@@ -1,0 +1,327 @@
+{
+  "schemaVersion": 1,
+  "contractId": "VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT",
+  "version": "v1",
+  "owner": "Claude Code",
+  "consumer": "Codex Art",
+  "date": "2026-08-28",
+  "slice": "VS2 - Gate Select to Hunt exploration and return",
+
+  "authorization": {
+    "source": "Owner handoff, 2026-08-28",
+    "grants": "VS2-PREP, then this contract, then bounded VS2 implementation, then STOP FOR OWNER REVIEW.",
+    "flow": "RAISING HOME -> GATE SELECT -> HUNT LOADOUT -> HUNT FIELD -> WILD CREATURE PRESENTATION -> EXPLORE -> EXIT -> RETURN RAISING HOME",
+    "excluded": ["Capture", "Hunt Result", "Battle", "Shop", "Database"],
+    "excludedNote": "These are outside VS2 by Owner instruction. They are not missing features of this contract, and presentation must not imply they are one tap away."
+  },
+
+  "purpose": "The only surface Codex binds VS2 presentation to. Codex reads frames and raises intents; it never reads Claude internal state and never holds gameplay truth. Everything here is read-only except the named intents. This is the same seam shape as INT_RH2_RUNTIME_PRESENTATION_CONTRACT, extended to three screens.",
+
+  "consumerRules": {
+    "mustNotImport": [
+      "src/championship/app/championshipStandaloneApp.js",
+      "src/championship/app/championshipRaisingProduction.js",
+      "src/championship/gate/**",
+      "src/championship/hunt/**",
+      "src/championship/field/**",
+      "src/championship/kernel/**",
+      "src/championship/r2/**",
+      "src/championship/raising/**",
+      "src/data/championship/**"
+    ],
+    "mayImport": [
+      "src/championship/app/gateHuntPresentationSource.js"
+    ],
+    "note": "The factory is the whole seam. If presentation needs a value that is not on a frame, that is a contract change request to Claude, not an import."
+  },
+
+  "rendererSplit": {
+    "dom": "Gate Select and Hunt Loadout screens, the Hunt HUD, all menus, panels, toolbar and text - Codex, P1R system",
+    "pixi": "The Hunt playable field, terrain, props, wild creatures, the player marker and 2D VFX - Claude owns the runtime integration, Codex owns visual QA and art",
+    "three": "NOT USED IN VS2. Original gate_select 3D models and the ART-R4 3D baseline are Owner-approved REFERENCE material, which is not an approval to ship a 3D runtime. Bounded 3D remains a separate Owner gate.",
+    "forbidden": [
+      "second global ticker",
+      "second Pixi Application bootstrap",
+      "second router",
+      "second save authority",
+      "second gameplay store"
+    ],
+    "stageNote": "VS2 introduces one shared Pixi stage host so that Raising and Hunt are scenes on a single Application. A second `new PIXI.Application()` would break the invariant the migration firewall enforces."
+  },
+
+  "producer": {
+    "module": "src/championship/app/gateHuntPresentationSource.js",
+    "factory": "createGateHuntPresentationSource(app)",
+    "status": "PUBLISHED_CONTRACT_FIRST - implementation follows this document",
+    "api": {
+      "getFrame()": "returns the current screen frame; pure read, never mutates",
+      "subscribe(listener)": "listener(frame) on every runtime change; returns an unsubscribe function",
+      "intents": "the object described under `intents` below"
+    }
+  },
+
+  "screens": {
+    "note": "One screen is active at a time. `frame.screen` names it. There is no second router: the screen stack is a bounded stack owned by the standalone application, and presentation reads its current value rather than driving navigation itself.",
+    "ids": ["RAISING_HOME", "GATE_SELECT", "HUNT_LOADOUT", "HUNT_FIELD"],
+    "transitions": [
+      "RAISING_HOME -> GATE_SELECT   (openGate intent)",
+      "GATE_SELECT  -> HUNT_LOADOUT  (selectGate + confirmGate intents)",
+      "GATE_SELECT  -> RAISING_HOME  (leaveScreen intent)",
+      "HUNT_LOADOUT -> HUNT_FIELD    (beginHunt intent)",
+      "HUNT_LOADOUT -> GATE_SELECT   (leaveScreen intent)",
+      "HUNT_FIELD   -> RAISING_HOME  (exitHunt intent)"
+    ],
+    "returnLifecycle": "Exiting the Hunt field always returns to Raising Home with the Raising slice intact. VS2 adds no Hunt reward, no capture, and no progression write, so a completed exploration changes nothing the player can lose."
+  },
+
+  "commonFrameFields": {
+    "contractVersion": "string",
+    "revision": "integer, increments on every runtime change; use it to skip redundant repaints",
+    "screen": "one of screens.ids",
+    "save": {
+      "phase": "DIRTY | SAVED | RESTORED | RECOVERED | CLEAN | SAVE_FAILED",
+      "savedAt": "ISO string or null",
+      "canRetry": "boolean"
+    },
+    "toolbar": {
+      "note": "Same neutral shell as Raising, in the ROM-verified Hunt mode. Slot semantics are still UNKNOWN_REQUIRES_TRACE and must stay unbound.",
+      "slotCount": { "value": 8, "evidence": "ROM_VERIFIED" },
+      "mode": { "value": 2, "context": "HUNT", "evidence": "ROM_VERIFIED", "source": "OVL0 caller 0x0211A138, MOV R1,#2" },
+      "assetFamily": { "value": "ui/hunt_set", "evidence": "ROM_VERIFIED" },
+      "slots": "eight entries, identical in shape to the Raising toolbar frame: buttonNode, frame geometry, submenuCapacity 8, and null commandId / iconCell / label at UNKNOWN_REQUIRES_TRACE",
+      "presentationRule": "Render all eight slots as the ROM-verified shell in ROM order at ROM geometry, every slot a neutral disabled placeholder carrying its raw slot id. Do not label, icon, or activate any slot. Do not hide slots to make the row look finished. The Hunt toolbar is present on HUNT_FIELD only; GATE_SELECT and HUNT_LOADOUT have no ROM-verified toolbar mode and therefore show none."
+    }
+  },
+
+  "gateSelectFrame": {
+    "screen": "GATE_SELECT",
+    "evidenceState": "STRUCTURE_PARTIAL - gate identity count is reference-backed; flow, input, camera and unlock rules are UNKNOWN_REQUIRES_TRACE",
+    "gates": [
+      {
+        "gateId": "stable product id, e.g. championship:2026:gate:01",
+        "ordinal": "1-based position in the product gate list",
+        "displayName": "product-authored neutral name",
+        "biomeRef": "O3-C biome representative id, for Codex art selection only; never a ROM pixel path",
+        "state": "AVAILABLE | LOCKED_UNKNOWN",
+        "stateEvidence": "UNKNOWN_REQUIRES_TRACE",
+        "stateNote": "No unlock, progression or ordering rule is traced. VS2 ships every gate AVAILABLE because inventing a lock is as much an invention as inventing an unlock. Presentation must not draw progress, stars, ranks or completion.",
+        "selected": "boolean",
+        "art": { "thumbnail": "assets/production/... or null", "note": "null means Codex has not supplied art; the runtime renders neutral geometry" }
+      }
+    ],
+    "gateCount": {
+      "value": 16,
+      "evidence": "REFERENCE_BASELINE",
+      "source": "O3-C 16/16 biome representatives; OVL12 gate_select 16 biome nodes",
+      "note": "16 is the biome-node count from reference evidence, not a traced runtime gate table. The relationship between a gate and an HM field is UNKNOWN: there are 30 HM fields on record and 16 biome nodes, and nothing traced maps one to the other."
+    },
+    "selection": { "gateId": "string or null" },
+    "affordances": {
+      "tapSelects": true,
+      "confirmRequiresSelection": true,
+      "note": "Pointer Events only. Mouse and touch share one path. No directional input model exists."
+    }
+  },
+
+  "huntLoadoutFrame": {
+    "screen": "HUNT_LOADOUT",
+    "evidenceState": "UNKNOWN_REQUIRES_TRACE - no original loadout model is traced",
+    "gate": { "gateId": "the confirmed gate", "displayName": "string" },
+    "party": [
+      {
+        "creatureId": "a Raising Home resident id",
+        "displayName": "string",
+        "speciesId": "product catalog id",
+        "cageId": "the cage it currently belongs to",
+        "selected": "boolean",
+        "sprite": { "portrait": "path", "idle": "grid sheet spec, same shape as the Raising frame" }
+      }
+    ],
+    "selectionRule": {
+      "value": "EXACTLY_ONE",
+      "evidence": "PRODUCT_AUTHORED",
+      "note": "No original party size, slot count, item loadout or restriction is traced. VS2 takes exactly one companion into the field because that is the minimum a Hunt field needs to be explorable, and it is labelled product-authored rather than presented as original behaviour. Presentation must not draw empty extra party slots, item slots, or a stamina or supply meter: those would assert a model that does not exist."
+    },
+    "selection": { "creatureId": "string or null" },
+    "canBegin": "boolean - true when a companion is selected"
+  },
+
+  "huntFieldFrame": {
+    "screen": "HUNT_FIELD",
+    "evidenceState": "STRUCTURE_ROM_VERIFIED for world geometry and collision bounds; movement, encounter and marker semantics are UNKNOWN_REQUIRES_TRACE",
+
+    "world": {
+      "widthTiles": { "value": 128, "evidence": "VERIFIED_BINARY", "source": "HUNT-MAP-STRUCTURE-001" },
+      "heightTiles": { "value": 128, "evidence": "VERIFIED_BINARY" },
+      "tileSizePx": { "value": 16, "evidence": "PRODUCT_AUTHORED", "note": "Original tile pixel size is a presentation decision at 2026 resolution; the tile COUNT is the preserved fact." },
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "chunkSizeTiles": { "value": 16, "evidence": "PRODUCT_AUTHORED", "note": "Streaming granularity only. Not an original structure claim." },
+      "preservationRule": "The Hunt world is a large modular field traversed by a camera. 9:16 is the VIEWPORT, never the world. The field must not be flattened into one screen-sized scene, and the logical grid must stay hidden from the player - no tile lines, no coordinate readout, no grid overlay."
+    },
+
+    "camera": {
+      "left": "world px", "top": "world px", "right": "world px", "bottom": "world px",
+      "centerX": "world px", "centerY": "world px",
+      "width": "visible world px", "height": "visible world px",
+      "note": "Clamped inside the world. Presentation renders what this window describes and never derives its own camera."
+    },
+
+    "terrain": {
+      "note": "Modular terrain, streamed by chunk. The runtime supplies which chunks are visible and what kind each cell is; Codex supplies how a kind looks.",
+      "visibleChunks": [
+        { "chunkX": "int", "chunkY": "int", "leftPx": "int", "topPx": "int", "rightPx": "int", "bottomPx": "int" }
+      ],
+      "kinds": {
+        "value": ["OPEN", "BLOCKED"],
+        "evidence": "BOUNDED_BY_VERIFIED_COLLISION",
+        "note": "Only two kinds are exposed, because only two collision outcomes are evidenced: attribute bit 0 set (or out of bounds) blocks, and everything else is unresolved. A richer terrain taxonomy - water, forest, cliff, path - is UNKNOWN_REQUIRES_TRACE and must not be invented in either runtime or art. Codex may vary the LOOK of OPEN and BLOCKED per biome; it must not imply a third traversal rule."
+      },
+      "unresolvedNote": "Attribute bits 1 through 7 remain unresolved. The runtime treats them as traversable and reports them as unresolved rather than claiming they are safe."
+    },
+
+    "objects": [
+      {
+        "objectId": "stable product id",
+        "kind": "SCENERY | BLOCKER",
+        "tileX": "int", "tileY": "int",
+        "worldX": "world px", "worldY": "world px",
+        "art": { "sprite": "assets/production/... or null" },
+        "note": "Object placement is part of the preserved modular-field structure. Individual original object identities are not traced, so VS2 objects are product-authored neutral placements."
+      }
+    ],
+
+    "player": {
+      "creatureId": "the companion chosen at loadout",
+      "displayName": "string",
+      "worldX": "world px", "worldY": "world px",
+      "tileX": "int", "tileY": "int",
+      "facing": "up | down | left | right",
+      "moving": "boolean",
+      "sprite": { "idle": "grid sheet spec", "portrait": "path" }
+    },
+
+    "wildCreatures": [
+      {
+        "wildId": "stable runtime id",
+        "speciesId": "product catalog id",
+        "displayName": "string",
+        "worldX": "world px", "worldY": "world px",
+        "facing": "up | down | left | right",
+        "moving": "boolean",
+        "state": "IDLE | WANDERING",
+        "sprite": { "idle": "grid sheet spec" },
+        "behaviourEvidence": "PRODUCT_AUTHORED_NOT_ORIGINAL"
+      }
+    ],
+
+    "wildBehaviourDeclaration": {
+      "state": "UNKNOWN_REQUIRES_TRACE",
+      "detail": "No original wild-creature movement, spawn rule, aggression, flee response or encounter trigger is traced. VS2 gives wild creatures a bounded, deterministic, seeded wander inside the verified collision rule and nothing else. They do not approach the player, react to the player, flee, chase, or trigger anything.",
+      "presentationRule": "Presentation must not add reaction, alert, aggression, exclamation marks, detection cones, or capture affordances. VS3 owns Capture; suggesting it here would pre-empt an unauthorized slice.",
+      "guard": "PD-HUNT-CAPTURE: the original tether/circle capture grammar must not degrade into a single Capture button. VS2 ships no capture surface at all."
+    },
+
+    "hud": {
+      "gateName": "string",
+      "companionName": "string",
+      "exitAvailable": true,
+      "note": "Deliberately minimal. hunt_sub_scene carries map_marker0..23 and remain_icon0..3 with remain_time0..3 as STRUCTURAL evidence only - the node names are known, their semantics are not. VS2 renders none of them rather than guessing what 24 markers count or what 4 timers measure."
+    },
+
+    "affordances": {
+      "dragMoves": true,
+      "tapMoves": true,
+      "note": "Pointer Events only, mouse and touch on one path. Direct manipulation, matching the Raising input grammar: touch or drag toward a destination and the companion walks there within the collision rule. There is no D-pad, no virtual stick, and no keyboard model."
+    }
+  },
+
+  "intents": {
+    "note": "The only mutation entry points. Codex calls these; Codex never writes state.",
+    "openGate()": "RAISING_HOME -> GATE_SELECT",
+    "selectGate(gateId | null)": "set or clear gate selection on GATE_SELECT",
+    "confirmGate()": "GATE_SELECT -> HUNT_LOADOUT using the current selection; a no-op with no selection",
+    "selectCompanion(creatureId | null)": "set or clear the companion on HUNT_LOADOUT",
+    "beginHunt()": "HUNT_LOADOUT -> HUNT_FIELD; a no-op until a companion is selected",
+    "moveTo(worldX, worldY)": "request player movement toward a world point on HUNT_FIELD; the runtime resolves it against collision",
+    "exitHunt()": "HUNT_FIELD -> RAISING_HOME",
+    "leaveScreen()": "step one screen back: GATE_SELECT -> RAISING_HOME, HUNT_LOADOUT -> GATE_SELECT",
+    "requestSave()": "persist; returns the updated save block"
+  },
+
+  "saveAndData": {
+    "authority": "Unchanged. One save key, championshipModernSave:v1, one durable writer, one envelope.",
+    "vs2Writes": {
+      "value": "NONE_BEYOND_THE_EXISTING_ENVELOPE",
+      "detail": "VS2 adds no new save field. Gate selection, loadout and field position are session state, not persisted progress, because no original persistence for them is traced and the standalone envelope is deny-by-default on unknown keys.",
+      "consequence": "A reload during a Hunt returns the player to Raising Home with the Raising slice intact. That is the honest behaviour for a slice with no traced Hunt persistence, not a defect."
+    },
+    "forbidden": "Codex must not add save fields. That remains a Claude-owned contract change."
+  },
+
+  "assetPolicy": {
+    "runtimeLoadable": "assets/production/ only",
+    "temporaryTechnicalArt": {
+      "state": "OWNER_ALLOWED_TEMPORARY",
+      "source": "Vs2NeutralTechnicalArt dependency",
+      "detail": "Original-created neutral technical field and resident presentation for architecture proof only. O1 Gate/Hunt, O3-C and P1R are reference INPUTS, not shippable material."
+    },
+    "forbidden": [
+      "any original ROM pixel or ROM-derived binary asset",
+      "any path outside assets/production/ in a runtime declaration",
+      "any implication that temporary technical art is final production art"
+    ],
+    "absentArtBehaviour": "Every art hook on a frame may be null. The runtime renders product-authored neutral geometry when it is, exactly as the Raising field already does. Missing art never blocks the slice, and it never authorizes Claude to invent visual production authority."
+  },
+
+  "excludedFromPresentation": {
+    "note": "Deliberately absent. Requesting any of these is a contract violation, not a missing feature.",
+    "fields": [
+      "capture affordances of any kind - VS3 owns Capture",
+      "hunt result, rewards, currency, or progression - VS3 and VS6",
+      "battle entry from the field - VS5",
+      "shop or database entry points - VS4",
+      "encounter counters, remaining-time meters, or the 24 map markers - node names are known, semantics are not",
+      "creature stat values - ROM proves the ten status fields exist; no values exist in this build",
+      "tile lines, grid overlays or coordinate readouts - the logical grid stays hidden",
+      "gate completion, ranking, star or progress indicators - no unlock rule is traced",
+      "any forensic catalog record, evidence claim, or promotion manifest field"
+    ]
+  },
+
+  "responsiveTargets": {
+    "reference": "390x844",
+    "mustPass": ["360x800", "390x844", "393x852", "412x915", "430x932"],
+    "criteria": [
+      "no horizontal overflow",
+      "no clipped controls",
+      "no field/input disagreement",
+      "safe-area handling",
+      "pointer mapping",
+      "viewport resilience",
+      "the Hunt camera window stays inside the world at every viewport"
+    ]
+  },
+
+  "acceptanceProof": {
+    "requirement": "Raising Home -> Gate Select -> Hunt Loadout -> Hunt Field -> wild creatures visible -> explore -> exit -> Raising Home, with the Raising slice unchanged on return.",
+    "invariants": [
+      "one Pixi Application",
+      "one Application-owned ticker",
+      "one save key and one durable writer",
+      "zero second routers or stores",
+      "the Hunt world stays 128x128 tiles",
+      "unknown collision bits stay unknown"
+    ]
+  },
+
+  "openQuestions": [
+    "Gate-to-field mapping: 16 biome nodes against 30 HM field records, with nothing traced connecting them.",
+    "Gate unlock and ordering rules.",
+    "Original loadout model: party size, items, restrictions.",
+    "Original wild-creature movement, spawn and encounter rules.",
+    "map_marker0..23 and remain_icon0..3 / remain_time0..3 semantics.",
+    "Hunt toolbar per-slot commands, icons and submenu population - the same open trace as Raising.",
+    "Whether any Hunt state persists across a session in the original."
+  ]
+}
