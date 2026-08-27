@@ -1,0 +1,255 @@
+/* VS2 -- neutral runtime shell styling.
+ *
+ * Deliberately plain. DOM screen UI is Codex Art's lane and the P1R system is the
+ * approved production standard; this stylesheet exists so the VS2 flow is legible
+ * and responsive today, not to make a visual production decision.
+ *
+ * Mobile-first portrait. Every layout is a single column that survives 360px, and
+ * nothing here may scroll the page horizontally.
+ */
+
+.cm-vs2-root {
+  --vs2-ink: #dce7ef;
+  --vs2-ink-dim: #8ea6b6;
+  --vs2-plate: #0d2029;
+  --vs2-plate-raised: #133040;
+  --vs2-line: #24505c;
+  --vs2-accent: #f0d083;
+
+  box-sizing: border-box;
+  display: block;
+  min-height: 100dvh;
+  padding:
+    calc(env(safe-area-inset-top, 0px) + 16px)
+    calc(env(safe-area-inset-right, 0px) + 14px)
+    calc(env(safe-area-inset-bottom, 0px) + 16px)
+    calc(env(safe-area-inset-left, 0px) + 14px);
+  background: #071722;
+  color: var(--vs2-ink);
+  overflow-x: hidden;
+}
+
+.cm-vs2-root *,
+.cm-vs2-root *::before,
+.cm-vs2-root *::after { box-sizing: border-box; }
+
+.cm-vs2-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 560px;
+  margin: 0 auto;
+  min-height: calc(100dvh - 32px);
+}
+
+.cm-vs2-header { display: flex; flex-direction: column; gap: 6px; }
+
+.cm-vs2-title {
+  margin: 0;
+  font-size: clamp(1.25rem, 5vw, 1.6rem);
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+
+.cm-vs2-subtitle,
+.cm-vs2-gateline {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--vs2-ink-dim);
+}
+
+/* --- Gate Select --------------------------------------------------------- */
+
+.cm-vs2-gates {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: 10px;
+  flex: 1 1 auto;
+  align-content: start;
+}
+
+.cm-vs2-gate {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 76px;
+  padding: 12px;
+  border: 1px solid var(--vs2-line);
+  border-radius: 12px;
+  background: var(--vs2-plate);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.cm-vs2-gate[data-selected="true"] {
+  border-color: var(--vs2-accent);
+  background: var(--vs2-plate-raised);
+}
+
+.cm-vs2-gate__ordinal {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  color: var(--vs2-ink-dim);
+}
+
+.cm-vs2-gate__name { font-size: 0.95rem; font-weight: 600; }
+
+/* --- Hunt Loadout -------------------------------------------------------- */
+
+.cm-vs2-party {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1 1 auto;
+  align-content: start;
+}
+
+.cm-vs2-member {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--vs2-line);
+  border-radius: 12px;
+  background: var(--vs2-plate);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.cm-vs2-member[data-selected="true"] {
+  border-color: var(--vs2-accent);
+  background: var(--vs2-plate-raised);
+}
+
+.cm-vs2-member__portrait {
+  width: 44px;
+  height: 44px;
+  max-width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #0a1a22;
+}
+
+.cm-vs2-member__name { font-size: 0.98rem; font-weight: 600; }
+
+/* --- shared actions ------------------------------------------------------ */
+
+.cm-vs2-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.cm-vs2-actions .cm-button { flex: 1 1 0; }
+
+/* --- Hunt Field ---------------------------------------------------------- */
+
+.cm-vs2-root--field { padding: 0; }
+
+.cm-vs2-field {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: 100dvh;
+  width: 100%;
+}
+
+.cm-vs2-hud {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding:
+    calc(env(safe-area-inset-top, 0px) + 10px)
+    calc(env(safe-area-inset-right, 0px) + 12px)
+    10px
+    calc(env(safe-area-inset-left, 0px) + 12px);
+  background: rgba(7, 23, 34, 0.92);
+  border-bottom: 1px solid var(--vs2-line);
+}
+
+.cm-vs2-hud__gate {
+  font-size: 0.92rem;
+  font-weight: 650;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cm-vs2-hud__companion {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.78rem;
+  color: var(--vs2-ink-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cm-vs2-hud__exit { flex: 0 0 auto; }
+
+.cm-vs2-field__canvas {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  background: #061014;
+  touch-action: none;
+}
+
+.cm-vs2-field__canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* The eight ROM-verified slots. Neutral, disabled, and never labelled: their
+ * commands, icons and submenu contents are UNKNOWN_REQUIRES_TRACE. */
+.cm-vs2-toolbar {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+  padding:
+    8px
+    calc(env(safe-area-inset-right, 0px) + 8px)
+    calc(env(safe-area-inset-bottom, 0px) + 8px)
+    calc(env(safe-area-inset-left, 0px) + 8px);
+  background: rgba(7, 23, 34, 0.92);
+  border-top: 1px solid var(--vs2-line);
+}
+
+.cm-vs2-slot {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  aspect-ratio: 1 / 1;
+  max-height: 44px;
+  border: 1px dashed rgba(142, 166, 182, 0.35);
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(142, 166, 182, 0.5);
+  font: inherit;
+  font-size: 0.68rem;
+  cursor: not-allowed;
+}
+
+.cm-vs2-slot__raw { pointer-events: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cm-vs2-root * { transition: none !important; animation: none !important; }
+}
+
+/* The expedition entry control appended to Codex's Raising Home screen.
+ * Fixed to the safe-area bottom so it cannot disturb the P1R layout it sits on. */
+.cm-vs2-entry {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+  z-index: 40;
+  max-width: calc(100vw - 32px);
+}

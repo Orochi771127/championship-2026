@@ -1,0 +1,55 @@
+{
+  "gate": "CHAMPIONSHIP_VS2_BROWSER_QA",
+  "date": "2026-08-27T18:41:03.780Z",
+  "baseUrl": "http://127.0.0.1:8732/championship.html",
+  "contract": "VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT/v1.1",
+  "requiredViewports": [
+    "360x800",
+    "390x844",
+    "393x852",
+    "412x915",
+    "430x932"
+  ],
+  "results": [
+    {
+      "viewport": "360x800",
+      "gates": 16,
+      "slots": 8,
+      "canvases": 1
+    },
+    {
+      "viewport": "390x844",
+      "gates": 16,
+      "slots": 8,
+      "canvases": 1
+    },
+    {
+      "viewport": "393x852",
+      "gates": 16,
+      "slots": 8,
+      "canvases": 1
+    },
+    {
+      "viewport": "412x915",
+      "gates": 16,
+      "slots": 8,
+      "canvases": 1
+    },
+    {
+      "viewport": "430x932",
+      "gates": 16,
+      "slots": 8,
+      "canvases": 1
+    }
+  ],
+  "invariants": {
+    "pixiApplicationsPerScreen": 1,
+    "stageRebuiltOnScreenChange": false,
+    "toolbarSlots": 8,
+    "toolbarSlotsBound": 0,
+    "storageKeys": [
+      "championshipModernSave:v1"
+    ]
+  },
+  "verdict": "PASS"
+}

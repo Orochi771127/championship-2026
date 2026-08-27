@@ -3,7 +3,7 @@
   "owner": "Claude Code",
   "scope": "gameplay reconstruction, runtime architecture, save/state, tests, integration - for Championship 2026 standalone",
   "lastSync": "2026-08-28",
-  "syncKind": "VS2-PREP hardening complete; Owner GO for VS2 recorded; CL-012 owned-documentation reconciliation applied",
+  "syncKind": "VS2 Gate-to-Hunt exploration complete; STOPPED FOR OWNER REVIEW",
   "git": {
     "repository": "CHAMPIONSHIP_2026_PRODUCT_SSOT (this repository)",
     "branch": "main",
@@ -17,14 +17,17 @@
   },
   "tests": {
     "suite": "npm test (node --test tests/*.mjs)",
-    "browserSuite": "npm run test:browser (tests/championship-int-rh2-browser.cjs)",
-    "pass": 35,
+    "browserSuites": [
+      "npm run test:browser (INT-RH2)",
+      "npm run test:browser:vs2 (VS2)"
+    ],
+    "pass": 48,
     "expectedFailures": 0,
     "unexpectedFailures": 0,
-    "previousBaseline": "19 pass / 0 expected / 0 unexpected at the accepted canonical baseline",
-    "baselineChangeCause": "VS2-PREP added the storage-guard suite (7), the frozen-runtime-invariant suite (7), and two firewall cases covering the guard allowance. Codex added one supplementary browser viewport in its own lane.",
-    "browserGate": "INT_RH2_BROWSER_QA_PASS viewports=6 required=5 saveReload=true",
-    "positiveControls": "Re-verified after VS2-PREP: empty deny-list CAUGHT, dropped write guard CAUGHT, namespace leaked into another src file CAUGHT, Hunt field shrunk below 128x128 CAUGHT, unknown collision bits made passable CAUGHT.",
+    "previousBaseline": "35 pass at the VS2-PREP checkpoint; 19 at the accepted canonical baseline",
+    "baselineChangeCause": "VS2 added 13 deterministic cases covering the screen stack, gate catalog, world generation, movement/collision/camera, wild behaviour, the published seam, the Hunt toolbar, later-slice refusals and save authority.",
+    "browserGate": "INT_RH2_BROWSER_QA_PASS viewports=6 required=5; CHAMPIONSHIP_VS2_BROWSER_QA_PASS viewports=5 required=5",
+    "positiveControls": "VS2-PREP 5/5 caught. VS2 8/8 caught: wild reacting to the player, collision disabled, wander radius unbounded, capture surface added to the seam, gate locked without evidence, illegal screen jump, world shrunk to a screen, toolbar command invented.",
     "note": "The historical 481/3/0 baseline belongs to the pre-migration research tree and its docs/qa suite, neither of which exists in this repository."
   },
   "completed": [
@@ -108,6 +111,41 @@
       ],
       "firewallChange": "The namespace scan was split into an external-dependency rule that binds every file, and a historical-namespace rule that allows exactly one file - the storage guard - to name what it refuses. Two new cases pin that allowance shut: the guard must be the only file naming it, must import nothing, and must keep a populated deny-list.",
       "duplicatedAuthority": "0 - still one Pixi Application, one save key, one durable writer, zero routers in src/championship"
+    },
+    {
+      "id": "VS2_GATE_TO_HUNT_EXPLORATION",
+      "state": "COMPLETE_AWAITING_OWNER_REVIEW",
+      "detail": "Raising Home -> Gate Select -> Hunt Loadout -> Hunt Field -> wild creature presentation -> explore -> exit -> Raising Home. Playable at all five contract viewports with the Raising slice intact on return.",
+      "preserved": [
+        "The Hunt world is a real 128x128 FieldDefinition validated by the frozen field kernel; 2048x2048 px against a ~390x780 viewport. 9:16 is the viewport, never the world.",
+        "Modular terrain streamed by 16x16 chunk, object placement, camera traversal, and a logical grid that stays hidden - no tile lines and no per-chunk tinting.",
+        "Collision bounded to the one evidenced rule: attribute bit 0 or out of bounds blocks; bits 1-7 stay unresolved and are reported as unresolved.",
+        "Hunt toolbar mode 2 / ui/hunt_set, eight slots, slot N = buttonN, every slot neutral and unbound."
+      ],
+      "refused": [
+        "No capture surface of any kind - VS3 owns Capture, and PD-HUNT-CAPTURE must not degrade into a button.",
+        "No terrain taxonomy beyond OPEN and BLOCKED, because only two collision outcomes are evidenced.",
+        "No wild creature that sees, approaches, flees from, chases or reacts to the player; movement is declared PRODUCT_AUTHORED_NOT_ORIGINAL.",
+        "No gate lock, rank, star or progress indicator, because no unlock rule is traced.",
+        "No map_marker or remain_icon rendering: node names are known, semantics are not.",
+        "No new save field. Gate, companion and field position are session state."
+      ],
+      "outputs": [
+        "docs/contracts/championship/VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT.json",
+        "src/championship/app/championshipScreenStack.js",
+        "src/championship/app/gateHuntPresentationSource.js",
+        "src/championship/app/vs2Screens.js",
+        "src/championship/app/vs2Styles.css",
+        "src/championship/gate/gateCatalog.js",
+        "src/championship/hunt/huntWorld.js",
+        "src/championship/hunt/huntRuntime.js",
+        "src/championship/presentation/championshipPixiStage.js",
+        "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
+        "tests/championship-vs2-runtime-cases.mjs",
+        "tests/championship-vs2-browser.cjs"
+      ],
+      "architectureChange": "The single PixiJS Application moved out of the Raising field module into championshipPixiStage.js. VS2 needed a second playable field and the product allows one bootstrap, so Raising and Hunt are now scenes on one stage and the canvas is re-parented across a screen change rather than rebuilt. VS1 behaviour is unchanged and both browser gates confirm it.",
+      "duplicatedAuthority": "0 - one Pixi Application (verified in-browser across three screen changes), one Application-owned ticker, one save key, one durable writer, zero routers"
     }
   ],
   "current": [
@@ -115,13 +153,18 @@
       "id": "ORIGINAL_RAISING_UI_RECONSTRUCTION",
       "state": "PARTIAL",
       "detail": "Slot ordering and submenu storage ROM_VERIFIED. Per-slot command/icon binding, submenu population, enable mask and slot 7 identity remain UNKNOWN_REQUIRES_TRACE. The eight-slot shell ships as neutral disabled RAW_SLOT placeholders; CARE stays unmapped to any slot."
+    },
+    {
+      "id": "VS2_DOM_PRESENTATION",
+      "state": "NEUTRAL_RUNTIME_SHELL_AWAITING_P1R",
+      "detail": "Gate Select, Hunt Loadout and the Hunt HUD ship as a Claude-authored neutral DOM shell so VS2 is playable and testable now. DOM screen UI is Codex's lane; the shell consumes only the published seam, which is exactly what a P1R Gate/Hunt family will bind to. It is not a visual production decision."
     }
   ],
   "notStarted": [
     {
-      "id": "HUNT",
+      "id": "HUNT_CAPTURE_AND_RESULT",
       "state": "NOT_STARTED",
-      "note": "External crosscheck describes stylus lasso/drag capture. Not traced, not implemented."
+      "note": "VS3. External crosscheck describes a stylus tether/circle capture; it is not traced and not implemented. VS2 deliberately ships no capture surface."
     },
     {
       "id": "CAPTURE",
@@ -163,9 +206,10 @@
   ],
   "blockedByArt": [],
   "blockedByOwner": [
+    "VS3 Capture and every later slice remain unauthorized. VS2 stops for Owner review.",
     "P3-P6, Modern Environment expansion and shipping promotion frozen",
-    "Final Raising environment art and final creature production not authorized",
-    "VS3 Capture and every later slice remain unauthorized; VS2 stops for Owner review"
+    "Final Raising and Hunt environment art and final creature production not authorized",
+    "Bounded 3D remains a separate Owner gate; the gate_select 3D models and ART-R4 are reference, not an approval to ship a 3D runtime"
   ],
   "nexusLinkAdaptation": [
     "R2 Raising domain: caretakerPosition, authored 24x14 grid, distance<=2 care gate, care +14 satiety / +5 ease. Frozen for research; excluded from product gameplay.",
@@ -174,10 +218,10 @@
   ],
   "dependenciesChanged": true,
   "recommendedNext": [
-    "Publish the Gate/Hunt read-only runtime presentation contract before any UI binding, so Codex has a seam to bind against.",
-    "Introduce one screen stack and one shared Pixi stage host; VS2 is the first slice needing more than one screen, and a second new PIXI.Application() would break the single-bootstrap invariant.",
-    "Keep wild-creature movement inside verified evidence bounds; nothing verifies original wild movement, so it stays product-authored and labelled.",
-    "STOP FOR OWNER REVIEW after VS2. Do not start VS3 Capture."
+    "STOP FOR OWNER REVIEW. VS3 Capture is not authorized.",
+    "Codex: a P1R Gate/Hunt family binding the published v1.1 seam would replace the neutral DOM shell without any runtime change.",
+    "Codex: Hunt field and wild creature art can land against the null art hooks already on the frame.",
+    "If VS3 is later authorized, the tether/circle capture grammar is the preservation constraint, not a Capture button."
   ],
   "nextSafeDeltaTrace": {
     "target": "submenu population site and the per-slot command writer",
@@ -267,6 +311,12 @@
       "current": "not built",
       "class": "UNKNOWN_REQUIRES_TRACE",
       "guard": "must not become a single Capture button"
+    },
+    {
+      "id": "PD-HUNT-FIELD-CONTENT",
+      "romVerified": "128x128 modular Hunt fields, 30 HM records, 16 biome nodes at the gate",
+      "current": "16 product gates, each with a deterministic product-authored world seed. The 128x128 structure is preserved exactly; the terrain and object CONTENT is product-authored, and no gate-to-original-field mapping is claimed.",
+      "class": "PARTIAL"
     }
   ],
   "verticalSlices": {
@@ -277,7 +327,7 @@
     },
     "VS2": {
       "name": "Gate Select -> Hunt Loadout -> Hunt Field -> Explore -> Return Home",
-      "state": "OWNER_AUTHORIZED_IN_PROGRESS",
+      "state": "COMPLETE_AWAITING_OWNER_REVIEW",
       "authorization": "Owner handoff, 2026-08-28: VS2-PREP then Gate/Hunt runtime presentation contract, then bounded VS2 implementation, then STOP FOR OWNER REVIEW.",
       "excluded": [
         "Capture",
@@ -285,7 +335,8 @@
         "Battle",
         "Shop",
         "Database"
-      ]
+      ],
+      "evidence": "48 deterministic cases, two browser gates, 8/8 positive controls"
     },
     "VS3": {
       "name": "Hunt -> Capture -> Result",

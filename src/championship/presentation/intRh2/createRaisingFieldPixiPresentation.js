@@ -1,19 +1,19 @@
-// INT-RH2 field-scoped PixiJS v8 presentation.
+// INT-RH2 Raising field -- a scene on the single Championship Pixi stage.
 //
-// One Application, one Application-owned ticker, and one read-only source. The
-// scene may hold transient pointer/animation state, but never cage assignment,
-// save data, gameplay values, routing, or another runtime store.
+// VS1 created its own Application here. VS2 needs a second playable field, and
+// the product is allowed exactly one Pixi bootstrap, so the Application moved to
+// championshipPixiStage.js and this module became a scene on it. The rendered
+// result is unchanged; what changed is who owns the canvas.
+//
+// The scene may hold transient pointer and animation state, but never cage
+// assignment, save data, gameplay values, routing, or another runtime store.
 
-const MAX_DEVICE_RESOLUTION = 2;
 const DRAG_THRESHOLD_PX = 6;
 
-function assertDependencies(PIXI, canvasHost, source) {
-  const pixiKeys = ["Application", "Assets", "Container", "Graphics", "AnimatedSprite", "Spritesheet", "Rectangle"];
-  if (!PIXI || pixiKeys.some((key) => typeof PIXI[key] !== "function" && typeof PIXI[key] !== "object")) {
-    throw new TypeError("INT-RH2 requires the PixiJS v8 presentation API");
-  }
-  if (!canvasHost || typeof canvasHost.appendChild !== "function" || typeof canvasHost.getBoundingClientRect !== "function") {
-    throw new TypeError("INT-RH2 requires a field canvas host");
+function assertDependencies(stage, source) {
+  if (!stage || !stage.PIXI || !stage.app || typeof stage.createSceneRoot !== "function"
+    || typeof stage.onResize !== "function" || typeof stage.attach !== "function") {
+    throw new TypeError("INT-RH2 requires the Championship Pixi stage");
   }
   if (!source || typeof source.getFrame !== "function" || typeof source.subscribe !== "function"
     || typeof source.intents?.selectCreature !== "function"
@@ -76,41 +76,22 @@ function clamp(value, minimum, maximum) {
 }
 
 /**
- * Mount the one allowed Raising field Pixi application.
+ * Mount the Raising field scene onto the single Championship Pixi stage.
  *
- * The caller owns DOM screen UI and supplies a `canvasHost` inside it. This
- * module owns only the canvas lifecycle and returns a small presentation port.
+ * The caller owns DOM screen UI and has already attached the stage to a field
+ * host inside it. This module owns only its own scene and returns a small
+ * presentation port.
  */
 export async function mountRaisingFieldPixiPresentation({
-  PIXI,
-  canvasHost,
+  stage,
   source,
   onFallback = () => {},
   reducedMotion = globalThis.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false
 }) {
-  assertDependencies(PIXI, canvasHost, source);
-  const hostRect = canvasHost.getBoundingClientRect();
-  const app = new PIXI.Application();
-  await app.init({
-    width: Math.max(1, Math.round(hostRect.width)),
-    height: Math.max(1, Math.round(hostRect.height)),
-    backgroundAlpha: 0,
-    antialias: true,
-    autoDensity: true,
-    resolution: clamp(Number(globalThis.devicePixelRatio) || 1, 1, MAX_DEVICE_RESOLUTION),
-    autoStart: true,
-    sharedTicker: false,
-    powerPreference: "high-performance",
-    eventFeatures: { move: true, globalMove: true, click: true, wheel: false }
-  });
+  assertDependencies(stage, source);
+  const { PIXI, app } = stage;
 
-  app.canvas.classList.add("cm-raising-pixi-canvas");
-  app.canvas.setAttribute("aria-hidden", "true");
-  app.canvas.tabIndex = -1;
-  app.canvas.style.touchAction = "none";
-  canvasHost.appendChild(app.canvas);
-
-  const scene = new PIXI.Container({ isRenderGroup: true, label: "INT-RH2 Raising field" });
+  const scene = stage.createSceneRoot("INT-RH2 Raising field");
   const backgroundLayer = new PIXI.Container({ label: "background" });
   const terrainLayer = new PIXI.Container({ label: "terrain" });
   const propLayer = new PIXI.Container({ label: "props" });
@@ -119,8 +100,6 @@ export async function mountRaisingFieldPixiPresentation({
   const fxLayer = new PIXI.Container({ label: "fx and lighting" });
   actorLayer.sortableChildren = true;
   scene.addChild(backgroundLayer, terrainLayer, propLayer, actorLayer, foregroundLayer, fxLayer);
-  app.stage.addChild(scene);
-  app.stage.eventMode = "static";
 
   const backdrop = new PIXI.Graphics();
   backgroundLayer.addChild(backdrop);
@@ -343,11 +322,10 @@ export async function mountRaisingFieldPixiPresentation({
     if (drag.moved) drag.entry.root.position.set(event.global.x, event.global.y);
   }
 
+  // The stage already resized the renderer and refreshed the hit area; the scene
+  // only has to relay out against the new screen size.
   function resize() {
     if (disposed) return;
-    const rect = canvasHost.getBoundingClientRect();
-    app.renderer.resize(Math.max(1, Math.round(rect.width)), Math.max(1, Math.round(rect.height)));
-    app.stage.hitArea = new PIXI.Rectangle(0, 0, app.screen.width, app.screen.height);
     sync(source.getFrame(), { force: true });
   }
 
@@ -357,24 +335,17 @@ export async function mountRaisingFieldPixiPresentation({
     }
   }
 
-  function handleContextLost(event) {
-    event.preventDefault();
-    app.stop();
-    app.canvas.hidden = true;
-    onFallback("The 2D field context was lost. DOM screen controls remain available; reload to restore the field.");
-  }
-
   app.stage.on("globalpointermove", moveDrag);
   app.stage.on("pointerup", finishDrag);
   app.stage.on("pointerupoutside", finishDrag);
   app.stage.on("pointercancel", finishDrag);
   app.ticker.add(updateAnimations);
-  app.canvas.addEventListener("webglcontextlost", handleContextLost);
 
   const unsubscribe = source.subscribe(sync);
-  const resizeObserver = typeof ResizeObserver === "function" ? new ResizeObserver(resize) : null;
-  resizeObserver?.observe(canvasHost);
-  if (!resizeObserver) globalThis.addEventListener?.("resize", resize);
+  const unobserveResize = stage.onResize(resize);
+  const unobserveContextLost = stage.onContextLost(() => {
+    onFallback("The 2D field context was lost. DOM screen controls remain available; reload to restore the field.");
+  });
   resize();
 
   return Object.freeze({
@@ -387,7 +358,7 @@ export async function mountRaisingFieldPixiPresentation({
 
     getDiagnostics() {
       return Object.freeze({
-        renderer: "PIXI_FIELD_SCOPED",
+        renderer: "PIXI_SCENE_ON_SHARED_STAGE",
         applicationCount: 1,
         ticker: "APPLICATION_OWNED",
         threeUsed: false,
@@ -403,21 +374,20 @@ export async function mountRaisingFieldPixiPresentation({
       disposed = true;
       drag = null;
       unsubscribe();
-      resizeObserver?.disconnect();
-      if (!resizeObserver) globalThis.removeEventListener?.("resize", resize);
+      unobserveResize();
+      unobserveContextLost();
       app.ticker.remove(updateAnimations);
       app.stage.off("globalpointermove", moveDrag);
       app.stage.off("pointerup", finishDrag);
       app.stage.off("pointerupoutside", finishDrag);
       app.stage.off("pointercancel", finishDrag);
-      app.canvas.removeEventListener("webglcontextlost", handleContextLost);
       for (const entry of actors.values()) entry.loadToken += 1;
       if (scene.parent) scene.parent.removeChild(scene);
       scene.destroy({ children: true });
       actors.clear();
       for (const sheet of sheets) sheet.destroy(false);
       sheets.clear();
-      app.destroy({ removeView: true, releaseGlobalResources: true }, { children: true });
+      // The Application belongs to the stage and outlives this scene.
       latestFrame = null;
     }
   });

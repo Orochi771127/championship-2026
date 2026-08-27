@@ -177,10 +177,19 @@ test("INT-RH2 save/reload proof restores runtime truth without restoring transie
   await reloaded.dispose();
 });
 
-test("INT-RH2 Pixi field module declares exactly one local renderer authority", () => {
+test("INT-RH2 Pixi field is a scene on the one shared stage and owns no bootstrap", () => {
   const file = path.join(repoRoot, "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js");
   const source = fs.readFileSync(file, "utf8");
-  assert.equal((source.match(/new PIXI\.Application\(\)/g) ?? []).length, 1, "Pixi bootstrap count drifted");
+  const stage = fs.readFileSync(path.join(repoRoot, "src/championship/presentation/championshipPixiStage.js"), "utf8");
+
+  // VS2 added a second playable field, so the single Application moved out to the
+  // stage host. The invariant is unchanged - exactly one bootstrap in the product
+  // - but it now lives one module out, and the field must neither create nor
+  // destroy an Application it does not own.
+  assert.equal((source.match(/new PIXI\.Application\(\)/g) ?? []).length, 0, "the field must not bootstrap its own Application");
+  assert.equal((stage.match(/new PIXI\.Application\(\)/g) ?? []).length, 1, "the stage must hold exactly one bootstrap");
+  assert.equal(/app\.destroy\(/.test(source), false, "the field must not destroy an Application it does not own");
+  assert.match(source, /stage\.createSceneRoot\(/, "the field must take its scene root from the stage");
   assert.equal(/new PIXI\.Ticker|Ticker\.shared|requestAnimationFrame|setInterval/.test(source), false,
     "Pixi field created a second ticker or frame loop");
   assert.match(source, /app\.ticker\.add\(updateAnimations\)/, "animation does not use the Application-owned ticker");

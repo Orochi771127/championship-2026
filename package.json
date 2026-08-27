@@ -7,7 +7,8 @@
   "scripts": {
     "serve": "node scripts/serve.mjs",
     "test": "node --test tests/*.mjs",
-    "test:browser": "node tests/championship-int-rh2-browser.cjs"
+    "test:browser": "node tests/championship-int-rh2-browser.cjs",
+    "test:browser:vs2": "node tests/championship-vs2-browser.cjs"
   },
   "dependencies": {
     "pixi.js": "8.19.0"
@@ -19,4 +20,3 @@
     "node": ">=22"
   }
 }
-

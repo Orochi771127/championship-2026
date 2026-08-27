@@ -20,6 +20,10 @@ import {
 } from "./championshipRaisingProduction.js";
 import { createChampionshipPersistentSavePort } from "./ChampionshipPersistentSavePort.js";
 import { selectPhase1FirstCreature } from "./phase1ProductCreatures.js";
+import { CHAMPIONSHIP_SCREENS, createChampionshipScreenStack } from "./championshipScreenStack.js";
+import { getChampionshipGate, listChampionshipGates } from "../gate/gateCatalog.js";
+import { createHuntWorld } from "../hunt/huntWorld.js";
+import { createHuntRuntime } from "../hunt/huntRuntime.js";
 
 export const STANDALONE_SESSION_ID = "championship-modern-home";
 export const STANDALONE_SLOT_ID = "raising-home";
@@ -56,6 +60,32 @@ export function createChampionshipStandaloneApp({
   // Production Raising state. Owned here, never by the frozen R2 reducer.
   let raising = null;
   let selectedCreatureId = null;
+
+  // VS2 expedition state. Session-scoped on purpose: no original Hunt
+  // persistence is traced, and the save envelope is deny-by-default on unknown
+  // keys, so gate choice, companion choice and field position deliberately do
+  // not survive a reload.
+  const screens = createChampionshipScreenStack({ initial: CHAMPIONSHIP_SCREENS.RAISING_HOME });
+  let selectedGateId = null;
+  let confirmedGateId = null;
+  let companionCreatureId = null;
+  let huntRuntime = null;
+  const screenListeners = new Set();
+
+  function publishScreens() {
+    for (const listener of [...screenListeners]) {
+      try { listener(screens.current()); } catch { /* observers never break navigation */ }
+    }
+  }
+
+  /** Drop every expedition choice and leave the player at Raising Home. */
+  function resetExpedition() {
+    huntRuntime = null;
+    selectedGateId = null;
+    confirmedGateId = null;
+    companionCreatureId = null;
+    while (screens.canGoBack()) screens.back();
+  }
 
   function requireSession() {
     if (!session) throw new Error("CHAMPIONSHIP_SESSION_NOT_OPEN");
@@ -126,6 +156,7 @@ export function createChampionshipStandaloneApp({
       const creatureIds = session.getRaisingHomeSnapshot().residents.map((r) => r.residentId);
       raising = createRaisingProductionState({ cageIds, creatureIds });
       selectedCreatureId = null;
+      resetExpedition();
       return { creature, snapshot: session.getRaisingHomeSnapshot(), raising };
     },
 
@@ -145,6 +176,7 @@ export function createChampionshipStandaloneApp({
       const creatureIds = session.getRaisingHomeSnapshot().residents.map((r) => r.residentId);
       raising = normalizeRaisingProductionState(read.save.raising, { cageIds, creatureIds });
       selectedCreatureId = null;
+      resetExpedition();
       return { creature, snapshot: session.getRaisingHomeSnapshot(), save: read.save, raising };
     },
 
@@ -216,6 +248,144 @@ export function createChampionshipStandaloneApp({
       });
     },
 
+    // ---------------------------------------------------------------------
+    // VS2 -- Gate Select, Hunt Loadout, Hunt Field
+    // ---------------------------------------------------------------------
+
+    getScreen() {
+      return screens.current();
+    },
+
+    getScreenTrail() {
+      return screens.trail();
+    },
+
+    subscribeScreen(listener) {
+      if (typeof listener !== "function") throw new TypeError("A screen observer must be a function");
+      screenListeners.add(listener);
+      return () => screenListeners.delete(listener);
+    },
+
+    getGates() {
+      return listChampionshipGates();
+    },
+
+    getSelectedGateId() {
+      return selectedGateId;
+    },
+
+    getConfirmedGate() {
+      return confirmedGateId === null ? null : getChampionshipGate(confirmedGateId);
+    },
+
+    getCompanionCreatureId() {
+      return companionCreatureId;
+    },
+
+    getHuntRuntime() {
+      return huntRuntime;
+    },
+
+    openGate() {
+      requireSession();
+      screens.enter(CHAMPIONSHIP_SCREENS.GATE_SELECT);
+      publishScreens();
+      return screens.current();
+    },
+
+    selectGate(gateId) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.GATE_SELECT) {
+        throw new Error("CHAMPIONSHIP_GATE_SELECT_NOT_ACTIVE");
+      }
+      if (gateId !== null && !getChampionshipGate(gateId)) {
+        throw new Error(`CHAMPIONSHIP_UNKNOWN_GATE: ${gateId}`);
+      }
+      selectedGateId = gateId;
+      publishScreens();
+      return selectedGateId;
+    },
+
+    /** Commit the gate choice and move to loadout. A no-op with no selection. */
+    confirmGate() {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.GATE_SELECT) return screens.current();
+      if (selectedGateId === null) return screens.current();
+      confirmedGateId = selectedGateId;
+      companionCreatureId = null;
+      screens.enter(CHAMPIONSHIP_SCREENS.HUNT_LOADOUT);
+      publishScreens();
+      return screens.current();
+    },
+
+    selectCompanion(creatureId) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) {
+        throw new Error("CHAMPIONSHIP_HUNT_LOADOUT_NOT_ACTIVE");
+      }
+      if (creatureId !== null && !raising?.assignments[creatureId]) {
+        throw new Error(`CHAMPIONSHIP_UNKNOWN_CREATURE: ${creatureId}`);
+      }
+      companionCreatureId = creatureId;
+      publishScreens();
+      return companionCreatureId;
+    },
+
+    /**
+     * Enter the field.
+     *
+     * The world is built from the gate's deterministic seed, so the same gate is
+     * the same field every time without persisting anything.
+     */
+    beginHunt() {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) return screens.current();
+      if (companionCreatureId === null || confirmedGateId === null) return screens.current();
+      const active = requireSession();
+      const resident = active.getRaisingHomeSnapshot().residents
+        .find((entry) => entry.residentId === companionCreatureId);
+      if (!resident) throw new Error(`CHAMPIONSHIP_UNKNOWN_CREATURE: ${companionCreatureId}`);
+      const world = createHuntWorld(getChampionshipGate(confirmedGateId));
+      huntRuntime = createHuntRuntime({
+        world,
+        companion: {
+          creatureId: resident.residentId,
+          displayName: resident.name,
+          speciesId: `championship:creature:${String(resident.speciesId ?? resident.residentId).replace(/^resident:/, "")}`
+        }
+      });
+      screens.enter(CHAMPIONSHIP_SCREENS.HUNT_FIELD);
+      publishScreens();
+      return screens.current();
+    },
+
+    /**
+     * Leave the field.
+     *
+     * VS2 writes nothing on exit: no capture, no reward, no progression. The
+     * Raising slice is exactly as the player left it.
+     */
+    exitHunt() {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD) return screens.current();
+      huntRuntime = null;
+      confirmedGateId = null;
+      companionCreatureId = null;
+      selectedGateId = null;
+      screens.exit();
+      publishScreens();
+      return screens.current();
+    },
+
+    /** Step one screen back. Clears the choice the popped screen owned. */
+    leaveScreen() {
+      const from = screens.current();
+      if (from === CHAMPIONSHIP_SCREENS.HUNT_FIELD) return this.exitHunt();
+      if (from === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) {
+        companionCreatureId = null;
+        confirmedGateId = null;
+      }
+      if (from === CHAMPIONSHIP_SCREENS.GATE_SELECT) selectedGateId = null;
+      screens.back();
+      publishScreens();
+      return screens.current();
+    },
+
     /** The controller dispatches through here, so interactions driven from the
      *  UI are counted the same as ones driven from a test. */
     runtimeFacade() {
@@ -240,6 +410,7 @@ export function createChampionshipStandaloneApp({
     },
 
     async dispose() {
+      resetExpedition();
       if (!session) return;
       const closing = session;
       session = null;

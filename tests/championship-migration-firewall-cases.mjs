@@ -58,10 +58,22 @@ test("the storage guard is a pure policy leaf with no imports and a populated de
   assert.match(guard, HISTORICAL_NAMESPACE);
 });
 
-test("only the bounded VS1 source family is present", () => {
-  const forbidden = ["arena", "battle", "capture", "encounter", "gate", "heartlake", "hunt", "shop"];
+test("only the authorized VS1 and VS2 source families are present", () => {
+  // `gate` and `hunt` left this list when the Owner authorized VS2 on 2026-08-28.
+  // Everything still here belongs to a slice with no implementation authority:
+  // capture and encounter are VS3, shop is VS4, battle and arena are VS5.
+  const forbidden = ["arena", "battle", "capture", "encounter", "heartlake", "shop"];
   const present = forbidden.filter((name) => fs.existsSync(path.join(root, "src/championship", name)));
   assert.deepEqual(present, []);
+
+  // Stated in both directions, so the VS2 scope is a fact the suite asserts
+  // rather than an absence it happens to tolerate.
+  const authorized = ["app", "contracts", "field", "gate", "hunt", "kernel", "modes", "presentation", "r2", "raising"];
+  const actual = fs.readdirSync(path.join(root, "src/championship"), { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .sort();
+  assert.deepEqual(actual, authorized);
 });
 
 test("all runtime asset declarations resolve below assets/production", () => {

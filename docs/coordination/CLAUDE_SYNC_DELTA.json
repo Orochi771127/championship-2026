@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "owner": "Claude Code",
-  "syncTarget": "VS2-PREP hardening + Owner GO for VS2",
+  "syncTarget": "VS2 Gate-to-Hunt exploration complete; STOPPED FOR OWNER REVIEW",
   "date": "2026-08-28",
   "note": "Claude-owned delta. Codex remains COORDINATION_MERGE_WRITER and merges this by stable record ID. Claude wrote no shared coordination file in this round.",
   "checkpoint": {
@@ -13,10 +13,13 @@
     "note": "The pre-migration checkpoint chain recorded in earlier revisions of this file is external provenance (docs/migration/PRE_MIGRATION_PROVENANCE.md), not this repository history. CL-008 and CL-009 concern that external branch and are unaffected by this round."
   },
   "tests": {
-    "pass": 35,
+    "pass": 48,
     "expected": 0,
     "unexpected": 0,
-    "browserGate": "viewports=6 required=5 saveReload=true",
+    "browserGates": [
+      "INT_RH2 viewports=6 required=5",
+      "VS2 viewports=5 required=5"
+    ],
     "unchangedThisRound": false
   },
   "ownerDecisionsApplied": [
@@ -34,6 +37,14 @@
       "state": "COMPLETE",
       "detail": "Repo-local PLAY_CHAMPIONSHIP.bat launcher (Node, product-owned server, no external project path); product-local forbidden storage key guard applied at the single durable storage boundary; current-repository protection for the frozen runtime invariants (zero-write R2 ports, one durable authority, Hunt 128x128 bound, bounded HM collision rule, camera-window-over-world). No pre-migration research tree was reintroduced.",
       "positiveControls": "5/5 caught."
+    },
+    {
+      "id": "VS2_GATE_TO_HUNT_EXPLORATION",
+      "type": "runtime",
+      "owner": "claude",
+      "state": "COMPLETE_AWAITING_OWNER_REVIEW",
+      "detail": "The authorized VS2 flow is playable end to end at all five contract viewports. Contract published first at docs/contracts/championship/VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT.json (v1.1 after implementation reconciliation).",
+      "positiveControls": "8/8 caught."
     }
   ],
   "stillUnknown": [
@@ -86,6 +97,37 @@
       "type": "dependency",
       "state": "STRENGTHENED",
       "detail": "The historical-namespace scan now allows exactly one file to name what it refuses - src/championship/app/championshipStorageGuard.js - and three cases pin the allowance shut. Deny-list, guard purity and single-namer are all positive-controlled."
+    },
+    {
+      "id": "HuntFieldContract",
+      "type": "dependency",
+      "owner": "claude",
+      "state": "PUBLISHED_AND_IMPLEMENTED",
+      "codexMaySafelyBind": "YES",
+      "detail": "Was NOT_STARTED / 'Codex must keep neutral placeholder'. The Hunt field runtime now exists and its presentation seam is published. Codex binds createGateHuntPresentationSource(app) only.",
+      "contract": "docs/contracts/championship/VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT.json"
+    },
+    {
+      "id": "Vs2GateToHuntEntry",
+      "type": "dependency",
+      "owner": "shared",
+      "state": "COMPLETE_AWAITING_OWNER_REVIEW",
+      "codexMaySafelyBind": "YES_THROUGH_THE_PUBLISHED_SEAM",
+      "detail": "Was NEXT_PLANNED_OWNER_GO_REQUIRED. The Owner GO arrived 2026-08-28 and the slice is built. Capture, Hunt Result, Battle, Shop and Database remain excluded."
+    },
+    {
+      "id": "ChampionshipRendererAuthorityPolicy",
+      "type": "dependency",
+      "owner": "owner",
+      "state": "UNCHANGED_POLICY_NEW_IMPLEMENTATION",
+      "detail": "The single Pixi Application moved from the Raising field module to src/championship/presentation/championshipPixiStage.js. Raising and Hunt are scenes on one stage; the canvas is re-parented across a screen change rather than rebuilt. Verified in-browser: one canvas across three screen changes and back. Still zero second routers, tickers, stores or save authorities."
+    },
+    {
+      "id": "Vs2NeutralTechnicalArt",
+      "type": "dependency",
+      "owner": "codex",
+      "state": "CONSUMED_AS_NULL_ART_HOOKS",
+      "detail": "The runtime renders product-authored neutral geometry for terrain, props, the companion and wild creatures. Every art hook on the frame is null and may be filled by Codex without a runtime change. No ROM pixel is loaded."
     }
   ],
   "integrationPlanRuntimeHalf": {
@@ -286,22 +328,20 @@
     }
   ],
   "vs2Readiness": {
-    "ready": [
-      "Presentation seam pattern proven and reusable: contract -> producer -> Codex binding, with zero duplicated authority",
-      "Single field-scoped Pixi Application exists and is reusable for a Hunt field",
-      "Single save authority exists; no second store was introduced by INT-RH2",
-      "Toolbar mode 2 = ui/hunt_set, caller OVL0 @0x0211A138 - ROM_VERIFIED",
-      "Hunt sub-screen structure known: ui/hunt/hunting/hunt_sub_scene.nxr, 72 nodes, map_marker0..23, remain_icon0..3 with remain_time0..3",
-      "OVL0 scene references known: hunt_sub_scene, hunt_shutter_scene, battle_main_scene, memorycard_plate_scene, info_bar",
-      "Field kernel already present and ROM-bounded: HM fixed 128x128 (VERIFIED_BINARY), sanitized attribute grid with bit0-or-out-of-bounds blocking, camera window and chunk window helpers."
+    "state": "DELIVERED",
+    "note": "Retained for history. The gaps listed here before implementation were closed as follows.",
+    "closed": [
+      "Screen stack: src/championship/app/championshipScreenStack.js, a bounded stack with an explicit transition table - not a router.",
+      "Shared Pixi stage: src/championship/presentation/championshipPixiStage.js, one Application for the whole product.",
+      "Gate runtime: 16 product gates, all AVAILABLE, deterministic world seeds, no claimed original field mapping.",
+      "Hunt field runtime: real 128x128 FieldDefinition through the frozen field kernel, camera window, chunk streaming.",
+      "Route and return lifecycle: exiting the field unwinds to Raising Home with the Raising slice intact."
     ],
-    "notReady": [
-      "No screen stack is mounted. VS2 is the first slice needing more than one screen, and this repository contains no createChampionshipScreenStack.js - that module was pre-migration and was not migrated.",
-      "A second new PIXI.Application() would break the single-bootstrap invariant. VS2 must introduce one shared Pixi stage host and mount Raising and Hunt as scenes on it.",
-      "Gate flow is asset and string evidence only. No traced runtime flow exists.",
-      "No Gate or Hunt runtime presentation contract is published yet.",
-      "No verified wild-creature movement evidence exists; movement must stay product-authored and labelled, not presented as original behaviour.",
-      "No loadout model. Hunt toolbar slot semantics remain UNKNOWN, exactly as in Raising."
+    "stillOpen": [
+      "Gate flow, input and camera in the original remain untraced; VS2 authored its own.",
+      "No loadout model is traced; VS2 takes exactly one companion and labels it PRODUCT_AUTHORED.",
+      "No wild-creature movement evidence exists; VS2 wanders inside a bounded radius and reacts to nothing.",
+      "Hunt toolbar slot semantics remain UNKNOWN, exactly as in Raising."
     ]
   },
   "productReset": {
@@ -360,5 +400,22 @@
       "tests/README.md"
     ],
     "sideEffect": "Running npm run test:browser as part of Claude focused QA regenerated Codex-owned screenshot and browser-QA evidence in the working tree. Claude did not commit those files; Codex should re-run and commit its own lane."
+  },
+  "presentationHandoffForCodex": {
+    "seam": "src/championship/app/gateHuntPresentationSource.js",
+    "contract": "docs/contracts/championship/VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT.json (v1.1)",
+    "domShellStatus": "src/championship/app/vs2Screens.js is a Claude-authored NEUTRAL RUNTIME SHELL, not a visual production decision. Replacing it with a P1R Gate/Hunt family requires no runtime change: the shell already consumes only the published seam.",
+    "artHooks": [
+      "gateSelect.gates[].art.thumbnail - null today",
+      "huntField object art - the field renders neutral product-authored props",
+      "wild creature and companion field art - the field renders neutral product-authored bodies"
+    ],
+    "mustNotDo": [
+      "import any gate, hunt, field, kernel, r2, raising or data module",
+      "add a save field",
+      "render a capture affordance, a reward, an encounter counter, the 24 map markers or the 4 remain timers",
+      "imply a third terrain traversal rule beyond OPEN and BLOCKED",
+      "label, icon or activate any toolbar slot"
+    ]
   }
 }

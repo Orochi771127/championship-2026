@@ -22,9 +22,10 @@ Open `http://127.0.0.1:8732/championship.html`.
 ```powershell
 npm test
 npm run test:browser
+npm run test:browser:vs2
 ```
 
-The browser gate exercises 360×800, 375×812, 390×844, 412×915, and 430×932. The repository is intentionally self-contained after `npm install`; runtime does not load PixiJS from a CDN or another project.
+The browser gates exercise the required 360×800, 390×844, 393×852, 412×915, and 430×932 contract viewports, plus 375×812 as supplementary coverage. The repository is intentionally self-contained after `npm install`; runtime does not load PixiJS from a CDN or another project.
 
 ## Product architecture
 
@@ -48,6 +49,7 @@ There is one standalone application, one Championship mode authority, one domain
 | Slice | Scope | State |
 |---|---|---|
 | VS1 | Raising Home: boot → select → care → relocate → save → real reload → continue → restore | accepted baseline; migrated and revalidated |
-| VS2 | Gate Select → Hunt Loadout → Hunt Field → Explore → Return Home | next candidate; **not authorized in this migration** |
+| VS2 | Gate Select → Hunt Loadout → Hunt Field → Explore → Return Home | built under the Owner GO of 2026-08-28; **stopped for Owner review** |
 | VS3–VS7 | Capture, support systems, battle, progression, production finish | preserved roadmap; frozen |
 
+VS2 deliberately ships no Capture, Hunt Result, Battle, Shop or Database surface. The Hunt world is a 128×128 modular field traversed by a camera: 9:16 is the viewport, never the world.
