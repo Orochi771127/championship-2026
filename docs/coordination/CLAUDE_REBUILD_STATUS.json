@@ -2,37 +2,30 @@
   "schemaVersion": 1,
   "owner": "Claude Code",
   "scope": "gameplay reconstruction, runtime architecture, save/state, tests, integration - for Championship 2026 standalone",
-  "lastSync": "2026-08-27",
-  "syncKind": "OWNER PRODUCT RESET reconciliation; VS2 not started",
+  "lastSync": "2026-08-28",
+  "syncKind": "VS2-PREP hardening complete; Owner GO for VS2 recorded; CL-012 owned-documentation reconciliation applied",
   "git": {
-    "worktree": "docs/migration/PRE_MIGRATION_PROVENANCE.md#runtime-source-worktree",
-    "branch": "claude/evidence-taxonomy-m1",
-    "head": "bb61d18",
-    "checkpointCommit": "d7a66b1",
-    "checkpointParent": "86524ca",
-    "followUpCommits": [
-      "a1b74f4",
-      "b2a46cd",
-      "2632ddf",
-      "2671db1",
-      "bb61d18"
-    ],
-    "workingTreeClean": true,
+    "repository": "CHAMPIONSHIP_2026_PRODUCT_SSOT (this repository)",
+    "branch": "main",
+    "headAtBatchStart": "3199a2569c09eeec765e71b6cb9e5451d990cecd",
+    "acceptedCanonicalBaseline": "3199a2569c09eeec765e71b6cb9e5451d990cecd",
+    "workingTreeClean": false,
+    "workingTreeNote": "Codex Art is working concurrently in its own lane (CODEX_ART_STATUS.json, docs/reports/vs1/**, tests/championship-int-rh2-browser.cjs, README/tests README viewport wording). Claude staged only Claude-owned files.",
     "pushed": false,
     "merged": false,
-    "note": "CL-001 resolved. Authority split was mostly clean: 2671db1 holds only Claude-runtime files. bb61d18 additionally carries four Claude-authority files (main.js, both boundary gates, the gate scope manifest). Reviewed and accepted by Claude; see CL-010. No history rewrite.",
-    "claudeRuntimeCheckpoint": "2671db1",
-    "codexPresentationCheckpoint": "bb61d18",
-    "coordinationCheckpoint": "cb0dc02 (main checkout, codex/championship-art-production-skill)"
+    "preMigrationHistory": "docs/migration/PRE_MIGRATION_PROVENANCE.md. The pre-migration branch claude/evidence-taxonomy-m1 and its checkpoints (d7a66b1, a1b74f4, b2a46cd, 2632ddf, 2671db1, bb61d18) are external provenance, not this repository history."
   },
   "tests": {
-    "suite": "docs/qa/_run_championship_gates.mjs",
-    "pass": 481,
-    "expectedFailures": 3,
+    "suite": "npm test (node --test tests/*.mjs)",
+    "browserSuite": "npm run test:browser (tests/championship-int-rh2-browser.cjs)",
+    "pass": 35,
+    "expectedFailures": 0,
     "unexpectedFailures": 0,
-    "previousBaseline": "471 pass / 3 expected / 0 unexpected",
-    "baselineChangeCause": "INT-RH2 added runtime-presentation and P1R contract suites.",
-    "gatePositiveControlAfterCodexEdits": "Re-verified: frozen R2 edit CAUGHT, Nexus import into the Pixi tree CAUGHT, out-of-tree file CAUGHT at three paths. Gates retain their teeth."
+    "previousBaseline": "19 pass / 0 expected / 0 unexpected at the accepted canonical baseline",
+    "baselineChangeCause": "VS2-PREP added the storage-guard suite (7), the frozen-runtime-invariant suite (7), and two firewall cases covering the guard allowance. Codex added one supplementary browser viewport in its own lane.",
+    "browserGate": "INT_RH2_BROWSER_QA_PASS viewports=6 required=5 saveReload=true",
+    "positiveControls": "Re-verified after VS2-PREP: empty deny-list CAUGHT, dropped write guard CAUGHT, namespace leaked into another src file CAUGHT, Hunt field shrunk below 128x128 CAUGHT, unknown collision bits made passable CAUGHT.",
+    "note": "The historical 481/3/0 baseline belongs to the pre-migration research tree and its docs/qa suite, neither of which exists in this repository."
   },
   "completed": [
     {
@@ -100,6 +93,21 @@
         "docs/qa/championship-int-rh2-runtime-presentation-cases.mjs"
       ],
       "duplicatedAuthority": "0 - one Pixi Application, one save authority, zero routers inside src/championship"
+    },
+    {
+      "id": "VS2_PREP_HARDENING",
+      "state": "COMPLETE",
+      "detail": "Repo-local one-click launcher; product-local forbidden storage key guard enforced at the single durable storage boundary; current-repository protection for the frozen runtime invariants. No pre-migration research tree was reintroduced.",
+      "outputs": [
+        "PLAY_CHAMPIONSHIP.bat",
+        "src/championship/app/championshipStorageGuard.js",
+        "src/championship/app/ChampionshipPersistentSavePort.js",
+        "tests/championship-storage-guard-cases.mjs",
+        "tests/championship-frozen-runtime-invariants-cases.mjs",
+        "tests/championship-migration-firewall-cases.mjs"
+      ],
+      "firewallChange": "The namespace scan was split into an external-dependency rule that binds every file, and a historical-namespace rule that allows exactly one file - the storage guard - to name what it refuses. Two new cases pin that allowance shut: the guard must be the only file naming it, must import nothing, and must keep a populated deny-list.",
+      "duplicatedAuthority": "0 - still one Pixi Application, one save key, one durable writer, zero routers in src/championship"
     }
   ],
   "current": [
@@ -155,9 +163,9 @@
   ],
   "blockedByArt": [],
   "blockedByOwner": [
-    "VS2 implementation blocked pending Owner GO",
     "P3-P6, Modern Environment expansion and shipping promotion frozen",
-    "Final Raising environment art and final creature production not authorized"
+    "Final Raising environment art and final creature production not authorized",
+    "VS3 Capture and every later slice remain unauthorized; VS2 stops for Owner review"
   ],
   "nexusLinkAdaptation": [
     "R2 Raising domain: caretakerPosition, authored 24x14 grid, distance<=2 care gate, care +14 satiety / +5 ease. Frozen for research; excluded from product gameplay.",
@@ -166,9 +174,10 @@
   ],
   "dependenciesChanged": true,
   "recommendedNext": [
-    "Owner GO for VS2.",
-    "Before VS2 code: decide whether the standalone build mounts the bounded screen stack - VS2 is the first slice needing more than one screen.",
-    "Before any push: clean integration path excluding reproducible staging (CL-009)."
+    "Publish the Gate/Hunt read-only runtime presentation contract before any UI binding, so Codex has a seam to bind against.",
+    "Introduce one screen stack and one shared Pixi stage host; VS2 is the first slice needing more than one screen, and a second new PIXI.Application() would break the single-bootstrap invariant.",
+    "Keep wild-creature movement inside verified evidence bounds; nothing verifies original wild movement, so it stays product-authored and labelled.",
+    "STOP FOR OWNER REVIEW after VS2. Do not start VS3 Capture."
   ],
   "nextSafeDeltaTrace": {
     "target": "submenu population site and the per-slot command writer",
@@ -268,7 +277,15 @@
     },
     "VS2": {
       "name": "Gate Select -> Hunt Loadout -> Hunt Field -> Explore -> Return Home",
-      "state": "NOT_STARTED_AWAITING_GO"
+      "state": "OWNER_AUTHORIZED_IN_PROGRESS",
+      "authorization": "Owner handoff, 2026-08-28: VS2-PREP then Gate/Hunt runtime presentation contract, then bounded VS2 implementation, then STOP FOR OWNER REVIEW.",
+      "excluded": [
+        "Capture",
+        "Hunt Result",
+        "Battle",
+        "Shop",
+        "Database"
+      ]
     },
     "VS3": {
       "name": "Hunt -> Capture -> Result",

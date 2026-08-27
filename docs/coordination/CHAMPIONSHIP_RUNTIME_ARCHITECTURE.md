@@ -3,7 +3,7 @@
 Canonical product repository: `.` (`CHAMPIONSHIP_2026_PRODUCT_SSOT`).  
 Migration reconciliation: the prior shared-repository wording below is retained only where it explains historical constraints. The current executable architecture is the standalone boundary defined in `docs/architecture/CHAMPIONSHIP_2026_ARCHITECTURE.md`.
 
-Owner: Claude Code · Last updated: 2026-08-27 · Kind: OWNER PRODUCT RESET reconciliation
+Owner: Claude Code · Last updated: 2026-08-28 · Kind: VS2-PREP hardening + CL-012 owned-documentation reconciliation
 
 Describes the architecture **as it actually is today**, not as planned. Every
 layer is marked `IMPLEMENTED`, `PARTIAL`, `PLANNED`, or `FORBIDDEN`.
@@ -58,6 +58,9 @@ original systems themselves may not be deleted or redesigned to suit a simpler U
 ## Entry and shell
 
 ```
+PLAY_CHAMPIONSHIP.bat        repo-local launcher    IMPLEMENTED
+    |  npm run serve -> scripts/serve.mjs; loopback by default, LAN opt-in
+    |
 championship.html                                   IMPLEMENTED
     |
 src/championship/app/main.js                        IMPLEMENTED
@@ -71,8 +74,14 @@ createRaisingPresentationSource(app)                IMPLEMENTED   <- the only pr
     +-- createRaisingFieldPixiPresentation.js       IMPLEMENTED   (Claude authority)
 ```
 
-`createChampionshipScreenStack.js` exists but is **not mounted**: `PARTIAL`.
-The build renders one screen. VS2 is the first slice that needs more.
+The build renders **one screen**, mounted directly by `main.js`. There is no
+screen stack in this repository: the pre-migration `createChampionshipScreenStack.js`
+was never migrated, and earlier revisions of this document describing it as
+present-but-unmounted were external-provenance drift (CL-012).
+
+VS2 is the first slice that needs more than one screen. It must therefore
+introduce the screen stack **and** a shared Pixi stage host, because a second
+`new PIXI.Application()` would break the single-bootstrap invariant.
 
 ---
 
@@ -109,12 +118,21 @@ runtime snapshot -> projectRaisingHomeDurableStateR2()   frozen R2 contract
                  -> serializeRaisingHomeSaveR2()          canonical string + digest
                  -> championshipStandaloneSave envelope   8 keys, deny-by-default
                  -> ChampionshipPersistentSavePort
+                 -> guardChampionshipStorage()             forbidden-key policy
                  -> localStorage["championshipModernSave:v1"]
 ```
 
 Single authority. `ChampionshipSavePortR2` stays zero-write; the persistent port
 declares `persistentWrite: true` precisely so the R2 assertion still rejects it.
 Restore seeds a fresh memory-only R2 port and reuses the existing restore path.
+
+Every key crossing that boundary is checked against
+`app/championshipStorageGuard.js`, a pure policy leaf that imports nothing and
+touches no Storage. It is the one file allowed to name the historical save
+namespace of the application Championship used to be a feature of, because a
+deny-list cannot block a name it may not write down. Historical data already
+present in a browser profile is neither read, written, nor deleted: out of scope
+means untouched.
 
 ---
 
@@ -159,11 +177,24 @@ They are debts, not decisions:
 
 ## Governance gates
 
+The pre-migration `docs/qa/**` gate tree was not migrated. The gates that govern
+**this** repository are:
+
 | Gate | Governs |
 |---|---|
-| `championship-production-boundary-cases.mjs` | production tree, frozen R2 non-modification, no Nexus import path, no forensic adoption, persistence-port honesty. Also scans `presentation/intRh2/`. |
-| `championship-taxonomy-boundary-cases.mjs` | CLOSED taxonomy tree; defers production paths to the successor |
-| `championship-r1-boundary-cases.mjs` | no ROM payload or binary asset path inside `src/championship/**` |
-| `championship-int-rh2-*-cases.mjs` | the presentation seam and the P1R contract |
+| `tests/championship-migration-firewall-cases.mjs` | external repository / CDN / research imports; the single-namer allowance for the storage guard; VS1 source-family bounds; asset firewall; one save key, one durable writer, one Pixi bootstrap, no second ticker |
+| `tests/championship-frozen-runtime-invariants-cases.mjs` | zero-write R2 ports; one durable authority across a real interaction; the 128×128 Hunt bound; the bounded HM collision rule; camera-window-over-world |
+| `tests/championship-storage-guard-cases.mjs` | the forbidden storage key policy at the durable boundary |
+| `tests/championship-vs1-runtime-cases.mjs` | the VS1 loop: new game, select, care, relocate, save, fresh continue, restore |
+| `tests/championship-int-rh2-*-cases.mjs` | the presentation seam and the P1R contract |
+| `tests/championship-int-rh2-browser.cjs` | real Chromium reload / continue / restore across the contract viewports |
 
-Baseline at this reconciliation: **481 pass / 3 expected / 0 unexpected**.
+Baseline at this reconciliation: **35 pass / 0 expected / 0 unexpected**, plus the
+browser gate at `viewports=6 required=5 saveReload=true`. The historical
+481 / 3 / 0 figure belongs to the pre-migration research tree and its `docs/qa`
+suite, neither of which exists here (CL-012).
+
+Positive controls re-verified at VS2-PREP: emptied deny-list **CAUGHT**, dropped
+write guard **CAUGHT**, namespace leaked into another `src` file **CAUGHT**, Hunt
+field shrunk below 128×128 **CAUGHT**, unknown collision bits made passable
+**CAUGHT**.

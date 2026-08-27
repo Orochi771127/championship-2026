@@ -22,9 +22,32 @@ import {
   deserializeChampionshipModernSave,
   serializeChampionshipModernSave
 } from "./championshipStandaloneSave.js";
+import { assertAllowedChampionshipStorageKey } from "./championshipStorageGuard.js";
 
 export const CHAMPIONSHIP_PERSISTENT_SAVE_PORT_KIND = "CHAMPIONSHIP_MODERN_PERSISTENT_SAVE_PORT";
 export const CHAMPIONSHIP_PERSISTENT_SAVE_PORT_POLICY = "STANDALONE_LOCAL_PERSISTENCE";
+
+/**
+ * Wrap an injected Storage so that every key crossing this boundary is checked
+ * against the product storage policy.
+ *
+ * This is the product's only durable storage boundary, so it is the only place
+ * the policy has to hold. The facade forwards, it does not cache: the browser
+ * Storage stays the single source of truth.
+ */
+export function guardChampionshipStorage(storage) {
+  return Object.freeze({
+    getItem(key) {
+      return storage.getItem(assertAllowedChampionshipStorageKey(key));
+    },
+    setItem(key, value) {
+      return storage.setItem(assertAllowedChampionshipStorageKey(key), value);
+    },
+    removeItem(key) {
+      return storage.removeItem(assertAllowedChampionshipStorageKey(key));
+    }
+  });
+}
 
 export function createChampionshipPersistentSavePort({
   storage,
@@ -34,7 +57,11 @@ export function createChampionshipPersistentSavePort({
     || typeof storage.removeItem !== "function") {
     throw new TypeError("Championship persistent save port requires a Storage-like object");
   }
-  const key = CHAMPIONSHIP_MODERN_SAVE_KEY;
+  // The product save key is validated at construction rather than trusted as a
+  // constant, so a future rename cannot quietly move the product onto a
+  // namespace that belongs to another application.
+  const key = assertAllowedChampionshipStorageKey(CHAMPIONSHIP_MODERN_SAVE_KEY);
+  const guarded = guardChampionshipStorage(storage);
 
   const listeners = new Set();
   // Phase vocabulary matches the R2 DOM view (DIRTY / CLEAN / SAVED / RESTORED /
@@ -73,7 +100,7 @@ export function createChampionshipPersistentSavePort({
       updatedAt: now()
     });
     const text = serializeChampionshipModernSave(save);
-    storage.setItem(key, text);
+    guarded.setItem(key, text);
     return { save, text };
   }
 
@@ -122,7 +149,7 @@ export function createChampionshipPersistentSavePort({
     },
 
     exportRecovery() {
-      const text = storage.getItem(key);
+      const text = guarded.getItem(key);
       return Object.freeze({ key, text: typeof text === "string" ? text : null });
     },
 
@@ -130,7 +157,7 @@ export function createChampionshipPersistentSavePort({
     read() {
       let text;
       try {
-        text = storage.getItem(key);
+        text = guarded.getItem(key);
       } catch (error) {
         return Object.freeze({ present: false, save: null, error: `STORAGE_UNAVAILABLE: ${error.message}` });
       }
@@ -154,7 +181,7 @@ export function createChampionshipPersistentSavePort({
     },
 
     clear() {
-      storage.removeItem(key);
+      guarded.removeItem(key);
       return publish({ phase: "DIRTY", lastCode: "CHAMPIONSHIP_MODERN_SAVE_UNSAVED", canRetry: false, revision: 0, savedAt: null, error: null });
     }
   });

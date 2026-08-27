@@ -29,13 +29,35 @@ function sourceText() {
   return codeFiles("src").map((file) => ({ file, text: fs.readFileSync(file, "utf8") }));
 }
 
-test("runtime has no external repository, Nexus namespace, CDN, or research import", () => {
-  const offenders = [];
-  for (const { file, text } of [...sourceText(), { file: path.join(root, "championship.html"), text: fs.readFileSync("championship.html", "utf8") }]) {
-    if (/R:[\\/]|NexusLink|NEXUS_|nexus:|https?:\/\/|(?:from|import\s*\()[^\n]*research[\\/]/i.test(text)) offenders.push(relative(file));
-  }
+function runtimeText() {
+  return [...sourceText(), { file: path.join(root, "championship.html"), text: fs.readFileSync("championship.html", "utf8") }];
+}
+
+// The storage guard is the one file allowed to name the historical save namespace
+// it refuses: a deny-list cannot block a name it may not write down. It is held
+// to the external-dependency rule like every other file, and the two tests below
+// pin the allowance shut so it cannot widen into an actual dependency.
+const STORAGE_GUARD = "src/championship/app/championshipStorageGuard.js";
+const EXTERNAL_DEPENDENCY = /R:[\/]|https?:\/\/|(?:from|import\s*\()[^\n]*research[\/]/i;
+const HISTORICAL_NAMESPACE = /NexusLink|NEXUS_|nexus:/i;
+
+test("runtime has no external repository, CDN, or research import", () => {
+  const offenders = runtimeText().filter(({ text }) => EXTERNAL_DEPENDENCY.test(text)).map(({ file }) => relative(file));
   assert.deepEqual(offenders, []);
 });
+
+test("only the storage guard names the historical save namespace, and only to refuse it", () => {
+  const naming = runtimeText().filter(({ text }) => HISTORICAL_NAMESPACE.test(text)).map(({ file }) => relative(file));
+  assert.deepEqual(naming, [STORAGE_GUARD]);
+});
+
+test("the storage guard is a pure policy leaf with no imports and a populated deny-list", () => {
+  const guard = fs.readFileSync(path.join(root, STORAGE_GUARD), "utf8");
+  assert.deepEqual(guard.match(/^\s*import[\s{"']/gm) ?? [], [], "the storage guard must import nothing");
+  // Positive control: emptying the deny-list must fail here, not silently pass.
+  assert.match(guard, HISTORICAL_NAMESPACE);
+});
+
 test("only the bounded VS1 source family is present", () => {
   const forbidden = ["arena", "battle", "capture", "encounter", "gate", "heartlake", "hunt", "shop"];
   const present = forbidden.filter((name) => fs.existsSync(path.join(root, "src/championship", name)));
@@ -81,7 +103,7 @@ test("one save key, one persistent writer, one Pixi bootstrap and no second tick
 
 test("coordination paths are repository-relative and manifests expose all required categories", () => {
   const coordination = codeFiles("docs/coordination");
-  const absolute = coordination.filter((file) => /[A-Za-z]:[\\/]/.test(fs.readFileSync(file, "utf8"))).map(relative);
+  const absolute = coordination.filter((file) => /[A-Za-z]:[\/]/.test(fs.readFileSync(file, "utf8"))).map(relative);
   assert.deepEqual(absolute, []);
   const claude = JSON.parse(fs.readFileSync("docs/coordination/CLAUDE_CHAMPIONSHIP_MIGRATION_MANIFEST.json", "utf8"));
   const codex = JSON.parse(fs.readFileSync("docs/coordination/CODEX_CHAMPIONSHIP_MIGRATION_MANIFEST.json", "utf8"));

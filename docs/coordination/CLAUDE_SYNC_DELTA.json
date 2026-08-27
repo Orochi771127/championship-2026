@@ -1,78 +1,39 @@
 {
   "schemaVersion": 1,
   "owner": "Claude Code",
-  "syncTarget": "OWNER PRODUCT RESET reconciliation",
-  "date": "2026-08-27",
-  "note": "Claude-owned delta for SYNC-3. Codex is COORDINATION_MERGE_WRITER and merges this by stable record ID. Claude wrote no shared coordination file in this round.",
+  "syncTarget": "VS2-PREP hardening + Owner GO for VS2",
+  "date": "2026-08-28",
+  "note": "Claude-owned delta. Codex remains COORDINATION_MERGE_WRITER and merges this by stable record ID. Claude wrote no shared coordination file in this round.",
   "checkpoint": {
-    "tip": "2632ddf",
-    "branch": "claude/evidence-taxonomy-m1",
-    "chain": [
-      {
-        "sha": "d7a66b1",
-        "parent": "86524ca",
-        "subject": "checkpoint runtime reconstruction through M9.1 and phase1",
-        "files": 110
-      },
-      {
-        "sha": "a1b74f4",
-        "subject": "relocate the presentation contract and harden the production gate"
-      },
-      {
-        "sha": "b2a46cd",
-        "subject": "declare the R2 protected-path failure the checkpoint made visible"
-      },
-      {
-        "sha": "2632ddf",
-        "subject": "close slot ordering and submenu storage in the toolbar contract"
-      }
-    ],
+    "repository": "CHAMPIONSHIP_2026_PRODUCT_SSOT (this repository)",
+    "branch": "main",
+    "baseline": "3199a2569c09eeec765e71b6cb9e5451d990cecd",
     "pushed": false,
     "merged": false,
-    "workingTreeClean": true,
-    "subjectPrefixDefect": "d7a66b1, a1b74f4 and b2a46cd carry a stray '@ ' subject prefix (CL-008, Owner-accepted as cosmetic, no rewrite). 2632ddf is clean."
+    "note": "The pre-migration checkpoint chain recorded in earlier revisions of this file is external provenance (docs/migration/PRE_MIGRATION_PROVENANCE.md), not this repository history. CL-008 and CL-009 concern that external branch and are unaffected by this round."
   },
   "tests": {
-    "pass": 471,
-    "expected": 3,
+    "pass": 35,
+    "expected": 0,
     "unexpected": 0,
-    "unchangedThisRound": true
+    "browserGate": "viewports=6 required=5 saveReload=true",
+    "unchangedThisRound": false
   },
   "ownerDecisionsApplied": [
     {
-      "id": "CL-005",
-      "state": "RESOLVED_BY_OWNER_POLICY",
-      "detail": "Phase 2 renderer policy set: DOM = application/screen UI authority; PixiJS = playable 2D field/actor/sprite/2D VFX authority; Three.js = bounded 3D only on verified original 3D evidence or explicit Owner approval. ALL_DOM, ALL_PIXI, ALL_THREE, a second renderer authority, a second ticker and a second global router are all forbidden."
-    },
-    {
-      "id": "CL-008",
-      "state": "ACCEPTED_COSMETIC",
-      "detail": "No history rewrite. Recorded, not fixed."
-    },
-    {
-      "id": "CL-009",
-      "state": "ACCEPTED_IN_LOCAL_RECOVERY_CHECKPOINT",
-      "detail": "35MB reproducible staging stays in the local checkpoint. Before any push or PR, build a clean integration path that excludes reproducible staging artifacts. Do not delete or rewrite now."
+      "id": "VS2-GO",
+      "state": "OWNER_AUTHORIZED",
+      "detail": "Owner handoff 2026-08-28 authorizes VS2-PREP hardening, then a Gate/Hunt runtime presentation contract, then bounded VS2 implementation (Raising Home -> Gate Select -> Hunt Loadout -> Hunt Field -> wild creature presentation -> explore -> exit -> Raising Home), then STOP FOR OWNER REVIEW. Capture, Hunt Result, Battle, Shop and Database stay outside VS2."
     }
   ],
   "closedThisRound": [
     {
-      "id": "SLOT_TO_NODE_ORDERING",
-      "type": "dependency",
+      "id": "VS2_PREP_HARDENING",
+      "type": "runtime",
       "owner": "claude",
-      "state": "ROM_VERIFIED",
-      "codexMaySafelyBind": "YES",
-      "detail": "ARM9 0x02060BF0 indexes a table at 0x0209F7C4 by slot number; entries 16,15,14,13,12,11,10,9 resolve to toolbar.nxr node indices, where node 16 is button0 and node 9 is button7. Slot N is buttonN, left to right. The descending table is an index inversion, not a reordering of the row.",
-      "contract": "docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json#slotToNodeMapping"
-    },
-    {
-      "id": "SUBMENU_STORAGE_STRUCTURE",
-      "type": "dependency",
-      "owner": "claude",
-      "state": "ROM_VERIFIED",
-      "codexMaySafelyBind": "YES",
-      "detail": "Every slot carries a submenu of up to eight entries. Pointer table at toolbar+0xE64 (8 slots x 8 x 4, slot stride 0x20); per-slot count array at +0xF64. The pointer table begins exactly where the slot array ends (0x64 + 8*0x1C0 = 0xE64), corroborating both offsets. The submenu is not a property of one special slot.",
-      "contract": "docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json#submenuStorage"
+      "state": "COMPLETE",
+      "detail": "Repo-local PLAY_CHAMPIONSHIP.bat launcher (Node, product-owned server, no external project path); product-local forbidden storage key guard applied at the single durable storage boundary; current-repository protection for the frozen runtime invariants (zero-write R2 ports, one durable authority, Hunt 128x128 bound, bounded HM collision rule, camera-window-over-world). No pre-migration research tree was reintroduced.",
+      "positiveControls": "5/5 caught."
     }
   ],
   "stillUnknown": [
@@ -109,10 +70,22 @@
   ],
   "updatedRecords": [
     {
-      "id": "CL-002",
+      "id": "CL-011",
       "type": "blocker",
-      "state": "PARTIALLY_CLOSED",
-      "detail": "Slot ordering and submenu storage closed. Command and icon-cell bindings remain open. The delta stayed inside its authorized scope and did not re-expand the Raising reverse program."
+      "state": "CLOSED_BY_OWNER_GO",
+      "detail": "VS2 implementation is authorized by the Owner handoff of 2026-08-28. Merge writer should move CL-011 from OPEN_OWNER_GATE to CLOSED_BY_OWNER_GO and record that VS2 ends in an Owner review gate rather than in VS3."
+    },
+    {
+      "id": "CL-012",
+      "type": "blocker",
+      "state": "RESOLVED",
+      "detail": "Claude-owned runtime architecture and status documentation now describes this repository. The pre-migration git block, the 481/3/0 baseline, the docs/qa gate names and the unmounted createChampionshipScreenStack.js reference were external-provenance drift and have been corrected in CLAUDE_REBUILD_STATUS.json and CHAMPIONSHIP_RUNTIME_ARCHITECTURE.md."
+    },
+    {
+      "id": "MIGRATION_FIREWALL",
+      "type": "dependency",
+      "state": "STRENGTHENED",
+      "detail": "The historical-namespace scan now allows exactly one file to name what it refuses - src/championship/app/championshipStorageGuard.js - and three cases pin the allowance shut. Deny-list, guard purity and single-namer are all positive-controlled."
     }
   ],
   "integrationPlanRuntimeHalf": {
@@ -273,7 +246,8 @@
   },
   "ownedFilesUpdated": [
     "CLAUDE_REBUILD_STATUS.json",
-    "CLAUDE_SYNC_DELTA.json"
+    "CLAUDE_SYNC_DELTA.json",
+    "CHAMPIONSHIP_RUNTIME_ARCHITECTURE.md"
   ],
   "sharedFilesWritten": [],
   "nextSafeDeltaTrace": {
@@ -318,15 +292,16 @@
       "Single save authority exists; no second store was introduced by INT-RH2",
       "Toolbar mode 2 = ui/hunt_set, caller OVL0 @0x0211A138 - ROM_VERIFIED",
       "Hunt sub-screen structure known: ui/hunt/hunting/hunt_sub_scene.nxr, 72 nodes, map_marker0..23, remain_icon0..3 with remain_time0..3",
-      "OVL0 scene references known: hunt_sub_scene, hunt_shutter_scene, battle_main_scene, memorycard_plate_scene, info_bar"
+      "OVL0 scene references known: hunt_sub_scene, hunt_shutter_scene, battle_main_scene, memorycard_plate_scene, info_bar",
+      "Field kernel already present and ROM-bounded: HM fixed 128x128 (VERIFIED_BINARY), sanitized attribute grid with bit0-or-out-of-bounds blocking, camera window and chunk window helpers."
     ],
     "notReady": [
-      "No bounded screen stack is mounted. VS2 is the first slice needing more than one screen; createChampionshipScreenStack.js exists but is unused by the standalone build.",
-      "Gate flow is asset and string evidence only (gate_select 3D models, 16 biome nodes, OVL12 strings). No traced runtime flow exists.",
-      "No Hunt field runtime contract is published.",
-      "No verified wild-creature movement evidence. Section I permits it only where verified; nothing is.",
-      "No loadout model.",
-      "Hunt toolbar slot semantics are UNKNOWN, exactly as in Raising."
+      "No screen stack is mounted. VS2 is the first slice needing more than one screen, and this repository contains no createChampionshipScreenStack.js - that module was pre-migration and was not migrated.",
+      "A second new PIXI.Application() would break the single-bootstrap invariant. VS2 must introduce one shared Pixi stage host and mount Raising and Hunt as scenes on it.",
+      "Gate flow is asset and string evidence only. No traced runtime flow exists.",
+      "No Gate or Hunt runtime presentation contract is published yet.",
+      "No verified wild-creature movement evidence exists; movement must stay product-authored and labelled, not presented as original behaviour.",
+      "No loadout model. Hunt toolbar slot semantics remain UNKNOWN, exactly as in Raising."
     ]
   },
   "productReset": {
@@ -371,5 +346,19 @@
       "PD-HUNT-CAPTURE: tether/circle grammar; must not become a single Capture button"
     ],
     "architectureConsequence": "What was documented as 'path B, the standalone exception' is now the only path. No second router, store, save authority, Pixi bootstrap or ticker. Verified at INT-RH2: 1 Pixi Application, 1 save authority, 0 routers in src/championship."
+  },
+  "concurrentLaneObservation": {
+    "note": "Codex Art was editing this working tree during the VS2-PREP batch. Claude staged only Claude-owned files and left the Codex lane untouched in its commit.",
+    "codexLaneFilesSeen": [
+      "docs/coordination/CODEX_ART_STATUS.json",
+      "docs/reports/vs1/INT_RH2_BROWSER_QA.json",
+      "docs/reports/vs1/INT_RH2_COMPLETION_REPORT.md",
+      "docs/reports/vs1/VS1_PRESENTATION_BACKLOG.json",
+      "docs/reports/vs1/screenshots/**",
+      "tests/championship-int-rh2-browser.cjs",
+      "README.md",
+      "tests/README.md"
+    ],
+    "sideEffect": "Running npm run test:browser as part of Claude focused QA regenerated Codex-owned screenshot and browser-QA evidence in the working tree. Claude did not commit those files; Codex should re-run and commit its own lane."
   }
 }
