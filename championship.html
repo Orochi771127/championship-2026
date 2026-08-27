@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#071722">
+    <link rel="icon" href="data:,">
+    <title>Digimon Championship — 2026 Modern Rebuild</title>
+    <link rel="stylesheet" href="./src/championship/app/styles.css?v=p1f">
+    <link rel="stylesheet" href="./src/championship/app/intRh2Styles.css?v=int-rh2">
+  </head>
+  <body>
+    <div id="cm-title" class="cm-title">
+      <div class="cm-title__panel">
+        <p class="cm-title__eyebrow">Standalone · 2026</p>
+        <h1 class="cm-title__name">Digimon Championship</h1>
+        <p class="cm-title__tagline">Raise and care for your first companion.</p>
+        <div class="cm-title__actions">
+          <button id="cm-new-game" class="cm-button cm-button--primary" type="button">New Game</button>
+          <button id="cm-continue" class="cm-button" type="button" disabled>Continue</button>
+        </div>
+        <p id="cm-title-note" class="cm-title__note" role="status"></p>
+      </div>
+    </div>
+    <div id="cm-root" hidden></div>
+    <noscript>Digimon Championship 2026 needs JavaScript.</noscript>
+    <script type="module" src="./src/championship/app/main.js?v=int-rh2"></script>
+  </body>
+</html>

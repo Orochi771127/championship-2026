@@ -1,0 +1,225 @@
+// Championship Modern -- standalone player save envelope.
+//
+// This is the standalone Championship 2026 save envelope. It has one storage
+// key, its own schema, and its own validation.
+//
+// The Raising Home slice is stored as the canonical string produced by
+// serializeRaisingHomeSaveR2(), so that the existing R2 persistence contract
+// -- byte budget, schema version, payload digest -- keeps validating it on the
+// way back in. This envelope adds standalone identity around that, nothing more.
+
+export const CHAMPIONSHIP_MODERN_SAVE_KEY = "championshipModernSave:v1";
+export const CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION = 1;
+export const CHAMPIONSHIP_MODERN_SAVE_KIND = "CHAMPIONSHIP_MODERN_STANDALONE_SAVE";
+
+// A player save is small. The forensic catalog tree is ~35MB; a single promoted
+// family is far past this. The ceiling is a blunt instrument on purpose: it
+// fails long before anything catalog-shaped could be committed.
+export const CHAMPIONSHIP_MODERN_SAVE_MAX_BYTES = 64 * 1024;
+export const CHAMPIONSHIP_MODERN_SAVE_MAX_DEPTH = 12;
+
+// Deny-by-default. An unknown top-level key is refused rather than carried:
+// silently passing unknown keys through is how a catalog ends up in a save.
+const ALLOWED_TOP_LEVEL_KEYS = Object.freeze([
+  "schemaVersion", "saveKind", "sessionId", "creature",
+  // `raisingHome` is the frozen R2 slice; `raising` is the production slice
+  // (cage assignment and product-authored interaction flags). They are kept
+  // apart on purpose: R2 is research history, `raising` is product gameplay.
+  "raisingHome", "raising", "progression", "flags", "updatedAt"
+]);
+
+const ALLOWED_CREATURE_KEYS = Object.freeze(["creatureId", "speciesId", "displayName"]);
+const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision"]);
+
+// Every one of these names identifies forensic/evidence data, catalog structure,
+// binary provenance, or promotion bookkeeping. None of them has any business in
+// a player save: the save references product content by stable ID only.
+const FORENSIC_MARKER_KEYS = Object.freeze([
+  // catalog artifact + record structure
+  "catalogKind", "records", "recordCount", "recordStrideBytes",
+  "expectedForensicRecordCount", "recordsDigestSha256", "generatorVersion",
+  // evidence claims
+  "evidenceClaims", "claims", "claimCount", "claimTopic", "requiredTrace",
+  // the six taxonomy dimensions
+  "sourceAuthority", "evidenceLevel", "evidenceBasis", "traceState",
+  "executionScope", "originalParityClaim",
+  // source provenance + legacy dialects
+  "provenance", "sourceFile", "sourceRow", "sourcePack", "evidenceDialect",
+  "legacyEvidenceStatus", "evidenceFromColumn", "legacyToken",
+  // binary metadata
+  "romOffset", "binaryOffset", "strideBytes", "overlayId",
+  // promotion bookkeeping
+  "promotionId", "promotedBy", "artifactDigest", "stagingSha256", "ownerGate"
+]);
+
+const FORENSIC_MARKER_SET = new Set(FORENSIC_MARKER_KEYS);
+
+export function saveError(message) {
+  const error = new Error(message);
+  error.name = "ChampionshipModernSaveError";
+  return error;
+}
+
+/**
+ * Refuse anything forensic-shaped, at any depth, before it can be committed.
+ *
+ * This is a machine guard, not a convention: the promoted 1,720 records and
+ * 34,492 evidence claims are a different authority from Championship Modern
+ * product data, and they must never round-trip through a player save.
+ */
+export function assertNoForensicPayload(value, path = "save", depth = 0) {
+  if (depth > CHAMPIONSHIP_MODERN_SAVE_MAX_DEPTH) {
+    throw saveError(`SAVE_TOO_DEEP: ${path}`);
+  }
+  if (value === null || typeof value !== "object") return value;
+  if (Array.isArray(value)) {
+    value.forEach((entry, index) => assertNoForensicPayload(entry, `${path}[${index}]`, depth + 1));
+    return value;
+  }
+  for (const key of Object.keys(value)) {
+    if (FORENSIC_MARKER_SET.has(key)) {
+      throw saveError(`FORENSIC_CATALOG_IN_PLAYER_SAVE: ${path}.${key}`);
+    }
+    assertNoForensicPayload(value[key], `${path}.${key}`, depth + 1);
+  }
+  return value;
+}
+
+function assertAllowedKeys(object, allowed, label) {
+  for (const key of Object.keys(object)) {
+    if (!allowed.includes(key)) throw saveError(`UNEXPECTED_SAVE_KEY: ${label}.${key}`);
+  }
+}
+
+function assertStableId(value, label) {
+  if (typeof value !== "string" || !/^[a-z0-9:_-]{3,96}$/i.test(value)) {
+    throw saveError(`INVALID_STABLE_ID: ${label}`);
+  }
+  return value;
+}
+
+/** Structural copy. Refuses functions, symbols and class instances outright: a
+ *  player save is plain data, and anything else is a bug or an attack. */
+function clonePlain(value, path = "save.raising", depth = 0) {
+  if (depth > CHAMPIONSHIP_MODERN_SAVE_MAX_DEPTH) throw saveError(`SAVE_TOO_DEEP: ${path}`);
+  if (value === null) return null;
+  const type = typeof value;
+  if (type === "string" || type === "number" || type === "boolean") return value;
+  if (Array.isArray(value)) return value.map((entry, i) => clonePlain(entry, `${path}[${i}]`, depth + 1));
+  if (type === "object") {
+    const out = {};
+    for (const key of Object.keys(value)) out[key] = clonePlain(value[key], `${path}.${key}`, depth + 1);
+    return out;
+  }
+  throw saveError(`UNSUPPORTED_SAVE_VALUE: ${path}`);
+}
+
+function byteLength(text) {
+  return new TextEncoder().encode(text).byteLength;
+}
+
+/**
+ * Build a standalone save envelope.
+ *
+ * `raisingHomeSerialized` is the canonical string from serializeRaisingHomeSaveR2().
+ * It is parsed and scanned here as well as validated on the way back in: a string
+ * is opaque to a key scan, so a forensic payload smuggled inside one would sail
+ * past the guard if the guard only looked at the envelope.
+ */
+export function createChampionshipModernSave({
+  sessionId,
+  creature,
+  raisingHomeSerialized,
+  raising = null,
+  progression = {},
+  flags = {},
+  updatedAt = new Date().toISOString()
+} = {}) {
+  assertStableId(sessionId, "sessionId");
+  if (!creature || typeof creature !== "object") throw saveError("MISSING_CREATURE");
+  assertAllowedKeys(creature, ALLOWED_CREATURE_KEYS, "creature");
+  assertStableId(creature.creatureId, "creature.creatureId");
+  assertStableId(creature.speciesId, "creature.speciesId");
+  if (typeof creature.displayName !== "string" || creature.displayName.length === 0 || creature.displayName.length > 64) {
+    throw saveError("INVALID_CREATURE_DISPLAY_NAME");
+  }
+  if (typeof raisingHomeSerialized !== "string" || raisingHomeSerialized.length === 0) {
+    throw saveError("MISSING_RAISING_HOME_SLICE");
+  }
+
+  assertAllowedKeys(progression, ALLOWED_PROGRESSION_KEYS, "progression");
+
+  let nested;
+  try {
+    nested = JSON.parse(raisingHomeSerialized);
+  } catch {
+    throw saveError("RAISING_HOME_SLICE_IS_NOT_JSON");
+  }
+  assertNoForensicPayload(nested, "save.raisingHome");
+
+  const save = {
+    schemaVersion: CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION,
+    saveKind: CHAMPIONSHIP_MODERN_SAVE_KIND,
+    sessionId,
+    creature: {
+      creatureId: creature.creatureId,
+      speciesId: creature.speciesId,
+      displayName: creature.displayName
+    },
+    raisingHome: raisingHomeSerialized,
+    raising: raising === null ? null : clonePlain(raising),
+    progression: {
+      interactionCount: Number.isSafeInteger(progression.interactionCount) ? progression.interactionCount : 0,
+      revision: Number.isSafeInteger(progression.revision) ? progression.revision : 0
+    },
+    flags: { newGameCompleted: flags.newGameCompleted === true },
+    updatedAt
+  };
+
+  assertAllowedKeys(save, ALLOWED_TOP_LEVEL_KEYS, "save");
+  assertNoForensicPayload(save);
+  return save;
+}
+
+export function serializeChampionshipModernSave(save) {
+  assertNoForensicPayload(save);
+  const text = JSON.stringify(save);
+  const bytes = byteLength(text);
+  if (bytes > CHAMPIONSHIP_MODERN_SAVE_MAX_BYTES) {
+    throw saveError(`SAVE_EXCEEDS_BYTE_BUDGET: ${bytes} > ${CHAMPIONSHIP_MODERN_SAVE_MAX_BYTES}`);
+  }
+  return text;
+}
+
+/**
+ * Parse a stored save. A malformed save must fail safely -- it never throws past
+ * the caller in a way that would strand the player with an unopenable game; the
+ * app treats a rejected save as "no save" and offers New Game.
+ */
+export function deserializeChampionshipModernSave(text) {
+  if (typeof text !== "string" || text.length === 0) throw saveError("EMPTY_SAVE");
+  if (byteLength(text) > CHAMPIONSHIP_MODERN_SAVE_MAX_BYTES) throw saveError("SAVE_EXCEEDS_BYTE_BUDGET");
+  let parsed;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    throw saveError("SAVE_IS_NOT_JSON");
+  }
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) throw saveError("SAVE_IS_NOT_AN_OBJECT");
+  if (parsed.saveKind !== CHAMPIONSHIP_MODERN_SAVE_KIND) throw saveError("SAVE_KIND_MISMATCH");
+  if (parsed.schemaVersion !== CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION) throw saveError("SAVE_SCHEMA_VERSION_UNSUPPORTED");
+  assertAllowedKeys(parsed, ALLOWED_TOP_LEVEL_KEYS, "save");
+  assertNoForensicPayload(parsed);
+
+  // Rebuilt rather than returned as parsed, so a stored save cannot introduce a
+  // shape the constructor would have refused.
+  return createChampionshipModernSave({
+    sessionId: parsed.sessionId,
+    creature: parsed.creature,
+    raisingHomeSerialized: parsed.raisingHome,
+    raising: parsed.raising ?? null,
+    progression: parsed.progression ?? {},
+    flags: parsed.flags ?? {},
+    updatedAt: typeof parsed.updatedAt === "string" ? parsed.updatedAt : new Date().toISOString()
+  });
+}

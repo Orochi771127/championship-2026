@@ -1,0 +1,355 @@
+{
+  "schemaVersion": 1,
+  "contractId": "CHAMPIONSHIP_TOOLBAR_CONTRACT",
+  "version": "v1.1",
+  "owner": "Claude Code",
+  "date": "2026-08-27",
+  "purpose": "Cross-agent presentation contract for the original Championship bottom toolbar. Codex may bind presentation to anything marked ROM_VERIFIED. Everything marked UNKNOWN_REQUIRES_TRACE must stay a neutral placeholder.",
+  "sourceEvidence": {
+    "romTree": "local research-only tree; no ROM content is reproduced here",
+    "reports": [
+      "docs/migration/PRE_MIGRATION_PROVENANCE.md#original-raising-ui-and-controls-contract",
+      "docs/migration/PRE_MIGRATION_PROVENANCE.md#original-raising-gameplay-contract"
+    ],
+    "method": "NDS FNT/FAT parse; ARM9 overlay table at 0xFDA00; per-overlay resource-string scan; targeted ARM9 disassembly"
+  },
+  "toolbar": {
+    "scene": {
+      "value": "ui/toolbar.nxr",
+      "evidence": "ROM_VERIFIED"
+    },
+    "sceneOwner": {
+      "value": "Shared",
+      "evidence": "ROM_VERIFIED",
+      "note": "Attached by the ARM9 main binary, not by any overlay."
+    },
+    "slotCount": {
+      "value": 8,
+      "evidence": "ROM_VERIFIED"
+    },
+    "labelAnchors": {
+      "value": "loc_button_0..loc_button_7",
+      "evidence": "ROM_VERIFIED",
+      "note": "Runtime-populated text slots. The literal string 'loc_button' appears zero times in ARM9, so slots are addressed positionally, not by name."
+    },
+    "submenuAnchor": {
+      "value": {
+        "node": "submenu_origin",
+        "x": 167,
+        "y": 162,
+        "cell": 4
+      },
+      "evidence": "ROM_VERIFIED"
+    },
+    "barPlate": {
+      "value": {
+        "node": "unnamed0000",
+        "x": 0,
+        "y": 168,
+        "cell": 9
+      },
+      "evidence": "ROM_VERIFIED"
+    }
+  },
+  "initializer": {
+    "address": {
+      "value": "0x020607D4",
+      "evidence": "ROM_VERIFIED"
+    },
+    "signature": {
+      "value": "(R0 = toolbar object, R1 = mode)",
+      "evidence": "ROM_VERIFIED"
+    },
+    "loadsScene": {
+      "value": "ui/toolbar.nxr",
+      "evidence": "ROM_VERIFIED"
+    }
+  },
+  "slotStorage": {
+    "baseOffset": {
+      "value": "0x64",
+      "evidence": "ROM_VERIFIED"
+    },
+    "stride": {
+      "value": "0x1C0",
+      "evidence": "ROM_VERIFIED"
+    },
+    "count": {
+      "value": 8,
+      "evidence": "ROM_VERIFIED"
+    },
+    "derivedFrom": "teardown loop ending at ARM9 0x020607D0: ADD R4,R10,#0x64 / CMP R11,#8 / ADD R4,R4,#0x1C0"
+  },
+  "toolbarObjectLayout": {
+    "iconSetHandle": {
+      "offset": "+0x30",
+      "evidence": "ROM_VERIFIED"
+    },
+    "sceneHandle": {
+      "offset": "+0x34",
+      "evidence": "ROM_VERIFIED"
+    },
+    "sceneLoaderStruct": {
+      "offset": "+0x38",
+      "evidence": "ROM_VERIFIED"
+    },
+    "slotArrayBase": {
+      "offset": "+0x64",
+      "evidence": "ROM_VERIFIED"
+    },
+    "mode": {
+      "offset": "+0xFA8",
+      "evidence": "ROM_VERIFIED"
+    }
+  },
+  "modes": [
+    {
+      "mode": 1,
+      "context": "TRAINING_RAISING",
+      "assetSet": "ui/training_set",
+      "caller": "OVL18",
+      "callerAddress": "0x0211CF08",
+      "callInstruction": "MOV R1, #1",
+      "evidence": "ROM_VERIFIED"
+    },
+    {
+      "mode": 2,
+      "context": "HUNT",
+      "assetSet": "ui/hunt_set",
+      "caller": "OVL0",
+      "callerAddress": "0x0211A138",
+      "callInstruction": "MOV R1, #2",
+      "evidence": "ROM_VERIFIED"
+    }
+  ],
+  "overlayUsage": {
+    "OVL18": {
+      "callsToolbarInitializer": true,
+      "mode": 1,
+      "evidence": "ROM_VERIFIED"
+    },
+    "OVL0": {
+      "callsToolbarInitializer": true,
+      "mode": 2,
+      "evidence": "ROM_VERIFIED"
+    },
+    "OVL15": {
+      "callsToolbarInitializer": false,
+      "usesInstead": "ui/button_bar.nxr",
+      "evidence": "ROM_VERIFIED"
+    }
+  },
+  "slotFrameGeometry": {
+    "evidence": "ROM_VERIFIED",
+    "note": "Frame cells 10 and 11 are the two stagger frames, not per-tool icons. Slot 7 alone uses cell 12; that is structural evidence only and does not name the slot.",
+    "pitchPx": 26,
+    "slots": [
+      {
+        "slot": 0,
+        "x": 38,
+        "y": 184,
+        "cell": 10,
+        "labelAnchorX": 28,
+        "labelAnchorY": 176
+      },
+      {
+        "slot": 1,
+        "x": 64,
+        "y": 178,
+        "cell": 11,
+        "labelAnchorX": 54,
+        "labelAnchorY": 170
+      },
+      {
+        "slot": 2,
+        "x": 90,
+        "y": 184,
+        "cell": 10,
+        "labelAnchorX": 80,
+        "labelAnchorY": 176
+      },
+      {
+        "slot": 3,
+        "x": 116,
+        "y": 178,
+        "cell": 11,
+        "labelAnchorX": 106,
+        "labelAnchorY": 170
+      },
+      {
+        "slot": 4,
+        "x": 142,
+        "y": 184,
+        "cell": 10,
+        "labelAnchorX": 132,
+        "labelAnchorY": 176
+      },
+      {
+        "slot": 5,
+        "x": 168,
+        "y": 178,
+        "cell": 11,
+        "labelAnchorX": 158,
+        "labelAnchorY": 170
+      },
+      {
+        "slot": 6,
+        "x": 194,
+        "y": 184,
+        "cell": 10,
+        "labelAnchorX": 184,
+        "labelAnchorY": 176
+      },
+      {
+        "slot": 7,
+        "x": 220,
+        "y": 178,
+        "cell": 12,
+        "labelAnchorX": 210,
+        "labelAnchorY": 170
+      }
+    ]
+  },
+  "iconBanks": {
+    "ui/training_set": {
+      "ncerCells": 36,
+      "nanrSequences": 3,
+      "evidence": "ROM_VERIFIED (asset shape)",
+      "slotMapping": "UNKNOWN_REQUIRES_TRACE"
+    },
+    "ui/hunt_set": {
+      "evidence": "ROM_VERIFIED (referenced by mode 2)",
+      "slotMapping": "UNKNOWN_REQUIRES_TRACE"
+    }
+  },
+  "toolVocabulary": {
+    "note": "Recovered from the game's own tutorial text in ui/txt/txt_list_txt.dat. These are the tools that exist and how they are used. They are NOT yet bound to slot indices.",
+    "evidence": "ROM_VERIFIED",
+    "tools": [
+      {
+        "id": "hand",
+        "romName": "手のアイコン",
+        "interaction": "slides the cage; hold-touch grabs a creature; dropping into a different cage trains it at that instant"
+      },
+      {
+        "id": "feed",
+        "romName": "ニクのアイコン / エサ",
+        "interaction": "select, then touch beside the creature"
+      },
+      {
+        "id": "clean",
+        "romName": "ウンチのアイコン",
+        "interaction": "select, then touch droppings and leftovers"
+      },
+      {
+        "id": "medicine",
+        "romName": "クスリのアイコン",
+        "interaction": "select, then touch the creature; cures sickness"
+      },
+      {
+        "id": "woundMedicine",
+        "romName": "キズグスリのアイコン",
+        "interaction": "select, then touch the creature; heals injury"
+      },
+      {
+        "id": "protein",
+        "romName": "プロテイン",
+        "interaction": "item exists with the description 'attack goes up'; no icon is named in the tutorial",
+        "evidence": "EXTERNAL_CROSSCHECK"
+      }
+    ]
+  },
+  "unknown": {
+    "perSlotCommandBindings": "UNKNOWN_REQUIRES_TRACE - no command table found adjacent to the slot-to-node table; the per-slot setup loop writes no command id",
+    "perSlotIconCell": "UNKNOWN_REQUIRES_TRACE - the icon bank is bound to the slot sub-object at +0xD4, but no per-slot cell or sequence selection was recovered",
+    "perSlotTextId": "UNKNOWN_REQUIRES_TRACE",
+    "slot7Identity": "UNKNOWN_REQUIRES_TRACE",
+    "submenuOwningSlot": "UNKNOWN_REQUIRES_TRACE",
+    "submenuMembership": "UNKNOWN_REQUIRES_TRACE - storage proven (8 per slot); population site not found. Hunt and Battle remain ROM_VERIFIED members of *a* submenu from tutorial text only.",
+    "exactCareValues": "UNKNOWN_REQUIRES_TRACE",
+    "slotEnableMask": "UNKNOWN_REQUIRES_TRACE - slot+0x192 and slot+0xBE are both initialised to 0 and are candidates, but nothing proves either is an enable flag"
+  },
+  "codexGuidance": {
+    "maySafelyBind": [
+      "8-slot contextual bottom-bar presentation structure",
+      "context switching by mode (training vs hunt icon bank)",
+      "slot frame geometry and 26px pitch as a layout reference",
+      "the existence of a submenu affordance",
+      "slot index to button order: slot N is buttonN, left to right",
+      "a submenu affordance of up to eight entries on any slot"
+    ],
+    "mustRemainNeutralPlaceholder": [
+      "exact slot semantic labels",
+      "exact slot actions and ordering",
+      "slot 7 identity",
+      "any numeric care effect",
+      "icon-to-slot assignment"
+    ]
+  },
+  "nextTrace": {
+    "target": "OVL18 0x0211CF10 onward",
+    "purpose": "8-slot configuration and binding closure only",
+    "scopeRule": "Do not re-expand the Raising reverse program."
+  },
+  "revisionNote": "RAISING_TOOLBAR_BINDING_CLOSURE delta. Two items closed: slot-to-node ordering and the submenu storage structure. Command and icon-cell bindings remain UNKNOWN_REQUIRES_TRACE.",
+  "slotToNodeMapping": {
+    "evidence": "ROM_VERIFIED",
+    "table": "0x0209F7C4, eight u32 entries, indexed by slot: LDR R1,[R0,R5,LSL#2] at ARM9 0x02060BF0",
+    "values": [
+      16,
+      15,
+      14,
+      13,
+      12,
+      11,
+      10,
+      9
+    ],
+    "resolvesTo": "toolbar.nxr node_index; node 16 is button0 and node 9 is button7",
+    "mapping": {
+      "slot0": "button0 (node 16)",
+      "slot1": "button1 (node 15)",
+      "slot2": "button2 (node 14)",
+      "slot3": "button3 (node 13)",
+      "slot4": "button4 (node 12)",
+      "slot5": "button5 (node 11)",
+      "slot6": "button6 (node 10)",
+      "slot7": "button7 (node 9)"
+    },
+    "meaning": "Slot order matches button order left to right: slot 0 is the leftmost button at x=38, slot 7 the rightmost at x=220. The descending table is an index inversion, not a reordering of the row."
+  },
+  "submenuStorage": {
+    "evidence": "ROM_VERIFIED",
+    "entryPointerTable": {
+      "baseOffset": "+0xE64",
+      "layout": "8 slots x 8 entries x 4 bytes",
+      "slotStride": "0x20",
+      "note": "Begins exactly where the slot array ends: 0x64 + 8*0x1C0 = 0xE64."
+    },
+    "countArray": {
+      "baseOffset": "+0xF64",
+      "layout": "8 x 4 bytes, one count per slot"
+    },
+    "maxEntriesPerSlot": 8,
+    "meaning": "Every slot can carry a submenu of up to eight entries; the submenu is not a property of one special slot.",
+    "populationSite": "UNKNOWN_REQUIRES_TRACE - ARM9 only ever clears these to zero (0x02060770, 0x02060C70/0x02060C84). No immediate-offset store sets a non-zero count anywhere in ARM9 or OVL18."
+  },
+  "slotStructFields": {
+    "evidence": "ROM_STRUCTURE_ONLY",
+    "size": "0x1C0",
+    "observedWrites": [
+      "+0x88",
+      "+0x8C",
+      "+0x90",
+      "+0x98",
+      "+0xBE (byte)",
+      "+0x15C",
+      "+0x160",
+      "+0x164",
+      "+0x16C",
+      "+0x192 (byte)"
+    ],
+    "subObject": "+0xD4 receives the icon-set handle read from toolbar+0x30 (ARM9 0x02060C24)",
+    "note": "Field semantics are not recovered. Do not infer meaning from offset."
+  }
+}

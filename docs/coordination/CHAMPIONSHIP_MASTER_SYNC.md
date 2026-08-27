@@ -7,13 +7,19 @@ syncRevision: **3** (approved cross-agent baseline; this docs-only product reset
 does not silently open SYNC-4)
 Product direction revision: **CHAMPIONSHIP_2026_RESET_1**
 Last reconciled: **2026-08-27**
-Round: **Post-SYNC-3 — Championship 2026 Owner Product Reset / documentation reconciliation**
+Round: **Post-SYNC-3 — Championship 2026 standalone repository migration / Owner review gate**
 Merge writer: **Codex (coordination responsibility only)**
 
 This file is an evidence index. Owner direction, agent-owned STATUS/DELTA files,
 source reports, contracts, manifests, tests, and Git state remain authoritative.
 
 ## Product state
+
+<!-- record-id: CHAMPIONSHIP_2026_REPOSITORY -->
+- `.` is now the independent `CHAMPIONSHIP_2026_PRODUCT_SSOT` on branch `main`.
+- The clean history begins with foundation checkpoint `efb397a`; VS1 is the only playable slice admitted by migration.
+- Runtime, production assets, tests, and npm dependencies resolve entirely inside this repository after `npm install`.
+- VS2 remains not authorized. The pre-migration repositories are external read-only provenance, not runtime dependencies.
 
 <!-- record-id: PRODUCT_SCOPE -->
 - The current product is `DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD`: a

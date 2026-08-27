@@ -1,5 +1,12 @@
 # Championship Decision Log
 
+## 2026-08-28 — Standalone repository separation executed
+
+- `.` is the active `CHAMPIONSHIP_2026_PRODUCT_SSOT` with independent clean Git history.
+- Only VS1 Raising Home, its bounded dependency closure, three contracts, eleven registered temporary presentation assets, and focused QA were migrated.
+- Forensic staging, ROM/decoded evidence, research galleries, later-slice runtime, and all Nexus application dependencies were excluded.
+- VS1 passed deterministic and five-viewport browser validation. Work is stopped for Owner review; VS2 is not opened.
+
 Record only explicit Owner decisions or genuinely new cross-agent decisions.
 This log does not restate every report and never replaces `OWNER_DIRECTION.md`.
 

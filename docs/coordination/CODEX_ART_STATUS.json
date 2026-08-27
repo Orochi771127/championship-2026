@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "owner": "CODEX_ART",
-  "lastUpdated": "2026-08-27",
-  "syncBatch": "CHAMPIONSHIP_2026_PRODUCT_RESET_DOCUMENTATION_RECONCILIATION",
+  "lastUpdated": "2026-08-28",
+  "syncBatch": "CHAMPIONSHIP_2026_REPOSITORY_SEPARATION",
   "syncRevision": 3,
   "syncRevisionTarget": 3,
-  "status": "CHAMPIONSHIP_2026_STANDALONE_PLAN_RECONCILED_STOPPED_FOR_VS2_GO",
+  "status": "REPOSITORY_MIGRATION_COMPLETE_STOPPED_FOR_OWNER_REVIEW",
   "sourceOfTruth": {
     "coordinationRoot": "docs/coordination",
-    "canonicalRepository": "docs/migration/PRE_MIGRATION_PROVENANCE.md#coordination-source",
-    "canonicalBranch": "codex/championship-art-production-skill",
-    "canonicalHeadAtPreparation": "a154a90595d4907af50264b083d6e12672138b36",
+    "canonicalRepository": ".",
+    "canonicalBranch": "main",
+    "canonicalHeadAtPreparation": "efb397a",
     "artEvidenceWorktree": "docs/migration/PRE_MIGRATION_PROVENANCE.md#art-evidence-worktree",
     "artEvidenceBranch": "codex/championship-art-reconstruction-research",
     "artEvidenceHead": "732775486665b21508ac51c1eea0b723db0f7744",
@@ -32,11 +32,12 @@
       "UNKNOWN_REQUIRES_TRACE": "NEUTRAL_DO_NOT_INVENT",
       "OWNER_APPROVED_ADAPTATION": "ONLY_INTENTIONAL_GAMEPLAY_CHANGE_AUTHORITY"
     },
-    "documentationBatchOnly": true,
+    "documentationBatchOnly": false,
+    "repositoryMigration": "COMPLETE_VS1_ONLY",
     "vs2ImplementationAuthorized": false
   },
   "workingTree": {
-    "canonicalWasDirtyAtPreparation": true,
+    "canonicalWasDirtyAtPreparation": false,
     "artEvidenceWorktreeWasDirty": true,
     "unrelatedChangesPreserved": true,
     "o3dCheckpointIsolatedFromRuntimeRegistryAndP2": true

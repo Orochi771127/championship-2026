@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "manifestId": "CODEX_CHAMPIONSHIP_MIGRATION_MANIFEST",
   "productSsot": "CHAMPIONSHIP_2026_PRODUCT_SSOT",
-  "status": "VALIDATED_MIGRATION_PLAN",
+  "status": "MIGRATED_AND_QA_PASSED",
   "sourceCheckpoint": "bb61d18d014db92f878862b1fe2b69092f02d0ad",
   "PRODUCTION_UI": [
     "src/championship/app/raisingHomeP1RView.js",
@@ -16,7 +16,20 @@
     "productionStatus": "TEMPORARY_PRESENTATION",
     "humanApproved": false,
     "shippingStatus": "NOT_SHIPPING_READY",
-    "note": "Accepted only as the VS1 playable baseline; not final art direction. File-level hashes are added after migration."
+    "note": "Accepted only as the VS1 playable baseline; not final art direction.",
+    "files": [
+      { "path": "assets/production/temporary/int-rh2/creatures/blazetail-kit/idle.png", "bytes": 2049658, "sha256": "ecb235728bc776a72d12f3fef1d5dd5e258565172ec2e2a3c3faa91276fc7715" },
+      { "path": "assets/production/temporary/int-rh2/creatures/blazetail-kit/portrait.png", "bytes": 415158, "sha256": "12a482f9c46fab3ae1ceadf1447704d6e7b3eb8cb58e40133abe99e531b767a6" },
+      { "path": "assets/production/temporary/int-rh2/creatures/blazetail-kit/touch.png", "bytes": 1532705, "sha256": "f4a9c56320a5f5baae923dfce64ea56afb93062ccd65df21b320c5c4b14f005d" },
+      { "path": "assets/production/temporary/int-rh2/creatures/crystalfin-seahorse/idle.png", "bytes": 1356014, "sha256": "f493611b07d35d8f908d93a4c7d120853138cd1117d79a2c669a9b29909dd0f0" },
+      { "path": "assets/production/temporary/int-rh2/creatures/crystalfin-seahorse/portrait.png", "bytes": 375290, "sha256": "d287ef82dcc4ba65bb8b3c097823c5c0ca5d01cb31835839c119ece5e3e0fc1c" },
+      { "path": "assets/production/temporary/int-rh2/creatures/crystalfin-seahorse/touch.png", "bytes": 1040025, "sha256": "85528449f1fc032d54444c3fb7773a4372d1898589b4f400da6b1a145e18b756" },
+      { "path": "assets/production/temporary/int-rh2/creatures/greyshade-cat/idle.png", "bytes": 1839330, "sha256": "77ffe226aaf40c5d05be1bfa5c5c21ac4de818d33ebeab1e3877f7e3e89f4099" },
+      { "path": "assets/production/temporary/int-rh2/creatures/greyshade-cat/portrait.png", "bytes": 404694, "sha256": "968523b9b754730198113d3898ac9cc2941a439b7d5660db47fc6794f5b6b9be" },
+      { "path": "assets/production/temporary/int-rh2/creatures/greyshade-cat/touch.png", "bytes": 139495, "sha256": "47a2da7f375224250c1bb2741b9e3c6501f27cf710df97ffd761ce23b9872770" },
+      { "path": "assets/production/temporary/int-rh2/environment/manifest.json", "bytes": 815, "sha256": "cf6c6ab42b8d78c2909d881138006644da35cc2fab84a2bb9a9b39d3f1166960" },
+      { "path": "assets/production/temporary/int-rh2/environment/raising_home_first_frame.webp", "bytes": 104012, "sha256": "e2c2ed4c6df2fba690ee9abcccdd1b8d0b092ad1d74492c067fd2d30a6bc6203" }
+    ]
   },
   "REFERENCE_ART": [
     "research/original-evidence/README.md"
@@ -44,4 +57,3 @@
     "assets outside assets/production"
   ]
 }
-

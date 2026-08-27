@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 2,
+  "id": "championship-modern-raising-home-presentation",
+  "note": "Presentation asset paths and product-authored cage regions for the standalone Raising screen. They live here, with the art, rather than in src/championship/ -- that tree is asserted to carry no binary asset paths at all, and the same rule is what keeps ROM-derived payload paths out of it.",
+  "authority": "CHAMPIONSHIP_2026_PRODUCT",
+  "originalParityClaim": false,
+  "cageNote": "Cage identity, names and regions below are PRODUCT-AUTHORED. ROM evidence proves 36 CageDefinition records and a 16-node cage presentation exist, but the assignment grammar, capacity rules and every cage effect remain UNKNOWN_REQUIRES_TRACE. Nothing here claims original parity, and no cage carries an effect.",
+  "habitat": {
+    "image": "assets/production/temporary/int-rh2/environment/raising_home_first_frame.webp",
+    "source": "assets/production/temporary/int-rh2/environment/manifest.json"
+  },
+  "cages": [
+    {
+      "cageId": "championship:2026:cage:moonwell-pool",
+      "name": "Moonwell Pool",
+      "region": { "x": 0.06, "y": 0.18, "w": 0.88, "h": 0.27 }
+    },
+    {
+      "cageId": "championship:2026:cage:quiet-hollow",
+      "name": "Quiet Hollow",
+      "region": { "x": 0.06, "y": 0.55, "w": 0.88, "h": 0.27 }
+    }
+  ],
+  "idle": {
+    "species": {
+      "greyshade-cat": {
+        "sheet": "assets/production/temporary/int-rh2/creatures/greyshade-cat/idle.png",
+        "columns": 4, "rows": 2, "frames": 8, "fps": 3
+      },
+      "blazetail-kit": {
+        "sheet": "assets/production/temporary/int-rh2/creatures/blazetail-kit/idle.png",
+        "columns": 4, "rows": 2, "frames": 8, "fps": 3
+      },
+      "crystalfin-seahorse": {
+        "sheet": "assets/production/temporary/int-rh2/creatures/crystalfin-seahorse/idle.png",
+        "columns": 4, "rows": 2, "frames": 8, "fps": 3
+      }
+    }
+  },
+  "reaction": {
+    "note": "Played once when the player uses a care tool. A reaction only -- it mutates no gameplay stat.",
+    "species": {
+      "greyshade-cat": {
+        "sheet": "assets/production/temporary/int-rh2/creatures/greyshade-cat/touch.png",
+        "columns": 6, "rows": 1, "frames": 6, "fps": 8
+      },
+      "blazetail-kit": {
+        "sheet": "assets/production/temporary/int-rh2/creatures/blazetail-kit/touch.png",
+        "columns": 3, "rows": 2, "frames": 6, "fps": 8
+      },
+      "crystalfin-seahorse": {
+        "sheet": "assets/production/temporary/int-rh2/creatures/crystalfin-seahorse/touch.png",
+        "columns": 3, "rows": 2, "frames": 6, "fps": 8
+      }
+    }
+  },
+  "portrait": {
+    "species": {
+      "greyshade-cat": "assets/production/temporary/int-rh2/creatures/greyshade-cat/portrait.png",
+      "blazetail-kit": "assets/production/temporary/int-rh2/creatures/blazetail-kit/portrait.png",
+      "crystalfin-seahorse": "assets/production/temporary/int-rh2/creatures/crystalfin-seahorse/portrait.png"
+    }
+  }
+}

@@ -1,0 +1,384 @@
+/* Championship 2026 -- standalone production styles.
+   Mobile-first 9:16. The habitat is the hero: creatures first, then the regions
+   they live in, then the current selection, then the tools. Everything else
+   stays out of the way. Direct manipulation only -- no navigation surface. */
+
+:root {
+  --cm-ink: #eaf6ff;
+  --cm-muted: #9db9c9;
+  --cm-dim: #7f9aa9;
+  --cm-deep: #061620;
+  --cm-panel: rgba(6, 22, 32, 0.9);
+  --cm-line: rgba(79, 166, 204, 0.24);
+  --cm-accent: #7fd2f5;
+  --cm-water: 127, 210, 245;
+  --cm-rest: 150, 205, 158;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--cm-deep);
+  color: var(--cm-ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  overscroll-behavior: none;
+}
+
+body { overflow: hidden; }
+button { font: inherit; }
+
+/* ---------------- Title ---------------- */
+
+.cm-title {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: max(24px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
+  background: radial-gradient(120% 90% at 50% 0%, #10314a 0%, #071722 70%);
+  z-index: 20;
+}
+
+.cm-title[hidden] { display: none; }
+.cm-title__panel { width: min(420px, 100%); display: flex; flex-direction: column; gap: 18px; text-align: center; }
+.cm-title__eyebrow { margin: 0; font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: #6fb6d8; }
+.cm-title__name { margin: 0; font-size: clamp(1.9rem, 8vw, 2.6rem); line-height: 1.1; }
+.cm-title__tagline { margin: 0; font-size: 0.92rem; color: var(--cm-muted); }
+.cm-title__actions { display: flex; flex-direction: column; gap: 12px; margin-top: 6px; }
+.cm-title__note { margin: 0; font-size: 0.78rem; color: var(--cm-dim); min-height: 1.2em; }
+
+.cm-button {
+  appearance: none;
+  border: 1px solid #2f6d8f;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #14435f 0%, #0e2f45 100%);
+  color: var(--cm-ink);
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 15px 18px;
+  min-height: 52px;
+  cursor: pointer;
+}
+
+.cm-button:disabled { opacity: 0.4; cursor: default; }
+.cm-button:not(:disabled):active { transform: translateY(1px); }
+.cm-button:focus-visible { outline: 3px solid var(--cm-accent); outline-offset: 2px; }
+.cm-button--primary { border-color: #4fa6cc; background: linear-gradient(180deg, #1d6d95 0%, #12506f 100%); }
+
+/* ---------------- Raising screen ---------------- */
+
+#cm-root[hidden] { display: none; }
+
+.cm-home {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  /* The habitat takes everything the two thin bands below it do not need. */
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  width: 100%;
+  max-width: min(100vw, calc(100dvh * 9 / 16));
+  margin: 0 auto;
+  background: var(--cm-deep);
+}
+
+.cm-habitat {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  background-color: #0a2233;
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: cover;
+}
+
+.cm-topbar {
+  position: relative;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: max(10px, env(safe-area-inset-top)) 12px 10px;
+  background: linear-gradient(180deg, rgba(4, 16, 24, 0.8) 0%, rgba(4, 16, 24, 0) 100%);
+}
+
+.cm-place {
+  flex: 1;
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1rem, 4.2vw, 1.4rem);
+  font-weight: 500;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+}
+
+.cm-clock {
+  margin: 0;
+  padding: 4px 10px;
+  border: 1px solid rgba(240, 208, 131, 0.32);
+  border-radius: 999px;
+  background: rgba(4, 16, 24, 0.5);
+  color: #f0d083;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+/* Save is system UI, not a creature tool, so it lives up here on its own. */
+.cm-system {
+  padding: 6px 12px;
+  min-height: 34px;
+  border: 1px solid rgba(157, 185, 201, 0.35);
+  border-radius: 999px;
+  background: rgba(4, 16, 24, 0.55);
+  color: var(--cm-muted);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.cm-system:active { transform: translateY(1px); }
+.cm-system:focus-visible { outline: 3px solid var(--cm-accent); outline-offset: 2px; }
+
+/* ---------------- Habitat regions ---------------- */
+
+/* Regions are part of the environment, not boxes drawn on top of it. At rest
+   they are a soft tint that separates water from resting ground; only a real
+   drag makes them outline themselves. */
+.cm-region {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  padding: 7px 10px;
+  border: 1px solid transparent;
+  border-radius: 26px;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.cm-region[data-identity="water"] {
+  background:
+    radial-gradient(120% 80% at 50% 100%, rgba(var(--cm-water), 0.20) 0%, rgba(var(--cm-water), 0) 70%),
+    linear-gradient(180deg, rgba(var(--cm-water), 0.05) 0%, rgba(var(--cm-water), 0.13) 100%);
+}
+
+.cm-region[data-identity="rest"] {
+  background:
+    radial-gradient(120% 80% at 50% 100%, rgba(var(--cm-rest), 0.18) 0%, rgba(var(--cm-rest), 0) 70%),
+    linear-gradient(180deg, rgba(var(--cm-rest), 0.04) 0%, rgba(var(--cm-rest), 0.12) 100%);
+}
+
+.cm-region__label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(234, 246, 255, 0.42);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+  transition: color 160ms ease;
+}
+
+/* Drag state: the regions speak up, and the destination speaks loudest. */
+.cm-home.is-relocating .cm-region { border-color: rgba(234, 246, 255, 0.22); }
+.cm-home.is-relocating .cm-region__label { color: rgba(234, 246, 255, 0.78); }
+.cm-home.is-relocating .cm-region.is-origin { border-style: dashed; opacity: 0.75; }
+
+.cm-region.is-drop-target {
+  border-color: var(--cm-accent);
+  box-shadow: inset 0 0 0 2px rgba(127, 210, 245, 0.45), 0 0 30px rgba(127, 210, 245, 0.3);
+  background:
+    radial-gradient(120% 80% at 50% 100%, rgba(var(--cm-water), 0.3) 0%, rgba(var(--cm-water), 0) 72%),
+    linear-gradient(180deg, rgba(var(--cm-water), 0.12) 0%, rgba(var(--cm-water), 0.26) 100%);
+}
+
+.cm-region.is-drop-target .cm-region__label { color: var(--cm-accent); }
+
+.cm-stage { position: absolute; inset: 0; z-index: 3; }
+
+/* ---------------- Creatures ---------------- */
+
+.cm-creature {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: grab;
+  /* Required, or a drag scrolls the page instead of moving the creature. */
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: left 1100ms ease-in-out, top 1100ms ease-in-out;
+}
+
+.cm-creature.is-dragging {
+  cursor: grabbing;
+  z-index: 40;
+  transition: none;
+  filter: drop-shadow(0 14px 20px rgba(0, 0, 0, 0.6));
+}
+
+.cm-creature__sprite {
+  display: block;
+  width: 116px;
+  height: 116px;
+  background-repeat: no-repeat;
+  background-position: 0% 0%;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.45));
+  pointer-events: none;
+}
+
+.cm-creature__sprite.is-still { background-size: contain; background-position: center; }
+
+/* Nameplates would otherwise stack up as habitat clutter, so only the creature
+   the player is actually working with is labelled. */
+.cm-creature__name {
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: rgba(127, 210, 245, 0.92);
+  color: #04141d;
+  font-size: 0.66rem;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-3px);
+  transition: opacity 140ms ease, transform 140ms ease;
+  pointer-events: none;
+}
+
+.cm-creature.is-selected .cm-creature__name,
+.cm-creature.is-dragging .cm-creature__name { opacity: 1; transform: translateY(0); }
+
+.cm-creature.is-selected::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  width: 84px;
+  height: 26px;
+  transform: translateX(-50%);
+  border: 2px solid var(--cm-accent);
+  border-radius: 50%;
+  box-shadow: 0 0 18px rgba(127, 210, 245, 0.55), inset 0 0 12px rgba(127, 210, 245, 0.28);
+  animation: cm-ring 2s ease-in-out infinite;
+}
+
+.cm-creature.is-reacting .cm-creature__sprite { filter: drop-shadow(0 0 16px rgba(150, 205, 158, 0.75)); }
+.cm-creature:focus-visible { outline: 3px solid var(--cm-accent); outline-offset: 4px; border-radius: 10px; }
+
+@keyframes cm-ring {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* ---------------- Transient feedback ---------------- */
+
+/* A message appears, says its piece, and leaves. It never becomes a permanent
+   band eating habitat. */
+.cm-toast {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  z-index: 9;
+  max-width: calc(100% - 28px);
+  margin: 0;
+  padding: 8px 14px;
+  transform: translate(-50%, 6px);
+  border: 1px solid var(--cm-line);
+  border-radius: 999px;
+  background: rgba(4, 16, 24, 0.9);
+  color: var(--cm-ink);
+  font-size: 0.76rem;
+  line-height: 1.3;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+.cm-toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------------- Selected creature ---------------- */
+
+.cm-panel {
+  padding: 9px 14px 8px;
+  border-top: 1px solid var(--cm-line);
+  background: var(--cm-panel);
+}
+
+.cm-panel__name { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 1.12rem; font-weight: 500; }
+.cm-panel__where { margin: 1px 0 0; font-size: 0.74rem; color: var(--cm-muted); }
+
+/* ---------------- Bottom tool bar ---------------- */
+
+.cm-tools {
+  display: flex;
+  gap: 8px;
+  padding: 8px 14px calc(8px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--cm-line);
+  background: rgba(4, 16, 24, 0.96);
+}
+
+.cm-tool {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  min-height: 54px;
+  padding: 7px 10px;
+  border: 1px solid rgba(79, 166, 204, 0.3);
+  border-radius: 14px;
+  background: rgba(20, 67, 95, 0.4);
+  color: var(--cm-muted);
+  cursor: pointer;
+  transition: border-color 140ms ease, background 140ms ease, color 140ms ease;
+}
+
+.cm-tool__glyph { font-size: 1.24rem; line-height: 1.1; }
+.cm-tool__label { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+
+.cm-tool.is-active {
+  border-color: var(--cm-accent);
+  background: linear-gradient(180deg, #1d6d95 0%, #12506f 100%);
+  color: var(--cm-ink);
+  box-shadow: inset 0 0 0 1px rgba(127, 210, 245, 0.45);
+}
+
+.cm-tool:not(.is-active):active { transform: translateY(1px); }
+.cm-tool:focus-visible { outline: 3px solid var(--cm-accent); outline-offset: 2px; }
+
+/* ---------------- Size adaptation ---------------- */
+
+@media (max-width: 360px) {
+  .cm-creature__sprite { width: 100px; height: 100px; }
+  .cm-place { font-size: 0.95rem; }
+}
+
+@media (max-height: 480px) {
+  .cm-home { max-width: 100vw; }
+  .cm-panel { padding: 6px 14px 5px; }
+  .cm-tools { padding-top: 6px; padding-bottom: calc(6px + env(safe-area-inset-bottom)); }
+  .cm-tool { min-height: 44px; padding: 4px 8px; }
+  .cm-tool__glyph { font-size: 1.05rem; }
+  .cm-creature__sprite { width: 88px; height: 88px; }
+  .cm-toast { bottom: 8px; }
+}
+
+@media (min-width: 700px) {
+  body { background: #04121b; }
+  .cm-home { border-left: 1px solid var(--cm-line); border-right: 1px solid var(--cm-line); }
+  .cm-creature__sprite { width: 138px; height: 138px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cm-creature { transition: none; }
+  .cm-creature.is-selected::before { animation: none; opacity: 1; }
+  .cm-region, .cm-toast, .cm-tool, .cm-creature__name { transition: none; }
+}

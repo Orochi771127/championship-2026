@@ -1,0 +1,277 @@
+{
+  "schemaVersion": 1,
+  "batch": "CHAMPIONSHIP_2026_VS1_INT_RH2",
+  "generatedAt": "2026-08-27T17:09:45.065Z",
+  "rendererPolicy": {
+    "dom": "P1R screen UI",
+    "pixi": "one field-scoped Application",
+    "three": "not used"
+  },
+  "viewports": [
+    {
+      "viewport": "360x800",
+      "layout": {
+        "viewport": {
+          "width": 360,
+          "height": 800
+        },
+        "documentWidth": 360,
+        "documentHeight": 800,
+        "shell": {
+          "width": 360,
+          "height": 800,
+          "top": 0,
+          "bottom": 800
+        },
+        "fieldHost": {
+          "width": 344,
+          "height": 563.453125
+        },
+        "canvas": {
+          "width": 344,
+          "height": 563
+        },
+        "canvasCount": 1,
+        "toolbarSlots": 8,
+        "toolbarEnabled": 0,
+        "uiAuthority": "P1R_DOM",
+        "rendererSplit": "DOM_UI_PIXI_FIELD",
+        "threeElements": 0,
+        "interactive": [
+          {
+            "id": "int-rh2-system-button is-dirty",
+            "width": 54.359375,
+            "height": 44,
+            "top": 10.5,
+            "bottom": 54.5
+          }
+        ]
+      },
+      "framePacing": {
+        "sampledFrames": 120,
+        "averageFps": 60.03,
+        "medianFrameMs": 16.7,
+        "p95FrameMs": 16.8
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "screenshot": "screenshots/raising-home-360x800.png"
+    },
+    {
+      "viewport": "390x844",
+      "layout": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "documentWidth": 390,
+        "documentHeight": 844,
+        "shell": {
+          "width": 390,
+          "height": 844,
+          "top": 0,
+          "bottom": 844
+        },
+        "fieldHost": {
+          "width": 370,
+          "height": 566.84375
+        },
+        "canvas": {
+          "width": 370,
+          "height": 567
+        },
+        "canvasCount": 1,
+        "toolbarSlots": 8,
+        "toolbarEnabled": 0,
+        "uiAuthority": "P1R_DOM",
+        "rendererSplit": "DOM_UI_PIXI_FIELD",
+        "threeElements": 0,
+        "interactive": [
+          {
+            "id": "int-rh2-system-button is-dirty",
+            "width": 58,
+            "height": 44,
+            "top": 13,
+            "bottom": 57
+          }
+        ]
+      },
+      "framePacing": {
+        "sampledFrames": 120,
+        "averageFps": 60.03,
+        "medianFrameMs": 16.7,
+        "p95FrameMs": 16.8
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "screenshot": "screenshots/raising-home-390x844.png"
+    },
+    {
+      "viewport": "375x812",
+      "layout": {
+        "viewport": {
+          "width": 375,
+          "height": 812
+        },
+        "documentWidth": 375,
+        "documentHeight": 812,
+        "shell": {
+          "width": 375,
+          "height": 812,
+          "top": 0,
+          "bottom": 812
+        },
+        "fieldHost": {
+          "width": 355,
+          "height": 556.84375
+        },
+        "canvas": {
+          "width": 355,
+          "height": 557
+        },
+        "canvasCount": 1,
+        "toolbarSlots": 8,
+        "toolbarEnabled": 0,
+        "uiAuthority": "P1R_DOM",
+        "rendererSplit": "DOM_UI_PIXI_FIELD",
+        "threeElements": 0,
+        "interactive": [
+          {
+            "id": "int-rh2-system-button is-dirty",
+            "width": 58,
+            "height": 44,
+            "top": 13,
+            "bottom": 57
+          }
+        ]
+      },
+      "framePacing": {
+        "sampledFrames": 120,
+        "averageFps": 60.03,
+        "medianFrameMs": 16.7,
+        "p95FrameMs": 16.8
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "screenshot": "screenshots/raising-home-375x812.png"
+    },
+    {
+      "viewport": "412x915",
+      "layout": {
+        "viewport": {
+          "width": 412,
+          "height": 915
+        },
+        "documentWidth": 412,
+        "documentHeight": 915,
+        "shell": {
+          "width": 412,
+          "height": 915,
+          "top": 0,
+          "bottom": 915
+        },
+        "fieldHost": {
+          "width": 392,
+          "height": 637.84375
+        },
+        "canvas": {
+          "width": 392,
+          "height": 638
+        },
+        "canvasCount": 1,
+        "toolbarSlots": 8,
+        "toolbarEnabled": 0,
+        "uiAuthority": "P1R_DOM",
+        "rendererSplit": "DOM_UI_PIXI_FIELD",
+        "threeElements": 0,
+        "interactive": [
+          {
+            "id": "int-rh2-system-button is-dirty",
+            "width": 58,
+            "height": 44,
+            "top": 13,
+            "bottom": 57
+          }
+        ]
+      },
+      "framePacing": {
+        "sampledFrames": 120,
+        "averageFps": 60.02,
+        "medianFrameMs": 16.7,
+        "p95FrameMs": 16.8
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "screenshot": "screenshots/raising-home-412x915.png"
+    },
+    {
+      "viewport": "430x932",
+      "layout": {
+        "viewport": {
+          "width": 430,
+          "height": 932
+        },
+        "documentWidth": 430,
+        "documentHeight": 932,
+        "shell": {
+          "width": 430,
+          "height": 932,
+          "top": 0,
+          "bottom": 932
+        },
+        "fieldHost": {
+          "width": 410,
+          "height": 654.84375
+        },
+        "canvas": {
+          "width": 410,
+          "height": 655
+        },
+        "canvasCount": 1,
+        "toolbarSlots": 8,
+        "toolbarEnabled": 0,
+        "uiAuthority": "P1R_DOM",
+        "rendererSplit": "DOM_UI_PIXI_FIELD",
+        "threeElements": 0,
+        "interactive": [
+          {
+            "id": "int-rh2-system-button is-dirty",
+            "width": 58,
+            "height": 44,
+            "top": 13,
+            "bottom": 57
+          }
+        ]
+      },
+      "framePacing": {
+        "sampledFrames": 120,
+        "averageFps": 60.02,
+        "medianFrameMs": 16.7,
+        "p95FrameMs": 16.8
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "screenshot": "screenshots/raising-home-430x932.png"
+    }
+  ],
+  "saveReload": {
+    "viewport": "390x844",
+    "selectedResident": "CRYSTALFIN",
+    "relocatedTo": "Quiet Hollow",
+    "careFlagPersisted": true,
+    "savePayloadPresent": true,
+    "restoredAfterPageReload": true,
+    "transientSelectionRestored": false,
+    "pageErrors": [],
+    "failedRequests": []
+  },
+  "pixiFallback": {
+    "viewport": "390x844",
+    "partialCanvasCount": 0,
+    "saveAvailable": true,
+    "toolbarSlots": 8,
+    "pageErrors": [],
+    "outcome": "PASS"
+  },
+  "outcome": "PASS"
+}

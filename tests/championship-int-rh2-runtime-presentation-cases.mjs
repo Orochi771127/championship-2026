@@ -1,0 +1,195 @@
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import test from "node:test";
+import { fileURLToPath } from "node:url";
+
+import { createChampionshipStandaloneApp } from "../src/championship/app/championshipStandaloneApp.js";
+import {
+  createRaisingPresentationSource,
+  RAISING_PRESENTATION_CONTRACT_VERSION
+} from "../src/championship/app/raisingPresentationSource.js";
+import { CHAMPIONSHIP_MODERN_SAVE_KEY } from "../src/championship/app/championshipStandaloneSave.js";
+
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const catalog = JSON.parse(fs.readFileSync(path.join(repoRoot, "src/data/championship/catalogs/entities.r1.json"), "utf8"));
+const presentation = JSON.parse(fs.readFileSync(
+  path.join(repoRoot, "docs/contracts/championship/raising-home-presentation.v1.json"), "utf8"
+));
+const CAGES = presentation.cages;
+
+function memoryStorage() {
+  const values = new Map();
+  return {
+    getItem(key) { return values.has(key) ? values.get(key) : null; },
+    setItem(key, value) { values.set(String(key), String(value)); },
+    removeItem(key) { values.delete(String(key)); },
+    keys() { return [...values.keys()].sort(); }
+  };
+}
+
+async function freshSource(storage = memoryStorage()) {
+  const app = createChampionshipStandaloneApp({
+    storage,
+    catalog,
+    cages: CAGES,
+    now: () => "2026-08-27T12:34:56.000Z"
+  });
+  await app.newGame();
+  return { app, source: createRaisingPresentationSource(app), storage };
+}
+
+test("INT-RH2 source projects the actual Phase 1 snapshot into the bounded frame", async () => {
+  const { app, source } = await freshSource();
+  const snapshot = app.getSnapshot();
+  assert.equal(snapshot.residents[0].speciesId, "greyshade-cat", "fixture drift: Phase 1 species IDs changed shape");
+
+  const frame = source.getFrame();
+  assert.equal(source.getFrame(), frame, "a pure getFrame read rebuilt or mutated the frame");
+  assert.equal(frame.contractVersion, RAISING_PRESENTATION_CONTRACT_VERSION);
+  assert.equal(frame.revision, 0);
+  assert.equal(frame.clock.display, "08:00");
+  assert.equal(frame.residents.length, snapshot.residents.length);
+  assert.equal(frame.residents[0].speciesId, "championship:creature:greyshade-cat");
+  assert.equal(frame.residents[0].sprite.idle.sheet, presentation.idle.species["greyshade-cat"].sheet);
+  assert.equal(frame.residents[0].cageId, CAGES[0].cageId);
+  assert.equal(frame.cages[0].occupantCount, frame.cages[0].occupantIds.length);
+  assert.equal(Object.isFrozen(frame), true);
+  assert.equal(Object.isFrozen(frame.residents[0].sprite.idle), true);
+
+  const serialized = JSON.stringify(frame);
+  for (const excluded of ["satiety", "energy", "ease", "readiness", "caretakerPosition", "eventLog", "feedback"]) {
+    assert.equal(serialized.includes(`\"${excluded}\"`), false, `presentation leaked excluded field ${excluded}`);
+  }
+  await app.dispose();
+});
+
+test("INT-RH2 toolbar projection preserves all eight verified shells and all unknowns", async () => {
+  const { app, source } = await freshSource();
+  const { toolbar } = source.getFrame();
+  assert.deepEqual(toolbar.slotCount, { value: 8, evidence: "ROM_VERIFIED" });
+  assert.deepEqual(toolbar.mode, { value: 1, context: "TRAINING_RAISING", evidence: "ROM_VERIFIED" });
+  assert.equal(toolbar.assetFamily.value, "ui/training_set");
+  assert.equal(toolbar.slots.length, 8);
+  assert.deepEqual(toolbar.slots.map((slot) => slot.buttonNode), [
+    "button0", "button1", "button2", "button3", "button4", "button5", "button6", "button7"
+  ]);
+  assert.deepEqual(toolbar.slots.map((slot) => slot.frame.cell), [10, 11, 10, 11, 10, 11, 10, 12]);
+  for (const [index, slot] of toolbar.slots.entries()) {
+    assert.equal(slot.slot, index);
+    assert.equal(slot.commandId.value, null);
+    assert.equal(slot.commandId.evidence, "UNKNOWN_REQUIRES_TRACE");
+    assert.equal(slot.iconCell.value, null);
+    assert.equal(slot.label.value, null);
+    assert.deepEqual(slot.submenuEntries.value, []);
+    assert.equal(slot.state, "UNBOUND_PLACEHOLDER");
+  }
+  await app.dispose();
+});
+
+test("INT-RH2 named intents mutate only the existing standalone truth and publish revisions", async () => {
+  const { app, source, storage } = await freshSource();
+  const residentId = source.getFrame().residents[0].creatureId;
+  const secondCage = CAGES[1].cageId;
+  const initialR2Resident = app.getSnapshot().residents.find((resident) => resident.residentId === residentId);
+  const observed = [];
+  const unsubscribe = source.subscribe((frame) => observed.push(frame));
+
+  const selected = source.intents.selectCreature(residentId);
+  assert.equal(selected.selection.creatureId, residentId);
+  assert.equal(selected.revision, 1);
+
+  const relocated = source.intents.relocateCreature(residentId, secondCage);
+  assert.equal(relocated.residents.find((resident) => resident.creatureId === residentId).cageId, secondCage);
+  assert.equal(app.getRaisingState().assignments[residentId], secondCage);
+  assert.equal(relocated.revision, 2);
+  assert.equal(source.intents.relocateCreature(residentId, secondCage).revision, 2, "same-cage drop advanced presentation truth");
+
+  const cared = source.intents.careForCreature(residentId);
+  assert.equal(cared.residents.find((resident) => resident.creatureId === residentId).intent, "care-reaction");
+  assert.equal(cared.revision, 3);
+  assert.equal(app.getRaisingState().interactions[residentId].careCount, 1);
+  const afterCare = app.getSnapshot().residents.find((resident) => resident.residentId === residentId);
+  for (const stat of ["satiety", "energy", "ease", "readiness"]) {
+    assert.equal(afterCare[stat], initialR2Resident[stat], `care intent moved forbidden stat ${stat}`);
+  }
+
+  const save = source.intents.requestSave();
+  assert.equal(save.phase, "SAVED");
+  assert.equal(source.getFrame().revision, 4);
+  assert.deepEqual(storage.keys(), [CHAMPIONSHIP_MODERN_SAVE_KEY]);
+  assert.equal(observed.length, 4);
+  assert.deepEqual(observed.map((frame) => frame.revision), [1, 2, 3, 4]);
+
+  unsubscribe();
+  source.intents.selectCreature(null);
+  assert.equal(observed.length, 4, "unsubscribed presentation observer still received frames");
+  await app.dispose();
+});
+
+test("INT-RH2 observers are isolated and re-entrant publications remain ordered", async () => {
+  const { app, source } = await freshSource();
+  const residentId = source.getFrame().residents[0].creatureId;
+  const first = [];
+  const second = [];
+  let reentered = false;
+  const unsubscribeThrower = source.subscribe(() => { throw new Error("observer failure"); });
+  const unsubscribeFirst = source.subscribe((frame) => {
+    first.push(frame.revision);
+    if (!reentered) {
+      reentered = true;
+      source.intents.relocateCreature(residentId, CAGES[1].cageId);
+    }
+  });
+  const unsubscribeSecond = source.subscribe((frame) => second.push(frame.revision));
+
+  source.intents.selectCreature(residentId);
+  assert.deepEqual(first, [1, 2]);
+  assert.deepEqual(second, [1, 2]);
+  assert.equal(source.getFrame().revision, 2);
+
+  unsubscribeThrower();
+  unsubscribeFirst();
+  unsubscribeSecond();
+  await app.dispose();
+});
+
+test("INT-RH2 save/reload proof restores runtime truth without restoring transient presentation state", async () => {
+  const storage = memoryStorage();
+  const first = await freshSource(storage);
+  const residentId = first.source.getFrame().residents[0].creatureId;
+  first.source.intents.selectCreature(residentId);
+  first.source.intents.relocateCreature(residentId, CAGES[1].cageId);
+  first.source.intents.careForCreature(residentId);
+  first.source.intents.requestSave();
+  await first.app.dispose();
+
+  const reloaded = createChampionshipStandaloneApp({ storage, catalog, cages: CAGES });
+  await reloaded.continueGame();
+  const restoredSource = createRaisingPresentationSource(reloaded);
+  const restored = restoredSource.getFrame();
+  const resident = restored.residents.find((entry) => entry.creatureId === residentId);
+  assert.equal(resident.cageId, CAGES[1].cageId);
+  assert.notEqual(resident.intent, "care-reaction", "ephemeral reaction was promoted into save truth");
+  assert.equal(restored.selection.creatureId, null, "selection was promoted into save truth");
+  assert.equal(restored.save.phase, "RESTORED");
+  assert.equal(reloaded.getRaisingState().interactions[residentId].careCount, 1);
+  await reloaded.dispose();
+});
+
+test("INT-RH2 Pixi field module declares exactly one local renderer authority", () => {
+  const file = path.join(repoRoot, "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js");
+  const source = fs.readFileSync(file, "utf8");
+  assert.equal((source.match(/new PIXI\.Application\(\)/g) ?? []).length, 1, "Pixi bootstrap count drifted");
+  assert.equal(/new PIXI\.Ticker|Ticker\.shared|requestAnimationFrame|setInterval/.test(source), false,
+    "Pixi field created a second ticker or frame loop");
+  assert.match(source, /app\.ticker\.add\(updateAnimations\)/, "animation does not use the Application-owned ticker");
+  assert.match(source, /autoUpdate: false/, "AnimatedSprite would attach itself to the shared ticker");
+  assert.equal(/Three|three\.js|WebGLRenderer/.test(source), false, "Three.js entered the Raising slice");
+  assert.equal(/localStorage|saveManager|championshipStandaloneApp|championshipRaisingProduction|entities\.r1/.test(source), false,
+    "Pixi presentation reached around the runtime presentation source");
+  assert.match(source, /source\.intents\.selectCreature/);
+  assert.match(source, /source\.intents\.relocateCreature/);
+  assert.match(source, /render\(frame\)\s*\{\s*sync\(frame\)/, "field port cannot accept the P1R render callback");
+  assert.equal(/toolbar|RAW_SLOT|commandId/.test(source), false, "field renderer took DOM toolbar authority");
+});

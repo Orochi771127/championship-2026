@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "contractId": "INT_RH2_RUNTIME_PRESENTATION_CONTRACT",
+  "version": "v1",
+  "owner": "Claude Code",
+  "consumer": "Codex Art",
+  "date": "2026-08-27",
+  "slice": "INT-RH2 - Raising Home Phase 2 Presentation Integration",
+
+  "purpose": "The only surface Codex binds presentation to. Codex reads frames and raises intents; it never reads Claude internal state and never holds gameplay truth. Everything here is read-only except the named intents.",
+
+  "rendererSplit": {
+    "dom": "application and screen UI - Codex, P1R system",
+    "pixi": "Raising playable field, actors, props, 2D presentation - Claude owns the runtime integration, Codex owns visual QA",
+    "three": "NOT USED IN INT-RH2",
+    "forbidden": ["second global ticker", "second Pixi bootstrap", "second router", "second save authority", "second gameplay store"]
+  },
+
+  "producer": {
+    "module": "src/championship/app/raisingPresentationSource.js",
+    "factory": "createRaisingPresentationSource(app)",
+    "status": "IMPLEMENTED_BY_CLAUDE",
+    "api": {
+      "getFrame()": "returns a RaisingPresentationFrame; pure read, never mutates",
+      "subscribe(listener)": "listener(frame) on every runtime change; returns an unsubscribe function",
+      "intents": "the object described under `intents` below"
+    },
+    "note": "Codex must not import championshipStandaloneApp, championshipRaisingProduction, any R2 module, or any catalog. This factory is the whole seam."
+  },
+
+  "frame": {
+    "contractVersion": "string",
+    "revision": "integer, increments on every runtime change; use it to skip redundant repaints",
+    "clock": {
+      "minutes": "integer, in-world minutes since midnight",
+      "display": "string, HH:MM"
+    },
+    "cages": [
+      {
+        "cageId": "stable id, e.g. championship:2026:cage:moonwell-pool",
+        "name": "product-authored display name",
+        "region": { "x": "0..1", "y": "0..1", "w": "0..1", "h": "0..1" },
+        "occupantIds": ["creatureId"],
+        "occupantCount": "integer",
+        "authority": "CHAMPIONSHIP_2026_PRODUCT",
+        "note": "Product-authored habitat prototypes. NOT the original 36-CageDefinition catalogue. Presentation must not imply otherwise."
+      }
+    ],
+    "residents": [
+      {
+        "creatureId": "stable id, e.g. resident:greyshade-cat",
+        "displayName": "string",
+        "speciesId": "product catalog id, e.g. championship:creature:greyshade-cat",
+        "cageId": "the cage this creature currently belongs to",
+        "lane": { "x": "0..1 within its cage region", "y": "0..1 within its cage region" },
+        "facing": "domain presentation hint",
+        "intent": "domain presentation hint",
+        "selected": "boolean",
+        "sprite": {
+          "idle": { "sheet": "path", "columns": "int", "rows": "int", "frames": "int", "fps": "int" },
+          "reaction": { "sheet": "path", "columns": "int", "rows": "int", "frames": "int", "fps": "int" },
+          "portrait": "path"
+        }
+      }
+    ],
+    "selection": { "creatureId": "string or null" },
+    "save": {
+      "phase": "DIRTY | SAVED | RESTORED | RECOVERED | CLEAN | SAVE_FAILED",
+      "savedAt": "ISO string or null",
+      "canRetry": "boolean"
+    },
+    "affordances": {
+      "tapSelects": true,
+      "dragRelocates": true,
+      "dropTargetCageIds": ["cageId"],
+      "note": "Pointer Events only. Mouse and touch use one code path; there is no keyboard-navigation model and no directional input."
+    },
+    "toolbar": {
+      "slotCount": { "value": 8, "evidence": "ROM_VERIFIED" },
+      "mode": { "value": 1, "context": "TRAINING_RAISING", "evidence": "ROM_VERIFIED" },
+      "assetFamily": { "value": "ui/training_set", "evidence": "ROM_VERIFIED" },
+      "slots": [
+        {
+          "slot": "0..7",
+          "buttonNode": "buttonN - slot N is buttonN, left to right",
+          "frame": { "x": "int", "y": "int", "cell": "int", "labelAnchorX": "int", "labelAnchorY": "int" },
+          "submenuCapacity": { "value": 8, "evidence": "ROM_VERIFIED" },
+          "submenuEntries": { "value": [], "evidence": "UNKNOWN_REQUIRES_TRACE", "note": "Storage is proven; population is not. Always empty in this contract version." },
+          "commandId": { "value": null, "evidence": "UNKNOWN_REQUIRES_TRACE" },
+          "iconCell": { "value": null, "evidence": "UNKNOWN_REQUIRES_TRACE" },
+          "label": { "value": null, "evidence": "UNKNOWN_REQUIRES_TRACE" },
+          "state": "UNBOUND_PLACEHOLDER"
+        }
+      ],
+      "presentationRule": "Render all eight slots as the ROM-verified shell, in ROM order, at the ROM geometry. Every slot is a neutral, disabled placeholder carrying its raw slot id. Do not label, icon, or activate any slot. Do not hide slots to make the row look finished."
+    },
+    "implementedActions": {
+      "note": "The only actions with real runtime behaviour today. They are deliberately NOT mapped to toolbar slots: that mapping is UNKNOWN_REQUIRES_TRACE and inventing it is the exact error this programme exists to prevent. Surface them as their own affordances until evidence closes the binding.",
+      "actions": [
+        { "id": "SELECT", "trigger": "tap a creature", "effect": "selection changes", "evidence": "product behaviour" },
+        { "id": "RELOCATE", "trigger": "drag a creature onto another cage", "effect": "cage assignment changes; no other effect is applied because none is verified", "evidence": "ROM_VERIFIED interaction grammar (hand icon grabs and drops); consequences UNKNOWN" },
+        { "id": "CARE", "trigger": "invoke the care intent on a selected creature", "effect": "one-shot reaction animation plus a product-authored interaction flag; mutates no gameplay stat", "evidence": "ROM_VERIFIED that a care tool exists and is used by touching the creature; exact values UNKNOWN" }
+      ]
+    }
+  },
+
+  "intents": {
+    "note": "The only mutation entry points. Codex calls these; Codex never writes state.",
+    "selectCreature(creatureId | null)": "set or clear selection",
+    "relocateCreature(creatureId, cageId)": "commit a drop; a no-op if the creature already belongs to that cage",
+    "careForCreature(creatureId)": "run the care interaction; returns the updated frame",
+    "requestSave()": "persist; returns the updated save block"
+  },
+
+  "excludedFromPresentation": {
+    "note": "Deliberately absent. Requesting any of these is a contract violation, not a missing feature.",
+    "fields": [
+      "satiety, energy, ease, readiness - R2 adaptation stats, removed from the player-facing HUD by Owner ruling",
+      "caretakerPosition - R2 prototype only; no player avatar exists",
+      "the R2 24x14 grid and tile coordinates",
+      "eventLog and raw domain feedback strings - product copy is adapted before it reaches a frame",
+      "any forensic catalog record, evidence claim, or promotion manifest field",
+      "any original ROM pixel or ROM-derived binary asset path"
+    ]
+  },
+
+  "statusModelNote": {
+    "romVerified": "HP, Capacity, Attack, Defense, Intelligence, Speed, Family, Generation, Attribute, Personality",
+    "state": "No values exist for any of them in this build. The frame exposes none, and presentation must not show placeholder numbers. Product-authored initial values may be defined later under explicit product authority."
+  },
+
+  "responsiveTargets": {
+    "reference": "390x844",
+    "mustPass": ["360x800", "390x844", "393x852", "412x915", "430x932"],
+    "criteria": ["no horizontal overflow", "no clipped controls", "no field/input disagreement", "safe-area handling", "pointer mapping", "viewport resilience"]
+  },
+
+  "saveLoadProof": {
+    "requirement": "initial state -> resident interaction -> save -> reload -> restored state",
+    "purpose": "Proves the UI and Pixi presentation hold no second copy of gameplay truth.",
+    "currentRuntimeEvidence": "Already proven at the runtime layer: cage assignment and the interaction flag survive a real page reload. INT-RH2 must show it survives with the P1R UI and Pixi field in place."
+  },
+
+  "implementation": {
+    "producerModule": "src/championship/app/raisingPresentationSource.js",
+    "fieldRendererModule": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
+    "bootstrapCount": 1,
+    "ticker": "APPLICATION_OWNED",
+    "toolbarRenderer": "DOM_SCREEN_UI",
+    "note": "The Pixi module is field-scoped and consumes only this contract source. The eight neutral toolbar shells remain DOM screen UI under the Owner renderer policy."
+  },
+
+  "openQuestions": []
+}
