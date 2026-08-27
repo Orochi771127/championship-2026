@@ -87,7 +87,13 @@ if not exist "%REPO%\node_modules\pixi.js" (
 )
 
 echo   Starting up...
-start "Championship 2026 server" /min cmd /c "cd /d "%REPO%" && set CHAMPIONSHIP_HOST=%BINDHOST%&& set CHAMPIONSHIP_PORT=%PORT%&& npm run serve"
+rem The server inherits this working directory and these variables, which avoids
+rem nesting quotes inside cmd /c and keeps a path with spaces working.
+pushd "%REPO%"
+set "CHAMPIONSHIP_HOST=%BINDHOST%"
+set "CHAMPIONSHIP_PORT=%PORT%"
+start "Championship 2026 server" /min cmd /c npm run serve
+popd
 
 set /a TRIES=0
 :wait
