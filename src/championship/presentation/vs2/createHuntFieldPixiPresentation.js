@@ -44,6 +44,7 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
   const { PIXI, app } = stage;
 
   const scene = stage.createSceneRoot("VS2 Hunt field");
+  const unmarkScene = stage.markScene("cm-hunt-pixi-canvas");
   const backdrop = new PIXI.Graphics();
   const world = new PIXI.Container({ label: "hunt world" });
   const terrainLayer = new PIXI.Container({ label: "modular terrain" });
@@ -292,6 +293,7 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
       if (disposed) return;
       disposed = true;
       drag = null;
+      unmarkScene();
       unobserveResize();
       unobserveContextLost();
       app.ticker.remove(advance);

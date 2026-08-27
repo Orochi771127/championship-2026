@@ -135,6 +135,18 @@ export async function createChampionshipPixiStage({ PIXI, canvasHost }) {
       return () => contextLostListeners.delete(listener);
     },
 
+    /**
+     * Mark the shared canvas as belonging to the mounted scene.
+     *
+     * The Application is shared, but the canvas still needs a per-scene hook for
+     * scene-specific styling and QA selectors. Returns an unmark function the
+     * scene calls on dispose.
+     */
+    markScene(className) {
+      app.canvas.classList.add(className);
+      return () => app.canvas.classList.remove(className);
+    },
+
     /** Create a scene root already added to the stage. The caller destroys it. */
     createSceneRoot(label) {
       const root = new PIXI.Container({ isRenderGroup: true, label });

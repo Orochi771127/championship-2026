@@ -92,6 +92,7 @@ export async function mountRaisingFieldPixiPresentation({
   const { PIXI, app } = stage;
 
   const scene = stage.createSceneRoot("INT-RH2 Raising field");
+  const unmarkScene = stage.markScene("cm-raising-pixi-canvas");
   const backgroundLayer = new PIXI.Container({ label: "background" });
   const terrainLayer = new PIXI.Container({ label: "terrain" });
   const propLayer = new PIXI.Container({ label: "props" });
@@ -374,6 +375,7 @@ export async function mountRaisingFieldPixiPresentation({
       disposed = true;
       drag = null;
       unsubscribe();
+      unmarkScene();
       unobserveResize();
       unobserveContextLost();
       app.ticker.remove(updateAnimations);

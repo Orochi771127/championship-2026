@@ -190,6 +190,12 @@ test("INT-RH2 Pixi field is a scene on the one shared stage and owns no bootstra
   assert.equal((stage.match(/new PIXI\.Application\(\)/g) ?? []).length, 1, "the stage must hold exactly one bootstrap");
   assert.equal(/app\.destroy\(/.test(source), false, "the field must not destroy an Application it does not own");
   assert.match(source, /stage\.createSceneRoot\(/, "the field must take its scene root from the stage");
+
+  // The canvas is shared now, so the Raising scene has to claim its own class
+  // while mounted. Losing it is invisible in unit tests and breaks the VS1
+  // browser gate's selector, so it is pinned here where it fails in a second.
+  assert.match(source, /stage\.markScene\("cm-raising-pixi-canvas"\)/, "the Raising scene must mark the shared canvas");
+  assert.match(source, /unmarkScene\(\)/, "the Raising scene must release its canvas class on dispose");
   assert.equal(/new PIXI\.Ticker|Ticker\.shared|requestAnimationFrame|setInterval/.test(source), false,
     "Pixi field created a second ticker or frame loop");
   assert.match(source, /app\.ticker\.add\(updateAnimations\)/, "animation does not use the Application-owned ticker");
