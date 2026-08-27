@@ -2,50 +2,51 @@
 //
 // EVIDENCE POSITION
 // -----------------
-// The gate COUNT is reference-backed: O3-C recovered 16/16 biome representatives
-// and OVL12 gate_select carries 16 biome nodes. That is a structural fact and is
-// preserved.
+// The 16 destinations and their identities are recovered, not authored. The
+// `gate_select/3D_worldMap_model.nsbmd` MDL0 name table carries 16
+// `<Name>parent` -> `<Name>` node pairs at a uniform 16-byte stride, and three
+// independent counts of 16 agree: model node pairs, `obj_world_GateIcon` cells,
+// and `field_image_icon` cells. See
+// docs/contracts/championship/VS2_GATE_SELECT_3D_RUNTIME_CONTRACT.v1.json.
 //
-// Everything else about a gate is not traced. There is no recovered gate table,
-// no unlock rule, no ordering rule, and nothing connecting a gate to one of the
-// 30 HM field records. So the names here are product-authored, every gate is
-// available, and each gate carries a product-authored world seed rather than a
-// claim about which original field it is.
+// IDENTITY VERSUS DISPLAY
+// -----------------------
+// `biomeId` is the ROM_VERIFIED node identity and is the canonical key: stable,
+// internal, and safe to align to the original. `displayName` is NOT recovered -
+// no original player-facing string for these destinations has been read - so it
+// is a presentation default that a localization layer is expected to replace.
+// Recovering a node name is not the same as recovering the label the player saw,
+// and this file keeps the two apart on purpose.
 //
-// This mirrors how VS1 already handles the two habitat regions: product-authored
-// content inside a preserved structure, labelled as such so it can never be
-// mistaken for recovered original data.
+// Ordering is the model's name-table order, which is alphabetical. Original
+// display or selection order is UNKNOWN_REQUIRES_TRACE.
+//
+// Everything else about a gate remains untraced: there is no recovered gate
+// table, no unlock rule, and nothing connecting a gate to one of the 30 HM field
+// records. So every gate is available, and each carries a product-authored world
+// seed rather than a claim about which original field it is.
 
 import { deepFreeze } from "../contracts/championshipContracts.js";
 
 export const GATE_COUNT = 16;
-export const GATE_COUNT_EVIDENCE = "REFERENCE_BASELINE";
+export const GATE_COUNT_EVIDENCE = "ROM_VERIFIED";
+export const GATE_IDENTITY_EVIDENCE = "ROM_VERIFIED";
+export const GATE_DISPLAY_NAME_EVIDENCE = "PRESENTATION_DEFAULT_NOT_RECOVERED";
 export const GATE_AUTHORITY = "CHAMPIONSHIP_2026_PRODUCT";
 
-// Product-authored neutral names. They describe a mood, not a recovered place:
-// no original gate name has been recovered, and presenting an invented name as
-// original would be exactly the error the evidence policy exists to prevent.
-const GATE_NAMES = Object.freeze([
-  "Shallow Verge",
-  "Quiet Basin",
-  "Ashen Steps",
-  "Pale Thicket",
-  "Sunken Walk",
-  "Amber Hollow",
-  "Still Lagoon",
-  "Rust Plateau",
-  "Cold Aqueduct",
-  "Drifting Fen",
-  "Glass Terrace",
-  "Low Cinderfield",
-  "Hushed Canopy",
-  "Salt Reach",
-  "Dim Causeway",
-  "Far Meridian"
+/**
+ * The 16 recovered biome node identities, in model name-table order.
+ *
+ * `displayName` is a presentation default derived from the node identity, not a
+ * recovered original string.
+ */
+const BIOME_IDENTITIES = Object.freeze([
+  "Canyon", "Crag", "Damp", "Desert", "Factory", "Forest", "Grass", "Ice",
+  "Jungle", "Mine", "Oasis", "Ruins", "Savanna", "Seaside", "Sewer", "Volcano"
 ]);
 
-function gateId(ordinal) {
-  return `championship:2026:gate:${String(ordinal).padStart(2, "0")}`;
+function gateId(biomeId) {
+  return `championship:2026:gate:${biomeId.toLowerCase()}`;
 }
 
 /**
@@ -56,15 +57,21 @@ function gateId(ordinal) {
  * every device and in every test run.
  */
 export const CHAMPIONSHIP_GATES = deepFreeze(
-  Array.from({ length: GATE_COUNT }, (_, index) => {
+  BIOME_IDENTITIES.map((biomeId, index) => {
     const ordinal = index + 1;
     return {
-      gateId: gateId(ordinal),
+      gateId: gateId(biomeId),
       ordinal,
-      displayName: GATE_NAMES[index],
-      nameAuthority: GATE_AUTHORITY,
-      // Codex binds art by ordinal. The O3-C representative catalog is Codex-owned
-      // and lives outside this repository, so this module does not invent ids for it.
+      // ROM_VERIFIED: the MDL0 node name. This is the canonical identity.
+      biomeId,
+      biomeNodeName: biomeId,
+      biomeParentNodeName: `${biomeId}parent`,
+      identityEvidence: GATE_IDENTITY_EVIDENCE,
+      // NOT recovered. A localization layer may replace this freely.
+      displayName: biomeId,
+      displayNameEvidence: GATE_DISPLAY_NAME_EVIDENCE,
+      // Codex binds art by ordinal; the O3-C representative catalog is
+      // Codex-owned and lives outside this repository.
       biomeOrdinal: ordinal,
       state: "AVAILABLE",
       stateEvidence: "UNKNOWN_REQUIRES_TRACE",
@@ -75,6 +82,7 @@ export const CHAMPIONSHIP_GATES = deepFreeze(
 );
 
 const GATES_BY_ID = new Map(CHAMPIONSHIP_GATES.map((gate) => [gate.gateId, gate]));
+const GATES_BY_BIOME = new Map(CHAMPIONSHIP_GATES.map((gate) => [gate.biomeId, gate]));
 
 export function listChampionshipGates() {
   return CHAMPIONSHIP_GATES;
@@ -84,6 +92,15 @@ export function getChampionshipGate(id) {
   return GATES_BY_ID.get(id) ?? null;
 }
 
+/** Resolve by recovered biome identity, the canonical key. */
+export function getChampionshipGateByBiome(biomeId) {
+  return GATES_BY_BIOME.get(biomeId) ?? null;
+}
+
 export function isChampionshipGateId(id) {
   return GATES_BY_ID.has(id);
+}
+
+export function listChampionshipBiomeIdentities() {
+  return BIOME_IDENTITIES;
 }

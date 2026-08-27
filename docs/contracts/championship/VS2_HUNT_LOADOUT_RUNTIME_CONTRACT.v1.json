@@ -1,0 +1,422 @@
+{
+  "schemaVersion": 1,
+  "contractId": "VS2_HUNT_LOADOUT_RUNTIME_CONTRACT",
+  "version": "v1",
+  "owner": "Claude Code",
+  "consumer": "Codex Art",
+  "date": "2026-08-28",
+  "slice": "VS2-R1 B - Original Hunt Loadout evidence closure",
+
+  "authorization": {
+    "source": "Owner directive, 2026-08-28, VS2-R1 Original Gate + Hunt Loadout parity",
+    "scope": "Evidence and contract closure only. No product implementation, no UI design, no Capture, no VS3, no Battle, no new save schema.",
+    "finding": "The shipped Hunt Loadout is a one-companion selection prototype. The original is a gear / equipment / plugin / launcher system across 11 NXR scenes and 79 catalogued items.",
+    "stopCondition": "Contract published. Codex may rebuild the formal Hunt Loadout only against this document."
+  },
+
+  "currentProductStatus": {
+    "value": "CURRENT_COMPANION_LOADOUT = PRODUCT_AUTHORED_PROTOTYPE",
+    "rule": "It must never be promoted to Original parity, and no part of it may be cited as evidence of original behaviour.",
+    "whatItGotRight": "It declared itself PRODUCT_AUTHORED at the time and shipped exactly one companion rather than inventing slots, items or a supply meter. Nothing has to be un-invented.",
+    "whatItLacks": "Every original concept below: equipment classes, consumable counts, gear slots, plugin slots, the launcher, the item catalog, availability rules, and the loadout-to-HUD handoff."
+  },
+
+  "method": {
+    "rule": "Existing evidence first. Nothing here is inferred from the shipped product UI.",
+    "sourcesRead": [
+      "the 94-scene NXR analysis: scene registry, linked-asset map, and full node tables with coordinates",
+      "the UI source-asset, sprite-bundle and background inventories",
+      "the ROM-extracted shop catalog with Japanese item names and descriptions",
+      "the shop and economy specification",
+      "the gameplay master spec, mode-flow map, hunt/capture spec and system-readiness register",
+      "the PlayerData save status"
+    ],
+    "corroboration": "Where a fact is asserted ROM_VERIFIED below it is because two independent artifacts agree - typically an NXR node name and a ROM item string.",
+    "provenance": "All paths are relative to ORIGINAL_EVIDENCE_ROOT, recorded once in research/original-evidence/README.md. No ROM payload, decoded pixel, or machine path enters this repository."
+  },
+
+  "answers": {
+
+    "1_originalLoadoutScreenSequence": {
+      "evidence": "PARTIAL",
+      "verified": {
+        "overlay": "OVL12 owns both Gate Select and Hunt Loadout.",
+        "detail": "The mode-flow map states OVL 12 = 'Gate select + Hunt loadout'. Independently, the NXR scene registry attributes all 11 ui/hunt/setting/ scenes AND ui/hunt/world/world_sub_base_scene.nxr to OVL12. Two independent artifacts agree.",
+        "romEvidence": "The OVL12 -> gate_select/3D_worldMap_model loader call at 0x0210C6FC is a direct code cross-reference; the NXR overlay attribution is inference (SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE)."
+      },
+      "documentedFlow": {
+        "value": "Gate Select -> Hunt Loadout -> field -> wild roam/alert/flee -> tools / rope / tether -> circle capture -> capture transaction -> result -> collection",
+        "source": "gameplay master spec",
+        "evidence": "PARTIAL - a documented research summary, not a traced call sequence"
+      },
+      "topMenu": {
+        "value": "Three top-level loadout menus exist as separate scenes: GEAR, PLUGIN, RELEASE.",
+        "scenes": ["menu_top_gear_scene.nxr", "menu_top_plugin_scene.nxr", "menu_top_release_scene.nxr"],
+        "evidence": "ROM_VERIFIED as scene identities",
+        "unknown": "Their ordering, entry point, and whether EQUIP is a fourth peer or is reached from one of them. `menu_top_release_scene` semantics are UNKNOWN: `release` also appears in hunt_result as release_txt/release_anim, where it plausibly means releasing a captured creature, but the loadout-context meaning is not traced."
+      },
+      "unknown": ["screen order", "entry and exit calls", "whether loadout is mandatory or skippable", "confirmation step"]
+    },
+
+    "2_elevenNxrSceneRoles": {
+      "evidence": "ROM_VERIFIED at node level; role naming is descriptive",
+      "note": "Coordinates are NXR node x/y. p6/p7 are the two float params; where they exceed 1.0 they consistently indicate a region extent rather than a scale.",
+      "scenes": [
+        {
+          "path": "ui/hunt/setting/menu_top_gear_scene.nxr",
+          "bytes": 492, "nodeCount": 9, "resources": ["setting_menu"],
+          "role": "Top-level GEAR menu page. Eight text/dynamic labels over a 12x12 base panel.",
+          "namedNodes": ["base"]
+        },
+        {
+          "path": "ui/hunt/setting/menu_top_plugin_scene.nxr",
+          "bytes": 648, "nodeCount": 12, "resources": ["setting_menu"],
+          "role": "Top-level PLUGIN menu page. Eleven text/dynamic labels over the same 12x12 base panel.",
+          "namedNodes": ["base"]
+        },
+        {
+          "path": "ui/hunt/setting/menu_top_release_scene.nxr",
+          "bytes": 492, "nodeCount": 9, "resources": ["setting_menu"],
+          "role": "Top-level RELEASE menu page. Same shape as the gear page.",
+          "namedNodes": ["base"],
+          "semantics": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "path": "ui/hunt/setting/setting_equip_main_scene.nxr",
+          "bytes": 1156, "nodeCount": 22, "resources": ["menu_main", "setting_obj_main"],
+          "role": "EQUIP main screen. Five class touch regions, five plates, five icons, five plate animations, and one large control area.",
+          "namedNodes": {
+            "classRegions": ["col_rope @(59,10)", "col_shot @(84,16)", "col_wire @(111,10)", "col_entrap @(136,16)", "col_damage_trap @(163,10)"],
+            "plates": ["plate0 @(66,17)", "plate1 @(92,23)", "plate2 @(118,17)", "plate3 @(144,23)", "plate4 @(170,17)"],
+            "icons": ["icon1 @(66,17)", "icon2 @(92,23)", "icon3 @(118,17)", "icon4 @(144,23)", "icon5 @(170,17)"],
+            "animations": ["plate0_anim", "plate1_anim", "plate2_anim", "plate3_anim", "plate4_anim"],
+            "control": "menu_control_area @(128,102) extent 16.0 x 9.0"
+          },
+          "layoutNote": "The five plates alternate y between 17 and 23 at a 26px x-pitch - a staggered row, not a grid."
+        },
+        {
+          "path": "ui/hunt/setting/setting_equip_sub_scene.nxr",
+          "bytes": 296, "nodeCount": 5, "resources": ["setting_obj_sub"],
+          "role": "EQUIP sub screen. Exactly five equip covers, matching the five classes.",
+          "namedNodes": ["equip_cover0 @(62,160)", "equip_cover1 @(88,166)", "equip_cover2 @(114,160)", "equip_cover3 @(140,166)", "equip_cover4 @(166,160)"]
+        },
+        {
+          "path": "ui/hunt/setting/setting_gear_main_scene.nxr",
+          "bytes": 656, "nodeCount": 12, "resources": ["setting_obj_main"],
+          "role": "GEAR main screen. Four category tabs with matching touch regions, plus a scrollable list area.",
+          "namedNodes": {
+            "tabRegions": ["col_all @(232,8) extent 1.0x3.0", "col_analyser @(232,68)", "col_bullet @(232,101)", "col_rader @(232,132)"],
+            "tabs": ["tab_all @(228,0)", "tab_analyser @(228,48)", "tab_bullet @(228,80)", "tab_rader @(228,112)"],
+            "scroll": ["slide_area @(147,12) extent 5.0x10.0", "col_slide_area @(130,0) extent 6.0x10.5"],
+            "background": "plugin_bg @(128,0) extent 13.0x24.0"
+          },
+          "scrollNote": "A dedicated slide area plus its own collision region is direct evidence of a scrollable/draggable list, which is input evidence at the layout level."
+        },
+        {
+          "path": "ui/hunt/setting/setting_gear_main_slot_scene.nxr",
+          "bytes": 716, "nodeCount": 13, "resources": ["setting_obj_main"],
+          "role": "GEAR slot strip. Exactly four slots, each with a collision region, a locator and a cover.",
+          "namedNodes": {
+            "collision": ["col_slot0 @(15,33)", "col_slot1 @(15,52)", "col_slot2 @(15,71)", "col_slot3 @(15,90)"],
+            "locators": ["loc_slot0", "loc_slot1", "loc_slot2", "loc_slot3"],
+            "covers": ["slot0_cover @(24,33)", "slot1_cover @(24,52)", "slot2_cover @(24,71)", "slot3_cover @(24,90)"],
+            "base": "col_slot_base @(0,26)"
+          },
+          "layoutNote": "Uniform 19px vertical pitch. Every node is typed SLOT by the analysis."
+        },
+        {
+          "path": "ui/hunt/setting/setting_gear_sub_scene.nxr",
+          "bytes": 452, "nodeCount": 8, "resources": ["setting_obj_sub"],
+          "role": "GEAR sub screen. Exactly four plugin positions, each with a cover.",
+          "namedNodes": {
+            "plugins": ["plugin0 @(13,50)", "plugin1 @(13,69)", "plugin2 @(13,88)", "plugin3 @(13,107)"],
+            "covers": ["plugin0_cover @(28,59)", "plugin1_cover @(28,78)", "plugin2_cover @(28,97)", "plugin3_cover @(28,116)"]
+          },
+          "layoutNote": "The same 19px pitch as the gear slots, at the same x - the gear slot strip and the plugin strip are the two screens of one four-position system."
+        },
+        {
+          "path": "ui/hunt/setting/setting_sub_base_scene.nxr",
+          "bytes": 396, "nodeCount": 7, "resources": ["setting_obj_sub"],
+          "role": "Item detail panel on the sub screen.",
+          "namedNodes": ["icon_image @(99,90)", "item_name @(130,46) extent 6.0x1.0", "item_desc @(116,65) extent 8.0x4.0", "plugin_slot @(-4,40)", "top_mes @(96,75) extent 9.0x2.0", "image_plate @(87,79)", "image_base @(24,40)"],
+          "note": "item_desc at 8 x 4 is a four-line description region, which matches the multi-line description strings in the item catalog."
+        },
+        {
+          "path": "ui/hunt/setting/equip_plate.nxr",
+          "bytes": 436, "nodeCount": 8, "resources": ["menu_main", "setting_obj_main"],
+          "role": "A single item plate with a quantity readout.",
+          "namedNodes": ["loc_name", "loc_item", "num_mul @(-35,6)", "num0 @(-22,8)", "num1 @(-13,8)", "item_base", "plate", "plate_base extent 19.0x5.0"],
+          "quantityFinding": {
+            "value": "num_mul plus exactly two digits is a two-digit quantity readout of the form x NN.",
+            "corroboration": "Every consumable Hunt item in the catalog has max_owned = 99. A two-digit field and a 99 cap are the same fact seen from two sides.",
+            "evidence": "ROM_VERIFIED"
+          }
+        },
+        {
+          "path": "ui/hunt/setting/launcher_plate.nxr",
+          "bytes": 120, "nodeCount": 2, "resources": ["setting_menu"],
+          "role": "Launcher plate frame: a base and a 12x12 background only.",
+          "namedNodes": ["base", "bg"],
+          "semantics": "UNKNOWN_REQUIRES_TRACE - see answer 4"
+        }
+      ],
+      "count": 11,
+      "completeness": "These are exactly the 11 scenes under ui/hunt/setting/ in the scene registry. No twelfth loadout scene exists."
+    },
+
+    "3_equipmentCategories": {
+      "evidence": "ROM_VERIFIED",
+      "classes": [
+        { "id": "ROPE", "nxrRegion": "col_rope", "shopSubcategory": "Rope", "items": 12, "maxOwned": 1, "statInDescription": "durability", "descriptionSample": "A rope for the Baby stage. Durability 10.", "note": "max_owned 1 and a durability stat: the rope is the single equipped tether, tiered by target evolution stage." },
+        { "id": "SHOT", "nxrRegion": "col_shot", "shopSubcategory": "Shot", "items": 12, "maxOwned": 99, "statInDescription": "power", "descriptionSample": "A gun for stopping a Digimon's movement. Power 10.", "note": "Ranged immobiliser. Sub-types in the catalog include rapid, sleep, stun and six-round shotgun variants." },
+        { "id": "WIRE", "nxrRegion": "col_wire", "shopSubcategory": "Wire", "items": 6, "maxOwned": 99, "statInDescription": "length", "descriptionSample": "Laid on the ground to block a Digimon's path. Length 24.", "note": "Ground barrier. Magnet and spark variants exist." },
+        { "id": "ENTRAP", "nxrRegion": "col_entrap", "shopSubcategory": "UNKNOWN_GROUPING", "maxOwned": 99, "note": "The class name is ROM_VERIFIED from two sides, but which shop subcategories it contains is not traced. Capture Trap ('placed on the ground to capture a Digimon') is the strongest candidate; Meat, Decoy and Light are lures and may belong here or to an untraced class." },
+        { "id": "DAMAGE_TRAP", "nxrRegion": "col_damage_trap", "shopSubcategory": "UNKNOWN_GROUPING", "maxOwned": 99, "note": "Bomb ('deals damage by explosion, power 40') and Mine ('explodes when a Digimon steps on it, power 50') are the strongest candidates. Not traced." }
+      ],
+      "corroboration": {
+        "finding": "The five class names are confirmed independently by ROM item strings, not just by NXR node names.",
+        "detail": "The Plugins/Checker subcategory contains exactly five items whose names are Shot Checker, Wire Checker, Entrap Checker, Damage Trap Checker and All Checker, each described as 'displays the count of <class> items'. Entrap and Damage Trap are therefore first-class in-game item classes in the ROM's own vocabulary, matching col_entrap and col_damage_trap exactly.",
+        "evidence": "ROM_VERIFIED"
+      },
+      "huntItemCatalogue": {
+        "evidence": "ROM_VERIFIED",
+        "source": "shop table base 0x020E0248, stride 0x38 (56 bytes), 118 records",
+        "totals": { "trainingGoods": 4, "huntItems": 49, "plugins": 30, "cages": 35 },
+        "huntSubcategories": [
+          { "index": 1, "name": "Rope", "items": 12, "maxOwned": 1 },
+          { "index": 2, "name": "Shot", "items": 12, "maxOwned": 99 },
+          { "index": 3, "name": "Wire", "items": 6, "maxOwned": 99 },
+          { "index": 4, "name": "Meat", "items": 4, "maxOwned": 99, "role": "lure - attracts by smell" },
+          { "index": 5, "name": "Decoy", "items": 2, "maxOwned": 99, "role": "lure - a walking toy that invites chase" },
+          { "index": 6, "name": "Light", "items": 2, "maxOwned": 99, "role": "lure - draws specific Digimon, NIGHT ONLY" },
+          { "index": 7, "name": "Bomb", "items": 4, "maxOwned": 99, "role": "damage" },
+          { "index": 8, "name": "Mine", "items": 2, "maxOwned": 99, "role": "damage on contact" },
+          { "index": 9, "name": "Capture Trap", "items": 2, "maxOwned": 99, "role": "placed capture" },
+          { "index": 10, "name": "Memory Card", "items": 3, "maxOwned": 1, "role": "capture capacity - see answer 10" }
+        ],
+        "resourceKey": "Hunt items bind the icon resource key `itemiconL`; plugins bind `setting_obj_plug`, which is the same name as the loadout sprite bundles setting_obj_plug_main / setting_obj_plug_sub."
+      },
+      "dayNightConsequence": {
+        "finding": "Both Light items state they can only be used at night.",
+        "significance": "Day/night is not only a Gate Select presentation state - it gates item usability. This is the first evidence that the day/night pairing in the world map model has a gameplay consequence.",
+        "evidence": "ROM_VERIFIED",
+        "unknown": "How the game decides it is night, and whether the Gate Select day/night state selects the Hunt's day/night state."
+      }
+    },
+
+    "4_launcherRole": {
+      "evidence": "UNKNOWN_REQUIRES_TRACE",
+      "whatExists": {
+        "scene": "ui/hunt/setting/launcher_plate.nxr - 2 nodes only (base, bg)",
+        "sprites": [
+          "ui/hunt/setting/obj_Launcher_icon: .ncer 4 cells, .nanr 152 bytes, .ncbr 6704 bytes",
+          "ui/hunt/setting/obj_Launcher_wind: .ncer 2 cells, .nanr 102 bytes, .ncbr 8240 bytes"
+        ],
+        "evidence": "ROM_VERIFIED that these assets exist and sit inside the Hunt Loadout family"
+      },
+      "whatIsNotKnown": [
+        "what a launcher launches",
+        "whether it is equipment, a delivery mechanism for Shot/Bomb/Trap items, or a screen",
+        "why it has an associated `wind` sprite",
+        "whether it occupies one of the four gear slots"
+      ],
+      "explicitNonEvidence": {
+        "warning": "Do NOT associate this with Desktop_Launcher.nsbmd.",
+        "detail": "3D_DECODED_STRUCTURE lists Launcher_model and Launcher_name nodes, but they belong to battle_menu/Desktop_Launcher.nsbmd and desktop/Desktop_Launcher.nsbmd - the same 38,176-byte file at both paths, identified in the research register (T4) as NDS system-layer UI, not this game's Hunt loadout. The name collision is a trap and is recorded here so it is not walked into."
+      },
+      "candidateReading": "The `wind` companion sprite and the 4-cell icon are consistent with a projectile or delivery device, which would relate it to the Shot class. That is a reading, not evidence, and must not be built on."
+    },
+
+    "5_pluginRole": {
+      "evidence": "ROM_VERIFIED",
+      "finding": "Plugins are INFORMATION equipment. They do not act on the world; they determine what the Hunt HUD is able to display.",
+      "catalogue": {
+        "total": 30,
+        "subcategories": [
+          { "index": 1, "name": "Analyzer", "items": 9, "maxOwned": 1, "role": "reveals creature attributes" },
+          { "index": 2, "name": "Checker", "items": 5, "maxOwned": 1, "role": "displays remaining counts of an item class" },
+          { "index": 3, "name": "Radar/Search", "items": 15, "maxOwned": 1, "role": "displays creatures on the radar, filtered" },
+          { "index": 4, "name": "Memory Checker", "items": 1, "maxOwned": 1, "role": "displays memory card capacity" }
+        ]
+      },
+      "analyzerFields": {
+        "evidence": "ROM_VERIFIED correspondence",
+        "detail": "The six single-purpose Analyzer items name exactly the six creature attribute fields present in the Hunt HUD scene, one for one.",
+        "mapping": [
+          { "item": "Gene Analyzer", "reveals": "species and generation", "huntHudNode": "gen / gen_title" },
+          { "item": "Family Analyzer", "reveals": "species and family", "huntHudNode": "type / type_title" },
+          { "item": "Alignment Analyzer", "reveals": "species and attribute", "huntHudNode": "align_text / align_node" },
+          { "item": "HP Analyzer", "reveals": "species and maximum HP", "huntHudNode": "hp / hp_title" },
+          { "item": "Mental Analyzer", "reveals": "species and personality", "huntHudNode": "mind / mind_title" },
+          { "item": "Memory Analyzer", "reveals": "species and capacity", "huntHudNode": "size / size_title" }
+        ],
+        "aggregates": "Digi-Analyzer alpha (generation + family), beta (generation + family + attribute) and omega ('all stats') are combined analyzers, which is why the HUD has one field set rather than one panel per plugin.",
+        "significance": "This is the single most useful loadout finding: the ORIGINAL creature status model shown during a Hunt is generation, family, attribute, HP, personality and capacity - and each field is gated by owning the corresponding plugin."
+      },
+      "checkerFields": {
+        "evidence": "ROM_VERIFIED correspondence",
+        "detail": "Four class-specific Checkers - Shot, Wire, Entrap, Damage Trap - correspond exactly to the four remaining-count readouts in the Hunt HUD: remain_icon0..3 with remain_number00..31, four icons each with a two-digit number. The fifth Checker is 'All'.",
+        "significance": "Four counters and four countable equip classes is the same fact from both directions, and it confirms ROPE is the non-countable fifth class."
+      },
+      "radarFields": {
+        "evidence": "PARTIAL",
+        "detail": "Radar/Search is the largest plugin subcategory at 15 items, and the sample filters by generation ('displays Baby-stage Digimon on the radar'). The Hunt HUD carries map_marker0..23 - 24 markers - plus map_frame, map_inner_frame and rader_disp_frame.",
+        "unknown": "Whether 24 is a hard contact limit, and what the other 14 radar items filter by."
+      },
+      "memoryCheckerField": {
+        "evidence": "ROM_VERIFIED correspondence",
+        "detail": "'Displays memory card capacity' corresponds to the Hunt HUD nodes mc_cur0, mc_cur1, mc_cur_g, mc_div, mc_max0, mc_max1, mc_max_g - a current/maximum pair, two digits each, with a 'G' unit glyph and a divider."
+      }
+    },
+
+    "6_selectableSlotCounts": {
+      "evidence": "ROM_VERIFIED",
+      "counts": {
+        "equipClassRegions": { "value": 5, "source": "setting_equip_main_scene col_rope/col_shot/col_wire/col_entrap/col_damage_trap" },
+        "equipCovers": { "value": 5, "source": "setting_equip_sub_scene equip_cover0..4" },
+        "equipPlatesAndIcons": { "value": 5, "source": "plate0..plate4, icon1..icon5, plate0_anim..plate4_anim" },
+        "gearSlots": { "value": 4, "source": "setting_gear_main_slot_scene col_slot0..3 with loc_slot0..3 and slot0..3_cover" },
+        "pluginSlots": { "value": 4, "source": "setting_gear_sub_scene plugin0..3 with plugin0..3_cover" },
+        "gearCategoryTabs": { "value": 4, "source": "setting_gear_main_scene tab_all/tab_analyser/tab_bullet/tab_rader" },
+        "huntHudRemainCounters": { "value": 4, "source": "hunt_sub_scene remain_icon0..3 with remain_number00..31" }
+      },
+      "reading": "Five equipment classes, of which four are countable consumables and one (ROPE) is a single equipped item; and four gear/plugin slots. The gear slot strip and the plugin strip share the same x and the same 19px pitch, so they are the two screens of one four-position system rather than eight positions.",
+      "unknown": [
+        "how many units of a consumable may be taken into a single Hunt",
+        "whether the five equip regions are slots to fill or class filters to pick from",
+        "whether the four gear slots and four plugin slots are the same four positions viewed on two screens, or two separate sets"
+      ]
+    },
+
+    "7_inventorySource": {
+      "evidence": "ROM_VERIFIED",
+      "source": "The Shop. Purchases commit to InventoryState at explicit PlayerData offsets recorded per record in the shop catalog.",
+      "detail": {
+        "shopTable": "base 0x020E0248, stride 0x38, 118 records",
+        "commitDomains": {
+          "InventoryState": "Training Goods, Hunt Items, Plugins",
+          "CageOwnershipState": "Cages"
+        },
+        "exampleOffsets": "Plugins/Analyzer commit to player offsets 0xAAC, 0xAAE, 0xAB0, 0xAB4 and neighbours - a packed per-item region.",
+        "separationRule": "InventoryState, CageOwnershipState and ShopVisibilityState are separate domains and must not be merged.",
+        "currency": "Bits. Known wallet cap 9,999,999.",
+        "priceRange": "5 Bits for the cheapest consumable up to roughly 90,000 for high-tier ropes; memory cards 2,450-9,850."
+      },
+      "consequence": "The Hunt Loadout does not own an inventory. It presents and selects from a player inventory the Shop writes. Any implementation must read inventory, never mint it."
+    },
+
+    "8_availabilityRules": {
+      "evidence": "ROM_VERIFIED",
+      "unlockTypes": [
+        { "raw": 0, "kind": "INITIAL_AVAILABLE", "count": 15, "confidence": "VERIFIED_BINARY" },
+        { "raw": 1, "kind": "TAMER_RANK_THRESHOLD", "count": 65, "confidence": "HIGH_CONFIDENCE", "parameter": "required rank" },
+        { "raw": 2, "kind": "BATTLE_BADGE_ID_0_BASED", "count": 38, "confidence": "VERIFIED_BINARY", "parameter": "zero-based badge id" }
+      ],
+      "totalRecords": 118,
+      "shopVisibilityState": {
+        "location": "PlayerData +0x2F0",
+        "values": { "0": "unavailable / hidden", "1": "available + NEW", "2": "available + seen" },
+        "evidence": "ROM_VERIFIED"
+      },
+      "consequence": "Availability is a Shop-side rule keyed on Tamer rank and battle badges, not a Loadout-side rule. The Loadout shows what the player owns; the Shop decides what the player could buy.",
+      "note": "TAMER_RANK_THRESHOLD is marked HIGH_CONFIDENCE rather than VERIFIED_BINARY in the source catalog. That distinction is preserved here rather than flattened."
+    },
+
+    "9_confirmationFlow": {
+      "evidence": "UNKNOWN_REQUIRES_TRACE",
+      "whatIsKnown": "setting_equip_main_scene carries a single large interaction region, menu_control_area @(128,102) with extent 16.0 x 9.0, which is the only control-shaped region on the equip screen. setting_gear_main_scene carries slide_area and col_slide_area, evidencing a scrollable list.",
+      "whatIsNotKnown": ["confirm and cancel bindings", "whether a confirmation step exists at all", "whether leaving the screen commits or discards", "the role of top_mes on the item detail panel"],
+      "note": "No button node named confirm, ok, decide or cancel exists in any of the 11 scenes. The only node explicitly typed BUTTON anywhere in the Hunt families is close_button in memorycard_plate_scene."
+    },
+
+    "10_loadoutToHuntRuntimeHandoff": {
+      "evidence": "ROM_VERIFIED correspondence, PARTIAL mechanism",
+      "finding": "The loadout determines the Hunt HUD's capabilities. Every dynamic readout in hunt_sub_scene has a corresponding purchasable plugin.",
+      "handoffTable": [
+        { "loadout": "Analyzer plugins", "huntRuntime": "gen, type, align_text, hp, mind, size fields plus digimon_name / nick_name / digimon_image_s" },
+        { "loadout": "Checker plugins", "huntRuntime": "remain_icon0..3 and remain_number00..31 - four item-class counters" },
+        { "loadout": "Radar/Search plugins", "huntRuntime": "map_marker0..23, map_frame, map_inner_frame, rader_disp_frame" },
+        { "loadout": "Memory Checker plugin", "huntRuntime": "mc_cur0/1, mc_cur_g, mc_div, mc_max0/1, mc_max_g" },
+        { "loadout": "Memory Card item", "huntRuntime": "the capacity value the mc_* readout displays" },
+        { "loadout": "Rope / Shot / Wire / Entrap / Damage Trap", "huntRuntime": "the field tools; the four countable classes drive the remain counters" }
+      ],
+      "memoryCardEconomy": {
+        "evidence": "ROM_VERIFIED",
+        "detail": "Memory Cards state 'lets you hold up to 32G / 64G / 96G captured in a Hunt', and the Memory Analyzer reveals a creature's capacity. Capture capacity is therefore a consumable resource measured in G, spent per captured creature according to that creature's size.",
+        "significance": "This is an original Hunt constraint with no equivalent in the current product. It belongs to VS3 Capture, and is recorded here because the loadout is where the capacity is chosen.",
+        "scope": "OUT_OF_SCOPE_FOR_THIS_BATCH"
+      },
+      "unknown": ["the call that carries the selection into the Hunt runtime", "whether the loadout is re-editable mid-Hunt", "what happens to unconsumed items on exit"]
+    },
+
+    "11_savePersistenceRelationship": {
+      "evidence": "PARTIAL",
+      "verified": [
+        "Purchases commit to InventoryState at per-item PlayerData offsets (shop catalog purchase_commit_domain and purchase_commit_player_offset).",
+        "Shop visibility persists at PlayerData +0x2F0 with 0/1/2 semantics.",
+        "Cage ownership persists in a separate CageOwnershipState domain.",
+        "Currency is Bits with a known 9,999,999 cap."
+      ],
+      "notVerified": [
+        "whether the SELECTED loadout persists, or only the owned inventory",
+        "the complete PlayerData field ledger and the serializer/load chain, which the save-status report states is incomplete",
+        "consumption write-back after a Hunt"
+      ],
+      "productRule": "Do not copy DS RAM offsets into the shipping schema. The save-status report says so explicitly, and the Championship 2026 envelope is deny-by-default on unknown keys. Any future loadout persistence needs a Claude-owned envelope change and its own authorization; this contract adds no save field."
+    }
+  },
+
+  "consumerRules": {
+    "lane": "Codex Art may rebuild the formal Hunt Loadout only against this contract.",
+    "mustNotDo": [
+      "promote the current one-companion prototype to Original parity",
+      "invent an equipment class beyond the five recovered ones",
+      "invent a slot count beyond the recovered 5 equip / 4 gear / 4 plugin",
+      "render a confirm or cancel affordance as original - none is traced",
+      "assert a launcher behaviour",
+      "show a capture-capacity or memory-card readout as a Loadout feature; that is Hunt runtime and VS3",
+      "add any save field",
+      "load or convert any ROM asset"
+    ],
+    "mustDo": [
+      "read inventory rather than mint it",
+      "keep item availability a Shop-side concept",
+      "mark every product-authored choice as PRODUCT_AUTHORED, including any confirmation step"
+    ]
+  },
+
+  "implementationReadiness": {
+    "readyToSpecify": [
+      "five equipment classes with recovered identities",
+      "the ten-subcategory Hunt item catalogue with counts, caps and stat vocabulary",
+      "the four-subcategory plugin catalogue and what each reveals",
+      "4 gear slots and 4 plugin positions",
+      "availability keyed on Tamer rank and battle badges",
+      "the loadout-to-HUD capability handoff"
+    ],
+    "blockedOnTrace": [
+      "screen sequence and entry/exit",
+      "confirmation flow",
+      "launcher role",
+      "release menu semantics",
+      "grouping of Meat / Decoy / Light into the five classes",
+      "the `bullet` gear tab, which has no exact plugin subcategory counterpart",
+      "per-Hunt carry limits",
+      "loadout persistence"
+    ],
+    "note": "The research system-readiness register independently rates Gate/Hunt Loadout as DEEP with claim_original_parity = partial and 'all equipment semantics' as the critical unknown. This contract closes the structure and the catalogue; it does not close per-item runtime effect."
+  },
+
+  "openTraceItems": [
+    { "id": "HL-1", "summary": "Loadout screen sequence, entry, exit and confirmation flow." },
+    { "id": "HL-2", "summary": "Launcher role. Assets exist inside the loadout family; behaviour is unknown. Not related to Desktop_Launcher.nsbmd." },
+    { "id": "HL-3", "summary": "menu_top_release_scene semantics." },
+    { "id": "HL-4", "summary": "Which shop subcategories belong to ENTRAP and DAMAGE_TRAP, and where Meat / Decoy / Light sit." },
+    { "id": "HL-5", "summary": "The `bullet` gear tab; Checker is the candidate but unproven." },
+    { "id": "HL-6", "summary": "Whether the 4 gear slots and 4 plugin positions are one system or two." },
+    { "id": "HL-7", "summary": "Per-Hunt carry limits for consumables." },
+    { "id": "HL-8", "summary": "Whether the selected loadout persists across sessions." },
+    { "id": "HL-9", "summary": "Per-item runtime effect - the research register's 'all equipment semantics'." },
+    { "id": "HL-10", "summary": "How the game determines night, given that Light items are night-only." }
+  ]
+}

@@ -3,7 +3,7 @@
 Canonical product repository: `.` (`CHAMPIONSHIP_2026_PRODUCT_SSOT`).  
 Migration reconciliation: the prior shared-repository wording below is retained only where it explains historical constraints. The current executable architecture is the standalone boundary defined in `docs/architecture/CHAMPIONSHIP_2026_ARCHITECTURE.md`.
 
-Owner: Claude Code · Last updated: 2026-08-28 · Kind: VS2-R1 Gate Select 3D parity contract closed, handed to the Codex presentation lane
+Owner: Claude Code · Last updated: 2026-08-28 · Kind: VS2-R1 A+B - Gate Select trace blocked on missing binaries, Hunt Loadout contract closed, canonical destination identity adopted
 
 Describes the architecture **as it actually is today**, not as planned. Every
 layer is marked `IMPLEMENTED`, `PARTIAL`, `PLANNED`, or `FORBIDDEN`.
@@ -175,8 +175,8 @@ means untouched.
 | TITLE / LOGIN | PARTIAL — New Game / Continue only |
 | RAISING HOME | **IMPLEMENTED** — VS1 baseline |
 | TRAINING / CARE / CAGE | PARTIAL — care is a reaction with no verified effect; 2 product cages against 36 original CageDefinitions |
-| GATE SELECT | **PARTIAL** — VS2 ships a 2D 16-card grid. The original is a 3D world map over 16 ROM-named biome nodes (VS2-R1 contract); the grid is retained as accessibility/debug/low-capability fallback, not as the sole Player Mode |
-| HUNT LOADOUT | **IMPLEMENTED** — VS2. Exactly one companion, labelled PRODUCT_AUTHORED |
+| GATE SELECT | **PARTIAL** — destinations now carry the 16 ROM-recovered biome identities as canonical keys. Presentation is still a 2D grid; the original is a 3D world map (VS2-R1 contract), and the grid is retained as accessibility/debug/low-capability fallback, not as the sole Player Mode |
+| HUNT LOADOUT | **PROTOTYPE** — one companion, PRODUCT_AUTHORED. The original is five equipment classes over a 79-item catalogue with 4 gear and 4 plugin positions (VS2-R1 Hunt Loadout contract). Never to be promoted to parity |
 | HUNT FIELD | **IMPLEMENTED** — VS2. 128×128 modular world, camera traversal, bounded wild wander |
 | CAPTURE | NOT_STARTED |
 | HUNT RESULT | NOT_STARTED |
@@ -223,6 +223,8 @@ The pre-migration `docs/qa/**` gate tree was not migrated. The gates that govern
 | `tests/championship-storage-guard-cases.mjs` | the forbidden storage key policy at the durable boundary |
 | `tests/championship-vs1-runtime-cases.mjs` | the VS1 loop: new game, select, care, relocate, save, fresh continue, restore |
 | `tests/championship-vs2-runtime-cases.mjs` | the screen stack, gate catalog, 128×128 world generation, movement/collision/camera, bounded wild behaviour, the published seam, the Hunt toolbar, later-slice refusals, save authority |
+| `tests/championship-vs2-gate-select-3d-contract-cases.mjs` | the recovered Gate Select evidence: 16 biome identities, model provenance, the verified negatives, and the unknowns that must not be upgraded |
+| `tests/championship-vs2-hunt-loadout-contract-cases.mjs` | the recovered Hunt Loadout evidence: five equipment classes, catalogue totals, slot counts, plugin-to-HUD mapping, and the prototype boundary |
 | `tests/championship-vs2-browser.cjs` | the whole VS2 flow in real Chromium at all five contract viewports |
 | `tests/championship-int-rh2-*-cases.mjs` | the presentation seam and the P1R contract |
 | `tests/championship-int-rh2-browser.cjs` | real Chromium reload / continue / restore across the contract viewports |

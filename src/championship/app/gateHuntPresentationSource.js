@@ -120,8 +120,12 @@ export function createGateHuntPresentationSource(app) {
       gates: app.getGates().map((gate) => ({
         gateId: gate.gateId,
         ordinal: gate.ordinal,
+        // The recovered node identity is canonical; the display string is a
+        // presentation default a localization layer may replace.
+        biomeId: gate.biomeId,
+        identityEvidence: gate.identityEvidence,
         displayName: gate.displayName,
-        nameAuthority: gate.nameAuthority,
+        displayNameEvidence: gate.displayNameEvidence,
         biomeOrdinal: gate.biomeOrdinal,
         state: gate.state,
         stateEvidence: gate.stateEvidence,
@@ -161,7 +165,7 @@ export function createGateHuntPresentationSource(app) {
       selectionRule: {
         value: "EXACTLY_ONE",
         evidence: "PRODUCT_AUTHORED",
-        note: "No original party size, item loadout or restriction is traced. Presentation must not draw empty extra party slots, item slots, or a supply meter."
+        note: "The original loadout is gear / equipment / plugin / launcher, not companion selection - see docs/contracts/championship/VS2_HUNT_LOADOUT_RUNTIME_CONTRACT.v1.json. This one-companion rule is a PRODUCT_AUTHORED prototype and must not be promoted to parity. Presentation must not draw empty extra party slots, item slots, or a supply meter."
       },
       selection: { creatureId: companionCreatureId },
       canBegin: companionCreatureId !== null

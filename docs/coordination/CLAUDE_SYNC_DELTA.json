@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "owner": "Claude Code",
-  "syncTarget": "VS2-R1 Original Gate Select 3D parity contract closed",
+  "syncTarget": "VS2-R1 A+B: Gate Select trace blocked, Hunt Loadout contract closed, canonical identity adopted",
   "date": "2026-08-28",
   "note": "Claude-owned delta. Codex remains COORDINATION_MERGE_WRITER and merges this by stable record ID. Claude wrote no shared coordination file in this round.",
   "checkpoint": {
@@ -13,16 +13,26 @@
     "note": "The pre-migration checkpoint chain recorded in earlier revisions of this file is external provenance (docs/migration/PRE_MIGRATION_PROVENANCE.md), not this repository history. CL-008 and CL-009 concern that external branch and are unaffected by this round."
   },
   "tests": {
-    "pass": 64,
+    "pass": 80,
     "expected": 0,
     "unexpected": 0,
     "unchangedThisRound": false
   },
   "ownerDecisionsApplied": [
     {
-      "id": "VS2-R1",
-      "state": "OWNER_AUTHORIZED",
-      "detail": "Owner directive 2026-08-28: restore Original Gate Select 3D parity. Claude lane closes the evidence contract only - no new gameplay, no Capture, no VS3, no new Hunt mechanics, no new save schema. Then stop and hand to the Codex presentation lane."
+      "id": "VS2-R1-IDENTITY",
+      "state": "APPLIED",
+      "detail": "The 16 ROM-recovered biome node identities are canonical for internal gate IDs. Player-facing display strings remain presentation translation, and are marked PRESENTATION_DEFAULT_NOT_RECOVERED because no original player-facing string has been read."
+    },
+    {
+      "id": "VS2-R1-A",
+      "state": "BLOCKED_ON_MISSING_INPUT",
+      "detail": "Bounded OVL12 Gate Select behavior trace authorized and attempted. No ROM, overlay or ARM9 binary exists in the research tree; the existing trace files state raw overlay binaries are not bundled. Nothing was inferred to fill the gap."
+    },
+    {
+      "id": "VS2-R1-B",
+      "state": "CLOSED",
+      "detail": "Original Hunt Loadout evidence contract published with all 11 Owner questions answered."
     }
   ],
   "closedThisRound": [
@@ -50,6 +60,15 @@
       "detail": "The original Gate Select is a 3D world map (ROM_VERIFIED, OVL12 loader call 0x0210C6FC) over 16 named biome nodes with paired day/night. Two research artifacts were corrected against the model bytes. No product code changed.",
       "contract": "docs/contracts/championship/VS2_GATE_SELECT_3D_RUNTIME_CONTRACT.v1.json",
       "positiveControls": "7/7 caught."
+    },
+    {
+      "id": "VS2_R1_HUNT_LOADOUT_CONTRACT",
+      "type": "contract",
+      "owner": "claude",
+      "state": "CLOSED",
+      "detail": "Five equipment classes, a 118-record shop table, 4 gear slots, 4 plugin positions, and a ROM-verified mapping from Analyzer/Checker/Radar/MemoryChecker plugins onto the Hunt HUD readouts.",
+      "contract": "docs/contracts/championship/VS2_HUNT_LOADOUT_RUNTIME_CONTRACT.v1.json",
+      "positiveControls": "11/11 caught."
     }
   ],
   "stillUnknown": [
@@ -155,6 +174,30 @@
       "owner": "shared",
       "state": "PARITY_GAP_RECORDED",
       "detail": "VS2 delivered the flow; VS2-R1 shows the Gate Select presentation is not yet original parity. The runtime, seam and state are unaffected - only the presentation layer changes."
+    },
+    {
+      "id": "HuntLoadoutRuntimeContract",
+      "type": "dependency",
+      "owner": "claude",
+      "state": "PUBLISHED",
+      "codexMaySafelyBind": "YES_AS_SPEC_ONLY",
+      "detail": "Codex may rebuild the formal Hunt Loadout only against this contract. The shipped one-companion loadout is a PRODUCT_AUTHORED_PROTOTYPE and must never be promoted to parity."
+    },
+    {
+      "id": "GateSelect3DRuntimeContract",
+      "type": "dependency",
+      "owner": "claude",
+      "state": "PUBLISHED_v1.1",
+      "codexMaySafelyBind": "YES_PRESENTATION_ONLY",
+      "detail": "v1.1 records the blocked trace, adds the independent OVL12 mode-flow corroboration, and adds the ROM-verified night-only Light finding that ties day/night to gameplay. No UNKNOWN was upgraded."
+    },
+    {
+      "id": "Vs2GateDestinationIdentity",
+      "type": "dependency",
+      "owner": "owner",
+      "state": "ROM_VERIFIED_CANONICAL",
+      "codexMaySafelyBind": "YES",
+      "detail": "gateId is now championship:2026:gate:<biome> over the 16 recovered identities; biomeId is the canonical key. displayName is a presentation default, not a recovered string - Codex and localization own it."
     }
   ],
   "integrationPlanRuntimeHalf": {
@@ -464,5 +507,20 @@
     "GATE_SELECT_NODE_CANDIDATES.csv is missing the biome node `Ice`; the model bytes at MDL0+672 contain it. The CSV under-reports 16 biomes as 15 child nodes.",
     "decoded_json/gate_select__earth.nsbmd.json is missing the node `map`; the model bytes at MDL0+240 contain it.",
     "Both corrections are recorded in the contract. The research packs are external and read-only; Claude did not modify them."
-  ]
+  ],
+  "codexLaneObservation": {
+    "finding": "The VS2-P browser gate currently FAILS at 360x800 with 'GATE_SELECT: clipped controls'.",
+    "ownership": "Codex lane. The failing assertion (clippedControls in auditPresentationLayout) and the animated .cm-vs2-shell that trips it were both added by the in-flight Codex presentation pass; both files are uncommitted.",
+    "verification": "Confirmed independent of the Claude change: the gate fails identically after reverting gateCatalog.js to its committed HEAD version. Shorter destination labels cannot push a control to left:-13.",
+    "diagnosis": "A probe at 360x800 shows the gate list and gate buttons reporting zero-size rects shortly after the screen appears, with a transform on .cm-vs2-shell. The audit samples the layout while the entry animation is still running, so it reads mid-animation boxes as clipped and undersized controls.",
+    "suggestion": "Settle the entry animation before auditing, or exclude in-flight transforms from the clipped-control check. Claude did not modify Codex presentation files.",
+    "claudeGates": "INT_RH2_BROWSER_QA_PASS viewports=6 required=5 saveReload=true; node suite 80/80."
+  },
+  "researchGap": {
+    "id": "GS-0",
+    "summary": "No ROM image, overlay binary or ARM9 binary exists under the original-evidence root.",
+    "blocks": "every Gate Select behaviour question: rotation, camera, input, hit-test, selection animation, day/night switch rule, earth consumer",
+    "unblockedBy": "OVL12 overlay binary (file id 12, 39,200 bytes, RAM 0x0210b300), the YDIJ ROM image, or a pre-extracted OVL12 disassembly excerpt around 0x0210C6FC",
+    "constraint": "Whatever arrives stays read-only and outside this repository under the existing IP policy."
+  }
 }

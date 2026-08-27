@@ -3,7 +3,7 @@
   "owner": "Claude Code",
   "scope": "gameplay reconstruction, runtime architecture, save/state, tests, integration - for Championship 2026 standalone",
   "lastSync": "2026-08-28",
-  "syncKind": "VS2-R1 Original Gate Select 3D parity contract closed; STOPPED, handed to the Codex presentation lane",
+  "syncKind": "VS2-R1 A+B: Gate Select behavior trace attempted and BLOCKED; Hunt Loadout contract closed; canonical destination identity adopted",
   "git": {
     "repository": "CHAMPIONSHIP_2026_PRODUCT_SSOT (this repository)",
     "branch": "main",
@@ -21,13 +21,13 @@
       "npm run test:browser (INT-RH2)",
       "npm run test:browser:vs2 (VS2)"
     ],
-    "pass": 64,
+    "pass": 80,
     "expectedFailures": 0,
     "unexpectedFailures": 0,
     "previousBaseline": "35 pass at the VS2-PREP checkpoint; 19 at the accepted canonical baseline",
-    "baselineChangeCause": "VS2 added 13 cases; VS2-R1 added 11 contract-guard cases; Codex added presentation cases in its own lane.",
-    "browserGate": "INT_RH2_BROWSER_QA_PASS viewports=6 required=5; CHAMPIONSHIP_VS2_BROWSER_QA_PASS viewports=5 required=5",
-    "positiveControls": "VS2-PREP 5/5, VS2 8/8, VS2-R1 7/7 caught: dropped biome, rotation upgraded without evidence, earth claimed as loaded, 2D grid demoted to sole mode, second selection state allowed, machine path reintroduced, ROM biome name adopted into the catalog unauthorized.",
+    "baselineChangeCause": "VS2-R1 B added 12 Hunt Loadout contract cases; Codex added presentation cases in its own lane.",
+    "browserGate": "INT_RH2_BROWSER_QA_PASS viewports=6 required=5 saveReload=true. VS2-P browser gate currently FAILS in the Codex lane - see codexLaneObservation.",
+    "positiveControls": "VS2-PREP 5/5, VS2 8/8, VS2-R1 A 7/7, VS2-R1 B 11/11 caught.",
     "note": "The historical 481/3/0 baseline belongs to the pre-migration research tree and its docs/qa suite, neither of which exists in this repository."
   },
   "completed": [
@@ -182,6 +182,60 @@
         "research/original-evidence/README.md"
       ],
       "productCodeChanged": "none"
+    },
+    {
+      "id": "VS2_R1_A_GATE_SELECT_BOUNDED_TRACE",
+      "state": "BLOCKED_ON_MISSING_INPUT",
+      "detail": "The Owner-authorized bounded OVL12 trace around 0x0210C6FC could not be performed. The original-evidence tree contains no ROM image, no overlay binary and no ARM9 binary; the existing per-subsystem trace files each state 'Bounded disassembly excerpt only. Raw overlay binary is not bundled.' There are no OVL12 instruction bytes to follow.",
+      "whatWasNotDone": "No behaviour was inferred to fill the gap. rotation, camera, input, hit-test, selection animation, the day/night switch rule and the earth consumer all remain UNKNOWN_REQUIRES_TRACE, exactly as before.",
+      "whatWouldUnblock": "The OVL12 overlay binary (file id 12, 39,200 bytes, RAM 0x0210b300), the ROM image, or a pre-extracted OVL12 disassembly excerpt around 0x0210C6FC in the same format as the existing OVL19/OVL8/ARM9 files.",
+      "recoveredAnyway": [
+        "An independent second source for the overlay identity: the systems-handoff mode-flow map states OVL 12 = 'Gate select + Hunt loadout'.",
+        "Day/night has a proven gameplay consequence: both Light items are ROM-documented as night-only."
+      ],
+      "outputs": [
+        "docs/contracts/championship/VS2_GATE_SELECT_3D_RUNTIME_CONTRACT.v1.json (v1.1)"
+      ]
+    },
+    {
+      "id": "VS2_R1_B_HUNT_LOADOUT_CONTRACT",
+      "state": "CONTRACT_CLOSED_AWAITING_IMPLEMENTATION_AUTHORIZATION",
+      "detail": "Closed the Original Hunt Loadout structure from existing evidence. All 11 Owner questions answered with per-field evidence levels. No product implementation.",
+      "headline": "The original loadout is five equipment classes - ROPE, SHOT, WIRE, ENTRAP, DAMAGE_TRAP - over a 79-item Hunt/Plugin catalogue, with 4 gear slots and 4 plugin positions. Plugins are information equipment: they decide what the Hunt HUD can display.",
+      "recovered": [
+        "Five equipment classes corroborated from two independent sides: NXR touch-region names (col_rope/col_shot/col_wire/col_entrap/col_damage_trap) and the ROM's own five Checker item names (Shot/Wire/Entrap/DamageTrap/All Checker).",
+        "The shop table at base 0x020E0248, stride 0x38, 118 records: Training 4, Hunt 49, Plugins 30, Cages 35.",
+        "Ten Hunt subcategories - Rope, Shot, Wire, Meat, Decoy, Light, Bomb, Mine, Capture Trap, Memory Card - with caps, prices and ROM descriptions.",
+        "Rope is max_owned 1 with a durability stat; the four other classes cap at 99, matching the two-digit x NN readout on equip_plate and the four remain counters in the Hunt HUD.",
+        "Six single-purpose Analyzer plugins map one-for-one onto the six Hunt HUD creature fields: gen, type, align_text, hp, mind, size.",
+        "Availability is Shop-side: INITIAL_AVAILABLE 15, TAMER_RANK_THRESHOLD 65, BATTLE_BADGE_ID_0_BASED 38, with visibility at PlayerData +0x2F0.",
+        "Memory Cards define capture capacity in G, which the Memory Checker plugin displays through the mc_* HUD nodes."
+      ],
+      "stillUnknown": [
+        "screen sequence and confirmation flow",
+        "launcher role",
+        "release menu semantics",
+        "grouping of Meat/Decoy/Light",
+        "the bullet gear tab",
+        "per-Hunt carry limits",
+        "loadout persistence",
+        "per-item runtime effect"
+      ],
+      "outputs": [
+        "docs/contracts/championship/VS2_HUNT_LOADOUT_RUNTIME_CONTRACT.v1.json",
+        "tests/championship-vs2-hunt-loadout-contract-cases.mjs"
+      ],
+      "productCodeChanged": "none beyond the authorized canonical identity adoption"
+    },
+    {
+      "id": "VS2_R1_CANONICAL_DESTINATION_IDENTITY",
+      "state": "COMPLETE",
+      "detail": "Owner decision applied: the 16 recovered biome node identities are canonical. gateCatalog.js carries biomeId as the canonical key and gateId as championship:2026:gate:<biome>. displayName is explicitly PRESENTATION_DEFAULT_NOT_RECOVERED - a node name is not the label the player saw, so localization may replace it freely.",
+      "guardInversion": "The test that previously FAILED if the catalog adopted recovered names now fails if adoption is partial, reordered, or leaves a product-authored placeholder behind. The guard did its job in both directions.",
+      "outputs": [
+        "src/championship/gate/gateCatalog.js",
+        "src/championship/app/gateHuntPresentationSource.js"
+      ]
     }
   ],
   "current": [
@@ -259,10 +313,10 @@
   ],
   "dependenciesChanged": true,
   "recommendedNext": [
-    "STOP. The contract is closed and the Codex presentation lane owns the Gate Select 3D build.",
-    "Owner decision needed: adopt the 16 recovered biome identities into the gate catalog? That is a runtime change with its own authorization.",
-    "If a behaviour trace is later authorized, T1 is the entry point: camera setup, draw call, rotation and input handling in OVL12.",
-    "VS3 Capture remains not started."
+    "STOP. Both contracts are closed and the Codex presentation lane owns the builds.",
+    "Owner input needed to unblock the Gate Select behaviour trace: the OVL12 overlay binary or the ROM image needs to reach this machine (read-only, never committed).",
+    "Codex: the VS2-P browser gate is currently failing at 360x800 on Codex-owned in-flight work - verified independent of the Claude identity change.",
+    "VS3 Capture remains not started. Memory-card capture capacity is recorded in the loadout contract as VS3 scope."
   ],
   "nextSafeDeltaTrace": {
     "target": "submenu population site and the per-slot command writer",
@@ -367,18 +421,12 @@
       "guard": "must not remain the sole Player Mode Gate Select"
     },
     {
-      "id": "PD-GATE-IDENTITY",
-      "romVerified": "16 biome identities: Canyon, Crag, Damp, Desert, Factory, Forest, Grass, Ice, Jungle, Mine, Oasis, Ruins, Savanna, Seaside, Sewer, Volcano",
-      "current": "16 product-authored gate names, correctly declared product-authored when written, now superseded by recovered evidence",
-      "class": "ROM_VERIFIED",
-      "guard": "adoption is a runtime change and needs Owner authorization; a test currently fails if the catalog adopts them unannounced"
-    },
-    {
       "id": "PD-HUNT-LOADOUT-MODEL",
-      "romVerified": "gear / equipment / plugin / launcher loadout across 11 NXR scenes under ui/hunt/setting/",
-      "current": "one-companion selection, declared PRODUCT_AUTHORED",
-      "class": "PARTIAL",
-      "note": "Surfaced by the Gate Select evidence read. Out of scope for VS2-R1; recorded, not acted on."
+      "romVerified": "Five equipment classes (ROPE/SHOT/WIRE/ENTRAP/DAMAGE_TRAP), a 79-item Hunt and Plugin catalogue, 4 gear slots, 4 plugin positions, and a plugin-gated Hunt HUD",
+      "current": "one-companion selection, declared PRODUCT_AUTHORED_PROTOTYPE",
+      "class": "ROM_VERIFIED",
+      "contract": "docs/contracts/championship/VS2_HUNT_LOADOUT_RUNTIME_CONTRACT.v1.json",
+      "guard": "must never be promoted to Original parity; a test asserts the seam keeps declaring the one-companion rule PRODUCT_AUTHORED"
     }
   ],
   "verticalSlices": {

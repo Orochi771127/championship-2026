@@ -98,12 +98,14 @@ test("the screen stack pops one level and unwinds only where an exit is declared
 test("the gate list preserves the reference-backed count and invents no unlock rule", () => {
   const gates = listChampionshipGates();
   assert.equal(gates.length, GATE_COUNT);
-  assert.equal(GATE_COUNT, 16, "16 biome nodes is the reference-backed structural fact");
+  assert.equal(GATE_COUNT, 16, "16 biome node pairs is the ROM-verified structural fact");
   assert.equal(new Set(gates.map((gate) => gate.gateId)).size, 16, "gate ids must be unique");
   for (const gate of gates) {
     assert.equal(gate.state, "AVAILABLE", "no gate may be locked while no unlock rule is traced");
     assert.equal(gate.stateEvidence, "UNKNOWN_REQUIRES_TRACE");
-    assert.equal(gate.nameAuthority, "CHAMPIONSHIP_2026_PRODUCT", "gate names must not claim to be original");
+    // The identity is recovered from the ROM model; the display string is not.
+    assert.equal(gate.identityEvidence, "ROM_VERIFIED");
+    assert.equal(gate.displayNameEvidence, "PRESENTATION_DEFAULT_NOT_RECOVERED");
     assert.equal(gate.originalFieldMapping, "UNKNOWN_REQUIRES_TRACE");
     assert.ok(Number.isSafeInteger(gate.worldSeed));
   }

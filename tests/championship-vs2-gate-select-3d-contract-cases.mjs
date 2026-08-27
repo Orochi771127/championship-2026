@@ -17,6 +17,11 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
 
+import {
+  listChampionshipBiomeIdentities,
+  listChampionshipGates
+} from "../src/championship/gate/gateCatalog.js";
+
 const CONTRACT_PATH = "docs/contracts/championship/VS2_GATE_SELECT_3D_RUNTIME_CONTRACT.v1.json";
 const contractText = fs.readFileSync(CONTRACT_PATH, "utf8");
 const contract = JSON.parse(contractText);
@@ -152,18 +157,32 @@ test("the contract carries provenance without carrying a payload or a machine pa
   assert.ok(contract.ipPolicy.forbidden.length >= 3);
 });
 
-test("the gate-name parity gap is recorded and not silently acted on", () => {
+test("the recovered biome identities are adopted as canonical, completely and in order", () => {
+  // This case previously asserted the OPPOSITE: that the catalog had NOT adopted
+  // the recovered names, so that adoption could not happen by accident. The Owner
+  // authorized adoption on 2026-08-28, so the guard inverts - a partial or
+  // reordered adoption is now the failure.
   const gap = contract.parityGap;
-  assert.equal(gap.status, "RECORDED_NOT_ACTED_ON");
-  for (const biome of RECOVERED_BIOMES) {
-    assert.ok(gap.finding.includes(biome), `${biome} missing from the parity finding`);
+  assert.equal(gap.status, "RESOLVED_OWNER_AUTHORIZED");
+
+  assert.deepEqual([...listChampionshipBiomeIdentities()], [...RECOVERED_BIOMES]);
+  const gates = listChampionshipGates();
+  assert.equal(gates.length, 16);
+  assert.deepEqual(gates.map((gate) => gate.biomeId), [...RECOVERED_BIOMES]);
+  assert.deepEqual(gates.map((gate) => gate.gateId),
+    RECOVERED_BIOMES.map((biome) => `championship:2026:gate:${biome.toLowerCase()}`));
+
+  for (const gate of gates) {
+    assert.equal(gate.identityEvidence, "ROM_VERIFIED");
+    assert.equal(gate.biomeNodeName, gate.biomeId);
+    assert.equal(gate.biomeParentNodeName, `${gate.biomeId}parent`);
+    // Recovering a node name is not recovering the label the player saw.
+    assert.equal(gate.displayNameEvidence, "PRESENTATION_DEFAULT_NOT_RECOVERED");
   }
 
-  // The shipped catalog is still the product-authored set. When that changes it
-  // will be a deliberate, authorized edit -- and this assertion is what makes it
-  // deliberate rather than accidental.
+  // No product-authored placeholder may survive as an identity.
   const catalog = fs.readFileSync("src/championship/gate/gateCatalog.js", "utf8");
-  const adopted = RECOVERED_BIOMES.filter((biome) => new RegExp(`"${biome}"`).test(catalog));
-  assert.deepEqual(adopted, [],
-    "the gate catalog adopted recovered biome identities; that needs Owner authorization and a contract update");
+  for (const stale of ["Shallow Verge", "Quiet Basin", "Ashen Steps", "Far Meridian"]) {
+    assert.equal(catalog.includes(stale), false, `${stale} survived the identity adoption`);
+  }
 });

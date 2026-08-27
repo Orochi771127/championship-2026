@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "contractId": "VS2_GATE_SELECT_3D_RUNTIME_CONTRACT",
-  "version": "v1",
+  "version": "v1.1",
   "owner": "Claude Code",
   "consumer": "Codex Art",
   "date": "2026-08-28",
@@ -80,6 +80,11 @@
         {
           "fact": "The static reverse-engineering report's runtime flow tree places a 3D world map inside Gate Select.",
           "detail": "Gate Select -> 3D world map / equipment-plugin setup / Hunt.",
+          "evidence": "PARTIAL"
+        },
+        {
+          "fact": "An independent research artifact maps overlay 12 to 'Gate select + Hunt loadout'.",
+          "detail": "The systems-handoff mode-flow map lists OVL 12 = Gate select + Hunt loadout, agreeing with the NXR scene registry's OVL12 attribution of both ui/hunt/world/ and ui/hunt/setting/. This is a second source for the overlay identity, arrived at independently of the NSBMD loader census.",
           "evidence": "PARTIAL"
         }
       ],
@@ -233,6 +238,16 @@
         "detail": "bg_earth (256x256, main) with bg_earth_sub_bg2 and bg_earth_sub_bg3 (two sub-screen BG layers) renders a starfield and nebula - deep space. bg_world (256x256, main) with bg_world_sub renders a green hexagonal cell lattice - a digital-world grid. Two background families in one screen group, one spacelike and one digital, is strong structural support for two 3D presentation states.",
         "evidence": "PARTIAL",
         "unknown": "Whether the two states are a sequence (approach the planet, then the world map), two selectable modes, or two different screens sharing a directory. No transition is traced."
+      },
+      "ownerRule": {
+        "source": "Owner directive, 2026-08-28",
+        "forbidden": [
+          "claiming Gate Select definitely displays earth",
+          "claiming the original is definitely a rotating Earth",
+          "treating the earth model as verified Gate runtime truth"
+        ],
+        "standing": "EARTH_GATE_CONSUMER = UNKNOWN_REQUIRES_TRACE",
+        "afterThisBatch": "Unchanged. The bounded trace could not run, so no consumer was found and none was invented."
       }
     },
     "4_sixteenBiomeGateNodeRelationship": {
@@ -403,7 +418,14 @@
         "value": "The switch rule. Nothing traced establishes what selects day versus night, whether it follows an in-game clock, a season, a per-gate property, or player action; nor whether the transition is a cut, a blend, or a lit rotation.",
         "evidence": "UNKNOWN_REQUIRES_TRACE"
       },
-      "presentationRule": "Day/night must be modelled as TWO paired states over one world, matching the node structure. Do not invent a continuous time-of-day cycle, a sun position, or a per-gate weather system: none is evidenced."
+      "presentationRule": "Day/night must be modelled as TWO paired states over one world, matching the node structure. Do not invent a continuous time-of-day cycle, a sun position, or a per-gate weather system: none is evidenced.",
+      "gameplayConsequence": {
+        "finding": "Day/night is not purely presentational: it gates item usability.",
+        "detail": "Both Hunt Items in the Light subcategory - Yellow Light and Blue Light - state in their ROM description that they can only be used at night. Light is a lure class that draws specific Digimon.",
+        "evidence": "ROM_VERIFIED",
+        "significance": "The world_day / world_night pairing in the Gate Select model is therefore tied to a real gameplay state, not only a texture swap.",
+        "stillUnknown": "How the game determines it is night, and whether the day/night state shown at Gate Select selects the Hunt's day/night state or merely reports it."
+      }
     },
     "6_selectionState": {
       "evidence": "PARTIAL",
@@ -491,11 +513,12 @@
         "detail": "The NXR scene registry lists 12 OVL12 scenes: 11 under ui/hunt/setting/ categorised 'Hunt Loadout / Equipment' (equip_plate, launcher_plate, menu_top_gear_scene, menu_top_plugin_scene, menu_top_release_scene, setting_equip_main_scene, setting_equip_sub_scene, setting_gear_main_scene, setting_gear_main_slot_scene, setting_gear_sub_scene, setting_sub_base_scene) and 1 under ui/hunt/world/ categorised 'Hunt World / Gate UI' (world_sub_base_scene). The same overlay that loads the 3D world map also owns the loadout scenes.",
         "evidence": "PARTIAL - the overlay attribution for the NXR scenes is inference; the OVL12 -> worldMap model loader call is a direct trace"
       },
-      "corroboration": "The static report's runtime flow tree places Gate Select -> equipment/plugin setup -> Hunt, in that order.",
+      "corroboration": "Two independent sources now agree that one overlay owns both screens: the systems-handoff mode-flow map states OVL 12 = 'Gate select + Hunt loadout', and the NXR scene registry attributes all 11 ui/hunt/setting/ scenes plus ui/hunt/world/world_sub_base_scene.nxr to OVL12. The gameplay master spec independently documents the flow Gate Select -> Hunt Loadout -> field. The transition CALL is still not traced.",
       "loadoutVocabulary": {
         "note": "The original loadout is gear/equipment/plugin/launcher based, not companion-selection based.",
         "evidence": "ROM_VERIFIED at asset level",
-        "detail": "ui/hunt/setting/ contains obj_Launcher_icon, obj_Launcher_wind, setting_obj_plug_main, setting_obj_plug_sub, menu_top_gear_scene, menu_top_plugin_scene, menu_top_release_scene, setting_equip_*, setting_gear_*. This is a real preservation debt against the shipped one-companion loadout, but it is OUT OF SCOPE for this batch and is recorded, not acted on."
+        "detail": "ui/hunt/setting/ contains obj_Launcher_icon, obj_Launcher_wind, setting_obj_plug_main, setting_obj_plug_sub, menu_top_gear_scene, menu_top_plugin_scene, menu_top_release_scene, setting_equip_*, setting_gear_*. This is a real preservation debt against the shipped one-companion loadout, but it is OUT OF SCOPE for this batch and is recorded, not acted on.",
+        "status": "CLOSED_IN_A_SEPARATE_CONTRACT - see docs/contracts/championship/VS2_HUNT_LOADOUT_RUNTIME_CONTRACT.v1.json"
       },
       "unknown": "No transition call, no commit path, and no state handoff between the two are traced."
     },
@@ -553,6 +576,11 @@
           }
         ],
         "unknown": "Sequence contents, frame counts, durations and trigger conditions were not decoded. The .nanr files were inventoried, not parsed."
+      },
+      "ownerRule": {
+        "source": "Owner directive, 2026-08-28",
+        "statement": "code-driven is NOT rotation proven. Only tracing a transform write or an input consumer may upgrade rotation.",
+        "standing": "The absence of NSBCA/NSBTA/NSBMA/NSBVA makes code-driven motion the only possible mechanism IF the world moves at all. It is not evidence that it moves."
       }
     },
     "12_unknownFields": {
@@ -640,8 +668,9 @@
     "finding": "The shipped VS2 gate catalog uses 16 PRODUCT-AUTHORED names (Shallow Verge, Quiet Basin, Ashen Steps, Pale Thicket, Sunken Walk, Amber Hollow, Still Lagoon, Rust Plateau, Cold Aqueduct, Drifting Fen, Glass Terrace, Low Cinderfield, Hushed Canopy, Salt Reach, Dim Causeway, Far Meridian) while the original has 16 ROM_VERIFIED biome identities (Canyon, Crag, Damp, Desert, Factory, Forest, Grass, Ice, Jungle, Mine, Oasis, Ruins, Savanna, Seaside, Sewer, Volcano).",
     "assessment": "The product-authored names were correct when written: the gate catalog was authored before this evidence was read, and it declared itself product-authored rather than claiming recovery. But under DEFAULT_PRESERVE, a ROM_VERIFIED identity outranks a product-authored placeholder now that the identity is recovered.",
     "recommendation": "Adopt the 16 recovered biome identities as the gate identities, keeping display naming a separate presentation concern. src/championship/gate/gateCatalog.js already carries biomeOrdinal and originalFieldMapping: UNKNOWN_REQUIRES_TRACE, so the change is a catalog edit, not an architecture change.",
-    "status": "RECORDED_NOT_ACTED_ON",
-    "reason": "The Owner directive for this batch is contract closure only, with no new gameplay. Changing the gate catalog is implementation and needs its own authorization."
+    "status": "RESOLVED_OWNER_AUTHORIZED",
+    "reason": "The Owner directive for this batch is contract closure only, with no new gameplay. Changing the gate catalog is implementation and needs its own authorization.",
+    "resolution": "Owner decision, 2026-08-28: the 16 recovered biome node identities are canonical. src/championship/gate/gateCatalog.js now carries biomeId as the canonical key and gateId as championship:2026:gate:<biome>. displayName is explicitly a PRESENTATION_DEFAULT_NOT_RECOVERED: a node name is not the label the player saw, and localization may replace it freely."
   },
   "implementationReadiness": {
     "readyToBuild": [
@@ -674,6 +703,12 @@
   },
   "openTraceItems": [
     {
+      "id": "GS-0",
+      "summary": "The bounded OVL12 Gate Select behavior trace could not be performed: no ROM image, overlay binary or ARM9 binary exists in the research tree, and the existing trace files state that raw overlay binaries are not bundled.",
+      "blocks": "rotation, camera, input, hit-test, selection animation, day/night switch rule, and the earth consumer - all seven of the Owner's open behaviour questions",
+      "unblockedBy": "the OVL12 overlay binary, the ROM image, or a pre-extracted OVL12 disassembly excerpt around 0x0210C6FC"
+    },
+    {
       "id": "T1",
       "register": "REVERSE_UNKNOWN_DEPENDENCIES.md",
       "summary": "Gate Select runtime behaviour: camera setup, draw call, rotation and input handling untraced.",
@@ -704,6 +739,32 @@
       "id": "GS-5",
       "summary": "obj_world_GateIcon per-cell pixels are mis-decoded from .ncbr.",
       "blocks": "per-gate original icon identity"
+    }
+  ],
+  "revisionNote": "v1.1 records the outcome of the Owner-authorized bounded Gate Select behavior trace, adds two corroborations recovered while closing the Hunt Loadout contract, and resolves the destination-identity parity gap. No UNKNOWN field was upgraded: the trace could not run.",
+  "boundedBehaviorTrace": {
+    "authorization": "Owner directive 2026-08-28: bounded Gate Select behavior trace, starting from the 3D_worldMap_model loader caller around OVL12 0x0210C6FC, following transform writes, camera setup, input consumers, selected node state, GateIcon update, destination panel update and the transition to Hunt Loadout. Not a full OVL12 re-expansion.",
+    "status": "BLOCKED_ON_MISSING_INPUT",
+    "attempted": "Yes. The research root was searched exhaustively for the required input.",
+    "finding": {
+      "value": "The original-evidence tree contains NO ROM image, NO overlay binary and NO ARM9 binary.",
+      "detail": "No .nds, .srl or .rom file exists anywhere under the research root. No file matching OVL12's recorded 39,200-byte size exists. There is no overlay table, no y9/y7 file, and no extracted overlay directory.",
+      "decisive": "The existing per-subsystem trace files state the reason themselves. Every one of them opens with the header line 'Bounded disassembly excerpt only. Raw overlay binary is not bundled.' The packs ship pre-extracted disassembly EXCERPTS for the regions someone already traced - OVL19 battle, OVL8, ARM9 - and nothing else.",
+      "consequence": "A caller/callee trace around 0x0210C6FC cannot be performed from the available evidence. There are no OVL12 instruction bytes to follow."
+    },
+    "whatWasNotDone": "No behaviour was inferred to fill the gap. rotation, camera, input, hit-test and the day/night switch rule remain exactly as recorded in v1: UNKNOWN_REQUIRES_TRACE.",
+    "whatWouldUnblock": [
+      "the OVL12 overlay binary (file id 12, 39,200 bytes, RAM base 0x0210b300), or",
+      "the YDIJ ROM image itself, from which the overlay can be extracted, or",
+      "a new pre-extracted OVL12 disassembly excerpt in the same format as the existing OVL19/OVL8/ARM9 trace files, covering the region around 0x0210C6FC"
+    ],
+    "scopeNote": "Only the first of these needs to reach this machine, and none of it may enter this repository - the IP policy below is unchanged."
+  },
+  "relatedContracts": [
+    {
+      "contractId": "VS2_HUNT_LOADOUT_RUNTIME_CONTRACT",
+      "path": "docs/contracts/championship/VS2_HUNT_LOADOUT_RUNTIME_CONTRACT.v1.json",
+      "relationship": "The other half of the same Owner batch. OVL12 owns both screens, so the two contracts share an overlay, an evidence base and the day/night finding."
     }
   ]
 }
