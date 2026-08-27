@@ -1,0 +1,375 @@
+{
+  "schemaVersion": 1,
+  "owner": "Claude Code",
+  "syncTarget": "OWNER PRODUCT RESET reconciliation",
+  "date": "2026-08-27",
+  "note": "Claude-owned delta for SYNC-3. Codex is COORDINATION_MERGE_WRITER and merges this by stable record ID. Claude wrote no shared coordination file in this round.",
+  "checkpoint": {
+    "tip": "2632ddf",
+    "branch": "claude/evidence-taxonomy-m1",
+    "chain": [
+      {
+        "sha": "d7a66b1",
+        "parent": "86524ca",
+        "subject": "checkpoint runtime reconstruction through M9.1 and phase1",
+        "files": 110
+      },
+      {
+        "sha": "a1b74f4",
+        "subject": "relocate the presentation contract and harden the production gate"
+      },
+      {
+        "sha": "b2a46cd",
+        "subject": "declare the R2 protected-path failure the checkpoint made visible"
+      },
+      {
+        "sha": "2632ddf",
+        "subject": "close slot ordering and submenu storage in the toolbar contract"
+      }
+    ],
+    "pushed": false,
+    "merged": false,
+    "workingTreeClean": true,
+    "subjectPrefixDefect": "d7a66b1, a1b74f4 and b2a46cd carry a stray '@ ' subject prefix (CL-008, Owner-accepted as cosmetic, no rewrite). 2632ddf is clean."
+  },
+  "tests": {
+    "pass": 471,
+    "expected": 3,
+    "unexpected": 0,
+    "unchangedThisRound": true
+  },
+  "ownerDecisionsApplied": [
+    {
+      "id": "CL-005",
+      "state": "RESOLVED_BY_OWNER_POLICY",
+      "detail": "Phase 2 renderer policy set: DOM = application/screen UI authority; PixiJS = playable 2D field/actor/sprite/2D VFX authority; Three.js = bounded 3D only on verified original 3D evidence or explicit Owner approval. ALL_DOM, ALL_PIXI, ALL_THREE, a second renderer authority, a second ticker and a second global router are all forbidden."
+    },
+    {
+      "id": "CL-008",
+      "state": "ACCEPTED_COSMETIC",
+      "detail": "No history rewrite. Recorded, not fixed."
+    },
+    {
+      "id": "CL-009",
+      "state": "ACCEPTED_IN_LOCAL_RECOVERY_CHECKPOINT",
+      "detail": "35MB reproducible staging stays in the local checkpoint. Before any push or PR, build a clean integration path that excludes reproducible staging artifacts. Do not delete or rewrite now."
+    }
+  ],
+  "closedThisRound": [
+    {
+      "id": "SLOT_TO_NODE_ORDERING",
+      "type": "dependency",
+      "owner": "claude",
+      "state": "ROM_VERIFIED",
+      "codexMaySafelyBind": "YES",
+      "detail": "ARM9 0x02060BF0 indexes a table at 0x0209F7C4 by slot number; entries 16,15,14,13,12,11,10,9 resolve to toolbar.nxr node indices, where node 16 is button0 and node 9 is button7. Slot N is buttonN, left to right. The descending table is an index inversion, not a reordering of the row.",
+      "contract": "docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json#slotToNodeMapping"
+    },
+    {
+      "id": "SUBMENU_STORAGE_STRUCTURE",
+      "type": "dependency",
+      "owner": "claude",
+      "state": "ROM_VERIFIED",
+      "codexMaySafelyBind": "YES",
+      "detail": "Every slot carries a submenu of up to eight entries. Pointer table at toolbar+0xE64 (8 slots x 8 x 4, slot stride 0x20); per-slot count array at +0xF64. The pointer table begins exactly where the slot array ends (0x64 + 8*0x1C0 = 0xE64), corroborating both offsets. The submenu is not a property of one special slot.",
+      "contract": "docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json#submenuStorage"
+    }
+  ],
+  "stillUnknown": [
+    {
+      "id": "PER_SLOT_COMMAND_BINDING",
+      "state": "UNKNOWN_REQUIRES_TRACE",
+      "detail": "No command table adjacent to the slot-to-node table; the per-slot setup loop writes no command id."
+    },
+    {
+      "id": "PER_SLOT_ICON_CELL",
+      "state": "UNKNOWN_REQUIRES_TRACE",
+      "detail": "The icon bank is bound to the slot sub-object at +0xD4 (ARM9 0x02060C24), but no per-slot cell or sequence selection was recovered."
+    },
+    {
+      "id": "SUBMENU_MEMBERSHIP",
+      "state": "UNKNOWN_REQUIRES_TRACE",
+      "detail": "Storage proven; population site not found. ARM9 only ever clears the counts to zero (0x02060770, 0x02060C70). Hunt and Battle remain ROM_VERIFIED members of a submenu from tutorial text alone."
+    },
+    {
+      "id": "SLOT_ENABLE_MASK",
+      "state": "UNKNOWN_REQUIRES_TRACE",
+      "detail": "slot+0x192 and slot+0xBE are both initialised to 0 and are candidates; nothing proves either is an enable flag."
+    },
+    {
+      "id": "SLOT7_IDENTITY",
+      "state": "UNKNOWN_REQUIRES_TRACE",
+      "detail": "Distinct frame cell 12 remains structural evidence only."
+    },
+    {
+      "id": "EXACT_CARE_VALUES",
+      "state": "UNKNOWN_REQUIRES_TRACE",
+      "detail": "Not directly proven; not inferred."
+    }
+  ],
+  "updatedRecords": [
+    {
+      "id": "CL-002",
+      "type": "blocker",
+      "state": "PARTIALLY_CLOSED",
+      "detail": "Slot ordering and submenu storage closed. Command and icon-cell bindings remain open. The delta stayed inside its authorized scope and did not re-expand the Raising reverse program."
+    }
+  ],
+  "integrationPlanRuntimeHalf": {
+    "note": "Claude's runtime-side input for CHAMPIONSHIP_REBUILD_INTEGRATION_PLAN_V1.md. Art Reference Coverage, Production Art Status and UI Status are Codex-owned and deliberately left null. Claude did not create the shared file; see ownershipQuestion below.",
+    "slices": [
+      {
+        "slice": "BOOT / ENTRY",
+        "originalEvidence": "ARM9 bootstrap; OVL3 boot/logo",
+        "runtimeStatus": "STANDALONE_ONLY",
+        "claudeImplementation": "COMPLETE for standalone: championship.html -> src/championship/app/main.js. Nexus path has no Championship opener wired, by Owner ruling.",
+        "saveDataStatus": "n/a",
+        "integrationStatus": "NOT_INTEGRATED_BY_DESIGN",
+        "openBlocker": "Nexus integration frozen",
+        "nextExecutableTask": "none until Owner unfreezes integration"
+      },
+      {
+        "slice": "TITLE / LOGIN",
+        "originalEvidence": "OVL13 title/login; title_menu/title_login_scene.nxr",
+        "runtimeStatus": "MINIMAL",
+        "claudeImplementation": "PARTIAL: standalone New Game / Continue surface only. No original title flow.",
+        "saveDataStatus": "Continue is gated on a valid championshipModernSave:v1",
+        "integrationStatus": "STANDALONE",
+        "openBlocker": "none",
+        "nextExecutableTask": "none authorized"
+      },
+      {
+        "slice": "RAISING HOME",
+        "originalEvidence": "OVL18; training/training_sub_scene.nxr (75 nodes); tutorial text idx 1499-1526",
+        "runtimeStatus": "PLAYABLE_STANDALONE",
+        "claudeImplementation": "COMPLETE for the Phase 1 loop: autonomous creatures, direct touch, drag relocation between two product-authored cages, care reaction with no stat mutation.",
+        "saveDataStatus": "COMPLETE: cage assignment and interaction flags persist and restore",
+        "integrationStatus": "STANDALONE",
+        "openBlocker": "CL-002 toolbar binding; care semantics unknown",
+        "nextExecutableTask": "resume the bounded slot trace when authorized"
+      },
+      {
+        "slice": "CAGE EDIT",
+        "originalEvidence": "OVL15; training/cage_edit_obj_main.nxr, cage_edit_obj_sub.nxr; 36 CageDefinitions; cage name + description + 3-pip level; cages level up capped by Tamer rank",
+        "runtimeStatus": "NOT_STARTED",
+        "claudeImplementation": "NOT_STARTED",
+        "saveDataStatus": "none",
+        "integrationStatus": "NOT_STARTED",
+        "openBlocker": "CL-004: drag grammar, valid placement, validation, persistence and cage-level meaning all unknown",
+        "nextExecutableTask": "OVL15 handler trace (not authorized)"
+      },
+      {
+        "slice": "SHOP",
+        "originalEvidence": "OVL17; shop/*.nxr; 35 shop cages; 118 shop records promoted as forensic data",
+        "runtimeStatus": "NOT_STARTED",
+        "claudeImplementation": "NOT_STARTED. Forensic shop records exist but are inert.",
+        "saveDataStatus": "none",
+        "integrationStatus": "NOT_STARTED",
+        "openBlocker": "no shop runtime contract",
+        "nextExecutableTask": "none authorized"
+      },
+      {
+        "slice": "DATABASE",
+        "originalEvidence": "OVL16; database/guid_main_scene.nxr; ui/txt/db_txt_list_txt.dat (72,690 bytes); 224-entry compact display family",
+        "runtimeStatus": "NOT_STARTED",
+        "claudeImplementation": "NOT_STARTED",
+        "saveDataStatus": "none",
+        "integrationStatus": "NOT_STARTED",
+        "openBlocker": "unlock/filter/read logic unknown",
+        "nextExecutableTask": "none authorized; Codex O2 catalog is the current 224-entity work"
+      },
+      {
+        "slice": "GATE / LOADOUT",
+        "originalEvidence": "OVL12; gate_select 3D models; 16 biome nodes",
+        "runtimeStatus": "NOT_STARTED",
+        "claudeImplementation": "NOT_STARTED",
+        "saveDataStatus": "none",
+        "integrationStatus": "NOT_STARTED",
+        "openBlocker": "none recorded",
+        "nextExecutableTask": "none authorized"
+      },
+      {
+        "slice": "HUNT FIELD",
+        "originalEvidence": "OVL0; ui/hunt/hunting/hunt_sub_scene.nxr (72 nodes, map_marker0..23, remain_icon0..3); toolbar mode 2 with ui/hunt_set",
+        "runtimeStatus": "NOT_STARTED",
+        "claudeImplementation": "NOT_STARTED",
+        "saveDataStatus": "none",
+        "integrationStatus": "NOT_STARTED",
+        "openBlocker": "HuntFieldContract not published",
+        "nextExecutableTask": "none authorized"
+      },
+      {
+        "slice": "CAPTURE",
+        "originalEvidence": "External crosscheck: stylus circle/lasso then drag against a fleeing creature to exhaust and capture. Not traced.",
+        "runtimeStatus": "NOT_STARTED",
+        "claudeImplementation": "NOT_STARTED",
+        "saveDataStatus": "none",
+        "integrationStatus": "NOT_STARTED",
+        "openBlocker": "no ROM trace",
+        "nextExecutableTask": "none authorized"
+      },
+      {
+        "slice": "HUNT RESULT",
+        "originalEvidence": "OVL4 tamer info / hunt result; OVL18 references /ui/hunt/result",
+        "runtimeStatus": "NOT_STARTED",
+        "claudeImplementation": "NOT_STARTED",
+        "saveDataStatus": "none",
+        "integrationStatus": "NOT_STARTED",
+        "openBlocker": "none recorded",
+        "nextExecutableTask": "none authorized"
+      },
+      {
+        "slice": "BATTLE MENU",
+        "originalEvidence": "OVL10; battle_menu/battle_setting_scene.nxr; tutorial text places Battle inside a submenu",
+        "runtimeStatus": "NOT_STARTED",
+        "claudeImplementation": "NOT_STARTED",
+        "saveDataStatus": "none",
+        "integrationStatus": "NOT_STARTED",
+        "openBlocker": "none recorded",
+        "nextExecutableTask": "none authorized"
+      },
+      {
+        "slice": "BATTLE RUNTIME",
+        "originalEvidence": "OVL19; damage core VERIFIED_BINARY (27-entry curve, power u16 at action+0x4A, resolver 0x021149A8); 596 action table; 11x11 field matrix; RNG modulus 103",
+        "runtimeStatus": "NOT_STARTED",
+        "claudeImplementation": "NOT_STARTED. Stage 1-3 reverse evidence exists and is promoted as forensic data only.",
+        "saveDataStatus": "none",
+        "integrationStatus": "NOT_STARTED",
+        "openBlocker": "B02 hit/miss, B03 crit probability, B05 status, B06 TP, B09 initiative all unknown",
+        "nextExecutableTask": "none authorized"
+      },
+      {
+        "slice": "BATTLE RESULT",
+        "originalEvidence": "OVL8; battle_result/*.nxr (4 scenes); Bits writer PlayerData+0x4C8 capped at 9,999,999",
+        "runtimeStatus": "NOT_STARTED",
+        "claudeImplementation": "NOT_STARTED",
+        "saveDataStatus": "none",
+        "integrationStatus": "NOT_STARTED",
+        "openBlocker": "B10 full result write graph unknown",
+        "nextExecutableTask": "none authorized"
+      },
+      {
+        "slice": "PROGRESSION",
+        "originalEvidence": "Tamer rank gates cage level-up (text idx 630); End Day confirmed (idx 653)",
+        "runtimeStatus": "NOT_STARTED",
+        "claudeImplementation": "NOT_STARTED",
+        "saveDataStatus": "none",
+        "integrationStatus": "NOT_STARTED",
+        "openBlocker": "no progression contract",
+        "nextExecutableTask": "none authorized"
+      },
+      {
+        "slice": "SAVE / LOAD",
+        "originalEvidence": "Suspend Save referenced externally; original PlayerData serializer not supplied",
+        "runtimeStatus": "COMPLETE_FOR_STANDALONE",
+        "claudeImplementation": "COMPLETE: championshipModernSave:v1 envelope, deny-by-default schema, three-layer forensic exclusion, malformed-save recovery, reload restore via a seeded memory-only R2 port.",
+        "saveDataStatus": "COMPLETE for the Raising slice",
+        "integrationStatus": "STANDALONE; never writes nexusLinkR2State:v1",
+        "openBlocker": "none",
+        "nextExecutableTask": "extend the envelope only when a new slice needs it"
+      }
+    ],
+    "ownershipQuestion": "The directive lists CHAMPIONSHIP_REBUILD_INTEGRATION_PLAN_V1.md as a NEW SHARED INTEGRATION DELIVERABLE without naming an owner, while Decision 1 tells Claude not to modify shared coordination files and Codex remains merge writer. Claude therefore supplied the runtime half here instead of creating the shared file. If the Owner assigns the file to Claude, Claude will author it directly."
+  },
+  "ownedFilesUpdated": [
+    "CLAUDE_REBUILD_STATUS.json",
+    "CLAUDE_SYNC_DELTA.json"
+  ],
+  "sharedFilesWritten": [],
+  "nextSafeDeltaTrace": {
+    "target": "submenu population site and the per-slot command writer",
+    "approach": "ARM9 register-offset stores into +0xE64 / +0xF64 were not covered by the immediate-offset scan; that is the most likely next lead, together with the slot sub-object at +0xD4 for icon cell selection.",
+    "scopeRule": "Do not re-expand the Raising reverse program.",
+    "blockedUntil": "Owner authorization"
+  },
+  "intRH2": {
+    "slice": "INT-RH2 - Raising Home Phase 2 Presentation Integration",
+    "state": "OWNER_APPROVED_INTEGRATION_BASELINE / CHECKPOINTED",
+    "claudeRuntimeCheckpoint": "2671db1",
+    "codexPresentationCheckpoint": "bb61d18",
+    "coordinationCheckpoint": "cb0dc02",
+    "tests": "481 pass / 3 expected / 0 unexpected",
+    "worktreeClean": true,
+    "pushed": false,
+    "duplicatedAuthority": "0 - one Pixi Application, one save authority (ChampionshipPersistentSavePort), zero routers in src/championship",
+    "claudeOwnedFilesInRuntimeCheckpoint": [
+      "src/championship/app/raisingPresentationSource.js",
+      "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
+      "docs/contracts/championship/INT_RH2_RUNTIME_PRESENTATION_CONTRACT.json",
+      "docs/qa/championship-int-rh2-runtime-presentation-cases.mjs"
+    ],
+    "toolbarHandling": "Eight slots ship as the ROM-verified shell in ROM order, every slot a neutral disabled RAW_SLOT placeholder. CARE remains IMPLEMENTED_ACTION_CARE and is not mapped to any slot."
+  },
+  "newBlockers": [
+    {
+      "id": "CL-010",
+      "owner": "shared",
+      "severity": "LOW",
+      "state": "REVIEWED_ACCEPTED",
+      "summary": "Four Claude-authority files landed in the Codex presentation checkpoint",
+      "detail": "bb61d18 carries src/championship/app/main.js, docs/qa/championship-production-boundary-cases.mjs, docs/qa/championship-taxonomy-boundary-cases.mjs and docs/qa/CHAMPIONSHIP_GATE_SCOPE_MANIFEST.json alongside Codex presentation work, against the section F rule that neither agent commits the other's authority. Claude reviewed the content: the gate changes add INT-RH2 paths by explicit shape and extend productionFiles() to scan the Pixi presentation tree, which strengthens rather than weakens the gate. Claude re-ran positive controls after the edits - frozen R2 edit CAUGHT, Nexus import into the Pixi tree CAUGHT, out-of-tree file CAUGHT at three paths. Accepted as-is; no history rewrite.",
+      "unblockedBy": "Future checkpoints split by authority before staging."
+    }
+  ],
+  "vs2Readiness": {
+    "ready": [
+      "Presentation seam pattern proven and reusable: contract -> producer -> Codex binding, with zero duplicated authority",
+      "Single field-scoped Pixi Application exists and is reusable for a Hunt field",
+      "Single save authority exists; no second store was introduced by INT-RH2",
+      "Toolbar mode 2 = ui/hunt_set, caller OVL0 @0x0211A138 - ROM_VERIFIED",
+      "Hunt sub-screen structure known: ui/hunt/hunting/hunt_sub_scene.nxr, 72 nodes, map_marker0..23, remain_icon0..3 with remain_time0..3",
+      "OVL0 scene references known: hunt_sub_scene, hunt_shutter_scene, battle_main_scene, memorycard_plate_scene, info_bar"
+    ],
+    "notReady": [
+      "No bounded screen stack is mounted. VS2 is the first slice needing more than one screen; createChampionshipScreenStack.js exists but is unused by the standalone build.",
+      "Gate flow is asset and string evidence only (gate_select 3D models, 16 biome nodes, OVL12 strings). No traced runtime flow exists.",
+      "No Hunt field runtime contract is published.",
+      "No verified wild-creature movement evidence. Section I permits it only where verified; nothing is.",
+      "No loadout model.",
+      "Hunt toolbar slot semantics are UNKNOWN, exactly as in Raising."
+    ]
+  },
+  "productReset": {
+    "date": "2026-08-27",
+    "product": "DIGIMON CHAMPIONSHIP - 2026 MODERN REBUILD; standalone, web-first, mobile-first, portrait 9:16, touch-first, desktop compatible",
+    "claudeOwnedFilesReconciled": [
+      "CHAMPIONSHIP_RUNTIME_ARCHITECTURE.md",
+      "CLAUDE_REBUILD_STATUS.json",
+      "CLAUDE_SYNC_DELTA.json"
+    ],
+    "sharedFilesForMergeWriter": {
+      "note": "Claude did not write the shared files. These are the runtime-side changes Codex should merge.",
+      "masterSync": [
+        "Product state section: the product is Championship 2026 standalone; Nexus Link is FROZEN / OUT OF CURRENT PRODUCT SCOPE.",
+        "Claude runtime state: the two-entry-path description is superseded. The standalone entry is now the only path; the Nexus bootstrap is a separate application sharing a repository.",
+        "Add the vertical-slice roadmap VS1..VS7 as the scheduling axis, replacing research batch numbering."
+      ],
+      "dependencyMatrix": [
+        "Add an evidence class OWNER_APPROVED_ADAPTATION - the only class permitted to intentionally change original gameplay.",
+        "Re-label historical Nexus-integration rows as FROZEN_OUT_OF_SCOPE rather than blocked.",
+        "Record the seven preservation debts as tracked obligations, not as decisions."
+      ],
+      "blockerLedger": [
+        "Nexus-integration blockers move from BLOCKED_BY_OWNER to FROZEN_OUT_OF_SCOPE.",
+        "New tracked debts: PD-CAGES, PD-TOOLBAR, PD-CARE, PD-STATUS, PD-CAGE-LEVEL, PD-AUTO-BATTLE, PD-HUNT-CAPTURE."
+      ],
+      "decisionLog": [
+        "Record the Owner Product Reset. Do not erase prior Nexus decisions; mark them superseded or frozen with their original dates."
+      ],
+      "integrationPlan": [
+        "Reframe the plan around the target product flow: TITLE/LOGIN, RAISING HOME, TRAINING/CARE/CAGE, GATE SELECT, HUNT LOADOUT, HUNT FIELD, CAPTURE, HUNT RESULT, SHOP/DATABASE, BATTLE MENU, AUTO BATTLE, BATTLE RESULT, PROGRESSION, SAVE/LOAD.",
+        "Raising Home slice: Runtime COMPLETE_FOR_INT_RH2, UI P1R_BOUND, Save SAVE_RELOAD_RESTORE_VERIFIED, Integration OWNER_APPROVED_INTEGRATION_BASELINE, Production Environment TEMPORARY, Production Character Art TEMPORARY."
+      ]
+    },
+    "preservationDebts": [
+      "PD-CAGES: 36 CageDefinitions vs 2 product regions",
+      "PD-TOOLBAR: 8 slots proven, bindings untraced",
+      "PD-CARE: four items and the tool-then-touch grammar proven, effects unknown",
+      "PD-STATUS: ten status fields proven, no values exist",
+      "PD-CAGE-LEVEL: cage level-up capped by Tamer rank, not built",
+      "PD-AUTO-BATTLE: automatic with pre-battle orders; must not become a manual command RPG",
+      "PD-HUNT-CAPTURE: tether/circle grammar; must not become a single Capture button"
+    ],
+    "architectureConsequence": "What was documented as 'path B, the standalone exception' is now the only path. No second router, store, save authority, Pixi bootstrap or ticker. Verified at INT-RH2: 1 Pixi Application, 1 save authority, 0 routers in src/championship."
+  }
+}

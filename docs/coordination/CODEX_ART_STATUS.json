@@ -1,0 +1,250 @@
+{
+  "schemaVersion": 1,
+  "owner": "CODEX_ART",
+  "lastUpdated": "2026-08-27",
+  "syncBatch": "CHAMPIONSHIP_2026_PRODUCT_RESET_DOCUMENTATION_RECONCILIATION",
+  "syncRevision": 3,
+  "syncRevisionTarget": 3,
+  "status": "CHAMPIONSHIP_2026_STANDALONE_PLAN_RECONCILED_STOPPED_FOR_VS2_GO",
+  "sourceOfTruth": {
+    "coordinationRoot": "docs/coordination",
+    "canonicalRepository": "docs/migration/PRE_MIGRATION_PROVENANCE.md#coordination-source",
+    "canonicalBranch": "codex/championship-art-production-skill",
+    "canonicalHeadAtPreparation": "a154a90595d4907af50264b083d6e12672138b36",
+    "artEvidenceWorktree": "docs/migration/PRE_MIGRATION_PROVENANCE.md#art-evidence-worktree",
+    "artEvidenceBranch": "codex/championship-art-reconstruction-research",
+    "artEvidenceHead": "732775486665b21508ac51c1eea0b723db0f7744",
+    "artEvidenceParent": "9d33b9eaa589307a3d6583afe0f319b6fe20bcf9"
+  },
+  "productAuthority": {
+    "product": "DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD",
+    "target": [
+      "WEB_FIRST",
+      "MOBILE_FIRST",
+      "PORTRAIT_9_16",
+      "TOUCH_FIRST",
+      "DESKTOP_BROWSER_COMPATIBLE"
+    ],
+    "nexusLinkIntegration": "FROZEN_OUT_OF_CURRENT_PRODUCT_SCOPE",
+    "gameplayPolicy": {
+      "ROM_VERIFIED": "DEFAULT_PRESERVE",
+      "PARTIAL": "PRESERVE_KNOWN_STRUCTURE",
+      "UNKNOWN_REQUIRES_TRACE": "NEUTRAL_DO_NOT_INVENT",
+      "OWNER_APPROVED_ADAPTATION": "ONLY_INTENTIONAL_GAMEPLAY_CHANGE_AUTHORITY"
+    },
+    "documentationBatchOnly": true,
+    "vs2ImplementationAuthorized": false
+  },
+  "workingTree": {
+    "canonicalWasDirtyAtPreparation": true,
+    "artEvidenceWorktreeWasDirty": true,
+    "unrelatedChangesPreserved": true,
+    "o3dCheckpointIsolatedFromRuntimeRegistryAndP2": true
+  },
+  "completed": [
+    {
+      "id": "ART-O1",
+      "status": "OWNER_APPROVED_REFERENCE_BASELINE",
+      "summary": "Nine evidence-ready Original Championship UI families; full verified runtime-composited screenshot coverage remains 0/10.",
+      "checkpoint": "d01146c",
+      "rights": "ROM_COPYRIGHTED_REFERENCE",
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
+    {
+      "id": "ART-R2R",
+      "status": "OWNER_APPROVED_REFERENCE_BASELINE",
+      "summary": "Four-entity character fidelity pipeline; no 224-entity mass batch authorized.",
+      "checkpoint": "48ea64f",
+      "rights": "ROM_COPYRIGHTED_REFERENCE",
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
+    {
+      "id": "O3-B",
+      "status": "OWNER_APPROVED_REFERENCE_BASELINE",
+      "summary": "Training/Cage: 40/40 CORE_FIELD_RECOVERED and 38/40 FULL_COMPOSITION_CONFIDENCE; CM12/CM18 remain OBJECT_LAYER_PARTIAL.",
+      "checkpoint": "eba10bc",
+      "rights": "ROM_COPYRIGHTED_REFERENCE",
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
+    {
+      "id": "O3-C",
+      "status": "OWNER_APPROVED_REFERENCE_BASELINE",
+      "summary": "Hunt: 16/16 biome representatives; 29 variants audited; 13 alternate variants remain archival backlog.",
+      "checkpoint": "a4c162d",
+      "rights": "ROM_COPYRIGHTED_REFERENCE",
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
+    {
+      "id": "O3-D",
+      "status": "OWNER_APPROVED_REFERENCE_BASELINE",
+      "summary": "Battle: 11/11 exact native static fields with full static composition confidence and zero object-link conflicts. BM03/BM04 animated placement/timing remains UNKNOWN_REQUIRES_TRACE.",
+      "checkpoint": "9d33b9eaa589307a3d6583afe0f319b6fe20bcf9",
+      "output": "reports/art-original/maps/o3d-battle/O3D_GALLERY_MANIFEST.json",
+      "rights": "ROM_COPYRIGHTED_REFERENCE",
+      "lifecycle": "REFERENCE_RECONSTRUCTION",
+      "productionStatus": "RESEARCH_ONLY",
+      "humanApproved": false,
+      "ownerReferenceApproved": true,
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
+    {
+      "id": "ART-R4",
+      "status": "OWNER_APPROVED_REFERENCE_BASELINE",
+      "summary": "Five-system Original VFX/3D representative baseline.",
+      "checkpoint": "9d03804",
+      "rights": "ROM_COPYRIGHTED_REFERENCE",
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
+    {
+      "id": "ART-O2",
+      "status": "OWNER_APPROVED_REFERENCE_CATALOG",
+      "summary": "Original Character Master Catalog: 224/224 decoded entities, separated into 216 regular and 8 eggs, with 224 Main and 224 Sub sheets, NCLR identity, silhouette, palette, structure counts, outlier status, and ART-R2R readiness. Zero new high-resolution redraws.",
+      "checkpoint": "732775486665b21508ac51c1eea0b723db0f7744",
+      "output": "docs/migration/PRE_MIGRATION_PROVENANCE.md#art-evidence-worktree",
+      "rights": "ROM_COPYRIGHTED_REFERENCE",
+      "lifecycle": "REFERENCE_RECONSTRUCTION",
+      "productionStatus": "RESEARCH_ONLY",
+      "humanApproved": false,
+      "ownerReferenceApproved": true,
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
+    {
+      "id": "ART-P1R",
+      "status": "OWNER_APPROVED_PRODUCTION_STANDARD",
+      "summary": "Championship Modern UI visual authority for the approved screen families.",
+      "checkpoint": "fbf4deb",
+      "rights": "ORIGINAL_CREATED",
+      "shippingStatus": "NOT_SHIPPING_READY"
+    }
+  ],
+  "current": [
+    {
+      "id": "CHAMPIONSHIP_2026_PRODUCT_RESET",
+      "status": "OWNER_VERIFIED_PRODUCT_POLICY_RECONCILED",
+      "summary": "Standalone Championship 2026 is now the product authority. Nexus integration is historical/frozen; VS1 is the accepted baseline and VS2-VS7 form the gated playable-slice roadmap."
+    },
+    {
+      "id": "ART-O2",
+      "status": "OWNER_APPROVED_REFERENCE_CATALOG",
+      "summary": "Owner approved the complete 224-entity decoded visual catalog; mass fidelity reconstruction remains unauthorized."
+    },
+    {
+      "id": "CHAMPIONSHIP_REBUILD_INTEGRATION_PLAN_V1",
+      "status": "COMPLETE_EVIDENCE_BOUNDED",
+      "summary": "Fifteen gameplay slices are indexed without percentages, separating local runtime, art reference, production art, UI, save/data, and actual integration."
+    },
+    {
+      "id": "CHAMPIONSHIP_SYNC_3",
+      "status": "OWNER_APPROVED_COORDINATION_SSOT",
+      "summary": "Claude toolbar closure, Codex O2, Integration Plan V1, and both owned Status/Delta pairs are the Owner-approved syncRevision 3 coordination baseline."
+    },
+    {
+      "id": "INT-RH2",
+      "status": "OWNER_APPROVED_INTEGRATION_BASELINE",
+      "summary": "The first cross-agent playable presentation slice is Owner-approved and locally checkpointed. Runtime 2671db12 and P1R presentation bb61d18 preserve the DOM/Pixi authority split, five-viewport QA, bounded fallback, and real save/reload restoration."
+    }
+  ],
+  "retainedProofs": [
+    {
+      "id": "ART-P2_P2R",
+      "status": "RETAINED_MODULAR_ENVIRONMENT_PROOF",
+      "summary": "Modern modular environment proof retained; not a production standard and not shipping-ready.",
+      "shippingStatus": "NOT_SHIPPING_READY"
+    }
+  ],
+  "frozen": [
+    "NEXUS_LINK_INTEGRATION",
+    "NEXUS_SPECIFIC_GAMEPLAY_DEPENDENCIES",
+    "LEGACY_ART-P3",
+    "LEGACY_ART-P4",
+    "LEGACY_ART-P5",
+    "LEGACY_ART-P6",
+    "VS2_TO_VS7_IMPLEMENTATION_DURING_DOCUMENTATION_RECONCILIATION"
+  ],
+  "blocked": [
+    "Legacy P3-P6 is superseded/frozen; production completion is planned under VS7 but no VS7 batch is authorized.",
+    "Cage/Home construction semantics and Training effects require runtime evidence; art must use neutral placeholders.",
+    "Creature RAW_SLOT semantic names require a verified runtime semantic map.",
+    "BM03/BM04 Battle BSAR placement/timing requires targeted evidence closure before animated composition.",
+    "CM12/CM18 object linkage conflicts remain quarantined.",
+    "Exact toolbar slot semantics, actions, submenu membership, slot 7 identity, and numeric care effects remain unavailable to Codex until Claude publishes its authorized bounded closure.",
+    "O2 mass high-resolution fidelity reconstruction remains unauthorized; 220 non-baseline entities are source-ready only.",
+    "INT-RH2 physical mobile-device GPU/performance certification remains outside this headless Chromium proof.",
+    "VS2 implementation is blocked until a separate Owner GO.",
+    "Claude-owned runtime architecture documentation predates this product reset and must be reconciled by Claude on its next authorized owned-doc update."
+  ],
+  "outputs": [
+    "reports/art-original/maps/o3d-battle/O3D_GALLERY_MANIFEST.json",
+    "docs/qa/verify_art_o3d_battle_field_gallery.py",
+    "scripts/art-original/build_art_o3d_battle_field_gallery.py",
+    "docs/migration/PRE_MIGRATION_PROVENANCE.md#art-evidence-worktree",
+    "docs/migration/PRE_MIGRATION_PROVENANCE.md#art-evidence-worktree",
+    "docs/migration/PRE_MIGRATION_PROVENANCE.md#art-evidence-worktree",
+    "docs/migration/PRE_MIGRATION_PROVENANCE.md#art-evidence-worktree",
+    "docs/coordination/championship/CHAMPIONSHIP_REBUILD_INTEGRATION_PLAN_V1.md",
+    "docs/reports/vs1/INT_RH2_COMPLETION_REPORT.md",
+    "docs/reports/vs1/INT_RH2_BROWSER_QA.json",
+    "docs/coordination/championship/CODEX_ART_STATUS.json",
+    "docs/coordination/championship/CODEX_SYNC_DELTA.json"
+  ],
+  "checkpoint": {
+    "latestOwnerApprovedArtCheckpoint": "732775486665b21508ac51c1eea0b723db0f7744",
+    "checkpointParent": "9d33b9eaa589307a3d6583afe0f319b6fe20bcf9",
+    "message": "art(research): approve O2 224-entity character catalog",
+    "pushed": false,
+    "merged": false,
+    "deployed": false
+  },
+  "intRh2Checkpoints": {
+    "claudeRuntime": "2671db12bc8c604a33d7f72a946256924983908b",
+    "codexPresentation": "bb61d18d014db92f878862b1fe2b69092f02d0ad",
+    "coordination": "cb0dc0221f04ec1898c052d7713ba72dae2d6ef7",
+    "worktree": "docs/migration/PRE_MIGRATION_PROVENANCE.md#runtime-source-worktree",
+    "branch": "claude/evidence-taxonomy-m1",
+    "cleanAfterImplementationCheckpoints": true,
+    "pushed": false,
+    "merged": false,
+    "deployed": false
+  },
+  "dependenciesChanged": {
+    "value": true,
+    "note": "Owner reset the product to standalone Championship 2026. Nexus integration is frozen/out of scope; ROM-verified gameplay is preserve-by-default; VS1 is the accepted baseline and VS2-VS7 are gated roadmap slices. VS2 still has no implementation GO."
+  },
+  "sharedMergeReceipt": {
+    "syncRevision": 3,
+    "reconciliation": "CHAMPIONSHIP_2026_PRODUCT_RESET",
+    "dependencyRows": 46,
+    "blockerRows": 19,
+    "stableIdConflicts": 0,
+    "atomicReplace": "PASS",
+    "baseHashes": {
+      "CHAMPIONSHIP_MASTER_SYNC.md": "438457002B9603D04C67C34E33874C1971C3C384A2A43CCBDED21EFA2ED069F1",
+      "CHAMPIONSHIP_DEPENDENCY_MATRIX.csv": "E8077DE255419FBBF7FCC94CF0ADA6AA026EE3E215760679ACDBC60AA00C65CB",
+      "CHAMPIONSHIP_BLOCKER_LEDGER.csv": "9E181865E314A9D8D64B0198498330C94DA81C8110AABD77856550B395AC1F7F"
+    },
+    "newHashes": {
+      "CHAMPIONSHIP_MASTER_SYNC.md": "AD2A2525EE5AF95E6C47D01F113AF570F673D3FEF83E43DDA6DA2BB065B19944",
+      "CHAMPIONSHIP_DEPENDENCY_MATRIX.csv": "89AC482D058F1F6133638F59241B2DF98430E06C476405EA7739226B00DA8ECF",
+      "CHAMPIONSHIP_BLOCKER_LEDGER.csv": "CF3ECFE52F6E4DAC81C69BB4717A2FF58059861052C89A1253E4755C1E051150"
+    }
+  },
+  "ownerCheckpointPreparation": {
+    "dependencyRows": 39,
+    "blockerRows": 16,
+    "jsonValidation": "PASS",
+    "csvStableIdValidation": "PASS",
+    "integrationPlanSlices": 15,
+    "hashes": {
+      "CHAMPIONSHIP_MASTER_SYNC.md": "3D84892A8EEF1182D46AFADA1F39D253E857D8A88E9E4FA871EEECD54C914C63",
+      "CHAMPIONSHIP_DEPENDENCY_MATRIX.csv": "41A279981EC34D0AE95172A0544A8EA418E82FFCD72459DAA19893071093CACB",
+      "CHAMPIONSHIP_BLOCKER_LEDGER.csv": "3A742AF575C51CB0825D7A9699C3BEA6204118F4A08B479E6A770570421ACDEF",
+      "CHAMPIONSHIP_REBUILD_INTEGRATION_PLAN_V1.md": "555A23307C9881036F554C42733A54C4CE03B43E38BFC03F8C42EBCF428BF281"
+    }
+  },
+  "recommendedNext": [
+    "STOP after reporting the reconciled Championship 2026 VS1-VS7 development plan.",
+    "Wait for a separate Owner GO before VS2 Gate Select/Hunt Loadout/Hunt Field implementation.",
+    "On Claude's next authorized owned-doc update, reconcile runtime architecture language to the standalone product reset without changing runtime behavior.",
+    "Do not start VS3-VS7, Nexus integration, production-art expansion, shipping promotion, push, merge, or deployment."
+  ]
+}

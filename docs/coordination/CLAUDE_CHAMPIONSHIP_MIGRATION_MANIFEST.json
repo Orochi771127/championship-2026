@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "manifestId": "CLAUDE_CHAMPIONSHIP_MIGRATION_MANIFEST",
+  "productSsot": "CHAMPIONSHIP_2026_PRODUCT_SSOT",
+  "status": "VALIDATED_MIGRATION_PLAN",
+  "sourceCheckpoint": "bb61d18d014db92f878862b1fe2b69092f02d0ad",
+  "provenance": "docs/migration/PRE_MIGRATION_PROVENANCE.md",
+  "runtimeImportClosure": {
+    "entry": "src/championship/app/main.js",
+    "fileCountIncludingJsonContracts": 35,
+    "externalProductImports": 0
+  },
+  "RUNTIME_PRODUCT": [
+    "championship.html",
+    "src/championship/app/main.js",
+    "src/championship/app/championshipStandaloneApp.js",
+    "src/championship/app/championshipStandaloneMessages.js",
+    "src/championship/app/phase1ProductCreatures.js",
+    "src/championship/app/cageRoster.js",
+    "src/championship/app/raisingPresentationSource.js",
+    "src/championship/app/raisingHomeP1RView.js",
+    "src/championship/app/styles.css",
+    "src/championship/app/intRh2Styles.css"
+  ],
+  "DOMAIN": [
+    "src/championship/app/championshipRaisingProduction.js",
+    "src/championship/r2/createChampionshipR2Session.js",
+    "src/championship/raising/createRaisingHomeRuntime.js",
+    "src/championship/raising/raisingHomeDefinition.js",
+    "src/championship/raising/raisingHomePersistenceR2.js",
+    "src/championship/kernel/ChampionshipModeRouter.js",
+    "src/championship/kernel/ChampionshipSaveCoordinatorR2.js",
+    "src/championship/kernel/ChampionshipSavePort.js",
+    "src/championship/kernel/ChampionshipSavePortR2.js",
+    "src/championship/modes/championshipModeRegistry.js",
+    "src/championship/modes/createChampionshipModeShell.js",
+    "src/championship/contracts/championshipContracts.js",
+    "src/championship/contracts/evidenceAdapter.js",
+    "src/championship/contracts/evidenceIngest.js",
+    "src/championship/contracts/evidencePolicy.js",
+    "src/championship/contracts/evidenceTaxonomy.js",
+    "src/data/championship/catalogs/entities.r1.json"
+  ],
+  "SAVE": [
+    "src/championship/app/ChampionshipPersistentSavePort.js",
+    "src/championship/app/championshipStandaloneSave.js"
+  ],
+  "PRESENTATION_CONTRACT": [
+    "docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json",
+    "docs/contracts/championship/INT_RH2_RUNTIME_PRESENTATION_CONTRACT.json",
+    "docs/contracts/championship/raising-home-presentation.v1.json"
+  ],
+  "PIXIJ_RUNTIME": [
+    "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
+    "src/championship/field/index.js",
+    "src/championship/field/fieldCamera.js",
+    "src/championship/field/fieldCollision.js",
+    "src/championship/field/fieldConstants.js",
+    "src/championship/field/fieldDefinition.js",
+    "src/data/championship/r2/fields/fieldInventoryR2.js"
+  ],
+  "TEST": [
+    "tests/championship-vs1-runtime-cases.mjs",
+    "tests/championship-int-rh2-runtime-presentation-cases.mjs",
+    "tests/championship-int-rh2-p1r-contract-cases.mjs",
+    "tests/championship-migration-firewall-cases.mjs",
+    "tests/championship-int-rh2-browser.cjs"
+  ],
+  "REVERSE_REFERENCE_ONLY": [
+    "docs/migration/PRE_MIGRATION_PROVENANCE.md",
+    "research/original-evidence/README.md"
+  ],
+  "DO_NOT_MIGRATE": [
+    "prior repository .git history",
+    "forensic staging and generated promotion catalogs",
+    "ROM/Nitro/decoded binaries or reference pixels",
+    "battle, hunt, capture, shop, progression and later-slice runtime",
+    "Nexus adapters, application, router, store, save and gameplay dependencies",
+    "unrelated Nexus assets and reports"
+  ],
+  "validationOwner": "Codex coordination merge writer"
+}
+

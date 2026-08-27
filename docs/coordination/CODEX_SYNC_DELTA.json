@@ -1,0 +1,253 @@
+{
+  "schemaVersion": 1,
+  "owner": "CODEX_ART",
+  "deltaId": "CODEX-CHAMPIONSHIP-2026-PRODUCT-RESET-DOC-RECONCILIATION-2026-08-27",
+  "targetSyncRevision": 3,
+  "status": "CHAMPIONSHIP_2026_STANDALONE_PLAN_RECONCILED_STOPPED_FOR_VS2_GO",
+  "statusSource": "docs/coordination/championship/CODEX_ART_STATUS.json",
+  "baseSyncRevision": 2,
+  "checkpoint": {
+    "latestOwnerApprovedCommit": "732775486665b21508ac51c1eea0b723db0f7744",
+    "message": "art(research): approve O2 224-entity character catalog",
+    "o2Checkpoint": "732775486665b21508ac51c1eea0b723db0f7744",
+    "o2CheckpointReason": "Owner approved O2 and explicitly authorized the isolated local checkpoint. Scope audit excluded integration implementation, P2/Moonlake, runtime, push, merge, and deploy."
+  },
+  "intRh2Checkpoints": {
+    "claudeRuntime": "2671db12bc8c604a33d7f72a946256924983908b",
+    "codexPresentation": "bb61d18d014db92f878862b1fe2b69092f02d0ad",
+    "coordination": "THIS_COMMIT_REPORTED_BY_FULL_SHA_AFTER_CREATION",
+    "implementationWorktreeClean": true
+  },
+  "productReset": {
+    "product": "DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD",
+    "delivery": "WEB_FIRST_MOBILE_FIRST_PORTRAIT_9_16_TOUCH_FIRST_DESKTOP_BROWSER_COMPATIBLE",
+    "nexusLinkIntegration": "FROZEN_OUT_OF_CURRENT_PRODUCT_SCOPE",
+    "historicalNexusDecisions": "PRESERVED_SUPERSEDED_FOR_CURRENT_PRODUCT",
+    "verifiedGameplay": "DEFAULT_PRESERVE",
+    "unknownGameplay": "NEUTRAL_DO_NOT_INVENT",
+    "adaptationAuthority": "OWNER_APPROVED_ADAPTATION_ONLY",
+    "vs1": "COMPLETE_BASELINE",
+    "vs2": "NEXT_PLANNED_OWNER_GO_REQUIRED",
+    "vs3ToVs7": "ROADMAP_ONLY_NOT_AUTHORIZED",
+    "documentationOnly": true
+  },
+  "completedWork": [
+    {
+      "id": "ART-O2",
+      "state": "OWNER_APPROVED_REFERENCE_CATALOG",
+      "coverage": {
+        "entities": 224,
+        "regular": 216,
+        "eggs": 8,
+        "mainDecodedSheets": 224,
+        "subDecodedSheets": 224,
+        "artR2rOwnerApprovedBaselines": 4,
+        "newHighResolutionReconstructions": 0
+      },
+      "structure": {
+        "regularCommonSequenceStructure": 182,
+        "regularStructuralOutliers": 34,
+        "eggStandardStructure": 8
+      },
+      "rights": "ROM_COPYRIGHTED_REFERENCE",
+      "lifecycle": "REFERENCE_RECONSTRUCTION",
+      "productionStatus": "RESEARCH_ONLY",
+      "humanApproved": false,
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "output": "docs/migration/PRE_MIGRATION_PROVENANCE.md#art-evidence-worktree"
+    },
+    {
+      "id": "CHAMPIONSHIP_REBUILD_INTEGRATION_PLAN_V1",
+      "state": "COMPLETE_EVIDENCE_BOUNDED",
+      "sliceCount": 15,
+      "output": "docs/coordination/championship/CHAMPIONSHIP_REBUILD_INTEGRATION_PLAN_V1.md"
+    }
+  ],
+  "dependencyUpserts": [
+    {
+      "recordId": "Championship2026ProductScope",
+      "contract": "Championship2026ProductScope",
+      "owner": "owner",
+      "state": "OWNER_VERIFIED_POLICY",
+      "codexMaySafelyBind": "YES",
+      "notes": "Standalone Championship 2026 is the current product; Nexus Link integration is frozen and outside current product scope."
+    },
+    {
+      "recordId": "Championship2026GameplayPreservation",
+      "contract": "Championship2026GameplayPreservation",
+      "owner": "owner",
+      "state": "OWNER_VERIFIED_POLICY",
+      "codexMaySafelyBind": "YES_WITH_EVIDENCE",
+      "notes": "ROM_VERIFIED preserves by default; PARTIAL preserves known structure; UNKNOWN remains neutral; intentional gameplay change requires OWNER_APPROVED_ADAPTATION."
+    },
+    {
+      "recordId": "Championship2026VerticalSliceRoadmap",
+      "contract": "Championship2026VerticalSliceRoadmap",
+      "owner": "owner",
+      "state": "OWNER_VERIFIED_ROADMAP",
+      "codexMaySafelyBind": "YES_PLANNING_ONLY",
+      "notes": "VS1 through VS7 sequence is authoritative planning order; only VS1 is complete and this documentation batch does not authorize VS2 implementation."
+    },
+    {
+      "recordId": "NexusLinkIntegrationForChampionship2026",
+      "contract": "NexusLinkIntegrationForChampionship2026",
+      "owner": "owner",
+      "state": "FROZEN_OUT_OF_CURRENT_PRODUCT_SCOPE",
+      "codexMaySafelyBind": "NO",
+      "notes": "Preserve historical Nexus decisions, but do not create Nexus dependencies or alter Championship architecture for future integration."
+    },
+    {
+      "recordId": "OriginalCharacterO2Catalog",
+      "contract": "OriginalCharacterO2Catalog",
+      "owner": "codex",
+      "state": "COMPLETE_PENDING_OWNER_REVIEW",
+      "codexMaySafelyBind": "N/A",
+      "notes": "224/224 decoded entity catalog; 216 regular, 8 eggs, 224 Main and 224 Sub sheets. Four ART-R2R baselines only; no new redraw. ROM reference, research-only, not shipping-ready."
+    },
+    {
+      "recordId": "ChampionshipRendererAuthorityPolicy",
+      "contract": "ChampionshipRendererAuthorityPolicy",
+      "owner": "owner",
+      "state": "OWNER_VERIFIED_POLICY",
+      "codexMaySafelyBind": "YES_WITH_SCENE_CONTRACT",
+      "notes": "DOM owns application/screen UI; PixiJS owns playable 2D field/actor/sprite/2D VFX presentation; Three.js is bounded to verified or explicitly approved 3D. No all-renderer migration, second authority, ticker, or router."
+    }
+  ],
+  "blockerUpserts": [
+    {
+      "recordId": "CL-011",
+      "id": "CL-011",
+      "owner": "shared",
+      "state": "OPEN_OWNER_GATE",
+      "detail": "VS2 is the next Championship 2026 slice, but this product-reset batch authorizes documentation only. A separate Owner GO remains required."
+    },
+    {
+      "recordId": "CL-012",
+      "id": "CL-012",
+      "owner": "shared",
+      "state": "OPEN_OWNED_DOC_RECONCILIATION",
+      "detail": "Claude-owned runtime architecture/status documentation predates the product reset. Codex preserved ownership; Claude should reconcile that language on its next authorized owned-doc update."
+    },
+    {
+      "recordId": "CX-006",
+      "id": "CX-006",
+      "owner": "codex",
+      "state": "SUPERSEDED_FROZEN",
+      "detail": "Legacy P3-P6 is preserved as history but superseded for Championship 2026. Production completion is now planned under a separately authorized VS7 batch."
+    },
+    {
+      "recordId": "CL-002",
+      "id": "CL-002",
+      "owner": "claude",
+      "state": "OWNER_AUTHORIZED_TRACE_PENDING_RESULT",
+      "detail": "Owner authorized only RAISING_TOOLBAR_BINDING_CLOSURE from OVL18 0x0211CF10 onward. Codex must wait for Claude-owned Status/Delta and preserve unresolved fields as UNKNOWN_REQUIRES_TRACE."
+    },
+    {
+      "recordId": "CL-005",
+      "id": "CL-005",
+      "owner": "claude",
+      "state": "RESOLVED_BY_OWNER_POLICY",
+      "detail": "DOM is screen UI authority; PixiJS is playable 2D presentation authority; Three.js is bounded verified/approved 3D presentation. This does not authorize Phase 2 implementation."
+    },
+    {
+      "recordId": "CL-008",
+      "id": "CL-008",
+      "owner": "claude",
+      "state": "ACCEPTED_COSMETIC",
+      "detail": "No history rewrite now for the cosmetic @ subject prefix."
+    },
+    {
+      "recordId": "CL-009",
+      "id": "CL-009",
+      "owner": "claude",
+      "state": "ACCEPTED_IN_LOCAL_RECOVERY_CHECKPOINT",
+      "detail": "Preserve the local forensic checkpoint. Do not push the current branch as-is; create a clean integration path excluding reproducible staging artifacts before push or PR."
+    }
+  ],
+  "ownerDecisionsApplied": [
+    "Product reset: DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD is the standalone target product.",
+    "Nexus Link integration is frozen and outside current product scope; historical Nexus decisions remain preserved as superseded/frozen.",
+    "ROM_VERIFIED gameplay is default-preserve; PARTIAL preserves known structure; UNKNOWN remains neutral; only OWNER_APPROVED_ADAPTATION may intentionally change gameplay.",
+    "Development roadmap is VS1 Raising baseline, VS2 Gate-to-Hunt exploration, VS3 Capture/Result, VS4 daily systems, VS5 Auto Battle, VS6 Progression/Save, VS7 production completion.",
+    "Renderer policy reconfirmed: DOM UI, PixiJS playable 2D, bounded evidence/Owner-approved Three.js; no React rewrite or duplicate global authority.",
+    "SYNC-2 approved and closed at revision 2.",
+    "Claude toolbar trace authorized at OVL18 0x0211CF10 onward only.",
+    "Phase 2 DOM/PixiJS/Three.js renderer authority policy fixed.",
+    "CL-008 accepted cosmetic with no history rewrite now.",
+    "CL-009 forensic checkpoint retained and current branch prohibited from push as-is.",
+    "O2 Original Character Master Catalog approved at checkpoint 7327754; mass redraw and P3 remain prohibited.",
+    "SYNC-3 and Integration Plan V1 approved as the cross-agent planning SSOT.",
+    "INT-RH2 Raising Home Phase 2 Presentation Integration authorized as the only implementation slice.",
+    "Contract-first boundary fixed: Claude owns runtime producer/Pixi field; Codex owns P1R DOM binding and visual QA."
+  ],
+  "sharedMergePolicy": "CODEX_SINGLE_WRITER_BASE_HASH_RECHECK_STABLE_ID_CONFLICT_REJECTION_ATOMIC_REPLACE",
+  "sync3Gate": {
+    "codexO2Complete": true,
+    "integrationPlanV1Complete": true,
+    "codexOwnedStatusDeltaUpdated": true,
+    "claudeToolbarClosureComplete": true,
+    "claudeOwnedStatusDeltaUpdated": true,
+    "syncRevision3Started": true,
+    "syncRevision3Complete": true,
+    "syncRevision3OwnerApproved": true,
+    "o2CheckpointCreated": true,
+    "intRh2Authorized": true,
+    "intRh2ContractPublished": true,
+    "intRh2ProducerImplemented": true,
+    "intRh2P1rBound": true,
+    "intRh2FiveViewportQa": true,
+    "intRh2SaveReloadProof": true,
+    "intRh2OwnerApprovedIntegrationBaseline": true,
+    "intRh2ImplementationCheckpointsCreated": true,
+    "championship2026ProductResetReconciled": true,
+    "vs2CandidateDefined": true,
+    "vs2ImplementationAuthorized": false,
+    "intRh2StoppedForOwnerReview": false
+  },
+  "mergeReceipt": {
+    "completed": true,
+    "syncRevision": 3,
+    "reconciliation": "CHAMPIONSHIP_2026_PRODUCT_RESET",
+    "dependencyRows": 46,
+    "blockerRows": 19,
+    "stableIdConflicts": 0,
+    "atomicReplace": "PASS",
+    "baseHashes": {
+      "CHAMPIONSHIP_MASTER_SYNC.md": "438457002B9603D04C67C34E33874C1971C3C384A2A43CCBDED21EFA2ED069F1",
+      "CHAMPIONSHIP_DEPENDENCY_MATRIX.csv": "E8077DE255419FBBF7FCC94CF0ADA6AA026EE3E215760679ACDBC60AA00C65CB",
+      "CHAMPIONSHIP_BLOCKER_LEDGER.csv": "9E181865E314A9D8D64B0198498330C94DA81C8110AABD77856550B395AC1F7F"
+    },
+    "newHashes": {
+      "CHAMPIONSHIP_MASTER_SYNC.md": "AD2A2525EE5AF95E6C47D01F113AF570F673D3FEF83E43DDA6DA2BB065B19944",
+      "CHAMPIONSHIP_DEPENDENCY_MATRIX.csv": "89AC482D058F1F6133638F59241B2DF98430E06C476405EA7739226B00DA8ECF",
+      "CHAMPIONSHIP_BLOCKER_LEDGER.csv": "CF3ECFE52F6E4DAC81C69BB4717A2FF58059861052C89A1253E4755C1E051150"
+    }
+  },
+  "ownerCheckpointPreparation": {
+    "dependencyRows": 39,
+    "blockerRows": 16,
+    "stableIdConflicts": 0,
+    "integrationPlanSlices": 15,
+    "hashes": {
+      "CHAMPIONSHIP_MASTER_SYNC.md": "3D84892A8EEF1182D46AFADA1F39D253E857D8A88E9E4FA871EEECD54C914C63",
+      "CHAMPIONSHIP_DEPENDENCY_MATRIX.csv": "41A279981EC34D0AE95172A0544A8EA418E82FFCD72459DAA19893071093CACB",
+      "CHAMPIONSHIP_BLOCKER_LEDGER.csv": "3A742AF575C51CB0825D7A9699C3BEA6204118F4A08B479E6A770570421ACDEF",
+      "CHAMPIONSHIP_REBUILD_INTEGRATION_PLAN_V1.md": "555A23307C9881036F554C42733A54C4CE03B43E38BFC03F8C42EBCF428BF281"
+    }
+  },
+  "intRh2": {
+    "state": "OWNER_APPROVED_INTEGRATION_BASELINE",
+    "contract": "docs/contracts/championship/INT_RH2_RUNTIME_PRESENTATION_CONTRACT.json",
+    "claudeHeldHead": "2632ddffac6da82525ed2e9089799e42fbffc25c",
+    "codexBinding": "getFrame/subscribe/intents only",
+    "toolbarPolicy": "8 neutral disabled RAW slots; no guessed command, icon, submenu membership, enable mask, slot 7 identity, or exact care values",
+    "rendererPolicy": "DOM screen UI; one Claude-owned Pixi field bootstrap; Three.js unused",
+    "qa": "P1R 4/4; runtime/Pixi 6/6; Phase 1 standalone 21/21; five responsive viewports; real save/reload restore; bounded Pixi bootstrap fallback",
+    "report": "docs/reports/vs1/INT_RH2_COMPLETION_REPORT.md",
+    "runtimeCheckpoint": "2671db12bc8c604a33d7f72a946256924983908b",
+    "presentationCheckpoint": "bb61d18d014db92f878862b1fe2b69092f02d0ad",
+    "productionEnvironment": "TEMPORARY",
+    "productionCharacterArt": "TEMPORARY",
+    "blockedOn": "VS2 requires a separate Owner GO; no push, merge or deploy is authorized"
+  }
+}

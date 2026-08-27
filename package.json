@@ -1,0 +1,22 @@
+{
+  "name": "championship-2026",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Standalone web/mobile rebuild of Digimon Championship.",
+  "scripts": {
+    "serve": "node scripts/serve.mjs",
+    "test": "node --test tests/*.mjs",
+    "test:browser": "node tests/championship-int-rh2-browser.cjs"
+  },
+  "dependencies": {
+    "pixi.js": "8.19.0"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
+

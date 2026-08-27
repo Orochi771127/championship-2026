@@ -1,0 +1,294 @@
+{
+  "schemaVersion": 1,
+  "owner": "Claude Code",
+  "scope": "gameplay reconstruction, runtime architecture, save/state, tests, integration - for Championship 2026 standalone",
+  "lastSync": "2026-08-27",
+  "syncKind": "OWNER PRODUCT RESET reconciliation; VS2 not started",
+  "git": {
+    "worktree": "docs/migration/PRE_MIGRATION_PROVENANCE.md#runtime-source-worktree",
+    "branch": "claude/evidence-taxonomy-m1",
+    "head": "bb61d18",
+    "checkpointCommit": "d7a66b1",
+    "checkpointParent": "86524ca",
+    "followUpCommits": [
+      "a1b74f4",
+      "b2a46cd",
+      "2632ddf",
+      "2671db1",
+      "bb61d18"
+    ],
+    "workingTreeClean": true,
+    "pushed": false,
+    "merged": false,
+    "note": "CL-001 resolved. Authority split was mostly clean: 2671db1 holds only Claude-runtime files. bb61d18 additionally carries four Claude-authority files (main.js, both boundary gates, the gate scope manifest). Reviewed and accepted by Claude; see CL-010. No history rewrite.",
+    "claudeRuntimeCheckpoint": "2671db1",
+    "codexPresentationCheckpoint": "bb61d18",
+    "coordinationCheckpoint": "cb0dc02 (main checkout, codex/championship-art-production-skill)"
+  },
+  "tests": {
+    "suite": "docs/qa/_run_championship_gates.mjs",
+    "pass": 481,
+    "expectedFailures": 3,
+    "unexpectedFailures": 0,
+    "previousBaseline": "471 pass / 3 expected / 0 unexpected",
+    "baselineChangeCause": "INT-RH2 added runtime-presentation and P1R contract suites.",
+    "gatePositiveControlAfterCodexEdits": "Re-verified: frozen R2 edit CAUGHT, Nexus import into the Pixi tree CAUGHT, out-of-tree file CAUGHT at three paths. Gates retain their teeth."
+  },
+  "completed": [
+    {
+      "id": "EVIDENCE_TAXONOMY_M1_M9_1",
+      "state": "COMPLETE",
+      "detail": "Six-dimension evidence taxonomy, legacy dialect registry (5 dialects / 36 tokens), cross-pack conflict engine, promotion pipeline, mutation harness with kill-safety.",
+      "outputs": [
+        "src/championship/contracts/evidenceTaxonomy.js",
+        "src/championship/contracts/legacyDialectRegistry.js",
+        "src/championship/contracts/crossPackConflict.js",
+        "src/championship/contracts/promotionPipeline.js",
+        "docs/qa/championship-evidence-taxonomy-*-cases.mjs"
+      ]
+    },
+    {
+      "id": "FULL_1720_PRODUCTION_PROMOTION",
+      "state": "COMPLETE",
+      "detail": "1720 forensic records / 34492 evidence claims promoted into 10 generated family catalogs plus 1 manifest. Additive only; the ten hand-authored catalogs are byte-identical.",
+      "outputs": [
+        "src/data/championship/catalogs/*.generated.r1.json",
+        "src/data/championship/catalogs/full-generation-promotion.manifest.json"
+      ],
+      "runtimeImports": 0
+    },
+    {
+      "id": "CHAMPIONSHIP_MODERN_PHASE_1_STANDALONE",
+      "state": "COMPLETE",
+      "detail": "Standalone playable loop: New Game -> creatures visible -> direct touch -> save -> reload -> restored. No Nexus integration.",
+      "outputs": [
+        "championship.html",
+        "src/championship/app/*",
+        "docs/qa/championship-phase1-standalone-cases.mjs"
+      ]
+    },
+    {
+      "id": "RAISING_DIRECT_MANIPULATION_CORRECTION",
+      "state": "COMPLETE",
+      "detail": "Removed the caretaker/D-pad/proximity model from the product path. Tap to select, drag creature between two cages, drop to relocate. Frozen R2 domain untouched.",
+      "outputs": [
+        "src/championship/app/championshipRaisingProduction.js",
+        "src/championship/app/raisingHomeProductionView.js"
+      ]
+    },
+    {
+      "id": "RAISING_VISUAL_CLEANUP",
+      "state": "COMPLETE",
+      "detail": "Habitat regions instead of drop-zone rectangles, creature spacing, nameplate only on selection, compact tool bar, Save moved to system control, development copy removed."
+    },
+    {
+      "id": "CROSS_AGENT_TOOLBAR_CONTRACT",
+      "state": "COMPLETE",
+      "detail": "ARM9 toolbar evidence published as a cross-agent presentation contract with per-field evidence levels.",
+      "outputs": [
+        "docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json"
+      ]
+    },
+    {
+      "id": "INT_RH2_RAISING_HOME_PHASE_2",
+      "state": "OWNER_APPROVED_INTEGRATION_BASELINE",
+      "detail": "First cross-agent playable presentation slice. Boot -> Raising Home -> select -> care -> relocate -> save -> real page reload -> continue -> state restored. Verified at 5 viewports.",
+      "claudeSide": [
+        "src/championship/app/raisingPresentationSource.js",
+        "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
+        "docs/contracts/championship/INT_RH2_RUNTIME_PRESENTATION_CONTRACT.json",
+        "docs/qa/championship-int-rh2-runtime-presentation-cases.mjs"
+      ],
+      "duplicatedAuthority": "0 - one Pixi Application, one save authority, zero routers inside src/championship"
+    }
+  ],
+  "current": [
+    {
+      "id": "ORIGINAL_RAISING_UI_RECONSTRUCTION",
+      "state": "PARTIAL",
+      "detail": "Slot ordering and submenu storage ROM_VERIFIED. Per-slot command/icon binding, submenu population, enable mask and slot 7 identity remain UNKNOWN_REQUIRES_TRACE. The eight-slot shell ships as neutral disabled RAW_SLOT placeholders; CARE stays unmapped to any slot."
+    }
+  ],
+  "notStarted": [
+    {
+      "id": "HUNT",
+      "state": "NOT_STARTED",
+      "note": "External crosscheck describes stylus lasso/drag capture. Not traced, not implemented."
+    },
+    {
+      "id": "CAPTURE",
+      "state": "NOT_STARTED"
+    },
+    {
+      "id": "BATTLE_RUNTIME",
+      "state": "NOT_STARTED",
+      "note": "Stage 1-3 reverse evidence exists; damage core is VERIFIED_BINARY. No runtime built."
+    },
+    {
+      "id": "SHOP_RUNTIME",
+      "state": "NOT_STARTED",
+      "note": "118 shop records promoted as forensic data only."
+    },
+    {
+      "id": "DATABASE_RUNTIME",
+      "state": "NOT_STARTED"
+    },
+    {
+      "id": "PROGRESSION",
+      "state": "NOT_STARTED"
+    },
+    {
+      "id": "CAGE_EDIT",
+      "state": "NOT_STARTED",
+      "note": "OVL15 scenes identified; drag grammar unknown."
+    }
+  ],
+  "blockedByUnknown": [
+    "Per-slot command binding (no command table adjacent to the slot-to-node table)",
+    "Per-slot icon cell (icon bank binds to slot+0xD4; no cell selection recovered)",
+    "Submenu population site (ARM9 only ever clears the counts to zero)",
+    "Slot enable mask (slot+0x192 and +0xBE are candidates; nothing proves either)",
+    "Slot 7 identity (distinct frame cell 12 is structural evidence only)",
+    "Care action state mutations and all numeric effects",
+    "Cage level semantics, capacity rules, relocation consequences",
+    "Battle B02 hit/miss, B03 crit probability, B05 status, B06 TP, B09 initiative"
+  ],
+  "blockedByArt": [],
+  "blockedByOwner": [
+    "VS2 implementation blocked pending Owner GO",
+    "P3-P6, Modern Environment expansion and shipping promotion frozen",
+    "Final Raising environment art and final creature production not authorized"
+  ],
+  "nexusLinkAdaptation": [
+    "R2 Raising domain: caretakerPosition, authored 24x14 grid, distance<=2 care gate, care +14 satiety / +5 ease. Frozen for research; excluded from product gameplay.",
+    "Moonwell Pool / Quiet Hollow: two product-authored habitat regions. NOT the original 36-CageDefinition catalogue.",
+    "satiety/energy/ease/readiness: R2 stat model, removed from the player-facing HUD."
+  ],
+  "dependenciesChanged": true,
+  "recommendedNext": [
+    "Owner GO for VS2.",
+    "Before VS2 code: decide whether the standalone build mounts the bounded screen stack - VS2 is the first slice needing more than one screen.",
+    "Before any push: clean integration path excluding reproducible staging (CL-009)."
+  ],
+  "nextSafeDeltaTrace": {
+    "target": "submenu population site and the per-slot command writer",
+    "approach": "register-offset stores into +0xE64 / +0xF64 were not covered by the immediate-offset scan; plus slot+0xD4 for icon cell selection",
+    "scopeRule": "Do not re-expand the Raising reverse program.",
+    "blockedUntil": "Owner authorization"
+  },
+  "rendererPolicy": {
+    "source": "Owner Decision 2, 2026-08-27",
+    "dom": "application / screen UI authority",
+    "pixi": "Championship playable 2D field / actor / sprite / 2D VFX presentation authority",
+    "three": "bounded 3D only on verified original 3D evidence or explicit Owner-approved new 3D use",
+    "forbidden": [
+      "ALL_DOM",
+      "ALL_PIXI",
+      "ALL_THREE",
+      "second global renderer authority",
+      "second ticker",
+      "second global router"
+    ],
+    "currentBuild": "Phase 1 standalone renders DOM only and loads no Pixi. Compliant, but the playable field will need the Pixi authority when Phase 2 opens."
+  },
+  "product": {
+    "name": "DIGIMON CHAMPIONSHIP - 2026 MODERN REBUILD",
+    "shape": "standalone; web-first; mobile-first; portrait 9:16; touch-first; desktop-browser compatible",
+    "resetDate": "2026-08-27",
+    "note": "This is the product, not a feature of another application."
+  },
+  "evidencePolicy": {
+    "ROM_VERIFIED": "DEFAULT_PRESERVE - modernise how it renders, never whether it exists",
+    "PARTIAL": "preserve known structure; unknown stays neutral",
+    "UNKNOWN_REQUIRES_TRACE": "do not invent",
+    "OWNER_APPROVED_ADAPTATION": "the only class permitted to intentionally change original gameplay",
+    "NEXUS_ADAPTATION": "historical R2 prototype mechanics; frozen for research, excluded from product gameplay"
+  },
+  "nexusIntegration": {
+    "state": "FROZEN_OUT_OF_CURRENT_PRODUCT_SCOPE",
+    "supersededDecisions": [
+      "Standalone-first ruling (2026-08-26): was a constraint on a Nexus feature; it is now simply the product's own shape",
+      "No state.championship in Nexus player state - FROZEN, still enforced",
+      "Never write nexusLinkR2State:v1 - STILL ENFORCED by NEXUS_SAVE_KEY_FORBIDDEN and tests P17/P18",
+      "Nexus emotional-loop contract must not reshape Championship gameplay"
+    ],
+    "historyPolicy": "Preserved, not erased. Marked superseded or frozen for this standalone product."
+  },
+  "preservationDebts": [
+    {
+      "id": "PD-CAGES",
+      "romVerified": "36 CageDefinitions, 35 shop cages, 1 non-shop waiting cage, 16-node cage strip",
+      "current": "two product-authored regions, temporary prototype",
+      "class": "DEFAULT_PRESERVE"
+    },
+    {
+      "id": "PD-TOOLBAR",
+      "romVerified": "8 slots, slot N = buttonN, mode 1 = ui/training_set, max 8 submenu entries per slot",
+      "current": "all eight ship as neutral disabled RAW_SLOT placeholders; correct under policy but not functional",
+      "class": "PARTIAL"
+    },
+    {
+      "id": "PD-CARE",
+      "romVerified": "four care items with their own descriptions; select-tool-then-touch grammar",
+      "current": "reaction animation plus a product-authored interaction flag; no verified effect",
+      "class": "PARTIAL"
+    },
+    {
+      "id": "PD-STATUS",
+      "romVerified": "HP, Capacity, Attack, Defense, Intelligence, Speed, Family, Generation, Attribute, Personality",
+      "current": "no values exist; none displayed",
+      "class": "PARTIAL"
+    },
+    {
+      "id": "PD-CAGE-LEVEL",
+      "romVerified": "cages level up, capped by Tamer rank",
+      "current": "not built",
+      "class": "ROM_VERIFIED"
+    },
+    {
+      "id": "PD-AUTO-BATTLE",
+      "romVerified": "battle is largely automatic with pre-battle orders",
+      "current": "not built",
+      "class": "ROM_VERIFIED",
+      "guard": "must not become a manual command RPG"
+    },
+    {
+      "id": "PD-HUNT-CAPTURE",
+      "romVerified": "tether/circle capture grammar (external crosscheck; not traced)",
+      "current": "not built",
+      "class": "UNKNOWN_REQUIRES_TRACE",
+      "guard": "must not become a single Capture button"
+    }
+  ],
+  "verticalSlices": {
+    "VS1": {
+      "name": "Raising Home",
+      "state": "COMPLETE_BASELINE",
+      "evidence": "INT-RH2, Owner-approved integration baseline"
+    },
+    "VS2": {
+      "name": "Gate Select -> Hunt Loadout -> Hunt Field -> Explore -> Return Home",
+      "state": "NOT_STARTED_AWAITING_GO"
+    },
+    "VS3": {
+      "name": "Hunt -> Capture -> Result",
+      "state": "NOT_STARTED"
+    },
+    "VS4": {
+      "name": "Training / Cage / Shop / Database",
+      "state": "NOT_STARTED"
+    },
+    "VS5": {
+      "name": "Battle Setup -> Auto Battle -> Battle Result",
+      "state": "NOT_STARTED"
+    },
+    "VS6": {
+      "name": "Full Progression + Save Integration",
+      "state": "NOT_STARTED"
+    },
+    "VS7": {
+      "name": "Production Art / Animation / VFX / Audio / Packaging",
+      "state": "NOT_STARTED"
+    }
+  }
+}

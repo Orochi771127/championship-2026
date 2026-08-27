@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "manifestId": "CODEX_CHAMPIONSHIP_MIGRATION_MANIFEST",
+  "productSsot": "CHAMPIONSHIP_2026_PRODUCT_SSOT",
+  "status": "VALIDATED_MIGRATION_PLAN",
+  "sourceCheckpoint": "bb61d18d014db92f878862b1fe2b69092f02d0ad",
+  "PRODUCTION_UI": [
+    "src/championship/app/raisingHomeP1RView.js",
+    "src/championship/app/styles.css",
+    "src/championship/app/intRh2Styles.css"
+  ],
+  "TEMPORARY_PRESENTATION": {
+    "destinationRoot": "assets/production/temporary/int-rh2",
+    "assetCount": 11,
+    "rightsStatus": "OWNER_OWNED",
+    "productionStatus": "TEMPORARY_PRESENTATION",
+    "humanApproved": false,
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "note": "Accepted only as the VS1 playable baseline; not final art direction. File-level hashes are added after migration."
+  },
+  "REFERENCE_ART": [
+    "research/original-evidence/README.md"
+  ],
+  "RESEARCH_GALLERY": {
+    "migrated": false,
+    "reason": "Original galleries remain external research provenance and must not enter runtime or clean product history."
+  },
+  "PRODUCTION_ASSET": {
+    "finalAssetsMigrated": 0,
+    "note": "VS7 remains frozen. Temporary VS1 assets are not promoted."
+  },
+  "QA": [
+    "tests/championship-int-rh2-p1r-contract-cases.mjs",
+    "tests/championship-migration-firewall-cases.mjs",
+    "tests/championship-int-rh2-browser.cjs",
+    "docs/reports/vs1/INT_RH2_BROWSER_QA.json"
+  ],
+  "DO_NOT_MIGRATE": [
+    "ROM/Nitro/reference pixels",
+    "original reconstruction galleries and contact sheets",
+    "Moonlake or Verdant Relay production expansion",
+    "P3-P6 and VS2-VS7 assets",
+    "unregistered third-party assets",
+    "assets outside assets/production"
+  ]
+}
+

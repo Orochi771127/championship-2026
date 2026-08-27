@@ -1,0 +1,32 @@
+node_modules/
+coverage/
+.tmp/
+*.log
+.DS_Store
+Thumbs.db
+
+# Research staging is deterministic external evidence, never product history.
+research/original-evidence/staging/
+
+# ROM / decoded proprietary payloads are forbidden from this product repo.
+*.nds
+*.srl
+*.nxr
+*.ncer
+*.ncgr
+*.nclr
+*.nanr
+*.nscr
+*.nbs
+*.nbsr
+*.atr
+*.datr
+*.col
+*.esc
+*.opm
+*.opmd
+*.nsbmd
+*.nsbtx
+*.nsbca
+*.bsar
+
