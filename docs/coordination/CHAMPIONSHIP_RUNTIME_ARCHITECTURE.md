@@ -3,7 +3,7 @@
 Canonical product repository: `.` (`CHAMPIONSHIP_2026_PRODUCT_SSOT`).  
 Migration reconciliation: the prior shared-repository wording below is retained only where it explains historical constraints. The current executable architecture is the standalone boundary defined in `docs/architecture/CHAMPIONSHIP_2026_ARCHITECTURE.md`.
 
-Owner: Claude Code · Last updated: 2026-08-28 · Kind: VS2 Gate-to-Hunt exploration complete, stopped for Owner review
+Owner: Claude Code · Last updated: 2026-08-28 · Kind: VS2-R1 Gate Select 3D parity contract closed, handed to the Codex presentation lane
 
 Describes the architecture **as it actually is today**, not as planned. Every
 layer is marked `IMPLEMENTED`, `PARTIAL`, `PLANNED`, or `FORBIDDEN`.
@@ -103,7 +103,7 @@ published seam — exactly what a P1R Gate/Hunt family will bind to.
 |---|---|---|
 | **DOM** | UI, menus, panels, toolbar, text | IMPLEMENTED — P1R system, Codex authority |
 | **PixiJS** | 2D gameplay: creatures, fields, sprites, VFX | IMPLEMENTED for the Raising **and** Hunt fields — one Application on a shared stage, one Application-owned ticker, Claude authority |
-| **Three.js** | verified or Owner-approved bounded 3D scenes | PLANNED — not used today |
+| **Three.js** | verified or Owner-approved bounded 3D scenes | PLANNED — not mounted. Gate Select now has a ROM-evidenced 3D contract (`VS2_GATE_SELECT_3D_RUNTIME_CONTRACT.v1.json`); the build is Codex's lane and is not yet authorized |
 
 `FORBIDDEN`: a second global router, store, save authority, Pixi bootstrap or
 ticker. A React rewrite is not authorized.
@@ -175,7 +175,7 @@ means untouched.
 | TITLE / LOGIN | PARTIAL — New Game / Continue only |
 | RAISING HOME | **IMPLEMENTED** — VS1 baseline |
 | TRAINING / CARE / CAGE | PARTIAL — care is a reaction with no verified effect; 2 product cages against 36 original CageDefinitions |
-| GATE SELECT | **IMPLEMENTED** — VS2. 16 product gates, all AVAILABLE; no unlock rule is traced |
+| GATE SELECT | **PARTIAL** — VS2 ships a 2D 16-card grid. The original is a 3D world map over 16 ROM-named biome nodes (VS2-R1 contract); the grid is retained as accessibility/debug/low-capability fallback, not as the sole Player Mode |
 | HUNT LOADOUT | **IMPLEMENTED** — VS2. Exactly one companion, labelled PRODUCT_AUTHORED |
 | HUNT FIELD | **IMPLEMENTED** — VS2. 128×128 modular world, camera traversal, bounded wild wander |
 | CAPTURE | NOT_STARTED |

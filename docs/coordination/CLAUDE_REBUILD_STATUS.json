@@ -3,7 +3,7 @@
   "owner": "Claude Code",
   "scope": "gameplay reconstruction, runtime architecture, save/state, tests, integration - for Championship 2026 standalone",
   "lastSync": "2026-08-28",
-  "syncKind": "VS2 Gate-to-Hunt exploration complete; STOPPED FOR OWNER REVIEW",
+  "syncKind": "VS2-R1 Original Gate Select 3D parity contract closed; STOPPED, handed to the Codex presentation lane",
   "git": {
     "repository": "CHAMPIONSHIP_2026_PRODUCT_SSOT (this repository)",
     "branch": "main",
@@ -21,13 +21,13 @@
       "npm run test:browser (INT-RH2)",
       "npm run test:browser:vs2 (VS2)"
     ],
-    "pass": 48,
+    "pass": 64,
     "expectedFailures": 0,
     "unexpectedFailures": 0,
     "previousBaseline": "35 pass at the VS2-PREP checkpoint; 19 at the accepted canonical baseline",
-    "baselineChangeCause": "VS2 added 13 deterministic cases covering the screen stack, gate catalog, world generation, movement/collision/camera, wild behaviour, the published seam, the Hunt toolbar, later-slice refusals and save authority.",
+    "baselineChangeCause": "VS2 added 13 cases; VS2-R1 added 11 contract-guard cases; Codex added presentation cases in its own lane.",
     "browserGate": "INT_RH2_BROWSER_QA_PASS viewports=6 required=5; CHAMPIONSHIP_VS2_BROWSER_QA_PASS viewports=5 required=5",
-    "positiveControls": "VS2-PREP 5/5 caught. VS2 8/8 caught: wild reacting to the player, collision disabled, wander radius unbounded, capture surface added to the seam, gate locked without evidence, illegal screen jump, world shrunk to a screen, toolbar command invented.",
+    "positiveControls": "VS2-PREP 5/5, VS2 8/8, VS2-R1 7/7 caught: dropped biome, rotation upgraded without evidence, earth claimed as loaded, 2D grid demoted to sole mode, second selection state allowed, machine path reintroduced, ROM biome name adopted into the catalog unauthorized.",
     "note": "The historical 481/3/0 baseline belongs to the pre-migration research tree and its docs/qa suite, neither of which exists in this repository."
   },
   "completed": [
@@ -146,6 +146,42 @@
       ],
       "architectureChange": "The single PixiJS Application moved out of the Raising field module into championshipPixiStage.js. VS2 needed a second playable field and the product allows one bootstrap, so Raising and Hunt are now scenes on one stage and the canvas is re-parented across a screen change rather than rebuilt. VS1 behaviour is unchanged and both browser gates confirm it.",
       "duplicatedAuthority": "0 - one Pixi Application (verified in-browser across three screen changes), one Application-owned ticker, one save key, one durable writer, zero routers"
+    },
+    {
+      "id": "VS2_R1_GATE_SELECT_3D_PARITY_CONTRACT",
+      "state": "CONTRACT_CLOSED_AWAITING_IMPLEMENTATION_AUTHORIZATION",
+      "detail": "Closed the Original Gate Select 3D parity question from existing original evidence. No product code was changed and no gameplay was added.",
+      "headline": "The original Gate Select is a 3D world map, ROM_VERIFIED. OVL12 carries a traced NSBMD loader call (0x0210C6FC) whose sole caller passes gate_select/3D_worldMap_model, and that model contains 16 biome node pairs. The shipped 2D card grid is therefore not final parity.",
+      "recovered": [
+        "16 biome identities with exact node names and offsets: Canyon, Crag, Damp, Desert, Factory, Forest, Grass, Ice, Jungle, Mine, Oasis, Ruins, Savanna, Seaside, Sewer, Volcano - each a <Name>parent -> <Name> pair at a 16-byte stride.",
+        "Three independent counts of 16: model node pairs, obj_world_GateIcon cells, and field_image_icon cells.",
+        "Day/night as PAIRED nodes at both geometry (world_day / world_night) and texture (four Map_fix_* names in MDL0 and TEX0) level.",
+        "The destination record: field_icon, field_name, field_id, field_desc and money_alert, with node coordinates, from ui/hunt/world/world_sub_base_scene.nxr.",
+        "Gate Select is the only screen family with zero .nxr scenes, against 94 across 11 other families."
+      ],
+      "verifiedNegatives": [
+        "Neither Gate Select model has any nsbca/nsbta/nsbma/nsbva. The ROM-wide 3D inventory is complete at 58 files and gate_select holds exactly 2, both .nsbmd. Any original 3D motion is code-driven, so a Three.js restoration must animate procedurally - with product-authored parameters, since the driving code is untraced.",
+        "gate_select/earth.nsbmd has no traced loader anywhere. The only `earth` string cross-reference is OVL19, which the census resolves to battle/earth_hit. An earth/space stage cannot be asserted as original on this evidence."
+      ],
+      "correctionsToResearch": [
+        "GATE_SELECT_NODE_CANDIDATES.csv omits the biome node `Ice`. Recovered by reading 3D_worldMap_model.nsbmd at MDL0+672: hex 496365.",
+        "decoded_json/gate_select__earth.nsbmd.json omits the node `map`. Recovered by reading earth.nsbmd at MDL0+240."
+      ],
+      "stillUnknown": [
+        "rotation",
+        "camera",
+        "input and hit-testing",
+        "day/night switch rule",
+        "biome display order",
+        "money_alert semantics",
+        "whether an earth stage precedes the world map"
+      ],
+      "outputs": [
+        "docs/contracts/championship/VS2_GATE_SELECT_3D_RUNTIME_CONTRACT.v1.json",
+        "tests/championship-vs2-gate-select-3d-contract-cases.mjs",
+        "research/original-evidence/README.md"
+      ],
+      "productCodeChanged": "none"
     }
   ],
   "current": [
@@ -158,6 +194,11 @@
       "id": "VS2_DOM_PRESENTATION",
       "state": "NEUTRAL_RUNTIME_SHELL_AWAITING_P1R",
       "detail": "Gate Select, Hunt Loadout and the Hunt HUD ship as a Claude-authored neutral DOM shell so VS2 is playable and testable now. DOM screen UI is Codex's lane; the shell consumes only the published seam, which is exactly what a P1R Gate/Hunt family will bind to. It is not a visual production decision."
+    },
+    {
+      "id": "GATE_SELECT_3D_RESTORATION",
+      "state": "CONTRACT_PUBLISHED_IMPLEMENTATION_NOT_AUTHORIZED",
+      "detail": "Codex Art owns the 3D presentation build against the published contract. It binds the EXISTING VS2 seam - no new intent, state field or save field is required. The 2D grid stays as accessibility, debug and low-capability fallback, and both modes must resolve to one destination truth."
     }
   ],
   "notStarted": [
@@ -218,10 +259,10 @@
   ],
   "dependenciesChanged": true,
   "recommendedNext": [
-    "STOP FOR OWNER REVIEW. VS3 Capture is not authorized.",
-    "Codex: a P1R Gate/Hunt family binding the published v1.1 seam would replace the neutral DOM shell without any runtime change.",
-    "Codex: Hunt field and wild creature art can land against the null art hooks already on the frame.",
-    "If VS3 is later authorized, the tether/circle capture grammar is the preservation constraint, not a Capture button."
+    "STOP. The contract is closed and the Codex presentation lane owns the Gate Select 3D build.",
+    "Owner decision needed: adopt the 16 recovered biome identities into the gate catalog? That is a runtime change with its own authorization.",
+    "If a behaviour trace is later authorized, T1 is the entry point: camera setup, draw call, rotation and input handling in OVL12.",
+    "VS3 Capture remains not started."
   ],
   "nextSafeDeltaTrace": {
     "target": "submenu population site and the per-slot command writer",
@@ -317,6 +358,27 @@
       "romVerified": "128x128 modular Hunt fields, 30 HM records, 16 biome nodes at the gate",
       "current": "16 product gates, each with a deterministic product-authored world seed. The 128x128 structure is preserved exactly; the terrain and object CONTENT is product-authored, and no gate-to-original-field mapping is claimed.",
       "class": "PARTIAL"
+    },
+    {
+      "id": "PD-GATE-SELECT-3D",
+      "romVerified": "3D world map selection over 16 named biome nodes, with paired day/night and a per-destination record panel",
+      "current": "2D 16-card DOM grid using product-authored names",
+      "class": "ROM_VERIFIED",
+      "guard": "must not remain the sole Player Mode Gate Select"
+    },
+    {
+      "id": "PD-GATE-IDENTITY",
+      "romVerified": "16 biome identities: Canyon, Crag, Damp, Desert, Factory, Forest, Grass, Ice, Jungle, Mine, Oasis, Ruins, Savanna, Seaside, Sewer, Volcano",
+      "current": "16 product-authored gate names, correctly declared product-authored when written, now superseded by recovered evidence",
+      "class": "ROM_VERIFIED",
+      "guard": "adoption is a runtime change and needs Owner authorization; a test currently fails if the catalog adopts them unannounced"
+    },
+    {
+      "id": "PD-HUNT-LOADOUT-MODEL",
+      "romVerified": "gear / equipment / plugin / launcher loadout across 11 NXR scenes under ui/hunt/setting/",
+      "current": "one-companion selection, declared PRODUCT_AUTHORED",
+      "class": "PARTIAL",
+      "note": "Surfaced by the Gate Select evidence read. Out of scope for VS2-R1; recorded, not acted on."
     }
   ],
   "verticalSlices": {

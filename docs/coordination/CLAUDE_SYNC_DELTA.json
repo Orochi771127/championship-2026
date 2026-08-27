@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "owner": "Claude Code",
-  "syncTarget": "VS2 Gate-to-Hunt exploration complete; STOPPED FOR OWNER REVIEW",
+  "syncTarget": "VS2-R1 Original Gate Select 3D parity contract closed",
   "date": "2026-08-28",
   "note": "Claude-owned delta. Codex remains COORDINATION_MERGE_WRITER and merges this by stable record ID. Claude wrote no shared coordination file in this round.",
   "checkpoint": {
@@ -13,20 +13,16 @@
     "note": "The pre-migration checkpoint chain recorded in earlier revisions of this file is external provenance (docs/migration/PRE_MIGRATION_PROVENANCE.md), not this repository history. CL-008 and CL-009 concern that external branch and are unaffected by this round."
   },
   "tests": {
-    "pass": 48,
+    "pass": 64,
     "expected": 0,
     "unexpected": 0,
-    "browserGates": [
-      "INT_RH2 viewports=6 required=5",
-      "VS2 viewports=5 required=5"
-    ],
     "unchangedThisRound": false
   },
   "ownerDecisionsApplied": [
     {
-      "id": "VS2-GO",
+      "id": "VS2-R1",
       "state": "OWNER_AUTHORIZED",
-      "detail": "Owner handoff 2026-08-28 authorizes VS2-PREP hardening, then a Gate/Hunt runtime presentation contract, then bounded VS2 implementation (Raising Home -> Gate Select -> Hunt Loadout -> Hunt Field -> wild creature presentation -> explore -> exit -> Raising Home), then STOP FOR OWNER REVIEW. Capture, Hunt Result, Battle, Shop and Database stay outside VS2."
+      "detail": "Owner directive 2026-08-28: restore Original Gate Select 3D parity. Claude lane closes the evidence contract only - no new gameplay, no Capture, no VS3, no new Hunt mechanics, no new save schema. Then stop and hand to the Codex presentation lane."
     }
   ],
   "closedThisRound": [
@@ -45,6 +41,15 @@
       "state": "COMPLETE_AWAITING_OWNER_REVIEW",
       "detail": "The authorized VS2 flow is playable end to end at all five contract viewports. Contract published first at docs/contracts/championship/VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT.json (v1.1 after implementation reconciliation).",
       "positiveControls": "8/8 caught."
+    },
+    {
+      "id": "VS2_R1_GATE_SELECT_3D_PARITY_CONTRACT",
+      "type": "contract",
+      "owner": "claude",
+      "state": "CLOSED",
+      "detail": "The original Gate Select is a 3D world map (ROM_VERIFIED, OVL12 loader call 0x0210C6FC) over 16 named biome nodes with paired day/night. Two research artifacts were corrected against the model bytes. No product code changed.",
+      "contract": "docs/contracts/championship/VS2_GATE_SELECT_3D_RUNTIME_CONTRACT.v1.json",
+      "positiveControls": "7/7 caught."
     }
   ],
   "stillUnknown": [
@@ -128,6 +133,28 @@
       "owner": "codex",
       "state": "CONSUMED_AS_NULL_ART_HOOKS",
       "detail": "The runtime renders product-authored neutral geometry for terrain, props, the companion and wild creatures. Every art hook on the frame is null and may be filled by Codex without a runtime change. No ROM pixel is loaded."
+    },
+    {
+      "id": "GateSelect3DRuntimeContract",
+      "type": "dependency",
+      "owner": "claude",
+      "state": "PUBLISHED",
+      "codexMaySafelyBind": "YES_PRESENTATION_ONLY",
+      "detail": "Three.js is presentation only. The 3D globe writes selection back through the existing VS2 seam; no second gate state, no new save field. The 2D grid is retained as ACCESSIBILITY_FALLBACK / DEBUG_FALLBACK / LOW_CAPABILITY_FALLBACK and must not remain the sole Player Mode."
+    },
+    {
+      "id": "ART_R4_VFX_3D",
+      "type": "dependency",
+      "owner": "codex",
+      "state": "CITED_NOT_REACHABLE_FROM_PRODUCT_REPO",
+      "detail": "The ART-R4 Gate Select 3D reference baseline is Codex-owned and lives outside both this repository and the original-evidence tree. Nothing in the new contract depends on it, but Codex should reconcile its Gate Select art baseline against the recovered node structure."
+    },
+    {
+      "id": "Vs2GateToHuntEntry",
+      "type": "dependency",
+      "owner": "shared",
+      "state": "PARITY_GAP_RECORDED",
+      "detail": "VS2 delivered the flow; VS2-R1 shows the Gate Select presentation is not yet original parity. The runtime, seam and state are unaffected - only the presentation layer changes."
     }
   ],
   "integrationPlanRuntimeHalf": {
@@ -417,5 +444,25 @@
       "imply a third terrain traversal rule beyond OPEN and BLOCKED",
       "label, icon or activate any toolbar slot"
     ]
-  }
+  },
+  "gateSelect3DHandoff": {
+    "lane": "Codex Art",
+    "contract": "docs/contracts/championship/VS2_GATE_SELECT_3D_RUNTIME_CONTRACT.v1.json",
+    "mayBind": "src/championship/app/gateHuntPresentationSource.js - the existing seam. No new seam, intent, state field or save field is required.",
+    "structureToAuthor": "one world root; 16 destination nodes each as a parent transform plus a child marker; two paired day/night states over one world.",
+    "mustNotDo": [
+      "load, convert or ship any original ROM model, texture or mesh - the geometry must be original-created",
+      "introduce a second gate selection state",
+      "add a save field",
+      "present rotation, camera framing, input semantics or day/night timing as original behaviour - all four are UNKNOWN_REQUIRES_TRACE",
+      "remove or break the 2D grid fallback",
+      "render a price on money_alert, or a lock, rank or progress marker on any gate"
+    ],
+    "openForOwner": "Adopt the 16 recovered biome identities into the gate catalog? Currently RECORDED_NOT_ACTED_ON, and a test fails if they are adopted without authorization."
+  },
+  "researchCorrections": [
+    "GATE_SELECT_NODE_CANDIDATES.csv is missing the biome node `Ice`; the model bytes at MDL0+672 contain it. The CSV under-reports 16 biomes as 15 child nodes.",
+    "decoded_json/gate_select__earth.nsbmd.json is missing the node `map`; the model bytes at MDL0+240 contain it.",
+    "Both corrections are recorded in the contract. The research packs are external and read-only; Claude did not modify them."
+  ]
 }

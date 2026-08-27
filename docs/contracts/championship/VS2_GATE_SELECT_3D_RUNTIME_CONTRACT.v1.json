@@ -1,0 +1,709 @@
+{
+  "schemaVersion": 1,
+  "contractId": "VS2_GATE_SELECT_3D_RUNTIME_CONTRACT",
+  "version": "v1",
+  "owner": "Claude Code",
+  "consumer": "Codex Art",
+  "date": "2026-08-28",
+  "slice": "VS2-R1 - Original Gate Select 3D restoration",
+  "authorization": {
+    "source": "Owner directive, 2026-08-28, VS2-R1 Original Gate Select 3D Restoration",
+    "scope": "Close the Original Gate Select 3D parity contract from existing original evidence. No new gameplay, no Capture, no VS3, no new Hunt mechanics, no new save schema.",
+    "finding": "The shipped VS2 Gate Select is a 2D 16-card grid. The original is a 3D world-map selection. The 2D grid is therefore not final parity.",
+    "stopCondition": "Contract published. Implementation is a separate authorization; the Codex presentation lane takes it from here."
+  },
+  "method": {
+    "rule": "Original evidence wins. Nothing in this contract is inferred from the shipped product UI.",
+    "approach": "Existing research authority read first, in this order: the 3D research and decoded packs, the ROM-wide 3D inventory, the NSBMD loader cross-reference census, the UI source-asset and sprite-bundle inventories, the 94-scene NXR analysis, and the static reverse-engineering report. Two artifact-level disagreements were resolved by reading the original model bytes directly.",
+    "correctionsMade": [
+      "GATE_SELECT_NODE_CANDIDATES.csv omits the biome node `Ice` while listing `Iceparent`. The 16-byte name-table stride showed a 32-byte gap there. Reading 3D_worldMap_model.nsbmd at MDL0+672 (file offset 696) returns hex 496365 = \"Ice\". The CSV is incomplete; GATE_SELECT_DECODED.md is correct. All 16 biome pairs are present.",
+      "decoded_json/gate_select__earth.nsbmd.json omits the node `map` while GATE_SELECT_DECODED.md lists it. Reading earth.nsbmd MDL0+240 returns \"map\". The decoded JSON is incomplete; the report is correct."
+    ],
+    "notReachableFromHere": "The ART-R4 Gate Select art baseline is Codex-owned and lives outside both this repository and the original-evidence tree. It is cited in coordination history as an Owner-approved reference baseline but could not be read in this batch, and nothing in this contract depends on it."
+  },
+  "evidenceSources": {
+    "root": "ORIGINAL_EVIDENCE_ROOT, recorded once in research/original-evidence/README.md. Every path below is relative to it.",
+    "policyNote": "Paths are provenance only. They are outside this repository and are never imported, copied, bundled, converted, or resolved at runtime. The absolute location is deliberately NOT repeated here: if the research root moves, only the evidence-firewall README changes.",
+    "primary": [
+      "YDIJ_3D_RESEARCH_PACK_2026-08-24/SUMMARY.json - ROM-wide 3D inventory",
+      "YDIJ_3D_RESEARCH_PACK_2026-08-24/OVL12_GATE_SELECT_STRING_EVIDENCE.csv",
+      "YDIJ_3D_RESEARCH_PACK_2026-08-24/BINARY_KEYWORD_CROSS_REFERENCE.csv",
+      "YDIJ_3D_DECODED_REFERENCE_PACK_2026-08-24/GATE_SELECT_DECODED.md",
+      "YDIJ_3D_DECODED_REFERENCE_PACK_2026-08-24/GATE_SELECT_NODE_CANDIDATES.csv",
+      "YDIJ_3D_DECODED_REFERENCE_PACK_2026-08-24/MODEL_ANIMATION_ASSOCIATIONS_EXPANDED.csv",
+      "YDIJ_3D_DECODED_REFERENCE_PACK_2026-08-24/decoded_json/gate_select__*.nsbmd.json",
+      "YDIJ_BATTLE_REVERSE_CLOSURE_STAGE4_2026-08-24/derived/NSBMD_LOADER_XREF_CENSUS.csv",
+      "CLAUDE_CODE_YDIJ_HANDOFF/01_UI_ART_LAYOUT/extracted_reference/YDIJ_UI_REFERENCE/UI_SOURCE_ASSET_INVENTORY.csv",
+      "CLAUDE_CODE_YDIJ_HANDOFF/01_UI_ART_LAYOUT/extracted_reference/YDIJ_UI_REFERENCE/UI_SPRITE_BUNDLE_INVENTORY.csv",
+      "CLAUDE_CODE_YDIJ_HANDOFF/01_UI_ART_LAYOUT/extracted_reference/YDIJ_UI_REFERENCE/UI_BACKGROUND_INVENTORY.csv",
+      "CLAUDE_CODE_YDIJ_HANDOFF/01_UI_ART_LAYOUT/nxr_94_analysis/NXR_SCENE_REGISTRY.csv",
+      "CLAUDE_CODE_YDIJ_HANDOFF/01_UI_ART_LAYOUT/nxr_94_analysis/NXR_LINKED_ASSET_MAP.csv",
+      "CLAUDE_CODE_YDIJ_HANDOFF/01_UI_ART_LAYOUT/nxr_94_analysis/NXR_NODE_TABLE.csv",
+      "REVERSE_UNKNOWN_DEPENDENCIES.md - registers T1 Gate Select runtime behaviour",
+      "Digimon_Championship_YDIJ_Static_Reverse_Engineering_Report.md"
+    ],
+    "directByteReads": [
+      "raw_3d_assets/gate_select/3D_worldMap_model.nsbmd at MDL0+656/672/688 - resolved the missing Ice node",
+      "raw_3d_assets/gate_select/earth.nsbmd MDL0 name region - resolved the missing map node"
+    ]
+  },
+  "ipPolicy": {
+    "rule": "ROM_COPYRIGHTED_REFERENCE / RESEARCH_ONLY / NOT_SHIPPING_READY.",
+    "forbidden": [
+      "copying any .nsbmd, .nsbca, .nsbta, .nsbma, .nsbva, .ncgr, .ncbr, .nclr, .nscr, .ncer, .nanr or .nxr into this repository",
+      "shipping any GLB, glTF, texture or mesh converted from those files",
+      "any runtime path that resolves into the research tree"
+    ],
+    "permitted": "Metadata, node names, counts, offsets, hashes and structural facts. This contract contains only those.",
+    "consequence": "The Three.js Gate Select must render original-created geometry authored to this contract's structure. It must not load or convert an original model."
+  },
+  "answers": {
+    "1_isGateSelect3DWorldEarthSelection": {
+      "verdict": "YES for the world map. PARTIAL for the earth globe.",
+      "evidence": "ROM_VERIFIED",
+      "supporting": [
+        {
+          "fact": "OVL12 contains a traced NSBMD loader call whose sole caller passes gate_select / 3D_worldMap_model.",
+          "detail": "NSBMD_LOADER_XREF_CENSUS.csv row: overlay 12, call_address 0x0210C6FC, 'generic wrapper; sole caller passes gate_select / 3D_worldMap_model'. This is a code-level cross-reference, not merely a string.",
+          "evidence": "ROM_VERIFIED"
+        },
+        {
+          "fact": "The path string gate_select/3D_worldMap_model is embedded in OVL12's data region.",
+          "detail": "Offsets 0x9454 and 0x9460, RAM 0x2114754 and 0x2114760. The two CSV rows are ONE contiguous path indexed twice, not two independent references - recorded in REVERSE_UNKNOWN_DEPENDENCIES.md T1 and preserved here so the count is not overstated.",
+          "evidence": "ROM_VERIFIED"
+        },
+        {
+          "fact": "Gate Select is the only screen family in the game that owns no .nxr scene.",
+          "detail": "94 .nxr files exist across 11 screen families (ui 34, title_menu 10, database 9, battle_result 8, training 7, battle_menu 7, shop 6, battle_menu_net 6, today_window 3, tamer_info 2, help 2). The gate_select group has 29 assets and zero .nxr. Its main-screen presentation is therefore not an NXR composition - it is 3D geometry plus OAM sprites.",
+          "evidence": "ROM_VERIFIED"
+        },
+        {
+          "fact": "The static reverse-engineering report's runtime flow tree places a 3D world map inside Gate Select.",
+          "detail": "Gate Select -> 3D world map / equipment-plugin setup / Hunt.",
+          "evidence": "PARTIAL"
+        }
+      ],
+      "consequence": "A 2D card grid is not original parity for the player-facing Gate Select. The original main screen is a 3D world map."
+    },
+    "2_worldMapModelIdentity": {
+      "evidence": "ROM_VERIFIED",
+      "path": "gate_select/3D_worldMap_model.nsbmd",
+      "sizeBytes": 164912,
+      "sha256": "4852ce8731b9b221864d219870bcf7f5f0332645d429893c107b4478e8fef539",
+      "container": {
+        "magic": "BMD0",
+        "version": 2,
+        "blocks": [
+          {
+            "tag": "MDL0",
+            "size": 33044
+          },
+          {
+            "tag": "TEX0",
+            "size": 131844
+          }
+        ]
+      },
+      "share": "This model plus earth.nsbmd account for 246,532 bytes - 42.6% of all 3D data in the ROM. Gate Select holds the single largest 3D investment in the game.",
+      "loader": {
+        "overlay": 12,
+        "callAddress": "0x0210C6FC",
+        "evidence": "ROM_VERIFIED"
+      },
+      "nodeTable": {
+        "note": "MDL0 name table, 16-byte stride, offsets relative to the MDL0 block.",
+        "structural": [
+          {
+            "offset": 416,
+            "name": "world_root"
+          },
+          {
+            "offset": 944,
+            "name": "world"
+          },
+          {
+            "offset": 960,
+            "name": "world_day"
+          },
+          {
+            "offset": 976,
+            "name": "world_night"
+          },
+          {
+            "offset": 1896,
+            "name": "tama:world_map"
+          },
+          {
+            "offset": 1912,
+            "name": "world_map"
+          },
+          {
+            "offset": 1960,
+            "name": "Map_fix_day"
+          },
+          {
+            "offset": 1976,
+            "name": "Map_fix_night"
+          },
+          {
+            "offset": 2024,
+            "name": "Map_fix_day_pl"
+          },
+          {
+            "offset": 2040,
+            "name": "Map_fix_night_pl"
+          },
+          {
+            "offset": 2180,
+            "name": "polygon0"
+          },
+          {
+            "offset": 2196,
+            "name": "polygon1"
+          }
+        ],
+        "tex0": [
+          "Map_fix_day",
+          "Map_fix_night",
+          "Map_fix_day_pl",
+          "Map_fix_night_pl"
+        ],
+        "tex0Note": "The fourth TEX0 name reads Map_fix_night_pl followed by 16 'A' bytes; that is name-field padding in the extraction, not part of the name."
+      }
+    },
+    "3_earthModelIdentity": {
+      "evidence": "PARTIAL - the file is ROM_VERIFIED, its runtime binding to Gate Select is UNKNOWN_REQUIRES_TRACE",
+      "path": "gate_select/earth.nsbmd",
+      "sizeBytes": 81620,
+      "sha256": "fc811f61f6093a3e35588267fa5dc3e0815a60772adde9bda43b797c27c2878b",
+      "container": {
+        "magic": "BMD0",
+        "version": 2,
+        "blocks": [
+          {
+            "tag": "MDL0",
+            "size": 15420
+          },
+          {
+            "tag": "TEX0",
+            "size": 66176
+          }
+        ]
+      },
+      "nodeTable": {
+        "mdl0": [
+          {
+            "offset": 32,
+            "name": "earth"
+          },
+          {
+            "offset": 136,
+            "name": "world_root"
+          },
+          {
+            "offset": 200,
+            "name": "map_tex"
+          },
+          {
+            "offset": 240,
+            "name": "map"
+          },
+          {
+            "offset": 280,
+            "name": "map_pl"
+          },
+          {
+            "offset": 368,
+            "name": "polygon0"
+          }
+        ],
+        "tex0": [
+          "map_pl"
+        ],
+        "note": "Offsets here are irregular, unlike the worldMap 16-byte stride. `map` at 240 was recovered by direct byte read; the decoded JSON omits it."
+      },
+      "loaderStatus": {
+        "verdict": "NO LOADER TRACED ANYWHERE",
+        "detail": "The 15-row NSBMD loader census contains no entry for gate_select/earth. The only `earth` string cross-reference in the whole binary scan is OVL19 at 0x266B4 / RAM 0x21319B4, and the census resolves OVL19's 5-entry model table as hitspark_small | hitspark_big | s_impact_s | s_impact_b | earth_hit - that is battle/earth_hit.nsbmd, NOT gate_select/earth.nsbmd.",
+        "evidence": "ROM_VERIFIED negative",
+        "consequence": "It is NOT established that earth.nsbmd is loaded during Gate Select. It may be loaded by file id rather than by name, used by another screen, or unused. Presentation must not assert an earth/globe stage as original behaviour on this evidence alone."
+      },
+      "supportingPresentationEvidence": {
+        "fact": "gate_select ships two distinct background sets, and they are visually different kinds of scene.",
+        "detail": "bg_earth (256x256, main) with bg_earth_sub_bg2 and bg_earth_sub_bg3 (two sub-screen BG layers) renders a starfield and nebula - deep space. bg_world (256x256, main) with bg_world_sub renders a green hexagonal cell lattice - a digital-world grid. Two background families in one screen group, one spacelike and one digital, is strong structural support for two 3D presentation states.",
+        "evidence": "PARTIAL",
+        "unknown": "Whether the two states are a sequence (approach the planet, then the world map), two selectable modes, or two different screens sharing a directory. No transition is traced."
+      }
+    },
+    "4_sixteenBiomeGateNodeRelationship": {
+      "evidence": "ROM_VERIFIED",
+      "structure": "Each biome is a TWO-node pair in the worldMap MDL0: `<Name>parent` immediately followed by `<Name>`, at a uniform 16-byte stride.",
+      "biomes": [
+        {
+          "ordinal": 1,
+          "parent": "Canyonparent",
+          "node": "Canyon",
+          "parentOffset": 432,
+          "nodeOffset": 448
+        },
+        {
+          "ordinal": 2,
+          "parent": "Cragparent",
+          "node": "Crag",
+          "parentOffset": 464,
+          "nodeOffset": 480
+        },
+        {
+          "ordinal": 3,
+          "parent": "Dampparent",
+          "node": "Damp",
+          "parentOffset": 496,
+          "nodeOffset": 512
+        },
+        {
+          "ordinal": 4,
+          "parent": "Desertparent",
+          "node": "Desert",
+          "parentOffset": 528,
+          "nodeOffset": 544
+        },
+        {
+          "ordinal": 5,
+          "parent": "Factoryparent",
+          "node": "Factory",
+          "parentOffset": 560,
+          "nodeOffset": 576
+        },
+        {
+          "ordinal": 6,
+          "parent": "Forestparent",
+          "node": "Forest",
+          "parentOffset": 592,
+          "nodeOffset": 608
+        },
+        {
+          "ordinal": 7,
+          "parent": "Grassparent",
+          "node": "Grass",
+          "parentOffset": 624,
+          "nodeOffset": 640
+        },
+        {
+          "ordinal": 8,
+          "parent": "Iceparent",
+          "node": "Ice",
+          "parentOffset": 656,
+          "nodeOffset": 672,
+          "note": "Recovered by direct byte read; missing from GATE_SELECT_NODE_CANDIDATES.csv"
+        },
+        {
+          "ordinal": 9,
+          "parent": "Jungleparent",
+          "node": "Jungle",
+          "parentOffset": 688,
+          "nodeOffset": 704
+        },
+        {
+          "ordinal": 10,
+          "parent": "Mineparent",
+          "node": "Mine",
+          "parentOffset": 720,
+          "nodeOffset": 736
+        },
+        {
+          "ordinal": 11,
+          "parent": "Oasisparent",
+          "node": "Oasis",
+          "parentOffset": 752,
+          "nodeOffset": 768
+        },
+        {
+          "ordinal": 12,
+          "parent": "Ruinsparent",
+          "node": "Ruins",
+          "parentOffset": 784,
+          "nodeOffset": 800
+        },
+        {
+          "ordinal": 13,
+          "parent": "Savannaparent",
+          "node": "Savanna",
+          "parentOffset": 816,
+          "nodeOffset": 832
+        },
+        {
+          "ordinal": 14,
+          "parent": "Seasideparent",
+          "node": "Seaside",
+          "parentOffset": 848,
+          "nodeOffset": 864
+        },
+        {
+          "ordinal": 15,
+          "parent": "Sewerparent",
+          "node": "Sewer",
+          "parentOffset": 880,
+          "nodeOffset": 896
+        },
+        {
+          "ordinal": 16,
+          "parent": "Volcanoparent",
+          "node": "Volcano",
+          "parentOffset": 912,
+          "nodeOffset": 928
+        }
+      ],
+      "orderingCaveat": {
+        "value": "The list above is NAME TABLE order, which is alphabetical. It is not proven to be display order, selection order, or gate numbering.",
+        "evidence": "UNKNOWN_REQUIRES_TRACE"
+      },
+      "corroboration": [
+        {
+          "fact": "gate_select/obj_world_GateIcon.ncer declares exactly 16 cells.",
+          "evidence": "ROM_VERIFIED",
+          "detail": "One OAM icon per biome. Source is .ncbr raw-char; the extracted preview PNG is mis-decoded, so per-cell VISUAL identity is UNKNOWN while the COUNT is verified."
+        },
+        {
+          "fact": "ui/hunt/world/field_image_icon.ncer declares exactly 16 cells.",
+          "evidence": "ROM_VERIFIED",
+          "detail": "A 16-entry field preview image set on the sub screen, bound by world_sub_base_scene.nxr node 0."
+        }
+      ],
+      "conclusion": "Three independent counts of 16 - model node pairs, gate icon cells, field preview cells - establish the 16 destinations as a first-class original structure with stable biome identities.",
+      "parityConsequence": "See parityGap below. The shipped product gate list uses 16 product-authored names; the original uses these 16 recovered biome identities."
+    },
+    "5_dayNightNodeRelationship": {
+      "evidence": "PARTIAL",
+      "verified": {
+        "geometryNodes": [
+          "world_day",
+          "world_night"
+        ],
+        "textureFixNodes": [
+          "Map_fix_day",
+          "Map_fix_night",
+          "Map_fix_day_pl",
+          "Map_fix_night_pl"
+        ],
+        "tex0Entries": [
+          "Map_fix_day",
+          "Map_fix_night",
+          "Map_fix_day_pl",
+          "Map_fix_night_pl"
+        ],
+        "detail": "Day and night exist as PAIRED nodes at both the geometry level (world_day / world_night, adjacent at offsets 960 and 976) and the texture level, where each of the four Map_fix names appears in BOTH MDL0 and TEX0. The `_pl` suffix appears throughout this model family (Map_fix_day_pl, and in earth.nsbmd map_pl) and is a consistent secondary variant marker.",
+        "evidence": "ROM_VERIFIED"
+      },
+      "corroboration": {
+        "fact": "gate_select/obj_world_time.ncer declares 11 cells with an accompanying obj_world_time.nanr animation.",
+        "detail": "A dedicated time display object exists on the Gate Select screen alongside the gate icons.",
+        "evidence": "ROM_VERIFIED"
+      },
+      "unknown": {
+        "value": "The switch rule. Nothing traced establishes what selects day versus night, whether it follows an in-game clock, a season, a per-gate property, or player action; nor whether the transition is a cut, a blend, or a lit rotation.",
+        "evidence": "UNKNOWN_REQUIRES_TRACE"
+      },
+      "presentationRule": "Day/night must be modelled as TWO paired states over one world, matching the node structure. Do not invent a continuous time-of-day cycle, a sun position, or a per-gate weather system: none is evidenced."
+    },
+    "6_selectionState": {
+      "evidence": "PARTIAL",
+      "verified": {
+        "source": "ui/hunt/world/world_sub_base_scene.nxr, category 'Hunt World / Gate UI', 312 bytes, 5 nodes, 2 resources",
+        "nodes": [
+          {
+            "index": 0,
+            "name": "field_icon",
+            "x": 12,
+            "y": 56,
+            "resource": "field_image_icon",
+            "resourceCellCount": 16,
+            "widget": "ICON"
+          },
+          {
+            "index": 1,
+            "name": "field_name",
+            "x": 72,
+            "y": 49,
+            "widget": "TEXT_OR_DYNAMIC_LABEL"
+          },
+          {
+            "index": 2,
+            "name": "field_id",
+            "x": 173,
+            "y": 38,
+            "widget": "VIRTUAL_OR_DYNAMIC_REGION"
+          },
+          {
+            "index": 3,
+            "name": "field_desc",
+            "x": 87,
+            "y": 66,
+            "widget": "TEXT_OR_DYNAMIC_LABEL",
+            "note": "param6/param7 = 9.5 x 4.0, consistent with a multi-line text region"
+          },
+          {
+            "index": 4,
+            "name": "money_alert",
+            "x": 129,
+            "y": 160,
+            "resource": "world_obj_sub",
+            "resourceCellCount": 1,
+            "widget": "SPRITE_CELL"
+          }
+        ],
+        "detail": "The selected destination is presented as a four-part record - icon, name, id, description - plus a money alert. The presence of an explicit `field_id` node proves the original carries a stable destination IDENTIFIER distinct from its display name.",
+        "evidence": "ROM_VERIFIED at node level"
+      },
+      "moneyAlert": {
+        "value": "A `money_alert` node exists on the destination panel.",
+        "semantics": "UNKNOWN_REQUIRES_TRACE",
+        "note": "It plausibly indicates an entry cost or insufficient funds, but no cost, currency, or gating rule is traced. Do not render a price."
+      },
+      "unknown": {
+        "howSelectionIsStored": "UNKNOWN_REQUIRES_TRACE",
+        "howSelectionIsCommitted": "UNKNOWN_REQUIRES_TRACE",
+        "whetherGatesLockOrUnlock": "UNKNOWN_REQUIRES_TRACE - no unlock rule is traced anywhere, consistent with the existing VS2 finding"
+      },
+      "overlayAttributionCaveat": "The NXR analysis attributes this scene to OVL12 with confidence SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE. That is inference from the subsystem path plus a prior overlay trace, not a direct traced binding. Treat the scene contents as ROM_VERIFIED and its overlay ownership as PARTIAL."
+    },
+    "7_rotationState": {
+      "evidence": "UNKNOWN_REQUIRES_TRACE",
+      "whatIsKnown": "The model uses a two-level hierarchy: a single `world_root`, then per-biome `<Name>parent` -> `<Name>` pairs, plus `world`, `world_day`, `world_night` and `world_map`. A parent/child split per biome is CONSISTENT with independent per-node transforms and with a rotating root, but structure is not proof of motion.",
+      "whatIsNotKnown": [
+        "whether the world rotates at all",
+        "whether rotation is free, snapped, continuous, or stepped between biomes",
+        "rotation axis, speed, easing, inertia or limits",
+        "whether the player drives rotation or it is autonomous"
+      ],
+      "hardConstraint": "REVERSE_UNKNOWN_DEPENDENCIES.md T1 explicitly records that camera setup, model draw call, rotation and input handling remain untraced, and that this specifically blocks the decision of whether Gate Select is a freely rotatable 3D globe. That register entry is authoritative and this contract does not override it.",
+      "presentationRule": "Any rotation shipped is OWNER_APPROVED_ADAPTATION or PRODUCT_AUTHORED and must be labelled as such. It must not be presented as recovered original behaviour."
+    },
+    "8_cameraState": {
+      "evidence": "UNKNOWN_REQUIRES_TRACE",
+      "whatIsKnown": "Nothing. No camera node, projection, field of view, distance, target, or animation was recovered from either model or from any overlay trace.",
+      "negativeFinding": "The worldMap MDL0 name table contains no camera-shaped name. The readable structural names stop at polygon0/polygon1; everything past offset ~2200 in the extraction is texture and vertex byte noise, not names.",
+      "presentationRule": "Camera framing is product-authored. Label it. Do not claim original camera parity."
+    },
+    "9_selectedGateToHuntLoadoutTransition": {
+      "evidence": "PARTIAL",
+      "verified": {
+        "fact": "The Hunt Loadout / Equipment UI and the Hunt World / Gate UI are attributed to the SAME overlay, OVL12.",
+        "detail": "The NXR scene registry lists 12 OVL12 scenes: 11 under ui/hunt/setting/ categorised 'Hunt Loadout / Equipment' (equip_plate, launcher_plate, menu_top_gear_scene, menu_top_plugin_scene, menu_top_release_scene, setting_equip_main_scene, setting_equip_sub_scene, setting_gear_main_scene, setting_gear_main_slot_scene, setting_gear_sub_scene, setting_sub_base_scene) and 1 under ui/hunt/world/ categorised 'Hunt World / Gate UI' (world_sub_base_scene). The same overlay that loads the 3D world map also owns the loadout scenes.",
+        "evidence": "PARTIAL - the overlay attribution for the NXR scenes is inference; the OVL12 -> worldMap model loader call is a direct trace"
+      },
+      "corroboration": "The static report's runtime flow tree places Gate Select -> equipment/plugin setup -> Hunt, in that order.",
+      "loadoutVocabulary": {
+        "note": "The original loadout is gear/equipment/plugin/launcher based, not companion-selection based.",
+        "evidence": "ROM_VERIFIED at asset level",
+        "detail": "ui/hunt/setting/ contains obj_Launcher_icon, obj_Launcher_wind, setting_obj_plug_main, setting_obj_plug_sub, menu_top_gear_scene, menu_top_plugin_scene, menu_top_release_scene, setting_equip_*, setting_gear_*. This is a real preservation debt against the shipped one-companion loadout, but it is OUT OF SCOPE for this batch and is recorded, not acted on."
+      },
+      "unknown": "No transition call, no commit path, and no state handoff between the two are traced."
+    },
+    "10_inputBehaviorEvidence": {
+      "evidence": "UNKNOWN_REQUIRES_TRACE",
+      "whatIsKnown": "The screen is split across two DS screens: the 3D world map and obj_world_* sprites on the main screen, and world_sub_base_scene.nxr with the destination record on the sub screen. On DS hardware the sub screen is the touch screen, so the destination panel sits on the touch surface. That is a hardware fact about where the panel is, not a traced input handler.",
+      "whatIsNotKnown": [
+        "whether selection is by stylus tap on the 3D map, by d-pad cycling, by sub-screen list, or by a combination",
+        "hit-testing model for the biome nodes",
+        "drag, flick, or hold semantics",
+        "confirm and cancel bindings"
+      ],
+      "presentationRule": "The Championship 2026 product is touch-first and pointer-only, which is a modernisation decision already ratified for VS1 and VS2. Input for the 3D Gate Select is therefore PRODUCT_AUTHORED and must be labelled as such, not asserted as original."
+    },
+    "11_animationEvidence": {
+      "verdict": "Split. The 3D layer has no animation asset; the 2D overlay layer has six.",
+      "threeD": {
+        "evidence": "ROM_VERIFIED negative",
+        "fact": "Neither Gate Select model has any skeletal, texture, material or visibility animation.",
+        "detail": "The ROM-wide 3D inventory is complete at 58 files: 33 .nsbmd, 14 .nsbta, 9 .nsbca, 1 .nsbva, 1 .nsbma. SUMMARY.json lists gate_select_assets as exactly two entries, both .nsbmd. MODEL_ANIMATION_ASSOCIATIONS_EXPANDED.csv marks both 3D_worldMap_model and earth as relationship_status = standalone_or_unpaired, with every nsbca/nsbta/nsbma/nsbva column empty.",
+        "consequence": "Any motion in the original 3D Gate Select is CODE-DRIVEN, not asset-driven. A Three.js restoration must therefore animate procedurally - and since the driving code is untraced, every procedural parameter is product-authored."
+      },
+      "twoD": {
+        "evidence": "ROM_VERIFIED",
+        "fact": "Six OAM animation resources serve the Gate Select screen.",
+        "resources": [
+          {
+            "path": "gate_select/obj_world_GateIcon.nanr",
+            "bytes": 294,
+            "cells": 16
+          },
+          {
+            "path": "gate_select/obj_world_Gatedata.nanr",
+            "bytes": 462,
+            "cells": 6
+          },
+          {
+            "path": "gate_select/obj_world_time.nanr",
+            "bytes": 191,
+            "cells": 11
+          },
+          {
+            "path": "ui/hunt/world/world_obj_main.nanr",
+            "bytes": 341
+          },
+          {
+            "path": "ui/hunt/world/world_obj_sub.nanr",
+            "bytes": 77,
+            "cells": 1
+          },
+          {
+            "path": "ui/hunt/world/field_image_icon.nanr",
+            "bytes": 224,
+            "cells": 16
+          }
+        ],
+        "unknown": "Sequence contents, frame counts, durations and trigger conditions were not decoded. The .nanr files were inventoried, not parsed."
+      }
+    },
+    "12_unknownFields": {
+      "evidence": "UNKNOWN_REQUIRES_TRACE",
+      "items": [
+        "Camera setup, projection and framing.",
+        "Whether the world rotates, and every rotation parameter.",
+        "Input handling and hit-testing for biome selection.",
+        "Day/night switch rule and transition style.",
+        "Whether gate_select/earth.nsbmd participates in Gate Select at all, and if so in what order relative to the world map.",
+        "Display and selection ORDER of the 16 biomes; the recovered order is alphabetical name-table order only.",
+        "Semantics of money_alert, and whether entering a gate has a cost.",
+        "Per-cell visual identity of obj_world_GateIcon - 16 cells verified, pixels mis-decoded from .ncbr.",
+        "Contents of all six .nanr sequences.",
+        "Meaning of the tama: prefix on the tama:world_map node name.",
+        "Meaning of the _pl suffix used across Map_fix_*_pl and earth map_pl.",
+        "Roles of polygon0 and polygon1 in the world map, and polygon0 in earth.",
+        "The relationship between gate_select/bg_world and gate_select/bg_earth as runtime states.",
+        "Original gate-to-Hunt-field mapping - still open from the VS2 contract, and unchanged by this evidence."
+      ]
+    }
+  },
+  "threeJsContract": {
+    "authority": "PRESENTATION ONLY.",
+    "rules": [
+      "Three.js renders. It holds no gameplay state, no save state, no routing, and no second selection authority.",
+      "The 3D globe writes selection back through the EXISTING Gate selection intent. It must not maintain its own selected-gate variable as the source of truth.",
+      "One Pixi Application and one Three.js renderer may coexist only because they own different screens: Pixi owns the playable Hunt field, Three.js would own the Gate Select presentation. Neither may take a second ticker that drives gameplay state.",
+      "No original ROM model, texture or converted mesh may be loaded. Geometry is original-created, authored to the structure recorded in this contract.",
+      "Three.js remains bounded: this contract covers Gate Select only and authorizes no other 3D surface."
+    ],
+    "structureToAuthor": {
+      "root": "one world root, matching world_root",
+      "biomeNodes": "16 destination nodes, each a parent transform plus a child marker, matching the <Name>parent -> <Name> pairing",
+      "dayNight": "two paired states over one world, matching world_day / world_night and the four Map_fix_* texture variants",
+      "note": "Authoring to this structure preserves the original's shape without copying its geometry."
+    }
+  },
+  "sharedSelectionStateContract": {
+    "rule": "ONE destination truth. Both presentations are views of it.",
+    "diagram": [
+      "                GateSelectionState",
+      "                (championshipStandaloneApp)",
+      "                        |",
+      "         +--------------+--------------+",
+      "         v                             v",
+      "   3D Globe (Three.js)          2D Grid (DOM)",
+      "   PLAYER_MODE                  FALLBACK",
+      "         |                             |",
+      "         +--------------+--------------+",
+      "                        v",
+      "        selectGate() / confirmGate() intents",
+      "        on the published VS2 seam"
+    ],
+    "existingSeam": {
+      "state": "app.getSelectedGateId(), app.getConfirmedGate()",
+      "intents": "source.intents.selectGate(gateId | null), source.intents.confirmGate(), source.intents.leaveScreen()",
+      "frame": "frame.gateSelect.gates[], frame.gateSelect.selection.gateId, frame.gateSelect.canConfirm",
+      "contract": "docs/contracts/championship/VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT.json v1.1",
+      "note": "No new intent, no new state field and no new save field is required to add the 3D mode. The 3D globe binds the SAME seam the 2D grid already binds. That is the point of having published it."
+    },
+    "forbidden": [
+      "a second gate selection variable in the Three.js layer",
+      "a gate selection that exists only while the 3D mode is mounted",
+      "a 2D grid and a 3D globe that can disagree about the selected destination",
+      "any new save schema"
+    ]
+  },
+  "fallbackPolicy": {
+    "rule": "The 2D 16-card grid is PRESERVED, and is demoted, not deleted.",
+    "retainedAs": [
+      "ACCESSIBILITY_FALLBACK",
+      "DEBUG_FALLBACK",
+      "LOW_CAPABILITY_FALLBACK"
+    ],
+    "mustNotBe": "the sole formal Player Mode Gate Select",
+    "requirements": [
+      "Both modes render the same 16 destinations from the same state.",
+      "The fallback must remain reachable and fully functional, including for a viewer who cannot use WebGL.",
+      "Selecting in either mode must produce an identical confirmed destination.",
+      "Mode choice must not alter gameplay, only presentation."
+    ]
+  },
+  "parityGap": {
+    "finding": "The shipped VS2 gate catalog uses 16 PRODUCT-AUTHORED names (Shallow Verge, Quiet Basin, Ashen Steps, Pale Thicket, Sunken Walk, Amber Hollow, Still Lagoon, Rust Plateau, Cold Aqueduct, Drifting Fen, Glass Terrace, Low Cinderfield, Hushed Canopy, Salt Reach, Dim Causeway, Far Meridian) while the original has 16 ROM_VERIFIED biome identities (Canyon, Crag, Damp, Desert, Factory, Forest, Grass, Ice, Jungle, Mine, Oasis, Ruins, Savanna, Seaside, Sewer, Volcano).",
+    "assessment": "The product-authored names were correct when written: the gate catalog was authored before this evidence was read, and it declared itself product-authored rather than claiming recovery. But under DEFAULT_PRESERVE, a ROM_VERIFIED identity outranks a product-authored placeholder now that the identity is recovered.",
+    "recommendation": "Adopt the 16 recovered biome identities as the gate identities, keeping display naming a separate presentation concern. src/championship/gate/gateCatalog.js already carries biomeOrdinal and originalFieldMapping: UNKNOWN_REQUIRES_TRACE, so the change is a catalog edit, not an architecture change.",
+    "status": "RECORDED_NOT_ACTED_ON",
+    "reason": "The Owner directive for this batch is contract closure only, with no new gameplay. Changing the gate catalog is implementation and needs its own authorization."
+  },
+  "implementationReadiness": {
+    "readyToBuild": [
+      "16 destination nodes with recovered stable identities",
+      "a paired day/night presentation model",
+      "a destination record panel with icon, name, id and description",
+      "binding to the existing published Gate selection seam with no new state"
+    ],
+    "blockedOnTrace": [
+      "rotation behaviour - T1 explicitly blocks the rotatable-globe decision",
+      "camera framing",
+      "input and hit-testing semantics",
+      "day/night switch rule",
+      "whether an earth/space stage precedes the world map"
+    ],
+    "consequence": "A faithful-in-structure 3D Gate Select can be built now. A faithful-in-behaviour one cannot. Everything in blockedOnTrace must ship labelled PRODUCT_AUTHORED or OWNER_APPROVED_ADAPTATION, never as recovered original behaviour."
+  },
+  "codexHandoff": {
+    "lane": "Codex Art owns the Gate Select 3D presentation build.",
+    "mayBind": "src/championship/app/gateHuntPresentationSource.js - the existing published seam. No new seam is required.",
+    "mustNotDo": [
+      "load, convert, or ship any original ROM model, texture or mesh",
+      "introduce a second gate selection state",
+      "add a save field",
+      "present rotation, camera, input or day/night timing as original behaviour",
+      "remove or break the 2D grid fallback",
+      "render a price on money_alert, or a lock, rank or progress marker on any gate"
+    ],
+    "openQuestionForOwner": "Whether to adopt the 16 recovered biome identities into the gate catalog now - see parityGap. That is a runtime change and needs Owner authorization."
+  },
+  "openTraceItems": [
+    {
+      "id": "T1",
+      "register": "REVERSE_UNKNOWN_DEPENDENCIES.md",
+      "summary": "Gate Select runtime behaviour: camera setup, draw call, rotation and input handling untraced.",
+      "blocks": "whether Gate Select is a freely rotatable 3D globe",
+      "doesNotBlock": "the 16-biome data structure"
+    },
+    {
+      "id": "GS-1",
+      "summary": "gate_select/earth.nsbmd has no traced loader in the NSBMD census and no overlay string reference.",
+      "blocks": "whether an earth/space stage is part of Gate Select"
+    },
+    {
+      "id": "GS-2",
+      "summary": "Display and selection order of the 16 biomes.",
+      "blocks": "original-order parity"
+    },
+    {
+      "id": "GS-3",
+      "summary": "money_alert semantics and whether gate entry has a cost.",
+      "blocks": "any economy surface on Gate Select"
+    },
+    {
+      "id": "GS-4",
+      "summary": "The six .nanr sequences were inventoried, not parsed.",
+      "blocks": "original icon and time animation parity"
+    },
+    {
+      "id": "GS-5",
+      "summary": "obj_world_GateIcon per-cell pixels are mis-decoded from .ncbr.",
+      "blocks": "per-gate original icon identity"
+    }
+  ]
+}
