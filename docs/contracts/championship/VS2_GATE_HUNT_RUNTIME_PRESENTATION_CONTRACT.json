@@ -414,6 +414,7 @@
     "bootstrapCount": 1,
     "ticker": "APPLICATION_OWNED",
     "routerCount": 0,
-    "saveAuthorities": 1
+    "saveAuthorities": 1,
+    "domShellNote": "The shell imports CHAMPIONSHIP_SCREENS from championshipScreenStack.js purely as a screen-id enum. A Codex replacement does not need even that: frame.screen already carries the value, so the seam remains the only required import."
   }
 }
