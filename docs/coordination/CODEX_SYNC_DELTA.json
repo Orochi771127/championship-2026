@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "owner": "CODEX_ART",
-  "deltaId": "CODEX-ART-A1-CAGE-ORIGINAL-STRUCTURE-2026-08-29",
-  "targetSyncRevision": 11,
-  "status": "A1_CAGE_ORIGINAL_STRUCTURE_LOCKED_CM01_CM10_NEXT",
+  "deltaId": "CODEX-ART-A3-CAGE-CM01-CM10-2026-08-29",
+  "targetSyncRevision": 12,
+  "status": "CM01_CM10_REVIEW_PACK_COMPLETE_OWNER_VISUAL_REVIEW_NEXT",
   "statusSource": "docs/coordination/CODEX_ART_STATUS.json",
-  "baseSyncRevision": 10,
+  "baseSyncRevision": 11,
   "checkpoint": {
     "latestOwnerApprovedCommit": "732775486665b21508ac51c1eea0b723db0f7744",
     "message": "art(research): approve O2 224-entity character catalog",
@@ -32,6 +32,17 @@
     "documentationOnly": false
   },
   "completedWork": [
+    {
+      "id": "ART-A3-CAGE-CM01-CM10-REVIEW-PACK",
+      "state": "COMPLETE_OWNER_VISUAL_REVIEW_PENDING",
+      "scope": "Ten core fields and ten separate object bundles for CM01-CM10",
+      "sourcePolicy": "APPROVED_REMAKE_STYLE_BOARD_ONLY_NO_ROM_IMAGE_INPUT_NO_ORIGINAL_PIXELS",
+      "technicalQa": "23_FILES_BYTE_IDENTICAL_10_OF_10_RGBA_BOTTOM_CENTER_ANCHORED",
+      "gameplayPolicy": "PLACEMENT_ATR_COL_RAISING_EFFECTS_AND_GAMEPLAY_MASKS_NOT_INFERRED",
+      "runtimeEligible": false,
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "output": "docs/art/production/cage/cm01-cm10/packages/manifest.json"
+    },
     {
       "id": "ART-A1-CAGE-ORIGINAL-STRUCTURE",
       "state": "COMPLETE_40_OF_40_STRUCTURE_ROWS_CLASSIFIED",

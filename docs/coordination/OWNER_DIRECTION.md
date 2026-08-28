@@ -4,7 +4,7 @@ Repository authority: `CHAMPIONSHIP_2026_PRODUCT_SSOT` (`.`).
 Migration state: standalone product; historical Nexus integration decisions are preserved below as superseded/frozen context only.
 
 Authority: **OWNER ONLY**  
-Last explicit direction: **2026-08-29 — Follow the original Cage terrain construction; continue, classify, commit and push after QA**
+Last explicit direction: **2026-08-29 — Continue production according to the approved Cage structure results**
 
 Agents may index this file and may transcribe a later explicit Owner directive,
 but may not reinterpret or independently change product direction.
@@ -35,6 +35,11 @@ bundle and separate ATR/COL data; a guessed four-way split of flattened concept
 art is not authoritative. Full visual production is scheduled as four batches
 of ten actual fields (CM01–CM40), while the twelve concept modules remain a
 pipeline and style pilot.
+
+The Owner then directed work to continue according to those results. This
+authorizes the bounded CM01–CM10 clean-room visual review packet using separate
+core-field and object-bundle art. It does not authorize invention of placement,
+ATR/COL meanings, Raising effects or runtime promotion.
 
 ## 2026-08-29 art-production amendment
 

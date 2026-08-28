@@ -1,6 +1,6 @@
 # Championship 2026 — Art Production Batch Plan
 
-Status: `A0 IMPLEMENTED / A1 CAGE ORIGINAL STRUCTURE LOCKED / CM01–CM10 NEXT`
+Status: `A0 IMPLEMENTED / CM01–CM10 CLEAN-ROOM REVIEW PACK COMPLETE / OWNER VISUAL REVIEW NEXT`
 Authority: Owner directive of 2026-08-29
 
 ## Batch sequence
@@ -42,6 +42,13 @@ contract. The actual forty-field production uses `core-field + objects + atr +
 col` and proceeds CM01–CM10, CM11–CM20, CM21–CM30 and CM31–CM40. The twelve
 concept modules remain a visual-vocabulary pilot and are not counted as the
 first twelve CM fields.
+
+CM01–CM10 now has a clean-room review packet with ten separate core-field
+candidates, ten detachable-object bundles, RGBA technical canvases, stable
+bottom-centre anchors, source boards, generation prompts and deterministic QA.
+This closes visual identity and layer-separation drafting only. It does not yet
+authorize tile-atlas slicing, object placement, gameplay shape masks or runtime
+promotion; those begin after Owner visual review of the two contact sheets.
 
 ### Characters
 

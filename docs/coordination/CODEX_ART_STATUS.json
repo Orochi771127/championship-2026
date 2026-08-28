@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "owner": "CODEX_ART",
   "lastUpdated": "2026-08-29",
-  "syncBatch": "ART_A1_CAGE_ORIGINAL_STRUCTURE_LOCK",
-  "syncRevision": 11,
-  "syncRevisionTarget": 11,
-  "status": "A1_CAGE_ORIGINAL_STRUCTURE_LOCKED_CM01_CM10_NEXT",
+  "syncBatch": "ART_A3_CAGE_CM01_CM10_CLEAN_ROOM_REVIEW_PACK",
+  "syncRevision": 12,
+  "syncRevisionTarget": 12,
+  "status": "CM01_CM10_REVIEW_PACK_COMPLETE_OWNER_VISUAL_REVIEW_NEXT",
   "sourceOfTruth": {
     "coordinationRoot": "docs/coordination",
     "canonicalRepository": ".",
@@ -65,6 +65,18 @@
     "o3dCheckpointIsolatedFromRuntimeRegistryAndP2": true
   },
   "completed": [
+    {
+      "id": "ART-A3-CAGE-CM01-CM10-REVIEW-PACK",
+      "status": "COMPLETE_OWNER_VISUAL_REVIEW_PENDING",
+      "summary": "Completed ten actual CM core-field candidates and ten separate detachable-object bundles using the verified original construction, stable RGBA canvases and bottom-centre anchors. The built-in generation route used only the approved remake style board, never original ROM imagery. No placement, ATR/COL meaning, Raising effect, gameplay mask, runtime promotion or shipping promotion was inferred.",
+      "output": "docs/art/production/cage/cm01-cm10/packages/manifest.json",
+      "receipt": "docs/art/production/cage/cm01-cm10/CM01_CM10_PRODUCTION_RECEIPT.md",
+      "validation": "106 deterministic repository tests pass; 23 package files rebuild byte-identically; A0 remains 752/752 with zero promotions",
+      "rights": "ORIGINAL_CREATED_CLEAN_ROOM_CANDIDATE",
+      "productionStatus": "OWNER_VISUAL_REVIEW_PENDING",
+      "humanApproved": false,
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
     {
       "id": "ART-A1-CAGE-ORIGINAL-STRUCTURE",
       "status": "COMPLETE_40_OF_40_STRUCTURE_ROWS_CLASSIFIED",
