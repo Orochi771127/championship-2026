@@ -23,6 +23,7 @@ Open `http://127.0.0.1:8732/championship.html`.
 npm test
 npm run test:browser
 npm run test:browser:vs2
+npm run test:browser:vs2-r1
 ```
 
 The browser gates exercise the required 360×800, 390×844, 393×852, 412×915, and 430×932 contract viewports, plus 375×812 as supplementary coverage. The repository is intentionally self-contained after `npm install`; runtime does not load PixiJS from a CDN or another project.
@@ -44,12 +45,22 @@ There is one standalone application, one Championship mode authority, one domain
 - `docs/coordination/` — `CHAMPIONSHIP_2026_PRODUCT_SSOT` coordination snapshots.
 - `docs/migration/` — checkpoint provenance and migration verification.
 
+## Documentation
+
+Start at [docs/README.md](docs/README.md). It separates current integrated truth from historical Claude/Codex coordination snapshots.
+
+- [Current product status](docs/CURRENT_PRODUCT_STATUS.md)
+- [Reusable implementation inventory](docs/REUSE_INVENTORY.md)
+- [Production plan](docs/planning/CHAMPIONSHIP_2026_MASTER_GAME_PRODUCTION_PLAN.md)
+- [Technical debt register](docs/TECH_DEBT_REGISTER.md)
+
 ## Roadmap gate
 
 | Slice | Scope | State |
 |---|---|---|
 | VS1 | Raising Home: boot → select → care → relocate → save → real reload → continue → restore | accepted baseline; migrated and revalidated |
-| VS2 | Gate Select → Hunt Loadout → Hunt Field → Explore → Return Home | built under the Owner GO of 2026-08-28; **stopped for Owner review** |
-| VS3–VS7 | Capture, support systems, battle, progression, production finish | preserved roadmap; frozen |
+| VS2 | Gate Select → Hunt Loadout → Hunt Field → Explore → Return Home, including bounded Gate 3D and the recovered Loadout runtime | integrated bounded baseline |
+| VS3 | Capture tether/circle → Hunt Result transaction | next gameplay slice; not started |
+| VS4–VS7 | daily systems, battle, progression and production finish | planned; not integrated |
 
 VS2 deliberately ships no Capture, Hunt Result, Battle, Shop or Database surface. The Hunt world is a 128×128 modular field traversed by a camera: 9:16 is the viewport, never the world.

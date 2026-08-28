@@ -4,12 +4,17 @@ Repository authority: `CHAMPIONSHIP_2026_PRODUCT_SSOT` (`.`).
 Migration state: standalone product; historical Nexus integration decisions are preserved below as superseded/frozen context only.
 
 Authority: **OWNER ONLY**  
-Last explicit direction: **2026-08-27 — Championship 2026 Product Reset**
+Last explicit direction: **2026-08-29 — Functional-complete, IP-neutral, modular-Cage product plan and repository consolidation**
 
 Agents may index this file and may transcribe a later explicit Owner directive,
 but may not reinterpret or independently change product direction.
 
 ## Current product authority — Championship 2026
+
+- One human Owner plus AI will first complete all game systems, modes and the New Game → Championship loop with IP-neutral stable IDs and original-neutral temporary content.
+- Final public branding, original creatures, world, art, text and audio are selected after the functional-completion gate; the public product does not ship Digimon names, characters or source media without rights.
+- The original Cage/Training mechanic is a required shape-aware spatial assembly system: functional terrain pieces have specific footprints and affect different raising values. Exact untraced shapes, rules and values remain evidence-gated.
+- `docs/README.md` is the documentation entrance; `docs/CURRENT_PRODUCT_STATUS.md` indexes current integrated `main`. Earlier coordination snapshots remain provenance and do not override later committed source/tests.
 
 - Target product: `DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD`.
 - Delivery target: standalone, web-first, mobile-first, portrait 9:16,

@@ -1,5 +1,7 @@
 # Championship Master Sync
 
+> **Historical synchronization snapshot.** This file records syncRevision 3 and the 2026-08-27 migration state. VS2, VS2-R1 and VS2-R2 were integrated by later commits. Use `docs/CURRENT_PRODUCT_STATUS.md` for current `main`; retain this file for cross-agent provenance.
+
 Canonical root: `.` (`CHAMPIONSHIP_2026_PRODUCT_SSOT`).  
 All external pre-migration locations have been replaced by the repo-relative provenance index at `docs/migration/PRE_MIGRATION_PROVENANCE.md`.
 

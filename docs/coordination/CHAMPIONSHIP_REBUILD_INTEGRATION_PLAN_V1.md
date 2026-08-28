@@ -1,5 +1,7 @@
 # Championship Rebuild Integration Plan V1
 
+> **Historical pre-VS2 integration snapshot.** Its slice matrix was accurate at 2026-08-27 but predates the integrated VS2, VS2-R1 and VS2-R2 commits. Current status is indexed in `docs/CURRENT_PRODUCT_STATUS.md`; this file remains evidence history and must not be used alone to decide what is implemented.
+
 Canonical product repository: `.`. VS1 is the only migrated playable slice; every later slice remains gated.
 
 Status: **CHAMPIONSHIP 2026 STANDALONE DEVELOPMENT SSOT / VS1 COMPLETE BASELINE / VS2 GO REQUIRED**
