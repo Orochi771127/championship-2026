@@ -28,6 +28,7 @@ import { createGateSelectView, createHuntLoadoutView, createHuntFieldView } from
 import { createChampionshipPixiStage } from "../presentation/championshipPixiStage.js";
 import { mountRaisingFieldPixiPresentation } from "../presentation/intRh2/createRaisingFieldPixiPresentation.js";
 import { mountHuntFieldPixiPresentation } from "../presentation/vs2/createHuntFieldPixiPresentation.js";
+import { mountGateSelectThreePresentation } from "../presentation/vs2/createGateSelectThreePresentation.js";
 
 const PIXI_V8_MODULE_URL = "../../../node_modules/pixi.js/dist/pixi.mjs";
 
@@ -101,16 +102,15 @@ async function mountRaisingHome() {
     }
   });
 
-  // The expedition entry point. Raising Home is Codex's P1R screen, and
-  // navigation is Claude's lane, so this is appended as a neutral runtime
-  // control instead of being edited into the P1R view. It disappears with the
-  // screen, because the P1R dispose clears the root.
+  // The expedition entry point is presentation-only. Navigation remains the
+  // published openGate intent below; this control holds no screen state.
   const entry = document.createElement("button");
   entry.type = "button";
   entry.className = "cm-button cm-button--primary cm-vs2-entry";
   entry.dataset.cmAction = "open-gate";
-  entry.dataset.uiAuthority = "CLAUDE_NEUTRAL_RUNTIME_SHELL_AWAITING_P1R";
-  entry.textContent = "Go to the gates";
+  entry.dataset.uiAuthority = "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R";
+  entry.setAttribute("aria-label", "Open Gate Select");
+  entry.textContent = "GATES";
   root.append(entry);
 
   return Object.freeze({
@@ -146,6 +146,14 @@ async function mountHuntField() {
   });
 }
 
+async function mountGateSelect() {
+  return createGateSelectView({
+    root,
+    source: expeditionSource,
+    mountWorld: mountGateSelectThreePresentation
+  });
+}
+
 /**
  * Mount the view for the current screen.
  *
@@ -169,7 +177,7 @@ async function mountCurrentScreen() {
     if (target !== CHAMPIONSHIP_SCREENS.RAISING_HOME) raisingSource = null;
 
     if (target === CHAMPIONSHIP_SCREENS.RAISING_HOME) view = await mountRaisingHome();
-    else if (target === CHAMPIONSHIP_SCREENS.GATE_SELECT) view = createGateSelectView({ root, source: expeditionSource });
+    else if (target === CHAMPIONSHIP_SCREENS.GATE_SELECT) view = await mountGateSelect();
     else if (target === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) view = createHuntLoadoutView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.HUNT_FIELD) view = await mountHuntField();
     mountedScreen = target;

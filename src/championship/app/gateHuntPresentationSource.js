@@ -85,8 +85,9 @@ const HUNT_TOOLBAR_FRAME = deepFreeze(huntToolbarProjection());
 
 function assertApplication(app) {
   const methods = [
-    "getScreen", "getGates", "getSelectedGateId", "getConfirmedGate", "getCompanionCreatureId",
-    "getHuntRuntime", "openGate", "selectGate", "confirmGate", "selectCompanion",
+    "getScreen", "getGates", "getSelectedGateId", "getConfirmedGate",
+    "getHuntRuntime", "getHuntLoadout", "openGate", "selectGate", "confirmGate",
+    "selectHuntEquipment", "fitHuntPlugin", "selectHuntMemoryCard",
     "beginHunt", "exitHunt", "leaveScreen", "getSnapshot", "getRaisingState", "save"
   ];
   if (!app || methods.some((method) => typeof app[method] !== "function")) {
@@ -144,31 +145,38 @@ export function createGateHuntPresentationSource(app) {
     };
   }
 
+  /**
+   * The Hunt Loadout surface.
+   *
+   * Read-only, and shaped by the recovered original: five equipment classes, four
+   * plugin positions, quantities and durability carried from a Shop-owned
+   * inventory, and the HUD capabilities the fitted plugins unlock.
+   *
+   * Companion selection is NOT here. It was the VS2 prototype, it is
+   * DEVELOPER_PROTOTYPE_ONLY, and the Player Mode seam does not surface it.
+   */
   function huntLoadoutBlock() {
-    const snapshot = app.getSnapshot();
-    const raising = app.getRaisingState();
     const gate = app.getConfirmedGate();
-    const companionCreatureId = app.getCompanionCreatureId();
+    const loadout = app.getHuntLoadout();
+    if (!loadout) return null;
+    const validation = loadout.validate();
     return {
-      gate: gate === null ? null : { gateId: gate.gateId, displayName: gate.displayName },
-      party: (snapshot?.residents ?? []).map((resident) => {
-        const key = speciesKey(resident);
-        return {
-          creatureId: resident.residentId,
-          displayName: resident.name,
-          speciesId: `championship:creature:${key}`,
-          cageId: raising?.assignments?.[resident.residentId] ?? null,
-          selected: resident.residentId === companionCreatureId,
-          sprite: spriteProjection(key)
-        };
-      }),
-      selectionRule: {
-        value: "EXACTLY_ONE",
-        evidence: "PRODUCT_AUTHORED",
-        note: "The original loadout is gear / equipment / plugin / launcher, not companion selection - see docs/contracts/championship/VS2_HUNT_LOADOUT_RUNTIME_CONTRACT.v1.json. This one-companion rule is a PRODUCT_AUTHORED prototype and must not be promoted to parity. Presentation must not draw empty extra party slots, item slots, or a supply meter."
+      gate: gate === null ? null : { gateId: gate.gateId, biomeId: gate.biomeId, displayName: gate.displayName },
+      structure: {
+        equipmentClasses: { value: 5, evidence: "ROM_VERIFIED" },
+        pluginPositions: { value: 4, evidence: "ROM_VERIFIED" },
+        positionModel: { value: loadout.positionModel, evidence: "PARTIAL_HL6_OPEN" }
       },
-      selection: { creatureId: companionCreatureId },
-      canBegin: companionCreatureId !== null
+      availableEquipment: loadout.listAvailableEquipment(),
+      selectedEquipment: loadout.getSelectedEquipment(),
+      availablePlugins: loadout.listAvailablePlugins(),
+      selectedPlugins: loadout.getSelectedPlugins(),
+      memoryCard: loadout.getMemoryCard(),
+      hudCapabilities: loadout.getHudCapabilities(),
+      validation,
+      confirmationState: loadout.getConfirmationState(),
+      canBegin: loadout.getConfirmationState().canConfirm,
+      presentationRule: "Render the five recovered equipment classes and four plugin positions. An empty class or position is empty, not disabled: no original rule requires anything to be equipped. Do not render an item effect, a carry limit, a price, or a companion."
     };
   }
 
@@ -189,7 +197,10 @@ export function createGateHuntPresentationSource(app) {
       },
       hud: {
         gateName: gate?.displayName ?? null,
-        companionName: runtime.getPlayer().displayName,
+        actorName: runtime.getPlayer().displayName,
+        // What the HUD may display is decided at loadout by the fitted plugins.
+        // A readout with no plugin behind it stays dark - the recovered rule.
+        capabilities: app.getHuntLoadout()?.getHudCapabilities() ?? null,
         exitAvailable: true,
         note: "Deliberately minimal. hunt_sub_scene carries map_marker0..23 and remain_icon0..3 as structural evidence only; their semantics are unknown, so none are rendered."
       },
@@ -274,9 +285,16 @@ export function createGateHuntPresentationSource(app) {
       app.confirmGate();
       return commit();
     },
-    selectCompanion(creatureId) {
-      if (app.getCompanionCreatureId() === creatureId) return currentFrame;
-      app.selectCompanion(creatureId);
+    selectEquipment(equipmentClass, itemId) {
+      app.selectHuntEquipment(equipmentClass, itemId);
+      return commit();
+    },
+    fitPlugin(position, itemId) {
+      app.fitHuntPlugin(position, itemId);
+      return commit();
+    },
+    selectMemoryCard(itemId) {
+      app.selectHuntMemoryCard(itemId);
       return commit();
     },
     beginHunt() {

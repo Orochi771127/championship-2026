@@ -44,12 +44,15 @@ function facingFrom(dx, dy, fallback) {
   return dy >= 0 ? "down" : "up";
 }
 
-export function createHuntRuntime({ world, companion, wildCount = null } = {}) {
+export function createHuntRuntime({ world, fieldActor, wildCount = null } = {}) {
   if (!world || typeof world.isBlockedTile !== "function" || !world.definition) {
     throw new TypeError("createHuntRuntime requires a Championship hunt world");
   }
-  if (!companion || typeof companion.creatureId !== "string") {
-    throw new TypeError("createHuntRuntime requires the companion chosen at loadout");
+  if (!fieldActor || typeof fieldActor.actorId !== "string") {
+    // The field actor is the tamer. In the original the Hunt HUD's creature panel
+    // describes the WILD target, not a companion, so nothing here is a creature
+    // the player brought.
+    throw new TypeError("createHuntRuntime requires a field actor");
   }
 
   const tileSize = world.tileSizePx;
@@ -111,9 +114,8 @@ export function createHuntRuntime({ world, companion, wildCount = null } = {}) {
   }
 
   const player = {
-    creatureId: companion.creatureId,
-    displayName: companion.displayName,
-    speciesId: companion.speciesId,
+    actorId: fieldActor.actorId,
+    displayName: fieldActor.displayName,
     worldX: world.spawn.x,
     worldY: world.spawn.y,
     facing: "down",
@@ -235,9 +237,8 @@ export function createHuntRuntime({ world, companion, wildCount = null } = {}) {
 
     getPlayer() {
       return Object.freeze({
-        creatureId: player.creatureId,
+        actorId: player.actorId,
         displayName: player.displayName,
-        speciesId: player.speciesId,
         worldX: player.worldX,
         worldY: player.worldY,
         tileX: Math.floor(player.worldX / tileSize),

@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "owner": "CODEX_ART",
-  "deltaId": "CODEX-CHAMPIONSHIP-2026-REPOSITORY-SEPARATION-2026-08-28",
-  "targetSyncRevision": 3,
-  "status": "REPOSITORY_MIGRATION_COMPLETE_STOPPED_FOR_OWNER_REVIEW",
+  "deltaId": "CODEX-VS2-R1-OWNER-VERDICT-VS2-R2-WAIT-2026-08-28",
+  "targetSyncRevision": 6,
+  "status": "VS2_R1_OWNER_APPROVED_STRUCTURAL_BASELINE_WAITING_VS2_R2_GO",
   "statusSource": "docs/coordination/CODEX_ART_STATUS.json",
-  "baseSyncRevision": 2,
+  "baseSyncRevision": 5,
   "checkpoint": {
     "latestOwnerApprovedCommit": "732775486665b21508ac51c1eea0b723db0f7744",
     "message": "art(research): approve O2 224-entity character catalog",
@@ -27,11 +27,45 @@
     "unknownGameplay": "NEUTRAL_DO_NOT_INVENT",
     "adaptationAuthority": "OWNER_APPROVED_ADAPTATION_ONLY",
     "vs1": "COMPLETE_BASELINE",
-    "vs2": "NEXT_PLANNED_OWNER_GO_REQUIRED",
+    "vs2": "PRESENTATION_BINDING_COMPLETE_OWNER_VISUAL_REVIEW_REQUIRED",
     "vs3ToVs7": "ROADMAP_ONLY_NOT_AUTHORIZED",
-    "documentationOnly": true
+    "documentationOnly": false
   },
   "completedWork": [
+    {
+      "id": "VS2-R1-GATE-3D",
+      "state": "OWNER_APPROVED_STRUCTURAL_BASELINE",
+      "contract": "docs/contracts/championship/VS2_GATE_SELECT_3D_RUNTIME_CONTRACT.v1.json",
+      "binding": "Injected frame.gateSelect truth and source.intents.selectGate(gateId) only",
+      "playerDefault": "THREE_BOUNDED_WORLD_MODE",
+      "fallback": "ACCESSIBILITY_LOW_GRAPHICS_DEVELOPER_2D_GRID",
+      "canonicalBiomeIdentities": 16,
+      "responsiveQa": "5/5 VS2 MUST_PASS; 390x844 and 393x852 VS2-R1 evidence PASS",
+      "rendererAuthority": "One Gate-local Three WebGLRenderer; event-driven; disposed before Hunt Loadout; no second store/router/save/Pixi Application",
+      "rights": "ORIGINAL_CREATED",
+      "productionStatus": "OWNER_APPROVED_STRUCTURAL_BASELINE",
+      "artifactMaturity": "STRUCTURAL_PRESENTATION",
+      "humanApproved": true,
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "output": "docs/reports/vs2-r1/VS2_R1_GATE_3D_COMPLETION_REPORT.md"
+    },
+    {
+      "id": "VS2-P",
+      "state": "COMPLETE_STOPPED_FOR_OWNER_VISUAL_REVIEW",
+      "contract": "docs/contracts/championship/VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT.json",
+      "flow": "RAISING_HOME -> GATE_SELECT -> HUNT_LOADOUT -> HUNT_FIELD -> EXPLORE -> EXIT -> RAISING_HOME",
+      "responsiveQa": "5/5 MUST_PASS",
+      "referenceEvidence": [
+        "390x844",
+        "393x852"
+      ],
+      "rendererAuthority": "DOM P1R screen UI; one existing shared Pixi stage for Hunt field; no second application, store, save authority, or movement logic",
+      "rights": "ORIGINAL_CREATED",
+      "productionStatus": "TEMPORARY_PRESENTATION",
+      "humanApproved": false,
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "output": "docs/reports/vs2/VS2_PRESENTATION_COMPLETION_REPORT.md"
+    },
     {
       "id": "ART-O2",
       "state": "OWNER_APPROVED_REFERENCE_CATALOG",
@@ -64,6 +98,22 @@
     }
   ],
   "dependencyUpserts": [
+    {
+      "recordId": "VS2GateSelect3DRuntimeContract",
+      "contract": "VS2_GATE_SELECT_3D_RUNTIME_CONTRACT/v1",
+      "owner": "shared",
+      "state": "PUBLISHED_BOUND_AND_STRUCTURALLY_VERIFIED",
+      "codexMaySafelyBind": "COMPLETE_WITH_TECHNICAL_PLACEHOLDERS",
+      "notes": "Codex bound a bounded original-created Three world through the existing source and selectGate intent. Original camera, rotation, input, hit-test and day/night switching parity remain unclaimed pending later trace closure."
+    },
+    {
+      "recordId": "VS2GateHuntRuntimePresentationContract",
+      "contract": "VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT/v1.1",
+      "owner": "shared",
+      "state": "PUBLISHED_BOUND_AND_VERIFIED",
+      "codexMaySafelyBind": "COMPLETE",
+      "notes": "Codex bound P1R Gate, Loadout, Hunt HUD/field, toolbar shell, Explore, and Return through the injected source only. The next gate is Owner visual review."
+    },
     {
       "recordId": "Championship2026ProductScope",
       "contract": "Championship2026ProductScope",
@@ -115,11 +165,25 @@
   ],
   "blockerUpserts": [
     {
+      "recordId": "CX-VS2-R1-OWNER-VISUAL-REVIEW",
+      "id": "CX-VS2-R1-OWNER-VISUAL-REVIEW",
+      "owner": "codex",
+      "state": "RESOLVED_OWNER_APPROVED_STRUCTURAL_BASELINE",
+      "detail": "Owner approved VS2-R1 as a structural baseline only. It remains not final art, not exact Original behavior parity and not shipping-ready."
+    },
+    {
+      "recordId": "CX-VS2-R2-IMPLEMENTATION-GATE",
+      "id": "CX-VS2-R2-IMPLEMENTATION-GATE",
+      "owner": "shared",
+      "state": "OPEN_OWNER_GO_REQUIRED",
+      "detail": "VS2_HUNT_LOADOUT_RUNTIME_CONTRACT/v1 is published as spec, but Claude reports implementation authorization pending. Current companion selection remains PRODUCT_AUTHORED_PROTOTYPE / DEVELOPER_ONLY."
+    },
+    {
       "recordId": "CL-011",
       "id": "CL-011",
       "owner": "shared",
-      "state": "OPEN_OWNER_GATE",
-      "detail": "VS2 is the next Championship 2026 slice, but this product-reset batch authorizes documentation only. A separate Owner GO remains required."
+      "state": "RESOLVED_VS2_P_COMPLETE_OWNER_VISUAL_REVIEW_GATE",
+      "detail": "Owner GO and the published v1.1 contract authorized VS2-P. Gate, Loadout, Hunt Field, Explore, and Return are complete; work is hard-stopped for Owner visual review before Capture or VS3."
     },
     {
       "recordId": "CL-012",
@@ -165,6 +229,16 @@
     }
   ],
   "ownerDecisionsApplied": [
+    "Owner approved VS2-R1 Gate 3D as OWNER_APPROVED_STRUCTURAL_BASELINE, not final art, exact Original behavior parity, or shipping-ready.",
+    "Gate camera, rotation, input, hit-test, node placement and day preview remain PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER and must not be upgraded to ROM_VERIFIED.",
+    "Future Gate production debt is biome differentiation, surface/material quality, node/world integration, day/night visual system and world richness; no immediate redraw is authorized.",
+    "The current Choose one companion / Greyshade / Blazetail / Crystalfin Hunt Loadout is PRODUCT_AUTHORED_PROTOTYPE / DEVELOPER_ONLY and cannot be promoted to final Player Mode.",
+    "Owner authorized VS2-R1 Gate 3D structural presentation after publication of VS2_GATE_SELECT_3D_RUNTIME_CONTRACT/v1 at checkpoint 419f8ee.",
+    "The recovered Canyon-through-Volcano biome identities are canonical identities but are not claimed as exact original UI copy or original display order.",
+    "The existing 4x4 Gate grid remains as accessibility, low-graphics and developer fallback; Player Mode defaults to the bounded 3D world when capable.",
+    "Camera, rotation, input, hit-test and day/night switching remain technical placeholders until later trace closure; no ORIGINAL_ROTATION_PARITY claim is made.",
+    "Owner approved Claude's VS2 runtime baseline and authorized VS2-P Gate/Hunt presentation binding through VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT/v1.1.",
+    "After Gate, Loadout, Hunt Field, Explore, Exit, and Return Home, Codex must stop for Owner visual review and must not begin Capture or VS3.",
     "Product reset: DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD is the standalone target product.",
     "Nexus Link integration is frozen and outside current product scope; historical Nexus decisions remain preserved as superseded/frozen.",
     "ROM_VERIFIED gameplay is default-preserve; PARTIAL preserves known structure; UNKNOWN remains neutral; only OWNER_APPROVED_ADAPTATION may intentionally change gameplay.",
@@ -202,6 +276,17 @@
     "championship2026ProductResetReconciled": true,
     "vs2CandidateDefined": true,
     "vs2ImplementationAuthorized": false,
+    "vs2PresentationBindingAuthorized": true,
+    "vs2PresentationBindingComplete": true,
+    "vs2StoppedForOwnerVisualReview": true,
+    "vs2R1Gate3DAuthorized": true,
+    "vs2R1Gate3DBound": true,
+    "vs2R1ThreeBoundedSceneQa": true,
+    "vs2R1OwnerVisualReviewRequired": false,
+    "vs2R1OwnerApprovedStructuralBaseline": true,
+    "vs2R1FinalArtApproved": false,
+    "vs2R1ShippingApproved": false,
+    "vs2R2ImplementationAuthorized": false,
     "intRh2StoppedForOwnerReview": false
   },
   "mergeReceipt": {
@@ -249,5 +334,43 @@
     "productionEnvironment": "TEMPORARY",
     "productionCharacterArt": "TEMPORARY",
     "blockedOn": "VS2 requires a separate Owner GO; no push, merge or deploy is authorized"
+  },
+  "vs2P": {
+    "state": "COMPLETE_STOPPED_FOR_OWNER_VISUAL_REVIEW",
+    "contract": "docs/contracts/championship/VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT.json",
+    "contractVersion": "v1.1",
+    "codexBinding": "getFrame/subscribe/intents and injected field source only",
+    "presentationModes": [
+      "PLAYER_MODE",
+      "DEVELOPER_EVIDENCE_MODE"
+    ],
+    "toolbarPolicy": "8 neutral disabled slots; Player Mode hides evidence labels; Developer Evidence Mode retains MODE 2, ROM VERIFIED, and RAW_SLOT labels; no command semantics invented",
+    "rendererPolicy": "DOM P1R screen UI; existing shared Pixi application/stage; 9:16 camera viewport over the 2048x2048 world",
+    "qa": "53/53 deterministic tests; 5/5 mustPass Playwright viewports; complete 390x844 and 393x852 evidence flows",
+    "report": "docs/reports/vs2/VS2_PRESENTATION_COMPLETION_REPORT.md",
+    "authorityAudit": "docs/reports/vs2/VS2_PRESENTATION_AUTHORITY_AUDIT.json",
+    "temporaryArtManifest": "assets/production/temporary/vs2-hunt/manifest.json",
+    "blockedOn": "OWNER_VISUAL_REVIEW; Capture, VS3, final Hunt art production, Battle, Shipping, push, merge, and deploy remain unauthorized"
+  },
+  "vs2R1": {
+    "state": "OWNER_APPROVED_STRUCTURAL_BASELINE",
+    "contract": "docs/contracts/championship/VS2_GATE_SELECT_3D_RUNTIME_CONTRACT.v1.json",
+    "checkpointRead": "419f8ee",
+    "codexBinding": "frame.gateSelect plus source.intents.selectGate(gateId) only",
+    "rendererPolicy": "One bounded Gate-local Three renderer; no animation/gameplay ticker; disposed on screen exit; fallback mounts zero Three renderers",
+    "interactionPolicy": "PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER; no original rotation/camera/input/hit-test parity claim",
+    "qa": "81/81 deterministic tests; 5/5 VS2 mustPass browser viewports; 390x844 and 393x852 Gate evidence; 2D low-graphics fallback",
+    "report": "docs/reports/vs2-r1/VS2_R1_GATE_3D_COMPLETION_REPORT.md",
+    "temporaryArtManifest": "assets/production/gate/vs2-r1/manifest.json",
+    "approvalBoundary": "NOT_FINAL_ART_NOT_EXACT_ORIGINAL_BEHAVIOR_PARITY_NOT_SHIPPING_READY",
+    "blockedOn": "FUTURE_PRODUCTION_ART_PASS; VS3 Capture and all later batches remain unauthorized"
+  },
+  "vs2R2": {
+    "state": "WAITING_EXPLICIT_OWNER_GO",
+    "contract": "docs/contracts/championship/VS2_HUNT_LOADOUT_RUNTIME_CONTRACT.v1.json",
+    "contractState": "PUBLISHED_SPEC_ONLY",
+    "currentLoadout": "PRODUCT_AUTHORED_PROTOTYPE_DEVELOPER_ONLY",
+    "implementationStarted": false,
+    "blockedOn": "OWNER_IMPLEMENTATION_AUTHORIZATION"
   }
 }

@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "owner": "CODEX_ART",
+  "batch": "VS2_PREP",
+  "scope": "VS1_PRESENTATION_BACKLOG_ONLY",
+  "state": "REGISTERED_NO_VS1_REDRAW",
+  "modePolicy": {
+    "PLAYER_MODE": "Player-facing presentation must omit developer evidence and implementation-status labels.",
+    "DEVELOPER_EVIDENCE_MODE": "Evidence labels may remain available in an explicitly selected developer-only presentation mode.",
+    "currentRuntimeChangeAuthorized": false
+  },
+  "items": [
+    {
+      "id": "VS1-PRES-001",
+      "currentPresentation": "COMPANION LINK",
+      "classification": "DEVELOPER_OR_SYSTEM_LABEL",
+      "futureMode": "DEVELOPER_EVIDENCE_MODE",
+      "playerModeAction": "REPLACE_WITH_PLAYER_FACING_COPY_OR_OMIT",
+      "state": "BACKLOG_REGISTERED"
+    },
+    {
+      "id": "VS1-PRES-002",
+      "currentPresentation": "FIELD ONLINE",
+      "classification": "IMPLEMENTATION_STATUS_LABEL",
+      "futureMode": "DEVELOPER_EVIDENCE_MODE",
+      "playerModeAction": "OMIT",
+      "state": "BACKLOG_REGISTERED"
+    },
+    {
+      "id": "VS1-PRES-003",
+      "currentPresentation": "ROM VERIFIED labels",
+      "classification": "EVIDENCE_PROVENANCE_LABEL",
+      "futureMode": "DEVELOPER_EVIDENCE_MODE",
+      "playerModeAction": "OMIT",
+      "state": "BACKLOG_REGISTERED"
+    },
+    {
+      "id": "VS1-PRES-004",
+      "currentPresentation": "MODE labels",
+      "classification": "DEVELOPER_EVIDENCE_LABEL",
+      "futureMode": "DEVELOPER_EVIDENCE_MODE",
+      "playerModeAction": "OMIT",
+      "state": "BACKLOG_REGISTERED"
+    },
+    {
+      "id": "VS1-PRES-005",
+      "currentPresentation": "RAW_SLOT labels",
+      "classification": "UNKNOWN_SEMANTIC_PLACEHOLDER",
+      "futureMode": "DEVELOPER_EVIDENCE_MODE",
+      "playerModeAction": "KEEP_SEMANTICALLY_NEUTRAL_WITHOUT_EXPOSING_RAW_IDENTIFIER",
+      "state": "BACKLOG_REGISTERED",
+      "constraint": "Do not invent command names, icons, enablement, submenu membership, slot 7 identity, or care values."
+    },
+    {
+      "id": "VS1-PRES-006",
+      "currentPresentation": "temporary creature names/assets",
+      "classification": "TEMPORARY_PRESENTATION_ASSETS",
+      "futureMode": "PLAYER_MODE",
+      "playerModeAction": "REPLACE_ONLY_UNDER_A_SEPARATE_PRODUCTION_ART_GATE",
+      "state": "BACKLOG_REGISTERED",
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
+    {
+      "id": "VS1-PRES-007",
+      "currentPresentation": "Quiet Hollow",
+      "classification": "TEMPORARY_PRODUCT_AUTHORED_NAME",
+      "futureMode": "PLAYER_MODE",
+      "playerModeAction": "RENAME_ONLY_WITH_AN_APPROVED_PLAYER_FACING_NAMING_PASS",
+      "state": "BACKLOG_REGISTERED"
+    }
+  ],
+  "excludedFromThisBatch": [
+    "VS1_VISUAL_REDRAW",
+    "HUNT_ENVIRONMENT_ART",
+    "TOOLBAR_SEMANTIC_BINDING",
+    "GAMEPLAY_OR_SAVE_CHANGES",
+    "ASSET_PROMOTION"
+  ]
+}

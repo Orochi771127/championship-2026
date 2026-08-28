@@ -1,0 +1,73 @@
+{
+  "gate": "VS2_R1_GATE_3D_BROWSER_QA",
+  "date": "2026-08-28T00:27:17.237Z",
+  "checkpoint": "419f8ee",
+  "viewports": [
+    "390x844",
+    "393x852"
+  ],
+  "worldFlows": [
+    {
+      "viewport": "390x844",
+      "screen": "GATE_SELECT",
+      "presentationMode": "PLAYER_MODE",
+      "gatePresentation": "THREE_BOUNDED_WORLD_MODE",
+      "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+      "rendererCount": 1,
+      "fallbackCards": 16,
+      "visibleNodes": 7,
+      "shell": {
+        "width": 390,
+        "height": 844
+      },
+      "worldViewport": {
+        "width": 366,
+        "height": 510
+      },
+      "overflowX": false,
+      "forbiddenPlayerEvidence": false,
+      "selectedGateId": "championship:2026:gate:canyon",
+      "threeRendererAfterTransition": 0,
+      "storageKeys": [],
+      "verdict": "PASS"
+    },
+    {
+      "viewport": "393x852",
+      "screen": "GATE_SELECT",
+      "presentationMode": "PLAYER_MODE",
+      "gatePresentation": "THREE_BOUNDED_WORLD_MODE",
+      "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+      "rendererCount": 1,
+      "fallbackCards": 16,
+      "visibleNodes": 7,
+      "shell": {
+        "width": 393,
+        "height": 852
+      },
+      "worldViewport": {
+        "width": 369,
+        "height": 518
+      },
+      "overflowX": false,
+      "forbiddenPlayerEvidence": false,
+      "selectedGateId": "championship:2026:gate:canyon",
+      "threeRendererAfterTransition": 0,
+      "storageKeys": [],
+      "verdict": "PASS"
+    }
+  ],
+  "fallback": {
+    "viewport": "390x844",
+    "rendererCount": 0,
+    "destinations": 16,
+    "selectionIntentBound": true,
+    "verdict": "PASS"
+  },
+  "claims": {
+    "originalRotationParity": false,
+    "interactionParameters": "PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER",
+    "exactOriginalCamera": "NOT_CLAIMED",
+    "exactOriginalDisplayOrder": "NOT_CLAIMED"
+  },
+  "verdict": "PASS"
+}

@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:gate_select:vs2-r1:original-created-world",
+  "title": "Championship 2026 Gate World Structural Model",
+  "rightsStatus": "ORIGINAL_CREATED",
+  "productionStatus": "OWNER_APPROVED_STRUCTURAL_BASELINE",
+  "artifactMaturity": "STRUCTURAL_PRESENTATION",
+  "shippingStatus": "NOT_SHIPPING_READY",
+  "humanApproved": true,
+  "ownerApproval": {
+    "date": "2026-08-28",
+    "verdict": "OWNER_APPROVED_STRUCTURAL_BASELINE",
+    "finalArt": false,
+    "exactOriginalBehaviorParity": false,
+    "shippingReady": false
+  },
+  "renderer": "THREE_BOUNDED_GATE_SELECT",
+  "implementation": "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
+  "contents": [
+    "Procedural high-resolution world sphere with original-created vertex colours",
+    "world_root, world, world_day and world_night paired presentation objects",
+    "Sixteen original-created node markers bound to canonical biome identities",
+    "P1R technical longitude shell, selection rings and world halo"
+  ],
+  "evidenceBoundary": {
+    "referenceOnly": "ART-R4 Gate Select and VS2_GATE_SELECT_3D_RUNTIME_CONTRACT.v1.json",
+    "romModelReuse": false,
+    "nsbmdConversion": false,
+    "decodedTextureReuse": false,
+    "originalPixelReuse": false,
+    "earthModelUsed": false,
+    "runtimeResearchPathDependency": false
+  },
+  "authorityBoundary": {
+    "selectionSource": "Injected VS2 presentation source frame",
+    "selectionWrite": "Injected selectGate(gateId) intent only",
+    "camera": "PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER",
+    "rotation": "PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER",
+    "input": "PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER",
+    "hitTest": "PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER",
+    "dayNight": "TWO_PAIRED_STATES_WITH_PRODUCT_AUTHORED_DAY_PREVIEW",
+    "originalRotationParityClaimed": false
+  },
+  "futureVisualDebt": [
+    "biome visual differentiation",
+    "surface and material quality",
+    "node and world integration",
+    "day and night visual system",
+    "Gate world visual richness"
+  ],
+  "promotionGate": "FUTURE_PRODUCTION_PASS_AND_OWNER_GO_REQUIRED"
+}

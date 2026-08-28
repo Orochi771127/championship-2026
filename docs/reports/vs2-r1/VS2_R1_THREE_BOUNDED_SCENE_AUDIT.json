@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "audit": "VS2_R1_THREE_BOUNDED_SCENE",
+  "date": "2026-08-28",
+  "verdict": "PASS",
+  "renderer": {
+    "constructorCountInImplementation": 1,
+    "scope": "GATE_SELECT_ONLY",
+    "mountCountDuringGateBrowserFlow": 1,
+    "countAfterTransitionToHuntLoadout": 0,
+    "dispose": [
+      "ResizeObserver disconnected",
+      "pointer listeners removed",
+      "geometries disposed",
+      "materials disposed",
+      "WebGLRenderer disposed",
+      "canvas and overlay removed"
+    ],
+    "renderLoop": "NONE_EVENT_DRIVEN",
+    "gameplayTicker": false
+  },
+  "scene": {
+    "worldRoot": "world_root",
+    "world": "world",
+    "pairedStates": [
+      "world_day",
+      "world_night"
+    ],
+    "activeState": "PRODUCT_AUTHORED_DAY_PREVIEW",
+    "destinationNodePairs": 16,
+    "nodePlacement": "PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER",
+    "camera": "PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER",
+    "rotation": "PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER",
+    "input": "PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER",
+    "hitTest": "PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER",
+    "originalRotationParityClaimed": false,
+    "pinchZoomImplemented": false
+  },
+  "coexistence": {
+    "gateThreeAndHuntPixiMountedAtSameTime": false,
+    "secondPixiApplication": false,
+    "secondDestinationModel": false
+  }
+}

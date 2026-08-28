@@ -1,11 +1,25 @@
 {
   "schemaVersion": 1,
   "batch": "CHAMPIONSHIP_2026_VS1_INT_RH2",
-  "generatedAt": "2026-08-27T17:09:45.065Z",
+  "generatedAt": "2026-08-28T00:26:33.877Z",
   "rendererPolicy": {
     "dom": "P1R screen UI",
     "pixi": "one field-scoped Application",
     "three": "not used"
+  },
+  "responsiveContract": {
+    "source": "docs/contracts/championship/INT_RH2_RUNTIME_PRESENTATION_CONTRACT.json",
+    "requiredViewports": [
+      "360x800",
+      "390x844",
+      "393x852",
+      "412x915",
+      "430x932"
+    ],
+    "supplementalViewports": [
+      "375x812"
+    ],
+    "missingRequiredViewports": []
   },
   "viewports": [
     {
@@ -44,6 +58,13 @@
             "height": 44,
             "top": 10.5,
             "bottom": 54.5
+          },
+          {
+            "id": "cm-button cm-button--primary cm-vs2-entry",
+            "width": 62,
+            "height": 44,
+            "top": 10,
+            "bottom": 54
           }
         ]
       },
@@ -93,6 +114,13 @@
             "height": 44,
             "top": 13,
             "bottom": 57
+          },
+          {
+            "id": "cm-button cm-button--primary cm-vs2-entry",
+            "width": 70,
+            "height": 44,
+            "top": 10,
+            "bottom": 54
           }
         ]
       },
@@ -107,27 +135,27 @@
       "screenshot": "screenshots/raising-home-390x844.png"
     },
     {
-      "viewport": "375x812",
+      "viewport": "393x852",
       "layout": {
         "viewport": {
-          "width": 375,
-          "height": 812
+          "width": 393,
+          "height": 852
         },
-        "documentWidth": 375,
-        "documentHeight": 812,
+        "documentWidth": 393,
+        "documentHeight": 852,
         "shell": {
-          "width": 375,
-          "height": 812,
+          "width": 393,
+          "height": 852,
           "top": 0,
-          "bottom": 812
+          "bottom": 852
         },
         "fieldHost": {
-          "width": 355,
-          "height": 556.84375
+          "width": 373,
+          "height": 574.84375
         },
         "canvas": {
-          "width": 355,
-          "height": 557
+          "width": 373,
+          "height": 575
         },
         "canvasCount": 1,
         "toolbarSlots": 8,
@@ -142,6 +170,13 @@
             "height": 44,
             "top": 13,
             "bottom": 57
+          },
+          {
+            "id": "cm-button cm-button--primary cm-vs2-entry",
+            "width": 70,
+            "height": 44,
+            "top": 10,
+            "bottom": 54
           }
         ]
       },
@@ -153,7 +188,7 @@
       },
       "pageErrors": [],
       "failedRequests": [],
-      "screenshot": "screenshots/raising-home-375x812.png"
+      "screenshot": "screenshots/raising-home-393x852.png"
     },
     {
       "viewport": "412x915",
@@ -191,12 +226,19 @@
             "height": 44,
             "top": 13,
             "bottom": 57
+          },
+          {
+            "id": "cm-button cm-button--primary cm-vs2-entry",
+            "width": 70,
+            "height": 44,
+            "top": 10,
+            "bottom": 54
           }
         ]
       },
       "framePacing": {
         "sampledFrames": 120,
-        "averageFps": 60.02,
+        "averageFps": 60.03,
         "medianFrameMs": 16.7,
         "p95FrameMs": 16.8
       },
@@ -240,6 +282,69 @@
             "height": 44,
             "top": 13,
             "bottom": 57
+          },
+          {
+            "id": "cm-button cm-button--primary cm-vs2-entry",
+            "width": 70,
+            "height": 44,
+            "top": 10,
+            "bottom": 54
+          }
+        ]
+      },
+      "framePacing": {
+        "sampledFrames": 120,
+        "averageFps": 60.03,
+        "medianFrameMs": 16.7,
+        "p95FrameMs": 16.8
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "screenshot": "screenshots/raising-home-430x932.png"
+    },
+    {
+      "viewport": "375x812",
+      "layout": {
+        "viewport": {
+          "width": 375,
+          "height": 812
+        },
+        "documentWidth": 375,
+        "documentHeight": 812,
+        "shell": {
+          "width": 375,
+          "height": 812,
+          "top": 0,
+          "bottom": 812
+        },
+        "fieldHost": {
+          "width": 355,
+          "height": 556.84375
+        },
+        "canvas": {
+          "width": 355,
+          "height": 557
+        },
+        "canvasCount": 1,
+        "toolbarSlots": 8,
+        "toolbarEnabled": 0,
+        "uiAuthority": "P1R_DOM",
+        "rendererSplit": "DOM_UI_PIXI_FIELD",
+        "threeElements": 0,
+        "interactive": [
+          {
+            "id": "int-rh2-system-button is-dirty",
+            "width": 58,
+            "height": 44,
+            "top": 13,
+            "bottom": 57
+          },
+          {
+            "id": "cm-button cm-button--primary cm-vs2-entry",
+            "width": 70,
+            "height": 44,
+            "top": 10,
+            "bottom": 54
           }
         ]
       },
@@ -251,7 +356,7 @@
       },
       "pageErrors": [],
       "failedRequests": [],
-      "screenshot": "screenshots/raising-home-430x932.png"
+      "screenshot": "screenshots/raising-home-375x812.png"
     }
   ],
   "saveReload": {

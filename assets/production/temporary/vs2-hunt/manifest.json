@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:hunt_field:vs2:temporary-signal-grove-kit",
+  "product": "DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD",
+  "batch": "VS2-P",
+  "rightsStatus": "ORIGINAL_CREATED",
+  "productionStatus": "TEMPORARY_PRESENTATION",
+  "shippingStatus": "NOT_SHIPPING_READY",
+  "humanApproved": false,
+  "runtimeRole": "Architecture-proof Hunt field presentation on the existing shared Pixi stage",
+  "implementation": [
+    "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
+    "src/championship/app/vs2Screens.js",
+    "src/championship/app/vs2Styles.css"
+  ],
+  "components": [
+    "procedural deep-navy and teal terrain surfaces",
+    "procedural modular scenery clusters",
+    "temporary creature-shaped field markers",
+    "functional Gate and field signal ornament"
+  ],
+  "evidenceBoundary": {
+    "romPixelReuse": false,
+    "o3cRuntimeUse": false,
+    "originalParityClaim": false,
+    "note": "O3-C is reference grammar only. No decoded Hunt pixels or ROM-derived runtime asset is included."
+  },
+  "promotionGate": "OWNER_VISUAL_REVIEW_REQUIRED",
+  "notes": [
+    "This kit is presentation-only and does not define gameplay, collision, camera, encounter, or movement behavior.",
+    "This manifest does not claim final Hunt art approval."
+  ]
+}

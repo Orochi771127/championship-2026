@@ -14,12 +14,29 @@
 // loaded, and none of it is a claim about original terrain, props or creatures.
 
 const DRAG_THRESHOLD_PX = 5;
-const ACTOR_BODY_RADIUS = 7;
+const ACTOR_BODY_RADIUS = 8;
+const TEMPORARY_ART_ID = "art:hunt_field:vs2:temporary-signal-grove-kit";
 
 const TERRAIN = Object.freeze({
-  ground: 0x16362f,
-  blocked: 0x0a1a22
+  ground: 0x0b2930,
+  groundLow: 0x0a222a,
+  groundSignal: 0x2f6870,
+  blocked: 0x17252a,
+  blockedLift: 0x294048,
+  blockedEdge: 0x3b6065,
+  cyan: 0x65b8c3,
+  gold: 0xd2ad5d
 });
+
+function hash01(x, y, salt = 0) {
+  let value = Math.imul(x + 0x9e3779b9, 0x85ebca6b)
+    ^ Math.imul(y + 0xc2b2ae35, 0x27d4eb2f)
+    ^ Math.imul(salt + 17, 0x165667b1);
+  value ^= value >>> 15;
+  value = Math.imul(value, 0x2c1b3c6d);
+  value ^= value >>> 12;
+  return (value >>> 0) / 0xffffffff;
+}
 
 function assertDependencies(stage, source) {
   if (!stage || !stage.PIXI || !stage.app || typeof stage.createSceneRoot !== "function"
@@ -48,7 +65,7 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
   const backdrop = new PIXI.Graphics();
   const world = new PIXI.Container({ label: "hunt world" });
   const terrainLayer = new PIXI.Container({ label: "modular terrain" });
-  const objectLayer = new PIXI.Container({ label: "field objects" });
+  const objectLayer = new PIXI.Container({ label: "field objects", sortableChildren: true });
   const actorLayer = new PIXI.Container({ label: "actors" });
   actorLayer.sortableChildren = true;
   world.addChild(terrainLayer, objectLayer, actorLayer);
@@ -62,6 +79,8 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
   let disposed = false;
   let drag = null;
   let lastGateId = null;
+  let backdropWidth = 0;
+  let backdropHeight = 0;
 
   function chunkKey(chunkX, chunkY) {
     return `${chunkX},${chunkY}`;
@@ -77,19 +96,56 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
     const graphic = new PIXI.Graphics();
     graphic.label = `chunk ${bounds.chunkX},${bounds.chunkY}`;
     const tile = view.tileSizePx;
-    // One ground colour across every chunk. Tinting alternate chunks made the
-    // 16x16 streaming grid visible, which is the logical grid the contract says
-    // stays hidden - a coarse grid overlay is still a grid overlay.
+    // One ground material across every chunk. Decorative marks are keyed from
+    // global tile coordinates rather than chunk identity, so streaming never
+    // exposes a 16x16 seam or logical grid.
     graphic
       .rect(bounds.leftPx, bounds.topPx, bounds.rightPx - bounds.leftPx, bounds.bottomPx - bounds.topPx)
       .fill(TERRAIN.ground);
 
     for (let tileY = bounds.startTileY; tileY < bounds.endTileYExclusive; tileY += 1) {
       for (let tileX = bounds.startTileX; tileX < bounds.endTileXExclusive; tileX += 1) {
-        if (!view.isBlockedTile(tileX, tileY)) continue;
+        const blocked = view.isBlockedTile(tileX, tileY);
+        const left = tileX * tile;
+        const top = tileY * tile;
+        if (!blocked) {
+          const grain = hash01(tileX, tileY, 3);
+          if (grain > 0.91) {
+            const offsetX = 3 + hash01(tileX, tileY, 5) * (tile - 6);
+            const offsetY = 3 + hash01(tileX, tileY, 7) * (tile - 6);
+            graphic
+              .ellipse(left + offsetX, top + offsetY, 2.6, 1.1)
+              .fill({ color: TERRAIN.groundSignal, alpha: 0.34 });
+          } else if (grain < 0.035) {
+            const startX = left + 3 + hash01(tileX, tileY, 11) * 5;
+            const startY = top + 5 + hash01(tileX, tileY, 13) * 6;
+            graphic
+              .moveTo(startX, startY)
+              .lineTo(startX + 5, startY - 2)
+              .stroke({ color: TERRAIN.groundSignal, alpha: 0.24, width: 1, cap: "round" });
+          }
+          continue;
+        }
         // Edge to edge, no stroke: adjacent blocked tiles merge into one mass
         // instead of reading as a grid of cells.
-        graphic.rect(tileX * tile, tileY * tile, tile, tile).fill(TERRAIN.blocked);
+        graphic.rect(left, top, tile, tile).fill(TERRAIN.blocked);
+        if (hash01(tileX, tileY, 19) > 0.62) {
+          graphic
+            .circle(left + tile * 0.5, top + tile * 0.5, tile * 0.58)
+            .fill({ color: TERRAIN.blockedLift, alpha: 0.42 });
+        }
+
+        // Only the OUTER silhouette is accented. Internal tile edges are never
+        // stroked, so the collision grid remains hidden.
+        if (!view.isBlockedTile(tileX, tileY - 1)) {
+          graphic.moveTo(left, top).lineTo(left + tile, top).stroke({ color: TERRAIN.blockedEdge, alpha: 0.7, width: 1.5 });
+        }
+        if (!view.isBlockedTile(tileX + 1, tileY)) {
+          graphic.moveTo(left + tile, top).lineTo(left + tile, top + tile).stroke({ color: TERRAIN.blockedEdge, alpha: 0.46, width: 1 });
+        }
+        if (!view.isBlockedTile(tileX, tileY + 1)) {
+          graphic.moveTo(left, top + tile).lineTo(left + tile, top + tile).stroke({ color: 0x07161d, alpha: 0.72, width: 2 });
+        }
       }
     }
     return graphic;
@@ -117,26 +173,43 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
     }
   }
 
-  /** A neutral product-authored prop. Codex replaces this with Hunt art. */
+  /** Original-created temporary scenery. It owns no collision meaning. */
   function createObjectNode(entry) {
-    const graphic = new PIXI.Graphics()
-      .ellipse(0, 2, 7, 3).fill({ color: 0x02070a, alpha: 0.4 })
-      .poly([0, -16, 6, 0, -6, 0]).fill(0x2f6b4d).stroke({ color: 0x17402f, width: 1 });
-    graphic.label = "original-created neutral field prop";
-    graphic.position.set(entry.worldX, entry.worldY);
-    return graphic;
+    const node = new PIXI.Container({ label: "original-created temporary field scenery" });
+    const shadow = new PIXI.Graphics().ellipse(0, 3, 12, 4).fill({ color: 0x02070a, alpha: 0.42 });
+    const base = new PIXI.Graphics()
+      .ellipse(-3, -2, 8, 5).fill(TERRAIN.blockedLift)
+      .ellipse(5, -1, 7, 4).fill(0x20373d)
+      .ellipse(0, -6, 6, 8).fill(0x315158).stroke({ color: 0x172d34, width: 1 });
+    const growth = new PIXI.Graphics()
+      .moveTo(-5, -7).quadraticCurveTo(-10, -15, -4, -21).stroke({ color: TERRAIN.cyan, alpha: 0.72, width: 1.4, cap: "round" })
+      .moveTo(1, -10).quadraticCurveTo(7, -18, 5, -25).stroke({ color: 0x4f8f91, alpha: 0.66, width: 1.2, cap: "round" })
+      .circle(-4, -21, 2).fill({ color: TERRAIN.gold, alpha: 0.82 })
+      .circle(5, -25, 1.8).fill({ color: TERRAIN.cyan, alpha: 0.72 });
+    node.addChild(shadow, base, growth);
+    node.position.set(entry.worldX, entry.worldY);
+    node.zIndex = Math.round(entry.worldY);
+    return node;
   }
 
-  /** A neutral product-authored creature body. Not original creature art. */
-  function createActorNode(tint, label) {
+  /** Original-created temporary creature marker. Not final creature art. */
+  function createActorNode(tint, label, { player = false } = {}) {
     const node = new PIXI.Container({ label });
-    const shadow = new PIXI.Graphics().ellipse(0, 3, 9, 4).fill({ color: 0x02070a, alpha: 0.42 });
+    const shadow = new PIXI.Graphics().ellipse(0, 4, 11, 4).fill({ color: 0x02070a, alpha: 0.48 });
+    const ring = new PIXI.Graphics()
+      .ellipse(0, 3, 13, 6)
+      .stroke({ color: player ? TERRAIN.gold : TERRAIN.cyan, alpha: player ? 0.72 : 0.16, width: 1.2 });
     const body = new PIXI.Graphics()
-      .ellipse(0, -6, ACTOR_BODY_RADIUS, ACTOR_BODY_RADIUS - 1).fill(tint).stroke({ color: 0x101727, width: 1.5 })
-      .circle(4, -13, 4).fill(tint).stroke({ color: 0x101727, width: 1.5 })
-      .circle(5, -14, 1).fill(0x0b1018);
-    node.addChild(shadow, body);
+      .poly([-6, -13, -3, -21, 1, -14]).fill(tint).stroke({ color: 0x101820, width: 1 })
+      .poly([2, -14, 6, -21, 8, -12]).fill(tint).stroke({ color: 0x101820, width: 1 })
+      .ellipse(-1, -7, ACTOR_BODY_RADIUS, ACTOR_BODY_RADIUS - 1).fill(tint).stroke({ color: 0x101820, width: 1.4 })
+      .circle(3, -14, 5).fill(tint).stroke({ color: 0x101820, width: 1.4 })
+      .moveTo(-7, -7).quadraticCurveTo(-14, -11, -12, -2).stroke({ color: tint, width: 3, cap: "round" })
+      .circle(5, -15, 1).fill(0x071016)
+      .poly([-3, -9, 0, -12, 3, -9, 0, -6]).fill(player ? TERRAIN.gold : TERRAIN.cyan);
+    node.addChild(shadow, ring, body);
     node.body = body;
+    node.ring = ring;
     return node;
   }
 
@@ -162,7 +235,7 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
 
   function syncActors(view) {
     if (!playerNode) {
-      playerNode = createActorNode(0xf0d083, "companion");
+      playerNode = createActorNode(0xe7c36f, "companion", { player: true });
       actorLayer.addChild(playerNode);
     }
     playerNode.position.set(view.player.worldX, view.player.worldY);
@@ -179,7 +252,7 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
     for (const wild of view.wildCreatures) {
       let node = wildNodes.get(wild.wildId);
       if (!node) {
-        node = createActorNode(0x72809c, "wild creature");
+        node = createActorNode(0x71879b, "wild creature");
         wildNodes.set(wild.wildId, node);
         actorLayer.addChild(node);
       }
@@ -197,7 +270,15 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
     });
     if (!view) return;
 
-    backdrop.clear().rect(0, 0, app.screen.width, app.screen.height).fill(0x061014);
+    if (backdropWidth !== app.screen.width || backdropHeight !== app.screen.height) {
+      backdropWidth = app.screen.width;
+      backdropHeight = app.screen.height;
+      backdrop
+        .clear()
+        .rect(0, 0, backdropWidth, backdropHeight).fill(TERRAIN.groundLow)
+        .ellipse(backdropWidth * 0.2, backdropHeight * 0.12, backdropWidth * 0.7, backdropHeight * 0.38)
+        .fill({ color: TERRAIN.cyan, alpha: 0.035 });
+    }
     syncObjects(view);
     syncTerrain(view);
     syncActors(view);
@@ -285,7 +366,8 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
         visibleChunks: liveChunks.size,
         wildCount: wildNodes.size,
         objectCount: objectNodes.size,
-        viewport: Object.freeze({ width: app.screen.width, height: app.screen.height })
+        viewport: Object.freeze({ width: app.screen.width, height: app.screen.height }),
+        temporaryArtId: TEMPORARY_ART_ID
       });
     },
 

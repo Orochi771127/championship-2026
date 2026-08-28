@@ -7,13 +7,22 @@ const BASE_URL = process.env.CHAMPIONSHIP_QA_URL || "http://127.0.0.1:8732/champ
 const CHROME = process.env.CHAMPIONSHIP_CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe";
 const OUTPUT = path.resolve("docs/reports/vs1");
 const SCREENSHOTS = path.join(OUTPUT, "screenshots");
-const VIEWPORTS = [
-  { width: 360, height: 800 },
-  { width: 390, height: 844 },
-  { width: 375, height: 812 },
-  { width: 412, height: 915 },
-  { width: 430, height: 932 }
-];
+const RESPONSIVE_CONTRACT_PATH = path.resolve("docs/contracts/championship/INT_RH2_RUNTIME_PRESENTATION_CONTRACT.json");
+const RESPONSIVE_CONTRACT = JSON.parse(fs.readFileSync(RESPONSIVE_CONTRACT_PATH, "utf8")).responsiveTargets;
+
+function viewportName({ width, height }) {
+  return `${width}x${height}`;
+}
+
+function parseViewport(value) {
+  const match = /^(\d+)x(\d+)$/.exec(value);
+  assert.ok(match, `invalid responsive contract viewport: ${value}`);
+  return { width: Number(match[1]), height: Number(match[2]) };
+}
+
+const REQUIRED_VIEWPORTS = RESPONSIVE_CONTRACT.mustPass.map(parseViewport);
+const SUPPLEMENTAL_VIEWPORTS = [parseViewport("375x812")];
+const VIEWPORTS = [...REQUIRED_VIEWPORTS, ...SUPPLEMENTAL_VIEWPORTS];
 
 fs.mkdirSync(SCREENSHOTS, { recursive: true });
 
@@ -201,6 +210,11 @@ async function runPixiFallback(browser) {
   try {
     const viewports = [];
     for (const viewport of VIEWPORTS) viewports.push(await runViewport(browser, viewport));
+    const passedViewportNames = new Set(viewports.map(({ viewport }) => viewport));
+    const missingRequiredViewports = REQUIRED_VIEWPORTS
+      .map(viewportName)
+      .filter((viewport) => !passedViewportNames.has(viewport));
+    assert.deepEqual(missingRequiredViewports, [], "all responsive contract viewports passed");
     const saveReload = await runSaveReload(browser);
     const pixiFallback = await runPixiFallback(browser);
     const report = {
@@ -208,13 +222,19 @@ async function runPixiFallback(browser) {
       batch: "CHAMPIONSHIP_2026_VS1_INT_RH2",
       generatedAt: new Date().toISOString(),
       rendererPolicy: { dom: "P1R screen UI", pixi: "one field-scoped Application", three: "not used" },
+      responsiveContract: {
+        source: path.relative(process.cwd(), RESPONSIVE_CONTRACT_PATH).replaceAll("\\", "/"),
+        requiredViewports: REQUIRED_VIEWPORTS.map(viewportName),
+        supplementalViewports: SUPPLEMENTAL_VIEWPORTS.map(viewportName),
+        missingRequiredViewports
+      },
       viewports,
       saveReload,
       pixiFallback,
       outcome: "PASS"
     };
     fs.writeFileSync(path.join(OUTPUT, "INT_RH2_BROWSER_QA.json"), `${JSON.stringify(report, null, 2)}\n`);
-    console.log(`INT_RH2_BROWSER_QA_PASS viewports=${viewports.length} saveReload=true`);
+    console.log(`INT_RH2_BROWSER_QA_PASS viewports=${viewports.length} required=${REQUIRED_VIEWPORTS.length} saveReload=true`);
   } finally {
     await browser.close();
   }

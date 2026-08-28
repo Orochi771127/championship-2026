@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "owner": "Claude Code",
-  "syncTarget": "VS2-R1 A+B: Gate Select trace blocked, Hunt Loadout contract closed, canonical identity adopted",
+  "syncTarget": "VS2-R2 Original Hunt Loadout runtime reconstruction",
   "date": "2026-08-28",
   "note": "Claude-owned delta. Codex remains COORDINATION_MERGE_WRITER and merges this by stable record ID. Claude wrote no shared coordination file in this round.",
   "checkpoint": {
@@ -13,26 +13,16 @@
     "note": "The pre-migration checkpoint chain recorded in earlier revisions of this file is external provenance (docs/migration/PRE_MIGRATION_PROVENANCE.md), not this repository history. CL-008 and CL-009 concern that external branch and are unaffected by this round."
   },
   "tests": {
-    "pass": 80,
+    "pass": 96,
     "expected": 0,
     "unexpected": 0,
     "unchangedThisRound": false
   },
   "ownerDecisionsApplied": [
     {
-      "id": "VS2-R1-IDENTITY",
+      "id": "VS2-R2",
       "state": "APPLIED",
-      "detail": "The 16 ROM-recovered biome node identities are canonical for internal gate IDs. Player-facing display strings remain presentation translation, and are marked PRESENTATION_DEFAULT_NOT_RECOVERED because no original player-facing string has been read."
-    },
-    {
-      "id": "VS2-R1-A",
-      "state": "BLOCKED_ON_MISSING_INPUT",
-      "detail": "Bounded OVL12 Gate Select behavior trace authorized and attempted. No ROM, overlay or ARM9 binary exists in the research tree; the existing trace files state raw overlay binaries are not bundled. Nothing was inferred to fill the gap."
-    },
-    {
-      "id": "VS2-R1-B",
-      "state": "CLOSED",
-      "detail": "Original Hunt Loadout evidence contract published with all 11 Owner questions answered."
+      "detail": "Build the Original Hunt Loadout domain from recovered evidence. Companion selection must not stand in for it in Player Mode; if kept, DEVELOPER_PROTOTYPE_ONLY. Upgrade the contract to an implementation-ready v1.1 with a read-only presentation surface."
     }
   ],
   "closedThisRound": [
@@ -69,6 +59,15 @@
       "detail": "Five equipment classes, a 118-record shop table, 4 gear slots, 4 plugin positions, and a ROM-verified mapping from Analyzer/Checker/Radar/MemoryChecker plugins onto the Hunt HUD readouts.",
       "contract": "docs/contracts/championship/VS2_HUNT_LOADOUT_RUNTIME_CONTRACT.v1.json",
       "positiveControls": "11/11 caught."
+    },
+    {
+      "id": "VS2_R2_HUNT_LOADOUT_RUNTIME",
+      "type": "runtime",
+      "owner": "claude",
+      "state": "COMPLETE",
+      "detail": "Five equipment classes, four plugin positions, Shop-owned inventory with the three recovered unlock kinds, plugin-gated HUD capabilities, and a handoff that carries what is equipped and applies nothing.",
+      "contract": "docs/contracts/championship/VS2_HUNT_LOADOUT_RUNTIME_CONTRACT.v1.json v1.1",
+      "positiveControls": "10/10 caught."
     }
   ],
   "stillUnknown": [
@@ -198,6 +197,30 @@
       "state": "ROM_VERIFIED_CANONICAL",
       "codexMaySafelyBind": "YES",
       "detail": "gateId is now championship:2026:gate:<biome> over the 16 recovered identities; biomeId is the canonical key. displayName is a presentation default, not a recovered string - Codex and localization own it."
+    },
+    {
+      "id": "HuntLoadoutRuntimeContract",
+      "type": "dependency",
+      "owner": "claude",
+      "state": "IMPLEMENTED_v1.1",
+      "codexMaySafelyBind": "YES",
+      "detail": "Read-only surface: availableEquipment, selectedEquipment, availablePlugins, selectedPlugins, memoryCard, hudCapabilities, validation, confirmationState. Intents: selectEquipment, fitPlugin, selectMemoryCard, beginHunt. No new save field."
+    },
+    {
+      "id": "HuntCompanionLoadoutPrototype",
+      "type": "dependency",
+      "owner": "claude",
+      "state": "DEVELOPER_PROTOTYPE_ONLY",
+      "codexMaySafelyBind": "NO",
+      "detail": "Removed from the Player Mode seam. Surviving only as app.selectDeveloperCompanion / getDeveloperCompanionCreatureId. Must never return to Player Mode."
+    },
+    {
+      "id": "HuntFieldActor",
+      "type": "dependency",
+      "owner": "claude",
+      "state": "PRODUCT_AUTHORED",
+      "codexMaySafelyBind": "YES",
+      "detail": "createHuntRuntime now takes fieldActor, not companion. The tamer walks the field; the Hunt HUD creature panel describes the WILD target that Analyzer plugins reveal."
     }
   ],
   "integrationPlanRuntimeHalf": {
@@ -509,12 +532,17 @@
     "Both corrections are recorded in the contract. The research packs are external and read-only; Claude did not modify them."
   ],
   "codexLaneObservation": {
-    "finding": "The VS2-P browser gate currently FAILS at 360x800 with 'GATE_SELECT: clipped controls'.",
-    "ownership": "Codex lane. The failing assertion (clippedControls in auditPresentationLayout) and the animated .cm-vs2-shell that trips it were both added by the in-flight Codex presentation pass; both files are uncommitted.",
-    "verification": "Confirmed independent of the Claude change: the gate fails identically after reverting gateCatalog.js to its committed HEAD version. Shorter destination labels cannot push a control to left:-13.",
-    "diagnosis": "A probe at 360x800 shows the gate list and gate buttons reporting zero-size rects shortly after the screen appears, with a transform on .cm-vs2-shell. The audit samples the layout while the entry animation is still running, so it reads mid-animation boxes as clipped and undersized controls.",
-    "suggestion": "Settle the entry animation before auditing, or exclude in-flight transforms from the clipped-control check. Claude did not modify Codex presentation files.",
-    "claudeGates": "INT_RH2_BROWSER_QA_PASS viewports=6 required=5 saveReload=true; node suite 80/80."
+    "finding": "This commit contains Codex's in-flight VS2-R1 3D Gate Select build as well as the Claude VS2-R2 loadout build.",
+    "reason": "The two are interleaved in shared tracked files and cannot be separated by path. main.js imports createGateSelectThreePresentation.js, vs2Screens.js carries both the 3D gate markup and the loadout view, and the VS2-P browser gate now hard-requires THREE_BOUNDED_WORLD_MODE. Committing only Claude-owned paths would have left a committed tree whose loadout view reads a frame field the seam no longer publishes.",
+    "claudeEditsToCodexFiles": [
+      "vs2Screens.js - rebuilt createHuntLoadoutView onto the recovered structure, reusing the existing screen chrome",
+      "vs2Styles.css - appended neutral loadout row styling",
+      "championship-vs2-browser.cjs - the loadout leg now asserts five classes and four positions, and that an empty loadout is permitted",
+      "championship-vs2-p1r-presentation-cases.mjs - inverted the prototype assertion the Owner directive overturned",
+      "championship-vs2-r1-gate-browser.cjs - the post-transition assertion follows the new loadout structure"
+    ],
+    "verification": "All four gates green together: node 96/96, INT-RH2, VS2-P, VS2-R1 gate 3D.",
+    "note": "The earlier 360x800 GATE_SELECT clipped-controls failure is resolved in the Codex lane and no longer reproduces."
   },
   "researchGap": {
     "id": "GS-0",

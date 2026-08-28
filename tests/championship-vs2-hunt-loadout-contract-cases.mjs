@@ -127,15 +127,24 @@ test("the untraced loadout fields are not upgraded without a trace", () => {
   assert.ok(contract.openTraceItems.length >= 8);
 });
 
-test("the shipped companion loadout stays a prototype and adds no save field", () => {
-  assert.match(contract.currentProductStatus.value, /PRODUCT_AUTHORED_PROTOTYPE/);
-  assert.match(contract.currentProductStatus.rule, /never be promoted/);
+test("the recovered structure shipped and the companion stayed a developer prototype", () => {
+  // v1 asserted the companion loadout was still the product's loadout. VS2-R2
+  // built the recovered structure, so this inverts: the product now implements
+  // the original, and the companion may only survive as a developer surface.
+  assert.equal(contract.currentProductStatus.value, "ORIGINAL_STRUCTURE_IMPLEMENTED");
+  assert.equal(contract.currentProductStatus.companionPrototype.value, "DEVELOPER_PROTOTYPE_ONLY");
+  assert.match(contract.currentProductStatus.companionPrototype.rule, /never be promoted/);
+
   assert.ok(contract.consumerRules.mustNotDo.some((rule) => /add any save field/i.test(rule)));
+  assert.ok(contract.consumerRules.mustNotDo.some((rule) => /companion selection to the Player Mode path/i.test(rule)));
   assert.match(contract.answers["11_savePersistenceRelationship"].productRule, /adds no save field/);
 
-  // The live seam must still declare the one-companion rule as product-authored.
+  // The live seam must carry the recovered surface and no companion.
   const seam = fs.readFileSync("src/championship/app/gateHuntPresentationSource.js", "utf8");
-  assert.match(seam, /evidence: "PRODUCT_AUTHORED"/, "the loadout selection rule stopped declaring itself product-authored");
+  for (const field of ["availableEquipment", "selectedEquipment", "availablePlugins", "selectedPlugins", "hudCapabilities", "confirmationState"]) {
+    assert.ok(seam.includes(field), `the seam lost ${field}`);
+  }
+  assert.equal(/selectCompanion|getCompanionCreatureId/.test(seam), false, "a companion surface survived on the seam");
 });
 
 test("all eleven Owner loadout questions are answered with an evidence level", () => {

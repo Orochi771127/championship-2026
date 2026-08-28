@@ -47,11 +47,9 @@ function createApp(storage) {
   });
 }
 
-const companion = {
-  creatureId: "resident:greyshade-cat",
-  displayName: "Greyshade",
-  speciesId: "championship:creature:greyshade-cat"
-};
+// The tamer walks the Hunt field. The HUD creature panel describes the WILD
+// target, so the field actor is never a creature the player brought.
+const fieldActor = { actorId: "championship:2026:actor:tamer", displayName: "Tamer" };
 
 // ---------------------------------------------------------------------------
 // Screen stack
@@ -159,10 +157,10 @@ test("the world is far larger than any supported viewport", () => {
 
 test("the player cannot walk into blocked terrain or out of the world", () => {
   const world = createHuntWorld(listChampionshipGates()[0]);
-  const runtime = createHuntRuntime({ world, companion });
+  const runtime = createHuntRuntime({ world, fieldActor });
 
   for (const [x, y] of [[-4000, -4000], [9000, 9000], [-4000, 9000]]) {
-    const attempt = createHuntRuntime({ world, companion });
+    const attempt = createHuntRuntime({ world, fieldActor });
     attempt.moveTo(x, y);
     for (let i = 0; i < 3000; i += 1) attempt.tick(16);
     const player = attempt.getPlayer();
@@ -181,11 +179,11 @@ test("the player cannot walk into blocked terrain or out of the world", () => {
 
 test("the camera is a window over the world and is always clamped inside it", () => {
   const world = createHuntWorld(listChampionshipGates()[2]);
-  const runtime = createHuntRuntime({ world, companion });
+  const runtime = createHuntRuntime({ world, fieldActor });
 
   for (const [width, height] of [[360, 800], [390, 844], [393, 852], [412, 915], [430, 932]]) {
     // Walk hard into a corner so the camera has to clamp.
-    const cornered = createHuntRuntime({ world, companion });
+    const cornered = createHuntRuntime({ world, fieldActor });
     cornered.moveTo(0, 0);
     for (let i = 0; i < 4000; i += 1) cornered.tick(16);
     const camera = cornered.getCamera(width, height);
@@ -200,7 +198,7 @@ test("the camera is a window over the world and is always clamped inside it", ()
 
 test("wild creatures wander inside a bounded radius and never react to the player", () => {
   const world = createHuntWorld(listChampionshipGates()[1]);
-  const runtime = createHuntRuntime({ world, companion });
+  const runtime = createHuntRuntime({ world, fieldActor });
   const spawns = world.wildCreatures;
   assert.equal(runtime.getWildCreatures().length, HUNT_WILD_COUNT);
 
@@ -209,7 +207,7 @@ test("wild creatures wander inside a bounded radius and never react to the playe
   const still = runtime.getWildCreatures();
 
   // Run the same simulation while the player walks straight at them.
-  const chased = createHuntRuntime({ world, companion });
+  const chased = createHuntRuntime({ world, fieldActor });
   chased.moveTo(spawns[0].worldX, spawns[0].worldY);
   for (let i = 0; i < 4000; i += 1) chased.tick(16);
   const observed = chased.getWildCreatures();
@@ -268,14 +266,23 @@ test("VS2 walks Raising Home to the Hunt field and back through the published se
   const loadout = source.getFrame().huntLoadout;
   assert.equal(source.getFrame().screen, CHAMPIONSHIP_SCREENS.HUNT_LOADOUT);
   assert.equal(loadout.gate.gateId, gateSelect.gates[3].gateId);
-  assert.equal(loadout.canBegin, false, "entering must be gated on a companion");
-  assert.equal(loadout.selectionRule.value, "EXACTLY_ONE");
-  assert.equal(loadout.selectionRule.evidence, "PRODUCT_AUTHORED");
+  // Five recovered equipment classes and four plugin positions.
+  assert.deepEqual(loadout.availableEquipment.map((entry) => entry.equipmentClass),
+    ["ROPE", "SHOT", "WIRE", "ENTRAP", "DAMAGE_TRAP"]);
+  assert.equal(loadout.selectedPlugins.length, 4);
+  assert.equal(loadout.structure.equipmentClasses.evidence, "ROM_VERIFIED");
 
-  source.intents.beginHunt();
-  assert.equal(source.getFrame().screen, CHAMPIONSHIP_SCREENS.HUNT_LOADOUT, "no companion, no field");
+  // An empty loadout is permitted: no original rule requires anything equipped.
+  assert.equal(loadout.canBegin, true);
+  assert.equal(loadout.confirmationState.originalConfirmationFlow, "UNKNOWN_REQUIRES_TRACE");
 
-  source.intents.selectCompanion(residentId);
+  source.intents.selectEquipment("ROPE", "championship:2026:hunt-item:rope-i");
+  const equipped = source.getFrame().huntLoadout.selectedEquipment
+    .find((slot) => slot.equipmentClass === "ROPE");
+  assert.equal(equipped.quantity, 1);
+  assert.equal(equipped.durability, 10);
+  assert.equal(equipped.durabilityConsumption, "UNKNOWN_REQUIRES_TRACE");
+
   source.intents.beginHunt();
   const field = source.getFrame().huntField;
   assert.equal(source.getFrame().screen, CHAMPIONSHIP_SCREENS.HUNT_FIELD);
@@ -283,6 +290,7 @@ test("VS2 walks Raising Home to the Hunt field and back through the published se
   assert.equal(field.world.widthTiles.evidence, "VERIFIED_BINARY");
 
   // Explore.
+  assert.equal(field.hud.actorName, "Tamer");
   const before = source.field.getView({ viewportWidth: 390, viewportHeight: 844 });
   assert.equal(before.wildCreatures.length, HUNT_WILD_COUNT);
   source.intents.moveTo(before.player.worldX + 220, before.player.worldY + 60);
@@ -312,7 +320,6 @@ test("the Hunt toolbar is the ROM-verified mode with every slot still unbound", 
   source.intents.openGate();
   source.intents.selectGate(app.getGates()[0].gateId);
   source.intents.confirmGate();
-  source.intents.selectCompanion(started.snapshot.residents[0].residentId);
   source.intents.beginHunt();
 
   const toolbar = source.getFrame().huntField.toolbar;
@@ -340,7 +347,6 @@ test("VS2 exposes no capture surface and no unresolved terrain taxonomy", async 
   source.intents.openGate();
   source.intents.selectGate(app.getGates()[0].gateId);
   source.intents.confirmGate();
-  source.intents.selectCompanion(started.snapshot.residents[0].residentId);
   source.intents.beginHunt();
 
   // Capture is VS3. Nothing in the VS2 seam may offer it.
@@ -352,22 +358,42 @@ test("VS2 exposes no capture surface and no unresolved terrain taxonomy", async 
   // legitimately NAME what VS2 refuses to render, so a substring search would
   // flag the documentation of the refusal as the thing it forbids. What matters
   // is that no renderable FIELD carries those semantics.
+  // VS2-R2 narrowed this sweep. Item counters and radar markers are no longer
+  // unexplained: they are ROM-verified plugin capabilities, so banning their
+  // names would now ban the recovered original. What must stay out is a later
+  // slice's MECHANICS - rewards, encounters, progression - and any capture
+  // affordance. Capture capacity is allowed through as a labelled readout,
+  // asserted separately below.
+  const ALLOWED_CAPTURE_KEYS = new Set(["captureCapacityG", "captureCapacityScope"]);
   const frame = source.getFrame();
   const offendingKeys = [];
   (function walkKeys(value, path) {
     if (!value || typeof value !== "object") return;
     for (const [key, child] of Object.entries(value)) {
-      if (/marker|remain|timer|counter|capture|reward|encounter|progress|rank/i.test(key)) {
-        offendingKeys.push(`${path}.${key}`);
-      }
+      const forbidden = /reward|encounter|progress|rank/i.test(key)
+        || (/capture/i.test(key) && !ALLOWED_CAPTURE_KEYS.has(key));
+      if (forbidden) offendingKeys.push(`${path}.${key}`);
       walkKeys(child, `${path}.${key}`);
     }
   })(frame, "frame");
   assert.deepEqual(offendingKeys, [], "VS2 exposed a field belonging to a later slice");
 
+  // Capture capacity is a number the Memory Checker displays, never an action.
+  const capabilities = frame.huntField.hud.capabilities;
+  assert.equal(capabilities.captureCapacityScope, "VS3_CAPTURE_NOT_IMPLEMENTED");
+  assert.equal(capabilities.evidence, "ROM_VERIFIED");
+
+  // With no plugins fitted the HUD is dark. Capability is derived from the
+  // loadout, not granted by default - that gating is the recovered rule.
+  assert.deepEqual(capabilities.analyzerFields, []);
+  assert.deepEqual(capabilities.itemCounters, []);
+  assert.equal(capabilities.radar, false);
+  assert.equal(capabilities.radarMarkerCapacity, 0);
+  assert.equal(capabilities.memoryReadout, false);
+
   assert.deepEqual(
     Object.keys(frame.huntField.hud).sort(),
-    ["companionName", "exitAvailable", "gateName", "note"],
+    ["actorName", "capabilities", "exitAvailable", "gateName", "note"],
     "the Hunt HUD grew a field whose original semantics are unknown"
   );
 
@@ -395,7 +421,6 @@ test("VS2 adds no save field, and a reload lands back at Raising Home", async ()
   source.intents.openGate();
   source.intents.selectGate(app.getGates()[7].gateId);
   source.intents.confirmGate();
-  source.intents.selectCompanion(residentId);
   source.intents.beginHunt();
 
   // Saving mid-Hunt is allowed and writes only the existing envelope.
@@ -406,7 +431,7 @@ test("VS2 adds no save field, and a reload lands back at Raising Home", async ()
     "creature", "flags", "progression", "raising", "raisingHome", "saveKind", "schemaVersion", "sessionId", "updatedAt"
   ].sort());
   const asText = JSON.stringify(saved);
-  for (const leak of ["gate", "hunt", "wild", "companion", "camera"]) {
+  for (const leak of ["gate", "hunt", "wild", "equipment", "plugin", "camera"]) {
     assert.equal(asText.toLowerCase().includes(leak), false, `VS2 leaked ${leak} into the save envelope`);
   }
   await app.dispose();
@@ -429,7 +454,6 @@ test("starting a new game clears any expedition in progress", async () => {
   source.intents.openGate();
   source.intents.selectGate(app.getGates()[0].gateId);
   source.intents.confirmGate();
-  source.intents.selectCompanion(started.snapshot.residents[0].residentId);
   source.intents.beginHunt();
   assert.equal(app.getScreen(), CHAMPIONSHIP_SCREENS.HUNT_FIELD);
 
@@ -437,6 +461,6 @@ test("starting a new game clears any expedition in progress", async () => {
   assert.equal(app.getScreen(), CHAMPIONSHIP_SCREENS.RAISING_HOME);
   assert.equal(app.getHuntRuntime(), null);
   assert.equal(app.getSelectedGateId(), null);
-  assert.equal(app.getCompanionCreatureId(), null);
+  assert.equal(app.getHuntLoadout(), null);
   await app.dispose();
 });

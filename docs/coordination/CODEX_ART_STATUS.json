@@ -2,15 +2,17 @@
   "schemaVersion": 1,
   "owner": "CODEX_ART",
   "lastUpdated": "2026-08-28",
-  "syncBatch": "CHAMPIONSHIP_2026_REPOSITORY_SEPARATION",
-  "syncRevision": 3,
-  "syncRevisionTarget": 3,
-  "status": "REPOSITORY_MIGRATION_COMPLETE_STOPPED_FOR_OWNER_REVIEW",
+  "syncBatch": "VS2_R1_OWNER_VERDICT_AND_VS2_R2_WAIT",
+  "syncRevision": 6,
+  "syncRevisionTarget": 6,
+  "status": "VS2_R1_OWNER_APPROVED_STRUCTURAL_BASELINE_WAITING_VS2_R2_GO",
   "sourceOfTruth": {
     "coordinationRoot": "docs/coordination",
     "canonicalRepository": ".",
     "canonicalBranch": "main",
     "canonicalHeadAtPreparation": "efb397a",
+    "canonicalHeadAtVS2P": "31697f50b778fabb6fa7f9fe1d5e83cd1a5f0f67",
+    "canonicalHeadAtVS2R1Completion": "52e24a5d497631f53a070cc9053cc0717f25e86c",
     "artEvidenceWorktree": "docs/migration/PRE_MIGRATION_PROVENANCE.md#art-evidence-worktree",
     "artEvidenceBranch": "codex/championship-art-reconstruction-research",
     "artEvidenceHead": "732775486665b21508ac51c1eea0b723db0f7744",
@@ -34,7 +36,18 @@
     },
     "documentationBatchOnly": false,
     "repositoryMigration": "COMPLETE_VS1_ONLY",
-    "vs2ImplementationAuthorized": false
+    "vs2PrepAuthorized": true,
+    "vs2PrepStatus": "COMPLETE",
+    "vs2ImplementationAuthorized": false,
+    "vs2PresentationBindingAuthorization": "OWNER_AUTHORIZED_CONTRACT_PUBLISHED",
+    "vs2PresentationBindingStatus": "COMPLETE_STOPPED_FOR_OWNER_VISUAL_REVIEW",
+    "vs2R1Gate3DAuthorization": "OWNER_AUTHORIZED_CONTRACT_PUBLISHED",
+    "vs2R1Gate3DStatus": "OWNER_APPROVED_STRUCTURAL_BASELINE",
+    "vs2R1FinalArt": false,
+    "vs2R1ExactOriginalBehaviorParity": false,
+    "vs2R1ShippingReady": false,
+    "vs2R2ImplementationAuthorized": false,
+    "huntLoadoutCurrentPresentation": "PRODUCT_AUTHORED_PROTOTYPE_DEVELOPER_ONLY"
   },
   "workingTree": {
     "canonicalWasDirtyAtPreparation": false,
@@ -43,6 +56,39 @@
     "o3dCheckpointIsolatedFromRuntimeRegistryAndP2": true
   },
   "completed": [
+    {
+      "id": "VS2-R1-GATE-3D",
+      "status": "OWNER_APPROVED_STRUCTURAL_BASELINE",
+      "summary": "Owner approved the bounded original-created Three.js Gate world as the VS2-R1 structural baseline only. It is not final art, exact Original behavior parity, or shipping-ready. Camera, rotation, input, hit-test, node placement and day preview remain PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER. The 2D list remains accessibility, low-graphics and developer fallback.",
+      "output": "docs/reports/vs2-r1/VS2_R1_GATE_3D_COMPLETION_REPORT.md",
+      "rights": "ORIGINAL_CREATED",
+      "productionStatus": "OWNER_APPROVED_STRUCTURAL_BASELINE",
+      "artifactMaturity": "STRUCTURAL_PRESENTATION",
+      "humanApproved": true,
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
+    {
+      "id": "VS2-P",
+      "status": "COMPLETE_STOPPED_FOR_OWNER_VISUAL_REVIEW",
+      "summary": "P1R Gate Select, Hunt Loadout, Hunt HUD, Return presentation, toolbar shell, responsive safe areas, Player/Developer evidence modes, visual transitions, and original-created temporary field presentation are bound through VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT/v1.1 only. Five contract viewports and both 390x844/393x852 evidence flows pass.",
+      "output": "docs/reports/vs2/VS2_PRESENTATION_COMPLETION_REPORT.md",
+      "rights": "ORIGINAL_CREATED",
+      "productionStatus": "TEMPORARY_PRESENTATION",
+      "humanApproved": false,
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
+    {
+      "id": "VS2-PREP-RESPONSIVE-QA",
+      "status": "COMPLETE_REQUIRED_VIEWPORT_CONTRACT",
+      "summary": "Playwright passed all five required mobile viewports including the previously missing 393x852 target, plus 375x812 supplementary coverage. The 393x852 run has zero overflow, page errors, failed requests, duplicate canvases, enabled unknown toolbar slots, or mounted Three.js elements.",
+      "output": "docs/reports/vs1/INT_RH2_BROWSER_QA.json"
+    },
+    {
+      "id": "VS1-PRESENTATION-BACKLOG",
+      "status": "REGISTERED_NO_VS1_REDRAW",
+      "summary": "COMPANION LINK, FIELD ONLINE, ROM VERIFIED, MODE, RAW_SLOT, temporary creature names/assets, and Quiet Hollow naming are registered for a future PLAYER_MODE versus DEVELOPER_EVIDENCE_MODE pass without changing VS1 in VS2-PREP.",
+      "output": "docs/reports/vs1/VS1_PRESENTATION_BACKLOG.json"
+    },
     {
       "id": "ART-O1",
       "status": "OWNER_APPROVED_REFERENCE_BASELINE",
@@ -120,6 +166,11 @@
   ],
   "current": [
     {
+      "id": "VS2-PRESENTATION-BINDING",
+      "status": "VS2_R1_OWNER_APPROVED_WAITING_VS2_R2_GO",
+      "summary": "Gate Select retains its Owner-approved structural baseline. The current Hunt Loadout companion selector is formally PRODUCT_AUTHORED_PROTOTYPE / DEVELOPER_ONLY and cannot be promoted as final Player Mode. The published Hunt Loadout contract is spec-only until a separate VS2-R2 implementation GO."
+    },
+    {
       "id": "CHAMPIONSHIP_2026_PRODUCT_RESET",
       "status": "OWNER_VERIFIED_PRODUCT_POLICY_RECONCILED",
       "summary": "Standalone Championship 2026 is now the product authority. Nexus integration is historical/frozen; VS1 is the accepted baseline and VS2-VS7 form the gated playable-slice roadmap."
@@ -160,7 +211,10 @@
     "LEGACY_ART-P4",
     "LEGACY_ART-P5",
     "LEGACY_ART-P6",
-    "VS2_TO_VS7_IMPLEMENTATION_DURING_DOCUMENTATION_RECONCILIATION"
+    "VS3_CAPTURE",
+    "FINAL_HUNT_ART_PRODUCTION",
+    "BATTLE",
+    "SHIPPING"
   ],
   "blocked": [
     "Legacy P3-P6 is superseded/frozen; production completion is planned under VS7 but no VS7 batch is authorized.",
@@ -171,10 +225,38 @@
     "Exact toolbar slot semantics, actions, submenu membership, slot 7 identity, and numeric care effects remain unavailable to Codex until Claude publishes its authorized bounded closure.",
     "O2 mass high-resolution fidelity reconstruction remains unauthorized; 220 non-baseline entities are source-ready only.",
     "INT-RH2 physical mobile-device GPU/performance certification remains outside this headless Chromium proof.",
-    "VS2 implementation is blocked until a separate Owner GO.",
+    "VS2-R1 Gate 3D is Owner-approved only as a structural baseline; its future production-art debt remains open and exact original camera/rotation/input/hit-test/day-night switching remain unresolved.",
+    "The current Hunt Loadout companion selector is PRODUCT_AUTHORED_PROTOTYPE / DEVELOPER_ONLY. VS2_HUNT_LOADOUT_RUNTIME_CONTRACT/v1 is present as spec, but Claude reports implementation authorization is still pending; do not begin VS2-R2 without a separate Owner GO.",
     "Claude-owned runtime architecture documentation predates this product reset and must be reconciled by Claude on its next authorized owned-doc update."
   ],
   "outputs": [
+    "docs/reports/vs2-r1/VS2_R1_OWNER_VERDICT.json",
+    "docs/reports/vs2/VS2_HUNT_LOADOUT_PROTOTYPE_STATUS.json",
+    "docs/reports/vs2-r1/VS2_R1_GATE_3D_COMPLETION_REPORT.md",
+    "docs/reports/vs2-r1/VS2_R1_GATE_3D_BROWSER_QA.json",
+    "docs/reports/vs2-r1/VS2_R1_GATE_3D_AUTHORITY_AUDIT.json",
+    "docs/reports/vs2-r1/VS2_R1_THREE_BOUNDED_SCENE_AUDIT.json",
+    "docs/reports/vs2-r1/VS2_R1_RESEARCH_TO_PRODUCTION_PROVENANCE.json",
+    "assets/production/gate/vs2-r1/manifest.json",
+    "docs/reports/vs2-r1/screenshots/gate-world-390x844.png",
+    "docs/reports/vs2-r1/screenshots/gate-world-rotated-390x844.png",
+    "docs/reports/vs2-r1/screenshots/gate-destination-selected-390x844.png",
+    "docs/reports/vs2-r1/screenshots/gate-to-loadout-390x844.png",
+    "docs/reports/vs2-r1/screenshots/gate-world-393x852.png",
+    "docs/reports/vs2-r1/screenshots/gate-2d-fallback-390x844.png",
+    "docs/reports/vs2/VS2_PRESENTATION_COMPLETION_REPORT.md",
+    "docs/reports/vs2/VS2_BROWSER_QA.json",
+    "docs/reports/vs2/VS2_PRESENTATION_AUTHORITY_AUDIT.json",
+    "docs/reports/vs2/screenshots/vs2-2-gates-390x844.png",
+    "docs/reports/vs2/screenshots/vs2-3-loadout-390x844.png",
+    "docs/reports/vs2/screenshots/vs2-4-field-390x844.png",
+    "docs/reports/vs2/screenshots/vs2-2-gates-393x852.png",
+    "docs/reports/vs2/screenshots/vs2-3-loadout-393x852.png",
+    "docs/reports/vs2/screenshots/vs2-4-field-393x852.png",
+    "assets/production/temporary/vs2-hunt/manifest.json",
+    "docs/reports/vs1/INT_RH2_BROWSER_QA.json",
+    "docs/reports/vs1/screenshots/raising-home-393x852.png",
+    "docs/reports/vs1/VS1_PRESENTATION_BACKLOG.json",
     "reports/art-original/maps/o3d-battle/O3D_GALLERY_MANIFEST.json",
     "docs/qa/verify_art_o3d_battle_field_gallery.py",
     "scripts/art-original/build_art_o3d_battle_field_gallery.py",
@@ -209,7 +291,7 @@
   },
   "dependenciesChanged": {
     "value": true,
-    "note": "Owner reset the product to standalone Championship 2026. Nexus integration is frozen/out of scope; ROM-verified gameplay is preserve-by-default; VS1 is the accepted baseline and VS2-VS7 are gated roadmap slices. VS2 still has no implementation GO."
+    "note": "Owner approved VS2-R1 as OWNER_APPROVED_STRUCTURAL_BASELINE, while retaining all interaction/camera/day-preview technical placeholders and NOT_SHIPPING_READY status. The Hunt Loadout contract exists at canonical HEAD, but Claude reports CONTRACT_CLOSED_AWAITING_IMPLEMENTATION_AUTHORIZATION; Codex is waiting for a distinct VS2-R2 Owner GO."
   },
   "sharedMergeReceipt": {
     "syncRevision": 3,
@@ -243,9 +325,10 @@
     }
   },
   "recommendedNext": [
-    "STOP after reporting the reconciled Championship 2026 VS1-VS7 development plan.",
-    "Wait for a separate Owner GO before VS2 Gate Select/Hunt Loadout/Hunt Field implementation.",
-    "On Claude's next authorized owned-doc update, reconcile runtime architecture language to the standalone product reset without changing runtime behavior.",
-    "Do not start VS3-VS7, Nexus integration, production-art expansion, shipping promotion, push, merge, or deployment."
+    "WAIT for a distinct Owner GO authorizing VS2-R2 Original Hunt Loadout 2026 presentation against VS2_HUNT_LOADOUT_RUNTIME_CONTRACT/v1.",
+    "Keep Gate camera, rotation, input, hit-test, node placement and day preview marked PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER until a later published trace contract resolves them.",
+    "Keep the current Choose one companion / Greyshade / Blazetail / Crystalfin surface PRODUCT_AUTHORED_PROTOTYPE / DEVELOPER_ONLY and never promote it as Original parity or final Player Mode.",
+    "Keep art:hunt_field:vs2:temporary-signal-grove-kit as ORIGINAL_CREATED / TEMPORARY_PRESENTATION / NOT_SHIPPING_READY unless Owner explicitly promotes it.",
+    "Do not start Capture, VS3, final Hunt art production, Battle, Shipping, Nexus integration, push, merge, or deployment."
   ]
 }

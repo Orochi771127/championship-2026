@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "record": "VS2_CURRENT_HUNT_LOADOUT_PRESENTATION_STATUS",
+  "date": "2026-08-28",
+  "status": "PRODUCT_AUTHORED_PROTOTYPE",
+  "audience": "DEVELOPER_ONLY",
+  "currentSurface": {
+    "instruction": "Choose one companion",
+    "temporaryNames": [
+      "Greyshade",
+      "Blazetail",
+      "Crystalfin"
+    ],
+    "originalParityClaimed": false,
+    "finalPlayerModeApproved": false,
+    "shippingReady": false,
+    "note": "The existing surface remains available only as the VS2 technical flow scaffold. Its companion-selection semantics and temporary entities must not be promoted as the Original Hunt Loadout."
+  },
+  "replacementDependency": {
+    "contract": "docs/contracts/championship/VS2_HUNT_LOADOUT_RUNTIME_CONTRACT.v1.json",
+    "contractRepositoryState": "PUBLISHED_AT_CANONICAL_HEAD",
+    "claudeStatus": "CONTRACT_CLOSED_AWAITING_IMPLEMENTATION_AUTHORIZATION",
+    "codexBindingStatus": "SPEC_ONLY_NO_IMPLEMENTATION_GO",
+    "nextAuthorizedProduct": "VS2_R2_ORIGINAL_HUNT_LOADOUT_2026_PRESENTATION"
+  },
+  "forbiddenBeforeOwnerGo": [
+    "Invent Original loadout semantics",
+    "Promote the companion selector to final Player Mode",
+    "Implement VS2-R2 from contract availability alone",
+    "Start VS3 Capture",
+    "Start final Hunt art, Battle or Shipping"
+  ]
+}

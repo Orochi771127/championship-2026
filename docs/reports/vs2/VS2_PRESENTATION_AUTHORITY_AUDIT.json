@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "audit": "VS2-P_RUNTIME_PRESENTATION_AUTHORITY",
+  "date": "2026-08-28",
+  "repository": "R:/Projects/Championship2026/championship-2026",
+  "branch": "main",
+  "baselineHead": "31697f50b778fabb6fa7f9fe1d5e83cd1a5f0f67",
+  "contract": {
+    "path": "docs/contracts/championship/VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT.json",
+    "id": "VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT",
+    "version": "v1.1",
+    "sha256": "A5304FC8E4ED0141BECBE9671AA9EB066E6E662252BD3743E5597E68A447CB36",
+    "binding": "INJECTED_SOURCE_ONLY"
+  },
+  "presentationAuthority": {
+    "standard": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+    "domModule": "src/championship/app/vs2Screens.js",
+    "domModuleImports": [],
+    "fieldModule": "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
+    "fieldModuleImports": [],
+    "modes": [
+      "PLAYER_MODE",
+      "DEVELOPER_EVIDENCE_MODE"
+    ],
+    "playerModeRawLabels": 0,
+    "developerModeRawLabels": 8
+  },
+  "runtimeAuthority": {
+    "pixiApplicationConstructor": "src/championship/presentation/championshipPixiStage.js:44",
+    "pixiApplicationConstructorCount": 1,
+    "secondPixiApplicationCreated": false,
+    "screenLifecycleChanged": false,
+    "huntStoreCreated": false,
+    "saveAuthorityCreated": false,
+    "movementLogicChanged": false,
+    "fieldDefinitionChanged": false,
+    "wildMovementChanged": false,
+    "captureSurfaceAdded": false,
+    "huntResultAdded": false,
+    "toolbarCommandsInvented": false,
+    "mainModuleChange": "Presentation-only Raising Home Gate entry label, aria-label, and P1R authority marker; navigation still invokes the published openGate intent."
+  },
+  "huntLoadoutPresentation": {
+    "status": "PRODUCT_AUTHORED_PROTOTYPE",
+    "audience": "DEVELOPER_ONLY",
+    "originalParityClaimed": false,
+    "finalPlayerModeApproved": false,
+    "replacementImplementationAuthorized": false,
+    "statusRecord": "docs/reports/vs2/VS2_HUNT_LOADOUT_PROTOTYPE_STATUS.json"
+  },
+  "browserEvidence": {
+    "report": "docs/reports/vs2/VS2_BROWSER_QA.json",
+    "mustPass": [
+      "360x800",
+      "390x844",
+      "393x852",
+      "412x915",
+      "430x932"
+    ],
+    "mustPassResult": "5/5 PASS",
+    "completeFlow": "RAISING_HOME -> GATE_SELECT -> HUNT_LOADOUT -> HUNT_FIELD -> EXPLORE -> EXIT -> RAISING_HOME",
+    "canvasesDuringHunt": 1,
+    "canvasesAfterReturn": 1,
+    "storageKeys": [
+      "championshipModernSave:v1"
+    ]
+  },
+  "verdict": "PASS"
+}

@@ -3,7 +3,7 @@
   "owner": "Claude Code",
   "scope": "gameplay reconstruction, runtime architecture, save/state, tests, integration - for Championship 2026 standalone",
   "lastSync": "2026-08-28",
-  "syncKind": "VS2-R1 A+B: Gate Select behavior trace attempted and BLOCKED; Hunt Loadout contract closed; canonical destination identity adopted",
+  "syncKind": "VS2-R2: Original Hunt Loadout runtime reconstruction complete; companion selection demoted to developer-only",
   "git": {
     "repository": "CHAMPIONSHIP_2026_PRODUCT_SSOT (this repository)",
     "branch": "main",
@@ -21,13 +21,13 @@
       "npm run test:browser (INT-RH2)",
       "npm run test:browser:vs2 (VS2)"
     ],
-    "pass": 80,
+    "pass": 96,
     "expectedFailures": 0,
     "unexpectedFailures": 0,
     "previousBaseline": "35 pass at the VS2-PREP checkpoint; 19 at the accepted canonical baseline",
-    "baselineChangeCause": "VS2-R1 B added 12 Hunt Loadout contract cases; Codex added presentation cases in its own lane.",
-    "browserGate": "INT_RH2_BROWSER_QA_PASS viewports=6 required=5 saveReload=true. VS2-P browser gate currently FAILS in the Codex lane - see codexLaneObservation.",
-    "positiveControls": "VS2-PREP 5/5, VS2 8/8, VS2-R1 A 7/7, VS2-R1 B 11/11 caught.",
+    "baselineChangeCause": "VS2-R2 added 15 loadout runtime cases; Codex added VS2-R1 3D Gate presentation cases in its own lane.",
+    "browserGate": "INT_RH2 viewports=6 required=5; VS2-P viewports=5 evidence=2; VS2-R1 gate 3D viewports=2 fallback=PASS. All green.",
+    "positiveControls": "VS2-PREP 5/5, VS2 8/8, VS2-R1 A 7/7, VS2-R1 B 11/11, VS2-R2 10/10 caught.",
     "note": "The historical 481/3/0 baseline belongs to the pre-migration research tree and its docs/qa suite, neither of which exists in this repository."
   },
   "completed": [
@@ -236,6 +236,37 @@
         "src/championship/gate/gateCatalog.js",
         "src/championship/app/gateHuntPresentationSource.js"
       ]
+    },
+    {
+      "id": "VS2_R2_HUNT_LOADOUT_RUNTIME",
+      "state": "COMPLETE",
+      "detail": "Built the Original Hunt Loadout domain from recovered evidence and removed companion selection from the Player Mode path.",
+      "headline": "Five equipment classes over a Shop-owned inventory, four plugin positions, and a plugin-gated Hunt HUD. The loadout decides what the HUD can display, which is the recovered handoff.",
+      "preserved": [
+        "ROPE, SHOT, WIRE, ENTRAP, DAMAGE_TRAP - the five classes corroborated by NXR touch regions and the ROM's own Checker item names.",
+        "ROPE caps at one owned and carries durability; the other four cap at 99 and are the four the Hunt HUD counts.",
+        "Four plugin positions, modelled as one set of four viewed on two screens (HL-6 open).",
+        "The six Analyzer fields mapped onto the six Hunt HUD nodes: gen, type, align_text, hp, mind, size.",
+        "Checker counts, Radar markers and Memory Checker capacity as plugin-gated HUD capabilities.",
+        "Three Shop-side unlock kinds, with TAMER_RANK_THRESHOLD kept at HIGH_CONFIDENCE.",
+        "The starting inventory shape from the shop table's initial_owned column."
+      ],
+      "refused": [
+        "No per-item effect. Durability, power and length are carried and consumed by nothing.",
+        "No per-Hunt carry limit; quantity is what is owned and quantityIsCarryLimit is false.",
+        "No confirmation requirement. An empty loadout is permitted, because requiring equipment would invent a rule.",
+        "No launcher, no release menu, no lure class grouping - all still UNKNOWN_REQUIRES_TRACE.",
+        "No new save field."
+      ],
+      "companionPrototype": "DEVELOPER_PROTOTYPE_ONLY. app.selectDeveloperCompanion / getDeveloperCompanionCreatureId survive for developer inspection; the Player Mode seam does not surface them, they gate nothing, and entering the field never consults them. The field actor is a product-authored tamer, because the original Hunt HUD's creature panel describes the WILD target the Analyzer reveals.",
+      "outputs": [
+        "src/championship/hunt/loadout/huntLoadoutContract.js",
+        "src/championship/hunt/loadout/huntEquipmentCatalog.js",
+        "src/championship/hunt/loadout/huntInventory.js",
+        "src/championship/hunt/loadout/huntLoadoutRuntime.js",
+        "docs/contracts/championship/VS2_HUNT_LOADOUT_RUNTIME_CONTRACT.v1.json (v1.1, implementation-ready)",
+        "tests/championship-vs2-r2-hunt-loadout-runtime-cases.mjs"
+      ]
     }
   ],
   "current": [
@@ -243,11 +274,6 @@
       "id": "ORIGINAL_RAISING_UI_RECONSTRUCTION",
       "state": "PARTIAL",
       "detail": "Slot ordering and submenu storage ROM_VERIFIED. Per-slot command/icon binding, submenu population, enable mask and slot 7 identity remain UNKNOWN_REQUIRES_TRACE. The eight-slot shell ships as neutral disabled RAW_SLOT placeholders; CARE stays unmapped to any slot."
-    },
-    {
-      "id": "VS2_DOM_PRESENTATION",
-      "state": "NEUTRAL_RUNTIME_SHELL_AWAITING_P1R",
-      "detail": "Gate Select, Hunt Loadout and the Hunt HUD ship as a Claude-authored neutral DOM shell so VS2 is playable and testable now. DOM screen UI is Codex's lane; the shell consumes only the published seam, which is exactly what a P1R Gate/Hunt family will bind to. It is not a visual production decision."
     },
     {
       "id": "GATE_SELECT_3D_RESTORATION",
@@ -313,10 +339,10 @@
   ],
   "dependenciesChanged": true,
   "recommendedNext": [
-    "STOP. Both contracts are closed and the Codex presentation lane owns the builds.",
-    "Owner input needed to unblock the Gate Select behaviour trace: the OVL12 overlay binary or the ROM image needs to reach this machine (read-only, never committed).",
-    "Codex: the VS2-P browser gate is currently failing at 360x800 on Codex-owned in-flight work - verified independent of the Claude identity change.",
-    "VS3 Capture remains not started. Memory-card capture capacity is recorded in the loadout contract as VS3 scope."
+    "STOP. VS3 Capture is not started.",
+    "Codex: rebind the Hunt Loadout presentation to the published read-only surface; the neutral shell already consumes only the seam.",
+    "Owner input still needed to unblock the Gate Select behaviour trace: the OVL12 overlay binary or the ROM.",
+    "Memory-card capture capacity is carried and displayed but spent by nothing; it becomes live in VS3."
   ],
   "nextSafeDeltaTrace": {
     "target": "submenu population site and the per-slot command writer",
@@ -421,12 +447,11 @@
       "guard": "must not remain the sole Player Mode Gate Select"
     },
     {
-      "id": "PD-HUNT-LOADOUT-MODEL",
-      "romVerified": "Five equipment classes (ROPE/SHOT/WIRE/ENTRAP/DAMAGE_TRAP), a 79-item Hunt and Plugin catalogue, 4 gear slots, 4 plugin positions, and a plugin-gated Hunt HUD",
-      "current": "one-companion selection, declared PRODUCT_AUTHORED_PROTOTYPE",
-      "class": "ROM_VERIFIED",
-      "contract": "docs/contracts/championship/VS2_HUNT_LOADOUT_RUNTIME_CONTRACT.v1.json",
-      "guard": "must never be promoted to Original parity; a test asserts the seam keeps declaring the one-companion rule PRODUCT_AUTHORED"
+      "id": "PD-HUNT-ITEM-SEMANTICS",
+      "romVerified": "Rope durability, shot power and wire length exist as declared item values",
+      "current": "carried on the item and consumed by nothing",
+      "class": "UNKNOWN_REQUIRES_TRACE",
+      "note": "The research system-readiness register rates this system's critical unknown as 'all equipment semantics'. Structure is closed; effect is not."
     }
   ],
   "verticalSlices": {

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "record": "VS2_R1_GATE_RESEARCH_TO_PRODUCTION_PROVENANCE",
+  "date": "2026-08-28",
+  "verdict": "ORIGINAL_CREATED_NO_REFERENCE_PAYLOAD_IN_RUNTIME",
+  "referenceInputs": [
+    {
+      "id": "VS2_GATE_SELECT_3D_RUNTIME_CONTRACT/v1",
+      "use": "Verified world, 16 node-pair, day/night pair and destination-panel structure",
+      "runtimeDependency": false
+    },
+    {
+      "id": "ART-R4_GATE_SELECT",
+      "checkpoint": "9d03804",
+      "rights": "ROM_COPYRIGHTED_REFERENCE",
+      "productionStatus": "RESEARCH_ONLY",
+      "use": "Composition, shape, material and hierarchy reference only",
+      "runtimeDependency": false
+    }
+  ],
+  "productionOutput": {
+    "assetId": "art:gate_select:vs2-r1:original-created-world",
+    "manifest": "assets/production/gate/vs2-r1/manifest.json",
+    "implementation": "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
+    "rights": "ORIGINAL_CREATED",
+    "productionStatus": "OWNER_APPROVED_STRUCTURAL_BASELINE",
+    "artifactMaturity": "STRUCTURAL_PRESENTATION",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": true,
+    "approvalScope": "STRUCTURAL_BASELINE_ONLY_NOT_FINAL_ART_NOT_BEHAVIOR_PARITY"
+  },
+  "firewall": {
+    "romModelCopied": false,
+    "nsbmdLoadedOrConverted": false,
+    "decodedTextureCopied": false,
+    "originalPixelCopied": false,
+    "earthModelUsed": false,
+    "externalResearchPathImported": false,
+    "runtimeTextureInputs": 0,
+    "geometryMethod": "Original-created Three.js primitives and procedural vertex colours"
+  },
+  "promotionGate": "FUTURE_PRODUCTION_PASS_AND_OWNER_GO_REQUIRED"
+}

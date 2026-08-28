@@ -1,13 +1,8 @@
-// VS2 browser gate.
+// VS2-P browser gate.
 //
-// Walks the authorized VS2 flow in real Chromium at every contract viewport:
-// Raising Home -> Gate Select -> Hunt Loadout -> Hunt Field -> explore -> exit ->
-// Raising Home. It proves the things a unit test cannot: that one Pixi
-// Application survives three screen changes, that the field actually paints, and
-// that no viewport scrolls sideways.
-//
-// Kept separate from the INT-RH2 gate so the VS1 presentation lane and the VS2
-// runtime lane can fail independently.
+// Walks the complete authorized presentation flow in real Chromium at every
+// contract viewport. The default path is PLAYER_MODE; a second bounded pass
+// proves DEVELOPER_EVIDENCE_MODE without introducing player-facing semantics.
 
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
@@ -20,6 +15,10 @@ const OUTPUT = path.resolve("docs/reports/vs2");
 const SCREENSHOTS = path.join(OUTPUT, "screenshots");
 const CONTRACT_PATH = path.resolve("docs/contracts/championship/VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT.json");
 const CONTRACT = JSON.parse(fs.readFileSync(CONTRACT_PATH, "utf8"));
+const UI_AUTHORITY = "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R";
+const PLAYER_MODE = "PLAYER_MODE";
+const DEVELOPER_MODE = "DEVELOPER_EVIDENCE_MODE";
+const PLAYER_FORBIDDEN = /ROM VERIFIED|RAW_SLOT|UNKNOWN_REQUIRES_TRACE|CLAUDE_NEUTRAL|implementation diagnostic/i;
 
 function parseViewport(value) {
   const match = /^(\d+)x(\d+)$/.exec(value);
@@ -28,6 +27,7 @@ function parseViewport(value) {
 }
 
 const VIEWPORTS = CONTRACT.responsiveTargets.mustPass.map(parseViewport);
+const CAPTURE_VIEWPORTS = new Set([CONTRACT.responsiveTargets.reference, "393x852"]);
 
 fs.mkdirSync(SCREENSHOTS, { recursive: true });
 
@@ -35,10 +35,64 @@ function name({ width, height }) {
   return `${width}x${height}`;
 }
 
+async function auditPresentationLayout(page, viewport, screen) {
+  const result = await page.evaluate(() => {
+    const root = document.getElementById("cm-root");
+    const controls = [...root.querySelectorAll("button:not([disabled]), a[href], [role='button']")]
+      .filter((node) => {
+        const style = getComputedStyle(node);
+        const rect = node.getBoundingClientRect();
+        return style.display !== "none" && style.visibility !== "hidden" && rect.width > 0 && rect.height > 0;
+      })
+      .map((node) => {
+        const rect = node.getBoundingClientRect();
+        return {
+          label: node.textContent.trim().replace(/\s+/g, " ").slice(0, 40),
+          left: rect.left,
+          right: rect.right,
+          top: rect.top,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height
+        };
+      });
+    return {
+      documentOverflowX: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+      rootOverflowX: root.scrollWidth > root.clientWidth + 1,
+      rootWidth: root.getBoundingClientRect().width,
+      rootHeight: root.getBoundingClientRect().height,
+      uiAuthority: root.dataset.uiAuthority,
+      presentationMode: root.dataset.presentationMode,
+      text: root.innerText,
+      clippedControls: controls.filter((control) =>
+        control.left < -1 || control.right > innerWidth + 1 || control.top < -1 || control.bottom > innerHeight + 1),
+      undersizedControls: controls.filter((control) => control.width < 44 || control.height < 44)
+    };
+  });
+
+  assert.equal(result.documentOverflowX, false, `${name(viewport)} ${screen}: document horizontal overflow`);
+  assert.equal(result.rootOverflowX, false, `${name(viewport)} ${screen}: root horizontal overflow`);
+  assert.equal(result.uiAuthority, UI_AUTHORITY, `${name(viewport)} ${screen}: wrong UI authority`);
+  assert.equal(result.presentationMode, PLAYER_MODE, `${name(viewport)} ${screen}: wrong default mode`);
+  assert.doesNotMatch(result.text, PLAYER_FORBIDDEN, `${name(viewport)} ${screen}: developer evidence leaked into Player Mode`);
+  assert.deepEqual(result.clippedControls, [], `${name(viewport)} ${screen}: clipped controls`);
+  assert.deepEqual(result.undersizedControls, [], `${name(viewport)} ${screen}: enabled controls below 44px`);
+  return {
+    screen,
+    root: `${Math.round(result.rootWidth)}x${Math.round(result.rootHeight)}`,
+    uiAuthority: result.uiAuthority,
+    presentationMode: result.presentationMode,
+    horizontalOverflow: false,
+    clippedControls: 0,
+    undersizedEnabledControls: 0
+  };
+}
+
 async function walk(browser, viewport, { capture }) {
   const context = await browser.newContext({ viewport, deviceScaleFactor: 2 });
   const page = await context.newPage();
   const problems = [];
+  const screens = [];
   page.on("pageerror", (error) => problems.push(`pageerror: ${error.message}`));
   page.on("console", (message) => { if (message.type() === "error") problems.push(`console: ${message.text()}`); });
 
@@ -56,28 +110,46 @@ async function walk(browser, viewport, { capture }) {
   await page.waitForTimeout(500);
   await shot("1-raising");
 
-  // --- Gate Select ---------------------------------------------------------
   await page.click(".cm-vs2-entry");
   await page.waitForSelector("[data-screen='GATE_SELECT']", { timeout: 15000 });
+  await page.waitForFunction(() => document.getElementById("cm-root")?.dataset.gatePresentation === "THREE_BOUNDED_WORLD_MODE");
   const gates = await page.locator(".cm-vs2-gate").count();
   assert.equal(gates, 16, `${name(viewport)}: gate count`);
-  const confirm = page.locator(".cm-vs2-actions .cm-button--primary");
+  assert.equal(await page.locator("canvas[data-renderer='THREE_BOUNDED_GATE_SELECT']").count(), 1,
+    `${name(viewport)}: bounded Three Gate renderer count`);
+  assert.equal(await page.locator("#cm-root").getAttribute("data-gate-presentation"), "THREE_BOUNDED_WORLD_MODE",
+    `${name(viewport)}: Player Mode did not default to the 3D world`);
+  const confirm = page.locator(".cm-vs2-footer .cm-vs2-action--primary");
   assert.equal(await confirm.isDisabled(), true, `${name(viewport)}: confirm must start gated`);
-  await page.locator(".cm-vs2-gate").nth(2).click();
+  const visibleWorldNodes = page.locator(".cm-vs2-gate3d__node-hit:not([hidden])");
+  assert.ok(await visibleWorldNodes.count() >= 1, `${name(viewport)}: no selectable 3D nodes are visible`);
+  await visibleWorldNodes.first().click();
   assert.equal(await confirm.isDisabled(), false, `${name(viewport)}: confirm must enable on selection`);
+  screens.push(await auditPresentationLayout(page, viewport, "GATE_SELECT"));
   await shot("2-gates");
 
-  // --- Hunt Loadout --------------------------------------------------------
   await confirm.click();
   await page.waitForSelector("[data-screen='HUNT_LOADOUT']", { timeout: 15000 });
-  const begin = page.locator(".cm-vs2-actions .cm-button--primary");
-  assert.equal(await begin.isDisabled(), true, `${name(viewport)}: begin must start gated`);
-  assert.ok(await page.locator(".cm-vs2-member").count() >= 1, `${name(viewport)}: party is empty`);
-  await page.locator(".cm-vs2-member").first().click();
-  assert.equal(await begin.isDisabled(), false, `${name(viewport)}: begin must enable on companion`);
+  const begin = page.locator(".cm-vs2-footer .cm-vs2-action--primary");
+  // VS2-R2 replaced the companion picker with the recovered structure. An empty
+  // loadout is permitted - no original rule requires anything equipped - so BEGIN
+  // is no longer gated on a selection.
+  assert.equal(await begin.isDisabled(), false, `${name(viewport)}: an empty loadout must be permitted`);
+
+  const classRows = page.locator("[data-equipment-class]");
+  const pluginRows = page.locator("[data-plugin-position]");
+  assert.equal(await classRows.count(), 5, `${name(viewport)}: five recovered equipment classes`);
+  assert.equal(await pluginRows.count(), 4, `${name(viewport)}: four recovered plugin positions`);
+  assert.equal(await page.locator(".cm-vs2-member").count(), 0, `${name(viewport)}: the companion picker survived`);
+
+  // Equipping and clearing both work, and neither gates entry.
+  const ropeOption = page.locator("[data-equipment-class='ROPE'] .cm-vs2-loadout__option").first();
+  await ropeOption.click();
+  assert.equal(await ropeOption.getAttribute("data-selected"), "true", `${name(viewport)}: rope did not equip`);
+  assert.equal(await begin.isDisabled(), false, `${name(viewport)}: equipping must not gate entry`);
+  screens.push(await auditPresentationLayout(page, viewport, "HUNT_LOADOUT"));
   await shot("3-loadout");
 
-  // --- Hunt Field ----------------------------------------------------------
   await begin.click();
   await page.waitForSelector("[data-screen='HUNT_FIELD']", { timeout: 20000 });
   await page.waitForTimeout(900);
@@ -89,22 +161,20 @@ async function walk(browser, viewport, { capture }) {
 
   const slots = await page.locator(".cm-vs2-slot").count();
   const disabled = await page.locator(".cm-vs2-slot[disabled]").count();
-  assert.equal(slots, 8, `${name(viewport)}: ROM-verified slot count`);
+  const rawLabels = await page.locator(".cm-vs2-slot__raw").count();
+  assert.equal(slots, 8, `${name(viewport)}: verified slot count`);
   assert.equal(disabled, 8, `${name(viewport)}: every slot must stay disabled`);
+  assert.equal(rawLabels, 0, `${name(viewport)}: RAW_SLOT labels leaked into Player Mode`);
+  screens.push(await auditPresentationLayout(page, viewport, "HUNT_FIELD"));
   await shot("4-field");
 
-  // --- Explore -------------------------------------------------------------
   const canvasBox = await page.locator(".cm-vs2-field__canvas").boundingBox();
   assert.ok(canvasBox.height > 200, `${name(viewport)}: the field has no room to render`);
   await page.mouse.click(canvasBox.x + canvasBox.width * 0.75, canvasBox.y + canvasBox.height * 0.7);
   await page.waitForTimeout(1600);
+  screens.push(await auditPresentationLayout(page, viewport, "EXPLORE"));
   await shot("5-explored");
 
-  const overflow = await page.evaluate(() =>
-    document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
-  assert.equal(overflow, false, `${name(viewport)}: the page scrolls horizontally`);
-
-  // --- Return --------------------------------------------------------------
   await page.locator(".cm-vs2-hud__exit").click();
   await page.waitForSelector(".cm-vs2-entry", { timeout: 15000 });
   await page.waitForTimeout(600);
@@ -112,49 +182,82 @@ async function walk(browser, viewport, { capture }) {
   assert.equal(canvasesAfter, 1, `${name(viewport)}: the stage was rebuilt instead of re-attached`);
   await shot("6-returned");
 
-  // The Raising slice is intact on return: the save key is still the only one.
   const keys = await page.evaluate(() => Object.keys(window.localStorage));
   assert.deepEqual(keys.filter((key) => key !== "championshipModernSave:v1"), [],
     `${name(viewport)}: a second storage key appeared`);
-
   assert.deepEqual(problems, [], `${name(viewport)}: console or page errors`);
   await context.close();
-  return { viewport: name(viewport), gates, slots, canvases };
+  return {
+    viewport: name(viewport), captured: capture, gates,
+    toolbarSlots: slots, toolbarSlotsBound: slots - disabled,
+    canvasesDuringHunt: canvases, canvasesAfterReturn: canvasesAfter, screens
+  };
+}
+
+async function verifyDeveloperMode(browser) {
+  const viewport = parseViewport(CONTRACT.responsiveTargets.reference);
+  const context = await browser.newContext({ viewport, deviceScaleFactor: 1 });
+  const page = await context.newPage();
+  const join = BASE_URL.includes("?") ? "&" : "?";
+  await page.goto(`${BASE_URL}${join}presentation=developer`, { waitUntil: "networkidle" });
+  await page.evaluate(() => window.localStorage.clear());
+  await page.reload({ waitUntil: "networkidle" });
+  await page.click("#cm-new-game");
+  await page.waitForSelector(".cm-vs2-entry", { timeout: 20000 });
+  await page.click(".cm-vs2-entry");
+  await page.waitForSelector("[data-screen='GATE_SELECT']", { timeout: 15000 });
+  assert.equal(await page.locator("#cm-root").getAttribute("data-presentation-mode"), DEVELOPER_MODE);
+  assert.ok(await page.locator(".cm-vs2-evidence").count() >= 1, "developer Gate evidence missing");
+  await page.locator(".cm-vs2-gate").nth(2).click();
+  await page.locator(".cm-vs2-footer .cm-vs2-action--primary").click();
+  // No companion step: an empty loadout is permitted, so BEGIN follows directly.
+  await page.waitForSelector("[data-screen='HUNT_LOADOUT']", { timeout: 15000 });
+  await page.locator(".cm-vs2-footer .cm-vs2-action--primary").click();
+  await page.waitForSelector("[data-screen='HUNT_FIELD']", { timeout: 20000 });
+  assert.equal(await page.locator(".cm-vs2-slot__raw").count(), 8, "developer RAW_SLOT evidence count");
+  assert.equal(await page.locator(".cm-vs2-slot:not([disabled])").count(), 0, "developer mode bound an unknown slot");
+  assert.match(await page.locator(".cm-vs2-toolbar").innerText(), /MODE 2.*ROM VERIFIED/s);
+  await context.close();
+  return { viewport: name(viewport), presentationMode: DEVELOPER_MODE, rawSlotLabels: 8, toolbarSlotsBound: 0, verdict: "PASS" };
 }
 
 (async () => {
   const browser = await chromium.launch({ headless: true, executablePath: CHROME });
   const results = [];
+  let developerMode;
   try {
     for (const viewport of VIEWPORTS) {
-      // Screenshots at the contract reference viewport only. The other four are
-      // asserted just as hard; capturing all five would add a megabyte of
-      // near-identical evidence to every run.
-      results.push(await walk(browser, viewport, { capture: name(viewport) === CONTRACT.responsiveTargets.reference }));
+      results.push(await walk(browser, viewport, { capture: CAPTURE_VIEWPORTS.has(name(viewport)) }));
     }
+    developerMode = await verifyDeveloperMode(browser);
   } finally {
     await browser.close();
   }
 
   const report = {
-    gate: "CHAMPIONSHIP_VS2_BROWSER_QA",
+    gate: "CHAMPIONSHIP_VS2_P_BROWSER_QA",
     date: new Date().toISOString(),
     baseUrl: BASE_URL,
     contract: `${CONTRACT.contractId}/${CONTRACT.version}`,
+    uiAuthority: UI_AUTHORITY,
     requiredViewports: CONTRACT.responsiveTargets.mustPass,
+    evidenceViewports: [...CAPTURE_VIEWPORTS],
     results,
+    developerMode,
     invariants: {
       pixiApplicationsPerScreen: 1,
       stageRebuiltOnScreenChange: false,
       toolbarSlots: 8,
       toolbarSlotsBound: 0,
-      storageKeys: ["championshipModernSave:v1"]
+      playerModeRawLabels: 0,
+      storageKeys: ["championshipModernSave:v1"],
+      captureSurfacePresent: false
     },
     verdict: "PASS"
   };
   fs.writeFileSync(path.join(OUTPUT, "VS2_BROWSER_QA.json"), `${JSON.stringify(report, null, 2)}\n`);
-  console.log(`CHAMPIONSHIP_VS2_BROWSER_QA_PASS viewports=${results.length} required=${VIEWPORTS.length}`);
+  console.log(`CHAMPIONSHIP_VS2_P_BROWSER_QA_PASS viewports=${results.length} evidence=${CAPTURE_VIEWPORTS.size}`);
 })().catch((error) => {
-  console.error(`CHAMPIONSHIP_VS2_BROWSER_QA_FAIL: ${error.message}`);
+  console.error(`CHAMPIONSHIP_VS2_P_BROWSER_QA_FAIL: ${error.stack || error.message}`);
   process.exit(1);
 });

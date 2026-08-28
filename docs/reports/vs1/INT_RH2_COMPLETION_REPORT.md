@@ -8,12 +8,13 @@ The standalone flow boots from `championship.html`, starts Raising Home, selects
 ## Verification
 
 - Deterministic tests: `19 / 19 PASS`.
-- Mobile browser viewports: `360×800`, `375×812`, `390×844`, `412×915`, `430×932` — all PASS.
+- Required mobile browser viewports: `360×800`, `390×844`, `393×852`, `412×915`, `430×932` — all PASS.
+- Supplementary mobile browser viewport: `375×812` — PASS.
 - Renderer: exactly one PixiJS Application/canvas; DOM owns UI; Three.js unmounted; no second ticker.
 - Toolbar: eight visible raw-slot shells; zero enabled commands; unknown semantics preserved.
 - Save: one writer and one product key; malformed save safely permits New Game.
 - Browser health: zero page errors and zero failed requests in normal runs.
-- Frame pacing: approximately 60 FPS; p95 `16.7–16.8 ms` across the five viewport samples.
+- Frame pacing: approximately 60 FPS; p95 `16.7–16.8 ms` across the six viewport samples.
 - Bounded Pixi failure: fallback renders no partial canvas while Save and toolbar remain available.
 
 Machine-readable evidence: `docs/reports/vs1/INT_RH2_BROWSER_QA.json`. Screenshots are in `docs/reports/vs1/screenshots/`.

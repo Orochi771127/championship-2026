@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "record": "VS2_R1_GATE_OWNER_VERDICT",
+  "date": "2026-08-28",
+  "verdict": "OWNER_APPROVED_STRUCTURAL_BASELINE",
+  "artifact": "art:gate_select:vs2-r1:original-created-world",
+  "notApprovedAs": [
+    "FINAL_ART",
+    "EXACT_ORIGINAL_BEHAVIOR_PARITY",
+    "SHIPPING_READY"
+  ],
+  "technicalPlaceholdersRemain": [
+    "camera",
+    "rotation",
+    "input",
+    "hit-test",
+    "node placement",
+    "day preview"
+  ],
+  "fallbackStatus": [
+    "ACCESSIBILITY_FALLBACK",
+    "LOW_GRAPHICS_FALLBACK",
+    "DEVELOPER_FALLBACK"
+  ],
+  "futureVisualDebt": [
+    "biome visual differentiation",
+    "surface and material quality",
+    "node and world integration",
+    "day and night visual system",
+    "Gate world visual richness"
+  ],
+  "nextGate": "WAIT_FOR_EXPLICIT_VS2_R2_IMPLEMENTATION_AUTHORIZATION",
+  "prohibited": [
+    "VS3_CAPTURE",
+    "FINAL_HUNT_ART",
+    "BATTLE",
+    "SHIPPING"
+  ]
+}

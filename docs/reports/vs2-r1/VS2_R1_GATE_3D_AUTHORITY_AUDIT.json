@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "audit": "VS2_R1_GATE_3D_RUNTIME_PRESENTATION_AUTHORITY",
+  "date": "2026-08-28",
+  "checkpointRead": "419f8ee",
+  "verdict": "OWNER_APPROVED_STRUCTURAL_BASELINE",
+  "selectionAuthority": {
+    "read": "frame.gateSelect.gates and frame.gateSelect.selection.gateId",
+    "write": "source.intents.selectGate(gateId)",
+    "threeLocalSelectionTruth": false,
+    "fallbackSelectionTruth": "SAME_SOURCE_AND_INTENT"
+  },
+  "architecture": {
+    "newGateStore": false,
+    "newRouter": false,
+    "newSaveAuthority": false,
+    "newGameplayState": false,
+    "newPixiApplication": false,
+    "huntWorldLogicChanged": false,
+    "loadoutLogicChanged": false,
+    "captureAdded": false,
+    "vs3Started": false
+  },
+  "presentation": {
+    "screenUi": "DOM_CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+    "gateWorldRenderer": "THREE_BOUNDED_GATE_SELECT",
+    "playerDefault": "THREE_BOUNDED_WORLD_MODE",
+    "fallbacks": [
+      "ACCESSIBILITY_FALLBACK",
+      "LOW_CAPABILITY_FALLBACK",
+      "DEVELOPER_FALLBACK"
+    ],
+    "canonicalBiomeIdentities": 16,
+    "exactOriginalDisplayCopyClaimed": false,
+    "exactOriginalDisplayOrderClaimed": false
+  },
+  "ownerVerdict": {
+    "finalArt": false,
+    "exactOriginalBehaviorParity": false,
+    "shippingReady": false,
+    "technicalPlaceholderFields": [
+      "camera",
+      "rotation",
+      "input",
+      "hit-test",
+      "node placement",
+      "day preview"
+    ]
+  },
+  "qa": {
+    "deterministicTests": "81/81 PASS",
+    "vs2MustPassViewports": "5/5 PASS",
+    "vs2R1EvidenceViewports": [
+      "390x844",
+      "393x852"
+    ],
+    "browserReport": "docs/reports/vs2-r1/VS2_R1_GATE_3D_BROWSER_QA.json"
+  }
+}
