@@ -49,6 +49,8 @@ There is one standalone application, one Championship mode authority, one domain
 
 Start at [docs/README.md](docs/README.md). It separates current integrated truth from historical Claude/Codex coordination snapshots.
 
+The original-game art audit starts at [docs/art/ART_MASTER_INVENTORY.md](docs/art/ART_MASTER_INVENTORY.md); ROM graphics and reconstruction galleries remain external under `R:\NEXUS LINK\原作\research-only`.
+
 - [Current product status](docs/CURRENT_PRODUCT_STATUS.md)
 - [Reusable implementation inventory](docs/REUSE_INVENTORY.md)
 - [Production plan](docs/planning/CHAMPIONSHIP_2026_MASTER_GAME_PRODUCTION_PLAN.md)

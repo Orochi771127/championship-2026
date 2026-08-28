@@ -23,8 +23,11 @@ This root is **read-only reference**. Nothing under it is imported, copied, bund
 | `YDIJ_3D_RESEARCH_PACK_2026-08-24/` | ROM-wide 3D inventory, overlay string cross-reference, per-subsystem focus copies |
 | `YDIJ_3D_DECODED_REFERENCE_PACK_2026-08-24/` | decoded model structure, node candidates, model/animation associations, SHA-256 manifest |
 | `YDIJ_BATTLE_REVERSE_CLOSURE_STAGE2..4_2026-08-24/` | derived loader cross-reference census |
-| `CLAUDE_CODE_YDIJ_HANDOFF/01_UI_ART_LAYOUT/` | UI source-asset, background and sprite-bundle inventories; 94-scene NXR analysis |
+| `CLAUDE_CODE_YDIJ_HANDOFF/01_UI_ART_LAYOUT/` | UI source-asset, background and sprite-bundle inventories; historical 94-scene NXR analysis |
 | `YDIJ_RAW_RESEARCH_EVIDENCE/` | raw forensic catalogs |
+| `research-only/YDIJ_FULL_ROM_DECONSTRUCTION_2026-08-29/` | authoritative 6,419-file NitroFS census, 96 NXR / 1,369 nodes, text and SDAT payload extraction |
+| `research-only/YDIJ_ART_AUDIT_2026-08-29/` | 752-unit original-art registry, Art-A inventory, matrices and AI handoff |
+| `research-only/YDIJ_ORIGINAL_VISUAL_RECONSTRUCTION_ARCHIVE_2026-08-29/` | consolidated committed O1-O4 / ART-R1-R5 research galleries and manifests |
 
 Metadata from these packs — names, counts, offsets, hashes, structural facts — is freely citable and is not copyrighted material. The `raw_3d_assets/`, `focus_*/` and extracted-image trees are ROM-derived and must never enter this repository.
 
