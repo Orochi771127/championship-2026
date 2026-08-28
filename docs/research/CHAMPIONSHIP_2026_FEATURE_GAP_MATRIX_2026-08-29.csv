@@ -1,0 +1,35 @@
+feature_id,domain,original_feature,evidence_state,current_runtime_state,missing_data,fillability,next_action
+FLOW-001,Core,Calendar 07:00-22:00 / 8 days per season / 4 seasons,WEB_CROSSCHECK_PENDING_BINARY,NOT_STARTED,Clock advancement seasonal modifiers autosave boundary,LIKELY_TRACE,Trace clock and day-end writers
+FLOW-002,Core,Four-year Championship cadence,OFFICIAL_WEB_CROSSCHECK_AND_LOCAL_TABLES,NOT_STARTED,Qualification scheduling endurance and final writes,LIKELY_TRACE,Trace OVL8 progression and calendar gates
+RAISE-001,Raising,Direct creature manipulation,VERIFIED,IMPLEMENTED,None for interaction grammar,DONE,Preserve Pointer Events contract
+RAISE-002,Care,Feed clean treatment and protein,PARTIAL,REACTION_ONLY,Exact mutations consumption success failure,LIKELY_TRACE,Trace OVL18 care handlers
+RAISE-003,Cage,36 CageDefinitions and 35 shop cages,ROM_VERIFIED,PARTIAL_TWO_PROTOTYPE_REGIONS,Capacity occupancy effects and relocation consequences,LIKELY_TRACE,Trace OVL15/OVL18 and build Cage catalog contract
+RAISE-004,Cage,Cage levels capped by Tamer rank,ROM_VERIFIED,NOT_STARTED,Numeric scaling purchase/upgrade transaction,LIKELY_TRACE,Trace level readers and writers
+RAISE-005,Status,HP TP Capacity Attack Defense Wisdom Speed family generation attribute personality,ROM_VERIFIED_STRUCTURE,NOT_STARTED,Durable field meanings ranges mutations and visibility,LIKELY_TRACE,Publish canonical CreatureState schema
+EVO-001,Evolution,Branching evolution graph,STATIC_CATALOG_AVAILABLE,NOT_STARTED,Full edge conditions priority and tie rules,LIKELY_TRACE,Generate graph then trace resolver priority
+EVO-002,Evolution,Time life history care penalties and egg reversion,WEB_CROSSCHECK_PENDING_BINARY,NOT_STARTED,Reset scope lifespan and prior-life selection,LIKELY_TRACE,Trace lifecycle/evolution handlers
+HUNT-001,Gate,16 Hunt locations and biome identities,VERIFIED_BINARY,IMPLEMENTED_PARTIAL,Exact gate-to-field mapping unlock/fee writes,LIKELY_TRACE,Join location catalog to progression readers
+HUNT-002,Loadout,Five equipment classes plus plugins,VERIFIED_BINARY,IMPLEMENTED,Per-Hunt carry limits and exact item effects,LIKELY_TRACE,Trace equipment consumption and effect dispatch
+HUNT-003,Hunt,128x128 field exploration and wild wander,VERIFIED_STRUCTURE,IMPLEMENTED,Original spawn distribution time weather and AI semantics,LIKELY_TRACE,Trace HM data and wild state machine
+HUNT-004,Capture,Rope circle pull and capture,VERIFIED_PLAYER_BEHAVIOR,NOT_STARTED,All tool branches tether thresholds result writes and failure states,LIKELY_TRACE,Build VS3 contract and emulator fixtures
+HUNT-005,Result,Capture capacity release and Hunt result,PARTIAL,NOT_STARTED,Capacity formula inventory writes naming and rollback,LIKELY_TRACE,Trace result and PlayerData writers
+SHOP-001,Shop,118 records across four categories,VERIFIED_BINARY,NOT_STARTED,Transaction write paths visibility transitions upgrade effects,LIKELY_TRACE,Implement catalog then atomic transaction tests
+DB-001,Database,216 creature collection entries,VERIFIED_BINARY,NOT_STARTED,Seen/owned/evolved distinctions completion reward,LIKELY_TRACE,Trace Database flags and 100-percent branch
+BATTLE-001,Battle Setup,Team selection up to 3 and pre-battle orders,VERIFIED_CROSSCHECK,NOT_STARTED,Exact order values AI bias and validation,LIKELY_TRACE,Trace setup writers to OVL19
+BATTLE-002,Auto Battle,Independent cooldown auto battle,VERIFIED_BINARY,NOT_STARTED,Hit/miss TP critical distribution init/ties,LIKELY_HIGH_RISK_TRACE,Close B02 B03 B06 B09 before parity
+BATTLE-003,Status,Single negative slot positive buff slot heal clear and DoT,VERIFIED_BINARY,NOT_STARTED,Weak status names and individual non-DoT hooks,LIKELY_TRACE,Close B05 semantic register
+BATTLE-004,Title Match,62 matches and 45 eligibility rules,VERIFIED_BINARY,NOT_STARTED,Calendar UI and complete reward/unlock writes,LIKELY_TRACE,Ingest catalogs and trace result graph
+BATTLE-005,Free Battle,Repeatable configurable battle,WEB_CROSSCHECK_AND_LOCAL_UI,NOT_STARTED,Opponent parameters fees/rewards/counters,LIKELY_TRACE,Trace Battle Menu and result modes
+BATTLE-006,Password Battle,Encoded asynchronous opponent,WEB_CROSSCHECK_AND_LOCAL_UI,NOT_STARTED,Encoding validation versioning and safety,LIKELY_TRACE,Trace password serializer/parser
+BATTLE-007,Championship,Qualification and consecutive main tournament battles,OFFICIAL_WEB_CROSSCHECK,NOT_STARTED,Round count recovery/endurance failure and final unlocks,LIKELY_TRACE,Trace Championship state machine
+BATTLE-008,Practice,Practice battle mode,WEB_CROSSCHECK_AND_LOCAL_UI,NOT_STARTED,Counter reward injury and evolution effects,LIKELY_TRACE,Trace mode flag through result writes
+BATTLE-009,Multiplayer,Wireless and Nintendo WFC battle,OFFICIAL_WEB_CROSSCHECK,NOT_STARTED,Modern protocol identity matchmaking and anti-cheat,NEW_PRODUCT_BUILD,Owner chooses online scope/backend
+PROG-001,Progression,Tamer rank title medal gate and licence progression,PARTIAL,NOT_STARTED,Complete PlayerData write graph and invariants,LIKELY_TRACE,Trace OVL8 and create golden saves
+SAVE-001,Save,Full-game durable state,PARTIAL,RAISING_ONLY,Full schema migrations recovery and version boundaries,LIKELY_TRACE,Close PlayerData map then extend one save authority
+TEXT-001,Localization,3197 decoded source text records,VERIFIED_BINARY,NOT_INGESTED,Control tags runtime lookup IDs and translation policy,YES,Build source catalog adapter and caller map
+AUDIO-001,Audio,151 SDAT embedded payloads,VERIFIED_BINARY,NOT_STARTED,Event callers priority ducking loops and replacements,YES_WITH_TRACE,Map SDAT IDs to ARM/overlay calls
+UI-001,UI,96 NXR scenes and 1369 nodes,VERIFIED_BINARY,PARTIAL,Modern screen semantics states accessibility and component mapping,YES,Complete screen inventory without literal DS coordinates
+ART-001,Production,Creature environment UI and VFX replacement,RESEARCH_REFERENCE_ONLY,TEMPORARY,Licensed or original-created shipping assets,OWNER_OR_LICENSOR_REQUIRED,Approve IP and production-art plan
+NET-001,Network,Original Nintendo WFC service,DISCONTINUED,NOT_STARTED,New service architecture accounts security persistence moderation,NEW_PRODUCT_BUILD,Select offline/private/matchmaking scope
+QA-001,QA,Deterministic parity and release coverage,PLANNED,VS1_VS2_ONLY,Golden fixtures devices browsers performance accessibility save recovery,YES,Create per-slice release gates
+DOC-001,Governance,One authoritative roadmap,CONFLICT_DETECTED,OPEN,README says VS2 built while older master says Owner GO required,YES,Reconcile before VS3 authorization

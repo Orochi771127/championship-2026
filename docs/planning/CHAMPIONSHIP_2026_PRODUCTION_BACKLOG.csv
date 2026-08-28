@@ -1,0 +1,51 @@
+work_id,phase,workstream,deliverable,depends_on,evidence_gate,completion_gate,estimate_weeks,parallelizable
+GOV-001,R0,Governance,"Reconcile README, master sync, blocker ledger and VS2 status",,"Owner directive + current runtime",All four authorities agree,1,no
+GOV-002,R0,Rights,"Adopt IP-neutral runtime and defer final original IP decision until functional completion",,"Owner directive 2026-08-29",Neutral IDs and research/production firewall recorded,1,no
+DES-001,R0,Design,"Approve master production plan and 9:16 screen blueprint",GOV-001,"Owner review",Approved screen inventory and scope,1,no
+DATA-001,R1,Data,"Freeze neutral stable IDs, evidence vocabulary and generated catalog contracts","GOV-001;GOV-002","Verified manifests",No product key depends on protected names and no research runtime import,2,no
+DATA-CAGE-001,R1,Data,"Define versioned Cage board, module shapeMask, placement and Training-effect contracts",DATA-001,"Owner-confirmed modular Cage invariant + evidence taxonomy",Schemas validate shapes effects presentation keys and evidence state without using asset filenames as IDs,2,yes
+CONTENT-NEUTRAL-001,R1,Content,"Create 16-24 original-neutral test species and modular placeholder kits",DATA-001,"Functional coverage matrix",All mechanics can be tested without protected characters or media,4,yes
+ARCH-001,R1,Architecture,"Harden one action map and active-device prompt system",DES-001,"Existing one-state authority",Touch/mouse/keyboard/gamepad fixtures pass,2,yes
+ARCH-002,R1,Architecture,"Version save schema and atomic migration/recovery",DATA-001,"Existing one-save authority",Migration/corruption/rollback tests pass,2,yes
+ARCH-003,R1,Performance,"Add quality tiers and release-build perf HUD",DES-001,"Measured device profiles",High/Medium/Low policies selectable and measured,2,yes
+UI-001,R1,UI,"Implement shared safe-area screen shell and focus stack",DES-001,"P1R production standard",All contract viewports and focus tests pass,3,yes
+TRACE-RAISE-001,R2,Reverse engineering,"Close care handler mutations and consumption",DATA-001,"OVL15/OVL18 trace",Deterministic fixtures reproduce changes,3,yes
+TRACE-RAISE-002,R2,Reverse engineering,"Close original Cage footprints orientation rules capacity and Training effects",DATA-CAGE-001,"OVL15/OVL18 + save diff + Owner-confirmed modular invariant",No guessed shape placement effect or numeric value remains in parity path,5,yes
+TRACE-EVO-001,R2,Reverse engineering,"Close evolution conditions, priority, reset and egg reversion",TRACE-RAISE-001,"Binary trace + emulator fixtures",Resolver fixtures cover ties and history,5,no
+GAME-RAISE-001,R2,Gameplay,"Implement complete Raising/calendar/condition domain",TRACE-RAISE-001,"Verified or neutral rules",Multi-day deterministic simulation passes,5,no
+GAME-EVO-001,R2,Gameplay,"Implement evolution resolver and life history",TRACE-EVO-001,"Verified resolver contract",Save/reload and evolution fixtures pass,4,no
+UI-RAISE-001,R2,UI,"Complete Raising Home, Detail and Training screens",GAME-RAISE-001,"9:16 blueprint",Touch and accessibility flows pass,4,yes
+TRACE-HUNT-001,R3,Reverse engineering,"Close spawn selection and wild AI states",DATA-001,"OVL12 trace",Seeded spawn/AI fixtures pass,4,yes
+TRACE-HUNT-002,R3,Reverse engineering,"Close Rope/Shot/Wire/Trap branches and capacity",DATA-001,"OVL12 trace",Equipment state machine fixtures pass,4,yes
+GAME-CAPTURE-001,R3,Gameplay,"Implement canonical capture/tether state machine",TRACE-HUNT-002,"Capture golden contract",Pointer-path fixtures pass across DPR/viewports,4,no
+GAME-HUNT-001,R3,Gameplay,"Implement Hunt Result atomic transaction",GAME-CAPTURE-001,"Verified result write graph",Return/save/reload fixtures pass,3,no
+UI-HUNT-001,R3,UI,"Complete Capture overlay and Hunt Result",GAME-CAPTURE-001,"9:16 blueprint",Thumb/device/recovery QA passes,3,yes
+ART-PILOT-001,R3,Prototype,"Prove skinnable content with one temporary original creature, biome, Hunt UI, VFX and audio","GOV-002;CONTENT-NEUTRAL-001","Original-neutral brief",Changing the manifest replaces the packet without gameplay-code edits,3,yes
+GAME-SHOP-001,R4,Gameplay,"Implement 118-record Shop transaction domain",DATA-001,"Shop table + unlock trace",Availability/Bits/rollback golden tests pass,4,yes
+GAME-DB-001,R4,Gameplay,"Implement seen/captured/owned Database state",DATA-001,"Collection trace",State separation and completion tests pass,3,yes
+GAME-CAGE-001,R4,Gameplay,"Implement Cage ownership shape-aware modular edit environmental effects and atomic save flow","DATA-CAGE-001;TRACE-RAISE-002","40/36/35 crosswalk + modular Cage spec",Placement validation effect preview deterministic tick cancel confirm and exact save restore tests pass,6,no
+UI-SUPPORT-001,R4,UI,"Complete Shop, Database and Cage Edit screens","GAME-SHOP-001;GAME-DB-001;GAME-CAGE-001","9:16 blueprint",Responsive/localization/accessibility QA passes,5,yes
+QA-CAGE-001,R4,QA,"Verify Cage footprints overlap boundaries effects rollback and save reload across input devices","GAME-CAGE-001;UI-SUPPORT-001","Modular Cage acceptance matrix",Property deterministic replay pointer-cancel viewport and skin-replacement tests pass,2,no
+TRACE-BATTLE-001,R5,Reverse engineering,"Close hit/miss and Sense downstream behavior",DATA-001,"OVL19/action/native/projectile trace",Hit/miss fixtures are reproducible,5,yes
+TRACE-BATTLE-002,R5,Reverse engineering,"Close TP/resource behavior",DATA-001,"OVL19 trace",Cost/recovery/result fixtures pass,5,yes
+TRACE-BATTLE-003,R5,Reverse engineering,"Close init seeding, same-tick ties and result write graph",DATA-001,"OVL19/OVL8 trace",Deterministic ordering/progression fixtures pass,4,yes
+GAME-BATTLE-001,R5,Gameplay,"Implement verified deterministic auto-Battle resolver","TRACE-BATTLE-001;TRACE-BATTLE-002;TRACE-BATTLE-003","Stage 4 + closure traces",Golden formulas/replay hashes pass,8,no
+UI-BATTLE-001,R5,UI,"Implement Battle select, team/strategy, Battle and Result","GAME-BATTLE-001;DES-001","9:16 blueprint",No command-turn redesign; device QA passes,6,yes
+GAME-PROG-001,R6,Gameplay,"Implement Titles, rank, gates, rewards and Championship","TRACE-BATTLE-003;GAME-EVO-001","Complete progression graph",New Game to Championship test passes,6,no
+IP-GATE-001,R7B,Governance,"After functional completion choose final title, world, launch roster and public content scope",QA-ALPHA-001,"Owner decision + trademark/IP review plan",Approved original-IP brief and measurable launch content scope,2,no
+CONTENT-UI-001,R7B,Art,"Complete final original HD UI component families","UI-001;IP-GATE-001","Approved original-IP brief + rights",All selected screen families human-approved,8,yes
+CONTENT-CHAR-001,R7B,Art,"Produce 4-8 final original entity pipeline pilot","ART-PILOT-001;IP-GATE-001","Original-IP brief + seed-frame approval",Anchor/strip/phone-scale QA passes,6,yes
+CONTENT-CHAR-002,R7B,Art,"Produce approved original launch-roster archetypes",CONTENT-CHAR-001,"Human pilot approval",Style/atlas standard locked and launch quantity frozen,8,yes
+CONTENT-CHAR-003,Post-release,Art,"Expand original roster in 20-30 entity content packs",CONTENT-CHAR-002,"Per-batch approval",Each pack is original rights-cleared and runtime-budgeted,ongoing,yes
+CONTENT-HUNT-001,R7B,Art,"Produce the approved original Hunt biome release set","ART-PILOT-001;IP-GATE-001","Original-IP brief + rights",Selected release fields pass layer/occlusion/perf QA,24,yes
+CONTENT-CAGE-001,R7B,Art,"Produce the approved original Cage/Training release set","TRACE-RAISE-002;IP-GATE-001","Original-IP brief + rights",Selected release treatments pass gameplay and visual QA,20,yes
+CONTENT-BATTLE-001,R7B,Art,"Produce the approved original Battle field release set","GAME-BATTLE-001;IP-GATE-001","Original-IP brief + rights",Selected release arenas pass readability/perf QA,14,yes
+CONTENT-VFX-001,R7B,Art,"Produce final original capture/evolution/Battle/weather VFX library","ART-PILOT-001;IP-GATE-001","Original-IP brief + rights",Tiered/reduced-motion/device QA passes,12,yes
+CONTENT-AUDIO-001,R7B,Audio,"Produce final original or licensed music, ambience and SFX",IP-GATE-001,"Approved audio brief + rights",Mix/loop/device/loudness QA passes,20,yes
+LOC-001,R7B,Localization,"Write and localize final original player-facing text","UI-SUPPORT-001;IP-GATE-001","Original world/lexicon + text event map",No source text and overflow/language QA pass,10,yes
+CONTENT-PUBLIC-001,R7B,Release-content,"Assemble selected public-release content pack","CONTENT-UI-001;CONTENT-CHAR-002;CONTENT-HUNT-001;CONTENT-CAGE-001;CONTENT-BATTLE-001;CONTENT-VFX-001;CONTENT-AUDIO-001;LOC-001","Production manifests + rights registry",Public build contains only approved original/licensed content,4,no
+REL-PWA-001,R8,Packaging,"Add versioned service worker and PWA install flow",ARCH-002,"Cache/version contract",Offline/update/recovery tests pass,3,yes
+QA-ALPHA-001,R8,QA,"Run functionally-complete device/browser/accessibility/performance alpha","GAME-PROG-001;UI-BATTLE-001;UI-SUPPORT-001;QA-CAGE-001;GAME-HUNT-001;GAME-EVO-001;ART-PILOT-001","IP-neutral feature-complete build",New Game to Championship passes with no P0 and a recorded device matrix,6,no
+QA-BETA-001,R8,QA,"Run public-content balance, long-save, thermal and content beta","QA-ALPHA-001;CONTENT-PUBLIC-001","Public-content-complete build",Release candidate gates pass,8,no
+REL-MOBILE-001,R8,Packaging,"Optional Capacitor mobile package",REL-PWA-001,"Web build parity",Mobile package matches web save/gameplay,4,no
+ONLINE-001,Post-release,Online,"Design asynchronous/private-room online mode",GAME-BATTLE-001,"New product security/privacy approval",Server validation and abuse controls pass,8,yes
