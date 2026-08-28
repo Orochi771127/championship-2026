@@ -6,6 +6,8 @@
   "description": "Standalone web/mobile rebuild of Digimon Championship.",
   "scripts": {
     "serve": "node scripts/serve.mjs",
+    "art:a0:build": "node scripts/build-art-production-a0.mjs",
+    "art:a0:validate": "node scripts/validate-art-production-a0.mjs",
     "test": "node --test tests/*.mjs",
     "test:browser": "node tests/championship-int-rh2-browser.cjs",
     "test:browser:vs2": "node tests/championship-vs2-browser.cjs",

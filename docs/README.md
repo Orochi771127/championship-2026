@@ -11,6 +11,9 @@ Do not infer current implementation state from one historical coordination file.
 | What Claude Code / Codex already built and can be reused | [Reuse Inventory](REUSE_INVENTORY.md) |
 | Original-game art coverage and replacement scope | [Art Master Inventory](art/ART_MASTER_INVENTORY.md) |
 | Machine-readable original-art registry | [Art Asset Registry](art/ART_ASSET_REGISTRY.json) |
+| Licensed remake visual authority | [Licensed Remake Style Bible](art/CHAMPIONSHIP_2026_LICENSED_REMAKE_STYLE_BIBLE.md) |
+| Art batch order and A1 work packet | [Art Production Batch Plan](art/ART_PRODUCTION_BATCH_PLAN.md) |
+| Reference-to-production mapping | [Art Production Crosswalk](art/ART_PRODUCTION_CROSSWALK.json) |
 | Complete production direction | [Master Game Production Plan](planning/CHAMPIONSHIP_2026_MASTER_GAME_PRODUCTION_PLAN.md) |
 | Solo + AI execution order | [Solo AI Parity-First Plan](planning/CHAMPIONSHIP_2026_SOLO_AI_PARITY_FIRST_PLAN_ZH_TW.md) |
 | Modular Cage requirement | [Modular Cage System Spec](planning/CHAMPIONSHIP_2026_MODULAR_CAGE_SYSTEM_SPEC_ZH_TW.md) |

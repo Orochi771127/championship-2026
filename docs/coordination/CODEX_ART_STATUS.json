@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "owner": "CODEX_ART",
-  "lastUpdated": "2026-08-28",
-  "syncBatch": "VS2_R1_OWNER_VERDICT_AND_VS2_R2_WAIT",
-  "syncRevision": 6,
-  "syncRevisionTarget": 6,
-  "status": "VS2_R1_OWNER_APPROVED_STRUCTURAL_BASELINE_WAITING_VS2_R2_GO",
+  "lastUpdated": "2026-08-29",
+  "syncBatch": "ART_A1_CAGE_ORIGINAL_STRUCTURE_LOCK",
+  "syncRevision": 11,
+  "syncRevisionTarget": 11,
+  "status": "A1_CAGE_ORIGINAL_STRUCTURE_LOCKED_CM01_CM10_NEXT",
   "sourceOfTruth": {
     "coordinationRoot": "docs/coordination",
     "canonicalRepository": ".",
@@ -48,6 +48,15 @@
     "vs2R1ShippingReady": false,
     "vs2R2ImplementationAuthorized": false,
     "huntLoadoutCurrentPresentation": "PRODUCT_AUTHORED_PROTOTYPE_DEVELOPER_ONLY"
+    ,"artProductionA0": "COMPLETE_VALIDATED"
+    ,"licensedRemakeDirection": "OWNER_REPORTED_FULL_LICENSE_DOCUMENT_LINK_REQUIRED_BEFORE_PROMOTION"
+    ,"rosterDirection": "CUTE_HAND_DRAWN_CAT_DOG_MAJORITY_OTHER_SPECIES_PRESERVED"
+    ,"launchRosterTarget": 96
+    ,"fullRosterTarget": 224
+    ,"a1CharacterDirection": "V1_SOURCE_PALETTE_SHAPE_ADAPTATION_SELECTED"
+    ,"characterPaletteDirection": "PRESERVE_ORIGINAL_MAJOR_PALETTE_FAMILY"
+    ,"a1GoldenSliceDirection": "COMPLETE_PROPOSAL_SET"
+    ,"vfxPortDirection": "DATA_FAITHFUL_LICENSED_SOURCE_TO_WEB_CONVERSION"
   },
   "workingTree": {
     "canonicalWasDirtyAtPreparation": false,
@@ -56,6 +65,61 @@
     "o3dCheckpointIsolatedFromRuntimeRegistryAndP2": true
   },
   "completed": [
+    {
+      "id": "ART-A1-CAGE-ORIGINAL-STRUCTURE",
+      "status": "COMPLETE_40_OF_40_STRUCTURE_ROWS_CLASSIFIED",
+      "summary": "Owner-directed original construction audit replaced the provisional four-way flattened PNG split with the verified core tile field plus separate object bundle and external ATR/COL structure. Forty visual fields are scheduled in four batches of ten; CM12/CM18 object conflicts remain quarantined and CM28/CM29 correctly declare no native object layer. No original pixels, gameplay inference, runtime promotion or shipping promotion occurred.",
+      "output": "docs/art/technical/a1-cage-original-structure/CM40_ORIGINAL_STRUCTURE_CROSSWALK.csv",
+      "receipt": "docs/art/technical/A1_CAGE_ORIGINAL_STRUCTURE_RECEIPT.md",
+      "rights": "REFERENCE_METADATA_ONLY_NO_ORIGINAL_PIXELS",
+      "productionStatus": "STRUCTURE_LOCK",
+      "humanApproved": true,
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
+    {
+      "id": "ART-A1-MAP-TECH",
+      "status": "TRANSPARENT_TECHNICAL_MASTERS_COMPLETE_NATIVE_LAYER_SEPARATION_PENDING",
+      "summary": "Owner-approved Cage and Hunt boards are source-hash locked and deterministically split into twelve addressable Cage modules plus independent HM01 bright and HM09 dark Hunt standards. All twelve Cage modules now have edge-connected-background alpha extraction, transparent flattened masters, visual-only silhouette masks, bottom-centre anchors and checkerboard QA. No visual regeneration, gameplay mask inference, runtime promotion or shipping promotion occurred.",
+      "output": "docs/art/technical/a1-map-tech/manifest.json",
+      "receipt": "docs/art/technical/A1_MAP_TECHNICALIZATION_RECEIPT.md",
+      "rights": "OWNER_REPORTED_FULL_LICENSE_DOCUMENT_LINK_REQUIRED",
+      "productionStatus": "TRANSPARENT_FLATTENED_TECHNICAL_MASTER",
+      "humanApproved": true,
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
+    {
+      "id": "ART-A1-GOLDEN-SLICE-DIRECTION-SET",
+      "status": "COMPLETE_ART_PROPOSAL",
+      "summary": "Completed the bounded A1 direction set: source-palette eight-character adaptation, bright Gate world/Earth, HM01/HM09 light-dark standards, twelve shape-aware Cage modules with changed internal content, six-screen light UI flow and five VFX families. Existing four VFX families now use data-faithful licensed-source conversion; capture tether/circle remains the new family.",
+      "output": "docs/art/proposals/a1-golden-slice/manifest.json",
+      "rights": "OWNER_REPORTED_FULL_LICENSE_DOCUMENT_LINK_REQUIRED",
+      "productionStatus": "ART_PROPOSAL",
+      "humanApproved": true,
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
+    {
+      "id": "ART-A1-CHARACTER-DIRECTION-PROPOSAL",
+      "status": "OWNER_DIRECTION_SELECTED_V1_SOURCE_PALETTE",
+      "summary": "The Owner selected the V1 source-palette character direction: two cat adaptations, two dog adaptations, three retained non-cat/dog species and one egg. Shape, anatomy and finish change while major palette families remain original; V2 recolour experiments are rejected historical comparisons. Panels remain proposal-only and are not runtime-eligible or shipping-ready.",
+      "output": "docs/art/proposals/a1-character-direction/manifest.json",
+      "rights": "OWNER_REPORTED_FULL_LICENSE_DOCUMENT_LINK_REQUIRED",
+      "productionStatus": "ART_PROPOSAL",
+      "humanApproved": true,
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
+    {
+      "id": "ART-A0-LICENSED-REMAKE-SPEC",
+      "status": "COMPLETE_VALIDATED",
+      "summary": "Locked the bright licensed faithful-remake Style Bible, cute hand-drawn cat/dog-majority roster mix, A0-A11 batch order, 752-record reference-to-production crosswalk, and non-shipping production index. No reference payload was copied and no new art was runtime- or shipping-promoted.",
+      "output": "docs/art/ART_PRODUCTION_BATCH_PLAN.md",
+      "registry": "docs/art/ART_PRODUCTION_CROSSWALK.json",
+      "productionIndex": "assets/production/ART_PRODUCTION_INDEX.json",
+      "validation": "100 deterministic repository tests pass; A0 validator passes 752/752 with zero promotions",
+      "rights": "OWNER_REPORTED_FULL_LICENSE_DOCUMENT_LINK_REQUIRED",
+      "productionStatus": "A0_SPECIFICATION_LOCK",
+      "humanApproved": true,
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
     {
       "id": "VS2-R1-GATE-3D",
       "status": "OWNER_APPROVED_STRUCTURAL_BASELINE",
@@ -217,6 +281,10 @@
     "SHIPPING"
   ],
   "blocked": [
+    "A1 Cage transparent flattened masters and Hunt standards are complete, but native authoring-layer separation, Hunt modular macro kits, seam/shape/collision/occlusion/mobile-performance QA and linked licence evidence remain required before runtime promotion.",
+    "A1 character identity sheets, animation masters, UI components, VFX ports and runtime atlases still require production receipts, linked licence evidence and relevant QA; direction boards alone are not runtime assets.",
+    "A2-A11 mass production remains gated by completion of the A1 technical pipeline and the consuming gameplay/presentation contracts; A0/A1 proposals do not promote the 96-character launch roster.",
+    "The Owner reports complete licensing, but each production asset still requires a linked licence document reference before READY_FOR_RUNTIME or SHIPPING_READY promotion.",
     "Legacy P3-P6 is superseded/frozen; production completion is planned under VS7 but no VS7 batch is authorized.",
     "Cage/Home construction semantics and Training effects require runtime evidence; art must use neutral placeholders.",
     "Creature RAW_SLOT semantic names require a verified runtime semantic map.",
@@ -230,6 +298,29 @@
     "Claude-owned runtime architecture documentation predates this product reset and must be reconciled by Claude on its next authorized owned-doc update."
   ],
   "outputs": [
+    "docs/art/technical/a1-map-tech/cage/transparent-qa-checker.png",
+    "docs/art/technical/a1-map-tech/manifest.json",
+    "docs/art/technical/A1_MAP_TECHNICALIZATION_RECEIPT.md",
+    "scripts/build-a1-map-tech.py",
+    "tests/championship-art-a1-map-tech-cases.mjs",
+    "docs/art/proposals/a1-golden-slice/manifest.json",
+    "docs/art/proposals/a1-golden-slice/gate-select-bright-direction.png",
+    "docs/art/proposals/a1-golden-slice/hunt-hm01-hm09-direction.png",
+    "docs/art/proposals/a1-golden-slice/cage-12-module-direction.png",
+    "docs/art/proposals/a1-golden-slice/ui-six-screen-flow-direction.png",
+    "docs/art/proposals/a1-golden-slice/vfx-five-family-direction.png",
+    "docs/art/proposals/a1-character-direction/manifest.json",
+    "docs/art/proposals/a1-character-direction/a1-character-direction-panel-01.png",
+    "docs/art/proposals/a1-character-direction/a1-character-direction-panel-02.png",
+    "docs/art/proposals/a1-character-direction/a1-character-direction-panel-01-v2-bold-color.png",
+    "docs/art/proposals/a1-character-direction/a1-character-direction-panel-02-v2-bold-color.png",
+    "docs/art/CHAMPIONSHIP_2026_LICENSED_REMAKE_STYLE_BIBLE.md",
+    "docs/art/ART_PRODUCTION_BATCH_PLAN.md",
+    "docs/art/ART_PRODUCTION_CROSSWALK.json",
+    "assets/production/ART_PRODUCTION_INDEX.json",
+    "scripts/build-art-production-a0.mjs",
+    "scripts/validate-art-production-a0.mjs",
+    "tests/championship-art-production-a0-cases.mjs",
     "docs/reports/vs2-r1/VS2_R1_OWNER_VERDICT.json",
     "docs/reports/vs2/VS2_HUNT_LOADOUT_PROTOTYPE_STATUS.json",
     "docs/reports/vs2-r1/VS2_R1_GATE_3D_COMPLETION_REPORT.md",
@@ -291,7 +382,7 @@
   },
   "dependenciesChanged": {
     "value": true,
-    "note": "Owner approved VS2-R1 as OWNER_APPROVED_STRUCTURAL_BASELINE, while retaining all interaction/camera/day-preview technical placeholders and NOT_SHIPPING_READY status. The Hunt Loadout contract exists at canonical HEAD, but Claude reports CONTRACT_CLOSED_AWAITING_IMPLEMENTATION_AUTHORIZATION; Codex is waiting for a distinct VS2-R2 Owner GO."
+    "note": "Owner directed the approved Hunt/Cage technical batch to continue through twelve Cage transparent flattened masters. Gameplay, renderer and save authority are unchanged; the 40 visual field families and 36 CageDefinitions remain distinct, and shape masks, raising effects, collision and map data remain external evidence-gated contracts."
   },
   "sharedMergeReceipt": {
     "syncRevision": 3,
@@ -325,6 +416,10 @@
     }
   },
   "recommendedNext": [
+    "Separate the twelve transparent Cage composites into native base-terrain, edge/transition, prop and foreground authoring layers, then run seam, shape-fit and occlusion QA against verified external shape masks without inventing raising semantics.",
+    "Build HM01/HM09 layered macro-tile kits against verified 128x128 topology, then run seam, collision-alignment, occlusion and mobile-performance QA.",
+    "Continue remaining A1 technical masters and receipts: eight character identity/animation anchors, Gate model/material specification, DOM UI components and five VFX conversion timelines.",
+    "For hitspark_big, hypereffect, spark and rain, decode and port licensed source timing/transform/visibility data instead of authoring replacement motion; keep unsupported parameters raw/unknown.",
     "WAIT for a distinct Owner GO authorizing VS2-R2 Original Hunt Loadout 2026 presentation against VS2_HUNT_LOADOUT_RUNTIME_CONTRACT/v1.",
     "Keep Gate camera, rotation, input, hit-test, node placement and day preview marked PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER until a later published trace contract resolves them.",
     "Keep the current Choose one companion / Greyshade / Blazetail / Crystalfin surface PRODUCT_AUTHORED_PROTOTYPE / DEVELOPER_ONLY and never promote it as Original parity or final Player Mode.",

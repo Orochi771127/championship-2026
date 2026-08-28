@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "authority": "CHAMPIONSHIP_2026_ART_PRODUCTION",
+  "sourceCrosswalk": "docs/art/ART_PRODUCTION_CROSSWALK.json",
+  "promotionPolicy": "ONLY_EXPLICIT_ENTRIES_MAY_BE_RUNTIME_REGISTERED; SHIPPING_READY_REQUIRES_LICENSE_DOCUMENT_HUMAN_APPROVAL_AND_RUNTIME_QA",
+  "a0State": "SPECIFICATION_LOCKED_NO_NEW_ART_PROMOTED",
+  "summary": {
+    "registeredRuntimeBundles": 3,
+    "shippingReadyBundles": 0
+  },
+  "entries": [
+    {
+      "assetId": "art:raising_home:int-rh2:temporary-presentation-bundle",
+      "manifestPath": "assets/production/temporary/int-rh2/manifest.json",
+      "rightsStatus": "OWNER_OWNED",
+      "productionStatus": "TEMPORARY_PRESENTATION",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "shippingReady": false,
+      "maturity": "VS1 Raising Home temporary creature and environment presentation"
+    },
+    {
+      "assetId": "art:hunt_field:vs2:temporary-signal-grove-kit",
+      "manifestPath": "assets/production/temporary/vs2-hunt/manifest.json",
+      "rightsStatus": "ORIGINAL_CREATED",
+      "productionStatus": "TEMPORARY_PRESENTATION",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "shippingReady": false,
+      "maturity": "Architecture-proof Hunt field presentation on the existing shared Pixi stage"
+    },
+    {
+      "assetId": "art:gate_select:vs2-r1:original-created-world",
+      "manifestPath": "assets/production/gate/vs2-r1/manifest.json",
+      "rightsStatus": "ORIGINAL_CREATED",
+      "productionStatus": "OWNER_APPROVED_STRUCTURAL_BASELINE",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": true,
+      "shippingReady": false,
+      "maturity": "STRUCTURAL_PRESENTATION"
+    }
+  ]
+}

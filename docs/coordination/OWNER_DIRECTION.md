@@ -4,10 +4,52 @@ Repository authority: `CHAMPIONSHIP_2026_PRODUCT_SSOT` (`.`).
 Migration state: standalone product; historical Nexus integration decisions are preserved below as superseded/frozen context only.
 
 Authority: **OWNER ONLY**  
-Last explicit direction: **2026-08-29 — Functional-complete, IP-neutral, modular-Cage product plan and repository consolidation**
+Last explicit direction: **2026-08-29 — Follow the original Cage terrain construction; continue, classify, commit and push after QA**
 
 Agents may index this file and may transcribe a later explicit Owner directive,
 but may not reinterpret or independently change product direction.
+
+## 2026-08-29 A1 map-direction approval
+
+The Owner explicitly approved the A1 `cage-12-module-direction.png` board as the
+visual direction for the Cage/Training modular terrain, and approved the paired
+`hunt-hm01-hm09-direction.png` board as the visual direction for the Hunt large
+maps. The next bounded batch is authorized to technicalize these two directions.
+
+This approval permits deterministic review crops, stable asset IDs, source-hash
+locking, layer contracts, anchors, and map-production specifications. It does
+not invent Cage footprints, raising effects, collision, spawn, ATR/ESC, or other
+unknown gameplay semantics; it does not make a flattened concept board a native
+layered master; and it does not promote any file to runtime or shipping status.
+
+The Owner subsequently directed work to continue. This authorizes the bounded
+transparent-master pass for the same twelve approved Cage modules. It does not
+expand the batch to all forty visual fields, reconcile the forty visual fields
+to the thirty-six verified `CageDefinition` records, or authorize runtime use.
+
+The Owner subsequently authorized the next Cage step, requested classification,
+and explicitly authorized commit and push after successful QA. The Owner also
+directed the remake to inspect and follow the original Cage terrain construction.
+The verified production interpretation is core tile field plus separate object
+bundle and separate ATR/COL data; a guessed four-way split of flattened concept
+art is not authoritative. Full visual production is scheduled as four batches
+of ten actual fields (CM01–CM40), while the twelve concept modules remain a
+pipeline and style pilot.
+
+## 2026-08-29 art-production amendment
+
+The Owner explicitly approved the previously proposed art plan for implementation with these decisions:
+
+- use the licensed faithful-remake route; the Owner reports that complete rights have been obtained, while each production promotion still requires a linked licence document reference;
+- preserve original structural identity, topology, composition and hand-drawn character while rebuilding high-definition production masters rather than shipping enlarged ROM payloads;
+- make the roster cuter and use real-world cat and dog breed anatomy as the majority visual vocabulary, while retaining valuable bird, fish, insect, plant, machine, spirit and giant-creature silhouettes;
+- preserve each source asset's major palette family for the current production pass; create remake distinction through changed anatomy, silhouettes, proportions, markings, props, terrain contours, materials and 2026 rendering quality. Palette replacement remains optional future work, not a current requirement;
+- keep the overall presentation fresh and bright; only maps whose original role is dark should remain dark, and even those retain readable walkable surfaces and controlled reflected light;
+- target a 96-character launch roster, then four post-launch packs of 32 to reach all 224 slots;
+- lock the launch mix at 32 cats, 28 dogs, 32 other species and 4 eggs; lock the full-catalog mix at 72 cats, 64 dogs, 80 other species and 8 eggs;
+- retain the function-first sequence and permit only the bounded A1 Golden Art Slice before mass production.
+
+This amendment changes content and art direction only. It does not change gameplay authority, renderer boundaries, save truth, the shape-aware Cage requirement, or the rule that unknown behavior remains neutral.
 
 ## Current product authority — Championship 2026
 

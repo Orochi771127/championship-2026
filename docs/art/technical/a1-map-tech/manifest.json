@@ -1,0 +1,845 @@
+{
+  "schemaVersion": 1,
+  "batchId": "ART-A1-MAP-TECH-2026-08-29",
+  "status": "TRANSPARENT_TECHNICAL_MASTERS_COMPLETE_NATIVE_LAYER_SEPARATION_PENDING",
+  "ownerApproval": {
+    "date": "2026-08-29",
+    "scope": [
+      "CAGE_12_MODULE_VISUAL_DIRECTION",
+      "HUNT_HM01_HM09_VISUAL_DIRECTION"
+    ],
+    "meaning": "APPROVED_FOR_TECHNICALIZATION_NOT_RUNTIME_PROMOTION"
+  },
+  "rights": {
+    "reportedByOwner": "FULL_LICENSE_ACQUIRED",
+    "promotionState": "BLOCKED_PENDING_LINKED_LICENSE_DOCUMENT_REFERENCE"
+  },
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "sourceBoards": [
+    {
+      "file": "../../proposals/a1-golden-slice/cage-12-module-direction.png",
+      "sha256": "4B525EC35176331785505FEE121C9405919C67AC89A308846E068ADB6B7B435C",
+      "size": [
+        1330,
+        1183
+      ]
+    },
+    {
+      "file": "../../proposals/a1-golden-slice/hunt-hm01-hm09-direction.png",
+      "sha256": "CE2FC263861C8263A301578B9E8BB8A3B868B7854C6FCD52EB6EFD358675E688",
+      "size": [
+        1774,
+        887
+      ]
+    }
+  ],
+  "cage": {
+    "moduleCount": 12,
+    "reviewGrid": {
+      "columns": 3,
+      "rows": 4
+    },
+    "modules": [
+      {
+        "assetId": "A1_CAGE_MOD_01",
+        "visualRole": "WOODLAND_CLEARING",
+        "file": "cage/modules/a1_cage_mod_01.png",
+        "sha256": "5FE4140C9B6B793BD4821660E0DEE2269C0663301E19A8E7165C4152A7096F97",
+        "sourceCrop": {
+          "x": 35,
+          "y": 20,
+          "width": 395,
+          "height": 290
+        },
+        "transparentFile": "cage/transparent/a1_cage_mod_01-transparent.png",
+        "transparentSha256": "2A5F946AC6A7953C307B0C7422465B29D7DFD18191112F92FF227D6C73BD1229",
+        "visualSilhouetteFile": "cage/masks/a1_cage_mod_01-visual-silhouette.png",
+        "visualSilhouetteSha256": "E8DE8F1180C7A1E8EECBEC198065F0D7082BD0AED9A94473D0177E81A2552D15",
+        "canvasSize": [
+          338,
+          270
+        ],
+        "alphaMetrics": {
+          "backgroundRgb": [
+            252,
+            249,
+            242
+          ],
+          "sourceAlphaBounds": [
+            62,
+            44,
+            368,
+            290
+          ],
+          "trimmedSourceBounds": [
+            54,
+            36,
+            376,
+            290
+          ],
+          "transparentPixels": 66229,
+          "partialAlphaPixels": 1700,
+          "opaquePixels": 46621,
+          "edgeOpaquePixels": 38,
+          "transparentCanvasPadding": 8,
+          "outputEdgeOpaquePixels": 0
+        },
+        "anchor": {
+          "policy": "BOTTOM_CENTER_TECHNICAL_ANCHOR",
+          "normalized": [
+            0.5,
+            1.0
+          ],
+          "pixel": [
+            169,
+            270
+          ]
+        },
+        "sourceState": "TRANSPARENT_FLATTENED_APPROVED_DIRECTION_MASTER",
+        "gameplayFootprint": "UNKNOWN_REQUIRES_VERIFIED_SHAPE_MASK",
+        "raisingEffects": "UNKNOWN_REQUIRES_TRACE",
+        "runtimeEligible": false
+      },
+      {
+        "assetId": "A1_CAGE_MOD_02",
+        "visualRole": "TIMBER_TRAINING_RING",
+        "file": "cage/modules/a1_cage_mod_02.png",
+        "sha256": "446264818CEC6BB62BD2BD96271ED05AFA3226B18F8D72AAC6DA65FBB6B37B5A",
+        "sourceCrop": {
+          "x": 445,
+          "y": 15,
+          "width": 430,
+          "height": 295
+        },
+        "transparentFile": "cage/transparent/a1_cage_mod_02-transparent.png",
+        "transparentSha256": "B8832CCF8DB278ADE5BACE0FD21D5EF97DFA514CC4CBB3CEB3C05779A305FAC7",
+        "visualSilhouetteFile": "cage/masks/a1_cage_mod_02-visual-silhouette.png",
+        "visualSilhouetteSha256": "89D44DDEAF2B7B4DC1624080A13A51F4A412622AC72CF6467EF70DA50ABE364E",
+        "canvasSize": [
+          390,
+          257
+        ],
+        "alphaMetrics": {
+          "backgroundRgb": [
+            252,
+            248,
+            242
+          ],
+          "sourceAlphaBounds": [
+            47,
+            62,
+            405,
+            295
+          ],
+          "trimmedSourceBounds": [
+            39,
+            54,
+            413,
+            295
+          ],
+          "transparentPixels": 64779,
+          "partialAlphaPixels": 1702,
+          "opaquePixels": 60369,
+          "edgeOpaquePixels": 30,
+          "transparentCanvasPadding": 8,
+          "outputEdgeOpaquePixels": 0
+        },
+        "anchor": {
+          "policy": "BOTTOM_CENTER_TECHNICAL_ANCHOR",
+          "normalized": [
+            0.5,
+            1.0
+          ],
+          "pixel": [
+            195,
+            257
+          ]
+        },
+        "sourceState": "TRANSPARENT_FLATTENED_APPROVED_DIRECTION_MASTER",
+        "gameplayFootprint": "UNKNOWN_REQUIRES_VERIFIED_SHAPE_MASK",
+        "raisingEffects": "UNKNOWN_REQUIRES_TRACE",
+        "runtimeEligible": false
+      },
+      {
+        "assetId": "A1_CAGE_MOD_03",
+        "visualRole": "AGILITY_LANE",
+        "file": "cage/modules/a1_cage_mod_03.png",
+        "sha256": "8BADEB76CE6B62CE08AF369408ED79C28095B3A5E04323920ADCA01CB4DBDFD8",
+        "sourceCrop": {
+          "x": 885,
+          "y": 15,
+          "width": 440,
+          "height": 295
+        },
+        "transparentFile": "cage/transparent/a1_cage_mod_03-transparent.png",
+        "transparentSha256": "8C77869A9600F3C6230424FF0D2847FE9C0FE534A498C7388FDCAECE10857456",
+        "visualSilhouetteFile": "cage/masks/a1_cage_mod_03-visual-silhouette.png",
+        "visualSilhouetteSha256": "CE3E0534E68D8E7D0A1B9CB66E14D93A5369C7166B3A2AEDFABDD1460C0BF394",
+        "canvasSize": [
+          429,
+          275
+        ],
+        "alphaMetrics": {
+          "backgroundRgb": [
+            252,
+            249,
+            241
+          ],
+          "sourceAlphaBounds": [
+            4,
+            44,
+            405,
+            295
+          ],
+          "trimmedSourceBounds": [
+            0,
+            36,
+            413,
+            295
+          ],
+          "transparentPixels": 72873,
+          "partialAlphaPixels": 1745,
+          "opaquePixels": 55182,
+          "edgeOpaquePixels": 33,
+          "transparentCanvasPadding": 8,
+          "outputEdgeOpaquePixels": 0
+        },
+        "anchor": {
+          "policy": "BOTTOM_CENTER_TECHNICAL_ANCHOR",
+          "normalized": [
+            0.5,
+            1.0
+          ],
+          "pixel": [
+            214,
+            275
+          ]
+        },
+        "sourceState": "TRANSPARENT_FLATTENED_APPROVED_DIRECTION_MASTER",
+        "gameplayFootprint": "UNKNOWN_REQUIRES_VERIFIED_SHAPE_MASK",
+        "raisingEffects": "UNKNOWN_REQUIRES_TRACE",
+        "runtimeEligible": false
+      },
+      {
+        "assetId": "A1_CAGE_MOD_04",
+        "visualRole": "TATAMI_ROOM",
+        "file": "cage/modules/a1_cage_mod_04.png",
+        "sha256": "3B03D29383D22EE42265281970FED92814EBFF7C4930026B786C1521751199A8",
+        "sourceCrop": {
+          "x": 25,
+          "y": 315,
+          "width": 410,
+          "height": 275
+        },
+        "transparentFile": "cage/transparent/a1_cage_mod_04-transparent.png",
+        "transparentSha256": "C0E141C11CC4F21846B477D9A37BC471E537D872382D515AC3228CB3A58F0451",
+        "visualSilhouetteFile": "cage/masks/a1_cage_mod_04-visual-silhouette.png",
+        "visualSilhouetteSha256": "9BFBB4DBCFC0B556A9B09984EB76E2E9AD7319243E7DB09773A29ED71FC69750",
+        "canvasSize": [
+          392,
+          291
+        ],
+        "alphaMetrics": {
+          "backgroundRgb": [
+            251,
+            249,
+            242
+          ],
+          "sourceAlphaBounds": [
+            39,
+            0,
+            399,
+            275
+          ],
+          "trimmedSourceBounds": [
+            31,
+            0,
+            407,
+            275
+          ],
+          "transparentPixels": 52141,
+          "partialAlphaPixels": 1673,
+          "opaquePixels": 58936,
+          "edgeOpaquePixels": 16,
+          "transparentCanvasPadding": 8,
+          "outputEdgeOpaquePixels": 0
+        },
+        "anchor": {
+          "policy": "BOTTOM_CENTER_TECHNICAL_ANCHOR",
+          "normalized": [
+            0.5,
+            1.0
+          ],
+          "pixel": [
+            196,
+            291
+          ]
+        },
+        "sourceState": "TRANSPARENT_FLATTENED_APPROVED_DIRECTION_MASTER",
+        "gameplayFootprint": "UNKNOWN_REQUIRES_VERIFIED_SHAPE_MASK",
+        "raisingEffects": "UNKNOWN_REQUIRES_TRACE",
+        "runtimeEligible": false
+      },
+      {
+        "assetId": "A1_CAGE_MOD_05",
+        "visualRole": "STRENGTH_GYM",
+        "file": "cage/modules/a1_cage_mod_05.png",
+        "sha256": "FA6F013550E00C741E34F5E7BC3E2B08D96CCA7F9027916731029FF44BC8ACB7",
+        "sourceCrop": {
+          "x": 455,
+          "y": 315,
+          "width": 420,
+          "height": 270
+        },
+        "transparentFile": "cage/transparent/a1_cage_mod_05-transparent.png",
+        "transparentSha256": "DEDF000FBC1DF9CC10169A47787AB49C80CA35D1F4B318A5FB6E730BFC578079",
+        "visualSilhouetteFile": "cage/masks/a1_cage_mod_05-visual-silhouette.png",
+        "visualSilhouetteSha256": "DE8300BB2CF47391D799AD7200B6A377E943AC67D405E8D001565A0F496A358B",
+        "canvasSize": [
+          380,
+          256
+        ],
+        "alphaMetrics": {
+          "backgroundRgb": [
+            252,
+            249,
+            241
+          ],
+          "sourceAlphaBounds": [
+            40,
+            38,
+            388,
+            266
+          ],
+          "trimmedSourceBounds": [
+            32,
+            30,
+            396,
+            270
+          ],
+          "transparentPixels": 57774,
+          "partialAlphaPixels": 1460,
+          "opaquePixels": 54166,
+          "edgeOpaquePixels": 0,
+          "transparentCanvasPadding": 8,
+          "outputEdgeOpaquePixels": 0
+        },
+        "anchor": {
+          "policy": "BOTTOM_CENTER_TECHNICAL_ANCHOR",
+          "normalized": [
+            0.5,
+            1.0
+          ],
+          "pixel": [
+            190,
+            256
+          ]
+        },
+        "sourceState": "TRANSPARENT_FLATTENED_APPROVED_DIRECTION_MASTER",
+        "gameplayFootprint": "UNKNOWN_REQUIRES_VERIFIED_SHAPE_MASK",
+        "raisingEffects": "UNKNOWN_REQUIRES_TRACE",
+        "runtimeEligible": false
+      },
+      {
+        "assetId": "A1_CAGE_MOD_06",
+        "visualRole": "RESEARCH_LAB",
+        "file": "cage/modules/a1_cage_mod_06.png",
+        "sha256": "041B3C5D15994AC2AA497EA0215B47A9D89D27AB149FE1CE2C73597F01B2E8DF",
+        "sourceCrop": {
+          "x": 880,
+          "y": 315,
+          "width": 450,
+          "height": 270
+        },
+        "transparentFile": "cage/transparent/a1_cage_mod_06-transparent.png",
+        "transparentSha256": "56F9516DB8F04D9D8540F21C57A12EAC9F043E326A2C5F2C5DD64C1D70242D60",
+        "visualSilhouetteFile": "cage/masks/a1_cage_mod_06-visual-silhouette.png",
+        "visualSilhouetteSha256": "BAB0C63DE24387646FBD83F74DBB637208850416A21EAF2C1713F25D254A0B2E",
+        "canvasSize": [
+          398,
+          274
+        ],
+        "alphaMetrics": {
+          "backgroundRgb": [
+            252,
+            248,
+            241
+          ],
+          "sourceAlphaBounds": [
+            25,
+            20,
+            391,
+            270
+          ],
+          "trimmedSourceBounds": [
+            17,
+            12,
+            399,
+            270
+          ],
+          "transparentPixels": 58505,
+          "partialAlphaPixels": 1657,
+          "opaquePixels": 61338,
+          "edgeOpaquePixels": 37,
+          "transparentCanvasPadding": 8,
+          "outputEdgeOpaquePixels": 0
+        },
+        "anchor": {
+          "policy": "BOTTOM_CENTER_TECHNICAL_ANCHOR",
+          "normalized": [
+            0.5,
+            1.0
+          ],
+          "pixel": [
+            199,
+            274
+          ]
+        },
+        "sourceState": "TRANSPARENT_FLATTENED_APPROVED_DIRECTION_MASTER",
+        "gameplayFootprint": "UNKNOWN_REQUIRES_VERIFIED_SHAPE_MASK",
+        "raisingEffects": "UNKNOWN_REQUIRES_TRACE",
+        "runtimeEligible": false
+      },
+      {
+        "assetId": "A1_CAGE_MOD_07",
+        "visualRole": "VOLCANIC_FIELD",
+        "file": "cage/modules/a1_cage_mod_07.png",
+        "sha256": "E18B24E4F6368D7224AE0E98C3C2BC146F50E191A043C51628E9BDEAAB38E4D1",
+        "sourceCrop": {
+          "x": 25,
+          "y": 590,
+          "width": 415,
+          "height": 260
+        },
+        "transparentFile": "cage/transparent/a1_cage_mod_07-transparent.png",
+        "transparentSha256": "F85B181C6C8B9AFDCA67670303BBFCB76C06F97E2A5A8174A1FA8944CF2DFF7A",
+        "visualSilhouetteFile": "cage/masks/a1_cage_mod_07-visual-silhouette.png",
+        "visualSilhouetteSha256": "5C1906D15849D750A1A112A6BDA0487320069A65A46FBD2468641980D1574FF4",
+        "canvasSize": [
+          381,
+          269
+        ],
+        "alphaMetrics": {
+          "backgroundRgb": [
+            252,
+            248,
+            241
+          ],
+          "sourceAlphaBounds": [
+            48,
+            0,
+            397,
+            245
+          ],
+          "trimmedSourceBounds": [
+            40,
+            0,
+            405,
+            253
+          ],
+          "transparentPixels": 55237,
+          "partialAlphaPixels": 2126,
+          "opaquePixels": 50537,
+          "edgeOpaquePixels": 15,
+          "transparentCanvasPadding": 8,
+          "outputEdgeOpaquePixels": 0
+        },
+        "anchor": {
+          "policy": "BOTTOM_CENTER_TECHNICAL_ANCHOR",
+          "normalized": [
+            0.5,
+            1.0
+          ],
+          "pixel": [
+            190,
+            269
+          ]
+        },
+        "sourceState": "TRANSPARENT_FLATTENED_APPROVED_DIRECTION_MASTER",
+        "gameplayFootprint": "UNKNOWN_REQUIRES_VERIFIED_SHAPE_MASK",
+        "raisingEffects": "UNKNOWN_REQUIRES_TRACE",
+        "runtimeEligible": false
+      },
+      {
+        "assetId": "A1_CAGE_MOD_08",
+        "visualRole": "FLOWER_MEADOW",
+        "file": "cage/modules/a1_cage_mod_08.png",
+        "sha256": "210D7644A2510041EA1C349D79CF42AF1597A9CEDE5FEF286014EECE9FC97435",
+        "sourceCrop": {
+          "x": 455,
+          "y": 590,
+          "width": 430,
+          "height": 260
+        },
+        "transparentFile": "cage/transparent/a1_cage_mod_08-transparent.png",
+        "transparentSha256": "9EA29D7D4563F953EB2A8DBC532006E7A2A349CA2E4D464263AEE525DF4C148C",
+        "visualSilhouetteFile": "cage/masks/a1_cage_mod_08-visual-silhouette.png",
+        "visualSilhouetteSha256": "B6123DF2E3996BD6C71C87FFBBEE17A27E2B1672A23499FD4196237349897ACD",
+        "canvasSize": [
+          377,
+          265
+        ],
+        "alphaMetrics": {
+          "backgroundRgb": [
+            252,
+            249,
+            242
+          ],
+          "sourceAlphaBounds": [
+            45,
+            17,
+            390,
+            250
+          ],
+          "trimmedSourceBounds": [
+            37,
+            9,
+            398,
+            258
+          ],
+          "transparentPixels": 57479,
+          "partialAlphaPixels": 2036,
+          "opaquePixels": 52285,
+          "edgeOpaquePixels": 0,
+          "transparentCanvasPadding": 8,
+          "outputEdgeOpaquePixels": 0
+        },
+        "anchor": {
+          "policy": "BOTTOM_CENTER_TECHNICAL_ANCHOR",
+          "normalized": [
+            0.5,
+            1.0
+          ],
+          "pixel": [
+            188,
+            265
+          ]
+        },
+        "sourceState": "TRANSPARENT_FLATTENED_APPROVED_DIRECTION_MASTER",
+        "gameplayFootprint": "UNKNOWN_REQUIRES_VERIFIED_SHAPE_MASK",
+        "raisingEffects": "UNKNOWN_REQUIRES_TRACE",
+        "runtimeEligible": false
+      },
+      {
+        "assetId": "A1_CAGE_MOD_09",
+        "visualRole": "DESERT_OASIS",
+        "file": "cage/modules/a1_cage_mod_09.png",
+        "sha256": "7BBCAD662E0C8BB30323A7D47F12D4C09C4C75FDC8828A7D0A3154EE215249B7",
+        "sourceCrop": {
+          "x": 895,
+          "y": 590,
+          "width": 430,
+          "height": 260
+        },
+        "transparentFile": "cage/transparent/a1_cage_mod_09-transparent.png",
+        "transparentSha256": "18B1240FB690476C793B599BDC9F8246B64AFE03A1E78BD601E06C1A6E9BBC0F",
+        "visualSilhouetteFile": "cage/masks/a1_cage_mod_09-visual-silhouette.png",
+        "visualSilhouetteSha256": "D1E15F02E40CDC471E480BE6DE890C8112DCE40ABD742B2DD00FCE0D6A7B77F9",
+        "canvasSize": [
+          351,
+          275
+        ],
+        "alphaMetrics": {
+          "backgroundRgb": [
+            252,
+            249,
+            242
+          ],
+          "sourceAlphaBounds": [
+            21,
+            9,
+            340,
+            258
+          ],
+          "trimmedSourceBounds": [
+            13,
+            1,
+            348,
+            260
+          ],
+          "transparentPixels": 65587,
+          "partialAlphaPixels": 2163,
+          "opaquePixels": 44050,
+          "edgeOpaquePixels": 0,
+          "transparentCanvasPadding": 8,
+          "outputEdgeOpaquePixels": 0
+        },
+        "anchor": {
+          "policy": "BOTTOM_CENTER_TECHNICAL_ANCHOR",
+          "normalized": [
+            0.5,
+            1.0
+          ],
+          "pixel": [
+            175,
+            275
+          ]
+        },
+        "sourceState": "TRANSPARENT_FLATTENED_APPROVED_DIRECTION_MASTER",
+        "gameplayFootprint": "UNKNOWN_REQUIRES_VERIFIED_SHAPE_MASK",
+        "raisingEffects": "UNKNOWN_REQUIRES_TRACE",
+        "runtimeEligible": false
+      },
+      {
+        "assetId": "A1_CAGE_MOD_10",
+        "visualRole": "STONE_BRIDGE",
+        "file": "cage/modules/a1_cage_mod_10.png",
+        "sha256": "2A0C584604880216A5BB1F393F9462109B97D74474EFA338F61F3FAB403F60F3",
+        "sourceCrop": {
+          "x": 25,
+          "y": 850,
+          "width": 425,
+          "height": 333
+        },
+        "transparentFile": "cage/transparent/a1_cage_mod_10-transparent.png",
+        "transparentSha256": "C691517FB1D44076160E272336AD21CE282675004BB0363AAEAC3980759984B8",
+        "visualSilhouetteFile": "cage/masks/a1_cage_mod_10-visual-silhouette.png",
+        "visualSilhouetteSha256": "CF26080481BE9F5B9DBD7993CEDD85930290E80D2B59EDE467ECA44D97C08683",
+        "canvasSize": [
+          379,
+          304
+        ],
+        "alphaMetrics": {
+          "backgroundRgb": [
+            252,
+            249,
+            241
+          ],
+          "sourceAlphaBounds": [
+            57,
+            9,
+            404,
+            281
+          ],
+          "trimmedSourceBounds": [
+            49,
+            1,
+            412,
+            289
+          ],
+          "transparentPixels": 91269,
+          "partialAlphaPixels": 2358,
+          "opaquePixels": 47898,
+          "edgeOpaquePixels": 0,
+          "transparentCanvasPadding": 8,
+          "outputEdgeOpaquePixels": 0
+        },
+        "anchor": {
+          "policy": "BOTTOM_CENTER_TECHNICAL_ANCHOR",
+          "normalized": [
+            0.5,
+            1.0
+          ],
+          "pixel": [
+            189,
+            304
+          ]
+        },
+        "sourceState": "TRANSPARENT_FLATTENED_APPROVED_DIRECTION_MASTER",
+        "gameplayFootprint": "UNKNOWN_REQUIRES_VERIFIED_SHAPE_MASK",
+        "raisingEffects": "UNKNOWN_REQUIRES_TRACE",
+        "runtimeEligible": false
+      },
+      {
+        "assetId": "A1_CAGE_MOD_11",
+        "visualRole": "POND_BANK",
+        "file": "cage/modules/a1_cage_mod_11.png",
+        "sha256": "20E1EDFE1B60362D562E0EA74D1BB47388CF430EDF73BEF5C39352D88B05B91A",
+        "sourceCrop": {
+          "x": 455,
+          "y": 850,
+          "width": 435,
+          "height": 333
+        },
+        "transparentFile": "cage/transparent/a1_cage_mod_11-transparent.png",
+        "transparentSha256": "066A4E0E130FE75DE6E504982BEB72CB47DE7BE170F2AE403CAA36D953CD975A",
+        "visualSilhouetteFile": "cage/masks/a1_cage_mod_11-visual-silhouette.png",
+        "visualSilhouetteSha256": "827D3329BA089906B830EB521FA903E1E6FA4408B6297F62D4BB36AF2842F29E",
+        "canvasSize": [
+          354,
+          274
+        ],
+        "alphaMetrics": {
+          "backgroundRgb": [
+            252,
+            249,
+            241
+          ],
+          "sourceAlphaBounds": [
+            50,
+            28,
+            372,
+            270
+          ],
+          "trimmedSourceBounds": [
+            42,
+            20,
+            380,
+            278
+          ],
+          "transparentPixels": 86073,
+          "partialAlphaPixels": 1660,
+          "opaquePixels": 57122,
+          "edgeOpaquePixels": 0,
+          "transparentCanvasPadding": 8,
+          "outputEdgeOpaquePixels": 0
+        },
+        "anchor": {
+          "policy": "BOTTOM_CENTER_TECHNICAL_ANCHOR",
+          "normalized": [
+            0.5,
+            1.0
+          ],
+          "pixel": [
+            177,
+            274
+          ]
+        },
+        "sourceState": "TRANSPARENT_FLATTENED_APPROVED_DIRECTION_MASTER",
+        "gameplayFootprint": "UNKNOWN_REQUIRES_VERIFIED_SHAPE_MASK",
+        "raisingEffects": "UNKNOWN_REQUIRES_TRACE",
+        "runtimeEligible": false
+      },
+      {
+        "assetId": "A1_CAGE_MOD_12",
+        "visualRole": "SNOW_RUINS",
+        "file": "cage/modules/a1_cage_mod_12.png",
+        "sha256": "CB90A14B44C4CE173F8A6B25D3F9512CE835527E6F481F2764EC764D211BB45A",
+        "sourceCrop": {
+          "x": 890,
+          "y": 860,
+          "width": 440,
+          "height": 323
+        },
+        "transparentFile": "cage/transparent/a1_cage_mod_12-transparent.png",
+        "transparentSha256": "3366425D14E1387024BDA146AE9CC6D7079A2FCCC90EABFA6538D1623E2666B4",
+        "visualSilhouetteFile": "cage/masks/a1_cage_mod_12-visual-silhouette.png",
+        "visualSilhouetteSha256": "8F40CEA72591381A0CC3BB5692E118214FE7B31510AD8609F0843D97129A4F59",
+        "canvasSize": [
+          378,
+          300
+        ],
+        "alphaMetrics": {
+          "backgroundRgb": [
+            251,
+            248,
+            241
+          ],
+          "sourceAlphaBounds": [
+            8,
+            0,
+            354,
+            276
+          ],
+          "trimmedSourceBounds": [
+            0,
+            0,
+            362,
+            284
+          ],
+          "transparentPixels": 85173,
+          "partialAlphaPixels": 1919,
+          "opaquePixels": 55028,
+          "edgeOpaquePixels": 2,
+          "transparentCanvasPadding": 8,
+          "outputEdgeOpaquePixels": 0
+        },
+        "anchor": {
+          "policy": "BOTTOM_CENTER_TECHNICAL_ANCHOR",
+          "normalized": [
+            0.5,
+            1.0
+          ],
+          "pixel": [
+            189,
+            300
+          ]
+        },
+        "sourceState": "TRANSPARENT_FLATTENED_APPROVED_DIRECTION_MASTER",
+        "gameplayFootprint": "UNKNOWN_REQUIRES_VERIFIED_SHAPE_MASK",
+        "raisingEffects": "UNKNOWN_REQUIRES_TRACE",
+        "runtimeEligible": false
+      }
+    ],
+    "requiredNativeLayers": [
+      "CORE_FIELD_TILES",
+      "OBJECT_BUNDLE"
+    ],
+    "requiredExternalData": [
+      "ATR_RAW_CLASSES",
+      "COL_RAW_CLASSES"
+    ],
+    "bindingRule": "VISUAL_MODULE_ID_MUST_BIND_TO_VERIFIED_EXTERNAL_SHAPE_MASK_AND_RAISING_DATA; ART_MUST_NOT_INVENT_SEMANTICS",
+    "transparentMasterState": "COMPLETE_FLATTENED_ALPHA_EXTRACTION_NOT_NATIVE_LAYERED_SOURCE",
+    "maskWarning": "VISUAL_SILHOUETTES_ARE_ALPHA_QA_ONLY_AND_MUST_NOT_BE_USED_AS_GAMEPLAY_SHAPE_MASKS",
+    "nextGate": "BUILD_CM01_CM10_CLEAN_ROOM_CORE_TILE_KITS_AND_SEPARATE_OBJECT_BUNDLES_THEN_RUN_SEAM_SHAPE_OCCLUSION_QA",
+    "alphaQaPreview": {
+      "file": "cage/transparent-qa-checker.png",
+      "sha256": "3F539D0224C6CB122CB026832501F4D2F5137C2AB7886639A1EB16663873D60F",
+      "background": "CHECKERBOARD_FOR_ALPHA_INSPECTION_NOT_ASSET_CONTENT"
+    }
+  },
+  "hunt": {
+    "standardCount": 2,
+    "standards": [
+      {
+        "assetId": "A1_HUNT_HM01_BRIGHT_STANDARD",
+        "visualRole": "HM01_BRIGHT_GRASSLAND",
+        "file": "hunt/hm01-bright-standard.png",
+        "sha256": "FBAF3E648C963AD2846E1FC0BAAE75A1D1E56A25883963E3C2897C4D9272510B",
+        "sourceCrop": {
+          "x": 0,
+          "y": 0,
+          "width": 887,
+          "height": 887
+        },
+        "sourceState": "FLATTENED_APPROVED_DIRECTION_STANDARD",
+        "worldTopology": "128_X_128_PRESERVE_SOURCE_STRUCTURE_TARGET",
+        "runtimeEligible": false
+      },
+      {
+        "assetId": "A1_HUNT_HM09_DARK_STANDARD",
+        "visualRole": "HM09_DARK_MINE",
+        "file": "hunt/hm09-dark-standard.png",
+        "sha256": "CCE3566CAD1E7F26FA8D5D26B9ADB3D2547505372F470375924FCE20EAB07C48",
+        "sourceCrop": {
+          "x": 887,
+          "y": 0,
+          "width": 887,
+          "height": 887
+        },
+        "sourceState": "FLATTENED_APPROVED_DIRECTION_STANDARD",
+        "worldTopology": "128_X_128_PRESERVE_SOURCE_STRUCTURE_TARGET",
+        "runtimeEligible": false
+      }
+    ],
+    "requiredNativeLayers": [
+      "AMBIENCE",
+      "BASE_TERRAIN",
+      "TERRAIN_TRANSITIONS",
+      "MACRO_CLUSTERS",
+      "PATHS_AND_DECALS",
+      "PROPS",
+      "ACTORS_AND_EFFECTS",
+      "FOREGROUND_AND_WEATHER"
+    ],
+    "cameraTarget": "PORTRAIT_9_16_OVER_128_X_128_WORLD",
+    "palettePolicy": "PRESERVE_ORIGINAL_MAJOR_PALETTE_FAMILY; HM01_BRIGHT; HM09_DARK_WITH_READABLE_WALKABLE_MIDTONES",
+    "bindingRule": "COLLISION_ATR_ESC_AND_SPAWN_DATA_REMAIN_EXTERNAL_GAMEPLAY_AUTHORITY",
+    "nextGate": "BUILD_LAYERED_MACRO_TILE_KITS_AND_RUN_SEAM_COLLISION_OCCLUSION_PERFORMANCE_QA"
+  },
+  "qa": {
+    "deterministicCrop": true,
+    "sourceHashLocked": true,
+    "visualRegeneration": false,
+    "requiredBeforeRuntime": [
+      "LINKED_LICENSE_EVIDENCE",
+      "NATIVE_LAYERED_MASTERS",
+      "SEAM_QA",
+      "COLLISION_ALIGNMENT_QA",
+      "OCCLUSION_QA",
+      "MOBILE_PERFORMANCE_QA"
+    ]
+  }
+}

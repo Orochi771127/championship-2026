@@ -5,6 +5,8 @@ Policy: original evidence informs production; it is never a shipping asset by de
 
 Solo sequencing: complete the game first with IP-neutral original placeholders; choose and produce the final original IP/content only after the functional-completion gate. Art is a replaceable content layer, never gameplay authority.
 
+> **Owner art amendment — 2026-08-29.** The Owner has selected a fully licensed faithful-remake route, a cute hand-drawn cat/dog-majority roster, a 96-character launch target and four 32-character post-launch packs. The function-first sequence remains active, but the bounded A1 Golden Art Slice may proceed as the art/skin pipeline proof. The detailed authority is [the licensed-remake Style Bible](../art/CHAMPIONSHIP_2026_LICENSED_REMAKE_STYLE_BIBLE.md) and [Art Production Batch Plan](../art/ART_PRODUCTION_BATCH_PLAN.md). Per-asset licence evidence remains required before runtime or shipping promotion.
+
 ## 1. Definition of HD remake
 
 A valid HD remake asset is a clean, resolution-independent or genuinely redrawn/rebuilt master that preserves evidenced visual relationships while being authored as licensed or original-created production material.
@@ -25,7 +27,7 @@ Every asset records source reference, observed design DNA, rights status, eviden
 | Family | Evidence inventory | Production objective |
 |---|---:|---|
 | UI | 96 NXR / 1,369 nodes / 9 reference families | one responsive component system |
-| Creatures | 216 regular + 8 eggs | schema capacity first; final original roster size decided after functional completion |
+| Creatures | 216 regular + 8 eggs | 96 at launch; four packs of 32 complete the 224-slot licensed catalog |
 | Cage/Training | 40 field references | modular Raising environment family |
 | Hunt | 16 biomes / 29 variants | 16 distinct layered biome kits |
 | Battle | 11 static fields | 11 readable arena treatments |
@@ -38,7 +40,7 @@ Every asset records source reference, observed design DNA, rights status, eviden
 ```text
 ROM_COPYRIGHTED_REFERENCE / RESEARCH_ONLY
   -> design observation and production brief
-  -> ORIGINAL_CREATED or LICENSED master
+  -> LICENSED faithful-remake or separately ORIGINAL_CREATED master
   -> technical QA
   -> human visual approval
   -> READY_FOR_RUNTIME
@@ -102,10 +104,10 @@ UI gate:
 - C0 — functional scaffold: keep the 224-slot research/schema capacity but expose only neutral product IDs;
 - C1 — mechanics test set: create 16–24 simple original silhouettes/geometric creatures that cover egg, growth, evolution, status, size and animation cases;
 - C2 — functional completion: finish every gameplay mode using the test set and replaceable manifests;
-- C3 — final-IP gate: after New Game can reach Championship, choose title, world, launch roster and final visual brief;
-- C4 — final pilot: produce 4–8 fully original final-quality entities covering diverse silhouettes;
-- C5+: expand in 20–30 entity content packs only after each prior batch is approved;
-- long term: 224 is an optional capacity target, not a first-release requirement.
+- C3 — licensed direction gate: use the Owner-approved hand-drawn cat/dog-majority Style Bible;
+- C4 — A1 pilot: produce eight licensed final-quality representatives covering cat, dog, egg and retained non-mammalian silhouettes;
+- C5 — launch roster: four content packs of 24, totalling 96;
+- C6–C9 — post-launch: four content packs of 32, completing all 224 slots.
 
 Do not begin final mass art before the functional-completion and final-IP gates.
 

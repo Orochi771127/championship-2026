@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "proposalId": "ART-A1-GOLDEN-SLICE-DIRECTION-2026-08-29",
+  "status": "ART_PROPOSAL_DIRECTION_SET_COMPLETE",
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "ownerDirection": "PRESERVE_ORIGINAL_MAJOR_PALETTES_CHANGE_SHAPE_CONTENT_AND_2026_FINISH",
+  "rights": {
+    "reportedByOwner": "FULL_LICENSE_ACQUIRED",
+    "promotionState": "BLOCKED_PENDING_LINKED_LICENSE_DOCUMENT_REFERENCE"
+  },
+  "files": [
+    {
+      "file": "gate-select-bright-direction.png",
+      "sha256": "5A95F0F0BA38BC1B9B8E03AD92395B0DBB01602D683E1906BF4B2D90F016B1C5",
+      "scope": ["GATE_WORLD", "EARTH_ROLE", "SIXTEEN_BIOME_NODES"],
+      "verdict": "SELECTED_BRIGHT_REVISION"
+    },
+    {
+      "file": "hunt-hm01-hm09-direction.png",
+      "sha256": "CE2FC263861C8263A301578B9E8BB8A3B868B7854C6FCD52EB6EFD358675E688",
+      "scope": ["HM01_BRIGHT_STANDARD", "HM09_DARK_STANDARD"],
+      "verdict": "SELECTED_DIRECTION"
+    },
+    {
+      "file": "cage-12-module-direction.png",
+      "sha256": "4B525EC35176331785505FEE121C9405919C67AC89A308846E068ADB6B7B435C",
+      "scope": ["TWELVE_SHAPE_AWARE_MODULES", "CHANGED_INTERNAL_CONTENT"],
+      "verdict": "SELECTED_DIRECTION_NO_GAMEPLAY_SEMANTICS"
+    },
+    {
+      "file": "ui-six-screen-flow-direction.png",
+      "sha256": "E6E05F55F02C92C3CE071E586CC1A7DF94619DADB75030D913AA1783C6313874",
+      "scope": ["HOME", "GATE", "LOADOUT", "HUNT", "CAPTURE", "RESULT"],
+      "verdict": "SELECTED_LIGHT_UI_DIRECTION"
+    },
+    {
+      "file": "vfx-five-family-direction.png",
+      "sha256": "2218B04AD8686CD00FA18BCF95AE38B30832C9A0234E3C8B396257A5BC496D09",
+      "scope": ["HITSPARK_BIG", "HYPEREFFECT", "SPARK", "RAIN", "CAPTURE_TETHER_CIRCLE"],
+      "verdict": "SELECTED_PREVIEW_FORMAL_OUTPUT_USES_DATA_FAITHFUL_PORT"
+    }
+  ],
+  "vfxSourceDataPolicy": {
+    "reuse": ["NODE_STRUCTURE", "FRAME_ORDER", "TIMING", "TRANSFORM_CURVES", "VISIBILITY", "PALETTE_FAMILY", "TEXTURE_ROLE"],
+    "conversion": "NITRO_TO_WEB_COMPATIBLE_PIXI_OR_BOUNDED_THREE",
+    "rawNitroRuntimePayload": false,
+    "unknownParameters": "PRESERVE_RAW_OR_UNKNOWN_DO_NOT_INVENT"
+  },
+  "characterDirection": "../a1-character-direction/manifest.json",
+  "promotionRule": "These boards define visual direction only. Technical masters, modular source pieces, animation sheets, UI components, VFX sprites and runtime bundles require their own receipts, linked licence evidence and QA."
+}

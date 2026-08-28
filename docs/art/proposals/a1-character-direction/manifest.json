@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "proposalId": "ART-A1-CHARACTER-DIRECTION-2026-08-29",
+  "status": "ART_PROPOSAL_AWAITING_OWNER_VISUAL_REVIEW",
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "preferredReviewVersion": "V1_SOURCE_PALETTE_SHAPE_ADAPTATION",
+  "direction": "CUTE_HAND_DRAWN_CAT_DOG_MAJORITY_WITH_OTHER_SPECIES_PRESERVED",
+  "style": [
+    "LICENSED_FAITHFUL_REMAKE",
+    "ORIGINAL_SILHOUETTE_PRESERVED",
+    "PRESSURE_SENSITIVE_HAND_INK",
+    "SOFT_CEL_SHADING",
+    "RESTRAINED_WATERCOLOR_GOUACHE_GRAIN",
+    "FRESH_BRIGHT_2026_FINISH"
+  ],
+  "palettePolicy": {
+    "sourcePaletteReuse": "PRESERVE_MAJOR_FAMILY",
+    "intent": "CHANGE_SHAPE_CONTENT_AND_2026_FINISH_BEFORE_OPTIONAL_FUTURE_RECOLOR",
+    "preserve": ["MAJOR_PALETTE_FAMILY", "MATERIAL_CLASS", "GAMEPLAY_ROLE", "FIELD_SCALE_READABILITY"],
+    "change": ["ANATOMY", "BREED_REFERENCE", "PROPORTIONS", "MARKING_SHAPE", "SURFACE_DETAIL"]
+  },
+  "rights": {
+    "reportedByOwner": "FULL_LICENSE_ACQUIRED",
+    "promotionState": "BLOCKED_PENDING_LINKED_LICENSE_DOCUMENT_REFERENCE"
+  },
+  "generation": {
+    "mode": "BUILT_IN_IMAGEGEN_WITH_LOCAL_REFERENCE_IMAGES",
+    "generatedAt": "2026-08-29",
+    "purpose": "VISUAL_DIRECTION_ONLY"
+  },
+  "panels": [
+    {
+      "file": "a1-character-direction-panel-01.png",
+      "sha256": "AA4592703FE0FCD79CAEE5FBD04B191993AC85024892399FD8E8184F6693A75A",
+      "sourceIds": ["CHARACTER:E000", "CHARACTER:M001", "CHARACTER:M201", "CHARACTER:M222"],
+      "proposedMix": ["EGG", "CAT", "DOG", "OTHER_INSECT"]
+    },
+    {
+      "file": "a1-character-direction-panel-02.png",
+      "sha256": "EFB9855346E905732311DC43ED8A8525134E6EF3BC61B9493A2030ED00896962",
+      "sourceIds": ["CHARACTER:M226", "CHARACTER:M228", "CHARACTER:M352", "CHARACTER:M431"],
+      "proposedMix": ["DOG", "CAT", "OTHER_AVIAN", "OTHER_AQUATIC"]
+    }
+  ],
+  "rejectedV2BoldColorPanels": [
+    {
+      "file": "a1-character-direction-panel-01-v2-bold-color.png",
+      "sha256": "1E5A5CA8E0CD6C84E6F46A6CFA378FCE6587226C194BB46B9B6667A662686124",
+      "sourceIds": ["CHARACTER:E000", "CHARACTER:M001", "CHARACTER:M201", "CHARACTER:M222"]
+    },
+    {
+      "file": "a1-character-direction-panel-02-v2-bold-color.png",
+      "sha256": "5244A855BB6FEB55089E873911B44372D17E1AAD3F7FFD9FFC94EF6660B11199",
+      "sourceIds": ["CHARACTER:M226", "CHARACTER:M228", "CHARACTER:M352", "CHARACTER:M431"]
+    }
+  ],
+  "ownerReviewQuestions": [
+    "Is the hand-drawn line and restrained paint texture close enough to the original character feeling?",
+    "Do the cat and dog adaptations preserve enough of each original silhouette?",
+    "Should retained non-cat/dog species remain this close to their original anatomy?"
+  ],
+  "promotionRule": "A separate Owner visual approval is required before identity sheets, animation masters, runtime atlases or the 96-character launch packs begin."
+}

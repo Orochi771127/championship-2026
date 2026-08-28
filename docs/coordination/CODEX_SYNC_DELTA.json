@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "owner": "CODEX_ART",
-  "deltaId": "CODEX-VS2-R1-OWNER-VERDICT-VS2-R2-WAIT-2026-08-28",
-  "targetSyncRevision": 6,
-  "status": "VS2_R1_OWNER_APPROVED_STRUCTURAL_BASELINE_WAITING_VS2_R2_GO",
+  "deltaId": "CODEX-ART-A1-CAGE-ORIGINAL-STRUCTURE-2026-08-29",
+  "targetSyncRevision": 11,
+  "status": "A1_CAGE_ORIGINAL_STRUCTURE_LOCKED_CM01_CM10_NEXT",
   "statusSource": "docs/coordination/CODEX_ART_STATUS.json",
-  "baseSyncRevision": 5,
+  "baseSyncRevision": 10,
   "checkpoint": {
     "latestOwnerApprovedCommit": "732775486665b21508ac51c1eea0b723db0f7744",
     "message": "art(research): approve O2 224-entity character catalog",
@@ -32,6 +32,42 @@
     "documentationOnly": false
   },
   "completedWork": [
+    {
+      "id": "ART-A1-CAGE-ORIGINAL-STRUCTURE",
+      "state": "COMPLETE_40_OF_40_STRUCTURE_ROWS_CLASSIFIED",
+      "scope": "CM01-CM40 original structural metadata and four batches of ten",
+      "visualPackages": ["CORE_FIELD_TILES", "OBJECT_BUNDLE"],
+      "externalData": ["ATR_RAW_CLASSES", "COL_RAW_CLASSES"],
+      "quarantinedObjectConflicts": ["CM12", "CM18"],
+      "nativeNoObjectLayer": ["CM28", "CM29"],
+      "sourcePolicy": "REFERENCE_METADATA_ONLY_NO_ORIGINAL_PIXELS",
+      "runtimeEligible": false,
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "output": "docs/art/technical/a1-cage-original-structure/CM40_ORIGINAL_STRUCTURE_CROSSWALK.csv"
+    },
+    {
+      "id": "ART-A1-MAP-TECH",
+      "state": "TRANSPARENT_TECHNICAL_MASTERS_COMPLETE_NATIVE_LAYER_SEPARATION_PENDING",
+      "scope": "Twelve Cage module review crops plus HM01 bright and HM09 dark Hunt standards",
+      "sourcePolicy": "OWNER_APPROVED_BOARDS_HASH_LOCKED_EDGE_CONNECTED_BACKGROUND_REMOVAL_NO_VISUAL_REGENERATION",
+      "gameplayPolicy": "SHAPE_MASK_RAISING_EFFECT_COLLISION_ATR_ESC_AND_SPAWN_DATA_REMAIN_EXTERNAL_AND_UNKNOWN_UNTIL_VERIFIED",
+      "rights": "OWNER_REPORTED_FULL_LICENSE_DOCUMENT_LINK_REQUIRED",
+      "humanApproved": true,
+      "runtimeEligible": false,
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "output": "docs/art/technical/a1-map-tech/manifest.json"
+    },
+    {
+      "id": "ART-A1-GOLDEN-SLICE-DIRECTION-SET",
+      "state": "COMPLETE_ART_PROPOSAL",
+      "scope": "Eight characters, bright Gate world/Earth, HM01/HM09, twelve Cage modules, six-screen UI flow and five VFX families",
+      "palettePolicy": "PRESERVE_ORIGINAL_MAJOR_PALETTE_FAMILIES_CHANGE_SHAPE_CONTENT_AND_FINISH",
+      "vfxPolicy": "DATA_FAITHFUL_LICENSED_SOURCE_TO_WEB_CONVERSION",
+      "rights": "OWNER_REPORTED_FULL_LICENSE_DOCUMENT_LINK_REQUIRED",
+      "humanApproved": true,
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "output": "docs/art/proposals/a1-golden-slice/manifest.json"
+    },
     {
       "id": "VS2-R1-GATE-3D",
       "state": "OWNER_APPROVED_STRUCTURAL_BASELINE",
@@ -229,6 +265,11 @@
     }
   ],
   "ownerDecisionsApplied": [
+    "Owner directed work to continue on the approved Cage/Hunt technical batch; the bounded continuation creates transparent Cage masters only and does not authorize all-forty mass production or runtime promotion.",
+    "Owner approved the Cage twelve-module board and Hunt HM01/HM09 board for the next bounded technicalization batch; this is visual-direction approval, not gameplay-semantic or runtime-promotion authority.",
+    "Owner rejected broad character recolouring and selected original major palette families with changed shapes, anatomy, content and 2026 finish.",
+    "Overall presentation remains bright; only originally dark-role maps stay dark, with readable walkable midtones.",
+    "Existing hitspark_big, hypereffect, spark and rain VFX reuse licensed source structure, timing, transforms, visibility, palette and texture roles through Web-compatible conversion rather than replacement motion.",
     "Owner approved VS2-R1 Gate 3D as OWNER_APPROVED_STRUCTURAL_BASELINE, not final art, exact Original behavior parity, or shipping-ready.",
     "Gate camera, rotation, input, hit-test, node placement and day preview remain PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER and must not be upgraded to ROM_VERIFIED.",
     "Future Gate production debt is biome differentiation, surface/material quality, node/world integration, day/night visual system and world richness; no immediate redraw is authorized.",
