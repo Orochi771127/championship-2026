@@ -15,6 +15,59 @@ OAM_SIZES = {
 }
 
 
+def bsar_tile_entry(value: int) -> dict:
+    """Decode the standard 10-bit/palette-bank entries used by BSAR."""
+    return {
+        "raw": value,
+        "tileIndex": value & 0x03FF,
+        "horizontalFlip": bool(value & 0x0400),
+        "verticalFlip": bool(value & 0x0800),
+        "paletteBank": (value >> 12) & 0x0F,
+    }
+
+
+def parse_bsar(path: Path) -> dict:
+    data = path.read_bytes()
+    if len(data) < 28 or data[:4] != b"BSAR":
+        raise ValueError(f"Unsupported BSAR header: {path.name}")
+    version, unknown_0, frame_count, unknown_2 = struct.unpack_from("<IIII", data, 4)
+    if version != 2 or frame_count < 1:
+        raise ValueError(f"Unsupported BSAR version/frame count: {path.name}")
+    cursor = 20
+    durations = list(struct.unpack_from(f"<{frame_count}I", data, cursor))
+    cursor += frame_count * 4
+    width, height = struct.unpack_from("<II", data, cursor)
+    cursor += 8
+    grid = list(struct.unpack_from(f"<{width * height}H", data, cursor))
+    cursor += width * height * 2
+    symbol_count = struct.unpack_from("<I", data, cursor)[0]
+    cursor += 4
+    if len(data) != cursor + symbol_count * frame_count * 2 or (grid and max(grid) >= symbol_count):
+        raise ValueError(f"BSAR grid/symbol table mismatch: {path.name}")
+    symbols = []
+    for symbol_index in range(symbol_count):
+        values = struct.unpack_from(f"<{frame_count}H", data, cursor + symbol_index * frame_count * 2)
+        symbols.append({
+            "symbolIndex": symbol_index,
+            "frameTileEntries": [bsar_tile_entry(value) for value in values],
+        })
+    return {
+        "format": "YDIJ_BSAR_ANIMATED_TILEMAP_V2",
+        "version": version,
+        "unknownHeaderWord0": unknown_0,
+        "unknownHeaderWord2": unknown_2,
+        "frameCount": frame_count,
+        "frameDurationsRawTicks": durations,
+        "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+        "width": width,
+        "height": height,
+        "cellOrder": "ROW_MAJOR",
+        "gridSymbols": grid,
+        "symbolCount": symbol_count,
+        "symbols": symbols,
+    }
+
+
 def tile_entry_14(value: int) -> dict:
     return {
         "raw": value,
@@ -283,3 +336,29 @@ def composite_object_placements(
             placement["verticalFlip"],
         )
     return image, invalid_cell_ids
+
+
+def render_bsar_frame(
+    animation: dict,
+    tiles: list[bytes],
+    palette: list[tuple[int, int, int, int]],
+    frame_index: int,
+) -> Image.Image:
+    width, height = animation["width"], animation["height"]
+    image = Image.new("RGBA", (width * 8, height * 8), (0, 0, 0, 0))
+    pixels = image.load()
+    for position, symbol_index in enumerate(animation["gridSymbols"]):
+        entry = animation["symbols"][symbol_index]["frameTileEntries"][frame_index]
+        if entry["paletteBank"] != 0 or entry["tileIndex"] >= len(tiles):
+            raise ValueError("BSAR references an unsupported palette bank or tile index")
+        tile = tiles[entry["tileIndex"]]
+        target_x, target_y = (position % width) * 8, (position // width) * 8
+        for y in range(8):
+            for x in range(8):
+                source_x = 7 - x if entry["horizontalFlip"] else x
+                source_y = 7 - y if entry["verticalFlip"] else y
+                palette_index = tile[source_y * 8 + source_x]
+                if palette_index == 0:
+                    continue
+                pixels[target_x + x, target_y + y] = palette[palette_index]
+    return image

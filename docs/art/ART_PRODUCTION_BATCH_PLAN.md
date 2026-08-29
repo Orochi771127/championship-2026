@@ -70,6 +70,14 @@ quarantined instead of receiving guessed cells. The exact 4× enlargement is
 the reconstruction authority for a later genuine HD redraw, not itself a
 resolution-independent redraw.
 
+Hunt receives the same correction at full-map scale. The red regions visible in
+the static O3-C archive are uncovered animation diagnostics, not completed
+terrain. The HD30 builder restores all 13 available Hunt BSAR bundles using the
+source-defined 128x128 symbol grids, preserves 28 frames and raw durations, and
+assembles `animated terrain -> void-masked core -> objects`. All 30 source variants now have
+1024x1024 native composites and deterministic 2048x2048 frame-0 baselines; HM01
+restores both bodies of water. ATR/ESC classes remain raw and non-semantic.
+
 ### Characters
 
 Licensed references: `E000`, `M001`, `M201`, `M222`, `M226`, `M228`, `M352`, `M431`.

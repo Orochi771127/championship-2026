@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "owner": "CODEX_ART",
   "deltaId": "CODEX-ART-A3-CAGE-FAITHFUL-HD40-2026-08-29",
-  "targetSyncRevision": 15,
-  "status": "CAGE_HD40_EXACT_RAW_ASSEMBLY_COMPLETE_CM12_CM18_OBJECT_CONFLICTS_QUARANTINED",
+  "targetSyncRevision": 16,
+  "status": "CAGE_HD40_AND_HUNT_HD30_EXACT_ASSEMBLY_BASELINES_COMPLETE",
   "statusSource": "docs/coordination/CODEX_ART_STATUS.json",
   "baseSyncRevision": 13,
   "checkpoint": {
@@ -32,6 +32,17 @@
     "documentationOnly": false
   },
   "completedWork": [
+    {
+      "id": "ART-A4-HUNT-FAITHFUL-HD30",
+      "state": "30_OF_30_VARIANTS_13_OF_13_BSAR_BUNDLES_28_OF_28_ANIMATION_FRAMES",
+      "scope": "Exact original Hunt BSAR animated terrain bed, void-masked core, OPM/NCER/linear-NCBR objects, ATR, ESC and 2048x2048 frame-zero baselines",
+      "sourcePolicy": "VERIFIED_ROM_SHA_SOURCE_VALUES_PRESERVED_ROM_AND_NITRO_BINARIES_NOT_COMMITTED",
+      "technicalQa": "466_FILES_BYTE_IDENTICAL_16_OF_16_ARCHIVE_STATIC_DIAGNOSTICS_ZERO_RGBA_DIFF_30_OF_30_HD2X_13_OF_13_BSAR_28_OF_28_FRAMES_NO_RED_DIAGNOSTIC_BLOCKS",
+      "gameplayPolicy": "RAW_ATR_ESC_AND_TIMING_UNITS_PRESERVED_WITHOUT_SEMANTIC_REINTERPRETATION",
+      "runtimeEligible": false,
+      "shippingStatus": "NOT_SHIPPING_READY_LICENSE_LINK_RUNTIME_AND_PERFORMANCE_QA_PENDING",
+      "output": "docs/art/production/hunt/faithful-hd30/manifest.json"
+    },
     {
       "id": "ART-A3-CAGE-FAITHFUL-HD40",
       "state": "40_OF_40_PIXEL_EXACT_RAW_ASSEMBLIES_36_COMPLETE_OBJECT_BANKS_4_OF_4_ANIMATED_TERRAIN_BUNDLES",
@@ -287,6 +298,7 @@
     }
   ],
   "ownerDecisionsApplied": [
+    "Owner identified the red Hunt regions as incomplete; the production baseline must restore source BSAR animated terrain rather than retain diagnostic red blocks.",
     "Owner corrected the Cage direction to 100% original art, code-side assembly, object collision/placement data and palette, with only an HD presentation increase; no content redesign or object relayout is permitted in this batch.",
     "Owner directed work to continue on the approved Cage/Hunt technical batch; the bounded continuation creates transparent Cage masters only and does not authorize all-forty mass production or runtime promotion.",
     "Owner approved the Cage twelve-module board and Hunt HM01/HM09 board for the next bounded technicalization batch; this is visual-direction approval, not gameplay-semantic or runtime-promotion authority.",

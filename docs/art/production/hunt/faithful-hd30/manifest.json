@@ -1,0 +1,2357 @@
+{
+  "schemaVersion": 1,
+  "batch": "ART_A4_HUNT_EXACT_ORIGINAL_HD30_BASELINE",
+  "fieldCount": 30,
+  "representativeArchivePixelExactCount": 16,
+  "animatedVariantCount": 13,
+  "animationFrameCount": 28,
+  "compositionOrder": "BSAR_ANIMATED_TERRAIN_THEN_VOID_MASKED_CORE_THEN_OPM_NCER_NCBR_OBJECTS",
+  "visualPolicy": "ORIGINAL_PALETTE_TOPOLOGY_TILE_ORDER_OBJECT_COORDINATES_AND_ANIMATION_PRESERVED",
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "contactSheet": {
+    "file": "contact-sheet-frame-00.jpg",
+    "sha256": "3F3EEDC6FFAEB28B85DC734D026AD09221491A4E1C56AFBAC673F8E76CD0F2FE"
+  },
+  "fields": [
+    {
+      "fieldId": "field_hm00_01",
+      "variant": 1,
+      "selectedArchiveRepresentative": false,
+      "archiveStaticDiagnosticPixelDiffCount": null,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm00_01/faithful-hd2x-frame-00.png",
+        "sha256": "A5123E4B9ED5FD03E3C0AE3FB82AF27947DC3921AECBC0A2DB2C8A6E5876B2F2",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm00_01/core-native.png",
+        "sha256": "3B76994FB5584D5A5B1D6EF93E76346733601C24E06B4CD366901BC17476B071",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 2111,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm00_01/static-composite-diagnostic.png",
+        "sha256": "A9225D353BD430E6157B7BC128C84E0303BBA8D5A6C2EA83AFDDD12CDC3CE5E8"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm00_01/object-placement.json",
+        "sha256": "6E4134B8C2BCC7104D40A7ABD7F183F30CBE0E265D31332B6664903E046CEAA1",
+        "count": 12
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm00_01/object-cell-bank.json",
+        "sha256": "BDE51C10B20E252658EF4A65D897AB3865B1DEB7F5B5D3312C11FA44758CD379",
+        "cellCount": 2
+      },
+      "attribute": {
+        "file": "fields/field_hm00_01/attribute-raw-classes.json",
+        "sha256": "6C342B67D3DEA65E52E06B0B33E76F239A1A3034B805419B834FE9C7CDCC71EC"
+      },
+      "encounter": {
+        "file": "fields/field_hm00_01/encounter-raw-classes.json",
+        "sha256": "A9EF8FA31C4792DA5D01F2F270C5B6A2441125E96831EB2014483336CF67D33F"
+      },
+      "animation": {
+        "status": "PRESENT_EXACT_LAYER_COMPOSITED",
+        "frameCount": 2,
+        "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+        "frames": [
+          {
+            "frameIndex": 0,
+            "durationRawTicks": 20,
+            "layerFile": "fields/field_hm00_01/animated-layer-frame-00.png",
+            "layerSha256": "B1B9FA191CBC292FF0F90065DFCCC6944CD699A3010257A321FA5524D16182C8",
+            "compositeFile": "fields/field_hm00_01/native-composite-frame-00.png",
+            "compositeSha256": "831B3A4BA32313CCEB94E9DB528241B8C41E7292D85A499FC3EEDF6E50E0B96B"
+          },
+          {
+            "frameIndex": 1,
+            "durationRawTicks": 20,
+            "layerFile": "fields/field_hm00_01/animated-layer-frame-01.png",
+            "layerSha256": "BEE0BAA62B942836C1A46957B16576B21DC5B98FE40EC6A9D5EFCA47D9360CB1",
+            "compositeFile": "fields/field_hm00_01/native-composite-frame-01.png",
+            "compositeSha256": "4087BB3B80EB5B32C3CDD01056816D1616C888984ACF7D48743F09ACDF139F85"
+          }
+        ],
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 308,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm01_01",
+      "variant": 1,
+      "selectedArchiveRepresentative": true,
+      "archiveStaticDiagnosticPixelDiffCount": 0,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm01_01/faithful-hd2x-frame-00.png",
+        "sha256": "8C0ABF2311C43274B80BFDCDA68D1713480C62D3068CFD8FB4D2F77D0ABEC054",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm01_01/core-native.png",
+        "sha256": "C0BB627BDAFF076DCE86E1CC5722CABD534CFDD96679ACFA7F9E2919E68DB981",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 2111,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm01_01/static-composite-diagnostic.png",
+        "sha256": "8A3E0AEBB138D7DD9DB899DA43247E3A107398B3D17FE80248A266B4AD60DD8C"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm01_01/object-placement.json",
+        "sha256": "403B1800C9514B2EC4C6058A771A5E3D512688621914EA6685C1C9B7863641D3",
+        "count": 12
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm01_01/object-cell-bank.json",
+        "sha256": "878D431443A5730017254BDB585A85EBF43FA6DC411843329E54ECB95DADFA91",
+        "cellCount": 2
+      },
+      "attribute": {
+        "file": "fields/field_hm01_01/attribute-raw-classes.json",
+        "sha256": "7294A2F6B4B92F18FEDFE7FC7B773812B3738947627B3B21769A5D9D0F14E91A"
+      },
+      "encounter": {
+        "file": "fields/field_hm01_01/encounter-raw-classes.json",
+        "sha256": "7369850F1C5FDAEBA94745A9D55E950F12B630AB0F1C3CE8FCEB10C1C60C35F8"
+      },
+      "animation": {
+        "status": "PRESENT_EXACT_LAYER_COMPOSITED",
+        "frameCount": 2,
+        "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+        "frames": [
+          {
+            "frameIndex": 0,
+            "durationRawTicks": 20,
+            "layerFile": "fields/field_hm01_01/animated-layer-frame-00.png",
+            "layerSha256": "B1B9FA191CBC292FF0F90065DFCCC6944CD699A3010257A321FA5524D16182C8",
+            "compositeFile": "fields/field_hm01_01/native-composite-frame-00.png",
+            "compositeSha256": "07BF3ED966896EEF2CF96705AA384DAE47C766D92CE3921253B7539D5FA6FA2F"
+          },
+          {
+            "frameIndex": 1,
+            "durationRawTicks": 20,
+            "layerFile": "fields/field_hm01_01/animated-layer-frame-01.png",
+            "layerSha256": "BEE0BAA62B942836C1A46957B16576B21DC5B98FE40EC6A9D5EFCA47D9360CB1",
+            "compositeFile": "fields/field_hm01_01/native-composite-frame-01.png",
+            "compositeSha256": "88B1327FCA2B4DB7919E246ED5E067CE37AE19822830F98DFD9AC77F126580F1"
+          }
+        ],
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 308,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm01_02",
+      "variant": 2,
+      "selectedArchiveRepresentative": false,
+      "archiveStaticDiagnosticPixelDiffCount": null,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm01_02/faithful-hd2x-frame-00.png",
+        "sha256": "7E2E601022A2CD649E64347FA5B265187825628E188450F546327DCC08BC0943",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm01_02/core-native.png",
+        "sha256": "6B583A1E5CD2C542F88768416BCC1F0FA40FEA464390F5C14B6F8009ED5B6AD6",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 2077,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm01_02/static-composite-diagnostic.png",
+        "sha256": "D3FFE7BAEB972A2736364BA1B3BC28C0DCDE216D05AD857ABC72846B95B04CDC"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm01_02/object-placement.json",
+        "sha256": "3A60B04837F6CB7124AECB001AD85C746F4980E773351AC3FA0402551E9DC678",
+        "count": 12
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm01_02/object-cell-bank.json",
+        "sha256": "8A8790C2995F74B65D14BE378EF6FA15EE411101E0D63AA74492C88E557BE839",
+        "cellCount": 2
+      },
+      "attribute": {
+        "file": "fields/field_hm01_02/attribute-raw-classes.json",
+        "sha256": "7294A2F6B4B92F18FEDFE7FC7B773812B3738947627B3B21769A5D9D0F14E91A"
+      },
+      "encounter": {
+        "file": "fields/field_hm01_02/encounter-raw-classes.json",
+        "sha256": "349109CC73476EE2FBC4E00284D76EE8F978791BC973A0583A6D4D7B134A51DE"
+      },
+      "animation": {
+        "status": "PRESENT_EXACT_LAYER_COMPOSITED",
+        "frameCount": 2,
+        "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+        "frames": [
+          {
+            "frameIndex": 0,
+            "durationRawTicks": 20,
+            "layerFile": "fields/field_hm01_02/animated-layer-frame-00.png",
+            "layerSha256": "939D48CFC576DF90433C93C5C3B1EDB6E42B06714C172DB3BC7EE7346B74496F",
+            "compositeFile": "fields/field_hm01_02/native-composite-frame-00.png",
+            "compositeSha256": "224F7AAB00FE85DE78E3307C7BBBDF596BE5954D5FFD6658B2AADC4AA162A4B9"
+          },
+          {
+            "frameIndex": 1,
+            "durationRawTicks": 20,
+            "layerFile": "fields/field_hm01_02/animated-layer-frame-01.png",
+            "layerSha256": "57A2B03E61A27EE0A947CD28F78272823EC4BBC1C3A60EF2B33E11B14C84BEAB",
+            "compositeFile": "fields/field_hm01_02/native-composite-frame-01.png",
+            "compositeSha256": "8E85038BB712BE2D4A3BFBA311E8C95D64AA6CC6FE180F75BFC0C71F92AEB847"
+          }
+        ],
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 310,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm02_01",
+      "variant": 1,
+      "selectedArchiveRepresentative": true,
+      "archiveStaticDiagnosticPixelDiffCount": 0,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm02_01/faithful-hd2x-frame-00.png",
+        "sha256": "F8EFCC7CD8DF1723AE7C20FB3CCBEEF06704C80DE694F0E7C56651D4E33E0B37",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm02_01/core-native.png",
+        "sha256": "63DC70DC90967AFEE84D6C24C105B2FA2E624555F18540768A09480C1B919742",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 926,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm02_01/static-composite-diagnostic.png",
+        "sha256": "174449D61F76EA848881FC651B79ED08642B831D4B7DD4A314941D084BC45582"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm02_01/object-placement.json",
+        "sha256": "857418624FFDABC76E49D1EE25998D1CF0FB2CF904625FD7665CFB717BE6DB8F",
+        "count": 33
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm02_01/object-cell-bank.json",
+        "sha256": "416C5290D9BA572734C55771AA23BFFE1D27E5127FF1A5D5C65B32DCDC2688C5",
+        "cellCount": 4
+      },
+      "attribute": {
+        "file": "fields/field_hm02_01/attribute-raw-classes.json",
+        "sha256": "BC87B79BFD730B00ADA7C24DA7C6A606AA266F0D83990BA0BAA7107E8B36567D"
+      },
+      "encounter": {
+        "file": "fields/field_hm02_01/encounter-raw-classes.json",
+        "sha256": "A5A46C3865E6F90D45DFA0592F48F5667BEAF1DFC8FD802922CB40311E7194B3"
+      },
+      "animation": {
+        "status": "NOT_PRESENT",
+        "frameCount": 0
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm02_02",
+      "variant": 2,
+      "selectedArchiveRepresentative": false,
+      "archiveStaticDiagnosticPixelDiffCount": null,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm02_02/faithful-hd2x-frame-00.png",
+        "sha256": "E1D28DCEEA83760BCEE3F6CF327C2D6D9AAFA119479BED1BF1F623D28F14FC22",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm02_02/core-native.png",
+        "sha256": "B9E12F0D82C7D68F22740B332CACB161BE4DC19B79B8D934610D07A8E542D64C",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 917,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm02_02/static-composite-diagnostic.png",
+        "sha256": "3864FA5AC2CB267170C935673F6FCEB0B9866BC73525638AC4230CE79008B805"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm02_02/object-placement.json",
+        "sha256": "B7DF64210E53CA98DAA1719B62807152C0226ED8D1C864EBA12572F1851E269F",
+        "count": 33
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm02_02/object-cell-bank.json",
+        "sha256": "E6221CF07EE471553DD9FCE56F35743CCF5FB3D057EDCF92E0BF65B494463CD0",
+        "cellCount": 4
+      },
+      "attribute": {
+        "file": "fields/field_hm02_02/attribute-raw-classes.json",
+        "sha256": "BC87B79BFD730B00ADA7C24DA7C6A606AA266F0D83990BA0BAA7107E8B36567D"
+      },
+      "encounter": {
+        "file": "fields/field_hm02_02/encounter-raw-classes.json",
+        "sha256": "FC7D4245537364C85DAD5589DBACDFF2A177B2A4B4F3CD6E48B096E04199486F"
+      },
+      "animation": {
+        "status": "NOT_PRESENT",
+        "frameCount": 0
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm03_01",
+      "variant": 1,
+      "selectedArchiveRepresentative": true,
+      "archiveStaticDiagnosticPixelDiffCount": 0,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm03_01/faithful-hd2x-frame-00.png",
+        "sha256": "4FAC5953DD21B35C9BD8383D59FB6D893D99DA8817C65C754118C2A74F5A3D0D",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm03_01/core-native.png",
+        "sha256": "71279572B8ED577E9B05AA601D762A952ADEC5650BD957C190C6616D990AF14C",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 1294,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm03_01/static-composite-diagnostic.png",
+        "sha256": "3DFF870B4123A71D397C9680913040228039322E66CCE9578156C987DF8E7772"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm03_01/object-placement.json",
+        "sha256": "AC9259A1CDF6E296C3E69B1F0260C31A6FFC2634A7FD4BC211DEFB9E24070E99",
+        "count": 75
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm03_01/object-cell-bank.json",
+        "sha256": "E1301A6577D29342AA5DCF9CD3DF64F6D4D7CF555D7320D47DBDFBC4A142C819",
+        "cellCount": 4
+      },
+      "attribute": {
+        "file": "fields/field_hm03_01/attribute-raw-classes.json",
+        "sha256": "33663F2AEDADBA6E0DAD61D4E6DB5614E88103FE677F8F219740C9C72E22D4C7"
+      },
+      "encounter": {
+        "file": "fields/field_hm03_01/encounter-raw-classes.json",
+        "sha256": "15A945D9F417098C29C3ECBB0B2422E23FE0DB613CE39062890F0D68829727FB"
+      },
+      "animation": {
+        "status": "NOT_PRESENT",
+        "frameCount": 0
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm03_02",
+      "variant": 2,
+      "selectedArchiveRepresentative": false,
+      "archiveStaticDiagnosticPixelDiffCount": null,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm03_02/faithful-hd2x-frame-00.png",
+        "sha256": "899FDD82DB79636F0FF29DAC9C9BCA7E1B3AD36BB5E19C5247476D0A89016B32",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm03_02/core-native.png",
+        "sha256": "36AB829F44211CCABF0A02DC41647AD942D63E3072B77506123DF1C203FEFE44",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 1246,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm03_02/static-composite-diagnostic.png",
+        "sha256": "5D12A9A18CE04921A94208B8FD6E4E4D854CF565C1CA25BCF506B8C4F3323484"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm03_02/object-placement.json",
+        "sha256": "A074EE894304A1D889177E1B6A55847274FBDB97539D0C1B5BBE0E27137DCA68",
+        "count": 75
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm03_02/object-cell-bank.json",
+        "sha256": "A35AE7DDAF2FC30593EED861C86B29CFE9EA4BA2BD7E59A57B79D105975314A2",
+        "cellCount": 4
+      },
+      "attribute": {
+        "file": "fields/field_hm03_02/attribute-raw-classes.json",
+        "sha256": "33663F2AEDADBA6E0DAD61D4E6DB5614E88103FE677F8F219740C9C72E22D4C7"
+      },
+      "encounter": {
+        "file": "fields/field_hm03_02/encounter-raw-classes.json",
+        "sha256": "0B96F13B9FBFDD10B504DF5A9C6B9B54C4D7AEFADD368BB62949835FCB044B10"
+      },
+      "animation": {
+        "status": "NOT_PRESENT",
+        "frameCount": 0
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm04_01",
+      "variant": 1,
+      "selectedArchiveRepresentative": true,
+      "archiveStaticDiagnosticPixelDiffCount": 0,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm04_01/faithful-hd2x-frame-00.png",
+        "sha256": "F40B43906245624CFD0C0B77DA93E6C0F75F7FBA9E8FD3C308673E9191FAF9D2",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm04_01/core-native.png",
+        "sha256": "FB0B1F63EB4CF7EE8A5C1411B4E49BCCB82A0FD2E14507F847806D7040599D1B",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 3477,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm04_01/static-composite-diagnostic.png",
+        "sha256": "F3DD732C56EC2C6D27D2DA893AD5816F00778A18177048E824074C472E0AAFF4"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm04_01/object-placement.json",
+        "sha256": "C0840E1DDC7766F3EE594D05CF7DDC6BF3864F8F61237494F07D943776CAEA66",
+        "count": 65
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm04_01/object-cell-bank.json",
+        "sha256": "B8071373B60766F78FC53E841791F282EEEC7F6F3FDF053F6CEF6C3598D7BD1A",
+        "cellCount": 9
+      },
+      "attribute": {
+        "file": "fields/field_hm04_01/attribute-raw-classes.json",
+        "sha256": "38AFB2C5CE15057AD11BDBCCE2AFDD0AC35489D81E21A8FF45B68FE4A57D9046"
+      },
+      "encounter": {
+        "file": "fields/field_hm04_01/encounter-raw-classes.json",
+        "sha256": "DE0192D6AA1235CB1894F762D570230AD8F37E6B041D2FCEA309B6CB6378DDC6"
+      },
+      "animation": {
+        "status": "NOT_PRESENT",
+        "frameCount": 0
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm04_02",
+      "variant": 2,
+      "selectedArchiveRepresentative": false,
+      "archiveStaticDiagnosticPixelDiffCount": null,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm04_02/faithful-hd2x-frame-00.png",
+        "sha256": "EC490D5AB11021DCDDE71B238994C82C0F2BE0F2A69EEA9090C88D756A4838E8",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm04_02/core-native.png",
+        "sha256": "33132673E4DCFF5E3F7088CD7C3EB9AF076874679246DE22561B4C34596AB47D",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 3444,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm04_02/static-composite-diagnostic.png",
+        "sha256": "3926D2F7299AA597D89DE507ED2CF13DB5727F96C5AA560342C8DF14D4857687"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm04_02/object-placement.json",
+        "sha256": "831EF7B099F49725761EA0F0FD4E7D96B5B9AEBA981DEB28A668763ED02864F7",
+        "count": 65
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm04_02/object-cell-bank.json",
+        "sha256": "5310D84846123051027B202DABD365D02E0892CAF81123BAE14A46FF43D430D1",
+        "cellCount": 9
+      },
+      "attribute": {
+        "file": "fields/field_hm04_02/attribute-raw-classes.json",
+        "sha256": "38AFB2C5CE15057AD11BDBCCE2AFDD0AC35489D81E21A8FF45B68FE4A57D9046"
+      },
+      "encounter": {
+        "file": "fields/field_hm04_02/encounter-raw-classes.json",
+        "sha256": "77B78F222E3E6EB98DBC83062FC59BB6567F08AD516B7721FEE727F7C9857E31"
+      },
+      "animation": {
+        "status": "NOT_PRESENT",
+        "frameCount": 0
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm05_01",
+      "variant": 1,
+      "selectedArchiveRepresentative": true,
+      "archiveStaticDiagnosticPixelDiffCount": 0,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm05_01/faithful-hd2x-frame-00.png",
+        "sha256": "9DB4F568BEC75F64E9F9D32F62F5C81E3E0EFFC02A09380DCDFE6D54C974D5C3",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm05_01/core-native.png",
+        "sha256": "C6FC456C7482E012DA88AF32F6EEDA9DED751952CF53AAB0746E1C15354F2AC1",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 2040,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm05_01/static-composite-diagnostic.png",
+        "sha256": "8B2B51019DD001605ABA7634B7AC758F6EB57DF1E047A466E26AB8CF3A899BDF"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm05_01/object-placement.json",
+        "sha256": "CC06B7BF1614CD722A25B0D693E0CCE1A9882E6DAFB765E9A77649A83AC0E929",
+        "count": 65
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm05_01/object-cell-bank.json",
+        "sha256": "506C360405A20C77973C530E1A6F01DB631812EB74E8B5EBF47695D8A2944CD9",
+        "cellCount": 14
+      },
+      "attribute": {
+        "file": "fields/field_hm05_01/attribute-raw-classes.json",
+        "sha256": "C7F1C1E95885BDD232CA7DC579D30E9C270682AA08FE8F6FF3A7F3A66D336A5A"
+      },
+      "encounter": {
+        "file": "fields/field_hm05_01/encounter-raw-classes.json",
+        "sha256": "3B357EB76207C8E6A2BA39B83AAA5F84FEF30EFFBBE63DC2735D0E61232996B6"
+      },
+      "animation": {
+        "status": "PRESENT_EXACT_LAYER_COMPOSITED",
+        "frameCount": 2,
+        "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+        "frames": [
+          {
+            "frameIndex": 0,
+            "durationRawTicks": 40,
+            "layerFile": "fields/field_hm05_01/animated-layer-frame-00.png",
+            "layerSha256": "571EFF782085180CF96DF66690DE2ABFD48923955D9F5D86B2357F92DFEA038B",
+            "compositeFile": "fields/field_hm05_01/native-composite-frame-00.png",
+            "compositeSha256": "3F82B13B48960D62374AE6D74B1076D5F1DBCE14279EB3C29F34C20EDB82645C"
+          },
+          {
+            "frameIndex": 1,
+            "durationRawTicks": 40,
+            "layerFile": "fields/field_hm05_01/animated-layer-frame-01.png",
+            "layerSha256": "EB09E690E030E04CB9D05EEADE2F44E9CFF12361D8645790A48B539320DC9EF6",
+            "compositeFile": "fields/field_hm05_01/native-composite-frame-01.png",
+            "compositeSha256": "59EDD9EB11E9CC10ADC26A15FC8D7FAD606DE1330BB5B1EE8748715698821427"
+          }
+        ],
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 913,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm05_02",
+      "variant": 2,
+      "selectedArchiveRepresentative": false,
+      "archiveStaticDiagnosticPixelDiffCount": null,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm05_02/faithful-hd2x-frame-00.png",
+        "sha256": "2D06B69F7F97275A4A3E85D504425592160D68B28B4F121DD07EF606BBEBC126",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm05_02/core-native.png",
+        "sha256": "0EEAF9913A14CB10DC19D21534FC2C928A8FC505801172ECCB84B3B06AAA99AE",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 2027,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm05_02/static-composite-diagnostic.png",
+        "sha256": "25CF22F7D43CA28EEAFA0F82B14A3533F1EEBF5E49DA6C0DBE79CD6EBE93533E"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm05_02/object-placement.json",
+        "sha256": "6580567FEA7AEE7E21A5CCDA742DC33C46306B1EA1B4A57ABAC09753472D42A2",
+        "count": 65
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm05_02/object-cell-bank.json",
+        "sha256": "1CE5E5C241910ABAFBA268FC32E11560032A14224BC344A9C0352BD073EBF62A",
+        "cellCount": 14
+      },
+      "attribute": {
+        "file": "fields/field_hm05_02/attribute-raw-classes.json",
+        "sha256": "C7F1C1E95885BDD232CA7DC579D30E9C270682AA08FE8F6FF3A7F3A66D336A5A"
+      },
+      "encounter": {
+        "file": "fields/field_hm05_02/encounter-raw-classes.json",
+        "sha256": "2EA859BD5699D202BA01CEF2C4535C069E6BD74B3C31DFDBE9540E59DB774871"
+      },
+      "animation": {
+        "status": "PRESENT_EXACT_LAYER_COMPOSITED",
+        "frameCount": 2,
+        "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+        "frames": [
+          {
+            "frameIndex": 0,
+            "durationRawTicks": 40,
+            "layerFile": "fields/field_hm05_02/animated-layer-frame-00.png",
+            "layerSha256": "9FF1D62C4350FA005D5A4D6D73BF4164DEF31B60BB7707ED7CBFBEC07D236ED1",
+            "compositeFile": "fields/field_hm05_02/native-composite-frame-00.png",
+            "compositeSha256": "86EAACB7CCAB3A836AC81029E0A8ED409425668B74DFF2C5469FB4DA227BC138"
+          },
+          {
+            "frameIndex": 1,
+            "durationRawTicks": 40,
+            "layerFile": "fields/field_hm05_02/animated-layer-frame-01.png",
+            "layerSha256": "FD9624DECEC96D20C789F39E5268909CCA40C9CC3E91EF0194CF7BD948D2A9F9",
+            "compositeFile": "fields/field_hm05_02/native-composite-frame-01.png",
+            "compositeSha256": "64DE1E9F5FCC952D2B4F872B33F3778708A0ACF1868F54CC9AA01AF2EDB2E56B"
+          }
+        ],
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 910,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm06_01",
+      "variant": 1,
+      "selectedArchiveRepresentative": true,
+      "archiveStaticDiagnosticPixelDiffCount": 0,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm06_01/faithful-hd2x-frame-00.png",
+        "sha256": "7E34EE0C7036CA80C27DC4E9A4BAAA65E0D1BC841553A3CB0C6F75A9EBA705C4",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm06_01/core-native.png",
+        "sha256": "298BF7570723146A07DB725AD63EF9F81352F53E4CA1C6A1FF8DDDB25D6B61CA",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 1516,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm06_01/static-composite-diagnostic.png",
+        "sha256": "CE5A96B2FD842A33B7B600F84787B61853C43C04C9B55902741D9199E1D9C46B"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm06_01/object-placement.json",
+        "sha256": "5D9F2FB808FA720E263E064DD47F65227C56961238A00ADCF202304E77735FF4",
+        "count": 19
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm06_01/object-cell-bank.json",
+        "sha256": "CF785054F5B871B9CC37DED149692E3B8E04F80D0874C3231D400E9C1DF45AD0",
+        "cellCount": 6
+      },
+      "attribute": {
+        "file": "fields/field_hm06_01/attribute-raw-classes.json",
+        "sha256": "0AE7A66C72A87B28C5D0175ADCB084C6CB2D5C9DA030C0167E6033D7F726A4D3"
+      },
+      "encounter": {
+        "file": "fields/field_hm06_01/encounter-raw-classes.json",
+        "sha256": "8F70D06DD360993808B890F7BFB064C7648D39AAFFCD6A92A61E8DBE98C541EE"
+      },
+      "animation": {
+        "status": "PRESENT_EXACT_LAYER_COMPOSITED",
+        "frameCount": 2,
+        "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+        "frames": [
+          {
+            "frameIndex": 0,
+            "durationRawTicks": 20,
+            "layerFile": "fields/field_hm06_01/animated-layer-frame-00.png",
+            "layerSha256": "5EC9217E2DC2BEA50719161E2372DA1B5742A81F8F0C995C37E6E8A56401E888",
+            "compositeFile": "fields/field_hm06_01/native-composite-frame-00.png",
+            "compositeSha256": "D8D3B29E43B2B0346DD3B20667D2E3B063642FD3D7DA5AB974852FC9F0D68E70"
+          },
+          {
+            "frameIndex": 1,
+            "durationRawTicks": 20,
+            "layerFile": "fields/field_hm06_01/animated-layer-frame-01.png",
+            "layerSha256": "34C2CC519627FC34F875E8192044EEE41B219D770A20F74EC79833D9B8E3A0F3",
+            "compositeFile": "fields/field_hm06_01/native-composite-frame-01.png",
+            "compositeSha256": "977357213298FE24735B6DAD49B722962890EB8B1509E6DC623874D51EB191A3"
+          }
+        ],
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 651,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm06_02",
+      "variant": 2,
+      "selectedArchiveRepresentative": false,
+      "archiveStaticDiagnosticPixelDiffCount": null,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm06_02/faithful-hd2x-frame-00.png",
+        "sha256": "24B6412B6D19312A1E0E5FDAF5506D5C17963041CA374FE18D2D2A88E7980DE4",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm06_02/core-native.png",
+        "sha256": "73855D5DE5D932E9E8414B5167FBAF4C72B159507EC71060FCA76569866E84D8",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 1521,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm06_02/static-composite-diagnostic.png",
+        "sha256": "76828199515E3D288E9D8CBD2FC8BEB095CE7EBAC5FC100AEDF33C99EFCE8AB2"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm06_02/object-placement.json",
+        "sha256": "CD94B1FEFD843BF64ED85216FC90A862F1D2F0448E8B1FFDFBAC9F17628038A5",
+        "count": 19
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm06_02/object-cell-bank.json",
+        "sha256": "F61B91999E5FC2D8179640092245B923D5DA51D65E7ECE0E0DA5D96D0D5BFC5D",
+        "cellCount": 6
+      },
+      "attribute": {
+        "file": "fields/field_hm06_02/attribute-raw-classes.json",
+        "sha256": "0AE7A66C72A87B28C5D0175ADCB084C6CB2D5C9DA030C0167E6033D7F726A4D3"
+      },
+      "encounter": {
+        "file": "fields/field_hm06_02/encounter-raw-classes.json",
+        "sha256": "066DE8C5D25796B803C4F2CB887630FE7DBBEA66EB36F6A9D78E0DC2C648A742"
+      },
+      "animation": {
+        "status": "PRESENT_EXACT_LAYER_COMPOSITED",
+        "frameCount": 2,
+        "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+        "frames": [
+          {
+            "frameIndex": 0,
+            "durationRawTicks": 20,
+            "layerFile": "fields/field_hm06_02/animated-layer-frame-00.png",
+            "layerSha256": "9E1B1ADD9D57A13C00E49C79E914A38647AB96B2FB1B9D42E25C621FB7E7D339",
+            "compositeFile": "fields/field_hm06_02/native-composite-frame-00.png",
+            "compositeSha256": "7CC25CB38962689C26ABC86F2D61A5FA52947DDE028CA4BA138EE3D6ABBC498A"
+          },
+          {
+            "frameIndex": 1,
+            "durationRawTicks": 20,
+            "layerFile": "fields/field_hm06_02/animated-layer-frame-01.png",
+            "layerSha256": "CE630799AF9B9D15AB96B5D3FE6C47C6DDA7D5D3BD7630C67733FCFC71ACDE21",
+            "compositeFile": "fields/field_hm06_02/native-composite-frame-01.png",
+            "compositeSha256": "B4B4059F84779E4792DC76F7FF2653B8D2F237CD1268BF28B9B2460919F87CA8"
+          }
+        ],
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 651,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm08_01",
+      "variant": 1,
+      "selectedArchiveRepresentative": true,
+      "archiveStaticDiagnosticPixelDiffCount": 0,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm08_01/faithful-hd2x-frame-00.png",
+        "sha256": "BB1126695DC37432D57D7B8C7B78BCC4F2A951B9D48420DAD9E53B1E76FF474A",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm08_01/core-native.png",
+        "sha256": "812F4671FB9F10F0E01330A290351111933E16E1C8337199AC34901350B1089D",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 2082,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm08_01/static-composite-diagnostic.png",
+        "sha256": "36C6897863BC0A9AD4AFE54526F9E1E09F662D159B677E8ED728E0FD8B8A8BF1"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm08_01/object-placement.json",
+        "sha256": "441835C9C20E425B3F96CF857FEE21B7317E63794280C210569C9D8818177A41",
+        "count": 18
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm08_01/object-cell-bank.json",
+        "sha256": "BEBA453A5E48F50207B86186877AF02DE02DD22F7E1E3FED60DC3292262AF676",
+        "cellCount": 4
+      },
+      "attribute": {
+        "file": "fields/field_hm08_01/attribute-raw-classes.json",
+        "sha256": "52C14A7D43BF3FA13A53CB057CD871906BC1CB014624EE7F68CA96DAF42E22AB"
+      },
+      "encounter": {
+        "file": "fields/field_hm08_01/encounter-raw-classes.json",
+        "sha256": "A8B8CC1494E56B910FB7F26FA9B85506F4D1BB6AF304123E6E4CC95653309243"
+      },
+      "animation": {
+        "status": "NOT_PRESENT",
+        "frameCount": 0
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm08_02",
+      "variant": 2,
+      "selectedArchiveRepresentative": false,
+      "archiveStaticDiagnosticPixelDiffCount": null,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm08_02/faithful-hd2x-frame-00.png",
+        "sha256": "33FD4F1AE764421A0FB978F97E800C597B416806796CB91B6F26F2925BC0FF72",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm08_02/core-native.png",
+        "sha256": "CF2150A430FA26B86C869882B23F443341EE90AFB3DE292B0FF82A24767A9FD2",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 2063,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm08_02/static-composite-diagnostic.png",
+        "sha256": "17128F8E4D0821F5FA2A2C5C9A650B6D4B440D9A4E5F852B1DFF546A19C3C061"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm08_02/object-placement.json",
+        "sha256": "7CF113DCEF7B84F127FD4A86C8CF36EB4C33181152A940F0FF676A44F1F1F98E",
+        "count": 18
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm08_02/object-cell-bank.json",
+        "sha256": "882378B5801257E51D6795A4936C86A73C6BBAFCE606BCA9A1282B381316B59C",
+        "cellCount": 4
+      },
+      "attribute": {
+        "file": "fields/field_hm08_02/attribute-raw-classes.json",
+        "sha256": "52C14A7D43BF3FA13A53CB057CD871906BC1CB014624EE7F68CA96DAF42E22AB"
+      },
+      "encounter": {
+        "file": "fields/field_hm08_02/encounter-raw-classes.json",
+        "sha256": "313B6FA5CB0F9831BE2175F9B40BC4169B9C301BE1C2D8C2C35A87C5173F78A2"
+      },
+      "animation": {
+        "status": "NOT_PRESENT",
+        "frameCount": 0
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm09_01",
+      "variant": 1,
+      "selectedArchiveRepresentative": true,
+      "archiveStaticDiagnosticPixelDiffCount": 0,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm09_01/faithful-hd2x-frame-00.png",
+        "sha256": "F148B481E940FC82D755ACB57BF4548114402DD5CB6B6F464E09A89E0A076E74",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm09_01/core-native.png",
+        "sha256": "61742036F54B6F07E4E55877F9FEA72FF6D6DF840C0079E2E4C87D4AB0DE0302",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 2064,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm09_01/static-composite-diagnostic.png",
+        "sha256": "EF2B4A186A6AAC4B5DF2AD9EB508693EF603C89F656BD2F70CF6E22D72086029"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm09_01/object-placement.json",
+        "sha256": "E667E7808C05CAD337E155178A54FBE53ACC6847A362B92A36611841ED636323",
+        "count": 4
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm09_01/object-cell-bank.json",
+        "sha256": "52FB431CD11CF99094CB627D0168FE17AD30654E656EB6E9B5EEC79FA02E8AFA",
+        "cellCount": 2
+      },
+      "attribute": {
+        "file": "fields/field_hm09_01/attribute-raw-classes.json",
+        "sha256": "C0D9B53D932CB3D7300389CEE706DE91670F88A80A2A061393E6C857B39D0ADA"
+      },
+      "encounter": {
+        "file": "fields/field_hm09_01/encounter-raw-classes.json",
+        "sha256": "141491059E495F55EAC3164F933BA8BABF8D5D18B932B9AC3918650B62DFCB20"
+      },
+      "animation": {
+        "status": "NOT_PRESENT",
+        "frameCount": 0
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm10_01",
+      "variant": 1,
+      "selectedArchiveRepresentative": true,
+      "archiveStaticDiagnosticPixelDiffCount": 0,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm10_01/faithful-hd2x-frame-00.png",
+        "sha256": "26D6195B001AB5A8CB2441D1E5AB4B2BFFBC74546FA4A6ADF261F3A164EF0C1C",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm10_01/core-native.png",
+        "sha256": "6AAE7770ABB1022077292E6C65CB4AB81C05E916AE94C8F8D5D26053A9869136",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 3926,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm10_01/static-composite-diagnostic.png",
+        "sha256": "2B5756743D36761E051C3B8E3531823AE1E01891BAB5AC55859D3C5B5EA6E69F"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm10_01/object-placement.json",
+        "sha256": "F664B304DF5FFA68DCE6AAB75937ABE1A8F9459E3783BB43499888D5FA58013A",
+        "count": 82
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm10_01/object-cell-bank.json",
+        "sha256": "AEDBA5B56B498E6A2BA0BB5124251D7E5515A8B6D368FA7D984BA5A37B49255F",
+        "cellCount": 11
+      },
+      "attribute": {
+        "file": "fields/field_hm10_01/attribute-raw-classes.json",
+        "sha256": "2A6A0CD8CB3FA8D7E47C4635DCA045125028F13081E6F5E12C1E24D02FBA2354"
+      },
+      "encounter": {
+        "file": "fields/field_hm10_01/encounter-raw-classes.json",
+        "sha256": "392229F5D5529B1C77B2932813D9B0B3CA40F864AE97BD5ADE0868108B5B701A"
+      },
+      "animation": {
+        "status": "PRESENT_EXACT_LAYER_COMPOSITED",
+        "frameCount": 3,
+        "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+        "frames": [
+          {
+            "frameIndex": 0,
+            "durationRawTicks": 13,
+            "layerFile": "fields/field_hm10_01/animated-layer-frame-00.png",
+            "layerSha256": "46A70708D4DA793C6752C99ED749B4F87C369E7F55BFBF9795F64ECC22E6CF24",
+            "compositeFile": "fields/field_hm10_01/native-composite-frame-00.png",
+            "compositeSha256": "3B1E457502587178796726E13124ED44A9829E9DE9BA99275BD93FE4BDA38F51"
+          },
+          {
+            "frameIndex": 1,
+            "durationRawTicks": 12,
+            "layerFile": "fields/field_hm10_01/animated-layer-frame-01.png",
+            "layerSha256": "185469C7C7D9334AC6420C3289043C44A764078783D8AF08CB564A092099C6F4",
+            "compositeFile": "fields/field_hm10_01/native-composite-frame-01.png",
+            "compositeSha256": "6AD76CDC421F2013466BAF759C4C73E9A18F8913C5E5B1CB7C12866F21D8CF2D"
+          },
+          {
+            "frameIndex": 2,
+            "durationRawTicks": 12,
+            "layerFile": "fields/field_hm10_01/animated-layer-frame-02.png",
+            "layerSha256": "E8AA72DE011AB9865C45F1FE8A0A3F927C6BACD97CD5808B5D2E18049BEA5DD8",
+            "compositeFile": "fields/field_hm10_01/native-composite-frame-02.png",
+            "compositeSha256": "AFF47379FC8350E69AA36944A4FC3C3DCB68539CBA334BAB60736E8C33E8FB86"
+          }
+        ],
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 41,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm11_01",
+      "variant": 1,
+      "selectedArchiveRepresentative": true,
+      "archiveStaticDiagnosticPixelDiffCount": 0,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm11_01/faithful-hd2x-frame-00.png",
+        "sha256": "2410AE791E3B4CD584BD9C020BFA3903AE266013AE841F1EFA0938F2E8E2A047",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm11_01/core-native.png",
+        "sha256": "4A8E7511379823A098AEE7409E6B57E8CA35ACB75013F43871145D03159A3D07",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 1274,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm11_01/static-composite-diagnostic.png",
+        "sha256": "4721A62CCD81DBC6AE8B347914081951411E2CF2C61DAC88F78F8EE29D0403A7"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm11_01/object-placement.json",
+        "sha256": "C37FB211133284EE42C1EE399EC2929657758AD61B9B45106F3BD922B2C049C2",
+        "count": 35
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm11_01/object-cell-bank.json",
+        "sha256": "27360B52341476A8DEA68D137EA6E5B7E46E628FB8117EE8B659304B3C77C85E",
+        "cellCount": 4
+      },
+      "attribute": {
+        "file": "fields/field_hm11_01/attribute-raw-classes.json",
+        "sha256": "9D78BA726E019D0A362003EDD55BE68E09C5A1505000FD683ACF64E62ADF93A7"
+      },
+      "encounter": {
+        "file": "fields/field_hm11_01/encounter-raw-classes.json",
+        "sha256": "A2CAC7827A00139DA8C164584758928EF377DFAC77C7A9CC9B41F1E7AA5A49FD"
+      },
+      "animation": {
+        "status": "PRESENT_EXACT_LAYER_COMPOSITED",
+        "frameCount": 3,
+        "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+        "frames": [
+          {
+            "frameIndex": 0,
+            "durationRawTicks": 13,
+            "layerFile": "fields/field_hm11_01/animated-layer-frame-00.png",
+            "layerSha256": "F08A9B9A864DF6F3DB59C34299C42C027C22EA4F6C990B44A4CF4DFBFBC3D2BD",
+            "compositeFile": "fields/field_hm11_01/native-composite-frame-00.png",
+            "compositeSha256": "242EAA7F0D0362059ACD33028948E3B4AE6031706AECB79B843A866D2EDABAD7"
+          },
+          {
+            "frameIndex": 1,
+            "durationRawTicks": 12,
+            "layerFile": "fields/field_hm11_01/animated-layer-frame-01.png",
+            "layerSha256": "3F291681DF19E93942535A622791EEC7F9451A61A97EBE672093C7B8A69D27A2",
+            "compositeFile": "fields/field_hm11_01/native-composite-frame-01.png",
+            "compositeSha256": "2F43A6CE78CF10130E813CEF01764D53D6764C864AB48AC7D6687C995A4CF63B"
+          },
+          {
+            "frameIndex": 2,
+            "durationRawTicks": 12,
+            "layerFile": "fields/field_hm11_01/animated-layer-frame-02.png",
+            "layerSha256": "2E15E9BBAF7D24CAD8AFB550999BF5A9006DA29CB7D8B7D7F6D1528A03E020F4",
+            "compositeFile": "fields/field_hm11_01/native-composite-frame-02.png",
+            "compositeSha256": "C5FF50CE9FDAF784F37816AE72FD5C12D85290AF628A09DD5E3428892872DEF2"
+          }
+        ],
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 41,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm13_01",
+      "variant": 1,
+      "selectedArchiveRepresentative": true,
+      "archiveStaticDiagnosticPixelDiffCount": 0,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm13_01/faithful-hd2x-frame-00.png",
+        "sha256": "EB9C26ADDF1E7C9132E6148977FF00C91934C5372FF780CA6C3565E888BEFB1A",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm13_01/core-native.png",
+        "sha256": "946A8F0A9DBB331B60C670F3CD3104F8272CE2EA08E002768EDC1761F0B0484C",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 1719,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm13_01/static-composite-diagnostic.png",
+        "sha256": "21D71A147A51213410D5B9A523D3205BFC2382E77B1BD4B29BD28AAE8988F8EE"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm13_01/object-placement.json",
+        "sha256": "D84ED182F7AD939655D930033F4F93DD323EE02196EBA1D7EDE216288FBB908A",
+        "count": 22
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm13_01/object-cell-bank.json",
+        "sha256": "17ED00370344EA3D6090884B3C329CFC37186F34EF5A897E522AEAE403A913D6",
+        "cellCount": 4
+      },
+      "attribute": {
+        "file": "fields/field_hm13_01/attribute-raw-classes.json",
+        "sha256": "C55A54C22135CA2AAEFAB95C3CA18835C0BD12854615F82EC69B070F1CCC4476"
+      },
+      "encounter": {
+        "file": "fields/field_hm13_01/encounter-raw-classes.json",
+        "sha256": "B821C7EAF570FDAAD90CC959CB20D69FECF42CA21D2E1125457B934BD8203AC0"
+      },
+      "animation": {
+        "status": "NOT_PRESENT",
+        "frameCount": 0
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm13_02",
+      "variant": 2,
+      "selectedArchiveRepresentative": false,
+      "archiveStaticDiagnosticPixelDiffCount": null,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm13_02/faithful-hd2x-frame-00.png",
+        "sha256": "16C1E44F811F0BBD42CE8173AD5DA74AF57BC45C8052C4372BE0F24DD4D31CF4",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm13_02/core-native.png",
+        "sha256": "251EFF51C5DB28A3FA14F779C101F2A8480E95D1F881CD5624D56691D6B9E11D",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 1668,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm13_02/static-composite-diagnostic.png",
+        "sha256": "4D0417BEB19FE156AE835414FD65ECD0D9DA150AB263CB41185647D6392E9765"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm13_02/object-placement.json",
+        "sha256": "2878B2B1FDD161A1056B28ED0AEE37C561F39CF35041695777FD550C224828A7",
+        "count": 22
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm13_02/object-cell-bank.json",
+        "sha256": "6B2852304E56C76FB650DFDB5D1AEC0C8382C37ECF4D5A2D4031297E6969F0D1",
+        "cellCount": 4
+      },
+      "attribute": {
+        "file": "fields/field_hm13_02/attribute-raw-classes.json",
+        "sha256": "C55A54C22135CA2AAEFAB95C3CA18835C0BD12854615F82EC69B070F1CCC4476"
+      },
+      "encounter": {
+        "file": "fields/field_hm13_02/encounter-raw-classes.json",
+        "sha256": "96F3AC35E25FB0CB280434E0E1991A4CA5BF7FCDF3F919DBE6F567BD435090D4"
+      },
+      "animation": {
+        "status": "NOT_PRESENT",
+        "frameCount": 0
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm14_01",
+      "variant": 1,
+      "selectedArchiveRepresentative": true,
+      "archiveStaticDiagnosticPixelDiffCount": 0,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm14_01/faithful-hd2x-frame-00.png",
+        "sha256": "B4CD0011F908197D747198A5FA3DB49E72DEA1E8B7AC4C3D3D1973B96E4ABC43",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm14_01/core-native.png",
+        "sha256": "D6A7A7612FC7261089AFF3797BDB354129FE2315824B9963E199960F3400BF32",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 2042,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm14_01/static-composite-diagnostic.png",
+        "sha256": "D6BFEE5288B28C32CE6584E00ECB052B513DBB2BEEB40760424AFF311E039CD6"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm14_01/object-placement.json",
+        "sha256": "81D217824404C197425F6529F30B3BD3C70171B5D152D8014662AACCFEEF1A8B",
+        "count": 20
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm14_01/object-cell-bank.json",
+        "sha256": "6C9832A52793D0A0BC3AE08798D20388B84FEE8DB92D567FDB531B671506DCAA",
+        "cellCount": 4
+      },
+      "attribute": {
+        "file": "fields/field_hm14_01/attribute-raw-classes.json",
+        "sha256": "E4D46BE5C3A2161510053AB3ECA6C63C2BC7C77F96999DE86B4E4F725F604C6B"
+      },
+      "encounter": {
+        "file": "fields/field_hm14_01/encounter-raw-classes.json",
+        "sha256": "D49FF34470AE9D308B335DC690DD4EF14863D3335C46724E2965C14ECF703F0A"
+      },
+      "animation": {
+        "status": "NOT_PRESENT",
+        "frameCount": 0
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm14_02",
+      "variant": 2,
+      "selectedArchiveRepresentative": false,
+      "archiveStaticDiagnosticPixelDiffCount": null,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm14_02/faithful-hd2x-frame-00.png",
+        "sha256": "27F7A0B820E7B125074833BB1D14D6419FF256BDFCD4D2D15F6CFA442DCBA485",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm14_02/core-native.png",
+        "sha256": "219FF5AA0892CCD6F2E1166485F1399A8BF85F4B10197108B51FE1F23CE96A97",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 2008,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm14_02/static-composite-diagnostic.png",
+        "sha256": "1A3F0E204B0ED782EC18D9423B9B6C919618940640F2166C041A0984AD6D4B47"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm14_02/object-placement.json",
+        "sha256": "FFFEB22DB6DAAA5D6030CAE623C414B593658294DE6ECD0505E916CE192DE1E6",
+        "count": 20
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm14_02/object-cell-bank.json",
+        "sha256": "287C2DBFB672F4C9ED3EB03E757682DAD11C22C76C3E6D62110C3728A712660E",
+        "cellCount": 4
+      },
+      "attribute": {
+        "file": "fields/field_hm14_02/attribute-raw-classes.json",
+        "sha256": "E4D46BE5C3A2161510053AB3ECA6C63C2BC7C77F96999DE86B4E4F725F604C6B"
+      },
+      "encounter": {
+        "file": "fields/field_hm14_02/encounter-raw-classes.json",
+        "sha256": "F2F8A78DCA52C8F623241A9491A96398F5438F78F8F13F2B3B3D7DE118849CD5"
+      },
+      "animation": {
+        "status": "NOT_PRESENT",
+        "frameCount": 0
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm15_01",
+      "variant": 1,
+      "selectedArchiveRepresentative": true,
+      "archiveStaticDiagnosticPixelDiffCount": 0,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm15_01/faithful-hd2x-frame-00.png",
+        "sha256": "43627D7399C4DF1CF3185F89DCAED97023BE25C938E56FB42A2517BD58DA0C64",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm15_01/core-native.png",
+        "sha256": "4B6A6B0A8AAE8F2DDC6AB527F146DF3F35BDF8CCBF08D51FDF2F1F70088A3078",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 2169,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm15_01/static-composite-diagnostic.png",
+        "sha256": "D80EE01F4FF56527B33A0839CB0DD9F6EC3B68AA990FD19F16D39CC2BFB1373C"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm15_01/object-placement.json",
+        "sha256": "9A2A7E23277B965AEE16ADB0D08469E0516EBC78AF8D2120B367305CC40F3FDC",
+        "count": 7
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm15_01/object-cell-bank.json",
+        "sha256": "E31DED6A3B8348B6C4EDD2D9F75B9C49A33BD5ED28E6167DE16852E373F80C54",
+        "cellCount": 2
+      },
+      "attribute": {
+        "file": "fields/field_hm15_01/attribute-raw-classes.json",
+        "sha256": "36A5DE54DB090D5793030A947B6285A3300E68D8240F064BC6F0CB7551E77128"
+      },
+      "encounter": {
+        "file": "fields/field_hm15_01/encounter-raw-classes.json",
+        "sha256": "43A2ADFFA7BE97B3CB6EC45C3A85D748CDC1CB9CD30268C1D89130ABE2FD5DBE"
+      },
+      "animation": {
+        "status": "PRESENT_EXACT_LAYER_COMPOSITED",
+        "frameCount": 2,
+        "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+        "frames": [
+          {
+            "frameIndex": 0,
+            "durationRawTicks": 50,
+            "layerFile": "fields/field_hm15_01/animated-layer-frame-00.png",
+            "layerSha256": "47B13DAE43A90522D6BD0608F07483FDC665505EECB2B07945DE8E875DFDE678",
+            "compositeFile": "fields/field_hm15_01/native-composite-frame-00.png",
+            "compositeSha256": "64D41320DF17C1555848519288F888779C4B159440790FC135AA0DDBF05180E5"
+          },
+          {
+            "frameIndex": 1,
+            "durationRawTicks": 50,
+            "layerFile": "fields/field_hm15_01/animated-layer-frame-01.png",
+            "layerSha256": "61A38584D915FDA22CA32DAC3AD1C65345FC2C5310015B6126AC9A1B5C94C8FA",
+            "compositeFile": "fields/field_hm15_01/native-composite-frame-01.png",
+            "compositeSha256": "00025C72934B242AFA420D63C4F141C35D2847D3AB06E3C744CB5CD78FF6714E"
+          }
+        ],
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 293,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm15_02",
+      "variant": 2,
+      "selectedArchiveRepresentative": false,
+      "archiveStaticDiagnosticPixelDiffCount": null,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm15_02/faithful-hd2x-frame-00.png",
+        "sha256": "AA627962794DD642859D2B0A47F192026022DBA2F1C13A2241220E8A5DE903AC",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm15_02/core-native.png",
+        "sha256": "1E639CE35ADA88224A2EF625FC418204AD5ABB88509FF3F243CC32C05FF7B92B",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 2239,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm15_02/static-composite-diagnostic.png",
+        "sha256": "32695CC6144E72DAD7D68DAA300B614CAB5F80B4918785970E9AE82A26B638DC"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm15_02/object-placement.json",
+        "sha256": "09DC2CFD756D0DA642AD653873A47F56318E4848B1F520CE58238CEF1477945F",
+        "count": 7
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm15_02/object-cell-bank.json",
+        "sha256": "BFB4976A05C2923957F021A35AB1BA347A5332270341F6C68D0FF3D401098B1C",
+        "cellCount": 2
+      },
+      "attribute": {
+        "file": "fields/field_hm15_02/attribute-raw-classes.json",
+        "sha256": "36A5DE54DB090D5793030A947B6285A3300E68D8240F064BC6F0CB7551E77128"
+      },
+      "encounter": {
+        "file": "fields/field_hm15_02/encounter-raw-classes.json",
+        "sha256": "2B2310B9E7AD0907EB9DC4A0A58CD3F7B69FE1F672FBBFD84FB5B6CCED5F2196"
+      },
+      "animation": {
+        "status": "PRESENT_EXACT_LAYER_COMPOSITED",
+        "frameCount": 2,
+        "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+        "frames": [
+          {
+            "frameIndex": 0,
+            "durationRawTicks": 50,
+            "layerFile": "fields/field_hm15_02/animated-layer-frame-00.png",
+            "layerSha256": "F2C6F039BEB6EB011962875284E08357336D1A1B3EF798D259B39848441D617D",
+            "compositeFile": "fields/field_hm15_02/native-composite-frame-00.png",
+            "compositeSha256": "FC295FF169C6D8628A8F3F301C4D891C97CA319E48B1E87A0878623C870B18D7"
+          },
+          {
+            "frameIndex": 1,
+            "durationRawTicks": 50,
+            "layerFile": "fields/field_hm15_02/animated-layer-frame-01.png",
+            "layerSha256": "A128CADA91ADEC0127C9AFBDE6CD903CABE6FE02BEEB39F5E343F5B4D4691DCC",
+            "compositeFile": "fields/field_hm15_02/native-composite-frame-01.png",
+            "compositeSha256": "DA523B872EA4E668F3D956E7B65304D7075B3947BD62C37BB365FFD0A9E4F769"
+          }
+        ],
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 293,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm16_01",
+      "variant": 1,
+      "selectedArchiveRepresentative": true,
+      "archiveStaticDiagnosticPixelDiffCount": 0,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm16_01/faithful-hd2x-frame-00.png",
+        "sha256": "2C4185A1D977B808EFC4484D3BD204BBEEDA4CA9164C2D40F625E1B0B733287B",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm16_01/core-native.png",
+        "sha256": "B82C483C0142AE8CB6F1298F93085FA3B9830759E58914BCDB15D02F8E46A28E",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 1285,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm16_01/static-composite-diagnostic.png",
+        "sha256": "074F763DD265B06A6A6943122440CFA255C62FB8462C57DECAB85B6042E0D9A6"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm16_01/object-placement.json",
+        "sha256": "9C1F3F88F7B0B2CA04C08D446D0F2A4308F1755DD10FB1F1A6AFF8B57DB16CDC",
+        "count": 17
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm16_01/object-cell-bank.json",
+        "sha256": "F5389FD84DA418236560D6846A531D860A7400D752A29EFD723EDFF3B87C26A6",
+        "cellCount": 3
+      },
+      "attribute": {
+        "file": "fields/field_hm16_01/attribute-raw-classes.json",
+        "sha256": "8CAF03B2D5E358C76086E3A3EA820120768A09343476E1317B56452A14E78457"
+      },
+      "encounter": {
+        "file": "fields/field_hm16_01/encounter-raw-classes.json",
+        "sha256": "5F260B85D8A7934CCD2C1F978F0E62014B0BC84B52E66339314821965DC7424D"
+      },
+      "animation": {
+        "status": "NOT_PRESENT",
+        "frameCount": 0
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm16_02",
+      "variant": 2,
+      "selectedArchiveRepresentative": false,
+      "archiveStaticDiagnosticPixelDiffCount": null,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm16_02/faithful-hd2x-frame-00.png",
+        "sha256": "DA425B277572BEEB780B789FD7E31E60063755BDE4B58B248B83C568A7C6CE14",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm16_02/core-native.png",
+        "sha256": "7CB85C72BD637843664CD3BB088EBC09A5622B3443B6E08D6A32160FCC015437",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 1257,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm16_02/static-composite-diagnostic.png",
+        "sha256": "70DAECC72EFD1893AB95C4F3604A04A70A33F36E325F4ED3A34F0F4DD0D50028"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm16_02/object-placement.json",
+        "sha256": "09EAF129696651D2B0E2D108203704AA29476059CE3F9DD27C5119294D802CDF",
+        "count": 17
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm16_02/object-cell-bank.json",
+        "sha256": "FCEAE8BF9C0E365DBECD4872D082FF3144DDF6A943B333FD8DDFF65B3475CB13",
+        "cellCount": 3
+      },
+      "attribute": {
+        "file": "fields/field_hm16_02/attribute-raw-classes.json",
+        "sha256": "8CAF03B2D5E358C76086E3A3EA820120768A09343476E1317B56452A14E78457"
+      },
+      "encounter": {
+        "file": "fields/field_hm16_02/encounter-raw-classes.json",
+        "sha256": "B61AC68484D81A336A40D44A69D6FBEC9547011060862091BA4DC249ACFCBEB1"
+      },
+      "animation": {
+        "status": "NOT_PRESENT",
+        "frameCount": 0
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm17_01",
+      "variant": 1,
+      "selectedArchiveRepresentative": true,
+      "archiveStaticDiagnosticPixelDiffCount": 0,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm17_01/faithful-hd2x-frame-00.png",
+        "sha256": "8A288AAAC3BFB0ED0C6807DF0DCC9CA52E2BD3607B6DCC37C23BB5568B2ED660",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm17_01/core-native.png",
+        "sha256": "11D680F740A7C6846EE9B0E6892FB4888CBE0137019CDE1EE378C5D226A14D17",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 1588,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm17_01/static-composite-diagnostic.png",
+        "sha256": "9B4B41571CBDB2BC3EE2775B0801F8601EC07E3C955EAC5C98D3E2874D7851E3"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm17_01/object-placement.json",
+        "sha256": "BFA11CB52CEE2C21D62329302B8780E4CE5547CCC02EB061139E84EBD33FFEFB",
+        "count": 40
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm17_01/object-cell-bank.json",
+        "sha256": "E7981B736FF00B4B2B797CA4D2811DE823F7165568AA68108A0BED8309B84570",
+        "cellCount": 4
+      },
+      "attribute": {
+        "file": "fields/field_hm17_01/attribute-raw-classes.json",
+        "sha256": "7260757991A8DF06BC15DD4305C71F8D3261696D5FB457BF23DAC044ACFDEB5B"
+      },
+      "encounter": {
+        "file": "fields/field_hm17_01/encounter-raw-classes.json",
+        "sha256": "35999E7E45CC0CAAEC371ABF9A917FD9869221CED4A267450A20D18AF7757F14"
+      },
+      "animation": {
+        "status": "PRESENT_EXACT_LAYER_COMPOSITED",
+        "frameCount": 2,
+        "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+        "frames": [
+          {
+            "frameIndex": 0,
+            "durationRawTicks": 22,
+            "layerFile": "fields/field_hm17_01/animated-layer-frame-00.png",
+            "layerSha256": "CB3006196FF1549A796C8C2CFE21E04BF4FBB2C39A2668FF45A0F736A1706FE5",
+            "compositeFile": "fields/field_hm17_01/native-composite-frame-00.png",
+            "compositeSha256": "E45EAE4C1EEA259D16F194A75A4E690A7C6D8CC09B11CA7F161D2E535C67B80D"
+          },
+          {
+            "frameIndex": 1,
+            "durationRawTicks": 22,
+            "layerFile": "fields/field_hm17_01/animated-layer-frame-01.png",
+            "layerSha256": "2D060C9B7B873140DBBA3C9AAC8148D346829605780937930FFDB343DD7D4BFA",
+            "compositeFile": "fields/field_hm17_01/native-composite-frame-01.png",
+            "compositeSha256": "3982D0FD945BAA4ED6A770BB081F415082EB4647E7D916D756CDC75F6741E2E8"
+          }
+        ],
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 742,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm17_02",
+      "variant": 2,
+      "selectedArchiveRepresentative": false,
+      "archiveStaticDiagnosticPixelDiffCount": null,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm17_02/faithful-hd2x-frame-00.png",
+        "sha256": "565D062913FC7266628838E1DAF8385344381AF7C3FBB756BF82550B4D9DFC4E",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm17_02/core-native.png",
+        "sha256": "BAF15D9E47A00A6BB0D360DA2FA191393BAD2137A2D55BB07C63C74BB81D20DD",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 1574,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm17_02/static-composite-diagnostic.png",
+        "sha256": "4CDCEBDD07DF1C1989259E84DE0BB316E8E97E523F0621CF2AD582AB6AD21F7B"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm17_02/object-placement.json",
+        "sha256": "EF4E8B9882B4B9250A9E284C7A0273D053A039D3EBEF22E4F1AC7D79FFC1EC74",
+        "count": 40
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm17_02/object-cell-bank.json",
+        "sha256": "B8EFA2E7B15845F6668943471030476699676F56D76F066AD97FC080FB6877EA",
+        "cellCount": 4
+      },
+      "attribute": {
+        "file": "fields/field_hm17_02/attribute-raw-classes.json",
+        "sha256": "7260757991A8DF06BC15DD4305C71F8D3261696D5FB457BF23DAC044ACFDEB5B"
+      },
+      "encounter": {
+        "file": "fields/field_hm17_02/encounter-raw-classes.json",
+        "sha256": "234D6B7322979B0B269345E4C985B37732308ABF41E550D6B0028EE230F54A34"
+      },
+      "animation": {
+        "status": "PRESENT_EXACT_LAYER_COMPOSITED",
+        "frameCount": 2,
+        "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+        "frames": [
+          {
+            "frameIndex": 0,
+            "durationRawTicks": 22,
+            "layerFile": "fields/field_hm17_02/animated-layer-frame-00.png",
+            "layerSha256": "DFC0767DA200E5891DFA69A0239F3F3614F4EC996F697B17BCB5A379835BDAFC",
+            "compositeFile": "fields/field_hm17_02/native-composite-frame-00.png",
+            "compositeSha256": "2C6E71574E81292C612A47A225D4192C0E473E0F2CCB2C8D2984D8DFA674C568"
+          },
+          {
+            "frameIndex": 1,
+            "durationRawTicks": 22,
+            "layerFile": "fields/field_hm17_02/animated-layer-frame-01.png",
+            "layerSha256": "1A77020D187DF9E0D4FEFFC5D7D72F7DA0A13EB0DF3F248DC661F2A8CF54899C",
+            "compositeFile": "fields/field_hm17_02/native-composite-frame-01.png",
+            "compositeSha256": "2F1195848AF9F9F344F3DE6647B16BEBC821424020018A903AAD218ECACCA767"
+          }
+        ],
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 724,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm18_01",
+      "variant": 1,
+      "selectedArchiveRepresentative": true,
+      "archiveStaticDiagnosticPixelDiffCount": 0,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm18_01/faithful-hd2x-frame-00.png",
+        "sha256": "F72776C929C38C6B9E07A9F73A8FA2934427202AC441A5FCCB9781EA42B8C2C1",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm18_01/core-native.png",
+        "sha256": "8AB87121DD2C3F677BF81EED13157B698A1F3DCFB877197E321E6C62018F9EE5",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 3839,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm18_01/static-composite-diagnostic.png",
+        "sha256": "34C98953A5D1A48084F149AA5BD4A3976D481ADFF22B35B7CDDFBB08EC5CF9C8"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm18_01/object-placement.json",
+        "sha256": "19A8AD917B36DA6357B2455DB2D7626B99A4475A100563CCF42A7CCBD4D12BC8",
+        "count": 39
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm18_01/object-cell-bank.json",
+        "sha256": "C37CDFF85997A3BCFE61EBEB9CE072677A600D3B633636EFBCA6AD2F5AEA1BAC",
+        "cellCount": 6
+      },
+      "attribute": {
+        "file": "fields/field_hm18_01/attribute-raw-classes.json",
+        "sha256": "A412A50ADA5EB86CBAB1208AD48B01F725AA5FBB23482D50684A6EDD25D367F2"
+      },
+      "encounter": {
+        "file": "fields/field_hm18_01/encounter-raw-classes.json",
+        "sha256": "0875A4B3A1D9063CAE81C3F66AA2ADA411A6FAC0153E93DF41A7629F3CF4341A"
+      },
+      "animation": {
+        "status": "NOT_PRESENT",
+        "frameCount": 0
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "fieldId": "field_hm18_02",
+      "variant": 2,
+      "selectedArchiveRepresentative": false,
+      "archiveStaticDiagnosticPixelDiffCount": null,
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "faithfulHd2x": {
+        "file": "fields/field_hm18_02/faithful-hd2x-frame-00.png",
+        "sha256": "6639F3F6B8047F31A3556710C88352409B764F3B21F203DE8EB61240744A89EA",
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "scale": 2,
+        "filter": "NEAREST"
+      },
+      "core": {
+        "file": "fields/field_hm18_02/core-native.png",
+        "sha256": "ACAAFC9EFEF2F1BF36655313DA2E0B7FD9525F5AFD62681DED7C10606BC00FF4",
+        "graphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 3797,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "palette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        }
+      },
+      "staticDiagnostic": {
+        "file": "fields/field_hm18_02/static-composite-diagnostic.png",
+        "sha256": "4F4009B4BCADFD342CA9DE3DC4AC1C8274A4397EF0AA85DE56DF84DD26E98630"
+      },
+      "objectPlacement": {
+        "file": "fields/field_hm18_02/object-placement.json",
+        "sha256": "59AD626CBB663725E7548783F482C7E2A213E73F0A1D0724DC93F1255F64DD5F",
+        "count": 39
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm18_02/object-cell-bank.json",
+        "sha256": "64AF128E6BC4B4ACDE6B8D8969EE8C7A03DCC991F114E6F29C182F79E7C34ABA",
+        "cellCount": 6
+      },
+      "attribute": {
+        "file": "fields/field_hm18_02/attribute-raw-classes.json",
+        "sha256": "A412A50ADA5EB86CBAB1208AD48B01F725AA5FBB23482D50684A6EDD25D367F2"
+      },
+      "encounter": {
+        "file": "fields/field_hm18_02/encounter-raw-classes.json",
+        "sha256": "42C82976FDEC6B6A32E744C98F64DDC2834CBD4DEB6AFA666EEE610CAEB1B9A2"
+      },
+      "animation": {
+        "status": "NOT_PRESENT",
+        "frameCount": 0
+      },
+      "runtimeEligible": false,
+      "shippingReady": false
+    }
+  ]
+}

@@ -3,9 +3,9 @@
   "owner": "CODEX_ART",
   "lastUpdated": "2026-08-29",
   "syncBatch": "ART_A3_CAGE_EXACT_ORIGINAL_FAITHFUL_HD40_BASELINE",
-  "syncRevision": 15,
-  "syncRevisionTarget": 15,
-  "status": "CAGE_HD40_EXACT_RAW_ASSEMBLY_COMPLETE_CM12_CM18_OBJECT_CONFLICTS_QUARANTINED",
+  "syncRevision": 16,
+  "syncRevisionTarget": 16,
+  "status": "CAGE_HD40_AND_HUNT_HD30_EXACT_ASSEMBLY_BASELINES_COMPLETE",
   "sourceOfTruth": {
     "coordinationRoot": "docs/coordination",
     "canonicalRepository": ".",
@@ -65,6 +65,18 @@
     "o3dCheckpointIsolatedFromRuntimeRegistryAndP2": true
   },
   "completed": [
+    {
+      "id": "ART-A4-HUNT-FAITHFUL-HD30",
+      "status": "30_OF_30_VARIANTS_13_OF_13_ANIMATED_TERRAIN_BUNDLES",
+      "summary": "The red/green uncovered regions in the Hunt static archive were confirmed as missing animated-terrain presentation. All 30 source variants now assemble as BSAR animated terrain, void-masked core, then OPM/NCER/linear-NCBR objects. Thirteen BSAR bundles provide 28 preserved frames; HM01 water is restored and HM15 retains volcanic land over lava. All NBS, ATR, ESC and object records remain raw/evidence-bounded.",
+      "output": "docs/art/production/hunt/faithful-hd30/manifest.json",
+      "receipt": "docs/art/production/hunt/FAITHFUL_HD30_RECEIPT.md",
+      "validation": "466 generated files rebuild byte-identically; 16/16 archived representative static diagnostics have zero RGBA pixel differences; 30/30 frame-0 outputs are 2048x2048 exact nearest-neighbour baselines; 13/13 BSAR bundles and 28/28 frames decode deterministically",
+      "rights": "OWNER_REPORTED_LICENSED_SOURCE_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "humanApproved": false,
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
     {
       "id": "ART-A3-CAGE-FAITHFUL-HD40",
       "status": "40_OF_40_VISUAL_AND_COLLISION_BASELINES_38_FULL_COMPOSITIONS",
@@ -254,6 +266,11 @@
   ],
   "current": [
     {
+      "id": "ART-A4-HUNT-FAITHFUL-HD30",
+      "status": "BASELINE_COMPLETE_RUNTIME_PROMOTION_BLOCKED",
+      "summary": "Thirty Hunt variants, thirteen animated-terrain bundles, object placement/cells, ATR and ESC are reconstructed. Remaining work is presentation/performance QA and any later genuine redraw; raw class/timing semantics, linked licence evidence and runtime promotion remain gated."
+    },
+    {
       "id": "ART-A3-CAGE-FAITHFUL-HD40",
       "status": "BASELINE_COMPLETE_RUNTIME_BINDING_BLOCKED",
       "summary": "Exact original visual, direct-14-bit NBS, lower-14-bit OPM cell binding/flips, NCER/linear-NCBR object banks, COL, ATR and all four verified Cage BSAR animated terrain bundles are available for 40 fields. CM09 water-layer omission is closed and all clean/diagnostic raw assemblies are pixel-exact. CM12 and CM18 still require original missing-cell evidence; runtime binding and shipping remain blocked pending linked licence evidence and a Cage presentation contract."
@@ -327,6 +344,10 @@
     "Claude-owned runtime architecture documentation predates this product reset and must be reconciled by Claude on its next authorized owned-doc update."
   ],
   "outputs": [
+    "docs/art/production/hunt/faithful-hd30/manifest.json",
+    "docs/art/production/hunt/FAITHFUL_HD30_RECEIPT.md",
+    "scripts/build-hunt-faithful-hd30.py",
+    "tests/championship-hunt-faithful-hd30-cases.mjs",
     "docs/art/production/cage/faithful-hd40/manifest.json",
     "docs/art/production/cage/FAITHFUL_HD40_RECEIPT.md",
     "scripts/build-cage-faithful-hd40.py",
