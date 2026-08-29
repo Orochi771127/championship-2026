@@ -68,3 +68,12 @@ The 4× files are an exact-original enlarged reference baseline, not a claim of
 newly redrawn resolution-independent art. Any later hand-redrawn HD pass must
 retain these raw reconstructions as the placement, silhouette, collision and
 pixel-difference authority.
+
+## Follow-up technical QA
+
+`docs/art/production/technical-qa/cage-hunt-exact-baseline/manifest.json`
+confirms 40/40 exact 4× block replication and 40/40 NBS/COL/ATR grid alignment.
+One un-tinted CM01–CM40 master contact sheet shows all forty art fields at once;
+four additional contact pages expose raw collision classes over the unchanged HD images.
+The overlay colours are review-only and do not assign passability or gameplay
+meaning. CM12 and CM18 remain quarantined.

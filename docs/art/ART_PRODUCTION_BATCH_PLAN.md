@@ -1,6 +1,6 @@
 # Championship 2026 — Art Production Batch Plan
 
-Status: `A0 IMPLEMENTED / CAGE CM01–CM40 EXACT-ORIGINAL HD BASELINE COMPLETE / CM12+CM18 OBJECT CONFLICTS OPEN`
+Status: `A0 IMPLEMENTED / CAGE CM01–CM40 + HUNT 30-VARIANT EXACT BASELINES TECHNICALLY QA'D / CM12+CM18 OBJECT CONFLICTS OPEN`
 Authority: Owner directive of 2026-08-29
 
 ## Batch sequence
@@ -77,6 +77,17 @@ source-defined 128x128 symbol grids, preserves 28 frames and raw durations, and
 assembles `animated terrain -> void-masked core -> objects`. All 30 source variants now have
 1024x1024 native composites and deterministic 2048x2048 frame-0 baselines; HM01
 restores both bodies of water. ATR/ESC classes remain raw and non-semantic.
+
+The bounded A3/A4 technical-QA follow-up validates every delivered map without
+changing its pixels or gameplay data. All 40 Cage HD files preserve exact 4×
+pixel blocks and align NBS, COL and ATR to the same native 8-pixel cells. The
+review packet adds raw-class collision overlays only; their colours are QA
+diagnostics and never gameplay art or inferred semantics. All 30 Hunt variants
+are scanned for large connected pure-red diagnostic regions, retain all 28
+animated frames, and receive fixed 390×844 centre crops with no scaling for
+portrait review. The memory audit rejects preloading all thirty 2048² RGBA maps
+(480 MiB before texture overhead) and requires one-field loading or tile
+streaming when a runtime binding is later authorized.
 
 ### Characters
 

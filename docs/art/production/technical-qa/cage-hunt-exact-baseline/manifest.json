@@ -1,0 +1,1520 @@
+{
+  "schemaVersion": 1,
+  "batch": "ART-A3-A4-EXACT-BASELINE-TECHNICAL-QA",
+  "status": "REFERENCE_TECHNICAL_QA_PASSED_WITH_KNOWN_PROMOTION_BLOCKERS",
+  "sourceManifests": {
+    "cage": {
+      "file": "docs/art/production/cage/faithful-hd40/manifest.json",
+      "sha256": "D15B8BCD3BC3C66E2792F661EAC375B7FE35FA646D04099C1D9D5F17482599BE"
+    },
+    "hunt": {
+      "file": "docs/art/production/hunt/faithful-hd30/manifest.json",
+      "sha256": "5FD6D64C205DBA2C0D188DAD64409592EB994B41CDFF0EF6B8D7CE99C95677DA"
+    }
+  },
+  "cage": {
+    "fieldCount": 40,
+    "exact4xBlockReplicationCount": 40,
+    "collisionAttributeTilemapAlignedCount": 40,
+    "rawCollisionClassesObserved": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "rawAttributeClassesObserved": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "objectConflictFields": [
+      "field_cm12_01",
+      "field_cm18_01"
+    ],
+    "master40ArtContact": {
+      "file": "cage-art-master-contact-cm01-cm40.png",
+      "sha256": "4F49A7C6BFD7DFE1FFDCEAE8BA585E35C08727B1694BEBD9B31A5B29D77B3BB0"
+    },
+    "contactPages": [
+      {
+        "file": "cage-collision-contact-01.png",
+        "sha256": "CD9C4155B31C96105047611F6932E0B2626D8A5F9A6E02CFD8C20B707C8699FE"
+      },
+      {
+        "file": "cage-collision-contact-02.png",
+        "sha256": "EAC20DD023312A9DF371B7166A48256D49EAC3D89F449D123CA16EBAD098DDBA"
+      },
+      {
+        "file": "cage-collision-contact-03.png",
+        "sha256": "402417245DAA19354005FE57204438CA128495F54BD47689DF59D945141E33EF"
+      },
+      {
+        "file": "cage-collision-contact-04.png",
+        "sha256": "1D16228223CB33C20C076512E72EC9DB727FAEFCA539DC731CBB7E3A7D7FAFFE"
+      }
+    ],
+    "fields": [
+      {
+        "fieldId": "field_cm01_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          12,
+          14
+        ],
+        "hdDimensions": [
+          384,
+          448
+        ],
+        "transparentPixelCount": 27456,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm01_01.png",
+          "sha256": "6045E76429CC0250455068C6EE0B58D4116CDF6D296800CD110ACE5F82F21A86",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm02_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          24,
+          25
+        ],
+        "hdDimensions": [
+          768,
+          800
+        ],
+        "transparentPixelCount": 245760,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm02_01.png",
+          "sha256": "3F3ACC01D8712CD9BA785EE7242A772A3500A7B0BBCCE88FA3F856162B90FDF9",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm03_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          36,
+          25
+        ],
+        "hdDimensions": [
+          1152,
+          800
+        ],
+        "transparentPixelCount": 301056,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm03_01.png",
+          "sha256": "4AD261A8871BDCB550DF627009158C3B73866113DA4658C59CD91A7C5FDB5A11",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm04_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          36,
+          14
+        ],
+        "hdDimensions": [
+          1152,
+          448
+        ],
+        "transparentPixelCount": 106688,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm04_01.png",
+          "sha256": "091EBE60BF9AF6AECD7A8F43F40A82993A16548F9693734C6E8A4BE9065E30FD",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm05_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          30,
+          25
+        ],
+        "hdDimensions": [
+          960,
+          800
+        ],
+        "transparentPixelCount": 264192,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm05_01.png",
+          "sha256": "93122DA6C3EB40D3FFF5825B19C2D3614D8AFCB08ACDE8899B0782318BFFEB4A",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm06_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          42,
+          25
+        ],
+        "hdDimensions": [
+          1344,
+          800
+        ],
+        "transparentPixelCount": 554800,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm06_01.png",
+          "sha256": "9821D66EDC052A74FC0C1DA34F239234A2975F4B52069D1FA3A1865A60E0446A",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm07_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          30,
+          25
+        ],
+        "hdDimensions": [
+          960,
+          800
+        ],
+        "transparentPixelCount": 264192,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm07_01.png",
+          "sha256": "5DDB19B1AE343DBBF32A86D1E2D2449918F0CF6DFC9499C3BA6C4A52A7CFCDC5",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm08_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          30,
+          25
+        ],
+        "hdDimensions": [
+          960,
+          800
+        ],
+        "transparentPixelCount": 380928,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm08_01.png",
+          "sha256": "70400D6B790C05B4411A948F6075C7F68D07961F100DC58904577AFDA180E3DB",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm09_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          36,
+          25
+        ],
+        "hdDimensions": [
+          1152,
+          800
+        ],
+        "transparentPixelCount": 406240,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm09_01.png",
+          "sha256": "49E2674C4FBECC4BCE6939F1BA654DC3778B06F1EF1C95627F3773D21E73FFB2",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm10_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          36,
+          25
+        ],
+        "hdDimensions": [
+          1152,
+          800
+        ],
+        "transparentPixelCount": 417120,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm10_01.png",
+          "sha256": "1CFFC241708A8722297E3EDF9EFC42A7AAB3188041B8CD574394A5329F566746",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm11_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          30,
+          25
+        ],
+        "hdDimensions": [
+          960,
+          800
+        ],
+        "transparentPixelCount": 355712,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm11_01.png",
+          "sha256": "2AA7DCAB7A4EAE425C49127197264BD25D35F737F655144FC6C34EE30A4A6DB9",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm12_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          30,
+          25
+        ],
+        "hdDimensions": [
+          960,
+          800
+        ],
+        "transparentPixelCount": 399360,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_CONFLICT_QUARANTINED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm12_01.png",
+          "sha256": "54D5E091C315B0D65D0876D8E265C3617B9C96A1C0E3DA9C92BDB46C1B1A26CF",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm13_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          24,
+          25
+        ],
+        "hdDimensions": [
+          768,
+          800
+        ],
+        "transparentPixelCount": 241152,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm13_01.png",
+          "sha256": "8CE0D29DD459662226FE0E000982D7C2306F0B8CFC3D91071CFE561B6BD20A5C",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm14_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          30,
+          25
+        ],
+        "hdDimensions": [
+          960,
+          800
+        ],
+        "transparentPixelCount": 398896,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm14_01.png",
+          "sha256": "19CC05A53555D909E55FE7AB4E649BE804518FC587D78DEF06A0D5C5125688BD",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm15_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          30,
+          25
+        ],
+        "hdDimensions": [
+          960,
+          800
+        ],
+        "transparentPixelCount": 356944,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm15_01.png",
+          "sha256": "C917383CBD1FA515C09DCBB7645799695466AFE566C3E266A6654FE67834D059",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm16_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          12,
+          14
+        ],
+        "hdDimensions": [
+          384,
+          448
+        ],
+        "transparentPixelCount": 36864,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm16_01.png",
+          "sha256": "703E490BF37AA673FCB8ED61C5ADA2F9CF9BC7571B3A13BCE860AECD68498CC6",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm17_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          24,
+          25
+        ],
+        "hdDimensions": [
+          768,
+          800
+        ],
+        "transparentPixelCount": 222256,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm17_01.png",
+          "sha256": "9421C4A5254B87D881ED95AA72FC2C26424CAEFBDC53AFEC10F4B7BE3819CCCC",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm18_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          18,
+          25
+        ],
+        "hdDimensions": [
+          576,
+          800
+        ],
+        "transparentPixelCount": 208896,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_CONFLICT_QUARANTINED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm18_01.png",
+          "sha256": "04CE67886B199CE36265E39C246B7914DB81FC977F81928F9A42D329CAD55186",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm19_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          48,
+          14
+        ],
+        "hdDimensions": [
+          1536,
+          448
+        ],
+        "transparentPixelCount": 128416,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm19_01.png",
+          "sha256": "579928AFFE24F017034B2B046C9C2A454EA49C9C65B03A612C0BAC56DCE0FFDA",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm20_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          30,
+          25
+        ],
+        "hdDimensions": [
+          960,
+          800
+        ],
+        "transparentPixelCount": 399360,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm20_01.png",
+          "sha256": "FDA25A3D8C355486421440F74092A2C1D29EF13D1A42442C3D39573E087938EC",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm21_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          30,
+          25
+        ],
+        "hdDimensions": [
+          960,
+          800
+        ],
+        "transparentPixelCount": 264192,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm21_01.png",
+          "sha256": "DC3A638850BA49DCC8C8BA22718784518D5C67AF6856994833D537BAD5B30B21",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm22_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          24,
+          25
+        ],
+        "hdDimensions": [
+          768,
+          800
+        ],
+        "transparentPixelCount": 243376,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm22_01.png",
+          "sha256": "4AFFDA161044C5F53F535FE8C9D682F23EF011F5BB2F44D0A4F801D90A4DBF08",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm23_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          18,
+          25
+        ],
+        "hdDimensions": [
+          576,
+          800
+        ],
+        "transparentPixelCount": 208896,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm23_01.png",
+          "sha256": "A90F2EDE3ACA5E000F25B183C8DC29962CE7D1B3A613C1D46F06C749DAD5C442",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm24_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          12,
+          14
+        ],
+        "hdDimensions": [
+          384,
+          448
+        ],
+        "transparentPixelCount": 36864,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm24_01.png",
+          "sha256": "DDB52105FF2F8909471C967B5F7117472879DC9AE193A0302998423A9C23B58E",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm25_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          24,
+          14
+        ],
+        "hdDimensions": [
+          768,
+          448
+        ],
+        "transparentPixelCount": 54544,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm25_01.png",
+          "sha256": "95C6A939BB8967CAE2533DC3F5413D28DE2B2C8B3F5F45A7BFDF54A20F64D80B",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm26_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          30,
+          25
+        ],
+        "hdDimensions": [
+          960,
+          800
+        ],
+        "transparentPixelCount": 263840,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm26_01.png",
+          "sha256": "8958B135298D31FFAD4A1849F1E3065297B3BB89EB3B6A89DFD08279B9E9AD13",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm27_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          24,
+          25
+        ],
+        "hdDimensions": [
+          768,
+          800
+        ],
+        "transparentPixelCount": 222608,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm27_01.png",
+          "sha256": "C5544BDE7866AC4517E1B6A34D1229D826B05A9D6F4A268EE88D67C7AD5A188C",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm28_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          30,
+          25
+        ],
+        "hdDimensions": [
+          960,
+          800
+        ],
+        "transparentPixelCount": 264192,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "NOT_PRESENT",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm28_01.png",
+          "sha256": "651A2CA7B4E56556D169F68A04688803FBDFA236E5C1F36E24337DEDEBCC5D99",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm29_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          12,
+          14
+        ],
+        "hdDimensions": [
+          384,
+          448
+        ],
+        "transparentPixelCount": 36864,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "NOT_PRESENT",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm29_01.png",
+          "sha256": "8293489D9B1987BC9D16FEFE78A316AE0C301B3AF40B5290C7802F154AAEA040",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm30_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          12,
+          14
+        ],
+        "hdDimensions": [
+          384,
+          448
+        ],
+        "transparentPixelCount": 36864,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm30_01.png",
+          "sha256": "1B130923382282C2B7A3C305782A739AE1B56E4BE0DD5062C04AC2F9137C2035",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm31_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          24,
+          14
+        ],
+        "hdDimensions": [
+          768,
+          448
+        ],
+        "transparentPixelCount": 73728,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm31_01.png",
+          "sha256": "4CC2FEB2D03DDAA913F22D39985DB28315457E09EC72B70353083F856A2A4B5D",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm32_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          12,
+          14
+        ],
+        "hdDimensions": [
+          384,
+          448
+        ],
+        "transparentPixelCount": 36864,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm32_01.png",
+          "sha256": "92A3A43988F94D93A811B43D164585BE9EC1225665F106864787739BB11065F2",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm33_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          12,
+          14
+        ],
+        "hdDimensions": [
+          384,
+          448
+        ],
+        "transparentPixelCount": 36864,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm33_01.png",
+          "sha256": "BD949D40A917DAD73AAE1F37252EB9BC03BF91ABF82DEC264E3489A4EDF0B8D4",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm34_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          12,
+          14
+        ],
+        "hdDimensions": [
+          384,
+          448
+        ],
+        "transparentPixelCount": 36544,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm34_01.png",
+          "sha256": "B1E4D14992D01803F1C55B24F39634D1364BE61034DF68B656855458A93A9776",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm35_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          12,
+          14
+        ],
+        "hdDimensions": [
+          384,
+          448
+        ],
+        "transparentPixelCount": 36864,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm35_01.png",
+          "sha256": "C3093972AB23E935777ED6F773EF4613C4F47FB793D52406559B1E5ECE9D7BD5",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm36_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          12,
+          14
+        ],
+        "hdDimensions": [
+          384,
+          448
+        ],
+        "transparentPixelCount": 36864,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm36_01.png",
+          "sha256": "B4E872A74235BC1E60F0EDA80810401D4A2A6EDF2D40848B92BBE7BCBCBD8AA6",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm37_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          12,
+          14
+        ],
+        "hdDimensions": [
+          384,
+          448
+        ],
+        "transparentPixelCount": 36864,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm37_01.png",
+          "sha256": "3C7644C45B3CB822B5E60D5026C2D6E3684786417664F40ACCE7AB679ABAFA0B",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm38_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          12,
+          14
+        ],
+        "hdDimensions": [
+          384,
+          448
+        ],
+        "transparentPixelCount": 30272,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm38_01.png",
+          "sha256": "2B35CC2D6A6E53A46C4FB5FEF801744FED38C8A2F626DB6C7C7DD9570C2B988F",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm39_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          12,
+          14
+        ],
+        "hdDimensions": [
+          384,
+          448
+        ],
+        "transparentPixelCount": 36864,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm39_01.png",
+          "sha256": "AAF9F1B80203C10E5E92630D063C467005751D3E8C581EA35AA0D167C82B8DDA",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      },
+      {
+        "fieldId": "field_cm40_01",
+        "exact4xBlockReplication": true,
+        "collisionAttributeTilemapAligned": true,
+        "gridDimensions": [
+          12,
+          14
+        ],
+        "hdDimensions": [
+          384,
+          448
+        ],
+        "transparentPixelCount": 36864,
+        "partialAlphaPixelCount": 0,
+        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "collisionOverlay": {
+          "file": "cage-collision-overlays/field_cm40_01.png",
+          "sha256": "1A6E6EE422B37ED03D17E1768DB5041C35A8715B9E254D9AD6F27F489F931B23",
+          "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
+        }
+      }
+    ]
+  },
+  "hunt": {
+    "fieldCount": 30,
+    "largeDiagnosticRedRegionAbsentCount": 30,
+    "animatedVariantCount": 13,
+    "animationFrameCount": 28,
+    "portraitReviewCropPolicy": "390X844_FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY",
+    "portraitReviewContactPages": [
+      {
+        "file": "hunt-portrait-review-contact-01.png",
+        "sha256": "93D3434DDA3AC2A1B94738D57EAEBD8D51942F6FB94259DAB4C3F4C887B8C2E7"
+      },
+      {
+        "file": "hunt-portrait-review-contact-02.png",
+        "sha256": "74E18D2BD1CB3E5F2447FC664F020EE78947B8C7F6641D71FCD1CE2CA3C96986"
+      },
+      {
+        "file": "hunt-portrait-review-contact-03.png",
+        "sha256": "A44BA4F070C92153C2D00400A92AB277A53E83DBCC9EAA836A76A6C2C7DBEE66"
+      }
+    ],
+    "performance": {
+      "singleHdFieldDecodedRgbaBytes": 16777216,
+      "all30HdFieldsDecodedRgbaBytes": 503316480,
+      "all30HdPngDiskBytes": 24479879,
+      "maxSingleFieldAnimationLayerDecodedRgbaBytes": 12582912,
+      "budgetVerdict": "DO_NOT_PRELOAD_30_FULL_RGBA_MAPS_USE_ONE_FIELD_OR_TILED_STREAMING",
+      "runtimeMeasurementStatus": "NOT_MEASURED_REFERENCE_PACKET_NOT_RUNTIME_BOUND"
+    },
+    "fields": [
+      {
+        "fieldId": "field_hm00_01",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 2,
+        "animationLayerDecodedRgbaBytes": 8388608,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm01_01",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 2,
+        "animationLayerDecodedRgbaBytes": 8388608,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm01_02",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 2,
+        "animationLayerDecodedRgbaBytes": 8388608,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm02_01",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 0,
+        "animationLayerDecodedRgbaBytes": 0,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm02_02",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 0,
+        "animationLayerDecodedRgbaBytes": 0,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm03_01",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 0,
+        "animationLayerDecodedRgbaBytes": 0,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm03_02",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 0,
+        "animationLayerDecodedRgbaBytes": 0,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm04_01",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 0,
+        "animationLayerDecodedRgbaBytes": 0,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm04_02",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 0,
+        "animationLayerDecodedRgbaBytes": 0,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm05_01",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 2,
+        "animationLayerDecodedRgbaBytes": 8388608,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm05_02",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 2,
+        "animationLayerDecodedRgbaBytes": 8388608,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm06_01",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 2,
+        "animationLayerDecodedRgbaBytes": 8388608,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm06_02",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 2,
+        "animationLayerDecodedRgbaBytes": 8388608,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm08_01",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 0,
+        "animationLayerDecodedRgbaBytes": 0,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm08_02",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 0,
+        "animationLayerDecodedRgbaBytes": 0,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm09_01",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 0,
+        "animationLayerDecodedRgbaBytes": 0,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm10_01",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 3,
+        "animationLayerDecodedRgbaBytes": 12582912,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm11_01",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 3,
+        "animationLayerDecodedRgbaBytes": 12582912,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm13_01",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 0,
+        "animationLayerDecodedRgbaBytes": 0,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm13_02",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 0,
+        "animationLayerDecodedRgbaBytes": 0,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm14_01",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 0,
+        "animationLayerDecodedRgbaBytes": 0,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm14_02",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 0,
+        "animationLayerDecodedRgbaBytes": 0,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm15_01",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 140,
+        "largestPureDiagnosticRedComponentPixels": 60,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 2,
+        "animationLayerDecodedRgbaBytes": 8388608,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm15_02",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 132,
+        "largestPureDiagnosticRedComponentPixels": 56,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 2,
+        "animationLayerDecodedRgbaBytes": 8388608,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm16_01",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 0,
+        "animationLayerDecodedRgbaBytes": 0,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm16_02",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 0,
+        "animationLayerDecodedRgbaBytes": 0,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm17_01",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 2,
+        "animationLayerDecodedRgbaBytes": 8388608,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm17_02",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 2,
+        "animationLayerDecodedRgbaBytes": 8388608,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm18_01",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 0,
+        "animationLayerDecodedRgbaBytes": 0,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      },
+      {
+        "fieldId": "field_hm18_02",
+        "hdDimensions": [
+          2048,
+          2048
+        ],
+        "pureDiagnosticRedPixelCount": 0,
+        "largestPureDiagnosticRedComponentPixels": 0,
+        "largeDiagnosticRedRegionAbsent": true,
+        "animationFrameCount": 0,
+        "animationLayerDecodedRgbaBytes": 0,
+        "reviewCrop": {
+          "dimensions": [
+            390,
+            844
+          ],
+          "policy": "FIXED_CENTER_CROP_NO_SCALE_REVIEW_ONLY_NOT_RUNTIME_CAMERA"
+        }
+      }
+    ]
+  },
+  "boundaries": {
+    "visualTransformationPerformed": false,
+    "rawClassSemanticsInvented": false,
+    "runtimeEligible": false,
+    "shippingReady": false,
+    "knownBlockers": [
+      "CM12_CM18_ORIGINAL_OBJECT_INDEX_CONFLICT",
+      "LICENSE_DOCUMENT_LINK_PENDING",
+      "GENUINE_HAND_REDRAWN_HD_MASTER_NOT_YET_PRODUCED",
+      "RUNTIME_CAMERA_CULLING_AND_DEVICE_PERFORMANCE_NOT_YET_MEASURED"
+    ]
+  }
+}

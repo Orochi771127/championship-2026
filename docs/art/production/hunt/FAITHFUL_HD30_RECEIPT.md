@@ -38,3 +38,13 @@ to runtime or shipping.
 Run `scripts/build-hunt-faithful-hd30.py` with the read-only O3-C archive and
 raw Field roots. `--verify-determinism` rebuilds all 466 files in a clean
 temporary directory and compares every SHA-256.
+
+## Follow-up technical QA
+
+`docs/art/production/technical-qa/cage-hunt-exact-baseline/manifest.json`
+confirms that all 30 frame-zero outputs contain no large connected pure-red
+diagnostic region and that 13 animated variants still expose all 28 source
+frames. Three 390×844 portrait contact pages use fixed centre crops without
+scaling. A decoded-memory audit records 16 MiB per 2048² RGBA field and 480 MiB
+for all thirty, so later runtime work must load one field at a time or stream
+tiles rather than preload the entire catalogue.

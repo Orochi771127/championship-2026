@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "owner": "CODEX_ART",
-  "deltaId": "CODEX-ART-A3-CAGE-FAITHFUL-HD40-2026-08-29",
-  "targetSyncRevision": 16,
-  "status": "CAGE_HD40_AND_HUNT_HD30_EXACT_ASSEMBLY_BASELINES_COMPLETE",
+  "deltaId": "CODEX-ART-A3-A4-EXACT-BASELINE-TECHNICAL-QA-HUNT-INPUT-TRACE-2026-08-29",
+  "targetSyncRevision": 18,
+  "status": "CAGE_HD40_AND_HUNT_HD30_TECHNICAL_QA_COMPLETE_HUNT_PAN_ROM_VERIFIED_RUNTIME_CORRECTION_PENDING",
   "statusSource": "docs/coordination/CODEX_ART_STATUS.json",
   "baseSyncRevision": 13,
   "checkpoint": {
@@ -32,6 +32,28 @@
     "documentationOnly": false
   },
   "completedWork": [
+    {
+      "id": "RESEARCH-HUNT-FIELD-PAN-ROM-TRACE",
+      "state": "ROM_AND_OWNER_VERIFIED_INVERSE_DELTA_CAMERA_PAN",
+      "scope": "OVL0 Hunt touch-handler trace, inverse pointer-delta field-window update, 256x192 camera-origin clamp and explicit current-runtime mismatch",
+      "sourcePolicy": "RESEARCH_ONLY_SHA_VERIFIED_ROM_NO_BINARY_OR_DECODED_PAYLOAD_COMMITTED",
+      "technicalQa": "OVL0_0211CA38_0211CA54_AND_0211D9F0_0211DA54_LOCKED_BY_TEST_119_OF_119_SUITE_PASS",
+      "gameplayPolicy": "PORTRAIT_9_16_IS_VIEWPORT_EMPTY_FIELD_DRAG_PANS_TAPS_DO_NOT_BECOME_AVATAR_MOVE_CAPTURE_REMAINS_SEPARATE",
+      "runtimeEligible": false,
+      "shippingStatus": "RUNTIME_CORRECTION_PENDING_SEPARATE_BATCH",
+      "output": "docs/research/HUNT_FIELD_INPUT_ROM_TRACE_2026-08-29.md"
+    },
+    {
+      "id": "ART-A3-A4-EXACT-BASELINE-TECHNICAL-QA",
+      "state": "50_FILES_DETERMINISTIC_40_CAGE_GRID_ALIGNMENTS_30_HUNT_RED_REGION_PASSES",
+      "scope": "Review-only collision overlays, exact 4x block checks, NBS/COL/ATR alignment, Hunt diagnostic-red connected-component scan, 390x844 no-scale crops, animation completeness and decoded-memory audit",
+      "sourcePolicy": "NO_VISUAL_TRANSFORMATION_NO_RAW_SEMANTIC_INFERENCE_REFERENCE_ONLY",
+      "technicalQa": "40_OF_40_CAGE_EXACT_REPLICATION_40_OF_40_GRID_ALIGNMENT_30_OF_30_NO_LARGE_RED_REGION_13_OF_13_ANIMATED_VARIANTS_28_OF_28_FRAMES_ONE_CM01_CM40_MASTER_CONTACT_50_FILES_BYTE_IDENTICAL",
+      "performanceVerdict": "ALL_30_FULL_RGBA_PRELOAD_REJECTED_480_MIB_BEFORE_TEXTURE_OVERHEAD",
+      "runtimeEligible": false,
+      "shippingStatus": "NOT_SHIPPING_READY_GENUINE_REDRAW_LICENSE_LINK_RUNTIME_AND_DEVICE_QA_PENDING",
+      "output": "docs/art/production/technical-qa/cage-hunt-exact-baseline/manifest.json"
+    },
     {
       "id": "ART-A4-HUNT-FAITHFUL-HD30",
       "state": "30_OF_30_VARIANTS_13_OF_13_BSAR_BUNDLES_28_OF_28_ANIMATION_FRAMES",
@@ -298,6 +320,7 @@
     }
   ],
   "ownerDecisionsApplied": [
+    "Owner play-history confirms the contextual hand tool: empty-space drag pans Cage/Hunt maps, Cage creatures can be grabbed and dropped to another grid location, and Hunt capture later accepts the subdued creature. OVL0 independently verifies inverse-delta Hunt camera panning and 256x192 viewport clamps.",
     "Owner identified the red Hunt regions as incomplete; the production baseline must restore source BSAR animated terrain rather than retain diagnostic red blocks.",
     "Owner corrected the Cage direction to 100% original art, code-side assembly, object collision/placement data and palette, with only an HD presentation increase; no content redesign or object relayout is permitted in this batch.",
     "Owner directed work to continue on the approved Cage/Hunt technical batch; the bounded continuation creates transparent Cage masters only and does not authorize all-forty mass production or runtime promotion.",

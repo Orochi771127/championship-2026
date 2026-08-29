@@ -79,6 +79,12 @@ Local evidence verifies five runtime equipment classes, 49 Hunt items, 30 plugin
 positions and plugin-gated HUD fields. Precise per-item behaviors, wild-AI states and all state-transition branches
 still require runtime trace.
 
+OVL0 static trace and Owner play-history confirmation establish the field-navigation grammar as
+`ROM_VERIFIED` + `OWNER_VERIFIED_ORIGINAL_BEHAVIOR`: the DS screen is a 256x192 camera window over the large Hunt
+field, and dragging empty field space pans that window by inverse stylus delta. It is not a command to move a player
+avatar. The 2026 9:16 presentation must preserve free, clamped two-axis field browsing so the player can search for
+wild creatures. See `HUNT_FIELD_INPUT_ROM_TRACE_2026-08-29.md`.
+
 ## Battle preparation and combat
 
 The original is not a turn-command RPG. The player selects up to three creatures and gives pre-battle strategy; combat

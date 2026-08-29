@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "owner": "CODEX_ART",
   "lastUpdated": "2026-08-29",
-  "syncBatch": "ART_A3_CAGE_EXACT_ORIGINAL_FAITHFUL_HD40_BASELINE",
-  "syncRevision": 16,
-  "syncRevisionTarget": 16,
-  "status": "CAGE_HD40_AND_HUNT_HD30_EXACT_ASSEMBLY_BASELINES_COMPLETE",
+  "syncBatch": "ART_A3_A4_EXACT_BASELINE_TECHNICAL_QA_AND_HUNT_INPUT_TRACE",
+  "syncRevision": 18,
+  "syncRevisionTarget": 18,
+  "status": "CAGE_HD40_AND_HUNT_HD30_TECHNICAL_QA_COMPLETE_HUNT_PAN_ROM_VERIFIED_RUNTIME_CORRECTION_PENDING",
   "sourceOfTruth": {
     "coordinationRoot": "docs/coordination",
     "canonicalRepository": ".",
@@ -65,6 +65,29 @@
     "o3dCheckpointIsolatedFromRuntimeRegistryAndP2": true
   },
   "completed": [
+    {
+      "id": "RESEARCH-HUNT-FIELD-PAN-ROM-TRACE",
+      "status": "ROM_AND_OWNER_VERIFIED_INVERSE_DELTA_CAMERA_PAN",
+      "summary": "OVL0 directly reads Hunt touch coordinates, applies previous-minus-current pointer deltas to field-window coordinates, and clamps the origin to field width minus 256 and field height minus 192. This verifies free map browsing and disproves the current prototype drag-to-avatar-move behavior. Owner play-history confirms the contextual hand tool pans empty field space and directly manipulates creatures in Cage/capture contexts.",
+      "output": "docs/research/HUNT_FIELD_INPUT_ROM_TRACE_2026-08-29.md",
+      "validation": "3 evidence tests pass inside the 119/119 repository suite; ROM/Nitro payload remains outside the repository",
+      "rights": "RESEARCH_ONLY_BINARY_TRACE_NO_ROM_PAYLOAD",
+      "productionStatus": "ORIGINAL_BEHAVIOR_CONTRACT_INPUT",
+      "humanApproved": true,
+      "shippingStatus": "RUNTIME_CORRECTION_NOT_YET_IMPLEMENTED"
+    },
+    {
+      "id": "ART-A3-A4-EXACT-BASELINE-TECHNICAL-QA",
+      "status": "50_FILES_DETERMINISTIC_40_CAGE_GRID_ALIGNMENTS_30_HUNT_RED_REGION_PASSES",
+      "summary": "All forty Cage exact 4x baselines preserve native pixel blocks and align NBS, COL and ATR to the same 8-pixel source cells. All thirty Hunt HD frame-zero baselines contain no large connected pure-red diagnostic region; thirteen animated variants retain twenty-eight frames. Fixed 390x844 no-scale portrait crops verify presentation without defining a runtime camera. The memory audit rejects preloading all thirty full RGBA maps.",
+      "output": "docs/art/production/technical-qa/cage-hunt-exact-baseline/manifest.json",
+      "receipt": "docs/art/production/technical-qa/cage-hunt-exact-baseline/TECHNICAL_QA_RECEIPT.md",
+      "validation": "50 generated files rebuild byte-identically including one CM01-CM40 master contact; 40/40 exact 4x replication; 40/40 NBS/COL/ATR alignment; 30/30 no large diagnostic-red component; 13/13 animated variants and 28/28 frames retained; all-thirty decoded RGBA preload cost measured at 480 MiB",
+      "rights": "QA_DERIVED_FROM_LICENSED_REFERENCE_BASELINES_LICENSE_LINK_PENDING",
+      "productionStatus": "REFERENCE_TECHNICAL_QA_PASSED_WITH_KNOWN_PROMOTION_BLOCKERS",
+      "humanApproved": false,
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
     {
       "id": "ART-A4-HUNT-FAITHFUL-HD30",
       "status": "30_OF_30_VARIANTS_13_OF_13_ANIMATED_TERRAIN_BUNDLES",
@@ -266,6 +289,11 @@
   ],
   "current": [
     {
+      "id": "VS2-HUNT-FIELD-PAN-PARITY",
+      "status": "ROM_VERIFIED_RUNTIME_CORRECTION_PENDING_SEPARATE_BATCH",
+      "summary": "The 9:16 Hunt presentation must expose a persistent clamped camera origin and inverse-delta map drag. Current pointer-to-moveTo avatar locomotion remains explicitly non-parity; capture/result semantics are still outside this art/trace batch."
+    },
+    {
       "id": "ART-A4-HUNT-FAITHFUL-HD30",
       "status": "BASELINE_COMPLETE_RUNTIME_PROMOTION_BLOCKED",
       "summary": "Thirty Hunt variants, thirteen animated-terrain bundles, object placement/cells, ATR and ESC are reconstructed. Remaining work is presentation/performance QA and any later genuine redraw; raw class/timing semantics, linked licence evidence and runtime promotion remain gated."
@@ -327,7 +355,7 @@
     "SHIPPING"
   ],
   "blocked": [
-    "Cage CM01-CM40 exact-original visual/collision/placement baseline is complete, but CM12/CM18 object-index conflicts, linked licence evidence, runtime presentation binding, occlusion and mobile-performance QA remain required before runtime promotion.",
+    "Cage CM01-CM40 and Hunt HD30 reference technical QA is complete, but CM12/CM18 object-index conflicts, linked licence evidence, genuine redrawn HD masters, runtime presentation binding, occlusion and physical-device performance QA remain required before runtime promotion.",
     "A1 character identity sheets, animation masters, UI components, VFX ports and runtime atlases still require production receipts, linked licence evidence and relevant QA; direction boards alone are not runtime assets.",
     "A2-A11 mass production remains gated by completion of the A1 technical pipeline and the consuming gameplay/presentation contracts; A0/A1 proposals do not promote the 96-character launch roster.",
     "The Owner reports complete licensing, but each production asset still requires a linked licence document reference before READY_FOR_RUNTIME or SHIPPING_READY promotion.",
@@ -344,6 +372,10 @@
     "Claude-owned runtime architecture documentation predates this product reset and must be reconciled by Claude on its next authorized owned-doc update."
   ],
   "outputs": [
+    "docs/art/production/technical-qa/cage-hunt-exact-baseline/manifest.json",
+    "docs/art/production/technical-qa/cage-hunt-exact-baseline/TECHNICAL_QA_RECEIPT.md",
+    "scripts/audit-faithful-map-readiness.py",
+    "tests/championship-faithful-map-technical-qa-cases.mjs",
     "docs/art/production/hunt/faithful-hd30/manifest.json",
     "docs/art/production/hunt/FAITHFUL_HD30_RECEIPT.md",
     "scripts/build-hunt-faithful-hd30.py",
@@ -438,7 +470,7 @@
   },
   "dependenciesChanged": {
     "value": true,
-    "note": "Owner superseded generated Cage visuals with a 100% original-faithful HD requirement including art code and collision. Exact NBS/OPM/COL/ATR raw data and four verified BSAR animated terrain bundles are now available as a non-runtime baseline; CM09 water omission is closed and CM12/CM18 object binding remains quarantined. Gameplay and save authority are unchanged."
+    "note": "The Cage/Hunt exact baselines now have deterministic technical QA: 40 Cage NBS/COL/ATR grids align, 30 Hunt variants contain no large diagnostic-red region, 28 animation frames remain complete, and a 480 MiB full-catalogue decoded preload is explicitly rejected. Runtime and gameplay authority are unchanged; CM12/CM18 remain quarantined."
   },
   "sharedMergeReceipt": {
     "syncRevision": 3,
@@ -474,7 +506,8 @@
   "recommendedNext": [
     "Close CM12 and CM18 original object-index conflicts using the verified source/decode chain, without guessing cell bindings.",
     "Port the remaining NCGR/NCLR and NCER/NCBR object-cell decoding into the browser art module and pixel-diff its composition against the 40 native goldens.",
-    "Build HM01/HM09 layered macro-tile kits against verified 128x128 topology, then run seam, collision-alignment, occlusion and mobile-performance QA.",
+    "Produce the first genuinely redrawn HD Cage and Hunt master slices against the exact placement/topology baselines, preserving original palette, composition and object positions; require source-versus-redraw review before scaling.",
+    "When runtime binding is separately authorized, measure one-field/tile-streaming GPU memory, camera culling, occlusion and physical-device performance; never preload all thirty full RGBA Hunt maps.",
     "Continue remaining A1 technical masters and receipts: eight character identity/animation anchors, Gate model/material specification, DOM UI components and five VFX conversion timelines.",
     "For hitspark_big, hypereffect, spark and rain, decode and port licensed source timing/transform/visibility data instead of authoring replacement motion; keep unsupported parameters raw/unknown.",
     "WAIT for a distinct Owner GO authorizing VS2-R2 Original Hunt Loadout 2026 presentation against VS2_HUNT_LOADOUT_RUNTIME_CONTRACT/v1.",
