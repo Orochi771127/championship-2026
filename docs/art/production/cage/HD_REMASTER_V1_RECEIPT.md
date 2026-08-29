@@ -1,11 +1,11 @@
-# Cage HD Remaster V1 — CM01–CM10 Production Receipt
+# Cage HD Remaster V1 — CM01–CM20 Production Receipt
 
 Date: 2026-08-29
-Batch: `ART_A3_CAGE_HD_REMASTER_V1_CM01_CM10`
+Latest batch: `ART_A3_CAGE_HD_REMASTER_V1_CM11_CM20`
 
 ## Outcome
 
-The first ten Cage fields now have deterministic 4× HD remaster candidates. They preserve the verified original composition, palette family, OPMD coordinates and flip flags, OPMD → NANR → NCER first-frame bindings, and the original NBS/COL/ATR grid dimensions. No object was moved, added, removed, or recoloured in this batch.
+The first twenty Cage fields now have deterministic 4× HD remaster candidates. They preserve the verified original composition, palette family, OPMD coordinates and flip flags, OPMD → NANR → NCER first-frame bindings, and the original NBS/COL/ATR grid dimensions. No object was moved, added, removed, or recoloured in either batch.
 
 This is the first genuine remaster-processing batch, not the exact-nearest reference baseline and not a hand-redrawn final master. It remains `NOT_RUNTIME_ELIGIBLE` and `NOT_SHIPPING_READY` until Owner visual approval and linked licence evidence are recorded.
 
@@ -23,14 +23,15 @@ The enhancement profile uses a Scale2x-derived binary silhouette as edge authori
 
 ## Validation
 
-- 10/10 fields generated; CM01 through CM10.
-- 71 generated files rebuild byte-identically.
+- 20/20 scheduled fields generated; CM01 through CM20.
+- 173 generated files rebuild byte-identically.
 - Every field remains aligned to the original 8-pixel grid at a 32-pixel remaster cell size.
 - Every core and object-cell image has zero RGB data under fully transparent pixels.
 - Every recorded alpha bound scales exactly by 4×.
 - Every OPMD coordinate and flip flag matches the exact reference record.
 - CM07 and CM09 each retain two decoded animated-terrain frames and raw timing ticks.
-- Contact sheet: `hd-remaster-v1/cage-cm01-cm10-remaster-contact.png`.
+- CM12 and CM18 retain their verified non-direct object sequence bindings; no cell was guessed or clamped.
+- Contact sheet: `hd-remaster-v1/cage-cm01-cm20-remaster-contact.png`.
 
 ## CM27 Owner Directive
 
@@ -38,4 +39,4 @@ CM27 is not part of this batch. Its later genuine remake must remove the Owner-i
 
 ## Next Batch
 
-Continue with CM11–CM20 using the same component-faithful workflow. CM27 removal is scheduled for the CM21–CM30 batch and requires a dedicated before/after visual check proving that only the central mark changed.
+Continue with CM21–CM30 using the same component-faithful workflow. CM27 removal is part of this batch and requires a dedicated before/after visual check proving that only the central mark changed.

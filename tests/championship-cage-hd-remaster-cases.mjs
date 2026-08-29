@@ -9,12 +9,16 @@ const manifest = JSON.parse(fs.readFileSync(`${root}/manifest.json`, "utf8"));
 const sourceManifest = JSON.parse(fs.readFileSync(`${sourceRoot}/manifest.json`, "utf8"));
 const digest = (file) => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex").toUpperCase();
 
-test("first Cage HD remaster batch covers CM01-CM10 without runtime promotion", () => {
-  assert.equal(manifest.batch, "ART_A3_CAGE_HD_REMASTER_V1_CM01_CM10");
-  assert.equal(manifest.fieldCount, 10);
+test("first two Cage HD remaster batches cover CM01-CM20 without runtime promotion", () => {
+  assert.equal(manifest.batch, "ART_A3_CAGE_HD_REMASTER_V1_CM11_CM20");
+  assert.deepEqual(manifest.completedBatches.map((batch) => batch.batch), [
+    "ART_A3_CAGE_HD_REMASTER_V1_CM01_CM10",
+    "ART_A3_CAGE_HD_REMASTER_V1_CM11_CM20",
+  ]);
+  assert.equal(manifest.fieldCount, 20);
   assert.equal(manifest.plannedFieldCount, 40);
-  assert.deepEqual(manifest.completedFields, Array.from({ length: 10 }, (_, index) => `field_cm${String(index + 1).padStart(2, "0")}_01`));
-  assert.deepEqual(manifest.nextFields, Array.from({ length: 10 }, (_, index) => `field_cm${String(index + 11).padStart(2, "0")}_01`));
+  assert.deepEqual(manifest.completedFields, Array.from({ length: 20 }, (_, index) => `field_cm${String(index + 1).padStart(2, "0")}_01`));
+  assert.deepEqual(manifest.nextFields, Array.from({ length: 10 }, (_, index) => `field_cm${String(index + 21).padStart(2, "0")}_01`));
   assert.equal(manifest.scale, 4);
   assert.equal(manifest.profile, "COMPONENT_FAITHFUL_EDGE_AWARE_BICUBIC_PMA_4X_V1");
   assert.match(manifest.visualPolicy, /ORIGINAL_COMPOSITION.*PRESERVED/);
@@ -75,6 +79,18 @@ test("CM07 and CM09 preserve their verified animated-terrain frame records", () 
       assert.ok(Number.isInteger(frame.rawDurationTicks));
     }
   }
+});
+
+test("CM12 and CM18 retain the resolved OPMD to NANR to NCER bindings", () => {
+  const byId = new Map(manifest.fields.map((field) => [field.fieldId, field]));
+  const cm12 = byId.get("field_cm12_01");
+  const cm18 = byId.get("field_cm18_01");
+  assert.ok(cm12);
+  assert.ok(cm18);
+  assert.deepEqual(cm12.objectPlacements.map((item) => item.firstFrameCellId), [0, 1, 0, 0, 0, 0, 1]);
+  assert.deepEqual(cm18.objectPlacements.map((item) => item.firstFrameCellId), [2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 4, 5, 6, 7]);
+  assert.equal(cm12.objectPlacements.length, 7);
+  assert.equal(cm18.objectPlacements.length, 16);
 });
 
 test("all Cage HD remaster outputs are present and hash locked", () => {

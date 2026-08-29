@@ -24,7 +24,8 @@ REPO = Path(__file__).resolve().parents[1]
 SOURCE_ROOT = REPO / "docs/art/production/cage/faithful-hd40"
 OUTPUT_ROOT = REPO / "docs/art/production/cage/hd-remaster-v1"
 SCALE = 4
-FIRST_BATCH = [f"field_cm{i:02d}_01" for i in range(1, 11)]
+COMPLETED_FIELDS = [f"field_cm{i:02d}_01" for i in range(1, 21)]
+NEXT_FIELDS = [f"field_cm{i:02d}_01" for i in range(21, 31)]
 
 
 def sha256(path: Path) -> str:
@@ -213,7 +214,7 @@ def build(output_root: Path) -> None:
     source_fields = {field["fieldId"]: field for field in source_manifest["fields"]}
     records = []
 
-    for field_id in FIRST_BATCH:
+    for field_id in COMPLETED_FIELDS:
         source_field = source_fields[field_id]
         source_dir = SOURCE_ROOT / "fields" / field_id
         output_dir = output_root / "fields" / field_id
@@ -338,15 +339,25 @@ def build(output_root: Path) -> None:
             },
         })
 
-    contact_path = output_root / "cage-cm01-cm10-remaster-contact.png"
+    contact_path = output_root / "cage-cm01-cm20-remaster-contact.png"
     save_contact(records, contact_path, output_root)
     manifest = {
         "schemaVersion": 1,
-        "batch": "ART_A3_CAGE_HD_REMASTER_V1_CM01_CM10",
+        "batch": "ART_A3_CAGE_HD_REMASTER_V1_CM11_CM20",
+        "completedBatches": [
+            {
+                "batch": "ART_A3_CAGE_HD_REMASTER_V1_CM01_CM10",
+                "fields": [f"field_cm{i:02d}_01" for i in range(1, 11)],
+            },
+            {
+                "batch": "ART_A3_CAGE_HD_REMASTER_V1_CM11_CM20",
+                "fields": [f"field_cm{i:02d}_01" for i in range(11, 21)],
+            },
+        ],
         "fieldCount": len(records),
         "plannedFieldCount": 40,
-        "completedFields": FIRST_BATCH,
-        "nextFields": [f"field_cm{i:02d}_01" for i in range(11, 21)],
+        "completedFields": COMPLETED_FIELDS,
+        "nextFields": NEXT_FIELDS,
         "scale": SCALE,
         "profile": "COMPONENT_FAITHFUL_EDGE_AWARE_BICUBIC_PMA_4X_V1",
         "componentOrder": "ANIMATED_TERRAIN_BEHIND_CORE_THEN_OPMD_NANR_NCER_OBJECTS",
@@ -403,7 +414,7 @@ def main() -> None:
             second = tree_hashes(second_root)
         if first != second:
             raise SystemExit("Cage HD remaster determinism check failed")
-        print(f"Deterministic Cage CM01-CM10 remaster passed: {len(first)} files")
+        print(f"Deterministic Cage CM01-CM20 remaster passed: {len(first)} files")
 
 
 if __name__ == "__main__":
