@@ -101,3 +101,40 @@ test("CM01-CM10 clean-room review packets preserve original construction boundar
     }
   }
 });
+
+test("CM01-CM10 authoring atlases are deterministic and do not invent gameplay tile authority", () => {
+  const atlasRoot = "docs/art/production/cage/cm01-cm10/atlas-pack";
+  const atlas = JSON.parse(fs.readFileSync(`${atlasRoot}/manifest.json`, "utf8"));
+  assert.equal(atlas.fieldCount, 10);
+  assert.equal(atlas.fields.length, 10);
+  assert.equal(new Set(atlas.fields.map((field) => field.fieldId)).size, 10);
+  assert.equal(atlas.runtimeEligible, false);
+  assert.equal(atlas.shippingReady, false);
+  assert.match(atlas.authorityBoundary.materialTiles, /NOT_GAMEPLAY_TILES/);
+  assert.match(atlas.authorityBoundary.edgeCornerSamples, /NOT_NATIVE_TILE_ROLES/);
+  assert.equal(atlas.authorityBoundary.atrColRaisingCollisionPlacement, "EXTERNAL_NOT_INFERRED");
+  assert.equal(atlas.qa.allMaterialEdgesPixelEqual, true);
+  assert.equal(atlas.qa.gameplaySemanticsInferred, false);
+  for (const field of atlas.fields) {
+    assert.match(field.fieldId, /^field_cm(0[1-9]|10)_01$/);
+    assert.equal(field.materialTile.edgeEquality.leftRight, true);
+    assert.equal(field.materialTile.edgeEquality.topBottom, true);
+    assert.equal(field.visualEdgeCornerSamples.samples.length, 9);
+    assert.equal(field.visualEdgeCornerSamples.runtimeTileAuthority, false);
+    assert.ok(field.objectAtlas.count >= 1);
+    assert.equal(field.objectAtlas.placementAuthority, "NONE");
+    assert.equal(field.artStagingPreview.placementPolicy, "NON_AUTHORITATIVE_ART_STAGING_ONLY");
+    assert.equal(field.runtimeEligible, false);
+    assert.equal(field.shippingReady, false);
+    for (const layer of [field.materialTile, field.materialSeamQa, field.visualEdgeCornerSamples, field.objectAtlas, field.artStagingPreview]) {
+      const file = `${atlasRoot}/${layer.file}`;
+      assert.equal(fs.existsSync(file), true);
+      assert.equal(digest(file), layer.sha256);
+    }
+    for (const object of field.objectAtlas.objects) {
+      assert.match(object.objectId, /^RAW_OBJECT_\d{2}$/);
+      assert.equal(object.anchor.policy, "BOTTOM_CENTER");
+      assert.equal(object.semanticIdentity, "UNASSIGNED_REQUIRES_ART_DIRECTION");
+    }
+  }
+});

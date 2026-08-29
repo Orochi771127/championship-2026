@@ -1,0 +1,1998 @@
+{
+  "schemaVersion": 1,
+  "batch": "ART_A3_CAGE_CM01_CM10_AUTHORING_ATLAS_V1",
+  "fieldCount": 10,
+  "sourceManifest": {
+    "file": "../packages/manifest.json",
+    "sha256": "F04E5E015AC4CBACEEB1C1FEFB6EF5AD50F9C358FC34F7E7DE4417DE1DC4D985"
+  },
+  "authorityBoundary": {
+    "materialTiles": "SEAMLESS_VISUAL_SWATCHES_ONLY_NOT_GAMEPLAY_TILES",
+    "edgeCornerSamples": "VISUAL_SAMPLING_ONLY_NOT_NATIVE_TILE_ROLES",
+    "objectIds": "RAW_ART_GROUPS_WITHOUT_INFERRED_SEMANTICS",
+    "staging": "NON_AUTHORITATIVE_ART_STAGING_ONLY",
+    "atrColRaisingCollisionPlacement": "EXTERNAL_NOT_INFERRED"
+  },
+  "palettePolicy": "PRESERVE_ORIGINAL_MAJOR_PALETTE_FAMILY_CHANGE_SHAPES_CONTENT_AND_FINISH",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "fields": [
+    {
+      "assetId": "art:cage:field_cm01_01:authoring-atlas-v1",
+      "fieldId": "field_cm01_01",
+      "nameEn": "Vacant Lot",
+      "originalStructure": {
+        "dimensions": "12x14",
+        "layoutCells": 168,
+        "topologyClass": "COMPACT",
+        "atr": "EXTERNAL_RAW_CLASSES_NOT_INFERRED",
+        "col": "EXTERNAL_RAW_CLASSES_NOT_INFERRED"
+      },
+      "source": {
+        "coreField": {
+          "file": "../packages/field_cm01_01/core-field.png",
+          "sha256": "1D1D19C7FC569FE1DCA66BF9B68748EFA4536DCF2E5CB2136EA768AFA3E85501"
+        },
+        "objectBundle": {
+          "file": "../packages/field_cm01_01/object-bundle.png",
+          "sha256": "5D279F584AE78E6C98268DB6F93E8641C6DDA6CC31EEFA18E9575F0488729283"
+        }
+      },
+      "materialTile": {
+        "file": "field_cm01_01/material-tile.png",
+        "sha256": "439872B82BBB109D7ACF0AFED9A6FCA62C95F016E0850FFC905D0C4BAB3FF750",
+        "role": "SEAMLESS_MATERIAL_SWATCH_NOT_GAMEPLAY_TILE",
+        "edgeEquality": {
+          "leftRight": true,
+          "topBottom": true
+        }
+      },
+      "materialSeamQa": {
+        "file": "field_cm01_01/material-seam-qa.png",
+        "sha256": "A28AC5A96E979D129147FA0641AC6F9DD7428013256044B6C6BE7FDCA6BBB721",
+        "repeat": "3x3"
+      },
+      "visualEdgeCornerSamples": {
+        "file": "field_cm01_01/visual-edge-corner-samples.png",
+        "sha256": "1034B7157B6740EB587828A28FC1C2D07776C8CD14248F53E91B0FDF49D724B8",
+        "samples": [
+          {
+            "role": "NW",
+            "cell": 0,
+            "sourceBounds": [
+              26,
+              59,
+              136,
+              143
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "N",
+            "cell": 1,
+            "sourceBounds": [
+              136,
+              59,
+              247,
+              143
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "NE",
+            "cell": 2,
+            "sourceBounds": [
+              247,
+              59,
+              357,
+              143
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "W",
+            "cell": 3,
+            "sourceBounds": [
+              26,
+              143,
+              136,
+              226
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "CENTER",
+            "cell": 4,
+            "sourceBounds": [
+              136,
+              143,
+              247,
+              226
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "E",
+            "cell": 5,
+            "sourceBounds": [
+              247,
+              143,
+              357,
+              226
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SW",
+            "cell": 6,
+            "sourceBounds": [
+              26,
+              226,
+              136,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "S",
+            "cell": 7,
+            "sourceBounds": [
+              136,
+              226,
+              247,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SE",
+            "cell": 8,
+            "sourceBounds": [
+              247,
+              226,
+              357,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          }
+        ],
+        "runtimeTileAuthority": false
+      },
+      "objectAtlas": {
+        "file": "field_cm01_01/object-atlas.png",
+        "sha256": "4F6E5A52BC3491BA0049586E54E764DF03BB27AFC21E6473CF1970D49E8697CD",
+        "count": 4,
+        "objects": [
+          {
+            "objectId": "RAW_OBJECT_01",
+            "cell": 0,
+            "anchor": {
+              "x": 64,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_02",
+            "cell": 1,
+            "anchor": {
+              "x": 192,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_03",
+            "cell": 2,
+            "anchor": {
+              "x": 320,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_04",
+            "cell": 3,
+            "anchor": {
+              "x": 448,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          }
+        ],
+        "placementAuthority": "NONE"
+      },
+      "artStagingPreview": {
+        "file": "field_cm01_01/art-staging-preview.png",
+        "sha256": "9F654479D2FACFB4D61E3E4E112D3F21FB6CC17E4EECFF1C174EC34FAB8AC88F",
+        "placementPolicy": "NON_AUTHORITATIVE_ART_STAGING_ONLY"
+      },
+      "productionStatus": "OWNER_VISUAL_REVIEW_PENDING",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm02_01:authoring-atlas-v1",
+      "fieldId": "field_cm02_01",
+      "nameEn": "Exercise Ground",
+      "originalStructure": {
+        "dimensions": "24x25",
+        "layoutCells": 600,
+        "topologyClass": "RECTANGULAR",
+        "atr": "EXTERNAL_RAW_CLASSES_NOT_INFERRED",
+        "col": "EXTERNAL_RAW_CLASSES_NOT_INFERRED"
+      },
+      "source": {
+        "coreField": {
+          "file": "../packages/field_cm02_01/core-field.png",
+          "sha256": "C159E0063783703D4DC6D67D7D5548DD1E6EE71B449B7E68E0462F3511099EE1"
+        },
+        "objectBundle": {
+          "file": "../packages/field_cm02_01/object-bundle.png",
+          "sha256": "2680C5824EFD5CC1C5A5D8AE088FCC24436D3E9F6064E9627730E5B2ADD158D9"
+        }
+      },
+      "materialTile": {
+        "file": "field_cm02_01/material-tile.png",
+        "sha256": "64744D39487285A157F98B3E3F4E6AAE707DC1684A9DE25C4943579463A269EC",
+        "role": "SEAMLESS_MATERIAL_SWATCH_NOT_GAMEPLAY_TILE",
+        "edgeEquality": {
+          "leftRight": true,
+          "topBottom": true
+        }
+      },
+      "materialSeamQa": {
+        "file": "field_cm02_01/material-seam-qa.png",
+        "sha256": "B051705411C9C492A67C8A54884DF9C046CFAF0B37FE9E989BCA2CB675BF607E",
+        "repeat": "3x3"
+      },
+      "visualEdgeCornerSamples": {
+        "file": "field_cm02_01/visual-edge-corner-samples.png",
+        "sha256": "8F1FE752BA9A0DAB3C2747F384C26AF85A7CE9452CD3FDE985E7D151D9733D24",
+        "samples": [
+          {
+            "role": "NW",
+            "cell": 0,
+            "sourceBounds": [
+              44,
+              72,
+              142,
+              151
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "N",
+            "cell": 1,
+            "sourceBounds": [
+              142,
+              72,
+              241,
+              151
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "NE",
+            "cell": 2,
+            "sourceBounds": [
+              241,
+              72,
+              339,
+              151
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "W",
+            "cell": 3,
+            "sourceBounds": [
+              44,
+              151,
+              142,
+              231
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "CENTER",
+            "cell": 4,
+            "sourceBounds": [
+              142,
+              151,
+              241,
+              231
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "E",
+            "cell": 5,
+            "sourceBounds": [
+              241,
+              151,
+              339,
+              231
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SW",
+            "cell": 6,
+            "sourceBounds": [
+              44,
+              231,
+              142,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "S",
+            "cell": 7,
+            "sourceBounds": [
+              142,
+              231,
+              241,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SE",
+            "cell": 8,
+            "sourceBounds": [
+              241,
+              231,
+              339,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          }
+        ],
+        "runtimeTileAuthority": false
+      },
+      "objectAtlas": {
+        "file": "field_cm02_01/object-atlas.png",
+        "sha256": "ECAE0CEE3671625D21EB2EA1EE8A4CA8B6777BB81D10FF28A3A3B4256E5A6AEF",
+        "count": 5,
+        "objects": [
+          {
+            "objectId": "RAW_OBJECT_01",
+            "cell": 0,
+            "anchor": {
+              "x": 64,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_02",
+            "cell": 1,
+            "anchor": {
+              "x": 192,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_03",
+            "cell": 2,
+            "anchor": {
+              "x": 320,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_04",
+            "cell": 3,
+            "anchor": {
+              "x": 448,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_05",
+            "cell": 4,
+            "anchor": {
+              "x": 64,
+              "y": 248,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          }
+        ],
+        "placementAuthority": "NONE"
+      },
+      "artStagingPreview": {
+        "file": "field_cm02_01/art-staging-preview.png",
+        "sha256": "A69805E0873005D7B7A86FB571DF7D80396F7E631B1161DF9A38114E70FC7BD5",
+        "placementPolicy": "NON_AUTHORITATIVE_ART_STAGING_ONLY"
+      },
+      "productionStatus": "OWNER_VISUAL_REVIEW_PENDING",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm03_01:authoring-atlas-v1",
+      "fieldId": "field_cm03_01",
+      "nameEn": "Arena",
+      "originalStructure": {
+        "dimensions": "36x25",
+        "layoutCells": 900,
+        "topologyClass": "RECTANGULAR",
+        "atr": "EXTERNAL_RAW_CLASSES_NOT_INFERRED",
+        "col": "EXTERNAL_RAW_CLASSES_NOT_INFERRED"
+      },
+      "source": {
+        "coreField": {
+          "file": "../packages/field_cm03_01/core-field.png",
+          "sha256": "93CB308F566174C6448B5E4F4FF2732F22A1D3919DE4E9336839788D99A53AD3"
+        },
+        "objectBundle": {
+          "file": "../packages/field_cm03_01/object-bundle.png",
+          "sha256": "C05F1A18C0C4AEA2EC8D4934039FAC50BDB227447060B159454B154CAFBB087E"
+        }
+      },
+      "materialTile": {
+        "file": "field_cm03_01/material-tile.png",
+        "sha256": "065FF74A3DEC1DA115E08866B36A2FA73FD95D3F75640F3613CC4686387F9DF0",
+        "role": "SEAMLESS_MATERIAL_SWATCH_NOT_GAMEPLAY_TILE",
+        "edgeEquality": {
+          "leftRight": true,
+          "topBottom": true
+        }
+      },
+      "materialSeamQa": {
+        "file": "field_cm03_01/material-seam-qa.png",
+        "sha256": "F1F187FE22EF3EA73F8E05D15224858F59CBED4C4B0A5F968538FB01FBEB7C9C",
+        "repeat": "3x3"
+      },
+      "visualEdgeCornerSamples": {
+        "file": "field_cm03_01/visual-edge-corner-samples.png",
+        "sha256": "AE6AB4D75E3B4371B7AD3A55122A7171B648516D2494F35CC99AF809A060F569",
+        "samples": [
+          {
+            "role": "NW",
+            "cell": 0,
+            "sourceBounds": [
+              36,
+              54,
+              140,
+              139
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "N",
+            "cell": 1,
+            "sourceBounds": [
+              140,
+              54,
+              243,
+              139
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "NE",
+            "cell": 2,
+            "sourceBounds": [
+              243,
+              54,
+              347,
+              139
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "W",
+            "cell": 3,
+            "sourceBounds": [
+              36,
+              139,
+              140,
+              225
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "CENTER",
+            "cell": 4,
+            "sourceBounds": [
+              140,
+              139,
+              243,
+              225
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "E",
+            "cell": 5,
+            "sourceBounds": [
+              243,
+              139,
+              347,
+              225
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SW",
+            "cell": 6,
+            "sourceBounds": [
+              36,
+              225,
+              140,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "S",
+            "cell": 7,
+            "sourceBounds": [
+              140,
+              225,
+              243,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SE",
+            "cell": 8,
+            "sourceBounds": [
+              243,
+              225,
+              347,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          }
+        ],
+        "runtimeTileAuthority": false
+      },
+      "objectAtlas": {
+        "file": "field_cm03_01/object-atlas.png",
+        "sha256": "89172D09C896CD4BACF5BB29680A99266D7B0FBFA7211745DAEAB02FD07B6C80",
+        "count": 4,
+        "objects": [
+          {
+            "objectId": "RAW_OBJECT_01",
+            "cell": 0,
+            "anchor": {
+              "x": 64,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_02",
+            "cell": 1,
+            "anchor": {
+              "x": 192,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_03",
+            "cell": 2,
+            "anchor": {
+              "x": 320,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_04",
+            "cell": 3,
+            "anchor": {
+              "x": 448,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          }
+        ],
+        "placementAuthority": "NONE"
+      },
+      "artStagingPreview": {
+        "file": "field_cm03_01/art-staging-preview.png",
+        "sha256": "98C7EA223EB1754D2AC353347F28A1A34DF48A6BC2969B0B3F0D235DE77F5702",
+        "placementPolicy": "NON_AUTHORITATIVE_ART_STAGING_ONLY"
+      },
+      "productionStatus": "OWNER_VISUAL_REVIEW_PENDING",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm04_01:authoring-atlas-v1",
+      "fieldId": "field_cm04_01",
+      "nameEn": "Dojo",
+      "originalStructure": {
+        "dimensions": "36x14",
+        "layoutCells": 504,
+        "topologyClass": "WIDE",
+        "atr": "EXTERNAL_RAW_CLASSES_NOT_INFERRED",
+        "col": "EXTERNAL_RAW_CLASSES_NOT_INFERRED"
+      },
+      "source": {
+        "coreField": {
+          "file": "../packages/field_cm04_01/core-field.png",
+          "sha256": "A96F1FA255E7C6FB95D6CB52050D074E8E643E4F7F18E87572262F8FA0873145"
+        },
+        "objectBundle": {
+          "file": "../packages/field_cm04_01/object-bundle.png",
+          "sha256": "8E912E9D0C4108E2E82D895C4ED786005CB72B7C3442B01E3F5D2ADA5716A301"
+        }
+      },
+      "materialTile": {
+        "file": "field_cm04_01/material-tile.png",
+        "sha256": "701C97B985347CB9C23F765C5B6B2C102E1B4D2911D016101DD35F933D440B26",
+        "role": "SEAMLESS_MATERIAL_SWATCH_NOT_GAMEPLAY_TILE",
+        "edgeEquality": {
+          "leftRight": true,
+          "topBottom": true
+        }
+      },
+      "materialSeamQa": {
+        "file": "field_cm04_01/material-seam-qa.png",
+        "sha256": "6E0F780039507C953533778B796F9FABF813612263FB026EA0F422184CCFAAEC",
+        "repeat": "3x3"
+      },
+      "visualEdgeCornerSamples": {
+        "file": "field_cm04_01/visual-edge-corner-samples.png",
+        "sha256": "5F3EB624CAAC7CF4199C84D1B88DAF03268F45B31F2E3FCEC984B66E8C58BD8C",
+        "samples": [
+          {
+            "role": "NW",
+            "cell": 0,
+            "sourceBounds": [
+              40,
+              59,
+              141,
+              143
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "N",
+            "cell": 1,
+            "sourceBounds": [
+              141,
+              59,
+              242,
+              143
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "NE",
+            "cell": 2,
+            "sourceBounds": [
+              242,
+              59,
+              343,
+              143
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "W",
+            "cell": 3,
+            "sourceBounds": [
+              40,
+              143,
+              141,
+              226
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "CENTER",
+            "cell": 4,
+            "sourceBounds": [
+              141,
+              143,
+              242,
+              226
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "E",
+            "cell": 5,
+            "sourceBounds": [
+              242,
+              143,
+              343,
+              226
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SW",
+            "cell": 6,
+            "sourceBounds": [
+              40,
+              226,
+              141,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "S",
+            "cell": 7,
+            "sourceBounds": [
+              141,
+              226,
+              242,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SE",
+            "cell": 8,
+            "sourceBounds": [
+              242,
+              226,
+              343,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          }
+        ],
+        "runtimeTileAuthority": false
+      },
+      "objectAtlas": {
+        "file": "field_cm04_01/object-atlas.png",
+        "sha256": "A7F95D16B3DAFE202A0DE5EFA5A7D1505B4CF42B8487D7D3D5691DA5926A9421",
+        "count": 4,
+        "objects": [
+          {
+            "objectId": "RAW_OBJECT_01",
+            "cell": 0,
+            "anchor": {
+              "x": 64,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_02",
+            "cell": 1,
+            "anchor": {
+              "x": 192,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_03",
+            "cell": 2,
+            "anchor": {
+              "x": 320,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_04",
+            "cell": 3,
+            "anchor": {
+              "x": 448,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          }
+        ],
+        "placementAuthority": "NONE"
+      },
+      "artStagingPreview": {
+        "file": "field_cm04_01/art-staging-preview.png",
+        "sha256": "217CE3BC8D1B6A985A955896E17A13BBB746F43DD5170F0C10E219550491562D",
+        "placementPolicy": "NON_AUTHORITATIVE_ART_STAGING_ONLY"
+      },
+      "productionStatus": "OWNER_VISUAL_REVIEW_PENDING",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm05_01:authoring-atlas-v1",
+      "fieldId": "field_cm05_01",
+      "nameEn": "Gym",
+      "originalStructure": {
+        "dimensions": "30x25",
+        "layoutCells": 750,
+        "topologyClass": "RECTANGULAR",
+        "atr": "EXTERNAL_RAW_CLASSES_NOT_INFERRED",
+        "col": "EXTERNAL_RAW_CLASSES_NOT_INFERRED"
+      },
+      "source": {
+        "coreField": {
+          "file": "../packages/field_cm05_01/core-field.png",
+          "sha256": "81B749BA42C273824A0C5A9D9184324C192A476E26730A22F374CE4083FE663C"
+        },
+        "objectBundle": {
+          "file": "../packages/field_cm05_01/object-bundle.png",
+          "sha256": "F1299E1193C22F3C15F7A904869BE6EDC03A21C76126086EEB7A19A15ADFA43F"
+        }
+      },
+      "materialTile": {
+        "file": "field_cm05_01/material-tile.png",
+        "sha256": "8424A791899FEC6E8C4E840226BE773E7A258A8D6252CC0B6A1E4B6D2428A2D9",
+        "role": "SEAMLESS_MATERIAL_SWATCH_NOT_GAMEPLAY_TILE",
+        "edgeEquality": {
+          "leftRight": true,
+          "topBottom": true
+        }
+      },
+      "materialSeamQa": {
+        "file": "field_cm05_01/material-seam-qa.png",
+        "sha256": "E05DBB56A93066A37302A8E21A2D6BE670B6DB3E870FA1C69EE7C914830AC611",
+        "repeat": "3x3"
+      },
+      "visualEdgeCornerSamples": {
+        "file": "field_cm05_01/visual-edge-corner-samples.png",
+        "sha256": "4AD838D5B55DAA5E0844809EC92E6CD20A84F37FD368866CD72CB7D99DD20AAA",
+        "samples": [
+          {
+            "role": "NW",
+            "cell": 0,
+            "sourceBounds": [
+              28,
+              59,
+              137,
+              143
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "N",
+            "cell": 1,
+            "sourceBounds": [
+              137,
+              59,
+              246,
+              143
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "NE",
+            "cell": 2,
+            "sourceBounds": [
+              246,
+              59,
+              355,
+              143
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "W",
+            "cell": 3,
+            "sourceBounds": [
+              28,
+              143,
+              137,
+              226
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "CENTER",
+            "cell": 4,
+            "sourceBounds": [
+              137,
+              143,
+              246,
+              226
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "E",
+            "cell": 5,
+            "sourceBounds": [
+              246,
+              143,
+              355,
+              226
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SW",
+            "cell": 6,
+            "sourceBounds": [
+              28,
+              226,
+              137,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "S",
+            "cell": 7,
+            "sourceBounds": [
+              137,
+              226,
+              246,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SE",
+            "cell": 8,
+            "sourceBounds": [
+              246,
+              226,
+              355,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          }
+        ],
+        "runtimeTileAuthority": false
+      },
+      "objectAtlas": {
+        "file": "field_cm05_01/object-atlas.png",
+        "sha256": "EE8B0B53589616C7EFAAC91908890E630FC690DAFB849123B078CB558B701C2B",
+        "count": 2,
+        "objects": [
+          {
+            "objectId": "RAW_OBJECT_01",
+            "cell": 0,
+            "anchor": {
+              "x": 64,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_02",
+            "cell": 1,
+            "anchor": {
+              "x": 192,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          }
+        ],
+        "placementAuthority": "NONE"
+      },
+      "artStagingPreview": {
+        "file": "field_cm05_01/art-staging-preview.png",
+        "sha256": "B91AD2E28758BFA2C779700809A97CDCF7C403DD671ED4EADEF5DDFF6197CD86",
+        "placementPolicy": "NON_AUTHORITATIVE_ART_STAGING_ONLY"
+      },
+      "productionStatus": "OWNER_VISUAL_REVIEW_PENDING",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm06_01:authoring-atlas-v1",
+      "fieldId": "field_cm06_01",
+      "nameEn": "Laboratory",
+      "originalStructure": {
+        "dimensions": "42x25",
+        "layoutCells": 1050,
+        "topologyClass": "RECTANGULAR",
+        "atr": "EXTERNAL_RAW_CLASSES_NOT_INFERRED",
+        "col": "EXTERNAL_RAW_CLASSES_NOT_INFERRED"
+      },
+      "source": {
+        "coreField": {
+          "file": "../packages/field_cm06_01/core-field.png",
+          "sha256": "69BEE457F023CF5D63805E919CC104A0EB98CABD3ACD20050EAE2D88CB73586F"
+        },
+        "objectBundle": {
+          "file": "../packages/field_cm06_01/object-bundle.png",
+          "sha256": "35AEDE554403509B44F25D3020828D4AE6FF9474A72C5AA50796E5C16CBBBD8D"
+        }
+      },
+      "materialTile": {
+        "file": "field_cm06_01/material-tile.png",
+        "sha256": "ACEC90824BA567896150A442B87B3297EE507FFE73CD1649A01DEFD6A242D5C8",
+        "role": "SEAMLESS_MATERIAL_SWATCH_NOT_GAMEPLAY_TILE",
+        "edgeEquality": {
+          "leftRight": true,
+          "topBottom": true
+        }
+      },
+      "materialSeamQa": {
+        "file": "field_cm06_01/material-seam-qa.png",
+        "sha256": "F45A2320A6C14A247E6AEF958A6F8FA5577AA5A4EBFBBC039888DBC9821AEFD8",
+        "repeat": "3x3"
+      },
+      "visualEdgeCornerSamples": {
+        "file": "field_cm06_01/visual-edge-corner-samples.png",
+        "sha256": "9E2B3A1F717B2DBB836B94403845B626B24BDF363FC76C0789A3AA3375D85F47",
+        "samples": [
+          {
+            "role": "NW",
+            "cell": 0,
+            "sourceBounds": [
+              29,
+              45,
+              137,
+              133
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "N",
+            "cell": 1,
+            "sourceBounds": [
+              137,
+              45,
+              246,
+              133
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "NE",
+            "cell": 2,
+            "sourceBounds": [
+              246,
+              45,
+              354,
+              133
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "W",
+            "cell": 3,
+            "sourceBounds": [
+              29,
+              133,
+              137,
+              222
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "CENTER",
+            "cell": 4,
+            "sourceBounds": [
+              137,
+              133,
+              246,
+              222
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "E",
+            "cell": 5,
+            "sourceBounds": [
+              246,
+              133,
+              354,
+              222
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SW",
+            "cell": 6,
+            "sourceBounds": [
+              29,
+              222,
+              137,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "S",
+            "cell": 7,
+            "sourceBounds": [
+              137,
+              222,
+              246,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SE",
+            "cell": 8,
+            "sourceBounds": [
+              246,
+              222,
+              354,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          }
+        ],
+        "runtimeTileAuthority": false
+      },
+      "objectAtlas": {
+        "file": "field_cm06_01/object-atlas.png",
+        "sha256": "1AC22591595F03E0075EB1919DE4F19FBF53B1EA0B6AFDD21330CE2036872B1D",
+        "count": 2,
+        "objects": [
+          {
+            "objectId": "RAW_OBJECT_01",
+            "cell": 0,
+            "anchor": {
+              "x": 64,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_02",
+            "cell": 1,
+            "anchor": {
+              "x": 192,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          }
+        ],
+        "placementAuthority": "NONE"
+      },
+      "artStagingPreview": {
+        "file": "field_cm06_01/art-staging-preview.png",
+        "sha256": "2FC0E7A0220AE1FED80D41ADF832A1089A722DD77D4A0AD10FE3B7A2DE6D3FF0",
+        "placementPolicy": "NON_AUTHORITATIVE_ART_STAGING_ONLY"
+      },
+      "productionStatus": "OWNER_VISUAL_REVIEW_PENDING",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm07_01:authoring-atlas-v1",
+      "fieldId": "field_cm07_01",
+      "nameEn": "Volcano",
+      "originalStructure": {
+        "dimensions": "30x25",
+        "layoutCells": 750,
+        "topologyClass": "RECTANGULAR",
+        "atr": "EXTERNAL_RAW_CLASSES_NOT_INFERRED",
+        "col": "EXTERNAL_RAW_CLASSES_NOT_INFERRED"
+      },
+      "source": {
+        "coreField": {
+          "file": "../packages/field_cm07_01/core-field.png",
+          "sha256": "6B42057C811C111A98D20A14744644C4D889F196DDA3E1D5F3247FC839F74291"
+        },
+        "objectBundle": {
+          "file": "../packages/field_cm07_01/object-bundle.png",
+          "sha256": "F17F192E84737E5805111ADE8A6F1E1A1458F7D170B5FFDA80867B77001F5541"
+        }
+      },
+      "materialTile": {
+        "file": "field_cm07_01/material-tile.png",
+        "sha256": "CCCBFB3BB3F7E217C2D37426A90C008C4749A4F8BB6051FE99CDFBA3BC0312A5",
+        "role": "SEAMLESS_MATERIAL_SWATCH_NOT_GAMEPLAY_TILE",
+        "edgeEquality": {
+          "leftRight": true,
+          "topBottom": true
+        }
+      },
+      "materialSeamQa": {
+        "file": "field_cm07_01/material-seam-qa.png",
+        "sha256": "B93E35DE1A678C3810F14865492492B44FEDD093F8E9CAE92DC6882682647D51",
+        "repeat": "3x3"
+      },
+      "visualEdgeCornerSamples": {
+        "file": "field_cm07_01/visual-edge-corner-samples.png",
+        "sha256": "CEAB6AFC54AB211A1D39030F3FB844E9AAE4BB6D26865C209286D6A869B23339",
+        "samples": [
+          {
+            "role": "NW",
+            "cell": 0,
+            "sourceBounds": [
+              36,
+              38,
+              140,
+              129
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "N",
+            "cell": 1,
+            "sourceBounds": [
+              140,
+              38,
+              243,
+              129
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "NE",
+            "cell": 2,
+            "sourceBounds": [
+              243,
+              38,
+              347,
+              129
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "W",
+            "cell": 3,
+            "sourceBounds": [
+              36,
+              129,
+              140,
+              219
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "CENTER",
+            "cell": 4,
+            "sourceBounds": [
+              140,
+              129,
+              243,
+              219
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "E",
+            "cell": 5,
+            "sourceBounds": [
+              243,
+              129,
+              347,
+              219
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SW",
+            "cell": 6,
+            "sourceBounds": [
+              36,
+              219,
+              140,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "S",
+            "cell": 7,
+            "sourceBounds": [
+              140,
+              219,
+              243,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SE",
+            "cell": 8,
+            "sourceBounds": [
+              243,
+              219,
+              347,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          }
+        ],
+        "runtimeTileAuthority": false
+      },
+      "objectAtlas": {
+        "file": "field_cm07_01/object-atlas.png",
+        "sha256": "06A602C736CF96C3D51739855315B96B1BD78C5A2341B6450AF647B46DA84899",
+        "count": 4,
+        "objects": [
+          {
+            "objectId": "RAW_OBJECT_01",
+            "cell": 0,
+            "anchor": {
+              "x": 64,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_02",
+            "cell": 1,
+            "anchor": {
+              "x": 192,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_03",
+            "cell": 2,
+            "anchor": {
+              "x": 320,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_04",
+            "cell": 3,
+            "anchor": {
+              "x": 448,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          }
+        ],
+        "placementAuthority": "NONE"
+      },
+      "artStagingPreview": {
+        "file": "field_cm07_01/art-staging-preview.png",
+        "sha256": "467955BB676709A7D899AFDEC587BAFF9A62EF8998050B1BF23216C1A726836B",
+        "placementPolicy": "NON_AUTHORITATIVE_ART_STAGING_ONLY"
+      },
+      "productionStatus": "OWNER_VISUAL_REVIEW_PENDING",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm08_01:authoring-atlas-v1",
+      "fieldId": "field_cm08_01",
+      "nameEn": "Grassland",
+      "originalStructure": {
+        "dimensions": "30x25",
+        "layoutCells": 750,
+        "topologyClass": "RECTANGULAR",
+        "atr": "EXTERNAL_RAW_CLASSES_NOT_INFERRED",
+        "col": "EXTERNAL_RAW_CLASSES_NOT_INFERRED"
+      },
+      "source": {
+        "coreField": {
+          "file": "../packages/field_cm08_01/core-field.png",
+          "sha256": "087DDA79EA9BA2AA1DDAE4E32149FAFEF2DED677AEC3A99D87148C458EC5AF22"
+        },
+        "objectBundle": {
+          "file": "../packages/field_cm08_01/object-bundle.png",
+          "sha256": "F9977AF5CFE9061940BDF2DDA3CB41C1CCED7497763760EF5EA389F7AA4B0EC7"
+        }
+      },
+      "materialTile": {
+        "file": "field_cm08_01/material-tile.png",
+        "sha256": "BFDCE2797104C3195C13019D0C18420D2C7F5F9843F8160851EEB5E11BA7A1DD",
+        "role": "SEAMLESS_MATERIAL_SWATCH_NOT_GAMEPLAY_TILE",
+        "edgeEquality": {
+          "leftRight": true,
+          "topBottom": true
+        }
+      },
+      "materialSeamQa": {
+        "file": "field_cm08_01/material-seam-qa.png",
+        "sha256": "87880903DCC77D243025487935AA3C040A14C185A188857F84C51267AB65F9AD",
+        "repeat": "3x3"
+      },
+      "visualEdgeCornerSamples": {
+        "file": "field_cm08_01/visual-edge-corner-samples.png",
+        "sha256": "5847DCD7B70EDF5132A548499AA4484CA32DFDD8FF665C83A15BB5119D377A0A",
+        "samples": [
+          {
+            "role": "NW",
+            "cell": 0,
+            "sourceBounds": [
+              32,
+              29,
+              139,
+              123
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "N",
+            "cell": 1,
+            "sourceBounds": [
+              139,
+              29,
+              245,
+              123
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "NE",
+            "cell": 2,
+            "sourceBounds": [
+              245,
+              29,
+              352,
+              123
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "W",
+            "cell": 3,
+            "sourceBounds": [
+              32,
+              123,
+              139,
+              216
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "CENTER",
+            "cell": 4,
+            "sourceBounds": [
+              139,
+              123,
+              245,
+              216
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "E",
+            "cell": 5,
+            "sourceBounds": [
+              245,
+              123,
+              352,
+              216
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SW",
+            "cell": 6,
+            "sourceBounds": [
+              32,
+              216,
+              139,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "S",
+            "cell": 7,
+            "sourceBounds": [
+              139,
+              216,
+              245,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SE",
+            "cell": 8,
+            "sourceBounds": [
+              245,
+              216,
+              352,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          }
+        ],
+        "runtimeTileAuthority": false
+      },
+      "objectAtlas": {
+        "file": "field_cm08_01/object-atlas.png",
+        "sha256": "70574C61CEB03A2834097095C19DAFBE29CB5D4CC09747DF48C6D0356F8774FB",
+        "count": 7,
+        "objects": [
+          {
+            "objectId": "RAW_OBJECT_01",
+            "cell": 0,
+            "anchor": {
+              "x": 64,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_02",
+            "cell": 1,
+            "anchor": {
+              "x": 192,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_03",
+            "cell": 2,
+            "anchor": {
+              "x": 320,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_04",
+            "cell": 3,
+            "anchor": {
+              "x": 448,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_05",
+            "cell": 4,
+            "anchor": {
+              "x": 64,
+              "y": 248,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_06",
+            "cell": 5,
+            "anchor": {
+              "x": 192,
+              "y": 248,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_07",
+            "cell": 6,
+            "anchor": {
+              "x": 320,
+              "y": 248,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          }
+        ],
+        "placementAuthority": "NONE"
+      },
+      "artStagingPreview": {
+        "file": "field_cm08_01/art-staging-preview.png",
+        "sha256": "E9F0233E7056CFF98539D92E28AC7F7AE57C07B22C3C73573F703944E800F351",
+        "placementPolicy": "NON_AUTHORITATIVE_ART_STAGING_ONLY"
+      },
+      "productionStatus": "OWNER_VISUAL_REVIEW_PENDING",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm09_01:authoring-atlas-v1",
+      "fieldId": "field_cm09_01",
+      "nameEn": "Beach",
+      "originalStructure": {
+        "dimensions": "36x25",
+        "layoutCells": 900,
+        "topologyClass": "RECTANGULAR",
+        "atr": "EXTERNAL_RAW_CLASSES_NOT_INFERRED",
+        "col": "EXTERNAL_RAW_CLASSES_NOT_INFERRED"
+      },
+      "source": {
+        "coreField": {
+          "file": "../packages/field_cm09_01/core-field.png",
+          "sha256": "1EF7F8FBE85EFDBB45B04F4BA96E87B0771726EF29A069A86CD64A19E56D3F50"
+        },
+        "objectBundle": {
+          "file": "../packages/field_cm09_01/object-bundle.png",
+          "sha256": "4C24BA96A2713005186AFF64DF8F6E546ECBA4CEC0100330DA64019C5F1BC93B"
+        }
+      },
+      "materialTile": {
+        "file": "field_cm09_01/material-tile.png",
+        "sha256": "F47B34B62A6194DBF61BF35059BF1F341A867C8BFD431DCB9FE62054A2BFEB3E",
+        "role": "SEAMLESS_MATERIAL_SWATCH_NOT_GAMEPLAY_TILE",
+        "edgeEquality": {
+          "leftRight": true,
+          "topBottom": true
+        }
+      },
+      "materialSeamQa": {
+        "file": "field_cm09_01/material-seam-qa.png",
+        "sha256": "76B42020EA7AC3F6DEBBCF66D91995E080E42B428C8FCA9143373C468DE1137A",
+        "repeat": "3x3"
+      },
+      "visualEdgeCornerSamples": {
+        "file": "field_cm09_01/visual-edge-corner-samples.png",
+        "sha256": "8501EFEE01F1B57C17A203C1C8555CFF45B203F0046745301BC108BE4ED014FA",
+        "samples": [
+          {
+            "role": "NW",
+            "cell": 0,
+            "sourceBounds": [
+              32,
+              37,
+              139,
+              128
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "N",
+            "cell": 1,
+            "sourceBounds": [
+              139,
+              37,
+              245,
+              128
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "NE",
+            "cell": 2,
+            "sourceBounds": [
+              245,
+              37,
+              352,
+              128
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "W",
+            "cell": 3,
+            "sourceBounds": [
+              32,
+              128,
+              139,
+              219
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "CENTER",
+            "cell": 4,
+            "sourceBounds": [
+              139,
+              128,
+              245,
+              219
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "E",
+            "cell": 5,
+            "sourceBounds": [
+              245,
+              128,
+              352,
+              219
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SW",
+            "cell": 6,
+            "sourceBounds": [
+              32,
+              219,
+              139,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "S",
+            "cell": 7,
+            "sourceBounds": [
+              139,
+              219,
+              245,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SE",
+            "cell": 8,
+            "sourceBounds": [
+              245,
+              219,
+              352,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          }
+        ],
+        "runtimeTileAuthority": false
+      },
+      "objectAtlas": {
+        "file": "field_cm09_01/object-atlas.png",
+        "sha256": "88BCF421353EAD382CD1F77BF646225E35600DD624CEC7CF7D4B182C77EC1517",
+        "count": 3,
+        "objects": [
+          {
+            "objectId": "RAW_OBJECT_01",
+            "cell": 0,
+            "anchor": {
+              "x": 64,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_02",
+            "cell": 1,
+            "anchor": {
+              "x": 192,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_03",
+            "cell": 2,
+            "anchor": {
+              "x": 320,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          }
+        ],
+        "placementAuthority": "NONE"
+      },
+      "artStagingPreview": {
+        "file": "field_cm09_01/art-staging-preview.png",
+        "sha256": "7CBFDAD078C3D73350A696904831D3FFD2899052EF86646A823CA4AB448092E7",
+        "placementPolicy": "NON_AUTHORITATIVE_ART_STAGING_ONLY"
+      },
+      "productionStatus": "OWNER_VISUAL_REVIEW_PENDING",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm10_01:authoring-atlas-v1",
+      "fieldId": "field_cm10_01",
+      "nameEn": "Mine",
+      "originalStructure": {
+        "dimensions": "36x25",
+        "layoutCells": 900,
+        "topologyClass": "RECTANGULAR",
+        "atr": "EXTERNAL_RAW_CLASSES_NOT_INFERRED",
+        "col": "EXTERNAL_RAW_CLASSES_NOT_INFERRED"
+      },
+      "source": {
+        "coreField": {
+          "file": "../packages/field_cm10_01/core-field.png",
+          "sha256": "98FC42666530B695F65773AE3915718A0138E887A41BEFC38D190B7E1371DE56"
+        },
+        "objectBundle": {
+          "file": "../packages/field_cm10_01/object-bundle.png",
+          "sha256": "33C7454DB1A329D3215385EF30866110FE3A290B3CB0D9FC0739B9CBB7CCE892"
+        }
+      },
+      "materialTile": {
+        "file": "field_cm10_01/material-tile.png",
+        "sha256": "DA5E82A4232D435A617622E66A222FC03D09FCBE9CD86DE28251A6174CC8EECB",
+        "role": "SEAMLESS_MATERIAL_SWATCH_NOT_GAMEPLAY_TILE",
+        "edgeEquality": {
+          "leftRight": true,
+          "topBottom": true
+        }
+      },
+      "materialSeamQa": {
+        "file": "field_cm10_01/material-seam-qa.png",
+        "sha256": "507211EAB7B04087737EF517F45716E9E0D96E71F8E281F9D8813B8B0B961714",
+        "repeat": "3x3"
+      },
+      "visualEdgeCornerSamples": {
+        "file": "field_cm10_01/visual-edge-corner-samples.png",
+        "sha256": "6AE949A114020FC15AC38EB47BC8B589AC60EE7B7E71DCDA24923E80F44A8394",
+        "samples": [
+          {
+            "role": "NW",
+            "cell": 0,
+            "sourceBounds": [
+              36,
+              29,
+              140,
+              123
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "N",
+            "cell": 1,
+            "sourceBounds": [
+              140,
+              29,
+              243,
+              123
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "NE",
+            "cell": 2,
+            "sourceBounds": [
+              243,
+              29,
+              347,
+              123
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "W",
+            "cell": 3,
+            "sourceBounds": [
+              36,
+              123,
+              140,
+              216
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "CENTER",
+            "cell": 4,
+            "sourceBounds": [
+              140,
+              123,
+              243,
+              216
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "E",
+            "cell": 5,
+            "sourceBounds": [
+              243,
+              123,
+              347,
+              216
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SW",
+            "cell": 6,
+            "sourceBounds": [
+              36,
+              216,
+              140,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "S",
+            "cell": 7,
+            "sourceBounds": [
+              140,
+              216,
+              243,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          },
+          {
+            "role": "SE",
+            "cell": 8,
+            "sourceBounds": [
+              243,
+              216,
+              347,
+              310
+            ],
+            "authority": "VISUAL_SAMPLE_ONLY"
+          }
+        ],
+        "runtimeTileAuthority": false
+      },
+      "objectAtlas": {
+        "file": "field_cm10_01/object-atlas.png",
+        "sha256": "7395ECF0C11C01AA6B8755C84EA116C22B2D3E9AFBC15140330B48D1A650D3D4",
+        "count": 4,
+        "objects": [
+          {
+            "objectId": "RAW_OBJECT_01",
+            "cell": 0,
+            "anchor": {
+              "x": 64,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_02",
+            "cell": 1,
+            "anchor": {
+              "x": 192,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_03",
+            "cell": 2,
+            "anchor": {
+              "x": 320,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          },
+          {
+            "objectId": "RAW_OBJECT_04",
+            "cell": 3,
+            "anchor": {
+              "x": 448,
+              "y": 120,
+              "policy": "BOTTOM_CENTER"
+            },
+            "semanticIdentity": "UNASSIGNED_REQUIRES_ART_DIRECTION"
+          }
+        ],
+        "placementAuthority": "NONE"
+      },
+      "artStagingPreview": {
+        "file": "field_cm10_01/art-staging-preview.png",
+        "sha256": "3927CBC296F592E20DCB7CAD3781D8E898E62B689335E85ABFE727CD6F09B883",
+        "placementPolicy": "NON_AUTHORITATIVE_ART_STAGING_ONLY"
+      },
+      "productionStatus": "OWNER_VISUAL_REVIEW_PENDING",
+      "runtimeEligible": false,
+      "shippingReady": false
+    }
+  ],
+  "qa": {
+    "allMaterialEdgesPixelEqual": true,
+    "objectAtlasesUseStableBottomCenterAnchors": true,
+    "stagingPlacementUsedAsGameplayAuthority": false,
+    "gameplaySemanticsInferred": false
+  }
+}

@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "owner": "CODEX_ART",
-  "deltaId": "CODEX-ART-A3-CAGE-CM01-CM10-2026-08-29",
-  "targetSyncRevision": 12,
-  "status": "CM01_CM10_REVIEW_PACK_COMPLETE_OWNER_VISUAL_REVIEW_NEXT",
+  "deltaId": "CODEX-ART-A3-CAGE-CM01-CM10-ATLAS-2026-08-29",
+  "targetSyncRevision": 13,
+  "status": "CM01_CM10_AUTHORING_ATLAS_COMPLETE_OWNER_VISUAL_REVIEW_NEXT",
   "statusSource": "docs/coordination/CODEX_ART_STATUS.json",
-  "baseSyncRevision": 11,
+  "baseSyncRevision": 12,
   "checkpoint": {
     "latestOwnerApprovedCommit": "732775486665b21508ac51c1eea0b723db0f7744",
     "message": "art(research): approve O2 224-entity character catalog",
@@ -32,6 +32,17 @@
     "documentationOnly": false
   },
   "completedWork": [
+    {
+      "id": "ART-A3-CAGE-CM01-CM10-AUTHORING-ATLAS",
+      "state": "COMPLETE_OWNER_VISUAL_REVIEW_PENDING",
+      "scope": "Ten material/seam proofs, ten visual edge-corner sample atlases, raw object-group atlases and ten non-authoritative art staging previews",
+      "sourcePolicy": "DETERMINISTIC_DERIVATION_OF_APPROVED_CLEAN_ROOM_PACK_NO_NEW_ROM_OR_GENERATION_INPUT",
+      "technicalQa": "95_FILES_BYTE_IDENTICAL_10_OF_10_MATERIAL_EDGES_PIXEL_EQUAL",
+      "gameplayPolicy": "NATIVE_TILE_ROLES_PLACEMENT_ATR_COL_COLLISION_RAISING_EFFECTS_AND_GAMEPLAY_MASKS_NOT_INFERRED",
+      "runtimeEligible": false,
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "output": "docs/art/production/cage/cm01-cm10/atlas-pack/manifest.json"
+    },
     {
       "id": "ART-A3-CAGE-CM01-CM10-REVIEW-PACK",
       "state": "COMPLETE_OWNER_VISUAL_REVIEW_PENDING",

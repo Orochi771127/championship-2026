@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "owner": "CODEX_ART",
   "lastUpdated": "2026-08-29",
-  "syncBatch": "ART_A3_CAGE_CM01_CM10_CLEAN_ROOM_REVIEW_PACK",
-  "syncRevision": 12,
-  "syncRevisionTarget": 12,
-  "status": "CM01_CM10_REVIEW_PACK_COMPLETE_OWNER_VISUAL_REVIEW_NEXT",
+  "syncBatch": "ART_A3_CAGE_CM01_CM10_AUTHORING_ATLAS_V1",
+  "syncRevision": 13,
+  "syncRevisionTarget": 13,
+  "status": "CM01_CM10_AUTHORING_ATLAS_COMPLETE_OWNER_VISUAL_REVIEW_NEXT",
   "sourceOfTruth": {
     "coordinationRoot": "docs/coordination",
     "canonicalRepository": ".",
@@ -65,6 +65,18 @@
     "o3dCheckpointIsolatedFromRuntimeRegistryAndP2": true
   },
   "completed": [
+    {
+      "id": "ART-A3-CAGE-CM01-CM10-AUTHORING-ATLAS",
+      "status": "COMPLETE_OWNER_VISUAL_REVIEW_PENDING",
+      "summary": "Derived ten seamless material swatches and 3x3 seam proofs, ten nine-cell visual edge/corner sampling atlases, bottom-centre raw object-group atlases and non-authoritative staging previews from the approved clean-room pack. Visual samples are not claimed as native gameplay tile roles; placement, ATR/COL, collision and Raising effects remain external and un-inferred.",
+      "output": "docs/art/production/cage/cm01-cm10/atlas-pack/manifest.json",
+      "receipt": "docs/art/production/cage/cm01-cm10/CM01_CM10_AUTHORING_ATLAS_RECEIPT.md",
+      "validation": "95 atlas files rebuild byte-identically; 10/10 material swatches have pixel-equal opposite edges",
+      "rights": "ORIGINAL_CREATED_CLEAN_ROOM_CANDIDATE",
+      "productionStatus": "OWNER_VISUAL_REVIEW_PENDING",
+      "humanApproved": false,
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
     {
       "id": "ART-A3-CAGE-CM01-CM10-REVIEW-PACK",
       "status": "COMPLETE_OWNER_VISUAL_REVIEW_PENDING",
@@ -242,6 +254,11 @@
   ],
   "current": [
     {
+      "id": "ART-A3-CAGE-PRODUCTION",
+      "status": "CM01_CM10_AUTHORING_ATLAS_COMPLETE_CM11_CM20_NEXT",
+      "summary": "CM01-CM10 now has clean-room core/object art plus deterministic material, sampling, object-atlas and art-staging QA. The next bounded visual-production batch is CM11-CM20; runtime promotion still requires verified native shape/tile, placement, ATR/COL and Raising contracts."
+    },
+    {
       "id": "VS2-PRESENTATION-BINDING",
       "status": "VS2_R1_OWNER_APPROVED_WAITING_VS2_R2_GO",
       "summary": "Gate Select retains its Owner-approved structural baseline. The current Hunt Loadout companion selector is formally PRODUCT_AUTHORED_PROTOTYPE / DEVELOPER_ONLY and cannot be promoted as final Player Mode. The published Hunt Loadout contract is spec-only until a separate VS2-R2 implementation GO."
@@ -293,7 +310,7 @@
     "SHIPPING"
   ],
   "blocked": [
-    "A1 Cage transparent flattened masters and Hunt standards are complete, but native authoring-layer separation, Hunt modular macro kits, seam/shape/collision/occlusion/mobile-performance QA and linked licence evidence remain required before runtime promotion.",
+    "CM01-CM10 visual authoring atlases and seam proofs are complete, but verified native gameplay tile roles, shape masks, placement, ATR/COL, Raising semantics, occlusion/mobile-performance QA and linked licence evidence remain required before runtime promotion.",
     "A1 character identity sheets, animation masters, UI components, VFX ports and runtime atlases still require production receipts, linked licence evidence and relevant QA; direction boards alone are not runtime assets.",
     "A2-A11 mass production remains gated by completion of the A1 technical pipeline and the consuming gameplay/presentation contracts; A0/A1 proposals do not promote the 96-character launch roster.",
     "The Owner reports complete licensing, but each production asset still requires a linked licence document reference before READY_FOR_RUNTIME or SHIPPING_READY promotion.",
@@ -310,6 +327,9 @@
     "Claude-owned runtime architecture documentation predates this product reset and must be reconciled by Claude on its next authorized owned-doc update."
   ],
   "outputs": [
+    "docs/art/production/cage/cm01-cm10/atlas-pack/manifest.json",
+    "docs/art/production/cage/cm01-cm10/CM01_CM10_AUTHORING_ATLAS_RECEIPT.md",
+    "scripts/build-cm01-cm10-cage-atlas.py",
     "docs/art/technical/a1-map-tech/cage/transparent-qa-checker.png",
     "docs/art/technical/a1-map-tech/manifest.json",
     "docs/art/technical/A1_MAP_TECHNICALIZATION_RECEIPT.md",
@@ -393,8 +413,8 @@
     "deployed": false
   },
   "dependenciesChanged": {
-    "value": true,
-    "note": "Owner directed the approved Hunt/Cage technical batch to continue through twelve Cage transparent flattened masters. Gameplay, renderer and save authority are unchanged; the 40 visual field families and 36 CageDefinitions remain distinct, and shape masks, raising effects, collision and map data remain external evidence-gated contracts."
+    "value": false,
+    "note": "The CM01-CM10 authoring atlas implements the already approved Cage core/object structure. Gameplay, renderer and save authority are unchanged; native tile roles, shape masks, placement, ATR/COL, Raising effects and collision remain external evidence-gated contracts."
   },
   "sharedMergeReceipt": {
     "syncRevision": 3,
@@ -428,7 +448,7 @@
     }
   },
   "recommendedNext": [
-    "Separate the twelve transparent Cage composites into native base-terrain, edge/transition, prop and foreground authoring layers, then run seam, shape-fit and occlusion QA against verified external shape masks without inventing raising semantics.",
+    "Begin the bounded CM11-CM20 clean-room core-field and separate object-bundle visual review batch, keeping CM12 and CM18 object-link conflicts quarantined and all gameplay semantics external.",
     "Build HM01/HM09 layered macro-tile kits against verified 128x128 topology, then run seam, collision-alignment, occlusion and mobile-performance QA.",
     "Continue remaining A1 technical masters and receipts: eight character identity/animation anchors, Gate model/material specification, DOM UI components and five VFX conversion timelines.",
     "For hitspark_big, hypereffect, spark and rain, decode and port licensed source timing/transform/visibility data instead of authoring replacement motion; keep unsupported parameters raw/unknown.",
