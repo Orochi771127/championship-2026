@@ -1,0 +1,185 @@
+{
+  "format": "YDIJ_NCER_CELL_BANK",
+  "cellCount": 4,
+  "bankType": 1,
+  "mappingType": 1,
+  "cells": [
+    {
+      "cellIndex": 0,
+      "rawCellAttribute": 2053,
+      "bounds": {
+        "minX": -15,
+        "minY": -5,
+        "maxXExclusive": 1,
+        "maxYExclusive": 11
+      },
+      "oamCount": 1,
+      "oamEntries": [
+        {
+          "ordinal": 0,
+          "rawAttr0": 251,
+          "rawAttr1": 16881,
+          "rawAttr2": 4096,
+          "x": -15,
+          "y": -5,
+          "width": 16,
+          "height": 16,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 0,
+          "priority": 0,
+          "paletteBank": 1
+        }
+      ]
+    },
+    {
+      "cellIndex": 1,
+      "rawCellAttribute": 2053,
+      "bounds": {
+        "minX": -15,
+        "minY": -5,
+        "maxXExclusive": 1,
+        "maxYExclusive": 11
+      },
+      "oamCount": 1,
+      "oamEntries": [
+        {
+          "ordinal": 0,
+          "rawAttr0": 251,
+          "rawAttr1": 16881,
+          "rawAttr2": 4098,
+          "x": -15,
+          "y": -5,
+          "width": 16,
+          "height": 16,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 2,
+          "priority": 0,
+          "paletteBank": 1
+        }
+      ]
+    },
+    {
+      "cellIndex": 2,
+      "rawCellAttribute": 2053,
+      "bounds": {
+        "minX": -15,
+        "minY": -5,
+        "maxXExclusive": 1,
+        "maxYExclusive": 11
+      },
+      "oamCount": 1,
+      "oamEntries": [
+        {
+          "ordinal": 0,
+          "rawAttr0": 251,
+          "rawAttr1": 16881,
+          "rawAttr2": 4100,
+          "x": -15,
+          "y": -5,
+          "width": 16,
+          "height": 16,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 4,
+          "priority": 0,
+          "paletteBank": 1
+        }
+      ]
+    },
+    {
+      "cellIndex": 3,
+      "rawCellAttribute": 2053,
+      "bounds": {
+        "minX": -15,
+        "minY": -5,
+        "maxXExclusive": 1,
+        "maxYExclusive": 11
+      },
+      "oamCount": 1,
+      "oamEntries": [
+        {
+          "ordinal": 0,
+          "rawAttr0": 251,
+          "rawAttr1": 16881,
+          "rawAttr2": 4102,
+          "x": -15,
+          "y": -5,
+          "width": 16,
+          "height": 16,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 6,
+          "priority": 0,
+          "paletteBank": 1
+        }
+      ]
+    }
+  ],
+  "sourcePayloads": {
+    "ncerSha256": "653C45ACD14EE5A3AEDB7F1A3D3162C53D053548BAA73DDCF651BD6A6540B3EE",
+    "ncbrSha256": "2252851589CC8D4D662CE199BC425E8EF2F13B1C7E3E0C62F8D0265ED9DA13CF",
+    "nclrSha256": "5FD0776DF141593DEB75214210E4459EE72DBFF175AF39B13FCA76179F548DC1"
+  },
+  "graphics": {
+    "formatCode": 3,
+    "pixelFormat": "INDEXED_4BPP",
+    "tileSize": "8x8",
+    "bytesPerTile": 32,
+    "tileCount": 16,
+    "transferMode": "LINEAR_TILE_SEQUENCE"
+  },
+  "palette": {
+    "colorEncoding": "BGR555",
+    "colorCount": 256
+  },
+  "renderedCells": [
+    {
+      "cellIndex": 0,
+      "file": "fields/field_cm32_01/object-cells/cell-000.png",
+      "sha256": "6A13B7C62807A51B6AB5D683CA981DCAE6AA81E99D724068112EC8DF3FEDF064",
+      "anchorX": 15,
+      "anchorY": 5,
+      "width": 16,
+      "height": 16
+    },
+    {
+      "cellIndex": 1,
+      "file": "fields/field_cm32_01/object-cells/cell-001.png",
+      "sha256": "3D93C9EFB386DAB838859F9D1E586811903596727764CDEFFF0438309D2AB790",
+      "anchorX": 15,
+      "anchorY": 5,
+      "width": 16,
+      "height": 16
+    },
+    {
+      "cellIndex": 2,
+      "file": "fields/field_cm32_01/object-cells/cell-002.png",
+      "sha256": "9BB0BC2C4122A378856871228DE9CB8BCABC46F86B46F796E004C4AED0EEFF6C",
+      "anchorX": 15,
+      "anchorY": 5,
+      "width": 16,
+      "height": 16
+    },
+    {
+      "cellIndex": 3,
+      "file": "fields/field_cm32_01/object-cells/cell-003.png",
+      "sha256": "D8C7792A8658BA4FF5CA37C36A6C912E2B4D62935FFE54D54FDDA4F8E0FE9E22",
+      "anchorX": 15,
+      "anchorY": 5,
+      "width": 16,
+      "height": 16
+    }
+  ],
+  "invalidPlacementCellIds": [],
+  "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+}

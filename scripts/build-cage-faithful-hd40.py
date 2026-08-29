@@ -15,6 +15,16 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw
 
+from lib.ydij_map_formats import (
+    composite_object_placements,
+    decode_ncgr as decode_map_ncgr,
+    decode_nclr as decode_map_nclr,
+    parse_nbs as parse_map_nbs,
+    parse_ncer,
+    render_nbs,
+    render_object_cell,
+)
+
 
 REPO = Path(__file__).resolve().parents[1]
 OUTPUT_ROOT = REPO / "docs/art/production/cage/faithful-hd40"
@@ -96,10 +106,15 @@ def parse_opm(path: Path) -> dict:
         raise ValueError(f"OPM record layout mismatch: {path.name}")
     placements = []
     for index in range(placement_count):
-        cell_id, x, y, raw_flags, raw_float_a, raw_float_b = struct.unpack_from("<HHHHff", data, cursor + index * 16)
+        raw_cell_word, x, y, raw_flags, raw_float_a, raw_float_b = struct.unpack_from("<HHHHff", data, cursor + index * 16)
         placements.append({
             "ordinal": index,
-            "cellId": cell_id,
+            "rawCellWord": raw_cell_word,
+            "cellId": raw_cell_word & 0x3FFF,
+            # OPMD uses the opposite high-bit ordering from the NBS tilemap:
+            # bit 14 flips the whole cell vertically; bit 15 horizontally.
+            "horizontalFlip": bool(raw_cell_word & 0x8000),
+            "verticalFlip": bool(raw_cell_word & 0x4000),
             "sourceX": x,
             "sourceY": y,
             "rawFlags": raw_flags,
@@ -119,30 +134,9 @@ def parse_opm(path: Path) -> dict:
 
 
 def parse_nbs(path: Path) -> dict:
-    data = path.read_bytes()
-    if len(data) < 20 or data[:4] != b"NBSR":
-        raise ValueError(f"Unsupported NBS header: {path.name}")
-    version, width, height, layer_count = struct.unpack_from("<IIII", data, 4)
-    entries = list(struct.unpack_from(f"<{width * height}H", data, 20))
-    if len(data) != 20 + width * height * 2:
-        raise ValueError(f"NBS cell count mismatch: {path.name}")
-    cells = [{
-        "raw": value,
-        "tileIndex": value & 0x03FF,
-        "horizontalFlip": bool(value & 0x0400),
-        "verticalFlip": bool(value & 0x0800),
-        "paletteBank": (value >> 12) & 0x0F,
-    } for value in entries]
-    return {
-        "format": "YDIJ_NBSR_TILEMAP_V2",
-        "sourceSha256": sha256(path),
-        "version": version,
-        "width": width,
-        "height": height,
-        "layerCount": layer_count,
-        "cellOrder": "ROW_MAJOR",
-        "cells": cells,
-    }
+    result = parse_map_nbs(path)
+    result["sourceSha256"] = sha256(path)
+    return result
 
 
 def raw_tile_entry(value: int) -> dict:
@@ -419,6 +413,124 @@ def build(archive_root: Path, raw_root: Path, output_root: Path) -> None:
         placement_out = field_dir / "object-placement.json"
         write_json(placement_out, placement)
 
+        core_tiles, core_graphics = decode_map_ncgr(raw_root / f"{field_id}.ncgr")
+        core_palette, core_palette_info = decode_map_nclr(raw_root / f"{field_id}.nclr")
+        core_clean = render_nbs(tilemap, core_tiles, core_palette, transparent_index_zero=True)
+        core_research = render_nbs(tilemap, core_tiles, core_palette, transparent_index_zero=False)
+        core_out = field_dir / "core-native.png"
+        core_clean.save(core_out, optimize=True)
+
+        object_cell_bank_record = {"status": "NOT_PRESENT"}
+        static_clean = core_clean
+        static_research = core_research
+        invalid_cell_ids = []
+        object_ncer = raw_root / f"{field_id}_obj.ncer"
+        object_ncbr = raw_root / f"{field_id}_obj.ncbr"
+        object_nclr = raw_root / f"{field_id}_obj.nclr"
+        if object_ncer.exists() or object_ncbr.exists() or object_nclr.exists():
+            if not object_ncer.exists() or not object_ncbr.exists() or not object_nclr.exists():
+                raise ValueError(f"{field_id} object cell bundle is incomplete")
+            cell_bank = parse_ncer(object_ncer)
+            object_units, object_graphics = decode_map_ncgr(object_ncbr)
+            object_bytes = b"".join(object_units)
+            object_palette, object_palette_info = decode_map_nclr(object_nclr)
+            invalid_cell_ids = sorted({
+                item["cellId"] for item in placement["placements"]
+                if item["cellId"] >= cell_bank["cellCount"]
+            })
+            if field_id in PARTIAL_FIELDS:
+                if not invalid_cell_ids:
+                    raise ValueError(f"{field_id} expected object conflict is no longer present")
+            elif invalid_cell_ids:
+                raise ValueError(f"{field_id} has unexpected object cell conflicts: {invalid_cell_ids}")
+            else:
+                static_clean, compose_invalid = composite_object_placements(
+                    core_clean,
+                    cell_bank,
+                    object_bytes,
+                    object_graphics["bytesPerTile"],
+                    object_palette,
+                    placement["placements"],
+                )
+                static_research, research_invalid = composite_object_placements(
+                    core_research,
+                    cell_bank,
+                    object_bytes,
+                    object_graphics["bytesPerTile"],
+                    object_palette,
+                    placement["placements"],
+                )
+                if compose_invalid or research_invalid:
+                    raise ValueError(f"{field_id} object composition unexpectedly skipped cells")
+
+            cell_dir = field_dir / "object-cells"
+            cell_dir.mkdir()
+            cell_records = []
+            for cell in cell_bank["cells"]:
+                cell_image, anchor = render_object_cell(
+                    cell,
+                    object_bytes,
+                    object_graphics["bytesPerTile"],
+                    cell_bank["mappingType"],
+                    object_palette,
+                )
+                cell_out = cell_dir / f"cell-{cell['cellIndex']:03d}.png"
+                cell_image.save(cell_out, optimize=True)
+                cell_records.append({
+                    "cellIndex": cell["cellIndex"],
+                    "file": f"fields/{field_id}/object-cells/{cell_out.name}",
+                    "sha256": sha256(cell_out),
+                    **anchor,
+                })
+            cell_bank["sourcePayloads"] = {
+                "ncerSha256": sha256(object_ncer),
+                "ncbrSha256": sha256(object_ncbr),
+                "nclrSha256": sha256(object_nclr),
+            }
+            cell_bank["graphics"] = object_graphics
+            cell_bank["palette"] = object_palette_info
+            cell_bank["renderedCells"] = cell_records
+            cell_bank["invalidPlacementCellIds"] = invalid_cell_ids
+            cell_bank["placementBindingAuthority"] = (
+                "QUARANTINED_DO_NOT_BIND" if field_id in PARTIAL_FIELDS else "VERIFIED_RAW_CELL_WORD_BINDING"
+            )
+            cell_bank_out = field_dir / "object-cell-bank.json"
+            write_json(cell_bank_out, cell_bank)
+            object_cell_bank_record = {
+                "status": "PRESENT_CONFLICT_QUARANTINED" if field_id in PARTIAL_FIELDS else "PRESENT_EXACTLY_RECOMPOSED",
+                "file": f"fields/{field_id}/object-cell-bank.json",
+                "sha256": sha256(cell_bank_out),
+                "cellCount": cell_bank["cellCount"],
+                "renderedCellCount": len(cell_records),
+                "invalidPlacementCellIds": invalid_cell_ids,
+                "placementBindingAuthority": cell_bank["placementBindingAuthority"],
+            }
+
+        clean_golden = Image.open(native_path).convert("RGBA")
+        research_golden_path = source_dir / "research/native_game_view_void_diagnostic.png"
+        research_golden = Image.open(research_golden_path).convert("RGBA")
+        if static_clean.tobytes() != clean_golden.tobytes():
+            raise ValueError(f"{field_id} raw static clean recomposition differs from archive golden")
+        if static_research.tobytes() != research_golden.tobytes():
+            raise ValueError(f"{field_id} raw static research recomposition differs from archive golden")
+        static_out = field_dir / "static-composite-native.png"
+        static_clean.save(static_out, optimize=True)
+        exact_assembly_record = {
+            "status": "CORE_ONLY_OBJECT_CONFLICT_QUARANTINED" if field_id in PARTIAL_FIELDS else "RAW_STATIC_PIXEL_EXACT",
+            "coreFile": f"fields/{field_id}/core-native.png",
+            "coreSha256": sha256(core_out),
+            "staticCompositeFile": f"fields/{field_id}/static-composite-native.png",
+            "staticCompositeSha256": sha256(static_out),
+            "cleanGoldenSha256": sha256(native_path),
+            "researchGoldenSha256": sha256(research_golden_path),
+            "cleanPixelDiffCount": 0,
+            "researchPixelDiffCount": 0,
+            "tileEntrySemantics": tilemap["tileEntrySemantics"],
+            "coreGraphics": core_graphics,
+            "corePalette": core_palette_info,
+            "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS" if field_id not in PARTIAL_FIELDS else "CORE_ONLY_OBJECTS_QUARANTINED",
+        }
+
         payloads = {}
         for extension in ("nbs", "ncgr", "nclr", "atr", "col", "opm"):
             payload = raw_root / f"{field_id}.{extension}"
@@ -442,6 +554,8 @@ def build(archive_root: Path, raw_root: Path, output_root: Path) -> None:
             "collision": {"file": f"fields/{field_id}/collision-raw-classes.json", "sha256": sha256(collision_out), "sourceSha256": col["sourceSha256"], "classSemantics": col["classSemantics"]},
             "attribute": {"file": f"fields/{field_id}/attribute-raw-classes.json", "sha256": sha256(attribute_out), "sourceSha256": atr["sourceSha256"], "classSemantics": atr["classSemantics"]},
             "objectPlacement": {"file": f"fields/{field_id}/object-placement.json", "sha256": sha256(placement_out), "sourceSha256": placement["sourceSha256"], "count": placement["placementCount"], "authority": placement["authority"]},
+            "objectCellBank": object_cell_bank_record,
+            "exactStaticAssembly": exact_assembly_record,
             "animatedLayer": animation_record,
             "sourcePayloadHashes": payloads,
             "rightsStatus": "LICENSED",
@@ -477,6 +591,14 @@ def build(archive_root: Path, raw_root: Path, output_root: Path) -> None:
             "all40HdRoundTripPixelExact": all(field["faithfulHd4x"]["downsampleRoundTripEqualsOriginal"] for field in records),
             "all40CollisionDimensionsMatchTilemaps": True,
             "all40AttributeDimensionsMatchTilemaps": True,
+            "all40CoreAndStaticLayersRecomposedPixelExactly": all(
+                field["exactStaticAssembly"]["cleanPixelDiffCount"] == 0
+                and field["exactStaticAssembly"]["researchPixelDiffCount"] == 0
+                for field in records
+            ),
+            "objectCellBanksExactlyRecomposed": sum(
+                field["objectCellBank"]["status"] == "PRESENT_EXACTLY_RECOMPOSED" for field in records
+            ),
             "allFourAnimatedLayerBundlesDecoded": sum(field["animatedLayer"]["status"] == "PRESENT_VERIFIED_ROM_DECODED" for field in records) == 4,
             "animatedLayerFramesDecoded": sum(field["animatedLayer"].get("frameCount", 0) for field in records),
             "objectPlacementRelayoutPerformed": False,

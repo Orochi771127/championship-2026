@@ -65,13 +65,20 @@ export function parseOriginalCageNbs(input) {
     const raw = dataView.getUint16(20 + index * 2, true);
     return Object.freeze({
       raw,
-      tileIndex: raw & 0x03ff,
-      horizontalFlip: Boolean(raw & 0x0400),
-      verticalFlip: Boolean(raw & 0x0800),
-      paletteBank: (raw >>> 12) & 0x0f,
+      tileIndex: raw & 0x3fff,
+      horizontalFlip: Boolean(raw & 0x4000),
+      verticalFlip: Boolean(raw & 0x8000),
     });
   });
-  return Object.freeze({ format: "YDIJ_NBSR_TILEMAP_V2", version, width, height, layerCount, cells: Object.freeze(cells) });
+  return Object.freeze({
+    format: "YDIJ_NBSR_DIRECT14_TILEMAP_V2",
+    version,
+    width,
+    height,
+    layerCount,
+    tileEntrySemantics: "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+    cells: Object.freeze(cells),
+  });
 }
 
 export function parseOriginalCageOpm(input) {
@@ -87,9 +94,13 @@ export function parseOriginalCageOpm(input) {
   expectLength(data, cursor + placementCount * 16, "OPM");
   const placements = Array.from({ length: placementCount }, (_, ordinal) => {
     const offset = cursor + ordinal * 16;
+    const rawCellWord = dataView.getUint16(offset, true);
     return Object.freeze({
       ordinal,
-      cellId: dataView.getUint16(offset, true),
+      rawCellWord,
+      cellId: rawCellWord & 0x3fff,
+      horizontalFlip: Boolean(rawCellWord & 0x8000),
+      verticalFlip: Boolean(rawCellWord & 0x4000),
       sourceX: dataView.getUint16(offset + 2, true),
       sourceY: dataView.getUint16(offset + 4, true),
       rawFlags: dataView.getUint16(offset + 6, true),

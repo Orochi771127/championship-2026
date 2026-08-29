@@ -59,6 +59,17 @@ palette, then composites that layer behind the unchanged static core/object
 image. CM09's water is therefore present; its remaining blue-edged central
 notch is the original irregular field footprint, not missing artwork.
 
+The follow-up exact-assembly pass corrects the source decoders rather than
+painting over missing areas. NBS is verified as a direct 14-bit tile index with
+high flip flags; OPM uses lower-14 cell IDs with its own whole-cell flip order;
+NCBR object graphics use linear bitmap transfer addressed through NCER mapping
+type 1. All 40 core/static results now compare to the clean and diagnostic
+goldens at zero RGBA pixel difference. Thirty-six complete object banks are
+exported cell-by-cell, CM28/CM29 correctly have none, and CM12/CM18 remain
+quarantined instead of receiving guessed cells. The exact 4× enlargement is
+the reconstruction authority for a later genuine HD redraw, not itself a
+resolution-independent redraw.
+
 ### Characters
 
 Licensed references: `E000`, `M001`, `M201`, `M222`, `M226`, `M228`, `M352`, `M431`.

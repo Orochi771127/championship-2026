@@ -55,7 +55,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm01_01/core-tilemap.json",
-        "sha256": "514D0D4A22DC25D9B9F43B3D9344B19B0DBAACA7E3E124A4CCC4A910ABF5667B",
+        "sha256": "BDBE55CFE87768BF879DB2D1418F9792BA31A5CF9B25837A6997A57319548E25",
         "sourceSha256": "4C3B56D595780499DFCFCEFA1FCE7FF48F6193A147C8595BBAABF5A087B5EB1D"
       },
       "collision": {
@@ -72,10 +72,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm01_01/object-placement.json",
-        "sha256": "427CCEB40558609F982B02C09E27CD8AA56DEDDC124999CBB06DE7AEBFC24CAD",
+        "sha256": "2EC9D133A09BF3D4AB2EB6C1A6B3F947B9A9B537375C7E119AA73431CF15535A",
         "sourceSha256": "59A25BBE2BE77C156D8FE4E56704409718655FA2B8D99F226C6C5549948DC5A3",
         "count": 4,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm01_01/object-cell-bank.json",
+        "sha256": "871AE6DDD02C89F7813665ECE233F0C0AD6910E04799E7B4B6521107E27015C0",
+        "cellCount": 4,
+        "renderedCellCount": 4,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm01_01/core-native.png",
+        "coreSha256": "87152FFFDF8278FD2772A78F410D28BBEA7F12C7897282A8DCD7A78B5943DBC7",
+        "staticCompositeFile": "fields/field_cm01_01/static-composite-native.png",
+        "staticCompositeSha256": "241BC59C24E0A89F2481708E45450553940C9834D734D7A71A1C9C49E4113862",
+        "cleanGoldenSha256": "88A24DBB318357E817D45C70331E6D6629165392E7663A53D89329030956CF56",
+        "researchGoldenSha256": "6B11CA9DA67E5B41EF93BCAD29717F3C06CD15892204BF8B49DE078088028FC3",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 124,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -152,7 +186,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm02_01/core-tilemap.json",
-        "sha256": "0C63545F48DAC8824C7B01F0EF8DF523A7C1BA9DE655BD13D4B5EC48E8AA055E",
+        "sha256": "6FE7EE8367189A9AFA0D6161A93D7CB9C2059121B8876DB844971C5AFBCCEF72",
         "sourceSha256": "0336D8E64111460B648C740A312BA2C2D47C51F2EF9B2486619CDB5790AC0B95"
       },
       "collision": {
@@ -169,10 +203,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm02_01/object-placement.json",
-        "sha256": "640BCEA1A495D26DCFB40442D075C132A15B826B1F857529A8FFC58B6AF90109",
+        "sha256": "BBED0E75ADD1BAC19B3BBFAC5355AF41F2AFE7EC6A5CD96903AF21374414B64D",
         "sourceSha256": "F8308481FC38D35DB652B6954F418ECAF3E39F6DED17B77B478673001B745E35",
         "count": 5,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm02_01/object-cell-bank.json",
+        "sha256": "EB2F49379DC41DA5B86796EEE0397A0AD5B56D7171670B6B34E73781999C8C9F",
+        "cellCount": 5,
+        "renderedCellCount": 5,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm02_01/core-native.png",
+        "coreSha256": "25259374B81294BD9EB7C58ECBEE01D3EDD2935A4E91B1570D9102729CA02425",
+        "staticCompositeFile": "fields/field_cm02_01/static-composite-native.png",
+        "staticCompositeSha256": "D8F855A37CBE271112A00581DA97F94CFE41D8C199A0E22D8E40D4C9834F9068",
+        "cleanGoldenSha256": "07CA6324F46E91A464283AA427F1A7049CFE0AB86BD3DB337BAA934042A51DF9",
+        "researchGoldenSha256": "EB74F847E07280E56583F0F892CA3DE7F0F0471F3678B7241CDF38714D0ACDDE",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 349,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -249,7 +317,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm03_01/core-tilemap.json",
-        "sha256": "350D52072E4E66446B09DD5BAA7359D9CB2A7FCDF80FE37ED847A320749BE7D2",
+        "sha256": "01968B94DAF10086FD9B6DBDFB7F7A17B90BE5E57D13204973218798083C8CD6",
         "sourceSha256": "46CC3A4B270F9D2C995C9B37AEA5711C8AEF3EE3946FE07350851749A0E24B66"
       },
       "collision": {
@@ -266,10 +334,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm03_01/object-placement.json",
-        "sha256": "5C37245A30FCD238141F11456D963DB47DF9431247B6727A28BF130D3B138817",
+        "sha256": "AD3598BB2B0D34BC2439A457DA7B58E8933DF2A1CF79363F3E5E8C62505438B5",
         "sourceSha256": "AD44D2ED2B5B5136622BDAFFCBAD57CECAB794235CB017CFA28819AC4A64B97F",
         "count": 6,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm03_01/object-cell-bank.json",
+        "sha256": "53AA35054CDE5212EA1D33FF700D2AA2E4F8C6ED38CF24DCD557D57870F4761C",
+        "cellCount": 3,
+        "renderedCellCount": 3,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm03_01/core-native.png",
+        "coreSha256": "B83C09299AE8F1F364C38745BCF137DC40FE49750E6134E374AB7240BA33A87B",
+        "staticCompositeFile": "fields/field_cm03_01/static-composite-native.png",
+        "staticCompositeSha256": "016532E87FC50A8A53C6B49890AF3E795F9F831AD9A3D06F0F49F4D88D661CF5",
+        "cleanGoldenSha256": "24E843C4EFC9107FAEA439D612B4338F71B35063AD3F5A8880D314CA21B46A5B",
+        "researchGoldenSha256": "13BF0EBD005AB33E12B76662F787A893ABAEEF6F191426AA0EC4B4C0D3952B05",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 332,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -346,7 +448,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm04_01/core-tilemap.json",
-        "sha256": "0FB4396298ADB6367B03C453CE5A45B980CE0E68EC47491AE9143522EB2C129D",
+        "sha256": "BE1735B2C8757F90E418DC706C348C1563CF5A72BBBEDDE5D8E58A37C00CF17C",
         "sourceSha256": "19C5C4679DC56A17FDFC3B4827EBA4AFFDD0E45DE4A4CE63310D1DDA1AC25831"
       },
       "collision": {
@@ -363,10 +465,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm04_01/object-placement.json",
-        "sha256": "52178CE22A69540D07367C2E4134103B8CD9E31C3B46224B3D02DCB852B328E8",
+        "sha256": "5951B5C99287C2654E0853E191831966902F65B46A634ED749FEEBD149587386",
         "sourceSha256": "712EF6878317C73E9CEAA4EA8A8F5EAD91AEA724E60223BD9298D2047ED0D8F2",
         "count": 3,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm04_01/object-cell-bank.json",
+        "sha256": "D3195D47845C15D1E390D3966DE7586C4008E9BA5FF196EBF7FF45DD2B34ADDB",
+        "cellCount": 3,
+        "renderedCellCount": 3,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm04_01/core-native.png",
+        "coreSha256": "0ACF623435B69A4BFE9DD5F53558CDE1EE8B951F95E9D9F6BE12D9C50520ECA5",
+        "staticCompositeFile": "fields/field_cm04_01/static-composite-native.png",
+        "staticCompositeSha256": "0B36EDDAF7C77A5C6AA2199FCA879433575426B3A61F4D7DC4B27C2D70087014",
+        "cleanGoldenSha256": "634CF3BB02FCC0EDECCFBBA76471CD3EA27841608DCB4228E06C068004969165",
+        "researchGoldenSha256": "4059E716632F3548F7167E9F179EFAFD8B74988430B74B790B84B28006E3BACF",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 270,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -443,7 +579,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm05_01/core-tilemap.json",
-        "sha256": "FBB5F85D19C90B58D8C4E8B92C33D4A69A07479ACC67F04745A013F145369EEB",
+        "sha256": "7A4B931057582F672965D55841F31D2943D03FA6F3A9340B7B0AABC1BA0645CF",
         "sourceSha256": "6DA0057164E531524FD38369FEEB87D927BB6F072CE6012A6BF325B07AAA99D9"
       },
       "collision": {
@@ -460,10 +596,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm05_01/object-placement.json",
-        "sha256": "50868C557843B2782AEAD8F9033B785C3C6094966CC21DF0204B62F278250E98",
+        "sha256": "A07C6262A95E705AAAE8140C620952DCB012DF110AE1A8984A75AC6444DBD223",
         "sourceSha256": "749C18461D9B553B5236D8BD463C2E7D638F93E1A4D3F1410DF30E8931112A28",
         "count": 6,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm05_01/object-cell-bank.json",
+        "sha256": "EC4CABA29BEFF985715101620CC812D3A894AC1FF0F9D2750FF74332D7A5BB63",
+        "cellCount": 3,
+        "renderedCellCount": 3,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm05_01/core-native.png",
+        "coreSha256": "8D5EB414349D7A4199BEC2837A3B1C26D80E3CA1639CD4D57888BD0D43F2EF46",
+        "staticCompositeFile": "fields/field_cm05_01/static-composite-native.png",
+        "staticCompositeSha256": "2CC17BF427D306B04A8E6066F435662E54433D3EE13748069B3930461F7AC2AA",
+        "cleanGoldenSha256": "2CC17BF427D306B04A8E6066F435662E54433D3EE13748069B3930461F7AC2AA",
+        "researchGoldenSha256": "778BA8DC4B00BCC986C95772BFC7875FC59306180AF235E22A6D5DC38E59FB26",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 389,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -540,7 +710,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm06_01/core-tilemap.json",
-        "sha256": "5667E7166F7B0F9B0B52015D1DF23947722AEE0F39313BFEFCD3830AC586893F",
+        "sha256": "2C66B10DC3018E5A4F000417F560ED8703665FD09B939B0695F8C60C9F50ECD2",
         "sourceSha256": "FA61DB6EB3142DE376C8D774E383B9B6012219153CA1A7FF16D7DF60D6C98F62"
       },
       "collision": {
@@ -557,10 +727,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm06_01/object-placement.json",
-        "sha256": "2E0F1E68AF8DEE82F122B02D6FF1610A581F6B5BACA7270104C62869CF9A7281",
+        "sha256": "5ED1079B081F760C113FDEAB1B7797B220AB6E023FA7A0D31033C7861B1931DD",
         "sourceSha256": "B52213494D3A5D353C4590EF88CEDD1157D8B6ABDA8D1AE8BBC8C053CA24C722",
         "count": 15,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm06_01/object-cell-bank.json",
+        "sha256": "E3F7CD38D00252D2599BE87DDD97718411E54242A2163D75680586045CF40E4F",
+        "cellCount": 13,
+        "renderedCellCount": 13,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm06_01/core-native.png",
+        "coreSha256": "02892A8A9B00DFAFB3B5DE642E4998037C7FBEEBCFE7EDF2B525CFE87DAC08A6",
+        "staticCompositeFile": "fields/field_cm06_01/static-composite-native.png",
+        "staticCompositeSha256": "25B0EB251E847273FBBA32509370372808B2152F25F0827C2686372209FA2438",
+        "cleanGoldenSha256": "25B0EB251E847273FBBA32509370372808B2152F25F0827C2686372209FA2438",
+        "researchGoldenSha256": "02748C3F283A1BB8EE09E444B8FC3D26A058957271B41A6B6D5ED1E9879742C1",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 478,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -637,7 +841,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm07_01/core-tilemap.json",
-        "sha256": "4E3508C40862E4110E39BA2BC9B0F3614B73B707F1CE40CF1BF822A4F0797EF1",
+        "sha256": "D0195A143343CEB9980E0E6C44F1C91230AAFA505B487096F9D24CDEBA59E92B",
         "sourceSha256": "8F44193E8AD1D631499959166D6F37A1E31D7385431B65AC7DAE5204F4F5FB00"
       },
       "collision": {
@@ -658,6 +862,40 @@
         "sourceSha256": "1BECE61B87FE49684F7A570B6BB9FFC7322EBBB883A6D1738BE78AB872173841",
         "count": 0,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm07_01/object-cell-bank.json",
+        "sha256": "5B44A1477F97B81160350C03C77C26C94801C5FA7B78C85822C5F8DF8AB45591",
+        "cellCount": 2,
+        "renderedCellCount": 2,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm07_01/core-native.png",
+        "coreSha256": "6E2AC7F0B26AC32203135B4221D6057E84039C67404E2159CEE8F45A75C69235",
+        "staticCompositeFile": "fields/field_cm07_01/static-composite-native.png",
+        "staticCompositeSha256": "6E2AC7F0B26AC32203135B4221D6057E84039C67404E2159CEE8F45A75C69235",
+        "cleanGoldenSha256": "53A71B7E7B27B0DD0180BA061026950BFE34A37A74B8756B5772CB476B729EFE",
+        "researchGoldenSha256": "B6A9B7D8B409D691A45B5F3CB998710608F53BB2F08803D7FF332894517948B1",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 463,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "PRESENT_VERIFIED_ROM_DECODED",
@@ -770,7 +1008,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm08_01/core-tilemap.json",
-        "sha256": "D2D3A370403C77CD919470313B04C8EBEF15C3DE93D22AB5A486679D2584A0BA",
+        "sha256": "1153128C9C340D28A1E2FD08A718A86A5BD92F84B0D8CE1F4CE7CB38F0E46D17",
         "sourceSha256": "6E721E29023E313BDEB0F886CBC18A45BBC0404851D45EE250D6C26E8D739059"
       },
       "collision": {
@@ -787,10 +1025,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm08_01/object-placement.json",
-        "sha256": "45731F4E0FA6790D60C49ACDE1253A48B975346CDD908033B348F0EAC9A2A759",
+        "sha256": "6A930443E8C2DDA92B4807BEF775733C12AC9F2960D9E816E080CF24358E22FC",
         "sourceSha256": "C98B72B99814F978DDA74E299760718C31B8893FCB1F34D9ED5AE96F556F05A6",
         "count": 2,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm08_01/object-cell-bank.json",
+        "sha256": "4D70DFD781E416E8B002A6A0872951C2A86099BFC4485792005D60427E8AFFCB",
+        "cellCount": 2,
+        "renderedCellCount": 2,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm08_01/core-native.png",
+        "coreSha256": "AF3B60FC1BB8B2AFBB090340A76FE5C21967FBE71F1D2D3984DDD148C3ED4F02",
+        "staticCompositeFile": "fields/field_cm08_01/static-composite-native.png",
+        "staticCompositeSha256": "60ED720913DF1A923BC67DB954DA7C70FD78F2D89D69980D441C8370EEA14A3C",
+        "cleanGoldenSha256": "FF25874DE869AE70E988A81090101F3F010A19EE8E3F7506AA39AB2E65F57527",
+        "researchGoldenSha256": "E245E2DD819E9C8FA671549AC017D71868D281C24BA8587CEA4B0C39E02ED8E0",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 228,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -867,7 +1139,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm09_01/core-tilemap.json",
-        "sha256": "9DF4A91E10A32519A7529668883D4A59322EE2A547F68D421EA7050E955B082C",
+        "sha256": "8F5D8EEA437DA7F8C96D2692744A4EBBA04CC064AC745CABDEB0DF0B77196BB1",
         "sourceSha256": "605D8247AD1F9617B721408391080CD5BB6C498B7566CB7CA346F7CDD9E353E6"
       },
       "collision": {
@@ -884,10 +1156,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm09_01/object-placement.json",
-        "sha256": "41CCCA7AFCCADDCE0AFF263D430007F468227089187986875A0AAAC0F2E67EC5",
+        "sha256": "B5BE8152083880CCC1CE00D8800BAAA6D61C4593A1B868BD4FB40582EDDBFEBF",
         "sourceSha256": "9947F36F0CCA246C361472853F048399DD7580688730247DF390E0EFD5EBEDD1",
         "count": 2,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm09_01/object-cell-bank.json",
+        "sha256": "7318AFB87A8072BC5EE1829F4E0F44E6D68AAB47D83032C398C915A5156CCA55",
+        "cellCount": 2,
+        "renderedCellCount": 2,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm09_01/core-native.png",
+        "coreSha256": "23E1571F25AF1FF1AF8047611F60C532CB8F95422ED5F59BC8D25D3283BD06E6",
+        "staticCompositeFile": "fields/field_cm09_01/static-composite-native.png",
+        "staticCompositeSha256": "D0B1E89D51A2D55A9B414A096A00716E0C596D5EA9D11783A5968C699042C325",
+        "cleanGoldenSha256": "D0B1E89D51A2D55A9B414A096A00716E0C596D5EA9D11783A5968C699042C325",
+        "researchGoldenSha256": "DDFB281BDA99B546302DD28F66738CB604987FC8A948B66611F0278351B6FD44",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 208,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "PRESENT_VERIFIED_ROM_DECODED",
@@ -1000,7 +1306,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm10_01/core-tilemap.json",
-        "sha256": "67FEFF9C25E44F3DB8259400084F860F8FEA6D94FC1E93726FD1B1D109C5A45D",
+        "sha256": "AB32954042A02FB949AA1AECED9861D497E1AC146B260DB2A46DE52618FED7EA",
         "sourceSha256": "0678A513A4A9BD61B63C3312838F0DB238E897318A00EA48C3AC1F8A0ACCEBCD"
       },
       "collision": {
@@ -1017,10 +1323,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm10_01/object-placement.json",
-        "sha256": "BB105E36E996227A2C44D8E92F6A986A20C3CC8736C32B664369EEF4F684A871",
+        "sha256": "A7782687B1072653BD4FFDB5983BFC2EAD3DE800960790CDAD1B03C127BC21BE",
         "sourceSha256": "B58FCC528D468F4A08BA1FB60D5A8B6AFD2A57A3BCE54CAC724D0B378A670A6C",
         "count": 7,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm10_01/object-cell-bank.json",
+        "sha256": "B884402FB3F65C71FF5A12A90C7BD90C0FC920F77550703146B2675C41A7FF9F",
+        "cellCount": 4,
+        "renderedCellCount": 4,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm10_01/core-native.png",
+        "coreSha256": "9FD6167B6FAB0AFF4AE58582DD5CB65ECBA8775195D6450AA7A13F2929738C5E",
+        "staticCompositeFile": "fields/field_cm10_01/static-composite-native.png",
+        "staticCompositeSha256": "2F503D08DEDE2FCD9A92C4B3EC98B8D223EC5E8B8DDA9B00408EAB49C2955F17",
+        "cleanGoldenSha256": "8C4CB6622F367B2958E21A9D48F13DBC93082CF20691A0130E8E678A91EA5AB4",
+        "researchGoldenSha256": "E57C98C7A76BD5114F13D5230EFDAE5A99EE835D746C1490D2311B611F335A48",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 449,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -1097,7 +1437,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm11_01/core-tilemap.json",
-        "sha256": "AABC9E1FABEE3B2A3DFD92BE72F8514743D6B6603698ECE6A787E99ED48815FB",
+        "sha256": "C21E53FD4726EA3266DEA93EE69EEA16179049BE49E8E64BF67DA0FEE8784F2A",
         "sourceSha256": "0B412668AC526F5BDB12D834F95549E92B0F1E3792041DBFB9912BB8B930BACB"
       },
       "collision": {
@@ -1114,10 +1454,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm11_01/object-placement.json",
-        "sha256": "6120D37B0A7AB137164EFCEB80E28272BDC76D9CE0A8B26548DF6BDA6750B374",
+        "sha256": "2DB9886323BFDD61D514887B5A1941B6E82D127ACB7903E33AA368717F86824A",
         "sourceSha256": "B903FCBAC1344AF09C044CC90F9D78FE2D17DA51B46323D2F9D6B5C815035860",
         "count": 9,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm11_01/object-cell-bank.json",
+        "sha256": "EB09835E52667BC79E8B907E72E49A1CA6321CA6B3B78EDF8604E08479A78436",
+        "cellCount": 2,
+        "renderedCellCount": 2,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm11_01/core-native.png",
+        "coreSha256": "DCFCAFF8D8A574F1DCB298E5C3F641FABD60345DEB0B36A95CF643717A1F3301",
+        "staticCompositeFile": "fields/field_cm11_01/static-composite-native.png",
+        "staticCompositeSha256": "1A26C2B3CCCCBD2055D3E7C5EB7183B3E07BE04F4CC13665B0D56B95242E7F52",
+        "cleanGoldenSha256": "B5B6906AD989C62CD8F159B47830EF98FC6C853038027D66F86D80134976F150",
+        "researchGoldenSha256": "61B986B8AC7860BD5DB65BAA2D6840656B263F579CFE7773C1B1688B7B805275",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 315,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -1194,7 +1568,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm12_01/core-tilemap.json",
-        "sha256": "D6A1B2B45EEB67541F81C2B8A260C401F9D34259F0675C01F22605E3A9D2ACBB",
+        "sha256": "6F715DAB27935CFB74BA36FC009D564503334AB2F506BF1F751566445451B6FF",
         "sourceSha256": "6690EAE63021960CB95213AD4691FD4319D6BAAD896165074881D6BFD91C12F7"
       },
       "collision": {
@@ -1211,10 +1585,46 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm12_01/object-placement.json",
-        "sha256": "DF2BFCC2BC4EDBA63EA8640B0041DD05F18DDDF796D8A8A9A343E553F8B44E79",
+        "sha256": "0E542480127A565EA16CB1B4DDC9B7616853CF2A0B4FCF5360D3FE5C04768F69",
         "sourceSha256": "360109D7E835EC5A8ABE6C5B07CB0B2773BA4A6CAAC5C650FBBEE8757033F759",
         "count": 7,
         "authority": "ORIGINAL_OBJECT_INDEX_CONFLICT_DO_NOT_BIND"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_CONFLICT_QUARANTINED",
+        "file": "fields/field_cm12_01/object-cell-bank.json",
+        "sha256": "4EECBBF3A48C56C28E96600120867C9F6023FEEE4AB1FE25EE5E3F8A1E95B3C7",
+        "cellCount": 2,
+        "renderedCellCount": 2,
+        "invalidPlacementCellIds": [
+          2
+        ],
+        "placementBindingAuthority": "QUARANTINED_DO_NOT_BIND"
+      },
+      "exactStaticAssembly": {
+        "status": "CORE_ONLY_OBJECT_CONFLICT_QUARANTINED",
+        "coreFile": "fields/field_cm12_01/core-native.png",
+        "coreSha256": "D35BB42B803E78169C6C90418DC0E8A605EBD661165AE9B7AD663CD5817F0971",
+        "staticCompositeFile": "fields/field_cm12_01/static-composite-native.png",
+        "staticCompositeSha256": "D35BB42B803E78169C6C90418DC0E8A605EBD661165AE9B7AD663CD5817F0971",
+        "cleanGoldenSha256": "5F3483D97DF2FA843623186DC21EB0ACCCD988A3DA9343A36A4283C87D9158DD",
+        "researchGoldenSha256": "EE0DDD59147B13320C6827972D8C65F7E50D27D528B49407F8FEE8B11BB3B903",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 350,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_ONLY_OBJECTS_QUARANTINED"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -1291,7 +1701,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm13_01/core-tilemap.json",
-        "sha256": "A827FBA3DC64C00830BA58CD766A8B4977A18A8A829A0ABA13D473679B18B4FC",
+        "sha256": "277F8AF34DDC763F7D9F41F7C6DAFC72FED2CA623E4CDA6D84F39E4AACFCD6B9",
         "sourceSha256": "72B4812521A4B34CEBA6FE2B1BD338693D5D8B6374248AC481276F8BD094AA8A"
       },
       "collision": {
@@ -1308,10 +1718,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm13_01/object-placement.json",
-        "sha256": "F395AC1A7FF52AD4CAD2D2B941E8DC0A71E0CBCE20383293FB38B9CAE8A63B15",
+        "sha256": "B11593CA8639A1139E44BBD735D6977EC6CAE6A2946D6619CBF61D079E2AB89D",
         "sourceSha256": "4605A8243AA7BA635D22C8265E3C739675BBBFE8CDDB04F7DAB74E5B0ABB380B",
         "count": 8,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm13_01/object-cell-bank.json",
+        "sha256": "ACB237E07B128E78441A93742DE73AD826C07D0AF5817FE5F74253925E8767BA",
+        "cellCount": 10,
+        "renderedCellCount": 10,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm13_01/core-native.png",
+        "coreSha256": "E657B49AE683B3D73748DCE010DC3E050520A846E2B700E17987BAE09BC07FBB",
+        "staticCompositeFile": "fields/field_cm13_01/static-composite-native.png",
+        "staticCompositeSha256": "504E38F3B05F76D5B59D65E544730DED9D7E5A8899F91379C4D50F01E06362EA",
+        "cleanGoldenSha256": "504E38F3B05F76D5B59D65E544730DED9D7E5A8899F91379C4D50F01E06362EA",
+        "researchGoldenSha256": "045FA15AFBCD1D3B69BC20C387CC46D711FD1ED4A40BE368B563CE4BBB78B629",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 308,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -1388,7 +1832,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm14_01/core-tilemap.json",
-        "sha256": "1318B732A8C9EA3E07FBAEB2DAF07698256336B319B3134E16232F3FB9273880",
+        "sha256": "8F70A4C6A06E9E18F8D03EF26C56529830C178D54AD248E72C74233E1ECA9D4C",
         "sourceSha256": "B5167A80A6446FDD05FB19B2B31FD745D71AC62D6C7557520ADEABD2C59CFC7C"
       },
       "collision": {
@@ -1405,10 +1849,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm14_01/object-placement.json",
-        "sha256": "8A592884C8F2FFECBF732CC3C2EFD3B766D0808DFFEA9D9F7D29B5E10F5259D5",
+        "sha256": "DC1F9BD51A71C5EB482DEBA475DDF85ED331A1D00FD613F2541D102CF2785B0E",
         "sourceSha256": "30A14E7C9527DD042BE08CA959B07466A7F1A439196BEFD6472FBF157FB1EA3A",
         "count": 13,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm14_01/object-cell-bank.json",
+        "sha256": "27D4C1780EC4BBE6B559C6413E6D88F5395BD808F14055557AA56DA91E77DCAF",
+        "cellCount": 14,
+        "renderedCellCount": 14,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm14_01/core-native.png",
+        "coreSha256": "1D9CEDF21D8C53F084810503ED9CB75388CCDD8C370A5FC42115ED0CAEC92E14",
+        "staticCompositeFile": "fields/field_cm14_01/static-composite-native.png",
+        "staticCompositeSha256": "F8720918A3CFAFAA8AC964F4F408169E1A3C54571AB04916418F628872771814",
+        "cleanGoldenSha256": "5615D2B5407EBA7D4E431A4B994F8751005F77F048515DA5FC2F6ED069DB3FF4",
+        "researchGoldenSha256": "4B5AACFA764594865A047D3E02CF5507C1AAFD0CDA22DCFE3F2319D1C0DB26A4",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 353,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -1485,7 +1963,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm15_01/core-tilemap.json",
-        "sha256": "F1B81ABFEEFF0C379B304777AC41F2891646EBEBE45D4E8739443C13FBE9942B",
+        "sha256": "4D374FE9F981F536A3DA3EF9768801CB43F231FEB877EEC20A5AF3E0928814E5",
         "sourceSha256": "21AE9972B6D3C25EE41AFD3419B02A780F1108A1B4385499A1E99FFC8AD8B648"
       },
       "collision": {
@@ -1502,10 +1980,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm15_01/object-placement.json",
-        "sha256": "EE40FBB2633FF42D96E32546A5722C83060209B4F68362A60944F7986134222B",
+        "sha256": "0612213359AD9AE4536415D7ADD3526DAE6838B3515B2F1DB7E14614B4D90235",
         "sourceSha256": "62FB10756FF3D9B0D4153F782E7B1143D25E799DCE99EA3740F21E50609D42DB",
         "count": 23,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm15_01/object-cell-bank.json",
+        "sha256": "5B5265D9C3E1D036023A44D05544431CAAE5AFA2294AAFFD403EB0C5DA771FC2",
+        "cellCount": 16,
+        "renderedCellCount": 16,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm15_01/core-native.png",
+        "coreSha256": "E2E718C73FD7AEB2249073A2B5B0C17C3275F6B1EE38C7E54E86AEA08727F8D6",
+        "staticCompositeFile": "fields/field_cm15_01/static-composite-native.png",
+        "staticCompositeSha256": "320F1EAC0448C168C10CEAE698F1D8EAB783C7B6888CE4A8E37E88ACCB559F72",
+        "cleanGoldenSha256": "AC1BD21B7096911BA22155A08057347E31DC56CF0AB29C16BC70FE08A8AA9715",
+        "researchGoldenSha256": "D8CC5DF87748A04D7BC8548E2FDEC631C6359AFB07EA03232C3A65AC76B08AC0",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 280,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -1582,7 +2094,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm16_01/core-tilemap.json",
-        "sha256": "4EE53C8D10F958145DE1B0F5FC67CE5008C7336222A86F98F60BC710713B9ADB",
+        "sha256": "45DA5DF0A7F900976BA32B74E555B99AF464C9BC4C5ACF3346DFA694B66A6CC6",
         "sourceSha256": "9D7707662F6094B5BE4913C44D82C62CF37BD472D8A37E39E54CF393AC9DDC97"
       },
       "collision": {
@@ -1599,10 +2111,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm16_01/object-placement.json",
-        "sha256": "0D65903F4DB6DFA883950420F6DFDF481C5AEEDBF4ECBAA1E014A12E313C8239",
+        "sha256": "350410C8C92256951F2A2B54998B03DE0F2FB1B6B9FCF529C2E532B1A1488850",
         "sourceSha256": "74676D04442F4381B04677A62DAA3B2C7A6AC30D2689F3E52EB808201457BC14",
         "count": 2,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm16_01/object-cell-bank.json",
+        "sha256": "C6FC7D2843D69C43BBF138B84FDC7B1A116B132C2FBDE46CA67FF8DF3453628D",
+        "cellCount": 8,
+        "renderedCellCount": 8,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm16_01/core-native.png",
+        "coreSha256": "357823DEC65F90A542F2D98C2B42DBBEC28D6022D197D51D4043EAA8D7F868E5",
+        "staticCompositeFile": "fields/field_cm16_01/static-composite-native.png",
+        "staticCompositeSha256": "2B3D730872623D9C78364C45C0CF49E270436CFA0FCAF08AA3DDC2EDB36C7226",
+        "cleanGoldenSha256": "2B3D730872623D9C78364C45C0CF49E270436CFA0FCAF08AA3DDC2EDB36C7226",
+        "researchGoldenSha256": "61F7CE584EFBC779EB660342C94CCF07949965DD9C5D0F213C1BB7B79CB76B27",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 133,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -1679,7 +2225,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm17_01/core-tilemap.json",
-        "sha256": "20D4F75B1C4D6DF57BBFAA8562BBAA13FDF61D5C24EED1F6DEDEB15BFBA9B0C2",
+        "sha256": "140D82CD19E89C5955E991B2BA0ABA9DAAD909D10EB495B8E13E0C541B419D12",
         "sourceSha256": "8857A2A8C545E09DF4A11FFD97BE42B35CE6069A4781ED565ABA498B37A8FF54"
       },
       "collision": {
@@ -1696,10 +2242,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm17_01/object-placement.json",
-        "sha256": "2E98AD07214D64037B635F7ADB026478CBA2F2D3F81D05B417B7E4CDE48982C5",
+        "sha256": "31DA82348D0DD60915F556D509D29F73B637B887C8B6797AF81CFE1AE13F23FE",
         "sourceSha256": "E3C4B18DAE994545FC1C3CB826CA3394CF2E55CF377A9C85B6B97EE73469A6AC",
         "count": 6,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm17_01/object-cell-bank.json",
+        "sha256": "AF939324D7AE628D6F962F8F3499DD71EA02278D6C6EE56C40F34E8742200924",
+        "cellCount": 6,
+        "renderedCellCount": 6,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm17_01/core-native.png",
+        "coreSha256": "E3AC246B33FA48A33EBD256FCC73B2551921711562509DAC9DF67B55B83F3332",
+        "staticCompositeFile": "fields/field_cm17_01/static-composite-native.png",
+        "staticCompositeSha256": "7FFAE3C77DF736C07E3394C6DA845459C2319EA57829029FC0925BFDBE80AC29",
+        "cleanGoldenSha256": "708BAF31AF6D97B285CDDD657A20CEEED6DF27A990117E39C4805C9B4D4C4C31",
+        "researchGoldenSha256": "E15A37E111E0291F483C1CB4DCC5480A7C4DE838D28C8127E929B56A30E3DA4E",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 379,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -1776,7 +2356,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm18_01/core-tilemap.json",
-        "sha256": "86408874ECD242F5B76D5E7B456626BAF8F7340DC1EE80A3F2B2E65419186B38",
+        "sha256": "C224E5EB0D9A4ED26A231E3C496E26CEBAAC77278BD5E9FDB78EB03EAA892AC5",
         "sourceSha256": "A98712270681F5879E98B1CF16B7CF188D864C1445BE2C6C37A4971C93438E16"
       },
       "collision": {
@@ -1793,10 +2373,47 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm18_01/object-placement.json",
-        "sha256": "5806EE7226237E34DC0A70F17327BB56C8E1095030DC4F5077C027D0081E4F14",
+        "sha256": "506A9D0830735A604737CDDB4D7D903A8E4E8529A9D768040A45CE3D43F67E38",
         "sourceSha256": "DABF999F7AE3F10907E86907427C0CD4867AE477DDB0782C4D16430F200E5FC3",
         "count": 16,
         "authority": "ORIGINAL_OBJECT_INDEX_CONFLICT_DO_NOT_BIND"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_CONFLICT_QUARANTINED",
+        "file": "fields/field_cm18_01/object-cell-bank.json",
+        "sha256": "C02C733F28FF01083D1E6C778B56E8A0FF916CA22B9D2C0373D2875FBCAB5397",
+        "cellCount": 8,
+        "renderedCellCount": 8,
+        "invalidPlacementCellIds": [
+          8,
+          9
+        ],
+        "placementBindingAuthority": "QUARANTINED_DO_NOT_BIND"
+      },
+      "exactStaticAssembly": {
+        "status": "CORE_ONLY_OBJECT_CONFLICT_QUARANTINED",
+        "coreFile": "fields/field_cm18_01/core-native.png",
+        "coreSha256": "AE1F7BBDCB2B01D54EE6A2BDC2818394A9324EC2C80F51AB9E59A4796444A1B3",
+        "staticCompositeFile": "fields/field_cm18_01/static-composite-native.png",
+        "staticCompositeSha256": "AE1F7BBDCB2B01D54EE6A2BDC2818394A9324EC2C80F51AB9E59A4796444A1B3",
+        "cleanGoldenSha256": "68365E63F2EF7B9B5A0B44396870EEE96AC8277DFD39A5142DB1BAC6F2513A75",
+        "researchGoldenSha256": "18E313C79CB9E7D81A53E033977EA0A7F98D0155F713569DD846B4E2F7DD1C36",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 241,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_ONLY_OBJECTS_QUARANTINED"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -1873,7 +2490,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm19_01/core-tilemap.json",
-        "sha256": "C9AF6B7B54148508995ABA892C2D67B3E2B92F1798FEEF21A5027113A222D68A",
+        "sha256": "11564BF6B2864C7BD6CBCAE2E7B425D0C63BFF915D30E7FB2E419D0AF85A4F16",
         "sourceSha256": "8487F551E3F10BBBF0080DC49D1BC53EE771A70314E9101AF05F0AAE6C859CA3"
       },
       "collision": {
@@ -1890,10 +2507,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm19_01/object-placement.json",
-        "sha256": "8D10EBF8137C76044A26D6FCD4562A7014DE36B099E05AFA6496E0769478C381",
+        "sha256": "619DBA4440A9162E0C35D93F6899B224700D6363162F7795443682574649DF20",
         "sourceSha256": "942D254A951DC069B6EAAD5E13266E2272F7710DDBAE948C4C758CDA2B703E6C",
         "count": 20,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm19_01/object-cell-bank.json",
+        "sha256": "82C7C5B492057826525E2BFF1175F5ED37FE1881D7EE16D1643B534F51522D3D",
+        "cellCount": 14,
+        "renderedCellCount": 14,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm19_01/core-native.png",
+        "coreSha256": "CDDC9D78083864AD9D5CC291DA34C464A7FA3FA1229AB2BF85DFBDFD29B08430",
+        "staticCompositeFile": "fields/field_cm19_01/static-composite-native.png",
+        "staticCompositeSha256": "46CC625D6D69F32062002CCD7C7847F4105318AE6031A0ADFFA732EFCD5C0010",
+        "cleanGoldenSha256": "0FDF0B7659FE2400FB925D08DDDE560034B90B50CA1FD0840A179CF549EEBDF1",
+        "researchGoldenSha256": "F1471D24CF587DC5F00B8F100A3D2B3D9A8897C2332CB10B29FC52B7BF73408E",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 472,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -1970,7 +2621,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm20_01/core-tilemap.json",
-        "sha256": "60C9ADA516930BB080174CBD92943E1A4AC1A4F006152C9449E5401DADD2C201",
+        "sha256": "95C039B0613663E71AA1E041B758FEF5903FF3E2516909427FF3E30FB83790FA",
         "sourceSha256": "83879B0EAE179E13FEA9396836691ACB803D140766AD5D4A3BA9BA1B1551BB69"
       },
       "collision": {
@@ -1991,6 +2642,40 @@
         "sourceSha256": "8BEF44E1DB26C97E5F005525C966186EDFF26A74D2F69A6161F7B01F3617E5ED",
         "count": 0,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm20_01/object-cell-bank.json",
+        "sha256": "664F52C655868362B531DA8ED95565E4BA10B924E4985C21718AA36D2362BB90",
+        "cellCount": 2,
+        "renderedCellCount": 2,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm20_01/core-native.png",
+        "coreSha256": "4CE132065DF348DE924033600CDDC3236B11E6FEA6F6751298808A2689B9E269",
+        "staticCompositeFile": "fields/field_cm20_01/static-composite-native.png",
+        "staticCompositeSha256": "4CE132065DF348DE924033600CDDC3236B11E6FEA6F6751298808A2689B9E269",
+        "cleanGoldenSha256": "4CE132065DF348DE924033600CDDC3236B11E6FEA6F6751298808A2689B9E269",
+        "researchGoldenSha256": "34CAE9406E93249B0246CD33C86E169A3F03A0AA675ACC43CF28BE076457A8AD",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 311,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -2067,7 +2752,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm21_01/core-tilemap.json",
-        "sha256": "1568D648B8A277306AAC6552F596B10070773323F1F4C01A6BF724B30E6C9A97",
+        "sha256": "6F17E15298AA829152AEF7FED813E5304D8EE7C1C2B4E714C4D4A9C1FF67BD10",
         "sourceSha256": "FBB9671B8DF119857C70A182931F716BEB70A68DB7717C4EFE4926DFD9E0F8BE"
       },
       "collision": {
@@ -2088,6 +2773,40 @@
         "sourceSha256": "11B491DBD5D6FE3E18B63A200E49B7106E20BD9B8FEC15507024731FEA6C9984",
         "count": 0,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm21_01/object-cell-bank.json",
+        "sha256": "E357FD05838145A140FF324D8592EA6F3A529C9E69D1CB8B579826B9BD38296C",
+        "cellCount": 2,
+        "renderedCellCount": 2,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm21_01/core-native.png",
+        "coreSha256": "EEF988C2D06C5AA5609606DB82C129D31DDCA29F9818CDB1E885AFF418665577",
+        "staticCompositeFile": "fields/field_cm21_01/static-composite-native.png",
+        "staticCompositeSha256": "EEF988C2D06C5AA5609606DB82C129D31DDCA29F9818CDB1E885AFF418665577",
+        "cleanGoldenSha256": "A3254CE8E523094FD2A314D70DCE3F101726D98EEC3D383FC26C1B68A016C935",
+        "researchGoldenSha256": "C94B25997EBA7B5D2DA39708CFB0491ED28E782D3FF357B73FD7CD56A5F4A5E9",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 432,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "PRESENT_VERIFIED_ROM_DECODED",
@@ -2200,7 +2919,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm22_01/core-tilemap.json",
-        "sha256": "C38FC9600715DCE42D21308FE2FF5AB7B334B07184042CAEFF4F3610B8A18E77",
+        "sha256": "643A18500A2E24AC8DC74F297AE3A1E20CF5B15A10C865581FF31A969EF4FAE3",
         "sourceSha256": "25CBCF94B8A02617D780847B9A712B17AEDEDBF1AC9FC662C6B0B5E694C5F5AD"
       },
       "collision": {
@@ -2217,10 +2936,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm22_01/object-placement.json",
-        "sha256": "415F91F154217C4E9B1911F0A797F40EC5E1F51784CC32536E2FE692E1823773",
+        "sha256": "117FE20BEFEA470767CACA02325B5C162A60E27BE25DE16499B37BB1919C8B0B",
         "sourceSha256": "8F9908BA27D13BAC35933A8465ABFB9272CDD468FF595E0092C326039D55D6FD",
         "count": 12,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm22_01/object-cell-bank.json",
+        "sha256": "288507BF37E39002FB5EE6C2AAF414AACA98A45EA211EFAA2E74B94C595BB452",
+        "cellCount": 9,
+        "renderedCellCount": 9,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm22_01/core-native.png",
+        "coreSha256": "4AB719CBE0C424166BD31C5CC8B09409DD50ED411A3DC84E2D015FCFBF120D57",
+        "staticCompositeFile": "fields/field_cm22_01/static-composite-native.png",
+        "staticCompositeSha256": "4AC7AAF1A6AAED46F6E19683CFDAE1A912C18E8F635657F79F22C6EA3E0D3439",
+        "cleanGoldenSha256": "80929F2BAE4656857E930527185B59B6EA661663D81F3CAD865FDE6794BD6059",
+        "researchGoldenSha256": "CD54143D9284F95A52003B3584CC67428AC7FBF3F8F6E2E31264DBF0846BFBE6",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 342,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -2297,7 +3050,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm23_01/core-tilemap.json",
-        "sha256": "6178F8788B12DF6B8E6962217E62DB45D0DB8CA21C51080B5A437DB93D803EC5",
+        "sha256": "48D2CC4A49F496F3055B8231371BB3FD387F15984DB5C38C9B0274DB735E18BE",
         "sourceSha256": "E8A9E5C5E7DCDB7723BDBC7ACBEB8DBC2EA30EE4273CDEB9C4DC6B6760587D52"
       },
       "collision": {
@@ -2314,10 +3067,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm23_01/object-placement.json",
-        "sha256": "20BACD0F290CE68AD7F02C8CCAE297D944FDECAE5BE7A9D9C14B2C89060D7AFF",
+        "sha256": "2DC89DFD5B74D543BAB0813B6592300F72CEDC5B879AEC297FB7E4129C689172",
         "sourceSha256": "C3E291435696F909F6EA8219D830FC7048D51ACEFC0B5ACA800E8B72FFF29D98",
         "count": 6,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm23_01/object-cell-bank.json",
+        "sha256": "8D98E3E037A5C04A5ADF1B24E430028E81D31AAFC9C02BB0E7A626D7BBE2CA36",
+        "cellCount": 12,
+        "renderedCellCount": 12,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm23_01/core-native.png",
+        "coreSha256": "286FD52E406B403C18675D1E6D53E68CC4A1B332B05D5165234919B6BCB2940F",
+        "staticCompositeFile": "fields/field_cm23_01/static-composite-native.png",
+        "staticCompositeSha256": "EC88B97BE230299589D65398B47843FC4276B1F770F80342E77C1FFC62E1A12A",
+        "cleanGoldenSha256": "86D1C7685499BAA0759F1B30EA3940CE852C11DE7F37B138E57B749C009B01BE",
+        "researchGoldenSha256": "7AE26E0B94A4947180F2A65358218FC3120018998DC3D188E0AA7702C12D2EB4",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 233,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -2394,7 +3181,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm24_01/core-tilemap.json",
-        "sha256": "4EE53C8D10F958145DE1B0F5FC67CE5008C7336222A86F98F60BC710713B9ADB",
+        "sha256": "45DA5DF0A7F900976BA32B74E555B99AF464C9BC4C5ACF3346DFA694B66A6CC6",
         "sourceSha256": "9D7707662F6094B5BE4913C44D82C62CF37BD472D8A37E39E54CF393AC9DDC97"
       },
       "collision": {
@@ -2411,10 +3198,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm24_01/object-placement.json",
-        "sha256": "0463366A409D3570BEECDD427CDF7F1DDAB6420F0402182FF6D328CC17481117",
+        "sha256": "60058B4071D54D94473D6556DC76A9552C9E0C16D58E2AE64A1C5BE3D019C0F2",
         "sourceSha256": "A6EEF9C954BB6204BC254C315942B20AD9BF094EDDCA2AE6C3057EB42DBB56AE",
         "count": 5,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm24_01/object-cell-bank.json",
+        "sha256": "4E7D2DAEC122C1CDB7E78DE6C3D434F0504EFE24FC52E70E390E4A254F369813",
+        "cellCount": 6,
+        "renderedCellCount": 6,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm24_01/core-native.png",
+        "coreSha256": "79BFDE121D2842A1A3DA72C6771078252525016DB06A40BA88E009B27803DAB0",
+        "staticCompositeFile": "fields/field_cm24_01/static-composite-native.png",
+        "staticCompositeSha256": "705BE3FA5B6BCBD66D2204D591C5E6DC1CED97490C9EBF6A1C50D90757BF7F3E",
+        "cleanGoldenSha256": "C2FA5B2D667D686D83A7641B25FFD9F29E3C813FA5E0574D181ED2DE42DEAB54",
+        "researchGoldenSha256": "B85D5AFDC336E549A380A0C47888421B3A5D16CEED18034A41B5D63DBEC094FE",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 133,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -2491,7 +3312,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm25_01/core-tilemap.json",
-        "sha256": "53E3B1D132A592E5363C121B0736DA6796F11A8D3B208A21F0D6253C1293A062",
+        "sha256": "8E369E433DB95FB0C91A60A58BF6F27405D7566C4115606B1D67EDC04C7CDA0B",
         "sourceSha256": "1A5960D0D34FDBEC3F3DBF1AB0516E4AE4443FC1B41F2C25CBA8952207697722"
       },
       "collision": {
@@ -2508,10 +3329,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm25_01/object-placement.json",
-        "sha256": "E405018D56A9B29A8D8200F50647CF0FE2BBF27BB1C5E8D47D5030B3111105D6",
+        "sha256": "456E85FB372A4562B81F87B78D7BFE5521C35D363EF8024DFBD139B79629AC1F",
         "sourceSha256": "CEDE3C6DC57E9846B327D0A59B91C2CD5FF1BFA053F998AFA26041BFCE8F30A3",
         "count": 13,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm25_01/object-cell-bank.json",
+        "sha256": "2B908BD3EF1CC7C0A04A9A9FFFFD6A2180B0F4152F783C1A2E455A70ABF5FEC2",
+        "cellCount": 19,
+        "renderedCellCount": 19,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm25_01/core-native.png",
+        "coreSha256": "6095D320A19644AE118FB725AC86EE9B35F45F2CA5255F38EE47B4C5331BA16C",
+        "staticCompositeFile": "fields/field_cm25_01/static-composite-native.png",
+        "staticCompositeSha256": "C2651FEACC316538325A76324279F9C75EEF482542E89D4EB588F16B9BF89430",
+        "cleanGoldenSha256": "C2651FEACC316538325A76324279F9C75EEF482542E89D4EB588F16B9BF89430",
+        "researchGoldenSha256": "77F095516BB656C3A3F0297158CC4BC95DE00BE526B07954CEDB7EE40446F22A",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 233,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -2588,7 +3443,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm26_01/core-tilemap.json",
-        "sha256": "32351314382C559EB983B8FE6501A06DD00FBFC94B6068280E6B66923E7BA599",
+        "sha256": "F56B0999A2ABB22C7C6EE1007B3E007C33C44E0A4BC2B58A8BFB731BC5E6F740",
         "sourceSha256": "0CD3BE311F14C282EA48924375A7277F8EC7B6A6571C0AE5F6E84CDA1107455E"
       },
       "collision": {
@@ -2605,10 +3460,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm26_01/object-placement.json",
-        "sha256": "CA7F28BAFE93B9531EACA94907C4640BD946C017B94D4A4E7B18DF5E923F1EE9",
+        "sha256": "FEDE55CAD0E9F6F44B5FEE2C38089B8FA82E78D14738CF80CD6B4F8C848C7D62",
         "sourceSha256": "E969C60CC6F088DB8FC3DCF7785B2F69CCEF4106D70F433984EEEEDB4CBF18C4",
         "count": 11,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm26_01/object-cell-bank.json",
+        "sha256": "A923A41E1828490431B43E949E9745609610602500C9A0B91D6C0ADC3294C0F2",
+        "cellCount": 6,
+        "renderedCellCount": 6,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm26_01/core-native.png",
+        "coreSha256": "0F96C165B15F3FC55BFD79E076B650AFD7885C5AD7A89E3C5980EA520882460D",
+        "staticCompositeFile": "fields/field_cm26_01/static-composite-native.png",
+        "staticCompositeSha256": "0602AFAEFE12FC26F7B1FB7E7289E66758F10925A597A52AAF19B39B2E95DC1C",
+        "cleanGoldenSha256": "F76164BB526589F092B84EC1866DC2417FAC330CE37A34DF4EAB97ED71D57B41",
+        "researchGoldenSha256": "2AF900CD5B727412B08BDB109ECD8BFB24D72EF5EE0BE946D0EE828BDFE818B0",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 312,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -2685,7 +3574,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm27_01/core-tilemap.json",
-        "sha256": "20D4F75B1C4D6DF57BBFAA8562BBAA13FDF61D5C24EED1F6DEDEB15BFBA9B0C2",
+        "sha256": "140D82CD19E89C5955E991B2BA0ABA9DAAD909D10EB495B8E13E0C541B419D12",
         "sourceSha256": "8857A2A8C545E09DF4A11FFD97BE42B35CE6069A4781ED565ABA498B37A8FF54"
       },
       "collision": {
@@ -2702,10 +3591,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm27_01/object-placement.json",
-        "sha256": "5C2F6679C926630D0A3C381AE7B02856D62300ED91E1C66BCDD7EDDD8B92D160",
+        "sha256": "08ABD34A1DD787BB534BF9F114BB430F517F64C45D6E9F0E586894212DC6D6FD",
         "sourceSha256": "08494BF8EE59DAA23AA59AB6FC3313CA8DC1A76D1FCCD5773AB01A613491BD8D",
         "count": 12,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm27_01/object-cell-bank.json",
+        "sha256": "D3D83BC632828D2917B7C51804F5B11043C26C97B4CC8C4465B136BEE8E0DEF9",
+        "cellCount": 7,
+        "renderedCellCount": 7,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm27_01/core-native.png",
+        "coreSha256": "16BE54E1BC0C326C3BB7861A109E7CEA5B4CECB03FFE91487ECDBD349169BD45",
+        "staticCompositeFile": "fields/field_cm27_01/static-composite-native.png",
+        "staticCompositeSha256": "8B8F4007A523437FC90E4A952969C6CDE151013FDA2B681D1F3D989D029F7963",
+        "cleanGoldenSha256": "E3AE07BCCCD66F18793215AAF10107D4D9CBD0FF76F96C00619859E6001CBBA2",
+        "researchGoldenSha256": "13F62E3E3F5E79BA3808057E96C18F2EE41C6468687B9A87978B1B5EFBFDF40A",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 379,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -2782,7 +3705,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm28_01/core-tilemap.json",
-        "sha256": "99DC3B474F9F4B2948CE9F84E47E46CAC50AF981247764725C9D2E7F06CA6CCB",
+        "sha256": "A4A7C0505C8A8B4DBED5F3A8E93A25B5F5F1FD2B959B33A2D0EC83724EC48A5B",
         "sourceSha256": "B9174D623C6EE92D5D55E635E5AF2B2B248BB2603521DF7626B4377D523F3148"
       },
       "collision": {
@@ -2803,6 +3726,34 @@
         "sourceSha256": null,
         "count": 0,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "NOT_PRESENT"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm28_01/core-native.png",
+        "coreSha256": "83645C8BF31F87FA5808FDBA0E821541F1FC09E121CBCE74232CDFF9011E593A",
+        "staticCompositeFile": "fields/field_cm28_01/static-composite-native.png",
+        "staticCompositeSha256": "83645C8BF31F87FA5808FDBA0E821541F1FC09E121CBCE74232CDFF9011E593A",
+        "cleanGoldenSha256": "B4F17BAFC3A7CD196F7BC4513A89A60B96598F279C2E6C9EBC4790E5810A9134",
+        "researchGoldenSha256": "C5E35870AFDEFB58E7D9891F08B71CCFA86ACFE742095320B42BC8F085EFE35D",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 370,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -2879,7 +3830,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm29_01/core-tilemap.json",
-        "sha256": "50254AD3FD63C31A66539B6C9D6189693BC6EA0FFC28C2927F8C6F0617F159DC",
+        "sha256": "DA7FD5F931C8EC43043809D8E8C7020D6D8F88C1329C573D390778F54AB09539",
         "sourceSha256": "0602D3F5FDBB2485B3430147A22F243CF62543A98B2B80621AA5A100575DAC5A"
       },
       "collision": {
@@ -2900,6 +3851,34 @@
         "sourceSha256": null,
         "count": 0,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "NOT_PRESENT"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm29_01/core-native.png",
+        "coreSha256": "6C85AB18018882C461F3A4A84BFC05CFCE5DF2D2DFC4C78606E7EB67B27533B6",
+        "staticCompositeFile": "fields/field_cm29_01/static-composite-native.png",
+        "staticCompositeSha256": "6C85AB18018882C461F3A4A84BFC05CFCE5DF2D2DFC4C78606E7EB67B27533B6",
+        "cleanGoldenSha256": "6C85AB18018882C461F3A4A84BFC05CFCE5DF2D2DFC4C78606E7EB67B27533B6",
+        "researchGoldenSha256": "890BFD1B4787032FC49BB3078CEBDA56E06DC5A21D967E903D98822A18FA2AB4",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 33,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -2976,7 +3955,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm30_01/core-tilemap.json",
-        "sha256": "BEEDE1E4B0E1B79B48F3136275CB53209EC8965EF4A3D24D5E5ED14066156C42",
+        "sha256": "CBA3BC419E1FC77762063087B521DFC3512B772ECCBF1EDC0A196A119434EC05",
         "sourceSha256": "4BACC88CD4E1194C83859ABCFAFCB7BC5486B32965B62259AA8FAC19F02BB0A2"
       },
       "collision": {
@@ -2993,10 +3972,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm30_01/object-placement.json",
-        "sha256": "5FD5F5950ED2E46DAE845EB67DCFE51B6DA6C539FB51BC733643F693B723F99F",
+        "sha256": "95A1A7859E0B3C5E3E2DF6B1FF929BC1FAB0218FAF47EE905C7CD4FD49193F3A",
         "sourceSha256": "BF7B68DC22B3917720F3F0ED0D67FFB2C77D7AD421847919D4F736A86A0749F9",
         "count": 1,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm30_01/object-cell-bank.json",
+        "sha256": "2E3ABEC98A25E745B49EA378018110379A5D8B60FFFCA1007F9A3D91412F69FA",
+        "cellCount": 5,
+        "renderedCellCount": 5,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm30_01/core-native.png",
+        "coreSha256": "09BC66324BDB9777A828EB182F163F2E6E0E9DE78762D72166AF0C29522AF838",
+        "staticCompositeFile": "fields/field_cm30_01/static-composite-native.png",
+        "staticCompositeSha256": "762D2DE9EC05354C0DD0C4662189970716D8D091AE1157F26199191552BAD19B",
+        "cleanGoldenSha256": "4598538854557E0732B9E1B8A394B494F62FB25118837AB801CF7E0F828E211E",
+        "researchGoldenSha256": "5F9C237DDAA4D54C57B0909667F89C6F2F25331B5534231C7C4F67F9AEF28584",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 123,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -3073,7 +4086,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm31_01/core-tilemap.json",
-        "sha256": "A38C05C74AEC9E8E5D282FDB10ACA5C640501AAEB9CD24961DB75E643B6C3BAB",
+        "sha256": "4B8473740C395B1C2DBDC975FD35105B5F0E2EEF0D56CF07ECDC3B4D8D535FFE",
         "sourceSha256": "8780E234AC6F067A65ADF9F0E07CA32B6A6FD6C8B9EFEE22DC325175BFBC462B"
       },
       "collision": {
@@ -3090,10 +4103,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm31_01/object-placement.json",
-        "sha256": "A947CD93C05933C24DD7C8894BEE1B1909A12C4AA815D034AC718071A93CA8FB",
+        "sha256": "CDBD3A1F6AB43F7BDC03BDDAD3954E0D9F72CDE77DC4BEFE034D57BE9E1B4E93",
         "sourceSha256": "6853D115764A0FF82AC23A43458AD1B9764722DCF0D9ABA2C39AC8571B418B18",
         "count": 3,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm31_01/object-cell-bank.json",
+        "sha256": "8BC0C71351F1763E0625F08AC123A677EB9AB37FF12556DDB08E8D1204807FB4",
+        "cellCount": 8,
+        "renderedCellCount": 8,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm31_01/core-native.png",
+        "coreSha256": "3938633F98BA9E06F5998611774B17F6109C157814D057CAA7DF25C573133434",
+        "staticCompositeFile": "fields/field_cm31_01/static-composite-native.png",
+        "staticCompositeSha256": "A09EACC4DB56D22503F4124E148BF0E941BF04C0E442997C2050AD4A20401A27",
+        "cleanGoldenSha256": "A09EACC4DB56D22503F4124E148BF0E941BF04C0E442997C2050AD4A20401A27",
+        "researchGoldenSha256": "4D5D7E3AA162614A52CB82968812162C13F6ABA247F02D34EB86518E6D362B57",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 170,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -3170,7 +4217,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm32_01/core-tilemap.json",
-        "sha256": "4EE53C8D10F958145DE1B0F5FC67CE5008C7336222A86F98F60BC710713B9ADB",
+        "sha256": "45DA5DF0A7F900976BA32B74E555B99AF464C9BC4C5ACF3346DFA694B66A6CC6",
         "sourceSha256": "9D7707662F6094B5BE4913C44D82C62CF37BD472D8A37E39E54CF393AC9DDC97"
       },
       "collision": {
@@ -3187,10 +4234,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm32_01/object-placement.json",
-        "sha256": "290C827CEED1A1219F8E6EF17C584ADEC9A461972A132E1141B5BA4BC97D5BE6",
+        "sha256": "386F1C29CACAB4F111270ADE239A65A1B042A843A5895A46A18C397650283032",
         "sourceSha256": "E0C2E43F59664651D2B32A08EC008544F2EEA752C2773F388DBD73AC7B32A9CD",
         "count": 7,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm32_01/object-cell-bank.json",
+        "sha256": "F961E1CE93BA90251E43ED36C495AC8737E454D72547FF8733EECC73829B642D",
+        "cellCount": 4,
+        "renderedCellCount": 4,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm32_01/core-native.png",
+        "coreSha256": "2C402BFB361EBDA9F3C046E0B50084E6286BB951905DBB4C5C4BE4F2CA95DFD2",
+        "staticCompositeFile": "fields/field_cm32_01/static-composite-native.png",
+        "staticCompositeSha256": "6C2A10C430A86A687CD44C15C9877E99481018BE37BCC45083425A72DE2A12D9",
+        "cleanGoldenSha256": "49E4FBADA12561448290CC2A3F91FCBC16912DBEFA92427B6BA6ECB3BCBA1B79",
+        "researchGoldenSha256": "C81134BE936DF81B56D4BC914E445F67A4168DA9C0D87311BF13761E87869015",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 133,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -3267,7 +4348,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm33_01/core-tilemap.json",
-        "sha256": "711253BBBF25C32306614622C223A79EF5F2523E1305A1C3BA18CA9BEB82085D",
+        "sha256": "02744C9F24E810F7CAC8A52BBB2401AC768FBE141F99BC2DF21CB4C5931DB5E7",
         "sourceSha256": "58F664EEB54F14DBD7CC85257CE0F7DAD302FD1EF59C2C844BDD13948E97B3DC"
       },
       "collision": {
@@ -3284,10 +4365,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm33_01/object-placement.json",
-        "sha256": "1EE9C014A1EF61E78C1161636B4E294A50278BCD85443FB1AB606C19855C7BBE",
+        "sha256": "151185552CE93015649951B5476D997BC70F70F37EF0AFDA498279CC82AE3300",
         "sourceSha256": "CC2FFBAB860074006A559995AA51B55AB21066C7BF86293816FE2258A4494472",
         "count": 1,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm33_01/object-cell-bank.json",
+        "sha256": "C44279DBCCB64673899BAC6AED507E1901A2241864D1099749D6EB0D9F97264A",
+        "cellCount": 2,
+        "renderedCellCount": 2,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm33_01/core-native.png",
+        "coreSha256": "E21551DC6439349ACC77197FDE42542E82E44646B8E5F1706A01E738EC07DBB5",
+        "staticCompositeFile": "fields/field_cm33_01/static-composite-native.png",
+        "staticCompositeSha256": "DD9D4F1C4085FE71BDD48A366F6746B16C84547AF8A4B48FE5980297D214A498",
+        "cleanGoldenSha256": "9C08F42403527F5322EF78A5A50FB03F46D713E98F7F75F8F72AE1E9847379D7",
+        "researchGoldenSha256": "21F286C8AF23F8AC9DDCF7001A5FADEB2C4CDEC5E87BD3FF3B7E63DB00CC1BD9",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 107,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -3364,7 +4479,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm34_01/core-tilemap.json",
-        "sha256": "D9D044CCB1DFB8C6C29A1C71CC5F64E49A128CEA0FC6B580BB5412EDF28CE2FF",
+        "sha256": "D25F8DCDB172EF633173DA833280C21EFE9288587E41D70FCE6C72D0B54EB45A",
         "sourceSha256": "D58041E6AC9978581E10DD2DE9430EDE268F28127D2D09494F7D7535B9B24D95"
       },
       "collision": {
@@ -3381,10 +4496,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm34_01/object-placement.json",
-        "sha256": "7A51555693BDD297A3042C58F8D16E9D129853E14340DCE3C007F8F5C430A527",
+        "sha256": "BC553F88A88728AF62C6F3329EFE212360AA475A3FF0EABC6E979B72D53068B9",
         "sourceSha256": "FA9AA1096E3993E09CE9699BD59DFC1D27519062AB015AFE3FF37A6B30251A95",
         "count": 3,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm34_01/object-cell-bank.json",
+        "sha256": "88C35BD5D61EDBC25CA9EF29F49BFFCA09339A04202E2AF1B398C2EF57AAEE9F",
+        "cellCount": 4,
+        "renderedCellCount": 4,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm34_01/core-native.png",
+        "coreSha256": "E1AEDFF00E9ADE167D55923267F88269B6721B6D3F9778099826F6CAD1C475A0",
+        "staticCompositeFile": "fields/field_cm34_01/static-composite-native.png",
+        "staticCompositeSha256": "FA21582CB1BF91EE1153E3F21EB3907B6C75D1C27B5F463033B6C8B462321212",
+        "cleanGoldenSha256": "FA21582CB1BF91EE1153E3F21EB3907B6C75D1C27B5F463033B6C8B462321212",
+        "researchGoldenSha256": "42EA6D43508235255C582AE506A53094295D7684DF8E7A4FCE6F0ED522FAA266",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 101,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -3461,7 +4610,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm35_01/core-tilemap.json",
-        "sha256": "2307D197F1EE5A98FE89D10BBB7806E868552A9F98C646D5EF0A8E2269C57ECD",
+        "sha256": "E585AD74B0E61AB2912FFE2D40C5C05A09419F915A62218702A6484E9AC4F725",
         "sourceSha256": "BFAF5E7A5792346CBCF5D9EA27B37DECCE53B7DFF126F4A9F30F5B420BAE98B0"
       },
       "collision": {
@@ -3482,6 +4631,40 @@
         "sourceSha256": "6D7272C34B11E2EE194A7E3F48D406B4321D8B5F89EF38137C7D9A916647AEBB",
         "count": 0,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm35_01/object-cell-bank.json",
+        "sha256": "035DC683E778115E8D336FFA12E2EB5CF3146E42EB5F2A7944CE8FC619918866",
+        "cellCount": 2,
+        "renderedCellCount": 2,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm35_01/core-native.png",
+        "coreSha256": "B3759C766DDC78313420735D0A8E58D3B95A438B9040E26A3FC02342D59B9CE5",
+        "staticCompositeFile": "fields/field_cm35_01/static-composite-native.png",
+        "staticCompositeSha256": "B3759C766DDC78313420735D0A8E58D3B95A438B9040E26A3FC02342D59B9CE5",
+        "cleanGoldenSha256": "82DFEC5260F8B640620B3ED5345520C74C02DA85D596A4AF359071E76A57F4C2",
+        "researchGoldenSha256": "F7AB3D47CDECAF2F94C2F7C63DEC1B05DCB495743D9DA9F37F7CA532AC640D2E",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 130,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -3558,7 +4741,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm36_01/core-tilemap.json",
-        "sha256": "46CD808781C1D8EA62FAAA569FC612723AE60F4685AF7A85FE4C63B31B54B94B",
+        "sha256": "757CC40A9CDBC84B7E86E8DACD97D000BFA5A8924F546056C1A27DC07B49096F",
         "sourceSha256": "6EA43B5B8B6F88B46D8EC0D3F0C9CF2AED431C5B52513330AD4B08D95C3BE1A6"
       },
       "collision": {
@@ -3579,6 +4762,40 @@
         "sourceSha256": "BEF711A3F30CA39DA2DE0A336C4803D0014A796AAD426B5103E658A85CB54C64",
         "count": 0,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm36_01/object-cell-bank.json",
+        "sha256": "089FC9106B796193EF768FACEE93487B961CF3986EB12C036C397281A4513DF9",
+        "cellCount": 2,
+        "renderedCellCount": 2,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm36_01/core-native.png",
+        "coreSha256": "299FAFE111E0B77AB79113DC349CCBB73E83D0ACAFB060FAA2EC04846AC59C90",
+        "staticCompositeFile": "fields/field_cm36_01/static-composite-native.png",
+        "staticCompositeSha256": "299FAFE111E0B77AB79113DC349CCBB73E83D0ACAFB060FAA2EC04846AC59C90",
+        "cleanGoldenSha256": "299FAFE111E0B77AB79113DC349CCBB73E83D0ACAFB060FAA2EC04846AC59C90",
+        "researchGoldenSha256": "AE4C200EE9278E0DF113969D6E77C0E8A807A8978B480E73ED93FE7F1FBAAB25",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 105,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -3655,7 +4872,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm37_01/core-tilemap.json",
-        "sha256": "03082BD834FE9FDDC459C2BE0DB6CE0B0A5969F67611570CE072B7C17B48C208",
+        "sha256": "F2A77BF1558B6CAD0C8F97BFF567644B50752A51C89CA8A8BC90D98D1E44EA11",
         "sourceSha256": "8BFD338711D8F9D33AE88C7530EEAFAE4CA3ADB9E0B9107935B16DCE6EE514B8"
       },
       "collision": {
@@ -3676,6 +4893,40 @@
         "sourceSha256": "05C7F4C0BE37FAFEE38837EEC20102162050781F672D6275F2DFB2B0377E21AE",
         "count": 0,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm37_01/object-cell-bank.json",
+        "sha256": "3B883B409677C2DCB9DD8EE3462902EB9AEE63326CD53FE1FBE69ADCFC7B36ED",
+        "cellCount": 5,
+        "renderedCellCount": 5,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm37_01/core-native.png",
+        "coreSha256": "9C815D2070703A1E4662DA1222337F6FD51F2400F335C9CC62308320B79A88E3",
+        "staticCompositeFile": "fields/field_cm37_01/static-composite-native.png",
+        "staticCompositeSha256": "9C815D2070703A1E4662DA1222337F6FD51F2400F335C9CC62308320B79A88E3",
+        "cleanGoldenSha256": "9C815D2070703A1E4662DA1222337F6FD51F2400F335C9CC62308320B79A88E3",
+        "researchGoldenSha256": "0FEDD63319BDE38E0DA9D374B7CF33DF360AC80656AA4630531D343E69360906",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 122,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -3752,7 +5003,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm38_01/core-tilemap.json",
-        "sha256": "C694EE21E0BC14E3A7EED570C86BC2AAB31FB7321CF49B3E763F79ECC9D18F14",
+        "sha256": "FAE01F0F7A442392E298CF9DF9D499F75DC8D8FB9365A2F81A91EB0EEBA98436",
         "sourceSha256": "DE7F77F778C25134E5192652046E9A61628E6A51AB73A5D408D77B8982E77893"
       },
       "collision": {
@@ -3769,10 +5020,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm38_01/object-placement.json",
-        "sha256": "37BD9748DEDB16AD1475C0D3BD81A903C03E25D4C8A2B7A14A82C5E16DB722CB",
+        "sha256": "EC3F21AA1D40ECB0D42B167318FDEB24E297A183E22A65E293C734BC5B3AFF45",
         "sourceSha256": "C19655FF47D3F3755360CA9C0FCA2456D74F007E560BC3ECB448E6D3F0D7EA36",
         "count": 10,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm38_01/object-cell-bank.json",
+        "sha256": "A618A10E58262E030D55DC60D6A3778E16BF9786B32CB96ABFB97DF5E8B4FD9A",
+        "cellCount": 16,
+        "renderedCellCount": 16,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm38_01/core-native.png",
+        "coreSha256": "B8AB35B765BCEB8E3B07BFE566003E9A208EF8C7D95F984E1B2F3D8107BADBF6",
+        "staticCompositeFile": "fields/field_cm38_01/static-composite-native.png",
+        "staticCompositeSha256": "0FD5E12BBA3551AD5BF4026BFA79BA79BF71C0F6137357716A0D0F591AEFFD3C",
+        "cleanGoldenSha256": "5A0E89A7DDBCC97CCD260ADAC13BC23CC4A0FE17CAACD8F4C34F3A7744E7B1C4",
+        "researchGoldenSha256": "23F5E449369D6779FFA68AA04B0770235DED6445801BF5020376A35056240EF2",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 119,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -3849,7 +5134,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm39_01/core-tilemap.json",
-        "sha256": "AB55881376F4E15F258234FD9E5B6088907C2788B751EFD9B18FFD90C9939295",
+        "sha256": "42C4FD98F7209AD99443463FDEECFDB814F2CCBE8295C829576011625ACB132F",
         "sourceSha256": "04B0273C2333CDFEBC220DFA07B49D70DE734AD72E36A9EED3F2756D388C041C"
       },
       "collision": {
@@ -3866,10 +5151,44 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm39_01/object-placement.json",
-        "sha256": "979830D7763B2D87344D5E86B0C5912B54231FDC45CDD8B070A89BAF75F7DB77",
+        "sha256": "B893C28A53F63D795DD9FD91C935ED5E2BF4A0A516B05848FFAE4A9A9AA31700",
         "sourceSha256": "928E9C8038ED9C6EF572F43EC906785D1C98D8BE9331885AC4B0005797B5D2E2",
         "count": 1,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm39_01/object-cell-bank.json",
+        "sha256": "45C2EAAB41BD9C73EDF3AD7B4441164ED5F61DEF8857DB388DD7706D2C79888C",
+        "cellCount": 2,
+        "renderedCellCount": 2,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm39_01/core-native.png",
+        "coreSha256": "C5F9E9C0346E53164D98127E023DDF033DFB99DDED74B90430C95D3287B81F00",
+        "staticCompositeFile": "fields/field_cm39_01/static-composite-native.png",
+        "staticCompositeSha256": "F2B3A8DE7672CF4C9D83F82972A82A5F92055082FFD1A5DCFD83A0893F8D4F85",
+        "cleanGoldenSha256": "F2B3A8DE7672CF4C9D83F82972A82A5F92055082FFD1A5DCFD83A0893F8D4F85",
+        "researchGoldenSha256": "50E95B0BBFB37DCA47B4180C3AB15E45A440E46BD2AA0AA6763534E88439F875",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 22,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "PRESENT_VERIFIED_ROM_DECODED",
@@ -3982,7 +5301,7 @@
       },
       "coreTilemap": {
         "file": "fields/field_cm40_01/core-tilemap.json",
-        "sha256": "4D8175259D6812989A450749744725DC2FE82475C863C865B3A96515FC6BE043",
+        "sha256": "48D63EE17E5A3B4C073205A10580CB80753910DDE77331CAE1FB3A5473E3DB0E",
         "sourceSha256": "A4F6B6B3940E73441372E141276F859F55EC0C1410E0EFC7456E4B1A4B557AC3"
       },
       "collision": {
@@ -4003,6 +5322,40 @@
         "sourceSha256": "A4BA46B57E9150629185F4B1D1DCA62F366537D79D71B9BD30CB58FBD136F11B",
         "count": 0,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "objectCellBank": {
+        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "file": "fields/field_cm40_01/object-cell-bank.json",
+        "sha256": "9797B6D263D297C6A6FA6DA1BBE476EA414A4F04D9C3A27DD3AC8E1F471D3E73",
+        "cellCount": 2,
+        "renderedCellCount": 2,
+        "invalidPlacementCellIds": [],
+        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+      },
+      "exactStaticAssembly": {
+        "status": "RAW_STATIC_PIXEL_EXACT",
+        "coreFile": "fields/field_cm40_01/core-native.png",
+        "coreSha256": "5CE17C1A4630401C31C7ADB4F01706272DF904C1A4EA8A22956693D670580040",
+        "staticCompositeFile": "fields/field_cm40_01/static-composite-native.png",
+        "staticCompositeSha256": "5CE17C1A4630401C31C7ADB4F01706272DF904C1A4EA8A22956693D670580040",
+        "cleanGoldenSha256": "27474FA6AAB08684BE4C2F761C65D187239455D2A06C1AE0AD5E8AEEDB33D244",
+        "researchGoldenSha256": "1D1E64227E00685F026A439D1B69363C2AE3393F87F4190E9AE3DA89846DEE51",
+        "cleanPixelDiffCount": 0,
+        "researchPixelDiffCount": 0,
+        "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
+        "coreGraphics": {
+          "formatCode": 4,
+          "pixelFormat": "INDEXED_8BPP",
+          "tileSize": "8x8",
+          "bytesPerTile": 64,
+          "tileCount": 132,
+          "transferMode": "LINEAR_TILE_SEQUENCE"
+        },
+        "corePalette": {
+          "colorEncoding": "BGR555",
+          "colorCount": 256
+        },
+        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -4057,6 +5410,8 @@
     "all40HdRoundTripPixelExact": true,
     "all40CollisionDimensionsMatchTilemaps": true,
     "all40AttributeDimensionsMatchTilemaps": true,
+    "all40CoreAndStaticLayersRecomposedPixelExactly": true,
+    "objectCellBanksExactlyRecomposed": 36,
     "allFourAnimatedLayerBundlesDecoded": true,
     "animatedLayerFramesDecoded": 8,
     "objectPlacementRelayoutPerformed": false,

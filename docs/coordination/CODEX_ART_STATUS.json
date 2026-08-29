@@ -3,9 +3,9 @@
   "owner": "CODEX_ART",
   "lastUpdated": "2026-08-29",
   "syncBatch": "ART_A3_CAGE_EXACT_ORIGINAL_FAITHFUL_HD40_BASELINE",
-  "syncRevision": 14,
-  "syncRevisionTarget": 14,
-  "status": "CAGE_HD40_BASELINE_COMPLETE_CM12_CM18_OBJECT_CONFLICTS_QUARANTINED",
+  "syncRevision": 15,
+  "syncRevisionTarget": 15,
+  "status": "CAGE_HD40_EXACT_RAW_ASSEMBLY_COMPLETE_CM12_CM18_OBJECT_CONFLICTS_QUARANTINED",
   "sourceOfTruth": {
     "coordinationRoot": "docs/coordination",
     "canonicalRepository": ".",
@@ -68,10 +68,10 @@
     {
       "id": "ART-A3-CAGE-FAITHFUL-HD40",
       "status": "40_OF_40_VISUAL_AND_COLLISION_BASELINES_38_FULL_COMPOSITIONS",
-      "summary": "Owner correction replaced generated Cage production art with an exact-original baseline: 40 raw-layer visual goldens, 40 deterministic 4x nearest-neighbour HD outputs, raw NBS tilemaps, COL collision, ATR attributes, original OPM coordinates, and all four verified native BSAR animated terrain bundles. CM09 water and the CM07/CM21/CM39 animated layers are restored. JavaScript format parsers preserve raw values. CM12/CM18 object-index conflicts remain quarantined and unbound.",
+      "summary": "Owner correction replaced generated Cage production art with an exact-original baseline: 40 deterministic raw core/static reconstructions, 40 deterministic 4x nearest-neighbour HD outputs, direct-14-bit NBS tilemaps, COL collision, ATR attributes, original lower-14-bit OPM cell words/coordinates/flips, 36 exact NCER/linear-NCBR object banks, and all four verified native BSAR animated terrain bundles. Every clean and void-diagnostic reconstruction has zero differing RGBA pixels against the archive goldens. CM09 water and the CM07/CM21/CM39 animated layers are restored. CM12/CM18 object-index conflicts remain quarantined and unbound.",
       "output": "docs/art/production/cage/faithful-hd40/manifest.json",
       "receipt": "docs/art/production/cage/FAITHFUL_HD40_RECEIPT.md",
-      "validation": "265 generated files rebuild byte-identically; 40/40 HD images round-trip to exact raw-layer frame-0 composites; 40/40 NBS/COL/ATR dimensions match; 4/4 BSAR bundles and 8/8 frames decode deterministically",
+      "validation": "619 generated files rebuild byte-identically; 40/40 raw core/static clean and diagnostic reconstructions have zero RGBA pixel differences; 36 complete object banks rebuild cell-by-cell; 40/40 HD images round-trip exactly; 40/40 NBS/COL/ATR dimensions match; 4/4 BSAR bundles and 8/8 frames decode deterministically",
       "rights": "OWNER_REPORTED_LICENSED_SOURCE_LINK_PENDING",
       "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
       "humanApproved": false,
@@ -256,7 +256,7 @@
     {
       "id": "ART-A3-CAGE-FAITHFUL-HD40",
       "status": "BASELINE_COMPLETE_RUNTIME_BINDING_BLOCKED",
-      "summary": "Exact original visual, NBS, OPM, COL, ATR and all four verified Cage BSAR animated terrain bundles are now available for 40 fields. CM09 water-layer omission is closed. CM12 and CM18 require original object-index decode closure; runtime binding and shipping remain blocked pending linked licence evidence and a Cage presentation contract."
+      "summary": "Exact original visual, direct-14-bit NBS, lower-14-bit OPM cell binding/flips, NCER/linear-NCBR object banks, COL, ATR and all four verified Cage BSAR animated terrain bundles are available for 40 fields. CM09 water-layer omission is closed and all clean/diagnostic raw assemblies are pixel-exact. CM12 and CM18 still require original missing-cell evidence; runtime binding and shipping remain blocked pending linked licence evidence and a Cage presentation contract."
     },
     {
       "id": "VS2-PRESENTATION-BINDING",
@@ -330,6 +330,7 @@
     "docs/art/production/cage/faithful-hd40/manifest.json",
     "docs/art/production/cage/FAITHFUL_HD40_RECEIPT.md",
     "scripts/build-cage-faithful-hd40.py",
+    "scripts/lib/ydij_map_formats.py",
     "scripts/lib/cage-original-formats.mjs",
     "tests/championship-cage-faithful-hd40-cases.mjs",
     "docs/art/technical/a1-map-tech/cage/transparent-qa-checker.png",

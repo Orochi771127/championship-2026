@@ -1,0 +1,107 @@
+{
+  "format": "YDIJ_NCER_CELL_BANK",
+  "cellCount": 2,
+  "bankType": 1,
+  "mappingType": 1,
+  "cells": [
+    {
+      "cellIndex": 0,
+      "rawCellAttribute": 2054,
+      "bounds": {
+        "minX": -15,
+        "minY": 0,
+        "maxXExclusive": 1,
+        "maxYExclusive": 16
+      },
+      "oamCount": 1,
+      "oamEntries": [
+        {
+          "ordinal": 0,
+          "rawAttr0": 0,
+          "rawAttr1": 16881,
+          "rawAttr2": 8192,
+          "x": -15,
+          "y": 0,
+          "width": 16,
+          "height": 16,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 0,
+          "priority": 0,
+          "paletteBank": 2
+        }
+      ]
+    },
+    {
+      "cellIndex": 1,
+      "rawCellAttribute": 2054,
+      "bounds": {
+        "minX": -15,
+        "minY": 0,
+        "maxXExclusive": 1,
+        "maxYExclusive": 16
+      },
+      "oamCount": 1,
+      "oamEntries": [
+        {
+          "ordinal": 0,
+          "rawAttr0": 0,
+          "rawAttr1": 16881,
+          "rawAttr2": 8194,
+          "x": -15,
+          "y": 0,
+          "width": 16,
+          "height": 16,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 2,
+          "priority": 0,
+          "paletteBank": 2
+        }
+      ]
+    }
+  ],
+  "sourcePayloads": {
+    "ncerSha256": "0F6450501A5D6592EE8BBCE2BCB3E0684373E220C5B5972D1132C99BF98AF9EB",
+    "ncbrSha256": "7DB94F95C5135BCAC9D2D1DCE5B83046E4D38D8D11DA56DB6699FA02922E2C72",
+    "nclrSha256": "7C8D4BD68A6B36F0E5976B099CDF6AAFEB122E96B16423221D3E79B6E1ABFE48"
+  },
+  "graphics": {
+    "formatCode": 3,
+    "pixelFormat": "INDEXED_4BPP",
+    "tileSize": "8x8",
+    "bytesPerTile": 32,
+    "tileCount": 8,
+    "transferMode": "LINEAR_TILE_SEQUENCE"
+  },
+  "palette": {
+    "colorEncoding": "BGR555",
+    "colorCount": 256
+  },
+  "renderedCells": [
+    {
+      "cellIndex": 0,
+      "file": "fields/field_cm35_01/object-cells/cell-000.png",
+      "sha256": "5F2EFA98FFA647F7CE7B596683E3DFB472A6AE371111E3F1A6D8CAC607E181F1",
+      "anchorX": 15,
+      "anchorY": 0,
+      "width": 16,
+      "height": 16
+    },
+    {
+      "cellIndex": 1,
+      "file": "fields/field_cm35_01/object-cells/cell-001.png",
+      "sha256": "80CB388915DFF4CD77C2B711F96DE93028FB15AA736DC816B245F5152369F006",
+      "anchorX": 15,
+      "anchorY": 0,
+      "width": 16,
+      "height": 16
+    }
+  ],
+  "invalidPlacementCellIds": [],
+  "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+}

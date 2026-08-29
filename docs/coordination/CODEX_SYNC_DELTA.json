@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "owner": "CODEX_ART",
   "deltaId": "CODEX-ART-A3-CAGE-FAITHFUL-HD40-2026-08-29",
-  "targetSyncRevision": 14,
-  "status": "CAGE_HD40_BASELINE_COMPLETE_CM12_CM18_OBJECT_CONFLICTS_QUARANTINED",
+  "targetSyncRevision": 15,
+  "status": "CAGE_HD40_EXACT_RAW_ASSEMBLY_COMPLETE_CM12_CM18_OBJECT_CONFLICTS_QUARANTINED",
   "statusSource": "docs/coordination/CODEX_ART_STATUS.json",
   "baseSyncRevision": 13,
   "checkpoint": {
@@ -34,10 +34,10 @@
   "completedWork": [
     {
       "id": "ART-A3-CAGE-FAITHFUL-HD40",
-      "state": "40_OF_40_VISUAL_COLLISION_ATTRIBUTE_TILEMAP_BASELINES_4_OF_4_ANIMATED_TERRAIN_BUNDLES_38_FULL_OBJECT_COMPOSITIONS",
-      "scope": "Exact original Cage raw-layer composition and 4x HD output plus NBS tilemaps, OPM source coordinates, COL collision, ATR attributes, four BSAR animated terrain bundles and browser format parsers",
+      "state": "40_OF_40_PIXEL_EXACT_RAW_ASSEMBLIES_36_COMPLETE_OBJECT_BANKS_4_OF_4_ANIMATED_TERRAIN_BUNDLES",
+      "scope": "Exact original Cage raw core/static composition and 4x HD output plus direct-14-bit NBS tilemaps, lower-14-bit OPM cell words/source coordinates/flips, NCER/linear-NCBR object banks, COL collision, ATR attributes, four BSAR animated terrain bundles and browser format parsers",
       "sourcePolicy": "VERIFIED_ROM_SHA_SOURCE_VALUES_PRESERVED_ROM_AND_NITRO_BINARIES_NOT_COMMITTED",
-      "technicalQa": "265_FILES_BYTE_IDENTICAL_40_OF_40_HD_PIXEL_ROUNDTRIP_40_OF_40_NBS_COL_ATR_DIMENSIONS_MATCH_4_OF_4_BSAR_BUNDLES_8_OF_8_FRAMES",
+      "technicalQa": "619_FILES_BYTE_IDENTICAL_40_OF_40_CLEAN_AND_DIAGNOSTIC_RAW_ASSEMBLIES_ZERO_RGBA_DIFF_36_OBJECT_BANKS_CELL_BY_CELL_40_OF_40_HD_PIXEL_ROUNDTRIP_40_OF_40_NBS_COL_ATR_DIMENSIONS_MATCH_4_OF_4_BSAR_BUNDLES_8_OF_8_FRAMES",
       "gameplayPolicy": "RAW_CLASSES_PRESERVED_WITHOUT_SEMANTIC_REINTERPRETATION_CM12_CM18_OBJECT_CONFLICTS_NOT_BOUND",
       "runtimeEligible": false,
       "shippingStatus": "NOT_SHIPPING_READY_LICENSE_LINK_AND_RUNTIME_QA_PENDING",
@@ -287,6 +287,7 @@
     }
   ],
   "ownerDecisionsApplied": [
+    "Owner corrected the Cage direction to 100% original art, code-side assembly, object collision/placement data and palette, with only an HD presentation increase; no content redesign or object relayout is permitted in this batch.",
     "Owner directed work to continue on the approved Cage/Hunt technical batch; the bounded continuation creates transparent Cage masters only and does not authorize all-forty mass production or runtime promotion.",
     "Owner approved the Cage twelve-module board and Hunt HM01/HM09 board for the next bounded technicalization batch; this is visual-direction approval, not gameplay-semantic or runtime-promotion authority.",
     "Owner rejected broad character recolouring and selected original major palette families with changed shapes, anatomy, content and 2026 finish.",

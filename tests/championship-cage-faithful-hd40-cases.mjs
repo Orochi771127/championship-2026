@@ -36,6 +36,11 @@ test("every HD image is exactly 4x the verified native dimensions and all derive
     assert.equal(field.faithfulHd4x.height, field.nativeOriginal.height * 4);
     assert.equal(field.faithfulHd4x.downsampleRoundTripEqualsOriginal, true);
     const records = [field.nativeOriginal, field.faithfulHd4x, field.coreTilemap, field.collision, field.attribute, field.objectPlacement];
+    records.push(
+      { file: field.exactStaticAssembly.coreFile, sha256: field.exactStaticAssembly.coreSha256 },
+      { file: field.exactStaticAssembly.staticCompositeFile, sha256: field.exactStaticAssembly.staticCompositeSha256 },
+    );
+    if (field.objectCellBank.status !== "NOT_PRESENT") records.push(field.objectCellBank);
     if (field.animatedLayer.status === "PRESENT_VERIFIED_ROM_DECODED") {
       records.push(field.animatedLayer, ...field.animatedLayer.layerFrames, field.animatedLayer.alternateCompositeFrame, field.animatedLayer.alternateFaithfulHd4xFrame);
       assert.equal(field.animatedLayer.frameCount, 2);
@@ -45,6 +50,15 @@ test("every HD image is exactly 4x the verified native dimensions and all derive
       const file = `${root}/${record.file}`;
       assert.equal(fs.existsSync(file), true, file);
       assert.equal(digest(file), record.sha256, file);
+    }
+    if (field.objectCellBank.status !== "NOT_PRESENT") {
+      const bank = JSON.parse(fs.readFileSync(`${root}/${field.objectCellBank.file}`, "utf8"));
+      assert.equal(bank.renderedCells.length, field.objectCellBank.renderedCellCount);
+      for (const cell of bank.renderedCells) {
+        const file = `${root}/${cell.file}`;
+        assert.equal(fs.existsSync(file), true, file);
+        assert.equal(digest(file), cell.sha256, file);
+      }
     }
   }
 });
@@ -58,6 +72,8 @@ test("collision, attribute, tilemap and placement data preserve original raw cla
     assert.equal(collision.cells.length, collision.width * collision.height);
     assert.equal(attribute.cells.length, attribute.width * attribute.height);
     assert.equal(tilemap.cells.length, tilemap.width * tilemap.height);
+    assert.equal(tilemap.format, "YDIJ_NBSR_DIRECT14_TILEMAP_V2");
+    assert.equal(tilemap.tileEntrySemantics, "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS");
     assert.deepEqual([collision.width, collision.height], [tilemap.width, tilemap.height]);
     assert.deepEqual([attribute.width, attribute.height], [tilemap.width, tilemap.height]);
     assert.equal(collision.classSemantics, "RAW_CLASS_XX_NOT_REINTERPRETED");
@@ -78,6 +94,8 @@ test("collision, attribute, tilemap and placement data preserve original raw cla
   assert.equal(manifest.qa.unknownClassSemanticsInvented, false);
   assert.equal(manifest.qa.allFourAnimatedLayerBundlesDecoded, true);
   assert.equal(manifest.qa.animatedLayerFramesDecoded, 8);
+  assert.equal(manifest.qa.all40CoreAndStaticLayersRecomposedPixelExactly, true);
+  assert.equal(manifest.qa.objectCellBanksExactlyRecomposed, 36);
 });
 
 test("browser-side original Cage format parsers preserve raw values", () => {
@@ -100,10 +118,11 @@ test("browser-side original Cage format parsers preserve raw values", () => {
   nbsView.setUint32(8, 2, true);
   nbsView.setUint32(12, 1, true);
   nbsView.setUint32(16, 1, true);
-  nbsView.setUint16(20, 7 | 0x0400, true);
-  nbsView.setUint16(22, 9 | 0x0800, true);
+  nbsView.setUint16(20, 7 | 0x4000, true);
+  nbsView.setUint16(22, 4097 | 0x8000, true);
   const nbs = parseOriginalCageNbs(nbsBytes);
-  assert.deepEqual(nbs.cells.map(({ tileIndex, horizontalFlip, verticalFlip }) => [tileIndex, horizontalFlip, verticalFlip]), [[7, true, false], [9, false, true]]);
+  assert.equal(nbs.format, "YDIJ_NBSR_DIRECT14_TILEMAP_V2");
+  assert.deepEqual(nbs.cells.map(({ tileIndex, horizontalFlip, verticalFlip }) => [tileIndex, horizontalFlip, verticalFlip]), [[7, true, false], [4097, false, true]]);
 
   const opmBytes = new Uint8Array(36);
   opmBytes.set(new TextEncoder().encode("OPMD"));
@@ -112,13 +131,17 @@ test("browser-side original Cage format parsers preserve raw values", () => {
   opmBytes[8] = 3;
   opmBytes.set(new TextEncoder().encode("obj"), 9);
   opmView.setUint32(16, 1, true);
-  opmView.setUint16(20, 2, true);
+  opmView.setUint16(20, 2 | 0x4000, true);
   opmView.setUint16(22, 68, true);
   opmView.setUint16(24, 88, true);
   opmView.setFloat32(28, 1, true);
   const opm = parseOriginalCageOpm(opmBytes);
   assert.equal(opm.placementCount, 1);
   assert.deepEqual([opm.placements[0].cellId, opm.placements[0].sourceX, opm.placements[0].sourceY], [2, 68, 88]);
+  assert.deepEqual(
+    [opm.placements[0].rawCellWord, opm.placements[0].horizontalFlip, opm.placements[0].verticalFlip],
+    [2 | 0x4000, false, true],
+  );
 
   const bsarBytes = new Uint8Array(46);
   bsarBytes.set(new TextEncoder().encode("BSAR"));

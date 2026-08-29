@@ -1,0 +1,343 @@
+{
+  "format": "YDIJ_NCER_CELL_BANK",
+  "cellCount": 5,
+  "bankType": 1,
+  "mappingType": 1,
+  "cells": [
+    {
+      "cellIndex": 0,
+      "rawCellAttribute": 2077,
+      "bounds": {
+        "minX": -78,
+        "minY": -9,
+        "maxXExclusive": 2,
+        "maxYExclusive": 55
+      },
+      "oamCount": 3,
+      "oamEntries": [
+        {
+          "ordinal": 0,
+          "rawAttr0": 247,
+          "rawAttr1": 49586,
+          "rawAttr2": 12288,
+          "x": -78,
+          "y": -9,
+          "width": 64,
+          "height": 64,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 0,
+          "priority": 0,
+          "paletteBank": 3
+        },
+        {
+          "ordinal": 1,
+          "rawAttr0": 33015,
+          "rawAttr1": 33266,
+          "rawAttr2": 12320,
+          "x": -14,
+          "y": -9,
+          "width": 16,
+          "height": 32,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 32,
+          "priority": 0,
+          "paletteBank": 3
+        },
+        {
+          "ordinal": 2,
+          "rawAttr0": 32791,
+          "rawAttr1": 33266,
+          "rawAttr2": 12324,
+          "x": -14,
+          "y": 23,
+          "width": 16,
+          "height": 32,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 36,
+          "priority": 0,
+          "paletteBank": 3
+        }
+      ]
+    },
+    {
+      "cellIndex": 1,
+      "rawCellAttribute": 2078,
+      "bounds": {
+        "minX": -79,
+        "minY": -30,
+        "maxXExclusive": 81,
+        "maxYExclusive": 2
+      },
+      "oamCount": 3,
+      "oamEntries": [
+        {
+          "ordinal": 0,
+          "rawAttr0": 16610,
+          "rawAttr1": 49585,
+          "rawAttr2": 40,
+          "x": -79,
+          "y": -30,
+          "width": 64,
+          "height": 32,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 40,
+          "priority": 0,
+          "paletteBank": 0
+        },
+        {
+          "ordinal": 1,
+          "rawAttr0": 16610,
+          "rawAttr1": 49649,
+          "rawAttr2": 56,
+          "x": -15,
+          "y": -30,
+          "width": 64,
+          "height": 32,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 56,
+          "priority": 0,
+          "paletteBank": 0
+        },
+        {
+          "ordinal": 2,
+          "rawAttr0": 226,
+          "rawAttr1": 32817,
+          "rawAttr2": 72,
+          "x": 49,
+          "y": -30,
+          "width": 32,
+          "height": 32,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 72,
+          "priority": 0,
+          "paletteBank": 0
+        }
+      ]
+    },
+    {
+      "cellIndex": 2,
+      "rawCellAttribute": 2081,
+      "bounds": {
+        "minX": -87,
+        "minY": -30,
+        "maxXExclusive": 89,
+        "maxYExclusive": 2
+      },
+      "oamCount": 4,
+      "oamEntries": [
+        {
+          "ordinal": 0,
+          "rawAttr0": 16610,
+          "rawAttr1": 49577,
+          "rawAttr2": 80,
+          "x": -87,
+          "y": -30,
+          "width": 64,
+          "height": 32,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 80,
+          "priority": 0,
+          "paletteBank": 0
+        },
+        {
+          "ordinal": 1,
+          "rawAttr0": 16610,
+          "rawAttr1": 49641,
+          "rawAttr2": 96,
+          "x": -23,
+          "y": -30,
+          "width": 64,
+          "height": 32,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 96,
+          "priority": 0,
+          "paletteBank": 0
+        },
+        {
+          "ordinal": 2,
+          "rawAttr0": 226,
+          "rawAttr1": 32809,
+          "rawAttr2": 112,
+          "x": 41,
+          "y": -30,
+          "width": 32,
+          "height": 32,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 112,
+          "priority": 0,
+          "paletteBank": 0
+        },
+        {
+          "ordinal": 3,
+          "rawAttr0": 32994,
+          "rawAttr1": 32841,
+          "rawAttr2": 120,
+          "x": 73,
+          "y": -30,
+          "width": 16,
+          "height": 32,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 120,
+          "priority": 0,
+          "paletteBank": 0
+        }
+      ]
+    },
+    {
+      "cellIndex": 3,
+      "rawCellAttribute": 2059,
+      "bounds": {
+        "minX": -5,
+        "minY": -31,
+        "maxXExclusive": 3,
+        "maxYExclusive": 1
+      },
+      "oamCount": 1,
+      "oamEntries": [
+        {
+          "ordinal": 0,
+          "rawAttr0": 32993,
+          "rawAttr1": 16891,
+          "rawAttr2": 4220,
+          "x": -5,
+          "y": -31,
+          "width": 8,
+          "height": 32,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 124,
+          "priority": 0,
+          "paletteBank": 1
+        }
+      ]
+    },
+    {
+      "cellIndex": 4,
+      "rawCellAttribute": 2059,
+      "bounds": {
+        "minX": -14,
+        "minY": -30,
+        "maxXExclusive": 2,
+        "maxYExclusive": 2
+      },
+      "oamCount": 1,
+      "oamEntries": [
+        {
+          "ordinal": 0,
+          "rawAttr0": 32994,
+          "rawAttr1": 33266,
+          "rawAttr2": 4222,
+          "x": -14,
+          "y": -30,
+          "width": 16,
+          "height": 32,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 126,
+          "priority": 0,
+          "paletteBank": 1
+        }
+      ]
+    }
+  ],
+  "sourcePayloads": {
+    "ncerSha256": "2715E2380245DCE2535CD55994332892C41073A67C26DC1AA5AB37CF8EA3787E",
+    "ncbrSha256": "D8EE6644B3019AED055D8465BBE816851A38CC5A9DA3980B1F8ED97DD98623AD",
+    "nclrSha256": "C75C3CD724AC3023A1D40887E961C128BAD57A661D1AD29F26A66017A1496A02"
+  },
+  "graphics": {
+    "formatCode": 3,
+    "pixelFormat": "INDEXED_4BPP",
+    "tileSize": "8x8",
+    "bytesPerTile": 32,
+    "tileCount": 260,
+    "transferMode": "LINEAR_TILE_SEQUENCE"
+  },
+  "palette": {
+    "colorEncoding": "BGR555",
+    "colorCount": 256
+  },
+  "renderedCells": [
+    {
+      "cellIndex": 0,
+      "file": "fields/field_cm37_01/object-cells/cell-000.png",
+      "sha256": "FB07E581CDCA5D3EFDB6C557A18A0F6004212792976715DEDC347A76D5D5F073",
+      "anchorX": 78,
+      "anchorY": 9,
+      "width": 80,
+      "height": 64
+    },
+    {
+      "cellIndex": 1,
+      "file": "fields/field_cm37_01/object-cells/cell-001.png",
+      "sha256": "7899BEDC0CF805F3C4D2573D5AF885F60648038B5DA8AC0538570441A9509AFF",
+      "anchorX": 79,
+      "anchorY": 30,
+      "width": 160,
+      "height": 32
+    },
+    {
+      "cellIndex": 2,
+      "file": "fields/field_cm37_01/object-cells/cell-002.png",
+      "sha256": "EF7DC4B9A134F411936B80817AC47407A1D08AABA96A58CFDAC0E8BD4EEA1E47",
+      "anchorX": 87,
+      "anchorY": 30,
+      "width": 176,
+      "height": 32
+    },
+    {
+      "cellIndex": 3,
+      "file": "fields/field_cm37_01/object-cells/cell-003.png",
+      "sha256": "767642D500625958F27137FF3B39192C9FB3AEA09C9FCE561A184E51905128EC",
+      "anchorX": 5,
+      "anchorY": 31,
+      "width": 8,
+      "height": 32
+    },
+    {
+      "cellIndex": 4,
+      "file": "fields/field_cm37_01/object-cells/cell-004.png",
+      "sha256": "1421AD1B8EF6A79CCCE10D481F8B532900A6A19B769CC766BC48B3420CC3938A",
+      "anchorX": 14,
+      "anchorY": 30,
+      "width": 16,
+      "height": 32
+    }
+  ],
+  "invalidPlacementCellIds": [],
+  "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+}

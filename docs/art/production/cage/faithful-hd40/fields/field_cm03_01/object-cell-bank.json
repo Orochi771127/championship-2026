@@ -1,0 +1,163 @@
+{
+  "format": "YDIJ_NCER_CELL_BANK",
+  "cellCount": 3,
+  "bankType": 1,
+  "mappingType": 1,
+  "cells": [
+    {
+      "cellIndex": 0,
+      "rawCellAttribute": 2056,
+      "bounds": {
+        "minX": -17,
+        "minY": -23,
+        "maxXExclusive": 23,
+        "maxYExclusive": 9
+      },
+      "oamCount": 2,
+      "oamEntries": [
+        {
+          "ordinal": 0,
+          "rawAttr0": 233,
+          "rawAttr1": 33263,
+          "rawAttr2": 8192,
+          "x": -17,
+          "y": -23,
+          "width": 32,
+          "height": 32,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 0,
+          "priority": 0,
+          "paletteBank": 2
+        },
+        {
+          "ordinal": 1,
+          "rawAttr0": 33001,
+          "rawAttr1": 16399,
+          "rawAttr2": 8200,
+          "x": 15,
+          "y": -23,
+          "width": 8,
+          "height": 32,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 8,
+          "priority": 0,
+          "paletteBank": 2
+        }
+      ]
+    },
+    {
+      "cellIndex": 1,
+      "rawCellAttribute": 2057,
+      "bounds": {
+        "minX": -17,
+        "minY": -24,
+        "maxXExclusive": 15,
+        "maxYExclusive": 8
+      },
+      "oamCount": 1,
+      "oamEntries": [
+        {
+          "ordinal": 0,
+          "rawAttr0": 232,
+          "rawAttr1": 33263,
+          "rawAttr2": 4106,
+          "x": -17,
+          "y": -24,
+          "width": 32,
+          "height": 32,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 10,
+          "priority": 0,
+          "paletteBank": 1
+        }
+      ]
+    },
+    {
+      "cellIndex": 2,
+      "rawCellAttribute": 2052,
+      "bounds": {
+        "minX": -7,
+        "minY": -12,
+        "maxXExclusive": 9,
+        "maxYExclusive": 4
+      },
+      "oamCount": 1,
+      "oamEntries": [
+        {
+          "ordinal": 0,
+          "rawAttr0": 244,
+          "rawAttr1": 16889,
+          "rawAttr2": 18,
+          "x": -7,
+          "y": -12,
+          "width": 16,
+          "height": 16,
+          "affine": false,
+          "disabled": false,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "tileIndex": 18,
+          "priority": 0,
+          "paletteBank": 0
+        }
+      ]
+    }
+  ],
+  "sourcePayloads": {
+    "ncerSha256": "33D7FF772AEB1D44119765232A1EB8C1BACC7DCD58AE2927B75AE602C964C7AA",
+    "ncbrSha256": "33DE519A6F1B8BC90742A82F5C5CE8A7E7ADFEEAA6CC3C80F37A50BA2E13C397",
+    "nclrSha256": "F66A57F0B3BB3864DE6EA40BD180E806166C4A5095056D1A17222A9C64720985"
+  },
+  "graphics": {
+    "formatCode": 3,
+    "pixelFormat": "INDEXED_4BPP",
+    "tileSize": "8x8",
+    "bytesPerTile": 32,
+    "tileCount": 40,
+    "transferMode": "LINEAR_TILE_SEQUENCE"
+  },
+  "palette": {
+    "colorEncoding": "BGR555",
+    "colorCount": 256
+  },
+  "renderedCells": [
+    {
+      "cellIndex": 0,
+      "file": "fields/field_cm03_01/object-cells/cell-000.png",
+      "sha256": "ED56B95E96F3A299DFFA181DD8149BEE10B36978A6275592DC1F4BA4AF22C599",
+      "anchorX": 17,
+      "anchorY": 23,
+      "width": 40,
+      "height": 32
+    },
+    {
+      "cellIndex": 1,
+      "file": "fields/field_cm03_01/object-cells/cell-001.png",
+      "sha256": "65EA190A5647B82662378B7E7C69D3F5061223DD70CB3049C9E0F4414435D706",
+      "anchorX": 17,
+      "anchorY": 24,
+      "width": 32,
+      "height": 32
+    },
+    {
+      "cellIndex": 2,
+      "file": "fields/field_cm03_01/object-cells/cell-002.png",
+      "sha256": "8F5EFE9790FBCB7B94E1B342FD5E1BD97A33C38A29DAB191297AC9C7102A6F52",
+      "anchorX": 7,
+      "anchorY": 12,
+      "width": 16,
+      "height": 16
+    }
+  ],
+  "invalidPlacementCellIds": [],
+  "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+}
