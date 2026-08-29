@@ -12,6 +12,19 @@ import {
 } from "../scripts/lib/cage-original-formats.mjs";
 
 const root = "docs/art/production/cage/faithful-hd40";
+const ownerDirectives = JSON.parse(fs.readFileSync("docs/art/production/cage/CAGE_OWNER_ADAPTATION_DIRECTIVES.json", "utf8"));
+
+test("CM27 remake removes the center Digimon mark without rewriting the exact reference baseline", () => {
+  assert.equal(ownerDirectives.baselinePolicy, "KEEP_EXACT_ORIGINAL_REFERENCE_UNCHANGED_FOR_COMPARISON");
+  assert.equal(ownerDirectives.directives.length, 1);
+  const directive = ownerDirectives.directives[0];
+  assert.equal(directive.directiveId, "CAGE-CM27-REMOVE-CENTER-DIGIMON-MARK");
+  assert.equal(directive.fieldId, "field_cm27_01");
+  assert.equal(directive.instruction, "REMOVE_FROM_REMADE_ART");
+  assert.ok(directive.appliesTo.includes("SHIPPING_ART"));
+  assert.ok(directive.doesNotApplyTo.includes("EXACT_ORIGINAL_REFERENCE_BASELINE"));
+  assert.match(directive.dataBoundary, /PRESERVE_ORIGINAL_LAYOUT_COLLISION_ATTRIBUTE_AND_PLACEMENT_DATA/);
+});
 const manifest = JSON.parse(fs.readFileSync(`${root}/manifest.json`, "utf8"));
 const digest = (file) => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex").toUpperCase();
 

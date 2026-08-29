@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "owner": "CODEX_ART",
   "deltaId": "CODEX-ART-A3-A4-EXACT-BASELINE-TECHNICAL-QA-HUNT-INPUT-TRACE-2026-08-29",
-  "targetSyncRevision": 18,
+  "targetSyncRevision": 19,
   "status": "CAGE_HD40_AND_HUNT_HD30_TECHNICAL_QA_COMPLETE_HUNT_PAN_ROM_VERIFIED_RUNTIME_CORRECTION_PENDING",
   "statusSource": "docs/coordination/CODEX_ART_STATUS.json",
   "baseSyncRevision": 13,
@@ -32,6 +32,16 @@
     "documentationOnly": false
   },
   "completedWork": [
+    {
+      "id": "ART-A3-CM27-OWNER-ADAPTATION-DIRECTIVE",
+      "state": "LOCKED_REMOVE_CENTER_DIGIMON_MARK_FROM_REMADE_ART",
+      "scope": "field_cm27_01 genuine HD redraw runtime and shipping presentation only",
+      "sourcePolicy": "EXACT_ORIGINAL_REFERENCE_BASELINE_REMAINS_UNCHANGED",
+      "gameplayPolicy": "VISUAL_ONLY_NO_LAYOUT_COLLISION_ATTRIBUTE_NBS_OR_PLACEMENT_CHANGE",
+      "runtimeEligible": false,
+      "shippingStatus": "REDRAW_NOT_YET_EXECUTED",
+      "output": "docs/art/production/cage/CAGE_OWNER_ADAPTATION_DIRECTIVES.json"
+    },
     {
       "id": "RESEARCH-HUNT-FIELD-PAN-ROM-TRACE",
       "state": "ROM_AND_OWNER_VERIFIED_INVERSE_DELTA_CAMERA_PAN",
@@ -320,6 +330,7 @@
     }
   ],
   "ownerDecisionsApplied": [
+    "Owner requires the Digimon mark at the center of field_cm27_01 to be removed from the genuine remake art while preserving the exact original comparison baseline and all other CM27 object positions and gameplay data.",
     "Owner play-history confirms the contextual hand tool: empty-space drag pans Cage/Hunt maps, Cage creatures can be grabbed and dropped to another grid location, and Hunt capture later accepts the subdued creature. OVL0 independently verifies inverse-delta Hunt camera panning and 256x192 viewport clamps.",
     "Owner identified the red Hunt regions as incomplete; the production baseline must restore source BSAR animated terrain rather than retain diagnostic red blocks.",
     "Owner corrected the Cage direction to 100% original art, code-side assembly, object collision/placement data and palette, with only an HD presentation increase; no content redesign or object relayout is permitted in this batch.",

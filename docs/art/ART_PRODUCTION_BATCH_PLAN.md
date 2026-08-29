@@ -122,6 +122,15 @@ The numeric species mix is locked, but exact membership of the launch 96 is sele
 
 Every post-launch pack contains a balanced mix and may not invalidate stable entity IDs or saves. New art replaces presentation records only.
 
+### Cage owner adaptation register
+
+The exact-original Cage baselines remain unchanged comparison authority. During
+the genuine A3 redraw, apply the machine-readable exceptions in
+`docs/art/production/cage/CAGE_OWNER_ADAPTATION_DIRECTIVES.json`. The first
+locked exception is CM27: remove the Owner-identified Digimon mark at the image
+center from remade/runtime/shipping art without moving other objects or changing
+COL, ATR, NBS or placement data.
+
 ## Required production receipt
 
 Every completed batch records asset IDs, licence reference, production files, atlas/bundle, human verdict, viewport/device QA, memory/performance result, rollback path and next Owner gate. The production index changes only after the receipt passes.

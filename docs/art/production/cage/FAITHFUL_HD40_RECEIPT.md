@@ -69,6 +69,15 @@ newly redrawn resolution-independent art. Any later hand-redrawn HD pass must
 retain these raw reconstructions as the placement, silhouette, collision and
 pixel-difference authority.
 
+## Owner-approved remake exception
+
+`field_cm27_01` retains its exact original center mark in this comparison
+baseline, but the Owner requires that the Digimon mark at the image center be
+removed from the genuine hand-redrawn HD master, runtime presentation and
+shipping art. No other CM27 terrain/object position, COL, ATR, NBS or placement
+data changes under this visual-only directive. The machine-readable instruction
+is `CAGE_OWNER_ADAPTATION_DIRECTIVES.json`.
+
 ## Follow-up technical QA
 
 `docs/art/production/technical-qa/cage-hunt-exact-baseline/manifest.json`

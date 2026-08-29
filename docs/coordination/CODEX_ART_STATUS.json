@@ -3,8 +3,8 @@
   "owner": "CODEX_ART",
   "lastUpdated": "2026-08-29",
   "syncBatch": "ART_A3_A4_EXACT_BASELINE_TECHNICAL_QA_AND_HUNT_INPUT_TRACE",
-  "syncRevision": 18,
-  "syncRevisionTarget": 18,
+  "syncRevision": 19,
+  "syncRevisionTarget": 19,
   "status": "CAGE_HD40_AND_HUNT_HD30_TECHNICAL_QA_COMPLETE_HUNT_PAN_ROM_VERIFIED_RUNTIME_CORRECTION_PENDING",
   "sourceOfTruth": {
     "coordinationRoot": "docs/coordination",
@@ -65,6 +65,17 @@
     "o3dCheckpointIsolatedFromRuntimeRegistryAndP2": true
   },
   "completed": [
+    {
+      "id": "ART-A3-CM27-OWNER-ADAPTATION-DIRECTIVE",
+      "status": "LOCKED_REMOVE_CENTER_DIGIMON_MARK_FROM_REMADE_ART",
+      "summary": "Owner requires the central Digimon mark in field_cm27_01 to be absent from the genuine HD redraw, runtime and shipping art. The exact-original reference baseline remains unchanged; all other layout, collision, attribute and placement data remain preserved.",
+      "output": "docs/art/production/cage/CAGE_OWNER_ADAPTATION_DIRECTIVES.json",
+      "validation": "Machine-readable directive locked by repository test",
+      "rights": "OWNER_APPROVED_VISUAL_ADAPTATION",
+      "productionStatus": "DIRECTIVE_LOCKED_REDRAW_NOT_YET_EXECUTED",
+      "humanApproved": true,
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
     {
       "id": "RESEARCH-HUNT-FIELD-PAN-ROM-TRACE",
       "status": "ROM_AND_OWNER_VERIFIED_INVERSE_DELTA_CAMERA_PAN",

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "lastUpdated": "2026-08-29",
+  "authority": "OWNER_DIRECTIVE",
+  "baselinePolicy": "KEEP_EXACT_ORIGINAL_REFERENCE_UNCHANGED_FOR_COMPARISON",
+  "directives": [
+    {
+      "directiveId": "CAGE-CM27-REMOVE-CENTER-DIGIMON-MARK",
+      "fieldId": "field_cm27_01",
+      "productionAssetId": "production:cage:map:field-cm27-01",
+      "targetElement": "OWNER_IDENTIFIED_DIGIMON_MARK_AT_IMAGE_CENTER",
+      "instruction": "REMOVE_FROM_REMADE_ART",
+      "appliesTo": [
+        "GENUINE_HAND_REDRAWN_HD_MASTER",
+        "RUNTIME_PRESENTATION",
+        "SHIPPING_ART"
+      ],
+      "doesNotApplyTo": [
+        "EXACT_ORIGINAL_REFERENCE_BASELINE",
+        "ROM_COMPARISON_GOLDEN",
+        "FORENSIC_QA_CONTACT_SHEET"
+      ],
+      "dataBoundary": "VISUAL_REMOVAL_ONLY_PRESERVE_ORIGINAL_LAYOUT_COLLISION_ATTRIBUTE_AND_PLACEMENT_DATA_UNLESS_A_SEPARATE_OWNER_DIRECTIVE_CHANGES_GAMEPLAY",
+      "acceptance": "THE_CENTER_MARK_IS_NOT_VISIBLE_IN_THE_REMADE_CM27_ART_AND_NO_OTHER_CM27_OBJECT_OR_TERRAIN_POSITION_MOVES"
+    }
+  ]
+}
