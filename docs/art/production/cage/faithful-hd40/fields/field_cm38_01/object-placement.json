@@ -1,0 +1,112 @@
+{
+  "format": "YDIJ_OPMD_RAW_V1",
+  "sourceSha256": "C19655FF47D3F3755360CA9C0FCA2456D74F007E560BC3ECB448E6D3F0D7EA36",
+  "version": 4,
+  "bundleName": "field_cm38_01_obj",
+  "placementCount": 10,
+  "placementSemantics": "SOURCE_ORDER_AND_COORDINATES_PRESERVED_NO_VISUAL_RELAYOUT",
+  "placements": [
+    {
+      "ordinal": 0,
+      "cellId": 2,
+      "sourceX": 0,
+      "sourceY": 36,
+      "rawFlags": 65535,
+      "rawFloatA": 1.0,
+      "rawFloatB": 0.0,
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+    },
+    {
+      "ordinal": 1,
+      "cellId": 2,
+      "sourceX": 16,
+      "sourceY": 44,
+      "rawFlags": 65535,
+      "rawFloatA": 1.0,
+      "rawFloatB": 0.0,
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+    },
+    {
+      "ordinal": 2,
+      "cellId": 2,
+      "sourceX": 32,
+      "sourceY": 52,
+      "rawFlags": 65535,
+      "rawFloatA": 1.0,
+      "rawFloatB": 0.0,
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+    },
+    {
+      "ordinal": 3,
+      "cellId": 2,
+      "sourceX": 48,
+      "sourceY": 60,
+      "rawFlags": 65535,
+      "rawFloatA": 1.0,
+      "rawFloatB": 0.0,
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+    },
+    {
+      "ordinal": 4,
+      "cellId": 2,
+      "sourceX": 64,
+      "sourceY": 68,
+      "rawFlags": 65535,
+      "rawFloatA": 1.0,
+      "rawFloatB": 0.0,
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+    },
+    {
+      "ordinal": 5,
+      "cellId": 5,
+      "sourceX": 80,
+      "sourceY": 76,
+      "rawFlags": 65535,
+      "rawFloatA": 1.0,
+      "rawFloatB": 0.0,
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+    },
+    {
+      "ordinal": 6,
+      "cellId": 1,
+      "sourceX": 35,
+      "sourceY": 41,
+      "rawFlags": 0,
+      "rawFloatA": 1.0,
+      "rawFloatB": 0.0,
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+    },
+    {
+      "ordinal": 7,
+      "cellId": 1,
+      "sourceX": 67,
+      "sourceY": 57,
+      "rawFlags": 0,
+      "rawFloatA": 1.0,
+      "rawFloatB": 0.0,
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+    },
+    {
+      "ordinal": 8,
+      "cellId": 4,
+      "sourceX": 47,
+      "sourceY": 103,
+      "rawFlags": 0,
+      "rawFloatA": 1.0,
+      "rawFloatB": 0.0,
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+    },
+    {
+      "ordinal": 9,
+      "cellId": 3,
+      "sourceX": 23,
+      "sourceY": 103,
+      "rawFlags": 0,
+      "rawFloatA": 1.0,
+      "rawFloatB": 0.0,
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+    }
+  ],
+  "quarantined": false,
+  "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+}

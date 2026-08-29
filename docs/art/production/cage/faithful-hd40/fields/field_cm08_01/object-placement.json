@@ -1,0 +1,32 @@
+{
+  "format": "YDIJ_OPMD_RAW_V1",
+  "sourceSha256": "C98B72B99814F978DDA74E299760718C31B8893FCB1F34D9ED5AE96F556F05A6",
+  "version": 4,
+  "bundleName": "field_cm08_01_obj",
+  "placementCount": 2,
+  "placementSemantics": "SOURCE_ORDER_AND_COORDINATES_PRESERVED_NO_VISUAL_RELAYOUT",
+  "placements": [
+    {
+      "ordinal": 0,
+      "cellId": 0,
+      "sourceX": 73,
+      "sourceY": 127,
+      "rawFlags": 0,
+      "rawFloatA": 1.0,
+      "rawFloatB": 0.0,
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+    },
+    {
+      "ordinal": 1,
+      "cellId": 1,
+      "sourceX": 200,
+      "sourceY": 165,
+      "rawFlags": 0,
+      "rawFloatA": 1.0,
+      "rawFloatB": 0.0,
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+    }
+  ],
+  "quarantined": false,
+  "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+}

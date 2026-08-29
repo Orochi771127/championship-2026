@@ -1,6 +1,6 @@
 # Championship 2026 — Art Production Batch Plan
 
-Status: `A0 IMPLEMENTED / CM01–CM10 CLEAN-ROOM REVIEW PACK COMPLETE / OWNER VISUAL REVIEW NEXT`
+Status: `A0 IMPLEMENTED / CAGE CM01–CM40 EXACT-ORIGINAL HD BASELINE COMPLETE / CM12+CM18 OBJECT CONFLICTS OPEN`
 Authority: Owner directive of 2026-08-29
 
 ## Batch sequence
@@ -43,12 +43,14 @@ col` and proceeds CM01–CM10, CM11–CM20, CM21–CM30 and CM31–CM40. The twe
 concept modules remain a visual-vocabulary pilot and are not counted as the
 first twelve CM fields.
 
-CM01–CM10 now has a clean-room review packet with ten separate core-field
-candidates, ten detachable-object bundles, RGBA technical canvases, stable
-bottom-centre anchors, source boards, generation prompts and deterministic QA.
-This closes visual identity and layer-separation drafting only. It does not yet
-authorize tile-atlas slicing, object placement, gameplay shape masks or runtime
-promotion; those begin after Owner visual review of the two contact sheets.
+The Owner rejected the generated CM01–CM10 staging result because it moved
+objects away from their original positions. That packet is withdrawn. The
+replacement faithful-HD40 baseline covers all forty original visual fields,
+preserves original NBS tile order, OPM object source coordinates, COL collision
+classes and ATR attribute classes, and enlarges the verified native composite
+exactly 4× with nearest-neighbour sampling. Thirty-eight fields have full
+composition confidence; CM12 and CM18 preserve their original object-index
+conflicts and are forbidden from guessed binding.
 
 ### Characters
 

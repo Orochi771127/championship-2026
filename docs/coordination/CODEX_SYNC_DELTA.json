@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "owner": "CODEX_ART",
-  "deltaId": "CODEX-ART-A3-CAGE-CM01-CM10-2026-08-29",
-  "targetSyncRevision": 12,
-  "status": "CM01_CM10_REVIEW_PACK_COMPLETE_OWNER_VISUAL_REVIEW_NEXT",
+  "deltaId": "CODEX-ART-A3-CAGE-FAITHFUL-HD40-2026-08-29",
+  "targetSyncRevision": 13,
+  "status": "CAGE_HD40_BASELINE_COMPLETE_CM12_CM18_OBJECT_CONFLICTS_QUARANTINED",
   "statusSource": "docs/coordination/CODEX_ART_STATUS.json",
-  "baseSyncRevision": 11,
+  "baseSyncRevision": 12,
   "checkpoint": {
     "latestOwnerApprovedCommit": "732775486665b21508ac51c1eea0b723db0f7744",
     "message": "art(research): approve O2 224-entity character catalog",
@@ -33,15 +33,26 @@
   },
   "completedWork": [
     {
+      "id": "ART-A3-CAGE-FAITHFUL-HD40",
+      "state": "40_OF_40_VISUAL_COLLISION_ATTRIBUTE_TILEMAP_BASELINES_38_FULL_OBJECT_COMPOSITIONS",
+      "scope": "Exact original Cage visual composition and 4x HD output plus NBS tilemaps, OPM source coordinates, COL collision, ATR attributes and browser format parsers",
+      "sourcePolicy": "VERIFIED_ROM_SHA_SOURCE_VALUES_PRESERVED_ROM_AND_NITRO_BINARIES_NOT_COMMITTED",
+      "technicalQa": "245_FILES_BYTE_IDENTICAL_40_OF_40_HD_PIXEL_ROUNDTRIP_40_OF_40_NBS_COL_ATR_DIMENSIONS_MATCH",
+      "gameplayPolicy": "RAW_CLASSES_PRESERVED_WITHOUT_SEMANTIC_REINTERPRETATION_CM12_CM18_OBJECT_CONFLICTS_NOT_BOUND",
+      "runtimeEligible": false,
+      "shippingStatus": "NOT_SHIPPING_READY_LICENSE_LINK_AND_RUNTIME_QA_PENDING",
+      "output": "docs/art/production/cage/faithful-hd40/manifest.json"
+    },
+    {
       "id": "ART-A3-CAGE-CM01-CM10-REVIEW-PACK",
-      "state": "COMPLETE_OWNER_VISUAL_REVIEW_PENDING",
-      "scope": "Ten core fields and ten separate object bundles for CM01-CM10",
+      "state": "SUPERSEDED_WITHDRAWN_BY_OWNER_CORRECTION",
+      "scope": "Historical generated CM01-CM10 review packet removed after object-placement rejection",
       "sourcePolicy": "APPROVED_REMAKE_STYLE_BOARD_ONLY_NO_ROM_IMAGE_INPUT_NO_ORIGINAL_PIXELS",
       "technicalQa": "23_FILES_BYTE_IDENTICAL_10_OF_10_RGBA_BOTTOM_CENTER_ANCHORED",
       "gameplayPolicy": "PLACEMENT_ATR_COL_RAISING_EFFECTS_AND_GAMEPLAY_MASKS_NOT_INFERRED",
       "runtimeEligible": false,
       "shippingStatus": "NOT_SHIPPING_READY",
-      "output": "docs/art/production/cage/cm01-cm10/packages/manifest.json"
+      "output": "GIT_HISTORY_ONLY"
     },
     {
       "id": "ART-A1-CAGE-ORIGINAL-STRUCTURE",

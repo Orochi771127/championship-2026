@@ -1,0 +1,46 @@
+# Cage CM01–CM40 exact-original HD baseline receipt
+
+Date: 2026-08-29
+
+Status: `40/40 VISUAL BASELINES / 38 FULL COMPOSITIONS / 2 OBJECT CONFLICTS QUARANTINED`
+
+## Owner correction applied
+
+The generated CM01–CM10 production packet and its manually arranged staging
+previews were withdrawn. The active Cage direction is now 100% original-faithful:
+original composition, palette, field shape, tile order, object cell order,
+object source coordinates, collision raw classes, attribute raw classes and
+art-format parsing are preserved. The only visual transformation in this batch
+is deterministic 4× nearest-neighbour enlargement.
+
+## Delivered
+
+- 40 byte-identical decoded native clean views retained as the comparison golden.
+- 40 4× HD images; downsampling every output by nearest neighbour returns the
+  exact native RGBA pixels.
+- 40 NBS core-tilemap JSON records, including raw tile values and flip bits.
+- 40 COL collision grids and 40 ATR attribute grids with every raw class value
+  preserved in row-major order.
+- 38 OPM object-placement tables using original cell IDs and source X/Y;
+  CM28 and CM29 correctly contain no native OPM layer.
+- JavaScript parsers for original COL, ATR, NBS and OPM formats, plus the
+  deterministic Python build/import pipeline and four review contact sheets.
+
+CM12 and CM18 retain the archive finding
+`CORE_FIELD_RECOVERED_OBJECT_LAYER_CONFLICT`. Their OPM data is preserved but
+marked `ORIGINAL_OBJECT_INDEX_CONFLICT_DO_NOT_BIND`; no guessed object binding
+or placement is allowed.
+
+## Rights and promotion boundary
+
+The Owner reports that the original source is licensed. A linked licence
+evidence record is still required before runtime or shipping promotion. This
+packet records `rightsStatus:LICENSED` with
+`licenseEvidenceStatus:OWNER_REPORTED_LINK_PENDING`, `runtimeEligible:false`
+and `shippingReady:false`; ROM and Nitro binaries are not committed.
+
+## Rebuild
+
+Run `scripts/build-cage-faithful-hd40.py` with the verified O3-B archive root
+and read-only raw Training directory. `--verify-determinism` rebuilds all 245
+files in a clean temporary directory and compares every SHA-256.

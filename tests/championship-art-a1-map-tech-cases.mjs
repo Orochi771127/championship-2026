@@ -74,30 +74,3 @@ test("all forty original CM structures are classified without copying original p
     assert.match(row, /"NOT_RUNTIME_READY"$/);
   }
 });
-
-test("CM01-CM10 clean-room review packets preserve original construction boundaries", () => {
-  const packRoot = "docs/art/production/cage/cm01-cm10/packages";
-  const cageManifest = JSON.parse(fs.readFileSync(`${packRoot}/manifest.json`, "utf8"));
-  assert.equal(cageManifest.fieldCount, 10);
-  assert.equal(cageManifest.fields.length, 10);
-  assert.equal(new Set(cageManifest.fields.map((field) => field.fieldId)).size, 10);
-  assert.deepEqual(cageManifest.construction, ["CORE_FIELD_TILES", "OBJECT_BUNDLE", "EXTERNAL_ATR", "EXTERNAL_COL"]);
-  assert.match(cageManifest.referencePolicy, /NO_ROM_IMAGE_INPUT_NO_ORIGINAL_PIXELS/);
-  assert.equal(cageManifest.humanApproved, false);
-  assert.equal(cageManifest.runtimeEligible, false);
-  assert.equal(cageManifest.shippingReady, false);
-  for (const field of cageManifest.fields) {
-    assert.match(field.fieldId, /^field_cm(0[1-9]|10)_01$/);
-    assert.equal(field.originalStructure.atr, "EXTERNAL_RAW_CLASSES_NOT_INFERRED");
-    assert.equal(field.originalStructure.col, "EXTERNAL_RAW_CLASSES_NOT_INFERRED");
-    assert.equal(field.runtimeEligible, false);
-    for (const layer of [field.coreField, field.objectBundle]) {
-      const file = `${packRoot}/${layer.file}`;
-      assert.equal(fs.existsSync(file), true);
-      assert.equal(digest(file), layer.sha256);
-      const png = fs.readFileSync(file);
-      assert.equal(png[25], 6, `${layer.file} must be RGBA PNG`);
-      assert.equal(layer.anchor.policy, "BOTTOM_CENTER");
-    }
-  }
-});

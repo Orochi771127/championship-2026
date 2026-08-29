@@ -1,0 +1,3233 @@
+{
+  "schemaVersion": 1,
+  "batch": "ART_A3_CAGE_EXACT_ORIGINAL_FAITHFUL_HD40_BASELINE",
+  "fieldCount": 40,
+  "fullCompositionConfidenceCount": 38,
+  "partialObjectConflictFields": [
+    "field_cm12_01",
+    "field_cm18_01"
+  ],
+  "ownerDirection": "PRESERVE_ORIGINAL_ART_COMPOSITION_PLACEMENT_COLLISION_AND_ART_CODE_100_PERCENT_ONLY_UPSCALE_TO_HD",
+  "visualPolicy": "BYTE_IDENTICAL_NATIVE_BASELINE_PLUS_4X_NEAREST_NO_RELAYOUT_NO_RECOLOR_NO_REDESIGN",
+  "dataPolicy": "COL_ATR_NBS_OPM_RAW_VALUES_PRESERVED_WITHOUT_SEMANTIC_REINTERPRETATION",
+  "sourceArchive": {
+    "logicalId": "O3_B_ORIGINAL_TRAINING_CAGE_40_FIELD_VISUAL_GALLERY",
+    "manifestSha256": "FC886C0A4A9D83D79F410300D70DEFA73DED6CCF0ADEDFFDAC0D372EA507BB2A"
+  },
+  "rightsStatus": "LICENSED",
+  "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "fields": [
+    {
+      "assetId": "art:cage:field_cm01_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm01_01",
+      "ordinal": 1,
+      "nameEn": "Vacant Lot",
+      "nameJp": "あきち",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "12x14",
+      "layoutCells": 168,
+      "nativeOriginal": {
+        "file": "fields/field_cm01_01/native-original.png",
+        "sha256": "88A24DBB318357E817D45C70331E6D6629165392E7663A53D89329030956CF56",
+        "width": 96,
+        "height": 112
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm01_01/faithful-hd4x.png",
+        "sha256": "816EC7851457DF8DF012A71CF36CEBC69DBDAF62E42B2C091D746733FA1DBB0A",
+        "width": 384,
+        "height": 448,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm01_01/core-tilemap.json",
+        "sha256": "514D0D4A22DC25D9B9F43B3D9344B19B0DBAACA7E3E124A4CCC4A910ABF5667B",
+        "sourceSha256": "4C3B56D595780499DFCFCEFA1FCE7FF48F6193A147C8595BBAABF5A087B5EB1D"
+      },
+      "collision": {
+        "file": "fields/field_cm01_01/collision-raw-classes.json",
+        "sha256": "12F05254B77716954B1A026A92EF48D70612F16DFC9353D5D0E65DA19457C241",
+        "sourceSha256": "4DF925AA72527A982CEADFBEF13FF30E7D0614452790F3D4BA6CC75369075C40",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm01_01/attribute-raw-classes.json",
+        "sha256": "2BA9769C12EFAB46390FC0C9A69AE81555583C5BF50C01464A95878D55DFA31A",
+        "sourceSha256": "93C6381EAC8CC25E20481B594F6F2D7DEBDBE307575A995FE2A82A790E157B07",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm01_01/object-placement.json",
+        "sha256": "427CCEB40558609F982B02C09E27CD8AA56DEDDC124999CBB06DE7AEBFC24CAD",
+        "sourceSha256": "59A25BBE2BE77C156D8FE4E56704409718655FA2B8D99F226C6C5549948DC5A3",
+        "count": 4,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "4C3B56D595780499DFCFCEFA1FCE7FF48F6193A147C8595BBAABF5A087B5EB1D"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "922F0C2CCC4A20E7D46BED65B9AEBCE9468AAA4DDB6C0DD875057EE8CBA6E570"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "93C6381EAC8CC25E20481B594F6F2D7DEBDBE307575A995FE2A82A790E157B07"
+        },
+        "col": {
+          "present": true,
+          "sha256": "4DF925AA72527A982CEADFBEF13FF30E7D0614452790F3D4BA6CC75369075C40"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "59A25BBE2BE77C156D8FE4E56704409718655FA2B8D99F226C6C5549948DC5A3"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm02_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm02_01",
+      "ordinal": 2,
+      "nameEn": "Exercise Ground",
+      "nameJp": "うんどうじょう",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "24x25",
+      "layoutCells": 600,
+      "nativeOriginal": {
+        "file": "fields/field_cm02_01/native-original.png",
+        "sha256": "07CA6324F46E91A464283AA427F1A7049CFE0AB86BD3DB337BAA934042A51DF9",
+        "width": 192,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm02_01/faithful-hd4x.png",
+        "sha256": "4C99F2CAEFC0E2E15D486FCD9D2EB0FE183CF1685D024CAB2B5B4996B0C9F249",
+        "width": 768,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm02_01/core-tilemap.json",
+        "sha256": "0C63545F48DAC8824C7B01F0EF8DF523A7C1BA9DE655BD13D4B5EC48E8AA055E",
+        "sourceSha256": "0336D8E64111460B648C740A312BA2C2D47C51F2EF9B2486619CDB5790AC0B95"
+      },
+      "collision": {
+        "file": "fields/field_cm02_01/collision-raw-classes.json",
+        "sha256": "D6FFA85D02F28AE3C53552FE9DDBFF676354F022E18A48F52E17CE3956FF740F",
+        "sourceSha256": "D67CE4E78848DF620DE0140AE9B1A23248AAF626AC43D9AF8F6C36C5EA8A373B",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm02_01/attribute-raw-classes.json",
+        "sha256": "1F6E6B0C0784C40D92BB64E83F36CC2E21AA34E47011204D7CB12BE56A43953D",
+        "sourceSha256": "A60F3B1374B41D46C4CB0DA9319EF597A6C14BD8FD77489208BF062506BAAAA1",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm02_01/object-placement.json",
+        "sha256": "640BCEA1A495D26DCFB40442D075C132A15B826B1F857529A8FFC58B6AF90109",
+        "sourceSha256": "F8308481FC38D35DB652B6954F418ECAF3E39F6DED17B77B478673001B745E35",
+        "count": 5,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "0336D8E64111460B648C740A312BA2C2D47C51F2EF9B2486619CDB5790AC0B95"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "C3BDDB5EDABF66A2FADBD6FDB256A8572C1D6D5528A3C469FBE87C7FAC38732A"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "A60F3B1374B41D46C4CB0DA9319EF597A6C14BD8FD77489208BF062506BAAAA1"
+        },
+        "col": {
+          "present": true,
+          "sha256": "D67CE4E78848DF620DE0140AE9B1A23248AAF626AC43D9AF8F6C36C5EA8A373B"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "F8308481FC38D35DB652B6954F418ECAF3E39F6DED17B77B478673001B745E35"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm03_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm03_01",
+      "ordinal": 3,
+      "nameEn": "Arena",
+      "nameJp": "きょうぎじょう",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "36x25",
+      "layoutCells": 900,
+      "nativeOriginal": {
+        "file": "fields/field_cm03_01/native-original.png",
+        "sha256": "24E843C4EFC9107FAEA439D612B4338F71B35063AD3F5A8880D314CA21B46A5B",
+        "width": 288,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm03_01/faithful-hd4x.png",
+        "sha256": "F1DACDEBC37FC17F1F09BAF1A29BCC59DAE8509CB3F41BBE5491B604DE63EB23",
+        "width": 1152,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm03_01/core-tilemap.json",
+        "sha256": "350D52072E4E66446B09DD5BAA7359D9CB2A7FCDF80FE37ED847A320749BE7D2",
+        "sourceSha256": "46CC3A4B270F9D2C995C9B37AEA5711C8AEF3EE3946FE07350851749A0E24B66"
+      },
+      "collision": {
+        "file": "fields/field_cm03_01/collision-raw-classes.json",
+        "sha256": "4E60324087886BAE09EBD7CBF3AB1D0B05FC1FE55ABCAAF13B957B76B59A9BD2",
+        "sourceSha256": "43197408D297DAC8628FFC29E38C82C3D67FE529F8FACBDEEEEC7C364EDF661B",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm03_01/attribute-raw-classes.json",
+        "sha256": "5AED73DC481B33A2616DCE9ADA796D4C3C16E87CAE8C110DB60912E07536251E",
+        "sourceSha256": "6A8A9C083C428331FF01189FC02D7F3D1BE1F66F47FE577E09E038A78248CDB8",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm03_01/object-placement.json",
+        "sha256": "5C37245A30FCD238141F11456D963DB47DF9431247B6727A28BF130D3B138817",
+        "sourceSha256": "AD44D2ED2B5B5136622BDAFFCBAD57CECAB794235CB017CFA28819AC4A64B97F",
+        "count": 6,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "46CC3A4B270F9D2C995C9B37AEA5711C8AEF3EE3946FE07350851749A0E24B66"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "84D7F8D957A1B26FDD4568418977959C9965FBE2BCDC1BE6416C62F75000CDD0"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "6A8A9C083C428331FF01189FC02D7F3D1BE1F66F47FE577E09E038A78248CDB8"
+        },
+        "col": {
+          "present": true,
+          "sha256": "43197408D297DAC8628FFC29E38C82C3D67FE529F8FACBDEEEEC7C364EDF661B"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "AD44D2ED2B5B5136622BDAFFCBAD57CECAB794235CB017CFA28819AC4A64B97F"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm04_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm04_01",
+      "ordinal": 4,
+      "nameEn": "Dojo",
+      "nameJp": "どうじょう",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "36x14",
+      "layoutCells": 504,
+      "nativeOriginal": {
+        "file": "fields/field_cm04_01/native-original.png",
+        "sha256": "634CF3BB02FCC0EDECCFBBA76471CD3EA27841608DCB4228E06C068004969165",
+        "width": 288,
+        "height": 112
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm04_01/faithful-hd4x.png",
+        "sha256": "3A445A357C6FF01BE11CD120C9C5C980733BBB2610FE35FB23C413A64143BB35",
+        "width": 1152,
+        "height": 448,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm04_01/core-tilemap.json",
+        "sha256": "0FB4396298ADB6367B03C453CE5A45B980CE0E68EC47491AE9143522EB2C129D",
+        "sourceSha256": "19C5C4679DC56A17FDFC3B4827EBA4AFFDD0E45DE4A4CE63310D1DDA1AC25831"
+      },
+      "collision": {
+        "file": "fields/field_cm04_01/collision-raw-classes.json",
+        "sha256": "79B76A8C014DB05CA0F3EDE0DA7F9A2CC5257BBD41328440576FD28DFB4F2AFD",
+        "sourceSha256": "C55E3E440A71FB7607A4623172BC6F099D7211EFD46BD87A156C38BE19AA3763",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm04_01/attribute-raw-classes.json",
+        "sha256": "9572DD237E739F26E37BC97790CA130FA4A153EBCFC228058941BB2F33D341B0",
+        "sourceSha256": "7CC794FD3AF991D8C2F251D5D0FD158349CCA4A47E4CC87FBC0CD688F12F1582",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm04_01/object-placement.json",
+        "sha256": "52178CE22A69540D07367C2E4134103B8CD9E31C3B46224B3D02DCB852B328E8",
+        "sourceSha256": "712EF6878317C73E9CEAA4EA8A8F5EAD91AEA724E60223BD9298D2047ED0D8F2",
+        "count": 3,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "19C5C4679DC56A17FDFC3B4827EBA4AFFDD0E45DE4A4CE63310D1DDA1AC25831"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "479630FEE03DA4EE6D8396CCF8078175D3901BF58BBBF9468C8E297F624478D0"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "7CC794FD3AF991D8C2F251D5D0FD158349CCA4A47E4CC87FBC0CD688F12F1582"
+        },
+        "col": {
+          "present": true,
+          "sha256": "C55E3E440A71FB7607A4623172BC6F099D7211EFD46BD87A156C38BE19AA3763"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "712EF6878317C73E9CEAA4EA8A8F5EAD91AEA724E60223BD9298D2047ED0D8F2"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm05_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm05_01",
+      "ordinal": 5,
+      "nameEn": "Gym",
+      "nameJp": "ジム",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "30x25",
+      "layoutCells": 750,
+      "nativeOriginal": {
+        "file": "fields/field_cm05_01/native-original.png",
+        "sha256": "2CC17BF427D306B04A8E6066F435662E54433D3EE13748069B3930461F7AC2AA",
+        "width": 240,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm05_01/faithful-hd4x.png",
+        "sha256": "1B4CDCB6F0D9A1AAC0F19B2BDEFF2AC5AC0B2378D03E08D15F995EC79338264E",
+        "width": 960,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm05_01/core-tilemap.json",
+        "sha256": "FBB5F85D19C90B58D8C4E8B92C33D4A69A07479ACC67F04745A013F145369EEB",
+        "sourceSha256": "6DA0057164E531524FD38369FEEB87D927BB6F072CE6012A6BF325B07AAA99D9"
+      },
+      "collision": {
+        "file": "fields/field_cm05_01/collision-raw-classes.json",
+        "sha256": "CBABA5482C3161F4C298CBF158E1D876DCC9CD619CF33BD04B032D9F45BD59F7",
+        "sourceSha256": "660987B91A0D9813C905060A6AC95A2F37FC4EC6F8A8154F90473F841EF4940C",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm05_01/attribute-raw-classes.json",
+        "sha256": "4FA033D8BBC639CF2CAA8170BCAEC167290A1AD741A094087718AB0027C4197F",
+        "sourceSha256": "053D1038E6D03713B024449470EB0629FCF9FE6106DBF168FDB55FA078E1B2A6",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm05_01/object-placement.json",
+        "sha256": "50868C557843B2782AEAD8F9033B785C3C6094966CC21DF0204B62F278250E98",
+        "sourceSha256": "749C18461D9B553B5236D8BD463C2E7D638F93E1A4D3F1410DF30E8931112A28",
+        "count": 6,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "6DA0057164E531524FD38369FEEB87D927BB6F072CE6012A6BF325B07AAA99D9"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "8DC4C542AD7F07D5793D78F97D744CE16E87B51C177E6416ED15E0A15B792F20"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "053D1038E6D03713B024449470EB0629FCF9FE6106DBF168FDB55FA078E1B2A6"
+        },
+        "col": {
+          "present": true,
+          "sha256": "660987B91A0D9813C905060A6AC95A2F37FC4EC6F8A8154F90473F841EF4940C"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "749C18461D9B553B5236D8BD463C2E7D638F93E1A4D3F1410DF30E8931112A28"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm06_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm06_01",
+      "ordinal": 6,
+      "nameEn": "Laboratory",
+      "nameJp": "けんきゅうじょ",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "42x25",
+      "layoutCells": 1050,
+      "nativeOriginal": {
+        "file": "fields/field_cm06_01/native-original.png",
+        "sha256": "25B0EB251E847273FBBA32509370372808B2152F25F0827C2686372209FA2438",
+        "width": 336,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm06_01/faithful-hd4x.png",
+        "sha256": "0ADB6799FACB94B1E75754702CC0AAB7DA094190E206CF5883817A41C4CABA82",
+        "width": 1344,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm06_01/core-tilemap.json",
+        "sha256": "5667E7166F7B0F9B0B52015D1DF23947722AEE0F39313BFEFCD3830AC586893F",
+        "sourceSha256": "FA61DB6EB3142DE376C8D774E383B9B6012219153CA1A7FF16D7DF60D6C98F62"
+      },
+      "collision": {
+        "file": "fields/field_cm06_01/collision-raw-classes.json",
+        "sha256": "182821DA929C9A632CC606CD64DCE6DEB73D7565B7E536A11F16150C09E0FB2C",
+        "sourceSha256": "6767DA57082FE8E265A068058EB83BAB1AEED58232277911F7431FDFA68E0764",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm06_01/attribute-raw-classes.json",
+        "sha256": "3DAA262BE0B430B35E215FB4F936AA156B218F56FB4203C83224257BEDE97CEB",
+        "sourceSha256": "1A6C3C24673994DE60CFFDBC4860F99C18F4135ECD174436674CAA6EAF83584A",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm06_01/object-placement.json",
+        "sha256": "2E0F1E68AF8DEE82F122B02D6FF1610A581F6B5BACA7270104C62869CF9A7281",
+        "sourceSha256": "B52213494D3A5D353C4590EF88CEDD1157D8B6ABDA8D1AE8BBC8C053CA24C722",
+        "count": 15,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "FA61DB6EB3142DE376C8D774E383B9B6012219153CA1A7FF16D7DF60D6C98F62"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "ACB4330657C0CF26799BDAF15568C5196B5EE63625259FFE4ECC93E29DF8EB6C"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "1A6C3C24673994DE60CFFDBC4860F99C18F4135ECD174436674CAA6EAF83584A"
+        },
+        "col": {
+          "present": true,
+          "sha256": "6767DA57082FE8E265A068058EB83BAB1AEED58232277911F7431FDFA68E0764"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "B52213494D3A5D353C4590EF88CEDD1157D8B6ABDA8D1AE8BBC8C053CA24C722"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm07_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm07_01",
+      "ordinal": 7,
+      "nameEn": "Volcano",
+      "nameJp": "かざん",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "30x25",
+      "layoutCells": 750,
+      "nativeOriginal": {
+        "file": "fields/field_cm07_01/native-original.png",
+        "sha256": "53A71B7E7B27B0DD0180BA061026950BFE34A37A74B8756B5772CB476B729EFE",
+        "width": 240,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm07_01/faithful-hd4x.png",
+        "sha256": "9757926C965DCC19BA3D644D1ECE70CDB034D325AFD7D029CDD471E0905BB079",
+        "width": 960,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm07_01/core-tilemap.json",
+        "sha256": "4E3508C40862E4110E39BA2BC9B0F3614B73B707F1CE40CF1BF822A4F0797EF1",
+        "sourceSha256": "8F44193E8AD1D631499959166D6F37A1E31D7385431B65AC7DAE5204F4F5FB00"
+      },
+      "collision": {
+        "file": "fields/field_cm07_01/collision-raw-classes.json",
+        "sha256": "49C7BED5062DD29CFBC1F3398E7103AFD552DF57552C1890084B66377E32E969",
+        "sourceSha256": "F48740685C414A0DDD45B43984367813EF7A836722914D7445268715596918DD",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm07_01/attribute-raw-classes.json",
+        "sha256": "DA3B1F4314FD0BDAC51617AEEE7A7D6C1654CDACF95C2F1EDD619487B5A7CBD1",
+        "sourceSha256": "3D1D344AA23DD45224CB4D125C0B95316A578E272C67B5000E5B3414D44A34E3",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm07_01/object-placement.json",
+        "sha256": "93A74C46FE9FF187917DBB591615A1365313C644E64B374C43DD5653EE859043",
+        "sourceSha256": "1BECE61B87FE49684F7A570B6BB9FFC7322EBBB883A6D1738BE78AB872173841",
+        "count": 0,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "8F44193E8AD1D631499959166D6F37A1E31D7385431B65AC7DAE5204F4F5FB00"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "AE6FC7AC1481446761323E64F31743E9C19CEA1FC6BE3B5BFE904CA00FDEB468"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "3D1D344AA23DD45224CB4D125C0B95316A578E272C67B5000E5B3414D44A34E3"
+        },
+        "col": {
+          "present": true,
+          "sha256": "F48740685C414A0DDD45B43984367813EF7A836722914D7445268715596918DD"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "1BECE61B87FE49684F7A570B6BB9FFC7322EBBB883A6D1738BE78AB872173841"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm08_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm08_01",
+      "ordinal": 8,
+      "nameEn": "Grassland",
+      "nameJp": "そうげん",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "30x25",
+      "layoutCells": 750,
+      "nativeOriginal": {
+        "file": "fields/field_cm08_01/native-original.png",
+        "sha256": "FF25874DE869AE70E988A81090101F3F010A19EE8E3F7506AA39AB2E65F57527",
+        "width": 240,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm08_01/faithful-hd4x.png",
+        "sha256": "DE8A8A4EB0708E5A4B96C62DC1E99503B77E75120903B82369D80702517248A5",
+        "width": 960,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm08_01/core-tilemap.json",
+        "sha256": "D2D3A370403C77CD919470313B04C8EBEF15C3DE93D22AB5A486679D2584A0BA",
+        "sourceSha256": "6E721E29023E313BDEB0F886CBC18A45BBC0404851D45EE250D6C26E8D739059"
+      },
+      "collision": {
+        "file": "fields/field_cm08_01/collision-raw-classes.json",
+        "sha256": "5681086766E13FD59284586214FCA416C9E1A8E140A4CFFA3756AF07C48D6D88",
+        "sourceSha256": "FE1F463522F5ADDE50B367E92A8C65EF0801E2420F723A20B7719C1F8A91F0C7",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm08_01/attribute-raw-classes.json",
+        "sha256": "C2A6B07D427A1D42948D68F220F6C6506707485D817CDAC7BBF58370184E950D",
+        "sourceSha256": "37C1F8AD78E5A8C9BDD10CB2DD922C34FF0AB3EFA0ECD8ED14C1477ECD439C0E",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm08_01/object-placement.json",
+        "sha256": "45731F4E0FA6790D60C49ACDE1253A48B975346CDD908033B348F0EAC9A2A759",
+        "sourceSha256": "C98B72B99814F978DDA74E299760718C31B8893FCB1F34D9ED5AE96F556F05A6",
+        "count": 2,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "6E721E29023E313BDEB0F886CBC18A45BBC0404851D45EE250D6C26E8D739059"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "5A9AF4E372B42C0BF4C4545D27ED3C0A41471F0C1E00AB8A9412060F949EBE6A"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "37C1F8AD78E5A8C9BDD10CB2DD922C34FF0AB3EFA0ECD8ED14C1477ECD439C0E"
+        },
+        "col": {
+          "present": true,
+          "sha256": "FE1F463522F5ADDE50B367E92A8C65EF0801E2420F723A20B7719C1F8A91F0C7"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "C98B72B99814F978DDA74E299760718C31B8893FCB1F34D9ED5AE96F556F05A6"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm09_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm09_01",
+      "ordinal": 9,
+      "nameEn": "Beach",
+      "nameJp": "ビーチ",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "36x25",
+      "layoutCells": 900,
+      "nativeOriginal": {
+        "file": "fields/field_cm09_01/native-original.png",
+        "sha256": "D0B1E89D51A2D55A9B414A096A00716E0C596D5EA9D11783A5968C699042C325",
+        "width": 288,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm09_01/faithful-hd4x.png",
+        "sha256": "ED165B7F55550DD24CB4286A957CE069A8ED35547CA2343D115BC84763BCA951",
+        "width": 1152,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm09_01/core-tilemap.json",
+        "sha256": "9DF4A91E10A32519A7529668883D4A59322EE2A547F68D421EA7050E955B082C",
+        "sourceSha256": "605D8247AD1F9617B721408391080CD5BB6C498B7566CB7CA346F7CDD9E353E6"
+      },
+      "collision": {
+        "file": "fields/field_cm09_01/collision-raw-classes.json",
+        "sha256": "2901DFB488556651CBA560B66FCA36A55C856C9038BC04B2DDB21E00CB399F44",
+        "sourceSha256": "1EAF93592BBDF6202F65942A1FF16AE7A43E281EC4A535A1F46F9A6A3460E806",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm09_01/attribute-raw-classes.json",
+        "sha256": "AB80AB8772C0FEABAD64111FE70A01C5BBEC6F0A54B0825436D8CAF68084C1AB",
+        "sourceSha256": "996A742B9B309D22FA69D3BC155C6BB1EECD109A2497885F77A6561F5E3A08FE",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm09_01/object-placement.json",
+        "sha256": "41CCCA7AFCCADDCE0AFF263D430007F468227089187986875A0AAAC0F2E67EC5",
+        "sourceSha256": "9947F36F0CCA246C361472853F048399DD7580688730247DF390E0EFD5EBEDD1",
+        "count": 2,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "605D8247AD1F9617B721408391080CD5BB6C498B7566CB7CA346F7CDD9E353E6"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "D6F3889091AEB6C6B21D63651EC44AB696E3CC820047877377D0F1C6CA1E501D"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "996A742B9B309D22FA69D3BC155C6BB1EECD109A2497885F77A6561F5E3A08FE"
+        },
+        "col": {
+          "present": true,
+          "sha256": "1EAF93592BBDF6202F65942A1FF16AE7A43E281EC4A535A1F46F9A6A3460E806"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "9947F36F0CCA246C361472853F048399DD7580688730247DF390E0EFD5EBEDD1"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm10_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm10_01",
+      "ordinal": 10,
+      "nameEn": "Mine",
+      "nameJp": "こうざん",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "36x25",
+      "layoutCells": 900,
+      "nativeOriginal": {
+        "file": "fields/field_cm10_01/native-original.png",
+        "sha256": "8C4CB6622F367B2958E21A9D48F13DBC93082CF20691A0130E8E678A91EA5AB4",
+        "width": 288,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm10_01/faithful-hd4x.png",
+        "sha256": "6F909CD155B79A9870871CAE276055DB4C44B13478D9B20642C199D17AA113B9",
+        "width": 1152,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm10_01/core-tilemap.json",
+        "sha256": "67FEFF9C25E44F3DB8259400084F860F8FEA6D94FC1E93726FD1B1D109C5A45D",
+        "sourceSha256": "0678A513A4A9BD61B63C3312838F0DB238E897318A00EA48C3AC1F8A0ACCEBCD"
+      },
+      "collision": {
+        "file": "fields/field_cm10_01/collision-raw-classes.json",
+        "sha256": "FCD62595EC991E31F8C2F253AA1564198828AF49648A9780B3E49838215F6009",
+        "sourceSha256": "38102B2EC551039178E90ADA96DC86510F04BD1441B8EA79EF2189E6E18DBE7D",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm10_01/attribute-raw-classes.json",
+        "sha256": "43473C45E911D8365BA3758F2F86D81F16BECCD1814C56CE89273A3EA02E6E5C",
+        "sourceSha256": "F74F4610B194A19C8653E5CD8F64D208620D8A8133D37510E016B6DC1D2009E7",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm10_01/object-placement.json",
+        "sha256": "BB105E36E996227A2C44D8E92F6A986A20C3CC8736C32B664369EEF4F684A871",
+        "sourceSha256": "B58FCC528D468F4A08BA1FB60D5A8B6AFD2A57A3BCE54CAC724D0B378A670A6C",
+        "count": 7,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "0678A513A4A9BD61B63C3312838F0DB238E897318A00EA48C3AC1F8A0ACCEBCD"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "27CEFE88AE72121D670806F06787E22384E9067303CEA70A2FB21F0D33BE2DCA"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "F74F4610B194A19C8653E5CD8F64D208620D8A8133D37510E016B6DC1D2009E7"
+        },
+        "col": {
+          "present": true,
+          "sha256": "38102B2EC551039178E90ADA96DC86510F04BD1441B8EA79EF2189E6E18DBE7D"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "B58FCC528D468F4A08BA1FB60D5A8B6AFD2A57A3BCE54CAC724D0B378A670A6C"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm11_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm11_01",
+      "ordinal": 11,
+      "nameEn": "Forest",
+      "nameJp": "もり",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "30x25",
+      "layoutCells": 750,
+      "nativeOriginal": {
+        "file": "fields/field_cm11_01/native-original.png",
+        "sha256": "B5B6906AD989C62CD8F159B47830EF98FC6C853038027D66F86D80134976F150",
+        "width": 240,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm11_01/faithful-hd4x.png",
+        "sha256": "48B1287560B5DF94CFB380840024343CF77D75D6766717697BEC47D7EF0A5203",
+        "width": 960,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm11_01/core-tilemap.json",
+        "sha256": "AABC9E1FABEE3B2A3DFD92BE72F8514743D6B6603698ECE6A787E99ED48815FB",
+        "sourceSha256": "0B412668AC526F5BDB12D834F95549E92B0F1E3792041DBFB9912BB8B930BACB"
+      },
+      "collision": {
+        "file": "fields/field_cm11_01/collision-raw-classes.json",
+        "sha256": "885F3ACB20F7262F726B3C3A1D0110113A8F375A2754A3A605E33757697B6D7B",
+        "sourceSha256": "3CA10517742161B48B8768135C39449BA9B20C2DA9F07D28C6675A0CE2C71F29",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm11_01/attribute-raw-classes.json",
+        "sha256": "C825BC5AD67B34FAA00B9B1662F7D046BFC166FB87AFAF1D8FCE64F8128C1005",
+        "sourceSha256": "E9B8AADE3D800D7F03BFAB800A7F45052695ABBDD3B54550EE7C5F652389546E",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm11_01/object-placement.json",
+        "sha256": "6120D37B0A7AB137164EFCEB80E28272BDC76D9CE0A8B26548DF6BDA6750B374",
+        "sourceSha256": "B903FCBAC1344AF09C044CC90F9D78FE2D17DA51B46323D2F9D6B5C815035860",
+        "count": 9,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "0B412668AC526F5BDB12D834F95549E92B0F1E3792041DBFB9912BB8B930BACB"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "78129BD592861499EE8B5EDA2CA338C8356FCB8DAC1C77C9B52A62C5044842AB"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "E9B8AADE3D800D7F03BFAB800A7F45052695ABBDD3B54550EE7C5F652389546E"
+        },
+        "col": {
+          "present": true,
+          "sha256": "3CA10517742161B48B8768135C39449BA9B20C2DA9F07D28C6675A0CE2C71F29"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "B903FCBAC1344AF09C044CC90F9D78FE2D17DA51B46323D2F9D6B5C815035860"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm12_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm12_01",
+      "ordinal": 12,
+      "nameEn": "Jungle",
+      "nameJp": "ジャングル",
+      "compositionConfidence": "CORE_FIELD_RECOVERED_OBJECT_LAYER_CONFLICT",
+      "originalDimensions": "30x25",
+      "layoutCells": 750,
+      "nativeOriginal": {
+        "file": "fields/field_cm12_01/native-original.png",
+        "sha256": "5F3483D97DF2FA843623186DC21EB0ACCCD988A3DA9343A36A4283C87D9158DD",
+        "width": 240,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm12_01/faithful-hd4x.png",
+        "sha256": "C8B94A2197975F8D3C95249C4813245F0369DD266E4C6EDD522E34A41F8B0301",
+        "width": 960,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm12_01/core-tilemap.json",
+        "sha256": "D6A1B2B45EEB67541F81C2B8A260C401F9D34259F0675C01F22605E3A9D2ACBB",
+        "sourceSha256": "6690EAE63021960CB95213AD4691FD4319D6BAAD896165074881D6BFD91C12F7"
+      },
+      "collision": {
+        "file": "fields/field_cm12_01/collision-raw-classes.json",
+        "sha256": "10E9F434CB3B3AC5E694247CC1118A80B879426915FCB9A011857F6BB0DE0A46",
+        "sourceSha256": "3E8D9329F198A38A8EE3ED9F7D6EA91ACF9D8850955C65AFA532E3D715A2439F",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm12_01/attribute-raw-classes.json",
+        "sha256": "FEFFD29AD6B56F4C65BEA30744ABAE38CE0A6FA7C2674F4BB92ED82C6F40D8DC",
+        "sourceSha256": "1BD012E204566B955911B3490BD796E78C574B9B5C826A4E4BDCD526E0F11EFA",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm12_01/object-placement.json",
+        "sha256": "DF2BFCC2BC4EDBA63EA8640B0041DD05F18DDDF796D8A8A9A343E553F8B44E79",
+        "sourceSha256": "360109D7E835EC5A8ABE6C5B07CB0B2773BA4A6CAAC5C650FBBEE8757033F759",
+        "count": 7,
+        "authority": "ORIGINAL_OBJECT_INDEX_CONFLICT_DO_NOT_BIND"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "6690EAE63021960CB95213AD4691FD4319D6BAAD896165074881D6BFD91C12F7"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "7FB74C2AE741218D826204A2310B48307AA2367C1C756024A5A7FB00E330617D"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "1BD012E204566B955911B3490BD796E78C574B9B5C826A4E4BDCD526E0F11EFA"
+        },
+        "col": {
+          "present": true,
+          "sha256": "3E8D9329F198A38A8EE3ED9F7D6EA91ACF9D8850955C65AFA532E3D715A2439F"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "360109D7E835EC5A8ABE6C5B07CB0B2773BA4A6CAAC5C650FBBEE8757033F759"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm13_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm13_01",
+      "ordinal": 13,
+      "nameEn": "Shrine",
+      "nameJp": "しんでん",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "24x25",
+      "layoutCells": 600,
+      "nativeOriginal": {
+        "file": "fields/field_cm13_01/native-original.png",
+        "sha256": "504E38F3B05F76D5B59D65E544730DED9D7E5A8899F91379C4D50F01E06362EA",
+        "width": 192,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm13_01/faithful-hd4x.png",
+        "sha256": "CEB73F9AA18386E6B9BC7411088AAEB7EFF0851C5B22CF4BF928BB4F297375AE",
+        "width": 768,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm13_01/core-tilemap.json",
+        "sha256": "A827FBA3DC64C00830BA58CD766A8B4977A18A8A829A0ABA13D473679B18B4FC",
+        "sourceSha256": "72B4812521A4B34CEBA6FE2B1BD338693D5D8B6374248AC481276F8BD094AA8A"
+      },
+      "collision": {
+        "file": "fields/field_cm13_01/collision-raw-classes.json",
+        "sha256": "B533199045150FD7EAF47A618DC887804E201818CACDC45CEBC8050DAFCE9C1D",
+        "sourceSha256": "F702D4E6F01E43DB6B305C32AD637F64A647248C4D167B31B9A7DDA59F772028",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm13_01/attribute-raw-classes.json",
+        "sha256": "E4F07FA755B9553DE0F2B9A1BDE121C4217952BA2939B82686AF231C2B8F803A",
+        "sourceSha256": "910F14C304D9F912CA748996C58ACFA2D3241D5DDAE9C9922AA2893AC177C439",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm13_01/object-placement.json",
+        "sha256": "F395AC1A7FF52AD4CAD2D2B941E8DC0A71E0CBCE20383293FB38B9CAE8A63B15",
+        "sourceSha256": "4605A8243AA7BA635D22C8265E3C739675BBBFE8CDDB04F7DAB74E5B0ABB380B",
+        "count": 8,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "72B4812521A4B34CEBA6FE2B1BD338693D5D8B6374248AC481276F8BD094AA8A"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "2FB18E3E3D8B80B477BC239697AD430770BB4EFF7FC6761DD30C8500D99445A0"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "910F14C304D9F912CA748996C58ACFA2D3241D5DDAE9C9922AA2893AC177C439"
+        },
+        "col": {
+          "present": true,
+          "sha256": "F702D4E6F01E43DB6B305C32AD637F64A647248C4D167B31B9A7DDA59F772028"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "4605A8243AA7BA635D22C8265E3C739675BBBFE8CDDB04F7DAB74E5B0ABB380B"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm14_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm14_01",
+      "ordinal": 14,
+      "nameEn": "Graveyard",
+      "nameJp": "はかば",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "30x25",
+      "layoutCells": 750,
+      "nativeOriginal": {
+        "file": "fields/field_cm14_01/native-original.png",
+        "sha256": "5615D2B5407EBA7D4E431A4B994F8751005F77F048515DA5FC2F6ED069DB3FF4",
+        "width": 240,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm14_01/faithful-hd4x.png",
+        "sha256": "3F13A0E6D48C73F2E7850A7C1A75F05F44E5F4A59412AFE19AD873FB1D2AAFFC",
+        "width": 960,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm14_01/core-tilemap.json",
+        "sha256": "1318B732A8C9EA3E07FBAEB2DAF07698256336B319B3134E16232F3FB9273880",
+        "sourceSha256": "B5167A80A6446FDD05FB19B2B31FD745D71AC62D6C7557520ADEABD2C59CFC7C"
+      },
+      "collision": {
+        "file": "fields/field_cm14_01/collision-raw-classes.json",
+        "sha256": "C6507075C5A9287BA47120B1CC023809728D0E2F95F3D514A397C029B65EE683",
+        "sourceSha256": "126F87B07452036ADED8F918A7309B45F48094A0EBB0BDC0B8DDF1713A94EC40",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm14_01/attribute-raw-classes.json",
+        "sha256": "C79BCD3374DC78E74BD178501D4EE1B38E8C0EFE7A693C81ABAD68D55D73A168",
+        "sourceSha256": "AE2125D653032421677B0C3D34CB18D0B314FD8D96EC1316D349B3382709F0A2",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm14_01/object-placement.json",
+        "sha256": "8A592884C8F2FFECBF732CC3C2EFD3B766D0808DFFEA9D9F7D29B5E10F5259D5",
+        "sourceSha256": "30A14E7C9527DD042BE08CA959B07466A7F1A439196BEFD6472FBF157FB1EA3A",
+        "count": 13,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "B5167A80A6446FDD05FB19B2B31FD745D71AC62D6C7557520ADEABD2C59CFC7C"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "C677CDBB3604C263EDBA4F509AAA0D9278EE090946C02C6E76FC42E4D994DA24"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "AE2125D653032421677B0C3D34CB18D0B314FD8D96EC1316D349B3382709F0A2"
+        },
+        "col": {
+          "present": true,
+          "sha256": "126F87B07452036ADED8F918A7309B45F48094A0EBB0BDC0B8DDF1713A94EC40"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "30A14E7C9527DD042BE08CA959B07466A7F1A439196BEFD6472FBF157FB1EA3A"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm15_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm15_01",
+      "ordinal": 15,
+      "nameEn": "Factory",
+      "nameJp": "こうじょう",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "30x25",
+      "layoutCells": 750,
+      "nativeOriginal": {
+        "file": "fields/field_cm15_01/native-original.png",
+        "sha256": "AC1BD21B7096911BA22155A08057347E31DC56CF0AB29C16BC70FE08A8AA9715",
+        "width": 240,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm15_01/faithful-hd4x.png",
+        "sha256": "2909FC3216E388E1F7F48CC647462203D30068E48F23784C7A1FB177E4CF0310",
+        "width": 960,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm15_01/core-tilemap.json",
+        "sha256": "F1B81ABFEEFF0C379B304777AC41F2891646EBEBE45D4E8739443C13FBE9942B",
+        "sourceSha256": "21AE9972B6D3C25EE41AFD3419B02A780F1108A1B4385499A1E99FFC8AD8B648"
+      },
+      "collision": {
+        "file": "fields/field_cm15_01/collision-raw-classes.json",
+        "sha256": "861432E08572D902EDEF4B78B8CE87A85D64E40CC8C02072D9572879F1501716",
+        "sourceSha256": "42DAD2A630C0AF6C33E9B48DA42BA0BB3F445925D49FB5E138772ABF8D8A6F06",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm15_01/attribute-raw-classes.json",
+        "sha256": "E86E915E65D34031FB53C2F25B8C7259A595B33EFE6607BC7EEF2C479239E76F",
+        "sourceSha256": "2511B03C2537B292BC2FD7A6014320E0983976BEEBF981DCB0937D613957EC8F",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm15_01/object-placement.json",
+        "sha256": "EE40FBB2633FF42D96E32546A5722C83060209B4F68362A60944F7986134222B",
+        "sourceSha256": "62FB10756FF3D9B0D4153F782E7B1143D25E799DCE99EA3740F21E50609D42DB",
+        "count": 23,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "21AE9972B6D3C25EE41AFD3419B02A780F1108A1B4385499A1E99FFC8AD8B648"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "E13D23CEFF156BC1B52A7A6C1C268BA18A39A873EDC69704EBCC1F97C8405278"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "2511B03C2537B292BC2FD7A6014320E0983976BEEBF981DCB0937D613957EC8F"
+        },
+        "col": {
+          "present": true,
+          "sha256": "42DAD2A630C0AF6C33E9B48DA42BA0BB3F445925D49FB5E138772ABF8D8A6F06"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "62FB10756FF3D9B0D4153F782E7B1143D25E799DCE99EA3740F21E50609D42DB"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm16_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm16_01",
+      "ordinal": 16,
+      "nameEn": "Mini Clinic",
+      "nameJp": "ミニほけんしつ",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "12x14",
+      "layoutCells": 168,
+      "nativeOriginal": {
+        "file": "fields/field_cm16_01/native-original.png",
+        "sha256": "2B3D730872623D9C78364C45C0CF49E270436CFA0FCAF08AA3DDC2EDB36C7226",
+        "width": 96,
+        "height": 112
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm16_01/faithful-hd4x.png",
+        "sha256": "1DCC8EA0D42804603C11C3B5D2CF5C380940A2F8E487C39F45D1274202AF8CBB",
+        "width": 384,
+        "height": 448,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm16_01/core-tilemap.json",
+        "sha256": "4EE53C8D10F958145DE1B0F5FC67CE5008C7336222A86F98F60BC710713B9ADB",
+        "sourceSha256": "9D7707662F6094B5BE4913C44D82C62CF37BD472D8A37E39E54CF393AC9DDC97"
+      },
+      "collision": {
+        "file": "fields/field_cm16_01/collision-raw-classes.json",
+        "sha256": "56C991C234D59A7BEF71D047BCE61CC4AC9641437CA75BE74884BE0B9254A16F",
+        "sourceSha256": "FC6856CF601C7558D7D387ADEC2DCBF46AB94A3CE514869E430FF99D378525E1",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm16_01/attribute-raw-classes.json",
+        "sha256": "0C1CEFE427D422762E6AA5F6DEC7A0AD053C6A7C9D7B19FF117A1F443A9CD456",
+        "sourceSha256": "C963A564A9AAB7CA6EA6518819F3E6E312296153AA83452138F2DE908124FC12",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm16_01/object-placement.json",
+        "sha256": "0D65903F4DB6DFA883950420F6DFDF481C5AEEDBF4ECBAA1E014A12E313C8239",
+        "sourceSha256": "74676D04442F4381B04677A62DAA3B2C7A6AC30D2689F3E52EB808201457BC14",
+        "count": 2,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "9D7707662F6094B5BE4913C44D82C62CF37BD472D8A37E39E54CF393AC9DDC97"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "410FF2AD79D89AC8450CEE690AE3BDE43D567E2F4D2F17C8498762BDF5275001"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "C963A564A9AAB7CA6EA6518819F3E6E312296153AA83452138F2DE908124FC12"
+        },
+        "col": {
+          "present": true,
+          "sha256": "FC6856CF601C7558D7D387ADEC2DCBF46AB94A3CE514869E430FF99D378525E1"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "74676D04442F4381B04677A62DAA3B2C7A6AC30D2689F3E52EB808201457BC14"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm17_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm17_01",
+      "ordinal": 17,
+      "nameEn": "Hospital",
+      "nameJp": "びょういん",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "24x25",
+      "layoutCells": 600,
+      "nativeOriginal": {
+        "file": "fields/field_cm17_01/native-original.png",
+        "sha256": "708BAF31AF6D97B285CDDD657A20CEEED6DF27A990117E39C4805C9B4D4C4C31",
+        "width": 192,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm17_01/faithful-hd4x.png",
+        "sha256": "063810F0A0BDBCD12909E024C9E93B700B8F6EEB95B571AC7F86E1F5A83168A5",
+        "width": 768,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm17_01/core-tilemap.json",
+        "sha256": "20D4F75B1C4D6DF57BBFAA8562BBAA13FDF61D5C24EED1F6DEDEB15BFBA9B0C2",
+        "sourceSha256": "8857A2A8C545E09DF4A11FFD97BE42B35CE6069A4781ED565ABA498B37A8FF54"
+      },
+      "collision": {
+        "file": "fields/field_cm17_01/collision-raw-classes.json",
+        "sha256": "C295D58E878DF20A7B592FB84A739D1DC68D3BB303F566DB6B83FEB00BAF9A06",
+        "sourceSha256": "E0C3C20F8C1AFBC0E163FFB9D70B6E96B267FED04BEA125CADE65DD0B9B04DEB",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm17_01/attribute-raw-classes.json",
+        "sha256": "E350A7CF78457D2B185EBE9B7A27A344D8F109FD7DB1596CDD7A25DCD69314DE",
+        "sourceSha256": "75A34D5DF66B7ED19A01C7E6F733B7B2B53FD4516AA00DB12F39E076FB951522",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm17_01/object-placement.json",
+        "sha256": "2E98AD07214D64037B635F7ADB026478CBA2F2D3F81D05B417B7E4CDE48982C5",
+        "sourceSha256": "E3C4B18DAE994545FC1C3CB826CA3394CF2E55CF377A9C85B6B97EE73469A6AC",
+        "count": 6,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "8857A2A8C545E09DF4A11FFD97BE42B35CE6069A4781ED565ABA498B37A8FF54"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "DCEE4F969555D061844FF3D69E1E0F4E5944533BE7566AB082EF4AF29BFC353E"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "75A34D5DF66B7ED19A01C7E6F733B7B2B53FD4516AA00DB12F39E076FB951522"
+        },
+        "col": {
+          "present": true,
+          "sha256": "E0C3C20F8C1AFBC0E163FFB9D70B6E96B267FED04BEA125CADE65DD0B9B04DEB"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "E3C4B18DAE994545FC1C3CB826CA3394CF2E55CF377A9C85B6B97EE73469A6AC"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm18_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm18_01",
+      "ordinal": 18,
+      "nameEn": "Flower Garden",
+      "nameJp": "はなぞの",
+      "compositionConfidence": "CORE_FIELD_RECOVERED_OBJECT_LAYER_CONFLICT",
+      "originalDimensions": "18x25",
+      "layoutCells": 450,
+      "nativeOriginal": {
+        "file": "fields/field_cm18_01/native-original.png",
+        "sha256": "68365E63F2EF7B9B5A0B44396870EEE96AC8277DFD39A5142DB1BAC6F2513A75",
+        "width": 144,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm18_01/faithful-hd4x.png",
+        "sha256": "2E1297DE8C291A9A0241E755CD4AD26DA413BD56A7CB4E0AF651A70A111F9A7C",
+        "width": 576,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm18_01/core-tilemap.json",
+        "sha256": "86408874ECD242F5B76D5E7B456626BAF8F7340DC1EE80A3F2B2E65419186B38",
+        "sourceSha256": "A98712270681F5879E98B1CF16B7CF188D864C1445BE2C6C37A4971C93438E16"
+      },
+      "collision": {
+        "file": "fields/field_cm18_01/collision-raw-classes.json",
+        "sha256": "47A5CD081CF2CBD846F3865AB111E29DD98865B2D65937C98FEDE593DC1F3CE5",
+        "sourceSha256": "12739684FF0A34A9DEB30C5A2364122FB9EC72C6589565EAD811D5EC0F17D85E",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm18_01/attribute-raw-classes.json",
+        "sha256": "F8A044BFD6E028D5B8365795593FF9ADFE6E4337CAF49592441AE8FADFCB35DB",
+        "sourceSha256": "1A0954E039F3BCB0AE7D9976B8E31D20D205E06C67F1B2480DB20142093B1B4E",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm18_01/object-placement.json",
+        "sha256": "5806EE7226237E34DC0A70F17327BB56C8E1095030DC4F5077C027D0081E4F14",
+        "sourceSha256": "DABF999F7AE3F10907E86907427C0CD4867AE477DDB0782C4D16430F200E5FC3",
+        "count": 16,
+        "authority": "ORIGINAL_OBJECT_INDEX_CONFLICT_DO_NOT_BIND"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "A98712270681F5879E98B1CF16B7CF188D864C1445BE2C6C37A4971C93438E16"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "D7AAD906983F9CECE0220E73B950E46945C4C693085E4B5EBF1DF9BE7B3A6F2A"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "1A0954E039F3BCB0AE7D9976B8E31D20D205E06C67F1B2480DB20142093B1B4E"
+        },
+        "col": {
+          "present": true,
+          "sha256": "12739684FF0A34A9DEB30C5A2364122FB9EC72C6589565EAD811D5EC0F17D85E"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "DABF999F7AE3F10907E86907427C0CD4867AE477DDB0782C4D16430F200E5FC3"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm19_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm19_01",
+      "ordinal": 19,
+      "nameEn": "Hot Spring",
+      "nameJp": "おんせん",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "48x14",
+      "layoutCells": 672,
+      "nativeOriginal": {
+        "file": "fields/field_cm19_01/native-original.png",
+        "sha256": "0FDF0B7659FE2400FB925D08DDDE560034B90B50CA1FD0840A179CF549EEBDF1",
+        "width": 384,
+        "height": 112
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm19_01/faithful-hd4x.png",
+        "sha256": "50CC33E164A5B6440E3BCB7DC5FFCD6489C413358B28A1AEE588BB09BEBE0A89",
+        "width": 1536,
+        "height": 448,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm19_01/core-tilemap.json",
+        "sha256": "C9AF6B7B54148508995ABA892C2D67B3E2B92F1798FEEF21A5027113A222D68A",
+        "sourceSha256": "8487F551E3F10BBBF0080DC49D1BC53EE771A70314E9101AF05F0AAE6C859CA3"
+      },
+      "collision": {
+        "file": "fields/field_cm19_01/collision-raw-classes.json",
+        "sha256": "620C2EBF2BE87AD5BA3F92035D9403AC11905D7755A082B4201A33913C47BBC4",
+        "sourceSha256": "00B7D4970ACC1C3F1029CCF093650A720B0B42C6CDA4DB00EB85DD33F1DBD964",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm19_01/attribute-raw-classes.json",
+        "sha256": "B6E93CAA6893E61A6DB8C390937809AE614474BEF3F3C373EF05515F5314A07E",
+        "sourceSha256": "AA6446193F845295B08381D4D2A9B282DC4768B954E19BD5A6B0F2C4CC24A4EF",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm19_01/object-placement.json",
+        "sha256": "8D10EBF8137C76044A26D6FCD4562A7014DE36B099E05AFA6496E0769478C381",
+        "sourceSha256": "942D254A951DC069B6EAAD5E13266E2272F7710DDBAE948C4C758CDA2B703E6C",
+        "count": 20,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "8487F551E3F10BBBF0080DC49D1BC53EE771A70314E9101AF05F0AAE6C859CA3"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "C386830858A7A299DC12829A2320B0B9C8E51BDCA37BC75EF05CC03DBB7224FC"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "AA6446193F845295B08381D4D2A9B282DC4768B954E19BD5A6B0F2C4CC24A4EF"
+        },
+        "col": {
+          "present": true,
+          "sha256": "00B7D4970ACC1C3F1029CCF093650A720B0B42C6CDA4DB00EB85DD33F1DBD964"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "942D254A951DC069B6EAAD5E13266E2272F7710DDBAE948C4C758CDA2B703E6C"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm20_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm20_01",
+      "ordinal": 20,
+      "nameEn": "Desert",
+      "nameJp": "さばく",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "30x25",
+      "layoutCells": 750,
+      "nativeOriginal": {
+        "file": "fields/field_cm20_01/native-original.png",
+        "sha256": "4CE132065DF348DE924033600CDDC3236B11E6FEA6F6751298808A2689B9E269",
+        "width": 240,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm20_01/faithful-hd4x.png",
+        "sha256": "F40F8C754A53E7E93C5EF5E428B3925E70DC99B07049AC8ED23C9B4C20F7FA86",
+        "width": 960,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm20_01/core-tilemap.json",
+        "sha256": "60C9ADA516930BB080174CBD92943E1A4AC1A4F006152C9449E5401DADD2C201",
+        "sourceSha256": "83879B0EAE179E13FEA9396836691ACB803D140766AD5D4A3BA9BA1B1551BB69"
+      },
+      "collision": {
+        "file": "fields/field_cm20_01/collision-raw-classes.json",
+        "sha256": "414C15AE18F31B1C1A3CD67B17B1CB66470198DA7819181C743E449C892BEB97",
+        "sourceSha256": "328EC29C465F1E0B534A0B3D68A6DA08F8BB687EBFD8B65ED82EB190D95FB8C6",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm20_01/attribute-raw-classes.json",
+        "sha256": "2FED448E69C6D671CA59D665AA81603DF2836C550F4BDDDEB79E33374BE6DD15",
+        "sourceSha256": "6C51DEE9E8D867510D3CA82EA435DFD67FB7FC84DAEC055F99B658C76FC9BFE4",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm20_01/object-placement.json",
+        "sha256": "9E339730A79AD62B1FFAA6F32CEBAECA869A0CADB64E0533A4664B7A25C6ED9B",
+        "sourceSha256": "8BEF44E1DB26C97E5F005525C966186EDFF26A74D2F69A6161F7B01F3617E5ED",
+        "count": 0,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "83879B0EAE179E13FEA9396836691ACB803D140766AD5D4A3BA9BA1B1551BB69"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "69B445354E5810E1D343CEC51264C8E2333A5C7EDE1A3E406B6238A731DA55FA"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "6C51DEE9E8D867510D3CA82EA435DFD67FB7FC84DAEC055F99B658C76FC9BFE4"
+        },
+        "col": {
+          "present": true,
+          "sha256": "328EC29C465F1E0B534A0B3D68A6DA08F8BB687EBFD8B65ED82EB190D95FB8C6"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "8BEF44E1DB26C97E5F005525C966186EDFF26A74D2F69A6161F7B01F3617E5ED"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm21_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm21_01",
+      "ordinal": 21,
+      "nameEn": "Ice",
+      "nameJp": "こおり",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "30x25",
+      "layoutCells": 750,
+      "nativeOriginal": {
+        "file": "fields/field_cm21_01/native-original.png",
+        "sha256": "A3254CE8E523094FD2A314D70DCE3F101726D98EEC3D383FC26C1B68A016C935",
+        "width": 240,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm21_01/faithful-hd4x.png",
+        "sha256": "BE76BA0CD822093DFE14A6774D1D4BE56E4F644100ABDE2F93D3C188A2A9AD36",
+        "width": 960,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm21_01/core-tilemap.json",
+        "sha256": "1568D648B8A277306AAC6552F596B10070773323F1F4C01A6BF724B30E6C9A97",
+        "sourceSha256": "FBB9671B8DF119857C70A182931F716BEB70A68DB7717C4EFE4926DFD9E0F8BE"
+      },
+      "collision": {
+        "file": "fields/field_cm21_01/collision-raw-classes.json",
+        "sha256": "3E54B30575DD7ED3B260F1C85562A33DB700458C925AC09269FFC6D28BE80AD7",
+        "sourceSha256": "A3FEA1E5B3CF815F784819A13527624C88A2BF844CA271BF0F3F0A37364F5371",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm21_01/attribute-raw-classes.json",
+        "sha256": "BEC4FEF30FDD216464AAA4DFC9C5BDE49111892A36730C0E12CBE7F3736F0FF4",
+        "sourceSha256": "92E74E572A2B9F089C273394B979B5A192313802E75E7CDAD7AE6A31642758E9",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm21_01/object-placement.json",
+        "sha256": "981060FF27AFF0FA4805AD7BB7947589CE8E1EE63AC9FA55EA60527BF53CC457",
+        "sourceSha256": "11B491DBD5D6FE3E18B63A200E49B7106E20BD9B8FEC15507024731FEA6C9984",
+        "count": 0,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "FBB9671B8DF119857C70A182931F716BEB70A68DB7717C4EFE4926DFD9E0F8BE"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "98B91ABF53E8F75FFD247884A33E5399FA81F81AA19EBBE89518B9078294989C"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "92E74E572A2B9F089C273394B979B5A192313802E75E7CDAD7AE6A31642758E9"
+        },
+        "col": {
+          "present": true,
+          "sha256": "A3FEA1E5B3CF815F784819A13527624C88A2BF844CA271BF0F3F0A37364F5371"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "11B491DBD5D6FE3E18B63A200E49B7106E20BD9B8FEC15507024731FEA6C9984"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm22_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm22_01",
+      "ordinal": 22,
+      "nameEn": "Power Plant",
+      "nameJp": "はつでんしょ",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "24x25",
+      "layoutCells": 600,
+      "nativeOriginal": {
+        "file": "fields/field_cm22_01/native-original.png",
+        "sha256": "80929F2BAE4656857E930527185B59B6EA661663D81F3CAD865FDE6794BD6059",
+        "width": 192,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm22_01/faithful-hd4x.png",
+        "sha256": "7C8A91B0021C875DF2C2E060D2784B85AAE4F2975A5CA9CF7BF252915241AF17",
+        "width": 768,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm22_01/core-tilemap.json",
+        "sha256": "C38FC9600715DCE42D21308FE2FF5AB7B334B07184042CAEFF4F3610B8A18E77",
+        "sourceSha256": "25CBCF94B8A02617D780847B9A712B17AEDEDBF1AC9FC662C6B0B5E694C5F5AD"
+      },
+      "collision": {
+        "file": "fields/field_cm22_01/collision-raw-classes.json",
+        "sha256": "3F305B2D0E9435FA20747C5BBCD0BA66B63E814BA415141AE31C76BB1A9DC76E",
+        "sourceSha256": "B2B193741538EC45571E036B8B330E46DCBE5F8D687ADE49A9694806F7796CC4",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm22_01/attribute-raw-classes.json",
+        "sha256": "227F39E262276F2F7AA6AAF6009BF938E4C522AB06C2FC9B9CE9F9601EEE9036",
+        "sourceSha256": "7BACCC0B3843B0AA803BB02BC642515C3BDA931E9F4480BDA4E0ABC88E1DC895",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm22_01/object-placement.json",
+        "sha256": "415F91F154217C4E9B1911F0A797F40EC5E1F51784CC32536E2FE692E1823773",
+        "sourceSha256": "8F9908BA27D13BAC35933A8465ABFB9272CDD468FF595E0092C326039D55D6FD",
+        "count": 12,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "25CBCF94B8A02617D780847B9A712B17AEDEDBF1AC9FC662C6B0B5E694C5F5AD"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "838319A8924E2D0D412AE8756DD1BA96ECD648BDB4865AFD2A6C27F0504D2BD6"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "7BACCC0B3843B0AA803BB02BC642515C3BDA931E9F4480BDA4E0ABC88E1DC895"
+        },
+        "col": {
+          "present": true,
+          "sha256": "B2B193741538EC45571E036B8B330E46DCBE5F8D687ADE49A9694806F7796CC4"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "8F9908BA27D13BAC35933A8465ABFB9272CDD468FF595E0092C326039D55D6FD"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm23_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm23_01",
+      "ordinal": 23,
+      "nameEn": "Gas Room",
+      "nameJp": "ガスルーム",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "18x25",
+      "layoutCells": 450,
+      "nativeOriginal": {
+        "file": "fields/field_cm23_01/native-original.png",
+        "sha256": "86D1C7685499BAA0759F1B30EA3940CE852C11DE7F37B138E57B749C009B01BE",
+        "width": 144,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm23_01/faithful-hd4x.png",
+        "sha256": "5582A20569F3C58D11733C92B7AFF66D9BAA50C199834CC16AF051F7E4FD1EA5",
+        "width": 576,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm23_01/core-tilemap.json",
+        "sha256": "6178F8788B12DF6B8E6962217E62DB45D0DB8CA21C51080B5A437DB93D803EC5",
+        "sourceSha256": "E8A9E5C5E7DCDB7723BDBC7ACBEB8DBC2EA30EE4273CDEB9C4DC6B6760587D52"
+      },
+      "collision": {
+        "file": "fields/field_cm23_01/collision-raw-classes.json",
+        "sha256": "8CE20DFF14D2701046FA5C71FC02E7480F3ABC3CCFECB5595107D53DC61721A5",
+        "sourceSha256": "C95245CAAF06C27215BFBC760A8CA304FC9E803FFE117D3FF35C37CB8830E48D",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm23_01/attribute-raw-classes.json",
+        "sha256": "146FDEFC55E65BAB117A60992989D804ECA72AE95CCAA431A171AA06A27D7E76",
+        "sourceSha256": "C58CADF5A7E5CAB096CF0ADBB145927082CA25A269C5E17D154EF9B441760210",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm23_01/object-placement.json",
+        "sha256": "20BACD0F290CE68AD7F02C8CCAE297D944FDECAE5BE7A9D9C14B2C89060D7AFF",
+        "sourceSha256": "C3E291435696F909F6EA8219D830FC7048D51ACEFC0B5ACA800E8B72FFF29D98",
+        "count": 6,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "E8A9E5C5E7DCDB7723BDBC7ACBEB8DBC2EA30EE4273CDEB9C4DC6B6760587D52"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "0E6128DD40ADDD412D2D3ABAA3CB161996E5E03584914AAB32F6775E0730E3D6"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "C58CADF5A7E5CAB096CF0ADBB145927082CA25A269C5E17D154EF9B441760210"
+        },
+        "col": {
+          "present": true,
+          "sha256": "C95245CAAF06C27215BFBC760A8CA304FC9E803FFE117D3FF35C37CB8830E48D"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "C3E291435696F909F6EA8219D830FC7048D51ACEFC0B5ACA800E8B72FFF29D98"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm24_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm24_01",
+      "ordinal": 24,
+      "nameEn": "Temple",
+      "nameJp": "おてら",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "12x14",
+      "layoutCells": 168,
+      "nativeOriginal": {
+        "file": "fields/field_cm24_01/native-original.png",
+        "sha256": "C2FA5B2D667D686D83A7641B25FFD9F29E3C813FA5E0574D181ED2DE42DEAB54",
+        "width": 96,
+        "height": 112
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm24_01/faithful-hd4x.png",
+        "sha256": "2BC30282294C32EC7B5FA419418C32035F7ACC420199CDDDB589913E3177844A",
+        "width": 384,
+        "height": 448,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm24_01/core-tilemap.json",
+        "sha256": "4EE53C8D10F958145DE1B0F5FC67CE5008C7336222A86F98F60BC710713B9ADB",
+        "sourceSha256": "9D7707662F6094B5BE4913C44D82C62CF37BD472D8A37E39E54CF393AC9DDC97"
+      },
+      "collision": {
+        "file": "fields/field_cm24_01/collision-raw-classes.json",
+        "sha256": "EC766A5D16BB31E731989B6966ADEA7CE9BD9E346B7CF571F3BF129A60B0979B",
+        "sourceSha256": "8A39CBCF2E311FBF5884018B956429B7F3B059CC7B9ED810148A34BABAC23458",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm24_01/attribute-raw-classes.json",
+        "sha256": "B3CFEB6B04BA9FB1DB8A230437257DADE558F15283E1C93DD9AFC70399397567",
+        "sourceSha256": "3BBE9328308EFB5150C4A0E30694BB533A572884FEE94ADCCA8D5F4FBE584663",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm24_01/object-placement.json",
+        "sha256": "0463366A409D3570BEECDD427CDF7F1DDAB6420F0402182FF6D328CC17481117",
+        "sourceSha256": "A6EEF9C954BB6204BC254C315942B20AD9BF094EDDCA2AE6C3057EB42DBB56AE",
+        "count": 5,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "9D7707662F6094B5BE4913C44D82C62CF37BD472D8A37E39E54CF393AC9DDC97"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "3CDA7C5311D834E1EE497752D4796461E6053D37988E8E0C8354565597519FF4"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "3BBE9328308EFB5150C4A0E30694BB533A572884FEE94ADCCA8D5F4FBE584663"
+        },
+        "col": {
+          "present": true,
+          "sha256": "8A39CBCF2E311FBF5884018B956429B7F3B059CC7B9ED810148A34BABAC23458"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "A6EEF9C954BB6204BC254C315942B20AD9BF094EDDCA2AE6C3057EB42DBB56AE"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm25_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm25_01",
+      "ordinal": 25,
+      "nameEn": "Zoo",
+      "nameJp": "どうぶつえん",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "24x14",
+      "layoutCells": 336,
+      "nativeOriginal": {
+        "file": "fields/field_cm25_01/native-original.png",
+        "sha256": "C2651FEACC316538325A76324279F9C75EEF482542E89D4EB588F16B9BF89430",
+        "width": 192,
+        "height": 112
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm25_01/faithful-hd4x.png",
+        "sha256": "B32E556B2197187921963ED8AB2AF9B9BB3F714BC0B362A260957C1A5F9B2A84",
+        "width": 768,
+        "height": 448,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm25_01/core-tilemap.json",
+        "sha256": "53E3B1D132A592E5363C121B0736DA6796F11A8D3B208A21F0D6253C1293A062",
+        "sourceSha256": "1A5960D0D34FDBEC3F3DBF1AB0516E4AE4443FC1B41F2C25CBA8952207697722"
+      },
+      "collision": {
+        "file": "fields/field_cm25_01/collision-raw-classes.json",
+        "sha256": "978342764E6E890AD7804D195BB46E6F77B5E7EC3037AA278FED4F469C54A7A8",
+        "sourceSha256": "F1DA832EC494FBE843C38770DABB829D6CC1DDC28D857D64D807075FC2EDDC67",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm25_01/attribute-raw-classes.json",
+        "sha256": "8ABE652CB77131E463C83C24F264AE83F2374F467E555A28110C3B8B9BAB3086",
+        "sourceSha256": "4250DC5978A9FF6B0E5FAB0B5B197FD3915DA8FB39C9EC4CDC81A65DA02CA4BE",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm25_01/object-placement.json",
+        "sha256": "E405018D56A9B29A8D8200F50647CF0FE2BBF27BB1C5E8D47D5030B3111105D6",
+        "sourceSha256": "CEDE3C6DC57E9846B327D0A59B91C2CD5FF1BFA053F998AFA26041BFCE8F30A3",
+        "count": 13,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "1A5960D0D34FDBEC3F3DBF1AB0516E4AE4443FC1B41F2C25CBA8952207697722"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "DA3015345BAA3838CFC690925690407A641E64AB25FD95121F818F5D65B397E6"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "4250DC5978A9FF6B0E5FAB0B5B197FD3915DA8FB39C9EC4CDC81A65DA02CA4BE"
+        },
+        "col": {
+          "present": true,
+          "sha256": "F1DA832EC494FBE843C38770DABB829D6CC1DDC28D857D64D807075FC2EDDC67"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "CEDE3C6DC57E9846B327D0A59B91C2CD5FF1BFA053F998AFA26041BFCE8F30A3"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm26_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm26_01",
+      "ordinal": 26,
+      "nameEn": "Ranch",
+      "nameJp": "ぼくじょう",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "30x25",
+      "layoutCells": 750,
+      "nativeOriginal": {
+        "file": "fields/field_cm26_01/native-original.png",
+        "sha256": "F76164BB526589F092B84EC1866DC2417FAC330CE37A34DF4EAB97ED71D57B41",
+        "width": 240,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm26_01/faithful-hd4x.png",
+        "sha256": "1E8593DCD43E48601FBEE13DC674AB36FAF0BBB3A27B8966D6D8512C25318017",
+        "width": 960,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm26_01/core-tilemap.json",
+        "sha256": "32351314382C559EB983B8FE6501A06DD00FBFC94B6068280E6B66923E7BA599",
+        "sourceSha256": "0CD3BE311F14C282EA48924375A7277F8EC7B6A6571C0AE5F6E84CDA1107455E"
+      },
+      "collision": {
+        "file": "fields/field_cm26_01/collision-raw-classes.json",
+        "sha256": "0999416F8735526C8D27332FFCEED0377435B476AADAA54B5D62453EE0DCB8E6",
+        "sourceSha256": "7AF1988CA3CE1756E35886835D95111A3D046A8AF329F0079C96474F90D321C8",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm26_01/attribute-raw-classes.json",
+        "sha256": "59A2A6800BE0A11CB4376D18276FC9A14FE2EB5DDEA324E62D728EC1C34CF8AC",
+        "sourceSha256": "D8D250FB162B23AD0D2360A29B98F51C4816B172A8D349A187AB6D6F2BA6BB7E",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm26_01/object-placement.json",
+        "sha256": "CA7F28BAFE93B9531EACA94907C4640BD946C017B94D4A4E7B18DF5E923F1EE9",
+        "sourceSha256": "E969C60CC6F088DB8FC3DCF7785B2F69CCEF4106D70F433984EEEEDB4CBF18C4",
+        "count": 11,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "0CD3BE311F14C282EA48924375A7277F8EC7B6A6571C0AE5F6E84CDA1107455E"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "44398FD857F6A5D3746B3E4A18097191F75913C223339F04E280D97451E28864"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "D8D250FB162B23AD0D2360A29B98F51C4816B172A8D349A187AB6D6F2BA6BB7E"
+        },
+        "col": {
+          "present": true,
+          "sha256": "7AF1988CA3CE1756E35886835D95111A3D046A8AF329F0079C96474F90D321C8"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "E969C60CC6F088DB8FC3DCF7785B2F69CCEF4106D70F433984EEEEDB4CBF18C4"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm27_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm27_01",
+      "ordinal": 27,
+      "nameEn": "Ring",
+      "nameJp": "リング",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "24x25",
+      "layoutCells": 600,
+      "nativeOriginal": {
+        "file": "fields/field_cm27_01/native-original.png",
+        "sha256": "E3AE07BCCCD66F18793215AAF10107D4D9CBD0FF76F96C00619859E6001CBBA2",
+        "width": 192,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm27_01/faithful-hd4x.png",
+        "sha256": "8737BBF6BE0F734AEA665129DAB4CBC4CE5625DA676748089CCF0408716C0B5E",
+        "width": 768,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm27_01/core-tilemap.json",
+        "sha256": "20D4F75B1C4D6DF57BBFAA8562BBAA13FDF61D5C24EED1F6DEDEB15BFBA9B0C2",
+        "sourceSha256": "8857A2A8C545E09DF4A11FFD97BE42B35CE6069A4781ED565ABA498B37A8FF54"
+      },
+      "collision": {
+        "file": "fields/field_cm27_01/collision-raw-classes.json",
+        "sha256": "8E4AB02006031840D789919DB4BFF846CB80CA352B8355BDC2A86453EBD667C7",
+        "sourceSha256": "B572FE4ABD31CA5D9744751B8B6428FAD57575F5D79F6218A8432263D30DCF31",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm27_01/attribute-raw-classes.json",
+        "sha256": "CD77DE7DAE80838E467A6FFF290738C3A17C46BECDE2115D7D0376696E3254C2",
+        "sourceSha256": "147F093B0E2A3EA81F2465C2BAC1039DC3C38F84D77B2ABFDF8B19BD908213A0",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm27_01/object-placement.json",
+        "sha256": "5C2F6679C926630D0A3C381AE7B02856D62300ED91E1C66BCDD7EDDD8B92D160",
+        "sourceSha256": "08494BF8EE59DAA23AA59AB6FC3313CA8DC1A76D1FCCD5773AB01A613491BD8D",
+        "count": 12,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "8857A2A8C545E09DF4A11FFD97BE42B35CE6069A4781ED565ABA498B37A8FF54"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "03D4D7360F2218C13F5DDA373BAC8A3A352BF68466338A163B35CF26097B6EB2"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "147F093B0E2A3EA81F2465C2BAC1039DC3C38F84D77B2ABFDF8B19BD908213A0"
+        },
+        "col": {
+          "present": true,
+          "sha256": "B572FE4ABD31CA5D9744751B8B6428FAD57575F5D79F6218A8432263D30DCF31"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "08494BF8EE59DAA23AA59AB6FC3313CA8DC1A76D1FCCD5773AB01A613491BD8D"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm28_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm28_01",
+      "ordinal": 28,
+      "nameEn": "Waiting Room",
+      "nameJp": "ひかえしつ",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "30x25",
+      "layoutCells": 750,
+      "nativeOriginal": {
+        "file": "fields/field_cm28_01/native-original.png",
+        "sha256": "B4F17BAFC3A7CD196F7BC4513A89A60B96598F279C2E6C9EBC4790E5810A9134",
+        "width": 240,
+        "height": 200
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm28_01/faithful-hd4x.png",
+        "sha256": "2C034A04C1304215F64B44DFA5E4442CAB839370553C2FEE3D6C11F063358C91",
+        "width": 960,
+        "height": 800,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm28_01/core-tilemap.json",
+        "sha256": "99DC3B474F9F4B2948CE9F84E47E46CAC50AF981247764725C9D2E7F06CA6CCB",
+        "sourceSha256": "B9174D623C6EE92D5D55E635E5AF2B2B248BB2603521DF7626B4377D523F3148"
+      },
+      "collision": {
+        "file": "fields/field_cm28_01/collision-raw-classes.json",
+        "sha256": "7220925BD130CA701C3CAE029FF319DD61710D91B7A9C5CFEC3116B5535746A8",
+        "sourceSha256": "FDFE908DDAD4FC35202D0B5177D5F098A655F247E1940525058B2B3DC227875A",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm28_01/attribute-raw-classes.json",
+        "sha256": "D0507C0798150BEE0C3C807BE60555D1D2221665910D58EA04AE3BD46480B592",
+        "sourceSha256": "B230A2FE37699497747735EB884A6E1064AE7DD9AAEF0AEF902C5F71D47088FB",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm28_01/object-placement.json",
+        "sha256": "7A83ED3FA6A4E182CC007AD84CD69151E7D01D1471E04EC323D32FC0C9806243",
+        "sourceSha256": null,
+        "count": 0,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "B9174D623C6EE92D5D55E635E5AF2B2B248BB2603521DF7626B4377D523F3148"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "80CF826B76C2B03A1FEDDA4F26E5B1C9F1AC3D0D887A58329BB4AD11A9450FFA"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "B230A2FE37699497747735EB884A6E1064AE7DD9AAEF0AEF902C5F71D47088FB"
+        },
+        "col": {
+          "present": true,
+          "sha256": "FDFE908DDAD4FC35202D0B5177D5F098A655F247E1940525058B2B3DC227875A"
+        },
+        "opm": {
+          "present": false,
+          "sha256": null
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm29_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm29_01",
+      "ordinal": 29,
+      "nameEn": "Lid",
+      "nameJp": "ふた",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "12x14",
+      "layoutCells": 168,
+      "nativeOriginal": {
+        "file": "fields/field_cm29_01/native-original.png",
+        "sha256": "6C85AB18018882C461F3A4A84BFC05CFCE5DF2D2DFC4C78606E7EB67B27533B6",
+        "width": 96,
+        "height": 112
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm29_01/faithful-hd4x.png",
+        "sha256": "2915DA22F70B9FA47ABABAA9C43E0A2B0E386153862F8E3A92C48AE45F0E4079",
+        "width": 384,
+        "height": 448,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm29_01/core-tilemap.json",
+        "sha256": "50254AD3FD63C31A66539B6C9D6189693BC6EA0FFC28C2927F8C6F0617F159DC",
+        "sourceSha256": "0602D3F5FDBB2485B3430147A22F243CF62543A98B2B80621AA5A100575DAC5A"
+      },
+      "collision": {
+        "file": "fields/field_cm29_01/collision-raw-classes.json",
+        "sha256": "0C54F13DFE3C0BF65E8CD8EDFB32E33F7FF120C7ACDC6ED433D503A3F46F340B",
+        "sourceSha256": "12745A44C02BB621DABB675D821A85456D68B4687F2611FC1167F36509817330",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm29_01/attribute-raw-classes.json",
+        "sha256": "292A84EB3A646B02AE7A1115F504353B5E411E217653A429A9D4461FF20E2735",
+        "sourceSha256": "6D6FE7720836CD8CC38FB6BBD06D586C2BE21D11C9F2654D66C4996B024D3183",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm29_01/object-placement.json",
+        "sha256": "7A83ED3FA6A4E182CC007AD84CD69151E7D01D1471E04EC323D32FC0C9806243",
+        "sourceSha256": null,
+        "count": 0,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "0602D3F5FDBB2485B3430147A22F243CF62543A98B2B80621AA5A100575DAC5A"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "650998DB410CDA25406345B7E5C477B10652DA4F87A0DDE2DD5BF43ADA307458"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "6D6FE7720836CD8CC38FB6BBD06D586C2BE21D11C9F2654D66C4996B024D3183"
+        },
+        "col": {
+          "present": true,
+          "sha256": "12745A44C02BB621DABB675D821A85456D68B4687F2611FC1167F36509817330"
+        },
+        "opm": {
+          "present": false,
+          "sha256": null
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm30_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm30_01",
+      "ordinal": 30,
+      "nameEn": "Mini Exercise",
+      "nameJp": "ミニうんどうじょう",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "12x14",
+      "layoutCells": 168,
+      "nativeOriginal": {
+        "file": "fields/field_cm30_01/native-original.png",
+        "sha256": "4598538854557E0732B9E1B8A394B494F62FB25118837AB801CF7E0F828E211E",
+        "width": 96,
+        "height": 112
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm30_01/faithful-hd4x.png",
+        "sha256": "F1748FC2ABC277437BCCA6D372523E0AF614F7D03C7F1E3FC3D8942CD3721C65",
+        "width": 384,
+        "height": 448,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm30_01/core-tilemap.json",
+        "sha256": "BEEDE1E4B0E1B79B48F3136275CB53209EC8965EF4A3D24D5E5ED14066156C42",
+        "sourceSha256": "4BACC88CD4E1194C83859ABCFAFCB7BC5486B32965B62259AA8FAC19F02BB0A2"
+      },
+      "collision": {
+        "file": "fields/field_cm30_01/collision-raw-classes.json",
+        "sha256": "B29121392C19F8DF98FE88A3592486A5AE1AC0A99029B5E0F4E6EDC6686BB1CC",
+        "sourceSha256": "184953B81860C0224EDC319AA48074242DA715177AC461FC65973E55EE44453F",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm30_01/attribute-raw-classes.json",
+        "sha256": "6DA1E3A92CAC27850E57E33AA6636271FB298BC5854D910CCFE7668EE0083BD1",
+        "sourceSha256": "CDAE829F47F706AFB1E3ED1D3A4B70341EABBCE09639351A150593A773C531CB",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm30_01/object-placement.json",
+        "sha256": "5FD5F5950ED2E46DAE845EB67DCFE51B6DA6C539FB51BC733643F693B723F99F",
+        "sourceSha256": "BF7B68DC22B3917720F3F0ED0D67FFB2C77D7AD421847919D4F736A86A0749F9",
+        "count": 1,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "4BACC88CD4E1194C83859ABCFAFCB7BC5486B32965B62259AA8FAC19F02BB0A2"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "86640953A9ABF6F17173F76DAA736D660DB1BBCE6102AF0CB708731E4B6B495C"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "CDAE829F47F706AFB1E3ED1D3A4B70341EABBCE09639351A150593A773C531CB"
+        },
+        "col": {
+          "present": true,
+          "sha256": "184953B81860C0224EDC319AA48074242DA715177AC461FC65973E55EE44453F"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "BF7B68DC22B3917720F3F0ED0D67FFB2C77D7AD421847919D4F736A86A0749F9"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm31_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm31_01",
+      "ordinal": 31,
+      "nameEn": "Clinic",
+      "nameJp": "ほけんしつ",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "24x14",
+      "layoutCells": 336,
+      "nativeOriginal": {
+        "file": "fields/field_cm31_01/native-original.png",
+        "sha256": "A09EACC4DB56D22503F4124E148BF0E941BF04C0E442997C2050AD4A20401A27",
+        "width": 192,
+        "height": 112
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm31_01/faithful-hd4x.png",
+        "sha256": "DA0C8EC45D3E1C303C4093D92D9A85914C168B99F624864F31A565CF2E525C53",
+        "width": 768,
+        "height": 448,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm31_01/core-tilemap.json",
+        "sha256": "A38C05C74AEC9E8E5D282FDB10ACA5C640501AAEB9CD24961DB75E643B6C3BAB",
+        "sourceSha256": "8780E234AC6F067A65ADF9F0E07CA32B6A6FD6C8B9EFEE22DC325175BFBC462B"
+      },
+      "collision": {
+        "file": "fields/field_cm31_01/collision-raw-classes.json",
+        "sha256": "FECA685D416E3457CD585493430895DF98337327973C6B53217EB43695210C3E",
+        "sourceSha256": "1F88C172386256CAFD5028303E64D9FD1206C917A059ACCB1DBD88C0BF3ADF75",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm31_01/attribute-raw-classes.json",
+        "sha256": "FFF880FAEB8869DD40F7A281A5165BDDDCBCEC683EEF6E05429319A665A9F930",
+        "sourceSha256": "350086899CBE0C96928C6D5ED03DEE5B3A389611D81545E8B8A52845458B0FCA",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm31_01/object-placement.json",
+        "sha256": "A947CD93C05933C24DD7C8894BEE1B1909A12C4AA815D034AC718071A93CA8FB",
+        "sourceSha256": "6853D115764A0FF82AC23A43458AD1B9764722DCF0D9ABA2C39AC8571B418B18",
+        "count": 3,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "8780E234AC6F067A65ADF9F0E07CA32B6A6FD6C8B9EFEE22DC325175BFBC462B"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "1117EF560DFB0B396CA873749A270A93435295D4715F04A6798040C4AABB5554"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "350086899CBE0C96928C6D5ED03DEE5B3A389611D81545E8B8A52845458B0FCA"
+        },
+        "col": {
+          "present": true,
+          "sha256": "1F88C172386256CAFD5028303E64D9FD1206C917A059ACCB1DBD88C0BF3ADF75"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "6853D115764A0FF82AC23A43458AD1B9764722DCF0D9ABA2C39AC8571B418B18"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm32_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm32_01",
+      "ordinal": 32,
+      "nameEn": "Mini Flower Garden",
+      "nameJp": "ミニはなぞの",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "12x14",
+      "layoutCells": 168,
+      "nativeOriginal": {
+        "file": "fields/field_cm32_01/native-original.png",
+        "sha256": "49E4FBADA12561448290CC2A3F91FCBC16912DBEFA92427B6BA6ECB3BCBA1B79",
+        "width": 96,
+        "height": 112
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm32_01/faithful-hd4x.png",
+        "sha256": "BD95000484E8EE20FE1A9C94DF12D9857833416CD9E858DB78B161E36828F273",
+        "width": 384,
+        "height": 448,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm32_01/core-tilemap.json",
+        "sha256": "4EE53C8D10F958145DE1B0F5FC67CE5008C7336222A86F98F60BC710713B9ADB",
+        "sourceSha256": "9D7707662F6094B5BE4913C44D82C62CF37BD472D8A37E39E54CF393AC9DDC97"
+      },
+      "collision": {
+        "file": "fields/field_cm32_01/collision-raw-classes.json",
+        "sha256": "3B9A5080B208E58588E29EDCCB82D7645728A18552033A3CE17A3F3B3EF7E49B",
+        "sourceSha256": "DF53619EF048831C7E031987F7C257069AD746BA78B2543F0F9E50D738D592E5",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm32_01/attribute-raw-classes.json",
+        "sha256": "4E6E9BDA27139AC3E7B6FB898818420AEA86C830811B52DCDF4A87AC038B64D7",
+        "sourceSha256": "19B199DC20356A469D8398CE526A44FB55DD667399BED33396DC12ED3DAFFEBD",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm32_01/object-placement.json",
+        "sha256": "290C827CEED1A1219F8E6EF17C584ADEC9A461972A132E1141B5BA4BC97D5BE6",
+        "sourceSha256": "E0C2E43F59664651D2B32A08EC008544F2EEA752C2773F388DBD73AC7B32A9CD",
+        "count": 7,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "9D7707662F6094B5BE4913C44D82C62CF37BD472D8A37E39E54CF393AC9DDC97"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "94D1BECF454DAECC5C7B831179E09D02CCA91FD36A78F0DC2498DEDD801D61B1"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "19B199DC20356A469D8398CE526A44FB55DD667399BED33396DC12ED3DAFFEBD"
+        },
+        "col": {
+          "present": true,
+          "sha256": "DF53619EF048831C7E031987F7C257069AD746BA78B2543F0F9E50D738D592E5"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "E0C2E43F59664651D2B32A08EC008544F2EEA752C2773F388DBD73AC7B32A9CD"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm33_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm33_01",
+      "ordinal": 33,
+      "nameEn": "Mini Forest",
+      "nameJp": "ミニもり",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "12x14",
+      "layoutCells": 168,
+      "nativeOriginal": {
+        "file": "fields/field_cm33_01/native-original.png",
+        "sha256": "9C08F42403527F5322EF78A5A50FB03F46D713E98F7F75F8F72AE1E9847379D7",
+        "width": 96,
+        "height": 112
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm33_01/faithful-hd4x.png",
+        "sha256": "CF0500E469AF4156FF22489B06A64DF7DF0DA3C2F26982B9C1F2257076376F22",
+        "width": 384,
+        "height": 448,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm33_01/core-tilemap.json",
+        "sha256": "711253BBBF25C32306614622C223A79EF5F2523E1305A1C3BA18CA9BEB82085D",
+        "sourceSha256": "58F664EEB54F14DBD7CC85257CE0F7DAD302FD1EF59C2C844BDD13948E97B3DC"
+      },
+      "collision": {
+        "file": "fields/field_cm33_01/collision-raw-classes.json",
+        "sha256": "218BFFE86E2F77CBC057F0BB5666203DF02B6723344F557DED6E7398F78EE787",
+        "sourceSha256": "3474763E67B4E0085FDF55094B0E892216062EB6D05F36DEE499CCF8557C5A66",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm33_01/attribute-raw-classes.json",
+        "sha256": "FE6BD4BFC843797DECBC7C0F37F8697A618AA75893FE3ED7737E79F63F82CE46",
+        "sourceSha256": "A9E9FBD9301AEAE2B961123EB0EBB89C137A172B301496BB025FE3E6EA168C8D",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm33_01/object-placement.json",
+        "sha256": "1EE9C014A1EF61E78C1161636B4E294A50278BCD85443FB1AB606C19855C7BBE",
+        "sourceSha256": "CC2FFBAB860074006A559995AA51B55AB21066C7BF86293816FE2258A4494472",
+        "count": 1,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "58F664EEB54F14DBD7CC85257CE0F7DAD302FD1EF59C2C844BDD13948E97B3DC"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "9DA4ED6823F69B458068BECE641259F5D39B3384109B80711C406CCD5857BA51"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "A9E9FBD9301AEAE2B961123EB0EBB89C137A172B301496BB025FE3E6EA168C8D"
+        },
+        "col": {
+          "present": true,
+          "sha256": "3474763E67B4E0085FDF55094B0E892216062EB6D05F36DEE499CCF8557C5A66"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "CC2FFBAB860074006A559995AA51B55AB21066C7BF86293816FE2258A4494472"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm34_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm34_01",
+      "ordinal": 34,
+      "nameEn": "Mini Gym",
+      "nameJp": "ミニジム",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "12x14",
+      "layoutCells": 168,
+      "nativeOriginal": {
+        "file": "fields/field_cm34_01/native-original.png",
+        "sha256": "FA21582CB1BF91EE1153E3F21EB3907B6C75D1C27B5F463033B6C8B462321212",
+        "width": 96,
+        "height": 112
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm34_01/faithful-hd4x.png",
+        "sha256": "6C07BD75AC912FABBCDBD855EE7886A37EFF1C4329AB71C1D6B6A0F6EDD0EA8D",
+        "width": 384,
+        "height": 448,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm34_01/core-tilemap.json",
+        "sha256": "D9D044CCB1DFB8C6C29A1C71CC5F64E49A128CEA0FC6B580BB5412EDF28CE2FF",
+        "sourceSha256": "D58041E6AC9978581E10DD2DE9430EDE268F28127D2D09494F7D7535B9B24D95"
+      },
+      "collision": {
+        "file": "fields/field_cm34_01/collision-raw-classes.json",
+        "sha256": "B07C498950ADEA76B7573A53D65407ABFBABD350CFF9DF82D16A38A6D9556418",
+        "sourceSha256": "B9D89E5115BB4469457D7738683DB27B8C41084A3A4E1272D622C2C85446E390",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm34_01/attribute-raw-classes.json",
+        "sha256": "514D00C16482CC030A4E040A003EDD9DF7F814E089823A3E1EEA8E74D5D6E522",
+        "sourceSha256": "8E752A7A1C1D57EFEE99E566167A26971B070A8C1831D31B86FDE625EB0C5C2D",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm34_01/object-placement.json",
+        "sha256": "7A51555693BDD297A3042C58F8D16E9D129853E14340DCE3C007F8F5C430A527",
+        "sourceSha256": "FA9AA1096E3993E09CE9699BD59DFC1D27519062AB015AFE3FF37A6B30251A95",
+        "count": 3,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "D58041E6AC9978581E10DD2DE9430EDE268F28127D2D09494F7D7535B9B24D95"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "8BE79F1C1821DAE9B9A7A170EEBB964EBBEE18ACE7E87A5678DF920452B6E5EE"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "8E752A7A1C1D57EFEE99E566167A26971B070A8C1831D31B86FDE625EB0C5C2D"
+        },
+        "col": {
+          "present": true,
+          "sha256": "B9D89E5115BB4469457D7738683DB27B8C41084A3A4E1272D622C2C85446E390"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "FA9AA1096E3993E09CE9699BD59DFC1D27519062AB015AFE3FF37A6B30251A95"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm35_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm35_01",
+      "ordinal": 35,
+      "nameEn": "Mini Volcano",
+      "nameJp": "ミニかざん",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "12x14",
+      "layoutCells": 168,
+      "nativeOriginal": {
+        "file": "fields/field_cm35_01/native-original.png",
+        "sha256": "82DFEC5260F8B640620B3ED5345520C74C02DA85D596A4AF359071E76A57F4C2",
+        "width": 96,
+        "height": 112
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm35_01/faithful-hd4x.png",
+        "sha256": "DF8D8280F218D08A298670F601C8E0AF4A3F7648343DC22ABAD0A3F0E0E9277B",
+        "width": 384,
+        "height": 448,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm35_01/core-tilemap.json",
+        "sha256": "2307D197F1EE5A98FE89D10BBB7806E868552A9F98C646D5EF0A8E2269C57ECD",
+        "sourceSha256": "BFAF5E7A5792346CBCF5D9EA27B37DECCE53B7DFF126F4A9F30F5B420BAE98B0"
+      },
+      "collision": {
+        "file": "fields/field_cm35_01/collision-raw-classes.json",
+        "sha256": "EF090C9309B7F1E3190F47B61C46032658613FCE72439658777B8F494D44AE63",
+        "sourceSha256": "65B40B3D0F4A220A9C5206DD6EE8C074C911C89DE2332AF9A91129FCCD52E81C",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm35_01/attribute-raw-classes.json",
+        "sha256": "2151754692C36BE830CE080985073990A5D92000EBFF1CD8E2023F4CFD4AC157",
+        "sourceSha256": "3175A110FBE1AE4A3C905E1D65C6CE1376B38845D5B9B78F430484FB903F2CF7",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm35_01/object-placement.json",
+        "sha256": "87D59D4EE8222FA219242E2F2C9D7F55E7DBD70C1D4BE958525603BF424F3D37",
+        "sourceSha256": "6D7272C34B11E2EE194A7E3F48D406B4321D8B5F89EF38137C7D9A916647AEBB",
+        "count": 0,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "BFAF5E7A5792346CBCF5D9EA27B37DECCE53B7DFF126F4A9F30F5B420BAE98B0"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "999268111D7ED7576941854F8489760D18917E7FA51BF354DB0497AE44E44E4D"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "3175A110FBE1AE4A3C905E1D65C6CE1376B38845D5B9B78F430484FB903F2CF7"
+        },
+        "col": {
+          "present": true,
+          "sha256": "65B40B3D0F4A220A9C5206DD6EE8C074C911C89DE2332AF9A91129FCCD52E81C"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "6D7272C34B11E2EE194A7E3F48D406B4321D8B5F89EF38137C7D9A916647AEBB"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm36_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm36_01",
+      "ordinal": 36,
+      "nameEn": "Mini Ice",
+      "nameJp": "ミニこおり",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "12x14",
+      "layoutCells": 168,
+      "nativeOriginal": {
+        "file": "fields/field_cm36_01/native-original.png",
+        "sha256": "299FAFE111E0B77AB79113DC349CCBB73E83D0ACAFB060FAA2EC04846AC59C90",
+        "width": 96,
+        "height": 112
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm36_01/faithful-hd4x.png",
+        "sha256": "A6BF989D61798D13B71F9B47D1F9F48285FE3D3A45EB05E30CB8BB2F6FF1189E",
+        "width": 384,
+        "height": 448,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm36_01/core-tilemap.json",
+        "sha256": "46CD808781C1D8EA62FAAA569FC612723AE60F4685AF7A85FE4C63B31B54B94B",
+        "sourceSha256": "6EA43B5B8B6F88B46D8EC0D3F0C9CF2AED431C5B52513330AD4B08D95C3BE1A6"
+      },
+      "collision": {
+        "file": "fields/field_cm36_01/collision-raw-classes.json",
+        "sha256": "3B9A5080B208E58588E29EDCCB82D7645728A18552033A3CE17A3F3B3EF7E49B",
+        "sourceSha256": "DF53619EF048831C7E031987F7C257069AD746BA78B2543F0F9E50D738D592E5",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm36_01/attribute-raw-classes.json",
+        "sha256": "E90EF8E78A5D478A3FFA8E1B06507FA8DBA84723B416ECD57F1944EF4CA78FA8",
+        "sourceSha256": "53A3DEBF27E6329694B3FF9672036B429A6D4A6049806F30A8858EB451011947",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm36_01/object-placement.json",
+        "sha256": "CB6C988CBA5FFC7266D37467A839B66A8B228D5257E68E8194B63E3B3620E874",
+        "sourceSha256": "BEF711A3F30CA39DA2DE0A336C4803D0014A796AAD426B5103E658A85CB54C64",
+        "count": 0,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "6EA43B5B8B6F88B46D8EC0D3F0C9CF2AED431C5B52513330AD4B08D95C3BE1A6"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "1AC7CBC5610539BD50A7D35D6E10D15CC9F89CA79B7F754C9FF8BFF7A775A280"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "53A3DEBF27E6329694B3FF9672036B429A6D4A6049806F30A8858EB451011947"
+        },
+        "col": {
+          "present": true,
+          "sha256": "DF53619EF048831C7E031987F7C257069AD746BA78B2543F0F9E50D738D592E5"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "BEF711A3F30CA39DA2DE0A336C4803D0014A796AAD426B5103E658A85CB54C64"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm37_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm37_01",
+      "ordinal": 37,
+      "nameEn": "Mini Mine",
+      "nameJp": "ミニこうざん",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "12x14",
+      "layoutCells": 168,
+      "nativeOriginal": {
+        "file": "fields/field_cm37_01/native-original.png",
+        "sha256": "9C815D2070703A1E4662DA1222337F6FD51F2400F335C9CC62308320B79A88E3",
+        "width": 96,
+        "height": 112
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm37_01/faithful-hd4x.png",
+        "sha256": "7A463B121B6246BBAC67E1EDEDD5471AFEA81D108FC9EBED46F1794A4DA38B7C",
+        "width": 384,
+        "height": 448,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm37_01/core-tilemap.json",
+        "sha256": "03082BD834FE9FDDC459C2BE0DB6CE0B0A5969F67611570CE072B7C17B48C208",
+        "sourceSha256": "8BFD338711D8F9D33AE88C7530EEAFAE4CA3ADB9E0B9107935B16DCE6EE514B8"
+      },
+      "collision": {
+        "file": "fields/field_cm37_01/collision-raw-classes.json",
+        "sha256": "43471284D0C399271F77BB1B948830F6F1EF361B1B87A3C7E83D87D5071C25C6",
+        "sourceSha256": "503ED8461EF699A4AC7C47C405E649FC1CD9CB4E66871B3F4D8F0EA5B37633DB",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm37_01/attribute-raw-classes.json",
+        "sha256": "7AA1217117187E56AFFC71E7178AA6A96197D9B64AEAFCCCAC53F37E1B5C1807",
+        "sourceSha256": "5CB0F95016DB9BCDE7204F996AF6B2520F2ED2B02A1836D4A6B625D3C4E1C94B",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm37_01/object-placement.json",
+        "sha256": "73C73767840D10EE2006BF706CCAEFFB7DDEAC638B8F68CE9D7C730A17CEF247",
+        "sourceSha256": "05C7F4C0BE37FAFEE38837EEC20102162050781F672D6275F2DFB2B0377E21AE",
+        "count": 0,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "8BFD338711D8F9D33AE88C7530EEAFAE4CA3ADB9E0B9107935B16DCE6EE514B8"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "2E9E689DEFDD9C70E6A9B9259B29EEAB8D873FE1DAD997C05CD7669071037E41"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "5CB0F95016DB9BCDE7204F996AF6B2520F2ED2B02A1836D4A6B625D3C4E1C94B"
+        },
+        "col": {
+          "present": true,
+          "sha256": "503ED8461EF699A4AC7C47C405E649FC1CD9CB4E66871B3F4D8F0EA5B37633DB"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "05C7F4C0BE37FAFEE38837EEC20102162050781F672D6275F2DFB2B0377E21AE"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm38_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm38_01",
+      "ordinal": 38,
+      "nameEn": "Mini Factory",
+      "nameJp": "ミニこうじょう",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "12x14",
+      "layoutCells": 168,
+      "nativeOriginal": {
+        "file": "fields/field_cm38_01/native-original.png",
+        "sha256": "5A0E89A7DDBCC97CCD260ADAC13BC23CC4A0FE17CAACD8F4C34F3A7744E7B1C4",
+        "width": 96,
+        "height": 112
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm38_01/faithful-hd4x.png",
+        "sha256": "6C9573F0A42EA5D4AC9DD3073884CDD9CACAE098AF2F30756748E36DE20C9F48",
+        "width": 384,
+        "height": 448,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm38_01/core-tilemap.json",
+        "sha256": "C694EE21E0BC14E3A7EED570C86BC2AAB31FB7321CF49B3E763F79ECC9D18F14",
+        "sourceSha256": "DE7F77F778C25134E5192652046E9A61628E6A51AB73A5D408D77B8982E77893"
+      },
+      "collision": {
+        "file": "fields/field_cm38_01/collision-raw-classes.json",
+        "sha256": "9B5A0ED8E20BE0FF152A094C2D7CB6E2B19EC7646478160A2D2CDF8333D3CFC0",
+        "sourceSha256": "1CF4AAD397AB622CFC9CEA064BF709FC49EC7DCBA1BD7D93C402F720BBB4FF1E",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm38_01/attribute-raw-classes.json",
+        "sha256": "D8A08D768516DF766F3F18BFF96717B695DFFB42FCB431B60E73F67D58C04D07",
+        "sourceSha256": "39BF35658EA3384C6E606C539A965FE31FA0E9020D9691CD75F2186E2ED44CC4",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm38_01/object-placement.json",
+        "sha256": "37BD9748DEDB16AD1475C0D3BD81A903C03E25D4C8A2B7A14A82C5E16DB722CB",
+        "sourceSha256": "C19655FF47D3F3755360CA9C0FCA2456D74F007E560BC3ECB448E6D3F0D7EA36",
+        "count": 10,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "DE7F77F778C25134E5192652046E9A61628E6A51AB73A5D408D77B8982E77893"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "EAFB01B2E3E17DE1B9E06B4EED1826314B58251387F7C0DED8C1F8CA7440C5DA"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "39BF35658EA3384C6E606C539A965FE31FA0E9020D9691CD75F2186E2ED44CC4"
+        },
+        "col": {
+          "present": true,
+          "sha256": "1CF4AAD397AB622CFC9CEA064BF709FC49EC7DCBA1BD7D93C402F720BBB4FF1E"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "C19655FF47D3F3755360CA9C0FCA2456D74F007E560BC3ECB448E6D3F0D7EA36"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm39_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm39_01",
+      "ordinal": 39,
+      "nameEn": "Mini Beach",
+      "nameJp": "ミニビーチ",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "12x14",
+      "layoutCells": 168,
+      "nativeOriginal": {
+        "file": "fields/field_cm39_01/native-original.png",
+        "sha256": "F2B3A8DE7672CF4C9D83F82972A82A5F92055082FFD1A5DCFD83A0893F8D4F85",
+        "width": 96,
+        "height": 112
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm39_01/faithful-hd4x.png",
+        "sha256": "D519923E35256D6BDA1D520EC8F4D8B1578F8A96A0E74F8782AE192E8592E1BD",
+        "width": 384,
+        "height": 448,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm39_01/core-tilemap.json",
+        "sha256": "AB55881376F4E15F258234FD9E5B6088907C2788B751EFD9B18FFD90C9939295",
+        "sourceSha256": "04B0273C2333CDFEBC220DFA07B49D70DE734AD72E36A9EED3F2756D388C041C"
+      },
+      "collision": {
+        "file": "fields/field_cm39_01/collision-raw-classes.json",
+        "sha256": "465957DD9796CB8F33C7EC454C3FA122856ED2AFB2A8B12EA21818D0034F33C2",
+        "sourceSha256": "CF2ECFD0FF2517EC64FE47646BC6C649B941F9804C5C0E343D5AAB5A87A4A018",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm39_01/attribute-raw-classes.json",
+        "sha256": "B6E755D579F6135C00B2B3C319D79BEF62ACF7C6D84F0084FB7E9A10B12B9550",
+        "sourceSha256": "FE30BD1D7694986DD56D98C4264671A701FF7D4CC8A2298D600CE79059432695",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm39_01/object-placement.json",
+        "sha256": "979830D7763B2D87344D5E86B0C5912B54231FDC45CDD8B070A89BAF75F7DB77",
+        "sourceSha256": "928E9C8038ED9C6EF572F43EC906785D1C98D8BE9331885AC4B0005797B5D2E2",
+        "count": 1,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "04B0273C2333CDFEBC220DFA07B49D70DE734AD72E36A9EED3F2756D388C041C"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "DCA72A75F860B5D79A6EC90CDFDBE4529ADDEDF30CCA7FFA0BA76B21F2B1DF54"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "FE30BD1D7694986DD56D98C4264671A701FF7D4CC8A2298D600CE79059432695"
+        },
+        "col": {
+          "present": true,
+          "sha256": "CF2ECFD0FF2517EC64FE47646BC6C649B941F9804C5C0E343D5AAB5A87A4A018"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "928E9C8038ED9C6EF572F43EC906785D1C98D8BE9331885AC4B0005797B5D2E2"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:cage:field_cm40_01:faithful-hd4x-baseline",
+      "fieldId": "field_cm40_01",
+      "ordinal": 40,
+      "nameEn": "Cave",
+      "nameJp": "どうくつ",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "originalDimensions": "12x14",
+      "layoutCells": 168,
+      "nativeOriginal": {
+        "file": "fields/field_cm40_01/native-original.png",
+        "sha256": "27474FA6AAB08684BE4C2F761C65D187239455D2A06C1AE0AD5E8AEEDB33D244",
+        "width": 96,
+        "height": 112
+      },
+      "faithfulHd4x": {
+        "file": "fields/field_cm40_01/faithful-hd4x.png",
+        "sha256": "6466F513A4E8D429455F165E4478C800CD76A5D341914EF1F31D330DA4565862",
+        "width": 384,
+        "height": 448,
+        "scale": 4,
+        "filter": "NEAREST",
+        "downsampleRoundTripEqualsOriginal": true
+      },
+      "coreTilemap": {
+        "file": "fields/field_cm40_01/core-tilemap.json",
+        "sha256": "4D8175259D6812989A450749744725DC2FE82475C863C865B3A96515FC6BE043",
+        "sourceSha256": "A4F6B6B3940E73441372E141276F859F55EC0C1410E0EFC7456E4B1A4B557AC3"
+      },
+      "collision": {
+        "file": "fields/field_cm40_01/collision-raw-classes.json",
+        "sha256": "2F9F1AB3B22F9275B8720FB8434E585859173BE4446A0F206447701EBC606083",
+        "sourceSha256": "4DAE8CE455AFE8FA6719A1B1747862A4E486C22BADAD7C3F5E207AE4B7F703E7",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "attribute": {
+        "file": "fields/field_cm40_01/attribute-raw-classes.json",
+        "sha256": "60360DABB6481E3ED7CCE157AC8D2B459B4468463EB998697C28E6989128A1BD",
+        "sourceSha256": "B10A3C16F139D11B277518C9302C690AA87D8DCB6786162FD45415DD98429216",
+        "classSemantics": "RAW_CLASS_XX_NOT_REINTERPRETED"
+      },
+      "objectPlacement": {
+        "file": "fields/field_cm40_01/object-placement.json",
+        "sha256": "F283079B1BCDE2E4C8ECFD42EBFF339D3C96E84A19EC1BA5A7FB3F391D11CDD6",
+        "sourceSha256": "A4BA46B57E9150629185F4B1D1DCA62F366537D79D71B9BD30CB58FBD136F11B",
+        "count": 0,
+        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+      },
+      "sourcePayloadHashes": {
+        "nbs": {
+          "present": true,
+          "sha256": "A4F6B6B3940E73441372E141276F859F55EC0C1410E0EFC7456E4B1A4B557AC3"
+        },
+        "ncgr": {
+          "present": true,
+          "sha256": "21846707FD86FC1092377420CE4032211890E7AE4CFD21068EDE6F5F3AC5270F"
+        },
+        "nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
+        },
+        "atr": {
+          "present": true,
+          "sha256": "B10A3C16F139D11B277518C9302C690AA87D8DCB6786162FD45415DD98429216"
+        },
+        "col": {
+          "present": true,
+          "sha256": "4DAE8CE455AFE8FA6719A1B1747862A4E486C22BADAD7C3F5E207AE4B7F703E7"
+        },
+        "opm": {
+          "present": true,
+          "sha256": "A4BA46B57E9150629185F4B1D1DCA62F366537D79D71B9BD30CB58FBD136F11B"
+        }
+      },
+      "rightsStatus": "LICENSED",
+      "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "runtimeEligible": false,
+      "shippingReady": false
+    }
+  ],
+  "qa": {
+    "all40NativeImagesImported": true,
+    "all40HdRoundTripPixelExact": true,
+    "all40CollisionDimensionsMatchTilemaps": true,
+    "all40AttributeDimensionsMatchTilemaps": true,
+    "objectPlacementRelayoutPerformed": false,
+    "unknownClassSemanticsInvented": false,
+    "cm12Cm18ObjectConflictBound": false
+  }
+}

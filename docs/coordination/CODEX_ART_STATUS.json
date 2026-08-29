@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "owner": "CODEX_ART",
   "lastUpdated": "2026-08-29",
-  "syncBatch": "ART_A3_CAGE_CM01_CM10_CLEAN_ROOM_REVIEW_PACK",
-  "syncRevision": 12,
-  "syncRevisionTarget": 12,
-  "status": "CM01_CM10_REVIEW_PACK_COMPLETE_OWNER_VISUAL_REVIEW_NEXT",
+  "syncBatch": "ART_A3_CAGE_EXACT_ORIGINAL_FAITHFUL_HD40_BASELINE",
+  "syncRevision": 13,
+  "syncRevisionTarget": 13,
+  "status": "CAGE_HD40_BASELINE_COMPLETE_CM12_CM18_OBJECT_CONFLICTS_QUARANTINED",
   "sourceOfTruth": {
     "coordinationRoot": "docs/coordination",
     "canonicalRepository": ".",
@@ -66,12 +66,24 @@
   },
   "completed": [
     {
+      "id": "ART-A3-CAGE-FAITHFUL-HD40",
+      "status": "40_OF_40_VISUAL_AND_COLLISION_BASELINES_38_FULL_COMPOSITIONS",
+      "summary": "Owner correction replaced generated Cage production art with an exact-original baseline: 40 native visual goldens, 40 deterministic 4x nearest-neighbour HD outputs, raw NBS tilemaps, COL collision, ATR attributes, and original OPM object source coordinates. JavaScript format parsers preserve raw values. CM12/CM18 object-index conflicts remain quarantined and unbound.",
+      "output": "docs/art/production/cage/faithful-hd40/manifest.json",
+      "receipt": "docs/art/production/cage/FAITHFUL_HD40_RECEIPT.md",
+      "validation": "245 generated files rebuild byte-identically; 40/40 HD images round-trip to exact native pixels; 40/40 NBS/COL/ATR dimensions match",
+      "rights": "OWNER_REPORTED_LICENSED_SOURCE_LINK_PENDING",
+      "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
+      "humanApproved": false,
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
+    {
       "id": "ART-A3-CAGE-CM01-CM10-REVIEW-PACK",
-      "status": "COMPLETE_OWNER_VISUAL_REVIEW_PENDING",
-      "summary": "Completed ten actual CM core-field candidates and ten separate detachable-object bundles using the verified original construction, stable RGBA canvases and bottom-centre anchors. The built-in generation route used only the approved remake style board, never original ROM imagery. No placement, ATR/COL meaning, Raising effect, gameplay mask, runtime promotion or shipping promotion was inferred.",
-      "output": "docs/art/production/cage/cm01-cm10/packages/manifest.json",
-      "receipt": "docs/art/production/cage/cm01-cm10/CM01_CM10_PRODUCTION_RECEIPT.md",
-      "validation": "106 deterministic repository tests pass; 23 package files rebuild byte-identically; A0 remains 752/752 with zero promotions",
+      "status": "SUPERSEDED_WITHDRAWN_BY_OWNER_CORRECTION",
+      "summary": "Historical generated CM01-CM10 review packet was rejected because the staging path did not preserve original object positions. Its production files were removed from the current tree and replaced by ART-A3-CAGE-FAITHFUL-HD40.",
+      "output": "GIT_HISTORY_ONLY",
+      "receipt": "GIT_HISTORY_ONLY",
+      "validation": "WITHDRAWN_NOT_RUNTIME_ELIGIBLE",
       "rights": "ORIGINAL_CREATED_CLEAN_ROOM_CANDIDATE",
       "productionStatus": "OWNER_VISUAL_REVIEW_PENDING",
       "humanApproved": false,
@@ -242,6 +254,11 @@
   ],
   "current": [
     {
+      "id": "ART-A3-CAGE-FAITHFUL-HD40",
+      "status": "BASELINE_COMPLETE_RUNTIME_BINDING_BLOCKED",
+      "summary": "Exact original visual, NBS, OPM, COL and ATR data is now available for 40 fields. CM12 and CM18 require original object-index decode closure; runtime binding and shipping remain blocked pending linked licence evidence and a Cage presentation contract."
+    },
+    {
       "id": "VS2-PRESENTATION-BINDING",
       "status": "VS2_R1_OWNER_APPROVED_WAITING_VS2_R2_GO",
       "summary": "Gate Select retains its Owner-approved structural baseline. The current Hunt Loadout companion selector is formally PRODUCT_AUTHORED_PROTOTYPE / DEVELOPER_ONLY and cannot be promoted as final Player Mode. The published Hunt Loadout contract is spec-only until a separate VS2-R2 implementation GO."
@@ -293,7 +310,7 @@
     "SHIPPING"
   ],
   "blocked": [
-    "A1 Cage transparent flattened masters and Hunt standards are complete, but native authoring-layer separation, Hunt modular macro kits, seam/shape/collision/occlusion/mobile-performance QA and linked licence evidence remain required before runtime promotion.",
+    "Cage CM01-CM40 exact-original visual/collision/placement baseline is complete, but CM12/CM18 object-index conflicts, linked licence evidence, runtime presentation binding, occlusion and mobile-performance QA remain required before runtime promotion.",
     "A1 character identity sheets, animation masters, UI components, VFX ports and runtime atlases still require production receipts, linked licence evidence and relevant QA; direction boards alone are not runtime assets.",
     "A2-A11 mass production remains gated by completion of the A1 technical pipeline and the consuming gameplay/presentation contracts; A0/A1 proposals do not promote the 96-character launch roster.",
     "The Owner reports complete licensing, but each production asset still requires a linked licence document reference before READY_FOR_RUNTIME or SHIPPING_READY promotion.",
@@ -310,6 +327,11 @@
     "Claude-owned runtime architecture documentation predates this product reset and must be reconciled by Claude on its next authorized owned-doc update."
   ],
   "outputs": [
+    "docs/art/production/cage/faithful-hd40/manifest.json",
+    "docs/art/production/cage/FAITHFUL_HD40_RECEIPT.md",
+    "scripts/build-cage-faithful-hd40.py",
+    "scripts/lib/cage-original-formats.mjs",
+    "tests/championship-cage-faithful-hd40-cases.mjs",
     "docs/art/technical/a1-map-tech/cage/transparent-qa-checker.png",
     "docs/art/technical/a1-map-tech/manifest.json",
     "docs/art/technical/A1_MAP_TECHNICALIZATION_RECEIPT.md",
@@ -394,7 +416,7 @@
   },
   "dependenciesChanged": {
     "value": true,
-    "note": "Owner directed the approved Hunt/Cage technical batch to continue through twelve Cage transparent flattened masters. Gameplay, renderer and save authority are unchanged; the 40 visual field families and 36 CageDefinitions remain distinct, and shape masks, raising effects, collision and map data remain external evidence-gated contracts."
+    "note": "Owner superseded generated Cage visuals with a 100% original-faithful HD requirement including art code and collision. Exact NBS/OPM/COL/ATR raw data is now available as a non-runtime baseline; CM12/CM18 object binding remains quarantined. Gameplay and save authority are unchanged."
   },
   "sharedMergeReceipt": {
     "syncRevision": 3,
@@ -428,7 +450,8 @@
     }
   },
   "recommendedNext": [
-    "Separate the twelve transparent Cage composites into native base-terrain, edge/transition, prop and foreground authoring layers, then run seam, shape-fit and occlusion QA against verified external shape masks without inventing raising semantics.",
+    "Close CM12 and CM18 original object-index conflicts using the verified source/decode chain, without guessing cell bindings.",
+    "Port the remaining NCGR/NCLR and NCER/NCBR object-cell decoding into the browser art module and pixel-diff its composition against the 40 native goldens.",
     "Build HM01/HM09 layered macro-tile kits against verified 128x128 topology, then run seam, collision-alignment, occlusion and mobile-performance QA.",
     "Continue remaining A1 technical masters and receipts: eight character identity/animation anchors, Gate model/material specification, DOM UI components and five VFX conversion timelines.",
     "For hitspark_big, hypereffect, spark and rain, decode and port licensed source timing/transform/visibility data instead of authoring replacement motion; keep unsupported parameters raw/unknown.",

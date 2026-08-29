@@ -4,7 +4,7 @@ Repository authority: `CHAMPIONSHIP_2026_PRODUCT_SSOT` (`.`).
 Migration state: standalone product; historical Nexus integration decisions are preserved below as superseded/frozen context only.
 
 Authority: **OWNER ONLY**  
-Last explicit direction: **2026-08-29 — Continue production according to the approved Cage structure results**
+Last explicit direction: **2026-08-29 — Rebuild Cage 100% like the original, including art code and collision; HD only**
 
 Agents may index this file and may transcribe a later explicit Owner directive,
 but may not reinterpret or independently change product direction.
@@ -40,6 +40,14 @@ The Owner then directed work to continue according to those results. This
 authorizes the bounded CM01–CM10 clean-room visual review packet using separate
 core-field and object-bundle art. It does not authorize invention of placement,
 ATR/COL meanings, Raising effects or runtime promotion.
+
+The Owner rejected the generated CM01–CM10 object staging because its positions
+did not match the original. The current Cage authority supersedes that packet:
+reproduce original art, composition, object positions, collision and art code
+100%, changing only resolution to HD. Do not recolour, redesign, replace props
+or manually reposition them. Preserve raw NBS/OPM/ATR/COL values. CM12 and CM18
+remain evidence-marked object-index conflicts until the original decode chain
+resolves them; do not guess.
 
 ## 2026-08-29 art-production amendment
 

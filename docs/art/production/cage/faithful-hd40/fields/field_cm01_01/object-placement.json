@@ -1,0 +1,52 @@
+{
+  "format": "YDIJ_OPMD_RAW_V1",
+  "sourceSha256": "59A25BBE2BE77C156D8FE4E56704409718655FA2B8D99F226C6C5549948DC5A3",
+  "version": 4,
+  "bundleName": "field_cm01_01_obj",
+  "placementCount": 4,
+  "placementSemantics": "SOURCE_ORDER_AND_COORDINATES_PRESERVED_NO_VISUAL_RELAYOUT",
+  "placements": [
+    {
+      "ordinal": 0,
+      "cellId": 1,
+      "sourceX": 68,
+      "sourceY": 88,
+      "rawFlags": 0,
+      "rawFloatA": 1.0,
+      "rawFloatB": 0.0,
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+    },
+    {
+      "ordinal": 1,
+      "cellId": 2,
+      "sourceX": 62,
+      "sourceY": 17,
+      "rawFlags": 0,
+      "rawFloatA": 1.0,
+      "rawFloatB": 0.0,
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+    },
+    {
+      "ordinal": 2,
+      "cellId": 0,
+      "sourceX": 50,
+      "sourceY": 19,
+      "rawFlags": 0,
+      "rawFloatA": 1.0,
+      "rawFloatB": 0.0,
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+    },
+    {
+      "ordinal": 3,
+      "cellId": 3,
+      "sourceX": 84,
+      "sourceY": 22,
+      "rawFlags": 0,
+      "rawFloatA": 1.0,
+      "rawFloatB": 0.0,
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+    }
+  ],
+  "quarantined": false,
+  "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+}
