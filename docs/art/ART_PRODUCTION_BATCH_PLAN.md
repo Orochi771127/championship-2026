@@ -1,6 +1,6 @@
 # Championship 2026 — Art Production Batch Plan
 
-Status: `A0 IMPLEMENTED / CM01–CM10 AUTHORING ATLAS COMPLETE / OWNER VISUAL REVIEW NEXT`
+Status: `A0 IMPLEMENTED / CM01–CM10 CLEAN-ROOM REVIEW PACK COMPLETE / OWNER VISUAL REVIEW NEXT`
 Authority: Owner directive of 2026-08-29
 
 ## Batch sequence
@@ -49,14 +49,6 @@ bottom-centre anchors, source boards, generation prompts and deterministic QA.
 This closes visual identity and layer-separation drafting only. It does not yet
 authorize tile-atlas slicing, object placement, gameplay shape masks or runtime
 promotion; those begin after Owner visual review of the two contact sheets.
-
-The Owner then directed the next step. The bounded authoring-atlas pass derives
-ten repeatable material swatches and seam proofs, nine visual edge/centre/corner
-samples per field, raw bottom-centre object cells and non-authoritative art
-staging previews. This makes the approved art easier to audit and hand off, but
-does not reinterpret visual samples as native gameplay tiles or staging as
-original placement. Verified topology, ATR/COL, collision and Raising data stay
-external.
 
 ### Characters
 

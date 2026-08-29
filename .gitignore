@@ -4,8 +4,6 @@ coverage/
 *.log
 .DS_Store
 Thumbs.db
-__pycache__/
-*.pyc
 
 # Research staging is deterministic external evidence, never product history.
 research/original-evidence/staging/
@@ -31,3 +29,4 @@ research/original-evidence/staging/
 *.nsbtx
 *.nsbca
 *.bsar
+
