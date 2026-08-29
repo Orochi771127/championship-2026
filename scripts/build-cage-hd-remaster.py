@@ -24,8 +24,8 @@ REPO = Path(__file__).resolve().parents[1]
 SOURCE_ROOT = REPO / "docs/art/production/cage/faithful-hd40"
 OUTPUT_ROOT = REPO / "docs/art/production/cage/hd-remaster-v1"
 SCALE = 4
-COMPLETED_FIELDS = [f"field_cm{i:02d}_01" for i in range(1, 31)]
-NEXT_FIELDS = [f"field_cm{i:02d}_01" for i in range(31, 41)]
+COMPLETED_FIELDS = [f"field_cm{i:02d}_01" for i in range(1, 41)]
+NEXT_FIELDS: list[str] = []
 CM27_LOGO_MASK_POLYGON = [
     (82, 54),
     (113, 54),
@@ -454,11 +454,11 @@ def build(output_root: Path) -> None:
             },
         })
 
-    contact_path = output_root / "cage-cm01-cm30-remaster-contact.png"
+    contact_path = output_root / "cage-cm01-cm40-remaster-contact.png"
     save_contact(records, contact_path, output_root)
     manifest = {
         "schemaVersion": 1,
-        "batch": "ART_A3_CAGE_HD_REMASTER_V1_CM21_CM30",
+        "batch": "ART_A3_CAGE_HD_REMASTER_V1_CM31_CM40",
         "completedBatches": [
             {
                 "batch": "ART_A3_CAGE_HD_REMASTER_V1_CM01_CM10",
@@ -471,6 +471,10 @@ def build(output_root: Path) -> None:
             {
                 "batch": "ART_A3_CAGE_HD_REMASTER_V1_CM21_CM30",
                 "fields": [f"field_cm{i:02d}_01" for i in range(21, 31)],
+            },
+            {
+                "batch": "ART_A3_CAGE_HD_REMASTER_V1_CM31_CM40",
+                "fields": [f"field_cm{i:02d}_01" for i in range(31, 41)],
             },
         ],
         "fieldCount": len(records),
@@ -546,7 +550,7 @@ def main() -> None:
             second = tree_hashes(second_root)
         if first != second:
             raise SystemExit("Cage HD remaster determinism check failed")
-        print(f"Deterministic Cage CM01-CM30 remaster passed: {len(first)} files")
+        print(f"Deterministic Cage CM01-CM40 remaster passed: {len(first)} files")
 
 
 if __name__ == "__main__":

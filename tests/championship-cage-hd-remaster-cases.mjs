@@ -9,17 +9,18 @@ const manifest = JSON.parse(fs.readFileSync(`${root}/manifest.json`, "utf8"));
 const sourceManifest = JSON.parse(fs.readFileSync(`${sourceRoot}/manifest.json`, "utf8"));
 const digest = (file) => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex").toUpperCase();
 
-test("first three Cage HD remaster batches cover CM01-CM30 without runtime promotion", () => {
-  assert.equal(manifest.batch, "ART_A3_CAGE_HD_REMASTER_V1_CM21_CM30");
+test("all four Cage HD remaster batches cover CM01-CM40 without runtime promotion", () => {
+  assert.equal(manifest.batch, "ART_A3_CAGE_HD_REMASTER_V1_CM31_CM40");
   assert.deepEqual(manifest.completedBatches.map((batch) => batch.batch), [
     "ART_A3_CAGE_HD_REMASTER_V1_CM01_CM10",
     "ART_A3_CAGE_HD_REMASTER_V1_CM11_CM20",
     "ART_A3_CAGE_HD_REMASTER_V1_CM21_CM30",
+    "ART_A3_CAGE_HD_REMASTER_V1_CM31_CM40",
   ]);
-  assert.equal(manifest.fieldCount, 30);
+  assert.equal(manifest.fieldCount, 40);
   assert.equal(manifest.plannedFieldCount, 40);
-  assert.deepEqual(manifest.completedFields, Array.from({ length: 30 }, (_, index) => `field_cm${String(index + 1).padStart(2, "0")}_01`));
-  assert.deepEqual(manifest.nextFields, Array.from({ length: 10 }, (_, index) => `field_cm${String(index + 31).padStart(2, "0")}_01`));
+  assert.deepEqual(manifest.completedFields, Array.from({ length: 40 }, (_, index) => `field_cm${String(index + 1).padStart(2, "0")}_01`));
+  assert.deepEqual(manifest.nextFields, []);
   assert.equal(manifest.scale, 4);
   assert.equal(manifest.profile, "COMPONENT_FAITHFUL_EDGE_AWARE_BICUBIC_PMA_4X_V1");
   assert.match(manifest.visualPolicy, /ORIGINAL_COMPOSITION.*PRESERVED/);
@@ -69,9 +70,9 @@ test("HD components retain source dimensions, placements, flips and object bindi
   assert.equal(manifest.qa.recolorDirectionApplied, false);
 });
 
-test("CM07, CM09 and CM21 preserve their verified animated-terrain frame records", () => {
+test("all four animated Cage fields preserve their verified terrain frame records", () => {
   const animated = manifest.fields.filter((field) => field.animatedFrames.length > 0);
-  assert.deepEqual(animated.map((field) => field.fieldId), ["field_cm07_01", "field_cm09_01", "field_cm21_01"]);
+  assert.deepEqual(animated.map((field) => field.fieldId), ["field_cm07_01", "field_cm09_01", "field_cm21_01", "field_cm39_01"]);
   for (const field of animated) {
     assert.equal(field.animatedFrames.length, 2);
     for (const frame of field.animatedFrames) {
