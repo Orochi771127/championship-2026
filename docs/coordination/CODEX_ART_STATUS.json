@@ -3,8 +3,8 @@
   "owner": "CODEX_ART",
   "lastUpdated": "2026-08-29",
   "syncBatch": "ART_A3_CAGE_EXACT_ORIGINAL_FAITHFUL_HD40_BASELINE",
-  "syncRevision": 13,
-  "syncRevisionTarget": 13,
+  "syncRevision": 14,
+  "syncRevisionTarget": 14,
   "status": "CAGE_HD40_BASELINE_COMPLETE_CM12_CM18_OBJECT_CONFLICTS_QUARANTINED",
   "sourceOfTruth": {
     "coordinationRoot": "docs/coordination",
@@ -68,10 +68,10 @@
     {
       "id": "ART-A3-CAGE-FAITHFUL-HD40",
       "status": "40_OF_40_VISUAL_AND_COLLISION_BASELINES_38_FULL_COMPOSITIONS",
-      "summary": "Owner correction replaced generated Cage production art with an exact-original baseline: 40 native visual goldens, 40 deterministic 4x nearest-neighbour HD outputs, raw NBS tilemaps, COL collision, ATR attributes, and original OPM object source coordinates. JavaScript format parsers preserve raw values. CM12/CM18 object-index conflicts remain quarantined and unbound.",
+      "summary": "Owner correction replaced generated Cage production art with an exact-original baseline: 40 raw-layer visual goldens, 40 deterministic 4x nearest-neighbour HD outputs, raw NBS tilemaps, COL collision, ATR attributes, original OPM coordinates, and all four verified native BSAR animated terrain bundles. CM09 water and the CM07/CM21/CM39 animated layers are restored. JavaScript format parsers preserve raw values. CM12/CM18 object-index conflicts remain quarantined and unbound.",
       "output": "docs/art/production/cage/faithful-hd40/manifest.json",
       "receipt": "docs/art/production/cage/FAITHFUL_HD40_RECEIPT.md",
-      "validation": "245 generated files rebuild byte-identically; 40/40 HD images round-trip to exact native pixels; 40/40 NBS/COL/ATR dimensions match",
+      "validation": "265 generated files rebuild byte-identically; 40/40 HD images round-trip to exact raw-layer frame-0 composites; 40/40 NBS/COL/ATR dimensions match; 4/4 BSAR bundles and 8/8 frames decode deterministically",
       "rights": "OWNER_REPORTED_LICENSED_SOURCE_LINK_PENDING",
       "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
       "humanApproved": false,
@@ -256,7 +256,7 @@
     {
       "id": "ART-A3-CAGE-FAITHFUL-HD40",
       "status": "BASELINE_COMPLETE_RUNTIME_BINDING_BLOCKED",
-      "summary": "Exact original visual, NBS, OPM, COL and ATR data is now available for 40 fields. CM12 and CM18 require original object-index decode closure; runtime binding and shipping remain blocked pending linked licence evidence and a Cage presentation contract."
+      "summary": "Exact original visual, NBS, OPM, COL, ATR and all four verified Cage BSAR animated terrain bundles are now available for 40 fields. CM09 water-layer omission is closed. CM12 and CM18 require original object-index decode closure; runtime binding and shipping remain blocked pending linked licence evidence and a Cage presentation contract."
     },
     {
       "id": "VS2-PRESENTATION-BINDING",
@@ -416,7 +416,7 @@
   },
   "dependenciesChanged": {
     "value": true,
-    "note": "Owner superseded generated Cage visuals with a 100% original-faithful HD requirement including art code and collision. Exact NBS/OPM/COL/ATR raw data is now available as a non-runtime baseline; CM12/CM18 object binding remains quarantined. Gameplay and save authority are unchanged."
+    "note": "Owner superseded generated Cage visuals with a 100% original-faithful HD requirement including art code and collision. Exact NBS/OPM/COL/ATR raw data and four verified BSAR animated terrain bundles are now available as a non-runtime baseline; CM09 water omission is closed and CM12/CM18 object binding remains quarantined. Gameplay and save authority are unchanged."
   },
   "sharedMergeReceipt": {
     "syncRevision": 3,

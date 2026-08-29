@@ -21,6 +21,12 @@ OUTPUT_ROOT = REPO / "docs/art/production/cage/faithful-hd40"
 CROSSWALK = REPO / "docs/art/technical/a1-cage-original-structure/CM40_ORIGINAL_STRUCTURE_CROSSWALK.csv"
 FIELD_IDS = [f"field_cm{i:02d}_01" for i in range(1, 41)]
 PARTIAL_FIELDS = {"field_cm12_01", "field_cm18_01"}
+ANIMATED_FIELDS = {
+    "field_cm07_01",
+    "field_cm09_01",
+    "field_cm21_01",
+    "field_cm39_01",
+}
 SCALE = 4
 
 
@@ -139,6 +145,122 @@ def parse_nbs(path: Path) -> dict:
     }
 
 
+def raw_tile_entry(value: int) -> dict:
+    return {
+        "raw": value,
+        "tileIndex": value & 0x03FF,
+        "horizontalFlip": bool(value & 0x0400),
+        "verticalFlip": bool(value & 0x0800),
+        "paletteBank": (value >> 12) & 0x0F,
+    }
+
+
+def parse_bsar(path: Path) -> dict:
+    data = path.read_bytes()
+    if len(data) < 28 or data[:4] != b"BSAR":
+        raise ValueError(f"Unsupported BSAR header: {path.name}")
+    version, unknown_header_word_0, frame_count, unknown_header_word_2 = struct.unpack_from("<IIII", data, 4)
+    if version != 2 or frame_count < 1:
+        raise ValueError(f"Unsupported BSAR version/frame count: {path.name}")
+    cursor = 20
+    frame_durations = list(struct.unpack_from(f"<{frame_count}I", data, cursor))
+    cursor += frame_count * 4
+    width, height = struct.unpack_from("<II", data, cursor)
+    cursor += 8
+    grid_symbols = list(struct.unpack_from(f"<{width * height}H", data, cursor))
+    cursor += width * height * 2
+    symbol_count = struct.unpack_from("<I", data, cursor)[0]
+    cursor += 4
+    expected = cursor + symbol_count * frame_count * 2
+    if len(data) != expected or (grid_symbols and max(grid_symbols) >= symbol_count):
+        raise ValueError(f"BSAR grid/symbol table mismatch: {path.name}")
+    symbols = []
+    for symbol_index in range(symbol_count):
+        values = struct.unpack_from(f"<{frame_count}H", data, cursor + symbol_index * frame_count * 2)
+        symbols.append({
+            "symbolIndex": symbol_index,
+            "frameTileEntries": [raw_tile_entry(value) for value in values],
+        })
+    return {
+        "format": "YDIJ_BSAR_ANIMATED_TILEMAP_V2",
+        "sourceSha256": sha256(path),
+        "version": version,
+        "unknownHeaderWord0": unknown_header_word_0,
+        "frameCount": frame_count,
+        "unknownHeaderWord2": unknown_header_word_2,
+        "frameDurationsRawTicks": frame_durations,
+        "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+        "width": width,
+        "height": height,
+        "cellOrder": "ROW_MAJOR",
+        "gridSymbols": grid_symbols,
+        "symbolCount": symbol_count,
+        "symbols": symbols,
+    }
+
+
+def decode_nclr(path: Path) -> tuple[list[tuple[int, int, int, int]], dict]:
+    data = path.read_bytes()
+    if len(data) < 40 or data[:4] != b"RLCN" or data[16:20] != b"TTLP":
+        raise ValueError(f"Unsupported NCLR: {path.name}")
+    palette_size = struct.unpack_from("<I", data, 32)[0]
+    if palette_size % 2 or palette_size > len(data):
+        raise ValueError(f"NCLR palette size mismatch: {path.name}")
+    palette_data = data[len(data) - palette_size:]
+    colors = []
+    for index, (color,) in enumerate(struct.iter_unpack("<H", palette_data)):
+        colors.append((
+            (color & 0x1F) * 255 // 31,
+            ((color >> 5) & 0x1F) * 255 // 31,
+            ((color >> 10) & 0x1F) * 255 // 31,
+            0 if index == 0 else 255,
+        ))
+    return colors, {
+        "sourceSha256": sha256(path),
+        "colorEncoding": "BGR555",
+        "colorCount": len(colors),
+        "transparentPaletteIndex": 0,
+    }
+
+
+def decode_ncgr_8bpp(path: Path) -> tuple[list[bytes], dict]:
+    data = path.read_bytes()
+    if len(data) < 48 or data[:4] != b"RGCN" or data[16:20] != b"RAHC":
+        raise ValueError(f"Unsupported NCGR: {path.name}")
+    format_code = struct.unpack_from("<I", data, 28)[0]
+    graphics_size = struct.unpack_from("<I", data, 40)[0]
+    if format_code != 4 or graphics_size % 64 or graphics_size > len(data):
+        raise ValueError(f"Expected tiled 8bpp NCGR: {path.name}")
+    graphics = data[len(data) - graphics_size:]
+    tiles = [graphics[offset:offset + 64] for offset in range(0, len(graphics), 64)]
+    return tiles, {
+        "sourceSha256": sha256(path),
+        "formatCode": format_code,
+        "pixelFormat": "INDEXED_8BPP",
+        "tileSize": "8x8",
+        "tileCount": len(tiles),
+    }
+
+
+def render_bsar_frame(animation: dict, tiles: list[bytes], palette: list[tuple[int, int, int, int]], frame_index: int) -> Image.Image:
+    width, height = animation["width"], animation["height"]
+    image = Image.new("RGBA", (width * 8, height * 8), (0, 0, 0, 0))
+    pixels = image.load()
+    for position, symbol_index in enumerate(animation["gridSymbols"]):
+        entry = animation["symbols"][symbol_index]["frameTileEntries"][frame_index]
+        tile_index = entry["tileIndex"]
+        if entry["paletteBank"] != 0 or tile_index >= len(tiles):
+            raise ValueError("BSAR references an unsupported palette bank or tile index")
+        tile = tiles[tile_index]
+        target_x, target_y = (position % width) * 8, (position // width) * 8
+        for y in range(8):
+            for x in range(8):
+                source_x = 7 - x if entry["horizontalFlip"] else x
+                source_y = 7 - y if entry["verticalFlip"] else y
+                pixels[target_x + x, target_y + y] = palette[tile[source_y * 8 + source_x]]
+    return image
+
+
 def checker(size: tuple[int, int], step: int = 16) -> Image.Image:
     image = Image.new("RGBA", size, (246, 246, 242, 255))
     draw = ImageDraw.Draw(image)
@@ -190,9 +312,78 @@ def build(archive_root: Path, raw_root: Path, output_root: Path) -> None:
         field_dir = output_root / "fields" / field_id
         field_dir.mkdir(parents=True)
 
-        source_image = Image.open(native_path).convert("RGBA")
+        static_source = Image.open(native_path).convert("RGBA")
+        source_image = static_source
         original_out = field_dir / "native-original.png"
-        shutil.copyfile(native_path, original_out)
+        animation_record = {"status": "NOT_PRESENT"}
+        animation_bsa = raw_root / f"{field_id}_anim.bsa"
+        if animation_bsa.exists():
+            animation_ncgr = raw_root / f"{field_id}_anim.ncgr"
+            animation_nclr = raw_root / f"{field_id}_anim.nclr"
+            if not animation_ncgr.exists() or not animation_nclr.exists():
+                raise ValueError(f"{field_id} animated layer bundle is incomplete")
+            animation = parse_bsar(animation_bsa)
+            tiles, graphics_info = decode_ncgr_8bpp(animation_ncgr)
+            palette, palette_info = decode_nclr(animation_nclr)
+            if (animation["width"] * 8, animation["height"] * 8) != static_source.size:
+                raise ValueError(f"{field_id} animated layer dimensions differ from static field")
+            layer_frames = []
+            composite_frames = []
+            for frame_index in range(animation["frameCount"]):
+                layer = render_bsar_frame(animation, tiles, palette, frame_index)
+                layer_out = field_dir / f"animated-layer-frame-{frame_index:02d}.png"
+                layer.save(layer_out, optimize=True)
+                composite = layer.copy()
+                composite.alpha_composite(static_source)
+                composite_frames.append(composite)
+                layer_frames.append({
+                    "frameIndex": frame_index,
+                    "rawDurationTicks": animation["frameDurationsRawTicks"][frame_index],
+                    "file": f"fields/{field_id}/{layer_out.name}",
+                    "sha256": sha256(layer_out),
+                })
+            source_image = composite_frames[0]
+            alternate_native_out = field_dir / "native-composite-frame-01.png"
+            composite_frames[1].save(alternate_native_out, optimize=True)
+            alternate_hd = composite_frames[1].resize(
+                (composite_frames[1].width * SCALE, composite_frames[1].height * SCALE),
+                Image.Resampling.NEAREST,
+            )
+            alternate_hd_out = field_dir / "faithful-hd4x-frame-01.png"
+            alternate_hd.save(alternate_hd_out, optimize=True)
+            animation["graphics"] = graphics_info
+            animation["palette"] = palette_info
+            animation_out = field_dir / "animated-layer.json"
+            write_json(animation_out, animation)
+            animation_record = {
+                "status": "PRESENT_VERIFIED_ROM_DECODED",
+                "file": f"fields/{field_id}/animated-layer.json",
+                "sha256": sha256(animation_out),
+                "sourceSha256": animation["sourceSha256"],
+                "graphicsSourceSha256": graphics_info["sourceSha256"],
+                "paletteSourceSha256": palette_info["sourceSha256"],
+                "frameCount": animation["frameCount"],
+                "frameDurationsRawTicks": animation["frameDurationsRawTicks"],
+                "timingSemantics": animation["timingSemantics"],
+                "layerFrames": layer_frames,
+                "alternateCompositeFrame": {
+                    "file": f"fields/{field_id}/{alternate_native_out.name}",
+                    "sha256": sha256(alternate_native_out),
+                },
+                "alternateFaithfulHd4xFrame": {
+                    "file": f"fields/{field_id}/{alternate_hd_out.name}",
+                    "sha256": sha256(alternate_hd_out),
+                    "scale": SCALE,
+                    "filter": "NEAREST",
+                },
+                "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER",
+            }
+        elif field_id in ANIMATED_FIELDS:
+            raise ValueError(f"Expected animated layer missing: {field_id}")
+        if animation_bsa.exists():
+            source_image.save(original_out, optimize=True)
+        else:
+            shutil.copyfile(native_path, original_out)
         hd = source_image.resize((source_image.width * SCALE, source_image.height * SCALE), Image.Resampling.NEAREST)
         hd_out = field_dir / "faithful-hd4x.png"
         hd.save(hd_out, optimize=True)
@@ -232,6 +423,9 @@ def build(archive_root: Path, raw_root: Path, output_root: Path) -> None:
         for extension in ("nbs", "ncgr", "nclr", "atr", "col", "opm"):
             payload = raw_root / f"{field_id}.{extension}"
             payloads[extension] = {"present": payload.exists(), "sha256": sha256(payload) if payload.exists() else None}
+        for extension in ("bsa", "ncgr", "nclr"):
+            payload = raw_root / f"{field_id}_anim.{extension}"
+            payloads[f"anim.{extension}"] = {"present": payload.exists(), "sha256": sha256(payload) if payload.exists() else None}
         row = rows[field_id]
         records.append({
             "assetId": f"art:cage:{field_id}:faithful-hd4x-baseline",
@@ -242,12 +436,13 @@ def build(archive_root: Path, raw_root: Path, output_root: Path) -> None:
             "compositionConfidence": metadata["composition_confidence"],
             "originalDimensions": metadata["dimensions"],
             "layoutCells": metadata["layout_cells"],
-            "nativeOriginal": {"file": f"fields/{field_id}/native-original.png", "sha256": sha256(original_out), "width": source_image.width, "height": source_image.height},
+            "nativeOriginal": {"file": f"fields/{field_id}/native-original.png", "sha256": sha256(original_out), "width": source_image.width, "height": source_image.height, "staticCoreObjectSourceSha256": sha256(native_path), "composition": "STATIC_CORE_OBJECT_PLUS_ANIMATED_FRAME_0" if animation_bsa.exists() else "STATIC_CORE_OBJECT"},
             "faithfulHd4x": {"file": f"fields/{field_id}/faithful-hd4x.png", "sha256": sha256(hd_out), "width": hd.width, "height": hd.height, "scale": SCALE, "filter": "NEAREST", "downsampleRoundTripEqualsOriginal": True},
             "coreTilemap": {"file": f"fields/{field_id}/core-tilemap.json", "sha256": sha256(tilemap_out), "sourceSha256": tilemap["sourceSha256"]},
             "collision": {"file": f"fields/{field_id}/collision-raw-classes.json", "sha256": sha256(collision_out), "sourceSha256": col["sourceSha256"], "classSemantics": col["classSemantics"]},
             "attribute": {"file": f"fields/{field_id}/attribute-raw-classes.json", "sha256": sha256(attribute_out), "sourceSha256": atr["sourceSha256"], "classSemantics": atr["classSemantics"]},
             "objectPlacement": {"file": f"fields/{field_id}/object-placement.json", "sha256": sha256(placement_out), "sourceSha256": placement["sourceSha256"], "count": placement["placementCount"], "authority": placement["authority"]},
+            "animatedLayer": animation_record,
             "sourcePayloadHashes": payloads,
             "rightsStatus": "LICENSED",
             "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
@@ -265,8 +460,10 @@ def build(archive_root: Path, raw_root: Path, output_root: Path) -> None:
         "fieldCount": 40,
         "fullCompositionConfidenceCount": 38,
         "partialObjectConflictFields": sorted(PARTIAL_FIELDS),
+        "animatedLayerFieldCount": len(ANIMATED_FIELDS),
+        "animatedLayerFields": sorted(ANIMATED_FIELDS),
         "ownerDirection": "PRESERVE_ORIGINAL_ART_COMPOSITION_PLACEMENT_COLLISION_AND_ART_CODE_100_PERCENT_ONLY_UPSCALE_TO_HD",
-        "visualPolicy": "BYTE_IDENTICAL_NATIVE_BASELINE_PLUS_4X_NEAREST_NO_RELAYOUT_NO_RECOLOR_NO_REDESIGN",
+        "visualPolicy": "EXACT_RAW_LAYER_COMPOSITE_PLUS_4X_NEAREST_NO_RELAYOUT_NO_RECOLOR_NO_REDESIGN",
         "dataPolicy": "COL_ATR_NBS_OPM_RAW_VALUES_PRESERVED_WITHOUT_SEMANTIC_REINTERPRETATION",
         "sourceArchive": {"logicalId": archive_manifest["batch"], "manifestSha256": sha256(archive_root / "O3B_GALLERY_MANIFEST.json")},
         "rightsStatus": "LICENSED",
@@ -280,6 +477,8 @@ def build(archive_root: Path, raw_root: Path, output_root: Path) -> None:
             "all40HdRoundTripPixelExact": all(field["faithfulHd4x"]["downsampleRoundTripEqualsOriginal"] for field in records),
             "all40CollisionDimensionsMatchTilemaps": True,
             "all40AttributeDimensionsMatchTilemaps": True,
+            "allFourAnimatedLayerBundlesDecoded": sum(field["animatedLayer"]["status"] == "PRESENT_VERIFIED_ROM_DECODED" for field in records) == 4,
+            "animatedLayerFramesDecoded": sum(field["animatedLayer"].get("frameCount", 0) for field in records),
             "objectPlacementRelayoutPerformed": False,
             "unknownClassSemanticsInvented": False,
             "cm12Cm18ObjectConflictBound": False,

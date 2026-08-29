@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "owner": "CODEX_ART",
   "deltaId": "CODEX-ART-A3-CAGE-FAITHFUL-HD40-2026-08-29",
-  "targetSyncRevision": 13,
+  "targetSyncRevision": 14,
   "status": "CAGE_HD40_BASELINE_COMPLETE_CM12_CM18_OBJECT_CONFLICTS_QUARANTINED",
   "statusSource": "docs/coordination/CODEX_ART_STATUS.json",
-  "baseSyncRevision": 12,
+  "baseSyncRevision": 13,
   "checkpoint": {
     "latestOwnerApprovedCommit": "732775486665b21508ac51c1eea0b723db0f7744",
     "message": "art(research): approve O2 224-entity character catalog",
@@ -34,10 +34,10 @@
   "completedWork": [
     {
       "id": "ART-A3-CAGE-FAITHFUL-HD40",
-      "state": "40_OF_40_VISUAL_COLLISION_ATTRIBUTE_TILEMAP_BASELINES_38_FULL_OBJECT_COMPOSITIONS",
-      "scope": "Exact original Cage visual composition and 4x HD output plus NBS tilemaps, OPM source coordinates, COL collision, ATR attributes and browser format parsers",
+      "state": "40_OF_40_VISUAL_COLLISION_ATTRIBUTE_TILEMAP_BASELINES_4_OF_4_ANIMATED_TERRAIN_BUNDLES_38_FULL_OBJECT_COMPOSITIONS",
+      "scope": "Exact original Cage raw-layer composition and 4x HD output plus NBS tilemaps, OPM source coordinates, COL collision, ATR attributes, four BSAR animated terrain bundles and browser format parsers",
       "sourcePolicy": "VERIFIED_ROM_SHA_SOURCE_VALUES_PRESERVED_ROM_AND_NITRO_BINARIES_NOT_COMMITTED",
-      "technicalQa": "245_FILES_BYTE_IDENTICAL_40_OF_40_HD_PIXEL_ROUNDTRIP_40_OF_40_NBS_COL_ATR_DIMENSIONS_MATCH",
+      "technicalQa": "265_FILES_BYTE_IDENTICAL_40_OF_40_HD_PIXEL_ROUNDTRIP_40_OF_40_NBS_COL_ATR_DIMENSIONS_MATCH_4_OF_4_BSAR_BUNDLES_8_OF_8_FRAMES",
       "gameplayPolicy": "RAW_CLASSES_PRESERVED_WITHOUT_SEMANTIC_REINTERPRETATION_CM12_CM18_OBJECT_CONFLICTS_NOT_BOUND",
       "runtimeEligible": false,
       "shippingStatus": "NOT_SHIPPING_READY_LICENSE_LINK_AND_RUNTIME_QA_PENDING",

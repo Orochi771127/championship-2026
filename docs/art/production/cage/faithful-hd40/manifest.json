@@ -7,8 +7,15 @@
     "field_cm12_01",
     "field_cm18_01"
   ],
+  "animatedLayerFieldCount": 4,
+  "animatedLayerFields": [
+    "field_cm07_01",
+    "field_cm09_01",
+    "field_cm21_01",
+    "field_cm39_01"
+  ],
   "ownerDirection": "PRESERVE_ORIGINAL_ART_COMPOSITION_PLACEMENT_COLLISION_AND_ART_CODE_100_PERCENT_ONLY_UPSCALE_TO_HD",
-  "visualPolicy": "BYTE_IDENTICAL_NATIVE_BASELINE_PLUS_4X_NEAREST_NO_RELAYOUT_NO_RECOLOR_NO_REDESIGN",
+  "visualPolicy": "EXACT_RAW_LAYER_COMPOSITE_PLUS_4X_NEAREST_NO_RELAYOUT_NO_RECOLOR_NO_REDESIGN",
   "dataPolicy": "COL_ATR_NBS_OPM_RAW_VALUES_PRESERVED_WITHOUT_SEMANTIC_REINTERPRETATION",
   "sourceArchive": {
     "logicalId": "O3_B_ORIGINAL_TRAINING_CAGE_40_FIELD_VISUAL_GALLERY",
@@ -33,7 +40,9 @@
         "file": "fields/field_cm01_01/native-original.png",
         "sha256": "88A24DBB318357E817D45C70331E6D6629165392E7663A53D89329030956CF56",
         "width": 96,
-        "height": 112
+        "height": 112,
+        "staticCoreObjectSourceSha256": "88A24DBB318357E817D45C70331E6D6629165392E7663A53D89329030956CF56",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm01_01/faithful-hd4x.png",
@@ -68,6 +77,9 @@
         "count": 4,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -92,6 +104,18 @@
         "opm": {
           "present": true,
           "sha256": "59A25BBE2BE77C156D8FE4E56704409718655FA2B8D99F226C6C5549948DC5A3"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -113,7 +137,9 @@
         "file": "fields/field_cm02_01/native-original.png",
         "sha256": "07CA6324F46E91A464283AA427F1A7049CFE0AB86BD3DB337BAA934042A51DF9",
         "width": 192,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "07CA6324F46E91A464283AA427F1A7049CFE0AB86BD3DB337BAA934042A51DF9",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm02_01/faithful-hd4x.png",
@@ -148,6 +174,9 @@
         "count": 5,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -172,6 +201,18 @@
         "opm": {
           "present": true,
           "sha256": "F8308481FC38D35DB652B6954F418ECAF3E39F6DED17B77B478673001B745E35"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -193,7 +234,9 @@
         "file": "fields/field_cm03_01/native-original.png",
         "sha256": "24E843C4EFC9107FAEA439D612B4338F71B35063AD3F5A8880D314CA21B46A5B",
         "width": 288,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "24E843C4EFC9107FAEA439D612B4338F71B35063AD3F5A8880D314CA21B46A5B",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm03_01/faithful-hd4x.png",
@@ -228,6 +271,9 @@
         "count": 6,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -252,6 +298,18 @@
         "opm": {
           "present": true,
           "sha256": "AD44D2ED2B5B5136622BDAFFCBAD57CECAB794235CB017CFA28819AC4A64B97F"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -273,7 +331,9 @@
         "file": "fields/field_cm04_01/native-original.png",
         "sha256": "634CF3BB02FCC0EDECCFBBA76471CD3EA27841608DCB4228E06C068004969165",
         "width": 288,
-        "height": 112
+        "height": 112,
+        "staticCoreObjectSourceSha256": "634CF3BB02FCC0EDECCFBBA76471CD3EA27841608DCB4228E06C068004969165",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm04_01/faithful-hd4x.png",
@@ -308,6 +368,9 @@
         "count": 3,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -332,6 +395,18 @@
         "opm": {
           "present": true,
           "sha256": "712EF6878317C73E9CEAA4EA8A8F5EAD91AEA724E60223BD9298D2047ED0D8F2"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -353,7 +428,9 @@
         "file": "fields/field_cm05_01/native-original.png",
         "sha256": "2CC17BF427D306B04A8E6066F435662E54433D3EE13748069B3930461F7AC2AA",
         "width": 240,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "2CC17BF427D306B04A8E6066F435662E54433D3EE13748069B3930461F7AC2AA",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm05_01/faithful-hd4x.png",
@@ -388,6 +465,9 @@
         "count": 6,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -412,6 +492,18 @@
         "opm": {
           "present": true,
           "sha256": "749C18461D9B553B5236D8BD463C2E7D638F93E1A4D3F1410DF30E8931112A28"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -433,7 +525,9 @@
         "file": "fields/field_cm06_01/native-original.png",
         "sha256": "25B0EB251E847273FBBA32509370372808B2152F25F0827C2686372209FA2438",
         "width": 336,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "25B0EB251E847273FBBA32509370372808B2152F25F0827C2686372209FA2438",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm06_01/faithful-hd4x.png",
@@ -468,6 +562,9 @@
         "count": 15,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -492,6 +589,18 @@
         "opm": {
           "present": true,
           "sha256": "B52213494D3A5D353C4590EF88CEDD1157D8B6ABDA8D1AE8BBC8C053CA24C722"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -511,13 +620,15 @@
       "layoutCells": 750,
       "nativeOriginal": {
         "file": "fields/field_cm07_01/native-original.png",
-        "sha256": "53A71B7E7B27B0DD0180BA061026950BFE34A37A74B8756B5772CB476B729EFE",
+        "sha256": "B1DB06ED7D5DC07423519611871B1A5441E517E7B53173E06E472572522576AC",
         "width": 240,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "53A71B7E7B27B0DD0180BA061026950BFE34A37A74B8756B5772CB476B729EFE",
+        "composition": "STATIC_CORE_OBJECT_PLUS_ANIMATED_FRAME_0"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm07_01/faithful-hd4x.png",
-        "sha256": "9757926C965DCC19BA3D644D1ECE70CDB034D325AFD7D029CDD471E0905BB079",
+        "sha256": "E1433E5F90A7FAA45F2BB025FBFFED1A741458B17CAA368A6E3B635BBECEDADE",
         "width": 960,
         "height": 800,
         "scale": 4,
@@ -548,6 +659,45 @@
         "count": 0,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "PRESENT_VERIFIED_ROM_DECODED",
+        "file": "fields/field_cm07_01/animated-layer.json",
+        "sha256": "106CA26E598F1119C1D3DF652D464B53869E119C9CD96A2043CFED32975452CC",
+        "sourceSha256": "CBAD82766CC422B943F1842ACBFAA933A28E0FF5838E3BD9AAD57B187C34CD2A",
+        "graphicsSourceSha256": "9AB7B1FFEF7EFB40F51F58027B82F2FE869CBB83A055B8A9EF87F2FFC58E3331",
+        "paletteSourceSha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A",
+        "frameCount": 2,
+        "frameDurationsRawTicks": [
+          50,
+          50
+        ],
+        "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+        "layerFrames": [
+          {
+            "frameIndex": 0,
+            "rawDurationTicks": 50,
+            "file": "fields/field_cm07_01/animated-layer-frame-00.png",
+            "sha256": "D950571515EA3CEB96DE58F71444D41FE7F2DD5CB44F15651C34E5B2ED8D335F"
+          },
+          {
+            "frameIndex": 1,
+            "rawDurationTicks": 50,
+            "file": "fields/field_cm07_01/animated-layer-frame-01.png",
+            "sha256": "AAB17BE837E23591D506FDABBE18528E0D909C8BED482DC2A14ADFE951DC0229"
+          }
+        ],
+        "alternateCompositeFrame": {
+          "file": "fields/field_cm07_01/native-composite-frame-01.png",
+          "sha256": "B1DB06ED7D5DC07423519611871B1A5441E517E7B53173E06E472572522576AC"
+        },
+        "alternateFaithfulHd4xFrame": {
+          "file": "fields/field_cm07_01/faithful-hd4x-frame-01.png",
+          "sha256": "E1433E5F90A7FAA45F2BB025FBFFED1A741458B17CAA368A6E3B635BBECEDADE",
+          "scale": 4,
+          "filter": "NEAREST"
+        },
+        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -572,6 +722,18 @@
         "opm": {
           "present": true,
           "sha256": "1BECE61B87FE49684F7A570B6BB9FFC7322EBBB883A6D1738BE78AB872173841"
+        },
+        "anim.bsa": {
+          "present": true,
+          "sha256": "CBAD82766CC422B943F1842ACBFAA933A28E0FF5838E3BD9AAD57B187C34CD2A"
+        },
+        "anim.ncgr": {
+          "present": true,
+          "sha256": "9AB7B1FFEF7EFB40F51F58027B82F2FE869CBB83A055B8A9EF87F2FFC58E3331"
+        },
+        "anim.nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
         }
       },
       "rightsStatus": "LICENSED",
@@ -593,7 +755,9 @@
         "file": "fields/field_cm08_01/native-original.png",
         "sha256": "FF25874DE869AE70E988A81090101F3F010A19EE8E3F7506AA39AB2E65F57527",
         "width": 240,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "FF25874DE869AE70E988A81090101F3F010A19EE8E3F7506AA39AB2E65F57527",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm08_01/faithful-hd4x.png",
@@ -628,6 +792,9 @@
         "count": 2,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -652,6 +819,18 @@
         "opm": {
           "present": true,
           "sha256": "C98B72B99814F978DDA74E299760718C31B8893FCB1F34D9ED5AE96F556F05A6"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -671,13 +850,15 @@
       "layoutCells": 900,
       "nativeOriginal": {
         "file": "fields/field_cm09_01/native-original.png",
-        "sha256": "D0B1E89D51A2D55A9B414A096A00716E0C596D5EA9D11783A5968C699042C325",
+        "sha256": "DDE86952236587B3059B8818A5A61049B42910DA8A56DD7B1CE1AA9B1E443521",
         "width": 288,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "D0B1E89D51A2D55A9B414A096A00716E0C596D5EA9D11783A5968C699042C325",
+        "composition": "STATIC_CORE_OBJECT_PLUS_ANIMATED_FRAME_0"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm09_01/faithful-hd4x.png",
-        "sha256": "ED165B7F55550DD24CB4286A957CE069A8ED35547CA2343D115BC84763BCA951",
+        "sha256": "6FADF023400285D92D737B63E368AA4955ECF4DFBF29FEC007F0B585A9B9ACF9",
         "width": 1152,
         "height": 800,
         "scale": 4,
@@ -708,6 +889,45 @@
         "count": 2,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "PRESENT_VERIFIED_ROM_DECODED",
+        "file": "fields/field_cm09_01/animated-layer.json",
+        "sha256": "EDCF1C4F4B5BC5F32E69A3D665833E885929472DC20EA00C3704A27A269840D3",
+        "sourceSha256": "27C3FEDBC52AF391E87B71064BC51F79EFF011249B0AB9D6112DD8FA76442A4D",
+        "graphicsSourceSha256": "54F4D3A7DF098F829363EE5124E99754F0AFCFB4B9592D754F9143480FD20A20",
+        "paletteSourceSha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A",
+        "frameCount": 2,
+        "frameDurationsRawTicks": [
+          20,
+          20
+        ],
+        "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+        "layerFrames": [
+          {
+            "frameIndex": 0,
+            "rawDurationTicks": 20,
+            "file": "fields/field_cm09_01/animated-layer-frame-00.png",
+            "sha256": "C89E280F7272212B2807B75E3978BB8594C1F91C14FA4C2DDAF76F82EF367B49"
+          },
+          {
+            "frameIndex": 1,
+            "rawDurationTicks": 20,
+            "file": "fields/field_cm09_01/animated-layer-frame-01.png",
+            "sha256": "E0660A778D97D0297316C95B874C715411B9EC152D46745B260CEAB67731504A"
+          }
+        ],
+        "alternateCompositeFrame": {
+          "file": "fields/field_cm09_01/native-composite-frame-01.png",
+          "sha256": "6C68CCF9F8CB2E7831A7BF523DEABEBDD915F5DC2F38976E815C2FF973591054"
+        },
+        "alternateFaithfulHd4xFrame": {
+          "file": "fields/field_cm09_01/faithful-hd4x-frame-01.png",
+          "sha256": "291464CF4533806DB2631E777232DFA4B1CF0E409C3C6A1C97C574B5EC1CD230",
+          "scale": 4,
+          "filter": "NEAREST"
+        },
+        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -732,6 +952,18 @@
         "opm": {
           "present": true,
           "sha256": "9947F36F0CCA246C361472853F048399DD7580688730247DF390E0EFD5EBEDD1"
+        },
+        "anim.bsa": {
+          "present": true,
+          "sha256": "27C3FEDBC52AF391E87B71064BC51F79EFF011249B0AB9D6112DD8FA76442A4D"
+        },
+        "anim.ncgr": {
+          "present": true,
+          "sha256": "54F4D3A7DF098F829363EE5124E99754F0AFCFB4B9592D754F9143480FD20A20"
+        },
+        "anim.nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
         }
       },
       "rightsStatus": "LICENSED",
@@ -753,7 +985,9 @@
         "file": "fields/field_cm10_01/native-original.png",
         "sha256": "8C4CB6622F367B2958E21A9D48F13DBC93082CF20691A0130E8E678A91EA5AB4",
         "width": 288,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "8C4CB6622F367B2958E21A9D48F13DBC93082CF20691A0130E8E678A91EA5AB4",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm10_01/faithful-hd4x.png",
@@ -788,6 +1022,9 @@
         "count": 7,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -812,6 +1049,18 @@
         "opm": {
           "present": true,
           "sha256": "B58FCC528D468F4A08BA1FB60D5A8B6AFD2A57A3BCE54CAC724D0B378A670A6C"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -833,7 +1082,9 @@
         "file": "fields/field_cm11_01/native-original.png",
         "sha256": "B5B6906AD989C62CD8F159B47830EF98FC6C853038027D66F86D80134976F150",
         "width": 240,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "B5B6906AD989C62CD8F159B47830EF98FC6C853038027D66F86D80134976F150",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm11_01/faithful-hd4x.png",
@@ -868,6 +1119,9 @@
         "count": 9,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -892,6 +1146,18 @@
         "opm": {
           "present": true,
           "sha256": "B903FCBAC1344AF09C044CC90F9D78FE2D17DA51B46323D2F9D6B5C815035860"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -913,7 +1179,9 @@
         "file": "fields/field_cm12_01/native-original.png",
         "sha256": "5F3483D97DF2FA843623186DC21EB0ACCCD988A3DA9343A36A4283C87D9158DD",
         "width": 240,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "5F3483D97DF2FA843623186DC21EB0ACCCD988A3DA9343A36A4283C87D9158DD",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm12_01/faithful-hd4x.png",
@@ -948,6 +1216,9 @@
         "count": 7,
         "authority": "ORIGINAL_OBJECT_INDEX_CONFLICT_DO_NOT_BIND"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -972,6 +1243,18 @@
         "opm": {
           "present": true,
           "sha256": "360109D7E835EC5A8ABE6C5B07CB0B2773BA4A6CAAC5C650FBBEE8757033F759"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -993,7 +1276,9 @@
         "file": "fields/field_cm13_01/native-original.png",
         "sha256": "504E38F3B05F76D5B59D65E544730DED9D7E5A8899F91379C4D50F01E06362EA",
         "width": 192,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "504E38F3B05F76D5B59D65E544730DED9D7E5A8899F91379C4D50F01E06362EA",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm13_01/faithful-hd4x.png",
@@ -1028,6 +1313,9 @@
         "count": 8,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -1052,6 +1340,18 @@
         "opm": {
           "present": true,
           "sha256": "4605A8243AA7BA635D22C8265E3C739675BBBFE8CDDB04F7DAB74E5B0ABB380B"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -1073,7 +1373,9 @@
         "file": "fields/field_cm14_01/native-original.png",
         "sha256": "5615D2B5407EBA7D4E431A4B994F8751005F77F048515DA5FC2F6ED069DB3FF4",
         "width": 240,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "5615D2B5407EBA7D4E431A4B994F8751005F77F048515DA5FC2F6ED069DB3FF4",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm14_01/faithful-hd4x.png",
@@ -1108,6 +1410,9 @@
         "count": 13,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -1132,6 +1437,18 @@
         "opm": {
           "present": true,
           "sha256": "30A14E7C9527DD042BE08CA959B07466A7F1A439196BEFD6472FBF157FB1EA3A"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -1153,7 +1470,9 @@
         "file": "fields/field_cm15_01/native-original.png",
         "sha256": "AC1BD21B7096911BA22155A08057347E31DC56CF0AB29C16BC70FE08A8AA9715",
         "width": 240,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "AC1BD21B7096911BA22155A08057347E31DC56CF0AB29C16BC70FE08A8AA9715",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm15_01/faithful-hd4x.png",
@@ -1188,6 +1507,9 @@
         "count": 23,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -1212,6 +1534,18 @@
         "opm": {
           "present": true,
           "sha256": "62FB10756FF3D9B0D4153F782E7B1143D25E799DCE99EA3740F21E50609D42DB"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -1233,7 +1567,9 @@
         "file": "fields/field_cm16_01/native-original.png",
         "sha256": "2B3D730872623D9C78364C45C0CF49E270436CFA0FCAF08AA3DDC2EDB36C7226",
         "width": 96,
-        "height": 112
+        "height": 112,
+        "staticCoreObjectSourceSha256": "2B3D730872623D9C78364C45C0CF49E270436CFA0FCAF08AA3DDC2EDB36C7226",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm16_01/faithful-hd4x.png",
@@ -1268,6 +1604,9 @@
         "count": 2,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -1292,6 +1631,18 @@
         "opm": {
           "present": true,
           "sha256": "74676D04442F4381B04677A62DAA3B2C7A6AC30D2689F3E52EB808201457BC14"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -1313,7 +1664,9 @@
         "file": "fields/field_cm17_01/native-original.png",
         "sha256": "708BAF31AF6D97B285CDDD657A20CEEED6DF27A990117E39C4805C9B4D4C4C31",
         "width": 192,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "708BAF31AF6D97B285CDDD657A20CEEED6DF27A990117E39C4805C9B4D4C4C31",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm17_01/faithful-hd4x.png",
@@ -1348,6 +1701,9 @@
         "count": 6,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -1372,6 +1728,18 @@
         "opm": {
           "present": true,
           "sha256": "E3C4B18DAE994545FC1C3CB826CA3394CF2E55CF377A9C85B6B97EE73469A6AC"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -1393,7 +1761,9 @@
         "file": "fields/field_cm18_01/native-original.png",
         "sha256": "68365E63F2EF7B9B5A0B44396870EEE96AC8277DFD39A5142DB1BAC6F2513A75",
         "width": 144,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "68365E63F2EF7B9B5A0B44396870EEE96AC8277DFD39A5142DB1BAC6F2513A75",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm18_01/faithful-hd4x.png",
@@ -1428,6 +1798,9 @@
         "count": 16,
         "authority": "ORIGINAL_OBJECT_INDEX_CONFLICT_DO_NOT_BIND"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -1452,6 +1825,18 @@
         "opm": {
           "present": true,
           "sha256": "DABF999F7AE3F10907E86907427C0CD4867AE477DDB0782C4D16430F200E5FC3"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -1473,7 +1858,9 @@
         "file": "fields/field_cm19_01/native-original.png",
         "sha256": "0FDF0B7659FE2400FB925D08DDDE560034B90B50CA1FD0840A179CF549EEBDF1",
         "width": 384,
-        "height": 112
+        "height": 112,
+        "staticCoreObjectSourceSha256": "0FDF0B7659FE2400FB925D08DDDE560034B90B50CA1FD0840A179CF549EEBDF1",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm19_01/faithful-hd4x.png",
@@ -1508,6 +1895,9 @@
         "count": 20,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -1532,6 +1922,18 @@
         "opm": {
           "present": true,
           "sha256": "942D254A951DC069B6EAAD5E13266E2272F7710DDBAE948C4C758CDA2B703E6C"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -1553,7 +1955,9 @@
         "file": "fields/field_cm20_01/native-original.png",
         "sha256": "4CE132065DF348DE924033600CDDC3236B11E6FEA6F6751298808A2689B9E269",
         "width": 240,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "4CE132065DF348DE924033600CDDC3236B11E6FEA6F6751298808A2689B9E269",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm20_01/faithful-hd4x.png",
@@ -1588,6 +1992,9 @@
         "count": 0,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -1612,6 +2019,18 @@
         "opm": {
           "present": true,
           "sha256": "8BEF44E1DB26C97E5F005525C966186EDFF26A74D2F69A6161F7B01F3617E5ED"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -1631,13 +2050,15 @@
       "layoutCells": 750,
       "nativeOriginal": {
         "file": "fields/field_cm21_01/native-original.png",
-        "sha256": "A3254CE8E523094FD2A314D70DCE3F101726D98EEC3D383FC26C1B68A016C935",
+        "sha256": "30F708109A32A07545E32D3859F083DF56576A3C5F227ACC328EEDAAD804C3B6",
         "width": 240,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "A3254CE8E523094FD2A314D70DCE3F101726D98EEC3D383FC26C1B68A016C935",
+        "composition": "STATIC_CORE_OBJECT_PLUS_ANIMATED_FRAME_0"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm21_01/faithful-hd4x.png",
-        "sha256": "BE76BA0CD822093DFE14A6774D1D4BE56E4F644100ABDE2F93D3C188A2A9AD36",
+        "sha256": "6612CC28F0869071CFAD64EBD648F8D6012FB42427AC3C313F67F067D4CE0395",
         "width": 960,
         "height": 800,
         "scale": 4,
@@ -1668,6 +2089,45 @@
         "count": 0,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "PRESENT_VERIFIED_ROM_DECODED",
+        "file": "fields/field_cm21_01/animated-layer.json",
+        "sha256": "18CA886B0A5833E2C8DCE2B333840ABBC9D083531DCA76A91461B17A71839AC4",
+        "sourceSha256": "17466B280F4510E6ACD4FC6CD7438DE19963A6BA56657CC37FBD0FD126396154",
+        "graphicsSourceSha256": "6F2A8A12E30A5312DAB26BBDED7B1B558354F08BCA448013194CFEE3C6D50460",
+        "paletteSourceSha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A",
+        "frameCount": 2,
+        "frameDurationsRawTicks": [
+          20,
+          20
+        ],
+        "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+        "layerFrames": [
+          {
+            "frameIndex": 0,
+            "rawDurationTicks": 20,
+            "file": "fields/field_cm21_01/animated-layer-frame-00.png",
+            "sha256": "2079BC3AD4063230C3929A71570E351429908D8E27F2808EBEF6FEC1FF31ED2F"
+          },
+          {
+            "frameIndex": 1,
+            "rawDurationTicks": 20,
+            "file": "fields/field_cm21_01/animated-layer-frame-01.png",
+            "sha256": "635D0CB7C30413AF984E0F57FE139C48251D9465496431C99784BA44B6D04C1B"
+          }
+        ],
+        "alternateCompositeFrame": {
+          "file": "fields/field_cm21_01/native-composite-frame-01.png",
+          "sha256": "AC82B8942E826954F98A9E00B948F0814A5E6398B408F56C2D3C91AB6455BB8C"
+        },
+        "alternateFaithfulHd4xFrame": {
+          "file": "fields/field_cm21_01/faithful-hd4x-frame-01.png",
+          "sha256": "0275ADA68225E249C361ECA5377686D9B0827D59560C6C8B5717C45ABC0700E4",
+          "scale": 4,
+          "filter": "NEAREST"
+        },
+        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -1692,6 +2152,18 @@
         "opm": {
           "present": true,
           "sha256": "11B491DBD5D6FE3E18B63A200E49B7106E20BD9B8FEC15507024731FEA6C9984"
+        },
+        "anim.bsa": {
+          "present": true,
+          "sha256": "17466B280F4510E6ACD4FC6CD7438DE19963A6BA56657CC37FBD0FD126396154"
+        },
+        "anim.ncgr": {
+          "present": true,
+          "sha256": "6F2A8A12E30A5312DAB26BBDED7B1B558354F08BCA448013194CFEE3C6D50460"
+        },
+        "anim.nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
         }
       },
       "rightsStatus": "LICENSED",
@@ -1713,7 +2185,9 @@
         "file": "fields/field_cm22_01/native-original.png",
         "sha256": "80929F2BAE4656857E930527185B59B6EA661663D81F3CAD865FDE6794BD6059",
         "width": 192,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "80929F2BAE4656857E930527185B59B6EA661663D81F3CAD865FDE6794BD6059",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm22_01/faithful-hd4x.png",
@@ -1748,6 +2222,9 @@
         "count": 12,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -1772,6 +2249,18 @@
         "opm": {
           "present": true,
           "sha256": "8F9908BA27D13BAC35933A8465ABFB9272CDD468FF595E0092C326039D55D6FD"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -1793,7 +2282,9 @@
         "file": "fields/field_cm23_01/native-original.png",
         "sha256": "86D1C7685499BAA0759F1B30EA3940CE852C11DE7F37B138E57B749C009B01BE",
         "width": 144,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "86D1C7685499BAA0759F1B30EA3940CE852C11DE7F37B138E57B749C009B01BE",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm23_01/faithful-hd4x.png",
@@ -1828,6 +2319,9 @@
         "count": 6,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -1852,6 +2346,18 @@
         "opm": {
           "present": true,
           "sha256": "C3E291435696F909F6EA8219D830FC7048D51ACEFC0B5ACA800E8B72FFF29D98"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -1873,7 +2379,9 @@
         "file": "fields/field_cm24_01/native-original.png",
         "sha256": "C2FA5B2D667D686D83A7641B25FFD9F29E3C813FA5E0574D181ED2DE42DEAB54",
         "width": 96,
-        "height": 112
+        "height": 112,
+        "staticCoreObjectSourceSha256": "C2FA5B2D667D686D83A7641B25FFD9F29E3C813FA5E0574D181ED2DE42DEAB54",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm24_01/faithful-hd4x.png",
@@ -1908,6 +2416,9 @@
         "count": 5,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -1932,6 +2443,18 @@
         "opm": {
           "present": true,
           "sha256": "A6EEF9C954BB6204BC254C315942B20AD9BF094EDDCA2AE6C3057EB42DBB56AE"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -1953,7 +2476,9 @@
         "file": "fields/field_cm25_01/native-original.png",
         "sha256": "C2651FEACC316538325A76324279F9C75EEF482542E89D4EB588F16B9BF89430",
         "width": 192,
-        "height": 112
+        "height": 112,
+        "staticCoreObjectSourceSha256": "C2651FEACC316538325A76324279F9C75EEF482542E89D4EB588F16B9BF89430",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm25_01/faithful-hd4x.png",
@@ -1988,6 +2513,9 @@
         "count": 13,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -2012,6 +2540,18 @@
         "opm": {
           "present": true,
           "sha256": "CEDE3C6DC57E9846B327D0A59B91C2CD5FF1BFA053F998AFA26041BFCE8F30A3"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -2033,7 +2573,9 @@
         "file": "fields/field_cm26_01/native-original.png",
         "sha256": "F76164BB526589F092B84EC1866DC2417FAC330CE37A34DF4EAB97ED71D57B41",
         "width": 240,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "F76164BB526589F092B84EC1866DC2417FAC330CE37A34DF4EAB97ED71D57B41",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm26_01/faithful-hd4x.png",
@@ -2068,6 +2610,9 @@
         "count": 11,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -2092,6 +2637,18 @@
         "opm": {
           "present": true,
           "sha256": "E969C60CC6F088DB8FC3DCF7785B2F69CCEF4106D70F433984EEEEDB4CBF18C4"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -2113,7 +2670,9 @@
         "file": "fields/field_cm27_01/native-original.png",
         "sha256": "E3AE07BCCCD66F18793215AAF10107D4D9CBD0FF76F96C00619859E6001CBBA2",
         "width": 192,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "E3AE07BCCCD66F18793215AAF10107D4D9CBD0FF76F96C00619859E6001CBBA2",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm27_01/faithful-hd4x.png",
@@ -2148,6 +2707,9 @@
         "count": 12,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -2172,6 +2734,18 @@
         "opm": {
           "present": true,
           "sha256": "08494BF8EE59DAA23AA59AB6FC3313CA8DC1A76D1FCCD5773AB01A613491BD8D"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -2193,7 +2767,9 @@
         "file": "fields/field_cm28_01/native-original.png",
         "sha256": "B4F17BAFC3A7CD196F7BC4513A89A60B96598F279C2E6C9EBC4790E5810A9134",
         "width": 240,
-        "height": 200
+        "height": 200,
+        "staticCoreObjectSourceSha256": "B4F17BAFC3A7CD196F7BC4513A89A60B96598F279C2E6C9EBC4790E5810A9134",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm28_01/faithful-hd4x.png",
@@ -2228,6 +2804,9 @@
         "count": 0,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -2252,6 +2831,18 @@
         "opm": {
           "present": false,
           "sha256": null
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -2273,7 +2864,9 @@
         "file": "fields/field_cm29_01/native-original.png",
         "sha256": "6C85AB18018882C461F3A4A84BFC05CFCE5DF2D2DFC4C78606E7EB67B27533B6",
         "width": 96,
-        "height": 112
+        "height": 112,
+        "staticCoreObjectSourceSha256": "6C85AB18018882C461F3A4A84BFC05CFCE5DF2D2DFC4C78606E7EB67B27533B6",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm29_01/faithful-hd4x.png",
@@ -2308,6 +2901,9 @@
         "count": 0,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -2332,6 +2928,18 @@
         "opm": {
           "present": false,
           "sha256": null
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -2353,7 +2961,9 @@
         "file": "fields/field_cm30_01/native-original.png",
         "sha256": "4598538854557E0732B9E1B8A394B494F62FB25118837AB801CF7E0F828E211E",
         "width": 96,
-        "height": 112
+        "height": 112,
+        "staticCoreObjectSourceSha256": "4598538854557E0732B9E1B8A394B494F62FB25118837AB801CF7E0F828E211E",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm30_01/faithful-hd4x.png",
@@ -2388,6 +2998,9 @@
         "count": 1,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -2412,6 +3025,18 @@
         "opm": {
           "present": true,
           "sha256": "BF7B68DC22B3917720F3F0ED0D67FFB2C77D7AD421847919D4F736A86A0749F9"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -2433,7 +3058,9 @@
         "file": "fields/field_cm31_01/native-original.png",
         "sha256": "A09EACC4DB56D22503F4124E148BF0E941BF04C0E442997C2050AD4A20401A27",
         "width": 192,
-        "height": 112
+        "height": 112,
+        "staticCoreObjectSourceSha256": "A09EACC4DB56D22503F4124E148BF0E941BF04C0E442997C2050AD4A20401A27",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm31_01/faithful-hd4x.png",
@@ -2468,6 +3095,9 @@
         "count": 3,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -2492,6 +3122,18 @@
         "opm": {
           "present": true,
           "sha256": "6853D115764A0FF82AC23A43458AD1B9764722DCF0D9ABA2C39AC8571B418B18"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -2513,7 +3155,9 @@
         "file": "fields/field_cm32_01/native-original.png",
         "sha256": "49E4FBADA12561448290CC2A3F91FCBC16912DBEFA92427B6BA6ECB3BCBA1B79",
         "width": 96,
-        "height": 112
+        "height": 112,
+        "staticCoreObjectSourceSha256": "49E4FBADA12561448290CC2A3F91FCBC16912DBEFA92427B6BA6ECB3BCBA1B79",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm32_01/faithful-hd4x.png",
@@ -2548,6 +3192,9 @@
         "count": 7,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -2572,6 +3219,18 @@
         "opm": {
           "present": true,
           "sha256": "E0C2E43F59664651D2B32A08EC008544F2EEA752C2773F388DBD73AC7B32A9CD"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -2593,7 +3252,9 @@
         "file": "fields/field_cm33_01/native-original.png",
         "sha256": "9C08F42403527F5322EF78A5A50FB03F46D713E98F7F75F8F72AE1E9847379D7",
         "width": 96,
-        "height": 112
+        "height": 112,
+        "staticCoreObjectSourceSha256": "9C08F42403527F5322EF78A5A50FB03F46D713E98F7F75F8F72AE1E9847379D7",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm33_01/faithful-hd4x.png",
@@ -2628,6 +3289,9 @@
         "count": 1,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -2652,6 +3316,18 @@
         "opm": {
           "present": true,
           "sha256": "CC2FFBAB860074006A559995AA51B55AB21066C7BF86293816FE2258A4494472"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -2673,7 +3349,9 @@
         "file": "fields/field_cm34_01/native-original.png",
         "sha256": "FA21582CB1BF91EE1153E3F21EB3907B6C75D1C27B5F463033B6C8B462321212",
         "width": 96,
-        "height": 112
+        "height": 112,
+        "staticCoreObjectSourceSha256": "FA21582CB1BF91EE1153E3F21EB3907B6C75D1C27B5F463033B6C8B462321212",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm34_01/faithful-hd4x.png",
@@ -2708,6 +3386,9 @@
         "count": 3,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -2732,6 +3413,18 @@
         "opm": {
           "present": true,
           "sha256": "FA9AA1096E3993E09CE9699BD59DFC1D27519062AB015AFE3FF37A6B30251A95"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -2753,7 +3446,9 @@
         "file": "fields/field_cm35_01/native-original.png",
         "sha256": "82DFEC5260F8B640620B3ED5345520C74C02DA85D596A4AF359071E76A57F4C2",
         "width": 96,
-        "height": 112
+        "height": 112,
+        "staticCoreObjectSourceSha256": "82DFEC5260F8B640620B3ED5345520C74C02DA85D596A4AF359071E76A57F4C2",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm35_01/faithful-hd4x.png",
@@ -2788,6 +3483,9 @@
         "count": 0,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -2812,6 +3510,18 @@
         "opm": {
           "present": true,
           "sha256": "6D7272C34B11E2EE194A7E3F48D406B4321D8B5F89EF38137C7D9A916647AEBB"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -2833,7 +3543,9 @@
         "file": "fields/field_cm36_01/native-original.png",
         "sha256": "299FAFE111E0B77AB79113DC349CCBB73E83D0ACAFB060FAA2EC04846AC59C90",
         "width": 96,
-        "height": 112
+        "height": 112,
+        "staticCoreObjectSourceSha256": "299FAFE111E0B77AB79113DC349CCBB73E83D0ACAFB060FAA2EC04846AC59C90",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm36_01/faithful-hd4x.png",
@@ -2868,6 +3580,9 @@
         "count": 0,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -2892,6 +3607,18 @@
         "opm": {
           "present": true,
           "sha256": "BEF711A3F30CA39DA2DE0A336C4803D0014A796AAD426B5103E658A85CB54C64"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -2913,7 +3640,9 @@
         "file": "fields/field_cm37_01/native-original.png",
         "sha256": "9C815D2070703A1E4662DA1222337F6FD51F2400F335C9CC62308320B79A88E3",
         "width": 96,
-        "height": 112
+        "height": 112,
+        "staticCoreObjectSourceSha256": "9C815D2070703A1E4662DA1222337F6FD51F2400F335C9CC62308320B79A88E3",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm37_01/faithful-hd4x.png",
@@ -2948,6 +3677,9 @@
         "count": 0,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -2972,6 +3704,18 @@
         "opm": {
           "present": true,
           "sha256": "05C7F4C0BE37FAFEE38837EEC20102162050781F672D6275F2DFB2B0377E21AE"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -2993,7 +3737,9 @@
         "file": "fields/field_cm38_01/native-original.png",
         "sha256": "5A0E89A7DDBCC97CCD260ADAC13BC23CC4A0FE17CAACD8F4C34F3A7744E7B1C4",
         "width": 96,
-        "height": 112
+        "height": 112,
+        "staticCoreObjectSourceSha256": "5A0E89A7DDBCC97CCD260ADAC13BC23CC4A0FE17CAACD8F4C34F3A7744E7B1C4",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm38_01/faithful-hd4x.png",
@@ -3028,6 +3774,9 @@
         "count": 10,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -3052,6 +3801,18 @@
         "opm": {
           "present": true,
           "sha256": "C19655FF47D3F3755360CA9C0FCA2456D74F007E560BC3ECB448E6D3F0D7EA36"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -3071,13 +3832,15 @@
       "layoutCells": 168,
       "nativeOriginal": {
         "file": "fields/field_cm39_01/native-original.png",
-        "sha256": "F2B3A8DE7672CF4C9D83F82972A82A5F92055082FFD1A5DCFD83A0893F8D4F85",
+        "sha256": "872901D2FDA60DE53DABE52D2EB1DF8E9F5FBE749B8F26B6EEC0FE2DFC72E63F",
         "width": 96,
-        "height": 112
+        "height": 112,
+        "staticCoreObjectSourceSha256": "F2B3A8DE7672CF4C9D83F82972A82A5F92055082FFD1A5DCFD83A0893F8D4F85",
+        "composition": "STATIC_CORE_OBJECT_PLUS_ANIMATED_FRAME_0"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm39_01/faithful-hd4x.png",
-        "sha256": "D519923E35256D6BDA1D520EC8F4D8B1578F8A96A0E74F8782AE192E8592E1BD",
+        "sha256": "60C527184B0104E1354EE945F7B3336E6FD93654C013410B96C3734187189E10",
         "width": 384,
         "height": 448,
         "scale": 4,
@@ -3108,6 +3871,45 @@
         "count": 1,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "PRESENT_VERIFIED_ROM_DECODED",
+        "file": "fields/field_cm39_01/animated-layer.json",
+        "sha256": "77A4FC33E3231213AEBB1A3A6A6B97C631D6BDACFD32FAFC2584DB3BA16E0877",
+        "sourceSha256": "FC23250A886E5F1E826A7B087FDA8B6362B5AFA05FED84BDD88371880E19BE24",
+        "graphicsSourceSha256": "463B9C23BC59AD889E98C41FCC4418CC95E92DDB84D8B50070E62E201A6F3E00",
+        "paletteSourceSha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A",
+        "frameCount": 2,
+        "frameDurationsRawTicks": [
+          20,
+          20
+        ],
+        "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+        "layerFrames": [
+          {
+            "frameIndex": 0,
+            "rawDurationTicks": 20,
+            "file": "fields/field_cm39_01/animated-layer-frame-00.png",
+            "sha256": "15542FFCC55C877706B0FB697732FF8A79A8F27FB74D68BD2EFEEDCE0D499539"
+          },
+          {
+            "frameIndex": 1,
+            "rawDurationTicks": 20,
+            "file": "fields/field_cm39_01/animated-layer-frame-01.png",
+            "sha256": "5B532756732E9E7137CF01D6B24BCC37E1D586F602DF9322CE065B0B4991969E"
+          }
+        ],
+        "alternateCompositeFrame": {
+          "file": "fields/field_cm39_01/native-composite-frame-01.png",
+          "sha256": "3D99C20AD22039B9D4A80BA26F62D46A273E2B562957433D759FB15C2FD02EF1"
+        },
+        "alternateFaithfulHd4xFrame": {
+          "file": "fields/field_cm39_01/faithful-hd4x-frame-01.png",
+          "sha256": "ACE51F1404591C3EFEE2D7280E9C229F58ED1CAF0F3F99A4EFCAD3BBDA956754",
+          "scale": 4,
+          "filter": "NEAREST"
+        },
+        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -3132,6 +3934,18 @@
         "opm": {
           "present": true,
           "sha256": "928E9C8038ED9C6EF572F43EC906785D1C98D8BE9331885AC4B0005797B5D2E2"
+        },
+        "anim.bsa": {
+          "present": true,
+          "sha256": "FC23250A886E5F1E826A7B087FDA8B6362B5AFA05FED84BDD88371880E19BE24"
+        },
+        "anim.ncgr": {
+          "present": true,
+          "sha256": "463B9C23BC59AD889E98C41FCC4418CC95E92DDB84D8B50070E62E201A6F3E00"
+        },
+        "anim.nclr": {
+          "present": true,
+          "sha256": "AD26E282E6970965FD4497E6178816266619EF256D74F48913B60C432B3A998A"
         }
       },
       "rightsStatus": "LICENSED",
@@ -3153,7 +3967,9 @@
         "file": "fields/field_cm40_01/native-original.png",
         "sha256": "27474FA6AAB08684BE4C2F761C65D187239455D2A06C1AE0AD5E8AEEDB33D244",
         "width": 96,
-        "height": 112
+        "height": 112,
+        "staticCoreObjectSourceSha256": "27474FA6AAB08684BE4C2F761C65D187239455D2A06C1AE0AD5E8AEEDB33D244",
+        "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm40_01/faithful-hd4x.png",
@@ -3188,6 +4004,9 @@
         "count": 0,
         "authority": "ORIGINAL_PLACEMENT_REFERENCE"
       },
+      "animatedLayer": {
+        "status": "NOT_PRESENT"
+      },
       "sourcePayloadHashes": {
         "nbs": {
           "present": true,
@@ -3212,6 +4031,18 @@
         "opm": {
           "present": true,
           "sha256": "A4BA46B57E9150629185F4B1D1DCA62F366537D79D71B9BD30CB58FBD136F11B"
+        },
+        "anim.bsa": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.ncgr": {
+          "present": false,
+          "sha256": null
+        },
+        "anim.nclr": {
+          "present": false,
+          "sha256": null
         }
       },
       "rightsStatus": "LICENSED",
@@ -3226,6 +4057,8 @@
     "all40HdRoundTripPixelExact": true,
     "all40CollisionDimensionsMatchTilemaps": true,
     "all40AttributeDimensionsMatchTilemaps": true,
+    "allFourAnimatedLayerBundlesDecoded": true,
+    "animatedLayerFramesDecoded": 8,
     "objectPlacementRelayoutPerformed": false,
     "unknownClassSemanticsInvented": false,
     "cm12Cm18ObjectConflictBound": false

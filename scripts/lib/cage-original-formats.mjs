@@ -107,3 +107,59 @@ export function parseOriginalCageOpm(input) {
     placementSemantics: "SOURCE_ORDER_AND_COORDINATES_PRESERVED_NO_VISUAL_RELAYOUT",
   });
 }
+
+export function parseOriginalCageBsar(input) {
+  const { data, dataView } = view(input);
+  expectMagic(data, "BSAR", "BSAR");
+  const version = dataView.getUint32(4, true);
+  const unknownHeaderWord0 = dataView.getUint32(8, true);
+  const frameCount = dataView.getUint32(12, true);
+  const unknownHeaderWord2 = dataView.getUint32(16, true);
+  if (version !== 2 || frameCount < 1) throw new RangeError(`Unsupported BSAR version/frame count ${version}/${frameCount}`);
+  let cursor = 20;
+  const frameDurationsRawTicks = Array.from({ length: frameCount }, () => {
+    const value = dataView.getUint32(cursor, true);
+    cursor += 4;
+    return value;
+  });
+  const width = dataView.getUint32(cursor, true);
+  const height = dataView.getUint32(cursor + 4, true);
+  cursor += 8;
+  const gridSymbols = Array.from({ length: width * height }, () => {
+    const value = dataView.getUint16(cursor, true);
+    cursor += 2;
+    return value;
+  });
+  const symbolCount = dataView.getUint32(cursor, true);
+  cursor += 4;
+  expectLength(data, cursor + symbolCount * frameCount * 2, "BSAR");
+  if (gridSymbols.some((symbol) => symbol >= symbolCount)) throw new RangeError("BSAR grid symbol is out of range");
+  const symbols = Array.from({ length: symbolCount }, (_, symbolIndex) => Object.freeze({
+    symbolIndex,
+    frameTileEntries: Object.freeze(Array.from({ length: frameCount }, () => {
+      const raw = dataView.getUint16(cursor, true);
+      cursor += 2;
+      return Object.freeze({
+        raw,
+        tileIndex: raw & 0x03ff,
+        horizontalFlip: Boolean(raw & 0x0400),
+        verticalFlip: Boolean(raw & 0x0800),
+        paletteBank: (raw >>> 12) & 0x0f,
+      });
+    })),
+  }));
+  return Object.freeze({
+    format: "YDIJ_BSAR_ANIMATED_TILEMAP_V2",
+    version,
+    unknownHeaderWord0,
+    frameCount,
+    unknownHeaderWord2,
+    frameDurationsRawTicks: Object.freeze(frameDurationsRawTicks),
+    timingSemantics: "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+    width,
+    height,
+    gridSymbols: Object.freeze(gridSymbols),
+    symbolCount,
+    symbols: Object.freeze(symbols),
+  });
+}

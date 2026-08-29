@@ -5,6 +5,7 @@ import test from "node:test";
 
 import {
   parseOriginalCageAtr,
+  parseOriginalCageBsar,
   parseOriginalCageCol,
   parseOriginalCageNbs,
   parseOriginalCageOpm,
@@ -20,6 +21,8 @@ test("faithful Cage HD baseline covers all 40 original visual fields", () => {
   assert.equal(new Set(manifest.fields.map((field) => field.fieldId)).size, 40);
   assert.equal(manifest.fullCompositionConfidenceCount, 38);
   assert.deepEqual(manifest.partialObjectConflictFields, ["field_cm12_01", "field_cm18_01"]);
+  assert.equal(manifest.animatedLayerFieldCount, 4);
+  assert.deepEqual(manifest.animatedLayerFields, ["field_cm07_01", "field_cm09_01", "field_cm21_01", "field_cm39_01"]);
   assert.match(manifest.visualPolicy, /NO_RELAYOUT_NO_RECOLOR_NO_REDESIGN/);
   assert.equal(manifest.runtimeEligible, false);
   assert.equal(manifest.shippingReady, false);
@@ -32,7 +35,13 @@ test("every HD image is exactly 4x the verified native dimensions and all derive
     assert.equal(field.faithfulHd4x.width, field.nativeOriginal.width * 4);
     assert.equal(field.faithfulHd4x.height, field.nativeOriginal.height * 4);
     assert.equal(field.faithfulHd4x.downsampleRoundTripEqualsOriginal, true);
-    for (const record of [field.nativeOriginal, field.faithfulHd4x, field.coreTilemap, field.collision, field.attribute, field.objectPlacement]) {
+    const records = [field.nativeOriginal, field.faithfulHd4x, field.coreTilemap, field.collision, field.attribute, field.objectPlacement];
+    if (field.animatedLayer.status === "PRESENT_VERIFIED_ROM_DECODED") {
+      records.push(field.animatedLayer, ...field.animatedLayer.layerFrames, field.animatedLayer.alternateCompositeFrame, field.animatedLayer.alternateFaithfulHd4xFrame);
+      assert.equal(field.animatedLayer.frameCount, 2);
+      assert.notEqual(field.nativeOriginal.sha256, field.nativeOriginal.staticCoreObjectSourceSha256);
+    }
+    for (const record of records) {
       const file = `${root}/${record.file}`;
       assert.equal(fs.existsSync(file), true, file);
       assert.equal(digest(file), record.sha256, file);
@@ -67,6 +76,8 @@ test("collision, attribute, tilemap and placement data preserve original raw cla
   }
   assert.equal(manifest.qa.objectPlacementRelayoutPerformed, false);
   assert.equal(manifest.qa.unknownClassSemanticsInvented, false);
+  assert.equal(manifest.qa.allFourAnimatedLayerBundlesDecoded, true);
+  assert.equal(manifest.qa.animatedLayerFramesDecoded, 8);
 });
 
 test("browser-side original Cage format parsers preserve raw values", () => {
@@ -108,4 +119,23 @@ test("browser-side original Cage format parsers preserve raw values", () => {
   const opm = parseOriginalCageOpm(opmBytes);
   assert.equal(opm.placementCount, 1);
   assert.deepEqual([opm.placements[0].cellId, opm.placements[0].sourceX, opm.placements[0].sourceY], [2, 68, 88]);
+
+  const bsarBytes = new Uint8Array(46);
+  bsarBytes.set(new TextEncoder().encode("BSAR"));
+  const bsarView = new DataView(bsarBytes.buffer);
+  bsarView.setUint32(4, 2, true);
+  bsarView.setUint32(8, 1, true);
+  bsarView.setUint32(12, 2, true);
+  bsarView.setUint32(16, 1, true);
+  bsarView.setUint32(20, 20, true);
+  bsarView.setUint32(24, 20, true);
+  bsarView.setUint32(28, 1, true);
+  bsarView.setUint32(32, 1, true);
+  bsarView.setUint16(36, 0, true);
+  bsarView.setUint32(38, 1, true);
+  bsarView.setUint16(42, 3 | 0x0400, true);
+  bsarView.setUint16(44, 5 | 0x0800, true);
+  const bsar = parseOriginalCageBsar(bsarBytes);
+  assert.deepEqual([bsar.frameCount, bsar.width, bsar.height, bsar.symbolCount], [2, 1, 1, 1]);
+  assert.deepEqual(bsar.symbols[0].frameTileEntries.map(({ tileIndex, horizontalFlip, verticalFlip }) => [tileIndex, horizontalFlip, verticalFlip]), [[3, true, false], [5, false, true]]);
 });

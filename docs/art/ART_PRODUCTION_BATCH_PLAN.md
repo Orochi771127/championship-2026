@@ -52,6 +52,13 @@ exactly 4× with nearest-neighbour sampling. Thirty-eight fields have full
 composition confidence; CM12 and CM18 preserve their original object-index
 conflicts and are forbidden from guessed binding.
 
+Owner review exposed that the static O3-B clean views omitted native animated
+terrain on CM07, CM09, CM21 and CM39. The faithful-HD40 builder now decodes each
+original BSAR symbol grid, both raw-duration frames, 8bpp NCGR tiles and NCLR
+palette, then composites that layer behind the unchanged static core/object
+image. CM09's water is therefore present; its remaining blue-edged central
+notch is the original irregular field footprint, not missing artwork.
+
 ### Characters
 
 Licensed references: `E000`, `M001`, `M201`, `M222`, `M226`, `M228`, `M352`, `M431`.

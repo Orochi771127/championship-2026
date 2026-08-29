@@ -49,6 +49,12 @@ or manually reposition them. Preserve raw NBS/OPM/ATR/COL values. CM12 and CM18
 remain evidence-marked object-index conflicts until the original decode chain
 resolves them; do not guess.
 
+The Owner then identified that the lower-row penultimate CM09 review image was
+visually incomplete. Inspection confirmed that the static clean archive omitted
+the original `field_cm09_01_anim` BSAR/NCGR/NCLR water layer. Restore every
+verified native Cage animated terrain layer rather than presenting transparent
+holes as a complete result; retain intentional blue-edged irregular cut-outs.
+
 ## 2026-08-29 art-production amendment
 
 The Owner explicitly approved the previously proposed art plan for implementation with these decisions:

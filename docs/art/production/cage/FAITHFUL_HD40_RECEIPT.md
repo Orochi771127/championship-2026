@@ -11,11 +11,16 @@ previews were withdrawn. The active Cage direction is now 100% original-faithful
 original composition, palette, field shape, tile order, object cell order,
 object source coordinates, collision raw classes, attribute raw classes and
 art-format parsing are preserved. The only visual transformation in this batch
-is deterministic 4× nearest-neighbour enlargement.
+is deterministic 4× nearest-neighbour enlargement. A review correction also
+restores the four verified native BSAR animated terrain layers that the earlier
+static archive did not composite.
 
 ## Delivered
 
-- 40 byte-identical decoded native clean views retained as the comparison golden.
+- 40 exact raw-layer frame-0 composites retained as comparison goldens. The
+  static archive pixels remain unchanged; CM07, CM09, CM21 and CM39 additionally
+  receive their verified animated terrain frame behind the static core/object
+  layer.
 - 40 4× HD images; downsampling every output by nearest neighbour returns the
   exact native RGBA pixels.
 - 40 NBS core-tilemap JSON records, including raw tile values and flip bits.
@@ -23,7 +28,11 @@ is deterministic 4× nearest-neighbour enlargement.
   preserved in row-major order.
 - 38 OPM object-placement tables using original cell IDs and source X/Y;
   CM28 and CM29 correctly contain no native OPM layer.
-- JavaScript parsers for original COL, ATR, NBS and OPM formats, plus the
+- 4 BSAR animated terrain bundles decoded from original 8bpp NCGR/NCLR data:
+  8 native animation-layer frames, their raw frame-tile tables and raw durations,
+  plus alternate complete native/4× composite frames. CM09 therefore includes
+  its original water instead of showing that layer as a transparent hole.
+- JavaScript parsers for original COL, ATR, NBS, OPM and BSAR formats, plus the
   deterministic Python build/import pipeline and four review contact sheets.
 
 CM12 and CM18 retain the archive finding
@@ -42,5 +51,5 @@ and `shippingReady:false`; ROM and Nitro binaries are not committed.
 ## Rebuild
 
 Run `scripts/build-cage-faithful-hd40.py` with the verified O3-B archive root
-and read-only raw Training directory. `--verify-determinism` rebuilds all 245
+and read-only raw Training directory. `--verify-determinism` rebuilds all 265
 files in a clean temporary directory and compares every SHA-256.
