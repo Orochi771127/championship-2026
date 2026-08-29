@@ -9,16 +9,17 @@ const manifest = JSON.parse(fs.readFileSync(`${root}/manifest.json`, "utf8"));
 const sourceManifest = JSON.parse(fs.readFileSync(`${sourceRoot}/manifest.json`, "utf8"));
 const digest = (file) => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex").toUpperCase();
 
-test("first two Cage HD remaster batches cover CM01-CM20 without runtime promotion", () => {
-  assert.equal(manifest.batch, "ART_A3_CAGE_HD_REMASTER_V1_CM11_CM20");
+test("first three Cage HD remaster batches cover CM01-CM30 without runtime promotion", () => {
+  assert.equal(manifest.batch, "ART_A3_CAGE_HD_REMASTER_V1_CM21_CM30");
   assert.deepEqual(manifest.completedBatches.map((batch) => batch.batch), [
     "ART_A3_CAGE_HD_REMASTER_V1_CM01_CM10",
     "ART_A3_CAGE_HD_REMASTER_V1_CM11_CM20",
+    "ART_A3_CAGE_HD_REMASTER_V1_CM21_CM30",
   ]);
-  assert.equal(manifest.fieldCount, 20);
+  assert.equal(manifest.fieldCount, 30);
   assert.equal(manifest.plannedFieldCount, 40);
-  assert.deepEqual(manifest.completedFields, Array.from({ length: 20 }, (_, index) => `field_cm${String(index + 1).padStart(2, "0")}_01`));
-  assert.deepEqual(manifest.nextFields, Array.from({ length: 10 }, (_, index) => `field_cm${String(index + 21).padStart(2, "0")}_01`));
+  assert.deepEqual(manifest.completedFields, Array.from({ length: 30 }, (_, index) => `field_cm${String(index + 1).padStart(2, "0")}_01`));
+  assert.deepEqual(manifest.nextFields, Array.from({ length: 10 }, (_, index) => `field_cm${String(index + 31).padStart(2, "0")}_01`));
   assert.equal(manifest.scale, 4);
   assert.equal(manifest.profile, "COMPONENT_FAITHFUL_EDGE_AWARE_BICUBIC_PMA_4X_V1");
   assert.match(manifest.visualPolicy, /ORIGINAL_COMPOSITION.*PRESERVED/);
@@ -68,9 +69,9 @@ test("HD components retain source dimensions, placements, flips and object bindi
   assert.equal(manifest.qa.recolorDirectionApplied, false);
 });
 
-test("CM07 and CM09 preserve their verified animated-terrain frame records", () => {
+test("CM07, CM09 and CM21 preserve their verified animated-terrain frame records", () => {
   const animated = manifest.fields.filter((field) => field.animatedFrames.length > 0);
-  assert.deepEqual(animated.map((field) => field.fieldId), ["field_cm07_01", "field_cm09_01"]);
+  assert.deepEqual(animated.map((field) => field.fieldId), ["field_cm07_01", "field_cm09_01", "field_cm21_01"]);
   for (const field of animated) {
     assert.equal(field.animatedFrames.length, 2);
     for (const frame of field.animatedFrames) {
@@ -79,6 +80,27 @@ test("CM07 and CM09 preserve their verified animated-terrain frame records", () 
       assert.ok(Number.isInteger(frame.rawDurationTicks));
     }
   }
+});
+
+test("CM27 removes only the Owner-directed centre logo before remaster", () => {
+  const adapted = manifest.fields.filter((field) => field.ownerAdaptation !== null);
+  assert.equal(adapted.length, 1);
+  assert.equal(adapted[0].fieldId, "field_cm27_01");
+  const directive = adapted[0].ownerAdaptation;
+  assert.equal(directive.directiveId, "CAGE-CM27-REMOVE-CENTER-DIGIMON-MARK");
+  assert.ok(directive.changedPixelCountNative > 0);
+  assert.equal(directive.pixelsChangedOutsideMask, 0);
+  assert.equal(directive.alphaUnchanged, true);
+  assert.equal(directive.layoutCollisionAttributePlacementDataUnchanged, true);
+  assert.equal(directive.objectPlacementsPreserved, true);
+  assert.notEqual(directive.sourcePixelSha256, directive.adaptedPixelSha256);
+  assert.notEqual(directive.beforeCompositePixelSha256, directive.afterCompositePixelSha256);
+  assert.equal(adapted[0].objectPlacements.length, 12);
+  assert.equal(manifest.qa.cm27CenterLogoRemoved, true);
+  assert.equal(manifest.qa.cm27GameplayDataChanged, false);
+  assert.equal(digest(`${root}/${directive.maskFile}`), directive.maskSha256);
+  assert.equal(digest(`${root}/${directive.qaFile}`), directive.qaSha256);
+  assert.equal(digest(manifest.ownerDirective.file), manifest.ownerDirective.sha256);
 });
 
 test("CM12 and CM18 retain the resolved OPMD to NANR to NCER bindings", () => {
@@ -99,6 +121,12 @@ test("all Cage HD remaster outputs are present and hash locked", () => {
     records.push(field.core, field.staticComposite, field.frameZero, ...field.objectCells);
     for (const frame of field.animatedFrames) {
       records.push(frame.layer, { file: frame.compositeFile, sha256: frame.compositeSha256 });
+    }
+    if (field.ownerAdaptation) {
+      records.push(
+        { file: field.ownerAdaptation.maskFile, sha256: field.ownerAdaptation.maskSha256 },
+        { file: field.ownerAdaptation.qaFile, sha256: field.ownerAdaptation.qaSha256 },
+      );
     }
   }
   for (const record of records) {

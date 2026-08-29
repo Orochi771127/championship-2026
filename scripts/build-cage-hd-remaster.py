@@ -24,8 +24,20 @@ REPO = Path(__file__).resolve().parents[1]
 SOURCE_ROOT = REPO / "docs/art/production/cage/faithful-hd40"
 OUTPUT_ROOT = REPO / "docs/art/production/cage/hd-remaster-v1"
 SCALE = 4
-COMPLETED_FIELDS = [f"field_cm{i:02d}_01" for i in range(1, 21)]
-NEXT_FIELDS = [f"field_cm{i:02d}_01" for i in range(21, 31)]
+COMPLETED_FIELDS = [f"field_cm{i:02d}_01" for i in range(1, 31)]
+NEXT_FIELDS = [f"field_cm{i:02d}_01" for i in range(31, 41)]
+CM27_LOGO_MASK_POLYGON = [
+    (82, 54),
+    (113, 54),
+    (135, 72),
+    (148, 89),
+    (145, 111),
+    (134, 131),
+    (60, 131),
+    (49, 113),
+    (47, 91),
+    (65, 72),
+]
 
 
 def sha256(path: Path) -> str:
@@ -138,6 +150,58 @@ def transparent_rgb_is_zero(image: Image.Image) -> bool:
     return not np.any(pixels[..., :3][transparent])
 
 
+def rgba_pixel_sha256(image: Image.Image) -> str:
+    rgba = image.convert("RGBA")
+    digest = hashlib.sha256()
+    digest.update(rgba.width.to_bytes(4, "little"))
+    digest.update(rgba.height.to_bytes(4, "little"))
+    digest.update(rgba.tobytes())
+    return digest.hexdigest().upper()
+
+
+def remove_cm27_center_logo(source: Image.Image) -> tuple[Image.Image, Image.Image, dict]:
+    """Replace only the Owner-identified centre logo with nearby ring-mat colour."""
+    original = source.convert("RGBA")
+    mask = Image.new("L", original.size, 0)
+    ImageDraw.Draw(mask).polygon(CM27_LOGO_MASK_POLYGON, fill=255)
+    mask_values = np.asarray(mask, dtype=np.uint8)
+    source_values = np.asarray(original, dtype=np.uint8)
+    output = source_values.copy()
+    masked = mask_values > 0
+    working = source_values[..., :3].astype(np.float32)
+    boundary_average = np.mean(working[~masked & (source_values[..., 3] > 0)], axis=0)
+    working[masked] = boundary_average
+    for _ in range(1200):
+        neighbours = (
+            np.roll(working, 1, axis=0)
+            + np.roll(working, -1, axis=0)
+            + np.roll(working, 1, axis=1)
+            + np.roll(working, -1, axis=1)
+        ) * 0.25
+        working[masked] = neighbours[masked]
+    output[masked, :3] = np.uint8(np.clip(working[masked], 0, 255))
+
+    adapted = Image.fromarray(output, "RGBA")
+    changed = np.any(output != source_values, axis=2)
+    outside_changed = changed & (mask_values == 0)
+    ys, xs = np.where(changed)
+    changed_bounds = [int(xs.min()), int(ys.min()), int(xs.max() + 1), int(ys.max() + 1)]
+    return adapted, mask, {
+        "directiveId": "CAGE-CM27-REMOVE-CENTER-DIGIMON-MARK",
+        "fieldId": "field_cm27_01",
+        "operation": "REMOVE_CENTER_LOGO_HARMONIC_INPAINT_FROM_UNCHANGED_SURROUNDING_PIXELS",
+        "maskPolygonNative": [list(point) for point in CM27_LOGO_MASK_POLYGON],
+        "maskBoundsNative": list(mask.getbbox()),
+        "changedPixelCountNative": int(np.count_nonzero(changed)),
+        "changedBoundsNative": changed_bounds,
+        "pixelsChangedOutsideMask": int(np.count_nonzero(outside_changed)),
+        "sourcePixelSha256": rgba_pixel_sha256(original),
+        "adaptedPixelSha256": rgba_pixel_sha256(adapted),
+        "alphaUnchanged": bool(np.array_equal(source_values[..., 3], output[..., 3])),
+        "layoutCollisionAttributePlacementDataUnchanged": True,
+    }
+
+
 def opaque_rgb_mae_after_downsample(source: Image.Image, remaster: Image.Image) -> float:
     reduced = remaster.resize(source.size, Image.Resampling.LANCZOS).convert("RGBA")
     original_values = np.asarray(source.convert("RGBA"), dtype=np.int16)
@@ -148,8 +212,14 @@ def opaque_rgb_mae_after_downsample(source: Image.Image, remaster: Image.Image) 
     return float(np.abs(original_values[..., :3][mask] - reduced_values[..., :3][mask]).mean())
 
 
-def remaster_component(source_path: Path, output_path: Path, output_root: Path) -> tuple[Image.Image, dict]:
-    source = Image.open(source_path).convert("RGBA")
+def remaster_component(
+    source_path: Path,
+    output_path: Path,
+    output_root: Path,
+    working_source: Image.Image | None = None,
+) -> tuple[Image.Image, dict]:
+    reference_source = Image.open(source_path).convert("RGBA")
+    source = working_source.convert("RGBA") if working_source is not None else reference_source
     remaster = remaster_rgba(source)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     remaster.save(output_path, format="PNG", optimize=True)
@@ -160,7 +230,7 @@ def remaster_component(source_path: Path, output_path: Path, output_root: Path) 
         "sourceSha256": sha256(source_path),
         "file": output_path.relative_to(output_root).as_posix(),
         "sha256": sha256(output_path),
-        "sourceDimensions": list(source.size),
+        "sourceDimensions": list(reference_source.size),
         "dimensions": list(remaster.size),
         "sourceAlphaBounds": source_bounds,
         "expectedScaledAlphaBounds": scaled_bounds(source_bounds),
@@ -168,6 +238,8 @@ def remaster_component(source_path: Path, output_path: Path, output_root: Path) 
         "alphaBoundsPreservedAt4x": remaster_bounds == scaled_bounds(source_bounds),
         "transparentRgbZero": transparent_rgb_is_zero(remaster),
         "opaqueRgbMaeAfterLanczosDownsample": round(opaque_rgb_mae_after_downsample(source, remaster), 4),
+        "ownerAdaptedBeforeRemaster": working_source is not None,
+        "workingSourcePixelSha256": rgba_pixel_sha256(source),
     }
     return remaster, metrics
 
@@ -207,9 +279,24 @@ def save_contact(records: list[dict], path: Path, output_root: Path) -> None:
     sheet.save(path, format="PNG", optimize=True)
 
 
+def save_cm27_adaptation_qa(before: Image.Image, after: Image.Image, path: Path) -> None:
+    label_height = 30
+    sheet = Image.new("RGB", (before.width + after.width, before.height + label_height), (236, 236, 232))
+    sheet.paste(checker(before.size).convert("RGB"), (0, label_height))
+    sheet.paste(checker(after.size).convert("RGB"), (before.width, label_height))
+    sheet.paste(before.convert("RGBA"), (0, label_height), before.convert("RGBA"))
+    sheet.paste(after.convert("RGBA"), (before.width, label_height), after.convert("RGBA"))
+    draw = ImageDraw.Draw(sheet)
+    font = ImageFont.load_default()
+    draw.text((10, 10), "BEFORE — exact reference composition", fill=(32, 36, 42), font=font)
+    draw.text((before.width + 10, 10), "AFTER — centre logo removed only", fill=(32, 36, 42), font=font)
+    sheet.save(path, format="PNG", optimize=True)
+
+
 def build(output_root: Path) -> None:
     safe_reset(output_root)
     source_manifest_path = SOURCE_ROOT / "manifest.json"
+    owner_directive_path = REPO / "docs/art/production/cage/CAGE_OWNER_ADAPTATION_DIRECTIVES.json"
     source_manifest = json.loads(source_manifest_path.read_text(encoding="utf-8"))
     source_fields = {field["fieldId"]: field for field in source_manifest["fields"]}
     records = []
@@ -220,10 +307,24 @@ def build(output_root: Path) -> None:
         output_dir = output_root / "fields" / field_id
         output_dir.mkdir(parents=True)
 
+        core_source_path = source_dir / "core-native.png"
+        owner_adaptation = None
+        cm27_before_core = None
+        working_core = None
+        if field_id == "field_cm27_01":
+            reference_core = Image.open(core_source_path).convert("RGBA")
+            working_core, adaptation_mask, owner_adaptation = remove_cm27_center_logo(reference_core)
+            cm27_before_core = remaster_rgba(reference_core)
+            mask_path = output_dir / "owner-adaptation-mask-native.png"
+            adaptation_mask.save(mask_path, format="PNG", optimize=True)
+            owner_adaptation["maskFile"] = mask_path.relative_to(output_root).as_posix()
+            owner_adaptation["maskSha256"] = sha256(mask_path)
+
         core, core_metrics = remaster_component(
-            source_dir / "core-native.png",
+            core_source_path,
             output_dir / "core-remaster-hd4x.png",
             output_root,
+            working_core,
         )
         placement = json.loads((source_dir / "object-placement.json").read_text(encoding="utf-8"))
         cell_images: dict[int, tuple[Image.Image, dict]] = {}
@@ -247,6 +348,7 @@ def build(output_root: Path) -> None:
                 cell_metrics.append(metrics)
 
         static = core.copy()
+        cm27_before_static = cm27_before_core.copy() if cm27_before_core is not None else None
         resolved_placements = []
         for item in placement["placements"]:
             cell_id = item["resolvedFirstFrameCellId"]
@@ -265,6 +367,8 @@ def build(output_root: Path) -> None:
                 item["sourceY"] * SCALE - anchor_y * SCALE,
             )
             static.alpha_composite(transformed, destination)
+            if cm27_before_static is not None:
+                cm27_before_static.alpha_composite(transformed, destination)
             resolved_placements.append({
                 "ordinal": item["ordinal"],
                 "sequenceId": item["sequenceId"],
@@ -277,6 +381,16 @@ def build(output_root: Path) -> None:
             })
         static_path = output_dir / "static-composite-remaster-hd4x.png"
         static.save(static_path, format="PNG", optimize=True)
+        if owner_adaptation is not None:
+            qa_path = output_dir / "owner-adaptation-before-after-qa.png"
+            save_cm27_adaptation_qa(cm27_before_static, static, qa_path)
+            owner_adaptation.update({
+                "qaFile": qa_path.relative_to(output_root).as_posix(),
+                "qaSha256": sha256(qa_path),
+                "beforeCompositePixelSha256": rgba_pixel_sha256(cm27_before_static),
+                "afterCompositePixelSha256": rgba_pixel_sha256(static),
+                "objectPlacementsPreserved": True,
+            })
 
         animated_frames = []
         animation = source_field["animatedLayer"]
@@ -319,6 +433,7 @@ def build(output_root: Path) -> None:
             "core": core_metrics,
             "objectCells": cell_metrics,
             "objectPlacements": resolved_placements,
+            "ownerAdaptation": owner_adaptation,
             "staticComposite": {
                 "file": static_path.relative_to(output_root).as_posix(),
                 "sha256": sha256(static_path),
@@ -339,11 +454,11 @@ def build(output_root: Path) -> None:
             },
         })
 
-    contact_path = output_root / "cage-cm01-cm20-remaster-contact.png"
+    contact_path = output_root / "cage-cm01-cm30-remaster-contact.png"
     save_contact(records, contact_path, output_root)
     manifest = {
         "schemaVersion": 1,
-        "batch": "ART_A3_CAGE_HD_REMASTER_V1_CM11_CM20",
+        "batch": "ART_A3_CAGE_HD_REMASTER_V1_CM21_CM30",
         "completedBatches": [
             {
                 "batch": "ART_A3_CAGE_HD_REMASTER_V1_CM01_CM10",
@@ -352,6 +467,10 @@ def build(output_root: Path) -> None:
             {
                 "batch": "ART_A3_CAGE_HD_REMASTER_V1_CM11_CM20",
                 "fields": [f"field_cm{i:02d}_01" for i in range(11, 21)],
+            },
+            {
+                "batch": "ART_A3_CAGE_HD_REMASTER_V1_CM21_CM30",
+                "fields": [f"field_cm{i:02d}_01" for i in range(21, 31)],
             },
         ],
         "fieldCount": len(records),
@@ -365,7 +484,12 @@ def build(output_root: Path) -> None:
             "file": source_manifest_path.relative_to(REPO).as_posix(),
             "sha256": sha256(source_manifest_path),
         },
-        "visualPolicy": "ORIGINAL_COMPOSITION_PALETTE_FAMILY_OBJECT_IDENTITY_COORDINATES_AND_FLIPS_PRESERVED",
+        "ownerDirective": {
+            "file": owner_directive_path.relative_to(REPO).as_posix(),
+            "sha256": sha256(owner_directive_path),
+            "appliedField": "field_cm27_01",
+        },
+        "visualPolicy": "ORIGINAL_COMPOSITION_PALETTE_FAMILY_OBJECT_IDENTITY_COORDINATES_AND_FLIPS_PRESERVED_EXCEPT_OWNER_DIRECTED_CM27_CENTER_LOGO_REMOVAL",
         "alphaPolicy": "SCALE2X_BINARY_EDGE_AUTHORITY_BICUBIC_PREMULTIPLIED_RGB_TRANSPARENT_RGB_ZERO",
         "gameplayPolicy": "COL_ATR_NBS_AND_PLACEMENT_AUTHORITY_UNCHANGED_NOT_EMBEDDED_IN_ART",
         "rightsStatus": "LICENSED",
@@ -386,6 +510,14 @@ def build(output_root: Path) -> None:
             "placementRelayoutPerformed": False,
             "newObjectsInvented": False,
             "recolorDirectionApplied": False,
+            "cm27CenterLogoRemoved": next(
+                record["ownerAdaptation"] is not None
+                and record["ownerAdaptation"]["pixelsChangedOutsideMask"] == 0
+                and record["ownerAdaptation"]["alphaUnchanged"]
+                for record in records
+                if record["fieldId"] == "field_cm27_01"
+            ),
+            "cm27GameplayDataChanged": False,
             "humanVisualReviewRequired": True,
         },
         "fields": records,
@@ -414,7 +546,7 @@ def main() -> None:
             second = tree_hashes(second_root)
         if first != second:
             raise SystemExit("Cage HD remaster determinism check failed")
-        print(f"Deterministic Cage CM01-CM20 remaster passed: {len(first)} files")
+        print(f"Deterministic Cage CM01-CM30 remaster passed: {len(first)} files")
 
 
 if __name__ == "__main__":
