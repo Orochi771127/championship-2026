@@ -1,0 +1,3674 @@
+{
+  "schemaVersion": 1,
+  "batch": "ART_A3_CAGE_HD_REMASTER_V1_CM01_CM10",
+  "fieldCount": 10,
+  "plannedFieldCount": 40,
+  "completedFields": [
+    "field_cm01_01",
+    "field_cm02_01",
+    "field_cm03_01",
+    "field_cm04_01",
+    "field_cm05_01",
+    "field_cm06_01",
+    "field_cm07_01",
+    "field_cm08_01",
+    "field_cm09_01",
+    "field_cm10_01"
+  ],
+  "nextFields": [
+    "field_cm11_01",
+    "field_cm12_01",
+    "field_cm13_01",
+    "field_cm14_01",
+    "field_cm15_01",
+    "field_cm16_01",
+    "field_cm17_01",
+    "field_cm18_01",
+    "field_cm19_01",
+    "field_cm20_01"
+  ],
+  "scale": 4,
+  "profile": "COMPONENT_FAITHFUL_EDGE_AWARE_BICUBIC_PMA_4X_V1",
+  "componentOrder": "ANIMATED_TERRAIN_BEHIND_CORE_THEN_OPMD_NANR_NCER_OBJECTS",
+  "sourceManifest": {
+    "file": "docs/art/production/cage/faithful-hd40/manifest.json",
+    "sha256": "BE1BB50185A36DD80740481B88F54F898B4FB6B3AB99874F49641BCE5F7355FE"
+  },
+  "visualPolicy": "ORIGINAL_COMPOSITION_PALETTE_FAMILY_OBJECT_IDENTITY_COORDINATES_AND_FLIPS_PRESERVED",
+  "alphaPolicy": "SCALE2X_BINARY_EDGE_AUTHORITY_BICUBIC_PREMULTIPLIED_RGB_TRANSPARENT_RGB_ZERO",
+  "gameplayPolicy": "COL_ATR_NBS_AND_PLACEMENT_AUTHORITY_UNCHANGED_NOT_EMBEDDED_IN_ART",
+  "rightsStatus": "LICENSED",
+  "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "contactSheet": {
+    "file": "cage-cm01-cm10-remaster-contact.png",
+    "sha256": "29EC094003C51DE9F95A1BC673A90E3200A4F025C095F9177DEAFE1483BB858A"
+  },
+  "qa": {
+    "allFieldsGridAligned": true,
+    "allCoreTransparentRgbZero": true,
+    "allObjectCellsTransparentRgbZero": true,
+    "placementRelayoutPerformed": false,
+    "newObjectsInvented": false,
+    "recolorDirectionApplied": false,
+    "humanVisualReviewRequired": true
+  },
+  "fields": [
+    {
+      "fieldId": "field_cm01_01",
+      "ordinal": 1,
+      "nameEn": "Vacant Lot",
+      "nameJp": "あきち",
+      "profile": "COMPONENT_FAITHFUL_EDGE_AWARE_BICUBIC_PMA_4X_V1",
+      "sourceAuthority": "FAITHFUL_HD40_RAW_RECOMPOSITION",
+      "core": {
+        "sourceFile": "fields/field_cm01_01/core-native.png",
+        "sourceSha256": "87152FFFDF8278FD2772A78F410D28BBEA7F12C7897282A8DCD7A78B5943DBC7",
+        "file": "fields/field_cm01_01/core-remaster-hd4x.png",
+        "sha256": "9BB618EED6ED322CFC6C604B06521387B807842E87CAAEDC77A1954EA3114927",
+        "sourceDimensions": [
+          96,
+          112
+        ],
+        "dimensions": [
+          384,
+          448
+        ],
+        "sourceAlphaBounds": [
+          0,
+          0,
+          96,
+          112
+        ],
+        "expectedScaledAlphaBounds": [
+          0,
+          0,
+          384,
+          448
+        ],
+        "alphaBounds": [
+          0,
+          0,
+          384,
+          448
+        ],
+        "alphaBoundsPreservedAt4x": true,
+        "transparentRgbZero": true,
+        "opaqueRgbMaeAfterLanczosDownsample": 3.0707
+      },
+      "objectCells": [
+        {
+          "sourceFile": "fields/field_cm01_01/object-cells/cell-000.png",
+          "sourceSha256": "F8A6CBD1A8C02BE24A8843BFA9C0FD52E02EBA2E2D0BA2693A52CD9D13E31C2A",
+          "file": "fields/field_cm01_01/object-cells-remaster-hd4x/cell-000.png",
+          "sha256": "8BACA37D024C66383416B023FD44DBF0161A1879BDB10B7834574F98CA34CA8E",
+          "sourceDimensions": [
+            48,
+            80
+          ],
+          "dimensions": [
+            192,
+            320
+          ],
+          "sourceAlphaBounds": [
+            0,
+            1,
+            48,
+            77
+          ],
+          "expectedScaledAlphaBounds": [
+            0,
+            4,
+            192,
+            308
+          ],
+          "alphaBounds": [
+            0,
+            4,
+            192,
+            308
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 3.5398,
+          "cellIndex": 0,
+          "sourceAnchor": [
+            23,
+            66
+          ],
+          "remasterAnchor": [
+            92,
+            264
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm01_01/object-cells/cell-001.png",
+          "sourceSha256": "6C80214AE4B4478772579D20914C8B96BF678F249110BCD38EABE5AAC07BFCAE",
+          "file": "fields/field_cm01_01/object-cells-remaster-hd4x/cell-001.png",
+          "sha256": "17698AC9C1FB9DC82377BC1510AB62FC2F2139FD76A07F726595D555BBF98181",
+          "sourceDimensions": [
+            64,
+            48
+          ],
+          "dimensions": [
+            256,
+            192
+          ],
+          "sourceAlphaBounds": [
+            1,
+            0,
+            63,
+            48
+          ],
+          "expectedScaledAlphaBounds": [
+            4,
+            0,
+            252,
+            192
+          ],
+          "alphaBounds": [
+            4,
+            0,
+            252,
+            192
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 6.0217,
+          "cellIndex": 1,
+          "sourceAnchor": [
+            40,
+            35
+          ],
+          "remasterAnchor": [
+            160,
+            140
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm01_01/object-cells/cell-002.png",
+          "sourceSha256": "2DBA29F3CF79859CEFCE5C91085A505168A14D67D7A6753A3CB4FE5FAEC0DB9B",
+          "file": "fields/field_cm01_01/object-cells-remaster-hd4x/cell-002.png",
+          "sha256": "F6FCF271BE5D1175C5183A7C14EA85C02EDF8F6BD3A3713FFB56EBEEC84F7AD5",
+          "sourceDimensions": [
+            32,
+            64
+          ],
+          "dimensions": [
+            128,
+            256
+          ],
+          "sourceAlphaBounds": [
+            3,
+            2,
+            32,
+            56
+          ],
+          "expectedScaledAlphaBounds": [
+            12,
+            8,
+            128,
+            224
+          ],
+          "alphaBounds": [
+            12,
+            8,
+            128,
+            224
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 4.3154,
+          "cellIndex": 2,
+          "sourceAnchor": [
+            19,
+            56
+          ],
+          "remasterAnchor": [
+            76,
+            224
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm01_01/object-cells/cell-003.png",
+          "sourceSha256": "BE2F7C82BEAB44860747D6A09D5AB007F433F08CD4F759EFCFA2CB820DF5DAA4",
+          "file": "fields/field_cm01_01/object-cells-remaster-hd4x/cell-003.png",
+          "sha256": "A1331A572C13A18DF0B03753C1E4C256F76844DE22F37CADDCCB1B8F6ADB2E6C",
+          "sourceDimensions": [
+            32,
+            64
+          ],
+          "dimensions": [
+            128,
+            256
+          ],
+          "sourceAlphaBounds": [
+            0,
+            1,
+            22,
+            52
+          ],
+          "expectedScaledAlphaBounds": [
+            0,
+            4,
+            88,
+            208
+          ],
+          "alphaBounds": [
+            0,
+            4,
+            88,
+            208
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 4.117,
+          "cellIndex": 3,
+          "sourceAnchor": [
+            9,
+            44
+          ],
+          "remasterAnchor": [
+            36,
+            176
+          ]
+        }
+      ],
+      "objectPlacements": [
+        {
+          "ordinal": 0,
+          "sequenceId": 1,
+          "firstFrameCellId": 1,
+          "sourceCoordinate": [
+            68,
+            88
+          ],
+          "remasterCoordinate": [
+            272,
+            352
+          ],
+          "destinationTopLeft": [
+            112,
+            212
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 1,
+          "sequenceId": 2,
+          "firstFrameCellId": 2,
+          "sourceCoordinate": [
+            62,
+            17
+          ],
+          "remasterCoordinate": [
+            248,
+            68
+          ],
+          "destinationTopLeft": [
+            172,
+            -156
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 2,
+          "sequenceId": 0,
+          "firstFrameCellId": 0,
+          "sourceCoordinate": [
+            50,
+            19
+          ],
+          "remasterCoordinate": [
+            200,
+            76
+          ],
+          "destinationTopLeft": [
+            108,
+            -188
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 3,
+          "sequenceId": 3,
+          "firstFrameCellId": 3,
+          "sourceCoordinate": [
+            84,
+            22
+          ],
+          "remasterCoordinate": [
+            336,
+            88
+          ],
+          "destinationTopLeft": [
+            300,
+            -88
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        }
+      ],
+      "staticComposite": {
+        "file": "fields/field_cm01_01/static-composite-remaster-hd4x.png",
+        "sha256": "599B00FE666A47A0E3B1B4C13AAA808A5A7A2DBEDAD11DACA61AC95ED04E4906",
+        "dimensions": [
+          384,
+          448
+        ]
+      },
+      "animatedFrames": [],
+      "frameZero": {
+        "file": "fields/field_cm01_01/static-composite-remaster-hd4x.png",
+        "sha256": "599B00FE666A47A0E3B1B4C13AAA808A5A7A2DBEDAD11DACA61AC95ED04E4906",
+        "dimensions": [
+          384,
+          448
+        ]
+      },
+      "grid": {
+        "width": 12,
+        "height": 14,
+        "nativeCellPixels": 8,
+        "remasterCellPixels": 32,
+        "aligned": true
+      }
+    },
+    {
+      "fieldId": "field_cm02_01",
+      "ordinal": 2,
+      "nameEn": "Exercise Ground",
+      "nameJp": "うんどうじょう",
+      "profile": "COMPONENT_FAITHFUL_EDGE_AWARE_BICUBIC_PMA_4X_V1",
+      "sourceAuthority": "FAITHFUL_HD40_RAW_RECOMPOSITION",
+      "core": {
+        "sourceFile": "fields/field_cm02_01/core-native.png",
+        "sourceSha256": "25259374B81294BD9EB7C58ECBEE01D3EDD2935A4E91B1570D9102729CA02425",
+        "file": "fields/field_cm02_01/core-remaster-hd4x.png",
+        "sha256": "9B55FF8BC9BAD035353C3BD6EB80FD0976D583AE915648D4E01BE5FEAB887C87",
+        "sourceDimensions": [
+          192,
+          200
+        ],
+        "dimensions": [
+          768,
+          800
+        ],
+        "sourceAlphaBounds": [
+          0,
+          24,
+          192,
+          200
+        ],
+        "expectedScaledAlphaBounds": [
+          0,
+          96,
+          768,
+          800
+        ],
+        "alphaBounds": [
+          0,
+          96,
+          768,
+          800
+        ],
+        "alphaBoundsPreservedAt4x": true,
+        "transparentRgbZero": true,
+        "opaqueRgbMaeAfterLanczosDownsample": 6.6703
+      },
+      "objectCells": [
+        {
+          "sourceFile": "fields/field_cm02_01/object-cells/cell-000.png",
+          "sourceSha256": "EF75EDBC0CAA24A0CD3F6A0EBD7C79D601EFB451ED98F37054F995CC22A34773",
+          "file": "fields/field_cm02_01/object-cells-remaster-hd4x/cell-000.png",
+          "sha256": "C8A9914C8C297FB10780F04F45827313A77F60A114FEBF2F43B30E259E215405",
+          "sourceDimensions": [
+            32,
+            32
+          ],
+          "dimensions": [
+            128,
+            128
+          ],
+          "sourceAlphaBounds": [
+            2,
+            2,
+            30,
+            26
+          ],
+          "expectedScaledAlphaBounds": [
+            8,
+            8,
+            120,
+            104
+          ],
+          "alphaBounds": [
+            8,
+            8,
+            120,
+            104
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 19.7459,
+          "cellIndex": 0,
+          "sourceAnchor": [
+            17,
+            19
+          ],
+          "remasterAnchor": [
+            68,
+            76
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm02_01/object-cells/cell-001.png",
+          "sourceSha256": "09C7DE5478FA465ACE7C3C9574FD737FA132E6D1A09BB9120242044C720A7CD8",
+          "file": "fields/field_cm02_01/object-cells-remaster-hd4x/cell-001.png",
+          "sha256": "24DC21EE898D977307665B0C7EE18AA33DBB374299EFA634F2ABB65F85F63BED",
+          "sourceDimensions": [
+            32,
+            32
+          ],
+          "dimensions": [
+            128,
+            128
+          ],
+          "sourceAlphaBounds": [
+            3,
+            2,
+            31,
+            27
+          ],
+          "expectedScaledAlphaBounds": [
+            12,
+            8,
+            124,
+            108
+          ],
+          "alphaBounds": [
+            12,
+            8,
+            124,
+            108
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 22.4784,
+          "cellIndex": 1,
+          "sourceAnchor": [
+            17,
+            19
+          ],
+          "remasterAnchor": [
+            68,
+            76
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm02_01/object-cells/cell-002.png",
+          "sourceSha256": "AB15764F5D59E053C12ED9A9FCB6DA1E51851727D32150C6899DCF250E78E98A",
+          "file": "fields/field_cm02_01/object-cells-remaster-hd4x/cell-002.png",
+          "sha256": "5F9F9F4E0C713214B88BF7CA343310E762E92BA194FECD53CD0839CC80B1F54B",
+          "sourceDimensions": [
+            32,
+            56
+          ],
+          "dimensions": [
+            128,
+            224
+          ],
+          "sourceAlphaBounds": [
+            5,
+            2,
+            32,
+            51
+          ],
+          "expectedScaledAlphaBounds": [
+            20,
+            8,
+            128,
+            204
+          ],
+          "alphaBounds": [
+            20,
+            8,
+            128,
+            204
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 18.672,
+          "cellIndex": 2,
+          "sourceAnchor": [
+            20,
+            41
+          ],
+          "remasterAnchor": [
+            80,
+            164
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm02_01/object-cells/cell-003.png",
+          "sourceSha256": "AAECFBFB34ECB111797CA24CF703318DB5B63A4A33CA432384C98E14D2AF6028",
+          "file": "fields/field_cm02_01/object-cells-remaster-hd4x/cell-003.png",
+          "sha256": "D17CDBF549058833DFC7A665A1EED895BF92DFF3C1D5715BB82703C94A777C39",
+          "sourceDimensions": [
+            32,
+            48
+          ],
+          "dimensions": [
+            128,
+            192
+          ],
+          "sourceAlphaBounds": [
+            0,
+            5,
+            32,
+            43
+          ],
+          "expectedScaledAlphaBounds": [
+            0,
+            20,
+            128,
+            172
+          ],
+          "alphaBounds": [
+            0,
+            20,
+            128,
+            172
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 16.2532,
+          "cellIndex": 3,
+          "sourceAnchor": [
+            16,
+            38
+          ],
+          "remasterAnchor": [
+            64,
+            152
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm02_01/object-cells/cell-004.png",
+          "sourceSha256": "AE209742FF1AF8773407EDAC1575DF5398D82C58744A3E1FCD0D4D4D3C4B0C10",
+          "file": "fields/field_cm02_01/object-cells-remaster-hd4x/cell-004.png",
+          "sha256": "5BB86469C7519ED376400A244D6F48B6A413501546034251E8DB8AE495E6960B",
+          "sourceDimensions": [
+            32,
+            56
+          ],
+          "dimensions": [
+            128,
+            224
+          ],
+          "sourceAlphaBounds": [
+            0,
+            2,
+            27,
+            51
+          ],
+          "expectedScaledAlphaBounds": [
+            0,
+            8,
+            108,
+            204
+          ],
+          "alphaBounds": [
+            0,
+            8,
+            108,
+            204
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 18.8836,
+          "cellIndex": 4,
+          "sourceAnchor": [
+            10,
+            41
+          ],
+          "remasterAnchor": [
+            40,
+            164
+          ]
+        }
+      ],
+      "objectPlacements": [
+        {
+          "ordinal": 0,
+          "sequenceId": 2,
+          "firstFrameCellId": 2,
+          "sourceCoordinate": [
+            68,
+            179
+          ],
+          "remasterCoordinate": [
+            272,
+            716
+          ],
+          "destinationTopLeft": [
+            192,
+            552
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 1,
+          "sequenceId": 3,
+          "firstFrameCellId": 3,
+          "sourceCoordinate": [
+            96,
+            184
+          ],
+          "remasterCoordinate": [
+            384,
+            736
+          ],
+          "destinationTopLeft": [
+            320,
+            584
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 2,
+          "sequenceId": 4,
+          "firstFrameCellId": 4,
+          "sourceCoordinate": [
+            122,
+            179
+          ],
+          "remasterCoordinate": [
+            488,
+            716
+          ],
+          "destinationTopLeft": [
+            448,
+            552
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 3,
+          "sequenceId": 0,
+          "firstFrameCellId": 0,
+          "sourceCoordinate": [
+            58,
+            53
+          ],
+          "remasterCoordinate": [
+            232,
+            212
+          ],
+          "destinationTopLeft": [
+            164,
+            136
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 4,
+          "sequenceId": 1,
+          "firstFrameCellId": 1,
+          "sourceCoordinate": [
+            139,
+            93
+          ],
+          "remasterCoordinate": [
+            556,
+            372
+          ],
+          "destinationTopLeft": [
+            488,
+            296
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        }
+      ],
+      "staticComposite": {
+        "file": "fields/field_cm02_01/static-composite-remaster-hd4x.png",
+        "sha256": "F9296E79D26A08440B584B2EE6F7F97BC64B479AC38CE35311B0FF04757BE243",
+        "dimensions": [
+          768,
+          800
+        ]
+      },
+      "animatedFrames": [],
+      "frameZero": {
+        "file": "fields/field_cm02_01/static-composite-remaster-hd4x.png",
+        "sha256": "F9296E79D26A08440B584B2EE6F7F97BC64B479AC38CE35311B0FF04757BE243",
+        "dimensions": [
+          768,
+          800
+        ]
+      },
+      "grid": {
+        "width": 24,
+        "height": 25,
+        "nativeCellPixels": 8,
+        "remasterCellPixels": 32,
+        "aligned": true
+      }
+    },
+    {
+      "fieldId": "field_cm03_01",
+      "ordinal": 3,
+      "nameEn": "Arena",
+      "nameJp": "きょうぎじょう",
+      "profile": "COMPONENT_FAITHFUL_EDGE_AWARE_BICUBIC_PMA_4X_V1",
+      "sourceAuthority": "FAITHFUL_HD40_RAW_RECOMPOSITION",
+      "core": {
+        "sourceFile": "fields/field_cm03_01/core-native.png",
+        "sourceSha256": "B83C09299AE8F1F364C38745BCF137DC40FE49750E6134E374AB7240BA33A87B",
+        "file": "fields/field_cm03_01/core-remaster-hd4x.png",
+        "sha256": "AC8E60E678D1AB85190C58039912C8FE97CBCA9421B08BDB5CAC4BA48AC13919",
+        "sourceDimensions": [
+          288,
+          200
+        ],
+        "dimensions": [
+          1152,
+          800
+        ],
+        "sourceAlphaBounds": [
+          0,
+          24,
+          288,
+          200
+        ],
+        "expectedScaledAlphaBounds": [
+          0,
+          96,
+          1152,
+          800
+        ],
+        "alphaBounds": [
+          0,
+          96,
+          1152,
+          800
+        ],
+        "alphaBoundsPreservedAt4x": true,
+        "transparentRgbZero": true,
+        "opaqueRgbMaeAfterLanczosDownsample": 7.21
+      },
+      "objectCells": [
+        {
+          "sourceFile": "fields/field_cm03_01/object-cells/cell-000.png",
+          "sourceSha256": "ED56B95E96F3A299DFFA181DD8149BEE10B36978A6275592DC1F4BA4AF22C599",
+          "file": "fields/field_cm03_01/object-cells-remaster-hd4x/cell-000.png",
+          "sha256": "D1127FA7FBAAC7174C8A42BFD6CC632F43169E24D64572107F1038478C9E11D6",
+          "sourceDimensions": [
+            40,
+            32
+          ],
+          "dimensions": [
+            160,
+            128
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            39,
+            32
+          ],
+          "expectedScaledAlphaBounds": [
+            0,
+            0,
+            156,
+            128
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            156,
+            128
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 9.9492,
+          "cellIndex": 0,
+          "sourceAnchor": [
+            17,
+            23
+          ],
+          "remasterAnchor": [
+            68,
+            92
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm03_01/object-cells/cell-001.png",
+          "sourceSha256": "65EA190A5647B82662378B7E7C69D3F5061223DD70CB3049C9E0F4414435D706",
+          "file": "fields/field_cm03_01/object-cells-remaster-hd4x/cell-001.png",
+          "sha256": "55EC489D2B4E315E08653AFA45295ADAB77D86C842D65B6E60E2766E3CB5FE47",
+          "sourceDimensions": [
+            32,
+            32
+          ],
+          "dimensions": [
+            128,
+            128
+          ],
+          "sourceAlphaBounds": [
+            3,
+            3,
+            30,
+            30
+          ],
+          "expectedScaledAlphaBounds": [
+            12,
+            12,
+            120,
+            120
+          ],
+          "alphaBounds": [
+            12,
+            12,
+            120,
+            120
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 8.4972,
+          "cellIndex": 1,
+          "sourceAnchor": [
+            17,
+            24
+          ],
+          "remasterAnchor": [
+            68,
+            96
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm03_01/object-cells/cell-002.png",
+          "sourceSha256": "8F5EFE9790FBCB7B94E1B342FD5E1BD97A33C38A29DAB191297AC9C7102A6F52",
+          "file": "fields/field_cm03_01/object-cells-remaster-hd4x/cell-002.png",
+          "sha256": "698DBEE75B729B726E85E93437CA960DD0E6784D6A84FB301B5171E849E862E4",
+          "sourceDimensions": [
+            16,
+            16
+          ],
+          "dimensions": [
+            64,
+            64
+          ],
+          "sourceAlphaBounds": [
+            3,
+            1,
+            13,
+            16
+          ],
+          "expectedScaledAlphaBounds": [
+            12,
+            4,
+            52,
+            64
+          ],
+          "alphaBounds": [
+            12,
+            4,
+            52,
+            64
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 8.3677,
+          "cellIndex": 2,
+          "sourceAnchor": [
+            7,
+            12
+          ],
+          "remasterAnchor": [
+            28,
+            48
+          ]
+        }
+      ],
+      "objectPlacements": [
+        {
+          "ordinal": 0,
+          "sequenceId": 0,
+          "firstFrameCellId": 0,
+          "sourceCoordinate": [
+            195,
+            152
+          ],
+          "remasterCoordinate": [
+            780,
+            608
+          ],
+          "destinationTopLeft": [
+            712,
+            516
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 1,
+          "sequenceId": 1,
+          "firstFrameCellId": 1,
+          "sourceCoordinate": [
+            76,
+            122
+          ],
+          "remasterCoordinate": [
+            304,
+            488
+          ],
+          "destinationTopLeft": [
+            236,
+            392
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 2,
+          "sequenceId": 2,
+          "firstFrameCellId": 2,
+          "sourceCoordinate": [
+            125,
+            77
+          ],
+          "remasterCoordinate": [
+            500,
+            308
+          ],
+          "destinationTopLeft": [
+            472,
+            260
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 3,
+          "sequenceId": 2,
+          "firstFrameCellId": 2,
+          "sourceCoordinate": [
+            70,
+            77
+          ],
+          "remasterCoordinate": [
+            280,
+            308
+          ],
+          "destinationTopLeft": [
+            252,
+            260
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 4,
+          "sequenceId": 2,
+          "firstFrameCellId": 2,
+          "sourceCoordinate": [
+            109,
+            163
+          ],
+          "remasterCoordinate": [
+            436,
+            652
+          ],
+          "destinationTopLeft": [
+            408,
+            604
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 5,
+          "sequenceId": 2,
+          "firstFrameCellId": 2,
+          "sourceCoordinate": [
+            147,
+            163
+          ],
+          "remasterCoordinate": [
+            588,
+            652
+          ],
+          "destinationTopLeft": [
+            560,
+            604
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        }
+      ],
+      "staticComposite": {
+        "file": "fields/field_cm03_01/static-composite-remaster-hd4x.png",
+        "sha256": "8DDEFFF69146AA5E9924905C937EEFB3DFC36AE889E4D5469788D6BE991D9FF5",
+        "dimensions": [
+          1152,
+          800
+        ]
+      },
+      "animatedFrames": [],
+      "frameZero": {
+        "file": "fields/field_cm03_01/static-composite-remaster-hd4x.png",
+        "sha256": "8DDEFFF69146AA5E9924905C937EEFB3DFC36AE889E4D5469788D6BE991D9FF5",
+        "dimensions": [
+          1152,
+          800
+        ]
+      },
+      "grid": {
+        "width": 36,
+        "height": 25,
+        "nativeCellPixels": 8,
+        "remasterCellPixels": 32,
+        "aligned": true
+      }
+    },
+    {
+      "fieldId": "field_cm04_01",
+      "ordinal": 4,
+      "nameEn": "Dojo",
+      "nameJp": "どうじょう",
+      "profile": "COMPONENT_FAITHFUL_EDGE_AWARE_BICUBIC_PMA_4X_V1",
+      "sourceAuthority": "FAITHFUL_HD40_RAW_RECOMPOSITION",
+      "core": {
+        "sourceFile": "fields/field_cm04_01/core-native.png",
+        "sourceSha256": "0ACF623435B69A4BFE9DD5F53558CDE1EE8B951F95E9D9F6BE12D9C50520ECA5",
+        "file": "fields/field_cm04_01/core-remaster-hd4x.png",
+        "sha256": "2A1D2082B83570847E2878BC56B6F7D1955B0A1CE66DB9B2BE19EA269E6420B0",
+        "sourceDimensions": [
+          288,
+          112
+        ],
+        "dimensions": [
+          1152,
+          448
+        ],
+        "sourceAlphaBounds": [
+          0,
+          0,
+          288,
+          112
+        ],
+        "expectedScaledAlphaBounds": [
+          0,
+          0,
+          1152,
+          448
+        ],
+        "alphaBounds": [
+          0,
+          0,
+          1152,
+          448
+        ],
+        "alphaBoundsPreservedAt4x": true,
+        "transparentRgbZero": true,
+        "opaqueRgbMaeAfterLanczosDownsample": 7.7852
+      },
+      "objectCells": [
+        {
+          "sourceFile": "fields/field_cm04_01/object-cells/cell-000.png",
+          "sourceSha256": "D6D3A655CB1DF89A232C99DA2302CA163DB88B047AE56B22CE919C23DEE75C54",
+          "file": "fields/field_cm04_01/object-cells-remaster-hd4x/cell-000.png",
+          "sha256": "4303B30669887472CDEFCE87EB7A812265FA63E4FDE833E8D1B4828808227F5D",
+          "sourceDimensions": [
+            16,
+            64
+          ],
+          "dimensions": [
+            64,
+            256
+          ],
+          "sourceAlphaBounds": [
+            1,
+            4,
+            16,
+            63
+          ],
+          "expectedScaledAlphaBounds": [
+            4,
+            16,
+            64,
+            252
+          ],
+          "alphaBounds": [
+            4,
+            16,
+            64,
+            252
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 8.2842,
+          "cellIndex": 0,
+          "sourceAnchor": [
+            15,
+            56
+          ],
+          "remasterAnchor": [
+            60,
+            224
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm04_01/object-cells/cell-001.png",
+          "sourceSha256": "9834E68193DA780AC10EBB1D2715FD5415DBD9E38AA1EF8E2357A5CCB32EE12A",
+          "file": "fields/field_cm04_01/object-cells-remaster-hd4x/cell-001.png",
+          "sha256": "E08156580379B6A236DBD73889F59613BE73B679FCF370C25338179E070CC77D",
+          "sourceDimensions": [
+            16,
+            64
+          ],
+          "dimensions": [
+            64,
+            256
+          ],
+          "sourceAlphaBounds": [
+            0,
+            5,
+            15,
+            64
+          ],
+          "expectedScaledAlphaBounds": [
+            0,
+            20,
+            60,
+            256
+          ],
+          "alphaBounds": [
+            0,
+            20,
+            60,
+            256
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 4.0445,
+          "cellIndex": 1,
+          "sourceAnchor": [
+            15,
+            56
+          ],
+          "remasterAnchor": [
+            60,
+            224
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm04_01/object-cells/cell-002.png",
+          "sourceSha256": "1C472D3C7BDB7F98291033320B41DAA0562754F0EFA278B66E337B388D4DD95C",
+          "file": "fields/field_cm04_01/object-cells-remaster-hd4x/cell-002.png",
+          "sha256": "030078C017F8EB576FFFB71421A7D511D75F5E8F97AFAAFDFAD2283845CB3124",
+          "sourceDimensions": [
+            64,
+            64
+          ],
+          "dimensions": [
+            256,
+            256
+          ],
+          "sourceAlphaBounds": [
+            0,
+            1,
+            54,
+            48
+          ],
+          "expectedScaledAlphaBounds": [
+            0,
+            4,
+            216,
+            192
+          ],
+          "alphaBounds": [
+            0,
+            4,
+            216,
+            192
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 2.6407,
+          "cellIndex": 2,
+          "sourceAnchor": [
+            1,
+            32
+          ],
+          "remasterAnchor": [
+            4,
+            128
+          ]
+        }
+      ],
+      "objectPlacements": [
+        {
+          "ordinal": 0,
+          "sequenceId": 0,
+          "firstFrameCellId": 0,
+          "sourceCoordinate": [
+            17,
+            65
+          ],
+          "remasterCoordinate": [
+            68,
+            260
+          ],
+          "destinationTopLeft": [
+            8,
+            36
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 1,
+          "sequenceId": 1,
+          "firstFrameCellId": 1,
+          "sourceCoordinate": [
+            32,
+            57
+          ],
+          "remasterCoordinate": [
+            128,
+            228
+          ],
+          "destinationTopLeft": [
+            68,
+            4
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 2,
+          "sequenceId": 2,
+          "firstFrameCellId": 2,
+          "sourceCoordinate": [
+            233,
+            23
+          ],
+          "remasterCoordinate": [
+            932,
+            92
+          ],
+          "destinationTopLeft": [
+            928,
+            -36
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        }
+      ],
+      "staticComposite": {
+        "file": "fields/field_cm04_01/static-composite-remaster-hd4x.png",
+        "sha256": "A49A3FC1D3434915D8C1AA6EB2AA15F5C61FDEA26703855C6A32D924FCF790FA",
+        "dimensions": [
+          1152,
+          448
+        ]
+      },
+      "animatedFrames": [],
+      "frameZero": {
+        "file": "fields/field_cm04_01/static-composite-remaster-hd4x.png",
+        "sha256": "A49A3FC1D3434915D8C1AA6EB2AA15F5C61FDEA26703855C6A32D924FCF790FA",
+        "dimensions": [
+          1152,
+          448
+        ]
+      },
+      "grid": {
+        "width": 36,
+        "height": 14,
+        "nativeCellPixels": 8,
+        "remasterCellPixels": 32,
+        "aligned": true
+      }
+    },
+    {
+      "fieldId": "field_cm05_01",
+      "ordinal": 5,
+      "nameEn": "Gym",
+      "nameJp": "ジム",
+      "profile": "COMPONENT_FAITHFUL_EDGE_AWARE_BICUBIC_PMA_4X_V1",
+      "sourceAuthority": "FAITHFUL_HD40_RAW_RECOMPOSITION",
+      "core": {
+        "sourceFile": "fields/field_cm05_01/core-native.png",
+        "sourceSha256": "8D5EB414349D7A4199BEC2837A3B1C26D80E3CA1639CD4D57888BD0D43F2EF46",
+        "file": "fields/field_cm05_01/core-remaster-hd4x.png",
+        "sha256": "98A25EC7D614BBBD622CFDF4A16D90EF4E70F67C222669E5CDF15880D900AF44",
+        "sourceDimensions": [
+          240,
+          200
+        ],
+        "dimensions": [
+          960,
+          800
+        ],
+        "sourceAlphaBounds": [
+          0,
+          24,
+          240,
+          200
+        ],
+        "expectedScaledAlphaBounds": [
+          0,
+          96,
+          960,
+          800
+        ],
+        "alphaBounds": [
+          0,
+          96,
+          960,
+          800
+        ],
+        "alphaBoundsPreservedAt4x": true,
+        "transparentRgbZero": true,
+        "opaqueRgbMaeAfterLanczosDownsample": 4.7715
+      },
+      "objectCells": [
+        {
+          "sourceFile": "fields/field_cm05_01/object-cells/cell-000.png",
+          "sourceSha256": "233716FCF3776DD85312165ED77EB396C50303D40EA4F62A961CE46850C935A3",
+          "file": "fields/field_cm05_01/object-cells-remaster-hd4x/cell-000.png",
+          "sha256": "EFC00388B0B86858E4EFFCE6A76A9419C8BA4FFD224FD73382554D78DE1D5B83",
+          "sourceDimensions": [
+            32,
+            48
+          ],
+          "dimensions": [
+            128,
+            192
+          ],
+          "sourceAlphaBounds": [
+            1,
+            1,
+            32,
+            46
+          ],
+          "expectedScaledAlphaBounds": [
+            4,
+            4,
+            128,
+            184
+          ],
+          "alphaBounds": [
+            4,
+            4,
+            128,
+            184
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 6.4323,
+          "cellIndex": 0,
+          "sourceAnchor": [
+            17,
+            46
+          ],
+          "remasterAnchor": [
+            68,
+            184
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm05_01/object-cells/cell-001.png",
+          "sourceSha256": "AA1B0E94C5A4BF96313433E31FA31C2A7605457F19AB2B5B5486C9C14AFE1B47",
+          "file": "fields/field_cm05_01/object-cells-remaster-hd4x/cell-001.png",
+          "sha256": "FA8B3817B36B0D2BA0D55C82505D2A592AF81275B73AC93093A79D9512303D8B",
+          "sourceDimensions": [
+            32,
+            32
+          ],
+          "dimensions": [
+            128,
+            128
+          ],
+          "sourceAlphaBounds": [
+            3,
+            0,
+            30,
+            32
+          ],
+          "expectedScaledAlphaBounds": [
+            12,
+            0,
+            120,
+            128
+          ],
+          "alphaBounds": [
+            12,
+            0,
+            120,
+            128
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 8.7604,
+          "cellIndex": 1,
+          "sourceAnchor": [
+            15,
+            30
+          ],
+          "remasterAnchor": [
+            60,
+            120
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm05_01/object-cells/cell-002.png",
+          "sourceSha256": "F1F7155341F0565FB6DD9A895F06AF52254A0CB64869F776A0D4412D8A6BCFDD",
+          "file": "fields/field_cm05_01/object-cells-remaster-hd4x/cell-002.png",
+          "sha256": "9C07B9389E7A0880B66BF6700C78DEBDFEF610F7B8CEA4957593758597195980",
+          "sourceDimensions": [
+            56,
+            56
+          ],
+          "dimensions": [
+            224,
+            224
+          ],
+          "sourceAlphaBounds": [
+            3,
+            4,
+            54,
+            54
+          ],
+          "expectedScaledAlphaBounds": [
+            12,
+            16,
+            216,
+            216
+          ],
+          "alphaBounds": [
+            12,
+            16,
+            216,
+            216
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 9.3464,
+          "cellIndex": 2,
+          "sourceAnchor": [
+            27,
+            51
+          ],
+          "remasterAnchor": [
+            108,
+            204
+          ]
+        }
+      ],
+      "objectPlacements": [
+        {
+          "ordinal": 0,
+          "sequenceId": 2,
+          "firstFrameCellId": 2,
+          "sourceCoordinate": [
+            153,
+            174
+          ],
+          "remasterCoordinate": [
+            612,
+            696
+          ],
+          "destinationTopLeft": [
+            504,
+            492
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 1,
+          "sequenceId": 1,
+          "firstFrameCellId": 1,
+          "sourceCoordinate": [
+            170,
+            94
+          ],
+          "remasterCoordinate": [
+            680,
+            376
+          ],
+          "destinationTopLeft": [
+            620,
+            256
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 2,
+          "sequenceId": 1,
+          "firstFrameCellId": 1,
+          "sourceCoordinate": [
+            122,
+            94
+          ],
+          "remasterCoordinate": [
+            488,
+            376
+          ],
+          "destinationTopLeft": [
+            428,
+            256
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 3,
+          "sequenceId": 1,
+          "firstFrameCellId": 1,
+          "sourceCoordinate": [
+            146,
+            118
+          ],
+          "remasterCoordinate": [
+            584,
+            472
+          ],
+          "destinationTopLeft": [
+            524,
+            352
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 4,
+          "sequenceId": 1,
+          "firstFrameCellId": 1,
+          "sourceCoordinate": [
+            98,
+            118
+          ],
+          "remasterCoordinate": [
+            392,
+            472
+          ],
+          "destinationTopLeft": [
+            332,
+            352
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 5,
+          "sequenceId": 0,
+          "firstFrameCellId": 0,
+          "sourceCoordinate": [
+            222,
+            87
+          ],
+          "remasterCoordinate": [
+            888,
+            348
+          ],
+          "destinationTopLeft": [
+            820,
+            164
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        }
+      ],
+      "staticComposite": {
+        "file": "fields/field_cm05_01/static-composite-remaster-hd4x.png",
+        "sha256": "4AAB0E33B0193613E5D640370690EAE7CC8EF93712181D30E4C9A1CC942886DE",
+        "dimensions": [
+          960,
+          800
+        ]
+      },
+      "animatedFrames": [],
+      "frameZero": {
+        "file": "fields/field_cm05_01/static-composite-remaster-hd4x.png",
+        "sha256": "4AAB0E33B0193613E5D640370690EAE7CC8EF93712181D30E4C9A1CC942886DE",
+        "dimensions": [
+          960,
+          800
+        ]
+      },
+      "grid": {
+        "width": 30,
+        "height": 25,
+        "nativeCellPixels": 8,
+        "remasterCellPixels": 32,
+        "aligned": true
+      }
+    },
+    {
+      "fieldId": "field_cm06_01",
+      "ordinal": 6,
+      "nameEn": "Laboratory",
+      "nameJp": "けんきゅうじょ",
+      "profile": "COMPONENT_FAITHFUL_EDGE_AWARE_BICUBIC_PMA_4X_V1",
+      "sourceAuthority": "FAITHFUL_HD40_RAW_RECOMPOSITION",
+      "core": {
+        "sourceFile": "fields/field_cm06_01/core-native.png",
+        "sourceSha256": "02892A8A9B00DFAFB3B5DE642E4998037C7FBEEBCFE7EDF2B525CFE87DAC08A6",
+        "file": "fields/field_cm06_01/core-remaster-hd4x.png",
+        "sha256": "4ED314032E65A4B004A69517A677E9877887810223CC1B13D8D8E36A79C27F2C",
+        "sourceDimensions": [
+          336,
+          200
+        ],
+        "dimensions": [
+          1344,
+          800
+        ],
+        "sourceAlphaBounds": [
+          0,
+          24,
+          336,
+          200
+        ],
+        "expectedScaledAlphaBounds": [
+          0,
+          96,
+          1344,
+          800
+        ],
+        "alphaBounds": [
+          0,
+          96,
+          1344,
+          800
+        ],
+        "alphaBoundsPreservedAt4x": true,
+        "transparentRgbZero": true,
+        "opaqueRgbMaeAfterLanczosDownsample": 6.6789
+      },
+      "objectCells": [
+        {
+          "sourceFile": "fields/field_cm06_01/object-cells/cell-000.png",
+          "sourceSha256": "B43AB677E090D891570957B768243E6CE18E0851101B4BDF1E8D571964A90413",
+          "file": "fields/field_cm06_01/object-cells-remaster-hd4x/cell-000.png",
+          "sha256": "0CB2B951899CE8F011EDC4DCA98E0947541C231677CD16B26A1FE6085FC13AE1",
+          "sourceDimensions": [
+            64,
+            64
+          ],
+          "dimensions": [
+            256,
+            256
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            62,
+            47
+          ],
+          "expectedScaledAlphaBounds": [
+            0,
+            0,
+            248,
+            188
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            248,
+            188
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 7.7056,
+          "cellIndex": 0,
+          "sourceAnchor": [
+            62,
+            17
+          ],
+          "remasterAnchor": [
+            248,
+            68
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm06_01/object-cells/cell-001.png",
+          "sourceSha256": "85420807267FE06BE665303C9E26ACF3189A0F2E53182569D618AD257A137EF1",
+          "file": "fields/field_cm06_01/object-cells-remaster-hd4x/cell-001.png",
+          "sha256": "E40F0245506D5AC454C418E46AB5A9C2063638AA4DDFC1BCA79B5AA3D3B03ED5",
+          "sourceDimensions": [
+            64,
+            32
+          ],
+          "dimensions": [
+            256,
+            128
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            52,
+            31
+          ],
+          "expectedScaledAlphaBounds": [
+            0,
+            0,
+            208,
+            124
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            208,
+            124
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 5.6854,
+          "cellIndex": 1,
+          "sourceAnchor": [
+            25,
+            15
+          ],
+          "remasterAnchor": [
+            100,
+            60
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm06_01/object-cells/cell-002.png",
+          "sourceSha256": "102EF08ABEFB1F1BFBCAF8915BB9D432B1CBC1DE6B007A0D3B56F419337DB5B7",
+          "file": "fields/field_cm06_01/object-cells-remaster-hd4x/cell-002.png",
+          "sha256": "8F0C99B4099A8724F226CF53AA26232F8A101CB70FDC04F284055D27C7D1F09A",
+          "sourceDimensions": [
+            16,
+            32
+          ],
+          "dimensions": [
+            64,
+            128
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            16,
+            31
+          ],
+          "expectedScaledAlphaBounds": [
+            0,
+            0,
+            64,
+            124
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            64,
+            124
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 11.588,
+          "cellIndex": 2,
+          "sourceAnchor": [
+            8,
+            31
+          ],
+          "remasterAnchor": [
+            32,
+            124
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm06_01/object-cells/cell-003.png",
+          "sourceSha256": "A8716A266507635DE9D0F8DB3858B45BEA3679D1602D420D77769EE18B98CF4C",
+          "file": "fields/field_cm06_01/object-cells-remaster-hd4x/cell-003.png",
+          "sha256": "7759B735EFF8E4F6023120B8386DD21CCF8B985063D3C17DCE0CE64E710CE682",
+          "sourceDimensions": [
+            16,
+            32
+          ],
+          "dimensions": [
+            64,
+            128
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            16,
+            31
+          ],
+          "expectedScaledAlphaBounds": [
+            0,
+            0,
+            64,
+            124
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            64,
+            124
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 11.6364,
+          "cellIndex": 3,
+          "sourceAnchor": [
+            8,
+            31
+          ],
+          "remasterAnchor": [
+            32,
+            124
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm06_01/object-cells/cell-004.png",
+          "sourceSha256": "C32B7FBD0D5D40F1C7965F723DDF97068DB51CDADC7F4AEBCCE75CC7D0F910C4",
+          "file": "fields/field_cm06_01/object-cells-remaster-hd4x/cell-004.png",
+          "sha256": "C836A5FE8F3082EE5CB09DBFCB627F06CC75FB0CD9CC7F9E4CE8245E81B4DE08",
+          "sourceDimensions": [
+            32,
+            32
+          ],
+          "dimensions": [
+            128,
+            128
+          ],
+          "sourceAlphaBounds": [
+            1,
+            0,
+            32,
+            32
+          ],
+          "expectedScaledAlphaBounds": [
+            4,
+            0,
+            128,
+            128
+          ],
+          "alphaBounds": [
+            4,
+            0,
+            128,
+            128
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 14.7203,
+          "cellIndex": 4,
+          "sourceAnchor": [
+            16,
+            30
+          ],
+          "remasterAnchor": [
+            64,
+            120
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm06_01/object-cells/cell-005.png",
+          "sourceSha256": "5D064753624F8A0BDCE25D8EDB5CF63ED2ADEFDE0F8E670088FB7683F7C01F28",
+          "file": "fields/field_cm06_01/object-cells-remaster-hd4x/cell-005.png",
+          "sha256": "BDF5E2ECDB5DA045B6F7E444ED6F226613FA44C7AED30EC508FAA658D5013CA7",
+          "sourceDimensions": [
+            32,
+            32
+          ],
+          "dimensions": [
+            128,
+            128
+          ],
+          "sourceAlphaBounds": [
+            1,
+            0,
+            32,
+            32
+          ],
+          "expectedScaledAlphaBounds": [
+            4,
+            0,
+            128,
+            128
+          ],
+          "alphaBounds": [
+            4,
+            0,
+            128,
+            128
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 14.6152,
+          "cellIndex": 5,
+          "sourceAnchor": [
+            16,
+            30
+          ],
+          "remasterAnchor": [
+            64,
+            120
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm06_01/object-cells/cell-006.png",
+          "sourceSha256": "6449672844B2EBC70A7FE49EDEF3FCC8F7BFF1BFD69D46C2EB8AE3FA41AD9B4F",
+          "file": "fields/field_cm06_01/object-cells-remaster-hd4x/cell-006.png",
+          "sha256": "CAFE6C44279AF2FB26A207C5388454B1CAC28F4228F2884DA43C63C735A28583",
+          "sourceDimensions": [
+            32,
+            32
+          ],
+          "dimensions": [
+            128,
+            128
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            32,
+            32
+          ],
+          "expectedScaledAlphaBounds": [
+            0,
+            0,
+            128,
+            128
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            128,
+            128
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 13.8439,
+          "cellIndex": 6,
+          "sourceAnchor": [
+            14,
+            27
+          ],
+          "remasterAnchor": [
+            56,
+            108
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm06_01/object-cells/cell-007.png",
+          "sourceSha256": "D67CFA622651008DE2101073205A02341A1020157DC896E957CB7F97E5C6C609",
+          "file": "fields/field_cm06_01/object-cells-remaster-hd4x/cell-007.png",
+          "sha256": "872B4999D9167F4F35C392E8FE86CDD74C2EF3B250580BC66925E223B1ED58C7",
+          "sourceDimensions": [
+            32,
+            24
+          ],
+          "dimensions": [
+            128,
+            96
+          ],
+          "sourceAlphaBounds": [
+            2,
+            0,
+            32,
+            24
+          ],
+          "expectedScaledAlphaBounds": [
+            8,
+            0,
+            128,
+            96
+          ],
+          "alphaBounds": [
+            8,
+            0,
+            128,
+            96
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 8.8357,
+          "cellIndex": 7,
+          "sourceAnchor": [
+            18,
+            22
+          ],
+          "remasterAnchor": [
+            72,
+            88
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm06_01/object-cells/cell-008.png",
+          "sourceSha256": "84FB195C604115D1F8A27A906A326287375C108BF41DA9A833F88A197519C071",
+          "file": "fields/field_cm06_01/object-cells-remaster-hd4x/cell-008.png",
+          "sha256": "7F3C6E05A17600F0A8FE201A377A74087001F740A1EBDFBD94739868F2C7CEB4",
+          "sourceDimensions": [
+            32,
+            64
+          ],
+          "dimensions": [
+            128,
+            256
+          ],
+          "sourceAlphaBounds": [
+            9,
+            33,
+            11,
+            38
+          ],
+          "expectedScaledAlphaBounds": [
+            36,
+            132,
+            44,
+            152
+          ],
+          "alphaBounds": [
+            36,
+            132,
+            44,
+            152
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 25.4,
+          "cellIndex": 8,
+          "sourceAnchor": [
+            2,
+            48
+          ],
+          "remasterAnchor": [
+            8,
+            192
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm06_01/object-cells/cell-009.png",
+          "sourceSha256": "D795C9880FAFBCADBD80A1FDB0FCC6B5555025B44430EB3FE079EF184C037C87",
+          "file": "fields/field_cm06_01/object-cells-remaster-hd4x/cell-009.png",
+          "sha256": "F3CC2652EC1C3854DA5B1608A8DFE5E81D59C15BF41967430A45CE098E6A2F7E",
+          "sourceDimensions": [
+            32,
+            64
+          ],
+          "dimensions": [
+            128,
+            256
+          ],
+          "sourceAlphaBounds": [
+            9,
+            30,
+            12,
+            37
+          ],
+          "expectedScaledAlphaBounds": [
+            36,
+            120,
+            48,
+            148
+          ],
+          "alphaBounds": [
+            36,
+            120,
+            48,
+            148
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 22.2424,
+          "cellIndex": 9,
+          "sourceAnchor": [
+            2,
+            48
+          ],
+          "remasterAnchor": [
+            8,
+            192
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm06_01/object-cells/cell-010.png",
+          "sourceSha256": "E69484EAC5FAFBEECC2CB2BF8697094231AB593111F6B22EC634B7B04C1A9752",
+          "file": "fields/field_cm06_01/object-cells-remaster-hd4x/cell-010.png",
+          "sha256": "C8E1298138FBB134B4B10BE45CB11BFE3898DC35D0C91481E843AF4AAECA67AE",
+          "sourceDimensions": [
+            32,
+            64
+          ],
+          "dimensions": [
+            128,
+            256
+          ],
+          "sourceAlphaBounds": [
+            9,
+            29,
+            11,
+            34
+          ],
+          "expectedScaledAlphaBounds": [
+            36,
+            116,
+            44,
+            136
+          ],
+          "alphaBounds": [
+            36,
+            116,
+            44,
+            136
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 25.4,
+          "cellIndex": 10,
+          "sourceAnchor": [
+            2,
+            48
+          ],
+          "remasterAnchor": [
+            8,
+            192
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm06_01/object-cells/cell-011.png",
+          "sourceSha256": "EC98535498F26C6EC5027D304B72079A2EB8C5E81DF14F6930D9A3E351DF9B48",
+          "file": "fields/field_cm06_01/object-cells-remaster-hd4x/cell-011.png",
+          "sha256": "E5DF9EF5127C77B0DB6938081CB5572198C8280BD71A9B3195FD498C8B8A783D",
+          "sourceDimensions": [
+            32,
+            64
+          ],
+          "dimensions": [
+            128,
+            256
+          ],
+          "sourceAlphaBounds": [
+            9,
+            27,
+            10,
+            28
+          ],
+          "expectedScaledAlphaBounds": [
+            36,
+            108,
+            40,
+            112
+          ],
+          "alphaBounds": [
+            36,
+            108,
+            40,
+            112
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 26.6667,
+          "cellIndex": 11,
+          "sourceAnchor": [
+            2,
+            48
+          ],
+          "remasterAnchor": [
+            8,
+            192
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm06_01/object-cells/cell-012.png",
+          "sourceSha256": "921D4BCD40B068A0AB0399CD26BCC9EFE19037F3688721D7AE8CF7286585134A",
+          "file": "fields/field_cm06_01/object-cells-remaster-hd4x/cell-012.png",
+          "sha256": "8834D495EB4956DA41F795132E1F914C4FA3F0C340927F781EF7600F0DA21CB1",
+          "sourceDimensions": [
+            32,
+            64
+          ],
+          "dimensions": [
+            128,
+            256
+          ],
+          "sourceAlphaBounds": null,
+          "expectedScaledAlphaBounds": null,
+          "alphaBounds": null,
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 0.0,
+          "cellIndex": 12,
+          "sourceAnchor": [
+            2,
+            48
+          ],
+          "remasterAnchor": [
+            8,
+            192
+          ]
+        }
+      ],
+      "objectPlacements": [
+        {
+          "ordinal": 0,
+          "sequenceId": 2,
+          "firstFrameCellId": 2,
+          "sourceCoordinate": [
+            264,
+            55
+          ],
+          "remasterCoordinate": [
+            1056,
+            220
+          ],
+          "destinationTopLeft": [
+            1024,
+            96
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 1,
+          "sequenceId": 2,
+          "firstFrameCellId": 2,
+          "sourceCoordinate": [
+            296,
+            55
+          ],
+          "remasterCoordinate": [
+            1184,
+            220
+          ],
+          "destinationTopLeft": [
+            1152,
+            96
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 2,
+          "sequenceId": 5,
+          "firstFrameCellId": 7,
+          "sourceCoordinate": [
+            43,
+            108
+          ],
+          "remasterCoordinate": [
+            172,
+            432
+          ],
+          "destinationTopLeft": [
+            100,
+            344
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 3,
+          "sequenceId": 5,
+          "firstFrameCellId": 7,
+          "sourceCoordinate": [
+            74,
+            108
+          ],
+          "remasterCoordinate": [
+            296,
+            432
+          ],
+          "destinationTopLeft": [
+            224,
+            344
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 4,
+          "sequenceId": 3,
+          "firstFrameCellId": 4,
+          "sourceCoordinate": [
+            129,
+            119
+          ],
+          "remasterCoordinate": [
+            516,
+            476
+          ],
+          "destinationTopLeft": [
+            452,
+            356
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 5,
+          "sequenceId": 3,
+          "firstFrameCellId": 4,
+          "sourceCoordinate": [
+            322,
+            84
+          ],
+          "remasterCoordinate": [
+            1288,
+            336
+          ],
+          "destinationTopLeft": [
+            1224,
+            328
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": true
+        },
+        {
+          "ordinal": 6,
+          "sequenceId": 4,
+          "firstFrameCellId": 6,
+          "sourceCoordinate": [
+            112,
+            122
+          ],
+          "remasterCoordinate": [
+            448,
+            488
+          ],
+          "destinationTopLeft": [
+            392,
+            380
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 7,
+          "sequenceId": 0,
+          "firstFrameCellId": 0,
+          "sourceCoordinate": [
+            192,
+            170
+          ],
+          "remasterCoordinate": [
+            768,
+            680
+          ],
+          "destinationTopLeft": [
+            520,
+            612
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 8,
+          "sequenceId": 1,
+          "firstFrameCellId": 1,
+          "sourceCoordinate": [
+            49,
+            180
+          ],
+          "remasterCoordinate": [
+            196,
+            720
+          ],
+          "destinationTopLeft": [
+            96,
+            660
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 9,
+          "sequenceId": 1,
+          "firstFrameCellId": 1,
+          "sourceCoordinate": [
+            289,
+            91
+          ],
+          "remasterCoordinate": [
+            1156,
+            364
+          ],
+          "destinationTopLeft": [
+            1056,
+            304
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 10,
+          "sequenceId": 6,
+          "firstFrameCellId": 8,
+          "sourceCoordinate": [
+            27,
+            134
+          ],
+          "remasterCoordinate": [
+            108,
+            536
+          ],
+          "destinationTopLeft": [
+            100,
+            344
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 11,
+          "sequenceId": 6,
+          "firstFrameCellId": 8,
+          "sourceCoordinate": [
+            168,
+            55
+          ],
+          "remasterCoordinate": [
+            672,
+            220
+          ],
+          "destinationTopLeft": [
+            664,
+            28
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 12,
+          "sequenceId": 6,
+          "firstFrameCellId": 8,
+          "sourceCoordinate": [
+            258,
+            55
+          ],
+          "remasterCoordinate": [
+            1032,
+            220
+          ],
+          "destinationTopLeft": [
+            1024,
+            156
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": true
+        },
+        {
+          "ordinal": 13,
+          "sequenceId": 7,
+          "firstFrameCellId": 12,
+          "sourceCoordinate": [
+            90,
+            134
+          ],
+          "remasterCoordinate": [
+            360,
+            536
+          ],
+          "destinationTopLeft": [
+            352,
+            472
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": true
+        },
+        {
+          "ordinal": 14,
+          "sequenceId": 7,
+          "firstFrameCellId": 12,
+          "sourceCoordinate": [
+            197,
+            55
+          ],
+          "remasterCoordinate": [
+            788,
+            220
+          ],
+          "destinationTopLeft": [
+            780,
+            28
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        }
+      ],
+      "staticComposite": {
+        "file": "fields/field_cm06_01/static-composite-remaster-hd4x.png",
+        "sha256": "D06A7B89732499A3AB53F241D845E91281DC2986067868757B3E800DCF4E2DF0",
+        "dimensions": [
+          1344,
+          800
+        ]
+      },
+      "animatedFrames": [],
+      "frameZero": {
+        "file": "fields/field_cm06_01/static-composite-remaster-hd4x.png",
+        "sha256": "D06A7B89732499A3AB53F241D845E91281DC2986067868757B3E800DCF4E2DF0",
+        "dimensions": [
+          1344,
+          800
+        ]
+      },
+      "grid": {
+        "width": 42,
+        "height": 25,
+        "nativeCellPixels": 8,
+        "remasterCellPixels": 32,
+        "aligned": true
+      }
+    },
+    {
+      "fieldId": "field_cm07_01",
+      "ordinal": 7,
+      "nameEn": "Volcano",
+      "nameJp": "かざん",
+      "profile": "COMPONENT_FAITHFUL_EDGE_AWARE_BICUBIC_PMA_4X_V1",
+      "sourceAuthority": "FAITHFUL_HD40_RAW_RECOMPOSITION",
+      "core": {
+        "sourceFile": "fields/field_cm07_01/core-native.png",
+        "sourceSha256": "6E2AC7F0B26AC32203135B4221D6057E84039C67404E2159CEE8F45A75C69235",
+        "file": "fields/field_cm07_01/core-remaster-hd4x.png",
+        "sha256": "0850AB365D0529B44373BFEF1DB6971DB4E30BE9BB89887A2DE6601DF1457C4B",
+        "sourceDimensions": [
+          240,
+          200
+        ],
+        "dimensions": [
+          960,
+          800
+        ],
+        "sourceAlphaBounds": [
+          0,
+          24,
+          240,
+          200
+        ],
+        "expectedScaledAlphaBounds": [
+          0,
+          96,
+          960,
+          800
+        ],
+        "alphaBounds": [
+          0,
+          96,
+          960,
+          800
+        ],
+        "alphaBoundsPreservedAt4x": true,
+        "transparentRgbZero": true,
+        "opaqueRgbMaeAfterLanczosDownsample": 2.9141
+      },
+      "objectCells": [
+        {
+          "sourceFile": "fields/field_cm07_01/object-cells/cell-000.png",
+          "sourceSha256": "5F2EFA98FFA647F7CE7B596683E3DFB472A6AE371111E3F1A6D8CAC607E181F1",
+          "file": "fields/field_cm07_01/object-cells-remaster-hd4x/cell-000.png",
+          "sha256": "B0A8B2FB4A3A4266EE58B72CE49547ABCE2099DCB82FF26AA3CDB385E1FB9428",
+          "sourceDimensions": [
+            16,
+            16
+          ],
+          "dimensions": [
+            64,
+            64
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            12,
+            11
+          ],
+          "expectedScaledAlphaBounds": [
+            0,
+            0,
+            48,
+            44
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            48,
+            44
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 15.9513,
+          "cellIndex": 0,
+          "sourceAnchor": [
+            15,
+            0
+          ],
+          "remasterAnchor": [
+            60,
+            0
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm07_01/object-cells/cell-001.png",
+          "sourceSha256": "80CB388915DFF4CD77C2B711F96DE93028FB15AA736DC816B245F5152369F006",
+          "file": "fields/field_cm07_01/object-cells-remaster-hd4x/cell-001.png",
+          "sha256": "548290A18714C05E53B936D83850F0C9442BCE22ED82EBD55E624EDF4C29C8FE",
+          "sourceDimensions": [
+            16,
+            16
+          ],
+          "dimensions": [
+            64,
+            64
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            12,
+            11
+          ],
+          "expectedScaledAlphaBounds": [
+            0,
+            0,
+            48,
+            44
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            48,
+            44
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 15.6159,
+          "cellIndex": 1,
+          "sourceAnchor": [
+            15,
+            0
+          ],
+          "remasterAnchor": [
+            60,
+            0
+          ]
+        }
+      ],
+      "objectPlacements": [],
+      "staticComposite": {
+        "file": "fields/field_cm07_01/static-composite-remaster-hd4x.png",
+        "sha256": "0850AB365D0529B44373BFEF1DB6971DB4E30BE9BB89887A2DE6601DF1457C4B",
+        "dimensions": [
+          960,
+          800
+        ]
+      },
+      "animatedFrames": [
+        {
+          "frameIndex": 0,
+          "rawDurationTicks": 50,
+          "layer": {
+            "sourceFile": "fields/field_cm07_01/animated-layer-frame-00.png",
+            "sourceSha256": "D950571515EA3CEB96DE58F71444D41FE7F2DD5CB44F15651C34E5B2ED8D335F",
+            "file": "fields/field_cm07_01/animated-layer-remaster-frame-00.png",
+            "sha256": "0CD751B8B4E97A297D792D23093E41C9D91EF1A603728A4706D00648DFCE98D7",
+            "sourceDimensions": [
+              240,
+              200
+            ],
+            "dimensions": [
+              960,
+              800
+            ],
+            "sourceAlphaBounds": [
+              0,
+              24,
+              240,
+              200
+            ],
+            "expectedScaledAlphaBounds": [
+              0,
+              96,
+              960,
+              800
+            ],
+            "alphaBounds": [
+              0,
+              96,
+              960,
+              800
+            ],
+            "alphaBoundsPreservedAt4x": true,
+            "transparentRgbZero": true,
+            "opaqueRgbMaeAfterLanczosDownsample": 2.0107
+          },
+          "compositeFile": "fields/field_cm07_01/composite-remaster-frame-00.png",
+          "compositeSha256": "0850AB365D0529B44373BFEF1DB6971DB4E30BE9BB89887A2DE6601DF1457C4B"
+        },
+        {
+          "frameIndex": 1,
+          "rawDurationTicks": 50,
+          "layer": {
+            "sourceFile": "fields/field_cm07_01/animated-layer-frame-01.png",
+            "sourceSha256": "AAB17BE837E23591D506FDABBE18528E0D909C8BED482DC2A14ADFE951DC0229",
+            "file": "fields/field_cm07_01/animated-layer-remaster-frame-01.png",
+            "sha256": "620854C50526A6CD41026C9CE28376431399BD534C7EB038AD60CF122C7CFA80",
+            "sourceDimensions": [
+              240,
+              200
+            ],
+            "dimensions": [
+              960,
+              800
+            ],
+            "sourceAlphaBounds": [
+              0,
+              24,
+              240,
+              200
+            ],
+            "expectedScaledAlphaBounds": [
+              0,
+              96,
+              960,
+              800
+            ],
+            "alphaBounds": [
+              0,
+              96,
+              960,
+              800
+            ],
+            "alphaBoundsPreservedAt4x": true,
+            "transparentRgbZero": true,
+            "opaqueRgbMaeAfterLanczosDownsample": 1.9944
+          },
+          "compositeFile": "fields/field_cm07_01/composite-remaster-frame-01.png",
+          "compositeSha256": "0850AB365D0529B44373BFEF1DB6971DB4E30BE9BB89887A2DE6601DF1457C4B"
+        }
+      ],
+      "frameZero": {
+        "file": "fields/field_cm07_01/composite-remaster-frame-00.png",
+        "sha256": "0850AB365D0529B44373BFEF1DB6971DB4E30BE9BB89887A2DE6601DF1457C4B",
+        "dimensions": [
+          960,
+          800
+        ]
+      },
+      "grid": {
+        "width": 30,
+        "height": 25,
+        "nativeCellPixels": 8,
+        "remasterCellPixels": 32,
+        "aligned": true
+      }
+    },
+    {
+      "fieldId": "field_cm08_01",
+      "ordinal": 8,
+      "nameEn": "Grassland",
+      "nameJp": "そうげん",
+      "profile": "COMPONENT_FAITHFUL_EDGE_AWARE_BICUBIC_PMA_4X_V1",
+      "sourceAuthority": "FAITHFUL_HD40_RAW_RECOMPOSITION",
+      "core": {
+        "sourceFile": "fields/field_cm08_01/core-native.png",
+        "sourceSha256": "AF3B60FC1BB8B2AFBB090340A76FE5C21967FBE71F1D2D3984DDD148C3ED4F02",
+        "file": "fields/field_cm08_01/core-remaster-hd4x.png",
+        "sha256": "72E9DD517F0321262599E41C417F845FFF70FBB50E9ACA8EF23B384E733221F7",
+        "sourceDimensions": [
+          240,
+          200
+        ],
+        "dimensions": [
+          960,
+          800
+        ],
+        "sourceAlphaBounds": [
+          0,
+          24,
+          240,
+          200
+        ],
+        "expectedScaledAlphaBounds": [
+          0,
+          96,
+          960,
+          800
+        ],
+        "alphaBounds": [
+          0,
+          96,
+          960,
+          800
+        ],
+        "alphaBoundsPreservedAt4x": true,
+        "transparentRgbZero": true,
+        "opaqueRgbMaeAfterLanczosDownsample": 3.0115
+      },
+      "objectCells": [
+        {
+          "sourceFile": "fields/field_cm08_01/object-cells/cell-000.png",
+          "sourceSha256": "5F2EFA98FFA647F7CE7B596683E3DFB472A6AE371111E3F1A6D8CAC607E181F1",
+          "file": "fields/field_cm08_01/object-cells-remaster-hd4x/cell-000.png",
+          "sha256": "B0A8B2FB4A3A4266EE58B72CE49547ABCE2099DCB82FF26AA3CDB385E1FB9428",
+          "sourceDimensions": [
+            16,
+            16
+          ],
+          "dimensions": [
+            64,
+            64
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            12,
+            11
+          ],
+          "expectedScaledAlphaBounds": [
+            0,
+            0,
+            48,
+            44
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            48,
+            44
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 15.9513,
+          "cellIndex": 0,
+          "sourceAnchor": [
+            15,
+            0
+          ],
+          "remasterAnchor": [
+            60,
+            0
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm08_01/object-cells/cell-001.png",
+          "sourceSha256": "80CB388915DFF4CD77C2B711F96DE93028FB15AA736DC816B245F5152369F006",
+          "file": "fields/field_cm08_01/object-cells-remaster-hd4x/cell-001.png",
+          "sha256": "548290A18714C05E53B936D83850F0C9442BCE22ED82EBD55E624EDF4C29C8FE",
+          "sourceDimensions": [
+            16,
+            16
+          ],
+          "dimensions": [
+            64,
+            64
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            12,
+            11
+          ],
+          "expectedScaledAlphaBounds": [
+            0,
+            0,
+            48,
+            44
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            48,
+            44
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 15.6159,
+          "cellIndex": 1,
+          "sourceAnchor": [
+            15,
+            0
+          ],
+          "remasterAnchor": [
+            60,
+            0
+          ]
+        }
+      ],
+      "objectPlacements": [
+        {
+          "ordinal": 0,
+          "sequenceId": 0,
+          "firstFrameCellId": 0,
+          "sourceCoordinate": [
+            73,
+            127
+          ],
+          "remasterCoordinate": [
+            292,
+            508
+          ],
+          "destinationTopLeft": [
+            232,
+            508
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 1,
+          "sequenceId": 1,
+          "firstFrameCellId": 0,
+          "sourceCoordinate": [
+            200,
+            165
+          ],
+          "remasterCoordinate": [
+            800,
+            660
+          ],
+          "destinationTopLeft": [
+            740,
+            660
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        }
+      ],
+      "staticComposite": {
+        "file": "fields/field_cm08_01/static-composite-remaster-hd4x.png",
+        "sha256": "912633BDD332B9F098DBE77AAC2DD898A12FF2A774C3707D36CCB1ADCDFFDC89",
+        "dimensions": [
+          960,
+          800
+        ]
+      },
+      "animatedFrames": [],
+      "frameZero": {
+        "file": "fields/field_cm08_01/static-composite-remaster-hd4x.png",
+        "sha256": "912633BDD332B9F098DBE77AAC2DD898A12FF2A774C3707D36CCB1ADCDFFDC89",
+        "dimensions": [
+          960,
+          800
+        ]
+      },
+      "grid": {
+        "width": 30,
+        "height": 25,
+        "nativeCellPixels": 8,
+        "remasterCellPixels": 32,
+        "aligned": true
+      }
+    },
+    {
+      "fieldId": "field_cm09_01",
+      "ordinal": 9,
+      "nameEn": "Beach",
+      "nameJp": "ビーチ",
+      "profile": "COMPONENT_FAITHFUL_EDGE_AWARE_BICUBIC_PMA_4X_V1",
+      "sourceAuthority": "FAITHFUL_HD40_RAW_RECOMPOSITION",
+      "core": {
+        "sourceFile": "fields/field_cm09_01/core-native.png",
+        "sourceSha256": "23E1571F25AF1FF1AF8047611F60C532CB8F95422ED5F59BC8D25D3283BD06E6",
+        "file": "fields/field_cm09_01/core-remaster-hd4x.png",
+        "sha256": "C34534B023C407416FD309595F8897C737E68DADE57304B4863C501089BD49DC",
+        "sourceDimensions": [
+          288,
+          200
+        ],
+        "dimensions": [
+          1152,
+          800
+        ],
+        "sourceAlphaBounds": [
+          0,
+          24,
+          288,
+          200
+        ],
+        "expectedScaledAlphaBounds": [
+          0,
+          96,
+          1152,
+          800
+        ],
+        "alphaBounds": [
+          0,
+          96,
+          1152,
+          800
+        ],
+        "alphaBoundsPreservedAt4x": true,
+        "transparentRgbZero": true,
+        "opaqueRgbMaeAfterLanczosDownsample": 4.9346
+      },
+      "objectCells": [
+        {
+          "sourceFile": "fields/field_cm09_01/object-cells/cell-000.png",
+          "sourceSha256": "B45B485F0CC42403BA777A00BBAEC3AFAAE60C6A0ACD840080224CED5465B9C3",
+          "file": "fields/field_cm09_01/object-cells-remaster-hd4x/cell-000.png",
+          "sha256": "05C18DFEDFEFC0BDB32BAA4FE2EBADF524FACBB9EE7A8DA341B177DE4828F5F6",
+          "sourceDimensions": [
+            64,
+            64
+          ],
+          "dimensions": [
+            256,
+            256
+          ],
+          "sourceAlphaBounds": [
+            3,
+            5,
+            58,
+            64
+          ],
+          "expectedScaledAlphaBounds": [
+            12,
+            20,
+            232,
+            256
+          ],
+          "alphaBounds": [
+            12,
+            20,
+            232,
+            256
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 8.7456,
+          "cellIndex": 0,
+          "sourceAnchor": [
+            33,
+            55
+          ],
+          "remasterAnchor": [
+            132,
+            220
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm09_01/object-cells/cell-001.png",
+          "sourceSha256": "5F7FD02D704F4DF943F9343382C9F1110D1F26EAEF8FB6485A025BF08DAAE986",
+          "file": "fields/field_cm09_01/object-cells-remaster-hd4x/cell-001.png",
+          "sha256": "901A249C466005156853F3EEBAE24B2DD39C13437E8C43681323D3BA00A47F52",
+          "sourceDimensions": [
+            64,
+            64
+          ],
+          "dimensions": [
+            256,
+            256
+          ],
+          "sourceAlphaBounds": [
+            1,
+            5,
+            57,
+            64
+          ],
+          "expectedScaledAlphaBounds": [
+            4,
+            20,
+            228,
+            256
+          ],
+          "alphaBounds": [
+            4,
+            20,
+            228,
+            256
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 8.742,
+          "cellIndex": 1,
+          "sourceAnchor": [
+            33,
+            55
+          ],
+          "remasterAnchor": [
+            132,
+            220
+          ]
+        }
+      ],
+      "objectPlacements": [
+        {
+          "ordinal": 0,
+          "sequenceId": 1,
+          "firstFrameCellId": 1,
+          "sourceCoordinate": [
+            33,
+            47
+          ],
+          "remasterCoordinate": [
+            132,
+            188
+          ],
+          "destinationTopLeft": [
+            0,
+            -32
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 1,
+          "sequenceId": 0,
+          "firstFrameCellId": 0,
+          "sourceCoordinate": [
+            65,
+            119
+          ],
+          "remasterCoordinate": [
+            260,
+            476
+          ],
+          "destinationTopLeft": [
+            128,
+            256
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        }
+      ],
+      "staticComposite": {
+        "file": "fields/field_cm09_01/static-composite-remaster-hd4x.png",
+        "sha256": "B1ED9A86912ED2E2996627A3CD95918C10C6FB1F117015B2BEFC26595374944C",
+        "dimensions": [
+          1152,
+          800
+        ]
+      },
+      "animatedFrames": [
+        {
+          "frameIndex": 0,
+          "rawDurationTicks": 20,
+          "layer": {
+            "sourceFile": "fields/field_cm09_01/animated-layer-frame-00.png",
+            "sourceSha256": "C89E280F7272212B2807B75E3978BB8594C1F91C14FA4C2DDAF76F82EF367B49",
+            "file": "fields/field_cm09_01/animated-layer-remaster-frame-00.png",
+            "sha256": "1DFC454DD26508E4F5FE8643A513557813BBF5B550D54E97B347AD06F8FC289D",
+            "sourceDimensions": [
+              288,
+              200
+            ],
+            "dimensions": [
+              1152,
+              800
+            ],
+            "sourceAlphaBounds": [
+              64,
+              24,
+              288,
+              192
+            ],
+            "expectedScaledAlphaBounds": [
+              256,
+              96,
+              1152,
+              768
+            ],
+            "alphaBounds": [
+              256,
+              96,
+              1152,
+              768
+            ],
+            "alphaBoundsPreservedAt4x": true,
+            "transparentRgbZero": true,
+            "opaqueRgbMaeAfterLanczosDownsample": 3.936
+          },
+          "compositeFile": "fields/field_cm09_01/composite-remaster-frame-00.png",
+          "compositeSha256": "9AB22225B76FEC1F08C16D82F5B0CE9CCD36F77D832B097D7B3F2F1669709810"
+        },
+        {
+          "frameIndex": 1,
+          "rawDurationTicks": 20,
+          "layer": {
+            "sourceFile": "fields/field_cm09_01/animated-layer-frame-01.png",
+            "sourceSha256": "E0660A778D97D0297316C95B874C715411B9EC152D46745B260CEAB67731504A",
+            "file": "fields/field_cm09_01/animated-layer-remaster-frame-01.png",
+            "sha256": "D6525CCB76380041EA14D84AD90E78307D354B2D9F87F1D67C90DF419D5C1F8F",
+            "sourceDimensions": [
+              288,
+              200
+            ],
+            "dimensions": [
+              1152,
+              800
+            ],
+            "sourceAlphaBounds": [
+              64,
+              24,
+              288,
+              192
+            ],
+            "expectedScaledAlphaBounds": [
+              256,
+              96,
+              1152,
+              768
+            ],
+            "alphaBounds": [
+              256,
+              96,
+              1152,
+              768
+            ],
+            "alphaBoundsPreservedAt4x": true,
+            "transparentRgbZero": true,
+            "opaqueRgbMaeAfterLanczosDownsample": 4.0262
+          },
+          "compositeFile": "fields/field_cm09_01/composite-remaster-frame-01.png",
+          "compositeSha256": "94E00F980EC0C5D93A9D11E83824A015423BDE943BA7C469BF7CF2CFB79EF068"
+        }
+      ],
+      "frameZero": {
+        "file": "fields/field_cm09_01/composite-remaster-frame-00.png",
+        "sha256": "9AB22225B76FEC1F08C16D82F5B0CE9CCD36F77D832B097D7B3F2F1669709810",
+        "dimensions": [
+          1152,
+          800
+        ]
+      },
+      "grid": {
+        "width": 36,
+        "height": 25,
+        "nativeCellPixels": 8,
+        "remasterCellPixels": 32,
+        "aligned": true
+      }
+    },
+    {
+      "fieldId": "field_cm10_01",
+      "ordinal": 10,
+      "nameEn": "Mine",
+      "nameJp": "こうざん",
+      "profile": "COMPONENT_FAITHFUL_EDGE_AWARE_BICUBIC_PMA_4X_V1",
+      "sourceAuthority": "FAITHFUL_HD40_RAW_RECOMPOSITION",
+      "core": {
+        "sourceFile": "fields/field_cm10_01/core-native.png",
+        "sourceSha256": "9FD6167B6FAB0AFF4AE58582DD5CB65ECBA8775195D6450AA7A13F2929738C5E",
+        "file": "fields/field_cm10_01/core-remaster-hd4x.png",
+        "sha256": "CE1C7B7164FF886FF8D0CF3CEF4113361F74A4E7D147E92B76D334380460DB94",
+        "sourceDimensions": [
+          288,
+          200
+        ],
+        "dimensions": [
+          1152,
+          800
+        ],
+        "sourceAlphaBounds": [
+          0,
+          24,
+          288,
+          200
+        ],
+        "expectedScaledAlphaBounds": [
+          0,
+          96,
+          1152,
+          800
+        ],
+        "alphaBounds": [
+          0,
+          96,
+          1152,
+          800
+        ],
+        "alphaBoundsPreservedAt4x": true,
+        "transparentRgbZero": true,
+        "opaqueRgbMaeAfterLanczosDownsample": 4.1301
+      },
+      "objectCells": [
+        {
+          "sourceFile": "fields/field_cm10_01/object-cells/cell-000.png",
+          "sourceSha256": "716C3B1680391F8EC03F355237BE50DDA5F552648E487708AF9A91289C15184F",
+          "file": "fields/field_cm10_01/object-cells-remaster-hd4x/cell-000.png",
+          "sha256": "2AA8D1DFC18B8C87C632BB8C208BBD357140C6F19EBF009DF6074F00F9C41D2B",
+          "sourceDimensions": [
+            16,
+            32
+          ],
+          "dimensions": [
+            64,
+            128
+          ],
+          "sourceAlphaBounds": [
+            3,
+            0,
+            16,
+            26
+          ],
+          "expectedScaledAlphaBounds": [
+            12,
+            0,
+            64,
+            104
+          ],
+          "alphaBounds": [
+            12,
+            0,
+            64,
+            104
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 13.9608,
+          "cellIndex": 0,
+          "sourceAnchor": [
+            15,
+            30
+          ],
+          "remasterAnchor": [
+            60,
+            120
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm10_01/object-cells/cell-001.png",
+          "sourceSha256": "EF7DC4B9A134F411936B80817AC47407A1D08AABA96A58CFDAC0E8BD4EEA1E47",
+          "file": "fields/field_cm10_01/object-cells-remaster-hd4x/cell-001.png",
+          "sha256": "6854C354092E26F7A2762068DB557F4856AD3ECA61057566BBBE6B6197A4BC31",
+          "sourceDimensions": [
+            176,
+            32
+          ],
+          "dimensions": [
+            704,
+            128
+          ],
+          "sourceAlphaBounds": [
+            7,
+            8,
+            169,
+            32
+          ],
+          "expectedScaledAlphaBounds": [
+            28,
+            32,
+            676,
+            128
+          ],
+          "alphaBounds": [
+            28,
+            32,
+            676,
+            128
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 13.6346,
+          "cellIndex": 1,
+          "sourceAnchor": [
+            87,
+            30
+          ],
+          "remasterAnchor": [
+            348,
+            120
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm10_01/object-cells/cell-002.png",
+          "sourceSha256": "767642D500625958F27137FF3B39192C9FB3AEA09C9FCE561A184E51905128EC",
+          "file": "fields/field_cm10_01/object-cells-remaster-hd4x/cell-002.png",
+          "sha256": "FE194A57D3CB3C4425940A9209A5375C7D9BB74671AC2AA380DA2ED28BC22AB6",
+          "sourceDimensions": [
+            8,
+            32
+          ],
+          "dimensions": [
+            32,
+            128
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            8,
+            32
+          ],
+          "expectedScaledAlphaBounds": [
+            0,
+            0,
+            32,
+            128
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            32,
+            128
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 2.6283,
+          "cellIndex": 2,
+          "sourceAnchor": [
+            5,
+            31
+          ],
+          "remasterAnchor": [
+            20,
+            124
+          ]
+        },
+        {
+          "sourceFile": "fields/field_cm10_01/object-cells/cell-003.png",
+          "sourceSha256": "1421AD1B8EF6A79CCCE10D481F8B532900A6A19B769CC766BC48B3420CC3938A",
+          "file": "fields/field_cm10_01/object-cells-remaster-hd4x/cell-003.png",
+          "sha256": "7B284B74C7AC5CFF644226ABC70B3A968A3123DD56F15D646A6D9DBEAB7D0A59",
+          "sourceDimensions": [
+            16,
+            32
+          ],
+          "dimensions": [
+            64,
+            128
+          ],
+          "sourceAlphaBounds": [
+            3,
+            0,
+            12,
+            31
+          ],
+          "expectedScaledAlphaBounds": [
+            12,
+            0,
+            48,
+            124
+          ],
+          "alphaBounds": [
+            12,
+            0,
+            48,
+            124
+          ],
+          "alphaBoundsPreservedAt4x": true,
+          "transparentRgbZero": true,
+          "opaqueRgbMaeAfterLanczosDownsample": 3.7829,
+          "cellIndex": 3,
+          "sourceAnchor": [
+            14,
+            30
+          ],
+          "remasterAnchor": [
+            56,
+            120
+          ]
+        }
+      ],
+      "objectPlacements": [
+        {
+          "ordinal": 0,
+          "sequenceId": 2,
+          "firstFrameCellId": 2,
+          "sourceCoordinate": [
+            73,
+            121
+          ],
+          "remasterCoordinate": [
+            292,
+            484
+          ],
+          "destinationTopLeft": [
+            272,
+            360
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 1,
+          "sequenceId": 2,
+          "firstFrameCellId": 2,
+          "sourceCoordinate": [
+            215,
+            121
+          ],
+          "remasterCoordinate": [
+            860,
+            484
+          ],
+          "destinationTopLeft": [
+            840,
+            480
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": true
+        },
+        {
+          "ordinal": 2,
+          "sequenceId": 3,
+          "firstFrameCellId": 3,
+          "sourceCoordinate": [
+            75,
+            168
+          ],
+          "remasterCoordinate": [
+            300,
+            672
+          ],
+          "destinationTopLeft": [
+            244,
+            552
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 3,
+          "sequenceId": 3,
+          "firstFrameCellId": 3,
+          "sourceCoordinate": [
+            213,
+            168
+          ],
+          "remasterCoordinate": [
+            852,
+            672
+          ],
+          "destinationTopLeft": [
+            796,
+            664
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": true
+        },
+        {
+          "ordinal": 4,
+          "sequenceId": 0,
+          "firstFrameCellId": 0,
+          "sourceCoordinate": [
+            79,
+            125
+          ],
+          "remasterCoordinate": [
+            316,
+            500
+          ],
+          "destinationTopLeft": [
+            256,
+            380
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        },
+        {
+          "ordinal": 5,
+          "sequenceId": 0,
+          "firstFrameCellId": 0,
+          "sourceCoordinate": [
+            208,
+            125
+          ],
+          "remasterCoordinate": [
+            832,
+            500
+          ],
+          "destinationTopLeft": [
+            772,
+            492
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": true
+        },
+        {
+          "ordinal": 6,
+          "sequenceId": 1,
+          "firstFrameCellId": 1,
+          "sourceCoordinate": [
+            143,
+            166
+          ],
+          "remasterCoordinate": [
+            572,
+            664
+          ],
+          "destinationTopLeft": [
+            224,
+            544
+          ],
+          "horizontalFlip": false,
+          "verticalFlip": false
+        }
+      ],
+      "staticComposite": {
+        "file": "fields/field_cm10_01/static-composite-remaster-hd4x.png",
+        "sha256": "E55FB01F65DD2E0885E175F91CE6164857C8A1BC4D4B4A5F57215D6B24075DC7",
+        "dimensions": [
+          1152,
+          800
+        ]
+      },
+      "animatedFrames": [],
+      "frameZero": {
+        "file": "fields/field_cm10_01/static-composite-remaster-hd4x.png",
+        "sha256": "E55FB01F65DD2E0885E175F91CE6164857C8A1BC4D4B4A5F57215D6B24075DC7",
+        "dimensions": [
+          1152,
+          800
+        ]
+      },
+      "grid": {
+        "width": 36,
+        "height": 25,
+        "nativeCellPixels": 8,
+        "remasterCellPixels": 32,
+        "aligned": true
+      }
+    }
+  ]
+}
