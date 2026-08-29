@@ -94,13 +94,13 @@ export function parseOriginalCageOpm(input) {
   expectLength(data, cursor + placementCount * 16, "OPM");
   const placements = Array.from({ length: placementCount }, (_, ordinal) => {
     const offset = cursor + ordinal * 16;
-    const rawCellWord = dataView.getUint16(offset, true);
+    const rawSequenceWord = dataView.getUint16(offset, true);
     return Object.freeze({
       ordinal,
-      rawCellWord,
-      cellId: rawCellWord & 0x3fff,
-      horizontalFlip: Boolean(rawCellWord & 0x8000),
-      verticalFlip: Boolean(rawCellWord & 0x4000),
+      rawSequenceWord,
+      sequenceId: rawSequenceWord & 0x3fff,
+      horizontalFlip: Boolean(rawSequenceWord & 0x8000),
+      verticalFlip: Boolean(rawSequenceWord & 0x4000),
       sourceX: dataView.getUint16(offset + 2, true),
       sourceY: dataView.getUint16(offset + 4, true),
       rawFlags: dataView.getUint16(offset + 6, true),
@@ -116,6 +116,71 @@ export function parseOriginalCageOpm(input) {
     placementCount,
     placements: Object.freeze(placements),
     placementSemantics: "SOURCE_ORDER_AND_COORDINATES_PRESERVED_NO_VISUAL_RELAYOUT",
+  });
+}
+
+export function parseOriginalCageNanr(input) {
+  const { data, dataView } = view(input);
+  expectMagic(data, "RNAN", "NANR");
+  if (decoder.decode(data.subarray(16, 20)) !== "KNBA" || data.length < 48) {
+    throw new RangeError("Unsupported NANR animation bank");
+  }
+  const base = 24;
+  const sequenceCount = dataView.getUint16(base, true);
+  const totalFrameCount = dataView.getUint16(base + 2, true);
+  const sequenceTableOffset = dataView.getUint32(base + 4, true);
+  const frameTableOffset = dataView.getUint32(base + 8, true);
+  const resultTableOffset = dataView.getUint32(base + 12, true);
+  let parsedFrameCount = 0;
+  const sequences = Array.from({ length: sequenceCount }, (_, sequenceId) => {
+    const offset = base + sequenceTableOffset + sequenceId * 16;
+    if (offset + 16 > data.length) throw new RangeError("NANR sequence table exceeds payload");
+    const frameCount = dataView.getUint16(offset, true);
+    const loopStartFrame = dataView.getUint16(offset + 2, true);
+    const rawWordA = dataView.getUint32(offset + 4, true);
+    const rawWordB = dataView.getUint32(offset + 8, true);
+    const relativeFrameOffset = dataView.getUint32(offset + 12, true);
+    if (frameCount < 1) throw new RangeError("NANR sequence has no frames");
+    const frames = Array.from({ length: frameCount }, (_, frameIndex) => {
+      const frameOffset = base + frameTableOffset + relativeFrameOffset + frameIndex * 8;
+      if (frameOffset + 8 > data.length) throw new RangeError("NANR frame table exceeds payload");
+      const relativeResultOffset = dataView.getUint32(frameOffset, true);
+      const rawDurationTicks = dataView.getUint16(frameOffset + 4, true);
+      const rawMarker = dataView.getUint16(frameOffset + 6, true);
+      const resultOffset = base + resultTableOffset + relativeResultOffset;
+      if (rawMarker !== 0xbeef || resultOffset + 2 > data.length) {
+        throw new RangeError("NANR result/marker mismatch");
+      }
+      parsedFrameCount += 1;
+      return Object.freeze({
+        frameIndex,
+        cellId: dataView.getUint16(resultOffset, true),
+        rawDurationTicks,
+        rawMarker,
+        relativeResultOffset,
+      });
+    });
+    return Object.freeze({
+      sequenceId,
+      frameCount,
+      loopStartFrame,
+      rawWordA,
+      rawWordB,
+      relativeFrameOffset,
+      frames: Object.freeze(frames),
+    });
+  });
+  if (parsedFrameCount !== totalFrameCount) throw new RangeError("NANR total frame count mismatch");
+  return Object.freeze({
+    format: "YDIJ_NANR_SEQUENCE_BANK",
+    sequenceCount,
+    totalFrameCount,
+    sequenceTableOffset,
+    frameTableOffset,
+    resultTableOffset,
+    timingSemantics: "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+    bindingSemantics: "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL",
+    sequences: Object.freeze(sequences),
   });
 }
 

@@ -1,6 +1,6 @@
 # Championship 2026 — Art Production Batch Plan
 
-Status: `A0 IMPLEMENTED / CAGE CM01–CM40 + HUNT 30-VARIANT EXACT BASELINES TECHNICALLY QA'D / CM12+CM18 OBJECT CONFLICTS OPEN`
+Status: `A0 IMPLEMENTED / CAGE CM01–CM40 + HUNT 30-VARIANT EXACT BASELINES TECHNICALLY QA'D / CAGE OBJECT SEQUENCE BINDING 40/40 RESOLVED`
 Authority: Owner directive of 2026-08-29
 
 ## Batch sequence
@@ -48,9 +48,9 @@ objects away from their original positions. That packet is withdrawn. The
 replacement faithful-HD40 baseline covers all forty original visual fields,
 preserves original NBS tile order, OPM object source coordinates, COL collision
 classes and ATR attribute classes, and enlarges the verified native composite
-exactly 4× with nearest-neighbour sampling. Thirty-eight fields have full
-composition confidence; CM12 and CM18 preserve their original object-index
-conflicts and are forbidden from guessed binding.
+exactly 4× with nearest-neighbour sampling. All forty fields now have full
+composition confidence. The former CM12/CM18 conflicts were caused by treating
+an OPMD sequence ID as a direct NCER cell ID; NANR resolves both without guessing.
 
 Owner review exposed that the static O3-B clean views omitted native animated
 terrain on CM07, CM09, CM21 and CM39. The faithful-HD40 builder now decodes each
@@ -61,12 +61,11 @@ notch is the original irregular field footprint, not missing artwork.
 
 The follow-up exact-assembly pass corrects the source decoders rather than
 painting over missing areas. NBS is verified as a direct 14-bit tile index with
-high flip flags; OPM uses lower-14 cell IDs with its own whole-cell flip order;
-NCBR object graphics use linear bitmap transfer addressed through NCER mapping
-type 1. All 40 core/static results now compare to the clean and diagnostic
-goldens at zero RGBA pixel difference. Thirty-six complete object banks are
-exported cell-by-cell, CM28/CM29 correctly have none, and CM12/CM18 remain
-quarantined instead of receiving guessed cells. The exact 4× enlargement is
+high flip flags; OPMD uses a lower-14 NANR sequence ID with its own whole-cell
+flip order; each NANR frame selects an NCER cell, and NCBR graphics use linear
+bitmap transfer addressed through NCER mapping type 1. All 40 static fields are
+now recomposed from the raw chain. Thirty-eight complete object and animation
+banks are exported, while CM28/CM29 correctly have none. The exact 4× enlargement is
 the reconstruction authority for a later genuine HD redraw, not itself a
 resolution-independent redraw.
 

@@ -14,7 +14,8 @@ modules remain visual-direction material only.
 - Four production batches of ten.
 - All forty rows preserve verified variable dimensions and layout-cell counts.
 - CM28 and CM29 declare no native object layer.
-- CM12 and CM18 retain `ORIGINAL_OBJECT_INDEX_CONFLICT_DO_NOT_INFER`.
+- CM12 and CM18 are resolved through the verified OPMD sequence ID → NANR
+  frame → NCER cell chain; no index is clamped, substituted or guessed.
 - Every row is `REFERENCE_METADATA_ONLY_NO_ORIGINAL_PIXELS` and
   `NOT_RUNTIME_READY`.
 - No gameplay effect, raising value, ATR meaning or COL meaning was invented.
@@ -33,5 +34,5 @@ This checkpoint changes documentation, technical manifests and non-runtime art
 proposal material only. Reverting its Git commit restores the previous state;
 there is no runtime registry, save-data or shipping promotion to migrate.
 
-Next authorized art batch: produce the clean-room CM01–CM10 core tile kits and
-separate object bundles, then stop for visual and seam review before CM11–CM20.
+The exact-original reference packet now covers CM01–CM40. Genuine HD redraw and
+runtime promotion remain separately gated by visual approval and licence evidence.

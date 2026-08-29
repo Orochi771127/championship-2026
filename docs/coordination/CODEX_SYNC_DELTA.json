@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "owner": "CODEX_ART",
-  "deltaId": "CODEX-ART-A3-A4-EXACT-BASELINE-TECHNICAL-QA-HUNT-INPUT-TRACE-2026-08-29",
-  "targetSyncRevision": 19,
-  "status": "CAGE_HD40_AND_HUNT_HD30_TECHNICAL_QA_COMPLETE_HUNT_PAN_ROM_VERIFIED_RUNTIME_CORRECTION_PENDING",
+  "deltaId": "CODEX-ART-A3-CAGE-OPMD-NANR-SEQUENCE-BINDING-2026-08-29",
+  "targetSyncRevision": 20,
+  "status": "CAGE_HD40_FULL_COMPOSITION_40_OF_40_RESOLVED_HUNT_HD30_QA_COMPLETE",
   "statusSource": "docs/coordination/CODEX_ART_STATUS.json",
   "baseSyncRevision": 13,
   "checkpoint": {
@@ -77,11 +77,11 @@
     },
     {
       "id": "ART-A3-CAGE-FAITHFUL-HD40",
-      "state": "40_OF_40_PIXEL_EXACT_RAW_ASSEMBLIES_36_COMPLETE_OBJECT_BANKS_4_OF_4_ANIMATED_TERRAIN_BUNDLES",
-      "scope": "Exact original Cage raw core/static composition and 4x HD output plus direct-14-bit NBS tilemaps, lower-14-bit OPM cell words/source coordinates/flips, NCER/linear-NCBR object banks, COL collision, ATR attributes, four BSAR animated terrain bundles and browser format parsers",
+      "state": "40_OF_40_RAW_CHAIN_COMPOSITIONS_38_OBJECT_AND_NANR_BANKS_4_OF_4_ANIMATED_TERRAIN_BUNDLES",
+      "scope": "Exact original Cage raw core/static composition and 4x HD output plus direct-14-bit NBS tilemaps, lower-14-bit OPMD sequence words/source coordinates/flips, NANR animation banks, NCER/linear-NCBR object banks, COL collision, ATR attributes, four BSAR animated terrain bundles and browser format parsers",
       "sourcePolicy": "VERIFIED_ROM_SHA_SOURCE_VALUES_PRESERVED_ROM_AND_NITRO_BINARIES_NOT_COMMITTED",
-      "technicalQa": "619_FILES_BYTE_IDENTICAL_40_OF_40_CLEAN_AND_DIAGNOSTIC_RAW_ASSEMBLIES_ZERO_RGBA_DIFF_36_OBJECT_BANKS_CELL_BY_CELL_40_OF_40_HD_PIXEL_ROUNDTRIP_40_OF_40_NBS_COL_ATR_DIMENSIONS_MATCH_4_OF_4_BSAR_BUNDLES_8_OF_8_FRAMES",
-      "gameplayPolicy": "RAW_CLASSES_PRESERVED_WITHOUT_SEMANTIC_REINTERPRETATION_CM12_CM18_OBJECT_CONFLICTS_NOT_BOUND",
+      "technicalQa": "657_FILES_BYTE_IDENTICAL_38_OF_38_OPMD_NANR_NCER_BINDINGS_VALID_40_OF_40_HD_PIXEL_ROUNDTRIP_40_OF_40_NBS_COL_ATR_DIMENSIONS_MATCH_4_OF_4_BSAR_BUNDLES_8_OF_8_FRAMES",
+      "gameplayPolicy": "RAW_CLASSES_AND_ANIMATION_TIMING_PRESERVED_WITHOUT_SEMANTIC_REINTERPRETATION_CM12_CM18_RESOLVED_WITHOUT_GUESSING",
       "runtimeEligible": false,
       "shippingStatus": "NOT_SHIPPING_READY_LICENSE_LINK_AND_RUNTIME_QA_PENDING",
       "output": "docs/art/production/cage/faithful-hd40/manifest.json"
@@ -103,7 +103,7 @@
       "scope": "CM01-CM40 original structural metadata and four batches of ten",
       "visualPackages": ["CORE_FIELD_TILES", "OBJECT_BUNDLE"],
       "externalData": ["ATR_RAW_CLASSES", "COL_RAW_CLASSES"],
-      "quarantinedObjectConflicts": ["CM12", "CM18"],
+      "resolvedObjectSequenceBindings": ["CM12", "CM18"],
       "nativeNoObjectLayer": ["CM28", "CM29"],
       "sourcePolicy": "REFERENCE_METADATA_ONLY_NO_ORIGINAL_PIXELS",
       "runtimeEligible": false,

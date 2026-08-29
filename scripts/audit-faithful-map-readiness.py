@@ -326,7 +326,6 @@ def build(output_root: Path) -> None:
             "runtimeEligible": False,
             "shippingReady": False,
             "knownBlockers": [
-                "CM12_CM18_ORIGINAL_OBJECT_INDEX_CONFLICT",
                 "LICENSE_DOCUMENT_LINK_PENDING",
                 "GENUINE_HAND_REDRAWN_HD_MASTER_NOT_YET_PRODUCED",
                 "RUNTIME_CAMERA_CULLING_AND_DEVICE_PERFORMANCE_NOT_YET_MEASURED",
@@ -336,6 +335,10 @@ def build(output_root: Path) -> None:
     write_json(output_root / "manifest.json", qa_manifest)
 
     report = f"""# Cage/Hunt exact-baseline technical QA\n\nDate: 2026-08-29\n\nStatus: `REFERENCE TECHNICAL QA PASSED / RUNTIME PROMOTION BLOCKED`\n\n## Result\n\n- Cage: {len(cage_records)}/40 fields preserve exact 4× pixel blocks; {sum(r['collisionAttributeTilemapAligned'] for r in cage_records)}/40 collision, attribute and tilemap grids align to the same 8-pixel native cells.\n- One un-tinted CM01–CM40 master contact sheet proves all forty art fields in a single view; four separate pages retain the collision overlays for enlarged review.\n- Hunt: {len(hunt_records)}/30 variants contain no large connected pure-red diagnostic region; {sum(r['animationFrameCount'] > 0 for r in hunt_records)} animated variants retain {sum(r['animationFrameCount'] for r in hunt_records)} source frames.\n- Portrait review uses a fixed 390×844 centre crop with no scaling. It is a presentation check, not a runtime camera contract.\n- Loading all thirty 2048×2048 RGBA fields at once would consume {hunt_hd_decoded_bytes / 1048576:.0f} MiB before texture overhead. The reference packet therefore requires one-field loading or tile streaming; mass preloading is rejected.\n\n## Boundaries\n\nThe collision colours are diagnostic overlays only. Raw class numbers are preserved and no passability or gameplay meaning is inferred. CM12 and CM18 remain quarantined object-index conflicts. These outputs remain exact enlarged reference baselines, not genuinely redrawn HD masters, runtime assets, or shipping-ready art.\n"""
+    report = report.replace(
+        "CM12 and CM18 remain quarantined object-index conflicts.",
+        "The former CM12/CM18 conflicts are closed by the verified OPMD -> NANR sequence -> NCER cell chain.",
+    )
     (output_root / "TECHNICAL_QA_RECEIPT.md").write_text(report, encoding="utf-8")
 
 

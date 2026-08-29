@@ -1,0 +1,47 @@
+{
+  "format": "YDIJ_NANR_SEQUENCE_BANK",
+  "sourceSha256": "642E0382B5E83CE086AA9C8A00E1495D303EA45B0C46544B547DE01C3FF29306",
+  "sequenceCount": 2,
+  "totalFrameCount": 2,
+  "sequenceTableOffset": 24,
+  "frameTableOffset": 56,
+  "resultTableOffset": 72,
+  "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+  "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL",
+  "sequences": [
+    {
+      "sequenceId": 0,
+      "frameCount": 1,
+      "loopStartFrame": 0,
+      "rawWordA": 65536,
+      "rawWordB": 2,
+      "relativeFrameOffset": 0,
+      "frames": [
+        {
+          "frameIndex": 0,
+          "cellId": 0,
+          "rawDurationTicks": 75,
+          "rawMarker": 48879,
+          "relativeResultOffset": 0
+        }
+      ]
+    },
+    {
+      "sequenceId": 1,
+      "frameCount": 1,
+      "loopStartFrame": 0,
+      "rawWordA": 65536,
+      "rawWordB": 2,
+      "relativeFrameOffset": 8,
+      "frames": [
+        {
+          "frameIndex": 0,
+          "cellId": 1,
+          "rawDurationTicks": 37,
+          "rawMarker": 48879,
+          "relativeResultOffset": 2
+        }
+      ]
+    }
+  ]
+}

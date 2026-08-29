@@ -14,4 +14,4 @@ Status: `REFERENCE TECHNICAL QA PASSED / RUNTIME PROMOTION BLOCKED`
 
 ## Boundaries
 
-The collision colours are diagnostic overlays only. Raw class numbers are preserved and no passability or gameplay meaning is inferred. CM12 and CM18 remain quarantined object-index conflicts. These outputs remain exact enlarged reference baselines, not genuinely redrawn HD masters, runtime assets, or shipping-ready art.
+The collision colours are diagnostic overlays only. Raw class numbers are preserved and no passability or gameplay meaning is inferred. The former CM12/CM18 conflicts are closed by the verified OPMD -> NANR sequence -> NCER cell chain. These outputs remain exact enlarged reference baselines, not genuinely redrawn HD masters, runtime assets, or shipping-ready art.

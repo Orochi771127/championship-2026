@@ -5,7 +5,7 @@
   "sourceManifests": {
     "cage": {
       "file": "docs/art/production/cage/faithful-hd40/manifest.json",
-      "sha256": "D15B8BCD3BC3C66E2792F661EAC375B7FE35FA646D04099C1D9D5F17482599BE"
+      "sha256": "BE1BB50185A36DD80740481B88F54F898B4FB6B3AB99874F49641BCE5F7355FE"
     },
     "hunt": {
       "file": "docs/art/production/hunt/faithful-hd30/manifest.json",
@@ -35,30 +35,27 @@
       5,
       6
     ],
-    "objectConflictFields": [
-      "field_cm12_01",
-      "field_cm18_01"
-    ],
+    "objectConflictFields": [],
     "master40ArtContact": {
       "file": "cage-art-master-contact-cm01-cm40.png",
-      "sha256": "4F49A7C6BFD7DFE1FFDCEAE8BA585E35C08727B1694BEBD9B31A5B29D77B3BB0"
+      "sha256": "7AC6A0932AE963DC18BB32FD59627E9BD32AA89714FB98FC3B5526DC25B1DFFC"
     },
     "contactPages": [
       {
         "file": "cage-collision-contact-01.png",
-        "sha256": "CD9C4155B31C96105047611F6932E0B2626D8A5F9A6E02CFD8C20B707C8699FE"
+        "sha256": "3738D22252AF772A27E10C3DEF03D40C9C30934FDCC0CC0182EF1177AB0E868A"
       },
       {
         "file": "cage-collision-contact-02.png",
-        "sha256": "EAC20DD023312A9DF371B7166A48256D49EAC3D89F449D123CA16EBAD098DDBA"
+        "sha256": "CF96E0B83C2158959AC75C2C93D995F58B4AA4490A26A47A2756EF39C78F55B7"
       },
       {
         "file": "cage-collision-contact-03.png",
-        "sha256": "402417245DAA19354005FE57204438CA128495F54BD47689DF59D945141E33EF"
+        "sha256": "E129BE728BD620A47B8167315DA37532B5482A0D4241E97A82835F5E41917F60"
       },
       {
         "file": "cage-collision-contact-04.png",
-        "sha256": "1D16228223CB33C20C076512E72EC9DB727FAEFCA539DC731CBB7E3A7D7FAFFE"
+        "sha256": "DEFDA4D04ADD1A73D2D04D728A4D599F4EF4D83E515432BC60B11F95E0C86CDE"
       }
     ],
     "fields": [
@@ -76,7 +73,7 @@
         ],
         "transparentPixelCount": 27456,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm01_01.png",
           "sha256": "6045E76429CC0250455068C6EE0B58D4116CDF6D296800CD110ACE5F82F21A86",
@@ -97,7 +94,7 @@
         ],
         "transparentPixelCount": 245760,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm02_01.png",
           "sha256": "3F3ACC01D8712CD9BA785EE7242A772A3500A7B0BBCCE88FA3F856162B90FDF9",
@@ -118,7 +115,7 @@
         ],
         "transparentPixelCount": 301056,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm03_01.png",
           "sha256": "4AD261A8871BDCB550DF627009158C3B73866113DA4658C59CD91A7C5FDB5A11",
@@ -139,7 +136,7 @@
         ],
         "transparentPixelCount": 106688,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm04_01.png",
           "sha256": "091EBE60BF9AF6AECD7A8F43F40A82993A16548F9693734C6E8A4BE9065E30FD",
@@ -160,7 +157,7 @@
         ],
         "transparentPixelCount": 264192,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm05_01.png",
           "sha256": "93122DA6C3EB40D3FFF5825B19C2D3614D8AFCB08ACDE8899B0782318BFFEB4A",
@@ -179,12 +176,12 @@
           1344,
           800
         ],
-        "transparentPixelCount": 554800,
+        "transparentPixelCount": 557664,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm06_01.png",
-          "sha256": "9821D66EDC052A74FC0C1DA34F239234A2975F4B52069D1FA3A1865A60E0446A",
+          "sha256": "C93B9F6E204E7B6DF108C18D0EC66BFAA56B0489DF7558434BA0820DCFC92183",
           "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
         }
       },
@@ -202,7 +199,7 @@
         ],
         "transparentPixelCount": 264192,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm07_01.png",
           "sha256": "5DDB19B1AE343DBBF32A86D1E2D2449918F0CF6DFC9499C3BA6C4A52A7CFCDC5",
@@ -223,10 +220,10 @@
         ],
         "transparentPixelCount": 380928,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm08_01.png",
-          "sha256": "70400D6B790C05B4411A948F6075C7F68D07961F100DC58904577AFDA180E3DB",
+          "sha256": "50EFF1B8591874CD3C4E39B39950A530C4DC9EB66249252419943DEEB8342D8B",
           "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
         }
       },
@@ -244,7 +241,7 @@
         ],
         "transparentPixelCount": 406240,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm09_01.png",
           "sha256": "49E2674C4FBECC4BCE6939F1BA654DC3778B06F1EF1C95627F3773D21E73FFB2",
@@ -265,7 +262,7 @@
         ],
         "transparentPixelCount": 417120,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm10_01.png",
           "sha256": "1CFFC241708A8722297E3EDF9EFC42A7AAB3188041B8CD574394A5329F566746",
@@ -286,7 +283,7 @@
         ],
         "transparentPixelCount": 355712,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm11_01.png",
           "sha256": "2AA7DCAB7A4EAE425C49127197264BD25D35F737F655144FC6C34EE30A4A6DB9",
@@ -305,12 +302,12 @@
           960,
           800
         ],
-        "transparentPixelCount": 399360,
+        "transparentPixelCount": 385712,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_CONFLICT_QUARANTINED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm12_01.png",
-          "sha256": "54D5E091C315B0D65D0876D8E265C3617B9C96A1C0E3DA9C92BDB46C1B1A26CF",
+          "sha256": "2BA2950921E7A626F6A5216EC5BD65F89D5E5D97A9B5C614FD01C8A707D54F44",
           "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
         }
       },
@@ -328,10 +325,10 @@
         ],
         "transparentPixelCount": 241152,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm13_01.png",
-          "sha256": "8CE0D29DD459662226FE0E000982D7C2306F0B8CFC3D91071CFE561B6BD20A5C",
+          "sha256": "F4B7ADF5341D9D3EA17E3E2E16240D3AEDDCA2EC056A9AC9DE992C028B5B8534",
           "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
         }
       },
@@ -347,12 +344,12 @@
           960,
           800
         ],
-        "transparentPixelCount": 398896,
+        "transparentPixelCount": 399248,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm14_01.png",
-          "sha256": "19CC05A53555D909E55FE7AB4E649BE804518FC587D78DEF06A0D5C5125688BD",
+          "sha256": "A56FEA63101749FA8B852A06435057EAFE12B49CE261027348A9E1C1F1FCE7F4",
           "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
         }
       },
@@ -368,12 +365,12 @@
           960,
           800
         ],
-        "transparentPixelCount": 356944,
+        "transparentPixelCount": 379584,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm15_01.png",
-          "sha256": "C917383CBD1FA515C09DCBB7645799695466AFE566C3E266A6654FE67834D059",
+          "sha256": "658C9F02AA837CE7884BE4B79E00D7AB0A393490D0C282FC081A2AA899B934E3",
           "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
         }
       },
@@ -391,7 +388,7 @@
         ],
         "transparentPixelCount": 36864,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm16_01.png",
           "sha256": "703E490BF37AA673FCB8ED61C5ADA2F9CF9BC7571B3A13BCE860AECD68498CC6",
@@ -410,12 +407,12 @@
           768,
           800
         ],
-        "transparentPixelCount": 222256,
+        "transparentPixelCount": 225184,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm17_01.png",
-          "sha256": "9421C4A5254B87D881ED95AA72FC2C26424CAEFBDC53AFEC10F4B7BE3819CCCC",
+          "sha256": "9A4852C8B0B7CFBF4A36E5CD2C376F5FE6BD1C21B567CA4B558C84A8132066A5",
           "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
         }
       },
@@ -433,10 +430,10 @@
         ],
         "transparentPixelCount": 208896,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_CONFLICT_QUARANTINED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm18_01.png",
-          "sha256": "04CE67886B199CE36265E39C246B7914DB81FC977F81928F9A42D329CAD55186",
+          "sha256": "6BC092C2206C29C615FBF2401E1A2067094CF177CCF2802871983F1A91136A74",
           "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
         }
       },
@@ -452,12 +449,12 @@
           1536,
           448
         ],
-        "transparentPixelCount": 128416,
+        "transparentPixelCount": 123632,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm19_01.png",
-          "sha256": "579928AFFE24F017034B2B046C9C2A454EA49C9C65B03A612C0BAC56DCE0FFDA",
+          "sha256": "EB19946C64E14B2C124D5948F888E49CCF88A169C8250848F49F9F7FDAB2FE03",
           "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
         }
       },
@@ -475,7 +472,7 @@
         ],
         "transparentPixelCount": 399360,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm20_01.png",
           "sha256": "FDA25A3D8C355486421440F74092A2C1D29EF13D1A42442C3D39573E087938EC",
@@ -496,7 +493,7 @@
         ],
         "transparentPixelCount": 264192,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm21_01.png",
           "sha256": "DC3A638850BA49DCC8C8BA22718784518D5C67AF6856994833D537BAD5B30B21",
@@ -515,12 +512,12 @@
           768,
           800
         ],
-        "transparentPixelCount": 243376,
+        "transparentPixelCount": 245200,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm22_01.png",
-          "sha256": "4AFFDA161044C5F53F535FE8C9D682F23EF011F5BB2F44D0A4F801D90A4DBF08",
+          "sha256": "02F47885AF3D68C851F9BC99519B2384F55EA27F3A89EDAA94F5C2F185221B63",
           "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
         }
       },
@@ -538,7 +535,7 @@
         ],
         "transparentPixelCount": 208896,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm23_01.png",
           "sha256": "A90F2EDE3ACA5E000F25B183C8DC29962CE7D1B3A613C1D46F06C749DAD5C442",
@@ -557,12 +554,12 @@
           384,
           448
         ],
-        "transparentPixelCount": 36864,
+        "transparentPixelCount": 32112,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm24_01.png",
-          "sha256": "DDB52105FF2F8909471C967B5F7117472879DC9AE193A0302998423A9C23B58E",
+          "sha256": "B5F0FFF9D5CAB8EF376E989410ACD2CB466FC6909F8A841610FF5470AA53B7B3",
           "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
         }
       },
@@ -580,7 +577,7 @@
         ],
         "transparentPixelCount": 54544,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm25_01.png",
           "sha256": "95C6A939BB8967CAE2533DC3F5413D28DE2B2C8B3F5F45A7BFDF54A20F64D80B",
@@ -601,7 +598,7 @@
         ],
         "transparentPixelCount": 263840,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm26_01.png",
           "sha256": "8958B135298D31FFAD4A1849F1E3065297B3BB89EB3B6A89DFD08279B9E9AD13",
@@ -622,7 +619,7 @@
         ],
         "transparentPixelCount": 222608,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm27_01.png",
           "sha256": "C5544BDE7866AC4517E1B6A34D1229D826B05A9D6F4A268EE88D67C7AD5A188C",
@@ -685,7 +682,7 @@
         ],
         "transparentPixelCount": 36864,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm30_01.png",
           "sha256": "1B130923382282C2B7A3C305782A739AE1B56E4BE0DD5062C04AC2F9137C2035",
@@ -706,7 +703,7 @@
         ],
         "transparentPixelCount": 73728,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm31_01.png",
           "sha256": "4CC2FEB2D03DDAA913F22D39985DB28315457E09EC72B70353083F856A2A4B5D",
@@ -727,10 +724,10 @@
         ],
         "transparentPixelCount": 36864,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm32_01.png",
-          "sha256": "92A3A43988F94D93A811B43D164585BE9EC1225665F106864787739BB11065F2",
+          "sha256": "2EB38283F58E86330A1025CC9CDE9281835E62FD18AEC170B36508CF471AD78C",
           "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
         }
       },
@@ -748,7 +745,7 @@
         ],
         "transparentPixelCount": 36864,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm33_01.png",
           "sha256": "BD949D40A917DAD73AAE1F37252EB9BC03BF91ABF82DEC264E3489A4EDF0B8D4",
@@ -769,7 +766,7 @@
         ],
         "transparentPixelCount": 36544,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm34_01.png",
           "sha256": "B1E4D14992D01803F1C55B24F39634D1364BE61034DF68B656855458A93A9776",
@@ -790,7 +787,7 @@
         ],
         "transparentPixelCount": 36864,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm35_01.png",
           "sha256": "C3093972AB23E935777ED6F773EF4613C4F47FB793D52406559B1E5ECE9D7BD5",
@@ -811,7 +808,7 @@
         ],
         "transparentPixelCount": 36864,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm36_01.png",
           "sha256": "B4E872A74235BC1E60F0EDA80810401D4A2A6EDF2D40848B92BBE7BCBCBD8AA6",
@@ -832,7 +829,7 @@
         ],
         "transparentPixelCount": 36864,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm37_01.png",
           "sha256": "3C7644C45B3CB822B5E60D5026C2D6E3684786417664F40ACCE7AB679ABAFA0B",
@@ -851,12 +848,12 @@
           384,
           448
         ],
-        "transparentPixelCount": 30272,
+        "transparentPixelCount": 36288,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm38_01.png",
-          "sha256": "2B35CC2D6A6E53A46C4FB5FEF801744FED38C8A2F626DB6C7C7DD9570C2B988F",
+          "sha256": "CDAA6A88D93C22559D89A21FB25F1AE6AE5287AC4F1C551F57EF864BAD1B301D",
           "classification": "QA_ONLY_RAW_CLASS_OVERLAY_NOT_GAMEPLAY_ART"
         }
       },
@@ -874,7 +871,7 @@
         ],
         "transparentPixelCount": 36864,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm39_01.png",
           "sha256": "AAF9F1B80203C10E5E92630D063C467005751D3E8C581EA35AA0D167C82B8DDA",
@@ -895,7 +892,7 @@
         ],
         "transparentPixelCount": 36864,
         "partialAlphaPixelCount": 0,
-        "objectBindingStatus": "PRESENT_EXACTLY_RECOMPOSED",
+        "objectBindingStatus": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "collisionOverlay": {
           "file": "cage-collision-overlays/field_cm40_01.png",
           "sha256": "1A6E6EE422B37ED03D17E1768DB5041C35A8715B9E254D9AD6F27F489F931B23",
@@ -1511,7 +1508,6 @@
     "runtimeEligible": false,
     "shippingReady": false,
     "knownBlockers": [
-      "CM12_CM18_ORIGINAL_OBJECT_INDEX_CONFLICT",
       "LICENSE_DOCUMENT_LINK_PENDING",
       "GENUINE_HAND_REDRAWN_HD_MASTER_NOT_YET_PRODUCED",
       "RUNTIME_CAMERA_CULLING_AND_DEVICE_PERFORMANCE_NOT_YET_MEASURED"

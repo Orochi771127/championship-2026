@@ -2,8 +2,10 @@
   "schemaVersion": 1,
   "batch": "ART_A3_CAGE_EXACT_ORIGINAL_FAITHFUL_HD40_BASELINE",
   "fieldCount": 40,
-  "fullCompositionConfidenceCount": 38,
-  "partialObjectConflictFields": [
+  "fullCompositionConfidenceCount": 40,
+  "archiveFullCompositionConfidenceCount": 38,
+  "partialObjectConflictFields": [],
+  "resolvedObjectSequenceBindingFields": [
     "field_cm12_01",
     "field_cm18_01"
   ],
@@ -16,7 +18,7 @@
   ],
   "ownerDirection": "PRESERVE_ORIGINAL_ART_COMPOSITION_PLACEMENT_COLLISION_AND_ART_CODE_100_PERCENT_ONLY_UPSCALE_TO_HD",
   "visualPolicy": "EXACT_RAW_LAYER_COMPOSITE_PLUS_4X_NEAREST_NO_RELAYOUT_NO_RECOLOR_NO_REDESIGN",
-  "dataPolicy": "COL_ATR_NBS_OPM_RAW_VALUES_PRESERVED_WITHOUT_SEMANTIC_REINTERPRETATION",
+  "dataPolicy": "COL_ATR_NBS_OPMD_NANR_NCER_RAW_VALUES_PRESERVED; OPMD_SEQUENCE_BINDING_RESOLVED_THROUGH_NANR",
   "sourceArchive": {
     "logicalId": "O3_B_ORIGINAL_TRAINING_CAGE_40_FIELD_VISUAL_GALLERY",
     "manifestSha256": "FC886C0A4A9D83D79F410300D70DEFA73DED6CCF0ADEDFFDAC0D372EA507BB2A"
@@ -34,14 +36,15 @@
       "nameEn": "Vacant Lot",
       "nameJp": "あきち",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "12x14",
       "layoutCells": 168,
       "nativeOriginal": {
         "file": "fields/field_cm01_01/native-original.png",
-        "sha256": "88A24DBB318357E817D45C70331E6D6629165392E7663A53D89329030956CF56",
+        "sha256": "241BC59C24E0A89F2481708E45450553940C9834D734D7A71A1C9C49E4113862",
         "width": 96,
         "height": 112,
-        "staticCoreObjectSourceSha256": "88A24DBB318357E817D45C70331E6D6629165392E7663A53D89329030956CF56",
+        "staticCoreObjectSourceSha256": "241BC59C24E0A89F2481708E45450553940C9834D734D7A71A1C9C49E4113862",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
@@ -72,30 +75,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm01_01/object-placement.json",
-        "sha256": "2EC9D133A09BF3D4AB2EB6C1A6B3F947B9A9B537375C7E119AA73431CF15535A",
+        "sha256": "EEC46F9F37F5CAE3354B7867258A896235B4EC7CA1CD2BBB1B533E9623E46E64",
         "sourceSha256": "59A25BBE2BE77C156D8FE4E56704409718655FA2B8D99F226C6C5549948DC5A3",
         "count": 4,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm01_01/object-cell-bank.json",
-        "sha256": "871AE6DDD02C89F7813665ECE233F0C0AD6910E04799E7B4B6521107E27015C0",
+        "sha256": "C63460A45B9C292962093EB4BD6B8306C609A52BB62ABBD34EF87CE91EB8B831",
         "cellCount": 4,
         "renderedCellCount": 4,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm01_01/object-animation-bank.json",
+        "sha256": "767636D3166E7DDAE3159DF7E3EAB3FDB7383F14BB6B0357A8791D492B0E9C01",
+        "sourceSha256": "E249EA53970594AB88021C4D4D63294CC8AA164CC14CAF02C21B684A58614C37",
+        "sequenceCount": 4,
+        "totalFrameCount": 4,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm01_01/core-native.png",
         "coreSha256": "87152FFFDF8278FD2772A78F410D28BBEA7F12C7897282A8DCD7A78B5943DBC7",
         "staticCompositeFile": "fields/field_cm01_01/static-composite-native.png",
         "staticCompositeSha256": "241BC59C24E0A89F2481708E45450553940C9834D734D7A71A1C9C49E4113862",
         "cleanGoldenSha256": "88A24DBB318357E817D45C70331E6D6629165392E7663A53D89329030956CF56",
         "researchGoldenSha256": "6B11CA9DA67E5B41EF93BCAD29717F3C06CD15892204BF8B49DE078088028FC3",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -109,7 +123,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -165,14 +179,15 @@
       "nameEn": "Exercise Ground",
       "nameJp": "うんどうじょう",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "24x25",
       "layoutCells": 600,
       "nativeOriginal": {
         "file": "fields/field_cm02_01/native-original.png",
-        "sha256": "07CA6324F46E91A464283AA427F1A7049CFE0AB86BD3DB337BAA934042A51DF9",
+        "sha256": "D8F855A37CBE271112A00581DA97F94CFE41D8C199A0E22D8E40D4C9834F9068",
         "width": 192,
         "height": 200,
-        "staticCoreObjectSourceSha256": "07CA6324F46E91A464283AA427F1A7049CFE0AB86BD3DB337BAA934042A51DF9",
+        "staticCoreObjectSourceSha256": "D8F855A37CBE271112A00581DA97F94CFE41D8C199A0E22D8E40D4C9834F9068",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
@@ -203,30 +218,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm02_01/object-placement.json",
-        "sha256": "BBED0E75ADD1BAC19B3BBFAC5355AF41F2AFE7EC6A5CD96903AF21374414B64D",
+        "sha256": "6D578AF839EB4C44EE6885F051F798FD3A0EAE2E2095C823CF30DF6427F676E4",
         "sourceSha256": "F8308481FC38D35DB652B6954F418ECAF3E39F6DED17B77B478673001B745E35",
         "count": 5,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm02_01/object-cell-bank.json",
-        "sha256": "EB2F49379DC41DA5B86796EEE0397A0AD5B56D7171670B6B34E73781999C8C9F",
+        "sha256": "72D6FE4541FA9A13D66E750686DAE44735F03E9FB29003423DC6526A98C50F98",
         "cellCount": 5,
         "renderedCellCount": 5,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm02_01/object-animation-bank.json",
+        "sha256": "3E843DDF678BADBC506B7F895AACA951DB17889F5CAFC2700AA74D9A9759FDC8",
+        "sourceSha256": "A2895869C068803887A62E5228B9151B49F24EAD19625D6C774A4D71B9DB819D",
+        "sequenceCount": 5,
+        "totalFrameCount": 5,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm02_01/core-native.png",
         "coreSha256": "25259374B81294BD9EB7C58ECBEE01D3EDD2935A4E91B1570D9102729CA02425",
         "staticCompositeFile": "fields/field_cm02_01/static-composite-native.png",
         "staticCompositeSha256": "D8F855A37CBE271112A00581DA97F94CFE41D8C199A0E22D8E40D4C9834F9068",
         "cleanGoldenSha256": "07CA6324F46E91A464283AA427F1A7049CFE0AB86BD3DB337BAA934042A51DF9",
         "researchGoldenSha256": "EB74F847E07280E56583F0F892CA3DE7F0F0471F3678B7241CDF38714D0ACDDE",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -240,7 +266,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -296,14 +322,15 @@
       "nameEn": "Arena",
       "nameJp": "きょうぎじょう",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "36x25",
       "layoutCells": 900,
       "nativeOriginal": {
         "file": "fields/field_cm03_01/native-original.png",
-        "sha256": "24E843C4EFC9107FAEA439D612B4338F71B35063AD3F5A8880D314CA21B46A5B",
+        "sha256": "016532E87FC50A8A53C6B49890AF3E795F9F831AD9A3D06F0F49F4D88D661CF5",
         "width": 288,
         "height": 200,
-        "staticCoreObjectSourceSha256": "24E843C4EFC9107FAEA439D612B4338F71B35063AD3F5A8880D314CA21B46A5B",
+        "staticCoreObjectSourceSha256": "016532E87FC50A8A53C6B49890AF3E795F9F831AD9A3D06F0F49F4D88D661CF5",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
@@ -334,30 +361,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm03_01/object-placement.json",
-        "sha256": "AD3598BB2B0D34BC2439A457DA7B58E8933DF2A1CF79363F3E5E8C62505438B5",
+        "sha256": "64F82B17466D845C2B59C7FBE2E11305132BD99600B919F9A9B07E8320861D01",
         "sourceSha256": "AD44D2ED2B5B5136622BDAFFCBAD57CECAB794235CB017CFA28819AC4A64B97F",
         "count": 6,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm03_01/object-cell-bank.json",
-        "sha256": "53AA35054CDE5212EA1D33FF700D2AA2E4F8C6ED38CF24DCD557D57870F4761C",
+        "sha256": "DCBE1AF9FB2E673E6C6A6FC70A74B1BAF704C81D63B8EA3FB1E9B75346091F0C",
         "cellCount": 3,
         "renderedCellCount": 3,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm03_01/object-animation-bank.json",
+        "sha256": "60CB549855E7B27C330F6A342F98D7900B54267C1CBF39CD7AB3BFA5C0936E1F",
+        "sourceSha256": "7EFF79FB7EBB691F5FDE1B062A59D946EEF8F65923BB7D65E2AC79284F0C4A8A",
+        "sequenceCount": 3,
+        "totalFrameCount": 3,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm03_01/core-native.png",
         "coreSha256": "B83C09299AE8F1F364C38745BCF137DC40FE49750E6134E374AB7240BA33A87B",
         "staticCompositeFile": "fields/field_cm03_01/static-composite-native.png",
         "staticCompositeSha256": "016532E87FC50A8A53C6B49890AF3E795F9F831AD9A3D06F0F49F4D88D661CF5",
         "cleanGoldenSha256": "24E843C4EFC9107FAEA439D612B4338F71B35063AD3F5A8880D314CA21B46A5B",
         "researchGoldenSha256": "13BF0EBD005AB33E12B76662F787A893ABAEEF6F191426AA0EC4B4C0D3952B05",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -371,7 +409,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -427,14 +465,15 @@
       "nameEn": "Dojo",
       "nameJp": "どうじょう",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "36x14",
       "layoutCells": 504,
       "nativeOriginal": {
         "file": "fields/field_cm04_01/native-original.png",
-        "sha256": "634CF3BB02FCC0EDECCFBBA76471CD3EA27841608DCB4228E06C068004969165",
+        "sha256": "0B36EDDAF7C77A5C6AA2199FCA879433575426B3A61F4D7DC4B27C2D70087014",
         "width": 288,
         "height": 112,
-        "staticCoreObjectSourceSha256": "634CF3BB02FCC0EDECCFBBA76471CD3EA27841608DCB4228E06C068004969165",
+        "staticCoreObjectSourceSha256": "0B36EDDAF7C77A5C6AA2199FCA879433575426B3A61F4D7DC4B27C2D70087014",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
@@ -465,30 +504,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm04_01/object-placement.json",
-        "sha256": "5951B5C99287C2654E0853E191831966902F65B46A634ED749FEEBD149587386",
+        "sha256": "72391A910EA8D68D894478AC1D151AD524CFA23109ECDAC8E81D179F4CFF8ED3",
         "sourceSha256": "712EF6878317C73E9CEAA4EA8A8F5EAD91AEA724E60223BD9298D2047ED0D8F2",
         "count": 3,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm04_01/object-cell-bank.json",
-        "sha256": "D3195D47845C15D1E390D3966DE7586C4008E9BA5FF196EBF7FF45DD2B34ADDB",
+        "sha256": "76EBFDD207B31237E5657A1C000AA48FBB13AEF51CB303684CA8186AC0CEB300",
         "cellCount": 3,
         "renderedCellCount": 3,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm04_01/object-animation-bank.json",
+        "sha256": "60CB549855E7B27C330F6A342F98D7900B54267C1CBF39CD7AB3BFA5C0936E1F",
+        "sourceSha256": "7EFF79FB7EBB691F5FDE1B062A59D946EEF8F65923BB7D65E2AC79284F0C4A8A",
+        "sequenceCount": 3,
+        "totalFrameCount": 3,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm04_01/core-native.png",
         "coreSha256": "0ACF623435B69A4BFE9DD5F53558CDE1EE8B951F95E9D9F6BE12D9C50520ECA5",
         "staticCompositeFile": "fields/field_cm04_01/static-composite-native.png",
         "staticCompositeSha256": "0B36EDDAF7C77A5C6AA2199FCA879433575426B3A61F4D7DC4B27C2D70087014",
         "cleanGoldenSha256": "634CF3BB02FCC0EDECCFBBA76471CD3EA27841608DCB4228E06C068004969165",
         "researchGoldenSha256": "4059E716632F3548F7167E9F179EFAFD8B74988430B74B790B84B28006E3BACF",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -502,7 +552,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -558,6 +608,7 @@
       "nameEn": "Gym",
       "nameJp": "ジム",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "30x25",
       "layoutCells": 750,
       "nativeOriginal": {
@@ -596,30 +647,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm05_01/object-placement.json",
-        "sha256": "A07C6262A95E705AAAE8140C620952DCB012DF110AE1A8984A75AC6444DBD223",
+        "sha256": "0CB4E203347CD1EE14F3D78F4A55E0CCFC5D45375868BBCFEBA108C734B53703",
         "sourceSha256": "749C18461D9B553B5236D8BD463C2E7D638F93E1A4D3F1410DF30E8931112A28",
         "count": 6,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm05_01/object-cell-bank.json",
-        "sha256": "EC4CABA29BEFF985715101620CC812D3A894AC1FF0F9D2750FF74332D7A5BB63",
+        "sha256": "9E7E805CED964A780279C1C89B8378ED38C9F94F93061D1E4F5F4347FF9D5153",
         "cellCount": 3,
         "renderedCellCount": 3,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm05_01/object-animation-bank.json",
+        "sha256": "60CB549855E7B27C330F6A342F98D7900B54267C1CBF39CD7AB3BFA5C0936E1F",
+        "sourceSha256": "7EFF79FB7EBB691F5FDE1B062A59D946EEF8F65923BB7D65E2AC79284F0C4A8A",
+        "sequenceCount": 3,
+        "totalFrameCount": 3,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm05_01/core-native.png",
         "coreSha256": "8D5EB414349D7A4199BEC2837A3B1C26D80E3CA1639CD4D57888BD0D43F2EF46",
         "staticCompositeFile": "fields/field_cm05_01/static-composite-native.png",
         "staticCompositeSha256": "2CC17BF427D306B04A8E6066F435662E54433D3EE13748069B3930461F7AC2AA",
         "cleanGoldenSha256": "2CC17BF427D306B04A8E6066F435662E54433D3EE13748069B3930461F7AC2AA",
         "researchGoldenSha256": "778BA8DC4B00BCC986C95772BFC7875FC59306180AF235E22A6D5DC38E59FB26",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -633,7 +695,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -689,19 +751,20 @@
       "nameEn": "Laboratory",
       "nameJp": "けんきゅうじょ",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "42x25",
       "layoutCells": 1050,
       "nativeOriginal": {
         "file": "fields/field_cm06_01/native-original.png",
-        "sha256": "25B0EB251E847273FBBA32509370372808B2152F25F0827C2686372209FA2438",
+        "sha256": "2A4B601B07448AF104AAB0360B7EDBEDBEDDE845747F293C12D25AACB27DC0F9",
         "width": 336,
         "height": 200,
-        "staticCoreObjectSourceSha256": "25B0EB251E847273FBBA32509370372808B2152F25F0827C2686372209FA2438",
+        "staticCoreObjectSourceSha256": "2A4B601B07448AF104AAB0360B7EDBEDBEDDE845747F293C12D25AACB27DC0F9",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm06_01/faithful-hd4x.png",
-        "sha256": "0ADB6799FACB94B1E75754702CC0AAB7DA094190E206CF5883817A41C4CABA82",
+        "sha256": "F169BF3316D2FB6439FE50A60DF39BCF6FE4655864028429DBC1B4BED7234DD0",
         "width": 1344,
         "height": 800,
         "scale": 4,
@@ -727,30 +790,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm06_01/object-placement.json",
-        "sha256": "5ED1079B081F760C113FDEAB1B7797B220AB6E023FA7A0D31033C7861B1931DD",
+        "sha256": "AA4C6FFCADAF79AD508C71C2517C56993543A00B76034E38CDF4ED6E381F6878",
         "sourceSha256": "B52213494D3A5D353C4590EF88CEDD1157D8B6ABDA8D1AE8BBC8C053CA24C722",
         "count": 15,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm06_01/object-cell-bank.json",
-        "sha256": "E3F7CD38D00252D2599BE87DDD97718411E54242A2163D75680586045CF40E4F",
+        "sha256": "59613243E3D3A2CBFF4015FE9EC65FDA7CEDCAEDC9BE8F01B61A920FC48D6481",
         "cellCount": 13,
         "renderedCellCount": 13,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm06_01/object-animation-bank.json",
+        "sha256": "38DC3BBFD66715E21B09B8A163916E6F7898F2E5447CB9CC111BFA544C51711D",
+        "sourceSha256": "8CFBC7D977418D319412C6372654325E9F4FDF13359ED0110AC991CF19D843D2",
+        "sequenceCount": 8,
+        "totalFrameCount": 18,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm06_01/core-native.png",
         "coreSha256": "02892A8A9B00DFAFB3B5DE642E4998037C7FBEEBCFE7EDF2B525CFE87DAC08A6",
         "staticCompositeFile": "fields/field_cm06_01/static-composite-native.png",
-        "staticCompositeSha256": "25B0EB251E847273FBBA32509370372808B2152F25F0827C2686372209FA2438",
+        "staticCompositeSha256": "2A4B601B07448AF104AAB0360B7EDBEDBEDDE845747F293C12D25AACB27DC0F9",
         "cleanGoldenSha256": "25B0EB251E847273FBBA32509370372808B2152F25F0827C2686372209FA2438",
         "researchGoldenSha256": "02748C3F283A1BB8EE09E444B8FC3D26A058957271B41A6B6D5ED1E9879742C1",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 4841,
+        "archiveResearchPixelDiffCount": 4841,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -764,7 +838,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -820,6 +894,7 @@
       "nameEn": "Volcano",
       "nameJp": "かざん",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "30x25",
       "layoutCells": 750,
       "nativeOriginal": {
@@ -827,7 +902,7 @@
         "sha256": "B1DB06ED7D5DC07423519611871B1A5441E517E7B53173E06E472572522576AC",
         "width": 240,
         "height": 200,
-        "staticCoreObjectSourceSha256": "53A71B7E7B27B0DD0180BA061026950BFE34A37A74B8756B5772CB476B729EFE",
+        "staticCoreObjectSourceSha256": "6E2AC7F0B26AC32203135B4221D6057E84039C67404E2159CEE8F45A75C69235",
         "composition": "STATIC_CORE_OBJECT_PLUS_ANIMATED_FRAME_0"
       },
       "faithfulHd4x": {
@@ -858,30 +933,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm07_01/object-placement.json",
-        "sha256": "93A74C46FE9FF187917DBB591615A1365313C644E64B374C43DD5653EE859043",
+        "sha256": "CD11D1EF9AD71DBC1C331985B634F45DEA1C44D6D984D6A71183C8F9235B5441",
         "sourceSha256": "1BECE61B87FE49684F7A570B6BB9FFC7322EBBB883A6D1738BE78AB872173841",
         "count": 0,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm07_01/object-cell-bank.json",
-        "sha256": "5B44A1477F97B81160350C03C77C26C94801C5FA7B78C85822C5F8DF8AB45591",
+        "sha256": "94AD2FD8D2BECF60E8770765C8F8B1D483000B844E019F583156A0780FD900F6",
         "cellCount": 2,
         "renderedCellCount": 2,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm07_01/object-animation-bank.json",
+        "sha256": "3C96EE73CC5A99261D2BC0307F87BCB5B96FC462B4F786A5E4EFA637912A2942",
+        "sourceSha256": "F91527F9F1CEDC8A681C64FFB13B72CF302202FBB8E9BAA7340E754321E9CEC5",
+        "sequenceCount": 2,
+        "totalFrameCount": 5,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm07_01/core-native.png",
         "coreSha256": "6E2AC7F0B26AC32203135B4221D6057E84039C67404E2159CEE8F45A75C69235",
         "staticCompositeFile": "fields/field_cm07_01/static-composite-native.png",
         "staticCompositeSha256": "6E2AC7F0B26AC32203135B4221D6057E84039C67404E2159CEE8F45A75C69235",
         "cleanGoldenSha256": "53A71B7E7B27B0DD0180BA061026950BFE34A37A74B8756B5772CB476B729EFE",
         "researchGoldenSha256": "B6A9B7D8B409D691A45B5F3CB998710608F53BB2F08803D7FF332894517948B1",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -895,7 +981,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "PRESENT_VERIFIED_ROM_DECODED",
@@ -924,6 +1010,7 @@
             "sha256": "AAB17BE837E23591D506FDABBE18528E0D909C8BED482DC2A14ADFE951DC0229"
           }
         ],
+        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER",
         "alternateCompositeFrame": {
           "file": "fields/field_cm07_01/native-composite-frame-01.png",
           "sha256": "B1DB06ED7D5DC07423519611871B1A5441E517E7B53173E06E472572522576AC"
@@ -933,8 +1020,7 @@
           "sha256": "E1433E5F90A7FAA45F2BB025FBFFED1A741458B17CAA368A6E3B635BBECEDADE",
           "scale": 4,
           "filter": "NEAREST"
-        },
-        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER"
+        }
       },
       "sourcePayloadHashes": {
         "nbs": {
@@ -987,19 +1073,20 @@
       "nameEn": "Grassland",
       "nameJp": "そうげん",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "30x25",
       "layoutCells": 750,
       "nativeOriginal": {
         "file": "fields/field_cm08_01/native-original.png",
-        "sha256": "FF25874DE869AE70E988A81090101F3F010A19EE8E3F7506AA39AB2E65F57527",
+        "sha256": "3745E30E21C195ED360095BE0A7EF1F10F42BE58C6B1C4E3B3D5D41260218F98",
         "width": 240,
         "height": 200,
-        "staticCoreObjectSourceSha256": "FF25874DE869AE70E988A81090101F3F010A19EE8E3F7506AA39AB2E65F57527",
+        "staticCoreObjectSourceSha256": "3745E30E21C195ED360095BE0A7EF1F10F42BE58C6B1C4E3B3D5D41260218F98",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm08_01/faithful-hd4x.png",
-        "sha256": "DE8A8A4EB0708E5A4B96C62DC1E99503B77E75120903B82369D80702517248A5",
+        "sha256": "80F039CB2B1F8AE751130AF7FB3EBF216C0BC93B95E523EBB8B103F18F17A2E8",
         "width": 960,
         "height": 800,
         "scale": 4,
@@ -1025,30 +1112,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm08_01/object-placement.json",
-        "sha256": "6A930443E8C2DDA92B4807BEF775733C12AC9F2960D9E816E080CF24358E22FC",
+        "sha256": "CCD5BD6DC2E45DEBCA4B26918086E20E8F478CEAB3840B7B22A7C05A843D3532",
         "sourceSha256": "C98B72B99814F978DDA74E299760718C31B8893FCB1F34D9ED5AE96F556F05A6",
         "count": 2,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm08_01/object-cell-bank.json",
-        "sha256": "4D70DFD781E416E8B002A6A0872951C2A86099BFC4485792005D60427E8AFFCB",
+        "sha256": "B9AA6AF2196F3AB78F384E1C37EAD5764DC9DCD3C944AD5CC232F97CC6C916B8",
         "cellCount": 2,
         "renderedCellCount": 2,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm08_01/object-animation-bank.json",
+        "sha256": "3C96EE73CC5A99261D2BC0307F87BCB5B96FC462B4F786A5E4EFA637912A2942",
+        "sourceSha256": "F91527F9F1CEDC8A681C64FFB13B72CF302202FBB8E9BAA7340E754321E9CEC5",
+        "sequenceCount": 2,
+        "totalFrameCount": 5,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm08_01/core-native.png",
         "coreSha256": "AF3B60FC1BB8B2AFBB090340A76FE5C21967FBE71F1D2D3984DDD148C3ED4F02",
         "staticCompositeFile": "fields/field_cm08_01/static-composite-native.png",
-        "staticCompositeSha256": "60ED720913DF1A923BC67DB954DA7C70FD78F2D89D69980D441C8370EEA14A3C",
+        "staticCompositeSha256": "3745E30E21C195ED360095BE0A7EF1F10F42BE58C6B1C4E3B3D5D41260218F98",
         "cleanGoldenSha256": "FF25874DE869AE70E988A81090101F3F010A19EE8E3F7506AA39AB2E65F57527",
         "researchGoldenSha256": "E245E2DD819E9C8FA671549AC017D71868D281C24BA8587CEA4B0C39E02ED8E0",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 27,
+        "archiveResearchPixelDiffCount": 27,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -1062,7 +1160,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -1118,6 +1216,7 @@
       "nameEn": "Beach",
       "nameJp": "ビーチ",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "36x25",
       "layoutCells": 900,
       "nativeOriginal": {
@@ -1156,30 +1255,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm09_01/object-placement.json",
-        "sha256": "B5BE8152083880CCC1CE00D8800BAAA6D61C4593A1B868BD4FB40582EDDBFEBF",
+        "sha256": "B442667610CCE70BCC8AEFC6D9A7D57633A4CFF562052C50B7E4909E641619EA",
         "sourceSha256": "9947F36F0CCA246C361472853F048399DD7580688730247DF390E0EFD5EBEDD1",
         "count": 2,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm09_01/object-cell-bank.json",
-        "sha256": "7318AFB87A8072BC5EE1829F4E0F44E6D68AAB47D83032C398C915A5156CCA55",
+        "sha256": "64FFFEDFDEBCA0E83556EC393656009D75254CACA9558EBA9CCC74E96F133CA8",
         "cellCount": 2,
         "renderedCellCount": 2,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm09_01/object-animation-bank.json",
+        "sha256": "A82677997EAED36F32F23893071D2EFCA66A1988BF90EE78D73AF930377CCDBF",
+        "sourceSha256": "642E0382B5E83CE086AA9C8A00E1495D303EA45B0C46544B547DE01C3FF29306",
+        "sequenceCount": 2,
+        "totalFrameCount": 2,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm09_01/core-native.png",
         "coreSha256": "23E1571F25AF1FF1AF8047611F60C532CB8F95422ED5F59BC8D25D3283BD06E6",
         "staticCompositeFile": "fields/field_cm09_01/static-composite-native.png",
         "staticCompositeSha256": "D0B1E89D51A2D55A9B414A096A00716E0C596D5EA9D11783A5968C699042C325",
         "cleanGoldenSha256": "D0B1E89D51A2D55A9B414A096A00716E0C596D5EA9D11783A5968C699042C325",
         "researchGoldenSha256": "DDFB281BDA99B546302DD28F66738CB604987FC8A948B66611F0278351B6FD44",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -1193,7 +1303,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "PRESENT_VERIFIED_ROM_DECODED",
@@ -1222,6 +1332,7 @@
             "sha256": "E0660A778D97D0297316C95B874C715411B9EC152D46745B260CEAB67731504A"
           }
         ],
+        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER",
         "alternateCompositeFrame": {
           "file": "fields/field_cm09_01/native-composite-frame-01.png",
           "sha256": "6C68CCF9F8CB2E7831A7BF523DEABEBDD915F5DC2F38976E815C2FF973591054"
@@ -1231,8 +1342,7 @@
           "sha256": "291464CF4533806DB2631E777232DFA4B1CF0E409C3C6A1C97C574B5EC1CD230",
           "scale": 4,
           "filter": "NEAREST"
-        },
-        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER"
+        }
       },
       "sourcePayloadHashes": {
         "nbs": {
@@ -1285,14 +1395,15 @@
       "nameEn": "Mine",
       "nameJp": "こうざん",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "36x25",
       "layoutCells": 900,
       "nativeOriginal": {
         "file": "fields/field_cm10_01/native-original.png",
-        "sha256": "8C4CB6622F367B2958E21A9D48F13DBC93082CF20691A0130E8E678A91EA5AB4",
+        "sha256": "2F503D08DEDE2FCD9A92C4B3EC98B8D223EC5E8B8DDA9B00408EAB49C2955F17",
         "width": 288,
         "height": 200,
-        "staticCoreObjectSourceSha256": "8C4CB6622F367B2958E21A9D48F13DBC93082CF20691A0130E8E678A91EA5AB4",
+        "staticCoreObjectSourceSha256": "2F503D08DEDE2FCD9A92C4B3EC98B8D223EC5E8B8DDA9B00408EAB49C2955F17",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
@@ -1323,30 +1434,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm10_01/object-placement.json",
-        "sha256": "A7782687B1072653BD4FFDB5983BFC2EAD3DE800960790CDAD1B03C127BC21BE",
+        "sha256": "C860463F273D53DC57F680900412C34A13D7D34E8F60145D7EFA0C6A187DB4E2",
         "sourceSha256": "B58FCC528D468F4A08BA1FB60D5A8B6AFD2A57A3BCE54CAC724D0B378A670A6C",
         "count": 7,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm10_01/object-cell-bank.json",
-        "sha256": "B884402FB3F65C71FF5A12A90C7BD90C0FC920F77550703146B2675C41A7FF9F",
+        "sha256": "028514C462E4F55F0360BC37C457B1FF9F45620108E35057624973312811D337",
         "cellCount": 4,
         "renderedCellCount": 4,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm10_01/object-animation-bank.json",
+        "sha256": "99FA24597335F2ECD0EF2A999351447A5B447DC390F2A4FBF420768F9E87D77D",
+        "sourceSha256": "C4C77F66E213819041AC8AF70411B2CAF10C1309C7BB5416C6C06C69654AB226",
+        "sequenceCount": 4,
+        "totalFrameCount": 4,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm10_01/core-native.png",
         "coreSha256": "9FD6167B6FAB0AFF4AE58582DD5CB65ECBA8775195D6450AA7A13F2929738C5E",
         "staticCompositeFile": "fields/field_cm10_01/static-composite-native.png",
         "staticCompositeSha256": "2F503D08DEDE2FCD9A92C4B3EC98B8D223EC5E8B8DDA9B00408EAB49C2955F17",
         "cleanGoldenSha256": "8C4CB6622F367B2958E21A9D48F13DBC93082CF20691A0130E8E678A91EA5AB4",
         "researchGoldenSha256": "E57C98C7A76BD5114F13D5230EFDAE5A99EE835D746C1490D2311B611F335A48",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -1360,7 +1482,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -1416,14 +1538,15 @@
       "nameEn": "Forest",
       "nameJp": "もり",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "30x25",
       "layoutCells": 750,
       "nativeOriginal": {
         "file": "fields/field_cm11_01/native-original.png",
-        "sha256": "B5B6906AD989C62CD8F159B47830EF98FC6C853038027D66F86D80134976F150",
+        "sha256": "1A26C2B3CCCCBD2055D3E7C5EB7183B3E07BE04F4CC13665B0D56B95242E7F52",
         "width": 240,
         "height": 200,
-        "staticCoreObjectSourceSha256": "B5B6906AD989C62CD8F159B47830EF98FC6C853038027D66F86D80134976F150",
+        "staticCoreObjectSourceSha256": "1A26C2B3CCCCBD2055D3E7C5EB7183B3E07BE04F4CC13665B0D56B95242E7F52",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
@@ -1454,30 +1577,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm11_01/object-placement.json",
-        "sha256": "2DB9886323BFDD61D514887B5A1941B6E82D127ACB7903E33AA368717F86824A",
+        "sha256": "54670EB5AB5D4DC5CAFF0F838DD5EF870C8F9E5AF4F51A6C2F1581FC2E13491A",
         "sourceSha256": "B903FCBAC1344AF09C044CC90F9D78FE2D17DA51B46323D2F9D6B5C815035860",
         "count": 9,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm11_01/object-cell-bank.json",
-        "sha256": "EB09835E52667BC79E8B907E72E49A1CA6321CA6B3B78EDF8604E08479A78436",
+        "sha256": "BC994138A362623552AA7DB762EC4941D30859F1DF27E2AB5322EAC4C3E91194",
         "cellCount": 2,
         "renderedCellCount": 2,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm11_01/object-animation-bank.json",
+        "sha256": "D60F1A241AB69579F190E97AFE516909DAA2F9299A46E6C980148535FBA2F9C9",
+        "sourceSha256": "BBD6064292883E36B3DC7EB3CE747ADF5E95BFABA531FEA45FEA6E67A6AE1CB0",
+        "sequenceCount": 2,
+        "totalFrameCount": 2,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm11_01/core-native.png",
         "coreSha256": "DCFCAFF8D8A574F1DCB298E5C3F641FABD60345DEB0B36A95CF643717A1F3301",
         "staticCompositeFile": "fields/field_cm11_01/static-composite-native.png",
         "staticCompositeSha256": "1A26C2B3CCCCBD2055D3E7C5EB7183B3E07BE04F4CC13665B0D56B95242E7F52",
         "cleanGoldenSha256": "B5B6906AD989C62CD8F159B47830EF98FC6C853038027D66F86D80134976F150",
         "researchGoldenSha256": "61B986B8AC7860BD5DB65BAA2D6840656B263F579CFE7773C1B1688B7B805275",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -1491,7 +1625,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -1546,20 +1680,21 @@
       "ordinal": 12,
       "nameEn": "Jungle",
       "nameJp": "ジャングル",
-      "compositionConfidence": "CORE_FIELD_RECOVERED_OBJECT_LAYER_CONFLICT",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE_NANR_SEQUENCE_BINDING_RESOLVED",
+      "archiveCompositionConfidence": "CORE_FIELD_RECOVERED_OBJECT_LAYER_CONFLICT",
       "originalDimensions": "30x25",
       "layoutCells": 750,
       "nativeOriginal": {
         "file": "fields/field_cm12_01/native-original.png",
-        "sha256": "5F3483D97DF2FA843623186DC21EB0ACCCD988A3DA9343A36A4283C87D9158DD",
+        "sha256": "411B97C94858B897428FCA6AD8834A2913198FF88B27A73D3EC098FF8044A627",
         "width": 240,
         "height": 200,
-        "staticCoreObjectSourceSha256": "5F3483D97DF2FA843623186DC21EB0ACCCD988A3DA9343A36A4283C87D9158DD",
+        "staticCoreObjectSourceSha256": "411B97C94858B897428FCA6AD8834A2913198FF88B27A73D3EC098FF8044A627",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm12_01/faithful-hd4x.png",
-        "sha256": "C8B94A2197975F8D3C95249C4813245F0369DD266E4C6EDD522E34A41F8B0301",
+        "sha256": "AC36B48E707B59CE4FDBD5C0A1EFF7D916E2C5C7DF2BBAFE442287D5D6CF5B88",
         "width": 960,
         "height": 800,
         "scale": 4,
@@ -1585,32 +1720,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm12_01/object-placement.json",
-        "sha256": "0E542480127A565EA16CB1B4DDC9B7616853CF2A0B4FCF5360D3FE5C04768F69",
+        "sha256": "7CD66ED2B96137DC7B1C77DB9068167277DEE20939DAAD6F96032902C6888364",
         "sourceSha256": "360109D7E835EC5A8ABE6C5B07CB0B2773BA4A6CAAC5C650FBBEE8757033F759",
         "count": 7,
-        "authority": "ORIGINAL_OBJECT_INDEX_CONFLICT_DO_NOT_BIND"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_CONFLICT_QUARANTINED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm12_01/object-cell-bank.json",
-        "sha256": "4EECBBF3A48C56C28E96600120867C9F6023FEEE4AB1FE25EE5E3F8A1E95B3C7",
+        "sha256": "3CBB779D030C88EF5A3F3F7CE92FAC7EB88D4F90398046F6083D144BDE11D008",
         "cellCount": 2,
         "renderedCellCount": 2,
-        "invalidPlacementCellIds": [
-          2
-        ],
-        "placementBindingAuthority": "QUARANTINED_DO_NOT_BIND"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm12_01/object-animation-bank.json",
+        "sha256": "AB250DEAA7D2E95FA9DA2FCE828DBD04C0338C1DAF3FE566B38FD7BCF76C64DB",
+        "sourceSha256": "0A34A7BD2C3B0A7815D66B30FA08DA246DB695B37BC194A2E38FA4B408E7286E",
+        "sequenceCount": 3,
+        "totalFrameCount": 3,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "CORE_ONLY_OBJECT_CONFLICT_QUARANTINED",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm12_01/core-native.png",
         "coreSha256": "D35BB42B803E78169C6C90418DC0E8A605EBD661165AE9B7AD663CD5817F0971",
         "staticCompositeFile": "fields/field_cm12_01/static-composite-native.png",
-        "staticCompositeSha256": "D35BB42B803E78169C6C90418DC0E8A605EBD661165AE9B7AD663CD5817F0971",
+        "staticCompositeSha256": "411B97C94858B897428FCA6AD8834A2913198FF88B27A73D3EC098FF8044A627",
         "cleanGoldenSha256": "5F3483D97DF2FA843623186DC21EB0ACCCD988A3DA9343A36A4283C87D9158DD",
         "researchGoldenSha256": "EE0DDD59147B13320C6827972D8C65F7E50D27D528B49407F8FEE8B11BB3B903",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 6690,
+        "archiveResearchPixelDiffCount": 6690,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -1624,7 +1768,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_ONLY_OBJECTS_QUARANTINED"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -1680,19 +1824,20 @@
       "nameEn": "Shrine",
       "nameJp": "しんでん",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "24x25",
       "layoutCells": 600,
       "nativeOriginal": {
         "file": "fields/field_cm13_01/native-original.png",
-        "sha256": "504E38F3B05F76D5B59D65E544730DED9D7E5A8899F91379C4D50F01E06362EA",
+        "sha256": "B6DC6C274047D208F191DFA6B9DB99725E4FAAD8C8E4AC4D338C42313F35B074",
         "width": 192,
         "height": 200,
-        "staticCoreObjectSourceSha256": "504E38F3B05F76D5B59D65E544730DED9D7E5A8899F91379C4D50F01E06362EA",
+        "staticCoreObjectSourceSha256": "B6DC6C274047D208F191DFA6B9DB99725E4FAAD8C8E4AC4D338C42313F35B074",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm13_01/faithful-hd4x.png",
-        "sha256": "CEB73F9AA18386E6B9BC7411088AAEB7EFF0851C5B22CF4BF928BB4F297375AE",
+        "sha256": "0E14ABF9BBE39C6D207AEEF3E9CB79B2A56837973AB3DC66271A5A19833FAB52",
         "width": 768,
         "height": 800,
         "scale": 4,
@@ -1718,30 +1863,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm13_01/object-placement.json",
-        "sha256": "B11593CA8639A1139E44BBD735D6977EC6CAE6A2946D6619CBF61D079E2AB89D",
+        "sha256": "8CA720D9A1833734BEF606664D377921B83437F92DF2F6051D64FBDB74090EF0",
         "sourceSha256": "4605A8243AA7BA635D22C8265E3C739675BBBFE8CDDB04F7DAB74E5B0ABB380B",
         "count": 8,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm13_01/object-cell-bank.json",
-        "sha256": "ACB237E07B128E78441A93742DE73AD826C07D0AF5817FE5F74253925E8767BA",
+        "sha256": "B8E9EFD41DECDA970DFF949C70A4FB22B82CB126DC27EF60876354E6A1AE65B3",
         "cellCount": 10,
         "renderedCellCount": 10,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm13_01/object-animation-bank.json",
+        "sha256": "487D17685E3353A2B1408024A04BC89A91C268665F24E85E364E087E37E61149",
+        "sourceSha256": "7B6654C9D3DD0B0F7F9EB711390BBF625F722724BB57D58FC2F134B8809757FE",
+        "sequenceCount": 4,
+        "totalFrameCount": 10,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm13_01/core-native.png",
         "coreSha256": "E657B49AE683B3D73748DCE010DC3E050520A846E2B700E17987BAE09BC07FBB",
         "staticCompositeFile": "fields/field_cm13_01/static-composite-native.png",
-        "staticCompositeSha256": "504E38F3B05F76D5B59D65E544730DED9D7E5A8899F91379C4D50F01E06362EA",
+        "staticCompositeSha256": "B6DC6C274047D208F191DFA6B9DB99725E4FAAD8C8E4AC4D338C42313F35B074",
         "cleanGoldenSha256": "504E38F3B05F76D5B59D65E544730DED9D7E5A8899F91379C4D50F01E06362EA",
         "researchGoldenSha256": "045FA15AFBCD1D3B69BC20C387CC46D711FD1ED4A40BE368B563CE4BBB78B629",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 69,
+        "archiveResearchPixelDiffCount": 69,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -1755,7 +1911,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -1811,19 +1967,20 @@
       "nameEn": "Graveyard",
       "nameJp": "はかば",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "30x25",
       "layoutCells": 750,
       "nativeOriginal": {
         "file": "fields/field_cm14_01/native-original.png",
-        "sha256": "5615D2B5407EBA7D4E431A4B994F8751005F77F048515DA5FC2F6ED069DB3FF4",
+        "sha256": "3C7A84C76A9CE68E2BF7C9C23D5B82BDC7EB4E6BC2BB4C803077CC63A194D690",
         "width": 240,
         "height": 200,
-        "staticCoreObjectSourceSha256": "5615D2B5407EBA7D4E431A4B994F8751005F77F048515DA5FC2F6ED069DB3FF4",
+        "staticCoreObjectSourceSha256": "3C7A84C76A9CE68E2BF7C9C23D5B82BDC7EB4E6BC2BB4C803077CC63A194D690",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm14_01/faithful-hd4x.png",
-        "sha256": "3F13A0E6D48C73F2E7850A7C1A75F05F44E5F4A59412AFE19AD873FB1D2AAFFC",
+        "sha256": "5812B850933FA4352AA9F088C60F67127F1D0D2257742EA2DD24B0B46565A3C7",
         "width": 960,
         "height": 800,
         "scale": 4,
@@ -1849,30 +2006,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm14_01/object-placement.json",
-        "sha256": "DC1F9BD51A71C5EB482DEBA475DDF85ED331A1D00FD613F2541D102CF2785B0E",
+        "sha256": "DDDC6E1C40421D444CBC6ACBCABA0981244CA31D1B0555F8C52B7A9E1D5880C4",
         "sourceSha256": "30A14E7C9527DD042BE08CA959B07466A7F1A439196BEFD6472FBF157FB1EA3A",
         "count": 13,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm14_01/object-cell-bank.json",
-        "sha256": "27D4C1780EC4BBE6B559C6413E6D88F5395BD808F14055557AA56DA91E77DCAF",
+        "sha256": "F8E7EC936AE3ADACA1E7DDC50D5F377A193D23D9D331C270110FEF4BDCB1FFAB",
         "cellCount": 14,
         "renderedCellCount": 14,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm14_01/object-animation-bank.json",
+        "sha256": "3A69AAD5CD540FD174DB1A0393A6758CF7E1AAE494810D61DFB9EA2B75B5C43A",
+        "sourceSha256": "6AB0B9E065916AC54B6CB4757A00F970D98A8E70B45DEE9C665E4E60F7C9B1F8",
+        "sequenceCount": 12,
+        "totalFrameCount": 15,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm14_01/core-native.png",
         "coreSha256": "1D9CEDF21D8C53F084810503ED9CB75388CCDD8C370A5FC42115ED0CAEC92E14",
         "staticCompositeFile": "fields/field_cm14_01/static-composite-native.png",
-        "staticCompositeSha256": "F8720918A3CFAFAA8AC964F4F408169E1A3C54571AB04916418F628872771814",
+        "staticCompositeSha256": "3C7A84C76A9CE68E2BF7C9C23D5B82BDC7EB4E6BC2BB4C803077CC63A194D690",
         "cleanGoldenSha256": "5615D2B5407EBA7D4E431A4B994F8751005F77F048515DA5FC2F6ED069DB3FF4",
         "researchGoldenSha256": "4B5AACFA764594865A047D3E02CF5507C1AAFD0CDA22DCFE3F2319D1C0DB26A4",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 2013,
+        "archiveResearchPixelDiffCount": 2013,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -1886,7 +2054,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -1942,19 +2110,20 @@
       "nameEn": "Factory",
       "nameJp": "こうじょう",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "30x25",
       "layoutCells": 750,
       "nativeOriginal": {
         "file": "fields/field_cm15_01/native-original.png",
-        "sha256": "AC1BD21B7096911BA22155A08057347E31DC56CF0AB29C16BC70FE08A8AA9715",
+        "sha256": "F0CD079746BE5B7476F1EB94566988F1995BCD9BB0E23E9EDACBD784AF576B5B",
         "width": 240,
         "height": 200,
-        "staticCoreObjectSourceSha256": "AC1BD21B7096911BA22155A08057347E31DC56CF0AB29C16BC70FE08A8AA9715",
+        "staticCoreObjectSourceSha256": "F0CD079746BE5B7476F1EB94566988F1995BCD9BB0E23E9EDACBD784AF576B5B",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm15_01/faithful-hd4x.png",
-        "sha256": "2909FC3216E388E1F7F48CC647462203D30068E48F23784C7A1FB177E4CF0310",
+        "sha256": "795DABD36B545674D53B8161AB55D279BF3558C0F16C815DA4973C1DDD4103B5",
         "width": 960,
         "height": 800,
         "scale": 4,
@@ -1980,30 +2149,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm15_01/object-placement.json",
-        "sha256": "0612213359AD9AE4536415D7ADD3526DAE6838B3515B2F1DB7E14614B4D90235",
+        "sha256": "C07F451A9F5EBB6D0421BDBD95E98287DFE7FB6088F5F49593672AED3268A1A2",
         "sourceSha256": "62FB10756FF3D9B0D4153F782E7B1143D25E799DCE99EA3740F21E50609D42DB",
         "count": 23,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm15_01/object-cell-bank.json",
-        "sha256": "5B5265D9C3E1D036023A44D05544431CAAE5AFA2294AAFFD403EB0C5DA771FC2",
+        "sha256": "B6DE717E8BDC8AD0AC264949EA0DBC60EA34FADDAD5911C2671FE5665BF182C2",
         "cellCount": 16,
         "renderedCellCount": 16,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm15_01/object-animation-bank.json",
+        "sha256": "6A8C5509FA55997733E5A312DFE3F4892342536CD8B329E293F316EEF9BFC85B",
+        "sourceSha256": "DCD0B839C5EA3C8BB0A011DC39958D99A766B6A9F2B4B0724FEBE3462C90C280",
+        "sequenceCount": 6,
+        "totalFrameCount": 21,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm15_01/core-native.png",
         "coreSha256": "E2E718C73FD7AEB2249073A2B5B0C17C3275F6B1EE38C7E54E86AEA08727F8D6",
         "staticCompositeFile": "fields/field_cm15_01/static-composite-native.png",
-        "staticCompositeSha256": "320F1EAC0448C168C10CEAE698F1D8EAB783C7B6888CE4A8E37E88ACCB559F72",
+        "staticCompositeSha256": "F0CD079746BE5B7476F1EB94566988F1995BCD9BB0E23E9EDACBD784AF576B5B",
         "cleanGoldenSha256": "AC1BD21B7096911BA22155A08057347E31DC56CF0AB29C16BC70FE08A8AA9715",
         "researchGoldenSha256": "D8CC5DF87748A04D7BC8548E2FDEC631C6359AFB07EA03232C3A65AC76B08AC0",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 11451,
+        "archiveResearchPixelDiffCount": 11451,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -2017,7 +2197,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -2073,6 +2253,7 @@
       "nameEn": "Mini Clinic",
       "nameJp": "ミニほけんしつ",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "12x14",
       "layoutCells": 168,
       "nativeOriginal": {
@@ -2111,30 +2292,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm16_01/object-placement.json",
-        "sha256": "350410C8C92256951F2A2B54998B03DE0F2FB1B6B9FCF529C2E532B1A1488850",
+        "sha256": "A0C556B22CD89DE20E49429A10862DA7F0F74E49FF692A52402576B1E3CF5C16",
         "sourceSha256": "74676D04442F4381B04677A62DAA3B2C7A6AC30D2689F3E52EB808201457BC14",
         "count": 2,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm16_01/object-cell-bank.json",
-        "sha256": "C6FC7D2843D69C43BBF138B84FDC7B1A116B132C2FBDE46CA67FF8DF3453628D",
+        "sha256": "48A94A7D89073C4A4AB5099C21737D0431321F1C08B869D491E091203BB60800",
         "cellCount": 8,
         "renderedCellCount": 8,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm16_01/object-animation-bank.json",
+        "sha256": "71B9C8A1237561C4FE2F59F4F985689812CAC18B56B0E1D93A9670DD36639FBE",
+        "sourceSha256": "AFEDA9A93C5CB625CF6D45A0D24EED04B09DE62A1B70FD5EF440F6C90FF0F182",
+        "sequenceCount": 8,
+        "totalFrameCount": 8,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm16_01/core-native.png",
         "coreSha256": "357823DEC65F90A542F2D98C2B42DBBEC28D6022D197D51D4043EAA8D7F868E5",
         "staticCompositeFile": "fields/field_cm16_01/static-composite-native.png",
         "staticCompositeSha256": "2B3D730872623D9C78364C45C0CF49E270436CFA0FCAF08AA3DDC2EDB36C7226",
         "cleanGoldenSha256": "2B3D730872623D9C78364C45C0CF49E270436CFA0FCAF08AA3DDC2EDB36C7226",
         "researchGoldenSha256": "61F7CE584EFBC779EB660342C94CCF07949965DD9C5D0F213C1BB7B79CB76B27",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -2148,7 +2340,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -2204,19 +2396,20 @@
       "nameEn": "Hospital",
       "nameJp": "びょういん",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "24x25",
       "layoutCells": 600,
       "nativeOriginal": {
         "file": "fields/field_cm17_01/native-original.png",
-        "sha256": "708BAF31AF6D97B285CDDD657A20CEEED6DF27A990117E39C4805C9B4D4C4C31",
+        "sha256": "EBB679C173053D59A5CDC92D534F9C727D70F1EFA909A2F389A453A80549B920",
         "width": 192,
         "height": 200,
-        "staticCoreObjectSourceSha256": "708BAF31AF6D97B285CDDD657A20CEEED6DF27A990117E39C4805C9B4D4C4C31",
+        "staticCoreObjectSourceSha256": "EBB679C173053D59A5CDC92D534F9C727D70F1EFA909A2F389A453A80549B920",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm17_01/faithful-hd4x.png",
-        "sha256": "063810F0A0BDBCD12909E024C9E93B700B8F6EEB95B571AC7F86E1F5A83168A5",
+        "sha256": "E406FE3C6A4A05782591B4F859EC72F2EB75A24FEA7F33641FD5FD2CD02DF77D",
         "width": 768,
         "height": 800,
         "scale": 4,
@@ -2242,30 +2435,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm17_01/object-placement.json",
-        "sha256": "31DA82348D0DD60915F556D509D29F73B637B887C8B6797AF81CFE1AE13F23FE",
+        "sha256": "A12C8D1871DBFBDF9D22CD98F22E6F579B2C2656FAF9E3B046E9E245C18F21E7",
         "sourceSha256": "E3C4B18DAE994545FC1C3CB826CA3394CF2E55CF377A9C85B6B97EE73469A6AC",
         "count": 6,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm17_01/object-cell-bank.json",
-        "sha256": "AF939324D7AE628D6F962F8F3499DD71EA02278D6C6EE56C40F34E8742200924",
+        "sha256": "770BA68BC245D836BFC0D7231E6F26AE57EE5BD04B98B443E43FFACF8E5CA873",
         "cellCount": 6,
         "renderedCellCount": 6,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm17_01/object-animation-bank.json",
+        "sha256": "4394D42BA00554A9A14BE9F252FCD845EB1600D1EFDB54D5D4911937820A98DD",
+        "sourceSha256": "852F611E52A6B9D7386D06E96DCACD82FAA68DD615A30C69460DC38278E5DACC",
+        "sequenceCount": 4,
+        "totalFrameCount": 6,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm17_01/core-native.png",
         "coreSha256": "E3AC246B33FA48A33EBD256FCC73B2551921711562509DAC9DF67B55B83F3332",
         "staticCompositeFile": "fields/field_cm17_01/static-composite-native.png",
-        "staticCompositeSha256": "7FFAE3C77DF736C07E3394C6DA845459C2319EA57829029FC0925BFDBE80AC29",
+        "staticCompositeSha256": "EBB679C173053D59A5CDC92D534F9C727D70F1EFA909A2F389A453A80549B920",
         "cleanGoldenSha256": "708BAF31AF6D97B285CDDD657A20CEEED6DF27A990117E39C4805C9B4D4C4C31",
         "researchGoldenSha256": "E15A37E111E0291F483C1CB4DCC5480A7C4DE838D28C8127E929B56A30E3DA4E",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 4258,
+        "archiveResearchPixelDiffCount": 4258,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -2279,7 +2483,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -2334,20 +2538,21 @@
       "ordinal": 18,
       "nameEn": "Flower Garden",
       "nameJp": "はなぞの",
-      "compositionConfidence": "CORE_FIELD_RECOVERED_OBJECT_LAYER_CONFLICT",
+      "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE_NANR_SEQUENCE_BINDING_RESOLVED",
+      "archiveCompositionConfidence": "CORE_FIELD_RECOVERED_OBJECT_LAYER_CONFLICT",
       "originalDimensions": "18x25",
       "layoutCells": 450,
       "nativeOriginal": {
         "file": "fields/field_cm18_01/native-original.png",
-        "sha256": "68365E63F2EF7B9B5A0B44396870EEE96AC8277DFD39A5142DB1BAC6F2513A75",
+        "sha256": "7DA6DE0F19648F8A1A387C9ED4600F605DE00CBD7B13D369067ACDB4BBF774A7",
         "width": 144,
         "height": 200,
-        "staticCoreObjectSourceSha256": "68365E63F2EF7B9B5A0B44396870EEE96AC8277DFD39A5142DB1BAC6F2513A75",
+        "staticCoreObjectSourceSha256": "7DA6DE0F19648F8A1A387C9ED4600F605DE00CBD7B13D369067ACDB4BBF774A7",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm18_01/faithful-hd4x.png",
-        "sha256": "2E1297DE8C291A9A0241E755CD4AD26DA413BD56A7CB4E0AF651A70A111F9A7C",
+        "sha256": "7CDB991AA7EB7F7651DFC49A3C7A3FDC07E8686FAEE99B0369C0DB085223AB9E",
         "width": 576,
         "height": 800,
         "scale": 4,
@@ -2373,33 +2578,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm18_01/object-placement.json",
-        "sha256": "506A9D0830735A604737CDDB4D7D903A8E4E8529A9D768040A45CE3D43F67E38",
+        "sha256": "3B6C4C8A72561B3D550A3F575F5F54500F6098CCDA803ABD6DB04E7A6DD917B6",
         "sourceSha256": "DABF999F7AE3F10907E86907427C0CD4867AE477DDB0782C4D16430F200E5FC3",
         "count": 16,
-        "authority": "ORIGINAL_OBJECT_INDEX_CONFLICT_DO_NOT_BIND"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_CONFLICT_QUARANTINED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm18_01/object-cell-bank.json",
-        "sha256": "C02C733F28FF01083D1E6C778B56E8A0FF916CA22B9D2C0373D2875FBCAB5397",
+        "sha256": "F73DB8C1C8B8FC9545209DBFD0B1E3BFE4AC1310124D7F1DE1E2A63B882DC6C3",
         "cellCount": 8,
         "renderedCellCount": 8,
-        "invalidPlacementCellIds": [
-          8,
-          9
-        ],
-        "placementBindingAuthority": "QUARANTINED_DO_NOT_BIND"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm18_01/object-animation-bank.json",
+        "sha256": "7604F3D2420CBF2359701EB989B68A2FDA6E3DFE5778C2D8A374477B4F82FBA6",
+        "sourceSha256": "5555D630DB4B56EFFB0B875CA564BC494A9E84D765728AD1DFC32979A6898A97",
+        "sequenceCount": 10,
+        "totalFrameCount": 20,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "CORE_ONLY_OBJECT_CONFLICT_QUARANTINED",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm18_01/core-native.png",
         "coreSha256": "AE1F7BBDCB2B01D54EE6A2BDC2818394A9324EC2C80F51AB9E59A4796444A1B3",
         "staticCompositeFile": "fields/field_cm18_01/static-composite-native.png",
-        "staticCompositeSha256": "AE1F7BBDCB2B01D54EE6A2BDC2818394A9324EC2C80F51AB9E59A4796444A1B3",
+        "staticCompositeSha256": "7DA6DE0F19648F8A1A387C9ED4600F605DE00CBD7B13D369067ACDB4BBF774A7",
         "cleanGoldenSha256": "68365E63F2EF7B9B5A0B44396870EEE96AC8277DFD39A5142DB1BAC6F2513A75",
         "researchGoldenSha256": "18E313C79CB9E7D81A53E033977EA0A7F98D0155F713569DD846B4E2F7DD1C36",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 1004,
+        "archiveResearchPixelDiffCount": 1004,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -2413,7 +2626,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_ONLY_OBJECTS_QUARANTINED"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -2469,19 +2682,20 @@
       "nameEn": "Hot Spring",
       "nameJp": "おんせん",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "48x14",
       "layoutCells": 672,
       "nativeOriginal": {
         "file": "fields/field_cm19_01/native-original.png",
-        "sha256": "0FDF0B7659FE2400FB925D08DDDE560034B90B50CA1FD0840A179CF549EEBDF1",
+        "sha256": "1E797E0BE80BF2FFF6ADE070F16E836524A503F9449301CAE12E642EC79C4BFF",
         "width": 384,
         "height": 112,
-        "staticCoreObjectSourceSha256": "0FDF0B7659FE2400FB925D08DDDE560034B90B50CA1FD0840A179CF549EEBDF1",
+        "staticCoreObjectSourceSha256": "1E797E0BE80BF2FFF6ADE070F16E836524A503F9449301CAE12E642EC79C4BFF",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm19_01/faithful-hd4x.png",
-        "sha256": "50CC33E164A5B6440E3BCB7DC5FFCD6489C413358B28A1AEE588BB09BEBE0A89",
+        "sha256": "7C07FE213299465DFAA13F8FCCAF97D7E902D11F808D79E1B6C39243451D6D47",
         "width": 1536,
         "height": 448,
         "scale": 4,
@@ -2507,30 +2721,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm19_01/object-placement.json",
-        "sha256": "619DBA4440A9162E0C35D93F6899B224700D6363162F7795443682574649DF20",
+        "sha256": "B09D3ED6582BADEFA51C1A93479284519061C54880C81469DF6328485B829D2B",
         "sourceSha256": "942D254A951DC069B6EAAD5E13266E2272F7710DDBAE948C4C758CDA2B703E6C",
         "count": 20,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm19_01/object-cell-bank.json",
-        "sha256": "82C7C5B492057826525E2BFF1175F5ED37FE1881D7EE16D1643B534F51522D3D",
+        "sha256": "D3B8635CEC969BD33E0E286D4BEB62A9B33A26A53FA7E333FD1B16D257195FA5",
         "cellCount": 14,
         "renderedCellCount": 14,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm19_01/object-animation-bank.json",
+        "sha256": "B0D80B01C5E24BF88CEC2AA4E2ECDD9110ADD6CBA5687D0342A1CB6F70DF4113",
+        "sourceSha256": "5EF0CCF3EAA1A65EAE86B183EEFB70E8F2693E55AB59F7A5AC1CDF2AB0ED5A7E",
+        "sequenceCount": 12,
+        "totalFrameCount": 14,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm19_01/core-native.png",
         "coreSha256": "CDDC9D78083864AD9D5CC291DA34C464A7FA3FA1229AB2BF85DFBDFD29B08430",
         "staticCompositeFile": "fields/field_cm19_01/static-composite-native.png",
-        "staticCompositeSha256": "46CC625D6D69F32062002CCD7C7847F4105318AE6031A0ADFFA732EFCD5C0010",
+        "staticCompositeSha256": "1E797E0BE80BF2FFF6ADE070F16E836524A503F9449301CAE12E642EC79C4BFF",
         "cleanGoldenSha256": "0FDF0B7659FE2400FB925D08DDDE560034B90B50CA1FD0840A179CF549EEBDF1",
         "researchGoldenSha256": "F1471D24CF587DC5F00B8F100A3D2B3D9A8897C2332CB10B29FC52B7BF73408E",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 18046,
+        "archiveResearchPixelDiffCount": 18046,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -2544,7 +2769,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -2600,6 +2825,7 @@
       "nameEn": "Desert",
       "nameJp": "さばく",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "30x25",
       "layoutCells": 750,
       "nativeOriginal": {
@@ -2638,30 +2864,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm20_01/object-placement.json",
-        "sha256": "9E339730A79AD62B1FFAA6F32CEBAECA869A0CADB64E0533A4664B7A25C6ED9B",
+        "sha256": "E7E6165F1903DFA7D31B2E2590E7C84BCC52EF1F11C7F6E97F4B22144EAA5257",
         "sourceSha256": "8BEF44E1DB26C97E5F005525C966186EDFF26A74D2F69A6161F7B01F3617E5ED",
         "count": 0,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm20_01/object-cell-bank.json",
-        "sha256": "664F52C655868362B531DA8ED95565E4BA10B924E4985C21718AA36D2362BB90",
+        "sha256": "9DBA2C415164144AF9F0102E4998B8F7764D7E01131C72A03B6AD8558A106815",
         "cellCount": 2,
         "renderedCellCount": 2,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm20_01/object-animation-bank.json",
+        "sha256": "3C96EE73CC5A99261D2BC0307F87BCB5B96FC462B4F786A5E4EFA637912A2942",
+        "sourceSha256": "F91527F9F1CEDC8A681C64FFB13B72CF302202FBB8E9BAA7340E754321E9CEC5",
+        "sequenceCount": 2,
+        "totalFrameCount": 5,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm20_01/core-native.png",
         "coreSha256": "4CE132065DF348DE924033600CDDC3236B11E6FEA6F6751298808A2689B9E269",
         "staticCompositeFile": "fields/field_cm20_01/static-composite-native.png",
         "staticCompositeSha256": "4CE132065DF348DE924033600CDDC3236B11E6FEA6F6751298808A2689B9E269",
         "cleanGoldenSha256": "4CE132065DF348DE924033600CDDC3236B11E6FEA6F6751298808A2689B9E269",
         "researchGoldenSha256": "34CAE9406E93249B0246CD33C86E169A3F03A0AA675ACC43CF28BE076457A8AD",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -2675,7 +2912,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -2731,6 +2968,7 @@
       "nameEn": "Ice",
       "nameJp": "こおり",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "30x25",
       "layoutCells": 750,
       "nativeOriginal": {
@@ -2738,7 +2976,7 @@
         "sha256": "30F708109A32A07545E32D3859F083DF56576A3C5F227ACC328EEDAAD804C3B6",
         "width": 240,
         "height": 200,
-        "staticCoreObjectSourceSha256": "A3254CE8E523094FD2A314D70DCE3F101726D98EEC3D383FC26C1B68A016C935",
+        "staticCoreObjectSourceSha256": "EEF988C2D06C5AA5609606DB82C129D31DDCA29F9818CDB1E885AFF418665577",
         "composition": "STATIC_CORE_OBJECT_PLUS_ANIMATED_FRAME_0"
       },
       "faithfulHd4x": {
@@ -2769,30 +3007,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm21_01/object-placement.json",
-        "sha256": "981060FF27AFF0FA4805AD7BB7947589CE8E1EE63AC9FA55EA60527BF53CC457",
+        "sha256": "36F96C1385948C5C70B5B9B3EC820690AE646D8DF0F3BC1E790A58CDDFCD9FC6",
         "sourceSha256": "11B491DBD5D6FE3E18B63A200E49B7106E20BD9B8FEC15507024731FEA6C9984",
         "count": 0,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm21_01/object-cell-bank.json",
-        "sha256": "E357FD05838145A140FF324D8592EA6F3A529C9E69D1CB8B579826B9BD38296C",
+        "sha256": "4FAC0078FBE44D62E157433FDC537F49144C04F311C1E0DBCBF9F4193404EDB3",
         "cellCount": 2,
         "renderedCellCount": 2,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm21_01/object-animation-bank.json",
+        "sha256": "3C96EE73CC5A99261D2BC0307F87BCB5B96FC462B4F786A5E4EFA637912A2942",
+        "sourceSha256": "F91527F9F1CEDC8A681C64FFB13B72CF302202FBB8E9BAA7340E754321E9CEC5",
+        "sequenceCount": 2,
+        "totalFrameCount": 5,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm21_01/core-native.png",
         "coreSha256": "EEF988C2D06C5AA5609606DB82C129D31DDCA29F9818CDB1E885AFF418665577",
         "staticCompositeFile": "fields/field_cm21_01/static-composite-native.png",
         "staticCompositeSha256": "EEF988C2D06C5AA5609606DB82C129D31DDCA29F9818CDB1E885AFF418665577",
         "cleanGoldenSha256": "A3254CE8E523094FD2A314D70DCE3F101726D98EEC3D383FC26C1B68A016C935",
         "researchGoldenSha256": "C94B25997EBA7B5D2DA39708CFB0491ED28E782D3FF357B73FD7CD56A5F4A5E9",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -2806,7 +3055,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "PRESENT_VERIFIED_ROM_DECODED",
@@ -2835,6 +3084,7 @@
             "sha256": "635D0CB7C30413AF984E0F57FE139C48251D9465496431C99784BA44B6D04C1B"
           }
         ],
+        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER",
         "alternateCompositeFrame": {
           "file": "fields/field_cm21_01/native-composite-frame-01.png",
           "sha256": "AC82B8942E826954F98A9E00B948F0814A5E6398B408F56C2D3C91AB6455BB8C"
@@ -2844,8 +3094,7 @@
           "sha256": "0275ADA68225E249C361ECA5377686D9B0827D59560C6C8B5717C45ABC0700E4",
           "scale": 4,
           "filter": "NEAREST"
-        },
-        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER"
+        }
       },
       "sourcePayloadHashes": {
         "nbs": {
@@ -2898,19 +3147,20 @@
       "nameEn": "Power Plant",
       "nameJp": "はつでんしょ",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "24x25",
       "layoutCells": 600,
       "nativeOriginal": {
         "file": "fields/field_cm22_01/native-original.png",
-        "sha256": "80929F2BAE4656857E930527185B59B6EA661663D81F3CAD865FDE6794BD6059",
+        "sha256": "B2D002617D5071A90C12956FE729293B53E4F61248A5E0891C2A04ED91618829",
         "width": 192,
         "height": 200,
-        "staticCoreObjectSourceSha256": "80929F2BAE4656857E930527185B59B6EA661663D81F3CAD865FDE6794BD6059",
+        "staticCoreObjectSourceSha256": "B2D002617D5071A90C12956FE729293B53E4F61248A5E0891C2A04ED91618829",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm22_01/faithful-hd4x.png",
-        "sha256": "7C8A91B0021C875DF2C2E060D2784B85AAE4F2975A5CA9CF7BF252915241AF17",
+        "sha256": "775B3CD073F687AC6C7E02E123E28ADE8C97A4061015F96D31193ED482EA31DC",
         "width": 768,
         "height": 800,
         "scale": 4,
@@ -2936,30 +3186,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm22_01/object-placement.json",
-        "sha256": "117FE20BEFEA470767CACA02325B5C162A60E27BE25DE16499B37BB1919C8B0B",
+        "sha256": "D6BA9CCCD7A964FFD7578A5D16AB21CB7A87E99F425A27A137B1CD3B6B58BA77",
         "sourceSha256": "8F9908BA27D13BAC35933A8465ABFB9272CDD468FF595E0092C326039D55D6FD",
         "count": 12,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm22_01/object-cell-bank.json",
-        "sha256": "288507BF37E39002FB5EE6C2AAF414AACA98A45EA211EFAA2E74B94C595BB452",
+        "sha256": "21586B90A5A27D4F83BD00944F0DD5CDB9FD68FF6FE2D5600A3641B166CB3E3D",
         "cellCount": 9,
         "renderedCellCount": 9,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm22_01/object-animation-bank.json",
+        "sha256": "A7FF4301CF4245800D8E39BF6D6C8220673E75D0A96E29CE01729851A0E96BE4",
+        "sourceSha256": "2077D7F636DADAA2130EB1E70879FAC7B80AB2D96BF22B0DB4BA17B96134D9B8",
+        "sequenceCount": 9,
+        "totalFrameCount": 24,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm22_01/core-native.png",
         "coreSha256": "4AB719CBE0C424166BD31C5CC8B09409DD50ED411A3DC84E2D015FCFBF120D57",
         "staticCompositeFile": "fields/field_cm22_01/static-composite-native.png",
-        "staticCompositeSha256": "4AC7AAF1A6AAED46F6E19683CFDAE1A912C18E8F635657F79F22C6EA3E0D3439",
+        "staticCompositeSha256": "B2D002617D5071A90C12956FE729293B53E4F61248A5E0891C2A04ED91618829",
         "cleanGoldenSha256": "80929F2BAE4656857E930527185B59B6EA661663D81F3CAD865FDE6794BD6059",
         "researchGoldenSha256": "CD54143D9284F95A52003B3584CC67428AC7FBF3F8F6E2E31264DBF0846BFBE6",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 888,
+        "archiveResearchPixelDiffCount": 888,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -2973,7 +3234,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -3029,14 +3290,15 @@
       "nameEn": "Gas Room",
       "nameJp": "ガスルーム",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "18x25",
       "layoutCells": 450,
       "nativeOriginal": {
         "file": "fields/field_cm23_01/native-original.png",
-        "sha256": "86D1C7685499BAA0759F1B30EA3940CE852C11DE7F37B138E57B749C009B01BE",
+        "sha256": "EC88B97BE230299589D65398B47843FC4276B1F770F80342E77C1FFC62E1A12A",
         "width": 144,
         "height": 200,
-        "staticCoreObjectSourceSha256": "86D1C7685499BAA0759F1B30EA3940CE852C11DE7F37B138E57B749C009B01BE",
+        "staticCoreObjectSourceSha256": "EC88B97BE230299589D65398B47843FC4276B1F770F80342E77C1FFC62E1A12A",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
@@ -3067,30 +3329,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm23_01/object-placement.json",
-        "sha256": "2DC89DFD5B74D543BAB0813B6592300F72CEDC5B879AEC297FB7E4129C689172",
+        "sha256": "4FAADA1650F781360D53FF3A53F3E23FAF7238FAD939440952B68C07F4099A38",
         "sourceSha256": "C3E291435696F909F6EA8219D830FC7048D51ACEFC0B5ACA800E8B72FFF29D98",
         "count": 6,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm23_01/object-cell-bank.json",
-        "sha256": "8D98E3E037A5C04A5ADF1B24E430028E81D31AAFC9C02BB0E7A626D7BBE2CA36",
+        "sha256": "D3DC3DB81ED368BD01A74D01D34F63343EF859DAA5AC43952A43535D8361185B",
         "cellCount": 12,
         "renderedCellCount": 12,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm23_01/object-animation-bank.json",
+        "sha256": "5CAA5DE3186AEC087702A36C7ED6FAEABC9FFCBFEE06BE9424D9CFB5DB026EA0",
+        "sourceSha256": "C613BA5EEA783C1ACAFB43C1E97BE5D057366586B7FB2FAB2F43BB5C365CEFD8",
+        "sequenceCount": 5,
+        "totalFrameCount": 12,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm23_01/core-native.png",
         "coreSha256": "286FD52E406B403C18675D1E6D53E68CC4A1B332B05D5165234919B6BCB2940F",
         "staticCompositeFile": "fields/field_cm23_01/static-composite-native.png",
         "staticCompositeSha256": "EC88B97BE230299589D65398B47843FC4276B1F770F80342E77C1FFC62E1A12A",
         "cleanGoldenSha256": "86D1C7685499BAA0759F1B30EA3940CE852C11DE7F37B138E57B749C009B01BE",
         "researchGoldenSha256": "7AE26E0B94A4947180F2A65358218FC3120018998DC3D188E0AA7702C12D2EB4",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -3104,7 +3377,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -3160,19 +3433,20 @@
       "nameEn": "Temple",
       "nameJp": "おてら",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "12x14",
       "layoutCells": 168,
       "nativeOriginal": {
         "file": "fields/field_cm24_01/native-original.png",
-        "sha256": "C2FA5B2D667D686D83A7641B25FFD9F29E3C813FA5E0574D181ED2DE42DEAB54",
+        "sha256": "3A863DBD7C2E8C45A41099107F0F7F12365C4D5E0B4DF5108264A934EADB9D05",
         "width": 96,
         "height": 112,
-        "staticCoreObjectSourceSha256": "C2FA5B2D667D686D83A7641B25FFD9F29E3C813FA5E0574D181ED2DE42DEAB54",
+        "staticCoreObjectSourceSha256": "3A863DBD7C2E8C45A41099107F0F7F12365C4D5E0B4DF5108264A934EADB9D05",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm24_01/faithful-hd4x.png",
-        "sha256": "2BC30282294C32EC7B5FA419418C32035F7ACC420199CDDDB589913E3177844A",
+        "sha256": "4E441B0E5AB7A185C4AB9476355582944DFB5A844D59CDB682E336DE76ADE0C2",
         "width": 384,
         "height": 448,
         "scale": 4,
@@ -3198,30 +3472,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm24_01/object-placement.json",
-        "sha256": "60058B4071D54D94473D6556DC76A9552C9E0C16D58E2AE64A1C5BE3D019C0F2",
+        "sha256": "DF349D494986206A1126013C008F7132A02E6CB602732E9A31F63488FD530BE4",
         "sourceSha256": "A6EEF9C954BB6204BC254C315942B20AD9BF094EDDCA2AE6C3057EB42DBB56AE",
         "count": 5,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm24_01/object-cell-bank.json",
-        "sha256": "4E7D2DAEC122C1CDB7E78DE6C3D434F0504EFE24FC52E70E390E4A254F369813",
+        "sha256": "27919A3792EF092A098175F31B4ECBD52D4ECAC27AA63F0862CD4F82EE402FAA",
         "cellCount": 6,
         "renderedCellCount": 6,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm24_01/object-animation-bank.json",
+        "sha256": "E03334F0EED9CA50493B2E7225DFBFF080B65073BF0F574BB0641EB8ED80A136",
+        "sourceSha256": "77F2ADB58DF9904B6413D087EFE4963F1C5B5C61CAB3270E7FB7B60A75F781F3",
+        "sequenceCount": 3,
+        "totalFrameCount": 6,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm24_01/core-native.png",
         "coreSha256": "79BFDE121D2842A1A3DA72C6771078252525016DB06A40BA88E009B27803DAB0",
         "staticCompositeFile": "fields/field_cm24_01/static-composite-native.png",
-        "staticCompositeSha256": "705BE3FA5B6BCBD66D2204D591C5E6DC1CED97490C9EBF6A1C50D90757BF7F3E",
+        "staticCompositeSha256": "3A863DBD7C2E8C45A41099107F0F7F12365C4D5E0B4DF5108264A934EADB9D05",
         "cleanGoldenSha256": "C2FA5B2D667D686D83A7641B25FFD9F29E3C813FA5E0574D181ED2DE42DEAB54",
         "researchGoldenSha256": "B85D5AFDC336E549A380A0C47888421B3A5D16CEED18034A41B5D63DBEC094FE",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 2406,
+        "archiveResearchPixelDiffCount": 2406,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -3235,7 +3520,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -3291,6 +3576,7 @@
       "nameEn": "Zoo",
       "nameJp": "どうぶつえん",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "24x14",
       "layoutCells": 336,
       "nativeOriginal": {
@@ -3329,30 +3615,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm25_01/object-placement.json",
-        "sha256": "456E85FB372A4562B81F87B78D7BFE5521C35D363EF8024DFBD139B79629AC1F",
+        "sha256": "CD3FCBD97F1C46A792B52896BC4A29B17D757666D54081399F9F6362397E8549",
         "sourceSha256": "CEDE3C6DC57E9846B327D0A59B91C2CD5FF1BFA053F998AFA26041BFCE8F30A3",
         "count": 13,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm25_01/object-cell-bank.json",
-        "sha256": "2B908BD3EF1CC7C0A04A9A9FFFFD6A2180B0F4152F783C1A2E455A70ABF5FEC2",
+        "sha256": "926A6D046F251D645DB57D183129C1DDE2F969C627D07F2D7379D6DE8F06295D",
         "cellCount": 19,
         "renderedCellCount": 19,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm25_01/object-animation-bank.json",
+        "sha256": "C53FDCC1A1BB811D0BFE32B3DC9F4C3912D159F1C27080D91CC3ADCFC3D859AD",
+        "sourceSha256": "62C27A0FEFD2F63C6546028CFF32DA7611121F769C11F5BEFE1AACE530EE02E8",
+        "sequenceCount": 17,
+        "totalFrameCount": 20,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm25_01/core-native.png",
         "coreSha256": "6095D320A19644AE118FB725AC86EE9B35F45F2CA5255F38EE47B4C5331BA16C",
         "staticCompositeFile": "fields/field_cm25_01/static-composite-native.png",
         "staticCompositeSha256": "C2651FEACC316538325A76324279F9C75EEF482542E89D4EB588F16B9BF89430",
         "cleanGoldenSha256": "C2651FEACC316538325A76324279F9C75EEF482542E89D4EB588F16B9BF89430",
         "researchGoldenSha256": "77F095516BB656C3A3F0297158CC4BC95DE00BE526B07954CEDB7EE40446F22A",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -3366,7 +3663,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -3422,14 +3719,15 @@
       "nameEn": "Ranch",
       "nameJp": "ぼくじょう",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "30x25",
       "layoutCells": 750,
       "nativeOriginal": {
         "file": "fields/field_cm26_01/native-original.png",
-        "sha256": "F76164BB526589F092B84EC1866DC2417FAC330CE37A34DF4EAB97ED71D57B41",
+        "sha256": "0602AFAEFE12FC26F7B1FB7E7289E66758F10925A597A52AAF19B39B2E95DC1C",
         "width": 240,
         "height": 200,
-        "staticCoreObjectSourceSha256": "F76164BB526589F092B84EC1866DC2417FAC330CE37A34DF4EAB97ED71D57B41",
+        "staticCoreObjectSourceSha256": "0602AFAEFE12FC26F7B1FB7E7289E66758F10925A597A52AAF19B39B2E95DC1C",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
@@ -3460,30 +3758,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm26_01/object-placement.json",
-        "sha256": "FEDE55CAD0E9F6F44B5FEE2C38089B8FA82E78D14738CF80CD6B4F8C848C7D62",
+        "sha256": "4459A2BB215E2AFD262E52B6CBB173855C95C16AFCEF365424439C33864EB829",
         "sourceSha256": "E969C60CC6F088DB8FC3DCF7785B2F69CCEF4106D70F433984EEEEDB4CBF18C4",
         "count": 11,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm26_01/object-cell-bank.json",
-        "sha256": "A923A41E1828490431B43E949E9745609610602500C9A0B91D6C0ADC3294C0F2",
+        "sha256": "3E3AE943AB79772D2FAA51542C8071FC97CEB7F7579BDB54C6B6B107DDF23808",
         "cellCount": 6,
         "renderedCellCount": 6,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm26_01/object-animation-bank.json",
+        "sha256": "138FF10DC9E0C169952DEA1C0EEC8D034F8786EC287A373085C437FE1D375D5A",
+        "sourceSha256": "2FA91BBF4C9E3407665FC82961853E31F6F7E67DF1F5665799B50F047B1B853B",
+        "sequenceCount": 5,
+        "totalFrameCount": 6,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm26_01/core-native.png",
         "coreSha256": "0F96C165B15F3FC55BFD79E076B650AFD7885C5AD7A89E3C5980EA520882460D",
         "staticCompositeFile": "fields/field_cm26_01/static-composite-native.png",
         "staticCompositeSha256": "0602AFAEFE12FC26F7B1FB7E7289E66758F10925A597A52AAF19B39B2E95DC1C",
         "cleanGoldenSha256": "F76164BB526589F092B84EC1866DC2417FAC330CE37A34DF4EAB97ED71D57B41",
         "researchGoldenSha256": "2AF900CD5B727412B08BDB109ECD8BFB24D72EF5EE0BE946D0EE828BDFE818B0",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -3497,7 +3806,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -3553,14 +3862,15 @@
       "nameEn": "Ring",
       "nameJp": "リング",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "24x25",
       "layoutCells": 600,
       "nativeOriginal": {
         "file": "fields/field_cm27_01/native-original.png",
-        "sha256": "E3AE07BCCCD66F18793215AAF10107D4D9CBD0FF76F96C00619859E6001CBBA2",
+        "sha256": "8B8F4007A523437FC90E4A952969C6CDE151013FDA2B681D1F3D989D029F7963",
         "width": 192,
         "height": 200,
-        "staticCoreObjectSourceSha256": "E3AE07BCCCD66F18793215AAF10107D4D9CBD0FF76F96C00619859E6001CBBA2",
+        "staticCoreObjectSourceSha256": "8B8F4007A523437FC90E4A952969C6CDE151013FDA2B681D1F3D989D029F7963",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
@@ -3591,30 +3901,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm27_01/object-placement.json",
-        "sha256": "08ABD34A1DD787BB534BF9F114BB430F517F64C45D6E9F0E586894212DC6D6FD",
+        "sha256": "F4F02B03C19CC0E58CAFF74E0A5006F4FC10F9D507A46DF0F3ED3C74E90829A6",
         "sourceSha256": "08494BF8EE59DAA23AA59AB6FC3313CA8DC1A76D1FCCD5773AB01A613491BD8D",
         "count": 12,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm27_01/object-cell-bank.json",
-        "sha256": "D3D83BC632828D2917B7C51804F5B11043C26C97B4CC8C4465B136BEE8E0DEF9",
+        "sha256": "C47721FEDB33C3958F169D7E7B4C479120F5DD74B913CC6C9D7CE9E659DDE9BD",
         "cellCount": 7,
         "renderedCellCount": 7,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm27_01/object-animation-bank.json",
+        "sha256": "C92F571EF966ABB177D14F1CD4945A023D96BCC42BAD98C6CC7C6B2DCA42F75A",
+        "sourceSha256": "B69ABA0DD6BA616194393B5E2B0DCDE6153EDB43A4703BE65631CC9B740F32C3",
+        "sequenceCount": 7,
+        "totalFrameCount": 7,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm27_01/core-native.png",
         "coreSha256": "16BE54E1BC0C326C3BB7861A109E7CEA5B4CECB03FFE91487ECDBD349169BD45",
         "staticCompositeFile": "fields/field_cm27_01/static-composite-native.png",
         "staticCompositeSha256": "8B8F4007A523437FC90E4A952969C6CDE151013FDA2B681D1F3D989D029F7963",
         "cleanGoldenSha256": "E3AE07BCCCD66F18793215AAF10107D4D9CBD0FF76F96C00619859E6001CBBA2",
         "researchGoldenSha256": "13F62E3E3F5E79BA3808057E96C18F2EE41C6468687B9A87978B1B5EFBFDF40A",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -3628,7 +3949,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -3684,14 +4005,15 @@
       "nameEn": "Waiting Room",
       "nameJp": "ひかえしつ",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "30x25",
       "layoutCells": 750,
       "nativeOriginal": {
         "file": "fields/field_cm28_01/native-original.png",
-        "sha256": "B4F17BAFC3A7CD196F7BC4513A89A60B96598F279C2E6C9EBC4790E5810A9134",
+        "sha256": "83645C8BF31F87FA5808FDBA0E821541F1FC09E121CBCE74232CDFF9011E593A",
         "width": 240,
         "height": 200,
-        "staticCoreObjectSourceSha256": "B4F17BAFC3A7CD196F7BC4513A89A60B96598F279C2E6C9EBC4790E5810A9134",
+        "staticCoreObjectSourceSha256": "83645C8BF31F87FA5808FDBA0E821541F1FC09E121CBCE74232CDFF9011E593A",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
@@ -3722,24 +4044,28 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm28_01/object-placement.json",
-        "sha256": "7A83ED3FA6A4E182CC007AD84CD69151E7D01D1471E04EC323D32FC0C9806243",
+        "sha256": "FC782DA35B0B373D88C29A4B1D21F77A69C8F97FFDF143B2097E20CAFBC2A377",
         "sourceSha256": null,
         "count": 0,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
         "status": "NOT_PRESENT"
       },
+      "objectAnimationBank": {
+        "status": "NOT_PRESENT"
+      },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm28_01/core-native.png",
         "coreSha256": "83645C8BF31F87FA5808FDBA0E821541F1FC09E121CBCE74232CDFF9011E593A",
         "staticCompositeFile": "fields/field_cm28_01/static-composite-native.png",
         "staticCompositeSha256": "83645C8BF31F87FA5808FDBA0E821541F1FC09E121CBCE74232CDFF9011E593A",
         "cleanGoldenSha256": "B4F17BAFC3A7CD196F7BC4513A89A60B96598F279C2E6C9EBC4790E5810A9134",
         "researchGoldenSha256": "C5E35870AFDEFB58E7D9891F08B71CCFA86ACFE742095320B42BC8F085EFE35D",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -3753,7 +4079,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -3809,6 +4135,7 @@
       "nameEn": "Lid",
       "nameJp": "ふた",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "12x14",
       "layoutCells": 168,
       "nativeOriginal": {
@@ -3847,24 +4174,28 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm29_01/object-placement.json",
-        "sha256": "7A83ED3FA6A4E182CC007AD84CD69151E7D01D1471E04EC323D32FC0C9806243",
+        "sha256": "FC782DA35B0B373D88C29A4B1D21F77A69C8F97FFDF143B2097E20CAFBC2A377",
         "sourceSha256": null,
         "count": 0,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
         "status": "NOT_PRESENT"
       },
+      "objectAnimationBank": {
+        "status": "NOT_PRESENT"
+      },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm29_01/core-native.png",
         "coreSha256": "6C85AB18018882C461F3A4A84BFC05CFCE5DF2D2DFC4C78606E7EB67B27533B6",
         "staticCompositeFile": "fields/field_cm29_01/static-composite-native.png",
         "staticCompositeSha256": "6C85AB18018882C461F3A4A84BFC05CFCE5DF2D2DFC4C78606E7EB67B27533B6",
         "cleanGoldenSha256": "6C85AB18018882C461F3A4A84BFC05CFCE5DF2D2DFC4C78606E7EB67B27533B6",
         "researchGoldenSha256": "890BFD1B4787032FC49BB3078CEBDA56E06DC5A21D967E903D98822A18FA2AB4",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -3878,7 +4209,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -3934,14 +4265,15 @@
       "nameEn": "Mini Exercise",
       "nameJp": "ミニうんどうじょう",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "12x14",
       "layoutCells": 168,
       "nativeOriginal": {
         "file": "fields/field_cm30_01/native-original.png",
-        "sha256": "4598538854557E0732B9E1B8A394B494F62FB25118837AB801CF7E0F828E211E",
+        "sha256": "762D2DE9EC05354C0DD0C4662189970716D8D091AE1157F26199191552BAD19B",
         "width": 96,
         "height": 112,
-        "staticCoreObjectSourceSha256": "4598538854557E0732B9E1B8A394B494F62FB25118837AB801CF7E0F828E211E",
+        "staticCoreObjectSourceSha256": "762D2DE9EC05354C0DD0C4662189970716D8D091AE1157F26199191552BAD19B",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
@@ -3972,30 +4304,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm30_01/object-placement.json",
-        "sha256": "95A1A7859E0B3C5E3E2DF6B1FF929BC1FAB0218FAF47EE905C7CD4FD49193F3A",
+        "sha256": "FC1954D6D60207DA3704D0D03D4BA142A9197502962CC165FCE02DC96305174B",
         "sourceSha256": "BF7B68DC22B3917720F3F0ED0D67FFB2C77D7AD421847919D4F736A86A0749F9",
         "count": 1,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm30_01/object-cell-bank.json",
-        "sha256": "2E3ABEC98A25E745B49EA378018110379A5D8B60FFFCA1007F9A3D91412F69FA",
+        "sha256": "FC1FF6071B47520889922EAAFF6B64FCA154F8A35E0488ABF5D55DC081EE6458",
         "cellCount": 5,
         "renderedCellCount": 5,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm30_01/object-animation-bank.json",
+        "sha256": "3E843DDF678BADBC506B7F895AACA951DB17889F5CAFC2700AA74D9A9759FDC8",
+        "sourceSha256": "A2895869C068803887A62E5228B9151B49F24EAD19625D6C774A4D71B9DB819D",
+        "sequenceCount": 5,
+        "totalFrameCount": 5,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm30_01/core-native.png",
         "coreSha256": "09BC66324BDB9777A828EB182F163F2E6E0E9DE78762D72166AF0C29522AF838",
         "staticCompositeFile": "fields/field_cm30_01/static-composite-native.png",
         "staticCompositeSha256": "762D2DE9EC05354C0DD0C4662189970716D8D091AE1157F26199191552BAD19B",
         "cleanGoldenSha256": "4598538854557E0732B9E1B8A394B494F62FB25118837AB801CF7E0F828E211E",
         "researchGoldenSha256": "5F9C237DDAA4D54C57B0909667F89C6F2F25331B5534231C7C4F67F9AEF28584",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -4009,7 +4352,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -4065,6 +4408,7 @@
       "nameEn": "Clinic",
       "nameJp": "ほけんしつ",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "24x14",
       "layoutCells": 336,
       "nativeOriginal": {
@@ -4103,30 +4447,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm31_01/object-placement.json",
-        "sha256": "CDBD3A1F6AB43F7BDC03BDDAD3954E0D9F72CDE77DC4BEFE034D57BE9E1B4E93",
+        "sha256": "C5BC1EF904BB7CB8C822143C11DBA30CD202B8BA9B78913A82CE55C301DDF8EE",
         "sourceSha256": "6853D115764A0FF82AC23A43458AD1B9764722DCF0D9ABA2C39AC8571B418B18",
         "count": 3,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm31_01/object-cell-bank.json",
-        "sha256": "8BC0C71351F1763E0625F08AC123A677EB9AB37FF12556DDB08E8D1204807FB4",
+        "sha256": "578E5090B6D984E6AA5245FCC08EB0C620C8271A4A6A8F707A2CCBFF6890910C",
         "cellCount": 8,
         "renderedCellCount": 8,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm31_01/object-animation-bank.json",
+        "sha256": "71B9C8A1237561C4FE2F59F4F985689812CAC18B56B0E1D93A9670DD36639FBE",
+        "sourceSha256": "AFEDA9A93C5CB625CF6D45A0D24EED04B09DE62A1B70FD5EF440F6C90FF0F182",
+        "sequenceCount": 8,
+        "totalFrameCount": 8,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm31_01/core-native.png",
         "coreSha256": "3938633F98BA9E06F5998611774B17F6109C157814D057CAA7DF25C573133434",
         "staticCompositeFile": "fields/field_cm31_01/static-composite-native.png",
         "staticCompositeSha256": "A09EACC4DB56D22503F4124E148BF0E941BF04C0E442997C2050AD4A20401A27",
         "cleanGoldenSha256": "A09EACC4DB56D22503F4124E148BF0E941BF04C0E442997C2050AD4A20401A27",
         "researchGoldenSha256": "4D5D7E3AA162614A52CB82968812162C13F6ABA247F02D34EB86518E6D362B57",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -4140,7 +4495,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -4196,19 +4551,20 @@
       "nameEn": "Mini Flower Garden",
       "nameJp": "ミニはなぞの",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "12x14",
       "layoutCells": 168,
       "nativeOriginal": {
         "file": "fields/field_cm32_01/native-original.png",
-        "sha256": "49E4FBADA12561448290CC2A3F91FCBC16912DBEFA92427B6BA6ECB3BCBA1B79",
+        "sha256": "69D4FE415FC3D83F5B1C762B895AD0F4D93B7B34A27391F19EC0408AC5752CA8",
         "width": 96,
         "height": 112,
-        "staticCoreObjectSourceSha256": "49E4FBADA12561448290CC2A3F91FCBC16912DBEFA92427B6BA6ECB3BCBA1B79",
+        "staticCoreObjectSourceSha256": "69D4FE415FC3D83F5B1C762B895AD0F4D93B7B34A27391F19EC0408AC5752CA8",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm32_01/faithful-hd4x.png",
-        "sha256": "BD95000484E8EE20FE1A9C94DF12D9857833416CD9E858DB78B161E36828F273",
+        "sha256": "EA3BEF76C9946AC9174CAADA08030F7D260D61463CA7DAF301201CCC0D28C326",
         "width": 384,
         "height": 448,
         "scale": 4,
@@ -4234,30 +4590,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm32_01/object-placement.json",
-        "sha256": "386F1C29CACAB4F111270ADE239A65A1B042A843A5895A46A18C397650283032",
+        "sha256": "623AA4A5F6345A92911E71613498F645D55641A7C7BB867E5867437DD51788FD",
         "sourceSha256": "E0C2E43F59664651D2B32A08EC008544F2EEA752C2773F388DBD73AC7B32A9CD",
         "count": 7,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm32_01/object-cell-bank.json",
-        "sha256": "F961E1CE93BA90251E43ED36C495AC8737E454D72547FF8733EECC73829B642D",
+        "sha256": "FC766BE8643E1BAE6D2AA56EBD2692615C2E80BB4B1EE441413DFC3A2DB3AAC7",
         "cellCount": 4,
         "renderedCellCount": 4,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm32_01/object-animation-bank.json",
+        "sha256": "AC1A47F3B91709CD2357B5AC5DBA2055BDF5C34B71E8DD9A4EAC8628AEF43BC2",
+        "sourceSha256": "4A524A833A3692D8BB7787B8E08E8D6C53618F19412BA988098E07BB3475F256",
+        "sequenceCount": 6,
+        "totalFrameCount": 16,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm32_01/core-native.png",
         "coreSha256": "2C402BFB361EBDA9F3C046E0B50084E6286BB951905DBB4C5C4BE4F2CA95DFD2",
         "staticCompositeFile": "fields/field_cm32_01/static-composite-native.png",
-        "staticCompositeSha256": "6C2A10C430A86A687CD44C15C9877E99481018BE37BCC45083425A72DE2A12D9",
+        "staticCompositeSha256": "69D4FE415FC3D83F5B1C762B895AD0F4D93B7B34A27391F19EC0408AC5752CA8",
         "cleanGoldenSha256": "49E4FBADA12561448290CC2A3F91FCBC16912DBEFA92427B6BA6ECB3BCBA1B79",
         "researchGoldenSha256": "C81134BE936DF81B56D4BC914E445F67A4168DA9C0D87311BF13761E87869015",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 276,
+        "archiveResearchPixelDiffCount": 276,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -4271,7 +4638,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -4327,14 +4694,15 @@
       "nameEn": "Mini Forest",
       "nameJp": "ミニもり",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "12x14",
       "layoutCells": 168,
       "nativeOriginal": {
         "file": "fields/field_cm33_01/native-original.png",
-        "sha256": "9C08F42403527F5322EF78A5A50FB03F46D713E98F7F75F8F72AE1E9847379D7",
+        "sha256": "DD9D4F1C4085FE71BDD48A366F6746B16C84547AF8A4B48FE5980297D214A498",
         "width": 96,
         "height": 112,
-        "staticCoreObjectSourceSha256": "9C08F42403527F5322EF78A5A50FB03F46D713E98F7F75F8F72AE1E9847379D7",
+        "staticCoreObjectSourceSha256": "DD9D4F1C4085FE71BDD48A366F6746B16C84547AF8A4B48FE5980297D214A498",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
@@ -4365,30 +4733,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm33_01/object-placement.json",
-        "sha256": "151185552CE93015649951B5476D997BC70F70F37EF0AFDA498279CC82AE3300",
+        "sha256": "E4798F0805B2F0A55776280164D7C822F49419344A0E3CA2DCEFEC30055DF10E",
         "sourceSha256": "CC2FFBAB860074006A559995AA51B55AB21066C7BF86293816FE2258A4494472",
         "count": 1,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm33_01/object-cell-bank.json",
-        "sha256": "C44279DBCCB64673899BAC6AED507E1901A2241864D1099749D6EB0D9F97264A",
+        "sha256": "3FFA7956FB0A58C475BC5C30479B8FCA273EE2FE1FE7E4A6702EB8F07263C9A0",
         "cellCount": 2,
         "renderedCellCount": 2,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm33_01/object-animation-bank.json",
+        "sha256": "D60F1A241AB69579F190E97AFE516909DAA2F9299A46E6C980148535FBA2F9C9",
+        "sourceSha256": "BBD6064292883E36B3DC7EB3CE747ADF5E95BFABA531FEA45FEA6E67A6AE1CB0",
+        "sequenceCount": 2,
+        "totalFrameCount": 2,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm33_01/core-native.png",
         "coreSha256": "E21551DC6439349ACC77197FDE42542E82E44646B8E5F1706A01E738EC07DBB5",
         "staticCompositeFile": "fields/field_cm33_01/static-composite-native.png",
         "staticCompositeSha256": "DD9D4F1C4085FE71BDD48A366F6746B16C84547AF8A4B48FE5980297D214A498",
         "cleanGoldenSha256": "9C08F42403527F5322EF78A5A50FB03F46D713E98F7F75F8F72AE1E9847379D7",
         "researchGoldenSha256": "21F286C8AF23F8AC9DDCF7001A5FADEB2C4CDEC5E87BD3FF3B7E63DB00CC1BD9",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -4402,7 +4781,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -4458,6 +4837,7 @@
       "nameEn": "Mini Gym",
       "nameJp": "ミニジム",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "12x14",
       "layoutCells": 168,
       "nativeOriginal": {
@@ -4496,30 +4876,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm34_01/object-placement.json",
-        "sha256": "BC553F88A88728AF62C6F3329EFE212360AA475A3FF0EABC6E979B72D53068B9",
+        "sha256": "6196ECD4617D45DD7EC0AC3E45F4BA85AFD2A6C3B963425D6AF06F2CBCF21C52",
         "sourceSha256": "FA9AA1096E3993E09CE9699BD59DFC1D27519062AB015AFE3FF37A6B30251A95",
         "count": 3,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm34_01/object-cell-bank.json",
-        "sha256": "88C35BD5D61EDBC25CA9EF29F49BFFCA09339A04202E2AF1B398C2EF57AAEE9F",
+        "sha256": "5C084C06D22DEC01139713DE98419BF222013D2F026AF3ED284A1CA6A807C27C",
         "cellCount": 4,
         "renderedCellCount": 4,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm34_01/object-animation-bank.json",
+        "sha256": "767636D3166E7DDAE3159DF7E3EAB3FDB7383F14BB6B0357A8791D492B0E9C01",
+        "sourceSha256": "E249EA53970594AB88021C4D4D63294CC8AA164CC14CAF02C21B684A58614C37",
+        "sequenceCount": 4,
+        "totalFrameCount": 4,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm34_01/core-native.png",
         "coreSha256": "E1AEDFF00E9ADE167D55923267F88269B6721B6D3F9778099826F6CAD1C475A0",
         "staticCompositeFile": "fields/field_cm34_01/static-composite-native.png",
         "staticCompositeSha256": "FA21582CB1BF91EE1153E3F21EB3907B6C75D1C27B5F463033B6C8B462321212",
         "cleanGoldenSha256": "FA21582CB1BF91EE1153E3F21EB3907B6C75D1C27B5F463033B6C8B462321212",
         "researchGoldenSha256": "42EA6D43508235255C582AE506A53094295D7684DF8E7A4FCE6F0ED522FAA266",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -4533,7 +4924,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -4589,14 +4980,15 @@
       "nameEn": "Mini Volcano",
       "nameJp": "ミニかざん",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "12x14",
       "layoutCells": 168,
       "nativeOriginal": {
         "file": "fields/field_cm35_01/native-original.png",
-        "sha256": "82DFEC5260F8B640620B3ED5345520C74C02DA85D596A4AF359071E76A57F4C2",
+        "sha256": "B3759C766DDC78313420735D0A8E58D3B95A438B9040E26A3FC02342D59B9CE5",
         "width": 96,
         "height": 112,
-        "staticCoreObjectSourceSha256": "82DFEC5260F8B640620B3ED5345520C74C02DA85D596A4AF359071E76A57F4C2",
+        "staticCoreObjectSourceSha256": "B3759C766DDC78313420735D0A8E58D3B95A438B9040E26A3FC02342D59B9CE5",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
@@ -4627,30 +5019,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm35_01/object-placement.json",
-        "sha256": "87D59D4EE8222FA219242E2F2C9D7F55E7DBD70C1D4BE958525603BF424F3D37",
+        "sha256": "5E785CACF3B49833E43AFACF4F23EE53BE4FBC32188B90F9CCECE16F0D33795B",
         "sourceSha256": "6D7272C34B11E2EE194A7E3F48D406B4321D8B5F89EF38137C7D9A916647AEBB",
         "count": 0,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm35_01/object-cell-bank.json",
-        "sha256": "035DC683E778115E8D336FFA12E2EB5CF3146E42EB5F2A7944CE8FC619918866",
+        "sha256": "EE2FF881878E9EAB85011BD0085BC1A94C9F4954EAAA5C4C407BD5257D6CA879",
         "cellCount": 2,
         "renderedCellCount": 2,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm35_01/object-animation-bank.json",
+        "sha256": "3C96EE73CC5A99261D2BC0307F87BCB5B96FC462B4F786A5E4EFA637912A2942",
+        "sourceSha256": "F91527F9F1CEDC8A681C64FFB13B72CF302202FBB8E9BAA7340E754321E9CEC5",
+        "sequenceCount": 2,
+        "totalFrameCount": 5,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm35_01/core-native.png",
         "coreSha256": "B3759C766DDC78313420735D0A8E58D3B95A438B9040E26A3FC02342D59B9CE5",
         "staticCompositeFile": "fields/field_cm35_01/static-composite-native.png",
         "staticCompositeSha256": "B3759C766DDC78313420735D0A8E58D3B95A438B9040E26A3FC02342D59B9CE5",
         "cleanGoldenSha256": "82DFEC5260F8B640620B3ED5345520C74C02DA85D596A4AF359071E76A57F4C2",
         "researchGoldenSha256": "F7AB3D47CDECAF2F94C2F7C63DEC1B05DCB495743D9DA9F37F7CA532AC640D2E",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -4664,7 +5067,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -4720,6 +5123,7 @@
       "nameEn": "Mini Ice",
       "nameJp": "ミニこおり",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "12x14",
       "layoutCells": 168,
       "nativeOriginal": {
@@ -4758,30 +5162,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm36_01/object-placement.json",
-        "sha256": "CB6C988CBA5FFC7266D37467A839B66A8B228D5257E68E8194B63E3B3620E874",
+        "sha256": "FAEA9FCDDEB3F0C6FB3490C5F779290DB71EB3078A94EFD4A94D9036962E9C01",
         "sourceSha256": "BEF711A3F30CA39DA2DE0A336C4803D0014A796AAD426B5103E658A85CB54C64",
         "count": 0,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm36_01/object-cell-bank.json",
-        "sha256": "089FC9106B796193EF768FACEE93487B961CF3986EB12C036C397281A4513DF9",
+        "sha256": "A6E8EB1C6D0C8A0D2E495DB0AAD2A58B62AF0BED3408F40AACD3F7B726FC79F2",
         "cellCount": 2,
         "renderedCellCount": 2,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm36_01/object-animation-bank.json",
+        "sha256": "3C96EE73CC5A99261D2BC0307F87BCB5B96FC462B4F786A5E4EFA637912A2942",
+        "sourceSha256": "F91527F9F1CEDC8A681C64FFB13B72CF302202FBB8E9BAA7340E754321E9CEC5",
+        "sequenceCount": 2,
+        "totalFrameCount": 5,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm36_01/core-native.png",
         "coreSha256": "299FAFE111E0B77AB79113DC349CCBB73E83D0ACAFB060FAA2EC04846AC59C90",
         "staticCompositeFile": "fields/field_cm36_01/static-composite-native.png",
         "staticCompositeSha256": "299FAFE111E0B77AB79113DC349CCBB73E83D0ACAFB060FAA2EC04846AC59C90",
         "cleanGoldenSha256": "299FAFE111E0B77AB79113DC349CCBB73E83D0ACAFB060FAA2EC04846AC59C90",
         "researchGoldenSha256": "AE4C200EE9278E0DF113969D6E77C0E8A807A8978B480E73ED93FE7F1FBAAB25",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -4795,7 +5210,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -4851,6 +5266,7 @@
       "nameEn": "Mini Mine",
       "nameJp": "ミニこうざん",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "12x14",
       "layoutCells": 168,
       "nativeOriginal": {
@@ -4889,30 +5305,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm37_01/object-placement.json",
-        "sha256": "73C73767840D10EE2006BF706CCAEFFB7DDEAC638B8F68CE9D7C730A17CEF247",
+        "sha256": "96006E6AE82FC6FCD720A93388E291EB53164FC2C44A19A770DBCD14180E267C",
         "sourceSha256": "05C7F4C0BE37FAFEE38837EEC20102162050781F672D6275F2DFB2B0377E21AE",
         "count": 0,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm37_01/object-cell-bank.json",
-        "sha256": "3B883B409677C2DCB9DD8EE3462902EB9AEE63326CD53FE1FBE69ADCFC7B36ED",
+        "sha256": "3611C291B826B3C8BF66B8AA3F4B9A0FD6DCD72419B10398ADD82E05F1B9A285",
         "cellCount": 5,
         "renderedCellCount": 5,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm37_01/object-animation-bank.json",
+        "sha256": "615E0102D0D399E1C667A771605F2B43A48EF17BA1C0F2A4F58559EBB84824CC",
+        "sourceSha256": "3B0561139A80A658AE2635DA739408402600D2BCFC7EF1E29BE24CB6E1AB168E",
+        "sequenceCount": 5,
+        "totalFrameCount": 5,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm37_01/core-native.png",
         "coreSha256": "9C815D2070703A1E4662DA1222337F6FD51F2400F335C9CC62308320B79A88E3",
         "staticCompositeFile": "fields/field_cm37_01/static-composite-native.png",
         "staticCompositeSha256": "9C815D2070703A1E4662DA1222337F6FD51F2400F335C9CC62308320B79A88E3",
         "cleanGoldenSha256": "9C815D2070703A1E4662DA1222337F6FD51F2400F335C9CC62308320B79A88E3",
         "researchGoldenSha256": "0FEDD63319BDE38E0DA9D374B7CF33DF360AC80656AA4630531D343E69360906",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -4926,7 +5353,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -4982,19 +5409,20 @@
       "nameEn": "Mini Factory",
       "nameJp": "ミニこうじょう",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "12x14",
       "layoutCells": 168,
       "nativeOriginal": {
         "file": "fields/field_cm38_01/native-original.png",
-        "sha256": "5A0E89A7DDBCC97CCD260ADAC13BC23CC4A0FE17CAACD8F4C34F3A7744E7B1C4",
+        "sha256": "10222417EBEFD2900BE463287959CEFADC0FAF3F7054AAA6DED48DDB54D42FC7",
         "width": 96,
         "height": 112,
-        "staticCoreObjectSourceSha256": "5A0E89A7DDBCC97CCD260ADAC13BC23CC4A0FE17CAACD8F4C34F3A7744E7B1C4",
+        "staticCoreObjectSourceSha256": "10222417EBEFD2900BE463287959CEFADC0FAF3F7054AAA6DED48DDB54D42FC7",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
         "file": "fields/field_cm38_01/faithful-hd4x.png",
-        "sha256": "6C9573F0A42EA5D4AC9DD3073884CDD9CACAE098AF2F30756748E36DE20C9F48",
+        "sha256": "263308AEE83132330622618CEF77D31A9860A7B8CECE9ED24ABB49D6936AE734",
         "width": 384,
         "height": 448,
         "scale": 4,
@@ -5020,30 +5448,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm38_01/object-placement.json",
-        "sha256": "EC3F21AA1D40ECB0D42B167318FDEB24E297A183E22A65E293C734BC5B3AFF45",
+        "sha256": "28E894F8A0605F2585964017A89888822A342DBE49D516C2D05F43E380850DF7",
         "sourceSha256": "C19655FF47D3F3755360CA9C0FCA2456D74F007E560BC3ECB448E6D3F0D7EA36",
         "count": 10,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm38_01/object-cell-bank.json",
-        "sha256": "A618A10E58262E030D55DC60D6A3778E16BF9786B32CB96ABFB97DF5E8B4FD9A",
+        "sha256": "34794CC857885095445FD3EA205FCAB27347C2188915903CAF478B1153348147",
         "cellCount": 16,
         "renderedCellCount": 16,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm38_01/object-animation-bank.json",
+        "sha256": "6A8C5509FA55997733E5A312DFE3F4892342536CD8B329E293F316EEF9BFC85B",
+        "sourceSha256": "DCD0B839C5EA3C8BB0A011DC39958D99A766B6A9F2B4B0724FEBE3462C90C280",
+        "sequenceCount": 6,
+        "totalFrameCount": 21,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm38_01/core-native.png",
         "coreSha256": "B8AB35B765BCEB8E3B07BFE566003E9A208EF8C7D95F984E1B2F3D8107BADBF6",
         "staticCompositeFile": "fields/field_cm38_01/static-composite-native.png",
-        "staticCompositeSha256": "0FD5E12BBA3551AD5BF4026BFA79BA79BF71C0F6137357716A0D0F591AEFFD3C",
+        "staticCompositeSha256": "10222417EBEFD2900BE463287959CEFADC0FAF3F7054AAA6DED48DDB54D42FC7",
         "cleanGoldenSha256": "5A0E89A7DDBCC97CCD260ADAC13BC23CC4A0FE17CAACD8F4C34F3A7744E7B1C4",
         "researchGoldenSha256": "23F5E449369D6779FFA68AA04B0770235DED6445801BF5020376A35056240EF2",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 5700,
+        "archiveResearchPixelDiffCount": 5700,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -5057,7 +5496,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -5113,6 +5552,7 @@
       "nameEn": "Mini Beach",
       "nameJp": "ミニビーチ",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "12x14",
       "layoutCells": 168,
       "nativeOriginal": {
@@ -5151,30 +5591,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm39_01/object-placement.json",
-        "sha256": "B893C28A53F63D795DD9FD91C935ED5E2BF4A0A516B05848FFAE4A9A9AA31700",
+        "sha256": "6A008A4EE919748C56CE121A386D1111960253D4D8ABB7BC7A4D5146482896CD",
         "sourceSha256": "928E9C8038ED9C6EF572F43EC906785D1C98D8BE9331885AC4B0005797B5D2E2",
         "count": 1,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm39_01/object-cell-bank.json",
-        "sha256": "45C2EAAB41BD9C73EDF3AD7B4441164ED5F61DEF8857DB388DD7706D2C79888C",
+        "sha256": "A25D4CA970F66E843826B80CD1C4CD1C8AD22893A68EAD694BE947CB0C9D7A2B",
         "cellCount": 2,
         "renderedCellCount": 2,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm39_01/object-animation-bank.json",
+        "sha256": "A82677997EAED36F32F23893071D2EFCA66A1988BF90EE78D73AF930377CCDBF",
+        "sourceSha256": "642E0382B5E83CE086AA9C8A00E1495D303EA45B0C46544B547DE01C3FF29306",
+        "sequenceCount": 2,
+        "totalFrameCount": 2,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm39_01/core-native.png",
         "coreSha256": "C5F9E9C0346E53164D98127E023DDF033DFB99DDED74B90430C95D3287B81F00",
         "staticCompositeFile": "fields/field_cm39_01/static-composite-native.png",
         "staticCompositeSha256": "F2B3A8DE7672CF4C9D83F82972A82A5F92055082FFD1A5DCFD83A0893F8D4F85",
         "cleanGoldenSha256": "F2B3A8DE7672CF4C9D83F82972A82A5F92055082FFD1A5DCFD83A0893F8D4F85",
         "researchGoldenSha256": "50E95B0BBFB37DCA47B4180C3AB15E45A440E46BD2AA0AA6763534E88439F875",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -5188,7 +5639,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "PRESENT_VERIFIED_ROM_DECODED",
@@ -5217,6 +5668,7 @@
             "sha256": "5B532756732E9E7137CF01D6B24BCC37E1D586F602DF9322CE065B0B4991969E"
           }
         ],
+        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER",
         "alternateCompositeFrame": {
           "file": "fields/field_cm39_01/native-composite-frame-01.png",
           "sha256": "3D99C20AD22039B9D4A80BA26F62D46A273E2B562957433D759FB15C2FD02EF1"
@@ -5226,8 +5678,7 @@
           "sha256": "ACE51F1404591C3EFEE2D7280E9C229F58ED1CAF0F3F99A4EFCAD3BBDA956754",
           "scale": 4,
           "filter": "NEAREST"
-        },
-        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER"
+        }
       },
       "sourcePayloadHashes": {
         "nbs": {
@@ -5280,14 +5731,15 @@
       "nameEn": "Cave",
       "nameJp": "どうくつ",
       "compositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
+      "archiveCompositionConfidence": "FULL_COMPOSITION_CONFIDENCE",
       "originalDimensions": "12x14",
       "layoutCells": 168,
       "nativeOriginal": {
         "file": "fields/field_cm40_01/native-original.png",
-        "sha256": "27474FA6AAB08684BE4C2F761C65D187239455D2A06C1AE0AD5E8AEEDB33D244",
+        "sha256": "5CE17C1A4630401C31C7ADB4F01706272DF904C1A4EA8A22956693D670580040",
         "width": 96,
         "height": 112,
-        "staticCoreObjectSourceSha256": "27474FA6AAB08684BE4C2F761C65D187239455D2A06C1AE0AD5E8AEEDB33D244",
+        "staticCoreObjectSourceSha256": "5CE17C1A4630401C31C7ADB4F01706272DF904C1A4EA8A22956693D670580040",
         "composition": "STATIC_CORE_OBJECT"
       },
       "faithfulHd4x": {
@@ -5318,30 +5770,41 @@
       },
       "objectPlacement": {
         "file": "fields/field_cm40_01/object-placement.json",
-        "sha256": "F283079B1BCDE2E4C8ECFD42EBFF339D3C96E84A19EC1BA5A7FB3F391D11CDD6",
+        "sha256": "6AEC68AECD7C0A284775A9C74BC2CFD2BAD89B0921E982E113F19E4CEEA186C2",
         "sourceSha256": "A4BA46B57E9150629185F4B1D1DCA62F366537D79D71B9BD30CB58FBD136F11B",
         "count": 0,
-        "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+        "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
       },
       "objectCellBank": {
-        "status": "PRESENT_EXACTLY_RECOMPOSED",
+        "status": "PRESENT_NANR_SEQUENCE_RESOLVED_EXACTLY_RECOMPOSED",
         "file": "fields/field_cm40_01/object-cell-bank.json",
-        "sha256": "9797B6D263D297C6A6FA6DA1BBE476EA414A4F04D9C3A27DD3AC8E1F471D3E73",
+        "sha256": "5C909F60EB6A99408746BC8E7A68010041F8C2C083BD010806DACD38842EEE17",
         "cellCount": 2,
         "renderedCellCount": 2,
-        "invalidPlacementCellIds": [],
-        "placementBindingAuthority": "VERIFIED_RAW_CELL_WORD_BINDING"
+        "invalidPlacementSequenceIds": [],
+        "invalidAnimationCellIds": [],
+        "placementBindingAuthority": "VERIFIED_OPMD_TO_NANR_TO_NCER_BINDING"
+      },
+      "objectAnimationBank": {
+        "status": "PRESENT_VERIFIED_NANR_SEQUENCE_BANK",
+        "file": "fields/field_cm40_01/object-animation-bank.json",
+        "sha256": "3C96EE73CC5A99261D2BC0307F87BCB5B96FC462B4F786A5E4EFA637912A2942",
+        "sourceSha256": "F91527F9F1CEDC8A681C64FFB13B72CF302202FBB8E9BAA7340E754321E9CEC5",
+        "sequenceCount": 2,
+        "totalFrameCount": 5,
+        "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL"
       },
       "exactStaticAssembly": {
-        "status": "RAW_STATIC_PIXEL_EXACT",
+        "status": "RAW_STATIC_RECOMPOSED_WITH_NANR_SEQUENCE_BINDING",
         "coreFile": "fields/field_cm40_01/core-native.png",
         "coreSha256": "5CE17C1A4630401C31C7ADB4F01706272DF904C1A4EA8A22956693D670580040",
         "staticCompositeFile": "fields/field_cm40_01/static-composite-native.png",
         "staticCompositeSha256": "5CE17C1A4630401C31C7ADB4F01706272DF904C1A4EA8A22956693D670580040",
         "cleanGoldenSha256": "27474FA6AAB08684BE4C2F761C65D187239455D2A06C1AE0AD5E8AEEDB33D244",
         "researchGoldenSha256": "1D1E64227E00685F026A439D1B69363C2AE3393F87F4190E9AE3DA89846DEE51",
-        "cleanPixelDiffCount": 0,
-        "researchPixelDiffCount": 0,
+        "archiveCleanPixelDiffCount": 0,
+        "archiveResearchPixelDiffCount": 0,
+        "archiveComparisonSemantics": "OLD_DIRECT_CELL_RECONSTRUCTION_IS_DIAGNOSTIC_ONLY_NOT_BINDING",
         "tileEntrySemantics": "DIRECT_14_BIT_TILE_INDEX_PLUS_HIGH_2_FLIP_FLAGS",
         "coreGraphics": {
           "formatCode": 4,
@@ -5355,7 +5818,7 @@
           "colorEncoding": "BGR555",
           "colorCount": 256
         },
-        "layerOrder": "CORE_THEN_OPM_NCER_NCBR_OBJECTS"
+        "layerOrder": "CORE_THEN_OPMD_NANR_SEQUENCE_FRAME_0_NCER_NCBR_OBJECTS"
       },
       "animatedLayer": {
         "status": "NOT_PRESENT"
@@ -5410,12 +5873,13 @@
     "all40HdRoundTripPixelExact": true,
     "all40CollisionDimensionsMatchTilemaps": true,
     "all40AttributeDimensionsMatchTilemaps": true,
-    "all40CoreAndStaticLayersRecomposedPixelExactly": true,
-    "objectCellBanksExactlyRecomposed": 36,
+    "all40CoreAndStaticLayersRecomposedFromRaw": true,
+    "objectCellBanksExactlyRecomposed": 38,
+    "objectAnimationBanksDecoded": 38,
     "allFourAnimatedLayerBundlesDecoded": true,
     "animatedLayerFramesDecoded": 8,
     "objectPlacementRelayoutPerformed": false,
     "unknownClassSemanticsInvented": false,
-    "cm12Cm18ObjectConflictBound": false
+    "cm12Cm18ObjectSequenceBindingResolved": true
   }
 }

@@ -107,7 +107,7 @@ source reports, contracts, manifests, tests, and Git state remain authoritative.
 - O2 Character Master Catalog: 224/224 decoded entities (216 regular, 8
   eggs), 224 Main and 224 Sub sheets; zero new high-resolution redraws. Four
   ART-R2R representatives remain the only fidelity baselines.
-- Training/Cage O3-B: 40/40 core, 38/40 full; CM12/CM18 remain partial.
+- Training/Cage O3-B: 40/40 core and 40/40 full; CM12/CM18 sequence bindings resolved.
 - Hunt O3-C: 16/16 biome representatives; 29 variants audited; 13 alternatives
   remain archival backlog.
 - Battle O3-D: 11/11 static, Owner-approved reference baseline.
@@ -186,7 +186,7 @@ Source: 2632ddf:docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.jso
 - CL-003/CL-004: exact care state changes and Cage capacity/effects remain
   unknown. Exact care values were not directly proven by the bounded trace.
 - CX-003: BM03/BM04 animated Battle placement/timing unknown.
-- CX-004: CM12/CM18 object linkage conflicts quarantined.
+- CX-004 is `CLOSED`: CM12/CM18 OPMD sequence IDs resolve through NANR to valid NCER cells.
 - CX-005: creature animation semantic names remain blocked at RAW_SLOT_XX.
 - CX-006: P2/P2R remains retained proof; legacy P3-P6 is
   `SUPERSEDED_FROZEN`, with production completion moved to the gated VS7 plan.

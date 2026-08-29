@@ -7,6 +7,7 @@ import {
   parseOriginalCageAtr,
   parseOriginalCageBsar,
   parseOriginalCageCol,
+  parseOriginalCageNanr,
   parseOriginalCageNbs,
   parseOriginalCageOpm,
 } from "../scripts/lib/cage-original-formats.mjs";
@@ -32,8 +33,10 @@ test("faithful Cage HD baseline covers all 40 original visual fields", () => {
   assert.equal(manifest.fieldCount, 40);
   assert.equal(manifest.fields.length, 40);
   assert.equal(new Set(manifest.fields.map((field) => field.fieldId)).size, 40);
-  assert.equal(manifest.fullCompositionConfidenceCount, 38);
-  assert.deepEqual(manifest.partialObjectConflictFields, ["field_cm12_01", "field_cm18_01"]);
+  assert.equal(manifest.fullCompositionConfidenceCount, 40);
+  assert.equal(manifest.archiveFullCompositionConfidenceCount, 38);
+  assert.deepEqual(manifest.partialObjectConflictFields, []);
+  assert.deepEqual(manifest.resolvedObjectSequenceBindingFields, ["field_cm12_01", "field_cm18_01"]);
   assert.equal(manifest.animatedLayerFieldCount, 4);
   assert.deepEqual(manifest.animatedLayerFields, ["field_cm07_01", "field_cm09_01", "field_cm21_01", "field_cm39_01"]);
   assert.match(manifest.visualPolicy, /NO_RELAYOUT_NO_RECOLOR_NO_REDESIGN/);
@@ -54,6 +57,7 @@ test("every HD image is exactly 4x the verified native dimensions and all derive
       { file: field.exactStaticAssembly.staticCompositeFile, sha256: field.exactStaticAssembly.staticCompositeSha256 },
     );
     if (field.objectCellBank.status !== "NOT_PRESENT") records.push(field.objectCellBank);
+    if (field.objectAnimationBank.status !== "NOT_PRESENT") records.push(field.objectAnimationBank);
     if (field.animatedLayer.status === "PRESENT_VERIFIED_ROM_DECODED") {
       records.push(field.animatedLayer, ...field.animatedLayer.layerFrames, field.animatedLayer.alternateCompositeFrame, field.animatedLayer.alternateFaithfulHd4xFrame);
       assert.equal(field.animatedLayer.frameCount, 2);
@@ -71,6 +75,15 @@ test("every HD image is exactly 4x the verified native dimensions and all derive
         const file = `${root}/${cell.file}`;
         assert.equal(fs.existsSync(file), true, file);
         assert.equal(digest(file), cell.sha256, file);
+      }
+      const animationBank = JSON.parse(fs.readFileSync(`${root}/${field.objectAnimationBank.file}`, "utf8"));
+      assert.equal(animationBank.sequenceCount, field.objectAnimationBank.sequenceCount);
+      assert.equal(animationBank.totalFrameCount, field.objectAnimationBank.totalFrameCount);
+      assert.match(animationBank.bindingSemantics, /OPMD_LOW14_SELECTS_NANR_SEQUENCE/);
+      for (const sequence of animationBank.sequences) {
+        assert.ok(sequence.frameCount >= 1);
+        assert.equal(sequence.frames.length, sequence.frameCount);
+        for (const frame of sequence.frames) assert.equal(frame.rawMarker, 0xbeef);
       }
     }
   }
@@ -96,19 +109,24 @@ test("collision, attribute, tilemap and placement data preserve original raw cla
     for (const item of placement.placements) {
       assert.equal(item.coordinateAuthority, "VERIFIED_SOURCE_REFERENCE_COORDINATES");
     }
-    if (manifest.partialObjectConflictFields.includes(field.fieldId)) {
-      assert.equal(placement.quarantined, true);
-      assert.equal(placement.authority, "ORIGINAL_OBJECT_INDEX_CONFLICT_DO_NOT_BIND");
-    } else {
-      assert.equal(placement.quarantined, false);
+    assert.equal(placement.quarantined, false);
+    assert.equal(placement.authority, "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR");
+    for (const item of placement.placements) {
+      assert.ok(Number.isInteger(item.sequenceId));
+      if (field.objectAnimationBank.status !== "NOT_PRESENT") {
+        assert.ok(Number.isInteger(item.resolvedFirstFrameCellId));
+        assert.ok(item.sequenceFrameCount >= 1);
+      }
     }
   }
   assert.equal(manifest.qa.objectPlacementRelayoutPerformed, false);
   assert.equal(manifest.qa.unknownClassSemanticsInvented, false);
   assert.equal(manifest.qa.allFourAnimatedLayerBundlesDecoded, true);
   assert.equal(manifest.qa.animatedLayerFramesDecoded, 8);
-  assert.equal(manifest.qa.all40CoreAndStaticLayersRecomposedPixelExactly, true);
-  assert.equal(manifest.qa.objectCellBanksExactlyRecomposed, 36);
+  assert.equal(manifest.qa.all40CoreAndStaticLayersRecomposedFromRaw, true);
+  assert.equal(manifest.qa.objectCellBanksExactlyRecomposed, 38);
+  assert.equal(manifest.qa.objectAnimationBanksDecoded, 38);
+  assert.equal(manifest.qa.cm12Cm18ObjectSequenceBindingResolved, true);
 });
 
 test("browser-side original Cage format parsers preserve raw values", () => {
@@ -150,11 +168,36 @@ test("browser-side original Cage format parsers preserve raw values", () => {
   opmView.setFloat32(28, 1, true);
   const opm = parseOriginalCageOpm(opmBytes);
   assert.equal(opm.placementCount, 1);
-  assert.deepEqual([opm.placements[0].cellId, opm.placements[0].sourceX, opm.placements[0].sourceY], [2, 68, 88]);
+  assert.deepEqual([opm.placements[0].sequenceId, opm.placements[0].sourceX, opm.placements[0].sourceY], [2, 68, 88]);
   assert.deepEqual(
-    [opm.placements[0].rawCellWord, opm.placements[0].horizontalFlip, opm.placements[0].verticalFlip],
+    [opm.placements[0].rawSequenceWord, opm.placements[0].horizontalFlip, opm.placements[0].verticalFlip],
     [2 | 0x4000, false, true],
   );
+
+  const nanrBytes = new Uint8Array(127);
+  nanrBytes.set(new TextEncoder().encode("RNAN"));
+  nanrBytes.set(new TextEncoder().encode("KNBA"), 16);
+  const nanrView = new DataView(nanrBytes.buffer);
+  nanrView.setUint16(24, 3, true);
+  nanrView.setUint16(26, 3, true);
+  nanrView.setUint32(28, 24, true);
+  nanrView.setUint32(32, 72, true);
+  nanrView.setUint32(36, 96, true);
+  for (let index = 0; index < 3; index += 1) {
+    const sequenceOffset = 48 + index * 16;
+    nanrView.setUint16(sequenceOffset, 1, true);
+    nanrView.setUint32(sequenceOffset + 12, index * 8, true);
+    const frameOffset = 96 + index * 8;
+    nanrView.setUint32(frameOffset, index * 2, true);
+    nanrView.setUint16(frameOffset + 4, 20 + index, true);
+    nanrView.setUint16(frameOffset + 6, 0xbeef, true);
+  }
+  nanrView.setUint16(120, 0, true);
+  nanrView.setUint16(122, 1, true);
+  nanrView.setUint16(124, 0, true);
+  const nanr = parseOriginalCageNanr(nanrBytes);
+  assert.deepEqual([nanr.sequenceCount, nanr.totalFrameCount], [3, 3]);
+  assert.deepEqual(nanr.sequences.map((sequence) => sequence.frames[0].cellId), [0, 1, 0]);
 
   const bsarBytes = new Uint8Array(46);
   bsarBytes.set(new TextEncoder().encode("BSAR"));

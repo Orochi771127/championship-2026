@@ -1,0 +1,95 @@
+{
+  "format": "YDIJ_NANR_SEQUENCE_BANK",
+  "sourceSha256": "852F611E52A6B9D7386D06E96DCACD82FAA68DD615A30C69460DC38278E5DACC",
+  "sequenceCount": 4,
+  "totalFrameCount": 6,
+  "sequenceTableOffset": 24,
+  "frameTableOffset": 88,
+  "resultTableOffset": 136,
+  "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+  "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL",
+  "sequences": [
+    {
+      "sequenceId": 0,
+      "frameCount": 2,
+      "loopStartFrame": 0,
+      "rawWordA": 65536,
+      "rawWordB": 2,
+      "relativeFrameOffset": 0,
+      "frames": [
+        {
+          "frameIndex": 0,
+          "cellId": 0,
+          "rawDurationTicks": 50,
+          "rawMarker": 48879,
+          "relativeResultOffset": 0
+        },
+        {
+          "frameIndex": 1,
+          "cellId": 1,
+          "rawDurationTicks": 12,
+          "rawMarker": 48879,
+          "relativeResultOffset": 2
+        }
+      ]
+    },
+    {
+      "sequenceId": 1,
+      "frameCount": 1,
+      "loopStartFrame": 0,
+      "rawWordA": 65536,
+      "rawWordB": 1,
+      "relativeFrameOffset": 16,
+      "frames": [
+        {
+          "frameIndex": 0,
+          "cellId": 2,
+          "rawDurationTicks": 2,
+          "rawMarker": 48879,
+          "relativeResultOffset": 4
+        }
+      ]
+    },
+    {
+      "sequenceId": 2,
+      "frameCount": 2,
+      "loopStartFrame": 0,
+      "rawWordA": 65536,
+      "rawWordB": 2,
+      "relativeFrameOffset": 24,
+      "frames": [
+        {
+          "frameIndex": 0,
+          "cellId": 3,
+          "rawDurationTicks": 31,
+          "rawMarker": 48879,
+          "relativeResultOffset": 6
+        },
+        {
+          "frameIndex": 1,
+          "cellId": 4,
+          "rawDurationTicks": 31,
+          "rawMarker": 48879,
+          "relativeResultOffset": 8
+        }
+      ]
+    },
+    {
+      "sequenceId": 3,
+      "frameCount": 1,
+      "loopStartFrame": 0,
+      "rawWordA": 65536,
+      "rawWordB": 1,
+      "relativeFrameOffset": 40,
+      "frames": [
+        {
+          "frameIndex": 0,
+          "cellId": 5,
+          "rawDurationTicks": 2,
+          "rawMarker": 48879,
+          "relativeResultOffset": 10
+        }
+      ]
+    }
+  ]
+}

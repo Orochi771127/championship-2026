@@ -1,0 +1,132 @@
+{
+  "format": "YDIJ_NANR_SEQUENCE_BANK",
+  "sourceSha256": "B69ABA0DD6BA616194393B5E2B0DCDE6153EDB43A4703BE65631CC9B740F32C3",
+  "sequenceCount": 7,
+  "totalFrameCount": 7,
+  "sequenceTableOffset": 24,
+  "frameTableOffset": 136,
+  "resultTableOffset": 192,
+  "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+  "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL",
+  "sequences": [
+    {
+      "sequenceId": 0,
+      "frameCount": 1,
+      "loopStartFrame": 0,
+      "rawWordA": 65536,
+      "rawWordB": 1,
+      "relativeFrameOffset": 0,
+      "frames": [
+        {
+          "frameIndex": 0,
+          "cellId": 0,
+          "rawDurationTicks": 2,
+          "rawMarker": 48879,
+          "relativeResultOffset": 0
+        }
+      ]
+    },
+    {
+      "sequenceId": 1,
+      "frameCount": 1,
+      "loopStartFrame": 0,
+      "rawWordA": 65536,
+      "rawWordB": 1,
+      "relativeFrameOffset": 8,
+      "frames": [
+        {
+          "frameIndex": 0,
+          "cellId": 1,
+          "rawDurationTicks": 2,
+          "rawMarker": 48879,
+          "relativeResultOffset": 2
+        }
+      ]
+    },
+    {
+      "sequenceId": 2,
+      "frameCount": 1,
+      "loopStartFrame": 0,
+      "rawWordA": 65536,
+      "rawWordB": 1,
+      "relativeFrameOffset": 16,
+      "frames": [
+        {
+          "frameIndex": 0,
+          "cellId": 2,
+          "rawDurationTicks": 2,
+          "rawMarker": 48879,
+          "relativeResultOffset": 4
+        }
+      ]
+    },
+    {
+      "sequenceId": 3,
+      "frameCount": 1,
+      "loopStartFrame": 0,
+      "rawWordA": 65536,
+      "rawWordB": 1,
+      "relativeFrameOffset": 24,
+      "frames": [
+        {
+          "frameIndex": 0,
+          "cellId": 3,
+          "rawDurationTicks": 2,
+          "rawMarker": 48879,
+          "relativeResultOffset": 6
+        }
+      ]
+    },
+    {
+      "sequenceId": 4,
+      "frameCount": 1,
+      "loopStartFrame": 0,
+      "rawWordA": 65536,
+      "rawWordB": 1,
+      "relativeFrameOffset": 32,
+      "frames": [
+        {
+          "frameIndex": 0,
+          "cellId": 4,
+          "rawDurationTicks": 2,
+          "rawMarker": 48879,
+          "relativeResultOffset": 8
+        }
+      ]
+    },
+    {
+      "sequenceId": 5,
+      "frameCount": 1,
+      "loopStartFrame": 0,
+      "rawWordA": 65536,
+      "rawWordB": 1,
+      "relativeFrameOffset": 40,
+      "frames": [
+        {
+          "frameIndex": 0,
+          "cellId": 5,
+          "rawDurationTicks": 2,
+          "rawMarker": 48879,
+          "relativeResultOffset": 10
+        }
+      ]
+    },
+    {
+      "sequenceId": 6,
+      "frameCount": 1,
+      "loopStartFrame": 0,
+      "rawWordA": 65536,
+      "rawWordB": 1,
+      "relativeFrameOffset": 48,
+      "frames": [
+        {
+          "frameIndex": 0,
+          "cellId": 6,
+          "rawDurationTicks": 2,
+          "rawMarker": 48879,
+          "relativeResultOffset": 12
+        }
+      ]
+    }
+  ]
+}

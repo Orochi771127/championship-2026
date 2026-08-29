@@ -107,7 +107,6 @@ const records = registry.assets
     const family = familyFor(asset);
     const blockers = ["PRODUCTION_MASTER_NOT_CREATED", "HUMAN_VISUAL_APPROVAL_REQUIRED", "RUNTIME_VISUAL_QA_REQUIRED"];
     if (asset.domain === "CHARACTER" || asset.domain === "CHARACTER_ANIMATION") blockers.push("LAUNCH_96_OR_POSTLAUNCH_PACK_ASSIGNMENT_REQUIRED");
-    if (/field_cm12_01|field_cm18_01/i.test(asset.logicalGroup)) blockers.push("REFERENCE_OBJECT_LAYER_CONFLICT_QUARANTINED");
     if (/field_bm03_01|field_bm04_01/i.test(asset.logicalGroup) && asset.domain === "BATTLE_FIELD") blockers.push("ANIMATED_LAYER_UNKNOWN_REQUIRES_TRACE");
     return {
       referenceAssetId: asset.assetId,

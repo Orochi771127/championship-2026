@@ -8,8 +8,8 @@
   "placements": [
     {
       "ordinal": 0,
-      "rawCellWord": 1,
-      "cellId": 1,
+      "rawSequenceWord": 1,
+      "sequenceId": 1,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 83,
@@ -17,9 +17,11 @@
       "rawFlags": 0,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 1,
+      "sequenceFrameCount": 1
     }
   ],
   "quarantined": false,
-  "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+  "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
 }

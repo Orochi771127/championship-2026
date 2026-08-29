@@ -46,8 +46,8 @@ did not match the original. The current Cage authority supersedes that packet:
 reproduce original art, composition, object positions, collision and art code
 100%, changing only resolution to HD. Do not recolour, redesign, replace props
 or manually reposition them. Preserve raw NBS/OPM/ATR/COL values. CM12 and CM18
-remain evidence-marked object-index conflicts until the original decode chain
-resolves them; do not guess.
+were resolved by the original OPMD → NANR → NCER decode chain; preserve that
+verified sequence binding and do not replace it with direct-cell guessing.
 
 The Owner then identified that the lower-row penultimate CM09 review image was
 visually incomplete. Inspection confirmed that the static clean archive omitted
@@ -169,7 +169,7 @@ This round remains `SYNC ONLY`:
 
 - O1 Original UI: complete and Owner-approved reference baseline.
 - ART-R2R Character Fidelity Pipeline: Owner-approved reference baseline.
-- Training/Cage: 40/40 core recovered; 38/40 full composition confidence.
+- Training/Cage: 40/40 core recovered; 40/40 full composition confidence.
 - Hunt: 16/16 biome representative coverage.
 - Battle: 11/11 static field coverage; Owner-approved reference baseline;
   BM03/BM04 animation placement/timing remains unknown and non-blocking for the

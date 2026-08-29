@@ -45,4 +45,4 @@ TOOLBAR_SLOT_ENABLE_MASK,claude,UNKNOWN_REQUIRES_TRACE,NO,slot+0x192 and slot+0x
 TOOLBAR_SLOT_STORAGE,claude,ROM_VERIFIED,YES_PRESENTATION_ONLY,Slot array base +0x64; stride 0x1C0; count 8.
 TOOLBAR_SUBMENU_MEMBERSHIP,claude,UNKNOWN_REQUIRES_TRACE,NO,"Storage proven; population site not found. ARM9 only ever clears the counts to zero (0x02060770, 0x02060C70). Hunt and Battle remain ROM_VERIFIED members of a submenu from tutorial text alone."
 TRAINING_RAISING_TOOLBAR_MODE,claude,ROM_VERIFIED,YES_PRESENTATION_ONLY,mode=1; ui/training_set; OVL18 caller 0x0211CF08.
-TrainingCageO3B,codex,OWNER_APPROVED_REFERENCE_BASELINE,N/A,"Codex reconfirmed: 40/40 core fields, 38/40 full composition confidence, checkpoint eba10bc. CM12/CM18 object linkage conflicts remain quarantined."
+TrainingCageO3B,codex,OWNER_APPROVED_REFERENCE_BASELINE,N/A,"Codex reconfirmed: 40/40 core fields and 40/40 full composition confidence. CM12/CM18 OPMD sequence IDs resolve through NANR to valid NCER cells without guessing."

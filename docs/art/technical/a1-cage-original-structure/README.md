@@ -33,7 +33,7 @@ not represent CM01–CM12. The production sequence for the actual forty fields i
 | Batch | Fields | Exit gate |
 |---|---|---|
 | 1 | CM01–CM10 | Core/object separation, dimensions, seams and neutral ATR/COL binding pass |
-| 2 | CM11–CM20 | Same gate; CM12 and CM18 object conflicts remain explicitly quarantined |
+| 2 | CM11–CM20 | Same gate; CM12 and CM18 use the verified OPMD → NANR → NCER binding |
 | 3 | CM21–CM30 | Same gate; CM28/CM29 correctly ship without invented object bundles |
 | 4 | CM31–CM40 | Same gate, then complete 40/40 contact-sheet and device review |
 
@@ -49,5 +49,6 @@ crosswalk for those four batches. It deliberately keeps the 40 visual fields,
 - No ROM-derived PNG, palette, tile, object cell, layout or binary is included.
 - All final visuals require new high-resolution clean-room art using the approved
   original-major-palette direction and changed shapes/content.
-- CM12 and CM18 have conflicting original object indices. No index is clamped,
-  substituted or guessed.
+- CM12 and CM18 were previously misread as direct OPMD-to-NCER indices. The
+  verified format chain is OPMD sequence ID → NANR frame → NCER cell; both are
+  now fully resolved without clamping, substitution or guessing.

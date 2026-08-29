@@ -1,0 +1,68 @@
+{
+  "format": "YDIJ_NANR_SEQUENCE_BANK",
+  "sourceSha256": "F91527F9F1CEDC8A681C64FFB13B72CF302202FBB8E9BAA7340E754321E9CEC5",
+  "sequenceCount": 2,
+  "totalFrameCount": 5,
+  "sequenceTableOffset": 24,
+  "frameTableOffset": 56,
+  "resultTableOffset": 96,
+  "timingSemantics": "RAW_TICKS_PRESERVED_NO_RATE_INFERENCE",
+  "bindingSemantics": "OPMD_LOW14_SELECTS_NANR_SEQUENCE_THEN_NANR_FRAME_SELECTS_NCER_CELL",
+  "sequences": [
+    {
+      "sequenceId": 0,
+      "frameCount": 2,
+      "loopStartFrame": 0,
+      "rawWordA": 65536,
+      "rawWordB": 2,
+      "relativeFrameOffset": 0,
+      "frames": [
+        {
+          "frameIndex": 0,
+          "cellId": 0,
+          "rawDurationTicks": 46,
+          "rawMarker": 48879,
+          "relativeResultOffset": 0
+        },
+        {
+          "frameIndex": 1,
+          "cellId": 1,
+          "rawDurationTicks": 46,
+          "rawMarker": 48879,
+          "relativeResultOffset": 2
+        }
+      ]
+    },
+    {
+      "sequenceId": 1,
+      "frameCount": 3,
+      "loopStartFrame": 0,
+      "rawWordA": 65536,
+      "rawWordB": 2,
+      "relativeFrameOffset": 16,
+      "frames": [
+        {
+          "frameIndex": 0,
+          "cellId": 0,
+          "rawDurationTicks": 18,
+          "rawMarker": 48879,
+          "relativeResultOffset": 4
+        },
+        {
+          "frameIndex": 1,
+          "cellId": 1,
+          "rawDurationTicks": 46,
+          "rawMarker": 48879,
+          "relativeResultOffset": 6
+        },
+        {
+          "frameIndex": 2,
+          "cellId": 0,
+          "rawDurationTicks": 28,
+          "rawMarker": 48879,
+          "relativeResultOffset": 8
+        }
+      ]
+    }
+  ]
+}

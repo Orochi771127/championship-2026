@@ -8,8 +8,8 @@
   "placements": [
     {
       "ordinal": 0,
-      "rawCellWord": 2,
-      "cellId": 2,
+      "rawSequenceWord": 2,
+      "sequenceId": 2,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 0,
@@ -17,12 +17,14 @@
       "rawFlags": 65535,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 6,
+      "sequenceFrameCount": 4
     },
     {
       "ordinal": 1,
-      "rawCellWord": 2,
-      "cellId": 2,
+      "rawSequenceWord": 2,
+      "sequenceId": 2,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 16,
@@ -30,12 +32,14 @@
       "rawFlags": 65535,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 6,
+      "sequenceFrameCount": 4
     },
     {
       "ordinal": 2,
-      "rawCellWord": 2,
-      "cellId": 2,
+      "rawSequenceWord": 2,
+      "sequenceId": 2,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 32,
@@ -43,12 +47,14 @@
       "rawFlags": 65535,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 6,
+      "sequenceFrameCount": 4
     },
     {
       "ordinal": 3,
-      "rawCellWord": 2,
-      "cellId": 2,
+      "rawSequenceWord": 2,
+      "sequenceId": 2,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 48,
@@ -56,12 +62,14 @@
       "rawFlags": 65535,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 6,
+      "sequenceFrameCount": 4
     },
     {
       "ordinal": 4,
-      "rawCellWord": 2,
-      "cellId": 2,
+      "rawSequenceWord": 2,
+      "sequenceId": 2,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 64,
@@ -69,12 +77,14 @@
       "rawFlags": 65535,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 6,
+      "sequenceFrameCount": 4
     },
     {
       "ordinal": 5,
-      "rawCellWord": 5,
-      "cellId": 5,
+      "rawSequenceWord": 5,
+      "sequenceId": 5,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 80,
@@ -82,12 +92,14 @@
       "rawFlags": 65535,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 12,
+      "sequenceFrameCount": 4
     },
     {
       "ordinal": 6,
-      "rawCellWord": 1,
-      "cellId": 1,
+      "rawSequenceWord": 1,
+      "sequenceId": 1,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 35,
@@ -95,12 +107,14 @@
       "rawFlags": 0,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 3,
+      "sequenceFrameCount": 7
     },
     {
       "ordinal": 7,
-      "rawCellWord": 1,
-      "cellId": 1,
+      "rawSequenceWord": 1,
+      "sequenceId": 1,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 67,
@@ -108,12 +122,14 @@
       "rawFlags": 0,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 3,
+      "sequenceFrameCount": 7
     },
     {
       "ordinal": 8,
-      "rawCellWord": 4,
-      "cellId": 4,
+      "rawSequenceWord": 4,
+      "sequenceId": 4,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 47,
@@ -121,12 +137,14 @@
       "rawFlags": 0,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 11,
+      "sequenceFrameCount": 1
     },
     {
       "ordinal": 9,
-      "rawCellWord": 3,
-      "cellId": 3,
+      "rawSequenceWord": 3,
+      "sequenceId": 3,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 23,
@@ -134,9 +152,11 @@
       "rawFlags": 0,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 10,
+      "sequenceFrameCount": 1
     }
   ],
   "quarantined": false,
-  "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+  "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
 }

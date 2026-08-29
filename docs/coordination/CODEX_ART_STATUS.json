@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "owner": "CODEX_ART",
   "lastUpdated": "2026-08-29",
-  "syncBatch": "ART_A3_A4_EXACT_BASELINE_TECHNICAL_QA_AND_HUNT_INPUT_TRACE",
-  "syncRevision": 19,
-  "syncRevisionTarget": 19,
-  "status": "CAGE_HD40_AND_HUNT_HD30_TECHNICAL_QA_COMPLETE_HUNT_PAN_ROM_VERIFIED_RUNTIME_CORRECTION_PENDING",
+  "syncBatch": "ART_A3_CAGE_OPMD_NANR_SEQUENCE_BINDING_RESOLUTION",
+  "syncRevision": 20,
+  "syncRevisionTarget": 20,
+  "status": "CAGE_HD40_FULL_COMPOSITION_40_OF_40_RESOLVED_HUNT_HD30_QA_COMPLETE",
   "sourceOfTruth": {
     "coordinationRoot": "docs/coordination",
     "canonicalRepository": ".",
@@ -113,11 +113,11 @@
     },
     {
       "id": "ART-A3-CAGE-FAITHFUL-HD40",
-      "status": "40_OF_40_VISUAL_AND_COLLISION_BASELINES_38_FULL_COMPOSITIONS",
-      "summary": "Owner correction replaced generated Cage production art with an exact-original baseline: 40 deterministic raw core/static reconstructions, 40 deterministic 4x nearest-neighbour HD outputs, direct-14-bit NBS tilemaps, COL collision, ATR attributes, original lower-14-bit OPM cell words/coordinates/flips, 36 exact NCER/linear-NCBR object banks, and all four verified native BSAR animated terrain bundles. Every clean and void-diagnostic reconstruction has zero differing RGBA pixels against the archive goldens. CM09 water and the CM07/CM21/CM39 animated layers are restored. CM12/CM18 object-index conflicts remain quarantined and unbound.",
+      "status": "40_OF_40_VISUAL_COLLISION_AND_FULL_COMPOSITION_BASELINES",
+      "summary": "The Cage baseline now resolves OPMD lower-14 sequence IDs through 38 NANR animation banks into valid NCER cells. All 40 fields have full composition confidence; CM12 and CM18 are closed without clamping or guessed cells. Thirteen archive composites based on the former direct-cell interpretation were replaced by raw-chain recompositions. Four BSAR terrain bundles and all COL/ATR/NBS data remain preserved.",
       "output": "docs/art/production/cage/faithful-hd40/manifest.json",
       "receipt": "docs/art/production/cage/FAITHFUL_HD40_RECEIPT.md",
-      "validation": "619 generated files rebuild byte-identically; 40/40 raw core/static clean and diagnostic reconstructions have zero RGBA pixel differences; 36 complete object banks rebuild cell-by-cell; 40/40 HD images round-trip exactly; 40/40 NBS/COL/ATR dimensions match; 4/4 BSAR bundles and 8/8 frames decode deterministically",
+      "validation": "657 generated files rebuild byte-identically; 38/38 OPMD-to-NANR-to-NCER banks validate with no out-of-range sequence or cell; 40/40 HD images round-trip exactly; 40/40 NBS/COL/ATR dimensions match; 4/4 BSAR bundles and 8/8 frames decode deterministically",
       "rights": "OWNER_REPORTED_LICENSED_SOURCE_LINK_PENDING",
       "productionStatus": "EXACT_ORIGINAL_HD_REFERENCE_BASELINE",
       "humanApproved": false,
@@ -138,7 +138,7 @@
     {
       "id": "ART-A1-CAGE-ORIGINAL-STRUCTURE",
       "status": "COMPLETE_40_OF_40_STRUCTURE_ROWS_CLASSIFIED",
-      "summary": "Owner-directed original construction audit replaced the provisional four-way flattened PNG split with the verified core tile field plus separate object bundle and external ATR/COL structure. Forty visual fields are scheduled in four batches of ten; CM12/CM18 object conflicts remain quarantined and CM28/CM29 correctly declare no native object layer. No original pixels, gameplay inference, runtime promotion or shipping promotion occurred.",
+      "summary": "Owner-directed original construction audit replaced the provisional four-way flattened PNG split with the verified core tile field plus separate object bundle and external ATR/COL structure. Forty visual fields are scheduled in four batches of ten; CM12/CM18 are resolved through OPMD-to-NANR-to-NCER binding and CM28/CM29 correctly declare no native object layer. Runtime and shipping promotion remain gated.",
       "output": "docs/art/technical/a1-cage-original-structure/CM40_ORIGINAL_STRUCTURE_CROSSWALK.csv",
       "receipt": "docs/art/technical/A1_CAGE_ORIGINAL_STRUCTURE_RECEIPT.md",
       "rights": "REFERENCE_METADATA_ONLY_NO_ORIGINAL_PIXELS",
@@ -242,7 +242,7 @@
     {
       "id": "O3-B",
       "status": "OWNER_APPROVED_REFERENCE_BASELINE",
-      "summary": "Training/Cage: 40/40 CORE_FIELD_RECOVERED and 38/40 FULL_COMPOSITION_CONFIDENCE; CM12/CM18 remain OBJECT_LAYER_PARTIAL.",
+      "summary": "Training/Cage: 40/40 CORE_FIELD_RECOVERED and 40/40 FULL_COMPOSITION_CONFIDENCE; CM12/CM18 OPMD sequence bindings are resolved through NANR to NCER.",
       "checkpoint": "eba10bc",
       "rights": "ROM_COPYRIGHTED_REFERENCE",
       "shippingStatus": "NOT_SHIPPING_READY"
@@ -312,7 +312,7 @@
     {
       "id": "ART-A3-CAGE-FAITHFUL-HD40",
       "status": "BASELINE_COMPLETE_RUNTIME_BINDING_BLOCKED",
-      "summary": "Exact original visual, direct-14-bit NBS, lower-14-bit OPM cell binding/flips, NCER/linear-NCBR object banks, COL, ATR and all four verified Cage BSAR animated terrain bundles are available for 40 fields. CM09 water-layer omission is closed and all clean/diagnostic raw assemblies are pixel-exact. CM12 and CM18 still require original missing-cell evidence; runtime binding and shipping remain blocked pending linked licence evidence and a Cage presentation contract."
+      "summary": "Exact original visual, direct-14-bit NBS, lower-14-bit OPMD sequence binding/flips, NANR animation banks, NCER/linear-NCBR object banks, COL, ATR and all four verified Cage BSAR animated terrain bundles are available for 40 fields. CM09 water-layer omission and CM12/CM18 sequence linkage are closed. Runtime binding and shipping remain blocked pending linked licence evidence and a Cage presentation contract."
     },
     {
       "id": "VS2-PRESENTATION-BINDING",
@@ -366,7 +366,7 @@
     "SHIPPING"
   ],
   "blocked": [
-    "Cage CM01-CM40 and Hunt HD30 reference technical QA is complete, but CM12/CM18 object-index conflicts, linked licence evidence, genuine redrawn HD masters, runtime presentation binding, occlusion and physical-device performance QA remain required before runtime promotion.",
+    "Cage CM01-CM40 and Hunt HD30 reference technical QA is complete; linked licence evidence, genuine redrawn HD masters, runtime presentation binding, occlusion and physical-device performance QA remain required before runtime promotion.",
     "A1 character identity sheets, animation masters, UI components, VFX ports and runtime atlases still require production receipts, linked licence evidence and relevant QA; direction boards alone are not runtime assets.",
     "A2-A11 mass production remains gated by completion of the A1 technical pipeline and the consuming gameplay/presentation contracts; A0/A1 proposals do not promote the 96-character launch roster.",
     "The Owner reports complete licensing, but each production asset still requires a linked licence document reference before READY_FOR_RUNTIME or SHIPPING_READY promotion.",
@@ -374,7 +374,6 @@
     "Cage/Home construction semantics and Training effects require runtime evidence; art must use neutral placeholders.",
     "Creature RAW_SLOT semantic names require a verified runtime semantic map.",
     "BM03/BM04 Battle BSAR placement/timing requires targeted evidence closure before animated composition.",
-    "CM12/CM18 object linkage conflicts remain quarantined.",
     "Exact toolbar slot semantics, actions, submenu membership, slot 7 identity, and numeric care effects remain unavailable to Codex until Claude publishes its authorized bounded closure.",
     "O2 mass high-resolution fidelity reconstruction remains unauthorized; 220 non-baseline entities are source-ready only.",
     "INT-RH2 physical mobile-device GPU/performance certification remains outside this headless Chromium proof.",
@@ -481,7 +480,7 @@
   },
   "dependenciesChanged": {
     "value": true,
-    "note": "The Cage/Hunt exact baselines now have deterministic technical QA: 40 Cage NBS/COL/ATR grids align, 30 Hunt variants contain no large diagnostic-red region, 28 animation frames remain complete, and a 480 MiB full-catalogue decoded preload is explicitly rejected. Runtime and gameplay authority are unchanged; CM12/CM18 remain quarantined."
+    "note": "The Cage/Hunt exact baselines now have deterministic technical QA: all 40 Cage compositions resolve through OPMD/NANR/NCER, 40 NBS/COL/ATR grids align, 30 Hunt variants contain no large diagnostic-red region, 28 animation frames remain complete, and a 480 MiB full-catalogue decoded preload is explicitly rejected. Runtime and gameplay authority are unchanged."
   },
   "sharedMergeReceipt": {
     "syncRevision": 3,
@@ -515,7 +514,6 @@
     }
   },
   "recommendedNext": [
-    "Close CM12 and CM18 original object-index conflicts using the verified source/decode chain, without guessing cell bindings.",
     "Port the remaining NCGR/NCLR and NCER/NCBR object-cell decoding into the browser art module and pixel-diff its composition against the 40 native goldens.",
     "Produce the first genuinely redrawn HD Cage and Hunt master slices against the exact placement/topology baselines, preserving original palette, composition and object positions; require source-versus-redraw review before scaling.",
     "When runtime binding is separately authorized, measure one-field/tile-streaming GPU memory, camera culling, occlusion and physical-device performance; never preload all thirty full RGBA Hunt maps.",

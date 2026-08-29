@@ -8,8 +8,8 @@
   "placements": [
     {
       "ordinal": 0,
-      "rawCellWord": 2,
-      "cellId": 2,
+      "rawSequenceWord": 2,
+      "sequenceId": 2,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 68,
@@ -17,12 +17,14 @@
       "rawFlags": 65535,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 2,
+      "sequenceFrameCount": 4
     },
     {
       "ordinal": 1,
-      "rawCellWord": 3,
-      "cellId": 3,
+      "rawSequenceWord": 3,
+      "sequenceId": 3,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 123,
@@ -30,12 +32,14 @@
       "rawFlags": 65535,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 6,
+      "sequenceFrameCount": 4
     },
     {
       "ordinal": 2,
-      "rawCellWord": 0,
-      "cellId": 0,
+      "rawSequenceWord": 0,
+      "sequenceId": 0,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 8,
@@ -43,12 +47,14 @@
       "rawFlags": 0,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 0,
+      "sequenceFrameCount": 1
     },
     {
       "ordinal": 3,
-      "rawCellWord": 0,
-      "cellId": 0,
+      "rawSequenceWord": 0,
+      "sequenceId": 0,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 53,
@@ -56,12 +62,14 @@
       "rawFlags": 0,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 0,
+      "sequenceFrameCount": 1
     },
     {
       "ordinal": 4,
-      "rawCellWord": 0,
-      "cellId": 0,
+      "rawSequenceWord": 0,
+      "sequenceId": 0,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 172,
@@ -69,12 +77,14 @@
       "rawFlags": 0,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 0,
+      "sequenceFrameCount": 1
     },
     {
       "ordinal": 5,
-      "rawCellWord": 0,
-      "cellId": 0,
+      "rawSequenceWord": 0,
+      "sequenceId": 0,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 127,
@@ -82,12 +92,14 @@
       "rawFlags": 0,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 0,
+      "sequenceFrameCount": 1
     },
     {
       "ordinal": 6,
-      "rawCellWord": 1,
-      "cellId": 1,
+      "rawSequenceWord": 1,
+      "sequenceId": 1,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 72,
@@ -95,12 +107,14 @@
       "rawFlags": 0,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 1,
+      "sequenceFrameCount": 1
     },
     {
       "ordinal": 7,
-      "rawCellWord": 16385,
-      "cellId": 1,
+      "rawSequenceWord": 16385,
+      "sequenceId": 1,
       "horizontalFlip": false,
       "verticalFlip": true,
       "sourceX": 120,
@@ -108,9 +122,11 @@
       "rawFlags": 0,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 1,
+      "sequenceFrameCount": 1
     }
   ],
   "quarantined": false,
-  "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+  "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
 }

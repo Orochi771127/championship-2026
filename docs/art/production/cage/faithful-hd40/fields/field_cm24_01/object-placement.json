@@ -8,8 +8,8 @@
   "placements": [
     {
       "ordinal": 0,
-      "rawCellWord": 1,
-      "cellId": 1,
+      "rawSequenceWord": 1,
+      "sequenceId": 1,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 47,
@@ -17,12 +17,14 @@
       "rawFlags": 0,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 4,
+      "sequenceFrameCount": 1
     },
     {
       "ordinal": 1,
-      "rawCellWord": 0,
-      "cellId": 0,
+      "rawSequenceWord": 0,
+      "sequenceId": 0,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 20,
@@ -30,12 +32,14 @@
       "rawFlags": 0,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 0,
+      "sequenceFrameCount": 4
     },
     {
       "ordinal": 2,
-      "rawCellWord": 0,
-      "cellId": 0,
+      "rawSequenceWord": 0,
+      "sequenceId": 0,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 73,
@@ -43,12 +47,14 @@
       "rawFlags": 0,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 0,
+      "sequenceFrameCount": 4
     },
     {
       "ordinal": 3,
-      "rawCellWord": 2,
-      "cellId": 2,
+      "rawSequenceWord": 2,
+      "sequenceId": 2,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 10,
@@ -56,12 +62,14 @@
       "rawFlags": 0,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 5,
+      "sequenceFrameCount": 1
     },
     {
       "ordinal": 4,
-      "rawCellWord": 2,
-      "cellId": 2,
+      "rawSequenceWord": 2,
+      "sequenceId": 2,
       "horizontalFlip": false,
       "verticalFlip": false,
       "sourceX": 84,
@@ -69,9 +77,11 @@
       "rawFlags": 0,
       "rawFloatA": 1.0,
       "rawFloatB": 0.0,
-      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES"
+      "coordinateAuthority": "VERIFIED_SOURCE_REFERENCE_COORDINATES",
+      "resolvedFirstFrameCellId": 5,
+      "sequenceFrameCount": 1
     }
   ],
   "quarantined": false,
-  "authority": "ORIGINAL_PLACEMENT_REFERENCE"
+  "authority": "ORIGINAL_OPMD_SEQUENCE_PLACEMENT_RESOLVED_THROUGH_NANR"
 }

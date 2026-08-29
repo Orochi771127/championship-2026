@@ -83,7 +83,7 @@ HM01 Grass is the A1 bright-field standard. HM09 Mine is the A1 dark-field stand
 
 ### Cage and Training
 
-Forty field references become forty presentation presets assembled from shared shape-aware modules. Art may replace floor, edge, connector, facility, prop, foreground, animation and audio, but never owns `shapeMask`, occupied cells, capacity or raising effects. CM12 and CM18 object conflicts remain visibly quarantined in reference mapping.
+Forty field references become forty presentation presets assembled from shared shape-aware modules. Art may replace floor, edge, connector, facility, prop, foreground, animation and audio, but never owns `shapeMask`, occupied cells, capacity or raising effects. CM12 and CM18 use the verified OPMD → NANR → NCER sequence binding recorded in the reference mapping.
 
 ### Battle
 

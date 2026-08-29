@@ -67,7 +67,8 @@ test("all forty original CM structures are classified without copying original p
   assert.equal(rows.filter((row) => row.includes('"CM11_CM20"')).length, 10);
   assert.equal(rows.filter((row) => row.includes('"CM21_CM30"')).length, 10);
   assert.equal(rows.filter((row) => row.includes('"CM31_CM40"')).length, 10);
-  assert.equal(rows.filter((row) => row.includes('"ORIGINAL_OBJECT_INDEX_CONFLICT_DO_NOT_INFER"')).length, 2);
+  assert.equal(rows.filter((row) => row.includes('"ORIGINAL_OBJECT_INDEX_CONFLICT_DO_NOT_INFER"')).length, 0);
+  assert.equal(rows.filter((row) => row.includes('"FULL_COMPOSITION_CONFIDENCE_NANR_SEQUENCE_BINDING_RESOLVED"')).length, 2);
   assert.equal(rows.filter((row) => row.includes('"NO_NATIVE_OBJECT_LAYER"')).length, 2);
   for (const row of rows) {
     assert.match(row, /"REFERENCE_METADATA_ONLY_NO_ORIGINAL_PIXELS"/);
