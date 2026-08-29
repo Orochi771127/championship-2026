@@ -25,6 +25,7 @@ import { createRaisingPresentationSource } from "./raisingPresentationSource.js"
 import { createGateHuntPresentationSource } from "./gateHuntPresentationSource.js";
 import { CHAMPIONSHIP_SCREENS } from "./championshipScreenStack.js";
 import { createGateSelectView, createHuntLoadoutView, createHuntFieldView } from "./vs2Screens.js";
+import { createHuntResultView } from "./vs3Screens.js";
 import { createChampionshipPixiStage } from "../presentation/championshipPixiStage.js";
 import { mountRaisingFieldPixiPresentation } from "../presentation/intRh2/createRaisingFieldPixiPresentation.js";
 import { mountHuntFieldPixiPresentation } from "../presentation/vs2/createHuntFieldPixiPresentation.js";
@@ -180,6 +181,7 @@ async function mountCurrentScreen() {
     else if (target === CHAMPIONSHIP_SCREENS.GATE_SELECT) view = await mountGateSelect();
     else if (target === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) view = createHuntLoadoutView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.HUNT_FIELD) view = await mountHuntField();
+    else if (target === CHAMPIONSHIP_SCREENS.HUNT_RESULT) view = createHuntResultView({ root, source: expeditionSource });
     mountedScreen = target;
   } finally {
     release();

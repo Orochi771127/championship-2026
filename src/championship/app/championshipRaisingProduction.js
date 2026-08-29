@@ -10,6 +10,7 @@
 // What lives here is only what the product can honestly own:
 //   - which cage a creature belongs to        (product-authored placement)
 //   - that the player used a care tool on it  (product-authored interaction flag)
+//   - Hunt instances brought home by enclosure (not R2 residents)
 //
 // Deliberately NOT here, because it is unverified:
 //   - training formulas, stat gains or losses
@@ -47,7 +48,9 @@ export function createRaisingProductionState({ cageIds = [], creatureIds = [] } 
     schemaVersion: RAISING_PRODUCTION_SCHEMA_VERSION,
     authority: RAISING_PRODUCTION_AUTHORITY,
     assignments,
-    interactions
+    interactions,
+    // Enclosed Hunt instances live here, not on the frozen R2 resident roster.
+    collection: []
   });
 }
 
@@ -98,6 +101,44 @@ export function cageOf(state, creatureId) {
 }
 
 /**
+ * Record one enclosed Hunt instance.
+ *
+ * This is a collection entry, not a new Raising Home resident. The original
+ * capture-success formula is untraced, so the caller must already have decided
+ * the enclosure succeeded under PRODUCT_AUTHORED_ENCLOSURE.
+ */
+export function recordEnclosedCreature(state, {
+  instanceId,
+  speciesId,
+  enclosedAt = new Date().toISOString(),
+  originGateId = null
+} = {}) {
+  if (typeof instanceId !== "string" || instanceId.length === 0) {
+    throw stateError("MISSING_INSTANCE_ID");
+  }
+  if (typeof speciesId !== "string" || speciesId.length === 0) {
+    throw stateError("MISSING_SPECIES_ID");
+  }
+  const existing = Array.isArray(state.collection) ? state.collection : [];
+  if (existing.some((entry) => entry.instanceId === instanceId)) {
+    throw stateError(`DUPLICATE_INSTANCE: ${instanceId}`);
+  }
+  return deepFreeze({
+    ...state,
+    collection: [
+      ...existing,
+      {
+        instanceId,
+        speciesId,
+        enclosedAt: typeof enclosedAt === "string" ? enclosedAt : null,
+        originGateId: typeof originGateId === "string" ? originGateId : null,
+        successAuthority: "PRODUCT_AUTHORED_ENCLOSURE"
+      }
+    ]
+  });
+}
+
+/**
  * Rebuild a stored slice, discarding anything unrecognised.
  *
  * A save that names a cage or creature this build does not have is repaired to
@@ -124,10 +165,28 @@ export function normalizeRaisingProductionState(input, { cageIds = [], creatureI
       };
     }
   }
+
+  const collection = [];
+  if (Array.isArray(input.collection)) {
+    for (const entry of input.collection) {
+      if (!entry || typeof entry !== "object") continue;
+      if (typeof entry.instanceId !== "string" || typeof entry.speciesId !== "string") continue;
+      if (collection.some((kept) => kept.instanceId === entry.instanceId)) continue;
+      collection.push({
+        instanceId: entry.instanceId,
+        speciesId: entry.speciesId,
+        enclosedAt: typeof entry.enclosedAt === "string" ? entry.enclosedAt : null,
+        originGateId: typeof entry.originGateId === "string" ? entry.originGateId : null,
+        successAuthority: "PRODUCT_AUTHORED_ENCLOSURE"
+      });
+    }
+  }
+
   return deepFreeze({
     schemaVersion: RAISING_PRODUCTION_SCHEMA_VERSION,
     authority: RAISING_PRODUCTION_AUTHORITY,
     assignments,
-    interactions
+    interactions,
+    collection
   });
 }

@@ -15,7 +15,6 @@ import { createGateHuntPresentationSource } from "../src/championship/app/gateHu
 import { CHAMPIONSHIP_MODERN_SAVE_KEY } from "../src/championship/app/championshipStandaloneSave.js";
 import {
   CHAMPIONSHIP_SCREENS,
-  CHAMPIONSHIP_SCREEN_STACK_MAX_DEPTH,
   createChampionshipScreenStack
 } from "../src/championship/app/championshipScreenStack.js";
 import { GATE_COUNT, listChampionshipGates } from "../src/championship/gate/gateCatalog.js";
@@ -67,14 +66,14 @@ test("the screen stack allows only declared transitions", () => {
   stack.enter(CHAMPIONSHIP_SCREENS.GATE_SELECT);
   stack.enter(CHAMPIONSHIP_SCREENS.HUNT_LOADOUT);
   stack.enter(CHAMPIONSHIP_SCREENS.HUNT_FIELD);
-  assert.equal(stack.depth(), CHAMPIONSHIP_SCREEN_STACK_MAX_DEPTH);
+  assert.equal(stack.depth(), 4);
   assert.deepEqual([...stack.trail()], ["RAISING_HOME", "GATE_SELECT", "HUNT_LOADOUT", "HUNT_FIELD"]);
 });
 
 test("the screen stack pops one level and unwinds only where an exit is declared", () => {
   const stack = createChampionshipScreenStack();
   stack.enter(CHAMPIONSHIP_SCREENS.GATE_SELECT);
-  assert.equal(stack.canExit(), false, "only the Hunt field declares an exit");
+  assert.equal(stack.canExit(), false, "Gate Select has no stack exit");
   assert.throws(() => stack.exit(), /SCREEN_HAS_NO_EXIT/);
   assert.equal(stack.back(), CHAMPIONSHIP_SCREENS.RAISING_HOME);
 

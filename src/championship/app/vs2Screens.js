@@ -462,10 +462,10 @@ export async function createHuntFieldView({ root, source, mountField }) {
   const viewport = element("div", "cm-vs2-field__viewport");
   viewport.append(element("span", "cm-vs2-field__corner cm-vs2-field__corner--a"), element("span", "cm-vs2-field__corner cm-vs2-field__corner--b"));
   const fieldHost = element("div", "cm-vs2-field__canvas");
-  fieldHost.setAttribute("aria-label", "Exploration field. Tap or drag to move.");
+  fieldHost.setAttribute("aria-label", "Exploration field. Touch a creature to draw a circle. Empty ground moves you.");
   viewport.append(fieldHost);
   const toolbar = toolbarShell(block.toolbar, mode);
-  const movementHint = element("p", "cm-vs2-field__hint", "TOUCH OR DRAG THE FIELD TO MOVE");
+  const movementHint = element("p", "cm-vs2-field__hint", "TOUCH A CREATURE AND DRAW A CIRCLE. EMPTY GROUND MOVES YOU.");
   shell.append(hud, viewport, toolbar, movementHint);
   root.append(shell);
 

@@ -67,8 +67,11 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
   const terrainLayer = new PIXI.Container({ label: "modular terrain" });
   const objectLayer = new PIXI.Container({ label: "field objects", sortableChildren: true });
   const actorLayer = new PIXI.Container({ label: "actors" });
+  const strokeLayer = new PIXI.Container({ label: "enclosure stroke" });
   actorLayer.sortableChildren = true;
-  world.addChild(terrainLayer, objectLayer, actorLayer);
+  const strokeGraphic = new PIXI.Graphics();
+  strokeLayer.addChild(strokeGraphic);
+  world.addChild(terrainLayer, objectLayer, actorLayer, strokeLayer);
   scene.addChild(backdrop, world);
 
   const chunkCache = new Map();
@@ -259,7 +262,22 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
       node.position.set(wild.worldX, wild.worldY);
       node.zIndex = Math.round(wild.worldY);
       node.scale.x = wild.facing === "left" ? -1 : 1;
+      const tethered = view.enclosure?.targetWildId === wild.wildId;
+      node.ring.clear()
+        .ellipse(0, 3, 13, 6)
+        .stroke({ color: tethered ? TERRAIN.gold : TERRAIN.cyan, alpha: tethered ? 0.9 : 0.16, width: tethered ? 2 : 1.2 });
     }
+  }
+
+  function syncEnclosure(view) {
+    strokeGraphic.clear();
+    const points = view.enclosure?.points;
+    if (!Array.isArray(points) || points.length === 0) return;
+    strokeGraphic.moveTo(points[0].x, points[0].y);
+    for (let index = 1; index < points.length; index += 1) {
+      strokeGraphic.lineTo(points[index].x, points[index].y);
+    }
+    strokeGraphic.stroke({ color: TERRAIN.cyan, width: 3, cap: "round", join: "round", alpha: 0.92 });
   }
 
   function render() {
@@ -282,6 +300,7 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
     syncObjects(view);
     syncTerrain(view);
     syncActors(view);
+    syncEnclosure(view);
     // The camera window is the only thing that moves the world.
     world.position.set(-view.camera.left, -view.camera.top);
   }
@@ -295,13 +314,22 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
     return { x: global.x + view.camera.left, y: global.y + view.camera.top };
   }
 
+  function canEnclose() {
+    return typeof source.intents.beginEnclosureStroke === "function"
+      && typeof source.intents.extendEnclosureStroke === "function"
+      && typeof source.intents.endEnclosureStroke === "function";
+  }
+
   function onPointerDown(event) {
     if (disposed) return;
+    const point = toWorldPoint(event.global);
+    const enclosing = Boolean(point && canEnclose() && source.intents.beginEnclosureStroke(point.x, point.y));
     drag = {
       pointerId: event.pointerId,
       startX: event.global.x,
       startY: event.global.y,
-      moved: false
+      moved: false,
+      enclosing
     };
   }
 
@@ -310,17 +338,22 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
     if (!drag.moved) {
       drag.moved = Math.hypot(event.global.x - drag.startX, event.global.y - drag.startY) >= DRAG_THRESHOLD_PX;
     }
-    // Dragging steers continuously; tapping commits once on release.
-    if (drag.moved) {
-      const point = toWorldPoint(event.global);
-      if (point) source.intents.moveTo(point.x, point.y);
+    const point = toWorldPoint(event.global);
+    if (drag.enclosing) {
+      if (point) source.intents.extendEnclosureStroke(point.x, point.y);
+      return;
     }
+    if (drag.moved && point) source.intents.moveTo(point.x, point.y);
   }
 
   function onPointerUp(event) {
     if (!drag || (event.pointerId !== undefined && event.pointerId !== drag.pointerId)) return;
     const completed = drag;
     drag = null;
+    if (completed.enclosing) {
+      source.intents.endEnclosureStroke();
+      return;
+    }
     if (completed.moved) return;
     const point = toWorldPoint(event.global ?? { x: completed.startX, y: completed.startY });
     if (point) source.intents.moveTo(point.x, point.y);

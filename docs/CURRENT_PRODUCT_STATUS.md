@@ -1,23 +1,24 @@
 # Championship 2026 — Current Product Status
 
-Status date: 2026-08-29
+Status date: 2026-08-30
 
-Evidence baseline: `main` through `989db03`; update this file with later integrated changes
+Evidence baseline: VS3 enclosure slice on the existing VS2 expedition; runtime tests 145/145
 
 Product authority: standalone `championship-2026` repository
 
 ## Executive status
 
-The project is not an empty plan. Claude Code and Codex have already produced a reusable browser-game foundation plus two playable vertical slices:
+The project is not an empty plan. Claude Code and Codex have already produced a reusable browser-game foundation plus three playable vertical slices:
 
 - VS1 Raising Home is integrated and accepted as the baseline;
 - VS2 Gate Select → Hunt Loadout → Hunt exploration → Return Home is integrated;
 - VS2-R1 adds a bounded Three.js Gate presentation over the same Gate state, with a 2D fallback;
 - VS2-R2 reconstructs the Hunt Loadout runtime contract and read-only presentation seam;
-- deterministic runtime/policy tests pass 96/96 at this baseline;
-- real-browser QA evidence exists for VS1, VS2 and VS2-R1 across portrait phone viewports.
+- VS3 adds Hunt enclosure (tether-distance class + original stroke grammar + Hunt Result) without a Capture button;
+- deterministic runtime/policy tests pass 145/145;
+- real-browser QA evidence exists for VS1, VS2 and VS2-R1; VS3 enclosure has a dedicated browser gate.
 
-The next gameplay slice is VS3 Capture and Hunt Result. Shop, Database, the full modular Cage editor, Battle, progression and public-release content are planned but not integrated.
+The next gameplay work is VS3 remainder (G-capacity consumption once traced, rope VFX conversion, Home display of enclosed instances) then Shop, Database, Cage editor, Battle, and Championship progression.
 
 ## Integrated playable flow
 
@@ -35,7 +36,11 @@ Boot / New Game / Continue
   -> Hunt Field
      -> deterministic 128×128 modular world
      -> camera, collision and bounded wild wandering
-     -> exit and return to Raising Home
+     -> touch a wild and draw a circle (original stroke grammar)
+     -> empty ground still moves the tamer
+  -> Hunt Result
+     -> BROUGHT HOME; collection instance written
+     -> return to Raising Home
 ```
 
 ## Runtime boundaries already established
@@ -60,7 +65,8 @@ Boot / New Game / Continue
 | Raising Home | `INTEGRATED_BOUNDED` | direct select/care reaction/relocate/save/restore, DOM + Pixi seam | exact care effects, final habitat, full Cage system |
 | Gate Select | `INTEGRATED_BOUNDED` | shared selection state, 2D fallback, Three.js presentation | exact original camera/input/node behavior remains partial |
 | Hunt Loadout | `INTEGRATED_BOUNDED` | five gear classes, four plugin positions, inventory validation, derived HUD capabilities | equipment effects and Capture capacity consumption in VS3 |
-| Hunt Field | `INTEGRATED_BOUNDED` | 128×128 world, camera, collision, deterministic exploration, return lifecycle | original spawn/AI closure, Capture and result transaction |
+| Hunt Field | `INTEGRATED_BOUNDED` | 128×128 world, camera, collision, deterministic exploration, enclosure gesture, return lifecycle | original spawn/AI closure, G-capacity consumption, rope VFX conversion |
+| Hunt Result | `INTEGRATED_BOUNDED` | enclosure writes a collection instance and returns Home | original success odds, Home presentation of new arrivals |
 | Modular Cage | `PLANNED` | specification and data/backlog design | original footprints/effects trace and complete VS4 implementation |
 | Shop / Database | `PLANNED` | source catalogs and planning only | product transaction/collection runtime and UI |
 | Battle | `PLANNED` | research contracts and field references only | deterministic product resolver, UI, result writes |
@@ -77,11 +83,12 @@ Boot / New Game / Continue
 
 ## Verification baseline
 
-- `npm test`: 96 pass / 0 fail.
+- `npm test`: 145 pass / 0 fail.
 - Browser commands:
   - `npm run test:browser`
   - `npm run test:browser:vs2`
   - `npm run test:browser:vs2-r1`
+  - `npm run test:browser:vs3`
 - Required portrait viewports include 360×800, 390×844, 393×852, 412×915 and 430×932; 375×812 is supplementary.
 
 ## Historical-document warning

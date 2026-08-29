@@ -700,3 +700,29 @@
   font-size: 0.72rem;
   color: rgba(142, 166, 182, 0.6);
 }
+
+.cm-vs2-result__body {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 14px;
+  min-height: 0;
+  padding: 28px 22px;
+  text-align: center;
+}
+
+.cm-vs2-result__species {
+  margin: 0;
+  color: var(--vs2-gold-bright);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.cm-vs2-result__note {
+  margin: 0;
+  max-width: 28ch;
+  color: var(--vs2-muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+}

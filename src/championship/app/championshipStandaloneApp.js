@@ -16,7 +16,8 @@ import {
   assignCreatureToCage,
   createRaisingProductionState,
   normalizeRaisingProductionState,
-  recordCareInteraction
+  recordCareInteraction,
+  recordEnclosedCreature
 } from "./championshipRaisingProduction.js";
 import { createChampionshipPersistentSavePort } from "./ChampionshipPersistentSavePort.js";
 import { selectPhase1FirstCreature } from "./phase1ProductCreatures.js";
@@ -77,10 +78,18 @@ export function createChampionshipStandaloneApp({
   // so until then the inventory starts at the original's initial_owned shape.
   let huntInventory = null;
   let huntLoadout = null;
+  // Snapshot of the last enclosed wild, for Hunt Result. Session-scoped: the
+  // durable write is the raising.collection entry, not this screen payload.
+  let huntResult = null;
   // DEVELOPER_PROTOTYPE_ONLY. Companion selection was the VS2 placeholder for a
   // loadout. It is not part of the Player Mode path and no seam surfaces it.
   let developerCompanionCreatureId = null;
   const screenListeners = new Set();
+
+  function speciesDisplayName(speciesId) {
+    const slug = String(speciesId ?? "").split(":").pop() || "creature";
+    return slug.replace(/-/g, " ").toUpperCase();
+  }
 
   function publishScreens() {
     for (const listener of [...screenListeners]) {
@@ -92,10 +101,12 @@ export function createChampionshipStandaloneApp({
   function resetExpedition() {
     huntRuntime = null;
     huntLoadout = null;
+    huntResult = null;
     selectedGateId = null;
     confirmedGateId = null;
     developerCompanionCreatureId = null;
-    while (screens.canGoBack()) screens.back();
+    if (screens.canExit()) screens.exit();
+    else while (screens.canGoBack()) screens.back();
   }
 
   function requireLoadout() {
@@ -313,6 +324,10 @@ export function createChampionshipStandaloneApp({
       return huntRuntime;
     },
 
+    getHuntResult() {
+      return huntResult;
+    },
+
     openGate() {
       requireSession();
       screens.enter(CHAMPIONSHIP_SCREENS.GATE_SELECT);
@@ -411,15 +426,71 @@ export function createChampionshipStandaloneApp({
     },
 
     /**
-     * Leave the field.
+     * Leave the field without an enclosure.
      *
-     * VS2 writes nothing on exit: no capture, no reward, no progression. The
-     * Raising slice is exactly as the player left it.
+     * Returning home this way writes no collection entry. Collection only grows
+     * when a closed original-geometry loop still contains the tethered wild.
      */
     exitHunt() {
       if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD) return screens.current();
       huntRuntime = null;
       huntLoadout = null;
+      huntResult = null;
+      confirmedGateId = null;
+      selectedGateId = null;
+      screens.exit();
+      publishScreens();
+      return screens.current();
+    },
+
+    beginEnclosureStroke(worldX, worldY) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD || !huntRuntime) return false;
+      return huntRuntime.beginEnclosureStroke(worldX, worldY);
+    },
+
+    extendEnclosureStroke(worldX, worldY) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD || !huntRuntime) return false;
+      return huntRuntime.extendEnclosureStroke(worldX, worldY);
+    },
+
+    /**
+     * Finish the current stroke.
+     *
+     * A closed loop that still contains the wild is the functional success rule.
+     * Original capture odds are untraced, so this does not roll a success chance.
+     */
+    endEnclosureStroke() {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD || !huntRuntime) return null;
+      const verdict = huntRuntime.endEnclosureStroke();
+      if (verdict?.outcome !== "ENCLOSED") return verdict;
+      const instanceId = `championship:2026:instance:${String((raising.collection?.length ?? 0) + 1).padStart(4, "0")}`;
+      raising = recordEnclosedCreature(raising, {
+        instanceId,
+        speciesId: verdict.speciesId,
+        enclosedAt: now(),
+        originGateId: confirmedGateId
+      });
+      huntResult = Object.freeze({
+        title: "HUNT RESULT",
+        outcomeLabel: "BROUGHT HOME",
+        speciesId: verdict.speciesId,
+        displayName: speciesDisplayName(verdict.speciesId),
+        instanceId,
+        tetherBand: verdict.tetherBand,
+        successAuthority: verdict.successAuthority,
+        collectionCount: raising.collection.length
+      });
+      screens.enter(CHAMPIONSHIP_SCREENS.HUNT_RESULT);
+      publishScreens();
+      return verdict;
+    },
+
+    /** Close Hunt Result and return to Raising Home. */
+    confirmHuntResult() {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_RESULT) return screens.current();
+      huntRuntime = null;
+      huntLoadout = null;
+      huntResult = null;
       confirmedGateId = null;
       selectedGateId = null;
       screens.exit();
@@ -431,6 +502,7 @@ export function createChampionshipStandaloneApp({
     leaveScreen() {
       const from = screens.current();
       if (from === CHAMPIONSHIP_SCREENS.HUNT_FIELD) return this.exitHunt();
+      if (from === CHAMPIONSHIP_SCREENS.HUNT_RESULT) return this.confirmHuntResult();
       if (from === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) {
         huntLoadout = null;
         confirmedGateId = null;

@@ -18,6 +18,10 @@
 // so the simulation is fully deterministic and testable without a browser.
 
 import { computeFieldCameraWindow, computeVisibleChunkWindow, getFieldChunkBounds } from "../field/fieldCamera.js";
+import { createCaptureStrokeRecognizer } from "./capture/captureStrokeRecognizer.js";
+import { classifyTetherDistance } from "./capture/tetherSystem.js";
+import { nearestWildInHitRadius } from "./capture/huntEnclosureSession.js";
+import { pointInPolygon } from "./capture/pointInPolygon.js";
 
 export const HUNT_PLAYER_SPEED_PX_PER_SECOND = 74;
 export const HUNT_WILD_SPEED_PX_PER_SECOND = 24;
@@ -125,6 +129,12 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null } = {}) 
   };
 
   const sourceWilds = wildCount === null ? world.wildCreatures : world.wildCreatures.slice(0, wildCount);
+  // VS3 enclosure. A stroke that starts near a wild creature is capture, not
+  // walking. Empty-ground pointers stay with moveTo, so this is not a Capture
+  // button. Success odds are untraced: a closed original-geometry loop that
+  // still contains the tethered wild is the functional success rule.
+  let enclosure = null;
+
   const wilds = sourceWilds.map((spawn) => ({
     wildId: spawn.wildId,
     speciesId: spawn.speciesId,
@@ -287,6 +297,78 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null } = {}) 
         }
       }
       return chunks;
+    },
+
+    /**
+     * Start a circle stroke if the pointer is on a wild creature.
+     *
+     * Empty ground returns false so the field can keep using the same pointer
+     * as a move. That is how this stays a gesture, not a Capture button.
+     */
+    beginEnclosureStroke(worldX, worldY) {
+      if (enclosure) return false;
+      if (!Number.isFinite(worldX) || !Number.isFinite(worldY)) return false;
+      const target = nearestWildInHitRadius(worldX, worldY, wilds);
+      if (!target) return false;
+      const recognizer = createCaptureStrokeRecognizer();
+      recognizer.begin(worldX, worldY);
+      enclosure = {
+        recognizer,
+        targetWildId: target.wildId,
+        speciesId: target.speciesId
+      };
+      player.targetX = null;
+      player.targetY = null;
+      player.moving = false;
+      return true;
+    },
+
+    extendEnclosureStroke(worldX, worldY) {
+      if (!enclosure) return false;
+      if (!Number.isFinite(worldX) || !Number.isFinite(worldY)) return false;
+      enclosure.recognizer.move(worldX, worldY);
+      return true;
+    },
+
+    endEnclosureStroke() {
+      if (!enclosure) return null;
+      const geometry = enclosure.recognizer.end();
+      const points = enclosure.recognizer.getPoints();
+      const target = wilds.find((wild) => wild.wildId === enclosure.targetWildId) ?? null;
+      const tetherBand = target
+        ? classifyTetherDistance(Math.hypot(target.worldX - player.worldX, target.worldY - player.worldY))
+        : "OVER_160";
+      const contained = Boolean(target && pointInPolygon(target.worldX, target.worldY, points));
+      const enclosed = geometry.closed && contained;
+      if (enclosed) {
+        const index = wilds.indexOf(target);
+        if (index >= 0) wilds.splice(index, 1);
+      }
+      const verdict = Object.freeze({
+        outcome: enclosed ? "ENCLOSED" : "OPEN",
+        wildId: enclosure.targetWildId,
+        speciesId: enclosure.speciesId,
+        successAuthority: "PRODUCT_AUTHORED_ENCLOSURE",
+        tetherBand,
+        closed: geometry.closed,
+        reason: geometry.reason
+      });
+      enclosure = null;
+      return verdict;
+    },
+
+    getEnclosureStroke() {
+      if (!enclosure) return null;
+      const target = wilds.find((wild) => wild.wildId === enclosure.targetWildId) ?? null;
+      const tetherBand = target
+        ? classifyTetherDistance(Math.hypot(target.worldX - player.worldX, target.worldY - player.worldY))
+        : "OVER_160";
+      return Object.freeze({
+        points: enclosure.recognizer.getPoints(),
+        targetWildId: enclosure.targetWildId,
+        tetherBand,
+        active: true
+      });
     }
   });
 }

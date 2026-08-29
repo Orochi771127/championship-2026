@@ -17,10 +17,11 @@ export const CHAMPIONSHIP_SCREENS = deepFreeze({
   RAISING_HOME: "RAISING_HOME",
   GATE_SELECT: "GATE_SELECT",
   HUNT_LOADOUT: "HUNT_LOADOUT",
-  HUNT_FIELD: "HUNT_FIELD"
+  HUNT_FIELD: "HUNT_FIELD",
+  HUNT_RESULT: "HUNT_RESULT"
 });
 
-export const CHAMPIONSHIP_SCREEN_STACK_MAX_DEPTH = 4;
+export const CHAMPIONSHIP_SCREEN_STACK_MAX_DEPTH = 5;
 
 // Forward transitions only. Going back is popping, and is legal wherever the
 // stack has something to pop to.
@@ -28,13 +29,17 @@ const FORWARD_TRANSITIONS = deepFreeze({
   RAISING_HOME: ["GATE_SELECT"],
   GATE_SELECT: ["HUNT_LOADOUT"],
   HUNT_LOADOUT: ["HUNT_FIELD"],
-  HUNT_FIELD: []
+  HUNT_FIELD: ["HUNT_RESULT"],
+  HUNT_RESULT: []
 });
 
 // Screens that unwind the whole stack rather than popping one level. Leaving the
-// Hunt field returns to Raising Home directly: the loadout and gate screens are
-// not somewhere the player should land on the way out.
-const RESET_TARGETS = deepFreeze({ HUNT_FIELD: "RAISING_HOME" });
+// Hunt field or Hunt Result returns to Raising Home directly: the loadout and
+// gate screens are not somewhere the player should land on the way out.
+const RESET_TARGETS = deepFreeze({
+  HUNT_FIELD: "RAISING_HOME",
+  HUNT_RESULT: "RAISING_HOME"
+});
 
 function screenStackError(message) {
   const error = new Error(message);

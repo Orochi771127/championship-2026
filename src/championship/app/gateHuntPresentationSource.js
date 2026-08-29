@@ -86,9 +86,11 @@ const HUNT_TOOLBAR_FRAME = deepFreeze(huntToolbarProjection());
 function assertApplication(app) {
   const methods = [
     "getScreen", "getGates", "getSelectedGateId", "getConfirmedGate",
-    "getHuntRuntime", "getHuntLoadout", "openGate", "selectGate", "confirmGate",
+    "getHuntRuntime", "getHuntLoadout", "getHuntResult", "openGate", "selectGate", "confirmGate",
     "selectHuntEquipment", "fitHuntPlugin", "selectHuntMemoryCard",
-    "beginHunt", "exitHunt", "leaveScreen", "getSnapshot", "getRaisingState", "save"
+    "beginHunt", "exitHunt", "leaveScreen",
+    "beginEnclosureStroke", "extendEnclosureStroke", "endEnclosureStroke", "confirmHuntResult",
+    "getSnapshot", "getRaisingState", "save"
   ];
   if (!app || methods.some((method) => typeof app[method] !== "function")) {
     throw new TypeError("VS2 requires an open Championship standalone application");
@@ -207,14 +209,31 @@ export function createGateHuntPresentationSource(app) {
       affordances: {
         dragMoves: true,
         tapMoves: true,
-        note: "Pointer Events only. Direct manipulation, matching the Raising input grammar. No D-pad, stick or keyboard model."
+        touchNearWildStartsStroke: true,
+        note: "Pointer Events only. Empty ground moves the tamer. Touching a wild starts an enclosure stroke. No Capture button."
       },
       wildBehaviourDeclaration: {
         state: "UNKNOWN_REQUIRES_TRACE",
         movementAuthority: runtime.movementAuthority,
-        note: "Wild creatures wander inside a bounded radius and do nothing else. They do not see, approach, flee from, chase or react to the player. VS3 owns Capture; VS2 ships no capture surface."
+        note: "Wild creatures wander inside a bounded radius and do nothing else. They do not see, approach, flee from, chase or react to the player. Enclosure is the VS3 success rule; original odds stay untraced."
       },
       toolbar: HUNT_TOOLBAR_FRAME
+    };
+  }
+
+  function huntResultBlock() {
+    const result = app.getHuntResult();
+    if (!result) return null;
+    return {
+      title: result.title,
+      outcomeLabel: result.outcomeLabel,
+      speciesId: result.speciesId,
+      displayName: result.displayName,
+      instanceId: result.instanceId,
+      tetherBand: result.tetherBand,
+      successAuthority: result.successAuthority,
+      collectionCount: result.collectionCount,
+      note: "Enclosure is the functional success rule. Original odds are untraced."
     };
   }
 
@@ -227,6 +246,7 @@ export function createGateHuntPresentationSource(app) {
       gateSelect: screen === CHAMPIONSHIP_SCREENS.GATE_SELECT ? gateSelectBlock() : null,
       huntLoadout: screen === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT ? huntLoadoutBlock() : null,
       huntField: screen === CHAMPIONSHIP_SCREENS.HUNT_FIELD ? huntFieldBlock() : null,
+      huntResult: screen === CHAMPIONSHIP_SCREENS.HUNT_RESULT ? huntResultBlock() : null,
       save: saveBlock(),
       navigation: {
         canLeave: screen !== CHAMPIONSHIP_SCREENS.RAISING_HOME,
@@ -307,6 +327,21 @@ export function createGateHuntPresentationSource(app) {
       if (!runtime) return false;
       return runtime.moveTo(worldX, worldY);
     },
+    beginEnclosureStroke(worldX, worldY) {
+      return app.beginEnclosureStroke(worldX, worldY);
+    },
+    extendEnclosureStroke(worldX, worldY) {
+      return app.extendEnclosureStroke(worldX, worldY);
+    },
+    endEnclosureStroke() {
+      const verdict = app.endEnclosureStroke();
+      if (verdict?.outcome === "ENCLOSED") return commit();
+      return currentFrame;
+    },
+    confirmHuntResult() {
+      app.confirmHuntResult();
+      return commit();
+    },
     exitHunt() {
       app.exitHunt();
       return commit();
@@ -343,6 +378,7 @@ export function createGateHuntPresentationSource(app) {
         visibleChunks: runtime.getVisibleChunks(viewportWidth, viewportHeight),
         player: runtime.getPlayer(),
         wildCreatures: runtime.getWildCreatures(),
+        enclosure: runtime.getEnclosureStroke(),
         objects: world.objects,
         isBlockedTile: (x, y) => world.isBlockedTile(x, y)
       };

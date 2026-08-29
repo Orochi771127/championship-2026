@@ -13,7 +13,7 @@ This inventory answers: “What has already been built, and what can the next sl
 | Raising presentation seam | `raisingPresentationSource.js`, `raisingHomeP1RView.js`, `createRaisingFieldPixiPresentation.js` | INT-RH2 tests + browser QA | Reuse getFrame/subscribe/intents; keep unverified effects neutral |
 | Gate/Hunt presentation seam | `gateHuntPresentationSource.js` | VS2 and VS2-R1 tests | VS3 must consume this seam rather than own expedition state |
 | Field camera/collision | `src/championship/field/` | frozen field invariants + VS2 tests | Reuse for large 2D fields; 9:16 remains a viewport |
-| Deterministic Hunt world | `hunt/huntWorld.js`, `hunt/huntRuntime.js` | connected/distinct world and movement tests | Extend with traced spawn/AI/Capture events, not renderer state |
+| Deterministic Hunt world | `hunt/huntWorld.js`, `hunt/huntRuntime.js` | connected/distinct world, movement and VS3 enclosure tests | Extend with traced spawn/AI; enclosure is live, original odds stay labelled |
 | Hunt Loadout domain | `hunt/loadout/` | VS2-R2 contract/runtime tests | Use for VS3 inventory/capacity; do not invent equipment effects |
 | Gate catalog/presentation | `gate/gateCatalog.js`, `createGateSelectThreePresentation.js` | VS2-R1 contracts + browser QA | Keep Three.js presentation-only and retain 2D fallback |
 | Evidence taxonomy/firewall | `src/championship/contracts/` | policy, ingest and migration-firewall tests | Every parity claim carries evidence status; research results cannot patch player state |
@@ -43,7 +43,8 @@ This inventory answers: “What has already been built, and what can the next sl
 
 ## Work that is not already implemented
 
-- Capture tether/circle interaction and Hunt Result atomic transaction;
+- Original capture-success odds, G-capacity consumption, and Hunt rope VFX conversion;
+- Home / Database presentation of enclosed collection instances;
 - exact Raising care formulas and complete modular Cage editor/effect resolver;
 - Shop transaction runtime and Database collection UI/state;
 - product Battle setup, deterministic auto-battle runtime and result writes;
