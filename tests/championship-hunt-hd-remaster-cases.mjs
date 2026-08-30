@@ -9,15 +9,16 @@ const manifest = JSON.parse(fs.readFileSync(`${root}/manifest.json`, "utf8"));
 const sourceManifest = JSON.parse(fs.readFileSync(`${sourceRoot}/manifest.json`, "utf8"));
 const digest = (file) => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex").toUpperCase();
 
-test("Hunt HD remaster batches cover HM00-HM06 without runtime promotion", () => {
-  assert.equal(manifest.batch, "ART_A4_HUNT_HD_REMASTER_V1_HM03_HM06");
+test("Hunt HD remaster batches cover HM00-HM14 without runtime promotion", () => {
+  assert.equal(manifest.batch, "ART_A4_HUNT_HD_REMASTER_V1_HM08_HM14");
   assert.deepEqual(manifest.completedBatches.map((batch) => batch.batch), [
     "ART_A4_HUNT_HD_REMASTER_V1_HM00_HM02",
     "ART_A4_HUNT_HD_REMASTER_V1_HM03_HM06",
+    "ART_A4_HUNT_HD_REMASTER_V1_HM08_HM14",
   ]);
-  assert.equal(manifest.fieldCount, 13);
+  assert.equal(manifest.fieldCount, 22);
   assert.equal(manifest.plannedFieldCount, 30);
-  assert.deepEqual(manifest.completedFields, sourceManifest.fields.slice(0, 13).map((field) => field.fieldId));
+  assert.deepEqual(manifest.completedFields, sourceManifest.fields.slice(0, 22).map((field) => field.fieldId));
   assert.equal(manifest.humanApproved, false);
   assert.equal(manifest.runtimeEligible, false);
   assert.equal(manifest.shippingReady, false);

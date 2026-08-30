@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "owner": "CODEX_ART",
   "lastUpdated": "2026-08-31",
-  "syncBatch": "ART_A4_HUNT_HD_REMASTER_V1_HM03_HM06",
-  "syncRevision": 26,
-  "syncRevisionTarget": 26,
-  "status": "HUNT_HD_REMASTER_13_OF_30_COMPLETE_REMAINING_17_NEXT",
+  "syncBatch": "ART_A4_HUNT_HD_REMASTER_V1_HM08_HM14",
+  "syncRevision": 27,
+  "syncRevisionTarget": 27,
+  "status": "HUNT_HD_REMASTER_22_OF_30_COMPLETE_FINAL_8_NEXT",
   "sourceOfTruth": {
     "coordinationRoot": "docs/coordination",
     "canonicalRepository": ".",
@@ -65,6 +65,18 @@
     "o3dCheckpointIsolatedFromRuntimeRegistryAndP2": true
   },
   "completed": [
+    {
+      "id": "ART-A4-HUNT-HD-REMASTER-V1-HM08-HM14",
+      "status": "THIRD_BATCH_COMPLETE_22_OF_30_TOTAL",
+      "summary": "Nine HM08-HM14 variants extend the locked HD workflow to 22/30 Hunt fields. Desert, cave, factory, interior, snow and rock day/night variants remain complete; HM10 and HM11 retain all three verified animation frames. HM11's original voids remain intentional black non-field regions rather than missing-region diagnostics.",
+      "output": "docs/art/production/hunt/hd-remaster-v1/manifest.json",
+      "receipt": "docs/art/production/hunt/HD_REMASTER_V1_RECEIPT.md",
+      "validation": "35 generated files rebuild byte-identically; every frame is 2048x2048, contains zero diagnostic-red pixels and is hash locked",
+      "rights": "OWNER_REPORTED_LICENSED_SOURCE_LINK_PENDING",
+      "productionStatus": "HD_REMASTER_CANDIDATE_OWNER_VISUAL_REVIEW_REQUIRED",
+      "humanApproved": false,
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
     {
       "id": "ART-A4-HUNT-HD-REMASTER-V1-HM03-HM06",
       "status": "SECOND_BATCH_COMPLETE_13_OF_30_TOTAL",
@@ -373,8 +385,8 @@
   "current": [
     {
       "id": "ART-A4-HUNT-HD-REMASTER",
-      "status": "SECOND_BATCH_COMPLETE_13_OF_30_REMAINING_17_NEXT",
-      "summary": "The locked genuine-HD Hunt workflow now covers 13/30 variants through HM06. Continue the remaining seventeen exact variants in bounded batches while preserving every 128x128 world, animated-terrain-under-core order, OPM/NCER object placement and large draggable camera world; never crop the world to 9:16."
+      "status": "THIRD_BATCH_COMPLETE_22_OF_30_FINAL_8_NEXT",
+      "summary": "The locked genuine-HD Hunt workflow now covers 22/30 variants through HM14. Continue the final eight exact variants while preserving every 128x128 world, animated-terrain-under-core order, OPM/NCER object placement and large draggable camera world; never crop the world to 9:16."
     },
     {
       "id": "VS2-HUNT-FIELD-PAN-PARITY",
@@ -443,7 +455,7 @@
     "SHIPPING"
   ],
   "blocked": [
-    "Cage CM01-CM40 and Hunt HD30 reference technical QA is complete; Cage component-faithful HD remaster candidates are complete for all 40 fields and Hunt genuine-HD production covers 13/30 variants. The remaining 17 Hunt variants, linked licence evidence, Owner visual approval, runtime presentation binding, occlusion and physical-device performance QA remain required before runtime promotion.",
+    "Cage CM01-CM40 and Hunt HD30 reference technical QA is complete; Cage component-faithful HD remaster candidates are complete for all 40 fields and Hunt genuine-HD production covers 22/30 variants. The final 8 Hunt variants, linked licence evidence, Owner visual approval, runtime presentation binding, occlusion and physical-device performance QA remain required before runtime promotion.",
     "A1 character identity sheets, animation masters, UI components, VFX ports and runtime atlases still require production receipts, linked licence evidence and relevant QA; direction boards alone are not runtime assets.",
     "A2-A11 mass production remains gated by completion of the A1 technical pipeline and the consuming gameplay/presentation contracts; A0/A1 proposals do not promote the 96-character launch roster.",
     "The Owner reports complete licensing, but each production asset still requires a linked licence document reference before READY_FOR_RUNTIME or SHIPPING_READY promotion.",
@@ -460,7 +472,7 @@
   ],
   "outputs": [
     "docs/art/production/hunt/hd-remaster-v1/manifest.json",
-    "docs/art/production/hunt/hd-remaster-v1/hunt-hm00-hm06-remaster-contact.jpg",
+    "docs/art/production/hunt/hd-remaster-v1/hunt-hm00-hm14-remaster-contact.jpg",
     "docs/art/production/hunt/HD_REMASTER_V1_RECEIPT.md",
     "scripts/build-hunt-hd-remaster.py",
     "tests/championship-hunt-hd-remaster-cases.mjs",
@@ -602,7 +614,7 @@
     }
   },
   "recommendedNext": [
-    "Extend the locked Hunt HD workflow from 13/30 to the remaining seventeen exact variants without changing their 128x128 world topology, animation layering, object placement or draggable large-map camera contract; process in bounded biome batches and never preload all decoded maps.",
+    "Complete the final eight Hunt variants with the locked HD workflow without changing their 128x128 world topology, animation layering, object placement or draggable large-map camera contract; never preload all decoded maps.",
     "Present the complete forty-field Cage contact sheet and CM27 before/after proof for Owner visual approval before any runtime or shipping promotion.",
     "Port the remaining NCGR/NCLR and NCER/NCBR object-cell decoding into the browser art module and pixel-diff its composition against the 40 native goldens.",
     "Produce the first genuinely redrawn HD Cage and Hunt master slices against the exact placement/topology baselines, preserving original palette, composition and object positions; require source-versus-redraw review before scaling.",
