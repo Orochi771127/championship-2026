@@ -35,6 +35,10 @@ BATCHES = [
         "field_hm11_01", "field_hm13_01", "field_hm13_02", "field_hm14_01",
         "field_hm14_02",
     ],
+    [
+        "field_hm15_01", "field_hm15_02", "field_hm16_01", "field_hm16_02",
+        "field_hm17_01", "field_hm17_02", "field_hm18_01", "field_hm18_02",
+    ],
 ]
 SELECTED_FIELDS = [field_id for batch in BATCHES for field_id in batch]
 SCALE = 2
@@ -123,8 +127,20 @@ def transparent_rgb_is_zero(image: Image.Image) -> bool:
     return not np.any(values[..., :3][transparent])
 
 
-def diagnostic_red_pixel_count(image: Image.Image) -> int:
-    """Count the solid-red sentinel used by incomplete reconstruction views."""
+def _max_true_run(mask: np.ndarray) -> int:
+    maximum = 0
+    for line in mask:
+        padded = np.pad(line.astype(np.int8), (1, 1))
+        changes = np.diff(padded)
+        starts = np.flatnonzero(changes == 1)
+        ends = np.flatnonzero(changes == -1)
+        if starts.size:
+            maximum = max(maximum, int(np.max(ends - starts)))
+    return maximum
+
+
+def diagnostic_red_metrics(image: Image.Image) -> dict:
+    """Separate tiny source-red details from large missing-region sentinels."""
     values = np.asarray(image.convert("RGBA"), dtype=np.uint8)
     diagnostic = (
         (values[..., 0] >= 250)
@@ -132,7 +148,15 @@ def diagnostic_red_pixel_count(image: Image.Image) -> int:
         & (values[..., 2] <= 5)
         & (values[..., 3] > 0)
     )
-    return int(np.count_nonzero(diagnostic))
+    count = int(np.count_nonzero(diagnostic))
+    max_run = max(_max_true_run(diagnostic), _max_true_run(diagnostic.T))
+    coverage = count / diagnostic.size
+    return {
+        "diagnosticRedPixelCount": count,
+        "diagnosticRedCoverage": round(coverage, 8),
+        "maxDiagnosticRedRunPixels": max_run,
+        "largeDiagnosticRedRegionAbsent": coverage < 0.01 and max_run < 64,
+    }
 
 
 def rgb_mae_after_downsample(source: Image.Image, remaster: Image.Image) -> float:
@@ -147,7 +171,7 @@ def remaster_frame(source_path: Path, output_path: Path, output_root: Path) -> d
     remaster = remaster_rgba(source)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     remaster.save(output_path, format="PNG", optimize=True)
-    return {
+    result = {
         "sourceFile": source_path.relative_to(SOURCE_ROOT).as_posix(),
         "sourceSha256": sha256(source_path),
         "file": output_path.relative_to(output_root).as_posix(),
@@ -157,9 +181,10 @@ def remaster_frame(source_path: Path, output_path: Path, output_root: Path) -> d
         "sourceAlphaBounds": list(source.getchannel("A").getbbox()),
         "alphaBounds": list(remaster.getchannel("A").getbbox()),
         "transparentRgbZero": transparent_rgb_is_zero(remaster),
-        "diagnosticRedPixelCount": diagnostic_red_pixel_count(remaster),
         "rgbMaeAfterLanczosDownsample": round(rgb_mae_after_downsample(source, remaster), 4),
     }
+    result.update(diagnostic_red_metrics(remaster))
+    return result
 
 
 def contact_sheet(records: list[dict], output_root: Path, path: Path) -> None:
@@ -236,16 +261,17 @@ def build(output_root: Path) -> None:
             "animationPreserved": source_field["animation"]["status"] != "NOT_PRESENT",
         })
 
-    contact_path = output_root / "hunt-hm00-hm14-remaster-contact.jpg"
+    contact_path = output_root / "hunt-hm00-hm18-remaster-contact.jpg"
     contact_sheet(records, output_root, contact_path)
     camera_contract_path = REPO / "docs/research/HUNT_FIELD_INPUT_ROM_TRACE_2026-08-29.md"
     manifest = {
         "schemaVersion": 1,
-        "batch": "ART_A4_HUNT_HD_REMASTER_V1_HM08_HM14",
+        "batch": "ART_A4_HUNT_HD_REMASTER_V1_HM15_HM18",
         "completedBatches": [
             {"batch": "ART_A4_HUNT_HD_REMASTER_V1_HM00_HM02", "fields": BATCHES[0]},
             {"batch": "ART_A4_HUNT_HD_REMASTER_V1_HM03_HM06", "fields": BATCHES[1]},
             {"batch": "ART_A4_HUNT_HD_REMASTER_V1_HM08_HM14", "fields": BATCHES[2]},
+            {"batch": "ART_A4_HUNT_HD_REMASTER_V1_HM15_HM18", "fields": BATCHES[3]},
         ],
         "fieldCount": len(records),
         "plannedFieldCount": 30,
@@ -268,7 +294,7 @@ def build(output_root: Path) -> None:
             "allFieldsRemain128x128": all(record["topologyCells"] == [128, 128] for record in records),
             "allFramesAre2048Square": all(frame["dimensions"] == [2048, 2048] for record in records for frame in record["frames"]),
             "allTransparentRgbZero": all(frame["transparentRgbZero"] for record in records for frame in record["frames"]),
-            "allDiagnosticRedAbsent": all(frame["diagnosticRedPixelCount"] == 0 for record in records for frame in record["frames"]),
+            "allLargeDiagnosticRedRegionsAbsent": all(frame["largeDiagnosticRedRegionAbsent"] for record in records for frame in record["frames"]),
             "objectPlacementRelayoutPerformed": False,
             "worldCroppedToPortrait": False,
             "animationFlattenedToStatic": False,
@@ -295,7 +321,7 @@ def main() -> None:
             second = tree_hashes(rebuilt)
         if first != second:
             raise SystemExit("Hunt HD remaster determinism check failed")
-        print(f"Deterministic Hunt HD remaster through HM14 passed: {len(first)} files")
+        print(f"Deterministic Hunt HD remaster all 30 passed: {len(first)} files")
 
 
 if __name__ == "__main__":

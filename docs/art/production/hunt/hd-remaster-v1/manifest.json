@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "batch": "ART_A4_HUNT_HD_REMASTER_V1_HM08_HM14",
+  "batch": "ART_A4_HUNT_HD_REMASTER_V1_HM15_HM18",
   "completedBatches": [
     {
       "batch": "ART_A4_HUNT_HD_REMASTER_V1_HM00_HM02",
@@ -38,9 +38,22 @@
         "field_hm14_01",
         "field_hm14_02"
       ]
+    },
+    {
+      "batch": "ART_A4_HUNT_HD_REMASTER_V1_HM15_HM18",
+      "fields": [
+        "field_hm15_01",
+        "field_hm15_02",
+        "field_hm16_01",
+        "field_hm16_02",
+        "field_hm17_01",
+        "field_hm17_02",
+        "field_hm18_01",
+        "field_hm18_02"
+      ]
     }
   ],
-  "fieldCount": 22,
+  "fieldCount": 30,
   "plannedFieldCount": 30,
   "completedFields": [
     "field_hm00_01",
@@ -64,7 +77,15 @@
     "field_hm13_01",
     "field_hm13_02",
     "field_hm14_01",
-    "field_hm14_02"
+    "field_hm14_02",
+    "field_hm15_01",
+    "field_hm15_02",
+    "field_hm16_01",
+    "field_hm16_02",
+    "field_hm17_01",
+    "field_hm17_02",
+    "field_hm18_01",
+    "field_hm18_02"
   ],
   "scale": 2,
   "profile": "COMPOSITE_FAITHFUL_BICUBIC_SCALE2X_BLEND_2X_V1",
@@ -86,14 +107,14 @@
   "runtimeEligible": false,
   "shippingReady": false,
   "contactSheet": {
-    "file": "hunt-hm00-hm14-remaster-contact.jpg",
-    "sha256": "D1F5F31B8355AC5EAF313108372889F64F8D346E07B1235D072F3200276C1A8B"
+    "file": "hunt-hm00-hm18-remaster-contact.jpg",
+    "sha256": "78E43347BFD1337AAEB5B9688F0F334E45A212A52B6AF0B25BE097A998C17E72"
   },
   "qa": {
     "allFieldsRemain128x128": true,
     "allFramesAre2048Square": true,
     "allTransparentRgbZero": true,
-    "allDiagnosticRedAbsent": true,
+    "allLargeDiagnosticRedRegionsAbsent": true,
     "objectPlacementRelayoutPerformed": false,
     "worldCroppedToPortrait": false,
     "animationFlattenedToStatic": false
@@ -142,8 +163,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.9049,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": 20
         },
@@ -173,8 +197,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.8995,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 1,
           "durationRawTicks": 20
         }
@@ -245,8 +272,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.9622,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": 20
         },
@@ -276,8 +306,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.9553,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 1,
           "durationRawTicks": 20
         }
@@ -348,8 +381,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.1993,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": 20
         },
@@ -379,8 +415,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.1955,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 1,
           "durationRawTicks": 20
         }
@@ -451,8 +490,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.8636,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": null
         }
@@ -523,8 +565,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.0849,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": null
         }
@@ -595,8 +640,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 2.4005,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": null
         }
@@ -667,8 +715,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.4473,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": null
         }
@@ -739,8 +790,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 2.4622,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": null
         }
@@ -811,8 +865,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.715,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": null
         }
@@ -883,8 +940,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 2.4675,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": 40
         },
@@ -914,8 +974,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 2.478,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 1,
           "durationRawTicks": 40
         }
@@ -986,8 +1049,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.6914,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": 40
         },
@@ -1017,8 +1083,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.6983,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 1,
           "durationRawTicks": 40
         }
@@ -1089,8 +1158,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 2.4964,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": 20
         },
@@ -1120,8 +1192,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 2.4632,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 1,
           "durationRawTicks": 20
         }
@@ -1192,8 +1267,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.7488,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": 20
         },
@@ -1223,8 +1301,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.7232,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 1,
           "durationRawTicks": 20
         }
@@ -1295,8 +1376,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.7634,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": null
         }
@@ -1367,8 +1451,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.1333,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": null
         }
@@ -1439,8 +1526,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.25,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": null
         }
@@ -1511,8 +1601,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 2.2883,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": 13
         },
@@ -1542,8 +1635,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 2.2885,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 1,
           "durationRawTicks": 12
         },
@@ -1573,8 +1669,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 2.2883,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 2,
           "durationRawTicks": 12
         }
@@ -1645,8 +1744,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 0.9504,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": 13
         },
@@ -1676,8 +1778,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 0.9507,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 1,
           "durationRawTicks": 12
         },
@@ -1707,8 +1812,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 0.9505,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 2,
           "durationRawTicks": 12
         }
@@ -1779,8 +1887,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.1314,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": null
         }
@@ -1851,8 +1962,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 0.6768,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": null
         }
@@ -1923,8 +2037,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.8895,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": null
         }
@@ -1995,8 +2112,11 @@
             2048
           ],
           "transparentRgbZero": true,
-          "diagnosticRedPixelCount": 0,
           "rgbMaeAfterLanczosDownsample": 1.2758,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
           "frameIndex": 0,
           "durationRawTicks": null
         }
@@ -2020,6 +2140,742 @@
       "encounter": {
         "sourceFile": "fields/field_hm14_02/encounter-raw-classes.json",
         "sourceSha256": "F2F8A78DCA52C8F623241A9491A96398F5438F78F8F13F2B3B3D7DE118849CD5",
+        "changed": false
+      },
+      "animationPreserved": false
+    },
+    {
+      "fieldId": "field_hm15_01",
+      "profile": "COMPOSITE_FAITHFUL_BICUBIC_SCALE2X_BLEND_2X_V1",
+      "compositionAuthority": "EXACT_BSAR_THEN_VOID_MASKED_CORE_THEN_OPM_NCER_NCBR_COMPOSITE",
+      "topologyCells": [
+        128,
+        128
+      ],
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "remasterDimensions": [
+        2048,
+        2048
+      ],
+      "frames": [
+        {
+          "sourceFile": "fields/field_hm15_01/native-composite-frame-00.png",
+          "sourceSha256": "64D41320DF17C1555848519288F888779C4B159440790FC135AA0DDBF05180E5",
+          "file": "fields/field_hm15_01/composite-remaster-hd2x-frame-00.png",
+          "sha256": "E42539B5F9AB1541D8B766DA4756335FE3B3BB97C5F63644204B2CB088574170",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "rgbMaeAfterLanczosDownsample": 1.5218,
+          "diagnosticRedPixelCount": 64,
+          "diagnosticRedCoverage": 1.526e-05,
+          "maxDiagnosticRedRunPixels": 8,
+          "largeDiagnosticRedRegionAbsent": true,
+          "frameIndex": 0,
+          "durationRawTicks": 50
+        },
+        {
+          "sourceFile": "fields/field_hm15_01/native-composite-frame-01.png",
+          "sourceSha256": "00025C72934B242AFA420D63C4F141C35D2847D3AB06E3C744CB5CD78FF6714E",
+          "file": "fields/field_hm15_01/composite-remaster-hd2x-frame-01.png",
+          "sha256": "DFA4E44F6D420A74D74767CCD873F55FD3A36F029F0BFEC06C107DD09E03CD7D",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "rgbMaeAfterLanczosDownsample": 1.5044,
+          "diagnosticRedPixelCount": 73,
+          "diagnosticRedCoverage": 1.74e-05,
+          "maxDiagnosticRedRunPixels": 8,
+          "largeDiagnosticRedRegionAbsent": true,
+          "frameIndex": 1,
+          "durationRawTicks": 50
+        }
+      ],
+      "objectPlacement": {
+        "sourceFile": "fields/field_hm15_01/object-placement.json",
+        "sourceSha256": "9A2A7E23277B965AEE16ADB0D08469E0516EBC78AF8D2120B367305CC40F3FDC",
+        "count": 7,
+        "coordinatesChanged": false
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm15_01/object-cell-bank.json",
+        "sha256": "E31DED6A3B8348B6C4EDD2D9F75B9C49A33BD5ED28E6167DE16852E373F80C54",
+        "cellCount": 2
+      },
+      "attribute": {
+        "sourceFile": "fields/field_hm15_01/attribute-raw-classes.json",
+        "sourceSha256": "36A5DE54DB090D5793030A947B6285A3300E68D8240F064BC6F0CB7551E77128",
+        "changed": false
+      },
+      "encounter": {
+        "sourceFile": "fields/field_hm15_01/encounter-raw-classes.json",
+        "sourceSha256": "43A2ADFFA7BE97B3CB6EC45C3A85D748CDC1CB9CD30268C1D89130ABE2FD5DBE",
+        "changed": false
+      },
+      "animationPreserved": true
+    },
+    {
+      "fieldId": "field_hm15_02",
+      "profile": "COMPOSITE_FAITHFUL_BICUBIC_SCALE2X_BLEND_2X_V1",
+      "compositionAuthority": "EXACT_BSAR_THEN_VOID_MASKED_CORE_THEN_OPM_NCER_NCBR_COMPOSITE",
+      "topologyCells": [
+        128,
+        128
+      ],
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "remasterDimensions": [
+        2048,
+        2048
+      ],
+      "frames": [
+        {
+          "sourceFile": "fields/field_hm15_02/native-composite-frame-00.png",
+          "sourceSha256": "FC295FF169C6D8628A8F3F301C4D891C97CA319E48B1E87A0878623C870B18D7",
+          "file": "fields/field_hm15_02/composite-remaster-hd2x-frame-00.png",
+          "sha256": "BC61CBEE6E552C4BED9E0C481CD48977D82B1AF16F686BDEF6D76A4C50018C8B",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "rgbMaeAfterLanczosDownsample": 1.4402,
+          "diagnosticRedPixelCount": 56,
+          "diagnosticRedCoverage": 1.335e-05,
+          "maxDiagnosticRedRunPixels": 8,
+          "largeDiagnosticRedRegionAbsent": true,
+          "frameIndex": 0,
+          "durationRawTicks": 50
+        },
+        {
+          "sourceFile": "fields/field_hm15_02/native-composite-frame-01.png",
+          "sourceSha256": "DA523B872EA4E668F3D956E7B65304D7075B3947BD62C37BB365FFD0A9E4F769",
+          "file": "fields/field_hm15_02/composite-remaster-hd2x-frame-01.png",
+          "sha256": "D4EA0D069A552C580CD993201363DE94D779102908EB145BF7DABFDDA2F46B07",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "rgbMaeAfterLanczosDownsample": 1.4237,
+          "diagnosticRedPixelCount": 57,
+          "diagnosticRedCoverage": 1.359e-05,
+          "maxDiagnosticRedRunPixels": 8,
+          "largeDiagnosticRedRegionAbsent": true,
+          "frameIndex": 1,
+          "durationRawTicks": 50
+        }
+      ],
+      "objectPlacement": {
+        "sourceFile": "fields/field_hm15_02/object-placement.json",
+        "sourceSha256": "09DC2CFD756D0DA642AD653873A47F56318E4848B1F520CE58238CEF1477945F",
+        "count": 7,
+        "coordinatesChanged": false
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm15_02/object-cell-bank.json",
+        "sha256": "BFB4976A05C2923957F021A35AB1BA347A5332270341F6C68D0FF3D401098B1C",
+        "cellCount": 2
+      },
+      "attribute": {
+        "sourceFile": "fields/field_hm15_02/attribute-raw-classes.json",
+        "sourceSha256": "36A5DE54DB090D5793030A947B6285A3300E68D8240F064BC6F0CB7551E77128",
+        "changed": false
+      },
+      "encounter": {
+        "sourceFile": "fields/field_hm15_02/encounter-raw-classes.json",
+        "sourceSha256": "2B2310B9E7AD0907EB9DC4A0A58CD3F7B69FE1F672FBBFD84FB5B6CCED5F2196",
+        "changed": false
+      },
+      "animationPreserved": true
+    },
+    {
+      "fieldId": "field_hm16_01",
+      "profile": "COMPOSITE_FAITHFUL_BICUBIC_SCALE2X_BLEND_2X_V1",
+      "compositionAuthority": "EXACT_BSAR_THEN_VOID_MASKED_CORE_THEN_OPM_NCER_NCBR_COMPOSITE",
+      "topologyCells": [
+        128,
+        128
+      ],
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "remasterDimensions": [
+        2048,
+        2048
+      ],
+      "frames": [
+        {
+          "sourceFile": "fields/field_hm16_01/native-composite-frame-00.png",
+          "sourceSha256": "074F763DD265B06A6A6943122440CFA255C62FB8462C57DECAB85B6042E0D9A6",
+          "file": "fields/field_hm16_01/composite-remaster-hd2x-frame-00.png",
+          "sha256": "CD92D8DE7B5C8C79FACE24347FB968C72FB90855E44C4DB98B382395E304A022",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "rgbMaeAfterLanczosDownsample": 1.9072,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
+          "frameIndex": 0,
+          "durationRawTicks": null
+        }
+      ],
+      "objectPlacement": {
+        "sourceFile": "fields/field_hm16_01/object-placement.json",
+        "sourceSha256": "9C1F3F88F7B0B2CA04C08D446D0F2A4308F1755DD10FB1F1A6AFF8B57DB16CDC",
+        "count": 17,
+        "coordinatesChanged": false
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm16_01/object-cell-bank.json",
+        "sha256": "F5389FD84DA418236560D6846A531D860A7400D752A29EFD723EDFF3B87C26A6",
+        "cellCount": 3
+      },
+      "attribute": {
+        "sourceFile": "fields/field_hm16_01/attribute-raw-classes.json",
+        "sourceSha256": "8CAF03B2D5E358C76086E3A3EA820120768A09343476E1317B56452A14E78457",
+        "changed": false
+      },
+      "encounter": {
+        "sourceFile": "fields/field_hm16_01/encounter-raw-classes.json",
+        "sourceSha256": "5F260B85D8A7934CCD2C1F978F0E62014B0BC84B52E66339314821965DC7424D",
+        "changed": false
+      },
+      "animationPreserved": false
+    },
+    {
+      "fieldId": "field_hm16_02",
+      "profile": "COMPOSITE_FAITHFUL_BICUBIC_SCALE2X_BLEND_2X_V1",
+      "compositionAuthority": "EXACT_BSAR_THEN_VOID_MASKED_CORE_THEN_OPM_NCER_NCBR_COMPOSITE",
+      "topologyCells": [
+        128,
+        128
+      ],
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "remasterDimensions": [
+        2048,
+        2048
+      ],
+      "frames": [
+        {
+          "sourceFile": "fields/field_hm16_02/native-composite-frame-00.png",
+          "sourceSha256": "70DAECC72EFD1893AB95C4F3604A04A70A33F36E325F4ED3A34F0F4DD0D50028",
+          "file": "fields/field_hm16_02/composite-remaster-hd2x-frame-00.png",
+          "sha256": "1C0321F2293C29776D9FC313B300CAF8F69020C2DA56462F536EA9091367314E",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "rgbMaeAfterLanczosDownsample": 1.0554,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
+          "frameIndex": 0,
+          "durationRawTicks": null
+        }
+      ],
+      "objectPlacement": {
+        "sourceFile": "fields/field_hm16_02/object-placement.json",
+        "sourceSha256": "09EAF129696651D2B0E2D108203704AA29476059CE3F9DD27C5119294D802CDF",
+        "count": 17,
+        "coordinatesChanged": false
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm16_02/object-cell-bank.json",
+        "sha256": "FCEAE8BF9C0E365DBECD4872D082FF3144DDF6A943B333FD8DDFF65B3475CB13",
+        "cellCount": 3
+      },
+      "attribute": {
+        "sourceFile": "fields/field_hm16_02/attribute-raw-classes.json",
+        "sourceSha256": "8CAF03B2D5E358C76086E3A3EA820120768A09343476E1317B56452A14E78457",
+        "changed": false
+      },
+      "encounter": {
+        "sourceFile": "fields/field_hm16_02/encounter-raw-classes.json",
+        "sourceSha256": "B61AC68484D81A336A40D44A69D6FBEC9547011060862091BA4DC249ACFCBEB1",
+        "changed": false
+      },
+      "animationPreserved": false
+    },
+    {
+      "fieldId": "field_hm17_01",
+      "profile": "COMPOSITE_FAITHFUL_BICUBIC_SCALE2X_BLEND_2X_V1",
+      "compositionAuthority": "EXACT_BSAR_THEN_VOID_MASKED_CORE_THEN_OPM_NCER_NCBR_COMPOSITE",
+      "topologyCells": [
+        128,
+        128
+      ],
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "remasterDimensions": [
+        2048,
+        2048
+      ],
+      "frames": [
+        {
+          "sourceFile": "fields/field_hm17_01/native-composite-frame-00.png",
+          "sourceSha256": "E45EAE4C1EEA259D16F194A75A4E690A7C6D8CC09B11CA7F161D2E535C67B80D",
+          "file": "fields/field_hm17_01/composite-remaster-hd2x-frame-00.png",
+          "sha256": "47362812491C20244B5F0C2C60F1D933D974A6562B9D95B372259997918E3E24",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "rgbMaeAfterLanczosDownsample": 2.3972,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
+          "frameIndex": 0,
+          "durationRawTicks": 22
+        },
+        {
+          "sourceFile": "fields/field_hm17_01/native-composite-frame-01.png",
+          "sourceSha256": "3982D0FD945BAA4ED6A770BB081F415082EB4647E7D916D756CDC75F6741E2E8",
+          "file": "fields/field_hm17_01/composite-remaster-hd2x-frame-01.png",
+          "sha256": "4AC2B3F65ECC7C9815DDE31D0F5BCA09D8A4CB4619072D8227E80FB5D9AF20C8",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "rgbMaeAfterLanczosDownsample": 2.3774,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
+          "frameIndex": 1,
+          "durationRawTicks": 22
+        }
+      ],
+      "objectPlacement": {
+        "sourceFile": "fields/field_hm17_01/object-placement.json",
+        "sourceSha256": "BFA11CB52CEE2C21D62329302B8780E4CE5547CCC02EB061139E84EBD33FFEFB",
+        "count": 40,
+        "coordinatesChanged": false
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm17_01/object-cell-bank.json",
+        "sha256": "E7981B736FF00B4B2B797CA4D2811DE823F7165568AA68108A0BED8309B84570",
+        "cellCount": 4
+      },
+      "attribute": {
+        "sourceFile": "fields/field_hm17_01/attribute-raw-classes.json",
+        "sourceSha256": "7260757991A8DF06BC15DD4305C71F8D3261696D5FB457BF23DAC044ACFDEB5B",
+        "changed": false
+      },
+      "encounter": {
+        "sourceFile": "fields/field_hm17_01/encounter-raw-classes.json",
+        "sourceSha256": "35999E7E45CC0CAAEC371ABF9A917FD9869221CED4A267450A20D18AF7757F14",
+        "changed": false
+      },
+      "animationPreserved": true
+    },
+    {
+      "fieldId": "field_hm17_02",
+      "profile": "COMPOSITE_FAITHFUL_BICUBIC_SCALE2X_BLEND_2X_V1",
+      "compositionAuthority": "EXACT_BSAR_THEN_VOID_MASKED_CORE_THEN_OPM_NCER_NCBR_COMPOSITE",
+      "topologyCells": [
+        128,
+        128
+      ],
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "remasterDimensions": [
+        2048,
+        2048
+      ],
+      "frames": [
+        {
+          "sourceFile": "fields/field_hm17_02/native-composite-frame-00.png",
+          "sourceSha256": "2C6E71574E81292C612A47A225D4192C0E473E0F2CCB2C8D2984D8DFA674C568",
+          "file": "fields/field_hm17_02/composite-remaster-hd2x-frame-00.png",
+          "sha256": "86A3C6126AED8077FB43398E9A8F800B315AAE1F66D3D5C7F0C6A53AB473026D",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "rgbMaeAfterLanczosDownsample": 1.2443,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
+          "frameIndex": 0,
+          "durationRawTicks": 22
+        },
+        {
+          "sourceFile": "fields/field_hm17_02/native-composite-frame-01.png",
+          "sourceSha256": "2F1195848AF9F9F344F3DE6647B16BEBC821424020018A903AAD218ECACCA767",
+          "file": "fields/field_hm17_02/composite-remaster-hd2x-frame-01.png",
+          "sha256": "8DAB7B8E3C55BC119CEC7FB1F1B01260668B2511FE5D8A5FC5876F7A525B8CD9",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "rgbMaeAfterLanczosDownsample": 1.2365,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
+          "frameIndex": 1,
+          "durationRawTicks": 22
+        }
+      ],
+      "objectPlacement": {
+        "sourceFile": "fields/field_hm17_02/object-placement.json",
+        "sourceSha256": "EF4E8B9882B4B9250A9E284C7A0273D053A039D3EBEF22E4F1AC7D79FFC1EC74",
+        "count": 40,
+        "coordinatesChanged": false
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm17_02/object-cell-bank.json",
+        "sha256": "B8EFA2E7B15845F6668943471030476699676F56D76F066AD97FC080FB6877EA",
+        "cellCount": 4
+      },
+      "attribute": {
+        "sourceFile": "fields/field_hm17_02/attribute-raw-classes.json",
+        "sourceSha256": "7260757991A8DF06BC15DD4305C71F8D3261696D5FB457BF23DAC044ACFDEB5B",
+        "changed": false
+      },
+      "encounter": {
+        "sourceFile": "fields/field_hm17_02/encounter-raw-classes.json",
+        "sourceSha256": "234D6B7322979B0B269345E4C985B37732308ABF41E550D6B0028EE230F54A34",
+        "changed": false
+      },
+      "animationPreserved": true
+    },
+    {
+      "fieldId": "field_hm18_01",
+      "profile": "COMPOSITE_FAITHFUL_BICUBIC_SCALE2X_BLEND_2X_V1",
+      "compositionAuthority": "EXACT_BSAR_THEN_VOID_MASKED_CORE_THEN_OPM_NCER_NCBR_COMPOSITE",
+      "topologyCells": [
+        128,
+        128
+      ],
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "remasterDimensions": [
+        2048,
+        2048
+      ],
+      "frames": [
+        {
+          "sourceFile": "fields/field_hm18_01/native-composite-frame-00.png",
+          "sourceSha256": "34C98953A5D1A48084F149AA5BD4A3976D481ADFF22B35B7CDDFBB08EC5CF9C8",
+          "file": "fields/field_hm18_01/composite-remaster-hd2x-frame-00.png",
+          "sha256": "2B8EA96FC7DF3A0EDB2C41B3303401FE5C52985CD0C5D359BD013D96B0F13304",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "rgbMaeAfterLanczosDownsample": 2.2995,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
+          "frameIndex": 0,
+          "durationRawTicks": null
+        }
+      ],
+      "objectPlacement": {
+        "sourceFile": "fields/field_hm18_01/object-placement.json",
+        "sourceSha256": "19A8AD917B36DA6357B2455DB2D7626B99A4475A100563CCF42A7CCBD4D12BC8",
+        "count": 39,
+        "coordinatesChanged": false
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm18_01/object-cell-bank.json",
+        "sha256": "C37CDFF85997A3BCFE61EBEB9CE072677A600D3B633636EFBCA6AD2F5AEA1BAC",
+        "cellCount": 6
+      },
+      "attribute": {
+        "sourceFile": "fields/field_hm18_01/attribute-raw-classes.json",
+        "sourceSha256": "A412A50ADA5EB86CBAB1208AD48B01F725AA5FBB23482D50684A6EDD25D367F2",
+        "changed": false
+      },
+      "encounter": {
+        "sourceFile": "fields/field_hm18_01/encounter-raw-classes.json",
+        "sourceSha256": "0875A4B3A1D9063CAE81C3F66AA2ADA411A6FAC0153E93DF41A7629F3CF4341A",
+        "changed": false
+      },
+      "animationPreserved": false
+    },
+    {
+      "fieldId": "field_hm18_02",
+      "profile": "COMPOSITE_FAITHFUL_BICUBIC_SCALE2X_BLEND_2X_V1",
+      "compositionAuthority": "EXACT_BSAR_THEN_VOID_MASKED_CORE_THEN_OPM_NCER_NCBR_COMPOSITE",
+      "topologyCells": [
+        128,
+        128
+      ],
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "remasterDimensions": [
+        2048,
+        2048
+      ],
+      "frames": [
+        {
+          "sourceFile": "fields/field_hm18_02/native-composite-frame-00.png",
+          "sourceSha256": "4F4009B4BCADFD342CA9DE3DC4AC1C8274A4397EF0AA85DE56DF84DD26E98630",
+          "file": "fields/field_hm18_02/composite-remaster-hd2x-frame-00.png",
+          "sha256": "99CABCDF44B94D7A35B090D5CF99FF1D0DB6F9977928C6C9D2637518A799CB08",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "rgbMaeAfterLanczosDownsample": 1.1664,
+          "diagnosticRedPixelCount": 0,
+          "diagnosticRedCoverage": 0.0,
+          "maxDiagnosticRedRunPixels": 0,
+          "largeDiagnosticRedRegionAbsent": true,
+          "frameIndex": 0,
+          "durationRawTicks": null
+        }
+      ],
+      "objectPlacement": {
+        "sourceFile": "fields/field_hm18_02/object-placement.json",
+        "sourceSha256": "59AD626CBB663725E7548783F482C7E2A213E73F0A1D0724DC93F1255F64DD5F",
+        "count": 39,
+        "coordinatesChanged": false
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm18_02/object-cell-bank.json",
+        "sha256": "64AF128E6BC4B4ACDE6B8D8969EE8C7A03DCC991F114E6F29C182F79E7C34ABA",
+        "cellCount": 6
+      },
+      "attribute": {
+        "sourceFile": "fields/field_hm18_02/attribute-raw-classes.json",
+        "sourceSha256": "A412A50ADA5EB86CBAB1208AD48B01F725AA5FBB23482D50684A6EDD25D367F2",
+        "changed": false
+      },
+      "encounter": {
+        "sourceFile": "fields/field_hm18_02/encounter-raw-classes.json",
+        "sourceSha256": "42C82976FDEC6B6A32E744C98F64DDC2834CBD4DEB6AFA666EEE610CAEB1B9A2",
         "changed": false
       },
       "animationPreserved": false

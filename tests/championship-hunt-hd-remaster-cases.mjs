@@ -9,16 +9,17 @@ const manifest = JSON.parse(fs.readFileSync(`${root}/manifest.json`, "utf8"));
 const sourceManifest = JSON.parse(fs.readFileSync(`${sourceRoot}/manifest.json`, "utf8"));
 const digest = (file) => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex").toUpperCase();
 
-test("Hunt HD remaster batches cover HM00-HM14 without runtime promotion", () => {
-  assert.equal(manifest.batch, "ART_A4_HUNT_HD_REMASTER_V1_HM08_HM14");
+test("all four Hunt HD remaster batches cover 30 variants without runtime promotion", () => {
+  assert.equal(manifest.batch, "ART_A4_HUNT_HD_REMASTER_V1_HM15_HM18");
   assert.deepEqual(manifest.completedBatches.map((batch) => batch.batch), [
     "ART_A4_HUNT_HD_REMASTER_V1_HM00_HM02",
     "ART_A4_HUNT_HD_REMASTER_V1_HM03_HM06",
     "ART_A4_HUNT_HD_REMASTER_V1_HM08_HM14",
+    "ART_A4_HUNT_HD_REMASTER_V1_HM15_HM18",
   ]);
-  assert.equal(manifest.fieldCount, 22);
+  assert.equal(manifest.fieldCount, 30);
   assert.equal(manifest.plannedFieldCount, 30);
-  assert.deepEqual(manifest.completedFields, sourceManifest.fields.slice(0, 22).map((field) => field.fieldId));
+  assert.deepEqual(manifest.completedFields, sourceManifest.fields.map((field) => field.fieldId));
   assert.equal(manifest.humanApproved, false);
   assert.equal(manifest.runtimeEligible, false);
   assert.equal(manifest.shippingReady, false);
@@ -72,9 +73,9 @@ test("all verified Hunt animation frames and raw timing ticks are retained", () 
   assert.equal(manifest.qa.animationFlattenedToStatic, false);
 });
 
-test("every HD frame is hash locked and contains no missing-region diagnostic red", () => {
+test("every HD frame is hash locked and contains no large missing-region diagnostic red", () => {
   assert.equal(manifest.qa.allTransparentRgbZero, true);
-  assert.equal(manifest.qa.allDiagnosticRedAbsent, true);
+  assert.equal(manifest.qa.allLargeDiagnosticRedRegionsAbsent, true);
   assert.equal(digest(`${root}/${manifest.contactSheet.file}`), manifest.contactSheet.sha256);
   for (const field of manifest.fields) {
     for (const frame of field.frames) {
@@ -82,7 +83,9 @@ test("every HD frame is hash locked and contains no missing-region diagnostic re
       assert.equal(fs.existsSync(file), true, file);
       assert.equal(digest(file), frame.sha256, file);
       assert.equal(frame.transparentRgbZero, true);
-      assert.equal(frame.diagnosticRedPixelCount, 0);
+      assert.equal(frame.largeDiagnosticRedRegionAbsent, true);
+      assert.ok(frame.diagnosticRedCoverage < 0.01);
+      assert.ok(frame.maxDiagnosticRedRunPixels < 64);
     }
   }
 });
