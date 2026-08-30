@@ -24,7 +24,14 @@ from PIL import Image, ImageDraw, ImageFont
 REPO = Path(__file__).resolve().parents[1]
 SOURCE_ROOT = REPO / "docs/art/production/hunt/faithful-hd30"
 OUTPUT_ROOT = REPO / "docs/art/production/hunt/hd-remaster-v1"
-FIRST_BATCH = ["field_hm00_01", "field_hm01_01", "field_hm01_02", "field_hm02_01", "field_hm02_02"]
+BATCHES = [
+    ["field_hm00_01", "field_hm01_01", "field_hm01_02", "field_hm02_01", "field_hm02_02"],
+    [
+        "field_hm03_01", "field_hm03_02", "field_hm04_01", "field_hm04_02",
+        "field_hm05_01", "field_hm05_02", "field_hm06_01", "field_hm06_02",
+    ],
+]
+SELECTED_FIELDS = [field_id for batch in BATCHES for field_id in batch]
 SCALE = 2
 
 
@@ -175,7 +182,7 @@ def build(output_root: Path) -> None:
     source_by_id = {field["fieldId"]: field for field in source_manifest["fields"]}
     records = []
 
-    for field_id in FIRST_BATCH:
+    for field_id in SELECTED_FIELDS:
         source_field = source_by_id[field_id]
         source_dir = SOURCE_ROOT / "fields" / field_id
         output_dir = output_root / "fields" / field_id
@@ -224,15 +231,19 @@ def build(output_root: Path) -> None:
             "animationPreserved": source_field["animation"]["status"] != "NOT_PRESENT",
         })
 
-    contact_path = output_root / "hunt-hm00-hm02-remaster-contact.jpg"
+    contact_path = output_root / "hunt-hm00-hm06-remaster-contact.jpg"
     contact_sheet(records, output_root, contact_path)
     camera_contract_path = REPO / "docs/research/HUNT_FIELD_INPUT_ROM_TRACE_2026-08-29.md"
     manifest = {
         "schemaVersion": 1,
-        "batch": "ART_A4_HUNT_HD_REMASTER_V1_HM00_HM02",
+        "batch": "ART_A4_HUNT_HD_REMASTER_V1_HM03_HM06",
+        "completedBatches": [
+            {"batch": "ART_A4_HUNT_HD_REMASTER_V1_HM00_HM02", "fields": BATCHES[0]},
+            {"batch": "ART_A4_HUNT_HD_REMASTER_V1_HM03_HM06", "fields": BATCHES[1]},
+        ],
         "fieldCount": len(records),
         "plannedFieldCount": 30,
-        "completedFields": FIRST_BATCH,
+        "completedFields": SELECTED_FIELDS,
         "scale": SCALE,
         "profile": "COMPOSITE_FAITHFUL_BICUBIC_SCALE2X_BLEND_2X_V1",
         "sourceManifest": {"file": source_manifest_path.relative_to(REPO).as_posix(), "sha256": sha256(source_manifest_path)},
@@ -278,7 +289,7 @@ def main() -> None:
             second = tree_hashes(rebuilt)
         if first != second:
             raise SystemExit("Hunt HD remaster determinism check failed")
-        print(f"Deterministic Hunt HD remaster first batch passed: {len(first)} files")
+        print(f"Deterministic Hunt HD remaster through HM06 passed: {len(first)} files")
 
 
 if __name__ == "__main__":

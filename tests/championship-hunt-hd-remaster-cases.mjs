@@ -9,17 +9,15 @@ const manifest = JSON.parse(fs.readFileSync(`${root}/manifest.json`, "utf8"));
 const sourceManifest = JSON.parse(fs.readFileSync(`${sourceRoot}/manifest.json`, "utf8"));
 const digest = (file) => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex").toUpperCase();
 
-test("first Hunt HD remaster batch covers HM00-HM02 without runtime promotion", () => {
-  assert.equal(manifest.batch, "ART_A4_HUNT_HD_REMASTER_V1_HM00_HM02");
-  assert.equal(manifest.fieldCount, 5);
-  assert.equal(manifest.plannedFieldCount, 30);
-  assert.deepEqual(manifest.completedFields, [
-    "field_hm00_01",
-    "field_hm01_01",
-    "field_hm01_02",
-    "field_hm02_01",
-    "field_hm02_02",
+test("Hunt HD remaster batches cover HM00-HM06 without runtime promotion", () => {
+  assert.equal(manifest.batch, "ART_A4_HUNT_HD_REMASTER_V1_HM03_HM06");
+  assert.deepEqual(manifest.completedBatches.map((batch) => batch.batch), [
+    "ART_A4_HUNT_HD_REMASTER_V1_HM00_HM02",
+    "ART_A4_HUNT_HD_REMASTER_V1_HM03_HM06",
   ]);
+  assert.equal(manifest.fieldCount, 13);
+  assert.equal(manifest.plannedFieldCount, 30);
+  assert.deepEqual(manifest.completedFields, sourceManifest.fields.slice(0, 13).map((field) => field.fieldId));
   assert.equal(manifest.humanApproved, false);
   assert.equal(manifest.runtimeEligible, false);
   assert.equal(manifest.shippingReady, false);
@@ -87,4 +85,3 @@ test("every HD frame is hash locked and contains no missing-region diagnostic re
     }
   }
 });
-
