@@ -1,0 +1,500 @@
+{
+  "schemaVersion": 1,
+  "batch": "ART_A4_HUNT_HD_REMASTER_V1_HM00_HM02",
+  "fieldCount": 5,
+  "plannedFieldCount": 30,
+  "completedFields": [
+    "field_hm00_01",
+    "field_hm01_01",
+    "field_hm01_02",
+    "field_hm02_01",
+    "field_hm02_02"
+  ],
+  "scale": 2,
+  "profile": "COMPOSITE_FAITHFUL_BICUBIC_SCALE2X_BLEND_2X_V1",
+  "sourceManifest": {
+    "file": "docs/art/production/hunt/faithful-hd30/manifest.json",
+    "sha256": "5FD6D64C205DBA2C0D188DAD64409592EB994B41CDFF0EF6B8D7CE99C95677DA"
+  },
+  "compositionOrder": "BSAR_ANIMATED_TERRAIN_THEN_VOID_MASKED_CORE_THEN_OPM_NCER_NCBR_OBJECTS",
+  "visualPolicy": "ORIGINAL_PALETTE_FAMILY_TOPOLOGY_TILE_SEAMS_OBJECT_COORDINATES_AND_ANIMATION_PRESERVED",
+  "cameraPolicy": "FULL_2048_WORLD_IS_PRESERVED_PORTRAIT_9_16_IS_A_CLAMPED_DRAGGABLE_VIEWPORT_NOT_A_CROP",
+  "cameraContract": {
+    "file": "docs/research/HUNT_FIELD_INPUT_ROM_TRACE_2026-08-29.md",
+    "sha256": "E3C30C826D742072AC50965533BBD3867C7179DF9E958B3AB9AE65D126FC2FF2"
+  },
+  "memoryPolicy": "LOAD_OR_STREAM_ONE_ACTIVE_FIELD_NEVER_PRELOAD_ALL_THIRTY_FULL_RGBA_MAPS",
+  "rightsStatus": "LICENSED",
+  "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "contactSheet": {
+    "file": "hunt-hm00-hm02-remaster-contact.jpg",
+    "sha256": "7BAD81C8D2A37613F9DF503F070173D3683FD9DBBCC8FAC2241A402D0AAF21DC"
+  },
+  "qa": {
+    "allFieldsRemain128x128": true,
+    "allFramesAre2048Square": true,
+    "allTransparentRgbZero": true,
+    "allDiagnosticRedAbsent": true,
+    "objectPlacementRelayoutPerformed": false,
+    "worldCroppedToPortrait": false,
+    "animationFlattenedToStatic": false
+  },
+  "fields": [
+    {
+      "fieldId": "field_hm00_01",
+      "profile": "COMPOSITE_FAITHFUL_BICUBIC_SCALE2X_BLEND_2X_V1",
+      "compositionAuthority": "EXACT_BSAR_THEN_VOID_MASKED_CORE_THEN_OPM_NCER_NCBR_COMPOSITE",
+      "topologyCells": [
+        128,
+        128
+      ],
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "remasterDimensions": [
+        2048,
+        2048
+      ],
+      "frames": [
+        {
+          "sourceFile": "fields/field_hm00_01/native-composite-frame-00.png",
+          "sourceSha256": "831B3A4BA32313CCEB94E9DB528241B8C41E7292D85A499FC3EEDF6E50E0B96B",
+          "file": "fields/field_hm00_01/composite-remaster-hd2x-frame-00.png",
+          "sha256": "8801C56C7A0A751D5E2E35F96F6B5C3BEF255C3C5C91DF45814710A96FBDC7E6",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "diagnosticRedPixelCount": 0,
+          "rgbMaeAfterLanczosDownsample": 1.9049,
+          "frameIndex": 0,
+          "durationRawTicks": 20
+        },
+        {
+          "sourceFile": "fields/field_hm00_01/native-composite-frame-01.png",
+          "sourceSha256": "4087BB3B80EB5B32C3CDD01056816D1616C888984ACF7D48743F09ACDF139F85",
+          "file": "fields/field_hm00_01/composite-remaster-hd2x-frame-01.png",
+          "sha256": "AF0268FFB3883F5F41D22723C677D5357AC9B7EA9114980A36C433CA23EF4C2B",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "diagnosticRedPixelCount": 0,
+          "rgbMaeAfterLanczosDownsample": 1.8995,
+          "frameIndex": 1,
+          "durationRawTicks": 20
+        }
+      ],
+      "objectPlacement": {
+        "sourceFile": "fields/field_hm00_01/object-placement.json",
+        "sourceSha256": "6E4134B8C2BCC7104D40A7ABD7F183F30CBE0E265D31332B6664903E046CEAA1",
+        "count": 12,
+        "coordinatesChanged": false
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm00_01/object-cell-bank.json",
+        "sha256": "BDE51C10B20E252658EF4A65D897AB3865B1DEB7F5B5D3312C11FA44758CD379",
+        "cellCount": 2
+      },
+      "attribute": {
+        "sourceFile": "fields/field_hm00_01/attribute-raw-classes.json",
+        "sourceSha256": "6C342B67D3DEA65E52E06B0B33E76F239A1A3034B805419B834FE9C7CDCC71EC",
+        "changed": false
+      },
+      "encounter": {
+        "sourceFile": "fields/field_hm00_01/encounter-raw-classes.json",
+        "sourceSha256": "A9EF8FA31C4792DA5D01F2F270C5B6A2441125E96831EB2014483336CF67D33F",
+        "changed": false
+      },
+      "animationPreserved": true
+    },
+    {
+      "fieldId": "field_hm01_01",
+      "profile": "COMPOSITE_FAITHFUL_BICUBIC_SCALE2X_BLEND_2X_V1",
+      "compositionAuthority": "EXACT_BSAR_THEN_VOID_MASKED_CORE_THEN_OPM_NCER_NCBR_COMPOSITE",
+      "topologyCells": [
+        128,
+        128
+      ],
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "remasterDimensions": [
+        2048,
+        2048
+      ],
+      "frames": [
+        {
+          "sourceFile": "fields/field_hm01_01/native-composite-frame-00.png",
+          "sourceSha256": "07BF3ED966896EEF2CF96705AA384DAE47C766D92CE3921253B7539D5FA6FA2F",
+          "file": "fields/field_hm01_01/composite-remaster-hd2x-frame-00.png",
+          "sha256": "2E02EC8496415DD2A6EA440672BC2541036BA0A1F9A571FFD1C8513DA348218D",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "diagnosticRedPixelCount": 0,
+          "rgbMaeAfterLanczosDownsample": 1.9622,
+          "frameIndex": 0,
+          "durationRawTicks": 20
+        },
+        {
+          "sourceFile": "fields/field_hm01_01/native-composite-frame-01.png",
+          "sourceSha256": "88B1327FCA2B4DB7919E246ED5E067CE37AE19822830F98DFD9AC77F126580F1",
+          "file": "fields/field_hm01_01/composite-remaster-hd2x-frame-01.png",
+          "sha256": "C3F091C3405D5103115A4EAC81711F28B0559C84E528C0C8D03C9B3B423D59F1",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "diagnosticRedPixelCount": 0,
+          "rgbMaeAfterLanczosDownsample": 1.9553,
+          "frameIndex": 1,
+          "durationRawTicks": 20
+        }
+      ],
+      "objectPlacement": {
+        "sourceFile": "fields/field_hm01_01/object-placement.json",
+        "sourceSha256": "403B1800C9514B2EC4C6058A771A5E3D512688621914EA6685C1C9B7863641D3",
+        "count": 12,
+        "coordinatesChanged": false
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm01_01/object-cell-bank.json",
+        "sha256": "878D431443A5730017254BDB585A85EBF43FA6DC411843329E54ECB95DADFA91",
+        "cellCount": 2
+      },
+      "attribute": {
+        "sourceFile": "fields/field_hm01_01/attribute-raw-classes.json",
+        "sourceSha256": "7294A2F6B4B92F18FEDFE7FC7B773812B3738947627B3B21769A5D9D0F14E91A",
+        "changed": false
+      },
+      "encounter": {
+        "sourceFile": "fields/field_hm01_01/encounter-raw-classes.json",
+        "sourceSha256": "7369850F1C5FDAEBA94745A9D55E950F12B630AB0F1C3CE8FCEB10C1C60C35F8",
+        "changed": false
+      },
+      "animationPreserved": true
+    },
+    {
+      "fieldId": "field_hm01_02",
+      "profile": "COMPOSITE_FAITHFUL_BICUBIC_SCALE2X_BLEND_2X_V1",
+      "compositionAuthority": "EXACT_BSAR_THEN_VOID_MASKED_CORE_THEN_OPM_NCER_NCBR_COMPOSITE",
+      "topologyCells": [
+        128,
+        128
+      ],
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "remasterDimensions": [
+        2048,
+        2048
+      ],
+      "frames": [
+        {
+          "sourceFile": "fields/field_hm01_02/native-composite-frame-00.png",
+          "sourceSha256": "224F7AAB00FE85DE78E3307C7BBBDF596BE5954D5FFD6658B2AADC4AA162A4B9",
+          "file": "fields/field_hm01_02/composite-remaster-hd2x-frame-00.png",
+          "sha256": "5442CD946B7A2AC24832E3F3939B4E7355F4FD594B8C35D6A2B236AE7F99C6C1",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "diagnosticRedPixelCount": 0,
+          "rgbMaeAfterLanczosDownsample": 1.1993,
+          "frameIndex": 0,
+          "durationRawTicks": 20
+        },
+        {
+          "sourceFile": "fields/field_hm01_02/native-composite-frame-01.png",
+          "sourceSha256": "8E85038BB712BE2D4A3BFBA311E8C95D64AA6CC6FE180F75BFC0C71F92AEB847",
+          "file": "fields/field_hm01_02/composite-remaster-hd2x-frame-01.png",
+          "sha256": "3D299B3AC5E8AED27F5CD41BABC4961400BC18958F5E51CF0BFD7F599190D04D",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "diagnosticRedPixelCount": 0,
+          "rgbMaeAfterLanczosDownsample": 1.1955,
+          "frameIndex": 1,
+          "durationRawTicks": 20
+        }
+      ],
+      "objectPlacement": {
+        "sourceFile": "fields/field_hm01_02/object-placement.json",
+        "sourceSha256": "3A60B04837F6CB7124AECB001AD85C746F4980E773351AC3FA0402551E9DC678",
+        "count": 12,
+        "coordinatesChanged": false
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm01_02/object-cell-bank.json",
+        "sha256": "8A8790C2995F74B65D14BE378EF6FA15EE411101E0D63AA74492C88E557BE839",
+        "cellCount": 2
+      },
+      "attribute": {
+        "sourceFile": "fields/field_hm01_02/attribute-raw-classes.json",
+        "sourceSha256": "7294A2F6B4B92F18FEDFE7FC7B773812B3738947627B3B21769A5D9D0F14E91A",
+        "changed": false
+      },
+      "encounter": {
+        "sourceFile": "fields/field_hm01_02/encounter-raw-classes.json",
+        "sourceSha256": "349109CC73476EE2FBC4E00284D76EE8F978791BC973A0583A6D4D7B134A51DE",
+        "changed": false
+      },
+      "animationPreserved": true
+    },
+    {
+      "fieldId": "field_hm02_01",
+      "profile": "COMPOSITE_FAITHFUL_BICUBIC_SCALE2X_BLEND_2X_V1",
+      "compositionAuthority": "EXACT_BSAR_THEN_VOID_MASKED_CORE_THEN_OPM_NCER_NCBR_COMPOSITE",
+      "topologyCells": [
+        128,
+        128
+      ],
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "remasterDimensions": [
+        2048,
+        2048
+      ],
+      "frames": [
+        {
+          "sourceFile": "fields/field_hm02_01/native-composite-frame-00.png",
+          "sourceSha256": "174449D61F76EA848881FC651B79ED08642B831D4B7DD4A314941D084BC45582",
+          "file": "fields/field_hm02_01/composite-remaster-hd2x-frame-00.png",
+          "sha256": "24CFB64C7F05F15BF6901A670DB40C612000C4EBBA26EDF14DEB51DF71CE33F9",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "diagnosticRedPixelCount": 0,
+          "rgbMaeAfterLanczosDownsample": 1.8636,
+          "frameIndex": 0,
+          "durationRawTicks": null
+        }
+      ],
+      "objectPlacement": {
+        "sourceFile": "fields/field_hm02_01/object-placement.json",
+        "sourceSha256": "857418624FFDABC76E49D1EE25998D1CF0FB2CF904625FD7665CFB717BE6DB8F",
+        "count": 33,
+        "coordinatesChanged": false
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm02_01/object-cell-bank.json",
+        "sha256": "416C5290D9BA572734C55771AA23BFFE1D27E5127FF1A5D5C65B32DCDC2688C5",
+        "cellCount": 4
+      },
+      "attribute": {
+        "sourceFile": "fields/field_hm02_01/attribute-raw-classes.json",
+        "sourceSha256": "BC87B79BFD730B00ADA7C24DA7C6A606AA266F0D83990BA0BAA7107E8B36567D",
+        "changed": false
+      },
+      "encounter": {
+        "sourceFile": "fields/field_hm02_01/encounter-raw-classes.json",
+        "sourceSha256": "A5A46C3865E6F90D45DFA0592F48F5667BEAF1DFC8FD802922CB40311E7194B3",
+        "changed": false
+      },
+      "animationPreserved": false
+    },
+    {
+      "fieldId": "field_hm02_02",
+      "profile": "COMPOSITE_FAITHFUL_BICUBIC_SCALE2X_BLEND_2X_V1",
+      "compositionAuthority": "EXACT_BSAR_THEN_VOID_MASKED_CORE_THEN_OPM_NCER_NCBR_COMPOSITE",
+      "topologyCells": [
+        128,
+        128
+      ],
+      "nativeDimensions": [
+        1024,
+        1024
+      ],
+      "remasterDimensions": [
+        2048,
+        2048
+      ],
+      "frames": [
+        {
+          "sourceFile": "fields/field_hm02_02/native-composite-frame-00.png",
+          "sourceSha256": "3864FA5AC2CB267170C935673F6FCEB0B9866BC73525638AC4230CE79008B805",
+          "file": "fields/field_hm02_02/composite-remaster-hd2x-frame-00.png",
+          "sha256": "CA49F00D564F9579E742CAC76263D71A1E6C0DF2D5246BF60FB42AE0A623B237",
+          "sourceDimensions": [
+            1024,
+            1024
+          ],
+          "dimensions": [
+            2048,
+            2048
+          ],
+          "sourceAlphaBounds": [
+            0,
+            0,
+            1024,
+            1024
+          ],
+          "alphaBounds": [
+            0,
+            0,
+            2048,
+            2048
+          ],
+          "transparentRgbZero": true,
+          "diagnosticRedPixelCount": 0,
+          "rgbMaeAfterLanczosDownsample": 1.0849,
+          "frameIndex": 0,
+          "durationRawTicks": null
+        }
+      ],
+      "objectPlacement": {
+        "sourceFile": "fields/field_hm02_02/object-placement.json",
+        "sourceSha256": "B7DF64210E53CA98DAA1719B62807152C0226ED8D1C864EBA12572F1851E269F",
+        "count": 33,
+        "coordinatesChanged": false
+      },
+      "objectCellBank": {
+        "file": "fields/field_hm02_02/object-cell-bank.json",
+        "sha256": "E6221CF07EE471553DD9FCE56F35743CCF5FB3D057EDCF92E0BF65B494463CD0",
+        "cellCount": 4
+      },
+      "attribute": {
+        "sourceFile": "fields/field_hm02_02/attribute-raw-classes.json",
+        "sourceSha256": "BC87B79BFD730B00ADA7C24DA7C6A606AA266F0D83990BA0BAA7107E8B36567D",
+        "changed": false
+      },
+      "encounter": {
+        "sourceFile": "fields/field_hm02_02/encounter-raw-classes.json",
+        "sourceSha256": "FC7D4245537364C85DAD5589DBACDFF2A177B2A4B4F3CD6E48B096E04199486F",
+        "changed": false
+      },
+      "animationPreserved": false
+    }
+  ]
+}
