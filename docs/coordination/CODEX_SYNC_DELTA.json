@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "owner": "CODEX_ART",
-  "deltaId": "CODEX-ART-A3-CAGE-OPMD-NANR-SEQUENCE-BINDING-2026-08-29",
-  "targetSyncRevision": 20,
-  "status": "CAGE_HD40_FULL_COMPOSITION_40_OF_40_RESOLVED_HUNT_HD30_QA_COMPLETE",
+  "deltaId": "CODEX-ART-RUNTIME-MAP-BUNDLE-V1-2026-08-31",
+  "targetSyncRevision": 29,
+  "status": "RUNTIME_MAP_ART_BUNDLE_SEAM_COMPLETE_CANDIDATE_PIXEL_PROMOTION_EVIDENCE_GATED",
   "statusSource": "docs/coordination/CODEX_ART_STATUS.json",
-  "baseSyncRevision": 13,
+  "baseSyncRevision": 28,
   "checkpoint": {
     "latestOwnerApprovedCommit": "732775486665b21508ac51c1eea0b723db0f7744",
     "message": "art(research): approve O2 224-entity character catalog",
@@ -32,6 +32,17 @@
     "documentationOnly": false
   },
   "completedWork": [
+    {
+      "id": "ART-RUNTIME-MAP-BUNDLE-V1",
+      "state": "TECHNICAL_RUNTIME_SEAM_COMPLETE_NO_CANDIDATE_PIXEL_PROMOTED",
+      "scope": "Production-only Pixi asset validation, one-active-field loading and unload, sole-ticker animation, exact world sizing, Hunt composite layer binding and fail-closed evidence gates",
+      "sourcePolicy": "ROM_ATTACHMENT_HASH_VERIFIED_RESEARCH_ONLY_NO_ROM_OR_DECODED_PAYLOAD_ENTERED_RUNTIME",
+      "technicalQa": "261_OF_261_NODE_TESTS_PASS_4_NEW_BUNDLE_CASES_PASS_BROWSER_VS3_BLOCKED_BY_UNRELATED_DIRTY_VS4_ENTRY_SELECTOR_ORDER",
+      "gameplayPolicy": "ART_BUNDLE_OWNS_NO_COLLISION_ENCOUNTERS_GATE_MAPPING_SPAWN_SAVE_OR_SIMULATION",
+      "runtimeEligible": true,
+      "shippingStatus": "ADAPTER_READY_ASSET_PROMOTION_BLOCKED_ON_LICENSE_LINK_HUMAN_APPROVAL_AND_IDENTITY_TIMING_EVIDENCE",
+      "output": "src/championship/presentation/runtimeMapArtBundle.js"
+    },
     {
       "id": "ART-A3-CM27-OWNER-ADAPTATION-DIRECTIVE",
       "state": "LOCKED_REMOVE_CENTER_DIGIMON_MARK_FROM_REMADE_ART",

@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "owner": "CODEX_ART",
   "lastUpdated": "2026-08-31",
-  "syncBatch": "ART_A4_HUNT_HD_REMASTER_V1_HM15_HM18",
-  "syncRevision": 28,
-  "syncRevisionTarget": 28,
-  "status": "HUNT_HD_REMASTER_30_OF_30_COMPLETE_CAGE_40_OF_40_AND_HUNT_30_OF_30_READY_FOR_OWNER_REVIEW",
+  "syncBatch": "ART_RUNTIME_MAP_BUNDLE_V1",
+  "syncRevision": 29,
+  "syncRevisionTarget": 29,
+  "status": "RUNTIME_MAP_ART_BUNDLE_SEAM_COMPLETE_CANDIDATE_PIXEL_PROMOTION_EVIDENCE_GATED",
   "sourceOfTruth": {
     "coordinationRoot": "docs/coordination",
     "canonicalRepository": ".",
@@ -65,6 +65,18 @@
     "o3dCheckpointIsolatedFromRuntimeRegistryAndP2": true
   },
   "completed": [
+    {
+      "id": "ART-RUNTIME-MAP-BUNDLE-V1",
+      "status": "TECHNICAL_RUNTIME_SEAM_COMPLETE",
+      "summary": "A bounded PixiJS map-art bundle now loads one explicit production field, sizes it in world pixels, advances only verified animation milliseconds from the sole Application ticker, unloads exact textures on swap/exit, and binds complete Hunt composites below actors and capture strokes without duplicating procedural terrain or objects.",
+      "output": "src/championship/presentation/runtimeMapArtBundle.js",
+      "receipt": "docs/art/production/runtime-integration/FAITHFUL_HD_RUNTIME_INTEGRATION_V1.md",
+      "validation": "261/261 full Node tests pass including 4 new runtime map-art cases; VS3 browser gate is presently blocked by unrelated uncommitted VS4 home-entry ordering because its broad .cm-vs2-entry selector opens Cage instead of Gate",
+      "rights": "ROM_SHA_VERIFIED_LICENSE_DOCUMENT_LINK_STILL_REQUIRED_BEFORE_CANDIDATE_PIXEL_REGISTRATION",
+      "productionStatus": "RUNTIME_ADAPTER_READY_NO_FAITHFUL_CANDIDATE_PIXEL_PROMOTED",
+      "humanApproved": false,
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
     {
       "id": "ART-A4-HUNT-HD-REMASTER-V1-HM15-HM18",
       "status": "FINAL_BATCH_COMPLETE_30_OF_30_TOTAL",

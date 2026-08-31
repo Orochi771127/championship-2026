@@ -56,14 +56,20 @@ function assertDependencies(stage, source) {
  * host. This module owns its own scene, its own pointer handlers and its own
  * ticker callback, and removes all three on dispose.
  */
-export async function mountHuntFieldPixiPresentation({ stage, source, onFallback = () => {} }) {
+export async function mountHuntFieldPixiPresentation({ stage, source, fieldArt = null, onFallback = () => {} }) {
   assertDependencies(stage, source);
   const { PIXI, app } = stage;
+
+  if (fieldArt !== null && (!fieldArt.displayObject || typeof fieldArt.update !== "function"
+    || typeof fieldArt.dispose !== "function" || typeof fieldArt.getDiagnostics !== "function")) {
+    throw new TypeError("The Hunt field art binding must be a loaded runtime map-art field");
+  }
 
   const scene = stage.createSceneRoot("VS2 Hunt field");
   const unmarkScene = stage.markScene("cm-hunt-pixi-canvas");
   const backdrop = new PIXI.Graphics();
   const world = new PIXI.Container({ label: "hunt world" });
+  const productionArtLayer = new PIXI.Container({ label: "bounded production map art" });
   const terrainLayer = new PIXI.Container({ label: "modular terrain" });
   const objectLayer = new PIXI.Container({ label: "field objects", sortableChildren: true });
   const actorLayer = new PIXI.Container({ label: "actors" });
@@ -71,7 +77,8 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
   actorLayer.sortableChildren = true;
   const strokeGraphic = new PIXI.Graphics();
   strokeLayer.addChild(strokeGraphic);
-  world.addChild(terrainLayer, objectLayer, actorLayer, strokeLayer);
+  if (fieldArt) productionArtLayer.addChild(fieldArt.displayObject);
+  world.addChild(productionArtLayer, terrainLayer, objectLayer, actorLayer, strokeLayer);
   scene.addChild(backdrop, world);
 
   const chunkCache = new Map();
@@ -288,6 +295,13 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
     });
     if (!view) return;
 
+    if (fieldArt) {
+      const art = fieldArt.getDiagnostics();
+      if (art.worldWidthPx !== view.worldWidthPx || art.worldHeightPx !== view.worldHeightPx) {
+        throw new RangeError(`Hunt field art/world mismatch: ${art.fieldId}`);
+      }
+    }
+
     if (backdropWidth !== app.screen.width || backdropHeight !== app.screen.height) {
       backdropWidth = app.screen.width;
       backdropHeight = app.screen.height;
@@ -297,8 +311,18 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
         .ellipse(backdropWidth * 0.2, backdropHeight * 0.12, backdropWidth * 0.7, backdropHeight * 0.38)
         .fill({ color: TERRAIN.cyan, alpha: 0.035 });
     }
-    syncObjects(view);
-    syncTerrain(view);
+    // A complete production composite already contains original terrain and
+    // static object art. The procedural layers remain the honest fallback only;
+    // drawing both would duplicate props and expose mismatched silhouettes.
+    if (fieldArt) {
+      terrainLayer.visible = false;
+      objectLayer.visible = false;
+    } else {
+      terrainLayer.visible = true;
+      objectLayer.visible = true;
+      syncObjects(view);
+      syncTerrain(view);
+    }
     syncActors(view);
     syncEnclosure(view);
     // The camera window is the only thing that moves the world.
@@ -362,6 +386,7 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
   function advance(ticker) {
     if (disposed) return;
     source.field.tick(ticker.deltaMS);
+    fieldArt?.update(ticker.deltaMS);
     render();
   }
 
@@ -400,7 +425,10 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
         wildCount: wildNodes.size,
         objectCount: objectNodes.size,
         viewport: Object.freeze({ width: app.screen.width, height: app.screen.height }),
-        temporaryArtId: TEMPORARY_ART_ID
+        art: fieldArt?.getDiagnostics() ?? Object.freeze({
+          assetId: TEMPORARY_ART_ID,
+          role: "PROCEDURAL_FALLBACK"
+        })
       });
     },
 
@@ -423,8 +451,12 @@ export async function mountHuntFieldPixiPresentation({ stage, source, onFallback
       objectNodes.clear();
       wildNodes.clear();
       playerNode = null;
+      if (fieldArt?.displayObject.parent === productionArtLayer) {
+        productionArtLayer.removeChild(fieldArt.displayObject);
+      }
       if (scene.parent) scene.parent.removeChild(scene);
       scene.destroy({ children: true });
+      void fieldArt?.dispose();
       // The Application belongs to the stage and outlives this scene.
     }
   });
