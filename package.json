@@ -18,11 +18,16 @@
     "art:internal-faithful:validate": "node scripts/validate-internal-faithful-baseline.mjs",
     "art:vfx:reference26:build": "node scripts/build-vfx-faithful-reference-26.mjs",
     "art:vfx:reference26:validate": "node scripts/validate-vfx-faithful-reference-26.mjs",
+    "art:vfx:convert": "node scripts/build-licensed-vfx-conversion-v1.mjs",
+    "art:vfx:animations:build": "node scripts/build-vfx-animation-sidecars-v1.mjs",
+    "art:vfx:gate-earth:trace": "python scripts/trace-gate-earth-ovl12.py",
+    "art:vfx:validate": "node scripts/validate-licensed-vfx-conversion-v1.mjs",
     "test": "node --test tests/*.mjs",
     "test:browser": "node tests/championship-int-rh2-browser.cjs",
     "test:browser:vs2": "node tests/championship-vs2-browser.cjs",
     "test:browser:vs2-r1": "node tests/championship-vs2-r1-gate-browser.cjs",
-    "test:browser:vs3": "node tests/championship-vs3-browser.cjs"
+    "test:browser:vs3": "node tests/championship-vs3-browser.cjs",
+    "test:browser:vfx": "node tests/championship-faithful-vfx-browser.cjs"
   },
   "dependencies": {
     "pixi.js": "8.19.0",

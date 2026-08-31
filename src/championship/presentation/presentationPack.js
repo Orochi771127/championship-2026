@@ -76,12 +76,14 @@ const PACKS = {
     presentationOnly: true,
     changesSimulation: false,
     runtimeEligible: false,
+    internalRuntimeEligible: true,
     shippingReady: false,
     binds: {
-      // HD Cage / Hunt candidates exist as art-production files, not as
-      // runtime-registered bundles. Leaving the slots unbound is honest.
+      // Public Cage / Hunt bundles remain unbound. The exact VFX baseline is
+      // available only to the owner-authorized non-public runtime path.
       raisingHome: null,
       ...emptyExtendedBinds(),
+      vfx: "art:vfx:faithful-original:internal-v1",
       huntField: null,
       gateSelect: null
     }
@@ -140,6 +142,7 @@ export function resolvePresentationSlot(slotId, packId = ACTIVE_PRESENTATION_PAC
     packId: pack.packId,
     assetId,
     bound: typeof assetId === "string",
-    runtimeEligible: pack.runtimeEligible && typeof assetId === "string"
+    runtimeEligible: pack.runtimeEligible && typeof assetId === "string",
+    internalRuntimeEligible: pack.internalRuntimeEligible === true && typeof assetId === "string"
   });
 }

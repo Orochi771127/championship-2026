@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "traceId": "championship-gate-earth-ovl12-trace-v1",
+  "scope": "STATIC_CODE_TRACE_SOURCE_FREE",
+  "rom": {
+    "gameCode": "YDIJ",
+    "sha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "payloadIncluded": false,
+    "sourcePathIncluded": false
+  },
+  "overlay": {
+    "id": 12,
+    "fileId": 12,
+    "ramBase": "0x0210B300",
+    "size": 39200,
+    "sha256": "489bc406b5af7da905b5a283f0778cf342612a5bd359ec6548a5699c3ad08a97",
+    "payloadIncluded": false
+  },
+  "assets": {
+    "worldMap": {
+      "fileId": 5382,
+      "size": 164912,
+      "sha256": "4852ce8731b9b221864d219870bcf7f5f0332645d429893c107b4478e8fef539"
+    },
+    "earth": {
+      "fileId": 5398,
+      "size": 81620,
+      "sha256": "fc811f61f6093a3e35588267fa5dc3e0815a60772adde9bda43b797c27c2878b"
+    }
+  },
+  "worldMapLoaderChain": {
+    "caller": "0x0210F0EC",
+    "wrapperCall": "0x0210F108",
+    "wrapper": "0x0210C6D8",
+    "modelLoadCall": "0x0210C6FC",
+    "modelLoader": "0x0208AF6C",
+    "arguments": {
+      "folder": "gate_select",
+      "model": "3D_worldMap_model"
+    },
+    "status": "ROM_VERIFIED"
+  },
+  "earthConsumerSearch": {
+    "ovl12AsciiEarthHits": 0,
+    "ovl12EarthFileIdU16Hits": 0,
+    "ovl12EarthFileIdU32Hits": 0,
+    "romCodeAsciiEarthHits": [
+      {
+        "binary": "OVL19",
+        "address": "0x021319B4",
+        "text": "earth_hit"
+      }
+    ],
+    "status": "NO_GATE_SELECT_EARTH_CONSUMER_PROVEN"
+  },
+  "runtimeDecision": {
+    "gateWorldMap": "ELIGIBLE_FOR_BOUNDED_INTEGRATION",
+    "gateEarth": "REFERENCE_ONLY_DO_NOT_MOUNT",
+    "reason": "The verified Gate Select loader names only 3D_worldMap_model. OVL12 contains neither the Earth asset name nor its file ID; the sole Earth code string belongs to battle/earth_hit."
+  }
+}

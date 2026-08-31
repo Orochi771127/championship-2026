@@ -17,6 +17,17 @@ assert.equal(manifest.gameplayOrSaveChangesPermitted, false);
 assert.equal(manifest.readySlotCount, 5);
 assert.equal(manifest.totalSlotCount, 9);
 assert.equal(manifest.complete, false);
+assert.equal(manifest.slots.vfx.runtimeAssetId, "art:vfx:faithful-original:internal-v1");
+const vfxRuntimeManifest = JSON.parse(fs.readFileSync(path.join(repo, ...manifest.slots.vfx.runtimeManifestPath.split("/")), "utf8"));
+assert.equal(vfxRuntimeManifest.internalRuntimeEligible, true);
+assert.equal(vfxRuntimeManifest.publicReleasePermitted, false);
+assert.equal(vfxRuntimeManifest.shippingReady, false);
+assert.equal(vfxRuntimeManifest.sourcePayloadIncluded, false);
+assert.equal(vfxRuntimeManifest.gateEarthMounted, false);
+assert.equal(vfxRuntimeManifest.tickerPolicy, "CALLER_OWNED_UPDATE_DELTA_MS");
+assert.deepEqual(vfxRuntimeManifest.systems.map((system) => system.systemId), ["hitspark_big", "hypereffect", "spark", "rain"]);
+assert.ok(vfxRuntimeManifest.systems.every((system) => system.model.startsWith("assets/production/internal-faithful-baseline/")));
+assert.ok(vfxRuntimeManifest.systems.every((system) => system.triggerBinding === "EXTERNAL_PRESENTATION_EVENT_REQUIRED"));
 
 let fileCount = 0;
 for (const slot of Object.values(manifest.slots)) {

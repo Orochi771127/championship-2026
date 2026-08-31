@@ -40,9 +40,18 @@ test("Option A is the default public skin and is not yet runtime-eligible", () =
   assert.equal(pack.role, "DEFAULT_PUBLIC_SKIN");
   assert.equal(pack.visualFamily, "LICENSED_FAITHFUL_HD");
   assert.equal(pack.runtimeEligible, false);
+  assert.equal(pack.internalRuntimeEligible, true);
   assert.equal(resolvePresentationSlot("raisingHome", pack.packId).bound, false);
   assert.equal(resolvePresentationSlot("huntField", pack.packId).bound, false);
   assert.equal(resolvePresentationSlot("gateSelect", pack.packId).bound, false);
+  assert.deepEqual(resolvePresentationSlot("vfx", pack.packId), {
+    slotId: "vfx",
+    packId: PRESENTATION_PACK_IDS.FAITHFUL_ORIGINAL,
+    assetId: "art:vfx:faithful-original:internal-v1",
+    bound: true,
+    runtimeEligible: false,
+    internalRuntimeEligible: true
+  });
   assert.equal(listPresentationPacks().length, 3);
 });
 

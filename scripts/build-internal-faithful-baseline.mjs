@@ -12,8 +12,11 @@ const sources = [
   ["uiHud", "docs/art/production/ui/faithful-hd96"],
   ["cageFields", "docs/art/production/cage/hd-remaster-v1"],
   ["huntField", "docs/art/production/hunt/hd-remaster-v1"],
-  ["vfx", "docs/art/production/vfx/faithful-reference-26"]
+  ["vfx", "assets/production/vfx/original-rom-conversion-v1"]
 ];
+
+const INTERNAL_VFX_ASSET_ID = "art:vfx:faithful-original:internal-v1";
+const INTERNAL_VFX_SYSTEMS = new Set(["hitspark_big", "hypereffect", "spark", "rain"]);
 
 function hash(file) {
   return crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
@@ -91,6 +94,57 @@ for (const slotId of ["raisingHome", "battleFields", "gateSelect", "packaging"])
     files: []
   };
 }
+
+const convertedVfxManifest = JSON.parse(fs.readFileSync(
+  path.join(repo, "assets/production/vfx/original-rom-conversion-v1/manifest.json"),
+  "utf8"
+));
+const runtimeVfxSystems = convertedVfxManifest.systems
+  .filter((system) => INTERNAL_VFX_SYSTEMS.has(system.systemId))
+  .map((system) => {
+    const outputs = system.outputs.map((output) => {
+      const relative = path.relative(
+        path.join(repo, "assets/production/vfx/original-rom-conversion-v1"),
+        path.join(repo, ...output.path.split("/"))
+      );
+      return {
+        path: path.relative(repo, path.join(outputRoot, "vfx", relative)).split(path.sep).join("/"),
+        bytes: output.size,
+        sha256: output.sha256,
+        kind: output.path.endsWith(".glb") ? "GLB" : output.path.endsWith(".json") ? "ANIMATION_SIDECAR" : "TEXTURE"
+      };
+    });
+    return {
+      systemId: system.systemId,
+      model: outputs.find((output) => output.kind === "GLB")?.path ?? null,
+      sidecars: outputs.filter((output) => output.kind === "ANIMATION_SIDECAR").map((output) => output.path),
+      outputs,
+      triggerBinding: "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      playback: "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      knownGaps: system.knownGaps
+    };
+  });
+if (runtimeVfxSystems.length !== INTERNAL_VFX_SYSTEMS.size || runtimeVfxSystems.some((system) => !system.model)) {
+  throw new Error("Internal faithful VFX runtime set is incomplete");
+}
+const runtimeVfxManifest = {
+  schemaVersion: 1,
+  assetId: INTERNAL_VFX_ASSET_ID,
+  packId: "championship:pack:faithful-original",
+  scope: "OWNER_AUTHORIZED_NON_PUBLIC_INTERNAL_BASELINE",
+  rightsEvidenceId: convertedVfxManifest.rightsEvidenceId,
+  internalRuntimeEligible: true,
+  publicReleasePermitted: false,
+  shippingReady: false,
+  sourcePayloadIncluded: false,
+  tickerPolicy: "CALLER_OWNED_UPDATE_DELTA_MS",
+  gateEarthMounted: false,
+  systems: runtimeVfxSystems
+};
+const runtimeVfxManifestPath = path.join(outputRoot, "vfx-runtime-manifest.json");
+fs.writeFileSync(runtimeVfxManifestPath, `${JSON.stringify(runtimeVfxManifest, null, 2)}\n`);
+slots.vfx.runtimeAssetId = INTERNAL_VFX_ASSET_ID;
+slots.vfx.runtimeManifestPath = path.relative(repo, runtimeVfxManifestPath).split(path.sep).join("/");
 
 const manifest = {
   schemaVersion: 1,

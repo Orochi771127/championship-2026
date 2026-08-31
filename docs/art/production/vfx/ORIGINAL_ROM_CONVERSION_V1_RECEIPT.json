@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "championship-vfx-original-rom-conversion-v1-receipt",
+  "bundleId": "championship-vfx-original-rom-conversion-v1",
+  "rightsEvidenceId": "LIC-CHAMPIONSHIP-2026-001",
+  "sourcePayloadIncluded": false,
+  "sourceLocationIncluded": false,
+  "tool": {
+    "version": [
+      "apicula 0.1.1-dev",
+      "build commit: 3d4e91e",
+      "build commit date: 2024-08-03"
+    ],
+    "executableSha256": "b546d35960a9b48514457d9998a1ae8b214019fcbd2406c782cb7a15d98597d8",
+    "upstreamLicense": "0BSD",
+    "upstream": "https://github.com/scurest/apicula"
+  },
+  "systems": [
+    {
+      "systemId": "gate_select",
+      "sources": [
+        {
+          "relativePath": "gate_select/3D_worldMap_model.nsbmd",
+          "size": 164912,
+          "sha256": "4852ce8731b9b221864d219870bcf7f5f0332645d429893c107b4478e8fef539",
+          "converterInput": true
+        },
+        {
+          "relativePath": "gate_select/earth.nsbmd",
+          "size": 81620,
+          "sha256": "fc811f61f6093a3e35588267fa5dc3e0815a60772adde9bda43b797c27c2878b",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/gate_select/gate-world-map.glb",
+          "size": 87444,
+          "sha256": "3698f831ed9057cb23af3e1393d4caefb3d0ec63fc1d79c60b7919a9a35ff444"
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/gate_select/gate-earth.glb",
+          "size": 42880,
+          "sha256": "0c27c7845eddbbdf160391ec2bff5cf8abcd76d6e5dd9ba6345b78391dead046"
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/gate_select/Map_fix_day.png",
+          "size": 110285,
+          "sha256": "1aaee8653e12a4b783048ac593c64cc639dd030af2ff503fb9bd8ba47a73a675"
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/gate_select/Map_fix_night.png",
+          "size": 50160,
+          "sha256": "c22ecfb4cefd5ec800554ecf6301e73a87f8a3ad558f1bc0e736d8c7869f2a28"
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/gate_select/map.png",
+          "size": 95044,
+          "sha256": "c941af370b48c7b644df14a668c4b160484f166e8f01ecd96456380fec67fa38"
+        }
+      ]
+    },
+    {
+      "systemId": "hitspark_big",
+      "sources": [
+        {
+          "relativePath": "battle/hitspark_big.nsbmd",
+          "size": 8004,
+          "sha256": "37afdfaf92cc2d39fd13494a333c88de22f3314d18b8c586bf498b8d2f977d80",
+          "converterInput": true
+        },
+        {
+          "relativePath": "battle/hitspark_big.nsbca",
+          "size": 5544,
+          "sha256": "1d0dbb5b1caf0e146e0174caa017aa637fe17fc302be843dd16a85c4589158bf",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/hitspark_big/hitspark_big.glb",
+          "size": 42504,
+          "sha256": "56fdb4267a5fa08fe0437da69e821777496bbff94f562522e0f2c3493e7513f2"
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/hitspark_big/hit_spark.png",
+          "size": 1160,
+          "sha256": "4a1e10bd8e4d05b667fc08f461741c230682642d3472f110a05944518f823a51"
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/hitspark_big/ip_circle.png",
+          "size": 392,
+          "sha256": "41ce4ebdde69d6a8537164505e981816c591c5e9d315ca2cd9fc4f68b8a6c0e6"
+        }
+      ]
+    },
+    {
+      "systemId": "hypereffect",
+      "sources": [
+        {
+          "relativePath": "battle/hypereffect.nsbmd",
+          "size": 6040,
+          "sha256": "8a0a651834ec0355871ba02d50687101c99d3954e6a355c2768631259ad407a3",
+          "converterInput": true
+        },
+        {
+          "relativePath": "battle/hypereffect.nsbca",
+          "size": 7012,
+          "sha256": "77a67b252958d036384250de85f0a4a62acfb5315e5f2d31d77b2482ff48fc03",
+          "converterInput": true
+        },
+        {
+          "relativePath": "battle/hypereffect.nsbva",
+          "size": 144,
+          "sha256": "b39d90d658d8884acbb7da20da4b847ffc4c75f25427c09baf90aa58ed510853",
+          "converterInput": false
+        }
+      ],
+      "outputs": [
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/hypereffect/hitmark.png",
+          "size": 394,
+          "sha256": "b65c00106eb65e79745538572cc1dd4a8338b633b0a7be9ab1a4afece02da763"
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/hypereffect/hypereffect.glb",
+          "size": 36812,
+          "sha256": "4abe7b99f20ee21196fc3ba43947bb1f6b5aa15dbf47f7ff270ac38cd1f9dcac"
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/hypereffect/hypereffect.visibility.json",
+          "size": 1378,
+          "sha256": "75aa6275a4a16b76738398efab03e546e8cf450fa2dcaf1f8ff3419b286a9d39"
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/hypereffect/new1.png",
+          "size": 656,
+          "sha256": "4a491ed0096631c28affa4742b1a2a3791ceac597862dadbf830a4a8cde59f84"
+        }
+      ]
+    },
+    {
+      "systemId": "spark",
+      "sources": [
+        {
+          "relativePath": "common/spark.nsbmd",
+          "size": 5484,
+          "sha256": "daa29e97794556ce9a82eb8238f8394329e13aea80dcddd83a143804ab9288e3",
+          "converterInput": true
+        },
+        {
+          "relativePath": "common/spark.nsbta",
+          "size": 4236,
+          "sha256": "bbc0902a7933a6dbf7477c656fe17567e41e0e96bb87bf6f97a1d16393b732b0",
+          "converterInput": true
+        },
+        {
+          "relativePath": "common/spark.nsbma",
+          "size": 2172,
+          "sha256": "d3e2f348488a7b59536846400f86e049eec19ab63f0a8ce97630dfadf5f55bce",
+          "converterInput": false
+        }
+      ],
+      "outputs": [
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/spark/m_spark_eff.png",
+          "size": 1428,
+          "sha256": "1990cde42ccb98cc4dd729808fe937e6d94523061b8f8c44c58ae1b85eb5c1a2"
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/spark/spark.glb",
+          "size": 23696,
+          "sha256": "6da6827b8951c5b8684e2237838250e4174d6ab9b0e3d604e01c967e01f9ce1c"
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/spark/spark.material-animation.json",
+          "size": 5652,
+          "sha256": "9a0e774d16e2bf65274d69ed47afd9ed28473d49dd4691524d6ab4cd9a94a719"
+        }
+      ]
+    },
+    {
+      "systemId": "rain",
+      "sources": [
+        {
+          "relativePath": "common/rain.nsbmd",
+          "size": 4744,
+          "sha256": "a76fa17cab0218cc3807a9eab3fb9f7bd01e7e89494e55cad05e87d9cfb29a9c",
+          "converterInput": true
+        },
+        {
+          "relativePath": "common/rain.nsbta",
+          "size": 644,
+          "sha256": "0bfa8df446d56cd4ac4a0cebdea37563324946eee411fdb288c123e20f92e248",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/rain/rain.glb",
+          "size": 4032,
+          "sha256": "4ebc766b968c7b17dc097b1f7566212134346d768ed17dcd840e11f4fe4b6294"
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/rain/rain_eff.png",
+          "size": 4142,
+          "sha256": "5eb28a78831fee5e8f83a44ed35d93c245e04b38d8aa48cc5207b56dca6bdc8e"
+        }
+      ]
+    }
+  ],
+  "animationSidecarDecoder": {
+    "id": "championship-nitro-g3d-sidecars-v1",
+    "sourcePayloadIncluded": false
+  }
+}
