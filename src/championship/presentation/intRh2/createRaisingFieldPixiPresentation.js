@@ -229,6 +229,7 @@ export async function mountRaisingFieldPixiPresentation({
   }
 
   async function loadActorTextures(entry, resident) {
+    if (!resident.sprite?.idle?.sheet || !resident.sprite?.reaction?.sheet) return;
     const token = ++entry.loadToken;
     try {
       const key = resident.speciesId.replace(/^championship:creature:/, "");

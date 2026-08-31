@@ -2,8 +2,10 @@
 //
 // Consumes only the injected Gate/Hunt presentation source. The field
 // gesture already decided the enclosure; this screen reports the instance
-// that was brought home.
+// that was brought home and lets the player give it a name (original OVL4
+// name-edit plate, product-authored length).
 
+import { PRODUCT_GIVEN_NAME_MAX_LENGTH } from "./championshipRaisingProduction.js";
 import { VS2_UI_AUTHORITY, VS2_PRESENTATION_MODES } from "./vs2Screens.js";
 
 const RESULT_TITLE = "HUNT RESULT";
@@ -50,9 +52,23 @@ export function createHuntResultView({ root, source }) {
   header.append(copy);
 
   const body = element("div", "cm-vs2-result__body");
+  const species = element("p", "cm-vs2-result__species", block.speciesLabel || block.displayName);
+  const nameField = element("label", "cm-vs2-result__name");
+  nameField.append(element("span", "cm-vs2-result__name-label", "GIVEN NAME"));
+  const nameInput = document.createElement("input");
+  nameInput.type = "text";
+  nameInput.className = "cm-vs2-result__name-input";
+  nameInput.maxLength = PRODUCT_GIVEN_NAME_MAX_LENGTH;
+  nameInput.value = block.displayName ?? "";
+  nameInput.setAttribute("data-cm-name-edit", "");
+  nameInput.setAttribute("aria-label", "Given name");
+  nameInput.autocomplete = "off";
+  nameInput.spellcheck = false;
+  nameField.append(nameInput);
   body.append(
-    element("p", "cm-vs2-result__species", block.displayName),
-    element("p", "cm-vs2-result__note", "This instance is now in your collection. Home does not yet show new arrivals.")
+    species,
+    nameField,
+    element("p", "cm-vs2-result__note", "Name them, then return home. They will be waiting in the habitat.")
   );
   if (mode === VS2_PRESENTATION_MODES.DEVELOPER) {
     body.append(element(
@@ -71,14 +87,24 @@ export function createHuntResultView({ root, source }) {
   shell.append(header, body, footer);
   root.append(shell);
 
-  home.addEventListener("click", () => source.intents.confirmHuntResult());
+  function commitName() {
+    const nextName = nameInput.value.trim();
+    if (nextName) source.intents.setHuntResultName(nextName);
+  }
+
+  nameInput.addEventListener("change", commitName);
+  home.addEventListener("click", () => {
+    commitName();
+    source.intents.confirmHuntResult();
+  });
 
   function render(nextFrame) {
     const next = nextFrame?.huntResult;
     if (!next) return;
     copy.querySelector(".cm-vs2-title").textContent = next.title;
     copy.querySelector(".cm-vs2-subtitle").textContent = next.outcomeLabel;
-    body.querySelector(".cm-vs2-result__species").textContent = next.displayName;
+    species.textContent = next.speciesLabel || next.displayName;
+    if (document.activeElement !== nameInput) nameInput.value = next.displayName ?? "";
   }
 
   return Object.freeze({

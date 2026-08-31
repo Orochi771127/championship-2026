@@ -21,12 +21,12 @@
 // Ordering is the model's name-table order, which is alphabetical. Original
 // display or selection order is UNKNOWN_REQUIRES_TRACE.
 //
-// Everything else about a gate remains untraced: there is no recovered gate
-// table, no unlock rule, and nothing connecting a gate to one of the 30 HM field
-// records. So every gate is available, and each carries a product-authored world
-// seed rather than a claim about which original field it is.
+// The original ARM9 Hunt table now supplies the day/night HM field pair for all
+// 16 identities. Unlock rules and the exact day/night selection call remain
+// untraced, so every gate stays available and no time selector is invented.
 
 import { deepFreeze } from "../contracts/championshipContracts.js";
+import { getOriginalHuntFieldBinding } from "./originalHuntFieldBindings.js";
 
 export const GATE_COUNT = 16;
 export const GATE_COUNT_EVIDENCE = "ROM_VERIFIED";
@@ -59,6 +59,8 @@ function gateId(biomeId) {
 export const CHAMPIONSHIP_GATES = deepFreeze(
   BIOME_IDENTITIES.map((biomeId, index) => {
     const ordinal = index + 1;
+    const originalFields = getOriginalHuntFieldBinding(biomeId);
+    if (!originalFields) throw new Error(`MISSING_ORIGINAL_HUNT_FIELD_BINDING: ${biomeId}`);
     return {
       gateId: gateId(biomeId),
       ordinal,
@@ -75,7 +77,8 @@ export const CHAMPIONSHIP_GATES = deepFreeze(
       biomeOrdinal: ordinal,
       state: "AVAILABLE",
       stateEvidence: "UNKNOWN_REQUIRES_TRACE",
-      originalFieldMapping: "UNKNOWN_REQUIRES_TRACE",
+      originalFieldMapping: "ROM_VERIFIED",
+      originalFields,
       worldSeed: 0x9e37 + (ordinal * 0x4f1b)
     };
   })

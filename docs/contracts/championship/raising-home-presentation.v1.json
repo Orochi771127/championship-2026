@@ -4,7 +4,7 @@
   "note": "Presentation asset paths and product-authored cage regions for the standalone Raising screen. They live here, with the art, rather than in src/championship/ -- that tree is asserted to carry no binary asset paths at all, and the same rule is what keeps ROM-derived payload paths out of it.",
   "authority": "CHAMPIONSHIP_2026_PRODUCT",
   "originalParityClaim": false,
-  "cageNote": "Cage identity, names and regions below are PRODUCT-AUTHORED. ROM evidence proves 36 CageDefinition records and a 16-node cage presentation exist, but the assignment grammar, capacity rules and every cage effect remain UNKNOWN_REQUIRES_TRACE. Nothing here claims original parity, and no cage carries an effect.",
+  "cageNote": "Cage names and the two habitat regions below are PRODUCT-AUTHORED. ROM evidence proves 36 CageDefinition records. Channel identity and the recommended Digimon count are VERIFIED_TEXT; overfill is allowed and only named as extra stress. Tick magnitudes and hex-membership assignment remain UNKNOWN_REQUIRES_TRACE. Nothing here claims original habitat parity.",
   "habitat": {
     "image": "assets/production/temporary/int-rh2/environment/raising_home_first_frame.webp",
     "source": "assets/production/temporary/int-rh2/environment/manifest.json"

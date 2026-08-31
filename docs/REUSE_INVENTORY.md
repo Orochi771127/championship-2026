@@ -43,10 +43,10 @@ This inventory answers: “What has already been built, and what can the next sl
 
 ## Work that is not already implemented
 
-- Original capture-success odds, G-capacity consumption, and Hunt rope VFX conversion;
-- Home / Database presentation of enclosed collection instances;
+- Original capture-success odds (close-stroke has none), remaining-G HUD writer, and Hunt rope VFX conversion;
+- Home presentation polish for enclosed collection instances (Database lists them by species);
 - exact Raising care formulas and complete modular Cage editor/effect resolver;
-- Shop transaction runtime and Database collection UI/state;
+- care-item consumption and remaining Shop writers (battle income, type-3 unlock);
 - product Battle setup, deterministic auto-battle runtime and result writes;
 - Titles, rank, four-year Championship progression and complete long-save schema;
 - final original public IP, creatures, environments, UI, VFX, audio and localization;

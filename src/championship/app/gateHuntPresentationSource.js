@@ -86,10 +86,16 @@ const HUNT_TOOLBAR_FRAME = deepFreeze(huntToolbarProjection());
 function assertApplication(app) {
   const methods = [
     "getScreen", "getGates", "getSelectedGateId", "getConfirmedGate",
-    "getHuntRuntime", "getHuntLoadout", "getHuntResult", "openGate", "selectGate", "confirmGate",
+    "getHuntRuntime", "getHuntLoadout", "getHuntResult", "getShopFrame", "getDatabaseFrame",
+    "getCageEditFrame",
+    "openGate", "openShop", "openDatabase", "openCageEdit", "selectGate", "confirmGate",
     "selectHuntEquipment", "fitHuntPlugin", "selectHuntMemoryCard",
-    "beginHunt", "exitHunt", "leaveScreen",
+    "beginHunt", "exitHunt", "leaveScreen", "buyShopItem", "subscribeShop",
+    "selectDatabaseSpecies", "renameDatabaseInstance",
+    "selectCageModule", "placeCageAt", "removeCagePlacement", "confirmCageEdit",
+    "setTamerRank",
     "beginEnclosureStroke", "extendEnclosureStroke", "endEnclosureStroke", "confirmHuntResult",
+    "setHuntResultName",
     "getSnapshot", "getRaisingState", "save"
   ];
   if (!app || methods.some((method) => typeof app[method] !== "function")) {
@@ -107,6 +113,7 @@ export function createGateHuntPresentationSource(app) {
   let currentFrame = null;
   let screenUnsubscribe = null;
   let saveUnsubscribe = null;
+  let shopUnsubscribe = null;
 
   function saveBlock() {
     const status = app.savePort.getStatus();
@@ -228,6 +235,7 @@ export function createGateHuntPresentationSource(app) {
       title: result.title,
       outcomeLabel: result.outcomeLabel,
       speciesId: result.speciesId,
+      speciesLabel: result.speciesLabel,
       displayName: result.displayName,
       instanceId: result.instanceId,
       tetherBand: result.tetherBand,
@@ -247,12 +255,15 @@ export function createGateHuntPresentationSource(app) {
       huntLoadout: screen === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT ? huntLoadoutBlock() : null,
       huntField: screen === CHAMPIONSHIP_SCREENS.HUNT_FIELD ? huntFieldBlock() : null,
       huntResult: screen === CHAMPIONSHIP_SCREENS.HUNT_RESULT ? huntResultBlock() : null,
+      shop: screen === CHAMPIONSHIP_SCREENS.SHOP ? app.getShopFrame() : null,
+      database: screen === CHAMPIONSHIP_SCREENS.DATABASE ? app.getDatabaseFrame() : null,
+      cageEdit: screen === CHAMPIONSHIP_SCREENS.CAGE_EDIT ? app.getCageEditFrame() : null,
       save: saveBlock(),
       navigation: {
         canLeave: screen !== CHAMPIONSHIP_SCREENS.RAISING_HOME,
         trail: app.getScreenTrail()
       },
-      note: "RAISING_HOME content is published by the VS1 seam (createRaisingPresentationSource). This source reports the active screen and owns the expedition screens only."
+      note: "RAISING_HOME content is published by the VS1 seam (createRaisingPresentationSource). SHOP, DATABASE, CAGE_EDIT and the expedition screens are published here."
     });
   }
 
@@ -269,13 +280,16 @@ export function createGateHuntPresentationSource(app) {
     if (screenUnsubscribe || saveUnsubscribe) return;
     screenUnsubscribe = app.subscribeScreen(() => publish());
     saveUnsubscribe = app.savePort.subscribe(() => publish());
+    shopUnsubscribe = app.subscribeShop(() => publish());
   }
 
   function unwire() {
     screenUnsubscribe?.();
     saveUnsubscribe?.();
+    shopUnsubscribe?.();
     screenUnsubscribe = null;
     saveUnsubscribe = null;
+    shopUnsubscribe = null;
   }
 
   currentFrame = buildFrame();
@@ -294,6 +308,50 @@ export function createGateHuntPresentationSource(app) {
   const intents = Object.freeze({
     openGate() {
       app.openGate();
+      return commit();
+    },
+    openShop() {
+      app.openShop();
+      return commit();
+    },
+    openDatabase() {
+      app.openDatabase();
+      return commit();
+    },
+    openCageEdit() {
+      app.openCageEdit();
+      return commit();
+    },
+    selectCageModule(moduleId) {
+      app.selectCageModule(moduleId);
+      return commit();
+    },
+    placeCageAt(slotIndex) {
+      app.placeCageAt(slotIndex);
+      return commit();
+    },
+    removeCagePlacement(moduleId) {
+      app.removeCagePlacement(moduleId);
+      return commit();
+    },
+    confirmCageEdit() {
+      app.confirmCageEdit();
+      return commit();
+    },
+    setTamerRank(nextRank) {
+      app.setTamerRank(nextRank);
+      return commit();
+    },
+    selectDatabaseSpecies(speciesIndex) {
+      app.selectDatabaseSpecies(speciesIndex);
+      return commit();
+    },
+    renameDatabaseInstance(instanceId, displayName) {
+      app.renameDatabaseInstance(instanceId, displayName);
+      return commit();
+    },
+    buyShopItem(shopRecordIndex, quantity = 1) {
+      app.buyShopItem(shopRecordIndex, quantity);
       return commit();
     },
     selectGate(gateId) {
@@ -335,11 +393,15 @@ export function createGateHuntPresentationSource(app) {
     },
     endEnclosureStroke() {
       const verdict = app.endEnclosureStroke();
-      if (verdict?.outcome === "ENCLOSED") return commit();
-      return currentFrame;
+      if (verdict == null) return currentFrame;
+      return commit();
     },
     confirmHuntResult() {
       app.confirmHuntResult();
+      return commit();
+    },
+    setHuntResultName(displayName) {
+      app.setHuntResultName(displayName);
       return commit();
     },
     exitHunt() {

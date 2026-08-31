@@ -121,10 +121,15 @@ fs.mkdirSync(SCREENSHOTS, { recursive: true });
     assert.match(resultText, /HUNT RESULT/);
     assert.match(resultText, /BROUGHT HOME/);
     assert.doesNotMatch(resultText, /\bCAPTURE\b/);
+    assert.equal(await page.locator("[data-cm-name-edit]").count(), 1);
+    await page.locator("[data-cm-name-edit]").fill("Ember");
     await page.screenshot({ path: path.join(SCREENSHOTS, "vs3-hunt-result-390x844.png") });
 
     await page.locator(".cm-vs2-action--primary").click();
     await page.waitForSelector(".cm-vs2-entry", { timeout: 15000 });
+    await page.waitForSelector("[data-resident-count]", { timeout: 15000 });
+    const residentCount = await page.locator("[data-resident-count]").getAttribute("data-resident-count");
+    assert.equal(residentCount, "4", "enclosed instance must appear at Raising Home");
     await page.screenshot({ path: path.join(SCREENSHOTS, "vs3-returned-home-390x844.png") });
 
     assert.deepEqual(problems, [], "console or page errors");

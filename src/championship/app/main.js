@@ -26,6 +26,7 @@ import { createGateHuntPresentationSource } from "./gateHuntPresentationSource.j
 import { CHAMPIONSHIP_SCREENS } from "./championshipScreenStack.js";
 import { createGateSelectView, createHuntLoadoutView, createHuntFieldView } from "./vs2Screens.js";
 import { createHuntResultView } from "./vs3Screens.js";
+import { createShopView, createDatabaseView, createCageEditView } from "./vs4Screens.js";
 import { createChampionshipPixiStage } from "../presentation/championshipPixiStage.js";
 import { mountRaisingFieldPixiPresentation } from "../presentation/intRh2/createRaisingFieldPixiPresentation.js";
 import { mountHuntFieldPixiPresentation } from "../presentation/vs2/createHuntFieldPixiPresentation.js";
@@ -107,18 +108,43 @@ async function mountRaisingHome() {
   // published openGate intent below; this control holds no screen state.
   const entry = document.createElement("button");
   entry.type = "button";
-  entry.className = "cm-button cm-button--primary cm-vs2-entry";
+  entry.className = "cm-button cm-button--primary cm-vs2-entry cm-vs2-entry--gates";
   entry.dataset.cmAction = "open-gate";
   entry.dataset.uiAuthority = "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R";
   entry.setAttribute("aria-label", "Open Gate Select");
   entry.textContent = "GATES";
-  root.append(entry);
+  const shopEntry = document.createElement("button");
+  shopEntry.type = "button";
+  shopEntry.className = "cm-button cm-button--primary cm-vs2-entry cm-vs2-entry--shop";
+  shopEntry.dataset.cmAction = "open-shop";
+  shopEntry.dataset.uiAuthority = "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R";
+  shopEntry.setAttribute("aria-label", "Open Shop");
+  shopEntry.textContent = "SHOP";
+  const databaseEntry = document.createElement("button");
+  databaseEntry.type = "button";
+  databaseEntry.className = "cm-button cm-button--primary cm-vs2-entry cm-vs2-entry--database";
+  databaseEntry.dataset.cmAction = "open-database";
+  databaseEntry.dataset.uiAuthority = "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R";
+  databaseEntry.setAttribute("aria-label", "Open Database");
+  databaseEntry.textContent = "DATA";
+  const cageEntry = document.createElement("button");
+  cageEntry.type = "button";
+  cageEntry.className = "cm-button cm-button--primary cm-vs2-entry cm-vs2-entry--cage";
+  cageEntry.dataset.cmAction = "open-cage";
+  cageEntry.dataset.uiAuthority = "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R";
+  cageEntry.setAttribute("aria-label", "Open Cage editor");
+  cageEntry.textContent = "CAGE";
+  const homeEntries = document.createElement("nav");
+  homeEntries.className = "cm-vs2-home-entries";
+  homeEntries.setAttribute("aria-label", "Home destinations");
+  homeEntries.append(cageEntry, databaseEntry, shopEntry, entry);
+  root.append(homeEntries);
 
   return Object.freeze({
     render: p1r.render,
     inspect: p1r.inspect,
     dispose() {
-      entry.remove();
+      homeEntries.remove();
       p1r.dispose();
     }
   });
@@ -178,6 +204,9 @@ async function mountCurrentScreen() {
     if (target !== CHAMPIONSHIP_SCREENS.RAISING_HOME) raisingSource = null;
 
     if (target === CHAMPIONSHIP_SCREENS.RAISING_HOME) view = await mountRaisingHome();
+    else if (target === CHAMPIONSHIP_SCREENS.SHOP) view = createShopView({ root, source: expeditionSource });
+    else if (target === CHAMPIONSHIP_SCREENS.DATABASE) view = createDatabaseView({ root, source: expeditionSource });
+    else if (target === CHAMPIONSHIP_SCREENS.CAGE_EDIT) view = createCageEditView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.GATE_SELECT) view = await mountGateSelect();
     else if (target === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) view = createHuntLoadoutView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.HUNT_FIELD) view = await mountHuntField();
@@ -211,13 +240,31 @@ async function openGameplay() {
   await mountCurrentScreen();
 }
 
-/** The Raising Home screen owns the only entry into the expedition flow. */
-function installGateEntry() {
+/** Raising Home owns the only entries into Shop and the expedition flow. */
+function installHomeEntries() {
   root.addEventListener("click", (event) => {
-    const trigger = event.target?.closest?.("[data-cm-action='open-gate']");
-    if (!trigger) return;
+    const gate = event.target?.closest?.("[data-cm-action='open-gate']");
+    if (gate) {
+      event.preventDefault();
+      expeditionSource?.intents.openGate();
+      return;
+    }
+    const shop = event.target?.closest?.("[data-cm-action='open-shop']");
+    if (shop) {
+      event.preventDefault();
+      expeditionSource?.intents.openShop();
+      return;
+    }
+    const database = event.target?.closest?.("[data-cm-action='open-database']");
+    if (database) {
+      event.preventDefault();
+      expeditionSource?.intents.openDatabase();
+      return;
+    }
+    const cage = event.target?.closest?.("[data-cm-action='open-cage']");
+    if (!cage) return;
     event.preventDefault();
-    expeditionSource?.intents.openGate();
+    expeditionSource?.intents.openCageEdit();
   });
 }
 
@@ -280,7 +327,7 @@ function boot() {
 
   newGameButton.addEventListener("click", () => { void startNewGame(); });
   continueButton.addEventListener("click", () => { void continueGame(); });
-  installGateEntry();
+  installHomeEntries();
   refreshContinue();
 
   // Closing the tab should not silently lose the session.

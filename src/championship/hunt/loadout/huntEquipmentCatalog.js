@@ -133,8 +133,8 @@ export const HUNT_CATALOG_ITEMS = deepFreeze([...HUNT_EQUIPMENT_ITEMS, ...HUNT_P
  * The capture-capacity carrier.
  *
  * The ROM's Memory Card subcategory sets how much can be held during a Hunt, in
- * G. Capture itself is VS3, so the capacity is carried and displayed and spent by
- * nothing.
+ * G. Max identity 32/64/96 is VERIFIED_BINARY. Bring-home compares summed
+ * G-cost against that max; per-species costs remain product unit 1.
  */
 export const HUNT_MEMORY_CARDS = deepFreeze([
   { itemId: "championship:2026:hunt-memory:card-32", kind: "MEMORY_CARD", displayName: "Card 32G", capacityG: 32, maxOwned: 1, unlock: initial, identityEvidence: HUNT_LOADOUT_ITEM_IDENTITY_EVIDENCE },

@@ -61,9 +61,15 @@ test("the screen stack allows only declared transitions", () => {
   // Skipping a screen is refused, not silently allowed.
   assert.throws(() => stack.enter(CHAMPIONSHIP_SCREENS.HUNT_FIELD), /ILLEGAL_SCREEN_TRANSITION/);
   assert.throws(() => stack.enter(CHAMPIONSHIP_SCREENS.HUNT_LOADOUT), /ILLEGAL_SCREEN_TRANSITION/);
-  assert.throws(() => stack.enter("SHOP"), /UNKNOWN_SCREEN/);
+  assert.throws(() => stack.enter("BATTLE"), /UNKNOWN_SCREEN/);
+  assert.equal(stack.canEnter(CHAMPIONSHIP_SCREENS.SHOP), true);
+  assert.equal(stack.canEnter(CHAMPIONSHIP_SCREENS.DATABASE), true);
+  assert.equal(stack.canEnter(CHAMPIONSHIP_SCREENS.CAGE_EDIT), true);
 
   stack.enter(CHAMPIONSHIP_SCREENS.GATE_SELECT);
+  assert.equal(stack.canEnter(CHAMPIONSHIP_SCREENS.SHOP), false);
+  assert.equal(stack.canEnter(CHAMPIONSHIP_SCREENS.DATABASE), false);
+  assert.equal(stack.canEnter(CHAMPIONSHIP_SCREENS.CAGE_EDIT), false);
   stack.enter(CHAMPIONSHIP_SCREENS.HUNT_LOADOUT);
   stack.enter(CHAMPIONSHIP_SCREENS.HUNT_FIELD);
   assert.equal(stack.depth(), 4);
@@ -103,7 +109,9 @@ test("the gate list preserves the reference-backed count and invents no unlock r
     // The identity is recovered from the ROM model; the display string is not.
     assert.equal(gate.identityEvidence, "ROM_VERIFIED");
     assert.equal(gate.displayNameEvidence, "PRESENTATION_DEFAULT_NOT_RECOVERED");
-    assert.equal(gate.originalFieldMapping, "UNKNOWN_REQUIRES_TRACE");
+    assert.equal(gate.originalFieldMapping, "ROM_VERIFIED");
+    assert.match(gate.originalFields.dayFieldId, /^field_hm\d{2}_0[12]$/);
+    assert.match(gate.originalFields.nightFieldId, /^field_hm\d{2}_0[12]$/);
     assert.ok(Number.isSafeInteger(gate.worldSeed));
   }
 });
@@ -379,7 +387,8 @@ test("VS2 exposes no capture surface and no unresolved terrain taxonomy", async 
 
   // Capture capacity is a number the Memory Checker displays, never an action.
   const capabilities = frame.huntField.hud.capabilities;
-  assert.equal(capabilities.captureCapacityScope, "VS3_CAPTURE_NOT_IMPLEMENTED");
+  assert.equal(capabilities.captureCapacityScope, "MEMORY_CARD_SUM_VS_MAX");
+  assert.equal(capabilities.captureCapacityG, 32);
   assert.equal(capabilities.evidence, "ROM_VERIFIED");
 
   // With no plugins fitted the HUD is dark. Capability is derived from the
@@ -427,7 +436,7 @@ test("VS2 adds no save field, and a reload lands back at Raising Home", async ()
   assert.deepEqual(storage.keys(), [CHAMPIONSHIP_MODERN_SAVE_KEY]);
   const saved = JSON.parse(storage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY));
   assert.deepEqual(Object.keys(saved).sort(), [
-    "creature", "flags", "progression", "raising", "raisingHome", "saveKind", "schemaVersion", "sessionId", "updatedAt"
+    "cageEdit", "creature", "flags", "progression", "raising", "raisingHome", "saveKind", "schemaVersion", "sessionId", "shop", "updatedAt"
   ].sort());
   const asText = JSON.stringify(saved);
   for (const leak of ["gate", "hunt", "wild", "equipment", "plugin", "camera"]) {

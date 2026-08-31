@@ -1,0 +1,98 @@
+{
+  "owner": "Claude Code",
+  "deltaDate": "2026-08-31",
+  "syncRevision": null,
+  "note": "Claude-owned delta. Shared Master Sync, Dependency Matrix and Blocker Ledger are Codex's to merge; changes that belong there are recorded here instead of edited directly.",
+  "added": [
+    {
+      "path": "src/championship/battle/battleContactTargeting.js",
+      "kind": "runtime module",
+      "evidence": "VERIFIED_BINARY (OVL19 0x0211C714..0x0211C954)",
+      "summary": "Bounded contact/target walk upstream of the DamageResolver. Models the action-kind gate (+0x50 in {2,3}), the single/multi selector (+0x54 in {0,1}), the three-slot walk, and the two proven rejections: null target and target HP <= 0. Rolls no RNG."
+    },
+    {
+      "path": "tests/championship-battle-contact-targeting-cases.mjs",
+      "kind": "test",
+      "summary": "11 cases pinning the dumped immediates, both rejection paths in both modes, single-mode early exit, the deferred early-out, and a source assertion that no hit/accuracy/evasion/Sense/TP/RNG identifier exists in the module."
+    },
+    {
+      "path": "src/championship/battle/battleRewardTransaction.js",
+      "kind": "runtime module",
+      "evidence": "VERIFIED_BINARY (OVL8 0x0210D0C8 / 0x0210EAB0, ARM9 0x020F126C)",
+      "summary": "Battle payout decision and wallet credit. Ships the 51-row mode-1 match payout table dumped from ARM9, the win/loss and suppressed-match gates, and the add-then-clamp credit at 9,999,999. No formula, because the original has none."
+    },
+    {
+      "path": "tests/championship-battle-reward-cases.mjs",
+      "kind": "test",
+      "summary": "11 cases pinning the table geometry, the contiguous 101..151 match ids, the gate order, loss withholding, and the post-add clamp. One case asserts the payout group ratios break at ids 139/140/150/151, which is why no ratio is coded."
+    },
+    {
+      "path": "src/championship/battle/battleActionSelection.js",
+      "kind": "runtime module",
+      "evidence": "VERIFIED_BINARY (OVL19 0x021159D4 and 0x02115E8C, ARM9 0x020431D4)",
+      "summary": "AI action selection, end to end. Three profiles, the roll ladder over three candidate buckets with the reserve gate, the negative-status-2 row override, uniform in-bucket pick, the full six-group state-7 cascade (2,1,4,3,6,5) with its four targeting styles and the duplicate-effect decline, and the move ladder with its Q12 distances. Buckets and groups are keyed by the original state codes; no strategy is named."
+    },
+    {
+      "path": "tests/championship-battle-ai-selection-cases.mjs",
+      "kind": "test",
+      "summary": "24 cases pinning every dumped table, the reserve truncation and tie behavior, the missing cost gate on bucket 4, the six-group cascade order, all three liveness rules, the effect-id table, group 5's uniform pick, the pendingField24 shortcut, the status-2 override, and rejection of rolls outside 0..102."
+    },
+    {
+      "path": "CLAUDE_REBUILD_STATUS.json",
+      "kind": "status",
+      "summary": "First edition in this repository; never previously tracked here."
+    },
+    {
+      "path": "CLAUDE_SYNC_DELTA.json",
+      "kind": "status",
+      "summary": "This file. First edition in this repository."
+    },
+    {
+      "path": "src/championship/battle/battleActionResource.js",
+      "kind": "runtime module",
+      "evidence": "VERIFIED_BINARY (OVL19 0x0211C144, guard 0x0211C24C)",
+      "summary": "The spendable action resource the brief called TP, now traced rather than invented. Current at stats +0x54, maximum at +0x5C, cost at action +0x48. Signed less-than guard: a refused action charges nothing, and paying to exactly zero is allowed."
+    },
+    {
+      "path": "tests/championship-battle-action-resource-cases.mjs",
+      "kind": "test",
+      "summary": "8 cases covering the offsets, the exact-zero boundary, the no-charge refusal, zero-cost actions, the relationship to the AI reserve, and the ascending slot-order fact."
+    }
+  ],
+  "modified": [
+    {
+      "path": "tests/championship-migration-firewall-cases.mjs",
+      "summary": "Added battleContactTargeting.js to the asserted battle directory listing and extended the authorization comment. The firewall states the battle folder contents in both directions, so a new module must be declared there."
+    }
+  ],
+  "forSharedLedger": {
+    "blockersUnchanged": [],
+    "blockersClosed": [
+      "Universal hit/miss formula — reclassified NO_ACCURACY_ROLL_FOUND. Four independent checks indicate the original resolves contact, not accuracy, so there is nothing to add; an accuracy formula would make the remake play differently from the original.",
+      "Bits reward formula — reclassified NO_FORMULA_EXISTS. The payout is a per-match constant in the ARM9 table at 0x020F126C, gated by win/loss. Table and gates are now implemented.",
+      "state-7 group-3 scan tail — walked to the end. The AI cascade is six groups (2, 1, 4, 3, 6, 5) then the move ladder, with no unwalked branch left.",
+      "Sense — reclassified NO_CODE_4_CONSUMER_EXISTS. No branch in ARM9 or any of the 22 overlays compares the positive effect code against 4; only != 0 presence tests exist. Nothing to implement.",
+      "TP — reclassified RESOLVED_AND_IMPLEMENTED. A spendable action resource is real: current stats +0x54, maximum +0x5C, cost action +0x48, charged at OVL19 0x0211C244. This also gives the AI reserve its meaning.",
+      "OVL8 first-clear bonus — reclassified NO_FIRST_CLEAR_BONUS. The payout is written before the mode jump table and none of the three destinations alters it. The 0x0210EA48 stepping is the counting-up tally, not a bonus.",
+      "Same-frame tie ordering — reclassified RESOLVED. Ascending slot index; nineteen 6-bounded loops in OVL19 all count upward, with no speed or priority tiebreak."
+    ],
+    "blockersOpened": [
+      "AI strategy labels and metric semantics — the structure is implemented, only the names remain unproven (Stage 4 B07/B08).",
+      "Action-resource regeneration, starting value, and any writer outside OVL19 — the charge is traced, restoration is not.",
+      "OVL8 rank and unlock writers beyond the wallet credit — the payout question is closed, the wider progression graph is not."
+    ],
+    "correctionForSharedLedger": "Stage 4 B08 describes OVL19 0x021144CC as an AI target scan. It is not: it is a first-fit affordability scan over an action-id list. The target choice is inlined at 0x02115BE8. Both are now implemented; the shared unknown register should be corrected rather than left describing the old reading.",
+    "warningForOtherLanes": "Channel-216 rolls are 0..102, not 0..215. battleActionSelection.js rejects out-of-range rolls; battleDamageResolver.js and battleStatus.js still accept any safe integer from an injected rng. Any harness or future wiring that feeds those modules must use the 0..102 range or the critical and status-proc rates will be wrong.",
+    "newFacts": [
+      "The Owner-supplied ROM at SHA-256 8ad375ba…c5d1 reproduces every battle constant the Cursor handoff claimed, with no discrepancy.",
+      "OVL19 contains exactly three direct DamageResolver call sites; the bounded caller region 0x0211C714..0x0211C92C contains no RNG call, which is positive evidence against an accuracy roll inside contact resolution.",
+      "R:\\NEXUS LINK\\原作\\research-only\\YDIJ_FULL_ROM_DECONSTRUCTION_2026-08-29 now ships arm9.bin, arm7.bin and all 22 ARM9 overlay binaries. The earlier repeated finding that no overlay or ARM9 binary existed under the research root is superseded; new overlay traces are no longer blocked for lack of a binary.",
+      "The AI cascade applies three different liveness rules: group 1 skips HP exactly 0, group 3 applies no HP test at all, group 5 requires HP > 0. battleContactTargeting separately requires HP > 0, so a negative-HP combatant can be targeted and then rejected at contact. All four rules are in the ROM.",
+      "OVL19 0x021300D4 maps action id to the positive effect code it applies (ids 0-9 -> 0, then pairs 10/11 -> 1 up to 22/23 -> 7). Group 6 uses it to decline an action whose effect the combatant already carries; this is the duplicate-effect logic Stage 6 saw while auditing Sense.",
+      "Stage 4 B07/B08 and the Cursor handoff both treated TP as an invention risk. It is not: OVL19 0x0211C244 charges action +0x48 against stats +0x54 with a refuse-if-insufficient guard. The shared unknown register should be corrected."
+    ]
+  },
+  "dependenciesChanged": false,
+  "checkpointCommitted": false,
+  "codexLaneNotice": "Resolved. Codex was fixing the GitHub CI failure on Orochi771127/championship-2026 and has finished; npm test is back to 289 pass / 0 fail with this lane's work included."
+}

@@ -11,3 +11,5 @@ This repository is the standalone product authority for **DIGIMON CHAMPIONSHIP â
 - VS1 is the accepted baseline. VS2 and later work require separate authorization.
 - Do not push, deploy, release, or integrate with Nexus Link without explicit Owner authorization.
 
+Claude Code taking over battle work: **review first**, then continue original arithmetic only. Brief: `docs/coordination/CURSOR_BATTLE_ARITHMETIC_HANDOFF.md`. Serena: `mem:core` and `mem:claude-code/battle-arithmetic-handoff`. Codex owns art/UI. Do not invent hit/miss, TP, Senseâ†’accuracy, or a BATTLE screen. Update `CLAUDE_REBUILD_STATUS.json` only after that review.
+

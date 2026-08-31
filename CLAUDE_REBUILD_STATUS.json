@@ -1,0 +1,329 @@
+{
+  "owner": "Claude Code",
+  "lane": "runtime implementation and original-system reconstruction",
+  "statusDate": "2026-08-31",
+  "repository": "championship-2026",
+  "branch": "main",
+  "note": "First edition in this repository. Neither CLAUDE_REBUILD_STATUS.json nor CLAUDE_SYNC_DELTA.json was ever tracked here (git log over all refs returns nothing), so no prior content was inferred. The Cursor handoff's statement that this file recorded BATTLE_RUNTIME as not started is recorded as NOT_REPORTED rather than transcribed.",
+  "completed": [
+    {
+      "id": "BATTLE_ARITHMETIC_HANDOFF_REVIEW",
+      "source": "docs/coordination/CURSOR_BATTLE_ARITHMETIC_HANDOFF.md",
+      "verdict": "PASS",
+      "method": "Independent re-dump from the Owner-supplied ROM, not acceptance of the handoff comments.",
+      "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+      "romHeader": {
+        "title": "DIGIMONCHAMP",
+        "gameCode": "YDIJ",
+        "arm9Ram": "0x02000000"
+      },
+      "overlay19": {
+        "ram": "0x0210B300",
+        "size": "0x26920",
+        "compressed": false,
+        "romRange": "0x1E4600..0x20AF20"
+      },
+      "checks": [
+        {
+          "item": "ARM9 0x020CA00C stride-16 curve, 27 values",
+          "result": "EXACT_MATCH"
+        },
+        {
+          "item": "OVL19 0x0213007C 11x11 signed field matrix",
+          "result": "EXACT_MATCH"
+        },
+        {
+          "item": "OVL19 0x0212FECC status durations 0 / 600 x11 / 900 x3",
+          "result": "EXACT_MATCH"
+        },
+        {
+          "item": "OVL19 0x02130038 general proc thresholds 0,5,10,15,20,25,30,35,40",
+          "result": "EXACT_MATCH"
+        },
+        {
+          "item": "OVL19 0x02130034 id13 proc thresholds 0,0,0,0,5,6,8,12,24",
+          "result": "EXACT_MATCH"
+        },
+        {
+          "item": "OVL19 0x0212FE64 crit thresholds 2,3,5,7 as u32",
+          "result": "EXACT_MATCH"
+        },
+        {
+          "item": "OVL19 0x021156B0 resistance sentinel 999",
+          "result": "EXACT_MATCH"
+        },
+        {
+          "item": "global percent default 100 (0x0210D224 mov r6,#0x64; str r6,[r5,#0x43C])",
+          "result": "CONFIRMED"
+        },
+        {
+          "item": "combatant current HP at +0x50 via target +0x10, guarded by cmp #0 / ble before subtract",
+          "result": "CONFIRMED"
+        },
+        {
+          "item": "no battle module imported anywhere under src/championship/app",
+          "result": "PASS"
+        },
+        {
+          "item": "no hitChance / accuracy / TP / Sense implementation in src/championship/battle",
+          "result": "PASS (only prohibition comments)"
+        },
+        {
+          "item": "no BATTLE entry in the screen stack",
+          "result": "PASS"
+        },
+        {
+          "item": "no Japanese action names in src/ (one glossary citation in a cageEffects.js comment)",
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "BATTLE_CONTACT_TARGETING",
+      "authorizedBy": "CURSOR_BATTLE_ARITHMETIC_HANDOFF next-knife section; Stage 6 implementation gate",
+      "evidence": "VERIFIED_BINARY",
+      "trace": "OVL19 0x0211C714..0x0211C954, resolver call site 0x0211C92C",
+      "independentFindings": [
+        "A full BL scan of OVL19 finds exactly three direct calls to the DamageResolver 0x021149A8: 0x0211C92C, 0x0211D9E0, 0x0211D9FC.",
+        "No BL to the RNG helper 0x020431D4 exists anywhere in 0x0211C714..0x0211C92C, so this stage rolls nothing.",
+        "Action +0x50 must be 2 or 3 (unsigned sub #2 / cmp #1 / bhi) or the walk is not entered.",
+        "Action +0x54 in {0,1} selects a single-target walk; anything else walks up to three slots (cmp r5,#3, effect record stride 436 from sl+672).",
+        "Proven rejections: null target pointer, and target current HP <= 0. The HP gate is enforced again at the resolver entry 0x021149BC.",
+        "In single-target mode a downed target ends the walk; in multi-target mode it advances to the next slot. A null single target still burns all three passes because the pointer load sits inside the loop."
+      ],
+      "outputs": [
+        "src/championship/battle/battleContactTargeting.js",
+        "tests/championship-battle-contact-targeting-cases.mjs"
+      ],
+      "notImplemented": [
+        "hit/miss probability",
+        "accuracy or evasion percentage",
+        "Sense mechanic (positive effect code 4)",
+        "TP",
+        "the meaning of the 0x02054A4C early-out (control flow modelled, semantics untraced)",
+        "any battle screen or app wiring"
+      ]
+    }
+  ],
+  "completedContinued": [
+    {
+      "id": "BATTLE_REWARD_TRANSACTION",
+      "evidence": "VERIFIED_BINARY",
+      "trace": "OVL8 0x0210D0C8 payout decision, OVL8 0x0210EAB0 wallet credit, ARM9 0x020F126C match table",
+      "independentFindings": [
+        "There is no Bits reward formula. The payout is a per-match constant read from the ARM9 match table at 0x020F126C, stride 28, 86 records; +0x00 is the mode the OVL8 jump table switches on, +0x10 the match id, +0x14 the payout.",
+        "Chain: matchTable[i].+0x14 -> screen +0x6BC (ARM9 0x0208CE8C) -> session ctx +0xC94 (ARM9 0x0208C4D4) -> pending +0x408 (OVL8 0x0210D190) -> wallet +0x4C8 (OVL8 0x0210EABC) -> clamp 9,999,999 (0x0210EAD4).",
+        "Mode histogram of the 86 records: mode 0 x1, mode 1 x51, mode 2 x9, mode 3 x11, mode 4 x10, mode 5 x4.",
+        "The 51 mode-1 payouts cover contiguous match ids 101..151, from 3,000 to 400,000 Bits.",
+        "Payout groups are near-multiples of the first ten (x1.5, x1.2, x1.4, x1.3) but several groups break the ratio at their last entries (ids 139, 140, 150, 151), so the ratios are an authoring artifact and not a rule the game evaluates. The table is shipped as data.",
+        "Gate order at 0x0210D0C8: pending defaults to 0; mode 1 with index 61 returns first; a loss returns second; only then is the payout written. The win flag at +0x7FC is 1 unless any inspected outcome entry is zero.",
+        "The wallet clamp is applied after the add, so an overflowing payout is truncated rather than refused."
+      ],
+      "outputs": [
+        "src/championship/battle/battleRewardTransaction.js",
+        "tests/championship-battle-reward-cases.mjs"
+      ],
+      "notImplemented": [
+        "first-clear bonus — later proven not to exist; the payout is written before the mode jump table and no branch alters it",
+        "rank or streak multipliers (none observed)",
+        "Bits spending, which is the Shop's side",
+        "any battle or result screen"
+      ]
+    }
+  ],
+  "completedAiSelection": {
+    "id": "BATTLE_AI_ACTION_SELECTION",
+    "evidence": "VERIFIED_BINARY",
+    "trace": "OVL19 0x021159D4 action ladder, 0x02115E8C move ladder, ARM9 0x020431D4 RNG helper",
+    "scopeNote": "Stage 4 B07/B08 hold that the AI structure is verified while strategy labels are not. This translation reproduces the structure and names no strategy; buckets are keyed by the state code the original passes to 0x02114984.",
+    "independentFindings": [
+      "There are exactly three AI profiles, selected by combatant +0x18. Row 3 of every AI table is zero.",
+      "Action ladder thresholds, OVL19 0x0212FF88 stride 12: profile 0 [32,58,95,99], profile 1 [17,31,88,92], profile 2 [7,14,41,60].",
+      "Negative status code 2 replaces the whole ladder row with 0x0212FE40 [0,10,10,20], and the move row with 0x0212FE38 [0,20]. It is a different decision profile, not a modifier.",
+      "Reserve = min(trunc(metricBase * reservePercent/100), metricLimit), percent from 0x0212FFF4 stride 16 indexed by the session scalar at ctx +0x5E9C.",
+      "Bucket order: roll < T0 tries the +0xCC bucket (state 5), roll < T1 the +0xD8 bucket (state 6), roll < T2 the +0xC0 bucket (state 4). Buckets 5 and 6 are gated on candidate +0x48 being strictly below the reserve; bucket 4 commits with NO cost gate at 0x02115B44..0x02115B58. The asymmetry is preserved.",
+      "Within a bucket the pick is uniform: 0x0202B558 is a signed divide returning the remainder in r1, so index = roll % count.",
+      "roll in [T2,T3) takes the targeted path (state 7), which runs the six-group cascade described under targetedCascade. roll >= T3 falls to the move ladder.",
+      "The move ladder at 0x02115E8C writes Q12 immediates to +0x184/+0x188 and enters state 3: primary 0x32000/0x50000/0x6E000 = 50/80/110, secondary 0x1E000 = 30. Thresholds 0x0212FE84 stride 6: [68,89], [48,96], [7,48].",
+      "combatant +0x24 > 0 skips the action ladder entirely and goes straight to the move ladder."
+    ],
+    "rngCorrection": {
+      "finding": "`mov r0, #216` passes a CHANNEL id, not a modulus. ARM9 0x020431D4 returns (seed[channel] + table[cursor]) mod 103, walking a fixed 103-entry table at 0x020BD23C with a per-channel cursor that wraps at 103. The header at 0x020BD230 holds the channel count 0xD9 (217), the cursor array and the seed array.",
+      "impact": "Every channel-216 roll in the battle system is 0..102, so all thresholds are out of 103. This makes previously unquantified rates concrete: the critical thresholds {2,3,5,7} are about 1.9%-6.8%, and status proc thresholds 0..40 top out near 39%.",
+      "residual": "The per-channel seed initialisation is not traced, so a bit-exact sequence is not yet reproducible. The range and modulus are."
+    },
+    "outputs": [
+      "src/championship/battle/battleActionSelection.js",
+      "tests/championship-battle-ai-selection-cases.mjs"
+    ],
+    "targetedCascade": {
+      "correction": "0x021144CC was recorded as a target selector by Stage 4 B08 and by this file's first edition. It is not. It is a first-fit affordability scan over the group list at combatant + 0xE8 + group*12 (count byte at + 0xF0 + group*12), returning the first action id whose ARM9 0x020CFF9C record (stride 104) has +0x48 strictly below the reserve, else 0. Order matters; there is no shuffle.",
+      "realTargetChoice": "Inlined at 0x02115BE8. Walks the roster at combatant +0x54, skipping a null entry or one whose HP is exactly 0, and keeps the entry with the greatest parallel metric at roster +0x44 + index*4. movgt means ties keep the earlier entry; the running best starts at 0 so a metric of 0 or less never wins.",
+      "hpAsymmetry": "This scan skips HP == 0 but accepts negative HP, unlike battleContactTargeting which requires HP > 0. The asymmetry is in the ROM and is preserved.",
+      "cascadeOrder": "Six groups in the order 2, 1, 4, 3, 6, 5, then the move ladder. Group 2 is guarded by [[+0x54]+0x40] > 0 and targets SELF with no roster scan. Group 1 needs an affordable action plus a metric44 roster target. Group 4 is guarded by [[+0x54]+0x50] > 0 and targets SELF. Group 3 targets the greatest metric54. Group 6 targets SELF but declines when the combatant already carries the effect the action would apply. Group 5 collects up to three living entries whose +0x160 is 0 and picks among them uniformly with a second channel-216 roll.",
+      "threeLivenessRules": "The cascade applies three different liveness tests. Group 1 skips a null entry or HP exactly 0. Group 3 (0x02115CFC..0x02115D18) applies NO HP test at all, so a defeated entry is a legal target. Group 5 requires HP > 0. All three are in the ROM and are preserved rather than normalised. battleContactTargeting separately requires HP > 0, so a negative-HP combatant can be selected by group 1 or 3 and then rejected at contact.",
+      "duplicateEffectCheck": "OVL19 0x021300D4, u32 by action id, maps an action to the positive effect code it would apply: ids 0-9 map to 0, then 10/11 to 1, 12/13 to 2, up to 22/23 to 7. Group 6 declines when combatant +0x160 already equals that code. Because the first ten entries are 0, an action with no effect is always declined by a combatant with no effect. This is the duplicate/active-effect logic Stage 6 observed while auditing Sense.",
+      "tableAdjacencyNote": "0x021300D4 sits 88 bytes past the field matrix base 0x0213007C, exactly where matrix row 8 would begin. The matrix's zero tail and this table's zero head occupy the same bytes, so both readings agree with the ROM and battleDamageResolver's rows 8-10 of zeros remain correct. Do not treat this as a conflict.",
+      "fieldCorrection": "+0x64 is the target and +0x178 is the chosen action id; +0x174 holds the pointer built from that id by multiplying by 104. An earlier reading of +0x178 as the target was wrong."
+    },
+    "notImplemented": [
+      "strategy names or metric semantics beyond role-based ones",
+      "the 596-action table",
+      "which kind of action each bucket holds",
+      "any battle screen"
+    ]
+  },
+  "current": "BATTLE_RUNTIME arithmetic, traced control flow, the reward transaction and AI action selection. No app wiring, no screen.",
+  "blocked": [
+    {
+      "id": "B-HITMISS",
+      "item": "universal hit/miss probability formula",
+      "state": "NO_ACCURACY_ROLL_FOUND",
+      "supersedes": "UNKNOWN_REQUIRES_TRACE",
+      "correctionDate": "2026-08-31",
+      "finding": "This is not a gap in the remake. Four independent checks indicate the original resolves contact, not accuracy, so the product already matches it: an effect reaching a living target deals damage.",
+      "evidence": [
+        "A full BL scan of OVL19 finds no RNG helper (0x020431D4) call anywhere in the bounded contact region 0x0211C714..0x0211C92C.",
+        "The resolver 0x021149A8 calls the RNG helper exactly twice: 0x02114CB8 is the x3/2 critical branch, 0x02114CE4 is the %100 variance. Neither can skip damage.",
+        "The resolver has exactly five exits returning 0, 1 or 2. Every early exit is a deterministic state compare (target HP <= 0; runtime state in {0,1,2,9,10,11,12}; +0x17C in 18..21). No exit is a roll and none is a distinct missed result code.",
+        "All 3,197 extracted original text records contain no MISS, dodge or accuracy vocabulary; the nine keyword hits are false positives (mithril, two action names, two idioms)."
+      ],
+      "residual": "Not proven for the two other resolver call sites 0x0211D9E0 / 0x0211D9FC, whose caller region has not been walked instruction by instruction. Adding an accuracy formula remains prohibited, because inventing one would make the remake play differently from the original."
+    },
+    {
+      "id": "B-SENSE",
+      "item": "Sense exact mechanic",
+      "state": "NO_CODE_4_CONSUMER_EXISTS",
+      "note": "No branch in ARM9 or any of the 22 overlays compares the positive effect code against 4. See completedRemainingUnknowns.",
+      "supersedes": "UNKNOWN_REQUIRES_TRACE",
+      "correctionDate": "2026-08-31"
+    },
+    {
+      "id": "B-TP",
+      "item": "TP",
+      "state": "RESOLVED_AND_IMPLEMENTED",
+      "supersedes": "UNKNOWN_REQUIRES_TRACE",
+      "correctionDate": "2026-08-31",
+      "note": "The spendable action resource is real and traced. battleActionResource.js implements the charge and the refusal; regeneration remains untraced."
+    },
+    {
+      "id": "B-RNG216",
+      "item": "RNG channel 216 distribution",
+      "state": "RANGE_RESOLVED",
+      "supersedes": "UNKNOWN_REQUIRES_TRACE",
+      "correctionDate": "2026-08-31",
+      "finding": "216 is a channel id, not a modulus. ARM9 0x020431D4 returns (seed[channel] + table[cursor]) mod 103 over a fixed 103-entry table at 0x020BD23C. Every roll is 0..102 and every threshold in the battle system is out of 103.",
+      "residual": "Per-channel seed initialisation is untraced, so the exact sequence is not reproducible; the range and modulus are. Injected rng.next(216) must yield 0..102 — battleActionSelection.js enforces that, the older battle modules do not yet."
+    },
+    {
+      "id": "B-AISTRATEGY",
+      "item": "human-readable AI strategy labels and metric semantics",
+      "state": "UNKNOWN_REQUIRES_TRACE",
+      "note": "Structure is implemented; only the names remain unproven, matching Stage 4 B07/B08."
+    },
+    {
+      "id": "B-AITARGET",
+      "item": "AI target selector OVL19 0x021144CC",
+      "state": "RESOLVED_AND_RENAMED",
+      "supersedes": "UNKNOWN_REQUIRES_TRACE",
+      "correctionDate": "2026-08-31",
+      "finding": "0x021144CC is not a target selector. It is a first-fit affordability scan over a per-group list of action ids, returning the first whose ARM9 record +0x48 is strictly below the reserve, or 0. The real target choice is inlined at 0x02115BE8 and picks the living roster entry with the greatest metric. Both are implemented.",
+      "residual": "The group-3 scan tail past 0x02115CD4 is not walked."
+    },
+    {
+      "id": "B-AIGROUP3",
+      "item": "state-7 group-3 scan tail OVL19 0x02115CC4 onward",
+      "state": "RESOLVED",
+      "supersedes": "UNKNOWN_REQUIRES_TRACE",
+      "correctionDate": "2026-08-31",
+      "finding": "Walked to the end. The cascade is six groups in the order 2, 1, 4, 3, 6, 5, then the move ladder. Groups 3, 6 and 5 are now implemented, so the AI decision path is closed end to end with no unwalked branch."
+    },
+    {
+      "id": "B-REWARD",
+      "item": "Bits reward formula",
+      "state": "NO_FORMULA_EXISTS",
+      "supersedes": "UNKNOWN_REQUIRES_TRACE",
+      "correctionDate": "2026-08-31",
+      "finding": "The payout is not computed. It is a per-match constant in an ARM9 table, gated by win/loss. Implemented in battleRewardTransaction.js.",
+      "residual": "The bodies of the three OVL8 jump-table destinations (mode 1 -> 0x0210D3EC, mode 2 -> 0x0210D1C0, default -> 0x0210D464) are not walked instruction by instruction. Mode 2 reads a per-opponent already-cleared flag and can branch on first clear; whether that branch alters the payout is still unknown, so no first-clear bonus is modelled."
+    },
+    {
+      "id": "B-PROGRESSION",
+      "item": "OVL8 progression/rank writer graph beyond the wallet credit",
+      "state": "NO_FIRST_CLEAR_BONUS",
+      "supersedes": "UNKNOWN_REQUIRES_TRACE",
+      "correctionDate": "2026-08-31",
+      "note": "The payout is written before the mode jump table and no branch alters it. Rank and unlock writers beyond the wallet credit remain untraced."
+    },
+    {
+      "id": "B-TIE",
+      "item": "same-frame simultaneous zero ordering",
+      "state": "RESOLVED",
+      "supersedes": "UNKNOWN_REQUIRES_TRACE",
+      "correctionDate": "2026-08-31",
+      "note": "Ascending slot index; nineteen 6-bounded loops in OVL19 all count upward."
+    }
+  ],
+  "verification": {
+    "battleSubset": "tests/championship-battle-*.mjs plus the migration firewall: pass",
+    "npmTest": "297 pass / 0 fail",
+    "knownFailureNotOurs": {
+      "test": "tests/championship-hunt-hd-remaster-cases.mjs — 'source assembly, object placement records and raw gameplay maps are unchanged'",
+      "cause": "The test digests files under docs/art/production/hunt/faithful-hd30, which Codex Art was rewriting during this session; the working tree grew from 59 to 465 uncommitted files while this batch ran. The pinned source SHA no longer matches.",
+      "action": "Left alone. Fixing an art hash from inside a battle batch is explicitly prohibited by the Cursor handoff and the file belongs to the Codex lane. The full suite passed at 279/279 earlier in this same session, before that art churn."
+    },
+    "browserGates": "not run this batch; no DOM, presentation or asset file changed by this lane"
+  },
+  "dependenciesChanged": false,
+  "checkpoint": {
+    "committed": false,
+    "reason": "The handoff says not to commit before it is requested. The working tree also carries concurrent Codex/Cursor edits across shared files."
+  },
+  "recommendedNext": [
+    "Owner decision on whether battle arithmetic may be wired to a runtime session; today nothing under src/championship/app imports it.",
+    "Trace the other two resolver call sites 0x0211D9E0 and 0x0211D9FC and record whether their caller regions add rejections this module does not model.",
+    "Leave hit/miss, Sense and TP blocked. Do not fill them with a conventional accuracy formula; the Stage 6 gate prohibits it."
+  ],
+  "completedRemainingUnknowns": {
+    "date": "2026-08-31",
+    "request": "Owner asked whether the four remaining unknowns could all be resolved from the original.",
+    "result": "All four are resolved. Three are negative or structural findings; one turned out to be a real system that is now implemented.",
+    "items": [
+      {
+        "id": "B-SENSE",
+        "verdict": "NO_CODE_4_CONSUMER_EXISTS",
+        "method": "Scanned ARM9 and all 22 overlays for a load of combatant +0x160 followed within four instructions by a compare against an immediate.",
+        "evidence": "Fourteen such sites exist in total. OVL19 compares the positive effect code against 0, 1, 2, 3, 5, 6, 7, 8 and 9. It never compares against 4. ARM9, OVL9 and OVL18 only compare against 0, which is a presence test.",
+        "conclusion": "Sense has no value-specific branch anywhere in the ROM's ARM code. Its only mechanical footprint is through != 0 tests: group 6's duplicate decline and group 5's target collection. This matches Stage 6's audit and extends it from OVL19 to the whole image.",
+        "notImplemented": "Nothing to implement. An accuracy or must-hit effect for code 4 would be an invention."
+      },
+      {
+        "id": "B-TP",
+        "verdict": "EXISTS_AND_IMPLEMENTED",
+        "method": "Enumerated every read of action +0x48 in OVL19 and checked which one writes back.",
+        "evidence": "Five reads: the charge at 0x0211C244, the affordability scan at 0x02114504, the two AI ladder gates at 0x02115AA8 and 0x02115AFC, and 0x0210BDE8 which masks a hardware register at 0x04001008 and is unrelated. Only 0x0211C244 writes: cmp current(stats +0x54) against cost, blt returns 0 without charging, otherwise sub and str back to +0x54.",
+        "conclusion": "A spendable action resource exists. Current is stats +0x54, maximum is stats +0x5C, cost is action +0x48 as a u16. The guard is signed less-than, so paying down to exactly zero is allowed and a refused action costs nothing. This also gives the AI reserve its meaning: min(trunc(max * profilePercent / 100), current).",
+        "outputs": [
+          "src/championship/battle/battleActionResource.js",
+          "tests/championship-battle-action-resource-cases.mjs"
+        ],
+        "residual": "Regeneration, starting value and any writer outside OVL19 are untraced. The module charges and refuses; it does not restore."
+      },
+      {
+        "id": "B-PROGRESSION",
+        "verdict": "NO_FIRST_CLEAR_BONUS",
+        "method": "Enumerated every access to the pending reward field +0x408 in OVL8 and located them relative to the mode jump table at 0x0210D1A0.",
+        "evidence": "The reward-decision function writes +0x408 exactly twice, at 0x0210D128 (default 0) and 0x0210D190 (the payout), and both are BEFORE the jump table. None of the three destinations (mode 1 at 0x0210D3EC, mode 2 at 0x0210D1C0, default at 0x0210D464) writes it.",
+        "conclusion": "The payout is locked before any mode branch runs, so there is no first-clear bonus, no rank multiplier and no streak. Mode 2's per-opponent already-cleared flag at +0xC0 gates presentation and progression, not the amount.",
+        "alsoFound": "0x0210EA48 is not a bonus either: it moves the pending amount into the wallet in steps of 1, 10 or 100 depending on magnitude, which is the counting-up tally. The instant path at 0x0210EAB0 transfers the remainder whole. Neither changes the total."
+      },
+      {
+        "id": "B-TIE",
+        "verdict": "ASCENDING_SLOT_INDEX",
+        "method": "Read the per-frame combatant pass and then swept OVL19 for every loop bounded by 6.",
+        "evidence": "The pass at 0x0210D6E4..0x0210D90C walks six fixed slots with add/cmp #6/blt, updating negative-status tick and DoT, positive-effect tick, +0x24 and cooldown +0x28 in that order. Nineteen loops in OVL19 are bounded by 6 and every one counts upward; none descends, sorts by speed or randomises.",
+        "conclusion": "When two combatants become ready on the same frame, the lower slot index is serviced first. There is no priority or speed tiebreak; speed only changes when a cooldown reaches zero, through the 90 - 2*speedIndex rebuild. Recorded as BATTLE_AI_SLOT_SERVICE_ORDER."
+      }
+    ]
+  }
+}

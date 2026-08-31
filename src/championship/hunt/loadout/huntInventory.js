@@ -12,8 +12,9 @@
 // badges. It is evaluated here so the loadout can explain why something is
 // absent, not so the loadout can decide it.
 //
-// VS4 owns the Shop. Until then there is no purchase path, and the starting
-// inventory follows the original's initial_owned shape.
+// VS4 owns the Shop. Hunt inventory is Shop-owned: New Game still accepts a
+// starting bag so capacity tests can pass an empty one; Continue restores
+// mapped SKUs from the Shop snapshot.
 
 import { deepFreeze } from "../../contracts/championshipContracts.js";
 import {
@@ -68,14 +69,15 @@ export function evaluateHuntItemAvailability(item, { tamerRank = 0, battleBadges
  * Create the player's Hunt inventory.
  *
  * `progression` is read-only context the Shop would own: Tamer rank and battle
- * badges. Neither is implemented as a product system yet, so both default to the
- * start of the game rather than being invented.
+ * badges. Rank now persists on the product save; badge writes still wait on battle.
  */
 export function createHuntInventory({
   entries = HUNT_STARTING_INVENTORY,
   tamerRank = 0,
   battleBadges = []
 } = {}) {
+  let rank = tamerRank;
+  let badges = [...battleBadges];
   const owned = new Map();
 
   function put(itemId, quantity) {
@@ -115,11 +117,17 @@ export function createHuntInventory({
     availabilityOf(itemId) {
       const item = getHuntCatalogItem(itemId);
       if (!item) return deepFreeze({ available: false, reason: "UNKNOWN_HUNT_ITEM", evidence: "n/a" });
-      return evaluateHuntItemAvailability(item, { tamerRank, battleBadges });
+      return evaluateHuntItemAvailability(item, { tamerRank: rank, battleBadges: badges });
     },
 
     getProgressionContext() {
-      return deepFreeze({ tamerRank, battleBadges: [...battleBadges] });
+      return deepFreeze({ tamerRank: rank, battleBadges: [...badges] });
+    },
+
+    setProgression(next = {}) {
+      if (Number.isSafeInteger(next.tamerRank)) rank = next.tamerRank;
+      if (Array.isArray(next.battleBadges)) badges = [...next.battleBadges];
+      return this.getProgressionContext();
     },
 
     /**

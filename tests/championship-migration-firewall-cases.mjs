@@ -58,22 +58,41 @@ test("the storage guard is a pure policy leaf with no imports and a populated de
   assert.match(guard, HISTORICAL_NAMESPACE);
 });
 
-test("only the authorized VS1 and VS2 source families are present", () => {
+test("only the authorized source families are present", () => {
   // `gate` and `hunt` left this list when the Owner authorized VS2 on 2026-08-28.
-  // Everything still here belongs to a slice with no implementation authority:
-  // capture and encounter are VS3, shop is VS4, battle and arena are VS5.
-  const forbidden = ["arena", "battle", "capture", "encounter", "heartlake", "shop"];
+  // `shop`, `database` and `cage` left it when the Owner authorized VS4 on 2026-08-30.
+  // `battle` left it when the Owner authorized the damage-core formula on 2026-08-31,
+  // then the rest of the OVL19 resolver (global / field / crit / variance / HP / cooldown),
+  // then heal / one-slot status / curve +1 on 2026-08-31,
+  // then the bounded contact/target walk upstream of the resolver on 2026-08-31.
+  // That folder is still arithmetic and traced control flow only — not a battle
+  // screen, not invented hit/miss.
+  // Arena and encounter still have no implementation authority.
+  const forbidden = ["arena", "encounter", "heartlake"];
   const present = forbidden.filter((name) => fs.existsSync(path.join(root, "src/championship", name)));
   assert.deepEqual(present, []);
 
-  // Stated in both directions, so the VS2 scope is a fact the suite asserts
+  // Stated in both directions, so the VS4 shop directory is a fact the suite asserts
   // rather than an absence it happens to tolerate.
-  const authorized = ["app", "contracts", "field", "gate", "hunt", "kernel", "modes", "presentation", "r2", "raising"];
+  const authorized = ["app", "battle", "cage", "contracts", "database", "field", "gate", "hunt", "kernel", "modes", "presentation", "r2", "raising", "shop"];
   const actual = fs.readdirSync(path.join(root, "src/championship"), { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)
     .sort();
   assert.deepEqual(actual, authorized);
+  assert.deepEqual(
+    fs.readdirSync(path.join(root, "src/championship/battle")).sort(),
+    [
+      "battleActionResource.js",
+      "battleActionSelection.js",
+      "battleContactTargeting.js",
+      "battleDamageCore.js",
+      "battleDamageResolver.js",
+      "battleRewardTransaction.js",
+      "battleStatus.js",
+      "battleSupport.js"
+    ]
+  );
 });
 
 test("all runtime asset declarations resolve below assets/production", () => {

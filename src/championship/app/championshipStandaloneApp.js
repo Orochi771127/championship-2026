@@ -17,7 +17,8 @@ import {
   createRaisingProductionState,
   normalizeRaisingProductionState,
   recordCareInteraction,
-  recordEnclosedCreature
+  recordEnclosedCreature,
+  renameEnclosedCreature
 } from "./championshipRaisingProduction.js";
 import { createChampionshipPersistentSavePort } from "./ChampionshipPersistentSavePort.js";
 import { selectPhase1FirstCreature } from "./phase1ProductCreatures.js";
@@ -28,6 +29,15 @@ import { createHuntRuntime } from "../hunt/huntRuntime.js";
 import { createHuntInventory } from "../hunt/loadout/huntInventory.js";
 import { createHuntLoadout } from "../hunt/loadout/huntLoadoutRuntime.js";
 import { HUNT_STARTING_INVENTORY } from "../hunt/loadout/huntEquipmentCatalog.js";
+import { evaluateBringHomeCapacity } from "../hunt/capture/memoryCardCapacity.js";
+import {
+  applyMappedHuntInventoryFromShop,
+  createShopRuntime
+} from "../shop/shopRuntime.js";
+import { projectDatabase } from "../database/databaseRuntime.js";
+import { DATABASE_SLOT_COUNT } from "../database/databaseCatalog.js";
+import { createCageEditRuntime } from "../cage/cageEditRuntime.js";
+import { normalizeTamerRank } from "../cage/cageCatalog.js";
 
 export const STANDALONE_SESSION_ID = "championship-modern-home";
 export const STANDALONE_SLOT_ID = "raising-home";
@@ -74,10 +84,16 @@ export function createChampionshipStandaloneApp({
   let selectedGateId = null;
   let confirmedGateId = null;
   let huntRuntime = null;
-  // The Shop owns the inventory; the loadout only reads it. VS4 owns the Shop,
-  // so until then the inventory starts at the original's initial_owned shape.
+  // The Shop owns the inventory; the loadout only reads it.
   let huntInventory = null;
   let huntLoadout = null;
+  let shop = null;
+  let lastShopReceipt = null;
+  let selectedDatabaseSpeciesIndex = null;
+  let cageEdit = null;
+  // Original PlayerData +0xAE8. Title matches write it; until battle exists this
+  // is a PRODUCT_AUTHORED seam (setTamerRank), same shape as creditBits.
+  let tamerRankValue = 0;
   // Snapshot of the last enclosed wild, for Hunt Result. Session-scoped: the
   // durable write is the raising.collection entry, not this screen payload.
   let huntResult = null;
@@ -85,6 +101,8 @@ export function createChampionshipStandaloneApp({
   // loadout. It is not part of the Player Mode path and no seam surfaces it.
   let developerCompanionCreatureId = null;
   const screenListeners = new Set();
+  const shopListeners = new Set();
+  let shopRuntimeUnsubscribe = null;
 
   function speciesDisplayName(speciesId) {
     const slug = String(speciesId ?? "").split(":").pop() || "creature";
@@ -107,6 +125,63 @@ export function createChampionshipStandaloneApp({
     developerCompanionCreatureId = null;
     if (screens.canExit()) screens.exit();
     else while (screens.canGoBack()) screens.back();
+  }
+
+  function requireShop() {
+    if (!shop) throw new Error("CHAMPIONSHIP_SHOP_NOT_OPEN");
+    return shop;
+  }
+
+  function bindShopRuntime() {
+    shopRuntimeUnsubscribe?.();
+    shopRuntimeUnsubscribe = shop.subscribe(() => {
+      for (const listener of [...shopListeners]) {
+        try { listener(shop.getFrame()); } catch { /* observers never break the shop */ }
+      }
+    });
+  }
+
+  function shopCageOwned() {
+    return shop?.toSave()?.cageOwned ?? [];
+  }
+
+  function tamerRank() {
+    return tamerRankValue;
+  }
+
+  function progressionContext() {
+    return { tamerRank: tamerRankValue, battleBadges: [] };
+  }
+
+  function applyProgression() {
+    const progression = progressionContext();
+    shop?.setProgression(progression);
+    huntInventory?.setProgression(progression);
+  }
+
+  function cageEditArgs() {
+    return [shopCageOwned(), tamerRank()];
+  }
+
+  function requireCageEdit() {
+    if (!cageEdit) throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_OPEN");
+    return cageEdit;
+  }
+
+  function openShopAndHunt({ shopSnapshot = null } = {}) {
+    lastShopReceipt = null;
+    const progression = progressionContext();
+    if (shopSnapshot) {
+      // Continue: Shop snapshot is the inventory authority. Hunt starts empty
+      // and receives only the mapped SKUs the Shop currently owns.
+      huntInventory = createHuntInventory({ entries: [], ...progression });
+      shop = createShopRuntime({ huntInventory, snapshot: shopSnapshot, progression });
+      applyMappedHuntInventoryFromShop(shop, huntInventory);
+    } else {
+      huntInventory = createHuntInventory({ entries: huntStartingInventory, ...progression });
+      shop = createShopRuntime({ huntInventory, progression });
+    }
+    bindShopRuntime();
   }
 
   function requireLoadout() {
@@ -179,11 +254,14 @@ export function createChampionshipStandaloneApp({
       creature = selectPhase1FirstCreature(catalog);
       revision = 0;
       interactionCount = 0;
+      tamerRankValue = 0;
       await openSession(createChampionshipSavePortR2());
       const creatureIds = session.getRaisingHomeSnapshot().residents.map((r) => r.residentId);
       raising = createRaisingProductionState({ cageIds, creatureIds });
       selectedCreatureId = null;
-      huntInventory = createHuntInventory({ entries: huntStartingInventory });
+      openShopAndHunt();
+      cageEdit = createCageEditRuntime();
+      selectedDatabaseSpeciesIndex = null;
       resetExpedition();
       return { creature, snapshot: session.getRaisingHomeSnapshot(), raising };
     },
@@ -200,11 +278,14 @@ export function createChampionshipStandaloneApp({
       creature = Object.freeze({ ...read.save.creature });
       revision = read.save.progression.revision ?? 0;
       interactionCount = read.save.progression.interactionCount ?? 0;
+      tamerRankValue = normalizeTamerRank(read.save.progression.tamerRank);
       await openSession(seededRealmPort(restored));
       const creatureIds = session.getRaisingHomeSnapshot().residents.map((r) => r.residentId);
       raising = normalizeRaisingProductionState(read.save.raising, { cageIds, creatureIds });
       selectedCreatureId = null;
-      huntInventory = createHuntInventory({ entries: huntStartingInventory });
+      openShopAndHunt({ shopSnapshot: read.save.shop });
+      cageEdit = createCageEditRuntime({ snapshot: read.save.cageEdit });
+      selectedDatabaseSpeciesIndex = null;
       resetExpedition();
       return { creature, snapshot: session.getRaisingHomeSnapshot(), save: read.save, raising };
     },
@@ -273,7 +354,10 @@ export function createChampionshipStandaloneApp({
         sessionId,
         revision,
         interactionCount,
-        raising
+        tamerRank: tamerRankValue,
+        raising,
+        shop: shop ? shop.toSave() : null,
+        cageEdit: cageEdit ? cageEdit.toSave() : null
       });
     },
 
@@ -326,6 +410,166 @@ export function createChampionshipStandaloneApp({
 
     getHuntResult() {
       return huntResult;
+    },
+
+    getShopFrame() {
+      if (!shop) return null;
+      return Object.freeze({ ...shop.getFrame(), lastReceipt: lastShopReceipt });
+    },
+
+    subscribeShop(listener) {
+      if (typeof listener !== "function") throw new TypeError("A shop observer must be a function");
+      shopListeners.add(listener);
+      return () => shopListeners.delete(listener);
+    },
+
+    /**
+     * Inject Bits. Original income (battle rewards) is untraced, so tests and
+     * later reward writers share this one PRODUCT_AUTHORED seam.
+     */
+    creditBits(amount) {
+      return requireShop().creditBits(amount);
+    },
+
+    getTamerRank() {
+      return tamerRankValue;
+    },
+
+    /**
+     * Write tamer rank. Original store is PlayerData +0xAE8 after battle result.
+     * Until title matches exist this is the same PRODUCT_AUTHORED seam as creditBits.
+     */
+    setTamerRank(nextRank) {
+      requireSession();
+      if (!Number.isSafeInteger(nextRank) || nextRank < 0) {
+        throw new Error("INVALID_TAMER_RANK");
+      }
+      tamerRankValue = normalizeTamerRank(nextRank);
+      applyProgression();
+      publishScreens();
+      return tamerRankValue;
+    },
+
+    openShop() {
+      requireSession();
+      requireShop();
+      if (screens.current() === CHAMPIONSHIP_SCREENS.SHOP) return screens.current();
+      lastShopReceipt = null;
+      screens.enter(CHAMPIONSHIP_SCREENS.SHOP);
+      publishScreens();
+      return screens.current();
+    },
+
+    buyShopItem(shopRecordIndex, quantity = 1) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.SHOP) {
+        throw new Error("CHAMPIONSHIP_SHOP_NOT_ACTIVE");
+      }
+      lastShopReceipt = requireShop().buy(shopRecordIndex, quantity);
+      publishScreens();
+      return lastShopReceipt;
+    },
+
+    getDatabaseFrame() {
+      const frame = projectDatabase({
+        starterSpeciesId: creature?.speciesId ?? null,
+        collection: raising?.collection ?? [],
+        selectedSpeciesIndex: selectedDatabaseSpeciesIndex
+      });
+      if (!frame.selected) return frame;
+      const instances = frame.selected.instances.map((entry) => {
+        const gate = entry.originGateId ? getChampionshipGate(entry.originGateId) : null;
+        return { ...entry, originGateName: gate?.displayName ?? null };
+      });
+      return Object.freeze({
+        ...frame,
+        selected: Object.freeze({ ...frame.selected, instances })
+      });
+    },
+
+    openDatabase() {
+      requireSession();
+      if (screens.current() === CHAMPIONSHIP_SCREENS.DATABASE) return screens.current();
+      selectedDatabaseSpeciesIndex = null;
+      screens.enter(CHAMPIONSHIP_SCREENS.DATABASE);
+      publishScreens();
+      return screens.current();
+    },
+
+    selectDatabaseSpecies(speciesIndex) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.DATABASE) {
+        throw new Error("CHAMPIONSHIP_DATABASE_NOT_ACTIVE");
+      }
+      if (speciesIndex === null) {
+        selectedDatabaseSpeciesIndex = null;
+        publishScreens();
+        return this.getDatabaseFrame();
+      }
+      if (!Number.isSafeInteger(speciesIndex) || speciesIndex < 0 || speciesIndex >= DATABASE_SLOT_COUNT) {
+        throw new Error(`UNKNOWN_DATABASE_SLOT: ${speciesIndex}`);
+      }
+      selectedDatabaseSpeciesIndex = speciesIndex;
+      publishScreens();
+      return this.getDatabaseFrame();
+    },
+
+    renameDatabaseInstance(instanceId, displayName) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.DATABASE) {
+        throw new Error("CHAMPIONSHIP_DATABASE_NOT_ACTIVE");
+      }
+      raising = renameEnclosedCreature(raising, instanceId, displayName);
+      publishScreens();
+      return raising.collection.find((entry) => entry.instanceId === instanceId)?.displayName ?? null;
+    },
+
+    getCageEditFrame() {
+      if (!cageEdit) return null;
+      return requireCageEdit().getFrame(...cageEditArgs());
+    },
+
+    openCageEdit() {
+      requireSession();
+      requireCageEdit();
+      if (screens.current() === CHAMPIONSHIP_SCREENS.CAGE_EDIT) return screens.current();
+      cageEdit.selectModule(null, ...cageEditArgs());
+      screens.enter(CHAMPIONSHIP_SCREENS.CAGE_EDIT);
+      publishScreens();
+      return screens.current();
+    },
+
+    selectCageModule(moduleId) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT) {
+        throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
+      }
+      requireCageEdit().selectModule(moduleId, ...cageEditArgs());
+      publishScreens();
+      return this.getCageEditFrame();
+    },
+
+    placeCageAt(slotIndex) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT) {
+        throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
+      }
+      requireCageEdit().placeAt(slotIndex, ...cageEditArgs());
+      publishScreens();
+      return this.getCageEditFrame();
+    },
+
+    removeCagePlacement(moduleId) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT) {
+        throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
+      }
+      requireCageEdit().removePlacement(moduleId, ...cageEditArgs());
+      publishScreens();
+      return this.getCageEditFrame();
+    },
+
+    confirmCageEdit() {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.CAGE_EDIT) {
+        throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
+      }
+      requireCageEdit().confirm(...cageEditArgs());
+      publishScreens();
+      return this.getCageEditFrame();
     },
 
     openGate() {
@@ -456,24 +700,38 @@ export function createChampionshipStandaloneApp({
     /**
      * Finish the current stroke.
      *
-     * A closed loop that still contains the wild is the functional success rule.
-     * Original capture odds are untraced, so this does not roll a success chance.
+     * Geometry success is the close-stroke rule (no original percent roll).
+     * Bring-home then hits the original memory-card compare: summed G-cost
+     * against max 32/64/96. Over capacity restores the wild and stays on the
+     * field. Per-species G-cost is still product unit 1.
      */
     endEnclosureStroke() {
       if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD || !huntRuntime) return null;
       const verdict = huntRuntime.endEnclosureStroke();
       if (verdict?.outcome !== "ENCLOSED") return verdict;
+      const capacity = evaluateBringHomeCapacity(huntInventory, raising.collection?.length ?? 0);
+      if (!capacity.allowed) {
+        huntRuntime.restoreLastEnclosedWild();
+        return Object.freeze({
+          ...verdict,
+          outcome: "OVER_CAPACITY",
+          capacity
+        });
+      }
       const instanceId = `championship:2026:instance:${String((raising.collection?.length ?? 0) + 1).padStart(4, "0")}`;
       raising = recordEnclosedCreature(raising, {
         instanceId,
         speciesId: verdict.speciesId,
+        displayName: speciesDisplayName(verdict.speciesId),
         enclosedAt: now(),
-        originGateId: confirmedGateId
+        originGateId: confirmedGateId,
+        cageId: cageIds[0]
       });
       huntResult = Object.freeze({
         title: "HUNT RESULT",
         outcomeLabel: "BROUGHT HOME",
         speciesId: verdict.speciesId,
+        speciesLabel: speciesDisplayName(verdict.speciesId),
         displayName: speciesDisplayName(verdict.speciesId),
         instanceId,
         tetherBand: verdict.tetherBand,
@@ -498,6 +756,22 @@ export function createChampionshipStandaloneApp({
       return screens.current();
     },
 
+    /**
+     * Hunt Result name edit (original OVL4 plate).
+     *
+     * The original charset is untraced; this uses the product given-name rule.
+     */
+    setHuntResultName(displayName) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_RESULT || !huntResult) {
+        throw new Error("CHAMPIONSHIP_HUNT_RESULT_NOT_ACTIVE");
+      }
+      raising = renameEnclosedCreature(raising, huntResult.instanceId, displayName);
+      const givenName = raising.collection.find((entry) => entry.instanceId === huntResult.instanceId)?.displayName;
+      huntResult = Object.freeze({ ...huntResult, displayName: givenName });
+      publishScreens();
+      return huntResult.displayName;
+    },
+
     /** Step one screen back. Clears the choice the popped screen owned. */
     leaveScreen() {
       const from = screens.current();
@@ -508,6 +782,12 @@ export function createChampionshipStandaloneApp({
         confirmedGateId = null;
       }
       if (from === CHAMPIONSHIP_SCREENS.GATE_SELECT) selectedGateId = null;
+      if (from === CHAMPIONSHIP_SCREENS.SHOP) {
+        shop?.markNewSeen();
+        lastShopReceipt = null;
+      }
+      if (from === CHAMPIONSHIP_SCREENS.DATABASE) selectedDatabaseSpeciesIndex = null;
+      if (from === CHAMPIONSHIP_SCREENS.CAGE_EDIT) cageEdit?.revert(...cageEditArgs());
       screens.back();
       publishScreens();
       return screens.current();

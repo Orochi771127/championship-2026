@@ -4,10 +4,29 @@ Repository authority: `CHAMPIONSHIP_2026_PRODUCT_SSOT` (`.`).
 Migration state: standalone product; historical Nexus integration decisions are preserved below as superseded/frozen context only.
 
 Authority: **OWNER ONLY**  
-Last explicit direction: **2026-08-29 — Rebuild Cage 100% like the original, including art code and collision; HD only**
+Last explicit direction: **2026-08-30 — Option A default skin; skinnable packs; translate original systems in JS first**
 
 Agents may index this file and may transcribe a later explicit Owner directive,
 but may not reinterpret or independently change product direction.
+
+## 2026-08-30 — Option A default skin, logic-first, skinnable
+
+The Owner confirmed:
+
+- Default public visual family is licensed faithful remake (Option A). Cat/dog
+  anatomy from the 2026-08-29 art-production amendment is a later alternate
+  presentation pack, not the current production line.
+- Visual style is not a single locked shipping look. Simulation IDs, the screen
+  stack, and presentation slots stay stable so packs can swap without forking
+  gameplay.
+- Translate original gameplay and architecture into JavaScript first. Art binds
+  through presentation packs. Do not wait for 224 sprites, and do not ship ROM
+  payloads.
+- Unknown original formulas stay neutral. Do not invent care numbers, capture
+  odds, per-species G-cost tables, hit/miss, or TP as original truth.
+
+This direction does not change renderer boundaries, save truth, or the
+shape-aware Cage requirement.
 
 ## 2026-08-29 A1 map-direction approval
 
@@ -70,6 +89,10 @@ The Owner explicitly approved the previously proposed art plan for implementatio
 
 This amendment changes content and art direction only. It does not change gameplay authority, renderer boundaries, save truth, the shape-aware Cage requirement, or the rule that unknown behavior remains neutral.
 
+The 2026-08-30 Owner direction supersedes the cat/dog majority-vocabulary and
+launch-mix bullets as the *active* default skin. Those roster-mix numbers remain
+recorded as a later alternate presentation pack, not as current production.
+
 ## Current product authority — Championship 2026
 
 - One human Owner plus AI will first complete all game systems, modes and the New Game → Championship loop with IP-neutral stable IDs and original-neutral temporary content.
@@ -128,6 +151,17 @@ This amendment changes content and art direction only. It does not change gamepl
   Blocker Ledger. That role is coordination-only and grants no gameplay or
   Owner authority. Shared coordination files may be updated only from verified
   repo evidence and both owned deltas.
+
+## Pending Cursor → Claude Code handoff (2026-08-31)
+
+Cursor left battle **arithmetic only** (not a BATTLE screen) for Claude Code
+to **review first, then continue** from original ROM numbers.
+
+- Canonical brief: `docs/coordination/CURSOR_BATTLE_ARITHMETIC_HANDOFF.md`
+- Serena: `mem:core` and `mem:claude-code/battle-arithmetic-handoff`
+- Product files: `src/championship/battle/{battleDamageCore,battleDamageResolver,battleSupport,battleStatus}.js`
+- `CLAUDE_REBUILD_STATUS.json` still records `BATTLE_RUNTIME` as not started
+  until Claude Code reviews and updates it. Cursor did not overwrite that file.
 
 Gameplay truth belongs to Claude/runtime evidence. Presentation and art truth
 belongs to Codex Art. Unknown gameplay contracts require neutral presentation;

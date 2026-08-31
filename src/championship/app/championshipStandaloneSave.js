@@ -8,6 +8,8 @@
 // -- byte budget, schema version, payload digest -- keeps validating it on the
 // way back in. This envelope adds standalone identity around that, nothing more.
 
+import { BITS_WALLET_CAP, SHOP_RECORD_COUNT } from "../shop/shopCatalog.js";
+
 export const CHAMPIONSHIP_MODERN_SAVE_KEY = "championshipModernSave:v1";
 export const CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION = 1;
 export const CHAMPIONSHIP_MODERN_SAVE_KIND = "CHAMPIONSHIP_MODERN_STANDALONE_SAVE";
@@ -25,11 +27,14 @@ const ALLOWED_TOP_LEVEL_KEYS = Object.freeze([
   // `raisingHome` is the frozen R2 slice; `raising` is the production slice
   // (cage assignment and product-authored interaction flags). They are kept
   // apart on purpose: R2 is research history, `raising` is product gameplay.
-  "raisingHome", "raising", "progression", "flags", "updatedAt"
+  "raisingHome", "raising", "shop", "cageEdit", "progression", "flags", "updatedAt"
 ]);
 
 const ALLOWED_CREATURE_KEYS = Object.freeze(["creatureId", "speciesId", "displayName"]);
-const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision"]);
+const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision", "tamerRank"]);
+const ALLOWED_SHOP_KEYS = Object.freeze(["bits", "visibility", "quantities", "cageOwned"]);
+const ALLOWED_CAGE_EDIT_KEYS = Object.freeze(["placements"]);
+const ALLOWED_CAGE_PLACEMENT_KEYS = Object.freeze(["moduleId", "slotIndex"]);
 
 // Every one of these names identifies forensic/evidence data, catalog structure,
 // binary provenance, or promotion bookkeeping. None of them has any business in
@@ -91,6 +96,67 @@ function assertAllowedKeys(object, allowed, label) {
   }
 }
 
+/**
+ * Shop is the durable economy slice: Bits, visibility, quantities, cages.
+ * Hunt expedition state still must not appear here.
+ */
+function normalizeShopSlice(shop) {
+  if (shop == null) return null;
+  if (typeof shop !== "object" || Array.isArray(shop)) throw saveError("INVALID_SHOP_SLICE");
+  assertAllowedKeys(shop, ALLOWED_SHOP_KEYS, "shop");
+  if (!Number.isSafeInteger(shop.bits) || shop.bits < 0 || shop.bits > BITS_WALLET_CAP) {
+    throw saveError("INVALID_SHOP_BITS");
+  }
+  if (!Array.isArray(shop.visibility) || shop.visibility.length !== SHOP_RECORD_COUNT) {
+    throw saveError("INVALID_SHOP_VISIBILITY");
+  }
+  if (!Array.isArray(shop.quantities) || shop.quantities.length !== SHOP_RECORD_COUNT) {
+    throw saveError("INVALID_SHOP_QUANTITIES");
+  }
+  for (let index = 0; index < SHOP_RECORD_COUNT; index += 1) {
+    const visibility = shop.visibility[index];
+    const quantity = shop.quantities[index];
+    if (!Number.isSafeInteger(visibility) || visibility < 0 || visibility > 2) {
+      throw saveError("INVALID_SHOP_VISIBILITY");
+    }
+    if (!Number.isSafeInteger(quantity) || quantity < 0) {
+      throw saveError("INVALID_SHOP_QUANTITIES");
+    }
+  }
+  if (!Array.isArray(shop.cageOwned)) throw saveError("INVALID_SHOP_CAGE_OWNED");
+  const cageOwned = [];
+  for (const recordIndex of shop.cageOwned) {
+    if (!Number.isSafeInteger(recordIndex) || recordIndex < 0 || recordIndex >= SHOP_RECORD_COUNT) {
+      throw saveError("INVALID_SHOP_CAGE_OWNED");
+    }
+    cageOwned.push(recordIndex);
+  }
+  return {
+    bits: shop.bits,
+    visibility: [...shop.visibility],
+    quantities: [...shop.quantities],
+    cageOwned
+  };
+}
+
+function normalizeCageEditSlice(cageEdit) {
+  if (cageEdit == null) return null;
+  if (typeof cageEdit !== "object" || Array.isArray(cageEdit)) throw saveError("INVALID_CAGE_EDIT_SLICE");
+  assertAllowedKeys(cageEdit, ALLOWED_CAGE_EDIT_KEYS, "cageEdit");
+  if (!Array.isArray(cageEdit.placements)) throw saveError("INVALID_CAGE_EDIT_PLACEMENTS");
+  const placements = [];
+  for (const entry of cageEdit.placements) {
+    if (!entry || typeof entry !== "object" || Array.isArray(entry)) throw saveError("INVALID_CAGE_EDIT_PLACEMENT");
+    assertAllowedKeys(entry, ALLOWED_CAGE_PLACEMENT_KEYS, "cageEdit.placement");
+    assertStableId(entry.moduleId, "cageEdit.placement.moduleId");
+    if (!Number.isSafeInteger(entry.slotIndex) || entry.slotIndex < 0) {
+      throw saveError("INVALID_CAGE_EDIT_SLOT");
+    }
+    placements.push({ moduleId: entry.moduleId, slotIndex: entry.slotIndex });
+  }
+  return { placements };
+}
+
 function assertStableId(value, label) {
   if (typeof value !== "string" || !/^[a-z0-9:_-]{3,96}$/i.test(value)) {
     throw saveError(`INVALID_STABLE_ID: ${label}`);
@@ -131,6 +197,8 @@ export function createChampionshipModernSave({
   creature,
   raisingHomeSerialized,
   raising = null,
+  shop = null,
+  cageEdit = null,
   progression = {},
   flags = {},
   updatedAt = new Date().toISOString()
@@ -168,9 +236,14 @@ export function createChampionshipModernSave({
     },
     raisingHome: raisingHomeSerialized,
     raising: raising === null ? null : clonePlain(raising),
+    shop: normalizeShopSlice(shop),
+    cageEdit: normalizeCageEditSlice(cageEdit),
     progression: {
       interactionCount: Number.isSafeInteger(progression.interactionCount) ? progression.interactionCount : 0,
-      revision: Number.isSafeInteger(progression.revision) ? progression.revision : 0
+      revision: Number.isSafeInteger(progression.revision) ? progression.revision : 0,
+      tamerRank: Number.isSafeInteger(progression.tamerRank) && progression.tamerRank > 0
+        ? Math.min(progression.tamerRank, 65535)
+        : 0
     },
     flags: { newGameCompleted: flags.newGameCompleted === true },
     updatedAt
@@ -218,6 +291,8 @@ export function deserializeChampionshipModernSave(text) {
     creature: parsed.creature,
     raisingHomeSerialized: parsed.raisingHome,
     raising: parsed.raising ?? null,
+    shop: parsed.shop ?? null,
+    cageEdit: parsed.cageEdit ?? null,
     progression: parsed.progression ?? {},
     flags: parsed.flags ?? {},
     updatedAt: typeof parsed.updatedAt === "string" ? parsed.updatedAt : new Date().toISOString()

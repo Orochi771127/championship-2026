@@ -19,6 +19,7 @@
 
 import { deepFreeze } from "../../contracts/championshipContracts.js";
 import { getHuntCatalogItem, listHuntEquipmentByClass, listHuntPluginsByKind } from "./huntEquipmentCatalog.js";
+import { CAPTURE_CAPACITY_SCOPE, maxGFromInventory } from "../capture/memoryCardCapacity.js";
 import {
   HUNT_ANALYZER_FIELD_ORDER,
   HUNT_COUNTED_CLASSES,
@@ -47,7 +48,7 @@ function loadoutError(message) {
  * Radar drives the map markers and the Memory Checker drives the capacity pair.
  * A HUD field with no plugin behind it stays dark - that is the original rule.
  */
-function deriveHudCapabilities(fittedPlugins, memoryCard) {
+function deriveHudCapabilities(fittedPlugins, inventory) {
   const analyzerFields = new Set();
   const itemCounters = new Set();
   const radarFilters = new Set();
@@ -75,9 +76,10 @@ function deriveHudCapabilities(fittedPlugins, memoryCard) {
     radarFilters: [...radarFilters].sort(),
     radarMarkerCapacity: radar ? HUNT_RADAR_MARKER_CAPACITY : 0,
     memoryReadout,
-    // The card supplies the number; the plugin decides whether it is shown.
-    captureCapacityG: memoryCard?.capacityG ?? null,
-    captureCapacityScope: "VS3_CAPTURE_NOT_IMPLEMENTED",
+    // Max G is owned-card identity (32/64/96). The plugin only decides whether
+    // the HUD shows the pair. Spending is a later compare, not a HUD action.
+    captureCapacityG: maxGFromInventory(inventory),
+    captureCapacityScope: CAPTURE_CAPACITY_SCOPE,
     note: "A HUD readout with no plugin behind it is not displayed. That gating is the recovered original behaviour, not a product choice."
   });
 }
@@ -198,12 +200,12 @@ export function createHuntLoadout({ inventory, memoryCardId = null } = {}) {
         itemId: memoryCard.itemId,
         displayName: memoryCard.displayName,
         capacityG: memoryCard.capacityG,
-        scope: "VS3_CAPTURE_NOT_IMPLEMENTED"
+        scope: CAPTURE_CAPACITY_SCOPE
       });
     },
 
     getHudCapabilities() {
-      return deriveHudCapabilities(fittedPluginItems(), memoryCard);
+      return deriveHudCapabilities(fittedPluginItems(), inventory);
     },
 
     /**
@@ -336,7 +338,7 @@ export function createHuntLoadout({ inventory, memoryCardId = null } = {}) {
             durability: item?.durability ?? null
           };
         }),
-        hudCapabilities: deriveHudCapabilities(fittedPluginItems(), memoryCard),
+        hudCapabilities: deriveHudCapabilities(fittedPluginItems(), inventory),
         appliedEffects: "NONE",
         appliedEffectsReason: "Per-item runtime effect is UNKNOWN_REQUIRES_TRACE. The Hunt runtime receives what is carried, not what it does."
       });

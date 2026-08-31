@@ -11,6 +11,7 @@ import test from "node:test";
 
 import { createChampionshipStandaloneApp } from "../src/championship/app/championshipStandaloneApp.js";
 import { createGateHuntPresentationSource } from "../src/championship/app/gateHuntPresentationSource.js";
+import { createRaisingPresentationSource } from "../src/championship/app/raisingPresentationSource.js";
 import { CHAMPIONSHIP_MODERN_SAVE_KEY } from "../src/championship/app/championshipStandaloneSave.js";
 import {
   CHAMPIONSHIP_SCREENS,
@@ -91,10 +92,22 @@ test("a closed loop on the field opens Hunt Result and keeps the instance after 
   assert.equal(app.getRaisingState().collection.length, 1);
   assert.equal(app.getRaisingState().collection[0].speciesId, target.speciesId);
   assert.equal(app.getSnapshot().residents.length, residentsBefore, "enclosed instances must not become R2 residents");
+  const instanceId = app.getRaisingState().collection[0].instanceId;
+  assert.equal(app.getRaisingState().assignments[instanceId], presentation.cages[0].cageId);
 
   app.confirmHuntResult();
   assert.equal(app.getScreen(), CHAMPIONSHIP_SCREENS.RAISING_HOME);
   assert.equal(app.getHuntRuntime(), null);
+
+  const home = createRaisingPresentationSource(app);
+  const homeIds = home.getFrame().residents.map((resident) => resident.creatureId);
+  assert.equal(home.getFrame().residents.length, residentsBefore + 1);
+  assert.equal(homeIds.includes(instanceId), true);
+  assert.equal(app.getSnapshot().residents.length, residentsBefore);
+  home.intents.selectCreature(instanceId);
+  home.intents.careForCreature(instanceId);
+  assert.equal(app.getRaisingState().interactions[instanceId].careCount, 1);
+
   app.save();
   await app.dispose();
 
@@ -105,7 +118,53 @@ test("a closed loop on the field opens Hunt Result and keeps the instance after 
   assert.equal(reloaded.getRaisingState().collection.length, 1);
   assert.equal(reloaded.getRaisingState().collection[0].speciesId, target.speciesId);
   assert.equal(reloaded.getSnapshot().residents.length, residentsBefore);
+  assert.equal(reloaded.getRaisingState().assignments[instanceId], presentation.cages[0].cageId);
+  const restoredHome = createRaisingPresentationSource(reloaded);
+  assert.equal(restoredHome.getFrame().residents.length, residentsBefore + 1);
+  assert.equal(restoredHome.getFrame().residents.some((resident) => resident.creatureId === instanceId), true);
   await reloaded.dispose();
+});
+
+test("Hunt Result can give the enclosed instance a name that Home then shows", async () => {
+  const app = createApp();
+  await enterFirstHunt(app);
+  const target = app.getHuntRuntime().getWildCreatures()[0];
+  assert.equal(app.beginEnclosureStroke(target.worldX, target.worldY), true);
+  drawClosedLoop(app, target.worldX, target.worldY);
+  app.endEnclosureStroke();
+
+  app.setHuntResultName("  Ember  ");
+  assert.equal(app.getHuntResult().displayName, "Ember");
+  assert.equal(app.getRaisingState().collection[0].displayName, "Ember");
+
+  app.confirmHuntResult();
+  const home = createRaisingPresentationSource(app);
+  const arrival = home.getFrame().residents.find((resident) => resident.creatureId === app.getRaisingState().collection[0].instanceId);
+  assert.equal(arrival.displayName, "Ember");
+  await app.dispose();
+});
+
+test("no memory card rejects bring-home and puts the wild back on the field", async () => {
+  const app = createChampionshipStandaloneApp({
+    storage: memoryStorage(),
+    catalog,
+    cages: presentation.cages,
+    huntStartingInventory: [],
+    now: () => "2026-08-30T06:20:00.000Z"
+  });
+  await enterFirstHunt(app);
+  const target = app.getHuntRuntime().getWildCreatures()[0];
+  const before = app.getHuntRuntime().getWildCreatures().length;
+  assert.equal(app.beginEnclosureStroke(target.worldX, target.worldY), true);
+  drawClosedLoop(app, target.worldX, target.worldY);
+  const verdict = app.endEnclosureStroke();
+  assert.equal(verdict.outcome, "OVER_CAPACITY");
+  assert.equal(verdict.capacity.originalEvent, "0x39");
+  assert.equal(app.getScreen(), CHAMPIONSHIP_SCREENS.HUNT_FIELD);
+  assert.equal(app.getRaisingState().collection.length, 0);
+  assert.equal(app.getHuntRuntime().getWildCreatures().length, before);
+  assert.equal(app.getHuntRuntime().getWildCreatures().some((wild) => wild.wildId === target.wildId), true);
+  await app.dispose();
 });
 
 test("an unclosed scribble stays on the field and writes no collection", async () => {
@@ -127,6 +186,8 @@ test("Hunt Result copy never uses a Capture button", () => {
   assert.match(screens, /HUNT RESULT/);
   assert.match(screens, /BROUGHT HOME/);
   assert.match(screens, /confirmHuntResult/);
+  assert.match(screens, /data-cm-name-edit/);
+  assert.doesNotMatch(screens, /Home does not yet show new arrivals/);
 });
 
 test("the presentation seam uses enclosure intents, never a Capture action", async () => {
@@ -139,6 +200,7 @@ test("the presentation seam uses enclosure intents, never a Capture action", asy
   }
   assert.equal(typeof source.intents.beginEnclosureStroke, "function");
   assert.equal(typeof source.intents.confirmHuntResult, "function");
+  assert.equal(typeof source.intents.setHuntResultName, "function");
 
   const target = source.field.getView({ viewportWidth: 390, viewportHeight: 844 }).wildCreatures[0];
   assert.equal(source.intents.beginEnclosureStroke(target.worldX, target.worldY), true);

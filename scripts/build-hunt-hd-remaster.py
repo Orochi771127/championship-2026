@@ -50,7 +50,12 @@ def sha256(path: Path) -> str:
 
 def write_json(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    # Keep generated text byte-stable across Windows and Linux checkouts.
+    path.write_text(
+        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+        newline="\n",
+    )
 
 
 def safe_reset(path: Path) -> None:

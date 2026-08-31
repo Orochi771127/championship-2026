@@ -15,6 +15,9 @@ import { deepFreeze } from "../contracts/championshipContracts.js";
 
 export const CHAMPIONSHIP_SCREENS = deepFreeze({
   RAISING_HOME: "RAISING_HOME",
+  SHOP: "SHOP",
+  DATABASE: "DATABASE",
+  CAGE_EDIT: "CAGE_EDIT",
   GATE_SELECT: "GATE_SELECT",
   HUNT_LOADOUT: "HUNT_LOADOUT",
   HUNT_FIELD: "HUNT_FIELD",
@@ -26,7 +29,10 @@ export const CHAMPIONSHIP_SCREEN_STACK_MAX_DEPTH = 5;
 // Forward transitions only. Going back is popping, and is legal wherever the
 // stack has something to pop to.
 const FORWARD_TRANSITIONS = deepFreeze({
-  RAISING_HOME: ["GATE_SELECT"],
+  RAISING_HOME: ["GATE_SELECT", "SHOP", "DATABASE", "CAGE_EDIT"],
+  SHOP: [],
+  DATABASE: [],
+  CAGE_EDIT: [],
   GATE_SELECT: ["HUNT_LOADOUT"],
   HUNT_LOADOUT: ["HUNT_FIELD"],
   HUNT_FIELD: ["HUNT_RESULT"],

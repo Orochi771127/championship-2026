@@ -1,13 +1,14 @@
-// VS3 -- original Hunt tether distance bands, rewritten for web/mobile.
+// VS3 -- Hunt tether distance bands for the web/mobile rebuild.
 //
-// The original rope/tether used four distance windows. Wild-creature AI still
-// is not traced, so this module only classifies distance. It does not invent
-// pull strength, stamina drain, or capture success odds.
+// 2026-08-30 ROM pass: original hypot pull radii are shutter-mode 40 / 80 / 256
+// px, not these four windows. 160 px is a spawn-offset step, not a rope band.
+// Keep this classifier as a product HUD/AI bucket only. It does not invent
+// pull strength, stamina drain, or capture odds.
 
 import { deepFreeze } from "../../contracts/championshipContracts.js";
 
 export const TETHER_BANDS = deepFreeze([40, 80, 160]);
-export const TETHER_DISTANCE_EVIDENCE = "VERIFIED_BINARY";
+export const TETHER_DISTANCE_EVIDENCE = "PRODUCT_AUTHORED";
 
 export function classifyTetherDistance(distancePx) {
   if (!Number.isFinite(distancePx) || distancePx < 0) {

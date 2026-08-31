@@ -1,11 +1,16 @@
-// VS3 -- original Hunt circle-capture grammar, rewritten for web/mobile.
+// VS3 -- Hunt circle-capture grammar, rewritten for web/mobile.
 //
-// The original ran this on the NDS stylus against a 256x192 sub-screen. The
-// 2026 product uses the same thresholds in canonical field pixels: a finger
-// stroke is still a stroke, whether it came from a stylus or a phone.
+// Independently reproduced in YDIJ OVL0 (ram 0x0210B300, ROM SHA-256 8ad375ba…):
+//   • ignore hypot ≤ 5px (`#0x5000` at 0x02114020)
+//   • interpolate hypot > 20px (`#0x14000` at 0x02114050)
+//   • abort if point count < 6; walk at most 20 slots of stride 0xD8
+//   • AABB extent must exceed 25px (`#0x19000` at 0x02114544)
 //
-// These constants are ROM-evidenced. Do not "tune" them for feel without an
-// Owner-approved adaptation.
+// `#0xf000` (15px) in that same AABB function is a *shape* compare
+// (|extentA−extentB| / |extentA−2·extentB|), not first-to-last closure.
+// The product still uses a 15px first-to-last gap as a PRIOR_SPEC stand-in.
+// Do not label that gap VERIFIED_BINARY. Do not swap in the shape test
+// without an Owner decision — it would change which loops count as closed.
 
 import { deepFreeze } from "../../contracts/championshipContracts.js";
 
@@ -16,6 +21,7 @@ export const CAPTURE_MINIMUM_CLOSE_POINTS = 6;
 export const CAPTURE_MINIMUM_EXTENT_PX = 25;
 export const CAPTURE_CLOSURE_TOLERANCE_PX = 15;
 export const CAPTURE_GEOMETRY_EVIDENCE = "VERIFIED_BINARY";
+export const CAPTURE_CLOSURE_EVIDENCE = "PRIOR_SPEC_NOT_AABB";
 
 function captureError(message) {
   const error = new Error(message);

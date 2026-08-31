@@ -1,8 +1,9 @@
 // VS3 -- original Hunt capture geometry, translated into a web/mobile simulator.
 //
-// These numbers come from the original capture grammar, not from a guess:
-// ignore jitter under 5px, interpolate gaps over 20px, keep at most 20 points,
-// close only with 6+ points, a 25px span, and a 15px first-to-last gap.
+// These numbers: ignore jitter under 5px, interpolate gaps over 20px, keep at
+// most 20 points, require 6+ points and a 25px span (VERIFIED_BINARY). The
+// 15px first-to-last gap is a prior-spec stand-in; original AABB uses 15px
+// as a shape test, not closure-to-start.
 //
 // This file tests the recognizer itself. Wiring it onto the Hunt field is a
 // later step; VS2 still ships no capture surface.
@@ -11,7 +12,9 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  CAPTURE_CLOSURE_EVIDENCE,
   CAPTURE_CLOSURE_TOLERANCE_PX,
+  CAPTURE_GEOMETRY_EVIDENCE,
   CAPTURE_IGNORE_SEGMENT_BELOW_PX,
   CAPTURE_INTERPOLATE_OVER_PX,
   CAPTURE_MAX_POINTS,
@@ -21,6 +24,7 @@ import {
 } from "../src/championship/hunt/capture/captureStrokeRecognizer.js";
 import {
   TETHER_BANDS,
+  TETHER_DISTANCE_EVIDENCE,
   classifyTetherDistance
 } from "../src/championship/hunt/capture/tetherSystem.js";
 
@@ -30,7 +34,9 @@ test("the translated capture constants match the original grammar", () => {
   assert.equal(CAPTURE_MAX_POINTS, 20);
   assert.equal(CAPTURE_MINIMUM_CLOSE_POINTS, 6);
   assert.equal(CAPTURE_MINIMUM_EXTENT_PX, 25);
+  assert.equal(CAPTURE_GEOMETRY_EVIDENCE, "VERIFIED_BINARY");
   assert.equal(CAPTURE_CLOSURE_TOLERANCE_PX, 15);
+  assert.equal(CAPTURE_CLOSURE_EVIDENCE, "PRIOR_SPEC_NOT_AABB");
 });
 
 test("a jitter shorter than 5px is ignored", () => {
@@ -126,7 +132,8 @@ test("a closed loop that spans 25px and returns within 15px captures", () => {
   assert.ok(stroke.getPoints().length >= CAPTURE_MINIMUM_CLOSE_POINTS);
 });
 
-test("tether distance uses the original four bands", () => {
+test("tether distance uses the product four bands (not ROM-verified)", () => {
+  assert.equal(TETHER_DISTANCE_EVIDENCE, "PRODUCT_AUTHORED");
   assert.deepEqual(TETHER_BANDS, Object.freeze([40, 80, 160]));
   assert.equal(classifyTetherDistance(0), "UNDER_40");
   assert.equal(classifyTetherDistance(39.9), "UNDER_40");

@@ -10,16 +10,24 @@
 // What lives here is only what the product can honestly own:
 //   - which cage a creature belongs to        (product-authored placement)
 //   - that the player used a care tool on it  (product-authored interaction flag)
-//   - Hunt instances brought home by enclosure (not R2 residents)
+//   - Hunt instances brought home by enclosure (collection + cage assignment)
 //
 // Deliberately NOT here, because it is unverified:
 //   - training formulas, stat gains or losses
-//   - cage capacity rules, elemental or healing effects
-//   - any consequence of relocating a creature
-// ROM proves CageDefinition structures exist. It does not prove their semantics.
+//   - how much extra stress overfill adds, or which resident field is written
+//   - any numeric consequence of relocating a creature
+// Channel identity and the recommended Digimon count are VERIFIED_TEXT
+// (cageEffects.js). Overfill is allowed (soft cap); extra-stress magnitude
+// stays UNKNOWN_REQUIRES_TRACE. VS1 still assigns to two product cages, not
+// hex modules — occupancy is not applied here until that membership exists.
 
 export const RAISING_PRODUCTION_SCHEMA_VERSION = 1;
 export const RAISING_PRODUCTION_AUTHORITY = "CHAMPIONSHIP_2026_PRODUCT";
+
+// Hunt Result has a name-edit plate in the original (OVL4 / ui/hunt/result/name_edit).
+// The exact original charset and length are untraced, so this bound is product-authored:
+// a short given name, not a paragraph.
+export const PRODUCT_GIVEN_NAME_MAX_LENGTH = 24;
 
 function stateError(message) {
   const error = new Error(message);
@@ -49,7 +57,8 @@ export function createRaisingProductionState({ cageIds = [], creatureIds = [] } 
     authority: RAISING_PRODUCTION_AUTHORITY,
     assignments,
     interactions,
-    // Enclosed Hunt instances live here, not on the frozen R2 resident roster.
+    // Enclosed Hunt instances join the product home roster (cage + care),
+    // never the frozen R2 resident snapshot.
     collection: []
   });
 }
@@ -101,17 +110,57 @@ export function cageOf(state, creatureId) {
 }
 
 /**
- * Record one enclosed Hunt instance.
+ * Product-authored given-name rule used by Hunt Result.
  *
- * This is a collection entry, not a new Raising Home resident. The original
- * capture-success formula is untraced, so the caller must already have decided
- * the enclosure succeeded under PRODUCT_AUTHORED_ENCLOSURE.
+ * Original Championship shows a name-edit plate after capture. The ROM length
+ * and allowed characters are UNKNOWN_REQUIRES_TRACE, so this only trims, blocks
+ * empty/control text, and caps length. It is not a claimed original charset.
+ */
+export function normalizeProductGivenName(value) {
+  if (typeof value !== "string") throw stateError("INVALID_GIVEN_NAME");
+  const givenName = value.trim();
+  if (givenName.length === 0 || givenName.length > PRODUCT_GIVEN_NAME_MAX_LENGTH) {
+    throw stateError("INVALID_GIVEN_NAME");
+  }
+  if (/[\p{Cc}\p{Cf}]/u.test(givenName)) throw stateError("INVALID_GIVEN_NAME");
+  return givenName;
+}
+
+function homeCageId(state, requestedCageId) {
+  if (typeof requestedCageId === "string" && requestedCageId.length > 0) return requestedCageId;
+  const assigned = Object.values(state.assignments ?? {});
+  if (assigned.length === 0) throw stateError("RAISING_REQUIRES_CAGE_ASSIGNMENT");
+  return assigned[0];
+}
+
+function collectionEntry(entry) {
+  return {
+    instanceId: entry.instanceId,
+    speciesId: entry.speciesId,
+    displayName: typeof entry.displayName === "string" && entry.displayName.length > 0
+      ? entry.displayName
+      : null,
+    enclosedAt: typeof entry.enclosedAt === "string" ? entry.enclosedAt : null,
+    originGateId: typeof entry.originGateId === "string" ? entry.originGateId : null,
+    successAuthority: "PRODUCT_AUTHORED_ENCLOSURE"
+  };
+}
+
+/**
+ * Record one enclosed Hunt instance as a raisable home member.
+ *
+ * Original capture creates a CreatureInstance that joins the player's collection
+ * and Home. This must not mutate the frozen R2 resident snapshot: the instance
+ * lives on the product `raising` slice (assignment + collection), which Home
+ * presentation then projects as a visible actor.
  */
 export function recordEnclosedCreature(state, {
   instanceId,
   speciesId,
+  displayName = null,
   enclosedAt = new Date().toISOString(),
-  originGateId = null
+  originGateId = null,
+  cageId = null
 } = {}) {
   if (typeof instanceId !== "string" || instanceId.length === 0) {
     throw stateError("MISSING_INSTANCE_ID");
@@ -123,19 +172,39 @@ export function recordEnclosedCreature(state, {
   if (existing.some((entry) => entry.instanceId === instanceId)) {
     throw stateError(`DUPLICATE_INSTANCE: ${instanceId}`);
   }
+  const assignedCage = homeCageId(state, cageId);
+  const givenName = displayName == null ? null : normalizeProductGivenName(displayName);
   return deepFreeze({
     ...state,
+    assignments: { ...state.assignments, [instanceId]: assignedCage },
+    interactions: {
+      ...state.interactions,
+      [instanceId]: { careCount: 0, lastCaredAt: null }
+    },
     collection: [
       ...existing,
-      {
+      collectionEntry({
         instanceId,
         speciesId,
-        enclosedAt: typeof enclosedAt === "string" ? enclosedAt : null,
-        originGateId: typeof originGateId === "string" ? originGateId : null,
-        successAuthority: "PRODUCT_AUTHORED_ENCLOSURE"
-      }
+        displayName: givenName,
+        enclosedAt,
+        originGateId
+      })
     ]
   });
+}
+
+/** Rename an enclosed instance from Hunt Result. */
+export function renameEnclosedCreature(state, instanceId, displayName) {
+  const existing = Array.isArray(state.collection) ? state.collection : [];
+  const index = existing.findIndex((entry) => entry.instanceId === instanceId);
+  if (index < 0) throw stateError(`UNKNOWN_CREATURE: ${instanceId}`);
+  const givenName = normalizeProductGivenName(displayName);
+  if (existing[index].displayName === givenName) return state;
+  const collection = existing.map((entry, entryIndex) => (
+    entryIndex === index ? collectionEntry({ ...entry, displayName: givenName }) : entry
+  ));
+  return deepFreeze({ ...state, collection });
 }
 
 /**
@@ -172,13 +241,31 @@ export function normalizeRaisingProductionState(input, { cageIds = [], creatureI
       if (!entry || typeof entry !== "object") continue;
       if (typeof entry.instanceId !== "string" || typeof entry.speciesId !== "string") continue;
       if (collection.some((kept) => kept.instanceId === entry.instanceId)) continue;
-      collection.push({
+      let displayName = null;
+      if (typeof entry.displayName === "string") {
+        try { displayName = normalizeProductGivenName(entry.displayName); } catch { displayName = null; }
+      }
+      collection.push(collectionEntry({
         instanceId: entry.instanceId,
         speciesId: entry.speciesId,
-        enclosedAt: typeof entry.enclosedAt === "string" ? entry.enclosedAt : null,
-        originGateId: typeof entry.originGateId === "string" ? entry.originGateId : null,
-        successAuthority: "PRODUCT_AUTHORED_ENCLOSURE"
-      });
+        displayName,
+        enclosedAt: entry.enclosedAt,
+        originGateId: entry.originGateId
+      }));
+      const storedCage = input.assignments?.[entry.instanceId];
+      assignments[entry.instanceId] = typeof storedCage === "string" && cageIds.includes(storedCage)
+        ? storedCage
+        : cageIds[0];
+      const storedInteraction = input.interactions?.[entry.instanceId];
+      if (storedInteraction && typeof storedInteraction === "object") {
+        const count = storedInteraction.careCount;
+        interactions[entry.instanceId] = {
+          careCount: Number.isSafeInteger(count) && count >= 0 ? count : 0,
+          lastCaredAt: typeof storedInteraction.lastCaredAt === "string" ? storedInteraction.lastCaredAt : null
+        };
+      } else {
+        interactions[entry.instanceId] = { careCount: 0, lastCaredAt: null };
+      }
     }
   }
 

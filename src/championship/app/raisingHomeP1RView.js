@@ -160,6 +160,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField } = {}
     lastRevision = frame.revision;
 
     clock.textContent = frame.clock?.display ?? "--:--";
+    fieldFrame.dataset.residentCount = String(frame.residents?.length ?? 0);
     const resident = selectedResident(frame);
     companionName.textContent = resident?.displayName?.toUpperCase() ?? "SELECT A RESIDENT";
     companionLocation.textContent = resident

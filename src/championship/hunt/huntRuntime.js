@@ -131,9 +131,11 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null } = {}) 
   const sourceWilds = wildCount === null ? world.wildCreatures : world.wildCreatures.slice(0, wildCount);
   // VS3 enclosure. A stroke that starts near a wild creature is capture, not
   // walking. Empty-ground pointers stay with moveTo, so this is not a Capture
-  // button. Success odds are untraced: a closed original-geometry loop that
-  // still contains the tethered wild is the functional success rule.
+  // button. Close-stroke has no original percent roll. The app then applies the
+  // memory-card capacity gate; if that rejects, restoreLastEnclosedWild puts
+  // the creature back.
   let enclosure = null;
+  let lastEnclosedWild = null;
 
   const wilds = sourceWilds.map((spawn) => ({
     wildId: spawn.wildId,
@@ -340,9 +342,13 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null } = {}) 
         : "OVER_160";
       const contained = Boolean(target && pointInPolygon(target.worldX, target.worldY, points));
       const enclosed = geometry.closed && contained;
+      lastEnclosedWild = null;
       if (enclosed) {
         const index = wilds.indexOf(target);
-        if (index >= 0) wilds.splice(index, 1);
+        if (index >= 0) {
+          lastEnclosedWild = target;
+          wilds.splice(index, 1);
+        }
       }
       const verdict = Object.freeze({
         outcome: enclosed ? "ENCLOSED" : "OPEN",
@@ -355,6 +361,22 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null } = {}) 
       });
       enclosure = null;
       return verdict;
+    },
+
+    /**
+     * Put back a wild removed by a geometry-success that the capacity gate then
+     * refused. Original over-capacity is event 0x39 on a later path, not a
+     * close-stroke subtract.
+     */
+    restoreLastEnclosedWild() {
+      if (!lastEnclosedWild) return false;
+      if (wilds.some((wild) => wild.wildId === lastEnclosedWild.wildId)) {
+        lastEnclosedWild = null;
+        return false;
+      }
+      wilds.push(lastEnclosedWild);
+      lastEnclosedWild = null;
+      return true;
     },
 
     getEnclosureStroke() {

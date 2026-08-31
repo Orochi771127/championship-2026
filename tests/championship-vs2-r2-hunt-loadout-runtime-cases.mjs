@@ -314,7 +314,7 @@ test("the loadout adds no save field", async () => {
 
   const saved = JSON.parse(storage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY));
   assert.deepEqual(Object.keys(saved).sort(), [
-    "creature", "flags", "progression", "raising", "raisingHome", "saveKind", "schemaVersion", "sessionId", "updatedAt"
+    "cageEdit", "creature", "flags", "progression", "raising", "raisingHome", "saveKind", "schemaVersion", "sessionId", "shop", "updatedAt"
   ].sort());
   const text = JSON.stringify(saved).toLowerCase();
   for (const leak of ["equipment", "plugin", "loadout", "durability", "inventory"]) {

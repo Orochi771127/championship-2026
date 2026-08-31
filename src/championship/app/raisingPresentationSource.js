@@ -28,8 +28,22 @@ function formatClock(minutes) {
 }
 
 function speciesKey(resident) {
-  if (typeof resident?.speciesId === "string" && resident.speciesId.length > 0) return resident.speciesId;
-  return String(resident?.residentId ?? "").replace(/^resident:/, "");
+  const raw = typeof resident?.speciesId === "string" && resident.speciesId.length > 0
+    ? resident.speciesId
+    : String(resident?.residentId ?? "").replace(/^resident:/, "");
+  return raw.replace(/^championship:creature:/, "");
+}
+
+function productSpeciesId(key) {
+  return `championship:creature:${key}`;
+}
+
+function fallbackSprite() {
+  return {
+    idle: { sheet: null, columns: 1, rows: 1, frames: 1, fps: 1 },
+    reaction: { sheet: null, columns: 1, rows: 1, frames: 1, fps: 1 },
+    portrait: null
+  };
 }
 
 function spriteProjection(resident) {
@@ -37,9 +51,7 @@ function spriteProjection(resident) {
   const idle = presentation.idle.species[key];
   const reaction = presentation.reaction.species[key];
   const portrait = presentation.portrait.species[key];
-  if (!idle || !reaction || !portrait) {
-    throw new Error(`CHAMPIONSHIP_PRESENTATION_ASSET_CONTRACT_MISSING: ${key}`);
-  }
+  if (!idle || !reaction || !portrait) return fallbackSprite();
   return {
     idle: { ...idle },
     reaction: { ...reaction },
@@ -95,12 +107,12 @@ function assertApplication(app) {
   }
 }
 
-function cageLanes(cages, residents, assignments) {
+function cageLanes(cages, members, assignments) {
   const lanes = new Map();
   for (const cage of cages) {
-    const occupants = residents
-      .filter((resident) => assignments[resident.residentId] === cage.cageId)
-      .map((resident) => resident.residentId)
+    const occupants = members
+      .filter((member) => assignments[member.creatureId] === cage.cageId)
+      .map((member) => member.creatureId)
       .sort();
     occupants.forEach((creatureId, index) => {
       const count = Math.max(1, occupants.length);
@@ -111,6 +123,34 @@ function cageLanes(cages, residents, assignments) {
     });
   }
   return lanes;
+}
+
+function speciesLabel(speciesId) {
+  return speciesKey({ speciesId }).replace(/-/g, " ");
+}
+
+/**
+ * Home actors are the frozen R2 starters plus enclosed collection instances.
+ * Collection IDs never enter the R2 snapshot; they only appear here.
+ */
+function homeMembers(snapshot, raising) {
+  const starters = snapshot.residents.map((resident) => ({
+    creatureId: resident.residentId,
+    displayName: resident.name,
+    speciesId: productSpeciesId(speciesKey(resident)),
+    facing: resident.facing,
+    intent: resident.intent,
+    spriteResident: resident
+  }));
+  const arrivals = (raising.collection ?? []).map((entry) => ({
+    creatureId: entry.instanceId,
+    displayName: entry.displayName || speciesLabel(entry.speciesId),
+    speciesId: entry.speciesId.includes(":") ? entry.speciesId : productSpeciesId(entry.speciesId),
+    facing: "right",
+    intent: "idle",
+    spriteResident: { speciesId: entry.speciesId, residentId: entry.instanceId }
+  }));
+  return [...starters, ...arrivals];
 }
 
 /**
@@ -136,7 +176,8 @@ export function createRaisingPresentationSource(app) {
     if (!snapshot || !raising) throw new Error("CHAMPIONSHIP_RAISING_SESSION_NOT_OPEN");
     const assignments = raising.assignments;
     const selectedCreatureId = app.getSelectedCreatureId();
-    const lanes = cageLanes(cages, snapshot.residents, assignments);
+    const members = homeMembers(snapshot, raising);
+    const lanes = cageLanes(cages, members, assignments);
     const saveStatus = app.savePort.getStatus();
     const phase = SAVE_PHASES.has(saveStatus.phase) ? saveStatus.phase : "CLEAN";
 
@@ -148,9 +189,9 @@ export function createRaisingPresentationSource(app) {
         display: formatClock(snapshot.clockMinutes)
       },
       cages: cages.map((cage) => {
-        const occupantIds = snapshot.residents
-          .filter((resident) => assignments[resident.residentId] === cage.cageId)
-          .map((resident) => resident.residentId)
+        const occupantIds = members
+          .filter((member) => assignments[member.creatureId] === cage.cageId)
+          .map((member) => member.creatureId)
           .sort();
         return {
           cageId: cage.cageId,
@@ -162,16 +203,16 @@ export function createRaisingPresentationSource(app) {
           note: "Product-authored habitat prototype; not an Original Championship CageDefinition."
         };
       }),
-      residents: snapshot.residents.map((resident) => ({
-        creatureId: resident.residentId,
-        displayName: resident.name,
-        speciesId: `championship:creature:${speciesKey(resident)}`,
-        cageId: assignments[resident.residentId],
-        lane: lanes.get(resident.residentId) ?? { x: 0.5, y: 0.72 },
-        facing: resident.facing,
-        intent: resident.residentId === reactionCreatureId ? "care-reaction" : resident.intent,
-        selected: resident.residentId === selectedCreatureId,
-        sprite: spriteProjection(resident)
+      residents: members.map((member) => ({
+        creatureId: member.creatureId,
+        displayName: member.displayName,
+        speciesId: member.speciesId,
+        cageId: assignments[member.creatureId],
+        lane: lanes.get(member.creatureId) ?? { x: 0.5, y: 0.72 },
+        facing: member.facing,
+        intent: member.creatureId === reactionCreatureId ? "care-reaction" : member.intent,
+        selected: member.creatureId === selectedCreatureId,
+        sprite: spriteProjection(member.spriteResident)
       })),
       selection: { creatureId: selectedCreatureId },
       save: {

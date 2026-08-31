@@ -36,7 +36,13 @@ def sha256(path: Path) -> str:
 
 
 def write_json(path: Path, value: object) -> None:
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    # Hashes in the generated manifest must describe the bytes Git stores.
+    # Force LF on Windows too; .gitattributes canonicalizes JSON to LF in CI.
+    path.write_text(
+        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+        newline="\n",
+    )
 
 
 def align4(value: int) -> int:

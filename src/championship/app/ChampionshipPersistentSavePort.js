@@ -95,7 +95,13 @@ export function createChampionshipPersistentSavePort({
       creature: request.creature,
       raisingHomeSerialized: serialized,
       raising: request.raising ?? null,
-      progression: { interactionCount: request.interactionCount, revision: request.revision },
+      shop: request.shop ?? null,
+      cageEdit: request.cageEdit ?? null,
+      progression: {
+        interactionCount: request.interactionCount,
+        revision: request.revision,
+        tamerRank: request.tamerRank ?? 0
+      },
       flags: { newGameCompleted: true },
       updatedAt: now()
     });

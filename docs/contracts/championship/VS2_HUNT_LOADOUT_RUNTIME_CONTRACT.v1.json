@@ -872,7 +872,7 @@
       "Show quantity for the four countable classes and durability for the rope, because that is the split the ROM makes.",
       "A HUD readout with no plugin behind it is not displayed. That gating is recovered behaviour, not a product choice.",
       "Do not render an item effect, a carry limit, a price, a confirmation requirement, or a companion.",
-      "Do not render capture capacity as an action. It is a labelled readout scoped VS3_CAPTURE_NOT_IMPLEMENTED."
+      "Do not render capture capacity as an action. It is a labelled readout of owned max G (32/64/96). Bring-home compares summed cost against that max; over capacity is not a HUD button."
     ]
   },
   "verification": {
