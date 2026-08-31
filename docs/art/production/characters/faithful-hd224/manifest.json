@@ -1,0 +1,1883 @@
+{
+  "schemaVersion": 1,
+  "catalog": "CHARACTER_FAITHFUL_HD224",
+  "entityCount": 224,
+  "batchCount": 7,
+  "batchSize": 32,
+  "fullRosterBuilt": true,
+  "visualPolicy": "EXACT_DECODED_CELL_ART_PLUS_4X_NEAREST_NO_RECOLOR_NO_REDESIGN",
+  "animationPolicy": "ORIGINAL_MAIN_SUB_NANR_TIMELINES_PRESERVED",
+  "renderer": "PIXIJS_V8_SPRITESHEET",
+  "rightsStatus": "LICENSED",
+  "licenseEvidenceStatus": "OWNER_REPORTED_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "artifactMaturity": "FUNCTIONAL_PIXEL_FAITHFUL_HD_BASELINE_NOT_SMOOTH_HAND_REDRAW",
+  "batches": [
+    {
+      "batchNumber": 1,
+      "directory": "batch-01",
+      "manifest": "batch-01/manifest.json",
+      "manifestSha256": "7F78040D32C08308C102D1A0BA728BB331A4078C2B13F88CC48715D2D5C94E57",
+      "firstOrdinal": 1,
+      "lastOrdinal": 32,
+      "entityCount": 32,
+      "contactSheet": "batch-01/batch-01-contact-sheet.png"
+    },
+    {
+      "batchNumber": 2,
+      "directory": "batch-02",
+      "manifest": "batch-02/manifest.json",
+      "manifestSha256": "F75E5B53F22B4A4982B017423A39D3ED1A96425C3C3E36A75EB229897746AB92",
+      "firstOrdinal": 33,
+      "lastOrdinal": 64,
+      "entityCount": 32,
+      "contactSheet": "batch-02/batch-02-contact-sheet.png"
+    },
+    {
+      "batchNumber": 3,
+      "directory": "batch-03",
+      "manifest": "batch-03/manifest.json",
+      "manifestSha256": "86E6D877308043FE0CE21E77425027D244C13EBD74C5887560383D02A79705E8",
+      "firstOrdinal": 65,
+      "lastOrdinal": 96,
+      "entityCount": 32,
+      "contactSheet": "batch-03/batch-03-contact-sheet.png"
+    },
+    {
+      "batchNumber": 4,
+      "directory": "batch-04",
+      "manifest": "batch-04/manifest.json",
+      "manifestSha256": "27CE3B3220107F6A16D290F754CBE754DF21EF48AAAFF2C16A7E2FB6BC62FBB9",
+      "firstOrdinal": 97,
+      "lastOrdinal": 128,
+      "entityCount": 32,
+      "contactSheet": "batch-04/batch-04-contact-sheet.png"
+    },
+    {
+      "batchNumber": 5,
+      "directory": "batch-05",
+      "manifest": "batch-05/manifest.json",
+      "manifestSha256": "66895AC2E28E1BA71EF9648351A39FC26FAAFF4F9507C46009BDD6866F4BE502",
+      "firstOrdinal": 129,
+      "lastOrdinal": 160,
+      "entityCount": 32,
+      "contactSheet": "batch-05/batch-05-contact-sheet.png"
+    },
+    {
+      "batchNumber": 6,
+      "directory": "batch-06",
+      "manifest": "batch-06/manifest.json",
+      "manifestSha256": "348B525263AD1D148DCDB75BFB528C44994419926EEEBFB14FEA1CBE5D268D3A",
+      "firstOrdinal": 161,
+      "lastOrdinal": 192,
+      "entityCount": 32,
+      "contactSheet": "batch-06/batch-06-contact-sheet.png"
+    },
+    {
+      "batchNumber": 7,
+      "directory": "batch-07",
+      "manifest": "batch-07/manifest.json",
+      "manifestSha256": "35A0768211D485BD864E496FA048C91E6FED06AFF99A1AD99C95235429A08035",
+      "firstOrdinal": 193,
+      "lastOrdinal": 224,
+      "entityCount": 32,
+      "contactSheet": "batch-07/batch-07-contact-sheet.png"
+    }
+  ],
+  "entities": [
+    {
+      "ordinal": 1,
+      "entityId": "e000_digitama",
+      "kind": "egg",
+      "batchNumber": 1,
+      "runtime": "batch-01/e000_digitama/runtime.json",
+      "preview": "batch-01/e000_digitama/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 2,
+      "entityId": "e001_digitama",
+      "kind": "egg",
+      "batchNumber": 1,
+      "runtime": "batch-01/e001_digitama/runtime.json",
+      "preview": "batch-01/e001_digitama/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 3,
+      "entityId": "e002_digitama",
+      "kind": "egg",
+      "batchNumber": 1,
+      "runtime": "batch-01/e002_digitama/runtime.json",
+      "preview": "batch-01/e002_digitama/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 4,
+      "entityId": "e003_digitama",
+      "kind": "egg",
+      "batchNumber": 1,
+      "runtime": "batch-01/e003_digitama/runtime.json",
+      "preview": "batch-01/e003_digitama/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 5,
+      "entityId": "e004_digitama",
+      "kind": "egg",
+      "batchNumber": 1,
+      "runtime": "batch-01/e004_digitama/runtime.json",
+      "preview": "batch-01/e004_digitama/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 6,
+      "entityId": "e005_digitama",
+      "kind": "egg",
+      "batchNumber": 1,
+      "runtime": "batch-01/e005_digitama/runtime.json",
+      "preview": "batch-01/e005_digitama/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 7,
+      "entityId": "e006_digitama",
+      "kind": "egg",
+      "batchNumber": 1,
+      "runtime": "batch-01/e006_digitama/runtime.json",
+      "preview": "batch-01/e006_digitama/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 8,
+      "entityId": "e007_digitama",
+      "kind": "egg",
+      "batchNumber": 1,
+      "runtime": "batch-01/e007_digitama/runtime.json",
+      "preview": "batch-01/e007_digitama/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 9,
+      "entityId": "m001_zurumon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m001_zurumon/runtime.json",
+      "preview": "batch-01/m001_zurumon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 10,
+      "entityId": "m002_choromon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m002_choromon/runtime.json",
+      "preview": "batch-01/m002_choromon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 11,
+      "entityId": "m003_nyokimon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m003_nyokimon/runtime.json",
+      "preview": "batch-01/m003_nyokimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 12,
+      "entityId": "m004_bubbmon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m004_bubbmon/runtime.json",
+      "preview": "batch-01/m004_bubbmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 13,
+      "entityId": "m005_pitchmon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m005_pitchmon/runtime.json",
+      "preview": "batch-01/m005_pitchmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 14,
+      "entityId": "m006_punimon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m006_punimon/runtime.json",
+      "preview": "batch-01/m006_punimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 15,
+      "entityId": "m007_botamon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m007_botamon/runtime.json",
+      "preview": "batch-01/m007_botamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 16,
+      "entityId": "m008_poyomon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m008_poyomon/runtime.json",
+      "preview": "batch-01/m008_poyomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 17,
+      "entityId": "m009_mokumon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m009_mokumon/runtime.json",
+      "preview": "batch-01/m009_mokumon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 18,
+      "entityId": "m010_yukimibotamon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m010_yukimibotamon/runtime.json",
+      "preview": "batch-01/m010_yukimibotamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 19,
+      "entityId": "m011_yuramon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m011_yuramon/runtime.json",
+      "preview": "batch-01/m011_yuramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 20,
+      "entityId": "m012_petimon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m012_petimon/runtime.json",
+      "preview": "batch-01/m012_petimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 21,
+      "entityId": "m101_caprimon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m101_caprimon/runtime.json",
+      "preview": "batch-01/m101_caprimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 22,
+      "entityId": "m102_koromon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m102_koromon/runtime.json",
+      "preview": "batch-01/m102_koromon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 23,
+      "entityId": "m103_tanemon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m103_tanemon/runtime.json",
+      "preview": "batch-01/m103_tanemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 24,
+      "entityId": "m104_tunomon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m104_tunomon/runtime.json",
+      "preview": "batch-01/m104_tunomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 25,
+      "entityId": "m105_tokomon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m105_tokomon/runtime.json",
+      "preview": "batch-01/m105_tokomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 26,
+      "entityId": "m106_nyaromon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m106_nyaromon/runtime.json",
+      "preview": "batch-01/m106_nyaromon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 27,
+      "entityId": "m107_pagumon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m107_pagumon/runtime.json",
+      "preview": "batch-01/m107_pagumon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 28,
+      "entityId": "m108_pyokomon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m108_pyokomon/runtime.json",
+      "preview": "batch-01/m108_pyokomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 29,
+      "entityId": "m109_pukamon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m109_pukamon/runtime.json",
+      "preview": "batch-01/m109_pukamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 30,
+      "entityId": "m110_petimemramon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m110_petimemramon/runtime.json",
+      "preview": "batch-01/m110_petimemramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 31,
+      "entityId": "m111_mochimon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m111_mochimon/runtime.json",
+      "preview": "batch-01/m111_mochimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 32,
+      "entityId": "m112_bebydomon",
+      "kind": "digimon",
+      "batchNumber": 1,
+      "runtime": "batch-01/m112_bebydomon/runtime.json",
+      "preview": "batch-01/m112_bebydomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 33,
+      "entityId": "m113_sunmon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m113_sunmon/runtime.json",
+      "preview": "batch-02/m113_sunmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 34,
+      "entityId": "m114_moonmon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m114_moonmon/runtime.json",
+      "preview": "batch-02/m114_moonmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 35,
+      "entityId": "m201_agumon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m201_agumon/runtime.json",
+      "preview": "batch-02/m201_agumon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 36,
+      "entityId": "m202_armadimon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m202_armadimon/runtime.json",
+      "preview": "batch-02/m202_armadimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 37,
+      "entityId": "m203_elecmon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m203_elecmon/runtime.json",
+      "preview": "batch-02/m203_elecmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 38,
+      "entityId": "m204_otamamon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m204_otamamon/runtime.json",
+      "preview": "batch-02/m204_otamamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 39,
+      "entityId": "m205_gaomon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m205_gaomon/runtime.json",
+      "preview": "batch-02/m205_gaomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 40,
+      "entityId": "m206_gazimon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m206_gazimon/runtime.json",
+      "preview": "batch-02/m206_gazimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 41,
+      "entityId": "m208_gabumon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m208_gabumon/runtime.json",
+      "preview": "batch-02/m208_gabumon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 42,
+      "entityId": "m209_kamemon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m209_kamemon/runtime.json",
+      "preview": "batch-02/m209_kamemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 43,
+      "entityId": "m210_gizamon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m210_gizamon/runtime.json",
+      "preview": "batch-02/m210_gizamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 44,
+      "entityId": "m211_candmon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m211_candmon/runtime.json",
+      "preview": "batch-02/m211_candmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 45,
+      "entityId": "m214_kunemon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m214_kunemon/runtime.json",
+      "preview": "batch-02/m214_kunemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 46,
+      "entityId": "m217_gottumon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m217_gottumon/runtime.json",
+      "preview": "batch-02/m217_gottumon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 47,
+      "entityId": "m218_goburimon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m218_goburimon/runtime.json",
+      "preview": "batch-02/m218_goburimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 48,
+      "entityId": "m219_gomamon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m219_gomamon/runtime.json",
+      "preview": "batch-02/m219_gomamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 49,
+      "entityId": "m221_terriermon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m221_terriermon/runtime.json",
+      "preview": "batch-02/m221_terriermon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 50,
+      "entityId": "m222_tentomon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m222_tentomon/runtime.json",
+      "preview": "batch-02/m222_tentomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 51,
+      "entityId": "m223_toyagumon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m223_toyagumon/runtime.json",
+      "preview": "batch-02/m223_toyagumon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 52,
+      "entityId": "m224_dracomon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m224_dracomon/runtime.json",
+      "preview": "batch-02/m224_dracomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 53,
+      "entityId": "m225_bakumon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m225_bakumon/runtime.json",
+      "preview": "batch-02/m225_bakumon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 54,
+      "entityId": "m226_hagurumon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m226_hagurumon/runtime.json",
+      "preview": "batch-02/m226_hagurumon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 55,
+      "entityId": "m227_patamon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m227_patamon/runtime.json",
+      "preview": "batch-02/m227_patamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 56,
+      "entityId": "m228_palmon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m228_palmon/runtime.json",
+      "preview": "batch-02/m228_palmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 57,
+      "entityId": "m229_picodevimon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m229_picodevimon/runtime.json",
+      "preview": "batch-02/m229_picodevimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 58,
+      "entityId": "m230_piyomon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m230_piyomon/runtime.json",
+      "preview": "batch-02/m230_piyomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 59,
+      "entityId": "m231_falcomon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m231_falcomon/runtime.json",
+      "preview": "batch-02/m231_falcomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 60,
+      "entityId": "m232_plotmon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m232_plotmon/runtime.json",
+      "preview": "batch-02/m232_plotmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 61,
+      "entityId": "m233_floramon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m233_floramon/runtime.json",
+      "preview": "batch-02/m233_floramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 62,
+      "entityId": "m235_mushmon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m235_mushmon/runtime.json",
+      "preview": "batch-02/m235_mushmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 63,
+      "entityId": "m236_yukiagumon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m236_yukiagumon/runtime.json",
+      "preview": "batch-02/m236_yukiagumon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 64,
+      "entityId": "m237_renamon",
+      "kind": "digimon",
+      "batchNumber": 2,
+      "runtime": "batch-02/m237_renamon/runtime.json",
+      "preview": "batch-02/m237_renamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 65,
+      "entityId": "m238_coronamon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m238_coronamon/runtime.json",
+      "preview": "batch-03/m238_coronamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 66,
+      "entityId": "m239_lunamon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m239_lunamon/runtime.json",
+      "preview": "batch-03/m239_lunamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 67,
+      "entityId": "m240_kuroagumon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m240_kuroagumon/runtime.json",
+      "preview": "batch-03/m240_kuroagumon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 68,
+      "entityId": "m241_psychemon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m241_psychemon/runtime.json",
+      "preview": "batch-03/m241_psychemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 69,
+      "entityId": "m242_alraumon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m242_alraumon/runtime.json",
+      "preview": "batch-03/m242_alraumon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 70,
+      "entityId": "m243_tsukaimon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m243_tsukaimon/runtime.json",
+      "preview": "batch-03/m243_tsukaimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 71,
+      "entityId": "m244_vmon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m244_vmon/runtime.json",
+      "preview": "batch-03/m244_vmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 72,
+      "entityId": "m255_guilmon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m255_guilmon/runtime.json",
+      "preview": "batch-03/m255_guilmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 73,
+      "entityId": "m301_ankylomon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m301_ankylomon/runtime.json",
+      "preview": "batch-03/m301_ankylomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 74,
+      "entityId": "m303_ikkakumon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m303_ikkakumon/runtime.json",
+      "preview": "batch-03/m303_ikkakumon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 75,
+      "entityId": "m304_wizarmon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m304_wizarmon/runtime.json",
+      "preview": "batch-03/m304_wizarmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 76,
+      "entityId": "m305_woodmon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m305_woodmon/runtime.json",
+      "preview": "batch-03/m305_woodmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 77,
+      "entityId": "m306_airdramon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m306_airdramon/runtime.json",
+      "preview": "batch-03/m306_airdramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 78,
+      "entityId": "m308_angemon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m308_angemon/runtime.json",
+      "preview": "batch-03/m308_angemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 79,
+      "entityId": "m310_orgemon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m310_orgemon/runtime.json",
+      "preview": "batch-03/m310_orgemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 80,
+      "entityId": "m311_gaogamon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m311_gaogamon/runtime.json",
+      "preview": "batch-03/m311_gaogamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 81,
+      "entityId": "m312_kabuterimon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m312_kabuterimon/runtime.json",
+      "preview": "batch-03/m312_kabuterimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 82,
+      "entityId": "m313_gargomon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m313_gargomon/runtime.json",
+      "preview": "batch-03/m313_gargomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 83,
+      "entityId": "m314_garurumon_va",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m314_garurumon_va/runtime.json",
+      "preview": "batch-03/m314_garurumon_va/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 84,
+      "entityId": "m315_garurumon_vi",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m315_garurumon_vi/runtime.json",
+      "preview": "batch-03/m315_garurumon_vi/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 85,
+      "entityId": "m316_guardromon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m316_guardromon/runtime.json",
+      "preview": "batch-03/m316_guardromon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 86,
+      "entityId": "m317_kiwimon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m317_kiwimon/runtime.json",
+      "preview": "batch-03/m317_kiwimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 87,
+      "entityId": "m318_kyubimon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m318_kyubimon/runtime.json",
+      "preview": "batch-03/m318_kyubimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 88,
+      "entityId": "m320_graymon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m320_graymon/runtime.json",
+      "preview": "batch-03/m320_graymon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 89,
+      "entityId": "m321_clockmon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m321_clockmon/runtime.json",
+      "preview": "batch-03/m321_clockmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 90,
+      "entityId": "m322_kuwagamon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m322_kuwagamon/runtime.json",
+      "preview": "batch-03/m322_kuwagamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 91,
+      "entityId": "m323_gekomon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m323_gekomon/runtime.json",
+      "preview": "batch-03/m323_gekomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 92,
+      "entityId": "m324_gesomon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m324_gesomon/runtime.json",
+      "preview": "batch-03/m324_gesomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 93,
+      "entityId": "m325_centalmon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m325_centalmon/runtime.json",
+      "preview": "batch-03/m325_centalmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 94,
+      "entityId": "m326_cockatrimon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m326_cockatrimon/runtime.json",
+      "preview": "batch-03/m326_cockatrimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 95,
+      "entityId": "m328_thanderballmon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m328_thanderballmon/runtime.json",
+      "preview": "batch-03/m328_thanderballmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 96,
+      "entityId": "m329_shellmon",
+      "kind": "digimon",
+      "batchNumber": 3,
+      "runtime": "batch-03/m329_shellmon/runtime.json",
+      "preview": "batch-03/m329_shellmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 97,
+      "entityId": "m330_geograymon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m330_geograymon/runtime.json",
+      "preview": "batch-04/m330_geograymon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 98,
+      "entityId": "m331_seadramon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m331_seadramon/runtime.json",
+      "preview": "batch-04/m331_seadramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 99,
+      "entityId": "m333_scumon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m333_scumon/runtime.json",
+      "preview": "batch-04/m333_scumon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 100,
+      "entityId": "m334_starmon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m334_starmon/runtime.json",
+      "preview": "batch-04/m334_starmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 101,
+      "entityId": "m337_darcmon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m337_darcmon/runtime.json",
+      "preview": "batch-04/m337_darcmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 102,
+      "entityId": "m338_darktyranomon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m338_darktyranomon/runtime.json",
+      "preview": "batch-04/m338_darktyranomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 103,
+      "entityId": "m339_tyranomon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m339_tyranomon/runtime.json",
+      "preview": "batch-04/m339_tyranomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 104,
+      "entityId": "m340_tailmon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m340_tailmon/runtime.json",
+      "preview": "batch-04/m340_tailmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 105,
+      "entityId": "m341_devidramon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m341_devidramon/runtime.json",
+      "preview": "batch-04/m341_devidramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 106,
+      "entityId": "m342_devimon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m342_devimon/runtime.json",
+      "preview": "batch-04/m342_devimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 107,
+      "entityId": "m343_togemon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m343_togemon/runtime.json",
+      "preview": "batch-04/m343_togemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 108,
+      "entityId": "m345_tortamon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m345_tortamon/runtime.json",
+      "preview": "batch-04/m345_tortamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 109,
+      "entityId": "m346_numemon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m346_numemon/runtime.json",
+      "preview": "batch-04/m346_numemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 110,
+      "entityId": "m347_bakemon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m347_bakemon/runtime.json",
+      "preview": "batch-04/m347_bakemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 111,
+      "entityId": "m349_bardramon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m349_bardramon/runtime.json",
+      "preview": "batch-04/m349_bardramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 112,
+      "entityId": "m351_vagimon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m351_vagimon/runtime.json",
+      "preview": "batch-04/m351_vagimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 113,
+      "entityId": "m352_peckmon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m352_peckmon/runtime.json",
+      "preview": "batch-04/m352_peckmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 114,
+      "entityId": "m353_meramon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m353_meramon/runtime.json",
+      "preview": "batch-04/m353_meramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 115,
+      "entityId": "m354_mojyamon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m354_mojyamon/runtime.json",
+      "preview": "batch-04/m354_mojyamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 116,
+      "entityId": "m355_monochromon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m355_monochromon/runtime.json",
+      "preview": "batch-04/m355_monochromon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 117,
+      "entityId": "m356_yukidarumon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m356_yukidarumon/runtime.json",
+      "preview": "batch-04/m356_yukidarumon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 118,
+      "entityId": "m357_unimon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m357_unimon/runtime.json",
+      "preview": "batch-04/m357_unimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 119,
+      "entityId": "m358_youkomon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m358_youkomon/runtime.json",
+      "preview": "batch-04/m358_youkomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 120,
+      "entityId": "m359_rynxmon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m359_rynxmon/runtime.json",
+      "preview": "batch-04/m359_rynxmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 121,
+      "entityId": "m362_raremon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m362_raremon/runtime.json",
+      "preview": "batch-04/m362_raremon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 122,
+      "entityId": "m363_leomon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m363_leomon/runtime.json",
+      "preview": "batch-04/m363_leomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 123,
+      "entityId": "m364_redvagimon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m364_redvagimon/runtime.json",
+      "preview": "batch-04/m364_redvagimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 124,
+      "entityId": "m366_coredramon_ten",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m366_coredramon_ten/runtime.json",
+      "preview": "batch-04/m366_coredramon_ten/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 125,
+      "entityId": "m367_coredramon_ti",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m367_coredramon_ti/runtime.json",
+      "preview": "batch-04/m367_coredramon_ti/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 126,
+      "entityId": "m368_firamon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m368_firamon/runtime.json",
+      "preview": "batch-04/m368_firamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 127,
+      "entityId": "m369_lekismon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m369_lekismon/runtime.json",
+      "preview": "batch-04/m369_lekismon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 128,
+      "entityId": "m370_icedevimon",
+      "kind": "digimon",
+      "batchNumber": 4,
+      "runtime": "batch-04/m370_icedevimon/runtime.json",
+      "preview": "batch-04/m370_icedevimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 129,
+      "entityId": "m371_grurumon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m371_grurumon/runtime.json",
+      "preview": "batch-05/m371_grurumon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 130,
+      "entityId": "m372_geremon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m372_geremon/runtime.json",
+      "preview": "batch-05/m372_geremon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 131,
+      "entityId": "m373_bluemeramon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m373_bluemeramon/runtime.json",
+      "preview": "batch-05/m373_bluemeramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 132,
+      "entityId": "m374_sorcerimon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m374_sorcerimon/runtime.json",
+      "preview": "batch-05/m374_sorcerimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 133,
+      "entityId": "m375_akatorimon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m375_akatorimon/runtime.json",
+      "preview": "batch-05/m375_akatorimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 134,
+      "entityId": "m376_saverdramon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m376_saverdramon/runtime.json",
+      "preview": "batch-05/m376_saverdramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 135,
+      "entityId": "m377_icemon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m377_icemon/runtime.json",
+      "preview": "batch-05/m377_icemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 136,
+      "entityId": "m378_vdramon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m378_vdramon/runtime.json",
+      "preview": "batch-05/m378_vdramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 137,
+      "entityId": "m379_growmon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m379_growmon/runtime.json",
+      "preview": "batch-05/m379_growmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 138,
+      "entityId": "m401_atlurkabuterimon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m401_atlurkabuterimon/runtime.json",
+      "preview": "batch-05/m401_atlurkabuterimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 139,
+      "entityId": "m402_anomalocarimon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m402_anomalocarimon/runtime.json",
+      "preview": "batch-05/m402_anomalocarimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 140,
+      "entityId": "m403_andromon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m403_andromon/runtime.json",
+      "preview": "batch-05/m403_andromon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 141,
+      "entityId": "m404_etemon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m404_etemon/runtime.json",
+      "preview": "batch-05/m404_etemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 142,
+      "entityId": "m405_angewomon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m405_angewomon/runtime.json",
+      "preview": "batch-05/m405_angewomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 143,
+      "entityId": "m406_oukuwamon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m406_oukuwamon/runtime.json",
+      "preview": "batch-05/m406_oukuwamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 144,
+      "entityId": "m407_gurudamon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m407_gurudamon/runtime.json",
+      "preview": "batch-05/m407_gurudamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 145,
+      "entityId": "m408_gerbemon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m408_gerbemon/runtime.json",
+      "preview": "batch-05/m408_gerbemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 146,
+      "entityId": "m410_cyberdramon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m410_cyberdramon/runtime.json",
+      "preview": "batch-05/m410_cyberdramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 147,
+      "entityId": "m412_jyureimon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m412_jyureimon/runtime.json",
+      "preview": "batch-05/m412_jyureimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 148,
+      "entityId": "m413_skullgreymon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m413_skullgreymon/runtime.json",
+      "preview": "batch-05/m413_skullgreymon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 149,
+      "entityId": "m414_zudomon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m414_zudomon/runtime.json",
+      "preview": "batch-05/m414_zudomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 150,
+      "entityId": "m415_dagomon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m415_dagomon/runtime.json",
+      "preview": "batch-05/m415_dagomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 151,
+      "entityId": "m416_deathmeramon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m416_deathmeramon/runtime.json",
+      "preview": "batch-05/m416_deathmeramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 152,
+      "entityId": "m417_delumon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m417_delumon/runtime.json",
+      "preview": "batch-05/m417_delumon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 153,
+      "entityId": "m418_tonosamagekomon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m418_tonosamagekomon/runtime.json",
+      "preview": "batch-05/m418_tonosamagekomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 154,
+      "entityId": "m419_toriceramon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m419_toriceramon/runtime.json",
+      "preview": "batch-05/m419_toriceramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 155,
+      "entityId": "m420_knightmon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m420_knightmon/runtime.json",
+      "preview": "batch-05/m420_knightmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 156,
+      "entityId": "m422_parrotmon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m422_parrotmon/runtime.json",
+      "preview": "batch-05/m422_parrotmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 157,
+      "entityId": "m423_hangyomon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m423_hangyomon/runtime.json",
+      "preview": "batch-05/m423_hangyomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 158,
+      "entityId": "m424_pandamon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m424_pandamon/runtime.json",
+      "preview": "batch-05/m424_pandamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 159,
+      "entityId": "m426_bigmamemon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m426_bigmamemon/runtime.json",
+      "preview": "batch-05/m426_bigmamemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 160,
+      "entityId": "m427_picklemon",
+      "kind": "digimon",
+      "batchNumber": 5,
+      "runtime": "batch-05/m427_picklemon/runtime.json",
+      "preview": "batch-05/m427_picklemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 161,
+      "entityId": "m428_fantomon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m428_fantomon/runtime.json",
+      "preview": "batch-06/m428_fantomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 162,
+      "entityId": "m430_vademon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m430_vademon/runtime.json",
+      "preview": "batch-06/m430_vademon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 163,
+      "entityId": "m431_whamon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m431_whamon/runtime.json",
+      "preview": "batch-06/m431_whamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 164,
+      "entityId": "m432_holyangemon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m432_holyangemon/runtime.json",
+      "preview": "batch-06/m432_holyangemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 165,
+      "entityId": "m433_machgaogamon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m433_machgaogamon/runtime.json",
+      "preview": "batch-06/m433_machgaogamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 166,
+      "entityId": "m435_mamemon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m435_mamemon/runtime.json",
+      "preview": "batch-06/m435_mamemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 167,
+      "entityId": "m437_mammon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m437_mammon/runtime.json",
+      "preview": "batch-06/m437_mammon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 168,
+      "entityId": "m438_megaseadramon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m438_megaseadramon/runtime.json",
+      "preview": "batch-06/m438_megaseadramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 169,
+      "entityId": "m439_megadramon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m439_megadramon/runtime.json",
+      "preview": "batch-06/m439_megadramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 170,
+      "entityId": "m440_metalgreymon_vi",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m440_metalgreymon_vi/runtime.json",
+      "preview": "batch-06/m440_metalgreymon_vi/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 171,
+      "entityId": "m441_metalgreymon_va",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m441_metalgreymon_va/runtime.json",
+      "preview": "batch-06/m441_metalgreymon_va/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 172,
+      "entityId": "m442_metaltyranomon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m442_metaltyranomon/runtime.json",
+      "preview": "batch-06/m442_metaltyranomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 173,
+      "entityId": "m444_monzaemon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m444_monzaemon/runtime.json",
+      "preview": "batch-06/m444_monzaemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 174,
+      "entityId": "m445_yatagaramon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m445_yatagaramon/runtime.json",
+      "preview": "batch-06/m445_yatagaramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 175,
+      "entityId": "m446_rizegreymon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m446_rizegreymon/runtime.json",
+      "preview": "batch-06/m446_rizegreymon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 176,
+      "entityId": "m447_rapidmon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m447_rapidmon/runtime.json",
+      "preview": "batch-06/m447_rapidmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 177,
+      "entityId": "m448_lilimon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m448_lilimon/runtime.json",
+      "preview": "batch-06/m448_lilimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 178,
+      "entityId": "m449_ladydevimon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m449_ladydevimon/runtime.json",
+      "preview": "batch-06/m449_ladydevimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 179,
+      "entityId": "m450_warumonzaemon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m450_warumonzaemon/runtime.json",
+      "preview": "batch-06/m450_warumonzaemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 180,
+      "entityId": "m451_weregarurumon_va",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m451_weregarurumon_va/runtime.json",
+      "preview": "batch-06/m451_weregarurumon_va/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 181,
+      "entityId": "m452_weregarurumon_vi",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m452_weregarurumon_vi/runtime.json",
+      "preview": "batch-06/m452_weregarurumon_vi/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 182,
+      "entityId": "m453_wingdramon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m453_wingdramon/runtime.json",
+      "preview": "batch-06/m453_wingdramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 183,
+      "entityId": "m454_grondramon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m454_grondramon/runtime.json",
+      "preview": "batch-06/m454_grondramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 184,
+      "entityId": "m455_flaremon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m455_flaremon/runtime.json",
+      "preview": "batch-06/m455_flaremon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 185,
+      "entityId": "m456_crescemon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m456_crescemon/runtime.json",
+      "preview": "batch-06/m456_crescemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 186,
+      "entityId": "m457_superstarmon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m457_superstarmon/runtime.json",
+      "preview": "batch-06/m457_superstarmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 187,
+      "entityId": "m458_blackrapidmon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m458_blackrapidmon/runtime.json",
+      "preview": "batch-06/m458_blackrapidmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 188,
+      "entityId": "m501_vikemon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m501_vikemon/runtime.json",
+      "preview": "batch-06/m501_vikemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 189,
+      "entityId": "m502_valkyrimon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m502_valkyrimon/runtime.json",
+      "preview": "batch-06/m502_valkyrimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 190,
+      "entityId": "m503_warglaymon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m503_warglaymon/runtime.json",
+      "preview": "batch-06/m503_warglaymon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 191,
+      "entityId": "m504_gigaseadramon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m504_gigaseadramon/runtime.json",
+      "preview": "batch-06/m504_gigaseadramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 192,
+      "entityId": "m505_grankuwagamon",
+      "kind": "digimon",
+      "batchNumber": 6,
+      "runtime": "batch-06/m505_grankuwagamon/runtime.json",
+      "preview": "batch-06/m505_grankuwagamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 193,
+      "entityId": "m506_griffomon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m506_griffomon/runtime.json",
+      "preview": "batch-07/m506_griffomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 194,
+      "entityId": "m507_crossmon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m507_crossmon/runtime.json",
+      "preview": "batch-07/m507_crossmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 195,
+      "entityId": "m508_saberleomon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m508_saberleomon/runtime.json",
+      "preview": "batch-07/m508_saberleomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 196,
+      "entityId": "m509_shinegraymon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m509_shinegraymon/runtime.json",
+      "preview": "batch-07/m509_shinegraymon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 197,
+      "entityId": "m510_skullmammon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m510_skullmammon/runtime.json",
+      "preview": "batch-07/m510_skullmammon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 198,
+      "entityId": "m511_saintgargomon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m511_saintgargomon/runtime.json",
+      "preview": "batch-07/m511_saintgargomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 199,
+      "entityId": "m512_hiandromon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m512_hiandromon/runtime.json",
+      "preview": "batch-07/m512_hiandromon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 200,
+      "entityId": "m513_bantyoliomon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m513_bantyoliomon/runtime.json",
+      "preview": "batch-07/m513_bantyoliomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 201,
+      "entityId": "m514_piemon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m514_piemon/runtime.json",
+      "preview": "batch-07/m514_piemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 202,
+      "entityId": "m515_pinochimon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m515_pinochimon/runtime.json",
+      "preview": "batch-07/m515_pinochimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 203,
+      "entityId": "m516_pharaohmon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m516_pharaohmon/runtime.json",
+      "preview": "batch-07/m516_pharaohmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 204,
+      "entityId": "m517_pukumon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m517_pukumon/runtime.json",
+      "preview": "batch-07/m517_pukumon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 205,
+      "entityId": "m518_blackwargreymon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m518_blackwargreymon/runtime.json",
+      "preview": "batch-07/m518_blackwargreymon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 206,
+      "entityId": "m519_princemamemon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m519_princemamemon/runtime.json",
+      "preview": "batch-07/m519_princemamemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 207,
+      "entityId": "m520_pilesiomon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m520_pilesiomon/runtime.json",
+      "preview": "batch-07/m520_pilesiomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 208,
+      "entityId": "m521_heraklekabuterimon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m521_heraklekabuterimon/runtime.json",
+      "preview": "batch-07/m521_heraklekabuterimon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 209,
+      "entityId": "m522_hououmon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m522_hououmon/runtime.json",
+      "preview": "batch-07/m522_hououmon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 210,
+      "entityId": "m526_miragegaogamon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m526_miragegaogamon/runtime.json",
+      "preview": "batch-07/m526_miragegaogamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 211,
+      "entityId": "m527_mugendramon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m527_mugendramon/runtime.json",
+      "preview": "batch-07/m527_mugendramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 212,
+      "entityId": "m528_metaletemon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m528_metaletemon/runtime.json",
+      "preview": "batch-07/m528_metaletemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 213,
+      "entityId": "m529_metalgarurumon_va",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m529_metalgarurumon_va/runtime.json",
+      "preview": "batch-07/m529_metalgarurumon_va/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 214,
+      "entityId": "m530_metalgarurumon_vi",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m530_metalgarurumon_vi/runtime.json",
+      "preview": "batch-07/m530_metalgarurumon_vi/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 215,
+      "entityId": "m531_metalseadramon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m531_metalseadramon/runtime.json",
+      "preview": "batch-07/m531_metalseadramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 216,
+      "entityId": "m532_rosemon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m532_rosemon/runtime.json",
+      "preview": "batch-07/m532_rosemon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 217,
+      "entityId": "m533_zeedgarurumon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m533_zeedgarurumon/runtime.json",
+      "preview": "batch-07/m533_zeedgarurumon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 218,
+      "entityId": "m534_victorygreymon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m534_victorygreymon/runtime.json",
+      "preview": "batch-07/m534_victorygreymon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 219,
+      "entityId": "m535_slayerdramon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m535_slayerdramon/runtime.json",
+      "preview": "batch-07/m535_slayerdramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 220,
+      "entityId": "m536_brakedramon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m536_brakedramon/runtime.json",
+      "preview": "batch-07/m536_brakedramon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 221,
+      "entityId": "m538_apollomon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m538_apollomon/runtime.json",
+      "preview": "batch-07/m538_apollomon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 222,
+      "entityId": "m539_dianamon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m539_dianamon/runtime.json",
+      "preview": "batch-07/m539_dianamon/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 223,
+      "entityId": "m540_imperialdramon_fm",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m540_imperialdramon_fm/runtime.json",
+      "preview": "batch-07/m540_imperialdramon_fm/cell-000-main-hd4x.png"
+    },
+    {
+      "ordinal": 224,
+      "entityId": "m541_dukemon",
+      "kind": "digimon",
+      "batchNumber": 7,
+      "runtime": "batch-07/m541_dukemon/runtime.json",
+      "preview": "batch-07/m541_dukemon/cell-000-main-hd4x.png"
+    }
+  ]
+}

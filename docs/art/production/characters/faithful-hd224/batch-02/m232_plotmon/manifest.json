@@ -1,0 +1,2806 @@
+{
+  "ordinal": 60,
+  "entityId": "m232_plotmon",
+  "kind": "digimon",
+  "preview": "cell-000-main-hd4x.png",
+  "previewSha256": "BFDF87BCB86B3058B721247C859381C11E3E28CDC5842A42B2B090F467F446AE",
+  "runtime": "runtime.json",
+  "runtimeSha256": "FE5132541A3A0DBB869063D38B589341F5E29018D8AD05B67CDD3472E707B9CE",
+  "main": {
+    "sourceSheetSha256": "66254F8E040C959E8C614F97375231A81A85A1E65316257C14BDEEBA8D78D191",
+    "cellCount": 63,
+    "sequenceCount": 40,
+    "frameRecordCount": 65,
+    "atlasPages": [
+      {
+        "page": 0,
+        "image": "main-atlas-00.png",
+        "data": "main-atlas-00.json",
+        "width": 2036,
+        "height": 1452,
+        "frameCount": 63,
+        "imageSha256": "71AA2B6C8A82C98A2EE00613E1AB573203D1651E6F192329A5E807FBFD5E55C3",
+        "dataSha256": "11143AD337CD9A5053F0E25588A46B567B774BD91EBD830E2D9AF92C3D8B7F73"
+      }
+    ],
+    "frameManifest": {
+      "m232_plotmon/main/cell_000": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "6BD669A1666326D1714F7447F62AB49EE33024B5C8B8FFBD089AD17A9B61DD87",
+        "hdRgbaSha256": "CE5996B2C415052BF8BA603B91FB47E95CB2F9687526776BED795FD246E5BC6E",
+        "frame": {
+          "x": 8,
+          "y": 8,
+          "w": 176,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 160,
+          "w": 176,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_001": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 29,
+          "w": 44,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "888641287999D92ACBB95CCD5F8DFAEDCA302EAEFEE98103FE44E26603DE01FB",
+        "hdRgbaSha256": "B94C181F14B1623ADFD8C2D0CA6B5CD84D2810B64E56336D43FD0E9AA6D37B2F",
+        "frame": {
+          "x": 192,
+          "y": 8,
+          "w": 176,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 168,
+          "w": 176,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_002": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D293B7EC495D017066B16726B2230118E43F343639128F3CFCC3C2515195A3D4",
+        "hdRgbaSha256": "A3F661510C13CF1C017B50BCA650DA0A6B79A165F87E42E60CDA9A20E0F34CBE",
+        "frame": {
+          "x": 376,
+          "y": 8,
+          "w": 176,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 160,
+          "w": 176,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_003": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 29,
+          "w": 44,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "934C5F3D3010112885E4CAC419CC227EE63D977A83CFE27F32A5B19B51C56490",
+        "hdRgbaSha256": "B9E7452D4A0D2A73EB277831821D6A21DD84CE78C438EC4CA9666934EE0551B3",
+        "frame": {
+          "x": 560,
+          "y": 8,
+          "w": 176,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 168,
+          "w": 176,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_004": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "CAA404AE6EC3B7924D09EFDB5985C774D5C93ED4E751EBD61A93CCC25D32D855",
+        "hdRgbaSha256": "51FCF5AD633B3BA60496E02EA9F1C9644BCDBEEEB7F75FBB7E331142E6FA1BD8",
+        "frame": {
+          "x": 744,
+          "y": 8,
+          "w": 176,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 160,
+          "w": 176,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_005": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 27,
+          "y": 20,
+          "w": 57,
+          "h": 57
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "12F6E55C727DAB793C00D4820A020CC4BA5FE849E5E67FE6D332B9027E1455BF",
+        "hdRgbaSha256": "3356C61CCF364D93F725486DA459610CF4D10332F8C5B72A6FFA59968C5F341E",
+        "frame": {
+          "x": 928,
+          "y": 8,
+          "w": 228,
+          "h": 228
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 78,
+          "y": 92,
+          "w": 228,
+          "h": 228
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_006": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "CAA404AE6EC3B7924D09EFDB5985C774D5C93ED4E751EBD61A93CCC25D32D855",
+        "hdRgbaSha256": "51FCF5AD633B3BA60496E02EA9F1C9644BCDBEEEB7F75FBB7E331142E6FA1BD8",
+        "frame": {
+          "x": 1164,
+          "y": 8,
+          "w": 176,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 160,
+          "w": 176,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_007": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 27,
+          "y": 20,
+          "w": 57,
+          "h": 57
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "12F6E55C727DAB793C00D4820A020CC4BA5FE849E5E67FE6D332B9027E1455BF",
+        "hdRgbaSha256": "3356C61CCF364D93F725486DA459610CF4D10332F8C5B72A6FFA59968C5F341E",
+        "frame": {
+          "x": 1348,
+          "y": 8,
+          "w": 228,
+          "h": 228
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 78,
+          "y": 92,
+          "w": 228,
+          "h": 228
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_008": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 27,
+          "w": 48,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "8437CF2F1C88A2A3F1E5B202C6EDB276919AE99CCF7F8B4E9634113674714B86",
+        "hdRgbaSha256": "E651A1067A675DA2706149C7F97B49E93282097AB469F5F5DA9B8CA853B704FE",
+        "frame": {
+          "x": 1584,
+          "y": 8,
+          "w": 192,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 144,
+          "w": 192,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_009": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 33,
+          "w": 56,
+          "h": 24
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "3767518C400F692A46358D084529E438E2DC142498B366A5B813BBEA70C536AB",
+        "hdRgbaSha256": "7BFD04EFF57E15A32E95DD4E757E966B2CE9BCEC897DD7AD0866BEC9B5DD75EB",
+        "frame": {
+          "x": 1784,
+          "y": 8,
+          "w": 224,
+          "h": 96
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 80,
+          "y": 224,
+          "w": 224,
+          "h": 96
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_010": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "CF54D0850825A30342BB35116BE0BCBAD833FAD2816055A96E3775E0B2DE83C5",
+        "hdRgbaSha256": "1298089220F4101131540371E04C5F9B0D9575E5EBE34AA797B1EA8FF0B9AF78",
+        "frame": {
+          "x": 8,
+          "y": 244,
+          "w": 176,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 144,
+          "w": 176,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_011": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 29,
+          "w": 44,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "873586CB312F3D92F2CD3899CE091BD7C429AE4236FA799E50B3C4D3CA80393C",
+        "hdRgbaSha256": "AA5E43CC3864CF3DA551890A1629536740212FF7F6DC6C03F821956387BA2E88",
+        "frame": {
+          "x": 192,
+          "y": 244,
+          "w": 176,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 168,
+          "w": 176,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_012": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 23,
+          "w": 50,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "42BF51BCB9449B959B9D67429A866CEAE6998691FB38DCDE1D878752E188BA21",
+        "hdRgbaSha256": "78AB991D568DD863FD3BDF2BEBD0638BA7D47B78DD2E41A235BEDDF7C7EBBD3F",
+        "frame": {
+          "x": 376,
+          "y": 244,
+          "w": 200,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 144,
+          "w": 200,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_013": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 23,
+          "w": 46,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E39984C3B57A5195EDD40A424BADEB30D38E9FBD835D257D548B37A3F79BCCCA",
+        "hdRgbaSha256": "4765C7653F13C4DCA5859FC9EBBC541DF06E591D44AEFFB78F82B26F04D71725",
+        "frame": {
+          "x": 584,
+          "y": 244,
+          "w": 184,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 152,
+          "w": 184,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_014": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 37,
+          "w": 50,
+          "h": 34
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "366B29F548B85599A7367D6843552BED485E9AEA8674DC21F76B6408E5866895",
+        "hdRgbaSha256": "F8DBCED532D36455E4130C6E5CDF5CA40950FEB2D93ECD7092D52E4590E98855",
+        "frame": {
+          "x": 776,
+          "y": 244,
+          "w": 200,
+          "h": 136
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 184,
+          "w": 200,
+          "h": 136
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_015": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 29,
+          "w": 44,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "873586CB312F3D92F2CD3899CE091BD7C429AE4236FA799E50B3C4D3CA80393C",
+        "hdRgbaSha256": "AA5E43CC3864CF3DA551890A1629536740212FF7F6DC6C03F821956387BA2E88",
+        "frame": {
+          "x": 984,
+          "y": 244,
+          "w": 176,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 168,
+          "w": 176,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_016": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 23,
+          "w": 50,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "42BF51BCB9449B959B9D67429A866CEAE6998691FB38DCDE1D878752E188BA21",
+        "hdRgbaSha256": "78AB991D568DD863FD3BDF2BEBD0638BA7D47B78DD2E41A235BEDDF7C7EBBD3F",
+        "frame": {
+          "x": 1168,
+          "y": 244,
+          "w": 200,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 144,
+          "w": 200,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_017": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 23,
+          "w": 46,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E39984C3B57A5195EDD40A424BADEB30D38E9FBD835D257D548B37A3F79BCCCA",
+        "hdRgbaSha256": "4765C7653F13C4DCA5859FC9EBBC541DF06E591D44AEFFB78F82B26F04D71725",
+        "frame": {
+          "x": 1376,
+          "y": 244,
+          "w": 184,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 152,
+          "w": 184,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_018": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 37,
+          "w": 50,
+          "h": 34
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "366B29F548B85599A7367D6843552BED485E9AEA8674DC21F76B6408E5866895",
+        "hdRgbaSha256": "F8DBCED532D36455E4130C6E5CDF5CA40950FEB2D93ECD7092D52E4590E98855",
+        "frame": {
+          "x": 1568,
+          "y": 244,
+          "w": 200,
+          "h": 136
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 184,
+          "w": 200,
+          "h": 136
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_019": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 29,
+          "w": 42,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "0AE847D402F4C7EE465328F40BB2C9A9235310362BC34C0545CC1E21329A92B8",
+        "hdRgbaSha256": "064FA9E75F1D97833E830D8F3D04453E574D649754B5CEAE8A2DA461D76175FF",
+        "frame": {
+          "x": 1776,
+          "y": 244,
+          "w": 168,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 108,
+          "y": 168,
+          "w": 168,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_020": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 23,
+          "w": 50,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "BC46FF8B5BD893F7787F097C4FB6F73C53CF74D1ACA4EB87B55C93A3AF4CEC00",
+        "hdRgbaSha256": "03A88D7DD67C12453FC5202E35A474F021F7730D4F34CA185AF634E5DD2A590E",
+        "frame": {
+          "x": 8,
+          "y": 428,
+          "w": 200,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 144,
+          "w": 200,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_021": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "1FB99612F545C0DEBA036A2BE67F16AE1FC1F3B339E58DCA30EEABACD4AB34A6",
+        "hdRgbaSha256": "315509A26AB1AFA7C6A1466FFC55E7D1F5BCBD93C95A8430F89A2FAD0F6FDE3D",
+        "frame": {
+          "x": 216,
+          "y": 428,
+          "w": 176,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 160,
+          "w": 176,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_022": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 27,
+          "y": 20,
+          "w": 57,
+          "h": 57
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "FB7EE74A23F3AA31326D06184F98BFDA6EAA46D21C5909FDED63AD33A5A715F7",
+        "hdRgbaSha256": "58F5FD8B2341DDBB9F962F5D71ADE9D50838A61D4F725B6070D4C696FF8C17B8",
+        "frame": {
+          "x": 400,
+          "y": 428,
+          "w": 228,
+          "h": 228
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 78,
+          "y": 92,
+          "w": 228,
+          "h": 228
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_023": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 37,
+          "w": 48,
+          "h": 30
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "955DCD428080B549EEFB0EC2D617571D998B838E9ACC4D74F6641C4E93D2D14F",
+        "hdRgbaSha256": "D9D54BBA5B9061A9EEE47BFD205CCD495088BAEA5C93C66FD59D40496FC09AB2",
+        "frame": {
+          "x": 636,
+          "y": 428,
+          "w": 192,
+          "h": 120
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 200,
+          "w": 192,
+          "h": 120
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_024": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 22,
+          "y": 25,
+          "w": 48,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "2A7AE42309B108736FF6A4F8B75F4FBE1EDE46F365D63DA5E7AC483A24B6DAB1",
+        "hdRgbaSha256": "1254A7DFD2290A5C43432404EC27F3D5F1C41198BC1828CB6E89749446FD729E",
+        "frame": {
+          "x": 836,
+          "y": 428,
+          "w": 192,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 152,
+          "w": 192,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_025": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 22,
+          "y": 31,
+          "w": 48,
+          "h": 36
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "1D3972DEB8181B4FA22BE8517591A917488A26857DEEC75284B49F85F293EDAD",
+        "hdRgbaSha256": "18A45870ACBC51AB9C7769138F5A39E0CDDD4B482A357080BC117EE27982B964",
+        "frame": {
+          "x": 1036,
+          "y": 428,
+          "w": 192,
+          "h": 144
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 176,
+          "w": 192,
+          "h": 144
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_026": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 37,
+          "w": 48,
+          "h": 30
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "151EBE5C138EF8CCBAAE47134C35C70B50F2331A7954D6763BD57D8236CF7D7B",
+        "hdRgbaSha256": "6A92D214A5D08F2240463F139BCE51D5E4D8A3F413F65DFC401BB7D2A28F3460",
+        "frame": {
+          "x": 1236,
+          "y": 428,
+          "w": 192,
+          "h": 120
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 200,
+          "w": 192,
+          "h": 120
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_027": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "9B43BF66BE244671356532FF4343118AA15E66D887AB66F996F6A3CFB296D10E",
+        "hdRgbaSha256": "59D521185B5EF914CFBF71C336FC06C3AF50236F5BC4A1C1607FAE12F49A2C27",
+        "frame": {
+          "x": 1436,
+          "y": 428,
+          "w": 176,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 160,
+          "w": 176,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_028": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 29,
+          "w": 44,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "BF5F5BBF7A52152634F64536BEE593BD3D4DD2F7CE04DA3E9D284F5CD77C9F10",
+        "hdRgbaSha256": "BD575692B3AAFC1833AC5577276DCA06CE652595B4884E91409F75DC33DF3814",
+        "frame": {
+          "x": 1620,
+          "y": 428,
+          "w": 176,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 168,
+          "w": 176,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_029": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "4DCD3F75948B50183BD5EB4AA5E15E2C38DB3DBE4B21964D090AC815D4BD05ED",
+        "hdRgbaSha256": "024063A70D90BA9DA82E982048C25DE5658FD81706832788B78F6DDF75C4DB83",
+        "frame": {
+          "x": 1804,
+          "y": 428,
+          "w": 176,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 160,
+          "w": 176,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_030": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 29,
+          "w": 44,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "39892BF91FB63CA1FC545D5346CF0F77989F5F1F8EE8206F6F070E54805DF62B",
+        "hdRgbaSha256": "8D29B7377ADEB68883D171B0695BED55BCA20ABE8CDB7BACFFF1F4FC37BF40AA",
+        "frame": {
+          "x": 8,
+          "y": 664,
+          "w": 176,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 168,
+          "w": 176,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_031": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "6DFCCC27831D3AD5D7F77D27E604CF8386C1774420C858967A853888C8CD3DF2",
+        "hdRgbaSha256": "3884585270EFBBFC6480361D02D4A0ECC3E73D86CF8F3008AF9BBD15698D5B88",
+        "frame": {
+          "x": 192,
+          "y": 664,
+          "w": 176,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 160,
+          "w": 176,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_032": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 27,
+          "y": 20,
+          "w": 57,
+          "h": 57
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "FAEDC9626E178964DB97707AB3DD3C145A8C4E3630180365116725E787BB6617",
+        "hdRgbaSha256": "C2FADF35B339F28832E25C9D57790132D94D80A5E64464CEF5D54DC20A65926D",
+        "frame": {
+          "x": 376,
+          "y": 664,
+          "w": 228,
+          "h": 228
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 78,
+          "y": 92,
+          "w": 228,
+          "h": 228
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_033": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "6DFCCC27831D3AD5D7F77D27E604CF8386C1774420C858967A853888C8CD3DF2",
+        "hdRgbaSha256": "3884585270EFBBFC6480361D02D4A0ECC3E73D86CF8F3008AF9BBD15698D5B88",
+        "frame": {
+          "x": 612,
+          "y": 664,
+          "w": 176,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 160,
+          "w": 176,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_034": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 27,
+          "y": 20,
+          "w": 57,
+          "h": 57
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "FAEDC9626E178964DB97707AB3DD3C145A8C4E3630180365116725E787BB6617",
+        "hdRgbaSha256": "C2FADF35B339F28832E25C9D57790132D94D80A5E64464CEF5D54DC20A65926D",
+        "frame": {
+          "x": 796,
+          "y": 664,
+          "w": 228,
+          "h": 228
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 78,
+          "y": 92,
+          "w": 228,
+          "h": 228
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_035": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 27,
+          "w": 48,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "B13F50F2F5E5CF7631D6844588DAFDD29EAAAC5F2A1FCDC86BAC01F5A540EF18",
+        "hdRgbaSha256": "D73ECA3CC6F53FCD3A706A6A67D325EB9A3FFD50F2EF397E33994C508E7BB701",
+        "frame": {
+          "x": 1032,
+          "y": 664,
+          "w": 192,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 144,
+          "w": 192,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_036": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 29,
+          "w": 42,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "0B1CD33952FE7028F0EB5797FFCC3598E93A29143C550864015EB034520EA08F",
+        "hdRgbaSha256": "D4778E9BCF37DDE32C6EE732F6D1EC8ED7BFF8FE1B517D3C695722D05EA4346F",
+        "frame": {
+          "x": 1232,
+          "y": 664,
+          "w": 168,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 108,
+          "y": 168,
+          "w": 168,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_037": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 23,
+          "w": 50,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "FFF671F477ECD70C697CD52C7B65EB20DC496EA6DD9BD995B49AD88F247AB708",
+        "hdRgbaSha256": "A7C3136D2B1DE0DBF536D07EC3AADF2803082F9ABE5DF199E3A433152985A175",
+        "frame": {
+          "x": 1408,
+          "y": 664,
+          "w": 200,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 144,
+          "w": 200,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_038": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "FCC1CF87FCB42A60746D6C7621C0B7CF79C7F0726698B732027B40E021683CC8",
+        "hdRgbaSha256": "07F4A0FD5606C5CDDDE3B097A5409DBD73420458F4810CD0249B974196362C33",
+        "frame": {
+          "x": 1616,
+          "y": 664,
+          "w": 176,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 160,
+          "w": 176,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_039": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 27,
+          "y": 20,
+          "w": 57,
+          "h": 57
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "0F4FB8D3024690A044D886D20B1467715A069D5D23A6A98B534E18119E179280",
+        "hdRgbaSha256": "7AAF41E14CD41825DD955CD8898AC396632229A2276287EBEE1C6C5F215A7584",
+        "frame": {
+          "x": 1800,
+          "y": 664,
+          "w": 228,
+          "h": 228
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 78,
+          "y": 92,
+          "w": 228,
+          "h": 228
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_040": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 37,
+          "w": 48,
+          "h": 30
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D5A320AFBD5312D4B11EE52D2D87346FA19F9BB64C0AEED7283B0FA0FA4ECD8E",
+        "hdRgbaSha256": "C1764FC33EF28182584FD2A5A2C2E6B1A11AFC658B0B92219CD0F7BB22EE6D1A",
+        "frame": {
+          "x": 8,
+          "y": 900,
+          "w": 192,
+          "h": 120
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 200,
+          "w": 192,
+          "h": 120
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_041": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 22,
+          "y": 25,
+          "w": 48,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "B91CBBE32CBFBCFF39D9055CE70A0D2DAC278D3EFD0E393E01EE32E1267291C2",
+        "hdRgbaSha256": "6EBA44115D836B8DAC384E04D7B10CB093EB6D2AABD06C4CD5CE8E39F2BF3E17",
+        "frame": {
+          "x": 208,
+          "y": 900,
+          "w": 192,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 152,
+          "w": 192,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_042": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "B4CAD0400B330407E80BABFD871AD8F96DDB246123BA210E66E2E6007836E7A4",
+        "hdRgbaSha256": "7133F77751BBD1E445CBDE18A6CFD6D0EBCA8A1141ED98EC91E181D20CA8B470",
+        "frame": {
+          "x": 408,
+          "y": 900,
+          "w": 176,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 160,
+          "w": 176,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_043": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 37,
+          "w": 48,
+          "h": 30
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "705498A413EE0E1AA3D6F657EFBB658D4B278E9E840E2CDC44DA4129F7FA2271",
+        "hdRgbaSha256": "82CBA1AD69BC335C4C4A3E27EDF38BB54052223FCEE6CC7C86E7DD90FEAC119C",
+        "frame": {
+          "x": 592,
+          "y": 900,
+          "w": 192,
+          "h": 120
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 200,
+          "w": 192,
+          "h": 120
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_044": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 27,
+          "w": 48,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E75518C987EA869373FF3010E9D8399361F223D7DA21FD9822F8E802DE69AFF1",
+        "hdRgbaSha256": "14900C52D3D31ED0A8B35A68CF5A4B1F7BA9D1B69282CF608BCE5541D27B51EC",
+        "frame": {
+          "x": 792,
+          "y": 900,
+          "w": 192,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 144,
+          "w": 192,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_045": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 27,
+          "w": 48,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "F8BA2253596E0F931DF671374D142C4F3F68ADACF8137216D744961A94FFEA93",
+        "hdRgbaSha256": "F33B48544F63AAE6A3108A7F2F893894EE5FEECD59485311AAD024898B8A445B",
+        "frame": {
+          "x": 992,
+          "y": 900,
+          "w": 192,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 144,
+          "w": 192,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_046": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "0D909AB19A5FD9A33701CD9D08EE7D6840FF683380B9510C5C92E0EF233399B5",
+        "hdRgbaSha256": "76EA0502BB0D3299296C28920436FF1448F81D624DC53B5A2C18C80996A2CF88",
+        "frame": {
+          "x": 1192,
+          "y": 900,
+          "w": 176,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 160,
+          "w": 176,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_047": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 29,
+          "w": 44,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "8AB338CD31947181EBD248FD91114B63D28E376158A8E4E3DF90B55ED3EEE6E7",
+        "hdRgbaSha256": "6CD2E406DBAD2D6294FDA02B2254F40FE52648FCD9A7FFBAA9D97F3AA4FE4447",
+        "frame": {
+          "x": 1376,
+          "y": 900,
+          "w": 176,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 168,
+          "w": 176,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_048": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 27,
+          "w": 42,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D488BC34423B60F9E37193AEE5E803B2815CC5DBF50CA2C6CC255C9FBD13CADA",
+        "hdRgbaSha256": "E7135303E575A671FA1B48DD9C8921E6F2D689E2B98CA3D4254F2B571DE423AC",
+        "frame": {
+          "x": 1560,
+          "y": 900,
+          "w": 168,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 108,
+          "y": 160,
+          "w": 168,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_049": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "2402D3E093CAAE2DE29CA183A4DE7434EB0E3B1D9A9C732ACBC3DEBBCAE4AD84",
+        "hdRgbaSha256": "9E0E28A0FA9BD09FF596E0EF0C790A62C7D41E402F89E7430266F38BA61ABC76",
+        "frame": {
+          "x": 1736,
+          "y": 900,
+          "w": 176,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 160,
+          "w": 176,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_050": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 23,
+          "w": 54,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "A6A3948989DA1E8E852FC914278A89BFEB761DEF1D154C591AB3A09D4042E6C4",
+        "hdRgbaSha256": "36C0E8A45BF3AFDA543913445F12FBF1277DC1A3A1D15A9A21473FA0BF9C7201",
+        "frame": {
+          "x": 8,
+          "y": 1084,
+          "w": 216,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 144,
+          "w": 216,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_051": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 29,
+          "w": 44,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "8AB338CD31947181EBD248FD91114B63D28E376158A8E4E3DF90B55ED3EEE6E7",
+        "hdRgbaSha256": "6CD2E406DBAD2D6294FDA02B2254F40FE52648FCD9A7FFBAA9D97F3AA4FE4447",
+        "frame": {
+          "x": 232,
+          "y": 1084,
+          "w": 176,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 168,
+          "w": 176,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_052": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 22,
+          "y": 29,
+          "w": 48,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "107CF83DA64C68F1D9A99F59EC6C9E2CE21487FE7346BE3CA882C42EA7DC3AAC",
+        "hdRgbaSha256": "A86E8E44746C5CB7A4B9AAE748EC5CA53F58A2E4147F7168DDFE6FF6A38B8E67",
+        "frame": {
+          "x": 416,
+          "y": 1084,
+          "w": 192,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 152,
+          "w": 192,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_053": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 35,
+          "w": 46,
+          "h": 32
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "346336A2EF2B5D99F121AA8DD48CD91ECCE511EDC228DD449D00254CD12BDA2A",
+        "hdRgbaSha256": "93B3241C9DB8EFEB0D4F110F927DA123E2CA347912AD259BABC1FE8F8B981EC0",
+        "frame": {
+          "x": 616,
+          "y": 1084,
+          "w": 184,
+          "h": 128
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 192,
+          "w": 184,
+          "h": 128
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_054": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 33,
+          "w": 46,
+          "h": 34
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "F01EB7F29D7D84C36BA4BAD2A6F2EAE4ED1A60CC2B77C695D91B72F7EC04076D",
+        "hdRgbaSha256": "F0FE674C67D6E86DE1BD2036997C4ECC36D232A9D52B37B1B4D1EA547067EA29",
+        "frame": {
+          "x": 808,
+          "y": 1084,
+          "w": 184,
+          "h": 136
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 184,
+          "w": 184,
+          "h": 136
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_055": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "2402D3E093CAAE2DE29CA183A4DE7434EB0E3B1D9A9C732ACBC3DEBBCAE4AD84",
+        "hdRgbaSha256": "9E0E28A0FA9BD09FF596E0EF0C790A62C7D41E402F89E7430266F38BA61ABC76",
+        "frame": {
+          "x": 1000,
+          "y": 1084,
+          "w": 176,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 160,
+          "w": 176,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_056": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 23,
+          "w": 54,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "A6A3948989DA1E8E852FC914278A89BFEB761DEF1D154C591AB3A09D4042E6C4",
+        "hdRgbaSha256": "36C0E8A45BF3AFDA543913445F12FBF1277DC1A3A1D15A9A21473FA0BF9C7201",
+        "frame": {
+          "x": 1184,
+          "y": 1084,
+          "w": 216,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 144,
+          "w": 216,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_057": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 31,
+          "w": 44,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "8AB1979FF097CB03BAC42428DA7A4FA2831D671FB2810FAD31806C50B8734F84",
+        "hdRgbaSha256": "12C153E265C6ACEE17BFD9F77BA1EDF0E6206464581E272874B4BA5D03865FB0",
+        "frame": {
+          "x": 1408,
+          "y": 1084,
+          "w": 176,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 168,
+          "w": 176,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_058": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 27,
+          "w": 50,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "F601DD23D7C77D6D1F84E2D26FB1A2675DCA58E8DBCCDD03C8E5EA156CD4923D",
+        "hdRgbaSha256": "DA0B2BAC7E1FE58AF02613B186BCAD0B6416ED1AA593F8A48FE39DC75CBDAB2F",
+        "frame": {
+          "x": 1592,
+          "y": 1084,
+          "w": 200,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 160,
+          "w": 200,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_059": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E09F16C1BDFE5AA57BFE5BBE8CA1E77C7F7EADFABBC1D7D0B966F79AF594A033",
+        "hdRgbaSha256": "489DD0860C1B8CF6B5C4F31429C242735429118025D99179822FEAF0AAC554BD",
+        "frame": {
+          "x": 1800,
+          "y": 1084,
+          "w": 176,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 144,
+          "w": 176,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_060": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 33,
+          "w": 56,
+          "h": 24
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "3767518C400F692A46358D084529E438E2DC142498B366A5B813BBEA70C536AB",
+        "hdRgbaSha256": "7BFD04EFF57E15A32E95DD4E757E966B2CE9BCEC897DD7AD0866BEC9B5DD75EB",
+        "frame": {
+          "x": 8,
+          "y": 1268,
+          "w": 224,
+          "h": 96
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 80,
+          "y": 224,
+          "w": 224,
+          "h": 96
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_061": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 21,
+          "w": 44,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "CF54D0850825A30342BB35116BE0BCBAD833FAD2816055A96E3775E0B2DE83C5",
+        "hdRgbaSha256": "1298089220F4101131540371E04C5F9B0D9575E5EBE34AA797B1EA8FF0B9AF78",
+        "frame": {
+          "x": 240,
+          "y": 1268,
+          "w": 176,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 144,
+          "w": 176,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/main/cell_062": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "65975A6877AF70CCABD6954A5C761DE389412227D0B43B74825C0C023728A775",
+        "hdRgbaSha256": "AF31D00C530AC54CDCA91D7CD42E4FE1FC54CF9F4AACEB2DBB6025101CF760F6",
+        "frame": {
+          "x": 424,
+          "y": 1268,
+          "w": 176,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 160,
+          "w": 176,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      }
+    }
+  },
+  "sub": {
+    "sourceSheetSha256": "AF49783A877575D961B557DD2AA6656F83CA6034C4C08B22BE8D87E1E41A241D",
+    "cellCount": 18,
+    "sequenceCount": 13,
+    "frameRecordCount": 18,
+    "atlasPages": [
+      {
+        "page": 0,
+        "image": "sub-atlas-00.png",
+        "data": "sub-atlas-00.json",
+        "width": 1928,
+        "height": 376,
+        "frameCount": 18,
+        "imageSha256": "280FA1F66CB6179868969C9F006F1601C977D160DEA19DEFB0D43493C43B1F40",
+        "dataSha256": "6861F04BF76B5FD73E1EAEBDCED406E6F3983E4E2DF05D2EF379E94BF1240D67"
+      }
+    ],
+    "frameManifest": {
+      "m232_plotmon/sub/cell_000": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "6BD669A1666326D1714F7447F62AB49EE33024B5C8B8FFBD089AD17A9B61DD87",
+        "hdRgbaSha256": "CE5996B2C415052BF8BA603B91FB47E95CB2F9687526776BED795FD246E5BC6E",
+        "frame": {
+          "x": 8,
+          "y": 8,
+          "w": 176,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 160,
+          "w": 176,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/sub/cell_001": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 29,
+          "w": 44,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "888641287999D92ACBB95CCD5F8DFAEDCA302EAEFEE98103FE44E26603DE01FB",
+        "hdRgbaSha256": "B94C181F14B1623ADFD8C2D0CA6B5CD84D2810B64E56336D43FD0E9AA6D37B2F",
+        "frame": {
+          "x": 192,
+          "y": 8,
+          "w": 176,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 168,
+          "w": 176,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/sub/cell_002": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D293B7EC495D017066B16726B2230118E43F343639128F3CFCC3C2515195A3D4",
+        "hdRgbaSha256": "A3F661510C13CF1C017B50BCA650DA0A6B79A165F87E42E60CDA9A20E0F34CBE",
+        "frame": {
+          "x": 376,
+          "y": 8,
+          "w": 176,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 160,
+          "w": 176,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/sub/cell_003": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 29,
+          "w": 44,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "934C5F3D3010112885E4CAC419CC227EE63D977A83CFE27F32A5B19B51C56490",
+        "hdRgbaSha256": "B9E7452D4A0D2A73EB277831821D6A21DD84CE78C438EC4CA9666934EE0551B3",
+        "frame": {
+          "x": 560,
+          "y": 8,
+          "w": 176,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 168,
+          "w": 176,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/sub/cell_004": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 33,
+          "w": 56,
+          "h": 24
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "3767518C400F692A46358D084529E438E2DC142498B366A5B813BBEA70C536AB",
+        "hdRgbaSha256": "7BFD04EFF57E15A32E95DD4E757E966B2CE9BCEC897DD7AD0866BEC9B5DD75EB",
+        "frame": {
+          "x": 744,
+          "y": 8,
+          "w": 224,
+          "h": 96
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 80,
+          "y": 224,
+          "w": 224,
+          "h": 96
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/sub/cell_005": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "CF54D0850825A30342BB35116BE0BCBAD833FAD2816055A96E3775E0B2DE83C5",
+        "hdRgbaSha256": "1298089220F4101131540371E04C5F9B0D9575E5EBE34AA797B1EA8FF0B9AF78",
+        "frame": {
+          "x": 976,
+          "y": 8,
+          "w": 176,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 144,
+          "w": 176,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/sub/cell_006": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 37,
+          "w": 48,
+          "h": 30
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "955DCD428080B549EEFB0EC2D617571D998B838E9ACC4D74F6641C4E93D2D14F",
+        "hdRgbaSha256": "D9D54BBA5B9061A9EEE47BFD205CCD495088BAEA5C93C66FD59D40496FC09AB2",
+        "frame": {
+          "x": 1160,
+          "y": 8,
+          "w": 192,
+          "h": 120
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 200,
+          "w": 192,
+          "h": 120
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/sub/cell_007": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 37,
+          "w": 48,
+          "h": 30
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "151EBE5C138EF8CCBAAE47134C35C70B50F2331A7954D6763BD57D8236CF7D7B",
+        "hdRgbaSha256": "6A92D214A5D08F2240463F139BCE51D5E4D8A3F413F65DFC401BB7D2A28F3460",
+        "frame": {
+          "x": 1360,
+          "y": 8,
+          "w": 192,
+          "h": 120
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 200,
+          "w": 192,
+          "h": 120
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/sub/cell_008": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "0D909AB19A5FD9A33701CD9D08EE7D6840FF683380B9510C5C92E0EF233399B5",
+        "hdRgbaSha256": "76EA0502BB0D3299296C28920436FF1448F81D624DC53B5A2C18C80996A2CF88",
+        "frame": {
+          "x": 1560,
+          "y": 8,
+          "w": 176,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 160,
+          "w": 176,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/sub/cell_009": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 29,
+          "w": 44,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "8AB338CD31947181EBD248FD91114B63D28E376158A8E4E3DF90B55ED3EEE6E7",
+        "hdRgbaSha256": "6CD2E406DBAD2D6294FDA02B2254F40FE52648FCD9A7FFBAA9D97F3AA4FE4447",
+        "frame": {
+          "x": 1744,
+          "y": 8,
+          "w": 176,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 168,
+          "w": 176,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/sub/cell_010": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 27,
+          "w": 42,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D488BC34423B60F9E37193AEE5E803B2815CC5DBF50CA2C6CC255C9FBD13CADA",
+        "hdRgbaSha256": "E7135303E575A671FA1B48DD9C8921E6F2D689E2B98CA3D4254F2B571DE423AC",
+        "frame": {
+          "x": 8,
+          "y": 192,
+          "w": 168,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 108,
+          "y": 160,
+          "w": 168,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/sub/cell_011": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "2402D3E093CAAE2DE29CA183A4DE7434EB0E3B1D9A9C732ACBC3DEBBCAE4AD84",
+        "hdRgbaSha256": "9E0E28A0FA9BD09FF596E0EF0C790A62C7D41E402F89E7430266F38BA61ABC76",
+        "frame": {
+          "x": 184,
+          "y": 192,
+          "w": 176,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 160,
+          "w": 176,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/sub/cell_012": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 23,
+          "w": 54,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "A6A3948989DA1E8E852FC914278A89BFEB761DEF1D154C591AB3A09D4042E6C4",
+        "hdRgbaSha256": "36C0E8A45BF3AFDA543913445F12FBF1277DC1A3A1D15A9A21473FA0BF9C7201",
+        "frame": {
+          "x": 368,
+          "y": 192,
+          "w": 216,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 144,
+          "w": 216,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/sub/cell_013": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 29,
+          "w": 44,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "8AB338CD31947181EBD248FD91114B63D28E376158A8E4E3DF90B55ED3EEE6E7",
+        "hdRgbaSha256": "6CD2E406DBAD2D6294FDA02B2254F40FE52648FCD9A7FFBAA9D97F3AA4FE4447",
+        "frame": {
+          "x": 592,
+          "y": 192,
+          "w": 176,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 168,
+          "w": 176,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/sub/cell_014": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 22,
+          "y": 29,
+          "w": 48,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "107CF83DA64C68F1D9A99F59EC6C9E2CE21487FE7346BE3CA882C42EA7DC3AAC",
+        "hdRgbaSha256": "A86E8E44746C5CB7A4B9AAE748EC5CA53F58A2E4147F7168DDFE6FF6A38B8E67",
+        "frame": {
+          "x": 776,
+          "y": 192,
+          "w": 192,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 152,
+          "w": 192,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/sub/cell_015": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 35,
+          "w": 46,
+          "h": 32
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "346336A2EF2B5D99F121AA8DD48CD91ECCE511EDC228DD449D00254CD12BDA2A",
+        "hdRgbaSha256": "93B3241C9DB8EFEB0D4F110F927DA123E2CA347912AD259BABC1FE8F8B981EC0",
+        "frame": {
+          "x": 976,
+          "y": 192,
+          "w": 184,
+          "h": 128
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 192,
+          "w": 184,
+          "h": 128
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/sub/cell_016": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 44,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E09F16C1BDFE5AA57BFE5BBE8CA1E77C7F7EADFABBC1D7D0B966F79AF594A033",
+        "hdRgbaSha256": "489DD0860C1B8CF6B5C4F31429C242735429118025D99179822FEAF0AAC554BD",
+        "frame": {
+          "x": 1168,
+          "y": 192,
+          "w": 176,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 144,
+          "w": 176,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m232_plotmon/sub/cell_017": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 33,
+          "w": 56,
+          "h": 24
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "3767518C400F692A46358D084529E438E2DC142498B366A5B813BBEA70C536AB",
+        "hdRgbaSha256": "7BFD04EFF57E15A32E95DD4E757E966B2CE9BCEC897DD7AD0866BEC9B5DD75EB",
+        "frame": {
+          "x": 1352,
+          "y": 192,
+          "w": 224,
+          "h": 96
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 80,
+          "y": 224,
+          "w": 224,
+          "h": 96
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      }
+    }
+  },
+  "productionStatus": "PIXEL_FAITHFUL_HD4X_FUNCTIONAL_BASELINE",
+  "runtimeEligible": false,
+  "shippingReady": false
+}

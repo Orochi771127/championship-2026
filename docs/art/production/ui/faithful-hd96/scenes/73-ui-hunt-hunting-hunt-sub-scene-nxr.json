@@ -1,0 +1,1656 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 73,
+  "scenePath": "ui/hunt/hunting/hunt_sub_scene.nxr",
+  "category": "Hunt HUD",
+  "overlayOwner": "OVL0",
+  "sourceEvidence": {
+    "fileId": 6315,
+    "fileName": "hunt_sub_scene.nxr",
+    "sha256": "c89bf24e9fe6c054e161091e20e32f0716b3a8d1c106b69c46f787f525664524",
+    "overlayMappingConfidence": "SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "SUB",
+    "roleEvidence": "FILENAME_HEURISTIC"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [
+    {
+      "resourceIndex": 0,
+      "resourceName": "hunting_obj_sub",
+      "cellCount": 28,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "ui/hunt/hunting/hunting_obj_sub.ncer",
+        "nanr": "ui/hunt/hunting/hunting_obj_sub.nanr",
+        "ncgr": "ui/hunt/hunting/hunting_obj_sub.ncgr",
+        "ncbr": null,
+        "nclr": "ui/hunt/hunting/hunting_obj_sub.nclr",
+        "nscr": null
+      },
+      "spriteWitness": "docs/art/production/ui/faithful-hd96/sprite-cell-witnesses-4x/ui__hunt__hunting__hunting_obj_sub__cells.png",
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "map_marker0",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 260,
+        "y": 180
+      },
+      "portraitProjection": {
+        "x": 1096.875,
+        "y": 1719.375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 1,
+      "name": "unnamed0005",
+      "resourceIndex": 0,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 42,
+        "y": 168
+      },
+      "portraitProjection": {
+        "x": 177.1875,
+        "y": 1668.75
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 2,
+      "name": "remain_time0",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 76,
+        "y": 169
+      },
+      "portraitProjection": {
+        "x": 320.625,
+        "y": 1672.9688
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 3,
+      "name": "remain_time1",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 84,
+        "y": 169
+      },
+      "portraitProjection": {
+        "x": 354.375,
+        "y": 1672.9688
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 4,
+      "name": "unnamed0008",
+      "resourceIndex": 0,
+      "cellIndex": 9,
+      "sourcePosition": {
+        "x": 91,
+        "y": 169
+      },
+      "portraitProjection": {
+        "x": 383.9062,
+        "y": 1672.9688
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 5,
+      "name": "remain_time2",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 100,
+        "y": 169
+      },
+      "portraitProjection": {
+        "x": 421.875,
+        "y": 1672.9688
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 6,
+      "name": "remain_time3",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 108,
+        "y": 169
+      },
+      "portraitProjection": {
+        "x": 455.625,
+        "y": 1672.9688
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 7,
+      "name": "mc_cur0",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 186,
+        "y": 165
+      },
+      "portraitProjection": {
+        "x": 784.6875,
+        "y": 1656.0938
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 8,
+      "name": "mc_cur1",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 194,
+        "y": 165
+      },
+      "portraitProjection": {
+        "x": 818.4375,
+        "y": 1656.0938
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 9,
+      "name": "mc_cur_g",
+      "resourceIndex": 0,
+      "cellIndex": 2,
+      "sourcePosition": {
+        "x": 202,
+        "y": 171
+      },
+      "portraitProjection": {
+        "x": 852.1875,
+        "y": 1681.4062
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 10,
+      "name": "mc_div",
+      "resourceIndex": 0,
+      "cellIndex": 10,
+      "sourcePosition": {
+        "x": 210,
+        "y": 165
+      },
+      "portraitProjection": {
+        "x": 885.9375,
+        "y": 1656.0938
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 11,
+      "name": "mc_max0",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 217,
+        "y": 165
+      },
+      "portraitProjection": {
+        "x": 915.4688,
+        "y": 1656.0938
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 12,
+      "name": "mc_max1",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 225,
+        "y": 165
+      },
+      "portraitProjection": {
+        "x": 949.2188,
+        "y": 1656.0938
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 13,
+      "name": "mc_max_g",
+      "resourceIndex": 0,
+      "cellIndex": 2,
+      "sourcePosition": {
+        "x": 233,
+        "y": 171
+      },
+      "portraitProjection": {
+        "x": 982.9688,
+        "y": 1681.4062
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 14,
+      "name": "remain_icon0",
+      "resourceIndex": 0,
+      "cellIndex": 5,
+      "sourcePosition": {
+        "x": 6,
+        "y": 137
+      },
+      "portraitProjection": {
+        "x": 25.3125,
+        "y": 1537.9688
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 15,
+      "name": "remain_icon1",
+      "resourceIndex": 0,
+      "cellIndex": 6,
+      "sourcePosition": {
+        "x": 45,
+        "y": 137
+      },
+      "portraitProjection": {
+        "x": 189.8438,
+        "y": 1537.9688
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 16,
+      "name": "remain_icon2",
+      "resourceIndex": 0,
+      "cellIndex": 7,
+      "sourcePosition": {
+        "x": 85,
+        "y": 137
+      },
+      "portraitProjection": {
+        "x": 358.5938,
+        "y": 1537.9688
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 17,
+      "name": "remain_icon3",
+      "resourceIndex": 0,
+      "cellIndex": 8,
+      "sourcePosition": {
+        "x": 123,
+        "y": 137
+      },
+      "portraitProjection": {
+        "x": 518.9062,
+        "y": 1537.9688
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 18,
+      "name": "remain_number00",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 25,
+        "y": 142
+      },
+      "portraitProjection": {
+        "x": 105.4688,
+        "y": 1559.0625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 19,
+      "name": "remain_number01",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 33,
+        "y": 142
+      },
+      "portraitProjection": {
+        "x": 139.2188,
+        "y": 1559.0625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 20,
+      "name": "remain_number10",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 64,
+        "y": 142
+      },
+      "portraitProjection": {
+        "x": 270.0,
+        "y": 1559.0625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 21,
+      "name": "remain_number11",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 72,
+        "y": 142
+      },
+      "portraitProjection": {
+        "x": 303.75,
+        "y": 1559.0625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 22,
+      "name": "remain_number20",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 103,
+        "y": 142
+      },
+      "portraitProjection": {
+        "x": 434.5312,
+        "y": 1559.0625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 23,
+      "name": "remain_number21",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 111,
+        "y": 142
+      },
+      "portraitProjection": {
+        "x": 468.2812,
+        "y": 1559.0625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 24,
+      "name": "remain_number30",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 142,
+        "y": 142
+      },
+      "portraitProjection": {
+        "x": 599.0625,
+        "y": 1559.0625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 25,
+      "name": "remain_number31",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 150,
+        "y": 142
+      },
+      "portraitProjection": {
+        "x": 632.8125,
+        "y": 1559.0625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 26,
+      "name": "map_marker1",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 268,
+        "y": 180
+      },
+      "portraitProjection": {
+        "x": 1130.625,
+        "y": 1719.375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 27,
+      "name": "map_marker2",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 276,
+        "y": 180
+      },
+      "portraitProjection": {
+        "x": 1164.375,
+        "y": 1719.375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 28,
+      "name": "map_marker3",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 284,
+        "y": 180
+      },
+      "portraitProjection": {
+        "x": 1198.125,
+        "y": 1719.375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 29,
+      "name": "map_marker4",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 291,
+        "y": 180
+      },
+      "portraitProjection": {
+        "x": 1227.6562,
+        "y": 1719.375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 30,
+      "name": "map_marker5",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 298,
+        "y": 180
+      },
+      "portraitProjection": {
+        "x": 1257.1875,
+        "y": 1719.375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 31,
+      "name": "map_marker6",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 260,
+        "y": 188
+      },
+      "portraitProjection": {
+        "x": 1096.875,
+        "y": 1753.125
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 32,
+      "name": "map_marker7",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 268,
+        "y": 188
+      },
+      "portraitProjection": {
+        "x": 1130.625,
+        "y": 1753.125
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 33,
+      "name": "map_marker8",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 276,
+        "y": 188
+      },
+      "portraitProjection": {
+        "x": 1164.375,
+        "y": 1753.125
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 34,
+      "name": "map_marker9",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 284,
+        "y": 188
+      },
+      "portraitProjection": {
+        "x": 1198.125,
+        "y": 1753.125
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 35,
+      "name": "map_marker10",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 291,
+        "y": 188
+      },
+      "portraitProjection": {
+        "x": 1227.6562,
+        "y": 1753.125
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 36,
+      "name": "map_marker11",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 298,
+        "y": 188
+      },
+      "portraitProjection": {
+        "x": 1257.1875,
+        "y": 1753.125
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 37,
+      "name": "map_inner_frame",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 15,
+        "y": 63
+      },
+      "portraitProjection": {
+        "x": 63.2812,
+        "y": 1225.7812
+      },
+      "params": [
+        0,
+        0,
+        2.049999952316284,
+        1.5499999523162842
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 38,
+      "name": "digimon_image_s",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 123,
+        "y": 74
+      },
+      "portraitProjection": {
+        "x": 518.9062,
+        "y": 1272.1875
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 39,
+      "name": "digimon_name",
+      "resourceIndex": -1,
+      "cellIndex": 2,
+      "sourcePosition": {
+        "x": 235,
+        "y": 115
+      },
+      "portraitProjection": {
+        "x": 991.4062,
+        "y": 1445.1562
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 40,
+      "name": "nick_name",
+      "resourceIndex": -1,
+      "cellIndex": 2,
+      "sourcePosition": {
+        "x": 255,
+        "y": 129
+      },
+      "portraitProjection": {
+        "x": 1075.7812,
+        "y": 1504.2188
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 41,
+      "name": "gen_title",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 177,
+        "y": 27
+      },
+      "portraitProjection": {
+        "x": 746.7188,
+        "y": 1073.9062
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 42,
+      "name": "type_title",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 177,
+        "y": 45
+      },
+      "portraitProjection": {
+        "x": 746.7188,
+        "y": 1149.8438
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 43,
+      "name": "hp_title",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 177,
+        "y": 63
+      },
+      "portraitProjection": {
+        "x": 746.7188,
+        "y": 1225.7812
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 44,
+      "name": "mind_title",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 177,
+        "y": 81
+      },
+      "portraitProjection": {
+        "x": 746.7188,
+        "y": 1301.7188
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 45,
+      "name": "size_title",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 177,
+        "y": 99
+      },
+      "portraitProjection": {
+        "x": 746.7188,
+        "y": 1377.6562
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 46,
+      "name": "gen",
+      "resourceIndex": -1,
+      "cellIndex": 2,
+      "sourcePosition": {
+        "x": 255,
+        "y": 27
+      },
+      "portraitProjection": {
+        "x": 1075.7812,
+        "y": 1073.9062
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 47,
+      "name": "type",
+      "resourceIndex": -1,
+      "cellIndex": 2,
+      "sourcePosition": {
+        "x": 255,
+        "y": 45
+      },
+      "portraitProjection": {
+        "x": 1075.7812,
+        "y": 1149.8438
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 48,
+      "name": "hp",
+      "resourceIndex": -1,
+      "cellIndex": 2,
+      "sourcePosition": {
+        "x": 255,
+        "y": 63
+      },
+      "portraitProjection": {
+        "x": 1075.7812,
+        "y": 1225.7812
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 49,
+      "name": "mind",
+      "resourceIndex": -1,
+      "cellIndex": 2,
+      "sourcePosition": {
+        "x": 255,
+        "y": 82
+      },
+      "portraitProjection": {
+        "x": 1075.7812,
+        "y": 1305.9375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 50,
+      "name": "size",
+      "resourceIndex": -1,
+      "cellIndex": 2,
+      "sourcePosition": {
+        "x": 255,
+        "y": 99
+      },
+      "portraitProjection": {
+        "x": 1075.7812,
+        "y": 1377.6562
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 51,
+      "name": "align_node",
+      "resourceIndex": 0,
+      "cellIndex": 12,
+      "sourcePosition": {
+        "x": 246,
+        "y": 122
+      },
+      "portraitProjection": {
+        "x": 1037.8125,
+        "y": 1474.6875
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 52,
+      "name": "map_marker12",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 309,
+        "y": 180
+      },
+      "portraitProjection": {
+        "x": 1303.5938,
+        "y": 1719.375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 53,
+      "name": "map_marker13",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 316,
+        "y": 180
+      },
+      "portraitProjection": {
+        "x": 1333.125,
+        "y": 1719.375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 54,
+      "name": "map_marker14",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 323,
+        "y": 180
+      },
+      "portraitProjection": {
+        "x": 1362.6562,
+        "y": 1719.375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 55,
+      "name": "map_marker15",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 330,
+        "y": 180
+      },
+      "portraitProjection": {
+        "x": 1392.1875,
+        "y": 1719.375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 56,
+      "name": "map_marker16",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 337,
+        "y": 180
+      },
+      "portraitProjection": {
+        "x": 1421.7188,
+        "y": 1719.375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 57,
+      "name": "map_marker17",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 344,
+        "y": 180
+      },
+      "portraitProjection": {
+        "x": 1451.25,
+        "y": 1719.375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 58,
+      "name": "map_marker18",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 309,
+        "y": 188
+      },
+      "portraitProjection": {
+        "x": 1303.5938,
+        "y": 1753.125
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 59,
+      "name": "map_marker19",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 316,
+        "y": 188
+      },
+      "portraitProjection": {
+        "x": 1333.125,
+        "y": 1753.125
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 60,
+      "name": "map_marker20",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 323,
+        "y": 188
+      },
+      "portraitProjection": {
+        "x": 1362.6562,
+        "y": 1753.125
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 61,
+      "name": "map_marker21",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 330,
+        "y": 188
+      },
+      "portraitProjection": {
+        "x": 1392.1875,
+        "y": 1753.125
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 62,
+      "name": "map_marker22",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 337,
+        "y": 188
+      },
+      "portraitProjection": {
+        "x": 1421.7188,
+        "y": 1753.125
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 63,
+      "name": "map_marker23",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 344,
+        "y": 188
+      },
+      "portraitProjection": {
+        "x": 1451.25,
+        "y": 1753.125
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 64,
+      "name": "align_text",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 238,
+        "y": 117
+      },
+      "portraitProjection": {
+        "x": 1004.0625,
+        "y": 1453.5938
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 65,
+      "name": "remain_icon_cover3",
+      "resourceIndex": 0,
+      "cellIndex": 11,
+      "sourcePosition": {
+        "x": 119,
+        "y": 134
+      },
+      "portraitProjection": {
+        "x": 502.0312,
+        "y": 1525.3125
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 66,
+      "name": "remain_icon_cover2",
+      "resourceIndex": 0,
+      "cellIndex": 11,
+      "sourcePosition": {
+        "x": 80,
+        "y": 134
+      },
+      "portraitProjection": {
+        "x": 337.5,
+        "y": 1525.3125
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 67,
+      "name": "remain_icon_cover1",
+      "resourceIndex": 0,
+      "cellIndex": 11,
+      "sourcePosition": {
+        "x": 41,
+        "y": 134
+      },
+      "portraitProjection": {
+        "x": 172.9688,
+        "y": 1525.3125
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 68,
+      "name": "remain_icon_cover0",
+      "resourceIndex": 0,
+      "cellIndex": 11,
+      "sourcePosition": {
+        "x": 2,
+        "y": 135
+      },
+      "portraitProjection": {
+        "x": 8.4375,
+        "y": 1529.5312
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 69,
+      "name": "rader_disp_frame",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 32,
+        "y": 74
+      },
+      "portraitProjection": {
+        "x": 135.0,
+        "y": 1272.1875
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 70,
+      "name": "graph",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 214,
+        "y": 164
+      },
+      "portraitProjection": {
+        "x": 902.8125,
+        "y": 1651.875
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 71,
+      "name": "map_frame",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 3,
+        "y": 47
+      },
+      "portraitProjection": {
+        "x": 12.6562,
+        "y": 1158.2812
+      },
+      "params": [
+        2,
+        0,
+        3.5,
+        3.5
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    }
+  ],
+  "dynamicVirtualNodeCount": 17,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

@@ -16,24 +16,55 @@ import { deepFreeze } from "../contracts/championshipContracts.js";
 
 export const PRESENTATION_PACK_IDS = deepFreeze({
   TEMPORARY_PROTOTYPE: "championship:pack:temporary-prototype",
-  FAITHFUL_ORIGINAL: "championship:pack:faithful-original"
+  FAITHFUL_ORIGINAL: "championship:pack:faithful-original",
+  CAT_DOG_FUTURE_SKIN: "championship:pack:cat-dog-future-skin"
 });
 
 export const PRESENTATION_SLOT_IDS = deepFreeze([
   "raisingHome",
+  "characterRoster",
+  "uiHud",
+  "cageFields",
   "huntField",
-  "gateSelect"
+  "battleFields",
+  "vfx",
+  "gateSelect",
+  "packaging"
 ]);
+
+export const PRESENTATION_GAMEPLAY_INVARIANTS = deepFreeze([
+  "simulation_entity_ids",
+  "damage_or_battle_resolution",
+  "ai_decisions",
+  "capture_rules_or_probabilities",
+  "collision_or_walkability_truth",
+  "raising_rules",
+  "progression_or_rewards",
+  "economy",
+  "save_schema_or_saved_truth"
+]);
+
+const emptyExtendedBinds = () => ({
+  characterRoster: null,
+  uiHud: null,
+  cageFields: null,
+  battleFields: null,
+  vfx: null,
+  packaging: null
+});
 
 const PACKS = {
   [PRESENTATION_PACK_IDS.TEMPORARY_PROTOTYPE]: {
     packId: PRESENTATION_PACK_IDS.TEMPORARY_PROTOTYPE,
     role: "CURRENT_RUNTIME",
     visualFamily: "PROTOTYPE_PLACEHOLDER",
+    presentationOnly: true,
+    changesSimulation: false,
     runtimeEligible: true,
     shippingReady: false,
     binds: {
       raisingHome: "art:raising_home:int-rh2:temporary-presentation-bundle",
+      ...emptyExtendedBinds(),
       huntField: "art:hunt_field:vs2:temporary-signal-grove-kit",
       gateSelect: "art:gate_select:vs2-r1:original-created-world"
     }
@@ -42,19 +73,38 @@ const PACKS = {
     packId: PRESENTATION_PACK_IDS.FAITHFUL_ORIGINAL,
     role: "DEFAULT_PUBLIC_SKIN",
     visualFamily: "LICENSED_FAITHFUL_HD",
+    presentationOnly: true,
+    changesSimulation: false,
     runtimeEligible: false,
     shippingReady: false,
     binds: {
       // HD Cage / Hunt candidates exist as art-production files, not as
       // runtime-registered bundles. Leaving the slots unbound is honest.
       raisingHome: null,
+      ...emptyExtendedBinds(),
       huntField: null,
-      gateSelect: "art:gate_select:vs2-r1:original-created-world"
+      gateSelect: null
+    }
+  },
+  [PRESENTATION_PACK_IDS.CAT_DOG_FUTURE_SKIN]: {
+    packId: PRESENTATION_PACK_IDS.CAT_DOG_FUTURE_SKIN,
+    role: "DEFERRED_ALTERNATE_SKIN",
+    visualFamily: "CAT_DOG_AND_PRESERVED_OTHER_SPECIES",
+    presentationOnly: true,
+    changesSimulation: false,
+    runtimeEligible: false,
+    shippingReady: false,
+    binds: {
+      raisingHome: null,
+      ...emptyExtendedBinds(),
+      huntField: null,
+      gateSelect: null
     }
   }
 };
 
 export const ACTIVE_PRESENTATION_PACK_ID = PRESENTATION_PACK_IDS.TEMPORARY_PROTOTYPE;
+export const INTERNAL_DEFAULT_PRESENTATION_PACK_ID = PRESENTATION_PACK_IDS.FAITHFUL_ORIGINAL;
 
 export function listPresentationPacks() {
   return deepFreeze(Object.values(PACKS));

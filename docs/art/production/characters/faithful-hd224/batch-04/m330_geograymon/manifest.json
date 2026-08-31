@@ -1,0 +1,2670 @@
+{
+  "ordinal": 97,
+  "entityId": "m330_geograymon",
+  "kind": "digimon",
+  "preview": "cell-000-main-hd4x.png",
+  "previewSha256": "D65A974D4281F43216292C3958DE5C4ABA804D98FB84A71B825CD86FE75B0FEB",
+  "runtime": "runtime.json",
+  "runtimeSha256": "0695256CE442527033EB451273D0779730240EB0715609488C841B1CBF92C730",
+  "main": {
+    "sourceSheetSha256": "1613C81BDBABE216E59F991CF7197D43D4619BE0D5ADFB8750E2A327F5316108",
+    "cellCount": 59,
+    "sequenceCount": 40,
+    "frameRecordCount": 65,
+    "atlasPages": [
+      {
+        "page": 0,
+        "image": "main-atlas-00.png",
+        "data": "main-atlas-00.json",
+        "width": 1992,
+        "height": 1656,
+        "frameCount": 59,
+        "imageSha256": "57B1B6ECFA392589B756407E44E5F7911DA4D2F16B3522A381508E42F79D091E",
+        "dataSha256": "AD7C84DE39B7E03D4CB08BEBBCE6EB6F94C1998B9FEF2532F8BE3442A6F0C600"
+      }
+    ],
+    "frameManifest": {
+      "m330_geograymon/main/cell_000": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 23,
+          "w": 48,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D142BFE22435E687628D557E4C300895D242E569EA002033D2BBA3DE76593641",
+        "hdRgbaSha256": "9FC66CB3868D64A2C91D715C213E3ECF9C6C5F0BE9169600099E72EFAD504775",
+        "frame": {
+          "x": 8,
+          "y": 8,
+          "w": 192,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 112,
+          "w": 192,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_001": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 52,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "F227C42F44D217E0ABABC18816B4777426B002163079EC02B279CF6A89A40ADA",
+        "hdRgbaSha256": "B1E65498031E68A9C6C1CA54AD4F39240DB6530B7AA27EC5D1645222C406F1CD",
+        "frame": {
+          "x": 208,
+          "y": 8,
+          "w": 208,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 88,
+          "y": 120,
+          "w": 208,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_002": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 23,
+          "w": 48,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "855CDCCE92BBCDA7358CCAD1AFF522B95DCE0641F15E4D26F3F1CE743A71699F",
+        "hdRgbaSha256": "8C74E793A5E12A5B6A1A75F7F45E3479F257F35D4ADF571D3A3BFF31A5CA5E1F",
+        "frame": {
+          "x": 424,
+          "y": 8,
+          "w": 192,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 112,
+          "w": 192,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_003": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 52,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "0455836D9B6E537ABA2C0CFD9816620C2188DD89216E9C16B299505A78EE3BD4",
+        "hdRgbaSha256": "F2A224E1CDCFCA83F31112326B16734FA567C63545BADFF936FA5711B653B936",
+        "frame": {
+          "x": 624,
+          "y": 8,
+          "w": 208,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 88,
+          "y": 120,
+          "w": 208,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_004": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 23,
+          "w": 48,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D142BFE22435E687628D557E4C300895D242E569EA002033D2BBA3DE76593641",
+        "hdRgbaSha256": "9FC66CB3868D64A2C91D715C213E3ECF9C6C5F0BE9169600099E72EFAD504775",
+        "frame": {
+          "x": 840,
+          "y": 8,
+          "w": 192,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 112,
+          "w": 192,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_005": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 19,
+          "w": 48,
+          "h": 56
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "EB165FE83994ABDC52296C55385278479EE90A5ED2FA902877771CFD48FBD3A1",
+        "hdRgbaSha256": "89238E5A7F644ECD941EB6801910AA92CF2FC9313DA561EFDCBC414E00865E8E",
+        "frame": {
+          "x": 1040,
+          "y": 8,
+          "w": 192,
+          "h": 224
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 96,
+          "w": 192,
+          "h": 224
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_006": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 19,
+          "w": 52,
+          "h": 56
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "AC39091B39F9B397AFF41F0132C4F59DB82990CD374CB11AAF1DD44E9E4111EC",
+        "hdRgbaSha256": "1691C37CC8AA16DBCC3C158EB8549FB29E4602EF0BA78A4CCC32E7E0F4D283CB",
+        "frame": {
+          "x": 1240,
+          "y": 8,
+          "w": 208,
+          "h": 224
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 88,
+          "y": 96,
+          "w": 208,
+          "h": 224
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_007": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 23,
+          "w": 72,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E92FBFA2044077D20E5780348991C396529FFE09204324ED19D6E04AE152B821",
+        "hdRgbaSha256": "7BE72744977A590842873B85C10D99E10822B982597D78FAED2EA15C61ED4933",
+        "frame": {
+          "x": 1456,
+          "y": 8,
+          "w": 288,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 48,
+          "y": 120,
+          "w": 288,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_008": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 23,
+          "w": 56,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E720C5786EEE30F194A6D3D4C4538D5FAB20D25CCD880201B53BFFA1F897B98C",
+        "hdRgbaSha256": "686B39B24FFD1E60941BE255DB5EC1C32CBCF597295E65E82E6A1A82CB75AD09",
+        "frame": {
+          "x": 1752,
+          "y": 8,
+          "w": 224,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 80,
+          "y": 112,
+          "w": 224,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_009": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 19,
+          "w": 48,
+          "h": 56
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "9ADEBD54C9AB712EDDA1A98BAA23B3540A0723ED4543AAEABBBB8BB6304B25A8",
+        "hdRgbaSha256": "92B3B3FC66390ED2611D65AF3B4F9902176918EF81E7CBB75AD3B7005C81D94D",
+        "frame": {
+          "x": 8,
+          "y": 240,
+          "w": 192,
+          "h": 224
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 96,
+          "w": 192,
+          "h": 224
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_010": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 14,
+          "y": 25,
+          "w": 70,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "C76944DF8899BB8C4C6833E37ABC2E1A98B3DF5C0E4560546ECF95307FFE2A1E",
+        "hdRgbaSha256": "2F089083CAAF2A1E82834EBC05B8261B2129BA252D07659419D297695E9C8A1C",
+        "frame": {
+          "x": 208,
+          "y": 240,
+          "w": 280,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 52,
+          "y": 120,
+          "w": 280,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_011": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 23,
+          "w": 54,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "942894EA044D792AF709BB57E3FDD1BA346AE4F9DCEEBF2322C5DF2E35952B1A",
+        "hdRgbaSha256": "E75A3D322D56403D1FEAE52DAC4F1D611EB1A7A12447DD141517EEDB1BC89342",
+        "frame": {
+          "x": 496,
+          "y": 240,
+          "w": 216,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 144,
+          "w": 216,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_012": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 8,
+          "y": 23,
+          "w": 68,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "1D5766B7D3A84177068BD3EE1C58F30C18538031C8375946768BFF973BF1A708",
+        "hdRgbaSha256": "AC505AAF2427C44B3A5909AC31687F7A1989EED05CCCBD72968C4722C6F01FEE",
+        "frame": {
+          "x": 720,
+          "y": 240,
+          "w": 272,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 56,
+          "y": 112,
+          "w": 272,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_013": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 19,
+          "w": 48,
+          "h": 56
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "9ADEBD54C9AB712EDDA1A98BAA23B3540A0723ED4543AAEABBBB8BB6304B25A8",
+        "hdRgbaSha256": "92B3B3FC66390ED2611D65AF3B4F9902176918EF81E7CBB75AD3B7005C81D94D",
+        "frame": {
+          "x": 1000,
+          "y": 240,
+          "w": 192,
+          "h": 224
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 96,
+          "w": 192,
+          "h": 224
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_014": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 14,
+          "y": 25,
+          "w": 70,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "C76944DF8899BB8C4C6833E37ABC2E1A98B3DF5C0E4560546ECF95307FFE2A1E",
+        "hdRgbaSha256": "2F089083CAAF2A1E82834EBC05B8261B2129BA252D07659419D297695E9C8A1C",
+        "frame": {
+          "x": 1200,
+          "y": 240,
+          "w": 280,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 52,
+          "y": 120,
+          "w": 280,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_015": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 23,
+          "w": 54,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "942894EA044D792AF709BB57E3FDD1BA346AE4F9DCEEBF2322C5DF2E35952B1A",
+        "hdRgbaSha256": "E75A3D322D56403D1FEAE52DAC4F1D611EB1A7A12447DD141517EEDB1BC89342",
+        "frame": {
+          "x": 1488,
+          "y": 240,
+          "w": 216,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 144,
+          "w": 216,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_016": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 8,
+          "y": 23,
+          "w": 68,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "1D5766B7D3A84177068BD3EE1C58F30C18538031C8375946768BFF973BF1A708",
+        "hdRgbaSha256": "AC505AAF2427C44B3A5909AC31687F7A1989EED05CCCBD72968C4722C6F01FEE",
+        "frame": {
+          "x": 1712,
+          "y": 240,
+          "w": 272,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 56,
+          "y": 112,
+          "w": 272,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_017": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 17,
+          "w": 52,
+          "h": 54
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E07E2CC8FED9FAE17CABFEE57127594AFFE4571FFA69B4731B4A35F0101DEC1F",
+        "hdRgbaSha256": "9AA52523EBC6C4CCA8158C6A791126CB9872824EC70022705EEEEC3FC6378F9E",
+        "frame": {
+          "x": 8,
+          "y": 472,
+          "w": 208,
+          "h": 216
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 88,
+          "y": 104,
+          "w": 208,
+          "h": 216
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_018": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 23,
+          "w": 52,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "FA0577E400C44C54626A5AAD77699568C164E4464017C9429C68ED9A646C5C27",
+        "hdRgbaSha256": "B14B69C8B805F91D2DBFEAE9B9CC187A3AC49F987C4A49C28DBEF5E1DA8C93E9",
+        "frame": {
+          "x": 224,
+          "y": 472,
+          "w": 208,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 88,
+          "y": 112,
+          "w": 208,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_019": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 50,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "B3D4964A382C5CA84ED1E431F2E6DD37427D1898A1FFF0B7DD085EF4698CF562",
+        "hdRgbaSha256": "A843FBE3BA2093D137BC17233BA44982D5394BFA6752A420EF6F1FD9C7646FEE",
+        "frame": {
+          "x": 440,
+          "y": 472,
+          "w": 200,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 120,
+          "w": 200,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_020": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 23,
+          "w": 48,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D62D5FAC85DF68E07B92FD17CA228C0874520E336C7BC7E0F67AD686C8EE6A8E",
+        "hdRgbaSha256": "3CDC42ACAC05360FD7048255AA57D7D86D84DED4E569935B93FE07099EDC3B9B",
+        "frame": {
+          "x": 648,
+          "y": 472,
+          "w": 192,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 112,
+          "w": 192,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_021": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 18,
+          "y": 33,
+          "w": 60,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "07A388ADDEA7C5E205B565BFB77240395BC85BE11AAD6C0C57AC16600121DDF9",
+        "hdRgbaSha256": "24B05DAC3665D642E71437BB34523D89232278BC07131413BEF31281CFD24BA9",
+        "frame": {
+          "x": 848,
+          "y": 472,
+          "w": 240,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 72,
+          "y": 168,
+          "w": 240,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_022": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 19,
+          "w": 48,
+          "h": 56
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "7B5D510B18484CAF3307B6A2F915694D5A90BF7EE3BE5A3EC3B07E67AC108609",
+        "hdRgbaSha256": "59412E931E2C6DAB3496947F139B9C22040B36CCF185C44D959DB7CE87A64627",
+        "frame": {
+          "x": 1096,
+          "y": 472,
+          "w": 192,
+          "h": 224
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 96,
+          "w": 192,
+          "h": 224
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_023": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 52,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E826CA9300AD30C425AC5CF20EDB088C8B3BB8B1F3C2DCDAB10A75A2A180096E",
+        "hdRgbaSha256": "EB2D01784414FEABB12AF73EF7DF03961D764D6F1E943612B71BCA578D0BA9B1",
+        "frame": {
+          "x": 1296,
+          "y": 472,
+          "w": 208,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 88,
+          "y": 120,
+          "w": 208,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_024": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 18,
+          "y": 33,
+          "w": 60,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "F7D67331C23CB35DDBA88374D6572D9B2317981C0E2824C1734CDF92DCC62A7F",
+        "hdRgbaSha256": "F4D8D390F17640F654D57626A34DE6689C7D376730D1AF1F6569A31F6C10A491",
+        "frame": {
+          "x": 1512,
+          "y": 472,
+          "w": 240,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 72,
+          "y": 168,
+          "w": 240,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_025": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 23,
+          "w": 48,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "A6ED9D3DC4B9813653B4E7022E7D07CF9DD19F3799E9E581BFE648889FD63472",
+        "hdRgbaSha256": "5ECB8549CA0D61936D4FB24208CECABD688B2519CF54B7EAB49B6AB362072DC7",
+        "frame": {
+          "x": 1760,
+          "y": 472,
+          "w": 192,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 112,
+          "w": 192,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_026": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 52,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "56173A7DD951E2B84C7353E6436DA7B17E4D84470123CBAAD0FCD152C1C9A39F",
+        "hdRgbaSha256": "A18E1D2CC21A5E71BCC39CD5B5357BB674B34E4779FF9A29D2334D89AA3B4B36",
+        "frame": {
+          "x": 8,
+          "y": 704,
+          "w": 208,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 88,
+          "y": 120,
+          "w": 208,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_027": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 23,
+          "w": 48,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "37E1FE0B86C864CE60CE109F2951F19F35A24EEE13EA62CA67F1FAA5ED90F786",
+        "hdRgbaSha256": "4AE9B7D65EB9AD4BDE0FC8C5F664DCD76D7B187FA6485EA2649415391CA5D4E4",
+        "frame": {
+          "x": 224,
+          "y": 704,
+          "w": 192,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 112,
+          "w": 192,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_028": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 52,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E0B8833B445C444DF66D99DAB0D7F1FDA6C8FED359DF367D929A60862E92F883",
+        "hdRgbaSha256": "D242F35CC54392AD0C9A3E5978106568568B40141D0B78DF7529EE5723DEB245",
+        "frame": {
+          "x": 424,
+          "y": 704,
+          "w": 208,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 88,
+          "y": 120,
+          "w": 208,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_029": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 23,
+          "w": 48,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "A6ED9D3DC4B9813653B4E7022E7D07CF9DD19F3799E9E581BFE648889FD63472",
+        "hdRgbaSha256": "5ECB8549CA0D61936D4FB24208CECABD688B2519CF54B7EAB49B6AB362072DC7",
+        "frame": {
+          "x": 640,
+          "y": 704,
+          "w": 192,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 112,
+          "w": 192,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_030": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 19,
+          "w": 48,
+          "h": 56
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "4AB0775FFDC32926ED2A235931A885C0AB005280D81461EF055AF39217D185FB",
+        "hdRgbaSha256": "35E73AC9286EF216553474291E7627A3421979F14B33269410A6C2BEA999F3AC",
+        "frame": {
+          "x": 840,
+          "y": 704,
+          "w": 192,
+          "h": 224
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 96,
+          "w": 192,
+          "h": 224
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_031": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 19,
+          "w": 52,
+          "h": 56
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "024271C34CF3BFA7B0404E1B4BDEE2A57643AEA131F8E09625BADF3F05FBB825",
+        "hdRgbaSha256": "084B486998B6F64BF11AAF32B8663D59B11E132ED96A698BED4A6AABFD7AE717",
+        "frame": {
+          "x": 1040,
+          "y": 704,
+          "w": 208,
+          "h": 224
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 88,
+          "y": 96,
+          "w": 208,
+          "h": 224
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_032": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 17,
+          "w": 52,
+          "h": 54
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "C98495868C756C34583B5A883F6700CD9085FB7AFFAB54DACE66B832FC464A44",
+        "hdRgbaSha256": "B0E6365C73C2CC1CCDD0E21987A4C91EBCB82ECFAC367E88BEB334FB38546EE4",
+        "frame": {
+          "x": 1256,
+          "y": 704,
+          "w": 208,
+          "h": 216
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 88,
+          "y": 104,
+          "w": 208,
+          "h": 216
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_033": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 23,
+          "w": 48,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E03303781A279AF862996679DEED517BE34D0A2D8C9CAA5E4BB1EC82078623CC",
+        "hdRgbaSha256": "0AE18A9C86290027708EF1AC826B7335347CEF81EDF37B9E474669CCD1B4AA1A",
+        "frame": {
+          "x": 1472,
+          "y": 704,
+          "w": 192,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 112,
+          "w": 192,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_034": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 50,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "85ED29C21EAB7240974357C799EFA1F83169A5EB597BE475874BA464F378B879",
+        "hdRgbaSha256": "3CFDF453A02B46C9B894CB2F006FCED20DF6AAB238C3FDCAE23294602C5FE576",
+        "frame": {
+          "x": 1672,
+          "y": 704,
+          "w": 200,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 120,
+          "w": 200,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_035": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 23,
+          "w": 48,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "3C57C13B711D9360111F1ADBA71F633DDBBBDC07CE21E428B557C98C1556C6E7",
+        "hdRgbaSha256": "31562FB2BA7799ED01D0D6B49D84AA5218CB621A57C3E50A24443D33D4B4E361",
+        "frame": {
+          "x": 8,
+          "y": 936,
+          "w": 192,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 112,
+          "w": 192,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_036": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 22,
+          "y": 33,
+          "w": 56,
+          "h": 34
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "289FD1B0FA9E7AF90A8FB50CD76707953388CFB86F312181EE38553BD377A43C",
+        "hdRgbaSha256": "0AEC9941FC0BBA531681AA990E60ABBA07B41DB3FA51E6B987304369BFCED504",
+        "frame": {
+          "x": 208,
+          "y": 936,
+          "w": 224,
+          "h": 136
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 80,
+          "y": 184,
+          "w": 224,
+          "h": 136
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_037": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 19,
+          "w": 48,
+          "h": 56
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "50C8BC6C07F4F045C51A51171426B5A2EED6A0512A18CED242BA97EDF1AC3ECC",
+        "hdRgbaSha256": "66B641EEE85B7F7CD614B552045E903C585BB02DCCEFA381D363D52E46258BBF",
+        "frame": {
+          "x": 440,
+          "y": 936,
+          "w": 192,
+          "h": 224
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 96,
+          "w": 192,
+          "h": 224
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_038": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 52,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "EB0DA2738331A83CDAD899E94B0BF440F9B0BE704DC29229B7933ECA759C99CA",
+        "hdRgbaSha256": "C13D5B30F5D941EFD9CAF88CD075F80742F63BA3859D5DBA71EC4629A8601966",
+        "frame": {
+          "x": 640,
+          "y": 936,
+          "w": 208,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 88,
+          "y": 120,
+          "w": 208,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_039": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 22,
+          "y": 33,
+          "w": 56,
+          "h": 34
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "3B23A5D349EF33622A1D24B0BD9A9DE8F9EA30855DFFEDC6CCA7EB07CF1B0181",
+        "hdRgbaSha256": "E52EC042C2088A762E9087E90B3F93D01B90D7F3E060D4009EA06F55DA3C59E0",
+        "frame": {
+          "x": 856,
+          "y": 936,
+          "w": 224,
+          "h": 136
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 80,
+          "y": 184,
+          "w": 224,
+          "h": 136
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_040": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 19,
+          "w": 52,
+          "h": 56
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "2D1A7342847EAB0A9E9B3D3CA446964A64C6DCCC38CFEFA3A718CC5046D80B44",
+        "hdRgbaSha256": "60692800826E58E4C63E4F858F6C776E538774CB5BB86A390AF6CF15CE10D895",
+        "frame": {
+          "x": 1088,
+          "y": 936,
+          "w": 208,
+          "h": 224
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 88,
+          "y": 96,
+          "w": 208,
+          "h": 224
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_041": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 19,
+          "w": 50,
+          "h": 56
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "BE3F094B7CCE0D4106561F2C896594CF339BF6CCAC23E6BC5DCC1D8E21B2CC0A",
+        "hdRgbaSha256": "D3556EA668AEBCD28BC427E9B84937BCE7C1100B7F83CFB9D214EE80C6505363",
+        "frame": {
+          "x": 1304,
+          "y": 936,
+          "w": 200,
+          "h": 224
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 96,
+          "w": 200,
+          "h": 224
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_042": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 23,
+          "w": 48,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "CC0C5E3ACA887BB17066C63373AE0608E50556E38AACEE4770157DCA8F321DA8",
+        "hdRgbaSha256": "61813710340205BF937EAE96A1F40EECAE7330855D7DA35FD4B8E7A19B8D7342",
+        "frame": {
+          "x": 1512,
+          "y": 936,
+          "w": 192,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 112,
+          "w": 192,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_043": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 54,
+          "h": 48
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "5EF9CD2124FF0599ADAAEEBBC91F4B0B2C32ACBD0A3A6FA5F8FD5F9ECD84C4D0",
+        "hdRgbaSha256": "C2BE7BFA234B3DF86FE873DD1D1A366FE1D2A19908209D5C7F0A7F93FE159002",
+        "frame": {
+          "x": 1712,
+          "y": 936,
+          "w": 216,
+          "h": 192
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 128,
+          "w": 216,
+          "h": 192
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_044": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 25,
+          "w": 50,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "139BA63FA417B35106D11FBC513E9E4893F2264BB20CC73D6BDEE5910A11427B",
+        "hdRgbaSha256": "2FE699EC16DE214BC5843175C18CD39C1494091A632FB18143AA77E10247DD77",
+        "frame": {
+          "x": 8,
+          "y": 1168,
+          "w": 200,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 120,
+          "w": 200,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_045": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 19,
+          "w": 52,
+          "h": 56
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "5B537FAC570F8E53DCFD063A897FB7E76237ACBA04198F2D8ED5F86D0CD59BB2",
+        "hdRgbaSha256": "DA42B07D97EF67200EC3C9E45F3BCC36D08EA76185209D30B8D616CE4088CA76",
+        "frame": {
+          "x": 216,
+          "y": 1168,
+          "w": 208,
+          "h": 224
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 88,
+          "y": 96,
+          "w": 208,
+          "h": 224
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_046": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 54,
+          "h": 48
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "9DA16324A98821B82FC845968EB211271CDEBC666E2C768BF536224FB8B23E84",
+        "hdRgbaSha256": "FF7D536AAF95117715F43CCCDA1A0CF7A6D9375AE428BBF055E0FFF464C92C8C",
+        "frame": {
+          "x": 432,
+          "y": 1168,
+          "w": 216,
+          "h": 192
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 128,
+          "w": 216,
+          "h": 192
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_047": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 52,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E826CA9300AD30C425AC5CF20EDB088C8B3BB8B1F3C2DCDAB10A75A2A180096E",
+        "hdRgbaSha256": "EB2D01784414FEABB12AF73EF7DF03961D764D6F1E943612B71BCA578D0BA9B1",
+        "frame": {
+          "x": 656,
+          "y": 1168,
+          "w": 208,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 88,
+          "y": 120,
+          "w": 208,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_048": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 17,
+          "w": 50,
+          "h": 58
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "F2C181B109F20A0FFB5D387C3D44E8C24ECE195B9B25D7BA20A799FE7449D31F",
+        "hdRgbaSha256": "3BD6F9B351897BDDEF700563FEF5E331D0DCB382AA0258F1850C8D8CF7886DF7",
+        "frame": {
+          "x": 872,
+          "y": 1168,
+          "w": 200,
+          "h": 232
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 88,
+          "w": 200,
+          "h": 232
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_049": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 25,
+          "w": 56,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "07D6ABD3B954C593DAB6CB6D3EA4BE5B6984EE0D83A889AD53FBCBDECB5900FE",
+        "hdRgbaSha256": "903100F4FAEE58E3EB09E5ED6934E6F990DD27D777F98CF22F431766A7A80650",
+        "frame": {
+          "x": 1080,
+          "y": 1168,
+          "w": 224,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 80,
+          "y": 120,
+          "w": 224,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_050": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 27,
+          "w": 56,
+          "h": 48
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "BE6083F5ABE6FA732D7496C3FD4993CD5F2F237D1DA5E5ECC656EE6ED012460F",
+        "hdRgbaSha256": "60E95EA4795B9AF965CDEAB12EAAD6DB778D3F718C5819F95DB16E9E31E74A7F",
+        "frame": {
+          "x": 1312,
+          "y": 1168,
+          "w": 224,
+          "h": 192
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 80,
+          "y": 128,
+          "w": 224,
+          "h": 192
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_051": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 50,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "B9C879E04E0105ADF1296D38B99EB5EC0E2D30735B2007390E3A127879CFA2C9",
+        "hdRgbaSha256": "55AA7D005AD9A466CE6DD825415D6E6B8C854851EA58D5D9992B1958B3028120",
+        "frame": {
+          "x": 1544,
+          "y": 1168,
+          "w": 200,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 120,
+          "w": 200,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_052": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 19,
+          "w": 52,
+          "h": 64
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "068E600C6DABC8360F8E91648A0B7C5A0F3AED6DBF6F75FA877C868172D0054B",
+        "hdRgbaSha256": "D0C5FDFAE2FCDACB340CDCA10424096B7E74A9F6D78AF5BA78396B4A4E021A82",
+        "frame": {
+          "x": 1752,
+          "y": 1168,
+          "w": 208,
+          "h": 256
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 88,
+          "y": 64,
+          "w": 208,
+          "h": 256
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_053": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 21,
+          "w": 56,
+          "h": 54
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "BF5A3DF1EA48B7FAF2268F1B2D5AE3D6E2BF62964353980D4BFF708BD008951B",
+        "hdRgbaSha256": "EBFA78946F2CF3B7B23F2E9BC2C04773F52F4BE9C7D3EA0289B43DFDE37D24D8",
+        "frame": {
+          "x": 8,
+          "y": 1432,
+          "w": 224,
+          "h": 216
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 80,
+          "y": 104,
+          "w": 224,
+          "h": 216
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_054": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 21,
+          "w": 50,
+          "h": 54
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "845B0AFE19C8997EDAB76D614AAB87885663196BCC5F1374A17714BE9C830594",
+        "hdRgbaSha256": "23F54E0B3AF268AB66C32B1772B3F356DC1CE82978B57522F38ECFA81359311C",
+        "frame": {
+          "x": 240,
+          "y": 1432,
+          "w": 200,
+          "h": 216
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 104,
+          "w": 200,
+          "h": 216
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_055": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 23,
+          "w": 44,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "042BDBF5B7B1587AA57045EA73EB96B9947D091B7A6BD192C403F9F886085B3C",
+        "hdRgbaSha256": "38A6E41ED03F8A32250A886E430B43424D9ABDB7D081419835B138CF6172251C",
+        "frame": {
+          "x": 448,
+          "y": 1432,
+          "w": 176,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 112,
+          "w": 176,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_056": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 8,
+          "y": 31,
+          "w": 80,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "8236C7179C384C9FF4CD364E3099643FA5623A0D974DFC555B2A41C107314DFA",
+        "hdRgbaSha256": "2B7E155E92E0CFEB13ABD2C9DD2948470F439E8D659CD1D5F5AB7BDC15D05787",
+        "frame": {
+          "x": 632,
+          "y": 1432,
+          "w": 320,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 32,
+          "y": 168,
+          "w": 320,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_057": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 15,
+          "w": 56,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E720C5786EEE30F194A6D3D4C4538D5FAB20D25CCD880201B53BFFA1F897B98C",
+        "hdRgbaSha256": "686B39B24FFD1E60941BE255DB5EC1C32CBCF597295E65E82E6A1A82CB75AD09",
+        "frame": {
+          "x": 960,
+          "y": 1432,
+          "w": 224,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 80,
+          "y": 112,
+          "w": 224,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/main/cell_058": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 23,
+          "w": 48,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "11ACB98A43370BBB09E94F17A66B3D7A013EDF9E15DECB00E2D5A00617F64CB9",
+        "hdRgbaSha256": "A496D58295BB2498B0D197C565FC5DAA8694B7D42CFDE6C5F2B0C3F867831391",
+        "frame": {
+          "x": 1192,
+          "y": 1432,
+          "w": 192,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 112,
+          "w": 192,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      }
+    }
+  },
+  "sub": {
+    "sourceSheetSha256": "B5BF23C5F588A34E2F21BF97CA90E7B073D166706493728053BB18C630CF1371",
+    "cellCount": 18,
+    "sequenceCount": 13,
+    "frameRecordCount": 18,
+    "atlasPages": [
+      {
+        "page": 0,
+        "image": "sub-atlas-00.png",
+        "data": "sub-atlas-00.json",
+        "width": 1920,
+        "height": 624,
+        "frameCount": 18,
+        "imageSha256": "D4E2B3F070D9D800409475AE29B34E21D8E0B4ADE346FF693C8BD589B878F98C",
+        "dataSha256": "C2D1581BC38F3A9A9ED94D87CCA3000D6D0A4C2AEFB718780C6BA030E1C18026"
+      }
+    ],
+    "frameManifest": {
+      "m330_geograymon/sub/cell_000": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 23,
+          "w": 48,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D142BFE22435E687628D557E4C300895D242E569EA002033D2BBA3DE76593641",
+        "hdRgbaSha256": "9FC66CB3868D64A2C91D715C213E3ECF9C6C5F0BE9169600099E72EFAD504775",
+        "frame": {
+          "x": 8,
+          "y": 8,
+          "w": 192,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 112,
+          "w": 192,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/sub/cell_001": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 52,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "F227C42F44D217E0ABABC18816B4777426B002163079EC02B279CF6A89A40ADA",
+        "hdRgbaSha256": "B1E65498031E68A9C6C1CA54AD4F39240DB6530B7AA27EC5D1645222C406F1CD",
+        "frame": {
+          "x": 208,
+          "y": 8,
+          "w": 208,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 88,
+          "y": 120,
+          "w": 208,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/sub/cell_002": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 23,
+          "w": 48,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "855CDCCE92BBCDA7358CCAD1AFF522B95DCE0641F15E4D26F3F1CE743A71699F",
+        "hdRgbaSha256": "8C74E793A5E12A5B6A1A75F7F45E3479F257F35D4ADF571D3A3BFF31A5CA5E1F",
+        "frame": {
+          "x": 424,
+          "y": 8,
+          "w": 192,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 112,
+          "w": 192,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/sub/cell_003": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 52,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "0455836D9B6E537ABA2C0CFD9816620C2188DD89216E9C16B299505A78EE3BD4",
+        "hdRgbaSha256": "F2A224E1CDCFCA83F31112326B16734FA567C63545BADFF936FA5711B653B936",
+        "frame": {
+          "x": 624,
+          "y": 8,
+          "w": 208,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 88,
+          "y": 120,
+          "w": 208,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/sub/cell_004": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 23,
+          "w": 72,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E92FBFA2044077D20E5780348991C396529FFE09204324ED19D6E04AE152B821",
+        "hdRgbaSha256": "7BE72744977A590842873B85C10D99E10822B982597D78FAED2EA15C61ED4933",
+        "frame": {
+          "x": 840,
+          "y": 8,
+          "w": 288,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 48,
+          "y": 120,
+          "w": 288,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/sub/cell_005": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 23,
+          "w": 56,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E720C5786EEE30F194A6D3D4C4538D5FAB20D25CCD880201B53BFFA1F897B98C",
+        "hdRgbaSha256": "686B39B24FFD1E60941BE255DB5EC1C32CBCF597295E65E82E6A1A82CB75AD09",
+        "frame": {
+          "x": 1136,
+          "y": 8,
+          "w": 224,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 80,
+          "y": 112,
+          "w": 224,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/sub/cell_006": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 18,
+          "y": 33,
+          "w": 60,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "07A388ADDEA7C5E205B565BFB77240395BC85BE11AAD6C0C57AC16600121DDF9",
+        "hdRgbaSha256": "24B05DAC3665D642E71437BB34523D89232278BC07131413BEF31281CFD24BA9",
+        "frame": {
+          "x": 1368,
+          "y": 8,
+          "w": 240,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 72,
+          "y": 168,
+          "w": 240,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/sub/cell_007": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 18,
+          "y": 33,
+          "w": 60,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "F7D67331C23CB35DDBA88374D6572D9B2317981C0E2824C1734CDF92DCC62A7F",
+        "hdRgbaSha256": "F4D8D390F17640F654D57626A34DE6689C7D376730D1AF1F6569A31F6C10A491",
+        "frame": {
+          "x": 1616,
+          "y": 8,
+          "w": 240,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 72,
+          "y": 168,
+          "w": 240,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/sub/cell_008": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 23,
+          "w": 48,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "CC0C5E3ACA887BB17066C63373AE0608E50556E38AACEE4770157DCA8F321DA8",
+        "hdRgbaSha256": "61813710340205BF937EAE96A1F40EECAE7330855D7DA35FD4B8E7A19B8D7342",
+        "frame": {
+          "x": 8,
+          "y": 224,
+          "w": 192,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 112,
+          "w": 192,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/sub/cell_009": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 54,
+          "h": 48
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "5EF9CD2124FF0599ADAAEEBBC91F4B0B2C32ACBD0A3A6FA5F8FD5F9ECD84C4D0",
+        "hdRgbaSha256": "C2BE7BFA234B3DF86FE873DD1D1A366FE1D2A19908209D5C7F0A7F93FE159002",
+        "frame": {
+          "x": 208,
+          "y": 224,
+          "w": 216,
+          "h": 192
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 128,
+          "w": 216,
+          "h": 192
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/sub/cell_010": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 25,
+          "w": 50,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "139BA63FA417B35106D11FBC513E9E4893F2264BB20CC73D6BDEE5910A11427B",
+        "hdRgbaSha256": "2FE699EC16DE214BC5843175C18CD39C1494091A632FB18143AA77E10247DD77",
+        "frame": {
+          "x": 432,
+          "y": 224,
+          "w": 200,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 120,
+          "w": 200,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/sub/cell_011": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 19,
+          "w": 52,
+          "h": 56
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "5B537FAC570F8E53DCFD063A897FB7E76237ACBA04198F2D8ED5F86D0CD59BB2",
+        "hdRgbaSha256": "DA42B07D97EF67200EC3C9E45F3BCC36D08EA76185209D30B8D616CE4088CA76",
+        "frame": {
+          "x": 640,
+          "y": 224,
+          "w": 208,
+          "h": 224
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 88,
+          "y": 96,
+          "w": 208,
+          "h": 224
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/sub/cell_012": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 54,
+          "h": 48
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "9DA16324A98821B82FC845968EB211271CDEBC666E2C768BF536224FB8B23E84",
+        "hdRgbaSha256": "FF7D536AAF95117715F43CCCDA1A0CF7A6D9375AE428BBF055E0FFF464C92C8C",
+        "frame": {
+          "x": 856,
+          "y": 224,
+          "w": 216,
+          "h": 192
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 128,
+          "w": 216,
+          "h": 192
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/sub/cell_013": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 52,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E826CA9300AD30C425AC5CF20EDB088C8B3BB8B1F3C2DCDAB10A75A2A180096E",
+        "hdRgbaSha256": "EB2D01784414FEABB12AF73EF7DF03961D764D6F1E943612B71BCA578D0BA9B1",
+        "frame": {
+          "x": 1080,
+          "y": 224,
+          "w": 208,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 88,
+          "y": 120,
+          "w": 208,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/sub/cell_014": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 17,
+          "w": 50,
+          "h": 58
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "F2C181B109F20A0FFB5D387C3D44E8C24ECE195B9B25D7BA20A799FE7449D31F",
+        "hdRgbaSha256": "3BD6F9B351897BDDEF700563FEF5E331D0DCB382AA0258F1850C8D8CF7886DF7",
+        "frame": {
+          "x": 1296,
+          "y": 224,
+          "w": 200,
+          "h": 232
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 88,
+          "w": 200,
+          "h": 232
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/sub/cell_015": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 25,
+          "w": 56,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "07D6ABD3B954C593DAB6CB6D3EA4BE5B6984EE0D83A889AD53FBCBDECB5900FE",
+        "hdRgbaSha256": "903100F4FAEE58E3EB09E5ED6934E6F990DD27D777F98CF22F431766A7A80650",
+        "frame": {
+          "x": 1504,
+          "y": 224,
+          "w": 224,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 80,
+          "y": 120,
+          "w": 224,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/sub/cell_016": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 23,
+          "w": 44,
+          "h": 52
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "042BDBF5B7B1587AA57045EA73EB96B9947D091B7A6BD192C403F9F886085B3C",
+        "hdRgbaSha256": "38A6E41ED03F8A32250A886E430B43424D9ABDB7D081419835B138CF6172251C",
+        "frame": {
+          "x": 1736,
+          "y": 224,
+          "w": 176,
+          "h": 208
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 104,
+          "y": 112,
+          "w": 176,
+          "h": 208
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m330_geograymon/sub/cell_017": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 8,
+          "y": 31,
+          "w": 80,
+          "h": 38
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "8236C7179C384C9FF4CD364E3099643FA5623A0D974DFC555B2A41C107314DFA",
+        "hdRgbaSha256": "2B7E155E92E0CFEB13ABD2C9DD2948470F439E8D659CD1D5F5AB7BDC15D05787",
+        "frame": {
+          "x": 8,
+          "y": 464,
+          "w": 320,
+          "h": 152
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 32,
+          "y": 168,
+          "w": 320,
+          "h": 152
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      }
+    }
+  },
+  "productionStatus": "PIXEL_FAITHFUL_HD4X_FUNCTIONAL_BASELINE",
+  "runtimeEligible": false,
+  "shippingReady": false
+}

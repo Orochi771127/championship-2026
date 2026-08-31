@@ -1,0 +1,204 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 1,
+  "scenePath": "battle/battle_sub_scene.nxr",
+  "category": "Battle Runtime",
+  "overlayOwner": "OVL19",
+  "sourceEvidence": {
+    "fileId": 41,
+    "fileName": "battle_sub_scene.nxr",
+    "sha256": "443cecb7f4c14cc695b4ad33403f3e186dcf1e697ff096be86e24f56ca47256b",
+    "overlayMappingConfidence": "VERIFIED_BINARY_SUBSYSTEM_PATH"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "SUB",
+    "roleEvidence": "FILENAME_HEURISTIC"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [
+    {
+      "resourceIndex": 0,
+      "resourceName": "battle_obj_sub",
+      "cellCount": 20,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "battle/battle_obj_sub.ncer",
+        "nanr": "battle/battle_obj_sub.nanr",
+        "ncgr": "battle/battle_obj_sub.ncgr",
+        "ncbr": null,
+        "nclr": "battle/battle_obj_sub.nclr",
+        "nscr": null
+      },
+      "spriteWitness": null,
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "loc_title",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 128,
+        "y": 42
+      },
+      "portraitProjection": {
+        "x": 540.0,
+        "y": 1137.1875
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 1,
+      "name": "time_digit0",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 109,
+        "y": 110
+      },
+      "portraitProjection": {
+        "x": 459.8438,
+        "y": 1424.0625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 2,
+      "name": "time_digit1",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 128,
+        "y": 110
+      },
+      "portraitProjection": {
+        "x": 540.0,
+        "y": 1424.0625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 3,
+      "name": "time_digit2",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 147,
+        "y": 110
+      },
+      "portraitProjection": {
+        "x": 620.1562,
+        "y": 1424.0625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 4,
+      "name": "team_name0",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 30,
+        "y": 69
+      },
+      "portraitProjection": {
+        "x": 126.5625,
+        "y": 1251.0938
+      },
+      "params": [
+        0,
+        0,
+        6,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 5,
+      "name": "team_name1",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 149,
+        "y": 69
+      },
+      "portraitProjection": {
+        "x": 628.5938,
+        "y": 1251.0938
+      },
+      "params": [
+        0,
+        0,
+        6,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    }
+  ],
+  "dynamicVirtualNodeCount": 3,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

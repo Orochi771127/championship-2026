@@ -95,6 +95,63 @@ recorded as a later alternate presentation pack, not as current production.
 
 ## Current product authority — Championship 2026
 
+### 2026-09-01 internal production authorization and skin-pack boundary
+
+The Owner directed the project to continue under
+`OWNER_AUTHORIZED_INTERNAL_PRODUCTION / FORMAL_DOCUMENT_LINK_PENDING` until the
+complete faithful presentation can be reviewed as a whole. Public release and
+shipping approval remain separate gates.
+
+The product is to use a replaceable presentation-pack architecture. The
+faithful Original Championship reconstruction is completed first; later visual
+changes, including the previously discussed cat/dog presentation, are separate
+skins over the same stable gameplay identities and are not the active batch.
+
+The Owner further directed that whole-game functional completion must not wait
+for final art review. During internal development, the 2026 mobile game should
+bind the faithful Original baseline directly rather than adding a separate
+user-facing pack loader. Safe temporary presentation remains only as a fallback
+for slots that have not yet been connected. The internal baseline is excluded
+from public release and must not commit ROM or Nitro source payloads. After the
+complete game can be reviewed end to end, the Owner will decide which
+presentation-pack elements to retain or replace.
+
+Public release remains the eventual production target, but the project is not
+near release and will not publish immediately after functional completion. The
+Owner therefore directed that licence-document closure must not block current
+internal game completion. Internal candidates remain non-public and release
+classification is revisited at the later release gate.
+
+Translation from NDS to browser and all recovered Original Championship
+behaviour semantics must remain faithful to the original evidence. A
+presentation pack may replace characters, UI, maps, VFX, 3D and packaging, but
+must not change simulation IDs, damage, AI, capture, collision, Raising,
+progression, rewards, economy or save truth. Verified behaviour is preserved;
+partial evidence preserves only the known structure; unresolved behaviour
+remains `UNKNOWN_REQUIRES_TRACE` rather than being invented.
+
+### 2026-09-01 faithful full-roster and completion directive
+
+The Owner explicitly directed the art lane to complete the Original
+Championship presentation in this order:
+
+- first complete all 224 default characters as faithful high-definition
+  reconstructions in seven batches of 32;
+- preserve Main/Sub identity, original major palettes, the hand-drawn visual
+  character and every original animation state, with consistent transparent
+  bounds, ground anchors and PixiJS atlases;
+- keep the previously discussed cat/dog variants as later replacement skins,
+  not the default roster;
+- continue the complete 96-scene UI/HUD in original screen order with a modern
+  portrait 9:16 layout;
+- batch-convert and progressively integrate the ROM-observed VFX;
+- finish battle maps, final Gate 3D and release packaging last.
+
+This latest explicit directive supersedes the earlier launch-96 roster split
+and the synchronization-only production freeze for this art work. It does not
+waive licence-document linkage, human visual approval or runtime QA before
+promotion into `assets/production` or shipping.
+
 - One human Owner plus AI will first complete all game systems, modes and the New Game → Championship loop with IP-neutral stable IDs and original-neutral temporary content.
 - Final public branding, original creatures, world, art, text and audio are selected after the functional-completion gate; the public product does not ship Digimon names, characters or source media without rights.
 - The original Cage/Training mechanic is a required shape-aware spatial assembly system: functional terrain pieces have specific footprints and affect different raising values. Exact untraced shapes, rules and values remain evidence-gated.

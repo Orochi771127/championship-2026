@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 83,
+  "scenePath": "ui/hunt/setting/setting_equip_sub_scene.nxr",
+  "category": "Hunt Loadout / Equipment",
+  "overlayOwner": "OVL12",
+  "sourceEvidence": {
+    "fileId": 6372,
+    "fileName": "setting_equip_sub_scene.nxr",
+    "sha256": "597b3f70dadd9d44204942357207d420e950892a3d5a509e37a3133dd64dc65e",
+    "overlayMappingConfidence": "SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "SUB",
+    "roleEvidence": "FILENAME_HEURISTIC"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [
+    {
+      "resourceIndex": 0,
+      "resourceName": "setting_obj_sub",
+      "cellCount": 11,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "ui/hunt/setting/setting_obj_sub.ncer",
+        "nanr": "ui/hunt/setting/setting_obj_sub.nanr",
+        "ncgr": "ui/hunt/setting/setting_obj_sub.ncgr",
+        "ncbr": null,
+        "nclr": "ui/hunt/setting/setting_obj_sub.nclr",
+        "nscr": null
+      },
+      "spriteWitness": "docs/art/production/ui/faithful-hd96/sprite-cell-witnesses-4x/ui__hunt__setting__setting_obj_sub__cells.png",
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "equip_cover0",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 62,
+        "y": 160
+      },
+      "portraitProjection": {
+        "x": 261.5625,
+        "y": 1635.0
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 1,
+      "name": "equip_cover1",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 88,
+        "y": 166
+      },
+      "portraitProjection": {
+        "x": 371.25,
+        "y": 1660.3125
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 2,
+      "name": "equip_cover2",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 114,
+        "y": 160
+      },
+      "portraitProjection": {
+        "x": 480.9375,
+        "y": 1635.0
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 3,
+      "name": "equip_cover3",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 140,
+        "y": 166
+      },
+      "portraitProjection": {
+        "x": 590.625,
+        "y": 1660.3125
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 4,
+      "name": "equip_cover4",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 166,
+        "y": 160
+      },
+      "portraitProjection": {
+        "x": 700.3125,
+        "y": 1635.0
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    }
+  ],
+  "dynamicVirtualNodeCount": 0,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

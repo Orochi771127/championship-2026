@@ -1,0 +1,357 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 62,
+  "scenePath": "ui/alert_window.nxr",
+  "category": "Shared UI Components",
+  "overlayOwner": "Shared",
+  "sourceEvidence": {
+    "fileId": 6142,
+    "fileName": "alert_window.nxr",
+    "sha256": "ce0785911913a91c28e7d67627fcc81ff16dca29cd46eccb9b92d1a2bfac83f7",
+    "overlayMappingConfidence": "SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "UNKNOWN_REQUIRES_TRACE",
+    "roleEvidence": "UNKNOWN_REQUIRES_TRACE"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [
+    {
+      "resourceIndex": 0,
+      "resourceName": "menu_main",
+      "cellCount": 89,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "ui/menu_main.ncer",
+        "nanr": "ui/menu_main.nanr",
+        "ncgr": null,
+        "ncbr": "ui/menu_main.ncbr",
+        "nclr": "ui/menu_main.nclr",
+        "nscr": null
+      },
+      "spriteWitness": "docs/art/production/ui/faithful-hd96/sprite-cell-witnesses-4x/ui__menu_main__cells.png",
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "unnamed0000",
+      "resourceIndex": 0,
+      "cellIndex": 24,
+      "sourcePosition": {
+        "x": 16,
+        "y": 24
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 1,
+      "name": "unnamed0001",
+      "resourceIndex": 0,
+      "cellIndex": 27,
+      "sourcePosition": {
+        "x": 16,
+        "y": 40
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 2,
+      "name": "unnamed0002",
+      "resourceIndex": 0,
+      "cellIndex": 25,
+      "sourcePosition": {
+        "x": 56,
+        "y": 32
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        20,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 3,
+      "name": "unnamed0003",
+      "resourceIndex": 0,
+      "cellIndex": 26,
+      "sourcePosition": {
+        "x": 216,
+        "y": 24
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 4,
+      "name": "unnamed0004",
+      "resourceIndex": 0,
+      "cellIndex": 28,
+      "sourcePosition": {
+        "x": 16,
+        "y": 64
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        4
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 5,
+      "name": "unnamed0005",
+      "resourceIndex": 0,
+      "cellIndex": 30,
+      "sourcePosition": {
+        "x": 8,
+        "y": 96
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 6,
+      "name": "unnamed0006",
+      "resourceIndex": 0,
+      "cellIndex": 31,
+      "sourcePosition": {
+        "x": 32,
+        "y": 104
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        23,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 7,
+      "name": "unnamed0007",
+      "resourceIndex": 0,
+      "cellIndex": 32,
+      "sourcePosition": {
+        "x": 216,
+        "y": 96
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 8,
+      "name": "unnamed0008",
+      "resourceIndex": 0,
+      "cellIndex": 29,
+      "sourcePosition": {
+        "x": 232,
+        "y": 48
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        6
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 9,
+      "name": "message",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 128,
+        "y": 59
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        12,
+        2
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 10,
+      "name": "select_cancel",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 176,
+        "y": 94
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 11,
+      "name": "ok",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 128,
+        "y": 94
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 12,
+      "name": "select_decide",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 86,
+        "y": 94
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 13,
+      "name": "bg_plane",
+      "resourceIndex": 0,
+      "cellIndex": 33,
+      "sourcePosition": {
+        "x": 20,
+        "y": 36
+      },
+      "portraitProjection": null,
+      "params": [
+        8,
+        0,
+        27,
+        9
+      ],
+      "colorModulationRaw": "0xC0FFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 14,
+      "name": "base_col",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 14,
+        "y": 31
+      },
+      "portraitProjection": null,
+      "params": [
+        10,
+        0,
+        14,
+        5
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    }
+  ],
+  "dynamicVirtualNodeCount": 5,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

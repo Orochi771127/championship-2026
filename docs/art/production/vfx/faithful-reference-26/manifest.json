@@ -1,0 +1,1229 @@
+{
+  "schemaVersion": 1,
+  "bundleId": "championship-vfx-faithful-reference-26",
+  "generatedBy": "scripts/build-vfx-faithful-reference-26.mjs",
+  "converter": [
+    "apicula 0.1.1-dev",
+    "build commit: 3d4e91e",
+    "build commit date: 2024-08-03"
+  ],
+  "sourcePayloadIncluded": false,
+  "systemCount": 26,
+  "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "limitation": "Converted motion is authoritative only where apicula decoded it; NSBMA/NSBVA and caller timing remain UNKNOWN_REQUIRES_TRACE.",
+  "systems": [
+    {
+      "systemId": "battle-atkup",
+      "logicalGroup": "battle/atkup",
+      "sources": [
+        {
+          "path": "battle/atkup.nsbmd",
+          "bytes": 1656,
+          "sha256": "15c08d580e490997efdd14ab2562338f049ad560b992e65ad8546e714699a0a5",
+          "converterInput": true
+        },
+        {
+          "path": "battle/atkup.nsbta",
+          "bytes": 408,
+          "sha256": "218932a651f6bd67513590e697d96484eab9dc41d3a87506e8203162208e901a",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/atkup/atkup.glb",
+          "bytes": 5388,
+          "sha256": "59cbcfb85b25d0411797c21f127a43659570cb5da9581273e74593dfc80528da",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_texture_transform",
+              "EXT_property_animation",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/atkup/atkup.png",
+          "bytes": 1030,
+          "sha256": "8b28839ad0e910a78cbfbd457ae0f73ed0ec5439e530188a34ad39a7f81b8add"
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "battle-circle",
+      "logicalGroup": "battle/circle",
+      "sources": [
+        {
+          "path": "battle/circle.nsbca",
+          "bytes": 1072,
+          "sha256": "1308071f1f3184f062b1c313f53cbbd5612a1138b16ce3b877c28a89d50472b2",
+          "converterInput": true
+        },
+        {
+          "path": "battle/circle.nsbmd",
+          "bytes": 1176,
+          "sha256": "d85591a7e872e963475fca06c7b26bd3f22c588d3936773cd18258ccbcfab57b",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/circle/circle.glb",
+          "bytes": 6288,
+          "sha256": "c9ecb319c8ff83f5e236d6e1495b26a071f89727441c5fdbd190ad5123bb0034",
+          "glb": {
+            "meshes": 1,
+            "nodes": 3,
+            "materials": 1,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/circle/circle.png",
+          "bytes": 666,
+          "sha256": "8144f3df78fc748ea492c61ab77e0bc1f6da8c12a82c46980cb05937387f7df4"
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "battle-circle_my",
+      "logicalGroup": "battle/circle_my",
+      "sources": [
+        {
+          "path": "battle/circle_my.nsbca",
+          "bytes": 1072,
+          "sha256": "777953c90f85507f4ff7b1d0fe5fe3f868f4680e7605fdc471ab6771c2a6d55f",
+          "converterInput": true
+        },
+        {
+          "path": "battle/circle_my.nsbmd",
+          "bytes": 1176,
+          "sha256": "dd8906bd6644b7abebfa3a8b3dbd499d431ac6bd7b881174ed74edefea2526e3",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/circle_my/circle_my.glb",
+          "bytes": 6284,
+          "sha256": "703ce76be930ab7bb0618c42aa6185b2ae344ea63099b9cc533130a00c403a7b",
+          "glb": {
+            "meshes": 1,
+            "nodes": 3,
+            "materials": 1,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/circle_my/circle_my.png",
+          "bytes": 782,
+          "sha256": "fdc12aacc071a2f1458877d361595d5700aba115b393d1127ecd3b136ea492bc"
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "battle-critup",
+      "logicalGroup": "battle/critup",
+      "sources": [
+        {
+          "path": "battle/critup.nsbmd",
+          "bytes": 1644,
+          "sha256": "f5661a7ed27f6caf642ea00130b0575180908194e95f1cbd6db1db4763c93a39",
+          "converterInput": true
+        },
+        {
+          "path": "battle/critup.nsbta",
+          "bytes": 408,
+          "sha256": "9ecfe878ec8a4a5e8c81729a4dc603b357ccc061a3bb5057cca77d9cb61b4ac0",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/critup/critup.glb",
+          "bytes": 5372,
+          "sha256": "621b6e651ae13c711482543ecbb03c5bffb7447cc3d29995734af547e2ec7264",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_texture_transform",
+              "EXT_property_animation",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/critup/critup.png",
+          "bytes": 837,
+          "sha256": "07a287cb4cb2cf50fd78fa858c176c9c6a135e0ef37759d8d3bcccc33af7de80"
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "battle-defup",
+      "logicalGroup": "battle/defup",
+      "sources": [
+        {
+          "path": "battle/defup.nsbmd",
+          "bytes": 1644,
+          "sha256": "054cdea7b2dca98a363ff18cba4a2d6e9c96d9e6589338eee33ed2bc75807b8a",
+          "converterInput": true
+        },
+        {
+          "path": "battle/defup.nsbta",
+          "bytes": 408,
+          "sha256": "f70fdf19e66622e05c70431adc13a2acd471136099d36da4029a67e9e4380c60",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/defup/defup.glb",
+          "bytes": 5368,
+          "sha256": "f1b1f6b39714a3e31b38c8d71cba8ab19b982e40f3e530bb6a1b95fc8d622f03",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_texture_transform",
+              "EXT_property_animation",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/defup/defup.png",
+          "bytes": 1253,
+          "sha256": "0be270103563537f1815510b8f65d6a3bdc3fa57418338c90391964417d8ed7a"
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "battle-earth_hit",
+      "logicalGroup": "battle/earth_hit",
+      "sources": [
+        {
+          "path": "battle/earth_hit.nsbca",
+          "bytes": 488,
+          "sha256": "d14399a5723352e136247f18b66fb62b6635a212fa68487fb8b6458e787c79b6",
+          "converterInput": true
+        },
+        {
+          "path": "battle/earth_hit.nsbmd",
+          "bytes": 2680,
+          "sha256": "5d14fe2222dc9fc0c1f43a22af7f7bf4a85744303c6d577d994a3c638a8caebd",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/earth_hit/earth_hit.glb",
+          "bytes": 7860,
+          "sha256": "b802288bbf23a5bac325f7cba77e11e80f45030978142a52139a77583dd0e837",
+          "glb": {
+            "meshes": 1,
+            "nodes": 4,
+            "materials": 2,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/earth_hit/etc_circle.png",
+          "bytes": 1024,
+          "sha256": "ecfe163ec678cb34e9c0961284951b5207a968fa10de3dc37fd8f0606c85db82"
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "battle-hitspark_big",
+      "logicalGroup": "battle/hitspark_big",
+      "sources": [
+        {
+          "path": "battle/hitspark_big.nsbca",
+          "bytes": 5544,
+          "sha256": "1d0dbb5b1caf0e146e0174caa017aa637fe17fc302be843dd16a85c4589158bf",
+          "converterInput": true
+        },
+        {
+          "path": "battle/hitspark_big.nsbmd",
+          "bytes": 8004,
+          "sha256": "37afdfaf92cc2d39fd13494a333c88de22f3314d18b8c586bf498b8d2f977d80",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/hitspark_big/hit_spark.png",
+          "bytes": 1160,
+          "sha256": "4a1e10bd8e4d05b667fc08f461741c230682642d3472f110a05944518f823a51"
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/hitspark_big/hitspark_big.glb",
+          "bytes": 42504,
+          "sha256": "56fdb4267a5fa08fe0437da69e821777496bbff94f562522e0f2c3493e7513f2",
+          "glb": {
+            "meshes": 1,
+            "nodes": 31,
+            "materials": 2,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/hitspark_big/ip_circle.png",
+          "bytes": 392,
+          "sha256": "41ce4ebdde69d6a8537164505e981816c591c5e9d315ca2cd9fc4f68b8a6c0e6"
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "battle-hitspark_small",
+      "logicalGroup": "battle/hitspark_small",
+      "sources": [
+        {
+          "path": "battle/hitspark_small.nsbca",
+          "bytes": 5004,
+          "sha256": "4a33b7da052ec8d0acd5f9abba75db2af659eb8d60ea571470070daf00f61138",
+          "converterInput": true
+        },
+        {
+          "path": "battle/hitspark_small.nsbmd",
+          "bytes": 8004,
+          "sha256": "e2077bd942559f98c899a14114d45942b4fd9a17dac69388667fe06718981103",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/hitspark_small/hit_spark.png",
+          "bytes": 1160,
+          "sha256": "4a1e10bd8e4d05b667fc08f461741c230682642d3472f110a05944518f823a51"
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/hitspark_small/hitspark_small.glb",
+          "bytes": 42508,
+          "sha256": "e671d45d14f0fb4d62a906d0ab3e8743628259af4305e85b9974c7b8fdb058d3",
+          "glb": {
+            "meshes": 1,
+            "nodes": 31,
+            "materials": 2,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/hitspark_small/ip_circle.png",
+          "bytes": 392,
+          "sha256": "41ce4ebdde69d6a8537164505e981816c591c5e9d315ca2cd9fc4f68b8a6c0e6"
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "battle-hitup",
+      "logicalGroup": "battle/hitup",
+      "sources": [
+        {
+          "path": "battle/hitup.nsbmd",
+          "bytes": 1644,
+          "sha256": "e716e9a4c4f124e41eff46c45b646b6a30e1e87d1d944c7ef86dc32452bfa628",
+          "converterInput": true
+        },
+        {
+          "path": "battle/hitup.nsbta",
+          "bytes": 408,
+          "sha256": "895cf3fe8e19439f9ba8ba756bd5c31989cb9aeb5eacb1bdab1ab2a34cf7347f",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/hitup/hitup.glb",
+          "bytes": 5368,
+          "sha256": "dd458513310a0baf99c775b3d94353c0727396937bd4154168d48cfa2005c06d",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_texture_transform",
+              "EXT_property_animation",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/hitup/hitup.png",
+          "bytes": 953,
+          "sha256": "3206af081f636bc8e3569f7a449e41c9032ff50562c4e433657e10f71abc6ff1"
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "battle-hypereffect",
+      "logicalGroup": "battle/hypereffect",
+      "sources": [
+        {
+          "path": "battle/hypereffect.nsbca",
+          "bytes": 7012,
+          "sha256": "77a67b252958d036384250de85f0a4a62acfb5315e5f2d31d77b2482ff48fc03",
+          "converterInput": true
+        },
+        {
+          "path": "battle/hypereffect.nsbmd",
+          "bytes": 6040,
+          "sha256": "8a0a651834ec0355871ba02d50687101c99d3954e6a355c2768631259ad407a3",
+          "converterInput": true
+        },
+        {
+          "path": "battle/hypereffect.nsbva",
+          "bytes": 144,
+          "sha256": "b39d90d658d8884acbb7da20da4b847ffc4c75f25427c09baf90aa58ed510853",
+          "converterInput": false
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/hypereffect/hitmark.png",
+          "bytes": 394,
+          "sha256": "b65c00106eb65e79745538572cc1dd4a8338b633b0a7be9ab1a4afece02da763"
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/hypereffect/hypereffect.glb",
+          "bytes": 36812,
+          "sha256": "4abe7b99f20ee21196fc3ba43947bb1f6b5aa15dbf47f7ff270ac38cd1f9dcac",
+          "glb": {
+            "meshes": 1,
+            "nodes": 20,
+            "materials": 2,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/hypereffect/new1.png",
+          "bytes": 656,
+          "sha256": "4a491ed0096631c28affa4742b1a2a3791ceac597862dadbf830a4a8cde59f84"
+        }
+      ],
+      "unsupportedSourceFormats": [
+        ".nsbva"
+      ],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "battle-hypereffect_ring",
+      "logicalGroup": "battle/hypereffect_ring",
+      "sources": [
+        {
+          "path": "battle/hypereffect_ring.nsbca",
+          "bytes": 2656,
+          "sha256": "287852a7dd90df637a76c153c436c60f9019e567829fc1eb4240ebaa77901623",
+          "converterInput": true
+        },
+        {
+          "path": "battle/hypereffect_ring.nsbmd",
+          "bytes": 3984,
+          "sha256": "0b836473df3c684b5c0685998902100983249b35e499f9156d369538d702fd5e",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/hypereffect_ring/hypereff.png",
+          "bytes": 2106,
+          "sha256": "79e708a16bcbd3c5df0ca5a5cdc03a9a0a6024a487673f61c02a459b05f18d02"
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/hypereffect_ring/hypereffect_ring.glb",
+          "bytes": 15408,
+          "sha256": "5e4641ef0731f62ec2d44a7076457e29bcb1d0d1ea8a2f7e86cd6a9f3f809621",
+          "glb": {
+            "meshes": 1,
+            "nodes": 4,
+            "materials": 1,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_materials_unlit"
+            ]
+          }
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "battle-s_impact_b",
+      "logicalGroup": "battle/s_impact_b",
+      "sources": [
+        {
+          "path": "battle/s_impact_b.nsbca",
+          "bytes": 360,
+          "sha256": "efdc4368230556808f637dbc22b6e1750a22f80d0921af625109df3b04a25883",
+          "converterInput": true
+        },
+        {
+          "path": "battle/s_impact_b.nsbmd",
+          "bytes": 2224,
+          "sha256": "0b049ad6ec321ca550b75257da17658ce666ad9bc34bb4c0450cb531c8c7cf2b",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/s_impact_b/ip_circle.png",
+          "bytes": 392,
+          "sha256": "41ce4ebdde69d6a8537164505e981816c591c5e9d315ca2cd9fc4f68b8a6c0e6"
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/s_impact_b/s_impact_b.glb",
+          "bytes": 5696,
+          "sha256": "b400fd13ef2cd1e7daf89d187eabc753e7610440d7df804d20b09a0fb82375da",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_materials_unlit"
+            ]
+          }
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "battle-s_impact_s",
+      "logicalGroup": "battle/s_impact_s",
+      "sources": [
+        {
+          "path": "battle/s_impact_s.nsbca",
+          "bytes": 360,
+          "sha256": "b87a9de82ebe4df89504618690ca2b098c8f6f06cec5c16649643fae5a7cda4f",
+          "converterInput": true
+        },
+        {
+          "path": "battle/s_impact_s.nsbmd",
+          "bytes": 2224,
+          "sha256": "3721500694afab16a1e02d73eacf150af28911ac17b9451985a28321ecae731d",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/s_impact_s/ip_circle.png",
+          "bytes": 392,
+          "sha256": "41ce4ebdde69d6a8537164505e981816c591c5e9d315ca2cd9fc4f68b8a6c0e6"
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/s_impact_s/s_impact_s.glb",
+          "bytes": 5696,
+          "sha256": "7569816d35c6210dccf55e5260b4fd5acfa10bf683b68c5e65bbac482674b737",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_materials_unlit"
+            ]
+          }
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "battle-speedup",
+      "logicalGroup": "battle/speedup",
+      "sources": [
+        {
+          "path": "battle/speedup.nsbmd",
+          "bytes": 1644,
+          "sha256": "44a6de29c773ef909a6d0f270cdcc547f497cd4e779e48b30456c2484cea69de",
+          "converterInput": true
+        },
+        {
+          "path": "battle/speedup.nsbta",
+          "bytes": 408,
+          "sha256": "9bfe77affcba1b42ee809669703150a3a80ffc3b3ffba4f28f60ac20df2b8ba8",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/speedup/speedup.glb",
+          "bytes": 5376,
+          "sha256": "998f6dab76b88dd63065fa52b0269aad69e43a66632363bbb79910d243fb5f28",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_texture_transform",
+              "EXT_property_animation",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/speedup/speedup.png",
+          "bytes": 981,
+          "sha256": "6bf230db59fc9ddc3c42a5fab641e7e519f2f9985441040f7f8c5bcefc1ee0de"
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "battle-test_buff",
+      "logicalGroup": "battle/test_buff",
+      "sources": [
+        {
+          "path": "battle/test_buff.nsbmd",
+          "bytes": 992,
+          "sha256": "c92d01860a513a990360406acebc19a1b2dd558aac1f795a68c07390281ba3d8",
+          "converterInput": true
+        },
+        {
+          "path": "battle/test_buff.nsbta",
+          "bytes": 264,
+          "sha256": "f9e6e226931f55d03a5d34656d3d34d3b8ce8f24efbcbcaff79e7fa2ad06a23e",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/test_buff/scrolltest.png",
+          "bytes": 310,
+          "sha256": "5254419a16af8ebbdea5c0d2fc68f485aa82b608395c52bc578a40bb4b40e021"
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/test_buff/test_buff.glb",
+          "bytes": 4360,
+          "sha256": "40fd269884dad59380ac0e97761b361bb7df7fb48bd88358584f6ff98b150327",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_texture_transform",
+              "EXT_property_animation",
+              "KHR_materials_unlit"
+            ]
+          }
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "battle-test_eff",
+      "logicalGroup": "battle/test_eff",
+      "sources": [
+        {
+          "path": "battle/test_eff.nsbmd",
+          "bytes": 1148,
+          "sha256": "8476dffc5b10f7f0674b2efa79d8b141fe64edffb4b4b852cb077f166c7c4ce4",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/test_eff/_e_X_g.png",
+          "bytes": 774,
+          "sha256": "4b144df348bda77e03ba214ba441ba773abc3445bccbb7609e286518f5661878"
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/test_eff/test_eff.glb",
+          "bytes": 2160,
+          "sha256": "f9b3d1c4328317e02a3c27571de9bde3ff7f7956cb8077a510344419c6bfb75e",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 0,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_materials_unlit"
+            ]
+          }
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "battle-toleup",
+      "logicalGroup": "battle/toleup",
+      "sources": [
+        {
+          "path": "battle/toleup.nsbmd",
+          "bytes": 1644,
+          "sha256": "64e4577f2c8540cb3ff684a58f6e07327ccfbd7e7ea0d864021a78482265a066",
+          "converterInput": true
+        },
+        {
+          "path": "battle/toleup.nsbta",
+          "bytes": 408,
+          "sha256": "3773ce8751fb163f33b2641efc1f81caf1d81373600b6141e245dc569fc0e33a",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/toleup/toleup.glb",
+          "bytes": 5372,
+          "sha256": "fff0a2a54c389e6db143b8592fbad23ef0873a311253e72941b7c0091570c229",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_texture_transform",
+              "EXT_property_animation",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/battle/toleup/toleup.png",
+          "bytes": 1006,
+          "sha256": "1392763fd236d9f64504bc32035974905684a0b808c00406957f24b84a963f6a"
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "common-lightup",
+      "logicalGroup": "common/lightup",
+      "sources": [
+        {
+          "path": "common/lightup.nsbmd",
+          "bytes": 4736,
+          "sha256": "453178c921da09c9fe67fb6a0765a3497b7325bfbe1844ea89f46fc6c9977379",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/common/lightup/light_eff.png",
+          "bytes": 2461,
+          "sha256": "ee66c8d4bf9b22b69466e3ec689b487d1875aab0b286c183b9131e1f9d99cb09"
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/common/lightup/lightup.glb",
+          "bytes": 1972,
+          "sha256": "cae56317ef555af59c105d905af887348c0b88bb0880bf7d966352f5bb4cf53d",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 0,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_materials_unlit"
+            ]
+          }
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "common-mist",
+      "logicalGroup": "common/mist",
+      "sources": [
+        {
+          "path": "common/mist.nsbmd",
+          "bytes": 4744,
+          "sha256": "891988590a80ffa185426cba8fdcfb113c890ec38a3403c877f82badb31f6205",
+          "converterInput": true
+        },
+        {
+          "path": "common/mist.nsbta",
+          "bytes": 2084,
+          "sha256": "ac73c67427af8ea479974cd60dbc75e3cb7170e11b97f5145cb5847af6d5c5b6",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/common/mist/mist.glb",
+          "bytes": 8352,
+          "sha256": "c607d1033cfddca39d4a03b5e51cf93cd79d30de1748824b4f49a4c38268ef13",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_texture_transform",
+              "EXT_property_animation",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/common/mist/mist_eff.png",
+          "bytes": 3876,
+          "sha256": "6bb310d51570d446082edc8acef8a94a693a9d4b7b6c28147320840e4b21f53d"
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "common-rain",
+      "logicalGroup": "common/rain",
+      "sources": [
+        {
+          "path": "common/rain.nsbmd",
+          "bytes": 4744,
+          "sha256": "a76fa17cab0218cc3807a9eab3fb9f7bd01e7e89494e55cad05e87d9cfb29a9c",
+          "converterInput": true
+        },
+        {
+          "path": "common/rain.nsbta",
+          "bytes": 644,
+          "sha256": "0bfa8df446d56cd4ac4a0cebdea37563324946eee411fdb288c123e20f92e248",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/common/rain/rain.glb",
+          "bytes": 4032,
+          "sha256": "4ebc766b968c7b17dc097b1f7566212134346d768ed17dcd840e11f4fe4b6294",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_texture_transform",
+              "EXT_property_animation",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/common/rain/rain_eff.png",
+          "bytes": 4142,
+          "sha256": "5eb28a78831fee5e8f83a44ed35d93c245e04b38d8aa48cc5207b56dca6bdc8e"
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "common-sandstome",
+      "logicalGroup": "common/sandstome",
+      "sources": [
+        {
+          "path": "common/sandstome.nsbmd",
+          "bytes": 4736,
+          "sha256": "dd8d85d1a640aacc43c756c9d42bad6dec0a9410f7a69bc947a7dbb1f76cc080",
+          "converterInput": true
+        },
+        {
+          "path": "common/sandstome.nsbta",
+          "bytes": 644,
+          "sha256": "a931ba838618c43a0065ec0a9b3c4c4830980d2a9ee7c002abf78d935cba5d56",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/common/sandstome/sand_eff.png",
+          "bytes": 2989,
+          "sha256": "77f27fd02983d0f4e0514ff65ed273e15df29059b067b9a4a831aa6f6a066da8"
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/common/sandstome/sandstome.glb",
+          "bytes": 4052,
+          "sha256": "9ec983f0f7b8b3ac77f1734a5931ace55bbb8998b291e7d12a7f62225b30a38e",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_texture_transform",
+              "EXT_property_animation",
+              "KHR_materials_unlit"
+            ]
+          }
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "common-snow",
+      "logicalGroup": "common/snow",
+      "sources": [
+        {
+          "path": "common/snow.nsbmd",
+          "bytes": 4804,
+          "sha256": "966e7502b18712ff7bf38f38a3e7629e484c9ac11213be064b5afabf53fe959a",
+          "converterInput": true
+        },
+        {
+          "path": "common/snow.nsbta",
+          "bytes": 528,
+          "sha256": "59ca23a7b5e7e9ab96c6414a8d0831722fe288b4ced0f98ddbedf5e2a64cf7f1",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/common/snow/snow.glb",
+          "bytes": 5040,
+          "sha256": "2a4434d8f50dcf1c4bca9ad8e9cf1ec31380a5f23973fa83d6ae3a4c60882ea1",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_texture_transform",
+              "EXT_property_animation",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/common/snow/snow_eff.png",
+          "bytes": 1230,
+          "sha256": "bdf6ea83bd6110d82a1c1b18922efef62626a8d3515d187b27aa21d8423b019e"
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "common-snowstome",
+      "logicalGroup": "common/snowstome",
+      "sources": [
+        {
+          "path": "common/snowstome.nsbmd",
+          "bytes": 4804,
+          "sha256": "a8550896802c48273983d92183b4a2dfe240d680b070cab9b35aedeb62a2030c",
+          "converterInput": true
+        },
+        {
+          "path": "common/snowstome.nsbta",
+          "bytes": 644,
+          "sha256": "8d36a8d26dd21be84caa778113c0a16498df2e767cebfdac795dfa5a3c1e501a",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/common/snowstome/snowstome.glb",
+          "bytes": 4344,
+          "sha256": "9ec4556ebe1d91cf78eccdc8ec60629dbdbb3292f760fcd09dff24be233b96d3",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_texture_transform",
+              "EXT_property_animation",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/common/snowstome/snowstome_eff.png",
+          "bytes": 3667,
+          "sha256": "6972369b5153792d62af2f475a5bc833146a31f2ea451baaf27dc4e48a6423bc"
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "common-spark",
+      "logicalGroup": "common/spark",
+      "sources": [
+        {
+          "path": "common/spark.nsbma",
+          "bytes": 2172,
+          "sha256": "d3e2f348488a7b59536846400f86e049eec19ab63f0a8ce97630dfadf5f55bce",
+          "converterInput": false
+        },
+        {
+          "path": "common/spark.nsbmd",
+          "bytes": 5484,
+          "sha256": "daa29e97794556ce9a82eb8238f8394329e13aea80dcddd83a143804ab9288e3",
+          "converterInput": true
+        },
+        {
+          "path": "common/spark.nsbta",
+          "bytes": 4236,
+          "sha256": "bbc0902a7933a6dbf7477c656fe17567e41e0e96bb87bf6f97a1d16393b732b0",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/common/spark/m_spark_eff.png",
+          "bytes": 1428,
+          "sha256": "1990cde42ccb98cc4dd729808fe937e6d94523061b8f8c44c58ae1b85eb5c1a2"
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/common/spark/spark.glb",
+          "bytes": 23696,
+          "sha256": "6da6827b8951c5b8684e2237838250e4174d6ab9b0e3d604e01c967e01f9ce1c",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 4,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_texture_transform",
+              "EXT_property_animation",
+              "KHR_materials_unlit"
+            ]
+          }
+        }
+      ],
+      "unsupportedSourceFormats": [
+        ".nsbma"
+      ],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "common-time_pl",
+      "logicalGroup": "common/time_pl",
+      "sources": [
+        {
+          "path": "common/time_pl.nsbmd",
+          "bytes": 4736,
+          "sha256": "212605a3d8df514580da8eae3f6aafabbff2b081f93b0156f923f8c928d4cdcc",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/common/time_pl/time_p.png",
+          "bytes": 586,
+          "sha256": "043ad0381bb259874663bcc3abb979c8b57121d89abf9edb2e643e7b210956d3"
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/common/time_pl/time_pl.glb",
+          "bytes": 1964,
+          "sha256": "f80e1b07c7a9950f7d2ead83ab2fab176b777cc71f4ac37eeb99134564238129",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 0,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_materials_unlit"
+            ]
+          }
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    {
+      "systemId": "common-wind",
+      "logicalGroup": "common/wind",
+      "sources": [
+        {
+          "path": "common/wind.nsbmd",
+          "bytes": 4744,
+          "sha256": "e8615087eb4654c47b2eacce84aa54a01366a6cc09537ef1beec0f37a9ec3c3e",
+          "converterInput": true
+        },
+        {
+          "path": "common/wind.nsbta",
+          "bytes": 644,
+          "sha256": "0b31d48c632ca67de1986162ee03dcc72e7638984fd2772cd6245bafdc1f96c0",
+          "converterInput": true
+        }
+      ],
+      "outputs": [
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/common/wind/wind.glb",
+          "bytes": 4032,
+          "sha256": "cb1d2d276e3d8f9a3bcce981f01a6c291c491e0eed67951ec3e4bac499a8f997",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_texture_transform",
+              "EXT_property_animation",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "docs/art/production/vfx/faithful-reference-26/common/wind/wind_eff.png",
+          "bytes": 2980,
+          "sha256": "4165afd3ac3e165958ae406d4dfca6b2aa49d665ae16ca633f9a683211108d8a"
+        }
+      ],
+      "unsupportedSourceFormats": [],
+      "evidenceStatus": "VERIFIED_BINARY_REFERENCE",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "runtimeEligible": false,
+      "shippingReady": false
+    }
+  ]
+}

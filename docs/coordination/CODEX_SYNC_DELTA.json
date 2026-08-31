@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "owner": "CODEX_ART",
-  "deltaId": "CODEX-ART-RUNTIME-MAP-BUNDLE-V1-2026-08-31",
+  "deltaId": "CODEX-ART-INTERNAL-FAITHFUL-BASELINE-V1-2026-09-01",
   "targetSyncRevision": 29,
-  "status": "RUNTIME_MAP_ART_BUNDLE_SEAM_COMPLETE_CANDIDATE_PIXEL_PROMOTION_EVIDENCE_GATED",
+  "status": "INTERNAL_FAITHFUL_BASELINE_DIRECT_ASSEMBLY_5_OF_9_SLOTS_COMPLETE",
   "statusSource": "docs/coordination/CODEX_ART_STATUS.json",
   "baseSyncRevision": 28,
   "checkpoint": {
@@ -32,6 +32,56 @@
     "documentationOnly": false
   },
   "completedWork": [
+    {
+      "id": "INTERNAL-FAITHFUL-BASELINE-V1",
+      "state": "DIRECT_INTERNAL_ASSEMBLY_5_OF_9_SLOTS_READY",
+      "scope": "Characters, UI/HUD reference, Cage, Hunt and VFX directly assembled for the internal 2026 mobile baseline; no user-facing loader",
+      "sourcePolicy": "OWNER_AUTHORIZED_INTERNAL_ONLY_GENERATED_OUTPUT_GITIGNORED_PUBLIC_RELEASE_GATE_DEFERRED",
+      "technicalQa": "2512_FILES_276_19_LOGICAL_MIB_ALL_HASHES_PASS",
+      "runtimeEligible": false,
+      "shippingStatus": "INTERNAL_BUILD_ONLY_RAISING_BATTLE_GATE_PACKAGING_STILL_PENDING",
+      "output": "scripts/build-internal-faithful-baseline.mjs"
+    },
+    {
+      "id": "CHAMPIONSHIP-PRESENTATION-PACK-CONTRACT-V1",
+      "state": "FULL_GAME_VISUAL_SLOT_AND_GAMEPLAY_ISOLATION_CONTRACT_COMPLETE",
+      "scope": "Nine visual slots across temporary, faithful-original and deferred cat/dog packs; local Owner-supplied original review permitted without repository inclusion",
+      "sourcePolicy": "INTERNAL_PRODUCTION_AUTHORIZED_FORMAL_DOCUMENT_LINK_PENDING_NO_ROM_OR_NITRO_PAYLOAD_COMMITTED",
+      "technicalQa": "6_FOCUSED_TESTS_PASS_PACKS_CANNOT_CHANGE_GAMEPLAY_OR_SAVE",
+      "runtimeEligible": true,
+      "shippingStatus": "NOT_SHIPPING_READY_PUBLIC_RELEASE_AND_RUNTIME_ART_PROMOTION_REMAIN_GATED",
+      "output": "docs/contracts/championship/CHAMPIONSHIP_PRESENTATION_PACK_CONTRACT.v1.json"
+    },
+    {
+      "id": "CHARACTER-FAITHFUL-HD224-V1",
+      "state": "7_OF_7_BATCHES_COMPLETE_TECHNICAL_PIXEL_FAITHFUL_BASELINE",
+      "scope": "224 Main/Sub PixiJS atlases, 17,235 cells, 11,480 sequences, stable alpha/anchor contracts",
+      "sourcePolicy": "OWNER_REPORTED_LICENSED_SOURCE_LINK_PENDING_DOCS_ONLY",
+      "technicalQa": "ALL_224_VALIDATE_106_INTENTIONAL_BLANK_CELLS_PRESERVED",
+      "runtimeEligible": false,
+      "shippingStatus": "HUMAN_APPROVAL_LICENSE_LINK_AND_RUNTIME_QA_REQUIRED",
+      "output": "docs/art/production/characters/faithful-hd224/manifest.json"
+    },
+    {
+      "id": "UI-FAITHFUL-HD96-V1",
+      "state": "96_SCENE_TECHNICAL_REFERENCE_CONTRACT_COMPLETE",
+      "scope": "96 NXR scenes, 1,369 nodes, 1080x1920 DOM zone contract, 87 backgrounds, 193 sprite witnesses",
+      "sourcePolicy": "OWNER_REPORTED_LICENSED_SOURCE_LINK_PENDING_DOCS_ONLY",
+      "technicalQa": "HASH_SIZE_SCENE_NODE_COUNTS_PASS_45_SCREEN_ROLES_REMAIN_UNKNOWN",
+      "runtimeEligible": false,
+      "shippingStatus": "FINAL_DOM_COMPONENTS_HUMAN_APPROVAL_LICENSE_LINK_AND_RUNTIME_QA_REQUIRED",
+      "output": "docs/art/production/ui/faithful-hd96/manifest.json"
+    },
+    {
+      "id": "VFX-FAITHFUL-REFERENCE-26",
+      "state": "FULL_26_SYSTEM_REFERENCE_CONVERSION_COMPLETE",
+      "scope": "26 Nitro VFX systems, 55 GLB/PNG reference outputs",
+      "sourcePolicy": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "technicalQa": "ALL_SOURCE_HASHES_OUTPUT_HASHES_AND_GLB_MESHES_VALIDATE",
+      "runtimeEligible": false,
+      "shippingStatus": "LICENSED_REPLACEMENT_TRIGGER_TIMING_HUMAN_APPROVAL_AND_RUNTIME_QA_REQUIRED",
+      "output": "docs/art/production/vfx/faithful-reference-26/manifest.json"
+    },
     {
       "id": "ART-RUNTIME-MAP-BUNDLE-V1",
       "state": "TECHNICAL_RUNTIME_SEAM_COMPLETE_NO_CANDIDATE_PIXEL_PROMOTED",

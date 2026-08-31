@@ -10,6 +10,14 @@ __pycache__/
 # Research staging is deterministic external evidence, never product history.
 research/original-evidence/staging/
 
+# Legal documents contain private terms and signatures. Only their evidence IDs
+# and non-sensitive scope metadata belong in the repository.
+docs/legal/private/
+
+# Owner-authorized non-public faithful baseline. Rebuilt locally from the
+# validated art-production candidates; never committed or released.
+assets/production/internal-faithful-baseline/
+
 # ROM / decoded proprietary payloads are forbidden from this product repo.
 *.nds
 *.srl
@@ -30,5 +38,8 @@ research/original-evidence/staging/
 *.nsbmd
 *.nsbtx
 *.nsbca
+*.nsbta
+*.nsbma
+*.nsbva
 *.bsar
 

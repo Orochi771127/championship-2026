@@ -1,0 +1,798 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 17,
+  "scenePath": "battle_result/result_sub_net_scene.nxr",
+  "category": "Battle Result",
+  "overlayOwner": "OVL8",
+  "sourceEvidence": {
+    "fileId": 213,
+    "fileName": "result_sub_net_scene.nxr",
+    "sha256": "be7807bb399971fbf4a1ab1543d0bb3cb4f0df706ee9f4fadeedbe1fa8eef955",
+    "overlayMappingConfidence": "SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "SUB",
+    "roleEvidence": "FILENAME_HEURISTIC"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [
+    {
+      "resourceIndex": 0,
+      "resourceName": "result_obj_main",
+      "cellCount": 67,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "battle_result/result_obj_main.ncer",
+        "nanr": "battle_result/result_obj_main.nanr",
+        "ncgr": null,
+        "ncbr": "battle_result/result_obj_main.ncbr",
+        "nclr": "battle_result/result_obj_main.nclr",
+        "nscr": null
+      },
+      "spriteWitness": "docs/art/production/ui/faithful-hd96/sprite-cell-witnesses-4x/battle_result__result_obj_main__cells.png",
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "unnamed0012",
+      "resourceIndex": 0,
+      "cellIndex": 14,
+      "sourcePosition": {
+        "x": 44,
+        "y": 19
+      },
+      "portraitProjection": {
+        "x": 185.625,
+        "y": 1040.1562
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 1,
+      "name": "unnamed0013",
+      "resourceIndex": 0,
+      "cellIndex": 15,
+      "sourcePosition": {
+        "x": 42,
+        "y": 69
+      },
+      "portraitProjection": {
+        "x": 177.1875,
+        "y": 1251.0938
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 2,
+      "name": "unnamed0018",
+      "resourceIndex": 0,
+      "cellIndex": 21,
+      "sourcePosition": {
+        "x": 183,
+        "y": 21
+      },
+      "portraitProjection": {
+        "x": 772.0312,
+        "y": 1048.5938
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 3,
+      "name": "unnamed0019",
+      "resourceIndex": 0,
+      "cellIndex": 20,
+      "sourcePosition": {
+        "x": 183,
+        "y": 71
+      },
+      "portraitProjection": {
+        "x": 772.0312,
+        "y": 1259.5312
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 4,
+      "name": "battle3",
+      "resourceIndex": 0,
+      "cellIndex": 22,
+      "sourcePosition": {
+        "x": 171,
+        "y": 20
+      },
+      "portraitProjection": {
+        "x": 721.4062,
+        "y": 1044.375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 5,
+      "name": "battle2",
+      "resourceIndex": 0,
+      "cellIndex": 22,
+      "sourcePosition": {
+        "x": 162,
+        "y": 20
+      },
+      "portraitProjection": {
+        "x": 683.4375,
+        "y": 1044.375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 6,
+      "name": "battle1",
+      "resourceIndex": 0,
+      "cellIndex": 22,
+      "sourcePosition": {
+        "x": 153,
+        "y": 20
+      },
+      "portraitProjection": {
+        "x": 645.4688,
+        "y": 1044.375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 7,
+      "name": "battle0",
+      "resourceIndex": 0,
+      "cellIndex": 22,
+      "sourcePosition": {
+        "x": 144,
+        "y": 20
+      },
+      "portraitProjection": {
+        "x": 607.5,
+        "y": 1044.375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 8,
+      "name": "win2",
+      "resourceIndex": 0,
+      "cellIndex": 22,
+      "sourcePosition": {
+        "x": 162,
+        "y": 45
+      },
+      "portraitProjection": {
+        "x": 683.4375,
+        "y": 1149.8438
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 9,
+      "name": "win1",
+      "resourceIndex": 0,
+      "cellIndex": 22,
+      "sourcePosition": {
+        "x": 153,
+        "y": 45
+      },
+      "portraitProjection": {
+        "x": 645.4688,
+        "y": 1149.8438
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 10,
+      "name": "win0",
+      "resourceIndex": 0,
+      "cellIndex": 22,
+      "sourcePosition": {
+        "x": 144,
+        "y": 45
+      },
+      "portraitProjection": {
+        "x": 607.5,
+        "y": 1149.8438
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 11,
+      "name": "rate2",
+      "resourceIndex": 0,
+      "cellIndex": 22,
+      "sourcePosition": {
+        "x": 171,
+        "y": 70
+      },
+      "portraitProjection": {
+        "x": 721.4062,
+        "y": 1255.3125
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 12,
+      "name": "rate1",
+      "resourceIndex": 0,
+      "cellIndex": 22,
+      "sourcePosition": {
+        "x": 162,
+        "y": 70
+      },
+      "portraitProjection": {
+        "x": 683.4375,
+        "y": 1255.3125
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 13,
+      "name": "rate0",
+      "resourceIndex": 0,
+      "cellIndex": 22,
+      "sourcePosition": {
+        "x": 153,
+        "y": 70
+      },
+      "portraitProjection": {
+        "x": 645.4688,
+        "y": 1255.3125
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 14,
+      "name": "text",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 34,
+        "y": 98
+      },
+      "portraitProjection": {
+        "x": 143.4375,
+        "y": 1373.4375
+      },
+      "params": [
+        0,
+        0,
+        12,
+        3
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 15,
+      "name": "unnamed0033",
+      "resourceIndex": 0,
+      "cellIndex": 31,
+      "sourcePosition": {
+        "x": 44,
+        "y": 44
+      },
+      "portraitProjection": {
+        "x": 185.625,
+        "y": 1145.625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 16,
+      "name": "unnamed0032",
+      "resourceIndex": 0,
+      "cellIndex": 21,
+      "sourcePosition": {
+        "x": 183,
+        "y": 46
+      },
+      "portraitProjection": {
+        "x": 772.0312,
+        "y": 1154.0625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 17,
+      "name": "win3",
+      "resourceIndex": 0,
+      "cellIndex": 22,
+      "sourcePosition": {
+        "x": 171,
+        "y": 45
+      },
+      "portraitProjection": {
+        "x": 721.4062,
+        "y": 1149.8438
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 18,
+      "name": "unnamed0011",
+      "resourceIndex": 0,
+      "cellIndex": 11,
+      "sourcePosition": {
+        "x": 30,
+        "y": 68
+      },
+      "portraitProjection": {
+        "x": 126.5625,
+        "y": 1246.875
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 19,
+      "name": "unnamed0010",
+      "resourceIndex": 0,
+      "cellIndex": 11,
+      "sourcePosition": {
+        "x": 30,
+        "y": 43
+      },
+      "portraitProjection": {
+        "x": 126.5625,
+        "y": 1141.4062
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 20,
+      "name": "unnamed0009",
+      "resourceIndex": 0,
+      "cellIndex": 11,
+      "sourcePosition": {
+        "x": 30,
+        "y": 18
+      },
+      "portraitProjection": {
+        "x": 126.5625,
+        "y": 1035.9375
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 21,
+      "name": "unnamed0017",
+      "resourceIndex": 0,
+      "cellIndex": 10,
+      "sourcePosition": {
+        "x": 114,
+        "y": 69
+      },
+      "portraitProjection": {
+        "x": 480.9375,
+        "y": 1251.0938
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 22,
+      "name": "unnamed0016",
+      "resourceIndex": 0,
+      "cellIndex": 10,
+      "sourcePosition": {
+        "x": 114,
+        "y": 44
+      },
+      "portraitProjection": {
+        "x": 480.9375,
+        "y": 1145.625
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 23,
+      "name": "unnamed0015",
+      "resourceIndex": 0,
+      "cellIndex": 10,
+      "sourcePosition": {
+        "x": 114,
+        "y": 19
+      },
+      "portraitProjection": {
+        "x": 480.9375,
+        "y": 1040.1562
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 24,
+      "name": "unnamed0007",
+      "resourceIndex": 0,
+      "cellIndex": 8,
+      "sourcePosition": {
+        "x": 220,
+        "y": 136
+      },
+      "portraitProjection": {
+        "x": 928.125,
+        "y": 1533.75
+      },
+      "params": [
+        3,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 25,
+      "name": "unnamed0006",
+      "resourceIndex": 0,
+      "cellIndex": 6,
+      "sourcePosition": {
+        "x": 8,
+        "y": 136
+      },
+      "portraitProjection": {
+        "x": 33.75,
+        "y": 1533.75
+      },
+      "params": [
+        3,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 26,
+      "name": "unnamed0000",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 8,
+        "y": 6
+      },
+      "portraitProjection": {
+        "x": 33.75,
+        "y": 985.3125
+      },
+      "params": [
+        3,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 27,
+      "name": "unnamed0002",
+      "resourceIndex": 0,
+      "cellIndex": 2,
+      "sourcePosition": {
+        "x": 220,
+        "y": 6
+      },
+      "portraitProjection": {
+        "x": 928.125,
+        "y": 985.3125
+      },
+      "params": [
+        3,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 28,
+      "name": "unnamed0008",
+      "resourceIndex": 0,
+      "cellIndex": 7,
+      "sourcePosition": {
+        "x": 24,
+        "y": 144
+      },
+      "portraitProjection": {
+        "x": 101.25,
+        "y": 1567.5
+      },
+      "params": [
+        4,
+        0,
+        26,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 29,
+      "name": "unnamed0003",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 8,
+        "y": 46
+      },
+      "portraitProjection": {
+        "x": 33.75,
+        "y": 1154.0625
+      },
+      "params": [
+        4,
+        0,
+        1,
+        12
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 30,
+      "name": "unnamed0001",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 24,
+        "y": 6
+      },
+      "portraitProjection": {
+        "x": 101.25,
+        "y": 985.3125
+      },
+      "params": [
+        4,
+        0,
+        26,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 31,
+      "name": "unnamed0005",
+      "resourceIndex": 0,
+      "cellIndex": 5,
+      "sourcePosition": {
+        "x": 236,
+        "y": 30
+      },
+      "portraitProjection": {
+        "x": 995.625,
+        "y": 1086.5625
+      },
+      "params": [
+        4,
+        0,
+        1,
+        14
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 32,
+      "name": "unnamed0004",
+      "resourceIndex": 0,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 24,
+        "y": 16
+      },
+      "portraitProjection": {
+        "x": 101.25,
+        "y": 1027.5
+      },
+      "params": [
+        5,
+        0,
+        27,
+        16
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    }
+  ],
+  "dynamicVirtualNodeCount": 1,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

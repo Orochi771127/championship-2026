@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "contractId": "CHAMPIONSHIP_PRESENTATION_PACK_CONTRACT/v1",
+  "authority": "OWNER_DIRECTIVE_2026-09-01",
+  "purpose": "Complete the faithful Original Championship presentation first, then permit whole-game reskinning without forking or changing gameplay.",
+  "internalProduction": {
+    "state": "OWNER_AUTHORIZED_INTERNAL_PRODUCTION",
+    "formalDocument": "PENDING_PRIVATE_DOCUMENT_LINK",
+    "publicReleasePermitted": false,
+    "shippingPermitted": false
+  },
+  "completionStrategy": {
+    "gameplayCompletionMustWaitForFinalArt": false,
+    "internalRuntimeDefault": "championship:pack:faithful-original",
+    "repositoryRuntimeFallback": "championship:pack:temporary-prototype",
+    "directInternalFaithfulBaseline": {
+      "permitted": true,
+      "binding": "DIRECT_NO_USER_FACING_LOADER",
+      "scope": "NON_PUBLIC_INTERNAL_2026_MOBILE_BUILD",
+      "sourcePayloadCommittedToRepository": false,
+      "includedInPublicBuildOrRelease": false,
+      "mayChangeGameplayOrSave": false
+    },
+    "reviewOrder": [
+      "COMPLETE_GAME_SYSTEMS_WITH_STABLE_PRESENTATION_SLOTS",
+      "DIRECTLY_BIND_FAITHFUL_ORIGINAL_INTERNAL_BASELINE",
+      "REVIEW_WHOLE_GAME_END_TO_END",
+      "SELECT_ELEMENTS_TO_RETAIN_OR_REPLACE",
+      "BUILD_AND_APPROVE_REPLACEMENT_SKINS"
+    ]
+  },
+  "rendererAuthority": {
+    "applicationUi": "DOM",
+    "playable2d": "ONE_SHARED_PIXIJS_APPLICATION",
+    "verifiedOrOwnerApproved3d": "BOUNDED_THREEJS_SCENE",
+    "forbidden": [
+      "SECOND_ROUTER",
+      "SECOND_STORE",
+      "SECOND_SAVE_AUTHORITY",
+      "SECOND_PIXI_APPLICATION",
+      "SECOND_GAMEPLAY_TICKER"
+    ]
+  },
+  "gameplayFidelity": {
+    "ROM_VERIFIED": "PRESERVE_EXACTLY",
+    "PARTIAL": "PRESERVE_KNOWN_STRUCTURE_ONLY",
+    "UNKNOWN_REQUIRES_TRACE": "KEEP_NEUTRAL_DO_NOT_INVENT",
+    "OWNER_APPROVED_ADAPTATION": "REQUIRES_SEPARATE_EXPLICIT_RECORD",
+    "packSelectionMustNeverChange": [
+      "simulation_entity_ids",
+      "damage_or_battle_resolution",
+      "ai_decisions",
+      "capture_rules_or_probabilities",
+      "collision_or_walkability_truth",
+      "raising_rules",
+      "progression_or_rewards",
+      "economy",
+      "save_schema_or_saved_truth"
+    ]
+  },
+  "slots": [
+    { "slotId": "raisingHome", "renderer": "PIXIJS_2D", "content": "raising field presentation" },
+    { "slotId": "characterRoster", "renderer": "PIXIJS_2D", "content": "224 Main/Sub character atlases" },
+    { "slotId": "uiHud", "renderer": "DOM", "content": "96-scene UI/HUD presentation" },
+    { "slotId": "cageFields", "renderer": "PIXIJS_2D", "content": "CM01-CM40 visual layers" },
+    { "slotId": "huntField", "renderer": "PIXIJS_2D", "content": "large draggable Hunt fields" },
+    { "slotId": "battleFields", "renderer": "PIXIJS_2D", "content": "11 Battle fields and verified animated layers" },
+    { "slotId": "vfx", "renderer": "PIXIJS_2D_OR_BOUNDED_THREEJS_BY_EVIDENCE", "content": "registered visual effects" },
+    { "slotId": "gateSelect", "renderer": "BOUNDED_THREEJS_WITH_2D_FALLBACK", "content": "Gate world and destinations" },
+    { "slotId": "packaging", "renderer": "DOM", "content": "title, loading, transition and release presentation" }
+  ],
+  "packOrder": [
+    "championship:pack:temporary-prototype",
+    "championship:pack:faithful-original",
+    "championship:pack:cat-dog-future-skin"
+  ],
+  "packPolicy": {
+    "temporaryPrototype": "CURRENT_RUNTIME_ONLY_NOT_FINAL",
+    "faithfulOriginal": "ACTIVE_INTERNAL_PRODUCTION_DEFAULT_TARGET",
+    "catDogFutureSkin": "DECLARED_UNBOUND_DEFERRED_UNTIL_FAITHFUL_COMPLETION_REVIEW"
+  },
+  "promotionGates": [
+    "SOURCE_AND_OUTPUT_HASH_VALIDATION",
+    "LICENSE_DOCUMENT_LINK_FOR_PUBLIC_RELEASE",
+    "HUMAN_VISUAL_APPROVAL",
+    "RUNTIME_BINDING_WITHOUT_GAMEPLAY_IMPORTS",
+    "MOBILE_AND_DESKTOP_VISUAL_QA",
+    "ART_PRODUCTION_INDEX_REGISTRATION"
+  ]
+}

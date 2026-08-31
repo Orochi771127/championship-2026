@@ -1,0 +1,412 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 35,
+  "scenePath": "shop/shop_item_plate_scene.nxr",
+  "category": "Shop",
+  "overlayOwner": "OVL17",
+  "sourceEvidence": {
+    "fileId": 5442,
+    "fileName": "shop_item_plate_scene.nxr",
+    "sha256": "8aebcb7858d6b79a7b664172e4090c0563d3cdee483374a484292f3a4d7aa5b8",
+    "overlayMappingConfidence": "SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "UNKNOWN_REQUIRES_TRACE",
+    "roleEvidence": "UNKNOWN_REQUIRES_TRACE"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [
+    {
+      "resourceIndex": 0,
+      "resourceName": "menu_main",
+      "cellCount": null,
+      "hasRenderBundle": false,
+      "source": {
+        "ncer": null,
+        "nanr": null,
+        "ncgr": null,
+        "ncbr": null,
+        "nclr": null,
+        "nscr": null
+      },
+      "spriteWitness": null,
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    },
+    {
+      "resourceIndex": 1,
+      "resourceName": "shop_obj_sub",
+      "cellCount": 10,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "shop/shop_obj_sub.ncer",
+        "nanr": "shop/shop_obj_sub.nanr",
+        "ncgr": null,
+        "ncbr": "shop/shop_obj_sub.ncbr",
+        "nclr": "shop/shop_obj_sub.nclr",
+        "nscr": null
+      },
+      "spriteWitness": "docs/art/production/ui/faithful-hd96/sprite-cell-witnesses-4x/shop__shop_obj_sub__cells.png",
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "unnamed0002",
+      "resourceIndex": 0,
+      "cellIndex": 37,
+      "sourcePosition": {
+        "x": 11,
+        "y": 23
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 1,
+      "name": "price0",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": -27,
+        "y": 31
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 2,
+      "name": "price1",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": -18,
+        "y": 31
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 3,
+      "name": "price2",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": -9,
+        "y": 31
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 4,
+      "name": "price3",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 0,
+        "y": 31
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 5,
+      "name": "price4",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 9,
+        "y": 31
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 6,
+      "name": "image_new",
+      "resourceIndex": 1,
+      "cellIndex": 2,
+      "sourcePosition": {
+        "x": 31,
+        "y": -34
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 7,
+      "name": "level_1",
+      "resourceIndex": 1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": -19,
+        "y": 10
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 8,
+      "name": "level_2",
+      "resourceIndex": 1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 0,
+        "y": 10
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 9,
+      "name": "level_3",
+      "resourceIndex": 1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 18,
+        "y": 10
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 10,
+      "name": "level_4",
+      "resourceIndex": 1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": -12,
+        "y": 10
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 11,
+      "name": "level_5",
+      "resourceIndex": 1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 12,
+        "y": 10
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 12,
+      "name": "sold_out",
+      "resourceIndex": 1,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 0,
+        "y": -10
+      },
+      "portraitProjection": null,
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 13,
+      "name": "image",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 0,
+        "y": -10
+      },
+      "portraitProjection": null,
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 14,
+      "name": "plate_base",
+      "resourceIndex": 1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 0,
+        "y": -10
+      },
+      "portraitProjection": null,
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 15,
+      "name": "price_base",
+      "resourceIndex": 1,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": -34,
+        "y": 24
+      },
+      "portraitProjection": null,
+      "params": [
+        4,
+        0,
+        9,
+        2
+      ],
+      "colorModulationRaw": "0xFF85983E",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 16,
+      "name": "image_base",
+      "resourceIndex": 1,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": -34,
+        "y": -42
+      },
+      "portraitProjection": null,
+      "params": [
+        4,
+        0,
+        9,
+        8
+      ],
+      "colorModulationRaw": "0xFF000000",
+      "cellLinkValidated": true
+    }
+  ],
+  "dynamicVirtualNodeCount": 1,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

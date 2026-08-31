@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "visibility": "REPOSITORY_COLLABORATORS",
+  "containsPrivateDocuments": false,
+  "entries": [
+    {
+      "evidenceId": "LIC-CHAMPIONSHIP-2026-001",
+      "title": "Original game visual data internal production authorization",
+      "authorizationSource": "Owner directives recorded in the Codex project task on 2026-09-01",
+      "authorizationRecordedOn": "2026-09-01",
+      "scope": {
+        "sourceGameCode": "YDIJ",
+        "sourceRomSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+        "assetFamilies": [
+          "characters_224_main_sub_and_animation",
+          "ui_hud_96_scene_reference",
+          "cage_fields_cm01_cm40",
+          "hunt_fields_all_verified_variants",
+          "battle_fields_and_animated_layers",
+          "gate_select_world_map_and_earth",
+          "vfx_26_registry_systems",
+          "final_visual_packaging"
+        ],
+        "permittedWork": [
+          "extract_for_conversion",
+          "convert_to_web_runtime_formats",
+          "create_internal_runtime_candidates",
+          "create_internal_review_galleries",
+          "build_presentation_pack_bindings",
+          "perform_non_public_visual_and_device_qa"
+        ]
+      },
+      "document": {
+        "status": "PENDING_PRIVATE_DOCUMENT_LINK",
+        "privateVaultReference": null,
+        "sha256": null,
+        "verifiedBy": null,
+        "verifiedOn": null
+      },
+      "decisions": {
+        "conversionPermitted": true,
+        "internalProductionPermitted": true,
+        "internalReviewPermitted": true,
+        "directInternalFaithfulBaselineBindingPermitted": true,
+        "runtimeIntegrationPermitted": false,
+        "shippingPermitted": false
+      },
+      "notes": [
+        "This entry truthfully records the Owner's instruction to complete internal production before whole-product visual review.",
+        "Internal authorization is not represented as a substitute for a signed licence or release approval.",
+        "The faithful baseline may be directly bound in a non-public internal build without a user-facing loader; ROM and Nitro source payloads remain excluded from the repository and every public release.",
+        "It does not claim that a signed licence document has been received or legally reviewed.",
+        "Runtime registration and release require a linked, hashed, and verified private document."
+      ]
+    }
+  ]
+}
