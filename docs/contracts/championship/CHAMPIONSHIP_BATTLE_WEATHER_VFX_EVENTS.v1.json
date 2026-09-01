@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "contractId": "championship-battle-weather-vfx-events-v1",
+  "scope": "PRESENTATION_ONLY_NO_SIMULATION_OR_SAVE_AUTHORITY",
+  "tickerPolicy": "CALLER_OWNED_DELTA_MS",
+  "concurrency": {
+    "battle": "one transient battle effect; a newer battle event replaces it",
+    "common": "one transient explicitly requested common effect",
+    "weather": "one persistent weather effect independent of transient effects"
+  },
+  "events": [
+    {
+      "type": "championship:presentation:battle-big-hit-confirmed",
+      "systemId": "hitspark_big",
+      "channel": "battle",
+      "playback": "ONE_SHOT",
+      "emitWhen": "after authoritative battle contact/damage resolution classifies the presentation as the original large-hit effect, before advancing to the next action presentation",
+      "evidence": "ROM_VERIFIED_ASSET_USE_TRIGGER_PARAMETERS_OPEN"
+    },
+    {
+      "type": "championship:presentation:battle-hyper-started",
+      "systemId": "hypereffect",
+      "channel": "battle",
+      "playback": "ONE_SHOT",
+      "emitWhen": "once on entry to a confirmed Hyper presentation phase; never from a generic button press",
+      "evidence": "ROM_VERIFIED_ASSET_USE_TRIGGER_PARAMETERS_OPEN"
+    },
+    {
+      "type": "championship:presentation:common-spark-requested",
+      "systemId": "spark",
+      "channel": "common",
+      "playback": "ONE_SHOT",
+      "emitWhen": "only from a system whose original caller has been traced or from an explicitly labelled internal presentation preview",
+      "evidence": "EXPLICIT_PRESENTATION_REQUEST_ONLY_CALLER_OPEN"
+    },
+    {
+      "type": "championship:presentation:weather-rain-changed",
+      "systemId": "rain",
+      "channel": "weather",
+      "playback": "LOOP_WHILE_ACTIVE",
+      "emitWhen": "once when authoritative weather enters or leaves rain; never every frame",
+      "evidence": "EXPLICIT_WEATHER_TRANSITION_ONLY_CALLER_OPEN"
+    }
+  ],
+  "hardConstraints": [
+    "The event bus is ephemeral and is never serialized.",
+    "A failed renderer or VFX load cannot change battle or weather state.",
+    "The presentation layer does not infer a hit, Hyper state, Spark caller, or rain state.",
+    "No private requestAnimationFrame or ticker is created.",
+    "Gate Earth is outside this contract and remains unmounted."
+  ]
+}

@@ -29,6 +29,19 @@
     </div>
     <div id="cm-root" hidden></div>
     <noscript>Digimon Championship 2026 needs JavaScript.</noscript>
-    <script type="module" src="./src/championship/app/main.js?v=vs4-cap-1"></script>
+    <script>
+      if (window.location.protocol === "file:") {
+        document.querySelector("#cm-new-game").disabled = true;
+        document.querySelector("#cm-continue").disabled = true;
+        document.querySelector("#cm-title-note").textContent =
+          "請使用 START_CHAMPIONSHIP.cmd 啟動。瀏覽器不能直接執行本機 HTML 的遊戲模組。";
+        document.documentElement.dataset.launchBlocked = "FILE_PROTOCOL";
+      } else {
+        const gameModule = document.createElement("script");
+        gameModule.type = "module";
+        gameModule.src = "./src/championship/app/main.js?v=vs4-cap-1";
+        document.body.appendChild(gameModule);
+      }
+    </script>
   </body>
 </html>

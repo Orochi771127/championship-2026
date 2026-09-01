@@ -34,10 +34,28 @@ Only source code, source-free hashes/trace receipts, and tests are committed.
 
 - Conversion validator: 5 source systems, 6 GLBs, 9 PNGs, 2 animation sidecars
 - Internal baseline validator: 5 of 9 presentation slots, 2,473 files
-- Node test suite: 314 passing, 0 failing
+- Git-tracked Node test suite: 332 passing, 0 failing
 - Chromium runtime smoke test: all four systems load, animate, update, and
   dispose; caller-owned ticker confirmed; Gate Earth remains unmounted
 
-The remaining game-side work is to map battle and weather presentation events
-to these four system IDs. That event routing must not change simulation or save
-state.
+## Battle and weather presentation events
+
+The event routing is implemented by
+`CHAMPIONSHIP_BATTLE_WEATHER_VFX_EVENTS.v1.json` and the corresponding
+presentation-only event bus/controller:
+
+- confirmed large battle hit → `hitspark_big` on the battle channel;
+- confirmed Hyper phase entry → `hypereffect` on the battle channel;
+- explicit common Spark request → `spark` on the common channel;
+- rain state transition → looping `rain` on the weather channel until stopped.
+
+Battle, common and weather channels can coexist. They share the caller's update
+delta and add no save or simulation state. Because the product does not yet have
+a battle screen or authoritative weather state, no existing gameplay input is
+pretended to be one of these events. Spark and rain remain explicit-only until
+their original callers are traced or the product introduces an authoritative
+state transition.
+
+The Chromium integration gate loads all four real converted systems through
+these events, verifies three concurrent channels, replaces a large hit with the
+Hyper effect, stops rain independently, and disposes every resource.

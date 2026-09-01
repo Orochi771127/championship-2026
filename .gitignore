@@ -1,5 +1,6 @@
 node_modules/
 coverage/
+dist/
 .tmp/
 *.log
 .DS_Store
@@ -17,6 +18,10 @@ docs/legal/private/
 # Owner-authorized non-public faithful baseline. Rebuilt locally from the
 # validated art-production candidates; never committed or released.
 assets/production/internal-faithful-baseline/
+
+# Runtime conversions made directly from the owner-supplied ROM stay local.
+# The Pages builder also rejects this directory as a second line of defence.
+assets/production/vfx/original-rom-conversion-v1/
 
 # ROM / decoded proprietary payloads are forbidden from this product repo.
 *.nds

@@ -12,12 +12,34 @@
 
 ## Install and run
 
+On Windows, double-click `START_CHAMPIONSHIP.cmd`. Keep its server window open
+while playing. Do not open `championship.html` directly: browsers block the
+game's JavaScript modules under the `file://` protocol.
+
+Or start it from PowerShell:
+
 ```powershell
 npm install
 npm run serve
 ```
 
 Open `http://127.0.0.1:8732/championship.html`.
+
+## GitHub Pages
+
+The repository includes a GitHub Actions workflow that builds the tracked game
+as a static GitHub Pages site. In repository **Settings → Pages**, choose
+**GitHub Actions** as the publishing source. The public build deliberately
+excludes the owner-only faithful VFX baseline, ROM/Nitro files, conversion
+working files, ROM-derived battle catalogs, and legal documents. Those battle
+catalogs remain available to repository collaborators for later runtime work.
+Saves remain in each player's browser.
+
+```powershell
+npm run build:pages
+npm run validate:pages
+npm run battle:catalogs:build -- --rom "C:\\path\\to\\original.nds"
+```
 
 ```powershell
 npm test

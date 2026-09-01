@@ -87,3 +87,29 @@ test("runtime refuses unknown effects instead of guessing a trigger", async () =
   const runtime = createFaithfulVfxRuntime({ manifest: manifest(), loader: { loadAsync: async () => null } });
   await assert.rejects(runtime.load("gate-earth"), /UNKNOWN_SYSTEM/);
 });
+
+test("battle and weather effects can coexist on caller-owned channels", async () => {
+  const loader = {
+    async loadAsync() {
+      return {
+        scene: new THREE.Group(),
+        animations: [],
+        parser: { json: { animations: [] }, associations: new Map() }
+      };
+    }
+  };
+  const runtime = createFaithfulVfxRuntime({ manifest: manifest(), loader });
+  const battle = await runtime.load("hitspark_big", { channel: "battle" });
+  const weather = await runtime.load("rain", { channel: "weather", loop: true });
+  assert.equal(runtime.getActive("battle"), battle);
+  assert.equal(runtime.getActive("weather"), weather);
+  assert.deepEqual(runtime.listActive(), [
+    { channel: "battle", systemId: "hitspark_big" },
+    { channel: "weather", systemId: "rain" }
+  ]);
+  await runtime.unload("weather");
+  assert.equal(runtime.getActive("weather"), null);
+  assert.equal(runtime.getActive("battle"), battle);
+  await runtime.unloadAll();
+  assert.equal(runtime.getActive("battle"), null);
+});

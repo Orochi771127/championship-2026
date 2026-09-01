@@ -49,10 +49,10 @@
   z-index: 5;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto;
-  align-items: center;
+  align-items: start;
   gap: 8px;
-  min-height: 70px;
-  padding: var(--rh2-safe-top) 12px 9px;
+  min-height: 120px;
+  padding: var(--rh2-safe-top) 12px 58px;
   border-bottom: 1px solid var(--rh2-line);
   background:
     linear-gradient(180deg, rgba(80, 96, 104, 0.9), rgba(20, 31, 38, 0.98) 42%, rgba(8, 22, 31, 0.98)),
@@ -288,7 +288,7 @@
 }
 
 @media (max-width: 374px) {
-  .int-rh2-header { min-height: 65px; padding-inline: 9px; }
+  .int-rh2-header { min-height: 116px; padding-inline: 9px; padding-bottom: 54px; }
   .int-rh2-field-frame,
   .int-rh2-companion,
   .int-rh2-toolbar { margin-inline: 6px; }

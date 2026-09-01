@@ -578,17 +578,21 @@
  * A flex cluster keeps DATA / SHOP / GATES from overlapping or clipping. */
 .cm-vs2-home-entries {
   position: fixed;
-  top: max(10px, env(safe-area-inset-top));
+  top: calc(max(10px, env(safe-area-inset-top)) + 51px);
   left: 50%;
   z-index: 40;
   display: flex;
+  justify-content: center;
+  width: min(calc(100% - 24px), 300px);
   gap: 6px;
   transform: translateX(-50%);
 }
 
 .cm-vs2-entry.cm-button {
-  width: 52px;
-  min-width: 52px;
+  flex: 1 1 0;
+  width: auto;
+  min-width: 0;
+  max-width: 64px;
   min-height: 44px;
   padding: 8px 2px;
   border: 1px solid rgba(210, 173, 93, 0.64);
@@ -769,7 +773,7 @@
   .cm-vs2-footer { padding-inline: 7px; }
   .cm-vs2-toolbar { margin-inline: 5px; padding-inline: 5px; }
   .cm-vs2-slot { min-height: 36px; }
-  .cm-vs2-entry.cm-button { width: 58px; min-width: 58px; }
+  .cm-vs2-entry.cm-button { width: auto; min-width: 0; }
 }
 
 @media (max-height: 820px) {

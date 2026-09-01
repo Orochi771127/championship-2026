@@ -122,20 +122,29 @@ export function createFaithfulVfxRuntime({ manifest, loader = new GLTFLoader(), 
   return response.json();
 } }) {
   const checked = validateFaithfulVfxRuntimeManifest(manifest);
-  let active = null;
-  let generation = 0;
+  const activeByChannel = new Map();
+  const generationByChannel = new Map();
 
-  async function load(systemId, { loop = false } = {}) {
+  function checkedChannel(channel) {
+    if (typeof channel !== "string" || !/^[a-z0-9][a-z0-9-]{0,31}$/.test(channel)) {
+      fail(`CHANNEL:${channel}`);
+    }
+    return channel;
+  }
+
+  async function load(systemId, { loop = false, channel = "transient" } = {}) {
+    const runtimeChannel = checkedChannel(channel);
     const record = checked.systems.find((system) => system.systemId === systemId);
     if (!record) fail(`UNKNOWN_SYSTEM:${systemId}`);
-    const requestGeneration = ++generation;
+    const requestGeneration = (generationByChannel.get(runtimeChannel) ?? 0) + 1;
+    generationByChannel.set(runtimeChannel, requestGeneration);
     const [gltf, ...sidecars] = await Promise.all([loader.loadAsync(record.model), ...record.sidecars.map(loadJson)]);
     const propertyAnimators = await createPropertyAnimators(gltf);
-    if (requestGeneration !== generation) {
+    if (requestGeneration !== generationByChannel.get(runtimeChannel)) {
       disposeObject(gltf.scene);
       return null;
     }
-    await active?.dispose();
+    await activeByChannel.get(runtimeChannel)?.dispose();
     const mixer = new THREE.AnimationMixer(gltf.scene);
     const actions = gltf.animations.filter((clip) => clip.tracks.length > 0).map((clip) => mixer.clipAction(clip).play());
     const periodSeconds = animationPeriodSeconds(gltf) || Math.max(...sidecars.map((sidecar) => sidecar.frameCount / 60), 1 / 60);
@@ -156,6 +165,7 @@ export function createFaithfulVfxRuntime({ manifest, loader = new GLTFLoader(), 
     applyAt(0);
     const instance = Object.freeze({
       systemId,
+      channel: runtimeChannel,
       object3d: gltf.scene,
       update(deltaMs) {
         if (disposed || finished || !Number.isFinite(deltaMs) || deltaMs <= 0) return;
@@ -177,6 +187,7 @@ export function createFaithfulVfxRuntime({ manifest, loader = new GLTFLoader(), 
         return freeze({
           assetId: checked.assetId,
           systemId,
+          channel: runtimeChannel,
           elapsedSeconds,
           periodSeconds,
           loop,
@@ -194,10 +205,10 @@ export function createFaithfulVfxRuntime({ manifest, loader = new GLTFLoader(), 
         mixer.stopAllAction();
         mixer.uncacheRoot(gltf.scene);
         disposeObject(gltf.scene);
-        if (active === instance) active = null;
+        if (activeByChannel.get(runtimeChannel) === instance) activeByChannel.delete(runtimeChannel);
       }
     });
-    active = instance;
+    activeByChannel.set(runtimeChannel, instance);
     return instance;
   }
 
@@ -205,11 +216,27 @@ export function createFaithfulVfxRuntime({ manifest, loader = new GLTFLoader(), 
     assetId: checked.assetId,
     listSystems: () => freeze(checked.systems.map((system) => system.systemId)),
     load,
-    getActive: () => active,
-    async unload() {
-      generation += 1;
-      await active?.dispose();
-      active = null;
+    getActive(channel = "transient") {
+      return activeByChannel.get(checkedChannel(channel)) ?? null;
+    },
+    listActive() {
+      return freeze([...activeByChannel.entries()].map(([channel, instance]) => ({
+        channel,
+        systemId: instance.systemId
+      })));
+    },
+    async unload(channel = "transient") {
+      const runtimeChannel = checkedChannel(channel);
+      generationByChannel.set(runtimeChannel, (generationByChannel.get(runtimeChannel) ?? 0) + 1);
+      await activeByChannel.get(runtimeChannel)?.dispose();
+      activeByChannel.delete(runtimeChannel);
+    },
+    async unloadAll() {
+      for (const channel of generationByChannel.keys()) {
+        generationByChannel.set(channel, (generationByChannel.get(channel) ?? 0) + 1);
+      }
+      await Promise.all([...activeByChannel.values()].map((instance) => instance.dispose()));
+      activeByChannel.clear();
     }
   });
 }
