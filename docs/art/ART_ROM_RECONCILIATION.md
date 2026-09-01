@@ -71,6 +71,27 @@ arena. The code-traced catalog with per-field RAM addresses settles this.
 
 `nxrNodes` (1,369) was not re-derived here; it still rests on the NXR node table.
 
+### Two different sixteens — do not conflate them
+
+| Quantity | Value | Status |
+|---|---:|---|
+| Biome **nodes** in `gate_select/3D_worldMap_model.nsbmd` | 16 | Unchanged, ROM-verified. Not touched by this reconciliation. |
+| Hunt **field groups** (`field_hm*`) | 16 → **17** | Corrected here. |
+| Native Hunt field **variants** | 29 → **30** | Corrected here. |
+
+The Gate Select contract's 16 is a count of named node pairs in the world-map model
+(Canyon, Crag, Damp, Desert, Factory, Forest, Grass, Ice, Jungle, Mine, Oasis, Ruins,
+Savanna, Seaside, Sewer, Volcano). The art baseline's 16 was a count of HM field
+groups. They are different things that happened to share a number, and only the
+second was wrong.
+
+Recovering `HM00` brings the variant count to 30 — which is exactly the figure
+`VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT.json` already recorded ("there are 30 HM
+fields on record and 16 biome nodes"). The runtime contract and the ROM agree; it was
+the art audit that was one short. That contract's open unknown stands unchanged:
+nothing traced maps a gate node to an HM field, and this reconciliation does not
+create such a mapping.
+
 ## Production semantics this establishes
 
 Facts a rebuild has to honour, all read from the binary:

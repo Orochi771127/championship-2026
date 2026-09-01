@@ -329,10 +329,13 @@ def build_new_units(census: dict[str, Any], tokens: set[str]) -> list[dict[str, 
             modern_renderer="LAYERED_2D",
             notes=(
                 "Seventeenth Hunt biome. The terrain reference starts at HM01, so this field was "
-                "missing from the 16-biome baseline. It is a complete field, not a template: base "
+                "missing from the 16-biome art baseline. It is a complete field, not a template: base "
                 "tilemap plus an _anim (BSA) layer and an _obj (OPM/NCER) layer, the same three-layer "
-                "structure as the documented biomes. Biome identity and terrain effects are gameplay "
-                "authority and stay neutral until traced."
+                "structure as the documented biomes. Counting it gives 30 native HM field variants, "
+                "which is the figure the Gate/Hunt runtime contract already carried. Not to be confused "
+                "with the 16 biome nodes in gate_select/3D_worldMap_model: that is a Gate Select model "
+                "count, it is unchanged, and nothing traced maps a gate node to an HM field. Biome "
+                "identity and terrain effects are gameplay authority and stay neutral until traced."
             ),
             components=components_for(hm00),
             blockers=[
@@ -441,7 +444,10 @@ def corrected_baselines(existing: dict[str, Any], census: dict[str, Any]) -> dic
         ),
         "huntBiomes": (
             "Corrected 16 -> 17. field_hm00_01 is a complete three-layer field (base + _anim + _obj) that the "
-            "terrain reference omitted because its table starts at HM01."
+            f"terrain reference omitted because its table starts at HM01. This makes "
+            f"{census['tiers']['huntFieldVariantCount']} native HM field variants, matching the count the "
+            "Gate/Hunt runtime contract already carried. Separate from the 16 biome nodes in "
+            "gate_select/3D_worldMap_model, which this does not change."
         ),
         "cageEnvironments": "Confirmed against the ROM: cm01-cm40.",
         "battleFields": (

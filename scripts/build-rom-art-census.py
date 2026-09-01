@@ -173,6 +173,12 @@ def build_census(rom_path: Path) -> dict[str, Any]:
         for entry in art
         if (match := re.search(r"/field/field_(hm\d+)_", entry["path"]))
     })
+    # Biome ids group variants; the variant is the individually authored field.
+    hunt_variants = sorted({
+        match.group(1)
+        for entry in art
+        if (match := re.search(r"/field/field_(hm\d+_\d+)\.", entry["path"]))
+    })
     battle_fields = sorted({
         match.group(1)
         for entry in art
@@ -280,6 +286,10 @@ def build_census(rom_path: Path) -> dict[str, Any]:
             "spriteEffects": {"directory": "/common", "families": len(sprite_effects)},
             "fonts": {"files": len(fonts), "paths": fonts},
             "huntBiomeIds": hunt_biomes,
+            "huntFieldVariants": hunt_variants,
+            # Distinct from the 16 biome nodes in gate_select/3D_worldMap_model.
+            # That count is a Gate Select model fact and is unaffected by this census.
+            "huntFieldVariantCount": len(hunt_variants),
             "battleFieldIds": battle_fields,
             "battleFieldSharedLayer": "field_bm00_00",
             "spriteEffectFamilies": sprite_effects,
