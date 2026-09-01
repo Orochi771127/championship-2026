@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m201_agumon",
+  "side": "main",
+  "cell": 52,
+  "candidateInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-08-rest-postzap-angry-v1-slot-03-cell-052.png",
+  "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-052-remix-candidate.png",
+  "outputSha256": "06F73D82CBDC0424082EA9D32966568A72D81F322E6DB4E55F47D9531FA2510D",
+  "reviewBoard": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-052-pose-review.png",
+  "reviewBoardSha256": "28182625FE1B525206B29269EBF7C0B34930CAA0C94948D7988B57AF7165CB14",
+  "checks": {
+    "canvas384x352": true,
+    "rgba": true,
+    "trueAlpha": true,
+    "sourceVerticalPlacementPreserved": true,
+    "bottomMeetsGroundY320": null,
+    "sourceFacingVisualReviewRequired": true,
+    "footAndHandLandmarkReviewRequired": true,
+    "a1IdentityReviewRequired": true
+  },
+  "sourceAlphaBounds": [
+    96,
+    92,
+    288,
+    320
+  ],
+  "candidateAlphaBounds": [
+    96,
+    122,
+    288,
+    320
+  ],
+  "normalizationScale": 0.5517241379310345,
+  "sourceFacing": "SOURCE_CELL_VISUAL_REVIEW_REQUIRED",
+  "candidateMirroredToSourceFacing": false,
+  "backgroundExtraction": "SOURCE_ALPHA",
+  "removedBackgroundPixels": 0,
+  "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+  "runtimeEligible": false,
+  "shippingReady": false
+}

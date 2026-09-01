@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m201_agumon",
+  "candidateStrip": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-08-rest-postzap-angry-v1.png",
+  "candidateStripSha256": "CEFD1EBC32AEB8D11E39A40BACB369F60D7AC3BB55AEF3DBD2E05CB9E8095978",
+  "backgroundExtraction": "EDGE_CONNECTED_BRIGHT_NEUTRAL_CHECKERBOARD",
+  "removedBackgroundPixels": 1310312,
+  "splitPolicy": "NEAREST_TRANSPARENT_COLUMN_RUN_AROUND_NOMINAL_BOUNDARY",
+  "splitBoundaries": [
+    0,
+    505,
+    887,
+    1330,
+    1774
+  ],
+  "slotCount": 4,
+  "slots": [
+    {
+      "slot": 0,
+      "cell": 26,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-08-rest-postzap-angry-v1-slot-00-cell-026.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-026-remix-candidate.png",
+      "outputSha256": "B554B713C005009E25CA303F0A7DBC22260F99B2A6256ADB608885FFF13F832A"
+    },
+    {
+      "slot": 1,
+      "cell": 48,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-08-rest-postzap-angry-v1-slot-01-cell-048.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-048-remix-candidate.png",
+      "outputSha256": "59B8534D768092C63AE2820518CE8ADE4F828985DFC2076E7CB9834E80F616A6"
+    },
+    {
+      "slot": 2,
+      "cell": 51,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-08-rest-postzap-angry-v1-slot-02-cell-051.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-051-remix-candidate.png",
+      "outputSha256": "AD770C70115E5A112C881C93FEA773F660A04A37E5BDB843FBB2DD32CD2BD965"
+    },
+    {
+      "slot": 3,
+      "cell": 52,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-08-rest-postzap-angry-v1-slot-03-cell-052.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-052-remix-candidate.png",
+      "outputSha256": "06F73D82CBDC0424082EA9D32966568A72D81F322E6DB4E55F47D9531FA2510D"
+    }
+  ],
+  "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+  "runtimeEligible": false,
+  "shippingReady": false
+}

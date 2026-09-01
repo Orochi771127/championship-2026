@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "owner": "CODEX_ART",
   "lastUpdated": "2026-09-01",
-  "syncBatch": "CAT_DOG_REMIX_M201_MOTION_FAMILY_CLOSURE_03_04",
-  "syncRevision": 33,
-  "syncRevisionTarget": 33,
-  "status": "M201_INTERNAL_RUNTIME_REVIEW_ACTIVE_24_OF_47_UNIQUE_VISUALS",
+  "syncBatch": "CAT_DOG_REMIX_M201_MOTION_FAMILY_CLOSURE_05",
+  "syncRevision": 34,
+  "syncRevisionTarget": 34,
+  "status": "M201_INTERNAL_RUNTIME_REVIEW_ACTIVE_28_OF_47_UNIQUE_VISUALS",
   "sourceOfTruth": {
     "coordinationRoot": "docs/coordination",
     "canonicalRepository": ".",
@@ -68,9 +68,9 @@
     {
       "id": "CHARACTER-REMIX-M201-INTERNAL-RUNTIME-REVIEW-V1",
       "status": "RAISING_HUNT_TECHNICAL_RUNTIME_PASS_ART_REVIEW_GATED",
-      "summary": "M201 closures 03 and 04 add canonical Cells 019, 022, 025, 044 and 047. Twenty-four unique candidates now cover 49 of 83 runtime slots through verified reuse; 34 slots remain explicit faithful fallbacks. Flee, tired-walk and the four-frame zapped sequence are complete, and no Main sequence remains partially remixed.",
+      "summary": "M201 closure 05 adds canonical Cells 026, 048, 051 and 052. Twenty-eight unique candidates now cover 57 of 83 runtime slots through verified Main/Sub reuse; 26 slots remain explicit faithful fallbacks. Rest, post-zap and angry are complete in Main, Sub reaches 11 complete timelines, and neither side has a partially remixed sequence.",
       "output": "assets/production/internal-character-review/m201-remix-v1/manifest.json",
-      "validation": "396/396 full Node tests and 11/11 focused M201 tests pass; real Chromium 390x844 loads Raising and Hunt with one canvas, no character-art fallback, no horizontal overflow, no page/console error and no failed asset request",
+      "validation": "397/397 full Node tests and 12/12 focused M201 tests pass; real Chromium 390x844 loads Raising and Hunt with one canvas, no character-art fallback, no horizontal overflow, no page/console error and no failed asset request",
       "rights": "OWNER_AUTHORIZED_INTERNAL_PRODUCTION_PUBLIC_RELEASE_GATE_DEFERRED",
       "humanApproved": false,
       "shippingStatus": "NOT_SHIPPING_READY"
@@ -676,7 +676,7 @@
       "other": 80,
       "egg": 8
     },
-    "current": "M201_INTERNAL_RUNTIME_REVIEW_ACTIVE_24_OF_47_UNIQUE_VISUALS",
+    "current": "M201_INTERNAL_RUNTIME_REVIEW_ACTIVE_28_OF_47_UNIQUE_VISUALS",
     "rightsStatus": "LICENSED",
     "productionStatus": "MOTION_COMPATIBLE_REDESIGN_TECHNICAL_RUNTIME_REVIEW",
     "humanApproved": false,
@@ -685,7 +685,7 @@
     "evolutionGraph": "STATIC_COMMUNITY_CROSSCHECK_AVAILABLE_CANONICAL_ROM_GRAPH_AND_RESOLVER_NOT_YET_VERIFIED",
     "blockedBeforeMassProduction": [
       "OWNER_SOURCE_POSE_REMIX_STYLE_LOCK",
-      "M201_REMAINING_23_UNIQUE_CONTROLLED_REDRAWS",
+      "M201_REMAINING_19_UNIQUE_CONTROLLED_REDRAWS",
       "M201_VISUAL_LANDMARK_AND_IDENTITY_CONTINUITY_APPROVAL",
       "CANONICAL_EVOLUTION_TOPOLOGY_CROSSWALK"
     ],
@@ -703,6 +703,8 @@
       "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-motion-family-closure-03-candidates.json",
       "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-motion-family-closure-04-candidates.png",
       "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-motion-family-closure-04-candidates.json",
+      "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-motion-family-closure-05-candidates.png",
+      "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-motion-family-closure-05-candidates.json",
       "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-all83-source-reuse.json",
       "assets/production/internal-character-review/m201-remix-v1/manifest.json",
       "src/championship/presentation/pixiCharacterRuntimeBundle.js",
@@ -744,7 +746,7 @@
     }
   },
   "recommendedNext": [
-    "Owner review the M201 contact sheets and refreshed 390x844 Raising/Hunt proofs. Continue motion-family closure 05 with canonical Cells 026, 048, 051 and 052 to complete rest, post-zap transition and angry while preserving ROM frame order, ticks, anchors and reuse.",
+    "Owner review the M201 contact sheets and refreshed 390x844 Raising/Hunt proofs. Continue Closure 06 as three controlled strips covering canonical Cells 027, 028, 029, 030, 032, 035, 036, 037, 039, 040, 041 and 042; this closes every restrained animation without introducing partial-identity sequences.",
     "Present the complete 30-variant Hunt contact sheet and 40-field Cage contact sheet for Owner visual review before runtime or shipping promotion.",
     "Present the complete forty-field Cage contact sheet and CM27 before/after proof for Owner visual approval before any runtime or shipping promotion.",
     "Port the remaining NCGR/NCLR and NCER/NCBR object-cell decoding into the browser art module and pixel-diff its composition against the 40 native goldens.",

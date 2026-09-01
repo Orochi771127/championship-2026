@@ -121,8 +121,8 @@ the original gameplay pose to fit the concept art.
 - create native-scale, 4x, and checkerboard contact sheets.
 
 Technical review checkpoint: a non-promotable hybrid atlas now proves all 83
-keys and 53 timelines with 49 candidate-backed slots and 34 faithful fallbacks.
-The final all-remix atlas remains blocked on the other 23 unique visual redraws
+keys and 53 timelines with 57 candidate-backed slots and 26 faithful fallbacks.
+The final all-remix atlas remains blocked on the other 19 unique visual redraws
 and visual landmark approval.
 
 ### Gate 5 — duration-aware PixiJS playback
@@ -149,8 +149,10 @@ the verified source reuse map also covers Main Cells 007 and 016 plus their Sub
 matches. Closure 02 completes Cells 002, 003, 008, 013, 014 and 024. Closure 03
 completes Cells 019, 022 and recanonicalizes the Cells 025/053/Sub013 eating
 group. Closure 04 adds Cells 044 and 047 and reuses Cell 044 for Cell 046,
-finishing the four-frame zapped sequence. Main now has 21 fully remixed
-sequences, zero partial sequences and 19 fallback-only sequences; Sub is 8/0/5.
+finishing the four-frame zapped sequence. Closure 05 adds Cells 026, 048, 051
+and 052 and propagates them to four exact-reuse Sub slots. Main now has 24 fully
+remixed sequences, zero partial sequences and 16 fallback-only sequences; Sub
+is 11/0/2.
 These candidates remain visual and landmark review-gated.
 
 ## Promotion and rollout

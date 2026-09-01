@@ -13,10 +13,10 @@
     "sub": 13,
     "total": 53
   },
-  "candidateSlotCount": 49,
-  "faithfulFallbackSlotCount": 34,
-  "technicalCandidateUniqueCount": 24,
-  "pendingUniqueCount": 23,
+  "candidateSlotCount": 57,
+  "faithfulFallbackSlotCount": 26,
+  "technicalCandidateUniqueCount": 28,
+  "pendingUniqueCount": 19,
   "runtime": "assets/production/internal-character-review/m201-remix-v1/runtime.review.json",
   "runtimeSha256": "5AEF65E5FAC7502BBEA4EB8C146ED8C69B6AD6743F1B70C7242F49421D701A58",
   "sides": {
@@ -29,8 +29,8 @@
           "width": 2032,
           "height": 1636,
           "frameCount": 65,
-          "imageSha256": "4FB8C46AEB980A308F5C73CD1D0B52DF1381AE2A4152952453442ED0BF9DD817",
-          "dataSha256": "5876DDECDDFD723CEBB7A7AAE3EE414FABFF5B22DBC2535AA1D616D5524D6CA1"
+          "imageSha256": "3451BB7E98553FE6C055B60EA6952E7A87753D8DE00D8610D4771D3ACE144FC3",
+          "dataSha256": "A225225F996FFE5EEAB8E2E06FEE835AE7957B2ACA1172F0FE273D5E787631A0"
         }
       ],
       "frameManifest": {
@@ -896,22 +896,25 @@
           "page": 0,
           "cell": 26,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "F2FB37E9D313ACE4F9B39222D68E70FD688CB52901EF304F700CF6611CD5CCED",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 26
+          },
+          "logicalRgbaSha256": "4614B99DFEF96957CD0098B0FED10E8B4B3082E41C17C2FBADBD3180357314D2",
           "frame": {
             "x": 1144,
             "y": 468,
             "w": 184,
-            "h": 96
+            "h": 92
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 100,
-            "y": 224,
+            "y": 228,
             "w": 184,
-            "h": 96
+            "h": 92
           },
           "sourceSize": {
             "w": 384,
@@ -1568,21 +1571,24 @@
           "page": 0,
           "cell": 48,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "FDEA2F7CFA3EEAD83DD7C5269DDF54293A576FE4EA5573E7021B5B0AAB976EE4",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 48
+          },
+          "logicalRgbaSha256": "F6B97ACFDF70EB39F424957F8B01288403C8F60B52684D0291841521ED97B975",
           "frame": {
             "x": 1614,
             "y": 916,
-            "w": 192,
+            "w": 186,
             "h": 216
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 99,
             "y": 104,
-            "w": 192,
+            "w": 186,
             "h": 216
           },
           "sourceSize": {
@@ -1605,7 +1611,7 @@
           },
           "logicalRgbaSha256": "B6E32CC5E6739711A0C22F45CAE6B30A56940C084C6922732560B563F02400D8",
           "frame": {
-            "x": 1814,
+            "x": 1808,
             "y": 916,
             "w": 175,
             "h": 216
@@ -1664,22 +1670,25 @@
           "page": 0,
           "cell": 51,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "5BC9F3BA9C7E89057066E0B6481955902D15B43760C995681E2FF3CB31EEECB5",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 51
+          },
+          "logicalRgbaSha256": "C7C0C64FD8AE7AAF592C87CE95E978EEB61FCD9C4DAE3F5649863158E4C5C431",
           "frame": {
             "x": 181,
             "y": 1140,
             "w": 192,
-            "h": 216
+            "h": 198
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 96,
-            "y": 104,
+            "y": 122,
             "w": 192,
-            "h": 216
+            "h": 198
           },
           "sourceSize": {
             "w": 384,
@@ -1694,22 +1703,25 @@
           "page": 0,
           "cell": 52,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "7704B5BBBD92283BFBA623CAEBB420A0E6E7618340C4AA7277F09DBB782B769C",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 52
+          },
+          "logicalRgbaSha256": "4B96AB2A8BF095C2EABEC3F251A5213E2EA0E464EA8EE14359EC4B026BD29849",
           "frame": {
             "x": 381,
             "y": 1140,
             "w": 192,
-            "h": 228
+            "h": 198
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 96,
-            "y": 92,
+            "y": 122,
             "w": 192,
-            "h": 228
+            "h": 198
           },
           "sourceSize": {
             "w": 384,
@@ -2103,11 +2115,11 @@
           "page": 0,
           "image": "sub-review-atlas-00.png",
           "data": "sub-review-atlas-00.json",
-          "width": 2008,
+          "width": 2000,
           "height": 480,
           "frameCount": 18,
-          "imageSha256": "2477663E8A119758E5B81458B4168C819D758839A90A8E00E8A0D9005CCF672B",
-          "dataSha256": "A8A16EB5F9BE3E9886938A6082A78309452C9F9510CB583B26868249FBEE72EE"
+          "imageSha256": "ACC439ADF59953C24AB1CF19FBE8C5830D201EBB985E01F405D15044EE927FD6",
+          "dataSha256": "F05703A5F4C7AE5C38A39D33650C3D72467283AF130872E45A0C3B663BCCCFCF"
         }
       ],
       "frameManifest": {
@@ -2346,22 +2358,25 @@
           "page": 0,
           "cell": 7,
           "side": "sub",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "F2FB37E9D313ACE4F9B39222D68E70FD688CB52901EF304F700CF6611CD5CCED",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 26
+          },
+          "logicalRgbaSha256": "4614B99DFEF96957CD0098B0FED10E8B4B3082E41C17C2FBADBD3180357314D2",
           "frame": {
             "x": 1258,
             "y": 8,
             "w": 184,
-            "h": 96
+            "h": 92
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 100,
-            "y": 224,
+            "y": 228,
             "w": 184,
-            "h": 96
+            "h": 92
           },
           "sourceSize": {
             "w": 384,
@@ -2376,21 +2391,24 @@
           "page": 0,
           "cell": 8,
           "side": "sub",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "FDEA2F7CFA3EEAD83DD7C5269DDF54293A576FE4EA5573E7021B5B0AAB976EE4",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 48
+          },
+          "logicalRgbaSha256": "F6B97ACFDF70EB39F424957F8B01288403C8F60B52684D0291841521ED97B975",
           "frame": {
             "x": 1450,
             "y": 8,
-            "w": 192,
+            "w": 186,
             "h": 216
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 99,
             "y": 104,
-            "w": 192,
+            "w": 186,
             "h": 216
           },
           "sourceSize": {
@@ -2413,7 +2431,7 @@
           },
           "logicalRgbaSha256": "B6E32CC5E6739711A0C22F45CAE6B30A56940C084C6922732560B563F02400D8",
           "frame": {
-            "x": 1650,
+            "x": 1644,
             "y": 8,
             "w": 175,
             "h": 216
@@ -2446,7 +2464,7 @@
           },
           "logicalRgbaSha256": "23C58EEB9FE3707CD3E85EE20AC9907B1E77E5A801017DCB576FE4A6A90C45EA",
           "frame": {
-            "x": 1833,
+            "x": 1827,
             "y": 8,
             "w": 165,
             "h": 216
@@ -2472,22 +2490,25 @@
           "page": 0,
           "cell": 11,
           "side": "sub",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "5BC9F3BA9C7E89057066E0B6481955902D15B43760C995681E2FF3CB31EEECB5",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 51
+          },
+          "logicalRgbaSha256": "C7C0C64FD8AE7AAF592C87CE95E978EEB61FCD9C4DAE3F5649863158E4C5C431",
           "frame": {
             "x": 8,
             "y": 244,
             "w": 192,
-            "h": 216
+            "h": 198
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 96,
-            "y": 104,
+            "y": 122,
             "w": 192,
-            "h": 216
+            "h": 198
           },
           "sourceSize": {
             "w": 384,
@@ -2502,22 +2523,25 @@
           "page": 0,
           "cell": 12,
           "side": "sub",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "7704B5BBBD92283BFBA623CAEBB420A0E6E7618340C4AA7277F09DBB782B769C",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 52
+          },
+          "logicalRgbaSha256": "4B96AB2A8BF095C2EABEC3F251A5213E2EA0E464EA8EE14359EC4B026BD29849",
           "frame": {
             "x": 208,
             "y": 244,
             "w": 192,
-            "h": 228
+            "h": 198
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 96,
-            "y": 92,
+            "y": 122,
             "w": 192,
-            "h": 228
+            "h": 198
           },
           "sourceSize": {
             "w": 384,
@@ -2693,9 +2717,9 @@
   "sequenceCoverage": {
     "main": {
       "counts": {
-        "FULL_REMIX": 21,
+        "FULL_REMIX": 24,
         "PARTIAL_REMIX": 0,
-        "FAITHFUL_FALLBACK_ONLY": 19
+        "FAITHFUL_FALLBACK_ONLY": 16
       },
       "animations": [
         {
@@ -2822,8 +2846,8 @@
           "id": 15,
           "name": "action_15",
           "semanticAlias": "rest",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
           "frameReferenceCount": 1
         },
         {
@@ -2918,8 +2942,8 @@
           "id": 27,
           "name": "action_27",
           "semanticAlias": "post_zap_transition",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
           "frameReferenceCount": 1
         },
         {
@@ -2934,8 +2958,8 @@
           "id": 29,
           "name": "action_29",
           "semanticAlias": "angry",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 2,
           "frameReferenceCount": 2
         },
         {
@@ -3022,9 +3046,9 @@
     },
     "sub": {
       "counts": {
-        "FULL_REMIX": 8,
+        "FULL_REMIX": 11,
         "PARTIAL_REMIX": 0,
-        "FAITHFUL_FALLBACK_ONLY": 5
+        "FAITHFUL_FALLBACK_ONLY": 2
       },
       "animations": [
         {
@@ -3071,16 +3095,16 @@
           "id": 5,
           "name": "action_05",
           "semanticAlias": null,
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
           "frameReferenceCount": 1
         },
         {
           "id": 6,
           "name": "action_06",
           "semanticAlias": null,
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
           "frameReferenceCount": 1
         },
         {
@@ -3095,8 +3119,8 @@
           "id": 8,
           "name": "action_08",
           "semanticAlias": null,
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 2,
           "frameReferenceCount": 2
         },
         {

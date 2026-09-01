@@ -15,6 +15,7 @@ const motionClosure = JSON.parse(fs.readFileSync(path.join(seedRoot, "m201-motio
 const motionClosure02 = JSON.parse(fs.readFileSync(path.join(seedRoot, "m201-motion-family-closure-02-candidates.json"), "utf8"));
 const motionClosure03 = JSON.parse(fs.readFileSync(path.join(seedRoot, "m201-motion-family-closure-03-candidates.json"), "utf8"));
 const motionClosure04 = JSON.parse(fs.readFileSync(path.join(seedRoot, "m201-motion-family-closure-04-candidates.json"), "utf8"));
+const motionClosure05 = JSON.parse(fs.readFileSync(path.join(seedRoot, "m201-motion-family-closure-05-candidates.json"), "utf8"));
 const reviewRoot = path.join(root, "assets/production/internal-character-review/m201-remix-v1");
 const reviewManifest = JSON.parse(fs.readFileSync(path.join(reviewRoot, "manifest.json"), "utf8"));
 const reviewRuntime = JSON.parse(fs.readFileSync(path.join(reviewRoot, "runtime.review.json"), "utf8"));
@@ -22,6 +23,7 @@ const motionClosureCells = [1, 5, 12, 50, 54];
 const motionClosure02Cells = [2, 3, 8, 13, 14, 24];
 const motionClosure03Cells = [19, 22, 25];
 const motionClosure04Cells = [44, 47];
+const motionClosure05Cells = [26, 48, 51, 52];
 
 function sha256(file) {
   return crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex").toUpperCase();
@@ -232,6 +234,43 @@ test("the fourth motion-family closure completes the original four-frame zapped 
   assert.equal(receipt.candidateStripSha256, sha256(strip));
 });
 
+test("the fifth motion-family closure completes rest, post-zap and angry with Main/Sub reuse", () => {
+  assert.equal(motionClosure05.batch, "MOTION_FAMILY_CLOSURE_05");
+  assert.equal(motionClosure05.canonicalCellCount, 4);
+  assert.deepEqual(motionClosure05.cells.map((entry) => entry.cell), motionClosure05Cells);
+  assert.equal(sha256(path.join(root, motionClosure05.contactSheet)), motionClosure05.contactSheetSha256);
+  const expectedReuse = new Map([
+    [26, ["main:26", "sub:7"]],
+    [48, ["main:48", "sub:8"]],
+    [51, ["main:51", "sub:11"]],
+    [52, ["main:52", "sub:12"]]
+  ]);
+  for (const cell of motionClosure05Cells) {
+    const candidate = path.join(seedRoot, `m201-main-cell-${String(cell).padStart(3, "0")}-remix-candidate.png`);
+    const qa = JSON.parse(fs.readFileSync(
+      path.join(seedRoot, `m201-main-cell-${String(cell).padStart(3, "0")}-remix-candidate-qa.json`),
+      "utf8"
+    ));
+    assert.deepEqual(readPngHeader(candidate), { width: 384, height: 352, colorType: 6 });
+    assert.equal(qa.outputSha256, sha256(candidate));
+    assert.equal(qa.checks.trueAlpha, true);
+    assert.equal(qa.checks.sourceVerticalPlacementPreserved, true);
+    assert.ok(qa.candidateAlphaBounds[0] > 0, `detached fragment reached left edge for Cell ${cell}`);
+    const group = all83Reuse.reuseGroups.find(
+      (entry) => entry.canonical.side === "main" && entry.canonical.cell === cell
+    );
+    assert.deepEqual(group.members.map((entry) => `${entry.side}:${entry.cell}`), expectedReuse.get(cell));
+  }
+  const family = "raw-motion-family-08-rest-postzap-angry-v1";
+  const strip = path.join(seedRoot, `${family}.png`);
+  const receipt = JSON.parse(fs.readFileSync(path.join(seedRoot, `${family}-normalization-receipt.json`), "utf8"));
+  assert.equal(readPngHeader(strip).colorType, 6);
+  assert.equal(receipt.backgroundExtraction, "EDGE_CONNECTED_BRIGHT_NEUTRAL_CHECKERBOARD");
+  assert.equal(receipt.splitPolicy, "NEAREST_TRANSPARENT_COLUMN_RUN_AROUND_NOMINAL_BOUNDARY");
+  assert.deepEqual(receipt.splitBoundaries, [0, 505, 887, 1330, 1774]);
+  assert.equal(receipt.candidateStripSha256, sha256(strip));
+});
+
 test("M201 remix artifacts remain review-gated and portable", () => {
   assert.equal(workPacket.runtimeEligible, false);
   assert.equal(workPacket.shippingReady, false);
@@ -257,8 +296,8 @@ test("M201 all-83 audit locks 47 unique visuals and complete Sub-to-Main reuse",
       .map((family) => family.visualCanonicals.map((entry) => entry.cell)),
     [[0, 2, 11, 48], [1, 3, 57], [8, 44, 47], [10, 61], [23, 26], [27, 29], [28, 30]]
   );
-  assert.equal(all83Reuse.technicalCandidateUniqueCount, 24);
-  assert.equal(all83Reuse.pendingUniqueCount, 23);
+  assert.equal(all83Reuse.technicalCandidateUniqueCount, 28);
+  assert.equal(all83Reuse.pendingUniqueCount, 19);
   assert.equal(fs.existsSync(path.join(root, all83Reuse.canonicalSourceContactSheet)), true);
   assert.equal(sha256(path.join(root, all83Reuse.canonicalSourceContactSheet)), all83Reuse.canonicalSourceContactSheetSha256);
   assert.equal(all83Reuse.reuseGroups.every((group) => fs.existsSync(path.join(root, group.sourceGuide))), true);
@@ -269,10 +308,10 @@ test("M201 hybrid review atlas exposes all 83 stable texture keys without promot
   assert.deepEqual(reviewManifest.slotCounts, { main: 65, sub: 18, total: 83 });
   assert.deepEqual(reviewManifest.sequenceCounts, { main: 40, sub: 13, total: 53 });
   assert.equal(reviewManifest.candidateSlotCount + reviewManifest.faithfulFallbackSlotCount, 83);
-  assert.equal(reviewManifest.technicalCandidateUniqueCount, 24);
-  assert.equal(reviewManifest.pendingUniqueCount, 23);
-  assert.equal(reviewManifest.candidateSlotCount, 49);
-  assert.equal(reviewManifest.faithfulFallbackSlotCount, 34);
+  assert.equal(reviewManifest.technicalCandidateUniqueCount, 28);
+  assert.equal(reviewManifest.pendingUniqueCount, 19);
+  assert.equal(reviewManifest.candidateSlotCount, 57);
+  assert.equal(reviewManifest.faithfulFallbackSlotCount, 26);
   assert.equal(reviewManifest.state, "COMPLETE_MOTION_PREVIEW_REVIEW_ONLY");
   assert.equal(reviewManifest.runtimeEligible, false);
   assert.equal(reviewManifest.shippingReady, false);
@@ -304,18 +343,19 @@ test("M201 hybrid review atlas exposes all 83 stable texture keys without promot
   assert.equal(reviewManifest.sourceTicksAndPlaybackPreserved, true);
   assert.equal(reviewManifest.stableTextureKeysPreserved, true);
   assert.deepEqual(reviewManifest.sequenceCoverage.main.counts, {
-    FULL_REMIX: 21,
+    FULL_REMIX: 24,
     PARTIAL_REMIX: 0,
-    FAITHFUL_FALLBACK_ONLY: 19
+    FAITHFUL_FALLBACK_ONLY: 16
   });
   assert.deepEqual(reviewManifest.sequenceCoverage.sub.counts, {
-    FULL_REMIX: 8,
+    FULL_REMIX: 11,
     PARTIAL_REMIX: 0,
-    FAITHFUL_FALLBACK_ONLY: 5
+    FAITHFUL_FALLBACK_ONLY: 2
   });
   for (const semanticAlias of [
     "idle", "idle_blink", "walk", "run", "alert", "attack_1", "attack_2", "attack_3",
-    "attack_4", "flee", "tired_walk", "eat", "zapped", "happy", "cheer_victory"
+    "attack_4", "flee", "tired_walk", "eat", "rest", "zapped", "post_zap_transition",
+    "happy", "angry", "cheer_victory"
   ]) {
     const animation = reviewManifest.sequenceCoverage.main.animations.find(
       (entry) => entry.semanticAlias === semanticAlias

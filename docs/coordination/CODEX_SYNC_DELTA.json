@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "owner": "CODEX_ART",
-  "deltaId": "CODEX-ART-M201-MOTION-FAMILY-CLOSURE-03-04-2026-09-01",
-  "targetSyncRevision": 33,
-  "status": "M201_INTERNAL_RUNTIME_REVIEW_ACTIVE_24_OF_47_UNIQUE_VISUALS",
+  "deltaId": "CODEX-ART-M201-MOTION-FAMILY-CLOSURE-05-2026-09-01",
+  "targetSyncRevision": 34,
+  "status": "M201_INTERNAL_RUNTIME_REVIEW_ACTIVE_28_OF_47_UNIQUE_VISUALS",
   "statusSource": "docs/coordination/CODEX_ART_STATUS.json",
-  "baseSyncRevision": 32,
+  "baseSyncRevision": 33,
   "checkpoint": {
     "latestOwnerApprovedCommit": "732775486665b21508ac51c1eea0b723db0f7744",
     "message": "art(research): approve O2 224-entity character catalog",
@@ -37,9 +37,9 @@
       "state": "RAISING_HUNT_TECHNICAL_RUNTIME_PASS_ART_REVIEW_GATED",
       "scope": "M201 12-pose technical candidate set, all-83 source reuse audit, private hybrid PixiJS atlas, original variable-tick playback and opt-in 390x844 Raising/Hunt review",
       "sourcePolicy": "OWNER_AUTHORIZED_INTERNAL_ONLY_PUBLIC_PAGES_EXCLUDED_NO_ROM_OR_NITRO_PAYLOAD",
-      "technicalQa": "396_OF_396_FULL_NODE_TESTS_PASS_11_OF_11_FOCUSED_M201_TESTS_REAL_CHROMIUM_390X844_RAISING_AND_HUNT_ONE_CANVAS_NO_CHARACTER_ART_FALLBACK_NO_OVERFLOW_NO_PAGE_CONSOLE_OR_REQUEST_ERROR",
+      "technicalQa": "397_OF_397_FULL_NODE_TESTS_PASS_12_OF_12_FOCUSED_M201_TESTS_REAL_CHROMIUM_390X844_RAISING_AND_HUNT_ONE_CANVAS_NO_CHARACTER_ART_FALLBACK_NO_OVERFLOW_NO_PAGE_CONSOLE_OR_REQUEST_ERROR",
       "runtimeEligible": false,
-      "shippingStatus": "24_OF_47_UNIQUE_VISUALS_23_PENDING_VISUAL_LANDMARK_REVIEW_REQUIRED",
+      "shippingStatus": "28_OF_47_UNIQUE_VISUALS_19_PENDING_VISUAL_LANDMARK_REVIEW_REQUIRED",
       "output": "assets/production/internal-character-review/m201-remix-v1/manifest.json"
     },
     {
@@ -276,7 +276,7 @@
       "owner": "codex",
       "state": "INTERNAL_RUNTIME_REVIEW_ACTIVE",
       "codexMaySafelyBind": "RAISING_HUNT_REVIEW_ONLY",
-      "notes": "All 83 stable keys and 53 original timelines are loadable. Twenty-four unique technical candidates cover 49 slots; 34 slots retain explicit faithful fallbacks. Main coverage is 21 full, 0 partial and 19 fallback-only sequences; Sub is 8/0/5. Final atlas and Battle proof remain blocked on 23 redraws and visual landmark approval."
+      "notes": "All 83 stable keys and 53 original timelines are loadable. Twenty-eight unique technical candidates cover 57 slots; 26 slots retain explicit faithful fallbacks. Main coverage is 24 full, 0 partial and 16 fallback-only sequences; Sub is 11/0/2. Final atlas and Battle proof remain blocked on 19 redraws and visual landmark approval."
     },
     {
       "recordId": "VS2GateSelect3DRuntimeContract",
@@ -348,8 +348,8 @@
       "recordId": "CX-M201-ART-CONTINUITY",
       "id": "CX-M201-ART-CONTINUITY",
       "owner": "codex",
-      "state": "OPEN_OWNER_VISUAL_REVIEW_AND_23_REDRAWS_REQUIRED",
-      "detail": "Technical runtime integration passes. Motion-family closures 03 and 04 finish flee, tired-walk and the four-frame zapped sequence; no Main sequence remains partially remixed and 23 unique visuals remain pending. Complete fallback-only animation-family redraws and landmark/identity review are required before runtime promotion."
+      "state": "OPEN_OWNER_VISUAL_REVIEW_AND_19_REDRAWS_REQUIRED",
+      "detail": "Technical runtime integration passes. Motion-family closure 05 finishes rest, post-zap and angry with four exact Main/Sub reuses; neither side has a partially remixed sequence and 19 unique visuals remain pending. Complete restrained and final battle-state redraw families plus landmark/identity review before runtime promotion."
     },
     {
       "recordId": "CX-VS2-R1-OWNER-VISUAL-REVIEW",

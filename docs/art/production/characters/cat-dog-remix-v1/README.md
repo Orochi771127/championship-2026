@@ -160,9 +160,9 @@ mask.
 
 The repository now also builds a private, review-only PixiJS runtime at
 `assets/production/internal-character-review/m201-remix-v1`. It exposes all 83
-stable Main/Sub texture keys and all 53 original animation sequences. Twenty-four
-unique technical candidates currently cover 49 runtime slots through verified
-source-cell reuse; the other 34 slots deliberately use the faithful-HD art as
+stable Main/Sub texture keys and all 53 original animation sequences. Twenty-eight
+unique technical candidates currently cover 57 runtime slots through verified
+source-cell reuse; the other 26 slots deliberately use the faithful-HD art as
 a visible fallback. It is activated only with
 `?characterArtReview=m201` and is excluded from the public Pages package.
 
@@ -187,6 +187,12 @@ applies Cell 044 to Cell 046, while the already remixed Cell 008 supplies Cell
 045. Together they complete the original four-frame zapped sequence, including
 its blackout silhouette frame, without changing its frame order or duration.
 
+Motion-family closure 05 adds canonical Cells 026, 048, 051 and 052. Verified
+reuse propagates them to Sub Cells 007, 008, 011 and 012. Rest, post-zap and
+angry are now complete in Main, while the same work completes three more Sub
+timelines. The post-zap frame intentionally preserves the ROM blackout
+silhouette treatment rather than replacing it with a normal idle drawing.
+
 - [Motion-family closure 01 contact sheet](m201-seed/m201-motion-family-closure-01-candidates.png)
 - [Motion-family closure 01 manifest](m201-seed/m201-motion-family-closure-01-candidates.json)
 - [Motion-family closure 02 contact sheet](m201-seed/m201-motion-family-closure-02-candidates.png)
@@ -195,10 +201,12 @@ its blackout silhouette frame, without changing its frame order or duration.
 - [Motion-family closure 03 manifest](m201-seed/m201-motion-family-closure-03-candidates.json)
 - [Motion-family closure 04 contact sheet](m201-seed/m201-motion-family-closure-04-candidates.png)
 - [Motion-family closure 04 manifest](m201-seed/m201-motion-family-closure-04-candidates.json)
+- [Motion-family closure 05 contact sheet](m201-seed/m201-motion-family-closure-05-candidates.png)
+- [Motion-family closure 05 manifest](m201-seed/m201-motion-family-closure-05-candidates.json)
 
-At the current art boundary, Main animation coverage is 21 fully remixed, zero
-partly remixed, and 19 faithful-fallback-only sequences. Sub coverage is 8, 0,
-and 5 respectively. Mixed-identity partial sequences have therefore been
+At the current art boundary, Main animation coverage is 24 fully remixed, zero
+partly remixed, and 16 faithful-fallback-only sequences. Sub coverage is 11, 0,
+and 2 respectively. Mixed-identity partial sequences have therefore been
 eliminated from the current M201 review atlas; fallback-only sequences remain
 explicit evidence of unfinished art, not acceptable final animation.
 
@@ -211,4 +219,4 @@ request:
 
 This proves the atlas, anchor, mirroring, field placement, ticker and unloading
 seams. It does not approve anatomy, motion landmarks, identity continuity or
-the remaining 23 unique redraws, and remains `runtimeEligible: false`.
+the remaining 19 unique redraws, and remains `runtimeEligible: false`.
