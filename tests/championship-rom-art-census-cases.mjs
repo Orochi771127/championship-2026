@@ -57,6 +57,18 @@ test("the database character tier is registered as its own tier", () => {
   assert.equal(kinds("CHARACTER_ANIMATION_SLOT_CONTRACT").length, 7);
 });
 
+test("the recovered tiers cover the exact ROM file counts the docs quote", () => {
+  const files = (kind) => kinds(kind).reduce((sum, asset) => sum + asset.components.length, 0);
+  assert.equal(files("CHARACTER_DB_ENTITY_REFERENCE"), 1792);
+  assert.equal(files("VFX_2D_SPRITE_FAMILY"), 748);
+  assert.equal(files("UI_BACKGROUND_REFERENCE") + files("UI_CELL_BUNDLE_REFERENCE") + files("UI_FONT_REFERENCE"), 118);
+  assert.equal(files("HUNT_BIOME_REFERENCE"), 12);
+  assert.equal(files("FIELD_UNATTRIBUTED_REFERENCE"), 9);
+  assert.equal(files("BATTLE_FIELD_SHARED_LAYER_REFERENCE"), 8);
+  const total = romDerived.reduce((sum, asset) => sum + asset.components.length, 0);
+  assert.equal(total, 2687, "ART_ROM_RECONCILIATION.md quotes 2,687 recovered ROM files");
+});
+
 test("the 2D sprite effect library and font tier are registered", () => {
   assert.equal(kinds("VFX_2D_SPRITE_FAMILY").length, 187);
   assert.equal(census.tiers.spriteEffects.families, 187);

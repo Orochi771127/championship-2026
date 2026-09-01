@@ -17,7 +17,7 @@ demonstrated parity with the ROM.
 
 Re-deriving the census from the ROM's own FAT/FNT (6,419 FAT entries, 6,397 named
 files, 22 ARM9 overlays) found **6,317 art payloads in 1,705 families**, of which
-**718 families were absent from the registry**. Those became 496 new decision units.
+**716 families were absent from the registry**. Those became 496 new decision units.
 
 Registry: **752 audited + 496 ROM-derived = 1,248 units.**
 
@@ -28,10 +28,11 @@ Registry: **752 audited + 496 ROM-derived = 1,248 units.**
 | `/db_digimon` database character tier | 224 | 1,792 | A second complete 8-file contract per entity. The audit's contract note reads "8 gameplay files per entity" and covered `/digimon` only. |
 | `/common` 2D sprite effect library | 187 | 748 | All 26 existing VFX units are Nitro **3D** models (`RAW_3D_*`). The 2D cell-animated effect library had no representation at all. |
 | Database-tier animation contract | 7 | — | Read from NANR sequence counts; a contract distinct from the gameplay one. |
-| UI families across 8 directories | 73 | 205 | Includes the 7 NFTR fonts — the audit had no typography tier of any kind. |
+| UI families across 9 directories | 73 | 118 | Includes the 7 NFTR fonts — the audit had no typography tier of any kind. |
 | Hunt biome `HM00` | 1 | 12 | The terrain reference table starts at HM01. |
 | Unattributed `/field` art | 3 | 9 | Belongs to neither the battle catalog nor the biome set. |
 | Battle field shared common layer | 1 | 8 | Correctly excluded from the 11-field count, but it is authored art needing its own replacement. |
+| **Total** | **496** | **2,687** | |
 
 ### The database character tier is genuinely separate art
 
