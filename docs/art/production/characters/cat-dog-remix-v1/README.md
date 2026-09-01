@@ -160,9 +160,9 @@ mask.
 
 The repository now also builds a private, review-only PixiJS runtime at
 `assets/production/internal-character-review/m201-remix-v1`. It exposes all 83
-stable Main/Sub texture keys and all 53 original animation sequences. Fourteen
-unique technical candidates currently cover 31 runtime slots through verified
-source-cell reuse; the other 52 slots deliberately use the faithful-HD art as
+stable Main/Sub texture keys and all 53 original animation sequences. Twenty
+unique technical candidates currently cover 44 runtime slots through verified
+source-cell reuse; the other 39 slots deliberately use the faithful-HD art as
 a visible fallback. It is activated only with
 `?characterArtReview=m201` and is excluded from the public Pages package.
 
@@ -171,12 +171,19 @@ original reuse map also applies Cell 005 to Cell 007 and Cell 012 to Cell 016.
 Idle, walk, run, Attack 1, Attack 3, happy and cheer/victory are now complete
 remix sequences rather than mixed-identity previews.
 
+Motion-family closure 02 adds canonical Cells 002, 003, 008, 013, 014 and 024.
+Their verified reuse also covers Main Cells 017, 018, 020, 021 and 045 plus
+Sub Cells 002 and 003. Idle blink, alert, Attack 2, Attack 4 and eat are now
+complete; flee and tired walk gain one remixed frame each.
+
 - [Motion-family closure 01 contact sheet](m201-seed/m201-motion-family-closure-01-candidates.png)
 - [Motion-family closure 01 manifest](m201-seed/m201-motion-family-closure-01-candidates.json)
+- [Motion-family closure 02 contact sheet](m201-seed/m201-motion-family-closure-02-candidates.png)
+- [Motion-family closure 02 manifest](m201-seed/m201-motion-family-closure-02-candidates.json)
 
-At the current art boundary, Main animation coverage is 13 fully remixed, 1
-partly remixed, and 26 faithful-fallback-only sequences. Sub coverage is 7, 0,
-and 6 respectively. The remaining partly remixed animation will visibly switch
+At the current art boundary, Main animation coverage is 18 fully remixed, 3
+partly remixed, and 19 faithful-fallback-only sequences. Sub coverage is 8, 0,
+and 5 respectively. The partly remixed animations will visibly switch
 identity and is evidence of missing art, not acceptable final animation.
 
 Real Chromium checks at `390 x 844` load the review runtime in both Raising and
@@ -188,4 +195,4 @@ request:
 
 This proves the atlas, anchor, mirroring, field placement, ticker and unloading
 seams. It does not approve anatomy, motion landmarks, identity continuity or
-the remaining 33 unique redraws, and remains `runtimeEligible: false`.
+the remaining 27 unique redraws, and remains `runtimeEligible: false`.

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m201_agumon",
+  "candidateStrip": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-05-attack-eat-v1.png",
+  "candidateStripSha256": "E50AA12CF3329EFF91E921A85D41285D489056285943F66BD4E7C2BF6AFB9FEB",
+  "backgroundExtraction": "EDGE_CONNECTED_BRIGHT_NEUTRAL_CHECKERBOARD",
+  "removedBackgroundPixels": 1225457,
+  "slotCount": 3,
+  "slots": [
+    {
+      "slot": 0,
+      "cell": 13,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-05-attack-eat-v1-slot-00-cell-013.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-013-remix-candidate.png",
+      "outputSha256": "4941966A03199CA4451FE1DDA44F30593E985A6CB26708C8062D853E844C8642"
+    },
+    {
+      "slot": 1,
+      "cell": 14,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-05-attack-eat-v1-slot-01-cell-014.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-014-remix-candidate.png",
+      "outputSha256": "9F7E409FF3855E9A3887FB586F6AEFF47D8C54997AC214397F7CB859355798BF"
+    },
+    {
+      "slot": 2,
+      "cell": 24,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-05-attack-eat-v1-slot-02-cell-024.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-024-remix-candidate.png",
+      "outputSha256": "BBC39B90B41BC3F92FAE863AAE012FBE5C2C4B74F8730621CFF608E1D592F09A"
+    }
+  ],
+  "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+  "runtimeEligible": false,
+  "shippingReady": false
+}

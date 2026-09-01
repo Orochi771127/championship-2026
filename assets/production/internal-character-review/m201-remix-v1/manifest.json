@@ -13,10 +13,10 @@
     "sub": 13,
     "total": 53
   },
-  "candidateSlotCount": 31,
-  "faithfulFallbackSlotCount": 52,
-  "technicalCandidateUniqueCount": 14,
-  "pendingUniqueCount": 33,
+  "candidateSlotCount": 44,
+  "faithfulFallbackSlotCount": 39,
+  "technicalCandidateUniqueCount": 20,
+  "pendingUniqueCount": 27,
   "runtime": "assets/production/internal-character-review/m201-remix-v1/runtime.review.json",
   "runtimeSha256": "5AEF65E5FAC7502BBEA4EB8C146ED8C69B6AD6743F1B70C7242F49421D701A58",
   "sides": {
@@ -26,11 +26,11 @@
           "page": 0,
           "image": "main-review-atlas-00.png",
           "data": "main-review-atlas-00.json",
-          "width": 2040,
-          "height": 1648,
+          "width": 2032,
+          "height": 1636,
           "frameCount": 65,
-          "imageSha256": "5E721A4A48883E9B41693E91984F3FA1E3F6A670CFD22B977B528BD5E79AD255",
-          "dataSha256": "87445B930D2F49E14D7279D87BE693845CD12AC9586C7371C1CF2AABBF62F519"
+          "imageSha256": "5FDD635E610615D66A07F76B3B64D6E7CC8D9CFC581CA38558B1ECC25258F7C0",
+          "dataSha256": "DCEED5C665B0562EE60B19CD9D8F3674061A8B4E2131A5CD2AC98D9CA9F136ED"
         }
       ],
       "frameManifest": {
@@ -104,21 +104,24 @@
           "page": 0,
           "cell": 2,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "F417D8B565726D167C9AA9FADACE0680932EA87EB2CD3ADC3C481B61480422C9",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 2
+          },
+          "logicalRgbaSha256": "419B05DA2E4F1B6F5A2334579117E19BF381808BEAD769A9A77782F25AC214A8",
           "frame": {
             "x": 346,
             "y": 8,
-            "w": 192,
+            "w": 160,
             "h": 216
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 112,
             "y": 104,
-            "w": 192,
+            "w": 160,
             "h": 216
           },
           "sourceSize": {
@@ -134,21 +137,24 @@
           "page": 0,
           "cell": 3,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "DE791F0B883BE26453E6BBBB1B2DEE5BC4B0190AEAD98CAEA4615377D88410B5",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 3
+          },
+          "logicalRgbaSha256": "DB4711CD5C446D42BF9E23185F691ED99859851B09C8B31F7218D2B5C6FF65E6",
           "frame": {
-            "x": 546,
+            "x": 514,
             "y": 8,
-            "w": 192,
+            "w": 152,
             "h": 204
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 116,
             "y": 116,
-            "w": 192,
+            "w": 152,
             "h": 204
           },
           "sourceSize": {
@@ -171,7 +177,7 @@
           },
           "logicalRgbaSha256": "EA8BBF2A0379E0BEB4669ECE5057239F6B22BF1992D9EE44373F3820D89A0205",
           "frame": {
-            "x": 746,
+            "x": 674,
             "y": 8,
             "w": 168,
             "h": 216
@@ -204,7 +210,7 @@
           },
           "logicalRgbaSha256": "DF4CA5AFEFEBD6B5683DDFE733592DCCB71B659651B7F113B6BD228B5CEF8374",
           "frame": {
-            "x": 922,
+            "x": 850,
             "y": 8,
             "w": 192,
             "h": 193
@@ -237,7 +243,7 @@
           },
           "logicalRgbaSha256": "EA8BBF2A0379E0BEB4669ECE5057239F6B22BF1992D9EE44373F3820D89A0205",
           "frame": {
-            "x": 1122,
+            "x": 1050,
             "y": 8,
             "w": 168,
             "h": 216
@@ -270,7 +276,7 @@
           },
           "logicalRgbaSha256": "DF4CA5AFEFEBD6B5683DDFE733592DCCB71B659651B7F113B6BD228B5CEF8374",
           "frame": {
-            "x": 1298,
+            "x": 1226,
             "y": 8,
             "w": 192,
             "h": 193
@@ -296,11 +302,14 @@
           "page": 0,
           "cell": 8,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "D4A2297108292D79BF6ACFD2220D41A03C1D8D0EBD90E42A66A6FF6F8C362603",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 8
+          },
+          "logicalRgbaSha256": "4DC9CC71D28ACD5E227CD269AE77607B9087737BA0C00998E352441349B5EA5D",
           "frame": {
-            "x": 1498,
+            "x": 1426,
             "y": 8,
             "w": 204,
             "h": 216
@@ -333,7 +342,7 @@
           },
           "logicalRgbaSha256": "601638AE037AF26E791BBBACA5E9C1559318EA83EACE7C8BA724605D3495DF40",
           "frame": {
-            "x": 1710,
+            "x": 1638,
             "y": 8,
             "w": 186,
             "h": 204
@@ -366,8 +375,8 @@
           },
           "logicalRgbaSha256": "6525F8A489E296674D4854AE7F55E632909F9DE5DBD4A60719341C5E68A908B3",
           "frame": {
-            "x": 8,
-            "y": 232,
+            "x": 1832,
+            "y": 8,
             "w": 190,
             "h": 228
           },
@@ -399,8 +408,8 @@
           },
           "logicalRgbaSha256": "1AE053EB98B8093F233D3CF71BD0FAF20659FF63CA258F970718D9E99AFD3ECA",
           "frame": {
-            "x": 206,
-            "y": 232,
+            "x": 8,
+            "y": 244,
             "w": 176,
             "h": 216
           },
@@ -432,8 +441,8 @@
           },
           "logicalRgbaSha256": "11CF16FAD875FF55BFFBF10589803ABA7105F393F743F388E7D172B0ECBB85F8",
           "frame": {
-            "x": 390,
-            "y": 232,
+            "x": 192,
+            "y": 244,
             "w": 204,
             "h": 196
           },
@@ -458,22 +467,25 @@
           "page": 0,
           "cell": 13,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "C51C6D13E3AEED1E2505D4D06F3FA113A19FC7D222F7BB68A19FA357B22A482F",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 13
+          },
+          "logicalRgbaSha256": "511C42ED965BD2847F7DDE9E1375D3E1967CFFB5B8BDA95A8AA43F92226C93ED",
           "frame": {
-            "x": 602,
-            "y": 232,
+            "x": 404,
+            "y": 244,
             "w": 192,
-            "h": 240
+            "h": 210
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 96,
-            "y": 80,
+            "y": 110,
             "w": 192,
-            "h": 240
+            "h": 210
           },
           "sourceSize": {
             "w": 384,
@@ -488,22 +500,25 @@
           "page": 0,
           "cell": 14,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "B0F1A014949C5694DE90CF05232868B41773E4697C87F80193488E41D28B2F4C",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 14
+          },
+          "logicalRgbaSha256": "4337CFAC93B238A7BE81EB7BD64382E91F8F00C7A7BC237B0EBB3C06A9578D05",
           "frame": {
-            "x": 802,
-            "y": 232,
+            "x": 604,
+            "y": 244,
             "w": 228,
-            "h": 216
+            "h": 173
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 78,
-            "y": 104,
+            "y": 147,
             "w": 228,
-            "h": 216
+            "h": 173
           },
           "sourceSize": {
             "w": 384,
@@ -525,8 +540,8 @@
           },
           "logicalRgbaSha256": "1AE053EB98B8093F233D3CF71BD0FAF20659FF63CA258F970718D9E99AFD3ECA",
           "frame": {
-            "x": 1038,
-            "y": 232,
+            "x": 840,
+            "y": 244,
             "w": 176,
             "h": 216
           },
@@ -558,8 +573,8 @@
           },
           "logicalRgbaSha256": "11CF16FAD875FF55BFFBF10589803ABA7105F393F743F388E7D172B0ECBB85F8",
           "frame": {
-            "x": 1222,
-            "y": 232,
+            "x": 1024,
+            "y": 244,
             "w": 204,
             "h": 196
           },
@@ -584,22 +599,25 @@
           "page": 0,
           "cell": 17,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "C51C6D13E3AEED1E2505D4D06F3FA113A19FC7D222F7BB68A19FA357B22A482F",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 13
+          },
+          "logicalRgbaSha256": "511C42ED965BD2847F7DDE9E1375D3E1967CFFB5B8BDA95A8AA43F92226C93ED",
           "frame": {
-            "x": 1434,
-            "y": 232,
+            "x": 1236,
+            "y": 244,
             "w": 192,
-            "h": 240
+            "h": 210
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 96,
-            "y": 80,
+            "y": 110,
             "w": 192,
-            "h": 240
+            "h": 210
           },
           "sourceSize": {
             "w": 384,
@@ -614,22 +632,25 @@
           "page": 0,
           "cell": 18,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "B0F1A014949C5694DE90CF05232868B41773E4697C87F80193488E41D28B2F4C",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 14
+          },
+          "logicalRgbaSha256": "4337CFAC93B238A7BE81EB7BD64382E91F8F00C7A7BC237B0EBB3C06A9578D05",
           "frame": {
-            "x": 1634,
-            "y": 232,
+            "x": 1436,
+            "y": 244,
             "w": 228,
-            "h": 216
+            "h": 173
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 78,
-            "y": 104,
+            "y": 147,
             "w": 228,
-            "h": 216
+            "h": 173
           },
           "sourceSize": {
             "w": 384,
@@ -648,8 +669,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "9BF9BE1CA4ABF6543389788464415307FC0CAC6F47866A627B08823BE87D6261",
           "frame": {
-            "x": 8,
-            "y": 480,
+            "x": 1672,
+            "y": 244,
             "w": 192,
             "h": 216
           },
@@ -674,12 +695,15 @@
           "page": 0,
           "cell": 20,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "D4A2297108292D79BF6ACFD2220D41A03C1D8D0EBD90E42A66A6FF6F8C362603",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 8
+          },
+          "logicalRgbaSha256": "4DC9CC71D28ACD5E227CD269AE77607B9087737BA0C00998E352441349B5EA5D",
           "frame": {
-            "x": 208,
-            "y": 480,
+            "x": 8,
+            "y": 468,
             "w": 204,
             "h": 216
           },
@@ -704,21 +728,24 @@
           "page": 0,
           "cell": 21,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "F417D8B565726D167C9AA9FADACE0680932EA87EB2CD3ADC3C481B61480422C9",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 2
+          },
+          "logicalRgbaSha256": "419B05DA2E4F1B6F5A2334579117E19BF381808BEAD769A9A77782F25AC214A8",
           "frame": {
-            "x": 420,
-            "y": 480,
-            "w": 192,
+            "x": 220,
+            "y": 468,
+            "w": 160,
             "h": 216
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 112,
             "y": 104,
-            "w": 192,
+            "w": 160,
             "h": 216
           },
           "sourceSize": {
@@ -738,8 +765,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "CD9FB312DD255E92788FB4853F683792D49503C86BBFBECA0ECC2B8D026DBD5A",
           "frame": {
-            "x": 620,
-            "y": 480,
+            "x": 388,
+            "y": 468,
             "w": 192,
             "h": 204
           },
@@ -771,8 +798,8 @@
           },
           "logicalRgbaSha256": "E4A03312282F8C105E9E505F32AF5BB66D2BA426A3048BF6DF9562B062DD0799",
           "frame": {
-            "x": 820,
-            "y": 480,
+            "x": 588,
+            "y": 468,
             "w": 184,
             "h": 76
           },
@@ -797,21 +824,24 @@
           "page": 0,
           "cell": 24,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "FCA4D36A18C6E7CC79A42B435EDFBE1BCEA0A34E7538101D3FB64B1776B4E2BF",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 24
+          },
+          "logicalRgbaSha256": "FBA6016B1E29C14162C256E20A5215DCE9A7A132A6DC78F68A6D00C15E9C3203",
           "frame": {
-            "x": 1012,
-            "y": 480,
-            "w": 192,
+            "x": 780,
+            "y": 468,
+            "w": 181,
             "h": 216
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 102,
             "y": 104,
-            "w": 192,
+            "w": 181,
             "h": 216
           },
           "sourceSize": {
@@ -834,8 +864,8 @@
           },
           "logicalRgbaSha256": "C34670CDBC1297BA59F8CFD6B69669F96E21CB5BD5D51915804B99A3A54665FE",
           "frame": {
-            "x": 1212,
-            "y": 480,
+            "x": 969,
+            "y": 468,
             "w": 176,
             "h": 216
           },
@@ -864,8 +894,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "F2FB37E9D313ACE4F9B39222D68E70FD688CB52901EF304F700CF6611CD5CCED",
           "frame": {
-            "x": 1396,
-            "y": 480,
+            "x": 1153,
+            "y": 468,
             "w": 184,
             "h": 96
           },
@@ -894,8 +924,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "70D8F502E20C1AFFCF2CB139F115AD2B6E5CD0154EE622875053DA962943022A",
           "frame": {
-            "x": 1588,
-            "y": 480,
+            "x": 1345,
+            "y": 468,
             "w": 180,
             "h": 216
           },
@@ -924,8 +954,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "E6CF36A366857665F071A6DA73C9447E0FC50CE6C8005732E101E2334AAFF98D",
           "frame": {
-            "x": 1776,
-            "y": 480,
+            "x": 1533,
+            "y": 468,
             "w": 180,
             "h": 204
           },
@@ -954,8 +984,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "99050C871B939F8E04867DA0E75F30AF418424DCD86A80953B209CB870B6E4B3",
           "frame": {
-            "x": 8,
-            "y": 704,
+            "x": 1721,
+            "y": 468,
             "w": 180,
             "h": 216
           },
@@ -984,8 +1014,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "6C4D4F14F3D882E96E75EE678737BB4C52EA217E8E4FC2773F92BF42C0DB9C6C",
           "frame": {
-            "x": 196,
-            "y": 704,
+            "x": 8,
+            "y": 692,
             "w": 180,
             "h": 204
           },
@@ -1014,8 +1044,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "70D8F502E20C1AFFCF2CB139F115AD2B6E5CD0154EE622875053DA962943022A",
           "frame": {
-            "x": 384,
-            "y": 704,
+            "x": 196,
+            "y": 692,
             "w": 180,
             "h": 216
           },
@@ -1044,8 +1074,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "0558450E752AB01EF0B7638159C38CADE2FB6D5F19FED0B8AB2B58D1D799881D",
           "frame": {
-            "x": 572,
-            "y": 704,
+            "x": 384,
+            "y": 692,
             "w": 192,
             "h": 204
           },
@@ -1074,8 +1104,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "70D8F502E20C1AFFCF2CB139F115AD2B6E5CD0154EE622875053DA962943022A",
           "frame": {
-            "x": 772,
-            "y": 704,
+            "x": 584,
+            "y": 692,
             "w": 180,
             "h": 216
           },
@@ -1104,8 +1134,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "0558450E752AB01EF0B7638159C38CADE2FB6D5F19FED0B8AB2B58D1D799881D",
           "frame": {
-            "x": 960,
-            "y": 704,
+            "x": 772,
+            "y": 692,
             "w": 192,
             "h": 204
           },
@@ -1134,8 +1164,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "5E6EFA0D0C27328ADFD02DFD53924F3B53E647F50DE31F218865B4AD001E390C",
           "frame": {
-            "x": 1160,
-            "y": 704,
+            "x": 972,
+            "y": 692,
             "w": 204,
             "h": 216
           },
@@ -1164,8 +1194,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "07932C14025D022D4CBA3129EE6810AEDF347AA1168F9F1FD8E8FEF5E5BAA904",
           "frame": {
-            "x": 1372,
-            "y": 704,
+            "x": 1184,
+            "y": 692,
             "w": 180,
             "h": 216
           },
@@ -1194,8 +1224,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "3A24999B48AEEAE2F35CCBAF6435780DC6D893D31CDE4C1631F5EF8DC705D33D",
           "frame": {
-            "x": 1560,
-            "y": 704,
+            "x": 1372,
+            "y": 692,
             "w": 204,
             "h": 216
           },
@@ -1224,8 +1254,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "99050C871B939F8E04867DA0E75F30AF418424DCD86A80953B209CB870B6E4B3",
           "frame": {
-            "x": 1772,
-            "y": 704,
+            "x": 1584,
+            "y": 692,
             "w": 180,
             "h": 216
           },
@@ -1254,8 +1284,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "AD627B666295BD40128E7C28A30AC1C3DB31B388DDF27789839AF576E144509B",
           "frame": {
-            "x": 8,
-            "y": 928,
+            "x": 1772,
+            "y": 692,
             "w": 192,
             "h": 204
           },
@@ -1284,8 +1314,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "35DC81D391C9F135876B5401F1D3CA15F599876A86AE1547B7E59F7F060DD521",
           "frame": {
-            "x": 208,
-            "y": 928,
+            "x": 8,
+            "y": 916,
             "w": 184,
             "h": 96
           },
@@ -1314,8 +1344,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "A1D2393396328799600A2C8F9C8FF5D3C05F0A438DAA5C676CB833E9B94D337F",
           "frame": {
-            "x": 400,
-            "y": 928,
+            "x": 200,
+            "y": 916,
             "w": 192,
             "h": 216
           },
@@ -1344,8 +1374,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "FBA7476181F4B7435AB2F9E6AC19BDBAFC1938C32CCA073F0F12F51033953755",
           "frame": {
-            "x": 600,
-            "y": 928,
+            "x": 400,
+            "y": 916,
             "w": 192,
             "h": 216
           },
@@ -1374,8 +1404,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "35DC81D391C9F135876B5401F1D3CA15F599876A86AE1547B7E59F7F060DD521",
           "frame": {
-            "x": 800,
-            "y": 928,
+            "x": 600,
+            "y": 916,
             "w": 184,
             "h": 96
           },
@@ -1404,8 +1434,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "AEBD326CB6BBD7C23F623C079FC465E14F303C5CE688A29481171EA8382CB8EF",
           "frame": {
-            "x": 992,
-            "y": 928,
+            "x": 792,
+            "y": 916,
             "w": 204,
             "h": 216
           },
@@ -1430,12 +1460,15 @@
           "page": 0,
           "cell": 45,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "D4A2297108292D79BF6ACFD2220D41A03C1D8D0EBD90E42A66A6FF6F8C362603",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 8
+          },
+          "logicalRgbaSha256": "4DC9CC71D28ACD5E227CD269AE77607B9087737BA0C00998E352441349B5EA5D",
           "frame": {
-            "x": 1204,
-            "y": 928,
+            "x": 1004,
+            "y": 916,
             "w": 204,
             "h": 216
           },
@@ -1464,8 +1497,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "AEBD326CB6BBD7C23F623C079FC465E14F303C5CE688A29481171EA8382CB8EF",
           "frame": {
-            "x": 1416,
-            "y": 928,
+            "x": 1216,
+            "y": 916,
             "w": 204,
             "h": 216
           },
@@ -1494,8 +1527,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "9B5BF54B3C28C8813EACEDF28B1A3D4AA02142EE8E814824F71609B553552C8E",
           "frame": {
-            "x": 1628,
-            "y": 928,
+            "x": 1428,
+            "y": 916,
             "w": 204,
             "h": 216
           },
@@ -1524,8 +1557,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "FDEA2F7CFA3EEAD83DD7C5269DDF54293A576FE4EA5573E7021B5B0AAB976EE4",
           "frame": {
-            "x": 1840,
-            "y": 928,
+            "x": 1640,
+            "y": 916,
             "w": 192,
             "h": 216
           },
@@ -1557,8 +1590,8 @@
           },
           "logicalRgbaSha256": "B6E32CC5E6739711A0C22F45CAE6B30A56940C084C6922732560B563F02400D8",
           "frame": {
-            "x": 8,
-            "y": 1152,
+            "x": 1840,
+            "y": 916,
             "w": 175,
             "h": 216
           },
@@ -1590,8 +1623,8 @@
           },
           "logicalRgbaSha256": "23C58EEB9FE3707CD3E85EE20AC9907B1E77E5A801017DCB576FE4A6A90C45EA",
           "frame": {
-            "x": 191,
-            "y": 1152,
+            "x": 8,
+            "y": 1140,
             "w": 165,
             "h": 216
           },
@@ -1620,8 +1653,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "5BC9F3BA9C7E89057066E0B6481955902D15B43760C995681E2FF3CB31EEECB5",
           "frame": {
-            "x": 364,
-            "y": 1152,
+            "x": 181,
+            "y": 1140,
             "w": 192,
             "h": 216
           },
@@ -1650,8 +1683,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "7704B5BBBD92283BFBA623CAEBB420A0E6E7618340C4AA7277F09DBB782B769C",
           "frame": {
-            "x": 564,
-            "y": 1152,
+            "x": 381,
+            "y": 1140,
             "w": 192,
             "h": 228
           },
@@ -1683,8 +1716,8 @@
           },
           "logicalRgbaSha256": "C34670CDBC1297BA59F8CFD6B69669F96E21CB5BD5D51915804B99A3A54665FE",
           "frame": {
-            "x": 764,
-            "y": 1152,
+            "x": 581,
+            "y": 1140,
             "w": 176,
             "h": 216
           },
@@ -1716,8 +1749,8 @@
           },
           "logicalRgbaSha256": "172EB9063C87A654F8417B71E680B456F83030B03BB8341628334A75D2E4F6C4",
           "frame": {
-            "x": 948,
-            "y": 1152,
+            "x": 765,
+            "y": 1140,
             "w": 115,
             "h": 152
           },
@@ -1746,8 +1779,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "3274880E1449EADAB1104E4A9344B37ED52BACC3227B69A12B66A1073677A49E",
           "frame": {
-            "x": 1071,
-            "y": 1152,
+            "x": 888,
+            "y": 1140,
             "w": 192,
             "h": 204
           },
@@ -1779,8 +1812,8 @@
           },
           "logicalRgbaSha256": "96D8FB761B4A6BEE5C486AE2AE6B17A6FAB1CA307CD8F029CCABF3EAF7EDA94A",
           "frame": {
-            "x": 1271,
-            "y": 1152,
+            "x": 1088,
+            "y": 1140,
             "w": 192,
             "h": 126
           },
@@ -1809,8 +1842,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "58B82F40547984B33B873DCBFA1F4CCA3623F5AE1E03794B7CC5C87A84F567AC",
           "frame": {
-            "x": 1471,
-            "y": 1152,
+            "x": 1288,
+            "y": 1140,
             "w": 192,
             "h": 204
           },
@@ -1839,8 +1872,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "8699075856AFEC09F0D9F14738C52A233C36D73D7504245411AFDE1B10B9966A",
           "frame": {
-            "x": 1671,
-            "y": 1152,
+            "x": 1488,
+            "y": 1140,
             "w": 192,
             "h": 228
           },
@@ -1869,8 +1902,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "8CAD7DF2C83AF326BC33521125953AD55AABB9D62F46E9FEFCBF00F1D3A2DACE",
           "frame": {
-            "x": 8,
-            "y": 1388,
+            "x": 1688,
+            "y": 1140,
             "w": 204,
             "h": 204
           },
@@ -1899,8 +1932,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "0E788F033DBDAB8A203B738BE9FED63FAD5E3883161B966B9E4A3BE15D648596",
           "frame": {
-            "x": 220,
-            "y": 1388,
+            "x": 8,
+            "y": 1376,
             "w": 192,
             "h": 252
           },
@@ -1929,8 +1962,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "694B8B7AB4868C57B2FFF6E36CC9AACA1F4312A730FECE60205CBC43308D7B5A",
           "frame": {
-            "x": 420,
-            "y": 1388,
+            "x": 208,
+            "y": 1376,
             "w": 192,
             "h": 228
           },
@@ -1962,8 +1995,8 @@
           },
           "logicalRgbaSha256": "7DDEBEC014C3D8EA2C5732AB0844ADEB4381A344C2693AB00B7E5DE00B33893C",
           "frame": {
-            "x": 620,
-            "y": 1388,
+            "x": 408,
+            "y": 1376,
             "w": 264,
             "h": 143
           },
@@ -1995,8 +2028,8 @@
           },
           "logicalRgbaSha256": "6525F8A489E296674D4854AE7F55E632909F9DE5DBD4A60719341C5E68A908B3",
           "frame": {
-            "x": 892,
-            "y": 1388,
+            "x": 680,
+            "y": 1376,
             "w": 190,
             "h": 228
           },
@@ -2025,8 +2058,8 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "2649BCC6A0ACCF45E3850FBB2CF522DCC8669FBE9AA368D3FBE84061D3FC32B9",
           "frame": {
-            "x": 1090,
-            "y": 1388,
+            "x": 878,
+            "y": 1376,
             "w": 192,
             "h": 216
           },
@@ -2055,11 +2088,11 @@
           "page": 0,
           "image": "sub-review-atlas-00.png",
           "data": "sub-review-atlas-00.json",
-          "width": 1908,
+          "width": 2008,
           "height": 480,
           "frameCount": 18,
-          "imageSha256": "D4A9FEB797ABD320C45BDEF424C8D474B3F7F2B340264F5CA9214304735E6010",
-          "dataSha256": "6AEA91188CBE313F510D60E06C230A0A0D9AA7105032090C3DFC4476B8E71F39"
+          "imageSha256": "ECF0307AF5E3CF661A964335D7ABD613C26857087B6354009120409231FC67C7",
+          "dataSha256": "152E02041EE8A9BB252CC35B24F5C09F091D08CAB66895A49B66E36F3B714EF8"
         }
       ],
       "frameManifest": {
@@ -2133,21 +2166,24 @@
           "page": 0,
           "cell": 2,
           "side": "sub",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "F417D8B565726D167C9AA9FADACE0680932EA87EB2CD3ADC3C481B61480422C9",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 2
+          },
+          "logicalRgbaSha256": "419B05DA2E4F1B6F5A2334579117E19BF381808BEAD769A9A77782F25AC214A8",
           "frame": {
             "x": 346,
             "y": 8,
-            "w": 192,
+            "w": 160,
             "h": 216
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 112,
             "y": 104,
-            "w": 192,
+            "w": 160,
             "h": 216
           },
           "sourceSize": {
@@ -2163,21 +2199,24 @@
           "page": 0,
           "cell": 3,
           "side": "sub",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "DE791F0B883BE26453E6BBBB1B2DEE5BC4B0190AEAD98CAEA4615377D88410B5",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 3
+          },
+          "logicalRgbaSha256": "DB4711CD5C446D42BF9E23185F691ED99859851B09C8B31F7218D2B5C6FF65E6",
           "frame": {
-            "x": 546,
+            "x": 514,
             "y": 8,
-            "w": 192,
+            "w": 152,
             "h": 204
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 116,
             "y": 116,
-            "w": 192,
+            "w": 152,
             "h": 204
           },
           "sourceSize": {
@@ -2200,7 +2239,7 @@
           },
           "logicalRgbaSha256": "601638AE037AF26E791BBBACA5E9C1559318EA83EACE7C8BA724605D3495DF40",
           "frame": {
-            "x": 746,
+            "x": 674,
             "y": 8,
             "w": 186,
             "h": 204
@@ -2233,7 +2272,7 @@
           },
           "logicalRgbaSha256": "6525F8A489E296674D4854AE7F55E632909F9DE5DBD4A60719341C5E68A908B3",
           "frame": {
-            "x": 940,
+            "x": 868,
             "y": 8,
             "w": 190,
             "h": 228
@@ -2266,7 +2305,7 @@
           },
           "logicalRgbaSha256": "E4A03312282F8C105E9E505F32AF5BB66D2BA426A3048BF6DF9562B062DD0799",
           "frame": {
-            "x": 1138,
+            "x": 1066,
             "y": 8,
             "w": 184,
             "h": 76
@@ -2296,7 +2335,7 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "F2FB37E9D313ACE4F9B39222D68E70FD688CB52901EF304F700CF6611CD5CCED",
           "frame": {
-            "x": 1330,
+            "x": 1258,
             "y": 8,
             "w": 184,
             "h": 96
@@ -2326,7 +2365,7 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "FDEA2F7CFA3EEAD83DD7C5269DDF54293A576FE4EA5573E7021B5B0AAB976EE4",
           "frame": {
-            "x": 1522,
+            "x": 1450,
             "y": 8,
             "w": 192,
             "h": 216
@@ -2359,7 +2398,7 @@
           },
           "logicalRgbaSha256": "B6E32CC5E6739711A0C22F45CAE6B30A56940C084C6922732560B563F02400D8",
           "frame": {
-            "x": 1722,
+            "x": 1650,
             "y": 8,
             "w": 175,
             "h": 216
@@ -2392,8 +2431,8 @@
           },
           "logicalRgbaSha256": "23C58EEB9FE3707CD3E85EE20AC9907B1E77E5A801017DCB576FE4A6A90C45EA",
           "frame": {
-            "x": 8,
-            "y": 244,
+            "x": 1833,
+            "y": 8,
             "w": 165,
             "h": 216
           },
@@ -2422,7 +2461,7 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "5BC9F3BA9C7E89057066E0B6481955902D15B43760C995681E2FF3CB31EEECB5",
           "frame": {
-            "x": 181,
+            "x": 8,
             "y": 244,
             "w": 192,
             "h": 216
@@ -2452,7 +2491,7 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "7704B5BBBD92283BFBA623CAEBB420A0E6E7618340C4AA7277F09DBB782B769C",
           "frame": {
-            "x": 381,
+            "x": 208,
             "y": 244,
             "w": 192,
             "h": 228
@@ -2485,7 +2524,7 @@
           },
           "logicalRgbaSha256": "C34670CDBC1297BA59F8CFD6B69669F96E21CB5BD5D51915804B99A3A54665FE",
           "frame": {
-            "x": 581,
+            "x": 408,
             "y": 244,
             "w": 176,
             "h": 216
@@ -2518,7 +2557,7 @@
           },
           "logicalRgbaSha256": "172EB9063C87A654F8417B71E680B456F83030B03BB8341628334A75D2E4F6C4",
           "frame": {
-            "x": 765,
+            "x": 592,
             "y": 244,
             "w": 115,
             "h": 152
@@ -2548,7 +2587,7 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "3274880E1449EADAB1104E4A9344B37ED52BACC3227B69A12B66A1073677A49E",
           "frame": {
-            "x": 888,
+            "x": 715,
             "y": 244,
             "w": 192,
             "h": 204
@@ -2578,7 +2617,7 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "694B8B7AB4868C57B2FFF6E36CC9AACA1F4312A730FECE60205CBC43308D7B5A",
           "frame": {
-            "x": 1088,
+            "x": 915,
             "y": 244,
             "w": 192,
             "h": 228
@@ -2611,7 +2650,7 @@
           },
           "logicalRgbaSha256": "7DDEBEC014C3D8EA2C5732AB0844ADEB4381A344C2693AB00B7E5DE00B33893C",
           "frame": {
-            "x": 1288,
+            "x": 1115,
             "y": 244,
             "w": 264,
             "h": 143
@@ -2639,9 +2678,9 @@
   "sequenceCoverage": {
     "main": {
       "counts": {
-        "FULL_REMIX": 13,
-        "PARTIAL_REMIX": 1,
-        "FAITHFUL_FALLBACK_ONLY": 26
+        "FULL_REMIX": 18,
+        "PARTIAL_REMIX": 3,
+        "FAITHFUL_FALLBACK_ONLY": 19
       },
       "animations": [
         {
@@ -2656,8 +2695,8 @@
           "id": 1,
           "name": "action_01",
           "semanticAlias": "idle_blink",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 2,
           "frameReferenceCount": 2
         },
         {
@@ -2680,8 +2719,8 @@
           "id": 4,
           "name": "action_04",
           "semanticAlias": "alert",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
           "frameReferenceCount": 1
         },
         {
@@ -2712,8 +2751,8 @@
           "id": 8,
           "name": "action_08",
           "semanticAlias": "attack_2",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 2,
           "frameReferenceCount": 2
         },
         {
@@ -2728,24 +2767,24 @@
           "id": 10,
           "name": "action_10",
           "semanticAlias": "attack_4",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 2,
           "frameReferenceCount": 2
         },
         {
           "id": 11,
           "name": "action_11",
           "semanticAlias": "flee",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "PARTIAL_REMIX",
+          "remixFrameReferences": 1,
           "frameReferenceCount": 2
         },
         {
           "id": 12,
           "name": "action_12",
           "semanticAlias": "tired_walk",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "PARTIAL_REMIX",
+          "remixFrameReferences": 1,
           "frameReferenceCount": 2
         },
         {
@@ -2760,8 +2799,8 @@
           "id": 14,
           "name": "action_14",
           "semanticAlias": "eat",
-          "state": "PARTIAL_REMIX",
-          "remixFrameReferences": 1,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 2,
           "frameReferenceCount": 2
         },
         {
@@ -2856,8 +2895,8 @@
           "id": 26,
           "name": "action_26",
           "semanticAlias": "zapped",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "PARTIAL_REMIX",
+          "remixFrameReferences": 1,
           "frameReferenceCount": 4
         },
         {
@@ -2968,9 +3007,9 @@
     },
     "sub": {
       "counts": {
-        "FULL_REMIX": 7,
+        "FULL_REMIX": 8,
         "PARTIAL_REMIX": 0,
-        "FAITHFUL_FALLBACK_ONLY": 6
+        "FAITHFUL_FALLBACK_ONLY": 5
       },
       "animations": [
         {
@@ -2985,8 +3024,8 @@
           "id": 1,
           "name": "action_01",
           "semanticAlias": null,
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 2,
           "frameReferenceCount": 2
         },
         {

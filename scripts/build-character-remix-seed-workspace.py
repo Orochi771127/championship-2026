@@ -36,6 +36,11 @@ ATLAS_MAX_SIZE = 2048
 ATLAS_PADDING = 8
 HIGH_RISK_CELLS = (0, 4, 6, 9, 11, 15, 23, 49, 53, 56, 62, 63)
 MOTION_CLOSURE_01_CELLS = (1, 5, 12, 50, 54)
+MOTION_CLOSURE_02_CELLS = (2, 3, 8, 13, 14, 24)
+MOTION_CLOSURE_BATCHES = (
+    (1, MOTION_CLOSURE_01_CELLS),
+    (2, MOTION_CLOSURE_02_CELLS),
+)
 PROJECT_ROOT = Path.cwd().resolve()
 SOURCE_FACING = "LEFT"
 SOURCE_FACING_BY_KEY_CELL = {
@@ -752,60 +757,62 @@ def build_candidate_contact_sheet(source_directory: Path, output_directory: Path
 def build_motion_closure_contact_sheet(
     source_directory: Path,
     output_directory: Path,
-) -> dict[str, Any] | None:
-    candidate_paths = {
-        cell_id: output_directory / f"m201-main-cell-{cell_id:03d}-remix-candidate.png"
-        for cell_id in MOTION_CLOSURE_01_CELLS
-    }
-    if not all(path.exists() for path in candidate_paths.values()):
-        return None
+) -> list[dict[str, Any]]:
+    completed: list[dict[str, Any]] = []
+    for batch_number, batch_cells in MOTION_CLOSURE_BATCHES:
+        candidate_paths = {
+            cell_id: output_directory / f"m201-main-cell-{cell_id:03d}-remix-candidate.png"
+            for cell_id in batch_cells
+        }
+        if not all(path.exists() for path in candidate_paths.values()):
+            continue
 
-    panel_width, panel_height = 256, 235
-    label_height = 28
-    board = Image.new(
-        "RGBA",
-        (panel_width * len(MOTION_CLOSURE_01_CELLS), panel_height + label_height),
-        (245, 243, 236, 255),
-    )
-    draw = ImageDraw.Draw(board)
-    records: list[dict[str, Any]] = []
-    for column, cell_id in enumerate(MOTION_CLOSURE_01_CELLS):
-        candidate = Image.open(candidate_paths[cell_id]).convert("RGBA")
-        _source, frame_record = load_source_cell(source_directory, cell_id)
-        guide = make_guide(candidate, frame_record)
-        left = column * panel_width
-        board.alpha_composite(
-            guide.resize((panel_width, panel_height), Image.Resampling.LANCZOS),
-            (left, 0),
+        panel_width, panel_height = 256, 235
+        label_height = 28
+        board = Image.new(
+            "RGBA",
+            (panel_width * len(batch_cells), panel_height + label_height),
+            (245, 243, 236, 255),
         )
-        draw.text((left + 8, panel_height + 8), f"Main Cell {cell_id:03d}", fill=(28, 37, 43, 255))
-        qa_path = output_directory / f"m201-main-cell-{cell_id:03d}-remix-candidate-qa.json"
-        records.append({
-            "cell": cell_id,
-            "candidate": project_path(candidate_paths[cell_id]),
-            "candidateSha256": sha256_file(candidate_paths[cell_id]),
-            "qa": project_path(qa_path),
-        })
+        draw = ImageDraw.Draw(board)
+        records: list[dict[str, Any]] = []
+        for column, cell_id in enumerate(batch_cells):
+            candidate = Image.open(candidate_paths[cell_id]).convert("RGBA")
+            _source, frame_record = load_source_cell(source_directory, cell_id)
+            guide = make_guide(candidate, frame_record)
+            left = column * panel_width
+            board.alpha_composite(
+                guide.resize((panel_width, panel_height), Image.Resampling.LANCZOS),
+                (left, 0),
+            )
+            draw.text((left + 8, panel_height + 8), f"Main Cell {cell_id:03d}", fill=(28, 37, 43, 255))
+            qa_path = output_directory / f"m201-main-cell-{cell_id:03d}-remix-candidate-qa.json"
+            records.append({
+                "cell": cell_id,
+                "candidate": project_path(candidate_paths[cell_id]),
+                "candidateSha256": sha256_file(candidate_paths[cell_id]),
+                "qa": project_path(qa_path),
+            })
 
-    board_path = output_directory / "m201-motion-family-closure-01-candidates.png"
-    board.save(board_path, optimize=True)
-    result = {
-        "schemaVersion": 1,
-        "entityId": ENTITY_ID,
-        "side": "main",
-        "batch": "MOTION_FAMILY_CLOSURE_01",
-        "canonicalCellCount": len(MOTION_CLOSURE_01_CELLS),
-        "cells": records,
-        "contactSheet": project_path(board_path),
-        "contactSheetSha256": sha256_file(board_path),
-        "state": "TECHNICAL_CANDIDATES_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
-        "runtimeEligible": False,
-        "shippingReady": False,
-    }
-    (output_directory / "m201-motion-family-closure-01-candidates.json").write_text(
-        serialize(result), encoding="utf-8"
-    )
-    return result
+        stem = f"m201-motion-family-closure-{batch_number:02d}-candidates"
+        board_path = output_directory / f"{stem}.png"
+        board.save(board_path, optimize=True)
+        result = {
+            "schemaVersion": 1,
+            "entityId": ENTITY_ID,
+            "side": "main",
+            "batch": f"MOTION_FAMILY_CLOSURE_{batch_number:02d}",
+            "canonicalCellCount": len(batch_cells),
+            "cells": records,
+            "contactSheet": project_path(board_path),
+            "contactSheetSha256": sha256_file(board_path),
+            "state": "TECHNICAL_CANDIDATES_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+            "runtimeEligible": False,
+            "shippingReady": False,
+        }
+        (output_directory / f"{stem}.json").write_text(serialize(result), encoding="utf-8")
+        completed.append(result)
+    return completed
 
 
 def build_workspace(source_directory: Path, output_directory: Path) -> dict[str, Any]:
@@ -1015,6 +1022,14 @@ def normalize_candidate_strip(
 
     require(strip_cells, "Candidate strip has no declared slots")
     strip = Image.open(candidate_path).convert("RGBA")
+    background_extraction = "SOURCE_ALPHA"
+    removed_background_pixels = 0
+    if strip.getchannel("A").getextrema()[0] == 255:
+        strip, removed_background_pixels = extract_connected_neutral_background(strip)
+        background_extraction = "EDGE_CONNECTED_BRIGHT_NEUTRAL_CHECKERBOARD"
+        # Persist the actual transparent production source so a later rebuild
+        # cannot accidentally depend on the generated preview checkerboard.
+        strip.save(candidate_path, optimize=True)
     require(strip.getchannel("A").getextrema()[0] == 0,
             "Candidate strip must contain genuine transparent alpha")
     slot_directory = output_directory / "motion-family-normalization-inputs"
@@ -1053,6 +1068,8 @@ def normalize_candidate_strip(
         "entityId": ENTITY_ID,
         "candidateStrip": project_path(candidate_path),
         "candidateStripSha256": sha256_file(candidate_path),
+        "backgroundExtraction": background_extraction,
+        "removedBackgroundPixels": removed_background_pixels,
         "slotCount": len(strip_cells),
         "slots": results,
         "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",

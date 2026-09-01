@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "owner": "CODEX_ART",
   "lastUpdated": "2026-09-01",
-  "syncBatch": "CAT_DOG_REMIX_M201_MOTION_FAMILY_CLOSURE_01",
-  "syncRevision": 31,
-  "syncRevisionTarget": 31,
-  "status": "M201_INTERNAL_RUNTIME_REVIEW_ACTIVE_14_OF_47_UNIQUE_VISUALS",
+  "syncBatch": "CAT_DOG_REMIX_M201_MOTION_FAMILY_CLOSURE_02",
+  "syncRevision": 32,
+  "syncRevisionTarget": 32,
+  "status": "M201_INTERNAL_RUNTIME_REVIEW_ACTIVE_20_OF_47_UNIQUE_VISUALS",
   "sourceOfTruth": {
     "coordinationRoot": "docs/coordination",
     "canonicalRepository": ".",
@@ -68,9 +68,9 @@
     {
       "id": "CHARACTER-REMIX-M201-INTERNAL-RUNTIME-REVIEW-V1",
       "status": "RAISING_HUNT_TECHNICAL_RUNTIME_PASS_ART_REVIEW_GATED",
-      "summary": "M201 motion-family closure 01 adds canonical Cells 001, 005, 012, 050 and 054 on top of the 12 high-risk set. Fourteen unique candidates now cover 31 of 83 runtime slots through verified reuse; 52 slots remain explicit faithful fallbacks. Idle, walk, run, Attack 1, Attack 3, happy and cheer/victory are now identity-continuous while the complete 47-visual redraw remains in progress.",
+      "summary": "M201 motion-family closure 02 adds canonical Cells 002, 003, 008, 013, 014 and 024. Twenty unique candidates now cover 44 of 83 runtime slots through verified reuse; 39 slots remain explicit faithful fallbacks. Idle blink, alert, Attack 2, Attack 4 and eat join the identity-continuous actions while the complete 47-visual redraw remains in progress.",
       "output": "assets/production/internal-character-review/m201-remix-v1/manifest.json",
-      "validation": "393/393 full Node tests pass, including 16 focused M201 review tests; real Chromium 390x844 loads Raising and Hunt with one canvas, no field fallback, no horizontal overflow, no page/console error and no failed asset request",
+      "validation": "394/394 full Node tests pass, including 17 focused M201 review tests; real Chromium 390x844 loads Raising and Hunt with one canvas, no field fallback, no horizontal overflow, no page/console error and no failed asset request",
       "rights": "OWNER_AUTHORIZED_INTERNAL_PRODUCTION_PUBLIC_RELEASE_GATE_DEFERRED",
       "humanApproved": false,
       "shippingStatus": "NOT_SHIPPING_READY"
@@ -676,7 +676,7 @@
       "other": 80,
       "egg": 8
     },
-    "current": "M201_INTERNAL_RUNTIME_REVIEW_ACTIVE_14_OF_47_UNIQUE_VISUALS",
+    "current": "M201_INTERNAL_RUNTIME_REVIEW_ACTIVE_20_OF_47_UNIQUE_VISUALS",
     "rightsStatus": "LICENSED",
     "productionStatus": "MOTION_COMPATIBLE_REDESIGN_TECHNICAL_RUNTIME_REVIEW",
     "humanApproved": false,
@@ -685,7 +685,7 @@
     "evolutionGraph": "STATIC_COMMUNITY_CROSSCHECK_AVAILABLE_CANONICAL_ROM_GRAPH_AND_RESOLVER_NOT_YET_VERIFIED",
     "blockedBeforeMassProduction": [
       "OWNER_SOURCE_POSE_REMIX_STYLE_LOCK",
-      "M201_REMAINING_33_UNIQUE_CONTROLLED_REDRAWS",
+      "M201_REMAINING_27_UNIQUE_CONTROLLED_REDRAWS",
       "M201_VISUAL_LANDMARK_AND_IDENTITY_CONTINUITY_APPROVAL",
       "CANONICAL_EVOLUTION_TOPOLOGY_CROSSWALK"
     ],
@@ -697,6 +697,8 @@
       "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-12-high-risk-remix-candidates.png",
       "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-motion-family-closure-01-candidates.png",
       "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-motion-family-closure-01-candidates.json",
+      "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-motion-family-closure-02-candidates.png",
+      "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-motion-family-closure-02-candidates.json",
       "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-all83-source-reuse.json",
       "assets/production/internal-character-review/m201-remix-v1/manifest.json",
       "src/championship/presentation/pixiCharacterRuntimeBundle.js",
@@ -738,7 +740,7 @@
     }
   },
   "recommendedNext": [
-    "Owner review the M201 twelve-pose and motion-family-closure-01 contact sheets plus the refreshed 390x844 Raising/Hunt proofs. Continue motion-family closure 02 with canonical Cells 002, 003, 008, 013, 014 and 024 so idle-blink, alert, Attack 2, Attack 4 and eat become identity-continuous.",
+    "Owner review the M201 twelve-pose and both motion-family closure contact sheets plus the refreshed 390x844 Raising/Hunt proofs. Continue motion-family closure 03 with canonical Cells 019, 022 and 025 to close flee, tired-walk and eat without mixed faithful fallback frames.",
     "Present the complete 30-variant Hunt contact sheet and 40-field Cage contact sheet for Owner visual review before runtime or shipping promotion.",
     "Present the complete forty-field Cage contact sheet and CM27 before/after proof for Owner visual approval before any runtime or shipping promotion.",
     "Port the remaining NCGR/NCLR and NCER/NCBR object-cell decoding into the browser art module and pixel-diff its composition against the 40 native goldens.",

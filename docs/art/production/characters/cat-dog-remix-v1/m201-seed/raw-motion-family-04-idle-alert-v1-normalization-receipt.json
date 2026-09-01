@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m201_agumon",
+  "candidateStrip": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-04-idle-alert-v1.png",
+  "candidateStripSha256": "B6B19C6638240DAF54CA87B5C5D2DB15CA706D093C516DF7402D9A1F2ADF563C",
+  "backgroundExtraction": "EDGE_CONNECTED_BRIGHT_NEUTRAL_CHECKERBOARD",
+  "removedBackgroundPixels": 1207484,
+  "slotCount": 3,
+  "slots": [
+    {
+      "slot": 0,
+      "cell": 2,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-04-idle-alert-v1-slot-00-cell-002.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-002-remix-candidate.png",
+      "outputSha256": "9286B80F7CD2069BD9928ABA1DD3C154E87343DF7DEE6ABD9794F07E1B63A379"
+    },
+    {
+      "slot": 1,
+      "cell": 3,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-04-idle-alert-v1-slot-01-cell-003.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-003-remix-candidate.png",
+      "outputSha256": "A0A5B1464901A62032AEBC132C1731E9B973146A4195853AA1C9F30C46F5E659"
+    },
+    {
+      "slot": 2,
+      "cell": 8,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-04-idle-alert-v1-slot-02-cell-008.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-008-remix-candidate.png",
+      "outputSha256": "F04184E5B280DFEEFDF8466B074B2EAC1479D8D65EAA52B84C7218027D07A2BD"
+    }
+  ],
+  "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+  "runtimeEligible": false,
+  "shippingReady": false
+}

@@ -121,8 +121,8 @@ the original gameplay pose to fit the concept art.
 - create native-scale, 4x, and checkerboard contact sheets.
 
 Technical review checkpoint: a non-promotable hybrid atlas now proves all 83
-keys and 53 timelines with 31 candidate-backed slots and 52 faithful fallbacks.
-The final all-remix atlas remains blocked on the other 33 unique visual redraws
+keys and 53 timelines with 44 candidate-backed slots and 39 faithful fallbacks.
+The final all-remix atlas remains blocked on the other 27 unique visual redraws
 and visual landmark approval.
 
 ### Gate 5 — duration-aware PixiJS playback
@@ -146,8 +146,10 @@ and identity-continuous full-animation review remain pending.
 
 Motion-family closure 01 completes canonical Cells 001, 005, 012, 050 and 054;
 the verified source reuse map also covers Main Cells 007 and 016 plus their Sub
-matches. Main now has 13 fully remixed sequences, one partial sequence and 26
-fallback-only sequences; Sub is 7/0/6. These candidates remain visual and
+matches. Motion-family closure 02 completes canonical Cells 002, 003, 008, 013,
+014 and 024 and propagates them into eight additional verified reuse slots.
+Main now has 18 fully remixed sequences, three partial sequences and 19
+fallback-only sequences; Sub is 8/0/5. These candidates remain visual and
 landmark review-gated.
 
 ## Promotion and rollout

@@ -12,10 +12,12 @@ const candidates = JSON.parse(fs.readFileSync(path.join(seedRoot, "m201-main-12-
 const sourceGuides = JSON.parse(fs.readFileSync(path.join(seedRoot, "m201-main-12-high-risk-source-guides.json"), "utf8"));
 const all83Reuse = JSON.parse(fs.readFileSync(path.join(seedRoot, "m201-all83-source-reuse.json"), "utf8"));
 const motionClosure = JSON.parse(fs.readFileSync(path.join(seedRoot, "m201-motion-family-closure-01-candidates.json"), "utf8"));
+const motionClosure02 = JSON.parse(fs.readFileSync(path.join(seedRoot, "m201-motion-family-closure-02-candidates.json"), "utf8"));
 const reviewRoot = path.join(root, "assets/production/internal-character-review/m201-remix-v1");
 const reviewManifest = JSON.parse(fs.readFileSync(path.join(reviewRoot, "manifest.json"), "utf8"));
 const reviewRuntime = JSON.parse(fs.readFileSync(path.join(reviewRoot, "runtime.review.json"), "utf8"));
 const motionClosureCells = [1, 5, 12, 50, 54];
+const motionClosure02Cells = [2, 3, 8, 13, 14, 24];
 
 function sha256(file) {
   return crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex").toUpperCase();
@@ -109,6 +111,52 @@ test("the first motion-family closure imports five canonical redraws with exact 
   }
 });
 
+test("the second motion-family closure imports six redraws and reaches fourteen runtime slots", () => {
+  assert.equal(motionClosure02.batch, "MOTION_FAMILY_CLOSURE_02");
+  assert.equal(motionClosure02.canonicalCellCount, 6);
+  assert.deepEqual(motionClosure02.cells.map((entry) => entry.cell), motionClosure02Cells);
+  assert.equal(sha256(path.join(root, motionClosure02.contactSheet)), motionClosure02.contactSheetSha256);
+  assert.equal(motionClosure02.runtimeEligible, false);
+  assert.equal(motionClosure02.shippingReady, false);
+  const expectedReuse = new Map([
+    [2, ["main:2", "main:21", "sub:2"]],
+    [3, ["main:3", "sub:3"]],
+    [8, ["main:8", "main:20", "main:45"]],
+    [13, ["main:13", "main:17"]],
+    [14, ["main:14", "main:18"]],
+    [24, ["main:24"]]
+  ]);
+  for (const cell of motionClosure02Cells) {
+    const candidate = path.join(seedRoot, `m201-main-cell-${String(cell).padStart(3, "0")}-remix-candidate.png`);
+    const qa = JSON.parse(fs.readFileSync(
+      path.join(seedRoot, `m201-main-cell-${String(cell).padStart(3, "0")}-remix-candidate-qa.json`),
+      "utf8"
+    ));
+    assert.deepEqual(readPngHeader(candidate), { width: 384, height: 352, colorType: 6 });
+    assert.equal(qa.outputSha256, sha256(candidate));
+    assert.equal(qa.checks.canvas384x352, true);
+    assert.equal(qa.checks.trueAlpha, true);
+    assert.equal(qa.checks.sourceVerticalPlacementPreserved, true);
+    const group = all83Reuse.reuseGroups.find(
+      (entry) => entry.canonical.side === "main" && entry.canonical.cell === cell
+    );
+    assert.ok(group, `missing reuse group for Main Cell ${cell}`);
+    assert.equal(group.candidateState, "TECHNICAL_CANDIDATE_AVAILABLE_VISUAL_REVIEW_REQUIRED");
+    assert.deepEqual(group.members.map((entry) => `${entry.side}:${entry.cell}`), expectedReuse.get(cell));
+  }
+  for (const family of [
+    "raw-motion-family-04-idle-alert-v1",
+    "raw-motion-family-05-attack-eat-v1"
+  ]) {
+    const strip = path.join(seedRoot, `${family}.png`);
+    const receipt = JSON.parse(fs.readFileSync(path.join(seedRoot, `${family}-normalization-receipt.json`), "utf8"));
+    assert.equal(readPngHeader(strip).colorType, 6);
+    assert.equal(receipt.backgroundExtraction, "EDGE_CONNECTED_BRIGHT_NEUTRAL_CHECKERBOARD");
+    assert.ok(receipt.removedBackgroundPixels > 0);
+    assert.equal(receipt.candidateStripSha256, sha256(strip));
+  }
+});
+
 test("M201 remix artifacts remain review-gated and portable", () => {
   assert.equal(workPacket.runtimeEligible, false);
   assert.equal(workPacket.shippingReady, false);
@@ -134,8 +182,8 @@ test("M201 all-83 audit locks 47 unique visuals and complete Sub-to-Main reuse",
       .map((family) => family.visualCanonicals.map((entry) => entry.cell)),
     [[0, 2, 11, 48], [1, 3, 57], [8, 44, 47], [10, 61], [23, 26], [27, 29], [28, 30]]
   );
-  assert.equal(all83Reuse.technicalCandidateUniqueCount, 14);
-  assert.equal(all83Reuse.pendingUniqueCount, 33);
+  assert.equal(all83Reuse.technicalCandidateUniqueCount, 20);
+  assert.equal(all83Reuse.pendingUniqueCount, 27);
   assert.equal(fs.existsSync(path.join(root, all83Reuse.canonicalSourceContactSheet)), true);
   assert.equal(sha256(path.join(root, all83Reuse.canonicalSourceContactSheet)), all83Reuse.canonicalSourceContactSheetSha256);
   assert.equal(all83Reuse.reuseGroups.every((group) => fs.existsSync(path.join(root, group.sourceGuide))), true);
@@ -146,10 +194,10 @@ test("M201 hybrid review atlas exposes all 83 stable texture keys without promot
   assert.deepEqual(reviewManifest.slotCounts, { main: 65, sub: 18, total: 83 });
   assert.deepEqual(reviewManifest.sequenceCounts, { main: 40, sub: 13, total: 53 });
   assert.equal(reviewManifest.candidateSlotCount + reviewManifest.faithfulFallbackSlotCount, 83);
-  assert.equal(reviewManifest.technicalCandidateUniqueCount, 14);
-  assert.equal(reviewManifest.pendingUniqueCount, 33);
-  assert.equal(reviewManifest.candidateSlotCount, 31);
-  assert.equal(reviewManifest.faithfulFallbackSlotCount, 52);
+  assert.equal(reviewManifest.technicalCandidateUniqueCount, 20);
+  assert.equal(reviewManifest.pendingUniqueCount, 27);
+  assert.equal(reviewManifest.candidateSlotCount, 44);
+  assert.equal(reviewManifest.faithfulFallbackSlotCount, 39);
   assert.equal(reviewManifest.state, "COMPLETE_MOTION_PREVIEW_REVIEW_ONLY");
   assert.equal(reviewManifest.runtimeEligible, false);
   assert.equal(reviewManifest.shippingReady, false);
@@ -181,16 +229,19 @@ test("M201 hybrid review atlas exposes all 83 stable texture keys without promot
   assert.equal(reviewManifest.sourceTicksAndPlaybackPreserved, true);
   assert.equal(reviewManifest.stableTextureKeysPreserved, true);
   assert.deepEqual(reviewManifest.sequenceCoverage.main.counts, {
-    FULL_REMIX: 13,
-    PARTIAL_REMIX: 1,
-    FAITHFUL_FALLBACK_ONLY: 26
+    FULL_REMIX: 18,
+    PARTIAL_REMIX: 3,
+    FAITHFUL_FALLBACK_ONLY: 19
   });
   assert.deepEqual(reviewManifest.sequenceCoverage.sub.counts, {
-    FULL_REMIX: 7,
+    FULL_REMIX: 8,
     PARTIAL_REMIX: 0,
-    FAITHFUL_FALLBACK_ONLY: 6
+    FAITHFUL_FALLBACK_ONLY: 5
   });
-  for (const semanticAlias of ["idle", "walk", "run", "attack_1", "attack_3", "happy", "cheer_victory"]) {
+  for (const semanticAlias of [
+    "idle", "idle_blink", "walk", "run", "alert", "attack_1", "attack_2", "attack_3",
+    "attack_4", "eat", "happy", "cheer_victory"
+  ]) {
     const animation = reviewManifest.sequenceCoverage.main.animations.find(
       (entry) => entry.semanticAlias === semanticAlias
     );
