@@ -85,6 +85,7 @@ test("only the authorized source families are present", () => {
     [
       "battleActionResource.js",
       "battleActionSelection.js",
+      "battleCatalogs.js",
       "battleContactTargeting.js",
       "battleDamageCore.js",
       "battleDamageResolver.js",

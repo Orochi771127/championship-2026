@@ -1,7 +1,7 @@
 {
   "owner": "Claude Code",
   "lane": "runtime implementation and original-system reconstruction",
-  "statusDate": "2026-08-31",
+  "statusDate": "2026-09-01",
   "repository": "championship-2026",
   "branch": "main",
   "note": "First edition in this repository. Neither CLAUDE_REBUILD_STATUS.json nor CLAUDE_SYNC_DELTA.json was ever tracked here (git log over all refs returns nothing), so no prior content was inferred. The Cursor handoff's statement that this file recorded BATTLE_RUNTIME as not started is recorded as NOT_REPORTED rather than transcribed.",
@@ -173,7 +173,7 @@
       "any battle screen"
     ]
   },
-  "current": "BATTLE_RUNTIME arithmetic, traced control flow, the reward transaction and AI action selection. No app wiring, no screen.",
+  "current": "BATTLE_RUNTIME arithmetic, traced control flow, the reward transaction, AI action selection, and the six battle data catalogs. No app wiring, no screen. The battle modules still have no catalog import: B1 delivered the data, not the connection.",
   "blocked": [
     {
       "id": "B-HITMISS",
@@ -266,7 +266,7 @@
   ],
   "verification": {
     "battleSubset": "tests/championship-battle-*.mjs plus the migration firewall: pass",
-    "npmTest": "297 pass / 0 fail",
+    "npmTest": "332 pass / 0 fail in the Git-tracked suite (297 before this batch; +17 new cases plus the Codex lane's committed additions)",
     "knownFailureNotOurs": {
       "test": "tests/championship-hunt-hd-remaster-cases.mjs — 'source assembly, object placement records and raw gameplay maps are unchanged'",
       "cause": "The test digests files under docs/art/production/hunt/faithful-hd30, which Codex Art was rewriting during this session; the working tree grew from 59 to 465 uncommitted files while this batch ran. The pinned source SHA no longer matches.",
@@ -280,9 +280,11 @@
     "reason": "The handoff says not to commit before it is requested. The working tree also carries concurrent Codex/Cursor edits across shared files."
   },
   "recommendedNext": [
-    "Owner decision on whether battle arithmetic may be wired to a runtime session; today nothing under src/championship/app imports it.",
-    "Trace the other two resolver call sites 0x0211D9E0 and 0x0211D9FC and record whether their caller regions add rejections this module does not model.",
-    "Leave hit/miss, Sense and TP blocked. Do not fill them with a conventional accuracy formula; the Stage 6 gate prohibits it."
+    "B2 battle script VM (52 opcodes, OVL19/ARM9). The move table's pointer1C/pointer28/pointer3C columns are OVL19 code addresses, so B2 is what turns them from numbers into behaviour.",
+    "B3 OVL10 match selection. It already reads two of these tables (opponent teams at 0x02110A4C, presets at 0x0210FB3C), so the catalogs are the input it was missing.",
+    "Re-check the two corrected bases against any downstream reading that assumed the handed-over addresses; a consumer written against 0x020ED2E4 or 0x020CC8F4 would be off by three and five columns respectively.",
+    "Leave hit/miss, Sense and TP blocked. Do not fill them with a conventional accuracy formula; the Stage 6 gate prohibits it.",
+    "Trace the other two resolver call sites 0x0211D9E0 and 0x0211D9FC and record whether their caller regions add rejections this module does not model."
   ],
   "completedRemainingUnknowns": {
     "date": "2026-08-31",
@@ -324,6 +326,73 @@
         "evidence": "The pass at 0x0210D6E4..0x0210D90C walks six fixed slots with add/cmp #6/blt, updating negative-status tick and DoT, positive-effect tick, +0x24 and cooldown +0x28 in that order. Nineteen loops in OVL19 are bounded by 6 and every one counts upward; none descends, sorts by speed or randomises.",
         "conclusion": "When two combatants become ready on the same frame, the lower slot index is serviced first. There is no priority or speed tiebreak; speed only changes when a cooldown reaches zero, through the 90 - 2*speedIndex rebuild. Recorded as BATTLE_AI_SLOT_SERVICE_ORDER."
       }
+    ]
+  },
+  "completedBattleCatalogs": {
+    "id": "BATTLE_DATA_EXTRACTION_B1",
+    "date": "2026-09-01",
+    "evidence": "VERIFIED_BINARY",
+    "scope": "Six ARM9 battle tables transcribed to product catalogs. Data only: nothing here is imported by a battle module or by the app.",
+    "builder": "scripts/build-battle-catalogs.py -- takes the ROM path from --rom or YDIJ_ROM, verifies the cartridge SHA-256, derives the ARM9 ROM offset and RAM base from the header, and refuses to emit a table whose record count does not converge. No absolute path is baked in; the generated JSON is what CI reads.",
+    "runtimeModule": "src/championship/battle/battleCatalogs.js",
+    "tables": [
+      {
+        "key": "battle-moves",
+        "ramBase": "0x020CFF9C",
+        "stride": 104,
+        "count": 596,
+        "countEvidence": "OVL19 0x02113DFC `cmp r2,#0x254 / blo` bounds the scan that walks this table with the 0x68-stride MLA at 0x02113DCC.",
+        "boundaryEvidence": "The UTF-16LE name pool ends four zero bytes below the base; record 595 ends at 0x020D9A9C where the ASCII run '%s/%s.nsbca' begins.",
+        "fieldsNamed": "speciesId +0x00, namePointer +0x04, actionCost +0x48, power +0x4A, kind +0x50, targetMode +0x54, elementSelect +0x58, statusCode +0x5C. 36 further fields carry a traced read site but no traced meaning and keep their byte offset as their name.",
+        "note": "596 Japanese move names stay in the cartridge. Only the name pointer is transcribed, as the per-record discriminator."
+      },
+      {
+        "key": "battle-arenas",
+        "ramBase": "0x020CC148",
+        "stride": 24,
+        "count": 11,
+        "countEvidence": "11 records exactly fill the gap between the end of the ASCII asset-name pool at 0x020CC144 and the next object at 0x020CC250, whose base is itself a literal at ARM9 0x020A1370.",
+        "contents": "Five ASCII asset-token pointers and one u32. The identifier column is the eleven BATTLE_* tokens from BATTLE_NORMAL to BATTLE_DOMESTADIUM."
+      },
+      {
+        "key": "battle-eligibility",
+        "ramBase": "0x020CC8D4",
+        "stride": 40,
+        "count": 46,
+        "baseCorrection": "The brief carried 0x020CC8F4 x 45. That address is the record's +0x20 column, not its first byte. ARM9 0x020923A8..0x02092414 copies the record field by field out of a literal pool at 0x02092428..0x0209244C holding &record[0].field for every field; the lowest is 0x020CC8D4. The word at 0x020CC8D0 is the C string '/' loaded at ARM9 0x02087E64, so the table cannot begin lower.",
+        "countCorrection": "46, not 45. With the corrected base the table ends at 0x020CD004, exactly the title-event base. The 46th record is the one the 45-record reading left as an orphan eight-byte pair; its +0x20 repeats the id 0x461."
+      },
+      {
+        "key": "battle-title-events",
+        "ramBase": "0x020CD004",
+        "stride": 40,
+        "count": 62,
+        "countEvidence": "The +0x08 column holds each of 0..61 exactly once -- a permutation, not an identity: records 12 and 51 swap. ARM9 0x02089294 walks the table at stride 0x28 while the index is below 0x3D, which is why the last record is out of that scan's reach.",
+        "specialRecord": "Record 61 is the only record in the table whose +0x24 is zero, and its +0x0C is -1 with +0x10..+0x1C all zero. That is the OVL8 no-reward special case, now pinned from the data rather than asserted."
+      },
+      {
+        "key": "battle-opponent-teams",
+        "ramBase": "0x020ED2D8",
+        "stride": 20,
+        "count": 152,
+        "baseCorrection": "The brief carried 0x020ED2E4. That is the record's +0x0C column. OVL10's literal pool at 0x02110A78..0x02110A8C holds 0x020ED2D8, 0x020ED2DC, 0x020ED2E0 and 0x020ED2E4 as consecutive per-field bases; the lowest is the record base. Reading from 0x020ED2E4 shifts every field three columns and makes record 0 look like [nameId, descId, m0, m1, m2] of the following record.",
+        "countEvidence": "With the corrected base the +0x00/+0x04/+0x08 columns flatten to exactly 0..455 in order -- one index per battle-preset record, no repeat, no gap. +0x0C runs 0x323..0x3BA unbroken and +0x10 runs 0x3BB..0x452 unbroken, and the eligibility table's id column takes the next id 0x453."
+      },
+      {
+        "key": "battle-presets",
+        "ramBase": "0x020E39D8",
+        "stride": 68,
+        "count": 456,
+        "countEvidence": "Cross-checked twice: the opponent-team table names exactly 456 record indices 0..455, and the +0x04 column rises monotonically to 150 across those 456 then jumps by 1002 in the record after the last.",
+        "note": "+0x0C is read as a u16 and summed at ARM9 0x02088EF8 but is zero on all 456 records. Recorded as it reads; not smoothed."
+      }
+    ],
+    "namingDiscipline": "A field is named only where a load instruction was traced and the surrounding code says what the value does. Everything else keeps its byte offset (fieldNN / pointerNN). A test enforces this, so a later pass has to cite an address to promote a name.",
+    "storageNote": "A field holding one value across a whole table is declared once in the catalog fieldMap with constantValue instead of repeated on every record. readBattleCatalogField() is the accessor that covers both cases.",
+    "notImplemented": [
+      "No battle module and no app screen imports these catalogs. B1 is data only.",
+      "The remaining 36 move fields have widths and read sites but no meanings; naming them needs B2/B4 to show what consumes them.",
+      "The arena table's 11x11 attribute matrix was not touched: this catalog is the arena records themselves, which are five asset-token pointers and one flag."
     ]
   }
 }

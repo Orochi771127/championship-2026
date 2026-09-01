@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "authority": "CHAMPIONSHIP_2026_PRODUCT",
+  "catalogKind": "championship:2026:catalog:battle-arenas",
+  "sourceEvidence": "VERIFIED_BINARY_STRUCTURE",
+  "nameEvidence": "TRACED_READ_SITE_ELSE_BYTE_OFFSET",
+  "rom": {
+    "sha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "title": "DIGIMONCHAMP",
+    "code": "YDIJ"
+  },
+  "table": {
+    "module": "arm9",
+    "ramBase": "0x020CC148",
+    "ramEnd": "0x020CC250",
+    "stride": 24,
+    "recordCountEvidence": "11 records of 0x18 exactly fill 0x020CC148..0x020CC250, between the end of the ASCII asset-name pool and the next object, whose base 0x020CC250 is itself a literal at ARM9:0x020A1370",
+    "boundaryEvidence": [
+      "the ASCII pool ends with 'field_bm00_00_common' terminated at 0x020CC144",
+      "OVL2:0x0210C0B4 holds the record base 0x020CC148",
+      "OVL19:0x0210CC40..0x0210CC78 hold base+0x04..base+0x14, the per-field base form",
+      "the object at 0x020CC250 is u16 data and is referenced as its own base at ARM9:0x020A1370"
+    ]
+  },
+  "fieldMap": [
+    {
+      "offset": 0,
+      "offsetHex": "0x00",
+      "name": "identifier",
+      "width": "ascii",
+      "readSite": "OVL2:0x0210C0B4 holds the record base; each value is a distinct BATTLE_* token",
+      "widthEvidence": "TRACED_LOAD",
+      "distinctValues": 11
+    },
+    {
+      "offset": 4,
+      "offsetHex": "0x04",
+      "name": "string04",
+      "width": "ascii",
+      "readSite": "OVL19:0x0210CC40 holds base+0x04",
+      "widthEvidence": "TRACED_LOAD",
+      "distinctValues": 11
+    },
+    {
+      "offset": 8,
+      "offsetHex": "0x08",
+      "name": "string08",
+      "width": "ascii",
+      "readSite": "OVL19:0x0210CC48 holds base+0x08",
+      "widthEvidence": "TRACED_LOAD",
+      "distinctValues": 2
+    },
+    {
+      "offset": 12,
+      "offsetHex": "0x0C",
+      "name": "string0C",
+      "width": "ascii",
+      "readSite": "OVL19:0x0210CC58 holds base+0x0C",
+      "widthEvidence": "TRACED_LOAD",
+      "distinctValues": 3
+    },
+    {
+      "offset": 16,
+      "offsetHex": "0x10",
+      "name": "string10",
+      "width": "ascii",
+      "readSite": "OVL19:0x0210CC68 holds base+0x10",
+      "widthEvidence": "TRACED_LOAD",
+      "distinctValues": 5
+    },
+    {
+      "offset": 20,
+      "offsetHex": "0x14",
+      "name": "field14",
+      "width": "u32",
+      "readSite": "OVL19:0x0210CC78 holds base+0x14",
+      "widthEvidence": "TRACED_LOAD",
+      "distinctValues": 2
+    }
+  ],
+  "recordCount": 11,
+  "records": [
+    {
+      "recordIndex": 0,
+      "identifier": "BATTLE_NORMAL",
+      "string04": "field_bm01_01",
+      "string08": "field_bm00_00_common",
+      "string0C": "",
+      "string10": "",
+      "field14": 1
+    },
+    {
+      "recordIndex": 1,
+      "identifier": "BATTLE_GRASS",
+      "string04": "field_bm02_01",
+      "string08": "field_bm00_00_common",
+      "string0C": "",
+      "string10": "field_bm02_01_obj",
+      "field14": 1
+    },
+    {
+      "recordIndex": 2,
+      "identifier": "BATTLE_VOLCANO",
+      "string04": "field_bm03_01",
+      "string08": "field_bm00_00_common",
+      "string0C": "field_bm03_01_anim",
+      "string10": "",
+      "field14": 0
+    },
+    {
+      "recordIndex": 3,
+      "identifier": "BATTLE_ISLAND",
+      "string04": "field_bm04_01",
+      "string08": "field_bm00_00_common",
+      "string0C": "field_bm04_01_anim",
+      "string10": "field_bm04_01_obj",
+      "field14": 1
+    },
+    {
+      "recordIndex": 4,
+      "identifier": "BATTLE_SOUTHPOLE",
+      "string04": "field_bm05_01",
+      "string08": "field_bm00_00_common",
+      "string0C": "",
+      "string10": "",
+      "field14": 1
+    },
+    {
+      "recordIndex": 5,
+      "identifier": "BATTLE_DESERT",
+      "string04": "field_bm06_01",
+      "string08": "field_bm00_00_common",
+      "string0C": "",
+      "string10": "",
+      "field14": 1
+    },
+    {
+      "recordIndex": 6,
+      "identifier": "BATTLE_CYBERSPACE",
+      "string04": "field_bm07_01",
+      "string08": "",
+      "string0C": "",
+      "string10": "",
+      "field14": 1
+    },
+    {
+      "recordIndex": 7,
+      "identifier": "BATTLE_HELL",
+      "string04": "field_bm08_01",
+      "string08": "field_bm00_00_common",
+      "string0C": "",
+      "string10": "field_bm08_01_obj",
+      "field14": 1
+    },
+    {
+      "recordIndex": 8,
+      "identifier": "BATTLE_COLOSSEUM",
+      "string04": "field_bm09_01",
+      "string08": "field_bm00_00_common",
+      "string0C": "",
+      "string10": "",
+      "field14": 1
+    },
+    {
+      "recordIndex": 9,
+      "identifier": "BATTLE_STADIUM",
+      "string04": "field_bm10_01",
+      "string08": "field_bm00_00_common",
+      "string0C": "",
+      "string10": "",
+      "field14": 1
+    },
+    {
+      "recordIndex": 10,
+      "identifier": "BATTLE_DOMESTADIUM",
+      "string04": "field_bm11_01",
+      "string08": "field_bm00_00_common",
+      "string0C": "",
+      "string10": "field_bm11_01_obj",
+      "field14": 1
+    }
+  ]
+}

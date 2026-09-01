@@ -1,6 +1,6 @@
 {
   "owner": "Claude Code",
-  "deltaDate": "2026-08-31",
+  "deltaDate": "2026-09-01",
   "syncRevision": null,
   "note": "Claude-owned delta. Shared Master Sync, Dependency Matrix and Blocker Ledger are Codex's to merge; changes that belong there are recorded here instead of edited directly.",
   "added": [
@@ -57,12 +57,63 @@
       "path": "tests/championship-battle-action-resource-cases.mjs",
       "kind": "test",
       "summary": "8 cases covering the offsets, the exact-zero boundary, the no-charge refusal, zero-cost actions, the relationship to the AI reserve, and the ascending slot-order fact."
+    },
+    {
+      "path": "scripts/build-battle-catalogs.py",
+      "kind": "builder",
+      "evidence": "VERIFIED_BINARY (ARM9 0x020CC148, 0x020CC8D4, 0x020CD004, 0x020CFF9C, 0x020E39D8, 0x020ED2D8)",
+      "summary": "Transcribes the six original battle tables out of the retail cartridge. Takes the ROM path from --rom or YDIJ_ROM and hard-codes no drive letter, so CI never needs the cartridge; verifies the ROM SHA-256 and the DIGIMONCHAMP/YDIJ header, derives the ARM9 ROM offset and RAM base from the header rather than assuming 0x4000, and refuses to write any table whose record count does not converge against a boundary in the image."
+    },
+    {
+      "path": "src/data/championship/catalogs/battle-moves.r1.json",
+      "kind": "catalog",
+      "summary": "596 move records, stride 104, from ARM9 0x020CFF9C. Eight named fields; 36 more carry a traced read site and keep their byte offset as their name. The 596 Japanese names stay in the cartridge -- only the name pointer is transcribed."
+    },
+    {
+      "path": "src/data/championship/catalogs/battle-arenas.r1.json",
+      "kind": "catalog",
+      "summary": "11 arena records, stride 24, from ARM9 0x020CC148. Five ASCII asset-token pointers and one u32; the identifier column is BATTLE_NORMAL through BATTLE_DOMESTADIUM."
+    },
+    {
+      "path": "src/data/championship/catalogs/battle-eligibility.r1.json",
+      "kind": "catalog",
+      "summary": "46 records, stride 40, from ARM9 0x020CC8D4 -- a corrected base and a corrected count; see correctionForSharedLedger."
+    },
+    {
+      "path": "src/data/championship/catalogs/battle-title-events.r1.json",
+      "kind": "catalog",
+      "summary": "62 records, stride 40, from ARM9 0x020CD004. Record 61 is the only one whose +0x24 is zero, which is the OVL8 no-reward special case pinned from data."
+    },
+    {
+      "path": "src/data/championship/catalogs/battle-opponent-teams.r1.json",
+      "kind": "catalog",
+      "summary": "152 records, stride 20, from ARM9 0x020ED2D8 -- a corrected base; see correctionForSharedLedger."
+    },
+    {
+      "path": "src/data/championship/catalogs/battle-presets.r1.json",
+      "kind": "catalog",
+      "summary": "456 records, stride 68, from ARM9 0x020E39D8. The count is cross-checked by the opponent-team table, whose three index columns name exactly 0..455."
+    },
+    {
+      "path": "src/championship/battle/battleCatalogs.js",
+      "kind": "runtime module",
+      "evidence": "VERIFIED_BINARY",
+      "summary": "Read-only accessor over the six catalogs: record counts, the ARM9 base/stride layout, a field reader that covers fields declared once as a table constant, and the species move scan with the eight-record cap from OVL19 0x02113DC0. Imports nothing outside src. Nothing else imports it -- B1 is data, not wiring."
+    },
+    {
+      "path": "tests/championship-battle-catalog-cases.mjs",
+      "kind": "test",
+      "summary": "17 cases. Ten hand-checked records carry their original bytes as hex and are decoded independently of the builder, so a wrong base, width or stride fails here. Also pins each record count and its convergence, the two base corrections, the enum ranges their dispatch code allows, the arena token list, the 0..455 preset bijection, that no catalog file contains a non-ASCII byte or an escaped one, and that no field is named unless a read site supports it."
     }
   ],
   "modified": [
     {
       "path": "tests/championship-migration-firewall-cases.mjs",
       "summary": "Added battleContactTargeting.js to the asserted battle directory listing and extended the authorization comment. The firewall states the battle folder contents in both directions, so a new module must be declared there."
+    },
+    {
+      "path": "tests/championship-migration-firewall-cases.mjs",
+      "summary": "Added battleCatalogs.js to the asserted battle directory listing. Codex was editing the same file in this working tree during this batch; only that one array entry belongs to this lane."
     }
   ],
   "forSharedLedger": {
@@ -79,17 +130,25 @@
     "blockersOpened": [
       "AI strategy labels and metric semantics — the structure is implemented, only the names remain unproven (Stage 4 B07/B08).",
       "Action-resource regeneration, starting value, and any writer outside OVL19 — the charge is traced, restoration is not.",
-      "OVL8 rank and unlock writers beyond the wallet credit — the payout question is closed, the wider progression graph is not."
+      "OVL8 rank and unlock writers beyond the wallet credit — the payout question is closed, the wider progression graph is not.",
+      "The 36 unnamed move-record fields -- widths and read sites are traced, meanings are not. Naming them needs B2 or B4 to show what consumes them.",
+      "Preset +0x0C is read as a u16 and summed at ARM9 0x02088EF8 but is zero on all 456 records. Either the sum is always zero or the caller can index past the table; unresolved."
     ],
-    "correctionForSharedLedger": "Stage 4 B08 describes OVL19 0x021144CC as an AI target scan. It is not: it is a first-fit affordability scan over an action-id list. The target choice is inlined at 0x02115BE8. Both are now implemented; the shared unknown register should be corrected rather than left describing the old reading.",
-    "warningForOtherLanes": "Channel-216 rolls are 0..102, not 0..215. battleActionSelection.js rejects out-of-range rolls; battleDamageResolver.js and battleStatus.js still accept any safe integer from an injected rng. Any harness or future wiring that feeds those modules must use the 0..102 range or the critical and status-proc rates will be wrong.",
+    "correctionForSharedLedger": "Stage 4 B08 describes OVL19 0x021144CC as an AI target scan. It is not: it is a first-fit affordability scan over an action-id list. The target choice is inlined at 0x02115BE8. Both are now implemented; the shared unknown register should be corrected rather than left describing the old reading. Second correction, 2026-09-01: two of the six B1 table bases in the brief are field columns, not record starts. The opponent-team table is 0x020ED2D8, not 0x020ED2E4 (OVL10's literal pool at 0x02110A78..0x02110A8C holds four consecutive per-field bases and the lowest is the record base); reading from the handed-over address shifts every field three columns. The eligibility table is 0x020CC8D4, not 0x020CC8F4 (ARM9 0x020923A8..0x02092414 copies the record field by field from the literal pool at 0x02092428), and with the corrected base it is 46 records ending exactly on the title-event base rather than 45 leaving an eight-byte orphan. Compilers keep &table[0].field in the literal pool, so any field of a record can be mistaken for the table base; the shared register should record the record starts.",
+    "warningForOtherLanes": "Channel-216 rolls are 0..102, not 0..215. battleActionSelection.js rejects out-of-range rolls; battleDamageResolver.js and battleStatus.js still accept any safe integer from an injected rng. Any harness or future wiring that feeds those modules must use the 0..102 range or the critical and status-proc rates will be wrong. Separately: any consumer written against the handed-over battle table bases 0x020ED2E4 or 0x020CC8F4 reads the wrong columns. Use 0x020ED2D8 and 0x020CC8D4, or read src/data/championship/catalogs/battle-*.r1.json.",
     "newFacts": [
       "The Owner-supplied ROM at SHA-256 8ad375ba…c5d1 reproduces every battle constant the Cursor handoff claimed, with no discrepancy.",
       "OVL19 contains exactly three direct DamageResolver call sites; the bounded caller region 0x0211C714..0x0211C92C contains no RNG call, which is positive evidence against an accuracy roll inside contact resolution.",
       "R:\\NEXUS LINK\\原作\\research-only\\YDIJ_FULL_ROM_DECONSTRUCTION_2026-08-29 now ships arm9.bin, arm7.bin and all 22 ARM9 overlay binaries. The earlier repeated finding that no overlay or ARM9 binary existed under the research root is superseded; new overlay traces are no longer blocked for lack of a binary.",
       "The AI cascade applies three different liveness rules: group 1 skips HP exactly 0, group 3 applies no HP test at all, group 5 requires HP > 0. battleContactTargeting separately requires HP > 0, so a negative-HP combatant can be targeted and then rejected at contact. All four rules are in the ROM.",
       "OVL19 0x021300D4 maps action id to the positive effect code it applies (ids 0-9 -> 0, then pairs 10/11 -> 1 up to 22/23 -> 7). Group 6 uses it to decline an action whose effect the combatant already carries; this is the duplicate-effect logic Stage 6 saw while auditing Sense.",
-      "Stage 4 B07/B08 and the Cursor handoff both treated TP as an invention risk. It is not: OVL19 0x0211C244 charges action +0x48 against stats +0x54 with a refuse-if-insufficient guard. The shared unknown register should be corrected."
+      "Stage 4 B07/B08 and the Cursor handoff both treated TP as an invention risk. It is not: OVL19 0x0211C244 charges action +0x48 against stats +0x54 with a refuse-if-insufficient guard. The shared unknown register should be corrected.",
+      "The move table's record count is in the ROM, not inferred: OVL19 0x02113DFC is `cmp r2,#0x254 / blo`, so the scan walks records 0..595 at the 0x68 stride the MLA at 0x02113DCC forms.",
+      "The opponent-team table's three index columns flatten to exactly 0..455 in order, one per battle-preset record. That is a bijection, so 152 teams and 456 presets confirm each other.",
+      "The message-id space is contiguous across three of these tables: opponent teams hold 0x323..0x3BA and 0x3BB..0x452, and the eligibility table's id column takes the next id 0x453 and runs to 0x47F.",
+      "Species ids 2..19 own no move record at all; 206 of the 224 ids own between 1 and 30. Species 1 owns 30, more than the eight the OVL19 scan will collect.",
+      "The title table's +0x08 column is a permutation of 0..61 rather than the identity: records 12 and 51 swap. It is still a bijection, so the count of 62 holds.",
+      "Record 61 of the title table is the only record in it with a zero +0x24. The OVL8 no-reward special case is now pinned from the data instead of asserted."
     ]
   },
   "dependenciesChanged": false,
