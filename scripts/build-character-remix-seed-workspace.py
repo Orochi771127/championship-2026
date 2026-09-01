@@ -35,6 +35,7 @@ EXPECTED_SOURCE_SIZE = (384, 352)
 ATLAS_MAX_SIZE = 2048
 ATLAS_PADDING = 8
 HIGH_RISK_CELLS = (0, 4, 6, 9, 11, 15, 23, 49, 53, 56, 62, 63)
+MOTION_CLOSURE_01_CELLS = (1, 5, 12, 50, 54)
 PROJECT_ROOT = Path.cwd().resolve()
 SOURCE_FACING = "LEFT"
 SOURCE_FACING_BY_KEY_CELL = {
@@ -748,6 +749,65 @@ def build_candidate_contact_sheet(source_directory: Path, output_directory: Path
     return result
 
 
+def build_motion_closure_contact_sheet(
+    source_directory: Path,
+    output_directory: Path,
+) -> dict[str, Any] | None:
+    candidate_paths = {
+        cell_id: output_directory / f"m201-main-cell-{cell_id:03d}-remix-candidate.png"
+        for cell_id in MOTION_CLOSURE_01_CELLS
+    }
+    if not all(path.exists() for path in candidate_paths.values()):
+        return None
+
+    panel_width, panel_height = 256, 235
+    label_height = 28
+    board = Image.new(
+        "RGBA",
+        (panel_width * len(MOTION_CLOSURE_01_CELLS), panel_height + label_height),
+        (245, 243, 236, 255),
+    )
+    draw = ImageDraw.Draw(board)
+    records: list[dict[str, Any]] = []
+    for column, cell_id in enumerate(MOTION_CLOSURE_01_CELLS):
+        candidate = Image.open(candidate_paths[cell_id]).convert("RGBA")
+        _source, frame_record = load_source_cell(source_directory, cell_id)
+        guide = make_guide(candidate, frame_record)
+        left = column * panel_width
+        board.alpha_composite(
+            guide.resize((panel_width, panel_height), Image.Resampling.LANCZOS),
+            (left, 0),
+        )
+        draw.text((left + 8, panel_height + 8), f"Main Cell {cell_id:03d}", fill=(28, 37, 43, 255))
+        qa_path = output_directory / f"m201-main-cell-{cell_id:03d}-remix-candidate-qa.json"
+        records.append({
+            "cell": cell_id,
+            "candidate": project_path(candidate_paths[cell_id]),
+            "candidateSha256": sha256_file(candidate_paths[cell_id]),
+            "qa": project_path(qa_path),
+        })
+
+    board_path = output_directory / "m201-motion-family-closure-01-candidates.png"
+    board.save(board_path, optimize=True)
+    result = {
+        "schemaVersion": 1,
+        "entityId": ENTITY_ID,
+        "side": "main",
+        "batch": "MOTION_FAMILY_CLOSURE_01",
+        "canonicalCellCount": len(MOTION_CLOSURE_01_CELLS),
+        "cells": records,
+        "contactSheet": project_path(board_path),
+        "contactSheetSha256": sha256_file(board_path),
+        "state": "TECHNICAL_CANDIDATES_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+        "runtimeEligible": False,
+        "shippingReady": False,
+    }
+    (output_directory / "m201-motion-family-closure-01-candidates.json").write_text(
+        serialize(result), encoding="utf-8"
+    )
+    return result
+
+
 def build_workspace(source_directory: Path, output_directory: Path) -> dict[str, Any]:
     output_directory.mkdir(parents=True, exist_ok=True)
     source, frame_record = load_source_frame(source_directory)
@@ -808,6 +868,7 @@ def build_workspace(source_directory: Path, output_directory: Path) -> dict[str,
     contract_path = output_directory / "seed-contract.json"
     contract_path.write_text(serialize(contract), encoding="utf-8")
     build_key_pose_workspace(source_directory, output_directory)
+    build_motion_closure_contact_sheet(source_directory, output_directory)
     reuse = build_all83_source_reuse(source_directory, output_directory)
     build_review_runtime(
         source_directory,
@@ -933,7 +994,85 @@ def normalize_candidate(
     qa_path = output_directory / f"m201-main-cell-{cell_id:03d}-remix-candidate-qa.json"
     qa_path.write_text(serialize(qa), encoding="utf-8")
     build_candidate_contact_sheet(source_directory, output_directory)
+    build_motion_closure_contact_sheet(source_directory, output_directory)
     return qa
+
+
+def normalize_candidate_strip(
+    candidate_path: Path,
+    source_directory: Path,
+    output_directory: Path,
+    strip_cells: list[int | None],
+    *,
+    mirror_candidate: bool = False,
+) -> dict[str, Any]:
+    """Split one identity-locked strip and normalize selected slots.
+
+    A ``None`` cell keeps an approved/anchor slot out of the redraw import.  The
+    strip width may not divide evenly, so rounded boundaries preserve every
+    source pixel exactly once.
+    """
+
+    require(strip_cells, "Candidate strip has no declared slots")
+    strip = Image.open(candidate_path).convert("RGBA")
+    require(strip.getchannel("A").getextrema()[0] == 0,
+            "Candidate strip must contain genuine transparent alpha")
+    slot_directory = output_directory / "motion-family-normalization-inputs"
+    slot_directory.mkdir(parents=True, exist_ok=True)
+    results: list[dict[str, Any]] = []
+    for slot_index, cell_id in enumerate(strip_cells):
+        left = round(slot_index * strip.width / len(strip_cells))
+        right = round((slot_index + 1) * strip.width / len(strip_cells))
+        require(right > left, f"Candidate strip slot {slot_index} is empty")
+        if cell_id is None:
+            results.append({"slot": slot_index, "cell": None, "state": "ANCHOR_SLOT_SKIPPED"})
+            continue
+        require(cell_id in range(65), f"M201 Main cell is out of range: {cell_id}")
+        slot = strip.crop((left, 0, right, strip.height))
+        require(alpha_bounds(slot) is not None, f"Candidate strip slot {slot_index} is blank")
+        slot_path = slot_directory / f"{candidate_path.stem}-slot-{slot_index:02d}-cell-{cell_id:03d}.png"
+        slot.save(slot_path, optimize=True)
+        qa = normalize_candidate(
+            slot_path,
+            source_directory,
+            output_directory,
+            cell_id=cell_id,
+            mirror_candidate=mirror_candidate,
+        )
+        results.append({
+            "slot": slot_index,
+            "cell": cell_id,
+            "state": qa["state"],
+            "normalizationInput": project_path(slot_path),
+            "output": qa["output"],
+            "outputSha256": qa["outputSha256"],
+        })
+
+    receipt = {
+        "schemaVersion": 1,
+        "entityId": ENTITY_ID,
+        "candidateStrip": project_path(candidate_path),
+        "candidateStripSha256": sha256_file(candidate_path),
+        "slotCount": len(strip_cells),
+        "slots": results,
+        "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+        "runtimeEligible": False,
+        "shippingReady": False,
+    }
+    receipt_path = output_directory / f"{candidate_path.stem}-normalization-receipt.json"
+    receipt_path.write_text(serialize(receipt), encoding="utf-8")
+    return receipt
+
+
+def parse_strip_cells(value: str) -> list[int | None]:
+    cells: list[int | None] = []
+    for token in value.split(","):
+        normalized = token.strip().lower()
+        if normalized in {"-", "skip", "anchor"}:
+            cells.append(None)
+        else:
+            cells.append(int(normalized))
+    return cells
 
 
 def parse_args() -> argparse.Namespace:
@@ -942,6 +1081,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-directory", type=Path, default=OUTPUT_DIRECTORY)
     parser.add_argument("--candidate", type=Path)
     parser.add_argument("--cell", type=int, default=0)
+    parser.add_argument(
+        "--strip-cells",
+        type=parse_strip_cells,
+        help="Comma-separated Main cell IDs in strip order; use 'anchor' to skip a locked slot.",
+    )
     parser.add_argument("--mirror-candidate", action="store_true")
     return parser.parse_args()
 
@@ -952,6 +1096,15 @@ if __name__ == "__main__":
     output_directory = arguments.output_directory.resolve()
     if arguments.candidate is None:
         result = build_workspace(source_directory, output_directory)
+        print(serialize(result))
+    elif arguments.strip_cells:
+        result = normalize_candidate_strip(
+            arguments.candidate.resolve(),
+            source_directory,
+            output_directory,
+            arguments.strip_cells,
+            mirror_candidate=arguments.mirror_candidate,
+        )
         print(serialize(result))
     else:
         result = normalize_candidate(

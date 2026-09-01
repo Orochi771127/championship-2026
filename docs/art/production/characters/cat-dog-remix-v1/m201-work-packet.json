@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "workPacketId": "CHARACTER_REMIX_M201_VERTICAL_SLICE_V1",
-  "state": "INTERNAL_RUNTIME_REVIEW_ACTIVE_9_OF_47_UNIQUE_VISUALS",
+  "state": "INTERNAL_RUNTIME_REVIEW_ACTIVE_14_OF_47_UNIQUE_VISUALS",
   "entityId": "m201_agumon",
   "stableEntityIdRequired": true,
   "presentationOnly": true,
@@ -77,13 +77,23 @@
     ],
     "policy": "PIXEL_IDENTICAL_ROM_CELLS_REUSE_ONE_APPROVED_HD_DRAWING"
   },
+  "motionFamilyClosure01": {
+    "canonicalCells": [1, 5, 12, 50, 54],
+    "reusedMainCells": [7, 16],
+    "candidateUniqueVisualCount": 14,
+    "candidateRuntimeSlotCount": 31,
+    "remainingUniqueVisualCount": 33,
+    "mainSequenceCoverage": { "full": 13, "partial": 1, "fallbackOnly": 26 },
+    "subSequenceCoverage": { "full": 7, "partial": 0, "fallbackOnly": 6 },
+    "state": "TECHNICAL_CANDIDATES_VISUAL_AND_LANDMARK_REVIEW_REQUIRED"
+  },
   "milestones": [
     { "id": "G0", "name": "EVIDENCE_LOCK", "state": "COMPLETE" },
     { "id": "G1", "name": "APPROVED_SEED_CELL_000", "state": "TECHNICAL_PASS_VISUAL_LANDMARK_REVIEW_REQUIRED" },
     { "id": "G2", "name": "TWELVE_HIGH_RISK_KEY_POSES", "state": "TECHNICAL_CANDIDATES_12_OF_12_VISUAL_LANDMARK_REVIEW_REQUIRED" },
-    { "id": "G3", "name": "ALL_83_MAIN_SUB_CELLS", "state": "9_OF_47_UNIQUE_VISUALS_TECHNICAL_CANDIDATES_38_PENDING" },
+    { "id": "G3", "name": "ALL_83_MAIN_SUB_CELLS", "state": "14_OF_47_UNIQUE_VISUALS_TECHNICAL_CANDIDATES_33_PENDING" },
     { "id": "G4", "name": "PIXIJS_ATLAS_AND_NANR_CONTRACT", "state": "HYBRID_REVIEW_ATLAS_COMPLETE_FINAL_REMIX_ATLAS_BLOCKED_ON_G3" },
-    { "id": "G5", "name": "DURATION_AWARE_PLAYER", "state": "IMPLEMENTED_AND_UNIT_TESTED_PENDING_RUNTIME_INTEGRATION" },
+    { "id": "G5", "name": "DURATION_AWARE_PLAYER", "state": "IMPLEMENTED_UNIT_TESTED_AND_RAISING_HUNT_REVIEW_BOUND" },
     { "id": "G6", "name": "RAISING_HUNT_BATTLE_9_16_PROOF", "state": "RAISING_HUNT_TECHNICAL_REVIEW_PASS_BATTLE_AND_FULL_ART_PENDING" }
   ],
   "acceptance": {

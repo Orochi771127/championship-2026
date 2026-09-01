@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m201_agumon",
+  "candidateStrip": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-00-idle-locomotion-v2.png",
+  "candidateStripSha256": "814AFE8C1CD53C9D0C1AFD3918512A64B1016C1BCED1B68047896754D80FAA4D",
+  "slotCount": 3,
+  "slots": [
+    {
+      "slot": 0,
+      "cell": null,
+      "state": "ANCHOR_SLOT_SKIPPED"
+    },
+    {
+      "slot": 1,
+      "cell": null,
+      "state": "ANCHOR_SLOT_SKIPPED"
+    },
+    {
+      "slot": 2,
+      "cell": 5,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-00-idle-locomotion-v2-slot-02-cell-005.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-005-remix-candidate.png",
+      "outputSha256": "40D0EDD3C8C521FA2A76E14CCD283A00156CCD92426025906E5DD28921A4428D"
+    }
+  ],
+  "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+  "runtimeEligible": false,
+  "shippingReady": false
+}

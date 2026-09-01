@@ -160,16 +160,24 @@ mask.
 
 The repository now also builds a private, review-only PixiJS runtime at
 `assets/production/internal-character-review/m201-remix-v1`. It exposes all 83
-stable Main/Sub texture keys and all 53 original animation sequences. Nine
-unique technical candidates currently cover 21 runtime slots through verified
-source-cell reuse; the other 62 slots deliberately use the faithful-HD art as
+stable Main/Sub texture keys and all 53 original animation sequences. Fourteen
+unique technical candidates currently cover 31 runtime slots through verified
+source-cell reuse; the other 52 slots deliberately use the faithful-HD art as
 a visible fallback. It is activated only with
 `?characterArtReview=m201` and is excluded from the public Pages package.
 
-At the current art boundary, Main animation coverage is 6 fully remixed, 8
-partly remixed, and 26 faithful-fallback-only sequences. Sub coverage is 4, 3,
-and 6 respectively. Partly remixed animations will visibly switch identity and
-are evidence of missing art, not acceptable final animation.
+Motion-family closure 01 adds canonical Cells 001, 005, 012, 050 and 054. The
+original reuse map also applies Cell 005 to Cell 007 and Cell 012 to Cell 016.
+Idle, walk, run, Attack 1, Attack 3, happy and cheer/victory are now complete
+remix sequences rather than mixed-identity previews.
+
+- [Motion-family closure 01 contact sheet](m201-seed/m201-motion-family-closure-01-candidates.png)
+- [Motion-family closure 01 manifest](m201-seed/m201-motion-family-closure-01-candidates.json)
+
+At the current art boundary, Main animation coverage is 13 fully remixed, 1
+partly remixed, and 26 faithful-fallback-only sequences. Sub coverage is 7, 0,
+and 6 respectively. The remaining partly remixed animation will visibly switch
+identity and is evidence of missing art, not acceptable final animation.
 
 Real Chromium checks at `390 x 844` load the review runtime in both Raising and
 Hunt with one shared Pixi canvas, no fallback, no page error and no failed asset
@@ -180,4 +188,4 @@ request:
 
 This proves the atlas, anchor, mirroring, field placement, ticker and unloading
 seams. It does not approve anatomy, motion landmarks, identity continuity or
-the remaining 38 unique redraws, and remains `runtimeEligible: false`.
+the remaining 33 unique redraws, and remains `runtimeEligible: false`.
