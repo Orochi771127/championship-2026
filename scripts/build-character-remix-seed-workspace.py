@@ -37,9 +37,13 @@ ATLAS_PADDING = 8
 HIGH_RISK_CELLS = (0, 4, 6, 9, 11, 15, 23, 49, 53, 56, 62, 63)
 MOTION_CLOSURE_01_CELLS = (1, 5, 12, 50, 54)
 MOTION_CLOSURE_02_CELLS = (2, 3, 8, 13, 14, 24)
+MOTION_CLOSURE_03_CELLS = (19, 22, 25)
+MOTION_CLOSURE_04_CELLS = (44, 47)
 MOTION_CLOSURE_BATCHES = (
     (1, MOTION_CLOSURE_01_CELLS),
     (2, MOTION_CLOSURE_02_CELLS),
+    (3, MOTION_CLOSURE_03_CELLS),
+    (4, MOTION_CLOSURE_04_CELLS),
 )
 PROJECT_ROOT = Path.cwd().resolve()
 SOURCE_FACING = "LEFT"
@@ -1032,12 +1036,47 @@ def normalize_candidate_strip(
         strip.save(candidate_path, optimize=True)
     require(strip.getchannel("A").getextrema()[0] == 0,
             "Candidate strip must contain genuine transparent alpha")
+    alpha = strip.getchannel("A")
+    transparent_columns = [alpha.crop((x, 0, x + 1, strip.height)).getbbox() is None for x in range(strip.width)]
+    transparent_runs: list[tuple[int, int]] = []
+    run_start: int | None = None
+    for x, transparent in enumerate(transparent_columns + [False]):
+        if transparent and run_start is None:
+            run_start = x
+        elif not transparent and run_start is not None:
+            if x - run_start >= 4:
+                transparent_runs.append((run_start, x))
+            run_start = None
+
+    split_boundaries = [0]
+    nominal_slot_width = strip.width / len(strip_cells)
+    for boundary_index in range(1, len(strip_cells)):
+        expected = round(boundary_index * nominal_slot_width)
+        search_radius = round(nominal_slot_width * 0.42)
+        eligible = [
+            (start, end) for start, end in transparent_runs
+            if end >= expected - search_radius and start <= expected + search_radius
+        ]
+        if eligible:
+            def boundary_distance(run: tuple[int, int]) -> int:
+                start, end = run
+                nearest = min(max(expected, start), end)
+                return abs(nearest - expected)
+
+            start, end = min(eligible, key=boundary_distance)
+            boundary = min(max(expected, start), end)
+        else:
+            boundary = expected
+        require(boundary > split_boundaries[-1], "Candidate strip split boundaries overlap")
+        split_boundaries.append(boundary)
+    split_boundaries.append(strip.width)
+
     slot_directory = output_directory / "motion-family-normalization-inputs"
     slot_directory.mkdir(parents=True, exist_ok=True)
     results: list[dict[str, Any]] = []
     for slot_index, cell_id in enumerate(strip_cells):
-        left = round(slot_index * strip.width / len(strip_cells))
-        right = round((slot_index + 1) * strip.width / len(strip_cells))
+        left = split_boundaries[slot_index]
+        right = split_boundaries[slot_index + 1]
         require(right > left, f"Candidate strip slot {slot_index} is empty")
         if cell_id is None:
             results.append({"slot": slot_index, "cell": None, "state": "ANCHOR_SLOT_SKIPPED"})
@@ -1070,6 +1109,8 @@ def normalize_candidate_strip(
         "candidateStripSha256": sha256_file(candidate_path),
         "backgroundExtraction": background_extraction,
         "removedBackgroundPixels": removed_background_pixels,
+        "splitPolicy": "NEAREST_TRANSPARENT_COLUMN_RUN_AROUND_NOMINAL_BOUNDARY",
+        "splitBoundaries": split_boundaries,
         "slotCount": len(strip_cells),
         "slots": results,
         "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",

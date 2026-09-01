@@ -13,10 +13,10 @@
   "subUniqueDecodedVisualCount": 18,
   "subSlotsReusedFromMain": 18,
   "allSubSlotsReuseMain": true,
-  "technicalCandidateUniqueCount": 20,
-  "pendingUniqueCount": 27,
+  "technicalCandidateUniqueCount": 24,
+  "pendingUniqueCount": 23,
   "canonicalSourceContactSheet": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-47-unique-source-production-queue.png",
-  "canonicalSourceContactSheetSha256": "DA779DAF480ABFEEF4A0F75C6D0A044B6FE4429DAE0E7FE156F2AB9AA7E3926B",
+  "canonicalSourceContactSheetSha256": "C7431BD345E47205CAB2CF45A9D1CB4BC0452136ED04F48DBEBD4B04F7105B16",
   "productionPolicy": "DRAW_EACH_CANONICAL_VISUAL_ONCE_REUSE_FOR_EVERY_PIXEL_IDENTICAL_SOURCE_SLOT",
   "geometryVariantPolicy": "DRAW_EACH_ALPHA_GEOMETRY_ONCE_KEEP_INTERIOR_EXPRESSION_AND_PALETTE_VARIANTS_INSIDE_THE_LOCKED_MASK",
   "slots": [
@@ -1132,9 +1132,9 @@
       },
       "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-019.png",
       "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-019-guide.png",
-      "candidateState": "PENDING_CONTROLLED_REDRAW",
-      "candidate": null,
-      "candidateSha256": null
+      "candidateState": "TECHNICAL_CANDIDATE_AVAILABLE_VISUAL_REVIEW_REQUIRED",
+      "candidate": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-019-remix-candidate.png",
+      "candidateSha256": "2B9B0F1F2EC3B065615ECF8A5916CF53374E0A62711BF1AC501CC7DC18CA0512"
     },
     {
       "decodedPixelSha256": "CD9FB312DD255E92788FB4853F683792D49503C86BBFBECA0ECC2B8D026DBD5A",
@@ -1155,9 +1155,9 @@
       },
       "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-022.png",
       "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-022-guide.png",
-      "candidateState": "PENDING_CONTROLLED_REDRAW",
-      "candidate": null,
-      "candidateSha256": null
+      "candidateState": "TECHNICAL_CANDIDATE_AVAILABLE_VISUAL_REVIEW_REQUIRED",
+      "candidate": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-022-remix-candidate.png",
+      "candidateSha256": "46F82D40F6F102F2CDBCDFF4D8EE70496B9430B5326DB101E1BCDBE2434F768B"
     },
     {
       "decodedPixelSha256": "0115B6CE1DA315D50362488F580ADCE6DFC386804A7CEF16866913F001E3BCD3",
@@ -1238,7 +1238,7 @@
       "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-025-guide.png",
       "candidateState": "TECHNICAL_CANDIDATE_AVAILABLE_VISUAL_REVIEW_REQUIRED",
       "candidate": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-025-remix-candidate.png",
-      "candidateSha256": "8BF9686D95AFCDF624420BEF77F4DB8DE8F6A3821F60899F1CAD40F99904C5A1"
+      "candidateSha256": "F55075BB087D276343275FB2FF8E1C5BFE097F83C1FF782CF5EF249277322604"
     },
     {
       "decodedPixelSha256": "F2FB37E9D313ACE4F9B39222D68E70FD688CB52901EF304F700CF6611CD5CCED",
@@ -1586,9 +1586,9 @@
       },
       "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-044.png",
       "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-044-guide.png",
-      "candidateState": "PENDING_CONTROLLED_REDRAW",
-      "candidate": null,
-      "candidateSha256": null
+      "candidateState": "TECHNICAL_CANDIDATE_AVAILABLE_VISUAL_REVIEW_REQUIRED",
+      "candidate": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-044-remix-candidate.png",
+      "candidateSha256": "9EE3B983062B70D38B3AF12E959A1C3D5AAF25678365B6267712CA786F2AE862"
     },
     {
       "decodedPixelSha256": "9B5BF54B3C28C8813EACEDF28B1A3D4AA02142EE8E814824F71609B553552C8E",
@@ -1609,9 +1609,9 @@
       },
       "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-047.png",
       "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-047-guide.png",
-      "candidateState": "PENDING_CONTROLLED_REDRAW",
-      "candidate": null,
-      "candidateSha256": null
+      "candidateState": "TECHNICAL_CANDIDATE_AVAILABLE_VISUAL_REVIEW_REQUIRED",
+      "candidate": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-047-remix-candidate.png",
+      "candidateSha256": "49DF2DA8007872D90BFE292DD8B834051A44C8D1463C08A533DC758240AF434E"
     },
     {
       "decodedPixelSha256": "FDEA2F7CFA3EEAD83DD7C5269DDF54293A576FE4EA5573E7021B5B0AAB976EE4",

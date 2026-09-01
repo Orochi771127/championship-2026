@@ -13,10 +13,10 @@
     "sub": 13,
     "total": 53
   },
-  "candidateSlotCount": 44,
-  "faithfulFallbackSlotCount": 39,
-  "technicalCandidateUniqueCount": 20,
-  "pendingUniqueCount": 27,
+  "candidateSlotCount": 49,
+  "faithfulFallbackSlotCount": 34,
+  "technicalCandidateUniqueCount": 24,
+  "pendingUniqueCount": 23,
   "runtime": "assets/production/internal-character-review/m201-remix-v1/runtime.review.json",
   "runtimeSha256": "5AEF65E5FAC7502BBEA4EB8C146ED8C69B6AD6743F1B70C7242F49421D701A58",
   "sides": {
@@ -29,8 +29,8 @@
           "width": 2032,
           "height": 1636,
           "frameCount": 65,
-          "imageSha256": "5FDD635E610615D66A07F76B3B64D6E7CC8D9CFC581CA38558B1ECC25258F7C0",
-          "dataSha256": "DCEED5C665B0562EE60B19CD9D8F3674061A8B4E2131A5CD2AC98D9CA9F136ED"
+          "imageSha256": "4FB8C46AEB980A308F5C73CD1D0B52DF1381AE2A4152952453442ED0BF9DD817",
+          "dataSha256": "5876DDECDDFD723CEBB7A7AAE3EE414FABFF5B22DBC2535AA1D616D5524D6CA1"
         }
       ],
       "frameManifest": {
@@ -665,21 +665,24 @@
           "page": 0,
           "cell": 19,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "9BF9BE1CA4ABF6543389788464415307FC0CAC6F47866A627B08823BE87D6261",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 19
+          },
+          "logicalRgbaSha256": "0E5720601F2664E396CAFCABD03162685C3F9C94751D48D51F3B900DB1D49715",
           "frame": {
             "x": 1672,
             "y": 244,
-            "w": 192,
+            "w": 172,
             "h": 216
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 106,
             "y": 104,
-            "w": 192,
+            "w": 172,
             "h": 216
           },
           "sourceSize": {
@@ -761,22 +764,25 @@
           "page": 0,
           "cell": 22,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "CD9FB312DD255E92788FB4853F683792D49503C86BBFBECA0ECC2B8D026DBD5A",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 22
+          },
+          "logicalRgbaSha256": "4A832A3679529829159C00A35EC38B8DA26F13CC09A586D11D1767BEBBC04EE8",
           "frame": {
             "x": 388,
             "y": 468,
             "w": 192,
-            "h": 204
+            "h": 144
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 96,
-            "y": 116,
+            "y": 176,
             "w": 192,
-            "h": 204
+            "h": 144
           },
           "sourceSize": {
             "w": 384,
@@ -862,19 +868,19 @@
             "side": "main",
             "cell": 25
           },
-          "logicalRgbaSha256": "C34670CDBC1297BA59F8CFD6B69669F96E21CB5BD5D51915804B99A3A54665FE",
+          "logicalRgbaSha256": "9412EE9A2CD59FE140115CCF6B880112C9CAFE10C8C3CCA9084CA28F21259643",
           "frame": {
             "x": 969,
             "y": 468,
-            "w": 176,
+            "w": 167,
             "h": 216
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 104,
+            "x": 108,
             "y": 104,
-            "w": 176,
+            "w": 167,
             "h": 216
           },
           "sourceSize": {
@@ -894,7 +900,7 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "F2FB37E9D313ACE4F9B39222D68E70FD688CB52901EF304F700CF6611CD5CCED",
           "frame": {
-            "x": 1153,
+            "x": 1144,
             "y": 468,
             "w": 184,
             "h": 96
@@ -924,7 +930,7 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "70D8F502E20C1AFFCF2CB139F115AD2B6E5CD0154EE622875053DA962943022A",
           "frame": {
-            "x": 1345,
+            "x": 1336,
             "y": 468,
             "w": 180,
             "h": 216
@@ -954,7 +960,7 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "E6CF36A366857665F071A6DA73C9447E0FC50CE6C8005732E101E2334AAFF98D",
           "frame": {
-            "x": 1533,
+            "x": 1524,
             "y": 468,
             "w": 180,
             "h": 204
@@ -984,7 +990,7 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "99050C871B939F8E04867DA0E75F30AF418424DCD86A80953B209CB870B6E4B3",
           "frame": {
-            "x": 1721,
+            "x": 1712,
             "y": 468,
             "w": 180,
             "h": 216
@@ -1430,21 +1436,24 @@
           "page": 0,
           "cell": 44,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "AEBD326CB6BBD7C23F623C079FC465E14F303C5CE688A29481171EA8382CB8EF",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 44
+          },
+          "logicalRgbaSha256": "B7DA1D22B3B3AF912FEF5395809ACF8ABE506E6ABC662154124CCC8221B3D44C",
           "frame": {
             "x": 792,
             "y": 916,
-            "w": 204,
+            "w": 195,
             "h": 216
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 90,
+            "x": 94,
             "y": 104,
-            "w": 204,
+            "w": 195,
             "h": 216
           },
           "sourceSize": {
@@ -1467,7 +1476,7 @@
           },
           "logicalRgbaSha256": "4DC9CC71D28ACD5E227CD269AE77607B9087737BA0C00998E352441349B5EA5D",
           "frame": {
-            "x": 1004,
+            "x": 995,
             "y": 916,
             "w": 204,
             "h": 216
@@ -1493,21 +1502,24 @@
           "page": 0,
           "cell": 46,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "AEBD326CB6BBD7C23F623C079FC465E14F303C5CE688A29481171EA8382CB8EF",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 44
+          },
+          "logicalRgbaSha256": "B7DA1D22B3B3AF912FEF5395809ACF8ABE506E6ABC662154124CCC8221B3D44C",
           "frame": {
-            "x": 1216,
+            "x": 1207,
             "y": 916,
-            "w": 204,
+            "w": 195,
             "h": 216
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 90,
+            "x": 94,
             "y": 104,
-            "w": 204,
+            "w": 195,
             "h": 216
           },
           "sourceSize": {
@@ -1523,21 +1535,24 @@
           "page": 0,
           "cell": 47,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "9B5BF54B3C28C8813EACEDF28B1A3D4AA02142EE8E814824F71609B553552C8E",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 47
+          },
+          "logicalRgbaSha256": "8DD1D1D2B7E8E698CA41D92C3CEBDF499BF0DBE18FB19BFE1D8A5EC34F905666",
           "frame": {
-            "x": 1428,
+            "x": 1410,
             "y": 916,
-            "w": 204,
+            "w": 196,
             "h": 216
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 90,
+            "x": 94,
             "y": 104,
-            "w": 204,
+            "w": 196,
             "h": 216
           },
           "sourceSize": {
@@ -1557,7 +1572,7 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "FDEA2F7CFA3EEAD83DD7C5269DDF54293A576FE4EA5573E7021B5B0AAB976EE4",
           "frame": {
-            "x": 1640,
+            "x": 1614,
             "y": 916,
             "w": 192,
             "h": 216
@@ -1590,7 +1605,7 @@
           },
           "logicalRgbaSha256": "B6E32CC5E6739711A0C22F45CAE6B30A56940C084C6922732560B563F02400D8",
           "frame": {
-            "x": 1840,
+            "x": 1814,
             "y": 916,
             "w": 175,
             "h": 216
@@ -1714,19 +1729,19 @@
             "side": "main",
             "cell": 25
           },
-          "logicalRgbaSha256": "C34670CDBC1297BA59F8CFD6B69669F96E21CB5BD5D51915804B99A3A54665FE",
+          "logicalRgbaSha256": "9412EE9A2CD59FE140115CCF6B880112C9CAFE10C8C3CCA9084CA28F21259643",
           "frame": {
             "x": 581,
             "y": 1140,
-            "w": 176,
+            "w": 167,
             "h": 216
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 104,
+            "x": 108,
             "y": 104,
-            "w": 176,
+            "w": 167,
             "h": 216
           },
           "sourceSize": {
@@ -1749,7 +1764,7 @@
           },
           "logicalRgbaSha256": "172EB9063C87A654F8417B71E680B456F83030B03BB8341628334A75D2E4F6C4",
           "frame": {
-            "x": 765,
+            "x": 756,
             "y": 1140,
             "w": 115,
             "h": 152
@@ -1779,7 +1794,7 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "3274880E1449EADAB1104E4A9344B37ED52BACC3227B69A12B66A1073677A49E",
           "frame": {
-            "x": 888,
+            "x": 879,
             "y": 1140,
             "w": 192,
             "h": 204
@@ -1812,7 +1827,7 @@
           },
           "logicalRgbaSha256": "96D8FB761B4A6BEE5C486AE2AE6B17A6FAB1CA307CD8F029CCABF3EAF7EDA94A",
           "frame": {
-            "x": 1088,
+            "x": 1079,
             "y": 1140,
             "w": 192,
             "h": 126
@@ -1842,7 +1857,7 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "58B82F40547984B33B873DCBFA1F4CCA3623F5AE1E03794B7CC5C87A84F567AC",
           "frame": {
-            "x": 1288,
+            "x": 1279,
             "y": 1140,
             "w": 192,
             "h": 204
@@ -1872,7 +1887,7 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "8699075856AFEC09F0D9F14738C52A233C36D73D7504245411AFDE1B10B9966A",
           "frame": {
-            "x": 1488,
+            "x": 1479,
             "y": 1140,
             "w": 192,
             "h": 228
@@ -1902,7 +1917,7 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "8CAD7DF2C83AF326BC33521125953AD55AABB9D62F46E9FEFCBF00F1D3A2DACE",
           "frame": {
-            "x": 1688,
+            "x": 1679,
             "y": 1140,
             "w": 204,
             "h": 204
@@ -2091,8 +2106,8 @@
           "width": 2008,
           "height": 480,
           "frameCount": 18,
-          "imageSha256": "ECF0307AF5E3CF661A964335D7ABD613C26857087B6354009120409231FC67C7",
-          "dataSha256": "152E02041EE8A9BB252CC35B24F5C09F091D08CAB66895A49B66E36F3B714EF8"
+          "imageSha256": "2477663E8A119758E5B81458B4168C819D758839A90A8E00E8A0D9005CCF672B",
+          "dataSha256": "A8A16EB5F9BE3E9886938A6082A78309452C9F9510CB583B26868249FBEE72EE"
         }
       ],
       "frameManifest": {
@@ -2522,19 +2537,19 @@
             "side": "main",
             "cell": 25
           },
-          "logicalRgbaSha256": "C34670CDBC1297BA59F8CFD6B69669F96E21CB5BD5D51915804B99A3A54665FE",
+          "logicalRgbaSha256": "9412EE9A2CD59FE140115CCF6B880112C9CAFE10C8C3CCA9084CA28F21259643",
           "frame": {
             "x": 408,
             "y": 244,
-            "w": 176,
+            "w": 167,
             "h": 216
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 104,
+            "x": 108,
             "y": 104,
-            "w": 176,
+            "w": 167,
             "h": 216
           },
           "sourceSize": {
@@ -2557,7 +2572,7 @@
           },
           "logicalRgbaSha256": "172EB9063C87A654F8417B71E680B456F83030B03BB8341628334A75D2E4F6C4",
           "frame": {
-            "x": 592,
+            "x": 583,
             "y": 244,
             "w": 115,
             "h": 152
@@ -2587,7 +2602,7 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "3274880E1449EADAB1104E4A9344B37ED52BACC3227B69A12B66A1073677A49E",
           "frame": {
-            "x": 715,
+            "x": 706,
             "y": 244,
             "w": 192,
             "h": 204
@@ -2617,7 +2632,7 @@
           "canonicalCandidate": null,
           "logicalRgbaSha256": "694B8B7AB4868C57B2FFF6E36CC9AACA1F4312A730FECE60205CBC43308D7B5A",
           "frame": {
-            "x": 915,
+            "x": 906,
             "y": 244,
             "w": 192,
             "h": 228
@@ -2650,7 +2665,7 @@
           },
           "logicalRgbaSha256": "7DDEBEC014C3D8EA2C5732AB0844ADEB4381A344C2693AB00B7E5DE00B33893C",
           "frame": {
-            "x": 1115,
+            "x": 1106,
             "y": 244,
             "w": 264,
             "h": 143
@@ -2678,8 +2693,8 @@
   "sequenceCoverage": {
     "main": {
       "counts": {
-        "FULL_REMIX": 18,
-        "PARTIAL_REMIX": 3,
+        "FULL_REMIX": 21,
+        "PARTIAL_REMIX": 0,
         "FAITHFUL_FALLBACK_ONLY": 19
       },
       "animations": [
@@ -2775,16 +2790,16 @@
           "id": 11,
           "name": "action_11",
           "semanticAlias": "flee",
-          "state": "PARTIAL_REMIX",
-          "remixFrameReferences": 1,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 2,
           "frameReferenceCount": 2
         },
         {
           "id": 12,
           "name": "action_12",
           "semanticAlias": "tired_walk",
-          "state": "PARTIAL_REMIX",
-          "remixFrameReferences": 1,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 2,
           "frameReferenceCount": 2
         },
         {
@@ -2895,8 +2910,8 @@
           "id": 26,
           "name": "action_26",
           "semanticAlias": "zapped",
-          "state": "PARTIAL_REMIX",
-          "remixFrameReferences": 1,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 4,
           "frameReferenceCount": 4
         },
         {
