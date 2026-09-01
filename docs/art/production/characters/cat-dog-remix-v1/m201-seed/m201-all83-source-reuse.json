@@ -1,0 +1,2514 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m201_agumon",
+  "state": "ROM_DECODED_CELL_REUSE_LOCKED",
+  "slotCounts": {
+    "main": 65,
+    "sub": 18,
+    "total": 83
+  },
+  "uniqueDecodedVisualCount": 47,
+  "uniqueGeometryCount": 36,
+  "mainUniqueDecodedVisualCount": 47,
+  "subUniqueDecodedVisualCount": 18,
+  "subSlotsReusedFromMain": 18,
+  "allSubSlotsReuseMain": true,
+  "technicalCandidateUniqueCount": 9,
+  "pendingUniqueCount": 38,
+  "canonicalSourceContactSheet": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-47-unique-source-production-queue.png",
+  "canonicalSourceContactSheetSha256": "C88017156E61734C5FF21057E056DB9757DF5FC1CB7A2FAB53D6E6032FD829B2",
+  "productionPolicy": "DRAW_EACH_CANONICAL_VISUAL_ONCE_REUSE_FOR_EVERY_PIXEL_IDENTICAL_SOURCE_SLOT",
+  "geometryVariantPolicy": "DRAW_EACH_ALPHA_GEOMETRY_ONCE_KEEP_INTERIOR_EXPRESSION_AND_PALETTE_VARIANTS_INSIDE_THE_LOCKED_MASK",
+  "slots": [
+    {
+      "side": "main",
+      "cell": 0,
+      "decodedPixelSha256": "2F2654B3B48008EAB15B3140666F4CAB9B4263F1EEB5B975D81923B9476BAC93",
+      "canonical": {
+        "side": "main",
+        "cell": 0
+      }
+    },
+    {
+      "side": "main",
+      "cell": 1,
+      "decodedPixelSha256": "0E45D47589B9A9C82AA49A12F8D582A27109FDD071E469B7B61DAE505BE156AF",
+      "canonical": {
+        "side": "main",
+        "cell": 1
+      }
+    },
+    {
+      "side": "main",
+      "cell": 2,
+      "decodedPixelSha256": "F417D8B565726D167C9AA9FADACE0680932EA87EB2CD3ADC3C481B61480422C9",
+      "canonical": {
+        "side": "main",
+        "cell": 2
+      }
+    },
+    {
+      "side": "main",
+      "cell": 3,
+      "decodedPixelSha256": "DE791F0B883BE26453E6BBBB1B2DEE5BC4B0190AEAD98CAEA4615377D88410B5",
+      "canonical": {
+        "side": "main",
+        "cell": 3
+      }
+    },
+    {
+      "side": "main",
+      "cell": 4,
+      "decodedPixelSha256": "2F2654B3B48008EAB15B3140666F4CAB9B4263F1EEB5B975D81923B9476BAC93",
+      "canonical": {
+        "side": "main",
+        "cell": 0
+      }
+    },
+    {
+      "side": "main",
+      "cell": 5,
+      "decodedPixelSha256": "73117CE4EF263DFA0529C411AEDED573FFD249846CA0B2D3D5F3D2D19378ECB2",
+      "canonical": {
+        "side": "main",
+        "cell": 5
+      }
+    },
+    {
+      "side": "main",
+      "cell": 6,
+      "decodedPixelSha256": "2F2654B3B48008EAB15B3140666F4CAB9B4263F1EEB5B975D81923B9476BAC93",
+      "canonical": {
+        "side": "main",
+        "cell": 0
+      }
+    },
+    {
+      "side": "main",
+      "cell": 7,
+      "decodedPixelSha256": "73117CE4EF263DFA0529C411AEDED573FFD249846CA0B2D3D5F3D2D19378ECB2",
+      "canonical": {
+        "side": "main",
+        "cell": 5
+      }
+    },
+    {
+      "side": "main",
+      "cell": 8,
+      "decodedPixelSha256": "D4A2297108292D79BF6ACFD2220D41A03C1D8D0EBD90E42A66A6FF6F8C362603",
+      "canonical": {
+        "side": "main",
+        "cell": 8
+      }
+    },
+    {
+      "side": "main",
+      "cell": 9,
+      "decodedPixelSha256": "1EB8FF4E4542354CA3EF31D8F48200FE4C21D7BE96BDECFDD85CA7B925E67229",
+      "canonical": {
+        "side": "main",
+        "cell": 9
+      }
+    },
+    {
+      "side": "main",
+      "cell": 10,
+      "decodedPixelSha256": "0B74D13DF039AF0F3454E4EBAD53A92961264CDABBFE1B0E93C56C5FCCD44ABC",
+      "canonical": {
+        "side": "main",
+        "cell": 10
+      }
+    },
+    {
+      "side": "main",
+      "cell": 11,
+      "decodedPixelSha256": "CF52476E0A80123C12266415ADCF3D09938E28C0E593A1D0D9DFED3970C682AB",
+      "canonical": {
+        "side": "main",
+        "cell": 11
+      }
+    },
+    {
+      "side": "main",
+      "cell": 12,
+      "decodedPixelSha256": "417B3A6711571B2E8D78EE97EDC63DE1F24FEB8B6DBD0C5A86E6686CDAA240F2",
+      "canonical": {
+        "side": "main",
+        "cell": 12
+      }
+    },
+    {
+      "side": "main",
+      "cell": 13,
+      "decodedPixelSha256": "C51C6D13E3AEED1E2505D4D06F3FA113A19FC7D222F7BB68A19FA357B22A482F",
+      "canonical": {
+        "side": "main",
+        "cell": 13
+      }
+    },
+    {
+      "side": "main",
+      "cell": 14,
+      "decodedPixelSha256": "B0F1A014949C5694DE90CF05232868B41773E4697C87F80193488E41D28B2F4C",
+      "canonical": {
+        "side": "main",
+        "cell": 14
+      }
+    },
+    {
+      "side": "main",
+      "cell": 15,
+      "decodedPixelSha256": "CF52476E0A80123C12266415ADCF3D09938E28C0E593A1D0D9DFED3970C682AB",
+      "canonical": {
+        "side": "main",
+        "cell": 11
+      }
+    },
+    {
+      "side": "main",
+      "cell": 16,
+      "decodedPixelSha256": "417B3A6711571B2E8D78EE97EDC63DE1F24FEB8B6DBD0C5A86E6686CDAA240F2",
+      "canonical": {
+        "side": "main",
+        "cell": 12
+      }
+    },
+    {
+      "side": "main",
+      "cell": 17,
+      "decodedPixelSha256": "C51C6D13E3AEED1E2505D4D06F3FA113A19FC7D222F7BB68A19FA357B22A482F",
+      "canonical": {
+        "side": "main",
+        "cell": 13
+      }
+    },
+    {
+      "side": "main",
+      "cell": 18,
+      "decodedPixelSha256": "B0F1A014949C5694DE90CF05232868B41773E4697C87F80193488E41D28B2F4C",
+      "canonical": {
+        "side": "main",
+        "cell": 14
+      }
+    },
+    {
+      "side": "main",
+      "cell": 19,
+      "decodedPixelSha256": "9BF9BE1CA4ABF6543389788464415307FC0CAC6F47866A627B08823BE87D6261",
+      "canonical": {
+        "side": "main",
+        "cell": 19
+      }
+    },
+    {
+      "side": "main",
+      "cell": 20,
+      "decodedPixelSha256": "D4A2297108292D79BF6ACFD2220D41A03C1D8D0EBD90E42A66A6FF6F8C362603",
+      "canonical": {
+        "side": "main",
+        "cell": 8
+      }
+    },
+    {
+      "side": "main",
+      "cell": 21,
+      "decodedPixelSha256": "F417D8B565726D167C9AA9FADACE0680932EA87EB2CD3ADC3C481B61480422C9",
+      "canonical": {
+        "side": "main",
+        "cell": 2
+      }
+    },
+    {
+      "side": "main",
+      "cell": 22,
+      "decodedPixelSha256": "CD9FB312DD255E92788FB4853F683792D49503C86BBFBECA0ECC2B8D026DBD5A",
+      "canonical": {
+        "side": "main",
+        "cell": 22
+      }
+    },
+    {
+      "side": "main",
+      "cell": 23,
+      "decodedPixelSha256": "0115B6CE1DA315D50362488F580ADCE6DFC386804A7CEF16866913F001E3BCD3",
+      "canonical": {
+        "side": "main",
+        "cell": 23
+      }
+    },
+    {
+      "side": "main",
+      "cell": 24,
+      "decodedPixelSha256": "FCA4D36A18C6E7CC79A42B435EDFBE1BCEA0A34E7538101D3FB64B1776B4E2BF",
+      "canonical": {
+        "side": "main",
+        "cell": 24
+      }
+    },
+    {
+      "side": "main",
+      "cell": 25,
+      "decodedPixelSha256": "C9C1A110675DBCE65EE896A71AF7198C7DB2B706C4C9CECE53DAE35F4307D59D",
+      "canonical": {
+        "side": "main",
+        "cell": 25
+      }
+    },
+    {
+      "side": "main",
+      "cell": 26,
+      "decodedPixelSha256": "F2FB37E9D313ACE4F9B39222D68E70FD688CB52901EF304F700CF6611CD5CCED",
+      "canonical": {
+        "side": "main",
+        "cell": 26
+      }
+    },
+    {
+      "side": "main",
+      "cell": 27,
+      "decodedPixelSha256": "70D8F502E20C1AFFCF2CB139F115AD2B6E5CD0154EE622875053DA962943022A",
+      "canonical": {
+        "side": "main",
+        "cell": 27
+      }
+    },
+    {
+      "side": "main",
+      "cell": 28,
+      "decodedPixelSha256": "E6CF36A366857665F071A6DA73C9447E0FC50CE6C8005732E101E2334AAFF98D",
+      "canonical": {
+        "side": "main",
+        "cell": 28
+      }
+    },
+    {
+      "side": "main",
+      "cell": 29,
+      "decodedPixelSha256": "99050C871B939F8E04867DA0E75F30AF418424DCD86A80953B209CB870B6E4B3",
+      "canonical": {
+        "side": "main",
+        "cell": 29
+      }
+    },
+    {
+      "side": "main",
+      "cell": 30,
+      "decodedPixelSha256": "6C4D4F14F3D882E96E75EE678737BB4C52EA217E8E4FC2773F92BF42C0DB9C6C",
+      "canonical": {
+        "side": "main",
+        "cell": 30
+      }
+    },
+    {
+      "side": "main",
+      "cell": 31,
+      "decodedPixelSha256": "70D8F502E20C1AFFCF2CB139F115AD2B6E5CD0154EE622875053DA962943022A",
+      "canonical": {
+        "side": "main",
+        "cell": 27
+      }
+    },
+    {
+      "side": "main",
+      "cell": 32,
+      "decodedPixelSha256": "0558450E752AB01EF0B7638159C38CADE2FB6D5F19FED0B8AB2B58D1D799881D",
+      "canonical": {
+        "side": "main",
+        "cell": 32
+      }
+    },
+    {
+      "side": "main",
+      "cell": 33,
+      "decodedPixelSha256": "70D8F502E20C1AFFCF2CB139F115AD2B6E5CD0154EE622875053DA962943022A",
+      "canonical": {
+        "side": "main",
+        "cell": 27
+      }
+    },
+    {
+      "side": "main",
+      "cell": 34,
+      "decodedPixelSha256": "0558450E752AB01EF0B7638159C38CADE2FB6D5F19FED0B8AB2B58D1D799881D",
+      "canonical": {
+        "side": "main",
+        "cell": 32
+      }
+    },
+    {
+      "side": "main",
+      "cell": 35,
+      "decodedPixelSha256": "5E6EFA0D0C27328ADFD02DFD53924F3B53E647F50DE31F218865B4AD001E390C",
+      "canonical": {
+        "side": "main",
+        "cell": 35
+      }
+    },
+    {
+      "side": "main",
+      "cell": 36,
+      "decodedPixelSha256": "07932C14025D022D4CBA3129EE6810AEDF347AA1168F9F1FD8E8FEF5E5BAA904",
+      "canonical": {
+        "side": "main",
+        "cell": 36
+      }
+    },
+    {
+      "side": "main",
+      "cell": 37,
+      "decodedPixelSha256": "3A24999B48AEEAE2F35CCBAF6435780DC6D893D31CDE4C1631F5EF8DC705D33D",
+      "canonical": {
+        "side": "main",
+        "cell": 37
+      }
+    },
+    {
+      "side": "main",
+      "cell": 38,
+      "decodedPixelSha256": "99050C871B939F8E04867DA0E75F30AF418424DCD86A80953B209CB870B6E4B3",
+      "canonical": {
+        "side": "main",
+        "cell": 29
+      }
+    },
+    {
+      "side": "main",
+      "cell": 39,
+      "decodedPixelSha256": "AD627B666295BD40128E7C28A30AC1C3DB31B388DDF27789839AF576E144509B",
+      "canonical": {
+        "side": "main",
+        "cell": 39
+      }
+    },
+    {
+      "side": "main",
+      "cell": 40,
+      "decodedPixelSha256": "35DC81D391C9F135876B5401F1D3CA15F599876A86AE1547B7E59F7F060DD521",
+      "canonical": {
+        "side": "main",
+        "cell": 40
+      }
+    },
+    {
+      "side": "main",
+      "cell": 41,
+      "decodedPixelSha256": "A1D2393396328799600A2C8F9C8FF5D3C05F0A438DAA5C676CB833E9B94D337F",
+      "canonical": {
+        "side": "main",
+        "cell": 41
+      }
+    },
+    {
+      "side": "main",
+      "cell": 42,
+      "decodedPixelSha256": "FBA7476181F4B7435AB2F9E6AC19BDBAFC1938C32CCA073F0F12F51033953755",
+      "canonical": {
+        "side": "main",
+        "cell": 42
+      }
+    },
+    {
+      "side": "main",
+      "cell": 43,
+      "decodedPixelSha256": "35DC81D391C9F135876B5401F1D3CA15F599876A86AE1547B7E59F7F060DD521",
+      "canonical": {
+        "side": "main",
+        "cell": 40
+      }
+    },
+    {
+      "side": "main",
+      "cell": 44,
+      "decodedPixelSha256": "AEBD326CB6BBD7C23F623C079FC465E14F303C5CE688A29481171EA8382CB8EF",
+      "canonical": {
+        "side": "main",
+        "cell": 44
+      }
+    },
+    {
+      "side": "main",
+      "cell": 45,
+      "decodedPixelSha256": "D4A2297108292D79BF6ACFD2220D41A03C1D8D0EBD90E42A66A6FF6F8C362603",
+      "canonical": {
+        "side": "main",
+        "cell": 8
+      }
+    },
+    {
+      "side": "main",
+      "cell": 46,
+      "decodedPixelSha256": "AEBD326CB6BBD7C23F623C079FC465E14F303C5CE688A29481171EA8382CB8EF",
+      "canonical": {
+        "side": "main",
+        "cell": 44
+      }
+    },
+    {
+      "side": "main",
+      "cell": 47,
+      "decodedPixelSha256": "9B5BF54B3C28C8813EACEDF28B1A3D4AA02142EE8E814824F71609B553552C8E",
+      "canonical": {
+        "side": "main",
+        "cell": 47
+      }
+    },
+    {
+      "side": "main",
+      "cell": 48,
+      "decodedPixelSha256": "FDEA2F7CFA3EEAD83DD7C5269DDF54293A576FE4EA5573E7021B5B0AAB976EE4",
+      "canonical": {
+        "side": "main",
+        "cell": 48
+      }
+    },
+    {
+      "side": "main",
+      "cell": 49,
+      "decodedPixelSha256": "31B04E96C28C2D605ECA2493C360F9DB58B8F2E4F74E1500D4FCAED43B51C301",
+      "canonical": {
+        "side": "main",
+        "cell": 49
+      }
+    },
+    {
+      "side": "main",
+      "cell": 50,
+      "decodedPixelSha256": "C1A62E9EF302D379CD70D7386EB3C19AA8584522F337C4F3DEC788AA950C20CB",
+      "canonical": {
+        "side": "main",
+        "cell": 50
+      }
+    },
+    {
+      "side": "main",
+      "cell": 51,
+      "decodedPixelSha256": "5BC9F3BA9C7E89057066E0B6481955902D15B43760C995681E2FF3CB31EEECB5",
+      "canonical": {
+        "side": "main",
+        "cell": 51
+      }
+    },
+    {
+      "side": "main",
+      "cell": 52,
+      "decodedPixelSha256": "7704B5BBBD92283BFBA623CAEBB420A0E6E7618340C4AA7277F09DBB782B769C",
+      "canonical": {
+        "side": "main",
+        "cell": 52
+      }
+    },
+    {
+      "side": "main",
+      "cell": 53,
+      "decodedPixelSha256": "C9C1A110675DBCE65EE896A71AF7198C7DB2B706C4C9CECE53DAE35F4307D59D",
+      "canonical": {
+        "side": "main",
+        "cell": 25
+      }
+    },
+    {
+      "side": "main",
+      "cell": 54,
+      "decodedPixelSha256": "10FD206314F41DA37B11F8B1E1440DA282217640D256226EE497FAD3DC140D78",
+      "canonical": {
+        "side": "main",
+        "cell": 54
+      }
+    },
+    {
+      "side": "main",
+      "cell": 55,
+      "decodedPixelSha256": "3274880E1449EADAB1104E4A9344B37ED52BACC3227B69A12B66A1073677A49E",
+      "canonical": {
+        "side": "main",
+        "cell": 55
+      }
+    },
+    {
+      "side": "main",
+      "cell": 56,
+      "decodedPixelSha256": "E31CAED1AF78BC28E4B783FC3C0B6447393AE508BB6CFB72A40ABE31C2322D02",
+      "canonical": {
+        "side": "main",
+        "cell": 56
+      }
+    },
+    {
+      "side": "main",
+      "cell": 57,
+      "decodedPixelSha256": "58B82F40547984B33B873DCBFA1F4CCA3623F5AE1E03794B7CC5C87A84F567AC",
+      "canonical": {
+        "side": "main",
+        "cell": 57
+      }
+    },
+    {
+      "side": "main",
+      "cell": 58,
+      "decodedPixelSha256": "8699075856AFEC09F0D9F14738C52A233C36D73D7504245411AFDE1B10B9966A",
+      "canonical": {
+        "side": "main",
+        "cell": 58
+      }
+    },
+    {
+      "side": "main",
+      "cell": 59,
+      "decodedPixelSha256": "8CAD7DF2C83AF326BC33521125953AD55AABB9D62F46E9FEFCBF00F1D3A2DACE",
+      "canonical": {
+        "side": "main",
+        "cell": 59
+      }
+    },
+    {
+      "side": "main",
+      "cell": 60,
+      "decodedPixelSha256": "0E788F033DBDAB8A203B738BE9FED63FAD5E3883161B966B9E4A3BE15D648596",
+      "canonical": {
+        "side": "main",
+        "cell": 60
+      }
+    },
+    {
+      "side": "main",
+      "cell": 61,
+      "decodedPixelSha256": "694B8B7AB4868C57B2FFF6E36CC9AACA1F4312A730FECE60205CBC43308D7B5A",
+      "canonical": {
+        "side": "main",
+        "cell": 61
+      }
+    },
+    {
+      "side": "main",
+      "cell": 62,
+      "decodedPixelSha256": "7143A7F08BFB88E46D1C07B2ED134063A3BA06B8BA45A0B6E7C0CF9FF7AA3EFA",
+      "canonical": {
+        "side": "main",
+        "cell": 62
+      }
+    },
+    {
+      "side": "main",
+      "cell": 63,
+      "decodedPixelSha256": "0B74D13DF039AF0F3454E4EBAD53A92961264CDABBFE1B0E93C56C5FCCD44ABC",
+      "canonical": {
+        "side": "main",
+        "cell": 10
+      }
+    },
+    {
+      "side": "main",
+      "cell": 64,
+      "decodedPixelSha256": "2649BCC6A0ACCF45E3850FBB2CF522DCC8669FBE9AA368D3FBE84061D3FC32B9",
+      "canonical": {
+        "side": "main",
+        "cell": 64
+      }
+    },
+    {
+      "side": "sub",
+      "cell": 0,
+      "decodedPixelSha256": "2F2654B3B48008EAB15B3140666F4CAB9B4263F1EEB5B975D81923B9476BAC93",
+      "canonical": {
+        "side": "main",
+        "cell": 0
+      }
+    },
+    {
+      "side": "sub",
+      "cell": 1,
+      "decodedPixelSha256": "0E45D47589B9A9C82AA49A12F8D582A27109FDD071E469B7B61DAE505BE156AF",
+      "canonical": {
+        "side": "main",
+        "cell": 1
+      }
+    },
+    {
+      "side": "sub",
+      "cell": 2,
+      "decodedPixelSha256": "F417D8B565726D167C9AA9FADACE0680932EA87EB2CD3ADC3C481B61480422C9",
+      "canonical": {
+        "side": "main",
+        "cell": 2
+      }
+    },
+    {
+      "side": "sub",
+      "cell": 3,
+      "decodedPixelSha256": "DE791F0B883BE26453E6BBBB1B2DEE5BC4B0190AEAD98CAEA4615377D88410B5",
+      "canonical": {
+        "side": "main",
+        "cell": 3
+      }
+    },
+    {
+      "side": "sub",
+      "cell": 4,
+      "decodedPixelSha256": "1EB8FF4E4542354CA3EF31D8F48200FE4C21D7BE96BDECFDD85CA7B925E67229",
+      "canonical": {
+        "side": "main",
+        "cell": 9
+      }
+    },
+    {
+      "side": "sub",
+      "cell": 5,
+      "decodedPixelSha256": "0B74D13DF039AF0F3454E4EBAD53A92961264CDABBFE1B0E93C56C5FCCD44ABC",
+      "canonical": {
+        "side": "main",
+        "cell": 10
+      }
+    },
+    {
+      "side": "sub",
+      "cell": 6,
+      "decodedPixelSha256": "0115B6CE1DA315D50362488F580ADCE6DFC386804A7CEF16866913F001E3BCD3",
+      "canonical": {
+        "side": "main",
+        "cell": 23
+      }
+    },
+    {
+      "side": "sub",
+      "cell": 7,
+      "decodedPixelSha256": "F2FB37E9D313ACE4F9B39222D68E70FD688CB52901EF304F700CF6611CD5CCED",
+      "canonical": {
+        "side": "main",
+        "cell": 26
+      }
+    },
+    {
+      "side": "sub",
+      "cell": 8,
+      "decodedPixelSha256": "FDEA2F7CFA3EEAD83DD7C5269DDF54293A576FE4EA5573E7021B5B0AAB976EE4",
+      "canonical": {
+        "side": "main",
+        "cell": 48
+      }
+    },
+    {
+      "side": "sub",
+      "cell": 9,
+      "decodedPixelSha256": "31B04E96C28C2D605ECA2493C360F9DB58B8F2E4F74E1500D4FCAED43B51C301",
+      "canonical": {
+        "side": "main",
+        "cell": 49
+      }
+    },
+    {
+      "side": "sub",
+      "cell": 10,
+      "decodedPixelSha256": "C1A62E9EF302D379CD70D7386EB3C19AA8584522F337C4F3DEC788AA950C20CB",
+      "canonical": {
+        "side": "main",
+        "cell": 50
+      }
+    },
+    {
+      "side": "sub",
+      "cell": 11,
+      "decodedPixelSha256": "5BC9F3BA9C7E89057066E0B6481955902D15B43760C995681E2FF3CB31EEECB5",
+      "canonical": {
+        "side": "main",
+        "cell": 51
+      }
+    },
+    {
+      "side": "sub",
+      "cell": 12,
+      "decodedPixelSha256": "7704B5BBBD92283BFBA623CAEBB420A0E6E7618340C4AA7277F09DBB782B769C",
+      "canonical": {
+        "side": "main",
+        "cell": 52
+      }
+    },
+    {
+      "side": "sub",
+      "cell": 13,
+      "decodedPixelSha256": "C9C1A110675DBCE65EE896A71AF7198C7DB2B706C4C9CECE53DAE35F4307D59D",
+      "canonical": {
+        "side": "main",
+        "cell": 25
+      }
+    },
+    {
+      "side": "sub",
+      "cell": 14,
+      "decodedPixelSha256": "10FD206314F41DA37B11F8B1E1440DA282217640D256226EE497FAD3DC140D78",
+      "canonical": {
+        "side": "main",
+        "cell": 54
+      }
+    },
+    {
+      "side": "sub",
+      "cell": 15,
+      "decodedPixelSha256": "3274880E1449EADAB1104E4A9344B37ED52BACC3227B69A12B66A1073677A49E",
+      "canonical": {
+        "side": "main",
+        "cell": 55
+      }
+    },
+    {
+      "side": "sub",
+      "cell": 16,
+      "decodedPixelSha256": "694B8B7AB4868C57B2FFF6E36CC9AACA1F4312A730FECE60205CBC43308D7B5A",
+      "canonical": {
+        "side": "main",
+        "cell": 61
+      }
+    },
+    {
+      "side": "sub",
+      "cell": 17,
+      "decodedPixelSha256": "7143A7F08BFB88E46D1C07B2ED134063A3BA06B8BA45A0B6E7C0CF9FF7AA3EFA",
+      "canonical": {
+        "side": "main",
+        "cell": 62
+      }
+    }
+  ],
+  "reuseGroups": [
+    {
+      "decodedPixelSha256": "2F2654B3B48008EAB15B3140666F4CAB9B4263F1EEB5B975D81923B9476BAC93",
+      "canonical": {
+        "side": "main",
+        "cell": 0
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 0
+        },
+        {
+          "side": "main",
+          "cell": 4
+        },
+        {
+          "side": "main",
+          "cell": 6
+        },
+        {
+          "side": "sub",
+          "cell": 0
+        }
+      ],
+      "decodedAlphaSha256": "F8006E52CC86A60DDDDFBD20C04D80F63348EE38408395B828EBFB24C408EB3F",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 0
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-000.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-000-guide.png",
+      "candidateState": "TECHNICAL_CANDIDATE_AVAILABLE_VISUAL_REVIEW_REQUIRED",
+      "candidate": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-000-remix-candidate.png",
+      "candidateSha256": "3F07A60694A97AC1BC4198B0FA0416279911BCC5BF4DBD4D1E71DC82D6AD4020"
+    },
+    {
+      "decodedPixelSha256": "0E45D47589B9A9C82AA49A12F8D582A27109FDD071E469B7B61DAE505BE156AF",
+      "canonical": {
+        "side": "main",
+        "cell": 1
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 1
+        },
+        {
+          "side": "sub",
+          "cell": 1
+        }
+      ],
+      "decodedAlphaSha256": "0ADB7C2C0AB18A98B8884538198484873CB90A8B65D8D0F353E2AA99FBF8F00A",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 1
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-001.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-001-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "F417D8B565726D167C9AA9FADACE0680932EA87EB2CD3ADC3C481B61480422C9",
+      "canonical": {
+        "side": "main",
+        "cell": 2
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 2
+        },
+        {
+          "side": "main",
+          "cell": 21
+        },
+        {
+          "side": "sub",
+          "cell": 2
+        }
+      ],
+      "decodedAlphaSha256": "F8006E52CC86A60DDDDFBD20C04D80F63348EE38408395B828EBFB24C408EB3F",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 0
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-002.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-002-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "DE791F0B883BE26453E6BBBB1B2DEE5BC4B0190AEAD98CAEA4615377D88410B5",
+      "canonical": {
+        "side": "main",
+        "cell": 3
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 3
+        },
+        {
+          "side": "sub",
+          "cell": 3
+        }
+      ],
+      "decodedAlphaSha256": "0ADB7C2C0AB18A98B8884538198484873CB90A8B65D8D0F353E2AA99FBF8F00A",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 1
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-003.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-003-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "73117CE4EF263DFA0529C411AEDED573FFD249846CA0B2D3D5F3D2D19378ECB2",
+      "canonical": {
+        "side": "main",
+        "cell": 5
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 5
+        },
+        {
+          "side": "main",
+          "cell": 7
+        }
+      ],
+      "decodedAlphaSha256": "C747F389A3A0BF62A02E0D3C4C490A23BFA65E67DC7E72104202404E1181700D",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 5
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-005.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-005-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "D4A2297108292D79BF6ACFD2220D41A03C1D8D0EBD90E42A66A6FF6F8C362603",
+      "canonical": {
+        "side": "main",
+        "cell": 8
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 8
+        },
+        {
+          "side": "main",
+          "cell": 20
+        },
+        {
+          "side": "main",
+          "cell": 45
+        }
+      ],
+      "decodedAlphaSha256": "DCE5AE4871DC4BFCDDE809E5C85E6CFD02AA6DB692EE4F3182AF9B1D88295FBF",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 8
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-008.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-008-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "1EB8FF4E4542354CA3EF31D8F48200FE4C21D7BE96BDECFDD85CA7B925E67229",
+      "canonical": {
+        "side": "main",
+        "cell": 9
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 9
+        },
+        {
+          "side": "sub",
+          "cell": 4
+        }
+      ],
+      "decodedAlphaSha256": "BAFB23150FDDD525925FAC62205EB842F69924D6FB7216C6B2EF061E77AA9B2C",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 9
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-009.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-009-guide.png",
+      "candidateState": "TECHNICAL_CANDIDATE_AVAILABLE_VISUAL_REVIEW_REQUIRED",
+      "candidate": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-009-remix-candidate.png",
+      "candidateSha256": "B5DEFA1F7A844EB2EC0F08E66F3DCDA3013FBCCAF003E79D9350A84663A0996C"
+    },
+    {
+      "decodedPixelSha256": "0B74D13DF039AF0F3454E4EBAD53A92961264CDABBFE1B0E93C56C5FCCD44ABC",
+      "canonical": {
+        "side": "main",
+        "cell": 10
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 10
+        },
+        {
+          "side": "main",
+          "cell": 63
+        },
+        {
+          "side": "sub",
+          "cell": 5
+        }
+      ],
+      "decodedAlphaSha256": "C0C74688A1D5C529768FDACA22C93FF86379B3D940240E0F2FE181E353431466",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 10
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-010.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-010-guide.png",
+      "candidateState": "TECHNICAL_CANDIDATE_AVAILABLE_VISUAL_REVIEW_REQUIRED",
+      "candidate": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-010-remix-candidate.png",
+      "candidateSha256": "45B29E8D69CE014D7AC4E0F22C9817B7A62D685B117ECDE1C91E027623E69AF4"
+    },
+    {
+      "decodedPixelSha256": "CF52476E0A80123C12266415ADCF3D09938E28C0E593A1D0D9DFED3970C682AB",
+      "canonical": {
+        "side": "main",
+        "cell": 11
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 11
+        },
+        {
+          "side": "main",
+          "cell": 15
+        }
+      ],
+      "decodedAlphaSha256": "F8006E52CC86A60DDDDFBD20C04D80F63348EE38408395B828EBFB24C408EB3F",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 0
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-011.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-011-guide.png",
+      "candidateState": "TECHNICAL_CANDIDATE_AVAILABLE_VISUAL_REVIEW_REQUIRED",
+      "candidate": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-011-remix-candidate.png",
+      "candidateSha256": "78932080E70F09C686A7E5E1D96CEAE34CDAC33A9F473C5342C37C4B83AA80C5"
+    },
+    {
+      "decodedPixelSha256": "417B3A6711571B2E8D78EE97EDC63DE1F24FEB8B6DBD0C5A86E6686CDAA240F2",
+      "canonical": {
+        "side": "main",
+        "cell": 12
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 12
+        },
+        {
+          "side": "main",
+          "cell": 16
+        }
+      ],
+      "decodedAlphaSha256": "F4AC6AF385B42DA148940EBD1E25401ED1AF2BDDA7386B5759EF2D1D02C0A399",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 12
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-012.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-012-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "C51C6D13E3AEED1E2505D4D06F3FA113A19FC7D222F7BB68A19FA357B22A482F",
+      "canonical": {
+        "side": "main",
+        "cell": 13
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 13
+        },
+        {
+          "side": "main",
+          "cell": 17
+        }
+      ],
+      "decodedAlphaSha256": "5B2EC331ACBF41CD63A8D17B75CC49F2609E243C8EDEB7CC67FA1899410FBB8E",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 13
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-013.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-013-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "B0F1A014949C5694DE90CF05232868B41773E4697C87F80193488E41D28B2F4C",
+      "canonical": {
+        "side": "main",
+        "cell": 14
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 14
+        },
+        {
+          "side": "main",
+          "cell": 18
+        }
+      ],
+      "decodedAlphaSha256": "0CF94C19518536617CA3FC0F37A65AE31CE1ACD72F6010B62E04C1A5B53B434B",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 14
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-014.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-014-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "9BF9BE1CA4ABF6543389788464415307FC0CAC6F47866A627B08823BE87D6261",
+      "canonical": {
+        "side": "main",
+        "cell": 19
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 19
+        }
+      ],
+      "decodedAlphaSha256": "6203F106BF96930FF1E1C6169C50DFEA8EAB62612834C6CB1F7B5F66F17B5A8A",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 19
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-019.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-019-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "CD9FB312DD255E92788FB4853F683792D49503C86BBFBECA0ECC2B8D026DBD5A",
+      "canonical": {
+        "side": "main",
+        "cell": 22
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 22
+        }
+      ],
+      "decodedAlphaSha256": "12DD0CA5A4BA08DA196671C9EEF6755199A70B07BF555B4DCB6F94666A77B02D",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 22
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-022.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-022-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "0115B6CE1DA315D50362488F580ADCE6DFC386804A7CEF16866913F001E3BCD3",
+      "canonical": {
+        "side": "main",
+        "cell": 23
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 23
+        },
+        {
+          "side": "sub",
+          "cell": 6
+        }
+      ],
+      "decodedAlphaSha256": "1ED7EF1C576BFF77B656BA1447D6E233B94AB9B0435280364B87984F3C750EC4",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 23
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-023.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-023-guide.png",
+      "candidateState": "TECHNICAL_CANDIDATE_AVAILABLE_VISUAL_REVIEW_REQUIRED",
+      "candidate": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-023-remix-candidate.png",
+      "candidateSha256": "88B4B359DC79D5CE7BF19D8C9270A7A58F8B5E2DBAAAA3014B8DA74E95ED032B"
+    },
+    {
+      "decodedPixelSha256": "FCA4D36A18C6E7CC79A42B435EDFBE1BCEA0A34E7538101D3FB64B1776B4E2BF",
+      "canonical": {
+        "side": "main",
+        "cell": 24
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 24
+        }
+      ],
+      "decodedAlphaSha256": "DBCF37904D4752C66AAABAC3ECA80F2B6E4E83CD3CE2C36A3BF7B0561D9A8D1F",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 24
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-024.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-024-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "C9C1A110675DBCE65EE896A71AF7198C7DB2B706C4C9CECE53DAE35F4307D59D",
+      "canonical": {
+        "side": "main",
+        "cell": 25
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 25
+        },
+        {
+          "side": "main",
+          "cell": 53
+        },
+        {
+          "side": "sub",
+          "cell": 13
+        }
+      ],
+      "decodedAlphaSha256": "B99D0A2F053B1785FF1ADD3668BABAD490BB8EF9DF2FF5C3836541C198D75768",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 25
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-025.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-025-guide.png",
+      "candidateState": "TECHNICAL_CANDIDATE_AVAILABLE_VISUAL_REVIEW_REQUIRED",
+      "candidate": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-025-remix-candidate.png",
+      "candidateSha256": "8BF9686D95AFCDF624420BEF77F4DB8DE8F6A3821F60899F1CAD40F99904C5A1"
+    },
+    {
+      "decodedPixelSha256": "F2FB37E9D313ACE4F9B39222D68E70FD688CB52901EF304F700CF6611CD5CCED",
+      "canonical": {
+        "side": "main",
+        "cell": 26
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 26
+        },
+        {
+          "side": "sub",
+          "cell": 7
+        }
+      ],
+      "decodedAlphaSha256": "1ED7EF1C576BFF77B656BA1447D6E233B94AB9B0435280364B87984F3C750EC4",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 23
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-026.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-026-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "70D8F502E20C1AFFCF2CB139F115AD2B6E5CD0154EE622875053DA962943022A",
+      "canonical": {
+        "side": "main",
+        "cell": 27
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 27
+        },
+        {
+          "side": "main",
+          "cell": 31
+        },
+        {
+          "side": "main",
+          "cell": 33
+        }
+      ],
+      "decodedAlphaSha256": "A59EAEA3F9026D9762C2ACA7933C3603C018021FEA7F766A675E2DD7FB65AEE9",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 27
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-027.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-027-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "E6CF36A366857665F071A6DA73C9447E0FC50CE6C8005732E101E2334AAFF98D",
+      "canonical": {
+        "side": "main",
+        "cell": 28
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 28
+        }
+      ],
+      "decodedAlphaSha256": "3C177858343AD76315DF4BC931DD4D6294D1BE72C14BC19896BBE83F3DFF0769",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 28
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-028.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-028-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "99050C871B939F8E04867DA0E75F30AF418424DCD86A80953B209CB870B6E4B3",
+      "canonical": {
+        "side": "main",
+        "cell": 29
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 29
+        },
+        {
+          "side": "main",
+          "cell": 38
+        }
+      ],
+      "decodedAlphaSha256": "A59EAEA3F9026D9762C2ACA7933C3603C018021FEA7F766A675E2DD7FB65AEE9",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 27
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-029.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-029-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "6C4D4F14F3D882E96E75EE678737BB4C52EA217E8E4FC2773F92BF42C0DB9C6C",
+      "canonical": {
+        "side": "main",
+        "cell": 30
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 30
+        }
+      ],
+      "decodedAlphaSha256": "3C177858343AD76315DF4BC931DD4D6294D1BE72C14BC19896BBE83F3DFF0769",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 28
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-030.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-030-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "0558450E752AB01EF0B7638159C38CADE2FB6D5F19FED0B8AB2B58D1D799881D",
+      "canonical": {
+        "side": "main",
+        "cell": 32
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 32
+        },
+        {
+          "side": "main",
+          "cell": 34
+        }
+      ],
+      "decodedAlphaSha256": "5C89774BBDA6D3B7D47B2DFB82147306BCF0E4133E039137F36AE13606D50984",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 32
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-032.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-032-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "5E6EFA0D0C27328ADFD02DFD53924F3B53E647F50DE31F218865B4AD001E390C",
+      "canonical": {
+        "side": "main",
+        "cell": 35
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 35
+        }
+      ],
+      "decodedAlphaSha256": "6F4ACB5549741EED586A81EA2F8F6C45F6CFC14B466515B1D589961BCEE6D5F9",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 35
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-035.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-035-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "07932C14025D022D4CBA3129EE6810AEDF347AA1168F9F1FD8E8FEF5E5BAA904",
+      "canonical": {
+        "side": "main",
+        "cell": 36
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 36
+        }
+      ],
+      "decodedAlphaSha256": "F8E65B10F029337081D963367B081ABE0751BD8ABB1CD8CD1343F323CA140DF6",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 36
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-036.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-036-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "3A24999B48AEEAE2F35CCBAF6435780DC6D893D31CDE4C1631F5EF8DC705D33D",
+      "canonical": {
+        "side": "main",
+        "cell": 37
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 37
+        }
+      ],
+      "decodedAlphaSha256": "4D701ABC6B90DC25821A8B28BC6E4F0E32F066F25EBFD24161FA8885F0F33844",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 37
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-037.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-037-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "AD627B666295BD40128E7C28A30AC1C3DB31B388DDF27789839AF576E144509B",
+      "canonical": {
+        "side": "main",
+        "cell": 39
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 39
+        }
+      ],
+      "decodedAlphaSha256": "BA24B5287C89640A789036DCA358A5DB74809D45596E1DB8AD7949C5EE32AB67",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 39
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-039.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-039-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "35DC81D391C9F135876B5401F1D3CA15F599876A86AE1547B7E59F7F060DD521",
+      "canonical": {
+        "side": "main",
+        "cell": 40
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 40
+        },
+        {
+          "side": "main",
+          "cell": 43
+        }
+      ],
+      "decodedAlphaSha256": "37B02A752204DD55C152DCB505A7835174BE439BC6210B45BD5B832E929C3927",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 40
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-040.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-040-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "A1D2393396328799600A2C8F9C8FF5D3C05F0A438DAA5C676CB833E9B94D337F",
+      "canonical": {
+        "side": "main",
+        "cell": 41
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 41
+        }
+      ],
+      "decodedAlphaSha256": "4D60BC5CA336AA257C550ABF9D305AEAAEADFD1EFA4CD132E039A1394B8B0F85",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 41
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-041.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-041-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "FBA7476181F4B7435AB2F9E6AC19BDBAFC1938C32CCA073F0F12F51033953755",
+      "canonical": {
+        "side": "main",
+        "cell": 42
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 42
+        }
+      ],
+      "decodedAlphaSha256": "67749DA666C25A4AECFF052B6FD3A5EC8B5B7E06A7245376AC137FFAE9B9E89C",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 42
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-042.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-042-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "AEBD326CB6BBD7C23F623C079FC465E14F303C5CE688A29481171EA8382CB8EF",
+      "canonical": {
+        "side": "main",
+        "cell": 44
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 44
+        },
+        {
+          "side": "main",
+          "cell": 46
+        }
+      ],
+      "decodedAlphaSha256": "DCE5AE4871DC4BFCDDE809E5C85E6CFD02AA6DB692EE4F3182AF9B1D88295FBF",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 8
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-044.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-044-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "9B5BF54B3C28C8813EACEDF28B1A3D4AA02142EE8E814824F71609B553552C8E",
+      "canonical": {
+        "side": "main",
+        "cell": 47
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 47
+        }
+      ],
+      "decodedAlphaSha256": "DCE5AE4871DC4BFCDDE809E5C85E6CFD02AA6DB692EE4F3182AF9B1D88295FBF",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 8
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-047.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-047-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "FDEA2F7CFA3EEAD83DD7C5269DDF54293A576FE4EA5573E7021B5B0AAB976EE4",
+      "canonical": {
+        "side": "main",
+        "cell": 48
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 48
+        },
+        {
+          "side": "sub",
+          "cell": 8
+        }
+      ],
+      "decodedAlphaSha256": "F8006E52CC86A60DDDDFBD20C04D80F63348EE38408395B828EBFB24C408EB3F",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 0
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-048.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-048-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "31B04E96C28C2D605ECA2493C360F9DB58B8F2E4F74E1500D4FCAED43B51C301",
+      "canonical": {
+        "side": "main",
+        "cell": 49
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 49
+        },
+        {
+          "side": "sub",
+          "cell": 9
+        }
+      ],
+      "decodedAlphaSha256": "FCB8023C63AD81AADCC1666760DD5AFDB33CC40165BED69E359351C9D6F30D00",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 49
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-049.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-049-guide.png",
+      "candidateState": "TECHNICAL_CANDIDATE_AVAILABLE_VISUAL_REVIEW_REQUIRED",
+      "candidate": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-049-remix-candidate.png",
+      "candidateSha256": "CD92AA813B41B13B0FD81990ECA58FB506CB6CBEEB594B0834B11B8DC7CF2DDB"
+    },
+    {
+      "decodedPixelSha256": "C1A62E9EF302D379CD70D7386EB3C19AA8584522F337C4F3DEC788AA950C20CB",
+      "canonical": {
+        "side": "main",
+        "cell": 50
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 50
+        },
+        {
+          "side": "sub",
+          "cell": 10
+        }
+      ],
+      "decodedAlphaSha256": "0270D6486116EDF596DECE38B7340CCD49E56C62B9E36433BBAE87D428450975",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 50
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-050.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-050-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "5BC9F3BA9C7E89057066E0B6481955902D15B43760C995681E2FF3CB31EEECB5",
+      "canonical": {
+        "side": "main",
+        "cell": 51
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 51
+        },
+        {
+          "side": "sub",
+          "cell": 11
+        }
+      ],
+      "decodedAlphaSha256": "8B11F5BE60A3655EAA921371B16D867CFB47CAD19687C5FE1AA5E7C272601AAB",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 51
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-051.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-051-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "7704B5BBBD92283BFBA623CAEBB420A0E6E7618340C4AA7277F09DBB782B769C",
+      "canonical": {
+        "side": "main",
+        "cell": 52
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 52
+        },
+        {
+          "side": "sub",
+          "cell": 12
+        }
+      ],
+      "decodedAlphaSha256": "DEEF576ED4D11113839A10F66C76DA4D6E23C42B732FE54F25634C0EED471DE4",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 52
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-052.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-052-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "10FD206314F41DA37B11F8B1E1440DA282217640D256226EE497FAD3DC140D78",
+      "canonical": {
+        "side": "main",
+        "cell": 54
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 54
+        },
+        {
+          "side": "sub",
+          "cell": 14
+        }
+      ],
+      "decodedAlphaSha256": "F467F962CF1FC5282FC3E4AAF41AA3AD48B25AE5C66AD77DF8B6B69782414782",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 54
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-054.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-054-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "3274880E1449EADAB1104E4A9344B37ED52BACC3227B69A12B66A1073677A49E",
+      "canonical": {
+        "side": "main",
+        "cell": 55
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 55
+        },
+        {
+          "side": "sub",
+          "cell": 15
+        }
+      ],
+      "decodedAlphaSha256": "027A9BE65F71948845ACF56A74ABB8FAC8D9607990DFD234CFFE732BF1B298B4",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 55
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-055.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-055-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "E31CAED1AF78BC28E4B783FC3C0B6447393AE508BB6CFB72A40ABE31C2322D02",
+      "canonical": {
+        "side": "main",
+        "cell": 56
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 56
+        }
+      ],
+      "decodedAlphaSha256": "4561191642D3E3A1966F96C04330AC8884CEB03274C3ADE6B26F5FA5B574854C",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 56
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-056.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-056-guide.png",
+      "candidateState": "TECHNICAL_CANDIDATE_AVAILABLE_VISUAL_REVIEW_REQUIRED",
+      "candidate": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-056-remix-candidate.png",
+      "candidateSha256": "4099E17DCA90B146EF9C1BC467A8F2FC4B2B0EB7C4354466EECFBC474249F53F"
+    },
+    {
+      "decodedPixelSha256": "58B82F40547984B33B873DCBFA1F4CCA3623F5AE1E03794B7CC5C87A84F567AC",
+      "canonical": {
+        "side": "main",
+        "cell": 57
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 57
+        }
+      ],
+      "decodedAlphaSha256": "0ADB7C2C0AB18A98B8884538198484873CB90A8B65D8D0F353E2AA99FBF8F00A",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 1
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-057.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-057-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "8699075856AFEC09F0D9F14738C52A233C36D73D7504245411AFDE1B10B9966A",
+      "canonical": {
+        "side": "main",
+        "cell": 58
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 58
+        }
+      ],
+      "decodedAlphaSha256": "01413FA624439EC6BC776ABB36B16C5EBAB19CCFDB9DAD5AA5CB33F3987777F7",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 58
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-058.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-058-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "8CAD7DF2C83AF326BC33521125953AD55AABB9D62F46E9FEFCBF00F1D3A2DACE",
+      "canonical": {
+        "side": "main",
+        "cell": 59
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 59
+        }
+      ],
+      "decodedAlphaSha256": "21DFC3FA16F5362050DC46428056B7662CE24EAF9DDE67C04AE582B046EA68A0",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 59
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-059.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-059-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "0E788F033DBDAB8A203B738BE9FED63FAD5E3883161B966B9E4A3BE15D648596",
+      "canonical": {
+        "side": "main",
+        "cell": 60
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 60
+        }
+      ],
+      "decodedAlphaSha256": "F0E75B3FAE42877D49855098A9FD96E4FBB315C7A2041D18868B2E8786D68AAD",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 60
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-060.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-060-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "694B8B7AB4868C57B2FFF6E36CC9AACA1F4312A730FECE60205CBC43308D7B5A",
+      "canonical": {
+        "side": "main",
+        "cell": 61
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 61
+        },
+        {
+          "side": "sub",
+          "cell": 16
+        }
+      ],
+      "decodedAlphaSha256": "C0C74688A1D5C529768FDACA22C93FF86379B3D940240E0F2FE181E353431466",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 10
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-061.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-061-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    },
+    {
+      "decodedPixelSha256": "7143A7F08BFB88E46D1C07B2ED134063A3BA06B8BA45A0B6E7C0CF9FF7AA3EFA",
+      "canonical": {
+        "side": "main",
+        "cell": 62
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 62
+        },
+        {
+          "side": "sub",
+          "cell": 17
+        }
+      ],
+      "decodedAlphaSha256": "5334C2EA685C0BD29E7E845545C961B5DA81ED89F749F2DE4A84B69FEC771B7F",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 62
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-062.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-062-guide.png",
+      "candidateState": "TECHNICAL_CANDIDATE_AVAILABLE_VISUAL_REVIEW_REQUIRED",
+      "candidate": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-062-remix-candidate.png",
+      "candidateSha256": "49EBA3FDF41F7B10EC4ECDCDCDE8C7CE31E42AEBF964C40DAE40E67662EAF20B"
+    },
+    {
+      "decodedPixelSha256": "2649BCC6A0ACCF45E3850FBB2CF522DCC8669FBE9AA368D3FBE84061D3FC32B9",
+      "canonical": {
+        "side": "main",
+        "cell": 64
+      },
+      "members": [
+        {
+          "side": "main",
+          "cell": 64
+        }
+      ],
+      "decodedAlphaSha256": "4C21D80DF80A5B8CD7C4CD5050F36684C932E1FE915EBEDF2363899A9D5A5A15",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 64
+      },
+      "sourceLogical": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-064.png",
+      "sourceGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/all83-source-guides/source-main-cell-064-guide.png",
+      "candidateState": "PENDING_CONTROLLED_REDRAW",
+      "candidate": null,
+      "candidateSha256": null
+    }
+  ],
+  "geometryFamilies": [
+    {
+      "decodedAlphaSha256": "F8006E52CC86A60DDDDFBD20C04D80F63348EE38408395B828EBFB24C408EB3F",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 0
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 0
+        },
+        {
+          "side": "main",
+          "cell": 2
+        },
+        {
+          "side": "main",
+          "cell": 11
+        },
+        {
+          "side": "main",
+          "cell": 48
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "0ADB7C2C0AB18A98B8884538198484873CB90A8B65D8D0F353E2AA99FBF8F00A",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 1
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 1
+        },
+        {
+          "side": "main",
+          "cell": 3
+        },
+        {
+          "side": "main",
+          "cell": 57
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "C747F389A3A0BF62A02E0D3C4C490A23BFA65E67DC7E72104202404E1181700D",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 5
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 5
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "DCE5AE4871DC4BFCDDE809E5C85E6CFD02AA6DB692EE4F3182AF9B1D88295FBF",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 8
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 8
+        },
+        {
+          "side": "main",
+          "cell": 44
+        },
+        {
+          "side": "main",
+          "cell": 47
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "BAFB23150FDDD525925FAC62205EB842F69924D6FB7216C6B2EF061E77AA9B2C",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 9
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 9
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "C0C74688A1D5C529768FDACA22C93FF86379B3D940240E0F2FE181E353431466",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 10
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 10
+        },
+        {
+          "side": "main",
+          "cell": 61
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "F4AC6AF385B42DA148940EBD1E25401ED1AF2BDDA7386B5759EF2D1D02C0A399",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 12
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 12
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "5B2EC331ACBF41CD63A8D17B75CC49F2609E243C8EDEB7CC67FA1899410FBB8E",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 13
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 13
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "0CF94C19518536617CA3FC0F37A65AE31CE1ACD72F6010B62E04C1A5B53B434B",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 14
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 14
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "6203F106BF96930FF1E1C6169C50DFEA8EAB62612834C6CB1F7B5F66F17B5A8A",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 19
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 19
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "12DD0CA5A4BA08DA196671C9EEF6755199A70B07BF555B4DCB6F94666A77B02D",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 22
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 22
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "1ED7EF1C576BFF77B656BA1447D6E233B94AB9B0435280364B87984F3C750EC4",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 23
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 23
+        },
+        {
+          "side": "main",
+          "cell": 26
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "DBCF37904D4752C66AAABAC3ECA80F2B6E4E83CD3CE2C36A3BF7B0561D9A8D1F",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 24
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 24
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "B99D0A2F053B1785FF1ADD3668BABAD490BB8EF9DF2FF5C3836541C198D75768",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 25
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 25
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "A59EAEA3F9026D9762C2ACA7933C3603C018021FEA7F766A675E2DD7FB65AEE9",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 27
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 27
+        },
+        {
+          "side": "main",
+          "cell": 29
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "3C177858343AD76315DF4BC931DD4D6294D1BE72C14BC19896BBE83F3DFF0769",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 28
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 28
+        },
+        {
+          "side": "main",
+          "cell": 30
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "5C89774BBDA6D3B7D47B2DFB82147306BCF0E4133E039137F36AE13606D50984",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 32
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 32
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "6F4ACB5549741EED586A81EA2F8F6C45F6CFC14B466515B1D589961BCEE6D5F9",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 35
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 35
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "F8E65B10F029337081D963367B081ABE0751BD8ABB1CD8CD1343F323CA140DF6",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 36
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 36
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "4D701ABC6B90DC25821A8B28BC6E4F0E32F066F25EBFD24161FA8885F0F33844",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 37
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 37
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "BA24B5287C89640A789036DCA358A5DB74809D45596E1DB8AD7949C5EE32AB67",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 39
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 39
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "37B02A752204DD55C152DCB505A7835174BE439BC6210B45BD5B832E929C3927",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 40
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 40
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "4D60BC5CA336AA257C550ABF9D305AEAAEADFD1EFA4CD132E039A1394B8B0F85",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 41
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 41
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "67749DA666C25A4AECFF052B6FD3A5EC8B5B7E06A7245376AC137FFAE9B9E89C",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 42
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 42
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "FCB8023C63AD81AADCC1666760DD5AFDB33CC40165BED69E359351C9D6F30D00",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 49
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 49
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "0270D6486116EDF596DECE38B7340CCD49E56C62B9E36433BBAE87D428450975",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 50
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 50
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "8B11F5BE60A3655EAA921371B16D867CFB47CAD19687C5FE1AA5E7C272601AAB",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 51
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 51
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "DEEF576ED4D11113839A10F66C76DA4D6E23C42B732FE54F25634C0EED471DE4",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 52
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 52
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "F467F962CF1FC5282FC3E4AAF41AA3AD48B25AE5C66AD77DF8B6B69782414782",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 54
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 54
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "027A9BE65F71948845ACF56A74ABB8FAC8D9607990DFD234CFFE732BF1B298B4",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 55
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 55
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "4561191642D3E3A1966F96C04330AC8884CEB03274C3ADE6B26F5FA5B574854C",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 56
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 56
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "01413FA624439EC6BC776ABB36B16C5EBAB19CCFDB9DAD5AA5CB33F3987777F7",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 58
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 58
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "21DFC3FA16F5362050DC46428056B7662CE24EAF9DDE67C04AE582B046EA68A0",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 59
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 59
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "F0E75B3FAE42877D49855098A9FD96E4FBB315C7A2041D18868B2E8786D68AAD",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 60
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 60
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "5334C2EA685C0BD29E7E845545C961B5DA81ED89F749F2DE4A84B69FEC771B7F",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 62
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 62
+        }
+      ]
+    },
+    {
+      "decodedAlphaSha256": "4C21D80DF80A5B8CD7C4CD5050F36684C932E1FE915EBEDF2363899A9D5A5A15",
+      "geometryCanonical": {
+        "side": "main",
+        "cell": 64
+      },
+      "visualCanonicals": [
+        {
+          "side": "main",
+          "cell": 64
+        }
+      ]
+    }
+  ],
+  "runtimeEligible": false,
+  "shippingReady": false
+}

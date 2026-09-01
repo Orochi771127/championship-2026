@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "workPacketId": "CHARACTER_REMIX_M201_CELL_000_SEED_V1",
+  "state": "TECHNICAL_CANDIDATE_AVAILABLE_VISUAL_LANDMARK_REVIEW_REQUIRED",
+  "entityId": "m201_agumon",
+  "side": "main",
+  "cell": 0,
+  "frameKey": "m201_agumon/main/cell_000",
+  "source": {
+    "atlasImage": "docs/art/production/characters/faithful-hd224/batch-02/m201_agumon/main-atlas-00.png",
+    "atlasData": "docs/art/production/characters/faithful-hd224/batch-02/m201_agumon/main-atlas-00.json",
+    "logicalImage": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/source-cell-000-logical.png",
+    "logicalImageSha256": "28A43A8FF49901F16703EED2D018C9C92E86EAF4712A3E11FC1ECC152E0E71B9",
+    "editTarget4x": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/source-cell-000-edit-target-4x.png",
+    "editTarget4xSha256": "D7C10DCF3071592B7F26D9CC48E4BBA32E7B9F1B2AE292041331C3D46EA25710",
+    "alphaBounds": [
+      96,
+      104,
+      288,
+      320
+    ]
+  },
+  "geometry": {
+    "logicalCanvas": {
+      "width": 384,
+      "height": 352
+    },
+    "groundY": 320,
+    "anchor": {
+      "x": 0.5,
+      "y": 0.9090909090909091
+    },
+    "spriteSourceSize": {
+      "x": 96,
+      "y": 104,
+      "w": 192,
+      "h": 216
+    },
+    "format": "RGBA"
+  },
+  "visualDirection": {
+    "file": "docs/art/proposals/a1-character-direction/a1-character-direction-panel-01.png",
+    "slot": 3,
+    "class": "DOG",
+    "palette": "SOURCE_MAJOR_YELLOW_CREAM_FAMILY",
+    "sourceFacing": "LEFT"
+  },
+  "outputs": {
+    "qaGuide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/source-cell-000-qa-guide.png",
+    "normalizedCandidate": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-000-remix-candidate.png",
+    "candidateQa": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-000-remix-candidate-qa.json"
+  },
+  "runtimeEligible": false,
+  "shippingReady": false
+}

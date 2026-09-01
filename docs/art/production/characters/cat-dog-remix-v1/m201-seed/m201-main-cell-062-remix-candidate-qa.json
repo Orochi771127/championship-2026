@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m201_agumon",
+  "side": "main",
+  "cell": 62,
+  "candidateInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-main-cell-062-v1.png",
+  "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-062-remix-candidate.png",
+  "outputSha256": "49EBA3FDF41F7B10EC4ECDCDCDE8C7CE31E42AEBF964C40DAE40E67662EAF20B",
+  "reviewBoard": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-062-pose-review.png",
+  "reviewBoardSha256": "F4E3CBF2606AD3DB075C5F1E95A3C1430EA52B900F8308FF30CA7579359BF567",
+  "checks": {
+    "canvas384x352": true,
+    "rgba": true,
+    "trueAlpha": true,
+    "sourceVerticalPlacementPreserved": true,
+    "bottomMeetsGroundY320": null,
+    "sourceFacingVisualReviewRequired": true,
+    "footAndHandLandmarkReviewRequired": true,
+    "a1IdentityReviewRequired": true
+  },
+  "sourceAlphaBounds": [
+    60,
+    140,
+    324,
+    320
+  ],
+  "candidateAlphaBounds": [
+    60,
+    177,
+    324,
+    320
+  ],
+  "normalizationScale": 0.18181818181818182,
+  "sourceFacing": "RIGHT_COLLAPSED",
+  "candidateMirroredToSourceFacing": false,
+  "backgroundExtraction": "SOURCE_ALPHA_THRESHOLD_8",
+  "removedBackgroundPixels": 9320,
+  "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+  "runtimeEligible": false,
+  "shippingReady": false
+}

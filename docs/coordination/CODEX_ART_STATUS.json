@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "owner": "CODEX_ART",
   "lastUpdated": "2026-09-01",
-  "syncBatch": "INTERNAL_FAITHFUL_BASELINE_V1",
-  "syncRevision": 29,
-  "syncRevisionTarget": 29,
-  "status": "INTERNAL_FAITHFUL_BASELINE_DIRECT_ASSEMBLY_5_OF_9_SLOTS_COMPLETE",
+  "syncBatch": "CAT_DOG_REMIX_M201_INTERNAL_RUNTIME_REVIEW_V1",
+  "syncRevision": 30,
+  "syncRevisionTarget": 30,
+  "status": "M201_INTERNAL_RUNTIME_REVIEW_ACTIVE_9_OF_47_UNIQUE_VISUALS",
   "sourceOfTruth": {
     "coordinationRoot": "docs/coordination",
     "canonicalRepository": ".",
@@ -65,6 +65,16 @@
     "o3dCheckpointIsolatedFromRuntimeRegistryAndP2": true
   },
   "completed": [
+    {
+      "id": "CHARACTER-REMIX-M201-INTERNAL-RUNTIME-REVIEW-V1",
+      "status": "RAISING_HUNT_TECHNICAL_RUNTIME_PASS_ART_REVIEW_GATED",
+      "summary": "M201 now has 12 high-risk technical candidates representing nine unique ROM drawings, a complete 83-slot source-reuse audit, a private hybrid PixiJS review atlas, original per-frame NANR tick playback and opt-in Raising/Hunt 390x844 browser integration. Twenty-one runtime slots use remix candidates and 62 use explicit faithful fallbacks; identity-continuous full animation is not yet complete.",
+      "output": "assets/production/internal-character-review/m201-remix-v1/manifest.json",
+      "validation": "14 focused Node tests pass; real Chromium loads Raising and Hunt with one canvas, no field fallback, no page error and no failed asset request",
+      "rights": "OWNER_AUTHORIZED_INTERNAL_PRODUCTION_PUBLIC_RELEASE_GATE_DEFERRED",
+      "humanApproved": false,
+      "shippingStatus": "NOT_SHIPPING_READY"
+    },
     {
       "id": "INTERNAL-FAITHFUL-BASELINE-V1",
       "status": "DIRECT_INTERNAL_ASSEMBLY_5_OF_9_SLOTS_READY",
@@ -654,7 +664,45 @@
   },
   "dependenciesChanged": {
     "value": true,
-    "note": "The Cage/Hunt exact baselines now have deterministic technical QA: all 40 Cage compositions resolve through OPMD/NANR/NCER, 40 NBS/COL/ATR grids align, 30 Hunt variants contain no large diagnostic-red region, 28 animation frames remain complete, and a 480 MiB full-catalogue decoded preload is explicitly rejected. Runtime and gameplay authority are unchanged."
+    "note": "The M201 art lane now supplies a private opt-in PixiJS runtime bundle and duration-aware presentation controller for Raising/Hunt review. It preserves stable entity/cell/sequence IDs and does not change runtime simulation, save truth or battle behaviour."
+  },
+  "catDogRemixPack": {
+    "packId": "championship:pack:cat-dog-remix-v1",
+    "ownerDirectiveDate": "2026-09-01",
+    "scope": 224,
+    "mix": {
+      "cat": 72,
+      "dog": 64,
+      "other": 80,
+      "egg": 8
+    },
+    "current": "M201_INTERNAL_RUNTIME_REVIEW_ACTIVE_9_OF_47_UNIQUE_VISUALS",
+    "rightsStatus": "LICENSED",
+    "productionStatus": "MOTION_COMPATIBLE_REDESIGN_TECHNICAL_RUNTIME_REVIEW",
+    "humanApproved": false,
+    "runtimeEligible": false,
+    "shippingReady": false,
+    "evolutionGraph": "STATIC_COMMUNITY_CROSSCHECK_AVAILABLE_CANONICAL_ROM_GRAPH_AND_RESOLVER_NOT_YET_VERIFIED",
+    "blockedBeforeMassProduction": [
+      "OWNER_SOURCE_POSE_REMIX_STYLE_LOCK",
+      "M201_REMAINING_38_UNIQUE_CONTROLLED_REDRAWS",
+      "M201_VISUAL_LANDMARK_AND_IDENTITY_CONTINUITY_APPROVAL",
+      "CANONICAL_EVOLUTION_TOPOLOGY_CROSSWALK"
+    ],
+    "outputs": [
+      "docs/art/production/characters/cat-dog-remix-v1/README.md",
+      "docs/art/production/characters/cat-dog-remix-v1/CAT_DOG_REMIX_V1_MANIFEST.json",
+      "docs/art/production/characters/cat-dog-remix-v1/M201_VERTICAL_SLICE_PLAN.md",
+      "docs/art/production/characters/cat-dog-remix-v1/m201-work-packet.json",
+      "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-12-high-risk-remix-candidates.png",
+      "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-all83-source-reuse.json",
+      "assets/production/internal-character-review/m201-remix-v1/manifest.json",
+      "src/championship/presentation/pixiCharacterRuntimeBundle.js",
+      "src/championship/presentation/characterAnimationTimeline.js",
+      "src/championship/presentation/pixiCharacterAnimationController.js",
+      "docs/art/production/characters/cat-dog-remix-v1/style-pilot/cat-dog-evolution-pilot-v1.png",
+      "docs/art/production/characters/cat-dog-remix-v1/source-pose-pilot/m201-idle-remix-v1.png"
+    ]
   },
   "sharedMergeReceipt": {
     "syncRevision": 3,
@@ -688,6 +736,7 @@
     }
   },
   "recommendedNext": [
+    "Owner review the M201 twelve-pose contact sheet and 390x844 Raising/Hunt proofs. Then redraw by complete animation family, starting with Cells 001, 005, 012, 016, 50 and 54 so idle, walk/run, attack, happy and victory never switch between remix and faithful identities.",
     "Present the complete 30-variant Hunt contact sheet and 40-field Cage contact sheet for Owner visual review before runtime or shipping promotion.",
     "Present the complete forty-field Cage contact sheet and CM27 before/after proof for Owner visual approval before any runtime or shipping promotion.",
     "Port the remaining NCGR/NCLR and NCER/NCBR object-cell decoding into the browser art module and pixel-diff its composition against the 40 native goldens.",

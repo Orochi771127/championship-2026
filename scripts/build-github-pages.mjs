@@ -32,7 +32,7 @@ const dependencyFiles = [
 // These files are useful in the private repository but are direct ROM-derived
 // production inputs. They are deliberately absent from the public Pages build
 // until the release/rights gate is opened.
-const privateRepositoryOnlyPath = /^(?:src\/championship\/battle\/battleCatalogs\.js|src\/data\/championship\/catalogs\/battle-[^/]+\.json)$/;
+const privateRepositoryOnlyPath = /^(?:assets\/production\/internal-character-review\/|src\/championship\/battle\/battleCatalogs\.js|src\/data\/championship\/catalogs\/battle-[^/]+\.json)$/;
 
 function copy(relativePath, destinationPath = relativePath) {
   const source = path.join(repoRoot, ...relativePath.split("/"));
@@ -51,7 +51,7 @@ for (const file of dependencyFiles) copy(file);
 copy("championship.html", "index.html");
 fs.writeFileSync(path.join(outputRoot, ".nojekyll"), "");
 
-const forbiddenPath = /(?:^|\/)(?:internal-faithful-baseline|original-rom-conversion-v1)(?:\/|$)|^src\/championship\/battle\/battleCatalogs\.js$|^src\/data\/championship\/catalogs\/battle-[^/]+\.json$|\.(?:nds|nsbmd|nsbca|nsbta|nsbma|nsbva)$/i;
+const forbiddenPath = /(?:^|\/)(?:internal-character-review|internal-faithful-baseline|original-rom-conversion-v1)(?:\/|$)|^src\/championship\/battle\/battleCatalogs\.js$|^src\/data\/championship\/catalogs\/battle-[^/]+\.json$|\.(?:nds|nsbmd|nsbca|nsbta|nsbma|nsbva)$/i;
 const outputFiles = [];
 function collect(directory) {
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {

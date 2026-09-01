@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "packId": "championship:pack:cat-dog-remix-v1",
+  "slotCount": 224,
+  "presentationOnly": true,
+  "changesSimulation": false,
+  "rightsStatus": "LICENSED",
+  "productionStatus": "MOTION_COMPATIBLE_REDESIGN_PILOT",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "sourcePayloadIncluded": false,
+  "rosterMix": {
+    "cat": 72,
+    "dog": 64,
+    "other": 80,
+    "egg": 8
+  },
+  "stageQuota": {
+    "baby1": { "slots": 12, "cat": 4, "dog": 4, "other": 4 },
+    "baby2": { "slots": 14, "cat": 5, "dog": 4, "other": 5 },
+    "rookie": { "slots": 38, "cat": 13, "dog": 11, "other": 14 },
+    "champion": { "slots": 65, "cat": 22, "dog": 19, "other": 24 },
+    "ultimate": { "slots": 50, "cat": 16, "dog": 15, "other": 19 },
+    "mega": { "slots": 37, "cat": 12, "dog": 11, "other": 14 }
+  },
+  "evolutionTopology": {
+    "staticCommunityCrosscheckAvailable": true,
+    "romVerifiedCanonicalGraphAvailable": false,
+    "resolverPriorityVerified": false,
+    "tieBehaviourVerified": false,
+    "eggReversionInheritanceVerified": false,
+    "runtimeBinding": "BLOCKED_UNTIL_CANONICAL_GRAPH_RECONCILIATION"
+  },
+  "remixRules": {
+    "newDisplayNamesOptionalUntilPackaging": true,
+    "sourceMotionTopologyRequired": true,
+    "sourceFrameTimingRequired": true,
+    "sourceGroundAnchorRequired": true,
+    "sourceCollisionBoundsRequired": true,
+    "directSourcePixelReusePermitted": false,
+    "sourceSilhouetteEnvelopeUsedAsMotionGuide": true,
+    "signatureSourceAccessoryReusePermitted": false,
+    "exactSourceMarkingReusePermitted": false,
+    "minimumContinuityTokensPerEvolutionEdge": 2
+  },
+  "pilot": {
+    "broadStyleAsset": "docs/art/production/characters/cat-dog-remix-v1/style-pilot/cat-dog-evolution-pilot-v1.png",
+    "sourcePoseAsset": "docs/art/production/characters/cat-dog-remix-v1/source-pose-pilot/m201-idle-remix-v1.png",
+    "sourcePoseGuide": "docs/art/production/characters/faithful-hd224/batch-02/m201_agumon/cell-000-main-hd4x.png",
+    "lineages": 2,
+    "stagesPerLineage": 6,
+    "generationMode": "BUILT_IN_IMAGEGEN",
+    "visualIdentityResult": "CONCEPT_PASS",
+    "pixelFrameCompatibilityResult": "FAIL_REQUIRES_CONTROLLED_OVERDRAW",
+    "technicalComparison": {
+      "source": { "width": 192, "height": 216, "alpha": true },
+      "concept": { "width": 1254, "height": 1254, "alpha": false }
+    },
+    "runtimeEligible": false,
+    "status": "SOURCE_POSE_CONCEPT_COMPLETE_CONTROLLED_OVERDRAW_REQUIRED"
+  },
+  "firstVerticalSlice": {
+    "entityId": "m201_agumon",
+    "plan": "docs/art/production/characters/cat-dog-remix-v1/M201_VERTICAL_SLICE_PLAN.md",
+    "workPacket": "docs/art/production/characters/cat-dog-remix-v1/m201-work-packet.json",
+    "state": "PLANNED_READY_TO_START_SEED",
+    "mainCellCount": 65,
+    "subCellCount": 18,
+    "mainSequenceCount": 40,
+    "subSequenceCount": 13
+  },
+  "productionBatches": [
+    { "batch": 1, "slots": 32, "state": "BLOCKED_ON_SOURCE_POSE_PILOT_AND_TOPOLOGY_LOCK" },
+    { "batch": 2, "slots": 32, "state": "NOT_STARTED" },
+    { "batch": 3, "slots": 32, "state": "NOT_STARTED" },
+    { "batch": 4, "slots": 32, "state": "NOT_STARTED" },
+    { "batch": 5, "slots": 32, "state": "NOT_STARTED" },
+    { "batch": 6, "slots": 32, "state": "NOT_STARTED" },
+    { "batch": 7, "slots": 32, "state": "NOT_STARTED" }
+  ]
+}

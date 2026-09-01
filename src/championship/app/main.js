@@ -31,8 +31,12 @@ import { createChampionshipPixiStage } from "../presentation/championshipPixiSta
 import { mountRaisingFieldPixiPresentation } from "../presentation/intRh2/createRaisingFieldPixiPresentation.js";
 import { mountHuntFieldPixiPresentation } from "../presentation/vs2/createHuntFieldPixiPresentation.js";
 import { mountGateSelectThreePresentation } from "../presentation/vs2/createGateSelectThreePresentation.js";
+import { loadPixiCharacterRuntimeBundle } from "../presentation/pixiCharacterRuntimeBundle.js";
 
 const PIXI_V8_MODULE_URL = "../../../node_modules/pixi.js/dist/pixi.mjs";
+const CHARACTER_REVIEW_RUNTIME_URL = new URLSearchParams(globalThis.location?.search ?? "").get("characterArtReview") === "m201"
+  ? "assets/production/internal-character-review/m201-remix-v1/runtime.review.json"
+  : null;
 
 const titleScreen = document.getElementById("cm-title");
 const titleNote = document.getElementById("cm-title-note");
@@ -64,6 +68,20 @@ async function ensurePixiStage(canvasHost) {
   return pixiStage;
 }
 
+async function loadOptionalCharacterReview(stage) {
+  if (!CHARACTER_REVIEW_RUNTIME_URL) return null;
+  try {
+    return await loadPixiCharacterRuntimeBundle({
+      PIXI: stage.PIXI,
+      runtimeUrl: CHARACTER_REVIEW_RUNTIME_URL,
+      cachePrefix: "m201-internal-review:"
+    });
+  } catch (error) {
+    console.warn(`CHAMPIONSHIP_CHARACTER_REVIEW_FALLBACK: ${error.message}`);
+    return null;
+  }
+}
+
 /** Shared fallback: a field that cannot start must never take the screen with it. */
 function fieldFallback(host, error) {
   root.dataset.fieldFallback = "true";
@@ -87,18 +105,22 @@ async function mountRaisingHome() {
     root,
     source: raisingSource,
     async mountField({ host, source: fieldSource }) {
+      let characterBundle = null;
       try {
         const stage = await ensurePixiStage(host);
+        characterBundle = await loadOptionalCharacterReview(stage);
         delete root.dataset.fieldFallback;
         return await mountRaisingFieldPixiPresentation({
           stage,
           source: fieldSource,
+          characterBundle,
           onFallback(message) {
             root.dataset.fieldFallback = "true";
             console.warn(message);
           }
         });
       } catch (error) {
+        void characterBundle?.dispose();
         return fieldFallback(host, error);
       }
     }
@@ -155,18 +177,22 @@ async function mountHuntField() {
     root,
     source: expeditionSource,
     async mountField({ host, source: fieldSource }) {
+      let characterBundle = null;
       try {
         const stage = await ensurePixiStage(host);
+        characterBundle = await loadOptionalCharacterReview(stage);
         delete root.dataset.fieldFallback;
         return await mountHuntFieldPixiPresentation({
           stage,
           source: fieldSource,
+          characterBundle,
           onFallback(message) {
             root.dataset.fieldFallback = "true";
             console.warn(message);
           }
         });
       } catch (error) {
+        void characterBundle?.dispose();
         return fieldFallback(host, error);
       }
     }

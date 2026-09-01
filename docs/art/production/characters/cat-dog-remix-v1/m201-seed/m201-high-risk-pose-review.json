@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m201_agumon",
+  "state": "TWELVE_OF_TWELVE_TECHNICAL_CANDIDATES_VISUAL_LANDMARK_REVIEW_REQUIRED",
+  "requestedPoseSlotCount": 12,
+  "uniqueDecodedSourcePoseCount": 9,
+  "sourceReuseGroups": [
+    {
+      "canonicalCell": 0,
+      "cells": [0, 4, 6],
+      "decision": "REUSE_CELL_000_REMIX_WITHOUT_REDRAW"
+    },
+    {
+      "canonicalCell": 11,
+      "cells": [11, 15],
+      "decision": "DRAW_ONCE_THEN_REUSE"
+    }
+  ],
+  "cells": [
+    { "cell": 0, "state": "TECHNICAL_PASS_VISUAL_LANDMARK_REVIEW_REQUIRED" },
+    { "cell": 4, "state": "REUSES_APPROVED_CELL_000_CANDIDATE" },
+    { "cell": 6, "state": "REUSES_APPROVED_CELL_000_CANDIDATE" },
+    { "cell": 9, "state": "TECHNICAL_PASS_RIGHT_RECOIL_VISUAL_LANDMARK_REVIEW_REQUIRED" },
+    { "cell": 11, "state": "TECHNICAL_PASS_VISUAL_LANDMARK_REVIEW_REQUIRED" },
+    { "cell": 15, "state": "REUSES_CELL_011_CANDIDATE" },
+    { "cell": 23, "state": "TECHNICAL_PASS_VISUAL_LANDMARK_REVIEW_REQUIRED" },
+    { "cell": 49, "state": "TECHNICAL_PASS_VISUAL_LANDMARK_REVIEW_REQUIRED" },
+    { "cell": 53, "state": "TECHNICAL_PASS_VISUAL_LANDMARK_REVIEW_REQUIRED" },
+    { "cell": 56, "state": "TECHNICAL_PASS_VISUAL_LANDMARK_REVIEW_REQUIRED" },
+    { "cell": 62, "state": "TECHNICAL_PASS_RIGHT_COLLAPSED_VISUAL_LANDMARK_REVIEW_REQUIRED" },
+    { "cell": 63, "state": "TECHNICAL_PASS_VISUAL_LANDMARK_REVIEW_REQUIRED" }
+  ],
+  "runtimeEligible": false,
+  "shippingReady": false
+}

@@ -34,7 +34,7 @@ function assertHost(canvasHost) {
  * whichever field scene is currently mounted.
  */
 export async function createChampionshipPixiStage({ PIXI, canvasHost }) {
-  const required = ["Application", "Assets", "Container", "Graphics", "AnimatedSprite", "Spritesheet", "Rectangle"];
+  const required = ["Application", "Assets", "Container", "Graphics", "AnimatedSprite", "Sprite", "Spritesheet", "Rectangle"];
   if (!PIXI || required.some((key) => typeof PIXI[key] !== "function" && typeof PIXI[key] !== "object")) {
     throw new TypeError("The Championship Pixi stage requires the PixiJS v8 presentation API");
   }

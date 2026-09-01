@@ -4,10 +4,30 @@ Repository authority: `CHAMPIONSHIP_2026_PRODUCT_SSOT` (`.`).
 Migration state: standalone product; historical Nexus integration decisions are preserved below as superseded/frozen context only.
 
 Authority: **OWNER ONLY**  
-Last explicit direction: **2026-08-30 — Option A default skin; skinnable packs; translate original systems in JS first**
+Last explicit direction: **2026-09-01 — create a motion-compatible cat/dog-majority remix of all 224 original creatures**
 
 Agents may index this file and may transcribe a later explicit Owner directive,
 but may not reinterpret or independently change product direction.
+
+## 2026-09-01 — Motion-compatible cat/dog 224-slot creature remix
+
+The Owner explicitly requested a redesign of all 224 character slots using the
+previously discussed cat-and-dog direction. The Owner then clarified that each
+design should be a substantial remix of its corresponding original creature so
+the existing action artwork is less error-prone to reproduce. Cats and dogs are
+the majority; valuable other creature species may remain. The character style
+retains a lightly hand-drawn quality.
+
+The remix therefore preserves motion-compatible anatomy, pose topology,
+grounding, animation slots, frame timing, and collision while changing breed
+anatomy, face, ears, muzzle, coat, tail, markings, and selected ornaments. This
+is an internally authorized licensed derivative presentation, not a claim that
+adding cat/dog elements alone creates an unrelated clean-room character.
+
+This is a presentation-pack direction. It does not change stable simulation
+IDs, evolution results or conditions, battle, capture, Raising, progression,
+economy, or save truth. The faithful internal baseline remains available as a
+development fallback while the licensed remix roster is designed and reviewed.
 
 ## 2026-08-30 — Option A default skin, logic-first, skinnable
 

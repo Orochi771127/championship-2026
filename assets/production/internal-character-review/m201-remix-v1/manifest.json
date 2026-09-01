@@ -1,0 +1,3059 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m201_agumon",
+  "state": "COMPLETE_MOTION_PREVIEW_REVIEW_ONLY",
+  "purpose": "EXERCISE_ORIGINAL_53_SEQUENCES_WITH_PARTIAL_REMIX_ART_BEFORE_VISUAL_APPROVAL",
+  "slotCounts": {
+    "main": 65,
+    "sub": 18,
+    "total": 83
+  },
+  "sequenceCounts": {
+    "main": 40,
+    "sub": 13,
+    "total": 53
+  },
+  "candidateSlotCount": 21,
+  "faithfulFallbackSlotCount": 62,
+  "technicalCandidateUniqueCount": 9,
+  "pendingUniqueCount": 38,
+  "runtime": "assets/production/internal-character-review/m201-remix-v1/runtime.review.json",
+  "runtimeSha256": "5AEF65E5FAC7502BBEA4EB8C146ED8C69B6AD6743F1B70C7242F49421D701A58",
+  "sides": {
+    "main": {
+      "atlasPages": [
+        {
+          "page": 0,
+          "image": "main-review-atlas-00.png",
+          "data": "main-review-atlas-00.json",
+          "width": 2040,
+          "height": 1648,
+          "frameCount": 65,
+          "imageSha256": "F9B391959D2D1F0C0339549EC6D25809DCD4826E3F473D9225C413C60D74E392",
+          "dataSha256": "3B2C1651B0B4B1CB2F3078F2434528CE85E433DD89EEA1553F14B8E028FD1D93"
+        }
+      ],
+      "frameManifest": {
+        "m201_agumon/main/cell_000": {
+          "page": 0,
+          "cell": 0,
+          "side": "main",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 0
+          },
+          "logicalRgbaSha256": "EA8BBF2A0379E0BEB4669ECE5057239F6B22BF1992D9EE44373F3820D89A0205",
+          "frame": {
+            "x": 8,
+            "y": 8,
+            "w": 168,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 108,
+            "y": 104,
+            "w": 168,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_001": {
+          "page": 0,
+          "cell": 1,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "0E45D47589B9A9C82AA49A12F8D582A27109FDD071E469B7B61DAE505BE156AF",
+          "frame": {
+            "x": 184,
+            "y": 8,
+            "w": 192,
+            "h": 204
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 116,
+            "w": 192,
+            "h": 204
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_002": {
+          "page": 0,
+          "cell": 2,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "F417D8B565726D167C9AA9FADACE0680932EA87EB2CD3ADC3C481B61480422C9",
+          "frame": {
+            "x": 384,
+            "y": 8,
+            "w": 192,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 104,
+            "w": 192,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_003": {
+          "page": 0,
+          "cell": 3,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "DE791F0B883BE26453E6BBBB1B2DEE5BC4B0190AEAD98CAEA4615377D88410B5",
+          "frame": {
+            "x": 584,
+            "y": 8,
+            "w": 192,
+            "h": 204
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 116,
+            "w": 192,
+            "h": 204
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_004": {
+          "page": 0,
+          "cell": 4,
+          "side": "main",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 0
+          },
+          "logicalRgbaSha256": "EA8BBF2A0379E0BEB4669ECE5057239F6B22BF1992D9EE44373F3820D89A0205",
+          "frame": {
+            "x": 784,
+            "y": 8,
+            "w": 168,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 108,
+            "y": 104,
+            "w": 168,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_005": {
+          "page": 0,
+          "cell": 5,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "73117CE4EF263DFA0529C411AEDED573FFD249846CA0B2D3D5F3D2D19378ECB2",
+          "frame": {
+            "x": 960,
+            "y": 8,
+            "w": 192,
+            "h": 204
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 116,
+            "w": 192,
+            "h": 204
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_006": {
+          "page": 0,
+          "cell": 6,
+          "side": "main",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 0
+          },
+          "logicalRgbaSha256": "EA8BBF2A0379E0BEB4669ECE5057239F6B22BF1992D9EE44373F3820D89A0205",
+          "frame": {
+            "x": 1160,
+            "y": 8,
+            "w": 168,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 108,
+            "y": 104,
+            "w": 168,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_007": {
+          "page": 0,
+          "cell": 7,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "73117CE4EF263DFA0529C411AEDED573FFD249846CA0B2D3D5F3D2D19378ECB2",
+          "frame": {
+            "x": 1336,
+            "y": 8,
+            "w": 192,
+            "h": 204
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 116,
+            "w": 192,
+            "h": 204
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_008": {
+          "page": 0,
+          "cell": 8,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "D4A2297108292D79BF6ACFD2220D41A03C1D8D0EBD90E42A66A6FF6F8C362603",
+          "frame": {
+            "x": 1536,
+            "y": 8,
+            "w": 204,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 90,
+            "y": 104,
+            "w": 204,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_009": {
+          "page": 0,
+          "cell": 9,
+          "side": "main",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 9
+          },
+          "logicalRgbaSha256": "601638AE037AF26E791BBBACA5E9C1559318EA83EACE7C8BA724605D3495DF40",
+          "frame": {
+            "x": 1748,
+            "y": 8,
+            "w": 186,
+            "h": 204
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 99,
+            "y": 116,
+            "w": 186,
+            "h": 204
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_010": {
+          "page": 0,
+          "cell": 10,
+          "side": "main",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 10
+          },
+          "logicalRgbaSha256": "6525F8A489E296674D4854AE7F55E632909F9DE5DBD4A60719341C5E68A908B3",
+          "frame": {
+            "x": 8,
+            "y": 232,
+            "w": 190,
+            "h": 228
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 97,
+            "y": 92,
+            "w": 190,
+            "h": 228
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_011": {
+          "page": 0,
+          "cell": 11,
+          "side": "main",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 11
+          },
+          "logicalRgbaSha256": "1AE053EB98B8093F233D3CF71BD0FAF20659FF63CA258F970718D9E99AFD3ECA",
+          "frame": {
+            "x": 206,
+            "y": 232,
+            "w": 176,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 104,
+            "y": 104,
+            "w": 176,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_012": {
+          "page": 0,
+          "cell": 12,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "417B3A6711571B2E8D78EE97EDC63DE1F24FEB8B6DBD0C5A86E6686CDAA240F2",
+          "frame": {
+            "x": 390,
+            "y": 232,
+            "w": 204,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 90,
+            "y": 104,
+            "w": 204,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_013": {
+          "page": 0,
+          "cell": 13,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "C51C6D13E3AEED1E2505D4D06F3FA113A19FC7D222F7BB68A19FA357B22A482F",
+          "frame": {
+            "x": 602,
+            "y": 232,
+            "w": 192,
+            "h": 240
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 80,
+            "w": 192,
+            "h": 240
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_014": {
+          "page": 0,
+          "cell": 14,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "B0F1A014949C5694DE90CF05232868B41773E4697C87F80193488E41D28B2F4C",
+          "frame": {
+            "x": 802,
+            "y": 232,
+            "w": 228,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 78,
+            "y": 104,
+            "w": 228,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_015": {
+          "page": 0,
+          "cell": 15,
+          "side": "main",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 11
+          },
+          "logicalRgbaSha256": "1AE053EB98B8093F233D3CF71BD0FAF20659FF63CA258F970718D9E99AFD3ECA",
+          "frame": {
+            "x": 1038,
+            "y": 232,
+            "w": 176,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 104,
+            "y": 104,
+            "w": 176,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_016": {
+          "page": 0,
+          "cell": 16,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "417B3A6711571B2E8D78EE97EDC63DE1F24FEB8B6DBD0C5A86E6686CDAA240F2",
+          "frame": {
+            "x": 1222,
+            "y": 232,
+            "w": 204,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 90,
+            "y": 104,
+            "w": 204,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_017": {
+          "page": 0,
+          "cell": 17,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "C51C6D13E3AEED1E2505D4D06F3FA113A19FC7D222F7BB68A19FA357B22A482F",
+          "frame": {
+            "x": 1434,
+            "y": 232,
+            "w": 192,
+            "h": 240
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 80,
+            "w": 192,
+            "h": 240
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_018": {
+          "page": 0,
+          "cell": 18,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "B0F1A014949C5694DE90CF05232868B41773E4697C87F80193488E41D28B2F4C",
+          "frame": {
+            "x": 1634,
+            "y": 232,
+            "w": 228,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 78,
+            "y": 104,
+            "w": 228,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_019": {
+          "page": 0,
+          "cell": 19,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "9BF9BE1CA4ABF6543389788464415307FC0CAC6F47866A627B08823BE87D6261",
+          "frame": {
+            "x": 8,
+            "y": 480,
+            "w": 192,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 104,
+            "w": 192,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_020": {
+          "page": 0,
+          "cell": 20,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "D4A2297108292D79BF6ACFD2220D41A03C1D8D0EBD90E42A66A6FF6F8C362603",
+          "frame": {
+            "x": 208,
+            "y": 480,
+            "w": 204,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 90,
+            "y": 104,
+            "w": 204,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_021": {
+          "page": 0,
+          "cell": 21,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "F417D8B565726D167C9AA9FADACE0680932EA87EB2CD3ADC3C481B61480422C9",
+          "frame": {
+            "x": 420,
+            "y": 480,
+            "w": 192,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 104,
+            "w": 192,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_022": {
+          "page": 0,
+          "cell": 22,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "CD9FB312DD255E92788FB4853F683792D49503C86BBFBECA0ECC2B8D026DBD5A",
+          "frame": {
+            "x": 620,
+            "y": 480,
+            "w": 192,
+            "h": 204
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 116,
+            "w": 192,
+            "h": 204
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_023": {
+          "page": 0,
+          "cell": 23,
+          "side": "main",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 23
+          },
+          "logicalRgbaSha256": "E4A03312282F8C105E9E505F32AF5BB66D2BA426A3048BF6DF9562B062DD0799",
+          "frame": {
+            "x": 820,
+            "y": 480,
+            "w": 184,
+            "h": 76
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 100,
+            "y": 244,
+            "w": 184,
+            "h": 76
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_024": {
+          "page": 0,
+          "cell": 24,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "FCA4D36A18C6E7CC79A42B435EDFBE1BCEA0A34E7538101D3FB64B1776B4E2BF",
+          "frame": {
+            "x": 1012,
+            "y": 480,
+            "w": 192,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 104,
+            "w": 192,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_025": {
+          "page": 0,
+          "cell": 25,
+          "side": "main",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 25
+          },
+          "logicalRgbaSha256": "C34670CDBC1297BA59F8CFD6B69669F96E21CB5BD5D51915804B99A3A54665FE",
+          "frame": {
+            "x": 1212,
+            "y": 480,
+            "w": 176,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 104,
+            "y": 104,
+            "w": 176,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_026": {
+          "page": 0,
+          "cell": 26,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "F2FB37E9D313ACE4F9B39222D68E70FD688CB52901EF304F700CF6611CD5CCED",
+          "frame": {
+            "x": 1396,
+            "y": 480,
+            "w": 184,
+            "h": 96
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 100,
+            "y": 224,
+            "w": 184,
+            "h": 96
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_027": {
+          "page": 0,
+          "cell": 27,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "70D8F502E20C1AFFCF2CB139F115AD2B6E5CD0154EE622875053DA962943022A",
+          "frame": {
+            "x": 1588,
+            "y": 480,
+            "w": 180,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 102,
+            "y": 104,
+            "w": 180,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_028": {
+          "page": 0,
+          "cell": 28,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "E6CF36A366857665F071A6DA73C9447E0FC50CE6C8005732E101E2334AAFF98D",
+          "frame": {
+            "x": 1776,
+            "y": 480,
+            "w": 180,
+            "h": 204
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 102,
+            "y": 116,
+            "w": 180,
+            "h": 204
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_029": {
+          "page": 0,
+          "cell": 29,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "99050C871B939F8E04867DA0E75F30AF418424DCD86A80953B209CB870B6E4B3",
+          "frame": {
+            "x": 8,
+            "y": 704,
+            "w": 180,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 102,
+            "y": 104,
+            "w": 180,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_030": {
+          "page": 0,
+          "cell": 30,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "6C4D4F14F3D882E96E75EE678737BB4C52EA217E8E4FC2773F92BF42C0DB9C6C",
+          "frame": {
+            "x": 196,
+            "y": 704,
+            "w": 180,
+            "h": 204
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 102,
+            "y": 116,
+            "w": 180,
+            "h": 204
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_031": {
+          "page": 0,
+          "cell": 31,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "70D8F502E20C1AFFCF2CB139F115AD2B6E5CD0154EE622875053DA962943022A",
+          "frame": {
+            "x": 384,
+            "y": 704,
+            "w": 180,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 102,
+            "y": 104,
+            "w": 180,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_032": {
+          "page": 0,
+          "cell": 32,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "0558450E752AB01EF0B7638159C38CADE2FB6D5F19FED0B8AB2B58D1D799881D",
+          "frame": {
+            "x": 572,
+            "y": 704,
+            "w": 192,
+            "h": 204
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 116,
+            "w": 192,
+            "h": 204
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_033": {
+          "page": 0,
+          "cell": 33,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "70D8F502E20C1AFFCF2CB139F115AD2B6E5CD0154EE622875053DA962943022A",
+          "frame": {
+            "x": 772,
+            "y": 704,
+            "w": 180,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 102,
+            "y": 104,
+            "w": 180,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_034": {
+          "page": 0,
+          "cell": 34,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "0558450E752AB01EF0B7638159C38CADE2FB6D5F19FED0B8AB2B58D1D799881D",
+          "frame": {
+            "x": 960,
+            "y": 704,
+            "w": 192,
+            "h": 204
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 116,
+            "w": 192,
+            "h": 204
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_035": {
+          "page": 0,
+          "cell": 35,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "5E6EFA0D0C27328ADFD02DFD53924F3B53E647F50DE31F218865B4AD001E390C",
+          "frame": {
+            "x": 1160,
+            "y": 704,
+            "w": 204,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 90,
+            "y": 104,
+            "w": 204,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_036": {
+          "page": 0,
+          "cell": 36,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "07932C14025D022D4CBA3129EE6810AEDF347AA1168F9F1FD8E8FEF5E5BAA904",
+          "frame": {
+            "x": 1372,
+            "y": 704,
+            "w": 180,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 102,
+            "y": 104,
+            "w": 180,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_037": {
+          "page": 0,
+          "cell": 37,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "3A24999B48AEEAE2F35CCBAF6435780DC6D893D31CDE4C1631F5EF8DC705D33D",
+          "frame": {
+            "x": 1560,
+            "y": 704,
+            "w": 204,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 90,
+            "y": 104,
+            "w": 204,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_038": {
+          "page": 0,
+          "cell": 38,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "99050C871B939F8E04867DA0E75F30AF418424DCD86A80953B209CB870B6E4B3",
+          "frame": {
+            "x": 1772,
+            "y": 704,
+            "w": 180,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 102,
+            "y": 104,
+            "w": 180,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_039": {
+          "page": 0,
+          "cell": 39,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "AD627B666295BD40128E7C28A30AC1C3DB31B388DDF27789839AF576E144509B",
+          "frame": {
+            "x": 8,
+            "y": 928,
+            "w": 192,
+            "h": 204
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 116,
+            "w": 192,
+            "h": 204
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_040": {
+          "page": 0,
+          "cell": 40,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "35DC81D391C9F135876B5401F1D3CA15F599876A86AE1547B7E59F7F060DD521",
+          "frame": {
+            "x": 208,
+            "y": 928,
+            "w": 184,
+            "h": 96
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 100,
+            "y": 224,
+            "w": 184,
+            "h": 96
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_041": {
+          "page": 0,
+          "cell": 41,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "A1D2393396328799600A2C8F9C8FF5D3C05F0A438DAA5C676CB833E9B94D337F",
+          "frame": {
+            "x": 400,
+            "y": 928,
+            "w": 192,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 104,
+            "w": 192,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_042": {
+          "page": 0,
+          "cell": 42,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "FBA7476181F4B7435AB2F9E6AC19BDBAFC1938C32CCA073F0F12F51033953755",
+          "frame": {
+            "x": 600,
+            "y": 928,
+            "w": 192,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 104,
+            "w": 192,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_043": {
+          "page": 0,
+          "cell": 43,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "35DC81D391C9F135876B5401F1D3CA15F599876A86AE1547B7E59F7F060DD521",
+          "frame": {
+            "x": 800,
+            "y": 928,
+            "w": 184,
+            "h": 96
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 100,
+            "y": 224,
+            "w": 184,
+            "h": 96
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_044": {
+          "page": 0,
+          "cell": 44,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "AEBD326CB6BBD7C23F623C079FC465E14F303C5CE688A29481171EA8382CB8EF",
+          "frame": {
+            "x": 992,
+            "y": 928,
+            "w": 204,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 90,
+            "y": 104,
+            "w": 204,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_045": {
+          "page": 0,
+          "cell": 45,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "D4A2297108292D79BF6ACFD2220D41A03C1D8D0EBD90E42A66A6FF6F8C362603",
+          "frame": {
+            "x": 1204,
+            "y": 928,
+            "w": 204,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 90,
+            "y": 104,
+            "w": 204,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_046": {
+          "page": 0,
+          "cell": 46,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "AEBD326CB6BBD7C23F623C079FC465E14F303C5CE688A29481171EA8382CB8EF",
+          "frame": {
+            "x": 1416,
+            "y": 928,
+            "w": 204,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 90,
+            "y": 104,
+            "w": 204,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_047": {
+          "page": 0,
+          "cell": 47,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "9B5BF54B3C28C8813EACEDF28B1A3D4AA02142EE8E814824F71609B553552C8E",
+          "frame": {
+            "x": 1628,
+            "y": 928,
+            "w": 204,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 90,
+            "y": 104,
+            "w": 204,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_048": {
+          "page": 0,
+          "cell": 48,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "FDEA2F7CFA3EEAD83DD7C5269DDF54293A576FE4EA5573E7021B5B0AAB976EE4",
+          "frame": {
+            "x": 1840,
+            "y": 928,
+            "w": 192,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 104,
+            "w": 192,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_049": {
+          "page": 0,
+          "cell": 49,
+          "side": "main",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 49
+          },
+          "logicalRgbaSha256": "B6E32CC5E6739711A0C22F45CAE6B30A56940C084C6922732560B563F02400D8",
+          "frame": {
+            "x": 8,
+            "y": 1152,
+            "w": 175,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 104,
+            "y": 104,
+            "w": 175,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_050": {
+          "page": 0,
+          "cell": 50,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "C1A62E9EF302D379CD70D7386EB3C19AA8584522F337C4F3DEC788AA950C20CB",
+          "frame": {
+            "x": 191,
+            "y": 1152,
+            "w": 180,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 102,
+            "y": 104,
+            "w": 180,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_051": {
+          "page": 0,
+          "cell": 51,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "5BC9F3BA9C7E89057066E0B6481955902D15B43760C995681E2FF3CB31EEECB5",
+          "frame": {
+            "x": 379,
+            "y": 1152,
+            "w": 192,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 104,
+            "w": 192,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_052": {
+          "page": 0,
+          "cell": 52,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "7704B5BBBD92283BFBA623CAEBB420A0E6E7618340C4AA7277F09DBB782B769C",
+          "frame": {
+            "x": 579,
+            "y": 1152,
+            "w": 192,
+            "h": 228
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 92,
+            "w": 192,
+            "h": 228
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_053": {
+          "page": 0,
+          "cell": 53,
+          "side": "main",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 25
+          },
+          "logicalRgbaSha256": "C34670CDBC1297BA59F8CFD6B69669F96E21CB5BD5D51915804B99A3A54665FE",
+          "frame": {
+            "x": 779,
+            "y": 1152,
+            "w": 176,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 104,
+            "y": 104,
+            "w": 176,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_054": {
+          "page": 0,
+          "cell": 54,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "10FD206314F41DA37B11F8B1E1440DA282217640D256226EE497FAD3DC140D78",
+          "frame": {
+            "x": 963,
+            "y": 1152,
+            "w": 128,
+            "h": 152
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 128,
+            "y": 168,
+            "w": 128,
+            "h": 152
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_055": {
+          "page": 0,
+          "cell": 55,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "3274880E1449EADAB1104E4A9344B37ED52BACC3227B69A12B66A1073677A49E",
+          "frame": {
+            "x": 1099,
+            "y": 1152,
+            "w": 192,
+            "h": 204
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 116,
+            "w": 192,
+            "h": 204
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_056": {
+          "page": 0,
+          "cell": 56,
+          "side": "main",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 56
+          },
+          "logicalRgbaSha256": "96D8FB761B4A6BEE5C486AE2AE6B17A6FAB1CA307CD8F029CCABF3EAF7EDA94A",
+          "frame": {
+            "x": 1299,
+            "y": 1152,
+            "w": 192,
+            "h": 126
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 194,
+            "w": 192,
+            "h": 126
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_057": {
+          "page": 0,
+          "cell": 57,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "58B82F40547984B33B873DCBFA1F4CCA3623F5AE1E03794B7CC5C87A84F567AC",
+          "frame": {
+            "x": 1499,
+            "y": 1152,
+            "w": 192,
+            "h": 204
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 116,
+            "w": 192,
+            "h": 204
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_058": {
+          "page": 0,
+          "cell": 58,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "8699075856AFEC09F0D9F14738C52A233C36D73D7504245411AFDE1B10B9966A",
+          "frame": {
+            "x": 1699,
+            "y": 1152,
+            "w": 192,
+            "h": 228
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 92,
+            "w": 192,
+            "h": 228
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_059": {
+          "page": 0,
+          "cell": 59,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "8CAD7DF2C83AF326BC33521125953AD55AABB9D62F46E9FEFCBF00F1D3A2DACE",
+          "frame": {
+            "x": 8,
+            "y": 1388,
+            "w": 204,
+            "h": 204
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 90,
+            "y": 116,
+            "w": 204,
+            "h": 204
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_060": {
+          "page": 0,
+          "cell": 60,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "0E788F033DBDAB8A203B738BE9FED63FAD5E3883161B966B9E4A3BE15D648596",
+          "frame": {
+            "x": 220,
+            "y": 1388,
+            "w": 192,
+            "h": 252
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 68,
+            "w": 192,
+            "h": 252
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_061": {
+          "page": 0,
+          "cell": 61,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "694B8B7AB4868C57B2FFF6E36CC9AACA1F4312A730FECE60205CBC43308D7B5A",
+          "frame": {
+            "x": 420,
+            "y": 1388,
+            "w": 192,
+            "h": 228
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 92,
+            "w": 192,
+            "h": 228
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_062": {
+          "page": 0,
+          "cell": 62,
+          "side": "main",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 62
+          },
+          "logicalRgbaSha256": "7DDEBEC014C3D8EA2C5732AB0844ADEB4381A344C2693AB00B7E5DE00B33893C",
+          "frame": {
+            "x": 620,
+            "y": 1388,
+            "w": 264,
+            "h": 143
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 60,
+            "y": 177,
+            "w": 264,
+            "h": 143
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_063": {
+          "page": 0,
+          "cell": 63,
+          "side": "main",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 10
+          },
+          "logicalRgbaSha256": "6525F8A489E296674D4854AE7F55E632909F9DE5DBD4A60719341C5E68A908B3",
+          "frame": {
+            "x": 892,
+            "y": 1388,
+            "w": 190,
+            "h": 228
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 97,
+            "y": 92,
+            "w": 190,
+            "h": 228
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/main/cell_064": {
+          "page": 0,
+          "cell": 64,
+          "side": "main",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "2649BCC6A0ACCF45E3850FBB2CF522DCC8669FBE9AA368D3FBE84061D3FC32B9",
+          "frame": {
+            "x": 1090,
+            "y": 1388,
+            "w": 192,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 104,
+            "w": 192,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        }
+      }
+    },
+    "sub": {
+      "atlasPages": [
+        {
+          "page": 0,
+          "image": "sub-review-atlas-00.png",
+          "data": "sub-review-atlas-00.json",
+          "width": 1944,
+          "height": 480,
+          "frameCount": 18,
+          "imageSha256": "DE7131084AE1D8BF0EB16127A072BE71FDA07606FD0DF6F2E6BA7AE065414F2E",
+          "dataSha256": "CCB97C9ABC3A249204B5DE4BA0CB06275A0873D18ED5D5CEF444BC26E07D15A8"
+        }
+      ],
+      "frameManifest": {
+        "m201_agumon/sub/cell_000": {
+          "page": 0,
+          "cell": 0,
+          "side": "sub",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 0
+          },
+          "logicalRgbaSha256": "EA8BBF2A0379E0BEB4669ECE5057239F6B22BF1992D9EE44373F3820D89A0205",
+          "frame": {
+            "x": 8,
+            "y": 8,
+            "w": 168,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 108,
+            "y": 104,
+            "w": 168,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/sub/cell_001": {
+          "page": 0,
+          "cell": 1,
+          "side": "sub",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "0E45D47589B9A9C82AA49A12F8D582A27109FDD071E469B7B61DAE505BE156AF",
+          "frame": {
+            "x": 184,
+            "y": 8,
+            "w": 192,
+            "h": 204
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 116,
+            "w": 192,
+            "h": 204
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/sub/cell_002": {
+          "page": 0,
+          "cell": 2,
+          "side": "sub",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "F417D8B565726D167C9AA9FADACE0680932EA87EB2CD3ADC3C481B61480422C9",
+          "frame": {
+            "x": 384,
+            "y": 8,
+            "w": 192,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 104,
+            "w": 192,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/sub/cell_003": {
+          "page": 0,
+          "cell": 3,
+          "side": "sub",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "DE791F0B883BE26453E6BBBB1B2DEE5BC4B0190AEAD98CAEA4615377D88410B5",
+          "frame": {
+            "x": 584,
+            "y": 8,
+            "w": 192,
+            "h": 204
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 116,
+            "w": 192,
+            "h": 204
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/sub/cell_004": {
+          "page": 0,
+          "cell": 4,
+          "side": "sub",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 9
+          },
+          "logicalRgbaSha256": "601638AE037AF26E791BBBACA5E9C1559318EA83EACE7C8BA724605D3495DF40",
+          "frame": {
+            "x": 784,
+            "y": 8,
+            "w": 186,
+            "h": 204
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 99,
+            "y": 116,
+            "w": 186,
+            "h": 204
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/sub/cell_005": {
+          "page": 0,
+          "cell": 5,
+          "side": "sub",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 10
+          },
+          "logicalRgbaSha256": "6525F8A489E296674D4854AE7F55E632909F9DE5DBD4A60719341C5E68A908B3",
+          "frame": {
+            "x": 978,
+            "y": 8,
+            "w": 190,
+            "h": 228
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 97,
+            "y": 92,
+            "w": 190,
+            "h": 228
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/sub/cell_006": {
+          "page": 0,
+          "cell": 6,
+          "side": "sub",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 23
+          },
+          "logicalRgbaSha256": "E4A03312282F8C105E9E505F32AF5BB66D2BA426A3048BF6DF9562B062DD0799",
+          "frame": {
+            "x": 1176,
+            "y": 8,
+            "w": 184,
+            "h": 76
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 100,
+            "y": 244,
+            "w": 184,
+            "h": 76
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/sub/cell_007": {
+          "page": 0,
+          "cell": 7,
+          "side": "sub",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "F2FB37E9D313ACE4F9B39222D68E70FD688CB52901EF304F700CF6611CD5CCED",
+          "frame": {
+            "x": 1368,
+            "y": 8,
+            "w": 184,
+            "h": 96
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 100,
+            "y": 224,
+            "w": 184,
+            "h": 96
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/sub/cell_008": {
+          "page": 0,
+          "cell": 8,
+          "side": "sub",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "FDEA2F7CFA3EEAD83DD7C5269DDF54293A576FE4EA5573E7021B5B0AAB976EE4",
+          "frame": {
+            "x": 1560,
+            "y": 8,
+            "w": 192,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 104,
+            "w": 192,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/sub/cell_009": {
+          "page": 0,
+          "cell": 9,
+          "side": "sub",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 49
+          },
+          "logicalRgbaSha256": "B6E32CC5E6739711A0C22F45CAE6B30A56940C084C6922732560B563F02400D8",
+          "frame": {
+            "x": 1760,
+            "y": 8,
+            "w": 175,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 104,
+            "y": 104,
+            "w": 175,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/sub/cell_010": {
+          "page": 0,
+          "cell": 10,
+          "side": "sub",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "C1A62E9EF302D379CD70D7386EB3C19AA8584522F337C4F3DEC788AA950C20CB",
+          "frame": {
+            "x": 8,
+            "y": 244,
+            "w": 180,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 102,
+            "y": 104,
+            "w": 180,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/sub/cell_011": {
+          "page": 0,
+          "cell": 11,
+          "side": "sub",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "5BC9F3BA9C7E89057066E0B6481955902D15B43760C995681E2FF3CB31EEECB5",
+          "frame": {
+            "x": 196,
+            "y": 244,
+            "w": 192,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 104,
+            "w": 192,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/sub/cell_012": {
+          "page": 0,
+          "cell": 12,
+          "side": "sub",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "7704B5BBBD92283BFBA623CAEBB420A0E6E7618340C4AA7277F09DBB782B769C",
+          "frame": {
+            "x": 396,
+            "y": 244,
+            "w": 192,
+            "h": 228
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 92,
+            "w": 192,
+            "h": 228
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/sub/cell_013": {
+          "page": 0,
+          "cell": 13,
+          "side": "sub",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 25
+          },
+          "logicalRgbaSha256": "C34670CDBC1297BA59F8CFD6B69669F96E21CB5BD5D51915804B99A3A54665FE",
+          "frame": {
+            "x": 596,
+            "y": 244,
+            "w": 176,
+            "h": 216
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 104,
+            "y": 104,
+            "w": 176,
+            "h": 216
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/sub/cell_014": {
+          "page": 0,
+          "cell": 14,
+          "side": "sub",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "10FD206314F41DA37B11F8B1E1440DA282217640D256226EE497FAD3DC140D78",
+          "frame": {
+            "x": 780,
+            "y": 244,
+            "w": 128,
+            "h": 152
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 128,
+            "y": 168,
+            "w": 128,
+            "h": 152
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/sub/cell_015": {
+          "page": 0,
+          "cell": 15,
+          "side": "sub",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "3274880E1449EADAB1104E4A9344B37ED52BACC3227B69A12B66A1073677A49E",
+          "frame": {
+            "x": 916,
+            "y": 244,
+            "w": 192,
+            "h": 204
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 116,
+            "w": 192,
+            "h": 204
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/sub/cell_016": {
+          "page": 0,
+          "cell": 16,
+          "side": "sub",
+          "artSource": "FAITHFUL_HD_FALLBACK",
+          "canonicalCandidate": null,
+          "logicalRgbaSha256": "694B8B7AB4868C57B2FFF6E36CC9AACA1F4312A730FECE60205CBC43308D7B5A",
+          "frame": {
+            "x": 1116,
+            "y": 244,
+            "w": 192,
+            "h": 228
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 96,
+            "y": 92,
+            "w": 192,
+            "h": 228
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        },
+        "m201_agumon/sub/cell_017": {
+          "page": 0,
+          "cell": 17,
+          "side": "sub",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 62
+          },
+          "logicalRgbaSha256": "7DDEBEC014C3D8EA2C5732AB0844ADEB4381A344C2693AB00B7E5DE00B33893C",
+          "frame": {
+            "x": 1316,
+            "y": 244,
+            "w": 264,
+            "h": 143
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 60,
+            "y": 177,
+            "w": 264,
+            "h": 143
+          },
+          "sourceSize": {
+            "w": 384,
+            "h": 352
+          },
+          "anchor": {
+            "x": 0.5,
+            "y": 0.9090909090909091
+          }
+        }
+      }
+    }
+  },
+  "sequenceCoverage": {
+    "main": {
+      "counts": {
+        "FULL_REMIX": 6,
+        "PARTIAL_REMIX": 8,
+        "FAITHFUL_FALLBACK_ONLY": 26
+      },
+      "animations": [
+        {
+          "id": 0,
+          "name": "action_00",
+          "semanticAlias": "idle",
+          "state": "PARTIAL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 1,
+          "name": "action_01",
+          "semanticAlias": "idle_blink",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 2,
+          "name": "action_02",
+          "semanticAlias": "walk",
+          "state": "PARTIAL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 3,
+          "name": "action_03",
+          "semanticAlias": "run",
+          "state": "PARTIAL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 4,
+          "name": "action_04",
+          "semanticAlias": "alert",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 5,
+          "name": "action_05",
+          "semanticAlias": "hurt",
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 6,
+          "name": "action_06",
+          "semanticAlias": "jump_hit_reaction",
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 7,
+          "name": "action_07",
+          "semanticAlias": "attack_1",
+          "state": "PARTIAL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 8,
+          "name": "action_08",
+          "semanticAlias": "attack_2",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 9,
+          "name": "action_09",
+          "semanticAlias": "attack_3",
+          "state": "PARTIAL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 10,
+          "name": "action_10",
+          "semanticAlias": "attack_4",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 11,
+          "name": "action_11",
+          "semanticAlias": "flee",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 12,
+          "name": "action_12",
+          "semanticAlias": "tired_walk",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 13,
+          "name": "action_13",
+          "semanticAlias": "sleep",
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 14,
+          "name": "action_14",
+          "semanticAlias": "eat",
+          "state": "PARTIAL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 15,
+          "name": "action_15",
+          "semanticAlias": "rest",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 16,
+          "name": "action_16",
+          "semanticAlias": "restrained_idle_a",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 17,
+          "name": "action_17",
+          "semanticAlias": "restrained_idle_b",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 18,
+          "name": "action_18",
+          "semanticAlias": "restrained_walk",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 19,
+          "name": "action_19",
+          "semanticAlias": "restrained_run",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 20,
+          "name": "action_20",
+          "semanticAlias": "restrained_alert",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 21,
+          "name": "action_21",
+          "semanticAlias": "restrained_flee",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 22,
+          "name": "action_22",
+          "semanticAlias": "restrained_tired_walk",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 23,
+          "name": "action_23",
+          "semanticAlias": "restrained_sleep",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 24,
+          "name": "action_24",
+          "semanticAlias": "restrained_eat",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 25,
+          "name": "action_25",
+          "semanticAlias": "restrained_rest",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 26,
+          "name": "action_26",
+          "semanticAlias": "zapped",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 4
+        },
+        {
+          "id": 27,
+          "name": "action_27",
+          "semanticAlias": "post_zap_transition",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 28,
+          "name": "action_28",
+          "semanticAlias": "happy",
+          "state": "PARTIAL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 29,
+          "name": "action_29",
+          "semanticAlias": "angry",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 30,
+          "name": "action_30",
+          "semanticAlias": "cheer_victory",
+          "state": "PARTIAL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 31,
+          "name": "action_31",
+          "semanticAlias": "guard",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 32,
+          "name": "action_32",
+          "semanticAlias": "train",
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 33,
+          "name": "action_33",
+          "semanticAlias": "shout",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 34,
+          "name": "action_34",
+          "semanticAlias": "guard_variant",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 35,
+          "name": "action_35",
+          "semanticAlias": "shout_continuation",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 36,
+          "name": "action_36",
+          "semanticAlias": "battle_status_unknown",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 37,
+          "name": "action_37",
+          "semanticAlias": "knocked_out",
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 38,
+          "name": "action_38",
+          "semanticAlias": "jump_hit_action",
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 39,
+          "name": "action_39",
+          "semanticAlias": "training_effect_state",
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 1
+        }
+      ]
+    },
+    "sub": {
+      "counts": {
+        "FULL_REMIX": 4,
+        "PARTIAL_REMIX": 3,
+        "FAITHFUL_FALLBACK_ONLY": 6
+      },
+      "animations": [
+        {
+          "id": 0,
+          "name": "action_00",
+          "semanticAlias": null,
+          "state": "PARTIAL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 1,
+          "name": "action_01",
+          "semanticAlias": null,
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 2,
+          "name": "action_02",
+          "semanticAlias": null,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 3,
+          "name": "action_03",
+          "semanticAlias": null,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 4,
+          "name": "action_04",
+          "semanticAlias": null,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 5,
+          "name": "action_05",
+          "semanticAlias": null,
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 6,
+          "name": "action_06",
+          "semanticAlias": null,
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 7,
+          "name": "action_07",
+          "semanticAlias": null,
+          "state": "PARTIAL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 8,
+          "name": "action_08",
+          "semanticAlias": null,
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 9,
+          "name": "action_09",
+          "semanticAlias": null,
+          "state": "PARTIAL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 2
+        },
+        {
+          "id": 10,
+          "name": "action_10",
+          "semanticAlias": null,
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 11,
+          "name": "action_11",
+          "semanticAlias": null,
+          "state": "FAITHFUL_FALLBACK_ONLY",
+          "remixFrameReferences": 0,
+          "frameReferenceCount": 1
+        },
+        {
+          "id": 12,
+          "name": "action_12",
+          "semanticAlias": null,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
+          "frameReferenceCount": 1
+        }
+      ]
+    }
+  },
+  "sourceTicksAndPlaybackPreserved": true,
+  "stableTextureKeysPreserved": true,
+  "mixedArtWarning": "DO_NOT_PROMOTE_THIS_REVIEW_ATLAS_AS_THE_FINISHED_REMIX_PACK",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "workPacketId": "CHARACTER_REMIX_M201_VERTICAL_SLICE_V1",
+  "state": "INTERNAL_RUNTIME_REVIEW_ACTIVE_9_OF_47_UNIQUE_VISUALS",
+  "entityId": "m201_agumon",
+  "stableEntityIdRequired": true,
+  "presentationOnly": true,
+  "changesSimulation": false,
+  "rightsStatus": "LICENSED",
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "source": {
+    "romSha256": "8AD375BA0BD9B652A25F72DEAD2B47F78DA401E188A8F3E1B7A6F2867EE0C5D1",
+    "romGameCode": "YDIJ",
+    "runtimeContract": "docs/art/production/characters/faithful-hd224/batch-02/m201_agumon/runtime.json",
+    "visualDirection": "docs/art/proposals/a1-character-direction/a1-character-direction-panel-01.png",
+    "visualDirectionSha256": "AA4592703FE0FCD79CAEE5FBD04B191993AC85024892399FD8E8184F6693A75A",
+    "visualDirectionSlot": 3,
+    "visualClass": "DOG"
+  },
+  "verifiedEvidence": {
+    "main": {
+      "cellCount": 65,
+      "sequenceCount": 40,
+      "frameReferenceCount": 65,
+      "sourceRuntimeExactMatch": true
+    },
+    "sub": {
+      "cellCount": 18,
+      "sequenceCount": 13,
+      "frameReferenceCount": 18,
+      "sourceRuntimeExactMatch": true,
+      "allCellsExactMainVisualReuse": true
+    },
+    "all83CellVisualReuse": {
+      "totalRuntimeSlots": 83,
+      "uniqueDecodedVisualCount": 47,
+      "uniqueGeometryCount": 36,
+      "mainUniqueDecodedVisualCount": 47,
+      "subUniqueDecodedVisualCount": 18,
+      "all18SubSlotsReuseMain": true
+    },
+    "fullRosterValidation": {
+      "entityCount": 224,
+      "mainSubCellCount": 17235,
+      "animationSequenceCount": 11480,
+      "passed": true
+    }
+  },
+  "geometryContract": {
+    "logicalCanvas": { "width": 384, "height": 352 },
+    "format": "RGBA",
+    "groundY": 320,
+    "anchor": { "x": 0.5, "y": 0.9090909090909091 },
+    "sourceFacingRequired": true,
+    "sourceLimbTopologyRequired": true,
+    "sourceActionOriginRequired": true,
+    "directSourcePixelReusePermitted": false
+  },
+  "animationContract": {
+    "mainCellKeysStable": true,
+    "subCellKeysStable": true,
+    "sourceCellOrderRequired": true,
+    "sourceDurationTicksRequired": true,
+    "sourcePlaybackModeRequired": true,
+    "fixedFpsNormalizationPermitted": false,
+    "tickRateHz": 60,
+    "tickRateEvidence": "PROVISIONAL_PENDING_EXECUTABLE_TIMING_TRACE"
+  },
+  "keyPoseCells": [0, 4, 6, 9, 11, 15, 23, 49, 53, 56, 62, 63],
+  "keyPoseDecodedArt": {
+    "requestedPoseSlotCount": 12,
+    "uniqueSourcePoseCount": 9,
+    "sourceReuseGroups": [
+      { "canonicalCell": 0, "cells": [0, 4, 6] },
+      { "canonicalCell": 11, "cells": [11, 15] }
+    ],
+    "policy": "PIXEL_IDENTICAL_ROM_CELLS_REUSE_ONE_APPROVED_HD_DRAWING"
+  },
+  "milestones": [
+    { "id": "G0", "name": "EVIDENCE_LOCK", "state": "COMPLETE" },
+    { "id": "G1", "name": "APPROVED_SEED_CELL_000", "state": "TECHNICAL_PASS_VISUAL_LANDMARK_REVIEW_REQUIRED" },
+    { "id": "G2", "name": "TWELVE_HIGH_RISK_KEY_POSES", "state": "TECHNICAL_CANDIDATES_12_OF_12_VISUAL_LANDMARK_REVIEW_REQUIRED" },
+    { "id": "G3", "name": "ALL_83_MAIN_SUB_CELLS", "state": "9_OF_47_UNIQUE_VISUALS_TECHNICAL_CANDIDATES_38_PENDING" },
+    { "id": "G4", "name": "PIXIJS_ATLAS_AND_NANR_CONTRACT", "state": "HYBRID_REVIEW_ATLAS_COMPLETE_FINAL_REMIX_ATLAS_BLOCKED_ON_G3" },
+    { "id": "G5", "name": "DURATION_AWARE_PLAYER", "state": "IMPLEMENTED_AND_UNIT_TESTED_PENDING_RUNTIME_INTEGRATION" },
+    { "id": "G6", "name": "RAISING_HUNT_BATTLE_9_16_PROOF", "state": "RAISING_HUNT_TECHNICAL_REVIEW_PASS_BATTLE_AND_FULL_ART_PENDING" }
+  ],
+  "acceptance": {
+    "visual": [
+      "A1_DOG_IDENTITY_RECOGNIZABLE",
+      "SOURCE_MAJOR_PALETTE_FAMILY_RETAINED",
+      "NO_FRAME_TO_FRAME_IDENTITY_DRIFT",
+      "READABLE_AT_GAME_SCALE"
+    ],
+    "technical": [
+      "EXACT_384_X_352_RGBA_CANVAS",
+      "GROUND_AND_ANCHOR_STABLE",
+      "83_OF_83_CELL_KEYS_PRESENT",
+      "53_OF_53_MAIN_SUB_SEQUENCES_PRESENT",
+      "SOURCE_CELL_ORDER_TICKS_AND_PLAYBACK_PRESERVED",
+      "ATLAS_PAGE_MAX_2048",
+      "NO_SECOND_PIXI_TICKER"
+    ],
+    "runtime": [
+      "RAISING_DRAG_AND_SELECTION_PASS",
+      "HUNT_SCALE_AND_MIRROR_PASS",
+      "BATTLE_ACTION_ORIGIN_PASS",
+      "PORTRAIT_AND_DESKTOP_CLIPPING_PASS",
+      "LAZY_LOAD_AND_UNLOAD_PASS"
+    ]
+  },
+  "rollback": "KEEP_FAITHFUL_HD_M201_PRESENTATION_ACTIVE_UNTIL_ALL_GATES_PASS"
+}

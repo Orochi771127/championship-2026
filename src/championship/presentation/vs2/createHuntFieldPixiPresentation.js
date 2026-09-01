@@ -56,7 +56,13 @@ function assertDependencies(stage, source) {
  * host. This module owns its own scene, its own pointer handlers and its own
  * ticker callback, and removes all three on dispose.
  */
-export async function mountHuntFieldPixiPresentation({ stage, source, fieldArt = null, onFallback = () => {} }) {
+export async function mountHuntFieldPixiPresentation({
+  stage,
+  source,
+  fieldArt = null,
+  characterBundle = null,
+  onFallback = () => {}
+}) {
   assertDependencies(stage, source);
   const { PIXI, app } = stage;
 
@@ -91,6 +97,12 @@ export async function mountHuntFieldPixiPresentation({ stage, source, fieldArt =
   let lastGateId = null;
   let backdropWidth = 0;
   let backdropHeight = 0;
+  let characterAssetFailures = 0;
+  if (characterBundle !== null && (typeof characterBundle.createActor !== "function"
+    || typeof characterBundle.dispose !== "function" || typeof characterBundle.getDiagnostics !== "function")) {
+    characterAssetFailures += 1;
+    throw new TypeError("Hunt character art must be an injected runtime bundle");
+  }
 
   function chunkKey(chunkX, chunkY) {
     return `${chunkX},${chunkY}`;
@@ -218,6 +230,15 @@ export async function mountHuntFieldPixiPresentation({ stage, source, fieldArt =
       .circle(5, -15, 1).fill(0x071016)
       .poly([-3, -9, 0, -12, 3, -9, 0, -6]).fill(player ? TERRAIN.gold : TERRAIN.cyan);
     node.addChild(shadow, ring, body);
+    if (characterBundle) {
+      const actor = characterBundle.createActor({ side: "main", animation: "idle" });
+      actor.sprite.scale.set(0.18);
+      body.visible = false;
+      node.addChild(actor.sprite);
+      node.characterController = actor.controller;
+      node.lastCharacterX = null;
+      node.lastCharacterY = null;
+    }
     node.body = body;
     node.ring = ring;
     return node;
@@ -248,7 +269,12 @@ export async function mountHuntFieldPixiPresentation({ stage, source, fieldArt =
       playerNode = createActorNode(0xe7c36f, "companion", { player: true });
       actorLayer.addChild(playerNode);
     }
+    const playerMoved = playerNode.lastCharacterX !== null
+      && (playerNode.lastCharacterX !== view.player.worldX || playerNode.lastCharacterY !== view.player.worldY);
+    playerNode.characterController?.setAnimation(playerMoved ? "walk" : "idle", { restart: false });
     playerNode.position.set(view.player.worldX, view.player.worldY);
+    playerNode.lastCharacterX = view.player.worldX;
+    playerNode.lastCharacterY = view.player.worldY;
     playerNode.zIndex = Math.round(view.player.worldY);
     playerNode.scale.x = view.player.facing === "left" ? -1 : 1;
 
@@ -388,6 +414,8 @@ export async function mountHuntFieldPixiPresentation({ stage, source, fieldArt =
     source.field.tick(ticker.deltaMS);
     fieldArt?.update(ticker.deltaMS);
     render();
+    playerNode?.characterController?.update(ticker);
+    for (const node of wildNodes.values()) node.characterController?.update(ticker);
   }
 
   app.stage.on("pointerdown", onPointerDown);
@@ -424,6 +452,8 @@ export async function mountHuntFieldPixiPresentation({ stage, source, fieldArt =
         visibleChunks: liveChunks.size,
         wildCount: wildNodes.size,
         objectCount: objectNodes.size,
+        characterAssetFailures,
+        characterArt: characterBundle?.getDiagnostics() ?? null,
         viewport: Object.freeze({ width: app.screen.width, height: app.screen.height }),
         art: fieldArt?.getDiagnostics() ?? Object.freeze({
           assetId: TEMPORARY_ART_ID,
@@ -457,6 +487,8 @@ export async function mountHuntFieldPixiPresentation({ stage, source, fieldArt =
       if (scene.parent) scene.parent.removeChild(scene);
       scene.destroy({ children: true });
       void fieldArt?.dispose();
+      void characterBundle?.dispose();
+      characterBundle = null;
       // The Application belongs to the stage and outlives this scene.
     }
   });

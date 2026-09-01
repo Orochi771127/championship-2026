@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "owner": "CODEX_ART",
-  "deltaId": "CODEX-ART-INTERNAL-FAITHFUL-BASELINE-V1-2026-09-01",
-  "targetSyncRevision": 29,
-  "status": "INTERNAL_FAITHFUL_BASELINE_DIRECT_ASSEMBLY_5_OF_9_SLOTS_COMPLETE",
+  "deltaId": "CODEX-ART-M201-INTERNAL-RUNTIME-REVIEW-V1-2026-09-01",
+  "targetSyncRevision": 30,
+  "status": "M201_INTERNAL_RUNTIME_REVIEW_ACTIVE_9_OF_47_UNIQUE_VISUALS",
   "statusSource": "docs/coordination/CODEX_ART_STATUS.json",
-  "baseSyncRevision": 28,
+  "baseSyncRevision": 29,
   "checkpoint": {
     "latestOwnerApprovedCommit": "732775486665b21508ac51c1eea0b723db0f7744",
     "message": "art(research): approve O2 224-entity character catalog",
@@ -32,6 +32,16 @@
     "documentationOnly": false
   },
   "completedWork": [
+    {
+      "id": "CHARACTER-REMIX-M201-INTERNAL-RUNTIME-REVIEW-V1",
+      "state": "RAISING_HUNT_TECHNICAL_RUNTIME_PASS_ART_REVIEW_GATED",
+      "scope": "M201 12-pose technical candidate set, all-83 source reuse audit, private hybrid PixiJS atlas, original variable-tick playback and opt-in 390x844 Raising/Hunt review",
+      "sourcePolicy": "OWNER_AUTHORIZED_INTERNAL_ONLY_PUBLIC_PAGES_EXCLUDED_NO_ROM_OR_NITRO_PAYLOAD",
+      "technicalQa": "391_OF_391_NODE_TESTS_PASS_REAL_CHROMIUM_RAISING_AND_HUNT_ONE_CANVAS_NO_FALLBACK_NO_PAGE_ERROR_NO_FAILED_ASSET_REQUEST",
+      "runtimeEligible": false,
+      "shippingStatus": "9_OF_47_UNIQUE_VISUALS_38_PENDING_VISUAL_LANDMARK_REVIEW_REQUIRED",
+      "output": "assets/production/internal-character-review/m201-remix-v1/manifest.json"
+    },
     {
       "id": "INTERNAL-FAITHFUL-BASELINE-V1",
       "state": "DIRECT_INTERNAL_ASSEMBLY_5_OF_9_SLOTS_READY",
@@ -261,6 +271,14 @@
   ],
   "dependencyUpserts": [
     {
+      "recordId": "M201CharacterRemixRuntimeReview",
+      "contract": "CHARACTER_REMIX_M201_VERTICAL_SLICE_V1",
+      "owner": "codex",
+      "state": "INTERNAL_RUNTIME_REVIEW_ACTIVE",
+      "codexMaySafelyBind": "RAISING_HUNT_REVIEW_ONLY",
+      "notes": "All 83 stable keys and 53 original timelines are loadable. Nine unique technical candidates cover 21 slots; 62 slots retain explicit faithful fallbacks. Final atlas and Battle proof remain blocked on 38 redraws and visual landmark approval."
+    },
+    {
       "recordId": "VS2GateSelect3DRuntimeContract",
       "contract": "VS2_GATE_SELECT_3D_RUNTIME_CONTRACT/v1",
       "owner": "shared",
@@ -326,6 +344,13 @@
     }
   ],
   "blockerUpserts": [
+    {
+      "recordId": "CX-M201-ART-CONTINUITY",
+      "id": "CX-M201-ART-CONTINUITY",
+      "owner": "codex",
+      "state": "OPEN_OWNER_VISUAL_REVIEW_AND_38_REDRAWS_REQUIRED",
+      "detail": "Technical runtime integration passes, but partial sequences visibly switch between remix candidates and faithful fallbacks. Complete animation-family redraws and landmark/identity review are required before runtime promotion."
+    },
     {
       "recordId": "CX-VS2-R1-OWNER-VISUAL-REVIEW",
       "id": "CX-VS2-R1-OWNER-VISUAL-REVIEW",

@@ -1,0 +1,385 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m201_agumon",
+  "side": "main",
+  "state": "SOURCE_GUIDES_READY_REQUIRES_APPROVED_SEED_BEFORE_REDRAW",
+  "requestedPoseSlotCount": 12,
+  "uniqueDecodedSourcePoseCount": 9,
+  "sourceReuseGroups": [
+    {
+      "canonicalCell": 0,
+      "cells": [
+        0,
+        4,
+        6
+      ]
+    },
+    {
+      "canonicalCell": 9,
+      "cells": [
+        9
+      ]
+    },
+    {
+      "canonicalCell": 11,
+      "cells": [
+        11,
+        15
+      ]
+    },
+    {
+      "canonicalCell": 23,
+      "cells": [
+        23
+      ]
+    },
+    {
+      "canonicalCell": 49,
+      "cells": [
+        49
+      ]
+    },
+    {
+      "canonicalCell": 53,
+      "cells": [
+        53
+      ]
+    },
+    {
+      "canonicalCell": 56,
+      "cells": [
+        56
+      ]
+    },
+    {
+      "canonicalCell": 62,
+      "cells": [
+        62
+      ]
+    },
+    {
+      "canonicalCell": 63,
+      "cells": [
+        63
+      ]
+    }
+  ],
+  "cells": [
+    {
+      "cell": 0,
+      "logicalImage": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-000.png",
+      "logicalImageSha256": "28A43A8FF49901F16703EED2D018C9C92E86EAF4712A3E11FC1ECC152E0E71B9",
+      "decodedPixelSha256": "2F2654B3B48008EAB15B3140666F4CAB9B4263F1EEB5B975D81923B9476BAC93",
+      "canonicalSourceCell": 0,
+      "reuseOf": null,
+      "guide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-000-guide.png",
+      "alphaBounds": [
+        96,
+        104,
+        288,
+        320
+      ],
+      "usedBy": [
+        {
+          "actionId": 0,
+          "action": "action_00",
+          "semanticAlias": "idle",
+          "semanticConfidence": "HIGH",
+          "frameIndex": 0,
+          "ticks": 31,
+          "playback": "forward_then_backward_once"
+        }
+      ]
+    },
+    {
+      "cell": 4,
+      "logicalImage": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-004.png",
+      "logicalImageSha256": "28A43A8FF49901F16703EED2D018C9C92E86EAF4712A3E11FC1ECC152E0E71B9",
+      "decodedPixelSha256": "2F2654B3B48008EAB15B3140666F4CAB9B4263F1EEB5B975D81923B9476BAC93",
+      "canonicalSourceCell": 0,
+      "reuseOf": 0,
+      "guide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-004-guide.png",
+      "alphaBounds": [
+        96,
+        104,
+        288,
+        320
+      ],
+      "usedBy": [
+        {
+          "actionId": 2,
+          "action": "action_02",
+          "semanticAlias": "walk",
+          "semanticConfidence": "HIGH",
+          "frameIndex": 0,
+          "ticks": 15,
+          "playback": "forward_then_backward_once"
+        }
+      ]
+    },
+    {
+      "cell": 6,
+      "logicalImage": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-006.png",
+      "logicalImageSha256": "28A43A8FF49901F16703EED2D018C9C92E86EAF4712A3E11FC1ECC152E0E71B9",
+      "decodedPixelSha256": "2F2654B3B48008EAB15B3140666F4CAB9B4263F1EEB5B975D81923B9476BAC93",
+      "canonicalSourceCell": 0,
+      "reuseOf": 0,
+      "guide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-006-guide.png",
+      "alphaBounds": [
+        96,
+        104,
+        288,
+        320
+      ],
+      "usedBy": [
+        {
+          "actionId": 3,
+          "action": "action_03",
+          "semanticAlias": "run",
+          "semanticConfidence": "HIGH",
+          "frameIndex": 0,
+          "ticks": 7,
+          "playback": "forward_then_backward_once"
+        }
+      ]
+    },
+    {
+      "cell": 9,
+      "logicalImage": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-009.png",
+      "logicalImageSha256": "59C8718213196220646E1400067029F765396707E70B04FDE2AC3BCABA02B93A",
+      "decodedPixelSha256": "1EB8FF4E4542354CA3EF31D8F48200FE4C21D7BE96BDECFDD85CA7B925E67229",
+      "canonicalSourceCell": 9,
+      "reuseOf": null,
+      "guide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-009-guide.png",
+      "alphaBounds": [
+        78,
+        116,
+        306,
+        320
+      ],
+      "usedBy": [
+        {
+          "actionId": 5,
+          "action": "action_05",
+          "semanticAlias": "hurt",
+          "semanticConfidence": "VERY_HIGH",
+          "frameIndex": 0,
+          "ticks": 7,
+          "playback": "forward_loop"
+        }
+      ]
+    },
+    {
+      "cell": 11,
+      "logicalImage": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-011.png",
+      "logicalImageSha256": "5699176C4603C1686EF8987202C6A7616DE22EE0E18792CE4D544F8FBACC505F",
+      "decodedPixelSha256": "CF52476E0A80123C12266415ADCF3D09938E28C0E593A1D0D9DFED3970C682AB",
+      "canonicalSourceCell": 11,
+      "reuseOf": null,
+      "guide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-011-guide.png",
+      "alphaBounds": [
+        96,
+        104,
+        288,
+        320
+      ],
+      "usedBy": [
+        {
+          "actionId": 7,
+          "action": "action_07",
+          "semanticAlias": "attack_1",
+          "semanticConfidence": "MEDIUM",
+          "frameIndex": 0,
+          "ticks": 15,
+          "playback": "forward_loop"
+        }
+      ]
+    },
+    {
+      "cell": 15,
+      "logicalImage": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-015.png",
+      "logicalImageSha256": "5699176C4603C1686EF8987202C6A7616DE22EE0E18792CE4D544F8FBACC505F",
+      "decodedPixelSha256": "CF52476E0A80123C12266415ADCF3D09938E28C0E593A1D0D9DFED3970C682AB",
+      "canonicalSourceCell": 11,
+      "reuseOf": 11,
+      "guide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-015-guide.png",
+      "alphaBounds": [
+        96,
+        104,
+        288,
+        320
+      ],
+      "usedBy": [
+        {
+          "actionId": 9,
+          "action": "action_09",
+          "semanticAlias": "attack_3",
+          "semanticConfidence": "HIGH",
+          "frameIndex": 0,
+          "ticks": 15,
+          "playback": "forward_loop"
+        }
+      ]
+    },
+    {
+      "cell": 23,
+      "logicalImage": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-023.png",
+      "logicalImageSha256": "5A98D98BC44C83D8F031ED8EA5BE63E03202952A4DD7DD91D957237A96541787",
+      "decodedPixelSha256": "0115B6CE1DA315D50362488F580ADCE6DFC386804A7CEF16866913F001E3BCD3",
+      "canonicalSourceCell": 23,
+      "reuseOf": null,
+      "guide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-023-guide.png",
+      "alphaBounds": [
+        100,
+        224,
+        284,
+        320
+      ],
+      "usedBy": [
+        {
+          "actionId": 13,
+          "action": "action_13",
+          "semanticAlias": "sleep",
+          "semanticConfidence": "HIGH",
+          "frameIndex": 0,
+          "ticks": 37,
+          "playback": "forward_loop"
+        }
+      ]
+    },
+    {
+      "cell": 49,
+      "logicalImage": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-049.png",
+      "logicalImageSha256": "32BA6ACFE4FB2B85B4FE3719E5541283CF6BFE4CE3836CDE821E584D39F6CD0E",
+      "decodedPixelSha256": "31B04E96C28C2D605ECA2493C360F9DB58B8F2E4F74E1500D4FCAED43B51C301",
+      "canonicalSourceCell": 49,
+      "reuseOf": null,
+      "guide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-049-guide.png",
+      "alphaBounds": [
+        90,
+        104,
+        294,
+        320
+      ],
+      "usedBy": [
+        {
+          "actionId": 28,
+          "action": "action_28",
+          "semanticAlias": "happy",
+          "semanticConfidence": "HIGH",
+          "frameIndex": 0,
+          "ticks": 15,
+          "playback": "forward_then_backward_once"
+        }
+      ]
+    },
+    {
+      "cell": 53,
+      "logicalImage": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-053.png",
+      "logicalImageSha256": "4B2702AE6015F43447326B94D9333FC79708421145BC1C77EE3EF7BE7D7D0F58",
+      "decodedPixelSha256": "C9C1A110675DBCE65EE896A71AF7198C7DB2B706C4C9CECE53DAE35F4307D59D",
+      "canonicalSourceCell": 53,
+      "reuseOf": null,
+      "guide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-053-guide.png",
+      "alphaBounds": [
+        96,
+        104,
+        288,
+        320
+      ],
+      "usedBy": [
+        {
+          "actionId": 30,
+          "action": "action_30",
+          "semanticAlias": "cheer_victory",
+          "semanticConfidence": "HIGH",
+          "frameIndex": 0,
+          "ticks": 10,
+          "playback": "forward_then_backward_once"
+        }
+      ]
+    },
+    {
+      "cell": 56,
+      "logicalImage": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-056.png",
+      "logicalImageSha256": "9372C2240E51C40B659AEA54EDFE3DFB121C18C043AD5F8601DFF09FD2C1F07A",
+      "decodedPixelSha256": "E31CAED1AF78BC28E4B783FC3C0B6447393AE508BB6CFB72A40ABE31C2322D02",
+      "canonicalSourceCell": 56,
+      "reuseOf": null,
+      "guide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-056-guide.png",
+      "alphaBounds": [
+        96,
+        184,
+        288,
+        320
+      ],
+      "usedBy": [
+        {
+          "actionId": 32,
+          "action": "action_32",
+          "semanticAlias": "train",
+          "semanticConfidence": "VERY_HIGH",
+          "frameIndex": 0,
+          "ticks": 7,
+          "playback": "forward_loop"
+        }
+      ]
+    },
+    {
+      "cell": 62,
+      "logicalImage": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-062.png",
+      "logicalImageSha256": "603E198517FCD2030B2F18A4EC0E2B26B29F5DE3B60F59CE0A3E364C27F3EB14",
+      "decodedPixelSha256": "7143A7F08BFB88E46D1C07B2ED134063A3BA06B8BA45A0B6E7C0CF9FF7AA3EFA",
+      "canonicalSourceCell": 62,
+      "reuseOf": null,
+      "guide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-062-guide.png",
+      "alphaBounds": [
+        60,
+        140,
+        324,
+        320
+      ],
+      "usedBy": [
+        {
+          "actionId": 37,
+          "action": "action_37",
+          "semanticAlias": "knocked_out",
+          "semanticConfidence": "VERY_HIGH",
+          "frameIndex": 0,
+          "ticks": 37,
+          "playback": "forward_loop"
+        }
+      ]
+    },
+    {
+      "cell": 63,
+      "logicalImage": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-063.png",
+      "logicalImageSha256": "8A44B7688C9C9A4654235B90B32C5F6F0B266C94F4D9E6D5A77735308A68C196",
+      "decodedPixelSha256": "0B74D13DF039AF0F3454E4EBAD53A92961264CDABBFE1B0E93C56C5FCCD44ABC",
+      "canonicalSourceCell": 63,
+      "reuseOf": null,
+      "guide": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/key-pose-guides/source-main-cell-063-guide.png",
+      "alphaBounds": [
+        96,
+        92,
+        288,
+        320
+      ],
+      "usedBy": [
+        {
+          "actionId": 38,
+          "action": "action_38",
+          "semanticAlias": "jump_hit_action",
+          "semanticConfidence": "HIGH",
+          "frameIndex": 0,
+          "ticks": 7,
+          "playback": "forward_loop"
+        }
+      ]
+    }
+  ],
+  "contactSheet": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-12-high-risk-source-guides.png",
+  "contactSheetSha256": "FBE1DF394DF5F78DCF70A96FADE84375EEC786439DF20C28C82D8044DB8B9458",
+  "runtimeEligible": false,
+  "shippingReady": false
+}

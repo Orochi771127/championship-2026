@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m201_agumon",
+  "side": "main",
+  "cell": 0,
+  "selectedCandidate": "raw-candidate-v4.png",
+  "state": "TECHNICAL_PASS_VISUAL_LANDMARK_REVIEW_REQUIRED",
+  "candidates": [
+    {
+      "file": "raw-candidate-v1.png",
+      "decision": "REJECTED",
+      "reasons": [
+        "GUARD_STANCE_DOES_NOT_MATCH_SOURCE_IDLE_POSE",
+        "NO_TRUE_ALPHA"
+      ]
+    },
+    {
+      "file": "raw-candidate-v2.png",
+      "decision": "SUPERSEDED_BY_V4",
+      "passes": [
+        "A1_DOG_IDENTITY",
+        "SOURCE_YELLOW_CREAM_PALETTE_FAMILY",
+        "384_X_352_RGBA_AFTER_NORMALIZATION",
+        "GROUND_Y_320"
+      ],
+      "reasons": [
+        "SOURCE_FACING_WAS_REVERSED",
+        "V4_HAS_CLEANER_COMPACT_IDLE_LIMB_GESTURE"
+      ]
+    },
+    {
+      "file": "raw-candidate-v3.png",
+      "decision": "REJECTED",
+      "reasons": [
+        "WIDE_ASPECT_FORCED_FIELD_SCALE_TOO_SMALL",
+        "SOURCE_SCALE_ENVELOPE_DRIFT"
+      ]
+    },
+    {
+      "file": "raw-candidate-v4.png",
+      "decision": "SELECTED_FOR_SEED_REVIEW_AFTER_HORIZONTAL_SOURCE_FACING_CORRECTION",
+      "passes": [
+        "A1_DOG_IDENTITY",
+        "SOURCE_YELLOW_CREAM_PALETTE_FAMILY",
+        "LEFT_FACING_AFTER_CONTROLLED_MIRROR",
+        "COMPACT_IDLE_STANCE",
+        "384_X_352_RGBA_AFTER_NORMALIZATION",
+        "GROUND_Y_320"
+      ],
+      "remaining": [
+        "OWNER_VISUAL_APPROVAL",
+        "FOOT_AND_HAND_LANDMARK_REVIEW"
+      ]
+    }
+  ],
+  "runtimeEligible": false,
+  "shippingReady": false
+}

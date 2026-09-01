@@ -86,6 +86,7 @@ export async function mountRaisingFieldPixiPresentation({
   stage,
   source,
   onFallback = () => {},
+  characterBundle = null,
   reducedMotion = globalThis.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false
 }) {
   assertDependencies(stage, source);
@@ -112,6 +113,10 @@ export async function mountRaisingFieldPixiPresentation({
   let latestRevision = -1;
   let drag = null;
   let assetFailures = 0;
+  if (characterBundle !== null && (typeof characterBundle.createActor !== "function"
+    || typeof characterBundle.dispose !== "function" || typeof characterBundle.getDiagnostics !== "function")) {
+    throw new TypeError("INT-RH2 character art must be an injected runtime bundle");
+  }
 
   function cageBounds(cage) {
     return {
@@ -217,18 +222,35 @@ export async function mountRaisingFieldPixiPresentation({
       selection,
       fallback,
       sprite: null,
+      characterController: null,
+      characterReactionActive: false,
       idleTextures: null,
       reactionTextures: null,
       lastReactionRevision: -1,
       loadToken: 0
     };
+    if (characterBundle) {
+      const actor = characterBundle.createActor({
+        side: "main",
+        animation: "idle",
+        reducedMotion
+      });
+      actor.sprite.scale.set(120 / 352);
+      root.removeChild(fallback);
+      fallback.destroy();
+      entry.fallback = null;
+      entry.sprite = actor.sprite;
+      entry.characterController = actor.controller;
+      root.addChildAt(actor.sprite, 2);
+    }
     actors.set(resident.creatureId, entry);
     attachActorInput(entry, resident.creatureId);
-    void loadActorTextures(entry, resident);
+    if (!entry.characterController) void loadActorTextures(entry, resident);
     return entry;
   }
 
   async function loadActorTextures(entry, resident) {
+    if (entry.characterController) return;
     if (!resident.sprite?.idle?.sheet || !resident.sprite?.reaction?.sheet) return;
     const token = ++entry.loadToken;
     try {
@@ -269,6 +291,13 @@ export async function mountRaisingFieldPixiPresentation({
   }
 
   function playReaction(entry, resident, revision) {
+    if (entry.characterController) {
+      if (entry.lastReactionRevision === revision) return;
+      entry.lastReactionRevision = revision;
+      entry.characterReactionActive = true;
+      entry.characterController.setAnimation("happy");
+      return;
+    }
     if (!entry.sprite || !entry.reactionTextures || entry.lastReactionRevision === revision) return;
     entry.lastReactionRevision = revision;
     entry.sprite.textures = entry.reactionTextures;
@@ -333,7 +362,15 @@ export async function mountRaisingFieldPixiPresentation({
 
   function updateAnimations(ticker) {
     for (const entry of actors.values()) {
-      if (entry.sprite?.playing) entry.sprite.update(ticker);
+      if (entry.characterController) {
+        const snapshot = entry.characterController.update(ticker);
+        if (entry.characterReactionActive && snapshot.cycle >= 1) {
+          entry.characterReactionActive = false;
+          entry.characterController.setAnimation("idle");
+        }
+      } else if (entry.sprite?.playing) {
+        entry.sprite.update(ticker);
+      }
     }
   }
 
@@ -367,6 +404,7 @@ export async function mountRaisingFieldPixiPresentation({
         frameRevision: latestRevision,
         residentCount: actors.size,
         assetFailures,
+        characterArt: characterBundle?.getDiagnostics() ?? null,
         viewport: Object.freeze({ width: app.screen.width, height: app.screen.height })
       });
     },
@@ -390,6 +428,8 @@ export async function mountRaisingFieldPixiPresentation({
       actors.clear();
       for (const sheet of sheets) sheet.destroy(false);
       sheets.clear();
+      void characterBundle?.dispose();
+      characterBundle = null;
       // The Application belongs to the stage and outlives this scene.
       latestFrame = null;
     }

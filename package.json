@@ -12,6 +12,8 @@
     "art:characters:b01:validate": "python scripts/validate-character-faithful-hd.py",
     "art:characters:all:build": "python scripts/build-character-faithful-hd.py --all",
     "art:characters:all:validate": "python scripts/validate-character-faithful-hd.py --all",
+    "art:characters:m201:review:build": "python scripts/build-character-remix-seed-workspace.py",
+    "art:characters:m201:review:validate": "node --test tests/championship-character-remix-m201-cases.mjs tests/championship-character-animation-timeline-cases.mjs",
     "art:ui:hd96:build": "python scripts/build-ui-faithful-hd96.py",
     "art:ui:hd96:validate": "python scripts/validate-ui-faithful-hd96.py",
     "art:internal-faithful:build": "node scripts/build-internal-faithful-baseline.mjs",
