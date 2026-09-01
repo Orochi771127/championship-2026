@@ -38,6 +38,10 @@ function familyFor(asset) {
   if (asset.domain === "VFX") return "vfx";
   if (asset.domain === "MAP" && asset.assetKind === "CAGE_ENVIRONMENT_REFERENCE") return "cage";
   if (asset.domain === "MAP" && asset.assetKind === "HUNT_BIOME_REFERENCE") return "hunt";
+  // Field art the ROM census found that belongs to neither the battle catalog nor
+  // the Hunt biome set. It stays in its own family so it cannot be produced as a
+  // biome or an arena before its consumer is traced.
+  if (asset.domain === "MAP" && asset.assetKind === "FIELD_UNATTRIBUTED_REFERENCE") return "field-unattributed";
   throw new Error(`Unsupported art family for ${asset.assetId}`);
 }
 
@@ -47,6 +51,7 @@ function batchFor(asset, family) {
   if (family === "hunt") return "A4_GATE_HUNT";
   if (family === "character" || family === "character-animation") return "A5_LAUNCH_ROSTER_AND_A8_A11_EXPANSION";
   if (family === "battle") return "A6_BATTLE";
+  if (family === "field-unattributed") return "A7_RELEASE_COMPLETION";
   if (family === "vfx") return pilotVfx.includes(asset.assetId) ? "A1_GOLDEN_ART_SLICE" : "A6_BATTLE_OR_A7_RELEASE_COMPLETION";
   if (family === "3d" && /^gate_select\//i.test(asset.logicalGroup)) return "A1_GOLDEN_ART_SLICE_THEN_A4_FINAL";
   if (family === "3d" && /^battle/i.test(asset.logicalGroup)) return "A6_BATTLE";
@@ -61,7 +66,7 @@ function rendererFor(asset) {
 }
 
 function productionAssetId(asset, family) {
-  const suffix = asset.assetId.replace(/^art:/, "").replace(/:rom-reference$|:nitro-reference$|:arena-reference$|:cage-reference$|:hunt-reference$/, "");
+  const suffix = asset.assetId.replace(/^art:/, "").replace(/:rom-reference$|:nitro-reference$|:arena-reference$|:cage-reference$|:hunt-reference$|:db-reference$|:sprite-reference$|:font-reference$|:shared-layer-reference$|:field-reference$/, "");
   return `production:${family}:${suffix}`;
 }
 
@@ -94,8 +99,11 @@ function writeOrCheck(filePath, value) {
 
 // The managed workspace protects the committed Art-A registry from direct file
 // access. Read the canonical HEAD blob so A0 cannot mutate or race that SSOT.
-const registry = JSON.parse(execFileSync("git", ["show", "HEAD:docs/art/ART_ASSET_REGISTRY.json"], { cwd: root, encoding: "utf8", maxBuffer: 5 * 1024 * 1024 }));
-if (!Array.isArray(registry.assets) || registry.assets.length !== 752) throw new Error("Expected the canonical 752-record Art-A registry");
+// 752 units from the original filesystem audit plus 496 recovered by reconciling
+// that audit against the ROM binary. See docs/art/ART_ROM_RECONCILIATION.md.
+const EXPECTED_REGISTRY_UNITS = 1248;
+const registry = JSON.parse(execFileSync("git", ["show", "HEAD:docs/art/ART_ASSET_REGISTRY.json"], { cwd: root, encoding: "utf8", maxBuffer: 8 * 1024 * 1024 }));
+if (!Array.isArray(registry.assets) || registry.assets.length !== EXPECTED_REGISTRY_UNITS) throw new Error(`Expected the canonical ${EXPECTED_REGISTRY_UNITS}-record Art-A registry`);
 if (new Set(registry.assets.map((asset) => asset.assetId)).size !== registry.assets.length) throw new Error("Duplicate Art-A asset IDs");
 
 for (const required of [...pilotCharacters, ...pilotVfx]) {

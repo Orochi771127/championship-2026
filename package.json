@@ -8,6 +8,10 @@
     "serve": "node scripts/serve.mjs",
     "art:a0:build": "node scripts/build-art-production-a0.mjs",
     "art:a0:validate": "node scripts/validate-art-production-a0.mjs",
+    "art:census:build": "python scripts/build-rom-art-census.py",
+    "art:census:validate": "python scripts/build-rom-art-census.py --check",
+    "art:reconcile:build": "python scripts/build-art-registry-correction.py",
+    "art:reconcile:validate": "python scripts/build-art-registry-correction.py --check",
     "art:characters:b01:build": "python scripts/build-character-faithful-hd.py --batch 1",
     "art:characters:b01:validate": "python scripts/validate-character-faithful-hd.py",
     "art:characters:all:build": "python scripts/build-character-faithful-hd.py --all",
@@ -32,6 +36,7 @@
     "test:browser:vs2": "node tests/championship-vs2-browser.cjs",
     "test:browser:vs2-r1": "node tests/championship-vs2-r1-gate-browser.cjs",
     "test:browser:vs3": "node tests/championship-vs3-browser.cjs",
+    "test:browser:characters:m201": "node tests/championship-character-remix-m201-browser.cjs",
     "test:browser:file-launch": "node tests/championship-file-launch-guard-browser.cjs",
     "test:browser:vfx": "node tests/championship-faithful-vfx-browser.cjs"
   },

@@ -5,13 +5,15 @@ import { execFileSync, spawnSync } from "node:child_process";
 
 const root = process.cwd();
 const readJson = (relativePath) => JSON.parse(fs.readFileSync(path.join(root, relativePath), "utf8"));
-const registry = JSON.parse(execFileSync("git", ["show", "HEAD:docs/art/ART_ASSET_REGISTRY.json"], { cwd: root, encoding: "utf8", maxBuffer: 5 * 1024 * 1024 }));
+// 752 audited + 496 ROM-reconciled. See docs/art/ART_ROM_RECONCILIATION.md.
+const EXPECTED_REGISTRY_UNITS = 1248;
+const registry = JSON.parse(execFileSync("git", ["show", "HEAD:docs/art/ART_ASSET_REGISTRY.json"], { cwd: root, encoding: "utf8", maxBuffer: 8 * 1024 * 1024 }));
 const crosswalk = readJson("docs/art/ART_PRODUCTION_CROSSWALK.json");
 const index = readJson("assets/production/ART_PRODUCTION_INDEX.json");
 
-assert.equal(registry.assets.length, 752);
-assert.equal(crosswalk.records.length, 752);
-assert.equal(new Set(crosswalk.records.map((record) => record.referenceAssetId)).size, 752);
+assert.equal(registry.assets.length, EXPECTED_REGISTRY_UNITS);
+assert.equal(crosswalk.records.length, EXPECTED_REGISTRY_UNITS);
+assert.equal(new Set(crosswalk.records.map((record) => record.referenceAssetId)).size, EXPECTED_REGISTRY_UNITS);
 assert.deepEqual(crosswalk.records.map((record) => record.referenceAssetId).sort(), registry.assets.map((asset) => asset.assetId).sort());
 assert.equal(crosswalk.summary.shippingReady, 0);
 assert.equal(crosswalk.summary.readyForRuntime, 0);
@@ -59,4 +61,4 @@ for (const required of [
 
 const deterministic = spawnSync(process.execPath, ["scripts/build-art-production-a0.mjs", "--check"], { cwd: root, encoding: "utf8" });
 assert.equal(deterministic.status, 0, deterministic.stderr || deterministic.stdout);
-console.log("A0 art production validation passed: 752 crosswalk records, 3 non-shipping runtime bundles, 0 promotions.");
+console.log(`A0 art production validation passed: ${EXPECTED_REGISTRY_UNITS} crosswalk records, 3 non-shipping runtime bundles, 0 promotions.`);
