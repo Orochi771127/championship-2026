@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "generator": "scripts/build-battle-field-geometry-constraint.py",
+  "sharedLayer": "docs/art/production/battle/human-paint-migration-r4/review/layers/field-bm00-00-shared-layer-human-paint.png",
+  "canvas": {
+    "width": 1536,
+    "height": 1024
+  },
+  "rule": "The generated background must paint continuous, walkable combat floor across the whole arena interior, and in particular under all six standing slots. Scenery, walls, seating, water and terrain edges must stay outside the interior region.",
+  "arenaInterior": {
+    "pixels": 586250,
+    "coverageOfFrame": 0.3727,
+    "bbox": {
+      "x0": 55,
+      "y0": 301,
+      "x1": 1479,
+      "y1": 835
+    },
+    "floorTopY": 301,
+    "floorTopNormalised": 0.29395,
+    "note": "floorTopY is the highest row the floor must reach. A horizon, terrace edge or pitch boundary painted below this line leaves the back of the arena unfloored, which is the BM09 and BM10 failure."
+  },
+  "standingSlots": [
+    {
+      "slot": 1,
+      "pixel": {
+        "x0": 351,
+        "y0": 365,
+        "x1": 574,
+        "y1": 424
+      },
+      "normalised": {
+        "x0": 0.22852,
+        "y0": 0.35645,
+        "x1": 0.3737,
+        "y1": 0.41406
+      }
+    },
+    {
+      "slot": 2,
+      "pixel": {
+        "x0": 961,
+        "y0": 365,
+        "x1": 1184,
+        "y1": 424
+      },
+      "normalised": {
+        "x0": 0.62565,
+        "y0": 0.35645,
+        "x1": 0.77083,
+        "y1": 0.41406
+      }
+    },
+    {
+      "slot": 3,
+      "pixel": {
+        "x0": 291,
+        "y0": 450,
+        "x1": 555,
+        "y1": 535
+      },
+      "normalised": {
+        "x0": 0.18945,
+        "y0": 0.43945,
+        "x1": 0.36133,
+        "y1": 0.52246
+      }
+    },
+    {
+      "slot": 4,
+      "pixel": {
+        "x0": 980,
+        "y0": 450,
+        "x1": 1255,
+        "y1": 535
+      },
+      "normalised": {
+        "x0": 0.63802,
+        "y0": 0.43945,
+        "x1": 0.81706,
+        "y1": 0.52246
+      }
+    },
+    {
+      "slot": 5,
+      "pixel": {
+        "x0": 291,
+        "y0": 568,
+        "x1": 559,
+        "y1": 683
+      },
+      "normalised": {
+        "x0": 0.18945,
+        "y0": 0.55469,
+        "x1": 0.36393,
+        "y1": 0.66699
+      }
+    },
+    {
+      "slot": 6,
+      "pixel": {
+        "x0": 975,
+        "y0": 568,
+        "x1": 1289,
+        "y1": 683
+      },
+      "normalised": {
+        "x0": 0.63477,
+        "y0": 0.55469,
+        "x1": 0.83919,
+        "y1": 0.66699
+      }
+    }
+  ],
+  "coverageMask": "docs/art/production/battle/field-floor-coverage-mask.png",
+  "verifiedBy": "scripts/validate-battle-composite-integrity.py (SLOTS check)"
+}

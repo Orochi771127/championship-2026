@@ -11,6 +11,8 @@ This supersedes any batch plan drawn against the old 752-unit registry.
 | `docs/art/ART_ASSET_REGISTRY.json` | 1,248 decision units — the work list |
 | `docs/art/ART_PRODUCTION_CROSSWALK.json` | 1,248 production records, batch assignments |
 | `docs/art/ROM_ART_CENSUS.json` | ROM ground truth: every art family, its files, sizes, formats |
+| `docs/art/BM00_REPAINT_SPEC.md` | Battle: how to re-cut the shared layer's matte, what to change stylistically, and the slot constraint |
+| `docs/art/BATTLE_FIELD_GEOMETRY_CONSTRAINT.json` | The six canonical slot boxes and the floor region a background must cover |
 
 ## Scope split
 
@@ -143,6 +145,15 @@ is the state R5 shipped in.
 The `CHROMA` baseline is ROM-derived, in
 `docs/art/BATTLE_FIELD_ORIGINAL_COLOR_BASELINE.json` — aggregate statistics only
 (two scalars per field), rebuilt with `npm run art:battle:baseline:build`.
+
+The full repaint specification — two-backdrop matting, the colour-count and value
+targets measured against the original, per-scene grading, the contact-shadow layer,
+and how to feed the slot constraint to generation — is
+`docs/art/BM00_REPAINT_SPEC.md`. Regenerate the constraint whenever BM00 changes:
+
+```bash
+python scripts/build-battle-field-geometry-constraint.py
+```
 
 ### Painterly is not the same as desaturated
 
