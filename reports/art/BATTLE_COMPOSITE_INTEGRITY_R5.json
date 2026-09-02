@@ -1,0 +1,284 @@
+{
+  "batchId": "ART-BATTLE-HUMAN-PAINT-STATIC-R5-2026-09-02",
+  "sharedLayer": "docs/art/production/battle/human-paint-migration-r4/review/layers/field-bm00-00-shared-layer-human-paint.png",
+  "thresholds": {
+    "matteEdgeExcessMax": 12.0,
+    "haloMax": 12.0,
+    "slotFloorDeMax": 20.0,
+    "adaptationMinSpread": 3.0,
+    "groundingMinDrop": 4.0,
+    "chromaRatioMin": 0.8
+  },
+  "shared": [
+    {
+      "check": "MATTE",
+      "metric": "edge luma minus local body luma",
+      "value": 33.8,
+      "threshold": 12.0,
+      "passed": false,
+      "detail": "edge luma 198.3 vs local body 149.1. A positive excess means the cutout kept a lighter authoring backdrop."
+    }
+  ],
+  "perField": [
+    {
+      "field": "bm01",
+      "checks": [
+        {
+          "check": "HALO",
+          "metric": "edge band luma minus background beyond",
+          "value": 25.1,
+          "threshold": 12.0,
+          "passed": false
+        },
+        {
+          "check": "SLOTS",
+          "metric": "worst of 6 slots, dE to arena-centre floor",
+          "value": 23.1,
+          "threshold": 20.0,
+          "passed": false,
+          "detail": "slot1 dE 23.1"
+        },
+        {
+          "check": "GROUNDING",
+          "metric": "far-band luma minus near-band luma",
+          "value": 2.0,
+          "threshold": 4.0,
+          "passed": false
+        },
+        {
+          "check": "CHROMA",
+          "metric": "saturation as a fraction of the original field",
+          "value": 0.72,
+          "threshold": 0.8,
+          "passed": false,
+          "detail": "rebuild 51.6% vs original 71.4%"
+        }
+      ]
+    },
+    {
+      "field": "bm02",
+      "checks": [
+        {
+          "check": "HALO",
+          "metric": "edge band luma minus background beyond",
+          "value": 35.3,
+          "threshold": 12.0,
+          "passed": false
+        },
+        {
+          "check": "SLOTS",
+          "metric": "worst of 6 slots, dE to arena-centre floor",
+          "value": 26.3,
+          "threshold": 20.0,
+          "passed": false,
+          "detail": "slot1 dE 26.3"
+        },
+        {
+          "check": "GROUNDING",
+          "metric": "far-band luma minus near-band luma",
+          "value": -6.5,
+          "threshold": 4.0,
+          "passed": false
+        },
+        {
+          "check": "CHROMA",
+          "metric": "saturation as a fraction of the original field",
+          "value": 0.62,
+          "threshold": 0.8,
+          "passed": false,
+          "detail": "rebuild 52.0% vs original 83.5%"
+        }
+      ]
+    },
+    {
+      "field": "bm05",
+      "checks": [
+        {
+          "check": "HALO",
+          "metric": "edge band luma minus background beyond",
+          "value": -2.4,
+          "threshold": 12.0,
+          "passed": true
+        },
+        {
+          "check": "SLOTS",
+          "metric": "worst of 6 slots, dE to arena-centre floor",
+          "value": 12.6,
+          "threshold": 20.0,
+          "passed": true,
+          "detail": "all slots on continuous floor"
+        },
+        {
+          "check": "GROUNDING",
+          "metric": "far-band luma minus near-band luma",
+          "value": -16.7,
+          "threshold": 4.0,
+          "passed": false
+        },
+        {
+          "check": "CHROMA",
+          "metric": "saturation as a fraction of the original field",
+          "value": 0.98,
+          "threshold": 0.8,
+          "passed": true,
+          "detail": "rebuild 19.0% vs original 19.4%"
+        }
+      ]
+    },
+    {
+      "field": "bm08",
+      "checks": [
+        {
+          "check": "HALO",
+          "metric": "edge band luma minus background beyond",
+          "value": 64.2,
+          "threshold": 12.0,
+          "passed": false
+        },
+        {
+          "check": "SLOTS",
+          "metric": "worst of 6 slots, dE to arena-centre floor",
+          "value": 12.4,
+          "threshold": 20.0,
+          "passed": true,
+          "detail": "all slots on continuous floor"
+        },
+        {
+          "check": "GROUNDING",
+          "metric": "far-band luma minus near-band luma",
+          "value": -1.7,
+          "threshold": 4.0,
+          "passed": false
+        },
+        {
+          "check": "CHROMA",
+          "metric": "saturation as a fraction of the original field",
+          "value": 0.41,
+          "threshold": 0.8,
+          "passed": false,
+          "detail": "rebuild 30.5% vs original 74.1%"
+        }
+      ]
+    },
+    {
+      "field": "bm09",
+      "checks": [
+        {
+          "check": "HALO",
+          "metric": "edge band luma minus background beyond",
+          "value": 8.3,
+          "threshold": 12.0,
+          "passed": true
+        },
+        {
+          "check": "SLOTS",
+          "metric": "worst of 6 slots, dE to arena-centre floor",
+          "value": 27.3,
+          "threshold": 20.0,
+          "passed": false,
+          "detail": "slot2 dE 27.3"
+        },
+        {
+          "check": "GROUNDING",
+          "metric": "far-band luma minus near-band luma",
+          "value": -4.9,
+          "threshold": 4.0,
+          "passed": false
+        },
+        {
+          "check": "CHROMA",
+          "metric": "saturation as a fraction of the original field",
+          "value": 1.2,
+          "threshold": 0.8,
+          "passed": true,
+          "detail": "rebuild 51.4% vs original 42.8%"
+        }
+      ]
+    },
+    {
+      "field": "bm10",
+      "checks": [
+        {
+          "check": "HALO",
+          "metric": "edge band luma minus background beyond",
+          "value": 11.4,
+          "threshold": 12.0,
+          "passed": true
+        },
+        {
+          "check": "SLOTS",
+          "metric": "worst of 6 slots, dE to arena-centre floor",
+          "value": 35.8,
+          "threshold": 20.0,
+          "passed": false,
+          "detail": "slot1 dE 35.8; slot2 dE 28.1"
+        },
+        {
+          "check": "GROUNDING",
+          "metric": "far-band luma minus near-band luma",
+          "value": -6.4,
+          "threshold": 4.0,
+          "passed": false
+        },
+        {
+          "check": "CHROMA",
+          "metric": "saturation as a fraction of the original field",
+          "value": 0.55,
+          "threshold": 0.8,
+          "passed": false,
+          "detail": "rebuild 37.1% vs original 67.2%"
+        }
+      ]
+    },
+    {
+      "field": "bm11",
+      "checks": [
+        {
+          "check": "HALO",
+          "metric": "edge band luma minus background beyond",
+          "value": 34.5,
+          "threshold": 12.0,
+          "passed": false
+        },
+        {
+          "check": "SLOTS",
+          "metric": "worst of 6 slots, dE to arena-centre floor",
+          "value": 10.6,
+          "threshold": 20.0,
+          "passed": true,
+          "detail": "all slots on continuous floor"
+        },
+        {
+          "check": "GROUNDING",
+          "metric": "far-band luma minus near-band luma",
+          "value": 3.4,
+          "threshold": 4.0,
+          "passed": false
+        },
+        {
+          "check": "CHROMA",
+          "metric": "saturation as a fraction of the original field",
+          "value": 0.28,
+          "threshold": 0.8,
+          "passed": false,
+          "detail": "rebuild 21.8% vs original 79.0%"
+        }
+      ]
+    },
+    {
+      "field": "(batch)",
+      "checks": [
+        {
+          "check": "ADAPTATION",
+          "metric": "mean dE of the composited ring from its cross-field average",
+          "value": 0.0,
+          "threshold": 3.0,
+          "passed": false,
+          "detail": "Zero means one bitmap was pasted into every scene with no per-scene grading."
+        }
+      ]
+    }
+  ],
+  "failures": 22,
+  "passed": false
+}

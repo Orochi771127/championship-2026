@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "generator": "scripts/build-battle-original-color-baseline.py",
+  "authority": "ROM_BINARY_GROUND_TRUTH",
+  "rightsNote": "Aggregate statistics only — two scalars per field. No palette entries, tile data, indices or pixels are stored, and these values cannot reconstruct any.",
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "method": "Each field's NCGR tile payload decoded through its own NCLR palette, then averaged per pixel so the result is area-weighted over authored art.",
+  "fields": {
+    "bm01": {
+      "originalFunction": "BATTLE_NORMAL",
+      "meanLuminance": 112.63,
+      "meanSaturationPercent": 71.42,
+      "sourceStem": "field_bm01_01"
+    },
+    "bm02": {
+      "originalFunction": "BATTLE_GRASS",
+      "meanLuminance": 134.7,
+      "meanSaturationPercent": 83.52,
+      "sourceStem": "field_bm02_01"
+    },
+    "bm03": {
+      "originalFunction": "BATTLE_VOLCANO",
+      "meanLuminance": 89.2,
+      "meanSaturationPercent": 73.06,
+      "sourceStem": "field_bm03_01"
+    },
+    "bm04": {
+      "originalFunction": "BATTLE_ISLAND",
+      "meanLuminance": 126.11,
+      "meanSaturationPercent": 75.44,
+      "sourceStem": "field_bm04_01"
+    },
+    "bm05": {
+      "originalFunction": "BATTLE_SOUTHPOLE",
+      "meanLuminance": 198.85,
+      "meanSaturationPercent": 19.41,
+      "sourceStem": "field_bm05_01"
+    },
+    "bm06": {
+      "originalFunction": "BATTLE_DESERT",
+      "meanLuminance": 219.71,
+      "meanSaturationPercent": 55.01,
+      "sourceStem": "field_bm06_01"
+    },
+    "bm07": {
+      "originalFunction": "BATTLE_CYBERSPACE",
+      "meanLuminance": 67.39,
+      "meanSaturationPercent": 69.74,
+      "sourceStem": "field_bm07_01"
+    },
+    "bm08": {
+      "originalFunction": "BATTLE_HELL",
+      "meanLuminance": 53.78,
+      "meanSaturationPercent": 74.12,
+      "sourceStem": "field_bm08_01"
+    },
+    "bm09": {
+      "originalFunction": "BATTLE_COLOSSEUM",
+      "meanLuminance": 140.01,
+      "meanSaturationPercent": 42.8,
+      "sourceStem": "field_bm09_01"
+    },
+    "bm10": {
+      "originalFunction": "BATTLE_STADIUM",
+      "meanLuminance": 115.45,
+      "meanSaturationPercent": 67.21,
+      "sourceStem": "field_bm10_01"
+    },
+    "bm11": {
+      "originalFunction": "BATTLE_DOMESTADIUM",
+      "meanLuminance": 121.53,
+      "meanSaturationPercent": 79.04,
+      "sourceStem": "field_bm11_01"
+    }
+  },
+  "interfacePalettes": {
+    "battle_bg_sub": {
+      "meanLuminance": 125.74,
+      "meanSaturationPercent": 88.44,
+      "usedColours": 256
+    },
+    "battle_obj_main": {
+      "meanLuminance": 159.8,
+      "meanSaturationPercent": 66.21,
+      "usedColours": 12
+    },
+    "battle_sub_bar": {
+      "meanLuminance": 131.16,
+      "meanSaturationPercent": 60.92,
+      "usedColours": 209
+    },
+    "game_moji_main": {
+      "meanLuminance": 162.36,
+      "meanSaturationPercent": 53.59,
+      "usedColours": 27
+    },
+    "start_back_bg_main": {
+      "meanLuminance": 122.38,
+      "meanSaturationPercent": 84.45,
+      "usedColours": 206
+    },
+    "title_bg_main": {
+      "meanLuminance": 143.81,
+      "meanSaturationPercent": 64.11,
+      "usedColours": 256
+    },
+    "training_main": {
+      "meanLuminance": 153.76,
+      "meanSaturationPercent": 56.11,
+      "usedColours": 60
+    },
+    "zukan_bg2_sub": {
+      "meanLuminance": 151.16,
+      "meanSaturationPercent": 57.98,
+      "usedColours": 156
+    }
+  },
+  "aggregate": {
+    "meanLuminance": 125.4,
+    "meanSaturationPercent": 64.62
+  }
+}

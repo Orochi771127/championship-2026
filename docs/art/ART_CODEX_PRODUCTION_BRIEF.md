@@ -116,6 +116,53 @@ All 1,248 units are `ROM_COPYRIGHTED_REFERENCE` / `ORIGINAL_REPLACEMENT_REQUIRED
 - Promotion requires licence evidence **and** human visual approval **and** runtime QA.
   Three separate gates; none implies another.
 
+## Battle field composites: the integrity gate
+
+```bash
+npm run art:battle:integrity
+```
+
+Provenance tests are not quality tests. The R5 batch passed 12/12 of its own tests
+while shipping a white halo on every silhouette edge and four of the six canonical
+combat slots painted onto scenery, because none of those tests looked at the
+composite. This gate does. Six checks:
+
+| Check | What it measures | Threshold |
+|---|---|---|
+| `MATTE` | shared-layer edge luma vs its own local body luma | ≤ 12 |
+| `HALO` | per field: edge band vs background beyond it | ≤ 12 |
+| `SLOTS` | each canonical standing slot vs the arena-centre floor | dE ≤ 20 |
+| `ADAPTATION` | spread of the composited ring's colour across fields | ≥ 3 |
+| `GROUNDING` | luminance drop from far band to the band at the silhouette | ≥ 4 |
+| `CHROMA` | saturation as a fraction of the original ROM field | ≥ 0.80 |
+
+`SLOTS` is gameplay, not taste — a slot on scenery puts a character inside a wall.
+`ADAPTATION` at exactly 0 means one bitmap was alpha-pasted into every scene, which
+is the state R5 shipped in.
+
+The `CHROMA` baseline is ROM-derived, in
+`docs/art/BATTLE_FIELD_ORIGINAL_COLOR_BASELINE.json` — aggregate statistics only
+(two scalars per field), rebuilt with `npm run art:battle:baseline:build`.
+
+### Painterly is not the same as desaturated
+
+The brief to make the art less mechanical and more hand-drawn was right, and the
+backgrounds did move. But that move also drained the colour: across the seven R5
+fields saturation fell to 60% of the original, and on BM11 to 28%. Those are
+independent axes. The original YDIJ art is simultaneously high-chroma *and*
+hand-drawn — a 2008 DS title averaging 64.6% saturation.
+
+What actually reads as mechanical is brushwork, not chroma: uniform outline weight,
+evenly stamped repeating texture, symmetrical highlights, smooth gradient bevels,
+and edges that all terminate the same way. Fix those and keep the colour energy.
+
+Note where the mechanical feel now lives: the backgrounds were migrated, but the
+shared BM00 ring was not. It still carries uniform outlines, a repeating stamped
+stone pattern, smooth bevels and glossy faceted gems — and it is the most prominent
+element in the frame, shared by all eleven fields. Until BM00 itself is repainted,
+the family will keep reading as mechanical no matter how painterly the backgrounds
+become.
+
 ## Gates before you hand anything back
 
 ```bash
