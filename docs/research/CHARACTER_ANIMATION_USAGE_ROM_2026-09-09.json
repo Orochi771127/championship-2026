@@ -1,0 +1,1129 @@
+{
+  "classification": "STATIC_BINARY_READ_AND_BOUNDED_NATIVE_REPLAY",
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "stateSha256": "b2678ceba20b2777cccc9b39cb767509454255293066648039fce33b1d709842",
+  "inventory": [
+    {
+      "folder": "digimon/",
+      "side": "main",
+      "banks": 224,
+      "sequenceCounts": {
+        "2": 8,
+        "40": 216
+      }
+    },
+    {
+      "folder": "digimon/",
+      "side": "sub",
+      "banks": 224,
+      "sequenceCounts": {
+        "2": 8,
+        "13": 216
+      }
+    },
+    {
+      "folder": "db_digimon/",
+      "side": "main",
+      "banks": 224,
+      "sequenceCounts": {
+        "1": 8,
+        "4": 216
+      }
+    },
+    {
+      "folder": "db_digimon/",
+      "side": "sub",
+      "banks": 224,
+      "sequenceCounts": {
+        "1": 8,
+        "3": 216
+      }
+    }
+  ],
+  "observations": {
+    "emulatedFrames": 720,
+    "repeatedTraceIdentical": true,
+    "residentSamples": 1374,
+    "stateRequests": [
+      {
+        "tick": 9,
+        "resident": "022e2d40",
+        "actor": "022e2604",
+        "species": 21,
+        "state": 9,
+        "requested": 1,
+        "slow": 0,
+        "caller": "02119898"
+      },
+      {
+        "tick": 59,
+        "resident": "022e6a20",
+        "actor": "022e62e4",
+        "species": 13,
+        "state": 1,
+        "requested": 0,
+        "slow": 0,
+        "caller": "02117c5c"
+      },
+      {
+        "tick": 69,
+        "resident": "022e2d40",
+        "actor": "022e2604",
+        "species": 21,
+        "state": 1,
+        "requested": 0,
+        "slow": 0,
+        "caller": "02117c5c"
+      },
+      {
+        "tick": 75,
+        "resident": "022e2d40",
+        "actor": "022e2604",
+        "species": 21,
+        "state": 9,
+        "requested": 1,
+        "slow": 0,
+        "caller": "02119898"
+      },
+      {
+        "tick": 105,
+        "resident": "022e6a20",
+        "actor": "022e62e4",
+        "species": 13,
+        "state": 16,
+        "requested": 11,
+        "slow": 0,
+        "caller": "0211ba00"
+      },
+      {
+        "tick": 135,
+        "resident": "022e2d40",
+        "actor": "022e2604",
+        "species": 21,
+        "state": 1,
+        "requested": 0,
+        "slow": 0,
+        "caller": "02117c5c"
+      },
+      {
+        "tick": 148,
+        "resident": "022e2d40",
+        "actor": "022e2604",
+        "species": 21,
+        "state": 9,
+        "requested": 1,
+        "slow": 0,
+        "caller": "02119898"
+      },
+      {
+        "tick": 208,
+        "resident": "022e2d40",
+        "actor": "022e2604",
+        "species": 21,
+        "state": 1,
+        "requested": 0,
+        "slow": 0,
+        "caller": "02117c5c"
+      },
+      {
+        "tick": 256,
+        "resident": "022e2d40",
+        "actor": "022e2604",
+        "species": 21,
+        "state": 2,
+        "requested": 2,
+        "slow": 0,
+        "caller": "02117eb4"
+      },
+      {
+        "tick": 285,
+        "resident": "022e6a20",
+        "actor": "022e62e4",
+        "species": 13,
+        "state": 1,
+        "requested": 0,
+        "slow": 0,
+        "caller": "02117c5c"
+      },
+      {
+        "tick": 291,
+        "resident": "022e6a20",
+        "actor": "022e62e4",
+        "species": 13,
+        "state": 2,
+        "requested": 2,
+        "slow": 0,
+        "caller": "02117eb4"
+      },
+      {
+        "tick": 360,
+        "resident": "022e6a20",
+        "actor": "022e62e4",
+        "species": 13,
+        "state": 1,
+        "requested": 0,
+        "slow": 0,
+        "caller": "02117c5c"
+      },
+      {
+        "tick": 387,
+        "resident": "022e6a20",
+        "actor": "022e62e4",
+        "species": 13,
+        "state": 2,
+        "requested": 2,
+        "slow": 0,
+        "caller": "02117eb4"
+      },
+      {
+        "tick": 401,
+        "resident": "022e2d40",
+        "actor": "022e2604",
+        "species": 21,
+        "state": 1,
+        "requested": 0,
+        "slow": 0,
+        "caller": "02117c5c"
+      },
+      {
+        "tick": 434,
+        "resident": "022e2d40",
+        "actor": "022e2604",
+        "species": 21,
+        "state": 9,
+        "requested": 14,
+        "slow": 0,
+        "caller": "02119898"
+      },
+      {
+        "tick": 500,
+        "resident": "022e6a20",
+        "actor": "022e62e4",
+        "species": 13,
+        "state": 1,
+        "requested": 0,
+        "slow": 0,
+        "caller": "02117c5c"
+      },
+      {
+        "tick": 501,
+        "resident": "022e6a20",
+        "actor": "022e62e4",
+        "species": 13,
+        "state": 9,
+        "requested": 1,
+        "slow": 0,
+        "caller": "02119898"
+      },
+      {
+        "tick": 531,
+        "resident": "022e6a20",
+        "actor": "022e62e4",
+        "species": 13,
+        "state": 1,
+        "requested": 0,
+        "slow": 0,
+        "caller": "02117c5c"
+      },
+      {
+        "tick": 586,
+        "resident": "022e6a20",
+        "actor": "022e62e4",
+        "species": 13,
+        "state": 2,
+        "requested": 2,
+        "slow": 0,
+        "caller": "02117eb4"
+      },
+      {
+        "tick": 674,
+        "resident": "022e2d40",
+        "actor": "022e2604",
+        "species": 21,
+        "state": 1,
+        "requested": 0,
+        "slow": 0,
+        "caller": "02117c5c"
+      },
+      {
+        "tick": 691,
+        "resident": "022e6a20",
+        "actor": "022e62e4",
+        "species": 13,
+        "state": 1,
+        "requested": 0,
+        "slow": 0,
+        "caller": "02117c5c"
+      },
+      {
+        "tick": 701,
+        "resident": "022e2d40",
+        "actor": "022e2604",
+        "species": 21,
+        "state": 9,
+        "requested": 1,
+        "slow": 0,
+        "caller": "02119898"
+      }
+    ],
+    "residentSequences": [
+      {
+        "species": 13,
+        "sequence": 0,
+        "state": 1,
+        "samples": 165
+      },
+      {
+        "species": 13,
+        "sequence": 1,
+        "state": 9,
+        "samples": 30
+      },
+      {
+        "species": 13,
+        "sequence": 2,
+        "state": 2,
+        "samples": 287
+      },
+      {
+        "species": 13,
+        "sequence": 11,
+        "state": 16,
+        "samples": 180
+      },
+      {
+        "species": 21,
+        "sequence": 0,
+        "state": 1,
+        "samples": 127
+      },
+      {
+        "species": 21,
+        "sequence": 1,
+        "state": 9,
+        "samples": 200
+      },
+      {
+        "species": 21,
+        "sequence": 2,
+        "state": 2,
+        "samples": 145
+      },
+      {
+        "species": 21,
+        "sequence": 14,
+        "state": 9,
+        "samples": 240
+      }
+    ]
+  },
+  "sampleBanks": [
+    {
+      "path": "digimon/m201_agumon_main.nanr",
+      "sha256": "d39d0ef49cb66d055f5944e9923655299a17131ddb2b1dcf729f48c18a5d59f7",
+      "sequences": [
+        {
+          "id": 0,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              0,
+              31
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        },
+        {
+          "id": 1,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              2,
+              37
+            ],
+            [
+              3,
+              28
+            ]
+          ]
+        },
+        {
+          "id": 2,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              4,
+              15
+            ],
+            [
+              5,
+              12
+            ]
+          ]
+        },
+        {
+          "id": 3,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              6,
+              7
+            ],
+            [
+              7,
+              7
+            ]
+          ]
+        },
+        {
+          "id": 4,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              8,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 5,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              9,
+              7
+            ]
+          ]
+        },
+        {
+          "id": 6,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              10,
+              7
+            ]
+          ]
+        },
+        {
+          "id": 7,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              11,
+              15
+            ],
+            [
+              12,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 8,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              13,
+              15
+            ],
+            [
+              14,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 9,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              15,
+              15
+            ],
+            [
+              16,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 10,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              17,
+              15
+            ],
+            [
+              18,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 11,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              19,
+              5
+            ],
+            [
+              20,
+              6
+            ]
+          ]
+        },
+        {
+          "id": 12,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              21,
+              37
+            ],
+            [
+              22,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 13,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              23,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 14,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              24,
+              25
+            ],
+            [
+              25,
+              31
+            ]
+          ]
+        },
+        {
+          "id": 15,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              26,
+              31
+            ]
+          ]
+        },
+        {
+          "id": 16,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              27,
+              31
+            ],
+            [
+              28,
+              22
+            ]
+          ]
+        },
+        {
+          "id": 17,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              29,
+              37
+            ],
+            [
+              30,
+              28
+            ]
+          ]
+        },
+        {
+          "id": 18,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              31,
+              15
+            ],
+            [
+              32,
+              12
+            ]
+          ]
+        },
+        {
+          "id": 19,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              33,
+              7
+            ],
+            [
+              34,
+              7
+            ]
+          ]
+        },
+        {
+          "id": 20,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              35,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 21,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              36,
+              5
+            ],
+            [
+              37,
+              6
+            ]
+          ]
+        },
+        {
+          "id": 22,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              38,
+              37
+            ],
+            [
+              39,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 23,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              40,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 24,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              41,
+              25
+            ],
+            [
+              42,
+              31
+            ]
+          ]
+        },
+        {
+          "id": 25,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              43,
+              31
+            ]
+          ]
+        },
+        {
+          "id": 26,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              44,
+              6
+            ],
+            [
+              45,
+              3
+            ],
+            [
+              46,
+              9
+            ],
+            [
+              47,
+              9
+            ]
+          ]
+        },
+        {
+          "id": 27,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              48,
+              2
+            ]
+          ]
+        },
+        {
+          "id": 28,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              49,
+              15
+            ],
+            [
+              50,
+              21
+            ]
+          ]
+        },
+        {
+          "id": 29,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              51,
+              11
+            ],
+            [
+              52,
+              16
+            ]
+          ]
+        },
+        {
+          "id": 30,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              53,
+              10
+            ],
+            [
+              54,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 31,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              55,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 32,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              56,
+              7
+            ]
+          ]
+        },
+        {
+          "id": 33,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              57,
+              31
+            ],
+            [
+              58,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 34,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              59,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 35,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              60,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 36,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              61,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 37,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              62,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 38,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              63,
+              7
+            ]
+          ]
+        },
+        {
+          "id": 39,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              64,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "digimon/m201_agumon_sub.nanr",
+      "sha256": "b92cb8a9fb90d40dfdfd950d6cee2dd81b4b75bc58f9c4417a31bf5a81aebe11",
+      "sequences": [
+        {
+          "id": 0,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              0,
+              31
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        },
+        {
+          "id": 1,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              2,
+              37
+            ],
+            [
+              3,
+              28
+            ]
+          ]
+        },
+        {
+          "id": 2,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              4,
+              7
+            ]
+          ]
+        },
+        {
+          "id": 3,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              5,
+              7
+            ]
+          ]
+        },
+        {
+          "id": 4,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              6,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 5,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              7,
+              31
+            ]
+          ]
+        },
+        {
+          "id": 6,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              8,
+              2
+            ]
+          ]
+        },
+        {
+          "id": 7,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              9,
+              15
+            ],
+            [
+              10,
+              21
+            ]
+          ]
+        },
+        {
+          "id": 8,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              11,
+              11
+            ],
+            [
+              12,
+              16
+            ]
+          ]
+        },
+        {
+          "id": 9,
+          "type": 65536,
+          "mode": 2,
+          "loopStart": 0,
+          "frames": [
+            [
+              13,
+              10
+            ],
+            [
+              14,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 10,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              15,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 11,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              16,
+              37
+            ]
+          ]
+        },
+        {
+          "id": 12,
+          "type": 65536,
+          "mode": 1,
+          "loopStart": 0,
+          "frames": [
+            [
+              17,
+              37
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "livePlayerCheck": {
+    "classification": "LIVE_FRAME_TRANSITION_DIFFERENTIAL",
+    "checkedTransitions": 1352,
+    "mismatches": [],
+    "boundaries": [
+      "Same-sequence adjacent original frames only; requests and state selection are excluded.",
+      "No browser texture or rendering assertion."
+    ]
+  },
+  "sourceFiles": [
+    {
+      "path": "R:\\Projects\\Championship2026\\_archive\\character-animation-2026-09-09\\day-visual\\usage.json",
+      "sha256": "f9587d97dfcbde9ac5435f1a22a7e673073c37abc1ccf335a78077b9f2264ae4"
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\_archive\\character-animation-2026-09-09\\day-visual\\banks.json",
+      "sha256": "8743d5fe1705806f94c57c9072beabd62e7d8cef1f7c0b0febbef5845a503501"
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\_archive\\character-animation-2026-09-09\\animation-cpu.json",
+      "sha256": "0854363f6eeab2f55c306d492d6daaf42a8f2ad71dfad1b5ebd25699e4b94f22"
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\_archive\\character-animation-2026-09-09\\live-player-check.json",
+      "sha256": "b8fe8ca9f3f58bf60dce2934f32cfaf2504b7ead316fbf8678c4695c6258b140"
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\_archive\\character-animation-2026-09-09\\original-raising-12s.gif",
+      "sha256": "7dc20a8575afef8bc2acbacf3a250022cb088fd4d9f785831159ec0bd689d7f2"
+    }
+  ],
+  "boundaries": [
+    "No player input and no RAM modification during this checkpoint replay; provenance of earlier checkpoint preparation is not re-established.",
+    "Observed Raising residents only. Other common animator objects are excluded from resident counts.",
+    "All 448 gameplay banks structurally inspected; not all 224 entries live observed.",
+    "No claim that every sequence has a verified semantic name, trigger, or browser integration.",
+    "GIF samples every six emulated frames, assuming 60 Hz for preview; not a performance benchmark.",
+    "Original imagery and executable bytes remain outside the product repository."
+  ]
+}
