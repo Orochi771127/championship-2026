@@ -8,6 +8,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const { chromium } = require("playwright");
+const { openFreshGame, openHunt, selectEnterableGate, RAISING_HOME, GATE_CONFIRM } = require("./championship-browser-opening.cjs");
 
 const BASE_URL = process.env.CHAMPIONSHIP_QA_URL || "http://127.0.0.1:8732/championship.html";
 const CHROME = process.env.CHAMPIONSHIP_CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe";
@@ -100,18 +101,14 @@ async function walk(browser, viewport, { capture }) {
     if (capture) await page.screenshot({ path: path.join(SCREENSHOTS, `vs2-${step}-${name(viewport)}.png`) });
   };
 
-  await page.goto(BASE_URL, { waitUntil: "networkidle" });
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload({ waitUntil: "networkidle" });
-
-  await page.click("#cm-new-game");
+  // Title LOGIN plus the full New Game opening; see championship-browser-opening.
+  await openFreshGame(page, BASE_URL);
   await page.waitForSelector("#cm-root.int-rh2-root", { timeout: 20000 });
-  await page.waitForSelector(".cm-vs2-entry", { timeout: 20000 });
+  await page.waitForSelector(RAISING_HOME, { timeout: 20000 });
   await page.waitForTimeout(500);
   await shot("1-raising");
 
-  await page.click(".cm-vs2-entry");
-  await page.waitForSelector("[data-screen='GATE_SELECT']", { timeout: 15000 });
+  await openHunt(page);
   await page.waitForFunction(() => document.getElementById("cm-root")?.dataset.gatePresentation === "THREE_BOUNDED_WORLD_MODE");
   const gates = await page.locator(".cm-vs2-gate").count();
   assert.equal(gates, 16, `${name(viewport)}: gate count`);
@@ -123,7 +120,9 @@ async function walk(browser, viewport, { capture }) {
   assert.equal(await confirm.isDisabled(), true, `${name(viewport)}: confirm must start gated`);
   const visibleWorldNodes = page.locator(".cm-vs2-gate3d__node-hit:not([hidden])");
   assert.ok(await visibleWorldNodes.count() >= 1, `${name(viewport)}: no selectable 3D nodes are visible`);
-  await visibleWorldNodes.first().click();
+  // A new tamer holds 0 Bits at rank 0, so most destinations are correctly
+  // refused; the confirm enables on one this player may actually enter.
+  await selectEnterableGate(page);
   assert.equal(await confirm.isDisabled(), false, `${name(viewport)}: confirm must enable on selection`);
   screens.push(await auditPresentationLayout(page, viewport, "GATE_SELECT"));
   await shot("2-gates");
@@ -159,12 +158,15 @@ async function walk(browser, viewport, { capture }) {
   const fallback = await page.evaluate(() => document.getElementById("cm-root").dataset.fieldFallback ?? "none");
   assert.equal(fallback, "none", `${name(viewport)}: the field fell back instead of rendering`);
 
+  // The eight-position placeholder rail is Developer Mode evidence now: Player
+  // Mode shows the recovered Hunt tools instead, so a player never meets eight
+  // disabled shells. The developer walk below still asserts the RAW_SLOT rail.
   const slots = await page.locator(".cm-vs2-slot").count();
-  const disabled = await page.locator(".cm-vs2-slot[disabled]").count();
   const rawLabels = await page.locator(".cm-vs2-slot__raw").count();
-  assert.equal(slots, 8, `${name(viewport)}: verified slot count`);
-  assert.equal(disabled, 8, `${name(viewport)}: every slot must stay disabled`);
+  const huntTools = await page.locator(".cm-hunt-tools .cm-vs2-action").count();
+  assert.equal(slots, 0, `${name(viewport)}: placeholder slots leaked into Player Mode`);
   assert.equal(rawLabels, 0, `${name(viewport)}: RAW_SLOT labels leaked into Player Mode`);
+  assert.ok(huntTools >= 1, `${name(viewport)}: Player Mode has no Hunt tools`);
   screens.push(await auditPresentationLayout(page, viewport, "HUNT_FIELD"));
   await shot("4-field");
 
@@ -176,7 +178,7 @@ async function walk(browser, viewport, { capture }) {
   await shot("5-explored");
 
   await page.locator(".cm-vs2-hud__exit").click();
-  await page.waitForSelector(".cm-vs2-entry", { timeout: 15000 });
+  await page.waitForSelector(RAISING_HOME, { timeout: 15000 });
   await page.waitForTimeout(600);
   const canvasesAfter = await page.locator("canvas").count();
   assert.equal(canvasesAfter, 1, `${name(viewport)}: the stage was rebuilt instead of re-attached`);
@@ -189,7 +191,7 @@ async function walk(browser, viewport, { capture }) {
   await context.close();
   return {
     viewport: name(viewport), captured: capture, gates,
-    toolbarSlots: slots, toolbarSlotsBound: slots - disabled,
+    placeholderSlots: slots, huntTools,
     canvasesDuringHunt: canvases, canvasesAfterReturn: canvasesAfter, screens
   };
 }
@@ -199,17 +201,13 @@ async function verifyDeveloperMode(browser) {
   const context = await browser.newContext({ viewport, deviceScaleFactor: 1 });
   const page = await context.newPage();
   const join = BASE_URL.includes("?") ? "&" : "?";
-  await page.goto(`${BASE_URL}${join}presentation=developer`, { waitUntil: "networkidle" });
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload({ waitUntil: "networkidle" });
-  await page.click("#cm-new-game");
-  await page.waitForSelector(".cm-vs2-entry", { timeout: 20000 });
-  await page.click(".cm-vs2-entry");
-  await page.waitForSelector("[data-screen='GATE_SELECT']", { timeout: 15000 });
+  await openFreshGame(page, `${BASE_URL}${join}presentation=developer`);
+  await page.waitForSelector(RAISING_HOME, { timeout: 20000 });
+  await openHunt(page);
   assert.equal(await page.locator("#cm-root").getAttribute("data-presentation-mode"), DEVELOPER_MODE);
   assert.ok(await page.locator(".cm-vs2-evidence").count() >= 1, "developer Gate evidence missing");
-  await page.locator(".cm-vs2-gate").nth(2).click();
-  await page.locator(".cm-vs2-footer .cm-vs2-action--primary").click();
+  await selectEnterableGate(page, { selector: ".cm-vs2-gate" });
+  await page.locator(GATE_CONFIRM).click();
   // No companion step: an empty loadout is permitted, so BEGIN follows directly.
   await page.waitForSelector("[data-screen='HUNT_LOADOUT']", { timeout: 15000 });
   await page.locator(".cm-vs2-footer .cm-vs2-action--primary").click();

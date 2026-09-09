@@ -74,7 +74,14 @@ test("only the authorized source families are present", () => {
 
   // Stated in both directions, so the VS4 shop directory is a fact the suite asserts
   // rather than an absence it happens to tolerate.
-  const authorized = ["app", "battle", "cage", "contracts", "database", "field", "gate", "hunt", "kernel", "modes", "presentation", "r2", "raising", "shop"];
+  // `time` joined on 2026-09-03 for the world clock: the 4/8/24/60/400 cascade
+  // read from ARM9 0x020C8A4C, which the original's status bar draws and the
+  // title-event schedule slots divide against. Pure arithmetic over a plain
+  // reading — it owns no ticker, no state and no renderer.
+    // `text` joined on 2026-09-05: product-authored display copy, layered on top
+  // of the ROM catalogs and keyed by their record indices. It holds no ROM
+  // evidence and never replaces a transcription.
+  const authorized = ["app", "battle", "cage", "contracts", "database", "field", "gate", "hunt", "kernel", "modes", "presentation", "r2", "raising", "shop", "text", "time"];
   const actual = fs.readdirSync(path.join(root, "src/championship"), { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)
@@ -83,15 +90,65 @@ test("only the authorized source families are present", () => {
   assert.deepEqual(
     fs.readdirSync(path.join(root, "src/championship/battle")).sort(),
     [
+      "battleActionApplication.js",
       "battleActionResource.js",
       "battleActionSelection.js",
+      "battleCandidateBuckets.js",
       "battleCatalogs.js",
       "battleContactTargeting.js",
+      "battleCreatureBuild.js",
       "battleDamageCore.js",
+      "battleDamageInputs.js",
       "battleDamageResolver.js",
+      "battleEconomyTransaction.js",
+      // Owner R10: numeric 2D resource banks on existing battle memory.
+      "battleEffectActors.js",
+      "battleFrameLoop.js",
+      // Owner 2026-09-07: original hit writers and notification 15/18..21,
+      // attached to the existing session/actor authority.
+      "battleHitRuntime.js",
+      "battleHitState.js",
+      "battleImpactEffects.js",
+      "battleInFlight.js",
+      "battleLaunchPool.js",
+      "battleMatchSelection.js",
+      "battleMoveBuckets.js",
+      "battleMoveScript.js",
+      "battleMoveScriptRun.js",
+      // Owner continuation 2026-09-07: remaining 18 bodies, fixed-point native
+      // math, and per-invocation byte memory. No new store/renderer/scene owner.
+      "battleNativeActors.js",
+      "battleNativeLaunch.js",
+      "battleNativeMath.js",
+      "battleNativeMemory.js",
+      // Owner R9: normal target/approach/launch bodies on the existing session.
+      "battleNormalFlow.js",
+      "battleNormalRuntime.js",
+      "battleOutcome.js",
+      "battlePresentationHost.js",
+      "battleProjectileContact.js",
+      "battleRemainingNatives.js",
       "battleRewardTransaction.js",
+      "battleRngChannel.js",
+      "battleScriptNatives.js",
+      "battleScriptVm.js",
+      "battleSession.js",
+      "battleSoundEvents.js",
+      "battleSpecialPrelude.js", // Owner 2026-09-07: CPU-checked special prelude slice
+      "battleSpriteCellBox.js",
+      "battleStateGraph.js",
+      "battleStateMachine.js",
       "battleStatus.js",
-      "battleSupport.js"
+      "battleSupport.js",
+      "battleTurnStates.js",
+      // Joined on 2026-09-09 with the title/championship writers: OVL8 0210D1C0
+      // category 1 and 0210D3EC category 0, plus the 0210E328 rank commit,
+      // checked against the CPU oracle. It writes progression only, and changes
+      // neither the per-match payout nor any screen.
+      "nativeTitleProgression.js",
+      // Joined on 2026-09-04 with the fixture board: the season/day columns of the
+      // title table at ARM9 0x020CD004, matched by the ROM's own scan at 0x02089230.
+      "titleEventSchedule.js"
     ]
   );
 });
@@ -119,6 +176,26 @@ test("product trees contain no ROM, Nitro, decoded, or forensic payload", () => 
   const payloads = [...walk("src"), ...walk("assets")].filter((file) => forbidden.test(file)).map(relative);
   assert.deepEqual(payloads, []);
   assert.deepEqual(walk("research/original-evidence").map(relative), ["research/original-evidence/README.md"]);
+});
+
+test("exactly one cartridge segment is carried, and it is the authorized one", () => {
+  // The rule above matches on extensions, so a .json full of bytecode slips past
+  // it and the title quietly becomes untrue. One such file exists: the battle
+  // script segment inside battle-scripts.r1.json, carried since the B2 pass and
+  // ratified by the Owner on 2026-09-02, without which the move scripts would
+  // have to be hand-written across 22,032 reachable instructions. Naming it here
+  // keeps the exception visible and keeps a second one from arriving unnoticed.
+  const AUTHORIZED = "src/data/championship/catalogs/battle-scripts.r1.json";
+  const encoded = codeFiles("src")
+    .filter((file) => /"base64"\s*:/.test(fs.readFileSync(file, "utf8")))
+    .map(relative);
+  assert.deepEqual(encoded, [AUTHORIZED], "one carried segment, and no second copy");
+
+  const catalog = JSON.parse(fs.readFileSync(path.join(root, AUTHORIZED), "utf8"));
+  assert.equal(catalog.blob.module, "ovl19");
+  assert.equal(catalog.blob.byteLength, 63748);
+  assert.equal(catalog.blob.encoding, "base64");
+  assert.equal(Buffer.from(catalog.blob.base64, "base64").length, catalog.blob.byteLength);
 });
 
 test("one save key, one persistent writer, one Pixi bootstrap and no second ticker", () => {

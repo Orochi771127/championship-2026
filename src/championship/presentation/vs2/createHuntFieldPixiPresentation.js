@@ -3,8 +3,8 @@
 // The world is 2048x2048 px and the viewport is roughly 390x780. This module
 // renders a CAMERA WINDOW over that world: a world container translated by the
 // camera origin, with modular terrain chunks built once and reused as they enter
-// and leave view. It never scales the world down to fit a screen, because the
-// large modular field is the preserved structure.
+// and leave view. The coordinate adapter preserves 256 native horizontal pixels
+// while portrait height changes the camera window; it never fits the whole map.
 //
 // The logical grid stays hidden. Blocked tiles are drawn edge to edge so they
 // merge into masses; open tiles are drawn not at all. There are no tile lines, no
@@ -13,7 +13,7 @@
 // Every visual here is product-authored neutral technical art. No ROM pixel is
 // loaded, and none of it is a claim about original terrain, props or creatures.
 
-const DRAG_THRESHOLD_PX = 5;
+import { createHuntFieldPointer } from "./huntFieldPointer.js";
 const ACTOR_BODY_RADIUS = 8;
 const TEMPORARY_ART_ID = "art:hunt_field:vs2:temporary-signal-grove-kit";
 
@@ -44,7 +44,9 @@ function assertDependencies(stage, source) {
     throw new TypeError("The Hunt field requires the Championship Pixi stage");
   }
   if (!source || typeof source.field?.getView !== "function" || typeof source.field?.tick !== "function"
-    || typeof source.intents?.moveTo !== "function") {
+    || typeof source.intents?.panCamera !== "function"
+    || typeof source.intents?.selectWildAt !== "function"
+    || typeof source.intents?.abortEnclosureStroke !== "function") {
     throw new TypeError("The Hunt field requires the VS2 presentation source");
   }
 }
@@ -82,10 +84,14 @@ export async function mountHuntFieldPixiPresentation({
   const strokeLayer = new PIXI.Container({ label: "enclosure stroke" });
   actorLayer.sortableChildren = true;
   const strokeGraphic = new PIXI.Graphics();
+  const toolGraphic = new PIXI.Graphics();
+  const flashGraphic = new PIXI.Graphics();
+  // Technical tool feedback; native rules and geometry never read these glyphs.
+  strokeLayer.addChild(toolGraphic);
   strokeLayer.addChild(strokeGraphic);
   if (fieldArt) productionArtLayer.addChild(fieldArt.displayObject);
   world.addChild(productionArtLayer, terrainLayer, objectLayer, actorLayer, strokeLayer);
-  scene.addChild(backdrop, world);
+  scene.addChild(backdrop, world, flashGraphic);
 
   const chunkCache = new Map();
   const liveChunks = new Set();
@@ -93,7 +99,6 @@ export async function mountHuntFieldPixiPresentation({
   const wildNodes = new Map();
   let playerNode = null;
   let disposed = false;
-  let drag = null;
   let lastGateId = null;
   let backdropWidth = 0;
   let backdropHeight = 0;
@@ -215,7 +220,7 @@ export async function mountHuntFieldPixiPresentation({
   }
 
   /** Original-created temporary creature marker. Not final creature art. */
-  function createActorNode(tint, label, { player = false } = {}) {
+  function createActorNode(tint, label, { player = false, speciesId = null } = {}) {
     const node = new PIXI.Container({ label });
     const shadow = new PIXI.Graphics().ellipse(0, 4, 11, 4).fill({ color: 0x02070a, alpha: 0.48 });
     const ring = new PIXI.Graphics()
@@ -231,13 +236,16 @@ export async function mountHuntFieldPixiPresentation({
       .poly([-3, -9, 0, -12, 3, -9, 0, -6]).fill(player ? TERRAIN.gold : TERRAIN.cyan);
     node.addChild(shadow, ring, body);
     if (characterBundle) {
-      const actor = characterBundle.createActor({ side: "main", animation: "idle" });
-      actor.sprite.scale.set(0.18);
-      body.visible = false;
-      node.addChild(actor.sprite);
-      node.characterController = actor.controller;
-      node.lastCharacterX = null;
-      node.lastCharacterY = null;
+      const actor = characterBundle.createActor({ speciesId, side: "main", animation: "idle" });
+      if (actor) {
+        actor.sprite.scale.set(0.18);
+        body.visible = false;
+        node.addChild(actor.sprite);
+        node.characterController = actor.controller;
+        node.nativeFramePresenter = actor.nativeFramePresenter ?? null;
+        node.lastCharacterX = null;
+        node.lastCharacterY = null;
+      }
     }
     node.body = body;
     node.ring = ring;
@@ -268,6 +276,7 @@ export async function mountHuntFieldPixiPresentation({
     if (!playerNode) {
       playerNode = createActorNode(0xe7c36f, "companion", { player: true });
       actorLayer.addChild(playerNode);
+      playerNode.visible = false; // The original field pan has no walking avatar.
     }
     const playerMoved = playerNode.lastCharacterX !== null
       && (playerNode.lastCharacterX !== view.player.worldX || playerNode.lastCharacterY !== view.player.worldY);
@@ -288,14 +297,16 @@ export async function mountHuntFieldPixiPresentation({
     for (const wild of view.wildCreatures) {
       let node = wildNodes.get(wild.wildId);
       if (!node) {
-        node = createActorNode(0x71879b, "wild creature");
+        node = createActorNode(0x71879b, "wild creature", { speciesId: wild.speciesId });
         wildNodes.set(wild.wildId, node);
         actorLayer.addChild(node);
       }
-      node.position.set(wild.worldX, wild.worldY);
+      node.position.set(wild.worldX, wild.worldY - (wild.worldZ ?? 0));
       node.zIndex = Math.round(wild.worldY);
-      node.scale.x = wild.facing === "left" ? -1 : 1;
-      const tethered = view.enclosure?.targetWildId === wild.wildId;
+      const nativeFrame = node.nativeFramePresenter?.apply(wild.nativeAnimation ?? null);
+      node.scale.x = nativeFrame ? (nativeFrame.flipX ? -1 : 1) : (wild.facing === "left" ? -1 : 1);
+      node.scale.y = nativeFrame?.flipY ? -1 : 1;
+      const tethered = view.selectedWildId === wild.wildId;
       node.ring.clear()
         .ellipse(0, 3, 13, 6)
         .stroke({ color: tethered ? TERRAIN.gold : TERRAIN.cyan, alpha: tethered ? 0.9 : 0.16, width: tethered ? 2 : 1.2 });
@@ -304,6 +315,48 @@ export async function mountHuntFieldPixiPresentation({
 
   function syncEnclosure(view) {
     strokeGraphic.clear();
+    toolGraphic.clear();flashGraphic.clear();
+    if(view.tools){
+      for(const o of view.tools.objects??[]){
+        const g=toolGraphic,x=o.x,y=o.y;
+        if(o.kind==='WIRE'){
+          const color=o.state===5?([0x53ced6,0x53ced6,0xaf85ee,0xaf85ee,0xffe36c,0xffe36c][o.itemIndex]):o.valid?0x6cd9ba:0xf08a74;
+          g.moveTo(...o.from).lineTo(...o.to).stroke({color,width:3});
+          for(const p of [o.from,o.to])g.circle(...p,4).fill(0xfff4d2).stroke({color,width:2});
+        }else if(o.kind==='MEAT'){
+          g.ellipse(x,y+2,12,4).fill({color:0x153b3d,alpha:.2});
+          g.moveTo(x-9,y+4).lineTo(x+9,y-4).stroke({color:0xfff4d5,width:5});
+          g.ellipse(x,y-2,7+o.tier,6+o.tier).fill([0xdc9162,0xdc9162,0xa684c5,0x7daecc][o.itemIndex]).stroke({color:0x6b4944,width:1});
+        }else if(o.kind==='DECOY'){
+          g.circle(x,y,10).fill({color:0xf3bb62,alpha:o.state===1?.5:1}).stroke({color:0x855b32,width:2});
+          g.circle(x-4,y-2,2).circle(x+4,y-2,2).fill(0x40555e);
+          g.moveTo(x-5,y+6).lineTo(x+5,y+6).stroke({color:0x40555e,width:2});
+        }else if(o.kind==='LIGHT'){
+          g.circle(x,y-9,18).fill({color:0xffec86,alpha:.18});
+          g.roundRect(x-7,y-20,14,18,4).fill(0xfff29b).stroke({color:0x5294a8,width:2});
+          g.moveTo(x,y-1).lineTo(x,y+9).stroke({color:0x528294,width:4});
+        }else if(o.kind==='CAPTURE_TRAP'){
+          g.ellipse(x,y,20,11).fill({color:0x79dcdb,alpha:.2}).stroke({color:0x6fc5d9,width:3});
+          if(o.triggered)g.roundRect(x-18,y-27,36,34,6).stroke({color:0xffe58e,width:3});
+        }else if(o.kind==='BOMB'||o.kind==='MINE'){
+          g.ellipse(x,y,12,7).fill(o.kind==='MINE'?0x789aa3:0x708298).stroke({color:0xe9ddb0,width:2});
+          g.circle(x,y-5,3).fill(o.state===4?0xff8568:0xfadd71);
+        }else if(o.kind==='SHOT_IMPACT'||o.kind==='TOOL_BURST'){
+          const r=o.kind==='SHOT_IMPACT'?12:o.sequence===3?24:10;
+          g.star(x,y,6,r,r*.4).fill({color:0xffdd80,alpha:Math.min(1,o.remaining/8)});
+          g.star(x,y,6,r*.55,r*.2).fill({color:0xfff8d3,alpha:Math.min(1,o.remaining/8)});
+        }else if(o.kind==='FLASH')flashGraphic.rect(0,0,app.screen.width,app.screen.height).fill({color:0xffffe6,alpha:o.alpha});
+      }
+      for(const p of view.tools.points)strokeGraphic.star(p.x,p.y,4,4,1.5).fill(0xf8db69);
+      const closure=view.tools.closure;
+      if(closure)strokeGraphic.ellipse(closure.x,closure.y,48,32).stroke({color:0xffe884,width:4,alpha:Math.max(.2,closure.ticks/18)});
+      const rope=view.tools.rope;
+      if(rope){
+        const color=rope.band==="STRONG"?0xf2ab45:0xffed96;
+        strokeGraphic.moveTo(...rope.from).lineTo(...rope.to).stroke({color,width:3,cap:"round"});
+      }
+      return;
+    }
     const points = view.enclosure?.points;
     if (!Array.isArray(points) || points.length === 0) return;
     strokeGraphic.moveTo(points[0].x, points[0].y);
@@ -352,66 +405,27 @@ export async function mountHuntFieldPixiPresentation({
     syncActors(view);
     syncEnclosure(view);
     // The camera window is the only thing that moves the world.
-    world.position.set(-view.camera.left, -view.camera.top);
+    world.scale.set(view.transform.scale);
+    world.position.set(-view.camera.left * view.transform.scale, -view.camera.top * view.transform.scale);
   }
 
-  function toWorldPoint(global) {
-    const view = source.field.getView({
-      viewportWidth: app.screen.width,
-      viewportHeight: app.screen.height
-    });
-    if (!view) return null;
-    return { x: global.x + view.camera.left, y: global.y + view.camera.top };
-  }
-
-  function canEnclose() {
-    return typeof source.intents.beginEnclosureStroke === "function"
-      && typeof source.intents.extendEnclosureStroke === "function"
-      && typeof source.intents.endEnclosureStroke === "function";
-  }
-
-  function onPointerDown(event) {
-    if (disposed) return;
-    const point = toWorldPoint(event.global);
-    const enclosing = Boolean(point && canEnclose() && source.intents.beginEnclosureStroke(point.x, point.y));
-    drag = {
-      pointerId: event.pointerId,
-      startX: event.global.x,
-      startY: event.global.y,
-      moved: false,
-      enclosing
-    };
-  }
-
-  function onPointerMove(event) {
-    if (!drag || event.pointerId !== drag.pointerId) return;
-    if (!drag.moved) {
-      drag.moved = Math.hypot(event.global.x - drag.startX, event.global.y - drag.startY) >= DRAG_THRESHOLD_PX;
-    }
-    const point = toWorldPoint(event.global);
-    if (drag.enclosing) {
-      if (point) source.intents.extendEnclosureStroke(point.x, point.y);
-      return;
-    }
-    if (drag.moved && point) source.intents.moveTo(point.x, point.y);
-  }
-
-  function onPointerUp(event) {
-    if (!drag || (event.pointerId !== undefined && event.pointerId !== drag.pointerId)) return;
-    const completed = drag;
-    drag = null;
-    if (completed.enclosing) {
-      source.intents.endEnclosureStroke();
-      return;
-    }
-    if (completed.moved) return;
-    const point = toWorldPoint(event.global ?? { x: completed.startX, y: completed.startY });
-    if (point) source.intents.moveTo(point.x, point.y);
-  }
+  const pointer = createHuntFieldPointer({
+    getView: () => source.field.getView({ viewportWidth: app.screen.width, viewportHeight: app.screen.height }),
+    intents: source.intents
+  });
+  const onPointerDown = (event) => pointer.down(event);
+  const onPointerMove = (event) => pointer.move(event);
+  const onPointerUp = (event) => pointer.up(event);
+  const onPointerCancel = (event) => pointer.cancel(event);
+  const cancelPointer = () => pointer.cancel();
+  const cancelHiddenPointer = () => { if (globalThis.document?.hidden) cancelPointer(); };
+  globalThis.addEventListener?.("blur", cancelPointer);
+  globalThis.document?.addEventListener("visibilitychange", cancelHiddenPointer);
 
   function advance(ticker) {
     if (disposed) return;
     source.field.tick(ticker.deltaMS);
+    if (disposed) return;
     fieldArt?.update(ticker.deltaMS);
     render();
     playerNode?.characterController?.update(ticker);
@@ -422,11 +436,12 @@ export async function mountHuntFieldPixiPresentation({
   app.stage.on("globalpointermove", onPointerMove);
   app.stage.on("pointerup", onPointerUp);
   app.stage.on("pointerupoutside", onPointerUp);
-  app.stage.on("pointercancel", onPointerUp);
+  app.stage.on("pointercancel", onPointerCancel);
   app.ticker.add(advance);
 
-  const unobserveResize = stage.onResize(render);
+  const unobserveResize = stage.onResize(() => { cancelPointer(); render(); });
   const unobserveContextLost = stage.onContextLost(() => {
+    cancelPointer();
     onFallback("The 2D field context was lost. Screen controls remain available; reload to restore the field.");
   });
   render();
@@ -451,9 +466,33 @@ export async function mountHuntFieldPixiPresentation({
         cachedChunks: chunkCache.size,
         visibleChunks: liveChunks.size,
         wildCount: wildNodes.size,
+        camera: view?.camera ?? null,
+        transform: view?.transform ?? null,
+        // Where the live actors are on this canvas, in its own pixels. The
+        // native controller owns their positions and moves them every frame, so
+        // they cannot be recomputed from the gate's spawn table by anything
+        // outside the running field -- which is what left the VS3 capture gate
+        // unable to point at a creature at all.
+        // Same camera-and-scale placement the world container is given below,
+        // written out rather than imported: this renderer consumes the published
+        // view and its one pointer adapter, never the Hunt domain.
+        wildScreenPositions: Object.freeze((view?.wildCreatures ?? []).map((wild) => Object.freeze({
+          wildId: wild.wildId,
+          x: (wild.worldX - view.camera.left) * view.transform.scale,
+          y: (wild.worldY - view.camera.top) * view.transform.scale,
+          state: wild.state ?? null, moving: wild.moving === true,
+          currentHp: wild.currentHp ?? null, maxHp: wild.maxHp ?? null
+        }))),
+        selectedWildId: view?.selectedWildId ?? null,
+        captureAvailability: view?.captureAvailability ?? null,
+        activePointerId: pointer.getOwner(),
         objectCount: objectNodes.size,
         characterAssetFailures,
         characterArt: characterBundle?.getDiagnostics() ?? null,
+        nativeCharacterFrames: [...wildNodes.entries()].flatMap(([wildId, node]) => {
+          const frame = node.nativeFramePresenter?.getSnapshot();
+          return frame ? [{ wildId, ...frame }] : [];
+        }),
         viewport: Object.freeze({ width: app.screen.width, height: app.screen.height }),
         art: fieldArt?.getDiagnostics() ?? Object.freeze({
           assetId: TEMPORARY_ART_ID,
@@ -465,7 +504,9 @@ export async function mountHuntFieldPixiPresentation({
     dispose() {
       if (disposed) return;
       disposed = true;
-      drag = null;
+      cancelPointer();
+      globalThis.removeEventListener?.("blur", cancelPointer);
+      globalThis.document?.removeEventListener("visibilitychange", cancelHiddenPointer);
       unmarkScene();
       unobserveResize();
       unobserveContextLost();
@@ -474,7 +515,7 @@ export async function mountHuntFieldPixiPresentation({
       app.stage.off("globalpointermove", onPointerMove);
       app.stage.off("pointerup", onPointerUp);
       app.stage.off("pointerupoutside", onPointerUp);
-      app.stage.off("pointercancel", onPointerUp);
+      app.stage.off("pointercancel", onPointerCancel);
       for (const graphic of chunkCache.values()) graphic.destroy();
       chunkCache.clear();
       liveChunks.clear();

@@ -2,6 +2,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const { chromium } = require("playwright");
+const { startGame, login, playOpening } = require("./championship-browser-opening.cjs");
 
 const BASE_URL = process.env.CHAMPIONSHIP_QA_URL || "http://127.0.0.1:8732/championship.html";
 const CHROME = process.env.CHAMPIONSHIP_CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe";
@@ -52,10 +53,18 @@ async function inspectLayout(page, viewport) {
     const shell = document.querySelector(".int-rh2-shell").getBoundingClientRect();
     const host = document.querySelector(".int-rh2-field-host").getBoundingClientRect();
     const canvas = document.querySelector(".cm-raising-pixi-canvas").getBoundingClientRect();
-    const interactive = [...document.querySelectorAll("button:not(:disabled)")].map((button) => {
-      const rect = button.getBoundingClientRect();
-      return { id: button.id || button.className, width: rect.width, height: rect.height, top: rect.top, bottom: rect.bottom };
-    });
+    // Product controls only, and only the ones actually on screen. Two kinds of
+    // button are not player controls and must not be measured as if they were:
+    // the ones inside a closed dialog (day-end confirm, lifecycle, mail letter),
+    // which are display:none until their moment, and PixiJS's own accessibility
+    // hook, a 1px body-level button parked at -1000,-1000. The shared toolbar is
+    // mounted at body level, so it needs its own scope alongside the UI root.
+    const interactive = [...document.querySelectorAll("#cm-root button:not(:disabled), .cm-toolbar button:not(:disabled)")]
+      .filter((button) => button.checkVisibility())
+      .map((button) => {
+        const rect = button.getBoundingClientRect();
+        return { id: button.id || button.className, width: rect.width, height: rect.height, top: rect.top, bottom: rect.bottom };
+      });
     return {
       viewport: { width, height },
       documentWidth: document.documentElement.scrollWidth,
@@ -64,8 +73,10 @@ async function inspectLayout(page, viewport) {
       fieldHost: { width: host.width, height: host.height },
       canvas: { width: canvas.width, height: canvas.height },
       canvasCount: document.querySelectorAll("canvas").length,
-      toolbarSlots: document.querySelectorAll(".int-rh2-raw-slot").length,
-      toolbarEnabled: document.querySelectorAll(".int-rh2-raw-slot:not(:disabled)").length,
+      // The 8-slot shell moved out of the P1R view on 2026-09-03: it is now the
+      // shared body-level toolbar, which is where ui/toolbar.nxr belongs.
+      toolbarSlots: document.querySelectorAll(".cm-toolbar__cell").length,
+      toolbarEnabled: document.querySelectorAll(".cm-toolbar__cell:not(:disabled)").length,
       uiAuthority: document.querySelector("#cm-root")?.dataset.uiAuthority,
       rendererSplit: document.querySelector(".int-rh2-shell")?.dataset.rendererSplit,
       threeElements: document.querySelectorAll("[data-renderer*='THREE'], canvas.three").length,
@@ -81,8 +92,8 @@ async function openRaising(context, { continueGame = false } = {}) {
   page.on("pageerror", (error) => pageErrors.push(error.message));
   page.on("requestfailed", (request) => failedRequests.push(`${request.url()} :: ${request.failure()?.errorText}`));
   await page.goto(BASE_URL, { waitUntil: "networkidle" });
-  await page.click(continueGame ? "#cm-continue" : "#cm-new-game");
-  await page.waitForSelector(".cm-raising-pixi-canvas", { timeout: 20000 });
+  await startGame(page, { continueGame });
+  await page.waitForSelector(".cm-raising-pixi-canvas", { timeout: 30000 });
   await page.waitForTimeout(2500);
   return { page, pageErrors, failedRequests };
 }
@@ -95,7 +106,10 @@ async function runViewport(browser, viewport) {
   assert.ok(layout.documentHeight <= viewport.height, `${viewport.width}x${viewport.height} vertical overflow`);
   assert.equal(layout.canvasCount, 1, "exactly one field canvas");
   assert.equal(layout.toolbarSlots, 8, "eight toolbar shells");
-  assert.equal(layout.toolbarEnabled, 0, "unknown toolbar slots stay disabled");
+  // The contract's slot count is still 8 and still ROM_VERIFIED; what changed is
+  // that Raising tools are traced now, so the cells are reachable at Home. Hunt
+  // is the context that blanks and disables them, and its own suite covers that.
+  assert.equal(layout.toolbarEnabled, 8, "Raising Home reaches every toolbar slot");
   assert.equal(layout.uiAuthority, "P1R_DOM");
   assert.equal(layout.rendererSplit, "DOM_UI_PIXI_FIELD");
   assert.equal(layout.threeElements, 0, "Three is absent");
@@ -135,36 +149,65 @@ async function runSaveReload(browser) {
   const host = await page.locator(".int-rh2-field-host").boundingBox();
   assert.ok(host, "field host exists");
 
-  const actor = { x: host.x + host.width * 0.5, y: host.y + host.height * (0.18 + 0.27 * 0.72) };
-  const target = { x: host.x + host.width * 0.5, y: host.y + host.height * (0.55 + 0.27 * 0.72) };
+  // The resident starts at the centre of the ranch ground. The old normalised
+  // pair was authored for the CM-authored 24x14 field and pointed at bare floor
+  // once the native ranch replaced it.
+  const actor = { x: host.x + host.width * 0.5, y: host.y + host.height * 0.5 };
+  const target = { x: host.x + host.width * 0.5, y: host.y + host.height * 0.58 };
+  // Compared against the placeholder this run actually rendered rather than an
+  // English literal, so the gate does not re-break every time the copy is
+  // translated. The screen is Traditional Chinese now.
+  const placeholderName = await page.locator(".int-rh2-companion__name").textContent();
   await page.mouse.click(actor.x, actor.y);
-  await page.waitForFunction(() => document.querySelector(".int-rh2-companion__name")?.textContent !== "SELECT A RESIDENT");
+  await page.waitForFunction((placeholder) => document.querySelector(".int-rh2-companion__name")?.textContent !== placeholder, placeholderName);
   const selectedName = await page.locator(".int-rh2-companion__name").textContent();
-  await page.click(".int-rh2-care-button");
+  // No care click. The care affordance was withdrawn on 2026-09-03 because the
+  // original tool semantics are UNKNOWN_REQUIRES_TRACE in OVL18, so nothing in
+  // the UI reaches careForCreature today. The intent and its persistence are
+  // still covered by the unit suite; asserting a button here only asserted that
+  // a removed control was still present.
+  const groundPosition = (target_) => target_.evaluate(() => {
+    const stored = localStorage.getItem("championshipModernSave:v1");
+    if (!stored) return null;
+    const fields = JSON.parse(stored).creature.nativeProfile.fields;
+    return { x: fields["1c0"], y: fields["1c4"], cageDefinition: fields["014"] };
+  });
+  const commit = async (target_) => {
+    await target_.locator(".int-rh2-system-button").first().click();
+    await target_.waitForFunction(() => document.querySelector(".int-rh2-system-button")?.dataset.phase === "SAVED");
+  };
+  await commit(page);
+  const before = await groundPosition(page);
+
+  // Relocation is a ground placement now, not a drop into a product cage: under
+  // NATIVE_ANCHORS_V1 the field routes a completed drag to relocateToGround, and
+  // only while the hand tool is held. The drag therefore moves the resident
+  // inside the ranch and leaves its cage assignment alone.
+  await page.locator(".cm-toolbar__cell").first().click();
   await page.mouse.move(actor.x, actor.y);
   await page.mouse.down();
   await page.mouse.move(target.x, target.y, { steps: 14 });
   await page.mouse.up();
-  await page.click(".int-rh2-system-button");
-  await page.waitForFunction(() => document.querySelector(".int-rh2-system-button")?.dataset.phase === "SAVED");
+  await commit(page);
 
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("championshipModernSave:v1")));
   assert.ok(saved, "save payload exists");
-  const savedText = JSON.stringify(saved);
-  assert.match(savedText, /quiet-hollow/, "relocated cage persisted");
-  assert.match(savedText, /careCount/, "care interaction flag persisted");
+  const after = await groundPosition(page);
+  assert.notDeepEqual(after, before, "the hand-tool drag moved the resident on the ranch ground");
+  assert.equal(after.cageDefinition, before.cageDefinition, "a ground move is not a cage change");
   await page.screenshot({ path: path.join(SCREENSHOTS, "raising-home-390x844-before-reload.png"), fullPage: true });
   await page.close();
 
   const restored = await openRaising(context, { continueGame: true });
   const restoredPage = restored.page;
+  assert.deepEqual(await groundPosition(restoredPage), after, "the relocated ground position survives a real page reload");
   const restoredHost = await restoredPage.locator(".int-rh2-field-host").boundingBox();
-  const restoredActor = {
-    x: restoredHost.x + restoredHost.width * 0.5,
-    y: restoredHost.y + restoredHost.height * (0.55 + 0.27 * 0.72)
-  };
+  // Where the drag left it, not where it started: the restored position is the
+  // thing under test, so the gate has to reach for the resident there.
+  const restoredActor = { x: restoredHost.x + restoredHost.width * 0.5, y: restoredHost.y + restoredHost.height * 0.58 };
+  const restoredPlaceholder = await restoredPage.locator(".int-rh2-companion__name").textContent();
   await restoredPage.mouse.click(restoredActor.x, restoredActor.y);
-  await restoredPage.waitForFunction(() => document.querySelector(".int-rh2-companion__location")?.textContent.includes("Quiet Hollow"));
+  await restoredPage.waitForFunction((placeholder) => document.querySelector(".int-rh2-companion__name")?.textContent !== placeholder, restoredPlaceholder);
   const restoredName = await restoredPage.locator(".int-rh2-companion__name").textContent();
   assert.equal(restoredName, selectedName, "same resident restored after real page reload");
   await restoredPage.screenshot({ path: path.join(SCREENSHOTS, "raising-home-390x844-restored.png"), fullPage: true });
@@ -172,8 +215,8 @@ async function runSaveReload(browser) {
   const result = {
     viewport: "390x844",
     selectedResident: selectedName,
-    relocatedTo: "Quiet Hollow",
-    careFlagPersisted: true,
+    relocatedOnGround: { from: before, to: after },
+    careAffordance: "WITHDRAWN_PENDING_OVL18_TRACE",
     savePayloadPresent: true,
     restoredAfterPageReload: true,
     transientSelectionRestored: false,
@@ -193,12 +236,16 @@ async function runPixiFallback(browser) {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto(BASE_URL, { waitUntil: "networkidle" });
-  await page.click("#cm-new-game");
+  await login(page);
+  // The opening is DOM-only, so it still runs when the field cannot.
+  await playOpening(page);
   await page.waitForSelector(".int-rh2-field-fallback");
   assert.equal(await page.locator("canvas").count(), 0, "failed Pixi bootstrap creates no partial canvas");
-  assert.equal(await page.locator(".int-rh2-system-button").isEnabled(), true, "save remains available in field fallback");
-  assert.equal(await page.locator(".int-rh2-raw-slot").count(), 8, "toolbar evidence remains visible in fallback");
-  assert.equal(await page.locator(".int-rh2-raw-slot:not(:disabled)").count(), 0, "unknown toolbar remains disabled");
+  assert.equal(await page.locator(".int-rh2-system-button").first().isEnabled(), true, "save remains available in field fallback");
+  // The toolbar is mounted by the application, not by the field, so a failed
+  // Pixi bootstrap must not take it down with the canvas.
+  assert.equal(await page.locator(".cm-toolbar__cell").count(), 8, "toolbar survives the field fallback");
+  assert.equal(await page.locator(".cm-toolbar__cell:not(:disabled)").count(), 8, "toolbar stays reachable in fallback");
   assert.deepEqual(errors, [], "Pixi load failure is bounded and does not become a page error");
   await page.screenshot({ path: path.join(SCREENSHOTS, "raising-home-390x844-pixi-fallback.png"), fullPage: true });
   await context.close();

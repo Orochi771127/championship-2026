@@ -4,6 +4,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const { chromium } = require("playwright");
+const { openFreshGame, openHunt, selectEnterableGate, RAISING_HOME, GATE_CONFIRM } = require("./championship-browser-opening.cjs");
 
 const BASE_URL = process.env.CHAMPIONSHIP_QA_URL || "http://127.0.0.1:8732/championship.html";
 const CHROME = process.env.CHAMPIONSHIP_CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe";
@@ -15,13 +16,9 @@ fs.mkdirSync(SCREENSHOTS, { recursive: true });
 function viewportName(viewport) { return `${viewport.width}x${viewport.height}`; }
 
 async function openGate(page, url = BASE_URL) {
-  await page.goto(url, { waitUntil: "networkidle" });
-  await page.evaluate(() => window.localStorage.clear());
-  await page.reload({ waitUntil: "networkidle" });
-  await page.click("#cm-new-game");
-  await page.waitForSelector(".cm-vs2-entry", { timeout: 20000 });
-  await page.click(".cm-vs2-entry");
-  await page.waitForSelector("[data-screen='GATE_SELECT']", { timeout: 15000 });
+  await openFreshGame(page, url);
+  await page.waitForSelector(RAISING_HOME, { timeout: 20000 });
+  await openHunt(page);
 }
 
 async function inspectGate(page, viewport) {
@@ -79,10 +76,8 @@ async function runWorldFlow(browser, viewport) {
   await page.waitForTimeout(120);
   if (name === "390x844") await page.screenshot({ path: path.join(SCREENSHOTS, "gate-world-rotated-390x844.png") });
 
-  const node = page.locator(".cm-vs2-gate3d__node-hit:not([hidden])").first();
-  const selectedGateId = await node.getAttribute("data-gate-id");
-  await node.click();
-  assert.equal(await page.locator(".cm-vs2-footer .cm-vs2-action--primary").isDisabled(), false);
+  const selectedGateId = await selectEnterableGate(page);
+  assert.equal(await page.locator(GATE_CONFIRM).isDisabled(), false);
   assert.equal(await page.locator(`.cm-vs2-gate3d__node-hit[data-gate-id='${selectedGateId}']`).getAttribute("data-selected"), "true");
   await page.screenshot({ path: path.join(SCREENSHOTS, `gate-destination-selected-${name}.png`) });
 
@@ -117,8 +112,10 @@ async function runFallback(browser) {
   assert.equal(await page.locator(".cm-vs2-gate").count(), 16);
   assert.equal(await page.locator(".cm-vs2-gate-fallback").isVisible(), true);
   await page.screenshot({ path: path.join(SCREENSHOTS, "gate-2d-fallback-390x844.png") });
-  await page.locator(".cm-vs2-gate").nth(2).click();
-  assert.equal(await page.locator(".cm-vs2-footer .cm-vs2-action--primary").isDisabled(), false);
+  // Same admission rule as the world flow: a fixed card index lands on whatever
+  // gate happens to sit there, and most are rank- or fee-locked for a new tamer.
+  await selectEnterableGate(page, { selector: ".cm-vs2-gate" });
+  assert.equal(await page.locator(GATE_CONFIRM).isDisabled(), false);
   await context.close();
   return { viewport: "390x844", rendererCount: 0, destinations: 16, selectionIntentBound: true, verdict: "PASS" };
 }
