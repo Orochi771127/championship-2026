@@ -23,7 +23,7 @@ export const NATIVE_HUNT_CHARACTER_FRAME_CONTRACT = "HUNT_CHARACTER_PRESENTATION
  * Each actor supplies its own compiled native sequences and cells. Live capture
  * replay is verified separately from the 224-character frame correspondence.
  */
-export function createNativeHuntCharacterFramePresenter({ sprite, animations, textureResolver, entityId, reducedMotion = false }) {
+export function createNativeHuntCharacterFramePresenter({ sprite, animations, textureResolver, entityId, reducedMotion = false, geometry = null }) {
   if (!sprite || typeof textureResolver !== "function" || !Array.isArray(animations)) {
     throw new TypeError("NATIVE_CHARACTER_PRESENTATION_DEPENDENCIES_REQUIRED");
   }
@@ -46,12 +46,31 @@ export function createNativeHuntCharacterFramePresenter({ sprite, animations, te
       const sourceFrame = sequence.frames[reducedMotion ? 0 : frame.frameIndex];
       const texture = textureResolver(sourceFrame.texture);
       if (!texture) throw new RangeError("NATIVE_CHARACTER_TEXTURE_MISSING");
+      const placement = geometry?.frames[sourceFrame.texture];
+      if (geometry && !placement) throw new RangeError('NATIVE_CHARACTER_GEOMETRY_MISSING');
       sprite.texture = texture;
       current = Object.freeze({ sequenceId: frame.sequenceId, frameIndex: reducedMotion ? 0 : frame.frameIndex,
         cell: sourceFrame.cell, flipX: Boolean(frame.flipBits & 1), flipY: Boolean(frame.flipBits & 2),
+        ...(placement ? {geometry:placement} : {}),
         authority: frame.contract, reducedMotion: Boolean(reducedMotion) });
       return current;
     },
     getSnapshot: () => current
   });
+}
+
+/** Preserve the decoded cell origin and per-cell packing scale at the owner's
+ * world position. Bounds/trim must not re-ground each pose or erase its jump.
+ * Hunt uses two world units per native pixel; Raising's parent already scales.
+ */
+export function applyNativeCharacterCellGeometry(sprite, frame, unitsPerNativePixel = 1) {
+  const placement=frame?.geometry;
+  if (!placement) return false;
+  sprite.visible=!placement.blank;
+  if (placement.blank) return true;
+  const scale=unitsPerNativePixel*sprite.texture.source.resolution/placement.scale;
+  if (!(scale>0) || !Number.isFinite(scale)) throw new TypeError('INVALID_NATIVE_CHARACTER_CELL_SCALE');
+  sprite.anchor.set(placement.origin[0]/placement.sourceSize[0],placement.origin[1]/placement.sourceSize[1]);
+  sprite.scale.set(scale,scale);
+  return true;
 }

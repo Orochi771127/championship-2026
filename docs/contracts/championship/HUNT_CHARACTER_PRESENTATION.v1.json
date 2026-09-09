@@ -1,6 +1,16 @@
 {
   "contractId": "HUNT_CHARACTER_PRESENTATION.v1",
-  "status": "VERIFIED_ORIGINAL_ANIMATION_PROJECTION_NORMAL_OWNER_UNBOUND",
+  "status": "ALL_REGISTERED_MAIN_FRAMES_BOUND_NORMAL_OWNER_GAMEPLAY_PARITY_PARTIAL",
+  "integration20260909": {
+    "scope": "All 224 registered Main resource banks through explicit Hunt or Raising scene intent; Battle retains its native actor presenter",
+    "normalHuntOwner": "src/championship/hunt/capture/nativeHuntFieldControls.js",
+    "rawFrameReferencesPerScene": 14283,
+    "geometry": "Per-cell hash-verified BATTLE_CHARACTER_GEOMETRY; preserve source origin, packing scale and blank cells",
+    "worldScale": "Hunt: 2 world units per native pixel; Raising: 1 local unit with native-scaled parent",
+    "crossSceneTest": "tests/championship-licensed-character-roster-cases.mjs",
+    "historicalSections": "scope and normalOwnerBlockers below describe the 2026-09-06 pilot only; they are not current integration blockers",
+    "remaining": "Complete original state-trigger coverage and all-condition/device visual parity are not established by frame enumeration"
+  },
   "scope": {
     "entityId": "m003_nyokimon",
     "speciesId": "species-010",

@@ -1,5 +1,9 @@
 # Championship Owner Direction
 
+## 2026-09-09 — Integrate original character animations in Hunt, Battle and Raising
+
+Owner requests all original character motions in the three existing scenes and supplies `YDIJ_PRIVATE_ROM_ART_PACK/02_CHARACTERS`. Continue internal animation integration using those existing reference materials, the verified native frame/state contracts and the current scene owners. The supplied 503 atlas PNGs already match the registered 224-entry baseline; this authorization does not require duplicate resource copies. Preserve source sequence IDs, timing, origins, flips and intentional blanks. Full resource/frame binding and full original action-trigger parity are separate acceptance statements. Licence verification remains at the final public-release gate.
+
 ## 2026-09-09 — Prefer original Hunt steering behavior
 
 After approving a proposed keep-current-direction workaround, Owner asks 「不能照著原作去做嗎？」. The workaround was not applied. Continue tracing the original live stack producers and call order before adopting an adaptation; retain the original-fidelity priority. Synthetic stack probes alone do not establish the normal producer.

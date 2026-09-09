@@ -9,6 +9,7 @@
 // assignment, save data, gameplay values, routing, or another runtime store.
 
 import { getRaisingNativePixelScale, getRaisingNativeActorGeometry } from "./raisingNativeSizing.js";
+import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
 import { raisingFieldViewport, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative } from "./raisingFieldViewport.js";
 
 const DRAG_THRESHOLD_PX = 6;
@@ -470,7 +471,9 @@ export async function mountRaisingFieldPixiPresentation({
         entry.root.position.set(point.x, point.y);
       }
       const nativeScale = getRaisingNativePixelScale(fieldArt?.field, app.screen);
-      const geometry = getRaisingNativeActorGeometry(entry.sprite, entry.nativeSizing, nativeScale);
+      const frameGeometry=entry.nativeFramePresenter?.getSnapshot()?.geometry;
+      const sizing=frameGeometry?.scale ? {...entry.nativeSizing,packedPixelsPerNativePixel:frameGeometry.scale} : entry.nativeSizing;
+      const geometry = getRaisingNativeActorGeometry(entry.sprite, sizing, nativeScale);
       const scale = geometry ? nativeScale : clamp(Math.min(app.screen.width / 390, app.screen.height / 620), 0.78, 1.18);
       const facing = resident.facing === "left" ? -1 : 1;
       if (geometry) {
@@ -555,7 +558,8 @@ export async function mountRaisingFieldPixiPresentation({
         // Profile changes may precede asynchronous texture loading. Never
         // apply one species' frame index to another species' atlas.
         if (frame && `championship:creature:species-${String(frame.speciesIndex).padStart(3,"0")}`===entry.speciesId)
-          {entry.nativeFramePresenter.apply(frame);if(entry.sprite){
+          {const visualFrame=entry.nativeFramePresenter.apply(frame);if(entry.sprite){
+            if(entry.nativeScale!==null)applyNativeCharacterCellGeometry(entry.sprite,visualFrame);
             if(entry.nativeScale!==null)entry.root.scale.x=Math.abs(entry.root.scale.x);
             entry.sprite.y=-(frame.positionQ12?.[2]??0)/4096;
             // Main is authored facing left; the original body bit mirrors it.
@@ -616,7 +620,8 @@ export async function mountRaisingFieldPixiPresentation({
     if(entry.sprite){entry.sprite.visible=e.target<0?!e.reveal:!e.reveal||!entry.evolutionSprite;entry.sprite.filters=e.phase>=2&&e.phase<=4?[silhouette]:null;}
     if(entry.evolutionSprite){entry.evolutionSprite.visible=e.reveal;
       entry.evolutionSprite.filters=e.phase<=4?[silhouette]:null;
-      if(e.targetFrame)entry.evolutionPresenter?.apply(e.targetFrame);}
+      if(e.targetFrame){const frame=entry.evolutionPresenter?.apply(e.targetFrame);
+        if(entry.nativeScale!==null&&e.reveal)applyNativeCharacterCellGeometry(entry.evolutionSprite,frame);}}
     const center={x:entry.root.x,y:entry.root.y-24*(entry.restScale??1)};
     if(e.phase>0&&e.phase<7){
       const radius=34*(entry.restScale??1);

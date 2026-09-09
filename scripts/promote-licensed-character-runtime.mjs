@@ -109,13 +109,13 @@ const bindings = species.records.map((record) => {
 counts.bytes = [...jobs.values()].reduce((sum, bytes) => sum + bytes.length, 0);
 const manifest = { schemaVersion: 1, assetId, runtimeEligible: true, shippingReady: false,
   productionStatus: "OWNER_AUTHORIZED_INTERNAL_CHARACTER_MATERIALS", shippingStatus: "NOT_SHIPPING_READY",
-  artifactMaturity: "PIXEL_FAITHFUL_224_RAW_TIMELINES_STATIC_NORMAL_PRESENTATION",
+  artifactMaturity: "PIXEL_FAITHFUL_224_NATIVE_MAIN_FRAME_PRESENTATION",
   publicReleasePermitted: false, humanApproved: false, rightsStatus: "LICENSED",
   ownerDirective: "docs/coordination/OWNER_DIRECTION.md#2026-09-02",
   sourceRomSha256: packMetadata.sourceRom.sha256,
   sourcePack: "YDIJ_PRIVATE_ROM_ART_PACK/02_CHARACTERS/use-ready-pixi-hd4x-224",
   visualPolicy: "EXACT_EXISTING_RGBA_ATLASES_NO_REDRAW_NO_RECOLOR",
-  animationBinding: "UNKNOWN_REQUIRES_TRACE_STATIC_FIRST_SOURCE_FRAME",
+  animationBinding: "HUNT_RAISING_BATTLE_NATIVE_MAIN_SEQUENCES_GAMEPLAY_PARITY_PARTIAL",
   memoryPolicy: "ONLY_SCENE_SPECIES_MAIN_ATLASES_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
   counts, speciesBindings: bindings, records };
 jobs.set("manifest.json", Buffer.from(serialize(manifest)));

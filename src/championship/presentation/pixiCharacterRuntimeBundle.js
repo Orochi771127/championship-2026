@@ -141,7 +141,8 @@ export async function loadPixiCharacterRuntimeBundle({
       tickRateHz = runtime.timing?.tickRateHz ?? 60,
       reducedMotion = false,
       nativeFramePresentation = false,
-      battleGeometry = null
+      battleGeometry = null,
+      nativeGeometry = null
     } = {}) {
       if (disposed) throw new Error("CHARACTER_RUNTIME_BUNDLE_DISPOSED");
       const sideRuntime = runtime.sides[side];
@@ -164,7 +165,7 @@ export async function loadPixiCharacterRuntimeBundle({
       });
       const nativeFramePresenter = nativeFramePresentation ? createNativeHuntCharacterFramePresenter({
         sprite, animations: sideRuntime.animations, textureResolver: (key) => textures.get(key),
-        entityId: runtime.entityId, reducedMotion
+        entityId: runtime.entityId, reducedMotion, geometry: nativeGeometry
       }) : null;
       const battleAnimator = battleGeometry ? createBattleCharacterAnimator({sprite,
         animations:sideRuntime.animations,textureResolver:key=>textures.get(key),geometry:battleGeometry,reducedMotion}) : null;

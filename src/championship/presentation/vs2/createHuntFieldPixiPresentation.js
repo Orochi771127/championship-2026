@@ -14,6 +14,7 @@
 // loaded, and none of it is a claim about original terrain, props or creatures.
 
 import { createHuntFieldPointer } from "./huntFieldPointer.js";
+import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
 const ACTOR_BODY_RADIUS = 8;
 const TEMPORARY_ART_ID = "art:hunt_field:vs2:temporary-signal-grove-kit";
 
@@ -236,13 +237,14 @@ export async function mountHuntFieldPixiPresentation({
       .poly([-3, -9, 0, -12, 3, -9, 0, -6]).fill(player ? TERRAIN.gold : TERRAIN.cyan);
     node.addChild(shadow, ring, body);
     if (characterBundle) {
-      const actor = characterBundle.createActor({ speciesId, side: "main", animation: "idle" });
+      const actor = characterBundle.createActor({ speciesId, side: "main", presentation: "hunt" });
       if (actor) {
         actor.sprite.scale.set(0.18);
         body.visible = false;
         node.addChild(actor.sprite);
         node.characterController = actor.controller;
         node.nativeFramePresenter = actor.nativeFramePresenter ?? null;
+        node.characterSprite = actor.sprite;
         node.lastCharacterX = null;
         node.lastCharacterY = null;
       }
@@ -304,6 +306,7 @@ export async function mountHuntFieldPixiPresentation({
       node.position.set(wild.worldX, wild.worldY - (wild.worldZ ?? 0));
       node.zIndex = Math.round(wild.worldY);
       const nativeFrame = node.nativeFramePresenter?.apply(wild.nativeAnimation ?? null);
+      if (node.characterSprite) applyNativeCharacterCellGeometry(node.characterSprite,nativeFrame,2);
       node.scale.x = nativeFrame ? (nativeFrame.flipX ? -1 : 1) : (wild.facing === "left" ? -1 : 1);
       node.scale.y = nativeFrame?.flipY ? -1 : 1;
       const tethered = view.selectedWildId === wild.wildId;

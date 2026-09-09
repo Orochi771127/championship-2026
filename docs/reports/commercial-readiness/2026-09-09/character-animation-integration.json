@@ -1,0 +1,92 @@
+{
+  "classification": "INTERNAL_ANIMATION_BINDING_ACCEPTANCE_GAMEPLAY_PARITY_PARTIAL",
+  "assetComparison": {
+    "entities": 224,
+    "sourceEntities": 224,
+    "missing": [],
+    "hashErrors": [],
+    "sourceImageDifferences": [],
+    "sequences": {
+      "main": 8656,
+      "sub": 2824
+    },
+    "frames": {
+      "main": 14283,
+      "sub": 3992
+    },
+    "checkedImages": 503
+  },
+  "controlledProjection": {
+    "entities": 224,
+    "mainSequences": 8656,
+    "frameReferencesPerScene": 14283,
+    "sceneCount": 3,
+    "totalFrameReferences": 42849
+  },
+  "tests": {
+    "regression": 1398,
+    "focusedAfterMetadata": 62,
+    "focusedAfterSizing": 10
+  },
+  "browser": {
+    "controlledSave": true,
+    "normalRoutes": [
+      "raising",
+      "hunt",
+      "battle"
+    ],
+    "battleViewport": [
+      390,
+      844
+    ],
+    "battleResult": "OPPONENT_WIN",
+    "warningAndErrorLogs": 0,
+    "fullOriginalActionTriggerParity": false
+  },
+  "files": [
+    {
+      "path": "R:\\Projects\\Championship2026\\_archive\\character-animation-2026-09-09\\asset-comparison.json",
+      "sha256": "12d9b810c96e394425dcfd78ac6b84036c4c9095eab7d1a240c53ceec1f7e3a5"
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\_archive\\character-animation-2026-09-09\\integration-regression.txt",
+      "sha256": "b13c02001383f9551e1773e0e4b1a7b99c762f7c568a916b826e00c5fbe7f304"
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\_archive\\character-animation-2026-09-09\\integration-focused-final.txt",
+      "sha256": "b30593352a391ed8c83cf7ceeac82f0e11a7738290aa227d1a819f86c203d3c6"
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\_archive\\character-animation-2026-09-09\\integration-sizing-final.txt",
+      "sha256": "91687171fcbb2efa30bfff18c52ef4fe674d60232d94985e8f8cf3cc3fac42ab"
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\_archive\\character-animation-2026-09-09\\integration\\battle-mobile-a.png",
+      "sha256": "ed3641b00b1d8bbb4aa1127da425c5b8d00c37b1c57eecf98b491f38b0ddde19"
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\_archive\\character-animation-2026-09-09\\integration\\battle-mobile-b.png",
+      "sha256": "23d3d5526419bfae68c985c5f2689e6687a9253e0bbf510b4e7c53082257667b"
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\_archive\\character-animation-2026-09-09\\integration\\hunt-fixed-a.png",
+      "sha256": "4c34b4894ba53922b68881c7872a32c9633de3386cf5df9d65c97f07fd291c62"
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\_archive\\character-animation-2026-09-09\\integration\\hunt-fixed-b.png",
+      "sha256": "79a0a25f7f1ed6a3aae2c6da90605613e122d890cfb9b6fad7f260014fdd2ccb"
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\_archive\\character-animation-2026-09-09\\integration\\raising-a.png",
+      "sha256": "9ffdaacf163abf66b7d5ba99baf06342f3ab09b865a6f2e67bf11f375f6b9226"
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\_archive\\character-animation-2026-09-09\\integration\\raising-fixed-a.png",
+      "sha256": "181dacc25bff0e84bba5da8a29521b3648bd773fcec65e4b44be99fd23e25a03"
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\_archive\\character-animation-2026-09-09\\integration\\raising-fixed-b.png",
+      "sha256": "1c082f19b227a2f90c9b5f86339cc5a1344f4e1357d25119f3a1268f5c387202"
+    }
+  ]
+}

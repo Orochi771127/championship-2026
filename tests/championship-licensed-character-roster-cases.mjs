@@ -6,6 +6,7 @@ import { pathToFileURL } from "node:url";
 import test from "node:test";
 import { LICENSED_CHARACTER_MANIFEST, loadLicensedCharacterRoster } from "../src/championship/presentation/licensedCharacterRoster.js";
 import { loadPixiCharacterRuntimeBundle } from "../src/championship/presentation/pixiCharacterRuntimeBundle.js";
+import { NATIVE_HUNT_CHARACTER_FRAME_CONTRACT, applyNativeCharacterCellGeometry } from "../src/championship/presentation/nativeHuntCharacterAction.js";
 
 const manifest = JSON.parse(fs.readFileSync(LICENSED_CHARACTER_MANIFEST, "utf8"));
 const productionIndex = JSON.parse(fs.readFileSync("assets/production/ART_PRODUCTION_INDEX.json", "utf8"));
@@ -147,4 +148,58 @@ test('hatching loads one shared atlas per entity and disposal waits for a pendin
   assert.equal(loads.length,2);
   assert.equal(new Set(releases).size,2);
   assert.deepEqual(roster.getDiagnostics().loadedEntityIds,[]);
+});
+
+test('all registered Main frames reach the Hunt, Raising and Battle presenters through the real roster', async()=>{
+  // Real metadata, loader, roster and presenters; decoded images are represented
+  // by keyed textures. Browser QA separately verifies actual GPU rendering.
+  class Sprite { constructor({texture}) { this.texture=texture;this.anchor={x:.5,y:1,set(x,y){this.x=x;this.y=y;}};
+    this.scale={x:1,y:1,set(x,y){this.x=x;this.y=y;}}; } }
+  class Spritesheet {
+    constructor({data}) { this.textures=Object.fromEntries(Object.entries(data.frames).map(([key,value])=>[key,{key,source:{resolution:1},packed:value}])); }
+    async parse() {} destroy() {}
+  }
+  const PIXI={Sprite,Spritesheet,Assets:{
+    async load(url){const source=typeof url==='string'?url:url.src;return source.endsWith('.json')?JSON.parse(fs.readFileSync(new URL(source),'utf8')):{source:{}};},
+    async unload(){}
+  }};
+  const counts={hunt:0,raising:0,battle:0};
+  for(const record of manifest.records){
+    const speciesId=manifest.speciesBindings.find(b=>b.entityId===record.entityId).speciesId;
+    const roster=await loadLicensedCharacterRoster({...args,PIXI,speciesIds:[speciesId]});
+    const runtime=JSON.parse(fs.readFileSync(path.join(directory,record.runtime),'utf8'));
+    for(const presentation of ['hunt','raising','battle']){
+      const actor=roster.createActor({speciesId,presentation});
+      assert.ok(presentation==='battle'?actor.battleAnimator:actor.nativeFramePresenter,`${record.entityId}:${presentation}`);
+      let tick=0;
+      for(const sequence of runtime.sides.main.animations){
+        for(const [frameIndex,frame]of sequence.frames.entries()){
+          const sample={contract:NATIVE_HUNT_CHARACTER_FRAME_CONTRACT,sequenceId:sequence.id,
+            frameIndex,cell:frame.cell,flipBits:tick%4,elapsedQ12:0,active:1};
+          const before=JSON.stringify(sample);
+          const projected=presentation==='battle'?actor.battleAnimator.apply({battleFrame:tick,sequenceId:sequence.id,
+            nativeRequest:true,nativeSample:sample}):actor.nativeFramePresenter.apply(sample);
+          assert.equal(actor.sprite.texture.key,frame.texture,`${record.entityId}:${presentation}:${sequence.id}:${frameIndex}`);
+          assert.equal(projected.cell,frame.cell);
+          if(presentation!=='battle'){
+            const units=presentation==='hunt'?2:1;
+            assert.equal(applyNativeCharacterCellGeometry(actor.sprite,projected,units),true);
+            assert.equal(actor.sprite.visible,!projected.geometry.blank);
+            if(!projected.geometry.blank){
+              const {spriteSourceSize:t,sourceSize:z}=actor.sprite.texture.packed;
+              const sprite=actor.sprite;
+              const box=[(t.x-z.w*sprite.anchor.x)*sprite.scale.x,(t.y-z.h*sprite.anchor.y)*sprite.scale.y,
+                (t.x+t.w-z.w*sprite.anchor.x)*sprite.scale.x,(t.y+t.h-z.h*sprite.anchor.y)*sprite.scale.y];
+              box.forEach((v,i)=>assert.ok(Math.abs(v-projected.geometry.nativeBounds[i]*units)<1e-8,
+                `${record.entityId}:${presentation}:${frame.texture}: original origin/scale ${i}`));
+            }
+          }
+          assert.equal(JSON.stringify(sample),before,'rendering must not mutate the owning simulation frame');
+          counts[presentation]++;tick++;
+        }
+      }
+    }
+    await roster.dispose();
+  }
+  assert.deepEqual(counts,{hunt:14283,raising:14283,battle:14283});
 });

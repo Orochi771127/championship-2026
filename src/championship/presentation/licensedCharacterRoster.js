@@ -113,14 +113,18 @@ export async function loadLicensedCharacterRoster({
       const entityId = identities.get(canonicalSpeciesId(speciesId));
       const bundle = bundles.get(entityId);
       if (!bundle) return null;
-      const nativeFramePresentation = side === "main" && (presentation === "raising" || entityId === "m003_nyokimon");
+      // Each normal owner publishes this species' raw frame. The old M003-only
+      // Hunt pilot gate left every other loaded atlas frozen on its first cell.
+      const nativeFramePresentation = side === "main" && ["raising", "hunt"].includes(presentation);
       const candidate = BATTLE_CHARACTER_GEOMETRY[entityId];
       const record = records.get(entityId);
-      const battleGeometry = presentation === 'battle' && side === 'main' && !appearances.has(entityId)
+      const verifiedGeometry = side === 'main' && !appearances.has(entityId)
         && candidate?.files.every(([name,hash])=>record.files.find(f=>f.path===name)?.sha256.toLowerCase()===hash)
         ? candidate : null;
+      const battleGeometry = presentation === 'battle' ? verifiedGeometry : null;
       const actor = bundle.createActor({ side, animation: 0,
-        reducedMotion: nativeFramePresentation || battleGeometry ? reducedMotion : true, nativeFramePresentation, battleGeometry });
+        reducedMotion: nativeFramePresentation || battleGeometry ? reducedMotion : true, nativeFramePresentation, battleGeometry,
+        nativeGeometry: nativeFramePresentation ? verifiedGeometry : null });
       // The first source frame is identity art. No unverified idle/happy/walk
       // alias controls gameplay, and the source's provisional 60 Hz is unused.
       return Object.freeze({ sprite: actor.sprite, controller: null, entityId,
@@ -128,6 +132,7 @@ export async function loadLicensedCharacterRoster({
         nativeFramePresenter: actor.nativeFramePresenter ?? null,
         battleAnimator: actor.battleAnimator ?? null,
         presentationState: battleGeometry ? 'BATTLE_RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL'
+          : nativeFramePresentation ? 'NATIVE_OWNER_FRAME_ALL_REGISTERED_MAIN_SEQUENCES'
           : "STATIC_SOURCE_IDENTITY_ACTION_BINDING_REQUIRES_TRACE" });
     },
     getDiagnostics() {

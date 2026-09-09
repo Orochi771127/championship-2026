@@ -174,11 +174,11 @@ test("no-option baseline and original baseline guard are retained", async () => 
   await assert.rejects(loadLicensedCharacterRoster({ ...f.args, productionIndex: { entries: [f.productionIndex.entries.at(-1)] } }), /NOT_REGISTERED_FOR_INTERNAL_RUNTIME/);
 });
 
-test("M003 native frame projection remains the same capability", async () => {
+test("M003 native frame projection remains available through the explicit Hunt scene contract", async () => {
   const f = fixture("m003_nyokimon"); const calls = [];
   const roster = await loadLicensedCharacterRoster({ ...f.args, loadBundle: async (options) => ({
     createActor(args) { calls.push(args); return { sprite: {}, nativeFramePresenter: {} }; }, async dispose() {} }) });
-  roster.createActor({ speciesId: f.speciesId });
+  roster.createActor({ speciesId: f.speciesId, presentation: 'hunt' });
   assert.equal(calls[0].nativeFramePresentation, true); assert.equal(calls[0].reducedMotion, false);
   await roster.dispose();
 });
