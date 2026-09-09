@@ -48,3 +48,8 @@ assets/production/vfx/original-rom-conversion-v1/
 *.nsbva
 *.bsar
 
+
+# Agent scratch files written at the repo root during audits and traces.
+# Nothing under this prefix has ever been tracked; they are working notes, not
+# product history.
+_tmp_*
