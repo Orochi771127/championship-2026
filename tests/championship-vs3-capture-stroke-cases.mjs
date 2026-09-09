@@ -1,13 +1,4 @@
-// VS3 -- original Hunt capture geometry, translated into a web/mobile simulator.
-//
-// These numbers: ignore jitter under 5px, interpolate gaps over 20px, keep at
-// most 20 points, require 6+ points and a 25px span (VERIFIED_BINARY). The
-// 15px first-to-last gap is a prior-spec stand-in; original AABB uses 15px
-// as a shape test, not closure-to-start.
-//
-// This file tests the recognizer itself. Wiring it onto the Hunt field is a
-// later step; VS2 still ships no capture surface.
-
+// Historical diagnostic tests; these do not authorize original capture.
 import assert from "node:assert/strict";
 import test from "node:test";
 
@@ -28,13 +19,13 @@ import {
   classifyTetherDistance
 } from "../src/championship/hunt/capture/tetherSystem.js";
 
-test("the translated capture constants match the original grammar", () => {
+test("the legacy diagnostic grammar remains explicitly non-original", () => {
   assert.equal(CAPTURE_IGNORE_SEGMENT_BELOW_PX, 5);
   assert.equal(CAPTURE_INTERPOLATE_OVER_PX, 20);
   assert.equal(CAPTURE_MAX_POINTS, 20);
   assert.equal(CAPTURE_MINIMUM_CLOSE_POINTS, 6);
   assert.equal(CAPTURE_MINIMUM_EXTENT_PX, 25);
-  assert.equal(CAPTURE_GEOMETRY_EVIDENCE, "VERIFIED_BINARY");
+  assert.equal(CAPTURE_GEOMETRY_EVIDENCE, "LEGACY_PROTOTYPE_NOT_ORIGINAL");
   assert.equal(CAPTURE_CLOSURE_TOLERANCE_PX, 15);
   assert.equal(CAPTURE_CLOSURE_EVIDENCE, "PRIOR_SPEC_NOT_AABB");
 });

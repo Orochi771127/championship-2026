@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "status": "NORMAL_FLOW_SLICE_IMPLEMENTED_AND_TESTED_FULL_PARITY_PARTIAL",
+  "originalFullMatchParity": false,
+  "normalGameplayAcceptedRecords": 0,
+  "authority": {
+    "session": "Existing battleSession slots; three ordinary launch slots per actor over the existing 12-object pool",
+    "worldAndAnimation": "Existing battleNativeActors memory and native animator",
+    "clockAndRng": "Existing frame/ticker and channel216; no independent clock or RNG",
+    "presentation": "Existing DOM UI and Pixi scene; existing bounded Three effects unchanged"
+  },
+  "evidence": {
+    "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "overlay19Sha256": "d660e3e0bf243541c356c54dcbd1aec58e8df6c2dfaf4a5854d375a5f2d13715",
+    "readyStand": "0210FD40 / 0210FD58 table; post-intro world positions",
+    "target": "02111F20; profile selectors 0/12/8; profile source remains fixture-default0",
+    "approach": "02115F38 / 021161F0 / 02116314",
+    "launch": "02116AA4 / 02116CAC / 02116E94; action1 follow-up 02116FD8 now bound, controlled acceptance",
+    "guard": "0211C144 controlled lock/global/busy/target/resource cases",
+    "locks": "0211CEC4 acquire / 0211CEFC release / 021156BC cleanup",
+    "geometry": "0210F5D8 six-point distances/angles/separation",
+    "initialRng": "0210CB94 and CBB4 both call 021140CC; each calls channel216 twice",
+    "support": "0211240C team counters; C714 kind2/3 own-team walk; 02115504 support writer",
+    "cpuReceipt": "docs/research/BATTLE_NORMAL_FLOW_CPU_2026-09-07.json",
+    "normalReceipt": "docs/art/production/battle-normal-closure-r9/normal-runtime.json",
+    "report": "docs/art/production/battle-normal-closure-r9/IMPLEMENTATION_2026-09-08.md",
+    "status1": "02112394 closest target; 021164C8 pursuit; 02115810 gate using actual +24",
+    "worldFlags": "0210CDD0 clear bits0/1; 0210D3A4 per-frame bit0; 02115068 HP-zero bit1; existing memory scalar block",
+    "closureCpuReceipt": "docs/research/BATTLE_NORMAL_CLOSURE_CPU_2026-09-08.json"
+  },
+  "verifiedCpuCases": {
+    "targets": 1040,
+    "positions": 1350,
+    "guards": 128,
+    "placement": 3,
+    "speeds": 103,
+    "notifications": 91,
+    "movement": 400,
+    "geometry": 70,
+    "launches": 900,
+    "locks": 72,
+    "teamCounters": 300,
+    "support": 310
+  },
+  "validation": {
+    "focusedPassed": 25,
+    "regressionPassed": 1216,
+    "browserViewports": [
+      [
+        390,
+        844
+      ],
+      [
+        320,
+        740
+      ]
+    ],
+    "physicalDeviceAccepted": false
+  },
+  "limits": [
+    "Controlled CPU services are explicit; no original full-match trace or equivalent pre-constructor RNG history",
+    "Normal preset fixtures retain default profile0; original profile source and Home-owned roster are not complete",
+    "Target selectors10/11 nonempty caches and notification0 HP-zero initialization are not accepted by this receipt",
+    "Normal receipts cover launch14/15; support16 has CPU and integration coverage, not a naturally selected full-move gameplay receipt",
+    "Impact cleanup success does not certify all per-move VFX, camera, audio or projectile behavior",
+    "Entry animation/mode variants, per-character per-move validation and non-battle triggers remain partial",
+    "Rights and shipping status unchanged",
+    "State16 action1 follow-up has controlled CPU and shared-runtime acceptance, not a naturally selected normal-move receipt",
+    "Status1 pursuit is bound for populated ordinary +C0 move buckets; empty-bucket stale-pointer behavior remains UNKNOWN_REQUIRES_TRACE",
+    "Other negative-status state bodies remain partial; status1 completion does not upgrade them"
+  ],
+  "supersedes": [
+    "R8 current ordinary launch represented by one committedAction: normal runtime now uses three slots",
+    "R8 normal seeds1/8: retained historical receipts; current normal revival regression uses9/25",
+    "R9 planning-only status for the bounded normal-flow implementation",
+    "R9 state16 action1 follow-up and world abort binding open statements for this bounded slice",
+    "R9 normal recovery seed9 replaced by19; seed9 now verifies natural status1 pursuit; seed25 retained",
+    "Earlier normal revival/pursuit RNG witnesses are historical; final R13 seeds20/30 and1 retain the same assertions"
+  ],
+  "updated": "2026-09-08",
+  "verifiedClosureCpuCases": {
+    "closestTargets": 160,
+    "pursuit": 420,
+    "targetedFollowup": 200,
+    "status1Gates": 24,
+    "worldFlags": 32
+  },
+  "r13Presentation": {
+    "report": "docs/art/production/battle-presentation-r13/IMPLEMENTATION_2026-09-08.md",
+    "originalResourcesAndNativeCallsBound": true,
+    "fullOriginalMatchAccepted": false,
+    "limits": [
+      "Three-member knockout slowdown lookup index3 requires actual original caller context; no guessed duration",
+      "Controlled 595-move execution does not certify natural AI selection or visual acceptance of every move",
+      "Original complete ending-camera, hardware pixel/audio parity and original pre-constructor RNG/profile history are not accepted",
+      "Home-owned party, additional moves, untraced status bodies and non-battle triggers remain separate open gameplay work",
+      "Physical-device, human visual, public rights and shipping acceptance remain false"
+    ]
+  }
+}

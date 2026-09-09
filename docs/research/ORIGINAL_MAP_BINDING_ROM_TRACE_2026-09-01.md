@@ -49,6 +49,12 @@ stores both verified alternatives and does not invent a selector.
 
 ## 40 CM art fields -> 36 CageDefinitions
 
+Reverified against OVL15's indexed text reader and all 35 shop itemIndex joins
+on 2026-09-05. The mapping below is unchanged and correct. The pointer-column
+base is not the name-column base; see
+[Cage identity trace](CAGE_IDENTITY_BINDING_ROM_TRACE_2026-09-05.md) for the
+complete names/effects/fields crosswalk and the rejected shifted-text handoff.
+
 The contiguous ARM9 Cage visual table contains 37 records, 0x28 bytes each,
 from `0x020C8CC0` through `0x020C9260`.
 

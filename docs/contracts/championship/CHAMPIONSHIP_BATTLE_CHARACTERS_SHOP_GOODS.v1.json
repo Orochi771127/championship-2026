@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "CHAMPIONSHIP_BATTLE_CHARACTERS_SHOP_GOODS_R2",
+  "date": "2026-09-07",
+  "scope": ["BATTLE_FIELD_STATIC_CHARACTERS", "SHOP_FOUR_TRAINING_GOODS"],
+  "authority": "EXISTING_SESSION_DOM_VIEWS_AND_SINGLE_PIXI_STAGE",
+  "battle": {
+    "identity": "Project session combatant.speciesId through the existing creature-species catalog; missing identity remains null",
+    "artLoader": "Existing loadLicensedCharacterRoster with production-index checks and appearance replacement selection",
+    "pose": "Main animation 0 first source frame; static identity only",
+    "sizing": "arenaRect.width / arena.nativeWidthPx * texture.source.resolution / packedPixelsPerNativePixel",
+    "stand": "Existing PRODUCT_AUTHORED stand, aligned to trimmed sprite feet; this is not original approach geometry",
+    "unknownSizing": "Retain neutral marker, never guess an enlargement",
+    "animation": "UNKNOWN_REQUIRES_TRACE: native object graph and actor-versus-effect target binding are absent from normal battle presentation",
+    "lifecycle": "One instance per present slot; reuse on resize; scene destroys sprites and disposes its roster on exit",
+    "partySelection": "UNCHANGED: existing preset stand-in player team; not Home resident binding"
+  },
+  "shop": {
+    "recordToItemIndex": [0, 1, 3, 2],
+    "recordToChineseName": ["飼料", "蛋白質", "傷藥", "藥品"],
+    "recordToToolbarIcon": ["feed", "protein", "woundMedicine", "medicine"],
+    "art": "Existing ORIGINAL_CREATED tooling-pilot-r1 atlas; eligible production entry required",
+    "identitySource": "SHOP_REVERSE_SPEC_v1.md:139-144 and YDIJ_RAW_RESEARCH_EVIDENCE/SHOP_REVERSE_CATALOG_118.csv:1-12",
+    "sourceCsvSha256": "58e5beb04f8c75c388710291c5c5506a560453872743ca34c7c3a7ef2bf1bc28",
+    "copyEvidence": "PRODUCT_AUTHORED_ZH_HANT_TRANSLATION",
+    "purchase": "Unchanged existing shopRecordIndex purchase intent, prices, wallet and quantities",
+    "otherCategories": "Not assigned these four icons; existing Cage thumbnails preserved"
+  },
+  "rawPackRuntimeReads": false,
+  "originalAnimationParityClaim": false,
+  "physicalPhoneQA": false,
+  "shippingReady": false,
+  "report": "docs/art/production/battle-characters-shop-r2/README.md"
+}

@@ -1,0 +1,31 @@
+{
+  "contractId": "CHAMPIONSHIP_MOBILE_CONTINUOUS_UI",
+  "schemaVersion": 1,
+  "date": "2026-09-06",
+  "authority": "OWNER_APPROVED_ADAPTATION_MOBILE_PRESENTATION",
+  "ownerRequest": "Port the original to mobile using supplied art; avoid the feeling of two separated screens",
+  "boundedScreens": ["RAISING_HOME", "GATE_SELECT", "HUNT_LOADOUT", "HUNT_FIELD"],
+  "layout": "One continuous scene; DOM information overlays, app-owned shared status and toolbar; responsive safe-area offsets retained",
+  "sourceAdditions": {
+    "gateSelect.walletBits": "Existing Shop wallet only",
+    "gateSelect.gates.codeString": "Existing gate-table.r1.json codeString",
+    "gateSelect.gates.entranceFeeBits": "Existing ROM-traced Gate catalog fee; readout only, no new deduction",
+    "gateSelect.gates.art.thumbnail": "First production daytime field frame by canonical fieldId; explicitly not the original field_image_icon cell",
+    "huntField.hud.target": "Null without selection; HP only when existing Analyzer capability includes HP and finite runtime values exist; other values remain unknown",
+    "selectWildAt": "Publish one discrete source change if selectedWildId changes; no polling or additional ticker"
+  },
+  "art": {
+    "packVerified": "R:/Projects/Championship2026/YDIJ_PRIVATE_ROM_ART_PACK",
+    "packRole": "REFERENCE_ONLY",
+    "runtimeFields": "assets/production/hunt/licensed-runtime-v1/manifest.json",
+    "globe": "Existing original-created structural model; brighter palette, decorative mesh/rings hidden; not an original globe reconstruction",
+    "rawAssetsCopied": false
+  },
+  "limits": ["Six-field target panel is structurally restored; only capability-gated HP is sourced", "No target portrait, original map marker plane or countdown integrated", "Hunt tools/AI/capture-to-Home remain outside this presentation slice", "Raising native camera and interaction lanes unchanged", "No full original UI-art or game-parity acceptance"],
+  "newRouter": false,
+  "newStore": false,
+  "newSave": false,
+  "newRenderer": false,
+  "newTicker": false,
+  "shippingReady": false
+}

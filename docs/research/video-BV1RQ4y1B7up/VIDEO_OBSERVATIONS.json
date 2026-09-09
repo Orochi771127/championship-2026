@@ -1,0 +1,401 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-03",
+  "title": "数码宝贝冠军赛前期攻略",
+  "source": "https://www.bilibili.com/video/BV1RQ4y1B7up/",
+  "author": "風月Official",
+  "durationSeconds": 472,
+  "method": "Visible browser player timeline sampling and screenshot inspection; intensified capture sequences; not exhaustive frame or touch-event analysis.",
+  "referenceOnly": true,
+  "runtimeUse": false,
+  "claudeAudit": {
+    "url": "https://claude.ai/code/artifact/47455915-26d7-4a98-a874-b5e4b48fe12f",
+    "status": "READABLE",
+    "comparison": "COMPLETED_WITH_EVIDENCE_LIMITS",
+    "comparisonDate": "2026-09-03",
+    "comparisonIndex": "docs/research/ORIGINAL_VIDEO_EVIDENCE_INDEX_2026-09-03.md",
+    "sourceNote": "Corrected share page was read before the user supplied the Cursor consolidation prompt; continued using the supplied local summary after that instruction."
+  },
+  "observations": [
+    {
+      "id": "B2-01",
+      "targetSeconds": 15,
+      "actualSeconds": 16.042864,
+      "displayTimeApprox": "00:17",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=15",
+      "label": "作者製作的流程圖",
+      "evidence": "EDITORIAL_OBSERVED",
+      "observed": "畫面以三個方框說明遊戲前、中、後期。",
+      "interpretation": "此處是攻略作者的分類。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "不能當成原作存在三個階段分頁或強制任務清單。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t015.png",
+        "sha256": "ad77642468877935d414ab5e322320c56d13ca7d6c26b615e7233c540b84f1ca",
+        "sizeBytes": 124261,
+        "paused": true
+      }
+    },
+    {
+      "id": "B2-02",
+      "targetSeconds": 45,
+      "actualSeconds": 46.463947,
+      "displayTimeApprox": "00:47",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=45",
+      "label": "Tamer Info",
+      "evidence": "VIDEO_OBSERVED",
+      "observed": "名字、Green、Funds、Play Time、Training Lic.、Max Capacity、Cage Space 並列；Rookie 被作者紅圈標記。",
+      "interpretation": "玩家資料、養成牌照及空間資源分別呈現。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "紅圈屬作者加註；各項變更規則未驗證。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t045.png",
+        "sha256": "1ebd2a07030d6f64a48380a5ca899a4a68efc4ce49c021041c95a2ce655b958f",
+        "sizeBytes": 148157,
+        "paused": true
+      }
+    },
+    {
+      "id": "B2-03",
+      "targetSeconds": 60,
+      "actualSeconds": 61.47572,
+      "displayTimeApprox": "01:02",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=60",
+      "label": "牌照升級",
+      "evidence": "VIDEO_OBSERVED",
+      "observed": "Bronze Tamer 與訓練牌照升級、可以進化到 Ultimate 的訊息。",
+      "interpretation": "進化階段上限與牌照相關。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "各階升級條件未驗證；英文 Ultimate 不可誤譯成 Mega。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t060.png",
+        "sha256": "7cf0989a6d67e35a31daa75d0a703b8095bce5a14e48fb0e263648b531294a5b",
+        "sizeBytes": 115044,
+        "paused": true
+      }
+    },
+    {
+      "id": "B2-04",
+      "targetSeconds": 90,
+      "actualSeconds": 91.081147,
+      "displayTimeApprox": "01:32",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=90",
+      "label": "Small Challenger",
+      "evidence": "VIDEO_OBSERVED",
+      "observed": "原作賽事介紹顯示 1 對 1 與入場費；旁邊另有作者條件表。",
+      "interpretation": "參賽前顯示比賽形式及費用。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "作者整理欄位不是原作 UI。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t090.png",
+        "sha256": "d0810eb202e2f517be98fce1168aad03e6d0627606cce973ed10a4be212fb263",
+        "sizeBytes": 139646,
+        "paused": true
+      }
+    },
+    {
+      "id": "B2-05",
+      "targetSeconds": 180,
+      "actualSeconds": 180.946444,
+      "displayTimeApprox": "03:01",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=180",
+      "label": "獎章結果",
+      "evidence": "VIDEO_OBSERVED",
+      "observed": "Insect Royale 獎章取得的結果畫面。",
+      "interpretation": "賽事有可見的獎章回饋。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "作者所述獎章總需求未由此一影格證明。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t180.png",
+        "sha256": "d9162a8054ebb4ed84c145480216b5f98635c1b9a41399c071f16812a2b91f62",
+        "sizeBytes": 99405,
+        "paused": true
+      }
+    },
+    {
+      "id": "B2-06",
+      "targetSeconds": 240,
+      "actualSeconds": 241.33624,
+      "displayTimeApprox": "04:02",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=240",
+      "label": "Large Fighter 非對稱隊伍",
+      "evidence": "VIDEO_OBSERVED",
+      "observed": "戰鬥總覽左方三隻、右方一隻；倒數 120；下方是戰鬥現場。",
+      "interpretation": "戰鬥呈現需容納雙方不同隊伍人數。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "右側大幅角色插圖屬剪輯；不能推定任意人數均合法。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t240.png",
+        "sha256": "9c60a8ea59a19a02b94bff0e58459db1e64d02b0a514b3c73ad7914ac8492961",
+        "sizeBytes": 146873,
+        "paused": true
+      }
+    },
+    {
+      "id": "B2-07",
+      "targetSeconds": 250,
+      "actualSeconds": 251.313289,
+      "displayTimeApprox": "04:12",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=250",
+      "label": "季節與賽事清單",
+      "evidence": "VIDEO_OBSERVED",
+      "observed": "两組原作畫面左右並排，分別為 Seas of Emeralds 與 Metal Emperor；可見季節分頁、列表及上方限制。",
+      "interpretation": "選中賽事與其詳情連動；有 Vegetation 與 Machine 類別限制。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "左右並排來自作者編輯；各圖示計數語意未驗證。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t250.png",
+        "sha256": "468b0d5b85ab1ee506d238a6316e5b4b866583c3ffdcfc65bf0d43cdc67aebac",
+        "sizeBytes": 169595,
+        "paused": true
+      }
+    },
+    {
+      "id": "B2-08",
+      "targetSeconds": 263,
+      "actualSeconds": 264.405333,
+      "displayTimeApprox": "04:25",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=263",
+      "label": "日文實機畫面",
+      "evidence": "VIDEO_OBSERVED",
+      "observed": "片中轉為拍攝日文掌機螢幕。",
+      "interpretation": "本片混用語言與拍攝形式。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "不能以同一英文版連續存檔解讀全片。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t263.png",
+        "sha256": "d584690f42651ee37d12fec649ccf40d5850bd6b9588f332ae03f3cae765b8a0",
+        "sizeBytes": 118223,
+        "paused": true
+      }
+    },
+    {
+      "id": "B2-09",
+      "targetSeconds": 267,
+      "actualSeconds": 268.56138,
+      "displayTimeApprox": "04:29",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=267",
+      "label": "沙漠套繩",
+      "evidence": "VIDEO_OBSERVED",
+      "observed": "白綠色分段繩索軌跡圍繞目標，底部第二格繩索高亮。",
+      "interpretation": "工具在世界中繪製繩索路徑。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "圈線閉合容差、方向、圈數、命中演算法未驗證。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t267.png",
+        "sha256": "6c2338dc4d84eeeed6e677d13d98578fb251c42e083e6d97b10ef7507a18dc06",
+        "sizeBytes": 114831,
+        "paused": true
+      }
+    },
+    {
+      "id": "B2-10",
+      "targetSeconds": 268,
+      "actualSeconds": 269.697934,
+      "displayTimeApprox": "04:30",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=268",
+      "label": "沙漠 Pull",
+      "evidence": "VIDEO_OBSERVED",
+      "observed": "站立目標上方有 Pull! 與綠條，繩索工具仍高亮。",
+      "interpretation": "捕捉已進入拉繩提示階段。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "綠條所代表的內部量未驗證。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t268.png",
+        "sha256": "103eafece8c65ed63f1188e3f21f3750f7a5f41dd2c8bff1da24b2426f5d3cca",
+        "sizeBytes": 116274,
+        "paused": true
+      }
+    },
+    {
+      "id": "B2-11",
+      "targetSeconds": 269,
+      "actualSeconds": 270.436673,
+      "displayTimeApprox": "04:31",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=269",
+      "label": "沙漠倒下與紅手",
+      "evidence": "VIDEO_OBSERVED",
+      "observed": "目標倒下伴隨星形效果，上方是紅色手掌與紅條；繩索仍高亮。",
+      "interpretation": "存在拉繩後、收取前的中間狀態。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "紅條是否計時或恢復量未驗證。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t269.png",
+        "sha256": "c830d286ccc9330ad6ece4d5e8ad922ed1c33154043901e689397f2793da99c2",
+        "sizeBytes": 117377,
+        "paused": true
+      }
+    },
+    {
+      "id": "B2-12",
+      "targetSeconds": 270,
+      "actualSeconds": 271.239988,
+      "displayTimeApprox": "04:32",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=270",
+      "label": "沙漠收取回饋",
+      "evidence": "VIDEO_OBSERVED",
+      "observed": "最左手掌工具高亮；原目標位置出現藍白光球。",
+      "interpretation": "前後序列支持使用手掌收取的解釋。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "單點或拖放的精確觸發、是否已永久入隊未驗證。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t270.png",
+        "sha256": "c0cf7442efe2d27bcf2f9c34e097c9f3c9a963c07e7b9e55d73ed6e07d5ff200",
+        "sizeBytes": 116416,
+        "paused": true
+      }
+    },
+    {
+      "id": "B2-13",
+      "targetSeconds": 295,
+      "actualSeconds": 296.763038,
+      "displayTimeApprox": "04:57",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=295",
+      "label": "Nature Analyzer",
+      "evidence": "VIDEO_OBSERVED",
+      "observed": "原作商品說明、5500 bits、持有量 0 可見。",
+      "interpretation": "目標情報與商品功能相關。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "實際裝備綁定與資料揭露條件未驗證。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t295.png",
+        "sha256": "988332144ebfd9a47745d9c0ea75f970e968bd9c547408c8355cb46ef62377f2",
+        "sizeBytes": 145650,
+        "paused": true
+      }
+    },
+    {
+      "id": "B2-14",
+      "targetSeconds": 300,
+      "actualSeconds": 301.14596,
+      "displayTimeApprox": "05:02",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=300",
+      "label": "沼澤套繩",
+      "evidence": "VIDEO_OBSERVED",
+      "observed": "藍色目標周圍出現白綠分段弧線，附近另有綠色角色；繩索工具高亮。",
+      "interpretation": "第二組場景重複出現套繩視覺。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "不能据附近有另一角色就推論多目標捕捉。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t300.png",
+        "sha256": "08e8078ba4efa1b38a5208c46357c4259f5d66d2694a2847e21f0ddfecf207ae",
+        "sizeBytes": 112248,
+        "paused": true
+      }
+    },
+    {
+      "id": "B2-15",
+      "targetSeconds": 301,
+      "actualSeconds": 302.399536,
+      "displayTimeApprox": "05:03",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=301",
+      "label": "沼澤拉繩連線",
+      "evidence": "VIDEO_OBSERVED",
+      "observed": "Pull!、部分減少的綠條，以及由目標向右方端點延伸的綠色斜繩。",
+      "interpretation": "拉扯具有目標端與操作端的空間關係。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "拉力、速度、斷繩和綠條公式未驗證。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t301.png",
+        "sha256": "6f5418a003b252a5f38a04df3d27a4ab78c0a51ee61a82558690d4b5bae9c7d3",
+        "sizeBytes": 113414,
+        "paused": true
+      }
+    },
+    {
+      "id": "B2-16",
+      "targetSeconds": 302,
+      "actualSeconds": 303.501961,
+      "displayTimeApprox": "05:04",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=302",
+      "label": "沼澤收取回饋",
+      "evidence": "VIDEO_OBSERVED",
+      "observed": "場景位置改變，出現藍白光球，最左手掌工具高亮。",
+      "interpretation": "支持另一組手掌收取回饋。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "畫面剪輯和鏡頭位移不可直接等同觸控輸入。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t302.png",
+        "sha256": "d509b2756c4a67127d77a95f71684c78e88547f6b5d45e84e25a299455de2b7e",
+        "sizeBytes": 112262,
+        "paused": true
+      }
+    },
+    {
+      "id": "B2-17",
+      "targetSeconds": 310,
+      "actualSeconds": 311.390352,
+      "displayTimeApprox": "05:12",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=310",
+      "label": "八日曆格",
+      "evidence": "VIDEO_OBSERVED",
+      "observed": "1–8 為兩列四欄，勾選與空白圖示旁有數字；1 呈紫色。",
+      "interpretation": "日程有按天摘要的視覺。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "圖示數字、紫色是否當日或選中未驗證。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t310.png",
+        "sha256": "27f8d91998ac9a161fdac68517491ef05346ccfbbf7966d7b6ab35a5653921f2",
+        "sizeBytes": 114035,
+        "paused": true
+      }
+    },
+    {
+      "id": "B2-18",
+      "targetSeconds": 330,
+      "actualSeconds": 331.704189,
+      "displayTimeApprox": "05:32",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=330",
+      "label": "Sky Walkers",
+      "evidence": "VIDEO_OBSERVED",
+      "observed": "原作條件含 Dragon and Bird species only、3 vs. 3 Battle、入場費 1000 bits。",
+      "interpretation": "賽事資格可同時允許多種類別。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "不合格時實際處理未驗證。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t330.png",
+        "sha256": "34bf519b60a4a74b6d92aab90e454d5222d6c5c4f189e42d6148f9b934013896",
+        "sizeBytes": 131390,
+        "paused": true
+      }
+    },
+    {
+      "id": "B2-19",
+      "targetSeconds": 360,
+      "actualSeconds": 360.915856,
+      "displayTimeApprox": "06:01",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=360",
+      "label": "Silver Freeze 非對稱賽事",
+      "evidence": "VIDEO_OBSERVED",
+      "observed": "原作文字明示 1 vs. 3 Battle 與 1500 bits；旁有作者條件表。",
+      "interpretation": "原作賽事直接支持 1 對 3。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "未取得此場完整戰鬥的逐步紀錄。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t360.png",
+        "sha256": "4c80b74689066e51e5e37ba84bfe18cd1f830f1f0d59acd81ee5fa42dcea68a1",
+        "sizeBytes": 149903,
+        "paused": true
+      }
+    },
+    {
+      "id": "B2-20",
+      "targetSeconds": 420,
+      "actualSeconds": 420.982286,
+      "displayTimeApprox": "07:01",
+      "sourceUrl": "https://www.bilibili.com/video/BV1RQ4y1B7up/?t=420",
+      "label": "Bug Busters",
+      "evidence": "VIDEO_OBSERVED",
+      "observed": "原作條件含 Virus attribute only、3 vs. 3 Battle、1000 bits。",
+      "interpretation": "屬性限制與物種類別限制需區分。",
+      "interpretationEvidence": "INFERRED_FROM_SEQUENCE_OR_CONTEXT",
+      "unknown": "所有資格交集與解鎖條件未驗證。",
+      "frame": {
+        "localPath": "R:/Projects/Championship2026/_archive/video-research/BV1RQ4y1B7up/frames/t420.png",
+        "sha256": "d3923320b408dac865375f6685142f59e738daf0e256ccac7540266f6f2f4f45",
+        "sizeBytes": 148914,
+        "paused": true
+      }
+    }
+  ]
+}

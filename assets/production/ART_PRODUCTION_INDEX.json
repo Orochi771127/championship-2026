@@ -2,13 +2,63 @@
   "schemaVersion": 1,
   "authority": "CHAMPIONSHIP_2026_ART_PRODUCTION",
   "sourceCrosswalk": "docs/art/ART_PRODUCTION_CROSSWALK.json",
-  "promotionPolicy": "ONLY_EXPLICIT_ENTRIES_MAY_BE_RUNTIME_REGISTERED; SHIPPING_READY_REQUIRES_LICENSE_DOCUMENT_HUMAN_APPROVAL_AND_RUNTIME_QA",
-  "a0State": "SPECIFICATION_LOCKED_NO_NEW_ART_PROMOTED",
+  "promotionPolicy": "ONLY_EXPLICIT_INDEX_ENTRIES_MAY_BE_RUNTIME_REGISTERED; OWNER_DECLARED_LICENSED_PIXELS_MAY_BE_RUNTIME_ELIGIBLE; SHIPPING_READY_REQUIRES_HUMAN_APPROVAL_AND_RUNTIME_QA",
+  "a0State": "SPECIFICATION_LOCKED_LICENSED_PIXEL_RUNTIME_PILOT_NO_SHIPPING",
+  "rightsAuthority": {
+    "uniqueSource": "THIS_INDEX",
+    "ownerStatus": "LICENSED",
+    "ownerDirective": "docs/coordination/OWNER_DIRECTION.md#2026-09-02",
+    "researchPack": "NOT_RUNTIME_READABLE"
+  },
   "summary": {
-    "registeredRuntimeBundles": 3,
+    "registeredRuntimeBundles": 25,
     "shippingReadyBundles": 0
   },
   "entries": [
+    {
+      "assetId": "art:hunt:licensed-runtime:v1",
+      "manifestPath": "assets/production/hunt/licensed-runtime-v1/manifest.json",
+      "rightsStatus": "LICENSED",
+      "productionStatus": "OWNER_APPROVED_LICENSED_PIXEL_RUNTIME",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "maturity": "LICENSED_PIXEL_FAITHFUL_NEAREST_HD_HUNT_FIELDS"
+    },
+    {
+      "assetId": "art:cage:licensed-runtime:v1",
+      "manifestPath": "assets/production/cage/licensed-runtime-v1/manifest.json",
+      "rightsStatus": "LICENSED",
+      "productionStatus": "OWNER_APPROVED_LICENSED_PIXEL_RUNTIME",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "maturity": "LICENSED_PIXEL_FAITHFUL_NEAREST_HD_CAGE_FIELDS"
+    },
+    {
+      "assetId": "art:battle:licensed-runtime:v1",
+      "manifestPath": "assets/production/battle/licensed-runtime-v1/manifest.json",
+      "rightsStatus": "LICENSED",
+      "productionStatus": "OWNER_APPROVED_LICENSED_PIXEL_RUNTIME",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "maturity": "LICENSED_PIXEL_FAITHFUL_NEAREST_HD_BATTLE_FIELDS"
+    },
+    {
+      "assetId": "art:vfx:licensed-runtime:v1",
+      "manifestPath": "assets/production/vfx/licensed-runtime-v1/manifest.json",
+      "rightsStatus": "LICENSED",
+      "productionStatus": "OWNER_APPROVED_LICENSED_PIXEL_RUNTIME",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "maturity": "LICENSED_PIXEL_FAITHFUL_NITRO_VFX_GLB"
+    },
     {
       "assetId": "art:raising_home:int-rh2:temporary-presentation-bundle",
       "manifestPath": "assets/production/temporary/int-rh2/manifest.json",
@@ -38,6 +88,202 @@
       "humanApproved": true,
       "shippingReady": false,
       "maturity": "STRUCTURAL_PRESENTATION"
+    },
+    {
+      "assetId": "art:battle:bm00-bm01-r1:original-review",
+      "manifestPath": "assets/production/internal-battle-review/bm00-bm01-r1/runtime.review.json",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "productionStatus": "OWNER_DIRECTED_ALIGNMENT_REVISION_INTERNAL_REVIEW",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": true,
+      "shippingReady": false,
+      "maturity": "INTERNAL_LAYERED_RUNTIME_REVIEW"
+    },
+    {
+      "assetId": "art:battle:bm02-r1:original-review",
+      "manifestPath": "assets/production/internal-battle-review/bm02-r1/runtime.review.json",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "shippingReady": false,
+      "maturity": "INTERNAL_LAYERED_RUNTIME_REVIEW"
+    },
+    {
+      "assetId": "art:battle:bm03-animated-r1:original-review",
+      "manifestPath": "assets/production/internal-battle-review/bm03-bm04-animated-r1/runtime.bm03.review.json",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "shippingReady": false,
+      "maturity": "INTERNAL_ANIMATED_LAYERED_RUNTIME_REVIEW"
+    },
+    {
+      "assetId": "art:battle:bm04-hardening-r2:original-review",
+      "manifestPath": "assets/production/internal-battle-review/hardening-r2/runtime.bm04.review.json",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "shippingReady": false,
+      "maturity": "INTERNAL_FIELD_OBJECT_LAYER_RUNTIME_REVIEW"
+    },
+    {
+      "assetId": "art:battle:bm05-r1:original-review",
+      "manifestPath": "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm05.review.json",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "shippingReady": false,
+      "maturity": "INTERNAL_LAYERED_RUNTIME_REVIEW"
+    },
+    {
+      "assetId": "art:battle:bm06-r1:original-review",
+      "manifestPath": "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm06.review.json",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "shippingReady": false,
+      "maturity": "INTERNAL_LAYERED_RUNTIME_REVIEW"
+    },
+    {
+      "assetId": "art:battle:bm07-cyberspace-r1:original-review",
+      "manifestPath": "assets/production/internal-battle-review/bm07-cyberspace-r1/runtime.review.json",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "shippingReady": false,
+      "maturity": "INTERNAL_INDEPENDENT_RUNTIME_REVIEW"
+    },
+    {
+      "assetId": "art:battle:bm08-hardening-r2:original-review",
+      "manifestPath": "assets/production/internal-battle-review/hardening-r2/runtime.bm08.review.json",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "shippingReady": false,
+      "maturity": "INTERNAL_FIELD_OBJECT_LAYER_RUNTIME_REVIEW"
+    },
+    {
+      "assetId": "art:battle:bm09-r1:original-review",
+      "manifestPath": "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm09.review.json",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "shippingReady": false,
+      "maturity": "INTERNAL_LAYERED_RUNTIME_REVIEW"
+    },
+    {
+      "assetId": "art:battle:bm10-r1:original-review",
+      "manifestPath": "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm10.review.json",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "shippingReady": false,
+      "maturity": "INTERNAL_LAYERED_RUNTIME_REVIEW"
+    },
+    {
+      "assetId": "art:battle:bm11-hardening-r2:original-review",
+      "manifestPath": "assets/production/internal-battle-review/hardening-r2/runtime.bm11.review.json",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "shippingReady": false,
+      "maturity": "INTERNAL_FIELD_OBJECT_LAYER_RUNTIME_REVIEW"
+    },
+    {
+      "assetId": "art:battle-select:menu-cube:v1",
+      "manifestPath": "assets/production/battle/menu-cube-v1/manifest.json",
+      "rightsStatus": "ORIGINAL_CREATED",
+      "productionStatus": "IMPLEMENTED_OWNER_VISUAL_REVIEW_PENDING",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "maturity": "FOUR_LAYERED_VECTOR_PANELS_BAKED_TO_SRGB_TEXTURES"
+    },
+    {
+      "assetId": "art:characters:licensed-internal:v1",
+      "manifestPath": "assets/production/internal-faithful-baseline/characters-v1/manifest.json",
+      "rightsStatus": "LICENSED",
+      "productionStatus": "OWNER_AUTHORIZED_INTERNAL_CHARACTER_MATERIALS",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "runtimeEligible": true,
+      "publicReleasePermitted": false,
+      "shippingReady": false,
+      "maturity": "PIXEL_FAITHFUL_224_RAW_TIMELINES_STATIC_NORMAL_PRESENTATION"
+    },
+    {
+      "assetId": "art:ui:raising-header-material:tooling-pilot-r1",
+      "manifestPath": "assets/production/ui/tooling-pilot-r1/manifest.json",
+      "rightsStatus": "ORIGINAL_CREATED",
+      "productionStatus": "IMPLEMENTED_OWNER_VISUAL_REVIEW_PENDING",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "runtimeEligible": true,
+      "publicReleasePermitted": false,
+      "shippingReady": false,
+      "maturity": "BOUNDED_ORIGINAL_UI_MATERIAL_PILOT"
+    },
+    {
+      "assetId": "art:vfx:original-battle-2d:v1",
+      "manifestPath": "assets/production/vfx/original-battle-2d-v1/manifest.json",
+      "rightsStatus": "ORIGINAL_CREATED",
+      "productionStatus": "RETIRED_GENERATED_REPLACEMENT_OWNER_CORRECTION",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "runtimeEligible": false,
+      "shippingReady": false,
+      "maturity": "HISTORICAL_R11_RETAINED_NOT_SELECTED",
+      "publicReleasePermitted": false
+    },
+    {
+      "assetId": "art:vfx:battle-effects:local-reference:v1",
+      "manifestPath": "assets/production/internal-faithful-baseline/battle-effects-v1/manifest.json",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE",
+      "productionStatus": "OWNER_AUTHORIZED_LOCAL_REFERENCE",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "runtimeEligible": true,
+      "localOnly": true,
+      "runtimeScope": "LOOPBACK_RESEARCH_ONLY",
+      "publicReleasePermitted": false,
+      "shippingReady": false,
+      "maturity": "SOURCE_PNG_PIXELS_NATIVE_ORIGINS_151_BANKS_LOCAL_REVIEW"
+    },
+    {
+      "assetId": "art:audio:battle:local-reference:v1",
+      "manifestPath": "assets/production/internal-faithful-baseline/battle-audio-v1/manifest.json",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE",
+      "productionStatus": "OWNER_AUTHORIZED_LOCAL_REFERENCE",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "runtimeEligible": true,
+      "localOnly": true,
+      "runtimeScope": "LOOPBACK_RESEARCH_ONLY",
+      "publicReleasePermitted": false,
+      "shippingReady": false,
+      "maturity": "SOURCE_SAMPLES_54_ORIGINAL_IDS_LOCAL_REVIEW"
+    },
+    {
+      "assetId": "art:raising:care:r1",
+      "manifestPath": "assets/production/raising-care-r1/manifest.json",
+      "rightsStatus": "ORIGINAL_CREATED",
+      "productionStatus": "INTEGRATED_VECTOR_CARE_ART",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "runtimeEligible": true,
+      "shippingReady": false,
+        "maturity": "Meat, capsule, waste-tool icon, broom/dustpan, cake and celebration platter on existing Home"
     }
   ]
 }

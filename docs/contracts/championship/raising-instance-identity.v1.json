@@ -1,0 +1,138 @@
+{
+  "contractId": "championship:2026:raising-instance-identity:v1",
+  "status": "IDENTITY_AND_NATIVE_CAPTURE_PROFILE_IMPLEMENTED_FULL_GROWTH_PARTIAL",
+  "scope": "One identity projection/allocator over existing sources, with actual native fields for new normal captures",
+  "authority": "CHAMPIONSHIP_2026_PRODUCT",
+  "originalParityStatus": "PARTIAL",
+  "implementation": "src/championship/raising/raisingInstanceIdentity.js",
+  "tests": [
+    "tests/championship-raising-instance-identity-cases.mjs",
+    "tests/championship-round2-identity-app-cases.mjs",
+    "tests/championship-native-individual-profile-cases.mjs",
+    "tests/championship-hunt-normal-capture-save-cases.mjs"
+  ],
+  "ownership": {
+    "stateOwner": "The existing championshipStandaloneApp; this module is pure and owns no state",
+    "existingSources": [
+      "creature.creatureId/speciesId/displayName",
+      "R2 resident residentId/speciesId/name",
+      "raising.collection instanceId/speciesId/displayName/enclosedAt/originGateId/successAuthority",
+      "raising.assignments and raising.interactions keyed by the same instance ID"
+    ],
+    "durableAddition": {
+      "instanceIdentity": {
+        "nextSequence": "positive safe integer; strictly greater than every surviving generated ID ordinal"
+      }
+    },
+    "saveAuthority": "Existing ChampionshipPersistentSavePort and championshipModernSave:v1 key; no additional roster copy or writer"
+  },
+  "api": {
+    "sources": "{ creature?, residents?, collection?, assignments?, interactions? }",
+    "canonicalRaisingSpeciesId": "Remove only the existing championship:creature: presentation prefix; do not rewrite instance IDs",
+    "listRaisingInstances": "Return an immutable ordered projection: starter first, then unmatched residents, then collection order",
+    "resolveRaisingInstance": "Resolve one exact instance ID, return null if absent; never resolve by species",
+    "createRaisingInstanceIdentityState": "New game or legacy migration: derive nextSequence from surviving generated IDs and assignment keys",
+    "normalizeRaisingInstanceIdentityState": "Validate the one-field durable state and reject a mark behind the supplied sources",
+    "allocateRaisingInstanceIdentity": "Return {state, instanceId}; the app commits both allocation state and existing collection mutation atomically"
+  },
+  "projection": {
+    "fields": [
+      "instanceId",
+      "speciesId",
+      "displayName",
+      "cageId",
+      "source",
+      "interaction",
+      "profile",
+      "identityEvidence",
+      "profileEvidence"
+    ],
+    "source": {
+      "kind": [
+        "STARTER",
+        "RESIDENT",
+        "COLLECTION"
+      ],
+      "residentId": "exact matching R2 resident ID or null",
+      "successAuthority": "existing collection value or null; PRODUCT_AUTHORED_ENCLOSURE is not promoted to original capture",
+      "enclosedAt": "existing value or null",
+      "originGateId": "existing value or null"
+    },
+    "interaction": "Existing {careCount,lastCaredAt} or null; this is an interaction flag, not an original growth stat",
+    "profile": "Immutable per-individual HP/TP/species/personality/known stat projection when collection.nativeProfile exists; null for legacy/starter entries without it.",
+    "identityEvidence": "PARTIAL",
+    "profileEvidence": "ROM_VERIFIED_INDIVIDUAL_FIELDS when nativeProfile exists; UNKNOWN_REQUIRES_TRACE otherwise."
+  },
+  "invariants": [
+    "Starter and resident references sharing the exact ID refer to one individual and must agree on canonical species ID",
+    "Two individuals of the same species keep independent IDs, names, cage memberships, sources and interactions",
+    "Duplicate resident IDs, duplicate collection IDs or collection/resident ID collisions are rejected by the resolver",
+    "Unknown IDs and missing profile fields remain unresolved; no species 0, base stats, preset team or rung fallback is added",
+    "Allocation is not capture: a reservation creates no collection member, changes no source, and applies no gameplay effect",
+    "New allocation uses championship:2026:instance: plus a decimal ordinal padded to at least four digits",
+    "The persisted high-water mark never decreases when collection members disappear",
+    "Numeric exhaustion and malformed or rewound current-schema marks are errors, not wraparound",
+    "Identity allocator serializes only its stable high-water mark. Actual known per-individual numeric fields may be stored inside the existing raising.collection entry; no forensic receipt, ROM payload or provenance blob is serialized."
+  ],
+  "legacyMigration": {
+    "sourceSchemas": [
+      1,
+      2
+    ],
+    "targetEnvelopeSchema": 3,
+    "ids": "Preserve all existing creatureId, residentId and instanceId values without renumbering",
+    "ordinal": "max decimal suffix among surviving generated IDs and assignment keys, plus one; start at one if none exist",
+    "durableR2Compatibility": "Allocator only reads IDs; durable R2 residents need not carry speciesId or name before restoration",
+    "deletedHistory": "Legacy envelopes did not persist deleted-ID history. No claim is made about unobserved IDs deleted before migration",
+    "unknowns": "Do not reconstruct original capture, starting selection, growth, current HP/TP, rungs, age or combat profile from species catalog values",
+    "roundTrip": "Once the v3 envelope is successfully saved, preserve its mark even if greater than the present roster maximum"
+  },
+  "evidence": [
+    {
+      "lookup": "championship-evidence MCP read_evidence",
+      "source": "original:CLAUDE_CODE_YDIJ_SYSTEMS_HANDOFF/07_PROGRESSION_ECONOMY_DATABASE/PROGRESSION_DATABASE_COLLECTION_SPEC.md",
+      "lines": [
+        3,
+        10
+      ],
+      "sha256": "dcdbaa23bb5bff9e1e2657e90320586c32977da86231e187a61766764b337900",
+      "supports": "Existing research separates species definitions, encyclopedia state and individual instances; capture records an individual",
+      "limit": "Research report structure only; no new ROM writer validation or current capture parity claim"
+    },
+    {
+      "lookup": "championship-evidence MCP read_evidence",
+      "source": "original:CLAUDE_CODE_YDIJ_SYSTEMS_HANDOFF/05_GAMEPLAY_SYSTEMS/GAMEPLAY_MASTER_SPEC.md",
+      "lines": [
+        48,
+        59
+      ],
+      "sha256": "54e8d4160671ad74f08a5c5e604b96dafaa222371470681415a0c8f23f19d3f2",
+      "supports": "Collection, resident state and visible actor are separate concepts",
+      "limit": "Retrieved classification does not independently promote the report to ROM_VERIFIED"
+    },
+    {
+      "source": "src/championship/raising/statLadder.js",
+      "supports": "Existing implementation explicitly marks per-creature rung evidence UNKNOWN_REQUIRES_TRACE",
+      "limit": "Known table/constructor arithmetic does not establish a player's persistent rung, current resources or mutation writers"
+    },
+    {
+      "source": "src/championship/app/phase1ProductCreatures.js",
+      "supports": "Current starter identity and FIRST_EGG_IN_TABLE_ORDER_UNKNOWN_REQUIRES_TRACE selection boundary",
+      "limit": "Preservation of the current source is not verification that the original starts with that egg"
+    }
+  ],
+  "notImplemented": [
+    "Original care/growth/evolution/lifetime and training writers",
+    "Player party composition, eligibility and post-battle writeback",
+    "Original initial egg constructor/source and legacy profile reconstruction",
+    "Original name-edit charset and native record writer closure"
+  ],
+  "currentNativeProfile": {
+    "research": "docs/research/GATE_ADMISSION_AND_INDIVIDUAL_RETURN_2026-09-08.md",
+    "module": "src/championship/raising/nativeIndividualProfile.js",
+    "homeCpuCopies": 684,
+    "source": "108 known u32 fields plus5 narrow fields and source name copied by02061BB4; no padding",
+    "outerSaveVersion": 5,
+    "legacyRule": "Do not derive missing native profiles from species base stats or battle presets."
+  }
+}

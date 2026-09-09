@@ -1,3 +1,4 @@
+import { uiText } from "../../text/uiText.js";
 // VS2-R1 -- bounded Three.js presentation for Gate Select.
 //
 // This scene is original-created Championship 2026 geometry. It carries no ROM
@@ -28,9 +29,9 @@ function createWorldGeometry({ night = false } = {}) {
   const position = geometry.getAttribute("position");
   const colors = new Float32Array(position.count * 3);
   const point = new THREE.Vector3();
-  const ocean = new THREE.Color(night ? 0x05111d : 0x0b3442);
-  const land = new THREE.Color(night ? 0x123338 : 0x356b62);
-  const ridge = new THREE.Color(night ? 0x32493f : 0x7e8b64);
+  const ocean = new THREE.Color(night ? 0x05111d : 0x126bd4);
+  const land = new THREE.Color(night ? 0x123338 : 0x559650);
+  const ridge = new THREE.Color(night ? 0x32493f : 0xbaa270);
 
   for (let index = 0; index < position.count; index += 1) {
     point.fromBufferAttribute(position, index).normalize();
@@ -78,13 +79,13 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
   renderer.domElement.className = "cm-vs2-gate3d__canvas";
   renderer.domElement.dataset.renderer = "THREE_BOUNDED_GATE_SELECT";
   renderer.domElement.dataset.interactionAuthority = "PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER";
-  renderer.domElement.setAttribute("aria-label", "Rotatable world destination view");
+  renderer.domElement.setAttribute("aria-label", uiText("Rotatable world destination view"));
   renderer.domElement.setAttribute("role", "img");
   renderer.domElement.style.touchAction = "none";
 
   const overlay = document.createElement("div");
   overlay.className = "cm-vs2-gate3d__nodes";
-  overlay.setAttribute("aria-label", "World destination nodes");
+  overlay.setAttribute("aria-label", uiText("World destination nodes"));
   host.append(renderer.domElement, overlay);
 
   const scene = new THREE.Scene();
@@ -127,6 +128,7 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
     new THREE.MeshBasicMaterial({ color: 0x79bcc4, wireframe: true, transparent: true, opacity: 0.075 })
   );
   grid.name = "ORIGINAL_CREATED_TECHNICAL_LONGITUDE_SHELL";
+  grid.visible = false;
   world.add(grid);
 
   const equator = new THREE.Mesh(
@@ -134,6 +136,7 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
     new THREE.MeshBasicMaterial({ color: 0xd2ad5d, transparent: true, opacity: 0.34 })
   );
   equator.name = "ORIGINAL_CREATED_WORLD_REFERENCE_RING";
+  equator.visible = false;
   equator.rotation.x = Math.PI / 2;
   world.add(equator);
 
@@ -142,6 +145,7 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
     new THREE.MeshBasicMaterial({ color: 0x65b8c3, transparent: true, opacity: 0.3 })
   );
   halo.name = "ORIGINAL_CREATED_GATE_HALO";
+  halo.visible = false;
   halo.rotation.set(1.18, 0.28, 0.22);
   worldRoot.add(halo);
 
@@ -176,7 +180,7 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
     button.type = "button";
     button.className = "cm-vs2-gate3d__node-hit";
     button.dataset.gateId = gate.gateId;
-    button.setAttribute("aria-label", `Select ${gate.displayName} biome destination`);
+    button.setAttribute("aria-label", uiText(`Select ${gate.displayName} biome destination`));
     const indexLabel = document.createElement("span");
     indexLabel.className = "cm-vs2-gate3d__node-index";
     indexLabel.textContent = String(gate.ordinal).padStart(2, "0");

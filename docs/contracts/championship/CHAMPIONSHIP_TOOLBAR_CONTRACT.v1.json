@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "contractId": "CHAMPIONSHIP_TOOLBAR_CONTRACT",
-  "version": "v1.1",
+  "version": "v1.2",
   "owner": "Claude Code",
-  "date": "2026-08-27",
+  "date": "2026-09-09",
   "purpose": "Cross-agent presentation contract for the original Championship bottom toolbar. Codex may bind presentation to anything marked ROM_VERIFIED. Everything marked UNKNOWN_REQUIRES_TRACE must stay a neutral placeholder.",
   "sourceEvidence": {
     "romTree": "local research-only tree; no ROM content is reproduced here",
@@ -260,13 +260,13 @@
     ]
   },
   "unknown": {
-    "perSlotCommandBindings": "UNKNOWN_REQUIRES_TRACE - no command table found adjacent to the slot-to-node table; the per-slot setup loop writes no command id",
+    "perSlotCommandBindings": "Raising bindings closed by raisingBindings; other toolbar modes retain their own evidence boundaries.",
     "perSlotIconCell": "UNKNOWN_REQUIRES_TRACE - the icon bank is bound to the slot sub-object at +0xD4, but no per-slot cell or sequence selection was recovered",
     "perSlotTextId": "UNKNOWN_REQUIRES_TRACE",
-    "slot7Identity": "UNKNOWN_REQUIRES_TRACE",
-    "submenuOwningSlot": "UNKNOWN_REQUIRES_TRACE",
+    "slot7Identity": "Raising: system; see raisingBindings. Other modes are not covered by this delta.",
+    "submenuOwningSlot": "Raising: management 6 and system 7; ROM setter and original video agree.",
     "submenuMembership": "UNKNOWN_REQUIRES_TRACE - storage proven (8 per slot); population site not found. Hunt and Battle remain ROM_VERIFIED members of *a* submenu from tutorial text only.",
-    "exactCareValues": "UNKNOWN_REQUIRES_TRACE",
+    "exactCareValues": "Consumed numeric writers have separate CPU receipts; unbound tutorial actors and other interactions remain PARTIAL.",
     "slotEnableMask": "UNKNOWN_REQUIRES_TRACE - slot+0x192 and slot+0xBE are both initialised to 0 and are candidates, but nothing proves either is an enable flag"
   },
   "codexGuidance": {
@@ -276,14 +276,12 @@
       "slot frame geometry and 26px pitch as a layout reference",
       "the existence of a submenu affordance",
       "slot index to button order: slot N is buttonN, left to right",
-      "a submenu affordance of up to eight entries on any slot"
+      "a submenu affordance of up to eight entries on any slot",
+      "Raising commands and ordering in raisingBindings, through the existing app authority"
     ],
     "mustRemainNeutralPlaceholder": [
-      "exact slot semantic labels",
-      "exact slot actions and ordering",
-      "slot 7 identity",
-      "any numeric care effect",
-      "icon-to-slot assignment"
+      "Untraced modes or untraced icon-to-cell assignments",
+      "Care effects without an identified original writer and caller"
     ]
   },
   "nextTrace": {
@@ -291,7 +289,7 @@
     "purpose": "8-slot configuration and binding closure only",
     "scopeRule": "Do not re-expand the Raising reverse program."
   },
-  "revisionNote": "RAISING_TOOLBAR_BINDING_CLOSURE delta. Two items closed: slot-to-node ordering and the submenu storage structure. Command and icon-cell bindings remain UNKNOWN_REQUIRES_TRACE.",
+  "revisionNote": "2026-09-09: Raising slot semantics and medicine callers closed. Prior scene geometry and icon-cell uncertainty remain independently scoped.",
   "slotToNodeMapping": {
     "evidence": "ROM_VERIFIED",
     "table": "0x0209F7C4, eight u32 entries, indexed by slot: LDR R1,[R0,R5,LSL#2] at ARM9 0x02060BF0",
@@ -351,5 +349,85 @@
     ],
     "subObject": "+0xD4 receives the icon-set handle read from toolbar+0x30 (ARM9 0x02060C24)",
     "note": "Field semantics are not recovered. Do not infer meaning from offset."
+  },
+  "observedSubmenu": {
+    "evidence": "LIVE_FOOTAGE_OBSERVATION",
+    "date": "2026-09-03",
+    "note": "Historical 2026-09-03 submenu observation. The 2026-09-09 raisingBindings delta now supplies the Raising command setter and controlled original tutorial operations.",
+    "presentation": "Opens as a panel over the touch screen while Training is the active mode; the toolbar row stays visible beneath it.",
+    "entries": [
+      "Tamer",
+      "Schedule",
+      "Cage Edit",
+      "Digimon",
+      "End Day"
+    ],
+    "entryCount": 5,
+    "whatIsNotThere": {
+      "absent": [
+        "Shop",
+        "Battle",
+        "Gate Select"
+      ],
+      "significance": "2026-09-03 correction (LIVE_FOOTAGE_OBSERVATION): these destinations are absent only from this five-entry management submenu. BV13u411B7BK at seek t=90 (V13) shows another toolbar cell, the rightmost eighth cell (zero-based slot 7), opening Help, Database, Battle, Save & Quit, Hunt and Shop. The management submenu opens from the seventh cell (zero-based slot 6; V15, t=117). The visible Hunt entry leads to Gate selection; Gate Select is not an extra label in the six-entry menu. Withdraw the ranch-location-click inference. This establishes English-footage visual entry points only; Japanese ROM command handlers and icon-cell bindings remain UNKNOWN_REQUIRES_TRACE. See docs/research/ORIGINAL_VIDEO_EVIDENCE_INDEX_2026-09-03.md."
+    },
+    "endDay": {
+      "finding": "End Day is a player-driven day advance.",
+      "significance": "The calendar is therefore not purely real-time. Any time-base implementation must support an explicit advance-to-next-day action alongside the running clock.",
+      "crossReference": "docs/contracts/championship/CHAMPIONSHIP_STATUS_BAR_CONTRACT.v1.json"
+    }
+  },
+  "raisingBindings": {
+    "evidence": "ROM_VERIFIED",
+    "routine": "OVL18 0210E724..0210E9C0 -> ARM9 02060CD4/02060D70",
+    "slots": [
+      {
+        "index": 0,
+        "command": "hand"
+      },
+      {
+        "index": 1,
+        "command": "feed"
+      },
+      {
+        "index": 2,
+        "command": "protein"
+      },
+      {
+        "index": 3,
+        "command": "clean"
+      },
+      {
+        "index": 4,
+        "command": "woundMedicine"
+      },
+      {
+        "index": 5,
+        "command": "medicine"
+      },
+      {
+        "index": 6,
+        "command": "management"
+      },
+      {
+        "index": 7,
+        "command": "system"
+      }
+    ],
+    "careTextIds": [
+      121,
+      110,
+      111,
+      112,
+      113,
+      114
+    ],
+    "numericCareEvidence": [
+      "docs/research/RAISING_CARE_CPU_CHECK_2026-09-08.json",
+      "docs/research/RAISING_TREATMENT_CPU_CHECK_2026-09-09.json"
+    ],
+    "liveTutorial": "PRIVATE lifecycle-two-stage-2026-09-09/tutorial-recheck: food, three clean targets, illness, hand/pan/training/recovery, wound treatment, sleep, system/Hunt",
+    "menuVideoCrosscheck": "docs/research/ORIGINAL_VIDEO_EVIDENCE_INDEX_2026-09-03.md",
+    "scope": "Raising only; independent presentation artwork is not a decoded-original icon-cell claim."
   }
 }

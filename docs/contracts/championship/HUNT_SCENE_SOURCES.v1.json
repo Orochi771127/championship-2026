@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "contract": "HUNT_SCENE_SOURCES.v1",
+  "status": "NORMAL_UNACCOMPANIED_ENTRY_BOUND_CARRIED_FIRST_UPDATE_PENDING",
+  "authority": "CHAMPIONSHIP_2026_PRODUCT_SSOT",
+  "catalog": "src/data/championship/catalogs/hunt-scene.r1.json",
+  "builder": "scripts/build-hunt-scene-catalog.py",
+  "catalogSha256": "9d70f593bbf83e76b4d4e102578476b35a55160fe4850da9f636633df568bb09",
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "gate": {
+    "count": 16,
+    "identity": "biomeId, never alphabetical browser ordinal",
+    "nodeResolver": "OVL12 0210C9D8 -> ARM9 0208A6B0 -> 02001558; original model loaded into fresh isolated CPU memory",
+    "variant": "OVL12 0210D1A4, actual node X/Z and whole calendar hour",
+    "supportedHourProbeRange": [2, 23],
+    "normalPlayableHours": [7, 22],
+    "unknown": "00/01 negative original trig-table index remains rejected; tutorial Gate is outside this regular provider"
+  },
+  "fields": {
+    "nativeHuntIndices": [0, 31],
+    "uniqueInitialEnvironments": 29,
+    "dimensions": [128, 128],
+    "nativePixelsPerTile": 8,
+    "productPixelsPerTile": 16,
+    "terrain": "0207C828 initializes wrap=0; 0207C858 loads field ATR; 0207C9E8 supplies ordered terrain types, out-of-bounds=1",
+    "blocking": "terrain type1 equals native bit0 blocked; no synthetic obstacle stamping or spawn-pocket clearing",
+    "direction": "02087E40 loads field ESC; 02088048 reads row-major cells, out-of-bounds byte0; runtime retains consumed target Q12 and blend only",
+    "directionUnknown": "low nibble12..15 remains unknownDirection; movement throws rather than fabricating a direction",
+    "mutability": "initial loader state only; dynamic controller effects and later grid writes are outside this provider"
+  },
+  "scene": {
+    "descriptors": "020CAA9C + nativeHuntIndex * 0x58; season0..3 selects descriptor+0x14+season*0x10",
+    "columns": ["primaryPresent", "threshold", "secondaryPresent", "parameter"],
+    "probability": "0211AECC -> 0204331C always consumes channel0, including absent primary resource",
+    "presentation": "records selection/trigger only; VFX events are not bound"
+  },
+  "entry": {
+    "owner": "championshipStandaloneApp.beginHunt",
+    "candidate": "prepareNativeHuntEntry clones continuing RNG; resolves Gate/clock/history/modifiers; generates individuals/AI/positions/grouping; world and runtime construct before commit",
+    "commit": "existing screen stack, RNG, persistent history and Hunt runtime become visible together; failed construction stays in Loadout without durable changes",
+    "registration": "0206489C individual+004 receives entity slot index; normal no-carried entry does not execute the extra 02065CE8 update",
+    "carried": "0211AA60..AA98 queues request45 at priority128, hides first actor and updates all active entities. Controlled CPU shows carried wildState3 and ordinary AI state1/request4. Full source-dependent first update remains unbound; reject carried input before RNG",
+    "legacy": "v1-v4 huntHistory:null stays unknown and cannot enter native Hunt; do not replace with zeros",
+    "render": "existing Pixi runtime shows actual generated species, positions and initial HP; map art follows resolved fieldId; existing product camera is preserved",
+    "nativeAnimation": false,
+    "normalAiUpdateBound": false,
+    "normalToolCaptureBound": false,
+    "normalCaptureHomeAccepted": false
+  },
+  "excludedRuntimePayloads": ["NSBMD", "raw ATR", "raw ESC", "original meshes or textures", "player RAM", "checkpoints", "research receipts", "fixed wild records", "recorded future RNG draws"],
+  "publicBuildAccepted": false
+}

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "championship-battle-economy-runtime",
+  "authority": "CHAMPIONSHIP_2026_PRODUCT",
+  "scope": "ROUND_1_EXISTING_SINGLE_MATCH_ECONOMY",
+  "originalParityClaim": false,
+  "evidence": {
+    "entryFee": "VERIFIED_BINARY: title event field24 -> OVL10 screen +0xD538 -> PlayerData +0x4C8 compare/debit",
+    "payout": "VERIFIED_BINARY: title event field20 -> session +0xC94 -> OVL8 pending reward -> wallet",
+    "independentReceipt": "docs/reports/parity-audit/2026-09-05/battle-fee-payout-rom-check.json",
+    "roundFlag": "Existing battleOutcome.recordRoundOutcome: OVL19 0x0210E280",
+    "rewardGate": "Existing battleRewardTransaction: OVL8 0x0210D0C8 and 0x0210EAB0",
+    "defaultModeAndBattleType": "PRODUCT_AUTHORED fixture zeros; not a mapping from cube buttons or entryMode",
+    "defaultScheduleAndPlayerRoster": "PARTIAL existing fixtures; unchanged by this contract"
+  },
+  "matchSelection": {
+    "matchEntryFee": "field24, including record 0 = 150 and record 61 = 0",
+    "matchPayout": "field20, including record 0 = 7000 and record 61 = 2500; advertised value before result gates",
+    "listMatches": "publishes entryFee and payout separately"
+  },
+  "runtime": {
+    "getEconomyContext": ["recordIndex", "mode", "battleType", "payout", "entryFee", "expectedRounds"],
+    "getSettlementResult": ["ended", "verdict", "reason", "battleType", "mode", "matchIndex", "roundCursor", "outcomeEntries"],
+    "verdictAndReason": "numeric session values, not translated UI strings",
+    "expectedRounds": 1,
+    "roundPublication": "recordRoundOutcome is called once when the live session ends, before its final view is published",
+    "unfinishedResult": "ended false, cursor zero, empty outcomeEntries; cannot authorize a reward",
+    "activeIdentity": "chooseMatch is refused after startMatch; app owns attempt identity and wallet transactions"
+  },
+  "views": {
+    "select": "displays fee and advertised prize; refused entry can show required fee and current wallet",
+    "result": "injected receipt.status SETTLED displays credited and walletAfter; clamped receipt additionally displays rewardBits",
+    "unsettled": "missing receipt displays an unknown prize and NOT CREDITED, never the catalog payout",
+    "save": "no additional result save UI or automatic save timing is introduced",
+    "modes": "the existing four mode choices remain unavailable"
+  },
+  "boundaries": [
+    "Single application wallet/transaction/save coordination; views do not mutate wallets",
+    "No additional router, store, storage key, Pixi application or ticker",
+    "Formal mode mapping, player individual roster, calendar and progression remain outside Round 1",
+    "ROM bytes, catalogs as save payloads and research evidence objects are never serialized into receipts"
+  ]
+}

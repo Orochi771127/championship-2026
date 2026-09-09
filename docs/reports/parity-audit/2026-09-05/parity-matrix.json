@@ -1,0 +1,118 @@
+{
+  "overall": "PARTIAL_NOT_FULL_ORIGINAL_PARITY",
+  "scope": "Working tree; statuses have no additive completion percentage.",
+  "items": [
+    {
+      "id": "ARCH",
+      "status": "PARTIAL",
+      "domain": "架構權責",
+      "finding": "單一 app/screen/save/Pixi 基礎成立；玩法、資產政策與完整串接另行判定",
+      "source": "src/championship/app/main.js",
+      "line": 116
+    },
+    {
+      "id": "DATA",
+      "status": "VERIFIED_BOUNDED",
+      "domain": "ROM 與資料",
+      "finding": "6317原始資源逐位元組一致；16catalog重建一致；Shop826欄一致",
+      "source": "docs/reports/parity-audit/2026-09-05/catalog-rom-comparison.json",
+      "line": 1
+    },
+    {
+      "id": "F01",
+      "status": "MISSING_INTEGRATION",
+      "domain": "籠內空地投食",
+      "finding": "正確操作已改為FEED後点角色旁空地；目前未接投食命令與食物物件",
+      "source": "src/championship/app/main.js",
+      "line": 544
+    },
+    {
+      "id": "F02",
+      "status": "CONFIRMED_GAP",
+      "domain": "戰鬥費用與獎勵入帳",
+      "finding": "PRIZE150後Shop仍0；ROM重驗150是報名費、獎金欄位7000；consumer誤讀且未接報名扣款與結果入帳",
+      "source": "src/championship/app/main.js",
+      "line": 423
+    },
+    {
+      "id": "F03",
+      "status": "PRODUCT_AUTHORED",
+      "domain": "捕獲流程",
+      "finding": "圈線閉合且包含目標後直接捕獲並提交collection",
+      "source": "src/championship/hunt/huntRuntime.js",
+      "line": 344
+    },
+    {
+      "id": "F04",
+      "status": "PARTIAL",
+      "domain": "戰前準備與賽程",
+      "finding": "以ROM預設隊伍代替玩家個體；賽程預設2,3；四模式disabled",
+      "source": "src/championship/app/battleRuntime.js",
+      "line": 85
+    },
+    {
+      "id": "F05",
+      "status": "MISSING_INTEGRATION",
+      "domain": "自然時間與養成",
+      "finding": "clock reducer存在；當前育成場景沒有持續時間推進呼叫",
+      "source": "src/championship/raising/raisingHomeDefinition.js",
+      "line": 211
+    },
+    {
+      "id": "F06",
+      "status": "CONFIRMED_GAP",
+      "domain": "手機版面",
+      "finding": "390x844 HP/TP與save status被固定toolbar遮住",
+      "source": "src/championship/app/intRh2Styles.css",
+      "line": 23
+    },
+    {
+      "id": "HUNT_WORLD",
+      "status": "PRODUCT_AUTHORED",
+      "domain": "野外地圖與AI",
+      "finding": "seeded橢圓collision、前三種非蛋species與固定6隻，未接原作分布",
+      "source": "src/championship/hunt/huntWorld.js",
+      "line": 41
+    },
+    {
+      "id": "CAGE",
+      "status": "PARTIAL",
+      "domain": "籠子",
+      "finding": "36identities存在；2列配置自訂；training magnitude未解",
+      "source": "src/championship/cage/ranchSlotGeometry.js",
+      "line": 62
+    },
+    {
+      "id": "ART",
+      "status": "PARTIAL",
+      "domain": "角色與UI美術",
+      "finding": "224角色及96UI工作區存在；預設角色仍fallback，未完整runtime綁定",
+      "source": "src/championship/app/main.js",
+      "line": 69
+    },
+    {
+      "id": "LIFECYCLE",
+      "status": "UNKNOWN_REQUIRES_TRACE",
+      "domain": "進化與持久個體",
+      "finding": "養成writers、rungs、進化與生命週期不能從表格欄位猜測",
+      "source": "src/championship/raising/statLadder.js",
+      "line": 1
+    },
+    {
+      "id": "SAVE",
+      "status": "PARTIAL",
+      "domain": "完整進度存檔",
+      "finding": "基本SAVE/Continue瀏覽器通過；完整遊戲狀態鏈未驗收",
+      "source": "src/championship/app/ChampionshipPersistentSavePort.js",
+      "line": 1
+    },
+    {
+      "id": "AUDIO_VFX",
+      "status": "NOT_FULLY_AUDITED",
+      "domain": "音效與特效",
+      "finding": "資源與部分整合存在，本次未逐事件驗收全部觸發",
+      "source": "src/championship/app/main.js",
+      "line": 387
+    }
+  ]
+}

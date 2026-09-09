@@ -1,6 +1,7 @@
 // Cage Edit runtime — original ownership plus a hex-slot ranch.
 //
-// Original (YDIJ OVL15): each owned cage fills at most one ranch hex. Slot
+// Legacy product model: each owned cage has one anchor. Original OVL15 uses
+// multi-cell shape masks; migration of old drafts/saves remains pending. Slot
 // count is 14/16/18/20 from the tamer-rank table. Rotation, adjacency, stacking
 // and training ticks are still closed. Confirm is in-memory; leaving the
 // screen discards an unconfirmed draft. Home SAVE writes the committed layout.
@@ -24,6 +25,7 @@ import {
   slotCountForTamerRank
 } from "./cageCatalog.js";
 import { trainingViewFromDefinition } from "./cageEffects.js";
+import { NATIVE_RANCH_LAYOUT, WAITING_ROOM_MODULE, originalStartingRanch, nativePlacementMask, validateNativeRanch } from './nativeRanchLayout.js';
 
 export const CAGE_EDIT_AUTHORITY = "CHAMPIONSHIP_2026_PRODUCT";
 
@@ -72,13 +74,24 @@ function normalizePlacements(raw) {
   return placements;
 }
 
-export function createCageEditRuntime({ snapshot = null } = {}) {
+export function createCageEditRuntime({ snapshot = null, initializeOriginal = false } = {}) {
+  if (initializeOriginal) snapshot = originalStartingRanch();
+  const layoutVersion = snapshot?.layoutVersion ?? null;
+  if (layoutVersion !== null && layoutVersion !== NATIVE_RANCH_LAYOUT) throw cageError('UNKNOWN_RANCH_LAYOUT');
   let committed = normalizePlacements(snapshot?.placements);
+  if (layoutVersion && !validateNativeRanch(committed)) throw cageError('INVALID_NATIVE_RANCH');
   let draft = clonePlacements(committed);
   let selectedModuleId = null;
   let lastVerdict = null;
 
   function dropInvalid(placements, owned, unlockedCount) {
+    // A rank change must not silently discard a native multi-cell placement.
+    if (layoutVersion) {
+      if (!validateNativeRanch(placements,unlockedCount) || placements.some(entry=>!owned.has(entry.moduleId))) {
+        throw cageError('NATIVE_RANCH_OWNERSHIP_OR_RANK_MISMATCH');
+      }
+      return placements;
+    }
     return placements.filter(
       (entry) => owned.has(entry.moduleId) && entry.slotIndex < unlockedCount
     );
@@ -90,6 +103,10 @@ export function createCageEditRuntime({ snapshot = null } = {}) {
     draft = dropInvalid(draft, owned, unlockedCount);
     committed = dropInvalid(committed, owned, unlockedCount);
     const occupied = new Map(draft.map((entry) => [entry.slotIndex, entry.moduleId]));
+    if (layoutVersion) for (const entry of draft) {
+      const mask = nativePlacementMask(entry);
+      for (let slot = 0; slot < MAX_SLOT_COUNT; slot++) if (mask & (1 << slot)) occupied.set(slot, entry.moduleId);
+    }
     const slots = [];
     for (let slotIndex = 0; slotIndex < MAX_SLOT_COUNT; slotIndex += 1) {
       const moduleId = occupied.get(slotIndex) ?? null;
@@ -101,6 +118,7 @@ export function createCageEditRuntime({ snapshot = null } = {}) {
         column: Math.floor(slotIndex / 2),
         row: slotIndex % 2,
         unlocked,
+        fixed: Boolean(layoutVersion && moduleId === WAITING_ROOM_MODULE),
         moduleId: unlocked ? moduleId : null,
         displayName: unlocked ? (definition?.displayName ?? null) : null,
         trainingSummary: unlocked ? (moduleId ? training.summary : null) : null
@@ -124,6 +142,8 @@ export function createCageEditRuntime({ snapshot = null } = {}) {
     const dirty = JSON.stringify(draft) !== JSON.stringify(committed);
     return deepFreeze({
       authority: CAGE_EDIT_AUTHORITY,
+      layoutVersion,
+      occupiedCount: occupied.size,
       definitionCount: CAGE_DEFINITION_COUNT,
       ownedCount: owned.size,
       tamerRank,
@@ -131,8 +151,8 @@ export function createCageEditRuntime({ snapshot = null } = {}) {
       maxSlotCount: MAX_SLOT_COUNT,
       unlockedCount,
       slotCountEvidence: SLOT_COUNT_EVIDENCE,
-      placementModel: PLACEMENT_MODEL,
-      placementEvidence: PLACEMENT_EVIDENCE,
+      placementModel: layoutVersion ? 'ORIGINAL_MULTI_CELL_FOOTPRINT' : PLACEMENT_MODEL,
+      placementEvidence: layoutVersion ? 'VERIFIED_BINARY_NATIVE_REPLAY' : PLACEMENT_EVIDENCE,
       effectParity: EFFECT_PARITY,
       effectChannelEvidence: EFFECT_CHANNEL_EVIDENCE,
       capacityRule: CAPACITY_RULE,
@@ -190,6 +210,13 @@ export function createCageEditRuntime({ snapshot = null } = {}) {
         lastVerdict = { ok: false, reason: "SLOT_LOCKED" };
         return getFrame(shopCageOwned, tamerRank);
       }
+      if (layoutVersion) {
+        const candidate = { moduleId: selectedModuleId, slotIndex };
+        if (!validateNativeRanch([...draft, candidate], unlockedCount)) {
+          lastVerdict = { ok: false, reason: 'FOOTPRINT_BLOCKED' };
+          return getFrame(shopCageOwned, tamerRank);
+        }
+      }
       if (draft.some((entry) => entry.slotIndex === slotIndex)) {
         lastVerdict = { ok: false, reason: "OCCUPIED" };
         return getFrame(shopCageOwned, tamerRank);
@@ -201,6 +228,10 @@ export function createCageEditRuntime({ snapshot = null } = {}) {
     },
 
     removePlacement(moduleId, shopCageOwned = [], tamerRank = 0) {
+      if (layoutVersion && moduleId === WAITING_ROOM_MODULE) {
+        lastVerdict = { ok: false, reason: 'FIXED_WAITING_ROOM' };
+        return getFrame(shopCageOwned, tamerRank);
+      }
       if (!draft.some((entry) => entry.moduleId === moduleId)) {
         lastVerdict = { ok: false, reason: "NOT_PLACED" };
         return getFrame(shopCageOwned, tamerRank);
@@ -229,6 +260,7 @@ export function createCageEditRuntime({ snapshot = null } = {}) {
 
     toSave() {
       return deepFreeze({
+        ...(layoutVersion ? { layoutVersion } : {}),
         placements: clonePlacements(committed)
       });
     }

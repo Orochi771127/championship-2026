@@ -1,0 +1,31 @@
+{
+  "capturedUtc": "2026-09-05T05:36:56.624808+00:00",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "branch": "main",
+  "baselineTextFilesChecked": 1394,
+  "changedBaselineFiles": [
+    "docs/CURRENT_PRODUCT_STATUS.md"
+  ],
+  "expectedDocumentationChanges": [
+    "docs/CURRENT_PRODUCT_STATUS.md"
+  ],
+  "unexpectedBaselineChanges": [],
+  "gitDiffCheckExit": 0,
+  "jsonParseErrors": [],
+  "missingReportLinks": [],
+  "rawArtChecked": 6317,
+  "rawArtMatched": 6317,
+  "catalogCount": 17,
+  "catalogDifferenceCount": 0,
+  "builderErrors": [],
+  "regression": {
+    "defaultCommand": "npm test",
+    "defaultPass": 493,
+    "defaultFailedFileWorkers": 35,
+    "retryCommand": "node --test --test-concurrency=2 tests/*.mjs",
+    "retryPass": 835,
+    "retryFail": 0,
+    "note": "All35failedentriesreportworkerprocessfailure; exact crash cause was not diagnosed."
+  },
+  "cleanup": "Owned audit browser tabs closed, viewport reset, own port8879 server stopped. User development origins/saves were not used."
+}

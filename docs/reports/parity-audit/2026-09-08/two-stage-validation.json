@@ -1,0 +1,92 @@
+{
+  "date": "2026-09-08",
+  "repository": "R:\\Projects\\Championship2026\\championship-2026",
+  "branch": "main",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "scopeStatus": "PARTIAL_TWO_STAGE_SCOPE_WITH_BOUNDED_IMPLEMENTATION_PASS",
+  "stage1": "Gate admission / observed wins / native return / individual persistence implemented; growth / own party / carried AI7 remain open",
+  "stage2": "Regression / art-index checks / documents / five Home viewports delivered; complete art / successful browser capture / physical devices / public Pages remain open",
+  "tests": {
+    "focused": {
+      "command": "node --test tests/championship-gate-admission-cases.mjs tests/championship-native-individual-profile-cases.mjs tests/championship-hunt-normal-capture-save-cases.mjs",
+      "passed": 16,
+      "failed": 0,
+      "log": "two-stage-focused.log"
+    },
+    "regression": {
+      "command": "node --test --test-concurrency=2 tests/*.mjs",
+      "passed": 1296,
+      "failed": 0,
+      "skipped": 0,
+      "todo": 0,
+      "durationMs": 96858.0086,
+      "log": "two-stage-regression.log"
+    },
+    "romCpu": {
+      "gateFeeCases": 158,
+      "gateUnlockCases": 95,
+      "initialGateFlags": 17,
+      "individualHomeCopies": 684,
+      "receipts": [
+        "docs/research/GATE_ADMISSION_CPU_CHECK_2026-09-08.json",
+        "docs/research/NATIVE_INDIVIDUAL_HOME_CPU_CHECK_2026-09-08.json"
+      ]
+    },
+    "productionValidator": {
+      "passed": true,
+      "registeredBundles": 24,
+      "runtimeEligibleBundles": 9,
+      "shippingReadyBundles": 0,
+      "log": "production-validator-updated.log"
+    },
+    "diffCheck": {
+      "exitCode": 0,
+      "log": "two-stage-diff-check.log"
+    },
+    "contractJsonParse": {
+      "passed": true,
+      "files": [
+        "HUNT_CAPTURE_DATAFLOW.v1.json",
+        "VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT.json",
+        "raising-instance-identity.v1.json",
+        "championship-save-envelope.v5.json"
+      ]
+    }
+  },
+  "browserReceipt": "two-stage-browser/receipt.json",
+  "pagesInputReceipt": "pages-input-check.json",
+  "sourceHashes": {
+    "src/championship/gate/gateAdmission.js": "a8c95f4eada50972edbf0e3d39318b2e0ab0d1059a885be1c72196ab57b4d542",
+    "src/championship/gate/gateCatalog.js": "d3a6df72dcb388df8b60c59c48dc04211ca6dadba437d27bcb0863d316490c5a",
+    "src/championship/app/championshipStandaloneApp.js": "ead1545bcbd0d4f4503710b72b10212bc7cd41ea3f8ab7a4dd66399462ba1e38",
+    "src/championship/app/championshipStandaloneSave.js": "391a000c01eb45f6150cbfdc794554afc0b3e37acf34a3f6c87de798ea4acbde",
+    "src/championship/app/ChampionshipPersistentSavePort.js": "ce96201a565283978fea1e7b3dd84c7364e3062c789b8d09dc6d82cdf5b90e23",
+    "src/championship/app/championshipRaisingProduction.js": "4fbd30b448266a8f8f4d78629810165cd3aa49556f7640a9916862c129386361",
+    "src/championship/app/gateHuntPresentationSource.js": "558b40047be82672d5979111bea54d8c557b47af0538bbc6b5c573b8923c31fc",
+    "src/championship/app/vs2Screens.js": "88457f9005112a7601ead628d4debd69c1255843bda15f5a02d0cd1e1e19deb2",
+    "src/championship/raising/nativeIndividualProfile.js": "f1179eb1b8294317555968c72da72261c52ffe5b13c7ddb3f23cd26bef7c7817",
+    "src/championship/raising/raisingInstanceIdentity.js": "2d0c521fe78c750987dd18fba9a9b9c88d586034003ddf1e17a6bfb28382ed5d",
+    "src/championship/hunt/capture/nativeWildActor.js": "5f34a04197b84a4085bcd85e57baa4dae2c7a18ee91fb52d2f11222b8f7dcf1b",
+    "src/championship/hunt/capture/nativeHuntFieldControls.js": "604b93abab5d9be92a57c3f09ee0d5fe7c63da1c5f6c01c102e267d13dec74fa",
+    "src/championship/hunt/huntRuntime.js": "29614ff7bee3b5b209f1878fe6afb2617f9bdc004333c0176606ec8dd53d5a65",
+    "src/data/championship/catalogs/gate-table.r1.json": "9c4740cbb9ffb37517c8281660f1fed35031b425cbb78e6ccb8b5dd981831ea3",
+    "scripts/build-gate-catalog.py": "d936ecff72126636e993ce13ff2ddbb529360935b34a55dd7a593c9e436e86c3",
+    "scripts/research/check-gate-admission-cpu.py": "35e74dd8af2f9d896200fb25ed9ec2439e0d528fe6166cc80bc2480d01939f95",
+    "scripts/research/check-native-individual-home-cpu.py": "34a5bb30eeae5749b152101e4c4f213b1c2e1c70d919f9b57e86ad44eef9d054",
+    "scripts/build-art-production-a0.mjs": "fe7af986dfa9c0c66d7dd926c2306eb8c6d894c04c41f6d47b10542adaecf652",
+    "scripts/validate-art-production-a0.mjs": "0415ada4fd65fdd5da9d7b2662e38f13bcfa830ef77d0be67aa513377664a9e6",
+    "tests/championship-gate-admission-cases.mjs": "2a7cf5f9005e12400ee2c7db0eb7938f0bdf509350727ce5e294ee6d66d9c8e1",
+    "tests/championship-native-individual-profile-cases.mjs": "7b2ad310ddce7fed700ae17505c182eae2484c5aeac8d7238b1d9ff041e82d52",
+    "tests/championship-hunt-normal-capture-save-cases.mjs": "e8b0d876beb17242cbe33fe1c2a1e32c977951945af18ce73ed9af6409bfebec"
+  },
+  "logHashes": {
+    "two-stage-focused.log": "695de7dda08401616e1c0684c72d1d24574421a093cd1d1bcb6d10980fa92ef6",
+    "two-stage-regression.log": "eb64fd718da869803adfe038fdf44b638e20fa75de34034e6a9de3f9af6c0428",
+    "production-validator-updated.log": "8faf366e0cfa2336fe22a320d99fff95a618412ff29e6e4656d8d214b14ba0cf",
+    "two-stage-browser/receipt.json": "cd54e7000a221576c614b36cebb2ed440f78c79d48dca918839d8f52f4c5f4eb",
+    "pages-input-check.json": "7f03d0ff7918eca7c982f52d72894cce52dbd1347f6bfd1f5574a00186e2d7a1"
+  },
+  "sharedWorktreePreserved": true,
+  "commitPushDeployPerformed": false,
+  "researchOrShippingPromotionPerformed": false
+}

@@ -1,0 +1,35 @@
+{
+  "origin": "http://127.0.0.1:8879",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "battle": {
+    "match": "MATCH 00",
+    "visibleVerdict": "YOUR TEAM",
+    "endReason": "TEAM DOWN",
+    "prizeShown": 150,
+    "walletAfterReturn": 0
+  },
+  "feeding": {
+    "withdrawnProbe": "FEED followed by touching the creature is not the original feeding gesture; excluded as evidence of failed feeding.",
+    "correctGesture": "FEED then touch empty cage ground to drop food; creature approaches/eats.",
+    "groundPoints": [
+      {
+        "x": 100,
+        "y": 390
+      },
+      {
+        "x": 292,
+        "y": 390
+      }
+    ],
+    "startedUtc": "2026-09-05T05:27:54.049Z",
+    "endedUtc": "2026-09-05T05:28:30.959Z",
+    "observed": "No meat appeared and no food inventory/consumption feedback appeared.",
+    "limitation": "Current new-game resident is DIGITAMA_0. This is a ground-placement/input check; it does not verify eating eligibility or food AI for an original hungry non-egg creature."
+  },
+  "save": {
+    "observed": "SAVE displayed Raising Home saved; after reload Continue became enabled and restored Raising Home."
+  }
+}

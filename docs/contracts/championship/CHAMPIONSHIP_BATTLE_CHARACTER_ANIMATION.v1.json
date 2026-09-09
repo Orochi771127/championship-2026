@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "id": "CHAMPIONSHIP_BATTLE_CHARACTER_ANIMATION_R3",
+  "date": "2026-09-07",
+  "status": "ALL_REGISTERED_MAIN_ANIMATIONS_BOUND_ORIGINAL_ACTION_LIFECYCLE_PARTIAL",
+  "extends": "CHAMPIONSHIP_BATTLE_CHARACTERS_SHOP_GOODS_R2",
+  "scope": "All 224 existing registered baseline entities: 216 regular characters and 8 eggs, with 228 species bindings",
+  "profiles": "src/data/championship/battleCharacterProfiles.js",
+  "rawMainSequences": 8656,
+  "authority": "Existing battle session and frame clock; existing single Pixi stage; DOM owns UI",
+  "selector": {
+    "evidence": "docs/research/BATTLE_CHARACTER_REQUESTS_CPU_2026-09-07.json",
+    "handlerTable": "OVL19 0x0211F8A0",
+    "actorBoundary": "OVL19 0x02114310 -> ARM9 0x02047984",
+    "entryCounter": 0,
+    "notificationToRawSequence": {"1": 0, "2": 2, "3": 3, "4": 2, "5": 2, "6": 2, "7": 3, "8": 7, "9": 8, "10": 9, "11": 10, "12": 35, "18": 15, "19": 15, "21": 15},
+    "notification0": "currentHp > 0 requests 0, otherwise 15; missing HP is unknown",
+    "notification15": "232 reaction/ending CPU cases cover entry selection using field84 and statusCode; later reaction movement and state changes are not implied",
+    "notification20": "battleEnding == 0 requests raw 33; other or missing ending state does not invent a request",
+    "unknown": "No request; never map raw slot 33 to a generic attack",
+    "equalRequests": "Keep elapsed time and active state; ARM9 SetIfChanged does not restart"
+  },
+  "runtimeProjection": {
+    "precedence": "An explicit nonzero field17C notification precedes temporary committed-move projection; missing operands remain unknown",
+    "dispatch": "Existing combatant.committedAction.move.field10 in 0..3 -> notifications 8..11",
+    "noCommittedAction": "Display raw 0 at the current implementation boundary",
+    "down": "currentHp <= 0 displays raw 15",
+    "invalidFamily": "Static identity fallback; do not invent a move mapping",
+    "writesSimulation": false,
+    "timingEvidence": "EXISTING_DISPATCH_ORIGINAL_LAUNCH_TIMING_PARTIAL"
+  },
+  "player": {
+    "timeline": "Existing createNativeCharacterAnimationTimeline, raw modes 1 and 2",
+    "advance": "One Q12 4096 advance per battle frame. The existing Pixi ticker accumulates elapsed time at 33513982/560190 Hz; redraw/resize does not advance",
+    "lateFirstRender": "Presentation source samples sequence start on the existing session frame; delayed GPU rendering catches up from that frame",
+    "forceAndSeek": "ARM9 020479A4 -> 0202FA68 -> 0202E144 resets the sequence and seeks an unsigned frame index. An explicit sequenceRequestId can restart the same sequence; redraw cannot. Invalid index retains reset loop start.",
+    "rawMode1": "Stop on last frame",
+    "rawMode2": "Loop to source loopStartFrame; discard overshoot as verified by existing CPU receipt",
+    "reducedMotion": "First frame of each requested sequence; action transitions retained",
+    "unsupportedSpeciesOrAppearance": "Keep existing static identity. Never apply baseline geometry to replacement art"
+  },
+  "geometry": {
+    "runtimeData": "src/data/championship/battleCharacterGeometry.js",
+    "cellCount": 13246,
+    "source": "Existing character-native-scale-candidates.json numeric pixel-equality receipt",
+    "validation": "Hash current production files against the receipt and manifest; verify every Main frame",
+    "scale": "arena native scale * texture resolution / current frame packed scale",
+    "anchor": "current frame packed source origin / current frame logical source size",
+    "position": "Fixed source origin based on initial pose native bounds; never re-ground each trimmed pose"
+  },
+  "specialPrelude": {
+    "recordCount": 325,
+    "speciesCount": 190,
+    "selection": "Verified pointer1C 02120900; each caller species supplies raw 33 pose duration and field10+7 restoration frame duration",
+    "originalLaunchTimingAccepted": false
+  },
+  "moveVm": {
+    "inventory": "docs/research/BATTLE_ALL_ACTIONS_COVERAGE_2026-09-07.json",
+    "moveRecordsIncludingSentinel": 596,
+    "translatedNativeBodies": 67,
+    "totalNativeBodies": 67,
+    "staticNativeCallSitesCovered": 3014,
+    "staticNativeCallSitesTotal": 3014,
+    "cpuReceipt": "docs/research/BATTLE_ACTION_NATIVES_CPU_2026-09-07.json",
+    "remainingNativeCpuReceipt": "docs/research/BATTLE_REMAINING_NATIVES_CPU_2026-09-07.json",
+    "nativeMotionCpuReceipt": "docs/research/BATTLE_REAL_MOTION_CPU_2026-09-07.json",
+    "mathCpuReceipt": "docs/research/BATTLE_NATIVE_MATH_CPU_2026-09-07.json",
+    "mathBinding": "Original Q12 direction, angle-index and vector helpers run in the existing VM host; no Math.sin/cos/atan2 approximation",
+    "byteMemoryBinding": "Optional memoryAccess is consumed by frame construction and native reads/writes; absolute address aliases agree. Ordinary runtime still lacks the full graph.",
+    "runtimeMovementEdge": "0211C35C owner -> inFlight+E4; 228 species movement values execute original 02114320/0211436C helpers",
+    "fullObjectGraphAccepted": false
+  },
+  "nativeMotionR6": {
+    "bodies": ["OVL19 0211E5A0", "OVL19 0211EA68"],
+    "verified": "Ground/air compound-body state, velocity, acceleration, coordinates, fade, pose requests and return values: 936 controlled frames plus 936 original-math frames",
+    "projection": "Optional getNativeActor projects explicitly supplied stand, heightNativePx, alpha, tintRgb and forced animation requests into the existing source and Pixi scene",
+    "reviewFixture": "tests/fixtures/championship-native-attack-motion.html",
+    "reviewMoveIds": [337, 455],
+    "reviewBoundary": "Fixed starting coordinates and target; direct native-body invocation. No full move-script/AI/contact/projectile encounter acceptance",
+    "normalGameplayAccepted": false
+  },
+  "open": [
+    "Original launch, approach, return-to-idle and movement timing",
+    "Full VM native object graph and effect actor bindings",
+    "Original arena camera and world-space positions",
+    "Home roster stats, entry conditions and team selection",
+    "Replacement-art per-frame geometry acceptance; existing baseline acceptance does not extend to replacement artwork",
+    "Native bodies are translated; full child actor and auxiliary VM ownership plus per-move 2D and 3D effect lifecycle remain unbound",
+    "Original non-battle action triggers: Raising, Hunt, evolution and capture are separate condition flows"
+  ],
+  "rawPackRuntimeReads": false,
+  "originalAnimationParityClaim": false,
+  "physicalPhoneQA": false,
+  "shippingReady": false,
+  "report": "docs/art/production/battle-native-motion-r6/IMPLEMENTATION_2026-09-07.md"
+}

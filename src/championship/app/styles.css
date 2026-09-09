@@ -13,6 +13,9 @@
   --cm-accent: #7fd2f5;
   --cm-water: 127, 210, 245;
   --cm-rest: 150, 205, 158;
+  --cm-screen-top: 0px;
+  --cm-screen-bottom: 0px;
+  --cm-screen-height: calc(100dvh - var(--cm-screen-top) - var(--cm-screen-bottom));
 }
 
 * { box-sizing: border-box; }
@@ -382,3 +385,401 @@ button { font: inherit; }
   .cm-creature.is-selected::before { animation: none; opacity: 1; }
   .cm-region, .cm-toast, .cm-tool, .cm-creature__name { transition: none; }
 }
+
+/* --- Persistent status bar: the original's ui/info_bar.nxr ---------------- */
+/* Four fields on one row -- SEASON | DAY N | MODE | HH:MM -- matching the nine
+   nodes info_bar.nxr carries. It sits above every screen because the original's
+   bar is a Shared scene no mode overlay owns. */
+/* The screen shells are `position: fixed; inset: 0` full-viewport layers, so a
+   bar in normal flow cannot push them down. The bar is fixed too, and the rule
+   below offsets whichever shell is mounted. Higher specificity than the shells'
+   own `inset: 0`, and scoped to the attribute so it does nothing when the bar
+   is absent -- for instance on the title screen. */
+.cm-status-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: clamp(0.5rem, 2.5vw, 1.25rem);
+  padding: 0.4rem clamp(0.6rem, 3vw, 1.1rem);
+  background: linear-gradient(180deg, #123449 0%, #0c2436 100%);
+  border-bottom: 1px solid rgba(126, 197, 224, 0.28);
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: clamp(0.68rem, 2.4vw, 0.8rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #cfe8f4;
+  font-variant-numeric: tabular-nums;
+}
+
+.cm-status-bar__season {
+  font-weight: 700;
+  color: #ffd98a;
+  min-width: 4.5em;
+}
+.cm-status-bar__season[data-season="spring"] { color: #a8e6a1; }
+.cm-status-bar__season[data-season="summer"] { color: #ffd98a; }
+.cm-status-bar__season[data-season="autumn"] { color: #f0a875; }
+.cm-status-bar__season[data-season="winter"] { color: #a7d8f0; }
+
+.cm-status-bar__day {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35em;
+  color: #9ec6da;
+}
+.cm-status-bar__day-number {
+  font-weight: 700;
+  font-size: 1.15em;
+  color: #eaf6fc;
+}
+
+.cm-status-bar__mode {
+  flex: 1 1 auto;
+  text-align: center;
+  font-weight: 700;
+  color: #ffe9b0;
+}
+
+.cm-status-bar__time {
+  font-weight: 700;
+  font-size: 1.15em;
+  color: #eaf6fc;
+  letter-spacing: 0.05em;
+}
+
+.cm-status-bar__end-day {
+  flex: 0 0 auto;
+  border: 1px solid rgba(126, 197, 224, 0.45);
+  border-radius: 3px;
+  background: rgba(18, 52, 73, 0.9);
+  color: #cfe8f4;
+  font: inherit;
+  letter-spacing: 0.08em;
+  padding: 0.22em 0.6em;
+  cursor: pointer;
+}
+.cm-status-bar__end-day:hover:not(:disabled) { background: rgba(30, 78, 104, 0.95); }
+.cm-status-bar__end-day:disabled { opacity: 0.35; cursor: default; }
+.cm-status-bar__end-day:focus-visible { outline: 2px solid #7ec5e0; outline-offset: 2px; }
+
+body[data-status-bar="on"] {
+  --cm-screen-top: var(--cm-status-bar-height, 38px);
+  --cm-screen-height: calc(100dvh - var(--cm-screen-top) - var(--cm-screen-bottom));
+}
+
+body[data-status-bar="on"] #cm-root {
+  top: var(--cm-screen-top);
+  /* The shared bar already includes the top safe area. */
+  --rh2-safe-top: 10px;
+  --vs2-safe-top: 10px;
+}
+
+/* --- Contextual toolbar: the original's ui/toolbar.nxr -------------------- */
+/* Eight cells at the bottom of the touch surface, with the submenu opening
+   upward from the bar -- the original anchors it at submenu_origin (167,162),
+   above the bar plate at y=168. Shared like the status bar: no screen owns it. */
+/* An author `display` beats the hidden attribute's UA `display:none`, so the
+   bar has to opt out explicitly or it renders on screens that set hidden. */
+.cm-toolbar[hidden] { display: none; }
+.cm-toolbar__menu[hidden] { display: none; }
+
+.cm-toolbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+.cm-toolbar__rail {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 2px;
+  padding: 4px clamp(4px, 1.5vw, 10px) calc(4px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(180deg, #0d2534 0%, #071722 100%);
+  border-top: 1px solid rgba(126, 197, 224, 0.3);
+}
+
+.cm-toolbar__cell {
+  min-width: 0;
+  min-height: 44px; /* touch target */
+  border: 1px solid rgba(126, 197, 224, 0.22);
+  border-radius: 3px;
+  background: rgba(18, 52, 73, 0.85);
+  color: #a9cfe0;
+  font: inherit;
+  font-size: clamp(0.52rem, 2vw, 0.64rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+}
+.cm-toolbar__cell:hover { background: rgba(30, 78, 104, 0.95); }
+.cm-toolbar__cell:focus-visible { outline: 2px solid #7ec5e0; outline-offset: 1px; }
+.cm-toolbar__cell[aria-pressed="true"] {
+  background: #2f7d63;
+  border-color: #8fe0bd;
+  color: #eafff5;
+}
+.cm-toolbar__cell[aria-expanded="true"] {
+  background: #2a5f7d;
+  border-color: #9ad9f0;
+  color: #eaf6fc;
+}
+.cm-toolbar__cell-label { pointer-events: none; }
+
+/* The submenu opens upward, over the field, exactly as the original does. */
+.cm-toolbar__menu {
+  align-self: center;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: min(calc(100% - 16px), 320px);
+  max-height: max(0px, calc(var(--cm-screen-height) - 8px));
+  overflow-y: auto;
+  gap: 4px;
+  margin: 0 0 4px;
+  padding: 8px;
+  border: 1px solid rgba(154, 217, 240, 0.45);
+  border-radius: 4px;
+  background: rgba(9, 32, 46, 0.97);
+  box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.45);
+}
+
+.cm-toolbar__entry {
+  min-height: 40px;
+  border: 1px solid rgba(126, 197, 224, 0.4);
+  border-radius: 3px;
+  background: linear-gradient(180deg, #1d5f86 0%, #14415e 100%);
+  color: #eaf6fc;
+  font: inherit;
+  font-size: clamp(0.66rem, 2.2vw, 0.8rem);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  padding: 0 0.7em;
+}
+.cm-toolbar__entry:hover:not(:disabled) { background: linear-gradient(180deg, #2a7ba8 0%, #1b5478 100%); }
+.cm-toolbar__entry:focus-visible { outline: 2px solid #7ec5e0; outline-offset: 2px; }
+.cm-toolbar__entry:disabled { opacity: 0.4; cursor: not-allowed; }
+/* Present in the original, not yet built here -- shown, never silently dropped. */
+.cm-toolbar__entry[data-state="NOT_IMPLEMENTED"]::after { content: " ·"; opacity: 0.7; }
+
+body[data-toolbar="on"] {
+  --cm-screen-bottom: var(--cm-toolbar-height, 56px);
+  --cm-screen-height: calc(100dvh - var(--cm-screen-top) - var(--cm-screen-bottom));
+}
+
+body[data-toolbar="on"] #cm-root {
+  bottom: var(--cm-screen-bottom);
+  /* The shared rail already includes the bottom safe area. */
+  --rh2-safe-bottom: 8px;
+  --vs2-safe-bottom: 8px;
+}
+
+/* --- Digimon roster: ui/digimon_list_* ----------------------------------- */
+.cm-digimon-root { position: fixed; inset: 0; overflow: auto; background: #071722; color: #cfe8f4; }
+.cm-digimon-shell {
+  width: min(100%, 430px);
+  margin: 0 auto;
+  padding: 1rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+.cm-digimon-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em; color: #7ec5e0; }
+.cm-digimon-title { margin: 0; font-size: 1.5rem; letter-spacing: 0.04em; }
+.cm-digimon-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.cm-digimon-item__button {
+  width: 100%; min-height: 44px; text-align: left;
+  border: 1px solid rgba(126,197,224,0.28); border-radius: 3px;
+  background: rgba(18,52,73,0.85); color: inherit; font: inherit;
+  padding: 0.5rem 0.7rem; cursor: pointer;
+}
+.cm-digimon-item__button[aria-pressed="true"] { background: #2a5f7d; border-color: #9ad9f0; }
+.cm-digimon-item__button:focus-visible { outline: 2px solid #7ec5e0; outline-offset: 2px; }
+.cm-digimon-detail {
+  display: grid; grid-template-columns: auto 1fr; gap: 0.2rem 0.7rem;
+  margin: 0; padding: 0.7rem; border: 1px solid rgba(126,197,224,0.22); border-radius: 3px;
+  background: rgba(9,32,46,0.7); font-variant-numeric: tabular-nums;
+}
+.cm-digimon-detail__label { font-size: 0.62rem; letter-spacing: 0.12em; color: #9ec6da; }
+.cm-digimon-detail__value { margin: 0; font-weight: 700; }
+.cm-digimon-untraced { grid-column: 1 / -1; margin: 0.4rem 0 0; font-size: 0.66rem; color: #7c96a5; }
+.cm-digimon-controls { display: flex; gap: 4px; }
+.cm-digimon-control {
+  flex: 1; min-height: 40px; border: 1px solid rgba(126,197,224,0.3); border-radius: 3px;
+  background: rgba(18,52,73,0.6); color: inherit; font: inherit; font-size: 0.62rem;
+  letter-spacing: 0.08em; opacity: 0.4; cursor: not-allowed;
+}
+.cm-digimon-back {
+  min-height: 44px; border: 1px solid rgba(126,197,224,0.45); border-radius: 3px;
+  background: rgba(18,52,73,0.9); color: inherit; font: inherit; letter-spacing: 0.1em; cursor: pointer;
+}
+.cm-digimon-back:focus-visible { outline: 2px solid #7ec5e0; outline-offset: 2px; }
+.cm-digimon-empty { color: #7c96a5; font-size: 0.8rem; }
+
+/* ---- Schedule board (ARM9 0x020CD004, scanned at 0x02089230) ------------- */
+.cm-schedule-root { position: fixed; inset: 0; overflow: auto; background: #071722; color: #cfe8f4; }
+.cm-schedule-shell {
+  width: min(100%, 430px);
+  margin: 0 auto;
+  padding: 1rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+.cm-schedule-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em; color: #7ec5e0; }
+.cm-schedule-title { margin: 0; font-size: 1.5rem; letter-spacing: 0.04em; }
+.cm-schedule-board { display: flex; flex-direction: column; gap: 0.7rem; }
+.cm-schedule-season { display: flex; flex-direction: column; gap: 0.3rem; }
+.cm-schedule-season__name {
+  margin: 0; font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase; color: #9ec6da;
+}
+/* Eight days, so four columns keeps every cell tappable at phone width. */
+.cm-schedule-days { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.cm-schedule-day {
+  display: flex; flex-direction: column; gap: 3px; min-height: 62px;
+  padding: 0.35rem 0.3rem;
+  border: 1px solid rgba(126,197,224,0.18); border-radius: 3px;
+  background: rgba(9,32,46,0.6);
+}
+.cm-schedule-day[data-today="true"] { border-color: #9ad9f0; background: rgba(42,95,125,0.55); }
+.cm-schedule-day__number {
+  margin: 0; font-size: 0.6rem; color: #7c96a5; font-variant-numeric: tabular-nums;
+}
+.cm-schedule-day__none { margin: 0; font-size: 0.7rem; color: #4d6572; }
+.cm-schedule-fixture {
+  width: 100%; min-height: 30px; text-align: left;
+  border: 1px solid rgba(126,197,224,0.28); border-radius: 2px;
+  background: rgba(18,52,73,0.85); color: inherit;
+  font: inherit; font-size: 0.62rem; line-height: 1.15;
+  padding: 0.25rem 0.3rem; cursor: pointer;
+}
+.cm-schedule-fixture[aria-pressed="true"] { background: #2a5f7d; border-color: #9ad9f0; }
+.cm-schedule-fixture:focus-visible { outline: 2px solid #7ec5e0; outline-offset: 1px; }
+/* A gated fixture is still shown -- the marker says the table gates it, not that
+   this build has decided the player cannot enter. */
+.cm-schedule-fixture[data-gated]::after {
+  content: " ·" attr(data-gated); color: #e0b26a; font-size: 0.58rem;
+}
+.cm-schedule-detail {
+  display: flex; flex-direction: column; gap: 0.4rem;
+  padding: 0.7rem; border: 1px solid rgba(126,197,224,0.22); border-radius: 3px;
+  background: rgba(9,32,46,0.7);
+}
+.cm-schedule-detail__name { margin: 0; font-size: 1rem; }
+.cm-schedule-detail__when { margin: 0; font-size: 0.66rem; letter-spacing: 0.1em; color: #9ec6da; }
+.cm-schedule-detail__blurb {
+  margin: 0; font-size: 0.72rem; line-height: 1.5; color: #cfe8f4; white-space: pre-line;
+}
+.cm-schedule-facts {
+  display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 0.7rem; margin: 0.2rem 0 0;
+  font-size: 0.66rem; font-variant-numeric: tabular-nums;
+}
+.cm-schedule-facts dt { letter-spacing: 0.1em; color: #9ec6da; }
+.cm-schedule-facts dd { margin: 0; font-weight: 700; }
+.cm-schedule-untraced { margin: 0.3rem 0 0; font-size: 0.62rem; line-height: 1.45; color: #7c96a5; }
+.cm-schedule-empty { margin: 0; font-size: 0.72rem; color: #7c96a5; }
+.cm-schedule-footer { margin: 0; font-size: 0.62rem; line-height: 1.45; color: #7c96a5; }
+.cm-schedule-back {
+  align-self: flex-start; min-height: 44px; padding: 0 1.1rem;
+  border: 1px solid rgba(126,197,224,0.35); border-radius: 3px;
+  background: rgba(18,52,73,0.9); color: inherit; font: inherit; cursor: pointer;
+}
+.cm-schedule-back:focus-visible { outline: 2px solid #7ec5e0; outline-offset: 2px; }
+
+/* ---- Help (help/help_main_scene.nxr, text from ui/txt/help_text_txt.dat) ---- */
+.cm-help-root { position: fixed; inset: 0; overflow: auto; background: #071722; color: #cfe8f4; }
+.cm-help-shell {
+  width: min(100%, 430px);
+  margin: 0 auto;
+  padding: 1rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+.cm-help-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em; color: #7ec5e0; }
+.cm-help-title { margin: 0; font-size: 1.5rem; letter-spacing: 0.04em; }
+.cm-help-list { display: flex; flex-wrap: wrap; gap: 4px; align-content: flex-start; }
+/* A heading has no body in the cartridge, so it is a label and takes a full row. */
+.cm-help-heading {
+  flex: 1 0 100%; margin: 0.5rem 0 0.1rem;
+  font-size: 0.64rem; letter-spacing: 0.16em; color: #7ec5e0;
+  border-bottom: 1px solid rgba(126,197,224,0.22); padding-bottom: 0.25rem;
+}
+.cm-help-heading:first-child { margin-top: 0; }
+.cm-help-topic {
+  min-height: 32px; text-align: left;
+  border: 1px solid rgba(126,197,224,0.28); border-radius: 3px;
+  background: rgba(18,52,73,0.85); color: inherit;
+  font: inherit; font-size: 0.68rem;
+  padding: 0.3rem 0.55rem; cursor: pointer;
+}
+.cm-help-topic[aria-pressed="true"] { background: #2a5f7d; border-color: #9ad9f0; }
+.cm-help-topic:focus-visible { outline: 2px solid #7ec5e0; outline-offset: 2px; }
+.cm-help-detail {
+  display: flex; flex-direction: column; gap: 0.45rem;
+  padding: 0.8rem; border: 1px solid rgba(126,197,224,0.22); border-radius: 3px;
+  background: rgba(9,32,46,0.7);
+}
+.cm-help-detail__title { margin: 0; font-size: 1rem; }
+/* The cartridge writes its own line breaks; keep them. */
+.cm-help-detail__body { margin: 0; font-size: 0.78rem; line-height: 1.65; white-space: pre-line; }
+.cm-help-detail__provenance { margin: 0; font-size: 0.6rem; color: #7c96a5; font-variant-numeric: tabular-nums; }
+.cm-help-empty { margin: 0; font-size: 0.72rem; color: #7c96a5; }
+.cm-help-note { margin: 0; font-size: 0.62rem; line-height: 1.45; color: #7c96a5; }
+.cm-help-back {
+  align-self: flex-start; min-height: 44px; padding: 0 1.1rem;
+  border: 1px solid rgba(126,197,224,0.35); border-radius: 3px;
+  background: rgba(18,52,73,0.9); color: inherit; font: inherit; cursor: pointer;
+}
+.cm-help-back:focus-visible { outline: 2px solid #7ec5e0; outline-offset: 2px; }
+
+/* ---- Tamer Info (tamer_info_main_scene.nxr + tamer_info_sub_scene.nxr) ----- */
+.cm-tamer-root { position: fixed; inset: 0; overflow: auto; background: #071722; color: #cfe8f4; }
+.cm-tamer-shell {
+  width: min(100%, 430px);
+  margin: 0 auto;
+  padding: 1rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+.cm-tamer-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em; color: #7ec5e0; }
+.cm-tamer-title { margin: 0; font-size: 1.5rem; letter-spacing: 0.04em; }
+.cm-tamer-fields {
+  display: grid; grid-template-columns: auto 1fr; gap: 0.3rem 0.9rem; margin: 0;
+  padding: 0.8rem; border: 1px solid rgba(126,197,224,0.22); border-radius: 3px;
+  background: rgba(9,32,46,0.7);
+}
+.cm-tamer-field__label { font-size: 0.64rem; letter-spacing: 0.14em; color: #9ec6da; align-self: center; }
+/* The cartridge draws each digit as its own cell, so the value row is monospaced
+   and right-aligned to keep the column the width the scene fixes. */
+.cm-tamer-field__value {
+  margin: 0; text-align: right;
+  font-family: "Cascadia Mono", Consolas, ui-monospace, monospace;
+  font-size: 0.95rem; font-weight: 700; letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+.cm-tamer-field__value[data-state="UNSOURCED"] { color: #55707e; font-weight: 400; }
+.cm-tamer-note { margin: 0; font-size: 0.62rem; line-height: 1.5; color: #7c96a5; }
+.cm-tamer-back {
+  align-self: flex-start; min-height: 44px; padding: 0 1.1rem;
+  border: 1px solid rgba(126,197,224,0.35); border-radius: 3px;
+  background: rgba(18,52,73,0.9); color: inherit; font: inherit; cursor: pointer;
+}
+.cm-tamer-back:focus-visible { outline: 2px solid #7ec5e0; outline-offset: 2px; }

@@ -9,9 +9,19 @@
 // way back in. This envelope adds standalone identity around that, nothing more.
 
 import { BITS_WALLET_CAP, SHOP_RECORD_COUNT } from "../shop/shopCatalog.js";
+import { createBattleEconomyState, normalizeBattleEconomyState } from "../battle/battleEconomyTransaction.js";
+import { createRaisingInstanceIdentityState, normalizeRaisingInstanceIdentityState } from "../raising/raisingInstanceIdentity.js";
+import { normalizeGameplayRngState } from "../battle/battleRngChannel.js";
+import { normalizeNativeHuntPersistentSave } from "../hunt/capture/nativeHuntPersistentState.js";
+import { assertRaisingNativeProfiles, normalizeNativeIndividualProfile } from "../raising/nativeIndividualProfile.js";
+import { normalizeRegisteredSpecies, retainOwnedBookSpecies } from "../database/nativeBookRegistration.js";
+import { normalizeNativeRaisingHome } from "../raising/nativeRaisingHomeState.js";
+import { normalizeNativeTitleProgress } from "../battle/nativeTitleProgression.js";
+import { normalizeNativeRaisingMessages } from "../raising/nativeRaisingMessages.js";
+import { normalizeNativeOpening } from './nativeOpeningState.js';
 
 export const CHAMPIONSHIP_MODERN_SAVE_KEY = "championshipModernSave:v1";
-export const CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION = 1;
+export const CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION = 5;
 export const CHAMPIONSHIP_MODERN_SAVE_KIND = "CHAMPIONSHIP_MODERN_STANDALONE_SAVE";
 
 // A player save is small. The forensic catalog tree is ~35MB; a single promoted
@@ -22,18 +32,22 @@ export const CHAMPIONSHIP_MODERN_SAVE_MAX_DEPTH = 12;
 
 // Deny-by-default. An unknown top-level key is refused rather than carried:
 // silently passing unknown keys through is how a catalog ends up in a save.
-const ALLOWED_TOP_LEVEL_KEYS = Object.freeze([
+const ALLOWED_TOP_LEVEL_KEYS_V1 = Object.freeze([
   "schemaVersion", "saveKind", "sessionId", "creature",
   // `raisingHome` is the frozen R2 slice; `raising` is the production slice
   // (cage assignment and product-authored interaction flags). They are kept
   // apart on purpose: R2 is research history, `raising` is product gameplay.
   "raisingHome", "raising", "shop", "cageEdit", "progression", "flags", "updatedAt"
 ]);
+const ALLOWED_TOP_LEVEL_KEYS_V2 = Object.freeze([...ALLOWED_TOP_LEVEL_KEYS_V1, "battleEconomy"]);
+const ALLOWED_TOP_LEVEL_KEYS_V3 = Object.freeze([...ALLOWED_TOP_LEVEL_KEYS_V2, "instanceIdentity"]);
+const ALLOWED_TOP_LEVEL_KEYS_V4 = Object.freeze([...ALLOWED_TOP_LEVEL_KEYS_V3, "gameplayRng"]);
+const ALLOWED_TOP_LEVEL_KEYS = Object.freeze([...ALLOWED_TOP_LEVEL_KEYS_V4, "huntHistory"]);
 
-const ALLOWED_CREATURE_KEYS = Object.freeze(["creatureId", "speciesId", "displayName"]);
-const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision", "tamerRank"]);
+const ALLOWED_CREATURE_KEYS = Object.freeze(["creatureId", "speciesId", "displayName", "nativeProfile"]);
+const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision", "tamerRank", "battleBadges", "registeredSpecies", "nativeTitles", "nativeMessages", "nativeOpening"]);
 const ALLOWED_SHOP_KEYS = Object.freeze(["bits", "visibility", "quantities", "cageOwned"]);
-const ALLOWED_CAGE_EDIT_KEYS = Object.freeze(["placements"]);
+const ALLOWED_CAGE_EDIT_KEYS = Object.freeze(["placements", "layoutVersion"]);
 const ALLOWED_CAGE_PLACEMENT_KEYS = Object.freeze(["moduleId", "slotIndex"]);
 
 // Every one of these names identifies forensic/evidence data, catalog structure,
@@ -154,7 +168,19 @@ function normalizeCageEditSlice(cageEdit) {
     }
     placements.push({ moduleId: entry.moduleId, slotIndex: entry.slotIndex });
   }
-  return { placements };
+  if (cageEdit.layoutVersion !== undefined && cageEdit.layoutVersion !== 'NATIVE_ANCHORS_V1') {
+    throw saveError('INVALID_RANCH_LAYOUT_VERSION');
+  }
+  return { ...(cageEdit.layoutVersion ? { layoutVersion: cageEdit.layoutVersion } : {}), placements };
+}
+
+function normalizeBattleEconomySlice(battleEconomy) {
+  const normalized = normalizeBattleEconomyState(battleEconomy);
+  // No battle runtime snapshot or original mid-match resume contract exists.
+  // Preserve manual save timing; refuse an unfinished attempt instead of losing
+  // its fee, inventing a refund, or restoring a fabricated result.
+  if (normalized.active !== null) throw saveError("SAVE_WHILE_BATTLE_ACTIVE");
+  return normalized;
 }
 
 function assertStableId(value, label) {
@@ -199,6 +225,10 @@ export function createChampionshipModernSave({
   raising = null,
   shop = null,
   cageEdit = null,
+  battleEconomy = createBattleEconomyState(),
+  instanceIdentity,
+  gameplayRng = null,
+  huntHistory = null,
   progression = {},
   flags = {},
   updatedAt = new Date().toISOString()
@@ -216,6 +246,13 @@ export function createChampionshipModernSave({
   }
 
   assertAllowedKeys(progression, ALLOWED_PROGRESSION_KEYS, "progression");
+  const battleBadges = Object.hasOwn(progression, "battleBadges") ? progression.battleBadges : [];
+  if (!Array.isArray(battleBadges) || battleBadges.length > 62 || new Set(battleBadges).size !== battleBadges.length
+    || [...battleBadges].some(n=>!Number.isInteger(n) || n<0 || n>61)) throw saveError("INVALID_BATTLE_BADGES");
+  assertRaisingNativeProfiles(raising);
+  if(raising?.nativeHome!==undefined)normalizeNativeRaisingHome(raising.nativeHome);
+  const registeredSpecies = retainOwnedBookSpecies(
+    normalizeRegisteredSpecies(progression.registeredSpecies), creature, raising?.collection ?? []);
 
   let nested;
   try {
@@ -224,6 +261,15 @@ export function createChampionshipModernSave({
     throw saveError("RAISING_HOME_SLICE_IS_NOT_JSON");
   }
   assertNoForensicPayload(nested, "save.raisingHome");
+  // Only allocation history is added. Identity/species/name remain in the
+  // existing starter, R2 resident and Raising collection slices.
+  const identitySources = {
+    creature,
+    residents: nested.payload?.residents ?? [],
+    collection: raising?.collection ?? [],
+    assignments: raising?.assignments ?? {},
+    interactions: raising?.interactions ?? {}
+  };
 
   const save = {
     schemaVersion: CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION,
@@ -232,13 +278,27 @@ export function createChampionshipModernSave({
     creature: {
       creatureId: creature.creatureId,
       speciesId: creature.speciesId,
-      displayName: creature.displayName
+      displayName: creature.displayName,
+      ...(Object.hasOwn(creature,"nativeProfile") ? {nativeProfile:normalizeNativeIndividualProfile(creature.nativeProfile,creature.speciesId)} : {})
     },
     raisingHome: raisingHomeSerialized,
     raising: raising === null ? null : clonePlain(raising),
     shop: normalizeShopSlice(shop),
     cageEdit: normalizeCageEditSlice(cageEdit),
+    battleEconomy: normalizeBattleEconomySlice(battleEconomy),
+    gameplayRng: normalizeGameplayRngState(gameplayRng),
+    huntHistory: normalizeNativeHuntPersistentSave(huntHistory),
+    instanceIdentity: instanceIdentity === undefined
+      ? createRaisingInstanceIdentityState(identitySources)
+      : normalizeRaisingInstanceIdentityState(instanceIdentity, identitySources),
     progression: {
+      ...(progression.nativeTitles!==undefined?{nativeTitles:normalizeNativeTitleProgress(progression.nativeTitles)}:{}),
+      ...(progression.nativeMessages!==undefined?{nativeMessages:normalizeNativeRaisingMessages(progression.nativeMessages)}:{}),
+      ...(progression.nativeOpening!==undefined?{nativeOpening:normalizeNativeOpening(progression.nativeOpening)}:{}),
+      registeredSpecies: [...registeredSpecies],
+      // Only wins observed by this build are carried. Legacy saves did not
+      // retain this history; missing badges are not reconstructed from guesses.
+      battleBadges: [...battleBadges].sort((a,b)=>a-b),
       interactionCount: Number.isSafeInteger(progression.interactionCount) ? progression.interactionCount : 0,
       revision: Number.isSafeInteger(progression.revision) ? progression.revision : 0,
       tamerRank: Number.isSafeInteger(progression.tamerRank) && progression.tamerRank > 0
@@ -250,17 +310,22 @@ export function createChampionshipModernSave({
   };
 
   assertAllowedKeys(save, ALLOWED_TOP_LEVEL_KEYS, "save");
+  if (save.battleEconomy.settledThrough > 0 && save.shop === null) throw saveError("MISSING_BATTLE_WALLET_SLICE");
   assertNoForensicPayload(save);
   return save;
 }
 
 export function serializeChampionshipModernSave(save) {
+  assertAllowedKeys(save, ALLOWED_TOP_LEVEL_KEYS, "save");
+  if (save.schemaVersion !== CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION) throw saveError("SAVE_SCHEMA_VERSION_UNSUPPORTED");
   assertNoForensicPayload(save);
   const text = JSON.stringify(save);
   const bytes = byteLength(text);
   if (bytes > CHAMPIONSHIP_MODERN_SAVE_MAX_BYTES) {
     throw saveError(`SAVE_EXCEEDS_BYTE_BUDGET: ${bytes} > ${CHAMPIONSHIP_MODERN_SAVE_MAX_BYTES}`);
   }
+  // Validate the complete boundary even if a caller bypassed the constructor.
+  deserializeChampionshipModernSave(text);
   return text;
 }
 
@@ -280,9 +345,19 @@ export function deserializeChampionshipModernSave(text) {
   }
   if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) throw saveError("SAVE_IS_NOT_AN_OBJECT");
   if (parsed.saveKind !== CHAMPIONSHIP_MODERN_SAVE_KIND) throw saveError("SAVE_KIND_MISMATCH");
-  if (parsed.schemaVersion !== CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION) throw saveError("SAVE_SCHEMA_VERSION_UNSUPPORTED");
-  assertAllowedKeys(parsed, ALLOWED_TOP_LEVEL_KEYS, "save");
+  const isV1 = parsed.schemaVersion === 1;
+  const isV2 = parsed.schemaVersion === 2;
+  const isV3 = parsed.schemaVersion === 3;
+  const isV4 = parsed.schemaVersion === 4;
+  const missingRngHistory = isV1 || isV2 || isV3;
+  const legacy = missingRngHistory || isV4;
+  if (!legacy && parsed.schemaVersion !== CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION) throw saveError("SAVE_SCHEMA_VERSION_UNSUPPORTED");
+  assertAllowedKeys(parsed, isV1 ? ALLOWED_TOP_LEVEL_KEYS_V1 : isV2 ? ALLOWED_TOP_LEVEL_KEYS_V2 : isV3 ? ALLOWED_TOP_LEVEL_KEYS_V3 : isV4 ? ALLOWED_TOP_LEVEL_KEYS_V4 : ALLOWED_TOP_LEVEL_KEYS, "save");
   assertNoForensicPayload(parsed);
+  if (!isV1 && !Object.hasOwn(parsed, "battleEconomy")) throw saveError("MISSING_BATTLE_ECONOMY_SLICE");
+  if (!isV1 && !isV2 && !Object.hasOwn(parsed, "instanceIdentity")) throw saveError("MISSING_INSTANCE_IDENTITY_SLICE");
+  if (!missingRngHistory && !Object.hasOwn(parsed, "gameplayRng")) throw saveError("MISSING_GAMEPLAY_RNG_SLICE");
+  if (!legacy && !Object.hasOwn(parsed, "huntHistory")) throw saveError("MISSING_HUNT_HISTORY_SLICE");
 
   // Rebuilt rather than returned as parsed, so a stored save cannot introduce a
   // shape the constructor would have refused.
@@ -293,6 +368,13 @@ export function deserializeChampionshipModernSave(text) {
     raising: parsed.raising ?? null,
     shop: parsed.shop ?? null,
     cageEdit: parsed.cageEdit ?? null,
+    // Explicit v1..v4 -> v5 migration at the same key. The canonical R2 string
+    // and old payload digest pass through unchanged until the normal restore.
+    battleEconomy: isV1 ? createBattleEconomyState() : parsed.battleEconomy,
+    instanceIdentity: isV1 || isV2 ? undefined : parsed.instanceIdentity,
+    gameplayRng: missingRngHistory ? null : parsed.gameplayRng,
+    // Older Web saves never recorded this slice. Do not invent a blank past.
+    huntHistory: legacy ? null : parsed.huntHistory,
     progression: parsed.progression ?? {},
     flags: parsed.flags ?? {},
     updatedAt: typeof parsed.updatedAt === "string" ? parsed.updatedAt : new Date().toISOString()

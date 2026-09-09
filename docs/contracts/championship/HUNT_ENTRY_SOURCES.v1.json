@@ -1,0 +1,92 @@
+{
+  "contract": "HUNT_ENTRY_SOURCES.v1",
+  "status": "FUNCTIONAL_SOURCES_AND_HISTORY_NORMAL_UNACCOMPANIED_ENTRY_BOUND",
+  "authority": "CHAMPIONSHIP_2026_PRODUCT_SSOT",
+  "source": {
+    "builder": "scripts/build-hunt-entry-catalog.py",
+    "catalog": "src/data/championship/catalogs/hunt-entry.r1.json",
+    "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "inputs": [
+      "hash-locked original ARM9",
+      "original static initializer 02098804..02099338 in isolated CPU memory"
+    ],
+    "excluded": [
+      "player saves",
+      "emulator checkpoints",
+      "research receipts",
+      "generated individuals",
+      "RNG state",
+      "raw encounter words",
+      "ATR",
+      "ESC",
+      "art"
+    ]
+  },
+  "functionalColumns": {
+    "speciesCount": 228,
+    "regularNativeHuntIndices": [
+      0,
+      31
+    ],
+    "seasonsPerHuntIndex": 4,
+    "biomeCatalogCount": 16,
+    "selection": "0211A578..0211A588: native Hunt index * 4 + calendar season",
+    "species": "02062100 / 02062C28 / 0210D5DC: constructor, ancestry and initial speed inputs",
+    "catalogs": "020A1358 ordered species and independent releaseMatchValue = packedEntry & 0x700",
+    "historyBaseline": "02068824: four empty slots, cursor0, species228, biome33, trait8, native default name",
+    "modifierCounts": [
+      15,
+      17,
+      19,
+      25,
+      15,
+      17,
+      13,
+      19,
+      19,
+      19,
+      18,
+      14,
+      17,
+      21,
+      21,
+      26
+    ]
+  },
+  "persistentOwner": "championshipStandaloneApp",
+  "save": {
+    "writer": "ChampionshipPersistentSavePort",
+    "key": "championshipModernSave:v1",
+    "outerSchemaVersion": 5,
+    "slice": "huntHistory",
+    "sliceVersion": 1,
+    "history": "three species/biome/name slots and cursor; no trait or carried fourth slot",
+    "modifiers": "exact 16 functional row lengths, low four bits; no packed padding",
+    "continue": "restore trait8 and fresh fourth slot; preserve recorded modifier values and continuing RNG",
+    "legacyV1ThroughV4": "huntHistory:null means unknown; never inferred as a fresh history",
+    "validation": "reject malformed current slices before replacing the active session or writing storage",
+    "transient": [
+      "Gate choice",
+      "wild individuals",
+      "AI state",
+      "native animation",
+      "carried fourth history slot"
+    ]
+  },
+  "unresolved": [
+    "carried request45 and whole-batch first state dispatch",
+    "normal AI including nonzero targets and dynamic controllers",
+    "normal tool/capture animation and capture-to-Home transaction",
+    "all-species/map visual and physical-device QA"
+  ],
+  "normalEntryCapturePlayable": false,
+  "publicBuildAccepted": false,
+  "normalEntry": {
+    "owner": "championshipStandaloneApp.beginHunt",
+    "sceneContract": "HUNT_SCENE_SOURCES.v1",
+    "unaccompaniedEntryBound": true,
+    "carriedEntryBound": false,
+    "normalCaptureHomeAccepted": false,
+    "report": "docs/art/HUNT_NORMAL_ENTRY_INTEGRATION_2026-09-06.md"
+  }
+}

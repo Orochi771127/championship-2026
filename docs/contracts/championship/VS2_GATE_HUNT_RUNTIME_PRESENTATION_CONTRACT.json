@@ -1,10 +1,19 @@
 {
   "schemaVersion": 1,
   "contractId": "VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT",
-  "version": "v1.1",
+  "version": "v1.3",
+  "normalHuntContinuation20260908": {
+    "authority": "Owner requested Hunt core and every tool in at most two stages on 2026-09-08",
+    "supersedes": "The historical VS2 capture exclusion and disabled-toolbar-only rules below apply only to the old exploration fixture. Normal Hunt now uses the same source.field and source.intents for native tools, card/result/home, plugin HUD and clock.",
+    "evidence": "docs/research/HUNT_CORE_TWO_STAGE_IMPLEMENTATION_2026-09-08.md",
+    "normalToolbar": "Render toolState.tools once using DOM. Suppress the obsolete neutral eight-slot rail when native controls exist. Keep the diagnostic fixture rail unchanged.",
+    "readouts": "hud.target and hud.plugins are gated by the equipped plugins; hud.time projects the application clock and eight-hour/capped-22:00 deadline.",
+    "scatterResponse": "OWNER_APPROVED_ADAPTATION: four scatter Shots use ordinary Shot species response for the uninitialized event byte. Native seven-pellet geometry, RNG order, cooldown, consumption and status conditions remain intact. All 46 equipment entries are enabled in the existing normal tool path.",
+    "limits": "Tool glyphs are functional temporary presentation; no full original VFX/audio or physical-phone acceptance is claimed."
+  },
   "owner": "Claude Code",
   "consumer": "Codex Art",
-  "date": "2026-08-28",
+  "date": "2026-09-08",
   "slice": "VS2 - Gate Select to Hunt exploration and return",
   "authorization": {
     "source": "Owner handoff, 2026-08-28",
@@ -70,7 +79,8 @@
       "RAISING_HOME",
       "GATE_SELECT",
       "HUNT_LOADOUT",
-      "HUNT_FIELD"
+      "HUNT_FIELD",
+      "HUNT_RESULT"
     ],
     "transitions": [
       "RAISING_HOME -> GATE_SELECT   (openGate intent)",
@@ -78,9 +88,11 @@
       "GATE_SELECT  -> RAISING_HOME  (leaveScreen intent)",
       "HUNT_LOADOUT -> HUNT_FIELD    (beginHunt intent)",
       "HUNT_LOADOUT -> GATE_SELECT   (leaveScreen intent)",
-      "HUNT_FIELD   -> RAISING_HOME  (exitHunt intent)"
+      "HUNT_FIELD   -> RAISING_HOME  (exitHunt intent)",
+      "HUNT_FIELD -> HUNT_RESULT (exitHunt with actual inserted cards)",
+      "HUNT_RESULT -> RAISING_HOME (confirmHuntResult after successful existing save)"
     ],
-    "returnLifecycle": "Exiting the Hunt field always returns to Raising Home with the Raising slice intact. VS2 adds no Hunt reward, no capture, and no progression write, so a completed exploration changes nothing the player can lose.",
+    "returnLifecycle": "Empty expedition returns Home. Actual on-card records enter existing HUNT_RESULT, then atomic Home/save commit. Normal return applies verified history/modifier/RNG writes once; screen navigation does not create capture ownership.",
     "raisingHomeNote": "RAISING_HOME content is published by the VS1 seam, createRaisingPresentationSource. This source reports the active screen and owns the expedition screens only, so `frame.gateSelect`, `frame.huntLoadout` and `frame.huntField` are all null while Raising Home is active."
   },
   "commonFrameFields": {
@@ -93,7 +105,7 @@
       "canRetry": "boolean"
     },
     "toolbar": {
-      "note": "Same neutral shell as Raising, in the ROM-verified Hunt mode. Slot semantics are still UNKNOWN_REQUIRES_TRACE and must stay unbound.",
+      "note": "Historical neutral shell is for the exploration/replay fixture. Normal Hunt uses toolState.tools through the same DOM seam; do not render both rails.",
       "slotCount": {
         "value": 8,
         "evidence": "ROM_VERIFIED"
@@ -114,29 +126,33 @@
   },
   "gateSelectFrame": {
     "screen": "GATE_SELECT",
-    "evidenceState": "STRUCTURE_PARTIAL - gate identity count is reference-backed; flow, input, camera and unlock rules are UNKNOWN_REQUIRES_TRACE",
+    "evidenceState": "ROM_VERIFIED_GATE_IDENTITY_FEE_AND_UNLOCK_WITH_NATURAL_PROGRESSION_PARTIAL",
     "gates": [
       {
         "gateId": "stable product id, e.g. championship:2026:gate:01",
         "ordinal": "1-based position in the product gate list",
-        "displayName": "product-authored neutral name",
-        "nameAuthority": "CHAMPIONSHIP_2026_PRODUCT - the name is product-authored and must never be presented as recovered",
+        "displayName": "Localized display string for the recovered Gate name",
         "biomeOrdinal": "1..16. Codex binds art by ordinal: the O3-C representative catalog is Codex-owned and lives outside this repository, so the runtime does not invent ids for it.",
-        "state": "AVAILABLE | LOCKED_UNKNOWN",
-        "stateEvidence": "UNKNOWN_REQUIRES_TRACE",
-        "stateNote": "No unlock, progression or ordering rule is traced. VS2 ships every gate AVAILABLE because inventing a lock is as much an invention as inventing an unlock. Presentation must not draw progress, stars, ranks or completion.",
+        "state": "AVAILABLE | LOCKED",
+        "stateEvidence": "ROM_VERIFIED",
+        "stateNote": "Project initial/rank/match unlock using existing app progression. Natural rank progression is not inferred.",
         "selected": "boolean",
         "art": {
           "thumbnail": "assets/production/... or null",
           "note": "null means Codex has not supplied art; the runtime renders neutral geometry"
-        }
+        },
+        "displayNameEvidence": "ROM_VERIFIED source name with presentation localization",
+        "biomeId": "Recovered stable native biome identity",
+        "codeString": "Recovered native node string",
+        "entranceFeeBits": "Nonnegative recovered fee",
+        "unlockKind": "0 initial /1 rank /2 battle record",
+        "unlockParameter": "Original row+20 parameter"
       }
     ],
     "gateCount": {
       "value": 16,
-      "evidence": "REFERENCE_BASELINE",
-      "source": "O3-C 16/16 biome representatives; OVL12 gate_select 16 biome nodes",
-      "note": "16 is the biome-node count from reference evidence, not a traced runtime gate table. The relationship between a gate and an HM field is UNKNOWN: there are 30 HM fields on record and 16 biome nodes, and nothing traced maps one to the other."
+      "evidence": "ROM_VERIFIED",
+      "source": "17-entry Gate table,16 ordinary nodes plus1 separate tutorial Grass node"
     },
     "selection": {
       "gateId": "string or null"
@@ -145,37 +161,28 @@
       "tapSelects": true,
       "confirmRequiresSelection": true,
       "note": "Pointer Events only. Mouse and touch share one path. No directional input model exists."
-    }
+    },
+    "admission": "Immutable {gateId,canConfigure,canEnter,reason,entranceFeeBits,chargeBits,walletBits,afterBits,unlockKind,unlockParameter,evidence}; no-selection has canConfigure/canEnter false and NO_GATE_SELECTED.",
+    "canConfirm": "admission.canConfigure",
+    "walletBits": "Existing Shop wallet projection"
   },
   "huntLoadoutFrame": {
     "screen": "HUNT_LOADOUT",
-    "evidenceState": "UNKNOWN_REQUIRES_TRACE - no original loadout model is traced",
-    "gate": {
-      "gateId": "the confirmed gate",
-      "displayName": "string"
-    },
-    "party": [
-      {
-        "creatureId": "a Raising Home resident id",
-        "displayName": "string",
-        "speciesId": "product catalog id",
-        "cageId": "the cage it currently belongs to",
-        "selected": "boolean",
-        "sprite": {
-          "portrait": "path",
-          "idle": "grid sheet spec, same shape as the Raising frame"
-        }
-      }
-    ],
-    "selectionRule": {
-      "value": "EXACTLY_ONE",
-      "evidence": "PRODUCT_AUTHORED",
-      "note": "No original party size, slot count, item loadout or restriction is traced. VS2 takes exactly one companion into the field because that is the minimum a Hunt field needs to be explorable, and it is labelled product-authored rather than presented as original behaviour. Presentation must not draw empty extra party slots, item slots, or a stamina or supply meter: those would assert a model that does not exist."
-    },
-    "selection": {
-      "creatureId": "string or null"
-    },
-    "canBegin": "boolean - true when a companion is selected"
+    "evidenceState": "FIVE_EQUIPMENT_CLASSES_FOUR_PLUGIN_POSITIONS_GATE_ADMISSION_BOUND",
+    "gate": "Confirmed Gate identity and name",
+    "structure": "equipmentClasses5;pluginPositions4;positionModel PARTIAL_HL6_OPEN",
+    "availableEquipment": "Existing Shop-owned stock grouped by recovered class",
+    "selectedEquipment": "Existing loadout selections",
+    "availablePlugins": "Existing owned plugin choices",
+    "selectedPlugins": "Four positions from existing loadout",
+    "memoryCard": "Existing selected card capacity",
+    "hudCapabilities": "Only equipped plugin capabilities",
+    "validation": "Existing loadout.validate()",
+    "confirmationState": "Existing loadout confirmation state",
+    "admission": "Same immutable Gate admission projection",
+    "entryError": "Admission or candidate-construction failure; null otherwise",
+    "canBegin": "confirmationState.canConfirm && admission.canEnter",
+    "selectionRule": "No required full loadout; no normal companion selector. Carried-actor entry remains unbound."
   },
   "huntFieldFrame": {
     "screen": "HUNT_FIELD",
@@ -301,9 +308,11 @@
       "note": "Deliberately minimal. hunt_sub_scene carries map_marker0..23 and remain_icon0..3 with remain_time0..3 as STRUCTURAL evidence only - the node names are known, their semantics are not. VS2 renders none of them rather than guessing what 24 markers count or what 4 timers measure."
     },
     "affordances": {
-      "dragMoves": true,
-      "tapMoves": true,
-      "note": "Pointer Events only, mouse and touch on one path. Direct manipulation, matching the Raising input grammar: touch or drag toward a destination and the companion walks there within the collision rule. There is no D-pad, no virtual stick, and no keyboard model."
+      "dragPans": true,
+      "tapSelectsWild": true,
+      "touchNearWildStartsStroke": false,
+      "canCollect": false,
+      "note": "Inverse pointer delta pans the existing camera. Target touch selects one wild ID; unknown native tool and ownership writers remain gated."
     }
   },
   "intents": {
@@ -313,10 +322,13 @@
     "confirmGate()": "GATE_SELECT -> HUNT_LOADOUT using the current selection; a no-op with no selection",
     "selectCompanion(creatureId | null)": "set or clear the companion on HUNT_LOADOUT",
     "beginHunt()": "HUNT_LOADOUT -> HUNT_FIELD; a no-op until a companion is selected",
-    "moveTo(worldX, worldY)": "request player movement toward a world point on HUNT_FIELD; the runtime resolves it against collision",
     "exitHunt()": "HUNT_FIELD -> RAISING_HOME",
     "leaveScreen()": "step one screen back: GATE_SELECT -> RAISING_HOME, HUNT_LOADOUT -> GATE_SELECT",
-    "requestSave()": "persist; returns the updated save block"
+    "requestSave()": "persist; returns the updated save block",
+    "panCamera(deltaX, deltaY, viewportWidth, viewportHeight)": "Continuous world-unit camera delta with the current field viewport dimensions; no avatar move and no discrete DOM publication.",
+    "selectWildAt(worldX, worldY)": "Select an existing wild ID using the explicitly product-authored hit radius. Does not alter HP or ownership.",
+    "abortEnclosureStroke()": "Discard an uncommitted diagnostic stroke. Never finish or submit it.",
+    "beginEnclosureStroke / extendEnclosureStroke / endEnclosureStroke": "Legacy diagnostic intents only, not called by the player pointer. End returns TOOL_TRACE_REQUIRED and cannot create a result or collection entry."
   },
   "saveAndData": {
     "authority": "Unchanged. One save key, championshipModernSave:v1, one durable writer, one envelope.",
@@ -391,17 +403,13 @@
     }
   },
   "openQuestions": [
-    "Gate-to-field mapping: 16 biome nodes against 30 HM field records, with nothing traced connecting them. VS2 gives each gate a deterministic product-authored world seed instead of claiming a mapping.",
-    "Gate unlock and ordering rules.",
-    "Original loadout model: party size, items, restrictions.",
-    "Original wild-creature movement, spawn and encounter rules.",
-    "map_marker0..23 and remain_icon0..3 / remain_time0..3 semantics.",
-    "Hunt toolbar per-slot commands, icons and submenu population - the same open trace as Raising.",
-    "Whether any Hunt state persists across a session in the original.",
-    "Original terrain taxonomy beyond the single evidenced blocking bit.",
-    "Original Hunt field content: VS2 preserves the 128x128 modular structure but authors its own terrain, because no original Hunt terrain data is available to this product."
+    "Carried actor entry and whole-batch first update",
+    "Wild AI7 combat",
+    "Remaining marker/remaining-icon semantics and exact original tool VFX/audio",
+    "Original normal touch capture and physical-device acceptance",
+    "Natural rank/fee-waiver acquisition and complete long-term progression"
   ],
-  "revisionNote": "v1.1 reconciles the published seam with the shipped implementation. No refusal was relaxed: the changes are the two-cadence read model, the Codex-owned biome handle, and the terrain shape the field renderer actually consumes.",
+  "revisionNote": "v1.3: admission/profile-return reconciliation. Historical authorization, acceptanceProof and product exploration field substructures below document the old fixture only; current normalHuntContinuation20260908 and gateAdmissionContinuation20260908 take precedence. No new router/store/save/renderer owner.",
   "implementation": {
     "screenStack": "src/championship/app/championshipScreenStack.js - a bounded stack with an explicit legal-transition table. No URL, no history, no route table, no lazy loading: it is not a second router.",
     "gateRuntime": "src/championship/gate/gateCatalog.js",
@@ -416,5 +424,19 @@
     "routerCount": 0,
     "saveAuthorities": 1,
     "domShellNote": "The shell imports CHAMPIONSHIP_SCREENS from championshipScreenStack.js purely as a screen-id enum. A Codex replacement does not need even that: frame.screen already carries the value, so the seam remains the only required import."
+  },
+  "round3ContinuousProjection": {
+    "camera": "Existing clamped camera kernel, independent of hidden prototype actor",
+    "transform": "world/native/viewport transform including scale and viewport dimensions",
+    "toWorldPoint(point)": "Read-only transform from viewport into the same world; presentation does not import Hunt domain",
+    "selectedWildId": "Session target identity or null",
+    "captureAvailability": "Native normal controls expose actual canCollect/currentHP states; replay keeps its own explicit evidence boundary."
+  },
+  "gateAdmissionContinuation20260908": {
+    "research": "docs/research/GATE_ADMISSION_AND_INDIVIDUAL_RETURN_2026-09-08.md",
+    "authority": "Existing standalone app progression/wallet and existing GateHunt presentation source",
+    "rule": "kind0 initial;kind1 rank>=parameter;kind2 observed ordinary win matchIndex. Locked preview allowed, confirmation blocked; fee charged once only on actual entry.",
+    "browserTouchCaptureAccepted": false,
+    "precedence": "Current admission/normalHunt blocks and updated frame definitions supersede the historical VS2 exploration-only acceptance, exclusions and openQuestions."
   }
 }

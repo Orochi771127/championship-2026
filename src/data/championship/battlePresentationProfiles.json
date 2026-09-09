@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "soundTableAddress": 34799544,
+  "soundTable": [
+    0,
+    65292,
+    65293,
+    65280,
+    65281,
+    512,
+    65287,
+    65291,
+    514,
+    65294,
+    65298,
+    518,
+    65286,
+    65297,
+    65307,
+    65295,
+    65283,
+    65285,
+    65303,
+    65300,
+    65290,
+    531,
+    65284,
+    65302,
+    65291,
+    65282,
+    65304,
+    65305,
+    65296
+  ],
+  "impactDepthBiasQ12": [
+    0,
+    0,
+    32768,
+    32768,
+    -32768
+  ],
+  "sequencePlayers": [
+    {
+      "id": 0,
+      "maxSequences": 2,
+      "heapSize": 0
+    },
+    {
+      "id": 1,
+      "maxSequences": 2,
+      "heapSize": 0
+    },
+    {
+      "id": 2,
+      "maxSequences": 1,
+      "heapSize": 0
+    },
+    {
+      "id": 3,
+      "maxSequences": 1,
+      "heapSize": 0
+    }
+  ],
+  "preludeTintTable": [
+    26,
+    5147,
+    11292,
+    17437,
+    23582,
+    29727,
+    23582,
+    17437,
+    11292,
+    5147,
+    26
+  ],
+  "hitSoundTable": [
+    0,
+    529,
+    0,
+    537,
+    0,
+    536,
+    530,
+    538,
+    515,
+    535,
+    524,
+    525,
+    526,
+    532,
+    528,
+    523,
+    522,
+    521,
+    533,
+    527,
+    534
+  ],
+  "hitPauseTable": [
+    4,
+    8,
+    10
+  ],
+  "knockoutSlowdownTable": [
+    90,
+    120,
+    240
+  ],
+  "knockoutSlowdownIndices": [
+    2,
+    1,
+    0
+  ],
+  "classification": "NUMERIC_ORIGINAL_PRESENTATION_TABLES"
+}

@@ -29,7 +29,7 @@ import { createFieldCollisionAdapter } from "../src/championship/field/fieldColl
 import { computeFieldCameraWindow } from "../src/championship/field/fieldCamera.js";
 import { getFieldFamilyProfile } from "../src/data/championship/r2/fields/fieldInventoryR2.js";
 
-const catalog = JSON.parse(fs.readFileSync("src/data/championship/catalogs/entities.r1.json", "utf8"));
+const catalog = JSON.parse(fs.readFileSync("src/data/championship/catalogs/creature-species.r1.json", "utf8"));
 const presentation = JSON.parse(fs.readFileSync("docs/contracts/championship/raising-home-presentation.v1.json", "utf8"));
 
 function memoryStorage() {

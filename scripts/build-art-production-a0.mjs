@@ -1,13 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
-import { execFileSync } from "node:child_process";
 
 const root = process.cwd();
 const crosswalkPath = path.join(root, "docs/art/ART_PRODUCTION_CROSSWALK.json");
 const indexPath = path.join(root, "assets/production/ART_PRODUCTION_INDEX.json");
 const checkOnly = process.argv.includes("--check");
 
-const pilotCharacters = [
+const pilotGameplayCharacters = [
   "art:character:e000-digitama:rom-reference",
   "art:character:m001-zurumon:rom-reference",
   "art:character:m201-agumon:rom-reference",
@@ -18,11 +17,19 @@ const pilotCharacters = [
   "art:character:m431-whamon:rom-reference"
 ];
 
+const pilotDatabaseCharacters = pilotGameplayCharacters.map((assetId) => assetId.replace(":rom-reference", ":db-reference"));
+const pilotCharacters = [...pilotGameplayCharacters, ...pilotDatabaseCharacters];
+
 const pilotVfx = [
   "art:vfx:battle-hitspark-big:nitro-reference",
   "art:vfx:battle-hypereffect:nitro-reference",
   "art:vfx:common-rain:nitro-reference",
   "art:vfx:common-spark:nitro-reference"
+];
+
+const battleSharedLayerPilot = [
+  "art:battle-field:field-bm00-00:shared-layer-reference",
+  "art:battle-field:battle-normal:arena-reference"
 ];
 
 function readJson(relativePath) {
@@ -66,14 +73,23 @@ function rendererFor(asset) {
 }
 
 function productionAssetId(asset, family) {
+  if (family === "character") {
+    const tier = asset.assetKind === "CHARACTER_DB_ENTITY_REFERENCE" ? "database" : "gameplay";
+    const entityId = asset.assetId.split(":")[2];
+    return `production:character:${tier}:${entityId}`;
+  }
+  if (family === "battle") {
+    const role = asset.assetKind === "BATTLE_FIELD_SHARED_LAYER_REFERENCE" ? "shared" : "arena";
+    return `production:battle:${role}:${asset.logicalGroup.replaceAll("_", "-")}`;
+  }
   const suffix = asset.assetId.replace(/^art:/, "").replace(/:rom-reference$|:nitro-reference$|:arena-reference$|:cage-reference$|:hunt-reference$|:db-reference$|:sprite-reference$|:font-reference$|:shared-layer-reference$|:field-reference$/, "");
   return `production:${family}:${suffix}`;
 }
 
 function pilotBatchFor(asset) {
   if (pilotCharacters.includes(asset.assetId) || pilotVfx.includes(asset.assetId)) return "A1_GOLDEN_ART_SLICE";
+  if (battleSharedLayerPilot.includes(asset.assetId)) return "PILOT_BATTLE_SHARED_LAYER";
   if (asset.assetId === "art:map:hm01:hunt-reference" || asset.assetId === "art:map:hm09:hunt-reference") return "A1_GOLDEN_ART_SLICE";
-  if (asset.assetId === "art:three-d:gate-select-3d-worldmap-model:nitro-reference" || asset.assetId === "art:three-d:gate-select-earth:nitro-reference") return "A1_GOLDEN_ART_SLICE";
   if (asset.domain === "UI" && /gate|hunt|training|result|title/i.test(`${asset.logicalGroup} ${asset.originalFunction}`)) return "A1_COMPONENT_SAMPLE_ONLY";
   return null;
 }
@@ -97,25 +113,38 @@ function writeOrCheck(filePath, value) {
   fs.writeFileSync(filePath, output, "utf8");
 }
 
-// The managed workspace protects the committed Art-A registry from direct file
-// access. Read the canonical HEAD blob so A0 cannot mutate or race that SSOT.
 // 752 units from the original filesystem audit plus 496 recovered by reconciling
-// that audit against the ROM binary. See docs/art/ART_ROM_RECONCILIATION.md.
+// that audit against the ROM binary. The reconciliation generator owns this file;
+// A0 consumes the generated working-tree view so dependency and blocker updates
+// are validated before commit. See docs/art/ART_ROM_RECONCILIATION.md.
 const EXPECTED_REGISTRY_UNITS = 1248;
-const registry = JSON.parse(execFileSync("git", ["show", "HEAD:docs/art/ART_ASSET_REGISTRY.json"], { cwd: root, encoding: "utf8", maxBuffer: 8 * 1024 * 1024 }));
+const registry = readJson("docs/art/ART_ASSET_REGISTRY.json");
 if (!Array.isArray(registry.assets) || registry.assets.length !== EXPECTED_REGISTRY_UNITS) throw new Error(`Expected the canonical ${EXPECTED_REGISTRY_UNITS}-record Art-A registry`);
 if (new Set(registry.assets.map((asset) => asset.assetId)).size !== registry.assets.length) throw new Error("Duplicate Art-A asset IDs");
 
-for (const required of [...pilotCharacters, ...pilotVfx]) {
+for (const required of [...pilotCharacters, ...pilotVfx, ...battleSharedLayerPilot]) {
   if (!registry.assets.some((asset) => asset.assetId === required)) throw new Error(`Missing A1 pilot reference ${required}`);
 }
+
+const productionIdsByReference = new Map(registry.assets.map((asset) => {
+  const family = familyFor(asset);
+  return [asset.assetId, productionAssetId(asset, family)];
+}));
 
 const records = registry.assets
   .map((asset) => {
     const family = familyFor(asset);
-    const blockers = ["PRODUCTION_MASTER_NOT_CREATED", "HUMAN_VISUAL_APPROVAL_REQUIRED", "RUNTIME_VISUAL_QA_REQUIRED"];
-    if (asset.domain === "CHARACTER" || asset.domain === "CHARACTER_ANIMATION") blockers.push("LAUNCH_96_OR_POSTLAUNCH_PACK_ASSIGNMENT_REQUIRED");
-    if (/field_bm03_01|field_bm04_01/i.test(asset.logicalGroup) && asset.domain === "BATTLE_FIELD") blockers.push("ANIMATED_LAYER_UNKNOWN_REQUIRES_TRACE");
+    const blockers = new Set(["PRODUCTION_MASTER_NOT_CREATED", "HUMAN_VISUAL_APPROVAL_REQUIRED", "RUNTIME_VISUAL_QA_REQUIRED", ...(asset.blockers || [])]);
+    if (asset.domain === "CHARACTER" || asset.domain === "CHARACTER_ANIMATION") blockers.add("LAUNCH_96_OR_POSTLAUNCH_PACK_ASSIGNMENT_REQUIRED");
+    const referenceDependencies = asset.dependencies || [];
+    const productionDependencies = referenceDependencies
+      .filter((dependency) => dependency.startsWith("art:"))
+      .map((dependency) => {
+        const productionId = productionIdsByReference.get(dependency);
+        if (!productionId) throw new Error(`Missing production dependency for ${asset.assetId}: ${dependency}`);
+        return productionId;
+      });
+    const paletteDecisionId = referenceDependencies.find((dependency) => dependency.startsWith("decision:character-palette:")) || null;
     return {
       referenceAssetId: asset.assetId,
       referenceDomain: asset.domain,
@@ -124,6 +153,9 @@ const records = registry.assets
       referenceEvidenceStatus: asset.evidenceStatus,
       referenceRightsStatus: asset.rightsStatus,
       productionAssetId: productionAssetId(asset, family),
+      paletteDecisionId,
+      referenceDependencies,
+      productionDependencies,
       family,
       renderer: rendererFor(asset),
       primaryBatch: batchFor(asset, family),
@@ -138,13 +170,144 @@ const records = registry.assets
       readyForRuntime: false,
       shippingReady: false,
       replacementRequired: true,
-      blockers
+      blockers: [...blockers]
     };
   })
   .sort((left, right) => left.referenceAssetId.localeCompare(right.referenceAssetId));
 
+if (new Set(records.map((record) => record.productionAssetId)).size !== records.length) {
+  throw new Error("Duplicate productionAssetId values");
+}
+
+function applyOneLicensedMapFamily(targetRecords, { family, manifestPath, groupOf }) {
+  const bundle = readJson(manifestPath);
+  const filesByGroup = new Map();
+  for (const field of bundle.fields) {
+    const group = groupOf(field.fieldId);
+    const files = filesByGroup.get(group) ?? [];
+    files.push(...field.frames.map((frame) => frame.src));
+    filesByGroup.set(group, files);
+  }
+  for (const record of targetRecords) {
+    if (record.family !== family) continue;
+    const files = filesByGroup.get(record.referenceLogicalGroup);
+    if (!files) throw new Error(`Missing licensed ${family} pixels for ${record.referenceAssetId}`);
+    record.productionRightsStatus = "LICENSED";
+    record.rightsVerificationStatus = "OWNER_DECLARED_PRODUCTION_INDEX_IS_AUTHORITY";
+    record.productionStatus = bundle.productionStatus;
+    record.runtimeManifestKey = manifestPath;
+    record.productionFiles = files;
+    record.humanApproved = true;
+    record.readyForRuntime = true;
+    record.shippingReady = false;
+    record.replacementRequired = false;
+    record.blockers = record.blockers.filter((blocker) => blocker !== "PRODUCTION_MASTER_NOT_CREATED");
+  }
+}
+
+function applyLicensedRuntimePromotions(targetRecords) {
+  applyOneLicensedMapFamily(targetRecords, {
+    family: "hunt",
+    manifestPath: "assets/production/hunt/licensed-runtime-v1/manifest.json",
+    groupOf(fieldId) {
+      const match = /^field_(hm\d+)_\d+$/i.exec(fieldId);
+      if (!match) throw new Error(`Unexpected licensed Hunt field id: ${fieldId}`);
+      return match[1].toUpperCase();
+    }
+  });
+  applyOneLicensedMapFamily(targetRecords, {
+    family: "cage",
+    manifestPath: "assets/production/cage/licensed-runtime-v1/manifest.json",
+    groupOf(fieldId) {
+      if (!/^field_cm\d+_\d+$/i.test(fieldId)) throw new Error(`Unexpected licensed Cage field id: ${fieldId}`);
+      return fieldId;
+    }
+  });
+  applyLicensedBattlePromotions(targetRecords);
+  applyLicensedVfxPromotions(targetRecords);
+}
+
+function applyLicensedBattlePromotions(targetRecords) {
+  const manifestPath = "assets/production/battle/licensed-runtime-v1/manifest.json";
+  const bundle = readJson(manifestPath);
+  const filesByField = new Map();
+  for (const field of bundle.fields) {
+    filesByField.set(field.fieldId, field.frames.map((frame) => frame.src));
+  }
+  const sharedFiles = bundle.fields
+    .filter((field) => field.hasCommonLayer)
+    .flatMap((field) => field.frames.map((frame) => frame.src));
+  for (const record of targetRecords) {
+    if (record.family !== "battle") continue;
+    const files = record.referenceAssetKind === "BATTLE_FIELD_SHARED_LAYER_REFERENCE"
+      ? sharedFiles
+      : filesByField.get(record.referenceLogicalGroup);
+    if (!files?.length) throw new Error(`Missing licensed battle pixels for ${record.referenceAssetId}`);
+    record.productionRightsStatus = "LICENSED";
+    record.rightsVerificationStatus = "OWNER_DECLARED_PRODUCTION_INDEX_IS_AUTHORITY";
+    record.productionStatus = bundle.productionStatus;
+    record.runtimeManifestKey = manifestPath;
+    record.productionFiles = files;
+    record.humanApproved = true;
+    record.readyForRuntime = true;
+    record.shippingReady = false;
+    record.replacementRequired = false;
+    record.blockers = record.blockers.filter((blocker) => blocker !== "PRODUCTION_MASTER_NOT_CREATED");
+  }
+}
+
+function applyLicensedVfxPromotions(targetRecords) {
+  const manifestPath = "assets/production/vfx/licensed-runtime-v1/manifest.json";
+  const bundle = readJson(manifestPath);
+  const filesByGroup = new Map();
+  for (const system of bundle.systems) {
+    filesByGroup.set(system.logicalGroup, [
+      system.model,
+      ...system.textures.map((texture) => texture.src),
+      ...system.sidecars
+    ]);
+  }
+  let promoted = 0;
+  for (const record of targetRecords) {
+    if (record.family !== "vfx" || record.referenceAssetKind !== "NITRO_3D_EFFECT_FAMILY") continue;
+    const files = filesByGroup.get(record.referenceLogicalGroup);
+    if (!files?.length) throw new Error(`Missing licensed VFX files for ${record.referenceAssetId}`);
+    record.productionRightsStatus = "LICENSED";
+    record.rightsVerificationStatus = "OWNER_DECLARED_PRODUCTION_INDEX_IS_AUTHORITY";
+    record.productionStatus = bundle.productionStatus;
+    record.runtimeManifestKey = manifestPath;
+    record.productionFiles = files;
+    record.humanApproved = true;
+    record.readyForRuntime = true;
+    record.shippingReady = false;
+    record.replacementRequired = false;
+    record.blockers = record.blockers.filter((blocker) => blocker !== "PRODUCTION_MASTER_NOT_CREATED");
+    promoted += 1;
+  }
+  if (promoted !== 26) throw new Error(`Expected 26 licensed Nitro VFX records, got ${promoted}`);
+}
+
+applyLicensedRuntimePromotions(records);
+
+// Four authored menu panels cover a bounded presentation, not the complete
+// original model (which also has password/practice groups and untraced layers).
+const cubeReference = records.find(record => record.referenceAssetId === "art:three-d:battle-menu-launcher13:nitro-reference");
+const cubeManifestPath = "assets/production/battle/menu-cube-v1/manifest.json";
+const cubePack = readJson(cubeManifestPath);
+if (!cubeReference) throw new Error("Missing battle cube reference record");
+cubeReference.boundedRuntimeReplacement = {
+  assetId: cubePack.assetId,
+  manifestPath: cubeManifestPath,
+  scope: "FOUR_AUTHORED_MENU_PANELS_ONLY",
+  rightsStatus: cubePack.rightsStatus,
+  runtimeEligible: cubePack.runtimeEligible,
+  humanApproved: cubePack.humanApproved,
+  shippingReady: false,
+  completeSourceCoverage: false
+};
+
 const crosswalk = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   project: "DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD",
   authority: "OWNER_DIRECTIVE_2026_08_29_LICENSED_FAITHFUL_CAT_ADAPTATION",
   generatedFrom: "docs/art/ART_ASSET_REGISTRY.json",
@@ -152,8 +315,8 @@ const crosswalk = {
   licenseGate: {
     ownerReportedStatus: "FULL_LICENSE_ACQUIRED",
     targetProductionRightsStatus: "LICENSED",
-    documentVerification: "REQUIRED_BEFORE_READY_FOR_RUNTIME_OR_SHIPPING_PROMOTION",
-    rule: "Reference rights and production rights remain separate until a production master and its licence evidence are linked."
+    documentVerification: "OWNER_DECLARED_PRODUCTION_INDEX_IS_RUNTIME_AUTHORITY; SHIPPING_STILL_REQUIRES_QA",
+    rule: "ART_PRODUCTION_INDEX is the unique runtime rights source. Unlisted research pixels stay unread. Shipping still requires visual QA."
   },
   rosterPlan: {
     totalSlots: 224,
@@ -181,10 +344,8 @@ const crosswalk = {
   a1Pilot: {
     characters: pilotCharacters,
     huntBiomes: ["art:map:hm01:hunt-reference", "art:map:hm09:hunt-reference"],
-    gate3d: [
-      "art:three-d:gate-select-3d-worldmap-model:nitro-reference",
-      "art:three-d:gate-select-earth:nitro-reference"
-    ],
+    gate3d: [],
+    battleSharedLayerPilot,
     vfxReferences: pilotVfx,
     newProductionOnlyVfx: ["production:vfx:capture-tether-circle-resolution"],
     cageModuleCount: 12,
@@ -201,33 +362,82 @@ const crosswalk = {
 };
 
 const registeredManifests = [
+  "assets/production/hunt/licensed-runtime-v1/manifest.json",
+  "assets/production/cage/licensed-runtime-v1/manifest.json",
+  "assets/production/battle/licensed-runtime-v1/manifest.json",
+  "assets/production/vfx/licensed-runtime-v1/manifest.json",
   "assets/production/temporary/int-rh2/manifest.json",
   "assets/production/temporary/vs2-hunt/manifest.json",
-  "assets/production/gate/vs2-r1/manifest.json"
+  "assets/production/gate/vs2-r1/manifest.json",
+  "assets/production/internal-battle-review/bm00-bm01-r1/runtime.review.json",
+  "assets/production/internal-battle-review/bm02-r1/runtime.review.json",
+  "assets/production/internal-battle-review/bm03-bm04-animated-r1/runtime.bm03.review.json",
+  "assets/production/internal-battle-review/hardening-r2/runtime.bm04.review.json",
+  "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm05.review.json",
+  "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm06.review.json",
+  "assets/production/internal-battle-review/bm07-cyberspace-r1/runtime.review.json",
+  "assets/production/internal-battle-review/hardening-r2/runtime.bm08.review.json",
+  "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm09.review.json",
+  "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm10.review.json",
+  "assets/production/internal-battle-review/hardening-r2/runtime.bm11.review.json",
+  "assets/production/battle/menu-cube-v1/manifest.json",
+  "assets/production/internal-faithful-baseline/characters-v1/manifest.json",
+  "assets/production/ui/tooling-pilot-r1/manifest.json"
 ].map((manifestPath) => ({ manifestPath, manifest: readJson(manifestPath) }));
+
+// Preserve the later R11 retirement and R13 loopback-only registrations when
+// rebuilding A0. They are explicit entries, never a directory-wide promotion.
+const laterEntries = [
+  ["assets/production/vfx/original-battle-2d-v1/manifest.json", "HISTORICAL_R11_RETAINED_NOT_SELECTED"],
+  ["assets/production/internal-faithful-baseline/battle-effects-v1/manifest.json", "SOURCE_PNG_PIXELS_NATIVE_ORIGINS_151_BANKS_LOCAL_REVIEW"],
+  ["assets/production/internal-faithful-baseline/battle-audio-v1/manifest.json", "SOURCE_SAMPLES_54_ORIGINAL_IDS_LOCAL_REVIEW"]
+].map(([manifestPath, maturity]) => {
+  const manifest = readJson(manifestPath);
+  if (manifest.shippingReady !== false || manifest.humanApproved !== false || manifest.publicReleasePermitted !== false) {
+    throw new Error(`Later registration requires explicit non-shipping scope: ${manifestPath}`);
+  }
+  if (manifest.localOnly === true) {
+    if (manifest.runtimeScope !== "LOOPBACK_RESEARCH_ONLY" || manifest.rightsStatus !== "ROM_COPYRIGHTED_REFERENCE") throw new Error(`Invalid local reference: ${manifestPath}`);
+    return {assetId:manifest.assetId,manifestPath,rightsStatus:manifest.rightsStatus,
+      productionStatus:manifest.productionStatus ?? "OWNER_AUTHORIZED_LOCAL_REFERENCE",shippingStatus:"NOT_SHIPPING_READY",
+      humanApproved:false,runtimeEligible:manifest.runtimeEligible,localOnly:true,runtimeScope:manifest.runtimeScope,
+      publicReleasePermitted:false,shippingReady:false,maturity};
+  }
+  if (manifest.runtimeEligible !== false || manifest.productionStatus !== "RETIRED_GENERATED_REPLACEMENT_OWNER_CORRECTION") throw new Error(`Retired art cannot be re-enabled: ${manifestPath}`);
+  return {assetId:manifest.assetId,manifestPath,rightsStatus:manifest.rightsStatus,productionStatus:manifest.productionStatus,
+    shippingStatus:"NOT_SHIPPING_READY",humanApproved:false,runtimeEligible:false,shippingReady:false,maturity,publicReleasePermitted:false};
+});
 
 const productionIndex = {
   schemaVersion: 1,
   authority: "CHAMPIONSHIP_2026_ART_PRODUCTION",
   sourceCrosswalk: "docs/art/ART_PRODUCTION_CROSSWALK.json",
-  promotionPolicy: "ONLY_EXPLICIT_ENTRIES_MAY_BE_RUNTIME_REGISTERED; SHIPPING_READY_REQUIRES_LICENSE_DOCUMENT_HUMAN_APPROVAL_AND_RUNTIME_QA",
-  a0State: "SPECIFICATION_LOCKED_NO_NEW_ART_PROMOTED",
+  promotionPolicy: "ONLY_EXPLICIT_INDEX_ENTRIES_MAY_BE_RUNTIME_REGISTERED; OWNER_DECLARED_LICENSED_PIXELS_MAY_BE_RUNTIME_ELIGIBLE; SHIPPING_READY_REQUIRES_HUMAN_APPROVAL_AND_RUNTIME_QA",
+  a0State: "SPECIFICATION_LOCKED_LICENSED_PIXEL_RUNTIME_PILOT_NO_SHIPPING",
+  rightsAuthority: {
+    uniqueSource: "THIS_INDEX",
+    ownerStatus: "LICENSED",
+    ownerDirective: "docs/coordination/OWNER_DIRECTION.md#2026-09-02",
+    researchPack: "NOT_RUNTIME_READABLE"
+  },
   summary: {
-    registeredRuntimeBundles: registeredManifests.length,
+    registeredRuntimeBundles: registeredManifests.length + laterEntries.length,
     shippingReadyBundles: registeredManifests.filter(({ manifest }) => manifest.shippingStatus === "SHIPPING_READY").length
   },
-  entries: registeredManifests.map(({ manifestPath, manifest }) => ({
+  entries: [...registeredManifests.map(({ manifestPath, manifest }) => ({
     assetId: manifest.assetId,
     manifestPath,
     rightsStatus: manifest.rightsStatus,
     productionStatus: manifest.productionStatus,
     shippingStatus: manifest.shippingStatus,
     humanApproved: manifest.humanApproved,
+    ...(manifest.runtimeEligible === true ? { runtimeEligible: true } : {}),
+    ...(manifest.publicReleasePermitted === false ? { publicReleasePermitted: false } : {}),
     shippingReady: manifest.shippingStatus === "SHIPPING_READY",
     maturity: manifest.artifactMaturity || manifest.runtimeRole || "TEMPORARY_PRESENTATION"
-  }))
+  })), ...laterEntries]
 };
 
 writeOrCheck(crosswalkPath, crosswalk);
 writeOrCheck(indexPath, productionIndex);
-console.log(checkOnly ? "A0 generated files are current." : `Wrote ${records.length} production crosswalk records and ${registeredManifests.length} runtime index entries.`);
+console.log(checkOnly ? "A0 generated files are current." : `Wrote ${records.length} production crosswalk records and ${productionIndex.entries.length} registered index entries.`);

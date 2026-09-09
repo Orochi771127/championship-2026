@@ -1,0 +1,20 @@
+{
+  "capturedUtc": "2026-09-05T05:59:39.963858+00:00",
+  "scope": "completion planning documentation and bounded research only",
+  "branch": "main",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "localLinksChecked": 57,
+  "missingLinks": [],
+  "matrixRowsConsistent": 14,
+  "researchScriptsAstValid": true,
+  "researchJsonValid": true,
+  "baselineFilesCompared": 1394,
+  "baselineDifferences": [
+    "docs/CURRENT_PRODUCT_STATUS.md"
+  ],
+  "productSourceTestAssetTextChanges": [],
+  "runtimeRegressionRerun": false,
+  "note": "Existing source-baseline predates audit status updates; expected status document differences retained. Binary assets are outside this text hash comparison.",
+  "gitDiffCheckExitCode": 0,
+  "newFilesTrailingWhitespace": []
+}

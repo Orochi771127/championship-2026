@@ -21,6 +21,9 @@
 // stays UNKNOWN_REQUIRES_TRACE. VS1 still assigns to two product cages, not
 // hex modules — occupancy is not applied here until that membership exists.
 
+import { normalizeNativeIndividualProfile } from "../raising/nativeIndividualProfile.js";
+import { normalizeNativeRaisingHome } from "../raising/nativeRaisingHomeState.js";
+
 export const RAISING_PRODUCTION_SCHEMA_VERSION = 1;
 export const RAISING_PRODUCTION_AUTHORITY = "CHAMPIONSHIP_2026_PRODUCT";
 
@@ -105,6 +108,26 @@ export function creaturesInCage(state, cageId) {
   return Object.keys(state.assignments).filter((id) => state.assignments[id] === cageId).sort();
 }
 
+// Original result release targets one record identity (02062024 / 02061FCC).
+// This projection can remove collection-owned records. Frozen R2 residents
+// use the canonical v5 resident-membership transaction, never a hidden tombstone.
+export function releaseCollectedCreature(state, instanceId) {
+  if (!state.collection.some((entry) => entry.instanceId === instanceId)) {
+    throw stateError(`UNKNOWN_COLLECTION_INSTANCE: ${instanceId}`);
+  }
+  return releaseRaisingMembership(state, instanceId);
+}
+
+export function releaseRaisingMembership(state, instanceId) {
+  if (!Object.hasOwn(state.assignments, instanceId) && !state.collection.some((entry) => entry.instanceId === instanceId)) {
+    throw stateError(`UNKNOWN_RAISING_INSTANCE: ${instanceId}`);
+  }
+  const assignments = { ...state.assignments }, interactions = { ...state.interactions };
+  delete assignments[instanceId]; delete interactions[instanceId];
+  return deepFreeze({ ...state, assignments, interactions,
+    collection: state.collection.filter((entry) => entry.instanceId !== instanceId) });
+}
+
 export function cageOf(state, creatureId) {
   return state.assignments[creatureId] ?? null;
 }
@@ -142,8 +165,39 @@ function collectionEntry(entry) {
       : null,
     enclosedAt: typeof entry.enclosedAt === "string" ? entry.enclosedAt : null,
     originGateId: typeof entry.originGateId === "string" ? entry.originGateId : null,
-    successAuthority: "PRODUCT_AUTHORED_ENCLOSURE"
+    // Preserve the recorded source when restoring or renaming. A legacy entry
+    // without this field cannot acquire a success claim from normalization.
+    successAuthority: typeof entry.successAuthority === "string" && entry.successAuthority.length > 0
+      ? entry.successAuthority
+      : null,
+    ...(entry.capturedVitals ? { capturedVitals: captureVitals(entry.capturedVitals) } : {}),
+    ...(entry.nativeProfile ? { nativeProfile: normalizeNativeIndividualProfile(entry.nativeProfile, entry.speciesId) } : {})
   };
+}
+
+function captureVitals(value) {
+  if (!Number.isSafeInteger(value?.maxHp) || value.maxHp < 1 || value.maxHp > 32767
+    || !Number.isSafeInteger(value.currentHp) || value.currentHp < 0 || value.currentHp > value.maxHp
+    || typeof value.traceId !== "string" || !value.traceId || value.traceId.length > 200) {
+    throw stateError("INVALID_CAPTURED_VITALS");
+  }
+  return { currentHp: value.currentHp, maxHp: value.maxHp, traceId: value.traceId };
+}
+
+// Only the existing app's result-to-Home transaction calls this after an actual
+// on-card transition. Legacy enclosure entries retain their previous provenance.
+export function recordNativeGiftCreature(state,entry){
+  const next=recordEnclosedCreature(state,{...entry,originGateId:null});
+  return deepFreeze({...next,collection:next.collection.map(item=>item.instanceId===entry.instanceId
+    ?{...item,successAuthority:'NATIVE_MAIL_GIFT',nativeProfile:normalizeNativeIndividualProfile(entry.nativeProfile,entry.speciesId)}:item)});
+}
+
+export function recordCapturedCardCreature(state, entry) {
+  const vitals = captureVitals(entry.capturedVitals);
+  const next = recordEnclosedCreature(state, entry);
+  return deepFreeze({ ...next, collection: next.collection.map((item) => item.instanceId === entry.instanceId
+    ? { ...item, successAuthority: entry.nativeProfile ? "NATIVE_NORMAL_HUNT_CONTROLLER" : "ROM_DATAFLOW_REPLAY_NOT_FIELD_PARITY", capturedVitals: vitals,
+      ...(entry.nativeProfile ? {nativeProfile:normalizeNativeIndividualProfile(entry.nativeProfile, entry.speciesId)} : {}) } : item) });
 }
 
 /**
@@ -188,7 +242,8 @@ export function recordEnclosedCreature(state, {
         speciesId,
         displayName: givenName,
         enclosedAt,
-        originGateId
+        originGateId,
+        successAuthority: "PRODUCT_AUTHORED_ENCLOSURE"
       })
     ]
   });
@@ -250,7 +305,10 @@ export function normalizeRaisingProductionState(input, { cageIds = [], creatureI
         speciesId: entry.speciesId,
         displayName,
         enclosedAt: entry.enclosedAt,
-        originGateId: entry.originGateId
+        originGateId: entry.originGateId,
+        successAuthority: entry.successAuthority,
+        capturedVitals: entry.capturedVitals,
+        nativeProfile: entry.nativeProfile
       }));
       const storedCage = input.assignments?.[entry.instanceId];
       assignments[entry.instanceId] = typeof storedCage === "string" && cageIds.includes(storedCage)
@@ -274,6 +332,7 @@ export function normalizeRaisingProductionState(input, { cageIds = [], creatureI
     authority: RAISING_PRODUCTION_AUTHORITY,
     assignments,
     interactions,
-    collection
+    collection,
+    ...(input.nativeHome ? {nativeHome:normalizeNativeRaisingHome(input.nativeHome)} : {})
   });
 }

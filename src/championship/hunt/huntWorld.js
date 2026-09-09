@@ -22,6 +22,7 @@
 import { createFieldDefinition } from "../field/fieldDefinition.js";
 import { createFieldCollisionAdapter } from "../field/fieldCollision.js";
 import { getFieldFamilyProfile } from "../../data/championship/r2/fields/fieldInventoryR2.js";
+import speciesCatalog from "../../data/championship/catalogs/creature-species.r1.json" with { type: "json" };
 
 export const HUNT_WORLD_TILES = 128;
 export const HUNT_TILE_SIZE_PX = 16;
@@ -32,11 +33,15 @@ export const HUNT_WORLD_SPAN_PX = HUNT_WORLD_TILES * HUNT_TILE_SIZE_PX;
 const BLOCKED = 0x01;
 const OPEN = 0x00;
 
-const WILD_SPECIES = Object.freeze([
-  "championship:creature:blazetail-kit",
-  "championship:creature:crystalfin-seahorse",
-  "championship:creature:greyshade-cat"
-]);
+// Explicit prototype/replay fixture subset only. Normal beginHunt supplies a
+// native entry candidate and branches before this seeded constructor executes.
+// These first three non-egg records are not a claim about any Gate's roster.
+const WILD_SPECIES = Object.freeze(
+  speciesCatalog.records
+    .filter((record) => record.generationIndex > 0)
+    .slice(0, 3)
+    .map((record) => `species-${String(record.recordIndex).padStart(3, "0")}`)
+);
 
 export const HUNT_WILD_COUNT = 6;
 
@@ -162,10 +167,11 @@ export function huntTileToWorldCentre(tileX, tileY) {
  * object placement, the spawn point, and the wild creature spawn list. It holds
  * no mutable runtime state: that belongs to the hunt runtime.
  */
-export function createHuntWorld(gate) {
+export function createHuntWorld(gate, nativeEntry = null) {
   if (!gate || typeof gate.gateId !== "string" || !Number.isSafeInteger(gate.worldSeed)) {
     throw new TypeError("createHuntWorld requires a Championship gate with a world seed");
   }
+  if (nativeEntry !== null) return createNativeEntryWorld(gate, nativeEntry);
   const random = seededRandom(gate.worldSeed);
   const values = buildAttributeGrid(random);
 
@@ -266,5 +272,39 @@ export function createHuntWorld(gate) {
       if (x < 0 || y < 0 || x >= HUNT_WORLD_TILES || y >= HUNT_WORLD_TILES) return false;
       return reachable[tileIndex(x, y)] === 1;
     }
+  });
+}
+
+// The same field kernel receives native initial blocking semantics. Normal
+// entry supplies this candidate; the seeded constructor is a test/replay fixture.
+function createNativeEntryWorld(gate, entry) {
+  const { scene, encounter } = entry;
+  const env = scene.environment;
+  if (scene.biomeId !== gate.biomeId || env.width !== 128 || env.height !== 128
+    || !encounter.actors.length) throw Error("HUNT_WORLD_NATIVE_ENTRY_INVALID");
+  const values = Array.from({ length:env.width * env.height }, (_,i) =>
+    env.isBlocked(i % env.width, Math.floor(i / env.width)) ? BLOCKED : OPEN);
+  const profile = getFieldFamilyProfile("HM");
+  const definition = createFieldDefinition({ schemaVersion:2,
+    fieldId:`championship:2026:r2:field:hm-${gate.gateId.split(":").pop()}`,
+    family:"HM", collisionProfileId:profile.profileId,
+    dimensions:{ widthTiles:env.width, heightTiles:env.height }, tileSizePx:HUNT_TILE_SIZE_PX,
+    chunkSizeTiles:HUNT_CHUNK_SIZE_TILES, collisionData:{ kind:"HM_SANITIZED_ATTRIBUTE_GRID", values }
+  }, profile);
+  // Retain the existing product camera centre; never alter native actor positions
+  // to fit the viewport or apply prototype reachability filtering to them.
+  return Object.freeze({ gateId:gate.gateId, definition, collision:createFieldCollisionAdapter(definition),
+    nativeEntry:true, nativeHuntIndex:scene.nativeHuntIndex, artFieldId:scene.fieldId,
+    widthTiles:env.width, heightTiles:env.height, tileSizePx:HUNT_TILE_SIZE_PX,
+    chunkSizeTiles:HUNT_CHUNK_SIZE_TILES, worldWidthPx:env.width * HUNT_TILE_SIZE_PX,
+    worldHeightPx:env.height * HUNT_TILE_SIZE_PX,
+    spawn:Object.freeze({ tileX:64, tileY:64, ...huntTileToWorldCentre(64,64) }),
+    objects:Object.freeze([]),
+    wildCreatures:Object.freeze(encounter.actors.map((actor,i) => Object.freeze({
+      wildId:`${gate.gateId}:native-wild:${i}`, speciesId:`species-${String(actor.speciesIndex).padStart(3,"0")}`,
+      worldX:actor.positionQ12[0] / 2048, worldY:actor.positionQ12[1] / 2048,
+      facing:actor.facing, currentHp:actor.individual.fields["050"], maxHp:actor.individual.fields["058"]
+    }))),
+    isBlockedTile:env.isBlocked
   });
 }

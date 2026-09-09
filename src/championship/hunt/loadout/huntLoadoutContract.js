@@ -12,11 +12,9 @@
 //
 // WHAT IS NOT HERE
 // ----------------
-// Per-item runtime effect. The research register's own verdict on this system is
-// "all equipment semantics" unknown: durability exists but nothing proves what
-// consumes it, power and length exist but nothing proves what they do. Those live
-// nowhere in this build, because inventing them is the one thing this programme
-// is designed to prevent.
+// Per-item runtime effects live in the normal Hunt controllers. Their 2026-09-08
+// translations and CPU evidence supersede the early structural-only verdict.
+// Scatter's response byte uses the approved correction; remaining live parity is incomplete.
 //
 // No original item name or description text appears in this repository. Those are
 // ROM strings and stay in the research tree.
@@ -24,7 +22,7 @@
 import { deepFreeze } from "../../contracts/championshipContracts.js";
 
 export const HUNT_LOADOUT_STRUCTURE_EVIDENCE = "ROM_VERIFIED";
-export const HUNT_LOADOUT_ITEM_IDENTITY_EVIDENCE = "PRODUCT_AUTHORED";
+export const HUNT_LOADOUT_ITEM_IDENTITY_EVIDENCE = "ROM_VERIFIED";
 
 /**
  * The five equipment classes.
@@ -72,11 +70,9 @@ export const HUNT_PLUGIN_KINDS = deepFreeze({
 /**
  * Four positions.
  *
- * The gear slot strip (main screen, col_slot0..3) and the plugin strip (sub
- * screen, plugin0..3) share the same x and the same 19px pitch, so they are
- * modelled as ONE set of four positions viewed on two screens. Whether the
- * original had four or eight is open trace item HL-6; if it resolves to eight,
- * this constant is the single place that changes.
+ * OVL0 02125ED8 reads four records at inventory+A8C, stride 8. Equipment
+ * separately reads five records at inventory+A00. Their runtime cardinality
+ * is verified; the older two-screen layout label remains presentation only.
  */
 export const HUNT_PLUGIN_POSITION_COUNT = 4;
 export const HUNT_PLUGIN_POSITION_MODEL = "ONE_SET_OF_FOUR_VIEWED_ON_TWO_SCREENS";
@@ -141,9 +137,8 @@ export const HUNT_LOADOUT_UNKNOWNS = deepFreeze([
   { id: "HL-1", field: "confirmationFlow", detail: "No confirm or cancel node exists in any of the eleven loadout scenes." },
   { id: "HL-2", field: "launcher", detail: "Assets exist inside the loadout family; behaviour is unknown. Not modelled." },
   { id: "HL-3", field: "releaseMenu", detail: "menu_top_release_scene semantics unknown. Not modelled." },
-  { id: "HL-4", field: "classGrouping", detail: "Which Shop subcategories fall under ENTRAP and DAMAGE_TRAP, and where lures sit." },
-  { id: "HL-6", field: "positionModel", detail: "Whether the gear slots and plugin positions are one set of four or two." },
+  { id: "HL-6", field: "positionModel", detail: "Four plugin records and five separate equipment records are ROM verified. The historical two-screen visual correspondence is still partial." },
   { id: "HL-7", field: "carryLimit", detail: "How many units of a consumable may enter a single Hunt. No limit is applied." },
   { id: "HL-8", field: "persistence", detail: "Whether the selected loadout persists. It does not: no save field was added." },
-  { id: "HL-9", field: "itemEffect", detail: "Per-item runtime effect. Durability, power and length are carried as declared values and consumed by nothing." }
+  { id: "HL-9", field: "itemEffect", detail: "Normal input/consumption and AI are bound for all 46 equipment entries. Four scatter Shots use OWNER_APPROVED_ADAPTATION: ordinary Shot species response replaces the uninitialized byte; native pellet geometry, RNG order, cooldown, consumption and status rules are preserved. Full visual/audio and device parity remain incomplete." }
 ]);

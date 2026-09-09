@@ -5,6 +5,11 @@
 // and entry 36 is the structural Lid. CM33/36/38 exist in the ROM filesystem
 // but are not referenced by this runtime table and are therefore not guessed
 // into one of the 36 definitions.
+// Reverified 2026-09-05: pointer-column base 0x020C8CC0; matching name and
+// description columns 0x020C8CDC/0x020C8CE0, all at index*40. OVL15's reader
+// and every shop itemIndex agree. Definition 0 IS the vacant lot (cm01);
+// definition 1 is the track (cm02). Do not shift art to match the superseded
+// +0x28/+0x2C text-builder bug. See CAGE_IDENTITY_BINDING_ROM_TRACE_2026-09-05.md.
 
 import { deepFreeze } from "../contracts/championshipContracts.js";
 

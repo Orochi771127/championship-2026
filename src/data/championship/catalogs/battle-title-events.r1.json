@@ -55,7 +55,7 @@
       "name": "field0C",
       "width": "s32",
       "readSite": null,
-      "widthEvidence": "CONSTANT_ZERO_PADDING",
+      "widthEvidence": "NO_TRACED_READ_SITE",
       "distinctValues": 34
     },
     {
@@ -91,7 +91,7 @@
       "name": "field1C",
       "width": "u32",
       "readSite": null,
-      "widthEvidence": "CONSTANT_ZERO_PADDING",
+      "widthEvidence": "NO_TRACED_READ_SITE",
       "distinctValues": 8
     },
     {
@@ -100,7 +100,7 @@
       "name": "field20",
       "width": "u32",
       "readSite": null,
-      "widthEvidence": "CONSTANT_ZERO_PADDING",
+      "widthEvidence": "NO_TRACED_READ_SITE",
       "distinctValues": 51
     },
     {
@@ -109,7 +109,7 @@
       "name": "field24",
       "width": "u32",
       "readSite": null,
-      "widthEvidence": "CONSTANT_ZERO_PADDING",
+      "widthEvidence": "NO_TRACED_READ_SITE",
       "distinctValues": 42
     }
   ],

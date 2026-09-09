@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "batch": "CHAMPIONSHIP_2026_VS1_INT_RH2",
-  "generatedAt": "2026-08-28T17:54:22.692Z",
+  "generatedAt": "2026-09-09T12:04:57.091Z",
   "rendererPolicy": {
     "dom": "P1R screen UI",
     "pixi": "one field-scoped Application",
@@ -33,44 +33,93 @@
         "documentHeight": 800,
         "shell": {
           "width": 360,
-          "height": 800,
-          "top": 0,
-          "bottom": 800
+          "height": 680,
+          "top": 40,
+          "bottom": 720
         },
         "fieldHost": {
-          "width": 344,
-          "height": 563.453125
+          "width": 342,
+          "height": 664
         },
         "canvas": {
-          "width": 344,
-          "height": 563
+          "width": 342,
+          "height": 664
         },
         "canvasCount": 1,
         "toolbarSlots": 8,
-        "toolbarEnabled": 0,
+        "toolbarEnabled": 8,
         "uiAuthority": "P1R_DOM",
         "rendererSplit": "DOM_UI_PIXI_FIELD",
         "threeElements": 0,
         "interactive": [
           {
             "id": "int-rh2-system-button is-dirty",
-            "width": 54.359375,
+            "width": 68.5,
             "height": 44,
-            "top": 10.5,
-            "bottom": 54.5
+            "top": 45,
+            "bottom": 89
           },
           {
-            "id": "cm-button cm-button--primary cm-vs2-entry",
-            "width": 62,
-            "height": 44,
-            "top": 10,
-            "bottom": 54
+            "id": "cm-toolbar__cell",
+            "width": 41.125,
+            "height": 64,
+            "top": 729,
+            "bottom": 793
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 41.125,
+            "height": 64,
+            "top": 729,
+            "bottom": 793
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 41.125,
+            "height": 64,
+            "top": 729,
+            "bottom": 793
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 41.125,
+            "height": 64,
+            "top": 729,
+            "bottom": 793
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 41.125,
+            "height": 64,
+            "top": 729,
+            "bottom": 793
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 41.125,
+            "height": 64,
+            "top": 729,
+            "bottom": 793
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 41.125,
+            "height": 64,
+            "top": 729,
+            "bottom": 793
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 41.125,
+            "height": 64,
+            "top": 729,
+            "bottom": 793
           }
         ]
       },
       "framePacing": {
         "sampledFrames": 120,
-        "averageFps": 60.03,
+        "averageFps": 60.02,
         "medianFrameMs": 16.7,
         "p95FrameMs": 16.8
       },
@@ -89,44 +138,93 @@
         "documentHeight": 844,
         "shell": {
           "width": 390,
-          "height": 844,
-          "top": 0,
-          "bottom": 844
+          "height": 719,
+          "top": 40,
+          "bottom": 759
         },
         "fieldHost": {
-          "width": 370,
-          "height": 566.84375
+          "width": 390,
+          "height": 719
         },
         "canvas": {
-          "width": 370,
-          "height": 567
+          "width": 390,
+          "height": 719
         },
         "canvasCount": 1,
         "toolbarSlots": 8,
-        "toolbarEnabled": 0,
+        "toolbarEnabled": 8,
         "uiAuthority": "P1R_DOM",
         "rendererSplit": "DOM_UI_PIXI_FIELD",
         "threeElements": 0,
         "interactive": [
           {
             "id": "int-rh2-system-button is-dirty",
-            "width": 58,
+            "width": 68.5,
             "height": 44,
-            "top": 13,
-            "bottom": 57
+            "top": 47,
+            "bottom": 91
           },
           {
-            "id": "cm-button cm-button--primary cm-vs2-entry",
-            "width": 70,
-            "height": 44,
-            "top": 10,
-            "bottom": 54
+            "id": "cm-toolbar__cell",
+            "width": 44.875,
+            "height": 69,
+            "top": 768,
+            "bottom": 837
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 44.875,
+            "height": 69,
+            "top": 768,
+            "bottom": 837
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 44.875,
+            "height": 69,
+            "top": 768,
+            "bottom": 837
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 44.875,
+            "height": 69,
+            "top": 768,
+            "bottom": 837
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 44.875,
+            "height": 69,
+            "top": 768,
+            "bottom": 837
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 44.875,
+            "height": 69,
+            "top": 768,
+            "bottom": 837
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 44.875,
+            "height": 69,
+            "top": 768,
+            "bottom": 837
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 44.875,
+            "height": 69,
+            "top": 768,
+            "bottom": 837
           }
         ]
       },
       "framePacing": {
         "sampledFrames": 120,
-        "averageFps": 60.03,
+        "averageFps": 60.02,
         "medianFrameMs": 16.7,
         "p95FrameMs": 16.8
       },
@@ -145,44 +243,93 @@
         "documentHeight": 852,
         "shell": {
           "width": 393,
-          "height": 852,
-          "top": 0,
-          "bottom": 852
+          "height": 727,
+          "top": 40,
+          "bottom": 767
         },
         "fieldHost": {
-          "width": 373,
-          "height": 574.84375
+          "width": 393,
+          "height": 727
         },
         "canvas": {
-          "width": 373,
-          "height": 575
+          "width": 393,
+          "height": 727
         },
         "canvasCount": 1,
         "toolbarSlots": 8,
-        "toolbarEnabled": 0,
+        "toolbarEnabled": 8,
         "uiAuthority": "P1R_DOM",
         "rendererSplit": "DOM_UI_PIXI_FIELD",
         "threeElements": 0,
         "interactive": [
           {
             "id": "int-rh2-system-button is-dirty",
-            "width": 58,
+            "width": 68.5,
             "height": 44,
-            "top": 13,
-            "bottom": 57
+            "top": 47,
+            "bottom": 91
           },
           {
-            "id": "cm-button cm-button--primary cm-vs2-entry",
-            "width": 70,
-            "height": 44,
-            "top": 10,
-            "bottom": 54
+            "id": "cm-toolbar__cell",
+            "width": 45.25,
+            "height": 69,
+            "top": 776,
+            "bottom": 845
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 45.25,
+            "height": 69,
+            "top": 776,
+            "bottom": 845
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 45.25,
+            "height": 69,
+            "top": 776,
+            "bottom": 845
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 45.25,
+            "height": 69,
+            "top": 776,
+            "bottom": 845
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 45.25,
+            "height": 69,
+            "top": 776,
+            "bottom": 845
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 45.25,
+            "height": 69,
+            "top": 776,
+            "bottom": 845
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 45.25,
+            "height": 69,
+            "top": 776,
+            "bottom": 845
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 45.25,
+            "height": 69,
+            "top": 776,
+            "bottom": 845
           }
         ]
       },
       "framePacing": {
         "sampledFrames": 120,
-        "averageFps": 60.02,
+        "averageFps": 60.03,
         "medianFrameMs": 16.7,
         "p95FrameMs": 16.8
       },
@@ -201,38 +348,87 @@
         "documentHeight": 915,
         "shell": {
           "width": 412,
-          "height": 915,
-          "top": 0,
-          "bottom": 915
+          "height": 790,
+          "top": 40,
+          "bottom": 830
         },
         "fieldHost": {
-          "width": 392,
-          "height": 637.84375
+          "width": 412,
+          "height": 790
         },
         "canvas": {
-          "width": 392,
-          "height": 638
+          "width": 412,
+          "height": 790
         },
         "canvasCount": 1,
         "toolbarSlots": 8,
-        "toolbarEnabled": 0,
+        "toolbarEnabled": 8,
         "uiAuthority": "P1R_DOM",
         "rendererSplit": "DOM_UI_PIXI_FIELD",
         "threeElements": 0,
         "interactive": [
           {
             "id": "int-rh2-system-button is-dirty",
-            "width": 58,
+            "width": 68.5,
             "height": 44,
-            "top": 13,
-            "bottom": 57
+            "top": 47,
+            "bottom": 91
           },
           {
-            "id": "cm-button cm-button--primary cm-vs2-entry",
-            "width": 70,
-            "height": 44,
-            "top": 10,
-            "bottom": 54
+            "id": "cm-toolbar__cell",
+            "width": 47.625,
+            "height": 69,
+            "top": 839,
+            "bottom": 908
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 47.625,
+            "height": 69,
+            "top": 839,
+            "bottom": 908
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 47.625,
+            "height": 69,
+            "top": 839,
+            "bottom": 908
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 47.625,
+            "height": 69,
+            "top": 839,
+            "bottom": 908
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 47.625,
+            "height": 69,
+            "top": 839,
+            "bottom": 908
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 47.625,
+            "height": 69,
+            "top": 839,
+            "bottom": 908
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 47.625,
+            "height": 69,
+            "top": 839,
+            "bottom": 908
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 47.625,
+            "height": 69,
+            "top": 839,
+            "bottom": 908
           }
         ]
       },
@@ -257,38 +453,87 @@
         "documentHeight": 932,
         "shell": {
           "width": 430,
-          "height": 932,
-          "top": 0,
-          "bottom": 932
+          "height": 807,
+          "top": 40,
+          "bottom": 847
         },
         "fieldHost": {
-          "width": 410,
-          "height": 654.84375
+          "width": 430,
+          "height": 807
         },
         "canvas": {
-          "width": 410,
-          "height": 655
+          "width": 430,
+          "height": 807
         },
         "canvasCount": 1,
         "toolbarSlots": 8,
-        "toolbarEnabled": 0,
+        "toolbarEnabled": 8,
         "uiAuthority": "P1R_DOM",
         "rendererSplit": "DOM_UI_PIXI_FIELD",
         "threeElements": 0,
         "interactive": [
           {
             "id": "int-rh2-system-button is-dirty",
-            "width": 58,
+            "width": 68.5,
             "height": 44,
-            "top": 13,
-            "bottom": 57
+            "top": 47,
+            "bottom": 91
           },
           {
-            "id": "cm-button cm-button--primary cm-vs2-entry",
-            "width": 70,
-            "height": 44,
-            "top": 10,
-            "bottom": 54
+            "id": "cm-toolbar__cell",
+            "width": 49.875,
+            "height": 69,
+            "top": 856,
+            "bottom": 925
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 49.875,
+            "height": 69,
+            "top": 856,
+            "bottom": 925
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 49.875,
+            "height": 69,
+            "top": 856,
+            "bottom": 925
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 49.875,
+            "height": 69,
+            "top": 856,
+            "bottom": 925
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 49.875,
+            "height": 69,
+            "top": 856,
+            "bottom": 925
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 49.875,
+            "height": 69,
+            "top": 856,
+            "bottom": 925
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 49.875,
+            "height": 69,
+            "top": 856,
+            "bottom": 925
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 49.875,
+            "height": 69,
+            "top": 856,
+            "bottom": 925
           }
         ]
       },
@@ -313,38 +558,87 @@
         "documentHeight": 812,
         "shell": {
           "width": 375,
-          "height": 812,
-          "top": 0,
-          "bottom": 812
+          "height": 687,
+          "top": 40,
+          "bottom": 727
         },
         "fieldHost": {
-          "width": 355,
-          "height": 556.84375
+          "width": 375,
+          "height": 687
         },
         "canvas": {
-          "width": 355,
-          "height": 557
+          "width": 375,
+          "height": 687
         },
         "canvasCount": 1,
         "toolbarSlots": 8,
-        "toolbarEnabled": 0,
+        "toolbarEnabled": 8,
         "uiAuthority": "P1R_DOM",
         "rendererSplit": "DOM_UI_PIXI_FIELD",
         "threeElements": 0,
         "interactive": [
           {
             "id": "int-rh2-system-button is-dirty",
-            "width": 58,
+            "width": 68.5,
             "height": 44,
-            "top": 13,
-            "bottom": 57
+            "top": 47,
+            "bottom": 91
           },
           {
-            "id": "cm-button cm-button--primary cm-vs2-entry",
-            "width": 70,
-            "height": 44,
-            "top": 10,
-            "bottom": 54
+            "id": "cm-toolbar__cell",
+            "width": 43,
+            "height": 69,
+            "top": 736,
+            "bottom": 805
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 43,
+            "height": 69,
+            "top": 736,
+            "bottom": 805
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 43,
+            "height": 69,
+            "top": 736,
+            "bottom": 805
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 43,
+            "height": 69,
+            "top": 736,
+            "bottom": 805
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 43,
+            "height": 69,
+            "top": 736,
+            "bottom": 805
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 43,
+            "height": 69,
+            "top": 736,
+            "bottom": 805
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 43,
+            "height": 69,
+            "top": 736,
+            "bottom": 805
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 43,
+            "height": 69,
+            "top": 736,
+            "bottom": 805
           }
         ]
       },
@@ -361,9 +655,20 @@
   ],
   "saveReload": {
     "viewport": "390x844",
-    "selectedResident": "CRYSTALFIN",
-    "relocatedTo": "Quiet Hollow",
-    "careFlagPersisted": true,
+    "selectedResident": "小蛋",
+    "relocatedOnGround": {
+      "from": {
+        "x": 128,
+        "y": 120,
+        "cageDefinition": 35
+      },
+      "to": {
+        "x": 128,
+        "y": 152,
+        "cageDefinition": 35
+      }
+    },
+    "careAffordance": "WITHDRAWN_PENDING_OVL18_TRACE",
     "savePayloadPresent": true,
     "restoredAfterPageReload": true,
     "transientSelectionRestored": false,

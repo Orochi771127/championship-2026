@@ -1,0 +1,537 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-05",
+  "evidence": "VERIFIED_BINARY",
+  "scope": "CAGE_IDENTITY_TEXT_SHOP_VISUAL_JOIN",
+  "git": {
+    "branch": "main",
+    "headAtStart": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+    "worktreeAtStart": "DIRTY_EXISTING_CLAUDE_AND_CODEX_WORK"
+  },
+  "romSha256": "8AD375BA0BD9B652A25F72DEAD2B47F78DA401E188A8F3E1B7A6F2867EE0C5D1",
+  "textBankSha256": "e9f390cab3c61e4c17791f2253043a8d1ca9bfc036f48ea9723ef769ef8012b3",
+  "finding": "The handoff builder read the next name/description row. The existing definition-to-visual binding is correct and is retained.",
+  "columns": {
+    "strideBytes": 40,
+    "fieldPointer": "0x020C8CC0",
+    "name": "0x020C8CDC",
+    "description": "0x020C8CE0",
+    "nameOffsetRelativeToNameColumn": 0,
+    "descriptionOffsetRelativeToNameColumn": 4
+  },
+  "readerWitness": {
+    "module": "OVL15",
+    "functionAddress": "0x0210C424",
+    "steps": [
+      {
+        "address": "0x0210C42C",
+        "instruction": "mov r2, #0x28"
+      },
+      {
+        "address": "0x0210C430",
+        "instruction": "mul r4, r1, r2"
+      },
+      {
+        "address": "0x0210C438",
+        "instruction": "ldr r1, [pc, #0x1c4]",
+        "literalAddress": "0x0210C604",
+        "literalValue": "0x020C8CDC"
+      },
+      {
+        "address": "0x0210C440",
+        "instruction": "ldr r1, [r1, r4]"
+      },
+      {
+        "address": "0x0210C448",
+        "instruction": "bl #0x0207D234"
+      },
+      {
+        "address": "0x0210C44C",
+        "instruction": "ldr r1, [pc, #0x1b4]",
+        "literalAddress": "0x0210C608",
+        "literalValue": "0x020C8CE0"
+      },
+      {
+        "address": "0x0210C454",
+        "instruction": "ldr r1, [r1, r4]"
+      },
+      {
+        "address": "0x0210C45C",
+        "instruction": "bl #0x0207D234"
+      }
+    ]
+  },
+  "independentShopJoin": {
+    "address": "0x020E0248",
+    "strideBytes": 56,
+    "tableCount": 118,
+    "category": 3,
+    "itemIndexOffset": "0x08",
+    "nameOffset": "0x24",
+    "descriptionOffset": "0x28",
+    "matched": 35,
+    "mismatches": 0
+  },
+  "counts": {
+    "visualAssets": 40,
+    "shopDefinitions": 35,
+    "waitingRoomDefinitions": 1,
+    "structuralVisuals": 1,
+    "unreferencedByThisTable": 3
+  },
+  "records": [
+    {
+      "recordIndex": 0,
+      "cageDefinitionIndex": 0,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8CC0",
+      "fieldId": "field_cm01_01",
+      "nameStringIndex": 494,
+      "descriptionStringIndex": 534,
+      "shopRecordIndex": 83,
+      "name": "あきち"
+    },
+    {
+      "recordIndex": 1,
+      "cageDefinitionIndex": 1,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8CE8",
+      "fieldId": "field_cm02_01",
+      "nameStringIndex": 495,
+      "descriptionStringIndex": 535,
+      "shopRecordIndex": 85,
+      "name": "うんどうじょう"
+    },
+    {
+      "recordIndex": 2,
+      "cageDefinitionIndex": 2,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8D10",
+      "fieldId": "field_cm03_01",
+      "nameStringIndex": 496,
+      "descriptionStringIndex": 536,
+      "shopRecordIndex": 86,
+      "name": "きょうぎじょう"
+    },
+    {
+      "recordIndex": 3,
+      "cageDefinitionIndex": 3,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8D38",
+      "fieldId": "field_cm04_01",
+      "nameStringIndex": 497,
+      "descriptionStringIndex": 537,
+      "shopRecordIndex": 87,
+      "name": "どうじょう"
+    },
+    {
+      "recordIndex": 4,
+      "cageDefinitionIndex": 4,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8D60",
+      "fieldId": "field_cm05_01",
+      "nameStringIndex": 498,
+      "descriptionStringIndex": 538,
+      "shopRecordIndex": 89,
+      "name": "ジム"
+    },
+    {
+      "recordIndex": 5,
+      "cageDefinitionIndex": 5,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8D88",
+      "fieldId": "field_cm06_01",
+      "nameStringIndex": 499,
+      "descriptionStringIndex": 539,
+      "shopRecordIndex": 109,
+      "name": "けんきゅうじょ"
+    },
+    {
+      "recordIndex": 6,
+      "cageDefinitionIndex": 6,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8DB0",
+      "fieldId": "field_cm07_01",
+      "nameStringIndex": 500,
+      "descriptionStringIndex": 540,
+      "shopRecordIndex": 93,
+      "name": "かざん"
+    },
+    {
+      "recordIndex": 7,
+      "cageDefinitionIndex": 7,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8DD8",
+      "fieldId": "field_cm08_01",
+      "nameStringIndex": 501,
+      "descriptionStringIndex": 541,
+      "shopRecordIndex": 91,
+      "name": "そうげん"
+    },
+    {
+      "recordIndex": 8,
+      "cageDefinitionIndex": 8,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8E00",
+      "fieldId": "field_cm09_01",
+      "nameStringIndex": 502,
+      "descriptionStringIndex": 542,
+      "shopRecordIndex": 95,
+      "name": "ビーチ"
+    },
+    {
+      "recordIndex": 9,
+      "cageDefinitionIndex": 9,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8E28",
+      "fieldId": "field_cm10_01",
+      "nameStringIndex": 503,
+      "descriptionStringIndex": 543,
+      "shopRecordIndex": 97,
+      "name": "こうざん"
+    },
+    {
+      "recordIndex": 10,
+      "cageDefinitionIndex": 10,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8E50",
+      "fieldId": "field_cm11_01",
+      "nameStringIndex": 504,
+      "descriptionStringIndex": 544,
+      "shopRecordIndex": 98,
+      "name": "もり"
+    },
+    {
+      "recordIndex": 11,
+      "cageDefinitionIndex": 11,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8E78",
+      "fieldId": "field_cm12_01",
+      "nameStringIndex": 505,
+      "descriptionStringIndex": 545,
+      "shopRecordIndex": 99,
+      "name": "ジャングル"
+    },
+    {
+      "recordIndex": 12,
+      "cageDefinitionIndex": 12,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8EA0",
+      "fieldId": "field_cm13_01",
+      "nameStringIndex": 506,
+      "descriptionStringIndex": 546,
+      "shopRecordIndex": 107,
+      "name": "しんでん"
+    },
+    {
+      "recordIndex": 13,
+      "cageDefinitionIndex": 13,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8EC8",
+      "fieldId": "field_cm14_01",
+      "nameStringIndex": 507,
+      "descriptionStringIndex": 547,
+      "shopRecordIndex": 103,
+      "name": "はかば"
+    },
+    {
+      "recordIndex": 14,
+      "cageDefinitionIndex": 14,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8EF0",
+      "fieldId": "field_cm15_01",
+      "nameStringIndex": 508,
+      "descriptionStringIndex": 548,
+      "shopRecordIndex": 100,
+      "name": "こうじょう"
+    },
+    {
+      "recordIndex": 15,
+      "cageDefinitionIndex": 15,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8F18",
+      "fieldId": "field_cm16_01",
+      "nameStringIndex": 509,
+      "descriptionStringIndex": 549,
+      "shopRecordIndex": 112,
+      "name": "ミニほけんしつ"
+    },
+    {
+      "recordIndex": 16,
+      "cageDefinitionIndex": 16,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8F40",
+      "fieldId": "field_cm17_01",
+      "nameStringIndex": 510,
+      "descriptionStringIndex": 550,
+      "shopRecordIndex": 110,
+      "name": "びょういん"
+    },
+    {
+      "recordIndex": 17,
+      "cageDefinitionIndex": 17,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8F68",
+      "fieldId": "field_cm18_01",
+      "nameStringIndex": 511,
+      "descriptionStringIndex": 551,
+      "shopRecordIndex": 102,
+      "name": "はなぞの"
+    },
+    {
+      "recordIndex": 18,
+      "cageDefinitionIndex": 18,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8F90",
+      "fieldId": "field_cm19_01",
+      "nameStringIndex": 512,
+      "descriptionStringIndex": 552,
+      "shopRecordIndex": 114,
+      "name": "おんせん"
+    },
+    {
+      "recordIndex": 19,
+      "cageDefinitionIndex": 19,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8FB8",
+      "fieldId": "field_cm20_01",
+      "nameStringIndex": 513,
+      "descriptionStringIndex": 553,
+      "shopRecordIndex": 104,
+      "name": "さばく"
+    },
+    {
+      "recordIndex": 20,
+      "cageDefinitionIndex": 20,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C8FE0",
+      "fieldId": "field_cm21_01",
+      "nameStringIndex": 514,
+      "descriptionStringIndex": 554,
+      "shopRecordIndex": 105,
+      "name": "こおり"
+    },
+    {
+      "recordIndex": 21,
+      "cageDefinitionIndex": 21,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C9008",
+      "fieldId": "field_cm22_01",
+      "nameStringIndex": 515,
+      "descriptionStringIndex": 555,
+      "shopRecordIndex": 106,
+      "name": "はつでんしょ"
+    },
+    {
+      "recordIndex": 22,
+      "cageDefinitionIndex": 22,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C9030",
+      "fieldId": "field_cm23_01",
+      "nameStringIndex": 516,
+      "descriptionStringIndex": 556,
+      "shopRecordIndex": 111,
+      "name": "ガスルーム"
+    },
+    {
+      "recordIndex": 23,
+      "cageDefinitionIndex": 23,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C9058",
+      "fieldId": "field_cm24_01",
+      "nameStringIndex": 517,
+      "descriptionStringIndex": 557,
+      "shopRecordIndex": 90,
+      "name": "おてら"
+    },
+    {
+      "recordIndex": 24,
+      "cageDefinitionIndex": 24,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C9080",
+      "fieldId": "field_cm25_01",
+      "nameStringIndex": 518,
+      "descriptionStringIndex": 558,
+      "shopRecordIndex": 115,
+      "name": "どうぶつえん"
+    },
+    {
+      "recordIndex": 25,
+      "cageDefinitionIndex": 25,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C90A8",
+      "fieldId": "field_cm26_01",
+      "nameStringIndex": 519,
+      "descriptionStringIndex": 559,
+      "shopRecordIndex": 116,
+      "name": "ぼくじょう"
+    },
+    {
+      "recordIndex": 26,
+      "cageDefinitionIndex": 26,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C90D0",
+      "fieldId": "field_cm27_01",
+      "nameStringIndex": 520,
+      "descriptionStringIndex": 560,
+      "shopRecordIndex": 117,
+      "name": "リング"
+    },
+    {
+      "recordIndex": 27,
+      "cageDefinitionIndex": 27,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C90F8",
+      "fieldId": "field_cm30_01",
+      "nameStringIndex": 523,
+      "descriptionStringIndex": 563,
+      "shopRecordIndex": 84,
+      "name": "ミニうんどうじょう"
+    },
+    {
+      "recordIndex": 28,
+      "cageDefinitionIndex": 28,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C9120",
+      "fieldId": "field_cm31_01",
+      "nameStringIndex": 524,
+      "descriptionStringIndex": 564,
+      "shopRecordIndex": 113,
+      "name": "ほけんしつ"
+    },
+    {
+      "recordIndex": 29,
+      "cageDefinitionIndex": 29,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C9148",
+      "fieldId": "field_cm32_01",
+      "nameStringIndex": 525,
+      "descriptionStringIndex": 565,
+      "shopRecordIndex": 101,
+      "name": "ミニはなぞの"
+    },
+    {
+      "recordIndex": 30,
+      "cageDefinitionIndex": 30,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C9170",
+      "fieldId": "field_cm34_01",
+      "nameStringIndex": 527,
+      "descriptionStringIndex": 567,
+      "shopRecordIndex": 88,
+      "name": "ミニジム"
+    },
+    {
+      "recordIndex": 31,
+      "cageDefinitionIndex": 31,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C9198",
+      "fieldId": "field_cm35_01",
+      "nameStringIndex": 528,
+      "descriptionStringIndex": 568,
+      "shopRecordIndex": 92,
+      "name": "ミニかざん"
+    },
+    {
+      "recordIndex": 32,
+      "cageDefinitionIndex": 32,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C91C0",
+      "fieldId": "field_cm37_01",
+      "nameStringIndex": 530,
+      "descriptionStringIndex": 570,
+      "shopRecordIndex": 96,
+      "name": "ミニこうざん"
+    },
+    {
+      "recordIndex": 33,
+      "cageDefinitionIndex": 33,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C91E8",
+      "fieldId": "field_cm39_01",
+      "nameStringIndex": 532,
+      "descriptionStringIndex": 572,
+      "shopRecordIndex": 94,
+      "name": "ミニビーチ"
+    },
+    {
+      "recordIndex": 34,
+      "cageDefinitionIndex": 34,
+      "role": "SHOP_CAGE",
+      "recordAddress": "0x020C9210",
+      "fieldId": "field_cm40_01",
+      "nameStringIndex": 533,
+      "descriptionStringIndex": 573,
+      "shopRecordIndex": 108,
+      "name": "どうくつ"
+    },
+    {
+      "recordIndex": 35,
+      "cageDefinitionIndex": 35,
+      "role": "WAITING_ROOM",
+      "recordAddress": "0x020C9238",
+      "fieldId": "field_cm28_01",
+      "nameStringIndex": 521,
+      "descriptionStringIndex": 561,
+      "shopRecordIndex": null,
+      "name": "ひかえしつ"
+    },
+    {
+      "recordIndex": 36,
+      "cageDefinitionIndex": null,
+      "role": "LID",
+      "recordAddress": "0x020C9260",
+      "fieldId": "field_cm29_01",
+      "nameStringIndex": 522,
+      "descriptionStringIndex": 562,
+      "shopRecordIndex": null,
+      "name": "ふた"
+    }
+  ],
+  "unreferencedByThisTable": [
+    {
+      "fieldId": "field_cm33_01",
+      "cageDefinitionIndex": null,
+      "name": null,
+      "evidence": "NOT_REFERENCED_BY_THIS_TABLE",
+      "runtimeRole": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "fieldId": "field_cm36_01",
+      "cageDefinitionIndex": null,
+      "name": null,
+      "evidence": "NOT_REFERENCED_BY_THIS_TABLE",
+      "runtimeRole": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "fieldId": "field_cm38_01",
+      "cageDefinitionIndex": null,
+      "name": null,
+      "evidence": "NOT_REFERENCED_BY_THIS_TABLE",
+      "runtimeRole": "UNKNOWN_REQUIRES_TRACE"
+    }
+  ],
+  "unresolved": [
+    "Tick magnitudes and raising reader/writer semantics",
+    "Waiting Room original acquisition/use trigger",
+    "Runtime use or semantic identity of the three unreferenced visual assets"
+  ],
+  "safety": {
+    "saveMigrationRequired": false,
+    "reason": "Stable module IDs, ownership and visual bindings retain their original indices. Only derived text/effect identity was corrected.",
+    "productionArtChanged": false
+  },
+  "verification": {
+    "independentPythonBuilderAndJavaScriptAudit": "PASS_36_IDENTITIES_35_SHOP_JOINS",
+    "preFixCrosswalkTests": "3_FAIL",
+    "postFixFocusedTests": "23_PASS",
+    "fullRegression": "831_PASS_0_FAIL_0_SKIPPED",
+    "romCatalogCheck": "PASS",
+    "gitDiffCheck": "PASS_EXISTING_LINE_ENDING_NOTICES_ONLY",
+    "browserQA": "NOT_RUN_THIS_DATA_IDENTITY_BATCH",
+    "positiveControls": [
+      "NEXT_ROW_OFFSETS_CAUGHT_BY_SHOP_JOIN",
+      "SHIFTED_NAME_COLUMN_BASE_CAUGHT_BY_SHOP_JOIN"
+    ]
+  }
+}

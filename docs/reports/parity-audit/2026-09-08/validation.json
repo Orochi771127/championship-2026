@@ -1,0 +1,34 @@
+{
+  "sourceHashFilesChecked": 7,
+  "changedKeySources": [],
+  "statusDifferencesOutsideAuditFolder": [],
+  "reportLocalLinksMissing": [],
+  "fullRegression": {
+    "total": 1281,
+    "pass": 1279,
+    "fail": 2,
+    "skip": 0
+  },
+  "focused": {
+    "pass": 21,
+    "fail": 0
+  },
+  "characters": "PASS 224 entities,17235 cells,11480 sequences",
+  "ui": "PASS 96 scenes,1369 nodes",
+  "productionValidator": "FAIL hardcoded21 vs actual24 at line99; later assertions not certified",
+  "diffCheckExit": 0,
+  "deletedTrackedPagesInputStillMissing": true,
+  "freshOriginalEmulatorRun": false,
+  "privatePackMutated": false,
+  "productSourceMutatedByThisAudit": false,
+  "archivedFramesVisuallyReviewed": [
+    "V03",
+    "V09",
+    "V12",
+    "V16",
+    "V20",
+    "V23",
+    "V39",
+    "V50"
+  ]
+}

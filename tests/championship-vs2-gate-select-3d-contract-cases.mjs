@@ -176,8 +176,15 @@ test("the recovered biome identities are adopted as canonical, completely and in
     assert.equal(gate.identityEvidence, "ROM_VERIFIED");
     assert.equal(gate.biomeNodeName, gate.biomeId);
     assert.equal(gate.biomeParentNodeName, `${gate.biomeId}parent`);
-    // Recovering a node name is not recovering the label the player saw.
-    assert.equal(gate.displayNameEvidence, "PRESENTATION_DEFAULT_NOT_RECOVERED");
+    // Recovered on 2026-09-04: the gate table's +0x0C column is a txt_list index,
+    // so the label the player saw IS now recovered -- and it is Japanese, because
+    // this cartridge is the Japanese release. A gate whose name equals its node id
+    // would mean the fallback crept back in.
+    // The cartridge's own name is recovered and kept as originalName; what the
+    // player reads is product-authored Chinese layered on top.
+    assert.equal(gate.originalNameEvidence, "ROM_VERIFIED");
+    assert.equal(gate.displayNameEvidence, "PRODUCT_AUTHORED_TRANSLATION");
+    assert.notEqual(gate.originalName, gate.biomeId, "the node id is not a display name");
   }
 
   // No product-authored placeholder may survive as an identity.

@@ -1,0 +1,721 @@
+{
+  "capturedUtc": "2026-09-08T06:08:26.808126+00:00",
+  "root": "R:\\Projects\\Championship2026\\championship-2026",
+  "branch": "main",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "statusLines": 3485,
+  "rom": {
+    "path": "R:\\8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1.nds",
+    "bytes": 67108864,
+    "sha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "title": "DIGIMONCHAMP",
+    "gameCode": "YDIJ"
+  },
+  "packRomMatch": true,
+  "packCensus": {
+    "artFiles": 6317,
+    "artFamilies": 1705,
+    "rawExtensions": {
+      ".atr": 120,
+      ".bak": 1,
+      ".bsa": 19,
+      ".nanr": 1317,
+      ".nbs": 100,
+      ".ncbr": 838,
+      ".ncer": 1317,
+      ".ncgr": 750,
+      ".nclr": 1523,
+      ".nftr": 7,
+      ".nsbca": 9,
+      ".nsbma": 1,
+      ".nsbmd": 33,
+      ".nsbta": 14,
+      ".nsbva": 1,
+      ".nscr": 96,
+      ".nxr": 96,
+      ".opm": 75
+    }
+  },
+  "rawFilesActual": 6317,
+  "conversionDeclared": {
+    "families": 1705,
+    "artRendered": 1541,
+    "diagnosticOnly": 164,
+    "familiesWithWarnings": 49
+  },
+  "conversionActual": {
+    "ART_RENDERED": 1541,
+    "DIAGNOSTIC_ONLY": 164
+  },
+  "productionIndexDeclared": {
+    "registeredRuntimeBundles": 24,
+    "shippingReadyBundles": 0
+  },
+  "productionEntries": [
+    {
+      "assetId": "art:hunt:licensed-runtime:v1",
+      "manifestPath": "assets/production/hunt/licensed-runtime-v1/manifest.json",
+      "exists": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "fields": 30,
+        "notes": 4
+      }
+    },
+    {
+      "assetId": "art:cage:licensed-runtime:v1",
+      "manifestPath": "assets/production/cage/licensed-runtime-v1/manifest.json",
+      "exists": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "fields": 40,
+        "notes": 4
+      }
+    },
+    {
+      "assetId": "art:battle:licensed-runtime:v1",
+      "manifestPath": "assets/production/battle/licensed-runtime-v1/manifest.json",
+      "exists": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "fields": 11,
+        "notes": 4
+      }
+    },
+    {
+      "assetId": "art:vfx:licensed-runtime:v1",
+      "manifestPath": "assets/production/vfx/licensed-runtime-v1/manifest.json",
+      "exists": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "systems": 26,
+        "notes": 4
+      }
+    },
+    {
+      "assetId": "art:raising_home:int-rh2:temporary-presentation-bundle",
+      "manifestPath": "assets/production/temporary/int-rh2/manifest.json",
+      "exists": true,
+      "runtimeEligible": null,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "components": 10
+      }
+    },
+    {
+      "assetId": "art:hunt_field:vs2:temporary-signal-grove-kit",
+      "manifestPath": "assets/production/temporary/vs2-hunt/manifest.json",
+      "exists": true,
+      "runtimeEligible": null,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "implementation": 3,
+        "components": 4,
+        "notes": 2
+      }
+    },
+    {
+      "assetId": "art:gate_select:vs2-r1:original-created-world",
+      "manifestPath": "assets/production/gate/vs2-r1/manifest.json",
+      "exists": true,
+      "runtimeEligible": null,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "contents": 4,
+        "futureVisualDebt": 5
+      }
+    },
+    {
+      "assetId": "art:battle:bm00-bm01-r1:original-review",
+      "manifestPath": "assets/production/internal-battle-review/bm00-bm01-r1/runtime.review.json",
+      "exists": true,
+      "runtimeEligible": null,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "sourceDimensions": 2
+      }
+    },
+    {
+      "assetId": "art:battle:bm02-r1:original-review",
+      "manifestPath": "assets/production/internal-battle-review/bm02-r1/runtime.review.json",
+      "exists": true,
+      "runtimeEligible": null,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "sourceDimensions": 2
+      }
+    },
+    {
+      "assetId": "art:battle:bm03-animated-r1:original-review",
+      "manifestPath": "assets/production/internal-battle-review/bm03-bm04-animated-r1/runtime.bm03.review.json",
+      "exists": true,
+      "runtimeEligible": null,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "sourceDimensions": 2
+      }
+    },
+    {
+      "assetId": "art:battle:bm04-hardening-r2:original-review",
+      "manifestPath": "assets/production/internal-battle-review/hardening-r2/runtime.bm04.review.json",
+      "exists": true,
+      "runtimeEligible": null,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "sourceDimensions": 2
+      }
+    },
+    {
+      "assetId": "art:battle:bm05-r1:original-review",
+      "manifestPath": "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm05.review.json",
+      "exists": true,
+      "runtimeEligible": null,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "sourceDimensions": 2
+      }
+    },
+    {
+      "assetId": "art:battle:bm06-r1:original-review",
+      "manifestPath": "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm06.review.json",
+      "exists": true,
+      "runtimeEligible": null,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "sourceDimensions": 2
+      }
+    },
+    {
+      "assetId": "art:battle:bm07-cyberspace-r1:original-review",
+      "manifestPath": "assets/production/internal-battle-review/bm07-cyberspace-r1/runtime.review.json",
+      "exists": true,
+      "runtimeEligible": null,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "sourceDimensions": 2
+      }
+    },
+    {
+      "assetId": "art:battle:bm08-hardening-r2:original-review",
+      "manifestPath": "assets/production/internal-battle-review/hardening-r2/runtime.bm08.review.json",
+      "exists": true,
+      "runtimeEligible": null,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "sourceDimensions": 2
+      }
+    },
+    {
+      "assetId": "art:battle:bm09-r1:original-review",
+      "manifestPath": "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm09.review.json",
+      "exists": true,
+      "runtimeEligible": null,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "sourceDimensions": 2
+      }
+    },
+    {
+      "assetId": "art:battle:bm10-r1:original-review",
+      "manifestPath": "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm10.review.json",
+      "exists": true,
+      "runtimeEligible": null,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "sourceDimensions": 2
+      }
+    },
+    {
+      "assetId": "art:battle:bm11-hardening-r2:original-review",
+      "manifestPath": "assets/production/internal-battle-review/hardening-r2/runtime.bm11.review.json",
+      "exists": true,
+      "runtimeEligible": null,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "sourceDimensions": 2
+      }
+    },
+    {
+      "assetId": "art:battle-select:menu-cube:v1",
+      "manifestPath": "assets/production/battle/menu-cube-v1/manifest.json",
+      "exists": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "faces": 4
+      }
+    },
+    {
+      "assetId": "art:characters:licensed-internal:v1",
+      "manifestPath": "assets/production/internal-faithful-baseline/characters-v1/manifest.json",
+      "exists": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "speciesBindings": 228,
+        "records": 224
+      }
+    },
+    {
+      "assetId": "art:ui:raising-header-material:tooling-pilot-r1",
+      "manifestPath": "assets/production/ui/tooling-pilot-r1/manifest.json",
+      "exists": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {}
+    },
+    {
+      "assetId": "art:vfx:original-battle-2d:v1",
+      "manifestPath": "assets/production/vfx/original-battle-2d-v1/manifest.json",
+      "exists": true,
+      "runtimeEligible": false,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "cells": 16
+      }
+    },
+    {
+      "assetId": "art:vfx:battle-effects:local-reference:v1",
+      "manifestPath": "assets/production/internal-faithful-baseline/battle-effects-v1/manifest.json",
+      "exists": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "cells": 1231,
+        "banks": 151
+      }
+    },
+    {
+      "assetId": "art:audio:battle:local-reference:v1",
+      "manifestPath": "assets/production/internal-faithful-baseline/battle-audio-v1/manifest.json",
+      "exists": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "summary": null,
+      "arrays": {
+        "sounds": 54
+      }
+    }
+  ],
+  "productionCounts": {
+    "entries": 24,
+    "runtimeEligibleTrue": 9,
+    "shippingReadyTrue": 0
+  },
+  "videoFrames": [
+    {
+      "id": "V01",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t010.png",
+      "title": "標題與 LOGIN",
+      "seconds": 10.441807,
+      "hashMatch": true
+    },
+    {
+      "id": "V02",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t023.png",
+      "title": "選中角色與場景",
+      "seconds": 23.58167,
+      "hashMatch": true
+    },
+    {
+      "id": "V03",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t030.png",
+      "title": "放置食物與訓練回饋",
+      "seconds": 30.88064,
+      "hashMatch": true
+    },
+    {
+      "id": "V04",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t038.png",
+      "title": "角色移動與多場地",
+      "seconds": 38.267524,
+      "hashMatch": true
+    },
+    {
+      "id": "V05",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t045.png",
+      "title": "球形地區選擇",
+      "seconds": 45.458062,
+      "hashMatch": true
+    },
+    {
+      "id": "V06",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t052.png",
+      "title": "瀏覽大地圖",
+      "seconds": 51.541609,
+      "hashMatch": true
+    },
+    {
+      "id": "V07",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t060.png",
+      "title": "狩獵介面",
+      "seconds": 60.729648,
+      "hashMatch": true
+    },
+    {
+      "id": "V08",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t061.png",
+      "title": "畫線圈選",
+      "seconds": 62.028629,
+      "hashMatch": true
+    },
+    {
+      "id": "V09",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t062.png",
+      "title": "拉繩階段",
+      "seconds": 62.625588,
+      "hashMatch": true
+    },
+    {
+      "id": "V10",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t063.png",
+      "title": "繩索與未知資訊",
+      "seconds": 63.433553,
+      "hashMatch": true
+    },
+    {
+      "id": "V11",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t069.png",
+      "title": "退出狩獵確認",
+      "seconds": 69.582236,
+      "hashMatch": true
+    },
+    {
+      "id": "V12",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t072.png",
+      "title": "捕捉後管理",
+      "seconds": 72.751778,
+      "hashMatch": true
+    },
+    {
+      "id": "V13",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t090.png",
+      "title": "功能選單六項",
+      "seconds": 90.49664,
+      "hashMatch": true
+    },
+    {
+      "id": "V14",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t105.png",
+      "title": "購買數量與確認",
+      "seconds": 105.829953,
+      "hashMatch": true
+    },
+    {
+      "id": "V15",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t117.png",
+      "title": "管理選單五項",
+      "seconds": 117.888187,
+      "hashMatch": true
+    },
+    {
+      "id": "V16",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t120.png",
+      "title": "場地效果與拼組",
+      "seconds": 121.081448,
+      "hashMatch": true
+    },
+    {
+      "id": "V17",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t129.png",
+      "title": "不等形模組",
+      "seconds": 129.555908,
+      "hashMatch": true
+    },
+    {
+      "id": "V18",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t142.png",
+      "title": "模式選擇立方體",
+      "seconds": 142.301644,
+      "hashMatch": true
+    },
+    {
+      "id": "V19",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t150.png",
+      "title": "對手隊伍選單",
+      "seconds": 150.753299,
+      "hashMatch": true
+    },
+    {
+      "id": "V20",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t162.png",
+      "title": "編隊與策略槽",
+      "seconds": 162.843446,
+      "hashMatch": true
+    },
+    {
+      "id": "V21",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t167.png",
+      "title": "從名單挑選成員",
+      "seconds": 168.241457,
+      "hashMatch": true
+    },
+    {
+      "id": "V22",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t172.png",
+      "title": "戰前總覽",
+      "seconds": 173.004283,
+      "hashMatch": true
+    },
+    {
+      "id": "V23",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t180.png",
+      "title": "戰鬥開場",
+      "seconds": 180.391858,
+      "hashMatch": true
+    },
+    {
+      "id": "V24",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t210.png",
+      "title": "自動戰鬥與效果",
+      "seconds": 210.488306,
+      "hashMatch": true
+    },
+    {
+      "id": "V25",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t240.png",
+      "title": "勝負宣告",
+      "seconds": 240.938266,
+      "hashMatch": true
+    },
+    {
+      "id": "V26",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t255.png",
+      "title": "翌日資訊通知",
+      "seconds": 255.757142,
+      "hashMatch": true
+    },
+    {
+      "id": "V27",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t270.png",
+      "title": "1VS1 與 3VS3",
+      "seconds": 270.757011,
+      "hashMatch": true
+    },
+    {
+      "id": "V28",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t286.png",
+      "title": "點選隊伍配置入口",
+      "seconds": 286.476083,
+      "hashMatch": true
+    },
+    {
+      "id": "V29",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t330.png",
+      "title": "另一場地的勝利",
+      "seconds": 331.045687,
+      "hashMatch": true
+    },
+    {
+      "id": "V30",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t360.png",
+      "title": "照料循環",
+      "seconds": 360.858817,
+      "hashMatch": true
+    },
+    {
+      "id": "V31",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t409.png",
+      "title": "商店入口三類",
+      "seconds": 409.877891,
+      "hashMatch": true
+    },
+    {
+      "id": "V32",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t429.png",
+      "title": "管理選單再次出現",
+      "seconds": 430.159628,
+      "hashMatch": true
+    },
+    {
+      "id": "V33",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t431.png",
+      "title": "結束一天確認",
+      "seconds": 431.739143,
+      "hashMatch": true
+    },
+    {
+      "id": "V34",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t433.png",
+      "title": "儲存回饋",
+      "seconds": 433.503023,
+      "hashMatch": true
+    },
+    {
+      "id": "V35",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t450.png",
+      "title": "下一天繼續照料",
+      "seconds": 450.328554,
+      "hashMatch": true
+    },
+    {
+      "id": "V36",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t459.png",
+      "title": "稱號賽條件與金額",
+      "seconds": 459.561067,
+      "hashMatch": true
+    },
+    {
+      "id": "V37",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t480.png",
+      "title": "1 對 1 開場",
+      "seconds": 480.115294,
+      "hashMatch": true
+    },
+    {
+      "id": "V38",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t510.png",
+      "title": "WIN 揭示",
+      "seconds": 509.890584,
+      "hashMatch": true
+    },
+    {
+      "id": "V39",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t516.png",
+      "title": "進化結果",
+      "seconds": 516.66335,
+      "hashMatch": true
+    },
+    {
+      "id": "V40",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t546.png",
+      "title": "第八天早晨",
+      "seconds": 546.843613,
+      "hashMatch": true
+    },
+    {
+      "id": "V41",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t554.png",
+      "title": "場地商品資料",
+      "seconds": 555.02178,
+      "hashMatch": true
+    },
+    {
+      "id": "V42",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t570.png",
+      "title": "狩獵耗材分類",
+      "seconds": 570.471053,
+      "hashMatch": true
+    },
+    {
+      "id": "V43",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t600.png",
+      "title": "情報插件分類",
+      "seconds": 600.033281,
+      "hashMatch": true
+    },
+    {
+      "id": "V44",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t630.png",
+      "title": "更多模組與待配置區",
+      "seconds": 630.12056,
+      "hashMatch": true
+    },
+    {
+      "id": "V45",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t660.png",
+      "title": "在地行為回饋",
+      "seconds": 660.576712,
+      "hashMatch": true
+    },
+    {
+      "id": "V46",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t690.png",
+      "title": "跨季與其他道具",
+      "seconds": 690.564267,
+      "hashMatch": true
+    },
+    {
+      "id": "V47",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t720.png",
+      "title": "多場地照料",
+      "seconds": 720.43317,
+      "hashMatch": true
+    },
+    {
+      "id": "V48",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t739.png",
+      "title": "狩獵設定總覽",
+      "seconds": 739.6027,
+      "hashMatch": true
+    },
+    {
+      "id": "V49",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t744.png",
+      "title": "繩索裝備清單",
+      "seconds": 744.347159,
+      "hashMatch": true
+    },
+    {
+      "id": "V50",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t750.png",
+      "title": "Wire 與 Rope 的語意差異",
+      "seconds": 750.497127,
+      "hashMatch": true
+    },
+    {
+      "id": "V51",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t761.png",
+      "title": "再次返回球形地圖",
+      "seconds": 761.84868,
+      "hashMatch": true
+    },
+    {
+      "id": "V52",
+      "path": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t792.png",
+      "title": "結束遊戲確認",
+      "seconds": 792.639733,
+      "hashMatch": true
+    }
+  ],
+  "sourceHashes": {
+    "src/championship/app/main.js": "540c2dcb0ea31fb02bf816af0ef5c275faf744c9cab441f079267c93b34f7359",
+    "src/championship/app/championshipStandaloneApp.js": "ad5c146ae998d33c3ef0af29ed5d07bf9754f28922d240239603d803769d01cd",
+    "src/championship/app/battleRuntime.js": "fab6a50e7475c246c7410c93c2e3134fe0720b32bab3bea62660174ef9ed13a1",
+    "src/championship/hunt/huntRuntime.js": "a699ea68d1104c6444a9a80955331e660cc018aee7d58aada0bfd119a9ee16de",
+    "src/championship/hunt/capture/nativeHuntFieldControls.js": "f4ac28ce545b40952607b430f18403c07fcb66912287f2cef3bd7bbea2392d3f",
+    "src/championship/raising/raisingHomeDefinition.js": "cc3c7598e1bbc96dab81138420297590a17282405fd8dfa5013555255b7a7d49",
+    "assets/production/ART_PRODUCTION_INDEX.json": "ca7f46413cd08169c55cf1987bad894bc05bf2ced27b17a8a4e925d4634e0373"
+  },
+  "appearanceRefresh": {
+    "declared": {
+      "acceptedSettings": 2,
+      "authoredSettings": 26,
+      "defaultReplaced": 0,
+      "identityBriefs": 224,
+      "legacySettingsAwaitingIdentityReview": 14,
+      "newIdentityDrawn": 12,
+      "required": 224
+    },
+    "recordCount": 224,
+    "newIdentityDrawn": 12,
+    "runtimeDefaultReplaced": 0
+  }
+}

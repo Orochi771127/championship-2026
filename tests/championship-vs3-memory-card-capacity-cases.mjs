@@ -65,7 +65,7 @@ test("no owned card rejects the first bring-home (max 0)", () => {
   assert.equal(usedGFromCollectionCount(4), 4);
 });
 
-test("a rejected enclose can put the wild back on the field", () => {
+test("a circle leaves the wild untouched before any capacity transaction", () => {
   const world = createHuntWorld(listChampionshipGates()[0]);
   const runtime = createHuntRuntime({ world, fieldActor });
   const target = runtime.getWildCreatures()[0];
@@ -74,10 +74,9 @@ test("a rejected enclose can put the wild back on the field", () => {
   runtime.beginEnclosureStroke(target.worldX, target.worldY);
   drawClosedLoop(runtime, target.worldX, target.worldY);
   const verdict = runtime.endEnclosureStroke();
-  assert.equal(verdict.outcome, "ENCLOSED");
-  assert.equal(runtime.getWildCreatures().length, before - 1);
-  assert.equal(runtime.restoreLastEnclosedWild(), true);
+  assert.equal(verdict.outcome, "TOOL_TRACE_REQUIRED");
+  assert.equal(runtime.getWildCreatures().length, before);
   assert.equal(runtime.getWildCreatures().length, before);
   assert.equal(runtime.getWildCreatures().some((wild) => wild.wildId === target.wildId), true);
-  assert.equal(runtime.restoreLastEnclosedWild(), false);
+  assert.equal(runtime.endEnclosureStroke(), null);
 });

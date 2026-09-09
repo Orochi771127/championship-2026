@@ -1,0 +1,910 @@
+{
+  "capturedUtc": "2026-09-05T04:56:54.003882+00:00",
+  "root": "R:\\Projects\\Championship2026\\championship-2026",
+  "branch": "main",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "scope": "Current nonignored Git files excluding this audit directory; existing working files included; deleted tracked files retained as absent.",
+  "totalEntries": 5288,
+  "existingFiles": 5287,
+  "bytes": 965344473,
+  "gitStatusCounts": {
+    "  ": 4318,
+    "??": 894,
+    " M": 75,
+    " D": 1
+  },
+  "headFileCount": 4394,
+  "groups": {
+    ".gitattributes": {
+      "files": 1,
+      "bytes": 203
+    },
+    ".github/workflows": {
+      "files": 2,
+      "bytes": 1693
+    },
+    ".gitignore": {
+      "files": 1,
+      "bytes": 1013
+    },
+    ".serena/.gitignore": {
+      "files": 1,
+      "bytes": 28
+    },
+    ".serena/memories": {
+      "files": 5,
+      "bytes": 10076
+    },
+    ".serena/project.yml": {
+      "files": 1,
+      "bytes": 10489
+    },
+    "AGENTS.md": {
+      "files": 1,
+      "bytes": 2085
+    },
+    "CLAUDE_REBUILD_STATUS.json": {
+      "files": 1,
+      "bytes": 112808
+    },
+    "CLAUDE_SYNC_DELTA.json": {
+      "files": 1,
+      "bytes": 153985
+    },
+    "PLAY_CHAMPIONSHIP.bat": {
+      "files": 1,
+      "bytes": 4250
+    },
+    "README.md": {
+      "files": 1,
+      "bytes": 4426
+    },
+    "START_CHAMPIONSHIP.cmd": {
+      "files": 1,
+      "bytes": 622
+    },
+    "_tmp_audit_c1c9.json": {
+      "files": 1,
+      "bytes": 34101
+    },
+    "_tmp_audit_c1c9.py": {
+      "files": 1,
+      "bytes": 21255
+    },
+    "_tmp_audit_c9_followup.py": {
+      "files": 1,
+      "bytes": 3444
+    },
+    "assets/production": {
+      "files": 222,
+      "bytes": 90245628
+    },
+    "battle-art-gallery.html": {
+      "files": 1,
+      "bytes": 6604
+    },
+    "battle-art-review.html": {
+      "files": 1,
+      "bytes": 3789
+    },
+    "championship.html": {
+      "files": 1,
+      "bytes": 2275
+    },
+    "docs/CURRENT_PRODUCT_STATUS.md": {
+      "files": 1,
+      "bytes": 7209
+    },
+    "docs/README.md": {
+      "files": 1,
+      "bytes": 5010
+    },
+    "docs/REUSE_INVENTORY.md": {
+      "files": 1,
+      "bytes": 4818
+    },
+    "docs/TECH_DEBT_REGISTER.md": {
+      "files": 1,
+      "bytes": 2248
+    },
+    "docs/adr": {
+      "files": 1,
+      "bytes": 2947
+    },
+    "docs/architecture": {
+      "files": 1,
+      "bytes": 1467
+    },
+    "docs/art": {
+      "files": 4464,
+      "bytes": 839891389
+    },
+    "docs/contracts": {
+      "files": 12,
+      "bytes": 172546
+    },
+    "docs/coordination": {
+      "files": 18,
+      "bytes": 310254
+    },
+    "docs/legal": {
+      "files": 2,
+      "bytes": 4091
+    },
+    "docs/migration": {
+      "files": 2,
+      "bytes": 4216
+    },
+    "docs/planning": {
+      "files": 7,
+      "bytes": 94681
+    },
+    "docs/reports": {
+      "files": 160,
+      "bytes": 28117176
+    },
+    "docs/research": {
+      "files": 21,
+      "bytes": 233752
+    },
+    "docs/superpowers": {
+      "files": 5,
+      "bytes": 13621
+    },
+    "package-lock.json": {
+      "files": 1,
+      "bytes": 6427
+    },
+    "package.json": {
+      "files": 1,
+      "bytes": 6328
+    },
+    "reports/art": {
+      "files": 10,
+      "bytes": 1738266
+    },
+    "research/original-evidence": {
+      "files": 1,
+      "bytes": 2634
+    },
+    "scripts/audit-faithful-map-readiness.py": {
+      "files": 1,
+      "bytes": 17596
+    },
+    "scripts/audit-original-map-bindings.mjs": {
+      "files": 1,
+      "bytes": 339
+    },
+    "scripts/build-a1-map-tech.py": {
+      "files": 1,
+      "bytes": 14534
+    },
+    "scripts/build-art-production-a0.mjs": {
+      "files": 1,
+      "bytes": 19330
+    },
+    "scripts/build-art-registry-correction.py": {
+      "files": 1,
+      "bytes": 30887
+    },
+    "scripts/build-battle-bm02-art.py": {
+      "files": 1,
+      "bytes": 7888
+    },
+    "scripts/build-battle-bm03-bm04-animated.py": {
+      "files": 1,
+      "bytes": 16754
+    },
+    "scripts/build-battle-bm07-cyberspace.py": {
+      "files": 1,
+      "bytes": 10074
+    },
+    "scripts/build-battle-catalogs.py": {
+      "files": 1,
+      "bytes": 24007
+    },
+    "scripts/build-battle-cube-art.mjs": {
+      "files": 1,
+      "bytes": 7662
+    },
+    "scripts/build-battle-field-geometry-constraint.py": {
+      "files": 1,
+      "bytes": 7431
+    },
+    "scripts/build-battle-human-paint-migration-r4.py": {
+      "files": 1,
+      "bytes": 13803
+    },
+    "scripts/build-battle-human-paint-static-r5.py": {
+      "files": 1,
+      "bytes": 9102
+    },
+    "scripts/build-battle-light-fence-pilot-r1.py": {
+      "files": 1,
+      "bytes": 13580
+    },
+    "scripts/build-battle-native-catalog.py": {
+      "files": 1,
+      "bytes": 9362
+    },
+    "scripts/build-battle-object-hardening-r2.py": {
+      "files": 1,
+      "bytes": 15632
+    },
+    "scripts/build-battle-original-color-baseline.py": {
+      "files": 1,
+      "bytes": 9042
+    },
+    "scripts/build-battle-pilot-art.py": {
+      "files": 1,
+      "bytes": 10813
+    },
+    "scripts/build-battle-script-blob.py": {
+      "files": 1,
+      "bytes": 5357
+    },
+    "scripts/build-battle-script-catalog.py": {
+      "files": 1,
+      "bytes": 12428
+    },
+    "scripts/build-battle-static-arena-family.py": {
+      "files": 1,
+      "bytes": 10728
+    },
+    "scripts/build-battle-style-calibration-r3.py": {
+      "files": 1,
+      "bytes": 4232
+    },
+    "scripts/build-cage-definitions.py": {
+      "files": 1,
+      "bytes": 11130
+    },
+    "scripts/build-cage-faithful-hd40.py": {
+      "files": 1,
+      "bytes": 36044
+    },
+    "scripts/build-cage-hd-remaster.py": {
+      "files": 1,
+      "bytes": 24421
+    },
+    "scripts/build-character-faithful-hd.py": {
+      "files": 1,
+      "bytes": 21864
+    },
+    "scripts/build-character-remix-seed-workspace.py": {
+      "files": 1,
+      "bytes": 50800
+    },
+    "scripts/build-creature-catalogs.py": {
+      "files": 1,
+      "bytes": 12688
+    },
+    "scripts/build-gate-catalog.py": {
+      "files": 1,
+      "bytes": 7316
+    },
+    "scripts/build-github-pages.mjs": {
+      "files": 1,
+      "bytes": 3915
+    },
+    "scripts/build-help-catalog.py": {
+      "files": 1,
+      "bytes": 6493
+    },
+    "scripts/build-hunt-faithful-hd30.py": {
+      "files": 1,
+      "bytes": 14469
+    },
+    "scripts/build-hunt-hd-remaster.py": {
+      "files": 1,
+      "bytes": 14864
+    },
+    "scripts/build-internal-faithful-baseline.mjs": {
+      "files": 1,
+      "bytes": 6507
+    },
+    "scripts/build-licensed-vfx-conversion-v1.mjs": {
+      "files": 1,
+      "bytes": 11853
+    },
+    "scripts/build-rng-channel-catalog.py": {
+      "files": 1,
+      "bytes": 8822
+    },
+    "scripts/build-rom-art-census.py": {
+      "files": 1,
+      "bytes": 14448
+    },
+    "scripts/build-shop-catalog.py": {
+      "files": 1,
+      "bytes": 3375
+    },
+    "scripts/build-species-names.py": {
+      "files": 1,
+      "bytes": 5626
+    },
+    "scripts/build-title-event-strings.py": {
+      "files": 1,
+      "bytes": 5628
+    },
+    "scripts/build-ui-faithful-hd96.py": {
+      "files": 1,
+      "bytes": 11591
+    },
+    "scripts/build-vfx-animation-sidecars-v1.mjs": {
+      "files": 1,
+      "bytes": 5697
+    },
+    "scripts/build-vfx-faithful-reference-26.mjs": {
+      "files": 1,
+      "bytes": 5890
+    },
+    "scripts/lib": {
+      "files": 5,
+      "bytes": 39837
+    },
+    "scripts/promote-licensed-battle-runtime.mjs": {
+      "files": 1,
+      "bytes": 5755
+    },
+    "scripts/promote-licensed-cage-runtime.mjs": {
+      "files": 1,
+      "bytes": 7108
+    },
+    "scripts/promote-licensed-hunt-hm00.mjs": {
+      "files": 1,
+      "bytes": 433
+    },
+    "scripts/promote-licensed-hunt-runtime.mjs": {
+      "files": 1,
+      "bytes": 7190
+    },
+    "scripts/promote-licensed-vfx-runtime.mjs": {
+      "files": 1,
+      "bytes": 6385
+    },
+    "scripts/serve.mjs": {
+      "files": 1,
+      "bytes": 1698
+    },
+    "scripts/trace-battle-field-animation.py": {
+      "files": 1,
+      "bytes": 5951
+    },
+    "scripts/trace-battle-field-objects.py": {
+      "files": 1,
+      "bytes": 6674
+    },
+    "scripts/trace-gate-earth-ovl12.py": {
+      "files": 1,
+      "bytes": 6167
+    },
+    "scripts/validate-art-production-a0.mjs": {
+      "files": 1,
+      "bytes": 7496
+    },
+    "scripts/validate-battle-composite-integrity.py": {
+      "files": 1,
+      "bytes": 14142
+    },
+    "scripts/validate-character-faithful-hd.py": {
+      "files": 1,
+      "bytes": 5895
+    },
+    "scripts/validate-github-pages.mjs": {
+      "files": 1,
+      "bytes": 1909
+    },
+    "scripts/validate-internal-faithful-baseline.mjs": {
+      "files": 1,
+      "bytes": 2538
+    },
+    "scripts/validate-licensed-vfx-conversion-v1.mjs": {
+      "files": 1,
+      "bytes": 3508
+    },
+    "scripts/validate-ui-faithful-hd96.py": {
+      "files": 1,
+      "bytes": 2351
+    },
+    "scripts/validate-vfx-faithful-reference-26.mjs": {
+      "files": 1,
+      "bytes": 1382
+    },
+    "src/README.md": {
+      "files": 1,
+      "bytes": 226
+    },
+    "src/championship": {
+      "files": 130,
+      "bytes": 1303443
+    },
+    "src/data": {
+      "files": 18,
+      "bytes": 1227595
+    },
+    "tests/README.md": {
+      "files": 1,
+      "bytes": 525
+    },
+    "tests/championship-art-a1-map-tech-cases.mjs": {
+      "files": 1,
+      "bytes": 4261
+    },
+    "tests/championship-art-production-a0-cases.mjs": {
+      "files": 1,
+      "bytes": 10315
+    },
+    "tests/championship-battle-action-application-cases.mjs": {
+      "files": 1,
+      "bytes": 9157
+    },
+    "tests/championship-battle-action-resource-cases.mjs": {
+      "files": 1,
+      "bytes": 3847
+    },
+    "tests/championship-battle-ai-selection-cases.mjs": {
+      "files": 1,
+      "bytes": 19185
+    },
+    "tests/championship-battle-art-pilot-browser.cjs": {
+      "files": 1,
+      "bytes": 4007
+    },
+    "tests/championship-battle-art-pilot-cases.mjs": {
+      "files": 1,
+      "bytes": 4360
+    },
+    "tests/championship-battle-bm02-art-browser.cjs": {
+      "files": 1,
+      "bytes": 3926
+    },
+    "tests/championship-battle-bm02-art-cases.mjs": {
+      "files": 1,
+      "bytes": 3693
+    },
+    "tests/championship-battle-bm03-bm04-animated-browser.cjs": {
+      "files": 1,
+      "bytes": 4835
+    },
+    "tests/championship-battle-bm03-bm04-animated-cases.mjs": {
+      "files": 1,
+      "bytes": 5880
+    },
+    "tests/championship-battle-bm07-cyberspace-browser.cjs": {
+      "files": 1,
+      "bytes": 3965
+    },
+    "tests/championship-battle-bm07-cyberspace-cases.mjs": {
+      "files": 1,
+      "bytes": 4297
+    },
+    "tests/championship-battle-candidate-buckets-cases.mjs": {
+      "files": 1,
+      "bytes": 8720
+    },
+    "tests/championship-battle-catalog-cases.mjs": {
+      "files": 1,
+      "bytes": 16808
+    },
+    "tests/championship-battle-contact-targeting-cases.mjs": {
+      "files": 1,
+      "bytes": 8463
+    },
+    "tests/championship-battle-creature-build-cases.mjs": {
+      "files": 1,
+      "bytes": 10055
+    },
+    "tests/championship-battle-cube-art-cases.mjs": {
+      "files": 1,
+      "bytes": 2819
+    },
+    "tests/championship-battle-cube-browser.cjs": {
+      "files": 1,
+      "bytes": 7472
+    },
+    "tests/championship-battle-damage-core-cases.mjs": {
+      "files": 1,
+      "bytes": 5373
+    },
+    "tests/championship-battle-damage-inputs-cases.mjs": {
+      "files": 1,
+      "bytes": 11243
+    },
+    "tests/championship-battle-field-scene-cases.mjs": {
+      "files": 1,
+      "bytes": 12988
+    },
+    "tests/championship-battle-frame-loop-cases.mjs": {
+      "files": 1,
+      "bytes": 12682
+    },
+    "tests/championship-battle-human-paint-migration-r4-cases.mjs": {
+      "files": 1,
+      "bytes": 4319
+    },
+    "tests/championship-battle-human-paint-static-r5-cases.mjs": {
+      "files": 1,
+      "bytes": 5394
+    },
+    "tests/championship-battle-in-flight-cases.mjs": {
+      "files": 1,
+      "bytes": 17675
+    },
+    "tests/championship-battle-launch-pool-cases.mjs": {
+      "files": 1,
+      "bytes": 10073
+    },
+    "tests/championship-battle-light-fence-pilot-r1-cases.mjs": {
+      "files": 1,
+      "bytes": 2072
+    },
+    "tests/championship-battle-match-selection-cases.mjs": {
+      "files": 1,
+      "bytes": 9154
+    },
+    "tests/championship-battle-move-buckets-cases.mjs": {
+      "files": 1,
+      "bytes": 7937
+    },
+    "tests/championship-battle-move-script-cases.mjs": {
+      "files": 1,
+      "bytes": 13823
+    },
+    "tests/championship-battle-move-script-run-cases.mjs": {
+      "files": 1,
+      "bytes": 10408
+    },
+    "tests/championship-battle-object-hardening-r2-browser.cjs": {
+      "files": 1,
+      "bytes": 6889
+    },
+    "tests/championship-battle-object-hardening-r2-cases.mjs": {
+      "files": 1,
+      "bytes": 6642
+    },
+    "tests/championship-battle-outcome-cases.mjs": {
+      "files": 1,
+      "bytes": 13782
+    },
+    "tests/championship-battle-presentation-source-cases.mjs": {
+      "files": 1,
+      "bytes": 13291
+    },
+    "tests/championship-battle-resolver-cases.mjs": {
+      "files": 1,
+      "bytes": 6693
+    },
+    "tests/championship-battle-reward-cases.mjs": {
+      "files": 1,
+      "bytes": 6883
+    },
+    "tests/championship-battle-rng-channel-cases.mjs": {
+      "files": 1,
+      "bytes": 10954
+    },
+    "tests/championship-battle-roster-source-cases.mjs": {
+      "files": 1,
+      "bytes": 8887
+    },
+    "tests/championship-battle-runtime-cases.mjs": {
+      "files": 1,
+      "bytes": 13847
+    },
+    "tests/championship-battle-script-natives-cases.mjs": {
+      "files": 1,
+      "bytes": 18607
+    },
+    "tests/championship-battle-script-vm-cases.mjs": {
+      "files": 1,
+      "bytes": 23326
+    },
+    "tests/championship-battle-session-cases.mjs": {
+      "files": 1,
+      "bytes": 23252
+    },
+    "tests/championship-battle-sprite-cell-box-cases.mjs": {
+      "files": 1,
+      "bytes": 13574
+    },
+    "tests/championship-battle-state-graph-cases.mjs": {
+      "files": 1,
+      "bytes": 9632
+    },
+    "tests/championship-battle-state-machine-cases.mjs": {
+      "files": 1,
+      "bytes": 10204
+    },
+    "tests/championship-battle-static-arena-family-browser.cjs": {
+      "files": 1,
+      "bytes": 4944
+    },
+    "tests/championship-battle-static-arena-family-cases.mjs": {
+      "files": 1,
+      "bytes": 5288
+    },
+    "tests/championship-battle-status-cases.mjs": {
+      "files": 1,
+      "bytes": 10501
+    },
+    "tests/championship-battle-style-calibration-r3-cases.mjs": {
+      "files": 1,
+      "bytes": 3852
+    },
+    "tests/championship-battle-support-cases.mjs": {
+      "files": 1,
+      "bytes": 6079
+    },
+    "tests/championship-battle-turn-states-cases.mjs": {
+      "files": 1,
+      "bytes": 11363
+    },
+    "tests/championship-cage-faithful-hd40-cases.mjs": {
+      "files": 1,
+      "bytes": 11696
+    },
+    "tests/championship-cage-hd-remaster-cases.mjs": {
+      "files": 1,
+      "bytes": 7328
+    },
+    "tests/championship-cage-identity-crosswalk-cases.mjs": {
+      "files": 1,
+      "bytes": 3998
+    },
+    "tests/championship-character-animation-timeline-cases.mjs": {
+      "files": 1,
+      "bytes": 6735
+    },
+    "tests/championship-character-faithful-hd-cases.mjs": {
+      "files": 1,
+      "bytes": 3022
+    },
+    "tests/championship-character-remix-m201-browser.cjs": {
+      "files": 1,
+      "bytes": 5139
+    },
+    "tests/championship-character-remix-m201-cases.mjs": {
+      "files": 1,
+      "bytes": 26654
+    },
+    "tests/championship-faithful-map-technical-qa-cases.mjs": {
+      "files": 1,
+      "bytes": 2867
+    },
+    "tests/championship-faithful-vfx-browser.cjs": {
+      "files": 1,
+      "bytes": 5442
+    },
+    "tests/championship-faithful-vfx-runtime-cases.mjs": {
+      "files": 1,
+      "bytes": 4390
+    },
+    "tests/championship-file-launch-guard-browser.cjs": {
+      "files": 1,
+      "bytes": 1409
+    },
+    "tests/championship-frozen-runtime-invariants-cases.mjs": {
+      "files": 1,
+      "bytes": 9491
+    },
+    "tests/championship-gate-earth-ovl12-trace-cases.mjs": {
+      "files": 1,
+      "bytes": 1605
+    },
+    "tests/championship-gate-table-cases.mjs": {
+      "files": 1,
+      "bytes": 3831
+    },
+    "tests/championship-generated-json-portability-cases.mjs": {
+      "files": 1,
+      "bytes": 781
+    },
+    "tests/championship-help-catalog-cases.mjs": {
+      "files": 1,
+      "bytes": 4737
+    },
+    "tests/championship-hunt-faithful-hd30-cases.mjs": {
+      "files": 1,
+      "bytes": 3758
+    },
+    "tests/championship-hunt-hd-remaster-cases.mjs": {
+      "files": 1,
+      "bytes": 4685
+    },
+    "tests/championship-hunt-original-input-evidence-cases.mjs": {
+      "files": 1,
+      "bytes": 1733
+    },
+    "tests/championship-int-rh2-browser.cjs": {
+      "files": 1,
+      "bytes": 12315
+    },
+    "tests/championship-int-rh2-p1r-contract-cases.mjs": {
+      "files": 1,
+      "bytes": 6595
+    },
+    "tests/championship-int-rh2-runtime-presentation-cases.mjs": {
+      "files": 1,
+      "bytes": 11334
+    },
+    "tests/championship-licensed-battle-runtime-cases.mjs": {
+      "files": 1,
+      "bytes": 5423
+    },
+    "tests/championship-licensed-cage-runtime-cases.mjs": {
+      "files": 1,
+      "bytes": 6091
+    },
+    "tests/championship-licensed-hunt-runtime-cases.mjs": {
+      "files": 1,
+      "bytes": 4033
+    },
+    "tests/championship-licensed-vfx-runtime-cases.mjs": {
+      "files": 1,
+      "bytes": 7318
+    },
+    "tests/championship-migration-firewall-cases.mjs": {
+      "files": 1,
+      "bytes": 10128
+    },
+    "tests/championship-original-map-bindings-cases.mjs": {
+      "files": 1,
+      "bytes": 3623
+    },
+    "tests/championship-presentation-pack-cases.mjs": {
+      "files": 1,
+      "bytes": 5890
+    },
+    "tests/championship-raising-production-cases.mjs": {
+      "files": 1,
+      "bytes": 3398
+    },
+    "tests/championship-ranch-slot-geometry-cases.mjs": {
+      "files": 1,
+      "bytes": 4758
+    },
+    "tests/championship-ranch-tile-composite-cases.mjs": {
+      "files": 1,
+      "bytes": 6461
+    },
+    "tests/championship-rom-art-census-cases.mjs": {
+      "files": 1,
+      "bytes": 7578
+    },
+    "tests/championship-runtime-battle-arena-art-review-cases.mjs": {
+      "files": 1,
+      "bytes": 6928
+    },
+    "tests/championship-runtime-map-art-bundle-cases.mjs": {
+      "files": 1,
+      "bytes": 5391
+    },
+    "tests/championship-species-names-cases.mjs": {
+      "files": 1,
+      "bytes": 2516
+    },
+    "tests/championship-stat-ladder-cases.mjs": {
+      "files": 1,
+      "bytes": 3047
+    },
+    "tests/championship-storage-guard-cases.mjs": {
+      "files": 1,
+      "bytes": 6620
+    },
+    "tests/championship-tamer-info-cases.mjs": {
+      "files": 1,
+      "bytes": 4307
+    },
+    "tests/championship-title-event-schedule-cases.mjs": {
+      "files": 1,
+      "bytes": 8247
+    },
+    "tests/championship-vfx-animation-sidecars-cases.mjs": {
+      "files": 1,
+      "bytes": 3017
+    },
+    "tests/championship-vfx-presentation-events-cases.mjs": {
+      "files": 1,
+      "bytes": 5674
+    },
+    "tests/championship-vfx-rom-conversion-cases.mjs": {
+      "files": 1,
+      "bytes": 324
+    },
+    "tests/championship-vs1-runtime-cases.mjs": {
+      "files": 1,
+      "bytes": 4119
+    },
+    "tests/championship-vs2-browser.cjs": {
+      "files": 1,
+      "bytes": 13550
+    },
+    "tests/championship-vs2-gate-select-3d-contract-cases.mjs": {
+      "files": 1,
+      "bytes": 10316
+    },
+    "tests/championship-vs2-hunt-loadout-contract-cases.mjs": {
+      "files": 1,
+      "bytes": 9027
+    },
+    "tests/championship-vs2-p1r-presentation-cases.mjs": {
+      "files": 1,
+      "bytes": 3557
+    },
+    "tests/championship-vs2-r1-gate-browser.cjs": {
+      "files": 1,
+      "bytes": 8013
+    },
+    "tests/championship-vs2-r1-gate-presentation-cases.mjs": {
+      "files": 1,
+      "bytes": 2817
+    },
+    "tests/championship-vs2-r2-hunt-loadout-runtime-cases.mjs": {
+      "files": 1,
+      "bytes": 15017
+    },
+    "tests/championship-vs2-runtime-cases.mjs": {
+      "files": 1,
+      "bytes": 23917
+    },
+    "tests/championship-vs3-browser.cjs": {
+      "files": 1,
+      "bytes": 7269
+    },
+    "tests/championship-vs3-capture-stroke-cases.mjs": {
+      "files": 1,
+      "bytes": 4914
+    },
+    "tests/championship-vs3-enclosure-app-cases.mjs": {
+      "files": 1,
+      "bytes": 9995
+    },
+    "tests/championship-vs3-enclosure-runtime-cases.mjs": {
+      "files": 1,
+      "bytes": 3403
+    },
+    "tests/championship-vs3-memory-card-capacity-cases.mjs": {
+      "files": 1,
+      "bytes": 3760
+    },
+    "tests/championship-vs4-cage-edit-cases.mjs": {
+      "files": 1,
+      "bytes": 11877
+    },
+    "tests/championship-vs4-database-cases.mjs": {
+      "files": 1,
+      "bytes": 6920
+    },
+    "tests/championship-vs4-shop-runtime-cases.mjs": {
+      "files": 1,
+      "bytes": 8955
+    },
+    "tests/championship-world-clock-cases.mjs": {
+      "files": 1,
+      "bytes": 5113
+    },
+    "tests/championship-zh-hant-text-cases.mjs": {
+      "files": 1,
+      "bytes": 2690
+    },
+    "tests/fixtures": {
+      "files": 1,
+      "bytes": 954
+    },
+    "tools/README.md": {
+      "files": 1,
+      "bytes": 193
+    }
+  },
+  "catalogCount": 17,
+  "contractCount": 12,
+  "productionEntryCount": 19,
+  "productionRuntimeEligible": 5,
+  "productionShippingReady": 0,
+  "missingProductionManifests": [],
+  "researchFileCount": 22,
+  "deterministicTestFileCount": 101,
+  "browserAndOtherCjsFileCount": 14,
+  "sourceJsCount": 127,
+  "staticEntryDependencyCount": 137
+}

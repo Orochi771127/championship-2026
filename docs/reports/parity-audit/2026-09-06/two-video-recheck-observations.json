@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "auditDate": "2026-09-06",
+  "captureSessionStarted": "2026-09-05",
+  "root": "R:/Projects/Championship2026/championship-2026",
+  "branch": "main",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "workingTree": "PREEXISTING_DIRTY_PRESERVED",
+  "method": "Sampled public browser playback and direct reinspection of 13 archived gameplay frames; not exhaustive video or audio transcription. Exact observed media time overrides target filenames. No new emulator or normal-game browser acceptance in this audit.",
+  "sources": [
+    "https://www.bilibili.com/video/BV13T4y137ef/",
+    "https://www.bilibili.com/video/BV13u411B7BK/"
+  ],
+  "priorFullGameplayIndex": "docs/research/video-BV13u411B7BK/VIDEO_OBSERVATIONS.json",
+  "originalRom": {
+    "path": "R:/8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1.nds",
+    "sha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "bytes": 67108864
+  },
+  "runtimeModified": false,
+  "observations": [
+    {
+      "sourceId": "BV13T4y137ef",
+      "observationOrigin": "CURRENT_TURN_BROWSER_CAPTURE",
+      "recordedMediaSeconds": 153.721453,
+      "framePath": "R:/Projects/Championship2026/_archive/video-research/BV13T4y137ef/recheck-2026-09-05/intro-raising.png",
+      "sha256": "bec2180c0947ad967a0d6e9f9ee0a8a427fce13931050ff51d070030d392bc8a",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "Training 場景、相鄰育成場地與 Attack/Defense 訊息；不能據此把數值變動歸因於食物。",
+      "legacyFilenameLabel": "intro-raising"
+    },
+    {
+      "sourceId": "BV13T4y137ef",
+      "observationOrigin": "CURRENT_TURN_BROWSER_CAPTURE",
+      "recordedMediaSeconds": 184.940593,
+      "framePath": "R:/Projects/Championship2026/_archive/video-research/BV13T4y137ef/recheck-2026-09-05/intro-growth.png",
+      "sha256": "948c6a2add4ebed095ba4c2d676f833e57dd3c2fd7b21cbb7641cf400425758f",
+      "classification": "AUTHOR_EXPLANATION_ONLY",
+      "observation": "作者繪製的進化條件圖；頁面另有勘誤提醒，數值未提升為 YDIJ ROM 規則。",
+      "legacyFilenameLabel": "intro-growth"
+    },
+    {
+      "sourceId": "BV13T4y137ef",
+      "observationOrigin": "CURRENT_TURN_BROWSER_CAPTURE",
+      "recordedMediaSeconds": 234.433664,
+      "framePath": "R:/Projects/Championship2026/_archive/video-research/BV13T4y137ef/recheck-2026-09-05/intro-evolution.png",
+      "sha256": "cfe90f5f6fb09320e2d345db09ebe3697f3052e9dc0cba24f48eaf610b87149b",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "實際內容是 Hunt 手掌收取提示，不是進化。畫面要求使用手掌；HP 歸零條件另由 ROM help104 交叉支持。",
+      "legacyFilenameLabel": "intro-evolution"
+    },
+    {
+      "sourceId": "BV13T4y137ef",
+      "observationOrigin": "CURRENT_TURN_BROWSER_CAPTURE",
+      "recordedMediaSeconds": 305.963764,
+      "framePath": "R:/Projects/Championship2026/_archive/video-research/BV13T4y137ef/recheck-2026-09-05/intro-capture-management.png",
+      "sha256": "6c88d45f5ced10267d4fe192f7ca42d94be2d7075683434104b5e07de8ea62b7",
+      "classification": "EXCLUDED_OBSCURED",
+      "observation": "登入提示遮蔽影片；不作玩法證據。",
+      "legacyFilenameLabel": "intro-capture-management"
+    },
+    {
+      "sourceId": "BV13T4y137ef",
+      "observationOrigin": "CURRENT_TURN_BROWSER_CAPTURE",
+      "recordedMediaSeconds": 336.610481,
+      "framePath": "R:/Projects/Championship2026/_archive/video-research/BV13T4y137ef/recheck-2026-09-05/intro-battle.png",
+      "sha256": "e0ae96fd736cc82f667c5aaf482276dc7bdc8c1014a11c0c6ac1ed2e44244d93",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "Championship 參賽 Yes/No 確認。四年週期是作者字幕解說，此處未獨立驗證該數值。",
+      "legacyFilenameLabel": "intro-battle"
+    },
+    {
+      "sourceId": "BV13T4y137ef",
+      "observationOrigin": "CURRENT_TURN_BROWSER_CAPTURE",
+      "recordedMediaSeconds": 371.207009,
+      "framePath": "R:/Projects/Championship2026/_archive/video-research/BV13T4y137ef/recheck-2026-09-05/intro-battle-followup.png",
+      "sha256": "aeae1980d856e10d6d99e2d22f80edcf5c92c0019125fd41facc31ed0b8699ce",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "實際內容是 Digipedia/Profile，列出 Status、Profile、Sp. Attack、Digivolution 分頁，不是戰鬥過程。",
+      "legacyFilenameLabel": "intro-battle-followup"
+    },
+    {
+      "sourceId": "BV13u411B7BK",
+      "sourceObservationId": "V03",
+      "observationOrigin": "HISTORICAL_FRAME_REVIEWED_CURRENT_TURN",
+      "recordedMediaSeconds": 30.88064,
+      "framePath": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t030.png",
+      "sha256": "7b9a41e12a37f56d74ae98666e6a46a109567d784b9ac41feec3b3e1667791f4",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "場景中出現肉塊，Food remaining 遞減，跑道區出現 HP UP。",
+      "interpretation": "物品放置與環境訓練是不同因果來源，不能把所有變動都歸因於食物。"
+    },
+    {
+      "sourceId": "BV13u411B7BK",
+      "sourceObservationId": "V05",
+      "observationOrigin": "HISTORICAL_FRAME_REVIEWED_CURRENT_TURN",
+      "recordedMediaSeconds": 45.458062,
+      "framePath": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t045.png",
+      "sha256": "b3327b7707776bed7cb7133b84f313c7bf4300106bd01f2c5567f76bae42d935",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "上方 Dina Plains 說明、入口費、Funds；下方球形地圖、地點標記、Settings／Return。",
+      "interpretation": "選地區和設定裝備是出發前的決策層。"
+    },
+    {
+      "sourceId": "BV13u411B7BK",
+      "sourceObservationId": "V08",
+      "observationOrigin": "HISTORICAL_FRAME_REVIEWED_CURRENT_TURN",
+      "recordedMediaSeconds": 62.028629,
+      "framePath": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t061.png",
+      "sha256": "9a78d35e968552e6151bc314d1c7dde9a05d4abda422817fe54aa7e36c051e3b",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "接近 01:02 的畫面可見游標與青白色分段弧線圍向野生角色，繩索圖示高亮。",
+      "interpretation": "證明有空間手勢軌跡；閉合閾值與手勢判定公式未由影片證明。"
+    },
+    {
+      "sourceId": "BV13u411B7BK",
+      "sourceObservationId": "V09",
+      "observationOrigin": "HISTORICAL_FRAME_REVIEWED_CURRENT_TURN",
+      "recordedMediaSeconds": 62.625588,
+      "framePath": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t062.png",
+      "sha256": "4506c1e53010c251b235cd9937d6d849e49babdf085415c950451b16927ecd37",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "兩個野生角色上方出現 Pull! 與綠條。",
+      "interpretation": "捕捉有需要持續操作的階段，不是點擊目標就立刻取得。"
+    },
+    {
+      "sourceId": "BV13u411B7BK",
+      "sourceObservationId": "V12",
+      "observationOrigin": "HISTORICAL_FRAME_REVIEWED_CURRENT_TURN",
+      "recordedMediaSeconds": 72.751778,
+      "framePath": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t072.png",
+      "sha256": "b220406114d655acd5e33e5222ab923ea70a9aeed9eb394a88a4e46e4abc1746",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "下方有 New 角色卡、Name／Rndm Name／Release、紅色 066G/64G 容量和 Return。",
+      "interpretation": "捕捉結果要再處理命名、去留、容量；影片不足以證明超額提交規則。"
+    },
+    {
+      "sourceId": "BV13u411B7BK",
+      "sourceObservationId": "V16",
+      "observationOrigin": "HISTORICAL_FRAME_REVIEWED_CURRENT_TURN",
+      "recordedMediaSeconds": 121.081448,
+      "framePath": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t120.png",
+      "sha256": "630afc2b006945e9559053d26624fac567b18743fedc8e534b3d2c7f61ade262",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "Playground 的說明包含 HP Up 與 Occupancy Limit 6；下方綠色六角編輯板、模組、ID／Size／Return。",
+      "interpretation": "容納數、能力效果、視覺佔地是不同欄位。"
+    },
+    {
+      "sourceId": "BV13u411B7BK",
+      "sourceObservationId": "V18",
+      "observationOrigin": "HISTORICAL_FRAME_REVIEWED_CURRENT_TURN",
+      "recordedMediaSeconds": 142.301644,
+      "framePath": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t142.png",
+      "sha256": "e4d0feac0bc52c6db7ad6a1d63755e6ced2fc7df9877900dd634665d1a50fd2a",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "下方立方體可辨 Title Match、Password Battle、Wi-Fi Matching 字樣及 Return。",
+      "interpretation": "此處證明模式入口存在；没有展示密碼或連線完整流程。"
+    },
+    {
+      "sourceId": "BV13u411B7BK",
+      "sourceObservationId": "V20",
+      "observationOrigin": "HISTORICAL_FRAME_REVIEWED_CURRENT_TURN",
+      "recordedMediaSeconds": 162.843446,
+      "framePath": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t162.png",
+      "sha256": "1afd05f68f5de9e5a0b559a273d7c4143fbd06cf95e350a8667206415b45f6dc",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "三個角色直欄、HP/TP、Normal Attack；上方文字提到可以更改隊名與戰鬥策略。",
+      "interpretation": "策略是戰前配置；本片未展開所有策略值。"
+    },
+    {
+      "sourceId": "BV13u411B7BK",
+      "sourceObservationId": "V23",
+      "observationOrigin": "HISTORICAL_FRAME_REVIEWED_CURRENT_TURN",
+      "recordedMediaSeconds": 180.391858,
+      "framePath": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t180.png",
+      "sha256": "aec6b68dd33778e15f22a1dcd5e0d9b594b545ff12a4e27acd56954512946a93",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "上方 Free Battle、雙方隊名、120、每隊三個角色與狀態條；下方對峙場地和播報文字。",
+      "interpretation": "隊伍總覽與場內行動分開呈現。"
+    },
+    {
+      "sourceId": "BV13u411B7BK",
+      "sourceObservationId": "V27",
+      "observationOrigin": "HISTORICAL_FRAME_REVIEWED_CURRENT_TURN",
+      "recordedMediaSeconds": 270.757011,
+      "framePath": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t270.png",
+      "sha256": "b256a6d9634e21c89c352de81a0ccfe55708ca4d43830277ff2ed3ca5a6ddad1",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "Free Battle 下方有 1VS1 和 3VS3 兩張選擇卡。",
+      "interpretation": "原作此模式不是只有 3v3。"
+    },
+    {
+      "sourceId": "BV13u411B7BK",
+      "sourceObservationId": "V33",
+      "observationOrigin": "HISTORICAL_FRAME_REVIEWED_CURRENT_TURN",
+      "recordedMediaSeconds": 431.739143,
+      "framePath": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t431.png",
+      "sha256": "73effe209c64ac67def72cbd9463c9fcdc684e43b7afa493d0af090e5fbe9a30",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "仍為 Day 6、13:00，出現是否結束一天的 Yes／No 確認。",
+      "interpretation": "可以在白天選擇提前結束；不是只能等到晚上。"
+    },
+    {
+      "sourceId": "BV13u411B7BK",
+      "sourceObservationId": "V36",
+      "observationOrigin": "HISTORICAL_FRAME_REVIEWED_CURRENT_TURN",
+      "recordedMediaSeconds": 459.561067,
+      "framePath": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t459.png",
+      "sha256": "e112e38254d506fb98a8b6b88c62c2ea1be45e94152d47e76094e4b44a123929",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "Challenge Gears、1vs1、Entrance Fee 150 bits、Day 7、Rank、4020 bits。",
+      "interpretation": "賽事有日期、形式和金錢條件；先讀條件，再選隊出戰。"
+    },
+    {
+      "sourceId": "BV13u411B7BK",
+      "sourceObservationId": "V50",
+      "observationOrigin": "HISTORICAL_FRAME_REVIEWED_CURRENT_TURN",
+      "recordedMediaSeconds": 750.497127,
+      "framePath": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t750.png",
+      "sha256": "b1a13da30efe89140bd2f5d21cb0edc13e0cf1b56bc7b33566532441242fd210",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "Normal Wire α 的說明為鋪於地面阻擋角色，Length 24。",
+      "interpretation": "Wire 是障礙功能，不能將其和拉扯用 Rope 視為同義物。"
+    }
+  ]
+}

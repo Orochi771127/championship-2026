@@ -1,0 +1,210 @@
+{
+  "method": "16 catalogs rebuilt using existing checked-in builders in temporary storage; Shop numeric fields independently read. Reproducibility and byte equality do not prove every semantic name or original control flow.",
+  "builderRuns": [
+    {
+      "builder": "build-battle-catalogs",
+      "exitCode": 0,
+      "output": "battle-moves            596 records  battle-moves.r1.json\nbattle-arenas            11 records  battle-arenas.r1.json\nbattle-eligibility       46 records  battle-eligibility.r1.json\nbattle-title-events      62 records  battle-title-events.r1.json\nbattle-opponent-teams   152 records  battle-opponent-teams.r1.json\nbattle-presets          456 records  battle-presets.r1.json\n"
+    },
+    {
+      "builder": "build-creature-catalogs",
+      "exitCode": 0,
+      "output": "wrote creature-stat-curve.r1.json\nwrote creature-species.r1.json\n"
+    },
+    {
+      "builder": "build-battle-script-catalog",
+      "exitCode": 0,
+      "output": "52 opcodes, 63748 bytes of bytecode, 23121 instructions, 41 routines, 67 natives -> battle-scripts.r1.json\n"
+    },
+    {
+      "builder": "build-battle-native-catalog",
+      "exitCode": 0,
+      "output": "67 natives, 7788 bytes, 3014 call sites -> battle-natives.r1.json\n"
+    },
+    {
+      "builder": "build-rng-channel-catalog",
+      "exitCode": 0,
+      "output": "217 channels, 103-entry table, 100 distinct values -> rng-channels.r1.json\n"
+    },
+    {
+      "builder": "build-cage-definitions",
+      "exitCode": 0,
+      "output": "wrote C:\\Users\\USER\\AppData\\Local\\Temp\\championship-rom-parity-ajnz3o5r\\catalogs\\cage-definitions.r1.json (36 records, 35 player-facing)\n"
+    },
+    {
+      "builder": "build-gate-catalog",
+      "exitCode": 0,
+      "output": "wrote C:\\Users\\USER\\AppData\\Local\\Temp\\championship-rom-parity-ajnz3o5r\\catalogs\\gate-table.r1.json (17 records, fees 0..4000)\n"
+    },
+    {
+      "builder": "build-help-catalog",
+      "exitCode": 0,
+      "output": "wrote C:\\Users\\USER\\AppData\\Local\\Temp\\championship-rom-parity-ajnz3o5r\\catalogs\\help-text.r1.json (16 headings, 68 topics)\n"
+    },
+    {
+      "builder": "build-species-names",
+      "exitCode": 0,
+      "output": "wrote C:\\Users\\USER\\AppData\\Local\\Temp\\championship-rom-parity-ajnz3o5r\\catalogs\\species-names.r1.json (216 names, stats: HP, TP, こうげき, ぼうぎょ, かしこさ, すばやさ)\n"
+    },
+    {
+      "builder": "build-title-event-strings",
+      "exitCode": 0,
+      "output": "wrote C:\\Users\\USER\\AppData\\Local\\Temp\\championship-rom-parity-ajnz3o5r\\catalogs\\battle-title-event-strings.r1.json (62 names, 62 descriptions)\n"
+    }
+  ],
+  "catalogs": [
+    {
+      "catalog": "battle-arenas.r1.json",
+      "currentExists": true,
+      "jsonEqual": true,
+      "differenceCount": 0,
+      "differencePaths": [],
+      "currentSha256": "4950e3dd99fa23e89a5c94c4fc987d97ccf099c779a4fe4219f382a6d2a59ab5",
+      "regeneratedSha256": "4950e3dd99fa23e89a5c94c4fc987d97ccf099c779a4fe4219f382a6d2a59ab5"
+    },
+    {
+      "catalog": "battle-eligibility.r1.json",
+      "currentExists": true,
+      "jsonEqual": true,
+      "differenceCount": 0,
+      "differencePaths": [],
+      "currentSha256": "c9b74dcf9cf7c03606035b5a0df33170cd79f55eef0dfa7140e9123cfc5971ad",
+      "regeneratedSha256": "c9b74dcf9cf7c03606035b5a0df33170cd79f55eef0dfa7140e9123cfc5971ad"
+    },
+    {
+      "catalog": "battle-moves.r1.json",
+      "currentExists": true,
+      "jsonEqual": true,
+      "differenceCount": 0,
+      "differencePaths": [],
+      "currentSha256": "d4e86d1ae63f853462e4a48e6d3778f8e8c8036e2e82c1b3ce28b3827d8b9d38",
+      "regeneratedSha256": "d4e86d1ae63f853462e4a48e6d3778f8e8c8036e2e82c1b3ce28b3827d8b9d38"
+    },
+    {
+      "catalog": "battle-natives.r1.json",
+      "currentExists": true,
+      "jsonEqual": true,
+      "differenceCount": 0,
+      "differencePaths": [],
+      "currentSha256": "2e08583ffbeb97913136c9ccb9e08f2736c6cd705ab11b929326c62f8d283926",
+      "regeneratedSha256": "2e08583ffbeb97913136c9ccb9e08f2736c6cd705ab11b929326c62f8d283926"
+    },
+    {
+      "catalog": "battle-opponent-teams.r1.json",
+      "currentExists": true,
+      "jsonEqual": true,
+      "differenceCount": 0,
+      "differencePaths": [],
+      "currentSha256": "b83f616271b40a7a3edc74ce01fec64258f17d88fc9c3e38b35325aacd925ac0",
+      "regeneratedSha256": "b83f616271b40a7a3edc74ce01fec64258f17d88fc9c3e38b35325aacd925ac0"
+    },
+    {
+      "catalog": "battle-presets.r1.json",
+      "currentExists": true,
+      "jsonEqual": true,
+      "differenceCount": 0,
+      "differencePaths": [],
+      "currentSha256": "7ebedd982cf4fd66cdf60ddf4cbd4e02955b59356e1d53439cb085efea2542f5",
+      "regeneratedSha256": "7ebedd982cf4fd66cdf60ddf4cbd4e02955b59356e1d53439cb085efea2542f5"
+    },
+    {
+      "catalog": "battle-scripts.r1.json",
+      "currentExists": true,
+      "jsonEqual": true,
+      "differenceCount": 0,
+      "differencePaths": [],
+      "currentSha256": "686638059989a243f754d5a3dae16902c049a396c2b14b335215d40a37720900",
+      "regeneratedSha256": "686638059989a243f754d5a3dae16902c049a396c2b14b335215d40a37720900"
+    },
+    {
+      "catalog": "battle-title-event-strings.r1.json",
+      "currentExists": true,
+      "jsonEqual": true,
+      "differenceCount": 0,
+      "differencePaths": [],
+      "currentSha256": "05b2108e723690094f72b2ed1a972682f555347b43e2d298b7d176d7c64f37cb",
+      "regeneratedSha256": "05b2108e723690094f72b2ed1a972682f555347b43e2d298b7d176d7c64f37cb"
+    },
+    {
+      "catalog": "battle-title-events.r1.json",
+      "currentExists": true,
+      "jsonEqual": true,
+      "differenceCount": 0,
+      "differencePaths": [],
+      "currentSha256": "b6768835f3dd7bc73c333f88000661ef12dcf777133385aa42e9b532ea9f7003",
+      "regeneratedSha256": "b6768835f3dd7bc73c333f88000661ef12dcf777133385aa42e9b532ea9f7003"
+    },
+    {
+      "catalog": "cage-definitions.r1.json",
+      "currentExists": true,
+      "jsonEqual": true,
+      "differenceCount": 0,
+      "differencePaths": [],
+      "currentSha256": "872e82510bcda4e44de0c0096b7fbd15f7a61670931935ee32e27e50e4dc7153",
+      "regeneratedSha256": "872e82510bcda4e44de0c0096b7fbd15f7a61670931935ee32e27e50e4dc7153"
+    },
+    {
+      "catalog": "creature-species.r1.json",
+      "currentExists": true,
+      "jsonEqual": true,
+      "differenceCount": 0,
+      "differencePaths": [],
+      "currentSha256": "d86ec0d6c97eca1827bf405ebae6a15275e60d47439ba7a8678f06e2dde34eba",
+      "regeneratedSha256": "d86ec0d6c97eca1827bf405ebae6a15275e60d47439ba7a8678f06e2dde34eba"
+    },
+    {
+      "catalog": "creature-stat-curve.r1.json",
+      "currentExists": true,
+      "jsonEqual": true,
+      "differenceCount": 0,
+      "differencePaths": [],
+      "currentSha256": "d8896d4184054a9e332ce970f817059e6c3b75e45869d6618ad871856895e8cd",
+      "regeneratedSha256": "d8896d4184054a9e332ce970f817059e6c3b75e45869d6618ad871856895e8cd"
+    },
+    {
+      "catalog": "gate-table.r1.json",
+      "currentExists": true,
+      "jsonEqual": true,
+      "differenceCount": 0,
+      "differencePaths": [],
+      "currentSha256": "0fd6b2b4c4eca29d7eba29efbf8312046036a29ee78f86bf8ba7366b5ccff0d3",
+      "regeneratedSha256": "0fd6b2b4c4eca29d7eba29efbf8312046036a29ee78f86bf8ba7366b5ccff0d3"
+    },
+    {
+      "catalog": "help-text.r1.json",
+      "currentExists": true,
+      "jsonEqual": true,
+      "differenceCount": 0,
+      "differencePaths": [],
+      "currentSha256": "85681cf457aea329b578ef5682370a85239062099118758b6ef269c38ae1da0e",
+      "regeneratedSha256": "85681cf457aea329b578ef5682370a85239062099118758b6ef269c38ae1da0e"
+    },
+    {
+      "catalog": "rng-channels.r1.json",
+      "currentExists": true,
+      "jsonEqual": true,
+      "differenceCount": 0,
+      "differencePaths": [],
+      "currentSha256": "992cfa9ca0b67f8cd2f23d477856a5e2447f57f56fc8ea66e3c42a00d2369c22",
+      "regeneratedSha256": "992cfa9ca0b67f8cd2f23d477856a5e2447f57f56fc8ea66e3c42a00d2369c22"
+    },
+    {
+      "catalog": "species-names.r1.json",
+      "currentExists": true,
+      "jsonEqual": true,
+      "differenceCount": 0,
+      "differencePaths": [],
+      "currentSha256": "7283f6262e6d23f22cce8562e6aadb4ddc6f9d78c3cca1bd3e61abd11aafea79",
+      "regeneratedSha256": "7283f6262e6d23f22cce8562e6aadb4ddc6f9d78c3cca1bd3e61abd11aafea79"
+    },
+    {
+      "catalog": "shop.r1.json",
+      "method": "Independent struct reads: ARM9 0x020E0248, stride 56, seven declared fields per record",
+      "recordsChecked": 118,
+      "numericFieldsChecked": 826,
+      "differenceCount": 0,
+      "differences": [],
+      "scope": "Other mappings and unlockKind semantics not re-proven by this numeric comparison."
+    }
+  ]
+}

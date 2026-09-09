@@ -1,4 +1,5 @@
-// VS4 -- Database encyclopedia: 224 slots, separate from CreatureInstance.
+// OVL16 -- 216 book rows, separate from CreatureInstance and egg resources.
+import { restoreLegacyIndividual } from "./fixtures/championship-legacy-collection.mjs";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
@@ -19,7 +20,7 @@ import {
   createChampionshipScreenStack
 } from "../src/championship/app/championshipScreenStack.js";
 
-const catalog = JSON.parse(fs.readFileSync("src/data/championship/catalogs/entities.r1.json", "utf8"));
+const catalog = JSON.parse(fs.readFileSync("src/data/championship/catalogs/creature-species.r1.json", "utf8"));
 const presentation = JSON.parse(fs.readFileSync("docs/contracts/championship/raising-home-presentation.v1.json", "utf8"));
 
 function memoryStorage() {
@@ -44,7 +45,7 @@ function createApp(storage = memoryStorage()) {
 async function enterFirstHunt(app) {
   await app.newGame();
   app.openGate();
-  app.selectGate(app.getGates()[0].gateId);
+  app.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId);
   app.confirmGate();
   app.beginHunt();
 }
@@ -58,27 +59,20 @@ function drawClosedLoop(host, cx, cy, radius = 36) {
   host.extendEnclosureStroke(cx + 2, cy + 2);
 }
 
-test("the encyclopedia is 224 slots: 8 eggs and 216 regular", () => {
+test("the original encyclopedia is 216 regular species, with no egg rows", () => {
   const slots = listDatabaseSlots();
   assert.equal(slots.length, DATABASE_SLOT_COUNT);
-  assert.equal(DATABASE_SLOT_COUNT, 224);
+  assert.equal(DATABASE_SLOT_COUNT, 216);
   assert.equal(slots.filter((slot) => slot.kind === "EGG").length, DATABASE_EGG_COUNT);
   assert.equal(slots.filter((slot) => slot.kind === "REGULAR").length, DATABASE_REGULAR_COUNT);
   assert.equal(slots.some((slot) => /[\u3040-\u30ff]/.test(slot.displayName)), false);
-  assert.equal(DATABASE_UNLOCK_EVIDENCE, "UNKNOWN_REQUIRES_TRACE");
+  assert.equal(DATABASE_UNLOCK_EVIDENCE, "ROM_VERIFIED_02116A20_REGISTRATION");
 });
 
-test("only the opening partner registers at New Game, not the extra home prototypes", () => {
-  const frame = projectDatabase({
-    starterSpeciesId: "championship:creature:greyshade-cat",
-    collection: []
-  });
-  assert.equal(frame.registeredCount, 1);
-  const greyshade = frame.entries.find((row) => row.speciesId === "championship:creature:greyshade-cat");
-  const blazetail = frame.entries.find((row) => row.speciesId === "championship:creature:blazetail-kit");
-  assert.equal(greyshade.state, "REGISTERED");
-  assert.equal(greyshade.source, "STARTER");
-  assert.equal(blazetail.state, "UNDISCOVERED");
+test("the opening egg does not register a regular species", () => {
+  const frame = projectDatabase({ starterSpeciesId: "species-000", collection: [] });
+  assert.equal(frame.registeredCount, 0);
+  assert.ok(frame.entries.every(row => row.state === "UNDISCOVERED"));
 });
 
 test("Home can enter Database and Database can only go back", () => {
@@ -89,31 +83,27 @@ test("Home can enter Database and Database can only go back", () => {
   assert.equal(stack.back(), CHAMPIONSHIP_SCREENS.RAISING_HOME);
 });
 
-test("New Game exposes one registered slot through the app", async () => {
+test("New Game exposes an empty book; selectors use species IDs independent of row ordinal", async () => {
   const app = createApp();
   await app.newGame();
   assert.equal(app.openDatabase(), CHAMPIONSHIP_SCREENS.DATABASE);
   const frame = app.getDatabaseFrame();
-  assert.equal(frame.slotCount, 224);
-  assert.equal(frame.registeredCount, 1);
-  assert.equal(frame.entries.filter((row) => row.state === "REGISTERED").length, 1);
-  assert.equal(frame.entries.find((row) => row.speciesId === "championship:creature:blazetail-kit").state, "UNDISCOVERED");
-  app.selectDatabaseSpecies(8);
-  assert.equal(app.getDatabaseFrame().selected.source, "STARTER");
+  assert.equal(frame.slotCount, 216);
+  assert.equal(frame.registeredCount, 0);
+  assert.throws(() => app.selectDatabaseSpecies(0), /UNKNOWN_DATABASE_SLOT/);
+  app.selectDatabaseSpecies(223);
+  assert.equal(app.getDatabaseFrame().selected.speciesIndex, 223);
+  assert.equal(app.getDatabaseFrame().selected.state, "UNDISCOVERED");
   assert.equal(app.getDatabaseFrame().selected.instances.length, 0);
   assert.equal(app.leaveScreen(), CHAMPIONSHIP_SCREENS.RAISING_HOME);
   await app.dispose();
 });
 
-test("a brought-home Hunt instance registers its species and survives continue", async () => {
+test("a historical Hunt instance registers its species and survives continue", async () => {
   const storage = memoryStorage();
   const app = createApp(storage);
-  await enterFirstHunt(app);
-  const target = app.getHuntRuntime().getWildCreatures()[0];
-  app.beginEnclosureStroke(target.worldX, target.worldY);
-  drawClosedLoop(app, target.worldX, target.worldY);
-  assert.equal(app.endEnclosureStroke().outcome, "ENCLOSED");
-  app.confirmHuntResult();
+  await app.newGame();
+  const target = await restoreLegacyIndividual(app, storage, "Legacy", "species-014");
   app.openDatabase();
   const row = app.getDatabaseFrame().entries.find((entry) => entry.speciesId === target.speciesId);
   assert.equal(row.state, "REGISTERED");
@@ -134,15 +124,19 @@ test("a brought-home Hunt instance registers its species and survives continue",
   await reloaded.dispose();
 });
 
-test("Database adds no save field", async () => {
+test("the book stays inside progression in the existing save envelope", async () => {
   const storage = memoryStorage();
   const app = createApp(storage);
   await app.newGame();
   app.save();
   const saved = JSON.parse(storage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY));
   assert.deepEqual(Object.keys(saved).sort(), [
-    "cageEdit", "creature", "flags", "progression", "raising", "raisingHome", "saveKind", "schemaVersion", "sessionId", "shop", "updatedAt"
+    "battleEconomy", "cageEdit", "creature", "flags", "gameplayRng", "huntHistory", "instanceIdentity", "progression", "raising", "raisingHome", "saveKind", "schemaVersion", "sessionId", "shop", "updatedAt"
   ]);
+  // Browsing Database creates no battle transaction or additional save state.
+  assert.deepEqual(saved.battleEconomy, { nextSequence: 1, settledThrough: 0, active: null, lastReceipt: null });
+  assert.deepEqual(saved.instanceIdentity, { nextSequence: 1 }, "Database browsing does not allocate an individual");
+  assert.deepEqual(saved.progression.registeredSpecies, []);
   await app.dispose();
 });
 
@@ -152,7 +146,7 @@ test("the presentation source opens Database without a second router", async () 
   const source = createGateHuntPresentationSource(app);
   source.intents.openDatabase();
   assert.equal(source.getFrame().screen, CHAMPIONSHIP_SCREENS.DATABASE);
-  assert.equal(source.getFrame().database.slotCount, 224);
+  assert.equal(source.getFrame().database.slotCount, 216);
   source.intents.leaveScreen();
   assert.equal(source.getFrame().screen, CHAMPIONSHIP_SCREENS.RAISING_HOME);
   await app.dispose();

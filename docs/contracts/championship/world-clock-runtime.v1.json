@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 1,
+  "contractId": "CHAMPIONSHIP_WORLD_CLOCK_RUNTIME",
+  "date": "2026-09-05",
+  "status": "IMPLEMENTED_ROUND2_BOUNDED_ENGINEERING_ACCEPTANCE_PASS",
+  "scope": "One existing Raising state owns the shared calendar and durable elapsed precision. Pure clock transitions do not apply growth, hunger, disease, movement, training, lifespan or evolution effects.",
+  "evidence": {
+    "report": "docs/research/round2-clock-2026-09-05/CLOCK_ROM_TRACE.md",
+    "mechanicalChecks": "docs/research/round2-clock-2026-09-05/clock-rom-check.json",
+    "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "cascade": {
+      "value": [
+        4,
+        8,
+        24,
+        60,
+        400
+      ],
+      "site": "ARM9:0x020C8A4C",
+      "status": "ROM_VERIFIED"
+    },
+    "clockWord": {
+      "address": "0x0210AA98",
+      "meaning": "minutes within the current calendar year; not elapsed units",
+      "status": "ROM_VERIFIED"
+    },
+    "elapsedRemainder": {
+      "address": "clock base 0x0210AA94 +0x08",
+      "meaning": "raw timer-converted elapsed units; active scene selects the divisor without rescaling stored remainder",
+      "status": "ROM_VERIFIED"
+    },
+    "trainingDivisor": {
+      "value": 200,
+      "entrySite": "OVL18:0x0211CE88",
+      "exitSite": "OVL18:0x0211CFCC",
+      "meaning": "Training entry writes base divisor 400 shifted right once; exit restores 400",
+      "status": "ROM_VERIFIED"
+    },
+    "newGame": {
+      "year": 0,
+      "season": 0,
+      "dayOfSeason": 0,
+      "clockMinutes": 420,
+      "sites": [
+        "ARM9:0x0207B9E4",
+        "ARM9:0x0207BA0C",
+        "ARM9:0x02001024",
+        "ARM9:0x02001030"
+      ],
+      "status": "ROM_VERIFIED",
+      "meaning": "ROM default clock initialization; separate full New Game UI handler and initial creature selection remain partial."
+    },
+    "dayStartMinutes": {
+      "value": 420,
+      "site": "ARM9:0x020987A0",
+      "status": "ROM_VERIFIED"
+    },
+    "dayEndMinutes": {
+      "value": 1320,
+      "site": "ARM9:0x0207BA18",
+      "status": "ROM_VERIFIED_POST_ADVANCE_STOP_CHECK"
+    },
+    "yearMaximum": {
+      "value": 99,
+      "behavior": "saturate year while calendar continues wrapping",
+      "site": "ARM9:0x0207BB08",
+      "status": "ROM_VERIFIED"
+    },
+    "endDay": {
+      "sites": [
+        "OVL18:0x0210FA30",
+        "OVL18:0x0210FAA4",
+        "ARM9:0x0207BD88"
+      ],
+      "meaning": "entry stops clock and clears elapsed remainder; update advances to next day at 07:00",
+      "status": "ROM_VERIFIED_CLOCK_PATH_ONLY"
+    }
+  },
+  "authority": {
+    "runtime": "src/championship/raising/createRaisingHomeRuntime.js",
+    "pureArithmetic": "src/championship/time/championshipWorldClock.js",
+    "save": "src/championship/raising/raisingHomePersistenceR2.js",
+    "app": "src/championship/app/championshipStandaloneApp.js",
+    "sessionAdapter": "createChampionshipR2Session.advanceRaisingClock delegates through the existing save coordinator to runtime.advanceClock",
+    "newTicker": false,
+    "newStore": false,
+    "newSaveKey": false
+  },
+  "state": {
+    "year": "integer 0..99, or null when historical year is unknown",
+    "season": "integer 0..3, or null when legacy date is unknown",
+    "dayOfSeason": "integer 0..7, or null when legacy date is unknown",
+    "clockMinutes": "integer 0..1439",
+    "clockUnits": "integer 0..399; RAW timer-converted remainder, never normalized. Training consumes /200; base helper consumes /400. A pure helper can consume saved remainder 300 with divisor 200 on its next nonzero update; this synthetic boundary case does not claim original Training entry preserves 300. Verified original entry/exit stop paths clear the raw accumulator.",
+    "clockSubunits": "integer 0..999; browser precision with 1000 subunits per elapsed unit, explicitly engineering data rather than a recovered ROM field",
+    "clockRevision": "monotonic safe integer bounded by state revision; one scalar instead of growing accepted command IDs"
+  },
+  "transition": {
+    "api": "runtime.advanceClock({ units, subunits = 0, divisor = 400, clearElapsed = false, expectedClockRevision })",
+    "input": "non-negative safe-integer raw units, optional integer subunits 0..999, optional verified divisor 200 or 400, and optional strict boolean clearElapsed; exact input keys; no implicit unit scaling",
+    "acceptedPublication": {
+      "accepted": true,
+      "kind": "clock",
+      "code": "RAISING_HOME_CLOCK_ADVANCED",
+      "persistenceAttempted": false,
+      "playerStatePatch": null
+    },
+    "zeroDelta": "same snapshot unless an explicit verified clearElapsed stop clears a nonzero accumulator; no publication, revision, command-ID consumption or dirty transition when nothing changes",
+    "clearElapsed": "Atomically clears clockUnits and clockSubunits after a nonzero advance, or on its own for a verified stop. Zero delta never divides inherited remainder or advances a minute. An already-empty stop is a no-op. Paused time rejects positive elapsed advancement but permits a zero-delta accumulator clear.",
+    "duplicateOrStale": "expectedClockRevision mismatch rejects without state mutation",
+    "pausedOrDisposed": "reject without mutation",
+    "observerReentry": "rejected while current publication is notifying",
+    "sideEffects": "calendar and its two revisions only; residents, tick, feedback, eventLog, inventory and individual identity are unchanged",
+    "cost": "arithmetic rollover; constant-size sequence storage; coordinator hashes on save/status reads rather than every clock update"
+  },
+  "elapsedAndModeBoundary": {
+    "pureHelper": "advanceWorldClockUnits performs full arithmetic cascade without deciding whether natural time is allowed",
+    "appResponsibility": "Consume the verified timing/mode contract from the existing stage; reset elapsed baselines at session and visibility/context boundaries; do not replay background or offline time by assumption",
+    "dayEnd": "Natural writer checks 22:00 after advancement, then stops, clears the raw remainder and raises a day-end flag. Advance plus clearElapsed is one publication. A web safety clamp is not claimed to be the original arithmetic. Do not automatically apply untraced day-end resident writers.",
+    "legacyApproximation": "worldMinutesForRealSeconds and its historical 600-second assumption are not authorized sources for natural runtime time",
+    "browserAdapter": {
+      "module": "src/championship/app/championshipClockDriver.js",
+      "ticker": "One callback on the existing Pixi Application ticker; no timer/RAF/bootstrap",
+      "nominalCadence": {
+        "busClockHz": 33513982,
+        "busCyclesPerFrame": 560190,
+        "rawUnitsPerNativeFrame": 16,
+        "trainingDivisor": 200
+      },
+      "enabledContext": "Visible normal RAISING_HOME only, without an open toolbar submenu or context loss",
+      "unresolvedContexts": "Other modes and modal contexts are gated off pending handler traces; this is incomplete integration, not a claim that all original scenes pause",
+      "knownStop": "Natural update reaching 22:00 and Training/Shop transitions clear domain raw remainder atomically",
+      "background": "Inactive/title/hidden/context-lost/replaced-session/long-gap resets elapsed sampling; no offline accrual",
+      "maximumAcceptedSampleGapMilliseconds": 2000,
+      "savedPrecision": "All raw units/subunits accepted into the domain are saved; incomplete virtual-frame phase under one native frame is measurement state, discarded when a new elapsed baseline is established",
+      "manualOnly": "main pagehide and visibility handlers never write a player save"
+    }
+  },
+  "persistence": {
+    "moduleName": "R2",
+    "currentPayloadSchemaVersion": 4,
+    "payloadDigestDomain": "raising-payload-v4",
+    "documentDigestDomain": "save-document-v2 retained for the existing serialized-document boundary",
+    "versions": {
+      "1": "Validate the exact unsigned v1 shape, add paused=false as the existing migration, then migrate to v4. Historical season/day/year remain null.",
+      "2": "Validate exact historical payload and raising-payload-v2 digest before migration. Historical season/day/year remain null.",
+      "3": "Validate exact historical payload and raising-payload-v3 digest before migration. Preserve season/day/minutes; year remains null.",
+      "4": "Require all precision fields and exact allowlist; validate raising-payload-v4 digest; preserve fractions and year knowledge on restore."
+    },
+    "legacyPrecision": "clockUnits=0 and clockSubunits=0 because previous saves could only represent whole minutes; this does not reconstruct lost elapsed time. Divisor is not persisted: the active verified scene contract selects it.",
+    "manualSave": "No automatic checkpoint added by a clock publication",
+    "limits": "Existing bounded plain-data, byte, depth, field and resident validation remain in force"
+  },
+  "tests": [
+    "tests/championship-world-clock-cases.mjs",
+    "tests/championship-clock-runtime-save-cases.mjs",
+    "tests/championship-round2-clock-driver-cases.mjs",
+    "tests/championship-round2-calendar-cases.mjs",
+    "tests/championship-int-rh2-runtime-presentation-cases.mjs"
+  ],
+  "remainingUnknowns": [
+    "Full day-end gameplay writer sequence",
+    "Age/growth/evolution effects",
+    "Original displayed year offset",
+    "Any mode or modal clock rule not yet closed in the companion trace"
+  ]
+}

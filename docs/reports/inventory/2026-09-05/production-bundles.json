@@ -1,0 +1,822 @@
+[
+  {
+    "assetId": "art:hunt:licensed-runtime:v1",
+    "manifestPath": "assets/production/hunt/licensed-runtime-v1/manifest.json",
+    "rightsStatus": "LICENSED",
+    "productionStatus": "OWNER_APPROVED_LICENSED_PIXEL_RUNTIME",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": true,
+    "runtimeEligible": true,
+    "shippingReady": false,
+    "maturity": "LICENSED_PIXEL_FAITHFUL_NEAREST_HD_HUNT_FIELDS",
+    "manifestExists": true,
+    "inHead": false,
+    "manifestCounts": {
+      "fields": 30,
+      "notes": 4
+    },
+    "manifestSummary": null,
+    "manifestDeclaredFlags": {
+      "productionStatus": "OWNER_APPROVED_LICENSED_PIXEL_RUNTIME",
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "rightsStatus": "LICENSED"
+    },
+    "manifestKeys": [
+      "schemaVersion",
+      "assetId",
+      "family",
+      "product",
+      "artifactMaturity",
+      "productionStatus",
+      "shippingStatus",
+      "humanApproved",
+      "runtimeEligible",
+      "shippingReady",
+      "rightsStatus",
+      "rights",
+      "fieldCount",
+      "tutorialFieldId",
+      "originalHuntId",
+      "memoryPolicy",
+      "filter",
+      "fields",
+      "notes"
+    ],
+    "sourceReferences": [
+      "src/championship/app/main.js"
+    ]
+  },
+  {
+    "assetId": "art:cage:licensed-runtime:v1",
+    "manifestPath": "assets/production/cage/licensed-runtime-v1/manifest.json",
+    "rightsStatus": "LICENSED",
+    "productionStatus": "OWNER_APPROVED_LICENSED_PIXEL_RUNTIME",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": true,
+    "runtimeEligible": true,
+    "shippingReady": false,
+    "maturity": "LICENSED_PIXEL_FAITHFUL_NEAREST_HD_CAGE_FIELDS",
+    "manifestExists": true,
+    "inHead": false,
+    "manifestCounts": {
+      "fields": 40,
+      "notes": 4
+    },
+    "manifestSummary": null,
+    "manifestDeclaredFlags": {
+      "productionStatus": "OWNER_APPROVED_LICENSED_PIXEL_RUNTIME",
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "rightsStatus": "LICENSED"
+    },
+    "manifestKeys": [
+      "schemaVersion",
+      "assetId",
+      "family",
+      "product",
+      "artifactMaturity",
+      "productionStatus",
+      "shippingStatus",
+      "humanApproved",
+      "runtimeEligible",
+      "shippingReady",
+      "rightsStatus",
+      "rights",
+      "fieldCount",
+      "defaultPreviewFieldId",
+      "defaultPreviewNote",
+      "memoryPolicy",
+      "filter",
+      "fields",
+      "notes",
+      "memoryPolicyNote"
+    ],
+    "sourceReferences": [
+      "src/championship/app/main.js"
+    ]
+  },
+  {
+    "assetId": "art:battle:licensed-runtime:v1",
+    "manifestPath": "assets/production/battle/licensed-runtime-v1/manifest.json",
+    "rightsStatus": "LICENSED",
+    "productionStatus": "OWNER_APPROVED_LICENSED_PIXEL_RUNTIME",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": true,
+    "runtimeEligible": true,
+    "shippingReady": false,
+    "maturity": "LICENSED_PIXEL_FAITHFUL_NEAREST_HD_BATTLE_FIELDS",
+    "manifestExists": true,
+    "inHead": false,
+    "manifestCounts": {
+      "fields": 11,
+      "notes": 4
+    },
+    "manifestSummary": null,
+    "manifestDeclaredFlags": {
+      "productionStatus": "OWNER_APPROVED_LICENSED_PIXEL_RUNTIME",
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "rightsStatus": "LICENSED"
+    },
+    "manifestKeys": [
+      "schemaVersion",
+      "assetId",
+      "family",
+      "product",
+      "artifactMaturity",
+      "productionStatus",
+      "shippingStatus",
+      "humanApproved",
+      "runtimeEligible",
+      "shippingReady",
+      "rightsStatus",
+      "rights",
+      "fieldCount",
+      "defaultPreviewFieldId",
+      "defaultPreviewNote",
+      "memoryPolicy",
+      "filter",
+      "fields",
+      "notes"
+    ],
+    "sourceReferences": [
+      "src/championship/app/main.js"
+    ]
+  },
+  {
+    "assetId": "art:vfx:licensed-runtime:v1",
+    "manifestPath": "assets/production/vfx/licensed-runtime-v1/manifest.json",
+    "rightsStatus": "LICENSED",
+    "productionStatus": "OWNER_APPROVED_LICENSED_PIXEL_RUNTIME",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": true,
+    "runtimeEligible": true,
+    "shippingReady": false,
+    "maturity": "LICENSED_PIXEL_FAITHFUL_NITRO_VFX_GLB",
+    "manifestExists": true,
+    "inHead": false,
+    "manifestCounts": {
+      "systems": 26,
+      "notes": 4
+    },
+    "manifestSummary": null,
+    "manifestDeclaredFlags": {
+      "productionStatus": "OWNER_APPROVED_LICENSED_PIXEL_RUNTIME",
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "rightsStatus": "LICENSED"
+    },
+    "manifestKeys": [
+      "schemaVersion",
+      "assetId",
+      "family",
+      "product",
+      "artifactMaturity",
+      "productionStatus",
+      "shippingStatus",
+      "humanApproved",
+      "runtimeEligible",
+      "shippingReady",
+      "rightsStatus",
+      "rights",
+      "systemCount",
+      "previewAliases",
+      "defaultPreviewSystemId",
+      "defaultPreviewNote",
+      "memoryPolicy",
+      "tickerPolicy",
+      "gateEarthMounted",
+      "camera",
+      "systems",
+      "notes"
+    ],
+    "sourceReferences": [
+      "src/championship/presentation/vfx/licensedVfxRuntimeBundle.js"
+    ]
+  },
+  {
+    "assetId": "art:raising_home:int-rh2:temporary-presentation-bundle",
+    "manifestPath": "assets/production/temporary/int-rh2/manifest.json",
+    "rightsStatus": "OWNER_OWNED",
+    "productionStatus": "TEMPORARY_PRESENTATION",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": false,
+    "shippingReady": false,
+    "maturity": "VS1 Raising Home temporary creature and environment presentation",
+    "manifestExists": true,
+    "inHead": true,
+    "manifestCounts": {
+      "components": 10
+    },
+    "manifestSummary": null,
+    "manifestDeclaredFlags": {
+      "rightsStatus": "OWNER_OWNED",
+      "productionStatus": "TEMPORARY_PRESENTATION"
+    },
+    "manifestKeys": [
+      "schemaVersion",
+      "assetId",
+      "product",
+      "rightsStatus",
+      "productionStatus",
+      "shippingStatus",
+      "humanApproved",
+      "runtimeRole",
+      "presentationContract",
+      "components",
+      "evidenceBoundary",
+      "promotionGate"
+    ],
+    "sourceReferences": []
+  },
+  {
+    "assetId": "art:hunt_field:vs2:temporary-signal-grove-kit",
+    "manifestPath": "assets/production/temporary/vs2-hunt/manifest.json",
+    "rightsStatus": "ORIGINAL_CREATED",
+    "productionStatus": "TEMPORARY_PRESENTATION",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": false,
+    "shippingReady": false,
+    "maturity": "Architecture-proof Hunt field presentation on the existing shared Pixi stage",
+    "manifestExists": true,
+    "inHead": true,
+    "manifestCounts": {
+      "implementation": 3,
+      "components": 4,
+      "notes": 2
+    },
+    "manifestSummary": null,
+    "manifestDeclaredFlags": {
+      "rightsStatus": "ORIGINAL_CREATED",
+      "productionStatus": "TEMPORARY_PRESENTATION"
+    },
+    "manifestKeys": [
+      "schemaVersion",
+      "assetId",
+      "product",
+      "batch",
+      "rightsStatus",
+      "productionStatus",
+      "shippingStatus",
+      "humanApproved",
+      "runtimeRole",
+      "implementation",
+      "components",
+      "evidenceBoundary",
+      "promotionGate",
+      "notes"
+    ],
+    "sourceReferences": []
+  },
+  {
+    "assetId": "art:gate_select:vs2-r1:original-created-world",
+    "manifestPath": "assets/production/gate/vs2-r1/manifest.json",
+    "rightsStatus": "ORIGINAL_CREATED",
+    "productionStatus": "OWNER_APPROVED_STRUCTURAL_BASELINE",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": true,
+    "shippingReady": false,
+    "maturity": "STRUCTURAL_PRESENTATION",
+    "manifestExists": true,
+    "inHead": true,
+    "manifestCounts": {
+      "contents": 4,
+      "futureVisualDebt": 5
+    },
+    "manifestSummary": null,
+    "manifestDeclaredFlags": {
+      "rightsStatus": "ORIGINAL_CREATED",
+      "productionStatus": "OWNER_APPROVED_STRUCTURAL_BASELINE"
+    },
+    "manifestKeys": [
+      "schemaVersion",
+      "assetId",
+      "title",
+      "rightsStatus",
+      "productionStatus",
+      "artifactMaturity",
+      "shippingStatus",
+      "humanApproved",
+      "ownerApproval",
+      "renderer",
+      "implementation",
+      "contents",
+      "evidenceBoundary",
+      "authorityBoundary",
+      "futureVisualDebt",
+      "promotionGate"
+    ],
+    "sourceReferences": []
+  },
+  {
+    "assetId": "art:battle:bm00-bm01-r1:original-review",
+    "manifestPath": "assets/production/internal-battle-review/bm00-bm01-r1/runtime.review.json",
+    "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+    "productionStatus": "OWNER_DIRECTED_ALIGNMENT_REVISION_INTERNAL_REVIEW",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": true,
+    "shippingReady": false,
+    "maturity": "INTERNAL_LAYERED_RUNTIME_REVIEW",
+    "manifestExists": true,
+    "inHead": false,
+    "manifestCounts": {
+      "sourceDimensions": 2
+    },
+    "manifestSummary": null,
+    "manifestDeclaredFlags": {
+      "productionStatus": "OWNER_DIRECTED_ALIGNMENT_REVISION_INTERNAL_REVIEW",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    "manifestKeys": [
+      "schemaVersion",
+      "assetId",
+      "family",
+      "artifactMaturity",
+      "productionStatus",
+      "shippingStatus",
+      "humanApproved",
+      "ownerApproval",
+      "rightsStatus",
+      "rights",
+      "internalReviewEligible",
+      "runtimeEligible",
+      "shippingReady",
+      "sourceDimensions",
+      "viewportPolicy",
+      "arena",
+      "promotionGate"
+    ],
+    "sourceReferences": []
+  },
+  {
+    "assetId": "art:battle:bm02-r1:original-review",
+    "manifestPath": "assets/production/internal-battle-review/bm02-r1/runtime.review.json",
+    "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+    "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": false,
+    "shippingReady": false,
+    "maturity": "INTERNAL_LAYERED_RUNTIME_REVIEW",
+    "manifestExists": true,
+    "inHead": false,
+    "manifestCounts": {
+      "sourceDimensions": 2
+    },
+    "manifestSummary": null,
+    "manifestDeclaredFlags": {
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    "manifestKeys": [
+      "schemaVersion",
+      "assetId",
+      "family",
+      "artifactMaturity",
+      "productionStatus",
+      "shippingStatus",
+      "humanApproved",
+      "ownerApproval",
+      "rightsStatus",
+      "rights",
+      "internalReviewEligible",
+      "runtimeEligible",
+      "shippingReady",
+      "sourceDimensions",
+      "viewportPolicy",
+      "arena",
+      "promotionGate"
+    ],
+    "sourceReferences": []
+  },
+  {
+    "assetId": "art:battle:bm03-animated-r1:original-review",
+    "manifestPath": "assets/production/internal-battle-review/bm03-bm04-animated-r1/runtime.bm03.review.json",
+    "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+    "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": false,
+    "shippingReady": false,
+    "maturity": "INTERNAL_ANIMATED_LAYERED_RUNTIME_REVIEW",
+    "manifestExists": true,
+    "inHead": false,
+    "manifestCounts": {
+      "sourceDimensions": 2
+    },
+    "manifestSummary": null,
+    "manifestDeclaredFlags": {
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    "manifestKeys": [
+      "schemaVersion",
+      "assetId",
+      "family",
+      "artifactMaturity",
+      "productionStatus",
+      "shippingStatus",
+      "humanApproved",
+      "ownerApproval",
+      "rightsStatus",
+      "rights",
+      "internalReviewEligible",
+      "runtimeEligible",
+      "shippingReady",
+      "sourceDimensions",
+      "viewportPolicy",
+      "arena",
+      "promotionGate"
+    ],
+    "sourceReferences": []
+  },
+  {
+    "assetId": "art:battle:bm04-hardening-r2:original-review",
+    "manifestPath": "assets/production/internal-battle-review/hardening-r2/runtime.bm04.review.json",
+    "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+    "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": false,
+    "shippingReady": false,
+    "maturity": "INTERNAL_FIELD_OBJECT_LAYER_RUNTIME_REVIEW",
+    "manifestExists": true,
+    "inHead": false,
+    "manifestCounts": {
+      "sourceDimensions": 2
+    },
+    "manifestSummary": null,
+    "manifestDeclaredFlags": {
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    "manifestKeys": [
+      "schemaVersion",
+      "assetId",
+      "family",
+      "artifactMaturity",
+      "productionStatus",
+      "shippingStatus",
+      "humanApproved",
+      "ownerApproval",
+      "rightsStatus",
+      "rights",
+      "internalReviewEligible",
+      "runtimeEligible",
+      "shippingReady",
+      "sourceDimensions",
+      "viewportPolicy",
+      "arena",
+      "promotionGate"
+    ],
+    "sourceReferences": []
+  },
+  {
+    "assetId": "art:battle:bm05-r1:original-review",
+    "manifestPath": "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm05.review.json",
+    "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+    "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": false,
+    "shippingReady": false,
+    "maturity": "INTERNAL_LAYERED_RUNTIME_REVIEW",
+    "manifestExists": true,
+    "inHead": false,
+    "manifestCounts": {
+      "sourceDimensions": 2
+    },
+    "manifestSummary": null,
+    "manifestDeclaredFlags": {
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    "manifestKeys": [
+      "schemaVersion",
+      "assetId",
+      "family",
+      "artifactMaturity",
+      "productionStatus",
+      "shippingStatus",
+      "humanApproved",
+      "ownerApproval",
+      "rightsStatus",
+      "rights",
+      "internalReviewEligible",
+      "runtimeEligible",
+      "shippingReady",
+      "sourceDimensions",
+      "viewportPolicy",
+      "arena",
+      "promotionGate"
+    ],
+    "sourceReferences": []
+  },
+  {
+    "assetId": "art:battle:bm06-r1:original-review",
+    "manifestPath": "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm06.review.json",
+    "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+    "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": false,
+    "shippingReady": false,
+    "maturity": "INTERNAL_LAYERED_RUNTIME_REVIEW",
+    "manifestExists": true,
+    "inHead": false,
+    "manifestCounts": {
+      "sourceDimensions": 2
+    },
+    "manifestSummary": null,
+    "manifestDeclaredFlags": {
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    "manifestKeys": [
+      "schemaVersion",
+      "assetId",
+      "family",
+      "artifactMaturity",
+      "productionStatus",
+      "shippingStatus",
+      "humanApproved",
+      "ownerApproval",
+      "rightsStatus",
+      "rights",
+      "internalReviewEligible",
+      "runtimeEligible",
+      "shippingReady",
+      "sourceDimensions",
+      "viewportPolicy",
+      "arena",
+      "promotionGate"
+    ],
+    "sourceReferences": []
+  },
+  {
+    "assetId": "art:battle:bm07-cyberspace-r1:original-review",
+    "manifestPath": "assets/production/internal-battle-review/bm07-cyberspace-r1/runtime.review.json",
+    "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+    "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": false,
+    "shippingReady": false,
+    "maturity": "INTERNAL_INDEPENDENT_RUNTIME_REVIEW",
+    "manifestExists": true,
+    "inHead": false,
+    "manifestCounts": {
+      "sourceDimensions": 2
+    },
+    "manifestSummary": null,
+    "manifestDeclaredFlags": {
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    "manifestKeys": [
+      "schemaVersion",
+      "assetId",
+      "family",
+      "artifactMaturity",
+      "productionStatus",
+      "shippingStatus",
+      "humanApproved",
+      "ownerApproval",
+      "rightsStatus",
+      "rights",
+      "internalReviewEligible",
+      "runtimeEligible",
+      "shippingReady",
+      "sourceDimensions",
+      "viewportPolicy",
+      "arena",
+      "promotionGate"
+    ],
+    "sourceReferences": []
+  },
+  {
+    "assetId": "art:battle:bm08-hardening-r2:original-review",
+    "manifestPath": "assets/production/internal-battle-review/hardening-r2/runtime.bm08.review.json",
+    "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+    "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": false,
+    "shippingReady": false,
+    "maturity": "INTERNAL_FIELD_OBJECT_LAYER_RUNTIME_REVIEW",
+    "manifestExists": true,
+    "inHead": false,
+    "manifestCounts": {
+      "sourceDimensions": 2
+    },
+    "manifestSummary": null,
+    "manifestDeclaredFlags": {
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    "manifestKeys": [
+      "schemaVersion",
+      "assetId",
+      "family",
+      "artifactMaturity",
+      "productionStatus",
+      "shippingStatus",
+      "humanApproved",
+      "ownerApproval",
+      "rightsStatus",
+      "rights",
+      "internalReviewEligible",
+      "runtimeEligible",
+      "shippingReady",
+      "sourceDimensions",
+      "viewportPolicy",
+      "arena",
+      "promotionGate"
+    ],
+    "sourceReferences": []
+  },
+  {
+    "assetId": "art:battle:bm09-r1:original-review",
+    "manifestPath": "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm09.review.json",
+    "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+    "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": false,
+    "shippingReady": false,
+    "maturity": "INTERNAL_LAYERED_RUNTIME_REVIEW",
+    "manifestExists": true,
+    "inHead": false,
+    "manifestCounts": {
+      "sourceDimensions": 2
+    },
+    "manifestSummary": null,
+    "manifestDeclaredFlags": {
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    "manifestKeys": [
+      "schemaVersion",
+      "assetId",
+      "family",
+      "artifactMaturity",
+      "productionStatus",
+      "shippingStatus",
+      "humanApproved",
+      "ownerApproval",
+      "rightsStatus",
+      "rights",
+      "internalReviewEligible",
+      "runtimeEligible",
+      "shippingReady",
+      "sourceDimensions",
+      "viewportPolicy",
+      "arena",
+      "promotionGate"
+    ],
+    "sourceReferences": []
+  },
+  {
+    "assetId": "art:battle:bm10-r1:original-review",
+    "manifestPath": "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm10.review.json",
+    "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+    "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": false,
+    "shippingReady": false,
+    "maturity": "INTERNAL_LAYERED_RUNTIME_REVIEW",
+    "manifestExists": true,
+    "inHead": false,
+    "manifestCounts": {
+      "sourceDimensions": 2
+    },
+    "manifestSummary": null,
+    "manifestDeclaredFlags": {
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    "manifestKeys": [
+      "schemaVersion",
+      "assetId",
+      "family",
+      "artifactMaturity",
+      "productionStatus",
+      "shippingStatus",
+      "humanApproved",
+      "ownerApproval",
+      "rightsStatus",
+      "rights",
+      "internalReviewEligible",
+      "runtimeEligible",
+      "shippingReady",
+      "sourceDimensions",
+      "viewportPolicy",
+      "arena",
+      "promotionGate"
+    ],
+    "sourceReferences": []
+  },
+  {
+    "assetId": "art:battle:bm11-hardening-r2:original-review",
+    "manifestPath": "assets/production/internal-battle-review/hardening-r2/runtime.bm11.review.json",
+    "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+    "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": false,
+    "shippingReady": false,
+    "maturity": "INTERNAL_FIELD_OBJECT_LAYER_RUNTIME_REVIEW",
+    "manifestExists": true,
+    "inHead": false,
+    "manifestCounts": {
+      "sourceDimensions": 2
+    },
+    "manifestSummary": null,
+    "manifestDeclaredFlags": {
+      "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+      "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+      "runtimeEligible": false,
+      "shippingReady": false
+    },
+    "manifestKeys": [
+      "schemaVersion",
+      "assetId",
+      "family",
+      "artifactMaturity",
+      "productionStatus",
+      "shippingStatus",
+      "humanApproved",
+      "ownerApproval",
+      "rightsStatus",
+      "rights",
+      "internalReviewEligible",
+      "runtimeEligible",
+      "shippingReady",
+      "sourceDimensions",
+      "viewportPolicy",
+      "arena",
+      "promotionGate"
+    ],
+    "sourceReferences": []
+  },
+  {
+    "assetId": "art:battle-select:menu-cube:v1",
+    "manifestPath": "assets/production/battle/menu-cube-v1/manifest.json",
+    "rightsStatus": "ORIGINAL_CREATED",
+    "productionStatus": "IMPLEMENTED_OWNER_VISUAL_REVIEW_PENDING",
+    "shippingStatus": "NOT_SHIPPING_READY",
+    "humanApproved": false,
+    "runtimeEligible": true,
+    "shippingReady": false,
+    "maturity": "FOUR_LAYERED_VECTOR_PANELS_BAKED_TO_SRGB_TEXTURES",
+    "manifestExists": true,
+    "inHead": false,
+    "manifestCounts": {
+      "faces": 4
+    },
+    "manifestSummary": null,
+    "manifestDeclaredFlags": {
+      "rightsStatus": "ORIGINAL_CREATED",
+      "productionStatus": "IMPLEMENTED_OWNER_VISUAL_REVIEW_PENDING",
+      "runtimeEligible": true,
+      "shippingReady": false
+    },
+    "manifestKeys": [
+      "schemaVersion",
+      "assetId",
+      "title",
+      "rightsStatus",
+      "productionStatus",
+      "runtimeEligible",
+      "humanApproved",
+      "shippingReady",
+      "shippingStatus",
+      "artifactMaturity",
+      "renderer",
+      "implementation",
+      "language",
+      "textEvidence",
+      "artEvidence",
+      "authoring",
+      "evidenceBoundary",
+      "authorityBoundary",
+      "budget",
+      "faces"
+    ],
+    "sourceReferences": [
+      "src/championship/presentation/vs5/battleCubeArt.js"
+    ]
+  }
+]

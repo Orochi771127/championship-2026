@@ -1,0 +1,42 @@
+{
+  "date": "2026-09-08",
+  "repository": "R:/Projects/Championship2026/championship-2026",
+  "branch": "main",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "workingTree": "SHARED_DIRTY_PRESERVED",
+  "requestedOverallCompletion": false,
+  "stage1": "PARTIAL",
+  "stage2": "PARTIAL",
+  "implementedNormalPaths": [
+    "Original species-zero starter construction with native profile and name",
+    "Native egg age and three released short Hand touches",
+    "Native egg animation completion followed by ancestry selection and form merge",
+    "Stable individual ID and native profile through Save/Continue",
+    "Lazy Main atlas form loading with deduplicated loads and awaited disposal",
+    "216-entry original encyclopedia order and persistent regular-species registration"
+  ],
+  "verifiedButNotNormallyBound": ["food bite writer", "condition writer", "medicine writer", "zero-peer growth writer"],
+  "cpuComparisons": {"food":168,"condition":90,"medicine":140,"formMerge":1824,"ageClock":80,"eggState":288,"hatchSelection":408,"zeroPeerGrowth":768,"bookRegistration":228},
+  "validation": {
+    "focused": {"pass":21,"fail":0,"skipped":0,"log":"raising-final-focused.log"},
+    "regression": {"pass":1312,"fail":0,"skipped":0,"todo":0,"log":"raising-phase-regression.log"},
+    "gitDiffCheck": "PASS",
+    "browser": {"input":"NORMAL_UI_ONLY","viewport":{"width":1280,"height":720,"gameWidth":430},"receipts":["raising-hatch-browser.json","raising-touch-book-browser.json"],"screenshots":["raising-hatch-continue.png","raising-book-browser.png"],"physicalTouchDevice":false},
+    "pages": {"preflightGuard":"IMPLEMENTED","staticModuleClosureGuard":"IMPLEMENTED","publicBuild":"BLOCKED","observedMissingInput":"src/data/championship/catalogs/entities.r1.json","outputCreated":false,"existingOutputReplaced":false,"log":"pages-preflight.log"}
+  },
+  "remaining": [
+    "Original Home Cage membership, native positions, physical pool slots and initializer/idle RNG",
+    "Food placement, approach/eating/clean object lifecycle and inventory binding",
+    "Treatment effect lifecycle and normal tool binding",
+    "Adult state, social/environment/training and growth integration",
+    "Adult evolution eligibility, lifespan, rebirth and removal",
+    "Player-owned ENTRY, party eligibility and battle result profile writeback",
+    "Natural rank/license and complete long-term progression",
+    "Carried Hunt entry, AI7 and full original event visuals/audio",
+    "Successful browser touch capture, background/long-run/context recovery and physical devices",
+    "Approved replacement art and valid public distributable dependency graph"
+  ],
+  "commitPushMergeDeploy": false,
+  "newArtApprovalOrShippingPermission": false,
+  "researchReport": "docs/research/RAISING_NATIVE_CONTINUATION_2026-09-08.md"
+}

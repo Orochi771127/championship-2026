@@ -1,0 +1,533 @@
+{
+  "status": "CONTROLLED_ORIGINAL_CPU_ALL_INITIAL_CELLS",
+  "runtimeEligible": false,
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "terrainReader": "0207C9E8",
+  "directionReader": "02088048",
+  "constructor": "0207C828",
+  "limits": "Initial immutable field sources only; dynamic controller lifecycle and unknown steering branches remain open.",
+  "fields": [
+    {
+      "fieldId": "field_hm01_01",
+      "cells": 16384,
+      "atrReaderSha256": "c8d9a279ee7e0905442d30f20c90e7d546a4a48590523a36228f411408824da2",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "83e018fbb68c050ec02ea608f44103562cef0d910bfd21f28cd392b8e755aab3",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm01_02",
+      "cells": 16384,
+      "atrReaderSha256": "c8d9a279ee7e0905442d30f20c90e7d546a4a48590523a36228f411408824da2",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "919f71e621f7b1e30187b00443cabc1349729091a54a2d9ef56095292a82477b",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm02_01",
+      "cells": 16384,
+      "atrReaderSha256": "759a2b353bfa63713b014e45ded92bc8859d4582d4516af7303907bdf8a3ed2a",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "8fe05587e4b6fce2bcbdf686fb1eccf220c8fc10fd35baa0e753ce2f4b69fdfd",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm02_02",
+      "cells": 16384,
+      "atrReaderSha256": "759a2b353bfa63713b014e45ded92bc8859d4582d4516af7303907bdf8a3ed2a",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "8ec7c41248d1229c8464c16bb1be6d339b47aee4e73c42f08783294da584c95e",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm03_01",
+      "cells": 16384,
+      "atrReaderSha256": "ffe3e2b818901c3c2dff8433f59fdc15427f5ab855117e98d4a6ecd9852b5ebb",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "bb1758756229bde72581cb479278075ab04ae6bb8b355b0c603a8a61783c234a",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm03_02",
+      "cells": 16384,
+      "atrReaderSha256": "ffe3e2b818901c3c2dff8433f59fdc15427f5ab855117e98d4a6ecd9852b5ebb",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "85c456ddf762da03bf0b68fb0ba12532d4f362d2bb72ef78b2a7457508dce34d",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm04_01",
+      "cells": 16384,
+      "atrReaderSha256": "13dcf6dd029f948b74adfa028170180c325988c7f0e7987a251637fff4c49039",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "93c1f13c1b7981001a7be556ac008b8dcecaf09d8d69543ca45a0b5ee1dd3370",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm04_02",
+      "cells": 16384,
+      "atrReaderSha256": "13dcf6dd029f948b74adfa028170180c325988c7f0e7987a251637fff4c49039",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "1a69478efa55d776a4d80173210d5693187684ccf151d42f22e2c04fb90cc4c6",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm05_01",
+      "cells": 16384,
+      "atrReaderSha256": "54aee2b416a02c7d8fd207d94b127727190b0aa6ddba31272e7890950cba7c8e",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "2f29add2ba8362f49c19f4357ab7c11fcbf322867ee1f4cd0405c6611b32ce61",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm05_02",
+      "cells": 16384,
+      "atrReaderSha256": "54aee2b416a02c7d8fd207d94b127727190b0aa6ddba31272e7890950cba7c8e",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "97eff05e2b0b1f622236138915aa5b45e6fb55ca12219ae38e1e9b84161592ad",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm08_01",
+      "cells": 16384,
+      "atrReaderSha256": "8d6a99dbbe5087128a0df7297edf3bd52cfbe2313712c85cb5e28162e5e2b7b6",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "53cf864c09bf1891d48e3ab437417fac6d9e69eadb6a35988ec1e190e928ec01",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm08_02",
+      "cells": 16384,
+      "atrReaderSha256": "8d6a99dbbe5087128a0df7297edf3bd52cfbe2313712c85cb5e28162e5e2b7b6",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "4165c5b80da22dfa9f10f61b18aed96f7d0a22906fbabdbda799658515b01dc0",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm06_01",
+      "cells": 16384,
+      "atrReaderSha256": "ec1f82091b0e7a57533988d7b0917b095c8aabaecadd0c3c1a4f3c3753cfd05d",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "b55e6a23ee20485e46b04ba34ec62ad31696c39d905a1b80dd29890c8a672bca",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm06_02",
+      "cells": 16384,
+      "atrReaderSha256": "ec1f82091b0e7a57533988d7b0917b095c8aabaecadd0c3c1a4f3c3753cfd05d",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "8ad31bd8100cb87d069fd4078d32d6f8050d4e7a11abb4ab496d7e39cde5581a",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm09_01",
+      "cells": 16384,
+      "atrReaderSha256": "d39205d4b0bb91fdcb4ab9cab8826a979c4f80ed51f3181381f9593caa713d26",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "a79a261a9cfe8d08b43aba215d3221567e05df446f3a5bb0efa19a5df7ee060d",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm10_01",
+      "cells": 16384,
+      "atrReaderSha256": "75ef4266408424273c66fca4a25ebb9c91ad4dc92134397cea5f84a8a0443356",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "6970289de1eb20ae3f7a8b7d8bc0d04a857957a9853d9208b5882d5daeddf8c0",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm11_01",
+      "cells": 16384,
+      "atrReaderSha256": "00a82bebda64bbd6273b0b304b8a30f8ece81447339006e35ab4a4e5cc53e384",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "73cbce4964a8eee34e3b955c467c4388802337756bfb4288f8d6156bda258f7f",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm13_01",
+      "cells": 16384,
+      "atrReaderSha256": "e5f3cc3e5b46823470c8f2d23e24c796359e3bc6349e96e9d24dc5c01c471f92",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "3e3cd4c8717ade001478b9e1327f8b10c907cb6319a872db1cda0f5de5be0f0a",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm13_02",
+      "cells": 16384,
+      "atrReaderSha256": "e5f3cc3e5b46823470c8f2d23e24c796359e3bc6349e96e9d24dc5c01c471f92",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "32df0d53561ba9d4be81185f09b7b3cd760c9520ed36a19aee08ee1ff5c89fb9",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm14_01",
+      "cells": 16384,
+      "atrReaderSha256": "27929525cc57654a750b106b5b2b03f106e0416a25b1dccda55b2c26dfda63eb",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "30bca9ba3cfaa552d4ba9d5599998a4244ba190fa79129aea70e61c15d8e321c",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm14_02",
+      "cells": 16384,
+      "atrReaderSha256": "27929525cc57654a750b106b5b2b03f106e0416a25b1dccda55b2c26dfda63eb",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "1e49003a8d29680a3477902ebb698042cdad5a3299a50c61a50e1dd7e0e984c8",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm15_01",
+      "cells": 16384,
+      "atrReaderSha256": "ffb364c7f598f64886eb4ea038ed412086d9788d9da4fa5e33806b96a66e717a",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "474c959b716b5088d02992f4a36f37da9216c36f352ac55762ce853ea5d1a1f0",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm15_02",
+      "cells": 16384,
+      "atrReaderSha256": "ffb364c7f598f64886eb4ea038ed412086d9788d9da4fa5e33806b96a66e717a",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "5040001d3edac67fd3a5f8f666c052f2a18e7ed0de94df5039b91f500b326fd7",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm16_01",
+      "cells": 16384,
+      "atrReaderSha256": "3d0f4758e3e1b78893a038d0c5699e68618c350c8a54446192190e20879e7da6",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "9fd4e43eb04015c5f9d2bb8c27d820eaf50a6822f47f25f5298af23f19ca1e5f",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm16_02",
+      "cells": 16384,
+      "atrReaderSha256": "3d0f4758e3e1b78893a038d0c5699e68618c350c8a54446192190e20879e7da6",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "5d585f976d0c0db68690c6ddcd20886a409f5665226eaea15a8bf88d50f3301c",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm17_01",
+      "cells": 16384,
+      "atrReaderSha256": "3742eca6d964c2fb0c0eb1fe27aabd8c99fc96449218e2cb481c255ce76c256c",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "ccf7b36f476b9ff0ab2dfe6dea918f240915aab1356d2b0c9b4399f54d244f81",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm17_02",
+      "cells": 16384,
+      "atrReaderSha256": "3742eca6d964c2fb0c0eb1fe27aabd8c99fc96449218e2cb481c255ce76c256c",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "71fd8c3a12ef85bacd136edcd2d27de4c390ac4fbbc40733bdad0275e4cd103d",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm18_01",
+      "cells": 16384,
+      "atrReaderSha256": "82f744b2b5e734ffcbf3c75874a675c8d6586205033a920fc7e79739b737825d",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "9b0fc89505f773c1e61096551970c2ba7eb68083d65742d181178a927f182b15",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "fieldId": "field_hm18_02",
+      "cells": 16384,
+      "atrReaderSha256": "82f744b2b5e734ffcbf3c75874a675c8d6586205033a920fc7e79739b737825d",
+      "atrOutside": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "escReaderSha256": "cd8a417ee8c1a69a5d35ad0c8c28c23a7c4fe573444b8773cd76db4ef516787a",
+      "escOutside": [
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

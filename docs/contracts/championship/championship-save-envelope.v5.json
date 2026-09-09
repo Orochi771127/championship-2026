@@ -1,0 +1,54 @@
+{
+  "contractId": "championship-save-envelope:v5",
+  "date": "2026-09-08",
+  "status": "NORMAL_HUNT_RNG_HISTORY_RETURN_AND_INDIVIDUAL_FIELDS_BOUND",
+  "schemaVersion": 5,
+  "storageKey": "championshipModernSave:v1",
+  "previousContract": "docs/contracts/championship/championship-save-envelope.v4.json",
+  "writerAuthority": "Existing ChampionshipPersistentSavePort",
+  "runtimeModule": "src/championship/app/championshipStandaloneSave.js",
+  "sourceContract": "docs/contracts/championship/HUNT_ENTRY_SOURCES.v1.json",
+  "addition": {
+    "huntHistory": "null or {version:1,history:{cursor,entries},modifiers}",
+    "history": "cursor0..2, exactly three entries {speciesIndex:0..228,biomeIndex:0..33,name:0..5 UTF16 units without NUL}",
+    "modifiers": "16 rows, exact source catalog lengths, saved values0..15",
+    "unknownKeys": "REJECT",
+    "missingCurrentSlice": "REJECT",
+    "noPointersOrPackedPayload": true
+  },
+  "lifecycle": {
+    "owner": "championshipStandaloneApp; no additional store, writer, key or clock",
+    "newGame": "Four original empty history slots with trait8/default name, cursor0 and 16 zero modifier rows",
+    "save": "Project three slots/cursor and low four modifier bits; preserve live traits; omit fourth carried slot and all transient field state",
+    "continue": "Validate complete candidate before replacing session; restore saved three slots with trait8 and fresh fourth slot; preserve modifiers and v4 RNG",
+    "legacyV1ThroughV4": "Migrate huntHistory as null; never infer an empty past; existing version-specific identity/economy/RNG rules remain",
+    "navigation": "Does not clear, initialize or mutate Hunt history",
+    "failedWrite": "Keep current app history/RNG and prior durable checkpoint; existing app save retry uses current projections",
+    "existingReplayHomeCommit": "Preserves the app history slice; does not create history changes from replay-only capture",
+    "normalHuntReturn": "Existing app stages and commits actual returned records, modifier/history and continuing RNG once; Result/Home commits native fields, stable IDs and source membership through the same save port."
+  },
+  "preserved": [
+    "One existing key and 65536-byte/depth-12 boundary",
+    "Nested Raising bytes/digest on deserialize migration",
+    "Existing wallet, inventory, cages, collection, stable identity and RNG",
+    "No automatic migration write from inspection/Continue",
+    "Strict legacy allowlists and rejection of future versions"
+  ],
+  "tests": [
+    "tests/championship-hunt-persistent-sources-cases.mjs",
+    "tests/championship-gate-admission-cases.mjs",
+    "tests/championship-native-individual-profile-cases.mjs",
+    "tests/championship-hunt-normal-capture-save-cases.mjs"
+  ],
+  "limits": [
+    "Carried actor entry, original Home growth/party consumers and natural progression remain open",
+    "No runtime raw ATR/ESC, CPU receipt, fixed encounter or guessed legacy individual values",
+    "No original DS battery-layout, browser touch success, physical-device or complete game acceptance claim"
+  ],
+  "compatibleOptionalExtensions": {
+    "progression.battleBadges": "Unique sorted known ordinary match indices0..61, max62. Missing old field becomes[] (no inferred prior wins). Existing mode0/battleType0 win receipts add a record once.",
+    "raising.collection[].nativeProfile": "Version1, exactly108 known u32 fields,5 fixed-width narrow fields and five-UTF16-unit source name. Optional for legacy records; validated before serialization/deserialization and species-consistent.",
+    "keyAndSchema": "Same championshipModernSave:v1 key and outer schema5. Optional fields only; no automatic migration write.",
+    "research": "docs/research/GATE_ADMISSION_AND_INDIVIDUAL_RETURN_2026-09-08.md"
+  }
+}

@@ -1,0 +1,572 @@
+{
+  "schemaVersion": 1,
+  "authority": "CHAMPIONSHIP_2026_PRODUCT",
+  "catalogKind": "championship:2026:catalog:cage-definitions",
+  "sourceEvidence": "ROM_VERIFIED",
+  "language": "ja",
+  "rom": {
+    "sha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1"
+  },
+  "table": {
+    "module": "arm9",
+    "address": "0x020C8CDC",
+    "stride": 40,
+    "recordCount": 36
+  },
+  "stringColumns": {
+    "name": "0x00",
+    "description": "0x04"
+  },
+  "fieldPointerColumn": {
+    "address": "0x020C8CC0",
+    "offsetFromNameColumn": "-0x1C",
+    "stride": 40
+  },
+  "textBankSha256": "e9f390cab3c61e4c17791f2253043a8d1ca9bfc036f48ea9723ef769ef8012b3",
+  "identityCrosscheck": "OVL15_INDEXED_TEXT_READER_AND_ALL_35_SHOP_ITEM_INDICES",
+  "magnitudeEvidence": "UNKNOWN_REQUIRES_TRACE",
+  "magnitudeNote": "The cartridge states WHICH stat each cage moves and the recommended occupancy, but does not establish HOW MUCH a tick moves it. Magnitudes require their own reader/writer trace; neither table layout nor a visual match supplies them.",
+  "recordCount": 36,
+  "records": [
+    {
+      "cageIndex": 0,
+      "name": "あきち",
+      "fieldId": "field_cm01_01",
+      "nameStringIndex": 494,
+      "descriptionStringIndex": 534,
+      "description": "こじんまりとしておちつく\nひろば。\nぼうぎょアップ\nデジモンしゅうようすう2",
+      "capacity": 2,
+      "effect": {
+        "kind": "STAT_UP",
+        "target": "DEFENSE"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 83
+    },
+    {
+      "cageIndex": 1,
+      "name": "うんどうじょう",
+      "fieldId": "field_cm02_01",
+      "nameStringIndex": 495,
+      "descriptionStringIndex": 535,
+      "description": "はしりこんでたいりょくが\nつく。\nＨＰアップ\nデジモンしゅうようすう6",
+      "capacity": 6,
+      "effect": {
+        "kind": "STAT_UP",
+        "target": "HP"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 85
+    },
+    {
+      "cageIndex": 2,
+      "name": "きょうぎじょう",
+      "fieldId": "field_cm03_01",
+      "nameStringIndex": 496,
+      "descriptionStringIndex": 536,
+      "description": "ひろいフィールドで\nおもうぞんぶんはしりこむ。\nすばやさアップ\nデジモンしゅうようすう10",
+      "capacity": 10,
+      "effect": {
+        "kind": "STAT_UP",
+        "target": "SPEED"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 86
+    },
+    {
+      "cageIndex": 3,
+      "name": "どうじょう",
+      "fieldId": "field_cm04_01",
+      "nameStringIndex": 497,
+      "descriptionStringIndex": 537,
+      "description": "技をみがいてしゅぎょう\nすることができるケージ。\nＴＰアップ\nデジモンしゅうようすう6",
+      "capacity": 6,
+      "effect": {
+        "kind": "STAT_UP",
+        "target": "TP"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 87
+    },
+    {
+      "cageIndex": 4,
+      "name": "ジム",
+      "fieldId": "field_cm05_01",
+      "nameStringIndex": 498,
+      "descriptionStringIndex": 538,
+      "description": "からだをきたえるきぐが\nたくさんそろっている。\n\nこうげきアップ\nデジモンしゅうようすう8",
+      "capacity": 8,
+      "effect": {
+        "kind": "STAT_UP",
+        "target": "ATTACK"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 89
+    },
+    {
+      "cageIndex": 5,
+      "name": "けんきゅうじょ",
+      "fieldId": "field_cm06_01",
+      "nameStringIndex": 499,
+      "descriptionStringIndex": 539,
+      "description": "データをあつかうばしょ。\n\nデータぞくせいアップ\nデジモンしゅうようすう8",
+      "capacity": 8,
+      "effect": {
+        "kind": "FAMILY_UP",
+        "target": "データ"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 109
+    },
+    {
+      "cageIndex": 6,
+      "name": "かざん",
+      "fieldId": "field_cm07_01",
+      "nameStringIndex": 500,
+      "descriptionStringIndex": 540,
+      "description": "もえるかざんのケージ。\n\nリュウぞくせいアップ\nデジモンしゅうようすう8",
+      "capacity": 8,
+      "effect": {
+        "kind": "FAMILY_UP",
+        "target": "リュウ"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 93
+    },
+    {
+      "cageIndex": 7,
+      "name": "そうげん",
+      "fieldId": "field_cm08_01",
+      "nameStringIndex": 501,
+      "descriptionStringIndex": 541,
+      "description": "みじかいくさがはえている\nそうげんのケージ。\nケモノぞくせいアップ\nデジモンしゅうようすう6",
+      "capacity": 6,
+      "effect": {
+        "kind": "FAMILY_UP",
+        "target": "ケモノ"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 91
+    },
+    {
+      "cageIndex": 8,
+      "name": "ビーチ",
+      "fieldId": "field_cm09_01",
+      "nameStringIndex": 502,
+      "descriptionStringIndex": 542,
+      "description": "なみがうちよせる\nうみべのケージ。\nミズぞくせいアップ\nデジモンしゅうようすう8",
+      "capacity": 8,
+      "effect": {
+        "kind": "FAMILY_UP",
+        "target": "ミズ"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 95
+    },
+    {
+      "cageIndex": 9,
+      "name": "こうざん",
+      "fieldId": "field_cm10_01",
+      "nameStringIndex": 503,
+      "descriptionStringIndex": 543,
+      "description": "かぜがふきあれる　こうざん\nのケージ。\nトリぞくせいアップ\nデジモンしゅうようすう8",
+      "capacity": 8,
+      "effect": {
+        "kind": "FAMILY_UP",
+        "target": "トリ"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 97
+    },
+    {
+      "cageIndex": 10,
+      "name": "もり",
+      "fieldId": "field_cm11_01",
+      "nameStringIndex": 504,
+      "descriptionStringIndex": 544,
+      "description": "しんぴてきなもりのケージ。\n\nムシクサぞくせいアップ\nデジモンしゅうようすう6",
+      "capacity": 6,
+      "effect": {
+        "kind": "FAMILY_UP",
+        "target": "ムシクサ"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 98
+    },
+    {
+      "cageIndex": 11,
+      "name": "ジャングル",
+      "fieldId": "field_cm12_01",
+      "nameStringIndex": 505,
+      "descriptionStringIndex": 545,
+      "description": "くさきがおいしげるケージ。\n\nムシクサぞくせいアップ\nデジモンしゅうようすう6",
+      "capacity": 6,
+      "effect": {
+        "kind": "FAMILY_UP",
+        "target": "ムシクサ"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 99
+    },
+    {
+      "cageIndex": 12,
+      "name": "しんでん",
+      "fieldId": "field_cm13_01",
+      "nameStringIndex": 506,
+      "descriptionStringIndex": 546,
+      "description": "ひかりのかみさまが\nまつられているしんでん。\nひかりのたいせいアップ\nデジモンしゅうようすう6",
+      "capacity": 6,
+      "effect": {
+        "kind": "RESIST_UP",
+        "target": "ひかり"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 107
+    },
+    {
+      "cageIndex": 13,
+      "name": "はかば",
+      "fieldId": "field_cm14_01",
+      "nameStringIndex": 507,
+      "descriptionStringIndex": 547,
+      "description": "ししゃがねむる　はかば。\n\nアンコクぞくせいアップ\nデジモンしゅうようすう6",
+      "capacity": 6,
+      "effect": {
+        "kind": "FAMILY_UP",
+        "target": "アンコク"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 103
+    },
+    {
+      "cageIndex": 14,
+      "name": "こうじょう",
+      "fieldId": "field_cm15_01",
+      "nameStringIndex": 508,
+      "descriptionStringIndex": 548,
+      "description": "きかいをつくるこうじょう\nのケージ。\nキカイぞくせいアップ\nデジモンしゅうようすう6",
+      "capacity": 6,
+      "effect": {
+        "kind": "FAMILY_UP",
+        "target": "キカイ"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 100
+    },
+    {
+      "cageIndex": 15,
+      "name": "ミニほけんしつ",
+      "fieldId": "field_cm16_01",
+      "nameStringIndex": 509,
+      "descriptionStringIndex": 549,
+      "description": "「ほけんしつ」のミニ\nバージョン。\nＨＰ　ストレス　かいふく\nデジモンしゅうようすう2",
+      "capacity": 2,
+      "effect": {
+        "kind": "RECOVER",
+        "target": "HP_AND_STRESS"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 112
+    },
+    {
+      "cageIndex": 16,
+      "name": "びょういん",
+      "fieldId": "field_cm17_01",
+      "nameStringIndex": 510,
+      "descriptionStringIndex": 550,
+      "description": "ワクチンのけんきゅうじょ。\n\nワクチンぞくせいアップ\nデジモンしゅうようすう6",
+      "capacity": 6,
+      "effect": {
+        "kind": "FAMILY_UP",
+        "target": "ワクチン"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 110
+    },
+    {
+      "cageIndex": 17,
+      "name": "はなぞの",
+      "fieldId": "field_cm18_01",
+      "nameStringIndex": 511,
+      "descriptionStringIndex": 551,
+      "description": "きれいなはなのさくケージで\nきよらかなこころになる。\nセイぞくせいアップ\nデジモンしゅうようすう4",
+      "capacity": 4,
+      "effect": {
+        "kind": "FAMILY_UP",
+        "target": "セイ"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 102
+    },
+    {
+      "cageIndex": 18,
+      "name": "おんせん",
+      "fieldId": "field_cm19_01",
+      "nameStringIndex": 512,
+      "descriptionStringIndex": 552,
+      "description": "デジモンをいやすケージ。\n\nＨＰ　ストレス　かいふく\nデジモンしゅうようすう8",
+      "capacity": 8,
+      "effect": {
+        "kind": "RECOVER",
+        "target": "HP_AND_STRESS"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 114
+    },
+    {
+      "cageIndex": 19,
+      "name": "さばく",
+      "fieldId": "field_cm20_01",
+      "nameStringIndex": 513,
+      "descriptionStringIndex": 553,
+      "description": "いちねんじゅうあつい\nさばくのケージ。\nねつたいせいアップ\nデジモンしゅうようすう6",
+      "capacity": 6,
+      "effect": {
+        "kind": "RESIST_UP",
+        "target": "ねつ"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 104
+    },
+    {
+      "cageIndex": 20,
+      "name": "こおり",
+      "fieldId": "field_cm21_01",
+      "nameStringIndex": 514,
+      "descriptionStringIndex": 554,
+      "description": "こごえるようなさむさと\nゆきにつつまれたケージ。\nさむさたいせいアップ\nデジモンしゅうようすう8",
+      "capacity": 8,
+      "effect": {
+        "kind": "RESIST_UP",
+        "target": "さむさ"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 105
+    },
+    {
+      "cageIndex": 21,
+      "name": "はつでんしょ",
+      "fieldId": "field_cm22_01",
+      "nameStringIndex": 515,
+      "descriptionStringIndex": 555,
+      "description": "でんりゅうがながれている\nケージ。\nかみなりたいせいアップ\nデジモンしゅうようすう6",
+      "capacity": 6,
+      "effect": {
+        "kind": "RESIST_UP",
+        "target": "かみなり"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 106
+    },
+    {
+      "cageIndex": 22,
+      "name": "ガスルーム",
+      "fieldId": "field_cm23_01",
+      "nameStringIndex": 516,
+      "descriptionStringIndex": 556,
+      "description": "びょうげんきんがたくさん\nいるケージ。\nウイルスぞくせいアップ\nデジモンしゅうようすう4",
+      "capacity": 4,
+      "effect": {
+        "kind": "FAMILY_UP",
+        "target": "ウイルス"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 111
+    },
+    {
+      "cageIndex": 23,
+      "name": "おてら",
+      "fieldId": "field_cm24_01",
+      "nameStringIndex": 517,
+      "descriptionStringIndex": 557,
+      "description": "しずかにせいしんとういつ\nするばしょ。\nかしこさアップ\nデジモンしゅうようすう2",
+      "capacity": 2,
+      "effect": {
+        "kind": "STAT_UP",
+        "target": "WISDOM"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 90
+    },
+    {
+      "cageIndex": 24,
+      "name": "どうぶつえん",
+      "fieldId": "field_cm25_01",
+      "nameStringIndex": 518,
+      "descriptionStringIndex": 558,
+      "description": "じどうでエサとウンチの\nおせわしてくれるケージ。\nすこしきゅうくつ。\nデジモンしゅうようすう2",
+      "capacity": 2,
+      "effect": {
+        "kind": "AUTO_CARE",
+        "target": "FOOD_AND_DROPPINGS"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 115
+    },
+    {
+      "cageIndex": 25,
+      "name": "ぼくじょう",
+      "fieldId": "field_cm26_01",
+      "nameStringIndex": 519,
+      "descriptionStringIndex": 559,
+      "description": "じどうでエサとウンチの\nおせわしてくれるケージ。\nひろくてすごしやすい。\nデジモンしゅうようすう8",
+      "capacity": 8,
+      "effect": {
+        "kind": "AUTO_CARE",
+        "target": "FOOD_AND_DROPPINGS"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 116
+    },
+    {
+      "cageIndex": 26,
+      "name": "リング",
+      "fieldId": "field_cm27_01",
+      "nameStringIndex": 520,
+      "descriptionStringIndex": 560,
+      "description": "れんしゅうようのリングで\nスパーリングをくりかえす。\nバトルすうアップ\nデジモンしゅうようすう6",
+      "capacity": 6,
+      "effect": {
+        "kind": "STAT_UP",
+        "target": "BATTLE_COUNT"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 117
+    },
+    {
+      "cageIndex": 27,
+      "name": "ミニうんどうじょう",
+      "fieldId": "field_cm30_01",
+      "nameStringIndex": 523,
+      "descriptionStringIndex": 563,
+      "description": "「うんどうじょう」の\nミニバージョン。\nＨＰアップ\nデジモンしゅうようすう2",
+      "capacity": 2,
+      "effect": {
+        "kind": "STAT_UP",
+        "target": "HP"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 84
+    },
+    {
+      "cageIndex": 28,
+      "name": "ほけんしつ",
+      "fieldId": "field_cm31_01",
+      "nameStringIndex": 524,
+      "descriptionStringIndex": 564,
+      "description": "デジモンをいやすケージ。\n\nＨＰ　ストレス　かいふく\nデジモンしゅうようすう6",
+      "capacity": 6,
+      "effect": {
+        "kind": "RECOVER",
+        "target": "HP_AND_STRESS"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 113
+    },
+    {
+      "cageIndex": 29,
+      "name": "ミニはなぞの",
+      "fieldId": "field_cm32_01",
+      "nameStringIndex": 525,
+      "descriptionStringIndex": 565,
+      "description": "「はなぞの」ミニバージョン。\n\nセイぞくせいアップ\nデジモンしゅうようすう2",
+      "capacity": 2,
+      "effect": {
+        "kind": "FAMILY_UP",
+        "target": "セイ"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 101
+    },
+    {
+      "cageIndex": 30,
+      "name": "ミニジム",
+      "fieldId": "field_cm34_01",
+      "nameStringIndex": 527,
+      "descriptionStringIndex": 567,
+      "description": "「ジム」のミニバージョン。\n\nこうげきアップ\nデジモンしゅうようすう2",
+      "capacity": 2,
+      "effect": {
+        "kind": "STAT_UP",
+        "target": "ATTACK"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 88
+    },
+    {
+      "cageIndex": 31,
+      "name": "ミニかざん",
+      "fieldId": "field_cm35_01",
+      "nameStringIndex": 528,
+      "descriptionStringIndex": 568,
+      "description": "「かざん」のミニバージョン。\n\nリュウぞくせいアップ\nデジモンしゅうようすう2",
+      "capacity": 2,
+      "effect": {
+        "kind": "FAMILY_UP",
+        "target": "リュウ"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 92
+    },
+    {
+      "cageIndex": 32,
+      "name": "ミニこうざん",
+      "fieldId": "field_cm37_01",
+      "nameStringIndex": 530,
+      "descriptionStringIndex": 570,
+      "description": "「こうざん」のミニ\nバージョン。\nトリぞくせいアップ\nデジモンしゅうようすう2",
+      "capacity": 2,
+      "effect": {
+        "kind": "FAMILY_UP",
+        "target": "トリ"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 96
+    },
+    {
+      "cageIndex": 33,
+      "name": "ミニビーチ",
+      "fieldId": "field_cm39_01",
+      "nameStringIndex": 532,
+      "descriptionStringIndex": 572,
+      "description": "「ビーチ」のミニバージョン。\n\nミズぞくせいアップ\nデジモンしゅうようすう2",
+      "capacity": 2,
+      "effect": {
+        "kind": "FAMILY_UP",
+        "target": "ミズ"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 94
+    },
+    {
+      "cageIndex": 34,
+      "name": "どうくつ",
+      "fieldId": "field_cm40_01",
+      "nameStringIndex": 533,
+      "descriptionStringIndex": 573,
+      "description": "くらいてせまい　ほらあなの\nケージ。\nやみのたいせいアップ\nデジモンしゅうようすう2",
+      "capacity": 2,
+      "effect": {
+        "kind": "RESIST_UP",
+        "target": "やみ"
+      },
+      "playerFacing": true,
+      "shopRecordIndex": 108
+    },
+    {
+      "cageIndex": 35,
+      "name": "ひかえしつ",
+      "fieldId": "field_cm28_01",
+      "nameStringIndex": 521,
+      "descriptionStringIndex": 561,
+      "description": "",
+      "capacity": null,
+      "effect": {
+        "kind": "NONE",
+        "target": null
+      },
+      "playerFacing": false,
+      "shopRecordIndex": null
+    }
+  ]
+}

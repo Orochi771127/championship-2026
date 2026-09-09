@@ -7,6 +7,9 @@
 
 import presentation from "../../../docs/contracts/championship/raising-home-presentation.v1.json" with { type: "json" };
 import toolbarContract from "../../../docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json" with { type: "json" };
+import { projectWorldClockDisplay } from "../time/championshipWorldClock.js";
+import {getCageDefinition} from "../cage/cageCatalog.js";
+import { raisingDisplayName, cageName } from "../text/zhHant.js";
 
 export const RAISING_PRESENTATION_CONTRACT_VERSION = "INT_RH2_RUNTIME_PRESENTATION_CONTRACT/v1";
 
@@ -94,7 +97,7 @@ const TOOLBAR_FRAME = deepFreeze(toolbarProjection());
 function assertApplication(app) {
   const methods = [
     "getSnapshot", "getRaisingState", "getSelectedCreatureId", "getCages",
-    "getSession", "select", "moveToCage", "care", "save"
+    "getSession", "getRaisingInstances", "select", "moveToCage", "care", "save"
   ];
   if (!app || methods.some((method) => typeof app[method] !== "function")) {
     throw new TypeError("INT-RH2 requires an open Championship standalone application");
@@ -133,24 +136,22 @@ function speciesLabel(speciesId) {
  * Home actors are the frozen R2 starters plus enclosed collection instances.
  * Collection IDs never enter the R2 snapshot; they only appear here.
  */
-function homeMembers(snapshot, raising) {
-  const starters = snapshot.residents.map((resident) => ({
-    creatureId: resident.residentId,
-    displayName: resident.name,
-    speciesId: productSpeciesId(speciesKey(resident)),
-    facing: resident.facing,
-    intent: resident.intent,
-    spriteResident: resident
-  }));
-  const arrivals = (raising.collection ?? []).map((entry) => ({
-    creatureId: entry.instanceId,
-    displayName: entry.displayName || speciesLabel(entry.speciesId),
-    speciesId: entry.speciesId.includes(":") ? entry.speciesId : productSpeciesId(entry.speciesId),
-    facing: "right",
-    intent: "idle",
-    spriteResident: { speciesId: entry.speciesId, residentId: entry.instanceId }
-  }));
-  return [...starters, ...arrivals];
+function homeMembers(snapshot, instances) {
+  const residents = new Map(snapshot.residents.map((resident) => [resident.residentId, resident]));
+  return instances.map((instance) => {
+    const resident = residents.get(instance.source.residentId);
+    return {
+      creatureId: instance.instanceId,
+      displayName: raisingDisplayName(instance),
+      speciesId: productSpeciesId(instance.speciesId),
+      // The species table's base HP/TP are not this individual's persistent
+      // current or grown values. Unknown player profiles remain unknown.
+      stats: instance.profile,
+      facing: resident?.facing ?? "right",
+      intent: resident?.intent ?? "idle",
+      spriteResident: { ...resident, speciesId: instance.speciesId, residentId: instance.instanceId }
+    };
+  });
 }
 
 /**
@@ -165,9 +166,12 @@ export function createRaisingPresentationSource(app) {
   let currentFrame = null;
   let runtimeUnsubscribe = null;
   let saveUnsubscribe = null;
+  let nativeUnsubscribe = null;
   let reactionCreatureId = null;
   let publishing = false;
   let pendingPublication = null;
+  let projectedSnapshot = null;
+  let projectedRaising = null;
 
   function buildFrame() {
     const snapshot = app.getSnapshot();
@@ -176,17 +180,25 @@ export function createRaisingPresentationSource(app) {
     if (!snapshot || !raising) throw new Error("CHAMPIONSHIP_RAISING_SESSION_NOT_OPEN");
     const assignments = raising.assignments;
     const selectedCreatureId = app.getSelectedCreatureId();
-    const members = homeMembers(snapshot, raising);
+    const members = homeMembers(snapshot, app.getRaisingInstances());
     const lanes = cageLanes(cages, members, assignments);
     const saveStatus = app.savePort.getStatus();
     const phase = SAVE_PHASES.has(saveStatus.phase) ? saveStatus.phase : "CLEAN";
+    projectedSnapshot = snapshot;
+    projectedRaising = raising;
 
     return deepFreeze({
       contractVersion: RAISING_PRESENTATION_CONTRACT_VERSION,
       revision: frameRevision,
+      ranch: { layoutVersion: app.getCageEditFrame()?.layoutVersion ?? null },
+      foods: app.getRaisingFoodFrame?.()??[],
+      lifecycle:app.getRaisingLifecycleFrame?.()??null,
       clock: {
         minutes: snapshot.clockMinutes,
-        display: formatClock(snapshot.clockMinutes)
+        display: formatClock(snapshot.clockMinutes),
+        // The original draws four fields, not one: ui/info_bar.nxr carries
+        // season_icon, day + day_number, mode_name and time0..time3 + colon.
+        ...projectWorldClockDisplay(snapshot)
       },
       cages: cages.map((cage) => {
         const occupantIds = members
@@ -212,6 +224,9 @@ export function createRaisingPresentationSource(app) {
         facing: member.facing,
         intent: member.creatureId === reactionCreatureId ? "care-reaction" : member.intent,
         selected: member.creatureId === selectedCreatureId,
+        stats: member.stats ?? null,
+        nativeCageName: (()=>{const definition=app.getRaisingActorFrame?.(member.creatureId)?.cageDefinitionIndex;
+          return Number.isInteger(definition)?cageName(definition, getCageDefinition(definition)?.displayName??null):null;})(),
         sprite: spriteProjection(member.spriteResident)
       })),
       selection: { creatureId: selectedCreatureId },
@@ -262,20 +277,45 @@ export function createRaisingPresentationSource(app) {
   function wireRuntime() {
     if (runtimeUnsubscribe || saveUnsubscribe) return;
     const session = app.getSession();
-    runtimeUnsubscribe = session.subscribeRaisingHome(() => publish());
+    let displayedClock = `${app.getSnapshot().year}:${app.getSnapshot().clockMinutes}:${app.getSnapshot().season}:${app.getSnapshot().dayOfSeason}`;
+    runtimeUnsubscribe = session.subscribeRaisingHome((publication) => {
+      const snapshot = app.getSnapshot();
+      const clockKey = `${snapshot.year}:${snapshot.clockMinutes}:${snapshot.season}:${snapshot.dayOfSeason}`;
+      if (publication?.kind === "clock" && clockKey === displayedClock) return;
+      displayedClock = clockKey;
+      publish({ clearReaction: publication?.kind !== "clock" });
+    });
     saveUnsubscribe = app.savePort.subscribe(() => publish());
+    nativeUnsubscribe = app.subscribeRaising?.(() => publish({clearReaction:false}));
+    // Asset mounting is asynchronous; the shared clock can reach its stop
+    // boundary before the first observer attaches. Catch up once on attach,
+    // including when no future minute publication will arrive.
+    if (projectedSnapshot !== app.getSnapshot() || projectedRaising !== app.getRaisingState()
+        || currentFrame.save.phase !== app.savePort.getStatus().phase) {
+      publish({ clearReaction: false });
+    }
   }
 
   function unwireRuntime() {
     runtimeUnsubscribe?.();
     saveUnsubscribe?.();
+    nativeUnsubscribe?.();nativeUnsubscribe=null;
     runtimeUnsubscribe = null;
     saveUnsubscribe = null;
   }
 
   currentFrame = buildFrame();
 
-  const intents = Object.freeze({
+    const intents = Object.freeze({
+      openMail(){return app.openRaisingMail?.()??false;},
+      acknowledgeMail(){return app.acknowledgeRaisingMail?.()??false;},
+      acknowledgeCalendar(){return app.acknowledgeRaisingCalendar?.()??false;},
+    confirmDayEnd(accepted){return app.confirmRaisingDayEnd?.(accepted)??false;},
+    relocateToGround(creatureId,input) {const result=app.moveRaisingResidentToGround?.(creatureId,input)??false;publish();return result;},
+    cleanFood(input) {const result=app.cleanRaisingFood?.(input)??false;publish();return result;},
+    placeFood(input) {const result=app.placeRaisingFood?.(input)??{ok:false,reason:"UNAVAILABLE"};publish();return result;},
+    touchEgg(creatureId) { return app.touchRaisingEgg?.(creatureId) ?? false; },
+    treatResident(creatureId,kind){const result=app.treatRaisingResident?.(creatureId,kind)??{ok:false};publish();return result;},
     selectCreature(creatureId) {
       if (app.getSelectedCreatureId() === creatureId) return currentFrame;
       reactionCreatureId = null;
@@ -291,8 +331,8 @@ export function createRaisingPresentationSource(app) {
     },
 
     careForCreature(creatureId) {
-      reactionCreatureId = creatureId;
       app.care(creatureId);
+      reactionCreatureId = creatureId;
       return publish({ clearReaction: false });
     },
 
@@ -305,6 +345,10 @@ export function createRaisingPresentationSource(app) {
   });
 
   return Object.freeze({
+    getActorFrame(creatureId) { return app.getRaisingActorFrame?.(creatureId) ?? null; },
+    getFoodFrame() { return app.getRaisingFoodFrame?.() ?? []; },
+    getWasteFrame(){return app.getRaisingWasteFrame?.()??[];},
+    getLifecycleFrame(){return app.getRaisingLifecycleFrame?.()??null;},
     getFrame() {
       return currentFrame;
     },

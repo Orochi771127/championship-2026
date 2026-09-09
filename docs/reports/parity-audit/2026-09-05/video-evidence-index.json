@@ -1,0 +1,78 @@
+{
+  "method": "Public in-app-browser playback samples plus reinspection of explicitly identified archived frame. Not an exhaustive full-video trace. Target-based filenames do not imply exact observed time.",
+  "feedingCorrection": "User correction, existing contract and ROM tutorial entries1500/1501 establish ground-placement gesture; initial creature-click probe withdrawn.",
+  "observations": [
+    {
+      "videoId": "BV13T4y137ef",
+      "sourceUrl": "https://www.bilibili.com/video/BV13T4y137ef/",
+      "recordedMediaSeconds": 128.449776,
+      "frame": "intro-sample-120.png",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "Training場景、需求氣泡與教學文字；不把字幕數值關係當ROM規則",
+      "sha256": "4b97fa71cbf164883fd3808a5aac89c3d59dff4b49b0f5d9c1a32ff74a2a9c67"
+    },
+    {
+      "videoId": "BV13T4y137ef",
+      "sourceUrl": "https://www.bilibili.com/video/BV13T4y137ef/",
+      "recordedMediaSeconds": 118.140598,
+      "frame": "intro-training-confirmed.png",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "Cage編輯、模組輪廓及場地說明",
+      "sha256": "6fae895947f61b1ccb78624a11c1321ba236eaa720f89881cf7ef3ea6091bd57"
+    },
+    {
+      "videoId": "BV13T4y137ef",
+      "sourceUrl": "https://www.bilibili.com/video/BV13T4y137ef/",
+      "recordedMediaSeconds": 142.822439,
+      "frame": "intro-feeding-tutorial-105.png",
+      "classification": "EXCLUDED_FROM_GAMEPLAY_PROOF",
+      "observation": "導航未到目標；是作者圖表，並非餵食操作",
+      "sha256": "c04a30a67064e83d1050a880d2b8895b16a52a0f6ef15413b76f3d87a1261aaf"
+    },
+    {
+      "videoId": "BV13T4y137ef",
+      "sourceUrl": "https://www.bilibili.com/video/BV13T4y137ef/",
+      "recordedMediaSeconds": 133.320709,
+      "frame": "intro-care-tutorial.png",
+      "classification": "EXCLUDED_OBSCURED",
+      "observation": "登入提示遮住畫面",
+      "sha256": "eb88424b3cd49b87322af58bc88a8cf9ff502e469a30326febbb9eb9d843e617"
+    },
+    {
+      "videoId": "BV13u411B7BK",
+      "sourceUrl": "https://www.bilibili.com/video/BV13u411B7BK/",
+      "recordedMediaSeconds": 23.969561,
+      "frame": "original-feed-before.png",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "投食前的選取與育成場景",
+      "sha256": "798e47524a9fae6408af05c95ffd039080abca5bae46ea45d2fd1777579be025"
+    },
+    {
+      "videoId": "BV13u411B7BK",
+      "sourceUrl": "https://www.bilibili.com/video/BV13u411B7BK/",
+      "recordedMediaSeconds": 33.926431,
+      "frame": "original-feed-during-a.png",
+      "classification": "VIDEO_OBSERVED",
+      "observation": "育成場景与79 Food remaining；此影格不獨立證明攝食",
+      "sha256": "e78eeeec02bf3d53524b5b9a71c79b521f7c3bbd2026e4e22e11e884c3bfb3e1"
+    },
+    {
+      "videoId": "BV13u411B7BK",
+      "sourceUrl": "https://www.bilibili.com/video/BV13u411B7BK/",
+      "recordedMediaSeconds": 32.389846,
+      "frame": "original-feed-ground-placement.png",
+      "classification": "EXCLUDED_OBSCURED",
+      "observation": "登入提示遮住畫面",
+      "sha256": "72e5273934c406694e4a979fb187d8b2956c4b09e6b1829a6c7cda9c6988d67e"
+    },
+    {
+      "videoId": "BV13u411B7BK",
+      "sourceUrl": "https://www.bilibili.com/video/BV13u411B7BK/",
+      "recordedMediaSeconds": 30.88064,
+      "frame": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/frames/t030.png",
+      "classification": "HISTORICAL_FRAME_REVIEWED_CURRENT",
+      "observation": "2026-09-03 V03影格本次重新開啟：場上肉塊、81/80 Food remaining；非本次新擷取",
+      "sha256": "7b9a41e12a37f56d74ae98666e6a46a109567d784b9ac41feec3b3e1667791f4"
+    }
+  ]
+}

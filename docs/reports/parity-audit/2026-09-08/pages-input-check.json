@@ -1,0 +1,1563 @@
+{
+  "date": "2026-09-08",
+  "status": "BLOCKED_INPUT_AND_IMPORT_GRAPH",
+  "scope": "Read-only comparison with current tracked-only Pages builder and current private exclusion rules. Literal relative imports from actual main.js; not a complete dynamic fetch/import or release audit.",
+  "buildRun": false,
+  "outputDeletedOrReplaced": false,
+  "missingTrackedInputs": [
+    "src/data/championship/catalogs/entities.r1.json"
+  ],
+  "reachableSourceModules": 184,
+  "omittedEdges": [
+    {
+      "importer": "src/championship/app/battlePresentationSource.js",
+      "specifier": "../../../docs/contracts/championship/battle-field-presentation.v1.json",
+      "target": "docs/contracts/championship/battle-field-presentation.v1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js",
+      "specifier": "../../../../docs/contracts/championship/battle-field-presentation.v1.json",
+      "target": "docs/contracts/championship/battle-field-presentation.v1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRosterSource.js",
+      "specifier": "../../../docs/contracts/championship/battle-player-roster.v1.json",
+      "target": "docs/contracts/championship/battle-player-roster.v1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "./battlePresentationSource.js",
+      "target": "src/championship/app/battlePresentationSource.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "./battleRosterSource.js",
+      "target": "src/championship/app/battleRosterSource.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/main.js",
+      "specifier": "./battleRuntime.js",
+      "target": "src/championship/app/battleRuntime.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/championshipStandaloneApp.js",
+      "specifier": "./championshipClockDriver.js",
+      "target": "src/championship/app/championshipClockDriver.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/main.js",
+      "specifier": "./championshipClockDriver.js",
+      "target": "src/championship/app/championshipClockDriver.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/main.js",
+      "specifier": "./championshipStatusBar.js",
+      "target": "src/championship/app/championshipStatusBar.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/main.js",
+      "specifier": "./championshipToolbar.js",
+      "target": "src/championship/app/championshipToolbar.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/main.js",
+      "specifier": "./digimonListScreen.js",
+      "target": "src/championship/app/digimonListScreen.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/main.js",
+      "specifier": "./helpScreen.js",
+      "target": "src/championship/app/helpScreen.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/main.js",
+      "specifier": "./scheduleScreen.js",
+      "target": "src/championship/app/scheduleScreen.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/main.js",
+      "specifier": "./tamerInfoScreen.js",
+      "target": "src/championship/app/tamerInfoScreen.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/main.js",
+      "specifier": "./vs5Screens.js",
+      "target": "src/championship/app/vs5Screens.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleActionApplication.js",
+      "target": "src/championship/battle/battleActionApplication.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleProjectileContact.js",
+      "specifier": "./battleActionApplication.js",
+      "target": "src/championship/battle/battleActionApplication.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleScriptNatives.js",
+      "specifier": "./battleActionApplication.js",
+      "target": "src/championship/battle/battleActionApplication.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleHitRuntime.js",
+      "specifier": "./battleCandidateBuckets.js",
+      "target": "src/championship/battle/battleCandidateBuckets.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleSession.js",
+      "specifier": "./battleCandidateBuckets.js",
+      "target": "src/championship/battle/battleCandidateBuckets.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleCatalogs.js",
+      "target": "src/championship/battle/battleCatalogs.js",
+      "reason": "PRIVATE_EXCLUDED"
+    },
+    {
+      "importer": "src/championship/battle/battleCandidateBuckets.js",
+      "specifier": "./battleCatalogs.js",
+      "target": "src/championship/battle/battleCatalogs.js",
+      "reason": "PRIVATE_EXCLUDED"
+    },
+    {
+      "importer": "src/championship/battle/battleHitRuntime.js",
+      "specifier": "./battleCatalogs.js",
+      "target": "src/championship/battle/battleCatalogs.js",
+      "reason": "PRIVATE_EXCLUDED"
+    },
+    {
+      "importer": "src/championship/battle/battleMoveBuckets.js",
+      "specifier": "./battleCatalogs.js",
+      "target": "src/championship/battle/battleCatalogs.js",
+      "reason": "PRIVATE_EXCLUDED"
+    },
+    {
+      "importer": "src/championship/battle/battleNormalRuntime.js",
+      "specifier": "./battleCatalogs.js",
+      "target": "src/championship/battle/battleCatalogs.js",
+      "reason": "PRIVATE_EXCLUDED"
+    },
+    {
+      "importer": "src/championship/app/battleRosterSource.js",
+      "specifier": "../battle/battleCreatureBuild.js",
+      "target": "src/championship/battle/battleCreatureBuild.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleCreatureBuild.js",
+      "target": "src/championship/battle/battleCreatureBuild.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNativeActors.js",
+      "specifier": "./battleCreatureBuild.js",
+      "target": "src/championship/battle/battleCreatureBuild.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntIndividual.js",
+      "specifier": "../../battle/battleCreatureBuild.js",
+      "target": "src/championship/battle/battleCreatureBuild.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleDamageInputs.js",
+      "target": "src/championship/battle/battleDamageInputs.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/championshipStandaloneApp.js",
+      "specifier": "../battle/battleEconomyTransaction.js",
+      "target": "src/championship/battle/battleEconomyTransaction.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/championshipStandaloneSave.js",
+      "specifier": "../battle/battleEconomyTransaction.js",
+      "target": "src/championship/battle/battleEconomyTransaction.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleEffectActors.js",
+      "target": "src/championship/battle/battleEffectActors.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battlePresentationSource.js",
+      "specifier": "../battle/battleFrameLoop.js",
+      "target": "src/championship/battle/battleFrameLoop.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleSession.js",
+      "specifier": "./battleFrameLoop.js",
+      "target": "src/championship/battle/battleFrameLoop.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleHitRuntime.js",
+      "target": "src/championship/battle/battleHitRuntime.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleHitState.js",
+      "target": "src/championship/battle/battleHitState.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleHitRuntime.js",
+      "specifier": "./battleHitState.js",
+      "target": "src/championship/battle/battleHitState.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleSession.js",
+      "specifier": "./battleHitState.js",
+      "target": "src/championship/battle/battleHitState.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleImpactEffects.js",
+      "target": "src/championship/battle/battleImpactEffects.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js",
+      "specifier": "../../battle/battleImpactEffects.js",
+      "target": "src/championship/battle/battleImpactEffects.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleSession.js",
+      "specifier": "./battleInFlight.js",
+      "target": "src/championship/battle/battleInFlight.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleLaunchPool.js",
+      "target": "src/championship/battle/battleLaunchPool.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNativeActors.js",
+      "specifier": "./battleLaunchPool.js",
+      "target": "src/championship/battle/battleLaunchPool.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleMatchSelection.js",
+      "target": "src/championship/battle/battleMatchSelection.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/championshipStandaloneApp.js",
+      "specifier": "../battle/battleMatchSelection.js",
+      "target": "src/championship/battle/battleMatchSelection.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/scheduleScreen.js",
+      "specifier": "../battle/battleMatchSelection.js",
+      "target": "src/championship/battle/battleMatchSelection.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNormalRuntime.js",
+      "specifier": "./battleMoveBuckets.js",
+      "target": "src/championship/battle/battleMoveBuckets.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleSession.js",
+      "specifier": "./battleMoveBuckets.js",
+      "target": "src/championship/battle/battleMoveBuckets.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleMoveScriptRun.js",
+      "specifier": "./battleMoveScript.js",
+      "target": "src/championship/battle/battleMoveScript.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNativeLaunch.js",
+      "specifier": "./battleMoveScriptRun.js",
+      "target": "src/championship/battle/battleMoveScriptRun.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleNativeActors.js",
+      "target": "src/championship/battle/battleNativeActors.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleNativeLaunch.js",
+      "target": "src/championship/battle/battleNativeLaunch.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleHitState.js",
+      "specifier": "./battleNativeMath.js",
+      "target": "src/championship/battle/battleNativeMath.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleMoveScriptRun.js",
+      "specifier": "./battleNativeMath.js",
+      "target": "src/championship/battle/battleNativeMath.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNormalFlow.js",
+      "specifier": "./battleNativeMath.js",
+      "target": "src/championship/battle/battleNativeMath.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntDirection.js",
+      "specifier": "../../battle/battleNativeMath.js",
+      "target": "src/championship/battle/battleNativeMath.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNativeActors.js",
+      "specifier": "./battleNativeMemory.js",
+      "target": "src/championship/battle/battleNativeMemory.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleNormalFlow.js",
+      "target": "src/championship/battle/battleNormalFlow.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleHitRuntime.js",
+      "specifier": "./battleNormalFlow.js",
+      "target": "src/championship/battle/battleNormalFlow.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNativeActors.js",
+      "specifier": "./battleNormalFlow.js",
+      "target": "src/championship/battle/battleNormalFlow.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNormalRuntime.js",
+      "specifier": "./battleNormalFlow.js",
+      "target": "src/championship/battle/battleNormalFlow.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleSession.js",
+      "specifier": "./battleNormalFlow.js",
+      "target": "src/championship/battle/battleNormalFlow.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleNormalRuntime.js",
+      "target": "src/championship/battle/battleNormalRuntime.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battlePresentationSource.js",
+      "specifier": "../battle/battleOutcome.js",
+      "target": "src/championship/battle/battleOutcome.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRosterSource.js",
+      "specifier": "../battle/battleOutcome.js",
+      "target": "src/championship/battle/battleOutcome.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleOutcome.js",
+      "target": "src/championship/battle/battleOutcome.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleHitRuntime.js",
+      "specifier": "./battleOutcome.js",
+      "target": "src/championship/battle/battleOutcome.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleSession.js",
+      "specifier": "./battleOutcome.js",
+      "target": "src/championship/battle/battleOutcome.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battlePresentationHost.js",
+      "target": "src/championship/battle/battlePresentationHost.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNativeActors.js",
+      "specifier": "./battlePresentationHost.js",
+      "target": "src/championship/battle/battlePresentationHost.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleProjectileContact.js",
+      "target": "src/championship/battle/battleProjectileContact.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntWire.js",
+      "specifier": "../../battle/battleProjectileContact.js",
+      "target": "src/championship/battle/battleProjectileContact.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleScriptNatives.js",
+      "specifier": "./battleRemainingNatives.js",
+      "target": "src/championship/battle/battleRemainingNatives.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleRngChannel.js",
+      "target": "src/championship/battle/battleRngChannel.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/championshipStandaloneApp.js",
+      "specifier": "../battle/battleRngChannel.js",
+      "target": "src/championship/battle/battleRngChannel.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/championshipStandaloneSave.js",
+      "specifier": "../battle/battleRngChannel.js",
+      "target": "src/championship/battle/battleRngChannel.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntEntryTransaction.js",
+      "specifier": "../../battle/battleRngChannel.js",
+      "target": "src/championship/battle/battleRngChannel.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleMoveScriptRun.js",
+      "specifier": "./battleScriptNatives.js",
+      "target": "src/championship/battle/battleScriptNatives.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleMoveScriptRun.js",
+      "specifier": "./battleScriptVm.js",
+      "target": "src/championship/battle/battleScriptVm.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNativeMath.js",
+      "specifier": "./battleScriptVm.js",
+      "target": "src/championship/battle/battleScriptVm.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNormalFlow.js",
+      "specifier": "./battleScriptVm.js",
+      "target": "src/championship/battle/battleScriptVm.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleSpecialPrelude.js",
+      "specifier": "./battleScriptVm.js",
+      "target": "src/championship/battle/battleScriptVm.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleSession.js",
+      "target": "src/championship/battle/battleSession.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleSoundEvents.js",
+      "target": "src/championship/battle/battleSoundEvents.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleSpecialPrelude.js",
+      "target": "src/championship/battle/battleSpecialPrelude.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleEffectActors.js",
+      "specifier": "./battleSpriteCellBox.js",
+      "target": "src/championship/battle/battleSpriteCellBox.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleImpactEffects.js",
+      "specifier": "./battleSpriteCellBox.js",
+      "target": "src/championship/battle/battleSpriteCellBox.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNativeActors.js",
+      "specifier": "./battleSpriteCellBox.js",
+      "target": "src/championship/battle/battleSpriteCellBox.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNativeLaunch.js",
+      "specifier": "./battleSpriteCellBox.js",
+      "target": "src/championship/battle/battleSpriteCellBox.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleScriptNatives.js",
+      "specifier": "./battleSpriteCellBox.js",
+      "target": "src/championship/battle/battleSpriteCellBox.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleSession.js",
+      "specifier": "./battleStateGraph.js",
+      "target": "src/championship/battle/battleStateGraph.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../battle/battleStateMachine.js",
+      "target": "src/championship/battle/battleStateMachine.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleFrameLoop.js",
+      "specifier": "./battleStateMachine.js",
+      "target": "src/championship/battle/battleStateMachine.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleSession.js",
+      "specifier": "./battleStateMachine.js",
+      "target": "src/championship/battle/battleStateMachine.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleStateGraph.js",
+      "specifier": "./battleStateMachine.js",
+      "target": "src/championship/battle/battleStateMachine.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNormalFlow.js",
+      "specifier": "./battleTurnStates.js",
+      "target": "src/championship/battle/battleTurnStates.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/scheduleScreen.js",
+      "specifier": "../battle/titleEventSchedule.js",
+      "target": "src/championship/battle/titleEventSchedule.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/championshipStandaloneApp.js",
+      "specifier": "../cage/nativeRanchLayout.js",
+      "target": "src/championship/cage/nativeRanchLayout.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/cage/cageEditRuntime.js",
+      "specifier": "./nativeRanchLayout.js",
+      "target": "src/championship/cage/nativeRanchLayout.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/raisingCageArtPlan.js",
+      "specifier": "../cage/nativeRanchLayout.js",
+      "target": "src/championship/cage/nativeRanchLayout.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/cage/nativeRanchLayout.js",
+      "specifier": "./ranchSlotGeometry.js",
+      "target": "src/championship/cage/ranchSlotGeometry.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/cageUiArt.js",
+      "specifier": "../cage/ranchSlotGeometry.js",
+      "target": "src/championship/cage/ranchSlotGeometry.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/raisingCageArtPlan.js",
+      "specifier": "../cage/ranchSlotGeometry.js",
+      "target": "src/championship/cage/ranchSlotGeometry.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/championshipStandaloneApp.js",
+      "specifier": "../gate/gateAdmission.js",
+      "target": "src/championship/gate/gateAdmission.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntExplosion.js",
+      "specifier": "./nativeCapturePhases.js",
+      "target": "src/championship/hunt/capture/nativeCapturePhases.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntFieldControls.js",
+      "specifier": "./nativeCapturePhases.js",
+      "target": "src/championship/hunt/capture/nativeCapturePhases.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntGateVariant.js",
+      "specifier": "./nativeCapturePhases.js",
+      "target": "src/championship/hunt/capture/nativeCapturePhases.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntLures.js",
+      "specifier": "./nativeCapturePhases.js",
+      "target": "src/championship/hunt/capture/nativeCapturePhases.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntMovement.js",
+      "specifier": "./nativeCapturePhases.js",
+      "target": "src/championship/hunt/capture/nativeCapturePhases.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntToolRules.js",
+      "specifier": "./nativeCapturePhases.js",
+      "target": "src/championship/hunt/capture/nativeCapturePhases.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntWire.js",
+      "specifier": "./nativeCapturePhases.js",
+      "target": "src/championship/hunt/capture/nativeCapturePhases.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeRopeStroke.js",
+      "specifier": "./nativeCapturePhases.js",
+      "target": "src/championship/hunt/capture/nativeCapturePhases.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeWildActor.js",
+      "specifier": "./nativeCapturePhases.js",
+      "target": "src/championship/hunt/capture/nativeCapturePhases.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/wildCaptureFlow.js",
+      "specifier": "./nativeCapturePhases.js",
+      "target": "src/championship/hunt/capture/nativeCapturePhases.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntGeneration.js",
+      "specifier": "./nativeHuntActorInitialization.js",
+      "target": "src/championship/hunt/capture/nativeHuntActorInitialization.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntSources.js",
+      "specifier": "./nativeHuntActorInitialization.js",
+      "target": "src/championship/hunt/capture/nativeHuntActorInitialization.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntFieldControls.js",
+      "specifier": "./nativeHuntConsumables.js",
+      "target": "src/championship/hunt/capture/nativeHuntConsumables.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeWildActor.js",
+      "specifier": "./nativeHuntDirection.js",
+      "target": "src/championship/hunt/capture/nativeHuntDirection.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/championshipStandaloneApp.js",
+      "specifier": "../hunt/capture/nativeHuntEntryTransaction.js",
+      "target": "src/championship/hunt/capture/nativeHuntEntryTransaction.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntHazards.js",
+      "specifier": "./nativeHuntExplosion.js",
+      "target": "src/championship/hunt/capture/nativeHuntExplosion.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/huntRuntime.js",
+      "specifier": "./capture/nativeHuntFieldControls.js",
+      "target": "src/championship/hunt/capture/nativeHuntFieldControls.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntSceneSources.js",
+      "specifier": "./nativeHuntGateVariant.js",
+      "target": "src/championship/hunt/capture/nativeHuntGateVariant.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntEntryTransaction.js",
+      "specifier": "./nativeHuntGeneration.js",
+      "target": "src/championship/hunt/capture/nativeHuntGeneration.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntConsumables.js",
+      "specifier": "./nativeHuntHazards.js",
+      "target": "src/championship/hunt/capture/nativeHuntHazards.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/championshipStandaloneApp.js",
+      "specifier": "../hunt/capture/nativeHuntHistory.js",
+      "target": "src/championship/hunt/capture/nativeHuntHistory.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntEntryTransaction.js",
+      "specifier": "./nativeHuntHistory.js",
+      "target": "src/championship/hunt/capture/nativeHuntHistory.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntPersistentState.js",
+      "specifier": "./nativeHuntHistory.js",
+      "target": "src/championship/hunt/capture/nativeHuntHistory.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntIndividualPool.js",
+      "specifier": "./nativeHuntIndividual.js",
+      "target": "src/championship/hunt/capture/nativeHuntIndividual.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntSources.js",
+      "specifier": "./nativeHuntIndividual.js",
+      "target": "src/championship/hunt/capture/nativeHuntIndividual.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntGeneration.js",
+      "specifier": "./nativeHuntIndividualPool.js",
+      "target": "src/championship/hunt/capture/nativeHuntIndividualPool.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntConsumables.js",
+      "specifier": "./nativeHuntLures.js",
+      "target": "src/championship/hunt/capture/nativeHuntLures.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeWildActor.js",
+      "specifier": "./nativeHuntMovement.js",
+      "target": "src/championship/hunt/capture/nativeHuntMovement.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/championshipStandaloneApp.js",
+      "specifier": "../hunt/capture/nativeHuntPersistentState.js",
+      "target": "src/championship/hunt/capture/nativeHuntPersistentState.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/championshipStandaloneSave.js",
+      "specifier": "../hunt/capture/nativeHuntPersistentState.js",
+      "target": "src/championship/hunt/capture/nativeHuntPersistentState.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntEntryTransaction.js",
+      "specifier": "./nativeHuntSceneSources.js",
+      "target": "src/championship/hunt/capture/nativeHuntSceneSources.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/championshipStandaloneApp.js",
+      "specifier": "../hunt/capture/nativeHuntSources.js",
+      "target": "src/championship/hunt/capture/nativeHuntSources.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntConsumables.js",
+      "specifier": "./nativeHuntSources.js",
+      "target": "src/championship/hunt/capture/nativeHuntSources.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntEntryTransaction.js",
+      "specifier": "./nativeHuntSources.js",
+      "target": "src/championship/hunt/capture/nativeHuntSources.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntPersistentState.js",
+      "specifier": "./nativeHuntSources.js",
+      "target": "src/championship/hunt/capture/nativeHuntSources.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeWildActor.js",
+      "specifier": "./nativeHuntSources.js",
+      "target": "src/championship/hunt/capture/nativeHuntSources.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntGeneration.js",
+      "specifier": "./nativeHuntSpawn.js",
+      "target": "src/championship/hunt/capture/nativeHuntSpawn.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntConsumables.js",
+      "specifier": "./nativeHuntToolRules.js",
+      "target": "src/championship/hunt/capture/nativeHuntToolRules.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntExplosion.js",
+      "specifier": "./nativeHuntToolRules.js",
+      "target": "src/championship/hunt/capture/nativeHuntToolRules.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntFieldControls.js",
+      "specifier": "./nativeHuntToolRules.js",
+      "target": "src/championship/hunt/capture/nativeHuntToolRules.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntHazards.js",
+      "specifier": "./nativeHuntToolRules.js",
+      "target": "src/championship/hunt/capture/nativeHuntToolRules.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntLures.js",
+      "specifier": "./nativeHuntToolRules.js",
+      "target": "src/championship/hunt/capture/nativeHuntToolRules.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntWire.js",
+      "specifier": "./nativeHuntToolRules.js",
+      "target": "src/championship/hunt/capture/nativeHuntToolRules.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeWildActor.js",
+      "specifier": "./nativeHuntToolRules.js",
+      "target": "src/championship/hunt/capture/nativeHuntToolRules.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntConsumables.js",
+      "specifier": "./nativeHuntWire.js",
+      "target": "src/championship/hunt/capture/nativeHuntWire.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntFieldControls.js",
+      "specifier": "./nativeRopeStroke.js",
+      "target": "src/championship/hunt/capture/nativeRopeStroke.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntFieldControls.js",
+      "specifier": "./nativeWildActor.js",
+      "target": "src/championship/hunt/capture/nativeWildActor.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntConsumables.js",
+      "specifier": "./nativeWildSpatial.js",
+      "target": "src/championship/hunt/capture/nativeWildSpatial.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntFieldControls.js",
+      "specifier": "./nativeWildSpatial.js",
+      "target": "src/championship/hunt/capture/nativeWildSpatial.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeWildActor.js",
+      "specifier": "./nativeWildSpatial.js",
+      "target": "src/championship/hunt/capture/nativeWildSpatial.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeWildActor.js",
+      "specifier": "./nativeWildStatus.js",
+      "target": "src/championship/hunt/capture/nativeWildStatus.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntToolRules.js",
+      "specifier": "./wildCaptureFlow.js",
+      "target": "src/championship/hunt/capture/wildCaptureFlow.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/huntRuntime.js",
+      "specifier": "./capture/wildCaptureFlow.js",
+      "target": "src/championship/hunt/capture/wildCaptureFlow.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/gateHuntPresentationSource.js",
+      "specifier": "../hunt/huntFieldCoordinates.js",
+      "target": "src/championship/hunt/huntFieldCoordinates.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/huntRuntime.js",
+      "specifier": "./huntFieldCoordinates.js",
+      "target": "src/championship/hunt/huntFieldCoordinates.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/huntMobileReadouts.js",
+      "specifier": "../hunt/loadout/nativeHuntPluginRules.js",
+      "target": "src/championship/hunt/loadout/nativeHuntPluginRules.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/main.js",
+      "specifier": "../presentation/battleAudioPresentation.js",
+      "target": "src/championship/presentation/battleAudioPresentation.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battlePresentationSource.js",
+      "specifier": "../presentation/battleCharacterAction.js",
+      "target": "src/championship/presentation/battleCharacterAction.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../presentation/battleCharacterAction.js",
+      "target": "src/championship/presentation/battleCharacterAction.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/pixiCharacterRuntimeBundle.js",
+      "specifier": "./battleCharacterAction.js",
+      "target": "src/championship/presentation/battleCharacterAction.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/main.js",
+      "specifier": "../presentation/battleEffectArt.js",
+      "target": "src/championship/presentation/battleEffectArt.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/battleAudioPresentation.js",
+      "specifier": "./battleEffectArt.js",
+      "target": "src/championship/presentation/battleEffectArt.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js",
+      "specifier": "../battleEffectSprites.js",
+      "target": "src/championship/presentation/battleEffectSprites.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js",
+      "specifier": "../battleFocusViewport.js",
+      "target": "src/championship/presentation/battleFocusViewport.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/vs4Screens.js",
+      "specifier": "../presentation/cageUiArt.js",
+      "target": "src/championship/presentation/cageUiArt.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/licensedCharacterRoster.js",
+      "specifier": "./characterAppearanceReplacement.js",
+      "target": "src/championship/presentation/characterAppearanceReplacement.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/characterAppearanceReplacement.js",
+      "specifier": "./characterOriginGeometry.js",
+      "target": "src/championship/presentation/characterOriginGeometry.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/gateHuntPresentationSource.js",
+      "specifier": "../presentation/huntMobileReadouts.js",
+      "target": "src/championship/presentation/huntMobileReadouts.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
+      "specifier": "./raisingFieldViewport.js",
+      "target": "src/championship/presentation/intRh2/raisingFieldViewport.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/intRh2/raisingNativeSizing.js",
+      "specifier": "./raisingFieldViewport.js",
+      "target": "src/championship/presentation/intRh2/raisingFieldViewport.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
+      "specifier": "./raisingNativeSizing.js",
+      "target": "src/championship/presentation/intRh2/raisingNativeSizing.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/main.js",
+      "specifier": "../presentation/licensedCharacterRoster.js",
+      "target": "src/championship/presentation/licensedCharacterRoster.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeWildActor.js",
+      "specifier": "../../presentation/nativeHuntCharacterAction.js",
+      "target": "src/championship/presentation/nativeHuntCharacterAction.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/pixiCharacterRuntimeBundle.js",
+      "specifier": "./nativeHuntCharacterAction.js",
+      "target": "src/championship/presentation/nativeHuntCharacterAction.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/main.js",
+      "specifier": "../presentation/raisingCageArtPlan.js",
+      "target": "src/championship/presentation/raisingCageArtPlan.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/vs4Screens.js",
+      "specifier": "../presentation/shopGoodsUiArt.js",
+      "target": "src/championship/presentation/shopGoodsUiArt.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js",
+      "specifier": "../vfx/licensedVfxRuntimeBundle.js",
+      "target": "src/championship/presentation/vfx/licensedVfxRuntimeBundle.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/vfx/licensedVfxRuntimeBundle.js",
+      "specifier": "./originalVfxSystemBindings.js",
+      "target": "src/championship/presentation/vfx/originalVfxSystemBindings.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
+      "specifier": "./huntFieldPointer.js",
+      "target": "src/championship/presentation/vs2/huntFieldPointer.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
+      "specifier": "./battleCubeArt.js",
+      "target": "src/championship/presentation/vs5/battleCubeArt.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/main.js",
+      "specifier": "../presentation/vs5/createBattleFieldPixiPresentation.js",
+      "target": "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/main.js",
+      "specifier": "../presentation/vs5/createBattleSelectThreePresentation.js",
+      "target": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/main.js",
+      "specifier": "../presentation/vs5/createBattleVfxThreeOverlay.js",
+      "target": "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/championshipRaisingProduction.js",
+      "specifier": "../raising/nativeIndividualProfile.js",
+      "target": "src/championship/raising/nativeIndividualProfile.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/championshipStandaloneApp.js",
+      "specifier": "../raising/nativeIndividualProfile.js",
+      "target": "src/championship/raising/nativeIndividualProfile.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/championshipStandaloneSave.js",
+      "specifier": "../raising/nativeIndividualProfile.js",
+      "target": "src/championship/raising/nativeIndividualProfile.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeWildActor.js",
+      "specifier": "../../raising/nativeIndividualProfile.js",
+      "target": "src/championship/raising/nativeIndividualProfile.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/raising/raisingInstanceIdentity.js",
+      "specifier": "./nativeIndividualProfile.js",
+      "target": "src/championship/raising/nativeIndividualProfile.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/championshipStandaloneApp.js",
+      "specifier": "../raising/raisingInstanceIdentity.js",
+      "target": "src/championship/raising/raisingInstanceIdentity.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/championshipStandaloneSave.js",
+      "specifier": "../raising/raisingInstanceIdentity.js",
+      "target": "src/championship/raising/raisingInstanceIdentity.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battlePresentationSource.js",
+      "specifier": "../text/catalogs.zhHant.js",
+      "target": "src/championship/text/catalogs.zhHant.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/huntMobileReadouts.js",
+      "specifier": "../text/catalogs.zhHant.js",
+      "target": "src/championship/text/catalogs.zhHant.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/vs4Screens.js",
+      "specifier": "../text/uiText.js",
+      "target": "src/championship/text/uiText.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/main.js",
+      "specifier": "../text/zhHant.js",
+      "target": "src/championship/text/zhHant.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/gate/gateCatalog.js",
+      "specifier": "../text/zhHant.js",
+      "target": "src/championship/text/zhHant.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/cageUiArt.js",
+      "specifier": "../text/zhHant.js",
+      "target": "src/championship/text/zhHant.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
+      "specifier": "../../text/zhHant.js",
+      "target": "src/championship/text/zhHant.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/championshipStandaloneApp.js",
+      "specifier": "../time/championshipWorldClock.js",
+      "target": "src/championship/time/championshipWorldClock.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/raisingPresentationSource.js",
+      "specifier": "../time/championshipWorldClock.js",
+      "target": "src/championship/time/championshipWorldClock.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/scheduleScreen.js",
+      "specifier": "../time/championshipWorldClock.js",
+      "target": "src/championship/time/championshipWorldClock.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/raising/raisingHomeDefinition.js",
+      "specifier": "../time/championshipWorldClock.js",
+      "target": "src/championship/time/championshipWorldClock.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/raising/raisingHomePersistenceR2.js",
+      "specifier": "../time/championshipWorldClock.js",
+      "target": "src/championship/time/championshipWorldClock.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNativeActors.js",
+      "specifier": "../../data/championship/battleCharacterGeometry.js",
+      "target": "src/data/championship/battleCharacterGeometry.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/licensedCharacterRoster.js",
+      "specifier": "../../data/championship/battleCharacterGeometry.js",
+      "target": "src/data/championship/battleCharacterGeometry.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battleRuntime.js",
+      "specifier": "../../data/championship/battleCharacterProfiles.js",
+      "target": "src/data/championship/battleCharacterProfiles.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleHitRuntime.js",
+      "specifier": "../../data/championship/battleCharacterProfiles.js",
+      "target": "src/data/championship/battleCharacterProfiles.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNativeActors.js",
+      "specifier": "../../data/championship/battleCharacterProfiles.js",
+      "target": "src/data/championship/battleCharacterProfiles.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleSpecialPrelude.js",
+      "specifier": "../../data/championship/battleCharacterProfiles.js",
+      "target": "src/data/championship/battleCharacterProfiles.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeWildActor.js",
+      "specifier": "../../../data/championship/battleCharacterProfiles.js",
+      "target": "src/data/championship/battleCharacterProfiles.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeWildSpatial.js",
+      "specifier": "../../../data/championship/battleCharacterProfiles.js",
+      "target": "src/data/championship/battleCharacterProfiles.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleEffectActors.js",
+      "specifier": "../../data/championship/battleEffectProfiles.json",
+      "target": "src/data/championship/battleEffectProfiles.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleHitState.js",
+      "specifier": "../../data/championship/battleHitTables.json",
+      "target": "src/data/championship/battleHitTables.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNormalFlow.js",
+      "specifier": "../../data/championship/battleHitTables.json",
+      "target": "src/data/championship/battleHitTables.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntDirection.js",
+      "specifier": "../../../data/championship/battleHitTables.json",
+      "target": "src/data/championship/battleHitTables.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntHazards.js",
+      "specifier": "../../../data/championship/battleHitTables.json",
+      "target": "src/data/championship/battleHitTables.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNativeMath.js",
+      "specifier": "../../data/championship/battleNativeMathTables.js",
+      "target": "src/data/championship/battleNativeMathTables.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNormalFlow.js",
+      "specifier": "../../data/championship/battleNormalFlowTables.json",
+      "target": "src/data/championship/battleNormalFlowTables.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleImpactEffects.js",
+      "specifier": "../../data/championship/battlePresentationProfiles.json",
+      "target": "src/data/championship/battlePresentationProfiles.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleNativeActors.js",
+      "specifier": "../../data/championship/battlePresentationProfiles.json",
+      "target": "src/data/championship/battlePresentationProfiles.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battlePresentationHost.js",
+      "specifier": "../../data/championship/battlePresentationProfiles.json",
+      "target": "src/data/championship/battlePresentationProfiles.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleSoundEvents.js",
+      "specifier": "../../data/championship/battlePresentationProfiles.json",
+      "target": "src/data/championship/battlePresentationProfiles.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleCatalogs.js",
+      "specifier": "../../data/championship/catalogs/battle-arenas.r1.json",
+      "target": "src/data/championship/catalogs/battle-arenas.r1.json",
+      "reason": "PRIVATE_EXCLUDED"
+    },
+    {
+      "importer": "src/championship/battle/battleCatalogs.js",
+      "specifier": "../../data/championship/catalogs/battle-eligibility.r1.json",
+      "target": "src/data/championship/catalogs/battle-eligibility.r1.json",
+      "reason": "PRIVATE_EXCLUDED"
+    },
+    {
+      "importer": "src/championship/battle/battleCatalogs.js",
+      "specifier": "../../data/championship/catalogs/battle-moves.r1.json",
+      "target": "src/data/championship/catalogs/battle-moves.r1.json",
+      "reason": "PRIVATE_EXCLUDED"
+    },
+    {
+      "importer": "src/championship/battle/battleScriptNatives.js",
+      "specifier": "../../data/championship/catalogs/battle-natives.r1.json",
+      "target": "src/data/championship/catalogs/battle-natives.r1.json",
+      "reason": "PRIVATE_EXCLUDED"
+    },
+    {
+      "importer": "src/championship/battle/battleCatalogs.js",
+      "specifier": "../../data/championship/catalogs/battle-opponent-teams.r1.json",
+      "target": "src/data/championship/catalogs/battle-opponent-teams.r1.json",
+      "reason": "PRIVATE_EXCLUDED"
+    },
+    {
+      "importer": "src/championship/battle/battleMatchSelection.js",
+      "specifier": "../../data/championship/catalogs/battle-opponent-teams.r1.json",
+      "target": "src/data/championship/catalogs/battle-opponent-teams.r1.json",
+      "reason": "PRIVATE_EXCLUDED"
+    },
+    {
+      "importer": "src/championship/app/battleRosterSource.js",
+      "specifier": "../../data/championship/catalogs/battle-presets.r1.json",
+      "target": "src/data/championship/catalogs/battle-presets.r1.json",
+      "reason": "PRIVATE_EXCLUDED"
+    },
+    {
+      "importer": "src/championship/battle/battleCatalogs.js",
+      "specifier": "../../data/championship/catalogs/battle-presets.r1.json",
+      "target": "src/data/championship/catalogs/battle-presets.r1.json",
+      "reason": "PRIVATE_EXCLUDED"
+    },
+    {
+      "importer": "src/championship/battle/battleMatchSelection.js",
+      "specifier": "../../data/championship/catalogs/battle-presets.r1.json",
+      "target": "src/data/championship/catalogs/battle-presets.r1.json",
+      "reason": "PRIVATE_EXCLUDED"
+    },
+    {
+      "importer": "src/championship/battle/battleMoveScriptRun.js",
+      "specifier": "../../data/championship/catalogs/battle-scripts.r1.json",
+      "target": "src/data/championship/catalogs/battle-scripts.r1.json",
+      "reason": "PRIVATE_EXCLUDED"
+    },
+    {
+      "importer": "src/championship/battle/titleEventSchedule.js",
+      "specifier": "../../data/championship/catalogs/battle-title-event-strings.r1.json",
+      "target": "src/data/championship/catalogs/battle-title-event-strings.r1.json",
+      "reason": "PRIVATE_EXCLUDED"
+    },
+    {
+      "importer": "src/championship/battle/battleCatalogs.js",
+      "specifier": "../../data/championship/catalogs/battle-title-events.r1.json",
+      "target": "src/data/championship/catalogs/battle-title-events.r1.json",
+      "reason": "PRIVATE_EXCLUDED"
+    },
+    {
+      "importer": "src/championship/battle/battleMatchSelection.js",
+      "specifier": "../../data/championship/catalogs/battle-title-events.r1.json",
+      "target": "src/data/championship/catalogs/battle-title-events.r1.json",
+      "reason": "PRIVATE_EXCLUDED"
+    },
+    {
+      "importer": "src/championship/battle/titleEventSchedule.js",
+      "specifier": "../../data/championship/catalogs/battle-title-events.r1.json",
+      "target": "src/data/championship/catalogs/battle-title-events.r1.json",
+      "reason": "PRIVATE_EXCLUDED"
+    },
+    {
+      "importer": "src/championship/cage/cageEffects.js",
+      "specifier": "../../data/championship/catalogs/cage-definitions.r1.json",
+      "target": "src/data/championship/catalogs/cage-definitions.r1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/battlePresentationSource.js",
+      "specifier": "../../data/championship/catalogs/creature-species.r1.json",
+      "target": "src/data/championship/catalogs/creature-species.r1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/main.js",
+      "specifier": "../../data/championship/catalogs/creature-species.r1.json",
+      "target": "src/data/championship/catalogs/creature-species.r1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleCreatureBuild.js",
+      "specifier": "../../data/championship/catalogs/creature-species.r1.json",
+      "target": "src/data/championship/catalogs/creature-species.r1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/database/databaseCatalog.js",
+      "specifier": "../../data/championship/catalogs/creature-species.r1.json",
+      "target": "src/data/championship/catalogs/creature-species.r1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/huntWorld.js",
+      "specifier": "../../data/championship/catalogs/creature-species.r1.json",
+      "target": "src/data/championship/catalogs/creature-species.r1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/raising/raisingHomeDefinition.js",
+      "specifier": "../../data/championship/catalogs/creature-species.r1.json",
+      "target": "src/data/championship/catalogs/creature-species.r1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleCreatureBuild.js",
+      "specifier": "../../data/championship/catalogs/creature-stat-curve.r1.json",
+      "target": "src/data/championship/catalogs/creature-stat-curve.r1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/gate/gateCatalog.js",
+      "specifier": "../../data/championship/catalogs/gate-table.r1.json",
+      "target": "src/data/championship/catalogs/gate-table.r1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/helpScreen.js",
+      "specifier": "../../data/championship/catalogs/help-text.r1.json",
+      "target": "src/data/championship/catalogs/help-text.r1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntSources.js",
+      "specifier": "../../../data/championship/catalogs/hunt-entry.r1.json",
+      "target": "src/data/championship/catalogs/hunt-entry.r1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntSceneSources.js",
+      "specifier": "../../../data/championship/catalogs/hunt-scene.r1.json",
+      "target": "src/data/championship/catalogs/hunt-scene.r1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/capture/nativeHuntToolRules.js",
+      "specifier": "../../../data/championship/catalogs/hunt-tools.r1.json",
+      "target": "src/data/championship/catalogs/hunt-tools.r1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/loadout/huntEquipmentCatalog.js",
+      "specifier": "../../../data/championship/catalogs/hunt-tools.r1.json",
+      "target": "src/data/championship/catalogs/hunt-tools.r1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/hunt/loadout/nativeHuntPluginRules.js",
+      "specifier": "../../../data/championship/catalogs/hunt-tools.r1.json",
+      "target": "src/data/championship/catalogs/hunt-tools.r1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/battle/battleRngChannel.js",
+      "specifier": "../../data/championship/catalogs/rng-channels.r1.json",
+      "target": "src/data/championship/catalogs/rng-channels.r1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/app/main.js",
+      "specifier": "../../data/championship/catalogs/species-names.r1.json",
+      "target": "src/data/championship/catalogs/species-names.r1.json",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    },
+    {
+      "importer": "src/championship/presentation/licensedCharacterRoster.js",
+      "specifier": "../../data/championship/characterNativeSizing.js",
+      "target": "src/data/championship/characterNativeSizing.js",
+      "reason": "NOT_IN_TRACKED_INPUT"
+    }
+  ],
+  "distinctOmittedTargets": 137,
+  "releaseBoundaryChanged": false
+}

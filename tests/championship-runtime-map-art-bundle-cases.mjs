@@ -73,6 +73,11 @@ test("runtime map art accepts only production paths and explicit external gamepl
   assert.equal(Object.isFrozen(checked), true);
   assert.equal(getRuntimeMapArtField(checked, "field_hm03_01").worldWidthPx, 2048);
 
+  const battle = manifest({ family: "BATTLE" });
+  battle.fields[0].fieldId = "field_bm01_01";
+  battle.fields[0].frames[0].src = "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png";
+  assert.equal(validateRuntimeMapArtBundle(battle).family, "BATTLE");
+
   const researchPath = manifest();
   researchPath.fields[0].frames[0].src = "docs/art/production/hunt/hd-remaster-v1/frame.png";
   assert.throws(() => validateRuntimeMapArtBundle(researchPath), /FRAME_OUTSIDE_PRODUCTION_ASSETS/);

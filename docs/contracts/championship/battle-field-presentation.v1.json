@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "id": "championship-modern-battle-field-presentation",
+  "authority": "CHAMPIONSHIP_2026_PRODUCT",
+  "note": "The BATTLE screen's layout and the runtime fields it may show. Layout numbers are PRODUCT-AUTHORED for a 9:16 phone frame. Every HUD field below is traced to a ROM read site, so the screen shows what the original tracks and nothing else. This file lives with the contracts rather than in src/ because src/championship carries no binary asset paths at all.",
+  "originalParityClaim": false,
+  "specialPrelude": {
+    "status": "BOUNDED_PRELUDE_INTEGRATED_FULL_ATTACK_PARTIAL",
+    "script": "OVL19:0x02120900",
+    "moveRecords": [99, 180, 181, 255],
+    "characterSpecies": [50, 81, 113],
+    "sourceFields": ["animationFrame", "specialPrelude"],
+    "sequence": 33,
+    "zoomEvidence": "166_CONTROLLED_ORIGINAL_CPU_FRAMES_MATCH",
+    "clockPolicy": "SPECIAL_BRANCH_SKIPS_ORDINARY_COMBAT_CLOCK_COOLDOWN_AND_DAMAGE",
+    "renderPolicy": "EXISTING_PIXI_WORLD_TRANSFORM_PLUS_EXISTING_BOUNDED_THREE_OVERLAY",
+    "hyperSystems": ["battle-hypereffect", "battle-hypereffect_ring"],
+    "mobileFraming": "VIEWPORT_ADAPTATION_OVER_EXISTING_AUTHORED_STANDS",
+    "digitalCurtain": "PROCEDURAL_REPLACEMENT_ORIGINAL_STRIP_BINDING_PENDING",
+    "open": ["original approach/launch positions", "full action and child object graph", "DS 3D camera projection", "actor tint palette", "all move-specific impact VFX", "physical device and refresh-rate acceptance"],
+    "reportId": "battle-focus-r4-2026-09-07"
+  },
+
+  "frame": {
+    "aspect": "9:16",
+    "referenceWidth": 360,
+    "referenceHeight": 640,
+    "note": "The original is a two-screen portrait stack: two 256x192 screens, 256x384 together, ratio 0.667. Every ROM background witness comes in a _main / _sub pair, battle_result included, so the original used both screens on every screen including battle. That is evidence for a PORTRAIT ORIENTATION and nothing more. The five bands below, their order and their exact heights are a PRODUCT-AUTHORED re-arrangement: no ROM layout has been traced for them, and saying they are what the second screen carried would overstate what the witnesses prove.",
+    "orientationDecision": "PORTRAIT_CONFIRMED_2026_09_02",
+    "orientationDecisionNote": "The Owner confirmed 9:16 on 2026-09-02 after the arena art appeared letterboxed. The dark bands were an unbuilt screen, not a wrong aspect: the arena renders are 3:2, which fills the field band exactly, and 16:9 would have matched neither the 3:2 art nor the original's 4:3 screens."
+  },
+
+  "bands": [
+    {
+      "id": "CLOCK",
+      "top": 0.0,
+      "height": 0.05,
+      "shows": ["clock.frames", "clock.tier", "clock.limit"]
+    },
+    {
+      "id": "OPPONENT_HUD",
+      "top": 0.05,
+      "height": 0.1,
+      "slots": [3, 4, 5],
+      "shows": ["hp", "status", "engaged"]
+    },
+    {
+      "id": "FIELD",
+      "top": 0.15,
+      "height": 0.375,
+      "aspect": 1.5,
+      "note": "0.375 of a 9:16 frame at full width is exactly 3:2, which is the aspect the arena renders are authored at. Full-bleed horizontally; no crop."
+    },
+    {
+      "id": "PLAYER_HUD",
+      "top": 0.525,
+      "height": 0.28,
+      "slots": [0, 1, 2],
+      "shows": ["hp", "resource", "cooldown", "status", "state", "engaged"]
+    },
+    {
+      "id": "EVENT_LOG",
+      "top": 0.805,
+      "height": 0.195,
+      "shows": ["verdict", "endReason", "events"],
+      "note": "This milestone is VS5 Auto Battle, and the trace agrees: the AI selects for all six slots and no traced site takes player input during a match. So this band is a record of what happened, not a command menu. A command menu here would imply an interaction the original does not have."
+    }
+  ],
+
+  "teams": {
+    "note": "OVL19 0x0210CAB8 indexes slot = withinTeam + base and advances base by 3 per team, so the six slots the frame walks are two teams laid end to end.",
+    "player": [0, 1, 2],
+    "opponent": [3, 4, 5]
+  },
+
+  "hudFields": {
+    "hp": { "current": "stats+0x50", "maximum": "stats+0x58", "evidence": "VERIFIED_BINARY", "site": "OVL19:0x021127B0" },
+    "resource": { "current": "stats+0x54", "maximum": "stats+0x5C", "evidence": "VERIFIED_BINARY", "site": "OVL19:0x0211C144" },
+    "cooldown": { "field": "+0x28", "evidence": "VERIFIED_BINARY", "site": "OVL19:0x0210D6E4" },
+    "status": { "code": "+0x158", "remaining": "+0x15C", "evidence": "VERIFIED_BINARY", "site": "OVL19:0x0210D6E4" },
+    "state": { "field": "+0x168", "evidence": "VERIFIED_BINARY", "site": "OVL19:0x021156F8" },
+    "engaged": { "field": "+0x94", "evidence": "VERIFIED_BINARY", "site": "OVL19:0x0210FA28" },
+    "clock": { "frames": "+0x5E98", "tier": "+0x5E9C", "limit": 7200, "tierFrames": 900, "tierMax": 7, "evidence": "VERIFIED_BINARY", "site": "OVL19:0x0210D93C" },
+    "verdict": { "field": "+0x5EA4", "values": { "3": "TEAM_ONE_AHEAD", "4": "TEAM_ZERO_AHEAD", "5": "LEVEL" }, "evidence": "VERIFIED_BINARY", "site": "OVL19:0x0210DF9C" },
+    "endReason": { "field": "+0x5EA0", "values": { "0": "RUNNING", "1": "TIME_UP", "2": "TEAM_DOWN" }, "evidence": "VERIFIED_BINARY", "site": "OVL19:0x021107E0" }
+  },
+
+  "notShown": {
+    "note": "Fields the screen deliberately does not draw, so nobody adds them later believing they were forgotten.",
+    "accuracy": "The original resolves contact, not accuracy. There is no hit/miss roll to show.",
+    "damageNumbers": "No traced site produces a per-hit number for display. The resolver writes HP; whether the original drew a number is a presentation question this lane has not answered.",
+    "turnOrder": "There are no turns. Six slots dispatch per frame until one engages, and cooldowns pace them.",
+    "commandMenu": "The battle is automatic. The AI selection module chooses for every slot, and no traced site reads player input between the start of a match and its verdict."
+  },
+
+  "arenaArt": {
+    "status": "NOT_PROMOTED",
+    "runtimeSource": null,
+    "note": "No art path is declared here. Licensed arena pixels load through the production index and main.js. Declaring a path would put a loadable URL on a file that src/ imports. The scene draws product-authored neutral technical art when those pixels are absent.",
+    "layerModel": {
+      "note": "ARM9 0x020CC148, 11 records of 0x18. Each arena names its own field, a shared common layer, an optional animated layer and an optional object layer. Ten of the eleven share one common layer; BATTLE_CYBERSPACE has none, which is why its frame does not match the others.",
+      "fields": {
+        "string04": "the arena's own field",
+        "string08": "the shared common layer, empty only for BATTLE_CYBERSPACE",
+        "string0C": "an animated layer, present on BATTLE_VOLCANO and BATTLE_ISLAND only",
+        "string10": "an object layer, present on four arenas"
+      }
+    },
+    "arenas": [
+      { "index": 0, "identifier": "BATTLE_NORMAL", "field": "field_bm01_01", "common": "field_bm00_00_common", "anim": null, "object": null },
+      { "index": 1, "identifier": "BATTLE_GRASS", "field": "field_bm02_01", "common": "field_bm00_00_common", "anim": null, "object": "field_bm02_01_obj" },
+      { "index": 2, "identifier": "BATTLE_VOLCANO", "field": "field_bm03_01", "common": "field_bm00_00_common", "anim": "field_bm03_01_anim", "object": null },
+      { "index": 3, "identifier": "BATTLE_ISLAND", "field": "field_bm04_01", "common": "field_bm00_00_common", "anim": "field_bm04_01_anim", "object": "field_bm04_01_obj" },
+      { "index": 4, "identifier": "BATTLE_SOUTHPOLE", "field": "field_bm05_01", "common": "field_bm00_00_common", "anim": null, "object": null },
+      { "index": 5, "identifier": "BATTLE_DESERT", "field": "field_bm06_01", "common": "field_bm00_00_common", "anim": null, "object": null },
+      { "index": 6, "identifier": "BATTLE_CYBERSPACE", "field": "field_bm07_01", "common": null, "anim": null, "object": null },
+      { "index": 7, "identifier": "BATTLE_HELL", "field": "field_bm08_01", "common": "field_bm00_00_common", "anim": null, "object": "field_bm08_01_obj" },
+      { "index": 8, "identifier": "BATTLE_COLOSSEUM", "field": "field_bm09_01", "common": "field_bm00_00_common", "anim": null, "object": null },
+      { "index": 9, "identifier": "BATTLE_STADIUM", "field": "field_bm10_01", "common": "field_bm00_00_common", "anim": null, "object": null },
+      { "index": 10, "identifier": "BATTLE_DOMESTADIUM", "field": "field_bm11_01", "common": "field_bm00_00_common", "anim": null, "object": "field_bm11_01_obj" }
+    ]
+  },
+
+  "standPositions": {
+    "status": "UNKNOWN_REQUIRES_TRACE",
+    "note": "Where the six combatants stand on the field is not decided here. States 4 and 5 carry the approach geometry and are blocked on a world-position model and the DS math routine at 0x02003098. The scene lays the six out evenly as PRODUCT-AUTHORED placement and says so; it is not a claim about the original."
+  }
+}

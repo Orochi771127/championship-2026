@@ -1,0 +1,75 @@
+{
+  "contractId": "championship-save-envelope:v3",
+  "status": "IMPLEMENTED_ROUND2_BOUNDED_ENGINEERING_ACCEPTANCE_PASS",
+  "date": "2026-09-05",
+  "scope": "Stable individual allocation and durable shared-clock precision in the existing player envelope",
+  "schemaVersion": 3,
+  "storageKey": "championshipModernSave:v1",
+  "writerAuthority": "Existing ChampionshipPersistentSavePort through championshipStandaloneApp.save",
+  "runtimeModule": "src/championship/app/championshipStandaloneSave.js",
+  "previousContract": "docs/contracts/championship/championship-save-envelope.v2.json",
+  "retainedInvariants": [
+    "Same storage key, one writer, max 65536 serialized bytes and max depth 12",
+    "Exact schema allowlists and recursive forensic-payload rejection",
+    "Existing wallet, inventory, cage placements, progression and battle economy slices",
+    "Active unresumable battle save refusal and atomic wallet/receipt serialization",
+    "Manual Save and Save and Quit only; no background, clock or result automatic checkpoint",
+    "A failed save retains the previous durable checkpoint; retry rebuilds current app state"
+  ],
+  "addition": {
+    "instanceIdentity": {
+      "nextSequence": "positive safe integer greater than every surviving allocated ID suffix; never reduced during current-schema normalization"
+    },
+    "identityContract": "docs/contracts/championship/raising-instance-identity.v1.json",
+    "notAdded": [
+      "second roster",
+      "individual base-stat fallback",
+      "evidence metadata",
+      "ROM payload",
+      "second save key"
+    ]
+  },
+  "migration": {
+    "acceptedEnvelopeVersions": [
+      1,
+      2,
+      3
+    ],
+    "v1": "Validate exact v1 shape, preserve all player slices, add empty battle economy and derive allocation mark from surviving IDs",
+    "v2": "Validate exact v2 shape including battle economy, preserve its wallet/receipt, derive allocation mark from surviving IDs",
+    "v3": "Require and validate instanceIdentity; reject rewound or malformed allocation marks",
+    "nestedRaisingString": "Outer migration preserves the exact original Raising serialized string; the existing R2 loader independently verifies its old schema/digest before migrating",
+    "continue": "Validate restored raw instance conflicts before replacing an open session. Duplicate identities and conflicting starter/resident species reject Continue",
+    "legacyDeletedHistory": "Cannot recover IDs deleted before a legacy checkpoint; preserve observed IDs without renumbering or invented history",
+    "futureVersions": "REJECT"
+  },
+  "raisingPayload": {
+    "currentSchemaVersion": 4,
+    "clockContract": "docs/contracts/championship/world-clock-runtime.v1.json",
+    "precision": [
+      "year",
+      "season",
+      "dayOfSeason",
+      "clockMinutes",
+      "clockUnits",
+      "clockSubunits",
+      "clockRevision"
+    ],
+    "missingLegacyDate": "Preserve null year/season/day knowledge according to the validated payload version; never infer dates from savedAt or real-world time",
+    "load": "Preserve accepted domain precision; establish fresh browser elapsed baseline without offline growth",
+    "save": "Next successful manual save writes current outer v3 plus canonical Raising payload v4"
+  },
+  "tests": [
+    "tests/championship-round2-identity-app-cases.mjs",
+    "tests/championship-round2-clock-driver-cases.mjs",
+    "tests/championship-clock-runtime-save-cases.mjs",
+    "tests/championship-save-economy-v2-cases.mjs",
+    "tests/championship-storage-guard-cases.mjs"
+  ],
+  "limits": [
+    "Engineering identity and precision do not establish original persistent creature stats or growth writers",
+    "Original full save timing and all scene/modal clock rules remain partially traced",
+    "No player battle roster, original capture, food consumption or evolution is implemented by this schema change"
+  ],
+  "supersededBy": "docs/contracts/championship/championship-save-envelope.v4.json"
+}

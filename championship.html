@@ -1,34 +1,46 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="color-scheme" content="dark">
-    <meta name="theme-color" content="#071722">
+    <meta name="theme-color" content="#066ddd">
     <link rel="icon" href="data:,">
-    <title>Digimon Championship — 2026 Modern Rebuild</title>
-    <link rel="stylesheet" href="./src/championship/app/styles.css?v=p1f">
-    <link rel="stylesheet" href="./src/championship/app/intRh2Styles.css?v=int-rh2">
+    <title>數碼獸冠軍賽 — 2026</title>
+    <link rel="stylesheet" href="./src/championship/app/styles.css?v=result-1">
+    <link rel="stylesheet" href="./src/championship/app/intRh2Styles.css?v=result-1">
     <link rel="stylesheet" href="./src/championship/app/vs2Styles.css?v=vs4-cap-1">
+    <link rel="stylesheet" href="./src/championship/app/vs5Styles.css?v=result-1">
+    <link rel="stylesheet" href="./src/championship/app/raisingHomeHud.css?v=raising-r3">
+    <link rel="stylesheet" href="./src/championship/app/huntMobile.css?v=continuous-r1">
+    <link rel="stylesheet" href="./src/championship/app/facilityBattleMobile.css?v=facilities-r1">
+    <link rel="stylesheet" href="./src/championship/app/opening.css?v=opening-1">
+    <link rel="stylesheet" href="./src/championship/app/trainingLabels.css?v=training-1">
     <script type="importmap">
       { "imports": { "three": "./node_modules/three/build/three.module.js" } }
     </script>
   </head>
   <body>
     <div id="cm-title" class="cm-title">
-      <div class="cm-title__panel">
-        <p class="cm-title__eyebrow">Standalone · 2026</p>
-        <h1 class="cm-title__name">Digimon Championship</h1>
-        <p class="cm-title__tagline">Raise and care for your first companion.</p>
-        <div class="cm-title__actions">
-          <button id="cm-new-game" class="cm-button cm-button--primary" type="button">New Game</button>
-          <button id="cm-continue" class="cm-button" type="button" disabled>Continue</button>
+      <div class="cm-title__panel" data-opening="login">
+        <div class="cm-title__logo">
+          <span class="cm-title__crown" aria-hidden="true"></span>
+          <p class="cm-title__eyebrow">DIGIMON</p>
+          <h1 class="cm-title__name">數碼獸<br><span>冠軍賽</span></h1>
+          <p class="cm-title__edition">CHAMPIONSHIP <b>2026</b></p>
         </div>
+        <div class="cm-title__world" aria-hidden="true"></div>
+        <button id="cm-login" class="cm-title__login" type="button" disabled>LOGIN</button>
+        <div class="cm-title__actions" hidden>
+          <button id="cm-new-game" class="cm-button cm-button--primary" type="button">開始新遊戲</button>
+          <button id="cm-continue" class="cm-button" type="button" disabled>繼續遊戲</button>
+        </div>
+        <div id="cm-opening" hidden></div>
         <p id="cm-title-note" class="cm-title__note" role="status"></p>
       </div>
     </div>
     <div id="cm-root" hidden></div>
-    <noscript>Digimon Championship 2026 needs JavaScript.</noscript>
+    <noscript>數碼獸冠軍賽 2026 需要啟用 JavaScript 才能執行。</noscript>
     <script>
       if (window.location.protocol === "file:") {
         document.querySelector("#cm-new-game").disabled = true;
@@ -39,7 +51,7 @@
       } else {
         const gameModule = document.createElement("script");
         gameModule.type = "module";
-        gameModule.src = "./src/championship/app/main.js?v=vs4-cap-1";
+        gameModule.src = "./src/championship/app/main.js?v=result-1";
         document.body.appendChild(gameModule);
       }
     </script>

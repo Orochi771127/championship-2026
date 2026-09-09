@@ -1,8 +1,8 @@
 name: Deploy Championship to GitHub Pages
 
 on:
-  push:
-    branches: [main]
+  # A source checkpoint on main is not public-release authorization.
+  # Explicit dispatch still runs all release/rights checks before deployment.
   workflow_dispatch:
 
 permissions:

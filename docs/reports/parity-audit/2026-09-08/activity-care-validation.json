@@ -1,0 +1,86 @@
+{
+  "date": "2026-09-08",
+  "branch": "main",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "status": "REPORTED_DEFECTS_FIXED",
+  "focused": {
+    "passed": 40,
+    "failed": 0,
+    "log": "activity-focused.log"
+  },
+  "regression": {
+    "passed": 1345,
+    "failed": 0,
+    "log": "activity-regression.log"
+  },
+  "finalVerificationNote": "Final focused run and rendered browser QA include native mirror projection adjustment after the full regression run.",
+  "gitDiffCheck": "PASS",
+  "browser": {
+    "url": "http://127.0.0.1:8876/championship.html",
+    "viewport": {
+      "width": 360,
+      "height": 640
+    },
+    "documentWidth": 360,
+    "canvasCount": 1,
+    "correctedSvgToolbarIcons": 3,
+    "normalContinue": true,
+    "restored2200ContinuesNextDay": true,
+    "autonomousActivityWithoutFood": true,
+    "feedStock": [
+      49,
+      48
+    ],
+    "proteinStock": [
+      8,
+      7
+    ],
+    "eatingAmountVisualObserved": true,
+    "cleanToolVisible": true,
+    "cleanRemovedProtein": true,
+    "cleanRefund": false,
+    "browserSaveWritten": false,
+    "physicalPhoneQA": false,
+    "screenshots": [
+      "activity-mobile-food.png",
+      "activity-mobile-clean.png",
+      "activity-mobile-roam-b.png",
+      "activity-mobile-roam-c.png",
+      "activity-mobile-final.png"
+    ]
+  },
+  "originalCpu": {
+    "selectors": 480,
+    "targets": 96,
+    "peerDecisions": 64,
+    "reactionParameters": 31,
+    "jumpTumbleFrames": 112
+  },
+  "art": {
+    "assetId": "art:raising:care:r1",
+    "source": "INDEPENDENTLY_AUTHORED_VECTOR",
+    "imageCount": 10,
+    "rawPackRuntimeReads": false
+  },
+  "remaining": [
+    "Complete idle life/evolution/environment/training guards",
+    "Complete reaction effects/audio",
+    "Sleep and overnight growth/food/lifetime effects",
+    "Original calendar interstitial",
+    "Physical-device and shipping acceptance"
+  ],
+  "shippingReady": false,
+  "files": {
+    "src/championship/raising/nativeRaisingActivity.js": "d3326821c52cf8079191c74048991a856aaad8760351e220a5734533af217d0a",
+    "src/championship/raising/nativeRaisingActor.js": "5a47d191f1665ecb51c7fb23f771d97585923c29fbfc4fe6440b328356e89f9d",
+    "src/championship/raising/nativeRaisingMovement.js": "a992e5929124572fbf4fe92629a39c0efca4b6f47b40307c97be36ee179f1225",
+    "src/championship/app/championshipClockDriver.js": "70df2a3da76d6c581aa5b43b43d7ca741531a6e28b769953396b4b648316091f",
+    "src/championship/app/championshipStandaloneApp.js": "6e6ee1e67ae76c30218f6c305de06b20f255bcc940f8dd12d0341022105155fc",
+    "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js": "cd6e0d11fe088fbcca882c899dbf4242523133ed6b4c23938fb7b99f45cca039",
+    "src/championship/app/intRh2Styles.css": "26d0fe1c811d8ec1a07239d58d1fcfc82071b3f49a7a814fd248be173474b839",
+    "src/data/championship/catalogs/raising-activity.r1.json": "6de2a60f334904659ba3e4e4122ae41ede64e661581cf9561f9ec821b578381c",
+    "scripts/build-raising-care-art.mjs": "774071e870667cd9fa08ac1e955a385350d058d2eee63ce390f2ad022933ec39",
+    "scripts/serve.mjs": "e37c816cc571a228148d7536b64fbf76bc43e3cece341f3474e3f28df61d1957",
+    "assets/production/raising-care-r1/manifest.json": "e0293438234e58d644de7adc92a738ceec04c30bde83c5b2a34b79a7d01b0b55"
+  }
+}

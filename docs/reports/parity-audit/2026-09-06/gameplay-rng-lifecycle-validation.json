@@ -1,0 +1,30 @@
+{
+  "status": "APP_RNG_SAVE_CONTINUATION_PASS_NORMAL_GENERATION_UNBOUND",
+  "branch": "main",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "initialDirtyEntries": 444,
+  "focused": {
+    "passed": 18,
+    "failed": 0
+  },
+  "regression": {
+    "passed": 967,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 40118.113,
+    "command": "node --v8-pool-size=1 --test --test-concurrency=1 tests/*.mjs"
+  },
+  "cpuClockVectors": 6,
+  "channelsPerVector": 217,
+  "appContinuationDrawsAfterReload": 1200,
+  "saveKey": "championshipModernSave:v1",
+  "saveEnvelopeVersion": 4,
+  "normalSpawnRuntimeBound": false,
+  "normalEntryCapturePlayable": false,
+  "huntGenerationConsumesGameplayRng": false,
+  "browserAcceptanceRun": false,
+  "originalBatterySaveParity": false,
+  "report": "docs/research/HUNT_RNG_LIFECYCLE_AND_AUTONOMY_2026-09-06.md",
+  "regressionLog": "R:/Projects/Championship2026/_archive/hunt-environment-2026-09-06/rng-lifecycle-regression-final.tap",
+  "gitDiffCheck": "PASS"
+}

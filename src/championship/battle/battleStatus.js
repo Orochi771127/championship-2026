@@ -313,17 +313,20 @@ export function tickNegativeStatus(input) {
   }
 
   const remaining = remainingDuration - 1;
+  let damageTick = false;
   if (runtimeCode === 7 || runtimeCode === 13) {
     if (remainderTowardZero(remaining, 180) === 0) {
       currentHp = applyDot(currentHp, maxHp, 3);
+      damageTick = true;
     }
   } else if (runtimeCode === 14) {
     if (remainderTowardZero(remaining, 10) === 0) {
       currentHp = applyDot(currentHp, maxHp, 5);
+      damageTick = true;
     }
   }
 
-  if (currentHp < 0) {
+  if (damageTick && currentHp < 0) {
     return deepFreeze({ runtimeCode: 0, remainingDuration: 0, currentHp: 0 });
   }
   return deepFreeze({ runtimeCode, remainingDuration: remaining, currentHp });

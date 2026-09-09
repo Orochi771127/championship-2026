@@ -1,0 +1,190 @@
+{
+  "contractId": "HUNT_CAPTURE_DATAFLOW",
+  "version": 1,
+  "date": "2026-09-08",
+  "authorization": "Owner: 追通一個野生個體的 HP 初始化與 Rope 傷害寫入，再接手掌收取、記憶卡插入及返家提交。第三輪既有授權已涵蓋這些工作。",
+  "status": "NORMAL_UNACCOMPANIED_CAPTURE_AND_NATIVE_PROFILE_SAVE_BOUND_FULL_PARITY_PARTIAL",
+  "normalEntryCapturePlayable": true,
+  "nativeReceipt": "docs/research/HUNT_CAPTURE_NATIVE_REPLAY_2026-09-05.json",
+  "research": "docs/research/HUNT_CAPTURE_DATAFLOW_2026-09-05.md",
+  "authority": {
+    "runtime": "Existing huntRuntime owns nativeHuntFieldControls for normal generation. Explicit native replay fixtures retain their separate diagnostic path.",
+    "rosterAndId": "Existing championshipStandaloneApp / raising.collection / raisingInstanceIdentity",
+    "storage": "Existing ChampionshipPersistentSavePort, championshipModernSave:v1 only",
+    "rendererAndClock": "No new renderer, global ticker, router, or store",
+    "assets": "No ROM pixels, decoded resources, raw records, or new numeric catalogs enter shipping runtime"
+  },
+  "record": {
+    "source": "ARM9 02062100 creates R, OVL0 context+108 owns stride-1C8 records, context+104 contains pointers",
+    "binding": "OVL0 0211AA5C -> ARM9 02065EB0 -> 0206489C -> OVL0 0210B924 sets W+110=R",
+    "hpInitialization": "R+50 and R+58 receive the same HP. W+4E8=current HP; W+4EC=max HP are separate copies",
+    "rng": "Normal entry consumes the continuing app RNG through verified species/pool/AI/position/grouping sources. Save v5 preserves RNG/history. Return consumes one channel1 draw per actual returned card. Historical live receipts remain research only; no future RNG result list is installed.",
+    "formula": "base + 10 * remainder(B7, trunc(trunc((nextRungHp-base)/2)/10)); this ROM returns remainder 0 for divisor 0",
+    "scope": "Normal unaccompanied native entry and tools are bound; NATIVE_LIVE_STATE_REPLAY remains an explicitly supplied research fixture only."
+  },
+  "rope": {
+    "damageRateQ12": "round(maxHp * 4096 / (coefficient * (generation==1 ? 3 : 6)))",
+    "coefficient": "Original u16 table 020C98BC + ropeIndex*28 + generation-column + max(species[70]-1,0)*2; coefficient supplied by trace",
+    "initialDurability": "u8[020C98B0 + ropeIndex*28] * 60",
+    "nativeDistanceBands": [
+      40,
+      80,
+      160
+    ],
+    "slack": "Squared distance <40^2: durability +10 capped at max; no direct HP damage",
+    "pull": "40^2 <= squared distance <80^2: accumulator += damageQ12; durability -1, extra -1 if species[71]==2",
+    "strong": "Squared distance >=80^2: accumulator += 2*damageQ12; durability -1, extra -2 if species[71]==2; dispatch 11 or blocked 13; blocked costs one more durability",
+    "damageWriter": "If accumulator >=4096, W.HP -= accumulator>>12 clamped at zero; then subtract exactly 4096 from accumulator, not modulo",
+    "break": "Squared distance strictly >160^2 sets durability zero; <=0 durability enters break state",
+    "tick": "One call is one native update invocation, never an assumed browser frame or arbitrary milliseconds",
+    "implementationLimit": "Normal controller binds compared strong/slack/pull writers and AI8 event11/13 reactions. Complete browser touch capture, original tool presentation and AI7 remain separate acceptance requirements.",
+    "movementBlocked": "Numerical input represents W+4FC movement-restriction flag, not a direct collision-grid verdict; AI8 event13 can set it via a random stun timer.",
+    "nativeTouchValidation": "198 actual stylus-driven Rope invocations match HP/durability/accumulator including events11/13. State-specific AI handling remains outside the numerical function."
+  },
+  "collection": {
+    "transitions": [
+      "WILD",
+      "TETHERED",
+      "DOWN_ANIMATION",
+      "HAND_READY",
+      "HAND_ANIMATION",
+      "ON_CARD",
+      "HOME_COMMITTED",
+      "RELEASED"
+    ],
+    "down": "Observed AI8 HP0 -> next-update AI10 entry starts W+11C=15 with vertical shake -> countdown checked before decrement -> AI11 entry writes W+4F8=1. This live path leaves W+50C=0; do not substitute the separate 0210CBBC downPhase path.",
+    "hand": "Event16, actual on-card species G sum plus incoming G <= owned card max; overcapacity event39 leaves wild present",
+    "accepted": "Event20 schedules collection; no immediate card count change",
+    "insert": "OVL0 02117458 insertion subphase increments its counter; only counter >10 copies R into card[count] and increments count",
+    "animationBoundary": "Normal native clock owns down and hand/card phases. Active native clocks reject early-completion APIs; renderer callbacks cannot insert a card. See the Hunt core implementation for normal input/AI/timeline tests.",
+    "hpOwnership": "Card copies source R; it does not copy depleted W.HP. This bounded capture has W.HP=0, R.HP=210, card.HP=210",
+    "duplicates": "Repeated hand/insertion/confirm intents do not append a second record",
+    "nativeObservedTimeline": "Gate0 actual wild7: HP0 frame351; hand-ready frame367; card count1 frame480. Observations, not universal delays. Card retains sourceHP210."
+  },
+  "home": {
+    "native": "OVL14 0210C03C -> ARM9 02061BB4 inserts R into first free slot of 16-slot pool (slot stride 1CC, record at +4), marks database flag, clears card count after loop",
+    "app": "exitHunt opens existing HUNT_RESULT with pending card; name edits update card; confirmHuntResult stages existing ID allocator and Raising collection",
+    "save": "Existing save port writes candidate collection and high-water mark together; only success publishes live roster and clears card",
+    "failure": "Keep result screen and card in memory, leave roster/ID unchanged, retry through same app transaction",
+    "saveGuard": "Standalone save cannot silently serialize Home while a captured card awaits commit",
+    "capacity": "16-slot capacity checked after staged releases. Card/Home rows ordered as original; all Home identities including starter/residents support confirmation/cancel. Canonical nested Raising schema v5 persists resident membership; validated v1-v4 migrate without silently accepting a truncated old roster.",
+    "durableExtension": "Optional raising.collection[].nativeProfile stores exactly 108 known u32 fields, five narrow fields, a five-UTF16-unit source name and version1; strict validation. Existing capturedVitals and legacy records remain valid.",
+    "profile": "Actual per-individual HP/TP and known stat fields are projected when nativeProfile exists. No growth/evolution/lifetime/skills or player party consumer is inferred.",
+    "provenance": "New normal captures: NATIVE_NORMAL_HUNT_CONTROLLER. Explicit replay retains ROM_DATAFLOW_REPLAY_NOT_FIELD_PARITY. Full hardware/save/field parity is not asserted.",
+    "releaseFailure": "Home removal, capture insertion, cage/care cleanup and ID allocation save atomically. Failure retains original Home, card and staged choice for retry.",
+    "returnWriter": {
+      "implementation": "src/championship/hunt/capture/nativeHuntHistory.js",
+      "normalAppBound": true,
+      "transaction": "Validate candidate records/RNG/history before committing; one return writer per expedition. Result/Home uses existing atomic save and ID allocation.",
+      "cpuHomeReceipt": "docs/research/NATIVE_INDIVIDUAL_HOME_CPU_CHECK_2026-09-08.json"
+    }
+  },
+  "remaining": [
+    "Original carried-actor entry/whole-batch update and wild AI7 combat",
+    "Successful normal browser touch capture and physical phone acceptance",
+    "Original Hunt tool VFX/audio and all-tool normal visual acceptance",
+    "Care/growth/evolution/lifetime, own-party eligibility and post-battle writeback",
+    "Original name-edit charset/writer and full DS battery layout parity"
+  ],
+  "liveEncounterReceipt": "docs/research/HUNT_LIVE_ENCOUNTER_REPLAY_2026-09-05.json",
+  "nativeTouchReceipt": "docs/research/HUNT_NATIVE_TOUCH_REPLAY_2026-09-05.json",
+  "liveResearch": "docs/research/HUNT_LIVE_CAPTURE_2026-09-05.md",
+  "phaseResearch": "docs/research/HUNT_PHASE_PORT_AND_RESIDENT_MIGRATION_2026-09-05.md",
+  "phaseReceipt": "docs/research/HUNT_NATIVE_PHASE_REPLAY_2026-09-05.json",
+  "boundedPorts": {
+    "stroke": "18 native samples and successful shape center match; slot variant RNG and animation expiry remain explicit inputs",
+    "ai8": "207 event prefixes and movement CPU cases remain evidence; normal controller now binds AI8. This does not accept AI7 or every browser/device case.",
+    "ai10": "Entry Nitro normalization,15 collision-checked moves and15 countdown/shake updates match native target",
+    "hand": "94 pre-insertion controller updates match native phases; render callbacks cannot accelerate card ownership"
+  },
+  "movementResearch": "docs/research/HUNT_MOVEMENT_CLOSURE_2026-09-06.md",
+  "movementReceipt": "docs/research/HUNT_MOVEMENT_REPLAY_2026-09-06.json",
+  "movementCpuReceipt": "docs/research/HUNT_MOVEMENT_CPU_CHECK_2026-09-06.json",
+  "movementRuntimeBound": true,
+  "normalSpawnRuntimeBound": true,
+  "normalEntryEnvironment": {
+    "research": "docs/research/HUNT_ENTRY_ENVIRONMENT_AND_COMPLETION_2026-09-06.md",
+    "receipt": "docs/research/HUNT_ENTRY_ENVIRONMENT_REPLAY_2026-09-06.json",
+    "cpuReceipt": "docs/research/HUNT_SPAWN_CPU_CHECK_2026-09-06.json",
+    "scope": "Actual UI entry from a private checkpoint chained to original Raising ds3; not a boot or battery-save acceptance",
+    "nativeHuntIndex": 1,
+    "field": "field_hm01_02",
+    "producer": "0207C858 ATR16-byte header and02087E40 ESC5-byte header; exact ROM/loaded/end hashes; zero grid writes in observed interval through tick876",
+    "variantLimit": "Original Gate node/hour selector and normal functional source binding are now implemented; historical capture receipts retain their original field identities.",
+    "rng": "10584 actual CPU returns and final cursors match restoreChannelRng; no future result list installed in runtime",
+    "position": "All15 initial positions and terrain queries match;7 repairs. Range uses channel0 thenB2/B3 divided by102; eight-ray repair radius0..50.",
+    "positionLimit": "Normal app uses the compared ordinary pool/AI/position/group composition. Carried-actor registration remains unbound.",
+    "target": "134 observed target writes; nonzero AI+1E4 written three times by0210FA70 in AI1. AI+1A0 was0; target presence alone does not prove active following.",
+    "regression": "Historical environment comparison was962/962; current audit continuation is recorded in two-stage-validation.json.",
+    "normalBrowserCaptureAccepted": false
+  },
+  "gameplayRngAppSaveBound": true,
+  "huntGenerationConsumesGameplayRng": true,
+  "gameplayRngContract": "docs/contracts/championship/championship-save-envelope.v5.json",
+  "individualPoolPort": {
+    "research": "docs/research/HUNT_INDIVIDUAL_POOL_IMPLEMENTATION_2026-09-06.md",
+    "receipt": "docs/research/HUNT_INDIVIDUAL_POOL_CPU_CHECK_2026-09-06.json",
+    "implementation": [
+      "src/championship/hunt/capture/nativeHuntIndividual.js",
+      "src/championship/hunt/capture/nativeHuntIndividualPool.js"
+    ],
+    "inputAuthority": "Explicit functional species, seasonal encounter entries, biome catalog/modifier bytes, selected released record, and caller-owned RNG. No research receipt or raw ROM asset import.",
+    "output": "Known constructor/post-update word and narrow-field projection plus five-UTF16-unit name. No invented padding, profile consumer or second save authority.",
+    "cpuEvidence": "228 species constructor/post-update paths; four pool vectors with 270/301/266/376 RNG calls; first vector equals original live 0211AA44 full217-channel boundary; six modifier-byte cases.",
+    "limits": "Functional numeric source catalog is bound; CPU receipts and raw resources are not runtime inputs. Carried-actor entry remains unbound.",
+    "runtimeDataEligible": true,
+    "normalEntryBound": true,
+    "acceptance": "NORMAL_UNACCOMPANIED_FUNCTIONAL_SOURCE_BOUND"
+  },
+  "actorGenerationPort": {
+    "research": "docs/research/HUNT_GENERATION_SOURCE_PROGRESS_2026-09-06.md",
+    "receipt": "docs/research/HUNT_ACTOR_ENTRY_CPU_CHECK_2026-09-06.json",
+    "implementation": [
+      "src/championship/hunt/capture/nativeHuntActorInitialization.js",
+      "src/championship/hunt/capture/nativeHuntGeneration.js"
+    ],
+    "ordinaryEntryRngCalls": 492,
+    "ordinaryEntryActors": 15,
+    "aiCpuCases": 721,
+    "speedCpuCases": 2052,
+    "groupCases": 3,
+    "carriedPoolReceipt": "docs/research/HUNT_CARRIED_POOL_CPU_CHECK_2026-09-06.json",
+    "carriedActorBound": false,
+    "inputAuthority": "Explicit functional inputs and caller RNG only; resource-presence booleans, no native pointers or raw grids",
+    "normalEntryBound": true,
+    "acceptance": "NORMAL_UNACCOMPANIED_ENTRY_BOUND_CARRIED_OPEN"
+  },
+  "gateVariantPort": {
+    "implementation": "src/championship/hunt/capture/nativeHuntGateVariant.js",
+    "receipt": "docs/research/HUNT_GATE_SOURCE_CPU_CHECK_2026-09-06.json",
+    "nodes": 17,
+    "cpuVectors": 408,
+    "comparedSupportedVectors": 374,
+    "normalEntryBound": true,
+    "limits": "00/01 hours produce negative original trig indices and remain explicit UNKNOWN; Gate node source is required and not replaced by browser geometry"
+  },
+  "historyLifecyclePort": {
+    "research": "docs/research/HUNT_HISTORY_LIFECYCLE_2026-09-06.md",
+    "implementation": "src/championship/hunt/capture/nativeHuntHistory.js",
+    "cpuReceipt": "docs/research/HUNT_HISTORY_CPU_CHECK_2026-09-06.json",
+    "originalSaveLoadReceipt": "docs/research/HUNT_HISTORY_LIFECYCLE_CHECK_2026-09-06.json",
+    "selectionCpuCases": 80,
+    "returnCpuCases": 22,
+    "returnedRecordRngCalls": 242,
+    "saveCodecCases": 3,
+    "originalControlledSaveLoadPassed": true,
+    "nativePersistentFields": "First three history slots: species, biome, five UTF16 units of name; cursor. Trait restored to8. Modifier low4bits. Slot3 transient.",
+    "nativeReturnMask": "Lost carried record decrement compares packed entry &0x700, distinct from ordinary species mask0xFFF; preserved exactly.",
+    "portLimits": "Pure writer plus app candidate commit now bind normal return. Carried entry and original hardware save parity remain open.",
+    "normalAppBound": true,
+    "webSaveBound": true,
+    "acceptance": "NORMAL_UNACCOMPANIED_RETURN_AND_SAVE_BOUND"
+  },
+  "currentAcceptance": {
+    "research": "docs/research/GATE_ADMISSION_AND_INDIVIDUAL_RETURN_2026-09-08.md",
+    "normalApiCaptureSaveContinue": true,
+    "browserTouchCaptureAccepted": false,
+    "physicalDeviceAccepted": false,
+    "supersedes": "Earlier fixture/replay restrictions are historical for normal unaccompanied generation, tools, AI1/2/3/8/down/hand/card/return. Remaining native and visual gaps below are still open."
+  }
+}

@@ -1,0 +1,791 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:cage:licensed-runtime:v1",
+  "family": "CAGE",
+  "product": "DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD",
+  "artifactMaturity": "LICENSED_PIXEL_FAITHFUL_NEAREST_HD_CAGE_FIELDS",
+  "productionStatus": "OWNER_APPROVED_LICENSED_PIXEL_RUNTIME",
+  "shippingStatus": "NOT_SHIPPING_READY",
+  "humanApproved": true,
+  "runtimeEligible": true,
+  "shippingReady": false,
+  "rightsStatus": "LICENSED",
+  "rights": {
+    "status": "LICENSED",
+    "authority": "assets/production/ART_PRODUCTION_INDEX.json",
+    "ownerDirective": "docs/coordination/OWNER_DIRECTION.md#2026-09-02",
+    "sourceRomSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "researchPack": "NOT_RUNTIME_READABLE",
+    "sourceBaseline": "docs/art/production/cage/faithful-hd40"
+  },
+  "fieldCount": 40,
+  "defaultPreviewFieldId": "field_cm01_01",
+  "defaultPreviewNote": "CageDefinition 0 visual. VS1 habitat regions remain product-authored drop targets; this is not original ranch layout.",
+  "memoryPolicy": "N_ACTIVE_TILES_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+  "filter": "nearest",
+  "fields": [
+    {
+      "fieldId": "field_cm01_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm01_01/frame-00.png",
+          "sha256": "816EC7851457DF8DF012A71CF36CEBC69DBDAF62E42B2C091D746733FA1DBB0A",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm02_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm02_01/frame-00.png",
+          "sha256": "4C99F2CAEFC0E2E15D486FCD9D2EB0FE183CF1685D024CAB2B5B4996B0C9F249",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm03_01",
+      "worldWidthPx": 1152,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 288,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm03_01/frame-00.png",
+          "sha256": "F1DACDEBC37FC17F1F09BAF1A29BCC59DAE8509CB3F41BBE5491B604DE63EB23",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm04_01",
+      "worldWidthPx": 1152,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 288,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm04_01/frame-00.png",
+          "sha256": "3A445A357C6FF01BE11CD120C9C5C980733BBB2610FE35FB23C413A64143BB35",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm05_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm05_01/frame-00.png",
+          "sha256": "1B4CDCB6F0D9A1AAC0F19B2BDEFF2AC5AC0B2378D03E08D15F995EC79338264E",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm06_01",
+      "worldWidthPx": 1344,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 336,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm06_01/frame-00.png",
+          "sha256": "F169BF3316D2FB6439FE50A60DF39BCF6FE4655864028429DBC1B4BED7234DD0",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm07_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm07_01/frame-00.png",
+          "sha256": "E1433E5F90A7FAA45F2BB025FBFFED1A741458B17CAA368A6E3B635BBECEDADE",
+          "durationMs": 835.7556556544072,
+          "durationRawTicks": 50,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm07_01/frame-01.png",
+          "sha256": "E1433E5F90A7FAA45F2BB025FBFFED1A741458B17CAA368A6E3B635BBECEDADE",
+          "durationRawTicks": 50,
+          "durationMs": 835.7556556544072,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm08_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm08_01/frame-00.png",
+          "sha256": "80F039CB2B1F8AE751130AF7FB3EBF216C0BC93B95E523EBB8B103F18F17A2E8",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm09_01",
+      "worldWidthPx": 1152,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 288,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm09_01/frame-00.png",
+          "sha256": "6FADF023400285D92D737B63E368AA4955ECF4DFBF29FEC007F0B585A9B9ACF9",
+          "durationMs": 334.30226226176285,
+          "durationRawTicks": 20,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm09_01/frame-01.png",
+          "sha256": "291464CF4533806DB2631E777232DFA4B1CF0E409C3C6A1C97C574B5EC1CD230",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm10_01",
+      "worldWidthPx": 1152,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 288,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm10_01/frame-00.png",
+          "sha256": "6F909CD155B79A9870871CAE276055DB4C44B13478D9B20642C199D17AA113B9",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm11_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm11_01/frame-00.png",
+          "sha256": "48B1287560B5DF94CFB380840024343CF77D75D6766717697BEC47D7EF0A5203",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm12_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm12_01/frame-00.png",
+          "sha256": "AC36B48E707B59CE4FDBD5C0A1EFF7D916E2C5C7DF2BBAFE442287D5D6CF5B88",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm13_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm13_01/frame-00.png",
+          "sha256": "0E14ABF9BBE39C6D207AEEF3E9CB79B2A56837973AB3DC66271A5A19833FAB52",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm14_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm14_01/frame-00.png",
+          "sha256": "5812B850933FA4352AA9F088C60F67127F1D0D2257742EA2DD24B0B46565A3C7",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm15_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm15_01/frame-00.png",
+          "sha256": "795DABD36B545674D53B8161AB55D279BF3558C0F16C815DA4973C1DDD4103B5",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm16_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm16_01/frame-00.png",
+          "sha256": "1DCC8EA0D42804603C11C3B5D2CF5C380940A2F8E487C39F45D1274202AF8CBB",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm17_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm17_01/frame-00.png",
+          "sha256": "E406FE3C6A4A05782591B4F859EC72F2EB75A24FEA7F33641FD5FD2CD02DF77D",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm18_01",
+      "worldWidthPx": 576,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 144,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm18_01/frame-00.png",
+          "sha256": "7CDB991AA7EB7F7651DFC49A3C7A3FDC07E8686FAEE99B0369C0DB085223AB9E",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm19_01",
+      "worldWidthPx": 1536,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 384,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm19_01/frame-00.png",
+          "sha256": "7C07FE213299465DFAA13F8FCCAF97D7E902D11F808D79E1B6C39243451D6D47",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm20_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm20_01/frame-00.png",
+          "sha256": "F40F8C754A53E7E93C5EF5E428B3925E70DC99B07049AC8ED23C9B4C20F7FA86",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm21_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm21_01/frame-00.png",
+          "sha256": "6612CC28F0869071CFAD64EBD648F8D6012FB42427AC3C313F67F067D4CE0395",
+          "durationMs": 334.30226226176285,
+          "durationRawTicks": 20,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm21_01/frame-01.png",
+          "sha256": "0275ADA68225E249C361ECA5377686D9B0827D59560C6C8B5717C45ABC0700E4",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm22_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm22_01/frame-00.png",
+          "sha256": "775B3CD073F687AC6C7E02E123E28ADE8C97A4061015F96D31193ED482EA31DC",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm23_01",
+      "worldWidthPx": 576,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 144,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm23_01/frame-00.png",
+          "sha256": "5582A20569F3C58D11733C92B7AFF66D9BAA50C199834CC16AF051F7E4FD1EA5",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm24_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm24_01/frame-00.png",
+          "sha256": "4E441B0E5AB7A185C4AB9476355582944DFB5A844D59CDB682E336DE76ADE0C2",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm25_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm25_01/frame-00.png",
+          "sha256": "B32E556B2197187921963ED8AB2AF9B9BB3F714BC0B362A260957C1A5F9B2A84",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm26_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm26_01/frame-00.png",
+          "sha256": "1E8593DCD43E48601FBEE13DC674AB36FAF0BBB3A27B8966D6D8512C25318017",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm27_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 200,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm27_01/frame-00.png",
+          "sha256": "8737BBF6BE0F734AEA665129DAB4CBC4CE5625DA676748089CCF0408716C0B5E",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm28_01",
+      "worldWidthPx": 960,
+      "worldHeightPx": 800,
+      "nativeWidthPx": 240,
+      "nativeHeightPx": 200,
+      "visualRole": "WAITING_ROOM",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm28_01/frame-00.png",
+          "sha256": "2C034A04C1304215F64B44DFA5E4442CAB839370553C2FEE3D6C11F063358C91",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm29_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "LID",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm29_01/frame-00.png",
+          "sha256": "2915DA22F70B9FA47ABABAA9C43E0A2B0E386153862F8E3A92C48AE45F0E4079",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm30_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm30_01/frame-00.png",
+          "sha256": "F1748FC2ABC277437BCCA6D372523E0AF614F7D03C7F1E3FC3D8942CD3721C65",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm31_01",
+      "worldWidthPx": 768,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 192,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm31_01/frame-00.png",
+          "sha256": "DA0C8EC45D3E1C303C4093D92D9A85914C168B99F624864F31A565CF2E525C53",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm32_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm32_01/frame-00.png",
+          "sha256": "EA3BEF76C9946AC9174CAADA08030F7D260D61463CA7DAF301201CCC0D28C326",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm33_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "UNREFERENCED_VISUAL_ASSET",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm33_01/frame-00.png",
+          "sha256": "CF0500E469AF4156FF22489B06A64DF7DF0DA3C2F26982B9C1F2257076376F22",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm34_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm34_01/frame-00.png",
+          "sha256": "6C07BD75AC912FABBCDBD855EE7886A37EFF1C4329AB71C1D6B6A0F6EDD0EA8D",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm35_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm35_01/frame-00.png",
+          "sha256": "DF8D8280F218D08A298670F601C8E0AF4A3F7648343DC22ABAD0A3F0E0E9277B",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm36_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "UNREFERENCED_VISUAL_ASSET",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm36_01/frame-00.png",
+          "sha256": "A6BF989D61798D13B71F9B47D1F9F48285FE3D3A45EB05E30CB8BB2F6FF1189E",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm37_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm37_01/frame-00.png",
+          "sha256": "7A463B121B6246BBAC67E1EDEDD5471AFEA81D108FC9EBED46F1794A4DA38B7C",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm38_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "UNREFERENCED_VISUAL_ASSET",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm38_01/frame-00.png",
+          "sha256": "263308AEE83132330622618CEF77D31A9860A7B8CECE9ED24ABB49D6936AE734",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm39_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm39_01/frame-00.png",
+          "sha256": "60C527184B0104E1354EE945F7B3336E6FD93654C013410B96C3734187189E10",
+          "durationMs": 334.30226226176285,
+          "durationRawTicks": 20,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm39_01/frame-01.png",
+          "sha256": "ACE51F1404591C3EFEE2D7280E9C229F58ED1CAF0F3F99A4EFCAD3BBDA956754",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm40_01",
+      "worldWidthPx": 384,
+      "worldHeightPx": 448,
+      "nativeWidthPx": 96,
+      "nativeHeightPx": 112,
+      "visualRole": "SHOP_CAGE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm40_01/frame-00.png",
+          "sha256": "6466F513A4E8D429455F165E4478C800CD76A5D341914EF1F31D330DA4565862",
+          "durationMs": null
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "One resident field at a time. Collision, ATR and ranch placement stay in Cage runtime.",
+    "cm33/cm36/cm38 are stored unreferenced assets. cm29 is LID. cm28 is Waiting Room.",
+    "Animated water/terrain uses verified raw ticks. Do not invent 60fps.",
+    "CM27 center-mark removal is remake-only. This bundle keeps the exact original pixels."
+  ],
+  "memoryPolicyNote": "Cages are small shaped tiles that composite into one ranch, not whole maps visited one at a time. Hunt and Battle keep ONE_ACTIVE_FIELD."
+}

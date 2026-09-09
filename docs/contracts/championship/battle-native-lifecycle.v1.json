@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "status": "ALL_EXECUTABLE_MOVE_SCRIPTS_AND_SOURCE_PRESENTATION_BOUND_ORIGINAL_PARITY_PARTIAL",
+  "originalParityClaim": false,
+  "scope": "Existing normal AI battle -> byte-address actor/target graph -> move VM -> owned effect cleanup",
+  "evidence": {
+    "launchTarget": "OVL19 0211C098: r3 is the target combatant; store +E8 and use its current transformed cell midpoint",
+    "initialize": "OVL19 0211C144: owner +E4, copied move +20, target point +14/+18/+1C, main VM +EC, four auxiliary VMs +2A0 with stride 1B4",
+    "primary": "OVL19 0211C714/C958: finish pointer1C, clear its children, allocate move fields30/36, then pointer28",
+    "release": "OVL19 0211CD80: 24 child handles, matching VM ownership only; clear matching auxiliary binding among four +970 entries",
+    "actorGeometry": "Existing registered character profiles and numeric native bounds; original cell-bank pointer path and raw animation cadence",
+    "resource": "OVL19 0211C244 charges current stats54 once before prelude; existing AI metricLimit=current, metricBase=maximum",
+    "impact": "0211AF20 target species >=72 selects big spark; 0211ADEC first free of 16; 0208AF28 finishes at source NSBCA frameCount, 0211A778 clears before next update",
+    "cpuReceipt": "docs/research/BATTLE_LIFECYCLE_CPU_2026-09-07.json",
+    "normalPathReceipt": "docs/art/production/battle-native-lifecycle-r7/normal-runtime.json",
+    "sources": [
+      "BATTLE_HIT_CONTACT_TRACE_v3.md:22",
+      "OVL19 SHA256 d660e3e0bf243541c356c54dcbd1aec58e8df6c2dfaf4a5854d375a5f2d13715"
+    ]
+  },
+  "boundaries": [
+    "Per-match VM memory is execution state within existing battleRuntime; never save/router/store/ticker authority",
+    "Original resource allocator returns null for absent banks; do not fabricate actor bounds or effect duration",
+    "Initial action notification timing uses the existing dispatcher; actor cell geometry and renderer share that request, including prelude restore",
+    "Translation coverage is separate from normal-path acceptance",
+    "Three-member knockout slowdown lookup index3 requires actual original caller context; no guessed duration",
+    "Controlled 595-move execution does not certify natural AI selection or visual acceptance of every move",
+    "Original complete ending-camera, hardware pixel/audio parity and original pre-constructor RNG/profile history are not accepted",
+    "Home-owned party, additional moves, untraced status bodies and non-battle triggers remain separate open gameplay work",
+    "Physical-device, human visual, public rights and shipping acceptance remain false"
+  ],
+  "r13Presentation": {
+    "report": "docs/art/production/battle-presentation-r13/IMPLEMENTATION_2026-09-08.md",
+    "verification": "docs/art/production/battle-presentation-r13/verification.json",
+    "limits": [
+      "Three-member knockout slowdown lookup index3 requires actual original caller context; no guessed duration",
+      "Controlled 595-move execution does not certify natural AI selection or visual acceptance of every move",
+      "Original complete ending-camera, hardware pixel/audio parity and original pre-constructor RNG/profile history are not accepted",
+      "Home-owned party, additional moves, untraced status bodies and non-battle triggers remain separate open gameplay work",
+      "Physical-device, human visual, public rights and shipping acceptance remain false"
+    ]
+  }
+}

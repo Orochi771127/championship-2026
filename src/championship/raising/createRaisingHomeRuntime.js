@@ -1,6 +1,6 @@
 import { clonePlainData, deepFreeze } from "../contracts/championshipContracts.js";
-import { createRaisingHomeInitialState, reduceRaisingHome } from "./raisingHomeDefinition.js";
-import { captureRaisingHomeSnapshotR2 } from "./raisingHomePersistenceR2.js";
+import { advanceRaisingHomeClock, createRaisingHomeInitialState, reduceRaisingHome } from "./raisingHomeDefinition.js";
+import { captureRaisingHomeSnapshotR2, stageRaisingResidentRelease } from "./raisingHomePersistenceR2.js";
 
 const ACCEPTED_COMMAND_ID_LIMIT = 256;
 const OBSERVER_FAILURE_LIMIT = 256;
@@ -13,7 +13,11 @@ const COMMAND_KEYS = Object.freeze({
   RAISING_HOME_CARE: BASE_COMMAND_KEYS,
   RAISING_HOME_TRAIN: BASE_COMMAND_KEYS,
   RAISING_HOME_REST: BASE_COMMAND_KEYS,
-  RAISING_HOME_TOGGLE_PAUSE: BASE_COMMAND_KEYS
+  RAISING_HOME_TOGGLE_PAUSE: BASE_COMMAND_KEYS,
+  // The original's Raising Home submenu carries an End Day entry, so a day can
+  // be closed on demand. It takes no payload: the reducer rolls the whole
+  // calendar cascade from the current reading.
+  RAISING_HOME_END_DAY: BASE_COMMAND_KEYS
 });
 
 function rejection(snapshot, code, message = null) {
@@ -55,12 +59,57 @@ export function createRaisingHomeRuntime(options = {}) {
   const listeners = new Set();
   const acceptedCommandIds = new Set();
 
+  function publish(next, kind = null) {
+    snapshot = next;
+    const publication = deepFreeze({ accepted: true, code: kind === "clock" ? "RAISING_HOME_CLOCK_ADVANCED" : "RAISING_HOME_OK", ...(kind ? { kind } : {}), snapshot, persistenceAttempted: false, playerStatePatch: null });
+    const notificationListeners = [...listeners];
+    notifying = true;
+    notificationSnapshot = publication.snapshot;
+    try {
+      for (const listener of notificationListeners) {
+        try { listener(publication); }
+        catch {
+          observerFailureCount = Math.min(OBSERVER_FAILURE_LIMIT, observerFailureCount + 1);
+          lastObserverFailureRevision = publication.snapshot.revision;
+        }
+      }
+    } finally {
+      notificationSnapshot = null;
+      notifying = false;
+    }
+    return publication;
+  }
+
   return Object.freeze({
     getSnapshot() {
       return snapshot;
     },
+    commitResidentRelease(residentIds, expectedRevision) {
+      if (disposed || notifying || snapshot.revision !== expectedRevision) return rejection(snapshot, "RAISING_HOME_RELEASE_STALE");
+      return publish(stageRaisingResidentRelease(snapshot, residentIds), "membership");
+    },
     getDiagnostics() {
       return deepFreeze({ disposed, observerFailureCount, lastObserverFailureRevision });
+    },
+    advanceClock(input) {
+      if (notifying) return rejection(notificationSnapshot, "RAISING_HOME_NOTIFICATION_BUSY", "Raising Home observer notification is in progress");
+      if (disposed) return deepFreeze({ accepted: false, code: "RAISING_HOME_DISPOSED", snapshot: null });
+      try {
+        const envelope = clonePlainData(input);
+        const keys = Object.keys(envelope).sort();
+        const expected = ["units", "expectedClockRevision", ...["subunits", "divisor", "clearElapsed"].filter((key) => Object.hasOwn(envelope, key))].sort();
+        if (keys.length !== expected.length || keys.some((key, i) => key !== expected[i])) throw new TypeError("Clock transition fields are not exact");
+        if (!Number.isSafeInteger(envelope.expectedClockRevision) || envelope.expectedClockRevision < 0 || Object.is(envelope.expectedClockRevision, -0)) throw new TypeError("Clock expectedClockRevision is invalid");
+        if (envelope.expectedClockRevision !== snapshot.clockRevision) return rejection(snapshot, "RAISING_HOME_STALE_CLOCK_REVISION");
+        const next = advanceRaisingHomeClock(snapshot, envelope.units,
+          Object.hasOwn(envelope, "subunits") ? envelope.subunits : 0,
+          Object.hasOwn(envelope, "divisor") ? envelope.divisor : 400,
+          Object.hasOwn(envelope, "clearElapsed") ? envelope.clearElapsed : false);
+        if (next === snapshot) return rejection(snapshot, snapshot.paused ? "RAISING_HOME_PAUSED" : "RAISING_HOME_CLOCK_NO_CHANGE");
+        return publish(next, "clock");
+      } catch (error) {
+        return rejection(snapshot, "RAISING_HOME_REJECTED", error instanceof Error ? error.message : String(error));
+      }
     },
     dispatch(command) {
       if (notifying) {
@@ -86,27 +135,8 @@ export function createRaisingHomeRuntime(options = {}) {
         const { commandId, expectedRevision, ...domainCommand } = envelope;
         const next = reduceRaisingHome(snapshot, domainCommand);
         if (next === snapshot) return deepFreeze({ accepted: false, code: "RAISING_HOME_PAUSED", snapshot });
-        snapshot = next;
         acceptedCommandIds.add(commandId);
-        const publication = deepFreeze({ accepted: true, code: "RAISING_HOME_OK", snapshot, persistenceAttempted: false, playerStatePatch: null });
-        const notificationListeners = [...listeners];
-        notifying = true;
-        notificationSnapshot = publication.snapshot;
-        try {
-          for (const listener of notificationListeners) {
-            try {
-              listener(publication);
-            } catch {
-              // Observer failures cannot roll back an already accepted domain transition.
-              observerFailureCount = Math.min(OBSERVER_FAILURE_LIMIT, observerFailureCount + 1);
-              lastObserverFailureRevision = publication.snapshot.revision;
-            }
-          }
-        } finally {
-          notificationSnapshot = null;
-          notifying = false;
-        }
-        return publication;
+        return publish(next);
       } catch (error) {
         return rejection(snapshot, "RAISING_HOME_REJECTED", error instanceof Error ? error.message : String(error));
       }

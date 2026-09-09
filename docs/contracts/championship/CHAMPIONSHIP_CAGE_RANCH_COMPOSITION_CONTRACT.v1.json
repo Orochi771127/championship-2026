@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "contractId": "CHAMPIONSHIP_CAGE_RANCH_COMPOSITION_CONTRACT",
+  "version": "v1.1",
+  "geometryFollowup": "2026-09-06: CHAMPIONSHIP_RANCH_NATIVE_GEOMETRY.v1.json supersedes this historical document's one-cell reading, unknown board coordinates and cover-switch address. Original shape masks and field tile origins are now verified by bounded native ARM execution; full field compositor and legacy-save migration remain pending.",
+  "owner": "Claude Code",
+  "consumer": "Codex Art, and the Claude-owned Raising field presenter",
+  "date": "2026-09-03",
+  "purpose": "The Raising Home ranch is a composition of several cage tiles, not one background image. This contract states what is measured, what is observed, and what is still unknown, so the tiling work can start without either lane inventing a number.",
+  "problemStatement": {
+    "symptom": "Cages cannot be joined. Raising Home shows exactly one cage field.",
+    "rootCause": "The licensed map-art path is single-slot by construction, and cages were routed through it.",
+    "sites": [
+      {
+        "file": "src/championship/presentation/runtimeMapArtBundle.js",
+        "detail": "createRuntimeMapArtFieldLoader holds `let active = null` and disposes the previous field on every load, so a second cage necessarily replaces the first."
+      },
+      {
+        "file": "src/championship/presentation/runtimeMapArtBundle.js",
+        "detail": "validateRuntimeMapArtBundle rejects any manifest whose memoryPolicy is not ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT, so a 'these N tiles are simultaneous' manifest cannot even be authored."
+      },
+      {
+        "file": "src/championship/app/main.js",
+        "detail": "DEFAULT_LICENSED_CAGE_FIELD resolves one field id from getOriginalCageVisualBinding(0)."
+      },
+      {
+        "file": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
+        "detail": "fieldArt is a single object added to a single productionArtLayer."
+      }
+    ],
+    "assessment": "The single-slot policy is CORRECT for Hunt, whose fields are 1024x1024 and visited one at a time. It is a category error for cages, which are small shaped tiles that must composite simultaneously. Do not relax the Hunt policy; add a second path."
+  },
+  "measuredTileFacts": {
+    "evidence": "MEASURED_FROM_SHIPPED_ASSETS",
+    "method": "PNG IHDR read plus full RGBA decode of assets/production/cage/licensed-runtime-v1/fields/*/frame-00.png on 2026-09-03.",
+    "tileCount": 40,
+    "scale": {
+      "value": 4,
+      "detail": "worldWidthPx / nativeWidthPx == 4 for every field; filter is nearest.",
+      "evidence": "MEASURED"
+    },
+    "alpha": {
+      "shaped": true,
+      "hardEdged": true,
+      "detail": "Tiles carry a real alpha channel with 0.0% partially-transparent pixels. field_cm01_01 is 84.0% opaque / 16.0% clear with corners TL,BL,BR = 0 and TR = 255. field_cm09_01 is 55.9% opaque, all four corners clear. A cage is an island silhouette, not a rectangle.",
+      "consequence": "Tiles interlock by silhouette. Composite with a plain alpha test; no feathering, no blending, no edge fade. Any anti-aliasing introduced downstream will show as a seam halo against the neighbouring tile.",
+      "evidence": "MEASURED"
+    },
+    "nativeFootprintDistribution": {
+      "detail": "Nine distinct native footprints across the 40 tiles.",
+      "evidence": "MEASURED",
+      "entries": [
+        {
+          "native": "96x112",
+          "count": 14
+        },
+        {
+          "native": "240x200",
+          "count": 11
+        },
+        {
+          "native": "192x200",
+          "count": 5
+        },
+        {
+          "native": "288x200",
+          "count": 3
+        },
+        {
+          "native": "144x200",
+          "count": 2
+        },
+        {
+          "native": "192x112",
+          "count": 2
+        },
+        {
+          "native": "288x112",
+          "count": 1
+        },
+        {
+          "native": "336x200",
+          "count": 1
+        },
+        {
+          "native": "384x112",
+          "count": 1
+        }
+      ],
+      "widthModule": {
+        "value": 48,
+        "detail": "Every native width is 48 * n for n in 2..8 (96,144,192,240,288,336,384). 48 native = 192 world.",
+        "evidence": "MEASURED"
+      },
+      "heightClasses": {
+        "value": [
+          112,
+          200
+        ],
+        "detail": "Only two native heights exist across all 40 tiles.",
+        "evidence": "MEASURED"
+      }
+    }
+  },
+  "observedFromOriginal": {
+    "evidence": "LIVE_FOOTAGE_OBSERVATION",
+    "sourceNote": "Owner-supplied gameplay recordings, used for layout topology and behaviour only. No frame was captured into this repository and no number in this contract is derived from a recording.",
+    "findings": [
+      {
+        "fact": "Several cages with different floor art abut edge to edge and read as one continuous ranch on the touch screen.",
+        "consequence": "Tiling is the intended presentation, not an approximation."
+      },
+      {
+        "fact": "The training channel name is drawn on the cage art itself, not only in menus.",
+        "consequence": "Do not overlay a product-authored channel label on top of a licensed tile; the tile already carries one."
+      },
+      {
+        "fact": "The Shop cage record shows name, thumbnail, description, training channel, Occupancy Limit and a starred Cage Lvl priced in bits.",
+        "consequence": "Cage Lvl is capped at three stars, matching level_1/level_2/level_3 in cage_edit_obj_sub.nxr."
+      }
+    ]
+  },
+  "cageEditBoard": {
+    "evidence": "LIVE_FOOTAGE_OBSERVATION",
+    "note": "The Cage Edit board was located in Owner-supplied footage after this contract's first draft. It answers most of what the open question below was asking.",
+    "observed": [
+      {
+        "fact": "The ranch board is a HEXAGONAL GRID drawn on a green ground.",
+        "consequence": "Matches help_text_txt.dat entry 147, which measures cage space in hexagons. Note this confirms the BOARD is hexagonal; it does not by itself settle that every cage occupies exactly one hexagon."
+      },
+      {
+        "fact": "Unoccupied slots render as empty hexagon outlines; occupied slots render the cage's own art inside the board.",
+        "consequence": "The board shows capacity directly. The cover1/2/3 nodes hide the slots the current tamer rank has not unlocked."
+      },
+      {
+        "fact": "The screen carries a detail panel (name, thumbnail, description, Occupancy Limit) and three controls: ID, Size, Return.",
+        "consequence": "ID and Size are view toggles over the same board. Their rendering is not captured, and the existence of a Size toggle is itself a hint that footprint is a thing the board can show."
+      },
+      {
+        "fact": "Occupancy Limit varies per cage independently of the tile size on the board. Playground shows 6; Mini Volcano shows 2 and occupies a single hexagon.",
+        "consequence": "TWO separate corrections. (1) Occupancy Limit is a count of Digimon, NOT a count of hex cells -- do not derive placement footprint from it. (2) It is a RECOMMENDED capacity, not a hard cap: help_text_txt.dat entry 133 permits more, at the cost of stress accumulating more easily. Do not implement it as a rule that refuses placement."
+      }
+    ],
+    "resolvesTheFootprintTension": {
+      "reading": "There are two separate art tiers, and the nine measured footprints belong to the second one. The Cage Edit board draws cages as uniform hexagon cells. The Training field draws the same cages at their real sizes, tiled edge to edge into one continuous ranch - which is why field art ranges from 96x112 to 384x112 while board ownership stays one module per hex slot.",
+      "confidence": "READING_NOT_TRACED",
+      "why": "Both views were observed directly, and the two-tier reading is the only one that fits both without inventing multi-cell ownership. It has not been confirmed against code.",
+      "consequence": "The tiling work targets the TRAINING FIELD view. The Cage Edit board is a separate, simpler screen and should not reuse the field compositor.",
+      "caution": "Codex notes the footage shows outlines spanning adjacent cells, so one-cage-one-hexagon must not be treated as settled while RANCH_SLOT_GEOMETRY is open."
+    }
+  },
+  "openQuestion": {
+    "id": "RANCH_SLOT_GEOMETRY",
+    "status": "PARTIALLY_ANSWERED",
+    "statement": "The board is a hexagon grid - that is now observed. What remains unknown is the grid's exact dimensions, orientation, origin and the slotIndex -> cell mapping.",
+    "stillUnknown": [
+      "Hexagon orientation (flat-top versus pointy-top) - the captured frame is too low-resolution to call it.",
+      "Grid extent and the shape of the 14-slot starting board versus the 20-slot maximum.",
+      "Which slotIndex corresponds to which cell.",
+      "How a field-view tile's size relates to its board hexagon, i.e. the exact anchor used when the Training field composites."
+    ],
+    "doNotResolveByGuessing": "The BAR/ELL tetris masks were already tried once as a product guess and rejected as not in the ROM. Do not reintroduce multi-cell ownership masks to explain the footprint spread - the two-tier reading above explains it without them.",
+    "whatWouldSettleIt": "The ranch board is drawn procedurally by OVL15; it owns no .nxr for the board itself. cage_edit_obj_main.nxr contains only cover1/cover2/cover3 at x=218/194/170, y=8, a uniform 24px pitch, and 3 covers against 6 unlockable slots implies each cover hides 2 slots. The slot coordinate source is inside OVL15 and has not been traced.",
+    "alsoReverify": "cageCatalog.js cites a switch at OVL15 0x0210B36C for the cover show/hide. A dump of that address on 2026-09-03 showed initialization-shaped code (stack setup and BL calls), not a switch. The address may be off. Re-verify before building on it."
+  },
+  "buildInstruction": {
+    "step1_addTiledFamilyPath": {
+      "rule": "Add a second load path for tiled families. Do not widen the existing single-field loader.",
+      "detail": "createRuntimeMapArtFieldLoader keeps its exact current behaviour and stays the Hunt path. A new tiled loader holds a keyed set of loaded tiles and disposes them as a set.",
+      "manifestChange": "validateRuntimeMapArtBundle must accept a second memoryPolicy value for tiled families, e.g. N_ACTIVE_TILES_LOAD_ON_ENTRY_UNLOAD_ON_EXIT, and must keep rejecting every other value. Every other guard stays: runtimeEligible === true, frames under assets/production/, gameplayBinding EXTERNAL_EXISTING_RUNTIME, gateMapping UNBOUND_EXPLICIT_FIELD_ID_REQUIRED, collisionBinding EXTERNAL_NOT_IN_ART_BUNDLE."
+    },
+    "step2_placement": {
+      "rule": "Placement is PRODUCT_AUTHORED until RANCH_SLOT_GEOMETRY is traced, and must be labelled as such in the manifest and in the diagnostics.",
+      "detail": "Derive tile positions from the existing cageEditRuntime slotIndex (0..19, one module per slot, unlocked count from slotCountForTamerRank). Keep the slotIndex -> position function in ONE named module so a traced table can replace it without touching the presenter.",
+      "forbidden": "Do not write the guessed coordinates into the licensed art manifest. The manifest describes pixels; placement is runtime state."
+    },
+    "step3_composite": {
+      "rule": "Alpha test only.",
+      "detail": "Tiles are hard-edged. Draw in a stable order, nearest filter, no tint, no blend mode, integer world positions. A non-integer position will resample a hard edge and produce a visible seam."
+    },
+    "step4_doNotRegress": {
+      "keep": [
+        "Hunt stays one resident field.",
+        "Collision and encounter data stay outside the art bundle.",
+        "The 11 runtime asset declarations assertion in tests/championship-migration-firewall-cases.mjs must be updated deliberately, not silently."
+      ]
+    }
+  },
+  "relatedContracts": [
+    "docs/contracts/championship/raising-home-presentation.v1.json",
+    "docs/contracts/championship/CHAMPIONSHIP_STATUS_BAR_CONTRACT.v1.json"
+  ],
+  "correctionLog": [
+    {
+      "date": "2026-09-03",
+      "source": "Codex video-evidence consolidation",
+      "corrected": "v1.0 described Occupancy Limit as how many Digimon the cage holds, which reads as a hard cap. help entry 133 allows overfill with a stress penalty.",
+      "alsoNoted": "The single-hex-per-cage reading of the board remains a reading. Footage shows outlines spanning adjacent cells, so do not treat one-cage-one-hex as settled while RANCH_SLOT_GEOMETRY is open."
+    }
+  ]
+}

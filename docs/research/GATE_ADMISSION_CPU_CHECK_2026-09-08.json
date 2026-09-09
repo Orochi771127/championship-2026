@@ -1,0 +1,2496 @@
+{
+  "schemaVersion": 1,
+  "classification": "RESEARCH_ONLY",
+  "runtimeEligible": false,
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "routines": [
+    "OVL12:0210F7D0",
+    "ARM9:02067920..02067954",
+    "OVL8:0210CFD8"
+  ],
+  "records": [
+    {
+      "recordIndex": 0,
+      "entranceFeeBits": 0,
+      "unlockKind": 0,
+      "unlockParameter": 0
+    },
+    {
+      "recordIndex": 1,
+      "entranceFeeBits": 300,
+      "unlockKind": 1,
+      "unlockParameter": 3
+    },
+    {
+      "recordIndex": 2,
+      "entranceFeeBits": 50,
+      "unlockKind": 1,
+      "unlockParameter": 1
+    },
+    {
+      "recordIndex": 3,
+      "entranceFeeBits": 230,
+      "unlockKind": 2,
+      "unlockParameter": 46
+    },
+    {
+      "recordIndex": 4,
+      "entranceFeeBits": 0,
+      "unlockKind": 1,
+      "unlockParameter": 1
+    },
+    {
+      "recordIndex": 5,
+      "entranceFeeBits": 500,
+      "unlockKind": 1,
+      "unlockParameter": 4
+    },
+    {
+      "recordIndex": 6,
+      "entranceFeeBits": 450,
+      "unlockKind": 1,
+      "unlockParameter": 3
+    },
+    {
+      "recordIndex": 7,
+      "entranceFeeBits": 830,
+      "unlockKind": 1,
+      "unlockParameter": 4
+    },
+    {
+      "recordIndex": 8,
+      "entranceFeeBits": 1000,
+      "unlockKind": 2,
+      "unlockParameter": 45
+    },
+    {
+      "recordIndex": 9,
+      "entranceFeeBits": 110,
+      "unlockKind": 1,
+      "unlockParameter": 2
+    },
+    {
+      "recordIndex": 10,
+      "entranceFeeBits": 1200,
+      "unlockKind": 2,
+      "unlockParameter": 7
+    },
+    {
+      "recordIndex": 11,
+      "entranceFeeBits": 600,
+      "unlockKind": 1,
+      "unlockParameter": 5
+    },
+    {
+      "recordIndex": 12,
+      "entranceFeeBits": 1350,
+      "unlockKind": 1,
+      "unlockParameter": 6
+    },
+    {
+      "recordIndex": 13,
+      "entranceFeeBits": 300,
+      "unlockKind": 1,
+      "unlockParameter": 2
+    },
+    {
+      "recordIndex": 14,
+      "entranceFeeBits": 2800,
+      "unlockKind": 1,
+      "unlockParameter": 6
+    },
+    {
+      "recordIndex": 15,
+      "entranceFeeBits": 4000,
+      "unlockKind": 1,
+      "unlockParameter": 8
+    },
+    {
+      "recordIndex": 16,
+      "entranceFeeBits": 0,
+      "unlockKind": 0,
+      "unlockParameter": 0
+    }
+  ],
+  "initialVisibility": [
+    2,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    2
+  ],
+  "feeCases": [
+    {
+      "recordIndex": 0,
+      "bits": 0,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 0,
+      "bits": 0,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 0,
+      "bits": 1,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 0,
+      "bits": 1,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 0,
+      "bits": 9999999,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 9999999
+    },
+    {
+      "recordIndex": 0,
+      "bits": 9999999,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 9999999
+    },
+    {
+      "recordIndex": 1,
+      "bits": 0,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 1,
+      "bits": 0,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 1,
+      "bits": 299,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 299
+    },
+    {
+      "recordIndex": 1,
+      "bits": 299,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 299
+    },
+    {
+      "recordIndex": 1,
+      "bits": 300,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 1,
+      "bits": 300,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 300
+    },
+    {
+      "recordIndex": 1,
+      "bits": 301,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 1,
+      "bits": 301,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 301
+    },
+    {
+      "recordIndex": 1,
+      "bits": 9999999,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 9999699
+    },
+    {
+      "recordIndex": 1,
+      "bits": 9999999,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 9999999
+    },
+    {
+      "recordIndex": 2,
+      "bits": 0,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 2,
+      "bits": 0,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 2,
+      "bits": 49,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 49
+    },
+    {
+      "recordIndex": 2,
+      "bits": 49,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 49
+    },
+    {
+      "recordIndex": 2,
+      "bits": 50,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 2,
+      "bits": 50,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 50
+    },
+    {
+      "recordIndex": 2,
+      "bits": 51,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 2,
+      "bits": 51,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 51
+    },
+    {
+      "recordIndex": 2,
+      "bits": 9999999,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 9999949
+    },
+    {
+      "recordIndex": 2,
+      "bits": 9999999,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 9999999
+    },
+    {
+      "recordIndex": 3,
+      "bits": 0,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 3,
+      "bits": 0,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 3,
+      "bits": 229,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 229
+    },
+    {
+      "recordIndex": 3,
+      "bits": 229,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 229
+    },
+    {
+      "recordIndex": 3,
+      "bits": 230,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 3,
+      "bits": 230,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 230
+    },
+    {
+      "recordIndex": 3,
+      "bits": 231,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 3,
+      "bits": 231,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 231
+    },
+    {
+      "recordIndex": 3,
+      "bits": 9999999,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 9999769
+    },
+    {
+      "recordIndex": 3,
+      "bits": 9999999,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 9999999
+    },
+    {
+      "recordIndex": 4,
+      "bits": 0,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 4,
+      "bits": 0,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 4,
+      "bits": 1,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 4,
+      "bits": 1,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 4,
+      "bits": 9999999,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 9999999
+    },
+    {
+      "recordIndex": 4,
+      "bits": 9999999,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 9999999
+    },
+    {
+      "recordIndex": 5,
+      "bits": 0,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 5,
+      "bits": 0,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 5,
+      "bits": 499,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 499
+    },
+    {
+      "recordIndex": 5,
+      "bits": 499,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 499
+    },
+    {
+      "recordIndex": 5,
+      "bits": 500,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 5,
+      "bits": 500,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 500
+    },
+    {
+      "recordIndex": 5,
+      "bits": 501,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 5,
+      "bits": 501,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 501
+    },
+    {
+      "recordIndex": 5,
+      "bits": 9999999,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 9999499
+    },
+    {
+      "recordIndex": 5,
+      "bits": 9999999,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 9999999
+    },
+    {
+      "recordIndex": 6,
+      "bits": 0,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 6,
+      "bits": 0,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 6,
+      "bits": 449,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 449
+    },
+    {
+      "recordIndex": 6,
+      "bits": 449,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 449
+    },
+    {
+      "recordIndex": 6,
+      "bits": 450,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 6,
+      "bits": 450,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 450
+    },
+    {
+      "recordIndex": 6,
+      "bits": 451,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 6,
+      "bits": 451,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 451
+    },
+    {
+      "recordIndex": 6,
+      "bits": 9999999,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 9999549
+    },
+    {
+      "recordIndex": 6,
+      "bits": 9999999,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 9999999
+    },
+    {
+      "recordIndex": 7,
+      "bits": 0,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 7,
+      "bits": 0,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 7,
+      "bits": 829,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 829
+    },
+    {
+      "recordIndex": 7,
+      "bits": 829,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 829
+    },
+    {
+      "recordIndex": 7,
+      "bits": 830,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 7,
+      "bits": 830,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 830
+    },
+    {
+      "recordIndex": 7,
+      "bits": 831,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 7,
+      "bits": 831,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 831
+    },
+    {
+      "recordIndex": 7,
+      "bits": 9999999,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 9999169
+    },
+    {
+      "recordIndex": 7,
+      "bits": 9999999,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 9999999
+    },
+    {
+      "recordIndex": 8,
+      "bits": 0,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 8,
+      "bits": 0,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 8,
+      "bits": 999,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 999
+    },
+    {
+      "recordIndex": 8,
+      "bits": 999,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 999
+    },
+    {
+      "recordIndex": 8,
+      "bits": 1000,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 8,
+      "bits": 1000,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 1000
+    },
+    {
+      "recordIndex": 8,
+      "bits": 1001,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 8,
+      "bits": 1001,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 1001
+    },
+    {
+      "recordIndex": 8,
+      "bits": 9999999,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 9998999
+    },
+    {
+      "recordIndex": 8,
+      "bits": 9999999,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 9999999
+    },
+    {
+      "recordIndex": 9,
+      "bits": 0,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 9,
+      "bits": 0,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 9,
+      "bits": 109,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 109
+    },
+    {
+      "recordIndex": 9,
+      "bits": 109,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 109
+    },
+    {
+      "recordIndex": 9,
+      "bits": 110,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 9,
+      "bits": 110,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 110
+    },
+    {
+      "recordIndex": 9,
+      "bits": 111,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 9,
+      "bits": 111,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 111
+    },
+    {
+      "recordIndex": 9,
+      "bits": 9999999,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 9999889
+    },
+    {
+      "recordIndex": 9,
+      "bits": 9999999,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 9999999
+    },
+    {
+      "recordIndex": 10,
+      "bits": 0,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 10,
+      "bits": 0,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 10,
+      "bits": 1199,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 1199
+    },
+    {
+      "recordIndex": 10,
+      "bits": 1199,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 1199
+    },
+    {
+      "recordIndex": 10,
+      "bits": 1200,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 10,
+      "bits": 1200,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 1200
+    },
+    {
+      "recordIndex": 10,
+      "bits": 1201,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 10,
+      "bits": 1201,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 1201
+    },
+    {
+      "recordIndex": 10,
+      "bits": 9999999,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 9998799
+    },
+    {
+      "recordIndex": 10,
+      "bits": 9999999,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 9999999
+    },
+    {
+      "recordIndex": 11,
+      "bits": 0,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 11,
+      "bits": 0,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 11,
+      "bits": 599,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 599
+    },
+    {
+      "recordIndex": 11,
+      "bits": 599,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 599
+    },
+    {
+      "recordIndex": 11,
+      "bits": 600,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 11,
+      "bits": 600,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 600
+    },
+    {
+      "recordIndex": 11,
+      "bits": 601,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 11,
+      "bits": 601,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 601
+    },
+    {
+      "recordIndex": 11,
+      "bits": 9999999,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 9999399
+    },
+    {
+      "recordIndex": 11,
+      "bits": 9999999,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 9999999
+    },
+    {
+      "recordIndex": 12,
+      "bits": 0,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 12,
+      "bits": 0,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 12,
+      "bits": 1349,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 1349
+    },
+    {
+      "recordIndex": 12,
+      "bits": 1349,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 1349
+    },
+    {
+      "recordIndex": 12,
+      "bits": 1350,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 12,
+      "bits": 1350,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 1350
+    },
+    {
+      "recordIndex": 12,
+      "bits": 1351,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 12,
+      "bits": 1351,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 1351
+    },
+    {
+      "recordIndex": 12,
+      "bits": 9999999,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 9998649
+    },
+    {
+      "recordIndex": 12,
+      "bits": 9999999,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 9999999
+    },
+    {
+      "recordIndex": 13,
+      "bits": 0,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 13,
+      "bits": 0,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 13,
+      "bits": 299,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 299
+    },
+    {
+      "recordIndex": 13,
+      "bits": 299,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 299
+    },
+    {
+      "recordIndex": 13,
+      "bits": 300,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 13,
+      "bits": 300,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 300
+    },
+    {
+      "recordIndex": 13,
+      "bits": 301,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 13,
+      "bits": 301,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 301
+    },
+    {
+      "recordIndex": 13,
+      "bits": 9999999,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 9999699
+    },
+    {
+      "recordIndex": 13,
+      "bits": 9999999,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 9999999
+    },
+    {
+      "recordIndex": 14,
+      "bits": 0,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 14,
+      "bits": 0,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 14,
+      "bits": 2799,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 2799
+    },
+    {
+      "recordIndex": 14,
+      "bits": 2799,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 2799
+    },
+    {
+      "recordIndex": 14,
+      "bits": 2800,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 14,
+      "bits": 2800,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 2800
+    },
+    {
+      "recordIndex": 14,
+      "bits": 2801,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 14,
+      "bits": 2801,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 2801
+    },
+    {
+      "recordIndex": 14,
+      "bits": 9999999,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 9997199
+    },
+    {
+      "recordIndex": 14,
+      "bits": 9999999,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 9999999
+    },
+    {
+      "recordIndex": 15,
+      "bits": 0,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 15,
+      "bits": 0,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 15,
+      "bits": 3999,
+      "waiver": 0,
+      "accepted": false,
+      "afterBits": 3999
+    },
+    {
+      "recordIndex": 15,
+      "bits": 3999,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 3999
+    },
+    {
+      "recordIndex": 15,
+      "bits": 4000,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 15,
+      "bits": 4000,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 4000
+    },
+    {
+      "recordIndex": 15,
+      "bits": 4001,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 15,
+      "bits": 4001,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 4001
+    },
+    {
+      "recordIndex": 15,
+      "bits": 9999999,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 9995999
+    },
+    {
+      "recordIndex": 15,
+      "bits": 9999999,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 9999999
+    },
+    {
+      "recordIndex": 16,
+      "bits": 0,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 16,
+      "bits": 0,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 0
+    },
+    {
+      "recordIndex": 16,
+      "bits": 1,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 16,
+      "bits": 1,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 1
+    },
+    {
+      "recordIndex": 16,
+      "bits": 9999999,
+      "waiver": 0,
+      "accepted": true,
+      "afterBits": 9999999
+    },
+    {
+      "recordIndex": 16,
+      "bits": 9999999,
+      "waiver": 1,
+      "accepted": true,
+      "afterBits": 9999999
+    }
+  ],
+  "unlockCases": [
+    {
+      "oldRank": 0,
+      "newRank": 0,
+      "won": false,
+      "matchIndex": 0,
+      "revealed": []
+    },
+    {
+      "oldRank": 0,
+      "newRank": 0,
+      "won": true,
+      "matchIndex": 7,
+      "revealed": [
+        10
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 0,
+      "won": true,
+      "matchIndex": 45,
+      "revealed": [
+        8
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 0,
+      "won": true,
+      "matchIndex": 46,
+      "revealed": [
+        3
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 0,
+      "won": false,
+      "matchIndex": 46,
+      "revealed": []
+    },
+    {
+      "oldRank": 0,
+      "newRank": 1,
+      "won": false,
+      "matchIndex": 0,
+      "revealed": [
+        2,
+        4
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 1,
+      "won": true,
+      "matchIndex": 7,
+      "revealed": [
+        2,
+        4,
+        10
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 1,
+      "won": true,
+      "matchIndex": 45,
+      "revealed": [
+        2,
+        4,
+        8
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 1,
+      "won": true,
+      "matchIndex": 46,
+      "revealed": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 1,
+      "won": false,
+      "matchIndex": 46,
+      "revealed": [
+        2,
+        4
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 2,
+      "won": false,
+      "matchIndex": 0,
+      "revealed": [
+        2,
+        4,
+        9,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 2,
+      "won": true,
+      "matchIndex": 7,
+      "revealed": [
+        2,
+        4,
+        9,
+        10,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 2,
+      "won": true,
+      "matchIndex": 45,
+      "revealed": [
+        2,
+        4,
+        8,
+        9,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 2,
+      "won": true,
+      "matchIndex": 46,
+      "revealed": [
+        2,
+        3,
+        4,
+        9,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 2,
+      "won": false,
+      "matchIndex": 46,
+      "revealed": [
+        2,
+        4,
+        9,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 3,
+      "won": false,
+      "matchIndex": 0,
+      "revealed": [
+        1,
+        2,
+        4,
+        6,
+        9,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 3,
+      "won": true,
+      "matchIndex": 7,
+      "revealed": [
+        1,
+        2,
+        4,
+        6,
+        9,
+        10,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 3,
+      "won": true,
+      "matchIndex": 45,
+      "revealed": [
+        1,
+        2,
+        4,
+        6,
+        8,
+        9,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 3,
+      "won": true,
+      "matchIndex": 46,
+      "revealed": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        9,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 3,
+      "won": false,
+      "matchIndex": 46,
+      "revealed": [
+        1,
+        2,
+        4,
+        6,
+        9,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 4,
+      "won": false,
+      "matchIndex": 0,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 4,
+      "won": true,
+      "matchIndex": 7,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 4,
+      "won": true,
+      "matchIndex": 45,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 4,
+      "won": true,
+      "matchIndex": 46,
+      "revealed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 4,
+      "won": false,
+      "matchIndex": 46,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 5,
+      "won": false,
+      "matchIndex": 0,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 5,
+      "won": true,
+      "matchIndex": 7,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 5,
+      "won": true,
+      "matchIndex": 45,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 5,
+      "won": true,
+      "matchIndex": 46,
+      "revealed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 5,
+      "won": false,
+      "matchIndex": 46,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        13
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 6,
+      "won": false,
+      "matchIndex": 0,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12,
+        13,
+        14
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 6,
+      "won": true,
+      "matchIndex": 7,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 6,
+      "won": true,
+      "matchIndex": 45,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 6,
+      "won": true,
+      "matchIndex": 46,
+      "revealed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12,
+        13,
+        14
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 6,
+      "won": false,
+      "matchIndex": 46,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12,
+        13,
+        14
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 7,
+      "won": false,
+      "matchIndex": 0,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12,
+        13,
+        14
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 7,
+      "won": true,
+      "matchIndex": 7,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 7,
+      "won": true,
+      "matchIndex": 45,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 7,
+      "won": true,
+      "matchIndex": 46,
+      "revealed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12,
+        13,
+        14
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 7,
+      "won": false,
+      "matchIndex": 46,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12,
+        13,
+        14
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 8,
+      "won": false,
+      "matchIndex": 0,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 8,
+      "won": true,
+      "matchIndex": 7,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 8,
+      "won": true,
+      "matchIndex": 45,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 8,
+      "won": true,
+      "matchIndex": 46,
+      "revealed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 8,
+      "won": false,
+      "matchIndex": 46,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 9,
+      "won": false,
+      "matchIndex": 0,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 9,
+      "won": true,
+      "matchIndex": 7,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 9,
+      "won": true,
+      "matchIndex": 45,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 9,
+      "won": true,
+      "matchIndex": 46,
+      "revealed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 9,
+      "won": false,
+      "matchIndex": 46,
+      "revealed": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 1,
+      "won": false,
+      "matchIndex": 0,
+      "revealed": [
+        2,
+        4
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 1,
+      "won": true,
+      "matchIndex": 7,
+      "revealed": [
+        2,
+        4,
+        10
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 1,
+      "won": true,
+      "matchIndex": 45,
+      "revealed": [
+        2,
+        4,
+        8
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 1,
+      "won": true,
+      "matchIndex": 46,
+      "revealed": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "oldRank": 0,
+      "newRank": 1,
+      "won": false,
+      "matchIndex": 46,
+      "revealed": [
+        2,
+        4
+      ]
+    },
+    {
+      "oldRank": 1,
+      "newRank": 2,
+      "won": false,
+      "matchIndex": 0,
+      "revealed": [
+        9,
+        13
+      ]
+    },
+    {
+      "oldRank": 1,
+      "newRank": 2,
+      "won": true,
+      "matchIndex": 7,
+      "revealed": [
+        9,
+        10,
+        13
+      ]
+    },
+    {
+      "oldRank": 1,
+      "newRank": 2,
+      "won": true,
+      "matchIndex": 45,
+      "revealed": [
+        8,
+        9,
+        13
+      ]
+    },
+    {
+      "oldRank": 1,
+      "newRank": 2,
+      "won": true,
+      "matchIndex": 46,
+      "revealed": [
+        3,
+        9,
+        13
+      ]
+    },
+    {
+      "oldRank": 1,
+      "newRank": 2,
+      "won": false,
+      "matchIndex": 46,
+      "revealed": [
+        9,
+        13
+      ]
+    },
+    {
+      "oldRank": 2,
+      "newRank": 3,
+      "won": false,
+      "matchIndex": 0,
+      "revealed": [
+        1,
+        6
+      ]
+    },
+    {
+      "oldRank": 2,
+      "newRank": 3,
+      "won": true,
+      "matchIndex": 7,
+      "revealed": [
+        1,
+        6,
+        10
+      ]
+    },
+    {
+      "oldRank": 2,
+      "newRank": 3,
+      "won": true,
+      "matchIndex": 45,
+      "revealed": [
+        1,
+        6,
+        8
+      ]
+    },
+    {
+      "oldRank": 2,
+      "newRank": 3,
+      "won": true,
+      "matchIndex": 46,
+      "revealed": [
+        1,
+        3,
+        6
+      ]
+    },
+    {
+      "oldRank": 2,
+      "newRank": 3,
+      "won": false,
+      "matchIndex": 46,
+      "revealed": [
+        1,
+        6
+      ]
+    },
+    {
+      "oldRank": 3,
+      "newRank": 4,
+      "won": false,
+      "matchIndex": 0,
+      "revealed": [
+        5,
+        7
+      ]
+    },
+    {
+      "oldRank": 3,
+      "newRank": 4,
+      "won": true,
+      "matchIndex": 7,
+      "revealed": [
+        5,
+        7,
+        10
+      ]
+    },
+    {
+      "oldRank": 3,
+      "newRank": 4,
+      "won": true,
+      "matchIndex": 45,
+      "revealed": [
+        5,
+        7,
+        8
+      ]
+    },
+    {
+      "oldRank": 3,
+      "newRank": 4,
+      "won": true,
+      "matchIndex": 46,
+      "revealed": [
+        3,
+        5,
+        7
+      ]
+    },
+    {
+      "oldRank": 3,
+      "newRank": 4,
+      "won": false,
+      "matchIndex": 46,
+      "revealed": [
+        5,
+        7
+      ]
+    },
+    {
+      "oldRank": 4,
+      "newRank": 5,
+      "won": false,
+      "matchIndex": 0,
+      "revealed": [
+        11
+      ]
+    },
+    {
+      "oldRank": 4,
+      "newRank": 5,
+      "won": true,
+      "matchIndex": 7,
+      "revealed": [
+        10,
+        11
+      ]
+    },
+    {
+      "oldRank": 4,
+      "newRank": 5,
+      "won": true,
+      "matchIndex": 45,
+      "revealed": [
+        8,
+        11
+      ]
+    },
+    {
+      "oldRank": 4,
+      "newRank": 5,
+      "won": true,
+      "matchIndex": 46,
+      "revealed": [
+        3,
+        11
+      ]
+    },
+    {
+      "oldRank": 4,
+      "newRank": 5,
+      "won": false,
+      "matchIndex": 46,
+      "revealed": [
+        11
+      ]
+    },
+    {
+      "oldRank": 5,
+      "newRank": 6,
+      "won": false,
+      "matchIndex": 0,
+      "revealed": [
+        12,
+        14
+      ]
+    },
+    {
+      "oldRank": 5,
+      "newRank": 6,
+      "won": true,
+      "matchIndex": 7,
+      "revealed": [
+        10,
+        12,
+        14
+      ]
+    },
+    {
+      "oldRank": 5,
+      "newRank": 6,
+      "won": true,
+      "matchIndex": 45,
+      "revealed": [
+        8,
+        12,
+        14
+      ]
+    },
+    {
+      "oldRank": 5,
+      "newRank": 6,
+      "won": true,
+      "matchIndex": 46,
+      "revealed": [
+        3,
+        12,
+        14
+      ]
+    },
+    {
+      "oldRank": 5,
+      "newRank": 6,
+      "won": false,
+      "matchIndex": 46,
+      "revealed": [
+        12,
+        14
+      ]
+    },
+    {
+      "oldRank": 6,
+      "newRank": 7,
+      "won": false,
+      "matchIndex": 0,
+      "revealed": []
+    },
+    {
+      "oldRank": 6,
+      "newRank": 7,
+      "won": true,
+      "matchIndex": 7,
+      "revealed": [
+        10
+      ]
+    },
+    {
+      "oldRank": 6,
+      "newRank": 7,
+      "won": true,
+      "matchIndex": 45,
+      "revealed": [
+        8
+      ]
+    },
+    {
+      "oldRank": 6,
+      "newRank": 7,
+      "won": true,
+      "matchIndex": 46,
+      "revealed": [
+        3
+      ]
+    },
+    {
+      "oldRank": 6,
+      "newRank": 7,
+      "won": false,
+      "matchIndex": 46,
+      "revealed": []
+    },
+    {
+      "oldRank": 7,
+      "newRank": 8,
+      "won": false,
+      "matchIndex": 0,
+      "revealed": [
+        15
+      ]
+    },
+    {
+      "oldRank": 7,
+      "newRank": 8,
+      "won": true,
+      "matchIndex": 7,
+      "revealed": [
+        10,
+        15
+      ]
+    },
+    {
+      "oldRank": 7,
+      "newRank": 8,
+      "won": true,
+      "matchIndex": 45,
+      "revealed": [
+        8,
+        15
+      ]
+    },
+    {
+      "oldRank": 7,
+      "newRank": 8,
+      "won": true,
+      "matchIndex": 46,
+      "revealed": [
+        3,
+        15
+      ]
+    },
+    {
+      "oldRank": 7,
+      "newRank": 8,
+      "won": false,
+      "matchIndex": 46,
+      "revealed": [
+        15
+      ]
+    },
+    {
+      "oldRank": 8,
+      "newRank": 9,
+      "won": false,
+      "matchIndex": 0,
+      "revealed": []
+    },
+    {
+      "oldRank": 8,
+      "newRank": 9,
+      "won": true,
+      "matchIndex": 7,
+      "revealed": [
+        10
+      ]
+    },
+    {
+      "oldRank": 8,
+      "newRank": 9,
+      "won": true,
+      "matchIndex": 45,
+      "revealed": [
+        8
+      ]
+    },
+    {
+      "oldRank": 8,
+      "newRank": 9,
+      "won": true,
+      "matchIndex": 46,
+      "revealed": [
+        3
+      ]
+    },
+    {
+      "oldRank": 8,
+      "newRank": 9,
+      "won": false,
+      "matchIndex": 46,
+      "revealed": []
+    }
+  ],
+  "waiverSource": "PARTIAL: init clears at ARM9 020688E0; load decodes bit27 at 0206AE24; natural acquisition remains UNKNOWN_REQUIRES_TRACE",
+  "limitations": [
+    "UI/input helpers stubbed for admission",
+    "controlled progression inputs",
+    "no physical device or complete original session"
+  ]
+}

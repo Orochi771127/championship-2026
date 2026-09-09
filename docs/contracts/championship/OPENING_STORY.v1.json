@@ -1,0 +1,52 @@
+{
+  "contract": "OPENING_STORY.v1",
+  "date": "2026-09-09",
+  "status": "CONTROL_FLOW_INTEGRATED_PICTURE_AUDIO_PARITY_PARTIAL",
+  "ownerScope": "Existing two-stage lifecycle/opening authorization",
+  "evidence": {
+    "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "controller": "ARM9 0208E964",
+    "cardHelpers": "ARM9 02090474..020906E4",
+    "cpuReceipt": "docs/research/OPENING_STORY_CPU_CHECK_2026-09-09.json",
+    "originalObservation": "PRIVATE lifecycle-two-stage-2026-09-09/opening-scroll",
+    "partsPerCard": [
+      4,
+      2,
+      2,
+      1
+    ],
+    "waitParameters": [
+      500,
+      750,
+      900,
+      300
+    ],
+    "startingScaleQ12": 410,
+    "targetScaleQ12": 4096,
+    "revealToleranceQ12": 205,
+    "scrollStepPixels": 4,
+    "scrollLimitPixels": -192
+  },
+  "integration": {
+    "entry": "Existing LOGIN -> New Game -> openingPresentation.begin",
+    "exit": "Existing registration envelope and naming flow; onStart invokes the sole app.newGame",
+    "dom": "openingStoryPresentation.js",
+    "numericControl": "nativeOpeningStory.js",
+    "animations": "Finite DOM Web Animations; pause while document hidden, dispose on reset/complete",
+    "save": "No story writes; prior save remains until existing validated newGame command",
+    "translation": "PRODUCT_AUTHORED zh-Hant, observed original card meanings",
+    "pictures": "Independently authored CSS; no private source payload"
+  },
+  "acceptance": {
+    "cpuEveryFramePaths": 5,
+    "cpuTotalUpdates": 7562,
+    "automaticBrowserToLetter": true,
+    "touchBrowserToLetter": true,
+    "reloadBeforeNamingPreservesContinue": true,
+    "fullTutorialRuntime": false,
+    "originalPictureParity": false,
+    "originalSoundParity": false,
+    "physicalDevice": false
+  },
+  "report": "docs/research/LIFECYCLE_OPENING_TWO_STAGE_2026-09-09.md"
+}

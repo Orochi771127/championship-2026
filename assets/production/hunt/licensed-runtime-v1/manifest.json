@@ -1,0 +1,614 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:hunt:licensed-runtime:v1",
+  "family": "HUNT",
+  "product": "DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD",
+  "artifactMaturity": "LICENSED_PIXEL_FAITHFUL_NEAREST_HD_HUNT_FIELDS",
+  "productionStatus": "OWNER_APPROVED_LICENSED_PIXEL_RUNTIME",
+  "shippingStatus": "NOT_SHIPPING_READY",
+  "humanApproved": true,
+  "runtimeEligible": true,
+  "shippingReady": false,
+  "rightsStatus": "LICENSED",
+  "rights": {
+    "status": "LICENSED",
+    "authority": "assets/production/ART_PRODUCTION_INDEX.json",
+    "ownerDirective": "docs/coordination/OWNER_DIRECTION.md#2026-09-02",
+    "sourceRomSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "researchPack": "NOT_RUNTIME_READABLE"
+  },
+  "fieldCount": 30,
+  "tutorialFieldId": "field_hm00_01",
+  "originalHuntId": "HUNT_TUTORIAL",
+  "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+  "filter": "nearest",
+  "fields": [
+    {
+      "fieldId": "field_hm00_01",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm00_01/frame-00.png",
+          "sha256": "A5123E4B9ED5FD03E3C0AE3FB82AF27947DC3921AECBC0A2DB2C8A6E5876B2F2",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm00_01/frame-01.png",
+          "sha256": "38A310CD8A1915AD70646A8F272B8F711586D318B457E0C7CFC1099162636C07",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm01_01",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm01_01/frame-00.png",
+          "sha256": "8C0ABF2311C43274B80BFDCDA68D1713480C62D3068CFD8FB4D2F77D0ABEC054",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm01_01/frame-01.png",
+          "sha256": "88F97ECDE2757E082632F8BCA2E0F2551CA0B1239A5ACCB687DC4084F8E1668B",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm01_02",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm01_02/frame-00.png",
+          "sha256": "7E2E601022A2CD649E64347FA5B265187825628E188450F546327DCC08BC0943",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm01_02/frame-01.png",
+          "sha256": "AA61B6108FD5B4A527702B87B60582B920FB45E199E30CC9C68C527DB1D083BF",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm02_01",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm02_01/frame-00.png",
+          "sha256": "F8EFCC7CD8DF1723AE7C20FB3CCBEEF06704C80DE694F0E7C56651D4E33E0B37",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm02_02",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm02_02/frame-00.png",
+          "sha256": "E1D28DCEEA83760BCEE3F6CF327C2D6D9AAFA119479BED1BF1F623D28F14FC22",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm03_01",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm03_01/frame-00.png",
+          "sha256": "4FAC5953DD21B35C9BD8383D59FB6D893D99DA8817C65C754118C2A74F5A3D0D",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm03_02",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm03_02/frame-00.png",
+          "sha256": "899FDD82DB79636F0FF29DAC9C9BCA7E1B3AD36BB5E19C5247476D0A89016B32",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm04_01",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm04_01/frame-00.png",
+          "sha256": "F40B43906245624CFD0C0B77DA93E6C0F75F7FBA9E8FD3C308673E9191FAF9D2",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm04_02",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm04_02/frame-00.png",
+          "sha256": "EC490D5AB11021DCDDE71B238994C82C0F2BE0F2A69EEA9090C88D756A4838E8",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm05_01",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm05_01/frame-00.png",
+          "sha256": "9DB4F568BEC75F64E9F9D32F62F5C81E3E0EFFC02A09380DCDFE6D54C974D5C3",
+          "durationRawTicks": 40,
+          "durationMs": 668.6045245235257,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm05_01/frame-01.png",
+          "sha256": "A4AA66953D721175DAF0120B9CFCF4D7BE58DC07D02FFF258CE180DEA8424BF1",
+          "durationRawTicks": 40,
+          "durationMs": 668.6045245235257,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm05_02",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm05_02/frame-00.png",
+          "sha256": "2D06B69F7F97275A4A3E85D504425592160D68B28B4F121DD07EF606BBEBC126",
+          "durationRawTicks": 40,
+          "durationMs": 668.6045245235257,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm05_02/frame-01.png",
+          "sha256": "10819EEBDC5DCAAFF9CD8168D0499D6D3C550E84E1665A665496F5F8B4142277",
+          "durationRawTicks": 40,
+          "durationMs": 668.6045245235257,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm06_01",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm06_01/frame-00.png",
+          "sha256": "7E34EE0C7036CA80C27DC4E9A4BAAA65E0D1BC841553A3CB0C6F75A9EBA705C4",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm06_01/frame-01.png",
+          "sha256": "E6B6567E8ABBAC3D5C846F8678ED6111A009589B2EB36945EABDFEC7B0C63B28",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm06_02",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm06_02/frame-00.png",
+          "sha256": "24B6412B6D19312A1E0E5FDAF5506D5C17963041CA374FE18D2D2A88E7980DE4",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm06_02/frame-01.png",
+          "sha256": "F372610BB445FA49FD9335E27FCD6174037F7FA150EB550B27CE519D72CB7624",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm08_01",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm08_01/frame-00.png",
+          "sha256": "BB1126695DC37432D57D7B8C7B78BCC4F2A951B9D48420DAD9E53B1E76FF474A",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm08_02",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm08_02/frame-00.png",
+          "sha256": "33FD4F1AE764421A0FB978F97E800C597B416806796CB91B6F26F2925BC0FF72",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm09_01",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm09_01/frame-00.png",
+          "sha256": "F148B481E940FC82D755ACB57BF4548114402DD5CB6B6F464E09A89E0A076E74",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm10_01",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm10_01/frame-00.png",
+          "sha256": "26D6195B001AB5A8CB2441D1E5AB4B2BFFBC74546FA4A6ADF261F3A164EF0C1C",
+          "durationRawTicks": 13,
+          "durationMs": 217.29647047014586,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm10_01/frame-01.png",
+          "sha256": "66821D751855A6625712C82352F797A0BCED3A5F1E8B8E18E2DF2E944F0D45DE",
+          "durationRawTicks": 12,
+          "durationMs": 200.58135735705773,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm10_01/frame-02.png",
+          "sha256": "B1D232F6BD392C4FCA2D5043E1A08A6632334896F3DAF4BF465EC6D539FC33AA",
+          "durationRawTicks": 12,
+          "durationMs": 200.58135735705773,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm11_01",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm11_01/frame-00.png",
+          "sha256": "2410AE791E3B4CD584BD9C020BFA3903AE266013AE841F1EFA0938F2E8E2A047",
+          "durationRawTicks": 13,
+          "durationMs": 217.29647047014586,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm11_01/frame-01.png",
+          "sha256": "CFF157C11C08958A79790E623068DA45E1FD5FDFDE7624983C8364FAE6E8B92D",
+          "durationRawTicks": 12,
+          "durationMs": 200.58135735705773,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm11_01/frame-02.png",
+          "sha256": "2EA505AAA61A82FF6192947BF495568A2563E4B8537395C262DE596CFFBFF35F",
+          "durationRawTicks": 12,
+          "durationMs": 200.58135735705773,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm13_01",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm13_01/frame-00.png",
+          "sha256": "EB9C26ADDF1E7C9132E6148977FF00C91934C5372FF780CA6C3565E888BEFB1A",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm13_02",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm13_02/frame-00.png",
+          "sha256": "16C1E44F811F0BBD42CE8173AD5DA74AF57BC45C8052C4372BE0F24DD4D31CF4",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm14_01",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm14_01/frame-00.png",
+          "sha256": "B4CD0011F908197D747198A5FA3DB49E72DEA1E8B7AC4C3D3D1973B96E4ABC43",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm14_02",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm14_02/frame-00.png",
+          "sha256": "27F7A0B820E7B125074833BB1D14D6419FF256BDFCD4D2D15F6CFA442DCBA485",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm15_01",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm15_01/frame-00.png",
+          "sha256": "43627D7399C4DF1CF3185F89DCAED97023BE25C938E56FB42A2517BD58DA0C64",
+          "durationRawTicks": 50,
+          "durationMs": 835.7556556544072,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm15_01/frame-01.png",
+          "sha256": "C0AC7370967708AA1D07AB62AD99857DDA0654EFCF08B4CB181EAF3307B173EE",
+          "durationRawTicks": 50,
+          "durationMs": 835.7556556544072,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm15_02",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm15_02/frame-00.png",
+          "sha256": "AA627962794DD642859D2B0A47F192026022DBA2F1C13A2241220E8A5DE903AC",
+          "durationRawTicks": 50,
+          "durationMs": 835.7556556544072,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm15_02/frame-01.png",
+          "sha256": "43BF842418E155ECA9EF26502BFDE8D30DEDF8FD4DC47986C9425016EA1AAE27",
+          "durationRawTicks": 50,
+          "durationMs": 835.7556556544072,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm16_01",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm16_01/frame-00.png",
+          "sha256": "2C4185A1D977B808EFC4484D3BD204BBEEDA4CA9164C2D40F625E1B0B733287B",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm16_02",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm16_02/frame-00.png",
+          "sha256": "DA425B277572BEEB780B789FD7E31E60063755BDE4B58B248B83C568A7C6CE14",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm17_01",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm17_01/frame-00.png",
+          "sha256": "8A288AAAC3BFB0ED0C6807DF0DCC9CA52E2BD3607B6DCC37C23BB5568B2ED660",
+          "durationRawTicks": 22,
+          "durationMs": 367.7324884879392,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm17_01/frame-01.png",
+          "sha256": "891172AE999BCA41095D93EAFD00940204BAEFC3417F7CCF65F73DE070D7C21B",
+          "durationRawTicks": 22,
+          "durationMs": 367.7324884879392,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm17_02",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm17_02/frame-00.png",
+          "sha256": "565D062913FC7266628838E1DAF8385344381AF7C3FBB756BF82550B4D9DFC4E",
+          "durationRawTicks": 22,
+          "durationMs": 367.7324884879392,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm17_02/frame-01.png",
+          "sha256": "722D8A7C56885EFC2803ED93ECE8CBD3AAEF96A9530ED07D2A49FAFA54864D70",
+          "durationRawTicks": 22,
+          "durationMs": 367.7324884879392,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm18_01",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm18_01/frame-00.png",
+          "sha256": "F72776C929C38C6B9E07A9F73A8FA2934427202AC441A5FCCB9781EA42B8C2C1",
+          "durationMs": null
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm18_02",
+      "worldWidthPx": 2048,
+      "worldHeightPx": 2048,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/licensed-runtime-v1/fields/field_hm18_02/frame-00.png",
+          "sha256": "6639F3F6B8047F31A3556710C88352409B764F3B21F203DE8EB61240744A89EA",
+          "durationMs": null
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "One resident field at a time. Collision and encounters stay in Hunt runtime.",
+    "hm00 is HUNT_TUTORIAL, not a Gate biome. Gate hunts load originalFields.dayFieldId.",
+    "Night variants are stored; day/night selection remains untraced and is not invented.",
+    "Extra animation frames without a pack HD2x file are 2x nearest of the native composite."
+  ]
+}

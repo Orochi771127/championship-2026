@@ -1,0 +1,821 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:vfx:licensed-runtime:v1",
+  "family": "VFX",
+  "product": "DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD",
+  "artifactMaturity": "LICENSED_PIXEL_FAITHFUL_NITRO_VFX_GLB",
+  "productionStatus": "OWNER_APPROVED_LICENSED_PIXEL_RUNTIME",
+  "shippingStatus": "NOT_SHIPPING_READY",
+  "humanApproved": true,
+  "runtimeEligible": true,
+  "shippingReady": false,
+  "rightsStatus": "LICENSED",
+  "rights": {
+    "status": "LICENSED",
+    "authority": "assets/production/ART_PRODUCTION_INDEX.json",
+    "ownerDirective": "docs/coordination/OWNER_DIRECTION.md#2026-09-02",
+    "sourceRomSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "researchPack": "NOT_RUNTIME_READABLE",
+    "sourceBaseline": "docs/art/production/vfx/faithful-reference-26"
+  },
+  "systemCount": 26,
+  "previewAliases": {
+    "hitspark_big": "battle-hitspark_big",
+    "hypereffect": "battle-hypereffect",
+    "spark": "common-spark",
+    "rain": "common-rain"
+  },
+  "defaultPreviewSystemId": null,
+  "defaultPreviewNote": "No VFX is mounted by default. ?vfxArt= names one system for visual QA. The presentation layer does not infer hits, Hyper, Spark, or rain.",
+  "memoryPolicy": "ONE_ACTIVE_SYSTEM_PER_CHANNEL_CALLER_OWNED_TICKER",
+  "tickerPolicy": "CALLER_OWNED_UPDATE_DELTA_MS",
+  "gateEarthMounted": false,
+  "camera": "PRODUCT_AUTHORED_PREVIEW_FRAMING",
+  "systems": [
+    {
+      "systemId": "battle-atkup",
+      "logicalGroup": "battle/atkup",
+      "model": "assets/production/vfx/licensed-runtime-v1/battle/atkup/atkup.glb",
+      "modelSha256": "59CBCFB85B25D0411797C21F127A43659570CB5DA9581273E74593DFC80528DA",
+      "glb": {
+        "meshes": 1,
+        "nodes": 2,
+        "materials": 1,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_texture_transform",
+          "EXT_property_animation",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/atkup/atkup.png",
+          "sha256": "8B28839AD0E910A78CBFBD457AE0F73ED0EC5439E530188A34AD39A7F81B8ADD",
+          "bytes": 1030
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "battle-circle",
+      "logicalGroup": "battle/circle",
+      "model": "assets/production/vfx/licensed-runtime-v1/battle/circle/circle.glb",
+      "modelSha256": "C9ECB319C8FF83F5E236D6E1495B26A071F89727441C5FDBD190AD5123BB0034",
+      "glb": {
+        "meshes": 1,
+        "nodes": 3,
+        "materials": 1,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/circle/circle.png",
+          "sha256": "8144F3DF78FC748EA492C61AB77E0BC1F6DA8C12A82C46980CB05937387F7DF4",
+          "bytes": 666
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "battle-circle_my",
+      "logicalGroup": "battle/circle_my",
+      "model": "assets/production/vfx/licensed-runtime-v1/battle/circle_my/circle_my.glb",
+      "modelSha256": "703CE76BE930AB7BB0618C42AA6185B2AE344EA63099B9CC533130A00C403A7B",
+      "glb": {
+        "meshes": 1,
+        "nodes": 3,
+        "materials": 1,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/circle_my/circle_my.png",
+          "sha256": "FDC12AACC071A2F1458877D361595D5700ABA115B393D1127ECD3B136EA492BC",
+          "bytes": 782
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "battle-critup",
+      "logicalGroup": "battle/critup",
+      "model": "assets/production/vfx/licensed-runtime-v1/battle/critup/critup.glb",
+      "modelSha256": "621B6E651AE13C711482543ECBB03C5BFFB7447CC3D29995734AF547E2EC7264",
+      "glb": {
+        "meshes": 1,
+        "nodes": 2,
+        "materials": 1,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_texture_transform",
+          "EXT_property_animation",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/critup/critup.png",
+          "sha256": "07A287CB4CB2CF50FD78FA858C176C9C6A135E0EF37759D8D3BCCCC33AF7DE80",
+          "bytes": 837
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "battle-defup",
+      "logicalGroup": "battle/defup",
+      "model": "assets/production/vfx/licensed-runtime-v1/battle/defup/defup.glb",
+      "modelSha256": "F1B1F6B39714A3E31B38C8D71CBA8AB19B982E40F3E530BB6A1B95FC8D622F03",
+      "glb": {
+        "meshes": 1,
+        "nodes": 2,
+        "materials": 1,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_texture_transform",
+          "EXT_property_animation",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/defup/defup.png",
+          "sha256": "0BE270103563537F1815510B8F65D6A3BDC3FA57418338C90391964417D8ED7A",
+          "bytes": 1253
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "battle-earth_hit",
+      "logicalGroup": "battle/earth_hit",
+      "model": "assets/production/vfx/licensed-runtime-v1/battle/earth_hit/earth_hit.glb",
+      "modelSha256": "B802288BBF23A5BAC325F7CBA77E11E80F45030978142A52139A77583DD0E837",
+      "glb": {
+        "meshes": 1,
+        "nodes": 4,
+        "materials": 2,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/earth_hit/etc_circle.png",
+          "sha256": "ECFE163EC678CB34E9C0961284951B5207A968FA10DE3DC37FD8F0606C85DB82",
+          "bytes": 1024
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "battle-hitspark_big",
+      "logicalGroup": "battle/hitspark_big",
+      "model": "assets/production/vfx/licensed-runtime-v1/battle/hitspark_big/hitspark_big.glb",
+      "modelSha256": "56FDB4267A5FA08FE0437DA69E821777496BBFF94F562522E0F2C3493E7513F2",
+      "glb": {
+        "meshes": 1,
+        "nodes": 31,
+        "materials": 2,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/hitspark_big/hit_spark.png",
+          "sha256": "4A1E10BD8E4D05B667FC08F461741C230682642D3472F110A05944518F823A51",
+          "bytes": 1160
+        },
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/hitspark_big/ip_circle.png",
+          "sha256": "41CE4EBDDE69D6A8537164505E981816C591C5E9D315CA2CD9FC4F68B8A6C0E6",
+          "bytes": 392
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "battle-hitspark_small",
+      "logicalGroup": "battle/hitspark_small",
+      "model": "assets/production/vfx/licensed-runtime-v1/battle/hitspark_small/hitspark_small.glb",
+      "modelSha256": "E671D45D14F0FB4D62A906D0AB3E8743628259AF4305E85B9974C7B8FDB058D3",
+      "glb": {
+        "meshes": 1,
+        "nodes": 31,
+        "materials": 2,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/hitspark_small/hit_spark.png",
+          "sha256": "4A1E10BD8E4D05B667FC08F461741C230682642D3472F110A05944518F823A51",
+          "bytes": 1160
+        },
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/hitspark_small/ip_circle.png",
+          "sha256": "41CE4EBDDE69D6A8537164505E981816C591C5E9D315CA2CD9FC4F68B8A6C0E6",
+          "bytes": 392
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "battle-hitup",
+      "logicalGroup": "battle/hitup",
+      "model": "assets/production/vfx/licensed-runtime-v1/battle/hitup/hitup.glb",
+      "modelSha256": "DD458513310A0BAF99C775B3D94353C0727396937BD4154168D48CFA2005C06D",
+      "glb": {
+        "meshes": 1,
+        "nodes": 2,
+        "materials": 1,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_texture_transform",
+          "EXT_property_animation",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/hitup/hitup.png",
+          "sha256": "3206AF081F636BC8E3569F7A449E41C9032FF50562C4E433657E10F71ABC6FF1",
+          "bytes": 953
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "battle-hypereffect",
+      "logicalGroup": "battle/hypereffect",
+      "model": "assets/production/vfx/licensed-runtime-v1/battle/hypereffect/hypereffect.glb",
+      "modelSha256": "4ABE7B99F20EE21196FC3BA43947BB1F6B5AA15DBF47F7FF270AC38CD1F9DCAC",
+      "glb": {
+        "meshes": 1,
+        "nodes": 20,
+        "materials": 2,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/hypereffect/hitmark.png",
+          "sha256": "B65C00106EB65E79745538572CC1DD4A8338B633B0A7BE9AB1A4AFECE02DA763",
+          "bytes": 394
+        },
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/hypereffect/new1.png",
+          "sha256": "4A491ED0096631C28AFFA4742B1A2A3791CEAC597862DADBF830A4A8CDE59F84",
+          "bytes": 656
+        }
+      ],
+      "sidecars": [
+        "assets/production/vfx/licensed-runtime-v1/battle/hypereffect/hypereffect.visibility.json"
+      ],
+      "unsupportedSourceFormats": [
+        ".nsbva"
+      ],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "battle-hypereffect_ring",
+      "logicalGroup": "battle/hypereffect_ring",
+      "model": "assets/production/vfx/licensed-runtime-v1/battle/hypereffect_ring/hypereffect_ring.glb",
+      "modelSha256": "5E4641EF0731F62EC2D44A7076457E29BCB1D0D1EA8A2F7E86CD6A9F3F809621",
+      "glb": {
+        "meshes": 1,
+        "nodes": 4,
+        "materials": 1,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/hypereffect_ring/hypereff.png",
+          "sha256": "79E708A16BCBD3C5DF0CA5A5CDC03A9A0A6024A487673F61C02A459B05F18D02",
+          "bytes": 2106
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "battle-s_impact_b",
+      "logicalGroup": "battle/s_impact_b",
+      "model": "assets/production/vfx/licensed-runtime-v1/battle/s_impact_b/s_impact_b.glb",
+      "modelSha256": "B400FD13EF2CD1E7DAF89D187EABC753E7610440D7DF804D20B09A0FB82375DA",
+      "glb": {
+        "meshes": 1,
+        "nodes": 2,
+        "materials": 1,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/s_impact_b/ip_circle.png",
+          "sha256": "41CE4EBDDE69D6A8537164505E981816C591C5E9D315CA2CD9FC4F68B8A6C0E6",
+          "bytes": 392
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "battle-s_impact_s",
+      "logicalGroup": "battle/s_impact_s",
+      "model": "assets/production/vfx/licensed-runtime-v1/battle/s_impact_s/s_impact_s.glb",
+      "modelSha256": "7569816D35C6210DCCF55E5260B4FD5ACFA10BF683B68C5E65BBAC482674B737",
+      "glb": {
+        "meshes": 1,
+        "nodes": 2,
+        "materials": 1,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/s_impact_s/ip_circle.png",
+          "sha256": "41CE4EBDDE69D6A8537164505E981816C591C5E9D315CA2CD9FC4F68B8A6C0E6",
+          "bytes": 392
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "battle-speedup",
+      "logicalGroup": "battle/speedup",
+      "model": "assets/production/vfx/licensed-runtime-v1/battle/speedup/speedup.glb",
+      "modelSha256": "998F6DAB76B88DD63065FA52B0269AAD69E43A66632363BBB79910D243FB5F28",
+      "glb": {
+        "meshes": 1,
+        "nodes": 2,
+        "materials": 1,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_texture_transform",
+          "EXT_property_animation",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/speedup/speedup.png",
+          "sha256": "6BF230DB59FC9DDC3C42A5FAB641E7E519F2F9985441040F7F8C5BCEFC1EE0DE",
+          "bytes": 981
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "battle-test_buff",
+      "logicalGroup": "battle/test_buff",
+      "model": "assets/production/vfx/licensed-runtime-v1/battle/test_buff/test_buff.glb",
+      "modelSha256": "40FD269884DAD59380AC0E97761B361BB7DF7FB48BD88358584F6FF98B150327",
+      "glb": {
+        "meshes": 1,
+        "nodes": 2,
+        "materials": 1,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_texture_transform",
+          "EXT_property_animation",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/test_buff/scrolltest.png",
+          "sha256": "5254419A16AF8EBBDEA5C0D2FC68F485AA82B608395C52BC578A40BB4B40E021",
+          "bytes": 310
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "battle-test_eff",
+      "logicalGroup": "battle/test_eff",
+      "model": "assets/production/vfx/licensed-runtime-v1/battle/test_eff/test_eff.glb",
+      "modelSha256": "F9B3D1C4328317E02A3C27571DE9BDE3FF7F7956CB8077A510344419C6BFB75E",
+      "glb": {
+        "meshes": 1,
+        "nodes": 2,
+        "materials": 1,
+        "animations": 0,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/test_eff/_e_X_g.png",
+          "sha256": "4B144DF348BDA77E03BA214BA441BA773ABC3445BCCBB7609E286518F5661878",
+          "bytes": 774
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "battle-toleup",
+      "logicalGroup": "battle/toleup",
+      "model": "assets/production/vfx/licensed-runtime-v1/battle/toleup/toleup.glb",
+      "modelSha256": "FFF0A2A54C389E6DB143B8592FBAD23EF0873A311253E72941B7C0091570C229",
+      "glb": {
+        "meshes": 1,
+        "nodes": 2,
+        "materials": 1,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_texture_transform",
+          "EXT_property_animation",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/battle/toleup/toleup.png",
+          "sha256": "1392763FD236D9F64504BC32035974905684A0B808C00406957F24B84A963F6A",
+          "bytes": 1006
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "common-lightup",
+      "logicalGroup": "common/lightup",
+      "model": "assets/production/vfx/licensed-runtime-v1/common/lightup/lightup.glb",
+      "modelSha256": "CAE56317EF555AF59C105D905AF887348C0B88BB0880BF7D966352F5BB4CF53D",
+      "glb": {
+        "meshes": 1,
+        "nodes": 2,
+        "materials": 1,
+        "animations": 0,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/common/lightup/light_eff.png",
+          "sha256": "EE66C8D4BF9B22B69466E3EC689B487D1875AAB0B286C183B9131E1F9D99CB09",
+          "bytes": 2461
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "common-mist",
+      "logicalGroup": "common/mist",
+      "model": "assets/production/vfx/licensed-runtime-v1/common/mist/mist.glb",
+      "modelSha256": "C607D1033CFDDCA39D4A03B5E51CF93CD79D30DE1748824B4F49A4C38268EF13",
+      "glb": {
+        "meshes": 1,
+        "nodes": 2,
+        "materials": 1,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_texture_transform",
+          "EXT_property_animation",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/common/mist/mist_eff.png",
+          "sha256": "6BB310D51570D446082EDC8ACEF8A94A693A9D4B7B6C28147320840E4B21F53D",
+          "bytes": 3876
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "common-rain",
+      "logicalGroup": "common/rain",
+      "model": "assets/production/vfx/licensed-runtime-v1/common/rain/rain.glb",
+      "modelSha256": "4EBC766B968C7B17DC097B1F7566212134346D768ED17DCD840E11F4FE4B6294",
+      "glb": {
+        "meshes": 1,
+        "nodes": 2,
+        "materials": 1,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_texture_transform",
+          "EXT_property_animation",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/common/rain/rain_eff.png",
+          "sha256": "5EB28A78831FEE5E8F83A44ED35D93C245E04B38D8AA48CC5207B56DCA6BDC8E",
+          "bytes": 4142
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "common-sandstome",
+      "logicalGroup": "common/sandstome",
+      "model": "assets/production/vfx/licensed-runtime-v1/common/sandstome/sandstome.glb",
+      "modelSha256": "9EC983F0F7B8B3AC77F1734A5931ACE55BBB8998B291E7D12A7F62225B30A38E",
+      "glb": {
+        "meshes": 1,
+        "nodes": 2,
+        "materials": 1,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_texture_transform",
+          "EXT_property_animation",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/common/sandstome/sand_eff.png",
+          "sha256": "77F27FD02983D0F4E0514FF65ED273E15DF29059B067B9A4A831AA6F6A066DA8",
+          "bytes": 2989
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "common-snow",
+      "logicalGroup": "common/snow",
+      "model": "assets/production/vfx/licensed-runtime-v1/common/snow/snow.glb",
+      "modelSha256": "2A4434D8F50DCF1C4BCA9AD8E9CF1EC31380A5F23973FA83D6AE3A4C60882EA1",
+      "glb": {
+        "meshes": 1,
+        "nodes": 2,
+        "materials": 1,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_texture_transform",
+          "EXT_property_animation",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/common/snow/snow_eff.png",
+          "sha256": "BDF6EA83BD6110D82A1C1B18922EFEF62626A8D3515D187B27AA21D8423B019E",
+          "bytes": 1230
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "common-snowstome",
+      "logicalGroup": "common/snowstome",
+      "model": "assets/production/vfx/licensed-runtime-v1/common/snowstome/snowstome.glb",
+      "modelSha256": "9EC4556EBE1D91CF78ECCDC8EC60629DBDBB3292F760FCD09DFF24BE233B96D3",
+      "glb": {
+        "meshes": 1,
+        "nodes": 2,
+        "materials": 1,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_texture_transform",
+          "EXT_property_animation",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/common/snowstome/snowstome_eff.png",
+          "sha256": "6972369B5153792D62AF2F475A5BC833146A31F2EA451BAAF27DC4E48A6423BC",
+          "bytes": 3667
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "common-spark",
+      "logicalGroup": "common/spark",
+      "model": "assets/production/vfx/licensed-runtime-v1/common/spark/spark.glb",
+      "modelSha256": "6DA6827B8951C5B8684E2237838250E4174D6AB9B0E3D604E01C967E01F9CE1C",
+      "glb": {
+        "meshes": 1,
+        "nodes": 2,
+        "materials": 4,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_texture_transform",
+          "EXT_property_animation",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/common/spark/m_spark_eff.png",
+          "sha256": "1990CDE42CCB98CC4DD729808FE937E6D94523061B8F8C44C58AE1B85EB5C1A2",
+          "bytes": 1428
+        }
+      ],
+      "sidecars": [
+        "assets/production/vfx/licensed-runtime-v1/common/spark/spark.material-animation.json"
+      ],
+      "unsupportedSourceFormats": [
+        ".nsbma"
+      ],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "common-time_pl",
+      "logicalGroup": "common/time_pl",
+      "model": "assets/production/vfx/licensed-runtime-v1/common/time_pl/time_pl.glb",
+      "modelSha256": "F80E1B07C7A9950F7D2EAD83AB2FAB176B777CC71F4AC37EEB99134564238129",
+      "glb": {
+        "meshes": 1,
+        "nodes": 2,
+        "materials": 1,
+        "animations": 0,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/common/time_pl/time_p.png",
+          "sha256": "043AD0381BB259874663BCC3ABB979C8B57121D89ABF9EDB2E643E7B210956D3",
+          "bytes": 586
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "systemId": "common-wind",
+      "logicalGroup": "common/wind",
+      "model": "assets/production/vfx/licensed-runtime-v1/common/wind/wind.glb",
+      "modelSha256": "CB1D2D276E3D8F9A3BCCE981F01A6C291C491E0EED67951EC3E4BAC499A8F997",
+      "glb": {
+        "meshes": 1,
+        "nodes": 2,
+        "materials": 1,
+        "animations": 1,
+        "extensionsUsed": [
+          "FB_ngon_encoding",
+          "KHR_texture_transform",
+          "EXT_property_animation",
+          "KHR_materials_unlit"
+        ]
+      },
+      "textures": [
+        {
+          "src": "assets/production/vfx/licensed-runtime-v1/common/wind/wind_eff.png",
+          "sha256": "4165AFD3AC3E165958AE406D4DFCA6B2AA49D665AE16CA633F9A683211108D8A",
+          "bytes": 2980
+        }
+      ],
+      "sidecars": [],
+      "unsupportedSourceFormats": [],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    }
+  ],
+  "notes": [
+    "Converted motion is authoritative only where apicula decoded it into the GLB.",
+    "NSBVA/NSBMA remain UNKNOWN except the two copied JSON sidecars for hypereffect and spark.",
+    "Gate Earth is not in this bundle and must stay unmounted.",
+    "Do not invent battle or weather callers from these files."
+  ]
+}

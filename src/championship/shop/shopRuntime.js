@@ -47,6 +47,7 @@ function isUnlocked(record, { tamerRank = 0, battleBadges = [] } = {}) {
 export function createShopRuntime({
   catalog = getShopCatalog(),
   huntInventory = null,
+  initialHuntInventory = null,
   bits = STARTING_BITS,
   progression = { tamerRank: 0, battleBadges: [] },
   snapshot = null
@@ -79,7 +80,8 @@ export function createShopRuntime({
       if (record.purchaseDomain === SHOP_PURCHASE_DOMAIN.CAGE_OWNERSHIP) {
         if (record.initialOwned > 0) cageOwned.add(record.shopRecordIndex);
       } else {
-        quantities[record.shopRecordIndex] = record.initialOwned;
+        quantities[record.shopRecordIndex] = initialHuntInventory && record.productItemId
+          ? initialHuntInventory.getQuantity(record.productItemId) : record.initialOwned;
       }
     }
   }
@@ -210,6 +212,39 @@ export function createShopRuntime({
       });
     },
 
+    // The native tool controller calls this only when its placement/fire branch
+    // consumes a unit. Preview, selection, cancellation and rejected use do not.
+    consumeRaisingFood(protein = false) {
+      if(typeof protein!=="boolean")return deepFreeze({ok:false,reason:"INVALID_FOOD_KIND"});
+      const shopRecordIndex=protein?1:0,before=quantities[shopRecordIndex];
+      if(before<1)return deepFreeze({ok:false,reason:"EMPTY"});
+      quantities[shopRecordIndex]=before-1;publish();
+      return deepFreeze({ok:true,shopRecordIndex,owned:before-1});
+    },
+
+    consumeRaisingMedicine(kind) {
+      if(kind!==0&&kind!==1)return deepFreeze({ok:false,reason:'INVALID_MEDICINE_KIND'});
+      const shopRecordIndex=kind===0?3:2,before=quantities[shopRecordIndex];
+      if(before<1)return deepFreeze({ok:false,reason:'EMPTY'});
+      quantities[shopRecordIndex]=before-1;publish();
+      return deepFreeze({ok:true,shopRecordIndex,owned:before-1});
+    },
+
+    consumeHuntItem(itemId, quantity = 1) {
+      const record = listShopRecords().find(row => row.productItemId === itemId);
+      if (!record || record.category !== "HUNT_ITEMS" || record.maxOwned !== 99) {
+        return deepFreeze({ ok:false, reason:"NOT_HUNT_CONSUMABLE" });
+      }
+      if (!Number.isSafeInteger(quantity) || quantity < 1) return deepFreeze({ ok:false, reason:"INVALID_QUANTITY" });
+      const before = quantities[record.shopRecordIndex];
+      if (before < quantity) return deepFreeze({ ok:false, reason:"EMPTY" });
+      const after = before - quantity;
+      huntInventory?.setQuantityFromShop(record.productItemId, after);
+      quantities[record.shopRecordIndex] = after;
+      publish();
+      return deepFreeze({ ok:true, itemId, shopRecordIndex:record.shopRecordIndex, quantity, owned:after });
+    },
+
     /**
      * Live rank / badge context. Original rank is written after battle result
      * (PlayerData +0xAE8). This updates the same unlock scan the shop already runs.
@@ -223,7 +258,30 @@ export function createShopRuntime({
       return publish();
     },
 
-    /** Test / reward injection. Original Bits income is untraced. */
+    /** Commit an app-coordinated transaction through the existing wallet. */
+    applyBitsTransaction({ expectedBits, bits }) {
+      if (!Number.isSafeInteger(bits) || bits < 0 || bits > BITS_WALLET_CAP) {
+        throw shopError("INVALID_BITS");
+      }
+      if (wallet !== expectedBits) return deepFreeze({ ok: false, reason: "WALLET_CHANGED", bits: wallet });
+      wallet = bits;
+      publish();
+      return deepFreeze({ ok: true, bits: wallet });
+    },
+
+    /** Explicit test / other income seam; battle income uses app transactions. */
+    receiveNativeGift(shopRecordIndex,quantity){
+      // ARM9 0208C618: inventory writer uses the existing item table and cap.
+      const record=getShopRecord(shopRecordIndex);
+      if(!Number.isSafeInteger(quantity)||quantity<0||quantity>65535)throw shopError('INVALID_GIFT_QUANTITY');
+      if(record.purchaseDomain===SHOP_PURCHASE_DOMAIN.CAGE_OWNERSHIP)throw shopError('GIFT_IS_NOT_INVENTORY');
+      const previous=quantities[shopRecordIndex];
+      quantities[shopRecordIndex]=Math.min(record.maxOwned,(previous+quantity)&65535);
+      if(record.productItemId&&huntInventory)huntInventory.setQuantityFromShop(record.productItemId,quantities[shopRecordIndex]);
+      publish();return quantities[shopRecordIndex]-previous;
+    },
+
+    /** Explicit test / other income seam; battle income uses app transactions. */
     creditBits(amount, { evidence = "PRODUCT_AUTHORED" } = {}) {
       if (!Number.isSafeInteger(amount) || amount < 0) throw shopError("INVALID_BITS");
       wallet = Math.min(BITS_WALLET_CAP, wallet + amount);
@@ -261,7 +319,7 @@ export function applyMappedHuntInventoryFromShop(shop, huntInventory) {
   for (const record of listShopRecords()) {
     if (!record.productItemId) continue;
     const qty = snapshot.quantities[record.shopRecordIndex];
-    if (qty > 0) huntInventory.grant(record.productItemId, qty);
+    huntInventory.setQuantityFromShop(record.productItemId, qty);
   }
 }
 

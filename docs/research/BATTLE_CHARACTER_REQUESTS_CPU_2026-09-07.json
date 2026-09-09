@@ -1,0 +1,3402 @@
+{
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "arm9Sha256": "6ef7abc91d2b656a3253e25d04500ca79f1599f562daea281c89ce45cb30ccdb",
+  "overlay19Sha256": "d660e3e0bf243541c356c54dcbd1aec58e8df6c2dfaf4a5854d375a5f2d13715",
+  "status": "BOUNDED_CPU_SELECTOR_REPLAY",
+  "boundaries": [
+    "synthetic combatant and actor pointers",
+    "speed helpers return controlled 4096",
+    "stop before animation/effect/movement execution",
+    "normal launch timing not proved"
+  ],
+  "requests": [
+    {
+      "notification": 0,
+      "counter": 0,
+      "currentHp": 0,
+      "handler": "0x2112d5c",
+      "sequenceId": 15
+    },
+    {
+      "notification": 0,
+      "counter": 0,
+      "currentHp": 1,
+      "handler": "0x2112d5c",
+      "sequenceId": 0
+    },
+    {
+      "notification": 0,
+      "counter": 0,
+      "currentHp": 520,
+      "handler": "0x2112d5c",
+      "sequenceId": 0
+    },
+    {
+      "notification": 0,
+      "counter": 1,
+      "currentHp": 0,
+      "handler": "0x2112d5c",
+      "sequenceId": null
+    },
+    {
+      "notification": 0,
+      "counter": 1,
+      "currentHp": 1,
+      "handler": "0x2112d5c",
+      "sequenceId": null
+    },
+    {
+      "notification": 0,
+      "counter": 1,
+      "currentHp": 520,
+      "handler": "0x2112d5c",
+      "sequenceId": null
+    },
+    {
+      "notification": 0,
+      "counter": 7,
+      "currentHp": 0,
+      "handler": "0x2112d5c",
+      "sequenceId": null
+    },
+    {
+      "notification": 0,
+      "counter": 7,
+      "currentHp": 1,
+      "handler": "0x2112d5c",
+      "sequenceId": null
+    },
+    {
+      "notification": 0,
+      "counter": 7,
+      "currentHp": 520,
+      "handler": "0x2112d5c",
+      "sequenceId": null
+    },
+    {
+      "notification": 1,
+      "counter": 0,
+      "currentHp": 0,
+      "handler": "0x2112dcc",
+      "sequenceId": 0
+    },
+    {
+      "notification": 1,
+      "counter": 0,
+      "currentHp": 1,
+      "handler": "0x2112dcc",
+      "sequenceId": 0
+    },
+    {
+      "notification": 1,
+      "counter": 0,
+      "currentHp": 520,
+      "handler": "0x2112dcc",
+      "sequenceId": 0
+    },
+    {
+      "notification": 1,
+      "counter": 1,
+      "currentHp": 0,
+      "handler": "0x2112dcc",
+      "sequenceId": null
+    },
+    {
+      "notification": 1,
+      "counter": 1,
+      "currentHp": 1,
+      "handler": "0x2112dcc",
+      "sequenceId": null
+    },
+    {
+      "notification": 1,
+      "counter": 1,
+      "currentHp": 520,
+      "handler": "0x2112dcc",
+      "sequenceId": null
+    },
+    {
+      "notification": 1,
+      "counter": 7,
+      "currentHp": 0,
+      "handler": "0x2112dcc",
+      "sequenceId": null
+    },
+    {
+      "notification": 1,
+      "counter": 7,
+      "currentHp": 1,
+      "handler": "0x2112dcc",
+      "sequenceId": null
+    },
+    {
+      "notification": 1,
+      "counter": 7,
+      "currentHp": 520,
+      "handler": "0x2112dcc",
+      "sequenceId": null
+    },
+    {
+      "notification": 2,
+      "counter": 0,
+      "currentHp": 0,
+      "handler": "0x2112dfc",
+      "sequenceId": 2
+    },
+    {
+      "notification": 2,
+      "counter": 0,
+      "currentHp": 1,
+      "handler": "0x2112dfc",
+      "sequenceId": 2
+    },
+    {
+      "notification": 2,
+      "counter": 0,
+      "currentHp": 520,
+      "handler": "0x2112dfc",
+      "sequenceId": 2
+    },
+    {
+      "notification": 2,
+      "counter": 1,
+      "currentHp": 0,
+      "handler": "0x2112dfc",
+      "sequenceId": null
+    },
+    {
+      "notification": 2,
+      "counter": 1,
+      "currentHp": 1,
+      "handler": "0x2112dfc",
+      "sequenceId": null
+    },
+    {
+      "notification": 2,
+      "counter": 1,
+      "currentHp": 520,
+      "handler": "0x2112dfc",
+      "sequenceId": null
+    },
+    {
+      "notification": 2,
+      "counter": 7,
+      "currentHp": 0,
+      "handler": "0x2112dfc",
+      "sequenceId": null
+    },
+    {
+      "notification": 2,
+      "counter": 7,
+      "currentHp": 1,
+      "handler": "0x2112dfc",
+      "sequenceId": null
+    },
+    {
+      "notification": 2,
+      "counter": 7,
+      "currentHp": 520,
+      "handler": "0x2112dfc",
+      "sequenceId": null
+    },
+    {
+      "notification": 4,
+      "counter": 0,
+      "currentHp": 0,
+      "handler": "0x2112eb8",
+      "sequenceId": 2
+    },
+    {
+      "notification": 4,
+      "counter": 0,
+      "currentHp": 1,
+      "handler": "0x2112eb8",
+      "sequenceId": 2
+    },
+    {
+      "notification": 4,
+      "counter": 0,
+      "currentHp": 520,
+      "handler": "0x2112eb8",
+      "sequenceId": 2
+    },
+    {
+      "notification": 4,
+      "counter": 1,
+      "currentHp": 0,
+      "handler": "0x2112eb8",
+      "sequenceId": null
+    },
+    {
+      "notification": 4,
+      "counter": 1,
+      "currentHp": 1,
+      "handler": "0x2112eb8",
+      "sequenceId": null
+    },
+    {
+      "notification": 4,
+      "counter": 1,
+      "currentHp": 520,
+      "handler": "0x2112eb8",
+      "sequenceId": null
+    },
+    {
+      "notification": 4,
+      "counter": 7,
+      "currentHp": 0,
+      "handler": "0x2112eb8",
+      "sequenceId": null
+    },
+    {
+      "notification": 4,
+      "counter": 7,
+      "currentHp": 1,
+      "handler": "0x2112eb8",
+      "sequenceId": null
+    },
+    {
+      "notification": 4,
+      "counter": 7,
+      "currentHp": 520,
+      "handler": "0x2112eb8",
+      "sequenceId": null
+    },
+    {
+      "notification": 5,
+      "counter": 0,
+      "currentHp": 0,
+      "handler": "0x2112ef0",
+      "sequenceId": 2
+    },
+    {
+      "notification": 5,
+      "counter": 0,
+      "currentHp": 1,
+      "handler": "0x2112ef0",
+      "sequenceId": 2
+    },
+    {
+      "notification": 5,
+      "counter": 0,
+      "currentHp": 520,
+      "handler": "0x2112ef0",
+      "sequenceId": 2
+    },
+    {
+      "notification": 5,
+      "counter": 1,
+      "currentHp": 0,
+      "handler": "0x2112ef0",
+      "sequenceId": null
+    },
+    {
+      "notification": 5,
+      "counter": 1,
+      "currentHp": 1,
+      "handler": "0x2112ef0",
+      "sequenceId": null
+    },
+    {
+      "notification": 5,
+      "counter": 1,
+      "currentHp": 520,
+      "handler": "0x2112ef0",
+      "sequenceId": null
+    },
+    {
+      "notification": 5,
+      "counter": 7,
+      "currentHp": 0,
+      "handler": "0x2112ef0",
+      "sequenceId": null
+    },
+    {
+      "notification": 5,
+      "counter": 7,
+      "currentHp": 1,
+      "handler": "0x2112ef0",
+      "sequenceId": null
+    },
+    {
+      "notification": 5,
+      "counter": 7,
+      "currentHp": 520,
+      "handler": "0x2112ef0",
+      "sequenceId": null
+    },
+    {
+      "notification": 6,
+      "counter": 0,
+      "currentHp": 0,
+      "handler": "0x2112f28",
+      "sequenceId": 2
+    },
+    {
+      "notification": 6,
+      "counter": 0,
+      "currentHp": 1,
+      "handler": "0x2112f28",
+      "sequenceId": 2
+    },
+    {
+      "notification": 6,
+      "counter": 0,
+      "currentHp": 520,
+      "handler": "0x2112f28",
+      "sequenceId": 2
+    },
+    {
+      "notification": 6,
+      "counter": 1,
+      "currentHp": 0,
+      "handler": "0x2112f28",
+      "sequenceId": null
+    },
+    {
+      "notification": 6,
+      "counter": 1,
+      "currentHp": 1,
+      "handler": "0x2112f28",
+      "sequenceId": null
+    },
+    {
+      "notification": 6,
+      "counter": 1,
+      "currentHp": 520,
+      "handler": "0x2112f28",
+      "sequenceId": null
+    },
+    {
+      "notification": 6,
+      "counter": 7,
+      "currentHp": 0,
+      "handler": "0x2112f28",
+      "sequenceId": null
+    },
+    {
+      "notification": 6,
+      "counter": 7,
+      "currentHp": 1,
+      "handler": "0x2112f28",
+      "sequenceId": null
+    },
+    {
+      "notification": 6,
+      "counter": 7,
+      "currentHp": 520,
+      "handler": "0x2112f28",
+      "sequenceId": null
+    },
+    {
+      "notification": 7,
+      "counter": 0,
+      "currentHp": 0,
+      "handler": "0x2112f60",
+      "sequenceId": 3
+    },
+    {
+      "notification": 7,
+      "counter": 0,
+      "currentHp": 1,
+      "handler": "0x2112f60",
+      "sequenceId": 3
+    },
+    {
+      "notification": 7,
+      "counter": 0,
+      "currentHp": 520,
+      "handler": "0x2112f60",
+      "sequenceId": 3
+    },
+    {
+      "notification": 7,
+      "counter": 1,
+      "currentHp": 0,
+      "handler": "0x2112f60",
+      "sequenceId": null
+    },
+    {
+      "notification": 7,
+      "counter": 1,
+      "currentHp": 1,
+      "handler": "0x2112f60",
+      "sequenceId": null
+    },
+    {
+      "notification": 7,
+      "counter": 1,
+      "currentHp": 520,
+      "handler": "0x2112f60",
+      "sequenceId": null
+    },
+    {
+      "notification": 7,
+      "counter": 7,
+      "currentHp": 0,
+      "handler": "0x2112f60",
+      "sequenceId": null
+    },
+    {
+      "notification": 7,
+      "counter": 7,
+      "currentHp": 1,
+      "handler": "0x2112f60",
+      "sequenceId": null
+    },
+    {
+      "notification": 7,
+      "counter": 7,
+      "currentHp": 520,
+      "handler": "0x2112f60",
+      "sequenceId": null
+    },
+    {
+      "notification": 8,
+      "counter": 0,
+      "currentHp": 0,
+      "handler": "0x2112f98",
+      "sequenceId": 7
+    },
+    {
+      "notification": 8,
+      "counter": 0,
+      "currentHp": 1,
+      "handler": "0x2112f98",
+      "sequenceId": 7
+    },
+    {
+      "notification": 8,
+      "counter": 0,
+      "currentHp": 520,
+      "handler": "0x2112f98",
+      "sequenceId": 7
+    },
+    {
+      "notification": 8,
+      "counter": 1,
+      "currentHp": 0,
+      "handler": "0x2112f98",
+      "sequenceId": null
+    },
+    {
+      "notification": 8,
+      "counter": 1,
+      "currentHp": 1,
+      "handler": "0x2112f98",
+      "sequenceId": null
+    },
+    {
+      "notification": 8,
+      "counter": 1,
+      "currentHp": 520,
+      "handler": "0x2112f98",
+      "sequenceId": null
+    },
+    {
+      "notification": 8,
+      "counter": 7,
+      "currentHp": 0,
+      "handler": "0x2112f98",
+      "sequenceId": null
+    },
+    {
+      "notification": 8,
+      "counter": 7,
+      "currentHp": 1,
+      "handler": "0x2112f98",
+      "sequenceId": null
+    },
+    {
+      "notification": 8,
+      "counter": 7,
+      "currentHp": 520,
+      "handler": "0x2112f98",
+      "sequenceId": null
+    },
+    {
+      "notification": 9,
+      "counter": 0,
+      "currentHp": 0,
+      "handler": "0x2112fd8",
+      "sequenceId": 8
+    },
+    {
+      "notification": 9,
+      "counter": 0,
+      "currentHp": 1,
+      "handler": "0x2112fd8",
+      "sequenceId": 8
+    },
+    {
+      "notification": 9,
+      "counter": 0,
+      "currentHp": 520,
+      "handler": "0x2112fd8",
+      "sequenceId": 8
+    },
+    {
+      "notification": 9,
+      "counter": 1,
+      "currentHp": 0,
+      "handler": "0x2112fd8",
+      "sequenceId": null
+    },
+    {
+      "notification": 9,
+      "counter": 1,
+      "currentHp": 1,
+      "handler": "0x2112fd8",
+      "sequenceId": null
+    },
+    {
+      "notification": 9,
+      "counter": 1,
+      "currentHp": 520,
+      "handler": "0x2112fd8",
+      "sequenceId": null
+    },
+    {
+      "notification": 9,
+      "counter": 7,
+      "currentHp": 0,
+      "handler": "0x2112fd8",
+      "sequenceId": null
+    },
+    {
+      "notification": 9,
+      "counter": 7,
+      "currentHp": 1,
+      "handler": "0x2112fd8",
+      "sequenceId": null
+    },
+    {
+      "notification": 9,
+      "counter": 7,
+      "currentHp": 520,
+      "handler": "0x2112fd8",
+      "sequenceId": null
+    },
+    {
+      "notification": 10,
+      "counter": 0,
+      "currentHp": 0,
+      "handler": "0x2113018",
+      "sequenceId": 9
+    },
+    {
+      "notification": 10,
+      "counter": 0,
+      "currentHp": 1,
+      "handler": "0x2113018",
+      "sequenceId": 9
+    },
+    {
+      "notification": 10,
+      "counter": 0,
+      "currentHp": 520,
+      "handler": "0x2113018",
+      "sequenceId": 9
+    },
+    {
+      "notification": 10,
+      "counter": 1,
+      "currentHp": 0,
+      "handler": "0x2113018",
+      "sequenceId": null
+    },
+    {
+      "notification": 10,
+      "counter": 1,
+      "currentHp": 1,
+      "handler": "0x2113018",
+      "sequenceId": null
+    },
+    {
+      "notification": 10,
+      "counter": 1,
+      "currentHp": 520,
+      "handler": "0x2113018",
+      "sequenceId": null
+    },
+    {
+      "notification": 10,
+      "counter": 7,
+      "currentHp": 0,
+      "handler": "0x2113018",
+      "sequenceId": null
+    },
+    {
+      "notification": 10,
+      "counter": 7,
+      "currentHp": 1,
+      "handler": "0x2113018",
+      "sequenceId": null
+    },
+    {
+      "notification": 10,
+      "counter": 7,
+      "currentHp": 520,
+      "handler": "0x2113018",
+      "sequenceId": null
+    },
+    {
+      "notification": 11,
+      "counter": 0,
+      "currentHp": 0,
+      "handler": "0x2113058",
+      "sequenceId": 10
+    },
+    {
+      "notification": 11,
+      "counter": 0,
+      "currentHp": 1,
+      "handler": "0x2113058",
+      "sequenceId": 10
+    },
+    {
+      "notification": 11,
+      "counter": 0,
+      "currentHp": 520,
+      "handler": "0x2113058",
+      "sequenceId": 10
+    },
+    {
+      "notification": 11,
+      "counter": 1,
+      "currentHp": 0,
+      "handler": "0x2113058",
+      "sequenceId": null
+    },
+    {
+      "notification": 11,
+      "counter": 1,
+      "currentHp": 1,
+      "handler": "0x2113058",
+      "sequenceId": null
+    },
+    {
+      "notification": 11,
+      "counter": 1,
+      "currentHp": 520,
+      "handler": "0x2113058",
+      "sequenceId": null
+    },
+    {
+      "notification": 11,
+      "counter": 7,
+      "currentHp": 0,
+      "handler": "0x2113058",
+      "sequenceId": null
+    },
+    {
+      "notification": 11,
+      "counter": 7,
+      "currentHp": 1,
+      "handler": "0x2113058",
+      "sequenceId": null
+    },
+    {
+      "notification": 11,
+      "counter": 7,
+      "currentHp": 520,
+      "handler": "0x2113058",
+      "sequenceId": null
+    },
+    {
+      "notification": 12,
+      "counter": 0,
+      "currentHp": 0,
+      "handler": "0x2113098",
+      "sequenceId": 35
+    },
+    {
+      "notification": 12,
+      "counter": 0,
+      "currentHp": 1,
+      "handler": "0x2113098",
+      "sequenceId": 35
+    },
+    {
+      "notification": 12,
+      "counter": 0,
+      "currentHp": 520,
+      "handler": "0x2113098",
+      "sequenceId": 35
+    },
+    {
+      "notification": 12,
+      "counter": 1,
+      "currentHp": 0,
+      "handler": "0x2113098",
+      "sequenceId": null
+    },
+    {
+      "notification": 12,
+      "counter": 1,
+      "currentHp": 1,
+      "handler": "0x2113098",
+      "sequenceId": null
+    },
+    {
+      "notification": 12,
+      "counter": 1,
+      "currentHp": 520,
+      "handler": "0x2113098",
+      "sequenceId": null
+    },
+    {
+      "notification": 12,
+      "counter": 7,
+      "currentHp": 0,
+      "handler": "0x2113098",
+      "sequenceId": null
+    },
+    {
+      "notification": 12,
+      "counter": 7,
+      "currentHp": 1,
+      "handler": "0x2113098",
+      "sequenceId": null
+    },
+    {
+      "notification": 12,
+      "counter": 7,
+      "currentHp": 520,
+      "handler": "0x2113098",
+      "sequenceId": null
+    },
+    {
+      "notification": 18,
+      "counter": 0,
+      "currentHp": 0,
+      "handler": "0x21138c0",
+      "sequenceId": 15
+    },
+    {
+      "notification": 18,
+      "counter": 0,
+      "currentHp": 1,
+      "handler": "0x21138c0",
+      "sequenceId": 15
+    },
+    {
+      "notification": 18,
+      "counter": 0,
+      "currentHp": 520,
+      "handler": "0x21138c0",
+      "sequenceId": 15
+    },
+    {
+      "notification": 18,
+      "counter": 1,
+      "currentHp": 0,
+      "handler": "0x21138c0",
+      "sequenceId": null
+    },
+    {
+      "notification": 18,
+      "counter": 1,
+      "currentHp": 1,
+      "handler": "0x21138c0",
+      "sequenceId": null
+    },
+    {
+      "notification": 18,
+      "counter": 1,
+      "currentHp": 520,
+      "handler": "0x21138c0",
+      "sequenceId": null
+    },
+    {
+      "notification": 18,
+      "counter": 7,
+      "currentHp": 0,
+      "handler": "0x21138c0",
+      "sequenceId": null
+    },
+    {
+      "notification": 18,
+      "counter": 7,
+      "currentHp": 1,
+      "handler": "0x21138c0",
+      "sequenceId": null
+    },
+    {
+      "notification": 18,
+      "counter": 7,
+      "currentHp": 520,
+      "handler": "0x21138c0",
+      "sequenceId": null
+    }
+  ],
+  "reactionEntries": [
+    {
+      "notification": 3,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x2112e34",
+      "sequenceId": 3
+    },
+    {
+      "notification": 3,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 0,
+      "battleEnding": 1,
+      "handler": "0x2112e34",
+      "sequenceId": 3
+    },
+    {
+      "notification": 19,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x21139ac",
+      "sequenceId": 15
+    },
+    {
+      "notification": 19,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 0,
+      "battleEnding": 1,
+      "handler": "0x21139ac",
+      "sequenceId": 15
+    },
+    {
+      "notification": 20,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x2113b4c",
+      "sequenceId": 33
+    },
+    {
+      "notification": 20,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 0,
+      "battleEnding": 1,
+      "handler": "0x2113b4c",
+      "sequenceId": null
+    },
+    {
+      "notification": 21,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x2113d10",
+      "sequenceId": 15
+    },
+    {
+      "notification": 21,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 0,
+      "battleEnding": 1,
+      "handler": "0x2113d10",
+      "sequenceId": 15
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 1,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 2,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 3,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 4,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 5,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 6,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 7,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 8,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 9,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 10,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 11,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 12,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 0,
+      "statusCode": 13,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 1,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 5
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 1,
+      "statusCode": 1,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 5
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 1,
+      "statusCode": 2,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 5
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 1,
+      "statusCode": 3,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 5
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 1,
+      "statusCode": 4,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 5
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 1,
+      "statusCode": 5,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 5
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 1,
+      "statusCode": 6,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 5
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 1,
+      "statusCode": 7,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 5
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 1,
+      "statusCode": 8,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 5
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 1,
+      "statusCode": 9,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 5
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 1,
+      "statusCode": 10,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 5
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 1,
+      "statusCode": 11,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 5
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 1,
+      "statusCode": 12,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 5
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 1,
+      "statusCode": 13,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 5
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 2,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 2,
+      "statusCode": 1,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 2,
+      "statusCode": 2,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 2,
+      "statusCode": 3,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 2,
+      "statusCode": 4,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 2,
+      "statusCode": 5,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 2,
+      "statusCode": 6,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 2,
+      "statusCode": 7,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 2,
+      "statusCode": 8,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 2,
+      "statusCode": 9,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 2,
+      "statusCode": 10,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 2,
+      "statusCode": 11,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 2,
+      "statusCode": 12,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 2,
+      "statusCode": 13,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 3,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 3,
+      "statusCode": 1,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 3,
+      "statusCode": 2,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 3,
+      "statusCode": 3,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 3,
+      "statusCode": 4,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 3,
+      "statusCode": 5,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 3,
+      "statusCode": 6,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 3,
+      "statusCode": 7,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 3,
+      "statusCode": 8,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 3,
+      "statusCode": 9,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 3,
+      "statusCode": 10,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 3,
+      "statusCode": 11,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 3,
+      "statusCode": 12,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 3,
+      "statusCode": 13,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 4,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 4,
+      "statusCode": 1,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 4,
+      "statusCode": 2,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 4,
+      "statusCode": 3,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 4,
+      "statusCode": 4,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 4,
+      "statusCode": 5,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 4,
+      "statusCode": 6,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 4,
+      "statusCode": 7,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 4,
+      "statusCode": 8,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 4,
+      "statusCode": 9,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 4,
+      "statusCode": 10,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 4,
+      "statusCode": 11,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 4,
+      "statusCode": 12,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 4,
+      "statusCode": 13,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 5,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 5,
+      "statusCode": 1,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 5,
+      "statusCode": 2,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 5,
+      "statusCode": 3,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 5,
+      "statusCode": 4,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 5,
+      "statusCode": 5,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 5,
+      "statusCode": 6,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 5,
+      "statusCode": 7,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 5,
+      "statusCode": 8,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 5,
+      "statusCode": 9,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 5,
+      "statusCode": 10,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 5,
+      "statusCode": 11,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 5,
+      "statusCode": 12,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 5,
+      "statusCode": 13,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 37
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 6,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 38
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 6,
+      "statusCode": 1,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 38
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 6,
+      "statusCode": 2,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 38
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 6,
+      "statusCode": 3,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 38
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 6,
+      "statusCode": 4,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 38
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 6,
+      "statusCode": 5,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 38
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 6,
+      "statusCode": 6,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 38
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 6,
+      "statusCode": 7,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 38
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 6,
+      "statusCode": 8,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 38
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 6,
+      "statusCode": 9,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 38
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 6,
+      "statusCode": 10,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 38
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 6,
+      "statusCode": 11,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 38
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 6,
+      "statusCode": 12,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 38
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 6,
+      "statusCode": 13,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 38
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 7,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 26
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 7,
+      "statusCode": 1,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 26
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 7,
+      "statusCode": 2,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 26
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 7,
+      "statusCode": 3,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 26
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 7,
+      "statusCode": 4,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 26
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 7,
+      "statusCode": 5,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 26
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 7,
+      "statusCode": 6,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 26
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 7,
+      "statusCode": 7,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 26
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 7,
+      "statusCode": 8,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 26
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 7,
+      "statusCode": 9,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 26
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 7,
+      "statusCode": 10,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 26
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 7,
+      "statusCode": 11,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 26
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 7,
+      "statusCode": 12,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 26
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 7,
+      "statusCode": 13,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 26
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 8,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 8,
+      "statusCode": 1,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 8,
+      "statusCode": 2,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 8,
+      "statusCode": 3,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 8,
+      "statusCode": 4,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 8,
+      "statusCode": 5,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 8,
+      "statusCode": 6,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 8,
+      "statusCode": 7,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 8,
+      "statusCode": 8,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 8,
+      "statusCode": 9,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 8,
+      "statusCode": 10,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 8,
+      "statusCode": 11,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 8,
+      "statusCode": 12,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 8,
+      "statusCode": 13,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 9,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 9,
+      "statusCode": 1,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 9,
+      "statusCode": 2,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 9,
+      "statusCode": 3,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 9,
+      "statusCode": 4,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 9,
+      "statusCode": 5,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 9,
+      "statusCode": 6,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 9,
+      "statusCode": 7,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 9,
+      "statusCode": 8,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 9,
+      "statusCode": 9,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 9,
+      "statusCode": 10,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 9,
+      "statusCode": 11,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 9,
+      "statusCode": 12,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 9,
+      "statusCode": 13,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 10,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 10,
+      "statusCode": 1,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 10,
+      "statusCode": 2,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 10,
+      "statusCode": 3,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 10,
+      "statusCode": 4,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 10,
+      "statusCode": 5,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 10,
+      "statusCode": 6,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 10,
+      "statusCode": 7,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 10,
+      "statusCode": 8,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 10,
+      "statusCode": 9,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 10,
+      "statusCode": 10,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 10,
+      "statusCode": 11,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 10,
+      "statusCode": 12,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 10,
+      "statusCode": 13,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 11,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 36
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 11,
+      "statusCode": 1,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 36
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 11,
+      "statusCode": 2,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 36
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 11,
+      "statusCode": 3,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 36
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 11,
+      "statusCode": 4,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 36
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 11,
+      "statusCode": 5,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 36
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 11,
+      "statusCode": 6,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 36
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 11,
+      "statusCode": 7,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 36
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 11,
+      "statusCode": 8,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 36
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 11,
+      "statusCode": 9,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 36
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 11,
+      "statusCode": 10,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 36
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 11,
+      "statusCode": 11,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 36
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 11,
+      "statusCode": 12,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 36
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 11,
+      "statusCode": 13,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 36
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 12,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": null
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 12,
+      "statusCode": 1,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": null
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 12,
+      "statusCode": 2,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": null
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 12,
+      "statusCode": 3,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": null
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 12,
+      "statusCode": 4,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": null
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 12,
+      "statusCode": 5,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": null
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 12,
+      "statusCode": 6,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": null
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 12,
+      "statusCode": 7,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": null
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 12,
+      "statusCode": 8,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 12,
+      "statusCode": 9,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 12,
+      "statusCode": 10,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 12,
+      "statusCode": 11,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": null
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 12,
+      "statusCode": 12,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 36
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 12,
+      "statusCode": 13,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": null
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 13,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 34
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 13,
+      "statusCode": 1,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 34
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 13,
+      "statusCode": 2,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 34
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 13,
+      "statusCode": 3,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 34
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 13,
+      "statusCode": 4,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 34
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 13,
+      "statusCode": 5,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 34
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 13,
+      "statusCode": 6,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 34
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 13,
+      "statusCode": 7,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 34
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 13,
+      "statusCode": 8,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 34
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 13,
+      "statusCode": 9,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 34
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 13,
+      "statusCode": 10,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 34
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 13,
+      "statusCode": 11,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 34
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 13,
+      "statusCode": 12,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 34
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 13,
+      "statusCode": 13,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 34
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 14,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 14,
+      "statusCode": 1,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 14,
+      "statusCode": 2,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 14,
+      "statusCode": 3,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 14,
+      "statusCode": 4,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 14,
+      "statusCode": 5,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 14,
+      "statusCode": 6,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 14,
+      "statusCode": 7,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 14,
+      "statusCode": 8,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 14,
+      "statusCode": 9,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 14,
+      "statusCode": 10,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 14,
+      "statusCode": 11,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 14,
+      "statusCode": 12,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 14,
+      "statusCode": 13,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 15,
+      "statusCode": 0,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 15,
+      "statusCode": 1,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 15,
+      "statusCode": 2,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 15,
+      "statusCode": 3,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 15,
+      "statusCode": 4,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 15,
+      "statusCode": 5,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 15,
+      "statusCode": 6,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 15,
+      "statusCode": 7,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 15,
+      "statusCode": 8,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 15,
+      "statusCode": 9,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 15,
+      "statusCode": 10,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 15,
+      "statusCode": 11,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 15,
+      "statusCode": 12,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    },
+    {
+      "notification": 15,
+      "counter": 0,
+      "currentHp": 100,
+      "hitReaction": 15,
+      "statusCode": 13,
+      "battleEnding": 0,
+      "handler": "0x21130c8",
+      "sequenceId": 6
+    }
+  ],
+  "equalRequests": [
+    {
+      "current": 0,
+      "requested": 0,
+      "restart": false
+    },
+    {
+      "current": 0,
+      "requested": 7,
+      "restart": true
+    },
+    {
+      "current": 0,
+      "requested": 8,
+      "restart": true
+    },
+    {
+      "current": 0,
+      "requested": 9,
+      "restart": true
+    },
+    {
+      "current": 0,
+      "requested": 10,
+      "restart": true
+    },
+    {
+      "current": 0,
+      "requested": 15,
+      "restart": true
+    },
+    {
+      "current": 0,
+      "requested": 35,
+      "restart": true
+    },
+    {
+      "current": 7,
+      "requested": 0,
+      "restart": true
+    },
+    {
+      "current": 7,
+      "requested": 7,
+      "restart": false
+    },
+    {
+      "current": 7,
+      "requested": 8,
+      "restart": true
+    },
+    {
+      "current": 7,
+      "requested": 9,
+      "restart": true
+    },
+    {
+      "current": 7,
+      "requested": 10,
+      "restart": true
+    },
+    {
+      "current": 7,
+      "requested": 15,
+      "restart": true
+    },
+    {
+      "current": 7,
+      "requested": 35,
+      "restart": true
+    },
+    {
+      "current": 8,
+      "requested": 0,
+      "restart": true
+    },
+    {
+      "current": 8,
+      "requested": 7,
+      "restart": true
+    },
+    {
+      "current": 8,
+      "requested": 8,
+      "restart": false
+    },
+    {
+      "current": 8,
+      "requested": 9,
+      "restart": true
+    },
+    {
+      "current": 8,
+      "requested": 10,
+      "restart": true
+    },
+    {
+      "current": 8,
+      "requested": 15,
+      "restart": true
+    },
+    {
+      "current": 8,
+      "requested": 35,
+      "restart": true
+    },
+    {
+      "current": 9,
+      "requested": 0,
+      "restart": true
+    },
+    {
+      "current": 9,
+      "requested": 7,
+      "restart": true
+    },
+    {
+      "current": 9,
+      "requested": 8,
+      "restart": true
+    },
+    {
+      "current": 9,
+      "requested": 9,
+      "restart": false
+    },
+    {
+      "current": 9,
+      "requested": 10,
+      "restart": true
+    },
+    {
+      "current": 9,
+      "requested": 15,
+      "restart": true
+    },
+    {
+      "current": 9,
+      "requested": 35,
+      "restart": true
+    },
+    {
+      "current": 10,
+      "requested": 0,
+      "restart": true
+    },
+    {
+      "current": 10,
+      "requested": 7,
+      "restart": true
+    },
+    {
+      "current": 10,
+      "requested": 8,
+      "restart": true
+    },
+    {
+      "current": 10,
+      "requested": 9,
+      "restart": true
+    },
+    {
+      "current": 10,
+      "requested": 10,
+      "restart": false
+    },
+    {
+      "current": 10,
+      "requested": 15,
+      "restart": true
+    },
+    {
+      "current": 10,
+      "requested": 35,
+      "restart": true
+    },
+    {
+      "current": 15,
+      "requested": 0,
+      "restart": true
+    },
+    {
+      "current": 15,
+      "requested": 7,
+      "restart": true
+    },
+    {
+      "current": 15,
+      "requested": 8,
+      "restart": true
+    },
+    {
+      "current": 15,
+      "requested": 9,
+      "restart": true
+    },
+    {
+      "current": 15,
+      "requested": 10,
+      "restart": true
+    },
+    {
+      "current": 15,
+      "requested": 15,
+      "restart": false
+    },
+    {
+      "current": 15,
+      "requested": 35,
+      "restart": true
+    },
+    {
+      "current": 35,
+      "requested": 0,
+      "restart": true
+    },
+    {
+      "current": 35,
+      "requested": 7,
+      "restart": true
+    },
+    {
+      "current": 35,
+      "requested": 8,
+      "restart": true
+    },
+    {
+      "current": 35,
+      "requested": 9,
+      "restart": true
+    },
+    {
+      "current": 35,
+      "requested": 10,
+      "restart": true
+    },
+    {
+      "current": 35,
+      "requested": 15,
+      "restart": true
+    },
+    {
+      "current": 35,
+      "requested": 35,
+      "restart": false
+    }
+  ]
+}

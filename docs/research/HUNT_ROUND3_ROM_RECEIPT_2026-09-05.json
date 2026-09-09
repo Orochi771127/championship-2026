@@ -1,0 +1,221 @@
+{
+  "status": "SPECIFIED_INSTRUCTIONS_VERIFIED_NOT_FULL_CAPTURE_PARITY",
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "overlayId": 0,
+  "overlayRamAddress": "0x0210B300",
+  "overlaySha256": "538b35fd7fd23080540c3d18d2974f0a54c78bc0ceda6e599340f4696688ebc0",
+  "groupCount": 5,
+  "instructionCount": 43,
+  "groups": [
+    {
+      "id": "camera_inverse_delta",
+      "instructions": [
+        {
+          "address": "0x0211CD4C",
+          "instruction": "sub r0, r0, r5"
+        },
+        {
+          "address": "0x0211CD50",
+          "instruction": "sub r1, r1, r6"
+        },
+        {
+          "address": "0x0211CD54",
+          "instruction": "bl #0x211dcf0"
+        },
+        {
+          "address": "0x0211CD58",
+          "instruction": "str r5, [r7, #8]"
+        },
+        {
+          "address": "0x0211CD60",
+          "instruction": "str r6, [r7, #0xc]"
+        },
+        {
+          "address": "0x0211D17C",
+          "instruction": "sub r0, r0, r4"
+        },
+        {
+          "address": "0x0211D180",
+          "instruction": "sub r1, r1, r5"
+        },
+        {
+          "address": "0x0211D184",
+          "instruction": "bl #0x211dcf0"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "camera_origin_writer_and_bounds",
+      "instructions": [
+        {
+          "address": "0x0211DCF4",
+          "instruction": "ldr r3, [r2, #0xd4]"
+        },
+        {
+          "address": "0x0211DCF8",
+          "instruction": "add r3, r3, r0"
+        },
+        {
+          "address": "0x0211DCFC",
+          "instruction": "str r3, [r2, #0xd4]"
+        },
+        {
+          "address": "0x0211DD00",
+          "instruction": "ldr r0, [r2, #0x64]"
+        },
+        {
+          "address": "0x0211DD04",
+          "instruction": "add r0, r0, r1"
+        },
+        {
+          "address": "0x0211DD08",
+          "instruction": "str r0, [r2, #0x64]"
+        },
+        {
+          "address": "0x0211DD0C",
+          "instruction": "ldr r0, [r2, #0xe4]"
+        },
+        {
+          "address": "0x0211DD14",
+          "instruction": "strlt r0, [r2, #0xd4]"
+        },
+        {
+          "address": "0x0211DD20",
+          "instruction": "sub r0, r0, #0x100"
+        },
+        {
+          "address": "0x0211DD28",
+          "instruction": "strgt r0, [r2, #0xd4]"
+        },
+        {
+          "address": "0x0211DD30",
+          "instruction": "ldr r1, [r0, #0xdc]"
+        },
+        {
+          "address": "0x0211DD3C",
+          "instruction": "strlt r1, [r0, #0x64]"
+        },
+        {
+          "address": "0x0211DD48",
+          "instruction": "sub r1, r1, #0xc0"
+        },
+        {
+          "address": "0x0211DD50",
+          "instruction": "strgt r1, [r0, #0x64]"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "stroke_short_distance_counter",
+      "instructions": [
+        {
+          "address": "0x02113FD0",
+          "instruction": "mov r1, #0x3c"
+        },
+        {
+          "address": "0x02114020",
+          "instruction": "cmp sb, #0x5000"
+        },
+        {
+          "address": "0x02114024",
+          "instruction": "bgt #0x2114044"
+        },
+        {
+          "address": "0x02114030",
+          "instruction": "add r1, r1, #1"
+        },
+        {
+          "address": "0x02114034",
+          "instruction": "cmp r1, #0x3c"
+        },
+        {
+          "address": "0x02114040",
+          "instruction": "pople {r3, r4, r5, r6, r7, r8, sb, sl, fp, pc}"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "stroke_interpolation_and_ring",
+      "instructions": [
+        {
+          "address": "0x021140A8",
+          "instruction": "mov r0, #0xa"
+        },
+        {
+          "address": "0x021140AC",
+          "instruction": "mul r3, r2, r0"
+        },
+        {
+          "address": "0x021140B8",
+          "instruction": "mul r0, r1, r0"
+        },
+        {
+          "address": "0x02114160",
+          "instruction": "sub sb, sb, #0x14000"
+        },
+        {
+          "address": "0x0211419C",
+          "instruction": "cmp r0, #0x14"
+        },
+        {
+          "address": "0x021141A0",
+          "instruction": "strge fp, [r4, #0x118]"
+        },
+        {
+          "address": "0x0211427C",
+          "instruction": "cmp r0, #0x14"
+        },
+        {
+          "address": "0x02114284",
+          "instruction": "strge r0, [r1, #0x118]"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "stroke_active_sample_expiration",
+      "instructions": [
+        {
+          "address": "0x021142F8",
+          "instruction": "bl #0x2047a08"
+        },
+        {
+          "address": "0x0211430C",
+          "instruction": "ldr r0, [sb, #0xc]"
+        },
+        {
+          "address": "0x02114310",
+          "instruction": "cmp r0, #0"
+        },
+        {
+          "address": "0x02114314",
+          "instruction": "bne #0x2114328"
+        },
+        {
+          "address": "0x02114318",
+          "instruction": "str r5, [sl, #0x104]"
+        },
+        {
+          "address": "0x02114320",
+          "instruction": "sub r0, r0, #1"
+        },
+        {
+          "address": "0x02114324",
+          "instruction": "str r0, [r4]"
+        }
+      ],
+      "pass": true
+    }
+  ],
+  "unknown": [
+    "camera lower-bound initialization",
+    "release impulse helper 0x0211DD5C",
+    "native stroke tick cadence and animation sample lifetime",
+    "tool HP and durability writers",
+    "wild encounter initialization",
+    "on-card insertion and Home commit"
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "date": "2026-09-09",
+  "status": "PARTIAL_TWO_STAGE_SCOPE_REMAINS_OPEN",
+  "repository": {
+    "root": "R:/Projects/Championship2026/championship-2026",
+    "branch": "main",
+    "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+    "uncommittedSharedWorktree": true
+  },
+  "regression": {
+    "command": "npm test",
+    "pass": 1379,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 42333.8357,
+    "log": "R:/Projects/Championship2026/_archive/lifecycle-two-stage-2026-09-09/opening-story-regression-final.log"
+  },
+  "finalTitleFocused": {
+    "pass": 15,
+    "fail": 0,
+    "files": [
+      "championship-opening-state-cases.mjs",
+      "championship-int-rh2-p1r-contract-cases.mjs",
+      "championship-toolbar-layout-cases.mjs",
+      "championship-tamer-info-cases.mjs"
+    ]
+  },
+  "receipts": [
+    {
+      "path": "docs/research/TITLE_PROGRESSION_CPU_CHECK_2026-09-09.json",
+      "sha256": "4adf06dcfb84b4bb2aae430436b9857fc137284ad11f19cc2dcd49408098ffa2"
+    },
+    {
+      "path": "docs/research/MORNING_MESSAGES_CPU_CHECK_2026-09-09.json",
+      "sha256": "d04f5ca31e7464a9e9257cf1822eb261df8b3b1066b90720322d4b70cba195f4"
+    },
+    {
+      "path": "docs/research/RAISING_FEAST_CPU_CHECK_2026-09-09.json",
+      "sha256": "45b348f3bb23225ca72105799b3f20de6be66dd2cae68cc1b7b817125f73013e"
+    },
+    {
+      "path": "docs/research/RAISING_TREATMENT_CPU_CHECK_2026-09-09.json",
+      "sha256": "d226a3d4bc27ee4a8d76a10183a3e38875c28c8a6321882c8d7128b36b1e1892"
+    },
+    {
+      "path": "docs/research/RAISING_HOME_REBUILD_OBSERVED_2026-09-09.json",
+      "sha256": "754cc6b1c6d3fd75963f3b70da8fb9834008552838ca95cc585820c376e1b5ab"
+    },
+    {
+      "path": "docs/research/OPENING_STORY_CPU_CHECK_2026-09-09.json",
+      "sha256": "d239e6d8afcac9f3726dd8de5032ab3b5d9efc86fe78a6455f152aff63214c26"
+    },
+    {
+      "path": "docs/research/TUTORIAL_CONTINUATION_OBSERVED_2026-09-09.json",
+      "sha256": "6ec52c180cebf51777c876bb002e2a7bb4060822c877f89840be0a78429bf6c9"
+    }
+  ],
+  "originalCounts": {
+    "titleResultCases": 600,
+    "morningCases": 1200,
+    "feastBites": 448,
+    "feastProducers": 6,
+    "treatmentAdmission": 672,
+    "treatmentWait": 56,
+    "composedTreatmentExits": 96,
+    "homeRebuildObservedScenarios": 1,
+    "homeRebuildResidents": 2,
+    "homeRebuildCheckpoints": 4,
+    "homeRebuildOrderedDraws": 31,
+    "openingStoryCpuPaths": 5,
+    "openingStoryCpuTotalFrames": 7562,
+    "tutorialObservedInputActions": 364
+  },
+  "browser": {
+    "entry": "http://127.0.0.1:8732/championship.html",
+    "publicActionsOnly": true,
+    "observed": [
+      "LOGIN -> Continue",
+      "original toolbar order and stocks",
+      "End Day confirmation -> calendar",
+      "reload during calendar -> Continue -> next-day Home",
+      "Save & Quit -> title without stale status bar",
+      "focused title actions preserve scrollTop 0 and visible crown/logo",
+      "New Game -> automatic four-card story -> envelope -> registration letter -> trainer name",
+      "touch-release story progression -> envelope; removed story nodes and title scrollTop 0",
+      "reload before confirmed naming retains the prior Continue save"
+    ],
+    "finalStatusBarCount": 0,
+    "finalTitleScrollTop": 0,
+    "finalStoryNodeCount": 0,
+    "finalScreen": "LOGIN menu with prior Continue save available"
+  },
+  "checks": {
+    "diffCheckExitCode": 0,
+    "researchPythonCompileExitCode": 0,
+    "researchPythonScriptsCompiled": 5
+  },
+  "fullOriginalStageComplete": false,
+  "tutorialRuntimeComplete": false,
+  "physicalDeviceAcceptance": false,
+  "shippingReady": false,
+  "commitPushMergeDeployPerformed": false,
+  "remainingReport": "docs/research/LIFECYCLE_OPENING_TWO_STAGE_2026-09-09.md",
+  "openingStoryFocused": {
+    "pass": 23,
+    "fail": 0,
+    "files": [
+      "championship-opening-story-cases.mjs",
+      "championship-opening-state-cases.mjs",
+      "championship-raising-lifecycle-app-cases.mjs",
+      "championship-round2-clock-driver-cases.mjs",
+      "championship-save-economy-v2-cases.mjs"
+    ]
+  },
+  "finalLegacyDayEndFocused": {
+    "pass": 20,
+    "fail": 0,
+    "log": "R:/Projects/Championship2026/_archive/lifecycle-two-stage-2026-09-09/final-focused.log"
+  },
+  "openingStoryRuntimeComplete": true,
+  "openingStoryOriginalPictureParity": false,
+  "finalAnimationSyncFocused": {
+    "pass": 3,
+    "fail": 0,
+    "browserRechecked": true
+  }
+}

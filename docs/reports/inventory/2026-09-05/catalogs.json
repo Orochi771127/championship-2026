@@ -1,0 +1,262 @@
+[
+  {
+    "path": "src/data/championship/catalogs/battle-arenas.r1.json",
+    "inHead": true,
+    "sourceEvidenceDeclared": "VERIFIED_BINARY_STRUCTURE",
+    "counts": {
+      "fieldMap": 6,
+      "records": 11
+    },
+    "declaredRecordCount": 11,
+    "actualRecordCount": 11,
+    "consumers": [
+      "src/championship/battle/battleCatalogs.js",
+      "src/championship/presentation/originalBattleFieldBindings.js"
+    ],
+    "sha256": "4950e3dd99fa23e89a5c94c4fc987d97ccf099c779a4fe4219f382a6d2a59ab5"
+  },
+  {
+    "path": "src/data/championship/catalogs/battle-eligibility.r1.json",
+    "inHead": true,
+    "sourceEvidenceDeclared": "VERIFIED_BINARY_STRUCTURE",
+    "counts": {
+      "fieldMap": 12,
+      "records": 46
+    },
+    "declaredRecordCount": 46,
+    "actualRecordCount": 46,
+    "consumers": [
+      "src/championship/battle/battleCatalogs.js"
+    ],
+    "sha256": "c9b74dcf9cf7c03606035b5a0df33170cd79f55eef0dfa7140e9123cfc5971ad"
+  },
+  {
+    "path": "src/data/championship/catalogs/battle-moves.r1.json",
+    "inHead": true,
+    "sourceEvidenceDeclared": "VERIFIED_BINARY_STRUCTURE",
+    "counts": {
+      "fieldMap": 45,
+      "records": 596
+    },
+    "declaredRecordCount": 596,
+    "actualRecordCount": 596,
+    "consumers": [
+      "src/championship/battle/battleCatalogs.js"
+    ],
+    "sha256": "d4e86d1ae63f853462e4a48e6d3778f8e8c8036e2e82c1b3ce28b3827d8b9d38"
+  },
+  {
+    "path": "src/data/championship/catalogs/battle-natives.r1.json",
+    "inHead": false,
+    "sourceEvidenceDeclared": "VERIFIED_BINARY_STRUCTURE",
+    "counts": {
+      "natives": 67
+    },
+    "declaredRecordCount": null,
+    "actualRecordCount": null,
+    "consumers": [
+      "src/championship/battle/battleScriptNatives.js"
+    ],
+    "sha256": "2e08583ffbeb97913136c9ccb9e08f2736c6cd705ab11b929326c62f8d283926"
+  },
+  {
+    "path": "src/data/championship/catalogs/battle-opponent-teams.r1.json",
+    "inHead": true,
+    "sourceEvidenceDeclared": "VERIFIED_BINARY_STRUCTURE",
+    "counts": {
+      "fieldMap": 5,
+      "records": 152
+    },
+    "declaredRecordCount": 152,
+    "actualRecordCount": 152,
+    "consumers": [
+      "src/championship/battle/battleCatalogs.js",
+      "src/championship/battle/battleMatchSelection.js"
+    ],
+    "sha256": "b83f616271b40a7a3edc74ce01fec64258f17d88fc9c3e38b35325aacd925ac0"
+  },
+  {
+    "path": "src/data/championship/catalogs/battle-presets.r1.json",
+    "inHead": true,
+    "sourceEvidenceDeclared": "VERIFIED_BINARY_STRUCTURE",
+    "counts": {
+      "fieldMap": 24,
+      "records": 456
+    },
+    "declaredRecordCount": 456,
+    "actualRecordCount": 456,
+    "consumers": [
+      "src/championship/battle/battleCatalogs.js",
+      "src/championship/battle/battleMatchSelection.js",
+      "src/championship/app/battleRosterSource.js"
+    ],
+    "sha256": "7ebedd982cf4fd66cdf60ddf4cbd4e02955b59356e1d53439cb085efea2542f5"
+  },
+  {
+    "path": "src/data/championship/catalogs/battle-scripts.r1.json",
+    "inHead": false,
+    "sourceEvidenceDeclared": "VERIFIED_BINARY_STRUCTURE",
+    "counts": {
+      "opcodes": 52,
+      "opcodesUnusedByBattleScripts": 18,
+      "moveRecordEntryPoints": 36,
+      "nativeTargets": 67,
+      "routines": 41
+    },
+    "declaredRecordCount": null,
+    "actualRecordCount": null,
+    "consumers": [
+      "src/championship/battle/battleMoveScriptRun.js"
+    ],
+    "sha256": "686638059989a243f754d5a3dae16902c049a396c2b14b335215d40a37720900"
+  },
+  {
+    "path": "src/data/championship/catalogs/battle-title-event-strings.r1.json",
+    "inHead": false,
+    "sourceEvidenceDeclared": "ROM_VERIFIED",
+    "counts": {
+      "records": 62
+    },
+    "declaredRecordCount": 62,
+    "actualRecordCount": 62,
+    "consumers": [
+      "src/championship/battle/titleEventSchedule.js"
+    ],
+    "sha256": "05b2108e723690094f72b2ed1a972682f555347b43e2d298b7d176d7c64f37cb"
+  },
+  {
+    "path": "src/data/championship/catalogs/battle-title-events.r1.json",
+    "inHead": true,
+    "sourceEvidenceDeclared": "VERIFIED_BINARY_STRUCTURE",
+    "counts": {
+      "fieldMap": 10,
+      "records": 62
+    },
+    "declaredRecordCount": 62,
+    "actualRecordCount": 62,
+    "consumers": [
+      "src/championship/battle/battleCatalogs.js",
+      "src/championship/battle/battleMatchSelection.js",
+      "src/championship/battle/titleEventSchedule.js"
+    ],
+    "sha256": "b6768835f3dd7bc73c333f88000661ef12dcf777133385aa42e9b532ea9f7003"
+  },
+  {
+    "path": "src/data/championship/catalogs/cage-definitions.r1.json",
+    "inHead": false,
+    "sourceEvidenceDeclared": "ROM_VERIFIED",
+    "counts": {
+      "records": 36
+    },
+    "declaredRecordCount": 36,
+    "actualRecordCount": 36,
+    "consumers": [
+      "src/championship/cage/cageEffects.js"
+    ],
+    "sha256": "872e82510bcda4e44de0c0096b7fbd15f7a61670931935ee32e27e50e4dc7153"
+  },
+  {
+    "path": "src/data/championship/catalogs/creature-species.r1.json",
+    "inHead": false,
+    "sourceEvidenceDeclared": "VERIFIED_BINARY_STRUCTURE",
+    "counts": {
+      "records": 228
+    },
+    "declaredRecordCount": null,
+    "actualRecordCount": 228,
+    "consumers": [
+      "src/championship/app/main.js",
+      "src/championship/hunt/huntWorld.js",
+      "src/championship/battle/battleCreatureBuild.js",
+      "src/championship/raising/raisingHomeDefinition.js",
+      "src/championship/raising/speciesBaseStats.js",
+      "src/championship/database/databaseCatalog.js"
+    ],
+    "sha256": "d86ec0d6c97eca1827bf405ebae6a15275e60d47439ba7a8678f06e2dde34eba"
+  },
+  {
+    "path": "src/data/championship/catalogs/creature-stat-curve.r1.json",
+    "inHead": false,
+    "sourceEvidenceDeclared": "VERIFIED_BINARY_STRUCTURE",
+    "counts": {
+      "rows": 27
+    },
+    "declaredRecordCount": null,
+    "actualRecordCount": null,
+    "consumers": [
+      "src/championship/battle/battleCreatureBuild.js",
+      "src/championship/raising/speciesBaseStats.js",
+      "src/championship/raising/statLadder.js"
+    ],
+    "sha256": "d8896d4184054a9e332ce970f817059e6c3b75e45869d6618ad871856895e8cd"
+  },
+  {
+    "path": "src/data/championship/catalogs/gate-table.r1.json",
+    "inHead": false,
+    "sourceEvidenceDeclared": "ROM_VERIFIED",
+    "counts": {
+      "records": 17
+    },
+    "declaredRecordCount": 17,
+    "actualRecordCount": 17,
+    "consumers": [
+      "src/championship/gate/gateCatalog.js"
+    ],
+    "sha256": "0fd6b2b4c4eca29d7eba29efbf8312046036a29ee78f86bf8ba7366b5ccff0d3"
+  },
+  {
+    "path": "src/data/championship/catalogs/help-text.r1.json",
+    "inHead": false,
+    "sourceEvidenceDeclared": "ROM_VERIFIED",
+    "counts": {
+      "records": 84
+    },
+    "declaredRecordCount": 84,
+    "actualRecordCount": 84,
+    "consumers": [
+      "src/championship/app/helpScreen.js"
+    ],
+    "sha256": "85681cf457aea329b578ef5682370a85239062099118758b6ef269c38ae1da0e"
+  },
+  {
+    "path": "src/data/championship/catalogs/rng-channels.r1.json",
+    "inHead": false,
+    "sourceEvidenceDeclared": "VERIFIED_BINARY_STRUCTURE",
+    "counts": {},
+    "declaredRecordCount": null,
+    "actualRecordCount": null,
+    "consumers": [
+      "src/championship/battle/battleRngChannel.js"
+    ],
+    "sha256": "992cfa9ca0b67f8cd2f23d477856a5e2447f57f56fc8ea66e3c42a00d2369c22"
+  },
+  {
+    "path": "src/data/championship/catalogs/shop.r1.json",
+    "inHead": true,
+    "sourceEvidenceDeclared": "VERIFIED_BINARY_STRUCTURE",
+    "counts": {
+      "records": 118
+    },
+    "declaredRecordCount": 118,
+    "actualRecordCount": 118,
+    "consumers": [
+      "src/championship/shop/shopCatalog.js"
+    ],
+    "sha256": "5d85c95a6c0e79366b74f60fa6a30dc6e0c2119861bbb258cc9d84d622404bdf"
+  },
+  {
+    "path": "src/data/championship/catalogs/species-names.r1.json",
+    "inHead": false,
+    "sourceEvidenceDeclared": "ROM_VERIFIED",
+    "counts": {
+      "statNames": 6,
+      "records": 216
+    },
+    "declaredRecordCount": 216,
+    "actualRecordCount": 216,
+    "consumers": [
+      "src/championship/app/main.js"
+    ],
+    "sha256": "7283f6262e6d23f22cce8562e6aadb4ddc6f9d78c3cca1bd3e61abd11aafea79"
+  }
+]

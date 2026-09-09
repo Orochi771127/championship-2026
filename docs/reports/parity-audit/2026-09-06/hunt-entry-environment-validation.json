@@ -1,0 +1,28 @@
+{
+  "status": "PASS_BOUNDED_PORTS_NORMAL_CAPTURE_UNACCEPTED",
+  "branch": "main",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "focused": {
+    "pass": 11,
+    "fail": 0
+  },
+  "regression": {
+    "command": "node --v8-pool-size=1 --test --test-concurrency=1 tests/*.mjs",
+    "pass": 962,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0,
+    "durationMs": 49564.1526
+  },
+  "pythonSyntax": "PASS",
+  "coordinationCsvShape": "PASS",
+  "newFileTrailingWhitespace": "PASS",
+  "gitDiffCheck": "PASS",
+  "normalEntryCapturePlayable": false,
+  "movementRuntimeBound": false,
+  "normalSpawnRuntimeBound": false,
+  "receiptHashes": {
+    "docs/research/HUNT_ENTRY_ENVIRONMENT_REPLAY_2026-09-06.json": "96bedf00cb38242cbb3cfe154b12a585853b95b90f90878a23a219b4e1eef467",
+    "docs/research/HUNT_SPAWN_CPU_CHECK_2026-09-06.json": "b73a3a63a0c39e256474cddd7eb56fc1d3d00b07f1fd34535260d7157cf8d6cf"
+  }
+}

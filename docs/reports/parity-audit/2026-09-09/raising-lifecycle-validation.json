@@ -1,0 +1,111 @@
+{
+  "date": "2026-09-09",
+  "stage": "RAISING_LIFECYCLE_STAGE.v1",
+  "status": "CORE_FLOW_INTEGRATED_FULL_ORIGINAL_STAGE_OPEN",
+  "repository": {
+    "root": "R:/Projects/Championship2026/championship-2026",
+    "branch": "main",
+    "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+    "workingTree": "Pre-existing shared changes preserved; this validation is of the current uncommitted working tree.",
+    "commitPushMergeDeployPerformed": false
+  },
+  "tests": {
+    "focused": {
+      "command": "node --test tests/championship-raising-lifecycle-cases.mjs tests/championship-raising-lifecycle-app-cases.mjs tests/championship-round2-clock-driver-cases.mjs tests/championship-raising-native-sizing-cases.mjs",
+      "pass": 30,
+      "fail": 0,
+      "durationMs": 10443.7428,
+      "log": "R:/Projects/Championship2026/_archive/lifecycle-focused-final.log"
+    },
+    "regression": {
+      "command": "npm test",
+      "pass": 1361,
+      "fail": 0,
+      "durationMs": 66594.6913,
+      "log": "R:/Projects/Championship2026/_archive/lifecycle-regression-final.log"
+    },
+    "diffCheck": {"command":"git diff --check","exitCode":0},
+    "pythonCompile": {
+      "command": "python -m py_compile scripts/research/check-raising-lifecycle-cpu.py scripts/research/check-raising-calendar-cpu.py scripts/research/trace-raising-native.py",
+      "exitCode": 0
+    }
+  },
+  "originalCpu": {
+    "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "lifecycleReceipt": "docs/research/RAISING_LIFECYCLE_CPU_CHECK_2026-09-08.json",
+    "lifecycleReceiptSha256": "381b10c95dfecd0ea4e7560073fdac82ac6250168ef0807e8c28ae1915dea296",
+    "calendarReceipt": "docs/research/RAISING_CALENDAR_CPU_CHECK_2026-09-09.json",
+    "calendarReceiptSha256": "ec20505705e8454caf7a93db669d3c50d0fce052ec597cf6015c5bc0d1cfb1e9",
+    "functionalCatalog": "src/data/championship/catalogs/raising-lifecycle.r1.json",
+    "functionalCatalogSha256": "290ddfbdde9be564be3b8e218ed742d06b116a9963d67c6258471b08b314718e",
+    "counts": {
+      "orderedEvolutionRules":477,"ruleGroups":179,"predicates":26,
+      "eligibilityCalls":2736,"sleepEntryExitPairs":880,"morningWriters":880,
+      "overnightCalls":168,"growthCalls":168,"rebirthCalls":456,"wasteAllocations":216,
+      "evolutionTimelines":3,"evolutionFramesPerTimeline":272,
+      "disappearanceTimelines":1,"disappearanceFrames":165,
+      "trainingWriters":672,"trainingTimelines":6,"calendarProjections":1024
+    },
+    "limitations": "Controlled CPU inputs and explicitly recorded presentation/resource/hardware boundaries. These counts do not claim full-scene, every-form, audio or physical-device equivalence."
+  },
+  "originalLiveTrace": {
+    "privateDirectory": "R:/Projects/Championship2026/_archive/raising-lifecycle-2026-09-08",
+    "runs": ["live01","live02","live03","live04","live05"],
+    "inputMethod": "Controller, stylus and frame progression; no RAM mutation command",
+    "observed": [
+      "Two sleep entries and two waste allocator calls",
+      "Natural evening exit, black date and eight-day calendar waiting for input",
+      "Calendar acknowledgement returns to day 5 07:00",
+      "Morning mail index 94 means battle entry time has arrived, not increased capacity",
+      "Natural evolution enters at tick 7557 and uses 272 handler calls",
+      "Sixty-one private captures from the observed natural evolution; old/new white silhouettes, blue backdrop, green rising effect and return"
+    ]
+  },
+  "video": {
+    "url": "https://www.bilibili.com/video/BV13u411B7BK/",
+    "viewedInBrowser": true,
+    "downloaded": false,
+    "observations": [
+      "431.739 seconds: Day 6 13:00 manual End Day Yes/No",
+      "433.503 seconds: Saving, followed by Day 7 around 436 seconds",
+      "509.49 to 514.164 seconds contains edits and date discontinuity; it does not prove a complete evolution or day-change sequence"
+    ]
+  },
+  "browser": {
+    "productionUrl": "http://127.0.0.1:8732/championship.html",
+    "productionChecks": ["Continue","End Day No/Yes","Calendar waits for acknowledgement","Calendar covers status and toolbar visually","07:00 return","Reload and Continue"],
+    "lastCalendar": {"fromDay":5,"toDay":6,"season":0,"clockMinutes":420,"registrationCountIsNotWinCount":true},
+    "fixtureUrl": "http://127.0.0.1:8732/tests/fixtures/championship-raising-lifecycle-review.html",
+    "fixtureFlow": "Public New Game, touch-to-hatch, food and day commands naturally reach evolution; no injected target form or evolution actor",
+    "fixtureStorage": "Separate in-memory test storage",
+    "evolution": {"instanceId":"resident:species-000","fromSpecies":14,"toSpecies":21,"day":3,"clockMinutes":423,"commitFrame":272},
+    "fieldHostSizes": [{"width":390,"height":620},{"width":320,"height":620}],
+    "physicalPhoneQA": false,
+    "applicationCount": 1,
+    "assetFailuresAtInspectedFrames": 0,
+    "threeUsed": false,
+    "checksAreFullViewportMobileEmulation": false
+  },
+  "build": {
+    "command": "node scripts/build-github-pages.mjs dist/lifecycle-review",
+    "status": "BLOCKED_PRE_EXISTING_TRACKED_INPUT_DELETION",
+    "error": "PAGES_INPUTS_MISSING: src/data/championship/catalogs/entities.r1.json",
+    "outputReplaced": false,
+    "log": "R:/Projects/Championship2026/_archive/lifecycle-pages-check.log"
+  },
+  "remainingInSameStage": [
+    "Complete original registration, rank/result flags and championship calendar integration",
+    "Original morning mail queue, tutorial cursor, birthday/gift effects and schedule/story ordering",
+    "Full native Home reconstruction, positions and RNG consumption differential",
+    "Complete effect geometry, training popup UI, audio, all-form and physical-device acceptance"
+  ],
+  "gates": {
+    "normalPlayableCore": true,
+    "fullOriginalStageComplete": false,
+    "newSaveAuthority": false,
+    "newRendererOrTicker": false,
+    "newRawRomArtOrAudioInRuntime": false,
+    "humanAcceptance": false,
+    "shippingReady": false
+  }
+}

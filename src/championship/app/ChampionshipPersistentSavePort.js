@@ -97,7 +97,16 @@ export function createChampionshipPersistentSavePort({
       raising: request.raising ?? null,
       shop: request.shop ?? null,
       cageEdit: request.cageEdit ?? null,
+      battleEconomy: request.battleEconomy,
+      instanceIdentity: request.instanceIdentity,
+      gameplayRng: request.gameplayRng,
+      huntHistory: request.huntHistory,
       progression: {
+        ...(request.nativeTitles!==undefined?{nativeTitles:request.nativeTitles}:{}),
+        ...(request.nativeMessages!==undefined?{nativeMessages:request.nativeMessages}:{}),
+        ...(request.nativeOpening!=null?{nativeOpening:request.nativeOpening}:{}),
+        registeredSpecies: request.registeredSpecies ?? [],
+        battleBadges: request.battleBadges ?? [],
         interactionCount: request.interactionCount,
         revision: request.revision,
         tamerRank: request.tamerRank ?? 0
@@ -124,6 +133,13 @@ export function createChampionshipPersistentSavePort({
       if (typeof listener !== "function") throw new TypeError("A persistence observer must be a function");
       listeners.add(listener);
       return () => listeners.delete(listener);
+    },
+
+    markDirty() {
+      // A failed save must keep its visible retry affordance. The application
+      // rebuilds a current snapshot for retry instead of replaying old state.
+      if (status.phase === "SAVE_FAILED" || status.phase === "DIRTY") return status;
+      return publish({ phase: "DIRTY", lastCode: "CHAMPIONSHIP_MODERN_SAVE_UNSAVED" });
     },
 
     save(request) {
@@ -188,6 +204,7 @@ export function createChampionshipPersistentSavePort({
 
     clear() {
       guarded.removeItem(key);
+      lastRequest = null;
       return publish({ phase: "DIRTY", lastCode: "CHAMPIONSHIP_MODERN_SAVE_UNSAVED", canRetry: false, revision: 0, savedAt: null, error: null });
     }
   });

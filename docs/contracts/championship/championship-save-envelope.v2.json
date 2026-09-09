@@ -1,0 +1,61 @@
+{
+  "contractId": "championship-save-envelope:v2",
+  "status": "IMPLEMENTED_ROUND1_ENGINEERING_ACCEPTANCE_PASS",
+  "scope": "Standalone player-owned save data and bounded battle economy receipts",
+  "runtimeModule": "src/championship/app/championshipStandaloneSave.js",
+  "pureTransactionModule": "src/championship/battle/battleEconomyTransaction.js",
+  "storageKey": "championshipModernSave:v1",
+  "schemaVersion": 2,
+  "maxSerializedBytes": 65536,
+  "maxDepth": 12,
+  "writerAuthority": "Existing ChampionshipPersistentSavePort through the standalone application",
+  "saveTiming": {
+    "policy": "Preserve existing manual Save and Save and Quit entry points",
+    "automaticCheckpointAdded": false,
+    "activeBattleSave": "REFUSED_SAVE_WHILE_BATTLE_ACTIVE",
+    "reason": "There is no battle runtime snapshot/resume contract. Do not persist a paid but unresumable active attempt or invent refund/loss recovery.",
+    "durabilityBoundary": "Only successfully written manual checkpoints survive reload or forced closure. Unsaved rewards and costs do not claim durability."
+  },
+  "migration": {
+    "acceptedEnvelopeVersions": [1, 2],
+    "fromV1": "Validate the original top-level allowlist, preserve all existing player slices and the exact raisingHome serialized string/digest, then add an empty battleEconomy state and emit schemaVersion 2.",
+    "missingBattleEconomyInV2": "REJECT",
+    "forensicPayloads": "REJECT recursively, including parsed raisingHome string",
+    "unknownBattleKeys": "REJECT",
+    "futureVersion": "REJECT",
+    "newStorageKey": false
+  },
+  "battleEconomy": {
+    "keys": ["nextSequence", "settledThrough", "active", "lastReceipt"],
+    "initial": { "nextSequence": 1, "settledThrough": 0, "active": null, "lastReceipt": null },
+    "identity": "battle:<positive sequence>, scoped to the containing player save/session",
+    "bounds": { "activeAttempts": 1, "retainedReceipts": 1, "outcomeEntryDataBudget": 256 },
+    "attemptKeys": ["attemptId", "sequence", "matchIndex", "mode", "battleType", "entryFee", "payout", "expectedRounds"],
+    "receiptKeys": ["attemptId", "sequence", "matchIndex", "mode", "battleType", "entryFee", "payout", "status", "outcome", "won", "rewardBits", "credited", "walletAfter", "clamped"],
+    "receiptStatus": ["SETTLED", "ABANDONED"],
+    "replayRule": "An identity at or below settledThrough never debits or credits again. The latest identity returns its existing receipt. Older identities return already-finalized without unbounded receipt history.",
+    "snapshotRule": "Wallet and ledger are projected into the same envelope and written with one existing setItem operation. Any finalized ledger requires the shop wallet slice.",
+    "walletAfterMeaning": "Wallet immediately after this transaction; later purchases or other valid transactions may change the current wallet.",
+    "resultGate": "Only the full expected completed-round flag list can settle the active immutable match context. Empty or partial results cannot claim a win.",
+    "abandonment": "Preserves current prototype Leave behavior, closes identity and grants no reward/refund. This is not an original refund-rule verification.",
+    "notSerialized": ["battle runtime", "VM", "catalog records", "research evidence", "frame logs", "all historical receipts"]
+  },
+  "arithmeticAuthority": {
+    "reward": "Existing resolveBattleReward and creditBattleReward pure functions",
+    "feeAndPayoutFieldReceipt": "docs/reports/parity-audit/2026-09-05/battle-fee-payout-rom-check.json",
+    "modeGate": "Preserve mode 1 / match index 61 suppression and completed-round win gating",
+    "walletCap": 9999999,
+    "newGameBitsChanged": false
+  },
+  "acceptanceTests": [
+    "tests/championship-battle-economy-transaction-cases.mjs",
+    "tests/championship-save-economy-v2-cases.mjs",
+    "tests/championship-storage-guard-cases.mjs",
+    "tests/championship-battle-economy-app-cases.mjs"
+  ],
+  "limits": [
+    "Ledger sequence and retry protection are technical persistence safeguards, not a reconstruction of original internal save layout.",
+    "No original automatic save timing, battle resume, complete player roster or all-mode eligibility is claimed.",
+    "App must discard stale callbacks when a player session is replaced; a sequence identity is scoped to its containing session."
+  ]
+}

@@ -138,6 +138,9 @@ export function createHuntInventory({
      */
     grant(itemId, quantity) {
       return put(itemId, (owned.get(itemId) ?? 0) + quantity);
-    }
+    },
+
+    // Shop is the quantity authority, including zero after field consumption.
+    setQuantityFromShop(itemId, quantity) { return put(itemId, quantity); }
   });
 }

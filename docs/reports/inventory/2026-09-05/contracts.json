@@ -1,0 +1,383 @@
+[
+  {
+    "path": "docs/contracts/championship/battle-field-presentation.v1.json",
+    "inHead": false,
+    "keys": [
+      "schemaVersion",
+      "id",
+      "authority",
+      "note",
+      "originalParityClaim",
+      "frame",
+      "bands",
+      "teams",
+      "hudFields",
+      "notShown",
+      "arenaArt",
+      "standPositions"
+    ],
+    "declaredStatus": {
+      "schemaVersion": 1,
+      "id": "championship-modern-battle-field-presentation",
+      "authority": "CHAMPIONSHIP_2026_PRODUCT",
+      "note": "The BATTLE screen's layout and the runtime fields it may show. Layout numbers are PRODUCT-AUTHORED for a 9:16 phone frame. Every HUD field below is traced to a ROM read site, so the screen shows what the original tracks and nothing else. This file lives with the contracts rather than in src/ because src/championship carries no binary asset paths at all.",
+      "originalParityClaim": false
+    },
+    "sha256": "17534cc3a917eb523113e13425b8c84369a63922329930621184d4803fc9f2fe"
+  },
+  {
+    "path": "docs/contracts/championship/battle-player-roster.v1.json",
+    "inHead": false,
+    "keys": [
+      "schemaVersion",
+      "id",
+      "authority",
+      "originalParityClaim",
+      "note",
+      "evidence",
+      "shapeEvidence",
+      "shapeNote",
+      "sourceEvidence",
+      "teamSize",
+      "teamSizeNote",
+      "profiles",
+      "notDecidedHere"
+    ],
+    "declaredStatus": {
+      "schemaVersion": 1,
+      "id": "championship-modern-battle-player-roster",
+      "authority": "CHAMPIONSHIP_2026_PRODUCT",
+      "originalParityClaim": false,
+      "note": "Battle profiles for the product's own three creatures. The SHAPE here is the original's: a stat-curve index plus the ten level fields ARM9 0x02062900 reads, fed through the same buildCreatureFromProfile the opponent path uses, so every stat is a curve row read back and nothing is computed. The VALUES are product-authored, and they have to be: Greyshade Cat, Blazetail Kit and Crystalfin Seahorse do not exist in the cartridge, so there is no ROM number to trace for them. Marking these PRODUCT_AUTHORED is not a gap in the reverse engineering; it is the honest label for creatures the product invented.",
+      "evidence": "PRODUCT_AUTHORED",
+      "shapeEvidence": "VERIFIED_BINARY",
+      "shapeNote": "statCurveIndex indexes ARM9 0x020CA008 column 0 for HP, exactly as a species record's +0x30 does. The ten level fields index the same curve's columns 1..6 exactly as an opponent preset's +0x14..+0x38 do. Both are checked against the ROM-derived catalogs at test time, so a value outside the 27-row curve fails rather than clamping.",
+      "teamSize": 3,
+      "teamSizeNote": "OVL10 0x02110A34 expands three opponents and OVL19 0x0210CCF0 advances the roster base by three per team, so three a side is the original's, not a product choice."
+    },
+    "sha256": "769e16c0b9710eb024f50e6596ef798869106b8d655d534a622a48c9723e3d20"
+  },
+  {
+    "path": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_WEATHER_VFX_EVENTS.v1.json",
+    "inHead": true,
+    "keys": [
+      "schemaVersion",
+      "contractId",
+      "scope",
+      "tickerPolicy",
+      "concurrency",
+      "events",
+      "hardConstraints"
+    ],
+    "declaredStatus": {
+      "schemaVersion": 1,
+      "contractId": "championship-battle-weather-vfx-events-v1",
+      "scope": "PRESENTATION_ONLY_NO_SIMULATION_OR_SAVE_AUTHORITY",
+      "tickerPolicy": "CALLER_OWNED_DELTA_MS"
+    },
+    "sha256": "2a5cacfb1d181b0628511612ecd85e7c62dc426267e4baac75c046668520ce28"
+  },
+  {
+    "path": "docs/contracts/championship/CHAMPIONSHIP_CAGE_RANCH_COMPOSITION_CONTRACT.v1.json",
+    "inHead": false,
+    "keys": [
+      "schemaVersion",
+      "contractId",
+      "version",
+      "owner",
+      "consumer",
+      "date",
+      "purpose",
+      "problemStatement",
+      "measuredTileFacts",
+      "observedFromOriginal",
+      "cageEditBoard",
+      "openQuestion",
+      "buildInstruction",
+      "relatedContracts",
+      "correctionLog"
+    ],
+    "declaredStatus": {
+      "schemaVersion": 1,
+      "contractId": "CHAMPIONSHIP_CAGE_RANCH_COMPOSITION_CONTRACT",
+      "version": "v1.1",
+      "owner": "Claude Code",
+      "consumer": "Codex Art, and the Claude-owned Raising field presenter",
+      "date": "2026-09-03",
+      "purpose": "The Raising Home ranch is a composition of several cage tiles, not one background image. This contract states what is measured, what is observed, and what is still unknown, so the tiling work can start without either lane inventing a number."
+    },
+    "sha256": "4dd9e1e9ba3143c74aec69d13c18bcdf2d7e4f03c7f9f2f0aa7e24655f651ace"
+  },
+  {
+    "path": "docs/contracts/championship/CHAMPIONSHIP_PRESENTATION_PACK_CONTRACT.v1.json",
+    "inHead": true,
+    "keys": [
+      "schemaVersion",
+      "contractId",
+      "authority",
+      "purpose",
+      "internalProduction",
+      "completionStrategy",
+      "rendererAuthority",
+      "gameplayFidelity",
+      "slots",
+      "packOrder",
+      "packPolicy",
+      "promotionGates"
+    ],
+    "declaredStatus": {
+      "schemaVersion": 1,
+      "contractId": "CHAMPIONSHIP_PRESENTATION_PACK_CONTRACT/v1",
+      "authority": "OWNER_DIRECTIVE_2026-09-01",
+      "purpose": "Complete the faithful Original Championship presentation first, then permit whole-game reskinning without forking or changing gameplay."
+    },
+    "sha256": "0da16513914109fc24de3d813e1280254ab570b3f8f3e03b5cf770d815331f88"
+  },
+  {
+    "path": "docs/contracts/championship/CHAMPIONSHIP_STATUS_BAR_CONTRACT.v1.json",
+    "inHead": false,
+    "keys": [
+      "schemaVersion",
+      "contractId",
+      "version",
+      "owner",
+      "consumer",
+      "date",
+      "purpose",
+      "theBar",
+      "timeBase",
+      "scheduleSlots",
+      "buildInstruction",
+      "relatedContracts"
+    ],
+    "declaredStatus": {
+      "schemaVersion": 1,
+      "contractId": "CHAMPIONSHIP_STATUS_BAR_CONTRACT",
+      "version": "v1.1",
+      "owner": "Claude Code",
+      "consumer": "Codex Art (presentation), Claude Code (time base and runtime state)",
+      "date": "2026-09-03",
+      "purpose": "The original carries one persistent four-field status bar across every mode. Championship 2026 currently renders one of the four. This contract states the time base that feeds it, which parts are ROM-verified, and which are inference."
+    },
+    "sha256": "a24f0cf1df49e92763843a50bc9fe68e8fef3fbcaa8f5e57a220ee80dff92ce0"
+  },
+  {
+    "path": "docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json",
+    "inHead": true,
+    "keys": [
+      "schemaVersion",
+      "contractId",
+      "version",
+      "owner",
+      "date",
+      "purpose",
+      "sourceEvidence",
+      "toolbar",
+      "initializer",
+      "slotStorage",
+      "toolbarObjectLayout",
+      "modes",
+      "overlayUsage",
+      "slotFrameGeometry",
+      "iconBanks",
+      "toolVocabulary",
+      "unknown",
+      "codexGuidance",
+      "nextTrace",
+      "revisionNote",
+      "slotToNodeMapping",
+      "submenuStorage",
+      "slotStructFields",
+      "observedSubmenu"
+    ],
+    "declaredStatus": {
+      "schemaVersion": 1,
+      "contractId": "CHAMPIONSHIP_TOOLBAR_CONTRACT",
+      "version": "v1.1",
+      "owner": "Claude Code",
+      "date": "2026-08-27",
+      "purpose": "Cross-agent presentation contract for the original Championship bottom toolbar. Codex may bind presentation to anything marked ROM_VERIFIED. Everything marked UNKNOWN_REQUIRES_TRACE must stay a neutral placeholder.",
+      "revisionNote": "RAISING_TOOLBAR_BINDING_CLOSURE delta. Two items closed: slot-to-node ordering and the submenu storage structure. Command and icon-cell bindings remain UNKNOWN_REQUIRES_TRACE."
+    },
+    "sha256": "eebd9248e0884d3ef63434f5773ade104838a87224b3b18e430d91e05123079b"
+  },
+  {
+    "path": "docs/contracts/championship/INT_RH2_RUNTIME_PRESENTATION_CONTRACT.json",
+    "inHead": true,
+    "keys": [
+      "schemaVersion",
+      "contractId",
+      "version",
+      "owner",
+      "consumer",
+      "date",
+      "slice",
+      "purpose",
+      "rendererSplit",
+      "producer",
+      "frame",
+      "intents",
+      "excludedFromPresentation",
+      "statusModelNote",
+      "responsiveTargets",
+      "saveLoadProof",
+      "implementation",
+      "openQuestions"
+    ],
+    "declaredStatus": {
+      "schemaVersion": 1,
+      "contractId": "INT_RH2_RUNTIME_PRESENTATION_CONTRACT",
+      "version": "v1",
+      "owner": "Claude Code",
+      "consumer": "Codex Art",
+      "date": "2026-08-27",
+      "slice": "INT-RH2 - Raising Home Phase 2 Presentation Integration",
+      "purpose": "The only surface Codex binds presentation to. Codex reads frames and raises intents; it never reads Claude internal state and never holds gameplay truth. Everything here is read-only except the named intents."
+    },
+    "sha256": "394cfb4869006a3f8b19f9d3b156548b8f9a6888f6e11c1a069dd47220aaf955"
+  },
+  {
+    "path": "docs/contracts/championship/raising-home-presentation.v1.json",
+    "inHead": true,
+    "keys": [
+      "schemaVersion",
+      "id",
+      "note",
+      "authority",
+      "originalParityClaim",
+      "cageNote",
+      "habitat",
+      "cages",
+      "idle",
+      "reaction",
+      "portrait"
+    ],
+    "declaredStatus": {
+      "schemaVersion": 2,
+      "id": "championship-modern-raising-home-presentation",
+      "note": "Presentation asset paths and product-authored cage regions for the standalone Raising screen. They live here, with the art, rather than in src/championship/ -- that tree is asserted to carry no binary asset paths at all, and the same rule is what keeps ROM-derived payload paths out of it.",
+      "authority": "CHAMPIONSHIP_2026_PRODUCT",
+      "originalParityClaim": false,
+      "cageNote": "Cage names and the two habitat regions below are PRODUCT-AUTHORED. ROM evidence proves 36 CageDefinition records. Channel identity and the recommended Digimon count are VERIFIED_TEXT; overfill is allowed and only named as extra stress. Tick magnitudes and hex-membership assignment remain UNKNOWN_REQUIRES_TRACE. Nothing here claims original habitat parity."
+    },
+    "sha256": "31bfef5e17bf7e8872c0246c7cca51a6512f0384201e238d2fca4bfa271eaa1b"
+  },
+  {
+    "path": "docs/contracts/championship/VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT.json",
+    "inHead": true,
+    "keys": [
+      "schemaVersion",
+      "contractId",
+      "version",
+      "owner",
+      "consumer",
+      "date",
+      "slice",
+      "authorization",
+      "purpose",
+      "consumerRules",
+      "rendererSplit",
+      "producer",
+      "screens",
+      "commonFrameFields",
+      "gateSelectFrame",
+      "huntLoadoutFrame",
+      "huntFieldFrame",
+      "intents",
+      "saveAndData",
+      "assetPolicy",
+      "excludedFromPresentation",
+      "responsiveTargets",
+      "acceptanceProof",
+      "openQuestions",
+      "revisionNote",
+      "implementation"
+    ],
+    "declaredStatus": {
+      "schemaVersion": 1,
+      "contractId": "VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT",
+      "version": "v1.1",
+      "owner": "Claude Code",
+      "consumer": "Codex Art",
+      "date": "2026-08-28",
+      "slice": "VS2 - Gate Select to Hunt exploration and return",
+      "purpose": "The only surface Codex binds VS2 presentation to. Codex reads frames and raises intents; it never reads Claude internal state and never holds gameplay truth. Everything here is read-only except the named intents. This is the same seam shape as INT_RH2_RUNTIME_PRESENTATION_CONTRACT, extended to three screens.",
+      "revisionNote": "v1.1 reconciles the published seam with the shipped implementation. No refusal was relaxed: the changes are the two-cadence read model, the Codex-owned biome handle, and the terrain shape the field renderer actually consumes."
+    },
+    "sha256": "a5304fc8e4ed0141becbe9671aa9eb066e6e662252bd3743e5597e68a447cb36"
+  },
+  {
+    "path": "docs/contracts/championship/VS2_GATE_SELECT_3D_RUNTIME_CONTRACT.v1.json",
+    "inHead": true,
+    "keys": [
+      "schemaVersion",
+      "contractId",
+      "version",
+      "owner",
+      "consumer",
+      "date",
+      "slice",
+      "authorization",
+      "method",
+      "evidenceSources",
+      "ipPolicy",
+      "answers",
+      "threeJsContract",
+      "sharedSelectionStateContract",
+      "fallbackPolicy",
+      "parityGap",
+      "implementationReadiness",
+      "codexHandoff",
+      "openTraceItems",
+      "revisionNote",
+      "boundedBehaviorTrace",
+      "relatedContracts"
+    ],
+    "declaredStatus": {
+      "schemaVersion": 1,
+      "contractId": "VS2_GATE_SELECT_3D_RUNTIME_CONTRACT",
+      "version": "v1.1",
+      "owner": "Claude Code",
+      "consumer": "Codex Art",
+      "date": "2026-08-28",
+      "slice": "VS2-R1 - Original Gate Select 3D restoration",
+      "revisionNote": "v1.1 records the outcome of the Owner-authorized bounded Gate Select behavior trace, adds two corroborations recovered while closing the Hunt Loadout contract, and resolves the destination-identity parity gap. No UNKNOWN field was upgraded: the trace could not run."
+    },
+    "sha256": "66bce76c1182d495f049f6ac64ff566f23cebc7c9d8d9487d1eda74c28153a86"
+  },
+  {
+    "path": "docs/contracts/championship/VS2_HUNT_LOADOUT_RUNTIME_CONTRACT.v1.json",
+    "inHead": true,
+    "keys": [
+      "schemaVersion",
+      "contractId",
+      "version",
+      "owner",
+      "consumer",
+      "date",
+      "slice",
+      "authorization",
+      "currentProductStatus",
+      "method",
+      "answers",
+      "consumerRules",
+      "implementationReadiness",
+      "openTraceItems",
+      "revisionNote",
+      "implementation",
+      "presentationSurface",
+      "verification"
+    ],
+    "declaredStatus": {
+      "schemaVersion": 1,
+      "contractId": "VS2_HUNT_LOADOUT_RUNTIME_CONTRACT",
+      "version": "v1.1",
+      "owner": "Claude Code",
+      "consumer": "Codex Art",
+      "date": "2026-08-28",
+      "slice": "VS2-R1 B - Original Hunt Loadout evidence closure",
+      "revisionNote": "v1.1 promotes the evidence layer to an implementation-ready contract. VS2-R2 built the runtime domain, so this revision adds the module map, the read-only presentation surface, and the boundary between what was preserved and what is product-authored. No evidence level changed and no unknown was upgraded."
+    },
+    "sha256": "4d228a4347dff2f7150a1a79a8dafd9cba1c23267133311ca2d2508fca75781f"
+  }
+]

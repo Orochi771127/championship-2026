@@ -1,0 +1,78 @@
+{
+  "date": "2026-09-03",
+  "adoptedObservationCount": 20,
+  "rawCaptureCount": 25,
+  "checks": {
+    "jsonParses": true,
+    "allAdoptedFramesExist": true,
+    "allAdoptedFramesNonempty": true,
+    "uniqueIds": true,
+    "allActualTimesWithinDuration": true
+  },
+  "omittedCaptures": [
+    {
+      "target": 120,
+      "file": "t120.png",
+      "reason": "Scout/editorial sample not needed for adopted claims"
+    },
+    {
+      "target": 285,
+      "file": "t285.png",
+      "reason": "Scout/editorial sample not needed for adopted claims"
+    },
+    {
+      "target": 258,
+      "file": "t258.png",
+      "reason": "Scout/editorial sample not needed for adopted claims"
+    },
+    {
+      "target": 150,
+      "file": "t150.png",
+      "reason": "Scout/editorial sample not needed for adopted claims"
+    },
+    {
+      "target": 210,
+      "file": "t210.png",
+      "reason": "Login dialog obscures gameplay"
+    }
+  ],
+  "caveats": [
+    "Not exhaustive viewing",
+    "No touch event recording",
+    "Browser currentTime immediately before screenshot is approximate",
+    "Claude artifact read after URL correction; crosscheck consolidated in the evidence index",
+    "Existing ROM research was read, not independently rerun",
+    "No current-runtime parity test or implementation change"
+  ],
+  "artifacts": [
+    {
+      "name": "ANALYSIS_ZH_TW.md",
+      "sizeBytes": 13716,
+      "sha256": "38a048e11d64c010bd10af76069effc1f0a27af9a720f51229562bbe61c8dce0"
+    },
+    {
+      "name": "VIDEO_OBSERVATIONS.json",
+      "sizeBytes": 18066,
+      "sha256": "f8e6e661f7c3d488898633a8231b68e4eddc68c0ff802c2700ccc91109530d3c"
+    },
+    {
+      "name": "VIDEO_OBSERVATIONS.csv",
+      "sizeBytes": 9273,
+      "sha256": "a01a3b9eaeb0883451d6d5b120db4208935781e7ce69708226d82f2879c7b57f"
+    }
+  ],
+  "consolidation": {
+    "date": "2026-09-03",
+    "index": "docs/research/ORIGINAL_VIDEO_EVIDENCE_INDEX_2026-09-03.md",
+    "observationsRetained": {
+      "BV13u411B7BK": 52,
+      "BV1RQ4y1B7up": 20
+    },
+    "localLinksChecked": 44,
+    "missingLocalLinks": 0,
+    "frameHashesChecked": 20,
+    "toolbarChangeLimitedToSignificance": true,
+    "runtimeModifiedByThisWork": false,
+    "runtimeTests": "NOT_RUN_DOCUMENTATION_ONLY"
+  }
+}

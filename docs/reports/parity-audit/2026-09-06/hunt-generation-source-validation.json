@@ -1,0 +1,87 @@
+{
+  "date": "2026-09-06",
+  "gitRoot": "R:/Projects/Championship2026/championship-2026",
+  "branch": "main",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "initialDirtyEntries": 454,
+  "receipts": [
+    {
+      "path": "docs/research/HUNT_ACTOR_ENTRY_CPU_CHECK_2026-09-06.json",
+      "sha256": "72b54dc81f8cba618e1765554efd543aa9d179f64582ba6a9bff9b68ba2c2430",
+      "deterministicRebuild": true
+    },
+    {
+      "path": "docs/research/HUNT_GATE_SOURCE_CPU_CHECK_2026-09-06.json",
+      "sha256": "ebd3361f70a9fc742e06ca9c4e829df4838217201cb77c58d327e32724ff7954",
+      "deterministicRebuild": true
+    },
+    {
+      "path": "docs/research/HUNT_CARRIED_POOL_CPU_CHECK_2026-09-06.json",
+      "sha256": "0b186e4eef0b5f4b7980429494adf98da22bfdf471ddb87e506ee40ecc7cd52f",
+      "deterministicRebuild": true
+    },
+    {
+      "path": "docs/research/HUNT_INDIVIDUAL_POOL_CPU_CHECK_2026-09-06.json",
+      "sha256": "e235850db7c331c70b0c131120752b90703e3cb7f8ca7a50b4f5f20fdfdda029",
+      "deterministicRebuild": true
+    }
+  ],
+  "aiCpuCases": 721,
+  "speedCpuCases": 2052,
+  "gateCpuCases": 408,
+  "gateComparedSupportedCases": 374,
+  "groupCases": 3,
+  "wholeOrdinaryEntryActors": 15,
+  "wholeOrdinaryEntryRngCalls": 492,
+  "controlledCarriedPoolActors": 14,
+  "controlledCarriedPoolRngCalls": 236,
+  "focusedBeforeAdditionalGuard": {
+    "tests": 11,
+    "pass": 11
+  },
+  "serialRegression": {
+    "tests": 979,
+    "pass": 979,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "durationMs": 60179.6391
+  },
+  "regressionCommand": "node --test --test-concurrency=1 tests/*.mjs",
+  "privateRegressionLog": "R:/Projects/Championship2026/_archive/hunt-environment-2026-09-06/entry-source/regression-final.tap",
+  "normalSpawnRuntimeBound": false,
+  "huntGenerationConsumesGameplayRng": false,
+  "normalEntryCapturePlayable": false,
+  "browserAcceptanceRun": false,
+  "changedProductEntry": false,
+  "saveSchemaChanged": false,
+  "committed": false,
+  "gitDiffCheck": "PASS",
+  "changedTextFilesUtf8LfAndWhitespace": "PASS (existing Markdown hard breaks preserved)",
+  "pythonSyntax": "PASS",
+  "changedPaths": [
+    "src/championship/hunt/capture/nativeHuntActorInitialization.js",
+    "src/championship/hunt/capture/nativeHuntGeneration.js",
+    "src/championship/hunt/capture/nativeHuntGateVariant.js",
+    "src/championship/hunt/capture/nativeHuntIndividualPool.js",
+    "scripts/research/check-hunt-actor-entry-cpu.py",
+    "scripts/research/check-hunt-entry-sources-cpu.py",
+    "scripts/research/check-hunt-individual-pool-cpu.py",
+    "scripts/research/trace-hunt-entry-environment.py",
+    "tests/championship-hunt-actor-entry-cases.mjs",
+    "tests/championship-hunt-gate-variant-cases.mjs",
+    "tests/championship-hunt-individual-pool-cases.mjs",
+    "docs/research/HUNT_GENERATION_SOURCE_PROGRESS_2026-09-06.md",
+    "docs/research/HUNT_ACTOR_ENTRY_CPU_CHECK_2026-09-06.json",
+    "docs/research/HUNT_GATE_SOURCE_CPU_CHECK_2026-09-06.json",
+    "docs/research/HUNT_CARRIED_POOL_CPU_CHECK_2026-09-06.json",
+    "docs/contracts/championship/HUNT_CAPTURE_DATAFLOW.v1.json",
+    "docs/CURRENT_PRODUCT_STATUS.md",
+    "docs/README.md",
+    "docs/planning/CHAMPIONSHIP_ORIGINAL_PARITY_STATUS_AND_SKILL_PLAN_2026-09-06.md",
+    "docs/coordination/CHAMPIONSHIP_DEPENDENCY_MATRIX.csv",
+    "docs/coordination/CHAMPIONSHIP_BLOCKER_LEDGER.csv",
+    "docs/reports/parity-audit/2026-09-06/hunt-generation-source-validation.json"
+  ]
+}

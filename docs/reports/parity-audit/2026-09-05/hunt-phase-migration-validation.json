@@ -1,0 +1,15 @@
+{
+  "date": "2026-09-05",
+  "gitRoot": "R:/Projects/Championship2026/championship-2026",
+  "branch": "main",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "scope": "native phase and sampler components; canonical resident membership migration",
+  "nativeComparisons": {"strokeSampleCalls":18,"ai8PullPrefixCalls":207,"ai10MotionCalls":15,"nonzeroDownCountdownCalls":15,"preInsertionHandUpdates":94},
+  "focused": {"tests":39,"pass":39,"fail":0},
+  "finalCaptureAndPhaseFocused": {"tests":25,"pass":25,"fail":0},
+  "finalRegression": {"command":"node --v8-pool-size=1 --test --test-concurrency=1 tests/*.mjs","tests":951,"pass":951,"fail":0,"skipped":0,"durationMs":44214.8028},
+  "earlierRunnerFailures": "Intermittent native Node process exits during parallel runs; one explicitly reported Fatal process out of memory: Zone. Final serial run passed all files.",
+  "browserReceipt": "hunt-phase-resident-browser.json",
+  "normalEntryCaptureAccepted": false,
+  "committed": false
+}

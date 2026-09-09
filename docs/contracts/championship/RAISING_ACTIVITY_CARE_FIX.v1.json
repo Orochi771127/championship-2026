@@ -1,0 +1,46 @@
+{
+  "contract": "RAISING_ACTIVITY_CARE_FIX.v1",
+  "date": "2026-09-08",
+  "status": "REPORTED_ACTIVITY_AND_CARE_VISUAL_DEFECTS_FIXED",
+  "overallOriginalParity": "PARTIAL",
+  "parent": "RAISING_NATIVE_FEEDING.v1",
+  "implemented": [
+    "Native idle elapsed threshold, physical-channel Cage/personality selection and Q12 roaming targets",
+    "Native numeric action sequences, completion modes, peer selection, follow, jump and tumble",
+    "Main sprite mirror bit and body height projected separately from ground shadow",
+    "Active Home day-end flag uses the existing endDay calendar command exactly once",
+    "Independent vector meat and capsule art with four native remaining-amount stages",
+    "Corrected care toolbar art and visible broom/dustpan feedback on the existing Pixi scene",
+    "Local server SVG MIME"
+  ],
+  "authorities": {
+    "actor": "Existing championshipStandaloneApp Raising actors",
+    "clock": "Existing championshipClockDriver and world calendar",
+    "rng": "Existing persistent 217-channel gameplay RNG",
+    "ui": "Existing DOM toolbar",
+    "renderer": "Existing single Pixi app and its ticker",
+    "save": "Unchanged v5 save authority and key",
+    "art": "Existing production index entry art:raising:care:r1"
+  },
+  "verification": {
+    "cpuSelectors": 480,
+    "cpuTargets": 96,
+    "cpuPeerDecisions": 64,
+    "cpuReactionParameterRecords": 31,
+    "cpuJumpAndTumbleFrames": 112,
+    "adultNumericSourceRowsWithSequenceCoverage": 220,
+    "browserViewport": "360x640",
+    "focusedPass": 40,
+    "regressionPass": 1345,
+    "report": "docs/research/RAISING_ACTIVITY_CARE_FIX_2026-09-08.md",
+    "receipt": "docs/reports/parity-audit/2026-09-08/activity-care-validation.json"
+  },
+  "boundaries": {
+    "idlePrefix": "Life, evolution, environment and training preconditions are not the complete original state machine",
+    "dayEnd": "Existing calendar continuation only; complete overnight growth/food/lifetime effects and original calendar interstitial remain partial",
+    "clean": "Visible tool and existing food removal; waste production and its whole lifecycle are not synthesized",
+    "art": "Independently authored vectors; no raw pack reads or original food/tool images copied to runtime",
+    "physicalDeviceQA": false,
+    "shippingReady": false
+  }
+}

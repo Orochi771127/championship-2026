@@ -6,9 +6,8 @@
 //
 // WHAT IT DOES NOT DO, ON PURPOSE
 // -------------------------------
-// It applies no per-item effect. Durability, power and length are carried as
-// declared values and consumed by nothing, because the research register's own
-// verdict on this system is that "all equipment semantics" are unknown. It
+// This loadout owns selections and capabilities; normal Hunt controllers
+// consume the verified per-item parameters through the existing runtime. It
 // enforces no carry limit, because none is traced. It requires nothing to be
 // equipped before a Hunt, because no confirmation rule is traced and inventing a
 // requirement is as much an invention as inventing an effect.
@@ -52,6 +51,7 @@ function deriveHudCapabilities(fittedPlugins, inventory) {
   const analyzerFields = new Set();
   const itemCounters = new Set();
   const radarFilters = new Set();
+  const nativeRadarIndices = new Set();
   let radar = false;
   let memoryReadout = false;
 
@@ -63,6 +63,7 @@ function deriveHudCapabilities(fittedPlugins, inventory) {
     if (capability.radar) {
       radar = true;
       if (capability.filterDimension) radarFilters.add(capability.filterDimension);
+      if (Number.isInteger(capability.nativeRadarIndex)) nativeRadarIndices.add(capability.nativeRadarIndex);
     }
     if (capability.memoryReadout) memoryReadout = true;
   }
@@ -74,6 +75,7 @@ function deriveHudCapabilities(fittedPlugins, inventory) {
     itemCounters: HUNT_COUNTED_CLASSES.filter((target) => itemCounters.has(target)),
     radar,
     radarFilters: [...radarFilters].sort(),
+    nativeRadarIndices: [...nativeRadarIndices].sort((a, b) => a - b),
     radarMarkerCapacity: radar ? HUNT_RADAR_MARKER_CAPACITY : 0,
     memoryReadout,
     // Max G is owned-card identity (32/64/96). The plugin only decides whether
@@ -177,7 +179,7 @@ export function createHuntLoadout({ inventory, memoryCardId = null } = {}) {
           quantity: itemId === null ? 0 : inventory.getQuantity(itemId),
           quantityIsCarryLimit: false,
           durability: item?.durability ?? null,
-          durabilityConsumption: "UNKNOWN_REQUIRES_TRACE"
+          durabilityConsumption: className === 'ROPE' ? 'ROM_NATIVE_PULL_CONTROLLER' : 'NOT_APPLICABLE'
         };
       });
     },

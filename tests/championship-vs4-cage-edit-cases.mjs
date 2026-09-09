@@ -27,7 +27,7 @@ import { CHAMPIONSHIP_MODERN_SAVE_KEY } from "../src/championship/app/championsh
 import { CHAMPIONSHIP_SCREENS } from "../src/championship/app/championshipScreenStack.js";
 import { SHOP_PURCHASE_DOMAIN, listShopRecords } from "../src/championship/shop/shopCatalog.js";
 
-const catalog = JSON.parse(fs.readFileSync("src/data/championship/catalogs/entities.r1.json", "utf8"));
+const catalog = JSON.parse(fs.readFileSync("src/data/championship/catalogs/creature-species.r1.json", "utf8"));
 const presentation = JSON.parse(fs.readFileSync("docs/contracts/championship/raising-home-presentation.v1.json", "utf8"));
 
 function memoryStorage() {
@@ -91,11 +91,13 @@ test("New Game opens Cage Edit with 14 hexes and starter ownership", async () =>
   assert.equal(frame.maxSlotCount, MAX_SLOT_COUNT);
   assert.equal(frame.unlockedCount, STARTING_SLOT_COUNT);
   assert.equal(frame.slotCountEvidence, "VERIFIED_BINARY");
-  assert.equal(frame.placementModel, "ONE_MODULE_PER_HEX_SLOT");
+  assert.equal(frame.placementModel, "ORIGINAL_MULTI_CELL_FOOTPRINT");
   assert.equal(frame.slots.filter((slot) => slot.unlocked).length, 14);
   assert.equal(frame.slots.filter((slot) => !slot.unlocked).length, 6);
   assert.ok(frame.ownedCount >= 4);
-  assert.ok(frame.tray.some((row) => row.moduleId === "championship:2026:cage:waiting-room"));
+  assert.equal(frame.placements.length,4);
+  assert.equal(frame.occupiedCount,9);
+  assert.equal(frame.slots.filter(slot=>slot.fixed).length,4);
   await app.dispose();
 });
 
@@ -104,16 +106,19 @@ test("placing, confirming and saving round-trips; BACK discards a draft", async 
   const app = createApp(storage);
   await app.newGame();
   app.openCageEdit();
-  const waiting = "championship:2026:cage:waiting-room";
+  const waiting = "championship:2026:cage:0";
+  app.removeCagePlacement(waiting);
   app.selectCageModule(waiting);
-  assert.equal(app.placeCageAt(0).lastVerdict.reason, "PLACED");
+  assert.equal(app.placeCageAt(10).lastVerdict.reason, "PLACED");
   assert.equal(app.placeCageAt(1).lastVerdict.reason, "NOTHING_SELECTED");
   app.leaveScreen();
   app.openCageEdit();
-  assert.equal(app.getCageEditFrame().placements.length, 0);
+  assert.equal(app.getCageEditFrame().placements.length, 4);
+  assert.equal(app.getCageEditFrame().placements.find(p=>p.moduleId===waiting).slotIndex,8);
 
+  app.removeCagePlacement(waiting);
   app.selectCageModule(waiting);
-  app.placeCageAt(3);
+  app.placeCageAt(12);
   app.confirmCageEdit();
   app.leaveScreen();
   app.save();
@@ -123,10 +128,34 @@ test("placing, confirming and saving round-trips; BACK discards a draft", async 
   await reloaded.continueGame();
   reloaded.openCageEdit();
   const restored = reloaded.getCageEditFrame();
-  assert.equal(restored.placements.length, 1);
-  assert.equal(restored.placements[0].moduleId, waiting);
-  assert.equal(restored.placements[0].slotIndex, 3);
+  assert.equal(restored.placements.length, 4);
+  assert.equal(restored.placements.find(p=>p.moduleId===waiting).slotIndex,12);
+  assert.equal(restored.layoutVersion,'NATIVE_ANCHORS_V1');
   await reloaded.dispose();
+});
+
+test("confirmed layout changes mark persistence dirty; draft and unchanged confirmation do not", async () => {
+  const app = createApp();
+  await app.newGame();
+  app.save();
+  const persistence = app.persistenceFacade();
+  assert.equal(persistence.getStatus().phase, "SAVED");
+  app.openCageEdit();
+  app.confirmCageEdit();
+  assert.equal(persistence.getStatus().phase, "SAVED");
+  app.removeCagePlacement("championship:2026:cage:0");
+  app.selectCageModule("championship:2026:cage:0");
+  app.placeCageAt(10);
+  assert.equal(persistence.getStatus().phase, "SAVED", "unconfirmed layout remains a draft");
+  app.confirmCageEdit();
+  assert.equal(persistence.getStatus().phase, "DIRTY");
+  app.save();
+  app.confirmCageEdit();
+  assert.equal(persistence.getStatus().phase, "SAVED", "identical confirmation does not dirty save");
+  app.removeCagePlacement("championship:2026:cage:0");
+  app.confirmCageEdit();
+  assert.equal(persistence.getStatus().phase, "DIRTY", "confirmed removal also needs saving");
+  await app.dispose();
 });
 
 test("a pre-cage save still continues with an empty ranch", async () => {
@@ -154,8 +183,9 @@ test("the presentation source opens Cage Edit without a second router", async ()
   source.intents.openCageEdit();
   assert.equal(source.getFrame().screen, CHAMPIONSHIP_SCREENS.CAGE_EDIT);
   assert.equal(source.getFrame().cageEdit.unlockedCount, 14);
-  source.intents.selectCageModule("championship:2026:cage:waiting-room");
-  source.intents.placeCageAt(0);
+  source.intents.removeCagePlacement("championship:2026:cage:0");
+  source.intents.selectCageModule("championship:2026:cage:0");
+  source.intents.placeCageAt(10);
   assert.equal(source.getFrame().cageEdit.lastVerdict.reason, "PLACED");
   source.intents.leaveScreen();
   assert.equal(source.getFrame().screen, CHAMPIONSHIP_SCREENS.RAISING_HOME);
@@ -170,13 +200,22 @@ test("original cage descriptions name a channel and a Digimon capacity, not a ti
     assert.equal(record.training.magnitudeParity, CAGE_TRAINING_MAGNITUDE_PARITY);
     assert.equal(Object.hasOwn(record.training, "delta"), false);
   }
+  // OVL15 reads the name at 0x020C8CDC + index*40, with no additional +0x28.
   const vacantLot = getCageTraining(0);
   assert.equal(vacantLot.channels[0].id, CAGE_TRAINING_CHANNELS.DEFENSE);
   assert.equal(vacantLot.capacity, 2);
-  assert.match(vacantLot.summary, /Defense up/);
-  assert.match(vacantLot.summary, /Best for 2/);
+  const runningTrack = getCageTraining(1);
+  assert.equal(runningTrack.channels[0].id, CAGE_TRAINING_CHANNELS.HP);
+  assert.equal(runningTrack.capacity, 6);
+  assert.match(runningTrack.summary, /HP up/);
+  assert.match(runningTrack.summary, /Best for 6/);
+  // Independent shop item indices: Gym 4, Mini Gym 30, Mini Infirmary 15.
   assert.equal(getCageTraining(4).channels[0].id, CAGE_TRAINING_CHANNELS.ATTACK);
   assert.equal(getCageTraining(4).capacity, 8);
+  assert.equal(getCageTraining(30).channels[0].id, CAGE_TRAINING_CHANNELS.ATTACK);
+  assert.equal(getCageTraining(30).capacity, 2);
+  assert.equal(getCageTraining(15).channels[0].id, CAGE_TRAINING_CHANNELS.RECOVER_HP_STRESS);
+  assert.equal(getCageTraining(15).capacity, 2);
   const waiting = getCageTraining(WAITING_ROOM_DEFINITION_INDEX);
   assert.equal(waiting.channels.length, 0);
   assert.equal(waiting.capacity, null);
@@ -191,7 +230,8 @@ test("setTamerRank opens 16 then 20 hexes, persists, and reveals rank-gated shop
   app.openCageEdit();
   assert.equal(app.getCageEditFrame().unlockedCount, 14);
   assert.equal(app.placeCageAt(14).lastVerdict.reason, "NOTHING_SELECTED");
-  app.selectCageModule("championship:2026:cage:waiting-room");
+  app.removeCagePlacement("championship:2026:cage:15");
+  app.selectCageModule("championship:2026:cage:15");
   assert.equal(app.placeCageAt(14).lastVerdict.reason, "SLOT_LOCKED");
 
   assert.equal(app.setTamerRank(2), 2);
@@ -202,7 +242,7 @@ test("setTamerRank opens 16 then 20 hexes, persists, and reveals rank-gated shop
 
   app.setTamerRank(6);
   assert.equal(app.getCageEditFrame().unlockedCount, 20);
-  const vacantLot = app.getCageEditFrame().tray.find((row) => row.moduleId === "championship:2026:cage:0");
+  const vacantLot = app.getCageEditFrame().placements.find((row) => row.moduleId === "championship:2026:cage:0");
   assert.ok(vacantLot);
   assert.match(vacantLot.trainingSummary, /Defense up/);
   assert.match(vacantLot.trainingSummary, /Best for 2/);
@@ -217,7 +257,7 @@ test("setTamerRank opens 16 then 20 hexes, persists, and reveals rank-gated shop
   assert.equal(reloaded.getTamerRank(), 6);
   reloaded.openCageEdit();
   assert.equal(reloaded.getCageEditFrame().unlockedCount, 20);
-  assert.equal(reloaded.getCageEditFrame().placements[0].slotIndex, 14);
+  assert.equal(reloaded.getCageEditFrame().placements.find(p=>p.moduleId==='championship:2026:cage:15').slotIndex, 14);
   await reloaded.dispose();
 });
 

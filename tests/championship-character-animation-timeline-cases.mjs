@@ -35,7 +35,7 @@ test("character timeline preserves the original per-frame NANR ticks", () => {
   assert.equal(timeline.getSnapshot().cycle, 1);
 });
 
-test("mode 2 traverses forward and backward without duplicating turn points", () => {
+test("legacy review ping-pong label traverses without duplicated turn points (not native mode 2)", () => {
   const animation = {
     playback: "forward_then_backward_once",
     frames: [0, 1, 2, 3].map((cell) => ({ texture: `cell-${cell}`, cell, ticks: 1 }))
@@ -51,7 +51,7 @@ test("mode 2 traverses forward and backward without duplicating turn points", ()
   assert.deepEqual(visited, [0, 1, 2, 3, 2, 1, 0]);
 });
 
-test("mode 1 loops forward and supports large ticker deltas", () => {
+test("legacy forward_loop label supports large ticker deltas (not native mode 1)", () => {
   const timeline = createCharacterAnimationTimeline({
     playback: "forward_loop",
     frames: [

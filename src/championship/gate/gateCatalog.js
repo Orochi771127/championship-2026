@@ -22,16 +22,28 @@
 // display or selection order is UNKNOWN_REQUIRES_TRACE.
 //
 // The original ARM9 Hunt table now supplies the day/night HM field pair for all
-// 16 identities. Unlock rules and the exact day/night selection call remain
-// untraced, so every gate stays available and no time selector is invented.
+// 16 identities. Native entry resolves day/night from the original node and
+// hour contract. The app projects unlock state from the original +1C/+20 rule
+// and its progression context; catalog presence alone never grants admission.
 
 import { deepFreeze } from "../contracts/championshipContracts.js";
+import gateTable from "../../data/championship/catalogs/gate-table.r1.json" with { type: "json" };
+// Product-authored Chinese copy layered on top; the Japanese stays authoritative.
+import { gateName } from "../text/zhHant.js";
 import { getOriginalHuntFieldBinding } from "./originalHuntFieldBindings.js";
 
 export const GATE_COUNT = 16;
 export const GATE_COUNT_EVIDENCE = "ROM_VERIFIED";
 export const GATE_IDENTITY_EVIDENCE = "ROM_VERIFIED";
-export const GATE_DISPLAY_NAME_EVIDENCE = "PRESENTATION_DEFAULT_NOT_RECOVERED";
+// Recovered on 2026-09-04. The gate table's +0x0C column is a txt_list index, so
+// these are the cartridge's own names, not a default derived from the node id.
+export const GATE_DISPLAY_NAME_EVIDENCE = "ROM_VERIFIED";
+/** The entrance fee is compared against Bits and deducted -- see gate-table.r1.json. */
+export const GATE_ENTRANCE_FEE_EVIDENCE = "ROM_VERIFIED";
+export const GATE_ENTRANCE_FEE_COMPARE_SITE = "OVL12:0x0210F84C";
+export const GATE_ENTRANCE_FEE_DEDUCT_SITE = "OVL12:0x0210F874";
+/** A non-zero player+0xEB8 waives both the check and the deduction. Untraced setter. */
+export const GATE_ENTRANCE_FEE_WAIVER_EVIDENCE = "UNKNOWN_REQUIRES_TRACE";
 export const GATE_AUTHORITY = "CHAMPIONSHIP_2026_PRODUCT";
 
 /**
@@ -44,6 +56,14 @@ const BIOME_IDENTITIES = Object.freeze([
   "Canyon", "Crag", "Damp", "Desert", "Factory", "Forest", "Grass", "Ice",
   "Jungle", "Mine", "Oasis", "Ruins", "Savanna", "Seaside", "Sewer", "Volcano"
 ]);
+
+// Records 0..15 carry each biome node name exactly once; the builder refuses to
+// emit the catalog otherwise, so this lookup cannot silently miss.
+const ROM_GATE_BY_BIOME = new Map(
+  gateTable.records
+    .filter((record) => record.recordIndex !== gateTable.tutorialRecordIndex)
+    .map((record) => [record.biomeNodeName, record])
+);
 
 function gateId(biomeId) {
   return `championship:2026:gate:${biomeId.toLowerCase()}`;
@@ -61,6 +81,8 @@ export const CHAMPIONSHIP_GATES = deepFreeze(
     const ordinal = index + 1;
     const originalFields = getOriginalHuntFieldBinding(biomeId);
     if (!originalFields) throw new Error(`MISSING_ORIGINAL_HUNT_FIELD_BINDING: ${biomeId}`);
+    const romRecord = ROM_GATE_BY_BIOME.get(biomeId);
+    if (!romRecord) throw new Error(`MISSING_ROM_GATE_RECORD: ${biomeId}`);
     return {
       gateId: gateId(biomeId),
       ordinal,
@@ -69,14 +91,28 @@ export const CHAMPIONSHIP_GATES = deepFreeze(
       biomeNodeName: biomeId,
       biomeParentNodeName: `${biomeId}parent`,
       identityEvidence: GATE_IDENTITY_EVIDENCE,
-      // NOT recovered. A localization layer may replace this freely.
-      displayName: biomeId,
-      displayNameEvidence: GATE_DISPLAY_NAME_EVIDENCE,
+      // The cartridge's own name, from the gate table's txt_list index. Japanese,
+      // because this ROM is the Japanese release; a localization layer may map it.
+      // What the player reads. Product-authored Chinese, falling back to the
+      // cartridge's own name when this build has no copy for it.
+      displayName: gateName(romRecord.recordIndex, romRecord.displayName),
+      displayNameEvidence: "PRODUCT_AUTHORED_TRANSLATION",
+      // The cartridge's own string, kept alongside so the evidence survives.
+      originalName: romRecord.displayName,
+      originalNameEvidence: GATE_DISPLAY_NAME_EVIDENCE,
+      romRecordIndex: romRecord.recordIndex,
+      codeString: romRecord.codeString,
+      // ROM_VERIFIED: blocks entry when the player cannot pay, and is deducted.
+      entranceFeeBits: romRecord.entranceFeeBits,
+      entranceFeeEvidence: GATE_ENTRANCE_FEE_EVIDENCE,
+      unlockKind: romRecord.unlockKind,
+      unlockParameter: romRecord.unlockParameter,
+      unlockEvidence: "ROM_VERIFIED",
       // Codex binds art by ordinal; the O3-C representative catalog is
       // Codex-owned and lives outside this repository.
       biomeOrdinal: ordinal,
-      state: "AVAILABLE",
-      stateEvidence: "UNKNOWN_REQUIRES_TRACE",
+      state: romRecord.unlockKind === 0 ? "AVAILABLE" : "LOCKED",
+      stateEvidence: "ROM_VERIFIED",
       originalFieldMapping: "ROM_VERIFIED",
       originalFields,
       worldSeed: 0x9e37 + (ordinal * 0x4f1b)

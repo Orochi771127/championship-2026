@@ -30,7 +30,7 @@ import {
 import { createHuntInventory } from "../src/championship/hunt/loadout/huntInventory.js";
 import { createHuntLoadout } from "../src/championship/hunt/loadout/huntLoadoutRuntime.js";
 
-const catalog = JSON.parse(fs.readFileSync("src/data/championship/catalogs/entities.r1.json", "utf8"));
+const catalog = JSON.parse(fs.readFileSync("src/data/championship/catalogs/creature-species.r1.json", "utf8"));
 const presentation = JSON.parse(fs.readFileSync("docs/contracts/championship/raising-home-presentation.v1.json", "utf8"));
 
 const ROPE = "championship:2026:hunt-item:rope-i";
@@ -83,7 +83,7 @@ test("the rope is the single equipped class and the rest are countable", () => {
     assert.equal(HUNT_EQUIPMENT_CLASS_RULES[className].countable, true);
     assert.equal(HUNT_EQUIPMENT_CLASS_RULES[className].hasDurability, false);
   }
-  assert.equal(getHuntCatalogItem(ROPE).durability, 10);
+  assert.equal(getHuntCatalogItem(ROPE).durability, 6);
   assert.equal(getHuntCatalogItem(SHOT).durability, null);
 });
 
@@ -108,7 +108,8 @@ test("the starting inventory follows the original initial_owned shape", () => {
   assert.equal(inventory.getQuantity("championship:2026:hunt-memory:card-32"), 1);
   // No plugin is owned at the start; every HUD readout begins dark.
   assert.equal(inventory.listOwned().every((entry) => entry.item.kind !== "PLUGIN"), true);
-  assert.equal(HUNT_STARTING_INVENTORY.length, 3);
+  assert.equal(inventory.getQuantity("championship:2026:hunt-item:meat-00"), 10);
+  assert.equal(HUNT_STARTING_INVENTORY.length, 4);
 });
 
 test("inventory quantity is capped at the per-item maximum", () => {
@@ -123,14 +124,14 @@ test("inventory quantity is capped at the per-item maximum", () => {
 test("availability is a Shop-side rule with its three recovered kinds", () => {
   const early = createHuntInventory({ tamerRank: 0, battleBadges: [] });
   assert.equal(early.availabilityOf(ROPE).reason, "INITIAL_AVAILABLE");
-  assert.equal(early.availabilityOf("championship:2026:hunt-item:rope-ii").available, false);
-  assert.equal(early.availabilityOf("championship:2026:hunt-item:rope-ii").reason, "TAMER_RANK_BELOW_THRESHOLD");
+  assert.equal(early.availabilityOf("championship:2026:hunt-item:rope-ii").reason, "INITIAL_AVAILABLE");
+  assert.equal(early.availabilityOf("championship:2026:hunt-item:rope-03").reason, "TAMER_RANK_BELOW_THRESHOLD");
   assert.equal(early.availabilityOf("championship:2026:hunt-item:rope-iii").reason, "BATTLE_BADGE_MISSING");
 
-  const later = createHuntInventory({ tamerRank: 2, battleBadges: [7] });
-  assert.equal(later.availabilityOf("championship:2026:hunt-item:rope-ii").available, true);
+  const later = createHuntInventory({ tamerRank: 1, battleBadges: [25] });
+  assert.equal(later.availabilityOf("championship:2026:hunt-item:rope-03").available, true);
   // The rank rule is HIGH_CONFIDENCE in the source catalog, not fully verified.
-  assert.equal(later.availabilityOf("championship:2026:hunt-item:rope-ii").evidence, "HIGH_CONFIDENCE");
+  assert.equal(later.availabilityOf("championship:2026:hunt-item:rope-03").evidence, "HIGH_CONFIDENCE");
   assert.equal(later.availabilityOf("championship:2026:hunt-item:rope-iii").available, true);
   assert.equal(later.availabilityOf("championship:2026:hunt-item:rope-iii").evidence, "ROM_VERIFIED");
 });
@@ -225,8 +226,8 @@ test("no item effect, no carry limit and no confirmation requirement is invented
   // Quantity is what is owned, not a per-Hunt allowance: no limit is traced.
   assert.equal(shot.quantity, 20);
   assert.equal(shot.quantityIsCarryLimit, false);
-  assert.equal(shot.durabilityConsumption, "UNKNOWN_REQUIRES_TRACE");
-  assert.equal(getHuntCatalogItem(SHOT).statEffect, "UNKNOWN_REQUIRES_TRACE");
+  assert.equal(shot.durabilityConsumption, "NOT_APPLICABLE");
+  assert.equal(getHuntCatalogItem(SHOT).statEffect, "ROM_VERIFIED_FUNCTIONAL_COLUMN");
 
   const handoff = loadout.toHuntHandoff();
   assert.equal(handoff.appliedEffects, "NONE");
@@ -254,7 +255,7 @@ test("the loadout seam exposes the read-only surface and no companion", async ()
   await app.newGame();
   const source = createGateHuntPresentationSource(app);
   source.intents.openGate();
-  source.intents.selectGate(app.getGates()[0].gateId);
+  source.intents.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId);
   source.intents.confirmGate();
 
   const block = source.getFrame().huntLoadout;
@@ -271,33 +272,14 @@ test("the loadout seam exposes the read-only surface and no companion", async ()
   source.intents.selectEquipment("ROPE", ROPE);
   const rope = source.getFrame().huntLoadout.selectedEquipment.find((slot) => slot.equipmentClass === "ROPE");
   assert.equal(rope.quantity, 1);
-  assert.equal(rope.durability, 10);
+  assert.equal(rope.durability, 6);
   await app.dispose();
 });
 
-test("the companion prototype survives only as a developer-only surface", async () => {
-  const app = createChampionshipStandaloneApp({
-    storage: memoryStorage(), catalog, cages: presentation.cages, now: () => "2026-08-28T12:00:00.000Z"
-  });
-  const started = await app.newGame();
-  const residentId = started.snapshot.residents[0].residentId;
-
-  // It exists, it records, and it gates nothing.
-  assert.equal(app.getDeveloperCompanionCreatureId(), null);
-  app.selectDeveloperCompanion(residentId);
-  assert.equal(app.getDeveloperCompanionCreatureId(), residentId);
-  assert.equal(typeof app.selectCompanion, "undefined", "the Player Mode companion API survived");
-
-  // Entering the field never consults it: the tamer walks the world.
-  const source = createGateHuntPresentationSource(app);
-  source.intents.openGate();
-  source.intents.selectGate(app.getGates()[0].gateId);
-  source.intents.confirmGate();
-  source.intents.beginHunt();
-  assert.equal(source.getFrame().screen, "HUNT_FIELD");
-  assert.equal(app.getHuntRuntime().getPlayer().actorId, "championship:2026:actor:tamer");
-  await app.dispose();
-});
+// Removed 2026-09-03: this test asserted the companion prototype existed but
+// stayed developer-only. At the Owner's direction the prototype itself was
+// deleted from championshipStandaloneApp.js, which satisfies the guarantee
+// outright -- there is no developer-only surface left to keep off the player path.
 
 test("the loadout adds no save field", async () => {
   const storage = memoryStorage();
@@ -307,15 +289,18 @@ test("the loadout adds no save field", async () => {
   await app.newGame();
   const source = createGateHuntPresentationSource(app);
   source.intents.openGate();
-  source.intents.selectGate(app.getGates()[0].gateId);
+  source.intents.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId);
   source.intents.confirmGate();
   source.intents.selectEquipment("ROPE", ROPE);
   source.intents.requestSave();
 
   const saved = JSON.parse(storage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY));
   assert.deepEqual(Object.keys(saved).sort(), [
-    "cageEdit", "creature", "flags", "progression", "raising", "raisingHome", "saveKind", "schemaVersion", "sessionId", "shop", "updatedAt"
+    "battleEconomy", "cageEdit", "creature", "flags", "gameplayRng", "huntHistory", "instanceIdentity", "progression", "raising", "raisingHome", "saveKind", "schemaVersion", "sessionId", "shop", "updatedAt"
   ].sort());
+  // The authorized battle envelope does not make Hunt state durable.
+  assert.deepEqual(saved.battleEconomy, { nextSequence: 1, settledThrough: 0, active: null, lastReceipt: null });
+  assert.deepEqual(saved.instanceIdentity, { nextSequence: 1 }, "Loadout choices do not allocate an individual");
   const text = JSON.stringify(saved).toLowerCase();
   for (const leak of ["equipment", "plugin", "loadout", "durability", "inventory"]) {
     assert.equal(text.includes(leak), false, `the loadout leaked ${leak} into the save envelope`);

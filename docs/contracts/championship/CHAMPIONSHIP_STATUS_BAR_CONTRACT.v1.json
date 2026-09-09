@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "contractId": "CHAMPIONSHIP_STATUS_BAR_CONTRACT",
+  "version": "v1.2",
+  "owner": "Claude Code",
+  "consumer": "Codex Art (presentation), Claude Code (time base and runtime state)",
+  "date": "2026-09-05",
+  "purpose": "One persistent read-only status bar consumes the existing shared calendar. Round 2 corrects the former timing inference using the original initializer, writer and Training scene trace.",
+  "theBar": {
+    "shape": "SEASON | DAY N | MODE | HH:MM",
+    "evidence": "LIVE_FOOTAGE_OBSERVATION",
+    "persistence": "Present in Hunt, Training, Battle and Shop. It is a shared component, not a per-screen header.",
+    "likelyOwner": {
+      "value": "ui/info_bar.nxr",
+      "evidence": "INFERENCE",
+      "detail": "info_bar.nxr is loaded by OVL0, OVL4, OVL5, OVL6, OVL7, OVL8, OVL12, OVL14, OVL15, OVL16, OVL17 and OVL18 - nearly every mode overlay. That distribution matches a persistent bar. Not traced to the draw call."
+    },
+    "fields": [
+      {
+        "field": "season",
+        "display": "Spring / Summer / Autumn / Winter",
+        "evidence": "LIVE_FOOTAGE_OBSERVATION for the four names",
+        "romSupport": "OVL1 loads spring_col, summer_col, autumn_col and winter_col - four season palettes."
+      },
+      {
+        "field": "day",
+        "display": "Day 1 .. Day 8",
+        "evidence": "LIVE_FOOTAGE_OBSERVATION",
+        "note": "Displayed 1-based. The ROM slot value is 0-based (mod 8). Do not render the raw slot."
+      },
+      {
+        "field": "mode",
+        "display": "Training / Hunt / Battle / Shop / Database ...",
+        "evidence": "LIVE_FOOTAGE_OBSERVATION",
+        "note": "Observed still reading Training while a match description panel was open, so the label tracks the owning mode, not the topmost panel."
+      },
+      {
+        "field": "clock",
+        "display": "HH:MM, 24-hour",
+        "evidence": "LIVE_FOOTAGE_OBSERVATION",
+        "note": "CORRECTION to the first-round audit, which claimed the original was not a 24-hour clock. It is. The existing clockMinutes 0..1439 representation is the right shape; what is missing is the time base below."
+      }
+    ]
+  },
+  "timeBase": {
+    "cascade": {
+      "value": [
+        4,
+        8,
+        24,
+        60,
+        400
+      ],
+      "meaning": [
+        "seasons per year",
+        "days per season",
+        "hours per day",
+        "minutes per hour",
+        "base raw elapsed divisor per world minute; normal Training selects 200"
+      ],
+      "evidence": "ROM_VERIFIED",
+      "site": "ARM9 0x020C8A4C",
+      "method": "Read directly from the cartridge on 2026-09-02. ROM file offset = arm9RomOffset(0x4000) + addr - 0x02000000. The eight words there read 4, 8, 24, 60, 400, 47, 47, 47; the first five are the cascade and the trailing 47s are not part of it.",
+      "romSha256": "8AD375BA0BD9B652A25F72DEAD2B47F78DA401E188A8F3E1B7A6F2867EE0C5D1"
+    },
+    "corroboration": {
+      "gameOwnHelpText": "ui/txt/help_text_txt.dat entry 96 states that one Digital World day is about ten real minutes, that there is no concept of weeks or months, that eight days make one season, and that four seasons make one year.",
+      "evidence": "ROM_VERIFIED"
+    },
+    "unitsPerDay": {
+      "value": 576000,
+      "derivation": "24 * 60 * 400",
+      "evidence": "DERIVED_FROM_ROM_VERIFIED_CASCADE",
+      "note": "Base-400 helper arithmetic only; not the RAM date word or normal Training elapsed rate."
+    },
+    "tickRate": {
+      "value": 16,
+      "unit": "raw converted elapsed units per nominal native VBlank frame",
+      "trainingDivisor": 200,
+      "busClockHz": 33513982,
+      "busCyclesPerFrame": 560190,
+      "evidence": "DERIVED_NOMINAL_UNLAGGED_ROM_VBLANK_CADENCE",
+      "trace": "docs/research/round2-clock-2026-09-05/CLOCK_ROM_TRACE.md",
+      "superseded": "The v1.1 help-text 600-second inference is withdrawn as a runtime timing source. Browser frame rate is not original frame rate; original stalls/jitter remain unmeasured."
+    },
+    "playerDrivenAdvance": {
+      "finding": "The Raising Home toolbar submenu carries an End Day entry.",
+      "evidence": "LIVE_FOOTAGE_OBSERVATION",
+      "date": "2026-09-03",
+      "consequence": "The calendar is NOT purely a real-time clock. The day advances both by the running cascade and by an explicit player action. A time base that only ticks will not reproduce the original.",
+      "designNote": "ROM default initialization and End Day use 07:00. End Day clears raw elapsed remainder and advances the existing calendar; all resident/day-end effects remain outside this pure-clock slice.",
+      "crossReference": "docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json",
+      "writerEvidence": "OVL18:0x0210FA30/0x0210FAA4 and ARM9:0x020987A0; see world-clock-runtime.v1.json"
+    }
+  },
+  "scheduleSlots": {
+    "finding": "The two title-event schedule columns are a calendar. battleMatchSelection.js currently carries a note saying they are 'named for their offsets, not for a calendar'. That reservation can be withdrawn.",
+    "evidence": "ROM_VERIFIED",
+    "slotA": {
+      "site": "ARM9 0x0207BC9C",
+      "behaviour": "Loads the clock word at [0x0210AA98], divides by the per-slot divisor at [0x0210AAC8], then takes the remainder against ARM9 0x020C8A4C + 0x00, which is 4.",
+      "meaning": "season index, 0..3",
+      "titleRecordField": "+0x14"
+    },
+    "slotB": {
+      "site": "ARM9 0x0207BCCC",
+      "behaviour": "Loads the SAME clock word at [0x0210AA98], divides by the per-slot divisor at [0x0210AACC], then takes the remainder against ARM9 0x020C8A4C + 0x04, which is 8.",
+      "meaning": "day within season, 0..7",
+      "titleRecordField": "+0x18"
+    },
+    "corroboration": "Live footage shows match records scheduled as a season plus a day, alongside an eligibility restriction and a versus format. help_text_txt.dat entry 155 states that title matches have fixed dates and that missing one costs a year.",
+    "supersededPrediction": {
+      "status": "DISPROVED_BY_ROUND2_INITIALIZER_TRACE",
+      "statement": "If the cascade reading is right, [0x0210AACC] should hold 576000 (units per day) and [0x0210AAC8] should hold 4608000 (units per season, 8 * 576000).",
+      "correction": "0x0210AA98 stores minutes within the year. 0x0210AACC is 1440 minutes/day; 0x0210AAC8 is 11520 minutes/season. The ARM9 initializer writes both, so static writer tracing is sufficient."
+    }
+  },
+  "buildInstruction": {
+    "step1_timeBase": {
+      "rule": "Extend the existing clock rather than replacing it.",
+      "detail": "raisingHomeDefinition.js already holds clockMinutes 0..1439 and that representation stays. Add season (0..3) and dayOfSeason (0..7) beside it, advanced by the same cascade, and persist all three. The save envelope is deny-by-default on unknown keys, so the persistence allowlist in raisingHomePersistenceR2.js must be extended in the same change or the new fields will not survive a reload. The state must also support an explicit endDay() advance, per timeBase.playerDrivenAdvance."
+    },
+    "step2_bar": {
+      "rule": "One shared component, read-only, mounted by every screen.",
+      "detail": "The bar owns no state and no clock. It reads the published presentation frame, exactly as the existing views do. Render day as dayOfSeason + 1 and season through a name table; never render the raw slot integers.",
+      "lane": "Presentation is Codex-owned. The runtime state and the cascade are Claude-owned."
+    },
+    "step3_whatThisUnblocks": [
+      "Today / Calendar (OVL1) - the mode has no meaning without a calendar.",
+      "The Raising Home schedule board - schedule_item.nxr carries day, name, rank, money and star nodes, and schedule_season_bar_scene.nxr carries prev/current/next season.",
+      "Battle menu dates - the filter already resolves records against the two schedule slots; it currently receives them as opaque inputs.",
+      "Seasonal effects on training and hunting, per help entries 98 and 136."
+    ],
+    "doNotInvent": [
+      "Do not add weeks or months. The game's own help text says they do not exist.",
+      "Do not add a continuous day/night cycle or a sun position. Gate Select models day and night as two paired nodes, and the switch rule is untraced.",
+      "Do not tie the season name colours to anything but the four season palettes OVL1 names."
+    ]
+  },
+  "relatedContracts": [
+    "docs/contracts/championship/CHAMPIONSHIP_CAGE_RANCH_COMPOSITION_CONTRACT.v1.json",
+    "docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json",
+    "docs/contracts/championship/world-clock-runtime.v1.json"
+  ]
+}

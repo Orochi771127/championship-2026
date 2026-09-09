@@ -81,9 +81,17 @@ export function createChampionshipR2Session({
     getRaisingHomeSnapshot() {
       return raisingSave.getRaisingHomeSnapshot();
     },
+    commitRaisingResidentRelease(residentIds, expectedRevision) {
+      if (disposing || disposed) return disposingRejection();
+      return raisingSave.commitResidentRelease(residentIds, expectedRevision);
+    },
     dispatchRaisingHome(command) {
       if (disposing || disposed) return disposingRejection(disposed ? "CHAMPIONSHIP_R2_DISPOSED" : undefined);
       return raisingSave.dispatchRaisingHome(command);
+    },
+    advanceRaisingClock(delta) {
+      if (disposing || disposed) return disposingRejection(disposed ? "CHAMPIONSHIP_R2_DISPOSED" : undefined);
+      return raisingSave.advanceRaisingClock(delta);
     },
     subscribeRaisingHome(listener) {
       if (disposing || disposed) throw new Error(`Championship R2 session is ${disposed ? "disposed" : "disposing"}`);

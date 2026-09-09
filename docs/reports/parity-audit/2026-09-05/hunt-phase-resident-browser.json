@@ -1,0 +1,12 @@
+{
+  "date": "2026-09-05",
+  "status": "PASS_RESULT_RELEASE_AND_CONTINUE_NOT_NORMAL_CAPTURE",
+  "url": "http://127.0.0.1:8732/tests/fixtures/championship-hunt-result-review.html",
+  "storage": "isolated in-memory fixture storage",
+  "input": "connected browser DOM click and fill; no physical touch-device claim",
+  "capturePreparation": "observed encounter; controlled soft pull; 16 native down updates and 94 native hand updates",
+  "verified": ["full Home capacity alert", "name retained through cancel and release", "initial resident release enabled", "save failure leaves card and name", "retry returns Home once", "Continue does not resurrect initial resident"],
+  "finalVisibleOutcome": "Saved Home count: 16; starter present: false; canonical residents: 0; new individual: Gate One Phase",
+  "afterReloadVisibleOutcome": "Saved Home count: 16; starter present: false; canonical residents: 0; new individual: Gate One Phase",
+  "normalEntryCaptureAccepted": false
+}

@@ -1,5 +1,9 @@
 # CHAMPIONSHIP_RUNTIME_ARCHITECTURE
 
+## 2026-09-08 Raising lifecycle continuation
+
+The existing standalone app owns child native Raising actors and advances egg age/actions from its current clock. The renderer only projects frames and routes released short Hand touches. Form changes preserve the individual ID and use the existing lazy character roster; pending loads and disposal share one lifecycle. Optional native starter profiles and strict permanent regular-species registration stay in the version-5 envelope. The book has 216 original rows, with book ordinal separate from species ID. Verified food/medicine/zero-peer growth helpers remain unbound until actual Cage, position, peer and actor-state callers are available. See [contract](../contracts/championship/RAISING_NATIVE_LIFECYCLE.v1.json).
+
 Canonical product repository: `.` (`CHAMPIONSHIP_2026_PRODUCT_SSOT`).  
 Migration reconciliation: the prior shared-repository wording below is retained only where it explains historical constraints. The current executable architecture is the standalone boundary defined in `docs/architecture/CHAMPIONSHIP_2026_ARCHITECTURE.md`.
 

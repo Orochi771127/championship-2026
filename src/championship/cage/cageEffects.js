@@ -11,14 +11,20 @@
 // WHAT IT MUST NOT CLAIM
 // ----------------------
 // Tick magnitudes, stacking, which resident field is written, and how much
-// extra stress overfill adds. CageDefinition +0x08 / +0x10 / +0x14 / +0x18 /
-// +0x1C / +0x20 / +0x24 still have no raising reader+writer. OVL18
+// extra stress overfill adds. Numeric effects require a separate raising
+// reader/writer trace; a table-column resemblance is not proof. OVL18
 // `ldrb [r2,#8]` at 0x0210A9E8 / 0x0210AA34 is a 4-slot type==5 state poke,
 // not a CageDefinition load. OVL15 0x0210C650 is a generic ~0x62-byte copy,
 // not a 40-byte cage record writer.
 //
-// Japanese ROM strings stay out of src/. English labels are product copy of the
-// verified meaning. Waiting Room (definition 35) has an empty original description.
+// Japanese catalog text remains the evidence source. English summaries are
+// product copy of its meaning. Definition 35 (Waiting Room) has an empty
+// description. The adjacent Lid visual is outside the 36-definition catalog.
+
+// Transcribed from the CageDefinition table at ARM9 0x020C8CDC, stride 40, 36
+// records; name/description offsets are +0/+4 from that name-column base.
+// See scripts/build-cage-definitions.py and the 2026-09-05 Cage identity trace.
+import cageDefinitions from "../../data/championship/catalogs/cage-definitions.r1.json" with { type: "json" };
 
 export const CAGE_TRAINING_CHANNEL_EVIDENCE = "VERIFIED_TEXT";
 export const CAGE_TRAINING_CAPACITY_EVIDENCE = "VERIFIED_TEXT";
@@ -153,46 +159,54 @@ function training(channels, capacity) {
   });
 }
 
-// Index = original CageDefinition 0..35 (SHOP_CAGE_CROSSWALK standard_cage_index).
-const BY_DEFINITION_INDEX = Object.freeze([
-  training([up(CAGE_TRAINING_CHANNELS.DEFENSE)], 2),
-  training([up(CAGE_TRAINING_CHANNELS.HP)], 6),
-  training([up(CAGE_TRAINING_CHANNELS.SPEED)], 10),
-  training([up(CAGE_TRAINING_CHANNELS.TP)], 6),
-  training([up(CAGE_TRAINING_CHANNELS.ATTACK)], 8),
-  training([up(CAGE_TRAINING_CHANNELS.FAMILY_DATA)], 8),
-  training([up(CAGE_TRAINING_CHANNELS.FAMILY_DRAGON)], 8),
-  training([up(CAGE_TRAINING_CHANNELS.FAMILY_BEAST)], 6),
-  training([up(CAGE_TRAINING_CHANNELS.FAMILY_WATER)], 8),
-  training([up(CAGE_TRAINING_CHANNELS.FAMILY_BIRD)], 8),
-  training([up(CAGE_TRAINING_CHANNELS.FAMILY_INSECT_PLANT)], 6),
-  training([up(CAGE_TRAINING_CHANNELS.FAMILY_INSECT_PLANT)], 6),
-  training([up(CAGE_TRAINING_CHANNELS.RESIST_LIGHT)], 6),
-  training([up(CAGE_TRAINING_CHANNELS.FAMILY_DARK)], 6),
-  training([up(CAGE_TRAINING_CHANNELS.FAMILY_MACHINE)], 6),
-  training([recoverHpStress()], 2),
-  // ROM name is the hospital; the paired description is the vaccine lab. Keep the text.
-  training([up(CAGE_TRAINING_CHANNELS.FAMILY_VACCINE)], 6),
-  training([up(CAGE_TRAINING_CHANNELS.FAMILY_HOLY)], 4),
-  training([recoverHpStress()], 8),
-  training([up(CAGE_TRAINING_CHANNELS.RESIST_HEAT)], 6),
-  training([up(CAGE_TRAINING_CHANNELS.RESIST_COLD)], 8),
-  training([up(CAGE_TRAINING_CHANNELS.RESIST_THUNDER)], 6),
-  training([up(CAGE_TRAINING_CHANNELS.FAMILY_VIRUS)], 4),
-  training([up(CAGE_TRAINING_CHANNELS.WISDOM)], 2),
-  training([autoCare()], 2),
-  training([autoCare()], 8),
-  training([up(CAGE_TRAINING_CHANNELS.BATTLE_COUNT)], 6),
-  training([up(CAGE_TRAINING_CHANNELS.HP)], 2),
-  training([recoverHpStress()], 6),
-  training([up(CAGE_TRAINING_CHANNELS.FAMILY_HOLY)], 2),
-  training([up(CAGE_TRAINING_CHANNELS.ATTACK)], 2),
-  training([up(CAGE_TRAINING_CHANNELS.FAMILY_DRAGON)], 2),
-  training([up(CAGE_TRAINING_CHANNELS.FAMILY_BIRD)], 2),
-  training([up(CAGE_TRAINING_CHANNELS.FAMILY_WATER)], 2),
-  training([up(CAGE_TRAINING_CHANNELS.RESIST_DARK)], 2),
-  training([], null)
-]);
+// The 36 records, derived from the cartridge rather than hand-entered.
+//
+// OVL15's indexed text reader and all 35 ShopItemTable joins independently
+// confirm: 0 = vacant lot (Defense/2), 1 = track (HP/6), 15 = mini infirmary,
+// 30 = mini gym, 35 = Waiting Room. A prior builder read the NEXT row's text
+// using +0x28/+0x2C; screenshots confirm effects but do not establish indices.
+const CHANNEL_FOR_ROM_EFFECT = Object.freeze({
+  "STAT_UP:DEFENSE": CAGE_TRAINING_CHANNELS.DEFENSE,
+  "STAT_UP:HP": CAGE_TRAINING_CHANNELS.HP,
+  "STAT_UP:TP": CAGE_TRAINING_CHANNELS.TP,
+  "STAT_UP:ATTACK": CAGE_TRAINING_CHANNELS.ATTACK,
+  "STAT_UP:SPEED": CAGE_TRAINING_CHANNELS.SPEED,
+  "STAT_UP:WISDOM": CAGE_TRAINING_CHANNELS.WISDOM,
+  "STAT_UP:BATTLE_COUNT": CAGE_TRAINING_CHANNELS.BATTLE_COUNT,
+  "FAMILY_UP:データ": CAGE_TRAINING_CHANNELS.FAMILY_DATA,
+  "FAMILY_UP:リュウ": CAGE_TRAINING_CHANNELS.FAMILY_DRAGON,
+  "FAMILY_UP:ケモノ": CAGE_TRAINING_CHANNELS.FAMILY_BEAST,
+  "FAMILY_UP:ミズ": CAGE_TRAINING_CHANNELS.FAMILY_WATER,
+  "FAMILY_UP:トリ": CAGE_TRAINING_CHANNELS.FAMILY_BIRD,
+  "FAMILY_UP:ムシクサ": CAGE_TRAINING_CHANNELS.FAMILY_INSECT_PLANT,
+  "FAMILY_UP:アンコク": CAGE_TRAINING_CHANNELS.FAMILY_DARK,
+  "FAMILY_UP:キカイ": CAGE_TRAINING_CHANNELS.FAMILY_MACHINE,
+  "FAMILY_UP:ワクチン": CAGE_TRAINING_CHANNELS.FAMILY_VACCINE,
+  "FAMILY_UP:セイ": CAGE_TRAINING_CHANNELS.FAMILY_HOLY,
+  "FAMILY_UP:ウイルス": CAGE_TRAINING_CHANNELS.FAMILY_VIRUS,
+  "RESIST_UP:ひかり": CAGE_TRAINING_CHANNELS.RESIST_LIGHT,
+  "RESIST_UP:ねつ": CAGE_TRAINING_CHANNELS.RESIST_HEAT,
+  "RESIST_UP:さむさ": CAGE_TRAINING_CHANNELS.RESIST_COLD,
+  "RESIST_UP:かみなり": CAGE_TRAINING_CHANNELS.RESIST_THUNDER,
+  "RESIST_UP:やみ": CAGE_TRAINING_CHANNELS.RESIST_DARK,
+  "RECOVER:HP_AND_STRESS": CAGE_TRAINING_CHANNELS.RECOVER_HP_STRESS,
+  "AUTO_CARE:FOOD_AND_DROPPINGS": CAGE_TRAINING_CHANNELS.AUTO_CARE
+});
+
+const BY_DEFINITION_INDEX = Object.freeze(
+  cageDefinitions.records.map((record) => {
+    if (record.effect.kind === "NONE") return training([], record.capacity ?? null);
+    const key = `${record.effect.kind}:${record.effect.target}`;
+    const channel = CHANNEL_FOR_ROM_EFFECT[key];
+    if (!channel) throw new Error(`UNMAPPED_CAGE_EFFECT: ${key} on cage ${record.cageIndex}`);
+    const mode = channel === CAGE_TRAINING_CHANNELS.RECOVER_HP_STRESS
+      ? CAGE_TRAINING_MODES.RECOVER
+      : channel === CAGE_TRAINING_CHANNELS.AUTO_CARE
+        ? CAGE_TRAINING_MODES.AUTO_CARE
+        : CAGE_TRAINING_MODES.UP;
+    return training([Object.freeze({ id: channel, mode })], record.capacity ?? null);
+  })
+);
 
 export function getCageTraining(cageDefinitionIndex) {
   return BY_DEFINITION_INDEX[cageDefinitionIndex] ?? null;

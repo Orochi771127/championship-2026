@@ -1,0 +1,25 @@
+{
+  "records": 1248,
+  "domains": {
+    "BATTLE_FIELD": 12,
+    "CHARACTER_ANIMATION": 60,
+    "CHARACTER": 448,
+    "MAP": 60,
+    "THREE_D": 6,
+    "UI": 449,
+    "VFX": 213
+  },
+  "referenceOccurrences": 8585,
+  "referenceKindCounts": {
+    "FILESYSTEM": 3769,
+    "LOGICAL_URI_NOT_FILESYSTEM": 2687,
+    "ROM_RELATIVE_RESOURCE_NOT_REPO_PATH": 2072,
+    "SHA256_VALUE_NOT_FILESYSTEM": 57
+  },
+  "nonFilesystemOccurrencesNotChecked": 4816,
+  "missingFilesystemOccurrences": 0,
+  "uniqueReferences": 5616,
+  "uniqueMissingFilesystemReferences": 0,
+  "replacementCharacterOccurrences": 0,
+  "limitations": "Filesystem existence at recorded paths only. Logical ROM URIs, bare source-resource names in evidenceRefs and hash values are not repository filesystem paths and are not classified as missing. No automatic relocation, hash re-verification, rights review or source reclassification."
+}

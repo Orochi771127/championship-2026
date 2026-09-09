@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "scope": "RESEARCH_ONLY_BROWSER_OBSERVATION",
+  "url": "https://www.bilibili.com/video/BV13u411B7BK/",
+  "date": "2026-09-07",
+  "localDirectory": "R:/Projects/Championship2026/_archive/video-research/BV13u411B7BK/battle-recheck-2026-09-07",
+  "method": "Visible Bilibili player controls; screenshot and read-only media time. Rechecked seeks wait for clock progression before pausing. Images visually reviewed; stale renders excluded.",
+  "captures": [
+    {
+      "paused": true,
+      "time": 229.783883,
+      "file": "live-first.png",
+      "sha256": "14d621253ba995f7cddfc1c9b5e404666c6d37701aef7d1bf2f8b5d0488b85b0",
+      "observationStatus": "VIDEO_OBSERVED",
+      "reason": null
+    },
+    {
+      "paused": true,
+      "time": 210.520662,
+      "file": "attack-200.png",
+      "sha256": "9a1e2b5d01e51f8bbf0fcd03f1e0c5e5eae6ca4c9f542416302a2ed561831449",
+      "observationStatus": "VIDEO_OBSERVED",
+      "reason": null
+    },
+    {
+      "paused": true,
+      "time": 202.05503,
+      "target": 202,
+      "file": "t202.png",
+      "sha256": "2704b289e65a35496f2f68011a1a2ace6dab37d7ad99327c8f282e8844057700",
+      "observationStatus": "VIDEO_OBSERVED",
+      "reason": null
+    },
+    {
+      "paused": true,
+      "time": 200.078408,
+      "target": 200,
+      "file": "t200.png",
+      "sha256": "372839528da67b6063679f7d539b1af13b6a0ee4dd30875196833ad9de67e128",
+      "observationStatus": "VIDEO_OBSERVED",
+      "reason": null
+    },
+    {
+      "paused": true,
+      "time": 204.054969,
+      "target": 204,
+      "file": "t204.png",
+      "sha256": "0f04c41c41717425166f647a298853e0953685aef76af123585d5f914da68a15",
+      "observationStatus": "VIDEO_OBSERVED",
+      "reason": null
+    },
+    {
+      "paused": true,
+      "time": 207.05362,
+      "target": 207,
+      "file": "t207.png",
+      "sha256": "bfabfb65ad945a2c6c6080eb44dcee2ee0f3a5967b91d7ec753f6b3394ee590d",
+      "observationStatus": "VIDEO_OBSERVED",
+      "reason": null
+    },
+    {
+      "paused": true,
+      "time": 209.022496,
+      "target": 209,
+      "file": "t209.png",
+      "sha256": "f1a467ddbbd5b8d48eea46f24a6e5ad59a018fd126436faaa8ec73ac82f05269",
+      "observationStatus": "VIDEO_OBSERVED",
+      "reason": null
+    },
+    {
+      "paused": true,
+      "time": 211.058289,
+      "target": 211,
+      "file": "t211.png",
+      "sha256": "6dd9798e375f5933daaa46fc911cc087529f307f43bb3a63ebb13bc9d199aa58",
+      "observationStatus": "VIDEO_OBSERVED",
+      "reason": null
+    },
+    {
+      "paused": true,
+      "time": 211.058289,
+      "target": 212,
+      "file": "t212.png",
+      "sha256": "956b19071e8def1ffbc7d2385278f2fec8d389b9cc9073a6c91e086b21ae40c4",
+      "observationStatus": "EXCLUDED_STALE_RENDER",
+      "reason": "Player time changed before a decoded video frame was captured; excluded from comparison."
+    },
+    {
+      "paused": true,
+      "time": 486,
+      "target": 486,
+      "file": "t486.png",
+      "sha256": "b8e89fe648d0c18128cec47ab5c3047d99374eee307b20055597205fc82fff21",
+      "observationStatus": "EXCLUDED_STALE_RENDER",
+      "reason": "Player time changed before a decoded video frame was captured; excluded from comparison."
+    },
+    {
+      "paused": true,
+      "time": 490,
+      "target": 490,
+      "file": "t490.png",
+      "sha256": "7ddcdc031012c2114990d37af5fcef80375b8c74d97c1e3a881a82822a84e05a",
+      "observationStatus": "EXCLUDED_STALE_RENDER",
+      "reason": "Player time changed before a decoded video frame was captured; excluded from comparison."
+    },
+    {
+      "paused": true,
+      "time": 494,
+      "target": 494,
+      "file": "t494.png",
+      "sha256": "5a1c108341d48a1a502932b626e89835176915a7634374c3d8638a495f0dc5a1",
+      "observationStatus": "EXCLUDED_STALE_RENDER",
+      "reason": "Player time changed before a decoded video frame was captured; excluded from comparison."
+    },
+    {
+      "paused": true,
+      "ready": 4,
+      "time": 490.075162,
+      "target": 490,
+      "file": "verified-490.png",
+      "sha256": "568cf8b695c26ee7d50d73338ffe127ce0e0573d53a63992b8635d7c6c4b2d74",
+      "observationStatus": "VIDEO_OBSERVED",
+      "reason": null
+    },
+    {
+      "paused": true,
+      "ready": 4,
+      "time": 202.287659,
+      "target": 202,
+      "file": "verified-202.png",
+      "sha256": "ea2ecfba23dad318e4433ed1f94b670ceaa276e7b7ef0f9b97b7868d609df669",
+      "observationStatus": "VIDEO_OBSERVED",
+      "reason": null
+    }
+  ]
+}

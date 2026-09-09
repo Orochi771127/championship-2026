@@ -91,7 +91,7 @@
       "name": "field16",
       "width": "u16",
       "readSite": null,
-      "widthEvidence": "CONSTANT_ZERO_PADDING",
+      "widthEvidence": "NO_TRACED_READ_SITE",
       "constantValue": 0
     },
     {
@@ -127,7 +127,7 @@
       "name": "field24",
       "width": "u32",
       "readSite": null,
-      "widthEvidence": "CONSTANT_ZERO_PADDING",
+      "widthEvidence": "NO_TRACED_READ_SITE",
       "distinctValues": 3
     }
   ],

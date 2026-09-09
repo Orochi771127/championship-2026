@@ -1,0 +1,91 @@
+{
+  "contract": "RAISING_NATIVE_FEEDING.v1",
+  "date": "2026-09-08",
+  "status": "PLAYABLE_FEEDING_SLICE_COMPLETE",
+  "overallRaisingLifecycle": "PARTIAL",
+  "scope": "Existing Home -> native ground and physical actor -> Feed/Protein placement -> approach/station/eating -> Clean -> existing v5 Save/Continue",
+  "authorities": {
+    "application": "championshipStandaloneApp",
+    "inventory": "existing shopRuntime records 0 and 1",
+    "individual": "existing nativeProfile on stable instance IDs",
+    "clock": "existing natural clock and native Raising age remainder",
+    "rng": "existing 217-channel gameplay RNG; physical Home slots 0..15",
+    "presentation": "DOM toolbar and HUD; one existing Pixi stage and application ticker",
+    "save": "existing schemaVersion 5 and storage key; optional raising.nativeHome child"
+  },
+  "implemented": [
+    "four native ranch sizes and committed Cage placement geometry",
+    "functional terrain with original wrapped queries and bounded clearance queries",
+    "physical slot identity, Home initialization RNG, source-clearance spawn and blocked-point correction",
+    "same-Cage nearest food and original four-station selector",
+    "ordinary food/protein shared ten-object pool and accepted-placement inventory debit",
+    "sixteen portions, native bounce, freshness and thirty-frame fresh-food notifications",
+    "native approach modes 0/1, walking and eating sequence 14",
+    "frame-1 bite latch, generation bite sizes, satiety/HP/protein carry and full-belly exit writers",
+    "multiple consumers, station eviction and food target cleanup",
+    "Clean remaining food without refund",
+    "valid ground hand relocation, physical Cage membership and feeding interruption",
+    "relative food coordinates, remaining portions, freshness and individual persistence",
+    "inventory readout and current/max HP on existing UI",
+    "touch/pointer ground tap versus camera swipe on the existing scene"
+  ],
+  "food": {
+    "poolCapacity": 10,
+    "portions": 16,
+    "initialFreshness": 1440,
+    "freshSearchPeriodNativeFrames": 30,
+    "inventoryDebitedOnBite": false
+  },
+  "save": {
+    "nativeHomeVersion": 1,
+    "fields": [
+      "poolSlots",
+      "foods"
+    ],
+    "foodFields": [
+      "slot",
+      "cageDefinitionIndex",
+      "localPositionQ12",
+      "protein",
+      "remaining",
+      "freshness"
+    ],
+    "transientStationOccupancySaved": false,
+    "transientAnimationSaved": false,
+    "adultHomeEntryRestoresSavedBodyPosition": false,
+    "adultHomeEntryBehavior": "Original source-clearance spawn and repair; same persistent individual and Cage",
+    "legacyUnknownProfilesInvented": false
+  },
+  "evidence": {
+    "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "originalCpuCases": {
+      "stationSelection": 400,
+      "approach": 64,
+      "sourceSpawn": 72,
+      "openTileSearch": 32,
+      "existingBiteWriter": 168
+    },
+    "originalLiveTrace": "_archive/raising-feeding-stage-2026-09-08, private parent workspace",
+    "report": "docs/research/RAISING_FEEDING_STAGE_2026-09-08.md",
+    "validation": "docs/reports/parity-audit/2026-09-08/feeding-stage-validation.json"
+  },
+  "boundaries": {
+    "validHandDropMembership": "Bounded position/membership writer; complete carry/throw/bounce and Cage reaction/effect programs are not claimed",
+    "unbound": [
+      "full idle preconditions, sleep and lifecycle AI; spontaneous activity is bound by the followup contract",
+      "peer/environment/training effects",
+      "treatment tool state machine",
+      "adult evolution eligibility",
+      "lifetime/rebirth",
+      "overnight food lifecycle",
+      "non-toolbar kind-2 food"
+    ],
+    "unknownInputs": "UNKNOWN_REQUIRES_TRACE; do not infer from screen similarity",
+    "foodArt": "Independently authored production SVG meat/capsule amount stages; Clean tool icon and broom/dustpan feedback. See activity/care followup.",
+    "functionalGroundData": "Numeric gameplay inputs only; no NBS/NXR/COL files, render tile IDs, ROM bytes or source images loaded",
+    "otherArtApprovals": "Unchanged; existing art registrations retain their own boundaries",
+    "physicalDeviceQA": false,
+    "shippingReady": false
+  },
+  "followup": "RAISING_ACTIVITY_CARE_FIX.v1.json"
+}

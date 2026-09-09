@@ -26,5 +26,5 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Run deterministic test suite
-        run: npm test
+      - name: Run repository-contained deterministic tests
+        run: npm run test:ci

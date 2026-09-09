@@ -1,0 +1,70 @@
+{
+  "date": "2026-09-06",
+  "status": "PASS_BOUNDED_MOVEMENT_NOT_NORMAL_CAPTURE",
+  "liveMovementCalls": 208,
+  "controlledDirectionCases": 96,
+  "controlledGridReaderResults": 64,
+  "originalReplayUnchanged": {
+    "actions": true,
+    "events": true,
+    "frames": true,
+    "initial": true,
+    "final": true,
+    "card": true
+  },
+  "sourceStateHashPreserved": true,
+  "focusedTests": {
+    "passed": 13,
+    "failed": 0
+  },
+  "regressionTests": {
+    "passed": 956,
+    "failed": 0,
+    "skipped": 0,
+    "command": "node --v8-pool-size=1 --test --test-concurrency=1 tests/*.mjs",
+    "log": "R:\\Projects\\Championship2026\\_archive\\hunt-movement-2026-09-06\\regression.log"
+  },
+  "gitDiffCheck": 0,
+  "guiCapture": "FAILED_E_NOINTERFACE_0x80004002",
+  "originalExecution": "ISOLATED_PY_DESMUME_0.9.12_LOADING_OWNER_0.9.13_STATE",
+  "normalEntryCapturePlayable": false,
+  "movementRuntimeBound": false,
+  "artifacts": [
+    {
+      "path": "scripts/research/hunt_movement_observer.py",
+      "sha256": "d7a3617e9535a46c99f685d808e1784c22598d8b3e1f5966b3b0e912fdd97df3"
+    },
+    {
+      "path": "scripts/research/check-hunt-movement-cpu.py",
+      "sha256": "1b12a42d8a5f11f1a4ab555152609c91307e7ac0ef6b6a235e0d3204e7548e93"
+    },
+    {
+      "path": "scripts/research/trace-hunt-native-touch.py",
+      "sha256": "f7c2ce486bf158fdf52d26ec92a1d8efe1110dda3758ea58369523ec6e592df9"
+    },
+    {
+      "path": "src/championship/hunt/capture/nativeHuntMovement.js",
+      "sha256": "51c6d6445251ab4822a2ea30fa510a66e72c7622da7d0e83f2c3cfed72a82124"
+    },
+    {
+      "path": "tests/championship-hunt-movement-cases.mjs",
+      "sha256": "4ba22aa68182df34b5e040ac1c90280639f639c6210e35695f8bc5c1fac3ea47"
+    },
+    {
+      "path": "docs/research/HUNT_MOVEMENT_REPLAY_2026-09-06.json",
+      "sha256": "9b81c59addd500b00833fbfbd7f9c9e71e327d29c18986cec6d7e939c9909b60"
+    },
+    {
+      "path": "docs/research/HUNT_MOVEMENT_CPU_CHECK_2026-09-06.json",
+      "sha256": "a71af57b317e48db012833ec150d5cfd3becdd3076217bc20bc31514ff360e1e"
+    },
+    {
+      "path": "docs/research/HUNT_MOVEMENT_CLOSURE_2026-09-06.md",
+      "sha256": "a7002211cdda0fa97002abf680777dae316aa7b90a92cdb309059d8c3b494cae"
+    },
+    {
+      "path": "docs/contracts/championship/HUNT_CAPTURE_DATAFLOW.v1.json",
+      "sha256": "61c5ea01e1e3362482a00045408cfa788ddb6a0deb0625e2e5eb3adb73508165"
+    }
+  ]
+}

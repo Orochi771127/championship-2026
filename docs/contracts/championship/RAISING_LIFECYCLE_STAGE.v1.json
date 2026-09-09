@@ -1,0 +1,88 @@
+{
+  "contract": "RAISING_LIFECYCLE_STAGE.v1",
+  "date": "2026-09-09",
+  "status": "CORE_FLOW_INTEGRATED_FULL_ORIGINAL_STAGE_OPEN",
+  "overallOriginalParity": "PARTIAL",
+  "ownerScope": "Owner-authorized two stages: original lifecycle and persistence, championship and morning messages, opening story/tutorial; then title/training/evolution/audio and browser/device acceptance.",
+  "report": "docs/research/RAISING_LIFECYCLE_STAGE_2026-09-08.md",
+  "parent": "RAISING_ACTIVITY_CARE_FIX.v1",
+  "authorities": {
+    "gameplay": "championshipStandaloneApp existing Raising actors and individual profiles",
+    "calendar": "Existing R2 world-clock reducer",
+    "rng": "Existing 217-channel persistent gameplay RNG",
+    "save": "Existing v5 envelope and ChampionshipPersistentSavePort; optional nativeHome child",
+    "ui": "Existing DOM Home, toolbar and lifecycle overlay",
+    "rendering": "Existing single Pixi Application and scene",
+    "time": "Existing championshipClockDriver"
+  },
+  "integrated": [
+    "477 ordered evolution rules, 26 predicates, rank/capacity, ancestry and extended lifetime",
+    "Cage program attribute and condition writers, original RNG consumption, same-Cage exclusion, and training-end evolution check",
+    "Ordinary evolution and egg rebirth commit at frame 272 with stable individual identity and persistent book branch",
+    "State-21 disappearance releases the native pool membership after the effect completes",
+    "Autonomous waste, forty-slot pool, per-Cage capacity, failed-spawn consequence, environment signals, clean hit box and Save/Continue",
+    "Fatigue sleep, interrupted and complete wake-up, critical illness and morning transition",
+    "Ordered remaining-day and 540-minute overnight settlement, food quantity/aging, individual and Cage effects",
+    "End Day Yes/No, fade, existing save transaction, eight-day calendar acknowledgement, return to 07:00 Home",
+    "Failed save retains the last durable checkpoint and retry does not repeat overnight settlement",
+    "General title registration/cancellation, result/rank flags and all-title fee waiver reach the existing calendar, Gate debit and v5 save",
+    "Morning message queue, numeric selection, money/item/egg gifts, cake/feast and saved read state",
+    "Original treatment admission, medicine result, sleep/eating exits, numeric presentation timeline and inventory Save/Continue",
+    "Day-end save keeps pending daylight minutes; calendar acknowledgement and Continue reconstruct before the two overnight passes",
+    "Reconstruction preserves Cage pool order, circular resident/food traversal and member-added RNG notifications",
+    "LOGIN and named new-game mail flow, saved trainer/egg names, DOM training labels and title focus/status-bar repairs",
+    "Four-card opening story uses original per-frame reveal, wait and touch-release progression before the registration envelope; independently authored DOM pictures"
+  ],
+  "evidence": {
+    "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "cpuReceipt": "docs/research/RAISING_LIFECYCLE_CPU_CHECK_2026-09-08.json",
+    "calendarCpuReceipt": "docs/research/RAISING_CALENDAR_CPU_CHECK_2026-09-09.json",
+    "functionalCatalog": "src/data/championship/catalogs/raising-lifecycle.r1.json",
+    "liveTrace": "PRIVATE raising-lifecycle-2026-09-08/live01..live05",
+    "video": "https://www.bilibili.com/video/BV13u411B7BK/",
+    "normalPathTests": "tests/championship-raising-lifecycle-app-cases.mjs",
+    "visualFixture": "tests/fixtures/championship-raising-lifecycle-review.html",
+    "rebuildObservedReceipt": "docs/research/RAISING_HOME_REBUILD_OBSERVED_2026-09-09.json",
+    "treatmentCpuReceipt": "docs/research/RAISING_TREATMENT_CPU_CHECK_2026-09-09.json",
+    "continuationValidation": "docs/reports/parity-audit/2026-09-09/lifecycle-opening-continuation-validation.json",
+    "openingStoryCpuReceipt": "docs/research/OPENING_STORY_CPU_CHECK_2026-09-09.json"
+  },
+  "remainingInThisStage": [
+    {
+      "id": "DAY_CHANGE_CHAMPIONSHIP_FLAGS",
+      "status": "PARTIAL",
+      "detail": "General registration/cancellation, result/rank and calendar persistence are connected, including the all-title Gate fee waiver. Championship entry, actual player party and multi-round result progression remain partial."
+    },
+    {
+      "id": "DAY_CHANGE_NOTIFICATION_QUEUE",
+      "status": "PARTIAL",
+      "detail": "Four-message queue, ordered morning selection, gifts, read effects and entry reminders are connected. All story/health/unlock trigger producers and a device birthday adapter remain incomplete."
+    },
+    {
+      "id": "RAISING_FULL_SCENE_DIFFERENTIAL",
+      "status": "PARTIAL",
+      "detail": "One original two-resident Home reconstruction now matches all projected profile fields, positions, ground objects and all 31 ordered RNG draws across four checkpoints. Wider layouts, populations and exceptional paths remain unverified."
+    },
+    {
+      "id": "LIFECYCLE_PRESENTATION_ACCEPTANCE",
+      "status": "PARTIAL",
+      "detail": "Title, naming mail flow, four-card story, training labels, special food and treatment graphics are integrated. Original picture fidelity, full tutorial, sound, all form pairs and physical device acceptance remain incomplete."
+    },
+    {
+      "id": "OPENING_TUTORIAL",
+      "status": "PARTIAL",
+      "detail": "Naming and four-card automatic/touch opening story are implemented. Original Raising operated through Gate, Hunt demonstration and first manual capture; remaining Hunt and battle tutorial interaction and full runtime teaching remain open."
+    }
+  ],
+  "gates": {
+    "privateRomPayloadAddedToRuntime": false,
+    "newRendererOrTicker": false,
+    "newSaveAuthority": false,
+    "normalPlayableCore": true,
+    "fullOriginalStageComplete": false,
+    "humanAcceptance": false,
+    "physicalPhoneQA": false,
+    "shippingReady": false
+  },
+  "continuationReport": "docs/research/LIFECYCLE_OPENING_TWO_STAGE_2026-09-09.md"
+}

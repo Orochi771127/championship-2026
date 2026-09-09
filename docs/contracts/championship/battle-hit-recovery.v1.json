@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "laterNormalFlowContract": "docs/contracts/championship/battle-normal-flow.v1.json",
+  "historicalLimitsNote": "R9 supersedes ordinary one-slot/approach/movement limits and normal seed fixtures below. This R8 CPU and normal-runtime receipt remains historical, not overwritten.",
+  "status": "ROM_CPU_VERIFIED_WRITERS_NORMAL_RUNTIME_BOUND_FULL_BATTLE_PARTIAL",
+  "scope": "Existing normal AI attack result -> combatant writes -> notification 15 reaction/landing -> 18/19/20/21 recovery/final down",
+  "originalFullMatchParity": false,
+  "authority": {
+    "state": "Existing battleSession combatants, nativeActors memory and animator",
+    "rng": "Existing battle RNG channel 216; no second RNG stream",
+    "clock": "Existing session frame and native tick; notification update follows state dispatch even when state is throttled/suspended",
+    "presentation": "Existing DOM HP/status and Pixi character projection; existing Three impact overlay"
+  },
+  "evidence": {
+    "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "overlay19Sha256": "d660e3e0bf243541c356c54dcbd1aec58e8df6c2dfaf4a5854d375a5f2d13715",
+    "hitResolver": "021149A8, post-core writes 02114D20..02115670; action override affects move+14, not move+50",
+    "status": "0211452C/021145C0; status threshold uses unclamped sl/r4, damage curve clamps at 26",
+    "notification": "02112820 old notification exit, 02112980 dispatch, 021130C8 reaction, 02113874 exit",
+    "recovery": "021138C0 / 021139AC / 02113B4C / 02113D10; candidate scan 021144CC group7; +98 initialized at 02114274",
+    "vertical": "0204819C then 020482AC; rotation words actor+C/+10 via 0204730C",
+    "dot": "0210D700..0210D8B4; HP<0 only after due damage ticks; ordinary hit HP<=0 clamp is immediate at 02114FAC",
+    "cpuReceipt": "docs/research/BATTLE_HIT_RECOVERY_CPU_2026-09-07.json",
+    "normalReceipt": "docs/art/production/battle-hit-recovery-r8/normal-runtime.json"
+  },
+  "verifiedCpuComparisons": {
+    "hitWriters": 251,
+    "reactionFrames": 8106,
+    "landingAndStatusBoundaries": 192,
+    "recoveryCases": 1254,
+    "dotBranches": 245
+  },
+  "preservedRules": [
+    "State 23 alone is not death; living reactions remain present and cannot relaunch until notification1",
+    "Normal hits clamp HP<=0 immediately, then reaction15 lands before down/recovery notification18",
+    "Reaction type5 does not write HP and enters reaction11 with counter0",
+    "Negative status cleanup and positive-slot cleanup differ between ordinary knockout and DoT",
+    "Recovery candidate requires cost strictly below current resource; original raw probability thresholds use channel216",
+    "Recovery20 enters raw sequence33, charges a selected recovery move once, restores truncated 5 percent max HP or 30 percent for move29",
+    "Recovery returns to notification1 only when the native animation finishes; ending aborts pending recovery",
+    "Final-down21 sets flag9A bit1 and counts the team slot once"
+  ],
+  "limits": [
+    "CPU writer comparisons supply the already computed damage and level indices; they do not claim full original resolver or full original match execution",
+    "CPU animation finish/height, recovery candidate, team/ending inputs and presentation services are controlled seams",
+    "Ordinary launch/approach/target states remain the existing partial adapter; original three ordinary action slots are represented by one current committed launch",
+    "Common notification tail implements hit-path bounds/facing/point copy; unrelated ordinary velocity/turn integration is not fully ported",
+    "Status writes/expiration and reaction12 landing are bound; remaining status state bodies are not all accepted",
+    "Normal fixtures still use preset player teams and explicit schedule/RNG; Home-owned party and non-battle triggers are outside this slice",
+    "Normal special moves180/181 still report object graph 0211DF68; moves180/181/255 report unresolved sound host0203EA30",
+    "Full 2D projectile banks, original hitstop/camera/audio and every-move acceptance remain open",
+    "No ROM image or model was added to runtime; numeric control-flow tables are separate from art/shipping approval",
+    "Browser phone viewport review is not physical-device or shipping acceptance"
+  ]
+}

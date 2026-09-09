@@ -108,14 +108,14 @@ MOVES = {
         (0x10, "u32", "field10", "OVL19:0x02116D94 ldr; 0..3 pick a four-arm jump calling 0x02112820 with 8..11"),
         (0x14, "u32", "field14", "OVL19:0x02114E50 ldr"),
         (0x18, "u32", "field18", None),
-        (0x1C, "u32", "pointer1C", "OVL19:0x0211C1B8 ldr; three distinct OVL19 code addresses plus null"),
+        (0x1C, "u32", "pointer1C", "OVL19:0x0211C1B8 ldr; a battle-script entry address, not a code pointer -- all 595 non-null values land inside the OVL19 bytecode blob 0x021204A0..0x0212FDA4, across 3 distinct entries"),
         (0x20, "s8", "field20", "OVL19:0x0211C52C ldrsb"),
         (0x21, "s8", "field21", "OVL19:0x0211C53C ldrsb"),
         (0x22, "u8", "field22", "OVL19:0x0211C514 ldrb"),
         (0x23, "u8", "field23", None),
         (0x24, "u16", "field24", "OVL19:0x0211A0B4 ldrh; the high byte indexes a per-battle counter array"),
         (0x26, "u16", "field26", None),
-        (0x28, "u32", "pointer28", "OVL19:0x0211A0FC ldr, compared against two OVL19 code addresses"),
+        (0x28, "u32", "pointer28", "OVL19:0x0211A0FC ldr, compared against two script addresses; a battle-script entry address, 31 distinct, all inside the bytecode blob. Many are odd, which reads like a Thumb pointer but is not: the bytecode is a byte stream and its routines are unaligned"),
         (0x2C, "s8", "field2C", "OVL19:0x0211CAF0 ldrsb"),
         (0x2D, "s8", "field2D", "OVL19:0x0211CB00 ldrsb"),
         (0x2E, "u16", "field2E", "OVL19:0x0211CB10 ldrh"),
@@ -126,7 +126,7 @@ MOVES = {
         (0x36, "u16", "field36", "OVL19:0x0211A0E4 ldrh; high byte indexes the same array as +0x24"),
         (0x38, "u16", "field38", "OVL19:0x0211CADC ldrh"),
         (0x3A, "u16", "field3A", None),
-        (0x3C, "u32", "pointer3C", "OVL19:0x0211C900 ldr; three distinct OVL19 code addresses plus null"),
+        (0x3C, "u32", "pointer3C", "OVL19:0x0211C900 ldr; a battle-script entry address, 2 distinct, all inside the bytecode blob"),
         (0x40, "s8", "field40", "OVL19:0x0211C8E0 ldrsb"),
         (0x41, "s8", "field41", "OVL19:0x0211C8F0 ldrsb"),
         (0x42, "u8", "field42", None),
@@ -343,7 +343,13 @@ def build_field_map(spec: dict, records: list[dict]) -> tuple[list[dict], set[st
             "name": name,
             "width": width,
             "readSite": site,
-            "widthEvidence": "TRACED_LOAD" if site else "CONSTANT_ZERO_PADDING",
+            # An untraced column gets NO_TRACED_READ_SITE, not a claim about its
+            # bytes. The old default said CONSTANT_ZERO_PADDING for every untraced
+            # column without ever checking, which was false for at least two of
+            # them: title-event field0C carries -1 (0xFFFFFFFF) in 15 records and
+            # field20 exceeds 16 bits in 24. A label the build never verifies must
+            # not sound like a measurement.
+            "widthEvidence": "TRACED_LOAD" if site else "NO_TRACED_READ_SITE",
         }
         if len(values) == 1:
             entry["constantValue"] = records[0][name]

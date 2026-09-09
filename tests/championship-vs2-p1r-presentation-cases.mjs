@@ -8,12 +8,14 @@ const field = fs.readFileSync("src/championship/presentation/vs2/createHuntField
 const manifest = JSON.parse(fs.readFileSync("assets/production/temporary/vs2-hunt/manifest.json", "utf8"));
 
 test("VS2-P screens consume only the injected presentation source", () => {
-  assert.doesNotMatch(screens, /^\s*import\s/m);
+  const imports = [...screens.matchAll(/^import .* from "([^"]+)";/gm)].map(match => match[1]);
+  assert.deepEqual(imports, ["../text/uiText.js"], "only display copy may be imported");
+  assert.doesNotMatch(screens, /import\s*\(/);
   assert.match(screens, /CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R/);
   assert.match(screens, /PLAYER_MODE/);
   assert.match(screens, /DEVELOPER_EVIDENCE_MODE/);
   assert.doesNotMatch(screens, /createHuntStore|createSave|new\s+Application|PIXI\.Application/);
-  assert.doesNotMatch(screens, /CAPTURE|HUNT_RESULT/);
+  assert.doesNotMatch(screens, /screens\.(enter|exit)|recordCapturedCardCreature|applyBitsTransaction/);
 });
 
 test("unknown Hunt toolbar semantics stay neutral and developer-gated", () => {
@@ -21,7 +23,10 @@ test("unknown Hunt toolbar semantics stay neutral and developer-gated", () => {
   assert.match(screens, /mode === VS2_PRESENTATION_MODES\.DEVELOPER/);
   assert.match(screens, /RAW_SLOT_/);
   assert.match(screens, /UNKNOWN_REQUIRES_TRACE/);
-  assert.doesNotMatch(screens, /ATTACK|CAPTURE|ITEM|SCAN|FLEE/);
+  // The old shell remains neutral. The separately traced native tools now
+  // include CAPTURE_TRAP; banning its name across the whole file hides scope.
+  const shell = screens.slice(screens.indexOf("function toolbarShell("), screens.indexOf("export async function createGateSelectView"));
+  assert.doesNotMatch(shell, /ATTACK|CAPTURE|ITEM|SCAN|FLEE/);
 });
 
 test("the Hunt Loadout screen is built on the recovered original structure", () => {
@@ -50,7 +55,7 @@ test("VS2-P CSS carries the P1R mobile contract", () => {
 
 test("temporary Hunt renderer preserves the shared Pixi/runtime authority boundary", () => {
   assert.doesNotMatch(field, /new\s+PIXI\.Application|new\s+Application/);
-  assert.doesNotMatch(field, /^\s*import\s/m);
+  assert.deepEqual([...field.matchAll(/^import .* from "(.*?)";/gm)].map((match) => match[1]), ["./huntFieldPointer.js"]);
   assert.match(field, /stage\.createSceneRoot/);
   assert.match(field, /app\.ticker\.add\(advance\)/);
   assert.match(field, /app\.ticker\.remove\(advance\)/);

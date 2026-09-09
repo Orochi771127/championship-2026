@@ -12,7 +12,7 @@ import {
 import { CHAMPIONSHIP_MODERN_SAVE_KEY } from "../src/championship/app/championshipStandaloneSave.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const catalog = JSON.parse(fs.readFileSync(path.join(repoRoot, "src/data/championship/catalogs/entities.r1.json"), "utf8"));
+const catalog = JSON.parse(fs.readFileSync(path.join(repoRoot, "src/data/championship/catalogs/creature-species.r1.json"), "utf8"));
 const presentation = JSON.parse(fs.readFileSync(
   path.join(repoRoot, "docs/contracts/championship/raising-home-presentation.v1.json"), "utf8"
 ));
@@ -42,16 +42,20 @@ async function freshSource(storage = memoryStorage()) {
 test("INT-RH2 source projects the actual Phase 1 snapshot into the bounded frame", async () => {
   const { app, source } = await freshSource();
   const snapshot = app.getSnapshot();
-  assert.equal(snapshot.residents[0].speciesId, "greyshade-cat", "fixture drift: Phase 1 species IDs changed shape");
+  assert.equal(snapshot.residents[0].speciesId, "species-000", "fixture drift: species IDs changed shape");
 
   const frame = source.getFrame();
   assert.equal(source.getFrame(), frame, "a pure getFrame read rebuilt or mutated the frame");
   assert.equal(frame.contractVersion, RAISING_PRESENTATION_CONTRACT_VERSION);
   assert.equal(frame.revision, 0);
-  assert.equal(frame.clock.display, "08:00");
+  assert.equal(frame.clock.display, "07:00", "ROM default clock initialization starts at 07:00");
   assert.equal(frame.residents.length, snapshot.residents.length);
-  assert.equal(frame.residents[0].speciesId, "championship:creature:greyshade-cat");
-  assert.equal(frame.residents[0].sprite.idle.sheet, presentation.idle.species["greyshade-cat"].sheet);
+  assert.equal(frame.residents[0].speciesId, "championship:creature:species-000");
+  // The three invented creatures carried placeholder sprite sheets. They were
+  // deleted on 2026-09-03; the cartridge species have no art yet, so the source
+  // must fall back rather than throw. That fallback is the assertion now.
+  assert.equal(frame.residents[0].sprite.idle.sheet, null, "no art for a cartridge species yet");
+  assert.equal(frame.residents[0].sprite.portrait, null);
   assert.equal(frame.residents[0].cageId, CAGES[0].cageId);
   assert.equal(frame.cages[0].occupantCount, frame.cages[0].occupantIds.length);
   assert.equal(Object.isFrozen(frame), true);
@@ -172,9 +176,66 @@ test("INT-RH2 save/reload proof restores runtime truth without restoring transie
   assert.equal(resident.cageId, CAGES[1].cageId);
   assert.notEqual(resident.intent, "care-reaction", "ephemeral reaction was promoted into save truth");
   assert.equal(restored.selection.creatureId, null, "selection was promoted into save truth");
-  assert.equal(restored.save.phase, "RESTORED");
+  assert.equal(restored.save.phase, "DIRTY", "original Home entry advances the saved slot RNG");
   assert.equal(reloaded.getRaisingState().interactions[residentId].careCount, 1);
   await reloaded.dispose();
+});
+
+test("INT-RH2 a delayed first subscriber immediately catches the 22:00 stop and dirty save state", async () => {
+  const { app, source } = await freshSource();
+  source.intents.requestSave();
+  assert.equal(source.getFrame().clock.display, "07:00");
+  assert.equal(source.getFrame().save.phase, "SAVED");
+
+  // The browser constructs a source before awaiting scene assets. Its clock
+  // owner can finish the day while no view is listening, so no later minute
+  // event can be relied on to repair that source's initial cached frame.
+  app.advanceClock({ units: (21 * 60 + 59 - app.getSnapshot().clockMinutes) * 400 });
+  app.advanceNaturalClock({ frames: 120 });
+  assert.equal(app.getSnapshot().clockMinutes, 22 * 60);
+  assert.deepEqual(app.getClockRunState(), { running: false, reason: "DAY_END" });
+  assert.equal(source.getFrame().clock.display, "07:00", "the delayed view has not subscribed yet");
+
+  const observed = [];
+  const unsubscribe = source.subscribe((frame) => observed.push(frame));
+  assert.equal(observed.length, 1, "attaching must catch up without waiting for a future tick");
+  assert.equal(observed[0].clock.display, "22:00");
+  assert.equal(observed[0].save.phase, "DIRTY");
+  assert.equal(source.getFrame(), observed[0]);
+  assert.equal(app.advanceNaturalClock({ frames: 120 }).accepted, false);
+  assert.equal(observed.length, 1, "a stopped clock does not publish a second repair frame");
+  unsubscribe();
+  await app.dispose();
+});
+
+test("INT-RH2 clock publications preserve care reaction and care at the saved day-end marks the game dirty", async () => {
+  const { app, source } = await freshSource();
+  const residentId = source.getFrame().residents[0].creatureId;
+  const unsubscribe = source.subscribe(() => {});
+  const actor = () => source.getFrame().residents.find((entry) => entry.creatureId === residentId);
+  source.intents.careForCreature(residentId);
+  assert.equal(actor().intent, "care-reaction");
+  const beforeClock = source.getFrame().revision;
+  app.advanceClock({ units: 400 });
+  assert.equal(source.getFrame().clock.display, "07:01");
+  assert.ok(source.getFrame().revision > beforeClock);
+  assert.equal(actor().intent, "care-reaction", "a clock-only update cannot cancel the active response");
+
+  app.advanceClock({ units: (21 * 60 + 59 - app.getSnapshot().clockMinutes) * 400 });
+  app.advanceNaturalClock({ frames: 120 });
+  assert.equal(source.getFrame().clock.display, "22:00");
+  assert.equal(source.intents.requestSave().phase, "SAVED");
+  assert.equal(app.getClockRunState().running, false);
+  const clockAtSave = app.getSnapshot();
+
+  source.intents.careForCreature(residentId);
+  assert.equal(app.savePort.getStatus().phase, "DIRTY");
+  assert.equal(source.getFrame().save.phase, "DIRTY", "care itself dirties the checkpoint when no clock update can do so");
+  assert.equal(app.getRaisingState().interactions[residentId].careCount, 2);
+  assert.equal(app.getSnapshot(), clockAtSave, "care does not advance the stopped clock or original-unknown stats");
+  assert.equal(actor().intent, "care-reaction", "save-status publication must not swallow the new care reaction");
+  unsubscribe();
+  await app.dispose();
 });
 
 test("INT-RH2 Pixi field is a scene on the one shared stage and owns no bootstrap", () => {

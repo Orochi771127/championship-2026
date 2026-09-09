@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-Hant">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hunt 原始動作逐幀驗收</title>
+<style>
+  :root { color-scheme: dark; font-family: system-ui,sans-serif; background:#0a171a; color:#e2eeed }
+  body { margin:0; padding:20px; max-width:780px; margin-inline:auto }
+  h1 { font-size:23px; margin:0 0 10px } p { color:#a9c3c5; line-height:1.6 }
+  #field { height:310px; border:1px solid #436367; border-radius:12px; overflow:hidden; margin-block:16px }
+  button,input { font:inherit } button { background:#25474c; border:1px solid #5b8186; color:inherit; padding:10px; border-radius:7px }
+  .buttons { display:flex; flex-wrap:wrap; gap:8px } input[type=range] { width:100%; margin:18px 0 }
+  pre { white-space:pre-wrap; overflow-wrap:anywhere; background:#11262a; padding:14px; border-radius:8px; line-height:1.5 }
+</style>
+<h1>Hunt 原始動作逐幀驗收</h1>
+<p>Nyokimon · species-010 · m003_nyokimon<br>原作觸控捕獲記錄，使用正式 Hunt Pixi 場景與角色素材載入器。此頁為隔離的美術驗收，不代表正常遊戲已能捕獲返家。畫面以 3 倍鏡頭置中檢查角色。</p>
+<div class="buttons" id="phases">
+  <button data-tick="136">被繩索綁住</button><button data-tick="143">拉扯</button>
+  <button data-tick="214">強拉反應</button><button data-tick="342">HP 歸零</button>
+  <button data-tick="357">可用手收集</button><button data-tick="376">收集起始</button><button data-tick="386">角色隱藏</button><button data-tick="470">卡片入帳</button>
+</div>
+<div id="field"></div>
+<label for="frame">原作更新畫格</label><input id="frame" type="range" min="1" max="476" value="143">
+<div class="buttons"><button id="play">播放記錄</button><button id="previous">上一格</button><button id="next">下一格</button><button id="motion">減少動態：關</button></div>
+<pre id="status" role="status">載入原始記錄與素材…</pre>
+<script type="module" src="./championship-hunt-character-review.mjs"></script>
+</html>

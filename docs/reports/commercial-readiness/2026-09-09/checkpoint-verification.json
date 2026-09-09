@@ -1,0 +1,60 @@
+{
+  "date": "2026-09-09",
+  "baselineCommit": "15874053c6f0e5696b0f17fabe0863248e787b1b",
+  "overallStatus": "PARTIAL",
+  "localFullRegression": {
+    "passed": 1384,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 93387.7775,
+    "boundary": "Working tree with local controlled reference assets; before extracting the existing manifest-presence assertion into its own local test."
+  },
+  "focusedAfterTestPartition": {
+    "passed": 7,
+    "failed": 0,
+    "files": [
+      "tests/championship-art-production-a0-cases.mjs",
+      "tests/championship-art-local-manifests-cases.mjs"
+    ]
+  },
+  "candidateCheckout": {
+    "method": "git checkout-index into isolated ignored directory; tests run from candidate cwd; npm ci --ignore-scripts",
+    "initialProbe": {
+      "passed": 1142,
+      "failed": 44,
+      "status": "DIAGNOSTIC_NOT_ACCEPTANCE",
+      "causes": [
+        "Absent controlled reference/art workspace assets",
+        "Missing numeric Hunt and art registry fixtures subsequently added",
+        "Relative node_modules imports before candidate npm ci"
+      ]
+    },
+    "finalPortableRegression": {
+      "passed": 1169,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 77486.4685,
+      "portableModules": 159,
+      "localReferenceModules": 27
+    },
+    "boundary": "Reference/art test modules remain in npm test; explicit scope manifest required for every test module."
+  },
+  "art": {
+    "registeredBundles": 25,
+    "shippingReadyBundles": 0,
+    "appearanceQueueDefaultReplaced": 0
+  },
+  "release": {
+    "rights": "DEFERRED_UNTIL_RELEASE",
+    "publicDeployment": "EXPLICIT_WORKFLOW_DISPATCH_ONLY",
+    "deployedByThisTask": false
+  },
+  "freshBrowserOrDeviceQA": false,
+  "logSha256": {
+    "commit-full-regression.log": "bbf541e1dfeece64c5aefdd90fd0596b2a6168f5ef733ad365998b2980069ed8",
+    "candidate-clean-regression.log": "f5e9176809f9d73781aeb4c45524ef9db50cb921e97943e5b58cac5a848b68be",
+    "candidate-ci-final.log": "d2ed388b2448b36600f1f66e6f0e5026ae5ea12ca6ab70e8576b0bf851dcaaea",
+    "candidate-npm-ci.log": "92a8b414a0cdf5061b74b7b3568892c37685f94d7b036df610b266d507f61a48"
+  },
+  "remoteCI": "TO_BE_VERIFIED_AFTER_PUSH"
+}

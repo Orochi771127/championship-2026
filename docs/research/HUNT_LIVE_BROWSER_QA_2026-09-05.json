@@ -1,0 +1,30 @@
+{
+  "status": "RESULT_FIXTURE_AND_NORMAL_NAVIGATION_PASS_CAPTURE_NORMAL_ENTRY_NOT_ACCEPTED",
+  "viewport": { "width": 390, "height": 844 },
+  "browser": "Codex in-app browser",
+  "input": "Supported DOM/mouse controls; no physical touch-device acceptance",
+  "resultFixture": {
+    "path": "tests/fixtures/championship-hunt-result-review.html",
+    "storage": "Isolated in-memory Map; no product browser save modified",
+    "encounter": "Actual Gate0 wild7 observation; bounded soft-pull and explicit phase inputs",
+    "checks": [
+      "17 rows ordered card first then16 Home individuals",
+      "Exact Home1 release confirmation can be cancelled without removal",
+      "Name Native Seven survives opening release choice",
+      "Confirm Home1 release keeps same-species Home2 and other rows",
+      "Forced quota failure retains result/card and reports save failure",
+      "Retry returns Home count16 with new individual Native Seven",
+      "Capacity alert remains visible above fixed return button with long scrollable roster"
+    ],
+    "finalAlertBounds": { "top": 673.2, "bottom": 702.0 },
+    "consoleErrors": []
+  },
+  "normalEntry": {
+    "path": "championship.html",
+    "flow": ["New Game", "SYSTEM", "Hunt", "LIST VIEW", "01 南橋峽谷", "CONTINUE", "BEGIN HUNT", "RETURN HOME"],
+    "consoleErrors": [],
+    "huntTools": "Eight disabled slots",
+    "capturePlayable": false
+  },
+  "regression": { "fullPassed": 940, "fullFailed": 0, "finalFocusedPassed": 30, "finalFocusedFailed": 0, "diffCheck": "PASS" }
+}

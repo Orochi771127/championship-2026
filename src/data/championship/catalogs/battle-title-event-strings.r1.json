@@ -1,0 +1,526 @@
+{
+  "schemaVersion": 1,
+  "authority": "CHAMPIONSHIP_2026_PRODUCT",
+  "catalogKind": "championship:2026:catalog:battle-title-event-strings",
+  "sourceEvidence": "ROM_VERIFIED",
+  "language": "ja",
+  "languageNote": "The cartridge under study is the Japanese YDIJ release, so these are the Japanese names the ROM itself carries. The gameplay footage in the research set is the English release, which is a different build; its English labels are NOT evidence for this ROM's string indices and no translation is invented here.",
+  "source": {
+    "file": "nitrofs/ui/txt/txt_list_txt.dat",
+    "sha256": "e9f390cab3c61e4c17791f2253043a8d1ca9bfc036f48ea9723ef769ef8012b3",
+    "encoding": "utf-16-le entries, raw 3C 3E 0A terminator",
+    "entryCount": 1568
+  },
+  "blocks": {
+    "name": {
+      "start": 675,
+      "count": 62,
+      "column": "field00"
+    },
+    "description": {
+      "start": 737,
+      "count": 62,
+      "column": "field04"
+    }
+  },
+  "indexEvidence": "battle-title-events field00 runs 675..736 contiguously and field04 runs 737..798 contiguously, with field04 - field00 == 62 for all 62 records",
+  "recordCount": 62,
+  "records": [
+    {
+      "recordIndex": 0,
+      "nameStringIndex": 675,
+      "descriptionStringIndex": 737,
+      "name": "アクセストゥルーパー",
+      "description": "成長期のトイアグモンと\n１VS１のガチンコソロバトル！\n\n\n１ＶＳ１バトル",
+      "descriptionRaw": "成長期のトイアグモンと\\n１VS１のガチンコソロバトル！\\n\\n\\n\u001b\r１ＶＳ１\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 1,
+      "nameStringIndex": 676,
+      "descriptionStringIndex": 738,
+      "name": "キャプテンリージョン",
+      "description": "むてきとよばれるコンビとバトル！\nタイトルホルダーは１体すくなく\n成熟期２体だがゆだんはできない！\n『成熟期』げんてい\n３ＶＳ２バトル",
+      "descriptionRaw": "むてきとよばれるコンビとバトル！\\nタイトルホルダーは１体すくなく\\n成熟期２体だがゆだんはできない！\\n\u001b\r『成熟期』\u001b\u0002げんてい\\n\u001b\r３ＶＳ２\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 2,
+      "nameStringIndex": 677,
+      "descriptionStringIndex": 739,
+      "name": "サンシャインレボリューション",
+      "description": "ビッグ７とよばれる\nさいきょうレベルタイトルの１つ！\nそのれきしに　なをきざめ！\n\n３ＶＳ３バトル",
+      "descriptionRaw": "ビッグ７とよばれる\\nさいきょうレベルタイトルの１つ！\\nそのれきしに　なをきざめ！\\n\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 3,
+      "nameStringIndex": 678,
+      "descriptionStringIndex": 740,
+      "name": "ベクターパーティション",
+      "description": "リーダーであるレナモンのワザを\nいかにおさえるかがしょうぶの\nポイント！\n\n３ＶＳ３バトル\n",
+      "descriptionRaw": "リーダーであるレナモンのワザを\\nいかにおさえるかがしょうぶの\\nポイント！\\n\\n\u001b\r３ＶＳ３\u001b\u0002バトル\\n"
+    },
+    {
+      "recordIndex": 4,
+      "nameStringIndex": 679,
+      "descriptionStringIndex": 741,
+      "name": "ビットエージェント",
+      "description": "ツノモンのパワーにさえきをつければ\nむずかしいあいてではない！\n\n\n３ＶＳ３バトル\n",
+      "descriptionRaw": "ツノモンのパワーにさえきをつければ\\nむずかしいあいてではない！\\n\\n\\n\u001b\r３ＶＳ３\u001b\u0002バトル\\n"
+    },
+    {
+      "recordIndex": 5,
+      "nameStringIndex": 680,
+      "descriptionStringIndex": 742,
+      "name": "タフデジタイザー",
+      "description": "パワーじまんのタッグチーム！\nＨＰをアップさせて　いどもう！\n\n『成長期』げんてい\n３ＶＳ３バトル",
+      "descriptionRaw": "パワーじまんのタッグチーム！\\nＨＰをアップさせて　いどもう！\\n\\n\u001b\r『成長期』\u001b\u0002げんてい\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 6,
+      "nameStringIndex": 681,
+      "descriptionStringIndex": 743,
+      "name": "コアブレーカー",
+      "description": "究極体ファラオモンがとうじょう！\n１VS１のガチンコソロバトル。\nあらゆるテイマーがちゅうもくする\nタイトルマッチだ！\n１ＶＳ１バトル",
+      "descriptionRaw": "究極体ファラオモンがとうじょう！\\n１VS１のガチンコソロバトル。\\nあらゆるテイマーがちゅうもくする\\nタイトルマッチだ！\\n\u001b\r１ＶＳ１\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 7,
+      "nameStringIndex": 682,
+      "descriptionStringIndex": 744,
+      "name": "シルバーフリーズ",
+      "description": "タイトルホルダーは成熟期３体のてごわいトリオ！　それにたいし\n１体で　いどまなければならない\nへんそくマッチだ！\n１ＶＳ３バトル",
+      "descriptionRaw": "タイトルホルダーは成熟期３体のてごわいトリオ！　それにたいし\\n１体で　いどまなければならない\\nへんそくマッチだ！\\n\u001b\r１ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 8,
+      "nameStringIndex": 683,
+      "descriptionStringIndex": 745,
+      "name": "エースオブスプリング",
+      "description": "ルールは1ＶＳ1のソロバトル！\nチームのエースをしゅつじょう\nさせよう！\n\n１ＶＳ１バトル",
+      "descriptionRaw": "ルールは1ＶＳ1のソロバトル！\\nチームのエースをしゅつじょう\\nさせよう！\\n\\n\u001b\r１ＶＳ１\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 9,
+      "nameStringIndex": 684,
+      "descriptionStringIndex": 746,
+      "name": "サマーオブミラージュ",
+      "description": "３VS１のへんそくマッチ！\n３体がかりでホエーモンをたおし\nまなつのはしゃとなれるのか！\n『成熟期』げんてい\n３ＶＳ１バトル",
+      "descriptionRaw": "３VS１のへんそくマッチ！\\n３体がかりでホエーモンをたおし\\nまなつのはしゃとなれるのか！\\n\u001b\r『成熟期』\u001b\u0002げんてい\\n\u001b\r３ＶＳ１\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 10,
+      "nameStringIndex": 685,
+      "descriptionStringIndex": 747,
+      "name": "オータムサバイバー",
+      "description": "タイトルホルダーはクールな完全体\nジュレイモン１体！\nソロでバトルするには　こうげきも\nかいふくも　バランスよく　だ！\n１ＶＳ１バトル",
+      "descriptionRaw": "タイトルホルダーはクールな完全体\\nジュレイモン１体！\\nソロでバトルするには　こうげきも\\nかいふくも　バランスよく　だ！\\n\u001b\r１ＶＳ１\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 11,
+      "nameStringIndex": 686,
+      "descriptionStringIndex": 748,
+      "name": "ジェネラルオブウインター",
+      "description": "３体のタイトルホルダーチームに\n１体でいどむ　へんそくバトル！\nあらゆるテイマーがちゅうもくする\nタイトルマッチだ！\n１ＶＳ３バトル",
+      "descriptionRaw": "３体のタイトルホルダーチームに\\n１体でいどむ　へんそくバトル！\\nあらゆるテイマーがちゅうもくする\\nタイトルマッチだ！\\n\u001b\r１ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 12,
+      "nameStringIndex": 687,
+      "descriptionStringIndex": 749,
+      "name": "ミリオンソロダイブ",
+      "description": "ビッグ７とよばれる\nさいきょうレベルタイトルの１つ！\nてき３体にたいしソロでいどめ！\n\n１ＶＳ３バトル",
+      "descriptionRaw": "ビッグ７とよばれる\\nさいきょうレベルタイトルの１つ！\\nてき３体にたいしソロでいどめ！\\n\\n\u001b\r１ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 13,
+      "nameStringIndex": 688,
+      "descriptionStringIndex": 750,
+      "name": "ドラゴンロード",
+      "description": "さいきょうのリュウぞくをあやつる\nバトル！　あらゆるテイマーが\nちゅうもくするタイトルマッチだ！\nしゅぞく　が『リュウ』げんてい\n３ＶＳ３バトル",
+      "descriptionRaw": "さいきょうのリュウぞくをあやつる\\nバトル！　あらゆるテイマーが\\nちゅうもくするタイトルマッチだ！\\nしゅぞく　が\u001b\r『リュウ』\u001b\u0002げんてい\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 14,
+      "nameStringIndex": 689,
+      "descriptionStringIndex": 751,
+      "name": "ビーストチャンピオン",
+      "description": "あらあらしいやせいのパワーを\nしはいして　ケモノのおうをめざせ！\n\nしゅぞく　が『ケモノ』げんてい\n３ＶＳ３バトル",
+      "descriptionRaw": "あらあらしいやせいのパワーを\\nしはいして　ケモノのおうをめざせ！\\n\\nしゅぞく　が\u001b\r『ケモノ』\u001b\u0002げんてい\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 15,
+      "nameStringIndex": 690,
+      "descriptionStringIndex": 752,
+      "name": "アクアセンチュリオン",
+      "description": "ぶたいは「みず」フィールド！\nしょうぐんユキアグモンを\nちゅうしんとしたチームへいどめ！\n『みずフィールド』で\n３ＶＳ３バトル",
+      "descriptionRaw": "ぶたいは「みず」フィールド！\\nしょうぐんユキアグモンを\\nちゅうしんとしたチームへいどめ！\\n\u001b\r『みずフィールド』\u001b\u0002で\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 16,
+      "nameStringIndex": 691,
+      "descriptionStringIndex": 753,
+      "name": "ウイングマスター",
+      "description": "おおぞらのバトルでは　かぜの力を\nみかたにつけると　ゆうりに\nたたかえる。\nしゅぞく　が『トリ』げんてい\n１ＶＳ１バトル",
+      "descriptionRaw": "おおぞらのバトルでは　かぜの力を\\nみかたにつけると　ゆうりに\\nたたかえる。\\nしゅぞく　が\u001b\r『トリ』\u001b\u0002げんてい\\n\u001b\r１ＶＳ１\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 17,
+      "nameStringIndex": 692,
+      "descriptionStringIndex": 754,
+      "name": "ネイチャーキング",
+      "description": "リーダー「ローズ」のこうげきに\nかえりうちにあったチームは\nかずおおい！\n『成熟期』げんてい\n３ＶＳ３バトル",
+      "descriptionRaw": "リーダー「ローズ」のこうげきに\\nかえりうちにあったチームは\\nかずおおい！\\n\u001b\r『成熟期』\u001b\u0002げんてい\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 18,
+      "nameStringIndex": 693,
+      "descriptionStringIndex": 755,
+      "name": "セイントソルジャーズ",
+      "description": "セイしゅぞくどうしのバトルは\nせいせいどうどうと　バトルする\nしせいがもとめられる。\nしゅぞく　が『セイ』げんてい\n ３ＶＳ３バトル\n ",
+      "descriptionRaw": "セイしゅぞくどうしのバトルは\\nせいせいどうどうと　バトルする\\nしせいがもとめられる。\\nしゅぞく　が\u001b\r『セイ』\u001b\u0002げんてい\\n \u001b\r３ＶＳ３\u001b\u0002バトル\\n "
+    },
+    {
+      "recordIndex": 19,
+      "nameStringIndex": 694,
+      "descriptionStringIndex": 756,
+      "name": "ナイトメアヘッド",
+      "description": "たびかさなるじっけんのすえに\nうまれた　マシーンチームから\nいまだしょうりを　てにしたものは\nいない。　『成熟期』げんてい\n３ＶＳ３バトル",
+      "descriptionRaw": "たびかさなるじっけんのすえに\\nうまれた　マシーンチームから\\nいまだしょうりを　てにしたものは\\nいない。　\u001b\r『成熟期』\u001b\u0002げんてい\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 20,
+      "nameStringIndex": 695,
+      "descriptionStringIndex": 757,
+      "name": "メタルエンペラー",
+      "description": "キカイのデジモンがひばなをちらし\nつよさをもとめてバトルする。\n\nしゅぞく　が『キカイ』げんてい\n３ＶＳ３バトル",
+      "descriptionRaw": "キカイのデジモンがひばなをちらし\\nつよさをもとめてバトルする。\\n\\nしゅぞく　が\u001b\r『キカイ』\u001b\u0002げんてい\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 21,
+      "nameStringIndex": 696,
+      "descriptionStringIndex": 758,
+      "name": "スカイウォーカーズ",
+      "description": "そらのしはいしゃをめざして\nデジモンたちがげきとつする。\n\nしゅぞく　が『リュウ』『トリ』\nげんてい　３ＶＳ３バトル",
+      "descriptionRaw": "そらのしはいしゃをめざして\\nデジモンたちがげきとつする。\\n\\nしゅぞく　が\u001b\r『リュウ』『トリ』\u001b\u0002\\nげんてい　\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 22,
+      "nameStringIndex": 697,
+      "descriptionStringIndex": 759,
+      "name": "ダークソルジャーズ",
+      "description": "アンコク　キカイだけのたいかい。\nえりすぐりのダークソルジャーが\nひばなをちらす！\nしゅぞく　が『キカイ』『アンコク』\nげんてい　３ＶＳ３バトル",
+      "descriptionRaw": "アンコク　キカイだけのたいかい。\\nえりすぐりのダークソルジャーが\\nひばなをちらす！\\nしゅぞく　が\u001b\r『キカイ』『アンコク』\u001b\u0002\\nげんてい　\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 23,
+      "nameStringIndex": 698,
+      "descriptionStringIndex": 760,
+      "name": "ワイルドハンターズ",
+      "description": "てきはパワーファイターがあつまる\nケモノけいのきょうごうチームだ！\n\n『成長期』げんてい\n３ＶＳ３バトル",
+      "descriptionRaw": "てきはパワーファイターがあつまる\\nケモノけいのきょうごうチームだ！\\n\\n\u001b\r『成長期』\u001b\u0002げんてい\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 24,
+      "nameStringIndex": 699,
+      "descriptionStringIndex": 761,
+      "name": "クリアファイターズ",
+      "description": "いろもじつりょくもバランスの\nとれたナイスなチームだ！\n\n３ＶＳ３バトル",
+      "descriptionRaw": "いろもじつりょくもバランスの\\nとれたナイスなチームだ！\\n\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 25,
+      "nameStringIndex": 700,
+      "descriptionStringIndex": 762,
+      "name": "スモールチャレンジャー",
+      "description": "タイトルホルダーは\nきょうりょくなツメをもつ\nギザモンだが　じゃくてんを\nつけばらくしょう！？\n１ＶＳ１バトル",
+      "descriptionRaw": "タイトルホルダーは\\nきょうりょくなツメをもつ\\nギザモンだが　じゃくてんを\\nつけばらくしょう！？\\n\u001b\r１ＶＳ１\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 26,
+      "nameStringIndex": 701,
+      "descriptionStringIndex": 763,
+      "name": "ラージファイター",
+      "description": "３VS１のへんそくマッチ！\nズドモンのけたはずれのパワーを\nチームでうちやぶれ！\n『成熟期』げんてい\n３ＶＳ１バトル",
+      "descriptionRaw": "３VS１のへんそくマッチ！\\nズドモンのけたはずれのパワーを\\nチームでうちやぶれ！\\n\u001b\r『成熟期』\u001b\u0002げんてい\\n\u001b\r３ＶＳ１\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 27,
+      "nameStringIndex": 702,
+      "descriptionStringIndex": 764,
+      "name": "ヒュージマキシマム",
+      "description": "３VS１のへんそくマッチ！\nピエモンのこうげきにまけず\nチームワークでたおせるか！\nせだい　が『完全体』げんてい\n３ＶＳ１バトル",
+      "descriptionRaw": "３VS１のへんそくマッチ！\\nピエモンのこうげきにまけず\\nチームワークでたおせるか！\\nせだい　が\u001b\r『完全体』\u001b\u0002げんてい\\n\u001b\r３ＶＳ１\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 28,
+      "nameStringIndex": 703,
+      "descriptionStringIndex": 765,
+      "name": "パーフェクトバトラー",
+      "description": "あらゆるテイマーがちゅうもくする\nタイトルマッチだ！　さいきょうの\nくみあわせでいどめ！\nせだい　が『究極体』げんてい\n３ＶＳ３バトル",
+      "descriptionRaw": "あらゆるテイマーがちゅうもくする\\nタイトルマッチだ！　さいきょうの\\nくみあわせでいどめ！\\nせだい　が\u001b\r『究極体』\u001b\u0002げんてい\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 29,
+      "nameStringIndex": 704,
+      "descriptionStringIndex": 766,
+      "name": "バグマーダーズ",
+      "description": "しんりゃくしゃとよばれる\nウイルスけいデジモンのちからが\nばくはつする！\nぞくせい　が『ウイルス』げんてい\n３ＶＳ３バトル",
+      "descriptionRaw": "しんりゃくしゃとよばれる\\nウイルスけいデジモンのちからが\\nばくはつする！\\nぞくせい　が\u001b\r『ウイルス』\u001b\u0002げんてい\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 30,
+      "nameStringIndex": 705,
+      "descriptionStringIndex": 767,
+      "name": "ジーンセイバーズ",
+      "description": "てきは幼年期Ⅱが３体。\nそれらに１体でいどむ\nへんそくマッチ！かずではふりだが\nそれぞれはたいしたことないぞ！\n１ＶＳ３バトル",
+      "descriptionRaw": "てきは幼年期Ⅱが３体。\\nそれらに１体でいどむ\\nへんそくマッチ！かずではふりだが\\nそれぞれはたいしたことないぞ！\\n\u001b\r１ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 31,
+      "nameStringIndex": 706,
+      "descriptionStringIndex": 768,
+      "name": "データキラーズ",
+      "description": "バトルをせいするには\nデータをしることがじゅうようだ！\n\nぞくせい　が『データ』げんてい\n３ＶＳ３バトル",
+      "descriptionRaw": "バトルをせいするには\\nデータをしることがじゅうようだ！\\n\\nぞくせい　が\u001b\r『データ』\u001b\u0002げんてい\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 32,
+      "nameStringIndex": 707,
+      "descriptionStringIndex": 769,
+      "name": "ノイジーディバイダー",
+      "description": "Dインフィニットのせいえいたちを\nやぶることができるか！\n『ウイルス』ぞくせい\n『究極体』げんてい\n３ＶＳ３バトル",
+      "descriptionRaw": "Dインフィニットのせいえいたちを\\nやぶることができるか！\\n\u001b\r『ウイルス』\u001b\u0002ぞくせい\\n\u001b\r『究極体』\u001b\u0002げんてい\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 33,
+      "nameStringIndex": 708,
+      "descriptionStringIndex": 770,
+      "name": "セキュリティファイナリスト",
+      "description": "さいきょうのワクチンぞくせいをきめる\nタイトルマッチ！！\n『ワクチン』ぞくせい\n『究極体』げんてい\n３ＶＳ３バトル",
+      "descriptionRaw": "さいきょうのワクチンぞくせいをきめる\\nタイトルマッチ！！\\n\u001b\r『ワクチン』\u001b\u0002ぞくせい\\n\u001b\r『究極体』\u001b\u0002げんてい\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 34,
+      "nameStringIndex": 709,
+      "descriptionStringIndex": 771,
+      "name": "ヒュージゲートキーパー",
+      "description": "さいきょうのデータぞくせいをきめる\nソロバトル！！\n『データ』ぞくせい\n『究極体』げんてい\n１ＶＳ１バトル",
+      "descriptionRaw": "さいきょうのデータぞくせいをきめる\\nソロバトル！！\\n\u001b\r『データ』\u001b\u0002ぞくせい\\n\u001b\r『究極体』\u001b\u0002げんてい\\n\u001b\r１ＶＳ１\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 35,
+      "nameStringIndex": 710,
+      "descriptionStringIndex": 772,
+      "name": "アクアクラッシャー",
+      "description": "バトルフィールドが　みず。\nミズ系のデジモンがいれば\nゆうりにたたかえる。\n『みずフィールド』でバトル\n３ＶＳ３バトル",
+      "descriptionRaw": "バトルフィールドが　みず。\\nミズ系のデジモンがいれば\\nゆうりにたたかえる。\\n\u001b\r『みずフィールド』\u001b\u0002でバトル\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 36,
+      "nameStringIndex": 711,
+      "descriptionStringIndex": 773,
+      "name": "ブリザードドミニオン",
+      "description": "スノウマウンテンが　ぶたい！\nアイスデビモンのこおりのツメと\nユキダルモンのパンチにちゅうい！\n『こおりフィールド』で\n３ＶＳ３バトル",
+      "descriptionRaw": "スノウマウンテンが　ぶたい！\\nアイスデビモンのこおりのツメと\\nユキダルモンのパンチにちゅうい！\\n\u001b\r『こおりフィールド』\u001b\u0002で\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 37,
+      "nameStringIndex": 712,
+      "descriptionStringIndex": 774,
+      "name": "ボルケーノストライカー",
+      "description": "かざん　でのタイトルマッチ。\nあれくるうマグマのねつが\nデジモンをおそう！\n『かざんフィールド』で\n３ＶＳ３バトル",
+      "descriptionRaw": "かざん　でのタイトルマッチ。\\nあれくるうマグマのねつが\\nデジモンをおそう！\\n\u001b\r『かざんフィールド』\u001b\u0002で\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 38,
+      "nameStringIndex": 713,
+      "descriptionStringIndex": 775,
+      "name": "デザートストーマー",
+      "description": "さばくのフィールドがぶたい。\nもうれつなあつさをこくふくした\nチームにふさわしいタイトルだ！\n『さばくフィールド』で\n３ＶＳ３バトル",
+      "descriptionRaw": "さばくのフィールドがぶたい。\\nもうれつなあつさをこくふくした\\nチームにふさわしいタイトルだ！\\n\u001b\r『さばくフィールド』\u001b\u0002で\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 39,
+      "nameStringIndex": 714,
+      "descriptionStringIndex": 776,
+      "name": "トップオブグラディエーター",
+      "description": "コロシアムでかいさいされる\nあらゆるテイマーがちゅうもくする\nタイトルマッチだ！\n『コロシアムフィールド』で\n１ＶＳ１バトル",
+      "descriptionRaw": "コロシアムでかいさいされる\\nあらゆるテイマーがちゅうもくする\\nタイトルマッチだ！\\n\u001b\r『コロシアムフィールド』\u001b\u0002で\\n\u001b\r１ＶＳ１\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 40,
+      "nameStringIndex": 715,
+      "descriptionStringIndex": 777,
+      "name": "トップオブザワールド",
+      "description": "タイトルホルダーはマジカルな\nやつら！　まどわされずにパワーで\nあいてをねじふせろ！\n\n３ＶＳ３バトル",
+      "descriptionRaw": "タイトルホルダーはマジカルな\\nやつら！　まどわされずにパワーで\\nあいてをねじふせろ！\\n\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 41,
+      "nameStringIndex": 716,
+      "descriptionStringIndex": 778,
+      "name": "クイーンオブデュエリスト",
+      "description": "タイトルホルダーはじょせいたち。\nしょうりしたデジモンは\nたたかいの　めがみとして\nあがめられるだろう。\n３ＶＳ３バトル",
+      "descriptionRaw": "タイトルホルダーはじょせいたち。\\nしょうりしたデジモンは\\nたたかいの　めがみとして\\nあがめられるだろう。\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 42,
+      "nameStringIndex": 717,
+      "descriptionStringIndex": 779,
+      "name": "ダンシングドールズ",
+      "description": "１VS３のへんそくマッチ！\nおそいかかるハグルモン３体を\nかるくうちやぶれ！\n『成熟期』げんてい\n１ＶＳ３バトル",
+      "descriptionRaw": "１VS３のへんそくマッチ！\\nおそいかかるハグルモン３体を\\nかるくうちやぶれ！\\n\u001b\r『成熟期』\u001b\u0002げんてい\\n\u001b\r１ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 43,
+      "nameStringIndex": 718,
+      "descriptionStringIndex": 780,
+      "name": "シーズオブエメラルド",
+      "description": "しょくぶつタイプのデジモンだけが\nつどう　タイトルマッチ！\n\n『しょくぶつ』タイプげんてい\n３ＶＳ３バトル",
+      "descriptionRaw": "しょくぶつタイプのデジモンだけが\\nつどう　タイトルマッチ！\\n\\n\u001b\r『しょくぶつ』\u001b\u0002タイプげんてい\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 44,
+      "nameStringIndex": 719,
+      "descriptionStringIndex": 781,
+      "name": "マメザワールド",
+      "description": "マメモンのみのレアなバトル。\nマメモンをせいするモノは\nデジモンをせいするといわれている。\n『マメモン』タイプげんてい\n３ＶＳ３バトル",
+      "descriptionRaw": "マメモンのみのレアなバトル。\\nマメモンをせいするモノは\\nデジモンをせいするといわれている。\\n\u001b\r『マメモン』\u001b\u0002タイプげんてい\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 45,
+      "nameStringIndex": 720,
+      "descriptionStringIndex": 782,
+      "name": "メタルアルマゲドン",
+      "description": "つよさはバラバラだが　みためは\nまさにフルメタルなタイトル\nホルダーがあいてだ！\n\n３ＶＳ３バトル",
+      "descriptionRaw": "つよさはバラバラだが　みためは\\nまさにフルメタルなタイトル\\nホルダーがあいてだ！\\n\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 46,
+      "nameStringIndex": 721,
+      "descriptionStringIndex": 783,
+      "name": "インセクトロワイヤル",
+      "description": "かたいそうこうをもった\nこんちゅうタイプのデジモンを\nたおすには　パワーがひつようだ！\n\n３ＶＳ３バトル",
+      "descriptionRaw": "かたいそうこうをもった\\nこんちゅうタイプのデジモンを\\nたおすには　パワーがひつようだ！\\n\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 47,
+      "nameStringIndex": 722,
+      "descriptionStringIndex": 784,
+      "name": "エンシェントバスター",
+      "description": "ながいあいだねむっていた\nめずらしい　こだいタイプの\nデジモンが　つどう。\n\n３ＶＳ３バトル",
+      "descriptionRaw": "ながいあいだねむっていた\\nめずらしい　こだいタイプの\\nデジモンが　つどう。\\n\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 48,
+      "nameStringIndex": 723,
+      "descriptionStringIndex": 785,
+      "name": "オリジンサバイバー",
+      "description": "しょきにはっけんされたデジモン\nだけが　しゅつじょうできる！\n『デジタルモンスター』に\nとうじょうしたデジモンげんてい\n１ＶＳ１バトル",
+      "descriptionRaw": "しょきにはっけんされたデジモン\\nだけが　しゅつじょうできる！\\n\u001b\r『デジタルモンスター』\u001b\u0002に\\nとうじょうしたデジモンげんてい\\n\u001b\r１ＶＳ１\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 49,
+      "nameStringIndex": 724,
+      "descriptionStringIndex": 786,
+      "name": "ペンデュラムディストーション",
+      "description": "『ペンデュラム』のころにいた\nデジモンだけのバトル！\n『ペンデュラム』にとうじょうした\nデジモンげんてい\n３ＶＳ３バトル",
+      "descriptionRaw": "『ペンデュラム』のころにいた\\nデジモンだけのバトル！\\n\u001b\r『ペンデュラム』\u001b\u0002にとうじょうした\\nデジモンげんてい\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 50,
+      "nameStringIndex": 725,
+      "descriptionStringIndex": 787,
+      "name": "ハンドレッドソウル",
+      "description": "ながいつきあいのデジモン\nだけが　しゅつじょうできる！\n\nデジタマ化　が『３』いじょう\nげんてい　３ＶＳ３バトル",
+      "descriptionRaw": "ながいつきあいのデジモン\\nだけが　しゅつじょうできる！\\n\\nデジタマ化　が\u001b\r『３』いじょう\u001b\u0002\\nげんてい　\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 51,
+      "nameStringIndex": 726,
+      "descriptionStringIndex": 788,
+      "name": "サウザンドソウル",
+      "description": "ビッグ７とよばれる\nさいきょうレベルタイトルの１つ！\n\nデジタマ化　が『５』いじょう\nげんてい　３ＶＳ３バトル",
+      "descriptionRaw": "ビッグ７とよばれる\\nさいきょうレベルタイトルの１つ！\\n\\nデジタマ化　が\u001b\r『５』いじょう\u001b\u0002\\nげんてい　\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 52,
+      "nameStringIndex": 727,
+      "descriptionStringIndex": 789,
+      "name": "インフィニティーソウル",
+      "description": "ビッグ７とよばれる\nさいきょうレベルタイトルの１つ！\n\nデジタマ化　が『１０』いじょう\nげんてい　３ＶＳ３バトル",
+      "descriptionRaw": "ビッグ７とよばれる\\nさいきょうレベルタイトルの１つ！\\n\\nデジタマ化　が\u001b\r『１０』いじょう\u001b\u0002\\nげんてい　\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 53,
+      "nameStringIndex": 728,
+      "descriptionStringIndex": 790,
+      "name": "グラビティナイツ",
+      "description": "ビッグ７とよばれる\nさいきょうレベルタイトルの１つ！\n\nようりょう　が『２４』いじょう\nげんてい　３ＶＳ３バトル",
+      "descriptionRaw": "ビッグ７とよばれる\\nさいきょうレベルタイトルの１つ！\\n\\nようりょう　が\u001b\r『２４』いじょう\u001b\u0002\\nげんてい　\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 54,
+      "nameStringIndex": 729,
+      "descriptionStringIndex": 791,
+      "name": "ロンサムへブン",
+      "description": "せいかくがおくびょうなデジモン\nだけでバトルするたいかい。\nコントロールするちからがひつよう。\nせいかくが『おくびょう』げんてい\n３ＶＳ３バトル",
+      "descriptionRaw": "せいかくがおくびょうなデジモン\\nだけでバトルするたいかい。\\nコントロールするちからがひつよう。\\nせいかくが\u001b\r『おくびょう』\u001b\u0002げんてい\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 55,
+      "nameStringIndex": 730,
+      "descriptionStringIndex": 792,
+      "name": "チャレンジギアーズ",
+      "description": "ルールは1ＶＳ1のソロバトル！\nこのタイトルがとれないようでは\nテイマーとしてのさきゆきが\nふあんだ！\n１ＶＳ１バトル",
+      "descriptionRaw": "ルールは1ＶＳ1のソロバトル！\\nこのタイトルがとれないようでは\\nテイマーとしてのさきゆきが\\nふあんだ！\\n\u001b\r１ＶＳ１\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 56,
+      "nameStringIndex": 731,
+      "descriptionStringIndex": 793,
+      "name": "レインボーフライヤー",
+      "description": "ヨウコモン　サイケモンなど\nカラフルなデジモンがとうじょう\nする！\n\n３ＶＳ３バトル",
+      "descriptionRaw": "ヨウコモン　サイケモンなど\\nカラフルなデジモンがとうじょう\\nする！\\n\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 57,
+      "nameStringIndex": 732,
+      "descriptionStringIndex": 794,
+      "name": "ムーンエボリューション",
+      "description": "ビッグ７とよばれる\nさいきょうレベルタイトルの１つ！\nてきはきゅうきょくのうつくしさを\nもとめるデリシアローズだ！\n３ＶＳ３バトル",
+      "descriptionRaw": "ビッグ７とよばれる\\nさいきょうレベルタイトルの１つ！\\nてきはきゅうきょくのうつくしさを\\nもとめるデリシアローズだ！\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 58,
+      "nameStringIndex": 733,
+      "descriptionStringIndex": 795,
+      "name": "ブレイドガーディアン",
+      "description": "ビッグ７とよばれる\nさいきょうレベルタイトルの１つ！\nてきはリュウぞくのすべてをしりつくしたエクスドラグナー！\n３ＶＳ３バトル",
+      "descriptionRaw": "ビッグ７とよばれる\\nさいきょうレベルタイトルの１つ！\\nてきはリュウぞくのすべてをしりつくしたエクスドラグナー！\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 59,
+      "nameStringIndex": 734,
+      "descriptionStringIndex": 796,
+      "name": "ゴールデンフェザー",
+      "description": "かがやきあふれるタイトルホルダー\nにバトルをいどめ！\nあらゆるテイマーがちゅうもくする\nタイトルマッチだ！\n３ＶＳ３バトル",
+      "descriptionRaw": "かがやきあふれるタイトルホルダー\\nにバトルをいどめ！\\nあらゆるテイマーがちゅうもくする\\nタイトルマッチだ！\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 60,
+      "nameStringIndex": 735,
+      "descriptionStringIndex": 797,
+      "name": "リフレクトウォー",
+      "description": "究極体のなかでは　ひかくてき\nたおしやすい　あいてだろう。\nあらゆるテイマーがちゅうもくする\nタイトルマッチだ！\n３ＶＳ３バトル",
+      "descriptionRaw": "究極体のなかでは　ひかくてき\\nたおしやすい　あいてだろう。\\nあらゆるテイマーがちゅうもくする\\nタイトルマッチだ！\\n\u001b\r３ＶＳ３\u001b\u0002バトル"
+    },
+    {
+      "recordIndex": 61,
+      "nameStringIndex": 736,
+      "descriptionStringIndex": 798,
+      "name": "チュートリアルマッチ",
+      "description": "チュートリアルようのバトル。\nまけても　だいじょうぶだ！",
+      "descriptionRaw": "チュートリアルようのバトル。\\nまけても　だいじょうぶだ！"
+    }
+  ]
+}

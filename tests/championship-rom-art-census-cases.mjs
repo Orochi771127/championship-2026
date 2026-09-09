@@ -85,6 +85,39 @@ test("the recovered hunt biome and shared battle layer are registered", () => {
   assert.equal(kinds("FIELD_UNATTRIBUTED_REFERENCE").length, 3);
 });
 
+test("registry encodes confirmed shared decisions and battle dependencies", () => {
+  const byId = new Map(registry.assets.map((asset) => [asset.assetId, asset]));
+  const gameplay = registry.assets.filter((asset) => asset.assetKind === "CHARACTER_ENTITY_REFERENCE");
+  const database = registry.assets.filter((asset) => asset.assetKind === "CHARACTER_DB_ENTITY_REFERENCE");
+  assert.equal(gameplay.length, 224);
+  assert.equal(database.length, 224);
+  assert.equal(new Set([...gameplay, ...database].flatMap((asset) => asset.dependencies)).size, 224);
+  for (const asset of [...gameplay, ...database]) {
+    assert.equal(asset.dependencies.length, 1, asset.assetId);
+    assert.match(asset.dependencies[0], /^decision:character-palette:[a-z0-9]+(?:-[a-z0-9]+)*$/);
+  }
+
+  const bm00 = byId.get("art:battle-field:field-bm00-00:shared-layer-reference");
+  const arenas = registry.assets.filter((asset) => asset.assetKind === "BATTLE_FIELD_REFERENCE");
+  assert.equal(arenas.length, 11);
+  for (const arena of arenas) {
+    assert.deepEqual(arena.dependencies, arena.logicalGroup === "field_bm07_01" ? [] : [bm00.assetId], arena.assetId);
+  }
+});
+
+test("registry carries scope and animated-layer trace blockers", () => {
+  const byGroup = new Map(registry.assets.map((asset) => [asset.logicalGroup, asset]));
+  for (const group of ["field_bm03_01", "field_bm04_01"]) {
+    assert.ok(byGroup.get(group).blockers.includes("ANIMATED_LAYER_UNKNOWN_REQUIRES_TRACE"), group);
+  }
+  for (const cage of registry.assets.filter((asset) => asset.assetKind === "CAGE_ENVIRONMENT_REFERENCE")) {
+    assert.ok(cage.blockers.includes("CAGE_RUNTIME_SEMANTICS_REQUIRES_TRACE"), cage.assetId);
+  }
+  for (const gate of registry.assets.filter((asset) => asset.domain === "THREE_D" && /^gate_select\//i.test(asset.logicalGroup))) {
+    assert.ok(gate.blockers.includes("GATE_TO_HM_MAPPING_REQUIRES_TRACE"), gate.assetId);
+  }
+});
+
 test("reconciliation promotes nothing and leaks no source pixels", () => {
   for (const asset of romDerived) {
     assert.equal(asset.rightsStatus, "ROM_COPYRIGHTED_REFERENCE", asset.assetId);

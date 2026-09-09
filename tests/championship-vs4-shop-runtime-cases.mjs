@@ -20,7 +20,7 @@ import {
   createChampionshipScreenStack
 } from "../src/championship/app/championshipScreenStack.js";
 
-const entities = JSON.parse(fs.readFileSync("src/data/championship/catalogs/entities.r1.json", "utf8"));
+const entities = JSON.parse(fs.readFileSync("src/data/championship/catalogs/creature-species.r1.json", "utf8"));
 const presentation = JSON.parse(fs.readFileSync("docs/contracts/championship/raising-home-presentation.v1.json", "utf8"));
 
 function memoryStorage() {

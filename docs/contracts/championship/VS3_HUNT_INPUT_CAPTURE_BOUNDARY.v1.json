@@ -1,0 +1,58 @@
+{
+  "contractId": "VS3_HUNT_INPUT_CAPTURE_BOUNDARY",
+  "version": 1,
+  "date": "2026-09-05",
+  "authorization": "Owner: 請開工預定地第三輪實作",
+  "status": "PARTIAL_IMPLEMENTATION_CAPTURE_VERTICAL_SLICE_BLOCKED",
+  "authority": {
+    "runtime": "src/championship/hunt/huntRuntime.js",
+    "presentationSeam": "src/championship/app/gateHuntPresentationSource.js",
+    "pointerAdapter": "src/championship/presentation/vs2/huntFieldPointer.js",
+    "save": "Existing standalone outer v3 / R2 v4; optional collection capturedVitals via HUNT_CAPTURE_DATAFLOW.v1; no new save writer",
+    "renderer": "Existing shared Pixi Application/ticker; DOM HUD and toolbar"
+  },
+  "evidence": {
+    "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "ovl0LoadAddress": "0x0210B300",
+    "cameraDeltaCallsites": ["0x0211CD4C-0x0211CD60", "0x0211D17C-0x0211D18C"],
+    "cameraWriter": "0x0211DCF0-0x0211DD54",
+    "receipt": "docs/research/HUNT_ROUND3_ROM_RECEIPT_2026-09-05.json",
+    "trace": "docs/research/HUNT_ROUND3_TRACE_2026-09-05.md",
+    "ownershipCondition": "ROM help #104: HP zero, then hand collection into memory card",
+    "strokeIsNotOwnership": "OVL0 enclose event 0x23 is distinct from later capacity event 0x16"
+  },
+  "coordinates": {
+    "worldUnitsPerNativePixel": 2,
+    "bindingEvidence": "Existing 1024 native map / 2048 logical world presentation binding only",
+    "horizontalNativeViewport": 256,
+    "portraitAdaptation": "Preserve horizontal native span; derive vertical world span from actual field viewport aspect. Never fit the whole map.",
+    "cameraBounds": "Existing field kernel; generated field lower bounds are zero, original lower-bound initialization remains untraced",
+    "noTruthPromotion": "This binding does not verify generated collision, encounter positions or native tool thresholds"
+  },
+  "input": {
+    "owner": "One pointer per mounted scene; second pointers cannot replace or complete it",
+    "targetTouch": "Select the existing wild ID, consume this drag; HP stays unknown and ownership unchanged",
+    "targetHitRadius": "Existing 48 world-unit presentation radius, PRODUCT_AUTHORED; not native tool eligibility",
+    "emptyDrag": "Inverse pointer delta pans persistent camera; no moveTo or walking avatar",
+    "cancel": "pointercancel, blur, hidden document, viewport resize, context loss, scene disposal abort; never submit",
+    "release": "End pointer ownership only; original release-motion helper 0x0211DD5C remains untraced",
+    "toolSlots": "Hunt uses the shared eight neutral disabled slots; Raising tools/menus are not reused. Slot command mapping is unknown."
+  },
+  "capture": {
+    "playerToolStrokeBound": false,
+    "canCollect": false,
+    "wildHp": null,
+    "diagnosticStroke": "Legacy recognizer accessible only through explicit diagnostic intents; returns TOOL_TRACE_REQUIRED; not submitted by the player pointer",
+    "forbiddenEffects": ["remove wild on circle", "synthesize HP/damage/durability", "allocate Raising ID on circle", "sum Home collection as on-card cost", "open result on circle", "write save on circle"],
+    "legacySaves": "Preserve existing IDs, names, care, cage assignments, successAuthority and allocator high-water mark; do not relabel as ROM capture",
+    "dataflowFollowup": "HUNT_CAPTURE_DATAFLOW.v1.json closes bounded native HP/Rope/hand/card/Home replay. Normal-entry input flags above remain false."
+  },
+  "blockers": [
+    "One verified field collision and live encounter selection/full RNG state",
+    "Rope tool dispatch and wild AI state-specific movement, event11 consumption, release/escape",
+    "Native stroke update cadence, animation-driven slot lifetime and spatial-query semantics",
+    "Live animation completion and insertion-subphase input binding",
+    "Result release/replacement selection and remaining individual profile fields"
+  ],
+  "acceptanceBoundary": "Input and save preservation can pass independently. A normal-entry original capture-to-Home flow has NOT passed. Do not call this round complete capture parity."
+}

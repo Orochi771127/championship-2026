@@ -1,0 +1,1325 @@
+{
+  "schemaVersion": 1,
+  "authority": "CHAMPIONSHIP_2026_PRODUCT",
+  "catalogKind": "championship:2026:catalog:species-names",
+  "sourceEvidence": "ROM_VERIFIED",
+  "language": "ja",
+  "source": {
+    "file": "nitrofs/ui/txt/txt_list_txt.dat",
+    "sha256": "e9f390cab3c61e4c17791f2253043a8d1ca9bfc036f48ea9723ef769ef8012b3"
+  },
+  "mapping": {
+    "rule": "text entry index = species record index + 33",
+    "coverage": "species 8..223",
+    "excluded": "species 0..7 are the eggs and carry no individual name; species 224..227 fall past the run and would land on the name-entry kana charts",
+    "corroboration": "the run is exactly 216 long, and databaseCatalog.js independently records the encyclopedia as 224 slots = 8 eggs plus 216 regular"
+  },
+  "statNames": [
+    "HP",
+    "TP",
+    "こうげき",
+    "ぼうぎょ",
+    "かしこさ",
+    "すばやさ"
+  ],
+  "statNameStringStart": 35,
+  "recordCount": 216,
+  "records": [
+    {
+      "recordIndex": 8,
+      "identifier": "ZURUMON",
+      "nameStringIndex": 41,
+      "name": "ズルモン"
+    },
+    {
+      "recordIndex": 9,
+      "identifier": "CHOROMON",
+      "nameStringIndex": 42,
+      "name": "チョロモン"
+    },
+    {
+      "recordIndex": 10,
+      "identifier": "NYOKIMON",
+      "nameStringIndex": 43,
+      "name": "ニョキモン"
+    },
+    {
+      "recordIndex": 11,
+      "identifier": "BUBBMON",
+      "nameStringIndex": 44,
+      "name": "バブモン"
+    },
+    {
+      "recordIndex": 12,
+      "identifier": "PITCHMON",
+      "nameStringIndex": 45,
+      "name": "ピチモン"
+    },
+    {
+      "recordIndex": 13,
+      "identifier": "PUNIMON",
+      "nameStringIndex": 46,
+      "name": "プニモン"
+    },
+    {
+      "recordIndex": 14,
+      "identifier": "BOTAMON",
+      "nameStringIndex": 47,
+      "name": "ボタモン"
+    },
+    {
+      "recordIndex": 15,
+      "identifier": "POYOMON",
+      "nameStringIndex": 48,
+      "name": "ポヨモン"
+    },
+    {
+      "recordIndex": 16,
+      "identifier": "MOKUMON",
+      "nameStringIndex": 49,
+      "name": "モクモン"
+    },
+    {
+      "recordIndex": 17,
+      "identifier": "YUKIMIBOTAMON",
+      "nameStringIndex": 50,
+      "name": "ユキミボタモン"
+    },
+    {
+      "recordIndex": 18,
+      "identifier": "YURAMON",
+      "nameStringIndex": 51,
+      "name": "ユラモン"
+    },
+    {
+      "recordIndex": 19,
+      "identifier": "PETIMON",
+      "nameStringIndex": 52,
+      "name": "プチモン"
+    },
+    {
+      "recordIndex": 20,
+      "identifier": "CAPRIMON",
+      "nameStringIndex": 53,
+      "name": "カプリモン"
+    },
+    {
+      "recordIndex": 21,
+      "identifier": "KOROMON",
+      "nameStringIndex": 54,
+      "name": "コロモン"
+    },
+    {
+      "recordIndex": 22,
+      "identifier": "TANEMON",
+      "nameStringIndex": 55,
+      "name": "タネモン"
+    },
+    {
+      "recordIndex": 23,
+      "identifier": "TUNOMON",
+      "nameStringIndex": 56,
+      "name": "ツノモン"
+    },
+    {
+      "recordIndex": 24,
+      "identifier": "TOKOMON",
+      "nameStringIndex": 57,
+      "name": "トコモン"
+    },
+    {
+      "recordIndex": 25,
+      "identifier": "NYAROMON",
+      "nameStringIndex": 58,
+      "name": "ニャロモン"
+    },
+    {
+      "recordIndex": 26,
+      "identifier": "PAGUMON",
+      "nameStringIndex": 59,
+      "name": "パグモン"
+    },
+    {
+      "recordIndex": 27,
+      "identifier": "PYOKOMON",
+      "nameStringIndex": 60,
+      "name": "ピョコモン"
+    },
+    {
+      "recordIndex": 28,
+      "identifier": "PUKAMON",
+      "nameStringIndex": 61,
+      "name": "プカモン"
+    },
+    {
+      "recordIndex": 29,
+      "identifier": "PETIMEMRAMON",
+      "nameStringIndex": 62,
+      "name": "プチメラモン"
+    },
+    {
+      "recordIndex": 30,
+      "identifier": "MOCHIMON",
+      "nameStringIndex": 63,
+      "name": "モチモン"
+    },
+    {
+      "recordIndex": 31,
+      "identifier": "BEBYDOMON",
+      "nameStringIndex": 64,
+      "name": "ベビドモン"
+    },
+    {
+      "recordIndex": 32,
+      "identifier": "SUNMON",
+      "nameStringIndex": 65,
+      "name": "サンモン"
+    },
+    {
+      "recordIndex": 33,
+      "identifier": "MOONMON",
+      "nameStringIndex": 66,
+      "name": "ムンモン"
+    },
+    {
+      "recordIndex": 34,
+      "identifier": "AGUMON",
+      "nameStringIndex": 67,
+      "name": "アグモン"
+    },
+    {
+      "recordIndex": 35,
+      "identifier": "ARMADIMON",
+      "nameStringIndex": 68,
+      "name": "アルマジモン"
+    },
+    {
+      "recordIndex": 36,
+      "identifier": "ELECMON",
+      "nameStringIndex": 69,
+      "name": "エレキモン"
+    },
+    {
+      "recordIndex": 37,
+      "identifier": "OTAMAMON",
+      "nameStringIndex": 70,
+      "name": "オタマモン"
+    },
+    {
+      "recordIndex": 38,
+      "identifier": "GAOMON",
+      "nameStringIndex": 71,
+      "name": "ガオモン"
+    },
+    {
+      "recordIndex": 39,
+      "identifier": "GAZIMON",
+      "nameStringIndex": 72,
+      "name": "ガジモン"
+    },
+    {
+      "recordIndex": 40,
+      "identifier": "GABUMON",
+      "nameStringIndex": 73,
+      "name": "ガブモン"
+    },
+    {
+      "recordIndex": 41,
+      "identifier": "KAMEMON",
+      "nameStringIndex": 74,
+      "name": "カメモン"
+    },
+    {
+      "recordIndex": 42,
+      "identifier": "GIZAMON",
+      "nameStringIndex": 75,
+      "name": "ギザモン"
+    },
+    {
+      "recordIndex": 43,
+      "identifier": "CANDMON",
+      "nameStringIndex": 76,
+      "name": "キャンドモン"
+    },
+    {
+      "recordIndex": 44,
+      "identifier": "KUNEMON",
+      "nameStringIndex": 77,
+      "name": "クネモン"
+    },
+    {
+      "recordIndex": 45,
+      "identifier": "GOTTUMON",
+      "nameStringIndex": 78,
+      "name": "ゴツモン"
+    },
+    {
+      "recordIndex": 46,
+      "identifier": "GOBURIMON",
+      "nameStringIndex": 79,
+      "name": "ゴブリモン"
+    },
+    {
+      "recordIndex": 47,
+      "identifier": "GOMAMON",
+      "nameStringIndex": 80,
+      "name": "ゴマモン"
+    },
+    {
+      "recordIndex": 48,
+      "identifier": "TERRIERMON",
+      "nameStringIndex": 81,
+      "name": "テリアモン"
+    },
+    {
+      "recordIndex": 49,
+      "identifier": "TENTOMON",
+      "nameStringIndex": 82,
+      "name": "テントモン"
+    },
+    {
+      "recordIndex": 50,
+      "identifier": "TOYAGUMON",
+      "nameStringIndex": 83,
+      "name": "トイアグモン"
+    },
+    {
+      "recordIndex": 51,
+      "identifier": "BAKUMON",
+      "nameStringIndex": 84,
+      "name": "バクモン"
+    },
+    {
+      "recordIndex": 52,
+      "identifier": "HAGURUMON",
+      "nameStringIndex": 85,
+      "name": "ハグルモン"
+    },
+    {
+      "recordIndex": 53,
+      "identifier": "PATAMON",
+      "nameStringIndex": 86,
+      "name": "パタモン"
+    },
+    {
+      "recordIndex": 54,
+      "identifier": "PALMON",
+      "nameStringIndex": 87,
+      "name": "パルモン"
+    },
+    {
+      "recordIndex": 55,
+      "identifier": "PICODEVIMON",
+      "nameStringIndex": 88,
+      "name": "ピコデビモン"
+    },
+    {
+      "recordIndex": 56,
+      "identifier": "PIYOMON",
+      "nameStringIndex": 89,
+      "name": "ピヨモン"
+    },
+    {
+      "recordIndex": 57,
+      "identifier": "FALCOMON",
+      "nameStringIndex": 90,
+      "name": "ファルコモン"
+    },
+    {
+      "recordIndex": 58,
+      "identifier": "PLOTMON",
+      "nameStringIndex": 91,
+      "name": "プロットモン"
+    },
+    {
+      "recordIndex": 59,
+      "identifier": "FLORAMON",
+      "nameStringIndex": 92,
+      "name": "フローラモン"
+    },
+    {
+      "recordIndex": 60,
+      "identifier": "MUSHMON",
+      "nameStringIndex": 93,
+      "name": "マッシュモン"
+    },
+    {
+      "recordIndex": 61,
+      "identifier": "YUKIAGUMON",
+      "nameStringIndex": 94,
+      "name": "ユキアグモン"
+    },
+    {
+      "recordIndex": 62,
+      "identifier": "RENAMON",
+      "nameStringIndex": 95,
+      "name": "レナモン"
+    },
+    {
+      "recordIndex": 63,
+      "identifier": "DRACOMON",
+      "nameStringIndex": 96,
+      "name": "ドラコモン"
+    },
+    {
+      "recordIndex": 64,
+      "identifier": "CORONAMON",
+      "nameStringIndex": 97,
+      "name": "コロナモン"
+    },
+    {
+      "recordIndex": 65,
+      "identifier": "LUNAMON",
+      "nameStringIndex": 98,
+      "name": "ルナモン"
+    },
+    {
+      "recordIndex": 66,
+      "identifier": "KUROAGUMON",
+      "nameStringIndex": 99,
+      "name": "クロアグモン"
+    },
+    {
+      "recordIndex": 67,
+      "identifier": "PSYCHEMON",
+      "nameStringIndex": 100,
+      "name": "サイケモン"
+    },
+    {
+      "recordIndex": 68,
+      "identifier": "ALRAUMON",
+      "nameStringIndex": 101,
+      "name": "アルラウモン"
+    },
+    {
+      "recordIndex": 69,
+      "identifier": "TSUKAIMON",
+      "nameStringIndex": 102,
+      "name": "ツカイモン"
+    },
+    {
+      "recordIndex": 70,
+      "identifier": "VMON",
+      "nameStringIndex": 103,
+      "name": "ブイモン"
+    },
+    {
+      "recordIndex": 71,
+      "identifier": "GUILMON",
+      "nameStringIndex": 104,
+      "name": "ギルモン"
+    },
+    {
+      "recordIndex": 72,
+      "identifier": "ANKYLOMON",
+      "nameStringIndex": 105,
+      "name": "アンキロモン"
+    },
+    {
+      "recordIndex": 73,
+      "identifier": "IKKAKUMON",
+      "nameStringIndex": 106,
+      "name": "イッカクモン"
+    },
+    {
+      "recordIndex": 74,
+      "identifier": "WIZARMON",
+      "nameStringIndex": 107,
+      "name": "ウィザーモン"
+    },
+    {
+      "recordIndex": 75,
+      "identifier": "WOODMON",
+      "nameStringIndex": 108,
+      "name": "ウッドモン"
+    },
+    {
+      "recordIndex": 76,
+      "identifier": "AIRDRAMON",
+      "nameStringIndex": 109,
+      "name": "エアドラモン"
+    },
+    {
+      "recordIndex": 77,
+      "identifier": "ANGEMON",
+      "nameStringIndex": 110,
+      "name": "エンジェモン"
+    },
+    {
+      "recordIndex": 78,
+      "identifier": "ORGEMON",
+      "nameStringIndex": 111,
+      "name": "オーガモン"
+    },
+    {
+      "recordIndex": 79,
+      "identifier": "GAOGAMON",
+      "nameStringIndex": 112,
+      "name": "ガオガモン"
+    },
+    {
+      "recordIndex": 80,
+      "identifier": "KABUTERIMON",
+      "nameStringIndex": 113,
+      "name": "カブテリモン"
+    },
+    {
+      "recordIndex": 81,
+      "identifier": "GARGOMON",
+      "nameStringIndex": 114,
+      "name": "ガルゴモン"
+    },
+    {
+      "recordIndex": 82,
+      "identifier": "GARURUMON_VA",
+      "nameStringIndex": 115,
+      "name": "ガルルモン"
+    },
+    {
+      "recordIndex": 83,
+      "identifier": "GARURUMON_VI",
+      "nameStringIndex": 116,
+      "name": "ガルルモン"
+    },
+    {
+      "recordIndex": 84,
+      "identifier": "GUARDROMON",
+      "nameStringIndex": 117,
+      "name": "ガードロモン"
+    },
+    {
+      "recordIndex": 85,
+      "identifier": "KIWIMON",
+      "nameStringIndex": 118,
+      "name": "キウイモン"
+    },
+    {
+      "recordIndex": 86,
+      "identifier": "KYUBIMON",
+      "nameStringIndex": 119,
+      "name": "キュウビモン"
+    },
+    {
+      "recordIndex": 87,
+      "identifier": "GRAYMON",
+      "nameStringIndex": 120,
+      "name": "グレイモン"
+    },
+    {
+      "recordIndex": 88,
+      "identifier": "CLOCKMON",
+      "nameStringIndex": 121,
+      "name": "クロックモン"
+    },
+    {
+      "recordIndex": 89,
+      "identifier": "KUWAGAMON",
+      "nameStringIndex": 122,
+      "name": "クワガーモン"
+    },
+    {
+      "recordIndex": 90,
+      "identifier": "GEKOMON",
+      "nameStringIndex": 123,
+      "name": "ゲコモン"
+    },
+    {
+      "recordIndex": 91,
+      "identifier": "GESOMON",
+      "nameStringIndex": 124,
+      "name": "ゲソモン"
+    },
+    {
+      "recordIndex": 92,
+      "identifier": "CENTALMON",
+      "nameStringIndex": 125,
+      "name": "ケンタルモン"
+    },
+    {
+      "recordIndex": 93,
+      "identifier": "COCKATRIMON",
+      "nameStringIndex": 126,
+      "name": "コカトリモン"
+    },
+    {
+      "recordIndex": 94,
+      "identifier": "THANDERBALLMON",
+      "nameStringIndex": 127,
+      "name": "サンダーボールモン"
+    },
+    {
+      "recordIndex": 95,
+      "identifier": "SHELLMON",
+      "nameStringIndex": 128,
+      "name": "シェルモン"
+    },
+    {
+      "recordIndex": 96,
+      "identifier": "GEOGRAYMON",
+      "nameStringIndex": 129,
+      "name": "ジオグレイモン"
+    },
+    {
+      "recordIndex": 97,
+      "identifier": "SEADRAMON",
+      "nameStringIndex": 130,
+      "name": "シードラモン"
+    },
+    {
+      "recordIndex": 98,
+      "identifier": "SCUMON",
+      "nameStringIndex": 131,
+      "name": "スカモン"
+    },
+    {
+      "recordIndex": 99,
+      "identifier": "STARMON",
+      "nameStringIndex": 132,
+      "name": "スターモン"
+    },
+    {
+      "recordIndex": 100,
+      "identifier": "DARCMON",
+      "nameStringIndex": 133,
+      "name": "ダルクモン"
+    },
+    {
+      "recordIndex": 101,
+      "identifier": "DARKTYRANOMON",
+      "nameStringIndex": 134,
+      "name": "ダークティラノモン"
+    },
+    {
+      "recordIndex": 102,
+      "identifier": "TYRANOMON",
+      "nameStringIndex": 135,
+      "name": "ティラノモン"
+    },
+    {
+      "recordIndex": 103,
+      "identifier": "TAILMON",
+      "nameStringIndex": 136,
+      "name": "テイルモン"
+    },
+    {
+      "recordIndex": 104,
+      "identifier": "DEVIDRAMON",
+      "nameStringIndex": 137,
+      "name": "デビドラモン"
+    },
+    {
+      "recordIndex": 105,
+      "identifier": "DEVIMON",
+      "nameStringIndex": 138,
+      "name": "デビモン"
+    },
+    {
+      "recordIndex": 106,
+      "identifier": "TOGEMON",
+      "nameStringIndex": 139,
+      "name": "トゲモン"
+    },
+    {
+      "recordIndex": 107,
+      "identifier": "TORTAMON",
+      "nameStringIndex": 140,
+      "name": "トータモン"
+    },
+    {
+      "recordIndex": 108,
+      "identifier": "NUMEMON",
+      "nameStringIndex": 141,
+      "name": "ヌメモン"
+    },
+    {
+      "recordIndex": 109,
+      "identifier": "BAKEMON",
+      "nameStringIndex": 142,
+      "name": "バケモン"
+    },
+    {
+      "recordIndex": 110,
+      "identifier": "BARDRAMON",
+      "nameStringIndex": 143,
+      "name": "バードラモン"
+    },
+    {
+      "recordIndex": 111,
+      "identifier": "VAGIMON",
+      "nameStringIndex": 144,
+      "name": "ベジーモン"
+    },
+    {
+      "recordIndex": 112,
+      "identifier": "PECKMON",
+      "nameStringIndex": 145,
+      "name": "ペックモン"
+    },
+    {
+      "recordIndex": 113,
+      "identifier": "MERAMON",
+      "nameStringIndex": 146,
+      "name": "メラモン"
+    },
+    {
+      "recordIndex": 114,
+      "identifier": "MOJYAMON",
+      "nameStringIndex": 147,
+      "name": "モジャモン"
+    },
+    {
+      "recordIndex": 115,
+      "identifier": "MONOCHROMON",
+      "nameStringIndex": 148,
+      "name": "モノクロモン"
+    },
+    {
+      "recordIndex": 116,
+      "identifier": "YUKIDARUMON",
+      "nameStringIndex": 149,
+      "name": "ユキダルモン"
+    },
+    {
+      "recordIndex": 117,
+      "identifier": "UNIMON",
+      "nameStringIndex": 150,
+      "name": "ユニモン"
+    },
+    {
+      "recordIndex": 118,
+      "identifier": "YOUKOMON",
+      "nameStringIndex": 151,
+      "name": "ヨウコモン"
+    },
+    {
+      "recordIndex": 119,
+      "identifier": "RYNXMON",
+      "nameStringIndex": 152,
+      "name": "ランクスモン"
+    },
+    {
+      "recordIndex": 120,
+      "identifier": "RAREMON",
+      "nameStringIndex": 153,
+      "name": "レアモン"
+    },
+    {
+      "recordIndex": 121,
+      "identifier": "LEOMON",
+      "nameStringIndex": 154,
+      "name": "レオモン"
+    },
+    {
+      "recordIndex": 122,
+      "identifier": "REDVAGIMON",
+      "nameStringIndex": 155,
+      "name": "レッドベジーモン"
+    },
+    {
+      "recordIndex": 123,
+      "identifier": "COREDRAMON_TEN",
+      "nameStringIndex": 156,
+      "name": "コアドラモン"
+    },
+    {
+      "recordIndex": 124,
+      "identifier": "COREDRAMON_TI",
+      "nameStringIndex": 157,
+      "name": "コアドラモン"
+    },
+    {
+      "recordIndex": 125,
+      "identifier": "FIRAMON",
+      "nameStringIndex": 158,
+      "name": "ファイラモン"
+    },
+    {
+      "recordIndex": 126,
+      "identifier": "LEKISMON",
+      "nameStringIndex": 159,
+      "name": "レキスモン"
+    },
+    {
+      "recordIndex": 127,
+      "identifier": "ICEDEVIMON",
+      "nameStringIndex": 160,
+      "name": "アイスデビモン"
+    },
+    {
+      "recordIndex": 128,
+      "identifier": "GRURUMON",
+      "nameStringIndex": 161,
+      "name": "グルルモン"
+    },
+    {
+      "recordIndex": 129,
+      "identifier": "GEREMON",
+      "nameStringIndex": 162,
+      "name": "ゲレモン"
+    },
+    {
+      "recordIndex": 130,
+      "identifier": "SORCERYMON",
+      "nameStringIndex": 163,
+      "name": "ソーサリモン"
+    },
+    {
+      "recordIndex": 131,
+      "identifier": "AKATORIMON",
+      "nameStringIndex": 164,
+      "name": "アカトリモン"
+    },
+    {
+      "recordIndex": 132,
+      "identifier": "SABIRDRAMON",
+      "nameStringIndex": 165,
+      "name": "セーバードラモン"
+    },
+    {
+      "recordIndex": 133,
+      "identifier": "ICEMON",
+      "nameStringIndex": 166,
+      "name": "アイスモン"
+    },
+    {
+      "recordIndex": 134,
+      "identifier": "VDRAMON",
+      "nameStringIndex": 167,
+      "name": "ブイドラモン"
+    },
+    {
+      "recordIndex": 135,
+      "identifier": "GROWMON",
+      "nameStringIndex": 168,
+      "name": "グラウモン"
+    },
+    {
+      "recordIndex": 136,
+      "identifier": "ATLURKABUTERIMON",
+      "nameStringIndex": 169,
+      "name": "アトラーカブテリモン"
+    },
+    {
+      "recordIndex": 137,
+      "identifier": "ANOMALOCARIMON",
+      "nameStringIndex": 170,
+      "name": "アノマロカリモン"
+    },
+    {
+      "recordIndex": 138,
+      "identifier": "ANDROMON",
+      "nameStringIndex": 171,
+      "name": "アンドロモン"
+    },
+    {
+      "recordIndex": 139,
+      "identifier": "ETEMON",
+      "nameStringIndex": 172,
+      "name": "エテモン"
+    },
+    {
+      "recordIndex": 140,
+      "identifier": "ANGEWOMON",
+      "nameStringIndex": 173,
+      "name": "エンジェウーモン"
+    },
+    {
+      "recordIndex": 141,
+      "identifier": "OUKUWAMON",
+      "nameStringIndex": 174,
+      "name": "オオクワモン"
+    },
+    {
+      "recordIndex": 142,
+      "identifier": "GURUDAMON",
+      "nameStringIndex": 175,
+      "name": "ガルダモン"
+    },
+    {
+      "recordIndex": 143,
+      "identifier": "GERBEMON",
+      "nameStringIndex": 176,
+      "name": "ガーベモン"
+    },
+    {
+      "recordIndex": 144,
+      "identifier": "CYBERDRAMON",
+      "nameStringIndex": 177,
+      "name": "サイバードラモン"
+    },
+    {
+      "recordIndex": 145,
+      "identifier": "JYUREIMON",
+      "nameStringIndex": 178,
+      "name": "ジュレイモン"
+    },
+    {
+      "recordIndex": 146,
+      "identifier": "SKULLGREYMON",
+      "nameStringIndex": 179,
+      "name": "スカルグレイモン"
+    },
+    {
+      "recordIndex": 147,
+      "identifier": "ZUDOMON",
+      "nameStringIndex": 180,
+      "name": "ズドモン"
+    },
+    {
+      "recordIndex": 148,
+      "identifier": "DAGOMON",
+      "nameStringIndex": 181,
+      "name": "ダゴモン"
+    },
+    {
+      "recordIndex": 149,
+      "identifier": "DEATHMERAMON",
+      "nameStringIndex": 182,
+      "name": "デスメラモン"
+    },
+    {
+      "recordIndex": 150,
+      "identifier": "DELUMON",
+      "nameStringIndex": 183,
+      "name": "デラモン"
+    },
+    {
+      "recordIndex": 151,
+      "identifier": "TONOSAMAGEKOMON",
+      "nameStringIndex": 184,
+      "name": "トノサマゲコモン"
+    },
+    {
+      "recordIndex": 152,
+      "identifier": "TORICERAMON",
+      "nameStringIndex": 185,
+      "name": "トリケラモン"
+    },
+    {
+      "recordIndex": 153,
+      "identifier": "KNIGHTMON",
+      "nameStringIndex": 186,
+      "name": "ナイトモン"
+    },
+    {
+      "recordIndex": 154,
+      "identifier": "PARROTMON",
+      "nameStringIndex": 187,
+      "name": "パロットモン"
+    },
+    {
+      "recordIndex": 155,
+      "identifier": "HANGYOMON",
+      "nameStringIndex": 188,
+      "name": "ハンギョモン"
+    },
+    {
+      "recordIndex": 156,
+      "identifier": "PANDAMON",
+      "nameStringIndex": 189,
+      "name": "パンダモン"
+    },
+    {
+      "recordIndex": 157,
+      "identifier": "BIGMAMEMON",
+      "nameStringIndex": 190,
+      "name": "ビッグマメモン"
+    },
+    {
+      "recordIndex": 158,
+      "identifier": "PICKLEMON",
+      "nameStringIndex": 191,
+      "name": "ピッコロモン"
+    },
+    {
+      "recordIndex": 159,
+      "identifier": "FANTOMON",
+      "nameStringIndex": 192,
+      "name": "ファントモン"
+    },
+    {
+      "recordIndex": 160,
+      "identifier": "VADEMON",
+      "nameStringIndex": 193,
+      "name": "ベーダモン"
+    },
+    {
+      "recordIndex": 161,
+      "identifier": "WHAMON",
+      "nameStringIndex": 194,
+      "name": "ホエーモン"
+    },
+    {
+      "recordIndex": 162,
+      "identifier": "HOLYANGEMON",
+      "nameStringIndex": 195,
+      "name": "ホーリーエンジェモン"
+    },
+    {
+      "recordIndex": 163,
+      "identifier": "MACHGAOGAMON",
+      "nameStringIndex": 196,
+      "name": "マッハガオガモン"
+    },
+    {
+      "recordIndex": 164,
+      "identifier": "MAMEMON",
+      "nameStringIndex": 197,
+      "name": "マメモン"
+    },
+    {
+      "recordIndex": 165,
+      "identifier": "MAMMON",
+      "nameStringIndex": 198,
+      "name": "マンモン"
+    },
+    {
+      "recordIndex": 166,
+      "identifier": "MEGASEADRAMON",
+      "nameStringIndex": 199,
+      "name": "メガシードラモン"
+    },
+    {
+      "recordIndex": 167,
+      "identifier": "MEGADRAMON",
+      "nameStringIndex": 200,
+      "name": "メガドラモン"
+    },
+    {
+      "recordIndex": 168,
+      "identifier": "METALGREYMON_VI",
+      "nameStringIndex": 201,
+      "name": "メタルグレイモン"
+    },
+    {
+      "recordIndex": 169,
+      "identifier": "METALGREYMON_VA",
+      "nameStringIndex": 202,
+      "name": "メタルグレイモン"
+    },
+    {
+      "recordIndex": 170,
+      "identifier": "METALTYRANOMON",
+      "nameStringIndex": 203,
+      "name": "メタルティラノモン"
+    },
+    {
+      "recordIndex": 171,
+      "identifier": "MONZAEMON",
+      "nameStringIndex": 204,
+      "name": "もんざえモン"
+    },
+    {
+      "recordIndex": 172,
+      "identifier": "YATAGARAMON",
+      "nameStringIndex": 205,
+      "name": "ヤタガラモン"
+    },
+    {
+      "recordIndex": 173,
+      "identifier": "RIZEGREYMON",
+      "nameStringIndex": 206,
+      "name": "ライズグレイモン"
+    },
+    {
+      "recordIndex": 174,
+      "identifier": "RAPPEDMON",
+      "nameStringIndex": 207,
+      "name": "ラピッドモン"
+    },
+    {
+      "recordIndex": 175,
+      "identifier": "LILIMON",
+      "nameStringIndex": 208,
+      "name": "リリモン"
+    },
+    {
+      "recordIndex": 176,
+      "identifier": "LADYDEVIMON",
+      "nameStringIndex": 209,
+      "name": "レディーデビモン"
+    },
+    {
+      "recordIndex": 177,
+      "identifier": "WARUMONZAEMON",
+      "nameStringIndex": 210,
+      "name": "ワルもんざえモン"
+    },
+    {
+      "recordIndex": 178,
+      "identifier": "WEREGARURUMON_VA",
+      "nameStringIndex": 211,
+      "name": "ワーガルルモン"
+    },
+    {
+      "recordIndex": 179,
+      "identifier": "WEREGARURUMON_VI",
+      "nameStringIndex": 212,
+      "name": "ワーガルルモン"
+    },
+    {
+      "recordIndex": 180,
+      "identifier": "WINGDRAMON",
+      "nameStringIndex": 213,
+      "name": "ウィングドラモン"
+    },
+    {
+      "recordIndex": 181,
+      "identifier": "GROUNDRAMON",
+      "nameStringIndex": 214,
+      "name": "グラウンドラモン"
+    },
+    {
+      "recordIndex": 182,
+      "identifier": "FLAREMON",
+      "nameStringIndex": 215,
+      "name": "フレアモン"
+    },
+    {
+      "recordIndex": 183,
+      "identifier": "CRESCEMON",
+      "nameStringIndex": 216,
+      "name": "クレシェモン"
+    },
+    {
+      "recordIndex": 184,
+      "identifier": "SUPERSTARMON",
+      "nameStringIndex": 217,
+      "name": "スーパースターモン"
+    },
+    {
+      "recordIndex": 185,
+      "identifier": "BLACKRAPIDMON",
+      "nameStringIndex": 218,
+      "name": "ブラックラピッドモン"
+    },
+    {
+      "recordIndex": 186,
+      "identifier": "BLUEMERAMON",
+      "nameStringIndex": 219,
+      "name": "ブルーメラモン"
+    },
+    {
+      "recordIndex": 187,
+      "identifier": "VIKEMON",
+      "nameStringIndex": 220,
+      "name": "ヴァイクモン"
+    },
+    {
+      "recordIndex": 188,
+      "identifier": "VALKYRIMON",
+      "nameStringIndex": 221,
+      "name": "ヴァルキリモン"
+    },
+    {
+      "recordIndex": 189,
+      "identifier": "WARGLAYMON",
+      "nameStringIndex": 222,
+      "name": "ウォーグレイモン"
+    },
+    {
+      "recordIndex": 190,
+      "identifier": "GIGASEADRAMON",
+      "nameStringIndex": 223,
+      "name": "ギガシードラモン"
+    },
+    {
+      "recordIndex": 191,
+      "identifier": "GRANKUWAGAMON",
+      "nameStringIndex": 224,
+      "name": "グランクワガーモン"
+    },
+    {
+      "recordIndex": 192,
+      "identifier": "GRIFFOMON",
+      "nameStringIndex": 225,
+      "name": "グリフォモン"
+    },
+    {
+      "recordIndex": 193,
+      "identifier": "CROSSMON",
+      "nameStringIndex": 226,
+      "name": "クロスモン"
+    },
+    {
+      "recordIndex": 194,
+      "identifier": "SABERLEOMON",
+      "nameStringIndex": 227,
+      "name": "サーベルレオモン"
+    },
+    {
+      "recordIndex": 195,
+      "identifier": "SHINEGRAYMON",
+      "nameStringIndex": 228,
+      "name": "シャイングレイモン"
+    },
+    {
+      "recordIndex": 196,
+      "identifier": "SKULLMAMMON",
+      "nameStringIndex": 229,
+      "name": "スカルマンモン"
+    },
+    {
+      "recordIndex": 197,
+      "identifier": "SAINTGARGOMON",
+      "nameStringIndex": 230,
+      "name": "セントガルゴモン"
+    },
+    {
+      "recordIndex": 198,
+      "identifier": "HIANDROMON",
+      "nameStringIndex": 231,
+      "name": "ハイアンドロモン"
+    },
+    {
+      "recordIndex": 199,
+      "identifier": "BANTYOLIOMON",
+      "nameStringIndex": 232,
+      "name": "バンチョーレオモン"
+    },
+    {
+      "recordIndex": 200,
+      "identifier": "PIEMON",
+      "nameStringIndex": 233,
+      "name": "ピエモン"
+    },
+    {
+      "recordIndex": 201,
+      "identifier": "PINOCHIMON",
+      "nameStringIndex": 234,
+      "name": "ピノッキモン"
+    },
+    {
+      "recordIndex": 202,
+      "identifier": "PHARAOHMON",
+      "nameStringIndex": 235,
+      "name": "ファラオモン"
+    },
+    {
+      "recordIndex": 203,
+      "identifier": "PUKUMON",
+      "nameStringIndex": 236,
+      "name": "プクモン"
+    },
+    {
+      "recordIndex": 204,
+      "identifier": "BLACKWARGREYMON",
+      "nameStringIndex": 237,
+      "name": "ブラックウォーグレイモン"
+    },
+    {
+      "recordIndex": 205,
+      "identifier": "PRINCEMAMEMON",
+      "nameStringIndex": 238,
+      "name": "プリンスマメモン"
+    },
+    {
+      "recordIndex": 206,
+      "identifier": "PILESIOMON",
+      "nameStringIndex": 239,
+      "name": "プレシオモン"
+    },
+    {
+      "recordIndex": 207,
+      "identifier": "HERAKLEKABUTERIMON",
+      "nameStringIndex": 240,
+      "name": "ヘラクルカブテリモン"
+    },
+    {
+      "recordIndex": 208,
+      "identifier": "HOUOUMON",
+      "nameStringIndex": 241,
+      "name": "ホウオウモン"
+    },
+    {
+      "recordIndex": 209,
+      "identifier": "MIRAGEGAOGAMON",
+      "nameStringIndex": 242,
+      "name": "ミラージュガオガモン"
+    },
+    {
+      "recordIndex": 210,
+      "identifier": "MUGENDRAMON",
+      "nameStringIndex": 243,
+      "name": "ムゲンドラモン"
+    },
+    {
+      "recordIndex": 211,
+      "identifier": "METALETEMON",
+      "nameStringIndex": 244,
+      "name": "メタルエテモン"
+    },
+    {
+      "recordIndex": 212,
+      "identifier": "METALGARURUMON_VA",
+      "nameStringIndex": 245,
+      "name": "メタルガルルモン"
+    },
+    {
+      "recordIndex": 213,
+      "identifier": "METALGARURUMON_VI",
+      "nameStringIndex": 246,
+      "name": "メタルガルルモン"
+    },
+    {
+      "recordIndex": 214,
+      "identifier": "METALSEADRAMON",
+      "nameStringIndex": 247,
+      "name": "メタルシードラモン"
+    },
+    {
+      "recordIndex": 215,
+      "identifier": "ROSEMON",
+      "nameStringIndex": 248,
+      "name": "ロゼモン"
+    },
+    {
+      "recordIndex": 216,
+      "identifier": "ZEEDGARURUMON",
+      "nameStringIndex": 249,
+      "name": "ズィードガルルモン"
+    },
+    {
+      "recordIndex": 217,
+      "identifier": "VICTORYGREYMON",
+      "nameStringIndex": 250,
+      "name": "ビクトリーグレイモン"
+    },
+    {
+      "recordIndex": 218,
+      "identifier": "SLAYERDRAMON",
+      "nameStringIndex": 251,
+      "name": "スレイヤードラモン"
+    },
+    {
+      "recordIndex": 219,
+      "identifier": "BRAKEDRAMON",
+      "nameStringIndex": 252,
+      "name": "ブレイクドラモン"
+    },
+    {
+      "recordIndex": 220,
+      "identifier": "APOLLOMON",
+      "nameStringIndex": 253,
+      "name": "アポロモン"
+    },
+    {
+      "recordIndex": 221,
+      "identifier": "DIANAMON",
+      "nameStringIndex": 254,
+      "name": "ディアナモン"
+    },
+    {
+      "recordIndex": 222,
+      "identifier": "IMPERIALDRAMON_PM",
+      "nameStringIndex": 255,
+      "name": "インペリアルドラモン"
+    },
+    {
+      "recordIndex": 223,
+      "identifier": "DUKEMON",
+      "nameStringIndex": 256,
+      "name": "デュークモン"
+    }
+  ]
+}

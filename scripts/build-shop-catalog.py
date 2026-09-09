@@ -18,9 +18,7 @@ DOMAIN = {
     "InventoryState": "INVENTORY",
     "CageOwnershipState": "CAGE_OWNERSHIP",
 }
-# Only SKUs that already exist as product Hunt items. Original has 12 ropes;
-# the loadout currently carries three product tiers. Unmapped records still
-# exist as shop rows and use shopRecordIndex as their inventory key.
+# Preserve existing save-facing IDs and map every Hunt SKU to its own item.
 PRODUCT_ITEM = {
     (1, 1, 0): "championship:2026:hunt-item:rope-i",
     (1, 2, 0): "championship:2026:hunt-item:shot-i",
@@ -29,6 +27,28 @@ PRODUCT_ITEM = {
     (1, 10, 1): "championship:2026:hunt-memory:card-64",
     (1, 10, 2): "championship:2026:hunt-memory:card-96",
 }
+for sub, stem in [(1, 'rope'), (2, 'shot'), (3, 'wire')]:
+    for index, tier in [(1, 'ii'), (2, 'iii')]:
+        PRODUCT_ITEM[(1, sub, index)] = f'championship:2026:hunt-item:{stem}-{tier}'
+for index, field in enumerate(['generation', 'family', 'alignment', 'hp', 'personality', 'capacity']):
+    PRODUCT_ITEM[(2, 1, index)] = f'championship:2026:hunt-plugin:analyzer-{field}'
+PRODUCT_ITEM[(2, 1, 8)] = 'championship:2026:hunt-plugin:analyzer-full'
+for index, target in enumerate(['shot', 'wire', 'entrap', 'damage-trap', 'all']):
+    PRODUCT_ITEM[(2, 2, index)] = f'championship:2026:hunt-plugin:checker-{target}'
+PRODUCT_ITEM[(2, 4, 0)] = 'championship:2026:hunt-plugin:memory-checker'
+PRODUCT_ITEM[(2, 3, 0)] = 'championship:2026:hunt-plugin:radar-generation'
+PRODUCT_ITEM[(2, 3, 4)] = 'championship:2026:hunt-plugin:radar-alignment'
+
+
+def hunt_product_id(category, subcategory, item_index, sub_name):
+    legacy = PRODUCT_ITEM.get((category, subcategory, item_index))
+    if legacy:
+        return legacy
+    if category not in (1, 2):
+        return None
+    stem = sub_name.lower().replace(' ', '-').replace('/', '-')
+    domain = 'hunt-item' if category == 1 else 'hunt-plugin'
+    return f'championship:2026:{domain}:{stem}-{item_index:02d}'
 
 
 def main():
@@ -53,7 +73,7 @@ def main():
                 "purchaseDomain": DOMAIN[row["purchase_commit_domain"]],
                 "displayName": f"{sub_name} {item_index}",
             }
-            product_id = PRODUCT_ITEM.get((category_raw, sub_raw, item_index))
+            product_id = hunt_product_id(category_raw, sub_raw, item_index, sub_name)
             if product_id:
                 rec["productItemId"] = product_id
             records.append(rec)
@@ -77,7 +97,7 @@ def main():
         "records": records,
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    OUT.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(f"wrote {OUT}")
 
 

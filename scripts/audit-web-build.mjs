@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {auditWebBuild} from './lib/web-build-plan.mjs';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const result=auditWebBuild(root),counts={};
+for(const issue of result.release.issues)counts[issue.kind]=(counts[issue.kind]??0)+1;
+const report={technical:result.technical,release:{ok:result.release.ok,issueCounts:counts,issues:result.release.issues},fileCount:result.input.files.length};
+if(process.argv[2])fs.writeFileSync(path.resolve(process.argv[2]),JSON.stringify(report,null,2)+'\n');
+console.log(JSON.stringify({...report,release:{ok:report.release.ok,issueCounts:counts}},null,2));
+process.exitCode=result.technical.ok?0:1;

@@ -13,10 +13,11 @@
 // The per-species G-cost table is in ARM9 at 0x020C1374, stride 0x84, u8 at
 // +0x1D (incoming-creature load uses the same table already biased by +0x1D
 // at 0x020C1391). Observed values on the first ~224 pointer-backed rows are
-// mostly 12 / 14 / 16 / 18 / 20 / 24 / 32, not 1. Product hunt still uses
-// unit cost 1 because the three placeholder species have no ROM index map.
-// Do not invent that map, and do not copy the 224-byte column into src/
-// until Owner authorizes a numeric table in the runtime bundle.
+// mostly 12 / 14 / 16 / 18 / 20 / 24 / 32, not 1. Species IDs now map to ROM
+// indices, but this column is absent from the product catalog. The legacy
+// count helper below remains diagnostic only. The bounded native capture flow
+// receives an explicit traced G cost and sums actual on-card records; it never
+// calls the legacy unit-cost helper or copies a ROM column into runtime assets.
 //
 // Remaining G is derived (max - used), not a stored subtract-on-enclose field.
 

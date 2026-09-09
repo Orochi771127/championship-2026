@@ -1,0 +1,117 @@
+{
+  "date": "2026-09-08",
+  "stage": "RAISING_NATIVE_FEEDING.v1",
+  "status": "PLAYABLE_FEEDING_SLICE_COMPLETE",
+  "wholeGameComplete": false,
+  "workspace": "R:\\Projects\\Championship2026\\championship-2026",
+  "branch": "main",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "sharedWorktreePreserved": true,
+  "commitPushMergeDeployPerformed": false,
+  "checks": {
+    "focused": {
+      "log": "feeding-focused.log",
+      "tests": 18,
+      "pass": 18,
+      "fail": 0,
+      "skipped": 0
+    },
+    "relatedRngRegression": {
+      "log": "feeding-rng-regression.log",
+      "tests": 33,
+      "pass": 33,
+      "fail": 0,
+      "skipped": 0
+    },
+    "fullRegression": {
+      "log": "feeding-regression.log",
+      "tests": 1326,
+      "pass": 1326,
+      "fail": 0,
+      "skipped": 0
+    },
+    "finalUiAfterCancellationGuard": {
+      "log": "feeding-final-ui-check.log",
+      "tests": 11,
+      "pass": 11,
+      "fail": 0,
+      "skipped": 0
+    },
+    "gitDiffCheckExit": 0,
+    "newFilesWhitespace": "PASS",
+    "jsonParse": "PASS"
+  },
+  "originalCpu": {
+    "stations": 400,
+    "movement": 64,
+    "sourceSpawn": 72,
+    "openTileSearch": 32,
+    "existingBiteWriter": 168
+  },
+  "browser": {
+    "method": "Existing browser skill; normal UI only; no fixture state injection",
+    "url": "http://127.0.0.1:8876/championship.html",
+    "viewports": [
+      [
+        1280,
+        720
+      ],
+      [
+        360,
+        640
+      ]
+    ],
+    "portraitDocumentWidth": 360,
+    "portraitCanvasCount": 1,
+    "newGameShortTouchHatch": true,
+    "feed50To49": true,
+    "protein10To9": true,
+    "approachAndVisiblePortionReduction": true,
+    "completeFoodConsumptionObservedInEarlierPass": true,
+    "cleanRestoredProteinWithoutRefund": true,
+    "saveQuitContinueRemainingFoodAndInventory": true,
+    "physicalDeviceQA": false,
+    "screenshots": [
+      "feeding-mobile-placement.png",
+      "feeding-mobile-consumed.png",
+      "feeding-mobile-restored.png"
+    ]
+  },
+  "art": {
+    "food": "independently authored Pixi code shapes",
+    "newOriginalFoodSpritesOrAudioIntegrated": false,
+    "existingRegistrationsChanged": false,
+    "shippingReady": false
+  },
+  "limits": [
+    "full Raising idle/wander/sleep and social/environment/training",
+    "complete carry/throw and Cage reaction/effect programs",
+    "treatment callers",
+    "adult evolution and lifetime/rebirth",
+    "overnight food lifecycle and kind-2 food",
+    "full original food art/audio and mood overlays",
+    "physical devices and public shipping"
+  ],
+  "sourceSha256": {
+    "src/championship/raising/nativeRaisingActor.js": "563d662ac1fb730d672be2a29a427bd1f525fb38e4dd852578a761d701d71f30",
+    "src/championship/raising/nativeRaisingGround.js": "c0163aadbd8cdd90266b615366297ca9654f3b5c841e95bf4e8cf4c2d91ab538",
+    "src/championship/raising/nativeRaisingMovement.js": "6fe9c6bde9f9ee786f05b48f9f783e8b969a6918b019ed907b16c57554175499",
+    "src/championship/raising/nativeRaisingFood.js": "1a90d8444f5f3e17747e4c30a54d70b36a1c15f2031b0ee83b77cc260fd1d44e",
+    "src/championship/raising/nativeRaisingHomeState.js": "ff8acee2e88c7982d820c0bcccfa9a857e32550e0fff373038415960c73ebf8b",
+    "src/championship/app/championshipStandaloneApp.js": "054ca4d356ff3803b4770e318b2e6337632ae650a1ada6fcec7eaaaa5fb3493c",
+    "src/championship/app/championshipStandaloneSave.js": "4a3a5f4beb3c3a7e80f3c270fa62e463d6475085f2727894ad08aa51dc764fd7",
+    "src/championship/app/championshipRaisingProduction.js": "901daa6081f15068d3b09233686bbf8bc4413ac84d116a925f7fe0707bd816b2",
+    "src/championship/app/raisingPresentationSource.js": "da3c3b6dbde20f88e8db294cce01f387d326e606ba3c17f37d9d407f1b09a225",
+    "src/championship/app/raisingHomeP1RView.js": "f0b61307748683277efbdfe4643d47cfc8b97121404f0363d511db8e4770e9b7",
+    "src/championship/app/championshipToolbar.js": "88b3a668c78049b97655e3a88b36e726d9b1beb0977c287a396253503f4d04a7",
+    "src/championship/app/main.js": "f1e40dda41d121f6c2486d2c18ef84e371d23c126e7600ea5775363f1b0fcac1",
+    "src/championship/shop/shopRuntime.js": "2c9a1516bff4537b7f8bd6d1fef04ad5500564d8a2d6f88eb2811d35fda6043b",
+    "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js": "5439c06a3722f49fd9bb1321acffc7af0f1240395977996a8d57f703f0381131",
+    "src/championship/presentation/intRh2/raisingFieldViewport.js": "241d611e708e8cadf0e7b90a7ecad515a491ae46ae9f562fd33ff07038ed6348",
+    "src/data/championship/catalogs/raising-ground.r1.json": "272caa8e575f9c107ab3058da351d45e75fe156b0b2fb6361aa74c3bc70d1242",
+    "scripts/research/check-raising-feeding-cpu.py": "2c8f50b8f78f14535955dafe3b1b5e9ea2033eb09e93451c06b2a53062a4bbdf",
+    "tests/championshipNativeRaisingFeeding.test.mjs": "b8b4b03f0697a63d9658e296c7895916390c79441987d54d727b2296d6ff4b66",
+    "tests/championship-raising-feeding-app-cases.mjs": "6e6ff8841e1d5bb555acf92955c58d250452f473ece678433b093058c2459c67",
+    "docs/contracts/championship/RAISING_NATIVE_FEEDING.v1.json": "431b01cde99bbcaf9b7f82e63e81863e561afcd772ee016789ea7da022d5ed39"
+  }
+}

@@ -6,22 +6,22 @@
 // out-of-bounds blocks, and every other bit is unresolved. The runtime treats
 // unresolved bits as traversable and never claims that is original behaviour.
 //
-// Movement speeds, the wander model, and the actor radius are PRODUCT_AUTHORED.
-// No original wild-creature movement, spawn rule, aggression, flee response or
-// encounter trigger is traced, so wild creatures wander inside a bounded radius
-// of where they spawned and do nothing else. They do not see the player, react to
-// the player, approach, flee, chase, or trigger anything. That is deliberate:
-// VS3 owns Capture, and a wild creature that reacted to the player would be an
-// unauthorised down payment on it.
+// Normal entry supplies original generated individuals, native positions and
+// initial HP through the application-owned RNG/history transaction. Those
+// actors stay at their initialized positions until the native AI update binds.
+// Product wandering, movement speeds and radius remain for explicit prototype
+// fixtures only. Camera panning remains the existing product presentation.
+// Explicit capture replay is separate from normal capture acceptance.
 //
 // The runtime holds no save state and no DOM. Time enters through tick(deltaMs)
 // so the simulation is fully deterministic and testable without a browser.
 
 import { computeFieldCameraWindow, computeVisibleChunkWindow, getFieldChunkBounds } from "../field/fieldCamera.js";
 import { createCaptureStrokeRecognizer } from "./capture/captureStrokeRecognizer.js";
-import { classifyTetherDistance } from "./capture/tetherSystem.js";
+import { huntViewportTransform, huntWorldToNative } from "./huntFieldCoordinates.js";
 import { nearestWildInHitRadius } from "./capture/huntEnclosureSession.js";
-import { pointInPolygon } from "./capture/pointInPolygon.js";
+import { createWildCaptureFlow, initializeWildHp } from "./capture/wildCaptureFlow.js";
+import { createNativeHuntFieldControls } from "./capture/nativeHuntFieldControls.js";
 
 export const HUNT_PLAYER_SPEED_PX_PER_SECOND = 74;
 export const HUNT_WILD_SPEED_PX_PER_SECOND = 24;
@@ -48,7 +48,7 @@ function facingFrom(dx, dy, fallback) {
   return dy >= 0 ? "down" : "up";
 }
 
-export function createHuntRuntime({ world, fieldActor, wildCount = null } = {}) {
+export function createHuntRuntime({ world, fieldActor, wildCount = null, captureReplay = null, maxCardG = 0, nativeEntry = null, nativeControls = null } = {}) {
   if (!world || typeof world.isBlockedTile !== "function" || !world.definition) {
     throw new TypeError("createHuntRuntime requires a Championship hunt world");
   }
@@ -128,14 +128,41 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null } = {}) 
     targetY: null
   };
 
-  const sourceWilds = wildCount === null ? world.wildCreatures : world.wildCreatures.slice(0, wildCount);
-  // VS3 enclosure. A stroke that starts near a wild creature is capture, not
-  // walking. Empty-ground pointers stay with moveTo, so this is not a Capture
-  // button. Close-stroke has no original percent roll. The app then applies the
-  // memory-card capacity gate; if that rejects, restoreLastEnclosedWild puts
-  // the creature back.
+  const liveObservation = captureReplay?.mode === "NATIVE_LIVE_STATE_REPLAY";
+  if (world.nativeEntry && captureReplay !== null) throw Error("NATIVE_ENTRY_REPLAY_CONFLICT");
+  if (world.nativeEntry && !nativeEntry?.encounter) throw Error("NATIVE_ENTRY_STATE_REQUIRED");
+  const entryState = nativeEntry ? structuredClone({ nativeHuntIndex:nativeEntry.scene.nativeHuntIndex,
+    fieldId:nativeEntry.scene.fieldId, season:nativeEntry.scene.season, hour:nativeEntry.scene.hour,
+    releasedSlot:nativeEntry.releasedSlot, encounter:nativeEntry.encounter }) : null;
+  let sourceWilds = wildCount === null ? world.wildCreatures : world.wildCreatures.slice(0, wildCount);
+  if (liveObservation) {
+    const encounter = captureReplay.encounter;
+    if (encounter?.gateId !== world.gateId || !Array.isArray(encounter.wildRecords) || !encounter.wildRecords.length) {
+      throw new TypeError("CAPTURE_LIVE_ENCOUNTER_GATE_REQUIRED");
+    }
+    sourceWilds = encounter.wildRecords.map((entry, index) => {
+      const position = entry.positionQ12;
+      if (entry.wildIndex !== index || !/^species-\d{3}$/.test(entry.speciesId)
+        || !Array.isArray(position) || position.length !== 2
+        || position.some((value) => !Number.isSafeInteger(value) || value < 0 || value >= 1024 * 4096)) {
+        throw new TypeError("INVALID_CAPTURE_LIVE_RECORD");
+      }
+      return { wildId: `${world.gateId}:native-wild:${index}`, speciesId: entry.speciesId,
+        worldX: position[0] / 2048, worldY: position[1] / 2048, wanderSeed: 0 };
+    });
+  }
+  // Pending strokes are diagnostics only until the native tool path is closed.
   let enclosure = null;
-  let lastEnclosedWild = null;
+  let selectedWildId = null;
+  let cameraCenter = { x: player.worldX, y: player.worldY };
+
+  function cameraRequest(viewportWidth, viewportHeight) {
+    const transform = huntViewportTransform(viewportWidth, viewportHeight);
+    return {
+      centerX: cameraCenter.x, centerY: cameraCenter.y,
+      viewportWidth: transform.worldWidth, viewportHeight: transform.worldHeight
+    };
+  }
 
   const wilds = sourceWilds.map((spawn) => ({
     wildId: spawn.wildId,
@@ -147,11 +174,35 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null } = {}) 
     facing: "down",
     moving: false,
     state: "IDLE",
+    currentHp: spawn.currentHp ?? null,
+    maxHp: spawn.maxHp ?? null,
     targetX: null,
     targetY: null,
     pauseMs: 400 + ((spawn.wanderSeed % 11) * 220),
     random: seededRandom(spawn.wanderSeed)
   }));
+
+  // Explicit research replay only. Native normal initialization does not confer
+  // capture authority before AI, tool input and animation completion bind.
+  const captureFlows = new Map();
+  if (captureReplay !== null) {
+    if ((!liveObservation && captureReplay.mode !== "NATIVE_DATAFLOW_REPLAY") || !Array.isArray(captureReplay.records)
+      || captureReplay.records.length !== 1) throw new TypeError("ONE_NATIVE_CAPTURE_REPLAY_REQUIRED");
+    for (const record of captureReplay.records) {
+      const wild = wilds[record.wildIndex];
+      if (!wild || wild.speciesId !== record.speciesId) throw new TypeError("CAPTURE_REPLAY_SPECIES_MISMATCH");
+      captureFlows.set(wild.wildId, createWildCaptureFlow({ ...record, wildId: wild.wildId,
+        hp: initializeWildHp(record.hpInitialization) }));
+    }
+  }
+  const controls = world.nativeEntry && nativeControls ? createNativeHuntFieldControls({
+    ...nativeControls, records:entryState.encounter.actors, wildIds:wilds.map(w=>w.wildId),
+    environment:nativeEntry.scene.environment,rng:nativeEntry.rng,maxCardG,night:nativeEntry.scene.variant.night }) : null;
+  const cardEntries = () => controls ? controls.getOnCardEntries() : [...captureFlows.values()].map((flow) => flow.snapshot()).filter((entry) => entry.state === "ON_CARD");
+  const captureVisible = (wild) => {
+    const captured = captureFlows.get(wild.wildId)?.snapshot();
+    return !captured?.nativePhase.wildHidden && !["ON_CARD", "HOME_COMMITTED", "RELEASED"].includes(captured?.state);
+  };
 
   let elapsedMs = 0;
 
@@ -178,6 +229,7 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null } = {}) 
   function advance(deltaMs) {
     const seconds = deltaMs / 1000;
     elapsedMs += deltaMs;
+    controls?.tick(deltaMs,[(cameraCenter.x-256)/2,(cameraCenter.y-192)/2]);
 
     if (player.targetX !== null) {
       const done = step(player, player.targetX, player.targetY, HUNT_PLAYER_SPEED_PX_PER_SECOND, seconds);
@@ -191,6 +243,7 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null } = {}) 
     }
 
     for (const wild of wilds) {
+      if (world.nativeEntry || liveObservation || captureFlows.has(wild.wildId)) continue; // Native AI update remains a separate binding.
       if (wild.targetX === null) {
         wild.pauseMs -= deltaMs;
         wild.moving = false;
@@ -212,6 +265,13 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null } = {}) 
   return Object.freeze({
     world,
     movementAuthority: HUNT_MOVEMENT_AUTHORITY,
+    getNativeEntryState: () => structuredClone(entryState),
+    getNativeReturnContext: () => nativeEntry && controls ? Object.freeze({biomeIndex:nativeEntry.scene.biomeIndex,
+      releasedSlot:nativeEntry.releasedSlot, carriedAtEntry:!!nativeEntry.encounter.historyWrite}) : null,
+    applyReturnedIndividuals(entries) {
+      if (!controls) throw Error("HUNT_NATIVE_RETURN_UNAVAILABLE");
+      controls.applyReturnedIndividuals(entries);
+    },
 
     /** Request movement toward a world point. Out-of-world requests are clamped. */
     moveTo(worldX, worldY) {
@@ -261,7 +321,8 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null } = {}) 
     },
 
     getWildCreatures() {
-      return wilds.map((wild) => Object.freeze({
+      if (controls) return controls.getActors();
+      return wilds.filter(captureVisible).map((wild) => Object.freeze({
         wildId: wild.wildId,
         speciesId: wild.speciesId,
         worldX: wild.worldX,
@@ -269,28 +330,82 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null } = {}) 
         facing: wild.facing,
         moving: wild.moving,
         state: wild.state,
-        behaviourEvidence: "PRODUCT_AUTHORED_NOT_ORIGINAL"
+        currentHp: captureFlows.get(wild.wildId)?.snapshot().currentHp ?? wild.currentHp,
+        maxHp: captureFlows.get(wild.wildId)?.snapshot().maxHp ?? wild.maxHp,
+        hpEvidence: captureFlows.has(wild.wildId) ? "ROM_DATAFLOW_REPLAY" : world.nativeEntry ? "ROM_VERIFIED_INITIALIZATION" : "UNKNOWN_REQUIRES_TRACE",
+        behaviourEvidence: world.nativeEntry ? "NATIVE_INITIALIZED_AI_UPDATE_PENDING" : "PRODUCT_AUTHORED_NOT_ORIGINAL"
       }));
     },
 
-    /** The camera window over the world for a given viewport, always clamped in. */
+    /** A persistent camera independent of the retained developer actor fixture. */
     getCamera(viewportWidth, viewportHeight) {
-      return computeFieldCameraWindow(world.definition, {
-        centerX: player.worldX,
-        centerY: player.worldY,
-        viewportWidth: Math.max(1, viewportWidth),
-        viewportHeight: Math.max(1, viewportHeight)
+      return computeFieldCameraWindow(world.definition, cameraRequest(viewportWidth, viewportHeight));
+    },
+
+    panCamera(deltaX, deltaY, viewportWidth, viewportHeight) {
+      if (![deltaX, deltaY].every(Number.isFinite) || enclosure) return false;
+      const cameraViewport = cameraRequest(viewportWidth, viewportHeight);
+      const current = computeFieldCameraWindow(world.definition, {
+        ...cameraViewport, centerX: cameraCenter.x, centerY: cameraCenter.y
+      });
+      const next = computeFieldCameraWindow(world.definition, {
+        ...cameraViewport,
+        centerX: (current.left + current.right) / 2 + deltaX,
+        centerY: (current.top + current.bottom) / 2 + deltaY
+      });
+      cameraCenter = { x: (next.left + next.right) / 2, y: (next.top + next.bottom) / 2 };
+      return true;
+    },
+
+    selectWildAt(worldX, worldY) {
+      if (controls) return controls.selectAt(worldX,worldY);
+      if (enclosure || ![worldX, worldY].every(Number.isFinite)) return false;
+      const target = nearestWildInHitRadius(worldX, worldY, wilds.filter(captureVisible));
+      selectedWildId = target?.wildId ?? null;
+      return target !== null;
+    },
+
+    getSelectedWildId() { return controls ? controls.getSelectedWildId() : selectedWildId; },
+    getToolState: () => controls?.getState() ?? null,
+    selectTool: kind => controls?.selectTool(kind) ?? false,
+    toolPointerDown: (x,y) => controls?.pointerDown(x,y) ?? false,
+    toolPointerMove: (x,y) => controls?.pointerMove(x,y) ?? false,
+    toolPointerUp: (x,y) => controls?.pointerUp(x,y) ?? false,
+
+    getCaptureRecord(wildId) { return controls ? controls.getCaptureRecord(wildId) : captureFlows.get(wildId)?.snapshot() ?? null; },
+    attachNativeRope(wildId) { return captureFlows.get(wildId)?.attach() ?? false; },
+    tickNativeRope(wildId, input) { return captureFlows.get(wildId)?.tickPull(input) ?? null; },
+    tickNativeCapturePhases(wildId) { return captureFlows.get(wildId)?.tickNativePhases() ?? null; },
+    completeNativeDownAnimation(wildId) { return captureFlows.get(wildId)?.completeDownAnimation() ?? false; },
+    collectNativeHand(wildId) {
+      const usedG = cardEntries().reduce((sum, entry) => sum + entry.gCost, 0);
+      return captureFlows.get(wildId)?.hand({ maxG: maxCardG, usedG }) ?? Object.freeze({ accepted: false, reason: "NATIVE_RECORD_REQUIRED" });
+    },
+    tickNativeCardInsertionPhase(wildId) { return captureFlows.get(wildId)?.tickCardInsertionPhase() ?? false; },
+    getOnCardEntries() { return Object.freeze(cardEntries()); },
+    renameOnCardEntry(wildId, name) { return controls ? controls.rename(wildId,name) : captureFlows.get(wildId)?.rename(name) ?? false; },
+    releaseOnCardEntry(wildId) { return controls ? controls.release(wildId) : captureFlows.get(wildId)?.releaseFromCard() ?? false; },
+    completeHomeCaptureCommit() { controls?.commit(); for (const flow of captureFlows.values()) flow.markHomeCommitted(); },
+    hasPendingCaptureAnimation() {
+      if (controls) return controls.hasPending();
+      return [...captureFlows.values()].some((flow) => ["DOWN_ANIMATION", "HAND_ANIMATION"].includes(flow.snapshot().state));
+    },
+
+    getCaptureAvailability() {
+      if (controls) return controls.getAvailability();
+      const native = captureFlows.get(selectedWildId)?.snapshot();
+      return Object.freeze({
+        state: "UNKNOWN_REQUIRES_TRACE", canCollect: false,
+        targetWildId: selectedWildId,
+        currentHp: native?.currentHp ?? null,
+        dataflowEvidence: "BOUNDED_NATIVE_REPLAY_CLOSED",
+        required: Object.freeze(["LIVE_ENCOUNTER_RNG_AND_RECORD", "NATIVE_TOOL_ROUTING_AND_CADENCE", "WILD_AI_PULL_EVENT_AND_ANIMATION"])
       });
     },
 
-    /** Which modular chunks the camera currently covers. */
+    /** Which modular chunks the same camera currently covers. */
     getVisibleChunks(viewportWidth, viewportHeight) {
-      const request = {
-        centerX: player.worldX,
-        centerY: player.worldY,
-        viewportWidth: Math.max(1, viewportWidth),
-        viewportHeight: Math.max(1, viewportHeight)
-      };
+      const request = cameraRequest(viewportWidth, viewportHeight);
       const window = computeVisibleChunkWindow(world.definition, request);
       const chunks = [];
       for (let chunkY = window.startChunkY; chunkY <= window.endChunkY; chunkY += 1) {
@@ -301,19 +416,16 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null } = {}) 
       return chunks;
     },
 
-    /**
-     * Start a circle stroke if the pointer is on a wild creature.
-     *
-     * Empty ground returns false so the field can keep using the same pointer
-     * as a move. That is how this stays a gesture, not a Capture button.
-     */
+    // Developer-only stroke inspection. No pointer adapter invokes this until
+    // tool dispatch, sample cadence/lifetime and spatial query have been traced.
     beginEnclosureStroke(worldX, worldY) {
       if (enclosure) return false;
       if (!Number.isFinite(worldX) || !Number.isFinite(worldY)) return false;
       const target = nearestWildInHitRadius(worldX, worldY, wilds);
       if (!target) return false;
       const recognizer = createCaptureStrokeRecognizer();
-      recognizer.begin(worldX, worldY);
+      const native = huntWorldToNative({ x: worldX, y: worldY });
+      recognizer.begin(native.x, native.y);
       enclosure = {
         recognizer,
         targetWildId: target.wildId,
@@ -328,67 +440,41 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null } = {}) 
     extendEnclosureStroke(worldX, worldY) {
       if (!enclosure) return false;
       if (!Number.isFinite(worldX) || !Number.isFinite(worldY)) return false;
-      enclosure.recognizer.move(worldX, worldY);
+      const native = huntWorldToNative({ x: worldX, y: worldY });
+      enclosure.recognizer.move(native.x, native.y);
       return true;
     },
 
     endEnclosureStroke() {
       if (!enclosure) return null;
+      // Old geometry is an explicitly unverified diagnostic, never ownership.
       const geometry = enclosure.recognizer.end();
-      const points = enclosure.recognizer.getPoints();
-      const target = wilds.find((wild) => wild.wildId === enclosure.targetWildId) ?? null;
-      const tetherBand = target
-        ? classifyTetherDistance(Math.hypot(target.worldX - player.worldX, target.worldY - player.worldY))
-        : "OVER_160";
-      const contained = Boolean(target && pointInPolygon(target.worldX, target.worldY, points));
-      const enclosed = geometry.closed && contained;
-      lastEnclosedWild = null;
-      if (enclosed) {
-        const index = wilds.indexOf(target);
-        if (index >= 0) {
-          lastEnclosedWild = target;
-          wilds.splice(index, 1);
-        }
-      }
       const verdict = Object.freeze({
-        outcome: enclosed ? "ENCLOSED" : "OPEN",
+        outcome: "TOOL_TRACE_REQUIRED",
         wildId: enclosure.targetWildId,
         speciesId: enclosure.speciesId,
-        successAuthority: "PRODUCT_AUTHORED_ENCLOSURE",
-        tetherBand,
-        closed: geometry.closed,
-        reason: geometry.reason
+        successAuthority: "UNKNOWN_REQUIRES_TRACE",
+        geometryEvidence: "LEGACY_PROTOTYPE_NOT_ORIGINAL",
+        geometry
       });
       enclosure = null;
       return verdict;
     },
 
-    /**
-     * Put back a wild removed by a geometry-success that the capacity gate then
-     * refused. Original over-capacity is event 0x39 on a later path, not a
-     * close-stroke subtract.
-     */
-    restoreLastEnclosedWild() {
-      if (!lastEnclosedWild) return false;
-      if (wilds.some((wild) => wild.wildId === lastEnclosedWild.wildId)) {
-        lastEnclosedWild = null;
-        return false;
-      }
-      wilds.push(lastEnclosedWild);
-      lastEnclosedWild = null;
-      return true;
+    abortEnclosureStroke() {
+      controls?.cancel();
+      const hadStroke = enclosure !== null;
+      enclosure = null;
+      for (const flow of captureFlows.values()) flow.release();
+      return hadStroke;
     },
 
     getEnclosureStroke() {
       if (!enclosure) return null;
-      const target = wilds.find((wild) => wild.wildId === enclosure.targetWildId) ?? null;
-      const tetherBand = target
-        ? classifyTetherDistance(Math.hypot(target.worldX - player.worldX, target.worldY - player.worldY))
-        : "OVER_160";
       return Object.freeze({
-        points: enclosure.recognizer.getPoints(),
+        points: enclosure.recognizer.getPoints().map(({ x, y }) => ({ x: x * 2, y: y * 2 })),
         targetWildId: enclosure.targetWildId,
-        tetherBand,
+        geometryEvidence: "LEGACY_PROTOTYPE_NOT_ORIGINAL",
         active: true
       });
     }

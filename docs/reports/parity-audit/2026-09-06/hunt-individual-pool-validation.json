@@ -1,0 +1,56 @@
+{
+  "date": "2026-09-06",
+  "gitRoot": "R:/Projects/Championship2026/championship-2026",
+  "branch": "main",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "initialDirtyEntries": 449,
+  "cpuReceiptSha256": "e235850db7c331c70b0c131120752b90703e3cb7f8ca7a50b4f5f20fdfdda029",
+  "cpuReceiptDeterministicRebuild": true,
+  "individualSpeciesCases": 228,
+  "candidateCases": 6,
+  "poolCases": [
+    {
+      "case": "observed-entry",
+      "records": 15,
+      "rngCalls": 270
+    },
+    {
+      "case": "continued-after-pool",
+      "records": 17,
+      "rngCalls": 301
+    },
+    {
+      "case": "controlled-released-candidate",
+      "records": 15,
+      "rngCalls": 266
+    },
+    {
+      "case": "controlled-depleted-released",
+      "records": 15,
+      "rngCalls": 376
+    }
+  ],
+  "focused": {
+    "tests": 20,
+    "pass": 20
+  },
+  "serialRegression": {
+    "tests": 971,
+    "pass": 971,
+    "fail": 0,
+    "skipped": 0,
+    "todo": 0,
+    "durationMs": 53708.8159
+  },
+  "regressionCommand": "node --v8-pool-size=1 --test --test-concurrency=1 tests/*.mjs",
+  "privateRegressionLog": "R:/Projects/Championship2026/_archive/hunt-environment-2026-09-06/full-spawn/individual-pool-regression-final.tap",
+  "gitDiffCheck": "PASS",
+  "newTextFilesUtf8LfAndWhitespace": "PASS",
+  "normalSpawnRuntimeBound": false,
+  "huntGenerationConsumesGameplayRng": false,
+  "normalEntryCapturePlayable": false,
+  "browserAcceptanceRun": false,
+  "changedProductEntry": false,
+  "saveSchemaChanged": false,
+  "committed": false
+}

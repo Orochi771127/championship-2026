@@ -42,7 +42,7 @@ function stateIdentity(snapshot) {
   const durable = projectRaisingHomeDurableStateR2(snapshot);
   return deepFreeze({
     revision: durable.stateRevision,
-    digest: digestCanonicalRaisingHomeDataR2(durable, "raising-payload-v2")
+    digest: digestCanonicalRaisingHomeDataR2(durable, "raising-payload-v5")
   });
 }
 
@@ -76,7 +76,7 @@ export function createChampionshipSaveCoordinatorR2({
   let portRevision = restoreRead.revision ?? 0;
   let savedStateRevision = restoreRead.accepted ? restoredSnapshot.revision : null;
   let savedStateDigest = restoreRead.accepted
-    ? digestCanonicalRaisingHomeDataR2(restoreRead.document.payload, "raising-payload-v2")
+    ? digestCanonicalRaisingHomeDataR2(restoreRead.document.payload, "raising-payload-v5")
     : null;
   let requiresRepair = restoreRead.source === "LAST_GOOD";
   let dirty = !restoreRead.accepted || requiresRepair;
@@ -91,6 +91,8 @@ export function createChampionshipSaveCoordinatorR2({
   let lastRuntimeIdentity = stateIdentity(runtime.getSnapshot());
 
   function getSaveStatus() {
+    // Clock revisions are cheap to mark; hash only when status or save is read.
+    if (!disposed && lastRuntimeIdentity.digest === null) lastRuntimeIdentity = stateIdentity(runtime.getSnapshot());
     const inspectedSlot = savePort.inspect({ slotId }).selectedSlot;
     return deepFreeze({
       schemaVersion: 2,
@@ -133,6 +135,14 @@ export function createChampionshipSaveCoordinatorR2({
 
   function markRuntimeDirty(publication) {
     if (!publication?.accepted || disposed) return;
+    if (publication.kind === "clock") {
+      const wasDirty = dirty;
+      lastRuntimeIdentity = { revision: publication.snapshot.revision, digest: null };
+      dirty = true;
+      if (phase !== "SAVE_FAILED") phase = "DIRTY";
+      if (!wasDirty) notifyStatus();
+      return;
+    }
     lastRuntimeIdentity = stateIdentity(publication.snapshot);
     dirty = requiresRepair
       || savedStateDigest === null
@@ -289,6 +299,14 @@ export function createChampionshipSaveCoordinatorR2({
     dispatchRaisingHome(command) {
       if (disposed) return result({ code: "CHAMPIONSHIP_R2_SAVE_COORDINATOR_DISPOSED", snapshot: null });
       return runtime.dispatch(command);
+    },
+    commitResidentRelease(residentIds, expectedRevision) {
+      if (disposed) return result({ code: "CHAMPIONSHIP_R2_SAVE_COORDINATOR_DISPOSED", snapshot: null });
+      return runtime.commitResidentRelease(residentIds, expectedRevision);
+    },
+    advanceRaisingClock(delta) {
+      if (disposed) return result({ code: "CHAMPIONSHIP_R2_SAVE_COORDINATOR_DISPOSED", snapshot: null });
+      return runtime.advanceClock(delta);
     },
     subscribeRaisingHome(listener) {
       if (disposed) throw new Error("Championship R2 save coordinator is disposed");

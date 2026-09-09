@@ -1,0 +1,65 @@
+{
+  "contractId": "HUNT_CHARACTER_PRESENTATION.v1",
+  "status": "VERIFIED_ORIGINAL_ANIMATION_PROJECTION_NORMAL_OWNER_UNBOUND",
+  "scope": {
+    "entityId": "m003_nyokimon",
+    "speciesId": "species-010",
+    "scene": "HUNT_FIELD",
+    "normalHuntCaptureHomeAccepted": false,
+    "battleAccepted": false,
+    "homeActionBindingAccepted": false
+  },
+  "evidence": [
+    "docs/research/HUNT_CHARACTER_ANIMATION_TRACE_2026-09-06.json",
+    "docs/research/CHARACTER_ANIMATION_CPU_CHECK_2026-09-06.json",
+    "docs/research/HUNT_PHASE_PORT_AND_RESIDENT_MIGRATION_2026-09-05.md"
+  ],
+  "requestSelector": {
+    "module": "OVL0",
+    "entry": "0210C048",
+    "target": "ARM9:02047984",
+    "inputs": ["request", "W+118 bound", "W+10C", "W+334", "W+40C"],
+    "sameSequenceRequestRestarts": false,
+    "semanticAliasesAuthoritative": false
+  },
+  "playback": {
+    "source": "ARM9:0202E188/0202E030/0202E438",
+    "rawMode1": "FORWARD_ONCE_HOLD_LAST",
+    "rawMode2": "FORWARD_LOOP_FROM_NATIVE_LOOP_START",
+    "rawMode3And4": "UNKNOWN_REQUIRES_CPU_COMPARISON",
+    "loopResetDiscardsOvershoot": true,
+    "timeUnit": "EXPLICIT_NATIVE_ANIMATOR_INVOCATION_Q12",
+    "pixiDeltaCannotInventNativeUpdates": true,
+    "animationCompletionCannotChangeCaptureOwnership": true
+  },
+  "wildViewExtension": {
+    "field": "nativeAnimation",
+    "nullable": true,
+    "required": ["contract", "sequenceId", "frameIndex", "flipBits"],
+    "contract": "HUNT_CHARACTER_PRESENTATION.v1",
+    "missingInputBehavior": "STATIC_SOURCE_IDENTITY_FRAME",
+    "unsupportedSpeciesBehavior": "STATIC_SOURCE_IDENTITY_FRAME",
+    "rendererMayWriteGameplay": false,
+    "ownerHidesWildThroughExistingWildList": true
+  },
+  "observedTransitions": [
+    { "tick": 136, "ai": 6, "sequenceId": 20 },
+    { "tick": 143, "ai": 8, "sequenceId": 21 },
+    { "tick": 214, "ai": 8, "sequenceId": 25 },
+    { "tick": 215, "ai": 8, "sequenceId": 21 },
+    { "tick": 342, "ai": 10, "sequenceId": 25, "currentHp": 0 },
+    { "tick": 357, "ai": 11, "sequenceId": 25, "handReady": true },
+    { "tick": 376, "ai": 12, "setterOrder": [39, 16], "sequenceId": 16 },
+    { "tick": 386, "wildHiddenByExistingHandController": true },
+    { "tick": 470, "cardCount": 1, "cardHp": 210 }
+  ],
+  "normalOwnerBlockers": [
+    "huntWorld normal entry still uses prototype species subset and encounter generator",
+    "huntRuntime native capture flows are created only by explicit captureReplay",
+    "native tool input, AI update cadence and animation state must originate in the existing normal Hunt owner",
+    "captured Home resident action source has not been traced and bound"
+  ],
+  "reviewFixture": "tests/fixtures/championship-hunt-character-review.html",
+  "shippingReady": false,
+  "publicReleasePermitted": false
+}

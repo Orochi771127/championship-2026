@@ -1,0 +1,70 @@
+{
+  "baselineAnchor": {
+    "x": 0.5,
+    "y": 0.9090909090909091
+  },
+  "baselineCanvas": [
+    384,
+    352
+  ],
+  "baselineRuntimeSha256": "0b43955de8fda0dbb995e4154d2a29518ebecac03075f74baa58d38087b2d25f",
+  "commonSourceOrigin": [
+    184,
+    268
+  ],
+  "entityId": "m201_agumon",
+  "kind": "COMMON_NATIVE_ORIGIN_BASELINE_REFERENCE_V1",
+  "logicalCanvas": [
+    464,
+    368
+  ],
+  "motionContractSha256": "0f7b37e5972f47cf56e151bfcb71fcee77f60b142266f59908baa9ac127c7c3b",
+  "referenceBySide": {
+    "main": {
+      "baselineSpriteSourceSize": {
+        "h": 216,
+        "w": 192,
+        "x": 96,
+        "y": 104
+      },
+      "currentSourceOrigin": [
+        192,
+        296
+      ],
+      "effectiveSourcePixelScale": 12,
+      "signedSourceAlphaBounds": [
+        -8,
+        -16,
+        8,
+        2
+      ],
+      "texture": "m201_agumon/main/cell_000"
+    },
+    "sub": {
+      "baselineSpriteSourceSize": {
+        "h": 216,
+        "w": 192,
+        "x": 96,
+        "y": 104
+      },
+      "currentSourceOrigin": [
+        192,
+        296
+      ],
+      "effectiveSourcePixelScale": 12,
+      "signedSourceAlphaBounds": [
+        -8,
+        -16,
+        8,
+        2
+      ],
+      "texture": "m201_agumon/sub/cell_000"
+    }
+  },
+  "schemaVersion": 1,
+  "sourceOriginAuditSha256": "293b6d49b984e67007ed252aefcb037c9a7c1e03062fbbea1865fd7b5832dd3a",
+  "sourcePixelScaleBySide": {
+    "main": 12,
+    "sub": 12
+  }
+}

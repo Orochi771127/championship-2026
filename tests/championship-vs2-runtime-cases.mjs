@@ -24,7 +24,7 @@ import {
   createHuntRuntime
 } from "../src/championship/hunt/huntRuntime.js";
 
-const catalog = JSON.parse(fs.readFileSync("src/data/championship/catalogs/entities.r1.json", "utf8"));
+const catalog = JSON.parse(fs.readFileSync("src/data/championship/catalogs/creature-species.r1.json", "utf8"));
 const presentation = JSON.parse(fs.readFileSync("docs/contracts/championship/raising-home-presentation.v1.json", "utf8"));
 
 function memoryStorage() {
@@ -98,17 +98,23 @@ test("the screen stack pops one level and unwinds only where an exit is declared
 // Gate catalog
 // ---------------------------------------------------------------------------
 
-test("the gate list preserves the reference-backed count and invents no unlock rule", () => {
+test("the gate list preserves ROM identity and the traced initial unlock states", () => {
   const gates = listChampionshipGates();
   assert.equal(gates.length, GATE_COUNT);
   assert.equal(GATE_COUNT, 16, "16 biome node pairs is the ROM-verified structural fact");
   assert.equal(new Set(gates.map((gate) => gate.gateId)).size, 16, "gate ids must be unique");
   for (const gate of gates) {
-    assert.equal(gate.state, "AVAILABLE", "no gate may be locked while no unlock rule is traced");
-    assert.equal(gate.stateEvidence, "UNKNOWN_REQUIRES_TRACE");
-    // The identity is recovered from the ROM model; the display string is not.
+    assert.equal(gate.state, gate.biomeId === "Grass" ? "AVAILABLE" : "LOCKED");
+    assert.equal(gate.stateEvidence, "ROM_VERIFIED");
+    // Both are recovered now: the identity from the ROM model, the display string
+    // from the gate table's txt_list index (recovered 2026-09-04).
     assert.equal(gate.identityEvidence, "ROM_VERIFIED");
-    assert.equal(gate.displayNameEvidence, "PRESENTATION_DEFAULT_NOT_RECOVERED");
+    assert.equal(gate.originalNameEvidence, "ROM_VERIFIED");
+    assert.equal(gate.displayNameEvidence, "PRODUCT_AUTHORED_TRANSLATION");
+    // The entrance fee is compared against Bits at OVL12:0x0210F84C and deducted
+    // at 0x0210F874, so it is a real rule, not a number that looks like money.
+    assert.equal(gate.entranceFeeEvidence, "ROM_VERIFIED");
+    assert.ok(Number.isSafeInteger(gate.entranceFeeBits) && gate.entranceFeeBits >= 0);
     assert.equal(gate.originalFieldMapping, "ROM_VERIFIED");
     assert.match(gate.originalFields.dayFieldId, /^field_hm\d{2}_0[12]$/);
     assert.match(gate.originalFields.nightFieldId, /^field_hm\d{2}_0[12]$/);
@@ -266,13 +272,13 @@ test("VS2 walks Raising Home to the Hunt field and back through the published se
   source.intents.confirmGate();
   assert.equal(source.getFrame().screen, CHAMPIONSHIP_SCREENS.GATE_SELECT);
 
-  source.intents.selectGate(gateSelect.gates[3].gateId);
+  source.intents.selectGate(gateSelect.gates.find(g => g.biomeId === "Grass").gateId);
   assert.equal(source.getFrame().gateSelect.canConfirm, true);
   source.intents.confirmGate();
 
   const loadout = source.getFrame().huntLoadout;
   assert.equal(source.getFrame().screen, CHAMPIONSHIP_SCREENS.HUNT_LOADOUT);
-  assert.equal(loadout.gate.gateId, gateSelect.gates[3].gateId);
+  assert.equal(loadout.gate.gateId, gateSelect.gates.find(g => g.biomeId === "Grass").gateId);
   // Five recovered equipment classes and four plugin positions.
   assert.deepEqual(loadout.availableEquipment.map((entry) => entry.equipmentClass),
     ["ROPE", "SHOT", "WIRE", "ENTRAP", "DAMAGE_TRAP"]);
@@ -287,8 +293,8 @@ test("VS2 walks Raising Home to the Hunt field and back through the published se
   const equipped = source.getFrame().huntLoadout.selectedEquipment
     .find((slot) => slot.equipmentClass === "ROPE");
   assert.equal(equipped.quantity, 1);
-  assert.equal(equipped.durability, 10);
-  assert.equal(equipped.durabilityConsumption, "UNKNOWN_REQUIRES_TRACE");
+  assert.equal(equipped.durability, 6, 'native basic rope byte, not the historical example value');
+  assert.equal(equipped.durabilityConsumption, "ROM_NATIVE_PULL_CONTROLLER");
 
   source.intents.beginHunt();
   const field = source.getFrame().huntField;
@@ -299,12 +305,13 @@ test("VS2 walks Raising Home to the Hunt field and back through the published se
   // Explore.
   assert.equal(field.hud.actorName, "Tamer");
   const before = source.field.getView({ viewportWidth: 390, viewportHeight: 844 });
-  assert.equal(before.wildCreatures.length, HUNT_WILD_COUNT);
-  source.intents.moveTo(before.player.worldX + 220, before.player.worldY + 60);
+  assert.equal(before.wildCreatures.length, app.getHuntRuntime().getNativeEntryState().encounter.actors.length);
+  assert.ok(before.wildCreatures.length > 0);
+  source.intents.panCamera(220, 60, 390, 844);
   for (let i = 0; i < 400; i += 1) source.field.tick(16);
   const after = source.field.getView({ viewportWidth: 390, viewportHeight: 844 });
-  assert.ok(after.player.worldX > before.player.worldX + 100, "the player did not explore");
-  assert.notEqual(after.camera.centerX, before.camera.centerX, "the camera did not follow");
+  assert.deepEqual(after.player, before.player, "exploration must not move a tamer");
+  assert.notEqual(after.camera.left, before.camera.left, "the camera did not pan");
 
   source.intents.exitHunt();
   assert.equal(source.getFrame().screen, CHAMPIONSHIP_SCREENS.RAISING_HOME);
@@ -325,7 +332,7 @@ test("the Hunt toolbar is the ROM-verified mode with every slot still unbound", 
   const started = await app.newGame();
   const source = createGateHuntPresentationSource(app);
   source.intents.openGate();
-  source.intents.selectGate(app.getGates()[0].gateId);
+  source.intents.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId);
   source.intents.confirmGate();
   source.intents.beginHunt();
 
@@ -347,16 +354,16 @@ test("the Hunt toolbar is the ROM-verified mode with every slot still unbound", 
   await app.dispose();
 });
 
-test("VS2 exposes no capture surface and no unresolved terrain taxonomy", async () => {
+test("Hunt exposes only the authorized native controls/readouts and no invented terrain taxonomy", async () => {
   const app = createApp(memoryStorage());
   const started = await app.newGame();
   const source = createGateHuntPresentationSource(app);
   source.intents.openGate();
-  source.intents.selectGate(app.getGates()[0].gateId);
+  source.intents.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId);
   source.intents.confirmGate();
   source.intents.beginHunt();
 
-  // Capture is VS3. Nothing in the VS2 seam may offer it.
+  // Capture uses named normal tool intents, never a shortcut that grants it.
   const intents = Object.keys(source.intents);
   for (const forbidden of ["capture", "throw", "tether", "encounter", "battle", "attack"]) {
     assert.equal(intents.some((name) => name.toLowerCase().includes(forbidden)), false, `VS2 exposed ${forbidden}`);
@@ -401,9 +408,16 @@ test("VS2 exposes no capture surface and no unresolved terrain taxonomy", async 
 
   assert.deepEqual(
     Object.keys(frame.huntField.hud).sort(),
-    ["actorName", "capabilities", "exitAvailable", "gateName", "note"],
+    ["actorName", "capabilities", "exitAvailable", "gateName", "note", "plugins", "target", "time"],
     "the Hunt HUD grew a field whose original semantics are unknown"
   );
+
+  assert.equal(frame.huntField.hud.target, null, "No selected wild means no target readout");
+  assert.equal(frame.huntField.hud.plugins.memory,null);
+  assert.equal(frame.huntField.hud.plugins.radar,null);
+  assert.deepEqual(frame.huntField.hud.plugins.counters,[]);
+  assert.equal(frame.huntField.hud.time.remainingMinutes,480);
+  assert.equal(typeof source.intents.toolPointerDown,'function');
 
   const view = source.field.getView({ viewportWidth: 390, viewportHeight: 844 });
   // Only two collision outcomes are evidenced, so only two terrain kinds exist.
@@ -418,7 +432,7 @@ test("VS2 exposes no capture surface and no unresolved terrain taxonomy", async 
 // Save authority
 // ---------------------------------------------------------------------------
 
-test("VS2 adds no save field, and a reload lands back at Raising Home", async () => {
+test("Hunt exploration adds no transient save fields, and reload preserves history at Raising Home", async () => {
   const storage = memoryStorage();
   const app = createApp(storage);
   const started = await app.newGame();
@@ -427,7 +441,7 @@ test("VS2 adds no save field, and a reload lands back at Raising Home", async ()
 
   app.care(residentId);
   source.intents.openGate();
-  source.intents.selectGate(app.getGates()[7].gateId);
+  source.intents.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId);
   source.intents.confirmGate();
   source.intents.beginHunt();
 
@@ -436,21 +450,27 @@ test("VS2 adds no save field, and a reload lands back at Raising Home", async ()
   assert.deepEqual(storage.keys(), [CHAMPIONSHIP_MODERN_SAVE_KEY]);
   const saved = JSON.parse(storage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY));
   assert.deepEqual(Object.keys(saved).sort(), [
-    "cageEdit", "creature", "flags", "progression", "raising", "raisingHome", "saveKind", "schemaVersion", "sessionId", "shop", "updatedAt"
+    "battleEconomy", "cageEdit", "creature", "flags", "gameplayRng", "huntHistory", "instanceIdentity", "progression", "raising", "raisingHome", "saveKind", "schemaVersion", "sessionId", "shop", "updatedAt"
   ].sort());
-  const asText = JSON.stringify(saved);
+  // Durable native history is separate from the transient field/loadout.
+  assert.deepEqual(saved.battleEconomy, { nextSequence: 1, settledThrough: 0, active: null, lastReceipt: null });
+  assert.deepEqual(saved.instanceIdentity, { nextSequence: 1 }, "Hunt exploration does not allocate an individual");
+  assert.ok(saved.huntHistory);
+  const { huntHistory, ...withoutDurableHistory } = saved;
+  const asText = JSON.stringify(withoutDurableHistory);
   for (const leak of ["gate", "hunt", "wild", "equipment", "plugin", "camera"]) {
     assert.equal(asText.toLowerCase().includes(leak), false, `VS2 leaked ${leak} into the save envelope`);
   }
   await app.dispose();
 
-  // A fresh application is the reload. No Hunt state is traced, so none returns.
+  // A fresh application restores history, never an expedition/field in progress.
   const reloaded = createApp(storage);
   const restored = await reloaded.continueGame();
   assert.ok(restored);
   assert.equal(reloaded.getScreen(), CHAMPIONSHIP_SCREENS.RAISING_HOME);
   assert.equal(reloaded.getHuntRuntime(), null);
   assert.equal(reloaded.getConfirmedGate(), null);
+  assert.deepEqual(reloaded.getHuntPersistentState(), app.getHuntPersistentState());
   assert.equal(reloaded.getRaisingState().interactions[residentId].careCount, 1, "the Raising slice must survive");
   await reloaded.dispose();
 });
@@ -460,7 +480,7 @@ test("starting a new game clears any expedition in progress", async () => {
   const started = await app.newGame();
   const source = createGateHuntPresentationSource(app);
   source.intents.openGate();
-  source.intents.selectGate(app.getGates()[0].gateId);
+  source.intents.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId);
   source.intents.confirmGate();
   source.intents.beginHunt();
   assert.equal(app.getScreen(), CHAMPIONSHIP_SCREENS.HUNT_FIELD);

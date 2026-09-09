@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:battle-select:menu-cube:v1",
+  "title": "Battle menu four-face panel pack",
+  "rightsStatus": "ORIGINAL_CREATED",
+  "productionStatus": "IMPLEMENTED_OWNER_VISUAL_REVIEW_PENDING",
+  "runtimeEligible": true,
+  "humanApproved": false,
+  "shippingReady": false,
+  "shippingStatus": "NOT_SHIPPING_READY",
+  "artifactMaturity": "FOUR_LAYERED_VECTOR_PANELS_BAKED_TO_SRGB_TEXTURES",
+  "renderer": "THREE_BOUNDED_BATTLE_SELECT",
+  "implementation": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
+  "language": "zh-Hant",
+  "textEvidence": "PRODUCT_AUTHORED",
+  "artEvidence": "PRODUCT_AUTHORED",
+  "authoring": {
+    "method": "REPO_NATIVE_VECTOR_UI_RASTERIZED_WITH_CHROMIUM",
+    "builder": "scripts/build-battle-cube-art.mjs",
+    "font": "Microsoft JhengHei rendered to PNG; no font binary redistributed"
+  },
+  "evidenceBoundary": {
+    "sourceModel": "battle_menu/launcher13.nsbmd",
+    "sourceModelSha256": "ea0cb0f6da5998d94b5ef870899ff149777de1bbad487dcd5975f7a5ac6e7157",
+    "requestedFourIdentitiesPresent": true,
+    "onlyFourOriginalFacesClaimed": false,
+    "additionalReferencePrefixes": [
+      "_06_password",
+      "_07_rensyu"
+    ],
+    "layerMeaning": "BACKGROUND_EMBLEM_LABEL_IS_PRODUCT_AUTHORED; _l/_u semantic meanings remain UNKNOWN_REQUIRES_TRACE",
+    "romModelReuse": false,
+    "decodedTextureReuse": false,
+    "originalPixelReuse": false,
+    "runtimeResearchPathDependency": false,
+    "orientationEvidence": "PRODUCT_AUTHORED",
+    "exactOriginalVisualParity": false
+  },
+  "authorityBoundary": {
+    "selection": "EXISTING_INJECTED_ON_SELECT",
+    "matchFiltering": "UNCHANGED_UNKNOWN_REQUIRES_TRACE",
+    "newGameModes": false,
+    "newTicker": false
+  },
+  "budget": {
+    "textureCount": 4,
+    "maxDimension": 512,
+    "rgbaBytesIncludingMipmapsCeiling": 5592408,
+    "maxTotalPngBytes": 768000,
+    "loadPolicy": "BATTLE_SELECT_ENTRY_DISPOSE_ON_EXIT"
+  },
+  "faces": [
+    {
+      "id": "CHAMPIONSHIP",
+      "label": "冠軍賽",
+      "referenceNodePrefix": "_02_champ",
+      "texture": "assets/production/battle/menu-cube-v1/championship.png",
+      "width": 512,
+      "height": 512,
+      "colorSpace": "srgb",
+      "sha256": "80de8cdc7ac7aba3bf48e4cfd795471f383955c13f9d6f8f037e578b711e7189",
+      "bytes": 160793,
+      "sourceLayers": {
+        "background": "docs/art/production/battle/menu-cube-v1/championship-background.svg",
+        "emblem": "docs/art/production/battle/menu-cube-v1/championship-emblem.svg",
+        "label": "docs/art/production/battle/menu-cube-v1/championship-label.svg"
+      }
+    },
+    {
+      "id": "TITLE_MATCH",
+      "label": "頭銜賽",
+      "referenceNodePrefix": "_03_title",
+      "texture": "assets/production/battle/menu-cube-v1/title-match.png",
+      "width": 512,
+      "height": 512,
+      "colorSpace": "srgb",
+      "sha256": "fe495111ed5b04a0509c44a8135e1d354b7a5d421710e3e4658758c11e8dcebf",
+      "bytes": 163467,
+      "sourceLayers": {
+        "background": "docs/art/production/battle/menu-cube-v1/title-match-background.svg",
+        "emblem": "docs/art/production/battle/menu-cube-v1/title-match-emblem.svg",
+        "label": "docs/art/production/battle/menu-cube-v1/title-match-label.svg"
+      }
+    },
+    {
+      "id": "FREE_BATTLE",
+      "label": "自由對戰",
+      "referenceNodePrefix": "_04_free",
+      "texture": "assets/production/battle/menu-cube-v1/free-battle.png",
+      "width": 512,
+      "height": 512,
+      "colorSpace": "srgb",
+      "sha256": "f2624018d2942ddc726726baa31cab47b5d6bbf2344808a7ee340f8ba2e7ff86",
+      "bytes": 157489,
+      "sourceLayers": {
+        "background": "docs/art/production/battle/menu-cube-v1/free-battle-background.svg",
+        "emblem": "docs/art/production/battle/menu-cube-v1/free-battle-emblem.svg",
+        "label": "docs/art/production/battle/menu-cube-v1/free-battle-label.svg"
+      }
+    },
+    {
+      "id": "LINK_BATTLE",
+      "label": "通訊對戰",
+      "referenceNodePrefix": "_05_tushin",
+      "texture": "assets/production/battle/menu-cube-v1/link-battle.png",
+      "width": 512,
+      "height": 512,
+      "colorSpace": "srgb",
+      "sha256": "36f02ec27ef7d94f90008968af0fbc2e6f272759669cf1a462ad9231dd0ecc76",
+      "bytes": 163219,
+      "sourceLayers": {
+        "background": "docs/art/production/battle/menu-cube-v1/link-battle-background.svg",
+        "emblem": "docs/art/production/battle/menu-cube-v1/link-battle-emblem.svg",
+        "label": "docs/art/production/battle/menu-cube-v1/link-battle-label.svg"
+      }
+    }
+  ]
+}

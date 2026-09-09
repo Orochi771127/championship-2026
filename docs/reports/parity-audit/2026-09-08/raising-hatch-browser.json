@@ -1,0 +1,10 @@
+{
+  "origin": "http://127.0.0.1:8749",
+  "flow": "New Game -> timed hatch -> select -> SAVE -> reload -> Continue -> select",
+  "input": "normal UI only",
+  "observed": "- status:\n  - generic: Spring\n  - generic: Day\n  - generic: \"1\"\n  - generic: Training\n  - time: 14:50\n- main:\n  - heading \"RAISING HOME\" [level=1]\n  - button \"SAVE\"\n  - heading \"DIGITAMA_0\" [level=2]\n  - paragraph: Living in Waiting Room\n  - term: HP\n  - definition: \"320\"\n  - term: TP\n  - definition: \"10\"\n  - region \"Playable Raising field\":\n    - generic: SWIPE TO VIEW\n  - status: Changes are waiting to be saved.\n- toolbar \"Contextual toolbar\":\n  - button \"HAND\":\n    - generic: HAND\n  - button \"FEED\":\n    - generic: FEED\n  - button \"CLEAN\":\n    - generic: CLEAN\n  - button \"MED\":\n    - generic: MED\n  - button \"WOUND\":\n    - generic: WOUND\n  - button \"PROTEIN\":\n    - generic: PROTEIN\n  - button \"MANAGE\":\n    - generic: MANAGE\n  - button \"SYSTEM\":\n    - generic: SYSTEM",
+  "limits": [
+    "Desktop viewport only in this run",
+    "No successful hand tap hatch browser test yet"
+  ]
+}

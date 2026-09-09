@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "id": "championship-modern-battle-player-roster",
+  "authority": "CHAMPIONSHIP_2026_PRODUCT",
+  "originalParityClaim": false,
+  "note": "Battle profiles for the product's own three creatures. The SHAPE here is the original's: a stat-curve index plus the ten level fields ARM9 0x02062900 reads, fed through the same buildCreatureFromProfile the opponent path uses, so every stat is a curve row read back and nothing is computed. The VALUES are product-authored, and they have to be: Greyshade Cat, Blazetail Kit and Crystalfin Seahorse do not exist in the cartridge, so there is no ROM number to trace for them. Marking these PRODUCT_AUTHORED is not a gap in the reverse engineering; it is the honest label for creatures the product invented.",
+
+  "evidence": "PRODUCT_AUTHORED",
+  "shapeEvidence": "VERIFIED_BINARY",
+  "shapeNote": "statCurveIndex indexes ARM9 0x020CA008 column 0 for HP, exactly as a species record's +0x30 does. The ten level fields index the same curve's columns 1..6 exactly as an opponent preset's +0x14..+0x38 do. Both are checked against the ROM-derived catalogs at test time, so a value outside the 27-row curve fails rather than clamping.",
+
+  "sourceEvidence": {
+    "statCurveIndex": "PRODUCT_AUTHORED",
+    "levels": "PRODUCT_AUTHORED",
+    "source12C": "PRODUCT_AUTHORED",
+    "source130": "PRODUCT_AUTHORED"
+  },
+
+  "teamSize": 3,
+  "teamSizeNote": "OVL10 0x02110A34 expands three opponents and OVL19 0x0210CCF0 advances the roster base by three per team, so three a side is the original's, not a product choice.",
+
+  "profiles": [
+    {
+      "residentId": "resident:greyshade-cat",
+      "speciesId": "championship:creature:greyshade-cat",
+      "displayName": "Greyshade Cat",
+      "statCurveIndex": 6,
+      "levels": {
+        "field14": 6,
+        "field18": 6,
+        "field1C": 5,
+        "field20": 6,
+        "field24": 5,
+        "field28": 6,
+        "field2C": 5,
+        "field30": 6,
+        "field34": 5,
+        "field38": 6
+      },
+      "source12C": 2,
+      "source130": 0
+    },
+    {
+      "residentId": "resident:blazetail-kit",
+      "speciesId": "championship:creature:blazetail-kit",
+      "displayName": "Blazetail Kit",
+      "statCurveIndex": 6,
+      "levels": {
+        "field14": 5,
+        "field18": 7,
+        "field1C": 6,
+        "field20": 5,
+        "field24": 6,
+        "field28": 7,
+        "field2C": 5,
+        "field30": 6,
+        "field34": 6,
+        "field38": 5
+      },
+      "source12C": 2,
+      "source130": 0
+    },
+    {
+      "residentId": "resident:crystalfin-seahorse",
+      "speciesId": "championship:creature:crystalfin-seahorse",
+      "displayName": "Crystalfin Seahorse",
+      "statCurveIndex": 6,
+      "levels": {
+        "field14": 7,
+        "field18": 5,
+        "field1C": 6,
+        "field20": 6,
+        "field24": 7,
+        "field28": 5,
+        "field2C": 6,
+        "field30": 5,
+        "field34": 6,
+        "field38": 6
+      },
+      "source12C": 2,
+      "source130": 0
+    }
+  ],
+
+  "notDecidedHere": {
+    "growth": "How a resident's raising history changes these levels is UNKNOWN_REQUIRES_TRACE. The original grows a creature through its own save structure, which this product does not have, and no growth rule is invented here: a resident battles at its declared profile until a traced or Owner-decided rule replaces this block.",
+    "moves": "A creature's move list comes from the 596-record move table keyed by species id at OVL19 0x02113DCC. The product species have no ROM species id, so which moves they carry is an open product decision and this file does not answer it.",
+    "speciesIndex": "databaseCatalog's speciesIndex 8, 9 and 10 are PRODUCT_AUTHORED encyclopedia ordinals and are NOT the battle species ids the 228-record table at ARM9 0x020C1374 uses. Nothing here maps one to the other, because no such mapping exists."
+  }
+}

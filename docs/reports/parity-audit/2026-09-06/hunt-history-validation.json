@@ -1,0 +1,65 @@
+{
+  "date": "2026-09-06",
+  "gitRoot": "R:/Projects/Championship2026/championship-2026",
+  "branch": "main",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "initialDirtyEntries": 463,
+  "receipts": [
+    {
+      "path": "docs/research/HUNT_HISTORY_CPU_CHECK_2026-09-06.json",
+      "sha256": "fa090eb84fac91a0c6bdce56f6a04894776fd0f605e056bcab28224e7d4f8b9d",
+      "deterministicCpuRebuild": true
+    },
+    {
+      "path": "docs/research/HUNT_HISTORY_LIFECYCLE_CHECK_2026-09-06.json",
+      "sha256": "6a37bfb61f4926e08cd01710a186ae6ebcaa06beeca25e25f7b54475e9439833",
+      "controlledOriginalUiSaveLoad": true
+    }
+  ],
+  "focused": {
+    "tests": 9,
+    "pass": 9,
+    "fail": 0,
+    "command": "node --test tests/championship-hunt-history-cases.mjs tests/championship-hunt-individual-pool-cases.mjs"
+  },
+  "serialRegression": {
+    "tests": 983,
+    "pass": 983,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "durationMs": 55047.571
+  },
+  "regressionCommand": "node --test --test-concurrency=1 tests/*.mjs",
+  "privateRegressionLog": "R:\\Projects\\Championship2026\\_archive\\hunt-history-2026-09-06\\full-regression.log",
+  "originalControlledSaveLoadPassed": true,
+  "normalSpawnRuntimeBound": false,
+  "huntGenerationConsumesGameplayRng": false,
+  "normalEntryCapturePlayable": false,
+  "webHistorySaveBound": false,
+  "browserAcceptanceRun": false,
+  "saveSchemaChanged": false,
+  "changedProductEntry": false,
+  "committed": false,
+  "gitDiffCheck": "PASS",
+  "changedTextUtf8Lf": "PASS",
+  "pythonSyntax": "PASS",
+  "changedPaths": [
+    "scripts/research/check-hunt-history-cpu.py",
+    "scripts/research/trace-hunt-history-lifecycle.py",
+    "src/championship/hunt/capture/nativeHuntHistory.js",
+    "tests/championship-hunt-history-cases.mjs",
+    "docs/research/HUNT_HISTORY_CPU_CHECK_2026-09-06.json",
+    "docs/research/HUNT_HISTORY_LIFECYCLE_CHECK_2026-09-06.json",
+    "docs/research/HUNT_HISTORY_LIFECYCLE_2026-09-06.md",
+    "docs/contracts/championship/HUNT_CAPTURE_DATAFLOW.v1.json",
+    "docs/CURRENT_PRODUCT_STATUS.md",
+    "docs/README.md",
+    "docs/research/HUNT_GENERATION_SOURCE_PROGRESS_2026-09-06.md",
+    "docs/coordination/CHAMPIONSHIP_DEPENDENCY_MATRIX.csv",
+    "docs/coordination/CHAMPIONSHIP_BLOCKER_LEDGER.csv",
+    "docs/planning/CHAMPIONSHIP_ORIGINAL_PARITY_STATUS_AND_SKILL_PLAN_2026-09-06.md",
+    "docs/reports/parity-audit/2026-09-06/hunt-history-validation.json"
+  ]
+}

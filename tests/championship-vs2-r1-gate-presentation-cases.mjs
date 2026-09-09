@@ -30,8 +30,8 @@ test("the 2D Gate grid survives as a reachable fallback", () => {
   assert.match(screens, /LOW_CAPABILITY_FALLBACK/);
   assert.match(screens, /VS2_PRESENTATION_MODES\.DEVELOPER/);
   assert.match(screens, /cm-vs2-gates/);
-  assert.match(screens, /WORLD VIEW/);
-  assert.match(screens, /LIST VIEW/);
+  assert.match(screens, /返回地球/);
+  assert.match(screens, /場地列表/);
 });
 
 test("the original-created production manifest refuses promotion and ROM payload", () => {

@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "contractId": "CHAMPIONSHIP_RANCH_NATIVE_GEOMETRY",
+  "date": "2026-09-06",
+  "tileCopyFollowup": "CHAMPIONSHIP_RANCH_TILE_COMPOSITION.v1.json now verifies and ports ordinary/filler/wall tile-copy loops, cropping and wrapping. The old full-compositor unknown below now concerns production material input, objects, animation, field-record lifecycle and renderer integration.",
+  "scope": "R2A native board placement and Training tile-origin arithmetic",
+  "evidence": "VERIFIED_BINARY_NATIVE_REPLAY_BOUNDED",
+  "receipt": "docs/research/ranch-assembly-2026-09-06/native-geometry-receipt.json",
+  "reproducer": "docs/research/ranch-assembly-2026-09-06/replay-ranch-geometry.py",
+  "supersedesClaims": [
+    "A cage always occupies exactly one hex cell.",
+    "OVL15 0x0210B36C is the cover switch.",
+    "Board coordinates are unknown or use alternating-column vertical staggering.",
+    "A Training field is necessarily unrelated to the original board anchor."
+  ],
+  "originalDataflow": {
+    "shapeWriter": "ARM9 0x02050030: definition index -> byte at 0x020C8CBC + index*40 -> cage record +8",
+    "anchorStorage": "ARM9 0x020500AC / 0x020500B4 read/write cage record +0x60",
+    "editorRestore": "OVL15 0x0210C834..0x0210C898 reads shape and anchor, calls 0x0210C118",
+    "editorPlacement": "OVL15 0x0210C118 tests mask[shape] & (occupied >> anchor); conflict returns 0 before writes",
+    "editorCommit": "OVL15 0x0210D640..0x0210D654 writes definition and anchor through existing native record setters",
+    "fieldInputs": "ARM9 0x02082150..0x02082190 copies the same record's field, anchor and shape into field arrays",
+    "fieldOrigin": "ARM9 0x020827B0..0x020827F4 reads anchor and shape mask to form destination tile index"
+  },
+  "board": {
+    "coordinateSpace": "NATIVE_CAGE_EDIT_SPRITE_ORIGIN_PIXELS",
+    "columns": 10,
+    "rows": 2,
+    "column": "floor(anchor / 2)",
+    "row": "anchor % 2",
+    "x": "2 + column*24 + row*12",
+    "y": "8 + row*22",
+    "fixedPointScale": 4096,
+    "rankSwitch": "OVL15 0x0210C660..0x0210C71C",
+    "shapeMasks": [1, 5, 3, 6, 21, 14, 7, 13, 11, 26, 15, 30, 27, 90, 85, 31],
+    "limits": "Single placement helper only. Caller row normalization, fixed reserved cells, remove/restore and commit must accompany future editor migration."
+  },
+  "field": {
+    "coordinateSpace": "ORIGINAL_FIELD_DESTINATION_TILES",
+    "tileX": "column*12 + row*6 + ((shapeMask & 1) ? 0 : 6)",
+    "tileY": "row*8",
+    "sourceCropObservation": "ARM9 0x02082894..0x020828B4 skips three source tile rows when row is zero",
+    "horizontalWrapObservation": "ARM9 0x020828F0..0x0208291C wraps a destination index back by one row stride when crossing the right edge",
+    "spriteOrigin": "UNKNOWN_REQUIRES_COMPLETE_COMPOSITOR_TRACE",
+    "actorTransform": "UNKNOWN_REQUIRES_TRACE",
+    "specialFieldHandling": "Waiting Room and empty-space filler are not ordinary independent shelf tiles"
+  },
+  "implementation": {
+    "coordinateAuthority": "src/championship/cage/ranchSlotGeometry.js",
+    "nativeArithmeticPorted": true,
+    "nativePlacementBoundToEditor": false,
+    "nativeFieldCompositorBound": false,
+    "legacyPlacementEvidence": "PRODUCT_AUTHORED_PENDING_ORIGINAL_FOOTPRINT_MIGRATION",
+    "legacySavePolicy": "Preserve existing records; do not silently drop, move or relabel them as original-valid",
+    "presentationPolicy": "Keep current shelf layout labelled PRODUCT_AUTHORED until complete compositor, save compatibility and original screen/live trace checks pass",
+    "rendererSaveRouterPolicy": "Existing authorities only"
+  },
+  "acceptance": {
+    "originalArmPlacementVectors": 2560,
+    "originalArmFieldOriginVectors": 320,
+    "liveOriginalGameplayCrossCheck": false,
+    "normalBrowserVisualChange": false,
+    "physicalDeviceQa": false,
+    "shippingReady": false
+  }
+}

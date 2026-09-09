@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "traceId": "BATTLE_BM03_BM04_ANIMATION_TRACE_2026_09_02",
+  "romSha256": "8AD375BA0BD9B652A25F72DEAD2B47F78DA401E188A8F3E1B7A6F2867EE0C5D1",
+  "inputPolicy": "EXTERNAL_RESEARCH_ONLY_NO_PAYLOAD_WRITTEN",
+  "timingClockHz": 59.82609828808083,
+  "genericUpdateCallSite": "ARM9_0x02083D1C_CALLS_0x0204ED5C_WITH_UPDATE_FLAG_1",
+  "result": "PLACEMENT_TIMING_AND_COMPOSITION_CLOSED_FOR_ORIGINAL_CREATED_REPLACEMENT",
+  "fields": [
+    {
+      "fieldId": "field_bm03_01",
+      "originalFunction": "BATTLE_VOLCANO",
+      "sourceEvidence": "VERIFIED_ROM_PAYLOAD_HASH_AND_BSAR_STRUCTURE",
+      "sourcePayloadHashes": {
+        "bsa": "C0607A44D293F36EC1232FB66AA860EC002D9FF89B2004EB419EDB523A71EB67",
+        "ncgr": "BAB81DDDF095FF48E1CC3623D87129763263622F0B3EA7A2AEF11E294B541D3F",
+        "nclr": "D553EEA8EDC95EBEC1F7E5EA78DDC60C48EA5C02A3C512D8EDDAFE2D0A6D75AC"
+      },
+      "format": "YDIJ_BSAR_ANIMATED_TILEMAP_V2",
+      "version": 2,
+      "headerWords": [
+        1,
+        1
+      ],
+      "frameCount": 2,
+      "frameDurationsRawTicks": [
+        50,
+        50
+      ],
+      "frameDurationsMs": [
+        835.7556556544072,
+        835.7556556544072
+      ],
+      "timingEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK_ARM9_0x0204ED5C",
+      "gridCells": [
+        52,
+        34
+      ],
+      "dimensionsPixels": [
+        416,
+        272
+      ],
+      "originPixels": [
+        0,
+        0
+      ],
+      "placementEvidence": "HIGH_CONFIDENCE_CROSSCHECK_FULL_FIELD_GRID_EQUALS_BATTLE_ARENA",
+      "symbolCount": 12,
+      "uniqueGridSymbols": 12,
+      "graphicsTileCount": 25,
+      "maximumReferencedTileByFrame": [
+        20,
+        24
+      ],
+      "compositionOrder": "ANIMATED_TERRAIN_BED_THEN_STATIC_TERRAIN_AND_OBJECTS_THEN_BM00_COMMON",
+      "compositionEvidence": "HIGH_CONFIDENCE_CROSSCHECK_SHARED_BSAR_RENDERER_AND_ORIGINAL_VISUAL_REFERENCE",
+      "semanticClaim": "FIELD_ANIMATION_ONLY_NO_GAMEPLAY_MEANING"
+    },
+    {
+      "fieldId": "field_bm04_01",
+      "originalFunction": "BATTLE_ISLAND",
+      "sourceEvidence": "VERIFIED_ROM_PAYLOAD_HASH_AND_BSAR_STRUCTURE",
+      "sourcePayloadHashes": {
+        "bsa": "7072423CC88BE0B27683C94782EAF37197AEAFACC1B4BEBCB689FDFC44B296C9",
+        "ncgr": "675721DE7FEA6793115E7F694B937777DA95294CE89DD1E846B032EC6623AF96",
+        "nclr": "25FC6D70DDF5B22350925390B1A273CAC926CFF16133B3E0FA12DC6F11DA373F"
+      },
+      "format": "YDIJ_BSAR_ANIMATED_TILEMAP_V2",
+      "version": 2,
+      "headerWords": [
+        1,
+        1
+      ],
+      "frameCount": 2,
+      "frameDurationsRawTicks": [
+        20,
+        20
+      ],
+      "frameDurationsMs": [
+        334.30226226176285,
+        334.30226226176285
+      ],
+      "timingEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK_ARM9_0x0204ED5C",
+      "gridCells": [
+        52,
+        34
+      ],
+      "dimensionsPixels": [
+        416,
+        272
+      ],
+      "originPixels": [
+        0,
+        0
+      ],
+      "placementEvidence": "HIGH_CONFIDENCE_CROSSCHECK_FULL_FIELD_GRID_EQUALS_BATTLE_ARENA",
+      "symbolCount": 179,
+      "uniqueGridSymbols": 179,
+      "graphicsTileCount": 311,
+      "maximumReferencedTileByFrame": [
+        309,
+        310
+      ],
+      "compositionOrder": "ANIMATED_TERRAIN_BED_THEN_STATIC_TERRAIN_AND_OBJECTS_THEN_BM00_COMMON",
+      "compositionEvidence": "HIGH_CONFIDENCE_CROSSCHECK_SHARED_BSAR_RENDERER_AND_ORIGINAL_VISUAL_REFERENCE",
+      "semanticClaim": "FIELD_ANIMATION_ONLY_NO_GAMEPLAY_MEANING"
+    }
+  ]
+}

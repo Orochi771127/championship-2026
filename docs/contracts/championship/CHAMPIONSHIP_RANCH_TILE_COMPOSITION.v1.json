@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "contractId": "CHAMPIONSHIP_RANCH_TILE_COMPOSITION",
+  "date": "2026-09-06",
+  "scope": "R2B ordinary cage, empty-slot filler and bottom wall tile-copy loops",
+  "evidence": "BOUNDED_ORIGINAL_ARM9_EXECUTION",
+  "receipt": "docs/research/ranch-assembly-2026-09-06/native-compositor-receipt.json",
+  "nativeCaseCount": 582,
+  "nativeSourceCount": 38,
+  "initialRecordWrites": {
+    "evidence": "ISOLATED_ORIGINAL_ARM_RECORD_SETTER_EXECUTION_NOT_FULL_NEW_GAME_TRACE",
+    "records": [
+      { "definitionIndex": 35, "anchor": 0 },
+      { "definitionIndex": 0, "anchor": 8 },
+      { "definitionIndex": 1, "anchor": 4 },
+      { "definitionIndex": 15, "anchor": 7 }
+    ],
+    "policy": "Evidence only. Do not relocate legacy saves or infer original initialization is integrated."
+  },
+  "coordinateAuthority": "src/championship/cage/ranchSlotGeometry.js",
+  "implementation": "src/championship/cage/ranchTileComposition.js",
+  "dimensions": { "widthTilesByUnlockedCount": { "14": 84, "16": 96, "18": 108, "20": 120 }, "heightTiles": 24 },
+  "ordinary": {
+    "instructions": "ARM9 0x02082874..0x02082994",
+    "origin": "originalRanchFieldTileOrigin(anchor, shapeIndex)",
+    "sourceCrop": "upper row skips first 3 source tile rows; lower row skips none",
+    "destination": "base + sourceRowAfterCrop * stride + sourceColumn; subtract stride once when base%stride + sourceColumn >= stride",
+    "rawTile": "u16(sourceTile + tileBase), preserving raw flags",
+    "skip": "tile == tileBase AND (rawAttribute & 1) != 0 skips all writes",
+    "writes": ["tile only if tile != tileBase", "raw attribute and definition owner only if rawAttribute != 1", "raw collision only when nonzero"]
+  },
+  "filler": {
+    "instructions": "ARM9 0x02082A90..0x02082BA0",
+    "origin": "column*12 + row*6, row*8; no shape-dependent +6",
+    "sourceCropAndWrap": "same as ordinary",
+    "skip": "tile == tileBase skips all writes",
+    "writes": ["tile", "attribute low bit and owner only when low bit is zero", "collision only when nonzero"]
+  },
+  "wall": {
+    "instructions": "ARM9 0x02082BC4..0x02082CC8",
+    "origin": "destination row 19, repeat every 12 columns, unlockedCount/2 repeats",
+    "writes": "nonzero source raw tile writes u16(tileBase + raw); no attribute, collision or owner change"
+  },
+  "waitingRoomBoundary": "Definition 35 is fixed in editor initialization; definition 36 is the empty-space filler. The copy loops accept explicit inputs. This contract does not establish automatic save migration or full native field-record creation.",
+  "runtimeBoundary": {
+    "pureAlgorithmOnly": true,
+    "researchArraysInRuntime": false,
+    "sourceProvider": "Existing production art and gameplay authorities must supply separately eligible inputs",
+    "preserveRawMetadata": "No collision class, walkability, effect, spawn or ownership gameplay interpretation",
+    "normalPresenterBound": false,
+    "objectAnimationActorTransforms": "UNKNOWN_REQUIRES_TRACE",
+    "liveOriginalSceneQa": false,
+    "shippingReady": false
+  }
+}

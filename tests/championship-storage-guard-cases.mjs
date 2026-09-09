@@ -22,7 +22,7 @@ import {
   isForbiddenChampionshipStorageKey
 } from "../src/championship/app/championshipStorageGuard.js";
 
-const catalog = JSON.parse(fs.readFileSync("src/data/championship/catalogs/entities.r1.json", "utf8"));
+const catalog = JSON.parse(fs.readFileSync("src/data/championship/catalogs/creature-species.r1.json", "utf8"));
 const presentation = JSON.parse(fs.readFileSync("docs/contracts/championship/raising-home-presentation.v1.json", "utf8"));
 
 /** Records every key that reaches the underlying Storage, in call order. */

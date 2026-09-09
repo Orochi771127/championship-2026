@@ -182,6 +182,47 @@ def ui_kind(families: list[dict[str, Any]]) -> str:
     return "UI_CELL_BUNDLE_REFERENCE"
 
 
+def append_unique(row: dict[str, Any], field: str, values: list[str]) -> None:
+    """Append deterministic contract metadata without duplicating prior runs."""
+    current = list(row.get(field, []))
+    for value in values:
+        if value not in current:
+            current.append(value)
+    row[field] = current
+
+
+def apply_confirmed_contract_edges(assets: list[dict[str, Any]]) -> None:
+    """Encode only relationships established by the reconciliation evidence.
+
+    Shared palette decisions are decision IDs rather than aliases to either tier's
+    complete package. Battle arena dependencies point at the canonical registry
+    unit so the production crosswalk can resolve them to production IDs.
+    """
+    shared_battle_id = "art:battle-field:field-bm00-00:shared-layer-reference"
+    for asset in assets:
+        kind = asset.get("assetKind")
+        asset_id = asset.get("assetId", "")
+        logical_group = asset.get("logicalGroup", "")
+
+        if kind in {"CHARACTER_ENTITY_REFERENCE", "CHARACTER_DB_ENTITY_REFERENCE"}:
+            match = re.match(r"^art:character:([^:]+):(rom|db)-reference$", asset_id)
+            if not match:
+                raise SystemExit(f"character assetId cannot produce a palette decision: {asset_id}")
+            append_unique(asset, "dependencies", [f"decision:character-palette:{match.group(1)}"])
+
+        if kind == "BATTLE_FIELD_REFERENCE" and logical_group != "field_bm07_01":
+            append_unique(asset, "dependencies", [shared_battle_id])
+
+        if kind == "BATTLE_FIELD_REFERENCE" and logical_group in {"field_bm03_01", "field_bm04_01"}:
+            append_unique(asset, "blockers", ["ANIMATED_LAYER_UNKNOWN_REQUIRES_TRACE"])
+
+        if kind == "CAGE_ENVIRONMENT_REFERENCE":
+            append_unique(asset, "blockers", ["CAGE_RUNTIME_SEMANTICS_REQUIRES_TRACE"])
+
+        if asset.get("domain") == "THREE_D" and logical_group.lower().startswith("gate_select/"):
+            append_unique(asset, "blockers", ["GATE_TO_HM_MAPPING_REQUIRES_TRACE"])
+
+
 def build_new_units(census: dict[str, Any], tokens: set[str]) -> list[dict[str, Any]]:
     by_key = {(family["directory"], family["stem"]): family for family in census["families"]}
     uncovered = {
@@ -502,6 +543,7 @@ def main() -> int:
         raise SystemExit(f"assetIds violate the schema pattern: {sorted(invalid)[:10]}")
 
     registry["assets"] = sorted(audited + added, key=lambda unit: unit["assetId"])
+    apply_confirmed_contract_edges(registry["assets"])
     registry["summary"]["baselines"] = corrected_baselines(registry["summary"]["baselines"], census)
     registry["authoritySnapshot"]["romReconciliation"] = {
         "date": "2026-09-01",

@@ -1,0 +1,5047 @@
+{
+  "status": "CONTROLLED_GATE_SOURCE_CPU_NOT_BROWSER_ACCEPTANCE",
+  "runtimeEligible": false,
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "stateSha256": "a166dd48eb64d1fce8259da156790f829cccac08cc0be7355029cdc689aaf963",
+  "boundaries": [
+    "loaded private original Gate model",
+    "controlled clock hour 0..23",
+    "DS divider/sqrt register adapter"
+  ],
+  "positions": [
+    {
+      "gateRecordIndex": 0,
+      "positionQ12": [
+        21152,
+        277715,
+        -313654
+      ]
+    },
+    {
+      "gateRecordIndex": 1,
+      "positionQ12": [
+        269655,
+        -25130,
+        -317977
+      ]
+    },
+    {
+      "gateRecordIndex": 2,
+      "positionQ12": [
+        -78562,
+        333316,
+        239055
+      ]
+    },
+    {
+      "gateRecordIndex": 3,
+      "positionQ12": [
+        185816,
+        -43863,
+        371491
+      ]
+    },
+    {
+      "gateRecordIndex": 4,
+      "positionQ12": [
+        200918,
+        232469,
+        -290892
+      ]
+    },
+    {
+      "gateRecordIndex": 5,
+      "positionQ12": [
+        -264750,
+        206662,
+        -257318
+      ]
+    },
+    {
+      "gateRecordIndex": 6,
+      "positionQ12": [
+        -206295,
+        345066,
+        -113268
+      ]
+    },
+    {
+      "gateRecordIndex": 7,
+      "positionQ12": [
+        231107,
+        209224,
+        286086
+      ]
+    },
+    {
+      "gateRecordIndex": 8,
+      "positionQ12": [
+        96979,
+        -381223,
+        155967
+      ]
+    },
+    {
+      "gateRecordIndex": 9,
+      "positionQ12": [
+        215967,
+        -308358,
+        184994
+      ]
+    },
+    {
+      "gateRecordIndex": 10,
+      "positionQ12": [
+        -47597,
+        381863,
+        166886
+      ]
+    },
+    {
+      "gateRecordIndex": 11,
+      "positionQ12": [
+        -78017,
+        -7993,
+        -412043
+      ]
+    },
+    {
+      "gateRecordIndex": 12,
+      "positionQ12": [
+        -349021,
+        -231496,
+        59993
+      ]
+    },
+    {
+      "gateRecordIndex": 13,
+      "positionQ12": [
+        -84871,
+        -293692,
+        292516
+      ]
+    },
+    {
+      "gateRecordIndex": 14,
+      "positionQ12": [
+        -73345,
+        -161345,
+        -384171
+      ]
+    },
+    {
+      "gateRecordIndex": 15,
+      "positionQ12": [
+        382119,
+        55523,
+        173078
+      ]
+    },
+    {
+      "gateRecordIndex": 16,
+      "positionQ12": [
+        21152,
+        277715,
+        -313654
+      ]
+    }
+  ],
+  "vectors": [
+    {
+      "gateRecordIndex": 0,
+      "hour": 0,
+      "night": 1,
+      "angle": 4294961296,
+      "sunVector": [
+        -1936,
+        0,
+        525
+      ],
+      "dotQ12": -1336
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 1,
+      "night": 0,
+      "angle": 4294965664,
+      "sunVector": [
+        -7804,
+        0,
+        -6753
+      ],
+      "dotQ12": 2465
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 2,
+      "night": 1,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": -3876
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 3,
+      "night": 1,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": -3001
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 4,
+      "night": 1,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": -1608
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 5,
+      "night": 0,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": 62
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 6,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 1722
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 7,
+      "night": 0,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": 3085
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 8,
+      "night": 0,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": 3915
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 9,
+      "night": 0,
+      "angle": 33312,
+      "sunVector": [
+        -214,
+        0,
+        -4090
+      ],
+      "dotQ12": 4067
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 10,
+      "night": 0,
+      "angle": 37680,
+      "sunVector": [
+        -1858,
+        0,
+        -3650
+      ],
+      "dotQ12": 3517
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 11,
+      "night": 0,
+      "angle": 42048,
+      "sunVector": [
+        -3182,
+        0,
+        -2579
+      ],
+      "dotQ12": 2359
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 12,
+      "night": 0,
+      "angle": 46416,
+      "sunVector": [
+        -3956,
+        0,
+        -1062
+      ],
+      "dotQ12": 793
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 13,
+      "night": 1,
+      "angle": 50784,
+      "sunVector": [
+        -4046,
+        0,
+        638
+      ],
+      "dotQ12": -909
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 14,
+      "night": 1,
+      "angle": 55152,
+      "sunVector": [
+        -3437,
+        0,
+        2228
+      ],
+      "dotQ12": -2455
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 15,
+      "night": 1,
+      "angle": 59536,
+      "sunVector": [
+        -2228,
+        0,
+        3437
+      ],
+      "dotQ12": -3580
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 16,
+      "night": 1,
+      "angle": 63904,
+      "sunVector": [
+        -638,
+        0,
+        4046
+      ],
+      "dotQ12": -4080
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 17,
+      "night": 1,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": -3876
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 18,
+      "night": 1,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": -3001
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 19,
+      "night": 1,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": -1608
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 20,
+      "night": 0,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": 62
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 21,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 1722
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 22,
+      "night": 0,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": 3085
+    },
+    {
+      "gateRecordIndex": 0,
+      "hour": 23,
+      "night": 0,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": 3915
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 0,
+      "night": 1,
+      "angle": 4294961296,
+      "sunVector": [
+        -1936,
+        0,
+        525
+      ],
+      "dotQ12": -3373
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 1,
+      "night": 0,
+      "angle": 4294965664,
+      "sunVector": [
+        -7804,
+        0,
+        -6753
+      ],
+      "dotQ12": 41
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 2,
+      "night": 1,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": -2330
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 3,
+      "night": 1,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": -759
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 4,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 943
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 5,
+      "night": 0,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": 2482
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 6,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 3593
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 7,
+      "night": 0,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": 4082
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 8,
+      "night": 0,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": 3866
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 9,
+      "night": 0,
+      "angle": 33312,
+      "sunVector": [
+        -214,
+        0,
+        -4090
+      ],
+      "dotQ12": 2981
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 10,
+      "night": 0,
+      "angle": 37680,
+      "sunVector": [
+        -1858,
+        0,
+        -3650
+      ],
+      "dotQ12": 1582
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 11,
+      "night": 1,
+      "angle": 42048,
+      "sunVector": [
+        -3182,
+        0,
+        -2579
+      ],
+      "dotQ12": -91
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 12,
+      "night": 1,
+      "angle": 46416,
+      "sunVector": [
+        -3956,
+        0,
+        -1062
+      ],
+      "dotQ12": -1748
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 13,
+      "night": 1,
+      "angle": 50784,
+      "sunVector": [
+        -4046,
+        0,
+        638
+      ],
+      "dotQ12": -3103
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 14,
+      "night": 1,
+      "angle": 55152,
+      "sunVector": [
+        -3437,
+        0,
+        2228
+      ],
+      "dotQ12": -3922
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 15,
+      "night": 1,
+      "angle": 59536,
+      "sunVector": [
+        -2228,
+        0,
+        3437
+      ],
+      "dotQ12": -4062
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 16,
+      "night": 1,
+      "angle": 63904,
+      "sunVector": [
+        -638,
+        0,
+        4046
+      ],
+      "dotQ12": -3498
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 17,
+      "night": 1,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": -2330
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 18,
+      "night": 1,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": -759
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 19,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 943
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 20,
+      "night": 0,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": 2482
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 21,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 3593
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 22,
+      "night": 0,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": 4082
+    },
+    {
+      "gateRecordIndex": 1,
+      "hour": 23,
+      "night": 0,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": 3866
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 0,
+      "night": 0,
+      "angle": 4294961296,
+      "sunVector": [
+        -1936,
+        0,
+        525
+      ],
+      "dotQ12": 2252
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 1,
+      "night": 1,
+      "angle": 4294965664,
+      "sunVector": [
+        -7804,
+        0,
+        -6753
+      ],
+      "dotQ12": -1579
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 2,
+      "night": 0,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": 3426
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 3,
+      "night": 0,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": 2217
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 4,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 625
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 5,
+      "night": 1,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": -1074
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 6,
+      "night": 1,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": -2589
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 7,
+      "night": 1,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": -3655
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 8,
+      "night": 1,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": -4091
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 9,
+      "night": 1,
+      "angle": 33312,
+      "sunVector": [
+        -214,
+        0,
+        -4090
+      ],
+      "dotQ12": -3818
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 10,
+      "night": 1,
+      "angle": 37680,
+      "sunVector": [
+        -1858,
+        0,
+        -3650
+      ],
+      "dotQ12": -2887
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 11,
+      "night": 1,
+      "angle": 42048,
+      "sunVector": [
+        -3182,
+        0,
+        -2579
+      ],
+      "dotQ12": -1456
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 12,
+      "night": 0,
+      "angle": 46416,
+      "sunVector": [
+        -3956,
+        0,
+        -1062
+      ],
+      "dotQ12": 226
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 13,
+      "night": 0,
+      "angle": 50784,
+      "sunVector": [
+        -4046,
+        0,
+        638
+      ],
+      "dotQ12": 1869
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 14,
+      "night": 0,
+      "angle": 55152,
+      "sunVector": [
+        -3437,
+        0,
+        2228
+      ],
+      "dotQ12": 3190
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 15,
+      "night": 0,
+      "angle": 59536,
+      "sunVector": [
+        -2228,
+        0,
+        3437
+      ],
+      "dotQ12": 3961
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 16,
+      "night": 0,
+      "angle": 63904,
+      "sunVector": [
+        -638,
+        0,
+        4046
+      ],
+      "dotQ12": 4043
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 17,
+      "night": 0,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": 3426
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 18,
+      "night": 0,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": 2217
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 19,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 625
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 20,
+      "night": 1,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": -1074
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 21,
+      "night": 1,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": -2589
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 22,
+      "night": 1,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": -3655
+    },
+    {
+      "gateRecordIndex": 2,
+      "hour": 23,
+      "night": 1,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": -4091
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 0,
+      "night": 1,
+      "angle": 4294961296,
+      "sunVector": [
+        -1936,
+        0,
+        525
+      ],
+      "dotQ12": -809
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 1,
+      "night": 1,
+      "angle": 4294965664,
+      "sunVector": [
+        -7804,
+        0,
+        -6753
+      ],
+      "dotQ12": -3782
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 2,
+      "night": 0,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": 4013
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 3,
+      "night": 0,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": 3999
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 4,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 3294
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 5,
+      "night": 0,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": 2021
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 6,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 398
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 7,
+      "night": 1,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": -1295
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 8,
+      "night": 1,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": -2763
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 9,
+      "night": 1,
+      "angle": 33312,
+      "sunVector": [
+        -214,
+        0,
+        -4090
+      ],
+      "dotQ12": -3753
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 10,
+      "night": 1,
+      "angle": 37680,
+      "sunVector": [
+        -1858,
+        0,
+        -3650
+      ],
+      "dotQ12": -4095
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 11,
+      "night": 1,
+      "angle": 42048,
+      "sunVector": [
+        -3182,
+        0,
+        -2579
+      ],
+      "dotQ12": -3730
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 12,
+      "night": 1,
+      "angle": 46416,
+      "sunVector": [
+        -3956,
+        0,
+        -1062
+      ],
+      "dotQ12": -2719
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 13,
+      "night": 1,
+      "angle": 50784,
+      "sunVector": [
+        -4046,
+        0,
+        638
+      ],
+      "dotQ12": -1239
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 14,
+      "night": 0,
+      "angle": 55152,
+      "sunVector": [
+        -3437,
+        0,
+        2228
+      ],
+      "dotQ12": 455
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 15,
+      "night": 0,
+      "angle": 59536,
+      "sunVector": [
+        -2228,
+        0,
+        3437
+      ],
+      "dotQ12": 2077
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 16,
+      "night": 0,
+      "angle": 63904,
+      "sunVector": [
+        -638,
+        0,
+        4046
+      ],
+      "dotQ12": 3333
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 17,
+      "night": 0,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": 4013
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 18,
+      "night": 0,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": 3999
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 19,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 3294
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 20,
+      "night": 0,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": 2021
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 21,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 398
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 22,
+      "night": 1,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": -1295
+    },
+    {
+      "gateRecordIndex": 3,
+      "hour": 23,
+      "night": 1,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": -2763
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 0,
+      "night": 1,
+      "angle": 4294961296,
+      "sunVector": [
+        -1936,
+        0,
+        525
+      ],
+      "dotQ12": -3128
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 1,
+      "night": 0,
+      "angle": 4294965664,
+      "sunVector": [
+        -7804,
+        0,
+        -6753
+      ],
+      "dotQ12": 445
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 2,
+      "night": 1,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": -2651
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 3,
+      "night": 1,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": -1152
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 4,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 546
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 5,
+      "night": 0,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": 2149
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 6,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 3381
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 7,
+      "night": 0,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": 4029
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 8,
+      "night": 0,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": 3981
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 9,
+      "night": 0,
+      "angle": 33312,
+      "sunVector": [
+        -214,
+        0,
+        -4090
+      ],
+      "dotQ12": 3243
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 10,
+      "night": 0,
+      "angle": 37680,
+      "sunVector": [
+        -1858,
+        0,
+        -3650
+      ],
+      "dotQ12": 1947
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 11,
+      "night": 0,
+      "angle": 42048,
+      "sunVector": [
+        -3182,
+        0,
+        -2579
+      ],
+      "dotQ12": 313
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 12,
+      "night": 1,
+      "angle": 46416,
+      "sunVector": [
+        -3956,
+        0,
+        -1062
+      ],
+      "dotQ12": -1375
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 13,
+      "night": 1,
+      "angle": 50784,
+      "sunVector": [
+        -4046,
+        0,
+        638
+      ],
+      "dotQ12": -2824
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 14,
+      "night": 1,
+      "angle": 55152,
+      "sunVector": [
+        -3437,
+        0,
+        2228
+      ],
+      "dotQ12": -3787
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 15,
+      "night": 1,
+      "angle": 59536,
+      "sunVector": [
+        -2228,
+        0,
+        3437
+      ],
+      "dotQ12": -4094
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 16,
+      "night": 1,
+      "angle": 63904,
+      "sunVector": [
+        -638,
+        0,
+        4046
+      ],
+      "dotQ12": -3691
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 17,
+      "night": 1,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": -2651
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 18,
+      "night": 1,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": -1152
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 19,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 546
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 20,
+      "night": 0,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": 2149
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 21,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 3381
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 22,
+      "night": 0,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": 4029
+    },
+    {
+      "gateRecordIndex": 4,
+      "hour": 23,
+      "night": 0,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": 3981
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 0,
+      "night": 0,
+      "angle": 4294961296,
+      "sunVector": [
+        -1936,
+        0,
+        525
+      ],
+      "dotQ12": 2087
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 1,
+      "night": 0,
+      "angle": 4294965664,
+      "sunVector": [
+        -7804,
+        0,
+        -6753
+      ],
+      "dotQ12": 4089
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 2,
+      "night": 1,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": -3519
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 3,
+      "night": 1,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": -4067
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 4,
+      "night": 1,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": -3912
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 5,
+      "night": 1,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": -3082
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 6,
+      "night": 1,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": -1719
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 7,
+      "night": 1,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": -58
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 8,
+      "night": 0,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": 1613
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 9,
+      "night": 0,
+      "angle": 33312,
+      "sunVector": [
+        -214,
+        0,
+        -4090
+      ],
+      "dotQ12": 3004
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 10,
+      "night": 0,
+      "angle": 37680,
+      "sunVector": [
+        -1858,
+        0,
+        -3650
+      ],
+      "dotQ12": 3876
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 11,
+      "night": 0,
+      "angle": 42048,
+      "sunVector": [
+        -3182,
+        0,
+        -2579
+      ],
+      "dotQ12": 4079
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 12,
+      "night": 0,
+      "angle": 46416,
+      "sunVector": [
+        -3956,
+        0,
+        -1062
+      ],
+      "dotQ12": 3577
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 13,
+      "night": 0,
+      "angle": 50784,
+      "sunVector": [
+        -4046,
+        0,
+        638
+      ],
+      "dotQ12": 2456
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 14,
+      "night": 0,
+      "angle": 55152,
+      "sunVector": [
+        -3437,
+        0,
+        2228
+      ],
+      "dotQ12": 912
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 15,
+      "night": 1,
+      "angle": 59536,
+      "sunVector": [
+        -2228,
+        0,
+        3437
+      ],
+      "dotQ12": -798
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 16,
+      "night": 1,
+      "angle": 63904,
+      "sunVector": [
+        -638,
+        0,
+        4046
+      ],
+      "dotQ12": -2363
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 17,
+      "night": 1,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": -3519
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 18,
+      "night": 1,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": -4067
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 19,
+      "night": 1,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": -3912
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 20,
+      "night": 1,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": -3082
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 21,
+      "night": 1,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": -1719
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 22,
+      "night": 1,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": -58
+    },
+    {
+      "gateRecordIndex": 5,
+      "hour": 23,
+      "night": 0,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": 1613
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 0,
+      "night": 0,
+      "angle": 4294961296,
+      "sunVector": [
+        -1936,
+        0,
+        525
+      ],
+      "dotQ12": 2948
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 1,
+      "night": 0,
+      "angle": 4294965664,
+      "sunVector": [
+        -7804,
+        0,
+        -6753
+      ],
+      "dotQ12": 4004
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 2,
+      "night": 1,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": -2834
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 3,
+      "night": 1,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": -3792
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 4,
+      "night": 1,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": -4093
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 5,
+      "night": 1,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": -3688
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 6,
+      "night": 1,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": -2645
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 7,
+      "night": 1,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": -1145
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 8,
+      "night": 0,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": 553
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 9,
+      "night": 0,
+      "angle": 33312,
+      "sunVector": [
+        -214,
+        0,
+        -4090
+      ],
+      "dotQ12": 2156
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 10,
+      "night": 0,
+      "angle": 37680,
+      "sunVector": [
+        -1858,
+        0,
+        -3650
+      ],
+      "dotQ12": 3385
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 11,
+      "night": 0,
+      "angle": 42048,
+      "sunVector": [
+        -3182,
+        0,
+        -2579
+      ],
+      "dotQ12": 4030
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 12,
+      "night": 0,
+      "angle": 46416,
+      "sunVector": [
+        -3956,
+        0,
+        -1062
+      ],
+      "dotQ12": 3978
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 13,
+      "night": 0,
+      "angle": 50784,
+      "sunVector": [
+        -4046,
+        0,
+        638
+      ],
+      "dotQ12": 3239
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 14,
+      "night": 0,
+      "angle": 55152,
+      "sunVector": [
+        -3437,
+        0,
+        2228
+      ],
+      "dotQ12": 1940
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 15,
+      "night": 0,
+      "angle": 59536,
+      "sunVector": [
+        -2228,
+        0,
+        3437
+      ],
+      "dotQ12": 299
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 16,
+      "night": 1,
+      "angle": 63904,
+      "sunVector": [
+        -638,
+        0,
+        4046
+      ],
+      "dotQ12": -1388
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 17,
+      "night": 1,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": -2834
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 18,
+      "night": 1,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": -3792
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 19,
+      "night": 1,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": -4093
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 20,
+      "night": 1,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": -3688
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 21,
+      "night": 1,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": -2645
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 22,
+      "night": 1,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": -1145
+    },
+    {
+      "gateRecordIndex": 6,
+      "hour": 23,
+      "night": 0,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": 553
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 0,
+      "night": 1,
+      "angle": 4294961296,
+      "sunVector": [
+        -1936,
+        0,
+        525
+      ],
+      "dotQ12": -1650
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 1,
+      "night": 1,
+      "angle": 4294965664,
+      "sunVector": [
+        -7804,
+        0,
+        -6753
+      ],
+      "dotQ12": -4031
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 2,
+      "night": 0,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": 3744
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 3,
+      "night": 0,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": 4096
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 4,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 3739
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 5,
+      "night": 0,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": 2737
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 6,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 1261
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 7,
+      "night": 1,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": -433
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 8,
+      "night": 1,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": -2052
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 9,
+      "night": 1,
+      "angle": 33312,
+      "sunVector": [
+        -214,
+        0,
+        -4090
+      ],
+      "dotQ12": -3316
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 10,
+      "night": 1,
+      "angle": 37680,
+      "sunVector": [
+        -1858,
+        0,
+        -3650
+      ],
+      "dotQ12": -4007
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 11,
+      "night": 1,
+      "angle": 42048,
+      "sunVector": [
+        -3182,
+        0,
+        -2579
+      ],
+      "dotQ12": -4006
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 12,
+      "night": 1,
+      "angle": 46416,
+      "sunVector": [
+        -3956,
+        0,
+        -1062
+      ],
+      "dotQ12": -3312
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 13,
+      "night": 1,
+      "angle": 50784,
+      "sunVector": [
+        -4046,
+        0,
+        638
+      ],
+      "dotQ12": -2046
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 14,
+      "night": 1,
+      "angle": 55152,
+      "sunVector": [
+        -3437,
+        0,
+        2228
+      ],
+      "dotQ12": -427
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 15,
+      "night": 0,
+      "angle": 59536,
+      "sunVector": [
+        -2228,
+        0,
+        3437
+      ],
+      "dotQ12": 1273
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 16,
+      "night": 0,
+      "angle": 63904,
+      "sunVector": [
+        -638,
+        0,
+        4046
+      ],
+      "dotQ12": 2746
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 17,
+      "night": 0,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": 3744
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 18,
+      "night": 0,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": 4096
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 19,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 3739
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 20,
+      "night": 0,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": 2737
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 21,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 1261
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 22,
+      "night": 1,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": -433
+    },
+    {
+      "gateRecordIndex": 7,
+      "hour": 23,
+      "night": 1,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": -2052
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 0,
+      "night": 1,
+      "angle": 4294961296,
+      "sunVector": [
+        -1936,
+        0,
+        525
+      ],
+      "dotQ12": -1177
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 1,
+      "night": 1,
+      "angle": 4294965664,
+      "sunVector": [
+        -7804,
+        0,
+        -6753
+      ],
+      "dotQ12": -3911
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 2,
+      "night": 0,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": 3920
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 3,
+      "night": 0,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": 4064
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 4,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 3505
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 5,
+      "night": 0,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": 2342
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 6,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 773
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 7,
+      "night": 1,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": -930
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 8,
+      "night": 1,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": -2472
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 9,
+      "night": 1,
+      "angle": 33312,
+      "sunVector": [
+        -214,
+        0,
+        -4090
+      ],
+      "dotQ12": -3586
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 10,
+      "night": 1,
+      "angle": 37680,
+      "sunVector": [
+        -1858,
+        0,
+        -3650
+      ],
+      "dotQ12": -4080
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 11,
+      "night": 1,
+      "angle": 42048,
+      "sunVector": [
+        -3182,
+        0,
+        -2579
+      ],
+      "dotQ12": -3870
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 12,
+      "night": 1,
+      "angle": 46416,
+      "sunVector": [
+        -3956,
+        0,
+        -1062
+      ],
+      "dotQ12": -2991
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 13,
+      "night": 1,
+      "angle": 50784,
+      "sunVector": [
+        -4046,
+        0,
+        638
+      ],
+      "dotQ12": -1595
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 14,
+      "night": 0,
+      "angle": 55152,
+      "sunVector": [
+        -3437,
+        0,
+        2228
+      ],
+      "dotQ12": 77
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 15,
+      "night": 0,
+      "angle": 59536,
+      "sunVector": [
+        -2228,
+        0,
+        3437
+      ],
+      "dotQ12": 1742
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 16,
+      "night": 0,
+      "angle": 63904,
+      "sunVector": [
+        -638,
+        0,
+        4046
+      ],
+      "dotQ12": 3099
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 17,
+      "night": 0,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": 3920
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 18,
+      "night": 0,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": 4064
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 19,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 3505
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 20,
+      "night": 0,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": 2342
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 21,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 773
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 22,
+      "night": 1,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": -930
+    },
+    {
+      "gateRecordIndex": 8,
+      "hour": 23,
+      "night": 1,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": -2472
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 0,
+      "night": 1,
+      "angle": 4294961296,
+      "sunVector": [
+        -1936,
+        0,
+        525
+      ],
+      "dotQ12": -2304
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 1,
+      "night": 1,
+      "angle": 4294965664,
+      "sunVector": [
+        -7804,
+        0,
+        -6753
+      ],
+      "dotQ12": -4096
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 2,
+      "night": 0,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": 3381
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 3,
+      "night": 0,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": 4029
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 4,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 3981
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 5,
+      "night": 0,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": 3246
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 6,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 1949
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 7,
+      "night": 0,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": 315
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 8,
+      "night": 1,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": -1373
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 9,
+      "night": 1,
+      "angle": 33312,
+      "sunVector": [
+        -214,
+        0,
+        -4090
+      ],
+      "dotQ12": -2824
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 10,
+      "night": 1,
+      "angle": 37680,
+      "sunVector": [
+        -1858,
+        0,
+        -3650
+      ],
+      "dotQ12": -3786
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 11,
+      "night": 1,
+      "angle": 42048,
+      "sunVector": [
+        -3182,
+        0,
+        -2579
+      ],
+      "dotQ12": -4095
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 12,
+      "night": 1,
+      "angle": 46416,
+      "sunVector": [
+        -3956,
+        0,
+        -1062
+      ],
+      "dotQ12": -3696
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 13,
+      "night": 1,
+      "angle": 50784,
+      "sunVector": [
+        -4046,
+        0,
+        638
+      ],
+      "dotQ12": -2658
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 14,
+      "night": 1,
+      "angle": 55152,
+      "sunVector": [
+        -3437,
+        0,
+        2228
+      ],
+      "dotQ12": -1161
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 15,
+      "night": 0,
+      "angle": 59536,
+      "sunVector": [
+        -2228,
+        0,
+        3437
+      ],
+      "dotQ12": 544
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 16,
+      "night": 0,
+      "angle": 63904,
+      "sunVector": [
+        -638,
+        0,
+        4046
+      ],
+      "dotQ12": 2148
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 17,
+      "night": 0,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": 3381
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 18,
+      "night": 0,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": 4029
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 19,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 3981
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 20,
+      "night": 0,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": 3246
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 21,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 1949
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 22,
+      "night": 0,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": 315
+    },
+    {
+      "gateRecordIndex": 9,
+      "hour": 23,
+      "night": 1,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": -1373
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 0,
+      "night": 0,
+      "angle": 4294961296,
+      "sunVector": [
+        -1936,
+        0,
+        525
+      ],
+      "dotQ12": 2114
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 1,
+      "night": 1,
+      "angle": 4294965664,
+      "sunVector": [
+        -7804,
+        0,
+        -6753
+      ],
+      "dotQ12": -1728
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 2,
+      "night": 0,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": 3513
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 3,
+      "night": 0,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": 2353
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 4,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 786
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 5,
+      "night": 1,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": -916
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 6,
+      "night": 1,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": -2460
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 7,
+      "night": 1,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": -3579
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 8,
+      "night": 1,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": -4080
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 9,
+      "night": 1,
+      "angle": 33312,
+      "sunVector": [
+        -214,
+        0,
+        -4090
+      ],
+      "dotQ12": -3875
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 10,
+      "night": 1,
+      "angle": 37680,
+      "sunVector": [
+        -1858,
+        0,
+        -3650
+      ],
+      "dotQ12": -3001
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 11,
+      "night": 1,
+      "angle": 42048,
+      "sunVector": [
+        -3182,
+        0,
+        -2579
+      ],
+      "dotQ12": -1608
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 12,
+      "night": 0,
+      "angle": 46416,
+      "sunVector": [
+        -3956,
+        0,
+        -1062
+      ],
+      "dotQ12": 63
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 13,
+      "night": 0,
+      "angle": 50784,
+      "sunVector": [
+        -4046,
+        0,
+        638
+      ],
+      "dotQ12": 1723
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 14,
+      "night": 0,
+      "angle": 55152,
+      "sunVector": [
+        -3437,
+        0,
+        2228
+      ],
+      "dotQ12": 3085
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 15,
+      "night": 0,
+      "angle": 59536,
+      "sunVector": [
+        -2228,
+        0,
+        3437
+      ],
+      "dotQ12": 3916
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 16,
+      "night": 0,
+      "angle": 63904,
+      "sunVector": [
+        -638,
+        0,
+        4046
+      ],
+      "dotQ12": 4066
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 17,
+      "night": 0,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": 3513
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 18,
+      "night": 0,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": 2353
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 19,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 786
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 20,
+      "night": 1,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": -916
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 21,
+      "night": 1,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": -2460
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 22,
+      "night": 1,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": -3579
+    },
+    {
+      "gateRecordIndex": 10,
+      "hour": 23,
+      "night": 1,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": -4080
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 0,
+      "night": 1,
+      "angle": 4294961296,
+      "sunVector": [
+        -1936,
+        0,
+        525
+      ],
+      "dotQ12": -318
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 1,
+      "night": 0,
+      "angle": 4294965664,
+      "sunVector": [
+        -7804,
+        0,
+        -6753
+      ],
+      "dotQ12": 3209
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 2,
+      "night": 1,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": -4084
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 3,
+      "night": 1,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": -3606
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 4,
+      "night": 1,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": -2504
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 5,
+      "night": 1,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": -971
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 6,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 731
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 7,
+      "night": 0,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": 2306
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 8,
+      "night": 0,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": 3484
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 9,
+      "night": 0,
+      "angle": 33312,
+      "sunVector": [
+        -214,
+        0,
+        -4090
+      ],
+      "dotQ12": 4058
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 10,
+      "night": 0,
+      "angle": 37680,
+      "sunVector": [
+        -1858,
+        0,
+        -3650
+      ],
+      "dotQ12": 3931
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 11,
+      "night": 0,
+      "angle": 42048,
+      "sunVector": [
+        -3182,
+        0,
+        -2579
+      ],
+      "dotQ12": 3126
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 12,
+      "night": 0,
+      "angle": 46416,
+      "sunVector": [
+        -3956,
+        0,
+        -1062
+      ],
+      "dotQ12": 1779
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 13,
+      "night": 0,
+      "angle": 50784,
+      "sunVector": [
+        -4046,
+        0,
+        638
+      ],
+      "dotQ12": 126
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 14,
+      "night": 1,
+      "angle": 55152,
+      "sunVector": [
+        -3437,
+        0,
+        2228
+      ],
+      "dotQ12": -1549
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 15,
+      "night": 1,
+      "angle": 59536,
+      "sunVector": [
+        -2228,
+        0,
+        3437
+      ],
+      "dotQ12": -2962
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 16,
+      "night": 1,
+      "angle": 63904,
+      "sunVector": [
+        -638,
+        0,
+        4046
+      ],
+      "dotQ12": -3856
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 17,
+      "night": 1,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": -4084
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 18,
+      "night": 1,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": -3606
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 19,
+      "night": 1,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": -2504
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 20,
+      "night": 1,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": -971
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 21,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 731
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 22,
+      "night": 0,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": 2306
+    },
+    {
+      "gateRecordIndex": 11,
+      "hour": 23,
+      "night": 0,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": 3484
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 0,
+      "night": 0,
+      "angle": 4294961296,
+      "sunVector": [
+        -1936,
+        0,
+        525
+      ],
+      "dotQ12": 4077
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 1,
+      "night": 0,
+      "angle": 4294965664,
+      "sunVector": [
+        -7804,
+        0,
+        -6753
+      ],
+      "dotQ12": 2598
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 2,
+      "night": 1,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": -376
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 3,
+      "night": 1,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": -2003
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 4,
+      "night": 1,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": -3283
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 5,
+      "night": 1,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": -3995
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 6,
+      "night": 1,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": -4018
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 7,
+      "night": 1,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": -3345
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 8,
+      "night": 1,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": -2095
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 9,
+      "night": 1,
+      "angle": 33312,
+      "sunVector": [
+        -214,
+        0,
+        -4090
+      ],
+      "dotQ12": -482
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 10,
+      "night": 0,
+      "angle": 37680,
+      "sunVector": [
+        -1858,
+        0,
+        -3650
+      ],
+      "dotQ12": 1213
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 11,
+      "night": 0,
+      "angle": 42048,
+      "sunVector": [
+        -3182,
+        0,
+        -2579
+      ],
+      "dotQ12": 2699
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 12,
+      "night": 0,
+      "angle": 46416,
+      "sunVector": [
+        -3956,
+        0,
+        -1062
+      ],
+      "dotQ12": 3719
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 13,
+      "night": 0,
+      "angle": 50784,
+      "sunVector": [
+        -4046,
+        0,
+        638
+      ],
+      "dotQ12": 4096
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 14,
+      "night": 0,
+      "angle": 55152,
+      "sunVector": [
+        -3437,
+        0,
+        2228
+      ],
+      "dotQ12": 3765
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 15,
+      "night": 0,
+      "angle": 59536,
+      "sunVector": [
+        -2228,
+        0,
+        3437
+      ],
+      "dotQ12": 2778
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 16,
+      "night": 0,
+      "angle": 63904,
+      "sunVector": [
+        -638,
+        0,
+        4046
+      ],
+      "dotQ12": 1314
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 17,
+      "night": 1,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": -376
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 18,
+      "night": 1,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": -2003
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 19,
+      "night": 1,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": -3283
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 20,
+      "night": 1,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": -3995
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 21,
+      "night": 1,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": -4018
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 22,
+      "night": 1,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": -3345
+    },
+    {
+      "gateRecordIndex": 12,
+      "hour": 23,
+      "night": 1,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": -2095
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 0,
+      "night": 0,
+      "angle": 4294961296,
+      "sunVector": [
+        -1936,
+        0,
+        525
+      ],
+      "dotQ12": 2130
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 1,
+      "night": 1,
+      "angle": 4294965664,
+      "sunVector": [
+        -7804,
+        0,
+        -6753
+      ],
+      "dotQ12": -1711
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 2,
+      "night": 0,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": 3504
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 3,
+      "night": 0,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": 2338
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 4,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 768
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 5,
+      "night": 1,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": -934
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 6,
+      "night": 1,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": -2475
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 7,
+      "night": 1,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": -3588
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 8,
+      "night": 1,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": -4082
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 9,
+      "night": 1,
+      "angle": 33312,
+      "sunVector": [
+        -214,
+        0,
+        -4090
+      ],
+      "dotQ12": -3869
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 10,
+      "night": 1,
+      "angle": 37680,
+      "sunVector": [
+        -1858,
+        0,
+        -3650
+      ],
+      "dotQ12": -2988
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 11,
+      "night": 1,
+      "angle": 42048,
+      "sunVector": [
+        -3182,
+        0,
+        -2579
+      ],
+      "dotQ12": -1591
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 12,
+      "night": 0,
+      "angle": 46416,
+      "sunVector": [
+        -3956,
+        0,
+        -1062
+      ],
+      "dotQ12": 82
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 13,
+      "night": 0,
+      "angle": 50784,
+      "sunVector": [
+        -4046,
+        0,
+        638
+      ],
+      "dotQ12": 1740
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 14,
+      "night": 0,
+      "angle": 55152,
+      "sunVector": [
+        -3437,
+        0,
+        2228
+      ],
+      "dotQ12": 3097
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 15,
+      "night": 0,
+      "angle": 59536,
+      "sunVector": [
+        -2228,
+        0,
+        3437
+      ],
+      "dotQ12": 3922
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 16,
+      "night": 0,
+      "angle": 63904,
+      "sunVector": [
+        -638,
+        0,
+        4046
+      ],
+      "dotQ12": 4064
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 17,
+      "night": 0,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": 3504
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 18,
+      "night": 0,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": 2338
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 19,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 768
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 20,
+      "night": 1,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": -934
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 21,
+      "night": 1,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": -2475
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 22,
+      "night": 1,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": -3588
+    },
+    {
+      "gateRecordIndex": 13,
+      "hour": 23,
+      "night": 1,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": -4082
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 0,
+      "night": 1,
+      "angle": 4294961296,
+      "sunVector": [
+        -1936,
+        0,
+        525
+      ],
+      "dotQ12": -312
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 1,
+      "night": 0,
+      "angle": 4294965664,
+      "sunVector": [
+        -7804,
+        0,
+        -6753
+      ],
+      "dotQ12": 3213
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 2,
+      "night": 1,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": -4085
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 3,
+      "night": 1,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": -3609
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 4,
+      "night": 1,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": -2509
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 5,
+      "night": 1,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": -977
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 6,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 725
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 7,
+      "night": 0,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": 2301
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 8,
+      "night": 0,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": 3481
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 9,
+      "night": 0,
+      "angle": 33312,
+      "sunVector": [
+        -214,
+        0,
+        -4090
+      ],
+      "dotQ12": 4057
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 10,
+      "night": 0,
+      "angle": 37680,
+      "sunVector": [
+        -1858,
+        0,
+        -3650
+      ],
+      "dotQ12": 3933
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 11,
+      "night": 0,
+      "angle": 42048,
+      "sunVector": [
+        -3182,
+        0,
+        -2579
+      ],
+      "dotQ12": 3130
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 12,
+      "night": 0,
+      "angle": 46416,
+      "sunVector": [
+        -3956,
+        0,
+        -1062
+      ],
+      "dotQ12": 1785
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 13,
+      "night": 0,
+      "angle": 50784,
+      "sunVector": [
+        -4046,
+        0,
+        638
+      ],
+      "dotQ12": 132
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 14,
+      "night": 1,
+      "angle": 55152,
+      "sunVector": [
+        -3437,
+        0,
+        2228
+      ],
+      "dotQ12": -1544
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 15,
+      "night": 1,
+      "angle": 59536,
+      "sunVector": [
+        -2228,
+        0,
+        3437
+      ],
+      "dotQ12": -2958
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 16,
+      "night": 1,
+      "angle": 63904,
+      "sunVector": [
+        -638,
+        0,
+        4046
+      ],
+      "dotQ12": -3854
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 17,
+      "night": 1,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": -4085
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 18,
+      "night": 1,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": -3609
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 19,
+      "night": 1,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": -2509
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 20,
+      "night": 1,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": -977
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 21,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 725
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 22,
+      "night": 0,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": 2301
+    },
+    {
+      "gateRecordIndex": 14,
+      "hour": 23,
+      "night": 0,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": 3481
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 0,
+      "night": 1,
+      "angle": 4294961296,
+      "sunVector": [
+        -1936,
+        0,
+        525
+      ],
+      "dotQ12": -3158
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 1,
+      "night": 1,
+      "angle": 4294965664,
+      "sunVector": [
+        -7804,
+        0,
+        -6753
+      ],
+      "dotQ12": -3927
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 2,
+      "night": 0,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": 2600
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 3,
+      "night": 0,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": 3662
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 4,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 4091
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 5,
+      "night": 0,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": 3814
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 6,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 2878
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 7,
+      "night": 0,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": 1443
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 8,
+      "night": 1,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": -241
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 9,
+      "night": 1,
+      "angle": 33312,
+      "sunVector": [
+        -214,
+        0,
+        -4090
+      ],
+      "dotQ12": -1882
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 10,
+      "night": 1,
+      "angle": 37680,
+      "sunVector": [
+        -1858,
+        0,
+        -3650
+      ],
+      "dotQ12": -3198
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 11,
+      "night": 1,
+      "angle": 42048,
+      "sunVector": [
+        -3182,
+        0,
+        -2579
+      ],
+      "dotQ12": -3963
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 12,
+      "night": 1,
+      "angle": 46416,
+      "sunVector": [
+        -3956,
+        0,
+        -1062
+      ],
+      "dotQ12": -4042
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 13,
+      "night": 1,
+      "angle": 50784,
+      "sunVector": [
+        -4046,
+        0,
+        638
+      ],
+      "dotQ12": -3422
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 14,
+      "night": 1,
+      "angle": 55152,
+      "sunVector": [
+        -3437,
+        0,
+        2228
+      ],
+      "dotQ12": -2211
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 15,
+      "night": 1,
+      "angle": 59536,
+      "sunVector": [
+        -2228,
+        0,
+        3437
+      ],
+      "dotQ12": -611
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 16,
+      "night": 0,
+      "angle": 63904,
+      "sunVector": [
+        -638,
+        0,
+        4046
+      ],
+      "dotQ12": 1088
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 17,
+      "night": 0,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": 2600
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 18,
+      "night": 0,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": 3662
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 19,
+      "night": 0,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": 4091
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 20,
+      "night": 0,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": 3814
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 21,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 2878
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 22,
+      "night": 0,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": 1443
+    },
+    {
+      "gateRecordIndex": 15,
+      "hour": 23,
+      "night": 1,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": -241
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 0,
+      "night": 1,
+      "angle": 4294961296,
+      "sunVector": [
+        -1936,
+        0,
+        525
+      ],
+      "dotQ12": -1336
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 1,
+      "night": 0,
+      "angle": 4294965664,
+      "sunVector": [
+        -7804,
+        0,
+        -6753
+      ],
+      "dotQ12": 2465
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 2,
+      "night": 1,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": -3876
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 3,
+      "night": 1,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": -3001
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 4,
+      "night": 1,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": -1608
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 5,
+      "night": 0,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": 62
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 6,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 1722
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 7,
+      "night": 0,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": 3085
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 8,
+      "night": 0,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": 3915
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 9,
+      "night": 0,
+      "angle": 33312,
+      "sunVector": [
+        -214,
+        0,
+        -4090
+      ],
+      "dotQ12": 4067
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 10,
+      "night": 0,
+      "angle": 37680,
+      "sunVector": [
+        -1858,
+        0,
+        -3650
+      ],
+      "dotQ12": 3517
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 11,
+      "night": 0,
+      "angle": 42048,
+      "sunVector": [
+        -3182,
+        0,
+        -2579
+      ],
+      "dotQ12": 2359
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 12,
+      "night": 0,
+      "angle": 46416,
+      "sunVector": [
+        -3956,
+        0,
+        -1062
+      ],
+      "dotQ12": 793
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 13,
+      "night": 1,
+      "angle": 50784,
+      "sunVector": [
+        -4046,
+        0,
+        638
+      ],
+      "dotQ12": -909
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 14,
+      "night": 1,
+      "angle": 55152,
+      "sunVector": [
+        -3437,
+        0,
+        2228
+      ],
+      "dotQ12": -2455
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 15,
+      "night": 1,
+      "angle": 59536,
+      "sunVector": [
+        -2228,
+        0,
+        3437
+      ],
+      "dotQ12": -3580
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 16,
+      "night": 1,
+      "angle": 63904,
+      "sunVector": [
+        -638,
+        0,
+        4046
+      ],
+      "dotQ12": -4080
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 17,
+      "night": 1,
+      "angle": 2736,
+      "sunVector": [
+        1062,
+        0,
+        3956
+      ],
+      "dotQ12": -3876
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 18,
+      "night": 1,
+      "angle": 7104,
+      "sunVector": [
+        2579,
+        0,
+        3182
+      ],
+      "dotQ12": -3001
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 19,
+      "night": 1,
+      "angle": 11472,
+      "sunVector": [
+        3650,
+        0,
+        1858
+      ],
+      "dotQ12": -1608
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 20,
+      "night": 0,
+      "angle": 15840,
+      "sunVector": [
+        4090,
+        0,
+        214
+      ],
+      "dotQ12": 62
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 21,
+      "night": 0,
+      "angle": 20208,
+      "sunVector": [
+        3824,
+        0,
+        -1468
+      ],
+      "dotQ12": 1722
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 22,
+      "night": 0,
+      "angle": 24576,
+      "sunVector": [
+        2896,
+        0,
+        -2896
+      ],
+      "dotQ12": 3085
+    },
+    {
+      "gateRecordIndex": 16,
+      "hour": 23,
+      "night": 0,
+      "angle": 28944,
+      "sunVector": [
+        1468,
+        0,
+        -3824
+      ],
+      "dotQ12": 3915
+    }
+  ]
+}

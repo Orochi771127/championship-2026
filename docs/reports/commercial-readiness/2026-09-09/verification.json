@@ -1,0 +1,81 @@
+{
+  "date": "2026-09-09",
+  "assessment": "NOT_COMMERCIAL_RELEASE_READY",
+  "repository": {
+    "root": "R:/Projects/Championship2026/championship-2026",
+    "branch": "main",
+    "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+    "sharedDirtyWorktree": true
+  },
+  "regression": {
+    "command": "node --test --test-concurrency=2 tests/*.mjs",
+    "pass": 1379,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 86748.1467
+  },
+  "focused": {
+    "files": [
+      "tests/championship-pages-closure-cases.mjs",
+      "tests/championship-save-economy-v2-cases.mjs",
+      "tests/championship-storage-guard-cases.mjs"
+    ],
+    "pass": 13,
+    "fail": 0,
+    "skip": 0
+  },
+  "productionDependencyAudit": {
+    "command": "npm audit --omit=dev --json",
+    "exitCode": 0,
+    "reportedVulnerabilities": 0,
+    "completeSecurityAudit": false
+  },
+  "pagesBuild": {
+    "command": "node scripts/build-github-pages.mjs dist/commercial-readiness-audit-2026-09-09",
+    "exitCode": 1,
+    "code": "PAGES_INPUTS_MISSING",
+    "missingInput": "src/data/championship/catalogs/entities.r1.json",
+    "failedBeforeOutputReplacement": true
+  },
+  "readOnlyStaticModuleAudit": {
+    "selection": "actual tracked and private exclusion rules",
+    "visitedModules": 71,
+    "excludedDependencyEdges": 95,
+    "fullDynamicResourceClosure": false
+  },
+  "artIndex": {
+    "registeredBundles": 25,
+    "shippingReadyBundles": 0,
+    "publicProjectionEntries": 20,
+    "publicProjectionEntriesNotShippingReady": 20,
+    "publicProjectionIsReleaseApproval": false
+  },
+  "browser": {
+    "url": "http://127.0.0.1:8732/championship.html",
+    "steps": ["LOGIN", "Continue", "Raising Home visual inspection", "natural next-day calendar"],
+    "device": "desktop in-app browser default viewport",
+    "capturedErrorWarningCount": 0,
+    "observedMissingToolIcons": ["feed", "protein", "clean"],
+    "usedExistingLocalSave": true,
+    "naturalDayTransitionPersisted": "day 2 evening to day 3 07:00 calendar",
+    "storageInjectedOrCleared": false,
+    "tabClosedAfterInspection": true,
+    "fullEndToEndAcceptance": false,
+    "physicalDeviceAcceptance": false
+  },
+  "runningServerAssetHeaders": {
+    "assets": [
+      "assets/production/raising-care-r1/meat-0.svg",
+      "assets/production/raising-care-r1/protein-0.svg",
+      "assets/production/raising-care-r1/clean.svg"
+    ],
+    "allHttpStatus": 200,
+    "observedContentType": "application/octet-stream",
+    "sourceCodeMimeMapping": "image/svg+xml",
+    "serverRestarted": false
+  },
+  "diffCheckExitCode": 0,
+  "productCodeModifiedByAudit": false,
+  "commitPushMergeDeployPerformed": false,
+  "externalLogDirectory": "R:/Projects/Championship2026/_archive/commercial-readiness-2026-09-09"
+}

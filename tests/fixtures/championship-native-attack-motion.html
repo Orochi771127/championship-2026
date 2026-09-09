@@ -1,0 +1,50 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><base href="/"><title>原作攻擊位移驗證</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#e9f5ff;color:#12324a;font-family:system-ui,sans-serif}main{max-width:560px;margin:auto;padding:14px}h1{font-size:22px;margin:0}p{font-size:14px;line-height:1.6}.controls{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}button{min-height:44px;border:1px solid #87abc6;border-radius:9px;background:#fff;color:inherit;padding:8px 12px;font:inherit}button:active{background:#b9e7ff}button:disabled{opacity:.5}#field{aspect-ratio:416/272;overflow:hidden;border:2px solid #77aac8;border-radius:14px}canvas{display:block}output{white-space:pre-wrap;font:13px/1.6 ui-monospace,monospace;display:block;background:white;border-radius:10px;padding:12px}</style></head>
+<body><main><h1>原作攻擊位移驗證</h1><p>檢查原生攻擊段的移動、淡出／淡入、起跳與指定影格。使用固定起點和目標；命中、傷害與招式特效池尚未在此測試接入。</p>
+<div class="controls"><button id="ground">地面攻擊段 · 337</button><button id="air">空中攻擊段 · 455</button></div><div id="field" aria-label="原作攻擊位移畫面"></div>
+<div class="controls"><button id="step">推進一幀</button><button id="six">推進六幀</button><button id="play">播放</button><button id="pause">暫停</button><button id="restart">重新開始</button></div><output id="receipt" role="status">載入中</output></main>
+<script type="module">
+import * as PIXI from '/node_modules/pixi.js/dist/pixi.mjs';
+import {createChampionshipPixiStage} from '/src/championship/presentation/championshipPixiStage.js';
+import {mountBattleFieldPixiPresentation} from '/src/championship/presentation/vs5/createBattleFieldPixiPresentation.js';
+import {loadLicensedCharacterRoster,LICENSED_CHARACTER_MANIFEST} from '/src/championship/presentation/licensedCharacterRoster.js';
+import {loadRuntimeMapArtField} from '/src/championship/presentation/runtimeMapArtBundle.js';
+import {createBattlePresentationSource} from '/src/championship/app/battlePresentationSource.js';
+import {createBattleSession,createSessionCombatant} from '/src/championship/battle/battleSession.js';
+import {createChannelRng} from '/src/championship/battle/battleRngChannel.js';
+import {createNativeMotionReview} from '/tests/fixtures/championship-native-motion-host.mjs';
+import manifest from '/assets/production/internal-faithful-baseline/characters-v1/manifest.json' with {type:'json'};
+import productionIndex from '/assets/production/ART_PRODUCTION_INDEX.json' with {type:'json'};
+import arenaManifest from '/assets/production/battle/licensed-runtime-v1/manifest.json' with {type:'json'};
+const stage=await createChampionshipPixiStage({PIXI,canvasHost:document.querySelector('#field')});stage.app.ticker.stop();
+let scene,source,session,review,moveId=337,busy=false;
+const output=document.querySelector('#receipt');
+function receipt(){
+ if(!scene)return;
+ const s=review.snapshot(),chars=scene.getDiagnostics().characters;
+ output.textContent=`招式記錄 ${moveId} · 角色 ${source.getFrame().combatants[0].displayName}\n影格 ${s.frame} · 原生階段 ${s.state} · ${s.complete?'位移段結束':'位移段進行中'}\n座標 ${s.positionQ12.map(n=>(n/4096).toFixed(3)).join(', ')}\n透明度 ${s.projection.motion.alpha.toFixed(3)}\n原始動作 ${s.request.sequenceId} · 指定起始影格 ${s.request.sequenceInitialFrame??0}`;
+ output.dataset.receipt=JSON.stringify({...s,characters:chars.map(c=>({slot:c.slot,position:c.position,alpha:c.alpha,sequence:c.animation?.sequenceId,frame:c.animation?.frameIndex}))});
+ stage.app.render();
+}
+async function load(id){
+ if(busy)return;busy=true;document.querySelectorAll('button').forEach(b=>b.disabled=true);stage.app.ticker.stop();
+ try{
+  const previous=scene;scene=null;await previous?.dispose();source?.dispose();moveId=id;review=createNativeMotionReview(id);
+  const ids=[review.move.speciesId,null,null,81,null,null];
+  session=createBattleSession({roster:ids.map(speciesId=>speciesId===null?null:createSessionCombatant({speciesId,currentHp:100,maxHp:100})),rng:createChannelRng(1)});
+  source=createBattlePresentationSource({session,getNativeActor:review.project,step:s=>{s.frame++;review.step();}});
+  const roster=await loadLicensedCharacterRoster({PIXI,speciesIds:ids.filter(i=>i!==null).map(i=>`species-${String(i).padStart(3,'0')}`),manifest,productionIndex,
+    manifestUrl:new URL(LICENSED_CHARACTER_MANIFEST,location.origin+'/').href});
+  const fieldArt=await loadRuntimeMapArtField({PIXI,manifest:arenaManifest,fieldId:source.getFrame().arena.field});
+  // Deterministic full-motion review; the product still honors reduced motion.
+  scene=await mountBattleFieldPixiPresentation({stage,source,fieldArt,characterRoster:roster,reducedMotion:false});receipt();
+ }catch(e){output.textContent='載入錯誤：'+e.message;throw e;}finally{busy=false;document.querySelectorAll('button').forEach(b=>b.disabled=false);}
+}
+document.querySelector('#ground').onclick=()=>load(337);document.querySelector('#air').onclick=()=>load(455);
+document.querySelector('#restart').onclick=()=>load(moveId);
+document.querySelector('#step').onclick=()=>{stage.app.ticker.stop();scene.advance();receipt();};
+document.querySelector('#six').onclick=()=>{stage.app.ticker.stop();for(let i=0;i<6;i++)scene.advance();receipt();};
+document.querySelector('#play').onclick=()=>stage.app.ticker.start();
+document.querySelector('#pause').onclick=()=>{stage.app.ticker.stop();receipt();};
+stage.onResize(()=>receipt());await load(337);
+</script></body></html>

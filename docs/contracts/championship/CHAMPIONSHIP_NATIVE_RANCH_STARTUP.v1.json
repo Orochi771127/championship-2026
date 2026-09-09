@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "contractId": "CHAMPIONSHIP_NATIVE_RANCH_STARTUP",
+  "date": "2026-09-06",
+  "ownerRequest": "Blue Waiting Room is the initial area and adjacent facilities form one ranch; implement it",
+  "layoutVersion": "NATIVE_ANCHORS_V1",
+  "initialRecords": [[35, 0], [0, 8], [1, 4], [15, 7]],
+  "evidence": "ISOLATED_ORIGINAL_ARM_RECORD_SETTER_EXECUTION_AND_OWNER_REFERENCE",
+  "sourceContract": "docs/contracts/championship/CHAMPIONSHIP_RANCH_TILE_COMPOSITION.v1.json",
+  "nativeRecordImplementation": "src/championship/cage/nativeRanchLayout.js",
+  "normalNewGameBound": true,
+  "legacySavePolicy": "No layout marker means legacy interpretation; preserve stored anchors, do not insert or reposition modules",
+  "editor": {
+    "waitingRoomFixedAnchor": 0,
+    "waitingRoomCells": [0, 1, 2, 3],
+    "initialOccupiedCount": 9,
+    "placement": "Native shape masks, two-row eligibility and full-footprint bounds",
+    "rankDecrease": "Reject the product debug rank change if either committed or draft native layout would no longer fit",
+    "commit": "Existing confirm and Save authority; BACK reverts unconfirmed edits"
+  },
+  "presentation": {
+    "existingMaterialsOnly": true,
+    "nativeOriginAndUpperCropBound": true,
+    "rightEdgeHorizontalWrapBound": true,
+    "rawTileCompositorBound": false,
+    "layerLimitation": "Existing precomposited frames crop floor and props together; separate object/animation offsets, filler and bottom wall are not integrated",
+    "residentPlacement": "Existing normalized interaction lanes project into Waiting Room; no native training-module membership or collision claim",
+    "camera": "OWNER_DIRECTION_MOBILE_PRESENTATION_ADAPTATION: 256 native pixels wide, horizontal pointer drag on ground, clamped to content; camera is transient and not saved"
+  },
+  "shippingReady": false,
+  "physicalDeviceQa": false
+}

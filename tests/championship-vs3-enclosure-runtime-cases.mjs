@@ -1,11 +1,4 @@
-// VS3 -- enclosure on the Hunt field.
-//
-// Original capture is a tether plus a drawn circle, not a menu button. This
-// file pins the translated field rule: a stroke that starts near a wild
-// creature, closes by the original geometry, and still contains that creature
-// removes it from the field. Capture-success odds are untraced, so enclosure
-// itself is the functional success rule and is labelled as such.
-
+// Circle diagnostics must not mutate wild ownership.
 import assert from "node:assert/strict";
 import test from "node:test";
 
@@ -49,7 +42,7 @@ test("a stroke on empty ground does not start enclosure", () => {
   assert.equal(runtime.getEnclosureStroke(), null);
 });
 
-test("a closed loop around a nearby wild removes that wild", () => {
+test("a closed loop around a nearby wild leaves that individual on the field", () => {
   const runtime = runtimeForFirstGate();
   const target = runtime.getWildCreatures()[0];
   assert.ok(target, "the first gate must spawn a wild creature");
@@ -57,11 +50,11 @@ test("a closed loop around a nearby wild removes that wild", () => {
   assert.ok(ENCLOSURE_HIT_RADIUS_PX >= 48);
   drawClosedLoop(runtime, target.worldX, target.worldY);
   const verdict = runtime.endEnclosureStroke();
-  assert.equal(verdict.outcome, "ENCLOSED");
+  assert.equal(verdict.outcome, "TOOL_TRACE_REQUIRED");
   assert.equal(verdict.wildId, target.wildId);
   assert.equal(verdict.speciesId, target.speciesId);
-  assert.equal(verdict.successAuthority, "PRODUCT_AUTHORED_ENCLOSURE");
-  assert.equal(runtime.getWildCreatures().some((wild) => wild.wildId === target.wildId), false);
+  assert.equal(verdict.successAuthority, "UNKNOWN_REQUIRES_TRACE");
+  assert.equal(runtime.getWildCreatures().some((wild) => wild.wildId === target.wildId), true);
   assert.equal(runtime.getEnclosureStroke(), null);
 });
 
@@ -72,6 +65,6 @@ test("an unclosed scribble on a wild does not take it", () => {
   runtime.beginEnclosureStroke(target.worldX, target.worldY);
   runtime.extendEnclosureStroke(target.worldX + 30, target.worldY);
   const verdict = runtime.endEnclosureStroke();
-  assert.equal(verdict.outcome, "OPEN");
+  assert.equal(verdict.outcome, "TOOL_TRACE_REQUIRED");
   assert.equal(runtime.getWildCreatures().length, before);
 });

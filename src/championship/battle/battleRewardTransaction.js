@@ -37,15 +37,10 @@
 //
 // So a loss pays nothing, and the payout is credited whole or not at all.
 //
-// NOT TRACED, THEREFORE NOT IMPLEMENTED
-// -------------------------------------
-// The bodies of the three jump-table destinations (mode 1 -> 0x0210D3EC,
-// mode 2 -> 0x0210D1C0, default -> 0x0210D464) are not walked instruction by
-// instruction here. Mode 2 is visibly a 61-opponent ladder that reads a
-// per-opponent "already cleared" flag at +0xC0 of an 8-byte record and can take
-// a first-clear branch; whether that branch changes the payout is UNKNOWN. This
-// module therefore exposes the payout and the credit, and does not model a
-// first-clear bonus, a rank multiplier or a streak.
+// OVL8's category 0 -> 0210D3EC is the championship; category 1 -> 0210D1C0
+// is the 61-title progression. nativeTitleProgression.js now implements those
+// writers and 0210E328 rank commit against the 2026-09-09 CPU oracle. Their
+// effects do not change this per-match payout or introduce a first-clear bonus.
 //
 // Also not here: Bits spent (that is the Shop's side), battle income for modes
 // whose match rows carry payout 0, and any screen.

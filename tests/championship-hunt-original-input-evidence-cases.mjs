@@ -8,7 +8,7 @@ const gap = fs.readFileSync("docs/research/CHAMPIONSHIP_2026_FEATURE_GAP_MATRIX_
 const currentField = fs.readFileSync("src/championship/presentation/vs2/createHuntFieldPixiPresentation.js", "utf8");
 
 test("Hunt ROM trace records inverse-delta panning and the original 256x192 camera clamp", () => {
-  for (const address of ["0x0211CA38", "0x0211CA54", "0x0211D9F0", "0x0211DA54"]) {
+  for (const address of ["0x0211CD38", "0x0211CD54", "0x0211DCF0", "0x0211DD54"]) {
     assert.match(trace, new RegExp(address));
   }
   assert.match(trace, /field width minus `0x100` \(256 pixels\)/);
@@ -24,8 +24,9 @@ test("research truth says portrait is a viewport and panning is not avatar locom
   assert.match(gap, /PROTOTYPE_WRONG_AVATAR_MOVE/);
 });
 
-test("the known VS2 mismatch stays explicit until its dedicated runtime batch", () => {
-  assert.match(currentField, /source\.intents\.moveTo\(point\.x, point\.y\)/);
-  assert.match(trace, /current VS2 prototype does not have parity here/);
-  assert.match(trace, /must be replaced by a persistent, clamped camera-pan intent/);
+test("the player field uses the dedicated camera pointer adapter and never avatar movement", () => {
+  assert.doesNotMatch(currentField, /source\.intents\.moveTo/);
+  assert.match(currentField, /createHuntFieldPointer/);
+  assert.match(currentField, /pointercancel", onPointerCancel/);
+  assert.match(currentField, /cancelPointer\(\)/);
 });

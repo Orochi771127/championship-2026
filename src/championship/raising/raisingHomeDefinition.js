@@ -6,6 +6,9 @@ import {
   createFieldDefinition
 } from "../field/index.js";
 import { getFieldFamilyProfile } from "../../data/championship/r2/fields/fieldInventoryR2.js";
+import speciesCatalog from "../../data/championship/catalogs/creature-species.r1.json" with { type: "json" };
+import { listStartingEggs, residentIdForSpecies, speciesIdForRecord } from "../app/phase1ProductCreatures.js";
+import { DAY_START_MINUTES, advanceWorldClock, advanceWorldClockUnits, createWorldClock, endWorldClockDay } from "../time/championshipWorldClock.js";
 
 export const RAISING_HOME_COMMANDS = Object.freeze({
   MOVE_CARETAKER: "RAISING_HOME_MOVE_CARETAKER",
@@ -15,7 +18,8 @@ export const RAISING_HOME_COMMANDS = Object.freeze({
   CARE: "RAISING_HOME_CARE",
   TRAIN: "RAISING_HOME_TRAIN",
   REST: "RAISING_HOME_REST",
-  TOGGLE_PAUSE: "RAISING_HOME_TOGGLE_PAUSE"
+  TOGGLE_PAUSE: "RAISING_HOME_TOGGLE_PAUSE",
+  END_DAY: "RAISING_HOME_END_DAY"
 });
 
 const DIRECTIONS = Object.freeze({
@@ -65,41 +69,37 @@ export const RAISING_HOME_KERNEL_FIELD_DEFINITION = createFieldDefinition({
   collisionData: { kind: FIELD_COLLISION_RULES.UNKNOWN_NOT_EXECUTABLE }
 }, getFieldFamilyProfile(FIELD_FAMILIES.CM));
 
+// The starting resident comes from the cartridge.
+//
+// Three invented creatures used to sit here. They were removed on 2026-09-03 at
+// the Owner's direction -- they were never in the ROM. The replacement is the
+// first egg in the transcribed ARM9 species table: eight records carry
+// generation 0 and family 0, which matches the documented 224 = 8 eggs + 216.
+//
+// IDENTITY is VERIFIED_BINARY. The behaviour numbers below are NOT: satiety,
+// energy, ease, readiness and temperament have no traced read site, and the
+// raising formulas in OVL18 are still UNKNOWN_REQUIRES_TRACE. They are carried
+// unchanged so the reducer keeps working while that trace is outstanding, and
+// they are the next thing to be replaced, not something to build on.
+const STARTING_SPECIES = listStartingEggs(speciesCatalog)[0];
+
 const RESIDENT_TEMPLATES = deepFreeze([
   {
-    residentId: "resident:greyshade-cat",
-    speciesId: "greyshade-cat",
-    name: "Greyshade",
+    residentId: residentIdForSpecies(STARTING_SPECIES),
+    speciesId: speciesIdForRecord(STARTING_SPECIES),
+    name: STARTING_SPECIES.identifier,
     position: { x: 5, y: 7 },
-    temperament: "watchful",
+    // UNKNOWN_REQUIRES_TRACE below this line.
+    temperament: "unknown",
     satiety: 72,
     energy: 68,
     ease: 64,
     readiness: 58
-  },
-  {
-    residentId: "resident:blazetail-kit",
-    speciesId: "blazetail-kit",
-    name: "Blazetail",
-    position: { x: 18, y: 8 },
-    temperament: "bright",
-    satiety: 66,
-    energy: 76,
-    ease: 59,
-    readiness: 70
-  },
-  {
-    residentId: "resident:crystalfin-seahorse",
-    speciesId: "crystalfin-seahorse",
-    name: "Crystalfin",
-    position: { x: 6, y: 4 },
-    temperament: "gentle",
-    satiety: 80,
-    energy: 62,
-    ease: 74,
-    readiness: 52
   }
 ]);
+
+/** The resident ids the product starts with, derived rather than hardcoded. */
+export const RAISING_HOME_RESIDENT_IDS = deepFreeze(RESIDENT_TEMPLATES.map((r) => r.residentId));
 
 function clamp(value, minimum = 0, maximum = 100) {
   return Math.max(minimum, Math.min(maximum, value));
@@ -171,7 +171,16 @@ export function createRaisingHomeInitialState({ sessionId = "championship-r2-hom
     revision: 0,
     tick: 0,
     paused: false,
-    clockMinutes: 8 * 60,
+    clockMinutes: DAY_START_MINUTES,
+    clockUnits: 0,
+    clockSubunits: 0,
+    clockRevision: 0,
+    // New Game resets the original year byte to zero (ARM9 0x0207BA0C).
+    // Legacy saves without that byte restore null instead.
+    year: 0,
+    // Calendar slots behind the original's status bar. See championshipWorldClock.
+    season: 0,
+    dayOfSeason: 0,
     caretakerPosition: { x: 12, y: 10 },
     selectedResidentId: RESIDENT_TEMPLATES[0].residentId,
     residents: RESIDENT_TEMPLATES.map((resident) => ({ ...clonePlainData(resident), facing: "down", intent: "wandering", lastResponse: "settled" })),
@@ -207,9 +216,23 @@ export function reduceRaisingHome(state, command) {
   } else if (command.type === RAISING_HOME_COMMANDS.ADVANCE) {
     if (next.paused) return state;
     next.tick += 1;
-    next.clockMinutes = (next.clockMinutes + Math.max(1, Math.min(30, Number(command.minutes) || 5))) % 1440;
+    const minutes = Math.max(1, Math.min(30, Number(command.minutes) || 5));
+    // The clock is a cascade, not a wrapping wall clock: crossing midnight has
+    // to roll the day, the season and the year with it.
+    const advanced = advanceWorldClock(next, minutes);
+    Object.assign(next, advanced);
+    next.clockRevision += 1;
     next.residents = next.residents.map((resident, index) => updateResident(next, resident, index));
     next = feedback(next, "The habitat takes another quiet breath.", "HABITAT_ADVANCED");
+  } else if (command.type === RAISING_HOME_COMMANDS.END_DAY) {
+    // The original's Raising Home submenu carries an End Day entry, so a day can
+    // be closed on demand rather than only running out. This closes the calendar
+    // day; it deliberately does not tick residents, because how many habitat
+    // steps a skipped day is worth is UNKNOWN_REQUIRES_TRACE.
+    const ended = endWorldClockDay(next);
+    Object.assign(next, ended);
+    next.clockRevision += 1;
+    next = feedback(next, "The day closes over the Raising Home.", "DAY_ENDED");
   } else {
     const resident = selectedResident(next);
     if (!resident) throw new Error("Selected raising-home resident is missing");
@@ -261,7 +284,27 @@ export function reduceRaisingHome(state, command) {
   }
 
   next.revision = state.revision + 1;
+  if (!Number.isSafeInteger(next.revision) || !Number.isSafeInteger(next.clockRevision)) throw new RangeError("Raising Home revision storage bound exceeded");
   return deepFreeze(clonePlainData(next));
+}
+
+/** Pure elapsed transition. It deliberately has no resident or interaction effects. */
+export function advanceRaisingHomeClock(state, units, subunits = 0, divisor = 400, clearElapsed = false) {
+  if (!state || state.modeId !== "raising-home") throw new TypeError("A raising-home state is required");
+  if (typeof clearElapsed !== "boolean") throw new TypeError("Clock clearElapsed must be boolean");
+  let advanced = advanceWorldClockUnits(state, units, { subunits, divisor });
+  const hasDelta = units !== 0 || subunits !== 0;
+  if (!hasDelta) {
+    if (!clearElapsed || (state.clockUnits === 0 && state.clockSubunits === 0)) return state;
+    // Stop clears the accumulator without first dividing a remainder inherited
+    // from another divisor. It cannot advance a minute on its own.
+    advanced = createWorldClock(state);
+  } else if (state.paused) return state;
+  if (clearElapsed) advanced = { ...advanced, clockUnits: 0, clockSubunits: 0 };
+  if (!Number.isSafeInteger(state.revision + 1) || !Number.isSafeInteger(state.clockRevision + 1)) {
+    throw new RangeError("Raising Home revision storage bound exceeded");
+  }
+  return deepFreeze({ ...state, ...advanced, revision: state.revision + 1, clockRevision: state.clockRevision + 1 });
 }
 
 export function formatRaisingHomeClock(minutes) {

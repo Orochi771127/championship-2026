@@ -82,6 +82,39 @@ export function auditOriginalMapBindingsFromRom(rom) {
   if (hunt.length !== 33) throw new Error(`ORIGINAL_HUNT_RECORD_COUNT_MISMATCH: ${hunt.length}`);
   if (cage.length !== 37) throw new Error(`ORIGINAL_CAGE_VISUAL_RECORD_COUNT_MISMATCH: ${cage.length}`);
 
+  // The scan finds POINTER columns, not arbitrary structure starts. OVL15
+  // 0x0210C438/0x0210C44C load name/description columns at 0x020C8CDC/CE0.
+  // Independently join all category-3 ShopItemTable itemIndex values to those
+  // columns so an internally coherent but shifted text table cannot pass.
+  const cageIdentities = cage.map((entry, recordIndex) => {
+    const pointerOffset = entry.recordAddress - arm9.ramAddress;
+    return {
+      recordIndex,
+      cageDefinitionIndex: recordIndex < 36 ? recordIndex : null,
+      role: recordIndex < 35 ? "SHOP_CAGE" : recordIndex === 35 ? "WAITING_ROOM" : "LID",
+      recordAddress: `0x${entry.recordAddress.toString(16).toUpperCase().padStart(8, "0")}`,
+      fieldId: entry.fieldId,
+      nameStringIndex: u32(arm9.data, pointerOffset + 0x1c),
+      descriptionStringIndex: u32(arm9.data, pointerOffset + 0x20),
+      shopRecordIndex: null
+    };
+  });
+  const shopCageIndices = new Set();
+  for (let shopRecordIndex = 0; shopRecordIndex < 118; shopRecordIndex += 1) {
+    const offset = 0x020e0248 - arm9.ramAddress + shopRecordIndex * 56;
+    if (u32(arm9.data, offset) !== 3) continue;
+    const itemIndex = u32(arm9.data, offset + 8);
+    if (itemIndex >= 35 || shopCageIndices.has(itemIndex)) throw new Error("INVALID_SHOP_CAGE_INDEX");
+    shopCageIndices.add(itemIndex);
+    const record = cageIdentities[itemIndex];
+    if (record.nameStringIndex !== u32(arm9.data, offset + 0x24)
+      || record.descriptionStringIndex !== u32(arm9.data, offset + 0x28)) {
+      throw new Error(`SHOP_CAGE_TEXT_MISMATCH: ${shopRecordIndex}/${itemIndex}`);
+    }
+    record.shopRecordIndex = shopRecordIndex;
+  }
+  if (shopCageIndices.size !== 35) throw new Error("SHOP_CAGE_JOIN_COUNT_MISMATCH");
+
   return Object.freeze({
     romSha256: digest,
     romGameCode: rom.toString("ascii", 0x0c, 0x10),
@@ -90,11 +123,7 @@ export function auditOriginalMapBindingsFromRom(rom) {
       byteLength: arm9.data.length
     }),
     huntRecords: Object.freeze(hunt),
-    cageVisualRecords: Object.freeze(cage.map((entry, recordIndex) => Object.freeze({
-      recordIndex,
-      recordAddress: `0x${entry.recordAddress.toString(16).toUpperCase().padStart(8, "0")}`,
-      fieldId: entry.fieldId
-    })))
+    cageVisualRecords: Object.freeze(cageIdentities.map(Object.freeze))
   });
 }
 

@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:ui:raising-header-material:tooling-pilot-r1",
+  "title": "Bright gold-and-blue Raising Home HUD pilot",
+  "rightsStatus": "ORIGINAL_CREATED",
+  "productionStatus": "IMPLEMENTED_OWNER_VISUAL_REVIEW_PENDING",
+  "shippingStatus": "NOT_SHIPPING_READY",
+  "artifactMaturity": "BOUNDED_ORIGINAL_UI_MATERIAL_PILOT",
+  "runtimeEligible": true,
+  "humanApproved": false,
+  "shippingReady": false,
+  "publicReleasePermitted": false,
+  "renderer": "DOM_CSS",
+  "implementation": "src/championship/app/intRh2Styles.css",
+  "scope": "RAISING_HOME_EXISTING_HUD_AND_EIGHT_TOOLBAR_SLOTS",
+  "authoring": {
+    "method": "IMAGEGEN_ORIGINAL_TEXTURE_WEBP_CODEC_CONVERSION",
+    "brief": "docs/art/production/tooling-pilot-r1/ui-candidate/BRIGHT_REVISION.md",
+    "source": "docs/art/production/tooling-pilot-r1/ui-source/raising-header-bright-original.png",
+    "sourceSha256": "97ef2ee380a6da159743163fbd281b8b05a99b14de9b67b4109f44a72ee6db20",
+    "codec": "WebP quality 82 effort 6; original dimensions preserved",
+    "ownerDirection": "2026-09-06: reuse original UI style where appropriate; avoid dark colors and favor a bright style",
+    "sourceMap": "docs/art/production/tooling-pilot-r1/ui-candidate/source-map.md",
+    "latestOwnerDirection": "Use provided photo2 original HUD assets in existing art pack and photo1 bright tactile quality; UI should support combined cages"
+  },
+  "texture": {
+    "src": "assets/production/ui/tooling-pilot-r1/raising-header-material.webp",
+    "sha256": "efc7a4a07cf138b8eecdf4a4ed75b658da20d7c3ba2f45041fedc81f229046c7",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 12966
+  },
+  "evidenceBoundary": {
+    "originalPixelReuse": false,
+    "runtimeResearchPathDependency": false,
+    "exactOriginalVisualParity": false,
+    "styleReference": "Original UI blue and amber panel accents; clean bright adaptation is Owner requested",
+    "newControls": false,
+    "gameplayChanges": false,
+    "newRenderer": false
+  },
+  "iconAtlas": {
+    "src": "assets/production/ui/tooling-pilot-r1/tool-icons.webp",
+    "sha256": "afae22b2826eb4c85009a2a04dc0c2545bda7a8e9b8412075f37a541780595ab",
+    "bytes": 158144,
+    "width": 1254,
+    "height": 1254,
+    "grid": [
+      3,
+      3
+    ],
+    "background": "OPAQUE_IVORY",
+    "source": "docs/art/production/tooling-pilot-r1/ui-source/tool-icons-ivory-original.png",
+    "sourceSha256": "198db157646c38fdcf7f7702095a42693ec0852eef17f0e655033514be009d4a",
+    "mapping": [
+      "hand",
+      "feed",
+      "clean",
+      "medicine",
+      "woundMedicine",
+      "protein",
+      "MANAGEMENT",
+      "SYSTEM",
+      "save"
+    ],
+    "slotOrderEvidence": "UNKNOWN_REQUIRES_TRACE; existing product order preserved",
+    "method": "Original imagegen illustrations; checkerboard draft rejected and background corrected by imagegen; WebP quality90"
+  }
+}

@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><base href="/">
+<title>對戰介面測試場次</title>
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js"}}</script>
+<link rel="stylesheet" href="src/championship/app/vs5Styles.css">
+<link rel="stylesheet" href="src/championship/app/facilityBattleMobile.css">
+<style>*{box-sizing:border-box}body{margin:0;font-family:'Microsoft JhengHei',sans-serif}#fixture{position:fixed;z-index:10;inset:0 0 auto;background:#fff5be;padding:8px;font-size:12px}#fixture button{min-height:44px}#app{top:156px}#receipt{font-size:11px}</style></head>
+<body><aside id="fixture">測試場次：秋季第 4 天、測試金額 10,000 bit、獨立記憶體存檔。<label><input type="checkbox" id="reduce">減少動態效果</label><br><button id="start">開始對戰測試</button><button id="step" hidden>推進 6 幀</button><button id="play" hidden>播放戰鬥</button><button id="finish" hidden>推進到結算</button><output id="receipt"></output></aside><main id="app"></main>
+<script type="module">
+import {createChampionshipStandaloneApp} from '/src/championship/app/championshipStandaloneApp.js';
+import {createBattleRuntime} from '/src/championship/app/battleRuntime.js';
+import {createBattleFieldView,createBattleResultView} from '/src/championship/app/vs5Screens.js';
+import {createChampionshipPixiStage} from '/src/championship/presentation/championshipPixiStage.js';
+import {mountBattleFieldPixiPresentation} from '/src/championship/presentation/vs5/createBattleFieldPixiPresentation.js';
+import {mountBattleVfxThreeOverlay} from '/src/championship/presentation/vs5/createBattleVfxThreeOverlay.js';
+import {mountBattleAudioPresentation} from '/src/championship/presentation/battleAudioPresentation.js';
+import {loadRuntimeMapArtField} from '/src/championship/presentation/runtimeMapArtBundle.js';
+import {loadRegisteredBattleEffectArt} from '/src/championship/presentation/battleEffectArt.js';
+import {loadLicensedCharacterRoster, LICENSED_CHARACTER_MANIFEST} from '/src/championship/presentation/licensedCharacterRoster.js';
+import characterManifest from '/assets/production/internal-faithful-baseline/characters-v1/manifest.json' with {type:'json'};
+import productionIndex from '/assets/production/ART_PRODUCTION_INDEX.json' with {type:'json'};
+import catalog from '/src/data/championship/catalogs/creature-species.r1.json' with {type:'json'};
+import presentation from '/docs/contracts/championship/raising-home-presentation.v1.json' with {type:'json'};
+import manifest from '/assets/production/battle/licensed-runtime-v1/manifest.json' with {type:'json'};
+import * as PIXI from '/node_modules/pixi.js/dist/pixi.mjs';
+const values=new Map(), storage={getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,v),removeItem:k=>values.delete(k)};
+const app=createChampionshipStandaloneApp({storage,catalog,cages:presentation.cages});
+const focusFixture=new URLSearchParams(location.search).has('special');
+await app.newGame(); app.advanceClock({units:(focusFixture?22:19)*1440*400});
+if(focusFixture)app.setTamerRank(4); // explicit test setup, never a normal-path rank claim
+app.creditBits(10000); app.openBattle();
+// Later scheduled record 1, both sides use preset team 1. AI/RNG/cost gates run
+// normally from clock zero. This is an explicit schedule fixture, not a save.
+const fixtureSeed=new URLSearchParams(location.search).get('seed');
+const runtime=createBattleRuntime({schedule:app.getBattleSchedule(),...(fixtureSeed?{seed:Number(fixtureSeed)}:{})});
+const root=document.querySelector('#app'), output=document.querySelector('#receipt'), start=document.querySelector('#start');
+let view,scene,stage,off,overlay,audio;
+if(focusFixture)document.querySelector('#fixture').firstChild.textContent='特殊招式測試場次：指定原作場次 1 與相同預設隊伍；正常 AI 選招，獨立記憶體存檔。';
+if(fixtureSeed)document.querySelector('#fixture').firstChild.textContent+=` 明示測試 RNG seed=${fixtureSeed}。`;
+const reduce=document.querySelector('#reduce');reduce.checked=matchMedia('(prefers-reduced-motion: reduce)').matches;
+start.onclick=async()=>{
+ start.disabled=true;reduce.disabled=true;
+ try {
+  const match=runtime.listMatches()[0];runtime.chooseMatch(match.recordIndex);
+  const source=runtime.startMatch();
+  const entered=app.enterMatch({...runtime.getEconomyContext(),attemptId:'battle:1'});
+  if(!entered.ok)throw Error(entered.reason);
+  output.textContent=`報名後 ${app.getShopFrame().bits} bit`;
+  view=createBattleFieldView({root,frame:source.getFrame(),mountField:()=>({}),onExit:()=>{void audio?.dispose();void overlay?.dispose();scene?.dispose();off?.();app.leaveScreen();root.textContent='已離開測試';}});
+  stage=await createChampionshipPixiStage({PIXI,canvasHost:root.querySelector('.cm-vs5-field')});
+  stage.app.ticker.stop();
+  const fieldArt=await loadRuntimeMapArtField({PIXI,manifest,fieldId:source.getFrame().arena.field});
+  const characterRoster=await loadLicensedCharacterRoster({PIXI,manifest:characterManifest,productionIndex,
+    manifestUrl:new URL(LICENSED_CHARACTER_MANIFEST,location.origin+'/').href,
+    speciesIds:source.getFrame().combatants.filter(c=>c.present).map(c=>c.speciesId)});
+  const effectArt=await loadRegisteredBattleEffectArt({PIXI,baseUrl:document.baseURI});
+  audio=await mountBattleAudioPresentation({source,baseUrl:document.baseURI});
+  scene=await mountBattleFieldPixiPresentation({stage,source,fieldArt,characterRoster,effectArt,reducedMotion:reduce.checked});
+  overlay=await mountBattleVfxThreeOverlay({host:root.querySelector('.cm-vs5-field'),stage,source,getFocusPlacement:()=>scene.getFocusPlacement(),getFieldPlacement:()=>scene.getFieldPlacement()});
+  root.dataset.characterReview=JSON.stringify(scene.getDiagnostics().characters);
+  stage.onResize(()=>{stage.app.render();overlay.redraw();});
+  stage.app.render();
+  const step=document.querySelector('#step');step.hidden=false;
+  function reviewState(){
+   root.dataset.audio=JSON.stringify(audio?.getDiagnostics());
+   const v=source.getView();root.dataset.nativeLifecycle=JSON.stringify(v.nativeLifecycle);
+   root.dataset.battleFrame=String(v.clock.frames);root.dataset.characterReview=JSON.stringify(scene.getDiagnostics().characters);
+   root.dataset.effectSprites=JSON.stringify(scene.getDiagnostics().effectSprites);
+   root.dataset.reactionView=JSON.stringify(v.combatants.map(c=>c.present?{slot:c.slot,hp:c.hp,down:c.down,
+     animation:c.animationRequest,motion:c.nativeMotion}:null));
+  }
+  step.onclick=()=>{
+   for(let i=0;i<6&&!source.getFrame().outcome.ended;i++)scene.advance({deltaMS:1000/59.8260982881});
+   root.dataset.characterReview=JSON.stringify(scene.getDiagnostics().characters);
+   root.dataset.battleFrame=String(source.getView().clock.frames);
+   root.dataset.focus=JSON.stringify(source.getView().specialPrelude);
+   reviewState();
+   overlay.redraw();
+   stage.app.render();
+  };
+  const special=document.createElement('button');special.textContent='推進到下一次特寫';document.querySelector('#fixture').insertBefore(special,output);
+  const impact=document.createElement('button');impact.textContent='推進到下一次命中';document.querySelector('#fixture').insertBefore(impact,output);
+  const projectile=document.createElement('button');projectile.textContent='推進到投射物命中';document.querySelector('#fixture').insertBefore(projectile,output);
+  const visibleEffect=document.createElement('button');visibleEffect.textContent='推進到投射物顯示';document.querySelector('#fixture').insertBefore(visibleEffect,output);
+  visibleEffect.onclick=()=>{
+   for(let i=0;i<16000&&!source.getView().outcome.ended;i++){
+    scene.advance({deltaMS:1000/59.8260982881});
+    if(scene.getDiagnostics().effectSprites?.sprites.some(e=>e.visible&&(e.bankId===19||e.bankId===81)))break;
+   }
+   reviewState();if(!source.getView().outcome.ended){overlay.redraw();stage.app.render();}
+  };
+  projectile.onclick=()=>{
+   const previous=source.getView().nativeLifecycle.contacts.projectileHits;
+   for(let i=0;i<16000&&!source.getView().outcome.ended;i++){
+    scene.advance({deltaMS:1000/59.8260982881});if(source.getView().nativeLifecycle.contacts.projectileHits>previous)break;
+   }
+   reviewState();const v=source.getView();output.textContent=`投射物命中 ${v.nativeLifecycle.contacts.projectileHits} 次；時鐘 ${v.clock.frames}`;
+   if(!v.outcome.ended){overlay.redraw();stage.app.render();}
+  };
+  const reactionSelect=document.createElement('select');reactionSelect.setAttribute('aria-label','受擊驗證事件');
+  for(const [value,label] of [['land','落地'],['judge','復起判定'],['restore','復起 HP 寫入'],['ready','復起完成'],['pursuit','狀態 8 追擊']]){
+   const option=document.createElement('option');option.value=value;option.textContent=label;reactionSelect.append(option);
+  }
+  const reactionStep=document.createElement('button');reactionStep.textContent='推進至受擊事件';
+  document.querySelector('#fixture').insertBefore(reactionSelect,output);document.querySelector('#fixture').insertBefore(reactionStep,output);
+  const fixtureResize=new ResizeObserver(()=>{root.style.top=document.querySelector('#fixture').getBoundingClientRect().height+'px';});
+  fixtureResize.observe(document.querySelector('#fixture'));
+  reactionStep.onclick=()=>{
+   const after=source.getView().animationFrame;
+   for(let i=0;i<16000&&!source.getView().outcome.ended;i++){
+    scene.advance({deltaMS:1000/59.8260982881});const v=source.getView(),reactions=v.nativeLifecycle.reactions;
+    const chosen=reactionSelect.value;
+    const event=chosen==='pursuit'?v.nativeLifecycle.normalFlow.history.find(e=>e.frame>=after&&e.type==='PURSUIT_MOVE_SELECTED'):
+      reactions.history.find(e=>e.frame>=after&&(
+      chosen==='land'?e.type==='LANDED':chosen==='judge'?e.type==='NOTIFICATION_CHANGED'&&e.from===18:
+      chosen==='ready'?e.type==='NOTIFICATION_CHANGED'&&e.from===20&&e.to===1:false));
+    if(event||(chosen==='restore'&&reactions.combatants.some(c=>c?.notification===20&&c.hp>0))){
+     const revived=reactions.combatants.find(c=>c?.notification===20);
+     output.textContent=`${reactionSelect.selectedOptions[0].textContent}；時鐘 ${v.clock.frames}；${event?`角色槽 ${event.slot}`:`HP ${revived?.hp??0}`}`;break;
+    }
+   }
+   reviewState();if(!source.getView().outcome.ended){overlay.redraw();stage.app.render();}
+  };
+  impact.onclick=()=>{
+   const last=source.getView().impactEffects.at(-1)?.id??0;
+   for(let i=0;i<16000&&!source.getView().outcome.ended;i++){
+    scene.advance({deltaMS:1000/59.8260982881});
+    if(source.getView().impactEffects.some(e=>e.id>last))break;
+   }
+   root.dataset.battleFrame=String(source.getView().clock.frames);
+   root.dataset.nativeLifecycle=JSON.stringify(source.getView().nativeLifecycle);
+   reviewState();
+   if(!source.getView().outcome.ended){overlay.redraw();stage.app.render();}
+  };
+  special.onclick=()=>{
+   for(let i=0;i<16000&&!source.getView().outcome.ended;i++){
+    scene.advance({deltaMS:1000/59.8260982881});
+    if(source.getView().specialPrelude?.frame===1)break;
+   }
+   root.dataset.characterReview=JSON.stringify(scene.getDiagnostics().characters);
+   root.dataset.battleFrame=String(source.getView().clock.frames);
+   root.dataset.focus=JSON.stringify(source.getView().specialPrelude);
+   if(!source.getView().outcome.ended){overlay.redraw();stage.app.render();}
+  };
+  const play=document.querySelector('#play');play.hidden=false;
+  play.onclick=()=>{play.disabled=true;step.disabled=true;stage.app.ticker.start();};
+  const finish=document.querySelector('#finish');finish.hidden=false;
+  finish.onclick=()=>{
+   stage.app.ticker.stop();finish.disabled=true;play.disabled=true;
+   // Drive the same scene/session one frame at a time, even when background RAF
+   // is suspended. No forced outcome, damage or wallet mutation in this control.
+   for(let i=0;i<32000&&!source.getFrame().outcome.ended;i++)scene.advance({deltaMS:1000/59.8260982881});
+   root.dataset.battleFrame=String(source.getView().clock.frames);
+   if(!source.getFrame().outcome.ended)output.textContent='未在原始時限內完成測試';
+  };
+  off=runtime.observe(reading=>{
+   view.render(reading);
+   if(!reading.outcome.ended)return;
+   step.disabled=true;finish.disabled=true;
+   void audio?.dispose();void overlay.dispose();scene.dispose();reviewState();app.finishMatch({...runtime.getSettlementResult(),attemptId:'battle:1'});
+   view=createBattleResultView({root,outcome:runtime.outcome(),receipt:app.getBattleReceipt(),matchTitle:match.title,onExit:()=>{app.leaveScreen();root.textContent='已返回牧場';}});
+   output.textContent=`結算後 ${app.getShopFrame().bits} bit`;
+  });
+ }catch(e){output.textContent=e.message;console.error(e);}
+};
+</script></body></html>

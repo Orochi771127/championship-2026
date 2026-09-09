@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "championship-battle-impact-continuation/v1",
+  "date": "2026-09-08",
+  "status": "ALL_EXECUTABLE_MOVE_SCRIPTS_AND_SOURCE_PRESENTATION_BOUND_ORIGINAL_PARITY_PARTIAL",
+  "authority": "Existing battle memory, hit resolver, launch auxiliary VMs, effect pools and Pixi scene",
+  "evidence": {
+    "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "overlay19Sha256": "d660e3e0bf243541c356c54dcbd1aec58e8df6c2dfaf4a5854d375a5f2d13715",
+    "offsetRange": "0211D95C..0211D99C",
+    "continuationRange": "0211DA0C..0211DF20",
+    "oracle": "docs/research/BATTLE_IMPACT_CONTINUATION_CPU_2026-09-08.json",
+    "offsetCases": 64,
+    "continuationCases": 128,
+    "controlledBoundaries": [
+      "allocator",
+      "target transformed cell box query",
+      "VM execution",
+      "3D render service"
+    ],
+    "r13Oracle": "docs/research/BATTLE_PRESENTATION_R13_CPU_2026-09-08.json"
+  },
+  "implemented": [
+    "Advance action+10 using world+47884; read old-index Q12 vector at world+47888 after accepted contact",
+    "Clear selected auxiliary+970 reference, including rejected result and kind5",
+    "Hit result2 selects secondary2D 012C for owner species<=133 or0124 otherwise, with target-box center and offset",
+    "Prelude02120900 requests secondary3D through the existing impact service",
+    "Result1 with pointer3C0212F6AB initializes012E and script0212F94E; other blocked scripts are skipped",
+    "Result2 initializes field44 actor with offset and six signed-Q12 auxiliary arguments",
+    "970 remains associated with the secondary actor; child actor owners remain per auxiliary VM",
+    "Owner+94 launch lock sets allocated child mode3, with allocation failure and full-slot behavior preserved"
+  ],
+  "presentation": {
+    "manifest": "assets/production/internal-faithful-baseline/battle-effects-v1/manifest.json",
+    "registeredOriginalCells": 1231,
+    "nativeSequenceBinding": "151 native banks / 484 sequences",
+    "sampleAuthority": "battleRuntime nativeLifecycle.effectActors; no independent frame advance",
+    "coordinates": "Q12 x,y-z, native signed scale/flip/rotation; existing shared field camera",
+    "missingCells": "Explicit diagnostics, no generic substitute",
+    "originalPixelsImported": true,
+    "humanApproved": false,
+    "localOnly": true,
+    "publicReleasePermitted": false,
+    "impactFamilies": 5,
+    "impactSlots": 80,
+    "audioSamples": 54
+  },
+  "limits": [
+    "Three-member knockout slowdown lookup index3 requires actual original caller context; no guessed duration",
+    "Controlled 595-move execution does not certify natural AI selection or visual acceptance of every move",
+    "Original complete ending-camera, hardware pixel/audio parity and original pre-constructor RNG/profile history are not accepted",
+    "Home-owned party, additional moves, untraced status bodies and non-battle triggers remain separate open gameplay work",
+    "Physical-device, human visual, public rights and shipping acceptance remain false"
+  ],
+  "report": "docs/art/production/battle-presentation-r13/IMPLEMENTATION_2026-09-08.md",
+  "originalFullMatchParity": false,
+  "physicalDeviceAccepted": false,
+  "shippingReady": false
+}

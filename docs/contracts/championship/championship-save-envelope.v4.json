@@ -1,0 +1,43 @@
+{
+  "contractId": "championship-save-envelope:v4",
+  "date": "2026-09-06",
+  "status": "IMPLEMENTED_APP_RNG_PERSISTENCE_NOT_NORMAL_GENERATION",
+  "authorization": "Owner requested normal entry with full generation and continuing RNG; existing work package A includes app/save RNG continuity",
+  "schemaVersion": 4,
+  "storageKey": "championshipModernSave:v1",
+  "previousContract": "docs/contracts/championship/championship-save-envelope.v3.json",
+  "writerAuthority": "Existing ChampionshipPersistentSavePort; manual save and existing successful capture-to-Home transaction",
+  "runtimeModule": "src/championship/app/championshipStandaloneSave.js",
+  "addition": {
+    "gameplayRng": "null or {version:1,seeds:int[217],cursors:int[217]}",
+    "seeds": "Canonical signed 32-bit words; validation also accepts equivalent unsigned 32-bit input",
+    "cursors": "0..103 inclusive; original roll wraps 103 to zero before reading",
+    "unknownKeys": "REJECT",
+    "copyBoundary": "RNG snapshots, normalization and restoration copy both arrays; no external mutable references"
+  },
+  "lifecycle": {
+    "owner": "championshipStandaloneApp only, reusing battleRngChannel algorithm; no second store or save authority",
+    "newGame": "Initialize once using platform local hour/minute/second. CPU-proven seed is their sum, or 1 for all-zero time. This platform input is separate from the Raising game calendar",
+    "draw": "nextGameplayRandom validates the channel before initialization, advances the owned sequence and marks the existing save dirty",
+    "navigation": "Gate selection, Hunt start/exit and other navigation do not reset this state",
+    "continue": "Validate before replacing an open session; restore both arrays, without reading the platform clock",
+    "legacy": "v1/v2/v3 migration preserves absent history as null. Read, canContinue and Continue do not invent it; the first native draw initializes a new clock-based sequence. It cannot recover historical original draws",
+    "failure": "Failed storage writes leave the old durable checkpoint and current in-memory sequence intact; app retry saves current state",
+    "captureCommit": "RNG joins the existing candidate Home/identity write; draws are refused during the synchronous capture commit"
+  },
+  "preserved": [
+    "One existing save key, 65536-byte and depth-12 limits",
+    "Existing wallet, identity, cage, inventory, collection and validated Raising payload",
+    "Strict old-version allowlists and rejection of malformed or future versions",
+    "Nested Raising schema v5 and legacy digest validation",
+    "No raw ROM, decoded map or replay record in player saves"
+  ],
+  "evidence": "docs/research/GAMEPLAY_RNG_CLOCK_CPU_CHECK_2026-09-06.json",
+  "tests": "tests/championship-gameplay-rng-lifecycle-cases.mjs",
+  "limits": [
+    "Hunt normal generation does not yet consume this app-owned sequence",
+    "Original full generation, scene variant, AI and capture integration are not established by persistence",
+    "This is the requested 2026 continuation boundary, not original DS battery-save parity; original load-time reseeding at 0206AD6C remains a separate trace",
+    "Existing preset battle runtime retains its own currently traced match-seed boundary; it is not silently changed by this schema"
+  ]
+}

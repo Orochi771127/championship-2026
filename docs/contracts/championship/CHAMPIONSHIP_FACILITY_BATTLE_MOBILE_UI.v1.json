@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "CHAMPIONSHIP_FACILITY_BATTLE_MOBILE_UI_R1",
+  "date": "2026-09-06",
+  "scope": ["SHOP", "CAGE_EDIT", "BATTLE_SELECT", "BATTLE_FIELD", "BATTLE_RESULT"],
+  "ownerDirection": "Make the supplied Shop, Battle interface and initial ranch cages work well on phones; avoid the feeling of two separate screens and keep the presentation bright.",
+  "layoutEvidence": "OWNER_APPROVED_ADAPTATION",
+  "layoutParityClaim": false,
+  "authority": {"ui": "EXISTING_DOM_VIEWS", "gameplay": "EXISTING_APP_AND_RUNTIMES", "renderer": "EXISTING_CHAMPIONSHIP_PIXI_STAGE"},
+  "stylesheet": "src/championship/app/facilityBattleMobile.css",
+  "referencePackage": "R:/Projects/Championship2026/YDIJ_PRIVATE_ROM_ART_PACK/01_UI",
+  "referenceUse": "RESEARCH_ONLY; no package pixels copied into runtime",
+  "runtimeArt": ["assets/production/cage/licensed-runtime-v1/manifest.json", "assets/production/battle/licensed-runtime-v1/manifest.json"],
+  "cagePresentation": {
+    "identity": "Existing CageDefinition to ShopRecord and original visual binding",
+    "coordinates": "ranchBoardCell native editor coordinates scaled by 2",
+    "occupancy": "Existing frame.slots; group thumbnails across the actual occupied cells",
+    "imageScale": "Uniform contain fit; footprint clips are presentation masks, not collision or placement authority",
+    "nativeThumbnailParity": false,
+    "startup": "Existing NATIVE_ANCHORS_V1: fixed Waiting Room and definitions 0, 1, 15; preserve legacy saves",
+    "actions": ["existing select", "existing remove", "existing place", "existing confirm", "existing leave/cancel"],
+    "rankControls": "Existing stand-in rank controls shown only in developer presentation"
+  },
+  "battlePresentation": {
+    "bandOrder": ["CLOCK", "OPPONENT_HUD", "FIELD", "PLAYER_HUD", "EVENT_LOG"],
+    "mobileRows": "42px 74px minmax(180px,1fr) 102px 64px",
+    "supersedes": "Fixed percentage CSS band sizing in battle-field-presentation.v1.json for the standalone mobile shell only; existing pure legacy geometry helpers remain unchanged",
+    "arenaScale": "Uniform contain fit; stands use the same fitted arena rectangle",
+    "health": "current and maximum from the injected battle presentation source",
+    "settlement": "Existing actual wallet receipt, never advertised payout substituted for credit",
+    "controls": "Existing leave-only automatic match; no combat commands added"
+  },
+  "validation": {"focusedPass": 75, "additionalFieldPass": 11, "regressionPass": 1140, "browserViewports": ["320x568", "390x844"], "physicalPhoneQA": false},
+  "remaining": ["Original Shop item portraits and scene UI art binding", "Original cage-editor thumbnail bank rather than field previews", "Battle character sprite/animation binding", "Four battle kinds to match selection mapping", "Full result rank/title/status/log sequence", "Ranch membership and training-effect writers"],
+  "shippingReady": false,
+  "report": "docs/art/production/facility-battle-mobile-r1/README.md"
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "id": "championship-battle-effect-pool/v1",
+  "updated": "2026-09-08",
+  "status": "ALL_EXECUTABLE_MOVE_SCRIPTS_AND_SOURCE_PRESENTATION_BOUND_ORIGINAL_PARITY_PARTIAL",
+  "report": "docs/art/production/battle-presentation-r13/IMPLEMENTATION_2026-09-08.md",
+  "authority": "Existing battleRuntime memory, launch VMs, battle session and caller-owned ticker",
+  "provenance": {
+    "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "overlay19Sha256": "d660e3e0bf243541c356c54dcbd1aec58e8df6c2dfaf4a5854d375a5f2d13715",
+    "numericProfiles": "src/data/championship/battleEffectProfiles.json",
+    "oracle": "docs/research/BATTLE_EFFECT_CPU_2026-09-08.json",
+    "normalReceipt": "docs/art/production/battle-effect-r11/normal-runtime.json",
+    "continuationContract": "docs/contracts/championship/battle-impact-continuation.v1.json",
+    "localArtContract": "docs/contracts/championship/battle-original-effect-preview.v1.json",
+    "localArtReceipt": "docs/art/production/battle-effect-r12/verification.json"
+  },
+  "numericResources": {
+    "banks": 151,
+    "sequences": 484,
+    "cells": 1231,
+    "poolSlots": 496,
+    "sourceImagesIncluded": false
+  },
+  "implemented": [
+    "0211A054..A17C bank demand from the existing roster move lists",
+    "0211ABFC allocation, 020475F8 reset, 0211ACF8 swap-last release and LIFO reuse",
+    "0211A568 2D mode0 update; 0211CCEC owned-child update after VM dispatch",
+    "0204819C signed Q12 acceleration and unscaled position integration",
+    "0211D2E0 / 0211AD9C owning-world resource query",
+    "0211BA40 rotated contact and 02066C90 segment arithmetic",
+    "Native sequence selection, zero-tick frame, transformed NCER boxes",
+    "Normal move-script projectile contact into existing hit/landing/recovery",
+    "Inactive slot animator survives release until reuse; settlement/dispose free all live effects",
+    "R11 D95C..D99C offset ring and DA0C..DF20 hit continuation with secondary/blocked auxiliary ownership",
+    "R12 all 1231 supplied original cells replace the retired R11 generated pictures, using native origins and the same pool snapshots on the existing Pixi actor layer; loopback research only",
+    "R13 original prelude VM, full-action engagement, native NCER geometry, five impact families, original audio and per-move cleanup",
+    "R13 rendered actors consume the same native animator sample; verified hit-pause and slowdown gate share the session clock"
+  ],
+  "validation": {
+    "focusedPassed": 18,
+    "regressionPassed": 1253,
+    "validationScope": "R13 controlled595x4, 90 new original ARM cases, final normal AI and phone-browser receipts; full original parity not claimed",
+    "physicalDeviceAccepted": false,
+    "normalGameplayAcceptedRecords": 0
+  },
+  "remaining": [
+    "Three-member knockout slowdown lookup index3 requires actual original caller context; no guessed duration",
+    "Controlled 595-move execution does not certify natural AI selection or visual acceptance of every move",
+    "Original complete ending-camera, hardware pixel/audio parity and original pre-constructor RNG/profile history are not accepted",
+    "Home-owned party, additional moves, untraced status bodies and non-battle triggers remain separate open gameplay work",
+    "Physical-device, human visual, public rights and shipping acceptance remain false"
+  ],
+  "supersedes": [
+    "R9 2D pool and rotated contact entirely unbound statements",
+    "R9 normal 0211DF68 needs-object-graph diagnostic for the represented moves",
+    "R9 seed19/25 revival fixtures; current projectile path uses21/16 for enemy/player resumed action",
+    "R10 absent 2D rendering and entirely unbound impact offset/secondary/blocked continuation; R10 numeric pool proof remains valid",
+    "R11 generated16-cell default, missing bank1 cell142 and advice to generate remaining source cells; R11 impact arithmetic proof remains valid",
+    "R12 full3D/audio and actual prelude VM wholly unbound statements; R13 report defines current limits"
+  ],
+  "originalFullMatchParity": false,
+  "shippingReady": false
+}

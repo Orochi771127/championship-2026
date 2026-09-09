@@ -1,0 +1,102 @@
+/* Shared bright mobile presentation for the Shop, Cage editor and Battle.
+ * Existing screens and input owners only. The reference package stays external. */
+.cm-vs2-root:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"]), .cm-vs5-root {
+  color-scheme: light; color: #205164; background: #e7f5f1;
+  --vs2-ink: #205164; --vs2-muted: #4c717b; --vs2-cyan: #117893;
+  --vs2-gold: #d5a232; --vs2-gold-bright: #805819;
+  font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+}
+.cm-vs2-root:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"]) .cm-vs2-shell, .cm-vs5-shell {
+  border: 0; background: radial-gradient(ellipse at 70% 10%, #e5fbff, transparent 70%), linear-gradient(#d7f2f0, #f5f8e8);
+}
+.cm-vs2-root:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"]) .cm-vs2-header {
+  min-height: 86px; padding: 12px; border: 0; background: none; box-shadow: none;
+}
+.cm-vs2-root:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"]) :is(.cm-vs2-header::before, .cm-vs2-header::after, .cm-vs2-header .cm-vs2-kicker) { display: none; }
+.cm-vs2-root:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"]) .cm-vs2-title { font-size: 21px; text-shadow: none; letter-spacing: .03em; }
+.cm-vs2-root:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"]) .cm-vs2-subtitle { color: #3e7180; font-size: 12px; line-height: 1.5; }
+.cm-vs2-root:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"]) .cm-vs2-body { padding: 8px 12px; gap: 12px; }
+.cm-vs2-root:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"]) .cm-vs2-footer { border: 0; background: transparent; box-shadow: none; }
+.cm-vs2-root:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"]) .cm-vs2-action, .cm-vs5-action {
+  min-height: 44px; border: 1px solid #689ead; border-radius: 4px 12px 4px 12px;
+  background: linear-gradient(#fff, #d7f0f3); color: #20546d; box-shadow: inset 0 0 0 1px #ffffffa0, 0 2px #5c8d9633; font-size: 13px; letter-spacing: .02em;
+}
+.cm-vs2-root:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"]) .cm-vs2-action--primary, .cm-vs5-action--primary { border-color: #bd9231; color: #6b4c1a; background: linear-gradient(#fff3b9, #f1cf77); }
+:where(.cm-vs2-root[data-screen="SHOP"], .cm-vs2-root[data-screen="CAGE_EDIT"]) .cm-vs2-shop__wallet { color: #29635d; border: 1px solid #a9caba; border-radius: 3px 10px 3px 10px; padding: 9px; background: #f7ffe9; font-size: 12px; white-space: nowrap; }
+:where(.cm-vs2-root[data-screen="SHOP"], .cm-vs2-root[data-screen="CAGE_EDIT"]) .cm-vs2-shop__tabs { position: sticky; top: -8px; z-index: 2; gap: 5px; padding: 4px 0 8px; background: #e3f5ef; }
+:where(.cm-vs2-root[data-screen="SHOP"], .cm-vs2-root[data-screen="CAGE_EDIT"]) .cm-vs2-shop__tab { min-height: 44px; border: 1px solid #8bb7af; color: #315d65; background: #f3ffff; font-size: 12px; letter-spacing: 0; border-radius: 3px 9px 3px 9px; }
+:where(.cm-vs2-root[data-screen="SHOP"], .cm-vs2-root[data-screen="CAGE_EDIT"]) .cm-vs2-shop__tab[data-active="true"] { color: #624516; background: linear-gradient(#fff4ba, #f5d77a); border-color: #c2a146; box-shadow: 0 2px #b99437; }
+:where(.cm-vs2-root[data-screen="SHOP"], .cm-vs2-root[data-screen="CAGE_EDIT"]) .cm-vs2-shop__row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; min-height: 84px; padding: 10px; border: 1px solid #afcfc6; border-radius: 3px 13px 3px 13px; background: #ffffffc7; box-shadow: 0 2px #407a7b0d; }
+:where(.cm-vs2-root[data-screen="SHOP"], .cm-vs2-root[data-screen="CAGE_EDIT"]) .cm-vs2-shop__row[data-has-art="true"] { grid-template-columns: 72px minmax(0, 1fr) auto; }
+.cm-facility-thumb { display: block; width: 72px; height: 66px; object-fit: contain; image-rendering: pixelated; border-radius: 4px; background: #deedde; }
+.cm-shop-goods-icon { display: block; width: 62px; height: 62px; justify-self: center; border-radius: 12px; background-size: 300% 300%; background-repeat: no-repeat; }
+:where(.cm-vs2-root[data-screen="SHOP"], .cm-vs2-root[data-screen="CAGE_EDIT"]) .cm-vs2-shop__name strong { font-size: 14px; color: #285968; }
+:where(.cm-vs2-root[data-screen="SHOP"], .cm-vs2-root[data-screen="CAGE_EDIT"]) .cm-vs2-shop__meta { display: block; margin-top: 7px; color: #52777b; font-size: 11px; }
+:where(.cm-vs2-root[data-screen="SHOP"], .cm-vs2-root[data-screen="CAGE_EDIT"]) .cm-vs2-shop__buy { min-width: 52px; min-height: 44px; padding: 6px; background: #e3f4c7; color: #355b36; border: 1px solid #98b76b; border-radius: 3px 9px 3px 9px; font-size: 12px; }
+:where(.cm-vs2-root[data-screen="SHOP"], .cm-vs2-root[data-screen="CAGE_EDIT"]) .cm-vs2-shop__buy:disabled { color: #71817a; background: #e7eddf; opacity: .72; }
+:where(.cm-vs2-root[data-screen="SHOP"], .cm-vs2-root[data-screen="CAGE_EDIT"]) .cm-vs2-shop__status { color: #3c735d; font-size: 12px; }
+:where(.cm-vs2-root[data-screen="SHOP"], .cm-vs2-root[data-screen="CAGE_EDIT"]) .cm-vs2-shop__empty { color: #57796b; font-size: 12px; }
+.cm-vs2-cage-rank { align-self: start; padding: 8px; border: 1px solid #b1ccb1; background: #f5ffe6; color: #447049; }
+.cm-vs2-cage-rank__label { color: inherit; font-size: 10px; letter-spacing: 0; }
+.cm-cage-board-hint { margin: 0; color: #4b776c; font-size: 12px; }
+.cm-cage-board-scroll { flex: 0 0 auto; overflow-x: auto; overflow-y: hidden; padding: 14px 0; border-block: 1px solid #82b394; background: linear-gradient(#c0e7bb, #a4d7bd); overscroll-behavior-x: contain; touch-action: pan-x; }
+.cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-board { position: relative; display: block; width: 508px; height: 102px; padding: 0; margin: 0; background: transparent; border: 0; }
+.cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-slot { position: absolute; width: 48px; height: 56px; min-width: 0; min-height: 0; margin: 0; padding: 0; transform: none; border: 0; border-radius: 0; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background-color: #e4ffe2; background-repeat: no-repeat; color: #478961; opacity: 1; font-size: 18px; }
+.cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-slot[data-unlocked="false"] { background: #508e78; color: #a4cdb8; }
+.cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-slot[data-fixed="true"] { opacity: 1; filter: none; }
+.cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-slot:focus-visible { filter: brightness(1.2); outline: 3px solid #956614; outline-offset: -4px; }
+.cm-cage-facilities { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.cm-cage-facility { display: grid; grid-template-columns: 56px 1fr; gap: 3px 7px; align-items: center; padding: 8px; border: 1px solid #9ec2af; border-radius: 3px 12px 3px 12px; background: #f5fff1e6; color: #265a53; text-align: left; cursor: pointer; }
+.cm-cage-facility .cm-facility-thumb { grid-row: span 2; width: 56px; height: 64px; }
+.cm-cage-facility strong { font-size: 12px; overflow-wrap: anywhere; }
+.cm-cage-facility span { font-size: 10px; color: #547669; }
+.cm-cage-facility:disabled { cursor: default; color: #446657; }
+.cm-vs2-cage-tray__item { display: grid; grid-template-columns: 64px 1fr; min-height: 74px; background: #f9fff0; color: #275966; border-color: #86b3a0; border-radius: 4px 12px 4px 12px; }
+.cm-vs2-cage-tray__item .cm-facility-thumb { grid-row: span 2; width: 60px; }
+.cm-vs2-cage-tray__item[data-selected="true"] { background: #fff0b7; border: 2px solid #b99538; }
+.cm-vs2-cage-tray__effect { color: #4c7569; }
+.cm-vs5-root { overflow: hidden; align-items: stretch; }
+.cm-vs5-shell { width: min(100%, 430px); max-width: 430px; height: 100%; max-height: none; aspect-ratio: auto; margin: 0 auto; overflow-y: auto; }
+.cm-vs5-header { padding: 16px 14px 8px; flex: 0 0 auto; }
+.cm-vs5-header .cm-vs5-kicker { color: #4b7981; }
+.cm-vs5-title { color: #245d70; font-size: 22px; text-shadow: none; }
+.cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube { min-height: 0; height: auto; flex: 0 0 auto; background: transparent; padding: 0 12px; }
+.cm-vs5-cube__face { background: #e0efdc; color: #386b62; border: 1px solid #8ab3a7; border-radius: 3px 8px 3px 8px; min-height: 44px; }
+.cm-vs5-cube__face:disabled { opacity: .65; }
+.cm-vs5-cube__note { color: #5d7781; font-size: 11px; margin: 4px 14px; }
+.cm-vs5-matches { padding: 8px 12px; gap: 9px; flex: 1 0 auto; }
+.cm-vs5-match { background: transparent; border: 0; }
+.cm-vs5-match__enter { width: 100%; display: grid; gap: 7px; text-align: left; padding: 12px; }
+.cm-vs5-match__fee, .cm-vs5-match__payout { color: #705626; font-size: 12px; letter-spacing: 0; }
+.cm-vs5-exit { margin: 8px 12px 12px; flex: 0 0 auto; }
+.cm-vs5-entry-notice { margin: 8px 14px; color: #8c442a; font-size: 12px; }
+.cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell { display: grid; grid-template-rows: 42px 74px minmax(180px, 1fr) 102px 64px; overflow: auto; }
+.cm-vs5-clock { background: transparent; padding: 8px 12px; }
+.cm-vs5-clock__caption { color: #346270; font-size: 11px; }
+.cm-vs5-clock__caption .cm-vs5-evidence { display: none; }
+.cm-vs5-clock__track { background: #c7e0d5; height: 7px; border-radius: 4px; }
+.cm-vs5-clock__fill { background: #48a76d; }
+.cm-vs5-clock__pips { display: none; }
+.cm-vs5-roster--player, .cm-vs5-roster--opponent { flex-direction: row; padding: 7px 10px; gap: 6px; overflow: visible; }
+.cm-vs5-roster .cm-vs5-fighter { flex: 1 1 0; border: 1px solid #7baa9b; border-radius: 3px 10px 3px 10px; padding: 7px; background: #f3ffedf0; color: #25544b; }
+.cm-vs5-roster--opponent .cm-vs5-fighter { background: #fff2deee; border-color: #c4ab7b; }
+.cm-vs5-fighter[data-down="true"] { opacity: .58; }
+.cm-vs5-fighter__name { color: inherit; font-size: 11px; letter-spacing: 0; }
+.cm-vs5-meter { background: #c1d6c9; border-radius: 3px; }
+.cm-vs5-field { aspect-ratio: auto; min-height: 180px; background: #d2ebe5; }
+.cm-vs5-log { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 8px; background: transparent; padding: 6px 12px; }
+.cm-vs5-log .cm-vs5-exit { margin: 0; min-width: 74px; }
+.cm-vs5-log__line, .cm-vs5-log__detail { color: #386d62; font-size: 11px; }
+.cm-vs5-result__body { margin: auto 12px; padding: 24px 16px; background: #f3ffede6; border: 2px solid #d4ae42; border-radius: 4px 22px 4px 18px; color: #2b6556; }
+.cm-vs5-result__detail, .cm-vs5-result__rank { color: #3b705f; }
+.cm-status-bar:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"], [data-screen^="BATTLE"]) { background: linear-gradient(#f6fff5, #d3eee9); color: #2a5b62; border-bottom-color: #d0a13d; box-shadow: none; }
+.cm-status-bar:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"], [data-screen^="BATTLE"]) :is(.cm-status-bar__season, .cm-status-bar__day, .cm-status-bar__time) { color: #3a6a66; }
+.cm-status-bar:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"], [data-screen^="BATTLE"]) .cm-status-bar__mode { color: #6a501c; background: #ffeba2; border-radius: 3px 8px 3px 8px; padding: 4px; }
+@media (max-width: 350px) { :where(.cm-vs2-root[data-screen="SHOP"], .cm-vs2-root[data-screen="CAGE_EDIT"]) .cm-vs2-shop__row[data-has-art="true"] { grid-template-columns: 56px minmax(0,1fr) 48px; gap: 7px; } :where(.cm-vs2-root[data-screen="SHOP"], .cm-vs2-root[data-screen="CAGE_EDIT"]) .cm-vs2-shop__row .cm-facility-thumb { width: 54px; } .cm-cage-facility { grid-template-columns: 1fr; } .cm-cage-facility .cm-facility-thumb { grid-row: auto; width: 100%; } }
+@media (prefers-reduced-motion: reduce) { .cm-vs5-meter__fill { transition: none; } }
+
+.cm-vs5-fighter__hp { color: #456b60; font-size: 10px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-edit__body { grid-template-rows: none; grid-auto-rows: max-content; align-content: start; }
+.cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-slot { background-image: none; }
+.cm-vs2-root:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"]) .cm-vs2-header::before,
+.cm-vs2-root:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"]) .cm-vs2-header::after { display: none; }

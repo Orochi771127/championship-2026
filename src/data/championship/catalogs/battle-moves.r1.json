@@ -55,7 +55,7 @@
       "name": "field0A",
       "width": "u8",
       "readSite": null,
-      "widthEvidence": "CONSTANT_ZERO_PADDING",
+      "widthEvidence": "NO_TRACED_READ_SITE",
       "distinctValues": 2
     },
     {
@@ -64,7 +64,7 @@
       "name": "field0B",
       "width": "u8",
       "readSite": null,
-      "widthEvidence": "CONSTANT_ZERO_PADDING",
+      "widthEvidence": "NO_TRACED_READ_SITE",
       "distinctValues": 2
     },
     {
@@ -100,7 +100,7 @@
       "name": "field18",
       "width": "u32",
       "readSite": null,
-      "widthEvidence": "CONSTANT_ZERO_PADDING",
+      "widthEvidence": "NO_TRACED_READ_SITE",
       "distinctValues": 3
     },
     {
@@ -108,7 +108,7 @@
       "offsetHex": "0x1C",
       "name": "pointer1C",
       "width": "u32",
-      "readSite": "OVL19:0x0211C1B8 ldr; three distinct OVL19 code addresses plus null",
+      "readSite": "OVL19:0x0211C1B8 ldr; a battle-script entry address, not a code pointer -- all 595 non-null values land inside the OVL19 bytecode blob 0x021204A0..0x0212FDA4, across 3 distinct entries",
       "widthEvidence": "TRACED_LOAD",
       "distinctValues": 4
     },
@@ -145,7 +145,7 @@
       "name": "field23",
       "width": "u8",
       "readSite": null,
-      "widthEvidence": "CONSTANT_ZERO_PADDING",
+      "widthEvidence": "NO_TRACED_READ_SITE",
       "constantValue": 0
     },
     {
@@ -163,7 +163,7 @@
       "name": "field26",
       "width": "u16",
       "readSite": null,
-      "widthEvidence": "CONSTANT_ZERO_PADDING",
+      "widthEvidence": "NO_TRACED_READ_SITE",
       "constantValue": 0
     },
     {
@@ -171,7 +171,7 @@
       "offsetHex": "0x28",
       "name": "pointer28",
       "width": "u32",
-      "readSite": "OVL19:0x0211A0FC ldr, compared against two OVL19 code addresses",
+      "readSite": "OVL19:0x0211A0FC ldr, compared against two script addresses; a battle-script entry address, 31 distinct, all inside the bytecode blob. Many are odd, which reads like a Thumb pointer but is not: the bytecode is a byte stream and its routines are unaligned",
       "widthEvidence": "TRACED_LOAD",
       "distinctValues": 32
     },
@@ -262,7 +262,7 @@
       "name": "field3A",
       "width": "u16",
       "readSite": null,
-      "widthEvidence": "CONSTANT_ZERO_PADDING",
+      "widthEvidence": "NO_TRACED_READ_SITE",
       "constantValue": 0
     },
     {
@@ -270,7 +270,7 @@
       "offsetHex": "0x3C",
       "name": "pointer3C",
       "width": "u32",
-      "readSite": "OVL19:0x0211C900 ldr; three distinct OVL19 code addresses plus null",
+      "readSite": "OVL19:0x0211C900 ldr; a battle-script entry address, 2 distinct, all inside the bytecode blob",
       "widthEvidence": "TRACED_LOAD",
       "distinctValues": 3
     },
@@ -298,7 +298,7 @@
       "name": "field42",
       "width": "u8",
       "readSite": null,
-      "widthEvidence": "CONSTANT_ZERO_PADDING",
+      "widthEvidence": "NO_TRACED_READ_SITE",
       "constantValue": 30
     },
     {
@@ -334,7 +334,7 @@
       "name": "field47",
       "width": "u8",
       "readSite": null,
-      "widthEvidence": "CONSTANT_ZERO_PADDING",
+      "widthEvidence": "NO_TRACED_READ_SITE",
       "constantValue": 0
     },
     {

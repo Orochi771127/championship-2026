@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hunt result research fixture</title>
+<link rel="stylesheet" href="../../src/championship/app/vs2Styles.css">
+<style>body{margin:0;background:#06141e;color:white;font-family:Arial}#fixture{position:fixed;z-index:20;bottom:0;left:0;background:#172d38;width:100%;padding:5px;font-size:12px}#fixture button{min-height:44px}#app.cm-vs2-root{bottom:78px}#outcome{white-space:pre-wrap}</style>
+<main id="app"></main>
+<aside id="fixture">RESEARCH FIXTURE — live encounter record, bounded soft-pull replay; no normal-entry capture claim.<br>
+<button id="failure">Enable save failure</button><button id="reload-save">Reload saved Home</button><output id="outcome"></output></aside>
+<script type="module">
+import { createChampionshipStandaloneApp } from '../../src/championship/app/championshipStandaloneApp.js';
+import { createGateHuntPresentationSource } from '../../src/championship/app/gateHuntPresentationSource.js';
+import { createHuntResultView } from '../../src/championship/app/vs3Screens.js';
+import { recordEnclosedCreature } from '../../src/championship/app/championshipRaisingProduction.js';
+import { allocateRaisingInstanceIdentity } from '../../src/championship/raising/raisingInstanceIdentity.js';
+import { CHAMPIONSHIP_MODERN_SAVE_KEY } from '../../src/championship/app/championshipStandaloneSave.js';
+import { listChampionshipGates } from '../../src/championship/gate/gateCatalog.js';
+import { liveCaptureReplay } from './championship-live-capture-replay.mjs';
+const read = async path => (await fetch(path)).json();
+const [catalog, presentation, encounter, touch] = await Promise.all([
+ read('../../src/data/championship/catalogs/creature-species.r1.json'),
+ read('../../docs/contracts/championship/raising-home-presentation.v1.json'),
+ read('../../docs/research/HUNT_LIVE_ENCOUNTER_REPLAY_2026-09-05.json'),
+ read('../../docs/research/HUNT_NATIVE_TOUCH_REPLAY_2026-09-05.json')]);
+const values = new Map();
+const storage = {fail:false,getItem:key=>values.get(key)??null,removeItem:key=>values.delete(key),
+ setItem(key,value){if(this.fail)throw new Error('fixture quota');values.set(key,value)}};
+const app = createChampionshipStandaloneApp({ storage, catalog, cages:presentation.cages,
+ huntCaptureReplay:liveCaptureReplay(encounter,touch,listChampionshipGates()[0].gateId) });
+await app.newGame();
+const starterId=app.getRaisingInstances().find(entry=>entry.source.kind==='STARTER').instanceId;
+while(app.getRaisingInstances().length<16){
+ app.save(); const saved=JSON.parse(storage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY));
+ const allocation=allocateRaisingInstanceIdentity(saved.instanceIdentity,{creature:saved.creature,collection:saved.raising.collection,assignments:saved.raising.assignments});
+ saved.instanceIdentity=allocation.state;
+ saved.raising=recordEnclosedCreature(saved.raising,{instanceId:allocation.instanceId,speciesId:'species-010',displayName:`Home ${saved.raising.collection.length+1}`,
+ enclosedAt:'2026-09-05T00:00:00.000Z',originGateId:app.getGates()[0].gateId,cageId:Object.values(saved.raising.assignments)[0]});
+ storage.setItem(CHAMPIONSHIP_MODERN_SAVE_KEY,JSON.stringify(saved));await app.continueGame();
+}
+app.openGate();app.selectGate(app.getGates()[0].gateId);app.confirmGate();app.beginHunt();
+const runtime=app.getHuntRuntime(),id=runtime.getWildCreatures()[7].wildId;
+runtime.attachNativeRope(id);
+while(runtime.getCaptureRecord(id).currentHp>0) runtime.tickNativeRope(id,{dxQ12:60*4096,dyQ12:0});
+for(let i=0;i<16;i++)runtime.tickNativeCapturePhases(id);
+runtime.collectNativeHand(id);
+for(let i=0;i<94;i++)runtime.tickNativeCapturePhases(id);
+app.exitHunt();app.confirmHuntResult();
+const source=createGateHuntPresentationSource(app),root=document.querySelector('#app');
+const view=createHuntResultView({root,source});
+source.subscribe(frame=>{
+ if(frame.screen==='HUNT_RESULT')view.render(frame);
+ else {view.dispose();root.textContent='Returned Home';showOutcome();}
+});
+function showOutcome(){document.querySelector('#outcome').textContent=`Saved Home count: ${app.getRaisingInstances().length}; starter present: ${!!app.resolveRaisingInstance(starterId)}; canonical residents: ${app.getSnapshot().residents.length}; new individual: ${app.getRaisingState().collection.at(-1)?.displayName}`;}
+document.querySelector('#reload-save').onclick=async()=>{await app.continueGame();showOutcome();};
+document.querySelector('#failure').onclick=event=>{storage.fail=!storage.fail;event.target.textContent=storage.fail?'Disable save failure':'Enable save failure';};
+</script></html>

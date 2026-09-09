@@ -1,16 +1,9 @@
-// VS3 -- Hunt circle-capture grammar, rewritten for web/mobile.
-//
-// Independently reproduced in YDIJ OVL0 (ram 0x0210B300, ROM SHA-256 8ad375ba…):
-//   • ignore hypot ≤ 5px (`#0x5000` at 0x02114020)
-//   • interpolate hypot > 20px (`#0x14000` at 0x02114050)
-//   • abort if point count < 6; walk at most 20 slots of stride 0xD8
-//   • AABB extent must exceed 25px (`#0x19000` at 0x02114544)
-//
-// `#0xf000` (15px) in that same AABB function is a *shape* compare
-// (|extentA−extentB| / |extentA−2·extentB|), not first-to-last closure.
-// The product still uses a 15px first-to-last gap as a PRIOR_SPEC stand-in.
-// Do not label that gap VERIFIED_BINARY. Do not swap in the shape test
-// without an Owner decision — it would change which loops count as closed.
+// Legacy diagnostic grammar. NOT original capture parity and not player input.
+// Direct ROM checks contradict its frozen buffer, short-step handling,
+// interpolation and endpoint gap. The native animation-driven sample lifetime
+// and spatial query are also unresolved. Kept only to inspect historical traces;
+// huntRuntime cannot remove targets or commit ownership from this result.
+// See docs/research/HUNT_ROUND3_TRACE_2026-09-05.md.
 
 import { deepFreeze } from "../../contracts/championshipContracts.js";
 
@@ -20,7 +13,7 @@ export const CAPTURE_MAX_POINTS = 20;
 export const CAPTURE_MINIMUM_CLOSE_POINTS = 6;
 export const CAPTURE_MINIMUM_EXTENT_PX = 25;
 export const CAPTURE_CLOSURE_TOLERANCE_PX = 15;
-export const CAPTURE_GEOMETRY_EVIDENCE = "VERIFIED_BINARY";
+export const CAPTURE_GEOMETRY_EVIDENCE = "LEGACY_PROTOTYPE_NOT_ORIGINAL";
 export const CAPTURE_CLOSURE_EVIDENCE = "PRIOR_SPEC_NOT_AABB";
 
 function captureError(message) {

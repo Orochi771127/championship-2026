@@ -4,10 +4,12 @@
 //   • 35 Shop cages plus Waiting Room (definition 35), never sold
 //   • Tamer-rank table at ARM9 0x020E1E14/0x020E1E18, stride 36: first word is
 //     ranch slot count 14 / 16 / 18 / 20
-//   • OVL15 0x0210B36C: switch (slotCount - 14) shows/hides cover1..3
+//   • OVL15 0x0210C660..0x0210C71C: rank-mask and cover switch
 //
-// One cage occupies exactly one hex slot. The BAR/ELL tetris masks were a
-// product guess and are not in the ROM. Channel identity and the recommended
+// The existing editor stores one module per anchor and does not yet enforce
+// the original shape masks. OVL15 0x0210C118 reads 16 masks at 0x0210DB40;
+// masks may occupy several cells. See the R2 native-geometry contract before
+// changing existing saves or placement behavior. Channel identity and the recommended
 // Digimon count come from original descriptions (VERIFIED_TEXT). Overfill is
 // allowed and only named as "stress rises more easily"; tick magnitudes stay
 // UNKNOWN_REQUIRES_TRACE — see cageEffects.js.
@@ -31,7 +33,7 @@ export const STARTING_SLOT_COUNT = 14;
 export const SLOT_COUNTS = Object.freeze([14, 16, 18, 20]);
 export const SLOT_COUNT_EVIDENCE = "VERIFIED_BINARY";
 export const PLACEMENT_MODEL = "ONE_MODULE_PER_HEX_SLOT";
-export const PLACEMENT_EVIDENCE = "VERIFIED_BINARY";
+export const PLACEMENT_EVIDENCE = "PRODUCT_AUTHORED_PENDING_ORIGINAL_FOOTPRINT_MIGRATION";
 export const EFFECT_PARITY = CAGE_TRAINING_MAGNITUDE_PARITY;
 export const EFFECT_CHANNEL_EVIDENCE = CAGE_TRAINING_CHANNEL_EVIDENCE;
 export const CAPACITY_RULE = CAGE_CAPACITY_RULE;

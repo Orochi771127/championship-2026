@@ -1,16 +1,616 @@
 {
-  "schemaVersion": 1,
-  "owner": "CODEX_ART",
-  "deltaId": "CODEX-ART-M201-MOTION-FAMILY-CLOSURE-05-2026-09-01",
-  "targetSyncRevision": 34,
-  "status": "M201_INTERNAL_RUNTIME_REVIEW_ACTIVE_28_OF_47_UNIQUE_VISUALS",
-  "statusSource": "docs/coordination/CODEX_ART_STATUS.json",
-  "baseSyncRevision": 33,
+  "raisingLifecycleStage": {
+    "date": "2026-09-09",
+    "status": "CORE_FLOW_INTEGRATED_FULL_ORIGINAL_STAGE_OPEN",
+    "completed": "Evolution predicates, lifetime/rebirth/disappearance, Cage training writers, waste and cleanup, sleep/wake, overnight food/growth and normal acknowledged day-change use the existing app actors, RNG, v5 save and Pixi ticker.",
+    "tests": {"focusedPass":30,"regressionPass":1361,"evolutionCpuCalls":2736,"calendarCpuProjections":1024},
+    "evidenceCorrections": ["Calendar +BC means registered, +C0 means won title; attempts are not either field.","Live morning mail 94 says battle entry time has arrived, not increased capacity."],
+    "report": "docs/research/RAISING_LIFECYCLE_STAGE_2026-09-08.md",
+    "contract": "docs/contracts/championship/RAISING_LIFECYCLE_STAGE.v1.json",
+    "validation": "docs/reports/parity-audit/2026-09-09/raising-lifecycle-validation.json",
+    "fullOriginalStageComplete": false,
+    "shippingReady": false
+  },
+  "battleCharacterAnimationR3": {
+    "date": "2026-09-07",
+    "status": "BOUNDED_ANIMATION_INTEGRATED_ORIGINAL_LAUNCH_TIMING_PARTIAL",
+    "completed": "Three existing battle species play raw sequences using native frame durations and 179 per-cell transforms in the current scene",
+    "tests": {
+      "focusedPass": 86,
+      "regressionPass": 1152,
+      "cpuSelectorCases": 117,
+      "cpuEqualRequestCases": 49
+    },
+    "browser": {
+      "viewports": [
+        "390x844",
+        "320x740"
+      ],
+      "actualSequence": 8,
+      "sampledFrames": [
+        0,
+        6,
+        12,
+        18,
+        24
+      ],
+      "settlementFrame": 181,
+      "fixtureSettlementBits": 16850,
+      "normalSaveModified": false,
+      "realtimeCadenceQA": false,
+      "physicalPhoneQA": false
+    },
+    "report": "docs/art/production/battle-animation-r3/README.md",
+    "contract": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTER_ANIMATION.v1.json",
+    "dependenciesChanged": false,
+    "rawPackRuntimeReads": false,
+    "originalAnimationParityClaim": false,
+    "shippingReady": false,
+    "remaining": "Original launch/movement/return timing, full native effect graph, original camera and Home party binding remain open"
+  },
+  "battleCharactersShopR2": {
+    "date": "2026-09-07",
+    "status": "STATIC_CHARACTER_AND_FOUR_GOODS_PRESENTATION_INTEGRATED",
+    "completed": "Existing battle species identity sprites and Chinese HUD names, native pixel sizing, four original-record Shop goods names and original-created icons",
+    "tests": {
+      "focusedPass": 35,
+      "regressionPass": 1144
+    },
+    "browser": {
+      "shopViewports": [
+        "390x844",
+        "320x568"
+      ],
+      "battleFixtureViewports": [
+        "390x844",
+        "320x740"
+      ],
+      "fixtureSettlementBits": 16850,
+      "physicalPhoneQA": false
+    },
+    "report": "docs/art/production/battle-characters-shop-r2/README.md",
+    "contract": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTERS_SHOP_GOODS.v1.json",
+    "dependenciesChanged": false,
+    "shippingReady": false,
+    "remaining": "Battle action animation/object graph, original movement and Home party binding remain open; other Shop item/Plugin portraits remain unbound"
+  },
+  "facilityBattleMobile": {
+    "date": "2026-09-06",
+    "status": "BOUNDED_PRESENTATION_INTEGRATED",
+    "completed": "Shop facility art and names; multi-cell Cage editor previews; bright mobile battle HUD/result and arena-aligned stands",
+    "tests": {
+      "focusedPass": 75,
+      "fieldPass": 11,
+      "regressionPass": 1140
+    },
+    "report": "docs/art/production/facility-battle-mobile-r1/README.md",
+    "contract": "docs/contracts/championship/CHAMPIONSHIP_FACILITY_BATTLE_MOBILE_UI.v1.json",
+    "dependenciesChanged": false,
+    "shippingReady": false,
+    "remaining": "Original UI/item portrait bindings, battle actors/mode mapping/full result sequence and ranch training writers remain open"
+  },
+  "mobileContinuousUi": {
+    "date": "2026-09-06",
+    "status": "BOUNDED_PRESENTATION_INTEGRATED",
+    "contract": "docs/contracts/championship/CHAMPIONSHIP_MOBILE_CONTINUOUS_UI.v1.json",
+    "report": "docs/art/production/mobile-continuous-r1/README.md",
+    "tests": {
+      "focusedPass": 61,
+      "regressionPass": 1138
+    },
+    "dependenciesChanged": false,
+    "shippingReady": false
+  },
+  "baseSyncRevision": 41,
+  "blockerUpserts": [
+    {
+      "detail": "Verified BSAR hashes and structure establish BM03/BM04 full-field placement, two frames, 50/20 raw-tick durations and animation-bed-first composition. Original-created three-layer review bundles pass 20/20 Chromium frame/viewport checks without claiming gameplay semantics or promotion.",
+      "id": "CX-003",
+      "owner": "codex",
+      "recordId": "CX-003",
+      "state": "RESOLVED_TARGETED_TRACE_AND_ANIMATED_REVIEW_COMPLETE"
+    },
+    {
+      "detail": "Technical runtime integration passes. Motion-family closure 05 finishes rest, post-zap and angry with four exact Main/Sub reuses; neither side has a partially remixed sequence and 19 unique visuals remain pending. Complete restrained and final battle-state redraw families plus landmark/identity review before runtime promotion.",
+      "id": "CX-M201-ART-CONTINUITY",
+      "owner": "codex",
+      "recordId": "CX-M201-ART-CONTINUITY",
+      "state": "OPEN_OWNER_VISUAL_REVIEW_AND_19_REDRAWS_REQUIRED"
+    },
+    {
+      "detail": "Owner approved VS2-R1 as a structural baseline only. It remains not final art, not exact Original behavior parity and not shipping-ready.",
+      "id": "CX-VS2-R1-OWNER-VISUAL-REVIEW",
+      "owner": "codex",
+      "recordId": "CX-VS2-R1-OWNER-VISUAL-REVIEW",
+      "state": "RESOLVED_OWNER_APPROVED_STRUCTURAL_BASELINE"
+    },
+    {
+      "detail": "VS2_HUNT_LOADOUT_RUNTIME_CONTRACT/v1 is published as spec, but Claude reports implementation authorization pending. Current companion selection remains PRODUCT_AUTHORED_PROTOTYPE / DEVELOPER_ONLY.",
+      "id": "CX-VS2-R2-IMPLEMENTATION-GATE",
+      "owner": "shared",
+      "recordId": "CX-VS2-R2-IMPLEMENTATION-GATE",
+      "state": "OPEN_OWNER_GO_REQUIRED"
+    },
+    {
+      "detail": "Owner GO and the published v1.1 contract authorized VS2-P. Gate, Loadout, Hunt Field, Explore, and Return are complete; work is hard-stopped for Owner visual review before Capture or VS3.",
+      "id": "CL-011",
+      "owner": "shared",
+      "recordId": "CL-011",
+      "state": "RESOLVED_VS2_P_COMPLETE_OWNER_VISUAL_REVIEW_GATE"
+    },
+    {
+      "detail": "Claude-owned runtime architecture/status documentation predates the product reset. Codex preserved ownership; Claude should reconcile that language on its next authorized owned-doc update.",
+      "id": "CL-012",
+      "owner": "shared",
+      "recordId": "CL-012",
+      "state": "OPEN_OWNED_DOC_RECONCILIATION"
+    },
+    {
+      "detail": "Legacy P3-P6 is preserved as history but superseded for Championship 2026. Production completion is now planned under a separately authorized VS7 batch.",
+      "id": "CX-006",
+      "owner": "codex",
+      "recordId": "CX-006",
+      "state": "SUPERSEDED_FROZEN"
+    },
+    {
+      "detail": "Owner authorized only RAISING_TOOLBAR_BINDING_CLOSURE from OVL18 0x0211CF10 onward. Codex must wait for Claude-owned Status/Delta and preserve unresolved fields as UNKNOWN_REQUIRES_TRACE.",
+      "id": "CL-002",
+      "owner": "claude",
+      "recordId": "CL-002",
+      "state": "OWNER_AUTHORIZED_TRACE_PENDING_RESULT"
+    },
+    {
+      "detail": "DOM is screen UI authority; PixiJS is playable 2D presentation authority; Three.js is bounded verified/approved 3D presentation. This does not authorize Phase 2 implementation.",
+      "id": "CL-005",
+      "owner": "claude",
+      "recordId": "CL-005",
+      "state": "RESOLVED_BY_OWNER_POLICY"
+    },
+    {
+      "detail": "No history rewrite now for the cosmetic @ subject prefix.",
+      "id": "CL-008",
+      "owner": "claude",
+      "recordId": "CL-008",
+      "state": "ACCEPTED_COSMETIC"
+    },
+    {
+      "detail": "Preserve the local forensic checkpoint. Do not push the current branch as-is; create a clean integration path excluding reproducible staging artifacts before push or PR.",
+      "id": "CL-009",
+      "owner": "claude",
+      "recordId": "CL-009",
+      "state": "ACCEPTED_IN_LOCAL_RECOVERY_CHECKPOINT"
+    }
+  ],
   "checkpoint": {
     "latestOwnerApprovedCommit": "732775486665b21508ac51c1eea0b723db0f7744",
     "message": "art(research): approve O2 224-entity character catalog",
     "o2Checkpoint": "732775486665b21508ac51c1eea0b723db0f7744",
     "o2CheckpointReason": "Owner approved O2 and explicitly authorized the isolated local checkpoint. Scope audit excluded integration implementation, P2/Moonlake, runtime, push, merge, and deploy."
+  },
+  "completedWork": [
+    {
+      "assetHumanApproved": false,
+      "id": "BATTLE-LIGHT-FENCE-PILOT-R1",
+      "output": "docs/art/production/battle/light-fence-pilot-r1/manifest.json",
+      "runtimeEligible": false,
+      "scope": "Original-created BM08 and BM10 plates plus deterministic lightweight metal fence, six fixed 2026 presentation slots, per-field adaptation, contact shadows, y=301 continuous-floor remap and exact 9:16 previews",
+      "shippingStatus": "INTERNAL_REVIEW_ONLY_FULL_11_FIELD_REBUILD_AND_OWNER_VISUAL_APPROVAL_REQUIRED",
+      "sourcePolicy": "ORIGINAL_CREATED_AI_ASSISTED_NO_ROM_PIXEL_INPUT_ROM_METADATA_AND_AGGREGATE_COLOR_EVIDENCE_RESEARCH_ONLY",
+      "state": "OWNER_HEAVY_STONE_RING_CANCELLATION_IMPLEMENTED_BM08_BM10_PILOT_GATE_PASS",
+      "technicalQa": "4_OF_4_FOCUSED_TESTS_PASS_COMPOSITE_GATE_PASSES_MATTE_HALO_SLOTS_ADAPTATION_GROUNDING_CHROMA"
+    },
+    {
+      "assetHumanApproved": false,
+      "id": "BATTLE-HUMAN-PAINT-STATIC-R5",
+      "output": "docs/art/production/battle/human-paint-static-r5/manifest.json",
+      "runtimeEligible": false,
+      "scope": "Owner-approved BM06-C style migration across BM01/BM02/BM05/BM08/BM09/BM10/BM11 with exact R4 BM00 reuse, separated BM08/BM11 objects, preserved BM11 6/6-tick frames and exact 9:16 field-band previews",
+      "shippingStatus": "COMPLETE_FAMILY_ASSET_REVIEW_RUNTIME_CONTRACT_BINDING_LICENSE_LINK_AND_RUNTIME_QA_REQUIRED",
+      "sourcePolicy": "ORIGINAL_CREATED_AI_ASSISTED_EXISTING_ORIGINAL_CREATED_ART_AS_EDIT_TARGET_NO_ROM_PIXEL_INPUT",
+      "state": "SEVEN_REMAINING_STATIC_ARENAS_COMPLETE_INTERNAL_REVIEW_NO_RUNTIME_REPLACEMENT",
+      "styleDirectionHumanApproved": true,
+      "technicalQa": "6_OF_6_FOCUSED_R5_TESTS_PASS_DETERMINISTIC_REBUILD_PASS_695_OF_697_FULL_NODE_TESTS_PASS_TWO_UNRELATED_IN_FLIGHT_BATTLE_SCRIPT_NATIVE_EXPECTATIONS_STALE"
+    },
+    {
+      "assetHumanApproved": false,
+      "id": "BATTLE-HUMAN-PAINT-MIGRATION-R4",
+      "output": "docs/art/production/battle/human-paint-migration-r4/manifest.json",
+      "runtimeEligible": false,
+      "scope": "Owner-approved BM06-C style migration across canonical BM00, independent BM07 and verified animated BM03/BM04, with deterministic geometry and exact 9:16 field-band previews",
+      "shippingStatus": "ASSET_REVIEW_RUNTIME_CONTRACT_BINDING_LICENSE_LINK_AND_RUNTIME_QA_REQUIRED",
+      "sourcePolicy": "ORIGINAL_CREATED_AI_ASSISTED_EXISTING_ORIGINAL_CREATED_ART_AS_EDIT_TARGET_NO_ROM_PIXEL_INPUT",
+      "state": "FOUR_STRUCTURAL_EDGE_CASES_COMPLETE_INTERNAL_REVIEW_NO_RUNTIME_REPLACEMENT",
+      "styleDirectionHumanApproved": true,
+      "technicalQa": "11_OF_11_FOCUSED_R3_R4_TESTS_PASS_670_OF_670_FULL_NODE_TESTS_PASS_BM00_CANONICAL_ALPHA_BM07_FIXED_RING_COORDINATES_BM03_BM04_VERIFIED_TWO_FRAME_TIMING"
+    },
+    {
+      "id": "BATTLE-HUMAN-PAINT-STYLE-CALIBRATION-R3",
+      "output": "docs/art/production/battle/style-calibration-r3/manifest.json",
+      "runtimeEligible": false,
+      "scope": "BM06 current/A/B/C comparison, human-authored mark-making critique, proposed style-bible delta, prompt provenance and portrait contain-fit review",
+      "shippingStatus": "OWNER_STYLE_APPROVAL_REQUIRED_BEFORE_RETROFIT_OR_RUNTIME_REPLACEMENT",
+      "sourcePolicy": "ORIGINAL_CREATED_AI_ASSISTED_EXISTING_PRODUCTION_COMPOSITE_AS_EDIT_COMPOSITION_REFERENCE_NO_ROM_INPUT",
+      "state": "CANDIDATE_C_OWNER_STYLE_APPROVED_FOR_BOUNDED_MIGRATION_NO_RUNTIME_MUTATION",
+      "technicalQa": "5_OF_5_STYLE_CALIBRATION_TESTS_PASS_12_OF_12_PRIOR_BATTLE_HARDENING_RUNTIME_TESTS_PASS_THREE_HASH_PINNED_1536X1024_CANDIDATES"
+    },
+    {
+      "id": "BATTLE-OBJECT-HARDENING-R2",
+      "output": "docs/art/production/battle/hardening-r2/manifest.json",
+      "runtimeEligible": false,
+      "scope": "Original-created BM04/BM08/BM11 field-object layers, evidence-coordinate placement envelopes, BM11 two-frame object presentation, canonical BM00 circle/border dependency and one-page 11-arena Pixi review",
+      "shippingStatus": "OWNER_VISUAL_APPROVAL_LICENSE_TERMS_LINK_AND_FINAL_ALIGNMENT_REVIEW_REQUIRED",
+      "sourcePolicy": "ORIGINAL_CREATED_AI_ASSISTED_METADATA_ONLY_OPMD_NANR_NCER_REFERENCE_NO_ROM_PIXEL_PALETTE_TILE_OR_NITRO_PAYLOAD",
+      "state": "THREE_FIELD_OBJECT_LAYERS_AND_ELEVEN_ARENA_GALLERY_INTERNAL_PIXI_REVIEW_PASSED_NOT_PROMOTED",
+      "technicalQa": "25_OF_25_CHROMIUM_FRAME_VIEWPORT_CHECKS_PASS_11_OF_11_GALLERY_SWITCHES_PASS_12_OF_12_FOCUSED_TESTS_PASS_646_OF_646_FULL_NODE_TESTS_PASS_A0_GATE_PASS"
+    },
+    {
+      "id": "BATTLE-BM03-BM04-ANIMATED-R1",
+      "output": "docs/art/production/battle/bm03-bm04-animated-r1/manifest.json",
+      "runtimeEligible": false,
+      "scope": "Original-created BM03/BM04 1536x1024 animation beds and terrain overlays, canonical BM00 dependency, verified two-frame timing and caller-owned single-ticker Pixi presentation",
+      "shippingStatus": "OWNER_VISUAL_APPROVAL_LICENSE_TERMS_AND_FINAL_BM04_OBJECT_SEPARATION_REQUIRED",
+      "sourcePolicy": "ORIGINAL_CREATED_AI_ASSISTED_ROM_METADATA_TRACE_ONLY_NO_ROM_PIXEL_PALETTE_TILE_CELL_OR_GEOMETRY_INPUT",
+      "state": "TWO_ARENA_ANIMATED_INTERNAL_PIXI_REVIEW_PASSED_NOT_PROMOTED",
+      "technicalQa": "20_OF_20_CHROMIUM_FRAME_VIEWPORT_CHECKS_PASS_11_OF_11_FOCUSED_TESTS_PASS_588_OF_588_FULL_NODE_TESTS_PASS_ART_GATES_PASS"
+    },
+    {
+      "id": "BATTLE-BM07-CYBERSPACE-R1",
+      "output": "docs/art/production/battle/bm07-cyberspace-r1/manifest.json",
+      "runtimeEligible": false,
+      "scope": "Original-created BM07 1536x1024 standalone cyber arena, deterministic six-zone geometry, zero BM00 dependencies and isolated single-Sprite Pixi presentation",
+      "shippingStatus": "OWNER_VISUAL_APPROVAL_AND_LICENSE_TERMS_LINK_REQUIRED",
+      "sourcePolicy": "ORIGINAL_CREATED_AI_ASSISTED_STRUCTURAL_FUNCTION_REFERENCE_ONLY_NO_ROM_PIXEL_PALETTE_TILE_CELL_OR_GEOMETRY_INPUT",
+      "state": "INDEPENDENT_SINGLE_LAYER_INTERNAL_PIXI_REVIEW_PASSED_NOT_PROMOTED",
+      "technicalQa": "5_OF_5_CHROMIUM_VIEWPORTS_PASS_9_OF_9_FOCUSED_TESTS_PASS_581_OF_581_FULL_NODE_TESTS_PASS_ART_GATES_PASS"
+    },
+    {
+      "id": "BATTLE-STATIC-ARENA-FAMILY-R1",
+      "output": "docs/art/production/battle/bm05-bm11-static-r1/manifest.json",
+      "runtimeEligible": false,
+      "scope": "Original-created BM05/BM06/BM08/BM09/BM10/BM11 1536x1024 backgrounds, canonical BM00 dependency, deterministic review composites and isolated Pixi presentation",
+      "shippingStatus": "OWNER_VISUAL_APPROVAL_LICENSE_TERMS_AND_FINAL_LAYER_SEPARATION_REQUIRED",
+      "sourcePolicy": "ORIGINAL_CREATED_AI_ASSISTED_NO_ROM_PIXEL_PALETTE_TILE_CELL_OBJECT_OR_GEOMETRY_INPUT",
+      "state": "SIX_ARENA_INTERNAL_PIXI_REVIEW_PASSED_NOT_PROMOTED",
+      "technicalQa": "30_OF_30_CHROMIUM_VIEWPORTS_PASS_8_OF_8_FOCUSED_TESTS_PASS_567_OF_567_FULL_NODE_TESTS_PASS_ART_GATES_PASS"
+    },
+    {
+      "id": "CHARACTER-REMIX-M201-INTERNAL-RUNTIME-REVIEW-V1",
+      "output": "assets/production/internal-character-review/m201-remix-v1/manifest.json",
+      "runtimeEligible": false,
+      "scope": "M201 12-pose technical candidate set, all-83 source reuse audit, private hybrid PixiJS atlas, original variable-tick playback and opt-in 390x844 Raising/Hunt review",
+      "shippingStatus": "28_OF_47_UNIQUE_VISUALS_19_PENDING_VISUAL_LANDMARK_REVIEW_REQUIRED",
+      "sourcePolicy": "OWNER_AUTHORIZED_INTERNAL_ONLY_PUBLIC_PAGES_EXCLUDED_NO_ROM_OR_NITRO_PAYLOAD",
+      "state": "RAISING_HUNT_TECHNICAL_RUNTIME_PASS_ART_REVIEW_GATED",
+      "technicalQa": "397_OF_397_FULL_NODE_TESTS_PASS_12_OF_12_FOCUSED_M201_TESTS_REAL_CHROMIUM_390X844_RAISING_AND_HUNT_ONE_CANVAS_NO_CHARACTER_ART_FALLBACK_NO_OVERFLOW_NO_PAGE_CONSOLE_OR_REQUEST_ERROR"
+    },
+    {
+      "id": "INTERNAL-FAITHFUL-BASELINE-V1",
+      "output": "scripts/build-internal-faithful-baseline.mjs",
+      "runtimeEligible": false,
+      "scope": "Characters, UI/HUD reference, Cage, Hunt and VFX directly assembled for the internal 2026 mobile baseline; no user-facing loader",
+      "shippingStatus": "INTERNAL_BUILD_ONLY_RAISING_BATTLE_GATE_PACKAGING_STILL_PENDING",
+      "sourcePolicy": "OWNER_AUTHORIZED_INTERNAL_ONLY_GENERATED_OUTPUT_GITIGNORED_PUBLIC_RELEASE_GATE_DEFERRED",
+      "state": "DIRECT_INTERNAL_ASSEMBLY_5_OF_9_SLOTS_READY",
+      "technicalQa": "2512_FILES_276_19_LOGICAL_MIB_ALL_HASHES_PASS"
+    },
+    {
+      "id": "CHAMPIONSHIP-PRESENTATION-PACK-CONTRACT-V1",
+      "output": "docs/contracts/championship/CHAMPIONSHIP_PRESENTATION_PACK_CONTRACT.v1.json",
+      "runtimeEligible": true,
+      "scope": "Nine visual slots across temporary, faithful-original and deferred cat/dog packs; local Owner-supplied original review permitted without repository inclusion",
+      "shippingStatus": "NOT_SHIPPING_READY_PUBLIC_RELEASE_AND_RUNTIME_ART_PROMOTION_REMAIN_GATED",
+      "sourcePolicy": "INTERNAL_PRODUCTION_AUTHORIZED_FORMAL_DOCUMENT_LINK_PENDING_NO_ROM_OR_NITRO_PAYLOAD_COMMITTED",
+      "state": "FULL_GAME_VISUAL_SLOT_AND_GAMEPLAY_ISOLATION_CONTRACT_COMPLETE",
+      "technicalQa": "6_FOCUSED_TESTS_PASS_PACKS_CANNOT_CHANGE_GAMEPLAY_OR_SAVE"
+    },
+    {
+      "id": "CHARACTER-FAITHFUL-HD224-V1",
+      "output": "docs/art/production/characters/faithful-hd224/manifest.json",
+      "runtimeEligible": false,
+      "scope": "224 Main/Sub PixiJS atlases, 17,235 cells, 11,480 sequences, stable alpha/anchor contracts",
+      "shippingStatus": "HUMAN_APPROVAL_LICENSE_LINK_AND_RUNTIME_QA_REQUIRED",
+      "sourcePolicy": "OWNER_REPORTED_LICENSED_SOURCE_LINK_PENDING_DOCS_ONLY",
+      "state": "7_OF_7_BATCHES_COMPLETE_TECHNICAL_PIXEL_FAITHFUL_BASELINE",
+      "technicalQa": "ALL_224_VALIDATE_106_INTENTIONAL_BLANK_CELLS_PRESERVED"
+    },
+    {
+      "id": "UI-FAITHFUL-HD96-V1",
+      "output": "docs/art/production/ui/faithful-hd96/manifest.json",
+      "runtimeEligible": false,
+      "scope": "96 NXR scenes, 1,369 nodes, 1080x1920 DOM zone contract, 87 backgrounds, 193 sprite witnesses",
+      "shippingStatus": "FINAL_DOM_COMPONENTS_HUMAN_APPROVAL_LICENSE_LINK_AND_RUNTIME_QA_REQUIRED",
+      "sourcePolicy": "OWNER_REPORTED_LICENSED_SOURCE_LINK_PENDING_DOCS_ONLY",
+      "state": "96_SCENE_TECHNICAL_REFERENCE_CONTRACT_COMPLETE",
+      "technicalQa": "HASH_SIZE_SCENE_NODE_COUNTS_PASS_45_SCREEN_ROLES_REMAIN_UNKNOWN"
+    },
+    {
+      "id": "VFX-FAITHFUL-REFERENCE-26",
+      "output": "docs/art/production/vfx/faithful-reference-26/manifest.json",
+      "runtimeEligible": false,
+      "scope": "26 Nitro VFX systems, 55 GLB/PNG reference outputs",
+      "shippingStatus": "LICENSED_REPLACEMENT_TRIGGER_TIMING_HUMAN_APPROVAL_AND_RUNTIME_QA_REQUIRED",
+      "sourcePolicy": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
+      "state": "FULL_26_SYSTEM_REFERENCE_CONVERSION_COMPLETE",
+      "technicalQa": "ALL_SOURCE_HASHES_OUTPUT_HASHES_AND_GLB_MESHES_VALIDATE"
+    },
+    {
+      "gameplayPolicy": "ART_BUNDLE_OWNS_NO_COLLISION_ENCOUNTERS_GATE_MAPPING_SPAWN_SAVE_OR_SIMULATION",
+      "id": "ART-RUNTIME-MAP-BUNDLE-V1",
+      "output": "src/championship/presentation/runtimeMapArtBundle.js",
+      "runtimeEligible": true,
+      "scope": "Production-only Pixi asset validation, one-active-field loading and unload, sole-ticker animation, exact world sizing, Hunt composite layer binding and fail-closed evidence gates",
+      "shippingStatus": "ADAPTER_READY_ASSET_PROMOTION_BLOCKED_ON_LICENSE_LINK_HUMAN_APPROVAL_AND_IDENTITY_TIMING_EVIDENCE",
+      "sourcePolicy": "ROM_ATTACHMENT_HASH_VERIFIED_RESEARCH_ONLY_NO_ROM_OR_DECODED_PAYLOAD_ENTERED_RUNTIME",
+      "state": "TECHNICAL_RUNTIME_SEAM_COMPLETE_NO_CANDIDATE_PIXEL_PROMOTED",
+      "technicalQa": "261_OF_261_NODE_TESTS_PASS_4_NEW_BUNDLE_CASES_PASS_BROWSER_VS3_BLOCKED_BY_UNRELATED_DIRTY_VS4_ENTRY_SELECTOR_ORDER"
+    },
+    {
+      "gameplayPolicy": "VISUAL_ONLY_NO_LAYOUT_COLLISION_ATTRIBUTE_NBS_OR_PLACEMENT_CHANGE",
+      "id": "ART-A3-CM27-OWNER-ADAPTATION-DIRECTIVE",
+      "output": "docs/art/production/cage/CAGE_OWNER_ADAPTATION_DIRECTIVES.json",
+      "runtimeEligible": false,
+      "scope": "field_cm27_01 genuine HD redraw runtime and shipping presentation only",
+      "shippingStatus": "REDRAW_NOT_YET_EXECUTED",
+      "sourcePolicy": "EXACT_ORIGINAL_REFERENCE_BASELINE_REMAINS_UNCHANGED",
+      "state": "LOCKED_REMOVE_CENTER_DIGIMON_MARK_FROM_REMADE_ART"
+    },
+    {
+      "gameplayPolicy": "PORTRAIT_9_16_IS_VIEWPORT_EMPTY_FIELD_DRAG_PANS_TAPS_DO_NOT_BECOME_AVATAR_MOVE_CAPTURE_REMAINS_SEPARATE",
+      "id": "RESEARCH-HUNT-FIELD-PAN-ROM-TRACE",
+      "output": "docs/research/HUNT_FIELD_INPUT_ROM_TRACE_2026-08-29.md",
+      "runtimeEligible": false,
+      "scope": "OVL0 Hunt touch-handler trace, inverse pointer-delta field-window update, 256x192 camera-origin clamp and explicit current-runtime mismatch",
+      "shippingStatus": "RUNTIME_CORRECTION_PENDING_SEPARATE_BATCH",
+      "sourcePolicy": "RESEARCH_ONLY_SHA_VERIFIED_ROM_NO_BINARY_OR_DECODED_PAYLOAD_COMMITTED",
+      "state": "ROM_AND_OWNER_VERIFIED_INVERSE_DELTA_CAMERA_PAN",
+      "technicalQa": "OVL0_0211CA38_0211CA54_AND_0211D9F0_0211DA54_LOCKED_BY_TEST_119_OF_119_SUITE_PASS"
+    },
+    {
+      "id": "ART-A3-A4-EXACT-BASELINE-TECHNICAL-QA",
+      "output": "docs/art/production/technical-qa/cage-hunt-exact-baseline/manifest.json",
+      "performanceVerdict": "ALL_30_FULL_RGBA_PRELOAD_REJECTED_480_MIB_BEFORE_TEXTURE_OVERHEAD",
+      "runtimeEligible": false,
+      "scope": "Review-only collision overlays, exact 4x block checks, NBS/COL/ATR alignment, Hunt diagnostic-red connected-component scan, 390x844 no-scale crops, animation completeness and decoded-memory audit",
+      "shippingStatus": "NOT_SHIPPING_READY_GENUINE_REDRAW_LICENSE_LINK_RUNTIME_AND_DEVICE_QA_PENDING",
+      "sourcePolicy": "NO_VISUAL_TRANSFORMATION_NO_RAW_SEMANTIC_INFERENCE_REFERENCE_ONLY",
+      "state": "50_FILES_DETERMINISTIC_40_CAGE_GRID_ALIGNMENTS_30_HUNT_RED_REGION_PASSES",
+      "technicalQa": "40_OF_40_CAGE_EXACT_REPLICATION_40_OF_40_GRID_ALIGNMENT_30_OF_30_NO_LARGE_RED_REGION_13_OF_13_ANIMATED_VARIANTS_28_OF_28_FRAMES_ONE_CM01_CM40_MASTER_CONTACT_50_FILES_BYTE_IDENTICAL"
+    },
+    {
+      "gameplayPolicy": "RAW_ATR_ESC_AND_TIMING_UNITS_PRESERVED_WITHOUT_SEMANTIC_REINTERPRETATION",
+      "id": "ART-A4-HUNT-FAITHFUL-HD30",
+      "output": "docs/art/production/hunt/faithful-hd30/manifest.json",
+      "runtimeEligible": false,
+      "scope": "Exact original Hunt BSAR animated terrain bed, void-masked core, OPM/NCER/linear-NCBR objects, ATR, ESC and 2048x2048 frame-zero baselines",
+      "shippingStatus": "NOT_SHIPPING_READY_LICENSE_LINK_RUNTIME_AND_PERFORMANCE_QA_PENDING",
+      "sourcePolicy": "VERIFIED_ROM_SHA_SOURCE_VALUES_PRESERVED_ROM_AND_NITRO_BINARIES_NOT_COMMITTED",
+      "state": "30_OF_30_VARIANTS_13_OF_13_BSAR_BUNDLES_28_OF_28_ANIMATION_FRAMES",
+      "technicalQa": "466_FILES_BYTE_IDENTICAL_16_OF_16_ARCHIVE_STATIC_DIAGNOSTICS_ZERO_RGBA_DIFF_30_OF_30_HD2X_13_OF_13_BSAR_28_OF_28_FRAMES_NO_RED_DIAGNOSTIC_BLOCKS"
+    },
+    {
+      "gameplayPolicy": "RAW_CLASSES_AND_ANIMATION_TIMING_PRESERVED_WITHOUT_SEMANTIC_REINTERPRETATION_CM12_CM18_RESOLVED_WITHOUT_GUESSING",
+      "id": "ART-A3-CAGE-FAITHFUL-HD40",
+      "output": "docs/art/production/cage/faithful-hd40/manifest.json",
+      "runtimeEligible": false,
+      "scope": "Exact original Cage raw core/static composition and 4x HD output plus direct-14-bit NBS tilemaps, lower-14-bit OPMD sequence words/source coordinates/flips, NANR animation banks, NCER/linear-NCBR object banks, COL collision, ATR attributes, four BSAR animated terrain bundles and browser format parsers",
+      "shippingStatus": "NOT_SHIPPING_READY_LICENSE_LINK_AND_RUNTIME_QA_PENDING",
+      "sourcePolicy": "VERIFIED_ROM_SHA_SOURCE_VALUES_PRESERVED_ROM_AND_NITRO_BINARIES_NOT_COMMITTED",
+      "state": "40_OF_40_RAW_CHAIN_COMPOSITIONS_38_OBJECT_AND_NANR_BANKS_4_OF_4_ANIMATED_TERRAIN_BUNDLES",
+      "technicalQa": "657_FILES_BYTE_IDENTICAL_38_OF_38_OPMD_NANR_NCER_BINDINGS_VALID_40_OF_40_HD_PIXEL_ROUNDTRIP_40_OF_40_NBS_COL_ATR_DIMENSIONS_MATCH_4_OF_4_BSAR_BUNDLES_8_OF_8_FRAMES"
+    },
+    {
+      "gameplayPolicy": "PLACEMENT_ATR_COL_RAISING_EFFECTS_AND_GAMEPLAY_MASKS_NOT_INFERRED",
+      "id": "ART-A3-CAGE-CM01-CM10-REVIEW-PACK",
+      "output": "GIT_HISTORY_ONLY",
+      "runtimeEligible": false,
+      "scope": "Historical generated CM01-CM10 review packet removed after object-placement rejection",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "sourcePolicy": "APPROVED_REMAKE_STYLE_BOARD_ONLY_NO_ROM_IMAGE_INPUT_NO_ORIGINAL_PIXELS",
+      "state": "SUPERSEDED_WITHDRAWN_BY_OWNER_CORRECTION",
+      "technicalQa": "23_FILES_BYTE_IDENTICAL_10_OF_10_RGBA_BOTTOM_CENTER_ANCHORED"
+    },
+    {
+      "externalData": [
+        "ATR_RAW_CLASSES",
+        "COL_RAW_CLASSES"
+      ],
+      "id": "ART-A1-CAGE-ORIGINAL-STRUCTURE",
+      "nativeNoObjectLayer": [
+        "CM28",
+        "CM29"
+      ],
+      "output": "docs/art/technical/a1-cage-original-structure/CM40_ORIGINAL_STRUCTURE_CROSSWALK.csv",
+      "resolvedObjectSequenceBindings": [
+        "CM12",
+        "CM18"
+      ],
+      "runtimeEligible": false,
+      "scope": "CM01-CM40 original structural metadata and four batches of ten",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "sourcePolicy": "REFERENCE_METADATA_ONLY_NO_ORIGINAL_PIXELS",
+      "state": "COMPLETE_40_OF_40_STRUCTURE_ROWS_CLASSIFIED",
+      "visualPackages": [
+        "CORE_FIELD_TILES",
+        "OBJECT_BUNDLE"
+      ]
+    },
+    {
+      "gameplayPolicy": "SHAPE_MASK_RAISING_EFFECT_COLLISION_ATR_ESC_AND_SPAWN_DATA_REMAIN_EXTERNAL_AND_UNKNOWN_UNTIL_VERIFIED",
+      "humanApproved": true,
+      "id": "ART-A1-MAP-TECH",
+      "output": "docs/art/technical/a1-map-tech/manifest.json",
+      "rights": "OWNER_REPORTED_FULL_LICENSE_DOCUMENT_LINK_REQUIRED",
+      "runtimeEligible": false,
+      "scope": "Twelve Cage module review crops plus HM01 bright and HM09 dark Hunt standards",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "sourcePolicy": "OWNER_APPROVED_BOARDS_HASH_LOCKED_EDGE_CONNECTED_BACKGROUND_REMOVAL_NO_VISUAL_REGENERATION",
+      "state": "TRANSPARENT_TECHNICAL_MASTERS_COMPLETE_NATIVE_LAYER_SEPARATION_PENDING"
+    },
+    {
+      "humanApproved": true,
+      "id": "ART-A1-GOLDEN-SLICE-DIRECTION-SET",
+      "output": "docs/art/proposals/a1-golden-slice/manifest.json",
+      "palettePolicy": "PRESERVE_ORIGINAL_MAJOR_PALETTE_FAMILIES_CHANGE_SHAPE_CONTENT_AND_FINISH",
+      "rights": "OWNER_REPORTED_FULL_LICENSE_DOCUMENT_LINK_REQUIRED",
+      "scope": "Eight characters, bright Gate world/Earth, HM01/HM09, twelve Cage modules, six-screen UI flow and five VFX families",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "state": "COMPLETE_ART_PROPOSAL",
+      "vfxPolicy": "DATA_FAITHFUL_LICENSED_SOURCE_TO_WEB_CONVERSION"
+    },
+    {
+      "artifactMaturity": "STRUCTURAL_PRESENTATION",
+      "binding": "Injected frame.gateSelect truth and source.intents.selectGate(gateId) only",
+      "canonicalBiomeIdentities": 16,
+      "contract": "docs/contracts/championship/VS2_GATE_SELECT_3D_RUNTIME_CONTRACT.v1.json",
+      "fallback": "ACCESSIBILITY_LOW_GRAPHICS_DEVELOPER_2D_GRID",
+      "humanApproved": true,
+      "id": "VS2-R1-GATE-3D",
+      "output": "docs/reports/vs2-r1/VS2_R1_GATE_3D_COMPLETION_REPORT.md",
+      "playerDefault": "THREE_BOUNDED_WORLD_MODE",
+      "productionStatus": "OWNER_APPROVED_STRUCTURAL_BASELINE",
+      "rendererAuthority": "One Gate-local Three WebGLRenderer; event-driven; disposed before Hunt Loadout; no second store/router/save/Pixi Application",
+      "responsiveQa": "5/5 VS2 MUST_PASS; 390x844 and 393x852 VS2-R1 evidence PASS",
+      "rights": "ORIGINAL_CREATED",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "state": "OWNER_APPROVED_STRUCTURAL_BASELINE"
+    },
+    {
+      "contract": "docs/contracts/championship/VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT.json",
+      "flow": "RAISING_HOME -> GATE_SELECT -> HUNT_LOADOUT -> HUNT_FIELD -> EXPLORE -> EXIT -> RAISING_HOME",
+      "humanApproved": false,
+      "id": "VS2-P",
+      "output": "docs/reports/vs2/VS2_PRESENTATION_COMPLETION_REPORT.md",
+      "productionStatus": "TEMPORARY_PRESENTATION",
+      "referenceEvidence": [
+        "390x844",
+        "393x852"
+      ],
+      "rendererAuthority": "DOM P1R screen UI; one existing shared Pixi stage for Hunt field; no second application, store, save authority, or movement logic",
+      "responsiveQa": "5/5 MUST_PASS",
+      "rights": "ORIGINAL_CREATED",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "state": "COMPLETE_STOPPED_FOR_OWNER_VISUAL_REVIEW"
+    },
+    {
+      "coverage": {
+        "artR2rOwnerApprovedBaselines": 4,
+        "eggs": 8,
+        "entities": 224,
+        "mainDecodedSheets": 224,
+        "newHighResolutionReconstructions": 0,
+        "regular": 216,
+        "subDecodedSheets": 224
+      },
+      "humanApproved": false,
+      "id": "ART-O2",
+      "lifecycle": "REFERENCE_RECONSTRUCTION",
+      "output": "docs/migration/PRE_MIGRATION_PROVENANCE.md#art-evidence-worktree",
+      "productionStatus": "RESEARCH_ONLY",
+      "rights": "ROM_COPYRIGHTED_REFERENCE",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "state": "OWNER_APPROVED_REFERENCE_CATALOG",
+      "structure": {
+        "eggStandardStructure": 8,
+        "regularCommonSequenceStructure": 182,
+        "regularStructuralOutliers": 34
+      }
+    },
+    {
+      "id": "CHAMPIONSHIP_REBUILD_INTEGRATION_PLAN_V1",
+      "output": "docs/coordination/championship/CHAMPIONSHIP_REBUILD_INTEGRATION_PLAN_V1.md",
+      "sliceCount": 15,
+      "state": "COMPLETE_EVIDENCE_BOUNDED"
+    }
+  ],
+  "deltaId": "CODEX-ART-BATTLE-LIGHT-FENCE-PILOT-R1-2026-09-02",
+  "dependencyUpserts": [
+    {
+      "codexMaySafelyBind": "RAISING_HUNT_REVIEW_ONLY",
+      "contract": "CHARACTER_REMIX_M201_VERTICAL_SLICE_V1",
+      "notes": "All 83 stable keys and 53 original timelines are loadable. Twenty-eight unique technical candidates cover 57 slots; 26 slots retain explicit faithful fallbacks. Main coverage is 24 full, 0 partial and 16 fallback-only sequences; Sub is 11/0/2. Final atlas and Battle proof remain blocked on 19 redraws and visual landmark approval.",
+      "owner": "codex",
+      "recordId": "M201CharacterRemixRuntimeReview",
+      "state": "INTERNAL_RUNTIME_REVIEW_ACTIVE"
+    },
+    {
+      "codexMaySafelyBind": "COMPLETE_WITH_TECHNICAL_PLACEHOLDERS",
+      "contract": "VS2_GATE_SELECT_3D_RUNTIME_CONTRACT/v1",
+      "notes": "Codex bound a bounded original-created Three world through the existing source and selectGate intent. Original camera, rotation, input, hit-test and day/night switching parity remain unclaimed pending later trace closure.",
+      "owner": "shared",
+      "recordId": "VS2GateSelect3DRuntimeContract",
+      "state": "PUBLISHED_BOUND_AND_STRUCTURALLY_VERIFIED"
+    },
+    {
+      "codexMaySafelyBind": "COMPLETE",
+      "contract": "VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT/v1.1",
+      "notes": "Codex bound P1R Gate, Loadout, Hunt HUD/field, toolbar shell, Explore, and Return through the injected source only. The next gate is Owner visual review.",
+      "owner": "shared",
+      "recordId": "VS2GateHuntRuntimePresentationContract",
+      "state": "PUBLISHED_BOUND_AND_VERIFIED"
+    },
+    {
+      "codexMaySafelyBind": "YES",
+      "contract": "Championship2026ProductScope",
+      "notes": "Standalone Championship 2026 is the current product; Nexus Link integration is frozen and outside current product scope.",
+      "owner": "owner",
+      "recordId": "Championship2026ProductScope",
+      "state": "OWNER_VERIFIED_POLICY"
+    },
+    {
+      "codexMaySafelyBind": "YES_WITH_EVIDENCE",
+      "contract": "Championship2026GameplayPreservation",
+      "notes": "ROM_VERIFIED preserves by default; PARTIAL preserves known structure; UNKNOWN remains neutral; intentional gameplay change requires OWNER_APPROVED_ADAPTATION.",
+      "owner": "owner",
+      "recordId": "Championship2026GameplayPreservation",
+      "state": "OWNER_VERIFIED_POLICY"
+    },
+    {
+      "codexMaySafelyBind": "YES_PLANNING_ONLY",
+      "contract": "Championship2026VerticalSliceRoadmap",
+      "notes": "VS1 through VS7 sequence is authoritative planning order; only VS1 is complete and this documentation batch does not authorize VS2 implementation.",
+      "owner": "owner",
+      "recordId": "Championship2026VerticalSliceRoadmap",
+      "state": "OWNER_VERIFIED_ROADMAP"
+    },
+    {
+      "codexMaySafelyBind": "NO",
+      "contract": "NexusLinkIntegrationForChampionship2026",
+      "notes": "Preserve historical Nexus decisions, but do not create Nexus dependencies or alter Championship architecture for future integration.",
+      "owner": "owner",
+      "recordId": "NexusLinkIntegrationForChampionship2026",
+      "state": "FROZEN_OUT_OF_CURRENT_PRODUCT_SCOPE"
+    },
+    {
+      "codexMaySafelyBind": "N/A",
+      "contract": "OriginalCharacterO2Catalog",
+      "notes": "224/224 decoded entity catalog; 216 regular, 8 eggs, 224 Main and 224 Sub sheets. Four ART-R2R baselines only; no new redraw. ROM reference, research-only, not shipping-ready.",
+      "owner": "codex",
+      "recordId": "OriginalCharacterO2Catalog",
+      "state": "COMPLETE_PENDING_OWNER_REVIEW"
+    },
+    {
+      "codexMaySafelyBind": "YES_WITH_SCENE_CONTRACT",
+      "contract": "ChampionshipRendererAuthorityPolicy",
+      "notes": "DOM owns application/screen UI; PixiJS owns playable 2D field/actor/sprite/2D VFX presentation; Three.js is bounded to verified or explicitly approved 3D. No all-renderer migration, second authority, ticker, or router.",
+      "owner": "owner",
+      "recordId": "ChampionshipRendererAuthorityPolicy",
+      "state": "OWNER_VERIFIED_POLICY"
+    }
+  ],
+  "intRh2": {
+    "blockedOn": "VS2 requires a separate Owner GO; no push, merge or deploy is authorized",
+    "claudeHeldHead": "2632ddffac6da82525ed2e9089799e42fbffc25c",
+    "codexBinding": "getFrame/subscribe/intents only",
+    "contract": "docs/contracts/championship/INT_RH2_RUNTIME_PRESENTATION_CONTRACT.json",
+    "presentationCheckpoint": "bb61d18d014db92f878862b1fe2b69092f02d0ad",
+    "productionCharacterArt": "TEMPORARY",
+    "productionEnvironment": "TEMPORARY",
+    "qa": "P1R 4/4; runtime/Pixi 6/6; Phase 1 standalone 21/21; five responsive viewports; real save/reload restore; bounded Pixi bootstrap fallback",
+    "rendererPolicy": "DOM screen UI; one Claude-owned Pixi field bootstrap; Three.js unused",
+    "report": "docs/reports/vs1/INT_RH2_COMPLETION_REPORT.md",
+    "runtimeCheckpoint": "2671db12bc8c604a33d7f72a946256924983908b",
+    "state": "OWNER_APPROVED_INTEGRATION_BASELINE",
+    "toolbarPolicy": "8 neutral disabled RAW slots; no guessed command, icon, submenu membership, enable mask, slot 7 identity, or exact care values"
   },
   "intRh2Checkpoints": {
     "claudeRuntime": "2671db12bc8c604a33d7f72a946256924983908b",
@@ -18,404 +618,40 @@
     "coordination": "THIS_COMMIT_REPORTED_BY_FULL_SHA_AFTER_CREATION",
     "implementationWorktreeClean": true
   },
-  "productReset": {
-    "product": "DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD",
-    "delivery": "WEB_FIRST_MOBILE_FIRST_PORTRAIT_9_16_TOUCH_FIRST_DESKTOP_BROWSER_COMPATIBLE",
-    "nexusLinkIntegration": "FROZEN_OUT_OF_CURRENT_PRODUCT_SCOPE",
-    "historicalNexusDecisions": "PRESERVED_SUPERSEDED_FOR_CURRENT_PRODUCT",
-    "verifiedGameplay": "DEFAULT_PRESERVE",
-    "unknownGameplay": "NEUTRAL_DO_NOT_INVENT",
-    "adaptationAuthority": "OWNER_APPROVED_ADAPTATION_ONLY",
-    "vs1": "COMPLETE_BASELINE",
-    "vs2": "PRESENTATION_BINDING_COMPLETE_OWNER_VISUAL_REVIEW_REQUIRED",
-    "vs3ToVs7": "ROADMAP_ONLY_NOT_AUTHORIZED",
-    "documentationOnly": false
+  "mergeReceipt": {
+    "atomicReplace": "PASS",
+    "baseHashes": {
+      "CHAMPIONSHIP_BLOCKER_LEDGER.csv": "9E181865E314A9D8D64B0198498330C94DA81C8110AABD77856550B395AC1F7F",
+      "CHAMPIONSHIP_DEPENDENCY_MATRIX.csv": "E8077DE255419FBBF7FCC94CF0ADA6AA026EE3E215760679ACDBC60AA00C65CB",
+      "CHAMPIONSHIP_MASTER_SYNC.md": "438457002B9603D04C67C34E33874C1971C3C384A2A43CCBDED21EFA2ED069F1"
+    },
+    "blockerRows": 19,
+    "completed": true,
+    "dependencyRows": 46,
+    "newHashes": {
+      "CHAMPIONSHIP_BLOCKER_LEDGER.csv": "CF3ECFE52F6E4DAC81C69BB4717A2FF58059861052C89A1253E4755C1E051150",
+      "CHAMPIONSHIP_DEPENDENCY_MATRIX.csv": "89AC482D058F1F6133638F59241B2DF98430E06C476405EA7739226B00DA8ECF",
+      "CHAMPIONSHIP_MASTER_SYNC.md": "AD2A2525EE5AF95E6C47D01F113AF570F673D3FEF83E43DDA6DA2BB065B19944"
+    },
+    "reconciliation": "CHAMPIONSHIP_2026_PRODUCT_RESET",
+    "stableIdConflicts": 0,
+    "syncRevision": 3
   },
-  "completedWork": [
-    {
-      "id": "CHARACTER-REMIX-M201-INTERNAL-RUNTIME-REVIEW-V1",
-      "state": "RAISING_HUNT_TECHNICAL_RUNTIME_PASS_ART_REVIEW_GATED",
-      "scope": "M201 12-pose technical candidate set, all-83 source reuse audit, private hybrid PixiJS atlas, original variable-tick playback and opt-in 390x844 Raising/Hunt review",
-      "sourcePolicy": "OWNER_AUTHORIZED_INTERNAL_ONLY_PUBLIC_PAGES_EXCLUDED_NO_ROM_OR_NITRO_PAYLOAD",
-      "technicalQa": "397_OF_397_FULL_NODE_TESTS_PASS_12_OF_12_FOCUSED_M201_TESTS_REAL_CHROMIUM_390X844_RAISING_AND_HUNT_ONE_CANVAS_NO_CHARACTER_ART_FALLBACK_NO_OVERFLOW_NO_PAGE_CONSOLE_OR_REQUEST_ERROR",
-      "runtimeEligible": false,
-      "shippingStatus": "28_OF_47_UNIQUE_VISUALS_19_PENDING_VISUAL_LANDMARK_REVIEW_REQUIRED",
-      "output": "assets/production/internal-character-review/m201-remix-v1/manifest.json"
+  "owner": "CODEX_ART",
+  "ownerCheckpointPreparation": {
+    "blockerRows": 16,
+    "dependencyRows": 39,
+    "hashes": {
+      "CHAMPIONSHIP_BLOCKER_LEDGER.csv": "3A742AF575C51CB0825D7A9699C3BEA6204118F4A08B479E6A770570421ACDEF",
+      "CHAMPIONSHIP_DEPENDENCY_MATRIX.csv": "41A279981EC34D0AE95172A0544A8EA418E82FFCD72459DAA19893071093CACB",
+      "CHAMPIONSHIP_MASTER_SYNC.md": "3D84892A8EEF1182D46AFADA1F39D253E857D8A88E9E4FA871EEECD54C914C63",
+      "CHAMPIONSHIP_REBUILD_INTEGRATION_PLAN_V1.md": "555A23307C9881036F554C42733A54C4CE03B43E38BFC03F8C42EBCF428BF281"
     },
-    {
-      "id": "INTERNAL-FAITHFUL-BASELINE-V1",
-      "state": "DIRECT_INTERNAL_ASSEMBLY_5_OF_9_SLOTS_READY",
-      "scope": "Characters, UI/HUD reference, Cage, Hunt and VFX directly assembled for the internal 2026 mobile baseline; no user-facing loader",
-      "sourcePolicy": "OWNER_AUTHORIZED_INTERNAL_ONLY_GENERATED_OUTPUT_GITIGNORED_PUBLIC_RELEASE_GATE_DEFERRED",
-      "technicalQa": "2512_FILES_276_19_LOGICAL_MIB_ALL_HASHES_PASS",
-      "runtimeEligible": false,
-      "shippingStatus": "INTERNAL_BUILD_ONLY_RAISING_BATTLE_GATE_PACKAGING_STILL_PENDING",
-      "output": "scripts/build-internal-faithful-baseline.mjs"
-    },
-    {
-      "id": "CHAMPIONSHIP-PRESENTATION-PACK-CONTRACT-V1",
-      "state": "FULL_GAME_VISUAL_SLOT_AND_GAMEPLAY_ISOLATION_CONTRACT_COMPLETE",
-      "scope": "Nine visual slots across temporary, faithful-original and deferred cat/dog packs; local Owner-supplied original review permitted without repository inclusion",
-      "sourcePolicy": "INTERNAL_PRODUCTION_AUTHORIZED_FORMAL_DOCUMENT_LINK_PENDING_NO_ROM_OR_NITRO_PAYLOAD_COMMITTED",
-      "technicalQa": "6_FOCUSED_TESTS_PASS_PACKS_CANNOT_CHANGE_GAMEPLAY_OR_SAVE",
-      "runtimeEligible": true,
-      "shippingStatus": "NOT_SHIPPING_READY_PUBLIC_RELEASE_AND_RUNTIME_ART_PROMOTION_REMAIN_GATED",
-      "output": "docs/contracts/championship/CHAMPIONSHIP_PRESENTATION_PACK_CONTRACT.v1.json"
-    },
-    {
-      "id": "CHARACTER-FAITHFUL-HD224-V1",
-      "state": "7_OF_7_BATCHES_COMPLETE_TECHNICAL_PIXEL_FAITHFUL_BASELINE",
-      "scope": "224 Main/Sub PixiJS atlases, 17,235 cells, 11,480 sequences, stable alpha/anchor contracts",
-      "sourcePolicy": "OWNER_REPORTED_LICENSED_SOURCE_LINK_PENDING_DOCS_ONLY",
-      "technicalQa": "ALL_224_VALIDATE_106_INTENTIONAL_BLANK_CELLS_PRESERVED",
-      "runtimeEligible": false,
-      "shippingStatus": "HUMAN_APPROVAL_LICENSE_LINK_AND_RUNTIME_QA_REQUIRED",
-      "output": "docs/art/production/characters/faithful-hd224/manifest.json"
-    },
-    {
-      "id": "UI-FAITHFUL-HD96-V1",
-      "state": "96_SCENE_TECHNICAL_REFERENCE_CONTRACT_COMPLETE",
-      "scope": "96 NXR scenes, 1,369 nodes, 1080x1920 DOM zone contract, 87 backgrounds, 193 sprite witnesses",
-      "sourcePolicy": "OWNER_REPORTED_LICENSED_SOURCE_LINK_PENDING_DOCS_ONLY",
-      "technicalQa": "HASH_SIZE_SCENE_NODE_COUNTS_PASS_45_SCREEN_ROLES_REMAIN_UNKNOWN",
-      "runtimeEligible": false,
-      "shippingStatus": "FINAL_DOM_COMPONENTS_HUMAN_APPROVAL_LICENSE_LINK_AND_RUNTIME_QA_REQUIRED",
-      "output": "docs/art/production/ui/faithful-hd96/manifest.json"
-    },
-    {
-      "id": "VFX-FAITHFUL-REFERENCE-26",
-      "state": "FULL_26_SYSTEM_REFERENCE_CONVERSION_COMPLETE",
-      "scope": "26 Nitro VFX systems, 55 GLB/PNG reference outputs",
-      "sourcePolicy": "ROM_COPYRIGHTED_REFERENCE_RESEARCH_ONLY",
-      "technicalQa": "ALL_SOURCE_HASHES_OUTPUT_HASHES_AND_GLB_MESHES_VALIDATE",
-      "runtimeEligible": false,
-      "shippingStatus": "LICENSED_REPLACEMENT_TRIGGER_TIMING_HUMAN_APPROVAL_AND_RUNTIME_QA_REQUIRED",
-      "output": "docs/art/production/vfx/faithful-reference-26/manifest.json"
-    },
-    {
-      "id": "ART-RUNTIME-MAP-BUNDLE-V1",
-      "state": "TECHNICAL_RUNTIME_SEAM_COMPLETE_NO_CANDIDATE_PIXEL_PROMOTED",
-      "scope": "Production-only Pixi asset validation, one-active-field loading and unload, sole-ticker animation, exact world sizing, Hunt composite layer binding and fail-closed evidence gates",
-      "sourcePolicy": "ROM_ATTACHMENT_HASH_VERIFIED_RESEARCH_ONLY_NO_ROM_OR_DECODED_PAYLOAD_ENTERED_RUNTIME",
-      "technicalQa": "261_OF_261_NODE_TESTS_PASS_4_NEW_BUNDLE_CASES_PASS_BROWSER_VS3_BLOCKED_BY_UNRELATED_DIRTY_VS4_ENTRY_SELECTOR_ORDER",
-      "gameplayPolicy": "ART_BUNDLE_OWNS_NO_COLLISION_ENCOUNTERS_GATE_MAPPING_SPAWN_SAVE_OR_SIMULATION",
-      "runtimeEligible": true,
-      "shippingStatus": "ADAPTER_READY_ASSET_PROMOTION_BLOCKED_ON_LICENSE_LINK_HUMAN_APPROVAL_AND_IDENTITY_TIMING_EVIDENCE",
-      "output": "src/championship/presentation/runtimeMapArtBundle.js"
-    },
-    {
-      "id": "ART-A3-CM27-OWNER-ADAPTATION-DIRECTIVE",
-      "state": "LOCKED_REMOVE_CENTER_DIGIMON_MARK_FROM_REMADE_ART",
-      "scope": "field_cm27_01 genuine HD redraw runtime and shipping presentation only",
-      "sourcePolicy": "EXACT_ORIGINAL_REFERENCE_BASELINE_REMAINS_UNCHANGED",
-      "gameplayPolicy": "VISUAL_ONLY_NO_LAYOUT_COLLISION_ATTRIBUTE_NBS_OR_PLACEMENT_CHANGE",
-      "runtimeEligible": false,
-      "shippingStatus": "REDRAW_NOT_YET_EXECUTED",
-      "output": "docs/art/production/cage/CAGE_OWNER_ADAPTATION_DIRECTIVES.json"
-    },
-    {
-      "id": "RESEARCH-HUNT-FIELD-PAN-ROM-TRACE",
-      "state": "ROM_AND_OWNER_VERIFIED_INVERSE_DELTA_CAMERA_PAN",
-      "scope": "OVL0 Hunt touch-handler trace, inverse pointer-delta field-window update, 256x192 camera-origin clamp and explicit current-runtime mismatch",
-      "sourcePolicy": "RESEARCH_ONLY_SHA_VERIFIED_ROM_NO_BINARY_OR_DECODED_PAYLOAD_COMMITTED",
-      "technicalQa": "OVL0_0211CA38_0211CA54_AND_0211D9F0_0211DA54_LOCKED_BY_TEST_119_OF_119_SUITE_PASS",
-      "gameplayPolicy": "PORTRAIT_9_16_IS_VIEWPORT_EMPTY_FIELD_DRAG_PANS_TAPS_DO_NOT_BECOME_AVATAR_MOVE_CAPTURE_REMAINS_SEPARATE",
-      "runtimeEligible": false,
-      "shippingStatus": "RUNTIME_CORRECTION_PENDING_SEPARATE_BATCH",
-      "output": "docs/research/HUNT_FIELD_INPUT_ROM_TRACE_2026-08-29.md"
-    },
-    {
-      "id": "ART-A3-A4-EXACT-BASELINE-TECHNICAL-QA",
-      "state": "50_FILES_DETERMINISTIC_40_CAGE_GRID_ALIGNMENTS_30_HUNT_RED_REGION_PASSES",
-      "scope": "Review-only collision overlays, exact 4x block checks, NBS/COL/ATR alignment, Hunt diagnostic-red connected-component scan, 390x844 no-scale crops, animation completeness and decoded-memory audit",
-      "sourcePolicy": "NO_VISUAL_TRANSFORMATION_NO_RAW_SEMANTIC_INFERENCE_REFERENCE_ONLY",
-      "technicalQa": "40_OF_40_CAGE_EXACT_REPLICATION_40_OF_40_GRID_ALIGNMENT_30_OF_30_NO_LARGE_RED_REGION_13_OF_13_ANIMATED_VARIANTS_28_OF_28_FRAMES_ONE_CM01_CM40_MASTER_CONTACT_50_FILES_BYTE_IDENTICAL",
-      "performanceVerdict": "ALL_30_FULL_RGBA_PRELOAD_REJECTED_480_MIB_BEFORE_TEXTURE_OVERHEAD",
-      "runtimeEligible": false,
-      "shippingStatus": "NOT_SHIPPING_READY_GENUINE_REDRAW_LICENSE_LINK_RUNTIME_AND_DEVICE_QA_PENDING",
-      "output": "docs/art/production/technical-qa/cage-hunt-exact-baseline/manifest.json"
-    },
-    {
-      "id": "ART-A4-HUNT-FAITHFUL-HD30",
-      "state": "30_OF_30_VARIANTS_13_OF_13_BSAR_BUNDLES_28_OF_28_ANIMATION_FRAMES",
-      "scope": "Exact original Hunt BSAR animated terrain bed, void-masked core, OPM/NCER/linear-NCBR objects, ATR, ESC and 2048x2048 frame-zero baselines",
-      "sourcePolicy": "VERIFIED_ROM_SHA_SOURCE_VALUES_PRESERVED_ROM_AND_NITRO_BINARIES_NOT_COMMITTED",
-      "technicalQa": "466_FILES_BYTE_IDENTICAL_16_OF_16_ARCHIVE_STATIC_DIAGNOSTICS_ZERO_RGBA_DIFF_30_OF_30_HD2X_13_OF_13_BSAR_28_OF_28_FRAMES_NO_RED_DIAGNOSTIC_BLOCKS",
-      "gameplayPolicy": "RAW_ATR_ESC_AND_TIMING_UNITS_PRESERVED_WITHOUT_SEMANTIC_REINTERPRETATION",
-      "runtimeEligible": false,
-      "shippingStatus": "NOT_SHIPPING_READY_LICENSE_LINK_RUNTIME_AND_PERFORMANCE_QA_PENDING",
-      "output": "docs/art/production/hunt/faithful-hd30/manifest.json"
-    },
-    {
-      "id": "ART-A3-CAGE-FAITHFUL-HD40",
-      "state": "40_OF_40_RAW_CHAIN_COMPOSITIONS_38_OBJECT_AND_NANR_BANKS_4_OF_4_ANIMATED_TERRAIN_BUNDLES",
-      "scope": "Exact original Cage raw core/static composition and 4x HD output plus direct-14-bit NBS tilemaps, lower-14-bit OPMD sequence words/source coordinates/flips, NANR animation banks, NCER/linear-NCBR object banks, COL collision, ATR attributes, four BSAR animated terrain bundles and browser format parsers",
-      "sourcePolicy": "VERIFIED_ROM_SHA_SOURCE_VALUES_PRESERVED_ROM_AND_NITRO_BINARIES_NOT_COMMITTED",
-      "technicalQa": "657_FILES_BYTE_IDENTICAL_38_OF_38_OPMD_NANR_NCER_BINDINGS_VALID_40_OF_40_HD_PIXEL_ROUNDTRIP_40_OF_40_NBS_COL_ATR_DIMENSIONS_MATCH_4_OF_4_BSAR_BUNDLES_8_OF_8_FRAMES",
-      "gameplayPolicy": "RAW_CLASSES_AND_ANIMATION_TIMING_PRESERVED_WITHOUT_SEMANTIC_REINTERPRETATION_CM12_CM18_RESOLVED_WITHOUT_GUESSING",
-      "runtimeEligible": false,
-      "shippingStatus": "NOT_SHIPPING_READY_LICENSE_LINK_AND_RUNTIME_QA_PENDING",
-      "output": "docs/art/production/cage/faithful-hd40/manifest.json"
-    },
-    {
-      "id": "ART-A3-CAGE-CM01-CM10-REVIEW-PACK",
-      "state": "SUPERSEDED_WITHDRAWN_BY_OWNER_CORRECTION",
-      "scope": "Historical generated CM01-CM10 review packet removed after object-placement rejection",
-      "sourcePolicy": "APPROVED_REMAKE_STYLE_BOARD_ONLY_NO_ROM_IMAGE_INPUT_NO_ORIGINAL_PIXELS",
-      "technicalQa": "23_FILES_BYTE_IDENTICAL_10_OF_10_RGBA_BOTTOM_CENTER_ANCHORED",
-      "gameplayPolicy": "PLACEMENT_ATR_COL_RAISING_EFFECTS_AND_GAMEPLAY_MASKS_NOT_INFERRED",
-      "runtimeEligible": false,
-      "shippingStatus": "NOT_SHIPPING_READY",
-      "output": "GIT_HISTORY_ONLY"
-    },
-    {
-      "id": "ART-A1-CAGE-ORIGINAL-STRUCTURE",
-      "state": "COMPLETE_40_OF_40_STRUCTURE_ROWS_CLASSIFIED",
-      "scope": "CM01-CM40 original structural metadata and four batches of ten",
-      "visualPackages": ["CORE_FIELD_TILES", "OBJECT_BUNDLE"],
-      "externalData": ["ATR_RAW_CLASSES", "COL_RAW_CLASSES"],
-      "resolvedObjectSequenceBindings": ["CM12", "CM18"],
-      "nativeNoObjectLayer": ["CM28", "CM29"],
-      "sourcePolicy": "REFERENCE_METADATA_ONLY_NO_ORIGINAL_PIXELS",
-      "runtimeEligible": false,
-      "shippingStatus": "NOT_SHIPPING_READY",
-      "output": "docs/art/technical/a1-cage-original-structure/CM40_ORIGINAL_STRUCTURE_CROSSWALK.csv"
-    },
-    {
-      "id": "ART-A1-MAP-TECH",
-      "state": "TRANSPARENT_TECHNICAL_MASTERS_COMPLETE_NATIVE_LAYER_SEPARATION_PENDING",
-      "scope": "Twelve Cage module review crops plus HM01 bright and HM09 dark Hunt standards",
-      "sourcePolicy": "OWNER_APPROVED_BOARDS_HASH_LOCKED_EDGE_CONNECTED_BACKGROUND_REMOVAL_NO_VISUAL_REGENERATION",
-      "gameplayPolicy": "SHAPE_MASK_RAISING_EFFECT_COLLISION_ATR_ESC_AND_SPAWN_DATA_REMAIN_EXTERNAL_AND_UNKNOWN_UNTIL_VERIFIED",
-      "rights": "OWNER_REPORTED_FULL_LICENSE_DOCUMENT_LINK_REQUIRED",
-      "humanApproved": true,
-      "runtimeEligible": false,
-      "shippingStatus": "NOT_SHIPPING_READY",
-      "output": "docs/art/technical/a1-map-tech/manifest.json"
-    },
-    {
-      "id": "ART-A1-GOLDEN-SLICE-DIRECTION-SET",
-      "state": "COMPLETE_ART_PROPOSAL",
-      "scope": "Eight characters, bright Gate world/Earth, HM01/HM09, twelve Cage modules, six-screen UI flow and five VFX families",
-      "palettePolicy": "PRESERVE_ORIGINAL_MAJOR_PALETTE_FAMILIES_CHANGE_SHAPE_CONTENT_AND_FINISH",
-      "vfxPolicy": "DATA_FAITHFUL_LICENSED_SOURCE_TO_WEB_CONVERSION",
-      "rights": "OWNER_REPORTED_FULL_LICENSE_DOCUMENT_LINK_REQUIRED",
-      "humanApproved": true,
-      "shippingStatus": "NOT_SHIPPING_READY",
-      "output": "docs/art/proposals/a1-golden-slice/manifest.json"
-    },
-    {
-      "id": "VS2-R1-GATE-3D",
-      "state": "OWNER_APPROVED_STRUCTURAL_BASELINE",
-      "contract": "docs/contracts/championship/VS2_GATE_SELECT_3D_RUNTIME_CONTRACT.v1.json",
-      "binding": "Injected frame.gateSelect truth and source.intents.selectGate(gateId) only",
-      "playerDefault": "THREE_BOUNDED_WORLD_MODE",
-      "fallback": "ACCESSIBILITY_LOW_GRAPHICS_DEVELOPER_2D_GRID",
-      "canonicalBiomeIdentities": 16,
-      "responsiveQa": "5/5 VS2 MUST_PASS; 390x844 and 393x852 VS2-R1 evidence PASS",
-      "rendererAuthority": "One Gate-local Three WebGLRenderer; event-driven; disposed before Hunt Loadout; no second store/router/save/Pixi Application",
-      "rights": "ORIGINAL_CREATED",
-      "productionStatus": "OWNER_APPROVED_STRUCTURAL_BASELINE",
-      "artifactMaturity": "STRUCTURAL_PRESENTATION",
-      "humanApproved": true,
-      "shippingStatus": "NOT_SHIPPING_READY",
-      "output": "docs/reports/vs2-r1/VS2_R1_GATE_3D_COMPLETION_REPORT.md"
-    },
-    {
-      "id": "VS2-P",
-      "state": "COMPLETE_STOPPED_FOR_OWNER_VISUAL_REVIEW",
-      "contract": "docs/contracts/championship/VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT.json",
-      "flow": "RAISING_HOME -> GATE_SELECT -> HUNT_LOADOUT -> HUNT_FIELD -> EXPLORE -> EXIT -> RAISING_HOME",
-      "responsiveQa": "5/5 MUST_PASS",
-      "referenceEvidence": [
-        "390x844",
-        "393x852"
-      ],
-      "rendererAuthority": "DOM P1R screen UI; one existing shared Pixi stage for Hunt field; no second application, store, save authority, or movement logic",
-      "rights": "ORIGINAL_CREATED",
-      "productionStatus": "TEMPORARY_PRESENTATION",
-      "humanApproved": false,
-      "shippingStatus": "NOT_SHIPPING_READY",
-      "output": "docs/reports/vs2/VS2_PRESENTATION_COMPLETION_REPORT.md"
-    },
-    {
-      "id": "ART-O2",
-      "state": "OWNER_APPROVED_REFERENCE_CATALOG",
-      "coverage": {
-        "entities": 224,
-        "regular": 216,
-        "eggs": 8,
-        "mainDecodedSheets": 224,
-        "subDecodedSheets": 224,
-        "artR2rOwnerApprovedBaselines": 4,
-        "newHighResolutionReconstructions": 0
-      },
-      "structure": {
-        "regularCommonSequenceStructure": 182,
-        "regularStructuralOutliers": 34,
-        "eggStandardStructure": 8
-      },
-      "rights": "ROM_COPYRIGHTED_REFERENCE",
-      "lifecycle": "REFERENCE_RECONSTRUCTION",
-      "productionStatus": "RESEARCH_ONLY",
-      "humanApproved": false,
-      "shippingStatus": "NOT_SHIPPING_READY",
-      "output": "docs/migration/PRE_MIGRATION_PROVENANCE.md#art-evidence-worktree"
-    },
-    {
-      "id": "CHAMPIONSHIP_REBUILD_INTEGRATION_PLAN_V1",
-      "state": "COMPLETE_EVIDENCE_BOUNDED",
-      "sliceCount": 15,
-      "output": "docs/coordination/championship/CHAMPIONSHIP_REBUILD_INTEGRATION_PLAN_V1.md"
-    }
-  ],
-  "dependencyUpserts": [
-    {
-      "recordId": "M201CharacterRemixRuntimeReview",
-      "contract": "CHARACTER_REMIX_M201_VERTICAL_SLICE_V1",
-      "owner": "codex",
-      "state": "INTERNAL_RUNTIME_REVIEW_ACTIVE",
-      "codexMaySafelyBind": "RAISING_HUNT_REVIEW_ONLY",
-      "notes": "All 83 stable keys and 53 original timelines are loadable. Twenty-eight unique technical candidates cover 57 slots; 26 slots retain explicit faithful fallbacks. Main coverage is 24 full, 0 partial and 16 fallback-only sequences; Sub is 11/0/2. Final atlas and Battle proof remain blocked on 19 redraws and visual landmark approval."
-    },
-    {
-      "recordId": "VS2GateSelect3DRuntimeContract",
-      "contract": "VS2_GATE_SELECT_3D_RUNTIME_CONTRACT/v1",
-      "owner": "shared",
-      "state": "PUBLISHED_BOUND_AND_STRUCTURALLY_VERIFIED",
-      "codexMaySafelyBind": "COMPLETE_WITH_TECHNICAL_PLACEHOLDERS",
-      "notes": "Codex bound a bounded original-created Three world through the existing source and selectGate intent. Original camera, rotation, input, hit-test and day/night switching parity remain unclaimed pending later trace closure."
-    },
-    {
-      "recordId": "VS2GateHuntRuntimePresentationContract",
-      "contract": "VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT/v1.1",
-      "owner": "shared",
-      "state": "PUBLISHED_BOUND_AND_VERIFIED",
-      "codexMaySafelyBind": "COMPLETE",
-      "notes": "Codex bound P1R Gate, Loadout, Hunt HUD/field, toolbar shell, Explore, and Return through the injected source only. The next gate is Owner visual review."
-    },
-    {
-      "recordId": "Championship2026ProductScope",
-      "contract": "Championship2026ProductScope",
-      "owner": "owner",
-      "state": "OWNER_VERIFIED_POLICY",
-      "codexMaySafelyBind": "YES",
-      "notes": "Standalone Championship 2026 is the current product; Nexus Link integration is frozen and outside current product scope."
-    },
-    {
-      "recordId": "Championship2026GameplayPreservation",
-      "contract": "Championship2026GameplayPreservation",
-      "owner": "owner",
-      "state": "OWNER_VERIFIED_POLICY",
-      "codexMaySafelyBind": "YES_WITH_EVIDENCE",
-      "notes": "ROM_VERIFIED preserves by default; PARTIAL preserves known structure; UNKNOWN remains neutral; intentional gameplay change requires OWNER_APPROVED_ADAPTATION."
-    },
-    {
-      "recordId": "Championship2026VerticalSliceRoadmap",
-      "contract": "Championship2026VerticalSliceRoadmap",
-      "owner": "owner",
-      "state": "OWNER_VERIFIED_ROADMAP",
-      "codexMaySafelyBind": "YES_PLANNING_ONLY",
-      "notes": "VS1 through VS7 sequence is authoritative planning order; only VS1 is complete and this documentation batch does not authorize VS2 implementation."
-    },
-    {
-      "recordId": "NexusLinkIntegrationForChampionship2026",
-      "contract": "NexusLinkIntegrationForChampionship2026",
-      "owner": "owner",
-      "state": "FROZEN_OUT_OF_CURRENT_PRODUCT_SCOPE",
-      "codexMaySafelyBind": "NO",
-      "notes": "Preserve historical Nexus decisions, but do not create Nexus dependencies or alter Championship architecture for future integration."
-    },
-    {
-      "recordId": "OriginalCharacterO2Catalog",
-      "contract": "OriginalCharacterO2Catalog",
-      "owner": "codex",
-      "state": "COMPLETE_PENDING_OWNER_REVIEW",
-      "codexMaySafelyBind": "N/A",
-      "notes": "224/224 decoded entity catalog; 216 regular, 8 eggs, 224 Main and 224 Sub sheets. Four ART-R2R baselines only; no new redraw. ROM reference, research-only, not shipping-ready."
-    },
-    {
-      "recordId": "ChampionshipRendererAuthorityPolicy",
-      "contract": "ChampionshipRendererAuthorityPolicy",
-      "owner": "owner",
-      "state": "OWNER_VERIFIED_POLICY",
-      "codexMaySafelyBind": "YES_WITH_SCENE_CONTRACT",
-      "notes": "DOM owns application/screen UI; PixiJS owns playable 2D field/actor/sprite/2D VFX presentation; Three.js is bounded to verified or explicitly approved 3D. No all-renderer migration, second authority, ticker, or router."
-    }
-  ],
-  "blockerUpserts": [
-    {
-      "recordId": "CX-M201-ART-CONTINUITY",
-      "id": "CX-M201-ART-CONTINUITY",
-      "owner": "codex",
-      "state": "OPEN_OWNER_VISUAL_REVIEW_AND_19_REDRAWS_REQUIRED",
-      "detail": "Technical runtime integration passes. Motion-family closure 05 finishes rest, post-zap and angry with four exact Main/Sub reuses; neither side has a partially remixed sequence and 19 unique visuals remain pending. Complete restrained and final battle-state redraw families plus landmark/identity review before runtime promotion."
-    },
-    {
-      "recordId": "CX-VS2-R1-OWNER-VISUAL-REVIEW",
-      "id": "CX-VS2-R1-OWNER-VISUAL-REVIEW",
-      "owner": "codex",
-      "state": "RESOLVED_OWNER_APPROVED_STRUCTURAL_BASELINE",
-      "detail": "Owner approved VS2-R1 as a structural baseline only. It remains not final art, not exact Original behavior parity and not shipping-ready."
-    },
-    {
-      "recordId": "CX-VS2-R2-IMPLEMENTATION-GATE",
-      "id": "CX-VS2-R2-IMPLEMENTATION-GATE",
-      "owner": "shared",
-      "state": "OPEN_OWNER_GO_REQUIRED",
-      "detail": "VS2_HUNT_LOADOUT_RUNTIME_CONTRACT/v1 is published as spec, but Claude reports implementation authorization pending. Current companion selection remains PRODUCT_AUTHORED_PROTOTYPE / DEVELOPER_ONLY."
-    },
-    {
-      "recordId": "CL-011",
-      "id": "CL-011",
-      "owner": "shared",
-      "state": "RESOLVED_VS2_P_COMPLETE_OWNER_VISUAL_REVIEW_GATE",
-      "detail": "Owner GO and the published v1.1 contract authorized VS2-P. Gate, Loadout, Hunt Field, Explore, and Return are complete; work is hard-stopped for Owner visual review before Capture or VS3."
-    },
-    {
-      "recordId": "CL-012",
-      "id": "CL-012",
-      "owner": "shared",
-      "state": "OPEN_OWNED_DOC_RECONCILIATION",
-      "detail": "Claude-owned runtime architecture/status documentation predates the product reset. Codex preserved ownership; Claude should reconcile that language on its next authorized owned-doc update."
-    },
-    {
-      "recordId": "CX-006",
-      "id": "CX-006",
-      "owner": "codex",
-      "state": "SUPERSEDED_FROZEN",
-      "detail": "Legacy P3-P6 is preserved as history but superseded for Championship 2026. Production completion is now planned under a separately authorized VS7 batch."
-    },
-    {
-      "recordId": "CL-002",
-      "id": "CL-002",
-      "owner": "claude",
-      "state": "OWNER_AUTHORIZED_TRACE_PENDING_RESULT",
-      "detail": "Owner authorized only RAISING_TOOLBAR_BINDING_CLOSURE from OVL18 0x0211CF10 onward. Codex must wait for Claude-owned Status/Delta and preserve unresolved fields as UNKNOWN_REQUIRES_TRACE."
-    },
-    {
-      "recordId": "CL-005",
-      "id": "CL-005",
-      "owner": "claude",
-      "state": "RESOLVED_BY_OWNER_POLICY",
-      "detail": "DOM is screen UI authority; PixiJS is playable 2D presentation authority; Three.js is bounded verified/approved 3D presentation. This does not authorize Phase 2 implementation."
-    },
-    {
-      "recordId": "CL-008",
-      "id": "CL-008",
-      "owner": "claude",
-      "state": "ACCEPTED_COSMETIC",
-      "detail": "No history rewrite now for the cosmetic @ subject prefix."
-    },
-    {
-      "recordId": "CL-009",
-      "id": "CL-009",
-      "owner": "claude",
-      "state": "ACCEPTED_IN_LOCAL_RECOVERY_CHECKPOINT",
-      "detail": "Preserve the local forensic checkpoint. Do not push the current branch as-is; create a clean integration path excluding reproducible staging artifacts before push or PR."
-    }
-  ],
+    "integrationPlanSlices": 15,
+    "stableIdConflicts": 0
+  },
   "ownerDecisionsApplied": [
+    "Owner cancelled the invented heavy stone arena ring and selected a lightweight metal sports fence; the six standing-slot coordinates remain a 2026 presentation contract and are not claimed as ROM-authored geometry.",
     "Owner requires the Digimon mark at the center of field_cm27_01 to be removed from the genuine remake art while preserving the exact original comparison baseline and all other CM27 object positions and gameplay data.",
     "Owner play-history confirms the contextual hand tool: empty-space drag pans Cage/Hunt maps, Cage creatures can be grabbed and dropped to another grid location, and Hunt capture later accepts the subdued creature. OVL0 independently verifies inverse-delta Hunt camera panning and 256x192 viewport clamps.",
     "Owner identified the red Hunt regions as incomplete; the production baseline must restore source BSAR animated terrain rather than retain diagnostic red blocks.",
@@ -450,123 +686,327 @@
     "INT-RH2 Raising Home Phase 2 Presentation Integration authorized as the only implementation slice.",
     "Contract-first boundary fixed: Claude owns runtime producer/Pixi field; Codex owns P1R DOM binding and visual QA."
   ],
+  "productReset": {
+    "adaptationAuthority": "OWNER_APPROVED_ADAPTATION_ONLY",
+    "delivery": "WEB_FIRST_MOBILE_FIRST_PORTRAIT_9_16_TOUCH_FIRST_DESKTOP_BROWSER_COMPATIBLE",
+    "documentationOnly": false,
+    "historicalNexusDecisions": "PRESERVED_SUPERSEDED_FOR_CURRENT_PRODUCT",
+    "nexusLinkIntegration": "FROZEN_OUT_OF_CURRENT_PRODUCT_SCOPE",
+    "product": "DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD",
+    "unknownGameplay": "NEUTRAL_DO_NOT_INVENT",
+    "verifiedGameplay": "DEFAULT_PRESERVE",
+    "vs1": "COMPLETE_BASELINE",
+    "vs2": "PRESENTATION_BINDING_COMPLETE_OWNER_VISUAL_REVIEW_REQUIRED",
+    "vs3ToVs7": "ROADMAP_ONLY_NOT_AUTHORIZED"
+  },
+  "schemaVersion": 1,
   "sharedMergePolicy": "CODEX_SINGLE_WRITER_BASE_HASH_RECHECK_STABLE_ID_CONFLICT_REJECTION_ATOMIC_REPLACE",
+  "status": "BATTLE_LIGHT_FENCE_PILOT_R1_COMPOSITE_GATE_PASS_INTERNAL_REVIEW_NO_RUNTIME_REPLACEMENT",
+  "statusSource": "docs/coordination/CODEX_ART_STATUS.json",
+  "supplementalDeltas": [
+    {
+      "acceptedSettingCount": 2,
+      "activeNewAppearanceCount": 0,
+      "fullMotionApprovedCount": 0,
+      "id": "ALL224-CREATURE-IDENTITY-START-2026-09-06",
+      "identityBriefCount": 224,
+      "legacySettingsAwaitingIdentityReview": 14,
+      "newIdentityDrawingCount": 12,
+      "nextParallelRepresentatives": [
+        "m006_punimon",
+        "m312_kabuterimon",
+        "m418_tonosamagekomon",
+        "e000_digitama"
+      ],
+      "remainingIdentityDrawings": 212,
+      "report": "docs/art/production/characters/appearance-refresh-v1/pixel-v2/identity-start-review.json",
+      "requiredEntityCount": 224,
+      "shippingReady": false,
+      "status": "ALL224_BRIEFED_12_IDENTITY_DRAFTS_2_REPRESENTATIVE_SETTINGS"
+    },
+    {
+      "acceptedSettingCount": 16,
+      "activeNewAppearanceCount": 0,
+      "fullMotionApprovedCount": 0,
+      "id": "CHARACTER-PIXEL-SETTINGS-PACKETS03-04-2026-09-06",
+      "nextPacket": [
+        "m003_nyokimon",
+        "m004_bubbmon",
+        "m005_pitchmon",
+        "m006_punimon"
+      ],
+      "progress": "docs/art/production/characters/appearance-refresh-v1/pixel-v2/setting-progress.json",
+      "remainingSettings": 208,
+      "report": "docs/art/production/characters/appearance-refresh-v1/pixel-v2/stage-02-packets-03-04-review.json",
+      "requiredEntityCount": 224,
+      "settingPoseCount": 120,
+      "shippingReady": false,
+      "status": "SIXTEEN_SETTINGS_PASS_ALL224_STAGE_IN_PROGRESS"
+    },
+    {
+      "acceptedSettingCountAtStageExit": 8,
+      "activeNewAppearanceCount": 0,
+      "authority": "Owner explicit autonomous execution with self-review each stage",
+      "dependenciesChanged": false,
+      "fullMotionApprovedCount": 0,
+      "gallery": "docs/art/production/characters/appearance-refresh-v1/pixel-v2/settings.html",
+      "id": "CHARACTER-PIXEL-SETTINGS-STAGE01-2026-09-06",
+      "progress": "docs/art/production/characters/appearance-refresh-v1/pixel-v2/setting-progress.json",
+      "report": "docs/art/production/characters/appearance-refresh-v1/pixel-v2/stage-01-review.json",
+      "requiredEntityCount": 224,
+      "settingPoseCountAtStageExit": 33,
+      "shippingReady": false,
+      "status": "REPRESENTATIVE_EIGHT_PASS_ALL_ROSTER_SETTINGS_IN_PROGRESS",
+      "summary": "Eight representative source-grid pixel settings passed author self-review and independent review after repair, 33 selected poses including all 12 E000 states. Stage 02 all224 settings started; queued E001-E007/M002. No whole-motion approval or runtime replacement.",
+      "validation": {
+        "javascriptRegressionTests": 1097,
+        "normalGameQa": "NOT_RUN",
+        "physicalDeviceQa": "NOT_RUN",
+        "pythonTests": 48
+      }
+    },
+    {
+      "acceptedTransparentMasters": 0,
+      "activeNewAppearanceCount": 0,
+      "delegatedSelectedBriefCount": 4,
+      "deltaId": "CODEX-CHARACTER-AUTONOMOUS-SELECTION-M201-2026-09-06",
+      "id": "CHARACTER-AUTONOMOUS-SELECTION-M201-2026-09-06",
+      "ownerSelectedDesignCount": 4,
+      "remaining": "M201 precise redraw and true alpha output; full47 masters/83 slots/53 sequences; normal new-art and device QA. Gameplay owners unchanged.",
+      "report": "docs/art/production/characters/appearance-refresh-v1/AUTONOMOUS_PRODUCTION_UPDATE.md",
+      "sharedMergePerformed": false,
+      "shippingReady": false,
+      "status": "OWNER_CHOICES_RECORDED_DELEGATED_BRIEFS_SELECTED_GEOMETRY_PASS_ART_REPAIR_REQUIRED",
+      "summary": "Owner firstfour A/B/B/A preserved; later low-error design selection and production delegated. Packet02 A/A/B/A briefs selected. M201 setting plus12 high-risk source poses;3 generated RGB candidates rejected for pose/alpha. Optional hash-locked common-origin M201 adapter preserves baseline reference and83 source offsets. Focused85/full1080 pass. No new art promotion."
+    },
+    {
+      "deltaId": "CODEX-HUNT-NORMAL-ENTRY-2026-09-06",
+      "fullAEntryAccepted": false,
+      "id": "HUNT-NORMAL-ENTRY-2026-09-06",
+      "normalCaptureHomeAccepted": false,
+      "normalEntryWithoutCarriedAccepted": true,
+      "report": "docs/art/HUNT_NORMAL_ENTRY_INTEGRATION_2026-09-06.md",
+      "sharedMergePerformed": true,
+      "sharedMergeReceipt": "reports/art/hunt-normal-entry-2026-09-06/shared-merge.json",
+      "sharedRows": [
+        "HuntFieldContract",
+        "CX-R3-HUNT-001"
+      ],
+      "status": "NORMAL_UNACCOMPANIED_ENTRY_BOUND_CARRIED_AI_CAPTURE_PENDING",
+      "summary": "Normal unaccompanied beginHunt uses native Gate/hour/season, 29 initial terrain/direction sources, existing pool/AI/placement/grouping and cloned app RNG/history; world/runtime complete before commit. Focused53/full1052 and mobile UI entry/Home/Save/Continue/reentry pass. Carried request45 first-batch update and normal AI/tools/animation/capture remain unbound.",
+      "syncRevision": 42
+    },
+    {
+      "activeAppearanceReplacementCount": 0,
+      "approvedDesignCount": 0,
+      "candidateIntegration": "ROOT_SINGLE_WRITER_LOCAL_FILES_ONLY",
+      "deltaId": "CODEX-CHARACTER-APPEARANCE-WORKFLOW-2026-09-06",
+      "report": "docs/art/production/characters/appearance-refresh-v1/IMPLEMENTATION_REPORT.md",
+      "sharedMergePerformed": false,
+      "status": "WORKFLOW_IMPLEMENTED_FIRST_FOUR_CONCEPTS_OWNER_SELECTION_PENDING",
+      "summary": "224 source contracts,56 packets,10184 nonblank masters; corrected source-origin guide exporter;4 A/B concept boards; guarded existing-roster replacement seam.1040 JS regression and16 Python checks pass. No full entity redraw or new appearance promotion. Canvas adapter, landmarks, owner selections and physical device QA remain pending."
+    },
+    {
+      "deltaId": "CODEX-HUNT-ENTRY-HISTORY-2026-09-06",
+      "normalCaptureHomeAccepted": false,
+      "remaining": "A normal entry source/environment/carried actor and transaction, B AI/tools/animation, C normal capture-to-Home; Battle/art expansion and public build remain incomplete.",
+      "report": "docs/art/HUNT_ENTRY_HISTORY_INTEGRATION_2026-09-06.md",
+      "sharedMergePerformed": false,
+      "status": "FUNCTIONAL_POOL_SOURCES_AND_APP_HISTORY_BOUND_NORMAL_CAPTURE_UNBOUND",
+      "verification": "640 original CPU source cases; focused64/full1000; mobile390 New Game/Save/Quit/reload/Continue/Grass/Tether/Hunt/Home; deterministic builder check; diff check."
+    },
+    {
+      "deltaId": "CODEX-HUNT-CHARACTER-ANIMATION-2026-09-06",
+      "normalCaptureHomeAccepted": false,
+      "remaining": "Normal capture owner/tool/AI source and Home action binding are unbound. Battle, other species, public Pages and physical device QA remain incomplete.",
+      "report": "docs/art/HUNT_CHARACTER_ANIMATION_2026-09-06.md",
+      "sharedMergePerformed": false,
+      "status": "VERIFIED_NATIVE_ANIMATION_AND_PIXI_PROJECTION_NORMAL_OWNER_UNBOUND",
+      "verification": "17 focused / 992 full regression; original CPU and live frame comparisons; 390x844 animation review and 430x932 normal New Game/Rope/Hunt/return smoke; git diff --check PASS."
+    },
+    {
+      "deltaId": "CODEX-CHARACTER-MATERIALS-2026-09-06",
+      "remaining": "Static source identity only; full action/event/timing and per-species visual QA, Battle/Database coverage, 164 diagnostic-only families, human approval and public release remain open.",
+      "report": "docs/art/CHARACTER_MATERIAL_RUNTIME_2026-09-06.md",
+      "sharedMergePerformed": false,
+      "status": "INTERNAL_STATIC_NORMAL_RAISING_HUNT_QA_PASS_FULL_ACTION_BINDINGS_UNKNOWN",
+      "verification": "987 regression tests passed; source and regenerated index checks passed; normal UI path and five Hunt viewport checks passed. git diff --check passed."
+    },
+    {
+      "deltaId": "CODEX-BATTLE-CUBE-FOUR-PANEL-ART-2026-09-05",
+      "preserved": "Existing route, store, save, Pixi ticker and mode availability; all earlier production packets.",
+      "remaining": "Global localization partial; original full menu/material semantics and mode bindings untraced; human visual approval pending.",
+      "report": "docs/art/production/battle/menu-cube-v1/README.md",
+      "sharedMergePerformed": false,
+      "source": "docs/coordination/CODEX_ART_STATUS.json#latestBoundedBatch",
+      "status": "IMPLEMENTED_BROWSER_QA_PASS_OWNER_VISUAL_REVIEW_PENDING",
+      "verification": "835 regression tests pass; five viewport browser QA and failure/disposal/reentry checks pass; production index regeneration validated."
+    },
+    {
+      "correction": "The handoff text builder, not the existing visual binding, was shifted by one record. Correct name/description offsets from 0x020C8CDC are +0/+4.",
+      "deltaId": "CODEX-CAGE-IDENTITY-BINDING-AUDIT-2026-09-05",
+      "preserved": "Existing visual fields, module IDs, ownership, save authority and all prior production packets.",
+      "remaining": "Training magnitudes and three unreferenced fields remain unknown; battle panels and general DOM localization are subsequent batches.",
+      "report": "docs/research/CAGE_IDENTITY_BINDING_ROM_TRACE_2026-09-05.md",
+      "sharedMergePerformed": false,
+      "source": "docs/coordination/CODEX_ART_STATUS.json#previousBoundedBatches/0",
+      "status": "COMPLETE_FIX_AND_REGRESSION_PASS",
+      "verification": "OVL15 reader plus 35 ROM shop joins; 23 focused tests and 831 full regression tests pass; two positive controls caught."
+    }
+  ],
   "sync3Gate": {
-    "codexO2Complete": true,
-    "integrationPlanV1Complete": true,
-    "codexOwnedStatusDeltaUpdated": true,
-    "claudeToolbarClosureComplete": true,
+    "championship2026ProductResetReconciled": true,
     "claudeOwnedStatusDeltaUpdated": true,
-    "syncRevision3Started": true,
-    "syncRevision3Complete": true,
-    "syncRevision3OwnerApproved": true,
-    "o2CheckpointCreated": true,
+    "claudeToolbarClosureComplete": true,
+    "codexO2Complete": true,
+    "codexOwnedStatusDeltaUpdated": true,
     "intRh2Authorized": true,
     "intRh2ContractPublished": true,
-    "intRh2ProducerImplemented": true,
-    "intRh2P1rBound": true,
     "intRh2FiveViewportQa": true,
-    "intRh2SaveReloadProof": true,
-    "intRh2OwnerApprovedIntegrationBaseline": true,
     "intRh2ImplementationCheckpointsCreated": true,
-    "championship2026ProductResetReconciled": true,
+    "intRh2OwnerApprovedIntegrationBaseline": true,
+    "intRh2P1rBound": true,
+    "intRh2ProducerImplemented": true,
+    "intRh2SaveReloadProof": true,
+    "intRh2StoppedForOwnerReview": false,
+    "integrationPlanV1Complete": true,
+    "o2CheckpointCreated": true,
+    "syncRevision3Complete": true,
+    "syncRevision3OwnerApproved": true,
+    "syncRevision3Started": true,
     "vs2CandidateDefined": true,
     "vs2ImplementationAuthorized": false,
     "vs2PresentationBindingAuthorized": true,
     "vs2PresentationBindingComplete": true,
-    "vs2StoppedForOwnerVisualReview": true,
+    "vs2R1FinalArtApproved": false,
     "vs2R1Gate3DAuthorized": true,
     "vs2R1Gate3DBound": true,
-    "vs2R1ThreeBoundedSceneQa": true,
-    "vs2R1OwnerVisualReviewRequired": false,
     "vs2R1OwnerApprovedStructuralBaseline": true,
-    "vs2R1FinalArtApproved": false,
+    "vs2R1OwnerVisualReviewRequired": false,
     "vs2R1ShippingApproved": false,
+    "vs2R1ThreeBoundedSceneQa": true,
     "vs2R2ImplementationAuthorized": false,
-    "intRh2StoppedForOwnerReview": false
+    "vs2StoppedForOwnerVisualReview": true
   },
-  "mergeReceipt": {
-    "completed": true,
-    "syncRevision": 3,
-    "reconciliation": "CHAMPIONSHIP_2026_PRODUCT_RESET",
-    "dependencyRows": 46,
-    "blockerRows": 19,
-    "stableIdConflicts": 0,
-    "atomicReplace": "PASS",
-    "baseHashes": {
-      "CHAMPIONSHIP_MASTER_SYNC.md": "438457002B9603D04C67C34E33874C1971C3C384A2A43CCBDED21EFA2ED069F1",
-      "CHAMPIONSHIP_DEPENDENCY_MATRIX.csv": "E8077DE255419FBBF7FCC94CF0ADA6AA026EE3E215760679ACDBC60AA00C65CB",
-      "CHAMPIONSHIP_BLOCKER_LEDGER.csv": "9E181865E314A9D8D64B0198498330C94DA81C8110AABD77856550B395AC1F7F"
-    },
-    "newHashes": {
-      "CHAMPIONSHIP_MASTER_SYNC.md": "AD2A2525EE5AF95E6C47D01F113AF570F673D3FEF83E43DDA6DA2BB065B19944",
-      "CHAMPIONSHIP_DEPENDENCY_MATRIX.csv": "89AC482D058F1F6133638F59241B2DF98430E06C476405EA7739226B00DA8ECF",
-      "CHAMPIONSHIP_BLOCKER_LEDGER.csv": "CF3ECFE52F6E4DAC81C69BB4717A2FF58059861052C89A1253E4755C1E051150"
-    }
-  },
-  "ownerCheckpointPreparation": {
-    "dependencyRows": 39,
-    "blockerRows": 16,
-    "stableIdConflicts": 0,
-    "integrationPlanSlices": 15,
-    "hashes": {
-      "CHAMPIONSHIP_MASTER_SYNC.md": "3D84892A8EEF1182D46AFADA1F39D253E857D8A88E9E4FA871EEECD54C914C63",
-      "CHAMPIONSHIP_DEPENDENCY_MATRIX.csv": "41A279981EC34D0AE95172A0544A8EA418E82FFCD72459DAA19893071093CACB",
-      "CHAMPIONSHIP_BLOCKER_LEDGER.csv": "3A742AF575C51CB0825D7A9699C3BEA6204118F4A08B479E6A770570421ACDEF",
-      "CHAMPIONSHIP_REBUILD_INTEGRATION_PLAN_V1.md": "555A23307C9881036F554C42733A54C4CE03B43E38BFC03F8C42EBCF428BF281"
-    }
-  },
-  "intRh2": {
-    "state": "OWNER_APPROVED_INTEGRATION_BASELINE",
-    "contract": "docs/contracts/championship/INT_RH2_RUNTIME_PRESENTATION_CONTRACT.json",
-    "claudeHeldHead": "2632ddffac6da82525ed2e9089799e42fbffc25c",
-    "codexBinding": "getFrame/subscribe/intents only",
-    "toolbarPolicy": "8 neutral disabled RAW slots; no guessed command, icon, submenu membership, enable mask, slot 7 identity, or exact care values",
-    "rendererPolicy": "DOM screen UI; one Claude-owned Pixi field bootstrap; Three.js unused",
-    "qa": "P1R 4/4; runtime/Pixi 6/6; Phase 1 standalone 21/21; five responsive viewports; real save/reload restore; bounded Pixi bootstrap fallback",
-    "report": "docs/reports/vs1/INT_RH2_COMPLETION_REPORT.md",
-    "runtimeCheckpoint": "2671db12bc8c604a33d7f72a946256924983908b",
-    "presentationCheckpoint": "bb61d18d014db92f878862b1fe2b69092f02d0ad",
-    "productionEnvironment": "TEMPORARY",
-    "productionCharacterArt": "TEMPORARY",
-    "blockedOn": "VS2 requires a separate Owner GO; no push, merge or deploy is authorized"
-  },
+  "targetSyncRevision": 42,
   "vs2P": {
-    "state": "COMPLETE_STOPPED_FOR_OWNER_VISUAL_REVIEW",
+    "authorityAudit": "docs/reports/vs2/VS2_PRESENTATION_AUTHORITY_AUDIT.json",
+    "blockedOn": "OWNER_VISUAL_REVIEW; Capture, VS3, final Hunt art production, Battle, Shipping, push, merge, and deploy remain unauthorized",
+    "codexBinding": "getFrame/subscribe/intents and injected field source only",
     "contract": "docs/contracts/championship/VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT.json",
     "contractVersion": "v1.1",
-    "codexBinding": "getFrame/subscribe/intents and injected field source only",
     "presentationModes": [
       "PLAYER_MODE",
       "DEVELOPER_EVIDENCE_MODE"
     ],
-    "toolbarPolicy": "8 neutral disabled slots; Player Mode hides evidence labels; Developer Evidence Mode retains MODE 2, ROM VERIFIED, and RAW_SLOT labels; no command semantics invented",
-    "rendererPolicy": "DOM P1R screen UI; existing shared Pixi application/stage; 9:16 camera viewport over the 2048x2048 world",
     "qa": "53/53 deterministic tests; 5/5 mustPass Playwright viewports; complete 390x844 and 393x852 evidence flows",
+    "rendererPolicy": "DOM P1R screen UI; existing shared Pixi application/stage; 9:16 camera viewport over the 2048x2048 world",
     "report": "docs/reports/vs2/VS2_PRESENTATION_COMPLETION_REPORT.md",
-    "authorityAudit": "docs/reports/vs2/VS2_PRESENTATION_AUTHORITY_AUDIT.json",
+    "state": "COMPLETE_STOPPED_FOR_OWNER_VISUAL_REVIEW",
     "temporaryArtManifest": "assets/production/temporary/vs2-hunt/manifest.json",
-    "blockedOn": "OWNER_VISUAL_REVIEW; Capture, VS3, final Hunt art production, Battle, Shipping, push, merge, and deploy remain unauthorized"
+    "toolbarPolicy": "8 neutral disabled slots; Player Mode hides evidence labels; Developer Evidence Mode retains MODE 2, ROM VERIFIED, and RAW_SLOT labels; no command semantics invented"
   },
   "vs2R1": {
-    "state": "OWNER_APPROVED_STRUCTURAL_BASELINE",
-    "contract": "docs/contracts/championship/VS2_GATE_SELECT_3D_RUNTIME_CONTRACT.v1.json",
+    "approvalBoundary": "NOT_FINAL_ART_NOT_EXACT_ORIGINAL_BEHAVIOR_PARITY_NOT_SHIPPING_READY",
+    "blockedOn": "FUTURE_PRODUCTION_ART_PASS; VS3 Capture and all later batches remain unauthorized",
     "checkpointRead": "419f8ee",
     "codexBinding": "frame.gateSelect plus source.intents.selectGate(gateId) only",
-    "rendererPolicy": "One bounded Gate-local Three renderer; no animation/gameplay ticker; disposed on screen exit; fallback mounts zero Three renderers",
+    "contract": "docs/contracts/championship/VS2_GATE_SELECT_3D_RUNTIME_CONTRACT.v1.json",
     "interactionPolicy": "PRODUCT_AUTHORED_TECHNICAL_PLACEHOLDER; no original rotation/camera/input/hit-test parity claim",
     "qa": "81/81 deterministic tests; 5/5 VS2 mustPass browser viewports; 390x844 and 393x852 Gate evidence; 2D low-graphics fallback",
+    "rendererPolicy": "One bounded Gate-local Three renderer; no animation/gameplay ticker; disposed on screen exit; fallback mounts zero Three renderers",
     "report": "docs/reports/vs2-r1/VS2_R1_GATE_3D_COMPLETION_REPORT.md",
-    "temporaryArtManifest": "assets/production/gate/vs2-r1/manifest.json",
-    "approvalBoundary": "NOT_FINAL_ART_NOT_EXACT_ORIGINAL_BEHAVIOR_PARITY_NOT_SHIPPING_READY",
-    "blockedOn": "FUTURE_PRODUCTION_ART_PASS; VS3 Capture and all later batches remain unauthorized"
+    "state": "OWNER_APPROVED_STRUCTURAL_BASELINE",
+    "temporaryArtManifest": "assets/production/gate/vs2-r1/manifest.json"
   },
   "vs2R2": {
-    "state": "WAITING_EXPLICIT_OWNER_GO",
+    "blockedOn": "OWNER_IMPLEMENTATION_AUTHORIZATION",
     "contract": "docs/contracts/championship/VS2_HUNT_LOADOUT_RUNTIME_CONTRACT.v1.json",
     "contractState": "PUBLISHED_SPEC_ONLY",
     "currentLoadout": "PRODUCT_AUTHORED_PROTOTYPE_DEVELOPER_ONLY",
     "implementationStarted": false,
-    "blockedOn": "OWNER_IMPLEMENTATION_AUTHORIZATION"
+    "state": "WAITING_EXPLICIT_OWNER_GO"
+  },
+  "battlePresentationR13": {
+    "date": "2026-09-08",
+    "status": "ALL_EXECUTABLE_MOVE_SCRIPTS_AND_SOURCE_PRESENTATION_BOUND_ORIGINAL_PARITY_PARTIAL",
+    "report": "docs/art/production/battle-presentation-r13/IMPLEMENTATION_2026-09-08.md",
+    "verification": "docs/art/production/battle-presentation-r13/verification.json",
+    "completed": {
+      "executableMoveRecords": 595,
+      "dummyRecordsExcluded": 1,
+      "speciesSpecific": 565,
+      "genericSupport": 30,
+      "sourceBanks": 151,
+      "sourceSequences": 484,
+      "sourceCells": 1231,
+      "blankSourceCells": 99,
+      "characterProfiles": 224,
+      "speciesMappings": 228,
+      "nativeCharacterCells": 13246,
+      "impactFamilies": 5,
+      "impactSlots": 80,
+      "originalSounds": 54
+    },
+    "tests": {
+      "regressionPassed": 1253,
+      "failed": 0,
+      "skipped": 0,
+      "newCpuCases": {
+        "impacts": 20,
+        "camera": 10,
+        "engagements": 16,
+        "frameBranches": 2,
+        "hitTiming": 24,
+        "timingGates": 15,
+        "slowdowns": 3
+      },
+      "controlledSweeps": [
+        {
+          "receipt": "reports/battle-r13-all-moves.json",
+          "records": 595,
+          "controlled": true,
+          "resultCode": 2,
+          "interruptAt": -1,
+          "errors": 0
+        },
+        {
+          "receipt": "reports/battle-r13-all-misses.json",
+          "records": 595,
+          "controlled": true,
+          "resultCode": 0,
+          "interruptAt": -1,
+          "errors": 0
+        },
+        {
+          "receipt": "reports/battle-r13-all-blocks.json",
+          "records": 595,
+          "controlled": true,
+          "resultCode": 1,
+          "interruptAt": -1,
+          "errors": 0
+        },
+        {
+          "receipt": "reports/battle-r13-all-interruptions.json",
+          "records": 595,
+          "controlled": true,
+          "resultCode": 2,
+          "interruptAt": 12,
+          "errors": 0
+        }
+      ],
+      "normalReceipt": "reports/battle-r13-normal-timing-final.json",
+      "browserReceipt": "reports/battle-r13-browser.json",
+      "gitDiffCheck": "PASS"
+    },
+    "limits": [
+      "Three-member knockout slowdown lookup index3 requires actual original caller context; no guessed duration",
+      "Controlled 595-move execution does not certify natural AI selection or visual acceptance of every move",
+      "Original complete ending-camera, hardware pixel/audio parity and original pre-constructor RNG/profile history are not accepted",
+      "Home-owned party, additional moves, untraced status bodies and non-battle triggers remain separate open gameplay work",
+      "Physical-device, human visual, public rights and shipping acceptance remain false"
+    ],
+    "originalFullMatchParity": false,
+    "shippingReady": false
   }
 }

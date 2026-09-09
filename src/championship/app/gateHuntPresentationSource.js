@@ -16,9 +16,13 @@
 // instead reads `field.getView()` each tick. Both read the same runtime; neither
 // holds a second copy of it.
 
+import { huntViewportTransform, huntViewportToWorld } from "../hunt/huntFieldCoordinates.js";
 import presentation from "../../../docs/contracts/championship/raising-home-presentation.v1.json" with { type: "json" };
 import toolbarContract from "../../../docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json" with { type: "json" };
 import { CHAMPIONSHIP_SCREENS } from "./championshipScreenStack.js";
+import { huntGateThumbnail, huntTargetReadout, huntPluginReadout } from "../presentation/huntMobileReadouts.js";
+import { raisingDisplayName, speciesNameForId } from "../text/zhHant.js";
+import { getHuntCatalogItem } from "../hunt/loadout/huntEquipmentCatalog.js";
 
 export const GATE_HUNT_PRESENTATION_CONTRACT_VERSION = "VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT/v1";
 
@@ -86,7 +90,7 @@ const HUNT_TOOLBAR_FRAME = deepFreeze(huntToolbarProjection());
 function assertApplication(app) {
   const methods = [
     "getScreen", "getGates", "getSelectedGateId", "getConfirmedGate",
-    "getHuntRuntime", "getHuntLoadout", "getHuntResult", "getShopFrame", "getDatabaseFrame",
+    "getHuntRuntime", "getHuntLoadout", "getHuntResult", "getShopFrame", "getDatabaseFrame", "getGateAdmission",
     "getCageEditFrame",
     "openGate", "openShop", "openDatabase", "openCageEdit", "selectGate", "confirmGate",
     "selectHuntEquipment", "fitHuntPlugin", "selectHuntMemoryCard",
@@ -95,7 +99,7 @@ function assertApplication(app) {
     "selectCageModule", "placeCageAt", "removeCagePlacement", "confirmCageEdit",
     "setTamerRank",
     "beginEnclosureStroke", "extendEnclosureStroke", "endEnclosureStroke", "confirmHuntResult",
-    "setHuntResultName",
+    "setHuntResultName", "abortEnclosureStroke",
     "getSnapshot", "getRaisingState", "save"
   ];
   if (!app || methods.some((method) => typeof app[method] !== "function")) {
@@ -126,6 +130,7 @@ export function createGateHuntPresentationSource(app) {
 
   function gateSelectBlock() {
     const selectedGateId = app.getSelectedGateId();
+    const admission = app.getGateAdmission(selectedGateId);
     return {
       gates: app.getGates().map((gate) => ({
         gateId: gate.gateId,
@@ -136,21 +141,27 @@ export function createGateHuntPresentationSource(app) {
         identityEvidence: gate.identityEvidence,
         displayName: gate.displayName,
         displayNameEvidence: gate.displayNameEvidence,
+        codeString: gate.codeString,
+        entranceFeeBits: gate.entranceFeeBits,
         biomeOrdinal: gate.biomeOrdinal,
         state: gate.state,
         stateEvidence: gate.stateEvidence,
+        unlockKind: gate.unlockKind,
+        unlockParameter: gate.unlockParameter,
         selected: gate.gateId === selectedGateId,
-        art: { thumbnail: null }
+        art: { thumbnail: huntGateThumbnail(gate) }
       })),
-      gateCount: { value: app.getGates().length, evidence: "REFERENCE_BASELINE" },
+      gateCount: { value: app.getGates().length, evidence: "ROM_VERIFIED" },
       selection: { gateId: selectedGateId },
-      canConfirm: selectedGateId !== null,
+      walletBits: app.getShopFrame()?.bits ?? null,
+      admission,
+      canConfirm: admission.canConfigure,
       affordances: {
         tapSelects: true,
         confirmRequiresSelection: true,
         note: "Pointer Events only; mouse and touch share one path."
       },
-      presentationRule: "Every gate is AVAILABLE and no gate carries progress, rank, stars or completion. No unlock rule is traced, and inventing a lock is as much an invention as inventing an unlock."
+      presentationRule: "Gate availability follows the original initial/rank/battle unlock rule. Selection previews any Gate; a locked Gate cannot be confirmed. Fee is committed once when the configured expedition enters the field."
     };
   }
 
@@ -169,6 +180,7 @@ export function createGateHuntPresentationSource(app) {
     const loadout = app.getHuntLoadout();
     if (!loadout) return null;
     const validation = loadout.validate();
+    const admission = app.getGateAdmission(gate?.gateId);
     return {
       gate: gate === null ? null : { gateId: gate.gateId, biomeId: gate.biomeId, displayName: gate.displayName },
       structure: {
@@ -184,8 +196,10 @@ export function createGateHuntPresentationSource(app) {
       hudCapabilities: loadout.getHudCapabilities(),
       validation,
       confirmationState: loadout.getConfirmationState(),
-      canBegin: loadout.getConfirmationState().canConfirm,
-      presentationRule: "Render the five recovered equipment classes and four plugin positions. An empty class or position is empty, not disabled: no original rule requires anything to be equipped. Do not render an item effect, a carry limit, a price, or a companion."
+      admission,
+      canBegin: loadout.getConfirmationState().canConfirm && admission.canEnter,
+      entryError: app.getHuntEntryError?.() ?? null,
+      presentationRule: "Render the five recovered equipment classes and four plugin positions. No original rule requires anything to be equipped. Show the recovered Gate fee and wallet from admission; disable start when admission fails. Do not invent an item effect, a carry limit, an item price, or a companion."
     };
   }
 
@@ -205,6 +219,9 @@ export function createGateHuntPresentationSource(app) {
         preservationRule: "9:16 is the viewport, never the world. The logical grid stays hidden: no tile lines, no coordinate readout, no grid overlay."
       },
       hud: {
+        target: huntTargetReadout(runtime, app.getHuntLoadout()?.getHudCapabilities()),
+        plugins:huntPluginReadout(runtime,app.getHuntLoadout()?.getHudCapabilities()),
+        time:app.getHuntTimeState?.() ?? null,
         gateName: gate?.displayName ?? null,
         actorName: runtime.getPlayer().displayName,
         // What the HUD may display is decided at loadout by the fitted plugins.
@@ -214,34 +231,48 @@ export function createGateHuntPresentationSource(app) {
         note: "Deliberately minimal. hunt_sub_scene carries map_marker0..23 and remain_icon0..3 as structural evidence only; their semantics are unknown, so none are rendered."
       },
       affordances: {
-        dragMoves: true,
-        tapMoves: true,
-        touchNearWildStartsStroke: true,
-        note: "Pointer Events only. Empty ground moves the tamer. Touching a wild starts an enclosure stroke. No Capture button."
+        dragPans: true,
+        tapSelectsWild: true,
+        touchNearWildStartsStroke: false,
+        canCollect: runtime.getCaptureAvailability()?.canCollect ?? false,
+        note: "HAND pans empty ground and collects eligible targets. The selected native tool owns other gestures."
       },
       wildBehaviourDeclaration: {
-        state: "UNKNOWN_REQUIRES_TRACE",
+        state: runtime.getToolState?.() ? "PARTIAL_NATIVE_AI_INTEGRATION" : "UNKNOWN_REQUIRES_TRACE",
         movementAuthority: runtime.movementAuthority,
-        note: "Wild creatures wander inside a bounded radius and do nothing else. They do not see, approach, flee from, chase or react to the player. Enclosure is the VS3 success rule; original odds stay untraced."
+        note: "Native tool/actor ports share the normal encounter RNG. Full AI and every-tool live ROM parity remain separate acceptance requirements."
       },
-      toolbar: HUNT_TOOLBAR_FRAME
+      toolbar: HUNT_TOOLBAR_FRAME,
+      toolState:runtime.getToolState?.() ?? null
     };
   }
 
   function huntResultBlock() {
     const result = app.getHuntResult();
     if (!result) return null;
+    const cardEntries = app.getHuntRuntime()?.getOnCardEntries?.() ?? [];
+    const homeEntries = app.getRaisingInstances?.() ?? [];
+    const selected = cardEntries.find(entry => entry.wildId === result.wildId);
+    const rows = (result.rows ?? []).map(row => {
+      const original = row.kind === "CARD"
+        ? cardEntries.find(entry => entry.wildId === row.id)
+        : homeEntries.find(entry => entry.instanceId === row.id);
+      return { ...row, displayName: original ? raisingDisplayName(original) : row.displayName };
+    });
     return {
       title: result.title,
       outcomeLabel: result.outcomeLabel,
       speciesId: result.speciesId,
       speciesLabel: result.speciesLabel,
-      displayName: result.displayName,
+      displayName: selected ? selected.displayName ?? speciesNameForId(selected.speciesId) : result.displayName,
       instanceId: result.instanceId,
       tetherBand: result.tetherBand,
       successAuthority: result.successAuthority,
       collectionCount: result.collectionCount,
-      note: "Enclosure is the functional success rule. Original odds are untraced."
+      commitError: result.commitError ?? null,
+      rows,
+      pendingRelease: rows.find(row => row.key === result.pendingRelease?.key) ?? result.pendingRelease ?? null,
+      note: "On-card entries commit through the existing app save authority when returning Home."
     };
   }
 
@@ -255,7 +286,12 @@ export function createGateHuntPresentationSource(app) {
       huntLoadout: screen === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT ? huntLoadoutBlock() : null,
       huntField: screen === CHAMPIONSHIP_SCREENS.HUNT_FIELD ? huntFieldBlock() : null,
       huntResult: screen === CHAMPIONSHIP_SCREENS.HUNT_RESULT ? huntResultBlock() : null,
-      shop: screen === CHAMPIONSHIP_SCREENS.SHOP ? app.getShopFrame() : null,
+      shop: screen === CHAMPIONSHIP_SCREENS.SHOP ? (() => {
+        const shop = app.getShopFrame();
+        return { ...shop, listings: shop.listings.map(row => ({
+          ...row, displayName: getHuntCatalogItem(row.productItemId)?.displayName ?? row.displayName
+        })) };
+      })() : null,
       database: screen === CHAMPIONSHIP_SCREENS.DATABASE ? app.getDatabaseFrame() : null,
       cageEdit: screen === CHAMPIONSHIP_SCREENS.CAGE_EDIT ? app.getCageEditFrame() : null,
       save: saveBlock(),
@@ -379,12 +415,24 @@ export function createGateHuntPresentationSource(app) {
       app.beginHunt();
       return commit();
     },
-    /** Field movement. Deliberately not a discrete publish: motion is continuous. */
-    moveTo(worldX, worldY) {
-      const runtime = app.getHuntRuntime();
-      if (!runtime) return false;
-      return runtime.moveTo(worldX, worldY);
+    /** Continuous input goes to the existing field runtime only. */
+    panCamera(deltaX, deltaY, viewportWidth, viewportHeight) {
+      return app.getHuntRuntime()?.panCamera(deltaX, deltaY, viewportWidth, viewportHeight) ?? false;
     },
+    selectWildAt(worldX, worldY) {
+      const runtime = app.getHuntRuntime();
+      const previous = runtime?.getSelectedWildId();
+      const selected = runtime?.selectWildAt(worldX, worldY) ?? false;
+      // Field selection does not emit a screen event. Publish just its discrete
+      // change here; continuous movement stays on the shared Pixi cadence.
+      if (runtime?.getSelectedWildId() !== previous) publish();
+      return selected;
+    },
+    abortEnclosureStroke() { return app.abortEnclosureStroke(); },
+    selectHuntTool(kind) { const accepted=app.getHuntRuntime()?.selectTool(kind)??false; publish(); return accepted; },
+    toolPointerDown(x,y) { const accepted=app.getHuntRuntime()?.toolPointerDown(x,y)??false; publish(); return accepted; },
+    toolPointerMove(x,y) { return app.getHuntRuntime()?.toolPointerMove(x,y)??false; },
+    toolPointerUp(x,y) { return app.getHuntRuntime()?.toolPointerUp(x,y)??false; },
     beginEnclosureStroke(worldX, worldY) {
       return app.beginEnclosureStroke(worldX, worldY);
     },
@@ -404,6 +452,9 @@ export function createGateHuntPresentationSource(app) {
       app.setHuntResultName(displayName);
       return commit();
     },
+    requestHuntResultRelease(key) { app.requestHuntResultRelease(key); return commit(); },
+    cancelHuntResultRelease() { app.cancelHuntResultRelease(); return commit(); },
+    confirmHuntResultRelease() { app.confirmHuntResultRelease(); return commit(); },
     exitHunt() {
       app.exitHunt();
       return commit();
@@ -423,7 +474,18 @@ export function createGateHuntPresentationSource(app) {
   const field = Object.freeze({
     /** Relay from the one Application-owned ticker. Not a gameplay intent. */
     tick(deltaMs) {
-      app.getHuntRuntime()?.tick(deltaMs);
+      const runtime=app.getHuntRuntime();
+      runtime?.tick(deltaMs);
+      app.checkHuntDeadline?.();
+      if (app.getScreen() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD) return;
+      if(!runtime?.getToolState?.())return;
+      const next=huntFieldBlock();
+      // Do not notify DOM observers for particle positions, native frame count
+      // or rope movement. The Pixi view reads those on the same shared ticker.
+      const previous=currentFrame.huntField;
+      const summary=b=>JSON.stringify([b?.hud,b?.toolState?.activeTool,b?.toolState?.notice,
+        b?.toolState?.tools,b?.toolState?.usedG,b?.toolState?.maxG,b?.affordances?.canCollect]);
+      if(summary(next)!==summary(previous))publish();
     },
 
     /** Continuous positional read for the field renderer. Never mutates. */
@@ -431,16 +493,22 @@ export function createGateHuntPresentationSource(app) {
       const runtime = app.getHuntRuntime();
       if (!runtime) return null;
       const world = runtime.world;
+      const camera = runtime.getCamera(viewportWidth, viewportHeight);
+      const transform = huntViewportTransform(viewportWidth, viewportHeight);
       return {
         gateId: world.gateId,
         tileSizePx: world.tileSizePx,
         worldWidthPx: world.worldWidthPx,
         worldHeightPx: world.worldHeightPx,
-        camera: runtime.getCamera(viewportWidth, viewportHeight),
+        camera, transform,
+        toWorldPoint: (point) => huntViewportToWorld(point, camera, transform),
+        selectedWildId: runtime.getSelectedWildId(),
+        captureAvailability: runtime.getCaptureAvailability(),
         visibleChunks: runtime.getVisibleChunks(viewportWidth, viewportHeight),
         player: runtime.getPlayer(),
         wildCreatures: runtime.getWildCreatures(),
         enclosure: runtime.getEnclosureStroke(),
+        tools:runtime.getToolState?.() ?? null,
         objects: world.objects,
         isBlockedTile: (x, y) => world.isBlockedTile(x, y)
       };

@@ -1,0 +1,73 @@
+{
+  "date": "2026-09-08",
+  "scope": "Normal browser interaction on a fresh loopback origin; no runtime/save injection",
+  "origin": "http://127.0.0.1:57108",
+  "homeViewports": [
+    {
+      "canvasCount": 1,
+      "height": 800,
+      "screen": "RAISING_HOME",
+      "scrollWidth": 360,
+      "width": 360
+    },
+    {
+      "canvasCount": 1,
+      "height": 812,
+      "screen": "RAISING_HOME",
+      "scrollWidth": 375,
+      "width": 375
+    },
+    {
+      "canvasCount": 1,
+      "height": 844,
+      "screen": "RAISING_HOME",
+      "scrollWidth": 390,
+      "width": 390
+    },
+    {
+      "canvasCount": 1,
+      "height": 915,
+      "screen": "RAISING_HOME",
+      "scrollWidth": 412,
+      "width": 412
+    },
+    {
+      "canvasCount": 1,
+      "height": 932,
+      "screen": "RAISING_HOME",
+      "scrollWidth": 430,
+      "width": 430
+    }
+  ],
+  "gate": {
+    "lockedCanyonRank3Seen": true,
+    "lockedConfirmDisabled": true,
+    "freeGrassEntry": true
+  },
+  "hunt390": {
+    "nativeFieldVisible": true,
+    "panAndToolSelection": true,
+    "meatPlacedAndStock10To9": true,
+    "ropeBreakNoticeObserved": true,
+    "successfulOnCardCapture": false,
+    "manualAndDeadlineReturnObserved": true
+  },
+  "persistence": {
+    "saveQuitReloadContinue": true,
+    "consumedMeatStock9AfterReload": true
+  },
+  "logs": [],
+  "limits": [
+    "Five widths cover Home only; Hunt gestures were checked at390x844",
+    "No successful browser touch capture proof",
+    "No physical Android/iOS device acceptance",
+    "No background/long-run/WebGL context-loss acceptance"
+  ],
+  "screenshots": [
+    "home-360.png",
+    "home-375.png",
+    "home-390.png",
+    "home-412.png",
+    "home-430.png"
+  ]
+}

@@ -1,10 +1,7 @@
 // Database projection — original encyclopedia vs instance split.
 //
-// OVL16 is a 224-slot species book. Capture still writes a CreatureInstance
-// (raising.collection). This projector never invents seen-but-uncaught or
-// filter tabs: those writers are untraced. A slot is REGISTERED when it is
-// the single product starter species, or when a Hunt instance of that species
-// has been brought home. The extra VS1 home prototypes are not starters.
+// The 216-row species book keeps registration after an individual changes
+// form or leaves Home. Held instances remain a separate projection.
 
 import { deepFreeze } from "../contracts/championshipContracts.js";
 import {
@@ -24,13 +21,14 @@ export const DATABASE_ENTRY_STATES = deepFreeze({
 export const DATABASE_REGISTER_SOURCES = deepFreeze({
   STARTER: "STARTER",
   COLLECTION: "COLLECTION",
-  BOTH: "BOTH"
+  BOTH: "BOTH",
+  HISTORY: "HISTORY"
 });
 
 function registerSource({ isStarter, instanceCount }) {
   if (isStarter && instanceCount > 0) return DATABASE_REGISTER_SOURCES.BOTH;
   if (isStarter) return DATABASE_REGISTER_SOURCES.STARTER;
-  return DATABASE_REGISTER_SOURCES.COLLECTION;
+  return instanceCount > 0 ? DATABASE_REGISTER_SOURCES.COLLECTION : DATABASE_REGISTER_SOURCES.HISTORY;
 }
 
 /**
@@ -42,6 +40,7 @@ function registerSource({ isStarter, instanceCount }) {
 export function projectDatabase({
   starterSpeciesId = null,
   collection = [],
+  registeredSpecies = [],
   selectedSpeciesIndex = null
 } = {}) {
   const instancesBySpecies = new Map();
@@ -63,9 +62,10 @@ export function projectDatabase({
   for (const slot of listDatabaseSlots()) {
     const instances = instancesBySpecies.get(slot.speciesId) ?? [];
     const isStarter = starterSpeciesId !== null && slot.speciesId === starterSpeciesId;
-    const registered = isStarter || instances.length > 0;
+    const registered = registeredSpecies.includes(slot.speciesIndex) || isStarter || instances.length > 0;
     if (registered) registeredCount += 1;
     entries.push({
+      bookOrdinal: slot.bookOrdinal,
       speciesIndex: slot.speciesIndex,
       speciesId: slot.speciesId,
       displayName: slot.displayName,
@@ -80,7 +80,7 @@ export function projectDatabase({
   let selected = null;
   if (selectedSpeciesIndex !== null) {
     const slot = getDatabaseSlot(selectedSpeciesIndex);
-    const row = entries[selectedSpeciesIndex];
+    const row = entries[slot.bookOrdinal];
     selected = {
       ...row,
       instances: instancesBySpecies.get(slot.speciesId) ?? []

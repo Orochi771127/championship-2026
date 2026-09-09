@@ -2,10 +2,15 @@ import { clonePlainData, deepFreeze } from "../contracts/championshipContracts.j
 import {
   RAISING_HOME_FIELD,
   canEnterRaisingHome,
-  createRaisingHomeInitialState
+  createRaisingHomeInitialState,
+  RAISING_HOME_RESIDENT_IDS
 } from "./raisingHomeDefinition.js";
+import { CLOCK_SUBUNITS_PER_UNIT, MINUTES_PER_DAY, WORLD_CLOCK_CASCADE, WORLD_CLOCK_MAX_YEAR } from "../time/championshipWorldClock.js";
 
-export const RAISING_HOME_SAVE_SCHEMA_VERSION_R2 = 2;
+// V5 persists resident membership (including an empty pool after release),
+// preserving V4 calendar precision. R2 names the existing authority, not schema.
+export const RAISING_HOME_SAVE_SCHEMA_VERSION_R2 = 5;
+const SAVE_SCHEMA_VERSION_V2 = 2;
 export const RAISING_HOME_SAVE_KIND_R2 = "CHAMPIONSHIP_R2_RAISING_HOME_SAVE";
 export const RAISING_HOME_ADAPTATION_REF_R2 = "CHAMPIONSHIP_ADAPTATION:RAISING_HOME_R2";
 
@@ -21,8 +26,8 @@ export const RAISING_HOME_PERSISTENCE_LIMITS_R2 = deepFreeze({
 
 const RUNTIME_STATE_KEYS = Object.freeze([
   "schemaVersion", "modeId", "sessionId", "revision", "tick", "paused",
-  "clockMinutes", "caretakerPosition", "selectedResidentId", "residents",
-  "field", "feedback", "eventLog"
+  "clockMinutes", "clockUnits", "clockSubunits", "clockRevision", "year", "season", "dayOfSeason", "caretakerPosition",
+  "selectedResidentId", "residents", "field", "feedback", "eventLog"
 ]);
 const RUNTIME_RESIDENT_KEYS = Object.freeze([
   "residentId", "speciesId", "name", "position", "temperament", "satiety",
@@ -33,6 +38,9 @@ const DURABLE_STATE_KEYS_V1 = Object.freeze([
   "selectedResidentId", "residents"
 ]);
 const DURABLE_STATE_KEYS_V2 = Object.freeze([...DURABLE_STATE_KEYS_V1, "paused"]);
+// V3 adds the calendar slots behind the original status bar.
+const DURABLE_STATE_KEYS_V3 = Object.freeze([...DURABLE_STATE_KEYS_V2, "season", "dayOfSeason"]);
+const DURABLE_STATE_KEYS_V4 = Object.freeze([...DURABLE_STATE_KEYS_V3, "year", "clockUnits", "clockSubunits", "clockRevision"]);
 const DURABLE_RESIDENT_KEYS = Object.freeze([
   "residentId", "position", "satiety", "energy", "ease", "readiness",
   "facing", "intent", "lastResponse"
@@ -44,11 +52,11 @@ const V2_KEYS = Object.freeze([
   "schemaVersion", "saveKind", "adaptationRef", "revision", "payload", "payloadDigest"
 ]);
 const FORBIDDEN_KEYS = new Set(["__proto__", "prototype", "constructor"]);
-const RESIDENT_IDS = new Set([
-  "resident:greyshade-cat",
-  "resident:blazetail-kit",
-  "resident:crystalfin-seahorse"
-]);
+// Derived from the raising definition rather than restated. The three invented
+// creature ids that used to be listed here were removed on 2026-09-03; the
+// residents now come from the transcribed ARM9 species table, so a hardcoded
+// list here would drift from the cartridge the moment the trace advances.
+const RESIDENT_IDS = new Set(RAISING_HOME_RESIDENT_IDS);
 const DIRECTION_IDS = new Set(["up", "down", "left", "right"]);
 const FIELD_SERIALIZATION = JSON.stringify(clonePlainData(RAISING_HOME_FIELD));
 const SESSION_ID_PATTERN = /^[a-z0-9:_-]{3,96}$/i;
@@ -204,8 +212,8 @@ function assertMutableResident(resident, path, keys = DURABLE_RESIDENT_KEYS, fie
   assertString(resident.lastResponse, `${path}.lastResponse`, { pattern: SAFE_ID_PATTERN, maximum: 64 });
 }
 
-function assertResidentSet(residents, path, validator) {
-  if (!Array.isArray(residents) || residents.length !== RESIDENT_IDS.size) {
+function assertResidentSet(residents, path, validator, fixed = false) {
+  if (!Array.isArray(residents) || residents.length > RESIDENT_IDS.size || (fixed && residents.length !== RESIDENT_IDS.size)) {
     throw persistenceError(`${path} must contain the exact R2 resident count`);
   }
   const seenResidents = new Set();
@@ -214,7 +222,7 @@ function assertResidentSet(residents, path, validator) {
     if (seenResidents.has(resident.residentId)) throw persistenceError(`${path}.${index}.residentId is duplicated`);
     seenResidents.add(resident.residentId);
   }
-  for (const residentId of RESIDENT_IDS) {
+  for (const residentId of fixed ? RESIDENT_IDS : []) {
     if (!seenResidents.has(residentId)) throw persistenceError(`${path} is missing ${residentId}`);
   }
   return seenResidents;
@@ -228,10 +236,11 @@ function assertRaisingHomeRuntimeState(state) {
   assertSafeInteger(state.revision, "raisingHome.revision");
   assertSafeInteger(state.tick, "raisingHome.tick", 0, state.revision);
   if (typeof state.paused !== "boolean") throw persistenceError("raisingHome.paused must be boolean");
-  assertSafeInteger(state.clockMinutes, "raisingHome.clockMinutes", 0, 1439);
+  assertSafeInteger(state.clockMinutes, "raisingHome.clockMinutes", 0, MINUTES_PER_DAY - 1);
+  assertClockState(state, "raisingHome", state.revision);
   if (JSON.stringify(state.field) !== FIELD_SERIALIZATION) throw persistenceError("raisingHome.field is not the current R2 field");
   assertPosition(state.caretakerPosition, "raisingHome.caretakerPosition", state.field);
-  assertString(state.selectedResidentId, "raisingHome.selectedResidentId", { pattern: SAFE_ID_PATTERN, maximum: 96 });
+  if (state.selectedResidentId !== null) assertString(state.selectedResidentId, "raisingHome.selectedResidentId", { pattern: SAFE_ID_PATTERN, maximum: 96 });
   const residentIds = assertResidentSet(state.residents, "raisingHome.residents", (resident, path) => {
     assertExactKeys(resident, RUNTIME_RESIDENT_KEYS, path);
     assertMutableResident({
@@ -250,7 +259,7 @@ function assertRaisingHomeRuntimeState(state) {
     assertString(resident.name, `${path}.name`, { maximum: 64 });
     assertString(resident.temperament, `${path}.temperament`, { pattern: SAFE_ID_PATTERN, maximum: 64 });
   });
-  if (!residentIds.has(state.selectedResidentId)) throw persistenceError("raisingHome.selectedResidentId is missing");
+  if (residentIds.size === 0 ? state.selectedResidentId !== null : !residentIds.has(state.selectedResidentId)) throw persistenceError("raisingHome.selectedResidentId is missing");
   assertString(state.feedback, "raisingHome.feedback", { maximum: 512 });
   if (!Array.isArray(state.eventLog) || state.eventLog.length > 48) throw persistenceError("raisingHome.eventLog exceeds its bound");
   let previousSequence = 0;
@@ -267,17 +276,41 @@ function assertRaisingHomeRuntimeState(state) {
   return state;
 }
 
-function validateDurableState(input, { version = 2 } = {}) {
+const DURABLE_KEYS_BY_VERSION = Object.freeze({
+  1: DURABLE_STATE_KEYS_V1,
+  2: DURABLE_STATE_KEYS_V2,
+  3: DURABLE_STATE_KEYS_V3,
+  4: DURABLE_STATE_KEYS_V4,
+  5: DURABLE_STATE_KEYS_V4
+});
+
+function assertClockState(state, path, revision) {
+  if (state.year !== null) assertSafeInteger(state.year, `${path}.year`, 0, WORLD_CLOCK_MAX_YEAR);
+  if (state.season !== null) assertSafeInteger(state.season, `${path}.season`, 0, WORLD_CLOCK_CASCADE.seasonsPerYear - 1);
+  if (state.dayOfSeason !== null) assertSafeInteger(state.dayOfSeason, `${path}.dayOfSeason`, 0, WORLD_CLOCK_CASCADE.daysPerSeason - 1);
+  assertSafeInteger(state.clockUnits, `${path}.clockUnits`, 0, WORLD_CLOCK_CASCADE.unitsPerMinute - 1);
+  assertSafeInteger(state.clockSubunits, `${path}.clockSubunits`, 0, CLOCK_SUBUNITS_PER_UNIT - 1);
+  assertSafeInteger(state.clockRevision, `${path}.clockRevision`, 0, revision);
+}
+
+function validateDurableState(input, { version = RAISING_HOME_SAVE_SCHEMA_VERSION_R2 } = {}) {
   const state = cloneBoundedPlainData(input);
-  assertExactKeys(state, version === 1 ? DURABLE_STATE_KEYS_V1 : DURABLE_STATE_KEYS_V2, `saveV${version}.payload`);
+  const keys = DURABLE_KEYS_BY_VERSION[version];
+  if (!keys) throw persistenceError(`unsupported durable payload version ${version}`);
+  assertExactKeys(state, keys, `saveV${version}.payload`);
   assertSafeInteger(state.stateRevision, `saveV${version}.payload.stateRevision`);
   assertSafeInteger(state.tick, `saveV${version}.payload.tick`, 0, state.stateRevision);
-  if (version === 2 && typeof state.paused !== "boolean") throw persistenceError("saveV2.payload.paused must be boolean");
-  assertSafeInteger(state.clockMinutes, `saveV${version}.payload.clockMinutes`, 0, 1439);
+  if (version >= 2 && typeof state.paused !== "boolean") throw persistenceError(`saveV${version}.payload.paused must be boolean`);
+  assertSafeInteger(state.clockMinutes, `saveV${version}.payload.clockMinutes`, 0, MINUTES_PER_DAY - 1);
+  if (version === 3) {
+    assertSafeInteger(state.season, `saveV${version}.payload.season`, 0, WORLD_CLOCK_CASCADE.seasonsPerYear - 1);
+    assertSafeInteger(state.dayOfSeason, `saveV${version}.payload.dayOfSeason`, 0, WORLD_CLOCK_CASCADE.daysPerSeason - 1);
+  }
+  if (version >= 4) assertClockState(state, `saveV${version}.payload`, state.stateRevision);
   assertPosition(state.caretakerPosition, `saveV${version}.payload.caretakerPosition`, RAISING_HOME_FIELD);
-  assertString(state.selectedResidentId, `saveV${version}.payload.selectedResidentId`, { pattern: SAFE_ID_PATTERN, maximum: 96 });
-  const residentIds = assertResidentSet(state.residents, `saveV${version}.payload.residents`, assertMutableResident);
-  if (!residentIds.has(state.selectedResidentId)) throw persistenceError(`saveV${version}.payload.selectedResidentId is missing`);
+  if (version < 5 || state.selectedResidentId !== null) assertString(state.selectedResidentId, `saveV${version}.payload.selectedResidentId`, { pattern: SAFE_ID_PATTERN, maximum: 96 });
+  const residentIds = assertResidentSet(state.residents, `saveV${version}.payload.residents`, assertMutableResident, version < 5);
+  if (residentIds.size === 0 ? state.selectedResidentId !== null : !residentIds.has(state.selectedResidentId)) throw persistenceError(`saveV${version}.payload.selectedResidentId is missing`);
   return deepFreeze(state);
 }
 
@@ -345,6 +378,12 @@ export function projectRaisingHomeDurableStateR2(snapshot) {
     tick: state.tick,
     paused: state.paused,
     clockMinutes: state.clockMinutes,
+    season: state.season,
+    dayOfSeason: state.dayOfSeason,
+    year: state.year,
+    clockUnits: state.clockUnits,
+    clockSubunits: state.clockSubunits,
+    clockRevision: state.clockRevision,
     caretakerPosition: state.caretakerPosition,
     selectedResidentId: state.selectedResidentId,
     residents: state.residents.map((resident) => ({
@@ -391,9 +430,9 @@ export function migrateRaisingHomeSaveV1ToV2(input) {
   if (source.saveKind !== RAISING_HOME_SAVE_KIND_R2) throw persistenceError("v1 saveKind is invalid");
   assertSafeInteger(source.revision, "saveV1.revision");
   const legacy = validateDurableState(source.payload, { version: 1 });
-  const payload = validateDurableState({ ...legacy, paused: false });
+  const payload = validateDurableState({ ...legacy, paused: false }, { version: SAVE_SCHEMA_VERSION_V2 });
   return deepFreeze({
-    schemaVersion: RAISING_HOME_SAVE_SCHEMA_VERSION_R2,
+    schemaVersion: SAVE_SCHEMA_VERSION_V2,
     saveKind: RAISING_HOME_SAVE_KIND_R2,
     adaptationRef: RAISING_HOME_ADAPTATION_REF_R2,
     revision: source.revision,
@@ -402,18 +441,19 @@ export function migrateRaisingHomeSaveV1ToV2(input) {
   });
 }
 
-function validateV2Document(input) {
+function validateVersionedDocument(input, version = RAISING_HOME_SAVE_SCHEMA_VERSION_R2) {
   const document = cloneBoundedPlainData(input);
-  assertExactKeys(document, V2_KEYS, "saveV2");
-  if (document.schemaVersion !== RAISING_HOME_SAVE_SCHEMA_VERSION_R2) throw persistenceError("saveV2.schemaVersion is invalid");
-  if (document.saveKind !== RAISING_HOME_SAVE_KIND_R2) throw persistenceError("saveV2.saveKind is invalid");
-  if (document.adaptationRef !== RAISING_HOME_ADAPTATION_REF_R2) throw persistenceError("saveV2.adaptationRef is invalid");
-  assertSafeInteger(document.revision, "saveV2.revision");
-  const payload = validateDurableState(document.payload);
-  const expectedDigest = digestCanonicalRaisingHomeDataR2(payload, "raising-payload-v2");
-  if (document.payloadDigest !== expectedDigest) throw persistenceError("saveV2 payloadDigest does not match");
+  const path = `saveV${version}`;
+  assertExactKeys(document, V2_KEYS, path);
+  if (document.schemaVersion !== version) throw persistenceError(`${path}.schemaVersion is invalid`);
+  if (document.saveKind !== RAISING_HOME_SAVE_KIND_R2) throw persistenceError(`${path}.saveKind is invalid`);
+  if (document.adaptationRef !== RAISING_HOME_ADAPTATION_REF_R2) throw persistenceError(`${path}.adaptationRef is invalid`);
+  assertSafeInteger(document.revision, `${path}.revision`);
+  const payload = validateDurableState(document.payload, { version });
+  const expectedDigest = digestCanonicalRaisingHomeDataR2(payload, `raising-payload-v${version}`);
+  if (document.payloadDigest !== expectedDigest) throw persistenceError(`${path} payloadDigest does not match`);
   return deepFreeze({
-    schemaVersion: RAISING_HOME_SAVE_SCHEMA_VERSION_R2,
+    schemaVersion: version,
     saveKind: RAISING_HOME_SAVE_KIND_R2,
     adaptationRef: RAISING_HOME_ADAPTATION_REF_R2,
     revision: document.revision,
@@ -422,16 +462,58 @@ function validateV2Document(input) {
   });
 }
 
+/** Validate the historical digest before adding v4 precision; missing dates stay unknown. */
+export function migrateRaisingHomeSaveToV4(input) {
+  const captured = cloneBoundedPlainData(input);
+  const source = captured.schemaVersion === 1 ? migrateRaisingHomeSaveV1ToV2(captured) : captured;
+  if (![2, 3, 4].includes(source.schemaVersion)) throw persistenceError("unsupported migration version");
+  const validated = validateVersionedDocument(source, source.schemaVersion);
+  if (validated.schemaVersion === 4) return validated;
+  const legacy = validated.payload;
+  const payload = validateDurableState({
+    ...legacy,
+    season: validated.schemaVersion === 3 ? legacy.season : null,
+    dayOfSeason: validated.schemaVersion === 3 ? legacy.dayOfSeason : null,
+    year: null,
+    clockUnits: 0,
+    clockSubunits: 0,
+    clockRevision: 0
+  }, { version: 4 });
+  return validateVersionedDocument({ ...validated, schemaVersion: 4, payload, payloadDigest: digestCanonicalRaisingHomeDataR2(payload, "raising-payload-v4") }, 4);
+}
+
+// V5 makes resident membership durable. Validate the old fixed-set document
+// before migration, so a damaged v4 save cannot masquerade as a valid release.
+export function migrateRaisingHomeSaveToV5(input) {
+  if (input.schemaVersion === 5) return validateVersionedDocument(input);
+  const previous = migrateRaisingHomeSaveToV4(input);
+  return validateVersionedDocument({ ...previous, schemaVersion: 5,
+    payloadDigest: digestCanonicalRaisingHomeDataR2(previous.payload, "raising-payload-v5") });
+}
+
+export function stageRaisingResidentRelease(snapshot, residentIds) {
+  const before = captureRaisingHomeSnapshotR2(snapshot);
+  if (!Array.isArray(residentIds) || new Set(residentIds).size !== residentIds.length
+    || residentIds.some((id) => !before.residents.some((resident) => resident.residentId === id))) {
+    throw persistenceError("release requires exact existing resident IDs");
+  }
+  if (!residentIds.length) return before;
+  const residents = before.residents.filter((resident) => !residentIds.includes(resident.residentId));
+  return captureRaisingHomeSnapshotR2({ ...before, revision: before.revision + 1, residents,
+    selectedResidentId: residents.some((resident) => resident.residentId === before.selectedResidentId)
+      ? before.selectedResidentId : residents[0]?.residentId ?? null });
+}
+
 export function createRaisingHomeSaveDocumentR2(snapshot, { revision = 0 } = {}) {
   assertSafeInteger(revision, "save revision");
   const payload = projectRaisingHomeDurableStateR2(snapshot);
-  return validateV2Document({
+  return validateVersionedDocument({
     schemaVersion: RAISING_HOME_SAVE_SCHEMA_VERSION_R2,
     saveKind: RAISING_HOME_SAVE_KIND_R2,
     adaptationRef: RAISING_HOME_ADAPTATION_REF_R2,
     revision,
     payload,
-    payloadDigest: digestCanonicalRaisingHomeDataR2(payload, "raising-payload-v2")
+    payloadDigest: digestCanonicalRaisingHomeDataR2(payload, "raising-payload-v5")
   });
 }
 
@@ -461,32 +543,37 @@ export function deserializeRaisingHomeSaveR2(serialized) {
   if (!Number.isSafeInteger(captured.schemaVersion)) throw persistenceError("serialized save schemaVersion is invalid");
   if (captured.schemaVersion > RAISING_HOME_SAVE_SCHEMA_VERSION_R2) throw persistenceError("serialized save is from a newer schema");
   if (captured.schemaVersion < 1) throw persistenceError("serialized save schemaVersion is unsupported");
-  const document = captured.schemaVersion === 1 ? migrateRaisingHomeSaveV1ToV2(captured) : validateV2Document(captured);
+  const document = migrateRaisingHomeSaveToV5(captured);
   const canonical = serializeCanonicalRaisingHomeDataR2(document);
   return deepFreeze({
     document,
     durableState: document.payload,
     serialized: canonical,
     digest: digestCanonicalRaisingHomeDataR2(canonical, "save-document-v2"),
-    migratedFrom: captured.schemaVersion === 1 ? 1 : null,
+    migratedFrom: captured.schemaVersion < RAISING_HOME_SAVE_SCHEMA_VERSION_R2 ? captured.schemaVersion : null,
     bytes: UTF8.encode(canonical).byteLength
   });
 }
 
 export function restoreRaisingHomeSnapshotR2(documentInput, { sessionId } = {}) {
   assertString(sessionId, "restore sessionId", { pattern: SESSION_ID_PATTERN, minimum: 3, maximum: 96 });
-  const document = validateV2Document(documentInput);
+  const document = validateVersionedDocument(documentInput);
   const base = createRaisingHomeInitialState({ sessionId });
-  const byResidentId = new Map(document.payload.residents.map((resident) => [resident.residentId, resident]));
   return captureRaisingHomeSnapshotR2({
     ...base,
     revision: document.payload.stateRevision,
     tick: document.payload.tick,
     paused: document.payload.paused,
     clockMinutes: document.payload.clockMinutes,
+    season: document.payload.season,
+    dayOfSeason: document.payload.dayOfSeason,
+    year: document.payload.year,
+    clockUnits: document.payload.clockUnits,
+    clockSubunits: document.payload.clockSubunits,
+    clockRevision: document.payload.clockRevision,
     caretakerPosition: document.payload.caretakerPosition,
     selectedResidentId: document.payload.selectedResidentId,
-    residents: base.residents.map((resident) => ({ ...resident, ...byResidentId.get(resident.residentId) })),
+    residents: document.payload.residents.map((resident) => ({ ...base.residents.find((entry) => entry.residentId === resident.residentId), ...resident })),
     feedback: "Raising Home state restored from this JavaScript realm's Championship R2 save.",
     eventLog: []
   });

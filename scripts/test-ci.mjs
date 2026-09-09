@@ -1,0 +1,14 @@
+import fs from "node:fs";
+import { spawnSync } from "node:child_process";
+import assert from "node:assert/strict";
+const scope = JSON.parse(fs.readFileSync("tests/ci-test-scope.v1.json", "utf8"));
+const actual = fs.readdirSync("tests").filter(name => name.endsWith(".mjs")).map(name => `tests/${name}`).sort();
+const classified = [...scope.portable, ...Object.keys(scope.localReference)].sort();
+assert.equal(new Set(classified).size, classified.length, "Duplicate CI scope classification");
+assert.deepEqual(classified, actual, "Every test file must have an explicit CI/local-reference classification");
+assert.ok(Object.values(scope.localReference).every(reason => typeof reason === "string" && reason.length > 20));
+console.log(`Portable test modules: ${scope.portable.length}; local-reference modules: ${Object.keys(scope.localReference).length}`);
+for (const [file, reason] of Object.entries(scope.localReference)) console.log(`LOCAL REFERENCE: ${file}: ${reason}`);
+const result = spawnSync(process.execPath, ["--test", "--test-concurrency=2", ...scope.portable], { stdio: "inherit" });
+if (result.error) throw result.error;
+process.exit(result.status ?? 1);

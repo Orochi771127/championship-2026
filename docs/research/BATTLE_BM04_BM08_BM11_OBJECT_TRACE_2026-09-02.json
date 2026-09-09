@@ -1,0 +1,336 @@
+{
+  "schemaVersion": 1,
+  "traceId": "BATTLE-BM04-BM08-BM11-FIELD-OBJECTS-2026-09-02",
+  "result": "OBJECT_PLACEMENT_AND_FRAME_STRUCTURE_CLOSED_FOR_ORIGINAL_CREATED_REPLACEMENT",
+  "authority": "VERIFIED_RAW_OPMD_TO_NANR_TO_NCER_METADATA",
+  "timingEvidence": "RAW_NANR_TICKS_PLUS_HIGH_CONFIDENCE_PLATFORM_FRAME_CLOCK_CROSSCHECK",
+  "previewClockHz": 59.8260982880808,
+  "semanticLimit": "PRESENTATION_STRUCTURE_ONLY_NO_GAMEPLAY_MEANING",
+  "dataBoundary": "METADATA_ONLY_NO_PIXEL_PALETTE_TILE_OR_NITRO_PAYLOAD",
+  "fields": [
+    {
+      "fieldId": "field_bm04_01",
+      "nativeCanvas": [
+        416,
+        272
+      ],
+      "sourceFiles": {
+        "nanr": {
+          "fileName": "field_bm04_01_obj.nanr",
+          "sha256": "E249EA53970594AB88021C4D4D63294CC8AA164CC14CAF02C21B684A58614C37"
+        },
+        "ncbr": {
+          "fileName": "field_bm04_01_obj.ncbr",
+          "sha256": "75E8B5EE3F3E4A3DA394757E5D8E41C6DCE09912CF3E6B42FAE6D2684A6534A4"
+        },
+        "ncer": {
+          "fileName": "field_bm04_01_obj.ncer",
+          "sha256": "37D39CBA5DF731CF946DA4F4D7A7494467DBA746A189679CF88ADC1AB1D297EC"
+        },
+        "nclr": {
+          "fileName": "field_bm04_01_obj.nclr",
+          "sha256": "A96DC367308B71EEA91D03E7A863146C154EFE08F363EC8748F774F82C73AC3F"
+        },
+        "opm": {
+          "fileName": "field_bm04_01_obj.opm",
+          "sha256": "5F493829461B98EF2FAA622554961C8CEEF86152F973CE0A0ADC0E27180B60E7"
+        }
+      },
+      "placementCount": 7,
+      "cellCount": 4,
+      "sequenceCount": 4,
+      "totalFrameCount": 4,
+      "placements": [
+        {
+          "ordinal": 0,
+          "sequenceId": 1,
+          "sourceX": 24,
+          "sourceY": 79,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "rawFlags": 0,
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cellId": 1,
+              "rawDurationTicks": 2,
+              "previewDurationMs": 33.4302262261763,
+              "bounds": {
+                "minX": -8,
+                "minY": -23,
+                "maxXExclusive": 16,
+                "maxYExclusive": 1
+              }
+            }
+          ]
+        },
+        {
+          "ordinal": 1,
+          "sequenceId": 1,
+          "sourceX": 208,
+          "sourceY": 55,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "rawFlags": 0,
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cellId": 1,
+              "rawDurationTicks": 2,
+              "previewDurationMs": 33.4302262261763,
+              "bounds": {
+                "minX": -8,
+                "minY": -23,
+                "maxXExclusive": 16,
+                "maxYExclusive": 1
+              }
+            }
+          ]
+        },
+        {
+          "ordinal": 2,
+          "sequenceId": 1,
+          "sourceX": 24,
+          "sourceY": 271,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "rawFlags": 0,
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cellId": 1,
+              "rawDurationTicks": 2,
+              "previewDurationMs": 33.4302262261763,
+              "bounds": {
+                "minX": -8,
+                "minY": -23,
+                "maxXExclusive": 16,
+                "maxYExclusive": 1
+              }
+            }
+          ]
+        },
+        {
+          "ordinal": 3,
+          "sequenceId": 2,
+          "sourceX": 392,
+          "sourceY": 79,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "rawFlags": 0,
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cellId": 2,
+              "rawDurationTicks": 2,
+              "previewDurationMs": 33.4302262261763,
+              "bounds": {
+                "minX": -8,
+                "minY": -23,
+                "maxXExclusive": 16,
+                "maxYExclusive": 1
+              }
+            }
+          ]
+        },
+        {
+          "ordinal": 4,
+          "sequenceId": 3,
+          "sourceX": 392,
+          "sourceY": 271,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "rawFlags": 0,
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cellId": 3,
+              "rawDurationTicks": 2,
+              "previewDurationMs": 33.4302262261763,
+              "bounds": {
+                "minX": -8,
+                "minY": -23,
+                "maxXExclusive": 16,
+                "maxYExclusive": 1
+              }
+            }
+          ]
+        },
+        {
+          "ordinal": 5,
+          "sequenceId": 0,
+          "sourceX": 352,
+          "sourceY": 295,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "rawFlags": 1,
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cellId": 0,
+              "rawDurationTicks": 2,
+              "previewDurationMs": 33.4302262261763,
+              "bounds": {
+                "minX": -32,
+                "minY": -63,
+                "maxXExclusive": 32,
+                "maxYExclusive": 1
+              }
+            }
+          ]
+        },
+        {
+          "ordinal": 6,
+          "sequenceId": 0,
+          "sourceX": 400,
+          "sourceY": 271,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "rawFlags": 1,
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cellId": 0,
+              "rawDurationTicks": 2,
+              "previewDurationMs": 33.4302262261763,
+              "bounds": {
+                "minX": -32,
+                "minY": -63,
+                "maxXExclusive": 32,
+                "maxYExclusive": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "fieldId": "field_bm08_01",
+      "nativeCanvas": [
+        416,
+        272
+      ],
+      "sourceFiles": {
+        "nanr": {
+          "fileName": "field_bm08_01_obj.nanr",
+          "sha256": "ADF4AEC0A530CE12463E99A727E8784302D37921A05FBC3B299AC507E2CF6E05"
+        },
+        "ncbr": {
+          "fileName": "field_bm08_01_obj.ncbr",
+          "sha256": "97673A00F2F35600FFC1F9A6B01F1D549F91474927DCADC298FD458D983A5307"
+        },
+        "ncer": {
+          "fileName": "field_bm08_01_obj.ncer",
+          "sha256": "2CD0E0825B243B8A8A16E555931B0E5B0E250E240C278F4B48F72F37C3167F78"
+        },
+        "nclr": {
+          "fileName": "field_bm08_01_obj.nclr",
+          "sha256": "281EAB6F1F9283E81AACC8E1CC792A23C88EB14D68E7F5EF0FC11ABF9A6D3491"
+        },
+        "opm": {
+          "fileName": "field_bm08_01_obj.opm",
+          "sha256": "58558903CCC2123BE66C1F77E58F77EF0C1E83AAC16230430A17011847C3F78C"
+        }
+      },
+      "placementCount": 1,
+      "cellCount": 1,
+      "sequenceCount": 1,
+      "totalFrameCount": 1,
+      "placements": [
+        {
+          "ordinal": 0,
+          "sequenceId": 0,
+          "sourceX": 368,
+          "sourceY": 304,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "rawFlags": 1,
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cellId": 0,
+              "rawDurationTicks": 2,
+              "previewDurationMs": 33.4302262261763,
+              "bounds": {
+                "minX": -24,
+                "minY": -63,
+                "maxXExclusive": 32,
+                "maxYExclusive": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "fieldId": "field_bm11_01",
+      "nativeCanvas": [
+        416,
+        272
+      ],
+      "sourceFiles": {
+        "nanr": {
+          "fileName": "field_bm11_01_obj.nanr",
+          "sha256": "6018C5EC55253763FF453F74522BB809E51CCC6262E4FB53EEF8DF73F1BEBD43"
+        },
+        "ncbr": {
+          "fileName": "field_bm11_01_obj.ncbr",
+          "sha256": "8C1D451A7B0D38963433A9ECA0E39C9162C01BF1A629A5D420380D475C33FCCE"
+        },
+        "ncer": {
+          "fileName": "field_bm11_01_obj.ncer",
+          "sha256": "652B9D19C0EFA3AEB581BB37C11B812E77AF56F9B158A5BD33862FD3F542881C"
+        },
+        "nclr": {
+          "fileName": "field_bm11_01_obj.nclr",
+          "sha256": "3EA4DC62DB54B183F4BA2B3994E25B71CC3EDA45F05C1E3CDE82A73A108BAE42"
+        },
+        "opm": {
+          "fileName": "field_bm11_01_obj.opm",
+          "sha256": "C12800921240885F4F012F51EEC1A553CE4FBD30A38F293849D173FAE75266FE"
+        }
+      },
+      "placementCount": 1,
+      "cellCount": 2,
+      "sequenceCount": 1,
+      "totalFrameCount": 2,
+      "placements": [
+        {
+          "ordinal": 0,
+          "sequenceId": 0,
+          "sourceX": 208,
+          "sourceY": 12,
+          "horizontalFlip": false,
+          "verticalFlip": false,
+          "rawFlags": 65535,
+          "frames": [
+            {
+              "frameIndex": 0,
+              "cellId": 0,
+              "rawDurationTicks": 6,
+              "previewDurationMs": 100.2906786785289,
+              "bounds": {
+                "minX": -64,
+                "minY": -15,
+                "maxXExclusive": 64,
+                "maxYExclusive": 1
+              }
+            },
+            {
+              "frameIndex": 1,
+              "cellId": 1,
+              "rawDurationTicks": 6,
+              "previewDurationMs": 100.2906786785289,
+              "bounds": {
+                "minX": -64,
+                "minY": -15,
+                "maxXExclusive": 64,
+                "maxYExclusive": 1
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
