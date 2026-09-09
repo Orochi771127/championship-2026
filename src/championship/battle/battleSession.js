@@ -35,7 +35,7 @@ import { deepFreeze } from "../contracts/championshipContracts.js";
 import { negativeStatusActionGate, BATTLE_STATUS_GATE_NORMAL } from "./battleStatus.js";
 import { selectBattleAiAction } from "./battleActionSelection.js";
 import { buildCandidateBuckets } from "./battleCandidateBuckets.js";
-import { buildMoveBucketsForSpecies } from "./battleMoveBuckets.js";
+import { buildMoveBucketsForCombatant } from "./battleMoveBuckets.js";
 import { applyBattleHp, rebuildDecisionCooldown } from "./battleDamageResolver.js";
 import {
   BATTLE_STATE_ACTION_GATE,
@@ -256,7 +256,7 @@ function runActionGate(combatant, slot, events, rng, allocateAction, session) {
   // 0x02113E5C. Passing the nine into the three meant the ladder never had a
   // candidate and every roll fell through to the move ladder.
   const built = buildCandidateBuckets([combatant.source12C, combatant.source130]);
-  const ladder = buildMoveBucketsForSpecies(combatant.speciesId);
+  const ladder = buildMoveBucketsForCombatant(combatant);
   const decision = selectBattleAiAction({
     profileIndex: combatant.profileIndex,
     negativeStatusCode: combatant.statusCode,

@@ -51,6 +51,7 @@ export function guardChampionshipStorage(storage) {
 
 export function createChampionshipPersistentSavePort({
   storage,
+  locks = globalThis.navigator?.locks,
   now = () => new Date().toISOString()
 } = {}) {
   if (!storage || typeof storage.getItem !== "function" || typeof storage.setItem !== "function"
@@ -76,6 +77,12 @@ export function createChampionshipPersistentSavePort({
     committedWrites: 0
   });
   let lastRequest = null;
+  let baseline;
+  let pendingText=null;
+  let releaseSessionLock=null, sessionLockTask=null, acquiringSessionLock=null;
+  // Captured once, then advanced only by a successful load/write/delete.
+  // A stale tab must never adopt another tab's bytes just because it retries.
+  try { baseline=guarded.getItem(key); } catch { /* read/save reports unavailable storage */ }
 
   function publish(next) {
     status = Object.freeze({ ...status, ...next });
@@ -85,7 +92,7 @@ export function createChampionshipPersistentSavePort({
     return status;
   }
 
-  function commit(request) {
+  function encode(request) {
     // serializeRaisingHomeSaveR2 returns { document, serialized, digest, bytes };
     // the canonical STRING is what the envelope stores, so the existing R2 digest
     // and byte-budget validation still runs over it on the way back in.
@@ -115,7 +122,23 @@ export function createChampionshipPersistentSavePort({
       updatedAt: now()
     });
     const text = serializeChampionshipModernSave(save);
+    return { save, text };
+  }
+
+  function assertCurrent() {
+    if(locks && !releaseSessionLock)throw new Error('CHAMPIONSHIP_SAVE_SESSION_NOT_OWNED');
+    const current=guarded.getItem(key);
+    if(baseline===undefined)baseline=current;
+    if(current!==baseline)throw new Error('CHAMPIONSHIP_MODERN_SAVE_CONFLICT');
+  }
+
+  function commit(request) {
+    const {save,text}=encode(request);
+    pendingText=text;
+    assertCurrent();
     guarded.setItem(key, text);
+    baseline=text;
+    pendingText=null;
     return { save, text };
   }
 
@@ -124,6 +147,31 @@ export function createChampionshipPersistentSavePort({
     policy: CHAMPIONSHIP_PERSISTENT_SAVE_PORT_POLICY,
     storageKey: key,
     capabilities: Object.freeze({ persistentRead: true, persistentWrite: true, persistentDelete: true }),
+
+    // Hold one browser Web Lock for this live save session. This serializes
+    // writers across tabs before they load, including truly simultaneous saves.
+    // Browsers without Web Locks retain the stale-byte check, but cannot claim
+    // atomic cross-tab exclusion. No second storage key or save authority exists.
+    async acquireSession() {
+      if(!locks || releaseSessionLock)return true;
+      if(acquiringSessionLock)return acquiringSessionLock;
+      acquiringSessionLock=new Promise((resolve,reject)=>{
+        sessionLockTask=locks.request(key,{mode:'exclusive',ifAvailable:true},lock=>{
+          if(!lock){resolve(false);return;}
+          return new Promise(release=>{releaseSessionLock=release;resolve(true);});
+        });
+        sessionLockTask.catch(reject);
+      });
+      try{return await acquiringSessionLock;}finally{acquiringSessionLock=null;}
+    },
+
+    async releaseSession() {
+      if(acquiringSessionLock)await acquiringSessionLock;
+      const release=releaseSessionLock;releaseSessionLock=null;
+      release?.();
+      if(sessionLockTask)await sessionLockTask;
+      sessionLockTask=null;
+    },
 
     getStatus() {
       return status;
@@ -144,6 +192,7 @@ export function createChampionshipPersistentSavePort({
 
     save(request) {
       lastRequest = request;
+      pendingText=null;
       try {
         const { save: written } = commit(request);
         return publish({
@@ -158,8 +207,8 @@ export function createChampionshipPersistentSavePort({
       } catch (error) {
         return publish({
           phase: "SAVE_FAILED",
-          lastCode: "CHAMPIONSHIP_MODERN_SAVE_FAILED",
-          canRetry: true,
+          lastCode: error.message==='CHAMPIONSHIP_MODERN_SAVE_CONFLICT'?error.message:"CHAMPIONSHIP_MODERN_SAVE_FAILED",
+          canRetry: error.message!=='CHAMPIONSHIP_MODERN_SAVE_CONFLICT',
           error: error.message
         });
       }
@@ -171,12 +220,13 @@ export function createChampionshipPersistentSavePort({
     },
 
     exportRecovery() {
-      const text = guarded.getItem(key);
-      return Object.freeze({ key, text: typeof text === "string" ? text : null });
+      let storedText=null,error=null;
+      try {storedText=guarded.getItem(key);}catch(e){error=e.message;}
+      return Object.freeze({ key, text:pendingText??storedText, pendingText, storedText, error });
     },
 
     /** Reads the stored save. A malformed save is reported, never thrown past the app. */
-    read() {
+    read({adopt=false}={}) {
       let text;
       try {
         text = guarded.getItem(key);
@@ -184,11 +234,13 @@ export function createChampionshipPersistentSavePort({
         return Object.freeze({ present: false, save: null, error: `STORAGE_UNAVAILABLE: ${error.message}` });
       }
       if (typeof text !== "string" || text.length === 0) {
+        if(adopt)baseline=text;
         return Object.freeze({ present: false, save: null, error: null });
       }
       try {
         const save = deserializeChampionshipModernSave(text);
-        publish({
+        if(adopt){baseline=text;pendingText=null;lastRequest=null;}
+        if(adopt)publish({
           phase: "RESTORED",
           lastCode: "CHAMPIONSHIP_MODERN_SAVE_RESTORED",
           canRetry: false,
@@ -203,7 +255,9 @@ export function createChampionshipPersistentSavePort({
     },
 
     clear() {
+      assertCurrent();
       guarded.removeItem(key);
+      baseline=null;pendingText=null;
       lastRequest = null;
       return publish({ phase: "DIRTY", lastCode: "CHAMPIONSHIP_MODERN_SAVE_UNSAVED", canRetry: false, revision: 0, savedAt: null, error: null });
     }

@@ -232,6 +232,7 @@ export function createRaisingPresentationSource(app) {
       selection: { creatureId: selectedCreatureId },
       save: {
         phase,
+        conflict:saveStatus.lastCode==='CHAMPIONSHIP_MODERN_SAVE_CONFLICT',
         savedAt: typeof saveStatus.savedAt === "string" ? saveStatus.savedAt : null,
         canRetry: Boolean(saveStatus.canRetry)
       },
@@ -341,7 +342,8 @@ export function createRaisingPresentationSource(app) {
       app.save();
       if (!wired) publish();
       return currentFrame.save;
-    }
+    },
+    exportRecovery(){return app.persistenceFacade().exportRecovery();}
   });
 
   return Object.freeze({

@@ -31,7 +31,7 @@ import {
 } from "../battle/battleSession.js";
 import { BATTLE_STATE_COOLDOWN_GATE } from "../battle/battleStateMachine.js";
 import { BATTLE_RNG_TRACED_MASTER_SEED, createChannelRng } from "../battle/battleRngChannel.js";
-import { getBattleCatalogRecord, listMoveRecordsForSpecies } from "../battle/battleCatalogs.js";
+import { getBattleCatalogRecord, listMoveRecordsForCombatant } from "../battle/battleCatalogs.js";
 import { damageInputsFor } from "../battle/battleDamageInputs.js";
 import { resolveBattleDamage } from "../battle/battleDamageResolver.js";
 import {
@@ -46,6 +46,7 @@ import {
   selectActionTargets
 } from "../battle/battleActionApplication.js";
 import { BATTLE_CREATURE_STAT_MAP } from "../battle/battleCreatureBuild.js";
+import {buildOwnedBattleCreature,settleOwnedBattleIndividual} from '../battle/battleParty.js';
 import {
   BATTLE_LAUNCH_POOL_SIZE,
   allocateLaunchObject,
@@ -88,15 +89,14 @@ function runtimeError(message) {
  * the default asks for the ordinary list rather than the entry-mode override.
  */
 export function createBattleRuntime(options = {}) {
-  // The product's own three creatures are OUT of the battle path for now, at the
-  // Owner's direction on 2026-09-02. They have no ROM species, so they had no
-  // move list, so they could not attack and the opponent took no damage all
-  // match. Rather than declare moves for them, both sides now field ROM teams
-  // and every number in a match comes out of the cartridge.
-  //
-  // battle-player-roster.v1.json is kept: it records the decision and the
-  // reasoning, and `residentIds` still works for a caller that wants them back.
+  // The normal title entry supplies the selected owned individuals. Legacy
+  // research fixtures can still request their explicitly declared preset team.
+  // Ownership and current individual fields are resolved by the application;
+  // this runtime cannot create, heal or reroll a player's party at entry.
   const residentIds = options.residentIds ?? [];
+  const playerIndividuals = options.playerIndividuals ?? null;
+  if(playerIndividuals!==null&&(!Array.isArray(playerIndividuals)||playerIndividuals.length<1||playerIndividuals.length>3))
+    throw runtimeError('OWNED_PARTY_REQUIRED');
   // Which team stands in for the player is a stand-in, not a reading: a title
   // record names ONE opponent team and the player's own party is what fills the
   // other side in the original.
@@ -471,7 +471,11 @@ export function createBattleRuntime(options = {}) {
         reason: session.endReason,
         battleType, mode, matchIndex: chosen.recordIndex,
         roundCursor: completedRound?.cursor ?? 0,
-        outcomeEntries: completedRound ? [...completedRound.flags] : []
+        outcomeEntries: completedRound ? [...completedRound.flags] : [],
+        ...(playerIndividuals&&session.ended?{individualResults:roster.slice(0,3).flatMap((creature,i)=>creature?[{
+          instanceId:creature.instanceId,nativeProfile:settleOwnedBattleIndividual(creature.nativeProfile,{
+            currentHp:session.slots[i].currentHp,metricLimit:session.slots[i].metricLimit,
+            verdict:session.verdict,mode})}]:[])}:{})
       });
     },
 
@@ -484,8 +488,13 @@ export function createBattleRuntime(options = {}) {
       // +0x08 is the permutation this lane already found is NOT the identity.
       const teamIndex = chosen.record.field08 ?? -1;
       const presetIndices = expandOpponentTeam(teamIndex);
-      const playerPresets = residentIds.length > 0 ? [] : expandOpponentTeam(playerTeamIndex);
+      const playerPresets = residentIds.length > 0 || playerIndividuals ? [] : expandOpponentTeam(playerTeamIndex);
       roster = buildBattleRoster({ residentIds, presetIndices, playerPresetIndices: playerPresets });
+      if(playerIndividuals){
+        const owned=playerIndividuals.map(buildOwnedBattleCreature);
+        while(owned.length<3)owned.push(null);
+        roster=deepFreeze([...owned,...roster.slice(3)]);
+      }
       builtRoster = roster;
 
       // The twelve shared in-flight objects, as battleLaunchPool models them:
@@ -508,7 +517,7 @@ export function createBattleRuntime(options = {}) {
             ? createSessionCombatant({ state: BATTLE_STATE_COOLDOWN_GATE, field28: 0, statePeriod: 1, ...fields })
             : null;
         }),
-        rng: createChannelRng(seed),
+        rng: options.rng ?? createChannelRng(seed),
         allocateAction(slot, decision, launchContext=null) {
           const move=moveRecordFor(decision);if(!move)return null;
           // Normal states supply the original packed-team target. Preserve the
@@ -555,7 +564,7 @@ export function createBattleRuntime(options = {}) {
       soundEvents.attach(nativeActors.memory);
       // Use the same species move list as current normal selection. Appended
       // resident moves remain outside this roster adapter until connected.
-      const demand=battleEffectBankDemand(session.slots.map(c=>c?listMoveRecordsForSpecies(c.speciesId):[]));
+      const demand=battleEffectBankDemand(session.slots.map(c=>c?listMoveRecordsForCombatant(c):[]));
       effectActors=createBattleEffectActors({memory:nativeActors.memory,worldAddress:nativeActors.worldAddress,
         loadedBankIds:demand.flatMap((n,id)=>id&&n?[id]:[])});
       demand.forEach((n,id)=>nativeActors.memory.writeU16(effectActors.base,4+id*2,n));
@@ -594,7 +603,7 @@ export function createBattleRuntime(options = {}) {
     },
 
     rosterEvidence() {
-      return roster ? rosterEvidence(roster) : null;
+      return roster ? playerIndividuals?'ROM_VERIFIED_INDIVIDUAL_FIELDS':rosterEvidence(roster) : null;
     },
 
     outcome() {

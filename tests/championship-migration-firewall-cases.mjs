@@ -125,6 +125,7 @@ test("only the authorized source families are present", () => {
       "battleNormalFlow.js",
       "battleNormalRuntime.js",
       "battleOutcome.js",
+      "battleParty.js",
       "battlePresentationHost.js",
       "battleProjectileContact.js",
       "battleRemainingNatives.js",

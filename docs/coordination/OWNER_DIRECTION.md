@@ -1,5 +1,13 @@
 # Championship Owner Direction
 
+## 2026-09-09 — Prefer original Hunt steering behavior
+
+After approving a proposed keep-current-direction workaround, Owner asks 「不能照著原作去做嗎？」. The workaround was not applied. Continue tracing the original live stack producers and call order before adopting an adaptation; retain the original-fidelity priority. Synthetic stack probes alone do not establish the normal producer.
+
+## 2026-09-09 — Complete the current remaining inventory in at most two stages
+
+Owner: 「目前還沒做好的項目，請你最多兩個階段完成」。Complete the current checkpoint inventory within two execution stages: playable flows and fault correction, then final content and release acceptance. Continue between them without another start approval. Rights verification remains at the final release gate; unknown original behavior requires tracing or explicit bounded adaptation approval. See [the current two-stage execution record](../reports/commercial-readiness/2026-09-09/TWO_STAGE_COMPLETION_ZH_TW.md).
+
 ## 2026-09-09 — Commercial readiness engineering; licence verification deferred
 
 Owner requests the four priority commercial-readiness issues in one stage, then asks: 「如果沒授權的話怎辦」 and 「能把授權留到最後嗎？」. Continue the authorized internal engineering and acceptance work along the existing faithful-rebuild direction. Schedule formal licence-document verification at the final public-release gate; do not require the document to perform internal build/test work, infer an original-IP conversion decision, or mark a pending document verified. Internal review, gameplay completion, asset approval and public distribution remain distinct. The user has not authorized publishing. The current engineering record is [the deferred-rights build report](../reports/commercial-readiness/2026-09-09/DEFERRED_RIGHTS_ENGINEERING_ZH_TW.md).

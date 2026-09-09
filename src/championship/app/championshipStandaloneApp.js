@@ -26,6 +26,8 @@ import {
   renameEnclosedCreature
 } from "./championshipRaisingProduction.js";
 import { createChampionshipPersistentSavePort } from "./ChampionshipPersistentSavePort.js";
+import {battlePartyAdmission,battlePartyCondition,buildOwnedBattleCreature} from '../battle/battleParty.js';
+import {normalizeNativeIndividualProfile} from '../raising/nativeIndividualProfile.js';
 import { selectPhase1FirstCreature } from "./phase1ProductCreatures.js";
 import { CHAMPIONSHIP_SCREENS, createChampionshipScreenStack } from "./championshipScreenStack.js";
 import { getChampionshipGate, listChampionshipGates } from "../gate/gateCatalog.js";
@@ -66,7 +68,7 @@ import { registerNativeBookSpecies, retainOwnedBookSpecies } from "../database/n
 import { createCageEditRuntime } from "../cage/cageEditRuntime.js";
 import { normalizeTamerRank, slotCountForTamerRank } from "../cage/cageCatalog.js";
 import { validateNativeRanch } from '../cage/nativeRanchLayout.js';
-import { matchEntryFee, matchPayout, resolveMatchList } from "../battle/battleMatchSelection.js";
+import { getMatchRecord, matchEntryFee, matchPayout, resolveMatchList } from "../battle/battleMatchSelection.js";
 import { DAY_END_MINUTES, projectWorldClockDisplay } from "../time/championshipWorldClock.js";
 import { NATIVE_CLOCK_CADENCE } from "./championshipClockDriver.js";
 import { createClockChannelRng, restoreChannelRng } from "../battle/battleRngChannel.js";
@@ -106,6 +108,7 @@ export const STANDALONE_SAVE_UNAVAILABLE_COPY = "Save status is unavailable.";
 
 export function createChampionshipStandaloneApp({
   storage,
+  locks = globalThis.navigator?.locks,
   catalog,
   cages = [],
   sessionId = STANDALONE_SESSION_ID,
@@ -121,7 +124,7 @@ export function createChampionshipStandaloneApp({
   deviceBirthday = () => null
 } = {}) {
   if (!catalog) throw new TypeError("Championship standalone app requires a product entities catalog");
-  const savePort = createChampionshipPersistentSavePort({ storage, now });
+  const savePort = createChampionshipPersistentSavePort({ storage, now, locks });
 
   const cageIds = cages.map((cage) => cage.cageId);
   let session = null;
@@ -145,6 +148,8 @@ export function createChampionshipStandaloneApp({
   let instanceIdentity = null;
   let battleEconomy = createBattleEconomyState();
   let battleTransactionActive = false;
+  let battlePartyIds = null;
+  const battleRngPreparations = new WeakMap();
   let huntCommitActive = false;
   // One application-owned sequence. Expedition resets never replace it.
   // Legacy saves lack history: initialize on the first native RNG use only.
@@ -356,13 +361,13 @@ export function createChampionshipStandaloneApp({
     for(const listener of [...raisingListeners])try {listener();} catch { /* observers cannot change native state */ }
   }
 
-  function writeRaisingNativeProfile(instanceId,profile) {
+  function writeRaisingNativeProfile(instanceId,profile,{markDirty=true}={}) {
     registeredSpeciesValue = registerNativeBookSpecies(registeredSpeciesValue, profile.fields["000"]);
     const speciesId=`species-${String(profile.fields["000"]).padStart(3,"0")}`;
     if(instanceId===creature?.creatureId) creature=Object.freeze({...creature,speciesId,nativeProfile:profile});
     else raising=Object.freeze({...raising,collection:Object.freeze(raising.collection.map(entry=>entry.instanceId===instanceId
       ? Object.freeze({...entry,speciesId,nativeProfile:profile}) : entry))});
-    savePort.markDirty();
+    if(markDirty)savePort.markDirty();
   }
 
   function nativeRaisingActor(instanceId) {
@@ -558,9 +563,11 @@ export function createChampionshipStandaloneApp({
     return { snapshot, identity, production, rng, huntHistory };
   }
 
-  function applyBattleTransaction(result) {
+  function applyBattleTransaction(result, individualResults=[], preparedRng=null) {
     if (!result.ok || result.duplicate) return result;
     const before = battleEconomy;
+    const beforeCreature=creature,beforeRaising=raising,beforeRegistered=registeredSpeciesValue;
+    const beforeRng=gameplayRng;
     const beforeBadges = battleBadgesValue;
     const beforeRank=tamerRankValue,beforeTitles=nativeTitles,beforeMessages=nativeMessages;
     const expectedBits = requireShop().getBits();
@@ -568,6 +575,8 @@ export function createChampionshipStandaloneApp({
     // until it succeeds every one of these is still the pre-transaction value.
     const rollback = () => {
       battleEconomy = before;
+      creature=beforeCreature;raising=beforeRaising;registeredSpeciesValue=beforeRegistered;
+      gameplayRng=beforeRng;
       battleBadgesValue = beforeBadges;
       tamerRankValue=beforeRank;nativeTitles=beforeTitles;nativeMessages=beforeMessages;
     };
@@ -576,6 +585,8 @@ export function createChampionshipStandaloneApp({
       // Publish the wallet only after its matching transaction state exists.
       // A synchronous observer therefore sees one consistent app snapshot.
       battleEconomy = result.state;
+      if(preparedRng)gameplayRng=preparedRng;
+      for(const entry of individualResults)writeRaisingNativeProfile(entry.instanceId,entry.nativeProfile,{markDirty:false});
       if (result.receipt?.status === "SETTLED") {
         const r=resolveNativeTitleResult({rank:tamerRankValue,category:result.receipt.mode,matchIndex:result.receipt.matchIndex,
           won:battleBadgesValue,...nativeTitles,rounds:[result.receipt.won?1:0]});
@@ -645,7 +656,8 @@ export function createChampionshipStandaloneApp({
       const initialRng = createClockChannelRng(rngClock());
       const initialHuntHistory = createNativeHuntPersistentState();
       if (session) await this.dispose();
-      savePort.clear();
+      if(!await savePort.acquireSession())throw new Error('另一個分頁正在遊玩。請先關閉該分頁，再開始遊戲。');
+      try {savePort.clear();}catch(error){await savePort.releaseSession();throw error;}
       const startingIdentity = selectPhase1FirstCreature(catalog);
       let nativeProfile = createNativeRaisingStarter(initialRng);
       if(givenName!==null)nativeProfile=Object.freeze({...nativeProfile,name:givenName});
@@ -702,10 +714,15 @@ export function createChampionshipStandaloneApp({
 
     async continueGame() {
       if (huntCommitActive) return null;
-      const read = savePort.read();
-      if (!read.present) return null;
-      const candidate = restoreCandidate(read.save);
-      if (session) await this.dispose();
+      if(!await savePort.acquireSession())throw new Error('另一個分頁正在遊玩。請先關閉該分頁，再繼續遊戲。');
+      const read = savePort.read({adopt:true});
+      if (!read.present) {if(!session)await savePort.releaseSession();return null;}
+      let candidate;
+      try {candidate=restoreCandidate(read.save);}catch(error){if(!session)await savePort.releaseSession();throw error;}
+      if (session) {
+        const closing=session;session=null;await closing.dispose();
+        battlePartyIds=null;
+      }
       creature = Object.freeze({ ...read.save.creature });
       revision = read.save.progression.revision ?? 0;
       interactionCount = read.save.progression.interactionCount ?? 0;
@@ -1463,7 +1480,41 @@ export function createChampionshipStandaloneApp({
       return battleEconomy.lastReceipt;
     },
 
-    enterMatch({ attemptId = nextBattleAttemptId(battleEconomy), recordIndex, mode, battleType } = {}) {
+    getBattlePartyCandidates(recordIndex) {
+      return this.getRaisingInstances().map(entry=>{
+        const nativeProfile=entry.instanceId===creature?.creatureId?creature.nativeProfile:raisingNativeProfile(entry.instanceId);
+        return Object.freeze({...entry,admission:battlePartyAdmission(nativeProfile,recordIndex)});
+      });
+    },
+
+    getBattlePartyLimit(recordIndex) {return battlePartyCondition(getMatchRecord(recordIndex).field0C).slots;},
+
+    prepareBattleRng() {
+      requireSession();
+      const base=gameplayRngSnapshot();
+      const rng=base?restoreChannelRng(base):createClockChannelRng(rngClock());
+      const preparation=Object.freeze({rng});
+      battleRngPreparations.set(preparation,{base:JSON.stringify(base),rng,session});
+      return preparation;
+    },
+
+    prepareBattleParty(recordIndex,instanceIds) {
+      const limit=battlePartyCondition(getMatchRecord(recordIndex).field0C).slots;
+      if(!Array.isArray(instanceIds)||!instanceIds.length||instanceIds.length>limit||new Set(instanceIds).size!==instanceIds.length)
+        return {ok:false,reason:'PARTY_SIZE',message:`請選擇 1 至 ${limit} 隻符合條件的數碼獸。`};
+      const candidates=this.getBattlePartyCandidates(recordIndex),individuals=[];
+      for(const instanceId of instanceIds){
+        const entry=candidates.find(c=>c.instanceId===instanceId);
+        if(!entry)return {ok:false,reason:'UNKNOWN_INDIVIDUAL',message:'選擇的數碼獸已不在目前名冊。'};
+        if(!entry.admission.ok)return entry.admission;
+        const nativeProfile=instanceId===creature?.creatureId?creature.nativeProfile:raisingNativeProfile(instanceId);
+        buildOwnedBattleCreature({instanceId,nativeProfile});
+        individuals.push({instanceId,nativeProfile:structuredClone(nativeProfile)});
+      }
+      return {ok:true,individuals};
+    },
+
+    enterMatch({ attemptId = nextBattleAttemptId(battleEconomy), recordIndex, mode, battleType, playerInstanceIds=null, rngPreparation=null } = {}) {
       requireSession();
       if (battleTransactionActive) return Object.freeze({ ok: false, reason: "TRANSACTION_ACTIVE" });
       const duplicateActive = battleEconomy.active?.attemptId === attemptId;
@@ -1475,18 +1526,28 @@ export function createChampionshipStandaloneApp({
         return Object.freeze({ ok: false, reason: "MATCH_NOT_AVAILABLE",
           message: "這場比賽不符合目前日期或資格，請重新選擇。" });
       }
+      if(!duplicateActive && playerInstanceIds!==null){
+        const admission=this.prepareBattleParty(recordIndex,playerInstanceIds);
+        if(!admission.ok)return admission;
+        if(mode!==1||battleType!==0)return {ok:false,reason:'OWNED_PARTY_MODE_REQUIRES_TRACE'};
+      }
+      const preparedRng=rngPreparation===null?null:battleRngPreparations.get(rngPreparation);
+      if(!duplicateActive && rngPreparation!==null && (!preparedRng||preparedRng.session!==session||preparedRng.base!==JSON.stringify(gameplayRngSnapshot())))
+        return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'遊戲進度已更新，請重新選擇參賽隊伍。'};
       const result = applyBattleTransaction(beginBattleAttempt(battleEconomy, {
         attemptId, matchIndex: recordIndex, mode, battleType,
         entryFee: matchEntryFee(recordIndex), payout: matchPayout(recordIndex), expectedRounds: 1
-      }, requireShop().getBits()));
+      }, requireShop().getBits()),[],preparedRng?.rng);
       if (!result.ok || result.duplicate) return result;
+      if(rngPreparation)battleRngPreparations.delete(rngPreparation);
+      battlePartyIds=playerInstanceIds===null?null:[...playerInstanceIds];
       screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);
       publishScreens();
       return result;
     },
 
     /** The battle judges itself; nothing else may push the result screen. */
-    finishMatch({ attemptId, ended, mode, battleType, matchIndex, outcomeEntries } = {}) {
+    finishMatch({ attemptId, ended, mode, battleType, matchIndex, outcomeEntries, individualResults=[] } = {}) {
       requireSession();
       if (battleTransactionActive) return Object.freeze({ ok: false, reason: "TRANSACTION_ACTIVE" });
       // A result already consumed can be queried after returning or reloading,
@@ -1508,8 +1569,18 @@ export function createChampionshipStandaloneApp({
       if (ended !== true || mode !== active.mode || battleType !== active.battleType || matchIndex !== active.matchIndex) {
         return Object.freeze({ ok: false, reason: "BATTLE_RESULT_CONTEXT_MISMATCH" });
       }
-      const result = applyBattleTransaction(settleBattleAttempt(battleEconomy, { attemptId, outcomeEntries }, requireShop().getBits()));
+      let updates=[];
+      if(battlePartyIds){
+        if(!Array.isArray(individualResults)||individualResults.length!==battlePartyIds.length||
+          individualResults.some((entry,i)=>entry.instanceId!==battlePartyIds[i]))
+          return {ok:false,reason:'BATTLE_PARTY_RESULT_MISMATCH'};
+        updates=individualResults.map(entry=>({instanceId:entry.instanceId,nativeProfile:normalizeNativeIndividualProfile(
+          entry.nativeProfile,this.resolveRaisingInstance(entry.instanceId).speciesId)}));
+      }
+      const result = applyBattleTransaction(settleBattleAttempt(battleEconomy, { attemptId, outcomeEntries }, requireShop().getBits()),updates);
       if (!result.ok || result.duplicate) return result;
+      for(const entry of updates)raisingActors.delete(entry.instanceId);
+      battlePartyIds=null;
       screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_RESULT);
       publishScreens();
       return result;
@@ -1531,6 +1602,7 @@ export function createChampionshipStandaloneApp({
         }, requireShop().getBits()));
         if (!result.ok) return screens.current();
       }
+      battlePartyIds = null;
       screens.exit();
       publishScreens();
       return screens.current();
@@ -1926,11 +1998,13 @@ export function createChampionshipStandaloneApp({
 
     async dispose() {
       if (huntCommitActive) return false;
+      battlePartyIds = null;
       resetExpedition();
-      if (!session) return;
+      if (!session) {await savePort.releaseSession();return;}
       const closing = session;
       session = null;
       await closing.dispose();
+      await savePort.releaseSession();
     }
   });
 }

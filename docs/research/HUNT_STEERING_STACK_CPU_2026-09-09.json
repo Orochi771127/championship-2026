@@ -1,0 +1,4431 @@
+{
+  "evidence": "BOUNDED_NATIVE_REPLAY",
+  "inputClass": "SYNTHETIC_STACK_INPUTS_NOT_LIVE_PLAY",
+  "stateSha256": "3b1a13a0e517722f094d0a6454f773a3b2f55b6f0b0994d4788447b5650940ae",
+  "entry": "0210D8B4",
+  "stop": "0210DEEC",
+  "enter8Direction": [
+    0,
+    1,
+    0
+  ],
+  "cases": [
+    {
+      "attribute": 0,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        -2945,
+        1410,
+        0
+      ]
+    },
+    {
+      "attribute": 0,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        0,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        -2945,
+        1410,
+        0
+      ]
+    },
+    {
+      "attribute": 0,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        0,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        -2945,
+        1410,
+        0
+      ]
+    },
+    {
+      "attribute": 1,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        -2813,
+        1458,
+        0
+      ]
+    },
+    {
+      "attribute": 1,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        -2813,
+        1458,
+        0
+      ]
+    },
+    {
+      "attribute": 1,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        -2813,
+        1458,
+        0
+      ]
+    },
+    {
+      "attribute": 2,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        -2788,
+        1483,
+        0
+      ]
+    },
+    {
+      "attribute": 2,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        -2788,
+        1483,
+        0
+      ]
+    },
+    {
+      "attribute": 2,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        -2788,
+        1483,
+        0
+      ]
+    },
+    {
+      "attribute": 3,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -2740,
+        1615,
+        0
+      ]
+    },
+    {
+      "attribute": 3,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -2740,
+        1615,
+        0
+      ]
+    },
+    {
+      "attribute": 3,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -2740,
+        1615,
+        0
+      ]
+    },
+    {
+      "attribute": 4,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        -2788,
+        1747,
+        0
+      ]
+    },
+    {
+      "attribute": 4,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        -2788,
+        1747,
+        0
+      ]
+    },
+    {
+      "attribute": 4,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        -2788,
+        1747,
+        0
+      ]
+    },
+    {
+      "attribute": 5,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        -2813,
+        1772,
+        0
+      ]
+    },
+    {
+      "attribute": 5,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        -2813,
+        1772,
+        0
+      ]
+    },
+    {
+      "attribute": 5,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        -2813,
+        1772,
+        0
+      ]
+    },
+    {
+      "attribute": 6,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        4096,
+        0
+      ],
+      "directionAfter": [
+        -2945,
+        1820,
+        0
+      ]
+    },
+    {
+      "attribute": 6,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        0,
+        4096,
+        0
+      ],
+      "directionAfter": [
+        -2945,
+        1820,
+        0
+      ]
+    },
+    {
+      "attribute": 6,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        0,
+        4096,
+        0
+      ],
+      "directionAfter": [
+        -2945,
+        1820,
+        0
+      ]
+    },
+    {
+      "attribute": 7,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        -3077,
+        1772,
+        0
+      ]
+    },
+    {
+      "attribute": 7,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        -3077,
+        1772,
+        0
+      ]
+    },
+    {
+      "attribute": 7,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        -3077,
+        1772,
+        0
+      ]
+    },
+    {
+      "attribute": 8,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        -3102,
+        1747,
+        0
+      ]
+    },
+    {
+      "attribute": 8,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        -3102,
+        1747,
+        0
+      ]
+    },
+    {
+      "attribute": 8,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        -3102,
+        1747,
+        0
+      ]
+    },
+    {
+      "attribute": 9,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -3150,
+        1615,
+        0
+      ]
+    },
+    {
+      "attribute": 9,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -3150,
+        1615,
+        0
+      ]
+    },
+    {
+      "attribute": 9,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -3150,
+        1615,
+        0
+      ]
+    },
+    {
+      "attribute": 10,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        -3102,
+        1483,
+        0
+      ]
+    },
+    {
+      "attribute": 10,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        -3102,
+        1483,
+        0
+      ]
+    },
+    {
+      "attribute": 10,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        -3102,
+        1483,
+        0
+      ]
+    },
+    {
+      "attribute": 11,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        -3077,
+        1458,
+        0
+      ]
+    },
+    {
+      "attribute": 11,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        -3077,
+        1458,
+        0
+      ]
+    },
+    {
+      "attribute": 11,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        -3077,
+        1458,
+        0
+      ]
+    },
+    {
+      "attribute": 12,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -2945,
+        1615,
+        0
+      ]
+    },
+    {
+      "attribute": 12,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        -2740,
+        1410,
+        0
+      ]
+    },
+    {
+      "attribute": 12,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -8192,
+        2048,
+        0
+      ],
+      "directionAfter": [
+        -3355,
+        1717,
+        0
+      ]
+    },
+    {
+      "attribute": 13,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -2945,
+        1615,
+        0
+      ]
+    },
+    {
+      "attribute": 13,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        -2740,
+        1410,
+        0
+      ]
+    },
+    {
+      "attribute": 13,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -8192,
+        2048,
+        0
+      ],
+      "directionAfter": [
+        -3355,
+        1717,
+        0
+      ]
+    },
+    {
+      "attribute": 14,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -2945,
+        1615,
+        0
+      ]
+    },
+    {
+      "attribute": 14,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        -2740,
+        1410,
+        0
+      ]
+    },
+    {
+      "attribute": 14,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -8192,
+        2048,
+        0
+      ],
+      "directionAfter": [
+        -3355,
+        1717,
+        0
+      ]
+    },
+    {
+      "attribute": 15,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -2945,
+        1615,
+        0
+      ]
+    },
+    {
+      "attribute": 15,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        -2740,
+        1410,
+        0
+      ]
+    },
+    {
+      "attribute": 15,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -8192,
+        2048,
+        0
+      ],
+      "directionAfter": [
+        -3355,
+        1717,
+        0
+      ]
+    },
+    {
+      "attribute": 32,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        0,
+        -4096,
+        0
+      ]
+    },
+    {
+      "attribute": 32,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        0,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        0,
+        -4096,
+        0
+      ]
+    },
+    {
+      "attribute": 32,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        0,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        0,
+        -4096,
+        0
+      ]
+    },
+    {
+      "attribute": 33,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        2633,
+        -3138,
+        0
+      ]
+    },
+    {
+      "attribute": 33,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        2633,
+        -3138,
+        0
+      ]
+    },
+    {
+      "attribute": 33,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        2633,
+        -3138,
+        0
+      ]
+    },
+    {
+      "attribute": 34,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        3138,
+        -2633,
+        0
+      ]
+    },
+    {
+      "attribute": 34,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        3138,
+        -2633,
+        0
+      ]
+    },
+    {
+      "attribute": 34,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        3138,
+        -2633,
+        0
+      ]
+    },
+    {
+      "attribute": 35,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        4096,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 35,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        4096,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 35,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        4096,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 36,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        3138,
+        2633,
+        0
+      ]
+    },
+    {
+      "attribute": 36,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        3138,
+        2633,
+        0
+      ]
+    },
+    {
+      "attribute": 36,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        3138,
+        2633,
+        0
+      ]
+    },
+    {
+      "attribute": 37,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        2633,
+        3138,
+        0
+      ]
+    },
+    {
+      "attribute": 37,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        2633,
+        3138,
+        0
+      ]
+    },
+    {
+      "attribute": 37,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        2633,
+        3138,
+        0
+      ]
+    },
+    {
+      "attribute": 38,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        4096,
+        0
+      ],
+      "directionAfter": [
+        0,
+        4096,
+        0
+      ]
+    },
+    {
+      "attribute": 38,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        0,
+        4096,
+        0
+      ],
+      "directionAfter": [
+        0,
+        4096,
+        0
+      ]
+    },
+    {
+      "attribute": 38,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        0,
+        4096,
+        0
+      ],
+      "directionAfter": [
+        0,
+        4096,
+        0
+      ]
+    },
+    {
+      "attribute": 39,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        -2633,
+        3138,
+        0
+      ]
+    },
+    {
+      "attribute": 39,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        -2633,
+        3138,
+        0
+      ]
+    },
+    {
+      "attribute": 39,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        -2633,
+        3138,
+        0
+      ]
+    },
+    {
+      "attribute": 40,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        -3138,
+        2633,
+        0
+      ]
+    },
+    {
+      "attribute": 40,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        -3138,
+        2633,
+        0
+      ]
+    },
+    {
+      "attribute": 40,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        -3138,
+        2633,
+        0
+      ]
+    },
+    {
+      "attribute": 41,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -4096,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 41,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -4096,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 41,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -4096,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 42,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        -3138,
+        -2633,
+        0
+      ]
+    },
+    {
+      "attribute": 42,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        -3138,
+        -2633,
+        0
+      ]
+    },
+    {
+      "attribute": 42,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        -3138,
+        -2633,
+        0
+      ]
+    },
+    {
+      "attribute": 43,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        -2633,
+        -3138,
+        0
+      ]
+    },
+    {
+      "attribute": 43,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        -2633,
+        -3138,
+        0
+      ]
+    },
+    {
+      "attribute": 43,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        -2633,
+        -3138,
+        0
+      ]
+    },
+    {
+      "attribute": 44,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        0,
+        0
+      ],
+      "directionAfter": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 44,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        4096,
+        -4096,
+        0
+      ]
+    },
+    {
+      "attribute": 44,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -8192,
+        2048,
+        0
+      ],
+      "directionAfter": [
+        -8192,
+        2048,
+        0
+      ]
+    },
+    {
+      "attribute": 45,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        0,
+        0
+      ],
+      "directionAfter": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 45,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        4096,
+        -4096,
+        0
+      ]
+    },
+    {
+      "attribute": 45,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -8192,
+        2048,
+        0
+      ],
+      "directionAfter": [
+        -8192,
+        2048,
+        0
+      ]
+    },
+    {
+      "attribute": 46,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        0,
+        0
+      ],
+      "directionAfter": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 46,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        4096,
+        -4096,
+        0
+      ]
+    },
+    {
+      "attribute": 46,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -8192,
+        2048,
+        0
+      ],
+      "directionAfter": [
+        -8192,
+        2048,
+        0
+      ]
+    },
+    {
+      "attribute": 47,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        0,
+        0
+      ],
+      "directionAfter": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 47,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        4096,
+        -4096,
+        0
+      ]
+    },
+    {
+      "attribute": 47,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -8192,
+        2048,
+        0
+      ],
+      "directionAfter": [
+        -8192,
+        2048,
+        0
+      ]
+    },
+    {
+      "attribute": 64,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        -2015,
+        -329,
+        0
+      ]
+    },
+    {
+      "attribute": 64,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        0,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        -2015,
+        -329,
+        0
+      ]
+    },
+    {
+      "attribute": 64,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        0,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        -2015,
+        -329,
+        0
+      ]
+    },
+    {
+      "attribute": 65,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        -1093,
+        6,
+        0
+      ]
+    },
+    {
+      "attribute": 65,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        -1093,
+        6,
+        0
+      ]
+    },
+    {
+      "attribute": 65,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        -1093,
+        6,
+        0
+      ]
+    },
+    {
+      "attribute": 66,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        -916,
+        183,
+        0
+      ]
+    },
+    {
+      "attribute": 66,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        -916,
+        183,
+        0
+      ]
+    },
+    {
+      "attribute": 66,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        -916,
+        183,
+        0
+      ]
+    },
+    {
+      "attribute": 67,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -581,
+        1105,
+        0
+      ]
+    },
+    {
+      "attribute": 67,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -581,
+        1105,
+        0
+      ]
+    },
+    {
+      "attribute": 67,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -581,
+        1105,
+        0
+      ]
+    },
+    {
+      "attribute": 68,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        -916,
+        2027,
+        0
+      ]
+    },
+    {
+      "attribute": 68,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        -916,
+        2027,
+        0
+      ]
+    },
+    {
+      "attribute": 68,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        -916,
+        2027,
+        0
+      ]
+    },
+    {
+      "attribute": 69,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        -1093,
+        2203,
+        0
+      ]
+    },
+    {
+      "attribute": 69,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        -1093,
+        2203,
+        0
+      ]
+    },
+    {
+      "attribute": 69,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        -1093,
+        2203,
+        0
+      ]
+    },
+    {
+      "attribute": 70,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        4096,
+        0
+      ],
+      "directionAfter": [
+        -2015,
+        2539,
+        0
+      ]
+    },
+    {
+      "attribute": 70,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        0,
+        4096,
+        0
+      ],
+      "directionAfter": [
+        -2015,
+        2539,
+        0
+      ]
+    },
+    {
+      "attribute": 70,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        0,
+        4096,
+        0
+      ],
+      "directionAfter": [
+        -2015,
+        2539,
+        0
+      ]
+    },
+    {
+      "attribute": 71,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        -2937,
+        2203,
+        0
+      ]
+    },
+    {
+      "attribute": 71,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        -2937,
+        2203,
+        0
+      ]
+    },
+    {
+      "attribute": 71,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        -2937,
+        2203,
+        0
+      ]
+    },
+    {
+      "attribute": 72,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        -3113,
+        2027,
+        0
+      ]
+    },
+    {
+      "attribute": 72,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        -3113,
+        2027,
+        0
+      ]
+    },
+    {
+      "attribute": 72,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        -3113,
+        2027,
+        0
+      ]
+    },
+    {
+      "attribute": 73,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -3449,
+        1105,
+        0
+      ]
+    },
+    {
+      "attribute": 73,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -3449,
+        1105,
+        0
+      ]
+    },
+    {
+      "attribute": 73,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -3449,
+        1105,
+        0
+      ]
+    },
+    {
+      "attribute": 74,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        -3113,
+        183,
+        0
+      ]
+    },
+    {
+      "attribute": 74,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        -3113,
+        183,
+        0
+      ]
+    },
+    {
+      "attribute": 74,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        -3113,
+        183,
+        0
+      ]
+    },
+    {
+      "attribute": 75,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        -2937,
+        6,
+        0
+      ]
+    },
+    {
+      "attribute": 75,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        -2937,
+        6,
+        0
+      ]
+    },
+    {
+      "attribute": 75,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        -2937,
+        6,
+        0
+      ]
+    },
+    {
+      "attribute": 76,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -2015,
+        1105,
+        0
+      ]
+    },
+    {
+      "attribute": 76,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        -581,
+        -329,
+        0
+      ]
+    },
+    {
+      "attribute": 76,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -8192,
+        2048,
+        0
+      ],
+      "directionAfter": [
+        -4883,
+        1822,
+        0
+      ]
+    },
+    {
+      "attribute": 77,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -2015,
+        1105,
+        0
+      ]
+    },
+    {
+      "attribute": 77,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        -581,
+        -329,
+        0
+      ]
+    },
+    {
+      "attribute": 77,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -8192,
+        2048,
+        0
+      ],
+      "directionAfter": [
+        -4883,
+        1822,
+        0
+      ]
+    },
+    {
+      "attribute": 78,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -2015,
+        1105,
+        0
+      ]
+    },
+    {
+      "attribute": 78,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        -581,
+        -329,
+        0
+      ]
+    },
+    {
+      "attribute": 78,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -8192,
+        2048,
+        0
+      ],
+      "directionAfter": [
+        -4883,
+        1822,
+        0
+      ]
+    },
+    {
+      "attribute": 79,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -2015,
+        1105,
+        0
+      ]
+    },
+    {
+      "attribute": 79,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        -581,
+        -329,
+        0
+      ]
+    },
+    {
+      "attribute": 79,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -8192,
+        2048,
+        0
+      ],
+      "directionAfter": [
+        -4883,
+        1822,
+        0
+      ]
+    },
+    {
+      "attribute": 96,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        0,
+        -4096,
+        0
+      ]
+    },
+    {
+      "attribute": 96,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        0,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        0,
+        -4096,
+        0
+      ]
+    },
+    {
+      "attribute": 96,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        0,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        0,
+        -4096,
+        0
+      ]
+    },
+    {
+      "attribute": 97,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        2633,
+        -3138,
+        0
+      ]
+    },
+    {
+      "attribute": 97,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        2633,
+        -3138,
+        0
+      ]
+    },
+    {
+      "attribute": 97,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        2633,
+        -3138,
+        0
+      ]
+    },
+    {
+      "attribute": 98,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        3138,
+        -2633,
+        0
+      ]
+    },
+    {
+      "attribute": 98,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        3138,
+        -2633,
+        0
+      ]
+    },
+    {
+      "attribute": 98,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        3138,
+        -2633,
+        0
+      ]
+    },
+    {
+      "attribute": 99,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        4096,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 99,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        4096,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 99,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        4096,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 100,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        3138,
+        2633,
+        0
+      ]
+    },
+    {
+      "attribute": 100,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        3138,
+        2633,
+        0
+      ]
+    },
+    {
+      "attribute": 100,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        3138,
+        2633,
+        0
+      ]
+    },
+    {
+      "attribute": 101,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        2633,
+        3138,
+        0
+      ]
+    },
+    {
+      "attribute": 101,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        2633,
+        3138,
+        0
+      ]
+    },
+    {
+      "attribute": 101,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        2633,
+        3138,
+        0
+      ]
+    },
+    {
+      "attribute": 102,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        4096,
+        0
+      ],
+      "directionAfter": [
+        0,
+        4096,
+        0
+      ]
+    },
+    {
+      "attribute": 102,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        0,
+        4096,
+        0
+      ],
+      "directionAfter": [
+        0,
+        4096,
+        0
+      ]
+    },
+    {
+      "attribute": 102,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        0,
+        4096,
+        0
+      ],
+      "directionAfter": [
+        0,
+        4096,
+        0
+      ]
+    },
+    {
+      "attribute": 103,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        -2633,
+        3138,
+        0
+      ]
+    },
+    {
+      "attribute": 103,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        -2633,
+        3138,
+        0
+      ]
+    },
+    {
+      "attribute": 103,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -2633,
+        3138,
+        0
+      ],
+      "directionAfter": [
+        -2633,
+        3138,
+        0
+      ]
+    },
+    {
+      "attribute": 104,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        -3138,
+        2633,
+        0
+      ]
+    },
+    {
+      "attribute": 104,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        -3138,
+        2633,
+        0
+      ]
+    },
+    {
+      "attribute": 104,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -3138,
+        2633,
+        0
+      ],
+      "directionAfter": [
+        -3138,
+        2633,
+        0
+      ]
+    },
+    {
+      "attribute": 105,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -4096,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 105,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -4096,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 105,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -4096,
+        0,
+        0
+      ],
+      "directionAfter": [
+        -4096,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 106,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        -3138,
+        -2633,
+        0
+      ]
+    },
+    {
+      "attribute": 106,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        -3138,
+        -2633,
+        0
+      ]
+    },
+    {
+      "attribute": 106,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -3138,
+        -2633,
+        0
+      ],
+      "directionAfter": [
+        -3138,
+        -2633,
+        0
+      ]
+    },
+    {
+      "attribute": 107,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        -2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        -2633,
+        -3138,
+        0
+      ]
+    },
+    {
+      "attribute": 107,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        -2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        -2633,
+        -3138,
+        0
+      ]
+    },
+    {
+      "attribute": 107,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -2633,
+        -3138,
+        0
+      ],
+      "directionAfter": [
+        -2633,
+        -3138,
+        0
+      ]
+    },
+    {
+      "attribute": 108,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        0,
+        0
+      ],
+      "directionAfter": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 108,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        4096,
+        -4096,
+        0
+      ]
+    },
+    {
+      "attribute": 108,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -8192,
+        2048,
+        0
+      ],
+      "directionAfter": [
+        -8192,
+        2048,
+        0
+      ]
+    },
+    {
+      "attribute": 109,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        0,
+        0
+      ],
+      "directionAfter": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 109,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        4096,
+        -4096,
+        0
+      ]
+    },
+    {
+      "attribute": 109,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -8192,
+        2048,
+        0
+      ],
+      "directionAfter": [
+        -8192,
+        2048,
+        0
+      ]
+    },
+    {
+      "attribute": 110,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        0,
+        0
+      ],
+      "directionAfter": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 110,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        4096,
+        -4096,
+        0
+      ]
+    },
+    {
+      "attribute": 110,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -8192,
+        2048,
+        0
+      ],
+      "directionAfter": [
+        -8192,
+        2048,
+        0
+      ]
+    },
+    {
+      "attribute": 111,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        0,
+        0,
+        0
+      ],
+      "scratchAfter": [
+        0,
+        0,
+        0
+      ],
+      "directionAfter": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "attribute": 111,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        4096,
+        -4096,
+        99
+      ],
+      "scratchAfter": [
+        4096,
+        -4096,
+        0
+      ],
+      "directionAfter": [
+        4096,
+        -4096,
+        0
+      ]
+    },
+    {
+      "attribute": 111,
+      "before": [
+        -3100,
+        1700,
+        0
+      ],
+      "scratchBefore": [
+        -8192,
+        2048,
+        -99
+      ],
+      "scratchAfter": [
+        -8192,
+        2048,
+        0
+      ],
+      "directionAfter": [
+        -8192,
+        2048,
+        0
+      ]
+    }
+  ],
+  "conclusion": "12..15 read unwritten stack X/Y; all tested flag classes depend on prior scratch. 0..11 overwrite X/Y. Z is always initialized to zero. This does not establish a live caller stack producer or authorize a replacement direction."
+}

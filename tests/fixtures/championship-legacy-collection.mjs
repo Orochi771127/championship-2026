@@ -26,5 +26,9 @@ export async function restoreLegacyIndividual(app, storage, displayName = "Legac
     // Loading a fixture changes this in-memory test session, not its checkpoint.
     if (checkpoint === null) storage.removeItem(CHAMPIONSHIP_MODERN_SAVE_KEY);
     else storage.setItem(CHAMPIONSHIP_MODERN_SAVE_KEY, checkpoint);
+    // This test-only helper explicitly restores storage behind the live app.
+    // Acknowledge that controlled baseline; ordinary stale tabs cannot do this
+    // through inspection/retry and are covered by save-conflict-cases.
+    app.savePort.read({adopt:true});
   }
 }

@@ -12,6 +12,7 @@ from pathlib import Path
 from desmume.emulator import DeSmuME
 from hunt_movement_observer import HuntMovementObserver
 from hunt_animation_observer import HuntAnimationObserver
+from hunt_steering_stack_observer import HuntSteeringStackObserver
 
 ROM_SHA = '8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1'
 
@@ -21,7 +22,12 @@ def main():
         parser.add_argument('--' + key, required=True)
     parser.add_argument('--movement-out', help='Optional selected-actor movement semantic receipt')
     parser.add_argument('--animation-out', help='Optional selected-actor NANR semantic receipt')
+    parser.add_argument('--steering-stack-out', help='Optional read-only all-actor steering stack provenance')
+    parser.add_argument('--escape-wait', type=int, default=0, help='Observe free escape after binding instead of pulling/capturing')
+    parser.add_argument('--wild-index',type=int,default=7)
     args = parser.parse_args()
+    if args.animation_out and args.wild_index != 7:
+        raise ValueError("The existing animation receipt is bounded to wild index 7")
     raw = Path(args.rom).read_bytes()
     assert hashlib.sha256(raw).hexdigest() == ROM_SHA
     private = Path(args.private_dir).resolve()
@@ -42,11 +48,12 @@ def main():
     assert word(player + 0x10) == 0 and word(0x0212AC4C) == 15
     assert word(player + 0x24) == 0
     manager = word(0x0210AA1C)
-    obj = word(manager + 12 + 7 * 4)
+    assert 0 <= args.wild_index < 32
+    obj = word(manager + 12 + args.wild_index * 4)
     wild = word(obj + 0x704)
     actor = word(wild + 0x34)
     record = word(wild + 0x110)
-    assert word(record) == 10 and word(wild + 0x4E8) == 210
+    if args.wild_index == 7: assert word(record) == 10 and word(wild + 0x4E8) == 210
     tick, phase, rope_address = 0, 'entry', None
     hand_controller = None
     selected_ai8 = False
@@ -55,6 +62,8 @@ def main():
     events, frames, actions, pictures = [], [], [], []
     movement = HuntMovementObserver(emu, wild, lambda: tick) if args.movement_out else None
     animation = HuntAnimationObserver(emu, wild, lambda: tick) if args.animation_out else None
+
+    steering = HuntSteeringStackObserver(emu, lambda: tick) if args.steering_stack_out else None
 
     def target():
         return {'hp': word(wild + 0x4E8), 'maxHp': word(wild + 0x4EC),
@@ -71,6 +80,10 @@ def main():
 
     def hook(address, size):
         nonlocal rope_address, hand_controller, selected_ai8, wild_random_max, sampler_address
+        if steering and address in steering.POINTS:
+            steering.observe(address)
+            if address not in base_hooks and not (movement and address in movement.POINTS) and not (animation and address in animation.POINTS):
+                return True
         if animation:
             animation.observe(address)
             if address not in base_hooks and not (movement and address in movement.POINTS):
@@ -155,7 +168,7 @@ def main():
                     0x02110D0C, 0x02110DC8, 0x02110E10, 0x02110FFC,
                     0x0210B5E4, 0x0210B628, 0x0210B650,
                     0x02113F8C, 0x02114040, 0x021141D8, 0x02114298, 0x02114388, 0x021145C8, 0x02114340}
-    for address in base_hooks | (movement.POINTS if movement else set()) | (animation.POINTS if animation else set()):
+    for address in base_hooks | (movement.POINTS if movement else set()) | (animation.POINTS if animation else set()) | (steering.POINTS if steering else set()):
         emu.memory.register_exec(address, hook, 4)
     if movement:
         movement.install_return = lambda address: emu.memory.register_exec(address, hook, 4)
@@ -199,6 +212,7 @@ def main():
     act('touch', 6, 36, 182); act('release', 6)
     for _ in range(8):
         x, y = screen_position()
+        if args.wild_index != 7 and 52 <= x <= 204 and 32 <= y <= 136: break
         dx, dy = max(-70, min(70, 120 - x)), max(-60, min(60, 85 - y))
         if abs(dx) + abs(dy) < 5:
             break
@@ -206,13 +220,23 @@ def main():
     phase = 'rope_circle'
     act('touch', 6, 64, 182); act('release', 6)
     x, y = screen_position()
-    assert 52 <= x <= 204 and 52 <= y <= 136, (x, y)
+    if args.wild_index != 7:
+        assert 0 <= x <= 255 and 0 <= y <= 191, (x,y)
+        x,y=max(32,min(223,x)),max(32,min(159,y))
+    assert 32 <= x <= 223 and 32 <= y <= 159, (x, y)
     for dx, dy in [(-32, 0), (-24, -24), (0, -32), (24, -24), (32, 0), (24, 24), (0, 32), (-24, 24), (-32, 0)]:
         act('touch', 2, x + dx, y + dy)
     screenshot('circle_before_release')
     act('release', 50)
     screenshot('bound_after_release')
-    assert target()['bound'] == 1, target()
+    if not args.escape_wait: assert target()['bound'] == 1, target()
+    if args.escape_wait:
+        assert 1 <= args.escape_wait <= 3600
+        phase='free_escape';act('release',args.escape_wait)
+        observation={'evidence':'BOUNDED_NATIVE_REPLAY','romSha256':ROM_SHA,'stateSha256':hashlib.sha256(Path(args.state).read_bytes()).hexdigest(),'inputAuthority':'Normal stylus binding followed by released input; no RAM writes','actions':actions,'final':target(),'calls':steering.calls if steering else []}
+        Path(args.out).write_text(json.dumps(observation,indent=2)+'\n',encoding='utf-8')
+        if args.steering_stack_out:Path(args.steering_stack_out).write_text(json.dumps(observation,indent=2)+'\n',encoding='utf-8')
+        print(json.dumps({'status':'FREE_ESCAPE_OBSERVED','calls':len(observation['calls']),'unknown':sum((c['attribute']&15)>=12 for c in observation['calls']),'final':target()}));return
     phase = 'rope_pull'
     x, y = screen_position()
     act('touch', 4, x, y - 5)
@@ -232,7 +256,7 @@ def main():
     card = word(player + 0x20)
     output = {'status': 'NATIVE_TOUCH_CAPTURE_PASS_NOT_WEB_PARITY', 'romSha256': ROM_SHA,
               'stateSha256': hashlib.sha256(Path(args.state).read_bytes()).hexdigest(),
-              'gateIndex': 0, 'wildIndex': 7, 'speciesIndex': 10, 'initial': initial,
+              'gateIndex': 0, 'wildIndex': args.wild_index, 'speciesIndex': word(record), 'initial': initial,
               'final': target(), 'card': {'speciesIndex': word(card), 'currentHp': word(card + 0x50), 'maxHp': word(card + 0x58)},
               'inputAuthority': 'DeSmuME stylus API only; no emulated memory writes or forced animation completion',
               'aiming': 'Script reads actual target position to aim and pan; all actions and calibrated native touch coordinates retained',
@@ -242,7 +266,7 @@ def main():
     if movement:
         assert movement.active is None, 'Unreturned native movement call'
         movement_output = {'romSha256': ROM_SHA, 'stateSha256': output['stateSha256'],
-                           'inputAuthority': output['inputAuthority'], 'wildIndex': 7,
+                           'inputAuthority': output['inputAuthority'], 'wildIndex': args.wild_index,
                            'status': 'OBSERVED_MOVEMENT_NOT_NORMAL_BROWSER_ACCEPTANCE',
                            'calls': movement.calls, 'captureFinal': output['final'], 'card': output['card']}
         with Path(args.movement_out).open('w', encoding='utf-8', newline='\n') as stream:
@@ -250,12 +274,15 @@ def main():
     if animation:
         animation_output = {'romSha256': ROM_SHA, 'stateSha256': output['stateSha256'],
                             'inputAuthority': output['inputAuthority'], 'overlay': 0,
-                            'wildIndex': 7, 'speciesIndex': 10, 'entityId': 'm003_nyokimon',
+                            'wildIndex': args.wild_index, 'speciesIndex': word(record), 'entityId': 'm003_nyokimon',
                             'status': 'ORIGINAL_TOUCH_ANIMATION_OBSERVATION_NOT_NORMAL_WEB_ACCEPTANCE',
                             'calls': animation.calls, 'frames': animation.frames,
                             'captureFinal': output['final'], 'card': output['card']}
         with Path(args.animation_out).open('w', encoding='utf-8', newline='\n') as stream:
             stream.write(json.dumps(animation_output, indent=2) + '\n')
+    if steering:
+        receipt = {'evidence':'BOUNDED_NATIVE_REPLAY','inputAuthority':output['inputAuthority'],'romSha256':ROM_SHA,'stateSha256':output['stateSha256'],'calls':steering.calls,'limits':'One normal input sequence, all observed actors. Stack provenance is observed, not a universal producer contract.'}
+        Path(args.steering_stack_out).write_text(json.dumps(receipt,indent=2)+'\n',encoding='utf-8')
     print(json.dumps({key: output[key] for key in ['status', 'initial', 'final', 'card']}))
 
 if __name__ == '__main__':

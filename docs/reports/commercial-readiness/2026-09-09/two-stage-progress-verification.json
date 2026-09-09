@@ -1,0 +1,81 @@
+{
+  "baselineCommit": "74b264f44f94bc74a48c4f73b2d20e349533cfa3",
+  "stage1": "PARTIAL",
+  "stage2": "OPEN",
+  "hunt": {
+    "keepDirectionAdaptationApplied": false,
+    "nativeEntryDirectionFixed": [
+      0,
+      1,
+      0
+    ],
+    "syntheticCpuCases": 192,
+    "normalCaptureSteeringCalls": 206,
+    "normalEscapeSteeringCalls": 364,
+    "normalEdgeUnassignedSteeringCalls": 1,
+    "unresolved": "Original heap address/state authority for the first escaped-edge movement; no fixed sampled address may become normal gameplay truth."
+  },
+  "gpuRecovery": {
+    "unitAndClockTests": {
+      "passed": 11,
+      "failed": 0
+    },
+    "browser": {
+      "origin": "http://127.0.0.1:8765",
+      "entry": "LOGIN -> New Game -> story -> naming -> Raising",
+      "result": "Controlled WebGL context loss/restoration retained same canvas and restored rendered scene; DOM time advanced after restoration.",
+      "phone": false,
+      "logs": "One expected context-loss warning. An earlier MutationObserver error lacked source URL; not attributed or hidden, and zero-error browser acceptance is not claimed."
+    }
+  },
+  "regression": {
+    "tests": 1397,
+    "pass": 1397,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 101709.216
+  },
+  "release": "NOT_REQUESTED_NOT_PERFORMED",
+  "ownedParty": {
+    "scope": "Ordinary title matches, owned individuals, shared gameplay RNG, atomic individual/economy result and Save/Continue",
+    "qualificationCpuVectors": 23256,
+    "individualWriterCpuVectors": 216,
+    "multiRoundChampionship": "OPEN",
+    "browser": "Controlled adult fixture -> LOGIN -> Continue -> System/Battle -> select owned individual -> natural battle -> result -> Home -> Save -> Continue",
+    "physicalDevice": false
+  },
+  "saveStability": {
+    "exclusiveSession": "Web Locks where supported; released on Save & Quit",
+    "withoutWebLocks": "Optimistic stale-byte rejection only; simultaneous races not claimed closed",
+    "staleOverwriteRejected": true,
+    "failedProgressExport": true,
+    "fullRecoveryImport": "OPEN",
+    "browserHandoff": "Second tab refused; first tab Save & Quit; second tab retry succeeds"
+  },
+  "skillsApplied": [
+    "game-studio",
+    "web-game-foundations",
+    "game-playtest",
+    "game-ui-frontend"
+  ],
+  "portableCI": {
+    "tests": 1181,
+    "pass": 1181,
+    "fail": 0,
+    "skip": 0,
+    "durationMs": 86404.9587,
+    "scope": "Local npm run test:ci; hosted CI recorded separately after push"
+  },
+  "lastFocused": {
+    "tests": 17,
+    "pass": 17,
+    "fail": 0,
+    "scope": "Owned-party/save/economy tests after suppressing intermediate save notifications inside individual/economy commit"
+  },
+  "internalBuild": {
+    "buildId": "f135502fd6cdfba1974c68c74a0f4bf314ab0d5718aaf11fccc982381d1e2b8c",
+    "files": 4391,
+    "validation": "PASS",
+    "scope": "Internal build before the final intermediate-save-notification adjustment; not a release or final-commit artifact"
+  }
+}

@@ -23,8 +23,11 @@ if __name__ == '__main__':
     parser.add_argument('end', type=lambda x: int(x, 16))
     parser.add_argument('--rom', default=DEFAULT_ROM)
     parser.add_argument('--arm9', action='store_true')
+    parser.add_argument('--overlay', type=int, default=0)
     args = parser.parse_args()
     rom, arm, overlay = load_rom(args.rom)
+    if args.overlay != 0:
+        overlay = rom.loadArm9Overlays([args.overlay])[args.overlay]
     base, code = (0x02000000, arm) if args.arm9 else (overlay.ramAddress, bytes(overlay.data))
     assert 0 <= args.start-base < args.end-base <= len(code)
     decoder = Cs(CS_ARCH_ARM, CS_MODE_ARM)

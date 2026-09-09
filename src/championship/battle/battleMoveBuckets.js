@@ -56,7 +56,7 @@
 // order, which the ladder's pick treats as significant.
 
 import { deepFreeze } from "../contracts/championshipContracts.js";
-import { listMoveRecordsForSpecies } from "./battleCatalogs.js";
+import { listMoveRecordsForSpecies, listMoveRecordsForCombatant } from "./battleCatalogs.js";
 
 export const BATTLE_MOVE_BUCKET_EVIDENCE = "VERIFIED_BINARY";
 export const BATTLE_MOVE_BUCKET_SITE = "OVL19:0x02113E5C";
@@ -150,4 +150,8 @@ export function buildMoveBuckets(records) {
  */
 export function buildMoveBucketsForSpecies(speciesId) {
   return buildMoveBuckets(listMoveRecordsForSpecies(speciesId));
+}
+
+export function buildMoveBucketsForCombatant(combatant) {
+  return buildMoveBuckets(listMoveRecordsForCombatant(combatant));
 }

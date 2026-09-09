@@ -64,11 +64,13 @@ export async function createChampionshipPixiStage({ PIXI, canvasHost }) {
 
   let destroyed = false;
   let contextLost = false;
+  let resumeAfterRestore = false;
   const resizeListeners = new Set();
   const contextLostListeners = new Set();
+  const contextRestoredListeners = new Set();
 
   function applySize() {
-    if (destroyed) return;
+    if (destroyed || contextLost) return;
     const bounds = host.getBoundingClientRect();
     app.renderer.resize(Math.max(1, Math.round(bounds.width)), Math.max(1, Math.round(bounds.height)));
     app.stage.hitArea = new PIXI.Rectangle(0, 0, app.screen.width, app.screen.height);
@@ -79,6 +81,8 @@ export async function createChampionshipPixiStage({ PIXI, canvasHost }) {
 
   function handleContextLost(event) {
     event.preventDefault();
+    if (destroyed || contextLost) return;
+    resumeAfterRestore = app.ticker.started;
     contextLost = true;
     app.stop();
     app.canvas.hidden = true;
@@ -87,10 +91,26 @@ export async function createChampionshipPixiStage({ PIXI, canvasHost }) {
     }
   }
 
+  function handleContextRestored() {
+    if (destroyed || !contextLost) return;
+    // Pixi installed its restoration listener during init, before this host.
+    // Its renderer restores GPU resources on the SAME Application and canvas.
+    contextLost = false;
+    applySize();
+    app.canvas.hidden = false;
+    for (const listener of [...contextRestoredListeners]) {
+      try { listener(); } catch { /* observers must not prevent restoration */ }
+    }
+    // Clock observers reset before ticking; suspended time is never simulated.
+    if (resumeAfterRestore) app.start();
+    resumeAfterRestore = false;
+  }
+
   const resizeObserver = typeof ResizeObserver === "function" ? new ResizeObserver(() => applySize()) : null;
   if (resizeObserver) resizeObserver.observe(host);
   else globalThis.addEventListener?.("resize", applySize);
   app.canvas.addEventListener("webglcontextlost", handleContextLost);
+  app.canvas.addEventListener("webglcontextrestored", handleContextRestored);
   applySize();
 
   return Object.freeze({
@@ -135,6 +155,11 @@ export async function createChampionshipPixiStage({ PIXI, canvasHost }) {
       return () => contextLostListeners.delete(listener);
     },
 
+    onContextRestored(listener) {
+      contextRestoredListeners.add(listener);
+      return () => contextRestoredListeners.delete(listener);
+    },
+
     /**
      * Mark the shared canvas as belonging to the mounted scene.
      *
@@ -171,9 +196,11 @@ export async function createChampionshipPixiStage({ PIXI, canvasHost }) {
       destroyed = true;
       resizeListeners.clear();
       contextLostListeners.clear();
+      contextRestoredListeners.clear();
       resizeObserver?.disconnect();
       if (!resizeObserver) globalThis.removeEventListener?.("resize", applySize);
       app.canvas.removeEventListener("webglcontextlost", handleContextLost);
+      app.canvas.removeEventListener("webglcontextrestored", handleContextRestored);
       app.destroy({ removeView: true, releaseGlobalResources: true }, { children: true });
     }
   });

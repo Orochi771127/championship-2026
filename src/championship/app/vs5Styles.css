@@ -304,6 +304,13 @@
 
 .cm-vs5-action--primary { border-color: #4fa6cc; }
 .cm-vs5-action:focus-visible { outline: 2px solid #65b8c3; outline-offset: 2px; }
+.cm-vs5-party { display: flex; flex-direction: column; gap: 10px; overflow-y: auto; min-height: 0; }
+.cm-vs5-party[hidden], .cm-vs5-matches[hidden], .cm-vs5-cube[hidden], .cm-vs5-cube__note[hidden] { display: none; }
+.cm-vs5-party { padding: 0 12px; }
+.cm-vs5-party .cm-vs5-action { min-height: 48px; text-align: left; }
+.cm-vs5-party .cm-vs5-action[aria-pressed="true"] { border: 2px solid #a5edff; background: #18516b; }
+.cm-vs5-party .cm-vs5-action:disabled { opacity: .55; cursor: default; }
+.cm-vs5-party .cm-vs5-match__fee { display: block; margin-top: 5px; font-size: 12px; letter-spacing: 0; }
 
 .cm-vs5-exit {
   margin: auto 0 8px;

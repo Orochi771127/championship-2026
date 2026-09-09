@@ -57,7 +57,9 @@ export function enterNativeWildState(a, id, host) {
   else if (id === 4) { nativeWildRequest(a,13); a.counter=(host.nextChannel(0xb2)%20+10)*60; }
   else if (id === 6) { a.bounce={amplitude:4,velocity:4}; nativeWildRequest(a,4); }
   else if (id === 8) {
-    a.directionQ12=[0,Q12,0]; a.escapeCounter=0; a.drowsy=0;
+    // OVL0 02111310..02111318 stores literal 1, not a full Q12 unit.
+    // Normalization happens AFTER the first terrain steering blend.
+    a.directionQ12=[0,1,0]; a.escapeCounter=0; a.drowsy=0;
     a.movementRestricted=0; a.restrictedTicks=0; nativeWildRequest(a,11);
   } else if (id === 9) {
     a.shake={ticks:a.shotShakeTicks,shakeX:1,shakeY:0,toggle:0}; nativeWildRequest(a,6);

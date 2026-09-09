@@ -129,6 +129,10 @@ async function ensurePixiStage(canvasHost) {
       isModalOpen: () => toolbar?.getOpenMenuId() != null
     });
     pixiStage.onContextLost(() => clockDriver.reset());
+    pixiStage.onContextRestored(() => {
+      clockDriver.reset();
+      delete root.dataset.fieldFallback;
+    });
     document.addEventListener("visibilitychange", () => clockDriver.reset());
   }
   clockDriver.setActive(!root.hidden);
@@ -369,14 +373,18 @@ function mountBattleSelect() {
   return createBattleSelectView({
     root,
     matches: battleRuntime.listMatches(),
+    getPartySelection:recordIndex=>({candidates:app.getBattlePartyCandidates(recordIndex),limit:app.getBattlePartyLimit(recordIndex)}),
     menuCopy: BATTLE_MENU_LABELS,
-    onEnter(recordIndex) {
+    onEnter(recordIndex,playerInstanceIds) {
       // Battle simulation uses this existing Application's ticker. Do not
       // charge for a session that cannot start advancing on the shared stage.
       if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started) {
         return { ok: false, reason: "BATTLE_NOT_READY", message: "遊戲場景尚未就緒，請返回育成場景後重試。" };
       }
-      const prepared = createBattleRuntime({ schedule: app.getBattleSchedule(), mode:1, battleType:0 });
+      const party=app.prepareBattleParty(recordIndex,playerInstanceIds);
+      if(!party.ok)return party;
+      const rngPreparation=app.prepareBattleRng();
+      const prepared = createBattleRuntime({ schedule: app.getBattleSchedule(), mode:1, battleType:0,playerIndividuals:party.individuals,rng:rngPreparation.rng });
       try {
         prepared.chooseMatch(recordIndex);
         // Build before charging. startMatch creates the session but never ticks
@@ -384,7 +392,7 @@ function mountBattleSelect() {
         prepared.startMatch();
         const context = prepared.getEconomyContext();
         const attemptId = `battle:${app.getBattleEconomyState().nextSequence}`;
-        const result = app.enterMatch({ ...context, attemptId });
+        const result = app.enterMatch({ ...context, attemptId,playerInstanceIds,rngPreparation });
         if (result.ok && !result.duplicate) {
           battleRuntime?.dispose();
           battleRuntime = prepared;
@@ -685,7 +693,7 @@ function runToolbarMenuEntry(entry) {
   }
   if (entry.action === "SAVE_AND_QUIT") {
     try {
-      if (app.save().phase === "SAVED") returnToTitle();
+      if (app.save().phase === "SAVED") void returnToTitle().catch(error=>console.warn(error));
     } catch (error) {
       console.warn(`CHAMPIONSHIP_SAVE_AND_QUIT: ${error.message}`);
     }
@@ -703,7 +711,7 @@ function runToolbarMenuEntry(entry) {
 }
 
 /** Save & Quit returns to the title, which is where the original ends a session. */
-function returnToTitle() {
+async function returnToTitle() {
   clockDriver?.setActive(false);
   statusBar?.dispose();statusBar=null;
   unsubscribeCalendar?.();
@@ -715,6 +723,7 @@ function returnToTitle() {
   view?.dispose?.();
   view = null;
   mountedScreen = null;
+  await app.dispose();
   root.hidden = true;
   titleScreen.hidden = false;
   openingPresentation.reset();loginButton.hidden=false;titleActions.hidden=true;
@@ -814,9 +823,9 @@ async function startNewGame(names={}) {
     return true;
   } catch (error) {
     console.warn(error);
-    note(`Could not start a new game: ${error.message}`);
     newGameButton.disabled = false;
     refreshContinue();
+    note(`無法開始新遊戲：${error.message}`);
     return false;
   }
 }
@@ -834,8 +843,9 @@ async function continueGame() {
     await openGameplay();
   } catch (error) {
     console.warn(error);
-    note(`Could not load your saved game: ${error.message}`);
     newGameButton.disabled = false;
+    refreshContinue();
+    note(`無法讀取存檔：${error.message}`);
   }
 }
 

@@ -2,6 +2,8 @@
   "schemaVersion": 1,
   "boundary": "CI verifies repository-contained engineering tests; local reference/art acceptance remains required separately. npm test continues to run the full suite. New test files require explicit classification.",
   "portable": [
+    "tests/championship-save-conflict-cases.mjs",
+    "tests/championship-battle-owned-party-cases.mjs",
     "tests/championship-art-a1-map-tech-cases.mjs",
     "tests/championship-art-production-a0-cases.mjs",
     "tests/championship-battle-action-application-cases.mjs",
@@ -107,6 +109,7 @@
     "tests/championship-opening-story-cases.mjs",
     "tests/championship-original-map-bindings-cases.mjs",
     "tests/championship-pages-closure-cases.mjs",
+    "tests/championship-pixi-context-recovery-cases.mjs",
     "tests/championship-presentation-pack-cases.mjs",
     "tests/championship-raising-activity-cases.mjs",
     "tests/championship-raising-cage-art-plan-cases.mjs",

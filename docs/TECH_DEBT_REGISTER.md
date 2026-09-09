@@ -24,10 +24,26 @@ fabricate a vector for them. That refusal is right. What is wrong is where it
 lands: the throw escapes the field's own ticker as an unhandled page error, so a
 wild that steps onto such a tile in movement mode 3 takes the whole Hunt down.
 
-It is not a rare corner. Every one of the 29 hunt environments has three
-untraced direction-palette entries (`unknownDirection` 14 and 15), and they
-cover **159,429 of 475,136 tiles — 33.6% of the hunt maps**, from 14.5% of
-`field_hm16_01` to 64.1% of `field_hm03_01`.
+The catalog contains **159,429 of 475,136 tiles — 33.6%**, but this is
+NOT a probability of hitting the failure or proof that those tiles are ordinary
+walkable escape paths. The 2026-09-09 census found all 150,699 nibble-14 tiles
+are blocked terrain, and all 8,730 nibble-15 tiles are escape boundaries.
+Normal AI8 checks the boundary before movement; its first update immediately
+following a state transition is a distinct case.
+
+New live original evidence reproduces that first-update exception at an edge:
+a normal stylus circle on wild index 3 reads attribute 0x8f. ARM9 animation
+routine 02047D5C pushes the current actor address and return address 02047944
+into the later steering scratch X/Y slots. The original blends and normalizes
+those values, then continues to escape handling. See
+[the live receipt](research/HUNT_STEERING_EDGE_LIVE_2026-09-09.json) and
+[the CPU probe](research/HUNT_STEERING_STACK_CPU_2026-09-09.json).
+This establishes one actual producer path; it does not establish a portable
+original heap-layout authority for every new encounter. No keep-direction
+adaptation has been installed. Owner asked to prioritize original behavior.
+
+A separate verified bug was fixed: AI8 entry 02111310 stores direction Y=1;
+the port incorrectly stored 4096 before the first steering blend.
 
 Remediation is a trace, not a patch: read what ARM9 does for nibbles 14/15 and
 implement it. Until then the guard must stay — a fallback direction chosen here

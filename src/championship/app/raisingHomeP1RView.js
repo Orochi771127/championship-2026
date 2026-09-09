@@ -122,12 +122,19 @@ export async function createRaisingHomeP1RView({ root, source, mountField } = {}
   // body level, which is where ui/toolbar.nxr belongs (Shared, attached by the
   // ARM9 main binary rather than by OVL18). Two toolbars is worse than one.
   const status = node("p", "int-rh2-status", "Raising Home is ready.");
+  const recovery=node('button','int-rh2-system-button','匯出未存成功的進度');recovery.type='button';recovery.hidden=true;
+  recovery.addEventListener('click',()=>{
+    const data=presentation.intents.exportRecovery?.();if(!data?.text)return;
+    const url=URL.createObjectURL(new Blob([data.text],{type:'application/json'}));
+    const link=document.createElement('a');link.href=url;link.download='championship-recovery.json';link.click();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  });
   status.setAttribute("role", "status");
   status.setAttribute("aria-live", "polite");
 
   // One-screen adaptation of the original info-above-field hierarchy.
   // The shared status/toolbar remain mounted by the existing application.
-  shell.append(header, companion, fieldFrame, status);
+  shell.append(header, companion, fieldFrame, status, recovery);
   root.append(shell);
   const transition=node('div','int-rh2-lifecycle');transition.hidden=true;transition.setAttribute('aria-live','polite');
   const transitionText=node('p','int-rh2-lifecycle__text');
@@ -196,7 +203,8 @@ export async function createRaisingHomeP1RView({ root, source, mountField } = {}
     savedAt = committedAt;
     const reported = saveStatus?.phase ?? "CLEAN";
     const phase = reported === "DIRTY" && Date.now() < acknowledgeUntil ? "SAVED" : reported;
-    status.textContent = uiText(SAVE_COPY[phase] ?? "Raising Home status updated.");
+    status.textContent = saveStatus?.conflict?'另一個分頁已更新存檔。請先匯出這裡的進度，再重新載入並選擇繼續遊戲。':uiText(SAVE_COPY[phase] ?? "Raising Home status updated.");
+    recovery.hidden=phase!=='SAVE_FAILED'||typeof presentation.intents.exportRecovery!=='function';
     save.dataset.phase = phase;
     save.classList.toggle("is-dirty", phase === "DIRTY" || phase === "SAVE_FAILED");
   }

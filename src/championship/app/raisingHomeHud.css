@@ -57,6 +57,7 @@
   letter-spacing: .025em;
 }
 .int-rh2-system-button::before { width: 22px; height: 22px; }
+.int-rh2-system-button[hidden] { display: none; }
 .int-rh2-system-button.is-dirty { color: #745014; border-color: #bb9a47; background: linear-gradient(#fffbed, #ffebb4); }
 
 /* The companion readout sits above the playable field, as in the reference.

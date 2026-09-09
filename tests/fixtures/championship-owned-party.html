@@ -1,0 +1,25 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><title>自有隊伍受控驗收</title>
+<style>body{background:#142331;color:white;font:16px system-ui}button{padding:12px}iframe{display:block;width:390px;height:780px;border:0;margin-top:16px}</style>
+<p>受控成年個體／比賽日期存檔；後續操作使用正式遊戲入口。僅限本機測試。</p>
+<button id="prepare">準備驗收存檔</button><p id="status" role="status">尚未準備</p><iframe title="正式遊戲"></iframe>
+<script type="module">
+import {createChampionshipStandaloneApp} from '../../src/championship/app/championshipStandaloneApp.js';
+import {createNativeHuntIndividual} from '../../src/championship/hunt/capture/nativeHuntIndividual.js';
+import {nativeHuntSpeciesByIndex} from '../../src/championship/hunt/capture/nativeHuntSources.js';
+import {nativeIndividualProfile} from '../../src/championship/raising/nativeIndividualProfile.js';
+import {CHAMPIONSHIP_MODERN_SAVE_KEY} from '../../src/championship/app/championshipStandaloneSave.js';
+document.querySelector('#prepare').addEventListener('click',async()=>{
+ const catalog=await fetch('../../src/data/championship/catalogs/creature-species.r1.json').then(r=>r.json());
+ const {cages}=await fetch('../../docs/contracts/championship/raising-home-presentation.v1.json').then(r=>r.json());
+ const app=createChampionshipStandaloneApp({storage:localStorage,catalog,cages,rngClock:()=>({hour:13,minute:20,second:50})});
+ try{
+  await app.newGame();app.save();const save=JSON.parse(localStorage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY));
+  save.creature.nativeProfile=nativeIndividualProfile(createNativeHuntIndividual({species:nativeHuntSpeciesByIndex(34),rng:{next:()=>11}}));
+  save.creature.speciesId='species-034';save.creature.displayName='隊伍驗收';
+  localStorage.setItem(CHAMPIONSHIP_MODERN_SAVE_KEY,JSON.stringify(save));await app.continueGame();
+  app.advanceClock({units:19*1440*400});app.creditBits(150);app.save();
+  document.querySelector('#status').textContent='受控存檔已準備；請登入、繼續遊戲並從工具列參賽。';
+ }finally{await app.dispose();}
+ document.querySelector('iframe').src='../../championship.html';
+});
+</script></html>

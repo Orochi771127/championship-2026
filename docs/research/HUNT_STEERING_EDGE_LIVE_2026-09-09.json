@@ -1,0 +1,149 @@
+{
+  "evidence": "BOUNDED_NATIVE_REPLAY",
+  "inputAuthority": "Normal stylus binding followed by released input; no RAM writes",
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "stateSha256": "3b1a13a0e517722f094d0a6454f773a3b2f55b6f0b0994d4788447b5650940ae",
+  "wildIndex": 3,
+  "calls": [
+    {
+      "tick": 143,
+      "ai": "0x230d2fc",
+      "caller": "0x211143c",
+      "stack": "0x27e3a38",
+      "positionQ12": [
+        1159597,
+        137040,
+        0
+      ],
+      "before": [
+        0,
+        1,
+        0
+      ],
+      "stackAtEntry": [
+        36750468,
+        33847620,
+        36754172
+      ],
+      "entryWriters": [
+        {
+          "tick": 143,
+          "pc": "0x2047d64",
+          "lr": "0x2047944",
+          "sp": "0x27e3a40",
+          "address": "0x27e3a38",
+          "size": 4,
+          "r0": 36750468,
+          "r1": 1,
+          "r2": 35156480,
+          "r3": 0,
+          "r4": 36750468,
+          "r5": 36754172
+        },
+        {
+          "tick": 143,
+          "pc": "0x2047d64",
+          "lr": "0x2047944",
+          "sp": "0x27e3a40",
+          "address": "0x27e3a3c",
+          "size": 4,
+          "r0": 36750468,
+          "r1": 1,
+          "r2": 35156480,
+          "r3": 0,
+          "r4": 36750468,
+          "r5": 36754172
+        }
+      ],
+      "attribute": 143,
+      "targetBeforeBlend": [
+        36750468,
+        33847620,
+        36754172
+      ],
+      "targetWriters": [
+        {
+          "tick": 143,
+          "pc": "0x2047d64",
+          "lr": "0x2047944",
+          "sp": "0x27e3a40",
+          "address": "0x27e3a38",
+          "size": 4,
+          "r0": 36750468,
+          "r1": 1,
+          "r2": 35156480,
+          "r3": 0,
+          "r4": 36750468,
+          "r5": 36754172
+        },
+        {
+          "tick": 143,
+          "pc": "0x2047d64",
+          "lr": "0x2047944",
+          "sp": "0x27e3a40",
+          "address": "0x27e3a3c",
+          "size": 4,
+          "r0": 36750468,
+          "r1": 1,
+          "r2": 35156480,
+          "r3": 0,
+          "r4": 36750468,
+          "r5": 36754172
+        }
+      ],
+      "afterBlend": [
+        1839318,
+        1694035,
+        0
+      ],
+      "afterNormalize": [
+        3013,
+        2775,
+        0
+      ]
+    }
+  ],
+  "final": {
+    "hp": 220,
+    "maxHp": 220,
+    "sourceHp": 220,
+    "sourceMaxHp": 220,
+    "ai": 1,
+    "bound": 0,
+    "ready": 0,
+    "downPhase": 0,
+    "downClock": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "aiFields": {
+      "0x54": 8,
+      "0x58": 0,
+      "0x6c": 0,
+      "0x70": 0,
+      "0x78": 0,
+      "0x7c": 0,
+      "0x84": 0,
+      "0x98": 0,
+      "0x1b0": 0
+    },
+    "movementRestricted": 0,
+    "worldQ12": [
+      2588672,
+      1933312
+    ],
+    "camera": [
+      161,
+      16
+    ],
+    "cardCount": 0
+  },
+  "sourceReceiptSha256": "7d885f0d8fba16b077cc3ca48897d23a89d5205f974b2ed482bef32dc08fb147",
+  "limits": [
+    "One original edge-binding sequence; not every gate, heap layout or caller",
+    "Write-hook PC is the emulator pipeline register and is offset from the actual PUSH instruction; static decode identifies ARM9 02047D5C push r3/r4/lr",
+    "Initial scratch X is the current actor address; Y is the animation return address 02047944. Normal web does not yet model the original heap address authority."
+  ]
+}

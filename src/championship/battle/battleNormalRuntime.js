@@ -5,7 +5,7 @@ import {normalBattleSpeedScalar,normalBattleTargetSelector,selectNormalBattleTar
   stepNormalBattleWait,stepNormalBattleLaunch,updateNormalBattleTeam,selectBattlePursuitTarget,
   stepBattlePursuit,finishBattleTargetedAction} from './battleNormalFlow.js';
 import {getBattleCatalogRecord} from './battleCatalogs.js';
-import {buildMoveBucketsForSpecies} from './battleMoveBuckets.js';
+import {buildMoveBucketsForCombatant} from './battleMoveBuckets.js';
 import {negativeStatusActionGate} from './battleStatus.js';
 
 export function createBattleNormalRuntime({session,actors,creatures,initialize,applyStatus,globalAbort=()=>!!(actors.worldFlags()&2)}){
@@ -39,7 +39,7 @@ export function createBattleNormalRuntime({session,actors,creatures,initialize,a
     if(c.committedAction===action)c.committedAction=c.launchSlots.find(Boolean)??0;
   }
   function chooseOrdinary(slot){
-    const c=session.slots[slot],bucket=buildMoveBucketsForSpecies(c.speciesId).buckets[4],roll=session.rng.next(216);
+    const c=session.slots[slot],bucket=buildMoveBucketsForCombatant(c).buckets[4],roll=session.rng.next(216);
     // Original reads the unused +C0 slot even when count is zero. Its stale
     // pointer is not reconstructed for noncombatants; preserve that boundary.
     const action=bucket.length?bucket[roll%bucket.length]:null;

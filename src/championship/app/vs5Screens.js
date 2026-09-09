@@ -82,7 +82,7 @@ function shell(root, screen, label) {
  * so the box does not filter the list: it is drawn because the original has it,
  * and the missing link is stated on screen rather than faked.
  */
-export function createBattleSelectView({ root, matches, onEnter, onExit, mountCube, menuCopy }) {
+export function createBattleSelectView({ root, matches, onEnter, onExit, mountCube, menuCopy, getPartySelection }) {
   if (!Array.isArray(matches)) throw new TypeError("The Battle menu requires a resolved match list");
   if (typeof onEnter !== "function") throw new TypeError("The Battle menu requires an onEnter intent");
 
@@ -94,6 +94,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, mountCu
   section.append(header);
 
   let cube = null;
+  const matchOnlyNodes = [];
   if (typeof mountCube === "function") {
     const stage = element("div", "cm-vs5-cube");
     section.append(stage);
@@ -107,6 +108,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, mountCu
     const note = element("p", "cm-vs5-cube__note",
       menuCopy.faceNotice);
     section.append(note);
+    matchOnlyNodes.push(stage, note);
   }
 
   const list = element("ul", "cm-vs5-matches");
@@ -115,6 +117,41 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, mountCu
   entryNotice.setAttribute("role", "status");
   entryNotice.setAttribute("aria-live", "polite");
   entryNotice.hidden = true;
+  const partyPanel=element('section','cm-vs5-party');partyPanel.hidden=true;
+  let selectedMatch=null,selectedIds=[];
+  function showRefusal(result,match){
+    if(result?.ok!==false)return;
+    entryNotice.hidden=false;entryNotice.dataset.reason=result.reason??'ENTRY_REFUSED';
+    const fee=result.entryFee??match.entryFee,wallet=result.walletBits??result.wallet??result.bits;
+    entryNotice.textContent=uiText(['INSUFFICIENT_FUNDS','INSUFFICIENT_BITS'].includes(result.reason)
+      ?`持有金額不足。報名費 ${fee} 位元幣；持有 ${wallet??'—'} 位元幣。`
+      :result.message??menuCopy.entryRefused??'目前無法參加這場對戰。');
+  }
+  function chooseParty(match){
+    selectedMatch=match;selectedIds=[];list.hidden=true;partyPanel.hidden=false;partyPanel.replaceChildren();entryNotice.hidden=true;
+    for (const node of matchOnlyNodes) node.hidden = true;
+    const {candidates,limit}=getPartySelection(match.recordIndex);
+    partyPanel.append(element('h2','cm-vs5-title','選擇參賽數碼獸'),element('p','cm-vs5-entry-notice',`最多 ${limit} 隻`));
+    const controls=[];
+    const confirm=actionButton('決定',{primary:true});confirm.disabled=true;
+    for(const entry of candidates){
+      const button=actionButton(entry.displayName??entry.name??entry.instanceId);
+      button.dataset.instanceId=entry.instanceId;button.setAttribute('aria-pressed','false');
+      button.disabled=!entry.admission.ok;
+      if(!entry.admission.ok)button.append(element('span','cm-vs5-match__fee',entry.admission.message));
+      else if(entry.profile)button.append(element('span','cm-vs5-match__fee',`HP ${entry.profile.currentHp}／${entry.profile.maxHp}　TP ${entry.profile.currentTp}／${entry.profile.maxTp}`));
+      button.addEventListener('click',()=>{
+        selectedIds=selectedIds.includes(entry.instanceId)?selectedIds.filter(id=>id!==entry.instanceId):[...selectedIds,entry.instanceId];
+        for(const [c,b] of controls){const picked=selectedIds.includes(c.instanceId);b.setAttribute('aria-pressed',String(picked));b.disabled=!c.admission.ok||(!picked&&selectedIds.length>=limit);}
+        confirm.disabled=selectedIds.length===0;
+      });
+      controls.push([entry,button]);partyPanel.append(button);
+    }
+    if(!candidates.some(c=>c.admission.ok))partyPanel.append(element('p','cm-vs5-entry-notice','目前沒有符合這場比賽條件的數碼獸。'));
+    confirm.addEventListener('click',()=>showRefusal(onEnter(selectedMatch.recordIndex,[...selectedIds]),selectedMatch));
+    const back=actionButton('返回賽事選擇');back.addEventListener('click',()=>{partyPanel.hidden=true;list.hidden=false;entryNotice.hidden=true;for(const node of matchOnlyNodes)node.hidden=false;});
+    partyPanel.append(confirm,back);
+  }
   function renderMatches(nextMatches) {
     if (!Array.isArray(nextMatches)) return;
     matches = nextMatches;
@@ -133,6 +170,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, mountCu
       button.append(element("span", "cm-vs5-match__payout",
         `${menuCopy.prize ?? "獎金"} ${match.payout > 0 ? `${match.payout} 位元幣` : menuCopy.noPayout}`));
       button.addEventListener("click", () => {
+        if(getPartySelection){chooseParty(match);return;}
         const result = onEnter(match.recordIndex);
         if (result?.ok !== false) return;
         entryNotice.hidden = false;
@@ -148,7 +186,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, mountCu
     }
   }
   renderMatches(matches);
-  section.append(list, entryNotice);
+  section.append(list, partyPanel, entryNotice);
 
   if (typeof onExit === "function") {
     const exit = actionButton(menuCopy.returnHome);

@@ -19,7 +19,7 @@ class Node {
   replaceChildren(...nodes) { this.children = [...nodes]; }
   setAttribute(name, value) { this.attributes[name] = value; }
   addEventListener(name, listener) { this.listeners[name] = listener; }
-  click() { this.listeners.click?.(); }
+  click() { if (!this.disabled) this.listeners.click?.(); }
 }
 
 function descendants(node) {
@@ -48,6 +48,30 @@ function useDocument(t) {
 }
 
 const outcome = { ended: true, verdict: "TEAM_ZERO_AHEAD", reason: "TEAM_DOWN", winningTeam: 0 };
+
+test('party selection enforces eligibility and slot limit; cancel never enters or charges', (t) => {
+  const root = useDocument(t), entered = [];
+  createBattleSelectView({root, matches:[{recordIndex:0,entryFee:150,payout:7000}],
+    menuCopy:{menu:'對戰',chooseMatch:'選擇對戰',availableMatches:'賽事',faceNotice:'模式'},
+    mountCube:()=>({dispose(){}}), onEnter:(...args)=>{entered.push(args);return {ok:true};},
+    getPartySelection:()=>({limit:1,candidates:[
+      {instanceId:'a',displayName:'甲',admission:{ok:true}},
+      {instanceId:'b',displayName:'乙',admission:{ok:true}},
+      {instanceId:'young',displayName:'幼年',admission:{ok:false,message:'尚未符合參賽資格'}}]})});
+  const button = name => descendants(root).find(n=>n.tagName==='button'&&n.textContent===name);
+  const match = findByClass(root,'cm-vs5-match__enter');
+  match.click();
+  assert.equal(button('決定').disabled,true);
+  assert.equal(findByClass(root,'cm-vs5-cube').hidden,true);
+  button('幼年').click();assert.equal(button('決定').disabled,true);
+  button('甲').click();assert.equal(button('乙').disabled,true);
+  button('乙').click();assert.deepEqual(entered,[]);
+  button('返回賽事選擇').click();assert.deepEqual(entered,[]);
+  assert.equal(findByClass(root,'cm-vs5-cube').hidden,false);
+  match.click();assert.equal(button('決定').disabled,true,'cancel discards the selection');
+  button('甲').click();button('甲').click();assert.equal(button('決定').disabled,true);
+  button('乙').click();button('決定').click();assert.deepEqual(entered,[[0,['b']]]);
+});
 
 function showPrize(root, receipt) {
   const view = createBattleResultView({ root, outcome, receipt, matchTitle: "MATCH 00" });

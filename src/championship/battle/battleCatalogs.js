@@ -162,3 +162,12 @@ export function listMoveRecordsForSpecies(speciesId) {
   }
   return matches;
 }
+
+/** OVL19 02113E04..02113E48 appends the individual's two learned records. */
+export function listMoveRecordsForCombatant(combatant) {
+  const moves=listMoveRecordsForSpecies(combatant.speciesId);
+  for(const id of [combatant.source12C,combatant.source130]){
+    if(id!==undefined&&id!==0)moves.push(getBattleCatalogRecord('moves',id));
+  }
+  return moves;
+}

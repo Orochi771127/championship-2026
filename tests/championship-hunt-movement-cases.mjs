@@ -85,3 +85,16 @@ test("controlled ARM grid probes verify wrap, outside bounds and ordered terrain
     assert.equal(readNativeTerrainType(grid, ...c.tile), c.terrain);
   }
 });
+
+
+test("entering native escape preserves the literal direction before its first steering blend", async () => {
+  const { enterNativeWildState } = await import("../src/championship/hunt/capture/nativeWildActor.js");
+  const cpu = JSON.parse(fs.readFileSync("docs/research/HUNT_STEERING_STACK_CPU_2026-09-09.json", "utf8"));
+  const actor = { aiState:1, bounds:{entityId:"m003_nyokimon"}, bound:0, poisoned:0, blinded:0, sequenceId:null };
+  enterNativeWildState(actor,8,{});
+  assert.deepEqual(actor.directionQ12,cpu.enter8Direction);
+  const observed=receipt.calls.find(call=>call.mode===3);
+  assert.deepEqual(actor.directionQ12,observed.before.directionQ12);
+  const attr=observed.steps.find(s=>s.attribute).attribute.value;
+  assert.deepEqual(steerNativeHuntDirection(actor.directionQ12,attr),point(observed,"0x210deec").directionQ12);
+});
