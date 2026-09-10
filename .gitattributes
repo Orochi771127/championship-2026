@@ -16,3 +16,5 @@
 # their line endings and invalidating the existing image/geometry contracts.
 assets/production/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 docs/art/production/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Historical generation prompts are signed receipts, including their final blank line.
+docs/art/production/characters/appearance-refresh-v1/batch-01/generation/*-prompt.txt -text whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
