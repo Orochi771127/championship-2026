@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-06",
+  "scope": "Offline UI artboard and route recommendation only",
+  "imageInspection": {
+    "performed": true,
+    "inspector": "root assistant",
+    "method": "Generated image viewed directly",
+    "result": "SUITABLE_FOR_COMPONENT_STYLE_REVIEW",
+    "findings": [
+      "Bright ivory, gold and blue-green visual family is coherent.",
+      "Eight tool icons are present; three button states, four status wells and two numeric wells are visible.",
+      "No visible words, map or character; no cropped components.",
+      "Arrow-like header ends are decorative and do not authorize navigation.",
+      "Disabled state retains gold outline; actual-size state readability has not been verified."
+    ]
+  },
+  "raster": {
+    "tool": "create-game-assets/scripts/asset_report.py",
+    "expectedSize": [
+      1536,
+      1024
+    ],
+    "actualSize": [
+      1536,
+      1024
+    ],
+    "mode": "RGB",
+    "hasAlpha": false,
+    "bytes": 1465350,
+    "result": "PASS"
+  },
+  "focused": {
+    "command": "node --test tests/championship-art-production-a0-cases.mjs tests/championship-toolbar-layout-cases.mjs",
+    "pass": 9,
+    "fail": 0,
+    "skipped": 0,
+    "exitCode": 0,
+    "log": "focused.log"
+  },
+  "regression": {
+    "command": "node --test --test-concurrency=2 tests/*.mjs",
+    "pass": 1124,
+    "fail": 0,
+    "skipped": 0,
+    "exitCode": 0,
+    "log": "regression.log",
+    "meaning": "Current shared-tree regression passed; does not prove generated UI is integrated or art is accepted."
+  },
+  "blender": {
+    "command": "R:/Tools/Blender/4.5.13/blender-4.5.13-windows-x64/blender.exe --version",
+    "version": "4.5.13 LTS",
+    "exitCode": 0,
+    "newModelCreated": false,
+    "renderRerun": false
+  },
+  "browserQA": "NOT_RUN_NO_RUNTIME_CHANGE",
+  "physicalDeviceQA": "NOT_RUN",
+  "godotQA": "NOT_RUN",
+  "spriteSlicing": "NOT_DONE",
+  "transparency": "OPAQUE_BY_DESIGN_NOT_A_TRANSPARENT_ATLAS",
+  "gameScaleReadability": "NOT_RUN",
+  "runtimeIntegrated": false
+}

@@ -1,0 +1,358 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 85,
+  "scenePath": "ui/hunt/setting/setting_gear_main_slot_scene.nxr",
+  "category": "Hunt Loadout / Equipment",
+  "overlayOwner": "OVL12",
+  "sourceEvidence": {
+    "fileId": 6374,
+    "fileName": "setting_gear_main_slot_scene.nxr",
+    "sha256": "3b591f2a5408fbd62b03e2da3c13d23c5ab7be485695a95af8f81d698b53e5ce",
+    "overlayMappingConfidence": "SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "MAIN",
+    "roleEvidence": "FILENAME_HEURISTIC"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [
+    {
+      "resourceIndex": 0,
+      "resourceName": "setting_obj_main",
+      "cellCount": 17,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "ui/hunt/setting/setting_obj_main.ncer",
+        "nanr": "ui/hunt/setting/setting_obj_main.nanr",
+        "ncgr": null,
+        "ncbr": "ui/hunt/setting/setting_obj_main.ncbr",
+        "nclr": "ui/hunt/setting/setting_obj_main.nclr",
+        "nscr": null
+      },
+      "spriteWitness": "docs/art/production/ui/faithful-hd96/sprite-cell-witnesses-4x/ui__hunt__setting__setting_obj_main__cells.png",
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "col_slot_base",
+      "resourceIndex": 0,
+      "cellIndex": 9,
+      "sourcePosition": {
+        "x": 0,
+        "y": 26
+      },
+      "portraitProjection": {
+        "x": 0.0,
+        "y": 259.6875
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 1,
+      "name": "slot3_cover",
+      "resourceIndex": 0,
+      "cellIndex": 10,
+      "sourcePosition": {
+        "x": 24,
+        "y": 90
+      },
+      "portraitProjection": {
+        "x": 101.25,
+        "y": 529.6875
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 2,
+      "name": "slot2_cover",
+      "resourceIndex": 0,
+      "cellIndex": 10,
+      "sourcePosition": {
+        "x": 24,
+        "y": 71
+      },
+      "portraitProjection": {
+        "x": 101.25,
+        "y": 449.5312
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 3,
+      "name": "slot1_cover",
+      "resourceIndex": 0,
+      "cellIndex": 10,
+      "sourcePosition": {
+        "x": 24,
+        "y": 52
+      },
+      "portraitProjection": {
+        "x": 101.25,
+        "y": 369.375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 4,
+      "name": "slot0_cover",
+      "resourceIndex": 0,
+      "cellIndex": 10,
+      "sourcePosition": {
+        "x": 24,
+        "y": 33
+      },
+      "portraitProjection": {
+        "x": 101.25,
+        "y": 289.2188
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 5,
+      "name": "col_slot0",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 15,
+        "y": 33
+      },
+      "portraitProjection": {
+        "x": 63.2812,
+        "y": 289.2188
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 6,
+      "name": "col_slot1",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 15,
+        "y": 52
+      },
+      "portraitProjection": {
+        "x": 63.2812,
+        "y": 369.375
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 7,
+      "name": "col_slot2",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 15,
+        "y": 71
+      },
+      "portraitProjection": {
+        "x": 63.2812,
+        "y": 449.5312
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 8,
+      "name": "col_slot3",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 15,
+        "y": 90
+      },
+      "portraitProjection": {
+        "x": 63.2812,
+        "y": 529.6875
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 9,
+      "name": "loc_slot0",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 15,
+        "y": 33
+      },
+      "portraitProjection": {
+        "x": 63.2812,
+        "y": 289.2188
+      },
+      "params": [
+        8,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 10,
+      "name": "loc_slot1",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 15,
+        "y": 52
+      },
+      "portraitProjection": {
+        "x": 63.2812,
+        "y": 369.375
+      },
+      "params": [
+        8,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 11,
+      "name": "loc_slot2",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 15,
+        "y": 71
+      },
+      "portraitProjection": {
+        "x": 63.2812,
+        "y": 449.5312
+      },
+      "params": [
+        8,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 12,
+      "name": "loc_slot3",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 15,
+        "y": 90
+      },
+      "portraitProjection": {
+        "x": 63.2812,
+        "y": 529.6875
+      },
+      "params": [
+        8,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    }
+  ],
+  "dynamicVirtualNodeCount": 8,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

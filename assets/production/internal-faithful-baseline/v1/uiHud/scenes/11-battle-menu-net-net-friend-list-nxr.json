@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 11,
+  "scenePath": "battle_menu_net/net_friend_list.nxr",
+  "category": "Network Battle UI",
+  "overlayOwner": "OVL9/OVL10",
+  "sourceEvidence": {
+    "fileId": 167,
+    "fileName": "net_friend_list.nxr",
+    "sha256": "5fb0815c88a537a521ed3381a35871f7350b1d03879ad6def236aed387473319",
+    "overlayMappingConfidence": "SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "UNKNOWN_REQUIRES_TRACE",
+    "roleEvidence": "UNKNOWN_REQUIRES_TRACE"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "defbutton",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 208,
+        "y": 44
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 1,
+      "name": "button1",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 25,
+        "y": 29
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        6,
+        2
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 2,
+      "name": "button3",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 25,
+        "y": 111
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        6,
+        2
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 3,
+      "name": "button2",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 25,
+        "y": 70
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        6,
+        2
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 4,
+      "name": "scrollarea",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 88,
+        "y": 96
+      },
+      "portraitProjection": null,
+      "params": [
+        1,
+        0,
+        9,
+        10
+      ],
+      "colorModulationRaw": "0xFFFFFFA1",
+      "cellLinkValidated": false
+    }
+  ],
+  "dynamicVirtualNodeCount": 5,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

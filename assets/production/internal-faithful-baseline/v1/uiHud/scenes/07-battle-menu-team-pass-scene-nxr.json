@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 7,
+  "scenePath": "battle_menu/team_pass_scene.nxr",
+  "category": "Battle Menu / Setup",
+  "overlayOwner": "OVL10",
+  "sourceEvidence": {
+    "fileId": 142,
+    "fileName": "team_pass_scene.nxr",
+    "sha256": "f9406c6e4c19d1021e56b78b0417d13b8db25bdd1de39c834c8b04651882df80",
+    "overlayMappingConfidence": "SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "UNKNOWN_REQUIRES_TRACE",
+    "roleEvidence": "UNKNOWN_REQUIRES_TRACE"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [
+    {
+      "resourceIndex": 0,
+      "resourceName": "battle_setting_obj_sub",
+      "cellCount": 3,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "battle_menu/battle_setting_obj_sub.ncer",
+        "nanr": "battle_menu/battle_setting_obj_sub.nanr",
+        "ncgr": "battle_menu/battle_setting_obj_sub.ncgr",
+        "ncbr": null,
+        "nclr": "battle_menu/battle_setting_obj_sub.nclr",
+        "nscr": null
+      },
+      "spriteWitness": "docs/art/production/ui/faithful-hd96/sprite-cell-witnesses-4x/battle_menu__battle_setting_obj_sub__cells.png",
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "pass",
+      "resourceIndex": -1,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 128,
+        "y": 174
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        16,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 1,
+      "name": "unnamed0001",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 0,
+        "y": 161
+      },
+      "portraitProjection": null,
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 2,
+      "name": "unnamed0000",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 0,
+        "y": 168
+      },
+      "portraitProjection": null,
+      "params": [
+        3,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    }
+  ],
+  "dynamicVirtualNodeCount": 1,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

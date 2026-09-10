@@ -1,0 +1,109 @@
+{
+  "batchId": "ART-BATTLE-LIGHT-FENCE-PILOT-R1-2026-09-02",
+  "sharedLayer": "docs/art/production/battle/light-fence-pilot-r1/review/layers/field-bm00-00-light-metal-fence-neutral.png",
+  "thresholds": {
+    "matteEdgeExcessMax": 12.0,
+    "haloMax": 12.0,
+    "slotFloorDeMax": 20.0,
+    "adaptationMinSpread": 3.0,
+    "groundingMinDrop": 4.0,
+    "chromaRatioMin": 0.8
+  },
+  "shared": [
+    {
+      "check": "MATTE",
+      "metric": "edge luma minus local body luma",
+      "value": -29.1,
+      "threshold": 12.0,
+      "passed": true,
+      "detail": "edge luma 148.7 vs local body 177.8. A positive excess means the cutout kept a lighter authoring backdrop."
+    }
+  ],
+  "perField": [
+    {
+      "field": "bm08",
+      "checks": [
+        {
+          "check": "HALO",
+          "metric": "edge band luma minus background beyond",
+          "value": 9.5,
+          "threshold": 12.0,
+          "passed": true
+        },
+        {
+          "check": "SLOTS",
+          "metric": "worst of 6 slots, dE to arena-centre floor",
+          "value": 15.4,
+          "threshold": 20.0,
+          "passed": true,
+          "detail": "all slots on continuous floor"
+        },
+        {
+          "check": "GROUNDING",
+          "metric": "far-band luma minus near-band luma",
+          "value": 6.2,
+          "threshold": 4.0,
+          "passed": true
+        },
+        {
+          "check": "CHROMA",
+          "metric": "saturation as a fraction of the original field",
+          "value": 0.99,
+          "threshold": 0.8,
+          "passed": true,
+          "detail": "rebuild 73.3% vs original 74.1%"
+        }
+      ]
+    },
+    {
+      "field": "bm10",
+      "checks": [
+        {
+          "check": "HALO",
+          "metric": "edge band luma minus background beyond",
+          "value": 11.7,
+          "threshold": 12.0,
+          "passed": true
+        },
+        {
+          "check": "SLOTS",
+          "metric": "worst of 6 slots, dE to arena-centre floor",
+          "value": 11.2,
+          "threshold": 20.0,
+          "passed": true,
+          "detail": "all slots on continuous floor"
+        },
+        {
+          "check": "GROUNDING",
+          "metric": "far-band luma minus near-band luma",
+          "value": 10.0,
+          "threshold": 4.0,
+          "passed": true
+        },
+        {
+          "check": "CHROMA",
+          "metric": "saturation as a fraction of the original field",
+          "value": 1.24,
+          "threshold": 0.8,
+          "passed": true,
+          "detail": "rebuild 83.7% vs original 67.2%"
+        }
+      ]
+    },
+    {
+      "field": "(batch)",
+      "checks": [
+        {
+          "check": "ADAPTATION",
+          "metric": "mean dE of the composited ring from its cross-field average",
+          "value": 19.62,
+          "threshold": 3.0,
+          "passed": true,
+          "detail": "Zero means one bitmap was pasted into every scene with no per-scene grading."
+        }
+      ]
+    }
+  ],
+  "failures": 0,
+  "passed": true
+}

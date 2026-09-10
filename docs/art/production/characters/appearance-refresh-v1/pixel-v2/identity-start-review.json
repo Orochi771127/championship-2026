@@ -1,0 +1,103 @@
+{
+  "browserQa": "reports/art/appearance-refresh-v1/identity-redesign-browser-qa.json",
+  "directionVersion": "creature-identity-v1",
+  "fullMotionApprovedCount": 0,
+  "id": "ALL224-CREATURE-IDENTITY-START-2026-09-06",
+  "identityBriefCount": 224,
+  "identityFamilies": {
+    "BEASTFOLK": 39,
+    "BIG_EYE": 27,
+    "CANINE": 57,
+    "DRAGONFOLK": 51,
+    "FELINE": 41,
+    "OTHER_WITH_REASON": 9
+  },
+  "identityQueueSha256": "5290061fb31d55874469ef4325b1c13b8e097bb66fca11680173a8e8cefae5a1",
+  "independentToolsReview": "docs/art/production/characters/appearance-refresh-v1/_work/identity-gate-review/integrated-tools-review-r02.json",
+  "legacySettingsPendingIdentityReview": 14,
+  "newIdentityDrawingCount": 12,
+  "newIdentityPoseImageCount": 16,
+  "newlyDrawnEntitiesOutsidePrevious16": [
+    "m003_nyokimon",
+    "m004_bubbmon",
+    "m005_pitchmon",
+    "m333_scumon",
+    "m347_bakemon",
+    "m356_yukidarumon",
+    "m419_toriceramon",
+    "m424_pandamon",
+    "m444_monzaemon",
+    "m503_warglaymon"
+  ],
+  "nextWork": {
+    "meaning": "Deterministic next-work selection from actual progress, not a background scheduler or drawing-completion claim.",
+    "nextParallelRepresentatives": [
+      "m006_punimon",
+      "m312_kabuterimon",
+      "m418_tonosamagekomon",
+      "e000_digitama"
+    ],
+    "remainingIdentityDrawings": 212,
+    "scope": "CONTINUE_ALL_ROSTER_IDENTITY_DRAWINGS_WITHOUT_WAITING_FOR_M201",
+    "singlePoseFollowup": [
+      "m003_nyokimon",
+      "m004_bubbmon",
+      "m005_pitchmon",
+      "m333_scumon",
+      "m347_bakemon",
+      "m356_yukidarumon",
+      "m419_toriceramon",
+      "m424_pandamon",
+      "m444_monzaemon",
+      "m503_warglaymon"
+    ]
+  },
+  "normalGameDefaultReplacedCount": 0,
+  "physicalDeviceQa": "NOT_RUN",
+  "remainingIdentityDrawings": 212,
+  "repairs": [
+    "M503 back-plate/shoulder separation failed initial independent review; 203 internal pixels repaired and re-reviewed with outer support and face unchanged.",
+    "Old visual PASS no longer grants current identity acceptance; missing/stale identity version or actual PNG blocks stage advance.",
+    "Execution-queue projection now rejects missing/duplicate entities before reporting 224 briefs.",
+    "Three designer chosenFamily fields normalized to canonical family with identical pixels and preserved independent review evidence."
+  ],
+  "representativePoseSettingsPassed": [
+    "m201_agumon",
+    "m001_zurumon"
+  ],
+  "schemaVersion": 1,
+  "settingProgressSha256": "23dc83d671b8d345e774d1ef6aa3d05fe8fdd4328b6f3698210099872f618354",
+  "shippingReady": false,
+  "singlePoseCandidatesPending": [
+    "m003_nyokimon",
+    "m004_bubbmon",
+    "m005_pitchmon",
+    "m333_scumon",
+    "m347_bakemon",
+    "m356_yukidarumon",
+    "m419_toriceramon",
+    "m424_pandamon",
+    "m444_monzaemon",
+    "m503_warglaymon"
+  ],
+  "sourceIndexSha256": "fa6d31ed819306aee5df61b56d03ed177d56bc6b1b450a3935c026ae2d633be9",
+  "sourceReviewScope": "Each of 224 actual standard source witnesses viewed by assigned designer; not all original poses.",
+  "sourceTotals": {
+    "eggs": 8,
+    "entities": 224,
+    "regular": 216,
+    "sequences": 11480,
+    "slots": 17235,
+    "uniqueNonblankMasters": 10184
+  },
+  "status": "ALL224_BRIEFED_12_IDENTITY_DRAFTS_2_REPRESENTATIVE_SETTINGS",
+  "tests": {
+    "gitDiffCheck": "PASS",
+    "javascriptRegression": 1104,
+    "pythonIdentityQueue": 5,
+    "pythonPixelCompiler": 17,
+    "pythonProductionQueue": 4,
+    "pythonSettingReview": 12,
+    "pythonSourceWorkflow": 16
+  }
+}

@@ -1,6 +1,7 @@
 import { createPixiCharacterAnimationController } from "./pixiCharacterAnimationController.js";
 import { createNativeHuntCharacterFramePresenter } from "./nativeHuntCharacterAction.js";
 import { createBattleCharacterAnimator } from "./battleCharacterAction.js";
+import {createNativeCharacterAnimationTimeline} from './characterAnimationTimeline.js';
 
 function requireRecord(value, label) {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
@@ -142,7 +143,8 @@ export async function loadPixiCharacterRuntimeBundle({
       reducedMotion = false,
       nativeFramePresentation = false,
       battleGeometry = null,
-      nativeGeometry = null
+      nativeGeometry = null,
+      nativeSequence = false
     } = {}) {
       if (disposed) throw new Error("CHARACTER_RUNTIME_BUNDLE_DISPOSED");
       const sideRuntime = runtime.sides[side];
@@ -169,7 +171,11 @@ export async function loadPixiCharacterRuntimeBundle({
       }) : null;
       const battleAnimator = battleGeometry ? createBattleCharacterAnimator({sprite,
         animations:sideRuntime.animations,textureResolver:key=>textures.get(key),geometry:battleGeometry,reducedMotion}) : null;
-      return Object.freeze({ sprite, controller, side, nativeFramePresenter, battleAnimator });
+      const timeline=nativeSequence?createNativeCharacterAnimationTimeline(firstAnimation):null;
+      const sequencePlayer=timeline?{getSnapshot:()=>timeline.getSnapshot(),advanceNative(delta){
+        const frame=timeline.advanceNative(delta);sprite.texture=textures.get(frame.texture);return frame;
+      }}:null;
+      return Object.freeze({ sprite, controller, side, nativeFramePresenter, battleAnimator,sequencePlayer });
     },
 
     getDiagnostics() {

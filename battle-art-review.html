@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <link rel="icon" href="data:,">
+  <title>Championship Battle Art Review</title>
+  <style>
+    html, body, #battle-art-host { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #191f25; }
+    #battle-art-host canvas { display: block; width: 100%; height: 100%; }
+  </style>
+</head>
+<body>
+  <main id="battle-art-host" aria-label="Internal Battle arena art review"></main>
+  <script type="module">
+    import * as PIXI from "./node_modules/pixi.js/dist/pixi.mjs";
+    import { createChampionshipPixiStage } from "./src/championship/presentation/championshipPixiStage.js";
+    import { loadRuntimeBattleArenaArtReview } from "./src/championship/presentation/runtimeBattleArenaArtReview.js";
+
+    const host = document.getElementById("battle-art-host");
+    const query = new URLSearchParams(globalThis.location.search);
+    const arenaKey = query.get("arena") || "bm01";
+    const paused = query.get("paused") === "1";
+    const manifestPaths = Object.freeze({
+      bm01: "./assets/production/internal-battle-review/bm00-bm01-r1/runtime.review.json",
+      bm02: "./assets/production/internal-battle-review/bm02-r1/runtime.review.json",
+      bm03: "./assets/production/internal-battle-review/bm03-bm04-animated-r1/runtime.bm03.review.json",
+      bm04: "./assets/production/internal-battle-review/hardening-r2/runtime.bm04.review.json",
+      bm05: "./assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm05.review.json",
+      bm06: "./assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm06.review.json",
+      bm07: "./assets/production/internal-battle-review/bm07-cyberspace-r1/runtime.review.json",
+      bm08: "./assets/production/internal-battle-review/hardening-r2/runtime.bm08.review.json",
+      bm09: "./assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm09.review.json",
+      bm10: "./assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm10.review.json",
+      bm11: "./assets/production/internal-battle-review/hardening-r2/runtime.bm11.review.json"
+    });
+    if (!(arenaKey in manifestPaths)) throw new Error(`Unknown Battle art review arena: ${arenaKey}`);
+    const manifest = await fetch(manifestPaths[arenaKey]).then((response) => {
+      if (!response.ok) throw new Error(`Battle art manifest load failed: ${response.status}`);
+      return response.json();
+    });
+    const stage = await createChampionshipPixiStage({ PIXI, canvasHost: host });
+    const root = stage.createSceneRoot("isolated battle art review");
+    const review = await loadRuntimeBattleArenaArtReview({ PIXI, manifest });
+    root.addChild(review.displayObject);
+    review.layout(stage.screen.width, stage.screen.height);
+    const unmark = stage.markScene("cm-battle-art-review-canvas");
+    const unresize = stage.onResize(() => review.layout(stage.screen.width, stage.screen.height));
+    const animate = (ticker) => review.advance(ticker.deltaMS);
+    if (!paused) stage.app.ticker.add(animate);
+
+    globalThis.__BATTLE_ART_REVIEW__ = Object.freeze({
+      getDiagnostics() {
+        return Object.freeze({ stage: stage.getDiagnostics(), review: review.getDiagnostics() });
+      },
+      advance(deltaMs) {
+        if (!paused) throw new Error("Manual advance requires ?paused=1");
+        return review.advance(deltaMs);
+      },
+      async dispose() {
+        if (!paused) stage.app.ticker.remove(animate);
+        unresize();
+        unmark();
+        await review.dispose();
+        root.destroy({ children: true });
+        stage.destroy();
+      }
+    });
+    globalThis.__BATTLE_ART_REVIEW_READY__ = true;
+  </script>
+</body>
+</html>

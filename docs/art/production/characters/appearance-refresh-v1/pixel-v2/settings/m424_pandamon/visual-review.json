@@ -1,0 +1,31 @@
+{
+  "candidateSource": "docs/art/production/characters/appearance-refresh-v1/_work/identity-integration/schema-normalized/m424_pandamon",
+  "entityId": "m424_pandamon",
+  "findings": [
+    "原黑白熊面已被琥珀毛身、奶油短貓吻、粉色三角耳內與分開短眼取代，單體的貓系身份可辨識。",
+    "四肢外輪廓與雙足底線在比較圖保持；紅巾兩叉仍可辨識。這僅是可見站姿觀察，不推定骨架或全動作端點。",
+    "亮底及暗底可讀；暗底紅巾末梢對比弱於主體，後續動畫審查需重看。"
+  ],
+  "fullMotionQa": "NOT_RUN",
+  "identityDirectionVersion": "creature-identity-v1",
+  "identityVerdict": "PASS_IDENTITY_DIRECTION",
+  "independentReview": "docs\\art\\production\\characters\\appearance-refresh-v1\\_work\\identity-roster-group3-independent-review\\review.json",
+  "metadataNormalization": "Added canonical identityDesign.family alias from chosenFamily; all pose pixels, palette, bounds and identity rules unchanged.",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "priorIndependentEvidence": {
+    "settingFileSha256": "319a87321151157baf78e2fa870a6da432b766aef813158a76ff321edafe0808",
+    "technicalQaSha256": "d42e6622d9f1b436005083f6720b4fb83a6409d92f0c40d86d97a853efebffe9"
+  },
+  "reviewMethod": "Actually viewed original/new comparison and native/enlarged authored contact board; independently compiled adopted pixels.",
+  "reviewer": "root / schema normalization of independently reviewed unchanged artwork",
+  "runtimePromotionGranted": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "ba7f4407cfa954e62b737e2cbd89661a3b4eda575aa59e4675e0c84e4e4cdaf8",
+  "sourceComparisonSha256": "c836fc81d6637a4e3098b7d8cd1fa9e7cf8543036cbb1ae5a67cab9eaee85911",
+  "technicalQaSha256": "26b22e22891214e7a7d58b8ec417a1187ffb14076e3ecd76a7ba120f0c706c53",
+  "unresolvedBlockingIssues": [
+    "Additional source representative poses and continuity review required before setting acceptance."
+  ],
+  "verdict": "STANDARD_POSE_REVIEWED_NOT_SETTING_PASS"
+}

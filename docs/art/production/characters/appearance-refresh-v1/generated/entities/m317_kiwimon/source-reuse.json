@@ -1,0 +1,1437 @@
+{
+  "classification": "RESEARCH_ONLY",
+  "entityId": "m317_kiwimon",
+  "masters": [
+    {
+      "canonical": "m317_kiwimon/main/cell_000",
+      "masterId": "m317_kiwimon:master:2a5449f376d2d9f9",
+      "members": [
+        "m317_kiwimon/main/cell_000",
+        "m317_kiwimon/sub/cell_000"
+      ],
+      "size": [
+        176,
+        240
+      ],
+      "sourceRgbaSha256": "4c94b5722aaecf1f24913e24a186409584ccce9f7013d9739f87cc99cb2a7470"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_001",
+      "masterId": "m317_kiwimon:master:3217eda7e6e5047d",
+      "members": [
+        "m317_kiwimon/main/cell_001",
+        "m317_kiwimon/sub/cell_001"
+      ],
+      "size": [
+        176,
+        232
+      ],
+      "sourceRgbaSha256": "d25d63cce9b88b75d995b32f4029925cb2136c6e628347dd20fc5a8310142599"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_002",
+      "masterId": "m317_kiwimon:master:4139f4a996d3391c",
+      "members": [
+        "m317_kiwimon/main/cell_002",
+        "m317_kiwimon/sub/cell_002"
+      ],
+      "size": [
+        176,
+        240
+      ],
+      "sourceRgbaSha256": "bf399c87cd19d3deccb997cdca5bb4a38c5b7d9210c7d83522df2b1d0e96c7a3"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_003",
+      "masterId": "m317_kiwimon:master:f723960e4dddcef0",
+      "members": [
+        "m317_kiwimon/main/cell_003",
+        "m317_kiwimon/sub/cell_003"
+      ],
+      "size": [
+        176,
+        232
+      ],
+      "sourceRgbaSha256": "fd9d6ef399e629d798652a685643554d527d0b6fda7d84d11e877d5af567a6a6"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_004",
+      "masterId": "m317_kiwimon:master:ef720305a12339f2",
+      "members": [
+        "m317_kiwimon/main/cell_004"
+      ],
+      "size": [
+        176,
+        240
+      ],
+      "sourceRgbaSha256": "567dc6ac6fd3e7003b329007a25e1a3aaab6a0e5b515bb5223929eac3362ea4d"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_005",
+      "masterId": "m317_kiwimon:master:9041e8e215272eda",
+      "members": [
+        "m317_kiwimon/main/cell_005"
+      ],
+      "size": [
+        208,
+        216
+      ],
+      "sourceRgbaSha256": "1eaeeb5058e50f9747fc448bd04f3a55320cf981d02eb6e94c25754aca8e74ca"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_006",
+      "masterId": "m317_kiwimon:master:daaabe6eb8ad33dc",
+      "members": [
+        "m317_kiwimon/main/cell_006"
+      ],
+      "size": [
+        232,
+        232
+      ],
+      "sourceRgbaSha256": "d1f43727bb768418cd207a71314f837a03f583b0ab8b3c2ada023b45d52661ca"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_007",
+      "masterId": "m317_kiwimon:master:f1137c57fb3e5c03",
+      "members": [
+        "m317_kiwimon/main/cell_007",
+        "m317_kiwimon/main/cell_053",
+        "m317_kiwimon/sub/cell_004",
+        "m317_kiwimon/sub/cell_017"
+      ],
+      "size": [
+        296,
+        160
+      ],
+      "sourceRgbaSha256": "acf148bee92f4fa01478676626aec5c8d8c147458d8a481129d37418ec9f52dc"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_008",
+      "masterId": "m317_kiwimon:master:36ba4357e9b19c6c",
+      "members": [
+        "m317_kiwimon/main/cell_008",
+        "m317_kiwimon/sub/cell_005"
+      ],
+      "size": [
+        200,
+        240
+      ],
+      "sourceRgbaSha256": "8aaa478ed48b72a4963c89a47d33af64fa84f8062d29b3e54670b3d412710598"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_009",
+      "masterId": "m317_kiwimon:master:9e4612df337ed895",
+      "members": [
+        "m317_kiwimon/main/cell_009",
+        "m317_kiwimon/main/cell_042",
+        "m317_kiwimon/main/cell_049",
+        "m317_kiwimon/sub/cell_011"
+      ],
+      "size": [
+        176,
+        232
+      ],
+      "sourceRgbaSha256": "a7b6a1b2a373e8fa8e5d2517eb45f629d1bbf24a64efabb14bc21d614ab4f47a"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_010",
+      "masterId": "m317_kiwimon:master:19275866ae3970e5",
+      "members": [
+        "m317_kiwimon/main/cell_010",
+        "m317_kiwimon/main/cell_048"
+      ],
+      "size": [
+        208,
+        248
+      ],
+      "sourceRgbaSha256": "a972d46c6cd15f528bdf2adc6a05838daa82cc28e7413d513c0d15bc45847739"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_011",
+      "masterId": "m317_kiwimon:master:bf1be49d32d301c9",
+      "members": [
+        "m317_kiwimon/main/cell_011",
+        "m317_kiwimon/main/cell_013"
+      ],
+      "size": [
+        176,
+        232
+      ],
+      "sourceRgbaSha256": "c9cc50818cf5ab81e4e26514f39bfecb724c95fa206f997bf777f87bbc10901c"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_012",
+      "masterId": "m317_kiwimon:master:9e56eccc26de4314",
+      "members": [
+        "m317_kiwimon/main/cell_012"
+      ],
+      "size": [
+        232,
+        192
+      ],
+      "sourceRgbaSha256": "c11fab9afdd99681e0b465c06c8764d2bb128631e468081872ea219ebb8f8b69"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_014",
+      "masterId": "m317_kiwimon:master:955829acdf794ad4",
+      "members": [
+        "m317_kiwimon/main/cell_014"
+      ],
+      "size": [
+        184,
+        208
+      ],
+      "sourceRgbaSha256": "5bb4a7b085919126ad6aab229606aab59440ce1775dd453a749618713b64d131"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_015",
+      "masterId": "m317_kiwimon:master:75bd33a198cf3d06",
+      "members": [
+        "m317_kiwimon/main/cell_015"
+      ],
+      "size": [
+        256,
+        224
+      ],
+      "sourceRgbaSha256": "fee5e797293c5d67bc368dec8e9e6c970206d25ccaee6229a44fd720d0963e85"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_016",
+      "masterId": "m317_kiwimon:master:8670986cc7f0a2ad",
+      "members": [
+        "m317_kiwimon/main/cell_016"
+      ],
+      "size": [
+        176,
+        240
+      ],
+      "sourceRgbaSha256": "cf1a9cee4dbe8b3a6121002af9a7000e379791fa0987f86c7d03ed07b1ed8e41"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_017",
+      "masterId": "m317_kiwimon:master:5d7b133d647ee366",
+      "members": [
+        "m317_kiwimon/main/cell_017"
+      ],
+      "size": [
+        208,
+        216
+      ],
+      "sourceRgbaSha256": "72cf060919a45a7cd1679f9d8c7567cf669fef158ea115c19ed972a420d34987"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_018",
+      "masterId": "m317_kiwimon:master:82068f5e6b0c5fee",
+      "members": [
+        "m317_kiwimon/main/cell_018",
+        "m317_kiwimon/sub/cell_006"
+      ],
+      "size": [
+        192,
+        160
+      ],
+      "sourceRgbaSha256": "a35ac7d90fed4c767b0a51596c6f8b700a7bf7ecf7838f52c76e08129a7391ac"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_019",
+      "masterId": "m317_kiwimon:master:d1863988e1558850",
+      "members": [
+        "m317_kiwimon/main/cell_019"
+      ],
+      "size": [
+        208,
+        240
+      ],
+      "sourceRgbaSha256": "f8e0d7ae47edb44e3caf83d781df45565da0d26af80137aaff3bd72282e01a47"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_020",
+      "masterId": "m317_kiwimon:master:e60309625caef058",
+      "members": [
+        "m317_kiwimon/main/cell_020",
+        "m317_kiwimon/main/cell_040",
+        "m317_kiwimon/main/cell_045",
+        "m317_kiwimon/sub/cell_009",
+        "m317_kiwimon/sub/cell_014"
+      ],
+      "size": [
+        176,
+        232
+      ],
+      "sourceRgbaSha256": "9f621569f6304abcb79a6f252f58db9a3d719d56735bc337b6d49711de39802f"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_021",
+      "masterId": "m317_kiwimon:master:f38450f66286d744",
+      "members": [
+        "m317_kiwimon/main/cell_021",
+        "m317_kiwimon/sub/cell_007"
+      ],
+      "size": [
+        200,
+        184
+      ],
+      "sourceRgbaSha256": "477413eeb64ce3fa47c84713588547f1a8cdae9f7fd2e5d08326332597ff06e6"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_022",
+      "masterId": "m317_kiwimon:master:71cc1cdf4b3498d9",
+      "members": [
+        "m317_kiwimon/main/cell_022"
+      ],
+      "size": [
+        176,
+        240
+      ],
+      "sourceRgbaSha256": "6cbb04f8125e4edf7c85722ea4179597f6890fc88dc67b0a8f03f544a008f13e"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_023",
+      "masterId": "m317_kiwimon:master:7f4f6c8279464e24",
+      "members": [
+        "m317_kiwimon/main/cell_023"
+      ],
+      "size": [
+        176,
+        232
+      ],
+      "sourceRgbaSha256": "d693f094f1dd8c5f08cea386a1a1b0a2b117af7b96b7cf131929e8d26cf7824e"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_024",
+      "masterId": "m317_kiwimon:master:36091d8af4ca361d",
+      "members": [
+        "m317_kiwimon/main/cell_024"
+      ],
+      "size": [
+        176,
+        240
+      ],
+      "sourceRgbaSha256": "544573c7f1029e3cee0aad020b2d5b5b4d2144f41233397f995240850e543695"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_025",
+      "masterId": "m317_kiwimon:master:6a8dca01a0a46acc",
+      "members": [
+        "m317_kiwimon/main/cell_025"
+      ],
+      "size": [
+        176,
+        232
+      ],
+      "sourceRgbaSha256": "9fa2e2f28a44d359219616567af5d49027fa87582ef16174fa4eba335974c9e6"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_026",
+      "masterId": "m317_kiwimon:master:97a39213bccf74d2",
+      "members": [
+        "m317_kiwimon/main/cell_026"
+      ],
+      "size": [
+        176,
+        240
+      ],
+      "sourceRgbaSha256": "e33736a900b8f778c0486f8c6261e0f9c41c8d0d5a1ecced4d3c2225133c4b9a"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_027",
+      "masterId": "m317_kiwimon:master:ed51e9afc0b492c0",
+      "members": [
+        "m317_kiwimon/main/cell_027"
+      ],
+      "size": [
+        208,
+        216
+      ],
+      "sourceRgbaSha256": "c5f8b8ad7c719bb72206d3295c2c6ee1122a15d25955ac0ed736b410a50cedcb"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_028",
+      "masterId": "m317_kiwimon:master:fd0b487faa1b613b",
+      "members": [
+        "m317_kiwimon/main/cell_028"
+      ],
+      "size": [
+        232,
+        232
+      ],
+      "sourceRgbaSha256": "6a7bcadbea1458aaaca4d99f2fb55921d5a4a3860d9f32a92428ff8ffc7a8cb6"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_029",
+      "masterId": "m317_kiwimon:master:cbae309c1d70e821",
+      "members": [
+        "m317_kiwimon/main/cell_029"
+      ],
+      "size": [
+        184,
+        208
+      ],
+      "sourceRgbaSha256": "30190d843f904018be8a7447a120b4fad6cdcc049d4c9126d9a8b8c86bb492d5"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_030",
+      "masterId": "m317_kiwimon:master:743193eedd7850be",
+      "members": [
+        "m317_kiwimon/main/cell_030"
+      ],
+      "size": [
+        256,
+        224
+      ],
+      "sourceRgbaSha256": "91d1b1aa211d41b3336d9eeb1dd6dd0f19a7acfce81aac5f24ea41b423a1a276"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_031",
+      "masterId": "m317_kiwimon:master:d8d165c4cc5dc918",
+      "members": [
+        "m317_kiwimon/main/cell_031"
+      ],
+      "size": [
+        176,
+        240
+      ],
+      "sourceRgbaSha256": "9db147428b8e0072e1527ccf8d47518e193c24ecaf3fe8c61ea5d710be7fe8b8"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_032",
+      "masterId": "m317_kiwimon:master:80fe12c758f7178a",
+      "members": [
+        "m317_kiwimon/main/cell_032"
+      ],
+      "size": [
+        208,
+        216
+      ],
+      "sourceRgbaSha256": "2f08b89f329cc5d80cc2886f5e6ea54723ab89365f43b7414f8af88141c5bb57"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_033",
+      "masterId": "m317_kiwimon:master:18582bf5f204cb7b",
+      "members": [
+        "m317_kiwimon/main/cell_033"
+      ],
+      "size": [
+        192,
+        160
+      ],
+      "sourceRgbaSha256": "e5ffc14ff81d88b438c009f50881a54b6542002482424238f970031319d1fded"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_034",
+      "masterId": "m317_kiwimon:master:32add650a9e38920",
+      "members": [
+        "m317_kiwimon/main/cell_034"
+      ],
+      "size": [
+        208,
+        240
+      ],
+      "sourceRgbaSha256": "e914f4bbdb15813ee73e67835650f5ef2f41ec8dbdc74d9cbbb3f6499990bda9"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_035",
+      "masterId": "m317_kiwimon:master:87170fa2475d2ef2",
+      "members": [
+        "m317_kiwimon/main/cell_035"
+      ],
+      "size": [
+        176,
+        232
+      ],
+      "sourceRgbaSha256": "8d41c5e00e783804715e45e18e83d7597df72354a8af1d48d3398bd01223a1aa"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_036",
+      "masterId": "m317_kiwimon:master:ab602e4ac122b7ce",
+      "members": [
+        "m317_kiwimon/main/cell_036"
+      ],
+      "size": [
+        200,
+        184
+      ],
+      "sourceRgbaSha256": "e5761d60042ed4801442f68c46f9cffb457d13b48b70e2d26e7fee22ae62c64b"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_037",
+      "masterId": "m317_kiwimon:master:630451d7123373fe",
+      "members": [
+        "m317_kiwimon/main/cell_037"
+      ],
+      "size": [
+        232,
+        232
+      ],
+      "sourceRgbaSha256": "0d099bc23328fc147ed741ced6975904762e09146a52770fa10414b5230e15eb"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_038",
+      "masterId": "m317_kiwimon:master:2adf9bf6a2ef0102",
+      "members": [
+        "m317_kiwimon/main/cell_038"
+      ],
+      "size": [
+        232,
+        232
+      ],
+      "sourceRgbaSha256": "b8b033013ee6b9be4beeed8f674f9b9be440feb6451c271a4265c4167357d2f9"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_039",
+      "masterId": "m317_kiwimon:master:47a7c790cd83de6b",
+      "members": [
+        "m317_kiwimon/main/cell_039",
+        "m317_kiwimon/sub/cell_008"
+      ],
+      "size": [
+        176,
+        240
+      ],
+      "sourceRgbaSha256": "beae69e35b313028d04e2b302c63e14200a52b63e15335568e8b6994883fd66a"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_041",
+      "masterId": "m317_kiwimon:master:0cb0a152e44910d6",
+      "members": [
+        "m317_kiwimon/main/cell_041",
+        "m317_kiwimon/sub/cell_010"
+      ],
+      "size": [
+        152,
+        240
+      ],
+      "sourceRgbaSha256": "de6c646e1978a79d42863664a7b90e8c74f6bdee90bdc723950f60a1fa39a967"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_043",
+      "masterId": "m317_kiwimon:master:581782d3ddde8c83",
+      "members": [
+        "m317_kiwimon/main/cell_043",
+        "m317_kiwimon/sub/cell_012"
+      ],
+      "size": [
+        200,
+        248
+      ],
+      "sourceRgbaSha256": "ca1a72b9bfb16b17b80eb6e607852b22ff511fa97ca00eea1ca8eea708c6b12f"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_044",
+      "masterId": "m317_kiwimon:master:012d8f1d25c35770",
+      "members": [
+        "m317_kiwimon/main/cell_044",
+        "m317_kiwimon/sub/cell_013"
+      ],
+      "size": [
+        208,
+        248
+      ],
+      "sourceRgbaSha256": "6145c1292c905917eec985855c9ae307d9e8ed13dfa25675f1046bae5ab9a1aa"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_046",
+      "masterId": "m317_kiwimon:master:117c54c3b29b71aa",
+      "members": [
+        "m317_kiwimon/main/cell_046",
+        "m317_kiwimon/sub/cell_015"
+      ],
+      "size": [
+        168,
+        192
+      ],
+      "sourceRgbaSha256": "0f11894d18016a11ded8af5e4681edb7ae87667f7e9e9b7789d7e879877848fa"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_047",
+      "masterId": "m317_kiwimon:master:80d35de69f1b1ef6",
+      "members": [
+        "m317_kiwimon/main/cell_047"
+      ],
+      "size": [
+        184,
+        208
+      ],
+      "sourceRgbaSha256": "4ea90c06963ba354009b371bb4b362924fd983df199f18f3047ae87d9d5ee2d7"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_050",
+      "masterId": "m317_kiwimon:master:2964f2028dbd4c20",
+      "members": [
+        "m317_kiwimon/main/cell_050"
+      ],
+      "size": [
+        152,
+        208
+      ],
+      "sourceRgbaSha256": "7a4cd2bc578f3412be738a768a054663af6a1155dae42c52f0d8a98a862fae25"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_051",
+      "masterId": "m317_kiwimon:master:952068b4a76cfee2",
+      "members": [
+        "m317_kiwimon/main/cell_051"
+      ],
+      "size": [
+        208,
+        248
+      ],
+      "sourceRgbaSha256": "5581aad2c148c7b40734afa762de2608e2e43bab1ae3d9ae7a68b257bac61dab"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_052",
+      "masterId": "m317_kiwimon:master:a041e9f95d56375e",
+      "members": [
+        "m317_kiwimon/main/cell_052",
+        "m317_kiwimon/sub/cell_016"
+      ],
+      "size": [
+        200,
+        240
+      ],
+      "sourceRgbaSha256": "07b373e56fbfbf0ebd642b77dc2ff00269deda2353724d29ec394cdfaf2b05b7"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_054",
+      "masterId": "m317_kiwimon:master:da78935498e8a893",
+      "members": [
+        "m317_kiwimon/main/cell_054"
+      ],
+      "size": [
+        200,
+        240
+      ],
+      "sourceRgbaSha256": "f949202b4bc3d12d13d159d6ae5421adbe12b6a42201320ce7716b855c26f759"
+    },
+    {
+      "canonical": "m317_kiwimon/main/cell_055",
+      "masterId": "m317_kiwimon:master:327bab2b19925971",
+      "members": [
+        "m317_kiwimon/main/cell_055"
+      ],
+      "size": [
+        176,
+        240
+      ],
+      "sourceRgbaSha256": "ce30844fbc357cad8889c1076fa2c595bc9463970f0f3c48c4cf96a1b12f37cb"
+    }
+  ],
+  "reusePolicy": "EXACT_RGBA_AND_DIMENSIONS_WITHIN_ENTITY_ONLY_PLACEMENT_RETAINED_PER_SLOT",
+  "schemaVersion": 1,
+  "slots": [
+    {
+      "declaredPreCompositeRgbaSha256": "d535c41ae546f22d0ff503ad93062d29e76df9093621f03766cf063100d4df72",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:2a5449f376d2d9f9",
+      "sourceRgbaSha256": "4c94b5722aaecf1f24913e24a186409584ccce9f7013d9739f87cc99cb2a7470",
+      "sourceSize": [
+        176,
+        240
+      ],
+      "texture": "m317_kiwimon/main/cell_000"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "5ca17900b0e12fe8f2cd6c53c29b5ed3ea51a4863457f39b32c26bacb3ff6020",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:3217eda7e6e5047d",
+      "sourceRgbaSha256": "d25d63cce9b88b75d995b32f4029925cb2136c6e628347dd20fc5a8310142599",
+      "sourceSize": [
+        176,
+        232
+      ],
+      "texture": "m317_kiwimon/main/cell_001"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e69c17e8776d79d94b6fe39baf295be00799b0e9b0b88f7b6c72a775bbca6026",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:4139f4a996d3391c",
+      "sourceRgbaSha256": "bf399c87cd19d3deccb997cdca5bb4a38c5b7d9210c7d83522df2b1d0e96c7a3",
+      "sourceSize": [
+        176,
+        240
+      ],
+      "texture": "m317_kiwimon/main/cell_002"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e246fe0b77e902a211dec96cec5caeb8f748800b065bbb09eb0045f63b8df13d",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:f723960e4dddcef0",
+      "sourceRgbaSha256": "fd9d6ef399e629d798652a685643554d527d0b6fda7d84d11e877d5af567a6a6",
+      "sourceSize": [
+        176,
+        232
+      ],
+      "texture": "m317_kiwimon/main/cell_003"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b7681c212c8ee9d6e781ecdcdbc8ceab772fc3294be6f197e98b155fe9f7d164",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:ef720305a12339f2",
+      "sourceRgbaSha256": "567dc6ac6fd3e7003b329007a25e1a3aaab6a0e5b515bb5223929eac3362ea4d",
+      "sourceSize": [
+        176,
+        240
+      ],
+      "texture": "m317_kiwimon/main/cell_004"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9efd08e7ebb77299e94ffc8aea969db0c627ef46c2127f78d5b1e2aab9dbf7ed",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:9041e8e215272eda",
+      "sourceRgbaSha256": "1eaeeb5058e50f9747fc448bd04f3a55320cf981d02eb6e94c25754aca8e74ca",
+      "sourceSize": [
+        208,
+        216
+      ],
+      "texture": "m317_kiwimon/main/cell_005"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e26cc538761dc1750bbf8b84dd9a8ade52aca1d0d3f775bcc3b72516e02f6bc7",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:daaabe6eb8ad33dc",
+      "sourceRgbaSha256": "d1f43727bb768418cd207a71314f837a03f583b0ab8b3c2ada023b45d52661ca",
+      "sourceSize": [
+        232,
+        232
+      ],
+      "texture": "m317_kiwimon/main/cell_006"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "8074666a91446c29363e7d6cfd9d69cd20dd2324a75a21eb251f744cd20d2269",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:f1137c57fb3e5c03",
+      "sourceRgbaSha256": "acf148bee92f4fa01478676626aec5c8d8c147458d8a481129d37418ec9f52dc",
+      "sourceSize": [
+        296,
+        160
+      ],
+      "texture": "m317_kiwimon/main/cell_007"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "956db05e57681fc876e2decb3c518ab45d31707659075186c87afa3281fc835e",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:36ba4357e9b19c6c",
+      "sourceRgbaSha256": "8aaa478ed48b72a4963c89a47d33af64fa84f8062d29b3e54670b3d412710598",
+      "sourceSize": [
+        200,
+        240
+      ],
+      "texture": "m317_kiwimon/main/cell_008"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b250c8b3790d267bc3355ebb9217f739a1fd3700f7d0ce636819b60dfd881334",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:9e4612df337ed895",
+      "sourceRgbaSha256": "a7b6a1b2a373e8fa8e5d2517eb45f629d1bbf24a64efabb14bc21d614ab4f47a",
+      "sourceSize": [
+        176,
+        232
+      ],
+      "texture": "m317_kiwimon/main/cell_009"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "251e646d2fe0351aa8afb5fd3dc4d950ebeb4c1ed6a47bcc18d331ea7cdfc638",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:19275866ae3970e5",
+      "sourceRgbaSha256": "a972d46c6cd15f528bdf2adc6a05838daa82cc28e7413d513c0d15bc45847739",
+      "sourceSize": [
+        208,
+        248
+      ],
+      "texture": "m317_kiwimon/main/cell_010"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "7bf365dfffcec6276cec530b2314652036c9e6469487585bc2f3303bce294982",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:bf1be49d32d301c9",
+      "sourceRgbaSha256": "c9cc50818cf5ab81e4e26514f39bfecb724c95fa206f997bf777f87bbc10901c",
+      "sourceSize": [
+        176,
+        232
+      ],
+      "texture": "m317_kiwimon/main/cell_011"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "cf737aa9bc0ff39b8f086fabafdb4c14c10cd1e5b74363d457056d15c79b18fe",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:9e56eccc26de4314",
+      "sourceRgbaSha256": "c11fab9afdd99681e0b465c06c8764d2bb128631e468081872ea219ebb8f8b69",
+      "sourceSize": [
+        232,
+        192
+      ],
+      "texture": "m317_kiwimon/main/cell_012"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "7bf365dfffcec6276cec530b2314652036c9e6469487585bc2f3303bce294982",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:bf1be49d32d301c9",
+      "sourceRgbaSha256": "c9cc50818cf5ab81e4e26514f39bfecb724c95fa206f997bf777f87bbc10901c",
+      "sourceSize": [
+        176,
+        232
+      ],
+      "texture": "m317_kiwimon/main/cell_013"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "c57071bd35ad8c2f33595fd1c9d9152970ab18ae6f8a964301efb38a57e4200a",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:955829acdf794ad4",
+      "sourceRgbaSha256": "5bb4a7b085919126ad6aab229606aab59440ce1775dd453a749618713b64d131",
+      "sourceSize": [
+        184,
+        208
+      ],
+      "texture": "m317_kiwimon/main/cell_014"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "c9602e1c3cf26dfbcbe2bedd25a8d95ffb6a91c81c88947d7e964ee0f6ea9fe1",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:75bd33a198cf3d06",
+      "sourceRgbaSha256": "fee5e797293c5d67bc368dec8e9e6c970206d25ccaee6229a44fd720d0963e85",
+      "sourceSize": [
+        256,
+        224
+      ],
+      "texture": "m317_kiwimon/main/cell_015"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b675c673d6f6b57ccbf8bdc11717ec3eb062125fab9eac17334494e83cf3c421",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:8670986cc7f0a2ad",
+      "sourceRgbaSha256": "cf1a9cee4dbe8b3a6121002af9a7000e379791fa0987f86c7d03ed07b1ed8e41",
+      "sourceSize": [
+        176,
+        240
+      ],
+      "texture": "m317_kiwimon/main/cell_016"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "42bacae6b6874303ca171a065da16263010fb514f70480fcda72e8d197824db7",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:5d7b133d647ee366",
+      "sourceRgbaSha256": "72cf060919a45a7cd1679f9d8c7567cf669fef158ea115c19ed972a420d34987",
+      "sourceSize": [
+        208,
+        216
+      ],
+      "texture": "m317_kiwimon/main/cell_017"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "0513b3c3ffc45ab10fef89f86e5c615bc39be64fbe15fcd0290b2566bb15955b",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:82068f5e6b0c5fee",
+      "sourceRgbaSha256": "a35ac7d90fed4c767b0a51596c6f8b700a7bf7ecf7838f52c76e08129a7391ac",
+      "sourceSize": [
+        192,
+        160
+      ],
+      "texture": "m317_kiwimon/main/cell_018"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "38019474f623b945c4704a8290fd4762958153cf482e00e28f97dec2d52866ee",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:d1863988e1558850",
+      "sourceRgbaSha256": "f8e0d7ae47edb44e3caf83d781df45565da0d26af80137aaff3bd72282e01a47",
+      "sourceSize": [
+        208,
+        240
+      ],
+      "texture": "m317_kiwimon/main/cell_019"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "79d851e84daa861b50603fd567fdf249409a33becacd3e47992f223646689987",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:e60309625caef058",
+      "sourceRgbaSha256": "9f621569f6304abcb79a6f252f58db9a3d719d56735bc337b6d49711de39802f",
+      "sourceSize": [
+        176,
+        232
+      ],
+      "texture": "m317_kiwimon/main/cell_020"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "23a1a30e9ea74bcf7b09c7d3ec472d8210942406c68ceb4bc523906b51372155",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:f38450f66286d744",
+      "sourceRgbaSha256": "477413eeb64ce3fa47c84713588547f1a8cdae9f7fd2e5d08326332597ff06e6",
+      "sourceSize": [
+        200,
+        184
+      ],
+      "texture": "m317_kiwimon/main/cell_021"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "059fb6ea0646d69f6198b4da4c68fea23d1346aac708be40842ca99292bc1099",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:71cc1cdf4b3498d9",
+      "sourceRgbaSha256": "6cbb04f8125e4edf7c85722ea4179597f6890fc88dc67b0a8f03f544a008f13e",
+      "sourceSize": [
+        176,
+        240
+      ],
+      "texture": "m317_kiwimon/main/cell_022"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "8a931dba7395feb42573439e8370b065013151ca2bb7c9cca4468b71d56e4860",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:7f4f6c8279464e24",
+      "sourceRgbaSha256": "d693f094f1dd8c5f08cea386a1a1b0a2b117af7b96b7cf131929e8d26cf7824e",
+      "sourceSize": [
+        176,
+        232
+      ],
+      "texture": "m317_kiwimon/main/cell_023"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "58ad39ff05a889cb3dfa8a88765cca4daeeeccfb97b2c635f9a43df06b8461a3",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:36091d8af4ca361d",
+      "sourceRgbaSha256": "544573c7f1029e3cee0aad020b2d5b5b4d2144f41233397f995240850e543695",
+      "sourceSize": [
+        176,
+        240
+      ],
+      "texture": "m317_kiwimon/main/cell_024"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "6f50be0f1eab3b569f24fc7bf1c179cdeda8e8b905dbcec79abcce4734efdae3",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:6a8dca01a0a46acc",
+      "sourceRgbaSha256": "9fa2e2f28a44d359219616567af5d49027fa87582ef16174fa4eba335974c9e6",
+      "sourceSize": [
+        176,
+        232
+      ],
+      "texture": "m317_kiwimon/main/cell_025"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "39b8a6e46b5b0ea7710ffcdea50f2c3bf54e21894e52f74ead1b9eed1df49673",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:97a39213bccf74d2",
+      "sourceRgbaSha256": "e33736a900b8f778c0486f8c6261e0f9c41c8d0d5a1ecced4d3c2225133c4b9a",
+      "sourceSize": [
+        176,
+        240
+      ],
+      "texture": "m317_kiwimon/main/cell_026"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "39224e22041736e71645d4a738c0f438ba1b725f0ad9236fd92db9f8a51ce394",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:ed51e9afc0b492c0",
+      "sourceRgbaSha256": "c5f8b8ad7c719bb72206d3295c2c6ee1122a15d25955ac0ed736b410a50cedcb",
+      "sourceSize": [
+        208,
+        216
+      ],
+      "texture": "m317_kiwimon/main/cell_027"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "8cd6a7f06eb34716abdc14196074d823e0ea21c2dbc9eff123a5389fed2d6089",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:fd0b487faa1b613b",
+      "sourceRgbaSha256": "6a7bcadbea1458aaaca4d99f2fb55921d5a4a3860d9f32a92428ff8ffc7a8cb6",
+      "sourceSize": [
+        232,
+        232
+      ],
+      "texture": "m317_kiwimon/main/cell_028"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "d50f73a673bbead2deb4c9994ccf05433c4813136b7e004bf4e6b21c66fdbe93",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:cbae309c1d70e821",
+      "sourceRgbaSha256": "30190d843f904018be8a7447a120b4fad6cdcc049d4c9126d9a8b8c86bb492d5",
+      "sourceSize": [
+        184,
+        208
+      ],
+      "texture": "m317_kiwimon/main/cell_029"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b941c1fa64fc5f2f2de8abfa8a1d762d23c37b06bb0cfcfb0e7889f3d1371790",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:743193eedd7850be",
+      "sourceRgbaSha256": "91d1b1aa211d41b3336d9eeb1dd6dd0f19a7acfce81aac5f24ea41b423a1a276",
+      "sourceSize": [
+        256,
+        224
+      ],
+      "texture": "m317_kiwimon/main/cell_030"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "4dc7f3957bea0541cb279ef37a03a33b1eae52f41c59e37ff8bd23c15b7a5e97",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:d8d165c4cc5dc918",
+      "sourceRgbaSha256": "9db147428b8e0072e1527ccf8d47518e193c24ecaf3fe8c61ea5d710be7fe8b8",
+      "sourceSize": [
+        176,
+        240
+      ],
+      "texture": "m317_kiwimon/main/cell_031"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "5ac127a9a4f8d46525fac35238db556fa9d356829c7f25866566eec1ca96203b",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:80fe12c758f7178a",
+      "sourceRgbaSha256": "2f08b89f329cc5d80cc2886f5e6ea54723ab89365f43b7414f8af88141c5bb57",
+      "sourceSize": [
+        208,
+        216
+      ],
+      "texture": "m317_kiwimon/main/cell_032"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "adaa11772206ae05b4ca890b1bb76211dd54d4c258a9116a04feb74cc6da16d8",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:18582bf5f204cb7b",
+      "sourceRgbaSha256": "e5ffc14ff81d88b438c009f50881a54b6542002482424238f970031319d1fded",
+      "sourceSize": [
+        192,
+        160
+      ],
+      "texture": "m317_kiwimon/main/cell_033"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "57b6088810d8f07bba5130821db19561b517da68c50444c9ccc37b5c2eae244f",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:32add650a9e38920",
+      "sourceRgbaSha256": "e914f4bbdb15813ee73e67835650f5ef2f41ec8dbdc74d9cbbb3f6499990bda9",
+      "sourceSize": [
+        208,
+        240
+      ],
+      "texture": "m317_kiwimon/main/cell_034"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "141ba5af49ebb9fbca1876467b8e8066e94ccd234506811558bbcd362ef02fd0",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:87170fa2475d2ef2",
+      "sourceRgbaSha256": "8d41c5e00e783804715e45e18e83d7597df72354a8af1d48d3398bd01223a1aa",
+      "sourceSize": [
+        176,
+        232
+      ],
+      "texture": "m317_kiwimon/main/cell_035"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "ce15622c7caa5af824e0874699960e565ee6ff6b0bc19d69e174498ee1c6300b",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:ab602e4ac122b7ce",
+      "sourceRgbaSha256": "e5761d60042ed4801442f68c46f9cffb457d13b48b70e2d26e7fee22ae62c64b",
+      "sourceSize": [
+        200,
+        184
+      ],
+      "texture": "m317_kiwimon/main/cell_036"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "3f1967a4986397c3a7ec0e7562093858c2ebb370ed7b10a5b2ec22d6af13c786",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:630451d7123373fe",
+      "sourceRgbaSha256": "0d099bc23328fc147ed741ced6975904762e09146a52770fa10414b5230e15eb",
+      "sourceSize": [
+        232,
+        232
+      ],
+      "texture": "m317_kiwimon/main/cell_037"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "26ebe002333724bd2f9d0a88d9c1933601b6fa979c122d46c14bd907aa14d170",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:2adf9bf6a2ef0102",
+      "sourceRgbaSha256": "b8b033013ee6b9be4beeed8f674f9b9be440feb6451c271a4265c4167357d2f9",
+      "sourceSize": [
+        232,
+        232
+      ],
+      "texture": "m317_kiwimon/main/cell_038"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "d493a74e6c8856d539e2cba4a7b88257fdcd09c3e4996d0a890f7ad9d1042b45",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:47a7c790cd83de6b",
+      "sourceRgbaSha256": "beae69e35b313028d04e2b302c63e14200a52b63e15335568e8b6994883fd66a",
+      "sourceSize": [
+        176,
+        240
+      ],
+      "texture": "m317_kiwimon/main/cell_039"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "79d851e84daa861b50603fd567fdf249409a33becacd3e47992f223646689987",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:e60309625caef058",
+      "sourceRgbaSha256": "9f621569f6304abcb79a6f252f58db9a3d719d56735bc337b6d49711de39802f",
+      "sourceSize": [
+        176,
+        232
+      ],
+      "texture": "m317_kiwimon/main/cell_040"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "751b72321a75d47429bc75c1f73a2a59751f3a44b56c98cebb863fe75585888e",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:0cb0a152e44910d6",
+      "sourceRgbaSha256": "de6c646e1978a79d42863664a7b90e8c74f6bdee90bdc723950f60a1fa39a967",
+      "sourceSize": [
+        152,
+        240
+      ],
+      "texture": "m317_kiwimon/main/cell_041"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b250c8b3790d267bc3355ebb9217f739a1fd3700f7d0ce636819b60dfd881334",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:9e4612df337ed895",
+      "sourceRgbaSha256": "a7b6a1b2a373e8fa8e5d2517eb45f629d1bbf24a64efabb14bc21d614ab4f47a",
+      "sourceSize": [
+        176,
+        232
+      ],
+      "texture": "m317_kiwimon/main/cell_042"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "4aa8c23bc3236fcdd8207d86153699399d6573408651e1f9054f12b7d0316012",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:581782d3ddde8c83",
+      "sourceRgbaSha256": "ca1a72b9bfb16b17b80eb6e607852b22ff511fa97ca00eea1ca8eea708c6b12f",
+      "sourceSize": [
+        200,
+        248
+      ],
+      "texture": "m317_kiwimon/main/cell_043"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "c74f77f860a38b453a210f7a3bb711f0dbb58a9127ddd43527cb2341e9eeca93",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:012d8f1d25c35770",
+      "sourceRgbaSha256": "6145c1292c905917eec985855c9ae307d9e8ed13dfa25675f1046bae5ab9a1aa",
+      "sourceSize": [
+        208,
+        248
+      ],
+      "texture": "m317_kiwimon/main/cell_044"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "79d851e84daa861b50603fd567fdf249409a33becacd3e47992f223646689987",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:e60309625caef058",
+      "sourceRgbaSha256": "9f621569f6304abcb79a6f252f58db9a3d719d56735bc337b6d49711de39802f",
+      "sourceSize": [
+        176,
+        232
+      ],
+      "texture": "m317_kiwimon/main/cell_045"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "101b1b25dd569792f6cba7266574b3d5570ca1d063135e6bba3b402bff71e90f",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:117c54c3b29b71aa",
+      "sourceRgbaSha256": "0f11894d18016a11ded8af5e4681edb7ae87667f7e9e9b7789d7e879877848fa",
+      "sourceSize": [
+        168,
+        192
+      ],
+      "texture": "m317_kiwimon/main/cell_046"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "cc09dd65a21b044d79177de9988a3e19eed32344f07ad2f52bc0bdb7f1b297d5",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:80d35de69f1b1ef6",
+      "sourceRgbaSha256": "4ea90c06963ba354009b371bb4b362924fd983df199f18f3047ae87d9d5ee2d7",
+      "sourceSize": [
+        184,
+        208
+      ],
+      "texture": "m317_kiwimon/main/cell_047"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "251e646d2fe0351aa8afb5fd3dc4d950ebeb4c1ed6a47bcc18d331ea7cdfc638",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:19275866ae3970e5",
+      "sourceRgbaSha256": "a972d46c6cd15f528bdf2adc6a05838daa82cc28e7413d513c0d15bc45847739",
+      "sourceSize": [
+        208,
+        248
+      ],
+      "texture": "m317_kiwimon/main/cell_048"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b250c8b3790d267bc3355ebb9217f739a1fd3700f7d0ce636819b60dfd881334",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:9e4612df337ed895",
+      "sourceRgbaSha256": "a7b6a1b2a373e8fa8e5d2517eb45f629d1bbf24a64efabb14bc21d614ab4f47a",
+      "sourceSize": [
+        176,
+        232
+      ],
+      "texture": "m317_kiwimon/main/cell_049"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "a146db4eb2624bc6686f1b61e0e73548a7c5ecf40cd4ecbde76fec06b836b10b",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:2964f2028dbd4c20",
+      "sourceRgbaSha256": "7a4cd2bc578f3412be738a768a054663af6a1155dae42c52f0d8a98a862fae25",
+      "sourceSize": [
+        152,
+        208
+      ],
+      "texture": "m317_kiwimon/main/cell_050"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "0c7b9dec7a8192a80849ba4afa045b037ce27b260d271162f68e4ed311a72525",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:952068b4a76cfee2",
+      "sourceRgbaSha256": "5581aad2c148c7b40734afa762de2608e2e43bab1ae3d9ae7a68b257bac61dab",
+      "sourceSize": [
+        208,
+        248
+      ],
+      "texture": "m317_kiwimon/main/cell_051"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "13a885a8c2edef1f48510c2230bac0ebb2825c416f80d3d0cf3edd1740659080",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:a041e9f95d56375e",
+      "sourceRgbaSha256": "07b373e56fbfbf0ebd642b77dc2ff00269deda2353724d29ec394cdfaf2b05b7",
+      "sourceSize": [
+        200,
+        240
+      ],
+      "texture": "m317_kiwimon/main/cell_052"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "8074666a91446c29363e7d6cfd9d69cd20dd2324a75a21eb251f744cd20d2269",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:f1137c57fb3e5c03",
+      "sourceRgbaSha256": "acf148bee92f4fa01478676626aec5c8d8c147458d8a481129d37418ec9f52dc",
+      "sourceSize": [
+        296,
+        160
+      ],
+      "texture": "m317_kiwimon/main/cell_053"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "3e0d448fa24586dba836a77d986c6478e5fa774218c0421f6533ed025667e1a2",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:da78935498e8a893",
+      "sourceRgbaSha256": "f949202b4bc3d12d13d159d6ae5421adbe12b6a42201320ce7716b855c26f759",
+      "sourceSize": [
+        200,
+        240
+      ],
+      "texture": "m317_kiwimon/main/cell_054"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b9100462259be5f5e5ed200630aad0855f87f56db2382ff2b4770f2763adcec1",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:327bab2b19925971",
+      "sourceRgbaSha256": "ce30844fbc357cad8889c1076fa2c595bc9463970f0f3c48c4cf96a1b12f37cb",
+      "sourceSize": [
+        176,
+        240
+      ],
+      "texture": "m317_kiwimon/main/cell_055"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "d535c41ae546f22d0ff503ad93062d29e76df9093621f03766cf063100d4df72",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:2a5449f376d2d9f9",
+      "sourceRgbaSha256": "4c94b5722aaecf1f24913e24a186409584ccce9f7013d9739f87cc99cb2a7470",
+      "sourceSize": [
+        176,
+        240
+      ],
+      "texture": "m317_kiwimon/sub/cell_000"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "5ca17900b0e12fe8f2cd6c53c29b5ed3ea51a4863457f39b32c26bacb3ff6020",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:3217eda7e6e5047d",
+      "sourceRgbaSha256": "d25d63cce9b88b75d995b32f4029925cb2136c6e628347dd20fc5a8310142599",
+      "sourceSize": [
+        176,
+        232
+      ],
+      "texture": "m317_kiwimon/sub/cell_001"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e69c17e8776d79d94b6fe39baf295be00799b0e9b0b88f7b6c72a775bbca6026",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:4139f4a996d3391c",
+      "sourceRgbaSha256": "bf399c87cd19d3deccb997cdca5bb4a38c5b7d9210c7d83522df2b1d0e96c7a3",
+      "sourceSize": [
+        176,
+        240
+      ],
+      "texture": "m317_kiwimon/sub/cell_002"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e246fe0b77e902a211dec96cec5caeb8f748800b065bbb09eb0045f63b8df13d",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:f723960e4dddcef0",
+      "sourceRgbaSha256": "fd9d6ef399e629d798652a685643554d527d0b6fda7d84d11e877d5af567a6a6",
+      "sourceSize": [
+        176,
+        232
+      ],
+      "texture": "m317_kiwimon/sub/cell_003"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "8074666a91446c29363e7d6cfd9d69cd20dd2324a75a21eb251f744cd20d2269",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:f1137c57fb3e5c03",
+      "sourceRgbaSha256": "acf148bee92f4fa01478676626aec5c8d8c147458d8a481129d37418ec9f52dc",
+      "sourceSize": [
+        296,
+        160
+      ],
+      "texture": "m317_kiwimon/sub/cell_004"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "956db05e57681fc876e2decb3c518ab45d31707659075186c87afa3281fc835e",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:36ba4357e9b19c6c",
+      "sourceRgbaSha256": "8aaa478ed48b72a4963c89a47d33af64fa84f8062d29b3e54670b3d412710598",
+      "sourceSize": [
+        200,
+        240
+      ],
+      "texture": "m317_kiwimon/sub/cell_005"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "0513b3c3ffc45ab10fef89f86e5c615bc39be64fbe15fcd0290b2566bb15955b",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:82068f5e6b0c5fee",
+      "sourceRgbaSha256": "a35ac7d90fed4c767b0a51596c6f8b700a7bf7ecf7838f52c76e08129a7391ac",
+      "sourceSize": [
+        192,
+        160
+      ],
+      "texture": "m317_kiwimon/sub/cell_006"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "23a1a30e9ea74bcf7b09c7d3ec472d8210942406c68ceb4bc523906b51372155",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:f38450f66286d744",
+      "sourceRgbaSha256": "477413eeb64ce3fa47c84713588547f1a8cdae9f7fd2e5d08326332597ff06e6",
+      "sourceSize": [
+        200,
+        184
+      ],
+      "texture": "m317_kiwimon/sub/cell_007"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "d493a74e6c8856d539e2cba4a7b88257fdcd09c3e4996d0a890f7ad9d1042b45",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:47a7c790cd83de6b",
+      "sourceRgbaSha256": "beae69e35b313028d04e2b302c63e14200a52b63e15335568e8b6994883fd66a",
+      "sourceSize": [
+        176,
+        240
+      ],
+      "texture": "m317_kiwimon/sub/cell_008"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "79d851e84daa861b50603fd567fdf249409a33becacd3e47992f223646689987",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:e60309625caef058",
+      "sourceRgbaSha256": "9f621569f6304abcb79a6f252f58db9a3d719d56735bc337b6d49711de39802f",
+      "sourceSize": [
+        176,
+        232
+      ],
+      "texture": "m317_kiwimon/sub/cell_009"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "751b72321a75d47429bc75c1f73a2a59751f3a44b56c98cebb863fe75585888e",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:0cb0a152e44910d6",
+      "sourceRgbaSha256": "de6c646e1978a79d42863664a7b90e8c74f6bdee90bdc723950f60a1fa39a967",
+      "sourceSize": [
+        152,
+        240
+      ],
+      "texture": "m317_kiwimon/sub/cell_010"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b250c8b3790d267bc3355ebb9217f739a1fd3700f7d0ce636819b60dfd881334",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:9e4612df337ed895",
+      "sourceRgbaSha256": "a7b6a1b2a373e8fa8e5d2517eb45f629d1bbf24a64efabb14bc21d614ab4f47a",
+      "sourceSize": [
+        176,
+        232
+      ],
+      "texture": "m317_kiwimon/sub/cell_011"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "4aa8c23bc3236fcdd8207d86153699399d6573408651e1f9054f12b7d0316012",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:581782d3ddde8c83",
+      "sourceRgbaSha256": "ca1a72b9bfb16b17b80eb6e607852b22ff511fa97ca00eea1ca8eea708c6b12f",
+      "sourceSize": [
+        200,
+        248
+      ],
+      "texture": "m317_kiwimon/sub/cell_012"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "c74f77f860a38b453a210f7a3bb711f0dbb58a9127ddd43527cb2341e9eeca93",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:012d8f1d25c35770",
+      "sourceRgbaSha256": "6145c1292c905917eec985855c9ae307d9e8ed13dfa25675f1046bae5ab9a1aa",
+      "sourceSize": [
+        208,
+        248
+      ],
+      "texture": "m317_kiwimon/sub/cell_013"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "79d851e84daa861b50603fd567fdf249409a33becacd3e47992f223646689987",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:e60309625caef058",
+      "sourceRgbaSha256": "9f621569f6304abcb79a6f252f58db9a3d719d56735bc337b6d49711de39802f",
+      "sourceSize": [
+        176,
+        232
+      ],
+      "texture": "m317_kiwimon/sub/cell_014"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "101b1b25dd569792f6cba7266574b3d5570ca1d063135e6bba3b402bff71e90f",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:117c54c3b29b71aa",
+      "sourceRgbaSha256": "0f11894d18016a11ded8af5e4681edb7ae87667f7e9e9b7789d7e879877848fa",
+      "sourceSize": [
+        168,
+        192
+      ],
+      "texture": "m317_kiwimon/sub/cell_015"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "13a885a8c2edef1f48510c2230bac0ebb2825c416f80d3d0cf3edd1740659080",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:a041e9f95d56375e",
+      "sourceRgbaSha256": "07b373e56fbfbf0ebd642b77dc2ff00269deda2353724d29ec394cdfaf2b05b7",
+      "sourceSize": [
+        200,
+        240
+      ],
+      "texture": "m317_kiwimon/sub/cell_016"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "8074666a91446c29363e7d6cfd9d69cd20dd2324a75a21eb251f744cd20d2269",
+      "isBlank": false,
+      "masterId": "m317_kiwimon:master:f1137c57fb3e5c03",
+      "sourceRgbaSha256": "acf148bee92f4fa01478676626aec5c8d8c147458d8a481129d37418ec9f52dc",
+      "sourceSize": [
+        296,
+        160
+      ],
+      "texture": "m317_kiwimon/sub/cell_017"
+    }
+  ]
+}

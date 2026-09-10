@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 92,
+  "scenePath": "ui/net_keyboard.nxr",
+  "category": "Shared UI Components",
+  "overlayOwner": "Shared",
+  "sourceEvidence": {
+    "fileId": 6250,
+    "fileName": "net_keyboard.nxr",
+    "sha256": "399fb4a5605ec8abde7839be476d424f8c15459bba4834dbf7e18a58c7fb602b",
+    "overlayMappingConfidence": "SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "UNKNOWN_REQUIRES_TRACE",
+    "roleEvidence": "UNKNOWN_REQUIRES_TRACE"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [
+    {
+      "resourceIndex": 0,
+      "resourceName": "keyboard_parts",
+      "cellCount": 21,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "ui/keyboard_parts.ncer",
+        "nanr": "ui/keyboard_parts.nanr",
+        "ncgr": null,
+        "ncbr": "ui/keyboard_parts.ncbr",
+        "nclr": "ui/keyboard_parts.nclr",
+        "nscr": null
+      },
+      "spriteWitness": "docs/art/production/ui/faithful-hd96/sprite-cell-witnesses-4x/ui__keyboard_parts__cells.png",
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "input",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 55,
+        "y": 33
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        9,
+        2
+      ],
+      "colorModulationRaw": "0xFFFFFF9A",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 1,
+      "name": "keyboard",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 16,
+        "y": 80
+      },
+      "portraitProjection": null,
+      "params": [
+        1,
+        0,
+        14,
+        5
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 2,
+      "name": "input_right",
+      "resourceIndex": 0,
+      "cellIndex": 19,
+      "sourcePosition": {
+        "x": 194,
+        "y": 25
+      },
+      "portraitProjection": null,
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 3,
+      "name": "input_center",
+      "resourceIndex": 0,
+      "cellIndex": 18,
+      "sourcePosition": {
+        "x": 74,
+        "y": 25
+      },
+      "portraitProjection": null,
+      "params": [
+        1,
+        0,
+        15,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 4,
+      "name": "input_left",
+      "resourceIndex": 0,
+      "cellIndex": 17,
+      "sourcePosition": {
+        "x": 42,
+        "y": 25
+      },
+      "portraitProjection": null,
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    }
+  ],
+  "dynamicVirtualNodeCount": 2,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

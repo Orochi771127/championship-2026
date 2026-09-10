@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "batchId": "ART-BATTLE-OBJECT-HARDENING-R2-2026-09-02",
+  "family": "BATTLE",
+  "fields": [
+    "field_bm04_01",
+    "field_bm08_01",
+    "field_bm11_01"
+  ],
+  "evidenceTrace": "docs/research/BATTLE_BM04_BM08_BM11_OBJECT_TRACE_2026-09-02.json",
+  "builder": "scripts/build-battle-object-hardening-r2.py",
+  "runtimeRoot": "assets/production/internal-battle-review/hardening-r2",
+  "unifiedReviewPage": "battle-art-gallery.html",
+  "browserQa": "docs/reports/art/battle/hardening-r2/browser-qa.json",
+  "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED_TERMS_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "promotionGate": "OWNER_VISUAL_APPROVAL_LICENSE_TERMS_LINK_AND_FINAL_ALIGNMENT_REVIEW_REQUIRED"
+}

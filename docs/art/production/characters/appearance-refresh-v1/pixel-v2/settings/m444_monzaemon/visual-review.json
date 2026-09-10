@@ -1,0 +1,31 @@
+{
+  "candidateSource": "docs/art/production/characters/appearance-refresh-v1/_work/identity-integration/schema-normalized/m444_monzaemon",
+  "entityId": "m444_monzaemon",
+  "findings": [
+    "黑鼻與杏白雙頰犬吻占據主要臉區，巧克力短耳和大眼區別於原熊臉；短耳犬玩偶方向成立。",
+    "雙手靠身、雙腳支撐與圓頭範圍在原新比較未見漂移；透明支撐相同不能證明肩膝位置。",
+    "奶油胸腹與輪廓在兩種底色可讀，近眼間大黑鼻可能在壓臉姿態合併成色塊。"
+  ],
+  "fullMotionQa": "NOT_RUN",
+  "identityDirectionVersion": "creature-identity-v1",
+  "identityVerdict": "PASS_IDENTITY_DIRECTION",
+  "independentReview": "docs\\art\\production\\characters\\appearance-refresh-v1\\_work\\identity-roster-group3-independent-review\\review.json",
+  "metadataNormalization": "Added canonical identityDesign.family alias from chosenFamily; all pose pixels, palette, bounds and identity rules unchanged.",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "priorIndependentEvidence": {
+    "settingFileSha256": "257b7058c1800dd044cd8986278356037bb5396e179ce1058ffdb4ed8d7b28dc",
+    "technicalQaSha256": "f8668f0c1c4f6e82d538bd53f922c044cb41c145f2a0b0b58b3b6cf3a8cf9156"
+  },
+  "reviewMethod": "Actually viewed original/new comparison and native/enlarged authored contact board; independently compiled adopted pixels.",
+  "reviewer": "root / schema normalization of independently reviewed unchanged artwork",
+  "runtimePromotionGranted": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "5ad2567ffeb54ab0edb7c5cadb0dd9dec886eef176d9d87988e992b780e65d34",
+  "sourceComparisonSha256": "8b7b460bb02111f252ac06a8ab50b0150416febe0db03e238522681123a735ea",
+  "technicalQaSha256": "dd5ac98e796be5e514f0e593903b439b1c2765b56ea175a71805064538618249",
+  "unresolvedBlockingIssues": [
+    "Additional source representative poses and continuity review required before setting acceptance."
+  ],
+  "verdict": "STANDARD_POSE_REVIEWED_NOT_SETTING_PASS"
+}

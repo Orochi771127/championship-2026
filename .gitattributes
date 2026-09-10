@@ -10,3 +10,9 @@
 *.png binary
 *.webp binary
 *.bat text eol=crlf
+
+# Generated art manifests/atlases are byte-hashed by their provenance receipts.
+# Preserve those bytes across Windows/Linux checkout rather than rewriting
+# their line endings and invalidating the existing image/geometry contracts.
+assets/production/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/art/production/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

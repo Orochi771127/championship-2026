@@ -1,0 +1,268 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:vfx:original-battle-2d:v1",
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "humanApproved": false,
+  "rightsStatus": "ORIGINAL_CREATED",
+  "productionStatus": "RETIRED_GENERATED_REPLACEMENT_OWNER_CORRECTION",
+  "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+  "visualParity": "PARTIAL_ORIGINAL_REPLACEMENT_REQUIRES_HUMAN_REVIEW",
+  "image": {
+    "src": "assets/production/vfx/original-battle-2d-v1/effects.png",
+    "width": 1254,
+    "height": 1254,
+    "sha256": "e10febf69e9a2ccadf20f670594a11ccccfd2d3a3510555b8162abc8360c649c"
+  },
+  "cells": [
+    {
+      "bankId": 19,
+      "cell": 0,
+      "frame": [
+        0,
+        0,
+        313,
+        313
+      ],
+      "origin": [
+        164,
+        157
+      ],
+      "pixelsPerNativePixel": 20
+    },
+    {
+      "bankId": 19,
+      "cell": 1,
+      "frame": [
+        313,
+        0,
+        314,
+        313
+      ],
+      "origin": [
+        162,
+        165
+      ],
+      "pixelsPerNativePixel": 20
+    },
+    {
+      "bankId": 19,
+      "cell": 2,
+      "frame": [
+        627,
+        0,
+        313,
+        313
+      ],
+      "origin": [
+        153,
+        157
+      ],
+      "pixelsPerNativePixel": 20
+    },
+    {
+      "bankId": 19,
+      "cell": 3,
+      "frame": [
+        940,
+        0,
+        314,
+        313
+      ],
+      "origin": [
+        153,
+        157
+      ],
+      "pixelsPerNativePixel": 20
+    },
+    {
+      "bankId": 81,
+      "cell": 0,
+      "frame": [
+        0,
+        313,
+        313,
+        314
+      ],
+      "origin": [
+        115,
+        155
+      ],
+      "pixelsPerNativePixel": 8
+    },
+    {
+      "bankId": 81,
+      "cell": 1,
+      "frame": [
+        313,
+        313,
+        314,
+        314
+      ],
+      "origin": [
+        118,
+        155
+      ],
+      "pixelsPerNativePixel": 8
+    },
+    {
+      "bankId": 81,
+      "cell": 2,
+      "frame": [
+        627,
+        313,
+        313,
+        314
+      ],
+      "origin": [
+        108,
+        157
+      ],
+      "pixelsPerNativePixel": 8
+    },
+    {
+      "bankId": 81,
+      "cell": 3,
+      "frame": [
+        940,
+        313,
+        314,
+        314
+      ],
+      "origin": [
+        112,
+        156
+      ],
+      "pixelsPerNativePixel": 8
+    },
+    {
+      "bankId": 1,
+      "cell": 86,
+      "frame": [
+        0,
+        627,
+        313,
+        313
+      ],
+      "origin": [
+        158,
+        153
+      ],
+      "pixelsPerNativePixel": 10
+    },
+    {
+      "bankId": 1,
+      "cell": 87,
+      "frame": [
+        313,
+        627,
+        314,
+        313
+      ],
+      "origin": [
+        157,
+        164
+      ],
+      "pixelsPerNativePixel": 10
+    },
+    {
+      "bankId": 1,
+      "cell": 88,
+      "frame": [
+        627,
+        627,
+        313,
+        274
+      ],
+      "origin": [
+        155,
+        160
+      ],
+      "pixelsPerNativePixel": 10
+    },
+    {
+      "bankId": 1,
+      "cell": 89,
+      "frame": [
+        940,
+        627,
+        314,
+        313
+      ],
+      "origin": [
+        157,
+        165
+      ],
+      "pixelsPerNativePixel": 10
+    },
+    {
+      "bankId": 1,
+      "cell": 90,
+      "frame": [
+        0,
+        940,
+        313,
+        314
+      ],
+      "origin": [
+        158,
+        149
+      ],
+      "pixelsPerNativePixel": 10
+    },
+    {
+      "bankId": 1,
+      "cell": 91,
+      "frame": [
+        313,
+        940,
+        314,
+        314
+      ],
+      "origin": [
+        160,
+        147
+      ],
+      "pixelsPerNativePixel": 10
+    },
+    {
+      "bankId": 1,
+      "cell": 118,
+      "frame": [
+        627,
+        910,
+        313,
+        344
+      ],
+      "origin": [
+        151,
+        189
+      ],
+      "pixelsPerNativePixel": 20
+    },
+    {
+      "bankId": 1,
+      "cell": 135,
+      "frame": [
+        940,
+        940,
+        314,
+        314
+      ],
+      "origin": [
+        156,
+        137
+      ],
+      "pixelsPerNativePixel": 32
+    }
+  ],
+  "provenance": {
+    "generator": "imagegen",
+    "sourcePixelPolicy": "NEW_GENERATION_NO_ROM_IMAGE_INPUT",
+    "prompt": "docs/art/production/battle-effect-r11/IMAGE_PROMPT.md",
+    "source": "exec-5d7b3fad-db9f-477f-9a69-50058f04250f.png",
+    "numericAnimationAuthority": "src/data/championship/battleEffectProfiles.json",
+    "registration": "ORIGINAL_ART_ORIGINS_NATIVE_FRAME_TIMING_UNCHANGED"
+  },
+  "publicReleasePermitted": false
+}

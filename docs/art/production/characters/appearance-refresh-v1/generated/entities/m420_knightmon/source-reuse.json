@@ -1,0 +1,1383 @@
+{
+  "classification": "RESEARCH_ONLY",
+  "entityId": "m420_knightmon",
+  "masters": [
+    {
+      "canonical": "m420_knightmon/main/cell_000",
+      "masterId": "m420_knightmon:master:14b043489cd5e81e",
+      "members": [
+        "m420_knightmon/main/cell_000",
+        "m420_knightmon/sub/cell_000"
+      ],
+      "size": [
+        192,
+        272
+      ],
+      "sourceRgbaSha256": "bf288b61eca9acf6c4ad2810ffdcc6fa2ed8e8cca754acc13c6ec4d2b475b29b"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_001",
+      "masterId": "m420_knightmon:master:e57ece3bb8c841cd",
+      "members": [
+        "m420_knightmon/main/cell_001",
+        "m420_knightmon/sub/cell_001"
+      ],
+      "size": [
+        208,
+        264
+      ],
+      "sourceRgbaSha256": "584fef76088010aff9e06d77b332c3fac3cd747b373ada0dbb54bced8f16a8ba"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_002",
+      "masterId": "m420_knightmon:master:2065c837da6d4666",
+      "members": [
+        "m420_knightmon/main/cell_002",
+        "m420_knightmon/sub/cell_002"
+      ],
+      "size": [
+        168,
+        264
+      ],
+      "sourceRgbaSha256": "15963f69e786f3f529e54ce591fe92f581caf0eb246902216922ee07888fae58"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_003",
+      "masterId": "m420_knightmon:master:5c69da96c2be0cf2",
+      "members": [
+        "m420_knightmon/main/cell_003",
+        "m420_knightmon/sub/cell_003"
+      ],
+      "size": [
+        168,
+        256
+      ],
+      "sourceRgbaSha256": "ac6de12b8978612699dfea54a0ea35008ec603293a269a6c878a2f9e39d25fb7"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_004",
+      "masterId": "m420_knightmon:master:5202f2d716b5905e",
+      "members": [
+        "m420_knightmon/main/cell_004"
+      ],
+      "size": [
+        192,
+        264
+      ],
+      "sourceRgbaSha256": "60406911fd2a71ddfb323529343df66b9f373fcfb8ddb8ab405ec0ed513d221f"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_005",
+      "masterId": "m420_knightmon:master:5c9c3cf4e9b16275",
+      "members": [
+        "m420_knightmon/main/cell_005"
+      ],
+      "size": [
+        184,
+        272
+      ],
+      "sourceRgbaSha256": "636310d15b9eef492f902f1fcffee5919abcc37459c988f7545d98ec0e9d0438"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_006",
+      "masterId": "m420_knightmon:master:4541369aa4abdb27",
+      "members": [
+        "m420_knightmon/main/cell_006"
+      ],
+      "size": [
+        248,
+        272
+      ],
+      "sourceRgbaSha256": "622a103eded41f85d3264b8d657eea7529c8b8b212c08af51e8bab7faca93c8f"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_007",
+      "masterId": "m420_knightmon:master:f356d67beea55e59",
+      "members": [
+        "m420_knightmon/main/cell_007",
+        "m420_knightmon/main/cell_008",
+        "m420_knightmon/main/cell_055",
+        "m420_knightmon/sub/cell_004",
+        "m420_knightmon/sub/cell_005"
+      ],
+      "size": [
+        272,
+        248
+      ],
+      "sourceRgbaSha256": "fed112172fd04ec11236c47913351e7e30fb8b6fd628380c13ac06a863e759a7"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_009",
+      "masterId": "m420_knightmon:master:46c51ee3c9d9a5d6",
+      "members": [
+        "m420_knightmon/main/cell_009",
+        "m420_knightmon/main/cell_011",
+        "m420_knightmon/main/cell_013",
+        "m420_knightmon/main/cell_014"
+      ],
+      "size": [
+        248,
+        296
+      ],
+      "sourceRgbaSha256": "87336a5d393cacc5058411c0ded50c64da7e73d34255ae7a645d9decbd44468c"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_010",
+      "masterId": "m420_knightmon:master:0a6146fee13ed0fa",
+      "members": [
+        "m420_knightmon/main/cell_010",
+        "m420_knightmon/main/cell_012"
+      ],
+      "size": [
+        192,
+        144
+      ],
+      "sourceRgbaSha256": "384cb1c447a9d367476428f8619bcb3851b10b1a8c48c159157b3f49fc1ec09a"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_015",
+      "masterId": "m420_knightmon:master:56e80148d23fdb39",
+      "members": [
+        "m420_knightmon/main/cell_015"
+      ],
+      "size": [
+        264,
+        224
+      ],
+      "sourceRgbaSha256": "b0bb36d4f250f357677dbe847173b0057b1b2ed6f3a48e7683ac8b81b1729d7f"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_016",
+      "masterId": "m420_knightmon:master:a92d11560ac19bf9",
+      "members": [
+        "m420_knightmon/main/cell_016"
+      ],
+      "size": [
+        248,
+        272
+      ],
+      "sourceRgbaSha256": "3c154fcb6f7cf3d232aae1a46393e7bd82feebb80a1e1de102418052d3ab6fac"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_017",
+      "masterId": "m420_knightmon:master:34377e4ced2a3a45",
+      "members": [
+        "m420_knightmon/main/cell_017"
+      ],
+      "size": [
+        176,
+        256
+      ],
+      "sourceRgbaSha256": "cd24d0b797722fca2af2bd8277bb0f066853aae8c2ad78551604a984a74d2a54"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_018",
+      "masterId": "m420_knightmon:master:6494d7bc008399ec",
+      "members": [
+        "m420_knightmon/main/cell_018"
+      ],
+      "size": [
+        168,
+        264
+      ],
+      "sourceRgbaSha256": "b9b282695dd211041c6868baa9388cdf7decdc3b96538a69978f3629f3896553"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_019",
+      "masterId": "m420_knightmon:master:aa41cb9a63f4b476",
+      "members": [
+        "m420_knightmon/main/cell_019",
+        "m420_knightmon/main/cell_022",
+        "m420_knightmon/main/cell_054",
+        "m420_knightmon/sub/cell_006",
+        "m420_knightmon/sub/cell_007",
+        "m420_knightmon/sub/cell_017"
+      ],
+      "size": [
+        312,
+        144
+      ],
+      "sourceRgbaSha256": "448a05feb0fe1d10782ae245995f9420de0c7413a854a3d3a87d06d98039f2ef"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_020",
+      "masterId": "m420_knightmon:master:226693b7c580208d",
+      "members": [
+        "m420_knightmon/main/cell_020",
+        "m420_knightmon/main/cell_041",
+        "m420_knightmon/sub/cell_009"
+      ],
+      "size": [
+        192,
+        272
+      ],
+      "sourceRgbaSha256": "22bfae2619053ca1025b266e5f4d89db893471a7fb883e6383be2bca8f107d46"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_021",
+      "masterId": "m420_knightmon:master:885c4237ce1a6b50",
+      "members": [
+        "m420_knightmon/main/cell_021",
+        "m420_knightmon/main/cell_042",
+        "m420_knightmon/sub/cell_010"
+      ],
+      "size": [
+        184,
+        264
+      ],
+      "sourceRgbaSha256": "654f3a3e604f271aceda5d055f33052a95b375d33bb8536c7ee83c0b0d724963"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_023",
+      "masterId": "m420_knightmon:master:27629e119c51b17d",
+      "members": [
+        "m420_knightmon/main/cell_023"
+      ],
+      "size": [
+        192,
+        272
+      ],
+      "sourceRgbaSha256": "449cb6d636c3cc30db85147f6b4004c83b8f02a9af3ecab131ac464a01b2840c"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_024",
+      "masterId": "m420_knightmon:master:9ca9534ded7c6cf6",
+      "members": [
+        "m420_knightmon/main/cell_024"
+      ],
+      "size": [
+        192,
+        264
+      ],
+      "sourceRgbaSha256": "b3d5a774aabd9be0344a58fddf4af1551edf08638b625782928ea4503a6e5502"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_025",
+      "masterId": "m420_knightmon:master:a52f35b858e157f4",
+      "members": [
+        "m420_knightmon/main/cell_025"
+      ],
+      "size": [
+        168,
+        264
+      ],
+      "sourceRgbaSha256": "b2e1504e160bc2ac3f3ebe1ddcd7c65abf07ac900e5fb6f996f0d34345df22b7"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_026",
+      "masterId": "m420_knightmon:master:13fef96f9bfcf68f",
+      "members": [
+        "m420_knightmon/main/cell_026"
+      ],
+      "size": [
+        168,
+        256
+      ],
+      "sourceRgbaSha256": "450eb9dfa9eab339cf4b89991f039e69af7da0b776b93c220658971b4a55b604"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_027",
+      "masterId": "m420_knightmon:master:5512fb6a5c644c6c",
+      "members": [
+        "m420_knightmon/main/cell_027"
+      ],
+      "size": [
+        192,
+        264
+      ],
+      "sourceRgbaSha256": "3ad956aefec370d8af333e4454a1f5e1a5d4142bb4211cff2c7985d3e74191f0"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_028",
+      "masterId": "m420_knightmon:master:588b24ff7d9cb5db",
+      "members": [
+        "m420_knightmon/main/cell_028"
+      ],
+      "size": [
+        176,
+        272
+      ],
+      "sourceRgbaSha256": "f8fb9f59c69db8dbed6943a5a353cd0f18034b820eefeb7ce07d2af0d4c2c3d9"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_029",
+      "masterId": "m420_knightmon:master:a8157018767f47c2",
+      "members": [
+        "m420_knightmon/main/cell_029"
+      ],
+      "size": [
+        232,
+        272
+      ],
+      "sourceRgbaSha256": "d8fb558d2a7995b70abc72c18e4f2087d61a590b24df4b1d56e8dd8e8b5774d9"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_030",
+      "masterId": "m420_knightmon:master:59abed90ee4718f5",
+      "members": [
+        "m420_knightmon/main/cell_030"
+      ],
+      "size": [
+        240,
+        224
+      ],
+      "sourceRgbaSha256": "b86f301fcebc065ae19fef64a977d740e117b6d5849a2cba36aabf522010cc42"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_031",
+      "masterId": "m420_knightmon:master:d94d2a979fd55dfd",
+      "members": [
+        "m420_knightmon/main/cell_031"
+      ],
+      "size": [
+        168,
+        272
+      ],
+      "sourceRgbaSha256": "0b0eac82f842f99f041b31fd9348b1078448da2dac23b2c1ff99d302508d0952"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_032",
+      "masterId": "m420_knightmon:master:546f4d4736c41d03",
+      "members": [
+        "m420_knightmon/main/cell_032"
+      ],
+      "size": [
+        176,
+        256
+      ],
+      "sourceRgbaSha256": "4c8d95787b81151cc29c1658c7be8a369a692f63d2937c9aecb6bb5d78227307"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_033",
+      "masterId": "m420_knightmon:master:57cd7b50f51efb76",
+      "members": [
+        "m420_knightmon/main/cell_033"
+      ],
+      "size": [
+        168,
+        264
+      ],
+      "sourceRgbaSha256": "96074e80ae87700bdcbd184ec0176f256ca242c9ca741d9fb0fcfc2542492dc1"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_034",
+      "masterId": "m420_knightmon:master:0111408cd53ae997",
+      "members": [
+        "m420_knightmon/main/cell_034"
+      ],
+      "size": [
+        272,
+        136
+      ],
+      "sourceRgbaSha256": "142220a8687532d704b9a6b9841d44df7c2b2078839febf21a795be799ae148d"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_035",
+      "masterId": "m420_knightmon:master:acebeaac6942216a",
+      "members": [
+        "m420_knightmon/main/cell_035"
+      ],
+      "size": [
+        192,
+        272
+      ],
+      "sourceRgbaSha256": "21cd7d5ce2c910aacf81ae169c9bcb5d5029490e95a7b3b5e935e030291ff65d"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_036",
+      "masterId": "m420_knightmon:master:3db86c630b2a75e9",
+      "members": [
+        "m420_knightmon/main/cell_036"
+      ],
+      "size": [
+        184,
+        264
+      ],
+      "sourceRgbaSha256": "ac641628e64488aa9f44439a2e0099532a8942455d92d670e291c7e3ed18e7f0"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_037",
+      "masterId": "m420_knightmon:master:e8d0857a441c5446",
+      "members": [
+        "m420_knightmon/main/cell_037"
+      ],
+      "size": [
+        272,
+        136
+      ],
+      "sourceRgbaSha256": "3e611b48853373090de73d2464df1eaa0767ab617bec47dc3ab3b159af9f55cc"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_038",
+      "masterId": "m420_knightmon:master:770658ffca1319f5",
+      "members": [
+        "m420_knightmon/main/cell_038"
+      ],
+      "size": [
+        248,
+        272
+      ],
+      "sourceRgbaSha256": "80ee677a15c62e6d28eb6dfc7886af3554017ac58ae5fefbab4b5d2ea289a19f"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_039",
+      "masterId": "m420_knightmon:master:e672f68ce1cdc128",
+      "members": [
+        "m420_knightmon/main/cell_039"
+      ],
+      "size": [
+        248,
+        272
+      ],
+      "sourceRgbaSha256": "b55e0fb5416d4144f113794194b053262034becd8cd66f341f437da62c6a53cc"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_040",
+      "masterId": "m420_knightmon:master:5c47c38adee6d0ea",
+      "members": [
+        "m420_knightmon/main/cell_040",
+        "m420_knightmon/sub/cell_008"
+      ],
+      "size": [
+        192,
+        272
+      ],
+      "sourceRgbaSha256": "7767d0d98150d0455eb15d73409901976f27b3e7dc43a60236bfd7bd91824ca1"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_043",
+      "masterId": "m420_knightmon:master:5b89e7174604337a",
+      "members": [
+        "m420_knightmon/main/cell_043",
+        "m420_knightmon/sub/cell_011"
+      ],
+      "size": [
+        224,
+        256
+      ],
+      "sourceRgbaSha256": "b41d7d6e373bb3e45892aa14baa43796341d439118e9b398fd913895293ab2b7"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_044",
+      "masterId": "m420_knightmon:master:db83547a5086d186",
+      "members": [
+        "m420_knightmon/main/cell_044",
+        "m420_knightmon/sub/cell_012"
+      ],
+      "size": [
+        216,
+        240
+      ],
+      "sourceRgbaSha256": "09814b8ee1875b9eb199323d2962506807ab034b1640326da4f432144c0108da"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_045",
+      "masterId": "m420_knightmon:master:7d55a8eb0b623bb1",
+      "members": [
+        "m420_knightmon/main/cell_045",
+        "m420_knightmon/main/cell_049",
+        "m420_knightmon/sub/cell_013"
+      ],
+      "size": [
+        208,
+        240
+      ],
+      "sourceRgbaSha256": "55800f236b61c67e69a568d5e24e2bfe646126f5d0206a34731db054b06c7635"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_046",
+      "masterId": "m420_knightmon:master:6a7b160e93f93815",
+      "members": [
+        "m420_knightmon/main/cell_046",
+        "m420_knightmon/main/cell_050",
+        "m420_knightmon/main/cell_052",
+        "m420_knightmon/sub/cell_014"
+      ],
+      "size": [
+        200,
+        304
+      ],
+      "sourceRgbaSha256": "4918f20a4a642e217f091cb99ede49a4057e6e85f6a6610325eefc4591784e2d"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_047",
+      "masterId": "m420_knightmon:master:d646a31b27dd20b5",
+      "members": [
+        "m420_knightmon/main/cell_047",
+        "m420_knightmon/main/cell_051",
+        "m420_knightmon/sub/cell_015"
+      ],
+      "size": [
+        224,
+        256
+      ],
+      "sourceRgbaSha256": "b4cb05bd1b0aaf0fb760af4a928ca590aee38a52196bb8ce2cd144d1caee79d3"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_048",
+      "masterId": "m420_knightmon:master:693882094bc47bcd",
+      "members": [
+        "m420_knightmon/main/cell_048"
+      ],
+      "size": [
+        224,
+        216
+      ],
+      "sourceRgbaSha256": "5e24ff7e43bdb142960ba26b4638ace478f97d4a7cead82b1f356e1f0193556d"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_053",
+      "masterId": "m420_knightmon:master:884d64c8ad8c9ded",
+      "members": [
+        "m420_knightmon/main/cell_053",
+        "m420_knightmon/sub/cell_016"
+      ],
+      "size": [
+        192,
+        272
+      ],
+      "sourceRgbaSha256": "a806d31e091e69b01c75b1611ca42caea2ea7f52fecb859c91ce12bad8b8991c"
+    },
+    {
+      "canonical": "m420_knightmon/main/cell_056",
+      "masterId": "m420_knightmon:master:ea9e18969b723360",
+      "members": [
+        "m420_knightmon/main/cell_056"
+      ],
+      "size": [
+        192,
+        272
+      ],
+      "sourceRgbaSha256": "c40d0f4d2d20e6f9b53acbabea1bff39b11163eea451cee7165d91b1a62245ad"
+    }
+  ],
+  "reusePolicy": "EXACT_RGBA_AND_DIMENSIONS_WITHIN_ENTITY_ONLY_PLACEMENT_RETAINED_PER_SLOT",
+  "schemaVersion": 1,
+  "slots": [
+    {
+      "declaredPreCompositeRgbaSha256": "df92253e750fc971ee43fbd139fd109631b3ffb800daa927eb43844b20e18e6f",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:14b043489cd5e81e",
+      "sourceRgbaSha256": "bf288b61eca9acf6c4ad2810ffdcc6fa2ed8e8cca754acc13c6ec4d2b475b29b",
+      "sourceSize": [
+        192,
+        272
+      ],
+      "texture": "m420_knightmon/main/cell_000"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "bdc17963e38c0168c808191c971c8fbb5684cc760fa0c47faf4caf1cd640f959",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:e57ece3bb8c841cd",
+      "sourceRgbaSha256": "584fef76088010aff9e06d77b332c3fac3cd747b373ada0dbb54bced8f16a8ba",
+      "sourceSize": [
+        208,
+        264
+      ],
+      "texture": "m420_knightmon/main/cell_001"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9467115c43476cbce5b34d2f627c7ffe5b7a14e9651a118cb65216e34d7a2d2c",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:2065c837da6d4666",
+      "sourceRgbaSha256": "15963f69e786f3f529e54ce591fe92f581caf0eb246902216922ee07888fae58",
+      "sourceSize": [
+        168,
+        264
+      ],
+      "texture": "m420_knightmon/main/cell_002"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "edce3dc35f40cfcd2b491708b795f37f3762bb128ee56a74f00a9aa2e07480c8",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:5c69da96c2be0cf2",
+      "sourceRgbaSha256": "ac6de12b8978612699dfea54a0ea35008ec603293a269a6c878a2f9e39d25fb7",
+      "sourceSize": [
+        168,
+        256
+      ],
+      "texture": "m420_knightmon/main/cell_003"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "4e74aeb4af2e655965c536af297dd80a7e48445d318e1eee9f8a79ecb5f9c133",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:5202f2d716b5905e",
+      "sourceRgbaSha256": "60406911fd2a71ddfb323529343df66b9f373fcfb8ddb8ab405ec0ed513d221f",
+      "sourceSize": [
+        192,
+        264
+      ],
+      "texture": "m420_knightmon/main/cell_004"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "88b69c02e2c47ffe89486b2f8c3c055213140739799949e117c8d91ac604006f",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:5c9c3cf4e9b16275",
+      "sourceRgbaSha256": "636310d15b9eef492f902f1fcffee5919abcc37459c988f7545d98ec0e9d0438",
+      "sourceSize": [
+        184,
+        272
+      ],
+      "texture": "m420_knightmon/main/cell_005"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "ba45d6eb39811e433303b4554a4ced863bad2367d92eb09c9f8348a1e711e29c",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:4541369aa4abdb27",
+      "sourceRgbaSha256": "622a103eded41f85d3264b8d657eea7529c8b8b212c08af51e8bab7faca93c8f",
+      "sourceSize": [
+        248,
+        272
+      ],
+      "texture": "m420_knightmon/main/cell_006"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "5fa7670cc0c9c9d5ee729322c82392373e855c6467d414dae6a7b45756e6eb93",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:f356d67beea55e59",
+      "sourceRgbaSha256": "fed112172fd04ec11236c47913351e7e30fb8b6fd628380c13ac06a863e759a7",
+      "sourceSize": [
+        272,
+        248
+      ],
+      "texture": "m420_knightmon/main/cell_007"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "5fa7670cc0c9c9d5ee729322c82392373e855c6467d414dae6a7b45756e6eb93",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:f356d67beea55e59",
+      "sourceRgbaSha256": "fed112172fd04ec11236c47913351e7e30fb8b6fd628380c13ac06a863e759a7",
+      "sourceSize": [
+        272,
+        248
+      ],
+      "texture": "m420_knightmon/main/cell_008"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "bdf4f7195a3e89495b33c17c72f1231412f357c539efee4d34749a698f9bd353",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:46c51ee3c9d9a5d6",
+      "sourceRgbaSha256": "87336a5d393cacc5058411c0ded50c64da7e73d34255ae7a645d9decbd44468c",
+      "sourceSize": [
+        248,
+        296
+      ],
+      "texture": "m420_knightmon/main/cell_009"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "89f8a77eea209dc43792e5220e56f80ee1b0bf4a17e1ba4dda2878721aaa0204",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:0a6146fee13ed0fa",
+      "sourceRgbaSha256": "384cb1c447a9d367476428f8619bcb3851b10b1a8c48c159157b3f49fc1ec09a",
+      "sourceSize": [
+        192,
+        144
+      ],
+      "texture": "m420_knightmon/main/cell_010"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "bdf4f7195a3e89495b33c17c72f1231412f357c539efee4d34749a698f9bd353",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:46c51ee3c9d9a5d6",
+      "sourceRgbaSha256": "87336a5d393cacc5058411c0ded50c64da7e73d34255ae7a645d9decbd44468c",
+      "sourceSize": [
+        248,
+        296
+      ],
+      "texture": "m420_knightmon/main/cell_011"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "89f8a77eea209dc43792e5220e56f80ee1b0bf4a17e1ba4dda2878721aaa0204",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:0a6146fee13ed0fa",
+      "sourceRgbaSha256": "384cb1c447a9d367476428f8619bcb3851b10b1a8c48c159157b3f49fc1ec09a",
+      "sourceSize": [
+        192,
+        144
+      ],
+      "texture": "m420_knightmon/main/cell_012"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "bdf4f7195a3e89495b33c17c72f1231412f357c539efee4d34749a698f9bd353",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:46c51ee3c9d9a5d6",
+      "sourceRgbaSha256": "87336a5d393cacc5058411c0ded50c64da7e73d34255ae7a645d9decbd44468c",
+      "sourceSize": [
+        248,
+        296
+      ],
+      "texture": "m420_knightmon/main/cell_013"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "bdf4f7195a3e89495b33c17c72f1231412f357c539efee4d34749a698f9bd353",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:46c51ee3c9d9a5d6",
+      "sourceRgbaSha256": "87336a5d393cacc5058411c0ded50c64da7e73d34255ae7a645d9decbd44468c",
+      "sourceSize": [
+        248,
+        296
+      ],
+      "texture": "m420_knightmon/main/cell_014"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "17c8899de7e45e45664c9c6ebe9bb60e41939a9a51b57a82ea391c1aee1772c8",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:56e80148d23fdb39",
+      "sourceRgbaSha256": "b0bb36d4f250f357677dbe847173b0057b1b2ed6f3a48e7683ac8b81b1729d7f",
+      "sourceSize": [
+        264,
+        224
+      ],
+      "texture": "m420_knightmon/main/cell_015"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "6fb0c95b28390efbc42232de416d50a293be433d0386082aedd0b4c4fcf22add",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:a92d11560ac19bf9",
+      "sourceRgbaSha256": "3c154fcb6f7cf3d232aae1a46393e7bd82feebb80a1e1de102418052d3ab6fac",
+      "sourceSize": [
+        248,
+        272
+      ],
+      "texture": "m420_knightmon/main/cell_016"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "46d439eb24e62ef18a1c631ddc42507c43be5f65bf1b7bb274aecf5670a7389e",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:34377e4ced2a3a45",
+      "sourceRgbaSha256": "cd24d0b797722fca2af2bd8277bb0f066853aae8c2ad78551604a984a74d2a54",
+      "sourceSize": [
+        176,
+        256
+      ],
+      "texture": "m420_knightmon/main/cell_017"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "54364bc41f3cd86730ed381c55d223a00035b022f1ea58f1093b573272178798",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:6494d7bc008399ec",
+      "sourceRgbaSha256": "b9b282695dd211041c6868baa9388cdf7decdc3b96538a69978f3629f3896553",
+      "sourceSize": [
+        168,
+        264
+      ],
+      "texture": "m420_knightmon/main/cell_018"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "cbf0ef8b886225767f98d4ba5f6df220d4ab1823351f193e06ca4fdc85a847f1",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:aa41cb9a63f4b476",
+      "sourceRgbaSha256": "448a05feb0fe1d10782ae245995f9420de0c7413a854a3d3a87d06d98039f2ef",
+      "sourceSize": [
+        312,
+        144
+      ],
+      "texture": "m420_knightmon/main/cell_019"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b8db2b4e7708c8ed8d3d55ec5fcffc85417821ee125a8fc11259103f4e3f9eba",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:226693b7c580208d",
+      "sourceRgbaSha256": "22bfae2619053ca1025b266e5f4d89db893471a7fb883e6383be2bca8f107d46",
+      "sourceSize": [
+        192,
+        272
+      ],
+      "texture": "m420_knightmon/main/cell_020"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "cf4fb5768674f5d76f27f3bb6ab5e8b47e96dd8ec2481ab92558fc3301463ea9",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:885c4237ce1a6b50",
+      "sourceRgbaSha256": "654f3a3e604f271aceda5d055f33052a95b375d33bb8536c7ee83c0b0d724963",
+      "sourceSize": [
+        184,
+        264
+      ],
+      "texture": "m420_knightmon/main/cell_021"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "cbf0ef8b886225767f98d4ba5f6df220d4ab1823351f193e06ca4fdc85a847f1",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:aa41cb9a63f4b476",
+      "sourceRgbaSha256": "448a05feb0fe1d10782ae245995f9420de0c7413a854a3d3a87d06d98039f2ef",
+      "sourceSize": [
+        312,
+        144
+      ],
+      "texture": "m420_knightmon/main/cell_022"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "88b3ea339792812f9983f55d30e13d7f5508352d5ca368576ada5f89dea79432",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:27629e119c51b17d",
+      "sourceRgbaSha256": "449cb6d636c3cc30db85147f6b4004c83b8f02a9af3ecab131ac464a01b2840c",
+      "sourceSize": [
+        192,
+        272
+      ],
+      "texture": "m420_knightmon/main/cell_023"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b19e71849bf1e8ce7b1c56fc953bc8080b39ff787bd3d0b41640952fada13e86",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:9ca9534ded7c6cf6",
+      "sourceRgbaSha256": "b3d5a774aabd9be0344a58fddf4af1551edf08638b625782928ea4503a6e5502",
+      "sourceSize": [
+        192,
+        264
+      ],
+      "texture": "m420_knightmon/main/cell_024"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "060934602f086f57801c640a74eb3d6342f89fdea5944259b78ef36fc54fe5df",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:a52f35b858e157f4",
+      "sourceRgbaSha256": "b2e1504e160bc2ac3f3ebe1ddcd7c65abf07ac900e5fb6f996f0d34345df22b7",
+      "sourceSize": [
+        168,
+        264
+      ],
+      "texture": "m420_knightmon/main/cell_025"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "1666b1c2b57c766eae8d06501f4491ff9b3eadb01c151f8b3b46a50042724cc3",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:13fef96f9bfcf68f",
+      "sourceRgbaSha256": "450eb9dfa9eab339cf4b89991f039e69af7da0b776b93c220658971b4a55b604",
+      "sourceSize": [
+        168,
+        256
+      ],
+      "texture": "m420_knightmon/main/cell_026"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "a94ffd26757585f827fdd37108052d528ad470231bac891fb57f810a010d57ab",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:5512fb6a5c644c6c",
+      "sourceRgbaSha256": "3ad956aefec370d8af333e4454a1f5e1a5d4142bb4211cff2c7985d3e74191f0",
+      "sourceSize": [
+        192,
+        264
+      ],
+      "texture": "m420_knightmon/main/cell_027"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "7dff50fc8369083cdf7d95090621e01b222e77065d5cb5cbc205fdde7ec3f07b",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:588b24ff7d9cb5db",
+      "sourceRgbaSha256": "f8fb9f59c69db8dbed6943a5a353cd0f18034b820eefeb7ce07d2af0d4c2c3d9",
+      "sourceSize": [
+        176,
+        272
+      ],
+      "texture": "m420_knightmon/main/cell_028"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "f7d3f08722e1a30210014cf564434a5e5f53b006e2388da14f44e095f2371344",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:a8157018767f47c2",
+      "sourceRgbaSha256": "d8fb558d2a7995b70abc72c18e4f2087d61a590b24df4b1d56e8dd8e8b5774d9",
+      "sourceSize": [
+        232,
+        272
+      ],
+      "texture": "m420_knightmon/main/cell_029"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9abace4e945c87a175d64021d32d61bbdf125e6bacd09071b27fbc1e1de4ec7c",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:59abed90ee4718f5",
+      "sourceRgbaSha256": "b86f301fcebc065ae19fef64a977d740e117b6d5849a2cba36aabf522010cc42",
+      "sourceSize": [
+        240,
+        224
+      ],
+      "texture": "m420_knightmon/main/cell_030"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "a162502b596acb30c45e12252e5b6534b017dc5697486e8d90f5183045d315ef",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:d94d2a979fd55dfd",
+      "sourceRgbaSha256": "0b0eac82f842f99f041b31fd9348b1078448da2dac23b2c1ff99d302508d0952",
+      "sourceSize": [
+        168,
+        272
+      ],
+      "texture": "m420_knightmon/main/cell_031"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "646f41a6ab854640ef3ebcad98067449f49c52f4e613cbb349e0349a67205167",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:546f4d4736c41d03",
+      "sourceRgbaSha256": "4c8d95787b81151cc29c1658c7be8a369a692f63d2937c9aecb6bb5d78227307",
+      "sourceSize": [
+        176,
+        256
+      ],
+      "texture": "m420_knightmon/main/cell_032"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "c39d7ea29c59273ecc30efdcd56d6f4632b3c7a4950bef576c01c37a2555a047",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:57cd7b50f51efb76",
+      "sourceRgbaSha256": "96074e80ae87700bdcbd184ec0176f256ca242c9ca741d9fb0fcfc2542492dc1",
+      "sourceSize": [
+        168,
+        264
+      ],
+      "texture": "m420_knightmon/main/cell_033"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9ee500d95bf038f74c435e3b08d72bfed9656c4fd609a0e5df0b9bc670a7f546",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:0111408cd53ae997",
+      "sourceRgbaSha256": "142220a8687532d704b9a6b9841d44df7c2b2078839febf21a795be799ae148d",
+      "sourceSize": [
+        272,
+        136
+      ],
+      "texture": "m420_knightmon/main/cell_034"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "02d8c6be653bea50fdd41e347407f19428a8f162770d4bc3e89a8af2d6f1f482",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:acebeaac6942216a",
+      "sourceRgbaSha256": "21cd7d5ce2c910aacf81ae169c9bcb5d5029490e95a7b3b5e935e030291ff65d",
+      "sourceSize": [
+        192,
+        272
+      ],
+      "texture": "m420_knightmon/main/cell_035"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "63cd14c04cde050026499fe76eff8d8bcbd48cc634be7126d3e691ec99069996",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:3db86c630b2a75e9",
+      "sourceRgbaSha256": "ac641628e64488aa9f44439a2e0099532a8942455d92d670e291c7e3ed18e7f0",
+      "sourceSize": [
+        184,
+        264
+      ],
+      "texture": "m420_knightmon/main/cell_036"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e01eaba9022c517b2f43f7fbb45f30518102354f081b32fb4ac5ad78acc6cf3c",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:e8d0857a441c5446",
+      "sourceRgbaSha256": "3e611b48853373090de73d2464df1eaa0767ab617bec47dc3ab3b159af9f55cc",
+      "sourceSize": [
+        272,
+        136
+      ],
+      "texture": "m420_knightmon/main/cell_037"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "17b0447739ab5a8648b11afa7979c8e54d06a4d0f6eb285f4746008d5754c8d5",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:770658ffca1319f5",
+      "sourceRgbaSha256": "80ee677a15c62e6d28eb6dfc7886af3554017ac58ae5fefbab4b5d2ea289a19f",
+      "sourceSize": [
+        248,
+        272
+      ],
+      "texture": "m420_knightmon/main/cell_038"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "767aeeccda36a67963086a01ec73afe4a353106e007f12a8b5e2843dea59a995",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:e672f68ce1cdc128",
+      "sourceRgbaSha256": "b55e0fb5416d4144f113794194b053262034becd8cd66f341f437da62c6a53cc",
+      "sourceSize": [
+        248,
+        272
+      ],
+      "texture": "m420_knightmon/main/cell_039"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "70411535579d845094b79769c13e95f799ed2894a69ef621cad892e3cabb195c",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:5c47c38adee6d0ea",
+      "sourceRgbaSha256": "7767d0d98150d0455eb15d73409901976f27b3e7dc43a60236bfd7bd91824ca1",
+      "sourceSize": [
+        192,
+        272
+      ],
+      "texture": "m420_knightmon/main/cell_040"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b8db2b4e7708c8ed8d3d55ec5fcffc85417821ee125a8fc11259103f4e3f9eba",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:226693b7c580208d",
+      "sourceRgbaSha256": "22bfae2619053ca1025b266e5f4d89db893471a7fb883e6383be2bca8f107d46",
+      "sourceSize": [
+        192,
+        272
+      ],
+      "texture": "m420_knightmon/main/cell_041"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "cf4fb5768674f5d76f27f3bb6ab5e8b47e96dd8ec2481ab92558fc3301463ea9",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:885c4237ce1a6b50",
+      "sourceRgbaSha256": "654f3a3e604f271aceda5d055f33052a95b375d33bb8536c7ee83c0b0d724963",
+      "sourceSize": [
+        184,
+        264
+      ],
+      "texture": "m420_knightmon/main/cell_042"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "227d1b584c2161b48846ba52ed195a1c239be472ecfb8234a9a411a31134f9f5",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:5b89e7174604337a",
+      "sourceRgbaSha256": "b41d7d6e373bb3e45892aa14baa43796341d439118e9b398fd913895293ab2b7",
+      "sourceSize": [
+        224,
+        256
+      ],
+      "texture": "m420_knightmon/main/cell_043"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "46cf51c578729f63d5484edeb16e7f3b1ab9ef17b9d6aee4ced067c8b81116ee",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:db83547a5086d186",
+      "sourceRgbaSha256": "09814b8ee1875b9eb199323d2962506807ab034b1640326da4f432144c0108da",
+      "sourceSize": [
+        216,
+        240
+      ],
+      "texture": "m420_knightmon/main/cell_044"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "cdb60e74fa7e6dd122afa684c8cfbd5e6f949047755140a48f389238a474480a",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:7d55a8eb0b623bb1",
+      "sourceRgbaSha256": "55800f236b61c67e69a568d5e24e2bfe646126f5d0206a34731db054b06c7635",
+      "sourceSize": [
+        208,
+        240
+      ],
+      "texture": "m420_knightmon/main/cell_045"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9acdee36fa5f9209e192fbb0805d55142bd4061650e80af5ff883a2106739433",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:6a7b160e93f93815",
+      "sourceRgbaSha256": "4918f20a4a642e217f091cb99ede49a4057e6e85f6a6610325eefc4591784e2d",
+      "sourceSize": [
+        200,
+        304
+      ],
+      "texture": "m420_knightmon/main/cell_046"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e3e6ccae7faa8bb4152876551807821aca1e85d6943da5422fff8ed5911abee8",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:d646a31b27dd20b5",
+      "sourceRgbaSha256": "b4cb05bd1b0aaf0fb760af4a928ca590aee38a52196bb8ce2cd144d1caee79d3",
+      "sourceSize": [
+        224,
+        256
+      ],
+      "texture": "m420_knightmon/main/cell_047"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "fb50f17d23725bc52fbc74d60641666b30ecc23a68609b64023a388766be9c5a",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:693882094bc47bcd",
+      "sourceRgbaSha256": "5e24ff7e43bdb142960ba26b4638ace478f97d4a7cead82b1f356e1f0193556d",
+      "sourceSize": [
+        224,
+        216
+      ],
+      "texture": "m420_knightmon/main/cell_048"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "cdb60e74fa7e6dd122afa684c8cfbd5e6f949047755140a48f389238a474480a",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:7d55a8eb0b623bb1",
+      "sourceRgbaSha256": "55800f236b61c67e69a568d5e24e2bfe646126f5d0206a34731db054b06c7635",
+      "sourceSize": [
+        208,
+        240
+      ],
+      "texture": "m420_knightmon/main/cell_049"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9acdee36fa5f9209e192fbb0805d55142bd4061650e80af5ff883a2106739433",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:6a7b160e93f93815",
+      "sourceRgbaSha256": "4918f20a4a642e217f091cb99ede49a4057e6e85f6a6610325eefc4591784e2d",
+      "sourceSize": [
+        200,
+        304
+      ],
+      "texture": "m420_knightmon/main/cell_050"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e3e6ccae7faa8bb4152876551807821aca1e85d6943da5422fff8ed5911abee8",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:d646a31b27dd20b5",
+      "sourceRgbaSha256": "b4cb05bd1b0aaf0fb760af4a928ca590aee38a52196bb8ce2cd144d1caee79d3",
+      "sourceSize": [
+        224,
+        256
+      ],
+      "texture": "m420_knightmon/main/cell_051"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9acdee36fa5f9209e192fbb0805d55142bd4061650e80af5ff883a2106739433",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:6a7b160e93f93815",
+      "sourceRgbaSha256": "4918f20a4a642e217f091cb99ede49a4057e6e85f6a6610325eefc4591784e2d",
+      "sourceSize": [
+        200,
+        304
+      ],
+      "texture": "m420_knightmon/main/cell_052"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "5b2c60b68bef097ff5ddf37e14e5decebf192d7a13172cc1738870e7e872e9e3",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:884d64c8ad8c9ded",
+      "sourceRgbaSha256": "a806d31e091e69b01c75b1611ca42caea2ea7f52fecb859c91ce12bad8b8991c",
+      "sourceSize": [
+        192,
+        272
+      ],
+      "texture": "m420_knightmon/main/cell_053"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "cbf0ef8b886225767f98d4ba5f6df220d4ab1823351f193e06ca4fdc85a847f1",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:aa41cb9a63f4b476",
+      "sourceRgbaSha256": "448a05feb0fe1d10782ae245995f9420de0c7413a854a3d3a87d06d98039f2ef",
+      "sourceSize": [
+        312,
+        144
+      ],
+      "texture": "m420_knightmon/main/cell_054"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "5fa7670cc0c9c9d5ee729322c82392373e855c6467d414dae6a7b45756e6eb93",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:f356d67beea55e59",
+      "sourceRgbaSha256": "fed112172fd04ec11236c47913351e7e30fb8b6fd628380c13ac06a863e759a7",
+      "sourceSize": [
+        272,
+        248
+      ],
+      "texture": "m420_knightmon/main/cell_055"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "8685d2bc0536be322358a4ab29e940c77fd07027fa560fe40393e30cfb8204f9",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:ea9e18969b723360",
+      "sourceRgbaSha256": "c40d0f4d2d20e6f9b53acbabea1bff39b11163eea451cee7165d91b1a62245ad",
+      "sourceSize": [
+        192,
+        272
+      ],
+      "texture": "m420_knightmon/main/cell_056"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "df92253e750fc971ee43fbd139fd109631b3ffb800daa927eb43844b20e18e6f",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:14b043489cd5e81e",
+      "sourceRgbaSha256": "bf288b61eca9acf6c4ad2810ffdcc6fa2ed8e8cca754acc13c6ec4d2b475b29b",
+      "sourceSize": [
+        192,
+        272
+      ],
+      "texture": "m420_knightmon/sub/cell_000"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "bdc17963e38c0168c808191c971c8fbb5684cc760fa0c47faf4caf1cd640f959",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:e57ece3bb8c841cd",
+      "sourceRgbaSha256": "584fef76088010aff9e06d77b332c3fac3cd747b373ada0dbb54bced8f16a8ba",
+      "sourceSize": [
+        208,
+        264
+      ],
+      "texture": "m420_knightmon/sub/cell_001"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9467115c43476cbce5b34d2f627c7ffe5b7a14e9651a118cb65216e34d7a2d2c",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:2065c837da6d4666",
+      "sourceRgbaSha256": "15963f69e786f3f529e54ce591fe92f581caf0eb246902216922ee07888fae58",
+      "sourceSize": [
+        168,
+        264
+      ],
+      "texture": "m420_knightmon/sub/cell_002"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "edce3dc35f40cfcd2b491708b795f37f3762bb128ee56a74f00a9aa2e07480c8",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:5c69da96c2be0cf2",
+      "sourceRgbaSha256": "ac6de12b8978612699dfea54a0ea35008ec603293a269a6c878a2f9e39d25fb7",
+      "sourceSize": [
+        168,
+        256
+      ],
+      "texture": "m420_knightmon/sub/cell_003"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "5fa7670cc0c9c9d5ee729322c82392373e855c6467d414dae6a7b45756e6eb93",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:f356d67beea55e59",
+      "sourceRgbaSha256": "fed112172fd04ec11236c47913351e7e30fb8b6fd628380c13ac06a863e759a7",
+      "sourceSize": [
+        272,
+        248
+      ],
+      "texture": "m420_knightmon/sub/cell_004"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "5fa7670cc0c9c9d5ee729322c82392373e855c6467d414dae6a7b45756e6eb93",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:f356d67beea55e59",
+      "sourceRgbaSha256": "fed112172fd04ec11236c47913351e7e30fb8b6fd628380c13ac06a863e759a7",
+      "sourceSize": [
+        272,
+        248
+      ],
+      "texture": "m420_knightmon/sub/cell_005"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "cbf0ef8b886225767f98d4ba5f6df220d4ab1823351f193e06ca4fdc85a847f1",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:aa41cb9a63f4b476",
+      "sourceRgbaSha256": "448a05feb0fe1d10782ae245995f9420de0c7413a854a3d3a87d06d98039f2ef",
+      "sourceSize": [
+        312,
+        144
+      ],
+      "texture": "m420_knightmon/sub/cell_006"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "cbf0ef8b886225767f98d4ba5f6df220d4ab1823351f193e06ca4fdc85a847f1",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:aa41cb9a63f4b476",
+      "sourceRgbaSha256": "448a05feb0fe1d10782ae245995f9420de0c7413a854a3d3a87d06d98039f2ef",
+      "sourceSize": [
+        312,
+        144
+      ],
+      "texture": "m420_knightmon/sub/cell_007"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "70411535579d845094b79769c13e95f799ed2894a69ef621cad892e3cabb195c",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:5c47c38adee6d0ea",
+      "sourceRgbaSha256": "7767d0d98150d0455eb15d73409901976f27b3e7dc43a60236bfd7bd91824ca1",
+      "sourceSize": [
+        192,
+        272
+      ],
+      "texture": "m420_knightmon/sub/cell_008"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b8db2b4e7708c8ed8d3d55ec5fcffc85417821ee125a8fc11259103f4e3f9eba",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:226693b7c580208d",
+      "sourceRgbaSha256": "22bfae2619053ca1025b266e5f4d89db893471a7fb883e6383be2bca8f107d46",
+      "sourceSize": [
+        192,
+        272
+      ],
+      "texture": "m420_knightmon/sub/cell_009"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "cf4fb5768674f5d76f27f3bb6ab5e8b47e96dd8ec2481ab92558fc3301463ea9",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:885c4237ce1a6b50",
+      "sourceRgbaSha256": "654f3a3e604f271aceda5d055f33052a95b375d33bb8536c7ee83c0b0d724963",
+      "sourceSize": [
+        184,
+        264
+      ],
+      "texture": "m420_knightmon/sub/cell_010"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "227d1b584c2161b48846ba52ed195a1c239be472ecfb8234a9a411a31134f9f5",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:5b89e7174604337a",
+      "sourceRgbaSha256": "b41d7d6e373bb3e45892aa14baa43796341d439118e9b398fd913895293ab2b7",
+      "sourceSize": [
+        224,
+        256
+      ],
+      "texture": "m420_knightmon/sub/cell_011"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "46cf51c578729f63d5484edeb16e7f3b1ab9ef17b9d6aee4ced067c8b81116ee",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:db83547a5086d186",
+      "sourceRgbaSha256": "09814b8ee1875b9eb199323d2962506807ab034b1640326da4f432144c0108da",
+      "sourceSize": [
+        216,
+        240
+      ],
+      "texture": "m420_knightmon/sub/cell_012"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "cdb60e74fa7e6dd122afa684c8cfbd5e6f949047755140a48f389238a474480a",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:7d55a8eb0b623bb1",
+      "sourceRgbaSha256": "55800f236b61c67e69a568d5e24e2bfe646126f5d0206a34731db054b06c7635",
+      "sourceSize": [
+        208,
+        240
+      ],
+      "texture": "m420_knightmon/sub/cell_013"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9acdee36fa5f9209e192fbb0805d55142bd4061650e80af5ff883a2106739433",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:6a7b160e93f93815",
+      "sourceRgbaSha256": "4918f20a4a642e217f091cb99ede49a4057e6e85f6a6610325eefc4591784e2d",
+      "sourceSize": [
+        200,
+        304
+      ],
+      "texture": "m420_knightmon/sub/cell_014"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e3e6ccae7faa8bb4152876551807821aca1e85d6943da5422fff8ed5911abee8",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:d646a31b27dd20b5",
+      "sourceRgbaSha256": "b4cb05bd1b0aaf0fb760af4a928ca590aee38a52196bb8ce2cd144d1caee79d3",
+      "sourceSize": [
+        224,
+        256
+      ],
+      "texture": "m420_knightmon/sub/cell_015"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "5b2c60b68bef097ff5ddf37e14e5decebf192d7a13172cc1738870e7e872e9e3",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:884d64c8ad8c9ded",
+      "sourceRgbaSha256": "a806d31e091e69b01c75b1611ca42caea2ea7f52fecb859c91ce12bad8b8991c",
+      "sourceSize": [
+        192,
+        272
+      ],
+      "texture": "m420_knightmon/sub/cell_016"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "cbf0ef8b886225767f98d4ba5f6df220d4ab1823351f193e06ca4fdc85a847f1",
+      "isBlank": false,
+      "masterId": "m420_knightmon:master:aa41cb9a63f4b476",
+      "sourceRgbaSha256": "448a05feb0fe1d10782ae245995f9420de0c7413a854a3d3a87d06d98039f2ef",
+      "sourceSize": [
+        312,
+        144
+      ],
+      "texture": "m420_knightmon/sub/cell_017"
+    }
+  ]
+}

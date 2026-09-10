@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m201_agumon",
+  "selectedConcept": "A",
+  "cell": "main/cell_000",
+  "candidatePath": "docs/art/production/characters/appearance-refresh-v1/m201-a/main-000-candidate-v1.png",
+  "candidateSha256": "8a73571a753c5b206f642692740976fa71c5657130e29864e561a47263b07ec3",
+  "sourceGuidePath": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/main/cell-000.png",
+  "status": "REPAIR_REQUIRED",
+  "identityReview": "A_IDENTITY_RECOGNIZABLE",
+  "motionCompatibility": "FAIL_VISIBLE_POSE_MISMATCH",
+  "alphaStatus": "FAIL_RGB_PAINTED_CHECKERBOARD",
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "technicalProbe": {
+    "method": "Pillow Image.open read-only inspection",
+    "size": [1409, 1117],
+    "mode": "RGB",
+    "bands": ["R", "G", "B"],
+    "hasTransparencyMetadata": false,
+    "finding": "沒有 alpha 通道，棋盤為已畫入背景，不能按 transparent PNG 處理。"
+  },
+  "visualFindings": [
+    "三角耳、奶油短吻/胸腹、銀腕環與金尾保留 A 身份；毛色大塊較概念板穩定。",
+    "兩個前臂垂落於腿旁，未保留 source Main 0 的前伸/屈肘關係。",
+    "腳底偏下、兩足間距加大，軀幹姿勢偏向 A 概念板的站姿；不能僅用整圖平移補償。",
+    "尾巴朝右上抬高；source 的可見尾端較低，量產不能新增這個擺向。",
+    "吻部向畫布左下延伸，眼/嘴與來源頭部朝向關係仍需修正。"
+  ],
+  "approximateAlignment": {
+    "method": "目視估點，以各自完整畫布左上為 (0,0)、右下為 (1,1)；非 alpha segmentation、人工精標或原作解剖 landmark。",
+    "uncertaintyPerAxis": 0.03,
+    "usage": "僅用於指出返修方向。不能以這些估點產生自動warp、宣稱精確動作相容或替代逐格座標審查。",
+    "points": [
+      {"label": "畫面左側前伸手端近似位置", "source": [0.23, 0.61], "candidate": [0.21, 0.71], "deltaCandidateMinusSource": [-0.02, 0.10], "repair": "抬高手/腕，重建來源前伸肘腕關係。"},
+      {"label": "畫面較右側可見手端近似位置", "source": [0.40, 0.65], "candidate": [0.48, 0.73], "deltaCandidateMinusSource": [0.08, 0.08], "repair": "手端向左上恢復，前臂不能沿腿側垂下。"},
+      {"label": "畫面左足淺色端近似位置", "source": [0.29, 0.71], "candidate": [0.30, 0.81], "deltaCandidateMinusSource": [0.01, 0.10], "repair": "恢復較高的前後足差，不強制共同底線。"},
+      {"label": "畫面右足淺色端近似位置", "source": [0.47, 0.75], "candidate": [0.52, 0.82], "deltaCandidateMinusSource": [0.05, 0.07], "repair": "向左上收回，保持來源足距。"},
+      {"label": "右方尾端近似位置", "source": [0.59, 0.60], "candidate": [0.63, 0.50], "deltaCandidateMinusSource": [0.04, -0.10], "repair": "將尾端壓低並縮短突出量，維持原可見尾部擺向。"},
+      {"label": "左方吻/鼻端近似位置", "source": [0.22, 0.35], "candidate": [0.15, 0.45], "deltaCandidateMinusSource": [-0.07, 0.10], "repair": "重新核對頭向與嘴端，不把 A 概念板大吻位置直接搬入此姿態。"}
+    ]
+  },
+  "retryDirective": "以修正後 source Main 0 guide 作主要姿態參照，候選僅作 A 身份與繪畫材質參照。重新繪製來源的前伸短前臂、錯開較高後足、較低短尾和頭向；禁止沿用板圖的垂手寬站姿。保留 A 五組身份，減少毛色碎斑，輸出真正 RGBA。",
+  "alphaOnlyRetryLimitation": "移除棋盤背景只能修復透明技術缺陷；無法修復本檔列出的肢體、頭嘴與尾部姿態偏差，因此 alpha 成功也不能記 Main 0 完成。"
+}

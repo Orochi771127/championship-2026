@@ -1,0 +1,94 @@
+{
+  "date": "2026-09-06",
+  "scope": "Raising Home UI and shared field viewport",
+  "status": "UI_INTEGRATED_NATIVE_RANCH_PARTIAL",
+  "focused": {
+    "pass": 33,
+    "fail": 0
+  },
+  "regression": {
+    "pass": 1127,
+    "fail": 0
+  },
+  "diffCheck": "PASS",
+  "browser": {
+    "normalPath": [
+      "New Game",
+      "select egg",
+      "drag to Quiet Hollow",
+      "Manage",
+      "Cage Edit",
+      "place Cage 0 / 1 / 15 / Waiting Room",
+      "Confirm",
+      "Home",
+      "System",
+      "Save & Quit",
+      "reload",
+      "Continue",
+      "verify four placements"
+    ],
+    "viewports": [
+      {
+        "canvasCount": 1,
+        "fieldHeight": 484.6000061035156,
+        "height": 800,
+        "overflow": false,
+        "toolbarBottom": 800.0000228881836,
+        "width": 360
+      },
+      {
+        "canvasCount": 1,
+        "fieldHeight": 514.6000366210938,
+        "height": 844,
+        "overflow": false,
+        "toolbarBottom": 844.0000228881836,
+        "width": 390
+      },
+      {
+        "canvasCount": 1,
+        "fieldHeight": 522.6000366210938,
+        "height": 852,
+        "overflow": false,
+        "toolbarBottom": 852.0000228881836,
+        "width": 394
+      },
+      {
+        "canvasCount": 1,
+        "fieldHeight": 585.7999877929688,
+        "height": 915,
+        "overflow": false,
+        "toolbarBottom": 915.2000350952148,
+        "width": 412
+      },
+      {
+        "canvasCount": 1,
+        "fieldHeight": 602.6000366210938,
+        "height": 932,
+        "overflow": false,
+        "toolbarBottom": 932.0000228881836,
+        "width": 430
+      }
+    ],
+    "smallViewport": {
+      "width": 320,
+      "height": 568,
+      "overflow": false,
+      "canvasCount": 1,
+      "toolbarCellWidth": 36.125,
+      "toolbarCellHeight": 58
+    },
+    "consoleWarnings": 0,
+    "consoleErrors": 0
+  },
+  "physicalDeviceQA": false,
+  "nativeRanchCompositorBound": false,
+  "shippingReady": false,
+  "limitations": [
+    "legacy shelf layout",
+    "legacy two-region resident assignments",
+    "no prop collision binding",
+    "untraced profile values remain unknown",
+    "other screens retain existing UI",
+    "320px eight-slot rail targets are narrower than 44px"
+  ]
+}

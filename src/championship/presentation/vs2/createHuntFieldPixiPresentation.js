@@ -15,6 +15,7 @@
 
 import { createHuntFieldPointer } from "./huntFieldPointer.js";
 import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
+import {huntTrapLayers} from '../huntFeedbackArt.js';
 const ACTOR_BODY_RADIUS = 8;
 const TEMPORARY_ART_ID = "art:hunt_field:vs2:temporary-signal-grove-kit";
 
@@ -63,6 +64,7 @@ export async function mountHuntFieldPixiPresentation({
   stage,
   source,
   fieldArt = null,
+  feedbackArt = null,
   characterBundle = null,
   onFallback = () => {}
 }) {
@@ -86,9 +88,12 @@ export async function mountHuntFieldPixiPresentation({
   actorLayer.sortableChildren = true;
   const strokeGraphic = new PIXI.Graphics();
   const toolGraphic = new PIXI.Graphics();
+  const nativeTools = new PIXI.Container({label:'native tool feedback'});
+  const toolSprites=[];
   const flashGraphic = new PIXI.Graphics();
   // Technical tool feedback; native rules and geometry never read these glyphs.
   strokeLayer.addChild(toolGraphic);
+  strokeLayer.addChild(nativeTools);
   strokeLayer.addChild(strokeGraphic);
   if (fieldArt) productionArtLayer.addChild(fieldArt.displayObject);
   world.addChild(productionArtLayer, terrainLayer, objectLayer, actorLayer, strokeLayer);
@@ -317,10 +322,20 @@ export async function mountHuntFieldPixiPresentation({
   }
 
   function syncEnclosure(view) {
+    let nativeCount=0;
+    for(const sprite of toolSprites)sprite.visible=false;
     strokeGraphic.clear();
     toolGraphic.clear();flashGraphic.clear();
     if(view.tools){
-      for(const o of view.tools.objects??[]){
+      for(const o of (view.tools.objects??[]).flatMap(huntTrapLayers)){
+        if(o.visible===false)continue;
+        const frame=feedbackArt?.getFrame(o);
+        if(frame){
+          const sprite=toolSprites[nativeCount]??new PIXI.Sprite(frame.texture);
+          if(!toolSprites[nativeCount]){toolSprites.push(sprite);nativeTools.addChild(sprite);}
+          nativeCount++;sprite.texture=frame.texture;sprite.anchor.set(frame.origin[0]/frame.width,frame.origin[1]/frame.height);
+          sprite.scale.set(2);sprite.position.set(o.x,o.y);sprite.visible=true;continue;
+        }
         const g=toolGraphic,x=o.x,y=o.y;
         if(o.kind==='WIRE'){
           const color=o.state===5?([0x53ced6,0x53ced6,0xaf85ee,0xaf85ee,0xffe36c,0xffe36c][o.itemIndex]):o.valid?0x6cd9ba:0xf08a74;
@@ -531,6 +546,7 @@ export async function mountHuntFieldPixiPresentation({
       if (scene.parent) scene.parent.removeChild(scene);
       scene.destroy({ children: true });
       void fieldArt?.dispose();
+      void feedbackArt?.dispose();
       void characterBundle?.dispose();
       characterBundle = null;
       // The Application belongs to the stage and outlives this scene.

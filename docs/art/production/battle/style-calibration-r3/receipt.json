@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "batchId": "ART-BATTLE-HUMAN-PAINT-STYLE-CALIBRATION-R3-2026-09-02",
+  "status": "OWNER_STYLE_APPROVED_FOR_BOUNDED_MIGRATION_NOT_RUNTIME_NOT_SHIPPING",
+  "purpose": "CALIBRATE_LESS_UNIFORM_MORE_HUMAN_AUTHORED_MARK_MAKING_BEFORE_REPLACEMENT",
+  "runtimeMutation": false,
+  "replacementPerformed": false,
+  "referencePixelsInCandidates": false,
+  "technicalFrame": {
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "view": "BATTLE_WIDE_FIXED_CAMERA",
+    "mobileFit": "CONTAIN_0_42"
+  },
+  "comparisonLayout": [
+    "TOP_LEFT_CURRENT",
+    "TOP_RIGHT_A",
+    "BOTTOM_LEFT_B",
+    "BOTTOM_RIGHT_C_RECOMMENDED"
+  ],
+  "inputs": [
+    {
+      "label": "CURRENT_R2_REFERENCE",
+      "file": "docs/art/production/battle/bm05-bm11-static-r1/review/bm06/bm00-bm06-composite-candidate.png",
+      "sha256": "4D4E2BDC8B0481421DD018112C0C7A103E85977270F219D1C88C8B3E4C02AE52",
+      "role": "EXISTING_COMPOSITION_REFERENCE"
+    },
+    {
+      "label": "A_GOUACHE",
+      "file": "docs/art/production/battle/style-calibration-r3/candidates/bm06-human-paint-a-gouache.png",
+      "sha256": "959F8E83FCA35A983C8209FC69CC310D7055D9F8C3ACB1361CEAD6E44084823B",
+      "role": "ORIGINAL_CREATED_STYLE_CANDIDATE"
+    },
+    {
+      "label": "B_ANIMATION_BACKGROUND",
+      "file": "docs/art/production/battle/style-calibration-r3/candidates/bm06-human-paint-b-animation-background.png",
+      "sha256": "A139160C32F3A66D8E4052077751FEE965B9AAE394822EB9C8E3651E8682EE04",
+      "role": "ORIGINAL_CREATED_STYLE_CANDIDATE"
+    },
+    {
+      "label": "C_RECOMMENDED_REDUCED_MICROTEXTURE",
+      "file": "docs/art/production/battle/style-calibration-r3/candidates/bm06-human-paint-c-recommended.png",
+      "sha256": "57604BB2958C014BB737CAA309E2097FAEAAE9C60E38B4E1313FCC27DA642239",
+      "role": "ORIGINAL_CREATED_STYLE_CANDIDATE"
+    }
+  ],
+  "comparison": {
+    "file": "docs/art/production/battle/style-calibration-r3/review/bm06-style-comparison-2x2.png",
+    "sha256": "BE2C4641286A7627A70F7739EC153C526D5BEBFC2F163F15AE8E39F2688EE23D"
+  },
+  "viewportChecks": [
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "file": "docs/art/production/battle/style-calibration-r3/review/bm06-human-paint-c-viewport-390x844.png",
+      "sha256": "2C9FB65E1D82A90F5EBE525760B104D054185FA24B429A6200AF99294DCABA93"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "file": "docs/art/production/battle/style-calibration-r3/review/bm06-human-paint-c-viewport-430x932.png",
+      "sha256": "ECC8F31A230798D25B981380437E6E083CF6B37469D74822B5EBE74C0A5AE19D"
+    }
+  ],
+  "recommendedCandidate": "C_RECOMMENDED_REDUCED_MICROTEXTURE",
+  "ownerStyleApproval": {
+    "state": "APPROVED_FOR_BOUNDED_MIGRATION",
+    "date": "2026-09-02",
+    "scope": "MARK_MAKING_MATERIAL_LANGUAGE_AND_DETAIL_DISTRIBUTION_ONLY"
+  },
+  "approvalGate": "CLOSED_FOR_BOUNDED_MIGRATION_ASSET_APPROVAL_AND_RUNTIME_PROMOTION_STILL_REQUIRED"
+}

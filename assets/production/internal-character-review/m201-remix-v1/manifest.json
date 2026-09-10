@@ -13,10 +13,10 @@
     "sub": 13,
     "total": 53
   },
-  "candidateSlotCount": 57,
-  "faithfulFallbackSlotCount": 26,
-  "technicalCandidateUniqueCount": 28,
-  "pendingUniqueCount": 19,
+  "candidateSlotCount": 83,
+  "faithfulFallbackSlotCount": 0,
+  "technicalCandidateUniqueCount": 47,
+  "pendingUniqueCount": 0,
   "runtime": "assets/production/internal-character-review/m201-remix-v1/runtime.review.json",
   "runtimeSha256": "5AEF65E5FAC7502BBEA4EB8C146ED8C69B6AD6743F1B70C7242F49421D701A58",
   "sides": {
@@ -27,10 +27,10 @@
           "image": "main-review-atlas-00.png",
           "data": "main-review-atlas-00.json",
           "width": 2032,
-          "height": 1636,
+          "height": 1632,
           "frameCount": 65,
-          "imageSha256": "3451BB7E98553FE6C055B60EA6952E7A87753D8DE00D8610D4771D3ACE144FC3",
-          "dataSha256": "A225225F996FFE5EEAB8E2E06FEE835AE7957B2ACA1172F0FE273D5E787631A0"
+          "imageSha256": "81DB35A68B5DA7F19C0E7C0512741CCFABDBD6E15DC987EB8B668F4268A4D6A9",
+          "dataSha256": "1944EA90EA27B370E64BDCDC5D26495925FC2CD0BBD47FDE10954CBB331329CE"
         }
       ],
       "frameManifest": {
@@ -929,22 +929,25 @@
           "page": 0,
           "cell": 27,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "70D8F502E20C1AFFCF2CB139F115AD2B6E5CD0154EE622875053DA962943022A",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 27
+          },
+          "logicalRgbaSha256": "7F99029C310EC9F6B3CA37B8EA29B72D272B40D56E240D6A47051D0DCD76A96B",
           "frame": {
             "x": 1336,
             "y": 468,
             "w": 180,
-            "h": 216
+            "h": 210
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 102,
-            "y": 104,
+            "y": 110,
             "w": 180,
-            "h": 216
+            "h": 210
           },
           "sourceSize": {
             "w": 384,
@@ -959,22 +962,25 @@
           "page": 0,
           "cell": 28,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "E6CF36A366857665F071A6DA73C9447E0FC50CE6C8005732E101E2334AAFF98D",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 28
+          },
+          "logicalRgbaSha256": "A32384522CAB44506A6F3962ABD48C325C7288AA044C0335D0F54F48A8040C5F",
           "frame": {
             "x": 1524,
             "y": 468,
             "w": 180,
-            "h": 204
+            "h": 193
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 102,
-            "y": 116,
+            "y": 127,
             "w": 180,
-            "h": 204
+            "h": 193
           },
           "sourceSize": {
             "w": 384,
@@ -989,22 +995,25 @@
           "page": 0,
           "cell": 29,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "99050C871B939F8E04867DA0E75F30AF418424DCD86A80953B209CB870B6E4B3",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 29
+          },
+          "logicalRgbaSha256": "DB4A28F124F95B3BAA37980CEEA4910F0C489745DDB6102AEBF96C30AF790471",
           "frame": {
             "x": 1712,
             "y": 468,
             "w": 180,
-            "h": 216
+            "h": 193
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 102,
-            "y": 104,
+            "y": 127,
             "w": 180,
-            "h": 216
+            "h": 193
           },
           "sourceSize": {
             "w": 384,
@@ -1019,21 +1028,24 @@
           "page": 0,
           "cell": 30,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "6C4D4F14F3D882E96E75EE678737BB4C52EA217E8E4FC2773F92BF42C0DB9C6C",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 30
+          },
+          "logicalRgbaSha256": "1786F707DBA7D011CB866F75C9644A164196BE477D22DA39403054DE60E94AF3",
           "frame": {
             "x": 8,
             "y": 692,
-            "w": 180,
+            "w": 177,
             "h": 204
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 102,
+            "x": 104,
             "y": 116,
-            "w": 180,
+            "w": 177,
             "h": 204
           },
           "sourceSize": {
@@ -1049,22 +1061,25 @@
           "page": 0,
           "cell": 31,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "70D8F502E20C1AFFCF2CB139F115AD2B6E5CD0154EE622875053DA962943022A",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 27
+          },
+          "logicalRgbaSha256": "7F99029C310EC9F6B3CA37B8EA29B72D272B40D56E240D6A47051D0DCD76A96B",
           "frame": {
-            "x": 196,
+            "x": 193,
             "y": 692,
             "w": 180,
-            "h": 216
+            "h": 210
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 102,
-            "y": 104,
+            "y": 110,
             "w": 180,
-            "h": 216
+            "h": 210
           },
           "sourceSize": {
             "w": 384,
@@ -1079,21 +1094,24 @@
           "page": 0,
           "cell": 32,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "0558450E752AB01EF0B7638159C38CADE2FB6D5F19FED0B8AB2B58D1D799881D",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 32
+          },
+          "logicalRgbaSha256": "2358A60E5701F23EC61680E2D21AE5F30C7F3B43F86DBDEE36347992807F8F53",
           "frame": {
-            "x": 384,
+            "x": 381,
             "y": 692,
-            "w": 192,
+            "w": 163,
             "h": 204
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 110,
             "y": 116,
-            "w": 192,
+            "w": 163,
             "h": 204
           },
           "sourceSize": {
@@ -1109,22 +1127,25 @@
           "page": 0,
           "cell": 33,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "70D8F502E20C1AFFCF2CB139F115AD2B6E5CD0154EE622875053DA962943022A",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 27
+          },
+          "logicalRgbaSha256": "7F99029C310EC9F6B3CA37B8EA29B72D272B40D56E240D6A47051D0DCD76A96B",
           "frame": {
-            "x": 584,
+            "x": 552,
             "y": 692,
             "w": 180,
-            "h": 216
+            "h": 210
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 102,
-            "y": 104,
+            "y": 110,
             "w": 180,
-            "h": 216
+            "h": 210
           },
           "sourceSize": {
             "w": 384,
@@ -1139,21 +1160,24 @@
           "page": 0,
           "cell": 34,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "0558450E752AB01EF0B7638159C38CADE2FB6D5F19FED0B8AB2B58D1D799881D",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 32
+          },
+          "logicalRgbaSha256": "2358A60E5701F23EC61680E2D21AE5F30C7F3B43F86DBDEE36347992807F8F53",
           "frame": {
-            "x": 772,
+            "x": 740,
             "y": 692,
-            "w": 192,
+            "w": 163,
             "h": 204
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 110,
             "y": 116,
-            "w": 192,
+            "w": 163,
             "h": 204
           },
           "sourceSize": {
@@ -1169,21 +1193,24 @@
           "page": 0,
           "cell": 35,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "5E6EFA0D0C27328ADFD02DFD53924F3B53E647F50DE31F218865B4AD001E390C",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 35
+          },
+          "logicalRgbaSha256": "A2CCF40B651C30348C6BE855E1C45124A02664919271DDE4B62FE89143F5DFB9",
           "frame": {
-            "x": 972,
+            "x": 911,
             "y": 692,
-            "w": 204,
+            "w": 175,
             "h": 216
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 90,
+            "x": 104,
             "y": 104,
-            "w": 204,
+            "w": 175,
             "h": 216
           },
           "sourceSize": {
@@ -1199,22 +1226,25 @@
           "page": 0,
           "cell": 36,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "07932C14025D022D4CBA3129EE6810AEDF347AA1168F9F1FD8E8FEF5E5BAA904",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 36
+          },
+          "logicalRgbaSha256": "F1F77DFBD50DF16C6F58F2BC5F2CB4C30C17DE7776B9C0CB25217567987AD32F",
           "frame": {
-            "x": 1184,
+            "x": 1094,
             "y": 692,
             "w": 180,
-            "h": 216
+            "h": 194
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 102,
-            "y": 104,
+            "y": 126,
             "w": 180,
-            "h": 216
+            "h": 194
           },
           "sourceSize": {
             "w": 384,
@@ -1229,21 +1259,24 @@
           "page": 0,
           "cell": 37,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "3A24999B48AEEAE2F35CCBAF6435780DC6D893D31CDE4C1631F5EF8DC705D33D",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 37
+          },
+          "logicalRgbaSha256": "AD7B7BB83F96DD5C36A7FFB19564AD9F2DE733C4E1A727498DDDD12B1E15D1E1",
           "frame": {
-            "x": 1372,
+            "x": 1282,
             "y": 692,
-            "w": 204,
+            "w": 195,
             "h": 216
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 90,
+            "x": 94,
             "y": 104,
-            "w": 204,
+            "w": 195,
             "h": 216
           },
           "sourceSize": {
@@ -1259,22 +1292,25 @@
           "page": 0,
           "cell": 38,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "99050C871B939F8E04867DA0E75F30AF418424DCD86A80953B209CB870B6E4B3",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 29
+          },
+          "logicalRgbaSha256": "DB4A28F124F95B3BAA37980CEEA4910F0C489745DDB6102AEBF96C30AF790471",
           "frame": {
-            "x": 1584,
+            "x": 1485,
             "y": 692,
             "w": 180,
-            "h": 216
+            "h": 193
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 102,
-            "y": 104,
+            "y": 127,
             "w": 180,
-            "h": 216
+            "h": 193
           },
           "sourceSize": {
             "w": 384,
@@ -1289,21 +1325,24 @@
           "page": 0,
           "cell": 39,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "AD627B666295BD40128E7C28A30AC1C3DB31B388DDF27789839AF576E144509B",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 39
+          },
+          "logicalRgbaSha256": "DF32C849D1FEB58636A9B9C342C7D177E3134BC61DF53353E9C535945915234D",
           "frame": {
-            "x": 1772,
+            "x": 1673,
             "y": 692,
-            "w": 192,
+            "w": 182,
             "h": 204
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 101,
             "y": 116,
-            "w": 192,
+            "w": 182,
             "h": 204
           },
           "sourceSize": {
@@ -1319,22 +1358,25 @@
           "page": 0,
           "cell": 40,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "35DC81D391C9F135876B5401F1D3CA15F599876A86AE1547B7E59F7F060DD521",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 40
+          },
+          "logicalRgbaSha256": "9B0E338CC8B493216951DE7308A0F0FE69E6D0DBF2C7C888F4186E678F4464B9",
           "frame": {
             "x": 8,
             "y": 916,
             "w": 184,
-            "h": 96
+            "h": 85
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 100,
-            "y": 224,
+            "y": 235,
             "w": 184,
-            "h": 96
+            "h": 85
           },
           "sourceSize": {
             "w": 384,
@@ -1349,21 +1391,24 @@
           "page": 0,
           "cell": 41,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "A1D2393396328799600A2C8F9C8FF5D3C05F0A438DAA5C676CB833E9B94D337F",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 41
+          },
+          "logicalRgbaSha256": "59DCDF60BC7918C99E350BFF669E9F8334802FD900E10794D20C511C977E37D8",
           "frame": {
             "x": 200,
             "y": 916,
-            "w": 192,
+            "w": 174,
             "h": 216
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 105,
             "y": 104,
-            "w": 192,
+            "w": 174,
             "h": 216
           },
           "sourceSize": {
@@ -1379,21 +1424,24 @@
           "page": 0,
           "cell": 42,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "FBA7476181F4B7435AB2F9E6AC19BDBAFC1938C32CCA073F0F12F51033953755",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 42
+          },
+          "logicalRgbaSha256": "5BBC8DC9F58CE58CEA632CC32087E4BD927A505D3EFB980C2350B265152F1E3B",
           "frame": {
-            "x": 400,
+            "x": 382,
             "y": 916,
-            "w": 192,
+            "w": 181,
             "h": 216
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 102,
             "y": 104,
-            "w": 192,
+            "w": 181,
             "h": 216
           },
           "sourceSize": {
@@ -1409,22 +1457,25 @@
           "page": 0,
           "cell": 43,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "35DC81D391C9F135876B5401F1D3CA15F599876A86AE1547B7E59F7F060DD521",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 40
+          },
+          "logicalRgbaSha256": "9B0E338CC8B493216951DE7308A0F0FE69E6D0DBF2C7C888F4186E678F4464B9",
           "frame": {
-            "x": 600,
+            "x": 571,
             "y": 916,
             "w": 184,
-            "h": 96
+            "h": 85
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 100,
-            "y": 224,
+            "y": 235,
             "w": 184,
-            "h": 96
+            "h": 85
           },
           "sourceSize": {
             "w": 384,
@@ -1446,7 +1497,7 @@
           },
           "logicalRgbaSha256": "B7DA1D22B3B3AF912FEF5395809ACF8ABE506E6ABC662154124CCC8221B3D44C",
           "frame": {
-            "x": 792,
+            "x": 763,
             "y": 916,
             "w": 195,
             "h": 216
@@ -1479,7 +1530,7 @@
           },
           "logicalRgbaSha256": "4DC9CC71D28ACD5E227CD269AE77607B9087737BA0C00998E352441349B5EA5D",
           "frame": {
-            "x": 995,
+            "x": 966,
             "y": 916,
             "w": 204,
             "h": 216
@@ -1512,7 +1563,7 @@
           },
           "logicalRgbaSha256": "B7DA1D22B3B3AF912FEF5395809ACF8ABE506E6ABC662154124CCC8221B3D44C",
           "frame": {
-            "x": 1207,
+            "x": 1178,
             "y": 916,
             "w": 195,
             "h": 216
@@ -1545,7 +1596,7 @@
           },
           "logicalRgbaSha256": "8DD1D1D2B7E8E698CA41D92C3CEBDF499BF0DBE18FB19BFE1D8A5EC34F905666",
           "frame": {
-            "x": 1410,
+            "x": 1381,
             "y": 916,
             "w": 196,
             "h": 216
@@ -1578,7 +1629,7 @@
           },
           "logicalRgbaSha256": "F6B97ACFDF70EB39F424957F8B01288403C8F60B52684D0291841521ED97B975",
           "frame": {
-            "x": 1614,
+            "x": 1585,
             "y": 916,
             "w": 186,
             "h": 216
@@ -1611,7 +1662,7 @@
           },
           "logicalRgbaSha256": "B6E32CC5E6739711A0C22F45CAE6B30A56940C084C6922732560B563F02400D8",
           "frame": {
-            "x": 1808,
+            "x": 1779,
             "y": 916,
             "w": 175,
             "h": 216
@@ -1802,21 +1853,24 @@
           "page": 0,
           "cell": 55,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "3274880E1449EADAB1104E4A9344B37ED52BACC3227B69A12B66A1073677A49E",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 55
+          },
+          "logicalRgbaSha256": "B445BFBE35084B1920D9E6A1572A23F6B3D496AEC17531E6D3C59C1E9EE77B32",
           "frame": {
             "x": 879,
             "y": 1140,
-            "w": 192,
+            "w": 186,
             "h": 204
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 99,
             "y": 116,
-            "w": 192,
+            "w": 186,
             "h": 204
           },
           "sourceSize": {
@@ -1839,7 +1893,7 @@
           },
           "logicalRgbaSha256": "96D8FB761B4A6BEE5C486AE2AE6B17A6FAB1CA307CD8F029CCABF3EAF7EDA94A",
           "frame": {
-            "x": 1079,
+            "x": 1073,
             "y": 1140,
             "w": 192,
             "h": 126
@@ -1865,21 +1919,24 @@
           "page": 0,
           "cell": 57,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "58B82F40547984B33B873DCBFA1F4CCA3623F5AE1E03794B7CC5C87A84F567AC",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 57
+          },
+          "logicalRgbaSha256": "509AB2CECCAC9476717BA119F909C5097188E5295864040A3E9F0E7FD31BBBA8",
           "frame": {
-            "x": 1279,
+            "x": 1273,
             "y": 1140,
-            "w": 192,
+            "w": 189,
             "h": 204
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 98,
             "y": 116,
-            "w": 192,
+            "w": 189,
             "h": 204
           },
           "sourceSize": {
@@ -1895,21 +1952,24 @@
           "page": 0,
           "cell": 58,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "8699075856AFEC09F0D9F14738C52A233C36D73D7504245411AFDE1B10B9966A",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 58
+          },
+          "logicalRgbaSha256": "D563898A17202D99FEAEDD1FB055AC26A0657925C7CB1221B5397810FC35B797",
           "frame": {
-            "x": 1479,
+            "x": 1470,
             "y": 1140,
-            "w": 192,
+            "w": 183,
             "h": 228
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 100,
             "y": 92,
-            "w": 192,
+            "w": 183,
             "h": 228
           },
           "sourceSize": {
@@ -1925,22 +1985,25 @@
           "page": 0,
           "cell": 59,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "8CAD7DF2C83AF326BC33521125953AD55AABB9D62F46E9FEFCBF00F1D3A2DACE",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 59
+          },
+          "logicalRgbaSha256": "3669AF7D0FA5945B97EE844EA46D9EA8F9CFD8E8B32EC4B1500BF9B5E1804EAB",
           "frame": {
-            "x": 1679,
+            "x": 1661,
             "y": 1140,
             "w": 204,
-            "h": 204
+            "h": 198
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 90,
-            "y": 116,
+            "y": 122,
             "w": 204,
-            "h": 204
+            "h": 198
           },
           "sourceSize": {
             "w": 384,
@@ -1955,22 +2018,25 @@
           "page": 0,
           "cell": 60,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "0E788F033DBDAB8A203B738BE9FED63FAD5E3883161B966B9E4A3BE15D648596",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 60
+          },
+          "logicalRgbaSha256": "E598DAD2246B31C484F033963321C5EAE66C889EE3BFE7E60B1213D16CC200D2",
           "frame": {
             "x": 8,
             "y": 1376,
             "w": 192,
-            "h": 252
+            "h": 247
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
             "x": 96,
-            "y": 68,
+            "y": 73,
             "w": 192,
-            "h": 252
+            "h": 247
           },
           "sourceSize": {
             "w": 384,
@@ -1985,21 +2051,24 @@
           "page": 0,
           "cell": 61,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "694B8B7AB4868C57B2FFF6E36CC9AACA1F4312A730FECE60205CBC43308D7B5A",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 61
+          },
+          "logicalRgbaSha256": "86221E43EFBFF6011B19D87F6103F87ABAA02DEE9F68F94DB28E1E80536E94E1",
           "frame": {
             "x": 208,
             "y": 1376,
-            "w": 192,
+            "w": 173,
             "h": 228
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 106,
             "y": 92,
-            "w": 192,
+            "w": 173,
             "h": 228
           },
           "sourceSize": {
@@ -2022,7 +2091,7 @@
           },
           "logicalRgbaSha256": "7DDEBEC014C3D8EA2C5732AB0844ADEB4381A344C2693AB00B7E5DE00B33893C",
           "frame": {
-            "x": 408,
+            "x": 389,
             "y": 1376,
             "w": 264,
             "h": 143
@@ -2055,7 +2124,7 @@
           },
           "logicalRgbaSha256": "6525F8A489E296674D4854AE7F55E632909F9DE5DBD4A60719341C5E68A908B3",
           "frame": {
-            "x": 680,
+            "x": 661,
             "y": 1376,
             "w": 190,
             "h": 228
@@ -2081,21 +2150,24 @@
           "page": 0,
           "cell": 64,
           "side": "main",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "2649BCC6A0ACCF45E3850FBB2CF522DCC8669FBE9AA368D3FBE84061D3FC32B9",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 64
+          },
+          "logicalRgbaSha256": "F1F32C62FFF51E95D9F347A9AF7E4F85B9528F1D306A31D878B30B41E00E0B21",
           "frame": {
-            "x": 878,
+            "x": 859,
             "y": 1376,
-            "w": 192,
+            "w": 163,
             "h": 216
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 110,
             "y": 104,
-            "w": 192,
+            "w": 163,
             "h": 216
           },
           "sourceSize": {
@@ -2118,8 +2190,8 @@
           "width": 2000,
           "height": 480,
           "frameCount": 18,
-          "imageSha256": "ACC439ADF59953C24AB1CF19FBE8C5830D201EBB985E01F405D15044EE927FD6",
-          "dataSha256": "F05703A5F4C7AE5C38A39D33650C3D72467283AF130872E45A0C3B663BCCCFCF"
+          "imageSha256": "4E9DC82F21D2A012B9B5910C7E3783A0E2C141D22388B5A2A2DF0387DA5089EA",
+          "dataSha256": "9FDA7B95A69E4A685D53E8627AC0A0F737E05BB5CCA7628485C9D43C36E610B9"
         }
       ],
       "frameManifest": {
@@ -2622,21 +2694,24 @@
           "page": 0,
           "cell": 15,
           "side": "sub",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "3274880E1449EADAB1104E4A9344B37ED52BACC3227B69A12B66A1073677A49E",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 55
+          },
+          "logicalRgbaSha256": "B445BFBE35084B1920D9E6A1572A23F6B3D496AEC17531E6D3C59C1E9EE77B32",
           "frame": {
             "x": 706,
             "y": 244,
-            "w": 192,
+            "w": 186,
             "h": 204
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 99,
             "y": 116,
-            "w": 192,
+            "w": 186,
             "h": 204
           },
           "sourceSize": {
@@ -2652,21 +2727,24 @@
           "page": 0,
           "cell": 16,
           "side": "sub",
-          "artSource": "FAITHFUL_HD_FALLBACK",
-          "canonicalCandidate": null,
-          "logicalRgbaSha256": "694B8B7AB4868C57B2FFF6E36CC9AACA1F4312A730FECE60205CBC43308D7B5A",
+          "artSource": "REMIX_TECHNICAL_CANDIDATE",
+          "canonicalCandidate": {
+            "side": "main",
+            "cell": 61
+          },
+          "logicalRgbaSha256": "86221E43EFBFF6011B19D87F6103F87ABAA02DEE9F68F94DB28E1E80536E94E1",
           "frame": {
-            "x": 906,
+            "x": 900,
             "y": 244,
-            "w": 192,
+            "w": 173,
             "h": 228
           },
           "rotated": false,
           "trimmed": true,
           "spriteSourceSize": {
-            "x": 96,
+            "x": 106,
             "y": 92,
-            "w": 192,
+            "w": 173,
             "h": 228
           },
           "sourceSize": {
@@ -2689,7 +2767,7 @@
           },
           "logicalRgbaSha256": "7DDEBEC014C3D8EA2C5732AB0844ADEB4381A344C2693AB00B7E5DE00B33893C",
           "frame": {
-            "x": 1106,
+            "x": 1081,
             "y": 244,
             "w": 264,
             "h": 143
@@ -2717,9 +2795,9 @@
   "sequenceCoverage": {
     "main": {
       "counts": {
-        "FULL_REMIX": 24,
+        "FULL_REMIX": 40,
         "PARTIAL_REMIX": 0,
-        "FAITHFUL_FALLBACK_ONLY": 16
+        "FAITHFUL_FALLBACK_ONLY": 0
       },
       "animations": [
         {
@@ -2854,80 +2932,80 @@
           "id": 16,
           "name": "action_16",
           "semanticAlias": "restrained_idle_a",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 2,
           "frameReferenceCount": 2
         },
         {
           "id": 17,
           "name": "action_17",
           "semanticAlias": "restrained_idle_b",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 2,
           "frameReferenceCount": 2
         },
         {
           "id": 18,
           "name": "action_18",
           "semanticAlias": "restrained_walk",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 2,
           "frameReferenceCount": 2
         },
         {
           "id": 19,
           "name": "action_19",
           "semanticAlias": "restrained_run",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 2,
           "frameReferenceCount": 2
         },
         {
           "id": 20,
           "name": "action_20",
           "semanticAlias": "restrained_alert",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
           "frameReferenceCount": 1
         },
         {
           "id": 21,
           "name": "action_21",
           "semanticAlias": "restrained_flee",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 2,
           "frameReferenceCount": 2
         },
         {
           "id": 22,
           "name": "action_22",
           "semanticAlias": "restrained_tired_walk",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 2,
           "frameReferenceCount": 2
         },
         {
           "id": 23,
           "name": "action_23",
           "semanticAlias": "restrained_sleep",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
           "frameReferenceCount": 1
         },
         {
           "id": 24,
           "name": "action_24",
           "semanticAlias": "restrained_eat",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 2,
           "frameReferenceCount": 2
         },
         {
           "id": 25,
           "name": "action_25",
           "semanticAlias": "restrained_rest",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
           "frameReferenceCount": 1
         },
         {
@@ -2974,8 +3052,8 @@
           "id": 31,
           "name": "action_31",
           "semanticAlias": "guard",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
           "frameReferenceCount": 1
         },
         {
@@ -2990,32 +3068,32 @@
           "id": 33,
           "name": "action_33",
           "semanticAlias": "shout",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 2,
           "frameReferenceCount": 2
         },
         {
           "id": 34,
           "name": "action_34",
           "semanticAlias": "guard_variant",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
           "frameReferenceCount": 1
         },
         {
           "id": 35,
           "name": "action_35",
           "semanticAlias": "shout_continuation",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
           "frameReferenceCount": 1
         },
         {
           "id": 36,
           "name": "action_36",
           "semanticAlias": "battle_status_unknown",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
           "frameReferenceCount": 1
         },
         {
@@ -3038,17 +3116,17 @@
           "id": 39,
           "name": "action_39",
           "semanticAlias": "training_effect_state",
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
           "frameReferenceCount": 1
         }
       ]
     },
     "sub": {
       "counts": {
-        "FULL_REMIX": 11,
+        "FULL_REMIX": 13,
         "PARTIAL_REMIX": 0,
-        "FAITHFUL_FALLBACK_ONLY": 2
+        "FAITHFUL_FALLBACK_ONLY": 0
       },
       "animations": [
         {
@@ -3135,16 +3213,16 @@
           "id": 10,
           "name": "action_10",
           "semanticAlias": null,
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
           "frameReferenceCount": 1
         },
         {
           "id": 11,
           "name": "action_11",
           "semanticAlias": null,
-          "state": "FAITHFUL_FALLBACK_ONLY",
-          "remixFrameReferences": 0,
+          "state": "FULL_REMIX",
+          "remixFrameReferences": 1,
           "frameReferenceCount": 1
         },
         {

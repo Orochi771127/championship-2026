@@ -1,0 +1,383 @@
+{
+  "date": "2026-09-08",
+  "status": "ALL_EXECUTABLE_MOVE_SCRIPTS_AND_SOURCE_PRESENTATION_BOUND_ORIGINAL_PARITY_PARTIAL",
+  "report": "docs/art/production/battle-presentation-r13/IMPLEMENTATION_2026-09-08.md",
+  "git": {
+    "branch": "main",
+    "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+    "committed": false
+  },
+  "completed": {
+    "executableMoveRecords": 595,
+    "dummyRecordsExcluded": 1,
+    "speciesSpecific": 565,
+    "genericSupport": 30,
+    "sourceBanks": 151,
+    "sourceSequences": 484,
+    "sourceCells": 1231,
+    "blankSourceCells": 99,
+    "characterProfiles": 224,
+    "speciesMappings": 228,
+    "nativeCharacterCells": 13246,
+    "impactFamilies": 5,
+    "impactSlots": 80,
+    "originalSounds": 54
+  },
+  "tests": {
+    "regressionPassed": 1253,
+    "failed": 0,
+    "skipped": 0,
+    "newCpuCases": {
+      "impacts": 20,
+      "camera": 10,
+      "engagements": 16,
+      "frameBranches": 2,
+      "hitTiming": 24,
+      "timingGates": 15,
+      "slowdowns": 3
+    },
+    "controlledSweeps": [
+      {
+        "receipt": "reports/battle-r13-all-moves.json",
+        "records": 595,
+        "controlled": true,
+        "resultCode": 2,
+        "interruptAt": -1,
+        "errors": 0
+      },
+      {
+        "receipt": "reports/battle-r13-all-misses.json",
+        "records": 595,
+        "controlled": true,
+        "resultCode": 0,
+        "interruptAt": -1,
+        "errors": 0
+      },
+      {
+        "receipt": "reports/battle-r13-all-blocks.json",
+        "records": 595,
+        "controlled": true,
+        "resultCode": 1,
+        "interruptAt": -1,
+        "errors": 0
+      },
+      {
+        "receipt": "reports/battle-r13-all-interruptions.json",
+        "records": 595,
+        "controlled": true,
+        "resultCode": 2,
+        "interruptAt": 12,
+        "errors": 0
+      }
+    ],
+    "normalReceipt": "reports/battle-r13-normal-timing-final.json",
+    "browserReceipt": "reports/battle-r13-browser.json",
+    "gitDiffCheck": "PASS"
+  },
+  "limits": [
+    "Three-member knockout slowdown lookup index3 requires actual original caller context; no guessed duration",
+    "Controlled 595-move execution does not certify natural AI selection or visual acceptance of every move",
+    "Original complete ending-camera, hardware pixel/audio parity and original pre-constructor RNG/profile history are not accepted",
+    "Home-owned party, additional moves, untraced status bodies and non-battle triggers remain separate open gameplay work",
+    "Physical-device, human visual, public rights and shipping acceptance remain false"
+  ],
+  "originalFullMatchParity": false,
+  "allMovesNormalVisualAccepted": false,
+  "physicalDeviceAccepted": false,
+  "shippingReady": false,
+  "publicReleasePermitted": false,
+  "sourceHashes": {
+    "src/championship/app/battleRuntime.js": "fab6a50e7475c246c7410c93c2e3134fe0720b32bab3bea62660174ef9ed13a1",
+    "src/championship/app/battlePresentationSource.js": "1c6cf3bd022385e4327b4e0ba6869944fdba5d11ee4002e49dfe4658d79bdb1d",
+    "src/championship/app/main.js": "0a2310e3dc729c2744d8f6c80a7142b4dab50bf8011682cd513650ca34c5c6fa",
+    "src/championship/battle/battlePresentationHost.js": "c193acd928c4ca8a272d26b3bd50394a2fe3a3120fb7d02b8300482cfda7b5f5",
+    "src/championship/battle/battleSoundEvents.js": "84413c0ba17ca3ffe87230ae06710fbf8e8dc9fbfde60b6371362ca3789d5eb2",
+    "src/championship/battle/battleNativeActors.js": "5aa7bafa34fd5f9653f76f935bc326c4b9843b400ab6ed64845b414ab5ca452d",
+    "src/championship/battle/battleNativeLaunch.js": "f90264aa7e28dafb553dc5f420f66e847c504ecf47fa47e6449fe1991ffc03c9",
+    "src/championship/battle/battleImpactEffects.js": "27ccab906bbb4699b783b30fea3009a7e1bae8ee8f00a2ea35541e6b6b3fdbc1",
+    "src/championship/battle/battleEffectActors.js": "6f945dda1a68714f9318a00c1995bb9b0856f9993d31411731c5df3bfeded308",
+    "src/championship/battle/battleHitState.js": "d749c2e03ceacaf9eb030fdd3dd81a5347f4b1a36bea644cd758fb27e507d999",
+    "src/championship/battle/battleHitRuntime.js": "b995abf4457f4a2961f8ddfeed57d6723a1763fc6164405af0d5b0b985c2e985",
+    "src/championship/battle/battleInFlight.js": "af7400de2506e4512d207ee7b68a83c343b56d4de9ba9a4039dd25c031667093",
+    "src/championship/presentation/battleAudioPresentation.js": "9dbb066258204d4947fff3dc4b581e4cc560dd73ffa39b0764f59213ba0adbd4",
+    "src/championship/presentation/battleCharacterAction.js": "b85602d6bd731d45fd3f17d2cccf110cd5e1b85077e89884bba12c0c2d129486",
+    "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js": "5c3daabfc609725edc8389c0daa98cc28d8ba63dcf313f0a34a7304989fe56a8",
+    "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js": "b32fcbd110ab39159f644c8d6f024eb97e26c4e5857ae80e298e4d9b48585d16",
+    "src/data/championship/battlePresentationProfiles.json": "4722f5d09729d29d8aa102761c1157f020a1eeb6c8fbf89d57a930f4b207519f",
+    "scripts/build-battle-presentation-sources.py": "75f6897ffd05efce7fc2154211028cfbe05392a19844220927de93b0e126f699",
+    "scripts/research/trace-battle-presentation-r13.py": "05f674412f6632db1809f237418c2f9d7a11321c7528e04ebd204b3133b4a7ec",
+    "scripts/serve.mjs": "425045ec42aab1ca741baf0de54eaecda7d2da3ec9d453e62c4b5ec87d1912ef",
+    "assets/production/ART_PRODUCTION_INDEX.json": "ca7f46413cd08169c55cf1987bad894bc05bf2ced27b17a8a4e925d4634e0373",
+    "tests/fixtures/championship-facility-battle-review.html": "b96ece2826689c5fd471092e861726fb155f2dade7ba6a722ed6f996bf180818"
+  },
+  "browser": {
+    "date": "2026-09-08",
+    "normalAi": true,
+    "injectedHitOrOutcome": false,
+    "includesNativeSnapshotAndGlobalTiming": true,
+    "scenarios": [
+      {
+        "activeLaunches": 0,
+        "audio": {
+          "active": 0,
+          "assetId": "art:audio:battle:local-reference:v1",
+          "contextState": "closed",
+          "loaded": 0,
+          "missing": [],
+          "played": 49,
+          "released": 49
+        },
+        "effectSprites": {
+          "active": 0,
+          "assetId": "art:vfx:battle-effects:local-reference:v1",
+          "created": 47,
+          "missingCells": [],
+          "released": 47,
+          "seenCells": [
+            "1:135",
+            "81:0",
+            "1:86",
+            "81:1",
+            "81:2",
+            "1:87",
+            "81:3",
+            "1:88",
+            "1:89",
+            "1:90",
+            "1:91",
+            "19:0",
+            "19:1",
+            "19:2",
+            "19:3"
+          ],
+          "sprites": [],
+          "visible": 0
+        },
+        "impacts": {
+          "active": 0,
+          "created": 47,
+          "released": 47
+        },
+        "issues": [],
+        "nativePool": {
+          "active": 0,
+          "created": 47,
+          "free": 496,
+          "loadedBanks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            19,
+            81
+          ],
+          "peak": 6,
+          "released": 47,
+          "unavailable": []
+        },
+        "overflow": false,
+        "receipt": "結算後 27400 bit",
+        "seed": 8,
+        "timing": {
+          "issues": [],
+          "pause": 0,
+          "slowdown": 0
+        },
+        "viewport": [
+          390,
+          844
+        ]
+      },
+      {
+        "overflow": false,
+        "reactions": [
+          {
+            "animation": {
+              "nativeRequest": true,
+              "sequenceId": 33,
+              "sequenceInitialFrame": 0,
+              "sequenceRequestId": 172,
+              "sequenceStartFrame": 2198,
+              "timingEvidence": "ROM_NOTIFICATION_UPDATE"
+            },
+            "down": false,
+            "hp": {
+              "current": 54,
+              "maximum": 1080,
+              "ratio": 0.05
+            },
+            "motion": {
+              "alpha": 1,
+              "heightNativePx": 0,
+              "rotationCosQ12": 4096,
+              "rotationSinQ12": 0,
+              "tintRgb": 16777215
+            },
+            "slot": 0
+          },
+          {
+            "animation": {
+              "nativeRequest": true,
+              "sequenceId": 8,
+              "sequenceInitialFrame": 0,
+              "sequenceRequestId": 171,
+              "sequenceStartFrame": 2187,
+              "timingEvidence": "ROM_NOTIFICATION_UPDATE"
+            },
+            "down": false,
+            "hp": {
+              "current": 344,
+              "maximum": 1080,
+              "ratio": 0.31851851851851853
+            },
+            "motion": {
+              "alpha": 1,
+              "heightNativePx": 0,
+              "rotationCosQ12": 4096,
+              "rotationSinQ12": 0,
+              "tintRgb": 16777215
+            },
+            "slot": 1
+          },
+          null,
+          {
+            "animation": {
+              "nativeRequest": true,
+              "sequenceId": 15,
+              "sequenceInitialFrame": 0,
+              "sequenceRequestId": 154,
+              "sequenceStartFrame": 1952,
+              "timingEvidence": "ROM_NOTIFICATION_UPDATE"
+            },
+            "down": true,
+            "hp": {
+              "current": 0,
+              "maximum": 1080,
+              "ratio": 0
+            },
+            "motion": {
+              "alpha": 1,
+              "heightNativePx": 0,
+              "rotationCosQ12": 4096,
+              "rotationSinQ12": 0,
+              "tintRgb": 16777215
+            },
+            "slot": 3
+          },
+          {
+            "animation": {
+              "nativeRequest": true,
+              "sequenceId": 8,
+              "sequenceInitialFrame": 0,
+              "sequenceRequestId": 165,
+              "sequenceStartFrame": 2117,
+              "timingEvidence": "ROM_NOTIFICATION_UPDATE"
+            },
+            "down": false,
+            "hp": {
+              "current": 500,
+              "maximum": 1080,
+              "ratio": 0.46296296296296297
+            },
+            "motion": {
+              "alpha": 1,
+              "heightNativePx": 0,
+              "rotationCosQ12": 4096,
+              "rotationSinQ12": 0,
+              "tintRgb": 16777215
+            },
+            "slot": 4
+          },
+          null
+        ],
+        "receipt": "復起 HP 寫入；時鐘 1285；HP 54",
+        "seed": 30,
+        "stage": "REVIVAL",
+        "timing": {
+          "issues": [],
+          "pause": 0,
+          "slowdown": 0
+        },
+        "viewport": [
+          320,
+          712
+        ]
+      },
+      {
+        "activeLaunches": 0,
+        "audio": {
+          "active": 0,
+          "assetId": "art:audio:battle:local-reference:v1",
+          "contextState": "closed",
+          "loaded": 0,
+          "missing": [],
+          "played": 78,
+          "released": 78
+        },
+        "effectSprites": {
+          "active": 0,
+          "assetId": "art:vfx:battle-effects:local-reference:v1",
+          "created": 53,
+          "missingCells": [],
+          "released": 53,
+          "seenCells": [
+            "1:135",
+            "81:0",
+            "1:86",
+            "81:1",
+            "81:2",
+            "1:87",
+            "81:3",
+            "1:88",
+            "1:89",
+            "1:90",
+            "1:91",
+            "19:0",
+            "19:1",
+            "19:2",
+            "19:3"
+          ],
+          "sprites": [],
+          "visible": 0
+        },
+        "impacts": {
+          "active": 0,
+          "created": 75,
+          "released": 75
+        },
+        "issues": [],
+        "nativePool": {
+          "active": 0,
+          "created": 53,
+          "free": 496,
+          "loadedBanks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            19,
+            81
+          ],
+          "peak": 6,
+          "released": 53,
+          "unavailable": []
+        },
+        "overflow": false,
+        "receipt": "結算後 27400 bit",
+        "seed": 30,
+        "stage": "SETTLED_AFTER_REALTIME_PLAY_AND_NORMAL_STEPS",
+        "timing": {
+          "issues": [],
+          "pause": 0,
+          "slowdown": 0
+        },
+        "viewport": [
+          320,
+          712
+        ]
+      }
+    ]
+  }
+}

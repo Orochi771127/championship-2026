@@ -1,0 +1,982 @@
+{
+  "characters": [
+    {
+      "alpha": 1,
+      "animation": {
+        "active": 1,
+        "baseBounds": [
+          -13,
+          -24,
+          18,
+          3
+        ],
+        "cell": 12,
+        "elapsedQ12": 8192,
+        "frameIndex": 0,
+        "geometry": {
+          "blank": false,
+          "nativeBounds": [
+            -13,
+            -23,
+            13,
+            3
+          ],
+          "origin": [
+            192,
+            296
+          ],
+          "scale": 8,
+          "sourceSize": [
+            384,
+            352
+          ]
+        },
+        "originalTimingParity": false,
+        "playMode": 1,
+        "reducedMotion": true,
+        "sequenceId": 8,
+        "texture": "m313_gargomon/main/cell_012"
+      },
+      "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL",
+      "entityId": "m313_gargomon",
+      "nativeSizing": {
+        "evidence": "VERIFIED_STATIC_MAIN_FIRST_SOURCE_FRAME",
+        "packedPixelsPerNativePixel": 8,
+        "texture": "m313_gargomon/main/cell_000"
+      },
+      "position": {
+        "x": 187.01068584735577,
+        "y": 194.55189678485576
+      },
+      "rendered": true,
+      "slot": 0,
+      "speciesId": "species-081",
+      "tint": 16777215
+    },
+    {
+      "alpha": 1,
+      "animation": {
+        "active": 1,
+        "baseBounds": [
+          -9,
+          -30,
+          10,
+          2
+        ],
+        "cell": 11,
+        "elapsedQ12": 8192,
+        "frameIndex": 0,
+        "geometry": {
+          "blank": false,
+          "nativeBounds": [
+            -16,
+            -26,
+            10,
+            2
+          ],
+          "origin": [
+            216,
+            304
+          ],
+          "scale": 8,
+          "sourceSize": [
+            384,
+            352
+          ]
+        },
+        "originalTimingParity": false,
+        "playMode": 1,
+        "reducedMotion": true,
+        "sequenceId": 8,
+        "texture": "m353_meramon/main/cell_011"
+      },
+      "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL",
+      "entityId": "m353_meramon",
+      "nativeSizing": {
+        "evidence": "VERIFIED_STATIC_MAIN_FIRST_SOURCE_FRAME",
+        "packedPixelsPerNativePixel": 8,
+        "texture": "m353_meramon/main/cell_000"
+      },
+      "position": {
+        "x": 195.98014197716344,
+        "y": 208.9878455528846
+      },
+      "rendered": true,
+      "slot": 1,
+      "speciesId": "species-113",
+      "tint": 16777215
+    },
+    {
+      "alpha": 1,
+      "animation": {
+        "active": 1,
+        "baseBounds": [
+          -13,
+          -24,
+          18,
+          3
+        ],
+        "cell": 12,
+        "elapsedQ12": 8192,
+        "frameIndex": 0,
+        "geometry": {
+          "blank": false,
+          "nativeBounds": [
+            -13,
+            -23,
+            13,
+            3
+          ],
+          "origin": [
+            192,
+            296
+          ],
+          "scale": 8,
+          "sourceSize": [
+            384,
+            352
+          ]
+        },
+        "originalTimingParity": false,
+        "playMode": 1,
+        "reducedMotion": true,
+        "sequenceId": 8,
+        "texture": "m313_gargomon/main/cell_012"
+      },
+      "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL",
+      "entityId": "m313_gargomon",
+      "nativeSizing": {
+        "evidence": "VERIFIED_STATIC_MAIN_FIRST_SOURCE_FRAME",
+        "packedPixelsPerNativePixel": 8,
+        "texture": "m313_gargomon/main/cell_000"
+      },
+      "position": {
+        "x": 207.28979492187497,
+        "y": 195.70733173076923
+      },
+      "rendered": true,
+      "slot": 3,
+      "speciesId": "species-081",
+      "tint": 16777215
+    },
+    {
+      "alpha": 1,
+      "animation": {
+        "active": 1,
+        "baseBounds": [
+          -9,
+          -30,
+          10,
+          2
+        ],
+        "cell": 11,
+        "elapsedQ12": 36864,
+        "frameIndex": 0,
+        "geometry": {
+          "blank": false,
+          "nativeBounds": [
+            -16,
+            -26,
+            10,
+            2
+          ],
+          "origin": [
+            216,
+            304
+          ],
+          "scale": 8,
+          "sourceSize": [
+            384,
+            352
+          ]
+        },
+        "originalTimingParity": false,
+        "playMode": 1,
+        "reducedMotion": true,
+        "sequenceId": 8,
+        "texture": "m353_meramon/main/cell_011"
+      },
+      "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL",
+      "entityId": "m353_meramon",
+      "nativeSizing": {
+        "evidence": "VERIFIED_STATIC_MAIN_FIRST_SOURCE_FRAME",
+        "packedPixelsPerNativePixel": 8,
+        "texture": "m353_meramon/main/cell_000"
+      },
+      "position": {
+        "x": 198.5982572115384,
+        "y": 183.26607196514425
+      },
+      "rendered": true,
+      "slot": 4,
+      "speciesId": "species-113",
+      "tint": 16777215
+    }
+  ],
+  "lifecycle": {
+    "active": [
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 179,
+        "nativeCalls": [
+          [
+            34721476,
+            2
+          ],
+          [
+            34721752,
+            4
+          ],
+          [
+            34723092,
+            5
+          ],
+          [
+            34721428,
+            53
+          ],
+          [
+            34721404,
+            53
+          ],
+          [
+            34722760,
+            14
+          ],
+          [
+            34721780,
+            13
+          ],
+          [
+            34722360,
+            9
+          ],
+          [
+            34722456,
+            20
+          ],
+          [
+            34722244,
+            9
+          ],
+          [
+            34722216,
+            9
+          ],
+          [
+            34722272,
+            9
+          ],
+          [
+            34722840,
+            9
+          ],
+          [
+            34726540,
+            17
+          ],
+          [
+            34721852,
+            2
+          ],
+          [
+            34721800,
+            2
+          ],
+          [
+            34722656,
+            2
+          ],
+          [
+            34721872,
+            32
+          ],
+          [
+            34726596,
+            16
+          ],
+          [
+            34721648,
+            16
+          ],
+          [
+            34721532,
+            1
+          ],
+          [
+            34726024,
+            2
+          ],
+          [
+            34721452,
+            2
+          ],
+          [
+            34722960,
+            2
+          ],
+          [
+            34722620,
+            5
+          ],
+          [
+            34722728,
+            7
+          ],
+          [
+            34726100,
+            3
+          ],
+          [
+            34727116,
+            1
+          ],
+          [
+            34723596,
+            1
+          ],
+          [
+            34722492,
+            1
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285212672,
+        "owner": 268435456,
+        "ownerSlot": 0,
+        "phase": "PRIMARY",
+        "target": 268828672,
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 254,
+        "nativeCalls": [
+          [
+            34721476,
+            2
+          ],
+          [
+            34721752,
+            4
+          ],
+          [
+            34723092,
+            5
+          ],
+          [
+            34721428,
+            53
+          ],
+          [
+            34721404,
+            53
+          ],
+          [
+            34722760,
+            14
+          ],
+          [
+            34721780,
+            13
+          ],
+          [
+            34722360,
+            9
+          ],
+          [
+            34722456,
+            20
+          ],
+          [
+            34722244,
+            9
+          ],
+          [
+            34722216,
+            9
+          ],
+          [
+            34722272,
+            9
+          ],
+          [
+            34722840,
+            9
+          ],
+          [
+            34726540,
+            17
+          ],
+          [
+            34721852,
+            2
+          ],
+          [
+            34721800,
+            2
+          ],
+          [
+            34722656,
+            2
+          ],
+          [
+            34721872,
+            32
+          ],
+          [
+            34726596,
+            16
+          ],
+          [
+            34721648,
+            16
+          ],
+          [
+            34721532,
+            1
+          ],
+          [
+            34726024,
+            2
+          ],
+          [
+            34721452,
+            2
+          ],
+          [
+            34722960,
+            2
+          ],
+          [
+            34722620,
+            5
+          ],
+          [
+            34722728,
+            7
+          ],
+          [
+            34726100,
+            3
+          ],
+          [
+            34727116,
+            1
+          ],
+          [
+            34723596,
+            1
+          ],
+          [
+            34722492,
+            1
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285220864,
+        "owner": 268566528,
+        "ownerSlot": 1,
+        "phase": "PRIMARY",
+        "target": 268828672,
+        "unresolvedHostCalls": []
+      }
+    ],
+    "impacts": {
+      "active": 4,
+      "created": 4,
+      "released": 0
+    },
+    "normalFlow": {
+      "evidence": "ROM_NORMAL_BRANCHES_CONTROLLED_INITIAL_RNG",
+      "history": [
+        {
+          "actionTarget": 3,
+          "clock": 0,
+          "frame": 0,
+          "moveId": 179,
+          "slot": 0,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 0,
+          "frame": 0,
+          "moveId": 254,
+          "slot": 1,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 0,
+          "frame": 0,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 0,
+          "frame": 0,
+          "moveId": 254,
+          "slot": 4,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 45,
+          "frame": 45,
+          "from": 4,
+          "slot": 0,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 45,
+          "frame": 45,
+          "from": 4,
+          "slot": 1,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 45,
+          "frame": 45,
+          "from": 4,
+          "slot": 3,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 46,
+          "frame": 46,
+          "moveId": 179,
+          "slot": 0,
+          "state": 14,
+          "targetSlot": 3,
+          "type": "LAUNCHED"
+        },
+        {
+          "clock": 46,
+          "frame": 46,
+          "moveId": 254,
+          "slot": 1,
+          "state": 14,
+          "targetSlot": 3,
+          "type": "LAUNCHED"
+        },
+        {
+          "clock": 46,
+          "frame": 46,
+          "moveId": 179,
+          "slot": 3,
+          "state": 14,
+          "targetSlot": 0,
+          "type": "LAUNCHED"
+        },
+        {
+          "clock": 53,
+          "frame": 53,
+          "from": 4,
+          "slot": 4,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 54,
+          "frame": 54,
+          "moveId": 254,
+          "slot": 4,
+          "state": 14,
+          "targetSlot": 0,
+          "type": "LAUNCHED"
+        }
+      ],
+      "initialRngBoundary": "0210CB94/CBB4: two 021140CC initializations per populated slot; pre-constructor RNG history is supplied by the fixture seed",
+      "slots": [
+        {
+          "launches": [
+            0,
+            null,
+            null
+          ],
+          "point": [
+            826465,
+            590957,
+            0
+          ],
+          "state": 14,
+          "targetSlot": 3
+        },
+        {
+          "launches": [
+            1,
+            null,
+            null
+          ],
+          "point": [
+            857421,
+            649868,
+            0
+          ],
+          "state": 14,
+          "targetSlot": 3
+        },
+        null,
+        {
+          "launches": [
+            null,
+            null,
+            null
+          ],
+          "point": [
+            894495,
+            596000,
+            0
+          ],
+          "state": 23,
+          "targetSlot": 0
+        },
+        {
+          "launches": [
+            null,
+            null,
+            null
+          ],
+          "point": [
+            864752,
+            537603,
+            0
+          ],
+          "state": 23,
+          "targetSlot": 0
+        },
+        null
+      ]
+    },
+    "reactions": {
+      "battleEnding": false,
+      "combatants": [
+        {
+          "attemptIndex": 2,
+          "counter": 17,
+          "hp": 1080,
+          "notification": 9,
+          "phase": 0,
+          "reaction": 0,
+          "speed": 0,
+          "state": 14,
+          "suspended": false
+        },
+        {
+          "attemptIndex": 2,
+          "counter": 17,
+          "hp": 1080,
+          "notification": 9,
+          "phase": 0,
+          "reaction": 0,
+          "speed": 0,
+          "state": 14,
+          "suspended": false
+        },
+        null,
+        {
+          "attemptIndex": 2,
+          "counter": -255,
+          "hp": 916,
+          "notification": 15,
+          "phase": 0,
+          "reaction": 1,
+          "speed": 0,
+          "state": 23,
+          "suspended": false
+        },
+        {
+          "attemptIndex": 2,
+          "counter": -255,
+          "hp": 961,
+          "notification": 15,
+          "phase": 0,
+          "reaction": 2,
+          "speed": 0,
+          "state": 23,
+          "suspended": false
+        },
+        null
+      ],
+      "history": [
+        {
+          "clock": 62,
+          "frame": 62,
+          "slot": 3,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 62,
+          "frame": 62,
+          "hp": 990,
+          "notification": 15,
+          "reaction": 2,
+          "result": 2,
+          "slot": 3,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 62,
+          "frame": 62,
+          "slot": 4,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 62,
+          "frame": 62,
+          "hp": 1010,
+          "notification": 15,
+          "reaction": 1,
+          "result": 2,
+          "slot": 4,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 62,
+          "frame": 62,
+          "slot": 3,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 62,
+          "frame": 62,
+          "hp": 916,
+          "notification": 15,
+          "reaction": 1,
+          "result": 2,
+          "slot": 3,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 62,
+          "frame": 62,
+          "slot": 4,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 62,
+          "frame": 62,
+          "hp": 961,
+          "notification": 15,
+          "reaction": 2,
+          "result": 2,
+          "slot": 4,
+          "type": "HIT_STATE_WRITTEN"
+        }
+      ]
+    },
+    "recent": [
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 179,
+        "nativeCalls": [
+          [
+            34721476,
+            1
+          ],
+          [
+            34721752,
+            1
+          ],
+          [
+            34723092,
+            1
+          ],
+          [
+            34721428,
+            46
+          ],
+          [
+            34721404,
+            46
+          ],
+          [
+            34722760,
+            2
+          ],
+          [
+            34721780,
+            2
+          ],
+          [
+            34722360,
+            1
+          ],
+          [
+            34722456,
+            2
+          ],
+          [
+            34722244,
+            1
+          ],
+          [
+            34722216,
+            1
+          ],
+          [
+            34722272,
+            1
+          ],
+          [
+            34722840,
+            1
+          ],
+          [
+            34726540,
+            16
+          ],
+          [
+            34721852,
+            1
+          ],
+          [
+            34721800,
+            1
+          ],
+          [
+            34722656,
+            1
+          ],
+          [
+            34721872,
+            30
+          ],
+          [
+            34726596,
+            15
+          ],
+          [
+            34721648,
+            15
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285229056,
+        "owner": 268828672,
+        "ownerSlot": 3,
+        "phase": "PRELUDE",
+        "target": 268435456,
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 254,
+        "nativeCalls": [
+          [
+            34721476,
+            1
+          ],
+          [
+            34721752,
+            1
+          ],
+          [
+            34723092,
+            1
+          ],
+          [
+            34721428,
+            22
+          ],
+          [
+            34721404,
+            22
+          ],
+          [
+            34722760,
+            2
+          ],
+          [
+            34721780,
+            2
+          ],
+          [
+            34722360,
+            1
+          ],
+          [
+            34722456,
+            2
+          ],
+          [
+            34722244,
+            1
+          ],
+          [
+            34722216,
+            1
+          ],
+          [
+            34722272,
+            1
+          ],
+          [
+            34722840,
+            1
+          ],
+          [
+            34726540,
+            8
+          ],
+          [
+            34721852,
+            1
+          ],
+          [
+            34721800,
+            1
+          ],
+          [
+            34722656,
+            1
+          ],
+          [
+            34721872,
+            14
+          ],
+          [
+            34726596,
+            7
+          ],
+          [
+            34721648,
+            7
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285237248,
+        "owner": 268959744,
+        "ownerSlot": 4,
+        "phase": "PRELUDE",
+        "target": 268435456,
+        "unresolvedHostCalls": []
+      }
+    ]
+  }
+}

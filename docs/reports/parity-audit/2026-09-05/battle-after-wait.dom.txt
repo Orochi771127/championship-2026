@@ -1,0 +1,10 @@
+- status:
+  - generic: Spring
+  - generic: Day
+  - generic: "1"
+  - generic: Battle
+  - time: 08:00
+- region "Battle result":
+  - generic: TEAM DOWN
+  - heading "YOUR TEAM" [level=1]
+  - button "NEXT"

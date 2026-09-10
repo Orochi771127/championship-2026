@@ -13,6 +13,23 @@ function frames(app,n){for(let i=0;i<n;i++){if(app.hasRaisingPresentation())app.
   const mailbox=app.getRaisingMailbox();if(mailbox.activeId!==null&&mailbox.queue.find(q=>q.id===mailbox.activeId)?.system)app.acknowledgeRaisingMail();}}
 async function hatch(app){const id=app.getRaisingInstances()[0].instanceId;for(let i=0;i<3;i++){app.touchRaisingEgg(id);frames(app,1);}frames(app,200);assert.ok(app.getRaisingActorFrame(id).speciesIndex>=8);return id;}
 
+test('held resident advances on the app clock, releases into native flight, lands and persists its original cage',async()=>{
+  const h=setup(),app=h.create();await app.newGame();const id=await hatch(app);
+  const before=app.getRaisingActorFrame(id),point={x:before.positionQ12[0]/4096,y:80};
+  assert.equal(app.beginRaisingCarry(id,point),true);assert.equal(app.getRaisingActorFrame(id).state,6);
+  assert.equal(app.getRaisingActorFrame(id).sequenceId,11);
+  for(let i=0;i<6;i++){app.updateRaisingCarry(id,{x:point.x,y:80-i*12});frames(app,1);}
+  const held=app.getRaisingActorFrame(id);assert.equal(held.positionQ12[2],81920);
+  assert.equal(app.releaseRaisingCarry(id),true);assert.equal(app.getRaisingActorFrame(id).state,7);
+  assert.equal(app.getRaisingActorFrame(id).sequenceId,5);assert.equal(app.releaseRaisingCarry(id),false);
+  let airborne=false;for(let i=0;i<600&&app.getRaisingActorFrame(id).state===7;i++){
+    frames(app,1);airborne||=app.getRaisingActorFrame(id).positionQ12[2]>held.positionQ12[2];}
+  assert.equal(airborne,true);assert.notEqual(app.getRaisingActorFrame(id).state,7);
+  assert.equal(app.getRaisingActorFrame(id).positionQ12[2],0);assert.equal(app.getRaisingActorFrame(id).cageDefinitionIndex,before.cageDefinitionIndex);
+  assert.equal(app.save().phase,'SAVED');await app.dispose();const restored=h.create();assert.ok(await restored.continueGame());
+  assert.equal(restored.getRaisingActorFrame(id).cageDefinitionIndex,before.cageDefinitionIndex);await restored.dispose();
+});
+
 test('controlled neglected-adult save follows native disappearance and Continue does not resurrect the released starter',async()=>{
   const h=setup(),initial=h.create();await initial.newGame();await hatch(initial);initial.save();await initial.dispose();
   const [key,text]=[...h.data][0],save=JSON.parse(text),id=save.creature.creatureId;

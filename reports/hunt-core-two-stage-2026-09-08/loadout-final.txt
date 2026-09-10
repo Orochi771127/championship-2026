@@ -1,0 +1,94 @@
+TAP version 13
+# Subtest: the five equipment classes and four plugin positions are preserved exactly
+ok 1 - the five equipment classes and four plugin positions are preserved exactly
+  ---
+  duration_ms: 2.7395
+  type: 'test'
+  ...
+# Subtest: the rope is the single equipped class and the rest are countable
+ok 2 - the rope is the single equipped class and the rest are countable
+  ---
+  duration_ms: 0.1962
+  type: 'test'
+  ...
+# Subtest: the six analyzer fields map onto the six recovered Hunt HUD nodes
+ok 3 - the six analyzer fields map onto the six recovered Hunt HUD nodes
+  ---
+  duration_ms: 0.2984
+  type: 'test'
+  ...
+# Subtest: the starting inventory follows the original initial_owned shape
+ok 4 - the starting inventory follows the original initial_owned shape
+  ---
+  duration_ms: 0.3114
+  type: 'test'
+  ...
+# Subtest: inventory quantity is capped at the per-item maximum
+ok 5 - inventory quantity is capped at the per-item maximum
+  ---
+  duration_ms: 0.2395
+  type: 'test'
+  ...
+# Subtest: availability is a Shop-side rule with its three recovered kinds
+ok 6 - availability is a Shop-side rule with its three recovered kinds
+  ---
+  duration_ms: 0.3747
+  type: 'test'
+  ...
+# Subtest: a class holds one item of its own class, and only if owned
+ok 7 - a class holds one item of its own class, and only if owned
+  ---
+  duration_ms: 0.9108
+  type: 'test'
+  ...
+# Subtest: a plugin occupies exactly one position
+ok 8 - a plugin occupies exactly one position
+  ---
+  duration_ms: 0.3742
+  type: 'test'
+  ...
+# Subtest: the Hunt HUD is dark until a plugin supplies each readout
+ok 9 - the Hunt HUD is dark until a plugin supplies each readout
+  ---
+  duration_ms: 1.0198
+  type: 'test'
+  ...
+# Subtest: analyzer fields report in the recovered order, not selection order
+ok 10 - analyzer fields report in the recovered order, not selection order
+  ---
+  duration_ms: 0.5753
+  type: 'test'
+  ...
+# Subtest: no item effect, no carry limit and no confirmation requirement is invented
+ok 11 - no item effect, no carry limit and no confirmation requirement is invented
+  ---
+  duration_ms: 0.6772
+  type: 'test'
+  ...
+# Subtest: the open unknowns stay declared as data
+ok 12 - the open unknowns stay declared as data
+  ---
+  duration_ms: 0.2191
+  type: 'test'
+  ...
+# Subtest: the loadout seam exposes the read-only surface and no companion
+ok 13 - the loadout seam exposes the read-only surface and no companion
+  ---
+  duration_ms: 42.4641
+  type: 'test'
+  ...
+# Subtest: the loadout adds no save field
+ok 14 - the loadout adds no save field
+  ---
+  duration_ms: 9.3633
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1188.6174

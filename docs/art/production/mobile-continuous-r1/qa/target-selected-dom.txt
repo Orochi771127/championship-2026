@@ -1,0 +1,42 @@
+- status:
+  - generic: Spring
+  - generic: Day
+  - generic: "1"
+  - generic: Hunt
+  - time: 10:39
+- region "Hunt field":
+  - generic "Exploration field. Drag empty ground to look around. Touch a creature to select it."
+  - strong: 戴納草原
+  - button "返回牧場"
+  - region "狩獵目標資訊":
+    - strong: 野生數碼獸
+    - term: 世代
+    - definition: "???"
+    - term: 種族
+    - definition: "???"
+    - term: HP
+    - definition: "???"
+    - term: 屬性
+    - definition: "???"
+    - term: 性格
+    - definition: "???"
+    - term: 容量
+    - definition: "???"
+  - paragraph: 拖曳地面移動視野 · 輕觸數碼獸選取
+- toolbar "Contextual toolbar":
+  - button "—" [disabled]:
+    - generic: —
+  - button "—" [disabled]:
+    - generic: —
+  - button "—" [disabled]:
+    - generic: —
+  - button "—" [disabled]:
+    - generic: —
+  - button "—" [disabled]:
+    - generic: —
+  - button "—" [disabled]:
+    - generic: —
+  - button "—" [disabled]:
+    - generic: —
+  - button "—" [disabled]:
+    - generic: —

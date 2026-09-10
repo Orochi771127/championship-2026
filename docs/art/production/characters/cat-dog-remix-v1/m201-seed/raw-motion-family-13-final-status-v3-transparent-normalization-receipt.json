@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m201_agumon",
+  "candidateStrip": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-13-final-status-v3-transparent.png",
+  "candidateStripSha256": "13F7DB41BD07E5D502AFB6EA896AB99BBF880FA02649B33A49A381252B097F01",
+  "backgroundExtraction": "SOURCE_ALPHA",
+  "removedBackgroundPixels": 0,
+  "splitPolicy": "NEAREST_TRANSPARENT_COLUMN_RUN_AROUND_NOMINAL_BOUNDARY",
+  "splitBoundaries": [
+    0,
+    384,
+    768,
+    1152
+  ],
+  "slotCount": 3,
+  "slots": [
+    {
+      "slot": 0,
+      "cell": 60,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-13-final-status-v3-transparent-slot-00-cell-060.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-060-remix-candidate.png",
+      "outputSha256": "BF12A8899B5562ACF73100CA19EF671BE11420BEB7FAC12A4E862A6F0F625F8F"
+    },
+    {
+      "slot": 1,
+      "cell": 61,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-13-final-status-v3-transparent-slot-01-cell-061.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-061-remix-candidate.png",
+      "outputSha256": "E4740E36A4ED02627BF7728735661F22761CA1699486596B2145015939BD13EA"
+    },
+    {
+      "slot": 2,
+      "cell": 64,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-13-final-status-v3-transparent-slot-02-cell-064.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-064-remix-candidate.png",
+      "outputSha256": "EE72EFE6F91225A7694311D1AF4D443623860E2B18E098D515C7F0C0E9853F31"
+    }
+  ],
+  "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+  "runtimeEligible": false,
+  "shippingReady": false
+}

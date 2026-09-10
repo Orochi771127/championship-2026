@@ -1,0 +1,282 @@
+{
+  "schemaVersion": 1,
+  "kind": "nitro-material-color-animation",
+  "sourceFormat": "NSBMA_MAT0",
+  "animationName": "spark",
+  "frameCount": 480,
+  "timebase": {
+    "unit": "sourceFrame",
+    "frameRateHz": null,
+    "status": "CALLER_TIMING_UNRESOLVED"
+  },
+  "tracks": [
+    {
+      "materialName": "spark_a",
+      "channels": {
+        "diffuse": {
+          "storage": "constant",
+          "encoded": 26425,
+          "rgb8": [
+            206,
+            206,
+            206
+          ]
+        },
+        "ambient": {
+          "storage": "constant",
+          "encoded": 0,
+          "rgb8": [
+            0,
+            0,
+            0
+          ]
+        },
+        "specular": {
+          "storage": "constant",
+          "encoded": 0,
+          "rgb8": [
+            0,
+            0,
+            0
+          ]
+        },
+        "emission": {
+          "storage": "constant",
+          "encoded": 0,
+          "rgb8": [
+            0,
+            0,
+            0
+          ]
+        },
+        "polygonAlpha": {
+          "storage": "runs",
+          "denominator": 31,
+          "runs": [
+            {
+              "startFrame": 0,
+              "endFrame": 59,
+              "value": 31
+            },
+            {
+              "startFrame": 60,
+              "endFrame": 179,
+              "value": 0
+            },
+            {
+              "startFrame": 180,
+              "endFrame": 299,
+              "value": 31
+            },
+            {
+              "startFrame": 300,
+              "endFrame": 419,
+              "value": 0
+            },
+            {
+              "startFrame": 420,
+              "endFrame": 479,
+              "value": 31
+            }
+          ]
+        }
+      }
+    },
+    {
+      "materialName": "spark_a1",
+      "channels": {
+        "diffuse": {
+          "storage": "constant",
+          "encoded": 26425,
+          "rgb8": [
+            206,
+            206,
+            206
+          ]
+        },
+        "ambient": {
+          "storage": "constant",
+          "encoded": 0,
+          "rgb8": [
+            0,
+            0,
+            0
+          ]
+        },
+        "specular": {
+          "storage": "constant",
+          "encoded": 0,
+          "rgb8": [
+            0,
+            0,
+            0
+          ]
+        },
+        "emission": {
+          "storage": "constant",
+          "encoded": 0,
+          "rgb8": [
+            0,
+            0,
+            0
+          ]
+        },
+        "polygonAlpha": {
+          "storage": "runs",
+          "denominator": 31,
+          "runs": [
+            {
+              "startFrame": 0,
+              "endFrame": 104,
+              "value": 0
+            },
+            {
+              "startFrame": 105,
+              "endFrame": 224,
+              "value": 31
+            },
+            {
+              "startFrame": 225,
+              "endFrame": 479,
+              "value": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "materialName": "spark_a2",
+      "channels": {
+        "diffuse": {
+          "storage": "constant",
+          "encoded": 26425,
+          "rgb8": [
+            206,
+            206,
+            206
+          ]
+        },
+        "ambient": {
+          "storage": "constant",
+          "encoded": 0,
+          "rgb8": [
+            0,
+            0,
+            0
+          ]
+        },
+        "specular": {
+          "storage": "constant",
+          "encoded": 0,
+          "rgb8": [
+            0,
+            0,
+            0
+          ]
+        },
+        "emission": {
+          "storage": "constant",
+          "encoded": 0,
+          "rgb8": [
+            0,
+            0,
+            0
+          ]
+        },
+        "polygonAlpha": {
+          "storage": "runs",
+          "denominator": 31,
+          "runs": [
+            {
+              "startFrame": 0,
+              "endFrame": 194,
+              "value": 0
+            },
+            {
+              "startFrame": 195,
+              "endFrame": 314,
+              "value": 31
+            },
+            {
+              "startFrame": 315,
+              "endFrame": 479,
+              "value": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "materialName": "spark_a3",
+      "channels": {
+        "diffuse": {
+          "storage": "constant",
+          "encoded": 26425,
+          "rgb8": [
+            206,
+            206,
+            206
+          ]
+        },
+        "ambient": {
+          "storage": "constant",
+          "encoded": 0,
+          "rgb8": [
+            0,
+            0,
+            0
+          ]
+        },
+        "specular": {
+          "storage": "constant",
+          "encoded": 0,
+          "rgb8": [
+            0,
+            0,
+            0
+          ]
+        },
+        "emission": {
+          "storage": "constant",
+          "encoded": 0,
+          "rgb8": [
+            0,
+            0,
+            0
+          ]
+        },
+        "polygonAlpha": {
+          "storage": "runs",
+          "denominator": 31,
+          "runs": [
+            {
+              "startFrame": 0,
+              "endFrame": 89,
+              "value": 0
+            },
+            {
+              "startFrame": 90,
+              "endFrame": 209,
+              "value": 31
+            },
+            {
+              "startFrame": 210,
+              "endFrame": 329,
+              "value": 0
+            },
+            {
+              "startFrame": 330,
+              "endFrame": 449,
+              "value": 31
+            },
+            {
+              "startFrame": 450,
+              "endFrame": 479,
+              "value": 0
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

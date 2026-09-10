@@ -1,0 +1,261 @@
+{
+  "classification": "RESEARCH_ONLY",
+  "entityId": "e002_digitama",
+  "schemaVersion": 1,
+  "semanticPolicy": "RAW_SEQUENCE_IDS_ONLY",
+  "sides": {
+    "main": {
+      "frameKeys": [
+        "e002_digitama/main/cell_000",
+        "e002_digitama/main/cell_001",
+        "e002_digitama/main/cell_002",
+        "e002_digitama/main/cell_003",
+        "e002_digitama/main/cell_004",
+        "e002_digitama/main/cell_005",
+        "e002_digitama/main/cell_006",
+        "e002_digitama/main/cell_007",
+        "e002_digitama/main/cell_008",
+        "e002_digitama/main/cell_009",
+        "e002_digitama/main/cell_010",
+        "e002_digitama/main/cell_011",
+        "e002_digitama/main/cell_012"
+      ],
+      "sequences": [
+        {
+          "frames": [
+            {
+              "cell": 0,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/main/cell_000",
+              "ticks": 15
+            },
+            {
+              "cell": 1,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/main/cell_001",
+              "ticks": 15
+            },
+            {
+              "cell": 2,
+              "frameIndex": 2,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/main/cell_002",
+              "ticks": 15
+            },
+            {
+              "cell": 3,
+              "frameIndex": 3,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/main/cell_003",
+              "ticks": 15
+            }
+          ],
+          "id": 0,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 4,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/main/cell_004",
+              "ticks": 10
+            },
+            {
+              "cell": 5,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/main/cell_005",
+              "ticks": 10
+            },
+            {
+              "cell": 6,
+              "frameIndex": 2,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/main/cell_006",
+              "ticks": 10
+            },
+            {
+              "cell": 7,
+              "frameIndex": 3,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/main/cell_007",
+              "ticks": 10
+            },
+            {
+              "cell": 8,
+              "frameIndex": 4,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/main/cell_008",
+              "ticks": 10
+            },
+            {
+              "cell": 9,
+              "frameIndex": 5,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/main/cell_009",
+              "ticks": 10
+            },
+            {
+              "cell": 10,
+              "frameIndex": 6,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/main/cell_010",
+              "ticks": 10
+            },
+            {
+              "cell": 11,
+              "frameIndex": 7,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/main/cell_011",
+              "ticks": 10
+            },
+            {
+              "cell": 12,
+              "frameIndex": 8,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/main/cell_012",
+              "ticks": 10
+            }
+          ],
+          "id": 1,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        }
+      ]
+    },
+    "sub": {
+      "frameKeys": [
+        "e002_digitama/sub/cell_000",
+        "e002_digitama/sub/cell_001",
+        "e002_digitama/sub/cell_002",
+        "e002_digitama/sub/cell_003",
+        "e002_digitama/sub/cell_004",
+        "e002_digitama/sub/cell_005",
+        "e002_digitama/sub/cell_006",
+        "e002_digitama/sub/cell_007",
+        "e002_digitama/sub/cell_008",
+        "e002_digitama/sub/cell_009",
+        "e002_digitama/sub/cell_010",
+        "e002_digitama/sub/cell_011",
+        "e002_digitama/sub/cell_012"
+      ],
+      "sequences": [
+        {
+          "frames": [
+            {
+              "cell": 0,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/sub/cell_000",
+              "ticks": 15
+            },
+            {
+              "cell": 1,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/sub/cell_001",
+              "ticks": 15
+            },
+            {
+              "cell": 2,
+              "frameIndex": 2,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/sub/cell_002",
+              "ticks": 15
+            },
+            {
+              "cell": 3,
+              "frameIndex": 3,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/sub/cell_003",
+              "ticks": 15
+            }
+          ],
+          "id": 0,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 4,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/sub/cell_004",
+              "ticks": 10
+            },
+            {
+              "cell": 5,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/sub/cell_005",
+              "ticks": 10
+            },
+            {
+              "cell": 6,
+              "frameIndex": 2,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/sub/cell_006",
+              "ticks": 10
+            },
+            {
+              "cell": 7,
+              "frameIndex": 3,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/sub/cell_007",
+              "ticks": 10
+            },
+            {
+              "cell": 8,
+              "frameIndex": 4,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/sub/cell_008",
+              "ticks": 10
+            },
+            {
+              "cell": 9,
+              "frameIndex": 5,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/sub/cell_009",
+              "ticks": 10
+            },
+            {
+              "cell": 10,
+              "frameIndex": 6,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/sub/cell_010",
+              "ticks": 10
+            },
+            {
+              "cell": 11,
+              "frameIndex": 7,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/sub/cell_011",
+              "ticks": 10
+            },
+            {
+              "cell": 12,
+              "frameIndex": 8,
+              "rawMarker": 48879,
+              "texture": "e002_digitama/sub/cell_012",
+              "ticks": 10
+            }
+          ],
+          "id": 1,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        }
+      ]
+    }
+  },
+  "timingPolicy": "RAW_TICKS_ONLY_NO_ASSUMED_HZ"
+}

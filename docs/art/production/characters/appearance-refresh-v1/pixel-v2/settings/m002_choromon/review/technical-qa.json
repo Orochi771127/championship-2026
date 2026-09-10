@@ -1,0 +1,120 @@
+{
+  "artReview": "PENDING_INDEPENDENT_VISUAL_REVIEW",
+  "decoderSha256": "d8690529211cf396e3b01c064a08f35d628ac30cf2f3ff92beffa8a4941b1d34",
+  "designVersion": "pixel-v2-m002-a-stage2-r02",
+  "distinctSourceCanvasStates": 52,
+  "distinctSourcePosesSelected": 3,
+  "eggFullStateCoverage": null,
+  "entityId": "m002_choromon",
+  "fullMotionQa": "NOT_RUN",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "poseSamplingStatus": "PASS",
+  "poses": [
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        0,
+        7,
+        17,
+        22
+      ],
+      "authoredRgbaSha256": "f5450a57d572c6b34c8fbc6a9447691e84d0e40c80ab55b010ee09bff7f43692",
+      "authoredVisiblePixels": 145,
+      "key": "main/cell_000",
+      "nativeBounds": [
+        -8,
+        -20,
+        16,
+        4
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        0,
+        7,
+        17,
+        22
+      ],
+      "sourceRgbaSha256": "d6bf9eee85eee64225fa0c6aaf1aac15b9a045ec2e8ae86cf2be1c5464bc557b",
+      "sourceVisiblePixels": 145,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        5,
+        7,
+        25,
+        22
+      ],
+      "authoredRgbaSha256": "d556bfdc6c6b8e1a217519694bf7b9cf76296a9ede313d3603254822a0f170a1",
+      "authoredVisiblePixels": 142,
+      "key": "main/cell_002",
+      "nativeBounds": [
+        -16,
+        -20,
+        16,
+        4
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        5,
+        7,
+        25,
+        22
+      ],
+      "sourceRgbaSha256": "85b42b3b912c24012eff3575b3b100a94873a06ed1d53042027df403215dff5c",
+      "sourceVisiblePixels": 142,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        6,
+        2,
+        24,
+        22
+      ],
+      "authoredRgbaSha256": "d30edf7e3a0d6d13a90fb348925e3351b96819265e82e9a5a505f57d10d75ad7",
+      "authoredVisiblePixels": 130,
+      "key": "main/cell_010",
+      "nativeBounds": [
+        -16,
+        -20,
+        8,
+        4
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        6,
+        2,
+        24,
+        22
+      ],
+      "sourceRgbaSha256": "0e8413409e5e7335a233bbf740541d85d9db6f32f0f669c0f7a3cf6abc31e288",
+      "sourceVisiblePixels": 130,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    }
+  ],
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "ed9f381d6037c33de18d1f4a7cceb7b3767bb0d25b03a5274efdab6d1f988016",
+  "settingPoseCount": 3,
+  "shippingReady": false,
+  "sourceFiles": {
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m002_choromon_main.nanr": "d39d0ef49cb66d055f5944e9923655299a17131ddb2b1dcf729f48c18a5d59f7",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m002_choromon_main.ncbr": "87f93bf8ffb191c410a9d41d3ff996e1c19435d425da85fb58450d581fa3d158",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m002_choromon_main.ncer": "458ee9a9dc27a1dff5439bd748a04bb83ef67a7a1fed5cdad1ea9a705678e951",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m002_choromon_main.nclr": "eb0fda27dd4448dc25d01539390a80c0e9ee994fa40c7d2bde336db5b244eeef",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m002_choromon_sub.nanr": "b92cb8a9fb90d40dfdfd950d6cee2dd81b4b75bc58f9c4417a31bf5a81aebe11",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m002_choromon_sub.ncer": "6f3a3b6963fe6ae57fd13dc4775c5f80bf43a3e026f0ec9c1e42042a00fb38f8",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m002_choromon_sub.ncgr": "f59af67d473da9fcff92ae19cb2556580a9d38738eef331c6b19c1b49001dc9f",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m002_choromon_sub.nclr": "0850204f270dc77bdb58e17612eee9861f1f2631d6d7833f4b2f5c8ed1bb13d5",
+    "08_FULL_FAMILY_CONVERSION/digimon/m002_choromon_main/animations.json": "c19e5dd34b7dc34ea1a12f387363eb965c50a226aa8754a442216b4fad17160f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m002_choromon_main/cells.json": "74295d0f2eca4f53cb24e217c7956225a4f4659f24072a78e423d4adc45e4bcc",
+    "08_FULL_FAMILY_CONVERSION/digimon/m002_choromon_sub/animations.json": "e30134f30f5eadc2c047803bc7980a57c64219f8c1eeeadb0a52cb747b874836",
+    "08_FULL_FAMILY_CONVERSION/digimon/m002_choromon_sub/cells.json": "1eea0040a467c151b34248a850b25725b931a55c395ca790fd40697641939746"
+  },
+  "technicalStatus": "PASS",
+  "visiblePaletteCount": 11
+}

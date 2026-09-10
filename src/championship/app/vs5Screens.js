@@ -274,7 +274,7 @@ function meter(className, label) {
   return { wrap, fill };
 }
 
-function combatantCard(combatant, compact) {
+function combatantCard(combatant, compact,hudArt=null) {
   const card = element("li", `cm-vs5-fighter${compact ? " cm-vs5-fighter--compact" : ""}`);
   card.dataset.slot = String(combatant.slot);
   card.dataset.team = String(combatant.team);
@@ -287,15 +287,23 @@ function combatantCard(combatant, compact) {
   const name = element("span", "cm-vs5-fighter__name", combatant.displayName ?? uiText(`SLOT ${combatant.slot + 1}`), false);
   const hp = meter("cm-vs5-meter--hp", "Health");
   const hpValue = element('span', 'cm-vs5-fighter__hp');
+  const portrait=element('img','cm-vs5-fighter__portrait');portrait.alt='';portrait.hidden=true;
+  card.append(portrait);
   card.append(name, hp.wrap, hpValue);
   let resource = null;
+  let sequenceId=0,sequenceStart=0;
   if (!compact) {
     resource = meter("cm-vs5-meter--resource", "Action resource");
     card.append(resource.wrap);
   }
   return {
     card,
-    update(next) {
+    update(next,frame=0,outcome=null) {
+      const requested=outcome?.ended&&outcome.winningTeam===next.team?9:next.down?5:0;
+      if(requested!==sequenceId){sequenceId=requested;sequenceStart=frame;}
+      const image=hudArt?.getBattleFrame(next.speciesId,sequenceId,Math.max(0,frame-sequenceStart));
+      portrait.hidden=!image;
+      if(image){if(portrait.getAttribute('src')!==image.src)portrait.src=image.src;}
       hp.fill.style.width = `${Math.round(next.hp.ratio * 100)}%`;
       hpValue.textContent = uiText(`生命值 ${next.hp.current} / ${next.hp.maximum}`);
       hp.wrap.setAttribute('aria-label', uiText(hpValue.textContent));
@@ -310,7 +318,7 @@ function combatantCard(combatant, compact) {
  * The match. `mountField` attaches the Pixi scene to the host this creates; the
  * DOM carries the words the scene cannot draw and nothing else.
  */
-export function createBattleFieldView({ root, frame, mountField, onExit }) {
+export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null }) {
   if (!frame || !Array.isArray(frame.combatants)) throw new TypeError("The Battle field view requires a battle frame");
   if (typeof mountField !== "function") throw new TypeError("The Battle field view requires the published field mounter");
 
@@ -323,7 +331,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit }) {
   const cards = new Map();
   for (const combatant of frame.combatants) {
     const compact = combatant.team === 1;
-    const built = combatantCard(combatant, compact);
+    const built = combatantCard(combatant, compact,hudArt);
     cards.set(combatant.slot, built);
     (compact ? opponents : players).append(built.card);
   }
@@ -358,7 +366,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit }) {
     render(view) {
       for (const combatant of view.combatants) {
         if (!combatant.present) continue;
-        cards.get(combatant.slot)?.update(combatant);
+        cards.get(combatant.slot)?.update(combatant,view.animationFrame??0,view.outcome);
       }
       clock.update(view.clock);
       log.update(view.outcome);
@@ -407,7 +415,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit }) {
  * Panels advance one at a time, which is how the original presents them; the
  * last one returns home.
  */
-export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, onExit }) {
+export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], hudArt=null, onExit }) {
   if (!outcome || typeof outcome !== "object") throw new TypeError("The Battle result requires an outcome");
 
   const section = shell(root, "BATTLE_RESULT", "Battle result");
@@ -466,12 +474,43 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     }
   });
 
+  if(credited&&receipt.won&&Number.isInteger(progression?.rankBefore)&&Number.isInteger(progression?.rankAfter)&&progression.rankAfter>progression.rankBefore){
+    panels.push({id:'RANK',scene:'result_sub_rankup_scene',build(){
+      const frag=document.createDocumentFragment();frag.append(element('span','cm-vs5-kicker','馴獸師升階'),
+        element('h1','cm-vs5-title',`階級 ${progression.rankBefore} → ${progression.rankAfter}`));return frag;
+    }});
+  }
+  if(credited&&receipt.won&&progression?.earnedTitles?.length){
+    panels.push({id:'TITLE',scene:'result_sub_titleget',build(){
+      const frag=document.createDocumentFragment();frag.append(element('span','cm-vs5-kicker','取得頭銜'));
+      for(const title of progression.earnedTitles){
+        const medal=hudArt?.getMedal?.(title.id);
+        if(medal){const img=element('img','cm-vs5-result__medal');img.src=medal.src;img.alt='';img.width=medal.width*2;img.height=medal.height*2;frag.append(img);}
+        frag.append(element('h1','cm-vs5-title',title.name));
+      }return frag;
+    }});
+  }
+  if(statistics){panels.push({id:'STATUS',scene:'result_sub_status_scene',build(){
+    const frag=document.createDocumentFragment();frag.append(element('h1','cm-vs5-title','戰績'));
+    const rows=element('dl','cm-vs5-result__statistics');
+    for(const [label,value] of [['對戰場次',statistics.battles??'—'],['勝率',statistics.winPercent===null?'—':`${statistics.winPercent}%`],['頭銜數',statistics.titleCount]]){
+      rows.append(element('dt','',label),element('dd','',String(value)));
+    }
+    frag.append(rows);return frag;
+  }});}
+  if(unlocks.length){panels.push({id:'LOG',scene:'battle_result_log_scene',build(){
+    const frag=document.createDocumentFragment();frag.append(element('h1','cm-vs5-title','新解鎖'));
+    for(const item of unlocks)frag.append(element('p','cm-vs5-result__detail',item.name));return frag;
+  }});}
   const advance = actionButton("下一頁", { primary: true });
   const exit = actionButton("返回牧場", { primary: true });
   exit.classList.add("cm-vs5-exit");
   if (typeof onExit === "function") exit.addEventListener("click", () => onExit());
 
   const body = element("div", "cm-vs5-result__body");
+  const characterHost=element('div','cm-vs5-result__characters');
+  characterHost.setAttribute('aria-label','參賽數碼獸');
+  const resultStage=element('div','cm-vs5-result__stage');resultStage.append(characterHost,body);
   let index = 0;
 
   function paint() {
@@ -487,10 +526,11 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     if (index < panels.length - 1) { index += 1; paint(); }
   });
 
-  section.append(body, advance, exit);
+  section.append(resultStage, advance, exit);
   paint();
 
   return Object.freeze({
+    getCharacterHost:()=>characterHost,
     render() {},
     inspect() {
       return Object.freeze({
@@ -499,8 +539,9 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
         panels: panels.map((panel) => panel.id),
         shownScenes: panels.map((panel) => panel.scene),
         // Named so the gap is visible rather than silently absent.
-        notBuilt: Object.freeze(["result_sub_status_scene", "result_sub_rankup_scene",
-          "result_sub_titleget", "battle_result_log_scene"]),
+        notBuilt: Object.freeze([]),
+        conditionalScenes: Object.freeze(['result_sub_rankup_scene','result_sub_titleget']),
+        visualGaps:Object.freeze(['ORIGINAL_RANK_ART','ORIGINAL_SCENE_TRANSITIONS']),
         outOfScope: Object.freeze(["result_sub_net_scene"])
       });
     },

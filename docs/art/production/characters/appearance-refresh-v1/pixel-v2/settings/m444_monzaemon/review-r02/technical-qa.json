@@ -1,0 +1,64 @@
+{
+  "artReview": "PENDING_INDEPENDENT_VISUAL_REVIEW",
+  "decoderSha256": "d8690529211cf396e3b01c064a08f35d628ac30cf2f3ff92beffa8a4941b1d34",
+  "designVersion": "creature-identity-v1-m444-standard-r01-schema-r02",
+  "distinctSourceCanvasStates": 56,
+  "distinctSourcePosesSelected": 1,
+  "eggFullStateCoverage": null,
+  "entityId": "m444_monzaemon",
+  "fullMotionQa": "NOT_RUN",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "poseSamplingStatus": "INCOMPLETE",
+  "poses": [
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        5,
+        1,
+        24,
+        32
+      ],
+      "authoredRgbaSha256": "072153690ab6117f5e026c1bfbb2207058f7a069c768a979e999ff0ce5876c4b",
+      "authoredVisiblePixels": 448,
+      "key": "main/cell_000",
+      "nativeBounds": [
+        -16,
+        -29,
+        8,
+        3
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        5,
+        1,
+        24,
+        32
+      ],
+      "sourceRgbaSha256": "da036623bb66f3414591c2928baf6b1a05df4b556ab5ab068b08d014fd0ff230",
+      "sourceVisiblePixels": 448,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    }
+  ],
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "5ad2567ffeb54ab0edb7c5cadb0dd9dec886eef176d9d87988e992b780e65d34",
+  "settingPoseCount": 1,
+  "shippingReady": false,
+  "sourceFiles": {
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m444_monzaemon_main.nanr": "0d058b45e7d1e37898ddcfdfadae966f7fb06431992d857ad1db766cba645dd9",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m444_monzaemon_main.ncbr": "6135ed28ff89c74cf58a5b6c4d285901f870a4b6cbde3f9bf5615a18583f76f7",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m444_monzaemon_main.ncer": "e9cca78a64d1f2a2e8b1d541b33056aebdb56c112eb8a7c1123ad768cf845ec8",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m444_monzaemon_main.nclr": "16ba08bc536cd948d46f1396c81028ca0447595e9988a4ea63c539ca1683f955",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m444_monzaemon_sub.nanr": "8482874b3fed0f9f452f05060976485bfb84b6ba0f1e820d83fa687d9208f9c5",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m444_monzaemon_sub.ncer": "87d8392ebaa68ace6f213258aca983f77f151f732b522a3387be660a2006f7f1",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m444_monzaemon_sub.ncgr": "f92a0a1db4c92b549eecaa252c56b75b2a18874648cb6d19103735fdb189009a",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m444_monzaemon_sub.nclr": "04e41064d96fa309da7df2a28abc0e97a1aa2794e44f28d88d6cf5f463a6d01f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m444_monzaemon_main/animations.json": "c4041fcbb4e57c4d9d3634f71cca24163fa851e421a9658b5261decf3e3fdacb",
+    "08_FULL_FAMILY_CONVERSION/digimon/m444_monzaemon_main/cells.json": "c10ec5fc401907f5ed26834a7cb22932138791beb15be599d7782b24bbde5ae0",
+    "08_FULL_FAMILY_CONVERSION/digimon/m444_monzaemon_sub/animations.json": "8633fdf4ea9a02f938fb749a26a1637bdbfb4a360b38db87939cbf5ad0b8ecbc",
+    "08_FULL_FAMILY_CONVERSION/digimon/m444_monzaemon_sub/cells.json": "22d1fb7db58dbf2e6a4015b08a5743e55ef9530831b261bf3b47df3f0519883e"
+  },
+  "technicalStatus": "PASS",
+  "visiblePaletteCount": 15
+}

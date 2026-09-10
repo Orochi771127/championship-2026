@@ -7,6 +7,7 @@ import {isPrivateRepositoryPath,isShippingArtEntry} from './public-art-boundary.
 export const BUILD_INPUT_PATH='docs/contracts/championship/WEB_BUILD_INPUTS.v1.json';
 export const ART_INDEX_PATH='assets/production/ART_PRODUCTION_INDEX.json';
 export const RIGHTS_PATH='docs/legal/RIGHTS_EVIDENCE_REGISTRY.json';
+export const PLAYTEST_PATH='src/data/championship/public-playtest.r1.json';
 export const SOURCE_PAYLOAD=/\.(?:nds|srl|nxr|ncer|ncgr|nclr|nanr|nscr|nbs|nbsr|atr|datr|col|esc|opm|opmd|nsbmd|nsbtx|nsbca|nsbta|nsbma|nsbva|bsar|ram|dst)$/i;
 export const sha256=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 export function permittedCopyPath(file){
@@ -85,4 +86,27 @@ export function auditWebBuild(root,{asOf=new Date().toISOString().slice(0,10)}={
   }
   return {input,technical:{ok:technicalIssues.length===0,issues:technicalIssues,moduleCount:closure.visited.length},
     release:{ok:releaseIssues.length===0,issues:releaseIssues},index};
+}
+
+// Public playtest permission is a distinct, explicit Owner decision. Keep the
+// verified-rights release gate above intact; never fabricate licence evidence.
+export function auditOwnerPlaytest(root,audit){
+  const issues=[],approval=audit.input.publicPlaytest;
+  let policy;
+  try{policy=JSON.parse(fs.readFileSync(checkedInput(root,PLAYTEST_PATH),'utf8'));}
+  catch{return {ok:false,issues:[{kind:'PUBLIC_PLAYTEST_POLICY_MISSING'}]};}
+  if(policy.status!=='OWNER_AUTHORIZED_PUBLIC_PLAYTEST'||approval?.policyId!==policy.id
+    ||policy.origin!=='https://orochi771127.github.io'||policy.basePath!=='/championship-2026/'
+    ||policy.rightsDocumentVerified!==false||policy.commercialReleaseAccepted!==false
+    ||!Array.isArray(approval?.files)||!audit.input.files.includes(PLAYTEST_PATH)){
+    return {ok:false,issues:[{kind:'PUBLIC_PLAYTEST_NOT_AUTHORIZED'}]};
+  }
+  const approved=new Map(approval.files.map(row=>[row.path,row.sha256]));
+  if(approved.size!==approval.files.length||approved.size!==audit.input.files.length)issues.push({kind:'PLAYTEST_APPROVED_FILE_LIST_MISMATCH'});
+  for(const file of audit.input.files){
+    const hash=approved.get(file);
+    if(!/^[a-f0-9]{64}$/.test(hash??''))issues.push({kind:'PLAYTEST_FILE_NOT_APPROVED',file});
+    else if(hash!==sha256(fs.readFileSync(checkedInput(root,file))))issues.push({kind:'PLAYTEST_APPROVED_BYTES_CHANGED',file});
+  }
+  return {ok:issues.length===0,issues,policy};
 }

@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:battle:bm07-cyberspace-r1:original-review",
+  "family": "BATTLE",
+  "artifactMaturity": "INTERNAL_INDEPENDENT_RUNTIME_REVIEW",
+  "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+  "shippingStatus": "NOT_SHIPPING_READY",
+  "humanApproved": false,
+  "ownerApproval": null,
+  "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+  "rights": {
+    "status": "ORIGINAL_CREATED_AI_ASSISTED_TERMS_LINK_PENDING",
+    "referencePixelReuse": false,
+    "referencePaletteReuse": false,
+    "referenceGeometryReuse": false
+  },
+  "internalReviewEligible": true,
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "sourceDimensions": [
+    1536,
+    1024
+  ],
+  "viewportPolicy": {
+    "fit": "CONTAIN",
+    "verticalAnchor": 0.42,
+    "contractViewports": [
+      [
+        360,
+        800
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        393,
+        852
+      ],
+      [
+        412,
+        915
+      ],
+      [
+        430,
+        932
+      ]
+    ]
+  },
+  "arena": {
+    "fieldId": "field_bm07_01",
+    "assetId": "production:battle:arena:field-bm07-01",
+    "dependencies": [],
+    "gameplayBinding": "EXTERNAL_NOT_MOUNTED",
+    "collisionBinding": "NONE_ART_REVIEW_ONLY",
+    "uiBinding": "NONE_ART_REVIEW_ONLY",
+    "standingZoneContract": {
+      "count": 6,
+      "centers": [
+        [
+          440,
+          400
+        ],
+        [
+          768,
+          400
+        ],
+        [
+          1096,
+          400
+        ],
+        [
+          440,
+          632
+        ],
+        [
+          768,
+          632
+        ],
+        [
+          1096,
+          632
+        ]
+      ],
+      "radius": 96,
+      "alignment": "THREE_EXACT_COLUMNS_BY_TWO_EXACT_ROWS",
+      "bakedIntoIndependentLayer": true
+    },
+    "layers": [
+      {
+        "assetId": "production:battle:arena:field-bm07-01",
+        "role": "ARENA_BACKGROUND",
+        "zIndex": 0,
+        "src": "assets/production/internal-battle-review/bm07-cyberspace-r1/field-bm07-01-independent-layer.png",
+        "sha256": "5F7B6F9D8AE35BB4F4DBD5BDE873D98C4C48DCCD4652DE1396C49550472F973C",
+        "alpha": false
+      }
+    ]
+  },
+  "promotionGate": "OWNER_VISUAL_APPROVAL_AND_LICENSE_TERMS_LINK_REQUIRED"
+}

@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 46,
+  "scenePath": "title_menu/opening_parts4_main.nxr",
+  "category": "Title / Login / Opening",
+  "overlayOwner": "OVL13",
+  "sourceEvidence": {
+    "fileId": 5483,
+    "fileName": "opening_parts4_main.nxr",
+    "sha256": "450837e69067a2ba5deaedbfd98d85e2126d3ed94ab49ce2851531deca395b9e",
+    "overlayMappingConfidence": "SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "MAIN",
+    "roleEvidence": "FILENAME_HEURISTIC"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [
+    {
+      "resourceIndex": 0,
+      "resourceName": "game_moji_main",
+      "cellCount": 4,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "title_menu/game_moji_main.ncer",
+        "nanr": "title_menu/game_moji_main.nanr",
+        "ncgr": null,
+        "ncbr": "title_menu/game_moji_main.ncbr",
+        "nclr": "title_menu/game_moji_main.nclr",
+        "nscr": null
+      },
+      "spriteWitness": "docs/art/production/ui/faithful-hd96/sprite-cell-witnesses-4x/title_menu__game_moji_main__cells.png",
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "unnamed0008",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 31,
+        "y": 77
+      },
+      "portraitProjection": {
+        "x": 130.7812,
+        "y": 474.8438
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    }
+  ],
+  "dynamicVirtualNodeCount": 0,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

@@ -1,0 +1,19 @@
+- status:
+  - generic: Spring
+  - generic: Day
+  - generic: "1"
+  - generic: Hunt
+  - time: 10:37
+- region "Hunt field":
+  - generic "Exploration field. Drag empty ground to look around. Touch a creature to select it."
+  - strong: 南橋峽谷
+  - button "返回牧場"
+  - region "狩獵目標資訊":
+    - strong: 輕觸數碼獸查看
+  - complementary
+  - paragraph: 拖曳地面移動視野 · 輕觸數碼獸選取
+  - navigation "狩獵工具":
+    - button "手" [pressed]
+    - button "繩索"
+    - button "普通射擊 α"
+    - button "肉餌"

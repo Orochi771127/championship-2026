@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 13,
+  "scenePath": "battle_menu_net/net_sub_desc.nxr",
+  "category": "Network Battle UI",
+  "overlayOwner": "OVL9/OVL10",
+  "sourceEvidence": {
+    "fileId": 177,
+    "fileName": "net_sub_desc.nxr",
+    "sha256": "c97b948e0faffd2aa1dbb9d312810a12d5a2cf620be964f7a027452fc5187ce6",
+    "overlayMappingConfidence": "SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "SUB",
+    "roleEvidence": "FILENAME_HEURISTIC"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "DESC",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 41,
+        "y": 96
+      },
+      "portraitProjection": {
+        "x": 172.9688,
+        "y": 1365.0
+      },
+      "params": [
+        0,
+        0,
+        11,
+        4
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 1,
+      "name": "TITLE",
+      "resourceIndex": -1,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 128,
+        "y": 49
+      },
+      "portraitProjection": {
+        "x": 540.0,
+        "y": 1166.7188
+      },
+      "params": [
+        0,
+        0,
+        10,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    }
+  ],
+  "dynamicVirtualNodeCount": 2,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

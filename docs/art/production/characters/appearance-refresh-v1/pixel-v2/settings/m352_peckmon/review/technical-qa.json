@@ -1,0 +1,120 @@
+{
+  "artReview": "PENDING_INDEPENDENT_VISUAL_REVIEW",
+  "decoderSha256": "d8690529211cf396e3b01c064a08f35d628ac30cf2f3ff92beffa8a4941b1d34",
+  "designVersion": "pixel-v2-m352-b-stage1-r02",
+  "distinctSourceCanvasStates": 54,
+  "distinctSourcePosesSelected": 3,
+  "eggFullStateCoverage": null,
+  "entityId": "m352_peckmon",
+  "fullMotionQa": "NOT_RUN",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "poseSamplingStatus": "PASS",
+  "poses": [
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        1,
+        3,
+        23,
+        32
+      ],
+      "authoredRgbaSha256": "300391fcfe2a745e630ba37696537001fc9d17cf1b008c78af2f0f229f9a5c52",
+      "authoredVisiblePixels": 360,
+      "key": "main/cell_000",
+      "nativeBounds": [
+        -8,
+        -30,
+        16,
+        2
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        1,
+        3,
+        23,
+        32
+      ],
+      "sourceRgbaSha256": "86f08ac6d67a637a23cb3949289b19d65a8108e854f2888f29081d72050e7617",
+      "sourceVisiblePixels": 360,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        4,
+        1,
+        30,
+        29
+      ],
+      "authoredRgbaSha256": "c2701d93d7aeb120526d4bd4e23880da14c37f3b1c933a5c18bbdb20f693c17e",
+      "authoredVisiblePixels": 451,
+      "key": "main/cell_007",
+      "nativeBounds": [
+        -16,
+        -30,
+        16,
+        2
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        4,
+        1,
+        30,
+        29
+      ],
+      "sourceRgbaSha256": "78be32a9785e080973e1d1095ae2fc55953acf61a58f87c5d35019a4fa8c6cf2",
+      "sourceVisiblePixels": 451,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        0,
+        2,
+        35,
+        24
+      ],
+      "authoredRgbaSha256": "25ded1d9384698b386f885f5a1e127cf2f2ff6c141106beda787da995b4f3450",
+      "authoredVisiblePixels": 411,
+      "key": "main/cell_019",
+      "nativeBounds": [
+        -32,
+        -22,
+        8,
+        2
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        0,
+        2,
+        35,
+        24
+      ],
+      "sourceRgbaSha256": "a96db1e888e1a57a997839baa4a43476297730b869a18c7269ec9053532e116e",
+      "sourceVisiblePixels": 411,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    }
+  ],
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "d2c00eb21fbb0f6cec26303d828e0abbbaca37bac5c21000f2939217bc9c66a3",
+  "settingPoseCount": 3,
+  "shippingReady": false,
+  "sourceFiles": {
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m352_peckmon_main.nanr": "24cbe3db174c7b3007405085178f48e2c922c546444bf3ba5a7a2bff654ca13c",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m352_peckmon_main.ncbr": "d403d4f104b3d43ef1da65baf0f7b8ec84b0aa0c195650a358f67900d276a51b",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m352_peckmon_main.ncer": "b76302d6686bd365dc183a0fdc5f0eedad2459d5bddef092fa72743fd7373fdd",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m352_peckmon_main.nclr": "55b6554898eb7b38c9f394023ffa2d873057b04a46b7eb4315a9fa6105c5c778",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m352_peckmon_sub.nanr": "b92cb8a9fb90d40dfdfd950d6cee2dd81b4b75bc58f9c4417a31bf5a81aebe11",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m352_peckmon_sub.ncer": "80b2f21cd8f881ee62a3827dd1a77db5407cc3d1ebf462d77234f03d5a560474",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m352_peckmon_sub.ncgr": "3cc0baf822789aa0f9d67afe625c84f016e77d1e3a969aa3be99502c73b0e6f6",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m352_peckmon_sub.nclr": "45db8422dac85af2a03a5a30f1bdd60c912a9cde0c747aa13d6388cfcac893fa",
+    "08_FULL_FAMILY_CONVERSION/digimon/m352_peckmon_main/animations.json": "6384d3207900b904dcc2c63402da66ca0f4285f3f7859b789a882090ed9f66fd",
+    "08_FULL_FAMILY_CONVERSION/digimon/m352_peckmon_main/cells.json": "4634cf37f5af0cb43e514f2c0fe28e8017cc1a737192646c08485270d3dc22ea",
+    "08_FULL_FAMILY_CONVERSION/digimon/m352_peckmon_sub/animations.json": "e30134f30f5eadc2c047803bc7980a57c64219f8c1eeeadb0a52cb747b874836",
+    "08_FULL_FAMILY_CONVERSION/digimon/m352_peckmon_sub/cells.json": "8ff0ec633a660a4a7a2c9b3dffbcdf607e046935d722f624cbe34bf0e1bcb319"
+  },
+  "technicalStatus": "PASS",
+  "visiblePaletteCount": 14
+}

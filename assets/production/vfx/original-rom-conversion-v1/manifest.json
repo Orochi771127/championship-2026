@@ -1,0 +1,245 @@
+{
+  "schemaVersion": 1,
+  "bundleId": "championship-vfx-original-rom-conversion-v1",
+  "format": "GLB_2_0_PNG_AND_NITRO_ANIMATION_SIDECARS",
+  "conversionStatus": "COMPLETE_WITH_KNOWN_FORMAT_GAPS",
+  "rightsEvidenceId": "LIC-CHAMPIONSHIP-2026-001",
+  "rightsStatus": "OWNER_AUTHORIZATION_RECORDED_DOCUMENT_LINK_PENDING",
+  "runtimeCandidate": true,
+  "runtimeRegistryEnabled": false,
+  "shippingReady": false,
+  "sourcePayloadIncluded": false,
+  "converter": "apicula 0.1.1-dev / 3d4e91e",
+  "systems": [
+    {
+      "systemId": "gate_select",
+      "title": "Gate Select world map and separately evidenced Earth model",
+      "runtimeCandidate": true,
+      "runtimeRegistryEnabled": false,
+      "shippingReady": false,
+      "provenance": "OVL12 directly loads the verified Gate Select world-map model.",
+      "outputs": [
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/gate_select/gate-world-map.glb",
+          "size": 87444,
+          "sha256": "3698f831ed9057cb23af3e1393d4caefb3d0ec63fc1d79c60b7919a9a35ff444",
+          "glb": {
+            "meshes": 1,
+            "nodes": 5,
+            "materials": 2,
+            "animations": 0,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/gate_select/gate-earth.glb",
+          "size": 42880,
+          "sha256": "0c27c7845eddbbdf160391ec2bff5cf8abcd76d6e5dd9ba6345b78391dead046",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 0,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/gate_select/Map_fix_day.png",
+          "size": 110285,
+          "sha256": "1aaee8653e12a4b783048ac593c64cc639dd030af2ff503fb9bd8ba47a73a675"
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/gate_select/Map_fix_night.png",
+          "size": 50160,
+          "sha256": "c22ecfb4cefd5ec800554ecf6301e73a87f8a3ad558f1bc0e736d8c7869f2a28"
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/gate_select/map.png",
+          "size": 95044,
+          "sha256": "c941af370b48c7b644df14a668c4b160484f166e8f01ecd96456380fec67fa38"
+        }
+      ],
+      "knownGaps": [
+        "A verified full-ROM static trace found no Gate Select consumer for the separate Earth model; keep it reference-only and do not mount it at runtime.",
+        "Camera, hit testing, day/night switching, and any code-driven motion remain unresolved."
+      ]
+    },
+    {
+      "systemId": "hitspark_big",
+      "title": "Battle large hit spark",
+      "runtimeCandidate": true,
+      "runtimeRegistryEnabled": false,
+      "shippingReady": false,
+      "provenance": "OVL19 uses hitspark_big through the verified five-entry battle effect table.",
+      "outputs": [
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/hitspark_big/hitspark_big.glb",
+          "size": 42504,
+          "sha256": "56fdb4267a5fa08fe0437da69e821777496bbff94f562522e0f2c3493e7513f2",
+          "glb": {
+            "meshes": 1,
+            "nodes": 31,
+            "materials": 2,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/hitspark_big/hit_spark.png",
+          "size": 1160,
+          "sha256": "4a1e10bd8e4d05b667fc08f461741c230682642d3472f110a05944518f823a51"
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/hitspark_big/ip_circle.png",
+          "size": 392,
+          "sha256": "41ce4ebdde69d6a8537164505e981816c591c5e9d315ca2cd9fc4f68b8a6c0e6"
+        }
+      ],
+      "knownGaps": [
+        "Exact trigger parameters, camera, and billboarding remain unresolved."
+      ]
+    },
+    {
+      "systemId": "hypereffect",
+      "title": "Battle hyper effect",
+      "runtimeCandidate": true,
+      "runtimeRegistryEnabled": false,
+      "shippingReady": false,
+      "provenance": "OVL19 directly loads the verified battle hyper-effect model.",
+      "outputs": [
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/hypereffect/hitmark.png",
+          "size": 394,
+          "sha256": "b65c00106eb65e79745538572cc1dd4a8338b633b0a7be9ab1a4afece02da763"
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/hypereffect/hypereffect.glb",
+          "size": 36812,
+          "sha256": "4abe7b99f20ee21196fc3ba43947bb1f6b5aa15dbf47f7ff270ac38cd1f9dcac",
+          "glb": {
+            "meshes": 1,
+            "nodes": 20,
+            "materials": 2,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/hypereffect/hypereffect.visibility.json",
+          "size": 1378,
+          "sha256": "75aa6275a4a16b76738398efab03e546e8cf450fa2dcaf1f8ff3419b286a9d39",
+          "sidecar": {
+            "kind": "nitro-visibility-animation",
+            "frameCount": 26,
+            "targetCount": 19
+          }
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/hypereffect/new1.png",
+          "size": 656,
+          "sha256": "4a491ed0096631c28affa4742b1a2a3791ceac597862dadbf830a4a8cde59f84"
+        }
+      ],
+      "knownGaps": [
+        "The source visibility timeline is decoded exactly; original caller frame cadence and trigger parameters remain unresolved.",
+        "Final camera remains unresolved."
+      ]
+    },
+    {
+      "systemId": "spark",
+      "title": "Common spark effect",
+      "runtimeCandidate": true,
+      "runtimeRegistryEnabled": false,
+      "shippingReady": false,
+      "provenance": "Verified common effect asset; the exact original caller remains unresolved.",
+      "outputs": [
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/spark/m_spark_eff.png",
+          "size": 1428,
+          "sha256": "1990cde42ccb98cc4dd729808fe937e6d94523061b8f8c44c58ae1b85eb5c1a2"
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/spark/spark.glb",
+          "size": 23696,
+          "sha256": "6da6827b8951c5b8684e2237838250e4174d6ab9b0e3d604e01c967e01f9ce1c",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 4,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_texture_transform",
+              "EXT_property_animation",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/spark/spark.material-animation.json",
+          "size": 5652,
+          "sha256": "9a0e774d16e2bf65274d69ed47afd9ed28473d49dd4691524d6ab4cd9a94a719",
+          "sidecar": {
+            "kind": "nitro-material-color-animation",
+            "frameCount": 480,
+            "targetCount": 4
+          }
+        }
+      ],
+      "knownGaps": [
+        "NSBTA conversion is experimental and uses glTF property-animation extensions.",
+        "The source material-color timeline is decoded exactly; original caller frame cadence remains unresolved.",
+        "The exact original caller remains unresolved."
+      ]
+    },
+    {
+      "systemId": "rain",
+      "title": "Common rain effect",
+      "runtimeCandidate": true,
+      "runtimeRegistryEnabled": false,
+      "shippingReady": false,
+      "provenance": "Verified common weather asset; the exact original caller remains unresolved.",
+      "outputs": [
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/rain/rain.glb",
+          "size": 4032,
+          "sha256": "4ebc766b968c7b17dc097b1f7566212134346d768ed17dcd840e11f4fe4b6294",
+          "glb": {
+            "meshes": 1,
+            "nodes": 2,
+            "materials": 1,
+            "animations": 1,
+            "extensionsUsed": [
+              "FB_ngon_encoding",
+              "KHR_texture_transform",
+              "EXT_property_animation",
+              "KHR_materials_unlit"
+            ]
+          }
+        },
+        {
+          "path": "assets/production/vfx/original-rom-conversion-v1/rain/rain_eff.png",
+          "size": 4142,
+          "sha256": "5eb28a78831fee5e8f83a44ed35d93c245e04b38d8aa48cc5207b56dca6bdc8e"
+        }
+      ],
+      "knownGaps": [
+        "NSBTA conversion is experimental and uses glTF property-animation extensions.",
+        "Weather activation, projection, and camera remain unresolved."
+      ]
+    }
+  ],
+  "animationSidecarDecoder": "championship-nitro-g3d-sidecars-v1"
+}

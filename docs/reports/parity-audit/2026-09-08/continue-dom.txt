@@ -1,0 +1,35 @@
+- status:
+  - generic: Spring
+  - generic: Day
+  - generic: "1"
+  - generic: Training
+  - time: 16:08
+- main:
+  - heading "RAISING HOME" [level=1]
+  - button "SAVE"
+  - heading "SELECT A RESIDENT" [level=2]
+  - paragraph: Touch a resident in the habitat.
+  - term: HP
+  - definition: "--"
+  - term: TP
+  - definition: "--"
+  - region "Playable Raising field":
+    - generic: FIELD ONLINE
+  - status: Raising Home is ready.
+- toolbar "Contextual toolbar":
+  - button "HAND":
+    - generic: HAND
+  - button "FEED":
+    - generic: FEED
+  - button "CLEAN":
+    - generic: CLEAN
+  - button "MED":
+    - generic: MED
+  - button "WOUND":
+    - generic: WOUND
+  - button "PROTEIN":
+    - generic: PROTEIN
+  - button "MANAGE":
+    - generic: MANAGE
+  - button "SYSTEM":
+    - generic: SYSTEM

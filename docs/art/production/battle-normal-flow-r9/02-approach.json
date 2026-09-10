@@ -1,0 +1,167 @@
+{
+  "active": [],
+  "impacts": {
+    "active": 0,
+    "created": 0,
+    "released": 0
+  },
+  "normalFlow": {
+    "evidence": "ROM_NORMAL_BRANCHES_CONTROLLED_INITIAL_RNG",
+    "history": [
+      {
+        "actionTarget": 3,
+        "clock": 0,
+        "frame": 0,
+        "moveId": 179,
+        "slot": 0,
+        "state": 4,
+        "targetSlot": 3,
+        "type": "SELECTED"
+      },
+      {
+        "actionTarget": 3,
+        "clock": 0,
+        "frame": 0,
+        "moveId": 254,
+        "slot": 1,
+        "state": 4,
+        "targetSlot": 3,
+        "type": "SELECTED"
+      },
+      {
+        "actionTarget": 0,
+        "clock": 0,
+        "frame": 0,
+        "moveId": 179,
+        "slot": 3,
+        "state": 4,
+        "targetSlot": 0,
+        "type": "SELECTED"
+      },
+      {
+        "actionTarget": 0,
+        "clock": 0,
+        "frame": 0,
+        "moveId": 254,
+        "slot": 4,
+        "state": 4,
+        "targetSlot": 0,
+        "type": "SELECTED"
+      }
+    ],
+    "initialRngBoundary": "0210CB94/CBB4: two 021140CC initializations per populated slot; pre-constructor RNG history is supplied by the fixture seed",
+    "slots": [
+      {
+        "launches": [
+          null,
+          null,
+          null
+        ],
+        "point": [
+          554863,
+          459318,
+          0
+        ],
+        "state": 4,
+        "targetSlot": 3
+      },
+      {
+        "launches": [
+          null,
+          null,
+          null
+        ],
+        "point": [
+          557856,
+          769882,
+          0
+        ],
+        "state": 4,
+        "targetSlot": 3
+      },
+      null,
+      {
+        "launches": [
+          null,
+          null,
+          null
+        ],
+        "point": [
+          1147923,
+          752458,
+          0
+        ],
+        "state": 4,
+        "targetSlot": 0
+      },
+      {
+        "launches": [
+          null,
+          null,
+          null
+        ],
+        "point": [
+          1151381,
+          442550,
+          0
+        ],
+        "state": 4,
+        "targetSlot": 0
+      },
+      null
+    ]
+  },
+  "reactions": {
+    "battleEnding": false,
+    "combatants": [
+      {
+        "attemptIndex": 2,
+        "counter": 1,
+        "hp": 1080,
+        "notification": 7,
+        "phase": 0,
+        "reaction": 0,
+        "speed": 0,
+        "state": 4,
+        "suspended": false
+      },
+      {
+        "attemptIndex": 2,
+        "counter": 1,
+        "hp": 1080,
+        "notification": 7,
+        "phase": 0,
+        "reaction": 0,
+        "speed": 0,
+        "state": 4,
+        "suspended": false
+      },
+      null,
+      {
+        "attemptIndex": 2,
+        "counter": 1,
+        "hp": 1080,
+        "notification": 7,
+        "phase": 0,
+        "reaction": 0,
+        "speed": 0,
+        "state": 4,
+        "suspended": false
+      },
+      {
+        "attemptIndex": 2,
+        "counter": 1,
+        "hp": 1080,
+        "notification": 7,
+        "phase": 0,
+        "reaction": 0,
+        "speed": 0,
+        "state": 4,
+        "suspended": false
+      },
+      null
+    ],
+    "history": []
+  },
+  "recent": []
+}

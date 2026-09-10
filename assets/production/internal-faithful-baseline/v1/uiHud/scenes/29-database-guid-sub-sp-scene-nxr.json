@@ -1,0 +1,424 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 29,
+  "scenePath": "database/guid_sub_sp_scene.nxr",
+  "category": "Database / Encyclopedia",
+  "overlayOwner": "OVL16",
+  "sourceEvidence": {
+    "fileId": 1029,
+    "fileName": "guid_sub_sp_scene.nxr",
+    "sha256": "ae97ea9df80f8656478437ccc06d311329dc120b099ab6186e4d389a18ae98d9",
+    "overlayMappingConfidence": "SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "SUB",
+    "roleEvidence": "FILENAME_HEURISTIC"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [
+    {
+      "resourceIndex": 0,
+      "resourceName": "zukan_obj_sub",
+      "cellCount": 28,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "database/zukan_obj_sub.ncer",
+        "nanr": "database/zukan_obj_sub.nanr",
+        "ncgr": "database/zukan_obj_sub.ncgr",
+        "ncbr": null,
+        "nclr": "database/zukan_obj_sub.nclr",
+        "nscr": null
+      },
+      "spriteWitness": "docs/art/production/ui/faithful-hd96/sprite-cell-witnesses-4x/database__zukan_obj_sub__cells.png",
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "desc",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 91,
+        "y": 60
+      },
+      "portraitProjection": {
+        "x": 383.9062,
+        "y": 1213.125
+      },
+      "params": [
+        0,
+        0,
+        9,
+        3
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 1,
+      "name": "name",
+      "resourceIndex": -1,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 168,
+        "y": 39
+      },
+      "portraitProjection": {
+        "x": 708.75,
+        "y": 1124.5312
+      },
+      "params": [
+        0,
+        0,
+        10,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 2,
+      "name": "waza_1",
+      "resourceIndex": 0,
+      "cellIndex": 6,
+      "sourcePosition": {
+        "x": 20,
+        "y": 61
+      },
+      "portraitProjection": {
+        "x": 84.375,
+        "y": 1217.3438
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 3,
+      "name": "waza_2",
+      "resourceIndex": 0,
+      "cellIndex": 6,
+      "sourcePosition": {
+        "x": 20,
+        "y": 91
+      },
+      "portraitProjection": {
+        "x": 84.375,
+        "y": 1343.9062
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 4,
+      "name": "waza_3",
+      "resourceIndex": 0,
+      "cellIndex": 6,
+      "sourcePosition": {
+        "x": 20,
+        "y": 121
+      },
+      "portraitProjection": {
+        "x": 84.375,
+        "y": 1470.4688
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 5,
+      "name": "waza_num_1",
+      "resourceIndex": 0,
+      "cellIndex": 5,
+      "sourcePosition": {
+        "x": 54,
+        "y": 59
+      },
+      "portraitProjection": {
+        "x": 227.8125,
+        "y": 1208.9062
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 6,
+      "name": "waza_num_2",
+      "resourceIndex": 0,
+      "cellIndex": 5,
+      "sourcePosition": {
+        "x": 54,
+        "y": 89
+      },
+      "portraitProjection": {
+        "x": 227.8125,
+        "y": 1335.4688
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 7,
+      "name": "waza_num_3",
+      "resourceIndex": 0,
+      "cellIndex": 5,
+      "sourcePosition": {
+        "x": 54,
+        "y": 119
+      },
+      "portraitProjection": {
+        "x": 227.8125,
+        "y": 1462.0312
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 8,
+      "name": "tab_bottom",
+      "resourceIndex": 0,
+      "cellIndex": 9,
+      "sourcePosition": {
+        "x": 80,
+        "y": 129
+      },
+      "portraitProjection": {
+        "x": 337.5,
+        "y": 1504.2188
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 9,
+      "name": "tab_left_3",
+      "resourceIndex": 0,
+      "cellIndex": 7,
+      "sourcePosition": {
+        "x": 10,
+        "y": 113
+      },
+      "portraitProjection": {
+        "x": 42.1875,
+        "y": 1436.7188
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 10,
+      "name": "tab_left_2",
+      "resourceIndex": 0,
+      "cellIndex": 7,
+      "sourcePosition": {
+        "x": 8,
+        "y": 83
+      },
+      "portraitProjection": {
+        "x": 33.75,
+        "y": 1310.1562
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 11,
+      "name": "tab_left_1",
+      "resourceIndex": 0,
+      "cellIndex": 7,
+      "sourcePosition": {
+        "x": 10,
+        "y": 53
+      },
+      "portraitProjection": {
+        "x": 42.1875,
+        "y": 1183.5938
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 12,
+      "name": "tab",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": -8,
+        "y": 0
+      },
+      "portraitProjection": {
+        "x": -33.75,
+        "y": 960.0
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 13,
+      "name": "tab_center_3",
+      "resourceIndex": 0,
+      "cellIndex": 8,
+      "sourcePosition": {
+        "x": 16,
+        "y": 113
+      },
+      "portraitProjection": {
+        "x": 67.5,
+        "y": 1436.7188
+      },
+      "params": [
+        3,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 14,
+      "name": "tab_center_2",
+      "resourceIndex": 0,
+      "cellIndex": 8,
+      "sourcePosition": {
+        "x": 16,
+        "y": 83
+      },
+      "portraitProjection": {
+        "x": 67.5,
+        "y": 1310.1562
+      },
+      "params": [
+        3,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 15,
+      "name": "tab_center_1",
+      "resourceIndex": 0,
+      "cellIndex": 8,
+      "sourcePosition": {
+        "x": 16,
+        "y": 53
+      },
+      "portraitProjection": {
+        "x": 67.5,
+        "y": 1183.5938
+      },
+      "params": [
+        3,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    }
+  ],
+  "dynamicVirtualNodeCount": 2,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

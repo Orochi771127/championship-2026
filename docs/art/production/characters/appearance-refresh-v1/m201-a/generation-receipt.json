@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m201_agumon",
+  "selectedConcept": "A",
+  "generationTool": "builtin image_gen.imagegen",
+  "generationCount": 3,
+  "inputPose": "source-correct main/cell-000.png",
+  "sourceCanvas": [
+    464,
+    368
+  ],
+  "qa": {
+    "identity": "A_RECOGNIZABLE_STYLE_SPEC_RECORDED",
+    "pose": "REPAIR_REQUIRED",
+    "alpha": "FAIL_RGB_CHECKERBOARD",
+    "animationMasterAcceptedCount": 0,
+    "normalGameReplacement": false
+  },
+  "nextAction": "RESOLVE_CONTROLLED_POSE_AND_TRUE_ALPHA_OUTPUT_BEFORE_FULL_MASTER_GENERATION",
+  "sameMethodTransparentRetriesStopped": true,
+  "note": "Three actual files remain RGB despite transparent requests. Do not infer alpha from checkerboard appearance or mass-produce this failure.",
+  "files": [
+    {
+      "path": "main-000-candidate-v1.png",
+      "sha256": "8a73571a753c5b206f642692740976fa71c5657130e29864e561a47263b07ec3",
+      "width": 1409,
+      "height": 1117,
+      "mode": "RGB",
+      "alphaExtrema": null,
+      "transparentBackgroundPassed": false,
+      "role": "REPAIR_CANDIDATE_NOT_ANIMATION_MASTER",
+      "runtimeEligible": false
+    },
+    {
+      "path": "main-000-alpha-attempt-v2.png",
+      "sha256": "76fc4f417a31f098b6042ab73f33063fb2862d5f0e06c510bd09346847ce8a57",
+      "width": 1409,
+      "height": 1117,
+      "mode": "RGB",
+      "alphaExtrema": null,
+      "transparentBackgroundPassed": false,
+      "role": "REPAIR_CANDIDATE_NOT_ANIMATION_MASTER",
+      "runtimeEligible": false
+    },
+    {
+      "path": "main-000-pose-attempt-v3.png",
+      "sha256": "47a76e672b0ad30d8891e484e880b10ab44d2a16c2cace581dbc4729ebde9640",
+      "width": 1407,
+      "height": 1118,
+      "mode": "RGB",
+      "alphaExtrema": null,
+      "transparentBackgroundPassed": false,
+      "role": "REPAIR_CANDIDATE_NOT_ANIMATION_MASTER",
+      "runtimeEligible": false
+    }
+  ]
+}

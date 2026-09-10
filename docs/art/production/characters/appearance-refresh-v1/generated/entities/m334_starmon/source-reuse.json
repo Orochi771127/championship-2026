@@ -1,0 +1,1460 @@
+{
+  "classification": "RESEARCH_ONLY",
+  "entityId": "m334_starmon",
+  "masters": [
+    {
+      "canonical": "m334_starmon/main/cell_000",
+      "masterId": "m334_starmon:master:559d044d7c72bdbf",
+      "members": [
+        "m334_starmon/main/cell_000",
+        "m334_starmon/main/cell_004",
+        "m334_starmon/sub/cell_000"
+      ],
+      "size": [
+        192,
+        200
+      ],
+      "sourceRgbaSha256": "31ac4d6792f766e158d16310d68ed4ce83c9bac06004bd65ba94ce023f00ce3d"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_001",
+      "masterId": "m334_starmon:master:6995a088017d1ae2",
+      "members": [
+        "m334_starmon/main/cell_001",
+        "m334_starmon/sub/cell_001"
+      ],
+      "size": [
+        208,
+        192
+      ],
+      "sourceRgbaSha256": "c16b54e40170d8e3e298113d1cd492f85843281ec2342fea8315da9348d197c3"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_002",
+      "masterId": "m334_starmon:master:fb59f458239a3126",
+      "members": [
+        "m334_starmon/main/cell_002",
+        "m334_starmon/sub/cell_002"
+      ],
+      "size": [
+        192,
+        200
+      ],
+      "sourceRgbaSha256": "b0699b000c30d039fa562244e2c022975ae62d79e6197c0a8e5346fc1d0c48d8"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_003",
+      "masterId": "m334_starmon:master:a23f5b7a5b349d73",
+      "members": [
+        "m334_starmon/main/cell_003",
+        "m334_starmon/sub/cell_003"
+      ],
+      "size": [
+        208,
+        192
+      ],
+      "sourceRgbaSha256": "b47b650ad10c6c4cc91a3dffa460161fcc0090b6bb44951fc0ca4f1e7786a5fa"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_005",
+      "masterId": "m334_starmon:master:f64436ef9d28d28d",
+      "members": [
+        "m334_starmon/main/cell_005"
+      ],
+      "size": [
+        200,
+        176
+      ],
+      "sourceRgbaSha256": "eb901383f7121119f46081e24a66b52ea0f369309f27382fd4483de2393d8a36"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_006",
+      "masterId": "m334_starmon:master:b2ebe5cc0b971832",
+      "members": [
+        "m334_starmon/main/cell_006"
+      ],
+      "size": [
+        240,
+        192
+      ],
+      "sourceRgbaSha256": "e1ac6d16d0566388d643bb41a6b4e818e28ba9da037a9ee6687180c6967128ae"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_007",
+      "masterId": "m334_starmon:master:2b99c8068ebef7fe",
+      "members": [
+        "m334_starmon/main/cell_007",
+        "m334_starmon/sub/cell_004"
+      ],
+      "size": [
+        208,
+        200
+      ],
+      "sourceRgbaSha256": "121da8910e7ca72840f82c605bc34d74ad5f05ebe749da6038e7bf82cdfc45b5"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_008",
+      "masterId": "m334_starmon:master:29cca842a433bbde",
+      "members": [
+        "m334_starmon/main/cell_008",
+        "m334_starmon/sub/cell_005"
+      ],
+      "size": [
+        208,
+        200
+      ],
+      "sourceRgbaSha256": "db3bc2c481b17fc06be11bac2708464122144ac8693e96f9c9c08d1006438f06"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_009",
+      "masterId": "m334_starmon:master:be82c62e051ddd01",
+      "members": [
+        "m334_starmon/main/cell_009",
+        "m334_starmon/main/cell_013"
+      ],
+      "size": [
+        240,
+        192
+      ],
+      "sourceRgbaSha256": "38273f0363eeb541b998b439c2522826a02ca84c211d95c625ba6dc21f23d744"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_010",
+      "masterId": "m334_starmon:master:6aa3a1afec92ce9b",
+      "members": [
+        "m334_starmon/main/cell_010"
+      ],
+      "size": [
+        208,
+        176
+      ],
+      "sourceRgbaSha256": "67ed41677e1d482c7b60b213524fa8fa6c78561f391feefbb1e927d768768d07"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_011",
+      "masterId": "m334_starmon:master:d92985abed4e954f",
+      "members": [
+        "m334_starmon/main/cell_011",
+        "m334_starmon/main/cell_014"
+      ],
+      "size": [
+        240,
+        192
+      ],
+      "sourceRgbaSha256": "684de7df3d8bf58f15fb85cf142b9dadc082f25b3fc69bded29ea4ba155dec47"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_012",
+      "masterId": "m334_starmon:master:3beb7b02349e1739",
+      "members": [
+        "m334_starmon/main/cell_012"
+      ],
+      "size": [
+        208,
+        176
+      ],
+      "sourceRgbaSha256": "fa97330413af00eb5122c3b3c6d30ef5a6a37cdd54bce318093c55d1c5fa1628"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_015",
+      "masterId": "m334_starmon:master:33952ac7c613f2f5",
+      "members": [
+        "m334_starmon/main/cell_015"
+      ],
+      "size": [
+        224,
+        192
+      ],
+      "sourceRgbaSha256": "a8f7a513675fa68c198fd6a557ea03f72bea3f80183b03490d6a49d7fc6d4cc3"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_016",
+      "masterId": "m334_starmon:master:6ac4b9a557dbe0f2",
+      "members": [
+        "m334_starmon/main/cell_016"
+      ],
+      "size": [
+        240,
+        184
+      ],
+      "sourceRgbaSha256": "4b067cdde689961464d34fc6126cb75a4317f3f7dccc1c4e4bdd711f51b645b5"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_017",
+      "masterId": "m334_starmon:master:410773b311442f9d",
+      "members": [
+        "m334_starmon/main/cell_017"
+      ],
+      "size": [
+        192,
+        200
+      ],
+      "sourceRgbaSha256": "0658952fc47eef681770c2e6493226d237bdef0536d95b7dec31dada3bbbe437"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_018",
+      "masterId": "m334_starmon:master:7e1823025ae4bb67",
+      "members": [
+        "m334_starmon/main/cell_018"
+      ],
+      "size": [
+        200,
+        176
+      ],
+      "sourceRgbaSha256": "de6a85edb07fe9871fd1f4dffa38ae3515b7050164902febe4235a2d6939261c"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_019",
+      "masterId": "m334_starmon:master:7460090a4806384e",
+      "members": [
+        "m334_starmon/main/cell_019",
+        "m334_starmon/main/cell_022",
+        "m334_starmon/main/cell_054",
+        "m334_starmon/sub/cell_006",
+        "m334_starmon/sub/cell_007",
+        "m334_starmon/sub/cell_017"
+      ],
+      "size": [
+        216,
+        88
+      ],
+      "sourceRgbaSha256": "3cd291bfdda6a9446b6b4348fc4a2b53ae923750b16c69835b0e4a90bb30bfae"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_020",
+      "masterId": "m334_starmon:master:10e9839a4e79cff0",
+      "members": [
+        "m334_starmon/main/cell_020"
+      ],
+      "size": [
+        208,
+        200
+      ],
+      "sourceRgbaSha256": "bd2cc8602c24bec8e927c2e6c529a06e9f1bcb4ae0f3fbc2716e49c30109e158"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_021",
+      "masterId": "m334_starmon:master:e20fa8aad452686f",
+      "members": [
+        "m334_starmon/main/cell_021"
+      ],
+      "size": [
+        192,
+        192
+      ],
+      "sourceRgbaSha256": "3b5e46bd0ce0a7ffd06f9aa362c2dee78f422624355e169f5693cf1c2ff3abe4"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_023",
+      "masterId": "m334_starmon:master:d2f748ff764330cb",
+      "members": [
+        "m334_starmon/main/cell_023",
+        "m334_starmon/main/cell_027"
+      ],
+      "size": [
+        176,
+        200
+      ],
+      "sourceRgbaSha256": "f0975eeaaf2128cefe1162f1eb712521f9570982586087a4d2394782fa20cca4"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_024",
+      "masterId": "m334_starmon:master:d5ad69c371c7a15d",
+      "members": [
+        "m334_starmon/main/cell_024"
+      ],
+      "size": [
+        192,
+        192
+      ],
+      "sourceRgbaSha256": "cd2edc746e67ad8c043858dad03b5df52a3a3ed419305474ce626375eba5e00d"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_025",
+      "masterId": "m334_starmon:master:b27db768e3ff7037",
+      "members": [
+        "m334_starmon/main/cell_025"
+      ],
+      "size": [
+        176,
+        200
+      ],
+      "sourceRgbaSha256": "21ef141522cee876b7e748530ac71428c25a7134b960068565727821fc743bfd"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_026",
+      "masterId": "m334_starmon:master:bece7493aa828989",
+      "members": [
+        "m334_starmon/main/cell_026"
+      ],
+      "size": [
+        192,
+        192
+      ],
+      "sourceRgbaSha256": "333e1fd042130c955c283b388223dbd04bf12e3bec21b6ea27f49e218e8df52b"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_028",
+      "masterId": "m334_starmon:master:7aa4917f217b9722",
+      "members": [
+        "m334_starmon/main/cell_028"
+      ],
+      "size": [
+        200,
+        176
+      ],
+      "sourceRgbaSha256": "a62a568ade95365a98dd065eb0ca30ad9af2490fd1741e1fe84d4ac432fa2682"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_029",
+      "masterId": "m334_starmon:master:de2887e04c3c87ea",
+      "members": [
+        "m334_starmon/main/cell_029"
+      ],
+      "size": [
+        232,
+        192
+      ],
+      "sourceRgbaSha256": "b6a7fc5e3789c848221efeac59fa613830869f0ca005f34433562c0430f928de"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_030",
+      "masterId": "m334_starmon:master:855f6ac76f124b5f",
+      "members": [
+        "m334_starmon/main/cell_030"
+      ],
+      "size": [
+        192,
+        192
+      ],
+      "sourceRgbaSha256": "ac88664d5ea19c4418b756db86a7bf07b86810d121da9f7c0a7e4a2b570b4592"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_031",
+      "masterId": "m334_starmon:master:0f192807c47211c2",
+      "members": [
+        "m334_starmon/main/cell_031"
+      ],
+      "size": [
+        232,
+        184
+      ],
+      "sourceRgbaSha256": "63e63387692035806169f186e5f24a5fa49505c0bab56213ef80bd2066c9245f"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_032",
+      "masterId": "m334_starmon:master:7d21d5d97e398139",
+      "members": [
+        "m334_starmon/main/cell_032"
+      ],
+      "size": [
+        176,
+        200
+      ],
+      "sourceRgbaSha256": "857f74ac31326f9b75b806da58404b009755d1b76ccf8afa18f9b542059d11f5"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_033",
+      "masterId": "m334_starmon:master:1f22ceaba2d02b7d",
+      "members": [
+        "m334_starmon/main/cell_033"
+      ],
+      "size": [
+        200,
+        176
+      ],
+      "sourceRgbaSha256": "759c27910e15d2d1cd709e69a194421432b3487d9c332cc74e31fa4d21f731d0"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_034",
+      "masterId": "m334_starmon:master:a80084cd5a5acf1f",
+      "members": [
+        "m334_starmon/main/cell_034",
+        "m334_starmon/main/cell_037"
+      ],
+      "size": [
+        216,
+        96
+      ],
+      "sourceRgbaSha256": "25d98b3c15fc4fb8dbbef76f8f879a83ed0ffdfc97ebe8ebc15671b66ded320a"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_035",
+      "masterId": "m334_starmon:master:1d362bd4e77c0d1f",
+      "members": [
+        "m334_starmon/main/cell_035"
+      ],
+      "size": [
+        176,
+        200
+      ],
+      "sourceRgbaSha256": "8a425498611dbbbd069b241ec33ced30b98bc8369f2f18ac404893d3d257511d"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_036",
+      "masterId": "m334_starmon:master:cda93602d0483e41",
+      "members": [
+        "m334_starmon/main/cell_036"
+      ],
+      "size": [
+        192,
+        192
+      ],
+      "sourceRgbaSha256": "3c1776e1bc92487d4b760f368f130d7af247691c2ca6b1dd22bbeb1912b45e9d"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_038",
+      "masterId": "m334_starmon:master:6d6fa14899e9ca5a",
+      "members": [
+        "m334_starmon/main/cell_038"
+      ],
+      "size": [
+        240,
+        192
+      ],
+      "sourceRgbaSha256": "3a8191da9d904316465431139e50cebeb0ae7b6141834535ae5238db8e32c810"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_039",
+      "masterId": "m334_starmon:master:e05c52b4ece294a4",
+      "members": [
+        "m334_starmon/main/cell_039"
+      ],
+      "size": [
+        240,
+        192
+      ],
+      "sourceRgbaSha256": "7f7e19214c8b7fe5e9e5bcb6d13002e299a5e0be5b11c67e9fc29ddf4cc52790"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_040",
+      "masterId": "m334_starmon:master:e8003410e1563843",
+      "members": [
+        "m334_starmon/main/cell_040",
+        "m334_starmon/sub/cell_008"
+      ],
+      "size": [
+        192,
+        200
+      ],
+      "sourceRgbaSha256": "3c65748dad58534fadb00dc906cb202f945e903c6f3123324491a2f5434204c1"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_041",
+      "masterId": "m334_starmon:master:fbf08bdccb6b5b8b",
+      "members": [
+        "m334_starmon/main/cell_041",
+        "m334_starmon/sub/cell_009"
+      ],
+      "size": [
+        208,
+        200
+      ],
+      "sourceRgbaSha256": "942a802cf2b53551f1f94b31497d7b208a060239c7b34365735e139d4b4a1dcf"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_042",
+      "masterId": "m334_starmon:master:42a7a6f23030a7a2",
+      "members": [
+        "m334_starmon/main/cell_042",
+        "m334_starmon/sub/cell_010"
+      ],
+      "size": [
+        184,
+        200
+      ],
+      "sourceRgbaSha256": "dc43b6ae2a194c950368f4282d9b08884a953a0ecf3c3a1d6f51f7e64a46a6d7"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_043",
+      "masterId": "m334_starmon:master:aed977c73049fcb8",
+      "members": [
+        "m334_starmon/main/cell_043",
+        "m334_starmon/sub/cell_011"
+      ],
+      "size": [
+        208,
+        200
+      ],
+      "sourceRgbaSha256": "4809001309776ad7bbc559b3ad6545cd9896d0c1b27feadaa8e946db9a104806"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_044",
+      "masterId": "m334_starmon:master:ebf8c67a000aa6a3",
+      "members": [
+        "m334_starmon/main/cell_044",
+        "m334_starmon/sub/cell_012"
+      ],
+      "size": [
+        224,
+        208
+      ],
+      "sourceRgbaSha256": "ea7671f946ac2d5c6adc525567bac185c6278c9aaa39359c8122d43aa980dfe0"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_045",
+      "masterId": "m334_starmon:master:c8f9c1ea26d0ce3b",
+      "members": [
+        "m334_starmon/main/cell_045",
+        "m334_starmon/sub/cell_013"
+      ],
+      "size": [
+        208,
+        200
+      ],
+      "sourceRgbaSha256": "ea5eda69886b55f6c2548b95862962cbbd3cfbed966bdb331ace6ee88bb31faa"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_046",
+      "masterId": "m334_starmon:master:b9e4d5c2a547f3f7",
+      "members": [
+        "m334_starmon/main/cell_046",
+        "m334_starmon/sub/cell_014"
+      ],
+      "size": [
+        192,
+        184
+      ],
+      "sourceRgbaSha256": "730f9b876a565862f5942130fde6440cdc79f7de0ebd996004f3222176a6afd7"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_047",
+      "masterId": "m334_starmon:master:1cd059a7814cda20",
+      "members": [
+        "m334_starmon/main/cell_047",
+        "m334_starmon/sub/cell_015"
+      ],
+      "size": [
+        176,
+        200
+      ],
+      "sourceRgbaSha256": "252a86259648c3759095539e36432a2ee1d471751ab253b4af2054194768d88c"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_048",
+      "masterId": "m334_starmon:master:72c026e5b4b360ba",
+      "members": [
+        "m334_starmon/main/cell_048"
+      ],
+      "size": [
+        184,
+        152
+      ],
+      "sourceRgbaSha256": "f30e180eaee71c0fc1b5552cfa58777392339e22bced8852e83e341187e373f0"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_049",
+      "masterId": "m334_starmon:master:7f00ff1d868cfa43",
+      "members": [
+        "m334_starmon/main/cell_049"
+      ],
+      "size": [
+        208,
+        200
+      ],
+      "sourceRgbaSha256": "f2e73a0bc4d03109fcf091b94fbd2748597f5b04439a4de2f50278d4ef4006bb"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_050",
+      "masterId": "m334_starmon:master:1602c21497c45957",
+      "members": [
+        "m334_starmon/main/cell_050"
+      ],
+      "size": [
+        152,
+        240
+      ],
+      "sourceRgbaSha256": "b83a5c03e7f8cd7d9f2dd9f4edc6fd5c1e20e78984ce1456b9091ee0f16c5e69"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_051",
+      "masterId": "m334_starmon:master:77bbb2d0ee52b7c9",
+      "members": [
+        "m334_starmon/main/cell_051"
+      ],
+      "size": [
+        176,
+        200
+      ],
+      "sourceRgbaSha256": "88922d9e174b7440458bf683cd2c6f37135d6fa5f05dab15b34731ff98b9ccec"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_052",
+      "masterId": "m334_starmon:master:0a1f30a1c5315edf",
+      "members": [
+        "m334_starmon/main/cell_052"
+      ],
+      "size": [
+        224,
+        208
+      ],
+      "sourceRgbaSha256": "1a91a35b3c15f3c5b40b5cac13191513db802fdbefb8760034b681988ea7f48a"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_053",
+      "masterId": "m334_starmon:master:6f036920d9e1ac6d",
+      "members": [
+        "m334_starmon/main/cell_053",
+        "m334_starmon/sub/cell_016"
+      ],
+      "size": [
+        208,
+        200
+      ],
+      "sourceRgbaSha256": "bbe1622e4a662aae866d626f163a9d4b6271dbd1158c1706714801a8e99be7d1"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_055",
+      "masterId": "m334_starmon:master:2895c61174e8fc7b",
+      "members": [
+        "m334_starmon/main/cell_055"
+      ],
+      "size": [
+        208,
+        200
+      ],
+      "sourceRgbaSha256": "b1f214efc97b181fcd80e98e15eafee863b2557613347ff56ccd1037f9f3b1d5"
+    },
+    {
+      "canonical": "m334_starmon/main/cell_056",
+      "masterId": "m334_starmon:master:8b7eaac907d8f784",
+      "members": [
+        "m334_starmon/main/cell_056"
+      ],
+      "size": [
+        192,
+        200
+      ],
+      "sourceRgbaSha256": "4f42ae17ddfd57ec8a090e00060cfa4cbe38f0b21d2c50b05ef8238659f80889"
+    }
+  ],
+  "reusePolicy": "EXACT_RGBA_AND_DIMENSIONS_WITHIN_ENTITY_ONLY_PLACEMENT_RETAINED_PER_SLOT",
+  "schemaVersion": 1,
+  "slots": [
+    {
+      "declaredPreCompositeRgbaSha256": "340f7cf79070940ebcb5dbbbad18be40069c6e04a52c8de09a7df8552b970f2d",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:559d044d7c72bdbf",
+      "sourceRgbaSha256": "31ac4d6792f766e158d16310d68ed4ce83c9bac06004bd65ba94ce023f00ce3d",
+      "sourceSize": [
+        192,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_000"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "f7a4070a4bc9dd76c15cda5950996f618e7eb2c834afe8ec2924e73a32e3beef",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:6995a088017d1ae2",
+      "sourceRgbaSha256": "c16b54e40170d8e3e298113d1cd492f85843281ec2342fea8315da9348d197c3",
+      "sourceSize": [
+        208,
+        192
+      ],
+      "texture": "m334_starmon/main/cell_001"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "41760e11a9c538a0e8acb6d5a55aab99e13d5845637908d9ed2c814a095b1ffe",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:fb59f458239a3126",
+      "sourceRgbaSha256": "b0699b000c30d039fa562244e2c022975ae62d79e6197c0a8e5346fc1d0c48d8",
+      "sourceSize": [
+        192,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_002"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "66efd640adf7ede2ca5c0e1d8d2a787e698d2589ecb50efacde3d466a180cd44",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:a23f5b7a5b349d73",
+      "sourceRgbaSha256": "b47b650ad10c6c4cc91a3dffa460161fcc0090b6bb44951fc0ca4f1e7786a5fa",
+      "sourceSize": [
+        208,
+        192
+      ],
+      "texture": "m334_starmon/main/cell_003"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "340f7cf79070940ebcb5dbbbad18be40069c6e04a52c8de09a7df8552b970f2d",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:559d044d7c72bdbf",
+      "sourceRgbaSha256": "31ac4d6792f766e158d16310d68ed4ce83c9bac06004bd65ba94ce023f00ce3d",
+      "sourceSize": [
+        192,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_004"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "09b9e88d59a0b46f5eb9db2ff8cd00b1ca3c2a87fc4b3d8b3ed82d6318ce6e4a",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:f64436ef9d28d28d",
+      "sourceRgbaSha256": "eb901383f7121119f46081e24a66b52ea0f369309f27382fd4483de2393d8a36",
+      "sourceSize": [
+        200,
+        176
+      ],
+      "texture": "m334_starmon/main/cell_005"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "774ff10fb5b57b867786925804bc48b464d088f6fccae62a7f6f5057434c0ea3",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:b2ebe5cc0b971832",
+      "sourceRgbaSha256": "e1ac6d16d0566388d643bb41a6b4e818e28ba9da037a9ee6687180c6967128ae",
+      "sourceSize": [
+        240,
+        192
+      ],
+      "texture": "m334_starmon/main/cell_006"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "7a77aeeabaab9719e684cca3da5fa4a56153c143e927b1fa83b3484118d245be",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:2b99c8068ebef7fe",
+      "sourceRgbaSha256": "121da8910e7ca72840f82c605bc34d74ad5f05ebe749da6038e7bf82cdfc45b5",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_007"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "271e64842d1882e99a25ea7a27959f09c3becb2d7d4661585daeeb1ce6996551",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:29cca842a433bbde",
+      "sourceRgbaSha256": "db3bc2c481b17fc06be11bac2708464122144ac8693e96f9c9c08d1006438f06",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_008"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "3fc8d64b8af1499c60cbf65937828a0a9189aee40ac8b307c25c5550dad43f34",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:be82c62e051ddd01",
+      "sourceRgbaSha256": "38273f0363eeb541b998b439c2522826a02ca84c211d95c625ba6dc21f23d744",
+      "sourceSize": [
+        240,
+        192
+      ],
+      "texture": "m334_starmon/main/cell_009"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "1b76b7d869e06f958375f011ec283c33f8001dfe2dd8f79fbb3781ce3282f835",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:6aa3a1afec92ce9b",
+      "sourceRgbaSha256": "67ed41677e1d482c7b60b213524fa8fa6c78561f391feefbb1e927d768768d07",
+      "sourceSize": [
+        208,
+        176
+      ],
+      "texture": "m334_starmon/main/cell_010"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "2ab1fff8ad6849a2d2b1dafed5822e5c2b27d217f658bdef4965d7c460523992",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:d92985abed4e954f",
+      "sourceRgbaSha256": "684de7df3d8bf58f15fb85cf142b9dadc082f25b3fc69bded29ea4ba155dec47",
+      "sourceSize": [
+        240,
+        192
+      ],
+      "texture": "m334_starmon/main/cell_011"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "a7277633bb2b4ff2f5dbb078531b925739320e5a2612f32716104b9a09920f92",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:3beb7b02349e1739",
+      "sourceRgbaSha256": "fa97330413af00eb5122c3b3c6d30ef5a6a37cdd54bce318093c55d1c5fa1628",
+      "sourceSize": [
+        208,
+        176
+      ],
+      "texture": "m334_starmon/main/cell_012"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "3fc8d64b8af1499c60cbf65937828a0a9189aee40ac8b307c25c5550dad43f34",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:be82c62e051ddd01",
+      "sourceRgbaSha256": "38273f0363eeb541b998b439c2522826a02ca84c211d95c625ba6dc21f23d744",
+      "sourceSize": [
+        240,
+        192
+      ],
+      "texture": "m334_starmon/main/cell_013"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "2ab1fff8ad6849a2d2b1dafed5822e5c2b27d217f658bdef4965d7c460523992",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:d92985abed4e954f",
+      "sourceRgbaSha256": "684de7df3d8bf58f15fb85cf142b9dadc082f25b3fc69bded29ea4ba155dec47",
+      "sourceSize": [
+        240,
+        192
+      ],
+      "texture": "m334_starmon/main/cell_014"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "c69e6674fa5e1a5f79c7863196dce66546bcc22b5755e21206c756394c2695fc",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:33952ac7c613f2f5",
+      "sourceRgbaSha256": "a8f7a513675fa68c198fd6a557ea03f72bea3f80183b03490d6a49d7fc6d4cc3",
+      "sourceSize": [
+        224,
+        192
+      ],
+      "texture": "m334_starmon/main/cell_015"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "77ec73a5204fa0788b808d99815e2e2a99b6c3711df769686ac91abe60fc7962",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:6ac4b9a557dbe0f2",
+      "sourceRgbaSha256": "4b067cdde689961464d34fc6126cb75a4317f3f7dccc1c4e4bdd711f51b645b5",
+      "sourceSize": [
+        240,
+        184
+      ],
+      "texture": "m334_starmon/main/cell_016"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "f5ca61fd85ec0fc8f2b58e66c8bbfa269c501778545987af5c9a4b3ceadc6fa4",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:410773b311442f9d",
+      "sourceRgbaSha256": "0658952fc47eef681770c2e6493226d237bdef0536d95b7dec31dada3bbbe437",
+      "sourceSize": [
+        192,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_017"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "d418b350e1f171b20707c889e0071f09c6f1673a2ca14d9c1068206015bdd9a2",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:7e1823025ae4bb67",
+      "sourceRgbaSha256": "de6a85edb07fe9871fd1f4dffa38ae3515b7050164902febe4235a2d6939261c",
+      "sourceSize": [
+        200,
+        176
+      ],
+      "texture": "m334_starmon/main/cell_018"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "127f417693239c9f9a4d832330515eb59ace08493a270ce6807f8275276f24e5",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:7460090a4806384e",
+      "sourceRgbaSha256": "3cd291bfdda6a9446b6b4348fc4a2b53ae923750b16c69835b0e4a90bb30bfae",
+      "sourceSize": [
+        216,
+        88
+      ],
+      "texture": "m334_starmon/main/cell_019"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "16a58d8aa47ac3e6a61363adc1bc6f6bf7565c0b843817a0e2d5059072fd474a",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:10e9839a4e79cff0",
+      "sourceRgbaSha256": "bd2cc8602c24bec8e927c2e6c529a06e9f1bcb4ae0f3fbc2716e49c30109e158",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_020"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "d93d8bfb413a2edf1f1fd97cbd76d97ae97742b5e7c43635f6f80fe5d632831f",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:e20fa8aad452686f",
+      "sourceRgbaSha256": "3b5e46bd0ce0a7ffd06f9aa362c2dee78f422624355e169f5693cf1c2ff3abe4",
+      "sourceSize": [
+        192,
+        192
+      ],
+      "texture": "m334_starmon/main/cell_021"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "127f417693239c9f9a4d832330515eb59ace08493a270ce6807f8275276f24e5",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:7460090a4806384e",
+      "sourceRgbaSha256": "3cd291bfdda6a9446b6b4348fc4a2b53ae923750b16c69835b0e4a90bb30bfae",
+      "sourceSize": [
+        216,
+        88
+      ],
+      "texture": "m334_starmon/main/cell_022"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "90497b21bce60b6a7ae1716d03c4e8ed15a0af5e8742014a73c458b251c18cd2",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:d2f748ff764330cb",
+      "sourceRgbaSha256": "f0975eeaaf2128cefe1162f1eb712521f9570982586087a4d2394782fa20cca4",
+      "sourceSize": [
+        176,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_023"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "42a5c0193282c00f934cdc1f4b8dab312859dfa5d64b2bfc0adab411c1a6c38a",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:d5ad69c371c7a15d",
+      "sourceRgbaSha256": "cd2edc746e67ad8c043858dad03b5df52a3a3ed419305474ce626375eba5e00d",
+      "sourceSize": [
+        192,
+        192
+      ],
+      "texture": "m334_starmon/main/cell_024"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "121107ae974f01b8d4dfe49a41b4c9bfeeb52a1b5d6e95977ab8cb4157ded04d",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:b27db768e3ff7037",
+      "sourceRgbaSha256": "21ef141522cee876b7e748530ac71428c25a7134b960068565727821fc743bfd",
+      "sourceSize": [
+        176,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_025"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "1087dbf216f36366be1a025c61d5000d5ed6f173bde4b6d36b5f8c235a6ad9d2",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:bece7493aa828989",
+      "sourceRgbaSha256": "333e1fd042130c955c283b388223dbd04bf12e3bec21b6ea27f49e218e8df52b",
+      "sourceSize": [
+        192,
+        192
+      ],
+      "texture": "m334_starmon/main/cell_026"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "90497b21bce60b6a7ae1716d03c4e8ed15a0af5e8742014a73c458b251c18cd2",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:d2f748ff764330cb",
+      "sourceRgbaSha256": "f0975eeaaf2128cefe1162f1eb712521f9570982586087a4d2394782fa20cca4",
+      "sourceSize": [
+        176,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_027"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "098e3d951708cc45c137ce2317d6ba6d1e5d87e62b228f549656f14b801b1707",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:7aa4917f217b9722",
+      "sourceRgbaSha256": "a62a568ade95365a98dd065eb0ca30ad9af2490fd1741e1fe84d4ac432fa2682",
+      "sourceSize": [
+        200,
+        176
+      ],
+      "texture": "m334_starmon/main/cell_028"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "6adb32706951624c46272a190b98e1560165184431919e46f1a70287e2467acf",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:de2887e04c3c87ea",
+      "sourceRgbaSha256": "b6a7fc5e3789c848221efeac59fa613830869f0ca005f34433562c0430f928de",
+      "sourceSize": [
+        232,
+        192
+      ],
+      "texture": "m334_starmon/main/cell_029"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "5bb61164ef3d0b42ad9e12357accb523ab3abd7a6601477088e82e10e7e8700d",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:855f6ac76f124b5f",
+      "sourceRgbaSha256": "ac88664d5ea19c4418b756db86a7bf07b86810d121da9f7c0a7e4a2b570b4592",
+      "sourceSize": [
+        192,
+        192
+      ],
+      "texture": "m334_starmon/main/cell_030"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "400ed208cd97db16714ea9fae26bfe227021eb5fddc200464a04993d9faa90bb",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:0f192807c47211c2",
+      "sourceRgbaSha256": "63e63387692035806169f186e5f24a5fa49505c0bab56213ef80bd2066c9245f",
+      "sourceSize": [
+        232,
+        184
+      ],
+      "texture": "m334_starmon/main/cell_031"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "153c6769cba56db68206a853cfdff399960181703aa54d625431128bb1d0aad3",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:7d21d5d97e398139",
+      "sourceRgbaSha256": "857f74ac31326f9b75b806da58404b009755d1b76ccf8afa18f9b542059d11f5",
+      "sourceSize": [
+        176,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_032"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "7ee9e17e59d6b49a6f8d7647cac3a0997ff81b077c85c3439d9f5b4b011a89df",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:1f22ceaba2d02b7d",
+      "sourceRgbaSha256": "759c27910e15d2d1cd709e69a194421432b3487d9c332cc74e31fa4d21f731d0",
+      "sourceSize": [
+        200,
+        176
+      ],
+      "texture": "m334_starmon/main/cell_033"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "d27af620448b25f08834e7c3f136674412f1f26640f56986a96859577aea559e",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:a80084cd5a5acf1f",
+      "sourceRgbaSha256": "25d98b3c15fc4fb8dbbef76f8f879a83ed0ffdfc97ebe8ebc15671b66ded320a",
+      "sourceSize": [
+        216,
+        96
+      ],
+      "texture": "m334_starmon/main/cell_034"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "26811a305708539002e55f2f98630e216bdb584f5586b31d30997cade965b9ea",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:1d362bd4e77c0d1f",
+      "sourceRgbaSha256": "8a425498611dbbbd069b241ec33ced30b98bc8369f2f18ac404893d3d257511d",
+      "sourceSize": [
+        176,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_035"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "cd89ab40d11953582b21b5148bc57f351d48354de2817b2538e7c3a4825f4ede",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:cda93602d0483e41",
+      "sourceRgbaSha256": "3c1776e1bc92487d4b760f368f130d7af247691c2ca6b1dd22bbeb1912b45e9d",
+      "sourceSize": [
+        192,
+        192
+      ],
+      "texture": "m334_starmon/main/cell_036"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "d27af620448b25f08834e7c3f136674412f1f26640f56986a96859577aea559e",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:a80084cd5a5acf1f",
+      "sourceRgbaSha256": "25d98b3c15fc4fb8dbbef76f8f879a83ed0ffdfc97ebe8ebc15671b66ded320a",
+      "sourceSize": [
+        216,
+        96
+      ],
+      "texture": "m334_starmon/main/cell_037"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b0708e4625329b37bb6ae73bdd9ea6c1be05b488d7beadd1df6fa9f1312a0ed4",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:6d6fa14899e9ca5a",
+      "sourceRgbaSha256": "3a8191da9d904316465431139e50cebeb0ae7b6141834535ae5238db8e32c810",
+      "sourceSize": [
+        240,
+        192
+      ],
+      "texture": "m334_starmon/main/cell_038"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "42d131be5c7578b9e856b121fbad546120d03bd18c6293e1c2a3f81e83c22109",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:e05c52b4ece294a4",
+      "sourceRgbaSha256": "7f7e19214c8b7fe5e9e5bcb6d13002e299a5e0be5b11c67e9fc29ddf4cc52790",
+      "sourceSize": [
+        240,
+        192
+      ],
+      "texture": "m334_starmon/main/cell_039"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "043b97ae27f8254e0170b7920e28b11ec1c3aef972d0f2200092602db462163f",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:e8003410e1563843",
+      "sourceRgbaSha256": "3c65748dad58534fadb00dc906cb202f945e903c6f3123324491a2f5434204c1",
+      "sourceSize": [
+        192,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_040"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "90fbf558c749758b539987f3776019ccaf194bacbac06a035e8eabd5ffb1994e",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:fbf08bdccb6b5b8b",
+      "sourceRgbaSha256": "942a802cf2b53551f1f94b31497d7b208a060239c7b34365735e139d4b4a1dcf",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_041"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "7c5fccfa5c19101e25cf7727569b347669f647e972f91d19a335e13bec8a1929",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:42a7a6f23030a7a2",
+      "sourceRgbaSha256": "dc43b6ae2a194c950368f4282d9b08884a953a0ecf3c3a1d6f51f7e64a46a6d7",
+      "sourceSize": [
+        184,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_042"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "31dbaf0387fe83fbb9f35d09bbe8e80647787e85d9fea54abaa54677649ba5d2",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:aed977c73049fcb8",
+      "sourceRgbaSha256": "4809001309776ad7bbc559b3ad6545cd9896d0c1b27feadaa8e946db9a104806",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_043"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9bd841ddecaf2b4af2442b127c0a31412d8d984e05b176366e09ea5478df43e3",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:ebf8c67a000aa6a3",
+      "sourceRgbaSha256": "ea7671f946ac2d5c6adc525567bac185c6278c9aaa39359c8122d43aa980dfe0",
+      "sourceSize": [
+        224,
+        208
+      ],
+      "texture": "m334_starmon/main/cell_044"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "7b9d0fc0c9a5355d936b5440c256970520d3979dd3a5a345f75e9762fae85e78",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:c8f9c1ea26d0ce3b",
+      "sourceRgbaSha256": "ea5eda69886b55f6c2548b95862962cbbd3cfbed966bdb331ace6ee88bb31faa",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_045"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "bf8c6f1c67df253262b319b0bce9e0a457deb556cd90b3027995f6500b414908",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:b9e4d5c2a547f3f7",
+      "sourceRgbaSha256": "730f9b876a565862f5942130fde6440cdc79f7de0ebd996004f3222176a6afd7",
+      "sourceSize": [
+        192,
+        184
+      ],
+      "texture": "m334_starmon/main/cell_046"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "ca90ac4967a7247e1f02fb28149797bfdc78645148814128d6290144d5d109bd",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:1cd059a7814cda20",
+      "sourceRgbaSha256": "252a86259648c3759095539e36432a2ee1d471751ab253b4af2054194768d88c",
+      "sourceSize": [
+        176,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_047"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "cc1e3b1146e38591dbeea398c2edd2fffeda78fa859207729c75bd8fbb365f3e",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:72c026e5b4b360ba",
+      "sourceRgbaSha256": "f30e180eaee71c0fc1b5552cfa58777392339e22bced8852e83e341187e373f0",
+      "sourceSize": [
+        184,
+        152
+      ],
+      "texture": "m334_starmon/main/cell_048"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "bd2f74ea5698681c5d34212403c616f8c37948b5cd03cddbdf94d2fbd90ae5b6",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:7f00ff1d868cfa43",
+      "sourceRgbaSha256": "f2e73a0bc4d03109fcf091b94fbd2748597f5b04439a4de2f50278d4ef4006bb",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_049"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "27a89344d7721039bf3af3091ace2ba0c2da26d9972310acdbab5519a60afce2",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:1602c21497c45957",
+      "sourceRgbaSha256": "b83a5c03e7f8cd7d9f2dd9f4edc6fd5c1e20e78984ce1456b9091ee0f16c5e69",
+      "sourceSize": [
+        152,
+        240
+      ],
+      "texture": "m334_starmon/main/cell_050"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "be8e280232372bf0277a455889b1ed0439836ab30dae3f50dd2534a769b85537",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:77bbb2d0ee52b7c9",
+      "sourceRgbaSha256": "88922d9e174b7440458bf683cd2c6f37135d6fa5f05dab15b34731ff98b9ccec",
+      "sourceSize": [
+        176,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_051"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "1a5e41dddda07d126528a8452f046b92f10a8f60bb0649c1d63bdfc38884ea25",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:0a1f30a1c5315edf",
+      "sourceRgbaSha256": "1a91a35b3c15f3c5b40b5cac13191513db802fdbefb8760034b681988ea7f48a",
+      "sourceSize": [
+        224,
+        208
+      ],
+      "texture": "m334_starmon/main/cell_052"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "c17bfdb82869a4165e1801b873f8907fc24ef4449a44711d8e23f89f7eec78ea",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:6f036920d9e1ac6d",
+      "sourceRgbaSha256": "bbe1622e4a662aae866d626f163a9d4b6271dbd1158c1706714801a8e99be7d1",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_053"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "127f417693239c9f9a4d832330515eb59ace08493a270ce6807f8275276f24e5",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:7460090a4806384e",
+      "sourceRgbaSha256": "3cd291bfdda6a9446b6b4348fc4a2b53ae923750b16c69835b0e4a90bb30bfae",
+      "sourceSize": [
+        216,
+        88
+      ],
+      "texture": "m334_starmon/main/cell_054"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "fac8d48ee3d8aaaaa8ccbddb481079aab232e117c6340a3252f1fb35fcb17659",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:2895c61174e8fc7b",
+      "sourceRgbaSha256": "b1f214efc97b181fcd80e98e15eafee863b2557613347ff56ccd1037f9f3b1d5",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_055"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e568e050ce51015faa6ad506a20beb323a5dd1b50ed9b0e96e441a38a0d26c7b",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:8b7eaac907d8f784",
+      "sourceRgbaSha256": "4f42ae17ddfd57ec8a090e00060cfa4cbe38f0b21d2c50b05ef8238659f80889",
+      "sourceSize": [
+        192,
+        200
+      ],
+      "texture": "m334_starmon/main/cell_056"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "340f7cf79070940ebcb5dbbbad18be40069c6e04a52c8de09a7df8552b970f2d",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:559d044d7c72bdbf",
+      "sourceRgbaSha256": "31ac4d6792f766e158d16310d68ed4ce83c9bac06004bd65ba94ce023f00ce3d",
+      "sourceSize": [
+        192,
+        200
+      ],
+      "texture": "m334_starmon/sub/cell_000"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "f7a4070a4bc9dd76c15cda5950996f618e7eb2c834afe8ec2924e73a32e3beef",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:6995a088017d1ae2",
+      "sourceRgbaSha256": "c16b54e40170d8e3e298113d1cd492f85843281ec2342fea8315da9348d197c3",
+      "sourceSize": [
+        208,
+        192
+      ],
+      "texture": "m334_starmon/sub/cell_001"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "41760e11a9c538a0e8acb6d5a55aab99e13d5845637908d9ed2c814a095b1ffe",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:fb59f458239a3126",
+      "sourceRgbaSha256": "b0699b000c30d039fa562244e2c022975ae62d79e6197c0a8e5346fc1d0c48d8",
+      "sourceSize": [
+        192,
+        200
+      ],
+      "texture": "m334_starmon/sub/cell_002"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "66efd640adf7ede2ca5c0e1d8d2a787e698d2589ecb50efacde3d466a180cd44",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:a23f5b7a5b349d73",
+      "sourceRgbaSha256": "b47b650ad10c6c4cc91a3dffa460161fcc0090b6bb44951fc0ca4f1e7786a5fa",
+      "sourceSize": [
+        208,
+        192
+      ],
+      "texture": "m334_starmon/sub/cell_003"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "7a77aeeabaab9719e684cca3da5fa4a56153c143e927b1fa83b3484118d245be",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:2b99c8068ebef7fe",
+      "sourceRgbaSha256": "121da8910e7ca72840f82c605bc34d74ad5f05ebe749da6038e7bf82cdfc45b5",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m334_starmon/sub/cell_004"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "271e64842d1882e99a25ea7a27959f09c3becb2d7d4661585daeeb1ce6996551",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:29cca842a433bbde",
+      "sourceRgbaSha256": "db3bc2c481b17fc06be11bac2708464122144ac8693e96f9c9c08d1006438f06",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m334_starmon/sub/cell_005"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "127f417693239c9f9a4d832330515eb59ace08493a270ce6807f8275276f24e5",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:7460090a4806384e",
+      "sourceRgbaSha256": "3cd291bfdda6a9446b6b4348fc4a2b53ae923750b16c69835b0e4a90bb30bfae",
+      "sourceSize": [
+        216,
+        88
+      ],
+      "texture": "m334_starmon/sub/cell_006"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "127f417693239c9f9a4d832330515eb59ace08493a270ce6807f8275276f24e5",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:7460090a4806384e",
+      "sourceRgbaSha256": "3cd291bfdda6a9446b6b4348fc4a2b53ae923750b16c69835b0e4a90bb30bfae",
+      "sourceSize": [
+        216,
+        88
+      ],
+      "texture": "m334_starmon/sub/cell_007"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "043b97ae27f8254e0170b7920e28b11ec1c3aef972d0f2200092602db462163f",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:e8003410e1563843",
+      "sourceRgbaSha256": "3c65748dad58534fadb00dc906cb202f945e903c6f3123324491a2f5434204c1",
+      "sourceSize": [
+        192,
+        200
+      ],
+      "texture": "m334_starmon/sub/cell_008"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "90fbf558c749758b539987f3776019ccaf194bacbac06a035e8eabd5ffb1994e",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:fbf08bdccb6b5b8b",
+      "sourceRgbaSha256": "942a802cf2b53551f1f94b31497d7b208a060239c7b34365735e139d4b4a1dcf",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m334_starmon/sub/cell_009"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "7c5fccfa5c19101e25cf7727569b347669f647e972f91d19a335e13bec8a1929",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:42a7a6f23030a7a2",
+      "sourceRgbaSha256": "dc43b6ae2a194c950368f4282d9b08884a953a0ecf3c3a1d6f51f7e64a46a6d7",
+      "sourceSize": [
+        184,
+        200
+      ],
+      "texture": "m334_starmon/sub/cell_010"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "31dbaf0387fe83fbb9f35d09bbe8e80647787e85d9fea54abaa54677649ba5d2",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:aed977c73049fcb8",
+      "sourceRgbaSha256": "4809001309776ad7bbc559b3ad6545cd9896d0c1b27feadaa8e946db9a104806",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m334_starmon/sub/cell_011"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9bd841ddecaf2b4af2442b127c0a31412d8d984e05b176366e09ea5478df43e3",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:ebf8c67a000aa6a3",
+      "sourceRgbaSha256": "ea7671f946ac2d5c6adc525567bac185c6278c9aaa39359c8122d43aa980dfe0",
+      "sourceSize": [
+        224,
+        208
+      ],
+      "texture": "m334_starmon/sub/cell_012"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "7b9d0fc0c9a5355d936b5440c256970520d3979dd3a5a345f75e9762fae85e78",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:c8f9c1ea26d0ce3b",
+      "sourceRgbaSha256": "ea5eda69886b55f6c2548b95862962cbbd3cfbed966bdb331ace6ee88bb31faa",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m334_starmon/sub/cell_013"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "bf8c6f1c67df253262b319b0bce9e0a457deb556cd90b3027995f6500b414908",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:b9e4d5c2a547f3f7",
+      "sourceRgbaSha256": "730f9b876a565862f5942130fde6440cdc79f7de0ebd996004f3222176a6afd7",
+      "sourceSize": [
+        192,
+        184
+      ],
+      "texture": "m334_starmon/sub/cell_014"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "ca90ac4967a7247e1f02fb28149797bfdc78645148814128d6290144d5d109bd",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:1cd059a7814cda20",
+      "sourceRgbaSha256": "252a86259648c3759095539e36432a2ee1d471751ab253b4af2054194768d88c",
+      "sourceSize": [
+        176,
+        200
+      ],
+      "texture": "m334_starmon/sub/cell_015"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "c17bfdb82869a4165e1801b873f8907fc24ef4449a44711d8e23f89f7eec78ea",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:6f036920d9e1ac6d",
+      "sourceRgbaSha256": "bbe1622e4a662aae866d626f163a9d4b6271dbd1158c1706714801a8e99be7d1",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m334_starmon/sub/cell_016"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "127f417693239c9f9a4d832330515eb59ace08493a270ce6807f8275276f24e5",
+      "isBlank": false,
+      "masterId": "m334_starmon:master:7460090a4806384e",
+      "sourceRgbaSha256": "3cd291bfdda6a9446b6b4348fc4a2b53ae923750b16c69835b0e4a90bb30bfae",
+      "sourceSize": [
+        216,
+        88
+      ],
+      "texture": "m334_starmon/sub/cell_017"
+    }
+  ]
+}

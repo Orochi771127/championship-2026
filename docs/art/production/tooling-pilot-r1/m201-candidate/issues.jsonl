@@ -1,0 +1,4 @@
+{"id":"M201-PROXY-001","severity":"medium","status":"OPEN_REVIEW","issue":"No downloaded mesh or rig was inspected; stock quadruped anatomy does not establish M201 biped pose fidelity."}
+{"id":"M201-POSE-002","severity":"high","status":"KNOWN_SOURCE_TRAP","issue":"Old generic 08 conversion and seed high-risk semantic labels are not reliable for 023/056/062; transfer-aware external guides and raw IDs are required."}
+{"id":"M201-ART-003","severity":"medium","status":"EXPLICIT_GAP","issue":"Current r02 lacks authored 056 and 062; proxy/source reference must not be counted as pixel authoring."}
+{"id":"M201-ORIGIN-004","severity":"medium","status":"EXPLICIT_LIMIT","issue":"Guide origin is NCER source origin, not proven ground; 464x368 proposal is not runtime export approval."}

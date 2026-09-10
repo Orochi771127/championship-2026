@@ -1,0 +1,7760 @@
+{
+  "cells": [
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        0,
+        0
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 228,
+        "w": 204,
+        "x": 90,
+        "y": 92
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-000.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": true,
+      "inferredCurrentSourceOrigin": [
+        198,
+        284
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 235,
+          "rawAttr1": 16880,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 33003,
+          "rawAttr1": 0,
+          "rawAttr2": 2,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 2,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 496,
+          "rawAttr2": 3,
+          "tileIndex": 3,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -5
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 3,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 251,
+          "rawAttr1": 0,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 228,
+        "w": 204,
+        "x": 280,
+        "y": 172
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -9,
+        -16,
+        8,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 0,
+        "transferSizeBytes": 320
+      },
+      "texture": "m333_scumon/main/cell_000"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        6,
+        0
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 216,
+        "w": 216,
+        "x": 84,
+        "y": 104
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-001.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        204,
+        284
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 235,
+          "rawAttr1": 16880,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 33003,
+          "rawAttr1": 0,
+          "rawAttr2": 2,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 2,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 496,
+          "rawAttr2": 3,
+          "tileIndex": 3,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -5
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 3,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 251,
+          "rawAttr1": 0,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 216,
+        "w": 216,
+        "x": 268,
+        "y": 184
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -10,
+        -15,
+        8,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 320,
+        "transferSizeBytes": 320
+      },
+      "texture": "m333_scumon/main/cell_001"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 128,
+        "w": 192,
+        "x": 96,
+        "y": 192
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-002.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16627,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -13
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 192,
+        "w": 288,
+        "x": 244,
+        "y": 208
+      },
+      "rawCellAttribute": 2054,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -13
+      },
+      "signedSourceAlphaBounds": [
+        -12,
+        -13,
+        12,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 640,
+        "transferSizeBytes": 256
+      },
+      "texture": "m333_scumon/main/cell_002"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 112,
+        "w": 192,
+        "x": 96,
+        "y": 208
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-003.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16627,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -13
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 168,
+        "w": 288,
+        "x": 244,
+        "y": 232
+      },
+      "rawCellAttribute": 2054,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -13
+      },
+      "signedSourceAlphaBounds": [
+        -12,
+        -11,
+        12,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 896,
+        "transferSizeBytes": 256
+      },
+      "texture": "m333_scumon/main/cell_003"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -2,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 144,
+        "w": 152,
+        "x": 116,
+        "y": 176
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-004.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        196,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 216,
+        "w": 228,
+        "x": 268,
+        "y": 184
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -10,
+        -15,
+        9,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 1152,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_004"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        44
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 136,
+        "w": 144,
+        "x": 120,
+        "y": 184
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-005.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        328
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 204,
+        "w": 216,
+        "x": 280,
+        "y": 148
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -9,
+        -18,
+        9,
+        -1
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 1536,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_005"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -2,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 144,
+        "w": 152,
+        "x": 116,
+        "y": 176
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-006.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        196,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 216,
+        "w": 228,
+        "x": 268,
+        "y": 184
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -10,
+        -15,
+        9,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 1152,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_006"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        44
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 136,
+        "w": 144,
+        "x": 120,
+        "y": 184
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-007.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        328
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 204,
+        "w": 216,
+        "x": 280,
+        "y": 148
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -9,
+        -18,
+        9,
+        -1
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 1536,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_007"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        20
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 200,
+        "w": 176,
+        "x": 104,
+        "y": 120
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-008.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        304
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 227,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -29
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 300,
+        "w": 264,
+        "x": 256,
+        "y": 88
+      },
+      "rawCellAttribute": 2058,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -29
+      },
+      "signedSourceAlphaBounds": [
+        -11,
+        -23,
+        11,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 1920,
+        "transferSizeBytes": 512
+      },
+      "texture": "m333_scumon/main/cell_008"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -10,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 176,
+        "w": 184,
+        "x": 100,
+        "y": 144
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-009.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        188,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 264,
+        "w": 276,
+        "x": 256,
+        "y": 136
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -11,
+        -19,
+        12,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 2432,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_009"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -106,
+        68
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 168,
+        "w": 216,
+        "x": 84,
+        "y": 152
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-010.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        92,
+        352
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 227,
+          "rawAttr1": 33272,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -8,
+          "y": -29
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 32995,
+          "rawAttr1": 16408,
+          "rawAttr2": 8,
+          "tileIndex": 8,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 24,
+          "y": -29
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 252,
+        "w": 324,
+        "x": 376,
+        "y": 64
+      },
+      "rawCellAttribute": 2060,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 32,
+        "maxYExclusive": 3,
+        "minX": -8,
+        "minY": -29
+      },
+      "signedSourceAlphaBounds": [
+        -1,
+        -25,
+        26,
+        -4
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 2816,
+        "transferSizeBytes": 640
+      },
+      "texture": "m333_scumon/main/cell_010"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -34,
+        28
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 160,
+        "w": 200,
+        "x": 92,
+        "y": 160
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-011.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        164,
+        312
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 240,
+        "w": 300,
+        "x": 280,
+        "y": 136
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -9,
+        -19,
+        16,
+        1
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 3456,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_011"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        66,
+        28
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 152,
+        "w": 224,
+        "x": 80,
+        "y": 168
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-012.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        264,
+        312
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33256,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -24,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16872,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -24,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 228,
+        "w": 336,
+        "x": 112,
+        "y": 148
+      },
+      "rawCellAttribute": 2057,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -24,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -23,
+        -18,
+        5,
+        1
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 3840,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_012"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -48,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 276,
+        "w": 228,
+        "x": 78,
+        "y": 44
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-013.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        150,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 235,
+          "rawAttr1": 16888,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 33003,
+          "rawAttr1": 8,
+          "rawAttr2": 2,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 8,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 2,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 504,
+          "rawAttr2": 3,
+          "tileIndex": 3,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -5
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 3,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 251,
+          "rawAttr1": 8,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 8,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 276,
+        "w": 228,
+        "x": 316,
+        "y": 112
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -8,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -6,
+        -21,
+        13,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 4224,
+        "transferSizeBytes": 320
+      },
+      "texture": "m333_scumon/main/cell_013"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        114,
+        28
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 184,
+        "w": 256,
+        "x": 64,
+        "y": 136
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-014.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        312,
+        312
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 227,
+          "rawAttr1": 33248,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -32,
+          "y": -29
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 32995,
+          "rawAttr1": 16384,
+          "rawAttr2": 8,
+          "tileIndex": 8,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -29
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 276,
+        "w": 384,
+        "x": 16,
+        "y": 100
+      },
+      "rawCellAttribute": 2060,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -32,
+        "minY": -29
+      },
+      "signedSourceAlphaBounds": [
+        -31,
+        -22,
+        1,
+        1
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 4544,
+        "transferSizeBytes": 640
+      },
+      "texture": "m333_scumon/main/cell_014"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -34,
+        28
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 160,
+        "w": 200,
+        "x": 92,
+        "y": 160
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-015.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        164,
+        312
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 240,
+        "w": 300,
+        "x": 280,
+        "y": 136
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -9,
+        -19,
+        16,
+        1
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 3456,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_015"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        66,
+        28
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 152,
+        "w": 224,
+        "x": 80,
+        "y": 168
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-016.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        264,
+        312
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33256,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -24,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16872,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -24,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 228,
+        "w": 336,
+        "x": 112,
+        "y": 148
+      },
+      "rawCellAttribute": 2057,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -24,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -23,
+        -18,
+        5,
+        1
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 3840,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_016"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -48,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 276,
+        "w": 228,
+        "x": 78,
+        "y": 44
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-017.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        150,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 235,
+          "rawAttr1": 16888,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 33003,
+          "rawAttr1": 8,
+          "rawAttr2": 2,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 8,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 2,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 504,
+          "rawAttr2": 3,
+          "tileIndex": 3,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -5
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 3,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 251,
+          "rawAttr1": 8,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 8,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 276,
+        "w": 228,
+        "x": 316,
+        "y": 112
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -8,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -6,
+        -21,
+        13,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 4224,
+        "transferSizeBytes": 320
+      },
+      "texture": "m333_scumon/main/cell_017"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        20
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 200,
+        "w": 176,
+        "x": 104,
+        "y": 120
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-018.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        304
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 227,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -29
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 300,
+        "w": 264,
+        "x": 256,
+        "y": 88
+      },
+      "rawCellAttribute": 2058,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -29
+      },
+      "signedSourceAlphaBounds": [
+        -11,
+        -23,
+        11,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 1920,
+        "transferSizeBytes": 512
+      },
+      "texture": "m333_scumon/main/cell_018"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -10,
+        92
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 176,
+        "w": 200,
+        "x": 92,
+        "y": 144
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-019.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        188,
+        376
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16611,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -29
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16627,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -13
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 264,
+        "w": 300,
+        "x": 244,
+        "y": 16
+      },
+      "rawCellAttribute": 2058,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": -5,
+        "minX": -16,
+        "minY": -29
+      },
+      "signedSourceAlphaBounds": [
+        -12,
+        -29,
+        13,
+        -7
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 5184,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_019"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -2,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 144,
+        "w": 152,
+        "x": 116,
+        "y": 176
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-020.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        196,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 216,
+        "w": 228,
+        "x": 268,
+        "y": 184
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -10,
+        -15,
+        9,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 5568,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_020"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        52
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 136,
+        "w": 144,
+        "x": 120,
+        "y": 184
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-021.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        336
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 204,
+        "w": 216,
+        "x": 280,
+        "y": 136
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -9,
+        -19,
+        9,
+        -2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 5952,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_021"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        58,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 120,
+        "w": 176,
+        "x": 104,
+        "y": 200
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-022.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        256,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16627,
+          "rawAttr1": 33256,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -24,
+          "y": -13
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 180,
+        "w": 264,
+        "x": 160,
+        "y": 220
+      },
+      "rawCellAttribute": 2057,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -24,
+        "minY": -13
+      },
+      "signedSourceAlphaBounds": [
+        -19,
+        -12,
+        3,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 6336,
+        "transferSizeBytes": 256
+      },
+      "texture": "m333_scumon/main/cell_022"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -2,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 160,
+        "w": 152,
+        "x": 116,
+        "y": 160
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-023.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        196,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 240,
+        "w": 228,
+        "x": 268,
+        "y": 160
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -10,
+        -17,
+        9,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 6592,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_023"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        0,
+        0
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 204,
+        "w": 204,
+        "x": 90,
+        "y": 116
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-024.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        198,
+        284
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 235,
+          "rawAttr1": 16880,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 33003,
+          "rawAttr1": 0,
+          "rawAttr2": 2,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 2,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 496,
+          "rawAttr2": 3,
+          "tileIndex": 3,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -5
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 3,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 251,
+          "rawAttr1": 0,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 204,
+        "w": 204,
+        "x": 280,
+        "y": 196
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -9,
+        -14,
+        8,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 6976,
+        "transferSizeBytes": 320
+      },
+      "texture": "m333_scumon/main/cell_024"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        58,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 120,
+        "w": 176,
+        "x": 104,
+        "y": 200
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-025.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        256,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16627,
+          "rawAttr1": 33256,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -24,
+          "y": -13
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 180,
+        "w": 264,
+        "x": 160,
+        "y": 220
+      },
+      "rawCellAttribute": 2057,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -24,
+        "minY": -13
+      },
+      "signedSourceAlphaBounds": [
+        -19,
+        -12,
+        3,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 6336,
+        "transferSizeBytes": 256
+      },
+      "texture": "m333_scumon/main/cell_025"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 160,
+        "w": 160,
+        "x": 112,
+        "y": 160
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-026.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 240,
+        "w": 240,
+        "x": 268,
+        "y": 160
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -10,
+        -17,
+        10,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 7296,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_026"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -10,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 152,
+        "w": 152,
+        "x": 116,
+        "y": 168
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-027.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        188,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 228,
+        "w": 228,
+        "x": 280,
+        "y": 172
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -9,
+        -16,
+        10,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 7680,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_027"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -10,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 128,
+        "w": 152,
+        "x": 116,
+        "y": 192
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-028.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        188,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16627,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -13
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 192,
+        "w": 228,
+        "x": 280,
+        "y": 208
+      },
+      "rawCellAttribute": 2054,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -13
+      },
+      "signedSourceAlphaBounds": [
+        -9,
+        -13,
+        10,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 8064,
+        "transferSizeBytes": 256
+      },
+      "texture": "m333_scumon/main/cell_028"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -10,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 112,
+        "w": 168,
+        "x": 108,
+        "y": 208
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-029.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        188,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16627,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -13
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 168,
+        "w": 252,
+        "x": 268,
+        "y": 232
+      },
+      "rawCellAttribute": 2054,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -13
+      },
+      "signedSourceAlphaBounds": [
+        -10,
+        -11,
+        11,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 8320,
+        "transferSizeBytes": 256
+      },
+      "texture": "m333_scumon/main/cell_029"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -18,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 228,
+        "w": 216,
+        "x": 84,
+        "y": 92
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-030.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        180,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 235,
+          "rawAttr1": 16888,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 504,
+          "rawAttr2": 2,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -5
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 2,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 251,
+          "rawAttr1": 8,
+          "rawAttr2": 3,
+          "tileIndex": 3,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 8,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 228,
+        "w": 216,
+        "x": 292,
+        "y": 160
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -8,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -8,
+        -17,
+        10,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 8576,
+        "transferSizeBytes": 256
+      },
+      "texture": "m333_scumon/main/cell_030"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        48
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 228,
+        "w": 192,
+        "x": 96,
+        "y": 92
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-031.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        332
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 235,
+          "rawAttr1": 16888,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 504,
+          "rawAttr2": 2,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 228,
+        "w": 192,
+        "x": 292,
+        "y": 124
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -8,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -8,
+        -20,
+        8,
+        -1
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 8832,
+        "transferSizeBytes": 192
+      },
+      "texture": "m333_scumon/main/cell_031"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -18,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 228,
+        "w": 216,
+        "x": 84,
+        "y": 92
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-032.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        180,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 235,
+          "rawAttr1": 16888,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 504,
+          "rawAttr2": 2,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -5
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 2,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 251,
+          "rawAttr1": 8,
+          "rawAttr2": 3,
+          "tileIndex": 3,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 8,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 228,
+        "w": 216,
+        "x": 292,
+        "y": 160
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -8,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -8,
+        -17,
+        10,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 8576,
+        "transferSizeBytes": 256
+      },
+      "texture": "m333_scumon/main/cell_032"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        48
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 228,
+        "w": 192,
+        "x": 96,
+        "y": 92
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-033.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        332
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 235,
+          "rawAttr1": 16888,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 504,
+          "rawAttr2": 2,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 228,
+        "w": 192,
+        "x": 292,
+        "y": 124
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -8,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -8,
+        -20,
+        8,
+        -1
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 8832,
+        "transferSizeBytes": 192
+      },
+      "texture": "m333_scumon/main/cell_033"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -10,
+        20
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 176,
+        "w": 152,
+        "x": 116,
+        "y": 144
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-034.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        188,
+        304
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 264,
+        "w": 228,
+        "x": 280,
+        "y": 124
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -9,
+        -20,
+        10,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 9024,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_034"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -10,
+        20
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 176,
+        "w": 152,
+        "x": 116,
+        "y": 144
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-035.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        188,
+        304
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 264,
+        "w": 228,
+        "x": 280,
+        "y": 124
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -9,
+        -20,
+        10,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 9024,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_035"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        100
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 136,
+        "w": 160,
+        "x": 112,
+        "y": 184
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-036.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        384
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16611,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -29
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16627,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -13
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 204,
+        "w": 240,
+        "x": 268,
+        "y": 64
+      },
+      "rawCellAttribute": 2058,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": -5,
+        "minX": -16,
+        "minY": -29
+      },
+      "signedSourceAlphaBounds": [
+        -10,
+        -25,
+        10,
+        -8
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 9408,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_036"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -18,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 228,
+        "w": 216,
+        "x": 84,
+        "y": 92
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-037.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        180,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 235,
+          "rawAttr1": 16888,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 504,
+          "rawAttr2": 2,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -5
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 2,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 251,
+          "rawAttr1": 8,
+          "rawAttr2": 3,
+          "tileIndex": 3,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 8,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 228,
+        "w": 216,
+        "x": 292,
+        "y": 160
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -8,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -8,
+        -17,
+        10,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 9792,
+        "transferSizeBytes": 256
+      },
+      "texture": "m333_scumon/main/cell_037"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        48
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 228,
+        "w": 192,
+        "x": 96,
+        "y": 92
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-038.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        332
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 235,
+          "rawAttr1": 16888,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 504,
+          "rawAttr2": 2,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 228,
+        "w": 192,
+        "x": 292,
+        "y": 124
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -8,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -8,
+        -20,
+        8,
+        -1
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 10048,
+        "transferSizeBytes": 192
+      },
+      "texture": "m333_scumon/main/cell_038"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        54,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 168,
+        "w": 240,
+        "x": 72,
+        "y": 152
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-039.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        252,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 243,
+          "rawAttr1": 16880,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -13
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 33011,
+          "rawAttr1": 0,
+          "rawAttr2": 2,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -13
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 168,
+        "w": 240,
+        "x": 208,
+        "y": 220
+      },
+      "rawCellAttribute": 2054,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -13
+      },
+      "signedSourceAlphaBounds": [
+        -15,
+        -12,
+        5,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 10240,
+        "transferSizeBytes": 192
+      },
+      "texture": "m333_scumon/main/cell_039"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -10,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 176,
+        "w": 152,
+        "x": 116,
+        "y": 144
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-040.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        188,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 264,
+        "w": 228,
+        "x": 280,
+        "y": 136
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -9,
+        -19,
+        10,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 10432,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_040"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -10,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 152,
+        "w": 152,
+        "x": 116,
+        "y": 168
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-041.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        188,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 228,
+        "w": 228,
+        "x": 280,
+        "y": 172
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -9,
+        -16,
+        10,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 7680,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_041"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        54,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 168,
+        "w": 240,
+        "x": 72,
+        "y": 152
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-042.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        252,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 243,
+          "rawAttr1": 16880,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -13
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 33011,
+          "rawAttr1": 0,
+          "rawAttr2": 2,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -13
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 168,
+        "w": 240,
+        "x": 208,
+        "y": 220
+      },
+      "rawCellAttribute": 2054,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -13
+      },
+      "signedSourceAlphaBounds": [
+        -15,
+        -12,
+        5,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 10240,
+        "transferSizeBytes": 192
+      },
+      "texture": "m333_scumon/main/cell_042"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        20
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 200,
+        "w": 176,
+        "x": 104,
+        "y": 120
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-043.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        304
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 1,
+          "priority": 0,
+          "rawAttr0": 227,
+          "rawAttr1": 33264,
+          "rawAttr2": 4096,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -29
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 300,
+        "w": 264,
+        "x": 256,
+        "y": 88
+      },
+      "rawCellAttribute": 2058,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -29
+      },
+      "signedSourceAlphaBounds": [
+        -11,
+        -23,
+        11,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 10816,
+        "transferSizeBytes": 512
+      },
+      "texture": "m333_scumon/main/cell_043"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        20
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 200,
+        "w": 176,
+        "x": 104,
+        "y": 120
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-044.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        304
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 2,
+          "priority": 0,
+          "rawAttr0": 227,
+          "rawAttr1": 33264,
+          "rawAttr2": 8192,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -29
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 300,
+        "w": 264,
+        "x": 256,
+        "y": 88
+      },
+      "rawCellAttribute": 2058,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -29
+      },
+      "signedSourceAlphaBounds": [
+        -11,
+        -23,
+        11,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 11328,
+        "transferSizeBytes": 512
+      },
+      "texture": "m333_scumon/main/cell_044"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        0,
+        0
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 228,
+        "w": 204,
+        "x": 90,
+        "y": 92
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-045.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        198,
+        284
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 2,
+          "priority": 0,
+          "rawAttr0": 235,
+          "rawAttr1": 16880,
+          "rawAttr2": 8192,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 2,
+          "priority": 0,
+          "rawAttr0": 33003,
+          "rawAttr1": 0,
+          "rawAttr2": 8194,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 2,
+          "paletteBank": 2,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 496,
+          "rawAttr2": 8195,
+          "tileIndex": 3,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -5
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 3,
+          "paletteBank": 2,
+          "priority": 0,
+          "rawAttr0": 251,
+          "rawAttr1": 0,
+          "rawAttr2": 8196,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 228,
+        "w": 204,
+        "x": 280,
+        "y": 172
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -9,
+        -16,
+        8,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 11840,
+        "transferSizeBytes": 320
+      },
+      "texture": "m333_scumon/main/cell_045"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        6,
+        0
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 216,
+        "w": 216,
+        "x": 84,
+        "y": 104
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-046.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        204,
+        284
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 235,
+          "rawAttr1": 16880,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 33003,
+          "rawAttr1": 0,
+          "rawAttr2": 2,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 2,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 496,
+          "rawAttr2": 3,
+          "tileIndex": 3,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -5
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 3,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 251,
+          "rawAttr1": 0,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 216,
+        "w": 216,
+        "x": 268,
+        "y": 184
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -10,
+        -15,
+        8,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 320,
+        "transferSizeBytes": 320
+      },
+      "texture": "m333_scumon/main/cell_046"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -2,
+        20
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 160,
+        "w": 152,
+        "x": 116,
+        "y": 160
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-047.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        196,
+        304
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 240,
+        "w": 228,
+        "x": 268,
+        "y": 148
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -10,
+        -18,
+        9,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 12160,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_047"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -2,
+        20
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 160,
+        "w": 152,
+        "x": 116,
+        "y": 160
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-048.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        196,
+        304
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 240,
+        "w": 228,
+        "x": 268,
+        "y": 148
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -10,
+        -18,
+        9,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 12544,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_048"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -14,
+        44
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 200,
+        "w": 176,
+        "x": 104,
+        "y": 120
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-049.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        184,
+        328
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 227,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -29
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 300,
+        "w": 264,
+        "x": 268,
+        "y": 52
+      },
+      "rawCellAttribute": 2058,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -29
+      },
+      "signedSourceAlphaBounds": [
+        -10,
+        -26,
+        12,
+        -1
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 12928,
+        "transferSizeBytes": 512
+      },
+      "texture": "m333_scumon/main/cell_049"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        0,
+        0
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 204,
+        "w": 204,
+        "x": 90,
+        "y": 116
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-050.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        198,
+        284
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 235,
+          "rawAttr1": 16880,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 33003,
+          "rawAttr1": 0,
+          "rawAttr2": 2,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 2,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 496,
+          "rawAttr2": 3,
+          "tileIndex": 3,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -5
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 3,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 251,
+          "rawAttr1": 0,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 204,
+        "w": 204,
+        "x": 280,
+        "y": 196
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -9,
+        -14,
+        8,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 6976,
+        "transferSizeBytes": 320
+      },
+      "texture": "m333_scumon/main/cell_050"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -2,
+        68
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 192,
+        "w": 200,
+        "x": 92,
+        "y": 128
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-051.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        196,
+        352
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 227,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -29
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 288,
+        "w": 300,
+        "x": 232,
+        "y": 28
+      },
+      "rawCellAttribute": 2058,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -29
+      },
+      "signedSourceAlphaBounds": [
+        -13,
+        -28,
+        12,
+        -4
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 13440,
+        "transferSizeBytes": 512
+      },
+      "texture": "m333_scumon/main/cell_051"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        0
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 216,
+        "w": 192,
+        "x": 96,
+        "y": 104
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-052.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        284
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 235,
+          "rawAttr1": 16888,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 504,
+          "rawAttr2": 2,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 216,
+        "w": 192,
+        "x": 292,
+        "y": 184
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -8,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -8,
+        -15,
+        8,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 13952,
+        "transferSizeBytes": 192
+      },
+      "texture": "m333_scumon/main/cell_052"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        50,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 120,
+        "w": 192,
+        "x": 96,
+        "y": 200
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-053.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        248,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16627,
+          "rawAttr1": 33256,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -24,
+          "y": -13
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 180,
+        "w": 288,
+        "x": 160,
+        "y": 220
+      },
+      "rawCellAttribute": 2057,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -24,
+        "minY": -13
+      },
+      "signedSourceAlphaBounds": [
+        -19,
+        -12,
+        5,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 14144,
+        "transferSizeBytes": 256
+      },
+      "texture": "m333_scumon/main/cell_053"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -2,
+        20
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 160,
+        "w": 152,
+        "x": 116,
+        "y": 160
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-054.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        196,
+        304
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 240,
+        "w": 228,
+        "x": 268,
+        "y": 148
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -10,
+        -18,
+        9,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 12544,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_054"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -14,
+        44
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 200,
+        "w": 176,
+        "x": 104,
+        "y": 120
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-055.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        184,
+        328
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 227,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -29
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 300,
+        "w": 264,
+        "x": 268,
+        "y": 52
+      },
+      "rawCellAttribute": 2058,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -29
+      },
+      "signedSourceAlphaBounds": [
+        -10,
+        -26,
+        12,
+        -1
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 12928,
+        "transferSizeBytes": 512
+      },
+      "texture": "m333_scumon/main/cell_055"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        0
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 216,
+        "w": 192,
+        "x": 96,
+        "y": 104
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-056.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        284
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 235,
+          "rawAttr1": 16888,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 504,
+          "rawAttr2": 2,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 216,
+        "w": 192,
+        "x": 292,
+        "y": 184
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -8,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -8,
+        -15,
+        8,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 13952,
+        "transferSizeBytes": 192
+      },
+      "texture": "m333_scumon/main/cell_056"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        20
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 200,
+        "w": 176,
+        "x": 104,
+        "y": 120
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-057.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        304
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 227,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -29
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 300,
+        "w": 264,
+        "x": 256,
+        "y": 88
+      },
+      "rawCellAttribute": 2058,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -29
+      },
+      "signedSourceAlphaBounds": [
+        -11,
+        -23,
+        11,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 1920,
+        "transferSizeBytes": 512
+      },
+      "texture": "m333_scumon/main/cell_057"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -106,
+        68
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 168,
+        "w": 216,
+        "x": 84,
+        "y": 152
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-058.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        92,
+        352
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 1,
+          "priority": 0,
+          "rawAttr0": 227,
+          "rawAttr1": 33272,
+          "rawAttr2": 4096,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -8,
+          "y": -29
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 1,
+          "priority": 0,
+          "rawAttr0": 32995,
+          "rawAttr1": 16408,
+          "rawAttr2": 4104,
+          "tileIndex": 8,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 24,
+          "y": -29
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 252,
+        "w": 324,
+        "x": 376,
+        "y": 64
+      },
+      "rawCellAttribute": 2060,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 32,
+        "maxYExclusive": 3,
+        "minX": -8,
+        "minY": -29
+      },
+      "signedSourceAlphaBounds": [
+        -1,
+        -25,
+        26,
+        -4
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 14400,
+        "transferSizeBytes": 640
+      },
+      "texture": "m333_scumon/main/cell_058"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -138,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 176,
+        "w": 184,
+        "x": 100,
+        "y": 144
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-059.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        60,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16619,
+          "rawAttr1": 32768,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": 0,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 16384,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": 0,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 264,
+        "w": 276,
+        "x": 448,
+        "y": 136
+      },
+      "rawCellAttribute": 2060,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 32,
+        "maxYExclusive": 3,
+        "minX": 0,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        5,
+        -19,
+        28,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 2432,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/main/cell_059"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        6,
+        -20
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 168,
+        "w": 216,
+        "x": 84,
+        "y": 152
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-060.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        204,
+        264
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 238,
+          "rawAttr1": 33258,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -22,
+          "y": -18
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 33006,
+          "rawAttr1": 16394,
+          "rawAttr2": 8,
+          "tileIndex": 8,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 10,
+          "y": -18
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 252,
+        "w": 324,
+        "x": 208,
+        "y": 196
+      },
+      "rawCellAttribute": 2056,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 18,
+        "maxYExclusive": 14,
+        "minX": -22,
+        "minY": -18
+      },
+      "signedSourceAlphaBounds": [
+        -15,
+        -14,
+        12,
+        7
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 2816,
+        "transferSizeBytes": 640
+      },
+      "texture": "m333_scumon/main/cell_060"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        0,
+        0
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 228,
+        "w": 204,
+        "x": 90,
+        "y": 92
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_main/cells/cell-061.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        198,
+        284
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 2,
+          "priority": 0,
+          "rawAttr0": 235,
+          "rawAttr1": 16880,
+          "rawAttr2": 8192,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 2,
+          "priority": 0,
+          "rawAttr0": 33003,
+          "rawAttr1": 0,
+          "rawAttr2": 8194,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 2,
+          "paletteBank": 2,
+          "priority": 0,
+          "rawAttr0": 16635,
+          "rawAttr1": 496,
+          "rawAttr2": 8195,
+          "tileIndex": 3,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -5
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 3,
+          "paletteBank": 2,
+          "priority": 0,
+          "rawAttr0": 251,
+          "rawAttr1": 0,
+          "rawAttr2": 8196,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 228,
+        "w": 204,
+        "x": 280,
+        "y": 172
+      },
+      "rawCellAttribute": 2055,
+      "side": "main",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -9,
+        -16,
+        8,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 15040,
+        "transferSizeBytes": 320
+      },
+      "texture": "m333_scumon/main/cell_061"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        0,
+        0
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 228,
+        "w": 204,
+        "x": 90,
+        "y": 92
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_sub/cells/cell-000.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        198,
+        284
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 8427,
+          "rawAttr1": 16880,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 41195,
+          "rawAttr1": 0,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 2,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 24827,
+          "rawAttr1": 496,
+          "rawAttr2": 6,
+          "tileIndex": 6,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -5
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 3,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 8443,
+          "rawAttr1": 0,
+          "rawAttr2": 8,
+          "tileIndex": 8,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 228,
+        "w": 204,
+        "x": 280,
+        "y": 172
+      },
+      "rawCellAttribute": 2055,
+      "side": "sub",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -9,
+        -16,
+        8,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 8,
+        "layout": "TILED_NCGR",
+        "sourceOffsetBytes": 0,
+        "transferSizeBytes": 576
+      },
+      "texture": "m333_scumon/sub/cell_000"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        6,
+        0
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 216,
+        "w": 216,
+        "x": 84,
+        "y": 104
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_sub/cells/cell-001.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        204,
+        284
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 8427,
+          "rawAttr1": 16880,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 41195,
+          "rawAttr1": 0,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 2,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 24827,
+          "rawAttr1": 496,
+          "rawAttr2": 6,
+          "tileIndex": 6,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -5
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 3,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 8443,
+          "rawAttr1": 0,
+          "rawAttr2": 8,
+          "tileIndex": 8,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 216,
+        "w": 216,
+        "x": 268,
+        "y": 184
+      },
+      "rawCellAttribute": 2055,
+      "side": "sub",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -10,
+        -15,
+        8,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 8,
+        "layout": "TILED_NCGR",
+        "sourceOffsetBytes": 576,
+        "transferSizeBytes": 576
+      },
+      "texture": "m333_scumon/sub/cell_001"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 128,
+        "w": 192,
+        "x": 96,
+        "y": 192
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_sub/cells/cell-002.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 24819,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -13
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 192,
+        "w": 288,
+        "x": 244,
+        "y": 208
+      },
+      "rawCellAttribute": 2054,
+      "side": "sub",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -13
+      },
+      "signedSourceAlphaBounds": [
+        -12,
+        -13,
+        12,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 8,
+        "layout": "TILED_NCGR",
+        "sourceOffsetBytes": 1152,
+        "transferSizeBytes": 512
+      },
+      "texture": "m333_scumon/sub/cell_002"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 112,
+        "w": 192,
+        "x": 96,
+        "y": 208
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_sub/cells/cell-003.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 24819,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -13
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 168,
+        "w": 288,
+        "x": 244,
+        "y": 232
+      },
+      "rawCellAttribute": 2054,
+      "side": "sub",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -13
+      },
+      "signedSourceAlphaBounds": [
+        -12,
+        -11,
+        12,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 8,
+        "layout": "TILED_NCGR",
+        "sourceOffsetBytes": 1664,
+        "transferSizeBytes": 512
+      },
+      "texture": "m333_scumon/sub/cell_003"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -10,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 176,
+        "w": 184,
+        "x": 100,
+        "y": 144
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_sub/cells/cell-004.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        188,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 24811,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 24827,
+          "rawAttr1": 16880,
+          "rawAttr2": 8,
+          "tileIndex": 8,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 264,
+        "w": 276,
+        "x": 256,
+        "y": 136
+      },
+      "rawCellAttribute": 2055,
+      "side": "sub",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -11,
+        -19,
+        12,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 8,
+        "layout": "TILED_NCGR",
+        "sourceOffsetBytes": 2176,
+        "transferSizeBytes": 768
+      },
+      "texture": "m333_scumon/sub/cell_004"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -106,
+        68
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 168,
+        "w": 216,
+        "x": 84,
+        "y": 152
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_sub/cells/cell-005.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        92,
+        352
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 8419,
+          "rawAttr1": 33272,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -8,
+          "y": -29
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 41187,
+          "rawAttr1": 16408,
+          "rawAttr2": 16,
+          "tileIndex": 16,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 24,
+          "y": -29
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 252,
+        "w": 324,
+        "x": 376,
+        "y": 64
+      },
+      "rawCellAttribute": 2060,
+      "side": "sub",
+      "signedCellBounds": {
+        "maxXExclusive": 32,
+        "maxYExclusive": 3,
+        "minX": -8,
+        "minY": -29
+      },
+      "signedSourceAlphaBounds": [
+        -1,
+        -25,
+        26,
+        -4
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 8,
+        "layout": "TILED_NCGR",
+        "sourceOffsetBytes": 2944,
+        "transferSizeBytes": 1280
+      },
+      "texture": "m333_scumon/sub/cell_005"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        58,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 120,
+        "w": 176,
+        "x": 104,
+        "y": 200
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_sub/cells/cell-006.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        256,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 24819,
+          "rawAttr1": 33256,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -24,
+          "y": -13
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 180,
+        "w": 264,
+        "x": 160,
+        "y": 220
+      },
+      "rawCellAttribute": 2057,
+      "side": "sub",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -24,
+        "minY": -13
+      },
+      "signedSourceAlphaBounds": [
+        -19,
+        -12,
+        3,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 8,
+        "layout": "TILED_NCGR",
+        "sourceOffsetBytes": 4224,
+        "transferSizeBytes": 512
+      },
+      "texture": "m333_scumon/sub/cell_006"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        58,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 120,
+        "w": 176,
+        "x": 104,
+        "y": 200
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_sub/cells/cell-007.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        256,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 24819,
+          "rawAttr1": 33256,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -24,
+          "y": -13
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 180,
+        "w": 264,
+        "x": 160,
+        "y": 220
+      },
+      "rawCellAttribute": 2057,
+      "side": "sub",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -24,
+        "minY": -13
+      },
+      "signedSourceAlphaBounds": [
+        -19,
+        -12,
+        3,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 8,
+        "layout": "TILED_NCGR",
+        "sourceOffsetBytes": 4224,
+        "transferSizeBytes": 512
+      },
+      "texture": "m333_scumon/sub/cell_007"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        0,
+        0
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 228,
+        "w": 204,
+        "x": 90,
+        "y": 92
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_sub/cells/cell-008.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        198,
+        284
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 8427,
+          "rawAttr1": 16880,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 41195,
+          "rawAttr1": 0,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 2,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 24827,
+          "rawAttr1": 496,
+          "rawAttr2": 6,
+          "tileIndex": 6,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -5
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 3,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 8443,
+          "rawAttr1": 0,
+          "rawAttr2": 8,
+          "tileIndex": 8,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 228,
+        "w": 204,
+        "x": 280,
+        "y": 172
+      },
+      "rawCellAttribute": 2055,
+      "side": "sub",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -9,
+        -16,
+        8,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 8,
+        "layout": "TILED_NCGR",
+        "sourceOffsetBytes": 4736,
+        "transferSizeBytes": 576
+      },
+      "texture": "m333_scumon/sub/cell_008"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        6,
+        0
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 216,
+        "w": 216,
+        "x": 84,
+        "y": 104
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_sub/cells/cell-009.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        204,
+        284
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 8427,
+          "rawAttr1": 16880,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 41195,
+          "rawAttr1": 0,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 2,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 24827,
+          "rawAttr1": 496,
+          "rawAttr2": 6,
+          "tileIndex": 6,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -5
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 3,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 8443,
+          "rawAttr1": 0,
+          "rawAttr2": 8,
+          "tileIndex": 8,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 216,
+        "w": 216,
+        "x": 268,
+        "y": 184
+      },
+      "rawCellAttribute": 2055,
+      "side": "sub",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -10,
+        -15,
+        8,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 8,
+        "layout": "TILED_NCGR",
+        "sourceOffsetBytes": 576,
+        "transferSizeBytes": 576
+      },
+      "texture": "m333_scumon/sub/cell_009"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -2,
+        20
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 160,
+        "w": 152,
+        "x": 116,
+        "y": 160
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_sub/cells/cell-010.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        196,
+        304
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 24811,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 24827,
+          "rawAttr1": 16880,
+          "rawAttr2": 8,
+          "tileIndex": 8,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 240,
+        "w": 228,
+        "x": 268,
+        "y": 148
+      },
+      "rawCellAttribute": 2055,
+      "side": "sub",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -10,
+        -18,
+        9,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 8,
+        "layout": "TILED_NCGR",
+        "sourceOffsetBytes": 5312,
+        "transferSizeBytes": 768
+      },
+      "texture": "m333_scumon/sub/cell_010"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -2,
+        20
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 160,
+        "w": 152,
+        "x": 116,
+        "y": 160
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_sub/cells/cell-011.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        196,
+        304
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 24811,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 24827,
+          "rawAttr1": 16880,
+          "rawAttr2": 8,
+          "tileIndex": 8,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 240,
+        "w": 228,
+        "x": 268,
+        "y": 148
+      },
+      "rawCellAttribute": 2055,
+      "side": "sub",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -10,
+        -18,
+        9,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 8,
+        "layout": "TILED_NCGR",
+        "sourceOffsetBytes": 6080,
+        "transferSizeBytes": 768
+      },
+      "texture": "m333_scumon/sub/cell_011"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -14,
+        44
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 200,
+        "w": 176,
+        "x": 104,
+        "y": 120
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_sub/cells/cell-012.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        184,
+        328
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 8419,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -29
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 300,
+        "w": 264,
+        "x": 268,
+        "y": 52
+      },
+      "rawCellAttribute": 2058,
+      "side": "sub",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -29
+      },
+      "signedSourceAlphaBounds": [
+        -10,
+        -26,
+        12,
+        -1
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 8,
+        "layout": "TILED_NCGR",
+        "sourceOffsetBytes": 6848,
+        "transferSizeBytes": 1024
+      },
+      "texture": "m333_scumon/sub/cell_012"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        0,
+        0
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 204,
+        "w": 204,
+        "x": 90,
+        "y": 116
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_sub/cells/cell-013.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        198,
+        284
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 8427,
+          "rawAttr1": 16880,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 41195,
+          "rawAttr1": 0,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 2,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 24827,
+          "rawAttr1": 496,
+          "rawAttr2": 6,
+          "tileIndex": 6,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -16,
+          "y": -5
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 3,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 8443,
+          "rawAttr1": 0,
+          "rawAttr2": 8,
+          "tileIndex": 8,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 0,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 204,
+        "w": 204,
+        "x": 280,
+        "y": 196
+      },
+      "rawCellAttribute": 2055,
+      "side": "sub",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -9,
+        -14,
+        8,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 8,
+        "layout": "TILED_NCGR",
+        "sourceOffsetBytes": 7872,
+        "transferSizeBytes": 576
+      },
+      "texture": "m333_scumon/sub/cell_013"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -2,
+        68
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 192,
+        "w": 200,
+        "x": 92,
+        "y": 128
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_sub/cells/cell-014.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        196,
+        352
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 8419,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -29
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 288,
+        "w": 300,
+        "x": 232,
+        "y": 28
+      },
+      "rawCellAttribute": 2058,
+      "side": "sub",
+      "signedCellBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 3,
+        "minX": -16,
+        "minY": -29
+      },
+      "signedSourceAlphaBounds": [
+        -13,
+        -28,
+        12,
+        -4
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 8,
+        "layout": "TILED_NCGR",
+        "sourceOffsetBytes": 8448,
+        "transferSizeBytes": 1024
+      },
+      "texture": "m333_scumon/sub/cell_014"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -6,
+        0
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 216,
+        "w": 192,
+        "x": 96,
+        "y": 104
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_sub/cells/cell-015.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 12,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        192,
+        284
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 8427,
+          "rawAttr1": 16888,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 24827,
+          "rawAttr1": 504,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 16,
+          "x": -8,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 216,
+        "w": 192,
+        "x": 292,
+        "y": 184
+      },
+      "rawCellAttribute": 2055,
+      "side": "sub",
+      "signedCellBounds": {
+        "maxXExclusive": 8,
+        "maxYExclusive": 3,
+        "minX": -8,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        -8,
+        -15,
+        8,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 8,
+        "layout": "TILED_NCGR",
+        "sourceOffsetBytes": 9472,
+        "transferSizeBytes": 384
+      },
+      "texture": "m333_scumon/sub/cell_015"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -106,
+        68
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 168,
+        "w": 216,
+        "x": 84,
+        "y": 152
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_sub/cells/cell-016.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        92,
+        352
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 8419,
+          "rawAttr1": 33272,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -8,
+          "y": -29
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 32,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 41187,
+          "rawAttr1": 16408,
+          "rawAttr2": 16,
+          "tileIndex": 16,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 24,
+          "y": -29
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 252,
+        "w": 324,
+        "x": 376,
+        "y": 64
+      },
+      "rawCellAttribute": 2060,
+      "side": "sub",
+      "signedCellBounds": {
+        "maxXExclusive": 32,
+        "maxYExclusive": 3,
+        "minX": -8,
+        "minY": -29
+      },
+      "signedSourceAlphaBounds": [
+        -1,
+        -25,
+        26,
+        -4
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 8,
+        "layout": "TILED_NCGR",
+        "sourceOffsetBytes": 9856,
+        "transferSizeBytes": 1280
+      },
+      "texture": "m333_scumon/sub/cell_016"
+    },
+    {
+      "currentAnchor": {
+        "x": 0.5,
+        "y": 0.9090909090909091
+      },
+      "currentOriginDriftFromFirstNonblankOnSide": [
+        -138,
+        12
+      ],
+      "currentSourceSize": {
+        "h": 352,
+        "w": 384
+      },
+      "currentSpriteSourceSize": {
+        "h": 176,
+        "w": 184,
+        "x": 100,
+        "y": 144
+      },
+      "decodedPixelsMatchCurrent": true,
+      "decodedSource": "08_FULL_FAMILY_CONVERSION/digimon/m333_scumon_sub/cells/cell-017.png",
+      "effectClassification": "UNCLASSIFIED_REQUIRES_VISUAL_REVIEW",
+      "effectiveSourcePixelScale": 8,
+      "generic08PixelsMatchTransferAwareDecode": false,
+      "inferredCurrentSourceOrigin": [
+        60,
+        296
+      ],
+      "isBlank": false,
+      "landmarksStatus": "MANUAL_POSE_REVIEW_REQUIRED",
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 24811,
+          "rawAttr1": 32768,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": 0,
+          "y": -21
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 24827,
+          "rawAttr1": 16384,
+          "rawAttr2": 8,
+          "tileIndex": 8,
+          "verticalFlip": false,
+          "width": 32,
+          "x": 0,
+          "y": -5
+        }
+      ],
+      "proposedSpriteSourceSize": {
+        "h": 264,
+        "w": 276,
+        "x": 448,
+        "y": 136
+      },
+      "rawCellAttribute": 2060,
+      "side": "sub",
+      "signedCellBounds": {
+        "maxXExclusive": 32,
+        "maxYExclusive": 3,
+        "minX": 0,
+        "minY": -21
+      },
+      "signedSourceAlphaBounds": [
+        5,
+        -19,
+        28,
+        3
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 8,
+        "layout": "TILED_NCGR",
+        "sourceOffsetBytes": 2176,
+        "transferSizeBytes": 768
+      },
+      "texture": "m333_scumon/sub/cell_017"
+    }
+  ],
+  "classification": "RESEARCH_ONLY",
+  "entityId": "m333_scumon",
+  "exportProposal": {
+    "anchor": {
+      "x": 0.5243243243243243,
+      "y": 0.7844827586206896
+    },
+    "atlasMaximum": 2048,
+    "commonSourceOrigin": [
+      388,
+      364
+    ],
+    "currentEffectiveScalesBySide": {
+      "main": [
+        8,
+        12
+      ],
+      "sub": [
+        8,
+        12
+      ]
+    },
+    "formula": "logical = commonSourceOrigin + sourceCoordinate * sourcePixelScaleBySide[side]",
+    "groundOrEffectLandmarks": "UNKNOWN_REQUIRES_VISUAL_AND_RUNTIME_TRACE",
+    "logicalCanvas": [
+      740,
+      464
+    ],
+    "marginPixels": 16,
+    "runtimeCompatibility": "REQUIRES_SCENE_SCALE_AND_ANCHOR_QA_BEFORE_EXPORT",
+    "scaleReference": "m333_scumon/main/cell_000",
+    "sourcePixelScale": 12,
+    "sourcePixelScaleBySide": {
+      "main": 12,
+      "sub": 12
+    },
+    "status": "GEOMETRIC_PROPOSAL_NOT_APPROVED_EXPORT"
+  },
+  "pixelMismatchKeys": [],
+  "placementStatus": "CURRENT_ATLAS_RECENTERED",
+  "schemaVersion": 1,
+  "summary": {
+    "blankSlots": 0,
+    "currentOriginVariantCount": 27,
+    "designStatus": "AWAITING_TWO_OPTIONS",
+    "effectiveSourcePixelScales": [
+      8,
+      12
+    ],
+    "entityId": "m333_scumon",
+    "generic08RendererMismatchSlots": 79,
+    "kind": "digimon",
+    "motionContract": "entities/m333_scumon/motion-contract.json",
+    "motionContractSha256": "1c74a1745397f84ad632971da9429a9e5667bb7ce1d3b33bf9cfa4b73c6b78d6",
+    "nonUniformScaleSlots": 55,
+    "originChangedFromFirstNonblankSlots": 72,
+    "runtimeEligible": false,
+    "sequenceCount": 53,
+    "shippingReady": false,
+    "slotCount": 80,
+    "sourceBatch": 4,
+    "sourceOrdinal": 99,
+    "sourcePixelMismatchCount": 0,
+    "structure": "REGULAR_COMMON_SEQUENCE_STRUCTURE",
+    "uniqueNonblankMasters": 42
+  }
+}

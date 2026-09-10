@@ -1,0 +1,417 @@
+{
+  "schemaVersion": 1,
+  "batchId": "ART-BATTLE-BM05-BM11-STATIC-R1-2026-09-02",
+  "status": "INTERNAL_PIXI_REVIEW_PASSED_NOT_OWNER_APPROVED_NOT_PROMOTED",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "canonicalSharedLayer": {
+    "assetId": "production:battle:shared:field-bm00-00",
+    "file": "assets/production/internal-battle-review/bm00-bm01-r1/field-bm00-00-shared-layer.png",
+    "sha256": "0906D94C70BAE26F5A1A65B0C7F304222B3CFA78007259389B18A34B51C5EB17",
+    "copiedIntoFamilyBundle": false
+  },
+  "contactSheet": {
+    "order": [
+      "field_bm05_01",
+      "field_bm06_01",
+      "field_bm08_01",
+      "field_bm09_01",
+      "field_bm10_01",
+      "field_bm11_01"
+    ],
+    "file": "review/contact-sheet-3x2.png",
+    "sha256": "A303F48612199DE76DBC1CA6BFCA8AE3070F94D969934EB07EE5E866E7A7D8F9"
+  },
+  "arenas": [
+    {
+      "key": "bm05",
+      "fieldId": "field_bm05_01",
+      "originalFunction": "BATTLE_SOUTHPOLE",
+      "assetId": "production:battle:arena:field-bm05-01",
+      "file": "review/bm05/field-bm05-01-background-candidate.png",
+      "sha256": "7B1BD13227723769903D9B899DE1C88B1D5461E15106208213BD999DCD94C975",
+      "runtimeManifest": "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm05.review.json",
+      "compositeReview": {
+        "file": "review/bm05/bm00-bm05-composite-candidate.png",
+        "sha256": "E716605AF983DE0B9B94E0898D1C5C4294B2BF84E7B13EFC4E9EDD74E951AE95"
+      },
+      "dependencies": [
+        "production:battle:shared:field-bm00-00"
+      ],
+      "referenceObjectLayerPresent": false,
+      "flattenedInternalReviewOnly": true,
+      "productionObjectSeparationRequired": false,
+      "viewportChecks": [
+        {
+          "viewport": [
+            360,
+            800
+          ],
+          "file": "review/bm05/viewport-360x800.png",
+          "sha256": "11B027C8989EEA37769C3A886359D7B77A1A7AC06074190031653DDA6FB0C072"
+        },
+        {
+          "viewport": [
+            390,
+            844
+          ],
+          "file": "review/bm05/viewport-390x844.png",
+          "sha256": "22C76864207584A97A20F20DDFEF4182A55B62BFF77CEF5CE1172D8326638529"
+        },
+        {
+          "viewport": [
+            393,
+            852
+          ],
+          "file": "review/bm05/viewport-393x852.png",
+          "sha256": "9D0FB59A7A855E61C01C4CDE3A4D6CE2033744C2AC7E8BA53B593BF2472EA3D3"
+        },
+        {
+          "viewport": [
+            412,
+            915
+          ],
+          "file": "review/bm05/viewport-412x915.png",
+          "sha256": "F3A17DA70111C54E6F7BD489A9B9874B994AED1232ECB7B5E0DD96E993003AAD"
+        },
+        {
+          "viewport": [
+            430,
+            932
+          ],
+          "file": "review/bm05/viewport-430x932.png",
+          "sha256": "DDFCA7C6BDD01097E2E83D806328A8DF33B3ACDEEDA07E85B9E987DCB6319B3E"
+        }
+      ]
+    },
+    {
+      "key": "bm06",
+      "fieldId": "field_bm06_01",
+      "originalFunction": "BATTLE_DESERT",
+      "assetId": "production:battle:arena:field-bm06-01",
+      "file": "review/bm06/field-bm06-01-background-candidate.png",
+      "sha256": "247474FD4879F97CC91CA0F07EB207BA945DE8E0D61FA9F98A1303C403BFD7CA",
+      "runtimeManifest": "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm06.review.json",
+      "compositeReview": {
+        "file": "review/bm06/bm00-bm06-composite-candidate.png",
+        "sha256": "4D4E2BDC8B0481421DD018112C0C7A103E85977270F219D1C88C8B3E4C02AE52"
+      },
+      "dependencies": [
+        "production:battle:shared:field-bm00-00"
+      ],
+      "referenceObjectLayerPresent": false,
+      "flattenedInternalReviewOnly": true,
+      "productionObjectSeparationRequired": false,
+      "viewportChecks": [
+        {
+          "viewport": [
+            360,
+            800
+          ],
+          "file": "review/bm06/viewport-360x800.png",
+          "sha256": "B63604CCE5F39783F2343BDBF2E9E583B2140C49A20ECF0D4ED855791942AE36"
+        },
+        {
+          "viewport": [
+            390,
+            844
+          ],
+          "file": "review/bm06/viewport-390x844.png",
+          "sha256": "60381DC321E67B76C907906C4EF3810D359CA53CE8CD50350A228C9FF2961C73"
+        },
+        {
+          "viewport": [
+            393,
+            852
+          ],
+          "file": "review/bm06/viewport-393x852.png",
+          "sha256": "ACA931BE50600DC01BF527CD631B0A0BD9872108E5BFB723341A2C88E0E32A30"
+        },
+        {
+          "viewport": [
+            412,
+            915
+          ],
+          "file": "review/bm06/viewport-412x915.png",
+          "sha256": "5541F5A0DCB6CCE3A41B558B5B56EB796475F216419F54890F055A02CFC2D484"
+        },
+        {
+          "viewport": [
+            430,
+            932
+          ],
+          "file": "review/bm06/viewport-430x932.png",
+          "sha256": "EF37A475B6B47181F9953816EC66343D89481FA5E61BB7A1100696E28C7C8E74"
+        }
+      ]
+    },
+    {
+      "key": "bm08",
+      "fieldId": "field_bm08_01",
+      "originalFunction": "BATTLE_HELL",
+      "assetId": "production:battle:arena:field-bm08-01",
+      "file": "review/bm08/field-bm08-01-background-candidate.png",
+      "sha256": "95688F26FB153D40CFFDE4CD62899719B9CD7FDE349829F43B9C9571DEC4F822",
+      "runtimeManifest": "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm08.review.json",
+      "compositeReview": {
+        "file": "review/bm08/bm00-bm08-composite-candidate.png",
+        "sha256": "D9F0128DEC5E4E4EA841673275122DDD24062B7AFFF96450303FAB163EF73AFF"
+      },
+      "dependencies": [
+        "production:battle:shared:field-bm00-00"
+      ],
+      "referenceObjectLayerPresent": true,
+      "flattenedInternalReviewOnly": true,
+      "productionObjectSeparationRequired": true,
+      "viewportChecks": [
+        {
+          "viewport": [
+            360,
+            800
+          ],
+          "file": "review/bm08/viewport-360x800.png",
+          "sha256": "F9218C47758AC26786EFABA87648B5CD06CDF8E4245D9ACDFA26FB1CB2868E49"
+        },
+        {
+          "viewport": [
+            390,
+            844
+          ],
+          "file": "review/bm08/viewport-390x844.png",
+          "sha256": "AA309AE2C3DAE4D785553C7F0B6FE68A48A5702A4E9A738C513A913427D8D434"
+        },
+        {
+          "viewport": [
+            393,
+            852
+          ],
+          "file": "review/bm08/viewport-393x852.png",
+          "sha256": "108DE02ED4EBF565ECFF7705019A25463E3A5D064E2E489EFA49FAD3328CB247"
+        },
+        {
+          "viewport": [
+            412,
+            915
+          ],
+          "file": "review/bm08/viewport-412x915.png",
+          "sha256": "8D80E721F46A9ED2FD8F7A4DFAF1AE0F8B8893A317F3531F4C45AFFD00C34264"
+        },
+        {
+          "viewport": [
+            430,
+            932
+          ],
+          "file": "review/bm08/viewport-430x932.png",
+          "sha256": "74911B8B40BBE2F4DB504F59C616A2FB34966EB72E3C5683CBD5CA637B8441E4"
+        }
+      ]
+    },
+    {
+      "key": "bm09",
+      "fieldId": "field_bm09_01",
+      "originalFunction": "BATTLE_COLOSSEUM",
+      "assetId": "production:battle:arena:field-bm09-01",
+      "file": "review/bm09/field-bm09-01-background-candidate.png",
+      "sha256": "44D0A7D48D7E6CE434A2FB88F6C07F4B2E60CA7911CC38BBCC54B2F7E884AFE9",
+      "runtimeManifest": "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm09.review.json",
+      "compositeReview": {
+        "file": "review/bm09/bm00-bm09-composite-candidate.png",
+        "sha256": "A2AA3C9700F637688DC4E46568197FF635CDD9664DF70819D61351A1B02D5526"
+      },
+      "dependencies": [
+        "production:battle:shared:field-bm00-00"
+      ],
+      "referenceObjectLayerPresent": false,
+      "flattenedInternalReviewOnly": true,
+      "productionObjectSeparationRequired": false,
+      "viewportChecks": [
+        {
+          "viewport": [
+            360,
+            800
+          ],
+          "file": "review/bm09/viewport-360x800.png",
+          "sha256": "C8721E49544977C3D295609FF97BD702C8EB7A00590DDB22D15172DCA22251C3"
+        },
+        {
+          "viewport": [
+            390,
+            844
+          ],
+          "file": "review/bm09/viewport-390x844.png",
+          "sha256": "4B00B6A8A510F0E85C5D3C08DCE5DF47F44C7E81611397DEB6856D6773977C2D"
+        },
+        {
+          "viewport": [
+            393,
+            852
+          ],
+          "file": "review/bm09/viewport-393x852.png",
+          "sha256": "F70D4A53EDC8E8DC6E359BDB3407DE906DD2FE8CD8C731D747DB08DB93D8DF8A"
+        },
+        {
+          "viewport": [
+            412,
+            915
+          ],
+          "file": "review/bm09/viewport-412x915.png",
+          "sha256": "E1190517EC9FDD17492908847BD0EF3E52E3961771376910096102533595B944"
+        },
+        {
+          "viewport": [
+            430,
+            932
+          ],
+          "file": "review/bm09/viewport-430x932.png",
+          "sha256": "4E011DC5F354543DFC76A154305EEFB896DBDCE8C43EFB4BFEF51F8A1BD84FDB"
+        }
+      ]
+    },
+    {
+      "key": "bm10",
+      "fieldId": "field_bm10_01",
+      "originalFunction": "BATTLE_STADIUM",
+      "assetId": "production:battle:arena:field-bm10-01",
+      "file": "review/bm10/field-bm10-01-background-candidate.png",
+      "sha256": "B7EEAD3C7A9BAA44812942CD4B290B798A0EFC6A912601BD12D190884B5A6F7A",
+      "runtimeManifest": "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm10.review.json",
+      "compositeReview": {
+        "file": "review/bm10/bm00-bm10-composite-candidate.png",
+        "sha256": "C6AA7EEC969AD247BDB67AE2EA8CEAB82A2D9B01FF252A6F7E5D1FBB059BF4F0"
+      },
+      "dependencies": [
+        "production:battle:shared:field-bm00-00"
+      ],
+      "referenceObjectLayerPresent": false,
+      "flattenedInternalReviewOnly": true,
+      "productionObjectSeparationRequired": false,
+      "viewportChecks": [
+        {
+          "viewport": [
+            360,
+            800
+          ],
+          "file": "review/bm10/viewport-360x800.png",
+          "sha256": "98E0324F78DB10A5658F8FD0F3EB2837CED9761F736E95F11680CA9517FDBB9E"
+        },
+        {
+          "viewport": [
+            390,
+            844
+          ],
+          "file": "review/bm10/viewport-390x844.png",
+          "sha256": "E6734CE321DA7128A95476C2F45655A521D80A758C8CFE1E44CDB798FFB0D0E7"
+        },
+        {
+          "viewport": [
+            393,
+            852
+          ],
+          "file": "review/bm10/viewport-393x852.png",
+          "sha256": "7F1457797A446B8E7CC598BC72FD9EF41077E9DEA9BF44A62AC0EA6469BA1B67"
+        },
+        {
+          "viewport": [
+            412,
+            915
+          ],
+          "file": "review/bm10/viewport-412x915.png",
+          "sha256": "6A7BC6DE981B83E0CC33E6E61E07756A1AE7A312F84542A9EB7E963AC121F7F0"
+        },
+        {
+          "viewport": [
+            430,
+            932
+          ],
+          "file": "review/bm10/viewport-430x932.png",
+          "sha256": "360B2470CC08002142F970A026607CF5F09EAB9AC35BEAA9DF4A64D456AA3F37"
+        }
+      ]
+    },
+    {
+      "key": "bm11",
+      "fieldId": "field_bm11_01",
+      "originalFunction": "BATTLE_DOMESTADIUM",
+      "assetId": "production:battle:arena:field-bm11-01",
+      "file": "review/bm11/field-bm11-01-background-candidate.png",
+      "sha256": "5FA50C4A05EC206E8E06D44ECE23B1E6939F768C1A45A8280914367394B2D3C1",
+      "runtimeManifest": "assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm11.review.json",
+      "compositeReview": {
+        "file": "review/bm11/bm00-bm11-composite-candidate.png",
+        "sha256": "84A58EC93B20A55832B97ADC1CDA00BA9B4E2896D09A4FCC4187FF33395CDF71"
+      },
+      "dependencies": [
+        "production:battle:shared:field-bm00-00"
+      ],
+      "referenceObjectLayerPresent": true,
+      "flattenedInternalReviewOnly": true,
+      "productionObjectSeparationRequired": true,
+      "viewportChecks": [
+        {
+          "viewport": [
+            360,
+            800
+          ],
+          "file": "review/bm11/viewport-360x800.png",
+          "sha256": "9B2AFABC916C32A9A03405A7254DEA75DB7E3D290B5B4A6029ACDF18D826B7D0"
+        },
+        {
+          "viewport": [
+            390,
+            844
+          ],
+          "file": "review/bm11/viewport-390x844.png",
+          "sha256": "C1AFBFD3CC882E5656A14900A5BDB65D8B8F30BC07147F335C8FAA7366BDFF2A"
+        },
+        {
+          "viewport": [
+            393,
+            852
+          ],
+          "file": "review/bm11/viewport-393x852.png",
+          "sha256": "CA9A78CA90C35203EBD6E93377E1E2A9A0DB7CEBA8BA69BD66C7D769A754259E"
+        },
+        {
+          "viewport": [
+            412,
+            915
+          ],
+          "file": "review/bm11/viewport-412x915.png",
+          "sha256": "C141B3F3CAD933D1ED125029F60E68E944A57FC69FC5B94FFC7BE0C8A72F3AB1"
+        },
+        {
+          "viewport": [
+            430,
+            932
+          ],
+          "file": "review/bm11/viewport-430x932.png",
+          "sha256": "BEDD1D710F245DC0D6BBCD1D7782D0BBBB53A0E4D0D871123D0055B27C59BA59"
+        }
+      ]
+    }
+  ],
+  "excluded": [
+    {
+      "fieldId": "field_bm03_01",
+      "reason": "ANIMATED_LAYER_UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "fieldId": "field_bm04_01",
+      "reason": "ANIMATED_LAYER_UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "fieldId": "field_bm07_01",
+      "reason": "INDEPENDENT_NO_BM00_DEPENDENCY_REQUIRES_SEPARATE_ARCHITECTURE_BATCH"
+    }
+  ],
+  "promotion": {
+    "humanApproved": false,
+    "runtimeQaPassed": true,
+    "runtimeQaAuthority": "docs/reports/art/battle/bm05-bm11-static-r1/browser-qa.json",
+    "licenseEvidenceLinked": false,
+    "readyForRuntime": false,
+    "shippingReady": false
+  }
+}

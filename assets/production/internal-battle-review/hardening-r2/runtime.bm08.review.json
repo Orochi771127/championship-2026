@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:battle:bm08-hardening-r2:original-review",
+  "family": "BATTLE",
+  "artifactMaturity": "INTERNAL_FIELD_OBJECT_LAYER_RUNTIME_REVIEW",
+  "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+  "shippingStatus": "NOT_SHIPPING_READY",
+  "humanApproved": false,
+  "ownerApproval": null,
+  "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+  "rights": {
+    "status": "ORIGINAL_CREATED_AI_ASSISTED_TERMS_LINK_PENDING",
+    "referencePixelReuse": false,
+    "referencePaletteReuse": false,
+    "referenceGeometryReuse": false
+  },
+  "internalReviewEligible": true,
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "sourceDimensions": [
+    1536,
+    1024
+  ],
+  "viewportPolicy": {
+    "fit": "CONTAIN",
+    "verticalAnchor": 0.42,
+    "contractViewports": [
+      [
+        360,
+        800
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        393,
+        852
+      ],
+      [
+        412,
+        915
+      ],
+      [
+        430,
+        932
+      ]
+    ]
+  },
+  "arena": {
+    "fieldId": "field_bm08_01",
+    "assetId": "production:battle:arena:field-bm08-01",
+    "dependencies": [
+      "production:battle:shared:field-bm00-00"
+    ],
+    "gameplayBinding": "EXTERNAL_NOT_MOUNTED",
+    "collisionBinding": "NONE_ART_REVIEW_ONLY",
+    "uiBinding": "NONE_ART_REVIEW_ONLY",
+    "layers": [
+      {
+        "assetId": "production:battle:arena:field-bm08-01",
+        "role": "ARENA_BACKGROUND",
+        "zIndex": 0,
+        "src": "assets/production/internal-battle-review/bm05-bm11-static-r1/field-bm08-01-background.png",
+        "sha256": "95688F26FB153D40CFFDE4CD62899719B9CD7FDE349829F43B9C9571DEC4F822",
+        "alpha": false
+      },
+      {
+        "assetId": "production:battle:objects:field-bm08-01",
+        "role": "FIELD_OBJECTS",
+        "zIndex": 10,
+        "src": "assets/production/internal-battle-review/hardening-r2/field-bm08-01-objects.png",
+        "sha256": "B3F432328A55F6EC96313C24C913B50BE246E82B4087E23DF2136A6D8B85C431",
+        "alpha": true
+      },
+      {
+        "assetId": "production:battle:shared:field-bm00-00",
+        "role": "CANONICAL_SHARED_LAYER",
+        "zIndex": 20,
+        "src": "assets/production/internal-battle-review/bm00-bm01-r1/field-bm00-00-shared-layer.png",
+        "sha256": "0906D94C70BAE26F5A1A65B0C7F304222B3CFA78007259389B18A34B51C5EB17",
+        "alpha": true
+      }
+    ]
+  },
+  "promotionGate": "OWNER_VISUAL_APPROVAL_LICENSE_TERMS_LINK_AND_FINAL_ALIGNMENT_REVIEW_REQUIRED"
+}

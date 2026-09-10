@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "id": "championship:study:blender-web-ui:r1",
+  "date": "2026-09-06",
+  "classification": "OFFLINE_UI_COMPONENT_DIRECTION_STUDY",
+  "scope": "Engineering recommendation plus a generated UI artboard. Not a runnable game, Godot migration, character model or map model.",
+  "repository": {
+    "root": "R:/Projects/Championship2026/championship-2026",
+    "branch": "main",
+    "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7"
+  },
+  "generation": {
+    "tool": "image_gen.imagegen",
+    "mode": "built_in",
+    "requestedModelName": "IMAGE2",
+    "resolvedModelId": null,
+    "modelVerification": "UNKNOWN_TOOL_NOT_EXPOSED",
+    "promptFile": "prompt.txt",
+    "promptSha256": "be16e50222590154f179f3930904fe5b3db99747cc2586213d80a2b9db377f92",
+    "originalOutput": "C:/Users/USER/.codex/generated_images/01a076ce-74dd-7872-a687-6a4b1462d8ce/exec-9b0670b3-b03c-48fd-8084-a0b76a089ec6.png"
+  },
+  "sources": [
+    {
+      "path": "R:\\Projects\\Championship2026\\championship-2026\\docs\\art\\production\\tooling-pilot-r1\\qa\\hud-r2-four-cages-390x844.png",
+      "sha256": "3d0d543d5392e410ef7506fab1d25ce2cabe19b75bc68bedca838eb504f774b2",
+      "bytes": 54184,
+      "role": "VISUAL_REFERENCE_ONLY",
+      "copiedIntoRuntime": false
+    },
+    {
+      "path": "R:\\Projects\\Championship2026\\YDIJ_PRIVATE_ROM_ART_PACK\\08_FULL_FAMILY_CONVERSION\\training\\training_bg_top1\\background-composite.png",
+      "sha256": "982baf997edfa2d76a45c90b2a33d8b3f75759e86e34b0bfc05ff5f0979a38b0",
+      "bytes": 8420,
+      "role": "VISUAL_REFERENCE_ONLY",
+      "copiedIntoRuntime": false
+    }
+  ],
+  "asset": {
+    "file": "ui-component-direction-r1.png",
+    "sha256": "a43e13955a89a70f427642cf2b0556a72472c88b557d410a307e175d67f47476",
+    "bytes": 1465350,
+    "width": 1536,
+    "height": 1024,
+    "format": "PNG",
+    "mode": "RGB",
+    "hasAlpha": false
+  },
+  "presentation": {
+    "statusWells": 4,
+    "numericWells": 2,
+    "buttonStateStudies": 3,
+    "toolIconCount": 8,
+    "toolIconOrder": [
+      "HAND",
+      "FEED",
+      "CLEAN",
+      "MED",
+      "WOUND",
+      "PROTEIN",
+      "MANAGE",
+      "SYSTEM"
+    ],
+    "orderAuthority": "EXISTING_PRODUCT_ORDER_NOT_ORIGINAL_MAPPING_CLAIM",
+    "toolIconLayout": "4x2 on study board only; existing game layout unchanged",
+    "captionAndNumericData": "NOT_BAKED_ENGINE_NATIVE_AT_INTEGRATION",
+    "headerEndcaps": "DECORATION_ONLY_NOT_NAVIGATION"
+  },
+  "rightsStatus": "GENERATED_FROM_PROJECT_AND_ROM_STYLE_REFERENCES_NOT_SEPARATELY_RIGHTS_CLEARED",
+  "runtimeEligible": false,
+  "runtimeIntegrated": false,
+  "productionIndexRegistered": false,
+  "humanApproved": false,
+  "shippingReady": false,
+  "publicReleasePermitted": false,
+  "qaFile": "qa.json",
+  "nextStep": "Produce individually exportable UI components; verify actual-size readability, alpha, bounds and scalable regions before existing DOM/production-index integration."
+}

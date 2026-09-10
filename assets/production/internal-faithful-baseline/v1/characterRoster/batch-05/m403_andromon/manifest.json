@@ -1,0 +1,2772 @@
+{
+  "ordinal": 140,
+  "entityId": "m403_andromon",
+  "kind": "digimon",
+  "preview": "cell-000-main-hd4x.png",
+  "previewSha256": "E7EAB335BD7D20D6FADBF4A885E1302338CC39F94C4834D33CB991413E9829FC",
+  "runtime": "runtime.json",
+  "runtimeSha256": "A58D219F99FD419E5C132EA8B66185FFE4EE27A8F4975AF152D8C4F1D74888F3",
+  "main": {
+    "sourceSheetSha256": "D747AF2B977F882F3B17FF4AE64834884D97E189C1FC04BF537000FCCE0B2145",
+    "cellCount": 62,
+    "sequenceCount": 40,
+    "frameRecordCount": 65,
+    "atlasPages": [
+      {
+        "page": 0,
+        "image": "main-atlas-00.png",
+        "data": "main-atlas-00.json",
+        "width": 2028,
+        "height": 1768,
+        "frameCount": 62,
+        "imageSha256": "3E01F03A9660570D2791C141DAACBFB416FB8BE0C1F47A33545B32A1D2BA9319",
+        "dataSha256": "0E7DAB4D535E61EC123CE4472611D5B72AA6FBE59EE64974C35F9F91DF666F21"
+      }
+    ],
+    "frameManifest": {
+      "m403_andromon/main/cell_000": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 17,
+          "w": 34,
+          "h": 62
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "008F713749D9E729A33C7C0ABD8A9BE47A04B5D7E6904691B4AF59B3196A2EEB",
+        "hdRgbaSha256": "1ADFF06BEE04D6760C2CAC132EAE59DB90B0C1D1677B317CAE725461E60F1F07",
+        "frame": {
+          "x": 8,
+          "y": 8,
+          "w": 136,
+          "h": 248
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 72,
+          "w": 136,
+          "h": 248
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_001": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 19,
+          "w": 34,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "7E1BFB24570EE6EC0DFC866E059862FD55111A8E8456A16D63480AE0B5450539",
+        "hdRgbaSha256": "F6DFABC7000D37D6776D32F75EAC8BBADAF4F3E51B10C4C7E2A950081D4051FF",
+        "frame": {
+          "x": 152,
+          "y": 8,
+          "w": 136,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 80,
+          "w": 136,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_002": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 19,
+          "w": 34,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "53E0C2DEB51472A8C23D8F5F1A4537AFC352830634A0F464CBCC1B5B13260B16",
+        "hdRgbaSha256": "0734327752676F629CD4D6043F229756E64329D2EFA9B4839E88415619861397",
+        "frame": {
+          "x": 296,
+          "y": 8,
+          "w": 136,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 80,
+          "w": 136,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_003": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 17,
+          "w": 36,
+          "h": 62
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "EE287F52BA8AF55FF708607F92233C57BE11D85F970B74EE1561D575B0D7786A",
+        "hdRgbaSha256": "D3FD1B0ACFC47EC67693C5C8327C87275500A10262E184769C33E332989DCECA",
+        "frame": {
+          "x": 440,
+          "y": 8,
+          "w": 144,
+          "h": 248
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 120,
+          "y": 72,
+          "w": 144,
+          "h": 248
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_004": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 17,
+          "w": 38,
+          "h": 62
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "77BCFB4310502991A552E71C0CF02251D57F513422728873988B14D2BD03EF12",
+        "hdRgbaSha256": "C0F2668D089E943015253E97BEC8EAEB6D1E79559ECAF29381DC570F29723F44",
+        "frame": {
+          "x": 592,
+          "y": 8,
+          "w": 152,
+          "h": 248
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 72,
+          "w": 152,
+          "h": 248
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_005": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 19,
+          "w": 46,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "CBD5650AE9B99E4334B752491BA6B535822A803FFEB97BFF57EB941E3E57A01E",
+        "hdRgbaSha256": "736D8E09135803F61887D2879C427783DCCCBEE08C18D54DD9FE908D4341285A",
+        "frame": {
+          "x": 752,
+          "y": 8,
+          "w": 184,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 80,
+          "w": 184,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_006": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 7,
+          "w": 64,
+          "h": 74
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E31DF08B468667EB9C47D8ED0D200B009170AA6297FD27563FAF2A3EF8A70D6B",
+        "hdRgbaSha256": "2CFE312959D2F6597564222C5E61E27A0A902B3646AB7300F8351E3819C3DC1B",
+        "frame": {
+          "x": 944,
+          "y": 8,
+          "w": 256,
+          "h": 296
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 64,
+          "y": 24,
+          "w": 256,
+          "h": 296
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_007": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 17,
+          "w": 56,
+          "h": 56
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E3795C577F3B068C57D4E8B72A1D194B3E33CB3BEC375A444ABC0D389EB8A4AB",
+        "hdRgbaSha256": "CF5684270194781DB1B1DB745726F81133A8AD0F39E534F8935102587A231A0C",
+        "frame": {
+          "x": 1208,
+          "y": 8,
+          "w": 224,
+          "h": 224
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 80,
+          "y": 96,
+          "w": 224,
+          "h": 224
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_008": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 19,
+          "w": 46,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "4BFAA80A92203481206D5822E1BF2E85A47B0355845368BAACF53C75E443F3CD",
+        "hdRgbaSha256": "EA207A433DA2E381738810C715B0FEE15A8D6C3D7EE98C77D1BB12D7C24CB140",
+        "frame": {
+          "x": 1440,
+          "y": 8,
+          "w": 184,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 80,
+          "w": 184,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_009": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 41,
+          "y": 29,
+          "w": 18,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "3F66FD0BD83B202DEFB7CB4656DF0FFE2D9488322120D69E6664DF12498A6A2B",
+        "hdRgbaSha256": "5F0E161C3F70D7810E82717219BA94ACE9089A0EFCB487401906879F19A49DEC",
+        "frame": {
+          "x": 1632,
+          "y": 8,
+          "w": 72,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 156,
+          "y": 152,
+          "w": 72,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_010": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 21,
+          "w": 50,
+          "h": 58
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "61C6046B60F36D03AB6F064249C860EC72EE278AC51B3A03CD4342D16763912C",
+        "hdRgbaSha256": "C4F4C4BF9BA1BCF6B32AAFF04CFB151C6E48F37724AE6F1AD67EC3072585F8FF",
+        "frame": {
+          "x": 1712,
+          "y": 8,
+          "w": 200,
+          "h": 232
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 88,
+          "w": 200,
+          "h": 232
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_011": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 42,
+          "y": 28,
+          "w": 18,
+          "h": 43
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E2DE602216A023642F2C10C8D1D68E736F1BB04A030C97BB89121E9887A0BE35",
+        "hdRgbaSha256": "3BD2721F5F51BC76D1B36B2861FA26F84E4A066F76AC83B69CB535673A4A55EF",
+        "frame": {
+          "x": 1920,
+          "y": 8,
+          "w": 72,
+          "h": 172
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 156,
+          "y": 148,
+          "w": 72,
+          "h": 172
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_012": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 7,
+          "w": 60,
+          "h": 80
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "0750569F3084A6CB464AD034E039BD3A21F18ECA267DA07673B97606734A3AEA",
+        "hdRgbaSha256": "D49C3B09CBDD069FAE370AE553DE14FAC1F9CF31B07D78F37B7B5822C1DE510E",
+        "frame": {
+          "x": 8,
+          "y": 312,
+          "w": 240,
+          "h": 320
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 72,
+          "y": 0,
+          "w": 240,
+          "h": 320
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_013": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 41,
+          "y": 29,
+          "w": 18,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "3F66FD0BD83B202DEFB7CB4656DF0FFE2D9488322120D69E6664DF12498A6A2B",
+        "hdRgbaSha256": "5F0E161C3F70D7810E82717219BA94ACE9089A0EFCB487401906879F19A49DEC",
+        "frame": {
+          "x": 256,
+          "y": 312,
+          "w": 72,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 156,
+          "y": 152,
+          "w": 72,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_014": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 21,
+          "w": 50,
+          "h": 58
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "61C6046B60F36D03AB6F064249C860EC72EE278AC51B3A03CD4342D16763912C",
+        "hdRgbaSha256": "C4F4C4BF9BA1BCF6B32AAFF04CFB151C6E48F37724AE6F1AD67EC3072585F8FF",
+        "frame": {
+          "x": 336,
+          "y": 312,
+          "w": 200,
+          "h": 232
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 88,
+          "w": 200,
+          "h": 232
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_015": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 42,
+          "y": 28,
+          "w": 18,
+          "h": 43
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E2DE602216A023642F2C10C8D1D68E736F1BB04A030C97BB89121E9887A0BE35",
+        "hdRgbaSha256": "3BD2721F5F51BC76D1B36B2861FA26F84E4A066F76AC83B69CB535673A4A55EF",
+        "frame": {
+          "x": 544,
+          "y": 312,
+          "w": 72,
+          "h": 172
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 156,
+          "y": 148,
+          "w": 72,
+          "h": 172
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_016": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 7,
+          "w": 60,
+          "h": 80
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "0750569F3084A6CB464AD034E039BD3A21F18ECA267DA07673B97606734A3AEA",
+        "hdRgbaSha256": "D49C3B09CBDD069FAE370AE553DE14FAC1F9CF31B07D78F37B7B5822C1DE510E",
+        "frame": {
+          "x": 624,
+          "y": 312,
+          "w": 240,
+          "h": 320
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 72,
+          "y": 0,
+          "w": 240,
+          "h": 320
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_017": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 22,
+          "y": 15,
+          "w": 56,
+          "h": 72
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "9139B56D70ABBAFB499E144C50CCA146BA53ACEFB391A6C9EEA03AFD4B256DF2",
+        "hdRgbaSha256": "FB3AFB5973D5ACF6EC947353613C9582F648EF613C8EFA14FD388B165A6F8EA4",
+        "frame": {
+          "x": 872,
+          "y": 312,
+          "w": 224,
+          "h": 288
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 80,
+          "y": 32,
+          "w": 224,
+          "h": 288
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_018": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 32,
+          "y": 25,
+          "w": 29,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "46C1EA85357CFE7626C8AA08E9C1B9C924C8AFBB6F42D7A179A3F2E24941A268",
+        "hdRgbaSha256": "DA4385C63E6716C324974502D4C08B256E2A40E166C18CCC3021D890F991D5F9",
+        "frame": {
+          "x": 1104,
+          "y": 312,
+          "w": 116,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 134,
+          "y": 160,
+          "w": 116,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_019": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 19,
+          "w": 34,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "B2EB6065526C014A1B11660DBBFE9FD33D8984C239B70C184D1C97B27DC82505",
+        "hdRgbaSha256": "5C55BBB91BC45A6262DAD8CE1E9AB0BA821D78D712717508CF8BA22FF68175B6",
+        "frame": {
+          "x": 1228,
+          "y": 312,
+          "w": 136,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 80,
+          "w": 136,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_020": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 17,
+          "w": 38,
+          "h": 62
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "3A2DF7A58A9EA138691999DA8024A2114B160CCB23F3B103ACA52A0690369DC5",
+        "hdRgbaSha256": "422199E6124655A125169DB664DF88965E8C45F02A4F97E80B5484B517C765CA",
+        "frame": {
+          "x": 1372,
+          "y": 312,
+          "w": 152,
+          "h": 248
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 72,
+          "w": 152,
+          "h": 248
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_021": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 25,
+          "y": 40,
+          "w": 47,
+          "h": 14
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "C6264088050CDAED14BD6C43E2351B1C7D373332A71265527515374DB620DD42",
+        "hdRgbaSha256": "48858251A385F28EB6F7DCCED2BC66009A1D5583AB4BDFE8D43AD0630A861EAE",
+        "frame": {
+          "x": 1532,
+          "y": 312,
+          "w": 188,
+          "h": 56
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 98,
+          "y": 264,
+          "w": 188,
+          "h": 56
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_022": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 22,
+          "y": 15,
+          "w": 50,
+          "h": 64
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "57617FE7C70624CA0F325B25B2526CF5BCF4E752C54B96B5FCBD4A3FE5DD7172",
+        "hdRgbaSha256": "88A2D812B91D526C42BF3538DAE84131352C55D1E2C2272F42B8DE7DBAF7CABD",
+        "frame": {
+          "x": 1728,
+          "y": 312,
+          "w": 200,
+          "h": 256
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 64,
+          "w": 200,
+          "h": 256
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_023": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 36,
+          "y": 23,
+          "w": 36,
+          "h": 56
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "A03E145D93F9B590CB9ED6FD7129919859E72841AF2C34DFAF4D2CD3C64D0548",
+        "hdRgbaSha256": "B1384BBF39685F51EC85BF2301BE292FB491BD030BAFEF6AF6C1A5C9C79A7FAA",
+        "frame": {
+          "x": 8,
+          "y": 640,
+          "w": 144,
+          "h": 224
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 120,
+          "y": 96,
+          "w": 144,
+          "h": 224
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_024": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 25,
+          "y": 40,
+          "w": 47,
+          "h": 14
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D71BA185245001A2A7D6635CD5080A547CB5DEB8A9AE2077CEF0B1FB248DB3F0",
+        "hdRgbaSha256": "E68BEEC61E9BE2F2849C618848F9CA01B685F14AC3CA2E8E10AF0F6763D3CE21",
+        "frame": {
+          "x": 160,
+          "y": 640,
+          "w": 188,
+          "h": 56
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 98,
+          "y": 264,
+          "w": 188,
+          "h": 56
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_025": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 17,
+          "w": 34,
+          "h": 62
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "A08AB367D73C0AB9A835F1A5F680427DEDCF88B9640B4F14E9ECA613517F493E",
+        "hdRgbaSha256": "9B39AED23333ABE721CE7408EC2C173476D9A5D28E21E65912CC5EB36946CE57",
+        "frame": {
+          "x": 356,
+          "y": 640,
+          "w": 136,
+          "h": 248
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 72,
+          "w": 136,
+          "h": 248
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_026": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 32,
+          "y": 19,
+          "w": 32,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "5BE2B4FCACD726189C94C7326453434AF5F05645B4DD86B1A5ABC7068268B3A4",
+        "hdRgbaSha256": "5655B0D53836EE0C0C6031EB6F966AF852375E6E14CC58036E7021945E143DEC",
+        "frame": {
+          "x": 500,
+          "y": 640,
+          "w": 128,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 128,
+          "y": 80,
+          "w": 128,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_027": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 19,
+          "w": 34,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "5A5121DC32300CA22DFC038B4D705C53C082DA82207B4974207B2B3E3F611FD5",
+        "hdRgbaSha256": "08B0E259070EA4DD1044FE65C75853E4D4FAE2D9431B825BCC8CD31AF9E0E769",
+        "frame": {
+          "x": 636,
+          "y": 640,
+          "w": 136,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 80,
+          "w": 136,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_028": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 17,
+          "w": 34,
+          "h": 62
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "6FF83957544628B4DB743B276299A7CA1DDC051BAB0A454B3BBBA0FBCBCF10E7",
+        "hdRgbaSha256": "A2B595153E193D2CE2054D67886FADBD55CD378AC7CA907B6AA95D253A099718",
+        "frame": {
+          "x": 780,
+          "y": 640,
+          "w": 136,
+          "h": 248
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 72,
+          "w": 136,
+          "h": 248
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_029": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 17,
+          "w": 34,
+          "h": 62
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "729DF117FDDB518F9CB3DC8BE0568F06685BB1CEA55B6AE2ABD332814AC8F9A1",
+        "hdRgbaSha256": "0E6D35E8935FBD1AEB53BA8425A145625E912FF9BB0DDD9D26DCE9BBEC600D75",
+        "frame": {
+          "x": 924,
+          "y": 640,
+          "w": 136,
+          "h": 248
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 72,
+          "w": 136,
+          "h": 248
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_030": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 19,
+          "w": 46,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "0DA8832EF1F271E205054671FFC1926DD6EBE3023B359CF8A4114E01E0F3FE05",
+        "hdRgbaSha256": "46B3AE79013892DB16F2E53AF553BC427D9CCCB16E73ACE19E7369727BF748C2",
+        "frame": {
+          "x": 1068,
+          "y": 640,
+          "w": 184,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 80,
+          "w": 184,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_031": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 17,
+          "w": 34,
+          "h": 62
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "729DF117FDDB518F9CB3DC8BE0568F06685BB1CEA55B6AE2ABD332814AC8F9A1",
+        "hdRgbaSha256": "0E6D35E8935FBD1AEB53BA8425A145625E912FF9BB0DDD9D26DCE9BBEC600D75",
+        "frame": {
+          "x": 1260,
+          "y": 640,
+          "w": 136,
+          "h": 248
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 72,
+          "w": 136,
+          "h": 248
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_032": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 19,
+          "w": 60,
+          "h": 62
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "C557BAE963C7ECB725B0F176AC50A9646659BF06CE6A454EF9A661F94BBC6EA8",
+        "hdRgbaSha256": "D319D688A8A76CEDE3F725EB53E34A99C2DFD5A5FED5A1B8DC1E6C6D22A486C2",
+        "frame": {
+          "x": 1404,
+          "y": 640,
+          "w": 240,
+          "h": 248
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 72,
+          "y": 72,
+          "w": 240,
+          "h": 248
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_033": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 11,
+          "w": 60,
+          "h": 62
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "DD4F4E15109CBF351ECF4D746D76FAC3F080D588D1178AD1A8703E2A92822C72",
+        "hdRgbaSha256": "3AC381E431D83743A5B6797A4F1C3C755526F52D5AC0631DC3F63C5AF722492C",
+        "frame": {
+          "x": 1652,
+          "y": 640,
+          "w": 240,
+          "h": 248
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 72,
+          "y": 72,
+          "w": 240,
+          "h": 248
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_034": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 15,
+          "w": 30,
+          "h": 64
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "26D3A7DC3013858A71232A5FCBE895682F4FE30340DB3E7DBF8465F587884B05",
+        "hdRgbaSha256": "60BBC4B5FD79DC34BD9BC59E892C5C256CA71167F277BBCC631B1B72371E5336",
+        "frame": {
+          "x": 1900,
+          "y": 640,
+          "w": 120,
+          "h": 256
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 132,
+          "y": 64,
+          "w": 120,
+          "h": 256
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_035": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 19,
+          "w": 32,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "76E59C8CEA8107E1E823C0420C13C50B05396A8FFA14336666516AE212F935D9",
+        "hdRgbaSha256": "124C76AEF5CB1D921ABF8094366C8EFCC53D2134E5E90321F5FE26FAB50817F5",
+        "frame": {
+          "x": 8,
+          "y": 904,
+          "w": 128,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 128,
+          "y": 80,
+          "w": 128,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_036": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 17,
+          "w": 38,
+          "h": 62
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "2D03489EB580CB34E422EC91FF8753714505C7B9B61B459F2F3E2F047AC8E45A",
+        "hdRgbaSha256": "C3DE86D1CC15A41085745ECA468177DC9CD5545A60FA5DD19E8E654F78FE9934",
+        "frame": {
+          "x": 144,
+          "y": 904,
+          "w": 152,
+          "h": 248
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 72,
+          "w": 152,
+          "h": 248
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_037": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 33,
+          "w": 68,
+          "h": 26
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "1C303256E939330481878195C9BD54F69122BC35F7ECB16C08D4D6F619AFD2C3",
+        "hdRgbaSha256": "F3BA4A8AF2290C175B68D32EB41ABC930DB9D39643F877484966165870D62A67",
+        "frame": {
+          "x": 304,
+          "y": 904,
+          "w": 272,
+          "h": 104
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 56,
+          "y": 216,
+          "w": 272,
+          "h": 104
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_038": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 15,
+          "w": 38,
+          "h": 64
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D2D106961C04B274695E47F2B544966E3039FB9BD6F50D1ED55AB976A41922B1",
+        "hdRgbaSha256": "C5A6535CEDEB55C555B9F9BB22D24B36DBB3E0E7AF50F5A59C07AD0E74C5468F",
+        "frame": {
+          "x": 584,
+          "y": 904,
+          "w": 152,
+          "h": 256
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 64,
+          "w": 152,
+          "h": 256
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_039": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 32,
+          "y": 23,
+          "w": 32,
+          "h": 56
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "329AA2B5ADE3D4D77A6D18B8027BE59CB14E98BE5D7A8ED5B27AC219D92B6AE7",
+        "hdRgbaSha256": "9F8EBE0B1A59533EBBC10B29AB179909B277E5314288E1620B66488BA7EF2173",
+        "frame": {
+          "x": 744,
+          "y": 904,
+          "w": 128,
+          "h": 224
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 128,
+          "y": 96,
+          "w": 128,
+          "h": 224
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_040": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 33,
+          "w": 68,
+          "h": 26
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "A105C4613839BE7A6F14F13FF8253114209ED262652D63AE6809990767AB3EE9",
+        "hdRgbaSha256": "38337B7E7612DA8DE73C0321EFA1108260F544A986A1BA0B6824B5D41B947A52",
+        "frame": {
+          "x": 880,
+          "y": 904,
+          "w": 272,
+          "h": 104
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 56,
+          "y": 216,
+          "w": 272,
+          "h": 104
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_041": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 7,
+          "w": 64,
+          "h": 74
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "252C9A35EDA5D179F0EEFFD5B437418FB8A77DD55800FCC2AC5F00F442B80F24",
+        "hdRgbaSha256": "739E6D92F5985D2F25B6C0EAFDB7260B0091680CD48514EAB347094E7F4D40BE",
+        "frame": {
+          "x": 1160,
+          "y": 904,
+          "w": 256,
+          "h": 296
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 64,
+          "y": 24,
+          "w": 256,
+          "h": 296
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_042": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 7,
+          "w": 64,
+          "h": 74
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E31DF08B468667EB9C47D8ED0D200B009170AA6297FD27563FAF2A3EF8A70D6B",
+        "hdRgbaSha256": "2CFE312959D2F6597564222C5E61E27A0A902B3646AB7300F8351E3819C3DC1B",
+        "frame": {
+          "x": 1424,
+          "y": 904,
+          "w": 256,
+          "h": 296
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 64,
+          "y": 24,
+          "w": 256,
+          "h": 296
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_043": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 7,
+          "w": 64,
+          "h": 74
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "252C9A35EDA5D179F0EEFFD5B437418FB8A77DD55800FCC2AC5F00F442B80F24",
+        "hdRgbaSha256": "739E6D92F5985D2F25B6C0EAFDB7260B0091680CD48514EAB347094E7F4D40BE",
+        "frame": {
+          "x": 1688,
+          "y": 904,
+          "w": 256,
+          "h": 296
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 64,
+          "y": 24,
+          "w": 256,
+          "h": 296
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_044": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 7,
+          "w": 64,
+          "h": 74
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "871ED13E84D0BA74C9930C3B01D6DE7238F6CE62185BC4893D409A0423DEBEA9",
+        "hdRgbaSha256": "1C4198AE9037775F751EC9B4892384E3175EF0A307B293CDC88E07F025072982",
+        "frame": {
+          "x": 8,
+          "y": 1208,
+          "w": 256,
+          "h": 296
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 64,
+          "y": 24,
+          "w": 256,
+          "h": 296
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_045": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 17,
+          "w": 36,
+          "h": 62
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "33248AEEDC5E58CE4ACFBF524DB53AF788CF17C514670A001220F31BAA6AA2BB",
+        "hdRgbaSha256": "41A723026A0704A0D5F505E73F5295F8895E49744B71AD66BDDDA5AEB7B8E7E5",
+        "frame": {
+          "x": 272,
+          "y": 1208,
+          "w": 144,
+          "h": 248
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 120,
+          "y": 72,
+          "w": 144,
+          "h": 248
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_046": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 19,
+          "w": 36,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "5BAEA8D1DFBF2CE521182681A37B8A5CE8FC37C169A18A4036D2D6AB8575B317",
+        "hdRgbaSha256": "672A2AA72111A7126F73F4C30B622CF1BA2CBBC26015E3B27771FC0E3D2DBED5",
+        "frame": {
+          "x": 424,
+          "y": 1208,
+          "w": 144,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 120,
+          "y": 80,
+          "w": 144,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_047": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 17,
+          "w": 38,
+          "h": 62
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "9A4F3606B978C659CA694B60343527B85BAA051FA6D239D7E75FD68688931813",
+        "hdRgbaSha256": "E783263B8DBB5EC990D38F861F2FAD862CB77FF9518B8212DCADDFFE0917E515",
+        "frame": {
+          "x": 576,
+          "y": 1208,
+          "w": 152,
+          "h": 248
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 72,
+          "w": 152,
+          "h": 248
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_048": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 38,
+          "y": 27,
+          "w": 22,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "74B4A6AADD1131F37E0F534C4195146EC213349D6C3DB7627C23964361F8E316",
+        "hdRgbaSha256": "7E076D5C89118733F28F7AF79CB5043650D34BE225C9BA00445CFCD5B0FED392",
+        "frame": {
+          "x": 736,
+          "y": 1208,
+          "w": 88,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 148,
+          "y": 144,
+          "w": 88,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_049": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 21,
+          "w": 56,
+          "h": 58
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "48D07CB51FE386C70A50A5537D16802C60DB3C5B96CC6B2D92E5DC623C60BF25",
+        "hdRgbaSha256": "F4904687C06B2E5B699B9D889FE950FFC8B8E04593351F7DBC9DB09D129DADB0",
+        "frame": {
+          "x": 832,
+          "y": 1208,
+          "w": 224,
+          "h": 232
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 80,
+          "y": 88,
+          "w": 224,
+          "h": 232
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_050": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 21,
+          "w": 42,
+          "h": 58
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "B660E7A14A88F3D9365DED7FF0CE5467297CD9E7E86165E9367087FDBCEE25E3",
+        "hdRgbaSha256": "2A994CF32C916795C145BC4322F5EDF3FA247CD0EB4D2BF095D5C329923FDD73",
+        "frame": {
+          "x": 1064,
+          "y": 1208,
+          "w": 168,
+          "h": 232
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 108,
+          "y": 88,
+          "w": 168,
+          "h": 232
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_051": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 32,
+          "y": 27,
+          "w": 32,
+          "h": 37
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "4207F4F756A61E136722D532764087E8B9BB5E4937F494523DFA4C612D2284DD",
+        "hdRgbaSha256": "0DF2A1991C5374DCEF96C5359FC49D231B7C9F92EA0898853CD005D80F801F99",
+        "frame": {
+          "x": 1240,
+          "y": 1208,
+          "w": 128,
+          "h": 148
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 128,
+          "y": 172,
+          "w": 128,
+          "h": 148
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_052": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 21,
+          "w": 38,
+          "h": 58
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "157F4073E23BCF8AD89DD815D3494E6C1541FA0F5C53F34D590DD0979FCFE41D",
+        "hdRgbaSha256": "B6AD722BF03B10E9270885D68D4F7800E6EA7B97F169B49AEB9ECDCC4CD7888B",
+        "frame": {
+          "x": 1376,
+          "y": 1208,
+          "w": 152,
+          "h": 232
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 88,
+          "w": 152,
+          "h": 232
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_053": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 27,
+          "w": 68,
+          "h": 40
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "2AAD41B0D66B0FD9DAE26407284614AC6E74F397A58C63CA86E188CAF81936AF",
+        "hdRgbaSha256": "5AA6FD6871DD47467E15BC33E0C6F00176AF650A75FE74F985E80E58C0DA29B4",
+        "frame": {
+          "x": 1536,
+          "y": 1208,
+          "w": 272,
+          "h": 160
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 56,
+          "y": 160,
+          "w": 272,
+          "h": 160
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_054": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 25,
+          "w": 40,
+          "h": 54
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "1106396842C1BF47E9A942873803EE76509612D1CE7E5D12ED4A2737809C6A50",
+        "hdRgbaSha256": "FFB46A511CB8C7E9ABDF63721D348F27B137DEC2E0C843DDB6C4731FE46B0333",
+        "frame": {
+          "x": 1816,
+          "y": 1208,
+          "w": 160,
+          "h": 216
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 112,
+          "y": 104,
+          "w": 160,
+          "h": 216
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_055": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 17,
+          "w": 50,
+          "h": 62
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "6A32941ADA463C7F2E1A299392846CBE5A35461C6FFF843D83FE06CA29C63A62",
+        "hdRgbaSha256": "FB36D2EC1DA2FC38AE613D4B927071D84B634F0E37C728DC794015670DB3CAC7",
+        "frame": {
+          "x": 8,
+          "y": 1512,
+          "w": 200,
+          "h": 248
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 92,
+          "y": 72,
+          "w": 200,
+          "h": 248
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_056": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 19,
+          "w": 42,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "089EFDC18E41AF6A561A5FBE2AD659F1E4DDB4F3BBC47F6B58CE418066A4E36C",
+        "hdRgbaSha256": "0C1A5E36C7BCF58294611C48B653735389567566FC4D16C770B1E85F93E2A779",
+        "frame": {
+          "x": 216,
+          "y": 1512,
+          "w": 168,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 108,
+          "y": 80,
+          "w": 168,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_057": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 38,
+          "y": 30,
+          "w": 19,
+          "h": 41
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "C94D21311ADE93DC8B644A884199BCA8891C4C55A635B222A175115906C95BF1",
+        "hdRgbaSha256": "BF0F714A1C47D1D13C4104E68D54FAEDBE067DBCECA7321091D66B8244BF6951",
+        "frame": {
+          "x": 392,
+          "y": 1512,
+          "w": 76,
+          "h": 164
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 154,
+          "y": 156,
+          "w": 76,
+          "h": 164
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_058": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 19,
+          "w": 46,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "FF8241BA198F8877D6F9063AD9FD6DA878E5611296B086EAA2F5AF4D81A65A95",
+        "hdRgbaSha256": "2B8AE80DE9C1EA2CAA33453F239DD8F992D8FEE60F6C9243ADE5379640976C8F",
+        "frame": {
+          "x": 476,
+          "y": 1512,
+          "w": 184,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 80,
+          "w": 184,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_059": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 31,
+          "y": 39,
+          "w": 34,
+          "h": 14
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D9AE26423ED8CEC887D2253A424D11675859FBED6D7010AFFA3D6033085E5623",
+        "hdRgbaSha256": "0DFB3F33332E0DA6EC96A12C02D3D73BF2C6E387AB5E8886109CA50E19A5CF4E",
+        "frame": {
+          "x": 668,
+          "y": 1512,
+          "w": 136,
+          "h": 56
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 264,
+          "w": 136,
+          "h": 56
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_060": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 19,
+          "w": 46,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "4BFAA80A92203481206D5822E1BF2E85A47B0355845368BAACF53C75E443F3CD",
+        "hdRgbaSha256": "EA207A433DA2E381738810C715B0FEE15A8D6C3D7EE98C77D1BB12D7C24CB140",
+        "frame": {
+          "x": 812,
+          "y": 1512,
+          "w": 184,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 80,
+          "w": 184,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/main/cell_061": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 17,
+          "w": 36,
+          "h": 62
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "FAD40B4B8C7238114F92CB2CBDA52AE0A40FB70FAE9A975B34DF7895F6E7EB46",
+        "hdRgbaSha256": "7CC0AADF58896951B28CFC3AACFF861798DCC1667AFDD6553C11D6A4E17A5D23",
+        "frame": {
+          "x": 1004,
+          "y": 1512,
+          "w": 144,
+          "h": 248
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 120,
+          "y": 72,
+          "w": 144,
+          "h": 248
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      }
+    }
+  },
+  "sub": {
+    "sourceSheetSha256": "B8FDDCD76E85DBCACA66CF1C8BBD394C4599D3E84662AA856EDE1DA8D717A74F",
+    "cellCount": 18,
+    "sequenceCount": 13,
+    "frameRecordCount": 18,
+    "atlasPages": [
+      {
+        "page": 0,
+        "image": "sub-atlas-00.png",
+        "data": "sub-atlas-00.json",
+        "width": 1968,
+        "height": 512,
+        "frameCount": 18,
+        "imageSha256": "C2F36C250C6616C3A9AF534045CA53433A0BF734A9E268AF52CA5A503FCF7213",
+        "dataSha256": "EF0AC6E0AE176E260A11926536B2FECBC918BFC687D3A0A1A20584C45BBE6DD7"
+      }
+    ],
+    "frameManifest": {
+      "m403_andromon/sub/cell_000": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 17,
+          "w": 34,
+          "h": 62
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "008F713749D9E729A33C7C0ABD8A9BE47A04B5D7E6904691B4AF59B3196A2EEB",
+        "hdRgbaSha256": "1ADFF06BEE04D6760C2CAC132EAE59DB90B0C1D1677B317CAE725461E60F1F07",
+        "frame": {
+          "x": 8,
+          "y": 8,
+          "w": 136,
+          "h": 248
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 72,
+          "w": 136,
+          "h": 248
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/sub/cell_001": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 19,
+          "w": 34,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "7E1BFB24570EE6EC0DFC866E059862FD55111A8E8456A16D63480AE0B5450539",
+        "hdRgbaSha256": "F6DFABC7000D37D6776D32F75EAC8BBADAF4F3E51B10C4C7E2A950081D4051FF",
+        "frame": {
+          "x": 152,
+          "y": 8,
+          "w": 136,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 80,
+          "w": 136,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/sub/cell_002": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 19,
+          "w": 34,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "53E0C2DEB51472A8C23D8F5F1A4537AFC352830634A0F464CBCC1B5B13260B16",
+        "hdRgbaSha256": "0734327752676F629CD4D6043F229756E64329D2EFA9B4839E88415619861397",
+        "frame": {
+          "x": 296,
+          "y": 8,
+          "w": 136,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 80,
+          "w": 136,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/sub/cell_003": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 17,
+          "w": 36,
+          "h": 62
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "EE287F52BA8AF55FF708607F92233C57BE11D85F970B74EE1561D575B0D7786A",
+        "hdRgbaSha256": "D3FD1B0ACFC47EC67693C5C8327C87275500A10262E184769C33E332989DCECA",
+        "frame": {
+          "x": 440,
+          "y": 8,
+          "w": 144,
+          "h": 248
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 120,
+          "y": 72,
+          "w": 144,
+          "h": 248
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/sub/cell_004": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 17,
+          "w": 56,
+          "h": 56
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E3795C577F3B068C57D4E8B72A1D194B3E33CB3BEC375A444ABC0D389EB8A4AB",
+        "hdRgbaSha256": "CF5684270194781DB1B1DB745726F81133A8AD0F39E534F8935102587A231A0C",
+        "frame": {
+          "x": 592,
+          "y": 8,
+          "w": 224,
+          "h": 224
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 80,
+          "y": 96,
+          "w": 224,
+          "h": 224
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/sub/cell_005": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 19,
+          "w": 46,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "4BFAA80A92203481206D5822E1BF2E85A47B0355845368BAACF53C75E443F3CD",
+        "hdRgbaSha256": "EA207A433DA2E381738810C715B0FEE15A8D6C3D7EE98C77D1BB12D7C24CB140",
+        "frame": {
+          "x": 824,
+          "y": 8,
+          "w": 184,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 80,
+          "w": 184,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/sub/cell_006": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 25,
+          "y": 40,
+          "w": 47,
+          "h": 14
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "C6264088050CDAED14BD6C43E2351B1C7D373332A71265527515374DB620DD42",
+        "hdRgbaSha256": "48858251A385F28EB6F7DCCED2BC66009A1D5583AB4BDFE8D43AD0630A861EAE",
+        "frame": {
+          "x": 1016,
+          "y": 8,
+          "w": 188,
+          "h": 56
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 98,
+          "y": 264,
+          "w": 188,
+          "h": 56
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/sub/cell_007": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 25,
+          "y": 40,
+          "w": 47,
+          "h": 14
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D71BA185245001A2A7D6635CD5080A547CB5DEB8A9AE2077CEF0B1FB248DB3F0",
+        "hdRgbaSha256": "E68BEEC61E9BE2F2849C618848F9CA01B685F14AC3CA2E8E10AF0F6763D3CE21",
+        "frame": {
+          "x": 1212,
+          "y": 8,
+          "w": 188,
+          "h": 56
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 98,
+          "y": 264,
+          "w": 188,
+          "h": 56
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/sub/cell_008": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 17,
+          "w": 36,
+          "h": 62
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "33248AEEDC5E58CE4ACFBF524DB53AF788CF17C514670A001220F31BAA6AA2BB",
+        "hdRgbaSha256": "41A723026A0704A0D5F505E73F5295F8895E49744B71AD66BDDDA5AEB7B8E7E5",
+        "frame": {
+          "x": 1408,
+          "y": 8,
+          "w": 144,
+          "h": 248
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 120,
+          "y": 72,
+          "w": 144,
+          "h": 248
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/sub/cell_009": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 19,
+          "w": 36,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "5BAEA8D1DFBF2CE521182681A37B8A5CE8FC37C169A18A4036D2D6AB8575B317",
+        "hdRgbaSha256": "672A2AA72111A7126F73F4C30B622CF1BA2CBBC26015E3B27771FC0E3D2DBED5",
+        "frame": {
+          "x": 1560,
+          "y": 8,
+          "w": 144,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 120,
+          "y": 80,
+          "w": 144,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/sub/cell_010": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 17,
+          "w": 38,
+          "h": 62
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "9A4F3606B978C659CA694B60343527B85BAA051FA6D239D7E75FD68688931813",
+        "hdRgbaSha256": "E783263B8DBB5EC990D38F861F2FAD862CB77FF9518B8212DCADDFFE0917E515",
+        "frame": {
+          "x": 1712,
+          "y": 8,
+          "w": 152,
+          "h": 248
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 72,
+          "w": 152,
+          "h": 248
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/sub/cell_011": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 38,
+          "y": 27,
+          "w": 22,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "74B4A6AADD1131F37E0F534C4195146EC213349D6C3DB7627C23964361F8E316",
+        "hdRgbaSha256": "7E076D5C89118733F28F7AF79CB5043650D34BE225C9BA00445CFCD5B0FED392",
+        "frame": {
+          "x": 1872,
+          "y": 8,
+          "w": 88,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 148,
+          "y": 144,
+          "w": 88,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/sub/cell_012": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 16,
+          "y": 21,
+          "w": 56,
+          "h": 58
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "48D07CB51FE386C70A50A5537D16802C60DB3C5B96CC6B2D92E5DC623C60BF25",
+        "hdRgbaSha256": "F4904687C06B2E5B699B9D889FE950FFC8B8E04593351F7DBC9DB09D129DADB0",
+        "frame": {
+          "x": 8,
+          "y": 264,
+          "w": 224,
+          "h": 232
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 80,
+          "y": 88,
+          "w": 224,
+          "h": 232
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/sub/cell_013": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 21,
+          "w": 42,
+          "h": 58
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "B660E7A14A88F3D9365DED7FF0CE5467297CD9E7E86165E9367087FDBCEE25E3",
+        "hdRgbaSha256": "2A994CF32C916795C145BC4322F5EDF3FA247CD0EB4D2BF095D5C329923FDD73",
+        "frame": {
+          "x": 240,
+          "y": 264,
+          "w": 168,
+          "h": 232
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 108,
+          "y": 88,
+          "w": 168,
+          "h": 232
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/sub/cell_014": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 32,
+          "y": 27,
+          "w": 32,
+          "h": 37
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "4207F4F756A61E136722D532764087E8B9BB5E4937F494523DFA4C612D2284DD",
+        "hdRgbaSha256": "0DF2A1991C5374DCEF96C5359FC49D231B7C9F92EA0898853CD005D80F801F99",
+        "frame": {
+          "x": 416,
+          "y": 264,
+          "w": 128,
+          "h": 148
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 128,
+          "y": 172,
+          "w": 128,
+          "h": 148
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/sub/cell_015": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 21,
+          "w": 38,
+          "h": 58
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "157F4073E23BCF8AD89DD815D3494E6C1541FA0F5C53F34D590DD0979FCFE41D",
+        "hdRgbaSha256": "B6AD722BF03B10E9270885D68D4F7800E6EA7B97F169B49AEB9ECDCC4CD7888B",
+        "frame": {
+          "x": 552,
+          "y": 264,
+          "w": 152,
+          "h": 232
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 88,
+          "w": 152,
+          "h": 232
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/sub/cell_016": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 19,
+          "w": 46,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "FF8241BA198F8877D6F9063AD9FD6DA878E5611296B086EAA2F5AF4D81A65A95",
+        "hdRgbaSha256": "2B8AE80DE9C1EA2CAA33453F239DD8F992D8FEE60F6C9243ADE5379640976C8F",
+        "frame": {
+          "x": 712,
+          "y": 264,
+          "w": 184,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 80,
+          "w": 184,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m403_andromon/sub/cell_017": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 31,
+          "y": 39,
+          "w": 34,
+          "h": 14
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D9AE26423ED8CEC887D2253A424D11675859FBED6D7010AFFA3D6033085E5623",
+        "hdRgbaSha256": "0DFB3F33332E0DA6EC96A12C02D3D73BF2C6E387AB5E8886109CA50E19A5CF4E",
+        "frame": {
+          "x": 904,
+          "y": 264,
+          "w": 136,
+          "h": 56
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 264,
+          "w": 136,
+          "h": 56
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      }
+    }
+  },
+  "productionStatus": "PIXEL_FAITHFUL_HD4X_FUNCTIONAL_BASELINE",
+  "runtimeEligible": false,
+  "shippingReady": false
+}

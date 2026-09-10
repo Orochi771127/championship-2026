@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "batchId": "ART-BATTLE-LIGHT-FENCE-PILOT-R1-2026-09-02",
+  "tool": "BUILT_IN_IMAGEGEN_ENVIRONMENT_PLATES_PLUS_DETERMINISTIC_PIL_GEOMETRY",
+  "generatedBackgroundCount": 2,
+  "deterministicFenceVariants": 2,
+  "sourcePolicy": "NO_ROM_PIXELS_IN_OUTPUTS",
+  "compositionOrder": [
+    "background",
+    "contact_shadow",
+    "verified_object_layer_when_present",
+    "adapted_light_metal_fence"
+  ],
+  "imageModelOwns": [
+    "OPAQUE_ENVIRONMENT_PIXELS"
+  ],
+  "imageModelDoesNotOwn": [
+    "SLOT_GEOMETRY",
+    "FENCE_GEOMETRY",
+    "CONTACT_SHADOW",
+    "OBJECT_LAYER_GEOMETRY"
+  ],
+  "outputs": [
+    {
+      "assetId": "art:battle:light-fence-pilot-r1:field-bm08-01",
+      "fieldId": "field_bm08_01",
+      "function": "BATTLE_HELL",
+      "background": {
+        "file": "docs/art/production/battle/light-fence-pilot-r1/review/08/field-bm08-01-background-light-fence-pilot.png",
+        "sha256": "522FD7A5AD9AB3AEBC95C906C617A78E3313247BE41AEE4A30DE840E5530003A",
+        "mode": "RGB"
+      },
+      "sharedLayer": "docs/art/production/battle/light-fence-pilot-r1/review/layers/field-bm00-00-light-metal-fence-bm08.png",
+      "adaptedFence": {
+        "file": "docs/art/production/battle/light-fence-pilot-r1/review/layers/field-bm00-00-light-metal-fence-bm08.png",
+        "sha256": "F553B66B4B7C4BD1E3DEB1D222A0592D3BE4EF2645D0FB14B9D823DFB1169EC5"
+      },
+      "contactShadow": {
+        "file": "docs/art/production/battle/light-fence-pilot-r1/review/layers/field-bm00-00-contact-shadow-bm08.png",
+        "sha256": "7EFD35A6927555B0ECAAEE4E0FD08A92C9D30F567CF1932F9A9665AD51912A79"
+      },
+      "objectLayers": [
+        {
+          "file": "assets/production/internal-battle-review/hardening-r2/field-bm08-01-objects.png",
+          "sha256": "B3F432328A55F6EC96313C24C913B50BE246E82B4087E23DF2136A6D8B85C431"
+        }
+      ],
+      "composites": [
+        {
+          "frameIndex": 0,
+          "file": "docs/art/production/battle/light-fence-pilot-r1/review/08/field-bm08-01-composite.png",
+          "sha256": "45DD98524FDC1DA3E592EB1F0BA3A80CE192A6FD0BEBCD6FEBFC46106827EB37",
+          "durationRawTicks": null
+        }
+      ],
+      "layoutPreview": {
+        "file": "docs/art/production/battle/light-fence-pilot-r1/review/layout/field-bm08-01-battle-layout-360x640.png",
+        "sha256": "F1F028BDADA0F598D5FA85B9CBD70D7F21BF08921ADE8684A89F780CCABF0797"
+      },
+      "geometryAuthority": "PRODUCT_AUTHORED_2026_SLOT_CONTRACT_AND_DETERMINISTIC_LIGHT_FENCE"
+    },
+    {
+      "assetId": "art:battle:light-fence-pilot-r1:field-bm10-01",
+      "fieldId": "field_bm10_01",
+      "function": "BATTLE_STADIUM",
+      "background": {
+        "file": "docs/art/production/battle/light-fence-pilot-r1/review/10/field-bm10-01-background-light-fence-pilot.png",
+        "sha256": "BE0A40DC0D6EA2655C427C68F77A011EBA67297384AE6B316B61FCABC58E04E5",
+        "mode": "RGB"
+      },
+      "sharedLayer": "docs/art/production/battle/light-fence-pilot-r1/review/layers/field-bm00-00-light-metal-fence-bm10.png",
+      "adaptedFence": {
+        "file": "docs/art/production/battle/light-fence-pilot-r1/review/layers/field-bm00-00-light-metal-fence-bm10.png",
+        "sha256": "1D712A653BD3E1AEEB6E6E9B3097AB2B724B5F8987EE702204987B0921F53AAE"
+      },
+      "contactShadow": {
+        "file": "docs/art/production/battle/light-fence-pilot-r1/review/layers/field-bm00-00-contact-shadow-bm10.png",
+        "sha256": "7EFD35A6927555B0ECAAEE4E0FD08A92C9D30F567CF1932F9A9665AD51912A79"
+      },
+      "objectLayers": [],
+      "composites": [
+        {
+          "frameIndex": 0,
+          "file": "docs/art/production/battle/light-fence-pilot-r1/review/10/field-bm10-01-composite.png",
+          "sha256": "3B31B3BC064E1C07B4C2A0D6B4C98E3EA097EC2A3B3F0F42979A4CC174165473",
+          "durationRawTicks": null
+        }
+      ],
+      "layoutPreview": {
+        "file": "docs/art/production/battle/light-fence-pilot-r1/review/layout/field-bm10-01-battle-layout-360x640.png",
+        "sha256": "B6FF1F00739DF1EFC25161BFA7D559C563B273ED58A2BFDDF9D4852E772C074B"
+      },
+      "geometryAuthority": "PRODUCT_AUTHORED_2026_SLOT_CONTRACT_AND_DETERMINISTIC_LIGHT_FENCE"
+    }
+  ]
+}

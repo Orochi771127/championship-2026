@@ -1,0 +1,590 @@
+{
+  "artReview": "PENDING_INDEPENDENT_VISUAL_REVIEW",
+  "decoderSha256": "d8690529211cf396e3b01c064a08f35d628ac30cf2f3ff92beffa8a4941b1d34",
+  "designVersion": "m226-b-pixel-stage1-r01",
+  "distinctSourceCanvasStates": 50,
+  "distinctSourcePosesSelected": 3,
+  "eggFullStateCoverage": null,
+  "entityId": "m226_hagurumon",
+  "fullMotionQa": "NOT_RUN",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "poseSamplingStatus": "PASS",
+  "poses": [
+    {
+      "addedSupport": [
+        [
+          -7,
+          -17
+        ],
+        [
+          -7,
+          -16
+        ],
+        [
+          -7,
+          -9
+        ],
+        [
+          -7,
+          -8
+        ],
+        [
+          -6,
+          -15
+        ],
+        [
+          -6,
+          -7
+        ],
+        [
+          -3,
+          -18
+        ],
+        [
+          -3,
+          -6
+        ],
+        [
+          -2,
+          -19
+        ],
+        [
+          -1,
+          -20
+        ],
+        [
+          1,
+          -5
+        ],
+        [
+          9,
+          -10
+        ]
+      ],
+      "authoredAlphaBounds": [
+        7,
+        2,
+        26,
+        18
+      ],
+      "authoredRgbaSha256": "f4bc4d5912d06b167954fc8efe3ee3e43f35d849180077a4be938a5751b6affa",
+      "authoredVisiblePixels": 184,
+      "key": "main/cell_000",
+      "nativeBounds": [
+        -16,
+        -22,
+        16,
+        2
+      ],
+      "removedSupport": [
+        [
+          -5,
+          -18
+        ],
+        [
+          1,
+          -20
+        ],
+        [
+          2,
+          -19
+        ],
+        [
+          2,
+          -18
+        ],
+        [
+          3,
+          -17
+        ],
+        [
+          3,
+          -5
+        ],
+        [
+          4,
+          -17
+        ],
+        [
+          4,
+          -16
+        ],
+        [
+          4,
+          -8
+        ],
+        [
+          4,
+          -6
+        ],
+        [
+          5,
+          -17
+        ],
+        [
+          5,
+          -16
+        ],
+        [
+          5,
+          -15
+        ],
+        [
+          5,
+          -14
+        ],
+        [
+          5,
+          -13
+        ],
+        [
+          5,
+          -9
+        ],
+        [
+          5,
+          -7
+        ],
+        [
+          5,
+          -6
+        ],
+        [
+          6,
+          -16
+        ],
+        [
+          6,
+          -15
+        ],
+        [
+          9,
+          -12
+        ],
+        [
+          9,
+          -11
+        ],
+        [
+          9,
+          -8
+        ]
+      ],
+      "sourceAlphaBounds": [
+        7,
+        2,
+        26,
+        18
+      ],
+      "sourceRgbaSha256": "b46471e7dcf8189d1389acca06e931e7550611fdcffd1e3ec368241c7c2fbe84",
+      "sourceVisiblePixels": 195,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [
+        [
+          -13,
+          -17
+        ],
+        [
+          -12,
+          -12
+        ],
+        [
+          -11,
+          -13
+        ],
+        [
+          -8,
+          -14
+        ],
+        [
+          -7,
+          -16
+        ],
+        [
+          -6,
+          -16
+        ],
+        [
+          -5,
+          -16
+        ],
+        [
+          -2,
+          -19
+        ],
+        [
+          0,
+          -6
+        ],
+        [
+          5,
+          -9
+        ],
+        [
+          5,
+          -8
+        ],
+        [
+          6,
+          -10
+        ],
+        [
+          6,
+          -9
+        ],
+        [
+          7,
+          -15
+        ],
+        [
+          8,
+          -17
+        ],
+        [
+          8,
+          -16
+        ],
+        [
+          10,
+          -19
+        ]
+      ],
+      "authoredAlphaBounds": [
+        2,
+        1,
+        30,
+        17
+      ],
+      "authoredRgbaSha256": "1ab6f7f45dcdfd58dac3e46107d1266dc617a7c91e56c060ee285c42020c41c6",
+      "authoredVisiblePixels": 211,
+      "key": "main/cell_008",
+      "nativeBounds": [
+        -15,
+        -22,
+        17,
+        2
+      ],
+      "removedSupport": [
+        [
+          -13,
+          -19
+        ],
+        [
+          -13,
+          -18
+        ],
+        [
+          -13,
+          -15
+        ],
+        [
+          -12,
+          -19
+        ],
+        [
+          -11,
+          -20
+        ],
+        [
+          -10,
+          -20
+        ],
+        [
+          -10,
+          -13
+        ],
+        [
+          -10,
+          -12
+        ],
+        [
+          -9,
+          -19
+        ],
+        [
+          -9,
+          -13
+        ],
+        [
+          -9,
+          -12
+        ],
+        [
+          -8,
+          -19
+        ],
+        [
+          -7,
+          -14
+        ],
+        [
+          -6,
+          -14
+        ],
+        [
+          -6,
+          -11
+        ],
+        [
+          -6,
+          -10
+        ],
+        [
+          -6,
+          -9
+        ],
+        [
+          -5,
+          -18
+        ],
+        [
+          -5,
+          -17
+        ],
+        [
+          -5,
+          -14
+        ],
+        [
+          -5,
+          -13
+        ],
+        [
+          -5,
+          -12
+        ],
+        [
+          -5,
+          -11
+        ],
+        [
+          -5,
+          -10
+        ],
+        [
+          -5,
+          -9
+        ],
+        [
+          -5,
+          -8
+        ],
+        [
+          -4,
+          -19
+        ],
+        [
+          -4,
+          -18
+        ],
+        [
+          -4,
+          -13
+        ],
+        [
+          -4,
+          -12
+        ],
+        [
+          -4,
+          -11
+        ],
+        [
+          -4,
+          -8
+        ],
+        [
+          -3,
+          -19
+        ],
+        [
+          -2,
+          -6
+        ],
+        [
+          5,
+          -18
+        ],
+        [
+          6,
+          -18
+        ],
+        [
+          6,
+          -17
+        ],
+        [
+          7,
+          -17
+        ],
+        [
+          7,
+          -14
+        ],
+        [
+          7,
+          -13
+        ],
+        [
+          7,
+          -12
+        ],
+        [
+          7,
+          -11
+        ],
+        [
+          8,
+          -14
+        ],
+        [
+          10,
+          -12
+        ],
+        [
+          10,
+          -11
+        ],
+        [
+          11,
+          -11
+        ],
+        [
+          12,
+          -19
+        ],
+        [
+          13,
+          -16
+        ],
+        [
+          13,
+          -13
+        ],
+        [
+          13,
+          -12
+        ],
+        [
+          14,
+          -18
+        ],
+        [
+          14,
+          -13
+        ],
+        [
+          14,
+          -12
+        ]
+      ],
+      "sourceAlphaBounds": [
+        2,
+        1,
+        30,
+        17
+      ],
+      "sourceRgbaSha256": "d35479e5dc56a14e7cae75bc0e4e58935d9fa55e44222eb7d9b891b3da6a0a2e",
+      "sourceVisiblePixels": 247,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [
+        [
+          5,
+          -5
+        ]
+      ],
+      "authoredAlphaBounds": [
+        5,
+        0,
+        27,
+        7
+      ],
+      "authoredRgbaSha256": "23e9b3b854d9a42ae0d6365827820ae05abb8b4cb308e263998391a29756dfd6",
+      "authoredVisiblePixels": 106,
+      "key": "main/cell_023",
+      "nativeBounds": [
+        -15,
+        -6,
+        17,
+        2
+      ],
+      "removedSupport": [
+        [
+          4,
+          -5
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          6,
+          -1
+        ],
+        [
+          6,
+          0
+        ],
+        [
+          7,
+          -1
+        ],
+        [
+          9,
+          -2
+        ],
+        [
+          10,
+          -5
+        ],
+        [
+          10,
+          -3
+        ],
+        [
+          10,
+          -2
+        ],
+        [
+          11,
+          -3
+        ]
+      ],
+      "sourceAlphaBounds": [
+        5,
+        0,
+        27,
+        7
+      ],
+      "sourceRgbaSha256": "0e45823f9783bcfc346b63efbe2ade5b6ad9e72bc4ddf500f5a460d3a829688c",
+      "sourceVisiblePixels": 115,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    }
+  ],
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "1b51cc4516ba293215932476849f7ee7d1e90e3f4151e72fee2069fd2f29a238",
+  "settingPoseCount": 3,
+  "shippingReady": false,
+  "sourceFiles": {
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m226_hagurumon_main.nanr": "d39d0ef49cb66d055f5944e9923655299a17131ddb2b1dcf729f48c18a5d59f7",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m226_hagurumon_main.ncbr": "83257a95861a93a85522410f966abccf0ee6d5688ff6fe2bef3f9e83b8342545",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m226_hagurumon_main.ncer": "0d38937260b9e14a2bc779cf03cf957a7b13fe7dbcfd013d85fe9f9eab2da1ad",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m226_hagurumon_main.nclr": "963e9c857270b95eeef0982928910c92bc5214ceb6b431531b1b3556cc48575c",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m226_hagurumon_sub.nanr": "b92cb8a9fb90d40dfdfd950d6cee2dd81b4b75bc58f9c4417a31bf5a81aebe11",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m226_hagurumon_sub.ncer": "ccd845197e8efdafdb6e7d5d661e2c4b5ca4dfc6e8f3998af61483f5b77dba1f",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m226_hagurumon_sub.ncgr": "7595beba4e5b3552e8e426c9370dcf549293aef73e0b6fd1e0ede8fc9b652b89",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m226_hagurumon_sub.nclr": "ae82909b33a824fff734cdc314f594ea837b423299c76e4424a4f8f2f6535481",
+    "08_FULL_FAMILY_CONVERSION/digimon/m226_hagurumon_main/animations.json": "c19e5dd34b7dc34ea1a12f387363eb965c50a226aa8754a442216b4fad17160f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m226_hagurumon_main/cells.json": "b3dc8e3e96f8dc50a3de217c79d88d697ab322d111958c1141f18f11efac374a",
+    "08_FULL_FAMILY_CONVERSION/digimon/m226_hagurumon_sub/animations.json": "e30134f30f5eadc2c047803bc7980a57c64219f8c1eeeadb0a52cb747b874836",
+    "08_FULL_FAMILY_CONVERSION/digimon/m226_hagurumon_sub/cells.json": "5fa03a22d5c3d017b4306359377e6666577d1d2098235cf6d288ebe4ed6bfb0e"
+  },
+  "technicalStatus": "PASS",
+  "visiblePaletteCount": 11
+}

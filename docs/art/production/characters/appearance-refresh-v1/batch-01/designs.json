@@ -1,0 +1,484 @@
+{
+  "schemaVersion": 1,
+  "batchId": "batch-01",
+  "status": "OWNER_OPTIONS_SELECTED_M201_PRODUCTION_ACTIVE",
+  "scope": "僅第一組四隻，共八個設計候選；未審查其餘 220 隻。",
+  "direction": "每隻依自身動作構造設計，無貓狗配額；清楚線條的高清手繪，預設保留來源主要色系。",
+  "technicalBoundary": "本檔的姿態是 source cell 外觀描述，不是原作 gameplay 動作命名或精確座標驗收。概念板不是透明圖格、動作母版或 runtime pack。",
+  "sharedStyle": {
+    "outline": "深色清楚線條，外輪廓略重；不使用像素塊仿舊",
+    "value": "三個清楚明暗層級，臉部對比集中",
+    "light": "固定左上柔光，少量控制高光",
+    "detail": "主要身份特徵須在 64–96 px 高度仍可讀；此高度僅概念縮圖檢查，不指定遊戲 world scale",
+    "presentation": "每隻一張奶油紙色橫式 A/B 比較板，主姿態、來源極端姿態、縮圖與五色色票；圖中文字僅角色 ID、A、B"
+  },
+  "entities": [
+    {
+      "entityId": "m201_agumon",
+      "code": "M201",
+      "nameZh": "二足幼獸",
+      "sourceStandardCell": "Main:0",
+      "sourceExtremeCell": "Main:23",
+      "sourcePoseNotes": "Main 0：朝左三分之四直立短臂厚腳，後尾向右。Main 23：低矮橫向伏地，頭向左，身體與尾在右。Sub 0、6 提供相應可見姿態；未以外觀推定狀態語義或宣稱像素完全重用。",
+      "referencePaths": [
+        "R:/Projects/Championship2026/YDIJ_PRIVATE_ROM_ART_PACK/02_CHARACTERS/native-224-catalog/assets/sheets/main/m201_agumon_main_cells.png",
+        "R:/Projects/Championship2026/championship-2026/docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-000-remix-candidate.png"
+      ],
+      "additionalEvidencePaths": [
+        "R:/Projects/Championship2026/YDIJ_PRIVATE_ROM_ART_PACK/02_CHARACTERS/native-224-catalog/assets/sheets/sub/m201_agumon_sub_cells.png"
+      ],
+      "prohibitedTopologyChanges": [
+        "增加四肢、獨立擺動飾品或新關節",
+        "把短厚後尾換成需要新擺動的長尾",
+        "因臉部設計移動嘴端、接地點或手部作用端"
+      ],
+      "concepts": [
+        {
+          "id": "A",
+          "title": "金色短吻貓型幼獸",
+          "description": "延續已存在的金色貓型 seed，整理奶油臉頰、腹部毛塊與銀色腕環。既有文案的 DOG 標籤與實際圖像不同；本案依圖辨識為貓型候選，尚未核准。",
+          "tokens": [
+            "三角小耳",
+            "奶油短吻與腹部",
+            "黑色大橢圓眼",
+            "銀色腕環",
+            "金色尖端短厚尾"
+          ],
+          "palette": [
+            {
+              "role": "主毛色",
+              "hex": "#EAB431"
+            },
+            {
+              "role": "高光",
+              "hex": "#FFD767"
+            },
+            {
+              "role": "奶油毛",
+              "hex": "#F8E4A4"
+            },
+            {
+              "role": "輪廓",
+              "hex": "#573919"
+            },
+            {
+              "role": "腕環",
+              "hex": "#A6ABB0"
+            }
+          ],
+          "materials": "柔軟短毛與低噪點金色毛塊，腕環使用少量銀灰反光。",
+          "motionRisks": [
+            "三角耳在翻身及伏地姿態易改變頭部包絡",
+            "腕環在遮擋時可能錯位",
+            "大眼與吻部在張嘴畫格容易漂移"
+          ],
+          "existingCandidate": true
+        },
+        {
+          "id": "B",
+          "title": "蜜金圓耳幼獸",
+          "description": "用貼頭圓耳、寬而短的奶油吻部、圓滑臉頰與頸前月牙形成另一身份；以淡色腕毛帶取代金屬腕環，保持原本二足結構。",
+          "tokens": [
+            "貼頭小圓耳",
+            "寬短奶油吻與單一深色鼻",
+            "平滑圓臉",
+            "奶油頸前月牙",
+            "淡色腕毛帶"
+          ],
+          "palette": [
+            {
+              "role": "主毛色",
+              "hex": "#DCA238"
+            },
+            {
+              "role": "高光",
+              "hex": "#F4C65C"
+            },
+            {
+              "role": "吻腹",
+              "hex": "#F3DCA4"
+            },
+            {
+              "role": "陰影",
+              "hex": "#AC682F"
+            },
+            {
+              "role": "鼻眼輪廓",
+              "hex": "#493522"
+            }
+          ],
+          "materials": "平順短毛、大片柔和暖色陰影，不增加長鬚、蹼、衣物或水生道具。",
+          "motionRisks": [
+            "寬吻不能外移原嘴部作用端",
+            "水獺視覺慣例易誘發過長尾巴，必須限制",
+            "奶油月牙需要跨伸展姿態保持相同表面位置"
+          ],
+          "existingCandidate": false
+        }
+      ],
+      "recommendation": "A 可最大化既有候選重用；B 的圓耳與無金屬細節有利於低成本保持姿態一致。建議由 Owner 比較身份偏好；美術建議 B，並非已選案。",
+      "reviewState": "OWNER_OPTION_SELECTED",
+      "image": "m201-concepts-v1.png",
+      "promptFile": "generation/m201-prompt.txt",
+      "artReviewNotes": [
+        "大型與伏地圖有清楚深色輪廓、高清手繪色塊。底部縮圖仍帶像素化邊緣，不代表正式高清風格；兩側毛色筆觸稍碎，製作母版時須收斂。",
+        "B 實際讀感更像圓耳熊獺幼獸，建議顯示名稱改為『蜜金圓耳幼獸』；水獺是最初方向，不能宣稱生成結果具有明確水獺解剖。",
+        "B 圖中奶油色集中在吻、頸和腕，腹部為金色；可作候選實際配色交給 Owner 看，不在文字中稱奶油腹。"
+      ],
+      "productionFixes": [
+        "從已選高清身份母版重新輸出真正縮圖，不把圖板上的像素化副本當製作 seed。",
+        "逐格鎖嘴端、手端、腳底與短厚尾的來源位置，再處理耳朵和臉毛允許範圍。",
+        "減少毛色碎斑，固定線條粗細；伏地姿態不沿用板上對稱前掌布局，須以原 cell 決定可見手腳。",
+        "移除所有紙色與接觸影，保留透明 alpha；無法以板圖證明其已存在。"
+      ],
+      "selectedConcept": "A"
+    },
+    {
+      "entityId": "m001_zurumon",
+      "code": "M001",
+      "nameZh": "無肢軟膠幼體",
+      "sourceStandardCell": "Main:0",
+      "sourceExtremeCell": "Main:60",
+      "sourcePoseNotes": "Main 0 是低矮黃色膠體及右側少量液滴。Main 60 為窄高伸展、深色大張口；Sub 14 亦可見高伸展形體。保留每個來源畫格既有液滴的數量和位置，不能把液滴當新粒子系統。",
+      "referencePaths": [
+        "R:/Projects/Championship2026/YDIJ_PRIVATE_ROM_ART_PACK/02_CHARACTERS/native-224-catalog/assets/sheets/main/m001_zurumon_main_cells.png"
+      ],
+      "additionalEvidencePaths": [
+        "R:/Projects/Championship2026/YDIJ_PRIVATE_ROM_ART_PACK/02_CHARACTERS/native-224-catalog/assets/sheets/sub/m001_zurumon_sub_cells.png"
+      ],
+      "prohibitedTopologyChanges": [
+        "增加四肢、耳、角、獨立尾巴或硬頭骨",
+        "新增液滴或讓內部花紋自行漂浮",
+        "把軟體變成不能依來源压扁伸展的硬殼"
+      ],
+      "concepts": [
+        {
+          "id": "A",
+          "title": "琥珀凝膠",
+          "description": "以半透明蜂蜜黃色膠體與弧形琥珀核心改變材質身份；三塊大內部琥珀島紋隨表面一起變形，保留深色小眼與橘褐嘴。",
+          "tokens": [
+            "半透明蜂蜜膠體",
+            "弧形琥珀核心",
+            "三塊固定琥珀島紋",
+            "奶油反光",
+            "深色小眼"
+          ],
+          "palette": [
+            {
+              "role": "主體",
+              "hex": "#E8B82D"
+            },
+            {
+              "role": "反光",
+              "hex": "#FFE28A"
+            },
+            {
+              "role": "內核",
+              "hex": "#C98217"
+            },
+            {
+              "role": "嘴",
+              "hex": "#A0441C"
+            },
+            {
+              "role": "輪廓眼",
+              "hex": "#5C4018"
+            }
+          ],
+          "materials": "有節制的半透明膠質，高光面積穩定、不依序列自發閃爍。",
+          "motionRisks": [
+            "內核在極端伸展時可能被畫成獨立固體",
+            "高光與內部紋理容易逐幀閃動",
+            "液滴被模型任意增加或丟失"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "金色緞面軟膠",
+          "description": "以不透明向日葵黃、寬奶油眉弧與兩大片赭色大理石紋建立平面識別；臉部更像可伸展的簡潔面罩，身體始終是軟膠。",
+          "tokens": [
+            "不透明緞面黃",
+            "寬奶油眉弧",
+            "兩點深色直眼",
+            "兩片赭色側紋",
+            "寬橘褐嘴"
+          ],
+          "palette": [
+            {
+              "role": "主體",
+              "hex": "#E6B526"
+            },
+            {
+              "role": "眉弧",
+              "hex": "#FFE5A0"
+            },
+            {
+              "role": "側紋",
+              "hex": "#C68A20"
+            },
+            {
+              "role": "嘴",
+              "hex": "#A34521"
+            },
+            {
+              "role": "輪廓眼",
+              "hex": "#563919"
+            }
+          ],
+          "materials": "平滑緞面軟膠，少量寬幅明暗，無容器或額外裝飾。",
+          "motionRisks": [
+            "奶油眉弧不能維持剛性而妨礙張嘴伸展",
+            "大側紋在伏平時需保持表面連續",
+            "不能因奶黃材質畫成裝在杯中的甜點"
+          ]
+        }
+      ],
+      "recommendation": "建議 B：主要面部符號較少，極端形變時較容易維持身份；A 材質更鮮明，但需增加半透明與紋理一致性檢查。",
+      "reviewState": "OWNER_OPTION_SELECTED",
+      "image": "m001-concepts-v1.png",
+      "promptFile": "generation/m001-prompt.txt",
+      "artReviewNotes": [
+        "輪廓與大形清楚、黃金色系符合方向；A 的透明高光與顆粒稍多，須避免逐幀閃爍。",
+        "A 原本應在體內或貼合表面的琥珀島紋被畫成突出膠珠；可用於選擇琥珀材質，量產身份設定需修正。"
+      ],
+      "productionFixes": [
+        "將 A 的突出琥珀珠改成平齊或內嵌色塊，不引入新增可分離構件。",
+        "每個 source cell 分別還原液滴；來源沒有的滴不能新增，也不能用獨立粒子動畫代替。",
+        "重新對照嘴開口方向、最高點、底部外形與側後方膠體突起；不能僅將中性圖拉長。",
+        "固定 A 高光與 B 眉弧的表面附著，減少細粒紋理。"
+      ],
+      "selectedConcept": "B"
+    },
+    {
+      "entityId": "m226_hagurumon",
+      "code": "M226",
+      "nameZh": "齒輪機械體",
+      "sourceStandardCell": "Main:0",
+      "sourceExtremeCell": "Main:23",
+      "sourcePoseNotes": "Main 0 為灰金色齒輪組的斜向可見面。Main 23 為極薄橫向側面，不能用正面圖單纯垂直壓縮替代。Sub 6、7、17 亦呈現窄側面。圖像未證明各齒輪的獨立旋轉控制。",
+      "referencePaths": [
+        "R:/Projects/Championship2026/YDIJ_PRIVATE_ROM_ART_PACK/02_CHARACTERS/native-224-catalog/assets/sheets/main/m226_hagurumon_main_cells.png"
+      ],
+      "additionalEvidencePaths": [
+        "R:/Projects/Championship2026/YDIJ_PRIVATE_ROM_ART_PACK/02_CHARACTERS/native-224-catalog/assets/sheets/sub/m226_hagurumon_sub_cells.png"
+      ],
+      "prohibitedTopologyChanges": [
+        "改變齒數、零件中心、遮擋順序或新增手腳",
+        "新增漂浮結晶或自轉小零件",
+        "使用輪廓外突出寶石或浮雕，造成新遮擋"
+      ],
+      "concepts": [
+        {
+          "id": "A",
+          "title": "鋼釉徽輪",
+          "description": "灰色拉絲鋼主體與金赭齒圈，正面用寬象牙釉眉板、紅玻璃窄眼和炭灰下臉板重新建立機械表情；三條大刻槽取代細碎裝飾。",
+          "tokens": [
+            "象牙釉眉板",
+            "兩道深紅玻璃眼",
+            "三條同心刻槽",
+            "灰鋼側齒",
+            "金赭主齒圈"
+          ],
+          "palette": [
+            {
+              "role": "主體灰鋼",
+              "hex": "#7C8283"
+            },
+            {
+              "role": "齒圈",
+              "hex": "#BE8B29"
+            },
+            {
+              "role": "釉板",
+              "hex": "#E6DEC5"
+            },
+            {
+              "role": "眼",
+              "hex": "#A63E31"
+            },
+            {
+              "role": "輪廓",
+              "hex": "#343B3C"
+            }
+          ],
+          "materials": "啞光拉絲鋼、少量低光澤琺瑯、局部紅玻璃；反光固定而不閃爍。",
+          "motionRisks": [
+            "同心刻槽需隨原零件視角轉換，不能在薄側面仍顯示正面",
+            "新眉板不可遮住原有眼部朝向",
+            "小固定件可能在縮圖變雜訊"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "礦紋古輪",
+          "description": "保留灰金機械輪廓，在既有正面嵌入平齊的煙灰礦片，使用大片淺灰角面眉與炭灰下臉楔形紋；眼仍為來源數量的紅色嵌點。",
+          "tokens": [
+            "平齊煙灰礦片",
+            "大片淺灰角面眉",
+            "炭灰楔形下臉紋",
+            "兩個紅色嵌眼",
+            "金赭金屬齒圈"
+          ],
+          "palette": [
+            {
+              "role": "主體礦片",
+              "hex": "#737B7C"
+            },
+            {
+              "role": "角面",
+              "hex": "#B9C0BD"
+            },
+            {
+              "role": "齒圈",
+              "hex": "#B88931"
+            },
+            {
+              "role": "眼",
+              "hex": "#A84938"
+            },
+            {
+              "role": "輪廓",
+              "hex": "#343A3D"
+            }
+          ],
+          "materials": "低光澤礦物表面嵌在金屬中，礦片是材質設計，不增加骨骼或破裂功能。",
+          "motionRisks": [
+            "礦片容易被模型畫成突出水晶，須明確拒收",
+            "角面在不同旋轉姿態須附著同一零件",
+            "避免新增裂縫開合而暗示新動作"
+          ]
+        }
+      ],
+      "recommendation": "建議 A：灰金主色清晰，與原機械動作的材質變形一致。B 提供較強的古物視覺差异，但不得把礦物面誤做新增構件。",
+      "reviewState": "OWNER_OPTION_SELECTED",
+      "image": "m226-concepts-v1.png",
+      "promptFile": "generation/m226-prompt.txt",
+      "artReviewNotes": [
+        "材料描繪偏寫實且細紋密度過高，明顯比另三張更接近有紋理的立體渲染。這不妨礙 Owner 選擇鋼釉或礦面身份，但正式高清手繪版本須減少材質噪點和過強倒角。",
+        "B 的礦眉有明顯前凸量，違反原 brief 的平齊表面意圖；A 的眉板也有厚倒角，須在母版阶段限制。"
+      ],
+      "productionFixes": [
+        "將 B 礦眉壓回既有臉部平面，以色面表現礦物，不增加幾何突起。",
+        "刪除細刮痕與大部分細裂紋，改為三個可跨姿態追蹤的大材質明暗區，統一清楚手繪輪廓。",
+        "依 NCER/OAM 與 source cell 逐一核對所有零件中心、齒數、正側面遮擋；未核對前不得把生成板当齒輪模板。",
+        "薄側面只繪製來源可見内容，不能因前視圖有紅眼就自動保留紅眼或厚眉。"
+      ],
+      "selectedConcept": "B"
+    },
+    {
+      "entityId": "e000_digitama",
+      "code": "E000",
+      "nameZh": "白灰蛋",
+      "sourceStandardCell": "Main:0",
+      "sourceExtremeCell": "Main:7",
+      "sourcePoseNotes": "Main 0 是白灰完整蛋；Main 4–8 可見不同殼裂/開口圖形，Main 7 可見紅黑抽象內部。Main 9–12 為獨立青白效果畫格。Main/Sub 各 13 格均已檢視；此处不推定孵化時序、物種或觸發條件。",
+      "referencePaths": [
+        "R:/Projects/Championship2026/YDIJ_PRIVATE_ROM_ART_PACK/02_CHARACTERS/native-224-catalog/assets/sheets/main/e000_digitama_main_cells.png"
+      ],
+      "additionalEvidencePaths": [
+        "R:/Projects/Championship2026/YDIJ_PRIVATE_ROM_ART_PACK/02_CHARACTERS/native-224-catalog/assets/sheets/sub/e000_digitama_sub_cells.png"
+      ],
+      "prohibitedTopologyChanges": [
+        "新增凸起結晶、巢、底座、翅膀或臉",
+        "把裝飾裂紋加到來源完整蛋階段",
+        "在開口中發明新生物或把青白效果提前疊上完整蛋"
+      ],
+      "concepts": [
+        {
+          "id": "A",
+          "title": "象牙瓷釉蛋",
+          "description": "象牙白緞面蛋殼，底部三分之一有寬灰釉帶，側上方四個平齊淡灰卵形釉斑；以材質和大圖案更新外觀而不改蛋形。",
+          "tokens": [
+            "象牙白釉",
+            "下方寬灰釉帶",
+            "四個淡灰卵形斑",
+            "圓潤固定高光"
+          ],
+          "palette": [
+            {
+              "role": "主殼",
+              "hex": "#EEEDE7"
+            },
+            {
+              "role": "高光",
+              "hex": "#FFFDF5"
+            },
+            {
+              "role": "釉紋",
+              "hex": "#ACB3B7"
+            },
+            {
+              "role": "陰影",
+              "hex": "#727C82"
+            },
+            {
+              "role": "輪廓",
+              "hex": "#414B54"
+            }
+          ],
+          "materials": "柔和瓷釉，花紋為色釉而非凹凸幾何。",
+          "motionRisks": [
+            "花紋在左右搖動時不可任意換邊",
+            "殼開口時色釉必須沿原裂口中断",
+            "明暗邊緣不能誤讀成提前裂開"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "月石礦紋蛋",
+          "description": "珍珠白殼上三片平齊的大淺灰礦面，組成不對稱連續螺紋；偏冷的銀灰反光與深石墨下緣形成更明確的角面圖案。",
+          "tokens": [
+            "珍珠白主殼",
+            "三片大淺灰礦面",
+            "不對稱連續螺紋",
+            "石墨下緣"
+          ],
+          "palette": [
+            {
+              "role": "主殼",
+              "hex": "#E9ECEB"
+            },
+            {
+              "role": "高光",
+              "hex": "#F9FCF9"
+            },
+            {
+              "role": "礦面",
+              "hex": "#BAC2C5"
+            },
+            {
+              "role": "陰影",
+              "hex": "#7E8A91"
+            },
+            {
+              "role": "輪廓",
+              "hex": "#424D57"
+            }
+          ],
+          "materials": "蛋面上的緞面礦物色塊，沒有凸起晶體、稜角輪廓或自發光。",
+          "motionRisks": [
+            "螺紋在搖擺時容易產生旋轉錯覺",
+            "礦片必須平齊，不能改原蛋輪廓",
+            "開口內部只能保持來源抽象程度，不能補出幼體"
+          ]
+        }
+      ],
+      "recommendation": "建議 A：大灰帶與四點斑更適合十三格小組的穩定繪製，且容易與殼裂區分；B 的大角面更鮮明但需檢查搖動時的紋理連續性。",
+      "reviewState": "OWNER_OPTION_SELECTED",
+      "image": "e000-concepts-v1.png",
+      "promptFile": "generation/e000-prompt.txt",
+      "artReviewNotes": [
+        "明暗與線條節制，B 礦片維持表面片區，没有突出晶體；本板風格可作後續高清手繪整理的參考。",
+        "A 實際是四個灰斑，且完整/開口/縮圖都一致；可以把本候選描述從三斑改成四斑，這是畫稿整理，不是 Owner 核准。",
+        "B 實際有較多細分礦面，應鎖定大斜紋布局，避免把每個微小切面當獨立動作特徵。"
+      ],
+      "productionFixes": [
+        "依來源各 cell 重建蛋的寬高、搖動、殼裂位置及開口，不從板圖推斷孵化順序。",
+        "A 按實際候選固定四斑與灰帶，跨裂殼繼續維持同一表面布局；B 固定大斜紋，減少不必要的小切面。",
+        "Main/Sub 青白效果格另按來源製作，不把蛋表面泛光當替代。",
+        "移除圖板地面陰影與紙色；開口中的紅黑形狀不補出來源未證明的生物。"
+      ],
+      "selectedConcept": "A"
+    }
+  ]
+}

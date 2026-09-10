@@ -1,0 +1,199 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 23,
+  "scenePath": "database/database_obj_main_scene.nxr",
+  "category": "Database / Encyclopedia",
+  "overlayOwner": "OVL16",
+  "sourceEvidence": {
+    "fileId": 1020,
+    "fileName": "database_obj_main_scene.nxr",
+    "sha256": "1378ec73e5cd5a8b4a60675cafb408a30f2c932b405d782b2b37f331f4e93b84",
+    "overlayMappingConfidence": "SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "MAIN",
+    "roleEvidence": "FILENAME_HEURISTIC"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [
+    {
+      "resourceIndex": 0,
+      "resourceName": "database_obj_main",
+      "cellCount": 5,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "database/database_obj_main.ncer",
+        "nanr": "database/database_obj_main.nanr",
+        "ncgr": null,
+        "ncbr": "database/database_obj_main.ncbr",
+        "nclr": "database/database_obj_main.nclr",
+        "nscr": null
+      },
+      "spriteWitness": "docs/art/production/ui/faithful-hd96/sprite-cell-witnesses-4x/database__database_obj_main__cells.png",
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    },
+    {
+      "resourceIndex": 1,
+      "resourceName": "database_icon",
+      "cellCount": 3,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "database/database_icon.ncer",
+        "nanr": "database/database_icon.nanr",
+        "ncgr": null,
+        "ncbr": "database/database_icon.ncbr",
+        "nclr": "database/database_icon.nclr",
+        "nscr": null
+      },
+      "spriteWitness": "docs/art/production/ui/faithful-hd96/sprite-cell-witnesses-4x/database__database_icon__cells.png",
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "mode",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": -2,
+        "y": 51
+      },
+      "portraitProjection": {
+        "x": -8.4375,
+        "y": 365.1562
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 1,
+      "name": "image",
+      "resourceIndex": 1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 0,
+        "y": 0
+      },
+      "portraitProjection": {
+        "x": 0.0,
+        "y": 150.0
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 2,
+      "name": "base",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": -54,
+        "y": -45
+      },
+      "portraitProjection": {
+        "x": -227.8125,
+        "y": -39.8438
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 3,
+      "name": "unnamed0003",
+      "resourceIndex": 0,
+      "cellIndex": 2,
+      "sourcePosition": {
+        "x": -46,
+        "y": -37
+      },
+      "portraitProjection": {
+        "x": -194.0625,
+        "y": -6.0938
+      },
+      "params": [
+        2,
+        0,
+        11.5,
+        10
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 4,
+      "name": "unnamed0004",
+      "resourceIndex": 0,
+      "cellIndex": 2,
+      "sourcePosition": {
+        "x": -49,
+        "y": -37
+      },
+      "portraitProjection": {
+        "x": -206.7188,
+        "y": -6.0938
+      },
+      "params": [
+        4,
+        0,
+        12,
+        10
+      ],
+      "colorModulationRaw": "0x7FFFFFFF",
+      "cellLinkValidated": true
+    }
+  ],
+  "dynamicVirtualNodeCount": 0,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

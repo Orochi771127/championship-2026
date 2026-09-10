@@ -1,6 +1,6 @@
 {
   "owner": "Claude Code",
-  "deltaDate": "2026-09-02",
+  "deltaDate": "2026-09-03",
   "syncRevision": null,
   "note": "Claude-owned delta. Shared Master Sync, Dependency Matrix and Blocker Ledger are Codex's to merge; changes that belong there are recorded here instead of edited directly. Art registry reconciled against the ROM binary on 2026-09-01; see docs/art/ART_ROM_RECONCILIATION.md and the artScopeCorrection entry for the shared ledger.",
   "added": [
@@ -482,6 +482,197 @@
       "path": "reports/art/BATTLE_COMPOSITE_INTEGRITY_R5.json",
       "kind": "report",
       "summary": "R5 gate run: 22 checks outside threshold. MATTE +33.8; HALO up to +64.2 (BM08); SLOTS fail on BM01/BM02/BM09/BM10 with BM10 worst at dE 35.8; ADAPTATION exactly 0.00; GROUNDING fails all seven; CHROMA down to 0.3 of original on BM11."
+    },
+    {
+      "path": "docs/coordination/CLAUDE_BATTLE_HANDOFF.md",
+      "kind": "coordination",
+      "summary": "The handoff a person reads first: where the battle lane stands, the eight wiring defects and why running a match found them, what is deliberately unfinished, and the ordered next steps. CLAUDE_REBUILD_STATUS.json is its machine-readable half."
+    },
+    {
+      "path": "src/championship/battle/battleSpriteCellBox.js",
+      "kind": "runtime module",
+      "evidence": "VERIFIED_BINARY (ARM9 0x02047E58, 0x0202DD54, 0x02049714, 0x02048B98)",
+      "summary": "The sprite cell box, translated whole: the bank lookup with its unsigned bound check and its 16-or-8 stride, the flip and Q12 scale transform with the ROM's two rounding directions, both early exits, and the bridge into battleLaunchPool.launchPosition. Checked against a literal ARM transcription over 4,000 randomised inputs, 0 mismatches."
+    },
+    {
+      "path": "tests/championship-battle-sprite-cell-box-cases.mjs",
+      "kind": "test",
+      "summary": "Thirty-seven differential vectors plus the bank bound check, the stride rule, both early exits and the launch bridge."
+    },
+    {
+      "path": "docs/contracts/championship/CHAMPIONSHIP_CAGE_RANCH_COMPOSITION_CONTRACT.v1.json",
+      "kind": "contract",
+      "summary": "Why cages cannot be joined and what it takes to join them. Root cause is the single-slot licensed map-art loader, correct for Hunt and a category error for cages. Measured from the 40 shipped tiles: 4x nearest scale, real alpha with 0.0% partial pixels (hard-edged island silhouettes, not rectangles), and NINE distinct native footprints from 96x112 to 384x112 with widths on a 48px module and only two height classes (112, 200). Records the open tension that ONE_MODULE_PER_HEX_SLOT is VERIFIED_BINARY while the footprints are not uniform, and forbids resolving it with tetris masks again. Build instruction adds a second tiled-family load path and a new memoryPolicy value without relaxing the Hunt policy. UPDATED same day: the Cage Edit board was then located in Owner-supplied footage. It is a HEXAGON GRID with empty slots drawn as hex outlines and ID/Size view toggles, which confirms ONE_MODULE_PER_HEX_SLOT visually and resolves the footprint tension via a two-tier reading (board draws uniform hex cells; Training field draws real per-cage sizes tiled edge to edge). Occupancy Limit is Digimon capacity, NOT hex-cell count - do not derive placement from it. Open question downgraded to PARTIALLY_ANSWERED: orientation, extent, origin and slotIndex-to-cell mapping remain untraced."
+    },
+    {
+      "path": "docs/contracts/championship/CHAMPIONSHIP_STATUS_BAR_CONTRACT.v1.json",
+      "kind": "contract",
+      "summary": "The original carries a persistent SEASON | DAY N | MODE | HH:MM bar in every mode; the product renders one of the four fields. Carries the ROM_VERIFIED time cascade 4/8/24/60/400 read directly from ARM9 0x020C8A4C, and the disassembly of ARM9 0x0207BC9C and 0x0207BCCC showing both schedule slots read the SAME clock word and take mod 4 and mod 8. Withdraws the battleMatchSelection.js reservation that the two title-event schedule columns are not a calendar: +0x14 is season, +0x18 is day-of-season. Marks the 16-units-per-frame tick rate as the one inference, and corrects the first-round audit claim that the original clock was not 24-hour - it is."
+    },
+    {
+      "path": "src/championship/time/championshipWorldClock.js",
+      "kind": "runtime",
+      "summary": "The original time cascade as pure arithmetic: 4 seasons / 8 days / 24 hours / 60 minutes / 400 units, read from ARM9 0x020C8A4C. advanceWorldClock rolls every level in one arithmetic step (a 500-year jump costs the same as a minute and cannot spin); endWorldClockDay implements the submenu End Day entry. Owns no ticker, no state, no renderer. REAL_SECONDS_PER_WORLD_DAY and DAY_START_MINUTES are the two PRODUCT_AUTHORED knobs and are named as such."
+    },
+    {
+      "path": "src/championship/app/championshipStatusBar.js",
+      "kind": "runtime",
+      "summary": "The persistent SEASON | DAY N | MODE | HH:MM bar, mounted at document.body rather than inside a screen because ui/info_bar.nxr is a Shared scene no mode overlay owns. Mode labels are observed, not guessed: Cage Edit reads Training and Gate Select reads Hunt. The End Day control is marked provisionalPlacement=SUBMENU_NOT_BUILT so its placement is not mistaken for original layout."
+    },
+    {
+      "path": "tests/championship-world-clock-cases.mjs",
+      "kind": "test",
+      "summary": "11 cases over the cascade: the five ARM9 words, season order against the OVL1 palettes, bound refusal and its off-by-one edge, rolling at each level, a single advance crossing every level at once, a 500-year jump, End Day rolling season, and 1-based day display over the 0-based slot."
+    },
+    {
+      "path": "src/championship/cage/ranchSlotGeometry.js",
+      "kind": "runtime",
+      "summary": "Ranch placement, with traced and untraced claims kept apart. Records the ROM cover nodes (cover1/2/3 at x=170/194/218, y=8, 24px pitch) and the derivation they support: three covers over six unlockable slots means two slots per cover, so ten columns of two -- and laying ten columns at the covers own pitch reproduces the three ROM cover x values exactly. That fit is recorded, not shipped as fact: BOARD_ROWS/BOARD_COLUMNS stay PRODUCT_AUTHORED. layoutRanchTiles shelf-packs the Training field at real tile sizes on integer coordinates."
+    },
+    {
+      "path": "tests/championship-ranch-slot-geometry-cases.mjs",
+      "kind": "test",
+      "summary": "11 cases. The load-bearing one asserts the ten-column board reproduces the ROM cover positions, so if anyone changes the arrangement the derivation that justified it fails loudly."
+    },
+    {
+      "path": "tests/championship-ranch-tile-composite-cases.mjs",
+      "kind": "test",
+      "summary": "6 cases against the REAL shipped cage manifest and a stub PIXI: N tiles composite into one container at integer positions, a ONE_ACTIVE bundle is refused so Hunt maps cannot be tiled, dispose releases every frame and is idempotent, and the measured facts the contract quotes (40 fields, 9 footprints, 4x scale, 48px width module, two height classes) are locked down. Found by running it: four of the forty cages are two-frame animations, so tiles and texture loads are not one to one."
+    },
+    {
+      "path": "src/championship/app/championshipToolbar.js",
+      "kind": "runtime",
+      "summary": "The contextual toolbar. Eight cells (ROM_VERIFIED count) mounted at body level because ui/toolbar.nxr is Shared, attached by the ARM9 main binary rather than by OVL18. Six ROM-recovered care tools plus the two observed submenus is exactly eight, and that fit is noted -- but WHICH cell holds what is UNKNOWN_REQUIRES_TRACE, so every cell carries data-slot-mapping=UNVERIFIED and the order is presentation, not parity. Mode 1 Training / mode 2 Hunt only; every other screen hides the bar because no other overlay calls the initializer."
+    },
+    {
+      "path": "(deleted) src/data/championship/catalogs/entities.r1.json",
+      "kind": "removal",
+      "summary": "The three invented creatures (catalogStatus TEMPORARY_VS1_PRESENTATION) are gone. They were never in the cartridge. The runtime now loads creature-species.r1.json, the transcribed ARM9 table."
+    },
+    {
+      "path": "src/championship/raising/speciesBaseStats.js",
+      "kind": "runtime",
+      "summary": "HP and TP for a species through a path that was already traced and simply never surfaced on the raising side: species +0x30 -> statCurveIndex -> stat-curve row -> column 0 (HP) and column 1 (TP), the same two columns battleCreatureBuild.js reads. DELIBERATELY returns no attack/defence/wisdom/speed: curve columns 1-6 are byte-identical in all 27 rows, so the curve carries one shared value and cannot differentiate four stats. Emitting one number under four labels would look like parity and be fiction."
+    },
+    {
+      "path": "src/championship/app/digimonListScreen.js",
+      "kind": "runtime",
+      "summary": "The Digimon roster, built to the node tables of the three original scenes rather than to taste: digimon_list_item (7 nodes), digimon_list_main (21) and digimon_list_sub (19). Renders only rows with a traced source - name, HP, TP, generation, attribute, family - and states how many further rows the original shows that are not traced. Untraced rows are ABSENT, not zero-filled, because a zero in a stat row reads as a real value. name_edit / delete / entry are drawn disabled: the original has them, this build does not."
+    },
+    {
+      "path": "(scratchpad) dis.cjs",
+      "kind": "tooling",
+      "summary": "Disassembler rewritten. The module is now a REQUIRED argument and its extent is read from manifests/overlays.csv; an address outside that module is refused with a non-zero exit instead of resolved. All 22 overlays share RAM base 0x0210B300, so an address cannot identify its overlay - that is exactly how the previous version produced a clean listing from the wrong binary. It also now prints the resolved target of pc-relative loads. Verified both ways: correct overlay disassembles, wrong overlay refuses."
+    },
+    {
+      "path": "scripts/build-title-event-strings.py",
+      "kind": "builder",
+      "summary": "Transcribes the 62 title-match names and blurbs out of nitrofs/ui/txt/txt_list_txt.dat. The bank is UTF-16LE entries terminated by the three RAW bytes 3C 3E 0A -- the terminator is not itself UTF-16, so decoding the whole file in one pass loses alignment after entry 0. The builder refuses if the terminator count disagrees with the header or if a name in the 675 block carries markup, so a wrong offset fails the build instead of emitting plausible text. Proven both ways: block 675 accepted, blocks 737 and 600 refused."
+    },
+    {
+      "path": "src/data/championship/catalogs/battle-title-event-strings.r1.json",
+      "kind": "catalog",
+      "summary": "62 fixture names and 62 blurbs, ROM_VERIFIED. Japanese, because the cartridge is the Japanese YDIJ release; no translation is invented."
+    },
+    {
+      "path": "src/championship/battle/titleEventSchedule.js",
+      "kind": "runtime",
+      "summary": "The fixture calendar and the ROM scan at ARM9 0x02089230, reproduced including its scan bound of 0x3D (record 61, the tutorial match, is never reached) and its capacity behaviour (a full output stops storing but keeps counting)."
+    },
+    {
+      "path": "src/championship/app/scheduleScreen.js",
+      "kind": "screen",
+      "summary": "The 4x8 fixture board. Marks today, shows every fixture, and does NOT hide gated ones -- the gate depends on an untraced counter, so hiding rows would misreport the schedule."
+    },
+    {
+      "path": "tests/championship-title-event-schedule-cases.mjs",
+      "kind": "test",
+      "summary": "12 cases covering the scan bound, the string-block alignment, the half-counter gate, capacity truncation, and the line-break conversion regression."
+    },
+    {
+      "path": "scripts/lib/ydij_text_bank.py",
+      "kind": "library",
+      "summary": "Shared reader for the cartridge's ui/txt banks. Holds the alignment rule (UTF-16LE entries, raw 3-byte 3C 3E 0A terminator, variable-length ASCII header) in one place so both builders cannot drift. Refactoring the title builder onto it produced a byte-identical catalog."
+    },
+    {
+      "path": "scripts/build-help-catalog.py",
+      "kind": "builder",
+      "summary": "Transcribes help_text_txt.dat. Carries a positive control: entry 96 must read as the day-length text and must land on the TIME title, or the build fails rather than emit a re-numbered catalog."
+    },
+    {
+      "path": "src/data/championship/catalogs/help-text.r1.json",
+      "kind": "catalog",
+      "summary": "84 help entries, ROM_VERIFIED: 16 section headings and 68 topics, in the cartridge's own order."
+    },
+    {
+      "path": "src/championship/app/helpScreen.js",
+      "kind": "screen",
+      "summary": "The help screen. Flat list in ROM order because the parent-child grouping is untraced; headings are labels, topics are selectable."
+    },
+    {
+      "path": "tests/championship-help-catalog-cases.mjs",
+      "kind": "test",
+      "summary": "8 cases: the 84/84 split, the entry-96 control, heading/topic classification, markup conversion, and a guard that no record asserts a parent while the grouping is untraced."
+    },
+    {
+      "path": "src/championship/app/tamerInfoScreen.js",
+      "kind": "screen",
+      "summary": "Tamer Info. The eight fields and their digit widths are ROM_VERIFIED from the tamer_info main and sub scene node tables; because each digit is its own sprite-cell node, the node names give the widths directly. Two fields have a traced source (money from the persisted shop wallet, have from the roster); the other six are drawn as dashes at their correct width."
+    },
+    {
+      "path": "tests/championship-tamer-info-cases.mjs",
+      "kind": "test",
+      "summary": "6 cases: the field list and scene split, the digit widths, the scene y positions, the money-width cross-check against the battle reward wallet cap, the sourced/unsourced partition, and a freeze guard so an untraced field cannot be given a source by assignment."
+    },
+    {
+      "path": "src/championship/raising/statLadder.js",
+      "kind": "runtime",
+      "summary": "The stat ladder. The 27-row table at ARM9 0x020CA008 is one shared growth ladder, not a per-species stat block: column 0 is the HP ladder (200..7000), columns 1..6 are byte-identical and form one shared ladder for every other stat (10..350), column 7 has no traced reader."
+    },
+    {
+      "path": "tests/championship-stat-ladder-cases.mjs",
+      "kind": "test",
+      "summary": "8 cases covering the ladder's ends, both ladders ascending, the shared-column premise, refusal of an off-ladder rung, and a guard that the per-creature rung stays declared untraced."
+    },
+    {
+      "path": "scripts/build-species-names.py",
+      "kind": "builder",
+      "summary": "Transcribes the Japanese species names. The offset is pinned by a control the cartridge itself printed on screen: species 21 must read KOROMON, which is the name the Owner's creature evolved into on video. Offsets +32 and +34 are both rejected by that control."
+    },
+    {
+      "path": "src/data/championship/catalogs/species-names.r1.json",
+      "kind": "catalog",
+      "summary": "216 Japanese species names plus the six stat labels, ROM_VERIFIED."
+    },
+    {
+      "path": "tests/championship-species-names-cases.mjs",
+      "kind": "test",
+      "summary": "5 cases covering the stat order, the 8..223 coverage, the +33 offset with its on-screen control, Japanese-only names, and the independent 216 agreement with the encyclopedia split."
+    },
+    {
+      "path": "scripts/build-cage-definitions.py",
+      "kind": "builder",
+      "summary": "Transcribes the 36 CageDefinition records from ARM9 0x020C8CDC. Its guard is the real invariant, not a guess: every record's description string index is exactly 40 past its name index. An earlier version checked for a consecutive run and correctly REFUSED, because the columns have gaps and records 34/35 jump back."
+    },
+    {
+      "path": "src/data/championship/catalogs/cage-definitions.r1.json",
+      "kind": "catalog",
+      "summary": "36 cages with the cartridge's own names, descriptions, effects and recommended occupancy. ROM_VERIFIED."
+    },
+    {
+      "path": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
+      "kind": "presentation",
+      "summary": "The battle menu box. Its four faces are ROM_VERIFIED from the node table of battle_menu/launcher13.nsbmd (box, _02_champ, _03_title, _04_free, _05_tushin); the geometry is original-created, exactly as the Gate world sphere is. Drawn on demand, never on a loop -- this product runs one ticker and it belongs to Pixi."
+    },
+    {
+      "path": "src/championship/text/zhHant.js",
+      "kind": "text",
+      "summary": "Product-authored Traditional Chinese display copy, keyed by ROM record index so it can never follow a mistranscription. Covers modes, the six stats, ten families, five resistances, 36 cages and 17 gates. Anything without an entry falls back to the cartridge's Japanese, never to a blank."
+    },
+    {
+      "path": "tests/championship-zh-hant-text-cases.mjs",
+      "kind": "test",
+      "summary": "6 cases: full cage and gate coverage, every classified cage effect labelled, stat order matching the bank, fallback to Japanese on an unknown key, and a guard that the ROM catalogs keep their Japanese untouched."
     }
   ],
   "modified": [
@@ -736,351 +927,663 @@
     {
       "path": "docs/art/ART_CODEX_PRODUCTION_BRIEF.md",
       "summary": "Added the composite-integrity gate section with its six thresholds, and a note that painterly and desaturated are independent axes - the original is high-chroma and hand-drawn at once, and the mechanical feel now lives in the un-migrated BM00 ring, not in the backgrounds."
+    },
+    {
+      "path": "src/championship/battle/battleStateGraph.js",
+      "evidence": "VERIFIED_BINARY (OVL19 0x021170D0)",
+      "summary": "runDefeatedState translates state 0x17's thirteen-instruction body: entry frame arms period 4; any notify code but 1 re-arms 4 and returns; code 1 alone falls into state 1's routine in place. BATTLE_STATE_BODIES_TRANSLATED is now [0, 11, 23]."
+    },
+    {
+      "path": "tests/championship-battle-state-graph-cases.mjs",
+      "summary": "Pins state 23's three arms, that it names no successor, and that the translated-body claim is three and cannot quietly widen."
+    },
+    {
+      "path": "tests/championship-battle-frame-loop-cases.mjs",
+      "summary": "Pins that dying arms the entry counter at -255 and writes the notify pair, that a survivor's state fields are untouched, and the new import edge."
+    },
+    {
+      "path": "src/championship/battle/battleMoveScript.js",
+      "evidence": "VERIFIED_BINARY (ARM9 0x02055500, 0x02054BF4; OVL19 0x02128680, 0x021292EA, 0x02129319)",
+      "summary": "CORRECTION. The 'missing fifteen-argument start site' does not exist. A script CALL builds its own frame with the same two-slot overhead init writes as zeros, and the only routine reading local -17 is 0x02128680, reached by two CALLs from +0x28 entries that each prepend one literal to their own fourteen arguments. POP.N 0x8F after both calls counts the fifteen slots; the operand is unsigned with bit 7 as a slide flag."
+    },
+    {
+      "path": "tests/championship-battle-move-script-cases.mjs",
+      "summary": "The case that pinned the gap now pins its resolution: the deep frame is a CALL frame, no init in the image passes fifteen, and the ROM's own POP.N counts the depth."
+    },
+    {
+      "path": "src/championship/battle/battleLaunchPool.js",
+      "summary": "The paragraph calling the cell box the ONE routine the rest of this stage waits on, modelled here as an input and not derived, is corrected. The routine is translated; what is left outside is which bank [X+4]+0xC8 reaches and which cell index +0x70 holds."
+    },
+    {
+      "path": "tests/championship-migration-firewall-cases.mjs",
+      "summary": "One line: battleSpriteCellBox.js added to the authorized battle-module list. This file is also modified by the Codex lane; nothing else in it was touched."
+    },
+    {
+      "path": "src/championship/battle/battleScriptNatives.js",
+      "evidence": "VERIFIED_BINARY (OVL19 0x0211D238, 0x0211D298, 0x0211D33C; ARM9 0x02047D98, 0x02047E00)",
+      "summary": "The three animation natives, 110 call sites. Host requirements are now declared per native rather than blanket, so the thirty-one that read no halfword keep the contract they always had. A refused cell index raises NEEDS_OBJECT_GRAPH rather than inventing a box."
+    },
+    {
+      "path": "src/championship/battle/battleSpriteCellBox.js",
+      "evidence": "VERIFIED_BINARY (ARM9 0x02047E60..0x02047E7C, 0x02047D98, 0x02047DCC)",
+      "summary": "The walk itself over a host: readCellRecordBox and readSpriteCellBox, plus the two extents. The extents are a second, independent proof of which halfword is which -- an extent is high minus low, and they subtract +0xC from +0x8 and +0xE from +0xA."
+    },
+    {
+      "path": "src/championship/battle/battleMoveScriptRun.js",
+      "summary": "The scaffold host gains readU16/readS16, and the runner reports needsObjectGraph: natives that ARE translated but need an object graph this scaffold does not hold. Distinct from unimplemented, and the reason the clean-column count stayed at 26 of 36."
+    },
+    {
+      "path": "tests/championship-battle-script-natives-cases.mjs",
+      "summary": "Fourteen differential vectors for the three natives, the Q12-before-halve ordering, the null-argument guard, the unsigned empty-table exit, the named boundary, and that only the halfword natives demand a halfword host. The implemented count moves 31 -> 34 and the unread example moves to 0x0211E0D4."
+    },
+    {
+      "path": "src/championship/battle/battleMatchSelection.js",
+      "summary": "NOT YET EDITED - flagged. Its comment states the two schedule columns are \"named for their offsets, not for a calendar\". The ROM now says otherwise (see the status bar contract). The comment should be corrected when that lane is next touched."
+    },
+    {
+      "path": "docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json",
+      "summary": "v1.1 -> v1.2. Added observedSubmenu. The submenu that opens from submenu_origin was seen in Training footage and contains five entries: Tamer, Schedule, Cage Edit, Digimon, End Day. Shop, Battle and Gate Select are NOT in it - the three destinations our invented Raising Home nav bar carries. The eight toolbar slot commands themselves remain UNKNOWN_REQUIRES_TRACE; this is submenu evidence only."
+    },
+    {
+      "path": "docs/contracts/championship/CHAMPIONSHIP_STATUS_BAR_CONTRACT.v1.json",
+      "summary": "v1.0 -> v1.1. Added timeBase.playerDrivenAdvance: End Day means the calendar is not purely real-time, so the time base needs an explicit endDay() alongside the running cascade. The hour a new day starts on is UNKNOWN_REQUIRES_TRACE."
+    },
+    {
+      "path": "src/championship/raising/raisingHomeDefinition.js",
+      "summary": "Added season and dayOfSeason to the raising state, routed ADVANCE through the cascade instead of wrapping clockMinutes at 1440 alone, and added the END_DAY command. END_DAY deliberately does not tick residents: how many habitat steps a skipped day is worth is UNKNOWN_REQUIRES_TRACE."
+    },
+    {
+      "path": "src/championship/raising/raisingHomePersistenceR2.js",
+      "summary": "Durable schema 2 -> 3 so the calendar survives a reload. Added DURABLE_STATE_KEYS_V3, a version-keyed payload validator, migrateRaisingHomeSaveV2ToV3 (defaults season/day to zero, since a clock alone cannot say which day it was), and a step-at-a-time migration chain so a v1 save still lands on v3. Digest label moved to raising-payload-v3."
+    },
+    {
+      "path": "src/championship/raising/createRaisingHomeRuntime.js",
+      "summary": "Added RAISING_HOME_END_DAY to COMMAND_KEYS. Found by running it: the envelope validator rejects any command type absent from that allowlist, so the button fired and nothing happened, with no console error."
+    },
+    {
+      "path": "src/championship/app/championshipStandaloneApp.js",
+      "summary": "Added endDay(). Extracted dispatchRaisingHomeCommand into the closure so dispatch() and endDay() share it and neither depends on the `this` binding, which would break if either were destructured off the frozen app object."
+    },
+    {
+      "path": "src/championship/app/raisingPresentationSource.js",
+      "summary": "The published frame now carries all four info_bar fields, not just the clock."
+    },
+    {
+      "path": "src/championship/app/main.js",
+      "summary": "Mounts the status bar once at body level and repaints it on screen change and on frame updates. It cannot live inside #cm-root: every view calls root.replaceChildren()."
+    },
+    {
+      "path": "src/championship/app/styles.css",
+      "summary": "Status bar styles. The screen shells are position:fixed inset:0 full-viewport layers, so the bar is fixed too and body[data-status-bar=on] #cm-root offsets whichever shell is mounted — higher specificity than the shells own inset:0, scoped so it does nothing when the bar is absent."
+    },
+    {
+      "path": "tests/championship-migration-firewall-cases.mjs",
+      "summary": "Added  to the authorized source families, with the reason recorded inline."
+    },
+    {
+      "path": "championship.html",
+      "summary": "Bumped the styles.css and main.js cache-busting versions to statusbar-1."
+    },
+    {
+      "path": "src/championship/presentation/runtimeMapArtBundle.js",
+      "summary": "Added MAP_ART_MEMORY_POLICIES with a second value for tiled families, plus loadRuntimeMapArtTileSet and createRuntimeMapArtTileSetLoader. Still deny-by-default: anything outside the two known policies is refused, and the tile-set loader requires the tiled policy so Hunt and Battle cannot be composited by accident. The single-field loader is untouched. A tile set exposes a composite `field` descriptor shaped like a single field, so it drops into the existing presenter without touching Codex-owned presentation code."
+    },
+    {
+      "path": "assets/production/cage/licensed-runtime-v1/manifest.json",
+      "summary": "memoryPolicy ONE_ACTIVE_FIELD -> N_ACTIVE_TILES. Cages are shaped tiles that composite into one ranch; routing them through the one-at-a-time loader is why they could never join. Hunt and Battle manifests unchanged and a test holds them to it."
+    },
+    {
+      "path": "src/championship/app/main.js",
+      "summary": "loadOptionalCageFieldArt now builds the ranch composite from the player placed cages (placement -> cage definition index -> visual binding -> manifest field -> layout), falling back to the single default cage when nothing is placed. ?cageArt= still shows one named field."
+    },
+    {
+      "path": "tests/championship-licensed-cage-runtime-cases.mjs",
+      "summary": "CODEX-OWNED FILE, edited by the Claude lane. Updated the memoryPolicy expectation and added assertions that no field carries x, y or slotIndex -- the test guarantee (no ranch layout invented in the manifest) is preserved and now checked directly, because placement lives in runtime state instead."
+    },
+    {
+      "path": "docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json",
+      "summary": "v1.2 -> v1.3. WITHDRAWN: the v1.2 claim that Shop, Battle and Gate Select are absent from the toolbar submenu, with its guess that they are reached by touching the ranch world. The Codex consolidation flagged a SECOND submenu; I re-checked the footage and confirmed it. Two menus: MANAGEMENT (Tamer, Schedule, Cage Edit, Digimon, End Day) and SYSTEM (Help, Save & Quit, Database, Hunt, Battle, Shop). Hunt is the Gate Select entry. Slot attribution (cell 7 = slot 6, cell 8 = slot 7) is carried from Codex and marked independentlyConfirmed:false -- the frames are not sharp enough for me to name the cell index."
+    },
+    {
+      "path": "docs/contracts/championship/CHAMPIONSHIP_CAGE_RANCH_COMPOSITION_CONTRACT.v1.json",
+      "summary": "v1.0 -> v1.1. Occupancy Limit corrected: it is a RECOMMENDED capacity, not a hard cap (help entry 133 permits overfill at a stress cost), and still not a hex-cell count. Also recorded that one-cage-one-hex stays a reading while RANCH_SLOT_GEOMETRY is open."
+    },
+    {
+      "path": "src/championship/app/main.js",
+      "summary": "Mounts and wires the toolbar. REMOVED the invented five-button Raising Home nav (CAGE/DATA/SHOP/BATTLE/GATES). End Day moved off the status bar into the MANAGEMENT submenu where the original puts it. Save & Quit saves and returns to the title."
+    },
+    {
+      "path": "src/championship/app/raisingHomeP1RView.js",
+      "summary": "CODEX-OWNED FILE, edited by the Claude lane. Removed the disabled RAW 00..07 toolbar shell, which the real toolbar now duplicates. Two toolbars on one screen is worse than touching the file."
+    },
+    {
+      "path": "tests/championship-int-rh2-p1r-contract-cases.mjs",
+      "summary": "CODEX-OWNED FILE, edited by the Claude lane. The eight-slot evidence boundary test now checks championshipToolbar.js, where the toolbar moved; the guarantee is unchanged and is strengthened -- it now also asserts the six tool identities, that six tools plus two menus equals the traced slot count, and that no stat name the toolbar does not drive appears in either file. Added a second test pinning the two submenus to their exact observed entries and asserting the four unbuilt destinations stay in the menu rather than vanishing."
+    },
+    {
+      "path": "src/championship/app/styles.css",
+      "summary": "Toolbar styles. Submenu opens upward over the field, matching submenu_origin sitting above the bar plate. body[data-toolbar=on] #cm-root offsets the fixed screen shells from the bottom, same technique as the status bar uses at the top."
+    },
+    {
+      "path": "scripts/build-creature-catalogs.py",
+      "summary": "Extended to transcribe the four identity fields traced from the OVL18 read sites: +0x00 identifier pointer, +0x0C generation, +0x10 attribute, +0x18 family bitmask. Added a cstring reader that REFUSES anything not NUL-terminated printable ASCII, so a wrong pointer reading fails the build instead of writing plausible garbage."
+    },
+    {
+      "path": "src/data/championship/catalogs/creature-species.r1.json",
+      "summary": "Regenerated: 228 records now carry identifier, generationIndex, attributeIndex and familyBits alongside statCurveIndex. Self-validating on regeneration - generation 0..6, attribute 0..4, family is zero or one of eight single bits, and exactly 8 records are eggs."
+    },
+    {
+      "path": "src/championship/app/phase1ProductCreatures.js",
+      "summary": "Rewritten to select from the cartridge. The starting creature is the first egg in table order (which egg the original hands a new player is UNKNOWN_REQUIRES_TRACE). Returns ONLY the three fields the save envelope accepts; generation/attribute/family are catalog data read on demand through lookupSpeciesIdentity, not copied into every save."
+    },
+    {
+      "path": "src/championship/raising/raisingHomeDefinition.js",
+      "summary": "RESIDENT_TEMPLATES is one cartridge egg instead of three invented creatures. The behaviour numbers (satiety/energy/ease/readiness/temperament) are carried unchanged and marked UNKNOWN_REQUIRES_TRACE - they are the next thing to replace, not something to build on."
+    },
+    {
+      "path": "src/championship/raising/raisingHomePersistenceR2.js",
+      "summary": "RESIDENT_IDS derived from the definition rather than restated, so it cannot drift from the cartridge as the trace advances."
+    },
+    {
+      "path": "src/championship/database/databaseCatalog.js",
+      "summary": "Encyclopedia species come from the cartridge. Egg versus regular is now classified from the DATA - generation 0 with no family - instead of from a slot-index threshold, and still yields 224 = 8 + 216."
+    },
+    {
+      "path": "src/championship/hunt/huntWorld.js",
+      "summary": "Wild species come from the cartridge. Which species a Gate spawns stays UNKNOWN_REQUIRES_TRACE, so this is a deterministic slice rather than a claim about any Gate roster."
+    },
+    {
+      "path": "src/championship/app/raisingPresentationSource.js",
+      "summary": "The frame now carries per-resident stats. Two edits were needed: homeMembers attaches them, and the residents projection lists fields explicitly so it had to name stats too - the first pass set them and the projection silently dropped them."
+    },
+    {
+      "path": "src/championship/app/raisingHomeP1RView.js",
+      "summary": "CODEX-OWNED FILE, edited by the Claude lane. Added an HP/TP readout to the companion panel, carrying the evidence level as a data attribute. Only the two stats that are traced; the original panel also shows AP, attack, defence, wisdom and speed and those stay absent."
+    },
+    {
+      "path": "src/championship/app/intRh2Styles.css",
+      "summary": "CODEX-OWNED FILE, edited by the Claude lane. Styles for the vitals readout, tabular numerals."
+    },
+    {
+      "path": "src/championship/app/championshipScreenStack.js",
+      "summary": "Added DIGIMON_LIST with a declared transition from RAISING_HOME and no forward transitions."
+    },
+    {
+      "path": "src/championship/app/championshipStandaloneApp.js",
+      "summary": "Added openDigimonList(), mirroring openDatabase/openCageEdit."
+    },
+    {
+      "path": "src/championship/app/championshipToolbar.js",
+      "summary": "The Digimon entry in the management submenu now has a destination; three of eleven remain unbuilt."
+    },
+    {
+      "path": "src/championship/app/main.js",
+      "summary": "projectRoster() builds the roster from residents plus Hunt-enclosed instances, carrying only traced fields and converting the family bitmask to the 1-based ordinal the ROM itself computes."
+    },
+    {
+      "path": "src/championship/app/styles.css",
+      "summary": "Roster styles, plus a REAL BUG FIX: .cm-toolbar had an author display:flex, which beats the hidden attribute UA display:none, so the toolbar rendered on every screen despite being correctly marked hidden. Added .cm-toolbar[hidden]{display:none}. Verified: 75px tall on Raising Home, 0 on the roster."
+    },
+    {
+      "path": "tests/championship-int-rh2-p1r-contract-cases.mjs",
+      "summary": "The unbuilt-destination list is now Tamer, Schedule, Help. That list shrinking is the running count of original destinations this build still lacks."
+    },
+    {
+      "path": "src/championship/app/vs5Screens.js",
+      "summary": "Battle Result rebuilt from one page into the panel sequence the ROM describes. The eight battle_result scenes and their node tables are the blueprint: result_sub_scene (digimon1..3 + text), result_sub_prize_scene (get1..6 / have1..6), result_sub_rankup_scene (tamer_rank), result_sub_titleget (medal1..7, title_name), result_sub_status_scene (battle0..3, win counters), battle_result_log_scene (log_space), result_sub_base, result_sub_net_scene. Only panels with a traced source are shown; the rest are named in inspect() so the gap is visible. The status panel is deliberately NOT shown - per-creature battle counts and win rates have no traced read site and zero-filling battle0..3 would read as a real tally."
+    },
+    {
+      "path": "src/championship/app/main.js",
+      "summary": "The result reads the chosen match back so the prize panel uses the record payout rather than inventing one, and the panel is omitted entirely when the record carries none."
     }
   ],
-  "forSharedLedger": {
-    "blockersUnchanged": [],
-    "blockersClosed": [
-      "Universal hit/miss formula — reclassified NO_ACCURACY_ROLL_FOUND. Four independent checks indicate the original resolves contact, not accuracy, so there is nothing to add; an accuracy formula would make the remake play differently from the original.",
-      "Bits reward formula — reclassified NO_FORMULA_EXISTS. The payout is a per-match constant in the ARM9 table at 0x020F126C, gated by win/loss. Table and gates are now implemented.",
-      "state-7 group-3 scan tail — walked to the end. The AI cascade is six groups (2, 1, 4, 3, 6, 5) then the move ladder, with no unwalked branch left.",
-      "Sense — reclassified NO_CODE_4_CONSUMER_EXISTS. No branch in ARM9 or any of the 22 overlays compares the positive effect code against 4; only != 0 presence tests exist. Nothing to implement.",
-      "TP — reclassified RESOLVED_AND_IMPLEMENTED. A spendable action resource is real: current stats +0x54, maximum +0x5C, cost action +0x48, charged at OVL19 0x0211C244. This also gives the AI reserve its meaning.",
-      "OVL8 first-clear bonus — reclassified NO_FIRST_CLEAR_BONUS. The payout is written before the mode jump table and none of the three destinations alters it. The 0x0210EA48 stepping is the counting-up tally, not a bonus.",
-      "Same-frame tie ordering — reclassified RESOLVED. Ascending slot index; nineteen 6-bounded loops in OVL19 all count upward, with no speed or priority tiebreak.",
-      "B-RNG216 residual -- per-channel seed initialisation. Now traced: ARM9 0x02043240 seeds all 217 channels from one master, and the seed and cursor array pointers occur exactly once each in the whole ARM9 image, both inside the header at 0x020BD230, so nothing else can perturb the state. The blocker moves from RANGE_RESOLVED to RESOLVED_AND_IMPLEMENTED. What remains outside the cartridge is only the boot master seed, which comes from the console clock.",
-      "The reward table had no path to gameplay. It has one now: ARM9 0x0208922C filters the title-event table into the match list OVL10 offers, and OVL10 0x02112608 reads the chosen record's +0x24 payout into the screen. The B1 catalogs were the missing input; this is the code that consumes them.",
-      "The frame loop had no path to an action. It has one now, and every stage of it was already translated: battleFrameLoop ticks +0x28 down, state 3's handler at OVL19 0x02115F38 returns while that counter is above zero and otherwise falls into state 1's routine at 0x021157BC, which is battleStatus's action gate, which calls AI action selection at 0x021159D4 -- state 2's handler.",
-      "X1, identifying OVL 2, 6, 7, 11, 14 and 20. Reading the ASCII resource names out of every overlay answers all six: OVL2 is the battle winner/result screen, OVL6 the battle menu, OVL7 a list screen, OVL11 the ending, OVL14 the training screen, and OVL20 is a 32-byte stub with nothing in it. The same pass identifies every other overlay, including OVL9 -- 487 KiB, the character and graphics resource manager, and therefore engine rather than game logic.",
-      "B1's pointer1C, pointer28 and pointer3C columns had names but no meaning. They are script entry addresses: all 1,755 non-null values across the three columns land on an instruction boundary in the OVL19 bytecode blob, and each column is started at its own OVL19 site with its own argument frame.",
-      "The AI candidate buckets. OVL19 0x02113F28 clears nine twelve-byte groups at combatant +0xE8 and files two source words from stats +0x12C and +0x130 into them through a 31-entry jump table. The battle session now runs from a spent cooldown to a chosen action.",
-      "How damage reaches the roster. Every frame the in-flight pool is walked and each in-use object is updated; an object of kind 0 runs battleContactTargeting's walk, which calls the damage resolver. The state machine never calls the resolver and never needed to."
-    ],
-    "blockersOpened": [
-      "AI strategy labels and metric semantics — the structure is implemented, only the names remain unproven (Stage 4 B07/B08).",
-      "Action-resource regeneration, starting value, and any writer outside OVL19 — the charge is traced, restoration is not.",
-      "OVL8 rank and unlock writers beyond the wallet credit — the payout question is closed, the wider progression graph is not.",
-      "The 36 unnamed move-record fields -- widths and read sites are traced, meanings are not. Naming them needs B2 or B4 to show what consumes them.",
-      "Preset +0x0C is read as a u16 and summed at ARM9 0x02088EF8 but is zero on all 456 records. Either the sum is always zero or the caller can index past the table; unresolved.",
-      "The 67 CALL_NATIVE targets in OVL19 0x0211CDFC..0x0211EA68 -- what the battle scripts actually do. 3,014 of the blob's 23,121 instructions are that one opcode, so no real script runs without them.",
-      "DIV_FX and MOD_FX with a zero denominator. Both route through the NDS hardware divider at 0x04000280 and nothing in this ROM establishes the zero-denominator result, so the VM raises rather than guess.",
-      "Where a real session's master RNG seed comes from -- the struct field read at ARM9 0x0206AD6C +0x0C. Until that is traced, only the OVL9 0x021775DC constant 0x14 replays exactly.",
-      "What entry mode 4 is. The global context +0xA8 is compared against 4 at OVL10 0x0210B478, and that is the only thing in the ROM that makes record 61 reachable.",
-      "The schedule clock: the two divisors at 0x0210AA94 +0x34 and +0x38, and the progress counter at the session block +0xA00 +0xE8. Until these are traced the match schedule cannot be driven from a save.",
-      "What the match screen does when the filter returns nothing. The schedule grid contains one empty cell, so the state is reachable.",
-      "The four routines the frame loop calls out to: 0x0211452C (status end and death), 0x02114984 with 0x17 plus 0x02112820 with 0x12 (death), 0x0211479C (timer elapsed) and 0x021145C0 with 1 (threshold crossed). The loop's shape is settled; what these do is not.",
-      "What +0x22 accumulates and what stats +0x18 selects. The threshold phase is fully traced as control flow, but both operands keep their offsets as names.",
-      "Twenty-one of the 27 state handlers. The dispatcher is settled; the bodies are not. Priority order is the ones the ROM actually sets: 0, then 4..16.",
-      "0x0211452C's jump table on the OLD status code, 0..13, which is what a status undoes when it wears off. The clear itself is traced; the fourteen arms are not.",
-      "What +0x170, the per-state period, is initialised to at battle start. Each handler sets its own; state 23 sets 4.",
-      "The nested script VM at action +0x2A0. OVL19 0x0211D71C starts it at 0x0211DD68 and steps it at 0x0211DF04, so an attack runs a second script after damage is applied. Not traced.",
-      "The AI candidate buckets at combatant +0xE8 / +0xF0, read by the affordability scan at OVL19 0x021144CC. Composing the battle modules shows this is the one seam a healthy roster hits every frame: the chain runs from a spent cooldown through the action gate and then stops, because nothing traced fills those lists."
-    ],
-    "correctionForSharedLedger": "Stage 4 B08 describes OVL19 0x021144CC as an AI target scan. It is not: it is a first-fit affordability scan over an action-id list. The target choice is inlined at 0x02115BE8. Both are now implemented; the shared unknown register should be corrected rather than left describing the old reading. Second correction, 2026-09-01: two of the six B1 table bases in the brief are field columns, not record starts. The opponent-team table is 0x020ED2D8, not 0x020ED2E4 (OVL10's literal pool at 0x02110A78..0x02110A8C holds four consecutive per-field bases and the lowest is the record base); reading from the handed-over address shifts every field three columns. The eligibility table is 0x020CC8D4, not 0x020CC8F4 (ARM9 0x020923A8..0x02092414 copies the record field by field from the literal pool at 0x02092428), and with the corrected base it is 46 records ending exactly on the title-event base rather than 45 leaving an eight-byte orphan. Compilers keep &table[0].field in the literal pool, so any field of a record can be mistaken for the table base; the shared register should record the record starts. Third correction, 2026-09-01: the earlier note that OVL19 holds 19 six-bounded loops undercounts. There are 24, and all 24 increment. The conclusion -- same-frame ties resolve by lowest slot number -- is unchanged and now rests on a mechanical check of every one. Fourth correction, 2026-09-01: this lane recorded six inert `bx lr` battle states (17..22). There are eight -- 24 and 25 are also `bx lr`, on the far side of state 23's body. And the earlier ranking of the 67 script natives as presentation plumbing was drawn from the two most-CALLED, which are a 16-byte yield and a 40-byte roll; ranked by size instead, 0x0211D71C is 2,124 bytes and is where damage is applied. Fifth correction, 2026-09-01: 0x02115924 is state 1's tail, not state 2's. State 1 is gate, select and commit together. And a hand reading of the cooldown at 0x0211594C gave 90 - speed*8 by taking magic 0x2AAAAAAB / asr #2 as a divide by 6; it is a divide by 24, so the formula is 90 - speed*2, which is what battleDamageResolver already had. Verified numerically over speed 0..199. Sixth correction, 2026-09-01: the frame function at 0x0210D33C runs ELEVEN loops, not the two this lane named. The in-flight update at 0x0210D694 sits between the state dispatch and the status tick, and two of the eleven are twelve-object pool walks.",
-    "warningForOtherLanes": "Channel-216 rolls are 0..102, not 0..215. battleActionSelection.js rejects out-of-range rolls; battleDamageResolver.js and battleStatus.js still accept any safe integer from an injected rng. Any harness or future wiring that feeds those modules must use the 0..102 range or the critical and status-proc rates will be wrong. Separately: any consumer written against the handed-over battle table bases 0x020ED2E4 or 0x020CC8F4 reads the wrong columns. Use 0x020ED2D8 and 0x020CC8D4, or read src/data/championship/catalogs/battle-*.r1.json. Also: the move-record fields +0x1C, +0x28 and +0x3C are script entry addresses, not code pointers to ARM functions. Several are odd-valued, which reads like a Thumb pointer but is not: the bytecode is a byte stream and its routines are not aligned. And: do not substitute a uniform 0..102 generator for the channel RNG. The original's table repeats three values and omits three, so the small skew is part of the behavior.",
-    "newFacts": [
-      "The Owner-supplied ROM at SHA-256 8ad375ba…c5d1 reproduces every battle constant the Cursor handoff claimed, with no discrepancy.",
-      "OVL19 contains exactly three direct DamageResolver call sites; the bounded caller region 0x0211C714..0x0211C92C contains no RNG call, which is positive evidence against an accuracy roll inside contact resolution.",
-      "R:\\NEXUS LINK\\原作\\research-only\\YDIJ_FULL_ROM_DECONSTRUCTION_2026-08-29 now ships arm9.bin, arm7.bin and all 22 ARM9 overlay binaries. The earlier repeated finding that no overlay or ARM9 binary existed under the research root is superseded; new overlay traces are no longer blocked for lack of a binary.",
-      "The AI cascade applies three different liveness rules: group 1 skips HP exactly 0, group 3 applies no HP test at all, group 5 requires HP > 0. battleContactTargeting separately requires HP > 0, so a negative-HP combatant can be targeted and then rejected at contact. All four rules are in the ROM.",
-      "OVL19 0x021300D4 maps action id to the positive effect code it applies (ids 0-9 -> 0, then pairs 10/11 -> 1 up to 22/23 -> 7). Group 6 uses it to decline an action whose effect the combatant already carries; this is the duplicate-effect logic Stage 6 saw while auditing Sense.",
-      "Stage 4 B07/B08 and the Cursor handoff both treated TP as an invention risk. It is not: OVL19 0x0211C244 charges action +0x48 against stats +0x54 with a refuse-if-insufficient guard. The shared unknown register should be corrected.",
-      "The move table's record count is in the ROM, not inferred: OVL19 0x02113DFC is `cmp r2,#0x254 / blo`, so the scan walks records 0..595 at the 0x68 stride the MLA at 0x02113DCC forms.",
-      "The opponent-team table's three index columns flatten to exactly 0..455 in order, one per battle-preset record. That is a bijection, so 152 teams and 456 presets confirm each other.",
-      "The message-id space is contiguous across three of these tables: opponent teams hold 0x323..0x3BA and 0x3BB..0x452, and the eligibility table's id column takes the next id 0x453 and runs to 0x47F.",
-      "Species ids 2..19 own no move record at all; 206 of the 224 ids own between 1 and 30. Species 1 owns 30, more than the eight the OVL19 scan will collect.",
-      "The title table's +0x08 column is a permutation of 0..61 rather than the identity: records 12 and 51 swap. It is still a bijection, so the count of 62 holds.",
-      "Record 61 of the title table is the only record in it with a zero +0x24. The OVL8 no-reward special case is now pinned from the data instead of asserted.",
-      "The battle script VM is generic engine code in ARM9, not battle code: the dispatch is at 0x020549D4 and the handlers at 0x02054A5C..0x0205568C, with the compiler's own 'script.cpp' assert strings sitting immediately after the 52-entry table at 0x020BDEAC. The table's own terminator is what fixes the opcode count.",
-      "It is a stack machine over one flat 96-slot array, using C++ pointer-to-member dispatch with an 8-byte stride. init fakes a caller frame with a zero return address, which is why RETURN's stop condition is a restored pc of exactly 0.",
-      "The scripts are Q12 fixed-point throughout: the whole integer arithmetic family (0x0B..0x11) is unused across all 23,121 instructions, while 0x13..0x19 are common. 0x15 rounds with +0x800, 0x16 uses the hardware divider on a value shifted left 32, and 0x18/0x19 step by 0x1000.",
-      "OVL19 0x021204A0..0x0212FDA4 is one contiguous 63,748-byte bytecode blob, 23,121 instructions, entered at 36 addresses taken from move-record fields +0x1C, +0x28 and +0x3C.",
-      "The original's stack-overflow assert is only a print: CALL and CALL_NATIVE check sp against 0x5E and 0x60, and on failure the push still runs off the slot array into sp and frameBase. The product VM raises there instead of reproducing the overrun.",
-      "The channel RNG is not a stream. The roll reads seed[channel] and never writes it, so each channel is one fixed cycle of period 103: critical hits and status procs repeat every 103 rolls on their channel.",
-      "The 103-entry table is NOT a permutation of 0..102. It holds 100 distinct values: 0, 50 and 99 each appear twice and 46, 100 and 102 never appear. A roll is therefore not uniform, and `roll < T` does not always hit exactly T times per cycle.",
-      "At the one master seed the ROM hard-codes (0x14 at OVL9 0x021775DC), channel 216's per-cycle hit count is exactly T for every threshold up to 15 -- which covers the critical thresholds 2, 3, 5 and 7 -- and off by exactly one at six thresholds above it. The earlier estimate of 1.9%-6.8% for the critical thresholds is confirmed exactly, not approximately.",
-      "The seed array 0x02104D20 and the cursor array 0x02105084 are adjacent, 217 words apart, and each pointer appears exactly once in the whole ARM9 image, inside the header at 0x020BD230.",
-      "The ROM's `% 103` is a signed truncating remainder implemented as smull by 0x13E22CBD then asr #3 plus the sign bit. It matches C semantics across the whole int32 range, so a negative operand yields a negative remainder with no correction.",
-      "The title-event table's +0x14 and +0x18 are a schedule key. Across the 4 x 8 grid the filter compares against, all 61 reachable records appear exactly once -- no record in two cells, none left over -- and one cell (slot A 3, slot B 4) holds no match.",
-      "The match list is capped at 5 by OVL10 0x0210EC2C, but the cap never binds: the busiest schedule cell holds four.",
-      "Not one of the 61 records the filter can reach has a zero payout. Record 61, the table's only zero, is exactly the one the filter cannot reach and the one entry mode 4 forces -- so B1's zero-payout finding and OVL8's no-reward behavior are one fact.",
-      "The word that forces the record-61 list is written at exactly one address in the whole ROM, OVL10 0x0210B498, guarded by `cmp r0,#4` on the global context +0xA8. Two independent whole-image scans agree there is no other writer.",
-      "OVL10 0x0211057C..0x02110594 loads a team record's +0x00/+0x04/+0x08 at stride 0x14 and multiplies each by 0x44 into the preset table. That is the ROM confirming B1's corrected team base 0x020ED2D8 from the consuming side.",
-      "-1 is the empty sentinel for both a team index (OVL10 0x02110560) and a preset slot inside a team (0x021105CC).",
-      "The per-frame update is OVL19 0x0210D6E4, 137 instructions over six slots, and its phase order is: negative status, then a threshold check reachable only when there is no status, then a gated timer, then the +0x24 and +0x28 counters.",
-      "An empty roster slot branches straight to the loop increment, so it escapes the counters as well as everything else. A combatant that dies during the status phase does NOT: the death handler branches into the timer phase and falls through into both counters.",
-      "The death test is `bge`, so a damage-over-time tick that lands a combatant exactly on 0 HP leaves it alive with its status still running. Only a negative result kills, and the negative is stored back as 0.",
-      "The threshold table at OVL19 0x0212FE74 is eight u16 entries, [100, 100, 100, 9999, 50, 9999, 50, 9999]; it is eight because battleActionSelection's move-ladder table starts sixteen bytes later at 0x0212FE84, whose first row is 68, 89.",
-      "The per-frame battle function is OVL19 0x0210D33C and it runs two six-slot loops in order: state dispatch at 0x0210D644, then the status and counter tick at 0x0210D6E4. Both ascending, both skipping an empty slot.",
-      "The battle state machine has 27 states in a table at OVL19 0x0213040C with stride 8 -- the same C++ pointer-to-member form the script VM's opcode table uses. Two independent bounds agree: the 28th entry would not be an OVL19 address, and the literal state codes any of the 70 `bl 0x02114984` sites passes are 0, 1, 3..16 and 23.",
-      "A state handler runs on the frame it is entered and after that only when the state's frame counter at +0x16C divides exactly by its period at +0x170. A period of 0 reaches the divide's zero path at ARM9 0x0202B750 and leaves the remainder at 0, so period 0 means EVERY frame, not never.",
-      "Bit 1 of the u16 at combatant +0x9A suspends the state machine for that combatant: no handler runs and the state counter does not advance either.",
-      "State 2, AI action selection, is never set by a literal `mov r1` anywhere in OVL19. It is only reached from inside the machine.",
-      "States 17 through 22 are six consecutive `bx lr` stubs at 0x021170B8..0x021170CC -- real table entries that do nothing, and none is a code the ROM sets.",
-      "0x0211479C, the frame loop's timer call-out, is NOT 'this combatant may act'. It clears +0x160 and +0x164 plus two per-combatant globals and returns the HP compare. An earlier working guess in this lane said otherwise and was wrong.",
-      "The battle state machine's graph: state 1 (the action gate) fans out to 3, 8, 9, 10, 12, 13; state 2 (AI selection) fans out to 3, 4, 5, 6, 7; the 4/5/6/7 group leads into 14/15/16 and all three return to 1; state 11 waits out a status then returns to 1 or drops to 0 when dead; state 0 arms a 60-frame period and does nothing else.",
-      "No state handler applies damage or walks contact. The damage resolver's three call sites are one inside the contact walk and two inside 0x0211D71C, a battle-script CALL_NATIVE target. The state machine schedules and the move's bytecode executes.",
-      "OVL9 is 487 KiB -- 45% of all overlay space -- and it is the character and graphics resource manager, not game logic. That materially shrinks the remaining reverse-engineering surface.",
-      "The game-logic overlays are OVL0 (hunting, 126 KiB), OVL8 (rewards, 18 KiB), OVL10 (match selection, 40 KiB), OVL18 (raising and schedule, 118 KiB) and OVL19 (battle, 154 KiB). Everything else is a screen, the resource manager, or a stub.",
-      "An attack lands through OVL19 0x0211D71C, a script CALL_NATIVE taking three arguments: the action object, an optional parameter block, and a Q12 number truncated with `asr #0xc`. The attacker is action +0xE4.",
-      "That native walks the same six-slot roster the frame loop does, ascending, and rejects a target on four counts in order: empty slot, the attacker itself, matching +0x54 on both sides, and the attacker having a non-zero +0x94 while the target's is zero. It returns how many survived.",
-      "An attacker whose status at +0x158 is exactly 5 skips the same-side rejection outright, so its own side becomes targetable. Self is still rejected first.",
-      "The damage resolver's parameter block is three words: either [action +0x00] + 0x28 when script argument 1 is zero, or argument1 + 0x24 otherwise.",
-      "The move record is [combatant +0x20] and [action +0x20]. Its +0x1C and +0x28 columns start scripts on the combatant's VM at +0xEC; its +0x3C column starts one on the action object's own VM at +0x2A0. A move therefore runs more than one script, on more than one VM.",
-      "Whatever the argument count, a script reads init argument k as local -(k+3) -- init pushes the array in reverse and then two zeros, so the mapping is independent of N. Across the whole blob the negative locals used are exactly the contiguous run -3 to -17 and nothing reads -1 or -2, which is what that predicts.",
-      "The 445-byte run at 0x0212F94E that B2's reachability walk could not account for is a built-in action script: OVL19 0x0211DD14 loads it as a literal and starts it with the same six-argument frame a move's own +0x3C script gets. It is 161 instructions and reserves 8 locals.",
-      "Move-record bytes +0x40 and +0x41 are constant zero across all 596 records, so two of the six script arguments are base words unchanged in every retail move. +0x43 is -1 on 585 records and 0..4 on eleven, so the third Q12 argument is -1.0 for almost every move.",
-      "The traced battle modules do compose. A six-slot session runs the frame function's two loops in order and carries every slot from a spent cooldown through the action gate; the chain breaks in exactly one place, at the AI's candidate buckets.",
-      "Composition found two defects that per-module cases could not: battleFrameLoop's strict field check blocked ticking a combatant that also carries state-machine fields, and a state handler must see the frame counter BEFORE the dispatcher's increment or an entry frame is not recognised as one.",
-      "Only 4 of the 27 battle states have runnable bodies today: 0, 1, 3 and 11. Eight more are inert stubs, leaving seventeen with a profile but no translation.",
-      "The 67 script natives are 7,788 bytes but lopsided: four routines are half of that and the other sixty-three average sixty bytes. By shape: 41 compound, 10 getters, 10 setters, 5 trivial, 1 yield.",
-      "OVL19 0x0211D70C is sixteen bytes -- `ldr ip,=0x0211D740 / mov r1,#0xd / bx ip` -- a tail call into the action-application body with the kind forced to 13. The kind-13 branch battleActionApplication found special is this entry, and the blob calls it 56 times.",
-      "0x0211CEC4 and 0x0211CEFC are two separate routines that both compare-and-set +0x154: they write only into an empty slot and return whether they wrote. A caller cannot treat either as a plain assignment.",
-      "0x0211D2BC reads a u8 at +0x58, adds one, and returns it in Q12 -- so the value the scripts see is one-based, not the stored byte.",
-      "0x0211D2E0 shifts its callee's result left by 20, not 12, so not every native that returns a scaled number is returning Q12.",
-      "The candidate array is nine groups of twelve bytes -- two word entries at +0xE8 and a byte count at +0xF0 -- and its extent is what fixes the count: 0xE8 + 9*12 is exactly 0x154, where the next field begins.",
-      "Only two entries are ever filed into that whole array, both from stats +0x12C and +0x130. A source code above 30 falls to group 0 and is dropped, and group 0 is never filed. Most buckets are empty in most frames, and the AI treats that as normal.",
-      "A bucket entry is an action id: the affordability scan indexes the move table with it at 0x02114500, and the same +0x12C field is used that way at 0x02111344. The bucket group index and the AI's state code are the same number.",
-      "The original files a bucket entry with no bound check and would write past a group's two words into the next group's count byte. Two sources cannot reach it, but the overrun is real and is refused rather than reproduced.",
-      "State 1 commits an action object taken from a pool at combatant +0x58, not the action the AI names. It releases a previous claim only when the object differs, stores the claim at +0x5C, and then rebuilds the cooldown.",
-      "The action cooldown is 90 - 2*speed from stats +0x8C, reduced to 80% when +0x160 is exactly 3. A speed of 45 yields zero and anything higher goes negative, and since the gate is `<= 0` and the tick is `subgt`, such a combatant is permanently ready.",
-      "+0x160 is one field read three ways that now agree: the frame loop gates its timer on it being non-zero, the cooldown takes 80% when it is 3, and AI group 6 declines an action whose effect is already carried. 0x0211479C clears +0x160 and +0x164 together, so that timer is the effect's duration.",
-      "With the pool supplied, the composed battle session runs a self-sustaining loop with zero seams: choose, commit, cool down, choose again -- and the same master seed replays it exactly.",
-      "A combatant can have at most three actions in flight: +0x78, +0x7C and +0x80. State 15 allocates into the first free one and the predicate at 0x02114464 gates states 6 and 7 on one being free, so a fourth action waits.",
-      "States 6 and 7 are the same routine but for one line -- a free slot advances to 15 or 16 respectively, otherwise the combatant waits out its cooldown and re-enters the action gate. Only state 7 notifies on its entry frame.",
-      "States 14, 15 and 16 abort back to state 1 on their entry frame when +0x180 is negative, and on +0x17C being 8..11 for 14 and 15 but 12 for 16. Nothing is tested after the entry frame.",
-      "0x02114490 answers yes when +0x17C is 18..21 and otherwise returns bit 1 of +0x9A -- the same suspend bit the state dispatcher reads, so a suspended combatant reads as interrupted here too.",
-      "States 4 and 5 are approach geometry: an angle tested against 0x4000 and 0xC000, the quarter and three-quarter turns of a 16-bit angle, offsetting a target by 0x10000 before a DS math call at 0x02003098.",
-      "A launch raises a notify equal to the move record's own +0x10 plus eight -- 8, 9, 10 or 11. Every one of the 596 records holds a value inside 0..3, so every launch in the game raises one of the four, and B1's catalogued field is confirmed from its consuming side.",
-      "The launch's two failure paths are literally the same three lines at 0x02116D40 and 0x02116E00: clear bit 0 of the new object, zero the slot, and go back to state 1. A null allocation is different again -- the slot is already clear and the handler simply returns with no transition.",
-      "A successful launch adds 120 to the signed halfword at combatant +0x1C, read with ldrsh and stored with strh, so it wraps at 16 bits.",
-      "A battle shares twelve in-flight objects at globalCtx + 0x47948, and bit 0 of each object's first word is its in-use flag. A combatant holds at most three, so four of the six can exhaust the pool.",
-      "A launch is refused by the action-resource charge at 0x0211C144 for one of two reasons -- a non-zero +0x154, tested before cost is even read, or a cost above the balance -- and state 15 cannot tell them apart. Either way the object goes back to the pool and the combatant returns to state 1.",
-      "+0x154 is one field three independent traces landed on: the two script natives compare-and-set it, the launch charge refuses on it, and the nine-group candidate array ends exactly there.",
-      "The frame function runs eleven loops, not two. In address order with bounds: 0x0210D3C0/6, 0x0210D490/12, 0x0210D4F8/6, 0x0210D590/6, 0x0210D624/2, 0x0210D644/6 state dispatch, 0x0210D694/12 in-flight update, 0x0210D6E4/6 status and counters, 0x0210D9A8/6, 0x0210DC58/6, 0x0210DD18/2.",
-      "Damage reaches the roster through the in-flight update: 0x0211CC7C dispatches on the object's +0x04 kind and kind 0 is the contact walk at 0x0211C714, which calls the resolver at 0x0211C92C.",
-      "An in-flight object's update refuses twice first: no owner at +0xE4 does nothing, and an owner whose +0x94 names a different object does nothing. Only a null lock or one naming this object lets it run.",
-      "An in-flight object and the 'action object' a move script operates on are the same thing: both read their owner at +0xE4, and battleActionApplication's fourth target rejection reads the owner's +0x94 lock from the other side."
-    ],
-    "artScopeCorrection": {
-      "status": "OPEN_FOR_CODEX_MERGE",
-      "summary": "The Art-A registry undercounted the original by 496 decision units (~2,689 ROM art files). Art production scope grows accordingly: a second character art tier per entity, a 187-family 2D effect library, a typography tier, one more hunt biome and the shared battle field layer.",
-      "impactOnArtProduction": "Codex's art batches should be re-planned against 1,248 units. The database character tier is a distinct deliverable per entity, not a resize of the gameplay sprite: only the palette is shared, and its animation contract is 4 Main / 3 Sub against the gameplay 40 / 13.",
-      "newBlockers": [
-        "HM00 biome identity UNKNOWN_REQUIRES_TRACE",
-        "2D sprite effect triggers and timing UNKNOWN_REQUIRES_TRACE",
-        "Database-tier animation slot meanings UNKNOWN_REQUIRES_TRACE",
-        "Consumer of /field/battle_01_01, battle_08_01, battle_15_01 UNKNOWN_REQUIRES_TRACE"
-      ],
-      "evidence": "docs/art/ART_ROM_RECONCILIATION.md, docs/art/ROM_ART_CENSUS.json"
+  "forSharedLedger": [
+    {
+      "id": "GATE_DISPLAY_NAMES_PARTIALLY_RECOVERED",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-03",
+      "detail": "gateCatalog.js declares GATE_DISPLAY_NAME_EVIDENCE = PRESENTATION_DEFAULT_NOT_RECOVERED and falls back to the MDL0 biome node names (Grass, Canyon, ...). Owner-supplied footage shows the Gate Select panel naming a gate Dina Plains, with a thumbnail, a description of which species gather there, and an Entrance Fee line shown against Funds. So original gate display names DO exist and are player-facing; at least one is now known. The full name table has not been located in the ROM text dumps checked so far. Not applied to code - recorded so the catalog is not left asserting the names were never recovered.",
+      "alsoConfirms": "The Gate entrance fee from help_text_txt.dat entry 101 is a real on-screen field, matching the Entrance Fee / Funds pair seen on the battle match panel."
     },
-    "entries20260902": [
-      {
-        "item": "BATTLE execution core is complete end to end",
-        "detail": "The chain now runs unbroken with no screen: frame clock, state dispatch with the engagement break, action gate, AI selection, commit, cooldown, launch and charge, in-flight update over both pool walks, contact, damage, status and counters, end check, judge, verdict demotion, round flag, payout gate. 328 cases in this lane, 327 passing.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "Correction to battleRewardTransaction as previously reported",
-        "detail": "That module described the OVL8 payout as gated on a single win flag at ctx +0xCAC. It is an array indexed by the round cursor at +0xCA4, and the gate requires every round so far to have been won. The module's conclusion (paid whole or not at all) still holds; its description of the gate did not. battleOutcome carries the corrected reading and the reward module's own text is unchanged and still accurate about the credit path.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "BATTLE screen is unblocked and needs a presentation contract",
-        "detail": "The Owner authorized a BATTLE screen on 2026-09-01 and the screen-less core is now finished. Before any DOM or Pixi work this lane needs a battle presentation contract agreed with the Codex art lane, which owns production UI. The 24-handle arrays on an in-flight object and the phase-4 request at battle end are the two hooks the screen has to satisfy.",
-        "owner": "Claude Code, needs Codex art lane"
-      },
-      {
-        "item": "Three test failures belong to the art lane, not this one",
-        "detail": "tests/championship-battle-bm07-cyberspace-cases.mjs, the production-index case and the battle art review case fail against art receipts and registries that are modified in the working tree by the concurrent lane. Not touched here.",
-        "owner": "Codex art lane"
-      },
-      {
-        "item": "Aspect ratio decided: the product stays 9:16 portrait",
-        "detail": "The Owner asked on 2026-09-02 whether to move the game to 16:9 because the arena art looked letterboxed. Measured before answering: the original is a two-screen portrait stack (two 256x192 screens, 256x384 together, ratio 0.667) and every ROM background witness comes in a _main / _sub pair, battle_result included, so the original used both screens on every screen. The arena renders are 1536x1024, ratio 1.5, not 16:9 -- moving to 16:9 would have letterboxed them sideways instead. The dark bands were an unbuilt battle screen, not a wrong aspect. The Owner confirmed 9:16, and the field band is authored at 0.375 of the frame so the 3:2 art fills it with no crop. No art needs regenerating.",
-        "owner": "Claude Code, Owner-confirmed"
-      },
-      {
-        "item": "The arena layer table validates the art lane's direction",
-        "detail": "ARM9 0x020CC148 gives each of the eleven arenas its own field plus a shared common layer. Ten share field_bm00_00_common and BATTLE_CYBERSPACE has none, which is exactly why the cyberspace art carries a different frame from the gold ring on the other ten. Two arenas, VOLCANO and ISLAND, also carry an _anim layer, and four carry an object layer. The contract now records all of it.",
-        "owner": "Claude Code, for the Codex art lane"
-      },
-      {
-        "item": "The BATTLE screen is built but not yet reachable in the running app",
-        "detail": "The contract, the presentation source and the Pixi scene are done and tested, and the three screens are registered in the stack. What remains is the DOM view for the match menu and the wiring in main.js. That needs a battle_menu screen backed by battleMatchSelection's five-entry list, and it will want its own stylesheet: styles.css is claimed by BOTH manifests, so this lane will add vs5Styles.css rather than edit a contested file, following the vs2 precedent.",
-        "owner": "Claude Code, coordinate with Codex art lane"
-      },
-      {
-        "item": "Battle arena art is still NOT_PROMOTED and the contract declares no path for it",
-        "detail": "The scene draws procedural neutral technical art and reports art.promoted false in its diagnostics. When the art lane promotes a set under assets/production, the contract's arenaArt.runtimeSource block names it and the procedural field becomes the fallback, the same shape the Hunt field already uses.",
-        "owner": "Codex art lane"
-      },
-      {
-        "item": "A battle now runs on real ROM stats, and it is playable end to end",
-        "detail": "Opponents come out of the cartridge: a title record names a team, the team names preset indices, ARM9 0x02062900 turns each into a creature. Verified in a browser at 375x812: Home to the Battle menu to a live match, field element measured at exactly 3:2, the Pixi scene mounted, six HUD cards, the ROM payout on the menu entry. 646 cases green.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "The stat curve is the same table the very first handoff review checked",
-        "detail": "ARM9 0x020CA00C stride-16, 27 values, was verified as EXACT_MATCH in the original handoff review without anyone knowing what it was for. It is the creature stat curve: 27 levels of eight columns, HP in column 0 running 200 to 7000.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "The product's own three creatures are declared, not traced, and are labelled everywhere",
-        "detail": "Greyshade Cat, Blazetail Kit and Crystalfin Seahorse do not exist in the cartridge, so no ROM number can be traced for them. Their levels live in battle-player-roster.v1.json marked PRODUCT_AUTHORED and run through the same builder the ROM path uses, so the arithmetic stays original. How raising should change those levels is UNKNOWN_REQUIRES_TRACE and no growth rule was invented. The battle screen shows the label.",
-        "owner": "Claude Code, needs an Owner decision on growth"
-      },
-      {
-        "item": "Which schedule pair a fresh save starts at is not traced",
-        "detail": "selectEligibleMatches filters on a schedule pair that lives in a save field this lane has not walked. The runtime defaults to (2, 3) because it opens title record 0, and reports scheduleEvidence PRODUCT_AUTHORED so a caller can tell. Passing a schedule overrides it.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "Nobody takes damage yet, and the reason is a composition gap not a missing formula",
-        "detail": "battleSession runs dispatch, the action gate, AI selection, the commit and the cooldown, and stops there. Damage comes from the in-flight walk to the contact walk to the resolver, and those three modules exist and are tested but the session does not call them. Over 300 frames a real match emits 1200 gates, 1200 choices, 12 commits and 8 releases, and no seams: the twelve-object pool fills and is never freed because the in-flight phase that would run an object to completion is not wired in. That is the next composition step.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "Damage is wired end to end, and the last blocker is a bucket mismatch with a traced answer",
-        "detail": "battleSession now runs the in-flight phase and applies HP; a session test drives six slots to real damage with no seam left. A live match still does no damage, and the reason is now traced rather than guessed: selectBattleAiAction reads its three buckets from combatant +0xE4/+0xE5/+0xE6, which the creature loader at OVL19 0x02113D88 writes (0x02113E9C, 0x02113ED0, 0x02113F08) while classifying the up-to-eight moves it scanned out of the 596-record table for that species. The session instead passes buildCandidateBuckets' nine groups, which live at +0xE8 + group*12 and feed the TARGETED cascade, not these three. So the session is right about its \"targeted\" argument and wrong about its \"candidateBuckets\" one. Closing it needs the classification rule at 0x02113E60..0x02113F08, which is the next read.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "The action element system is traced",
-        "detail": "A move record's +0x58 selects which of six defender levels resists it: selector 0 or above 5 uses creature +0x88, and 1..5 use +0x94, +0x98, +0x9C, +0xA0, +0xA4. Each branch is raised one curve step by its own buff code (2, 5, 6, 8, 9, 7) on the defender's +0x160. Those offsets are exactly the level fields the creature builder writes from preset +0x1C..+0x38.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "Codex was right on three counts and they are fixed",
-        "detail": "The Battle screen shipped three of the five bands the contract declares, the CSS locked only the field, and the contract note over-claimed the band layout as the original second screen. All three corrected and verified in a browser at 375x812: shell ratio 0.5625, bands measured at exactly 5, 10, 37.5, 28 and 19.5 per cent, field ratio 1.500. A test now compares every CSS band height against the contract so they cannot drift. One factual note: the earlier browser verification was of the real game screen, not battle-art-gallery.html, so the 3:2 field measurement stood; but three of five bands is not a finished screen and calling it done was an overstatement.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "The AI bucket question is answered, and the buckets are not the nine groups",
-        "detail": "OVL19 0x02113E5C classifies the creature move list into three buckets by the move record +0x50: kind 0 fills the array at +0xC0 counted at +0xE4, kind 1 with +0x0C == 1 fills +0xCC counted at +0xE5, kind 1 with +0x0C == 2 fills +0xD8 counted at +0xE6, three each. The AI reads those counts at 0x02115B28, 0x02115A80 and 0x02115AD4, so bucket 4 is +0xE4, bucket 5 is +0xE5 and bucket 6 is +0xE6. Contact kinds 2 and 3 are never bucketed, so every attack comes through the targeted cascade, which takes the nine groups the session already passes. The session was right about targeted and its candidateBuckets argument is a separate, smaller job.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "Two inputs the session never supplied, one fixed and one open",
-        "detail": "targeted.roster is now wired: the cascade scans it for a target and without it group 1 and group 3 always reported NO_TARGET. sessionScalarIndex is still open: it indexes the reserve percentages, 0 yields a reserve of 0, and the gate is cost < reserve, so at 0 no action is ever affordable. Where the original sets it is not traced. With a roster and a non-zero scalar the AI commits, verified over 3000 draws.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "A power question worth answering before trusting any damage number",
-        "detail": "Only 30 of the 596 move records carry a contact kind, and their +0x4A power holds just two distinct values, 0 and 15. The resolver reads power from action +0x20 then +0x4A, and this lane has assumed that record is the move record. Either most contact moves really do zero damage, or +0x4A is not the field the resolver ends up reading. That is the next thing to settle, because every damage number depends on it.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "The power field is correct; the damage PATH was the wrong one",
-        "detail": "Proof that action +0x20 is a move-table record: 0x0211C188 compares its +0x28 against the literal 0x02120D8A, and 262 of the 596 records carry exactly that pointer. So +0x4A really is the power the resolver multiplies by. What was wrong is which moves reach it. The jump table at 0x021149E8 reads pc as 0x021149F0, so kind 0 and kind 1 go to the curve-and-power path at 0x02114A00, kind 2 goes to 0x02115504 and kind 3 returns. The table divides as 205 kind-0 moves (powers 0, 100, 300), 361 kind-1 (27 distinct powers, 30 to 600), 27 kind-2 (0 or 15) and 3 kind-3 (0). The contact walk proceeds only for kinds 2 and 3, exactly the kinds the switch sends elsewhere.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "The ordinary attack is resolved by a script native, not by the contact walk",
-        "detail": "The resolver has three callers. One is the contact walk at 0x0211C92C; the other two, 0x0211D9E0 and 0x0211D9FC, are both inside the 2,124-byte script native at 0x0211D71C. That native was earlier called presentation plumbing because every store in it lands in the handle arrays, which was true and incomplete: it also calls the resolver twice. So a normal attack runs as a MOVE SCRIPT on the VM, which calls that native, which resolves the damage. battleInFlight said the chain closed at the contact walk; that claim is now corrected in the file and a test holds the correction.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "The AI now commits real attack moves, and the two reasons it never did are both traced",
-        "detail": "First, the reserve scalar is the clock tier. 0x021159F0 reads ctx +0xE9C, the eight-step tier battleOutcome advances every 900 frames, and indexes the percent table at 0x0212FFF4 with it. Two of the three profiles reserve nothing at tier 0, so the original opens a match passive and grows willing as the clock runs out. The session was passing a per-combatant field that defaulted to 0. Second, the ladder buckets are the creature move list classified by kind at 0x02113E5C, not the nine candidate groups from the two source codes; the nine belong to the targeted cascade, which the session was already passing correctly. With both fixed a real match commits move 98 for its species, a kind-0 move of power 100 and cost 0, out of bucket 4 which carries no cost gate. That is why a match is not silent at tier 0 even when the reserve is zero.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "Running move scripts works, and it needs an Owner decision about what ships",
-        "detail": "The VM executes the cartridge bytecode. Feeding a real move record entry point into battleScriptVm runs it and dispatches real natives: 15, 6 and 20 distinct ones from the three pointers a record carries. Reachability was measured first, and there is no small subset: decoding from all 36 move entry points and following every in-range target visits 22,032 of the segment 23,121 instructions and touches 63,747 of its 63,748 bytes. So making move scripts run means carrying the whole 63,748-byte segment, about 86 KB as base64. The migration firewall payload test matches on file extensions and a .json would pass it, but the test is titled no ROM, Nitro, decoded, or forensic payload, and the intent plainly covers this. The extractor is written and proven; nothing has been placed in src/.",
-        "owner": "Owner decision"
-      },
-      {
-        "item": "A move record names three scripts, and all three point into the segment",
-        "detail": "pointer1C has 3 distinct values across 595 records, pointer28 has 31 across 565, pointer3C has 2 across 595, and every one of them is a move-record entry point. The launch initialiser at 0x0211C198 rewrites two of them in place before use: a record whose +0x0C is 1 and whose +0x28 is 0x02124D82 gets +0x28 set to 0x02120D8A, and a record whose +0x1C is 0x02120674 and whose +0x28 is 0x02120D8A gets +0x1C set to 0x02120754. It also refuses the launch outright when 0x0210FA28 says anyone is engaged.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "What still blocks real damage after the scripts run",
-        "detail": "The scripts run on an all-zero action object, so their conditionals take the wrong branches and none of the three reached 0x0211D71C, the native that calls the resolver. Two of the three ended in RUN_BUDGET_EXHAUSTED and one in DIV_FX_BY_ZERO_UNTRACED, both consistent with missing object state rather than with a wrong decode. The remaining work is modelling the action object the scripts read, not more tracing of the VM.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "The script segment was already in the tree, and the decision ratified it rather than authorizing it",
-        "detail": "The Owner was asked whether to carry the 63,748-byte OVL19 script segment and said yes. It then turned out battle-scripts.r1.json has carried it in blob.base64 since the B2 pass, byte for byte identical, sha e089685d. A second copy was written and has been deleted; battleMoveScriptRun reads the one that was always there. Two things follow. The decision stands and is now recorded. And the migration firewall payload test matches on file extensions, so it never saw this: a case has been added that names the one authorized segment and fails if a second appears.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "Move scripts now execute, and the next step is a short list of small natives",
-        "detail": "A real attack move record runs on the VM through its +0x3C column with the traced six-argument frame and dispatches 20 distinct natives. It does not yet reach 0x0211D71C because every native returns 0 from a stub, so the script spins instead of progressing. The hot ones are small: 0x0211D3A8 at 32 bytes called 1,083 times, 0x0211D54C at 84, 0x0211D3C8 at 80, 0x0211D1E0 at 28, three 24-byte ones, 0x0211D2E0 at 56, and 0x0211E28C at 16 bytes with zero arguments and yields true, which is the per-frame yield the spin is waiting on. Implementing that handful is what turns a spinning script into a running one.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "Move scripts now run to completion, and the blocker was the yield",
-        "detail": "0x0211E28C is sixteen bytes: bl 0x02054A24 and return 0, the per-frame yield. A caller stub that merely returned 0 for it kept the script inside one resume until the budget ran out, which read like a decode fault and was not one. Routing natives to battleScriptNatives, whose implementation of that address actually yields, turned a spinning script into one that executes 280 instructions and ends cleanly. Sweeping every distinct script address in the move table: 36 run, 9 finish clean, 27 still error on an unread native, and 1 reaches 0x0211D71C, the routine that calls the damage resolver.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "Nine natives read, and the ranked list of what is left",
-        "detail": "0x02054A34 is the argument read, 0x02054A24 the yield. 0x02047C48 returns 1 when the object +0x7C is zero and 0 otherwise, an is-it-finished poll a single attack script runs 1,083 times. Three 24-byte getters read a three-word vector through +0x2C at +0x00, +0x04 and +0x08, and 0x0211D54C writes the second and third of them, so +0x2C is a position block written and read by the same script. Seven of the nine were already implemented from an earlier pass; the two that were not are now. What blocks the remaining 27 scripts, ranked by how many want it: 0x0211E2C4 wanted by 25 of 36 at 20 bytes and one argument, then 0x0211D238 and 0x0211D298 by 18 each, 0x0211D418 by 17, 0x0211DF68 by 13.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "The move-script stage went from 9 of 36 scripts running to 26, and the blocker was never the natives",
-        "detail": "Two diagnostics did the work. Stubbing the animation natives with plausible values changed nothing, which ruled them out. Reading the calls that preceded a failure showed every accessor receiving argument zero, which pointed at the frame rather than the routine. battleMoveScript had recorded the +0x1C and +0x28 argument counts as null because they had never been traced, so the runner passed no arguments at all: every arg(0) was zero, the accessor natives returned zero and the scripts divided by zero. It read like a decode fault for two sittings and was an empty frame. 0x0211C51C passes 8 and 0x0211CABC passes 14, both now recorded slot by slot.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "Twelve more natives, including the DS square root and the trig table",
-        "detail": "0x0211E2C4 is the DS hardware square root: SQRTCNT at 0x040002B0 in 64-bit mode, and a value at or below zero returns zero without touching it. 0x0211E2D8 and 0x0211E304 read a 4,096-entry table of signed halfword pairs at 0x02099D6C; comparing the whole table against round(4096 * sin) and its cosine gave zero mismatches across all 4,096 rows and both columns, so the closed form is the table and 16 KB of it did not need carrying. 0x0211E29C rolls channel 216, the same cycle the crit and variance rolls use, and takes the remainder modulo a Q12 argument.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "What actually blocks the last ten scripts",
-        "detail": "Not natives and not the decode. The scripts now run far enough to read the in-flight object graph: 0x0211D050 fetches the action at +0xE8, the three getters chain through +0x2C to a position block, and the host memory those reads land in is empty. Seeding a crude graph by hand moved one more script from errored to clean, which is the proof. The next read is the launch initialiser at 0x0211C098, which is what sets those fields up.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "The launch position is traced, and every remaining thread converges on one routine",
-        "detail": "OVL19 0x0211C098 fetches the current animation cell through 0x02047E58, reads the three-word position block at +0x2C, and places the new object at the owner position plus half of x0 plus x1 shifted twelve, the same for y, with z untouched and the rounding toward zero. That block is the same one the three script getters at 0x0211CE7C, 0x0211CE94 and 0x0211CEAC read and 0x0211D418 writes, so four routines and the launch all share it. The consequence for the stage: the launch position and the three unread animation natives are not two dependencies but one. 0x02047E58 reads the creature loaded sprite data, which is the art lane asset rather than anything a battle table holds, so the cell box is modelled as an input and not derived.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "A match deals damage end to end for the first time",
-        "detail": "Player 760 down to -62, -18 and -8, opponent untouched, ended at frame 7201 on TIME_UP with verdict TEAM_ONE_AHEAD. The chain is AI selection, the move buckets, the move script running the cartridge bytecode on the traced VM, the attack native 0x0211D71C, the resolver at 0x021149A8 and applyBattleHp. The attack runs on the +0x28 column and not +0x3C. Three composition bugs surfaced only by running it: a catalog key of battle-moves where the catalog says moves, with a try/catch swallowing the miss so every action carried a null move; speciesId never reaching the combatant so all six bucketed as species 0; and the side field at +0x54 never being set so every target was refused as SAME_SIDE. None was a bad reading of the ROM; all three were wiring.",
-        "owner": "Claude Code"
-      },
-      {
-        "item": "The product creatures cannot attack, and that is a decision not a bug",
-        "detail": "Greyshade Cat and the other two have no ROM species id, so buildMoveBucketsForSpecies gives them species 0 and they commit a move that never reaches the attack. In the run above the opponent took no damage at all for exactly this reason. They need declared move lists the way they already have declared levels, and which moves they carry is an Owner call rather than something the cartridge can answer.",
-        "owner": "Owner decision"
-      },
-      {
-        "item": "A player write-up corroborates the schedule pair, and answers nothing else",
-        "detail": "The Owner supplied a Bahamut forum post about the original. Treated as a SECONDARY source throughout: nothing traced was changed and no number was taken from it. One thing lines up usefully. The post describes the calendar as four seasons a year, eight days a season, and battleMatchSelection dumped the schedule moduli as 4 and 8 weeks ago, so slotA reads as the season and slotB as the day. That makes the runtime default legible as season 2 day 3 while leaving it product-authored, because where a fresh save actually starts is still untraced. Two smaller notes: the post lists the trainable stats as HP, TP, attack, defence, one unclear term and agility, which is six and matches the six defender branches at 0x02114A8C, and it calls the action resource TP, which is a player-facing name for the field this lane traced as charged by the action cost at 0x0211C244. Neither is being used to rename anything. What the post does NOT cover, and I looked for it specifically: whether the player controls a fight or it runs itself, what the battle screen shows, and any time limit. So the VS5 Auto Battle reading still rests on the trace alone -- no traced site reads player input between the start of a match and its verdict.",
-        "owner": "Claude Code"
-      }
-    ],
-    "battleCompositeIntegrity": {
-      "status": "OPEN_FOR_CODEX_MERGE",
-      "summary": "R5 is not ready for the 11-field family review or a runtime swap. Two blocking defects: an un-keyed white matte on the shared BM00 layer that haloes over every dark field, and four of the six canonical combat slots painted onto scenery in BM01/BM02/BM09/BM10.",
-      "blocking": [
-        "BM00 shared layer matte: edge pixels at alpha 1-64 average RGB 242,238,232 against a body of 141,121,85. One re-key fixes all eleven fields.",
-        "Canonical slot coverage: BM10 puts slots 1-2 on the spectator tiers and 3-4 across the pitch barrier; BM09 slot 2 on the terrace; BM01 and BM02 slot 1. Characters would stand inside scenery."
+    {
+      "id": "HUNT_CAPTURE_INPUT_OBSERVED",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-03",
+      "detail": "Hunt capture is a touch-drag: with a tool selected on the toolbar, a trail is drawn across the touch screen from an anchor toward the target creature. Matches help_text_txt.dat entry 89 (rope) and entry 104 (reduce HP to zero with equipment, then catch with the hand icon). Hunt HUD carries a countdown timer, a capacity gauge in G against a memory-card maximum, a radar minimap, and a target panel whose fields read ??? until analyzed."
+    },
+    {
+      "id": "CLAUDE_AUDIT_CORRECTIONS_FROM_CODEX_CONSOLIDATION",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-03",
+      "detail": "Five errors in the Claude audit artifact, found by the Codex video-evidence consolidation and fixed at the same URL. (1) The Light-only-at-night rule was cited to help #96; #96 is day length and season/year, #92 is lures. The real source is the item descriptions quoted in the Gate Select contract. (2) The screen-family table listed Cage Edit as 2 extra NXR scenes when both live under training/ and are already inside that row 7, so the column summed to 98 instead of 96. (3) Two headings still said the training_sub content is on the bottom screen after the verdict above them had been corrected to the physical top. (4) The toolbar submenu was recorded as one menu; there are two. (5) The 708-test figure and the battle coloured-dots description were both stale.",
+      "note": "All five are mine. Recording them so the shared ledger carries the correction rather than only the corrected page."
+    },
+    {
+      "id": "OVL18_SPECIES_TABLE_READ_SITES_FIRST_PASS",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-03",
+      "detail": "First pass at the raising trace. OVL18 holds 11 literal-pool references to the species table at ARM9 0x020C1374, reached by 16 LDR sites. Hand-decoding one cluster confirms the access shape: load the current creature record, read its species index, multiply by 0x84, add the table base, then load a field. That CONFIRMS THE 132-BYTE STRIDE FROM CODE rather than from the table span alone, and recovers two field offsets read by raising: +0x0C and +0x18.",
+      "confidence": "+0x0C and +0x18 are hand-decoded. A wider automated scan also suggested +0x00, +0x10, +0x1C and LDRB +0x1D, which are inside the record and plausible but NOT yet hand-verified. The same scan produced +0xF8C, which is a false positive: it is outside the 132-byte record and is the global-context load that precedes the table access.",
+      "significance": "The species catalog previously recorded exactly one traced read site (+0x30, on the battle path at ARM9 0x0206291C). Raising reads different fields from battle, so the record carries at least two distinct consumers. 69 of the 132 byte lanes vary across the 228 records, so most of the table is still unnamed.",
+      "nextStep": "Hand-verify the four scan-only offsets, then follow each field to what OVL18 does with it. The raising FORMULAS and state machine are a separate and much larger job inside OVL18 code."
+    },
+    {
+      "id": "OVL18_SPECIES_FIELD_SEMANTICS_ROUND_2",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-03",
+      "method": "Hand disassembly of OVL18 read sites into the ARM9 species table at 0x020C1374, using the unpacked overlay (offset = addr - 0x0210B300) and arm9.bin (offset = addr - 0x02000000). Mapping re-verified against the known 4,8,24,60,400 control word before use.",
+      "proven": [
+        "Record stride 0x84 (132) is confirmed IN CODE (MOV r0,#0x84 then MLA base+index*0x84), not merely inferred from table span / record count.",
+        "Field +0x0C: loaded, 0x1CD added, passed as the index argument to ARM9 0x0207D234 with bank 0.",
+        "Field +0x10: loaded, 0x1D4 added, passed to the SAME function with bank 0. The two base offsets differ by 7.",
+        "ARM9 0x0207D234 is a two-level resource accessor: ADD r0,r0,r0,LSL#4 then LDR [r2, r0 LSL#4] selects a table at a 272-byte stride by bank, then LDR [r0, r1 LSL#2] indexes it by word. It returns a pointer, which OVL18 stores into the raising context.",
+        "Field +0x18 is a BITMASK. The code runs the lowest-set-bit idiom (MVN / SUB #1 / AND) then RSB r0,#0x20 to turn it into a position, then adds 1 - so it is converted to a 1-based ordinal rather than used as a number."
       ],
-      "nonBlocking": [
-        "Ring receives no per-scene grading - byte-identical in all seven composites.",
-        "No contact shadow in any field; structures read as floating.",
-        "BM00 still carries uniform outlines, stamped repeating stone texture and glossy bevels, which the batch's own ART_DIRECTION.md bans. Shared and frozen, so all eleven fields inherit it.",
-        "Saturation at 60% of the original overall, 28% on BM11."
+      "corrected": "The earlier automated pass reported a read at +0x1C. That was a FALSE POSITIVE: at 0x2125f24 the +0x1c load is from r9, an unrelated base, while the species-table load at that site is +0x0C. Also previously rejected: +0xF8C, which is outside the 132-byte record.",
+      "stillUnknown": "What the bank-0 strings ARE. Two indices seven apart into one table is consistent with two per-species text attributes, but nothing here names them, and no read of +0x00, +0x1D or any other field has been hand-verified yet. Raising FORMULAS and the state machine remain untouched.",
+      "ownerDirection": "2026-09-03 the Owner chose path A2: trace first, then swap the product-authored placeholders out in one move, so there is no window where the build cannot run."
+    },
+    {
+      "id": "OVL18_SPECIES_IDENTITY_FIELDS_RESOLVED",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-03",
+      "summary": "The species record at ARM9 0x020C1374 (228 records, stride 0x84) now has four identity fields resolved by combining hand disassembly of the OVL18 read sites with a read of the actual values across all 228 records.",
+      "fields": [
+        {
+          "offset": "+0x00",
+          "meaning": "pointer to a NUL-terminated ASCII species identifier",
+          "evidence": "DATA_VERIFIED: all 228 pointers land inside the ARM9 image and all 228 targets are NUL-terminated ASCII of length >= 3. Record 0 is the egg identifier."
+        },
+        {
+          "offset": "+0x0C",
+          "meaning": "generation / life stage index",
+          "evidence": "CODE + DATA: 7 distinct values 0..6 across the table; OVL18 adds 0x1CD and calls the bank-0 resource accessor, i.e. it indexes a text block. 7 matches the documented stages (egg plus the six growth stages)."
+        },
+        {
+          "offset": "+0x10",
+          "meaning": "attribute index",
+          "evidence": "CODE + DATA: 5 distinct values 0..4; OVL18 adds 0x1D4 and calls the SAME accessor. 5 matches Vaccine/Virus/Data/Free plus a none for the stages help entry 119 says have no attribute."
+        },
+        {
+          "offset": "+0x18",
+          "meaning": "species-family bitmask",
+          "evidence": "CODE + DATA: the only values present are 0 and the eight single bits 0x01..0x80, and OVL18 runs the lowest-set-bit idiom then RSB #0x20 and +1 to turn it into a 1-based ordinal. Eight bits matches the eight families help entry 120 documents."
+        }
       ],
-      "gate": "npm run art:battle:integrity",
-      "packageJsonNote": "package.json currently holds BOTH lanes' unwired npm scripts - Codex's battle-art entries (whose script and test files are still untracked) and Claude's art:battle:baseline:* and art:battle:integrity. It was deliberately left unstaged: committing it now would point npm at files not yet in the tree. Codex should commit package.json together with its battle-art files.",
-      "evidence": "reports/art/BATTLE_COMPOSITE_INTEGRITY_R5.json"
+      "internalCrosscheck": "0x1D4 - 0x1CD = 7, exactly the number of distinct generation values. The generation and attribute strings are therefore adjacent blocks in one bank-0 table, which is what two indices seven apart into the same accessor implied.",
+      "boundaryCrosscheck": "Records 0..7 carry family 0 and generation 0, matching the documented split of 224 = 8 eggs + 216 regular entities.",
+      "stillUnknown": "+0x1D is a byte with 7 distinct values in 12..32 and is not yet interpreted. Raising STATS (HP/TP/AP, attack, defense, wisdom, speed, capacity, lifespan) and every care FORMULA remain untraced; 63 of the 132 byte lanes are still unnamed, and the bank-0 table itself is built at runtime at 0x0210AC14 so its contents cannot be resolved from the static image.",
+      "unblocks": "This is enough ROM-verified species IDENTITY (name, generation, attribute, family) to replace the three product-authored placeholder creatures under the Owner path A2. It is NOT enough to restore care, which needs the untraced formulas."
+    },
+    {
+      "id": "SPECIES_FIELDS_ROUND_3",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-03",
+      "method": "Rewrote the field scanner to be dataflow-confirmed: a load only counts as a field read if its base register genuinely derives from the table base through a multiply by 0x84, and any offset >= 0x84 is discarded. The two earlier passes each produced a false positive (+0xF8C, +0x1C-from-r9); this pass produced none.",
+      "scanResult": "Six field reads across all modules: +0x04 (arm9), +0x0C (arm9, ovl0, ovl16, ovl18), +0x10 (arm9, ovl16, ovl18), +0x18 (arm9, ovl16, ovl18), +0x1C byte (ovl0), +0x70 byte (ovl0).",
+      "corroboration": "OVL16 is the Database overlay and it reads exactly +0x0C, +0x10 and +0x18 -- the three fields round 2 identified as generation, attribute and family. An encyclopedia reading precisely those three is independent support for that reading.",
+      "newlyResolved": [
+        {
+          "field": "+0x04",
+          "finding": "Pointer to a second ASCII string used as a LOOKUP KEY. ARM9 0x02097A0C walks the table calling 0x0201FFC0 with (key, needle, 4) and captures the record index when the result is zero. 0x0201FFC0 was disassembled and is byte-wise compare: returns the difference on mismatch, stops at NUL, counts down the length - strncmp. The first four characters are as discriminating as the whole string, giving 224 distinct prefixes across 228 records.",
+          "evidence": "CODE + DATA"
+        },
+        {
+          "field": "+0x1C",
+          "finding": "Byte read by Hunt. FULLY DETERMINED BY GENERATION with zero violations across all 228 records: 0->1, 1->6, 2->8, 3->10, 4->14, 5->18, 6->24.",
+          "evidence": "DATA_VERIFIED",
+          "candidate": "A monotonic per-generation cost read on the hunting path matches the memory-card capacity help entry 128 describes as rising on evolution. Nothing traced NAMES it, so it is transcribed as generationScaledByte, not as capacity."
+        },
+        {
+          "field": "+0x70",
+          "finding": "Byte read by Hunt, four values 0..3. Transcribed as huntClassByte; not interpreted.",
+          "evidence": "DATA_ONLY"
+        }
+      ],
+      "knownGap": "The battle read site at ARM9 0x0206291C for +0x30 does NOT appear in this scan, so the scanner still misses at least one access pattern. The scan is a lower bound on read sites, not a complete census.",
+      "stillUnknown": "Stats - HP, TP, AP, attack, defence, wisdom, speed, lifespan - remain unlocated, and every raising FORMULA in OVL18 is untouched. Of 132 bytes, 8 offsets now have a traced read site."
+    },
+    {
+      "id": "HELP_SCREEN_NEEDS_AN_OWNER_DECISION",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-03",
+      "detail": "Help was going to be the cheap next destination because its 170 strings are already extracted to help_text_txt.csv. Built as designed it would put a substantial body of the original written help text into the shipping repo, which is a content-reproduction decision rather than a structural one. Deferred to the Owner instead of done unilaterally. Digimon was built first because it is a view over data already transcribed."
+    },
+    {
+      "id": "OVL18_RUNS_A_SIMULATION_METERS_CONFIRMED",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-04",
+      "question": "The Owner challenged the claim that the original has a care loop, noting it did not look like it. The challenge was fair: the previous claim rested on the game HELP TEXT describing hunger, sickness, injury and permanent loss, plus the tool vocabulary, and NOT on any evidence that the code runs those mechanics. Documentation of a system is not proof the system executes.",
+      "method": "Scanned OVL18 for read-modify-write on struct fields - a simulation must WRITE state - then disassembled one site by hand.",
+      "proven": [
+        "OVL18 contains 100 read-modify-write sites on struct fields. It is a simulation, not a menu shell.",
+        "Field +0x1C of the creature record is a CLAMPED 0..100 METER. At OVL18 0x021186E8 the code loads it, adds 0x32 (50), stores it, reloads, compares against 0x64 (100) and stores the clamp when it is over. Cap and restore step are both explicit constants.",
+        "The same field is decremented elsewhere in the same overlay: SUB #10, SUB #2 and SUB #1 sites exist, alongside ADD #3 and ADD #1.",
+        "The restore at 0x021186E8 is guarded: the code first loads another field and executes only when that value is <= 0."
+      ],
+      "stillUnknown": "WHICH meter +0x1C is. Nothing here names it hunger, and no time-driven decrement has been isolated yet - the SUB sites are at specific code sites whose trigger is untraced. So \"the original maintains per-creature clamped meters with restore and drain\" is now proven; \"not feeding a Digimon eventually kills it\" is not.",
+      "processChange": "The Owner set a standing rule on 2026-09-04: before starting work on any part, confirm which evidence tier it sits at, and specifically whether the BEHAVIOUR is verified rather than only documented. Adopted."
+    },
+    {
+      "id": "OVL18_METER_MECHANIC_TRACED",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-04",
+      "proven": [
+        "OVL18 0x02111130 populates two slots side by side: +0x114 from the incoming argument, then it reads that record field +0x00 as a species index, does MOV #0x84 / MLA against the species table base, and stores the result at +0x118. So +0x114 is the CREATURE record and +0x118 is its SPECIES record, proven by construction rather than inferred.",
+        "At OVL18 0x021187E0 the penalty is conditional: threshold = species[+0x1C]; if creature[+0x08] >= threshold then creature[+0x1C] -= 10.",
+        "At OVL18 0x021186E8 the same meter is restored: creature[+0x1C] += 50, then reloaded, compared against 100 and clamped. Cap and step are explicit constants.",
+        "creature[+0x08] is incremented by 1 nearby (0x02118730), in the same handler as the restore and the penalty."
+      ],
+      "correction": "The species byte at +0x1C was previously recorded as a memory-card capacity CANDIDATE, reasoning from help entry 128 that capacity rises on evolution. That reading is withdrawn. It is a THRESHOLD in a comparison, not a cost drawn from a pool. It was transcribed under the neutral name generationScaledByte and never shipped as capacity, so no product behaviour depended on the wrong reading.",
+      "meaning": "The original does maintain a per-creature clamped 0..100 meter with a restore step, a penalty step, an accumulating counter, and a per-generation threshold that decides when the penalty applies. Higher generations tolerate a larger counter before being penalised.",
+      "stillUnknown": "What the meter and the counter MEASURE, and what drives the counter upward. Until the increment trigger is traced it is not established whether this is time pressure or a cost attached to specific actions - and those imply different products."
+    },
+    {
+      "id": "OVL18_HANDLER_TABLE_LOCATED",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-04",
+      "proven": [
+        "The meter handler at OVL18 0x0211837C has ZERO direct BL callers. It is reached through a dispatch table, the same shape the battle lane found for its state machine.",
+        "That table is at OVL18 0x021283D0 .. 0x02128968: 180 entries, 8-byte stride laid out as {handler pointer, 0}, and all 180 pointers are distinct. The meter handler is index 96.",
+        "Inside the handler the accumulation is indexed: creature+0x100 is an ARRAY of halfwords; the code does accumulator[r4] += r4, and only when that accumulator reaches 4 or more does creature+0x08 increment. So the rate is driven by the index r4, and the meter penalty is two thresholds deep, not one."
+      ],
+      "chainNowTraced": "accumulator[r4] += r4  ->  at >= 4, creature[+0x08] += 1  ->  at creature[+0x08] >= species[+0x1C] (per-generation threshold), creature[+0x1C] -= 10, against a meter restored in +50 steps and clamped at 100.",
+      "forkStillOpen": "Whether this is time pressure or an action cost still hinges on what selects handler index 96 and what r4 is. Both now have a precise address to work from rather than a guess. This is where the stage ends; closing the fork is the next stage, not a step within this one.",
+      "productImpact": "NOTHING was implemented from any of this. No care system, no meter, no threshold has been added to the product, because the trigger is not established and the Owner rule adopted 2026-09-04 is to confirm behaviour before building."
+    },
+    {
+      "id": "OVL18_HANDLER_TABLE_CORRECTED",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-04",
+      "correction": "The claim \"180-entry handler table, meter handler at index 96\" is WITHDRAWN. That came from walking outward from a known entry while the {pointer, 0} pattern held, which ran straight through the end of one table and into the next.",
+      "proven": "OVL18 0x02110C38 reads a global at +0xA8 and tests it against 1, 3 and 5. On a match it registers the table at 0x021283D0 with size 0x260 (76 entries); otherwise it registers 0x02128630 with size 0x340 (104 entries). Both sizes are explicit MOV immediates at the registration calls, so the bounds are stated by the code rather than inferred from data shape.",
+      "revised": "The meter handler entry at 0x021286D0 lies inside the SECOND set: index 20 of 104, active when the global mode at +0xA8 is not 1, 3 or 5.",
+      "meaning": "Dispatch is mode-gated. Which handler set is live depends on a global mode selector, which is the same +0xA8 the battle lane already found deciding a one-entry match mode. So the raising handlers are not a flat list; there are at least two sets and the mode chooses.",
+      "stillOpen": "What mode values 1/3/5 mean, and what selects index 20 within the active set. The fork - time pressure versus action cost - is still not closed, and nothing has been implemented from any of it."
+    },
+    {
+      "id": "GATE_ENTRANCE_FEE_NOT_TRACEABLE_YET",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-04",
+      "request": "Owner asked for Gate entrance fee and Tamer-rank gating.",
+      "finding": "NOT BUILT, because the numbers do not exist in anything traced. There is no fee or rank table anywhere in src or the contracts. The one candidate - battle-title-events field20 - is ruled out on its own data: it ranges 2500..880000, is never zero, and is never below field24 in any of the 62 records, so paying it to win at most 36000 makes no sense; and the fee the footage shows for one match is 1400, below field20 minimum. field24 is the payout, confirmed by the module note that record 61 is the table only zero-payout row.",
+      "wouldHaveBeen": "Implementing the mechanism with invented per-gate numbers, which the Owner directive of 2026-09-03 forbids. The RULES are documented in help entries 100 and 101 and the fee field is visible in footage; only the VALUES are missing.",
+      "bonus": "While checking, field14 (values 0..3) and field18 (values 0..7) in the transcribed title table match exactly the season and day-of-season slots traced from ARM9 0x0207BC9C and 0x0207BCCC. The calendar reading is now confirmed from the data side as well as the code side."
+    },
+    {
+      "id": "GATE_TABLE_LOCATED_FEE_STILL_NOT_TRACED",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-04",
+      "proven": [
+        "A 17-record table with stride 36 sits at ARM9 0x020C9558. Seventeen is the hunt field-id count (16 gates plus the tutorial).",
+        "w0 and w1 are the day/night hunt field index pair, values 0..32 across the table - which matches the 33-entry Hunt table originalHuntFieldBindings.js already cites. Record 16 carries the same index in both, and is the odd row out on every other column too, consistent with it being the tutorial.",
+        "w2 is a per-record pointer into a nearby ASCII region.",
+        "w3, w4 and w5 are three PARALLEL text-index blocks of 17 each: 574..590, 591..607, 608..623. Each advances by one per record, and the blocks are 17 apart - the same shape as the species generation/attribute text blocks found earlier."
+      ],
+      "alsoFound": "The tamer-rank table at ARM9 0x020E1E18 (stride 36, 10 rows) has 9 columns and only w0 was previously traced as the ranch slot count 14/16/18/20. w1, w2 and w3 are monotonic non-decreasing caps; w3 runs 3,3,4,4,5,5,6,6,6,6, which is the shape of an evolution generation ceiling given help entry 146 says rank limits how far a Digimon can evolve. NOT asserted - no read site traced.",
+      "notFound": "THE ENTRANCE FEE. w6 holds 17 distinct large values and is a strong candidate, but its decomposition is unresolved and the read sites could not be confirmed.",
+      "toolWarning": "WITHDRAWN AND CORRECTED 2026-09-04. The claim that the literal-pool matcher produced a fourth false positive was WRONG. The words at OVL12 0x0210E450 and 0x0210D000 are 0xE59F1088, genuine LDR Rt,[pc,#imm] instructions; the matcher identified them correctly. The real mistake was mine: the scratch disassembler was bound to arm9_overlay_0018.bin and I fed it OVL12 addresses. Overlays share the RAM base 0x0210B300, so the offsets resolved without error and produced confident-looking output from the wrong binary.",
+      "productImpact": "Nothing implemented. Gate entrance fee and rank gating remain unbuilt, as they were before this round.",
+      "rootCauseReview": "Reviewing the four incidents, they had FOUR DIFFERENT causes, not one unreliable tool: (1) species +0xF8C was a missing bounds check, since 0xF8C exceeds the 0x84 record - fixed by rejecting offsets >= stride; (2) the +0x1C-from-r9 hit was loose dataflow in the first scanner - fixed by the stricter version that requires derivation through a multiply by the stride; (3) the 180-entry table was a greedy outward walk running through the end of one table into the next - a method error, fixed by reading the size the registration code passes; (4) this one was wrong-overlay disassembly, a process error with no tool defect at all. Calling them all one broken matcher was itself a wrong diagnosis.",
+      "actualFix": "Not a rewrite. The disassembler needs the overlay id passed explicitly and should refuse an address whose overlay is not the one loaded, so the same mix-up fails loudly instead of printing plausible instructions.",
+      "newFinding": "With the correct overlay, both sites read cleanly: OVL12 0x0210E450 does LDRH from table base+24 indexed by the record offset, and 0x0210D000 does LDRSH - SIGNED - from base+26. A fee would not be signed, so base+24 is the stronger entrance-fee candidate and base+26 is something that can go negative."
+    },
+    {
+      "id": "GATE_FEE_NARROWED_NOT_CLOSED",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-04",
+      "proven": "OVL12 0x0210E450 loads the literal at 0x0210E4E0, which holds 0x020C9570 - the gate table base plus 24 - and does LDRH from it indexed by the record offset, so the field is an UNSIGNED u16 at record+0x18. It passes the value to 0x0210E588, which offsets a UI object, sets r3 to 7, loads a format literal and calls 0x0207F958. A width of 7 matches the seven-digit money display the footage shows.",
+      "alsoProven": "The neighbouring field at record+0x1A is read with LDRSH at OVL12 0x0210D000 - SIGNED - so it can go negative and is therefore not money.",
+      "notProven": "That record+0x18 IS the entrance fee. It is a per-gate value drawn as a 7-digit number, which is consistent with a fee and rules out the signed neighbour, but no comparison against player funds and no deduction has been traced. The values across the 17 records are 0, 364, 50, 230, 0, 308, 66, 574, 744, 110, 816, 216, 1350, 108, 2608, 4320, 0.",
+      "weakSupport": "Record 0 carries 0 and the footage shows one gate at an entrance fee of 0, but no gate name is mapped to a record index, so this is a coincidence of shape rather than a match.",
+      "nextStep": "Find the site that compares this field against the player funds, or that deducts it. That is what would make it the fee rather than a number that happens to be drawn like money."
+    },
+    {
+      "id": "TITLE_EVENT_SCHEDULE_TRACED_AND_BUILT",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-04",
+      "proven": "ARM9 0x02089230 is the game's own what-is-on-today query. It asks the clock for season and day, then walks the 62-record table at 0x020CD004 at stride 0x28 matching field14 against the season and field18 against the day, with a third condition comparing field10 against HALF a u16 at player+0x0AE8. It emits record indices, its scan bound is 0x3D so record 61 is never reached, and its capacity check guards the store rather than the loop.",
+      "alsoProven": "The two string columns are two parallel 62-entry blocks in nitrofs/ui/txt/txt_list_txt.dat: field00 runs 675..736 and field04 runs 737..798, with field04 minus field00 equal to 62 for every record. Record 61, the one the scan bound excludes, is the tutorial match -- which is why it is not a fixture.",
+      "notProven": "What the counter at player+0x0AE8 counts. field10 only holds 0..4 so a counter of 8 clears everything, but there is no traced write site. The board therefore shows the whole calendar and marks the threshold rather than hiding rows behind it. field0C, field1C, field20 and field24 keep their byte-offset names.",
+      "languageNote": "The cartridge is the Japanese YDIJ release, so the fixture names are Japanese. The research footage is the English release, a different build; its labels are not evidence for this ROM's string table, and no translation was invented."
+    },
+    {
+      "id": "BUILDER_LINE_BREAK_DEFECT_FOUND_AND_FIXED",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-04",
+      "what": "The first build of the string catalog shipped blurbs still holding the bank's two-character backslash-n instead of real line breaks, so the board rendered the escape as visible text. Caught by looking at the live page, not by the tests, which had not asserted it.",
+      "cause": "The builder's comparison had been written as a real newline rather than the two literal characters -- the backslash was un-escaped on its way into the file.",
+      "fix": "The value is now a named constant spelled chr(92) + n, which cannot be mangled the same way, and a regression test asserts that all 62 blurbs carry real breaks and no residual escape."
+    },
+    {
+      "id": "HELP_BANK_CONNECTED",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-04",
+      "proven": "help_text_txt.dat declares 168 entries and they are two parallel blocks of 84: entry i is a title, entry i+84 is its body. The offset is fixed by a control this project already relied on -- entry 96, previously cited for the clock cascade, lands on the TIME title under this split. Sixteen bodies are the literal string n/a; those titles are section headings. The remaining 68 are topics. The heading/topic split is the file's, not a reading of the Japanese.",
+      "correction": "The figure of 170 help strings used in earlier discussion was wrong. The bank holds 168 entries, which is 84 titles and 84 bodies, so there are 68 readable topics -- not 170 paragraphs.",
+      "notProven": "Which heading owns which topics. The bank stores headings and topics as separate runs with no parent link, and no grouping table was found in ARM9, OVL5 (help resource descriptor) or OVL16 (loader pointer). The screen therefore renders the ROM's own order and asserts no tree; a test forbids any record from carrying a parent field while this stays untraced.",
+      "alsoRecorded": "The help overlays are OVL5 and OVL16. An earlier scan of mine mislabelled every overlay as ovl9 because the id was taken with a regex that matched the 9 in the arm9 filename prefix; the corrected scan is what produced OVL5/OVL16."
+    },
+    {
+      "id": "TAMER_INFO_BUILT",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-04",
+      "proven": "tamer_info_main_scene.nxr and tamer_info_sub_scene.nxr (both OVL4) name every field on the screen, and because the cartridge draws each digit as its own sprite-cell node the node names also fix the widths: title 3, guid 3, map 3, battle 4, win 3 on the main scene; money 7, time 3 plus a separator plus 2, have 3 on the sub scene. Row order follows the scene y positions 22/44/66/109/131 and 72/113/154.",
+      "crossCheck": "The 7-digit money field now has three independent ROM witnesses: the sub scene lays out money0..money6, the battle reward path clamps the wallet at 9999999, and the gate draw call at OVL12 0x0210E588 passes a field width of 7 to the number renderer. A test asserts the first two agree.",
+      "notProven": "The values behind title, guid, map, battle, win and time. Those are lifetime counters the cartridge keeps in its save and this build has no traced read site for any of them. They are rendered as dashes at their ROM width rather than as zeros, because a zero counter reads as a real total. No English gloss is invented for guid or map either -- the labels are the scenes' own node names.",
+      "consequence": "With this screen the toolbar's unbuilt-destination list reaches zero: every entry in both submenus now resolves to a screen or an action. That is not a completeness claim -- Tamer Info itself draws six of eight fields unsourced -- it only means no menu entry is a dead end. The contract test now asserts the empty list AND the entry count, so deleting an entry cannot satisfy it."
+    },
+    {
+      "id": "CURSOR_AUDIT_2026-09-04_ACCEPTED",
+      "raisedBy": "Cursor audit, verified and actioned by Claude Code",
+      "date": "2026-09-04",
+      "upheld": [
+        "C9 gate values: my brief listed 0,364,50,230,0,308,66,574,744,110,816,216,1350,108,2608,4320,0. The ROM says 0,300,50,230,0,500,450,830,1000,110,1200,600,1350,300,2800,4000,0. The u32 words I recorded were machine-read and correct; the low halves were computed BY HAND and wrong wherever the arithmetic was non-trivial. None of it reached the product because the fee was never implemented. Any note still quoting 364/308/574 is void.",
+        "C3 capacity behaviour: BHS at 0x02089268 branches PAST the match test, so a full output stops evaluating the predicate. My scanTitleEventsForToday counted matches past capacity and my test asserted that wrong behaviour. Fixed: the function now returns only what the ROM returns (r0 = r3, the number written); matched/truncated are gone and a test forbids their return.",
+        "C7 field list: the tamer_info sub scene has 23 nodes, not 17. My earlier dump was truncated at 40 lines and I treated the visible rows as complete. name, rank, license, cage0, cage1 and the G unit glyph were below the cut. The field table is now 12 entries.",
+        "C2 metadata: widthEvidence was set to CONSTANT_ZERO_PADDING for every untraced column without ever checking the bytes, and it is false for field0C (15 records carry -1) and field20 (24 exceed 16 bits). The default is now NO_TRACED_READ_SITE, which is what it always meant.",
+        "Defect A: Continue was offered whenever the save merely parsed as JSON, so a save written before a schema change enabled a button guaranteed to fail. Added app.canContinue(), a state-free dry run of the same restore; the title screen now disables Continue and shows the reason.",
+        "Defect B: ATTRIBUTE 0 and FAMILY 0 were two different zeros treated inconsistently. attributeIndex 0 is a real value (38 species carry it) but the label implied a named attribute, so it now reads ATTR. INDEX. familyBits 0 means no bit set, a real answer, so it now renders as an explicit none instead of vanishing -- keeping an ABSENT row meaning only untraced."
+      ],
+      "majorCorrection": {
+        "what": "player+0x0AE8 is the TAMER RANK, and I had labelled it UNKNOWN_REQUIRES_TRACE while the identification was already in this codebase.",
+        "where": "cageCatalog.js documents +0xAE8 as the tamer rank and reads the rank table at ARM9 0x020E1E18 as VERIFIED_BINARY; championshipStandaloneApp.setTamerRank names the same address and says the store happens after battle result.",
+        "fit": "The rank table holds exactly TEN ranks (14,14,16,16,18,18,20,20,20,20, then out of range). rank >> 1 over 0..9 yields exactly 0..4, which is exactly the set field10 takes across all 62 records. field10 is a rank TIER; a fixture opens at rank 2 * field10.",
+        "labelNow": "CORROBORATED_PENDING_WRITE_SITE -- the write site for +0xAE8 is still open, so this is not called ROM_VERIFIED.",
+        "consequence": "Tamer Info's rank field now has a real source, and the Schedule board states the rank a fixture needs instead of calling the requirement unknown."
+      },
+      "alsoDone": "Removed the audit fetch probes Cursor left in five product files; they were real network calls in shipping source and the migration firewall test was right to fail on them. Suite is 803/803 with them gone.",
+      "stillOpen": "Gate fee identity (next step is player+0xEB8, which suppresses the deduction, and how the 17 records map to 16 biomes); help section grouping; the +0xAE8 write site; the five remaining Tamer lifetime counters; whether the cage node shows cage space or cages placed -- both readings fit the row, so it stays unsourced."
+    },
+    {
+      "id": "GATE_ENTRANCE_FEE_CLOSED",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-04",
+      "status": "CLOSED -- previously GATE_FEE_NARROWED_NOT_CLOSED",
+      "proven": "OVL12 0x0210F82C multiplies the gate index by 36, loads the u16 at 0x020C9570 (gate table + 0x18), compares it against the player's Bits at +0x4C8 (0x0210F84C), REFUSES entry when it cannot be afforded (0x0210F85C), and SUBTRACTS it from Bits (0x0210F874). That is an entrance fee by behaviour, which is what the earlier 'drawn like money' reading was missing.",
+      "mapping": "The table's +0x08 column is a C string holding the biome node name, so the index-to-biome mapping is READ, not inferred. Records 0..15 carry the 16 product biomes exactly once; record 16 is the tutorial, reusing Grass at no cost. The builder refuses to emit unless that holds.",
+      "corroboration": "Record 0 is Grass / DAINA-SOUGEN, which the English release's footage shows at an entrance fee of 0. Independent, and from a different build.",
+      "fees": "0, 300, 50, 230, 0, 500, 450, 830, 1000, 110, 1200, 600, 1350, 300, 2800, 4000, 0",
+      "bonus": "The same table's +0x0C column is a txt_list index, so the gate DISPLAY NAMES are now recovered too. GATE_DISPLAY_NAME_EVIDENCE moves from PRESENTATION_DEFAULT_NOT_RECOVERED to ROM_VERIFIED, and the gates now show the cartridge's own Japanese names instead of their node ids.",
+      "stillOpen": "What sets the waiver flag at player+0xEB8. A non-zero value skips both the affordability check and the deduction; its effect is recorded, its trigger is not modelled."
+    },
+    {
+      "id": "OVL18_RAISING_TRACE_ROUND_1",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-04",
+      "outcome": "NOT CRACKED. Two dead ends closed with evidence, and the search redirected.",
+      "ruledOut": {
+        "what": "The byte cluster at +0x1A8..+0x1B4, which a store-frequency scan of OVL18 surfaced as five consecutive byte fields -- exactly the shape of five raising stats.",
+        "why": "OVL18 0x02119BB0 reads +0x1A8, compares against 4 and jumps through a five-entry table. Phase 0 sets a 32-bit timer at +0x1AC to 0x3000, writes 31 to +0x1B0, zeroes +0x1B1 and +0x1B4, and calls ARM9 0x020472CC twice -- which is nothing but STRB r1,[r0,#0x15]; BX lr, a generic byte setter. Phase 1 copies three consecutive words into +0xF8/+0xFC/+0x100, an x/y/z position. This is an actor animation controller, not persistent creature state.",
+        "value": "This was the most tempting wrong answer available and would have produced invented 'raising numbers' that looked ROM-derived."
+      },
+      "alsoRuledOut": "0x50 appeared 11 times before a MUL and looked like an 80-byte creature record stride. At 0x02113480 it is arithmetic instead -- the product is shifted right by 5, the signed divide-by-32 idiom, so the site computes x * 80 / 32. Not a stride.",
+      "structuralFinding": "The raising stats are NOT at fixed offsets from the player structure. Every immediate offset in the 0x400..0xF00 window across OVL18 was tallied; the hot fields (+0x404..+0x44C, +0x6DC, +0xB18, +0xDFC, +0xE28) are word-sized and pointer-shaped, not stat bytes. The three known save fields (Bits +0x4C8, tamer rank +0xAE8, gate waiver +0xEB8) are fixed, but creature records are reached through a pointer, which is why an offset scan cannot find them.",
+      "toolCheck": "Suspected my disassembler was misprinting MUL operands; decoded the raw word by hand and it is correct. No tool defect.",
+      "nextAnchor": "Find the roster POINTER, not an offset. The +0x440 word (27 stores, the most-written field in the window) and the +0x404..+0x44C cluster are the likely handle area. From the roster base, the per-creature record and its stat fields fall out.",
+      "honestNote": "The four training goods (shop TRAINING_GOODS, item indices 0..3, prices 5/20/200/300) match the four consumable toolbar tools exactly -- feed, medicine, wound medicine, protein -- but their EFFECT table was not located this round."
+    },
+    {
+      "id": "STAT_MODEL_CORRECTED_CURVE_IS_A_LADDER",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-04",
+      "withdrawn": "speciesBaseStats.js claimed the stat curve CANNOT be the source of attack, defence, wisdom and speed, because columns 1..6 are byte-identical and would emit one number under four labels. The observation was right; the premise was wrong. WITHDRAWN.",
+      "proven": "ARM9 0x02062900 builds a creature instance. For every stat it repeats one shape: LDR the stat's OWN index out of the source record, MOV it LSL #4 (the 16-byte row stride), LDRH from that stat's own column pointer, STR the value onto the instance. The seven column pointers sit in one literal pool as consecutive +2 offsets from 0x020CA008 -- 008, 00A, 00C, 00E, 010, 012, 014 -- which is what proves they are columns of one table rather than seven tables. The rung is also copied to the instance at +0x84, +0x88, +0x8C, +0x90, +0x94, +0x98.",
+      "model": "The curve is a LADDER of 27 rungs. Column 0 is HP: 200, 280, ... 7000. Columns 1..6 are one shared ladder: 10, 14, ... 350. Two stats differ not by which column they read but by which rung they stand on, so identical columns are the design and not a defect.",
+      "alsoProven": "The per-creature record stride is 0x44 (68 bytes), from OVL10 0x021100E0 (MOV r1,#0x44; MLA r2,r0,r1,r5). The stat rungs are fields inside it at +0x14, +0x18, +0x1C, +0x20, +0x24, +0x28, +0x2C, +0x30 and onward.",
+      "consequence": "The long-standing 'four stats have no source' gap has a correct answer at last: they were never species constants. A species does not have an attack value; a CREATURE has an attack rung, and training is what moves it. That also names what Phase 4 has to find -- the magnitude by which a training session advances a rung.",
+      "notShippable": "The rungs are save state, not a ROM table, so there is nothing to transcribe yet. statLadder.js exposes the ladder and refuses to guess where any creature stands on it; CREATURE_RECORD_RUNG_EVIDENCE stays UNKNOWN_REQUIRES_TRACE and a test enforces that."
+    },
+    {
+      "id": "LIVE_MEMORY_CAPTURE_1",
+      "raisedBy": "Claude Code, from an Owner-supplied DeSmuME save state",
+      "date": "2026-09-04",
+      "method": "The DeSmuME .ds1 save state is a zlib stream after a 32-byte header. Inflating gives 11,167,748 bytes; main RAM was located inside it by searching for the clock cascade fingerprint (4,8,24,60,400 as LE u32, which must sit at 0x020C8A4C) and then VERIFIED by matching a 512-byte chunk of arm9.bin at the implied base. Extraction is reproducible from any future save state by the same two steps.",
+      "confirmed": {
+        "playerStruct": "The global at 0x020FBA08 -> +0x04 chain resolves on live memory to player base 0x021C24C0. All three known offsets read correctly: +0x4C8 Bits = 10000, +0xAE8 tamer rank = 0, +0xEB8 gate waiver = 0. The gate-fee trace and the tamer-rank identification are now confirmed against a running game, not only against static code.",
+        "statLadder": "A live creature instance sits at 0x021C31E8 with HP 360 and TP 14, each duplicated into a pair of fields (0x50/0x58 and 0x54/0x5C). 360 is exactly HP-ladder rung 2 and 14 is exactly shared-ladder rung 1. The ladder is therefore the real source of base stats, confirmed on live data rather than inferred from a disassembly."
+      },
+      "notConfirmed": "The exact rung-to-value pairing beyond the first stat. The instance holds nine stat values at +0x60..+0x80 (18,19,19,19,10,10,11,11,10) and nine small numbers at +0x84..+0xA4 (2,2,2,2,3,0,1,1,1). The first pair matches the ladder exactly (rung 2 -> 18) but three others sit exactly ONE above their predicted ladder value and one is far off. Off-by-one across several stats reads like a modifier applied after the build rather than a wrong model, but that is a hypothesis and is not asserted.",
+      "nextStep": "A second capture taken after a single feeding, diffed against this one, would name the changed fields directly. The persistent 68-byte record (stride 0x44, from OVL10 0x021100E0) has not yet been located in RAM; the instance at 0x021C31E8 is the built copy, not the stored one."
+    },
+    {
+      "id": "LIVE_CAPTURE_2_FEEDING_DIFF",
+      "raisedBy": "Claude Code, from an Owner-supplied before/after save-state pair",
+      "date": "2026-09-05",
+      "method": "Slots ds1 (08:41) and ds2 (08:42) are one minute apart in the same session, and both resolve to the SAME player base 0x021C24A0, so an absolute byte diff is valid with no realignment. Across 4 MB only 5,703 bytes differ, and inside the player structure only 11 runs.",
+      "methodWarning": "An earlier pair from different sessions had the player base move from 0x021C24C0 to 0x021C24A0. A naive absolute diff across sessions is worthless; always confirm the base matches, and align to it when it does not.",
+      "finding": "Feeding does NOT immediately change a hunger value. What changes is object bookkeeping: two pointers (0x022857E8 and 0x022F24C0) move from player+0x3814/+0x3868 to player+0x3878/+0x38CC, and three slots flip from 0 to 1 at player+0x3E20, +0x40A0 and +0x4240. That is a food object being spawned and queued, which matches the cartridge's own help text -- feeding PLACES food in the cage and the Digimon eats it over time.",
+      "consequence": "The raising state does not move when the tool is used; it moves when the creature acts or the day advances. A capture pair for the hunger field has to span TIME PASSING or an END_DAY, not a tool press. This corrects the capture protocol.",
+      "alsoClarified": "The creature instance found in the 2026-09-04 capture (HP 360, TP 14, ladder rungs) was a BATTLE instance -- that capture was taken during a battle. Neither ranch capture contains one, which confirms ARM9 0x02062900 builds a combat-time copy rather than the persistent record. The persistent 68-byte record is still unlocated.",
+      "unexplained": "A regular array at 0x020F2324 with stride 0x24 shows single-byte changes in the 13..33 range across at least 15 entries. Shape and value range read like per-actor animation state, but it is not identified and is not claimed."
+    },
+    {
+      "id": "LIVE_CREATURE_RECORD_LOCATED",
+      "raisedBy": "Claude Code, with an Owner correction that fixed the search",
+      "date": "2026-09-05",
+      "correction": "An earlier note called the 2026-09-04 instance a BATTLE copy because a screenshot showed an explosion. The Owner corrected this: there was no battle, that was FIELD TRAINING (running), which spends current HP and raises maximum HP. The instance is the ranch creature itself.",
+      "searchBug": "That correction also exposed a defect in my own fingerprint. It required current HP == max HP (+0x50 equal to +0x58), which only holds for an untrained creature. Once the Owner trained, current fell below max and the search returned zero -- I had read that as 'no creature present' when it meant 'my filter excluded it'. Relaxing to current <= max, and restricting to the heap above the ARM9 image, found it immediately.",
+      "located": "The live creature record sits at 0x02130714, with a second copy at 0x021E7F84. Across the feeding pair: HP 47/360 -> 105/360, TP 10/10 unchanged.",
+      "ladderConfirmedAgain": "Max HP 360 is exactly HP-ladder rung 2 and max TP 10 is exactly shared-ladder rung 0. That is a third independent confirmation of the ladder model, this time on a ranch creature rather than a trained one.",
+      "notProven": "Whether the +58 HP is the feeding or ordinary regeneration over the 62 seconds between captures. One capture pair cannot separate them; a pair with the same interval and NO feeding would.",
+      "openDetail": "The stat values at +0x60..+0x74 read 10,14,10,10,10,11 while the indices at +0x84..+0x98 read 0,0,0,0,1,0. The 11 is not a ladder value at all (the ladder runs 10,14,18,22), so a modifier is applied on top of the ladder base. Consistent with the off-by-one seen in the 2026-09-04 capture, still not explained."
+    },
+    {
+      "id": "EVOLUTION_OBSERVED_LIVE",
+      "raisedBy": "Claude Code, from four Owner save states spanning an evolution",
+      "date": "2026-09-05",
+      "proven": "Evolution does not modify the creature record in place. It DESTROYS the old one and allocates a new one. Across four states in one session (player base constant at 0x021C24A0): ds1/ds2 hold a record at 0x02130714 with HP 47/360 then 105/360; ds3, taken mid-evolution, has that address fully zeroed and no record matching anywhere in the heap; ds4 has a new record at 0x02131BB0 with HP 200/200.",
+      "alsoObserved": "The new record starts at FULL HP, and its max HP of 200 is ladder rung 0 -- the bottom of the ladder -- where the old record's 360 was rung 2. The first words also shift by one slot: the old record opened 14, 0, 6 and the new one opens 10, 14, 0, which reads like a history chain pushing the new form to the front.",
+      "notProven": "Which field holds the species. The on-screen message said the creature evolved into KOROMON, which is species index 21, but neither record carries 21 in its opening fields (they hold 14 and 10, which are BOTAMON and NYOKIMON). Either the opening words are not species ids, or these records are not the creature the message named, or the visible evolution happened later than ds4. Not resolved, and not guessed.",
+      "alsoNotProven": "Whether max HP genuinely FALLS on evolution. A drop from rung 2 to rung 0 is counter-intuitive and has at least two innocent explanations, so the observation is recorded and the conclusion is not.",
+      "nextStep": "The watcher script (watch.lua) settles all of this: it logs every changed offset with a frame number, so the evolution transition names its own fields instead of being inferred from four snapshots. It has not been run yet.",
+      "toolNote": "Screen capture of the emulator now works through occlusion via PrintWindow with PW_RENDERFULLCONTENT, so the game can be observed without disturbing the Owner's foreground window. Confirmed against a live frame showing the status bar as Spring | 3-day | ikusei | 12:30, which matches the four-field info_bar layout this project built from the ROM scene."
+    },
+    {
+      "id": "TRAINING_AND_FEEDING_OBSERVED_ON_HARDWARE",
+      "raisedBy": "Claude Code, from an Owner-recorded video of the running game",
+      "date": "2026-09-05",
+      "tier": "LIVE_FOOTAGE_OBSERVATION -- the Owner recorded the Japanese cartridge running in DeSmuME, so this is the right build and the right language, but it is one observed instance and not a traced formula.",
+      "training": "The game states its own training result in text: 'あいうえおはHPが90あがった' followed by 'かしこさがさがった' -- HP rose by 90 AND wisdom fell. Training is therefore a TRADE, not a pure gain. The status panel in the same frame reads HP 238/480, TP 15/15, capacity 12 G, on Spring day 5 at 08:50.",
+      "maxHpIsNotALadderValue": "480 is not a rung of the HP ladder (200, 280, 360, 440, 520...). Neither is the implied previous value of 390. So maximum HP is NOT constrained to ladder values: the ladder supplies a base and training adds on top of it. That finally explains the anomaly seen in two memory captures, where stat values sat exactly one above their predicted rung.",
+      "feeding": "Feeding consumes an inventory item and the game reports the remaining count: 'エサのこり45コ', then 44, then 43 across three feeds. This matches the memory diff, which showed object bookkeeping (pointers moving between lists, slots flipping 0 to 1) rather than an instant stat change.",
+      "correction": "The HP recovery seen earlier (47 -> 105 across the feeding pair) was NOT feeding and NOT idle regeneration. The Owner identified it as the effect of a HEALING CAGE the creature was standing in. That is the cage-effect magnitude which cageEffects.js currently flags as UNKNOWN_REQUIRES_TRACE, so the observation lands directly on an open item.",
+      "alsoSeen": "An evolution sequence, with the lower screen showing the EVOLUTION presentation.",
+      "whatThisDoesNotGive": "The formulas. +90 is one sample from one creature at one moment; the rule that produced it, and what determines which stat falls, still have to come from the code. The value of this footage is that it names WHAT to look for -- a paired raise/lower on training, an item decrement on feeding, and a cage-driven HP restore."
+    },
+    {
+      "id": "SPECIES_NAMES_AND_STAT_ORDER_RECOVERED",
+      "raisedBy": "Claude Code, from an anchor the Owner supplied by video",
+      "date": "2026-09-05",
+      "howItStarted": "The Owner's recording showed the game printing its own training result. Searching the text bank for those words found the format templates: entry 1 is '[5]は[3]が[4]あがった' and entry 2 is '[3]が[4]さがった'. A template with a stat-name slot implies a stat-name table, and that table is what the search then found.",
+      "statOrder": "Entries 35..40 are the six stat labels in the game's own order: HP, TP, KOUGEKI (attack), BOUGYO (defence), KASHIKOSA (wisdom), SUBAYASA (speed). The training messages substitute from this list, so this IS the canonical stat order -- the thing the raising lane has needed all along to say which field is which.",
+      "alsoRecovered": "Entries 20..29 are ten family names and 30..34 are five resistances (heat, cold, thunder, light, dark), the last matching help topic 42's statement that there are five attack types.",
+      "speciesNames": "A run of Digimon names begins at entry 41 and maps to the species table at a constant offset of 33, covering species 8..223 -- exactly 216 entries. Species 0..7 are eggs with no individual name; 224..227 fall past the run onto the name-entry kana charts.",
+      "corroboration": "The run being exactly 216 long is independently witnessed by databaseCatalog.js, which records the encyclopedia as 224 slots = 8 eggs + 216 regular. Those two facts were derived years apart in this project by unrelated means and agree exactly.",
+      "guardDesign": "The Japanese-character check alone does NOT pin the offset -- +32 also passes it, because a shifted run is still Japanese. What pins it is a control drawn from the cartridge's own screen output: species 21 must be KOROMON. Both +32 and +34 fail that. The coarse filter and the precise control do different jobs and both are kept.",
+      "shipped": "The names now reach the roster: projectRoster carries speciesName and the Digimon screen shows a SPECIES row. Eggs and the four unnamed species render as absent rather than blank."
+    },
+    {
+      "id": "CAGE_TABLE_WAS_OFF_BY_ONE_NOW_CORRECTED",
+      "raisedBy": "Claude Code, prompted by the Owner asking what each cage does",
+      "date": "2026-09-05",
+      "defect": "cageEffects.js carried a hand-entered per-cage channel and capacity that was OFF BY ONE against the cartridge for all 36 records. It opened with 'Defense up, best for 2' -- a cage that does not exist in the ROM -- which pushed every real cage down one slot. It also recorded definition 35 as the Waiting Room; 34 is the waiting room and 35 is FUTA, the lid.",
+      "impact": "Every cage in the running build showed the wrong effect and the wrong recommended occupancy. Cage choice is the main raising decision, so the product was misreporting the whole mechanic.",
+      "nowCorrect": "Definition 0 is UNDOUJOU, a running track: HP up, best for 6. 1 is the stadium (speed, 10), 2 the dojo (TP, 6), 3 the gym (attack, 8), 22 the temple (wisdom, 2), 14 the mini infirmary (HP and stress recover, 2).",
+      "confirmedOnScreen": "The Owner photographed the cartridge's own cage shop. MINI-GYM reads 'gym mini version / attack up / best for 2' and is definition 29; MINI-INFIRMARY reads 'HP stress recover / best for 2' and is definition 14. Both match the transcription word for word, from a source independent of the ROM read.",
+      "alsoFound": "NO cage trains defence. BOUGYO is a real stat -- fourth in the game's own stat list -- but no cage description names it. The DEFENSE channel was the fabricated entry that started the off-by-one, and a test now asserts it stays unused.",
+      "stillOpen": "Magnitudes. The cartridge states WHICH stat each cage moves and the recommended occupancy, but never how much a tick moves it. A guess that record columns +0x10..+0x24 were six per-stat magnitudes was tested and REFUTED -- the speed cage carries zero in the speed slot -- and that refutation is recorded in the builder so it is not retried."
+    },
+    {
+      "id": "FULL_UI_TOUR_OBSERVED",
+      "raisedBy": "Claude Code, from a 110-second Owner recording covering most screens",
+      "date": "2026-09-05",
+      "tier": "LIVE_FOOTAGE_OBSERVATION on the Japanese cartridge.",
+      "modeLabels": "The status bar's third field is the MODE, and the cartridge's own words for it are IKUSEI (raising), BATORU (battle), HANTO (hunt) and SHOPPU (shop). This build currently prints English mode words there; those are product copy, and these are the originals.",
+      "systemMenu": "The system submenu is confirmed on screen and reads HELP / DATABASE / SAVE-AND-QUIT / HUNT / BATTLE, matching the entries this build carries.",
+      "cageLevel": "NEW: the cage edit panel shows a KEEJI REBERU (cage level) line rendered as a star rating, alongside the cage name and description. This build has no such concept. It is the most promising lead yet for the untraced magnitude question -- a per-cage level would naturally scale the effect -- but nothing about it is traced, so nothing is claimed.",
+      "consumables": "Protein is a counted consumable like food: the message line reads PUROTEIN NO KORI 8 KO alongside ESA NO KORI 43 KO. So at least two of the four training goods decrement an inventory count.",
+      "battleSelect": "The battle menu is presented as a rotating 3D CUBE whose faces carry the options (start battle, title match). This build renders a flat list.",
+      "statusList": "The full status list was captured and its field set matches ui/digimon_list_sub.nxr exactly -- HP, TP, SP1, SP2, stamina, battle count, attack, win rate, defence, lifespan, wisdom, personality, speed, digitama conversion -- with a capacity figure shown as a G value. The screen this build made from that scene has the right shape.",
+      "whatThisIsNot": "None of it is a formula. It names concepts and confirms structure; the magnitudes still have to come from code."
+    },
+    {
+      "id": "BATTLE_MENU_WAS_FLAT_WHEN_THE_ORIGINAL_IS_A_BOX",
+      "raisedBy": "Owner, who noticed the inconsistency",
+      "date": "2026-09-05",
+      "defect": "Gate Select was built as a 3D world sphere while Battle Select was a flat DOM list, even though the original presents BOTH as 3D. There was no design reason: the gate world got wired during VS2 and battle_menu/launcher13.nsbmd sat in the art registry marked NEEDS_REBUILD and was never picked up. Two equivalent screens, different treatment.",
+      "romEvidence": "launcher13.nsbmd's node table proves both shape and face set: a `box` node with _00_edge and _01_edgelight trim, then _02_champ, _03_title, _04_free and _05_tushin, each with bg/l/u variants. The four names line up with the battle kinds help topics 69-74 list.",
+      "keyRealisation": "The Gate world in production is NOT the ROM model -- its manifest reads 'Procedural high-resolution world sphere with original-created vertex colours'. The cartridge model supplies STRUCTURE and the product builds its own geometry. So the box needed no art-lane conversion and could be built immediately under the same clean-room policy.",
+      "structuralFinding": "The box selects a battle KIND, not a match. The original has two layers -- kind, then match within it -- and this build had collapsed them into one flat match list. The box is now drawn with all four faces disabled and an on-screen note, because which matches belong to which kind is NOT traced. No face pretends to lead anywhere.",
+      "twoRulesIBroke": "The first version put cm-vs5- styles in styles.css, which is contested between lanes and must not carry them, and ran its own requestAnimationFrame loop, which is a second ticker. Both were caught by existing guards, both are fixed: styles moved to vs5Styles.css, and the box now draws on demand exactly as the Gate sphere does."
+    },
+    {
+      "id": "CHINESE_DISPLAY_LAYER_ADDED",
+      "raisedBy": "Owner request",
+      "date": "2026-09-05",
+      "design": "Translation is PRODUCT_AUTHORED copy and is kept structurally separate from ROM evidence. The catalogs keep their Japanese and their language:'ja' marker; zhHant.js layers Chinese on top, keyed by record INDEX rather than by the Japanese text so that a translation can never silently follow a mistranscription.",
+      "covered": "Modes, the six stats in the game's own order, ten families, five resistances, all 36 cages with their effects, all 17 gates, and the battle box's four faces.",
+      "gateCatalogChange": "A gate's displayName is now the Chinese copy and its evidence is PRODUCT_AUTHORED_TRANSLATION; the cartridge's own string moved to originalName with ROM_VERIFIED beside it. Four guards asserted the old arrangement and were updated, and a test now asserts the catalogs still hold Japanese.",
+      "notYetTranslated": "The 216 species names and the 68 help topics. Those are the large sets and are untouched; they still display the cartridge's Japanese."
+    },
+    {
+      "id": "CAGE_ART_BINDING_MISMATCH_FOUND",
+      "raisedBy": "Claude Code, while preparing the Codex handoff",
+      "date": "2026-09-05",
+      "proven": "originalCageVisualBindings maps cage 0 to field_cm01_01, but that render is a VACANT LOT -- dirt, concrete pipes, a tree. Cage 0 is UNDOUJOU, a running track, and the running track render is field_cm02_01. At least one binding is wrong, and it is wrong in the same direction as the cage table was.",
+      "likelyCause": "SHOP_REVERSE_SPEC_v1.md section 12.3 records that field_cm01_01 is referenced by a special structure sitting immediately BEFORE the 36-record standard table, not by a standard record. So the art numbering starts one ahead: cm02 is the first standard cage. The old test's own variable name for cage 0 was `vacantLot`, which is probably where the error entered.",
+      "doNotShift": "This must NOT be fixed by shifting the whole table. There are 40 art fields against 36 definitions, and the existing binding already jumps irregularly at the tail (27->cm30, 30->cm34, 32->cm37, 33->cm39, 35->cm28). It is a crosswalk to re-derive record by record, not an offset.",
+      "nowFeasible": "Re-deriving it is far easier than before, because the 36 cage NAMES and descriptions are now transcribed. Most renders identify themselves on sight -- track, stadium, dojo, gym, volcano, beach, ice field, graveyard, hot spring -- and the MINI cages state 'the mini version of X' in their own description, which pairs them to their full-size art.",
+      "handedTo": "docs/coordination/CODEX_HANDOFF_2026-09-05_CAGE_ART_AND_BATTLE_CUBE.md, written from the Claude lane and attributed."
     }
-  },
+  ],
   "dependenciesChanged": false,
   "checkpointCommitted": false,
-  "codexLaneNotice": "Resolved. Codex was fixing the GitHub CI failure on Orochi771127/championship-2026 and has finished; npm test is back to 289 pass / 0 fail with this lane's work included.",
+  "codexLaneNotice": {
+    "statusBarAndRanchTiling": "Two new Claude-owned contracts under docs/contracts/championship/ specify the work Owner queued as items 2 and 3. Presentation of the status bar is Codex-owned; the time cascade and ranch placement state are Claude-owned. Neither contract has been implemented yet. Both name what must NOT be invented: no weeks or months, no continuous day/night cycle, no tetris ownership masks, and no guessed coordinates written into the licensed art manifest."
+  },
   "ownerAuthorizationForSharedLedger": {
     "date": "2026-09-01",
     "directive": "The Owner authorized the BATTLE screen and directed that the screen-less execution core be built first, as pure logic plus tests.",
     "note": "docs/coordination/OWNER_DIRECTION.md is Owner-authority and was mid-edit in the Codex lane when this was written, so this lane did not transcribe it there. Codex or the Owner should carry it across; the firewall comment about `battle` being 'not a battle screen' will need updating when a screen actually lands.",
     "actedOn": "B4 execution core only. No screen exists and nothing under src/championship/app imports a battle module."
+  },
+  "handoff": {
+    "date": "2026-09-03",
+    "document": "docs/coordination/CLAUDE_BATTLE_HANDOFF.md",
+    "state": "A match runs end to end on cartridge data and returns a verdict. 749 tests green. Nothing committed. State 0x17 has a translated body, the fifteen-argument script entry turned out not to exist, the sprite cell box is translated, and the three natives it was blocking are done -- 79.4% of every native call a battle script makes is now covered.",
+    "singleRemainingDependency": "The resource behind [X+4]'s +0xC8 bank and +0x70 cell index. It is the OVL9 resource manager's and the art lane's, and the dump waits on the remake art having something to align to.",
+    "ownerDecisionsOpen": [
+      "Move lists for the product creatures when they return to the battle path.",
+      "Whether to take the two siblings 0x0211D274 and 0x0211D360, whose accessors are already read."
+    ]
+  },
+  "verificationLatest": {
+    "date": "2026-09-04",
+    "command": "npm test",
+    "total": 777,
+    "passed": 777,
+    "failed": 0,
+    "browser": "PARTIAL. Battle menu and match entry verified live (MATCH 00, payout 150). The result panels could NOT be verified live: the battle advances from the Pixi stage ticker, which is requestAnimationFrame driven, and the automation pane is hidden for long stretches so rAF does not fire - a probe of the rAF rate itself timed out for the same reason. The match sitting at ended=false after two minutes is the harness, NOT a product defect."
   }
 }

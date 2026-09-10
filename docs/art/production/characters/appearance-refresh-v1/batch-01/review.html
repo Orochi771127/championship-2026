@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>角色外觀更新 · 第一批設計審查</title>
+  <style>
+    :root{color-scheme:light;--paper:#f5f2ea;--ink:#25362f;--muted:#657269;--line:#d6ddd4;--accent:#245e48;--light:#e9efe7;--warm:#9b6029}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.75 system-ui,-apple-system,"Microsoft JhengHei",sans-serif}a{color:var(--accent);text-underline-offset:4px}a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #b97633;outline-offset:4px}
+    header,main,footer{width:min(1180px,calc(100% - 48px));margin:auto}header{padding:55px 0 28px;border-bottom:1px solid var(--line)}.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:700}h1{font-size:clamp(28px,4vw,46px);line-height:1.3;letter-spacing:-.04em;margin:14px 0}h2{font-size:28px;line-height:1.4;margin:0}.intro{max-width:850px;color:var(--muted);margin:0 0 20px}.nav{display:flex;gap:12px;flex-wrap:wrap}.nav a{padding:7px 14px;text-decoration:none;border:1px solid var(--line);border-radius:4px;background:#fff9;font:600 14px/1.8 system-ui}
+    .stats{display:flex;gap:28px;flex-wrap:wrap;padding-top:26px;font-size:14px;color:var(--muted)}.stats strong{font-size:20px;margin-right:5px;color:var(--ink)}.entity{padding:42px 0;border-bottom:1px solid var(--line);scroll-margin-top:20px}.heading{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:18px}.tag{font-size:12px;white-space:nowrap;color:var(--warm);border:1px solid #d9bf98;border-radius:3px;padding:3px 9px}.code{font-family:ui-monospace,monospace;color:var(--accent);font-size:15px;letter-spacing:.05em;margin:0 0 4px}.board{display:block;width:100%;height:auto;border:1px solid #dfd9ca;border-radius:6px;background:#fff9}.caption{display:flex;justify-content:space-between;gap:20px;font-size:13px;color:var(--muted);margin:10px 0 22px}.options{display:grid;grid-template-columns:1fr 1fr;gap:20px}.option{border:1px solid var(--line);padding:22px;background:#fff9;border-radius:6px}.option h3{font-size:19px;line-height:1.4;margin:0 0 12px}.option p{font-size:14px;margin:0 0 14px}.tokens{font-size:13px;color:var(--muted)}.palette{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}.swatch{width:27px;height:27px;border-radius:50%;border:1px solid #0002}.pick{display:flex;gap:9px;align-items:center;min-height:46px;font-weight:650;font-size:14px;cursor:pointer}.pick input{accent-color:var(--accent);width:18px;height:18px}.option:has(input:checked){border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:#f0f5ed}.recommendation{margin:20px 0 8px;font-size:14px;color:var(--muted)}details{font-size:13px;color:var(--muted);margin-top:12px}summary{cursor:pointer;min-height:34px;color:var(--accent)}details ul{margin:8px 0;padding-left:22px}.summary{padding:32px 0}textarea{width:100%;min-height:100px;background:#fff;border:1px solid var(--line);border-radius:4px;padding:14px;color:var(--ink);font:15px/1.7 inherit;resize:vertical}.hint{font-size:13px;color:var(--muted)}footer{padding:22px 0 45px;font-size:13px;color:var(--muted)}.error{padding:25px;color:#913d2a;border:1px solid #d8ab95;border-radius:4px}.reviewNote{font-size:13px;color:#795527;background:#f7eddd;padding:12px 16px;border-radius:4px;margin-top:12px}
+    @media(max-width:650px){header,main,footer{width:calc(100% - 28px)}header{padding-top:30px}.options{grid-template-columns:1fr;gap:12px}.option{padding:17px}.heading{align-items:flex-start;gap:8px}h2{font-size:24px}.stats{gap:12px 22px}.entity{padding:28px 0}.caption{display:block}.nav{gap:8px}.nav a{padding:7px 11px}.tag{white-space:normal;max-width:100px}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">Championship 2026 / Character design / 01</div>
+    <h1>新外觀，沿用原本的動作。</h1>
+    <p class="intro">第一批已選定：M201 A、M001 B、M226 B、E000 A。現已改用原生像素母版、共用色盤與圖像連動，224 套全部更新並在合格後自動置換。下方高清設計板保留為身份參考。<a href="../pixel-v2/review/index.html">查看 M201 像素連動與原始序列</a>。</p>
+    <nav class="nav" aria-label="角色導覽"><a href="#M201">M201 · 二足幼獸</a><a href="#M001">M001 · 軟體</a><a href="#M226">M226 · 齒輪</a><a href="#E000">E000 · 蛋</a><a href="#reply">整理選擇</a></nav>
+    <div class="stats"><span><strong>224</strong>套製作名冊</span><span><strong>56</strong>組看稿工作包</span><span><strong>4 × 2</strong>本批外觀方案</span><span><strong>0</strong>已替換正常預設</span></div>
+  </header>
+  <main>
+    <div id="entities" aria-live="polite"><p>正在載入設計資料…</p></div>
+    <section class="summary" id="reply">
+      <div class="eyebrow">Recorded choices</div><h2>已記錄你的選案</h2>
+      <p class="hint">已依對話記錄四隻選案。頁面改選僅整理修改提議，不會自動覆寫正式紀錄或變更遊戲；後續方案由美術總監自主選擇。</p>
+      <label for="replyText" class="hint">選案回覆文字</label>
+      <textarea id="replyText" readonly>M201 A、M001 B、M226 B、E000 A。</textarea>
+      <p class="hint">目前先完成 M201 的基準姿勢與高風險動作審查，再展開完整 Main/Sub。<a href="../m201-a/README.md">查看 M201 A 製作進度</a></p>
+    </section>
+  </main>
+  <footer><a href="../README.md">工作流說明</a> · <a href="../STYLE_GUIDE.md">共同畫風</a> · <a href="../generated/catalog.json">224 套技術清單</a> · <a href="designs.json">本批設計資料</a><p>來源只用來核對姿態；本頁沒有載入原始 ROM 像素或 gameplay 邏輯。</p></footer>
+  <script type="module">
+    const holder=document.getElementById('entities');
+    const reply=document.getElementById('replyText');
+    const choices=new Map();
+    function el(tag,text,className){const node=document.createElement(tag);if(text!=null)node.textContent=text;if(className)node.className=className;return node;}
+    try{
+      const response=await fetch('./designs.json');if(!response.ok)throw new Error('設計資料無法載入');const data=await response.json();holder.replaceChildren();
+      for(const entry of data.entities){
+        const section=el('section',null,'entity');section.id=entry.code;
+        const selected=['A','B'].includes(entry.selectedConcept)?entry.selectedConcept:null;if(selected)choices.set(entry.code,selected);
+        const heading=el('div',null,'heading');const title=el('div');title.append(el('p',entry.code,'code'),el('h2',entry.nameZh));heading.append(title,el('span',selected?`已選 ${selected}`:'由美術總監選案','tag'));section.append(heading);
+        if(!/^[a-z0-9-]+\.png$/.test(entry.image))throw new Error('設計圖檔名不正確');
+        const zoom=el('a');zoom.href=entry.image;zoom.target='_blank';zoom.rel='noopener';zoom.setAttribute('aria-label',`${entry.code} 開啟完整設計板`);
+        const img=el('img',null,'board');img.src=entry.image;img.alt=`${entry.code} 方案 A 與 B：標準姿態、極端姿態與色票`;img.width=1536;img.height=1024;img.addEventListener('error',()=>{img.alt=`${entry.code} 設計圖載入失敗，請檢查檔案。`;});zoom.append(img);section.append(zoom);
+        const caption=el('div',null,'caption');caption.append(el('span',`參照姿態：${entry.sourceStandardCell} ／ ${entry.sourceExtremeCell}`),el('span','點圖可放大 · 造型選案圖，非正式動畫'));section.append(caption);
+        const options=el('div',null,'options');
+        for(const concept of entry.concepts){
+          const option=el('article',null,'option');option.append(el('h3',`${concept.id} · ${concept.title}`),el('p',concept.description),el('p',concept.tokens.join(' · '),'tokens'));
+          const palette=el('div',null,'palette');palette.setAttribute('aria-label','設計參考色票');for(const color of concept.palette){const swatch=el('span',null,'swatch');if(/^#[a-f0-9]{6}$/i.test(color.hex))swatch.style.backgroundColor=color.hex;swatch.title=`${color.role} ${color.hex}`;swatch.setAttribute('aria-label',swatch.title);palette.append(swatch);}option.append(palette);
+          const label=el('label',null,'pick');const input=el('input');input.type='radio';input.name=entry.code;input.value=concept.id;input.checked=concept.id===selected;input.setAttribute('aria-label',`${entry.code} 選擇 ${concept.id}`);input.addEventListener('change',()=>{choices.set(entry.code,concept.id);reply.value=data.entities.map(item=>`${item.code} ${choices.get(item.code)??'待選'}`).join('、')+'。\n修改意見：';});label.append(input,el('span',concept.id===selected?`已核准外觀方向 ${concept.id}`:`改選提議 ${concept.id}`));option.append(label);options.append(option);
+        }
+        section.append(options,el('p',entry.recommendation,'recommendation'));
+        if(entry.artReviewNotes?.length)section.append(el('p',entry.artReviewNotes.join(' '),'reviewNote'));
+        const details=el('details');details.append(el('summary','動畫適配注意事項'));const list=el('ul');for(const note of [...entry.prohibitedTopologyChanges,...entry.concepts.flatMap(item=>item.motionRisks)])list.append(el('li',note));details.append(el('p',entry.sourcePoseNotes),list);section.append(details);holder.append(section);
+      }
+      reply.value=data.entities.map(item=>`${item.code} ${choices.get(item.code)??'待選'}`).join('、')+'。';
+    }catch(error){holder.replaceChildren(el('p',`${error.message}。請從既有本機伺服器開啟此頁，不要直接使用 file://。`,'error'));}
+  </script>
+</body>
+</html>

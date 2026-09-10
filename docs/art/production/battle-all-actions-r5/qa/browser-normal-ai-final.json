@@ -1,0 +1,14 @@
+{
+  "kind": "CODEX_IN_APP_BROWSER_QA",
+  "fixture": "explicit original match 1 with preset teams; autonomous AI",
+  "focus": {
+    "height": 844,
+    "overflow": false,
+    "receipt": "報名後 9400 bit",
+    "width": 390
+  },
+  "result": "- complementary:\n  - text: 特殊招式測試場次：指定原作場次 1 與相同預設隊伍；正常 AI 選招，獨立記憶體存檔。\n  - checkbox \"減少動態效果\" [disabled]\n  - text: 減少動態效果\n  - button \"開始對戰測試\" [disabled]\n  - button \"推進 6 幀\" [disabled]\n  - button \"播放戰鬥\" [disabled]\n  - button \"推進到結算\" [disabled]\n  - button \"推進到下一次特寫\"\n  - status: 結算後 9400 bit\n- main:\n  - region \"Battle result\":\n    - generic: 一方全員倒下\n    - heading \"對手獲勝\" [level=1]\n    - button \"下一頁\"",
+  "prize": "- complementary:\n  - text: 特殊招式測試場次：指定原作場次 1 與相同預設隊伍；正常 AI 選招，獨立記憶體存檔。\n  - checkbox \"減少動態效果\" [disabled]\n  - text: 減少動態效果\n  - button \"開始對戰測試\" [disabled]\n  - button \"推進 6 幀\" [disabled]\n  - button \"播放戰鬥\" [disabled]\n  - button \"推進到結算\" [disabled]\n  - button \"推進到下一次特寫\"\n  - status: 結算後 9400 bit\n- main:\n  - region \"Battle result\":\n    - text: 獎金\n    - heading \"0\" [level=1]\n    - paragraph: 持有 9400 Bits\n    - paragraph: 本場沒有獲得獎金。\n    - paragraph: MATCH 01\n    - button \"返回牧場\"",
+  "errors": [],
+  "boundary": "Does not establish all 595 moves, original world geometry or Home roster entry"
+}

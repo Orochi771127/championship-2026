@@ -1,0 +1,56 @@
+{
+  "batchId": "ART-HUNT-CHARACTER-ANIMATION-2026-09-06",
+  "status": "VERIFIED_NATIVE_ANIMATION_AND_PIXI_PROJECTION_NORMAL_OWNER_UNBOUND",
+  "branch": "main",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "entityId": "m003_nyokimon",
+  "speciesId": "species-010",
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "stateSha256": "c0b30e38795287665c85f7aadbdb5247515d7c4849d408924eb93a11bd47f7e4",
+  "sourceCalls": 796,
+  "sourceFrames": 476,
+  "cpuSelectors": 640,
+  "cpuAnimatorCases": 72,
+  "cpuAnimatorSteps": 9288,
+  "tests": {
+    "focused": 17,
+    "regression": 992,
+    "failed": 0,
+    "skipped": 0
+  },
+  "browser": {
+    "reviewViewport": {
+      "width": 390,
+      "height": 844
+    },
+    "normalViewport": {
+      "width": 430,
+      "height": 932
+    },
+    "review": "ORIGINAL_CALL_REPLAY_THROUGH_NATIVE_PLAYER_AND_FORMAL_HUNT_SCENE",
+    "normalPath": "NEW_GAME_SYSTEM_HUNT_GATE01_EQUIP_ROPE_BEGIN_HUNT_RETURN_HOME",
+    "normalToolsDisabled": 8,
+    "normalCaptureHomeAccepted": false,
+    "consoleWarnings": 0,
+    "consoleErrors": 0,
+    "canvasCount": 1
+  },
+  "publicPages": {
+    "status": "BLOCKED",
+    "missing": "src/data/championship/catalogs/entities.r1.json",
+    "privateCharacterDirectoryIncluded": false,
+    "privateCharacterIndexEntries": 0
+  },
+  "archive": {
+    "renderedFamilies": 1541,
+    "diagnosticOnlyFamilies": 164,
+    "modified": false
+  },
+  "diffCheck": "PASS",
+  "evidenceHashes": {
+    "docs/art/HUNT_CHARACTER_ANIMATION_2026-09-06.md": "d3692a95cc7ba72f4abebb5cff7d83cd14bdc38e470062b63f00838d567c294e",
+    "docs/contracts/championship/HUNT_CHARACTER_PRESENTATION.v1.json": "5dfcd4735ee25ca10837430f228737e6a9b2c58373cbf19ff4d2e91cd4a6355a",
+    "docs/research/HUNT_CHARACTER_ANIMATION_TRACE_2026-09-06.json": "fe6783b2a7be70e983436ad025123a9d38e86e9e5f53f4f325e33292707ffa60",
+    "docs/research/CHARACTER_ANIMATION_CPU_CHECK_2026-09-06.json": "0854363f6eeab2f55c306d492d6daaf42a8f2ad71dfad1b5ebd25699e4b94f22"
+  }
+}

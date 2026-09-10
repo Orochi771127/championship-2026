@@ -88,6 +88,16 @@
 .cm-vs5-log .cm-vs5-exit { margin: 0; min-width: 74px; }
 .cm-vs5-log__line, .cm-vs5-log__detail { color: #386d62; font-size: 11px; }
 .cm-vs5-result__body { margin: auto 12px; padding: 24px 16px; background: #f3ffede6; border: 2px solid #d4ae42; border-radius: 4px 22px 4px 18px; color: #2b6556; }
+.cm-vs5-result__stage { position: relative; width: 100%; height: clamp(300px,58vh,440px); margin: auto 0; flex: 0 0 auto; }
+.cm-vs5-result__characters { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; }
+.cm-vs5-result__stage .cm-vs5-result__body { position: absolute; inset: auto 12px 52%; margin: 0; padding: 16px; text-align: center; }
+.cm-vs5-shell[data-panel="RESULT"] .cm-vs5-result__body { background: #f3ffeded; }
+.cm-vs5-shell[data-panel="RESULT"] .cm-vs5-result__body .cm-vs5-title { font-size: 30px; }
+.cm-vs5-result__characters canvas { display: block; }
+.cm-vs5-result__medal { image-rendering: pixelated; object-fit: contain; max-height: 96px; width: auto; }
+.cm-vs5-result__statistics { display: grid; grid-template-columns: 1fr 1fr; text-align: left; gap: 8px; }
+.cm-vs5-result__statistics dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+.cm-vs5-shell[data-panel="LOG"] .cm-vs5-result__body { max-height: 210px; overflow-y: auto; }
 .cm-vs5-result__detail, .cm-vs5-result__rank { color: #3b705f; }
 .cm-status-bar:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"], [data-screen^="BATTLE"]) { background: linear-gradient(#f6fff5, #d3eee9); color: #2a5b62; border-bottom-color: #d0a13d; box-shadow: none; }
 .cm-status-bar:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"], [data-screen^="BATTLE"]) :is(.cm-status-bar__season, .cm-status-bar__day, .cm-status-bar__time) { color: #3a6a66; }
@@ -96,6 +106,12 @@
 @media (prefers-reduced-motion: reduce) { .cm-vs5-meter__fill { transition: none; } }
 
 .cm-vs5-fighter__hp { color: #456b60; font-size: 10px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.cm-vs5-fighter:has(.cm-vs5-fighter__portrait:not([hidden])) { display: grid; grid-template-columns: 32px minmax(0,1fr); gap: 2px 4px; align-content: center; }
+.cm-vs5-fighter__portrait { grid-column: 1; grid-row: 1 / 3; width: 32px; height: 32px; object-fit: contain; image-rendering: pixelated; }
+.cm-vs5-fighter:has(.cm-vs5-fighter__portrait:not([hidden])) .cm-vs5-fighter__name { grid-column: 2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cm-vs5-fighter:has(.cm-vs5-fighter__portrait:not([hidden])) .cm-vs5-meter--hp { grid-column: 2; }
+.cm-vs5-fighter:has(.cm-vs5-fighter__portrait:not([hidden])) :is(.cm-vs5-fighter__hp,.cm-vs5-meter--resource) { grid-column: 1 / -1; }
+.cm-vs5-fighter__portrait[hidden] { display: none; }
 .cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-edit__body { grid-template-rows: none; grid-auto-rows: max-content; align-content: start; }
 .cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-slot { background-image: none; }
 .cm-vs2-root:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"]) .cm-vs2-header::before,

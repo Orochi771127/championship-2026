@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m201_agumon",
+  "designVersion": "m201-a-setting-v1",
+  "selectedConcept": "A",
+  "selectionAuthority": "EXPLICIT_OWNER_CHAT_2026_09_06",
+  "selectionState": "OWNER_SELECTED",
+  "productionPolicy": "LOW_ERROR_FIRST",
+  "specState": "READY_FOR_CONTROLLED_REDRAW",
+  "motionCompatibility": "NOT_VALIDATED",
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "title": "M201 A 金色短吻貓型幼獸",
+  "references": {
+    "policy": "docs/art/production/characters/appearance-refresh-v1/production-autonomy.json",
+    "identityBoard": "docs/art/production/characters/appearance-refresh-v1/batch-01/m201-concepts-v1.png",
+    "identityBoardSha256": "bb8446f1b95c846bdd6a0d9effa481253e3a66ed503654794281b0d6f4e26c79",
+    "identityRegion": "左側 A 的大型高清角色；底部像素化縮圖和較小姿態圖不是動作或品質範本。",
+    "guideIndex": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/guide-index.json",
+    "guides": [
+      {"cell": "main/cell_000", "path": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/main/cell-000.png", "sha256": "af8b7014fbc319b96e639e4f375f9cb71da44337e9fb92c3161fd5bfaaa1db26", "visuallyInspected": true},
+      {"cell": "main/cell_023", "path": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/main/cell-023.png", "sha256": "c812760d6c317ff1d341b07f6ccb8cabcebd06c1776ab68b5c3d8c277735f12e", "visuallyInspected": true}
+    ],
+    "motionContractSha256": "0f7b37e5972f47cf56e151bfcb71fcee77f60b142266f59908baa9ac127c7c3b"
+  },
+  "authorityOrder": [
+    "Owner 已選 A 的身份，不重新開 A/B 決策。",
+    "轉移表修正後 pose guides 鎖來源姿態與共同原點；概念板不決定手腳、嘴端或尾端座標。",
+    "此設定稿收斂固定材質和身份特徵；不得自行改原動畫序列、ticks、模式、gameplay 觸發。"
+  ],
+  "features": [
+    {"id": "ears-cheek", "lock": "一對三角小耳、短金色臉頰毛尖；每側主要臉毛尖保持同一數量和位置。", "occlusion": "遠側耳及臉毛被來源頭部/肢體遮住時隱藏，不為保持雙耳可見而轉頭。"},
+    {"id": "eyes-muzzle", "lock": "大型深棕黑橢圓眼，奶油短吻、深色小鼻、少量貼臉短線；保持 A 的貓型短吻身份。", "occlusion": "眼白與鼻嘴不能被移到可見面中央；嘴開口沿來源作用端展開，不增加遠側眼。"},
+    {"id": "cream-body", "lock": "暖金主毛、奶油胸腹大區；奶油區連續附著軀幹，不變成新衣服。", "occlusion": "伏低、翻身或肢體遮擋時只繪製應露出的胸腹部分，不強制完整腹斑。"},
+    {"id": "silver-wrists", "lock": "兩腕簡單銀色環，單一灰暗邊與窄亮面；不加扣件、吊飾、花紋或獨立旋轉。", "occlusion": "腕環跟隨原腕部和前臂遮擋，來源遮住哪一腕就遮住該環，不補出可見手掌。"},
+    {"id": "tail-toes", "lock": "短厚金色後尾保持 A 的尖端語彙；可見趾端為奶油淺色，指趾分隔從來源可見結構延續。", "occlusion": "尾與趾不為展示設計而移出身體；不增加長尾、蹼、爪刃或新腳。"}
+  ],
+  "palette": {
+    "status": "ART_DIRECTOR_TARGETS_NOT_PIXEL_SAMPLED_MEASUREMENTS",
+    "mainGold": "#EAB431",
+    "litGold": "#FFD767",
+    "shadowOchre": "#AF741E",
+    "cream": "#F8E4A4",
+    "outlineAndEyes": "#573919",
+    "silverMid": "#A6ABB0",
+    "silverLight": "#E4E2D4",
+    "rules": ["暖金維持最大色域。", "每部位最多主色/亮色/暗色三個主要塊面，轉折只做局部柔化。", "狀態色變與黑影等特殊 source cells 另依來源約定，不能由設定稿替換成普通毛色。"]
+  },
+  "rendering": {
+    "line": "清楚深褐外輪廓，內線略細；不加像素階梯，不用寫實毛髮逐根描繪。",
+    "fur": "短毛以大色塊和少量邊緣毛尖呈現；移除比較板大多數零碎斑點筆觸，不新增虎斑、斑點或花色。",
+    "light": "左上柔光；單一寬亮部和單一暗部，禁止每格重新生成隨機高光。",
+    "metal": "腕環低噪點銀灰，不用鏡面環境倒影或亮點閃爍。",
+    "alpha": "候選要求真正 RGBA 透明背景；不含奶油紙、接觸影、色票、文字或輔助格線。Alpha 必須由技術檢查確認。"
+  },
+  "sourcePoseNotes": {
+    "main/cell_000": "修正 guide 中頭朝左，前肢位置與後足前後錯開不同於概念板左右站齊的 pose；以 guide 實際位置重繪，不把概念板角色縮小置中。",
+    "main/cell_023": "修正 guide 的頭在左、身體向右，右中有明顯上伸構件，右端有白色端點；與舊 contact sheet/概念板的簡化趴姿不同。保留其位置和遮擋，不擅自命名該構件或動作語義。",
+    "uncertainty": "嘴/腕/趾等精確端點仍需逐格疊圖及人工標記，這份文字不是端點測量或 ground truth。"
+  },
+  "guideGeometry": {
+    "logicalCanvas": [464, 368],
+    "commonSourceOrigin": [184, 268],
+    "sourcePixelScale": 12,
+    "anchor": {"x": 0.39655172413793105, "y": 0.7282608695652174},
+    "status": "GEOMETRIC_PROPOSAL_NOT_APPROVED_EXPORT",
+    "note": "以上是已檢視 guide-index 的研究座標，不代表 runtime scale/anchor 已驗收。不得套用舊 384×352 的逐格置中/貼底設定。"
+  },
+  "allowedOutlineChanges": [
+    "可在核准 A 身份下整理耳形、短臉毛和表面線條；修改只在不移動作用端、原點與來源遮擋的局部範圍。",
+    "來源輪廓像素階梯可以轉成清楚手繪曲線，但不能改變構件數量、擺向或接觸位置。",
+    "若三角耳等身份特徵與極端來源姿態冲突，先壓縮/遮擋局部特徵而保留姿態；不能改整體身體姿勢。"
+  ],
+  "forbidden": [
+    "新增幀、中間動作、獨立耳尾擺動、腕環旋轉或眨眼節奏。",
+    "以漂亮站姿取代 Main 0 的原肢體關係，或以對稱趴姿取代修正 Main 23。",
+    "為填滿畫布而縮放每格、重新置中或貼齊底線。",
+    "從概念板底部小圖抽像素、從來源像素直接包裝成已重繪成品。",
+    "把通過外貌審查當作 motion PASS、human device PASS 或 runtime/shipping eligibility。"
+  ],
+  "candidateReview": [
+    "檢查 A 五個身份群是否保留，特別是三角耳、奶油胸腹與銀腕環。",
+    "與該格修正 guide 比較主體位置、頭向、嘴端、前後肢、可見端點和遮擋，具體不符記錄為返修。",
+    "检查大色塊穩定、線條密度、透明邊、裝飾是否帶來新運動。",
+    "技術上檢查尺寸/alpha/共用原點，不以目視代替數值驗證。",
+    "失敗姿態依已授權自動返修；第一四已選案不重開。"
+  ]
+}

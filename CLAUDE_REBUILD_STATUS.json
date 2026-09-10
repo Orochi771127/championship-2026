@@ -1,398 +1,1164 @@
 {
-  "owner": "Claude Code",
-  "lane": "runtime implementation and original-system reconstruction",
-  "statusDate": "2026-09-01",
-  "repository": "championship-2026",
-  "branch": "main",
-  "note": "First edition in this repository. Neither CLAUDE_REBUILD_STATUS.json nor CLAUDE_SYNC_DELTA.json was ever tracked here (git log over all refs returns nothing), so no prior content was inferred. The Cursor handoff's statement that this file recorded BATTLE_RUNTIME as not started is recorded as NOT_REPORTED rather than transcribed.",
-  "completed": [
+ "owner": "Claude Code",
+ "lane": "runtime implementation and original-system reconstruction",
+ "statusDate": "2026-09-02",
+ "repository": "championship-2026",
+ "branch": "main",
+ "note": "First edition in this repository. Neither CLAUDE_REBUILD_STATUS.json nor CLAUDE_SYNC_DELTA.json was ever tracked here (git log over all refs returns nothing), so no prior content was inferred. The Cursor handoff's statement that this file recorded BATTLE_RUNTIME as not started is recorded as NOT_REPORTED rather than transcribed.",
+ "completed": [
+  {
+   "id": "BATTLE_ARITHMETIC_HANDOFF_REVIEW",
+   "source": "docs/coordination/CURSOR_BATTLE_ARITHMETIC_HANDOFF.md",
+   "verdict": "PASS",
+   "method": "Independent re-dump from the Owner-supplied ROM, not acceptance of the handoff comments.",
+   "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+   "romHeader": {
+    "title": "DIGIMONCHAMP",
+    "gameCode": "YDIJ",
+    "arm9Ram": "0x02000000"
+   },
+   "overlay19": {
+    "ram": "0x0210B300",
+    "size": "0x26920",
+    "compressed": false,
+    "romRange": "0x1E4600..0x20AF20"
+   },
+   "checks": [
     {
-      "id": "BATTLE_ARITHMETIC_HANDOFF_REVIEW",
-      "source": "docs/coordination/CURSOR_BATTLE_ARITHMETIC_HANDOFF.md",
-      "verdict": "PASS",
-      "method": "Independent re-dump from the Owner-supplied ROM, not acceptance of the handoff comments.",
-      "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
-      "romHeader": {
-        "title": "DIGIMONCHAMP",
-        "gameCode": "YDIJ",
-        "arm9Ram": "0x02000000"
-      },
-      "overlay19": {
-        "ram": "0x0210B300",
-        "size": "0x26920",
-        "compressed": false,
-        "romRange": "0x1E4600..0x20AF20"
-      },
-      "checks": [
-        {
-          "item": "ARM9 0x020CA00C stride-16 curve, 27 values",
-          "result": "EXACT_MATCH"
-        },
-        {
-          "item": "OVL19 0x0213007C 11x11 signed field matrix",
-          "result": "EXACT_MATCH"
-        },
-        {
-          "item": "OVL19 0x0212FECC status durations 0 / 600 x11 / 900 x3",
-          "result": "EXACT_MATCH"
-        },
-        {
-          "item": "OVL19 0x02130038 general proc thresholds 0,5,10,15,20,25,30,35,40",
-          "result": "EXACT_MATCH"
-        },
-        {
-          "item": "OVL19 0x02130034 id13 proc thresholds 0,0,0,0,5,6,8,12,24",
-          "result": "EXACT_MATCH"
-        },
-        {
-          "item": "OVL19 0x0212FE64 crit thresholds 2,3,5,7 as u32",
-          "result": "EXACT_MATCH"
-        },
-        {
-          "item": "OVL19 0x021156B0 resistance sentinel 999",
-          "result": "EXACT_MATCH"
-        },
-        {
-          "item": "global percent default 100 (0x0210D224 mov r6,#0x64; str r6,[r5,#0x43C])",
-          "result": "CONFIRMED"
-        },
-        {
-          "item": "combatant current HP at +0x50 via target +0x10, guarded by cmp #0 / ble before subtract",
-          "result": "CONFIRMED"
-        },
-        {
-          "item": "no battle module imported anywhere under src/championship/app",
-          "result": "PASS"
-        },
-        {
-          "item": "no hitChance / accuracy / TP / Sense implementation in src/championship/battle",
-          "result": "PASS (only prohibition comments)"
-        },
-        {
-          "item": "no BATTLE entry in the screen stack",
-          "result": "PASS"
-        },
-        {
-          "item": "no Japanese action names in src/ (one glossary citation in a cageEffects.js comment)",
-          "result": "PASS"
-        }
-      ]
+     "item": "ARM9 0x020CA00C stride-16 curve, 27 values",
+     "result": "EXACT_MATCH"
     },
     {
-      "id": "BATTLE_CONTACT_TARGETING",
-      "authorizedBy": "CURSOR_BATTLE_ARITHMETIC_HANDOFF next-knife section; Stage 6 implementation gate",
-      "evidence": "VERIFIED_BINARY",
-      "trace": "OVL19 0x0211C714..0x0211C954, resolver call site 0x0211C92C",
-      "independentFindings": [
-        "A full BL scan of OVL19 finds exactly three direct calls to the DamageResolver 0x021149A8: 0x0211C92C, 0x0211D9E0, 0x0211D9FC.",
-        "No BL to the RNG helper 0x020431D4 exists anywhere in 0x0211C714..0x0211C92C, so this stage rolls nothing.",
-        "Action +0x50 must be 2 or 3 (unsigned sub #2 / cmp #1 / bhi) or the walk is not entered.",
-        "Action +0x54 in {0,1} selects a single-target walk; anything else walks up to three slots (cmp r5,#3, effect record stride 436 from sl+672).",
-        "Proven rejections: null target pointer, and target current HP <= 0. The HP gate is enforced again at the resolver entry 0x021149BC.",
-        "In single-target mode a downed target ends the walk; in multi-target mode it advances to the next slot. A null single target still burns all three passes because the pointer load sits inside the loop."
-      ],
-      "outputs": [
-        "src/championship/battle/battleContactTargeting.js",
-        "tests/championship-battle-contact-targeting-cases.mjs"
-      ],
-      "notImplemented": [
-        "hit/miss probability",
-        "accuracy or evasion percentage",
-        "Sense mechanic (positive effect code 4)",
-        "TP",
-        "the meaning of the 0x02054A4C early-out (control flow modelled, semantics untraced)",
-        "any battle screen or app wiring"
-      ]
+     "item": "OVL19 0x0213007C 11x11 signed field matrix",
+     "result": "EXACT_MATCH"
+    },
+    {
+     "item": "OVL19 0x0212FECC status durations 0 / 600 x11 / 900 x3",
+     "result": "EXACT_MATCH"
+    },
+    {
+     "item": "OVL19 0x02130038 general proc thresholds 0,5,10,15,20,25,30,35,40",
+     "result": "EXACT_MATCH"
+    },
+    {
+     "item": "OVL19 0x02130034 id13 proc thresholds 0,0,0,0,5,6,8,12,24",
+     "result": "EXACT_MATCH"
+    },
+    {
+     "item": "OVL19 0x0212FE64 crit thresholds 2,3,5,7 as u32",
+     "result": "EXACT_MATCH"
+    },
+    {
+     "item": "OVL19 0x021156B0 resistance sentinel 999",
+     "result": "EXACT_MATCH"
+    },
+    {
+     "item": "global percent default 100 (0x0210D224 mov r6,#0x64; str r6,[r5,#0x43C])",
+     "result": "CONFIRMED"
+    },
+    {
+     "item": "combatant current HP at +0x50 via target +0x10, guarded by cmp #0 / ble before subtract",
+     "result": "CONFIRMED"
+    },
+    {
+     "item": "no battle module imported anywhere under src/championship/app",
+     "result": "PASS"
+    },
+    {
+     "item": "no hitChance / accuracy / TP / Sense implementation in src/championship/battle",
+     "result": "PASS (only prohibition comments)"
+    },
+    {
+     "item": "no BATTLE entry in the screen stack",
+     "result": "PASS"
+    },
+    {
+     "item": "no Japanese action names in src/ (one glossary citation in a cageEffects.js comment)",
+     "result": "PASS"
     }
-  ],
-  "completedContinued": [
-    {
-      "id": "BATTLE_REWARD_TRANSACTION",
-      "evidence": "VERIFIED_BINARY",
-      "trace": "OVL8 0x0210D0C8 payout decision, OVL8 0x0210EAB0 wallet credit, ARM9 0x020F126C match table",
-      "independentFindings": [
-        "There is no Bits reward formula. The payout is a per-match constant read from the ARM9 match table at 0x020F126C, stride 28, 86 records; +0x00 is the mode the OVL8 jump table switches on, +0x10 the match id, +0x14 the payout.",
-        "Chain: matchTable[i].+0x14 -> screen +0x6BC (ARM9 0x0208CE8C) -> session ctx +0xC94 (ARM9 0x0208C4D4) -> pending +0x408 (OVL8 0x0210D190) -> wallet +0x4C8 (OVL8 0x0210EABC) -> clamp 9,999,999 (0x0210EAD4).",
-        "Mode histogram of the 86 records: mode 0 x1, mode 1 x51, mode 2 x9, mode 3 x11, mode 4 x10, mode 5 x4.",
-        "The 51 mode-1 payouts cover contiguous match ids 101..151, from 3,000 to 400,000 Bits.",
-        "Payout groups are near-multiples of the first ten (x1.5, x1.2, x1.4, x1.3) but several groups break the ratio at their last entries (ids 139, 140, 150, 151), so the ratios are an authoring artifact and not a rule the game evaluates. The table is shipped as data.",
-        "Gate order at 0x0210D0C8: pending defaults to 0; mode 1 with index 61 returns first; a loss returns second; only then is the payout written. The win flag at +0x7FC is 1 unless any inspected outcome entry is zero.",
-        "The wallet clamp is applied after the add, so an overflowing payout is truncated rather than refused."
-      ],
-      "outputs": [
-        "src/championship/battle/battleRewardTransaction.js",
-        "tests/championship-battle-reward-cases.mjs"
-      ],
-      "notImplemented": [
-        "first-clear bonus — later proven not to exist; the payout is written before the mode jump table and no branch alters it",
-        "rank or streak multipliers (none observed)",
-        "Bits spending, which is the Shop's side",
-        "any battle or result screen"
-      ]
-    }
-  ],
-  "completedAiSelection": {
-    "id": "BATTLE_AI_ACTION_SELECTION",
-    "evidence": "VERIFIED_BINARY",
-    "trace": "OVL19 0x021159D4 action ladder, 0x02115E8C move ladder, ARM9 0x020431D4 RNG helper",
-    "scopeNote": "Stage 4 B07/B08 hold that the AI structure is verified while strategy labels are not. This translation reproduces the structure and names no strategy; buckets are keyed by the state code the original passes to 0x02114984.",
-    "independentFindings": [
-      "There are exactly three AI profiles, selected by combatant +0x18. Row 3 of every AI table is zero.",
-      "Action ladder thresholds, OVL19 0x0212FF88 stride 12: profile 0 [32,58,95,99], profile 1 [17,31,88,92], profile 2 [7,14,41,60].",
-      "Negative status code 2 replaces the whole ladder row with 0x0212FE40 [0,10,10,20], and the move row with 0x0212FE38 [0,20]. It is a different decision profile, not a modifier.",
-      "Reserve = min(trunc(metricBase * reservePercent/100), metricLimit), percent from 0x0212FFF4 stride 16 indexed by the session scalar at ctx +0x5E9C.",
-      "Bucket order: roll < T0 tries the +0xCC bucket (state 5), roll < T1 the +0xD8 bucket (state 6), roll < T2 the +0xC0 bucket (state 4). Buckets 5 and 6 are gated on candidate +0x48 being strictly below the reserve; bucket 4 commits with NO cost gate at 0x02115B44..0x02115B58. The asymmetry is preserved.",
-      "Within a bucket the pick is uniform: 0x0202B558 is a signed divide returning the remainder in r1, so index = roll % count.",
-      "roll in [T2,T3) takes the targeted path (state 7), which runs the six-group cascade described under targetedCascade. roll >= T3 falls to the move ladder.",
-      "The move ladder at 0x02115E8C writes Q12 immediates to +0x184/+0x188 and enters state 3: primary 0x32000/0x50000/0x6E000 = 50/80/110, secondary 0x1E000 = 30. Thresholds 0x0212FE84 stride 6: [68,89], [48,96], [7,48].",
-      "combatant +0x24 > 0 skips the action ladder entirely and goes straight to the move ladder."
-    ],
-    "rngCorrection": {
-      "finding": "`mov r0, #216` passes a CHANNEL id, not a modulus. ARM9 0x020431D4 returns (seed[channel] + table[cursor]) mod 103, walking a fixed 103-entry table at 0x020BD23C with a per-channel cursor that wraps at 103. The header at 0x020BD230 holds the channel count 0xD9 (217), the cursor array and the seed array.",
-      "impact": "Every channel-216 roll in the battle system is 0..102, so all thresholds are out of 103. This makes previously unquantified rates concrete: the critical thresholds {2,3,5,7} are about 1.9%-6.8%, and status proc thresholds 0..40 top out near 39%.",
-      "residual": "The per-channel seed initialisation is not traced, so a bit-exact sequence is not yet reproducible. The range and modulus are."
-    },
-    "outputs": [
-      "src/championship/battle/battleActionSelection.js",
-      "tests/championship-battle-ai-selection-cases.mjs"
-    ],
-    "targetedCascade": {
-      "correction": "0x021144CC was recorded as a target selector by Stage 4 B08 and by this file's first edition. It is not. It is a first-fit affordability scan over the group list at combatant + 0xE8 + group*12 (count byte at + 0xF0 + group*12), returning the first action id whose ARM9 0x020CFF9C record (stride 104) has +0x48 strictly below the reserve, else 0. Order matters; there is no shuffle.",
-      "realTargetChoice": "Inlined at 0x02115BE8. Walks the roster at combatant +0x54, skipping a null entry or one whose HP is exactly 0, and keeps the entry with the greatest parallel metric at roster +0x44 + index*4. movgt means ties keep the earlier entry; the running best starts at 0 so a metric of 0 or less never wins.",
-      "hpAsymmetry": "This scan skips HP == 0 but accepts negative HP, unlike battleContactTargeting which requires HP > 0. The asymmetry is in the ROM and is preserved.",
-      "cascadeOrder": "Six groups in the order 2, 1, 4, 3, 6, 5, then the move ladder. Group 2 is guarded by [[+0x54]+0x40] > 0 and targets SELF with no roster scan. Group 1 needs an affordable action plus a metric44 roster target. Group 4 is guarded by [[+0x54]+0x50] > 0 and targets SELF. Group 3 targets the greatest metric54. Group 6 targets SELF but declines when the combatant already carries the effect the action would apply. Group 5 collects up to three living entries whose +0x160 is 0 and picks among them uniformly with a second channel-216 roll.",
-      "threeLivenessRules": "The cascade applies three different liveness tests. Group 1 skips a null entry or HP exactly 0. Group 3 (0x02115CFC..0x02115D18) applies NO HP test at all, so a defeated entry is a legal target. Group 5 requires HP > 0. All three are in the ROM and are preserved rather than normalised. battleContactTargeting separately requires HP > 0, so a negative-HP combatant can be selected by group 1 or 3 and then rejected at contact.",
-      "duplicateEffectCheck": "OVL19 0x021300D4, u32 by action id, maps an action to the positive effect code it would apply: ids 0-9 map to 0, then 10/11 to 1, 12/13 to 2, up to 22/23 to 7. Group 6 declines when combatant +0x160 already equals that code. Because the first ten entries are 0, an action with no effect is always declined by a combatant with no effect. This is the duplicate/active-effect logic Stage 6 observed while auditing Sense.",
-      "tableAdjacencyNote": "0x021300D4 sits 88 bytes past the field matrix base 0x0213007C, exactly where matrix row 8 would begin. The matrix's zero tail and this table's zero head occupy the same bytes, so both readings agree with the ROM and battleDamageResolver's rows 8-10 of zeros remain correct. Do not treat this as a conflict.",
-      "fieldCorrection": "+0x64 is the target and +0x178 is the chosen action id; +0x174 holds the pointer built from that id by multiplying by 104. An earlier reading of +0x178 as the target was wrong."
-    },
-    "notImplemented": [
-      "strategy names or metric semantics beyond role-based ones",
-      "the 596-action table",
-      "which kind of action each bucket holds",
-      "any battle screen"
-    ]
+   ]
   },
-  "current": "BATTLE_RUNTIME arithmetic, traced control flow, the reward transaction, AI action selection, and the six battle data catalogs. No app wiring, no screen. The battle modules still have no catalog import: B1 delivered the data, not the connection.",
-  "blocked": [
-    {
-      "id": "B-HITMISS",
-      "item": "universal hit/miss probability formula",
-      "state": "NO_ACCURACY_ROLL_FOUND",
-      "supersedes": "UNKNOWN_REQUIRES_TRACE",
-      "correctionDate": "2026-08-31",
-      "finding": "This is not a gap in the remake. Four independent checks indicate the original resolves contact, not accuracy, so the product already matches it: an effect reaching a living target deals damage.",
-      "evidence": [
-        "A full BL scan of OVL19 finds no RNG helper (0x020431D4) call anywhere in the bounded contact region 0x0211C714..0x0211C92C.",
-        "The resolver 0x021149A8 calls the RNG helper exactly twice: 0x02114CB8 is the x3/2 critical branch, 0x02114CE4 is the %100 variance. Neither can skip damage.",
-        "The resolver has exactly five exits returning 0, 1 or 2. Every early exit is a deterministic state compare (target HP <= 0; runtime state in {0,1,2,9,10,11,12}; +0x17C in 18..21). No exit is a roll and none is a distinct missed result code.",
-        "All 3,197 extracted original text records contain no MISS, dodge or accuracy vocabulary; the nine keyword hits are false positives (mithril, two action names, two idioms)."
-      ],
-      "residual": "Not proven for the two other resolver call sites 0x0211D9E0 / 0x0211D9FC, whose caller region has not been walked instruction by instruction. Adding an accuracy formula remains prohibited, because inventing one would make the remake play differently from the original."
-    },
-    {
-      "id": "B-SENSE",
-      "item": "Sense exact mechanic",
-      "state": "NO_CODE_4_CONSUMER_EXISTS",
-      "note": "No branch in ARM9 or any of the 22 overlays compares the positive effect code against 4. See completedRemainingUnknowns.",
-      "supersedes": "UNKNOWN_REQUIRES_TRACE",
-      "correctionDate": "2026-08-31"
-    },
-    {
-      "id": "B-TP",
-      "item": "TP",
-      "state": "RESOLVED_AND_IMPLEMENTED",
-      "supersedes": "UNKNOWN_REQUIRES_TRACE",
-      "correctionDate": "2026-08-31",
-      "note": "The spendable action resource is real and traced. battleActionResource.js implements the charge and the refusal; regeneration remains untraced."
-    },
-    {
-      "id": "B-RNG216",
-      "item": "RNG channel 216 distribution",
-      "state": "RANGE_RESOLVED",
-      "supersedes": "UNKNOWN_REQUIRES_TRACE",
-      "correctionDate": "2026-08-31",
-      "finding": "216 is a channel id, not a modulus. ARM9 0x020431D4 returns (seed[channel] + table[cursor]) mod 103 over a fixed 103-entry table at 0x020BD23C. Every roll is 0..102 and every threshold in the battle system is out of 103.",
-      "residual": "Per-channel seed initialisation is untraced, so the exact sequence is not reproducible; the range and modulus are. Injected rng.next(216) must yield 0..102 — battleActionSelection.js enforces that, the older battle modules do not yet."
-    },
-    {
-      "id": "B-AISTRATEGY",
-      "item": "human-readable AI strategy labels and metric semantics",
-      "state": "UNKNOWN_REQUIRES_TRACE",
-      "note": "Structure is implemented; only the names remain unproven, matching Stage 4 B07/B08."
-    },
-    {
-      "id": "B-AITARGET",
-      "item": "AI target selector OVL19 0x021144CC",
-      "state": "RESOLVED_AND_RENAMED",
-      "supersedes": "UNKNOWN_REQUIRES_TRACE",
-      "correctionDate": "2026-08-31",
-      "finding": "0x021144CC is not a target selector. It is a first-fit affordability scan over a per-group list of action ids, returning the first whose ARM9 record +0x48 is strictly below the reserve, or 0. The real target choice is inlined at 0x02115BE8 and picks the living roster entry with the greatest metric. Both are implemented.",
-      "residual": "The group-3 scan tail past 0x02115CD4 is not walked."
-    },
-    {
-      "id": "B-AIGROUP3",
-      "item": "state-7 group-3 scan tail OVL19 0x02115CC4 onward",
-      "state": "RESOLVED",
-      "supersedes": "UNKNOWN_REQUIRES_TRACE",
-      "correctionDate": "2026-08-31",
-      "finding": "Walked to the end. The cascade is six groups in the order 2, 1, 4, 3, 6, 5, then the move ladder. Groups 3, 6 and 5 are now implemented, so the AI decision path is closed end to end with no unwalked branch."
-    },
-    {
-      "id": "B-REWARD",
-      "item": "Bits reward formula",
-      "state": "NO_FORMULA_EXISTS",
-      "supersedes": "UNKNOWN_REQUIRES_TRACE",
-      "correctionDate": "2026-08-31",
-      "finding": "The payout is not computed. It is a per-match constant in an ARM9 table, gated by win/loss. Implemented in battleRewardTransaction.js.",
-      "residual": "The bodies of the three OVL8 jump-table destinations (mode 1 -> 0x0210D3EC, mode 2 -> 0x0210D1C0, default -> 0x0210D464) are not walked instruction by instruction. Mode 2 reads a per-opponent already-cleared flag and can branch on first clear; whether that branch alters the payout is still unknown, so no first-clear bonus is modelled."
-    },
-    {
-      "id": "B-PROGRESSION",
-      "item": "OVL8 progression/rank writer graph beyond the wallet credit",
-      "state": "NO_FIRST_CLEAR_BONUS",
-      "supersedes": "UNKNOWN_REQUIRES_TRACE",
-      "correctionDate": "2026-08-31",
-      "note": "The payout is written before the mode jump table and no branch alters it. Rank and unlock writers beyond the wallet credit remain untraced."
-    },
-    {
-      "id": "B-TIE",
-      "item": "same-frame simultaneous zero ordering",
-      "state": "RESOLVED",
-      "supersedes": "UNKNOWN_REQUIRES_TRACE",
-      "correctionDate": "2026-08-31",
-      "note": "Ascending slot index; nineteen 6-bounded loops in OVL19 all count upward."
-    }
-  ],
-  "verification": {
-    "battleSubset": "tests/championship-battle-*.mjs plus the migration firewall: pass",
-    "npmTest": "332 pass / 0 fail in the Git-tracked suite (297 before this batch; +17 new cases plus the Codex lane's committed additions)",
-    "knownFailureNotOurs": {
-      "test": "tests/championship-hunt-hd-remaster-cases.mjs — 'source assembly, object placement records and raw gameplay maps are unchanged'",
-      "cause": "The test digests files under docs/art/production/hunt/faithful-hd30, which Codex Art was rewriting during this session; the working tree grew from 59 to 465 uncommitted files while this batch ran. The pinned source SHA no longer matches.",
-      "action": "Left alone. Fixing an art hash from inside a battle batch is explicitly prohibited by the Cursor handoff and the file belongs to the Codex lane. The full suite passed at 279/279 earlier in this same session, before that art churn."
-    },
-    "browserGates": "not run this batch; no DOM, presentation or asset file changed by this lane"
-  },
-  "dependenciesChanged": false,
-  "checkpoint": {
-    "committed": false,
-    "reason": "The handoff says not to commit before it is requested. The working tree also carries concurrent Codex/Cursor edits across shared files."
-  },
-  "recommendedNext": [
-    "B2 battle script VM (52 opcodes, OVL19/ARM9). The move table's pointer1C/pointer28/pointer3C columns are OVL19 code addresses, so B2 is what turns them from numbers into behaviour.",
-    "B3 OVL10 match selection. It already reads two of these tables (opponent teams at 0x02110A4C, presets at 0x0210FB3C), so the catalogs are the input it was missing.",
-    "Re-check the two corrected bases against any downstream reading that assumed the handed-over addresses; a consumer written against 0x020ED2E4 or 0x020CC8F4 would be off by three and five columns respectively.",
-    "Leave hit/miss, Sense and TP blocked. Do not fill them with a conventional accuracy formula; the Stage 6 gate prohibits it.",
-    "Trace the other two resolver call sites 0x0211D9E0 and 0x0211D9FC and record whether their caller regions add rejections this module does not model."
-  ],
-  "completedRemainingUnknowns": {
-    "date": "2026-08-31",
-    "request": "Owner asked whether the four remaining unknowns could all be resolved from the original.",
-    "result": "All four are resolved. Three are negative or structural findings; one turned out to be a real system that is now implemented.",
-    "items": [
-      {
-        "id": "B-SENSE",
-        "verdict": "NO_CODE_4_CONSUMER_EXISTS",
-        "method": "Scanned ARM9 and all 22 overlays for a load of combatant +0x160 followed within four instructions by a compare against an immediate.",
-        "evidence": "Fourteen such sites exist in total. OVL19 compares the positive effect code against 0, 1, 2, 3, 5, 6, 7, 8 and 9. It never compares against 4. ARM9, OVL9 and OVL18 only compare against 0, which is a presence test.",
-        "conclusion": "Sense has no value-specific branch anywhere in the ROM's ARM code. Its only mechanical footprint is through != 0 tests: group 6's duplicate decline and group 5's target collection. This matches Stage 6's audit and extends it from OVL19 to the whole image.",
-        "notImplemented": "Nothing to implement. An accuracy or must-hit effect for code 4 would be an invention."
-      },
-      {
-        "id": "B-TP",
-        "verdict": "EXISTS_AND_IMPLEMENTED",
-        "method": "Enumerated every read of action +0x48 in OVL19 and checked which one writes back.",
-        "evidence": "Five reads: the charge at 0x0211C244, the affordability scan at 0x02114504, the two AI ladder gates at 0x02115AA8 and 0x02115AFC, and 0x0210BDE8 which masks a hardware register at 0x04001008 and is unrelated. Only 0x0211C244 writes: cmp current(stats +0x54) against cost, blt returns 0 without charging, otherwise sub and str back to +0x54.",
-        "conclusion": "A spendable action resource exists. Current is stats +0x54, maximum is stats +0x5C, cost is action +0x48 as a u16. The guard is signed less-than, so paying down to exactly zero is allowed and a refused action costs nothing. This also gives the AI reserve its meaning: min(trunc(max * profilePercent / 100), current).",
-        "outputs": [
-          "src/championship/battle/battleActionResource.js",
-          "tests/championship-battle-action-resource-cases.mjs"
-        ],
-        "residual": "Regeneration, starting value and any writer outside OVL19 are untraced. The module charges and refuses; it does not restore."
-      },
-      {
-        "id": "B-PROGRESSION",
-        "verdict": "NO_FIRST_CLEAR_BONUS",
-        "method": "Enumerated every access to the pending reward field +0x408 in OVL8 and located them relative to the mode jump table at 0x0210D1A0.",
-        "evidence": "The reward-decision function writes +0x408 exactly twice, at 0x0210D128 (default 0) and 0x0210D190 (the payout), and both are BEFORE the jump table. None of the three destinations (mode 1 at 0x0210D3EC, mode 2 at 0x0210D1C0, default at 0x0210D464) writes it.",
-        "conclusion": "The payout is locked before any mode branch runs, so there is no first-clear bonus, no rank multiplier and no streak. Mode 2's per-opponent already-cleared flag at +0xC0 gates presentation and progression, not the amount.",
-        "alsoFound": "0x0210EA48 is not a bonus either: it moves the pending amount into the wallet in steps of 1, 10 or 100 depending on magnitude, which is the counting-up tally. The instant path at 0x0210EAB0 transfers the remainder whole. Neither changes the total."
-      },
-      {
-        "id": "B-TIE",
-        "verdict": "ASCENDING_SLOT_INDEX",
-        "method": "Read the per-frame combatant pass and then swept OVL19 for every loop bounded by 6.",
-        "evidence": "The pass at 0x0210D6E4..0x0210D90C walks six fixed slots with add/cmp #6/blt, updating negative-status tick and DoT, positive-effect tick, +0x24 and cooldown +0x28 in that order. Nineteen loops in OVL19 are bounded by 6 and every one counts upward; none descends, sorts by speed or randomises.",
-        "conclusion": "When two combatants become ready on the same frame, the lower slot index is serviced first. There is no priority or speed tiebreak; speed only changes when a cooldown reaches zero, through the 90 - 2*speedIndex rebuild. Recorded as BATTLE_AI_SLOT_SERVICE_ORDER."
-      }
-    ]
-  },
-  "completedBattleCatalogs": {
-    "id": "BATTLE_DATA_EXTRACTION_B1",
-    "date": "2026-09-01",
-    "evidence": "VERIFIED_BINARY",
-    "scope": "Six ARM9 battle tables transcribed to product catalogs. Data only: nothing here is imported by a battle module or by the app.",
-    "builder": "scripts/build-battle-catalogs.py -- takes the ROM path from --rom or YDIJ_ROM, verifies the cartridge SHA-256, derives the ARM9 ROM offset and RAM base from the header, and refuses to emit a table whose record count does not converge. No absolute path is baked in; the generated JSON is what CI reads.",
-    "runtimeModule": "src/championship/battle/battleCatalogs.js",
-    "tables": [
-      {
-        "key": "battle-moves",
-        "ramBase": "0x020CFF9C",
-        "stride": 104,
-        "count": 596,
-        "countEvidence": "OVL19 0x02113DFC `cmp r2,#0x254 / blo` bounds the scan that walks this table with the 0x68-stride MLA at 0x02113DCC.",
-        "boundaryEvidence": "The UTF-16LE name pool ends four zero bytes below the base; record 595 ends at 0x020D9A9C where the ASCII run '%s/%s.nsbca' begins.",
-        "fieldsNamed": "speciesId +0x00, namePointer +0x04, actionCost +0x48, power +0x4A, kind +0x50, targetMode +0x54, elementSelect +0x58, statusCode +0x5C. 36 further fields carry a traced read site but no traced meaning and keep their byte offset as their name.",
-        "note": "596 Japanese move names stay in the cartridge. Only the name pointer is transcribed, as the per-record discriminator."
-      },
-      {
-        "key": "battle-arenas",
-        "ramBase": "0x020CC148",
-        "stride": 24,
-        "count": 11,
-        "countEvidence": "11 records exactly fill the gap between the end of the ASCII asset-name pool at 0x020CC144 and the next object at 0x020CC250, whose base is itself a literal at ARM9 0x020A1370.",
-        "contents": "Five ASCII asset-token pointers and one u32. The identifier column is the eleven BATTLE_* tokens from BATTLE_NORMAL to BATTLE_DOMESTADIUM."
-      },
-      {
-        "key": "battle-eligibility",
-        "ramBase": "0x020CC8D4",
-        "stride": 40,
-        "count": 46,
-        "baseCorrection": "The brief carried 0x020CC8F4 x 45. That address is the record's +0x20 column, not its first byte. ARM9 0x020923A8..0x02092414 copies the record field by field out of a literal pool at 0x02092428..0x0209244C holding &record[0].field for every field; the lowest is 0x020CC8D4. The word at 0x020CC8D0 is the C string '/' loaded at ARM9 0x02087E64, so the table cannot begin lower.",
-        "countCorrection": "46, not 45. With the corrected base the table ends at 0x020CD004, exactly the title-event base. The 46th record is the one the 45-record reading left as an orphan eight-byte pair; its +0x20 repeats the id 0x461."
-      },
-      {
-        "key": "battle-title-events",
-        "ramBase": "0x020CD004",
-        "stride": 40,
-        "count": 62,
-        "countEvidence": "The +0x08 column holds each of 0..61 exactly once -- a permutation, not an identity: records 12 and 51 swap. ARM9 0x02089294 walks the table at stride 0x28 while the index is below 0x3D, which is why the last record is out of that scan's reach.",
-        "specialRecord": "Record 61 is the only record in the table whose +0x24 is zero, and its +0x0C is -1 with +0x10..+0x1C all zero. That is the OVL8 no-reward special case, now pinned from the data rather than asserted."
-      },
-      {
-        "key": "battle-opponent-teams",
-        "ramBase": "0x020ED2D8",
-        "stride": 20,
-        "count": 152,
-        "baseCorrection": "The brief carried 0x020ED2E4. That is the record's +0x0C column. OVL10's literal pool at 0x02110A78..0x02110A8C holds 0x020ED2D8, 0x020ED2DC, 0x020ED2E0 and 0x020ED2E4 as consecutive per-field bases; the lowest is the record base. Reading from 0x020ED2E4 shifts every field three columns and makes record 0 look like [nameId, descId, m0, m1, m2] of the following record.",
-        "countEvidence": "With the corrected base the +0x00/+0x04/+0x08 columns flatten to exactly 0..455 in order -- one index per battle-preset record, no repeat, no gap. +0x0C runs 0x323..0x3BA unbroken and +0x10 runs 0x3BB..0x452 unbroken, and the eligibility table's id column takes the next id 0x453."
-      },
-      {
-        "key": "battle-presets",
-        "ramBase": "0x020E39D8",
-        "stride": 68,
-        "count": 456,
-        "countEvidence": "Cross-checked twice: the opponent-team table names exactly 456 record indices 0..455, and the +0x04 column rises monotonically to 150 across those 456 then jumps by 1002 in the record after the last.",
-        "note": "+0x0C is read as a u16 and summed at ARM9 0x02088EF8 but is zero on all 456 records. Recorded as it reads; not smoothed."
-      }
-    ],
-    "namingDiscipline": "A field is named only where a load instruction was traced and the surrounding code says what the value does. Everything else keeps its byte offset (fieldNN / pointerNN). A test enforces this, so a later pass has to cite an address to promote a name.",
-    "storageNote": "A field holding one value across a whole table is declared once in the catalog fieldMap with constantValue instead of repeated on every record. readBattleCatalogField() is the accessor that covers both cases.",
-    "notImplemented": [
-      "No battle module and no app screen imports these catalogs. B1 is data only.",
-      "The remaining 36 move fields have widths and read sites but no meanings; naming them needs B2/B4 to show what consumes them.",
-      "The arena table's 11x11 attribute matrix was not touched: this catalog is the arena records themselves, which are five asset-token pointers and one flag."
-    ]
+  {
+   "id": "BATTLE_CONTACT_TARGETING",
+   "authorizedBy": "CURSOR_BATTLE_ARITHMETIC_HANDOFF next-knife section; Stage 6 implementation gate",
+   "evidence": "VERIFIED_BINARY",
+   "trace": "OVL19 0x0211C714..0x0211C954, resolver call site 0x0211C92C",
+   "independentFindings": [
+    "A full BL scan of OVL19 finds exactly three direct calls to the DamageResolver 0x021149A8: 0x0211C92C, 0x0211D9E0, 0x0211D9FC.",
+    "No BL to the RNG helper 0x020431D4 exists anywhere in 0x0211C714..0x0211C92C, so this stage rolls nothing.",
+    "Action +0x50 must be 2 or 3 (unsigned sub #2 / cmp #1 / bhi) or the walk is not entered.",
+    "Action +0x54 in {0,1} selects a single-target walk; anything else walks up to three slots (cmp r5,#3, effect record stride 436 from sl+672).",
+    "Proven rejections: null target pointer, and target current HP <= 0. The HP gate is enforced again at the resolver entry 0x021149BC.",
+    "In single-target mode a downed target ends the walk; in multi-target mode it advances to the next slot. A null single target still burns all three passes because the pointer load sits inside the loop."
+   ],
+   "outputs": [
+    "src/championship/battle/battleContactTargeting.js",
+    "tests/championship-battle-contact-targeting-cases.mjs"
+   ],
+   "notImplemented": [
+    "hit/miss probability",
+    "accuracy or evasion percentage",
+    "Sense mechanic (positive effect code 4)",
+    "TP",
+    "the meaning of the 0x02054A4C early-out (control flow modelled, semantics untraced)",
+    "any battle screen or app wiring"
+   ]
   }
+ ],
+ "completedContinued": [
+  {
+   "id": "BATTLE_REWARD_TRANSACTION",
+   "evidence": "VERIFIED_BINARY",
+   "trace": "OVL8 0x0210D0C8 payout decision, OVL8 0x0210EAB0 wallet credit, ARM9 0x020F126C match table",
+   "independentFindings": [
+    "There is no Bits reward formula. The payout is a per-match constant read from the ARM9 match table at 0x020F126C, stride 28, 86 records; +0x00 is the mode the OVL8 jump table switches on, +0x10 the match id, +0x14 the payout.",
+    "Chain: matchTable[i].+0x14 -> screen +0x6BC (ARM9 0x0208CE8C) -> session ctx +0xC94 (ARM9 0x0208C4D4) -> pending +0x408 (OVL8 0x0210D190) -> wallet +0x4C8 (OVL8 0x0210EABC) -> clamp 9,999,999 (0x0210EAD4).",
+    "Mode histogram of the 86 records: mode 0 x1, mode 1 x51, mode 2 x9, mode 3 x11, mode 4 x10, mode 5 x4.",
+    "The 51 mode-1 payouts cover contiguous match ids 101..151, from 3,000 to 400,000 Bits.",
+    "Payout groups are near-multiples of the first ten (x1.5, x1.2, x1.4, x1.3) but several groups break the ratio at their last entries (ids 139, 140, 150, 151), so the ratios are an authoring artifact and not a rule the game evaluates. The table is shipped as data.",
+    "Gate order at 0x0210D0C8: pending defaults to 0; mode 1 with index 61 returns first; a loss returns second; only then is the payout written. The win flag at +0x7FC is 1 unless any inspected outcome entry is zero.",
+    "The wallet clamp is applied after the add, so an overflowing payout is truncated rather than refused."
+   ],
+   "outputs": [
+    "src/championship/battle/battleRewardTransaction.js",
+    "tests/championship-battle-reward-cases.mjs"
+   ],
+   "notImplemented": [
+    "first-clear bonus — later proven not to exist; the payout is written before the mode jump table and no branch alters it",
+    "rank or streak multipliers (none observed)",
+    "Bits spending, which is the Shop's side",
+    "any battle or result screen"
+   ]
+  }
+ ],
+ "completedAiSelection": {
+  "id": "BATTLE_AI_ACTION_SELECTION",
+  "evidence": "VERIFIED_BINARY",
+  "trace": "OVL19 0x021159D4 action ladder, 0x02115E8C move ladder, ARM9 0x020431D4 RNG helper",
+  "scopeNote": "Stage 4 B07/B08 hold that the AI structure is verified while strategy labels are not. This translation reproduces the structure and names no strategy; buckets are keyed by the state code the original passes to 0x02114984.",
+  "independentFindings": [
+   "There are exactly three AI profiles, selected by combatant +0x18. Row 3 of every AI table is zero.",
+   "Action ladder thresholds, OVL19 0x0212FF88 stride 12: profile 0 [32,58,95,99], profile 1 [17,31,88,92], profile 2 [7,14,41,60].",
+   "Negative status code 2 replaces the whole ladder row with 0x0212FE40 [0,10,10,20], and the move row with 0x0212FE38 [0,20]. It is a different decision profile, not a modifier.",
+   "Reserve = min(trunc(metricBase * reservePercent/100), metricLimit), percent from 0x0212FFF4 stride 16 indexed by the session scalar at ctx +0x5E9C.",
+   "Bucket order: roll < T0 tries the +0xCC bucket (state 5), roll < T1 the +0xD8 bucket (state 6), roll < T2 the +0xC0 bucket (state 4). Buckets 5 and 6 are gated on candidate +0x48 being strictly below the reserve; bucket 4 commits with NO cost gate at 0x02115B44..0x02115B58. The asymmetry is preserved.",
+   "Within a bucket the pick is uniform: 0x0202B558 is a signed divide returning the remainder in r1, so index = roll % count.",
+   "roll in [T2,T3) takes the targeted path (state 7), which runs the six-group cascade described under targetedCascade. roll >= T3 falls to the move ladder.",
+   "The move ladder at 0x02115E8C writes Q12 immediates to +0x184/+0x188 and enters state 3: primary 0x32000/0x50000/0x6E000 = 50/80/110, secondary 0x1E000 = 30. Thresholds 0x0212FE84 stride 6: [68,89], [48,96], [7,48].",
+   "combatant +0x24 > 0 skips the action ladder entirely and goes straight to the move ladder."
+  ],
+  "rngCorrection": {
+   "finding": "`mov r0, #216` passes a CHANNEL id, not a modulus. ARM9 0x020431D4 returns (seed[channel] + table[cursor]) mod 103, walking a fixed 103-entry table at 0x020BD23C with a per-channel cursor that wraps at 103. The header at 0x020BD230 holds the channel count 0xD9 (217), the cursor array and the seed array.",
+   "impact": "Every channel-216 roll in the battle system is 0..102, so all thresholds are out of 103. This makes previously unquantified rates concrete: the critical thresholds {2,3,5,7} are about 1.9%-6.8%, and status proc thresholds 0..40 top out near 39%.",
+   "residual": "The per-channel seed initialisation is not traced, so a bit-exact sequence is not yet reproducible. The range and modulus are."
+  },
+  "outputs": [
+   "src/championship/battle/battleActionSelection.js",
+   "tests/championship-battle-ai-selection-cases.mjs"
+  ],
+  "targetedCascade": {
+   "correction": "0x021144CC was recorded as a target selector by Stage 4 B08 and by this file's first edition. It is not. It is a first-fit affordability scan over the group list at combatant + 0xE8 + group*12 (count byte at + 0xF0 + group*12), returning the first action id whose ARM9 0x020CFF9C record (stride 104) has +0x48 strictly below the reserve, else 0. Order matters; there is no shuffle.",
+   "realTargetChoice": "Inlined at 0x02115BE8. Walks the roster at combatant +0x54, skipping a null entry or one whose HP is exactly 0, and keeps the entry with the greatest parallel metric at roster +0x44 + index*4. movgt means ties keep the earlier entry; the running best starts at 0 so a metric of 0 or less never wins.",
+   "hpAsymmetry": "This scan skips HP == 0 but accepts negative HP, unlike battleContactTargeting which requires HP > 0. The asymmetry is in the ROM and is preserved.",
+   "cascadeOrder": "Six groups in the order 2, 1, 4, 3, 6, 5, then the move ladder. Group 2 is guarded by [[+0x54]+0x40] > 0 and targets SELF with no roster scan. Group 1 needs an affordable action plus a metric44 roster target. Group 4 is guarded by [[+0x54]+0x50] > 0 and targets SELF. Group 3 targets the greatest metric54. Group 6 targets SELF but declines when the combatant already carries the effect the action would apply. Group 5 collects up to three living entries whose +0x160 is 0 and picks among them uniformly with a second channel-216 roll.",
+   "threeLivenessRules": "The cascade applies three different liveness tests. Group 1 skips a null entry or HP exactly 0. Group 3 (0x02115CFC..0x02115D18) applies NO HP test at all, so a defeated entry is a legal target. Group 5 requires HP > 0. All three are in the ROM and are preserved rather than normalised. battleContactTargeting separately requires HP > 0, so a negative-HP combatant can be selected by group 1 or 3 and then rejected at contact.",
+   "duplicateEffectCheck": "OVL19 0x021300D4, u32 by action id, maps an action to the positive effect code it would apply: ids 0-9 map to 0, then 10/11 to 1, 12/13 to 2, up to 22/23 to 7. Group 6 declines when combatant +0x160 already equals that code. Because the first ten entries are 0, an action with no effect is always declined by a combatant with no effect. This is the duplicate/active-effect logic Stage 6 observed while auditing Sense.",
+   "tableAdjacencyNote": "0x021300D4 sits 88 bytes past the field matrix base 0x0213007C, exactly where matrix row 8 would begin. The matrix's zero tail and this table's zero head occupy the same bytes, so both readings agree with the ROM and battleDamageResolver's rows 8-10 of zeros remain correct. Do not treat this as a conflict.",
+   "fieldCorrection": "+0x64 is the target and +0x178 is the chosen action id; +0x174 holds the pointer built from that id by multiplying by 104. An earlier reading of +0x178 as the target was wrong.",
+   "sixBoundedLoopCount": "Corrected 2026-09-01: OVL19 holds 24 six-bounded loops, not 19, and all 24 increment. The conclusion is unchanged and now rests on a mechanical check of every one of them."
+  },
+  "notImplemented": [
+   "strategy names or metric semantics beyond role-based ones",
+   "the 596-action table",
+   "which kind of action each bucket holds",
+   "any battle screen"
+  ]
+ },
+ "current": "BATTLE_RUNTIME arithmetic, traced control flow, the reward transaction, AI action selection, the six battle data catalogs, the script VM, the channel RNG, match selection, the frame tick loop, the 27-state machine and three of its handler bodies (0, 11 and 23), and the notify pair at +0x17C/+0x180. A match runs end to end on cartridge data and returns a verdict.",
+ "blocked": [
+  {
+   "id": "B-HITMISS",
+   "item": "universal hit/miss probability formula",
+   "state": "NO_ACCURACY_ROLL_FOUND",
+   "supersedes": "UNKNOWN_REQUIRES_TRACE",
+   "correctionDate": "2026-08-31",
+   "finding": "This is not a gap in the remake. Four independent checks indicate the original resolves contact, not accuracy, so the product already matches it: an effect reaching a living target deals damage.",
+   "evidence": [
+    "A full BL scan of OVL19 finds no RNG helper (0x020431D4) call anywhere in the bounded contact region 0x0211C714..0x0211C92C.",
+    "The resolver 0x021149A8 calls the RNG helper exactly twice: 0x02114CB8 is the x3/2 critical branch, 0x02114CE4 is the %100 variance. Neither can skip damage.",
+    "The resolver has exactly five exits returning 0, 1 or 2. Every early exit is a deterministic state compare (target HP <= 0; runtime state in {0,1,2,9,10,11,12}; +0x17C in 18..21). No exit is a roll and none is a distinct missed result code.",
+    "All 3,197 extracted original text records contain no MISS, dodge or accuracy vocabulary; the nine keyword hits are false positives (mithril, two action names, two idioms)."
+   ],
+   "residual": "Not proven for the two other resolver call sites 0x0211D9E0 / 0x0211D9FC, whose caller region has not been walked instruction by instruction. Adding an accuracy formula remains prohibited, because inventing one would make the remake play differently from the original."
+  },
+  {
+   "id": "B-SENSE",
+   "item": "Sense exact mechanic",
+   "state": "NO_CODE_4_CONSUMER_EXISTS",
+   "note": "No branch in ARM9 or any of the 22 overlays compares the positive effect code against 4. See completedRemainingUnknowns.",
+   "supersedes": "UNKNOWN_REQUIRES_TRACE",
+   "correctionDate": "2026-08-31"
+  },
+  {
+   "id": "B-TP",
+   "item": "TP",
+   "state": "RESOLVED_AND_IMPLEMENTED",
+   "supersedes": "UNKNOWN_REQUIRES_TRACE",
+   "correctionDate": "2026-08-31",
+   "note": "The spendable action resource is real and traced. battleActionResource.js implements the charge and the refusal; regeneration remains untraced."
+  },
+  {
+   "id": "B-RNG216",
+   "item": "RNG channel 216 distribution",
+   "state": "RESOLVED_AND_IMPLEMENTED",
+   "supersedes": "UNKNOWN_REQUIRES_TRACE",
+   "correctionDate": "2026-09-01",
+   "finding": "216 is a channel id, not a modulus. ARM9 0x020431D4 returns (seed[channel] + table[cursor]) mod 103 over a fixed 103-entry table at 0x020BD23C. Every roll is 0..102 and every threshold in the battle system is out of 103.",
+   "residual": "Closed. The seeder is ARM9 0x02043240 and the state it writes is unreachable from anywhere else: a whole-image scan finds the seed pointer 0x02104D20 and the cursor pointer 0x02105084 at exactly one address each, both inside the header at 0x020BD230. A master seed therefore fixes all 217 channels for the session. What stays outside the cartridge is only where the master seed comes from at boot: ARM9 0x02000C90 passes 0, which takes the console clock at 0x0201034C. OVL9 0x021775DC passes the constant 0x14, so that reseed is fully reproducible.",
+   "implementedAt": "src/championship/battle/battleRngChannel.js"
+  },
+  {
+   "id": "B-AISTRATEGY",
+   "item": "human-readable AI strategy labels and metric semantics",
+   "state": "UNKNOWN_REQUIRES_TRACE",
+   "note": "Structure is implemented; only the names remain unproven, matching Stage 4 B07/B08."
+  },
+  {
+   "id": "B-AITARGET",
+   "item": "AI target selector OVL19 0x021144CC",
+   "state": "RESOLVED_AND_RENAMED",
+   "supersedes": "UNKNOWN_REQUIRES_TRACE",
+   "correctionDate": "2026-08-31",
+   "finding": "0x021144CC is not a target selector. It is a first-fit affordability scan over a per-group list of action ids, returning the first whose ARM9 record +0x48 is strictly below the reserve, or 0. The real target choice is inlined at 0x02115BE8 and picks the living roster entry with the greatest metric. Both are implemented.",
+   "residual": "The group-3 scan tail past 0x02115CD4 is not walked."
+  },
+  {
+   "id": "B-AIGROUP3",
+   "item": "state-7 group-3 scan tail OVL19 0x02115CC4 onward",
+   "state": "RESOLVED",
+   "supersedes": "UNKNOWN_REQUIRES_TRACE",
+   "correctionDate": "2026-08-31",
+   "finding": "Walked to the end. The cascade is six groups in the order 2, 1, 4, 3, 6, 5, then the move ladder. Groups 3, 6 and 5 are now implemented, so the AI decision path is closed end to end with no unwalked branch."
+  },
+  {
+   "id": "B-REWARD",
+   "item": "Bits reward formula",
+   "state": "NO_FORMULA_EXISTS",
+   "supersedes": "UNKNOWN_REQUIRES_TRACE",
+   "correctionDate": "2026-08-31",
+   "finding": "The payout is not computed. It is a per-match constant in an ARM9 table, gated by win/loss. Implemented in battleRewardTransaction.js.",
+   "residual": "The bodies of the three OVL8 jump-table destinations (mode 1 -> 0x0210D3EC, mode 2 -> 0x0210D1C0, default -> 0x0210D464) are not walked instruction by instruction. Mode 2 reads a per-opponent already-cleared flag and can branch on first clear; whether that branch alters the payout is still unknown, so no first-clear bonus is modelled."
+  },
+  {
+   "id": "B-PROGRESSION",
+   "item": "OVL8 progression/rank writer graph beyond the wallet credit",
+   "state": "NO_FIRST_CLEAR_BONUS",
+   "supersedes": "UNKNOWN_REQUIRES_TRACE",
+   "correctionDate": "2026-08-31",
+   "note": "The payout is written before the mode jump table and no branch alters it. Rank and unlock writers beyond the wallet credit remain untraced."
+  },
+  {
+   "id": "B-TIE",
+   "item": "same-frame simultaneous zero ordering",
+   "state": "RESOLVED",
+   "supersedes": "UNKNOWN_REQUIRES_TRACE",
+   "correctionDate": "2026-08-31",
+   "note": "Ascending slot index; nineteen 6-bounded loops in OVL19 all count upward."
+  }
+ ],
+ "verification": {
+  "battleSubset": "tests/championship-battle-*.mjs plus the migration firewall: pass",
+  "npmTest": "battle subset plus the migration firewall: 292 pass / 0 fail",
+  "knownFailureNotOurs": {
+   "test": "tests/championship-art-production-a0-cases.mjs -- 'crosswalk carries registry blockers and confirmed production dependencies'",
+   "cause": "The Codex art lane is mid-edit on battle-field production assets; ART_ASSET_REGISTRY.json, ART_PRODUCTION_CROSSWALK.json and that test file are all modified in this working tree.",
+   "action": "Left alone. Fixing an art crosswalk from inside a battle batch is prohibited by the handoff and the files belong to the Codex lane."
+  },
+  "browserGates": "not run this batch; no DOM, presentation or asset file changed by this lane"
+ },
+ "dependenciesChanged": false,
+ "checkpoint": {
+  "committed": false,
+  "reason": "The handoff says not to commit before it is requested. The working tree also carries concurrent Codex/Cursor edits across shared files."
+ },
+ "recommendedNext": [
+  "The remaining unread natives, ranked by call sites: 0x0211E0D4 (157), 0x0211D604 (104), 0x0211DF68 (101), 0x0211E4CC (42), 0x0211D668 (40).",
+  "The two siblings of the natives just done, if the Owner wants them: 0x0211D274 (X extent, 13 sites) and 0x0211D360 (one animation entry, 4). Both accessors are already read.",
+  "Move lists for the product creatures, when they come back into the battle path. They have no ROM species so they cannot attack; an Owner decision, not a trace.",
+  "The cell-bank dump itself, when the art lane has generated the sprites it would align to. The consumer is in place.",
+  "The 26 notify exit routines behind 0x02112820, if a state body ever needs one."
+ ],
+ "completedRemainingUnknowns": {
+  "date": "2026-08-31",
+  "request": "Owner asked whether the four remaining unknowns could all be resolved from the original.",
+  "result": "All four are resolved. Three are negative or structural findings; one turned out to be a real system that is now implemented.",
+  "items": [
+   {
+    "id": "B-SENSE",
+    "verdict": "NO_CODE_4_CONSUMER_EXISTS",
+    "method": "Scanned ARM9 and all 22 overlays for a load of combatant +0x160 followed within four instructions by a compare against an immediate.",
+    "evidence": "Fourteen such sites exist in total. OVL19 compares the positive effect code against 0, 1, 2, 3, 5, 6, 7, 8 and 9. It never compares against 4. ARM9, OVL9 and OVL18 only compare against 0, which is a presence test.",
+    "conclusion": "Sense has no value-specific branch anywhere in the ROM's ARM code. Its only mechanical footprint is through != 0 tests: group 6's duplicate decline and group 5's target collection. This matches Stage 6's audit and extends it from OVL19 to the whole image.",
+    "notImplemented": "Nothing to implement. An accuracy or must-hit effect for code 4 would be an invention."
+   },
+   {
+    "id": "B-TP",
+    "verdict": "EXISTS_AND_IMPLEMENTED",
+    "method": "Enumerated every read of action +0x48 in OVL19 and checked which one writes back.",
+    "evidence": "Five reads: the charge at 0x0211C244, the affordability scan at 0x02114504, the two AI ladder gates at 0x02115AA8 and 0x02115AFC, and 0x0210BDE8 which masks a hardware register at 0x04001008 and is unrelated. Only 0x0211C244 writes: cmp current(stats +0x54) against cost, blt returns 0 without charging, otherwise sub and str back to +0x54.",
+    "conclusion": "A spendable action resource exists. Current is stats +0x54, maximum is stats +0x5C, cost is action +0x48 as a u16. The guard is signed less-than, so paying down to exactly zero is allowed and a refused action costs nothing. This also gives the AI reserve its meaning: min(trunc(max * profilePercent / 100), current).",
+    "outputs": [
+     "src/championship/battle/battleActionResource.js",
+     "tests/championship-battle-action-resource-cases.mjs"
+    ],
+    "residual": "Regeneration, starting value and any writer outside OVL19 are untraced. The module charges and refuses; it does not restore."
+   },
+   {
+    "id": "B-PROGRESSION",
+    "verdict": "NO_FIRST_CLEAR_BONUS",
+    "method": "Enumerated every access to the pending reward field +0x408 in OVL8 and located them relative to the mode jump table at 0x0210D1A0.",
+    "evidence": "The reward-decision function writes +0x408 exactly twice, at 0x0210D128 (default 0) and 0x0210D190 (the payout), and both are BEFORE the jump table. None of the three destinations (mode 1 at 0x0210D3EC, mode 2 at 0x0210D1C0, default at 0x0210D464) writes it.",
+    "conclusion": "The payout is locked before any mode branch runs, so there is no first-clear bonus, no rank multiplier and no streak. Mode 2's per-opponent already-cleared flag at +0xC0 gates presentation and progression, not the amount.",
+    "alsoFound": "0x0210EA48 is not a bonus either: it moves the pending amount into the wallet in steps of 1, 10 or 100 depending on magnitude, which is the counting-up tally. The instant path at 0x0210EAB0 transfers the remainder whole. Neither changes the total."
+   },
+   {
+    "id": "B-TIE",
+    "verdict": "ASCENDING_SLOT_INDEX",
+    "method": "Read the per-frame combatant pass and then swept OVL19 for every loop bounded by 6.",
+    "evidence": "The pass at 0x0210D6E4..0x0210D90C walks six fixed slots with add/cmp #6/blt, updating negative-status tick and DoT, positive-effect tick, +0x24 and cooldown +0x28 in that order. Nineteen loops in OVL19 are bounded by 6 and every one counts upward; none descends, sorts by speed or randomises.",
+    "conclusion": "When two combatants become ready on the same frame, the lower slot index is serviced first. There is no priority or speed tiebreak; speed only changes when a cooldown reaches zero, through the 90 - 2*speedIndex rebuild. Recorded as BATTLE_AI_SLOT_SERVICE_ORDER."
+   }
+  ]
+ },
+ "completedBattleCatalogs": {
+  "id": "BATTLE_DATA_EXTRACTION_B1",
+  "date": "2026-09-01",
+  "evidence": "VERIFIED_BINARY",
+  "scope": "Six ARM9 battle tables transcribed to product catalogs. Data only: nothing here is imported by a battle module or by the app.",
+  "builder": "scripts/build-battle-catalogs.py -- takes the ROM path from --rom or YDIJ_ROM, verifies the cartridge SHA-256, derives the ARM9 ROM offset and RAM base from the header, and refuses to emit a table whose record count does not converge. No absolute path is baked in; the generated JSON is what CI reads.",
+  "runtimeModule": "src/championship/battle/battleCatalogs.js",
+  "tables": [
+   {
+    "key": "battle-moves",
+    "ramBase": "0x020CFF9C",
+    "stride": 104,
+    "count": 596,
+    "countEvidence": "OVL19 0x02113DFC `cmp r2,#0x254 / blo` bounds the scan that walks this table with the 0x68-stride MLA at 0x02113DCC.",
+    "boundaryEvidence": "The UTF-16LE name pool ends four zero bytes below the base; record 595 ends at 0x020D9A9C where the ASCII run '%s/%s.nsbca' begins.",
+    "fieldsNamed": "speciesId +0x00, namePointer +0x04, actionCost +0x48, power +0x4A, kind +0x50, targetMode +0x54, elementSelect +0x58, statusCode +0x5C. 36 further fields carry a traced read site but no traced meaning and keep their byte offset as their name.",
+    "note": "596 Japanese move names stay in the cartridge. Only the name pointer is transcribed, as the per-record discriminator."
+   },
+   {
+    "key": "battle-arenas",
+    "ramBase": "0x020CC148",
+    "stride": 24,
+    "count": 11,
+    "countEvidence": "11 records exactly fill the gap between the end of the ASCII asset-name pool at 0x020CC144 and the next object at 0x020CC250, whose base is itself a literal at ARM9 0x020A1370.",
+    "contents": "Five ASCII asset-token pointers and one u32. The identifier column is the eleven BATTLE_* tokens from BATTLE_NORMAL to BATTLE_DOMESTADIUM."
+   },
+   {
+    "key": "battle-eligibility",
+    "ramBase": "0x020CC8D4",
+    "stride": 40,
+    "count": 46,
+    "baseCorrection": "The brief carried 0x020CC8F4 x 45. That address is the record's +0x20 column, not its first byte. ARM9 0x020923A8..0x02092414 copies the record field by field out of a literal pool at 0x02092428..0x0209244C holding &record[0].field for every field; the lowest is 0x020CC8D4. The word at 0x020CC8D0 is the C string '/' loaded at ARM9 0x02087E64, so the table cannot begin lower.",
+    "countCorrection": "46, not 45. With the corrected base the table ends at 0x020CD004, exactly the title-event base. The 46th record is the one the 45-record reading left as an orphan eight-byte pair; its +0x20 repeats the id 0x461."
+   },
+   {
+    "key": "battle-title-events",
+    "ramBase": "0x020CD004",
+    "stride": 40,
+    "count": 62,
+    "countEvidence": "The +0x08 column holds each of 0..61 exactly once -- a permutation, not an identity: records 12 and 51 swap. ARM9 0x02089294 walks the table at stride 0x28 while the index is below 0x3D, which is why the last record is out of that scan's reach.",
+    "specialRecord": "Record 61 is the only record in the table whose +0x24 is zero, and its +0x0C is -1 with +0x10..+0x1C all zero. That is the OVL8 no-reward special case, now pinned from the data rather than asserted."
+   },
+   {
+    "key": "battle-opponent-teams",
+    "ramBase": "0x020ED2D8",
+    "stride": 20,
+    "count": 152,
+    "baseCorrection": "The brief carried 0x020ED2E4. That is the record's +0x0C column. OVL10's literal pool at 0x02110A78..0x02110A8C holds 0x020ED2D8, 0x020ED2DC, 0x020ED2E0 and 0x020ED2E4 as consecutive per-field bases; the lowest is the record base. Reading from 0x020ED2E4 shifts every field three columns and makes record 0 look like [nameId, descId, m0, m1, m2] of the following record.",
+    "countEvidence": "With the corrected base the +0x00/+0x04/+0x08 columns flatten to exactly 0..455 in order -- one index per battle-preset record, no repeat, no gap. +0x0C runs 0x323..0x3BA unbroken and +0x10 runs 0x3BB..0x452 unbroken, and the eligibility table's id column takes the next id 0x453."
+   },
+   {
+    "key": "battle-presets",
+    "ramBase": "0x020E39D8",
+    "stride": 68,
+    "count": 456,
+    "countEvidence": "Cross-checked twice: the opponent-team table names exactly 456 record indices 0..455, and the +0x04 column rises monotonically to 150 across those 456 then jumps by 1002 in the record after the last.",
+    "note": "+0x0C is read as a u16 and summed at ARM9 0x02088EF8 but is zero on all 456 records. Recorded as it reads; not smoothed."
+   }
+  ],
+  "namingDiscipline": "A field is named only where a load instruction was traced and the surrounding code says what the value does. Everything else keeps its byte offset (fieldNN / pointerNN). A test enforces this, so a later pass has to cite an address to promote a name.",
+  "storageNote": "A field holding one value across a whole table is declared once in the catalog fieldMap with constantValue instead of repeated on every record. readBattleCatalogField() is the accessor that covers both cases.",
+  "notImplemented": [
+   "No battle module and no app screen imports these catalogs. B1 is data only.",
+   "The remaining 36 move fields have widths and read sites but no meanings; naming them needs B2/B4 to show what consumes them.",
+   "The arena table's 11x11 attribute matrix was not touched: this catalog is the arena records themselves, which are five asset-token pointers and one flag."
+  ]
+ },
+ "completedBattleScriptVm": {
+  "id": "BATTLE_SCRIPT_VM_B2",
+  "date": "2026-09-01",
+  "evidence": "VERIFIED_BINARY",
+  "scope": "The 52-opcode script VM and OVL19's bytecode blob. The VM executes; the natives it calls out to do not exist yet, so nothing is wired to the app.",
+  "dispatch": {
+   "site": "ARM9 0x020549D4",
+   "form": "ldrb the opcode byte at pc, index a table of 8-byte C++ pointer-to-member pairs at ARM9 0x020BDEAC, blx. All 52 this-adjust words are zero, so every handler is a plain call.",
+   "loop": "The loop re-runs while flags bit 1 is set at ARM9 0x02054A08; a native clears that bit through 0x02054A24 to give the frame back.",
+   "relatedSites": "init 0x020548D4, run 0x02054980, isActive 0x02054A4C, argument fetch 0x02054A34"
+  },
+  "opcodeCountEvidence": "The table ends at 0x020BE04C, which is where the compiler put 'script.cpp' and 'Script Stack Overflow!' for the two handlers that check the stack. Entry 52 would start inside those strings, so the last opcode is 0x33 and the count is 52. The handlers are contiguous ARM9 code, 0x02054A5C..0x0205568C, with no gaps.",
+  "operandSizeEvidence": "A linear decode of the whole OVL19 blob with these sizes consumes 0x021204A0..0x0212FDA4 exactly -- 23,121 instructions, ending on the byte where ARM code resumes -- and all 1,290 branch targets land on an instruction boundary. Any wrong size desynchronises the stream long before the end, so this is a proof and not a spot check.",
+  "machine": {
+   "shape": "A stack machine over one flat object: pc at +0x04, 96 slots at +0x08..+0x184, sp at +0x188, frameBase at +0x18C, flags at +0x190, a second array at +0x194.",
+   "frames": "init pushes the arguments in reverse, then a zero return address and a zero saved frame base, then sets frameBase = sp. The top frame is shaped exactly like a CALL frame, which is why RETURN stops the script when the restored pc is 0 instead of testing a depth counter.",
+   "stackGuards": "CALL refuses at sp >= 0x5E and CALL_NATIVE at sp >= 0x60, both asserting 'Script Stack Overflow!'. In the original the assert is only a print: execution continues and the push runs off the end of the slot array into sp and frameBase. That overrun is a defect, so the product VM raises instead of reproducing it.",
+   "arithmetic": "Two families. The integer set is 0x0B..0x11; the Q12 fixed-point set is 0x13..0x19. 0x15 multiplies with a +0x800 round and a 12-bit shift, 0x16 divides a value shifted left 32 and shifts the result back 20 through the NDS hardware divider at 0x04000280, and 0x18/0x19 step by 0x1000 -- those four prove the split. 0x13/0x14 and 0x23/0x25 are byte-identical to their integer counterparts, because Q12 add, subtract and shift-left are the same operation on the raw word."
+  },
+  "blob": {
+   "location": "OVL19 0x021204A0..0x0212FDA4, 63,748 bytes, 23,121 instructions",
+   "boundaries": "66 bytes of zero padding below the base; ARM code resumes at 0x0212FDA4",
+   "entryPoints": "36 distinct addresses, from move-record fields +0x1C, +0x28 and +0x3C. All 36 are instruction boundaries and all 36 decode to a RETURN.",
+   "callNative": "3,014 of the 23,121 instructions are CALL_NATIVE, naming 67 distinct OVL19 addresses between 0x0211CDFC and 0x0211EA68. None is traced.",
+   "unusedOpcodes": "18 of the 52 never appear in the battle scripts, including the whole integer arithmetic family. These scripts are Q12 throughout. The unused opcodes are still implemented, because the VM belongs to the ROM and not to these scripts."
+  },
+  "notImplemented": [
+   "The 67 CALL_NATIVE targets. They are dispatched to an injected handler with no default, so a caller cannot accidentally get invented behavior.",
+   "Division by zero in DIV_FX and MOD_FX. Both go through the NDS hardware divider, whose zero-denominator result nothing in this ROM establishes, so they raise. The integer divide IS traced: 0x0202B764 returns with r0 and r1 untouched, so DIV yields the numerator and MOD yields 0.",
+   "Unaligned indirect access. No traced script produces one, and the ARM rotated-load behavior is not modelled; the VM raises rather than differ silently.",
+   "Nothing imports the VM. B2 is the machine and its bytecode, not a battle."
+  ]
+ },
+ "completedRngChannel": {
+  "id": "RNG_CHANNEL_MODEL_X2",
+  "date": "2026-09-01",
+  "evidence": "VERIFIED_BINARY",
+  "scope": "The channel generator behind every battle roll: the 103-entry table, the 217-channel state, the seeder, and the exact remainder the ROM computes.",
+  "roll": "ARM9 0x020431D4. roll(channel) = (seed[channel] + table[cursor[channel]]) % 103. The cursor resets to 0 on entry once it reaches 103 (cmp r1,#0x67 at 0x020431EC) and is then post-incremented. The remainder is a signed truncating one built from smull by 0x13E22CBD and asr #3, verified against C semantics across the int32 range.",
+  "seeder": "ARM9 0x02043240. seed[0] = master, cursor[0] = master % 103, then for each channel 1..216 it rolls channel 0 twice: the first roll accumulates into the seed running total, the second into the cursor running total, and the channel takes seed = the seed total and cursor = the cursor total % 103.",
+  "stateIsolation": "This is what closes the old residual. The header at 0x020BD230 holds the channel count 217 and the two array pointers, and those pointers occur exactly once each in the whole ARM9 image -- inside the header. Nothing but the roll and the seeder can touch the arrays, so a master seed determines the entire session and nothing can perturb it. The builder asserts this on every run.",
+  "periodicity": "The roll reads the seed and never writes it, so a channel is not a stream: it is one fixed cycle of period 103. Critical hits and status procs repeat every 103 rolls on their channel. That is the original's behavior.",
+  "distributionFinding": "The table is 103 entries but only 100 distinct values: 0, 50 and 99 each appear twice and 46, 100 and 102 never appear, so a roll is NOT uniform over 0..102. Over one cycle the hit count for `roll < T` is exactly T only where the shifted gaps and repeats fall above T. At the traced master seed 0x14 channel 216 is exact for every T <= 15 -- which covers the critical thresholds 2, 3, 5 and 7 -- and off by exactly one at six thresholds above it. Do not substitute a uniform generator; the skew is the original's.",
+  "masterSeedSources": [
+   "ARM9 0x02000C90 -- boot, master 0, which takes the console clock at 0x0201034C. Environmental; refused rather than emulated.",
+   "ARM9 0x0206AD6C -- master loaded from a struct at +0x0C. The struct is not traced.",
+   "OVL9 0x021775DC -- `mov r0, #0x14`. A hard constant, so this reseed replays exactly."
+  ],
+  "notImplemented": [
+   "The boot clock read at 0x0201034C. createChannelRng refuses a master seed of 0 rather than invent a value.",
+   "A negative cursor. The ROM's reset compare is signed, so a negative cursor would index before the table; nothing traced produces one, and the module raises instead of reading rubbish.",
+   "Nothing wires the generator into a running battle. It satisfies the rng.next(channel) interface the battle modules already take, and a test drives battleStatus with it, but no app path constructs one."
+  ]
+ },
+ "completedMatchSelection": {
+  "id": "BATTLE_MATCH_SELECTION_B3",
+  "date": "2026-09-01",
+  "evidence": "VERIFIED_BINARY",
+  "scope": "Which matches the game offers and why. This is the seam the B1 catalogs had no consumer for: the filter reads the title-event table, and OVL10 reads its payout column.",
+  "filter": {
+   "site": "ARM9 0x0208922C, driven from OVL10 0x0210EC30",
+   "rule": "Walk title records 0..60 in order and keep the first `cap` whose +0x14 equals schedule slot A, whose +0x18 equals schedule slot B, and whose +0x10 is at most the progress counter shifted right by one. Return the count. The accepted value stored is the record index.",
+   "scanBound": "cmp ip,#0x3d at 0x02089294 -- 61 records, so index 61 is outside the scan.",
+   "cap": "OVL10 0x0210EC2C passes 5. In practice it never binds: the busiest schedule cell holds four.",
+   "progressGate": "cmp r1, r2, lsr #1 with strle at 0x02089284, where r2 is a u16 read at the session block +0xA00 +0xE8."
+  },
+  "scheduleGrid": "ARM9 0x0207BC9C and 0x0207BCCC produce the two slots the same way: divide a clock word by a per-slot divisor in the RAM struct at 0x0210AA94 and take the remainder against a constant from 0x020C8A4C, whose first two words are 4 and 8. The data agrees decisively: across the resulting 4 x 8 grid, all 61 reachable records appear exactly once, no record in two cells and none left over. One cell, slot A 3 and slot B 4, holds no match at all.",
+  "specialRecord": "OVL10 0x0210EBFC reads a word in its own BSS; when set, the screen skips the filter and offers a list of exactly one, `mov r1, #0x3d` at 0x0210EC18 -- record 61. That word is written at exactly one address in the entire ROM, OVL10 0x0210B498, and only when the global context's +0xA8 is 4 (cmp at 0x0210B478). Two independent whole-image scans agree there is no other writer. So record 61 is the match of one entry mode, not dead data.",
+  "payoutClosure": "Not one of the 61 records the filter can offer has a zero +0x24. Record 61, the only zero in the table, is exactly the one the filter cannot reach and the one entry mode 4 forces. B1's observation and OVL8's no-reward behavior are the same fact seen from two ends.",
+  "opponentExpansion": "OVL10 0x0211057C..0x02110594 loads the team record's +0x00, +0x04 and +0x08 from three per-field bases at stride 0x14 and multiplies each by 0x44 into the preset table at 0x021105D4. That is the ROM confirming B1's corrected team base 0x020ED2D8 from the other direction. A team index of -1 and a preset slot of -1 are both 'none'.",
+  "notImplemented": [
+   "What entry mode 4 is. The context field +0xA8 is compared against 4; nothing traced says what sets it.",
+   "The clock divisors at 0x0210AA94 +0x34 and +0x38. They live in RAM and nothing in the cartridge initialises them statically, so the two schedule slots are inputs to the module rather than something it computes. They are named for their offsets, not for a calendar.",
+   "The progress counter's source. The module takes it as an argument; the session block field it comes from is outside this trace.",
+   "What the screen does when the filter returns nothing -- and the grid does contain one empty cell, so that state is reachable.",
+   "Nothing wires this into the app. B3 is the rule, not a screen."
+  ]
+ },
+ "ownerAuthorization": {
+  "date": "2026-09-01",
+  "directive": "The Owner authorized the BATTLE screen, and directed that the screen-less execution core be built first as pure logic plus tests.",
+  "recordedBy": "Claude Code, from the Owner's message in session. Transcribing it into docs/coordination/OWNER_DIRECTION.md is the Owner's or Codex's call; that file was mid-edit in the Codex lane when this was written, so this lane did not touch it.",
+  "actedOn": "B4 execution core only. No screen exists, and nothing under src/championship/app imports any battle module."
+ },
+ "completedFrameLoop": {
+  "id": "BATTLE_FRAME_LOOP_B4_CORE",
+  "date": "2026-09-01",
+  "evidence": "VERIFIED_BINARY",
+  "scope": "The six-slot per-frame update at OVL19 0x0210D6E4: the phase order, the empty-slot skip, and the four places the loop calls out. Logic only; no screen.",
+  "loop": {
+   "site": "OVL19 0x0210D6E4..0x0210D90C, 137 instructions, `cmp r8,#6 / blt`",
+   "roster": "roster[slot] is read at base + 0x5E20 + slot*4; a null entry branches straight to the loop increment, so an empty slot escapes the counters too.",
+   "order": "Ascending. So is every other six-bounded loop in the overlay -- all 24 of them increment, checked mechanically. Two combatants ready on the same frame therefore resolve by slot number, lowest first: that is the iteration, not a tie-break rule."
+  },
+  "phases": [
+   "1  negative status (0x0210D700): remaining <= 0 clears and skips phase 1b; otherwise the traced tick runs and a death test follows.",
+   "1b threshold (0x0210D880), reachable only when the status code is 0: +0x22 strictly above table[stats +0x18] calls out and zeroes +0x22.",
+   "2  timer (0x0210D8B4): +0x160 non-zero gates it; +0x164 decrements while positive, else the loop calls out.",
+   "3  counters (0x0210D8DC): +0x24 then +0x28, each decrementing only while strictly positive."
+  ],
+  "deathPath": "hp < 0 after a tick stores 0 back, clears the status, sets state 0x17 and notifies 0x12, and zeroes +0x3C. Landing exactly on 0 is NOT death -- the compare is `bge`. The handler branches to phase 2 and falls through, so a combatant that dies this frame still has its timer and both counters ticked.",
+  "thresholdTable": "OVL19 0x0212FE74, u16 x 8: [100, 100, 100, 9999, 50, 9999, 50, 9999]. Eight because the move ladder's own table begins sixteen bytes later at 0x0212FE84 -- the table battleActionSelection already reads, whose first row is 68, 89. 9999 is the original's way of writing 'never'.",
+  "delegation": "The status tick is battleStatus.tickNegativeStatus, already traced at 0x0210D700 and unchanged. The frame module adds no arithmetic of its own.",
+  "notImplemented": [
+   "The four routines the loop calls out to: 0x0211452C on status end and on death, 0x02114984 with 0x17 and 0x02112820 with 0x12 on death, 0x0211479C when the timer runs out, and 0x021145C0 with 1 when the threshold is crossed. None is traced, so each is reported as a named event carrying its ROM address and nothing is invented for it.",
+   "The threshold index has no bound check in the original and would read into the move ladder's table; the module raises instead.",
+   "Action selection, contact and damage are not called from this loop in the original, so they are not called from it here.",
+   "No BATTLE screen. The Owner authorized one on 2026-09-01 and directed the core first; nothing under src/championship/app imports this."
+  ]
+ },
+ "completedStateMachine": {
+  "id": "BATTLE_STATE_MACHINE_B4_LINK",
+  "date": "2026-09-01",
+  "evidence": "VERIFIED_BINARY",
+  "priorityCall": "The Owner authorized the BATTLE screen and left the order to this lane. The four call-outs were taken before the screen, because tracing them showed they are not a side quest: they are the half of B4 that connects the frame tick to action selection. A screen built first would have had to invent what its states mean.",
+  "correctedHypothesis": "The working guess going in was that 0x0211479C, the frame loop's timer call-out, meant 'this combatant may act'. It does not: it clears +0x160/+0x164 and two per-combatant globals and returns the HP compare. The real link was found by walking up from the AI instead.",
+  "frameFunction": {
+   "site": "OVL19 0x0210D33C",
+   "order": "Two six-slot loops, both ascending, both skipping an empty slot: state dispatch at 0x0210D644, then the status/threshold/timer/counter tick at 0x0210D6E4 that battleFrameLoop already models."
+  },
+  "dispatcher": {
+   "site": "OVL19 0x021156F8",
+   "table": "0x0213040C, stride 8, the same C++ pointer-to-member form the script VM's opcode table uses. 27 states, 0x00..0x1A.",
+   "rule": "Bit 1 of the u16 at +0x9A suspends the combatant: no handler, and the counter does not advance. Otherwise a counter at +0x16C below zero is the entry frame — it is set to 0, the handler runs, and the counter becomes 1. On later frames the handler runs only when the counter divides exactly by the state's own period at +0x170. Every non-suspended path increments.",
+   "periodZero": "A period of 0 reaches the divide's zero path at ARM9 0x0202B750, which leaves the remainder at 0. So period 0 means every frame, not never.",
+   "entryCounter": "0x02114984 writes the state to +0x168 and -255 to +0x16C. Any negative would do; -255 is what the ROM writes and is kept rather than normalised."
+  },
+  "countEvidence": "Two independent bounds agree on 27. The table's 28th entry would start at 0x021304E4, where the words are 0x001F0000 and 0x01FF03E0 — neither inside OVL19's code, and UTF-16LE text follows shortly after; all 27 before it are valid OVL19 addresses. From the other side, sweeping all 70 `bl 0x02114984` sites, the literal state codes the ROM ever sets are 0, 1, 3..16 and 23.",
+  "theJoin": "State 3's handler at 0x02115F38 ends at 0x021161D0 with `ldr r0,[r5,#0x28] / cmp r0,#0 / popgt`: a cooldown still running returns, and a spent one falls into state 1's routine at 0x021157BC — the negative-status action gate this repository already implements, which in turn calls AI action selection at 0x021159D4, state 2's handler. battleFrameLoop is what ticks +0x28 down. That is the whole chain from a frame to a chosen action, and all four stages were already translated.",
+  "alreadyTranslatedStates": [
+   "state 1 -> 0x021157BC, battleStatus.negativeStatusActionGate",
+   "state 2 -> 0x021159D4, battleActionSelection.selectBattleAiAction. Note it is never set by a literal `mov r1`; it is only reached from inside the machine.",
+   "state 3 -> 0x02115F38, the cooldown gate above",
+   "state 23 -> 0x021170D0, the state battleFrameLoop's death path sets"
+  ],
+  "inertStates": "States 17..22 are six consecutive `bx lr` at 0x021170B8..0x021170CC. They are real table entries that do nothing, and none of the six is a code the ROM ever sets.",
+  "notImplemented": [
+   "The bodies of the other twenty-one handlers. The dispatcher is traced; the module reports which handler would run rather than running one.",
+   "What bit 1 of +0x9A means, only that it suspends.",
+   "What +0x170 is initialised to at battle start. Each handler sets its own period; state 23 sets 4.",
+   "The other three frame-loop call-outs (0x0211452C is now read as the status-clear that also undoes the old code via a 0..13 jump table, but the per-code arms are not traced).",
+   "Still no BATTLE screen, and nothing under src/championship/app imports any of this."
+  ]
+ },
+ "completedStateGraph": {
+  "id": "BATTLE_STATE_GRAPH",
+  "date": "2026-09-01",
+  "evidence": "VERIFIED_BINARY",
+  "method": "Each of the 27 handlers was scanned mechanically for its `mov r1,#N / bl 0x02114984` transitions, its writes to the period at +0x170, and its call targets. Two handlers were then read whole by hand; the extraction agreed with both.",
+  "shape": "State 1, the action gate, is the hub and fans out to 3, 8, 9, 10, 12, 13. State 2, AI selection, fans out to 3, 4, 5, 6, 7. The 4/5/6/7 group leads into 14/15/16 and all three of those return to 1. State 11 waits out a status then returns to 1, or drops to 0 if the combatant is dead. State 0 arms a 60-frame period and does nothing else.",
+  "bodiesTranslated": "2 of 27: state 0 (0x021157A8, 20 bytes) and state 11 (0x0211680C, 112 bytes). The other 25 have a profile in the graph but no implementation.",
+  "inertCorrection": "The inert `bx lr` states are eight, not the six recorded earlier: 17..22, plus 24 and 25 on the far side of state 23's body. None of the eight is a code the ROM sets.",
+  "whereDamageHappens": "No state handler calls the damage resolver or the contact walk. The resolver at 0x021149A8 has three call sites: one inside the contact walk itself, and two inside 0x0211D71C -- a battle-script CALL_NATIVE target. The state machine schedules; the move's bytecode executes, and damage lands through a native the script calls.",
+  "correctionOfPriorJudgement": "This lane ranked the 67 script natives as presentation plumbing and deprioritised them, from sampling the two most-CALLED. Those are a 16-byte yield and a 40-byte roll, and the median native is 52 bytes, so the bulk of that judgement holds -- but 0x0211D71C is 2,124 bytes and is the attack itself. The set was ranked by call count when it should have been ranked by size."
+ },
+ "completedOverlayIdentification": {
+  "id": "OVERLAY_IDENTIFICATION_X1",
+  "date": "2026-09-01",
+  "evidence": "VERIFIED_BINARY (ASCII resource names inside each overlay)",
+  "note": "X1 asked what OVL 2, 6, 7, 11, 14 and 20 are. Reading the ASCII resource names out of every overlay answers all six and identifies the rest at the same time.",
+  "overlays": {
+   "ovl0": "126.2 KiB -- hunting, wild AI and items. Untouched.",
+   "ovl1": "4.3 KiB -- the `today_window` screen.",
+   "ovl2": "7.4 KiB -- the battle winner/result screen (`winner_top_bg`, `e003_battle`). X1 answered.",
+   "ovl3": "2.2 KiB -- the company logo screen.",
+   "ovl4": "6.2 KiB -- tamer info, and the hunt result UI.",
+   "ovl5": "2.4 KiB -- the help screen.",
+   "ovl6": "2.4 KiB -- the battle menu screen (`battle_menu`, `bg_battle_top1`). X1 answered.",
+   "ovl7": "2.5 KiB -- a list screen (`list_bg_sub`). X1 answered.",
+   "ovl8": "17.9 KiB -- rewards and the wallet. Payout traced; the wider progression writers are not.",
+   "ovl9": "487.2 KiB -- the character and graphics resource manager (`char/*.nsc.l`, `Out of memory.`). Nearly half the overlay space, and it is engine, not game logic.",
+   "ovl10": "39.6 KiB -- match selection and eligibility. The rule is traced; the screen is not.",
+   "ovl11": "8.7 KiB -- the ending screen (`ending_bg`). X1 answered.",
+   "ovl12": "38.3 KiB -- the hunt world and settings UI.",
+   "ovl13": "2.5 KiB -- the title menu.",
+   "ovl14": "4.5 KiB -- the training screen (`training_bg_top`). X1 answered.",
+   "ovl15": "10.9 KiB -- training and cage edit.",
+   "ovl16": "18.9 KiB -- the database screen.",
+   "ovl17": "17.7 KiB -- the shop screen.",
+   "ovl18": "118.3 KiB -- raising formulas and the schedule state machine. Untouched.",
+   "ovl19": "154.3 KiB -- battle. Largely traced.",
+   "ovl20": "32 bytes -- a stub. X1 answered: there is nothing in it.",
+   "ovl21": "2.8 KiB -- movie playback."
+  }
+ },
+ "completedActionApplication": {
+  "id": "BATTLE_ACTION_APPLICATION",
+  "date": "2026-09-01",
+  "evidence": "VERIFIED_BINARY",
+  "scope": "OVL19 0x0211D71C, the script CALL_NATIVE that lands an attack. The script contract, the six-slot target walk and its four rejections, and which parameter block reaches the damage resolver. NOT the whole 2,088-byte body.",
+  "scriptContract": "Three arguments. 0 is the action object, 1 is either zero or a parameter block, 2 arrives in Q12 and the entry truncates it with `asr #0xc` into the value called `kind`. The attacker is action +0xE4.",
+  "targetWalk": "The same six-slot roster the frame loop walks, at base + 0x5E20 + slot*4, ascending, bounded by `cmp r0,#6` at 0x0211DF38. The routine returns the number of slots that survived every rejection.",
+  "rejections": [
+   "0x0211D794 -- the slot is empty",
+   "0x0211D79C -- the slot is the attacker itself",
+   "0x0211D7B8 -- attacker +0x54 equals target +0x54, UNLESS the attacker's status at +0x158 is exactly 5, which skips this check outright",
+   "0x0211D7EC -- the attacker's +0x94 is non-zero and the target's is zero"
+  ],
+  "resolverPaths": "Argument 1 of zero takes the three words at [action +0x00] + 0x28 (0x020648F0 is `add r0,r0,#4`, then +0x24) and calls the resolver at 0x0211D9E0; anything else passes argument1 + 0x24 and calls it at 0x0211D9FC. Either way the roster slot is the defender and the action object is second.",
+  "notImplemented": [
+   "What `kind` selects. Only that 13 alone skips the write to action +0x20 at 0x0211DA04.",
+   "What +0x54, +0x94 and status 5 mean. All three keep their offsets as names.",
+   "The three parameter words themselves. This module locates them and hands them on; it does not interpret them.",
+   "Most of the 2,088-byte body. The action object carries its own script VM at +0x2A0 which this routine starts and steps at 0x0211DD68 and 0x0211DF04, and that nested script is not traced."
+  ]
+ },
+ "completedMoveScript": {
+  "id": "BATTLE_MOVE_SCRIPT_LAYER",
+  "date": "2026-09-01",
+  "evidence": "VERIFIED_BINARY",
+  "closure": "B1's three unnamed pointer columns in the move table are script entry addresses, and this closes B1 -> B2 -> B4 in one line: [combatant +0x20] and [action +0x20] are the move record, +0x1C is started at OVL19 0x0211C560 on the combatant's VM at +0xEC, +0x28 at 0x0211CB7C on the same VM, and +0x3C at 0x0211C904 and 0x0211DF04 on the action's own VM at +0x2A0.",
+  "sixArgumentFrame": "The +0x3C start builds `mov r2, #6`: two pointers, the action object, then three Q12 values made by `ldrsb` on move-record bytes +0x43, +0x40 and +0x41 shifted left 12, the last two added to base words. +0x40 and +0x41 are constant zero across all 596 records; +0x43 is -1 on 585 of them and 0..4 on the other eleven, so argument 3 is -1.0 in Q12 for almost every move.",
+  "argumentAddressing": "A general result, provable from init alone: whatever the argument count, init argument k is local -(k+3), because init pushes the array in reverse and then two zeros. Locals -1 and -2 are those zeros. The blob agrees -- across all 23,121 instructions the negative locals used are exactly the contiguous run -3 down to -17, and nothing reads -1 or -2.",
+  "builtInScript": "One path ignores the move's own column: OVL19 0x0211DD14 loads the literal 0x0212F94E and starts that with the same six-argument frame. It decodes to 161 instructions and 445 bytes -- exactly the 445-byte run B2's reachability walk could not account for, unreachable from any move record because it lives in OVL19's literal pool rather than the table. Its prologue reserves 8 locals and reads -5, -4, -3, which are arguments 2, 1 and 0.",
+  "notImplemented": [
+   "The argument counts and frames for the +0x1C and +0x28 entries. Both start sites were found; neither frame was read out. A local of -17 somewhere in the blob implies an entry that passes fifteen arguments.",
+   "What arguments 0 and 1 point at, and what the two base words added to arguments 4 and 5 are.",
+   "What any of the scripts then does. That is bytecode, which battleScriptVm executes and this layer does not interpret."
+  ]
+ },
+ "completedBattleSession": {
+  "id": "BATTLE_SESSION_COMPOSITION_A",
+  "date": "2026-09-01",
+  "evidence": "VERIFIED_BINARY",
+  "ownerDirection": "The Owner chose A -> C -> B on 2026-09-01: confirm the logic composes, then trace the presentation natives, then build the screen once. This is A.",
+  "scope": "A screen-less session that runs the traced modules in the frame function's order and stops wherever the evidence stops, naming the seam. No UI, no invented behavior.",
+  "frameOrder": "OVL19 0x0210D33C runs the state dispatch loop at 0x0210D644 and then the status/counter tick at 0x0210D6E4, both six slots ascending. The session runs both in that order.",
+  "chainThatComposes": "battleFrameLoop ticks +0x28 down; state 3 returns while it is above zero and otherwise falls into state 1's routine; state 1 is battleStatus's action gate; a NORMAL family reaches AI selection. The first three links run end to end in the session and are checked by a six-slot case where every slot works through a different starting cooldown and all six reach the gate.",
+  "seamsFound": [
+   "AI_CANDIDATE_BUCKETS -- AI action selection needs the candidate lists at combatant +0xE8/+0xF0, read at 0x021144CC. Nothing traced fills them, so every slot stops there. This is the single seam a healthy roster hits.",
+   "UNTRACED_STATE_BODY -- 17 of the 27 states have a profile but no body. The session names the state and its handler address and leaves the combatant untouched.",
+   "ACTION_GATE_NON_NORMAL -- the gate can answer with a family other than NORMAL, and what follows is not traced."
+  ],
+  "runnableStates": "4 of 27: 0, 1, 3 and 11. Eight more are inert `bx lr` and reach no body at all.",
+  "twoDefectsFound": "Composing did what it was meant to: it exposed two real defects that per-module cases could not. battleFrameLoop refused any field it did not own, so a session combatant carrying state-machine fields could not be ticked -- the frame module now exports its field list and the session hands it only those. And a state handler must see the counter BEFORE the dispatcher's increment; the session was passing the post-increment value, so an entry frame would not have been recognised as one.",
+  "notImplemented": [
+   "Nothing ends a battle, because no traced state does. A session runs for a bounded number of frames and reports; it does not reach a winner.",
+   "No screen. This is A of A -> C -> B.",
+   "Nothing under src/championship/app imports it."
+  ]
+ },
+ "completedScriptNatives": {
+  "id": "BATTLE_SCRIPT_NATIVES_C",
+  "date": "2026-09-01",
+  "evidence": "VERIFIED_BINARY",
+  "ownerDirection": "Step C of the Owner's A -> C -> B: trace the presentation natives before building the screen.",
+  "scope": "All 67 CALL_NATIVE targets catalogued mechanically; 16 of them read line by line and implemented. Those 16 carry 1,578 of the 3,014 native call sites the scripts make -- a little over half.",
+  "catalogMethod": "For each target the words up to the next target are decoded and scanned for `bl 0x02054A34` (a script argument read, with the literal index), `bl 0x02054A24` (a yield), any other `bl`, and every base-plus-displacement load or store with its width and direction. Nothing is named. The catalog's nameEvidence field says MECHANICAL_EXTRACTION_ONLY_NO_NAMES and a test asserts no entry carries a name at all.",
+  "shape": "7,788 bytes across 67 routines, but lopsided: four are half of it and the other sixty-three average sixty bytes. By shape, 41 compound, 10 getters, 10 setters, 5 trivial, 1 yield.",
+  "implementedFindings": [
+   "0x0211CE7C / 0x0211CE94 / 0x0211CEAC -- 265, 265 and 15 calls: a chained read through +0x2C then +0x00, +0x04 or +0x08, with no null guard.",
+   "0x0211D1A8 / 0x0211D1C4 / 0x0211D1E0 -- guarded reads of +0x24, +0x28, +0x2C returning 0 for a null argument.",
+   "0x0211D2BC -- 168 calls: reads a u8 at +0x58, ADDS ONE, then shifts into Q12.",
+   "0x0211CFD8 -- reads +0x04 then +0x6DC and shifts into Q12; 0x0211CFF4 is the same chain without the shift.",
+   "0x0211CEC4 and 0x0211CEFC -- two separate routines that are both compare-and-set on +0x154: they write only when the slot is zero and return whether they did.",
+   "0x0211D514 -- 238 calls: null guard, then `asr #0xc` on argument 1 and a byte store at +0x14.",
+   "0x0211D3A8 and 0x0211D2E0 -- null guard then a tail call into a routine that was not read; the second shifts the result left by 20, not 12.",
+   "0x0211E28C -- 89 calls, 16 bytes: yield the frame and return 0.",
+   "0x0211D70C -- 56 calls, 16 bytes: `ldr ip,=0x0211D740 / mov r1,#0xd / bx ip`. A tail call into the action-application body with the kind forced to 13, which is exactly the value that routine independently treats as special. The kind-13 branch is not a mystery flag; it is this entry."
+  ],
+  "hostBoundary": "The implemented natives dereference real objects and a JavaScript rebuild has no raw addresses, so each takes a host supplying readU32/readU8/writeU32/writeU8 plus call() for the two that hand off unread routines and yield(). The offsets, the null guards and the shifts are the ROM's; the object graph is the caller's.",
+  "notImplemented": [
+   "51 of the 67. They are catalogued with their mechanical facts and calling one raises rather than returning a value nobody traced. The busiest unread ones are 0x0211D3C8 (219 calls), 0x0211D54C (214) and 0x0211E0D4 (157).",
+   "The two routines 0x0211D3A8 and 0x0211D2E0 tail-call into: ARM9 0x02047C48 and OVL19 0x0211AD9C.",
+   "What any of the 67 means. The offsets are the names."
+  ]
+ },
+ "completedCandidateBuckets": {
+  "id": "BATTLE_CANDIDATE_BUCKETS",
+  "date": "2026-09-01",
+  "evidence": "VERIFIED_BINARY",
+  "priorityCall": "The Owner left the choice to this lane. The buckets were taken ahead of the remaining 51 natives because composition had shown they were the single seam stopping a battle from happening at all: every other link already ran.",
+  "site": "OVL19 0x02113F28, in the same function as the species move scan",
+  "array": "Nine groups of twelve bytes: two word entries at +0xE8 and a byte count at +0xF0. The bound is the array's own extent -- 0xE8 + 9*12 is exactly 0x154, where the next field begins, the one two of the script natives compare-and-set.",
+  "fill": "Two source words at stats +0x12C and +0x130. A zero is skipped. A value of 1..30 picks a group through a 31-entry jump table at 0x02113FA0; anything above 30 falls through with the group register still zero, and group 0 is never filed. So at most two entries exist across the whole array at any time, and most buckets are empty -- which is legal: the AI treats an empty list as EMPTY and falls through to the move ladder.",
+  "entryMeaning": "The stored value is used as a move-table index by the affordability scan at 0x02114500 (`mla r3, r0, #0x68, base`), and the same +0x12C field is used that way at 0x02111344. So an entry is an action id and its cost is the move record's +0x48. The bucket group index and the AI's state code are the same number.",
+  "seamClosed": "The session now carries a combatant from a spent cooldown through the action gate to a chosen action, rolling the original's channel-216 dice to choose it. A six-slot thirty-frame run produces 165 decisions across all six slots and replays identically from the same master seed.",
+  "secondSeamFound": "Wiring it exposed another: AI selection's targeted cascade needs `scanGroups` and `actionCostById`, which are the same lists in the shape the affordability scan reads. Both now come from one build, so the cascade runs too.",
+  "notImplemented": [
+   "What the two source fields at stats +0x12C and +0x130 mean, and what fills THEM.",
+   "What any bucket group number stands for. The jump table is transcribed, not interpreted.",
+   "What state 2 does with a decision once the AI has made one. That is the session's remaining seam, at 0x02115924.",
+   "The original writes a bucket entry with no bound check and would run past a group's two words into the next group's count. Two sources cannot reach it; this module raises rather than letting a caller reproduce the overrun."
+  ]
+ },
+ "completedActionCommit": {
+  "id": "BATTLE_ACTION_COMMIT_LOOP_CLOSED",
+  "date": "2026-09-01",
+  "evidence": "VERIFIED_BINARY",
+  "ownerDirection": "The Owner asked whether BATTLE can simply be finished. Scope stated back: a behaviourally faithful, playable battle is achievable; pixel-level presentation parity is not, because most of the original's rendering is OVL9's resource manager and the DS pipeline the web rebuild replaces. This is the first stretch of that.",
+  "finding": "0x02115924 is not state 2's tail -- it is state 1's. State 1 is the whole of gate, select and commit: it takes an action object from a pool at combatant +0x58 (0x02111F20), calls AI selection at 0x02115920, releases any previous claim when it differs, claims the new object at +0x5C, and rebuilds the cooldown.",
+  "cooldownCorrection": "Reading 0x0211594C by hand gave `90 - speed*8`, from taking the magic 0x2AAAAAAB with asr #2 as a divide by 6. It is a divide by 24, so the formula is 90 - speed*2 -- which is what battleDamageResolver.baseActionCooldown already had. Verified numerically across speed 0..199 with zero mismatches rather than left on a hand reading. This is exactly the MLA/magic-number trap the brief warns about, caught by checking instead of trusting.",
+  "cooldownFacts": "cooldown = 90 - 2*speed from stats +0x8C, then 80% of that when +0x160 is exactly 3. Speed 45 gives a cooldown of 0 and anything above it goes negative; since the gate is `<= 0` and the tick is `subgt`, a combatant that fast is permanently ready.",
+  "fieldUnification": "+0x160 is the positive-effect code, and three modules read it three ways that now line up: the frame loop gates its timer on it being non-zero, the cooldown rebuild takes 80% when it is 3, and AI group 6 declines an action whose effect the combatant already carries. 0x0211479C clears +0x160 and +0x164 together, so the frame loop's timer is the effect's own duration.",
+  "loopClosed": "With a pool supplied the session runs a self-sustaining loop with no seams at all: a combatant chooses, commits, takes a cooldown of 90-2*speed, the frame loop ticks it down, and at zero it chooses again. A six-slot run commits for every slot and replays identically from the same master seed.",
+  "notImplemented": [
+   "The action pool at combatant +0x58 and its allocator at 0x02111F20. A caller supplies one; without it the commit is a named seam.",
+   "Where the AI's choice is written into the claimed object (+0x174 / +0x178 per battleActionSelection) and what reads it afterwards.",
+   "The fifteen state bodies still untraced, the 51 unread natives, and whatever ends a battle."
+  ]
+ },
+ "completedTurnStates": {
+  "id": "BATTLE_TURN_STATES",
+  "date": "2026-09-01",
+  "evidence": "VERIFIED_BINARY",
+  "scope": "The states a committed action passes through before it lands. States 6 and 7 and three shared predicates read whole and implemented; the shared head of 14, 15 and 16 implemented; states 4 and 5 described and deliberately not.",
+  "turnShape": "1 gate/select/commit/cooldown -> 4 or 5 (approach) or 6 or 7 (wait) -> 14, 15 or 16 (launch) -> back to 1. The mechanically extracted graph and the hand-read bodies agree on every edge.",
+  "launchSlots": "Combatant +0x78, +0x7C and +0x80 hold in-flight objects. State 15 walks them at 0x02116CF8 for a zero and allocates into the first one it finds; the predicate at 0x02114464 walks the same three words and answers whether any is free. Two halves of one array read from opposite ends, and they agree: a combatant can have at most three actions in flight, and a fourth waits.",
+  "waitStates": "6 and 7 are the same routine but for one line: a free launch slot advances to 15 or 16 respectively, otherwise the combatant waits out its cooldown and re-enters the action gate to choose again. State 7 also notifies 1 on its entry frame at 0x0211648C; state 6 never does.",
+  "launchAborts": "14, 15 and 16 open identically on their entry frame and abort straight back to state 1 on either of two tests. The first differs: 14 and 15 abort when +0x17C is 8, 9, 10 or 11; 16 aborts when it is 12. All three abort on a negative +0x180. Nothing is tested after the entry frame.",
+  "predicates": [
+   "0x02114464 -- any of the three launch slots free.",
+   "0x02114490 -- +0x17C in 18..21 answers yes outright; otherwise the answer is bit 1 of +0x9A, the same suspend bit the state dispatcher reads.",
+   "0x021144B0 -- no committed action at +0x5C answers yes on its own; otherwise it defers to 0x02114490."
+  ],
+  "notImplemented": [
+   "States 4 and 5, the approach geometry. 0x02116250 tests an angle against 0x4000 and 0xC000 -- the quarter and three-quarter turns of a 16-bit angle -- and offsets a target by 0x10000 before calling a DS math routine at 0x02003098. World positions and that routine are untraced, so the geometry is described and not written.",
+   "The allocator at 0x0210F8C4 and the initialiser at 0x0211C098. The second places the object at the midpoint of a box in Q12 world units, which needs the same position model.",
+   "The bodies of 14 and 16 past their shared head.",
+   "What +0x17C, +0x180 and +0x1C mean. All three keep their offsets."
+  ],
+  "launchSequence": "State 15's body past the shared head, read whole: walk the three slots for a free one, allocate into it, a null allocation ends the handler with the slot left clear, a global flag at 0x02116D34 or a failed initialise at 0x0211C098 both take the identical three-line release -- clear bit 0 of the object, zero the slot, back to state 1 -- and a success aims it, raises a notify, and adds 120 to the signed halfword at +0x1C.",
+  "notifyMapping": "The launch notify is the move record's own +0x10 plus eight: 0 raises 8, 1 raises 9, 2 raises 10, 3 raises 11, and anything above 3 raises nothing because the `addls` does not take. B1 catalogued that field from this exact read site; this is the mapping it produces, and since every one of the 596 records holds 0..3, every launch in the game raises one of the four."
+ },
+ "completedLaunchPool": {
+  "id": "BATTLE_LAUNCH_POOL",
+  "date": "2026-09-01",
+  "evidence": "VERIFIED_BINARY",
+  "pool": "OVL19 0x0210F8C4 scans twelve objects at globalCtx + 0x47948 + i*4 and returns the first whose first word has bit 0 clear. It walks all twelve regardless -- `cmpeq r3,#0 / moveq r3,r2` keeps the lowest free one rather than exiting early. Bit 0 is the in-use flag, and state 15's two release paths clear it with `bic r1,r1,#1`, so allocation and release are two ends of one bit.",
+  "capacity": "Twelve objects for the whole battle against three launch slots per combatant, so four of the six can exhaust the pool between them.",
+  "whyALaunchIsRefused": "The initialiser at 0x0211C098 stores the action into the new object at +0xE8 and tail-calls 0x0211C144 -- which is the action-resource charge this repository already translated. That routine refuses first on a non-zero +0x154, before it looks at cost at all, and then applies the `blt` cost gate. Both refusals return zero, and state 15 cannot tell them apart: either way it clears bit 0, zeroes the slot and goes back to state 1.",
+  "threeWayJoin": "+0x154 is one field three independent traces landed on. The two script natives at 0x0211CEC4 and 0x0211CEFC compare-and-set it. The launch charge refuses on it. And the nine-group candidate array that starts at +0xE8 ends exactly there, since 0xE8 + 9*12 is 0x154. None of the three traces was looking for the others.",
+  "notImplemented": [
+   "What an in-flight object is, beyond bit 0 of its first word and the action at its +0xE8.",
+   "What +0x154 means, only that it admits one launch at a time.",
+   "The position maths in 0x0211C098, which places the object at the midpoint of a box in Q12 world units."
+  ]
+ },
+ "completedInFlight": {
+  "id": "BATTLE_IN_FLIGHT_CHAIN_CLOSED",
+  "date": "2026-09-01",
+  "evidence": "VERIFIED_BINARY",
+  "theChain": "The last link. Every frame OVL19 0x0210D694 walks all twelve pool objects and updates each one whose in-use bit is set, through 0x0211CC7C. That routine dispatches on the object's +0x04 kind, and kind 0's handler IS battleContactTargeting's walk at 0x0211C714 -- which calls the damage resolver at 0x0211C92C. So damage reaches the roster through the in-flight update, not through the state machine. No state handler ever calls the resolver, and it never needed to.",
+  "frameOrderCorrection": "An earlier reading of this lane said the frame function runs two loops. It runs ELEVEN, and the in-flight walk sits between the two that were named. Full list, in address order with bounds: 0x0210D3C0/6, 0x0210D490/12, 0x0210D4F8/6, 0x0210D590/6, 0x0210D624/2, 0x0210D644/6 (state dispatch), 0x0210D694/12 (in-flight update), 0x0210D6E4/6 (status and counters), 0x0210D9A8/6, 0x0210DC58/6, 0x0210DD18/2. Two of the eleven are pool walks.",
+  "updateGuards": "0x0211CC7C refuses twice before dispatching: an object with no owner at +0xE4 does nothing, and an owner whose +0x94 names a different object does nothing either. Only a null lock or one naming this very object lets the update run.",
+  "twoFieldsUnified": "+0xE4 is the owner, and battleActionApplication reads the attacker as the action object's +0xE4 -- so an in-flight object and the 'action object' a move script operates on are one thing. +0x94 on the owner is a lock naming one in-flight object, and battleActionApplication's fourth target rejection reads the same field from the other side.",
+  "notImplemented": [
+   "Kinds 1 and 2 at 0x0211CBA4 and 0x0211CC18, and the common tail at 0x0211CCE0.",
+   "The eight frame loops that are listed for their order and nothing more.",
+   "What +0x94 and the object's +0x04 kind mean beyond the dispatch they drive."
+  ]
+ },
+ "completedBattleOutcome": {
+  "id": "BATTLE_OUTCOME",
+  "status": "COMPLETE",
+  "evidence": "VERIFIED_BINARY",
+  "summary": "How a match ends, who is judged to have won, and what the tournament does with it. This was the last missing link in the battle execution core: every earlier module described what happens inside a frame, and nothing described how the frames stop.",
+  "sites": {
+   "endCheck": "OVL19:0x021107E0",
+   "clock": "OVL19:0x0210D93C",
+   "judge": "OVL19:0x0210DF9C",
+   "standingCount": "OVL19:0x021127B0",
+   "levelDemotion": "OVL19:0x02110B4C",
+   "roundRecord": "OVL19:0x0210E280",
+   "payoutGate": "OVL8:0x0210D0C8",
+   "rosterInit": "OVL19:0x0210CAB8",
+   "phaseRequest": "OVL19:0x0210DE38"
+  },
+  "facts": [
+   "Two ways a match ends: a team whose roster +0x14 reaches its +0x10 member count (end reason 2), or the frame counter at +0x5E98 passing 7200 (end reason 1). The compare is ble, so frame 7200 itself still plays.",
+   "7200 frames is 120 seconds at 60fps. The tier at +0x5E9C is min(7, frames/900). The divisor 900 was proven numerically over 0..99,999 against the magic 0x91A2B3C5 with asr #9 rather than read by hand, because that exact kind of read produced a wrong cooldown formula earlier in this lane.",
+   "The judge compares standing counts first (member +0x10 then +0x50, alive when > 0); the side with more standing wins outright. Only on a tie does it sum HP/maxHP per team.",
+   "That tie-break is IEEE-754 single precision, not Q12: 0x0202AE3C int-to-float, 0x0202A98C float divide, 0x0202A1F0 float add, 0x0202A8B0 and 0x0202A79C the two compares. Rounding at every divide and every add is modelled with Math.fround.",
+   "Verdict 4 = team 0 ahead, 3 = team 1 ahead, 5 = exactly level. 0x02110B5C demotes 5 to 3 before anything shows it.",
+   "The recorder at 0x0210E280 switches on the OVL19 static 0x0210B2DC: types 0 and 1, and every value that is not 2, win on verdict 4; type 2 wins on anything else. The demotion cannot change the flag either way, which the tests prove, so the order of the two routines does not need to be known.",
+   "The win flag is an ARRAY: session ctx +0xCAC indexed by the round cursor at +0xCA4, which advances after each round. The OVL8 payout gate requires EVERY round so far to be won, so one loss takes the whole payout. This corrects the earlier reading in battleRewardTransaction, which described +0xCAC as a single win flag.",
+   "On a win, when ctx +0xC98 is 3, a tally at +0xEAC climbs by one capped at 9999. Nothing in OVL19 clears it, so it accumulates rather than being a streak.",
+   "Slots 0..2 are team 0 and slots 3..5 are team 1: the roster init at 0x0210CAB8 indexes slot = withinTeam + base and advances base by 3 per team. Each combatant object is 0x18C bytes.",
+   "The two death tests genuinely disagree and were NOT reconciled: battleFrameLoop reports DEFEATED on hp < 0 so exactly zero survives, while the standing count here is hp <= 0. A combatant on exactly zero is alive to the frame and down to the judge."
+  ],
+  "files": [
+   "src/championship/battle/battleOutcome.js",
+   "tests/championship-battle-outcome-cases.mjs"
+  ],
+  "tests": "14 cases"
+ },
+ "completedInFlightSecondPass": {
+  "id": "BATTLE_INFLIGHT_SECOND_PASS",
+  "status": "COMPLETE",
+  "evidence": "VERIFIED_BINARY",
+  "summary": "The in-flight stretch finished: kinds 1 and 2, the shared handle tail, the five script VMs per object, and two frame-ordering facts an earlier reading of this lane missed.",
+  "corrections": [
+   "The frame runs TWO pool walks, not one. The first at 0x0210D490 runs only when a counter at +0x1F138 is a multiple of 8 (idiom proven numerically as x % 8) and updates only objects whose OWNER is engaged; the second at 0x0210D694 updates every in-use object. On those frames an engaged owner's object is updated twice.",
+   "The state-dispatch loop at 0x0210D644 calls 0x0210FA28 after EVERY slot and breaks out the moment anyone is engaged. The six slots do not all act on a frame where one of them commits. This was previously modelled as a plain six-slot walk.",
+   "Kinds 1 and 2 are now traced, so BATTLE_INFLIGHT_KINDS traced is [0,1,2] rather than [0]. They are not a second damage path: they step scripts."
+  ],
+  "facts": [
+   "An in-flight object carries FIVE script VMs: one at +0xEC and four in an array at +0x2A0 with stride 0x1B4. Kind 1 steps all five; kind 2 steps only the four and reports whether any stayed active. Active is bit 0 of a VM's +0x190.",
+   "When a VM goes inactive, 0x0211CD80 releases what it held: three parallel 24-entry arrays on the object, the handle at +0x24, its owning script at +0x84, a binding at +0x970, with the handle's byte +0x5B cleared and any binding naming it unbound. The shared tail at 0x0211CCE0 walks the same twenty-four.",
+   "0x0210FA28 is the is-any-of-the-six-engaged test, reading the same +0x94 lock the in-flight update and battleActionApplication read. Engaged and holding an in-flight object are one statement.",
+   "All eleven frame loops now carry their call targets. Seven remain untranslated and are recorded as addresses plus callees only: a call target is not a meaning."
+  ],
+  "files": [
+   "src/championship/battle/battleInFlight.js",
+   "tests/championship-battle-in-flight-cases.mjs"
+  ],
+  "tests": "13 cases"
+ },
+ "completedSessionClosure": {
+  "id": "BATTLE_SESSION_CLOSURE",
+  "status": "COMPLETE",
+  "evidence": "VERIFIED_BINARY composition",
+  "summary": "battleSession now runs a battle to a verdict instead of to a caller-supplied bound. The frame is dispatch with the engagement break, then status and counters, then the clock, then the end check, judge and demotion.",
+  "facts": [
+   "runBattleSession stops on the traced end conditions and reports reason and verdict; the old comment saying the states that end a battle were not traced is retired.",
+   "The end check is applied only when both teams have at least one member. The ROM wipe compare is downed >= count and its rosters always have three a side, so count == 0 is outside the domain of that compare; answering 0 >= 0 as a wipe would be answering a question the ROM never asks."
+  ],
+  "files": [
+   "src/championship/battle/battleSession.js",
+   "tests/championship-battle-session-cases.mjs"
+  ],
+  "tests": "15 cases"
+ },
+ "verificationLatest": {
+  "date": "2026-09-03",
+  "command": "node --test tests/*.mjs",
+  "total": 749,
+  "passed": 749,
+  "failed": 0
+ },
+ "completedBattleScreen": {
+  "id": "BATTLE_SCREEN_VS5",
+  "status": "BUILT_NOT_YET_ROUTED",
+  "evidence": "PRODUCT_AUTHORED layout over VERIFIED_BINARY fields",
+  "summary": "The BATTLE screen the Owner authorized on 2026-09-01, built after the Owner confirmed a 9:16 portrait frame on 2026-09-02.",
+  "facts": [
+   "The product stays 9:16. The original is a two-screen portrait stack, 256x384, ratio 0.667, and every ROM background witness comes in a _main / _sub pair including battle_result. The arena renders are 1536x1024, ratio 1.5, so 16:9 would have matched neither the art nor the original.",
+   "Five bands tile the frame: CLOCK 0.05, OPPONENT_HUD 0.10, FIELD 0.375, PLAYER_HUD 0.28, EVENT_LOG 0.195. The field band is exactly 3:2 at full width, which is why the arena art needs no crop and no regeneration.",
+   "Every HUD field names a traced read site. accuracy, damage numbers, turn order and a command menu are recorded in a notShown block as deliberately absent, and both the source and the scene are asserted to carry no such identifier.",
+   "VS5 is Auto Battle and the trace agrees: no traced site reads player input between the start of a match and its verdict. The scene has no pointer handling at all.",
+   "The eleven-arena layer table is in the contract. Ten arenas share field_bm00_00_common and BATTLE_CYBERSPACE has none, so the scene draws the common ring only when the frame says the arena has that layer.",
+   "No art path is declared while the arena art is unpromoted, so importing the contract into src cannot name a path outside assets/production."
+  ],
+  "files": [
+   "docs/contracts/championship/battle-field-presentation.v1.json",
+   "src/championship/app/battlePresentationSource.js",
+   "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js",
+   "src/championship/app/championshipScreenStack.js"
+  ],
+  "tests": "24 cases across two files",
+  "remaining": "The DOM view for the battle_menu match list and the mounting in main.js. It will want its own vs5Styles.css rather than an edit to styles.css, which both manifests claim."
+ },
+ "completedCreatureBuild": {
+  "id": "BATTLE_CREATURE_BUILD",
+  "status": "COMPLETE",
+  "evidence": "VERIFIED_BINARY",
+  "summary": "Where a combatant's stats come from. Until this, a battle could only run on made-up inputs.",
+  "sites": {
+   "builder": "ARM9:0x02062900",
+   "expand": "OVL10:0x021105A8",
+   "loader": "OVL19:0x02113D88",
+   "curve": "ARM9:0x020CA008",
+   "species": "ARM9:0x020C1374",
+   "speciesCount": "ARM9:0x02097A58"
+  },
+  "facts": [
+   "The preset-to-creature mapping was derived by emulating the decoded instruction stream, not read by eye. A scratchpad emulator printed every creature offset and what reached it.",
+   "A creature is a species id plus ten small level numbers. Every stat is curve[level]; nothing is computed. HP takes its level from the SPECIES record +0x30, the other nine from the PRESET +0x14..+0x38.",
+   "The curve is 27 rows of eight u16 at 0x020CA008. Column 0 is HP, 200 to 7000. Columns 1 through 6 are byte-identical, which is why the compiler could share one base register and why sharing a column changes no value. Column 7 runs 4 to 20 and the builder never reads it.",
+   "This is the same stride-16 table the very first handoff review verified as EXACT_MATCH without knowing its purpose.",
+   "The species table is 228 records of 0x84 and 228 is also the absent marker, so the marker is one past the last id rather than a magic number.",
+   "One preset carries -1 in a level field, which would read in front of the curve. It never happens: that record names the absent species and is skipped before any level is read. Recorded as a thing not to clamp.",
+   "combatant+0x10 IS the creature record, so the judge reading member+0x10+0x50 is reading the creature's HP. The move list is built by scanning all 596 move records for ones whose +0x00 matches the species, capped at eight."
+  ],
+  "files": [
+   "scripts/build-creature-catalogs.py",
+   "src/data/championship/catalogs/creature-stat-curve.r1.json",
+   "src/data/championship/catalogs/creature-species.r1.json",
+   "src/championship/battle/battleCreatureBuild.js",
+   "tests/championship-battle-creature-build-cases.mjs"
+  ],
+  "tests": "9 cases"
+ },
+ "completedBattlePlayable": {
+  "id": "BATTLE_PLAYABLE_VS5",
+  "status": "FIVE_BANDS_COMPLETE_NO_DAMAGE_YET",
+  "evidence": "VERIFIED_BINARY mechanics over mixed inputs",
+  "summary": "Home to the Battle menu to a live match, verified in a browser at 375x812.",
+  "facts": [
+   "The field element measures exactly 3:2, so the arena art fills it with no crop. The letterboxing the Owner reported is gone.",
+   "The menu lists a real title record with its ROM payout, capped at the original five.",
+   "The player's three creatures are PRODUCT_AUTHORED and labelled on screen; the opponents are VERIFIED_BINARY. A roster with one declared creature reports itself declared.",
+   "Four named screen intents rather than a generic push, so a match cannot be entered except from the menu and a judged round cannot be re-entered by popping back.",
+   "The Pixi scene draws the arena only. A first revision drew all five contract bands inside the field band, which put a second HUD inside the arena; caught in the browser and corrected."
+  ],
+  "openGap": "Nobody takes damage. battleSession runs dispatch, gate, AI, commit and cooldown, and stops. Damage needs the in-flight walk to contact to resolver, which exist as tested modules the session does not call. Over 300 frames a real match emits 1200 gates, 1200 choices, 12 commits, 8 releases and no seams: the twelve-object pool fills and is never freed.",
+  "files": [
+   "src/championship/app/battleRosterSource.js",
+   "src/championship/app/battleRuntime.js",
+   "src/championship/app/vs5Screens.js",
+   "src/championship/app/vs5Styles.css",
+   "docs/contracts/championship/battle-player-roster.v1.json"
+  ],
+  "tests": "19 cases across two files",
+  "correctionsFromCodex": [
+   "The screen shipped three of five contract bands. The clock and the event log are now built.",
+   "The CSS locked only the field. All five heights are now locked to the contract on a 9:16 shell, and a test compares them.",
+   "The contract note read as though the ROM proved the band layout. It proves a portrait orientation only, and now says so."
+  ],
+  "browserVerification": "375x812: shell 375x667 ratio 0.5625; bands 5 / 10 / 37.5 / 28 / 19.5 per cent; field ratio 1.500; eight clock pips; the log reads THE MATCH IS RUNNING."
+ },
+ "completedDamageWiring": {
+  "id": "BATTLE_DAMAGE_WIRING",
+  "status": "WIRED_BUT_ON_THE_MINOR_PATH",
+  "evidence": "VERIFIED_BINARY",
+  "summary": "The in-flight phase is composed into the frame and damage flows; a live match does not yet deal any, for a traced reason.",
+  "facts": [
+   "battleDamageCore's BATTLE_STAT_CURVE is column 1 of the 27-row creature curve catalogued today. Same table, proven by assertion rather than assumed.",
+   "attackerIndex is the attacker creature's +0x84, raised one step when its +0x160 or +0x158 is exactly 1.",
+   "defenderIndex is chosen by the action record's +0x58 from six creature levels: +0x88 (selector 0 and anything above 5), +0x94, +0x98, +0x9C, +0xA0, +0xA4, each raised by its own buff code 2, 5, 6, 8, 9, 7.",
+   "The in-flight phase sits between the dispatch loop and the tick loop, which is where BATTLE_FRAME_LOOPS already put 0x0210D694.",
+   "A session given a contact resolver drives six slots to real damage with no seam left; without one the phase is a named seam."
+  ],
+  "blocker": "selectBattleAiAction reads its three buckets from combatant +0xE4/+0xE5/+0xE6, written by the creature loader at OVL19 0x02113D88 as it classifies the moves it scanned for the species. The session passes buildCandidateBuckets' nine groups instead, which live at +0xE8 + group*12 and feed the targeted cascade. Next read: the classification at 0x02113E60..0x02113F08.",
+  "files": [
+   "src/championship/battle/battleDamageInputs.js",
+   "src/championship/battle/battleSession.js",
+   "src/championship/app/battleRuntime.js"
+  ],
+  "tests": "9 new cases plus 2 added to the session suite",
+  "correction": "The contact walk is not where an ordinary attack resolves. Kinds 0 and 1, which hold every real power from 30 to 600, reach the resolver from the script native 0x0211D71C; the walk handles only kinds 2 and 3, whose powers are 0 or 15. The runtime resolveContact therefore sits on the smaller of the two paths, which is why a live match still shows no HP loss."
+ },
+ "completedAiComposition": {
+  "id": "BATTLE_AI_COMPOSITION",
+  "status": "COMPLETE",
+  "evidence": "VERIFIED_BINARY",
+  "summary": "The AI ladder now has candidates and a reserve, and commits real damage-route moves.",
+  "facts": [
+   "The reserve scalar is the battle clock tier at ctx +0x5E9C, read at 0x021159F0 and indexing 0x0212FFF4 stride 16. Percents ramp 0,40,50,60,70,80,90,100 for profile 0.",
+   "The ladder buckets come from the creature move list classified at 0x02113E5C by the move record +0x50, with kind 1 split on +0x0C. Three per bucket.",
+   "Bucket 4 has no cost gate, so a free kind-0 move is available at tier 0 while the reserve is still zero.",
+   "The bucketed kinds 0 and 1 are exactly the kinds the resolver routes to the curve-and-power term; kinds 2 and 3, which the contact walk handles, are never bucketed."
+  ],
+  "files": [
+   "src/championship/battle/battleMoveBuckets.js",
+   "src/championship/battle/battleSession.js"
+  ],
+  "tests": "9 cases"
+ },
+ "openBattleScriptDecision": {
+  "id": "BATTLE_SCRIPT_BLOB",
+  "status": "RESOLVED_SEGMENT_WAS_ALREADY_CARRIED",
+  "summary": "Executing the original move scripts requires carrying the OVL19 script segment in the product.",
+  "measured": {
+   "segmentBytes": 63748,
+   "base64Bytes": 85855,
+   "instructionsTotal": 23121,
+   "instructionsReachable": 22032,
+   "bytesTouched": 63747,
+   "entryPoints": 36
+  },
+  "proven": "The VM runs the real bytecode and dispatches real natives; 15, 6 and 20 distinct natives from a single move record three pointers.",
+  "theTwoOptions": [
+   "Carry the segment. The VM then runs the original scripts and move behaviour is not reimplemented at all, which is the most faithful option available. Cost: about 86 KB of cartridge bytecode lives in the product tree, which the firewall payload test would not catch but its title covers.",
+   "Do not carry it. Move behaviour then has to be written by hand across 22,032 instructions of reachable script, which is exactly what rule 1 forbids guessing at."
+  ],
+  "recommendation": "Carry it. The project premise is faithfulness, the VM is already traced and tested, and the alternative is inventing behaviour at a scale rule 1 exists to prevent. But it changes what ships, so it is the Owner call.",
+  "nextIfCarried": "Model the action object the scripts read. They currently run on zeros, so their branches go the wrong way and none reaches 0x0211D71C.",
+  "resolution": "The Owner authorized carrying the segment on 2026-09-02. It was already in battle-scripts.r1.json from the B2 pass, byte identical; the duplicate written today was deleted. The firewall now names the one authorized segment."
+ },
+ "completedMoveScriptRun": {
+  "id": "BATTLE_MOVE_SCRIPT_RUN",
+  "status": "MOST_SCRIPTS_RUN_BLOCKED_ON_OBJECT_GRAPH",
+  "evidence": "VERIFIED_BINARY",
+  "summary": "A real move record executes the cartridge own script on the traced VM.",
+  "facts": [
+   "All three script columns of all 596 records land inside the segment: 1,700-plus columns checked.",
+   "The launch at 0x0211C198 rewrites two pointers in place before starting them, and the second test reads the first store, so one record can take both.",
+   "The +0x3C column runs on the VM array at +0x2A0 with the six-argument frame battleMoveScript traced; +0x1C and +0x28 run on +0xEC.",
+   "A kind-1 move of power 400 dispatches 20 distinct natives.",
+   "The yield at 0x0211E28C was the blocker, not the decode. With natives routed, a real attack script executes 280 instructions and ends cleanly.",
+   "Native coverage is 18 of 67 routines over 2,011 of 3,014 call sites.",
+   "Sweeping every distinct script address: 36 run, 9 clean, 27 stop on an unread native, 1 reaches 0x0211D71C."
+  ],
+  "blocker": "The remaining ten stop because the host object graph is empty, not because a native is unread. 0x0211D050 reads the action at +0xE8 and the getters chain through +0x2C; nothing populates either. Seeding a crude graph moved one more script clean.",
+  "files": [
+   "src/championship/battle/battleMoveScriptRun.js"
+  ],
+  "tests": "8 cases",
+  "measured": {
+   "distinctScripts": 36,
+   "cleanBefore": 9,
+   "cleanAfter": 26,
+   "nativesBefore": 16,
+   "nativesAfter": 30,
+   "callSitesBefore": 1578,
+   "callSitesAfter": 2282,
+   "callSiteTotal": 3014
+  }
+ },
+ "openBattleCellBox": {
+  "id": "BATTLE_SPRITE_CELL_BOX",
+  "status": "SUPERSEDED_BY_completedSpriteCellBox",
+  "note": "Kept so the earlier reading stays visible rather than being quietly replaced. It called this one routine and the single remaining structural dependency; it is three calls deep, and the routine itself is now translated. What remains is the resource behind [X+4]+0xC8."
+ },
+ "completedDamageChain": {
+  "id": "BATTLE_DAMAGE_CHAIN",
+  "status": "COMPLETE_END_TO_END",
+  "evidence": "VERIFIED_BINARY",
+  "summary": "A live match runs on cartridge data only, deals damage, knocks a side down and returns a verdict.",
+  "observed": "Two seeds: 181 and 271 frames, both TEAM_DOWN with TEAM_ZERO_AHEAD. Player 1080 down to 929 and 992, opponent 520 down to 0 and marked down. rosterEvidence VERIFIED_BINARY.",
+  "facts": [
+   "The attack runs on the +0x28 column, which reaches 0x0211D71C, holds 31 distinct scripts against two for +0x3C, and is the one the launch initialiser rewrites.",
+   "0x0211D71C is nine instructions that read the kind out of Q12 and tail into 0x0211D740, the body 0x0211D70C enters with the kind forced to 13.",
+   "The product creatures are out of the battle path at the Owner direction, so both sides field ROM teams and every number comes out of the cartridge."
+  ],
+  "bugsFoundByRunningIt": [
+   "The catalog key was battle-moves where the catalog says moves, and a try/catch swallowed the miss, so every committed action carried a null move.",
+   "speciesId never reached the combatant, so all six bucketed as species 0 and committed the same wrong action.",
+   "The side field at +0x54 was never set, so every target was refused as SAME_SIDE.",
+   "The death test sat inside the status tick. The ROM runs it unconditionally before the status check at 0x0210D790, clamps the HP to zero at 0x0210D798 and sets state 0x17 at 0x0210D7AC. A combatant with no status was never reported dead, so a wipe could only ever end on the clock.",
+   "The script VM was rebuilt every frame, so a script restarted from the top and fired once per frame instead of once. It now persists per action.",
+   "Combatants started in state 1 rather than the cooldown gate, so every one committed on every frame and a match was over in three.",
+   "battleOutcome read currentHp in one place and hp in another; callers happened to set both until a projection supplied one.",
+   "summariseSeams counted a finished battle as a seam, because BATTLE_ENDED also carries a reason field."
+  ],
+  "tests": "704 green"
+ },
+ "secondarySources": {
+  "policy": "Rule 2 of the brief: every number comes from the cartridge. A secondary source may suggest a NAME or make a traced structure legible; it may never supply a value, and where the two disagree the cartridge wins.",
+  "used": [
+   {
+    "source": "Bahamut forum write-up supplied by the Owner on 2026-09-02",
+    "corroborated": "Four seasons a year and eight days a season, against the already-dumped schedule moduli of 4 and 8.",
+    "suggestedNames": "TP for the action resource; six trainable stats against the six defender branches.",
+    "changedNothing": true,
+    "didNotAnswer": "Whether a fight is player-controlled, what the battle screen shows, any time limit."
+   }
+  ]
+ },
+ "completedDefeatedState": {
+  "id": "BATTLE_DEFEATED_STATE",
+  "date": "2026-09-02",
+  "status": "COMPLETE",
+  "evidence": "VERIFIED_BINARY",
+  "summary": "State 0x17 has a translated body, and the two call-outs the death path makes are applied rather than only announced. The seam a composed session reported for state 23 is closed.",
+  "tableRedumped": "The 27-entry dispatch table at 0x0213040C was read from the ROM again rather than taken from this file: index 0x17 is 0x021170D0, and the 28th entry is 0x001F0000, outside OVL19. Both agree with the earlier reading.",
+  "body": {
+   "site": "OVL19:0x021170D0",
+   "bytes": 52,
+   "shape": "Thirteen instructions. Entry frame (+0x16C == 0): arm +0x170 to 4 and return. Otherwise read +0x17C: any value but 1 re-arms 4 and returns; exactly 1 falls into state 1's routine at 0x021157BC with the same combatant.",
+   "threeNegatives": "It never calls 0x02114984, so nothing in this handler moves a combatant out of 0x17 -- being down is durable. It applies no HP test, and 0x021157BC opens straight onto the +0x158 jump table with no liveness gate of its own, so a defeated combatant on the code-1 arm really does run the action gate. And the falling-through arm does not rewrite the period, so the 4 armed on the entry frame stands."
+  },
+  "theGateField": {
+   "finding": "+0x17C is the notify code a combatant was last given. That is what state 0x17 tests.",
+   "site": "OVL19:0x02112820",
+   "traced": "0x02112928 reads the code the combatant is ALREADY carrying and indexes a 26-entry pointer-to-member table built on the stack from a template at 0x0211F7D0; a null entry skips the call. Then 0x02112964 stores the new code to +0x17C and 0x0211296C arms +0x180 at -255. There is exactly one exit, so both stores always happen.",
+   "notTraced": "The 26 exit routines. The table is assembled on the stack and this lane has not walked it, so the code whose routine would have run is named on the event and nothing is invented for it.",
+   "everyWriter": "A whole-overlay scan for immediate-offset accesses at +0x17C finds 30, of which seven are stores. Four of the seven are on a different structure (base r4+0x19000). The three on a combatant are 0x02112964 (this notify), 0x02114124 (the initialiser at 0x021140D0, which writes 0 to both +0x168 and +0x17C at battle start) and 0x02117278 (a block zeroing)."
+  },
+  "defectFoundByRunningIt": "0x02114984 is four instructions and writes BOTH +0x168 and +0x16C -- `mvn r1,#0xfe` is -255. The death path was setting only the state. A probe over twelve frames showed a defeated combatant with its counter still climbing out of state 3 (1, 2, 3 ...) and the period stuck at state 3's 1, so the dispatcher never gave state 0x17 an entry frame and it never armed its own period of 4. After the fix the same probe reads counter -255 on the death frame, then period 4 from the entry frame on.",
+  "secondGap": "runStatusWaitState returned a notify code from the day it was written and the session dropped it, so +0x17C never moved. It is applied now, which is what makes state 23's gate reachable at all.",
+  "measuredBeforeAndAfter": "seed 0x14: 181 frames, TEAM_DOWN, TEAM_ZERO_AHEAD, hp [1080,1080,-,520] -> [929,992,-,0]. seed 0x20: 271 frames, same verdict, hp -> [874,961,-,0]. Identical before and after, which is the expected result: the fix changes what a combatant does AFTER it is down.",
+  "whatARealMatchShows": "Every one of the currently reachable matches ends on the very frame of its first death, because each opponent team expands to a single member and the first death is therefore a wipe. Twelve player-team indices were run: firstDown equals the last frame in every match that ends on a wipe. So state 0x17 is entered on the final frame and never dispatched in a runtime match today. The seam it raised was reachable in composed sessions, and there it went from 11 in 12 frames to 0.",
+  "files": [
+   "src/championship/battle/battleStateGraph.js",
+   "src/championship/battle/battleStateMachine.js",
+   "src/championship/battle/battleFrameLoop.js",
+   "src/championship/battle/battleSession.js"
+  ],
+  "tests": "714 green, six cases added",
+  "notImplemented": [
+   "The 26 notify exit routines behind 0x02112820.",
+   "What any notify code means beyond the number. Codes seen so far: 1, 0x12, and the 8..12 and 18..21 ranges battleTurnStates already reads.",
+   "The other twenty-four handler bodies."
+  ]
+ },
+ "completedDeepScriptFrame": {
+  "id": "BATTLE_SCRIPT_DEEP_FRAME",
+  "date": "2026-09-02",
+  "status": "RESOLVED_PREMISE_WAS_WRONG",
+  "evidence": "VERIFIED_BINARY",
+  "supersedes": "The recorded item 'one script entry has not been found; the blob reads a local implying fifteen arguments and the widest traced frame is fourteen'.",
+  "summary": "There is no missing start site. A script-level CALL builds its own frame, so a fifteen-deep frame never had to come from an init.",
+  "theMechanism": "ARM9 0x02055500, the CALL handler, does what the init does: 0x02055538 pushes the return address (pc + 5), 0x02055554 pushes the caller's frame base, 0x0205555C sets the frame base to the new depth. A callee's locals -1 and -2 are those two words -- the slots init fills with zeros -- and -3 downward reach whatever the caller left on the stack. The addressing rule is identical; only the order differs, because init reverses the argument array and a CALL does not.",
+  "whereTheMinus17Is": "All three uses of local -17 in the blob are in one routine, 0x02128680. It is not in the move table and is reached only by two CALLs, at 0x021292EA and 0x02129319. Both callers are +0x28 entries, so both hold fourteen arguments of their own: record 565 (species 215) at 0x021292C9 pushes the literal 0x00001000, Q12 1.0, and record 441 (species 176) at 0x021292F8 pushes 0x00000000; each then pushes its own fourteen from local -16 down to -3. Pushing them high-to-low undoes init's reversal, so inside 0x02128680 locals -3..-16 mean exactly what they meant in the caller and -17 is the prepended literal.",
+  "theRomCountsItToo": "Both call sites are followed by POP.N 0x8F. The operand is an UNSIGNED byte -- ARM9 0x02054BF8 is `ldrb`, and bit 7 is a slide flag, not a sign -- so the low seven bits are 15. The frame depth is counted by the cartridge, not inferred here. An earlier signed reading of this operand would have printed -113.",
+  "checkedFromTheOtherSide": "Every ARM-mode BL to the init at 0x020548D4, across ARM9 and all 22 overlays, is one of 24 sites. The argument counts they pass are only 0, 1, 6, 8 and 14. Nothing in the image passes fifteen.",
+  "newFactAlongTheWay": "The +0x1C entry passes 8 arguments (`mov r2,#8` at 0x0211C51C), which this file previously listed as untraced. The +0x28 entry passes 14 (`mov r2,#0xE` at 0x0211CABC, array at sp+0, stores running sp+0x00..sp+0x34). Sixteen of the 24 init sites pass 0 with a null script address, which is the VM being cleared rather than started.",
+  "independentlyRedumped": "The local range was re-derived by walking the blob from the 36 move-record entry points plus the literal 0x0212F94E, following JMP/JZ/JNZ/CALL: 22,191 bytes reached, negative locals exactly the contiguous run -3..-17, positive locals 0..68, nothing reading -1 or -2. The signedness of the local operand was confirmed at the handlers themselves -- `ldrsb r3,[r2,#1]` at 0x02054AB8, 0x02054B70 and 0x02054C48.",
+  "files": [
+   "src/championship/battle/battleMoveScript.js"
+  ],
+  "tests": "715 green, one case added and one corrected",
+  "notImplemented": [
+   "What the prepended literal selects inside 0x02128680. One caller passes Q12 1.0 and the other 0.0, which is a switch of some kind; which, is bytecode.",
+   "What arguments 0 and 1 of the six-argument frame point at, and what the two base words added to arguments 4 and 5 are."
+  ]
+ },
+ "completedSpriteCellBox": {
+  "id": "BATTLE_SPRITE_CELL_BOX",
+  "date": "2026-09-03",
+  "status": "ROUTINE_TRANSLATED_RESOURCE_STILL_AN_INPUT",
+  "evidence": "VERIFIED_BINARY",
+  "supersedes": "openBattleCellBox, which recorded this as one routine and as the single remaining structural dependency, modelled as an input with nothing derived.",
+  "ownerDirection": "Trace the resource path and dump the original cell boxes (option B), taken 2026-09-02, scheduled after the state-0x17 body and the deep-frame question.",
+  "twoOfThoseThreeWordsWereWrong": "It is not one routine, it is three calls deep. And the arithmetic at the end of it needs nothing from the art: it is now translated whole, with the resource left as the only input.",
+  "theChain": "ARM9 0x02047E58: [obj+0xC8] -> 0x02049714 (ldr r0,[r0,#4], two instructions) -> 0x02048B98 (ldr r0,[r0], two instructions) -> 0x0202DD54 with the halfword at [[obj+0x70]] as the index.",
+  "bankLookup": "0x0202DD54 is a bounds-checked indexed read over a header of {u16 count, u16 attribute, u32 arrayBase}. The compare is UNSIGNED (cmp r1,r2 / movhs r0,#0), so an out-of-range index returns null and a negative one does not read backwards. Attribute bit 0 selects a stride of 16, otherwise 8. Derived check: the box is at +0x8..+0xE, so it only fits the 16-byte stride.",
+  "whichHalfwordIsWhich": "Taken from the ROM's own rounding rather than from a sprite-format write-up. In the scale pass one edge of each pair is computed with mla against -4095 and the other with mul then +4095, both then asr #12 -- rounding one edge down and the other up is what a bounding box does. So +0x0C is the low X edge and +0x08 the high, +0x0E the low Y and +0x0A the high; the object's copies are +0xD0/+0xCC and +0xD2/+0xCE.",
+  "theTransform": "r1 == 0, or no flip with both scales exactly 0x1000, returns the cell's own box at cell+8 (0x02047FF0). Otherwise +0x14 bit 0 flips X and bit 1 flips Y -- negate the pair and swap it, so the low edge stays low -- then the Q12 scales at +0x04 and +0x08 are applied, a negative scale swapping which edge feeds which. Every store is a strh, so every result truncates to a signed halfword. The identity check skips the rounding as well, so 0x1000 is not the same as multiplying by one.",
+  "verifiedNumerically": "The ARM was transcribed instruction by instruction into a scratch script and 4,000 randomised inputs were run through both it and the module: 0 mismatches. Thirty-seven of those vectors, one per combination of flip bits and scale signs, are embedded in the test so the check survives the scratch script.",
+  "howNarrowTheGapNowIs": "The launch initialiser passes r1 = 1 unconditionally (0x0211C0C0), so a launch never takes the r1 == 0 exit. Its fourth argument comes from fields this lane already holds: the committed action at +0x5C (0x02116B70, 0x02116D70), the target at +0x64 (0x02116F3C), and the return of 0x02112394 at 0x0211716C. The sprite object is that thing's +4. What is left outside is one field on an object the battle lane already carries, not the box.",
+  "whyTheDumpWasNotDone": "Walking [X+4]'s +0xC8 into a loaded resource is the OVL9 resource manager's and the art lane's. A table of original boxes dumped now would have nothing to align to, because the remake's own art is not generated. The routine that consumes such a table is in place, so the dump can happen the moment the art does.",
+  "files": [
+   "src/championship/battle/battleSpriteCellBox.js",
+   "src/championship/battle/battleLaunchPool.js"
+  ],
+  "tests": "737 green, eight cases added",
+  "notImplemented": [
+   "What [X+4] is as a structure, and what its +0xC8 and +0x70 hold on a given frame.",
+   "The three animation natives 0x0211D238, 0x0211D298 and 0x0211D33C, which take the same box. The box side of them is now available; their own bodies are still unread.",
+   "OVL19 0x02112394, the fourth caller's source."
+  ]
+ },
+ "romProvenanceNote": {
+  "date": "2026-09-03",
+  "event": "The ROM moved twice in one session. It began at C:\\Users\\USER\\Downloads\\8ad375ba....nds, disappeared mid-batch, was continued from a byte-identical copy in the Codex art lane's work directory, and the Owner then placed the authoritative copy at R:\\8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1.nds.",
+  "currentPath": "R:\\8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1.nds",
+  "verified": "67,108,864 bytes, SHA-256 8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1, DIGIMONCHAMP / YDIJ. Checked in full at the new path before any reading was taken from it.",
+  "forTheOwner": "Every reading in this file came from an image whose full SHA-256 was verified at the time it was read. No finding rests on an unverified copy."
+ },
+ "completedAnimationNatives": {
+  "id": "BATTLE_ANIMATION_NATIVES",
+  "date": "2026-09-03",
+  "status": "COMPLETE",
+  "evidence": "VERIFIED_BINARY",
+  "summary": "The three natives the cell box was blocking are translated: OVL19 0x0211D238, 0x0211D298 and 0x0211D33C, 110 call sites between them.",
+  "correctionToTheGrouping": "This file and the handoff called all three animation natives supplied by the cell box. Only two of the three touch it. 0x0211D238 calls 0x02047E58 with r1 = 1 and 0x0211D298 calls 0x02047D98, which does its own walk; 0x0211D33C calls 0x02047E00, which reads the animation table at [obj+0x8C] and never looks at a cell at all.",
+  "bodies": {
+   "0x0211D238": "The cell box's Y midpoint in Q12. Reads the returned pointer at +6 (low Y) and +2 (high Y), adds them, shifts left 12, THEN halves toward zero with `add r0,r0,r0,lsr #31 / asr r0,r0,#1`. The order matters: an odd sum keeps its half unit, which halving first would have discarded.",
+   "0x0211D298": "The cell box's Y extent in Q12, via 0x02047D98: the same walk, then `ldrsh [+0xA] - ldrsh [+0xE]`. No transform is applied, so this is the record's own height and not the object's scaled copy.",
+   "0x0211D33C": "The animation table's summed u16 at +4, in Q12, via 0x02047E00: count at [[obj+0x8C]], array base at +0xC read once, entries of eight bytes. An empty table returns 0 -- the compare is `cmp ip,#0 / bxls lr`, unsigned."
+  },
+  "theAccessorFamily": "0x02047D98 (Y extent), 0x02047DCC (X extent), 0x02047E00 (the table sum) and 0x02047E38 (one entry, indexed through 0x0202E364) sit immediately below 0x02047E58 and share its walk.",
+  "secondIndependentProofOfTheEdgeRoles": "0x02047DCC computes `[+0x8] - [+0xC]` and 0x02047D98 computes `[+0xA] - [+0xE]`. An extent is high minus low, so +0x08 and +0x0A are the high edges and +0x0C and +0x0E the low ones. That is the same answer the scale pass's rounding directions gave, reached from a different routine -- the earlier reading is confirmed rather than merely restated.",
+  "whatTheSummedFieldMeans": "UNKNOWN_REQUIRES_TRACE. It is summed over every entry and shifted into Q12, which is what a total duration would look like, but the field has not been read from the other side, so it keeps its offset for a name.",
+  "hostContract": "readU16 and readS16 joined the host, because the walk is `ldrh` for the count, the attribute and the cell index and `ldrsh` for the four box halfwords. They are declared PER NATIVE rather than added to the blanket contract: widening it for all thirty-four broke eight existing cases for natives that never read a halfword, which is the wrong shape for the boundary.",
+  "defectFoundByRunningIt": "The first cut raised on a refused cell index, on the ground that the original faults there. Running the move table showed the cost: the scaffold host has no object graph at all, so scripts that reached these natives now died and the clean-column count fell from 26 of 36 to 23. A host with no graph is not the ROM's fault case -- it is a caller who has not supplied the graph. The natives now name that boundary (NEEDS_OBJECT_GRAPH) and battleMoveScriptRun counts it beside the unread natives instead of dying on it. 26 of 36 restored.",
+  "verifiedNumerically": "The three were transcribed instruction by instruction into a scratch script and 3,000 randomised inputs were run through both it and the module: 0 mismatches. Fourteen of those vectors are embedded in the test.",
+  "coverage": "Implemented natives 31 -> 34 of 67; covered call sites 2,283 -> 2,393 of 3,014, which is 79.4% of every native call a battle script makes.",
+  "siblingsLeftAlone": "0x0211D274 is the X extent through 0x02047DCC (13 call sites) and 0x0211D360 is one animation entry through 0x02047E38 (4). Both accessors are read and both natives are four instructions, but the Owner asked for three and three is what was done.",
+  "files": [
+   "src/championship/battle/battleScriptNatives.js",
+   "src/championship/battle/battleSpriteCellBox.js",
+   "src/championship/battle/battleMoveScriptRun.js"
+  ],
+  "tests": "749 green, six cases added",
+  "notImplemented": [
+   "What the summed u16 at entry +4 measures.",
+   "ARM9 0x0202E364, which 0x02047E38 indexes the table through.",
+   "The 33 natives still unread. The busiest is 0x0211E0D4 at 157 call sites."
+  ]
+ }
 }

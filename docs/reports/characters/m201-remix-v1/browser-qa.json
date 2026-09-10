@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "viewport": "390x844",
+  "query": "characterArtReview=m201",
+  "raising": {
+    "screen": "RAISING_HOME",
+    "documentWidth": 390,
+    "documentHeight": 844,
+    "canvasCount": 1,
+    "canvasRect": {
+      "width": 390,
+      "height": 719,
+      "left": 0,
+      "top": 40
+    },
+    "fieldFallback": "none"
+  },
+  "hunt": {
+    "screen": "HUNT_FIELD",
+    "documentWidth": 390,
+    "documentHeight": 844,
+    "canvasCount": 1,
+    "canvasRect": {
+      "width": 390,
+      "height": 803,
+      "left": 0,
+      "top": 41
+    },
+    "fieldFallback": "none"
+  },
+  "loadedReviewAssets": [
+    "main-review-atlas-00.json",
+    "main-review-atlas-00.png",
+    "runtime.review.json",
+    "sub-review-atlas-00.json",
+    "sub-review-atlas-00.png"
+  ],
+  "pageProblems": [],
+  "state": "PASS_INTERNAL_REVIEW_ONLY"
+}

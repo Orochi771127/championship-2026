@@ -1,0 +1,130 @@
+{
+  "clock": "1501",
+  "effects": {
+    "active": 0,
+    "assetId": "art:vfx:original-battle-2d:v1",
+    "created": 54,
+    "missingCells": [],
+    "released": 54,
+    "seenCells": [
+      "1:135",
+      "19:0",
+      "19:2",
+      "19:3",
+      "19:1",
+      "81:0",
+      "1:86",
+      "81:1",
+      "1:87",
+      "81:2",
+      "81:3",
+      "1:88",
+      "1:89",
+      "1:90",
+      "1:91"
+    ],
+    "sprites": [],
+    "visible": 0
+  },
+  "overflow": false,
+  "reaction": [
+    {
+      "animation": {
+        "nativeRequest": true,
+        "sequenceId": 33,
+        "sequenceInitialFrame": 0,
+        "sequenceRequestId": 197,
+        "sequenceStartFrame": 1911,
+        "timingEvidence": "ROM_NOTIFICATION_UPDATE"
+      },
+      "down": false,
+      "hp": {
+        "current": 54,
+        "maximum": 1080,
+        "ratio": 0.05
+      },
+      "motion": {
+        "alpha": 1,
+        "heightNativePx": 0,
+        "rotationCosQ12": 4096,
+        "rotationSinQ12": 0,
+        "tintRgb": 16777215
+      },
+      "slot": 0
+    },
+    {
+      "animation": {
+        "nativeRequest": true,
+        "sequenceId": 8,
+        "sequenceInitialFrame": 0,
+        "sequenceRequestId": 194,
+        "sequenceStartFrame": 1882,
+        "timingEvidence": "ROM_NOTIFICATION_UPDATE"
+      },
+      "down": false,
+      "hp": {
+        "current": 61,
+        "maximum": 1080,
+        "ratio": 0.05648148148148148
+      },
+      "motion": {
+        "alpha": 1,
+        "heightNativePx": 0,
+        "rotationCosQ12": 4096,
+        "rotationSinQ12": 0,
+        "tintRgb": 16777215
+      },
+      "slot": 1
+    },
+    null,
+    {
+      "animation": {
+        "nativeRequest": true,
+        "sequenceId": 15,
+        "sequenceInitialFrame": 0,
+        "sequenceRequestId": 139,
+        "sequenceStartFrame": 1073,
+        "timingEvidence": "ROM_NOTIFICATION_UPDATE"
+      },
+      "down": true,
+      "hp": {
+        "current": 0,
+        "maximum": 1080,
+        "ratio": 0
+      },
+      "motion": {
+        "alpha": 1,
+        "heightNativePx": 0,
+        "rotationCosQ12": 4096,
+        "rotationSinQ12": 0,
+        "tintRgb": 16777215
+      },
+      "slot": 3
+    },
+    {
+      "animation": {
+        "nativeRequest": true,
+        "sequenceId": 5,
+        "sequenceInitialFrame": 0,
+        "sequenceRequestId": 196,
+        "sequenceStartFrame": 1899,
+        "timingEvidence": "ROM_NOTIFICATION_UPDATE"
+      },
+      "down": false,
+      "hp": {
+        "current": 275,
+        "maximum": 1080,
+        "ratio": 0.25462962962962965
+      },
+      "motion": {
+        "alpha": 1,
+        "heightNativePx": 0,
+        "rotationCosQ12": 4096,
+        "rotationSinQ12": 0,
+        "tintRgb": 16777215
+      },
+      "slot": 4
+    },
+    null
+  ]
+}

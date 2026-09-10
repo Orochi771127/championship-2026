@@ -37,7 +37,12 @@ import { createChampionshipPixiStage } from "../presentation/championshipPixiSta
 import { mountRaisingFieldPixiPresentation } from "../presentation/intRh2/createRaisingFieldPixiPresentation.js";
 import { mountHuntFieldPixiPresentation } from "../presentation/vs2/createHuntFieldPixiPresentation.js";
 import { mountBattleFieldPixiPresentation } from "../presentation/vs5/createBattleFieldPixiPresentation.js";
-import {loadRegisteredBattleEffectArt} from '../presentation/battleEffectArt.js';
+import {loadRegisteredBattleEffectArt,isLocalBattleEffectPreview} from '../presentation/battleEffectArt.js';
+import {loadRegisteredRaisingFeedbackArt} from '../presentation/raisingFeedbackArt.js';
+import {loadRegisteredCharacterHudArt} from '../presentation/characterHudArt.js';
+import {loadRegisteredHuntFeedbackArt} from '../presentation/huntFeedbackArt.js';
+import {mountBattleResultCharacters} from '../presentation/battleResultCharacters.js';
+import {nativeBattleWinPercent} from '../battle/nativeTitleProgression.js';
 import { mountBattleVfxThreeOverlay } from "../presentation/vs5/createBattleVfxThreeOverlay.js";
 import { mountBattleAudioPresentation } from '../presentation/battleAudioPresentation.js';
 // The battle menu box. Its four faces are ROM_VERIFIED from launcher13.nsbmd;
@@ -139,7 +144,8 @@ async function ensurePixiStage(canvasHost) {
   return pixiStage;
 }
 
-async function loadOptionalCharacterReview(stage, speciesIds = []) {
+async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main']) {
+  if(sides.includes('sub')&&!isLocalBattleEffectPreview(location.href))return null;
   try {
     if (!CHARACTER_REVIEW_RUNTIME_URL) {
       const indexResponse = await fetch(new URL("assets/production/ART_PRODUCTION_INDEX.json", location.href));
@@ -149,7 +155,7 @@ async function loadOptionalCharacterReview(stage, speciesIds = []) {
       const manifestUrl = new URL(LICENSED_CHARACTER_MANIFEST, location.href).href;
       const response = await fetch(manifestUrl);
       if (!response.ok) throw new Error(`CHARACTER_MANIFEST_HTTP_${response.status}`);
-      return await loadLicensedCharacterRoster({ PIXI: stage.PIXI, speciesIds,
+      return await loadLicensedCharacterRoster({ PIXI: stage.PIXI, speciesIds,sides,
         productionIndex, manifestUrl, manifest: await response.json() });
     }
     return await loadPixiCharacterRuntimeBundle({
@@ -283,22 +289,30 @@ function fieldFallback(host, error) {
 
 async function mountRaisingHome() {
   raisingSource = createRaisingPresentationSource(app);
+  let hudArt=null;
+  try{hudArt=await loadRegisteredCharacterHudArt({baseUrl:location.href});}
+  catch(error){console.warn('Character HUD art unavailable',error);}
   const p1r = await createRaisingHomeP1RView({
     root,
+    hudArt,
     source: raisingSource,
     async mountField({ host, source: fieldSource,onTrainingFrame }) {
       let characterBundle = null;
       let fieldArt = null;
+      let feedbackArt = null;
       try {
         const stage = await ensurePixiStage(host);
         characterBundle = await loadOptionalCharacterReview(stage, fieldSource.getFrame().residents.map((resident) => resident.speciesId));
         fieldArt = await loadOptionalCageFieldArt(stage);
+        try{feedbackArt=await loadRegisteredRaisingFeedbackArt({PIXI:stage.PIXI,baseUrl:location.href});}
+        catch(error){console.warn('Raising reaction art unavailable',error);}
         delete root.dataset.fieldFallback;
         return await mountRaisingFieldPixiPresentation({
           stage,
           source: fieldSource,
           fieldArt,
           characterBundle,
+          feedbackArt,
           getSelectedTool: () => toolbar?.getSelectedTool() ?? null,
           onTrainingFrame,
           onFallback(message) {
@@ -309,6 +323,7 @@ async function mountRaisingHome() {
       } catch (error) {
         void fieldArt?.dispose();
         void characterBundle?.dispose();
+        void feedbackArt?.dispose();
         return fieldFallback(host, error);
       }
     }
@@ -334,17 +349,21 @@ async function mountHuntField() {
     async mountField({ host, source: fieldSource }) {
       let characterBundle = null;
       let fieldArt = null;
+      let feedbackArt = null;
       try {
         const stage = await ensurePixiStage(host);
         characterBundle = await loadOptionalCharacterReview(stage,
           fieldSource.field.getView({ viewportWidth: stage.app.screen.width, viewportHeight: stage.app.screen.height })
             .wildCreatures.map((wild) => wild.speciesId));
         fieldArt = await loadOptionalHuntFieldArt(stage);
+        try{feedbackArt=await loadRegisteredHuntFeedbackArt({PIXI:stage.PIXI,baseUrl:location.href});}
+        catch(error){console.warn('Hunt tool reference art unavailable',error);}
         delete root.dataset.fieldFallback;
         return await mountHuntFieldPixiPresentation({
           stage,
           source: fieldSource,
           fieldArt,
+          feedbackArt,
           characterBundle,
           onFallback(message) {
             root.dataset.fieldFallback = "true";
@@ -352,6 +371,7 @@ async function mountHuntField() {
           }
         });
       } catch (error) {
+        void feedbackArt?.dispose();
         void fieldArt?.dispose();
         void characterBundle?.dispose();
         return fieldFallback(host, error);
@@ -365,11 +385,13 @@ async function mountHuntField() {
 // screens; the views below are handed only what they draw.
 let battleRuntime = null;
 let battleAttemptId = null;
+let battleProgressBefore = null;
 
 function mountBattleSelect() {
   battleRuntime?.dispose();
   battleRuntime = createBattleRuntime({ schedule: app.getBattleSchedule(), mode:1, battleType:0 });
   battleAttemptId = null;
+  battleProgressBefore = null;
   return createBattleSelectView({
     root,
     matches: battleRuntime.listMatches(),
@@ -397,6 +419,7 @@ function mountBattleSelect() {
           battleRuntime?.dispose();
           battleRuntime = prepared;
           battleAttemptId = result.attempt.attemptId;
+          battleProgressBefore={rank:app.getTamerRank(),badges:app.getBattleBadges(),shopIds:app.getShopFrame().listings.map(item=>item.shopRecordIndex)};
         } else prepared.dispose();
         return { ...result, wallet: app.getShopFrame().bits, entryFee: context.entryFee };
       } catch (error) {
@@ -417,9 +440,13 @@ async function mountBattleField() {
   const activeRuntime = battleRuntime;
   const activeAttemptId = battleAttemptId;
   const source = activeRuntime.startMatch();
+  let hudArt=null;
+  try{hudArt=await loadRegisteredCharacterHudArt({baseUrl:location.href});}
+  catch(error){console.warn('Battle HUD reference unavailable',error);}
   const view = createBattleFieldView({
     root,
     frame: { ...source.getFrame(), rosterEvidence: activeRuntime.rosterEvidence() },
+    hudArt,
     mountField({ host }) {
       let disposed = false;
       let scene = null;
@@ -458,7 +485,7 @@ async function mountBattleField() {
             await vfxOverlay?.dispose();await effectArt?.dispose();await fieldArt?.dispose();await characterRoster?.dispose();return;
           }
           battleAudio = await mountBattleAudioPresentation({source});
-          scene = await mountBattleFieldPixiPresentation({ stage, source, fieldArt, characterRoster, effectArt });
+          scene = await mountBattleFieldPixiPresentation({ stage, source, fieldArt, characterRoster, effectArt,onView:frame=>view.render(frame) });
           if (disposed) {
             await battleAudio?.dispose();
             await vfxOverlay?.dispose();
@@ -506,14 +533,21 @@ async function mountBattleField() {
   return view;
 }
 
-function mountBattleResult() {
+async function mountBattleResult() {
   // The result consumes the app's actual receipt, including loss and clamping.
   const chosen = battleRuntime.getChosenMatch?.() ?? null;
-  return createBattleResultView({
+  const record=app.getTitleProgress().record;
+  const hudArt=await loadRegisteredCharacterHudArt({baseUrl:location.href}).catch(()=>null);
+  const resultView=createBattleResultView({
     root,
     outcome: battleRuntime.outcome(),
     receipt: app.getBattleReceipt(),
     matchTitle: chosen ? titleEventText(chosen.recordIndex, "name", chosen.title) : null,
+    hudArt,
+    statistics:{battles:record?.battles??null,winPercent:nativeBattleWinPercent(record),titleCount:app.getBattleBadges().length},
+    unlocks:battleProgressBefore?app.getShopFrame().listings.filter(item=>!battleProgressBefore.shopIds.includes(item.shopRecordIndex)).map(item=>({name:uiText(item.displayName)})):[],
+    progression:battleProgressBefore?{rankBefore:battleProgressBefore.rank,rankAfter:app.getTamerRank(),
+      earnedTitles:app.getBattleBadges().filter(id=>!battleProgressBefore.badges.includes(id)).map(id=>({id,name:titleEventText(id,'name',`頭銜 ${id}`)}))}:null,
     onExit() {
       battleRuntime?.dispose();
       battleRuntime = null;
@@ -521,6 +555,12 @@ function mountBattleResult() {
       app.leaveScreen();
     }
   });
+  let resultCharacters=null;
+  try{
+    const participants=battleRuntime.getResultParticipants(),stage=await ensurePixiStage(resultView.getCharacterHost());
+    resultCharacters=await mountBattleResultCharacters({stage,hudArt,participants,won:battleRuntime.outcome().winningTeam===0});
+  }catch(error){console.warn('Battle result character reference unavailable',error);}
+  return {...resultView,dispose(){resultCharacters?.dispose();resultView.dispose();}};
 }
 
 async function mountGateSelect() {
@@ -596,7 +636,7 @@ async function mountCurrentScreen() {
     else if (target === CHAMPIONSHIP_SCREENS.HUNT_RESULT) view = createHuntResultView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.BATTLE_SELECT) view = mountBattleSelect();
     else if (target === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) view = await mountBattleField();
-    else if (target === CHAMPIONSHIP_SCREENS.BATTLE_RESULT) view = mountBattleResult();
+    else if (target === CHAMPIONSHIP_SCREENS.BATTLE_RESULT) view = await mountBattleResult();
     mountedScreen = target;
   } finally {
     release();

@@ -1,0 +1,64 @@
+{
+  "artReview": "PENDING_INDEPENDENT_VISUAL_REVIEW",
+  "decoderSha256": "d8690529211cf396e3b01c064a08f35d628ac30cf2f3ff92beffa8a4941b1d34",
+  "designVersion": "m004-creature-identity-r02",
+  "distinctSourceCanvasStates": 51,
+  "distinctSourcePosesSelected": 1,
+  "eggFullStateCoverage": null,
+  "entityId": "m004_bubbmon",
+  "fullMotionQa": "NOT_RUN",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "poseSamplingStatus": "INCOMPLETE",
+  "poses": [
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        1,
+        5,
+        17,
+        22
+      ],
+      "authoredRgbaSha256": "26abdd21b68fda3a8813fbd34cba2b57533d8d139b0dc1b1a3720efcb73df71e",
+      "authoredVisiblePixels": 150,
+      "key": "main/cell_000",
+      "nativeBounds": [
+        -8,
+        -19,
+        16,
+        5
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        1,
+        5,
+        17,
+        22
+      ],
+      "sourceRgbaSha256": "38e45c69524e799a88ed13ab5dd478bd9891925fb84257febf1d01d26bc65cdc",
+      "sourceVisiblePixels": 150,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    }
+  ],
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "4230ce6ca4f0b19393bdbdc46d419be9f55f73309286baa91e8690e2c16c2e20",
+  "settingPoseCount": 1,
+  "shippingReady": false,
+  "sourceFiles": {
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m004_bubbmon_main.nanr": "d39d0ef49cb66d055f5944e9923655299a17131ddb2b1dcf729f48c18a5d59f7",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m004_bubbmon_main.ncbr": "0ff081ff4beef013d9bc051cf6dcb08c1e85228c30675f06877cb6c9e57a4130",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m004_bubbmon_main.ncer": "7d206c3406a32d31f2af420c2224cb076f61525c968ca976399cd972340231be",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m004_bubbmon_main.nclr": "49141561b8e4df2b8771c5cedd3727db63d033a547ca64eb55ad9577e8ea4c8e",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m004_bubbmon_sub.nanr": "b92cb8a9fb90d40dfdfd950d6cee2dd81b4b75bc58f9c4417a31bf5a81aebe11",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m004_bubbmon_sub.ncer": "166aa386b1b6a44a59879665ff50a76d1422d1753dc9d9bcfe710c918fb8a9ba",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m004_bubbmon_sub.ncgr": "68d61521b20358b140910e85e01f82eed52cd11be46ba62524eaab1ddc98283a",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m004_bubbmon_sub.nclr": "fbd9f64fdcb1ce0957bc90b15019f61ab1f31cedaf5fb3c0ab61860322cf3f3d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m004_bubbmon_main/animations.json": "c19e5dd34b7dc34ea1a12f387363eb965c50a226aa8754a442216b4fad17160f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m004_bubbmon_main/cells.json": "edf10d815b9062386ca364463a8957f2d9dcccb995da553e4ae556d7b4ff0051",
+    "08_FULL_FAMILY_CONVERSION/digimon/m004_bubbmon_sub/animations.json": "e30134f30f5eadc2c047803bc7980a57c64219f8c1eeeadb0a52cb747b874836",
+    "08_FULL_FAMILY_CONVERSION/digimon/m004_bubbmon_sub/cells.json": "244434b674b2784d9477271ead833c040c445a4407ec4113d8e5de74ce4cbe0d"
+  },
+  "technicalStatus": "PASS",
+  "visiblePaletteCount": 8
+}

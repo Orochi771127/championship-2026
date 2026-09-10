@@ -1,0 +1,2162 @@
+[
+  {
+    "entityId": "m418_tonosamagekomon",
+    "sourceImageSha256": "5a132a820b41f9be3f172668ec14be89bb7a8b66e28814343e320abf5ee641ab",
+    "observedBody": "寬腹二足，頭側兩個大型黃色圓口構件",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "鼓頰獅王",
+    "fixedTraits": [
+      "圓獅鼻與分叉短吻",
+      "紅棕頰鬃沿臉側",
+      "象牙腹盾",
+      "圓口構件包覆木紋銅圈"
+    ],
+    "changedRegions": [
+      "頭臉辨識：圓獅鼻與分叉短吻",
+      "身體材質與局部圖樣：紅棕頰鬃沿臉側；象牙腹盾；圓口構件包覆木紋銅圈"
+    ],
+    "preservedMotion": [
+      "雙足接地與頭側圓口構件位置",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頰鬃只向現有頭面內收"
+    ],
+    "rationale": "以「鼓頰獅王」重設身份；依可見的寬腹二足，頭側兩個大型黃色圓口構件選擇BEASTFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "圓口遮擋不得被當成新增手臂",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m419_toriceramon",
+    "sourceImageSha256": "73a2cee3c80b1ec4aa8aec55a4cd17e7e0364a8dedf7aa74e11e7452f27b3667",
+    "observedBody": "側身二足，長吻角冠、短前肢與右側尾部",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "青銅角龍人",
+    "fixedTraits": [
+      "琥珀大眼及奶油眉甲",
+      "短吻玉色鼻盾",
+      "暖銅腹甲",
+      "深青脊冠三段亮緣"
+    ],
+    "changedRegions": [
+      "頭臉辨識：琥珀大眼及奶油眉甲",
+      "身體材質與局部圖樣：短吻玉色鼻盾；暖銅腹甲；深青脊冠三段亮緣"
+    ],
+    "preservedMotion": [
+      "鼻端角尖、兩腳與尾端相對位置",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "眉甲與頰鱗可改內輪廓"
+    ],
+    "rationale": "以「青銅角龍人」重設身份；依可見的側身二足，長吻角冠、短前肢與右側尾部選擇DRAGONFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "側面眼面積有限，不可畫出正面雙眼",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m420_knightmon",
+    "sourceImageSha256": "716828d35f1f968d431003e97e8bee005638da56203bc712d49d461221499aad",
+    "observedBody": "窄肩直立裝甲人形，右侧細長構件",
+    "chosenFamily": "CANINE",
+    "designName": "鐵灰牧犬騎士",
+    "fixedTraits": [
+      "垂耳形頭盔側片",
+      "白色犬吻護面",
+      "琥珀眼窗",
+      "靛藍菱形胸章"
+    ],
+    "changedRegions": [
+      "頭臉辨識：垂耳形頭盔側片",
+      "身體材質與局部圖樣：白色犬吻護面；琥珀眼窗；靛藍菱形胸章"
+    ],
+    "preservedMotion": [
+      "裝甲雙足與側向長構件位置",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "犬吻收在原頭盔範圍"
+    ],
+    "rationale": "以「鐵灰牧犬騎士」重設身份；依可見的窄肩直立裝甲人形，右侧細長構件選擇CANINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "頭盔細節過多會吞掉口鼻",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m422_parrotmon",
+    "sourceImageSha256": "2c73f5a87579073b19da28089358f1b11aad163c3166afbddcc80b1232418e3a",
+    "observedBody": "前傾鳥形，長喙及向右上伸出的黃色羽片",
+    "chosenFamily": "FELINE",
+    "designName": "羽冠山貓",
+    "fixedTraits": [
+      "貓眼式深色眼眶",
+      "耳簇形雙色冠羽",
+      "奶油頰羽",
+      "青綠點斑翼面"
+    ],
+    "changedRegions": [
+      "頭臉辨識：貓眼式深色眼眶",
+      "身體材質與局部圖樣：耳簇形雙色冠羽；奶油頰羽；青綠點斑翼面"
+    ],
+    "preservedMotion": [
+      "喙尖、鳥足與長羽片端點",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "冠羽內部改耳簇分區"
+    ],
+    "rationale": "以「羽冠山貓」重設身份；依可見的前傾鳥形，長喙及向右上伸出的黃色羽片選擇FELINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "貓化僅限面部語言，不能刪長喙",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m423_hangyomon",
+    "sourceImageSha256": "4b920b5ea1278680db891e12cb96dc7f63f38f1738975ae91c3ca562e12798f4",
+    "observedBody": "二足魚形，背鰭高起，左側直立長柄",
+    "chosenFamily": "CANINE",
+    "designName": "潮汐犬衛",
+    "fixedTraits": [
+      "犬鼻形珊瑚鼻盾",
+      "藍白口鼻面罩",
+      "黃眉點",
+      "背鰭改雙色波帶"
+    ],
+    "changedRegions": [
+      "頭臉辨識：犬鼻形珊瑚鼻盾",
+      "身體材質與局部圖樣：藍白口鼻面罩；黃眉點；背鰭改雙色波帶"
+    ],
+    "preservedMotion": [
+      "長柄、背鰭尖及足部位置",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "鼻盾不超出原口部"
+    ],
+    "rationale": "以「潮汐犬衛」重設身份；依可見的二足魚形，背鰭高起，左側直立長柄選擇CANINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "直立物件不可改為尾巴",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m424_pandamon",
+    "sourceImageSha256": "b510e60d53646873e60913f64a7cb0effec250f5a882562949376d01168c29f2",
+    "observedBody": "圓頭短手二足，右側分叉紅巾",
+    "chosenFamily": "FELINE",
+    "designName": "赤巾奶油貓",
+    "fixedTraits": [
+      "尖耳內粉色三角",
+      "奶油貓口鼻與小三角鼻",
+      "琥珀毛身與象牙胸腹",
+      "紅巾固定兩叉"
+    ],
+    "changedRegions": [
+      "頭臉辨識：尖耳內粉色三角",
+      "身體材質與局部圖樣：奶油貓口鼻與小三角鼻；琥珀毛身與象牙胸腹；紅巾固定兩叉"
+    ],
+    "preservedMotion": [
+      "雙腳底線、手端及紅巾两端",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "原圓耳範圍內改三角耳"
+    ],
+    "rationale": "以「赤巾奶油貓」重設身份；依可見的圓頭短手二足，右側分叉紅巾選擇FELINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "三角耳不可讓頭部重心上移",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m426_bigmamemon",
+    "sourceImageSha256": "ff11198dce273bd4733bc9c54706e9ce400cafb84858b653082cfa6fc6b4d76a",
+    "observedBody": "圓灰主體兩側紅色圓件，前下方兩顆黑圓件",
+    "chosenFamily": "BIG_EYE",
+    "designName": "圓盾大眼機偶",
+    "fixedTraits": [
+      "超大雙青鏡眼",
+      "米白額板",
+      "紅圓件改銅色耳杯",
+      "下圓件保留深色同心面"
+    ],
+    "changedRegions": [
+      "頭臉辨識：超大雙青鏡眼",
+      "身體材質與局部圖樣：米白額板；紅圓件改銅色耳杯；下圓件保留深色同心面"
+    ],
+    "preservedMotion": [
+      "四個圓構件中心與主體定位",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "眼窗只改表面"
+    ],
+    "rationale": "以「圓盾大眼機偶」重設身份；依可見的圓灰主體兩側紅色圓件，前下方兩顆黑圓件選擇BIG_EYE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "無法只由站姿確認下圓件是腳或輪",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m427_picklemon",
+    "sourceImageSha256": "53012f93db29acedb8b73907f0fccf43794b1d51b98e4e8ef15343e49e09028b",
+    "observedBody": "小型圓帽人形，兩側斜伸細長構件",
+    "chosenFamily": "BIG_EYE",
+    "designName": "莓帽星眼精靈",
+    "fixedTraits": [
+      "莓紅圓帽白色眉緣",
+      "兩顆深紫大眼",
+      "杏色短口",
+      "細長構件改藍白條紋"
+    ],
+    "changedRegions": [
+      "頭臉辨識：莓紅圓帽白色眉緣",
+      "身體材質與局部圖樣：兩顆深紫大眼；杏色短口；細長構件改藍白條紋"
+    ],
+    "preservedMotion": [
+      "兩側細長端點與小腿",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "臉部在帽下擴可見區"
+    ],
+    "rationale": "以「莓帽星眼精靈」重設身份；依可見的小型圓帽人形，兩側斜伸細長構件選擇BIG_EYE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "臉只有數像素，不加鼻孔細節",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m428_fantomon",
+    "sourceImageSha256": "90aa329aaef6e620d468145c93295a7f3ae1fc789bfddd9688b326ba55f86386",
+    "observedBody": "遮罩式暗色主體，後上方大型彎曲淺色構件",
+    "chosenFamily": "FELINE",
+    "designName": "暮影貓面客",
+    "fixedTraits": [
+      "象牙貓面罩",
+      "翡翠狹長眼窗",
+      "酒紅頰帷",
+      "暗灰身體兩道月牙扣"
+    ],
+    "changedRegions": [
+      "頭臉辨識：象牙貓面罩",
+      "身體材質與局部圖樣：翡翠狹長眼窗；酒紅頰帷；暗灰身體兩道月牙扣"
+    ],
+    "preservedMotion": [
+      "整體漂浮位置與彎曲構件端點",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "貓耳只做面罩角面"
+    ],
+    "rationale": "以「暮影貓面客」重設身份；依可見的遮罩式暗色主體，後上方大型彎曲淺色構件選擇FELINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "不能把披覆下黑區猜作腿",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m430_vademon",
+    "sourceImageSha256": "3be6e58d18a117f8cdda5fc8c8cd79f1ef44b26326c39126514680760ea369be",
+    "observedBody": "細長二足，頭頂很大紫色圓冠，左側短伸構件",
+    "chosenFamily": "BIG_EYE",
+    "designName": "星瞳腦冠客",
+    "fixedTraits": [
+      "紫冠改大塊珠光分瓣",
+      "深褐大眼杏色眼白",
+      "短紅唇點",
+      "奶油手足套"
+    ],
+    "changedRegions": [
+      "頭臉辨識：紫冠改大塊珠光分瓣",
+      "身體材質與局部圖樣：深褐大眼杏色眼白；短紅唇點；奶油手足套"
+    ],
+    "preservedMotion": [
+      "圓冠中心、細腿與左端點",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "眼眶在現有頭面內擴大"
+    ],
+    "rationale": "以「星瞳腦冠客」重設身份；依可見的細長二足，頭頂很大紫色圓冠，左側短伸構件選擇BIG_EYE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "頭冠不是可任意縮小的髮型",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m431_whamon",
+    "sourceImageSha256": "43c6893dead46abfb3b65c9ca25fc9db85b4d9769488a3e1f30c7278b823dcd4",
+    "observedBody": "橫向巨型水生身體，大頭口部、藍色鰭尾",
+    "chosenFamily": "CANINE",
+    "designName": "灰吻海犬",
+    "fixedTraits": [
+      "短犬吻式鼻面分區",
+      "奶油眉斑",
+      "海灰背與白腹",
+      "大鰭藍黑耳形條紋"
+    ],
+    "changedRegions": [
+      "頭臉辨識：短犬吻式鼻面分區",
+      "身體材質與局部圖樣：奶油眉斑；海灰背與白腹；大鰭藍黑耳形條紋"
+    ],
+    "preservedMotion": [
+      "嘴縫、所有鰭尾端與漂浮原點",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "吻部色塊改造保持原嘴界"
+    ],
+    "rationale": "以「灰吻海犬」重設身份；依可見的橫向巨型水生身體，大頭口部、藍色鰭尾選擇CANINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "不能新增會獨立擺動的犬耳或腿",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m432_holyangemon",
+    "sourceImageSha256": "189743dbc2b4e1348ffd5d6034f1d0aea1c60c61ee179a7e4ad567a3c7b47a60",
+    "observedBody": "裝甲二足，兩側多片白色伸出構件",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "銀羽白狼使",
+    "fixedTraits": [
+      "白狼短吻面罩",
+      "金色雙眉窗",
+      "紫灰胸毛形甲面",
+      "翼片銀色根部深緣"
+    ],
+    "changedRegions": [
+      "頭臉辨識：白狼短吻面罩",
+      "身體材質與局部圖樣：金色雙眉窗；紫灰胸毛形甲面；翼片銀色根部深緣"
+    ],
+    "preservedMotion": [
+      "足部與多片側構件根端位置",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "狼耳以頭盔角面表達"
+    ],
+    "rationale": "以「銀羽白狼使」重設身份；依可見的裝甲二足，兩側多片白色伸出構件選擇BEASTFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "多片翼狀構件不能合成一對大翼",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m433_machgaogamon",
+    "sourceImageSha256": "d96a422557c2a1d6607c3f12d6551ae61efcb3dbcab8bb4a0a99de8f9e8cc682",
+    "observedBody": "前傾二足機械體，右後方直立圓柱",
+    "chosenFamily": "CANINE",
+    "designName": "潮鋼犬兵",
+    "fixedTraits": [
+      "藍灰犬額甲",
+      "紅鼻口護罩",
+      "白色下頰",
+      "後圓柱改淡銅分節"
+    ],
+    "changedRegions": [
+      "頭臉辨識：藍灰犬額甲",
+      "身體材質與局部圖樣：紅鼻口護罩；白色下頰；後圓柱改淡銅分節"
+    ],
+    "preservedMotion": [
+      "圓柱位置、爪尖及前傾軸",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "額甲短耳切面"
+    ],
+    "rationale": "以「潮鋼犬兵」重設身份；依可見的前傾二足機械體，右後方直立圓柱選擇CANINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "圓柱用途未知，只保留形狀",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m435_mamemon",
+    "sourceImageSha256": "aa940fedae9e1d3a12274129cf050e942b6d5ebedb45814449186db0b19236ea",
+    "observedBody": "極小灰圓體與下部紅色短塊",
+    "chosenFamily": "BIG_EYE",
+    "designName": "煤球亮眼仔",
+    "fixedTraits": [
+      "單對白青大眼",
+      "深灰圓頂一格額光",
+      "紅色手足團塊",
+      "奶油小口線"
+    ],
+    "changedRegions": [
+      "頭臉辨識：單對白青大眼",
+      "身體材質與局部圖樣：深灰圓頂一格額光；紅色手足團塊；奶油小口線"
+    ],
+    "preservedMotion": [
+      "小圖格重心及紅塊端點",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "眼框可擴一像素但不放大整體"
+    ],
+    "rationale": "以「煤球亮眼仔」重設身份；依可見的極小灰圓體與下部紅色短塊選擇BIG_EYE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "16像素網格無法容納耳飾",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m437_mammon",
+    "sourceImageSha256": "37b4c8aed440867eed77d2af94d76b0af7d54eb6b3d20ab41f076dd2aaa16c3a",
+    "observedBody": "四足大型長鼻長牙體，背後多束尖毛",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "長牙絨獸",
+    "fixedTraits": [
+      "圓暖棕眼眶",
+      "象牙短眉毛",
+      "栗色大塊肩毛",
+      "灰藍鼻端皮套"
+    ],
+    "changedRegions": [
+      "頭臉辨識：圓暖棕眼眶",
+      "身體材質與局部圖樣：象牙短眉毛；栗色大塊肩毛；灰藍鼻端皮套"
+    ],
+    "preservedMotion": [
+      "長鼻彎曲與牙尖、四足及背毛伸出端",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頰毛輪廓局部鈍化"
+    ],
+    "rationale": "以「長牙絨獸」重設身份；依可見的四足大型長鼻長牙體，背後多束尖毛選擇BEASTFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "長牙不可為可愛化而截短",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m438_megaseadramon",
+    "sourceImageSha256": "a3917ba3fad316293aa2ba76a11e240605cbbcb89834513e1af034f1a4015f17",
+    "observedBody": "捲曲蛇形長吻，頭頂綠色冠片",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "赤鬃潮龍",
+    "fixedTraits": [
+      "琥珀大眼白眉",
+      "赭紅口鼻",
+      "墨綠頰鱗",
+      "奶油腹帶沿彎曲身體"
+    ],
+    "changedRegions": [
+      "頭臉辨識：琥珀大眼白眉",
+      "身體材質與局部圖樣：赭紅口鼻；墨綠頰鱗；奶油腹帶沿彎曲身體"
+    ],
+    "preservedMotion": [
+      "蛇身彎曲與上下長端點",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "冠片改成短角分區"
+    ],
+    "rationale": "以「赤鬃潮龍」重設身份；依可見的捲曲蛇形長吻，頭頂綠色冠片選擇DRAGONFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "沒有可見腳，不改成二足龍人",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m439_megadramon",
+    "sourceImageSha256": "ecc4e2521b3cf05762d3316d78243ede3bd48ca71ba63f4df974a006cf5b16a2",
+    "observedBody": "前傾長吻二足，紫色背刺、灰色前端構件",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "鉛紫翼龍客",
+    "fixedTraits": [
+      "金色眼縫奶油眉甲",
+      "紫灰鱗面",
+      "紅銅胸腹",
+      "背刺淡灰尖端"
+    ],
+    "changedRegions": [
+      "頭臉辨識：金色眼縫奶油眉甲",
+      "身體材質與局部圖樣：紫灰鱗面；紅銅胸腹；背刺淡灰尖端"
+    ],
+    "preservedMotion": [
+      "前端構件、雙足及背刺外緣",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頰甲與脊刺材質可變"
+    ],
+    "rationale": "以「鉛紫翼龍客」重設身份；依可見的前傾長吻二足，紫色背刺、灰色前端構件選擇DRAGONFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "前端大塊不可認定為可替換鼻子",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m440_metalgreymon_vi",
+    "sourceImageSha256": "be2b5488cd087d5f8381073e5999611548137e6defe4a0d36d4b10d7c6b186de",
+    "observedBody": "灰紫二足龍形，額角與藍色後片",
+    "chosenFamily": "FELINE",
+    "designName": "霜甲角貓",
+    "fixedTraits": [
+      "短貓鼻護面",
+      "紫白頰甲",
+      "琥珀眼窗",
+      "腹甲改雲灰毛塊紋"
+    ],
+    "changedRegions": [
+      "頭臉辨識：短貓鼻護面",
+      "身體材質與局部圖樣：紫白頰甲；琥珀眼窗；腹甲改雲灰毛塊紋"
+    ],
+    "preservedMotion": [
+      "額角尖、尾端、雙腳及背片",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "耳形刻面在頭甲內"
+    ],
+    "rationale": "以「霜甲角貓」重設身份；依可見的灰紫二足龍形，額角與藍色後片選擇FELINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "長吻不可直接砍成圓貓頭",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m441_metalgreymon_va",
+    "sourceImageSha256": "7646315ac53a520d22f280e1a815bba425c4a0e167ca078ef1548a5a58fb4df2",
+    "observedBody": "橙色二足龍形，角面與藍色背片",
+    "chosenFamily": "CANINE",
+    "designName": "琥甲獵犬",
+    "fixedTraits": [
+      "深犬鼻面罩",
+      "象牙短眉",
+      "銅橙胸毛形腹甲",
+      "黑色腕甲扣"
+    ],
+    "changedRegions": [
+      "頭臉辨識：深犬鼻面罩",
+      "身體材質與局部圖樣：象牙短眉；銅橙胸毛形腹甲；黑色腕甲扣"
+    ],
+    "preservedMotion": [
+      "角端、背片、尾部與雙腳",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "眼眶及頰甲重劃"
+    ],
+    "rationale": "以「琥甲獵犬」重設身份；依可見的橙色二足龍形，角面與藍色背片選擇CANINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "與另一色號不推定共同動畫母版",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m442_metaltyranomon",
+    "sourceImageSha256": "b8e3ddd96ec2a57029c6c79763ab67d31ebb1e7df0187074953436ac49cb9596",
+    "observedBody": "灰黑機械二足，長吻和彎尾紅節",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "鋼牙灰龍人",
+    "fixedTraits": [
+      "青白眼窗",
+      "灰銀短吻鼻梁",
+      "深紅腹鱗帶",
+      "淡灰爪根護片"
+    ],
+    "changedRegions": [
+      "頭臉辨識：青白眼窗",
+      "身體材質與局部圖樣：灰銀短吻鼻梁；深紅腹鱗帶；淡灰爪根護片"
+    ],
+    "preservedMotion": [
+      "嘴端、雙足及分節尾形",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頭甲局部角面"
+    ],
+    "rationale": "以「鋼牙灰龍人」重設身份；依可見的灰黑機械二足，長吻和彎尾紅節選擇DRAGONFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "機械線條不能跨關節形成新活動件",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m444_monzaemon",
+    "sourceImageSha256": "214fe683aa46921c6374da7d4d44b4d27c4912cc4c2a57da2de96b7251d62c47",
+    "observedBody": "圓耳厚身二足，奶油腹塊與短粗手",
+    "chosenFamily": "CANINE",
+    "designName": "蜜糖短耳犬",
+    "fixedTraits": [
+      "巧克力耳帽",
+      "杏白雙頰犬吻",
+      "黑鼻配大棕眼",
+      "奶油胸腹心形上緣"
+    ],
+    "changedRegions": [
+      "頭臉辨識：巧克力耳帽",
+      "身體材質與局部圖樣：杏白雙頰犬吻；黑鼻配大棕眼；奶油胸腹心形上緣"
+    ],
+    "preservedMotion": [
+      "雙腳、短手端及圓頭位置",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "圓耳改貼頭短耳面"
+    ],
+    "rationale": "以「蜜糖短耳犬」重設身份；依可見的圓耳厚身二足，奶油腹塊與短粗手選擇CANINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "不畫垂到肩外的新長耳",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m445_yatagaramon",
+    "sourceImageSha256": "a75ca2310d546c06ad9ad0df4cc38acada1de9f5aff7b3cd67dae39089bcf97e",
+    "observedBody": "雙翼向上展開的鳥體，細足與長頭冠",
+    "chosenFamily": "FELINE",
+    "designName": "夜羽貓鴞",
+    "fixedTraits": [
+      "貓式杏眼深面盤",
+      "紫色耳簇冠",
+      "金色喙根",
+      "夜藍翼片三道淡羽帶"
+    ],
+    "changedRegions": [
+      "頭臉辨識：貓式杏眼深面盤",
+      "身體材質與局部圖樣：紫色耳簇冠；金色喙根；夜藍翼片三道淡羽帶"
+    ],
+    "preservedMotion": [
+      "展翼端點、喙尖與鳥足",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "冠內耳簇形狀"
+    ],
+    "rationale": "以「夜羽貓鴞」重設身份；依可見的雙翼向上展開的鳥體，細足與長頭冠選擇FELINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "不可把展翼轉成手臂",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m446_rizegreymon",
+    "sourceImageSha256": "c0ba59499b758ae65c70804a573b088ecd5f499df9121975993e296b238ba07e",
+    "observedBody": "寬爪二足，頭後紅尖片與一側灰色大件",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "赤冠銅龍人",
+    "fixedTraits": [
+      "墨藍大眼白眉",
+      "銅紅頰鱗",
+      "象牙下頜",
+      "灰色大件改金銅嵌邊"
+    ],
+    "changedRegions": [
+      "頭臉辨識：墨藍大眼白眉",
+      "身體材質與局部圖樣：銅紅頰鱗；象牙下頜；灰色大件改金銅嵌邊"
+    ],
+    "preservedMotion": [
+      "灰色大件位置、爪足及頭後片端",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頰鱗內部重設"
+    ],
+    "rationale": "以「赤冠銅龍人」重設身份；依可見的寬爪二足，頭後紅尖片與一側灰色大件選擇DRAGONFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "大件用途不由名字猜測",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m447_rapidmon",
+    "sourceImageSha256": "984c38893ea6adaa4ba5f25a43f59f3352b9375411f5ab8b8b6a1cfc40dc15b8",
+    "observedBody": "綠色二足甲體，頭頂橫向長耳狀構件",
+    "chosenFamily": "CANINE",
+    "designName": "綠甲長耳犬衛",
+    "fixedTraits": [
+      "犬鼻形白色面罩",
+      "琥珀眉窗",
+      "深綠肩甲奶油胸面",
+      "耳片褐色內帶"
+    ],
+    "changedRegions": [
+      "頭臉辨識：犬鼻形白色面罩",
+      "身體材質與局部圖樣：琥珀眉窗；深綠肩甲奶油胸面；耳片褐色內帶"
+    ],
+    "preservedMotion": [
+      "頭頂長片端、雙足及兩側灰件",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "耳片內輪廓細化"
+    ],
+    "rationale": "以「綠甲長耳犬衛」重設身份；依可見的綠色二足甲體，頭頂橫向長耳狀構件選擇CANINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "長耳狀件若有機械運動必須逐姿態跟隨",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m448_lilimon",
+    "sourceImageSha256": "4da252949ceecf1501774b4d7edc360c8c1fafc570dd7f82fc6296bf5455bfb7",
+    "observedBody": "細腿植物人形，綠色兩側大葉與粉色頭身",
+    "chosenFamily": "BIG_EYE",
+    "designName": "桃花圓眼舞者",
+    "fixedTraits": [
+      "深棕大眼杏色眼圈",
+      "桃紅三瓣頭冠",
+      "嫩黃嘴點",
+      "綠葉浅色中脈"
+    ],
+    "changedRegions": [
+      "頭臉辨識：深棕大眼杏色眼圈",
+      "身體材質與局部圖樣：桃紅三瓣頭冠；嫩黃嘴點；綠葉浅色中脈"
+    ],
+    "preservedMotion": [
+      "葉片長端、腰線及足尖",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "花冠瓣面鈍化"
+    ],
+    "rationale": "以「桃花圓眼舞者」重設身份；依可見的細腿植物人形，綠色兩側大葉與粉色頭身選擇BIG_EYE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "花冠與頭臉不能同時擠滿小圖格",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m449_ladydevimon",
+    "sourceImageSha256": "9283b9300460e272cef661f2e1689502135405dc33eb89bb23a19881a1c855bc",
+    "observedBody": "窄腰二足，暗色頭角與右側大伸出件",
+    "chosenFamily": "FELINE",
+    "designName": "夜幕貓面女衛",
+    "fixedTraits": [
+      "銀灰貓面罩",
+      "紫色杏眼",
+      "栗色短頰毛",
+      "黑衣胸前月牙面"
+    ],
+    "changedRegions": [
+      "頭臉辨識：銀灰貓面罩",
+      "身體材質與局部圖樣：紫色杏眼；栗色短頰毛；黑衣胸前月牙面"
+    ],
+    "preservedMotion": [
+      "雙足與所有頭側長構件",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "貓耳用既有頭角根部"
+    ],
+    "rationale": "以「夜幕貓面女衛」重設身份；依可見的窄腰二足，暗色頭角與右側大伸出件選擇FELINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "右上分叉件用途未知不得刪除",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m450_warumonzaemon",
+    "sourceImageSha256": "3bf793c7c72377daf3b7c768628046ee75006cb0b4aa398cd43d662a31eb6078",
+    "observedBody": "圓耳厚身二足，灰棕身與紅色側巾",
+    "chosenFamily": "CANINE",
+    "designName": "煤絨斑犬",
+    "fixedTraits": [
+      "煤灰耳帽",
+      "米白犬吻和鼻點",
+      "琥珀圓眼深眉",
+      "腹部改奶茶橢圓毛塊"
+    ],
+    "changedRegions": [
+      "頭臉辨識：煤灰耳帽",
+      "身體材質與局部圖樣：米白犬吻和鼻點；琥珀圓眼深眉；腹部改奶茶橢圓毛塊"
+    ],
+    "preservedMotion": [
+      "足底短手與紅巾兩端",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頰毛限頭輪廓內"
+    ],
+    "rationale": "以「煤絨斑犬」重設身份；依可見的圓耳厚身二足，灰棕身與紅色側巾選擇CANINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "不能因與M444相似就共用全部畫格",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m451_weregarurumon_va",
+    "sourceImageSha256": "44d6bc0cec02f860723f4131defd8627f45013ea0a647b3891632a131e21e8b7",
+    "observedBody": "藍白前傾二足狼形，長吻與手爪",
+    "chosenFamily": "CANINE",
+    "designName": "霜藍狼行者",
+    "fixedTraits": [
+      "寬白眉與藍眼",
+      "深海鼻頭",
+      "灰白頸毛三簇",
+      "護腿改赭金綁帶"
+    ],
+    "changedRegions": [
+      "頭臉辨識：寬白眉與藍眼",
+      "身體材質與局部圖樣：深海鼻頭；灰白頸毛三簇；護腿改赭金綁帶"
+    ],
+    "preservedMotion": [
+      "嘴端、指爪、腳端及背尖",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頸毛縮成三個穩定塊"
+    ],
+    "rationale": "以「霜藍狼行者」重設身份；依可見的藍白前傾二足狼形，長吻與手爪選擇CANINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "不能新增隨意飄動的鬃毛",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m452_weregarurumon_vi",
+    "sourceImageSha256": "28d59f9c99584bb8f733ba975738735666c4e71a58a1247786766df523c00290",
+    "observedBody": "灰黑前傾二足狼形，長吻及粗手",
+    "chosenFamily": "CANINE",
+    "designName": "墨嶺狼行者",
+    "fixedTraits": [
+      "杏白短眉",
+      "銅色犬鼻環面",
+      "黑棕肩毛",
+      "白色趾套"
+    ],
+    "changedRegions": [
+      "頭臉辨識：杏白短眉",
+      "身體材質與局部圖樣：銅色犬鼻環面；黑棕肩毛；白色趾套"
+    ],
+    "preservedMotion": [
+      "長吻爪手及腳底",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "肩毛內部三角分區"
+    ],
+    "rationale": "以「墨嶺狼行者」重設身份；依可見的灰黑前傾二足狼形，長吻及粗手選擇CANINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "須與M451各自看來源姿態，不能僅換色",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m453_wingdramon",
+    "sourceImageSha256": "2978eea33a15e0c0c83c88f8f36285fbeb1a6993fbdc93bee823bc21b4e1421b",
+    "observedBody": "藍色有翼二足，右伸長翼與彎尾",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "碧翼角龍人",
+    "fixedTraits": [
+      "橘色角根改象牙金帽",
+      "白色短吻",
+      "琥珀大眼",
+      "翼膜深藍淺青條帶"
+    ],
+    "changedRegions": [
+      "頭臉辨識：橘色角根改象牙金帽",
+      "身體材質與局部圖樣：白色短吻；琥珀大眼；翼膜深藍淺青條帶"
+    ],
+    "preservedMotion": [
+      "翼端、尾彎與雙足",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頰鱗及翼膜內圖樣"
+    ],
+    "rationale": "以「碧翼角龍人」重設身份；依可見的藍色有翼二足，右伸長翼與彎尾選擇DRAGONFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "翼膀不得轉作頭耳",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m454_grondramon",
+    "sourceImageSha256": "3439e4bf80f858ecfbb4d470137a40aa27c65a0674da04a89537493702f14756",
+    "observedBody": "低伏四足綠體，長吻、紅冠與後尾",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "苔甲地龍",
+    "fixedTraits": [
+      "黃褐大眼",
+      "玉白鼻梁盾",
+      "赤銅短冠",
+      "苔綠皮面奶油足背"
+    ],
+    "changedRegions": [
+      "頭臉辨識：黃褐大眼",
+      "身體材質與局部圖樣：玉白鼻梁盾；赤銅短冠；苔綠皮面奶油足背"
+    ],
+    "preservedMotion": [
+      "四足位置、嘴縫、尾尖",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "冠片可鈍化不改長度"
+    ],
+    "rationale": "以「苔甲地龍」重設身份；依可見的低伏四足綠體，長吻、紅冠與後尾選擇DRAGONFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "保持四足；龍人風格不新增直立姿態",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m455_flaremon",
+    "sourceImageSha256": "c7e3b3ff6e30ce7c39d9ba958e7dd64333a7deec5744252002194dca564b5d44",
+    "observedBody": "橙紅厚身二足，環繞頭肩的大鬃形輪廓",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "赤鬃獅拳士",
+    "fixedTraits": [
+      "奶油獅吻",
+      "炭灰鼻與圓眉",
+      "赭金鬃毛三大瓣",
+      "深紅腕套"
+    ],
+    "changedRegions": [
+      "頭臉辨識：奶油獅吻",
+      "身體材質與局部圖樣：炭灰鼻與圓眉；赭金鬃毛三大瓣；深紅腕套"
+    ],
+    "preservedMotion": [
+      "手端、足底及頭肩鬃外界",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "鬃毛由細絲改大瓣"
+    ],
+    "rationale": "以「赤鬃獅拳士」重設身份；依可見的橙紅厚身二足，環繞頭肩的大鬃形輪廓選擇BEASTFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "髮絲閃動風險，逐格不追加尖毛",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m456_crescemon",
+    "sourceImageSha256": "95fd6e6287bf3f195dae7ddfc0294f5de6bd60deb2a456b528d58d63ade62c5c",
+    "observedBody": "纖細二足，頭側長尖片與左下月形構件",
+    "chosenFamily": "FELINE",
+    "designName": "月甲雪貓",
+    "fixedTraits": [
+      "雪白貓吻",
+      "藍紫杏眼",
+      "銀灰頰甲",
+      "月形件加淡金內緣"
+    ],
+    "changedRegions": [
+      "頭臉辨識：雪白貓吻",
+      "身體材質與局部圖樣：藍紫杏眼；銀灰頰甲；月形件加淡金內緣"
+    ],
+    "preservedMotion": [
+      "月形件尖端、雙足與頭片",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "臉側短耳切面"
+    ],
+    "rationale": "以「月甲雪貓」重設身份；依可見的纖細二足，頭側長尖片與左下月形構件選擇FELINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "月形件不可合併成尾巴",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m457_superstarmon",
+    "sourceImageSha256": "2c24c9bef0b122aeb1a9e311e7053b10595919928ccfc0e0f3b8fa2f2880dd24",
+    "observedBody": "金色星形頭部二足，右後紅色長帶",
+    "chosenFamily": "CANINE",
+    "designName": "耀金犬面衛",
+    "fixedTraits": [
+      "奶油犬吻面罩",
+      "黑鼻形額下點",
+      "琥珀眼槽",
+      "金甲胸前深藍三角"
+    ],
+    "changedRegions": [
+      "頭臉辨識：奶油犬吻面罩",
+      "身體材質與局部圖樣：黑鼻形額下點；琥珀眼槽；金甲胸前深藍三角"
+    ],
+    "preservedMotion": [
+      "星角長端、雙足與紅帶端",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "犬面只佔星形中央"
+    ],
+    "rationale": "以「耀金犬面衛」重設身份；依可見的金色星形頭部二足，右後紅色長帶選擇CANINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "星形頭不改成圓頭",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m458_blackrapidmon",
+    "sourceImageSha256": "96cc4001935f77a8a2600b284759644755747e1a85a9c748edf7e5cc2a1dbc99",
+    "observedBody": "灰黑二足甲體，頭部橫向長片",
+    "chosenFamily": "FELINE",
+    "designName": "墨甲長耳貓衛",
+    "fixedTraits": [
+      "三角貓鼻白面板",
+      "青綠大眼",
+      "炭灰胸甲杏色腹片",
+      "長片粉灰內面"
+    ],
+    "changedRegions": [
+      "頭臉辨識：三角貓鼻白面板",
+      "身體材質與局部圖樣：青綠大眼；炭灰胸甲杏色腹片；長片粉灰內面"
+    ],
+    "preservedMotion": [
+      "長片端、雙腳及腕端",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "長片既有形狀內重画耳面"
+    ],
+    "rationale": "以「墨甲長耳貓衛」重設身份；依可見的灰黑二足甲體，頭部橫向長片選擇FELINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "貓耳短尖不能取代原長片",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m501_vikemon",
+    "sourceImageSha256": "68efeea42515630a1e6ab57edcbc7bc0f15c05d76d5aa3b7f33c167b9a5f9327",
+    "observedBody": "寬肩厚身裝甲二足，白鬚及巨大雙手",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "霜角獾盾衛",
+    "fixedTraits": [
+      "獾式黑白臉條",
+      "棕色大鼻",
+      "銀鬚三層塊面",
+      "青灰肩甲銅邊"
+    ],
+    "changedRegions": [
+      "頭臉辨識：獾式黑白臉條",
+      "身體材質與局部圖樣：棕色大鼻；銀鬚三層塊面；青灰肩甲銅邊"
+    ],
+    "preservedMotion": [
+      "巨大手部與雙足定位、頭角端",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "鬚毛輪廓簡化"
+    ],
+    "rationale": "以「霜角獾盾衛」重設身份；依可見的寬肩厚身裝甲二足，白鬚及巨大雙手選擇BEASTFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "白鬚不可遮住手與胸分界",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m502_valkyrimon",
+    "sourceImageSha256": "dff08fbf3371627cce4adc6e53b3191f3520ed8657fcb28cea000f7fccb6ecaa",
+    "observedBody": "纖細白甲二足，頭側長片與左向金色伸件",
+    "chosenFamily": "CANINE",
+    "designName": "銀羽犬騎",
+    "fixedTraits": [
+      "象牙犬面",
+      "藍灰眉眼窗",
+      "頰侧短毛形甲面",
+      "紅披片改暗橘內襯"
+    ],
+    "changedRegions": [
+      "頭臉辨識：象牙犬面",
+      "身體材質與局部圖樣：藍灰眉眼窗；頰侧短毛形甲面；紅披片改暗橘內襯"
+    ],
+    "preservedMotion": [
+      "長伸件、頭側片與足部",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "犬吻在面罩中重畫"
+    ],
+    "rationale": "以「銀羽犬騎」重設身份；依可見的纖細白甲二足，頭側長片與左向金色伸件選擇CANINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "側頭構件細，不加額外耳朵",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m503_warglaymon",
+    "sourceImageSha256": "47d46c36500ac81ea18e623d4eb0d68d312ba4f62e124309601296d71a47cb2f",
+    "observedBody": "二足大爪戰士，黃甲背構件與尖角頭",
+    "chosenFamily": "FELINE",
+    "designName": "金爪虎甲戰士",
+    "fixedTraits": [
+      "虎斑額甲",
+      "奶油短貓吻",
+      "琥珀大眼黑鼻",
+      "金色足掌深棕趾分區"
+    ],
+    "changedRegions": [
+      "頭臉辨識：虎斑額甲",
+      "身體材質與局部圖樣：奶油短貓吻；琥珀大眼黑鼻；金色足掌深棕趾分區"
+    ],
+    "preservedMotion": [
+      "雙足爪尖、手爪端、背件與頭軸",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頭盔內貓耳切面及頰甲"
+    ],
+    "rationale": "以「金爪虎甲戰士」重設身份；依可見的二足大爪戰士，黃甲背構件與尖角頭選擇FELINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "與Owner示例相應，但不能把甲爪縮成短掌",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m504_gigaseadramon",
+    "sourceImageSha256": "e5ebf3d645659dfa647bc8bc17d5cc682fb2f7a6d152e3c9b13e5b0156e45594",
+    "observedBody": "長蛇形水生身，細長口鼻及背刺",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "珊瑚長吻龍",
+    "fixedTraits": [
+      "青綠大眼圈",
+      "珊瑚紅鼻梁",
+      "象牙下顎帶",
+      "紫灰身體大塊鱗面"
+    ],
+    "changedRegions": [
+      "頭臉辨識：青綠大眼圈",
+      "身體材質與局部圖樣：珊瑚紅鼻梁；象牙下顎帶；紫灰身體大塊鱗面"
+    ],
+    "preservedMotion": [
+      "吻端、蛇身彎曲與背刺尖",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "角面內部材質重畫"
+    ],
+    "rationale": "以「珊瑚長吻龍」重設身份；依可見的長蛇形水生身，細長口鼻及背刺選擇DRAGONFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "無四肢，不硬加龍人手腳",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m505_grankuwagamon",
+    "sourceImageSha256": "b3bb8e67d9323efbf2aaa71ae82b45f7a5c626681799c54f097109bad640344d",
+    "observedBody": "低伏黑甲多肢，橘色長鉗向右上伸",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "黑甲狼面蟲衛",
+    "fixedTraits": [
+      "狼式銀灰口鼻面板",
+      "琥珀眼點",
+      "黑甲大塊銅邊",
+      "長鉗橘白端帶"
+    ],
+    "changedRegions": [
+      "頭臉辨識：狼式銀灰口鼻面板",
+      "身體材質與局部圖樣：琥珀眼點；黑甲大塊銅邊；長鉗橘白端帶"
+    ],
+    "preservedMotion": [
+      "全部足端與長鉗軸線",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "狼面限制前頭甲內"
+    ],
+    "rationale": "以「黑甲狼面蟲衛」重設身份；依可見的低伏黑甲多肢，橘色長鉗向右上伸選擇BEASTFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "多肢不能刪成四足狼",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m506_griffomon",
+    "sourceImageSha256": "5c4b77b71c410a408a9d01dd26376eba043d89e70406636a37bb2c08b8cb4f5b",
+    "observedBody": "四足長尾、背上大型棕紅翼與長前吻",
+    "chosenFamily": "FELINE",
+    "designName": "羽翼獅貓",
+    "fixedTraits": [
+      "貓式金眼黑眼線",
+      "奶油頰毛",
+      "赤棕翼面金斑",
+      "尾端翡翠雙色節"
+    ],
+    "changedRegions": [
+      "頭臉辨識：貓式金眼黑眼線",
+      "身體材質與局部圖樣：奶油頰毛；赤棕翼面金斑；尾端翡翠雙色節"
+    ],
+    "preservedMotion": [
+      "四足、翼端、尾彎與嘴端",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頰毛短簇"
+    ],
+    "rationale": "以「羽翼獅貓」重設身份；依可見的四足長尾、背上大型棕紅翼與長前吻選擇FELINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "必須保留長吻，不換短圓頭",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m507_crossmon",
+    "sourceImageSha256": "abe37a2263918293fc6c9b6b2b4827879e87ac3de142a6a5d905b1c75a0932b9",
+    "observedBody": "展翼金色鳥體，俯身長頭與小足",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "金羽獅面翼衛",
+    "fixedTraits": [
+      "白色獅面額片",
+      "琥珀眼槽",
+      "金羽三層棕影",
+      "爪根銅護面"
+    ],
+    "changedRegions": [
+      "頭臉辨識：白色獅面額片",
+      "身體材質與局部圖樣：琥珀眼槽；金羽三層棕影；爪根銅護面"
+    ],
+    "preservedMotion": [
+      "展翼輪廓、嘴尖與腳爪",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "面片內部獅鼻符號"
+    ],
+    "rationale": "以「金羽獅面翼衛」重設身份；依可見的展翼金色鳥體，俯身長頭與小足選擇BEASTFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "臉部小，獸化不增加第二張嘴",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m508_saberleomon",
+    "sourceImageSha256": "2cf3bb6219572396449d42f3354e7aa305c78d798d1910dcb39ae2d41ac7a117",
+    "observedBody": "橘色四足大貓，背毛與長牙",
+    "chosenFamily": "FELINE",
+    "designName": "曦斑劍齒貓",
+    "fixedTraits": [
+      "奶油寬吻",
+      "深棕鼻及藍眼",
+      "背部兩條粗虎紋",
+      "赭色爪掌與象牙長牙"
+    ],
+    "changedRegions": [
+      "頭臉辨識：奶油寬吻",
+      "身體材質與局部圖樣：深棕鼻及藍眼；背部兩條粗虎紋；赭色爪掌與象牙長牙"
+    ],
+    "preservedMotion": [
+      "長牙尖、四足及背毛長端",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "眼眉和短頰毛"
+    ],
+    "rationale": "以「曦斑劍齒貓」重設身份；依可見的橘色四足大貓，背毛與長牙選擇FELINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "長牙不能為萌化縮短",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m509_shinegraymon",
+    "sourceImageSha256": "b7c6a845072d5ae1ce91f0e294eecefe9fb3651f2b36baca5b10eb9a38a11e2e",
+    "observedBody": "高大二足裝甲，右側紅長翼与粗爪",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "紅翼角龍騎",
+    "fixedTraits": [
+      "象牙龍吻護面",
+      "青色眼窗",
+      "橘紅胸鱗盾",
+      "赤銅翼面奶油根節"
+    ],
+    "changedRegions": [
+      "頭臉辨識：象牙龍吻護面",
+      "身體材質與局部圖樣：青色眼窗；橘紅胸鱗盾；赤銅翼面奶油根節"
+    ],
+    "preservedMotion": [
+      "長翼端、腳底及大手爪",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頭角內金色層次"
+    ],
+    "rationale": "以「紅翼角龍騎」重設身份；依可見的高大二足裝甲，右側紅長翼与粗爪選擇DRAGONFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "56像素身高不能逐格變動頭身比例",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m510_skullmammon",
+    "sourceImageSha256": "8bbaaebd3cc9cf88240242e43c097bc6f0eb96a7e1a0a2ea26dd890f3353db46",
+    "observedBody": "四足長牙體，白灰骨片與紫色背尖",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "骨冠長牙獸",
+    "fixedTraits": [
+      "暖金鼻盾",
+      "深琥珀眼窩",
+      "骨白頰甲杏色內面",
+      "炭紫背甲寬條"
+    ],
+    "changedRegions": [
+      "頭臉辨識：暖金鼻盾",
+      "身體材質與局部圖樣：深琥珀眼窩；骨白頰甲杏色內面；炭紫背甲寬條"
+    ],
+    "preservedMotion": [
+      "牙尖、長鼻及四足",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "鼻盾內圓鼻紋樣"
+    ],
+    "rationale": "以「骨冠長牙獸」重設身份；依可見的四足長牙體，白灰骨片與紫色背尖選擇BEASTFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "骨狀原外形有大量空隙不能補實",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m511_saintgargomon",
+    "sourceImageSha256": "0787fd29ad8731da69069e75935c9b2721c1481e147b9df8cb3c168a125ceec4",
+    "observedBody": "綠色直立機甲，橫耳片、長腿及兩側大件",
+    "chosenFamily": "CANINE",
+    "designName": "苔鋼大耳犬機",
+    "fixedTraits": [
+      "白犬吻面罩",
+      "黃眉綠眼",
+      "深橄欖胸甲米白腹條",
+      "耳片赤銅內帶"
+    ],
+    "changedRegions": [
+      "頭臉辨識：白犬吻面罩",
+      "身體材質與局部圖樣：黃眉綠眼；深橄欖胸甲米白腹條；耳片赤銅內帶"
+    ],
+    "preservedMotion": [
+      "兩側件與長腿接地、橫耳端",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頭甲面罩內短鼻"
+    ],
+    "rationale": "以「苔鋼大耳犬機」重設身份；依可見的綠色直立機甲，橫耳片、長腿及兩側大件選擇CANINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "不可由外形稱兩側件為武器技能",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m512_hiandromon",
+    "sourceImageSha256": "de6fe15466f10c98030fc153ac510fb51e82fdb5dec0e8b77a4a0751c1846818",
+    "observedBody": "瘦長機械人形，青灰甲與紅色小節",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "鋼脊狼面守衛",
+    "fixedTraits": [
+      "銀狼吻護板",
+      "單條琥珀眉窗",
+      "暗紅頸毛形胸紋",
+      "炭灰護腿米白膝"
+    ],
+    "changedRegions": [
+      "頭臉辨識：銀狼吻護板",
+      "身體材質與局部圖樣：單條琥珀眉窗；暗紅頸毛形胸紋；炭灰護腿米白膝"
+    ],
+    "preservedMotion": [
+      "四肢長度與足底",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "短鼻面罩不超頭甲"
+    ],
+    "rationale": "以「鋼脊狼面守衛」重設身份；依可見的瘦長機械人形，青灰甲與紅色小節選擇BEASTFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "不能強加毛髮到機械關節",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m513_bantyoliomon",
+    "sourceImageSha256": "4f8d728ca9360470755ec5023d68125596475febfa6ed4b95d0160165ae6cb10",
+    "observedBody": "二足厚鬃人形，黑色大衣與橘色口面",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "棕鬃獅袍客",
+    "fixedTraits": [
+      "奶油獅口鼻",
+      "金眼黑眉",
+      "三大塊棕紅鬃毛",
+      "黑袍改深藍與象牙袖口"
+    ],
+    "changedRegions": [
+      "頭臉辨識：奶油獅口鼻",
+      "身體材質與局部圖樣：金眼黑眉；三大塊棕紅鬃毛；黑袍改深藍與象牙袖口"
+    ],
+    "preservedMotion": [
+      "衣擺、雙手端與腳底",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "鬃外緣適度鈍化"
+    ],
+    "rationale": "以「棕鬃獅袍客」重設身份；依可見的二足厚鬃人形，黑色大衣與橘色口面選擇BEASTFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "大衣遮擋的腿形未知，不重畫成裸腿",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m514_piemon",
+    "sourceImageSha256": "4807ca3360702b221ddaa19fdad35d972c5a81e3194457aa3b3807e172d9e1fb",
+    "observedBody": "細長二足，左右彎長構件及尖頂頭冠",
+    "chosenFamily": "FELINE",
+    "designName": "彩衣貓面偶師",
+    "fixedTraits": [
+      "白貓面罩粉鼻",
+      "紫色杏眼",
+      "紅綠衣改酒紅靛藍大面",
+      "金色爪套"
+    ],
+    "changedRegions": [
+      "頭臉辨識：白貓面罩粉鼻",
+      "身體材質與局部圖樣：紫色杏眼；紅綠衣改酒紅靛藍大面；金色爪套"
+    ],
+    "preservedMotion": [
+      "兩側長件尖端與細足",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "面罩額角短貓耳切面"
+    ],
+    "rationale": "以「彩衣貓面偶師」重設身份；依可見的細長二足，左右彎長構件及尖頂頭冠選擇FELINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "不能把兩側彎件當尾巴",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m515_pinochimon",
+    "sourceImageSha256": "1acbdd8a841bc41e34052f069b4981417673874377506b89e020887d8a870573",
+    "observedBody": "木質二足，紅帽及左側直立長柄",
+    "chosenFamily": "CANINE",
+    "designName": "木紋犬偶",
+    "fixedTraits": [
+      "杏色犬吻木面",
+      "深棕圓鼻",
+      "紅帽折耳形側片",
+      "腹面松木寬紋"
+    ],
+    "changedRegions": [
+      "頭臉辨識：杏色犬吻木面",
+      "身體材質與局部圖樣：深棕圓鼻；紅帽折耳形側片；腹面松木寬紋"
+    ],
+    "preservedMotion": [
+      "長柄、手端及木腿接地",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "犬鼻木雕面內部"
+    ],
+    "rationale": "以「木紋犬偶」重設身份；依可見的木質二足，紅帽及左側直立長柄選擇CANINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "木紋每姿態固定，避免隨機條紋",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m516_pharaohmon",
+    "sourceImageSha256": "aa6be45292494a4909006cf83aed0b8e1c9cb26043b7a69af6aa11d0f832f7a9",
+    "observedBody": "直立金色人形，條紋頭巾与白色長前片",
+    "chosenFamily": "FELINE",
+    "designName": "砂金貓面王",
+    "fixedTraits": [
+      "貓鼻三角金面",
+      "碧綠杏眼",
+      "深藍頭巾耳形角面",
+      "象牙前片赭金日紋"
+    ],
+    "changedRegions": [
+      "頭臉辨識：貓鼻三角金面",
+      "身體材質與局部圖樣：碧綠杏眼；深藍頭巾耳形角面；象牙前片赭金日紋"
+    ],
+    "preservedMotion": [
+      "頭巾外形、手部及前長片底",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "貓耳以頭巾內稜角表達"
+    ],
+    "rationale": "以「砂金貓面王」重設身份；依可見的直立金色人形，條紋頭巾与白色長前片選擇FELINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "長前片不可當普通腹毛重做",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m517_pukumon",
+    "sourceImageSha256": "979a8f9617c82b37246de8a3a2dc68d26e62c0ce2a69ed0948256ade8bacf754",
+    "observedBody": "懸浮圓刺體，下方紅色拳形件",
+    "chosenFamily": "BIG_EYE",
+    "designName": "鋼刺圓眼拳偶",
+    "fixedTraits": [
+      "大青眼象牙眼眶",
+      "深灰圓鼻孔面",
+      "海藍中腰带",
+      "紅件改暗銅拳套"
+    ],
+    "changedRegions": [
+      "頭臉辨識：大青眼象牙眼眶",
+      "身體材質與局部圖樣：深灰圓鼻孔面；海藍中腰带；紅件改暗銅拳套"
+    ],
+    "preservedMotion": [
+      "所有刺端與兩個下垂件位置",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "眼眶在圓殼內擴大"
+    ],
+    "rationale": "以「鋼刺圓眼拳偶」重設身份；依可見的懸浮圓刺體，下方紅色拳形件選擇BIG_EYE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "漂浮高度不能轉為雙腳接地",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m518_blackwargreymon",
+    "sourceImageSha256": "128cf0024ce4911f424a15a1e752dfd7a8ff44e05df0cddadd4d9ca34613cc08",
+    "observedBody": "黑甲二足長爪，大型暗色背構件",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "夜鋼角龍騎",
+    "fixedTraits": [
+      "象牙短龍吻",
+      "金眼紫眉甲",
+      "黑鉛胸鱗暗金邊",
+      "灰銀爪根护面"
+    ],
+    "changedRegions": [
+      "頭臉辨識：象牙短龍吻",
+      "身體材質與局部圖樣：金眼紫眉甲；黑鉛胸鱗暗金邊；灰銀爪根护面"
+    ],
+    "preservedMotion": [
+      "手足長爪與背件端",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頭面角形及下顎色塊"
+    ],
+    "rationale": "以「夜鋼角龍騎」重設身份；依可見的黑甲二足長爪，大型暗色背構件選擇DRAGONFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "黑底輪廓易消失，描邊需明度對比",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m519_princemamemon",
+    "sourceImageSha256": "6853d01a693ac2756b49916f03f0d4a33017d6ba8a10acfdc8c83370394c3fb8",
+    "observedBody": "金色圓身短肢，紅白背披片",
+    "chosenFamily": "BIG_EYE",
+    "designName": "金冠圓眼小王",
+    "fixedTraits": [
+      "兩顆深褐大眼",
+      "奶油短嘴面",
+      "銅金冠與青寶石方點",
+      "酒紅披面白色寬邊"
+    ],
+    "changedRegions": [
+      "頭臉辨識：兩顆深褐大眼",
+      "身體材質與局部圖樣：奶油短嘴面；銅金冠與青寶石方點；酒紅披面白色寬邊"
+    ],
+    "preservedMotion": [
+      "圓身中心、短肢與披片端",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "臉部擴大眼睛"
+    ],
+    "rationale": "以「金冠圓眼小王」重設身份；依可見的金色圓身短肢，紅白背披片選擇BIG_EYE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "32像素冠面不加細珠鏈",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m520_pilesiomon",
+    "sourceImageSha256": "4eb415b2fd30ffabec79dcf81d2c5c958ef1db0dc4e9c0a99c2d8aae8bcc78dd",
+    "observedBody": "白藍長頸水生體，短足及向上後尾",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "雪藍長頸龍",
+    "fixedTraits": [
+      "琥珀大眼淡藍眉鱗",
+      "奶油短鼻",
+      "青白背面寬水紋",
+      "金色頸腹分區"
+    ],
+    "changedRegions": [
+      "頭臉辨識：琥珀大眼淡藍眉鱗",
+      "身體材質與局部圖樣：奶油短鼻；青白背面寬水紋；金色頸腹分區"
+    ],
+    "preservedMotion": [
+      "長頸彎曲、足端與尾部",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "眼眉鱗內造型"
+    ],
+    "rationale": "以「雪藍長頸龍」重設身份；依可見的白藍長頸水生體，短足及向上後尾選擇DRAGONFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "不可把長頸縮回身體做大頭",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m521_heraklekabuterimon",
+    "sourceImageSha256": "79949f705cef70a5ab018e1ea34459586db684a07460d4e5d2e5181db0e6bb4b",
+    "observedBody": "金色多肢，兩根巨大角与黑色背甲",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "金角獸面甲蟲",
+    "fixedTraits": [
+      "獅式奶油前面板",
+      "琥珀小眼深眉",
+      "黑背甲金棕放射分區",
+      "肢節銀灰套"
+    ],
+    "changedRegions": [
+      "頭臉辨識：獅式奶油前面板",
+      "身體材質與局部圖樣：琥珀小眼深眉；黑背甲金棕放射分區；肢節銀灰套"
+    ],
+    "preservedMotion": [
+      "全部肢端及兩根巨角弧度",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頭部短鼻面雕紋"
+    ],
+    "rationale": "以「金角獸面甲蟲」重設身份；依可見的金色多肢，兩根巨大角与黑色背甲選擇BEASTFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "不把巨角當普通貓耳重排",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m522_hououmon",
+    "sourceImageSha256": "a19e7d6259d9bf8fd06dcad7b0c663915038e71d6259250d33c3b08093d76b18",
+    "observedBody": "金紅大型展翼鳥體，後方多條長羽",
+    "chosenFamily": "FELINE",
+    "designName": "金羽貓眼鳳",
+    "fixedTraits": [
+      "貓式翡翠杏眼",
+      "象牙短頰羽",
+      "金翼赤銅三層羽帶",
+      "長羽端奶油節"
+    ],
+    "changedRegions": [
+      "頭臉辨識：貓式翡翠杏眼",
+      "身體材質與局部圖樣：象牙短頰羽；金翼赤銅三層羽帶；長羽端奶油節"
+    ],
+    "preservedMotion": [
+      "所有長羽、翼端、鳥足及喙尖",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頰羽短簇"
+    ],
+    "rationale": "以「金羽貓眼鳳」重設身份；依可見的金紅大型展翼鳥體，後方多條長羽選擇FELINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "羽毛多，不能逐格增加細毛",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m526_miragegaogamon",
+    "sourceImageSha256": "4311be90083fe4fd6c3f577625f369ec79576c35bbbe2f8f274061226ad7d306",
+    "observedBody": "藍白二足甲體，尖頭與後方大構件",
+    "chosenFamily": "CANINE",
+    "designName": "蒼甲狼衛",
+    "fixedTraits": [
+      "白狼吻護面",
+      "琥珀眼窗黑眉",
+      "藍灰胸毛形甲片",
+      "紅腰節米白邊"
+    ],
+    "changedRegions": [
+      "頭臉辨識：白狼吻護面",
+      "身體材質與局部圖樣：琥珀眼窗黑眉；藍灰胸毛形甲片；紅腰節米白邊"
+    ],
+    "preservedMotion": [
+      "大手、足端與後伸件",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "狼耳在頭甲既有尖端"
+    ],
+    "rationale": "以「蒼甲狼衛」重設身份；依可見的藍白二足甲體，尖頭與後方大構件選擇CANINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "背件不能新增犬尾功能",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m527_mugendramon",
+    "sourceImageSha256": "f0507317218746daa69836beecd4378cfa89913fc17d3e4c8becc7a57c187dae",
+    "observedBody": "寬大機械二足，上方雙筒与长侧向构件",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "銀鉚巨龍機",
+    "fixedTraits": [
+      "青眼龍面罩",
+      "銅色下頜盾",
+      "銀灰胸鱗分板",
+      "暗藍筒件寬環"
+    ],
+    "changedRegions": [
+      "頭臉辨識：青眼龍面罩",
+      "身體材質與局部圖樣：銅色下頜盾；銀灰胸鱗分板；暗藍筒件寬環"
+    ],
+    "preservedMotion": [
+      "雙筒、手端、側件與腳底",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "龍吻面板內部刻形"
+    ],
+    "rationale": "以「銀鉚巨龍機」重設身份；依可見的寬大機械二足，上方雙筒与长侧向构件選擇DRAGONFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "結構密集，臉不能覆蓋上筒根部",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m528_metaletemon",
+    "sourceImageSha256": "067d97ea00db3dcb312abf38196d1f22be33d68b6fce6488de5fcd9977d5fa18",
+    "observedBody": "直立長臂灰體，右側彎細尾",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "銀毛猿獅客",
+    "fixedTraits": [
+      "杏白獅短吻",
+      "琥珀眼黑眉",
+      "銀灰頰毛兩簇",
+      "胸前深紅菱形毛塊"
+    ],
+    "changedRegions": [
+      "頭臉辨識：杏白獅短吻",
+      "身體材質與局部圖樣：琥珀眼黑眉；銀灰頰毛兩簇；胸前深紅菱形毛塊"
+    ],
+    "preservedMotion": [
+      "長臂、足底及尾彎",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頰毛收在頭內"
+    ],
+    "rationale": "以「銀毛猿獅客」重設身份；依可見的直立長臂灰體，右側彎細尾選擇BEASTFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "來源手臂比例不適合縮為小貓短手",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m529_metalgarurumon_va",
+    "sourceImageSha256": "018527e1d6c58ce713f4921707143d18c8c6899cb044119a0ea8159d4d923f5c",
+    "observedBody": "藍色四足長吻，右上黃色背片",
+    "chosenFamily": "CANINE",
+    "designName": "霜翼白鼻犬",
+    "fixedTraits": [
+      "白色鼻梁與犬吻",
+      "金眼深眉",
+      "深藍肩部雪斑",
+      "背片改淡銅寬條"
+    ],
+    "changedRegions": [
+      "頭臉辨識：白色鼻梁與犬吻",
+      "身體材質與局部圖樣：金眼深眉；深藍肩部雪斑；背片改淡銅寬條"
+    ],
+    "preservedMotion": [
+      "四足、長吻與背片端",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頸毛形甲面"
+    ],
+    "rationale": "以「霜翼白鼻犬」重設身份；依可見的藍色四足長吻，右上黃色背片選擇CANINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "背片不能改成新犬耳",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m530_metalgarurumon_vi",
+    "sourceImageSha256": "17dac0d7f3c19a7d95664072e26122007faf2809ec899e62d409d25826c15e96",
+    "observedBody": "黑灰四足長吻，後側淺色尖片",
+    "chosenFamily": "CANINE",
+    "designName": "墨翼灰鼻犬",
+    "fixedTraits": [
+      "奶油鼻梁犬吻",
+      "青綠大眼",
+      "石墨肩面銀白斑",
+      "後片暗銅根節"
+    ],
+    "changedRegions": [
+      "頭臉辨識：奶油鼻梁犬吻",
+      "身體材質與局部圖樣：青綠大眼；石墨肩面銀白斑；後片暗銅根節"
+    ],
+    "preservedMotion": [
+      "四足、嘴端及後尖片",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "眼眉面板"
+    ],
+    "rationale": "以「墨翼灰鼻犬」重設身份；依可見的黑灰四足長吻，後側淺色尖片選擇CANINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "不同色號仍需獨立驗證圖格重用",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m531_metalseadramon",
+    "sourceImageSha256": "06a518c4ed2ef46a80d3abb6510df9be15eb4e2a10ebd557d6f41fc9a9afd171",
+    "observedBody": "細長S形水生龍，長吻與側刺",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "金鬚潮龍",
+    "fixedTraits": [
+      "琥珀大眼青眉",
+      "奶油下頜",
+      "金銅大塊背鱗",
+      "紫灰側刺象牙尖"
+    ],
+    "changedRegions": [
+      "頭臉辨識：琥珀大眼青眉",
+      "身體材質與局部圖樣：奶油下頜；金銅大塊背鱗；紫灰側刺象牙尖"
+    ],
+    "preservedMotion": [
+      "S形身軸、長吻与側刺端",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頰鱗在頭面內修改"
+    ],
+    "rationale": "以「金鬚潮龍」重設身份；依可見的細長S形水生龍，長吻與側刺選擇DRAGONFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "48×64細長體不套用方形大頭模板",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m532_rosemon",
+    "sourceImageSha256": "fe356af801b6805d0c5d1f5fbf392fb888dc45ea9975f204de501580a2e572c7",
+    "observedBody": "纖細黑紅人形，綠肩片與右側長帶",
+    "chosenFamily": "FELINE",
+    "designName": "薔薇貓面使",
+    "fixedTraits": [
+      "奶油貓面粉鼻",
+      "深綠杏眼",
+      "酒紅玫瑰頭冠耳形折角",
+      "黑衣象牙胸面"
+    ],
+    "changedRegions": [
+      "頭臉辨識：奶油貓面粉鼻",
+      "身體材質與局部圖樣：深綠杏眼；酒紅玫瑰頭冠耳形折角；黑衣象牙胸面"
+    ],
+    "preservedMotion": [
+      "長帶、手端與細足",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頭冠折角及短頰面"
+    ],
+    "rationale": "以「薔薇貓面使」重設身份；依可見的纖細黑紅人形，綠肩片與右側長帶選擇FELINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "細腰及長帶不能被胸毛遮住",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m533_zeedgarurumon",
+    "sourceImageSha256": "7be0f3be38e40e039fd50d72b8b89c7e901fb0eb7e85c2f00b5c9a90e5e8a325",
+    "observedBody": "藍灰厚身四足，背上大型斜長塊",
+    "chosenFamily": "CANINE",
+    "designName": "藍盾長吻犬",
+    "fixedTraits": [
+      "白色犬鼻面罩",
+      "琥珀眉眼",
+      "深藍胸面奶油喉節",
+      "背塊銀灰雙帶"
+    ],
+    "changedRegions": [
+      "頭臉辨識：白色犬鼻面罩",
+      "身體材質與局部圖樣：琥珀眉眼；深藍胸面奶油喉節；背塊銀灰雙帶"
+    ],
+    "preservedMotion": [
+      "長背塊、四足和嘴端",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頭甲犬耳角面"
+    ],
+    "rationale": "以「藍盾長吻犬」重設身份；依可見的藍灰厚身四足，背上大型斜長塊選擇CANINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "不能將背塊縮小為毛束",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m534_victorygreymon",
+    "sourceImageSha256": "f6ee2d989cb82bcbc3a06d3d526e32bd32b29e863f6ed28707e860c15cf96906",
+    "observedBody": "金橘二足，右側長橫構件與大爪",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "金甲角龍將",
+    "fixedTraits": [
+      "青眼白眉龍面",
+      "象牙下頜",
+      "深銅胸鱗大塊",
+      "金護腿灰銀趾"
+    ],
+    "changedRegions": [
+      "頭臉辨識：青眼白眉龍面",
+      "身體材質與局部圖樣：象牙下頜；深銅胸鱗大塊；金護腿灰銀趾"
+    ],
+    "preservedMotion": [
+      "橫長件、爪足與手端",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頭角內面與頰甲"
+    ],
+    "rationale": "以「金甲角龍將」重設身份；依可見的金橘二足，右側長橫構件與大爪選擇DRAGONFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "長件用途未知，保持來源幾何",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m535_slayerdramon",
+    "sourceImageSha256": "8db01e69a138a08964d310424b453b4a522273bee213a1f56798db1638c53b62",
+    "observedBody": "寬展翼裝甲二足，藍綠翼膜與長尾形端",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "碧翼銀角龍人",
+    "fixedTraits": [
+      "暖金大眼",
+      "白銀短龍吻",
+      "鈷藍胸鱗盾",
+      "翡翠翼膜象牙根條"
+    ],
+    "changedRegions": [
+      "頭臉辨識：暖金大眼",
+      "身體材質與局部圖樣：白銀短龍吻；鈷藍胸鱗盾；翡翠翼膜象牙根條"
+    ],
+    "preservedMotion": [
+      "翼端、雙足與長構件相對位置",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "角甲與翼膜紋样"
+    ],
+    "rationale": "以「碧翼銀角龍人」重設身份；依可見的寬展翼裝甲二足，藍綠翼膜與長尾形端選擇DRAGONFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "展翼面積大，禁止每格重排羽膜紋",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m536_brakedramon",
+    "sourceImageSha256": "be4bdac03cff3f6db5aafd235787f4662271fa0bb248678d412f488353673712",
+    "observedBody": "寬大四足綠色機械體，長嘴與上方長件",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "苔銅重甲地龍",
+    "fixedTraits": [
+      "杏色大眼窗",
+      "銅色龍鼻盾",
+      "苔綠甲面灰白爪根",
+      "背件赭金宽圈"
+    ],
+    "changedRegions": [
+      "頭臉辨識：杏色大眼窗",
+      "身體材質與局部圖樣：銅色龍鼻盾；苔綠甲面灰白爪根；背件赭金宽圈"
+    ],
+    "preservedMotion": [
+      "四足、長嘴与上方构件",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "眼窗與鼻甲分面"
+    ],
+    "rationale": "以「苔銅重甲地龍」重設身份；依可見的寬大四足綠色機械體，長嘴與上方長件選擇DRAGONFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "四足動作不因龍人名稱而直立",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m538_apollomon",
+    "sourceImageSha256": "7407ea4cae24b7a566d27959af2e20e8a3f74897e10477528e0cd1012515833d",
+    "observedBody": "橘紅厚身二足，頭頂彎曲深色長件",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "赤金獅面炎衛",
+    "fixedTraits": [
+      "奶油獅吻深鼻",
+      "金眼黑眉",
+      "紅銅鬃甲三層",
+      "象牙手足護面"
+    ],
+    "changedRegions": [
+      "頭臉辨識：奶油獅吻深鼻",
+      "身體材質與局部圖樣：金眼黑眉；紅銅鬃甲三層；象牙手足護面"
+    ],
+    "preservedMotion": [
+      "頭頂長件、雙足與手端",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "鬃甲外緣短鈍化"
+    ],
+    "rationale": "以「赤金獅面炎衛」重設身份；依可見的橘紅厚身二足，頭頂彎曲深色長件選擇BEASTFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "長件不猜為可删裝飾",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m539_dianamon",
+    "sourceImageSha256": "eae4c24c6caddec81c6443e057918d06a76f2067d78608ac65eefa616b1fff08",
+    "observedBody": "藍白細長二足，頭側多根長尖片",
+    "chosenFamily": "FELINE",
+    "designName": "霜月長耳貓衛",
+    "fixedTraits": [
+      "白貓面罩淡粉鼻",
+      "紫藍大眼",
+      "銀灰頰甲",
+      "鈷藍腿甲奶油膝片"
+    ],
+    "changedRegions": [
+      "頭臉辨識：白貓面罩淡粉鼻",
+      "身體材質與局部圖樣：紫藍大眼；銀灰頰甲；鈷藍腿甲奶油膝片"
+    ],
+    "preservedMotion": [
+      "頭側長片、雙足與兩側伸件",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "貓耳語言在原長片內"
+    ],
+    "rationale": "以「霜月長耳貓衛」重設身份；依可見的藍白細長二足，頭側多根長尖片選擇FELINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "多根長片不能合成兩耳",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m540_imperialdramon_fm",
+    "sourceImageSha256": "edc0eacbc6bb70c04a063ddf97077735484ea13b094efcd50e8da6eb0f725def",
+    "observedBody": "深色裝甲二足，雙橘翼及粗大爪足",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "赤翼黑角龍人",
+    "fixedTraits": [
+      "象牙短龍吻",
+      "金眼青眉甲",
+      "黑藍胸鱗銀灰帶",
+      "橘翼深紅三區"
+    ],
+    "changedRegions": [
+      "頭臉辨識：象牙短龍吻",
+      "身體材質與局部圖樣：金眼青眉甲；黑藍胸鱗銀灰帶；橘翼深紅三區"
+    ],
+    "preservedMotion": [
+      "雙翼根端、爪足與前伸件",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "頰甲與翼膜內色塊"
+    ],
+    "rationale": "以「赤翼黑角龍人」重設身份；依可見的深色裝甲二足，雙橘翼及粗大爪足選擇DRAGONFOLK，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "巨大翼在翻身時遮臉，需高風險姿態審查",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  },
+  {
+    "entityId": "m541_dukemon",
+    "sourceImageSha256": "dc08455f4d5e4e824591044007ca54f008b2aeb5fc6b60e7960b3255cf437c93",
+    "observedBody": "白甲二足，長槍狀件、圓盾及紅色披片",
+    "chosenFamily": "CANINE",
+    "designName": "白甲赤巾犬騎",
+    "fixedTraits": [
+      "白犬吻金鼻面",
+      "青藍眼窗",
+      "頭盔折耳形側甲",
+      "赤銅圓盾奶油菱紋"
+    ],
+    "changedRegions": [
+      "頭臉辨識：白犬吻金鼻面",
+      "身體材質與局部圖樣：青藍眼窗；頭盔折耳形側甲；赤銅圓盾奶油菱紋"
+    ],
+    "preservedMotion": [
+      "長件尖端、圓盾中心、披片及足底",
+      "只以目前站姿見證鎖定可見構造；全部序列動態位置尚待逐姿態驗證"
+    ],
+    "allowedContourChanges": [
+      "犬面收在頭盔範圍"
+    ],
+    "rationale": "以「白甲赤巾犬騎」重設身份；依可見的白甲二足，長槍狀件、圓盾及紅色披片選擇CANINE，以臉部及成組材質區塊建立差異，保持既有支撐和延伸構造。",
+    "risk": "盾面不能擴大遮住手的來源位置",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "sourceVisualReviewScope": "group-3-page-1/2/3 每個來源站姿均已觀看，未宣稱完整動作已審查",
+    "directionVersion": "creature-identity-v1"
+  }
+]

@@ -1,0 +1,316 @@
+TAP version 13
+# Subtest: the 9:16 frame is centred and never stretched
+ok 1 - the 9:16 frame is centred and never stretched
+  ---
+  duration_ms: 2.4063
+  type: 'test'
+  ...
+# Subtest: character art uses arena native pixels, keeps feet on stands after resize, and releases its roster once
+ok 2 - character art uses arena native pixels, keeps feet on stands after resize, and releases its roster once
+  ---
+  duration_ms: 12.4594
+  type: 'test'
+  ...
+# Subtest: unknown sizing retains neutral markers instead of guessing character proportions
+ok 3 - unknown sizing retains neutral markers instead of guessing character proportions
+  ---
+  duration_ms: 1.5976
+  type: 'test'
+  ...
+# Subtest: animated geometry retains a fixed native origin across changing packing and viewport sizes
+ok 4 - animated geometry retains a fixed native origin across changing packing and viewport sizes
+  ---
+  duration_ms: 3.8834
+  type: 'test'
+  ...
+# Subtest: the band rectangles tile the frame with no gap and no overlap
+ok 5 - the band rectangles tile the frame with no gap and no overlap
+  ---
+  duration_ms: 0.6285
+  type: 'test'
+  ...
+# Subtest: the scene mounts, draws, and registers exactly one ticker and one resize observer
+ok 6 - the scene mounts, draws, and registers exactly one ticker and one resize observer
+  ---
+  duration_ms: 3.8727
+  type: 'test'
+  ...
+# Subtest: cyberspace is framed with a rectangle, every other arena with the common ring
+ok 7 - cyberspace is framed with a rectangle, every other arena with the common ring
+  ---
+  duration_ms: 7.6199
+  type: 'test'
+  ...
+# Subtest: licensed field art hides the procedural plate and keeps stand markers
+ok 8 - licensed field art hides the procedural plate and keeps stand markers
+  ---
+  duration_ms: 2.1396
+  type: 'test'
+  ...
+# Subtest: the scene draws nothing that implies the viewer chooses an action
+ok 9 - the scene draws nothing that implies the viewer chooses an action
+  ---
+  duration_ms: 3.0405
+  type: 'test'
+  ...
+# Subtest: the battle runs itself and stops, and a stopped battle is still drawn
+ok 10 - the battle runs itself and stops, and a stopped battle is still drawn
+  ---
+  duration_ms: 14.2011
+  type: 'test'
+  ...
+# Subtest: the scene draws the arena and leaves every label to the DOM
+ok 11 - the scene draws the arena and leaves every label to the DOM
+  ---
+  duration_ms: 5.7752
+  type: 'test'
+  ...
+# Subtest: the scene refuses a stage or a source that is not the real one
+ok 12 - the scene refuses a stage or a source that is not the real one
+  ---
+  duration_ms: 2.9556
+  type: 'test'
+  ...
+# Subtest: the scene imports nothing outside src and the contracts
+ok 13 - the scene imports nothing outside src and the contracts
+  ---
+  duration_ms: 3.9153
+  type: 'test'
+  ...
+# Subtest: the three battle screens follow the original's own screen names
+ok 14 - the three battle screens follow the original's own screen names
+  ---
+  duration_ms: 80.1531
+  type: 'test'
+  ...
+# Subtest: the frame is 9:16 and the field band is exactly the 3:2 the arena art is drawn at
+ok 15 - the frame is 9:16 and the field band is exactly the 3:2 the arena art is drawn at
+  ---
+  duration_ms: 3.2402
+  type: 'test'
+  ...
+# Subtest: the bands tile the frame exactly once, with no gap and no overlap
+ok 16 - the bands tile the frame exactly once, with no gap and no overlap
+  ---
+  duration_ms: 7.8328
+  type: 'test'
+  ...
+# Subtest: the HUD bands carry the teams the roster init proves
+ok 17 - the HUD bands carry the teams the roster init proves
+  ---
+  duration_ms: 1.496
+  type: 'test'
+  ...
+# Subtest: every HUD field names a traced read site, and the invented ones are refused by name
+ok 18 - every HUD field names a traced read site, and the invented ones are refused by name
+  ---
+  duration_ms: 3.8465
+  type: 'test'
+  ...
+# Subtest: the clock the screen shows is the traced one, and 7200 is not yet empty
+ok 19 - the clock the screen shows is the traced one, and 7200 is not yet empty
+  ---
+  duration_ms: 762.8682
+  type: 'test'
+  ...
+# Subtest: cyberspace has no common ring, and the frame says so
+ok 20 - cyberspace has no common ring, and the frame says so
+  ---
+  duration_ms: 1.1946
+  type: 'test'
+  ...
+# Subtest: no runtime art path is declared while the arena art is unpromoted
+ok 21 - no runtime art path is declared while the arena art is unpromoted
+  ---
+  duration_ms: 1.0191
+  type: 'test'
+  ...
+# Subtest: a combatant projects only what the battle modules already read
+ok 22 - a combatant projects only what the battle modules already read
+  ---
+  duration_ms: 2.3082
+  type: 'test'
+  ...
+# Subtest: a zero maximum is nothing to draw rather than a full bar or a crash
+ok 23 - a zero maximum is nothing to draw rather than a full bar or a crash
+  ---
+  duration_ms: 0.926
+  type: 'test'
+  ...
+# Subtest: stand positions are product-authored and say so
+ok 24 - stand positions are product-authored and say so
+  ---
+  duration_ms: 1.4953
+  type: 'test'
+  ...
+# Subtest: the discrete frame republishes on a real change and stays put otherwise
+ok 25 - the discrete frame republishes on a real change and stays put otherwise
+  ---
+  duration_ms: 4.9707
+  type: 'test'
+  ...
+# Subtest: the end of a battle reaches the screen as a side, not as a winner
+ok 26 - the end of a battle reaches the screen as a side, not as a winner
+  ---
+  duration_ms: 1.6518
+  type: 'test'
+  ...
+# Subtest: the source refuses anything that is not a six-slot session
+ok 27 - the source refuses anything that is not a six-slot session
+  ---
+  duration_ms: 0.9049
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src and the contracts
+ok 28 - the module imports nothing outside src and the contracts
+  ---
+  duration_ms: 1.484
+  type: 'test'
+  ...
+# Subtest: 166 original CPU yielded frames match zoom, camera operands, raw pose, hold and return
+ok 29 - 166 original CPU yielded frames match zoom, camera operands, raw pose, hold and return
+  ---
+  duration_ms: 10.2632
+  type: 'test'
+  ...
+# Subtest: only traced prelude/character combinations bind; durations match current numeric production metadata
+ok 30 - only traced prelude/character combinations bind; durations match current numeric production metadata
+  ---
+  duration_ms: 8.9144
+  type: 'test'
+  ...
+# Subtest: normal AI entry plays a complete special prelude without advancing clock, HP or cooldown, then settles
+ok 31 - normal AI entry plays a complete special prelude without advancing clock, HP or cooldown, then settles
+  ---
+  duration_ms: 708.496
+  type: 'test'
+  ...
+# Subtest: phone focus restores the identity transform; reduced motion never zooms the field
+ok 32 - phone focus restores the identity transform; reduced motion never zooms the field
+  ---
+  duration_ms: 0.5965
+  type: 'test'
+  ...
+# Subtest: licensed VFX runtime stores exactly the 26 Nitro 3D families
+ok 33 - licensed VFX runtime stores exactly the 26 Nitro 3D families
+  ---
+  duration_ms: 5.0685
+  type: 'test'
+  ...
+# Subtest: preview aliases map the four traced events onto licensed system ids
+ok 34 - preview aliases map the four traced events onto licensed system ids
+  ---
+  duration_ms: 1.9507
+  type: 'test'
+  ...
+# Subtest: licensed VFX models live under production, hash-match, and keep sidecars to hyper and spark
+ok 35 - licensed VFX models live under production, hash-match, and keep sidecars to hyper and spark
+  ---
+  duration_ms: 131.9319
+  type: 'test'
+  ...
+# Subtest: licensed VFX runtime does not carry Nitro binaries or Gate Earth
+ok 36 - licensed VFX runtime does not carry Nitro binaries or Gate Earth
+  ---
+  duration_ms: 66.348
+  type: 'test'
+  ...
+# Subtest: licensed VFX loader resolves aliases, advances from caller delta, and refuses Gate Earth
+ok 37 - licensed VFX loader resolves aliases, advances from caller delta, and refuses Gate Earth
+  ---
+  duration_ms: 10.5556
+  type: 'test'
+  ...
+# Subtest: battle VFX overlay uses the Pixi ticker, authored camera, and no pointer
+ok 38 - battle VFX overlay uses the Pixi ticker, authored camera, and no pointer
+  ---
+  duration_ms: 5.8951
+  type: 'test'
+  ...
+# Subtest: runtime has no external repository, CDN, or research import
+ok 39 - runtime has no external repository, CDN, or research import
+  ---
+  duration_ms: 370.8477
+  type: 'test'
+  ...
+# Subtest: only the storage guard names the historical save namespace, and only to refuse it
+ok 40 - only the storage guard names the historical save namespace, and only to refuse it
+  ---
+  duration_ms: 351.3968
+  type: 'test'
+  ...
+# Subtest: the storage guard is a pure policy leaf with no imports and a populated deny-list
+ok 41 - the storage guard is a pure policy leaf with no imports and a populated deny-list
+  ---
+  duration_ms: 2.1238
+  type: 'test'
+  ...
+# Subtest: only the authorized source families are present
+ok 42 - only the authorized source families are present
+  ---
+  duration_ms: 3.502
+  type: 'test'
+  ...
+# Subtest: all runtime asset declarations resolve below assets/production
+ok 43 - all runtime asset declarations resolve below assets/production
+  ---
+  duration_ms: 1084.8845
+  type: 'test'
+  ...
+# Subtest: product trees contain no ROM, Nitro, decoded, or forensic payload
+ok 44 - product trees contain no ROM, Nitro, decoded, or forensic payload
+  ---
+  duration_ms: 955.9541
+  type: 'test'
+  ...
+# Subtest: exactly one cartridge segment is carried, and it is the authorized one
+ok 45 - exactly one cartridge segment is carried, and it is the authorized one
+  ---
+  duration_ms: 237.3959
+  type: 'test'
+  ...
+# Subtest: one save key, one persistent writer, one Pixi bootstrap and no second ticker
+ok 46 - one save key, one persistent writer, one Pixi bootstrap and no second ticker
+  ---
+  duration_ms: 212.8203
+  type: 'test'
+  ...
+# Subtest: coordination paths are repository-relative and manifests expose all required categories
+ok 47 - coordination paths are repository-relative and manifests expose all required categories
+  ---
+  duration_ms: 12.8997
+  type: 'test'
+  ...
+# Subtest: converted Hyper primitive visibility uses original skin node indices, never the synthetic wrapper
+ok 48 - converted Hyper primitive visibility uses original skin node indices, never the synthetic wrapper
+  ---
+  duration_ms: 6.1124
+  type: 'test'
+  ...
+# Subtest: hypereffect VIS0 sidecar preserves all 26 x 19 visibility samples
+ok 49 - hypereffect VIS0 sidecar preserves all 26 x 19 visibility samples
+  ---
+  duration_ms: 1.105
+  type: 'test'
+  ...
+# Subtest: spark MAT0 sidecar preserves exact four-track alpha runs
+ok 50 - spark MAT0 sidecar preserves exact four-track alpha runs
+  ---
+  duration_ms: 2.7017
+  type: 'test'
+  ...
+# Subtest: runtime sidecars contain no ROM payload or source-machine path
+ok 51 - runtime sidecars contain no ROM payload or source-machine path
+  ---
+  duration_ms: 1.0095
+  type: 'test'
+  ...
+1..51
+# tests 51
+# suites 0
+# pass 51
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3584.9539

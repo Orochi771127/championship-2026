@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "batchId": "ART-BATTLE-HUMAN-PAINT-MIGRATION-R4-2026-09-02",
+  "tool": "BUILT_IN_IMAGEGEN_PLUS_DETERMINISTIC_PIL_NORMALIZATION",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "styleApprovalEvidence": "Owner message 2026-09-02: 新的風格我覺得可以",
+  "sharedLayer": {
+    "assetId": "art:battle:human-paint-r4:field-bm00-00-shared-layer",
+    "file": "docs/art/production/battle/human-paint-migration-r4/review/layers/field-bm00-00-shared-layer-human-paint.png",
+    "sha256": "1AF674BEC1AEA889D24F389668A7DFCAAA1A87FCE8C74A1FB793A090A8397E3D",
+    "alphaMaskSha256": "03D7EAD02E090DFA82F7A3C7B5F36ABD6A8524ACD12E53D0E2B4ABB25F7C5A62",
+    "canonicalAlphaMaskSha256": "03D7EAD02E090DFA82F7A3C7B5F36ABD6A8524ACD12E53D0E2B4ABB25F7C5A62",
+    "geometryAuthority": "CANONICAL_BM00_ALPHA_MASK_NOT_IMAGE_MODEL",
+    "alpha": true
+  },
+  "bm07": {
+    "assetId": "art:battle:human-paint-r4:field-bm07-01",
+    "fieldId": "field_bm07_01",
+    "file": "docs/art/production/battle/human-paint-migration-r4/review/bm07/field-bm07-01-independent-human-paint.png",
+    "sha256": "9E7D145E79706E47D1B9A38D83B5DC2591FA637F246CFF52B53A8DE5778F42C0",
+    "standingZoneContract": {
+      "centers": [
+        [
+          440,
+          400
+        ],
+        [
+          768,
+          400
+        ],
+        [
+          1096,
+          400
+        ],
+        [
+          440,
+          632
+        ],
+        [
+          768,
+          632
+        ],
+        [
+          1096,
+          632
+        ]
+      ],
+      "radius": 96,
+      "source": "DETERMINISTIC_BUILDER_NOT_IMAGE_MODEL"
+    },
+    "dependencies": [],
+    "geometryAuthority": "BM07_INDEPENDENT_BACKGROUND_PLUS_DETERMINISTIC_STANDING_ZONES"
+  },
+  "animatedFields": [
+    {
+      "assetId": "art:battle:human-paint-r4:field-bm03-01",
+      "fieldId": "field_bm03_01",
+      "effect": "LAVA",
+      "maskCoverage": 0.09455,
+      "frameCount": 2,
+      "timingEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK_ARM9_0x0204ED5C",
+      "placementEvidence": "HIGH_CONFIDENCE_CROSSCHECK_FULL_FIELD_GRID_EQUALS_BATTLE_ARENA",
+      "frames": [
+        {
+          "frameIndex": 0,
+          "file": "docs/art/production/battle/human-paint-migration-r4/review/03/field-bm03-01-animation-frame-00.png",
+          "sha256": "CBF848C6A047F94BD821BC1978F92FCB9E8804841D83ED3DA85D6041BB7F58B7",
+          "durationRawTicks": 50,
+          "durationMs": 835.7556556544072
+        },
+        {
+          "frameIndex": 1,
+          "file": "docs/art/production/battle/human-paint-migration-r4/review/03/field-bm03-01-animation-frame-01.png",
+          "sha256": "CF557A5B1799A06F3F9ECC2B7CCE3993538900712484AE82CB8D5414CA74DB0E",
+          "durationRawTicks": 50,
+          "durationMs": 835.7556556544072
+        }
+      ],
+      "composites": [
+        {
+          "frameIndex": 0,
+          "file": "docs/art/production/battle/human-paint-migration-r4/review/03/field-bm03-01-composite-frame-00.png",
+          "sha256": "BE34C5C8F4CB65E91AF5774C7FF28279978731BC49E95662946BF98C651E0AC1"
+        },
+        {
+          "frameIndex": 1,
+          "file": "docs/art/production/battle/human-paint-migration-r4/review/03/field-bm03-01-composite-frame-01.png",
+          "sha256": "44A94E29057755EF2C87C04B1F62318A2128DAD28DDDE4DE7A7473C6685B9859"
+        }
+      ],
+      "objectLayer": null,
+      "geometryAuthority": "VERIFIED_FRAME_COUNT_TIMING_AND_COMPOSITION_PLUS_CANONICAL_BM00"
+    },
+    {
+      "assetId": "art:battle:human-paint-r4:field-bm04-01",
+      "fieldId": "field_bm04_01",
+      "effect": "WATER",
+      "maskCoverage": 0.226749,
+      "frameCount": 2,
+      "timingEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK_ARM9_0x0204ED5C",
+      "placementEvidence": "HIGH_CONFIDENCE_CROSSCHECK_FULL_FIELD_GRID_EQUALS_BATTLE_ARENA",
+      "frames": [
+        {
+          "frameIndex": 0,
+          "file": "docs/art/production/battle/human-paint-migration-r4/review/04/field-bm04-01-animation-frame-00.png",
+          "sha256": "862460EB9D4B20C75620396868BBAB09BB03260368AD50306522C8194AA6B7D0",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285
+        },
+        {
+          "frameIndex": 1,
+          "file": "docs/art/production/battle/human-paint-migration-r4/review/04/field-bm04-01-animation-frame-01.png",
+          "sha256": "B28990ACD5C4C75FFD80F78185655145B66B823E8CFF4D8AC9D82F73BCFE0B19",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285
+        }
+      ],
+      "composites": [
+        {
+          "frameIndex": 0,
+          "file": "docs/art/production/battle/human-paint-migration-r4/review/04/field-bm04-01-composite-frame-00.png",
+          "sha256": "EC9961448663C9A7AD9A641F0D4C646AA530B0BB825F082F536A748D9B56195A"
+        },
+        {
+          "frameIndex": 1,
+          "file": "docs/art/production/battle/human-paint-migration-r4/review/04/field-bm04-01-composite-frame-01.png",
+          "sha256": "D416CE784C79EB4FA8F5E107B5C89B9A10AED6259D9AFBE53EE6C46D850E3EC1"
+        }
+      ],
+      "objectLayer": "assets/production/internal-battle-review/hardening-r2/field-bm04-01-objects.png",
+      "geometryAuthority": "VERIFIED_FRAME_COUNT_TIMING_AND_COMPOSITION_PLUS_CANONICAL_BM00"
+    }
+  ],
+  "layoutPreviews": [
+    {
+      "fieldId": "field-bm07-01",
+      "file": "docs/art/production/battle/human-paint-migration-r4/review/layout/field-bm07-01-battle-layout-360x640.png",
+      "sha256": "319A7FFC4E384DA83CD99F515542638D3EA126951E81D7A4A62F79FF6777AE99",
+      "size": [
+        360,
+        640
+      ]
+    },
+    {
+      "fieldId": "field-bm03-01",
+      "file": "docs/art/production/battle/human-paint-migration-r4/review/layout/field-bm03-01-battle-layout-360x640.png",
+      "sha256": "393A4AEAAC02C7D7BBDF4F0E6A770B0F174897AA6BBA88CDD0FFCB6C9EB05C5A",
+      "size": [
+        360,
+        640
+      ]
+    },
+    {
+      "fieldId": "field-bm04-01",
+      "file": "docs/art/production/battle/human-paint-migration-r4/review/layout/field-bm04-01-battle-layout-360x640.png",
+      "sha256": "622A0CCC06071ED885CFD9A5D58226F107143CA64494F59C39C06FE617FC64CE",
+      "size": [
+        360,
+        640
+      ]
+    }
+  ],
+  "contactSheet": {
+    "file": "docs/art/production/battle/human-paint-migration-r4/review/human-paint-migration-r4-contact-sheet.png",
+    "sha256": "8D0FAF283498ECB799C94002BF03448CCF1B0FAC8968B99FD989A48A38C14C38",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  "rejectedCandidate": "rejected/field-bm07-01-independent-human-paint-rings-model-drawn-rejected.png",
+  "rejectionReason": "MODEL_DRAWN_STANDING_ZONES_CANNOT_OWN_GAMEPLAY_GEOMETRY"
+}

@@ -1,0 +1,51 @@
+{
+  "schemaVersion":1,
+  "entityId":"m201_agumon",
+  "selectedConcept":"A",
+  "candidate":"docs/art/production/characters/appearance-refresh-v1/pixel-v2/m201-a/main-000-first-review.png",
+  "authoringSource":"reports/art/appearance-refresh-v1/author-m201-pixel-v2.py",
+  "sourceGuide":"R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/main/cell-000.png",
+  "nativeGrid":[16,24],
+  "reviewImageSize":[320,480],
+  "artDecision":"ART_DIRECTOR_ACCEPTS_PIXEL_A_DIRECTION",
+  "status":"LOCAL_PIXEL_FIXES_BEFORE_FIRST_CELL_CLOSURE",
+  "runtimeEligible":false,
+  "shippingReady":false,
+  "identityAssessment":"三角耳、暖金主色、奶油短臉/胸腹、可見腕灰點在低像素格可讀，符合 A 的簡化方向。腳部沒有新銀環；不用回到獨立高清生成。",
+  "samplingMethod":"Pillow 唯讀採樣：source guide (88+c*12+6,40+r*12+6)，候選20× nearest圖 (c*20+10,r*20+10)，r/c均0-based。",
+  "geometryAssessment":{
+    "status":"PASS_HAND_FOOT_ALPHA_SUPPORT_MAIN000_ONLY",
+    "scope":"rows14–23 全部 alpha support 相同，含手端、錯開足端和下部透明洞。此檢查不驗證時序、其他 source cells、完整姿態鏈或正常遊戲。",
+    "sourceVisibleRows":[3,20],
+    "candidateVisibleRows":[1,20],
+    "allowedAddedSupport":[
+      {"row":1,"columns":[4,10],"reason":"兩個短耳峰，使用原OAM上方透明餘量。"},
+      {"row":2,"columns":[4,5,6,9,10,11],"reason":"耳部三角基座。"},
+      {"row":3,"columns":[4,11],"reason":"耳基連接。"},
+      {"row":4,"columns":[3,12],"reason":"局部頭部/耳基銜接。"},
+      {"row":8,"columns":[13],"reason":"A 右側短臉毛尖，不碰肢體端點。"}
+    ],
+    "removedSupportToRestore":[
+      {"column":11,"row":11,"newSymbol":"K","reason":"恢復頸/軀幹右邊界，保持來源姿態。"},
+      {"column":11,"row":12,"newSymbol":"K","reason":"恢復相鄰軀幹邊界，避免不必要的身形收窄。"},
+      {"column":12,"row":13,"newSymbol":"K","reason":"恢復肩/身體右邊界；與耳/短吻允許輪廓改動分開。"}
+    ]
+  },
+  "optionalReadabilityRefinement":{
+    "column":1,
+    "row":6,
+    "currentSymbol":"R",
+    "suggestedSymbol":"D",
+    "reason":"只加深單一鼻點，使低像素奶油短吻更清楚；不延長鼻端，不改alpha。此項不阻擋方向採用。"
+  },
+  "linkedVariantFinding":{
+    "target":"main/cell_002",
+    "status":"PATCH_HEIGHT_REPAIR_REQUIRED",
+    "sourceEvidence":"source Main000與002僅columns7–9、rows5–6六像素不同。",
+    "currentIssue":"author script 的 eye-closed 是3×3，在(7,5)覆寫時第三行GGG會改動原Main0 row7 的DDG，額外移除兩個眼色像素。",
+    "repair":"把Main002用的eye-closed patch限為3×2；或第三行保留原DDG，前者較明確。其他cell的眼patch大小須按各自delta驗證，不能一律推成眨眼。",
+    "scope":"此項是檢視author source發現的連動風險，尚未把未view的其他候選算作視覺驗收。"
+  },
+  "nextSafeStep":"保留這個手工pixel方向，補回三個軀幹邊界像素並限制Main002的眼patch高度；重編Main0/2後檢查差異區與九槽共用下patch。不要重畫所有姿態或增加新幀。",
+  "notClaimed":["全47母版完成","83槽動作通過","其他角色完成","normal gameplay驗收","human device驗收","runtime預設已替換"]
+}

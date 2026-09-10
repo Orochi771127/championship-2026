@@ -1,0 +1,160 @@
+TAP version 13
+# Subtest: all 228 species preserve actual ARM9 soft-float movement helper results
+ok 1 - all 228 species preserve actual ARM9 soft-float movement helper results
+  ---
+  duration_ms: 2.719
+  type: 'test'
+  ...
+# Subtest: 90 original CPU actor-native cases agree on returned values, writes and delegated animation calls
+ok 2 - 90 original CPU actor-native cases agree on returned values, writes and delegated animation calls
+  ---
+  duration_ms: 6.845
+  type: 'test'
+  ...
+# Subtest: the original DS square-root boundary stays Q12 for all fourteen CPU samples
+ok 3 - the original DS square-root boundary stays Q12 for all fourteen CPU samples
+  ---
+  duration_ms: 0.3784
+  type: 'test'
+  ...
+# Subtest: all 64 CPU launch pointer combinations include the field0C=2 reverse branch
+ok 4 - all 64 CPU launch pointer combinations include the field0C=2 reverse branch
+  ---
+  duration_ms: 0.842
+  type: 'test'
+  ...
+# Subtest: resumed VM calls use this frame host and report this frame diagnostics
+ok 5 - resumed VM calls use this frame host and report this frame diagnostics
+  ---
+  duration_ms: 11.0757
+  type: 'test'
+  ...
+# Subtest: the menu is capped at the original's five and no schedule means no available matches
+ok 6 - the menu is capped at the original's five and no schedule means no available matches
+  ---
+  duration_ms: 4.4174
+  type: 'test'
+  ...
+# Subtest: a match cannot start before it is chosen, and only an open one may be
+ok 7 - a match cannot start before it is chosen, and only an open one may be
+  ---
+  duration_ms: 0.6285
+  type: 'test'
+  ...
+# Subtest: a chosen match builds six slots out of real tables
+ok 8 - a chosen match builds six slots out of real tables
+  ---
+  duration_ms: 5.4683
+  type: 'test'
+  ...
+# Subtest: the pool is the original's twelve, and exhausting it is not an error
+ok 9 - the pool is the original's twelve, and exhausting it is not an error
+  ---
+  duration_ms: 105.176
+  type: 'test'
+  ...
+# Subtest: observers are given the current view and stop on dispose
+ok 10 - observers are given the current view and stop on dispose
+  ---
+  duration_ms: 1.3815
+  type: 'test'
+  ...
+# Subtest: the screens import nothing, so a view cannot reach into the runtime
+ok 11 - the screens import nothing, so a view cannot reach into the runtime
+  ---
+  duration_ms: 0.307
+  type: 'test'
+  ...
+# Subtest: no screen offers a control that implies choosing an action mid-match
+ok 12 - no screen offers a control that implies choosing an action mid-match
+  ---
+  duration_ms: 0.7252
+  type: 'test'
+  ...
+# Subtest: the stylesheet retains the field aspect and fits the available app height
+ok 13 - the stylesheet retains the field aspect and fits the available app height
+  ---
+  duration_ms: 13.8278
+  type: 'test'
+  ...
+# Subtest: the three battle intents are named, so no generic push can reach a match
+ok 14 - the three battle intents are named, so no generic push can reach a match
+  ---
+  duration_ms: 2.7816
+  type: 'test'
+  ...
+# Subtest: settlement reads one completed numeric round before publishing the final view
+ok 15 - settlement reads one completed numeric round before publishing the final view
+  ---
+  duration_ms: 155.1693
+  type: 'test'
+  ...
+# Subtest: economic fixture defaults do not imply a traced mapping from menu entry mode
+ok 16 - economic fixture defaults do not imply a traced mapping from menu entry mode
+  ---
+  duration_ms: 0.5251
+  type: 'test'
+  ...
+# Subtest: the runtime imports nothing outside src and the contracts
+ok 17 - the runtime imports nothing outside src and the contracts
+  ---
+  duration_ms: 1.5374
+  type: 'test'
+  ...
+# Subtest: all five contract bands exist in the DOM, and the CSS locks their heights
+ok 18 - all five contract bands exist in the DOM, and the CSS locks their heights
+  ---
+  duration_ms: 1.6793
+  type: 'test'
+  ...
+# Subtest: the band layout is labelled product-authored, not an original layout
+ok 19 - the band layout is labelled product-authored, not an original layout
+  ---
+  duration_ms: 1.4958
+  type: 'test'
+  ...
+# Subtest: a full match now deals damage and reaches a verdict
+ok 20 - a full match now deals damage and reaches a verdict
+  ---
+  duration_ms: 82.0962
+  type: 'test'
+  ...
+# Subtest: the side field is set per team, and without it nobody can be targeted
+ok 21 - the side field is set per team, and without it nobody can be targeted
+  ---
+  duration_ms: 7.1129
+  type: 'test'
+  ...
+# Subtest: 166 original CPU yielded frames match zoom, camera operands, raw pose, hold and return
+ok 22 - 166 original CPU yielded frames match zoom, camera operands, raw pose, hold and return
+  ---
+  duration_ms: 24.5152
+  type: 'test'
+  ...
+# Subtest: only traced prelude/character combinations bind; durations match current numeric production metadata
+ok 23 - only traced prelude/character combinations bind; durations match current numeric production metadata
+  ---
+  duration_ms: 4.7104
+  type: 'test'
+  ...
+# Subtest: normal AI entry plays a complete special prelude without advancing clock, HP or cooldown, then settles
+ok 24 - normal AI entry plays a complete special prelude without advancing clock, HP or cooldown, then settles
+  ---
+  duration_ms: 490.2769
+  type: 'test'
+  ...
+# Subtest: phone focus restores the identity transform; reduced motion never zooms the field
+ok 25 - phone focus restores the identity transform; reduced motion never zooms the field
+  ---
+  duration_ms: 0.4809
+  type: 'test'
+  ...
+1..25
+# tests 25
+# suites 0
+# pass 25
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2330.7054

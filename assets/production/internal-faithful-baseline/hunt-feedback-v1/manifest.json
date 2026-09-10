@@ -1,0 +1,4700 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:vfx:hunt-feedback:local-reference:v1",
+  "manifestPath": "assets/production/internal-faithful-baseline/hunt-feedback-v1/manifest.json",
+  "runtimeEligible": true,
+  "localOnly": true,
+  "runtimeScope": "LOOPBACK_RESEARCH_ONLY",
+  "rightsStatus": "ROM_COPYRIGHTED_REFERENCE",
+  "publicReleasePermitted": false,
+  "shippingReady": false,
+  "humanApproved": false,
+  "productionStatus": "OWNER_AUTHORIZED_LOCAL_REFERENCE",
+  "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+  "banks": [
+    {
+      "kind": "SHOT",
+      "itemIndex": 0,
+      "bank": "e002_hunt_bullet_nomal",
+      "cells": [
+        {
+          "cell": 0,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-000.png",
+          "sha256": "6fd5d65629449697235c102d309deb533546bb2f0d72d7df498e66e1c72a24fe",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            11,
+            12
+          ]
+        },
+        {
+          "cell": 1,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-001.png",
+          "sha256": "0402caeda70cdfdb3db994d3f1698e5b32c24b298e94c355edf9ceb56bf1d1bf",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            11,
+            12
+          ]
+        },
+        {
+          "cell": 2,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-002.png",
+          "sha256": "689f0dfb9b0b8d1da3382129d1d1486508dc2f83cd039ce284c0981b92426e4b",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            11,
+            12
+          ]
+        },
+        {
+          "cell": 3,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-003.png",
+          "sha256": "dc28b0986b9865108b1e1295f156a149139122fafd5301e2ebfed3bccd9cbb47",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            11,
+            12
+          ]
+        },
+        {
+          "cell": 4,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-004.png",
+          "sha256": "54ae826a204c82383e7420bcf5d2a5214a501c01cbe46602b56c5fe50e045adc",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            3,
+            4
+          ]
+        },
+        {
+          "cell": 5,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-005.png",
+          "sha256": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            0,
+            0
+          ]
+        },
+        {
+          "cell": 6,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-006.png",
+          "sha256": "e1fb084fed0ad56213535fe2f7a8ee484eee2c07edb11654c8967c8c5709abc4",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            3,
+            4
+          ]
+        },
+        {
+          "cell": 7,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-007.png",
+          "sha256": "50196ac2bfbe6445e7feb1d3f626c4cf34b407fac34c25d60e4e5edca6d2436b",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            3,
+            4
+          ]
+        },
+        {
+          "cell": 8,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-008.png",
+          "sha256": "5b86dee0c57979dd9b67e4e670e91219852c9a98f0eb76a64019cbd3e3046335",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            3,
+            4
+          ]
+        },
+        {
+          "cell": 9,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-009.png",
+          "sha256": "35a86143fabc7c5d32de5cdddaee240917feee01db72fa071b7a82c9e1fe9d7e",
+          "width": 16,
+          "height": 8,
+          "origin": [
+            3,
+            4
+          ]
+        },
+        {
+          "cell": 10,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-010.png",
+          "sha256": "2870718162b9048d2561a4f5e194a6b708e2b7d7f8534bee24ef832fa8c42ad7",
+          "width": 16,
+          "height": 16,
+          "origin": [
+            3,
+            12
+          ]
+        },
+        {
+          "cell": 11,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-011.png",
+          "sha256": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            0,
+            0
+          ]
+        },
+        {
+          "cell": 12,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-012.png",
+          "sha256": "5905ce3ff14f98344c0b65411d7cdb2915db609b338d3698339700872e1bf78c",
+          "width": 16,
+          "height": 24,
+          "origin": [
+            7,
+            8
+          ]
+        },
+        {
+          "cell": 13,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-013.png",
+          "sha256": "08660307db3ac8e30dce9c9a16f853d20ad30d693d88814e8e602b301ff29bf6",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            8
+          ]
+        },
+        {
+          "cell": 14,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-014.png",
+          "sha256": "62da2296a0f3ac5af3eca6e6d0bf5a0fcf73326fb78d4e99d448523b5e82c767",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            8
+          ]
+        },
+        {
+          "cell": 15,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-015.png",
+          "sha256": "aebcdacbdcd3928065cf62e163c2491df4b7c4528c937e7bd89fc2b038e6e738",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            16
+          ]
+        },
+        {
+          "cell": 16,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-016.png",
+          "sha256": "2a7d70269c87378af5d87a93923b22b3ff05a62a43f7bc77d351c06457a0a4e6",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            8
+          ]
+        },
+        {
+          "cell": 17,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_nomal/cell-017.png",
+          "sha256": "8ac109ac96a7410289db2d7437ca6bd553427594713c8348e2f3ebda4782af1a",
+          "width": 32,
+          "height": 16,
+          "origin": [
+            15,
+            0
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": 0,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 0,
+              "ticks": 1
+            },
+            {
+              "cell": 1,
+              "ticks": 1
+            },
+            {
+              "cell": 2,
+              "ticks": 1
+            },
+            {
+              "cell": 3,
+              "ticks": 2
+            },
+            {
+              "cell": 4,
+              "ticks": 2
+            },
+            {
+              "cell": 5,
+              "ticks": 1
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 6,
+              "ticks": 3
+            },
+            {
+              "cell": 7,
+              "ticks": 5
+            },
+            {
+              "cell": 8,
+              "ticks": 2
+            },
+            {
+              "cell": 9,
+              "ticks": 1
+            },
+            {
+              "cell": 10,
+              "ticks": 1
+            },
+            {
+              "cell": 11,
+              "ticks": 1
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 12,
+              "ticks": 5
+            },
+            {
+              "cell": 13,
+              "ticks": 5
+            },
+            {
+              "cell": 14,
+              "ticks": 6
+            },
+            {
+              "cell": 15,
+              "ticks": 6
+            },
+            {
+              "cell": 16,
+              "ticks": 7
+            },
+            {
+              "cell": 17,
+              "ticks": 7
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "e002_hunt_bullet_nomal.nanr": "c90b22918f116bdfdd1345738b344aa49fe6b5c399e3d96f4802d26fc2c873aa",
+        "e002_hunt_bullet_nomal.ncbr": "4cc0c1229044b2c40034a472656682a558b234756d4fbdad482e6ce230181800",
+        "e002_hunt_bullet_nomal.ncer": "20447e3c725a6c3868112eab0ee1d117362e5d6496c2a3fc68f2abdc46ba567f",
+        "e002_hunt_bullet_nomal.nclr": "a9a28eed78d62156bfc132391789a10b1409a23b9c6f3079cc39b12532cef289"
+      }
+    },
+    {
+      "kind": "SHOT",
+      "itemIndex": 1,
+      "bank": "e002_hunt_bullet_sleep",
+      "cells": [
+        {
+          "cell": 0,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-000.png",
+          "sha256": "6fd5d65629449697235c102d309deb533546bb2f0d72d7df498e66e1c72a24fe",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            11,
+            12
+          ]
+        },
+        {
+          "cell": 1,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-001.png",
+          "sha256": "0402caeda70cdfdb3db994d3f1698e5b32c24b298e94c355edf9ceb56bf1d1bf",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            11,
+            12
+          ]
+        },
+        {
+          "cell": 2,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-002.png",
+          "sha256": "689f0dfb9b0b8d1da3382129d1d1486508dc2f83cd039ce284c0981b92426e4b",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            11,
+            12
+          ]
+        },
+        {
+          "cell": 3,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-003.png",
+          "sha256": "dc28b0986b9865108b1e1295f156a149139122fafd5301e2ebfed3bccd9cbb47",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            11,
+            12
+          ]
+        },
+        {
+          "cell": 4,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-004.png",
+          "sha256": "54ae826a204c82383e7420bcf5d2a5214a501c01cbe46602b56c5fe50e045adc",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            3,
+            4
+          ]
+        },
+        {
+          "cell": 5,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-005.png",
+          "sha256": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            0,
+            0
+          ]
+        },
+        {
+          "cell": 6,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-006.png",
+          "sha256": "e1fb084fed0ad56213535fe2f7a8ee484eee2c07edb11654c8967c8c5709abc4",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            3,
+            4
+          ]
+        },
+        {
+          "cell": 7,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-007.png",
+          "sha256": "50196ac2bfbe6445e7feb1d3f626c4cf34b407fac34c25d60e4e5edca6d2436b",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            3,
+            4
+          ]
+        },
+        {
+          "cell": 8,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-008.png",
+          "sha256": "5b86dee0c57979dd9b67e4e670e91219852c9a98f0eb76a64019cbd3e3046335",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            3,
+            4
+          ]
+        },
+        {
+          "cell": 9,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-009.png",
+          "sha256": "35a86143fabc7c5d32de5cdddaee240917feee01db72fa071b7a82c9e1fe9d7e",
+          "width": 16,
+          "height": 8,
+          "origin": [
+            3,
+            4
+          ]
+        },
+        {
+          "cell": 10,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-010.png",
+          "sha256": "2870718162b9048d2561a4f5e194a6b708e2b7d7f8534bee24ef832fa8c42ad7",
+          "width": 16,
+          "height": 16,
+          "origin": [
+            3,
+            12
+          ]
+        },
+        {
+          "cell": 11,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-011.png",
+          "sha256": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            0,
+            0
+          ]
+        },
+        {
+          "cell": 12,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-012.png",
+          "sha256": "6fb6c8f621a4ec72d2932b63a9c14eb0d483593ea5a8d8a4de8b7963ef063436",
+          "width": 16,
+          "height": 24,
+          "origin": [
+            7,
+            8
+          ]
+        },
+        {
+          "cell": 13,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-013.png",
+          "sha256": "f0c447664ef4ea23de0ce5f58a6a69e17df4e28f29dcf22916c13e951872e3bd",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            8
+          ]
+        },
+        {
+          "cell": 14,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-014.png",
+          "sha256": "84436231b6a121f52981803c3da2f32db3685dfcdf7025fa5e271fa5f851833a",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            8
+          ]
+        },
+        {
+          "cell": 15,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-015.png",
+          "sha256": "a772f1aad56cbaee6e6b66f4944b57502772f100a4ced7a00229693b0818113e",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            16
+          ]
+        },
+        {
+          "cell": 16,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-016.png",
+          "sha256": "91b621b5a3b22953b2c8e72d384d3adb0d1e4035e1c695a1855253e1da2a40fa",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            8
+          ]
+        },
+        {
+          "cell": 17,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_sleep/cell-017.png",
+          "sha256": "fc529c39b1850659dbfe1d10a6bcc50377c43605c637ca09075534df4cda2853",
+          "width": 32,
+          "height": 16,
+          "origin": [
+            15,
+            0
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": 0,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 0,
+              "ticks": 1
+            },
+            {
+              "cell": 1,
+              "ticks": 1
+            },
+            {
+              "cell": 2,
+              "ticks": 1
+            },
+            {
+              "cell": 3,
+              "ticks": 2
+            },
+            {
+              "cell": 4,
+              "ticks": 2
+            },
+            {
+              "cell": 5,
+              "ticks": 1
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 6,
+              "ticks": 3
+            },
+            {
+              "cell": 7,
+              "ticks": 5
+            },
+            {
+              "cell": 8,
+              "ticks": 2
+            },
+            {
+              "cell": 9,
+              "ticks": 1
+            },
+            {
+              "cell": 10,
+              "ticks": 1
+            },
+            {
+              "cell": 11,
+              "ticks": 1
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 12,
+              "ticks": 5
+            },
+            {
+              "cell": 13,
+              "ticks": 5
+            },
+            {
+              "cell": 14,
+              "ticks": 6
+            },
+            {
+              "cell": 15,
+              "ticks": 6
+            },
+            {
+              "cell": 16,
+              "ticks": 7
+            },
+            {
+              "cell": 17,
+              "ticks": 7
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "e002_hunt_bullet_sleep.nanr": "c90b22918f116bdfdd1345738b344aa49fe6b5c399e3d96f4802d26fc2c873aa",
+        "e002_hunt_bullet_sleep.ncbr": "4cc0c1229044b2c40034a472656682a558b234756d4fbdad482e6ce230181800",
+        "e002_hunt_bullet_sleep.ncer": "20447e3c725a6c3868112eab0ee1d117362e5d6496c2a3fc68f2abdc46ba567f",
+        "e002_hunt_bullet_sleep.nclr": "8561709b96065502f787d9535dc5d746f4463ec21abfe336590e019dda26287c"
+      }
+    },
+    {
+      "kind": "SHOT",
+      "itemIndex": 2,
+      "bank": "e002_hunt_bullet_stun",
+      "cells": [
+        {
+          "cell": 0,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-000.png",
+          "sha256": "6fd5d65629449697235c102d309deb533546bb2f0d72d7df498e66e1c72a24fe",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            11,
+            12
+          ]
+        },
+        {
+          "cell": 1,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-001.png",
+          "sha256": "0402caeda70cdfdb3db994d3f1698e5b32c24b298e94c355edf9ceb56bf1d1bf",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            11,
+            12
+          ]
+        },
+        {
+          "cell": 2,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-002.png",
+          "sha256": "689f0dfb9b0b8d1da3382129d1d1486508dc2f83cd039ce284c0981b92426e4b",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            11,
+            12
+          ]
+        },
+        {
+          "cell": 3,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-003.png",
+          "sha256": "dc28b0986b9865108b1e1295f156a149139122fafd5301e2ebfed3bccd9cbb47",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            11,
+            12
+          ]
+        },
+        {
+          "cell": 4,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-004.png",
+          "sha256": "54ae826a204c82383e7420bcf5d2a5214a501c01cbe46602b56c5fe50e045adc",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            3,
+            4
+          ]
+        },
+        {
+          "cell": 5,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-005.png",
+          "sha256": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            0,
+            0
+          ]
+        },
+        {
+          "cell": 6,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-006.png",
+          "sha256": "e1fb084fed0ad56213535fe2f7a8ee484eee2c07edb11654c8967c8c5709abc4",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            3,
+            4
+          ]
+        },
+        {
+          "cell": 7,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-007.png",
+          "sha256": "50196ac2bfbe6445e7feb1d3f626c4cf34b407fac34c25d60e4e5edca6d2436b",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            3,
+            4
+          ]
+        },
+        {
+          "cell": 8,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-008.png",
+          "sha256": "5b86dee0c57979dd9b67e4e670e91219852c9a98f0eb76a64019cbd3e3046335",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            3,
+            4
+          ]
+        },
+        {
+          "cell": 9,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-009.png",
+          "sha256": "35a86143fabc7c5d32de5cdddaee240917feee01db72fa071b7a82c9e1fe9d7e",
+          "width": 16,
+          "height": 8,
+          "origin": [
+            3,
+            4
+          ]
+        },
+        {
+          "cell": 10,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-010.png",
+          "sha256": "2870718162b9048d2561a4f5e194a6b708e2b7d7f8534bee24ef832fa8c42ad7",
+          "width": 16,
+          "height": 16,
+          "origin": [
+            3,
+            12
+          ]
+        },
+        {
+          "cell": 11,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-011.png",
+          "sha256": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            0,
+            0
+          ]
+        },
+        {
+          "cell": 12,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-012.png",
+          "sha256": "8e57b9dcb8f9c57b22e2936b89a489af0dd4fb14d8ef45bc553a99f05f5bf01c",
+          "width": 16,
+          "height": 24,
+          "origin": [
+            7,
+            8
+          ]
+        },
+        {
+          "cell": 13,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-013.png",
+          "sha256": "45dad9829cb6740e527c06d6000992400a60ab241cd0a350a28cfbd74ec1a705",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            8
+          ]
+        },
+        {
+          "cell": 14,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-014.png",
+          "sha256": "bfd275f3da938246e78ad1c0d4e7a3eb638b4a44dfd5088f914ca6d311cd8f7e",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            8
+          ]
+        },
+        {
+          "cell": 15,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-015.png",
+          "sha256": "c93ee9760d5252dcb77c2f14d16c4b4059c1ec245292392f706261db2cebfca2",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            16
+          ]
+        },
+        {
+          "cell": 16,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-016.png",
+          "sha256": "8e1216df24b187f7f653f6863922c67cd651ad8533421178a4be6d6ff912a76a",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            8
+          ]
+        },
+        {
+          "cell": 17,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bullet_stun/cell-017.png",
+          "sha256": "9ee232ee103c9cdade42dd0e201a3e9452000fbb71419f65f47c0be6e958acda",
+          "width": 32,
+          "height": 16,
+          "origin": [
+            15,
+            0
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": 0,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 0,
+              "ticks": 1
+            },
+            {
+              "cell": 1,
+              "ticks": 1
+            },
+            {
+              "cell": 2,
+              "ticks": 1
+            },
+            {
+              "cell": 3,
+              "ticks": 2
+            },
+            {
+              "cell": 4,
+              "ticks": 2
+            },
+            {
+              "cell": 5,
+              "ticks": 1
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 6,
+              "ticks": 3
+            },
+            {
+              "cell": 7,
+              "ticks": 5
+            },
+            {
+              "cell": 8,
+              "ticks": 2
+            },
+            {
+              "cell": 9,
+              "ticks": 1
+            },
+            {
+              "cell": 10,
+              "ticks": 1
+            },
+            {
+              "cell": 11,
+              "ticks": 1
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 12,
+              "ticks": 5
+            },
+            {
+              "cell": 13,
+              "ticks": 5
+            },
+            {
+              "cell": 14,
+              "ticks": 6
+            },
+            {
+              "cell": 15,
+              "ticks": 6
+            },
+            {
+              "cell": 16,
+              "ticks": 7
+            },
+            {
+              "cell": 17,
+              "ticks": 7
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "e002_hunt_bullet_stun.nanr": "c90b22918f116bdfdd1345738b344aa49fe6b5c399e3d96f4802d26fc2c873aa",
+        "e002_hunt_bullet_stun.ncbr": "4cc0c1229044b2c40034a472656682a558b234756d4fbdad482e6ce230181800",
+        "e002_hunt_bullet_stun.ncer": "20447e3c725a6c3868112eab0ee1d117362e5d6496c2a3fc68f2abdc46ba567f",
+        "e002_hunt_bullet_stun.nclr": "344c5bbd0312c0cba5ea4dd6bac08b89d459a1bcfe3d22c61099b606ea55b831"
+      }
+    },
+    {
+      "kind": "MEAT",
+      "itemIndex": 0,
+      "bank": "e002_hunt_niku_nomal",
+      "cells": [
+        {
+          "cell": 0,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_nomal/cell-000.png",
+          "sha256": "3b9a774b1031374d366d809923b0a96187398b25503551f13ea899881358852b",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            19
+          ]
+        },
+        {
+          "cell": 1,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_nomal/cell-001.png",
+          "sha256": "f3738a3790a19f1420b9fd2f71e8ad100c68b994528dc58e159b5396d50d706e",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            19
+          ]
+        },
+        {
+          "cell": 2,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_nomal/cell-002.png",
+          "sha256": "c6357d8e7de0e186ab3f60587436be60ea527b7a0b040fb775beda64ea173a8e",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            19
+          ]
+        },
+        {
+          "cell": 3,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_nomal/cell-003.png",
+          "sha256": "be70950ca6df693e8471f724a57914ebbc8a9f79a3247b85853af3492e8f7923",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            19
+          ]
+        },
+        {
+          "cell": 4,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_nomal/cell-004.png",
+          "sha256": "d706516c6cafd1f3c1a583d234cf1bc61b103a74b3bbd1bb3262e0a14e9c8098",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            27
+          ]
+        },
+        {
+          "cell": 5,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_nomal/cell-005.png",
+          "sha256": "ae69665e7fe11cb4044507c1a4ad25727fbd50671589fbd7212049ba7c8759bb",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            27
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": 0,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 0,
+              "ticks": 2
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 1,
+              "ticks": 2
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 2,
+              "ticks": 2
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 3,
+              "ticks": 2
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "playbackMode": 2,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 4,
+              "ticks": 18
+            },
+            {
+              "cell": 5,
+              "ticks": 18
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "e002_hunt_niku_nomal.nanr": "665b1e8cb368eeeaf8cc4a7f97c6cdd8e3d7d37f91ebbb06066beab384e595d6",
+        "e002_hunt_niku_nomal.ncbr": "f2370bcfa2f88f48e396f1ecc5c83da05ccde0a587523534639d49b9f198123c",
+        "e002_hunt_niku_nomal.ncer": "72716f4d9777f2b332bd468e91ec2731006447252fec309ee6c72502938e228a",
+        "e002_hunt_niku_nomal.nclr": "0487ec8621b24223c68d4d0ba0b65d4feff6b49fb833e340fedc265ac26ff840"
+      }
+    },
+    {
+      "kind": "MEAT",
+      "itemIndex": 1,
+      "bank": "e002_hunt_niku_big",
+      "cells": [
+        {
+          "cell": 0,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_big/cell-000.png",
+          "sha256": "70475f4013eaf13c5ffcd808bfc3a78250cc297947d353081d3f2f23b1cf1fe3",
+          "width": 40,
+          "height": 40,
+          "origin": [
+            15,
+            33
+          ]
+        },
+        {
+          "cell": 1,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_big/cell-001.png",
+          "sha256": "12d40f8b520339d58d1f259988ddd0ba0f51f35dcd0276cbf5061cfa4286678f",
+          "width": 40,
+          "height": 40,
+          "origin": [
+            15,
+            33
+          ]
+        },
+        {
+          "cell": 2,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_big/cell-002.png",
+          "sha256": "83144cb02e7d05e26d0f0afa2742bc62eef65d36de1db236501ebdc73f0faf6e",
+          "width": 48,
+          "height": 32,
+          "origin": [
+            23,
+            25
+          ]
+        },
+        {
+          "cell": 3,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_big/cell-003.png",
+          "sha256": "73b39f6347700fb9afeca1de49c511ebbf31f9305a0343b1ed33d1a814847dd0",
+          "width": 48,
+          "height": 24,
+          "origin": [
+            23,
+            17
+          ]
+        },
+        {
+          "cell": 4,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_big/cell-004.png",
+          "sha256": "930c6cf47d5f273a992a69af13a121e84cd7e46aa0fc0516efc53fd66ace95c5",
+          "width": 48,
+          "height": 48,
+          "origin": [
+            23,
+            41
+          ]
+        },
+        {
+          "cell": 5,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_big/cell-005.png",
+          "sha256": "cbfa24cf7ce6692bf9b7472c3238bc0e2db2b41a62caeb2ca6c9807d09c5007e",
+          "width": 48,
+          "height": 48,
+          "origin": [
+            23,
+            41
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": 0,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 0,
+              "ticks": 2
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 1,
+              "ticks": 2
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 2,
+              "ticks": 2
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 3,
+              "ticks": 2
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "playbackMode": 2,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 4,
+              "ticks": 18
+            },
+            {
+              "cell": 5,
+              "ticks": 18
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "e002_hunt_niku_big.nanr": "665b1e8cb368eeeaf8cc4a7f97c6cdd8e3d7d37f91ebbb06066beab384e595d6",
+        "e002_hunt_niku_big.ncbr": "4b22b99cc17a5245ca7be6811b6f5fcb96597b8521a2b81f5f1fe6ad498fb0c8",
+        "e002_hunt_niku_big.ncer": "5b92f93a9834e97ae72897b914b49e2ce057650040a103c0ec8789fc3b798d7c",
+        "e002_hunt_niku_big.nclr": "0487ec8621b24223c68d4d0ba0b65d4feff6b49fb833e340fedc265ac26ff840"
+      }
+    },
+    {
+      "kind": "MEAT",
+      "itemIndex": 2,
+      "bank": "e002_hunt_niku_poison",
+      "cells": [
+        {
+          "cell": 0,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_poison/cell-000.png",
+          "sha256": "9ce5e8c1a51797db305a74cca9c051297dc91b17d08dcfa5e364932c392902ad",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            19
+          ]
+        },
+        {
+          "cell": 1,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_poison/cell-001.png",
+          "sha256": "5464e9ced947eed415bb016173c0e19f2c70a2c555f3d46e1c88e95e408587be",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            19
+          ]
+        },
+        {
+          "cell": 2,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_poison/cell-002.png",
+          "sha256": "de29c551419b2967d898c8b19247bae0f356326590ff2604bbe5d222a5c87d89",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            19
+          ]
+        },
+        {
+          "cell": 3,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_poison/cell-003.png",
+          "sha256": "225d4e2662e47a37d23bc0c24a304112218a67537a4e7efb5b73c3f3b1b970f5",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            19
+          ]
+        },
+        {
+          "cell": 4,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_poison/cell-004.png",
+          "sha256": "d706516c6cafd1f3c1a583d234cf1bc61b103a74b3bbd1bb3262e0a14e9c8098",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            27
+          ]
+        },
+        {
+          "cell": 5,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_poison/cell-005.png",
+          "sha256": "ae69665e7fe11cb4044507c1a4ad25727fbd50671589fbd7212049ba7c8759bb",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            27
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": 0,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 0,
+              "ticks": 2
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 1,
+              "ticks": 2
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 2,
+              "ticks": 2
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 3,
+              "ticks": 2
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "playbackMode": 2,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 4,
+              "ticks": 18
+            },
+            {
+              "cell": 5,
+              "ticks": 18
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "e002_hunt_niku_poison.nanr": "665b1e8cb368eeeaf8cc4a7f97c6cdd8e3d7d37f91ebbb06066beab384e595d6",
+        "e002_hunt_niku_poison.ncbr": "8c875b7b1bec2e9ee9a1adf4fe87410108835131f0877d9f821f10a59f0a4db3",
+        "e002_hunt_niku_poison.ncer": "72716f4d9777f2b332bd468e91ec2731006447252fec309ee6c72502938e228a",
+        "e002_hunt_niku_poison.nclr": "0487ec8621b24223c68d4d0ba0b65d4feff6b49fb833e340fedc265ac26ff840"
+      }
+    },
+    {
+      "kind": "MEAT",
+      "itemIndex": 3,
+      "bank": "e002_hunt_niku_stun",
+      "cells": [
+        {
+          "cell": 0,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_stun/cell-000.png",
+          "sha256": "766af17c8ed13ea347fd0905ef63a678d15725c5c60dd68f8bfbc8addeec2649",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            19
+          ]
+        },
+        {
+          "cell": 1,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_stun/cell-001.png",
+          "sha256": "44f8be50fef313958086e2c9f55f9383130575f33cbc8060856014604b5df5ae",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            19
+          ]
+        },
+        {
+          "cell": 2,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_stun/cell-002.png",
+          "sha256": "528ba812ed6ddd31e364aa73ae02c45d2918326dacbda8be158bc15b44fe2eea",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            19
+          ]
+        },
+        {
+          "cell": 3,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_stun/cell-003.png",
+          "sha256": "2ca109189271ab16ce9f616e4439804ec1042c047e13b68ad5eee5f5ec464092",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            19
+          ]
+        },
+        {
+          "cell": 4,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_stun/cell-004.png",
+          "sha256": "d706516c6cafd1f3c1a583d234cf1bc61b103a74b3bbd1bb3262e0a14e9c8098",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            27
+          ]
+        },
+        {
+          "cell": 5,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_niku_stun/cell-005.png",
+          "sha256": "ae69665e7fe11cb4044507c1a4ad25727fbd50671589fbd7212049ba7c8759bb",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            27
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": 0,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 0,
+              "ticks": 2
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 1,
+              "ticks": 2
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 2,
+              "ticks": 2
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 3,
+              "ticks": 2
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "playbackMode": 2,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 4,
+              "ticks": 18
+            },
+            {
+              "cell": 5,
+              "ticks": 18
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "e002_hunt_niku_stun.nanr": "665b1e8cb368eeeaf8cc4a7f97c6cdd8e3d7d37f91ebbb06066beab384e595d6",
+        "e002_hunt_niku_stun.ncbr": "556d8daa14ea55f9cf465cb567bdf41df4c0c07fa2ad5b15b1ee01586bb20e68",
+        "e002_hunt_niku_stun.ncer": "11ec0082cb84819037e1310b54ebc6d759f1d06b6b149c1d18be33b24e756d3a",
+        "e002_hunt_niku_stun.nclr": "4471bf96535521624b97a15c4f5b4c5ef62a69c3dd4f3d703094211d6c13fc93"
+      }
+    },
+    {
+      "kind": "DECOY",
+      "itemIndex": 0,
+      "bank": "e002_hunt_decoy",
+      "cells": [
+        {
+          "cell": 0,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy/cell-000.png",
+          "sha256": "9d37df3a11fa27bde88db469cb66951684a9ce1442f6b4ec1e193b3b209fa185",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            7,
+            21
+          ]
+        },
+        {
+          "cell": 1,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy/cell-001.png",
+          "sha256": "11b8cc548a03958e7ff719ef30a74d1d5dbd6ba73e0dda030c1cfaa1afbbc94d",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            7,
+            21
+          ]
+        },
+        {
+          "cell": 2,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy/cell-002.png",
+          "sha256": "dbb5fc1ae23c78ffd882f8200a88605c6a4741ee92b5871b784968aa1b42d68d",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            7,
+            21
+          ]
+        },
+        {
+          "cell": 3,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy/cell-003.png",
+          "sha256": "d8ab5a94b031acf441e7e6b9a9d02c270902af8ee0a2635f7484b66f6269f918",
+          "width": 24,
+          "height": 16,
+          "origin": [
+            7,
+            13
+          ]
+        },
+        {
+          "cell": 4,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy/cell-004.png",
+          "sha256": "b2f0ab773b3189ee028769ddfe6fcd66d09fbd5e846993962f4461b2140d4b6e",
+          "width": 24,
+          "height": 16,
+          "origin": [
+            7,
+            13
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": 0,
+          "playbackMode": 2,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 0,
+              "ticks": 12
+            },
+            {
+              "cell": 1,
+              "ticks": 15
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 2,
+              "ticks": 15
+            },
+            {
+              "cell": 3,
+              "ticks": 15
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 4,
+              "ticks": 15
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "e002_hunt_decoy.nanr": "59d9630e653e666870231fd430700f8139270d162191c907702ba16bc2ae93b7",
+        "e002_hunt_decoy.ncbr": "22b4da42190888cfbf57c024de6031196cda47839b0d5a0c7d0fb37beab4ef46",
+        "e002_hunt_decoy.ncer": "da4e8175327a48a24d2e6427ca51aaa2eca39f9374a1ec117a48e25861f3ac5c",
+        "e002_hunt_decoy.nclr": "66623ab1aa6abec498c9528c5bac228b8cfcc3d732da42a1555a4cae5f2bb259"
+      }
+    },
+    {
+      "kind": "DECOY",
+      "itemIndex": 1,
+      "bank": "e002_hunt_decoy2",
+      "cells": [
+        {
+          "cell": 0,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy2/cell-000.png",
+          "sha256": "50a43f1722adf63496a634fe25474d3c0ebf1159356401286e358066a5f6b1a6",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            7,
+            21
+          ]
+        },
+        {
+          "cell": 1,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy2/cell-001.png",
+          "sha256": "24c3a984c8ebed08c37e524799e8cb6727377ebcec4a2beba080f58084fd2c3c",
+          "width": 24,
+          "height": 16,
+          "origin": [
+            7,
+            13
+          ]
+        },
+        {
+          "cell": 2,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy2/cell-002.png",
+          "sha256": "cfdb0b371d29fb1e76bcbb068ccd7b6c923aaff6ef1a932e833796717c9692bd",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            7,
+            21
+          ]
+        },
+        {
+          "cell": 3,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy2/cell-003.png",
+          "sha256": "9907a7074a09a9a6f32d234086ba5ef3a9aec0b47df151f421fe181468de1f38",
+          "width": 24,
+          "height": 16,
+          "origin": [
+            7,
+            13
+          ]
+        },
+        {
+          "cell": 4,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_decoy2/cell-004.png",
+          "sha256": "f68d8d11d54eba150d7889c980e8bd60cfac28feda71cb6d87e857c5bab1f002",
+          "width": 24,
+          "height": 16,
+          "origin": [
+            7,
+            13
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": 0,
+          "playbackMode": 2,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 0,
+              "ticks": 12
+            },
+            {
+              "cell": 1,
+              "ticks": 15
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 2,
+              "ticks": 15
+            },
+            {
+              "cell": 3,
+              "ticks": 15
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 4,
+              "ticks": 15
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "e002_hunt_decoy2.nanr": "59d9630e653e666870231fd430700f8139270d162191c907702ba16bc2ae93b7",
+        "e002_hunt_decoy2.ncbr": "cf0c5a62f9dc1cee09fb3eaf33132fbcc18e584a03b3db2125371ed9e724e91a",
+        "e002_hunt_decoy2.ncer": "da1db581a5e8a7edaa96a0698f3f9d3fedec4b0a2a263990c8746d875eac5be3",
+        "e002_hunt_decoy2.nclr": "cd6d3d8a338cb253874a139b4ec721ebd931a282f15452e9a1a01353216541ee"
+      }
+    },
+    {
+      "kind": "LIGHT",
+      "itemIndex": 0,
+      "bank": "e002_hunt_digilight",
+      "cells": [
+        {
+          "cell": 0,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digilight/cell-000.png",
+          "sha256": "ceb291b01c62c271f7e999c482890fb8da9730e66c33357da0af87d8ca7780ab",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            24
+          ]
+        },
+        {
+          "cell": 1,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digilight/cell-001.png",
+          "sha256": "285cfdfdfe23c6d6ba156945be09dc897643a5cb8f84df2ba991a44687b4a38c",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            24
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": 0,
+          "playbackMode": 2,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 0,
+              "ticks": 15
+            },
+            {
+              "cell": 1,
+              "ticks": 15
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "e002_hunt_digilight.nanr": "e66cc37e21cde696e34302c05c9103d3f433b402149f5b5cb43c1dc82244787e",
+        "e002_hunt_digilight.ncbr": "dd4dd560f9144989e471aed8da294c8922bbdbee4aebe02ef0b4855bd698961f",
+        "e002_hunt_digilight.ncer": "e2c3a9bef8a6d2e1829b313ec14d88c2e458dd309ad2898a89d4d5c2b6372fa5",
+        "e002_hunt_digilight.nclr": "b0d8bc3329b4371891168f44916b982944591be92a8cbde3f9206ce52eb99ed7"
+      }
+    },
+    {
+      "kind": "LIGHT",
+      "itemIndex": 1,
+      "bank": "e002_hunt_digilight2",
+      "cells": [
+        {
+          "cell": 0,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digilight2/cell-000.png",
+          "sha256": "c7cd60281e98063f841107b6ce8d6094f911272cae3691d7aaf5b983a1567983",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            24
+          ]
+        },
+        {
+          "cell": 1,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digilight2/cell-001.png",
+          "sha256": "e07fac6c8b584ac71a87058d8709c28701a45c7007fc0d01e3745cb81bd6a09a",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            24
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": 0,
+          "playbackMode": 2,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 0,
+              "ticks": 15
+            },
+            {
+              "cell": 1,
+              "ticks": 15
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "e002_hunt_digilight2.nanr": "e66cc37e21cde696e34302c05c9103d3f433b402149f5b5cb43c1dc82244787e",
+        "e002_hunt_digilight2.ncbr": "1fe083c2faa9b8f9f59957f1b0b5cd1b38447696cdccccfd1a705a677b3da365",
+        "e002_hunt_digilight2.ncer": "e2c3a9bef8a6d2e1829b313ec14d88c2e458dd309ad2898a89d4d5c2b6372fa5",
+        "e002_hunt_digilight2.nclr": "93236ba51845b5b5bf3858a4eafda4eccac30c9ff0cd4ab5f74bc88e0bc643c6"
+      }
+    },
+    {
+      "kind": "BOMB",
+      "itemIndex": 0,
+      "bank": "e002_hunt_bom_nomal",
+      "cells": [
+        {
+          "cell": 0,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-000.png",
+          "sha256": "d3a8dc300863bb2d61b1ddc890232515ddcdf03bff594d432cd3569b0939598b",
+          "width": 16,
+          "height": 24,
+          "origin": [
+            7,
+            20
+          ]
+        },
+        {
+          "cell": 1,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-001.png",
+          "sha256": "8e7020e4cc4ea27af8ced8753714e9521df052505ce069408cf472980029dd50",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            20
+          ]
+        },
+        {
+          "cell": 2,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-002.png",
+          "sha256": "69c96bc41546c45011c9c0104c2c2d05adfa080c220f7ab20feb739a242c1b14",
+          "width": 16,
+          "height": 24,
+          "origin": [
+            7,
+            20
+          ]
+        },
+        {
+          "cell": 3,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-003.png",
+          "sha256": "57b9c42abdb095e8ac044e98d0c1c486a528a442f13bc1a9cbe43d4589a5a820",
+          "width": 16,
+          "height": 16,
+          "origin": [
+            7,
+            6
+          ]
+        },
+        {
+          "cell": 4,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-004.png",
+          "sha256": "7784db592d2a66db3c0c9aae2c2fd863c7e5efdc68b217654201c4ddc34ca206",
+          "width": 24,
+          "height": 16,
+          "origin": [
+            13,
+            6
+          ]
+        },
+        {
+          "cell": 5,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-005.png",
+          "sha256": "45e8b3df1831906368b1f773071331f714332334e747ad1d9d7cb7c2edf623ef",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            12,
+            13
+          ]
+        },
+        {
+          "cell": 6,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-006.png",
+          "sha256": "9ffa414eea254d24348ce4df78dee22542f5a078a2eb72e1d499d19a6ee49ea9",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            12,
+            14
+          ]
+        },
+        {
+          "cell": 7,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-007.png",
+          "sha256": "e1e4eafad2f7fa119c6c3187cd82e706f980d9036e815ad2d8129d4ec76cfea0",
+          "width": 24,
+          "height": 16,
+          "origin": [
+            12,
+            6
+          ]
+        },
+        {
+          "cell": 8,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-008.png",
+          "sha256": "41e19e72cb442d97e742ad11bb801ae21e89f3a1f7b3299cd0e6ae781f97faba",
+          "width": 24,
+          "height": 8,
+          "origin": [
+            12,
+            -2
+          ]
+        },
+        {
+          "cell": 9,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-009.png",
+          "sha256": "532c66ececc29c4e7687eae59064c3001456393c95e603486e5a565bb6950030",
+          "width": 48,
+          "height": 48,
+          "origin": [
+            31,
+            24
+          ]
+        },
+        {
+          "cell": 10,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-010.png",
+          "sha256": "b623b429ee057624988751f8a1c0cd786bb6c722a726c415f4f0a946716c89ed",
+          "width": 56,
+          "height": 56,
+          "origin": [
+            33,
+            24
+          ]
+        },
+        {
+          "cell": 11,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-011.png",
+          "sha256": "bca654ef5b3451669bcaf772f46ca314fe9d546182f745a6044b66165a76f96f",
+          "width": 64,
+          "height": 64,
+          "origin": [
+            31,
+            32
+          ]
+        },
+        {
+          "cell": 12,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-012.png",
+          "sha256": "91650aead39de4bbe92eba29309aada4f93dc35e8b7a2d959d16c5b98ecb7183",
+          "width": 72,
+          "height": 64,
+          "origin": [
+            39,
+            32
+          ]
+        },
+        {
+          "cell": 13,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-013.png",
+          "sha256": "197716e0fa9b8e5d65b24c1532ddac0ae1588c82972c430fea7fe38f9bc4989c",
+          "width": 72,
+          "height": 56,
+          "origin": [
+            39,
+            24
+          ]
+        },
+        {
+          "cell": 14,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-014.png",
+          "sha256": "f5cfe8d292acef2664387bc3594d46609ced11062aae7b2471eae7b1728b824b",
+          "width": 56,
+          "height": 48,
+          "origin": [
+            29,
+            25
+          ]
+        },
+        {
+          "cell": 15,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-015.png",
+          "sha256": "d53fd9962ef4d2b83601559e6a2817dfac6c70739410eeb68e437e57d5013481",
+          "width": 16,
+          "height": 16,
+          "origin": [
+            5,
+            9
+          ]
+        },
+        {
+          "cell": 16,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-016.png",
+          "sha256": "35342da735f7321ba3c21572346b74b1234ab8d50bde439f491fd47a828d8d6f",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            7,
+            16
+          ]
+        },
+        {
+          "cell": 17,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-017.png",
+          "sha256": "b06779d49c69cc4a9ca81e137b276048b1e0a9fdc30310389ac71e52f08ccf6e",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            7,
+            16
+          ]
+        },
+        {
+          "cell": 18,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-018.png",
+          "sha256": "982bab86fa92b8a42d64a2864d552ebf0bcaa2eab531c87c95887625faab361d",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            9,
+            16
+          ]
+        },
+        {
+          "cell": 19,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-019.png",
+          "sha256": "a0edc480ca868c4706712fafe1a7a5215247a7d625d6c799b38fd760db4604e0",
+          "width": 16,
+          "height": 16,
+          "origin": [
+            4,
+            16
+          ]
+        },
+        {
+          "cell": 20,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_nomal/cell-020.png",
+          "sha256": "071c516c2981a14a17417733448bf3ad78fbe64c5051a447297facbba0657f12",
+          "width": 16,
+          "height": 8,
+          "origin": [
+            -1,
+            14
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": 0,
+          "playbackMode": 2,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 0,
+              "ticks": 15
+            },
+            {
+              "cell": 1,
+              "ticks": 15
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 2,
+              "ticks": 15
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 3,
+              "ticks": 5
+            },
+            {
+              "cell": 4,
+              "ticks": 5
+            },
+            {
+              "cell": 5,
+              "ticks": 6
+            },
+            {
+              "cell": 6,
+              "ticks": 6
+            },
+            {
+              "cell": 7,
+              "ticks": 7
+            },
+            {
+              "cell": 8,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 9,
+              "ticks": 5
+            },
+            {
+              "cell": 10,
+              "ticks": 5
+            },
+            {
+              "cell": 11,
+              "ticks": 6
+            },
+            {
+              "cell": 12,
+              "ticks": 6
+            },
+            {
+              "cell": 13,
+              "ticks": 7
+            },
+            {
+              "cell": 14,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 15,
+              "ticks": 5
+            },
+            {
+              "cell": 16,
+              "ticks": 5
+            },
+            {
+              "cell": 17,
+              "ticks": 6
+            },
+            {
+              "cell": 18,
+              "ticks": 6
+            },
+            {
+              "cell": 19,
+              "ticks": 7
+            },
+            {
+              "cell": 20,
+              "ticks": 7
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "e002_hunt_bom_nomal.nanr": "513af033585d95ce66cf7513e7845e5101b3f0c44ef825ff326600cf3251df1a",
+        "e002_hunt_bom_nomal.ncbr": "7631370b32b55f63b79f1ed702bbb845853ff64661a395ce396d38683dc44ee8",
+        "e002_hunt_bom_nomal.ncer": "29c8259b6d42e6cfd519858edce081e4fc7736bdd030c2aacd1258e99f97490d",
+        "e002_hunt_bom_nomal.nclr": "ed55419bbfabc18d055fbe999b90f42a61648b043187337a6a7d20960d61f1dd"
+      }
+    },
+    {
+      "kind": "BOMB",
+      "itemIndex": 1,
+      "bank": "e002_hunt_bom_sleep",
+      "cells": [
+        {
+          "cell": 0,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-000.png",
+          "sha256": "feed1c3f0853ff2648f66aab1a5dc222920f605edec47a2ae6c10aad607dd950",
+          "width": 16,
+          "height": 24,
+          "origin": [
+            7,
+            20
+          ]
+        },
+        {
+          "cell": 1,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-001.png",
+          "sha256": "d0069655a0b6844e6710d05ea2d375cc625c65a3ad2f98da73ead4c8c03a5687",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            20
+          ]
+        },
+        {
+          "cell": 2,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-002.png",
+          "sha256": "69c96bc41546c45011c9c0104c2c2d05adfa080c220f7ab20feb739a242c1b14",
+          "width": 16,
+          "height": 24,
+          "origin": [
+            7,
+            20
+          ]
+        },
+        {
+          "cell": 3,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-003.png",
+          "sha256": "aa7f665fdc8512792157ba0d0949b71a131c8228cda99e061576e6cbb387700c",
+          "width": 16,
+          "height": 16,
+          "origin": [
+            7,
+            6
+          ]
+        },
+        {
+          "cell": 4,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-004.png",
+          "sha256": "102462b83420881881a089e5eac7715370d3a5c68c55959dd90e7ae8cc7cf73d",
+          "width": 24,
+          "height": 16,
+          "origin": [
+            13,
+            6
+          ]
+        },
+        {
+          "cell": 5,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-005.png",
+          "sha256": "bf8599b097f50c456bcd8f5deb8e2a1b0601c185e8f27cd9a09a6357cb386283",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            12,
+            13
+          ]
+        },
+        {
+          "cell": 6,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-006.png",
+          "sha256": "4093e67dad8bc9ec7ae64e4270f50f7fdefd443640b3930578fc65836330146e",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            12,
+            14
+          ]
+        },
+        {
+          "cell": 7,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-007.png",
+          "sha256": "14a10c42e4bea9b8a0e9c10e4f056ab02f56acd20ecf25db93e5bf6223eb2378",
+          "width": 24,
+          "height": 16,
+          "origin": [
+            12,
+            6
+          ]
+        },
+        {
+          "cell": 8,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-008.png",
+          "sha256": "7951a3ead834f80b1c762bbd08eb13d78fc54d656fcd01cc4e4ccd9bf4c018b8",
+          "width": 24,
+          "height": 8,
+          "origin": [
+            12,
+            -2
+          ]
+        },
+        {
+          "cell": 9,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-009.png",
+          "sha256": "532c66ececc29c4e7687eae59064c3001456393c95e603486e5a565bb6950030",
+          "width": 48,
+          "height": 48,
+          "origin": [
+            31,
+            24
+          ]
+        },
+        {
+          "cell": 10,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-010.png",
+          "sha256": "b623b429ee057624988751f8a1c0cd786bb6c722a726c415f4f0a946716c89ed",
+          "width": 56,
+          "height": 56,
+          "origin": [
+            33,
+            24
+          ]
+        },
+        {
+          "cell": 11,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-011.png",
+          "sha256": "bca654ef5b3451669bcaf772f46ca314fe9d546182f745a6044b66165a76f96f",
+          "width": 64,
+          "height": 64,
+          "origin": [
+            31,
+            32
+          ]
+        },
+        {
+          "cell": 12,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-012.png",
+          "sha256": "91650aead39de4bbe92eba29309aada4f93dc35e8b7a2d959d16c5b98ecb7183",
+          "width": 72,
+          "height": 64,
+          "origin": [
+            39,
+            32
+          ]
+        },
+        {
+          "cell": 13,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-013.png",
+          "sha256": "197716e0fa9b8e5d65b24c1532ddac0ae1588c82972c430fea7fe38f9bc4989c",
+          "width": 72,
+          "height": 56,
+          "origin": [
+            39,
+            24
+          ]
+        },
+        {
+          "cell": 14,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-014.png",
+          "sha256": "f5cfe8d292acef2664387bc3594d46609ced11062aae7b2471eae7b1728b824b",
+          "width": 56,
+          "height": 48,
+          "origin": [
+            29,
+            25
+          ]
+        },
+        {
+          "cell": 15,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-015.png",
+          "sha256": "d53fd9962ef4d2b83601559e6a2817dfac6c70739410eeb68e437e57d5013481",
+          "width": 16,
+          "height": 16,
+          "origin": [
+            5,
+            9
+          ]
+        },
+        {
+          "cell": 16,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-016.png",
+          "sha256": "35342da735f7321ba3c21572346b74b1234ab8d50bde439f491fd47a828d8d6f",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            7,
+            16
+          ]
+        },
+        {
+          "cell": 17,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-017.png",
+          "sha256": "b06779d49c69cc4a9ca81e137b276048b1e0a9fdc30310389ac71e52f08ccf6e",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            7,
+            16
+          ]
+        },
+        {
+          "cell": 18,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-018.png",
+          "sha256": "982bab86fa92b8a42d64a2864d552ebf0bcaa2eab531c87c95887625faab361d",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            9,
+            16
+          ]
+        },
+        {
+          "cell": 19,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-019.png",
+          "sha256": "a0edc480ca868c4706712fafe1a7a5215247a7d625d6c799b38fd760db4604e0",
+          "width": 16,
+          "height": 16,
+          "origin": [
+            4,
+            16
+          ]
+        },
+        {
+          "cell": 20,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_sleep/cell-020.png",
+          "sha256": "071c516c2981a14a17417733448bf3ad78fbe64c5051a447297facbba0657f12",
+          "width": 16,
+          "height": 8,
+          "origin": [
+            -1,
+            14
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": 0,
+          "playbackMode": 2,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 0,
+              "ticks": 15
+            },
+            {
+              "cell": 1,
+              "ticks": 15
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 2,
+              "ticks": 15
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 3,
+              "ticks": 5
+            },
+            {
+              "cell": 4,
+              "ticks": 5
+            },
+            {
+              "cell": 5,
+              "ticks": 6
+            },
+            {
+              "cell": 6,
+              "ticks": 6
+            },
+            {
+              "cell": 7,
+              "ticks": 7
+            },
+            {
+              "cell": 8,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 9,
+              "ticks": 5
+            },
+            {
+              "cell": 10,
+              "ticks": 5
+            },
+            {
+              "cell": 11,
+              "ticks": 6
+            },
+            {
+              "cell": 12,
+              "ticks": 6
+            },
+            {
+              "cell": 13,
+              "ticks": 7
+            },
+            {
+              "cell": 14,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 15,
+              "ticks": 5
+            },
+            {
+              "cell": 16,
+              "ticks": 5
+            },
+            {
+              "cell": 17,
+              "ticks": 6
+            },
+            {
+              "cell": 18,
+              "ticks": 6
+            },
+            {
+              "cell": 19,
+              "ticks": 7
+            },
+            {
+              "cell": 20,
+              "ticks": 7
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "e002_hunt_bom_sleep.nanr": "513af033585d95ce66cf7513e7845e5101b3f0c44ef825ff326600cf3251df1a",
+        "e002_hunt_bom_sleep.ncbr": "07bf08554203cc62b20fff46e407f97a09a602ef3a709ef7bdf224982aadbc23",
+        "e002_hunt_bom_sleep.ncer": "29c8259b6d42e6cfd519858edce081e4fc7736bdd030c2aacd1258e99f97490d",
+        "e002_hunt_bom_sleep.nclr": "7a0c36d56ed92ec0d139def663508d2e90f092989d167cf66f3e16b44ff9c952"
+      }
+    },
+    {
+      "kind": "BOMB",
+      "itemIndex": 2,
+      "bank": "e002_hunt_bom_stun",
+      "cells": [
+        {
+          "cell": 0,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-000.png",
+          "sha256": "b577e9cb8c3b6cd99489cbc720ccb6b87f13ed702985d57a2599c7c31ff87de6",
+          "width": 16,
+          "height": 24,
+          "origin": [
+            7,
+            20
+          ]
+        },
+        {
+          "cell": 1,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-001.png",
+          "sha256": "588627cb2fd7b976cdca7f3ec1be17bc9823668d6767fdf1b239bafd39d615cf",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            20
+          ]
+        },
+        {
+          "cell": 2,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-002.png",
+          "sha256": "69c96bc41546c45011c9c0104c2c2d05adfa080c220f7ab20feb739a242c1b14",
+          "width": 16,
+          "height": 24,
+          "origin": [
+            7,
+            20
+          ]
+        },
+        {
+          "cell": 3,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-003.png",
+          "sha256": "fe93784b219ac032179c739f11fa01e5b81f8bae1929261614343af9d54c308d",
+          "width": 16,
+          "height": 16,
+          "origin": [
+            7,
+            6
+          ]
+        },
+        {
+          "cell": 4,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-004.png",
+          "sha256": "d463e90b3dbd0ca7957792540d26c88e136ef3db402ce19caf5266bc657e7bde",
+          "width": 24,
+          "height": 16,
+          "origin": [
+            13,
+            6
+          ]
+        },
+        {
+          "cell": 5,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-005.png",
+          "sha256": "117dd2d1c26adaa46b0bd6c6a221ef3a23f2ed1a399044ec6d94f9b181f1a68c",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            12,
+            13
+          ]
+        },
+        {
+          "cell": 6,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-006.png",
+          "sha256": "bf3c808c1e9fffc065ce952569248769ad5e3e587c8eb7483d425e0a923669e7",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            12,
+            14
+          ]
+        },
+        {
+          "cell": 7,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-007.png",
+          "sha256": "c8c7446bc8935901ec0fa623e904522ef0fe479993ac8fd130e2a94dcb89bac7",
+          "width": 24,
+          "height": 16,
+          "origin": [
+            12,
+            6
+          ]
+        },
+        {
+          "cell": 8,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-008.png",
+          "sha256": "fd3671665c3bedeba67c960ff88bb8ee56121b0db82580b17aa2481e016d7cd7",
+          "width": 24,
+          "height": 8,
+          "origin": [
+            12,
+            -2
+          ]
+        },
+        {
+          "cell": 9,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-009.png",
+          "sha256": "532c66ececc29c4e7687eae59064c3001456393c95e603486e5a565bb6950030",
+          "width": 48,
+          "height": 48,
+          "origin": [
+            31,
+            24
+          ]
+        },
+        {
+          "cell": 10,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-010.png",
+          "sha256": "b623b429ee057624988751f8a1c0cd786bb6c722a726c415f4f0a946716c89ed",
+          "width": 56,
+          "height": 56,
+          "origin": [
+            33,
+            24
+          ]
+        },
+        {
+          "cell": 11,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-011.png",
+          "sha256": "bca654ef5b3451669bcaf772f46ca314fe9d546182f745a6044b66165a76f96f",
+          "width": 64,
+          "height": 64,
+          "origin": [
+            31,
+            32
+          ]
+        },
+        {
+          "cell": 12,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-012.png",
+          "sha256": "91650aead39de4bbe92eba29309aada4f93dc35e8b7a2d959d16c5b98ecb7183",
+          "width": 72,
+          "height": 64,
+          "origin": [
+            39,
+            32
+          ]
+        },
+        {
+          "cell": 13,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-013.png",
+          "sha256": "197716e0fa9b8e5d65b24c1532ddac0ae1588c82972c430fea7fe38f9bc4989c",
+          "width": 72,
+          "height": 56,
+          "origin": [
+            39,
+            24
+          ]
+        },
+        {
+          "cell": 14,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-014.png",
+          "sha256": "f5cfe8d292acef2664387bc3594d46609ced11062aae7b2471eae7b1728b824b",
+          "width": 56,
+          "height": 48,
+          "origin": [
+            29,
+            25
+          ]
+        },
+        {
+          "cell": 15,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-015.png",
+          "sha256": "d53fd9962ef4d2b83601559e6a2817dfac6c70739410eeb68e437e57d5013481",
+          "width": 16,
+          "height": 16,
+          "origin": [
+            5,
+            9
+          ]
+        },
+        {
+          "cell": 16,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-016.png",
+          "sha256": "35342da735f7321ba3c21572346b74b1234ab8d50bde439f491fd47a828d8d6f",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            7,
+            16
+          ]
+        },
+        {
+          "cell": 17,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-017.png",
+          "sha256": "b06779d49c69cc4a9ca81e137b276048b1e0a9fdc30310389ac71e52f08ccf6e",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            7,
+            16
+          ]
+        },
+        {
+          "cell": 18,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-018.png",
+          "sha256": "982bab86fa92b8a42d64a2864d552ebf0bcaa2eab531c87c95887625faab361d",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            9,
+            16
+          ]
+        },
+        {
+          "cell": 19,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-019.png",
+          "sha256": "a0edc480ca868c4706712fafe1a7a5215247a7d625d6c799b38fd760db4604e0",
+          "width": 16,
+          "height": 16,
+          "origin": [
+            4,
+            16
+          ]
+        },
+        {
+          "cell": 20,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_stun/cell-020.png",
+          "sha256": "071c516c2981a14a17417733448bf3ad78fbe64c5051a447297facbba0657f12",
+          "width": 16,
+          "height": 8,
+          "origin": [
+            -1,
+            14
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": 0,
+          "playbackMode": 2,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 0,
+              "ticks": 15
+            },
+            {
+              "cell": 1,
+              "ticks": 15
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 2,
+              "ticks": 15
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 3,
+              "ticks": 5
+            },
+            {
+              "cell": 4,
+              "ticks": 5
+            },
+            {
+              "cell": 5,
+              "ticks": 6
+            },
+            {
+              "cell": 6,
+              "ticks": 6
+            },
+            {
+              "cell": 7,
+              "ticks": 7
+            },
+            {
+              "cell": 8,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 9,
+              "ticks": 5
+            },
+            {
+              "cell": 10,
+              "ticks": 5
+            },
+            {
+              "cell": 11,
+              "ticks": 6
+            },
+            {
+              "cell": 12,
+              "ticks": 6
+            },
+            {
+              "cell": 13,
+              "ticks": 7
+            },
+            {
+              "cell": 14,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 15,
+              "ticks": 5
+            },
+            {
+              "cell": 16,
+              "ticks": 5
+            },
+            {
+              "cell": 17,
+              "ticks": 6
+            },
+            {
+              "cell": 18,
+              "ticks": 6
+            },
+            {
+              "cell": 19,
+              "ticks": 7
+            },
+            {
+              "cell": 20,
+              "ticks": 7
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "e002_hunt_bom_stun.nanr": "513af033585d95ce66cf7513e7845e5101b3f0c44ef825ff326600cf3251df1a",
+        "e002_hunt_bom_stun.ncbr": "6db13adba42e766c2ca1d2e186b256f9386b9e9eef5f04ef25237f5d3ebec41c",
+        "e002_hunt_bom_stun.ncer": "29c8259b6d42e6cfd519858edce081e4fc7736bdd030c2aacd1258e99f97490d",
+        "e002_hunt_bom_stun.nclr": "d3064530b6a211cbc899f3bbf4fe4a53800027d38d974988359a662de47c98ad"
+      }
+    },
+    {
+      "kind": "BOMB",
+      "itemIndex": 3,
+      "bank": "e002_hunt_bom_flash",
+      "cells": [
+        {
+          "cell": 0,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-000.png",
+          "sha256": "5a2f74fee9de8e3dd25b9e6a6e41347e77aff821b4640c7364e9f45cefa813ee",
+          "width": 16,
+          "height": 24,
+          "origin": [
+            7,
+            20
+          ]
+        },
+        {
+          "cell": 1,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-001.png",
+          "sha256": "07dc17518982ec9981c8a73ed6337d0de12f2bcf78367485b3e22a97b43683f7",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            20
+          ]
+        },
+        {
+          "cell": 2,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-002.png",
+          "sha256": "69c96bc41546c45011c9c0104c2c2d05adfa080c220f7ab20feb739a242c1b14",
+          "width": 16,
+          "height": 24,
+          "origin": [
+            7,
+            20
+          ]
+        },
+        {
+          "cell": 3,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-003.png",
+          "sha256": "a6a2460dc09d1982990484925c8f991f8fb8d96e6b00d6d7588fd5c3ea9930e9",
+          "width": 16,
+          "height": 16,
+          "origin": [
+            7,
+            6
+          ]
+        },
+        {
+          "cell": 4,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-004.png",
+          "sha256": "04acc6cd4ab542563feda447a8cc60776f4b4bc10559b171e5c092da78f76153",
+          "width": 24,
+          "height": 16,
+          "origin": [
+            13,
+            6
+          ]
+        },
+        {
+          "cell": 5,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-005.png",
+          "sha256": "acf8ac141db706791109af48cd7bf3b7e7ebf49651a6d30fa1f6e9b94c4ef26f",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            12,
+            13
+          ]
+        },
+        {
+          "cell": 6,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-006.png",
+          "sha256": "959dc6e4e68288cbb1a28329ce221ac0af8aa9f1af57f4babc24055eca4577eb",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            12,
+            14
+          ]
+        },
+        {
+          "cell": 7,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-007.png",
+          "sha256": "b8991b12fb2a6535d1c015edf51dcd8302cac72a9da8686802fb3ddfee0d88ff",
+          "width": 24,
+          "height": 16,
+          "origin": [
+            12,
+            6
+          ]
+        },
+        {
+          "cell": 8,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-008.png",
+          "sha256": "b931fd5bf4a5e2415956a428825a6b105ef8850a0aa75c3e34949b1975289977",
+          "width": 24,
+          "height": 8,
+          "origin": [
+            12,
+            -2
+          ]
+        },
+        {
+          "cell": 9,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-009.png",
+          "sha256": "532c66ececc29c4e7687eae59064c3001456393c95e603486e5a565bb6950030",
+          "width": 48,
+          "height": 48,
+          "origin": [
+            31,
+            24
+          ]
+        },
+        {
+          "cell": 10,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-010.png",
+          "sha256": "b623b429ee057624988751f8a1c0cd786bb6c722a726c415f4f0a946716c89ed",
+          "width": 56,
+          "height": 56,
+          "origin": [
+            33,
+            24
+          ]
+        },
+        {
+          "cell": 11,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-011.png",
+          "sha256": "bca654ef5b3451669bcaf772f46ca314fe9d546182f745a6044b66165a76f96f",
+          "width": 64,
+          "height": 64,
+          "origin": [
+            31,
+            32
+          ]
+        },
+        {
+          "cell": 12,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-012.png",
+          "sha256": "91650aead39de4bbe92eba29309aada4f93dc35e8b7a2d959d16c5b98ecb7183",
+          "width": 72,
+          "height": 64,
+          "origin": [
+            39,
+            32
+          ]
+        },
+        {
+          "cell": 13,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-013.png",
+          "sha256": "197716e0fa9b8e5d65b24c1532ddac0ae1588c82972c430fea7fe38f9bc4989c",
+          "width": 72,
+          "height": 56,
+          "origin": [
+            39,
+            24
+          ]
+        },
+        {
+          "cell": 14,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-014.png",
+          "sha256": "f5cfe8d292acef2664387bc3594d46609ced11062aae7b2471eae7b1728b824b",
+          "width": 56,
+          "height": 48,
+          "origin": [
+            29,
+            25
+          ]
+        },
+        {
+          "cell": 15,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-015.png",
+          "sha256": "d53fd9962ef4d2b83601559e6a2817dfac6c70739410eeb68e437e57d5013481",
+          "width": 16,
+          "height": 16,
+          "origin": [
+            5,
+            9
+          ]
+        },
+        {
+          "cell": 16,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-016.png",
+          "sha256": "35342da735f7321ba3c21572346b74b1234ab8d50bde439f491fd47a828d8d6f",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            7,
+            16
+          ]
+        },
+        {
+          "cell": 17,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-017.png",
+          "sha256": "b06779d49c69cc4a9ca81e137b276048b1e0a9fdc30310389ac71e52f08ccf6e",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            7,
+            16
+          ]
+        },
+        {
+          "cell": 18,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-018.png",
+          "sha256": "982bab86fa92b8a42d64a2864d552ebf0bcaa2eab531c87c95887625faab361d",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            9,
+            16
+          ]
+        },
+        {
+          "cell": 19,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-019.png",
+          "sha256": "a0edc480ca868c4706712fafe1a7a5215247a7d625d6c799b38fd760db4604e0",
+          "width": 16,
+          "height": 16,
+          "origin": [
+            4,
+            16
+          ]
+        },
+        {
+          "cell": 20,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_bom_flash/cell-020.png",
+          "sha256": "071c516c2981a14a17417733448bf3ad78fbe64c5051a447297facbba0657f12",
+          "width": 16,
+          "height": 8,
+          "origin": [
+            -1,
+            14
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": 0,
+          "playbackMode": 2,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 0,
+              "ticks": 15
+            },
+            {
+              "cell": 1,
+              "ticks": 15
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 2,
+              "ticks": 15
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 3,
+              "ticks": 5
+            },
+            {
+              "cell": 4,
+              "ticks": 5
+            },
+            {
+              "cell": 5,
+              "ticks": 6
+            },
+            {
+              "cell": 6,
+              "ticks": 6
+            },
+            {
+              "cell": 7,
+              "ticks": 7
+            },
+            {
+              "cell": 8,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 9,
+              "ticks": 5
+            },
+            {
+              "cell": 10,
+              "ticks": 5
+            },
+            {
+              "cell": 11,
+              "ticks": 6
+            },
+            {
+              "cell": 12,
+              "ticks": 6
+            },
+            {
+              "cell": 13,
+              "ticks": 7
+            },
+            {
+              "cell": 14,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 15,
+              "ticks": 5
+            },
+            {
+              "cell": 16,
+              "ticks": 5
+            },
+            {
+              "cell": 17,
+              "ticks": 6
+            },
+            {
+              "cell": 18,
+              "ticks": 6
+            },
+            {
+              "cell": 19,
+              "ticks": 7
+            },
+            {
+              "cell": 20,
+              "ticks": 7
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "e002_hunt_bom_flash.nanr": "513af033585d95ce66cf7513e7845e5101b3f0c44ef825ff326600cf3251df1a",
+        "e002_hunt_bom_flash.ncbr": "b39e09629dbf022940080cf87ba6587013a6a3168df3210fcd32f552f6abcdf7",
+        "e002_hunt_bom_flash.ncer": "29c8259b6d42e6cfd519858edce081e4fc7736bdd030c2aacd1258e99f97490d",
+        "e002_hunt_bom_flash.nclr": "31e571b74fa34af379f1f097c85f28b9440d99827a6fe32a8d03e43dc037ef8d"
+      }
+    },
+    {
+      "kind": "MINE",
+      "itemIndex": 0,
+      "bank": "e002_hunt_smallmine",
+      "cells": [
+        {
+          "cell": 0,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-000.png",
+          "sha256": "e92b2ab29a9ae73a514c83b27ead810d25da0d6e6a6895d41e843fac6cba19ff",
+          "width": 32,
+          "height": 16,
+          "origin": [
+            15,
+            9
+          ]
+        },
+        {
+          "cell": 1,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-001.png",
+          "sha256": "37f996a7abfb673392e3b0bee47fbcf2a62e410dc51e9a3a248b00e7ca4dce01",
+          "width": 32,
+          "height": 16,
+          "origin": [
+            15,
+            9
+          ]
+        },
+        {
+          "cell": 2,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-002.png",
+          "sha256": "011cabd21e1033c843f2393ea937bd53851c9108dc65a94adcd300a775ea90f6",
+          "width": 32,
+          "height": 16,
+          "origin": [
+            15,
+            9
+          ]
+        },
+        {
+          "cell": 3,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-003.png",
+          "sha256": "5905ce3ff14f98344c0b65411d7cdb2915db609b338d3698339700872e1bf78c",
+          "width": 16,
+          "height": 24,
+          "origin": [
+            7,
+            8
+          ]
+        },
+        {
+          "cell": 4,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-004.png",
+          "sha256": "08660307db3ac8e30dce9c9a16f853d20ad30d693d88814e8e602b301ff29bf6",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            8
+          ]
+        },
+        {
+          "cell": 5,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-005.png",
+          "sha256": "62da2296a0f3ac5af3eca6e6d0bf5a0fcf73326fb78d4e99d448523b5e82c767",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            8
+          ]
+        },
+        {
+          "cell": 6,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-006.png",
+          "sha256": "aebcdacbdcd3928065cf62e163c2491df4b7c4528c937e7bd89fc2b038e6e738",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            16
+          ]
+        },
+        {
+          "cell": 7,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-007.png",
+          "sha256": "2a7d70269c87378af5d87a93923b22b3ff05a62a43f7bc77d351c06457a0a4e6",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            8
+          ]
+        },
+        {
+          "cell": 8,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-008.png",
+          "sha256": "8ac109ac96a7410289db2d7437ca6bd553427594713c8348e2f3ebda4782af1a",
+          "width": 32,
+          "height": 16,
+          "origin": [
+            15,
+            0
+          ]
+        },
+        {
+          "cell": 9,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-009.png",
+          "sha256": "532c66ececc29c4e7687eae59064c3001456393c95e603486e5a565bb6950030",
+          "width": 48,
+          "height": 48,
+          "origin": [
+            31,
+            24
+          ]
+        },
+        {
+          "cell": 10,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-010.png",
+          "sha256": "a56a05b5c28af4806667587da42d254102e518fc6636a605b587bd17f74e2554",
+          "width": 56,
+          "height": 56,
+          "origin": [
+            31,
+            24
+          ]
+        },
+        {
+          "cell": 11,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-011.png",
+          "sha256": "bca654ef5b3451669bcaf772f46ca314fe9d546182f745a6044b66165a76f96f",
+          "width": 64,
+          "height": 64,
+          "origin": [
+            31,
+            32
+          ]
+        },
+        {
+          "cell": 12,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-012.png",
+          "sha256": "91650aead39de4bbe92eba29309aada4f93dc35e8b7a2d959d16c5b98ecb7183",
+          "width": 72,
+          "height": 64,
+          "origin": [
+            39,
+            32
+          ]
+        },
+        {
+          "cell": 13,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-013.png",
+          "sha256": "197716e0fa9b8e5d65b24c1532ddac0ae1588c82972c430fea7fe38f9bc4989c",
+          "width": 72,
+          "height": 56,
+          "origin": [
+            39,
+            24
+          ]
+        },
+        {
+          "cell": 14,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-014.png",
+          "sha256": "666fc037637654a1ee4cf346c2bfb149f2774641dfd7e02aa7368e8897bd3a16",
+          "width": 64,
+          "height": 48,
+          "origin": [
+            31,
+            24
+          ]
+        },
+        {
+          "cell": 15,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-015.png",
+          "sha256": "6b97a58b484b65bfa6a11f89dd772086091f2394b031b490890687d723cec83a",
+          "width": 24,
+          "height": 16,
+          "origin": [
+            7,
+            8
+          ]
+        },
+        {
+          "cell": 16,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-016.png",
+          "sha256": "35342da735f7321ba3c21572346b74b1234ab8d50bde439f491fd47a828d8d6f",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            7,
+            16
+          ]
+        },
+        {
+          "cell": 17,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-017.png",
+          "sha256": "b06779d49c69cc4a9ca81e137b276048b1e0a9fdc30310389ac71e52f08ccf6e",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            7,
+            16
+          ]
+        },
+        {
+          "cell": 18,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-018.png",
+          "sha256": "83e606ba0cc56de6cb69d0a8174d88ee79b7f7d3dca7e79515fe5ac873d43a76",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            7,
+            16
+          ]
+        },
+        {
+          "cell": 19,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-019.png",
+          "sha256": "eb6fe5bbdd9ba34f984b8797981a1829ce2978b05900af7dc54017b329dda4e5",
+          "width": 24,
+          "height": 16,
+          "origin": [
+            7,
+            16
+          ]
+        },
+        {
+          "cell": 20,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_smallmine/cell-020.png",
+          "sha256": "a18a376602502d1295e45c1b3c0adc5fc08556c7b56673bdc7497a0dbb4b0d68",
+          "width": 16,
+          "height": 16,
+          "origin": [
+            -1,
+            16
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": 0,
+          "playbackMode": 2,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 0,
+              "ticks": 15
+            },
+            {
+              "cell": 1,
+              "ticks": 15
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 2,
+              "ticks": 15
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 3,
+              "ticks": 5
+            },
+            {
+              "cell": 4,
+              "ticks": 5
+            },
+            {
+              "cell": 5,
+              "ticks": 6
+            },
+            {
+              "cell": 6,
+              "ticks": 6
+            },
+            {
+              "cell": 7,
+              "ticks": 7
+            },
+            {
+              "cell": 8,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 9,
+              "ticks": 5
+            },
+            {
+              "cell": 10,
+              "ticks": 5
+            },
+            {
+              "cell": 11,
+              "ticks": 6
+            },
+            {
+              "cell": 12,
+              "ticks": 6
+            },
+            {
+              "cell": 13,
+              "ticks": 7
+            },
+            {
+              "cell": 14,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 15,
+              "ticks": 5
+            },
+            {
+              "cell": 16,
+              "ticks": 5
+            },
+            {
+              "cell": 17,
+              "ticks": 6
+            },
+            {
+              "cell": 18,
+              "ticks": 6
+            },
+            {
+              "cell": 19,
+              "ticks": 7
+            },
+            {
+              "cell": 20,
+              "ticks": 7
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "e002_hunt_smallmine.nanr": "513af033585d95ce66cf7513e7845e5101b3f0c44ef825ff326600cf3251df1a",
+        "e002_hunt_smallmine.ncbr": "c40ea36fb57784af4fd22757cc91823e5ffa32691fcb748276056e66d1d2157d",
+        "e002_hunt_smallmine.ncer": "1a7ce704c4264b8ee35e6c60059bc8778310cafa42f7b6225c7edfdb27d84d48",
+        "e002_hunt_smallmine.nclr": "b3d0e9bdf62255fcd04414805002fcaefd89a0901d2c4074f442c1db27cde980"
+      }
+    },
+    {
+      "kind": "MINE",
+      "itemIndex": 1,
+      "bank": "e002_hunt_hugemine",
+      "cells": [
+        {
+          "cell": 0,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-000.png",
+          "sha256": "5d9ea084aa2e016103e9046a6401fea55d3b09ec2fdf1a75f381bcf582756af0",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            13
+          ]
+        },
+        {
+          "cell": 1,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-001.png",
+          "sha256": "56b9a1f6dac6ea7ee846fa7101dd296779328de777fccb988f8b63398d6517c4",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            13
+          ]
+        },
+        {
+          "cell": 2,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-002.png",
+          "sha256": "c946837909897fe2f3baa36f49dae892b5cf8bb7f61f59088f97697680bcf1a7",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            13
+          ]
+        },
+        {
+          "cell": 3,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-003.png",
+          "sha256": "5905ce3ff14f98344c0b65411d7cdb2915db609b338d3698339700872e1bf78c",
+          "width": 16,
+          "height": 24,
+          "origin": [
+            7,
+            8
+          ]
+        },
+        {
+          "cell": 4,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-004.png",
+          "sha256": "08660307db3ac8e30dce9c9a16f853d20ad30d693d88814e8e602b301ff29bf6",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            8
+          ]
+        },
+        {
+          "cell": 5,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-005.png",
+          "sha256": "62da2296a0f3ac5af3eca6e6d0bf5a0fcf73326fb78d4e99d448523b5e82c767",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            8
+          ]
+        },
+        {
+          "cell": 6,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-006.png",
+          "sha256": "aebcdacbdcd3928065cf62e163c2491df4b7c4528c937e7bd89fc2b038e6e738",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            16
+          ]
+        },
+        {
+          "cell": 7,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-007.png",
+          "sha256": "2a7d70269c87378af5d87a93923b22b3ff05a62a43f7bc77d351c06457a0a4e6",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            8
+          ]
+        },
+        {
+          "cell": 8,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-008.png",
+          "sha256": "8ac109ac96a7410289db2d7437ca6bd553427594713c8348e2f3ebda4782af1a",
+          "width": 32,
+          "height": 16,
+          "origin": [
+            15,
+            0
+          ]
+        },
+        {
+          "cell": 9,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-009.png",
+          "sha256": "532c66ececc29c4e7687eae59064c3001456393c95e603486e5a565bb6950030",
+          "width": 48,
+          "height": 48,
+          "origin": [
+            31,
+            24
+          ]
+        },
+        {
+          "cell": 10,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-010.png",
+          "sha256": "a56a05b5c28af4806667587da42d254102e518fc6636a605b587bd17f74e2554",
+          "width": 56,
+          "height": 56,
+          "origin": [
+            31,
+            24
+          ]
+        },
+        {
+          "cell": 11,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-011.png",
+          "sha256": "bca654ef5b3451669bcaf772f46ca314fe9d546182f745a6044b66165a76f96f",
+          "width": 64,
+          "height": 64,
+          "origin": [
+            31,
+            32
+          ]
+        },
+        {
+          "cell": 12,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-012.png",
+          "sha256": "91650aead39de4bbe92eba29309aada4f93dc35e8b7a2d959d16c5b98ecb7183",
+          "width": 72,
+          "height": 64,
+          "origin": [
+            39,
+            32
+          ]
+        },
+        {
+          "cell": 13,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-013.png",
+          "sha256": "197716e0fa9b8e5d65b24c1532ddac0ae1588c82972c430fea7fe38f9bc4989c",
+          "width": 72,
+          "height": 56,
+          "origin": [
+            39,
+            24
+          ]
+        },
+        {
+          "cell": 14,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-014.png",
+          "sha256": "666fc037637654a1ee4cf346c2bfb149f2774641dfd7e02aa7368e8897bd3a16",
+          "width": 64,
+          "height": 48,
+          "origin": [
+            31,
+            24
+          ]
+        },
+        {
+          "cell": 15,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-015.png",
+          "sha256": "6b97a58b484b65bfa6a11f89dd772086091f2394b031b490890687d723cec83a",
+          "width": 24,
+          "height": 16,
+          "origin": [
+            7,
+            8
+          ]
+        },
+        {
+          "cell": 16,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-016.png",
+          "sha256": "35342da735f7321ba3c21572346b74b1234ab8d50bde439f491fd47a828d8d6f",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            7,
+            16
+          ]
+        },
+        {
+          "cell": 17,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-017.png",
+          "sha256": "b06779d49c69cc4a9ca81e137b276048b1e0a9fdc30310389ac71e52f08ccf6e",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            7,
+            16
+          ]
+        },
+        {
+          "cell": 18,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-018.png",
+          "sha256": "83e606ba0cc56de6cb69d0a8174d88ee79b7f7d3dca7e79515fe5ac873d43a76",
+          "width": 24,
+          "height": 24,
+          "origin": [
+            7,
+            16
+          ]
+        },
+        {
+          "cell": 19,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-019.png",
+          "sha256": "eb6fe5bbdd9ba34f984b8797981a1829ce2978b05900af7dc54017b329dda4e5",
+          "width": 24,
+          "height": 16,
+          "origin": [
+            7,
+            16
+          ]
+        },
+        {
+          "cell": 20,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-020.png",
+          "sha256": "a18a376602502d1295e45c1b3c0adc5fc08556c7b56673bdc7497a0dbb4b0d68",
+          "width": 16,
+          "height": 16,
+          "origin": [
+            -1,
+            16
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": 0,
+          "playbackMode": 2,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 0,
+              "ticks": 15
+            },
+            {
+              "cell": 1,
+              "ticks": 15
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 2,
+              "ticks": 15
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 3,
+              "ticks": 5
+            },
+            {
+              "cell": 4,
+              "ticks": 5
+            },
+            {
+              "cell": 5,
+              "ticks": 6
+            },
+            {
+              "cell": 6,
+              "ticks": 6
+            },
+            {
+              "cell": 7,
+              "ticks": 7
+            },
+            {
+              "cell": 8,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 9,
+              "ticks": 5
+            },
+            {
+              "cell": 10,
+              "ticks": 5
+            },
+            {
+              "cell": 11,
+              "ticks": 6
+            },
+            {
+              "cell": 12,
+              "ticks": 6
+            },
+            {
+              "cell": 13,
+              "ticks": 7
+            },
+            {
+              "cell": 14,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 15,
+              "ticks": 5
+            },
+            {
+              "cell": 16,
+              "ticks": 5
+            },
+            {
+              "cell": 17,
+              "ticks": 6
+            },
+            {
+              "cell": 18,
+              "ticks": 6
+            },
+            {
+              "cell": 19,
+              "ticks": 7
+            },
+            {
+              "cell": 20,
+              "ticks": 7
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "e002_hunt_hugemine.nanr": "513af033585d95ce66cf7513e7845e5101b3f0c44ef825ff326600cf3251df1a",
+        "e002_hunt_hugemine.ncbr": "7254687987f4abf9cc1fd008ef6e8426e43b53e7add73c951377f30ab7a7139a",
+        "e002_hunt_hugemine.ncer": "cf679e28d4017fe354876dd13a0830541c32b90f31ca386d361aa605a0f96e4f",
+        "e002_hunt_hugemine.nclr": "b3d0e9bdf62255fcd04414805002fcaefd89a0901d2c4074f442c1db27cde980"
+      }
+    },
+    {
+      "kind": "CAPTURE_TRAP",
+      "itemIndex": 0,
+      "bank": "e002_hunt_digicach",
+      "cells": [
+        {
+          "cell": 0,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-000.png",
+          "sha256": "a09a658cdd53f6f619300d5b30d49eb1c6ecde9e352a6ddf5d492dbe5a1b76e8",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            15
+          ]
+        },
+        {
+          "cell": 1,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-001.png",
+          "sha256": "a09a658cdd53f6f619300d5b30d49eb1c6ecde9e352a6ddf5d492dbe5a1b76e8",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            15,
+            15
+          ]
+        },
+        {
+          "cell": 2,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-002.png",
+          "sha256": "650c40524486b1e03428be4c242f04fbf3fddd5fc237301e67e1d8127304dc32",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            23
+          ]
+        },
+        {
+          "cell": 3,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-003.png",
+          "sha256": "e95caec8f9371ca2c68a1937c9931c3736bf383656c7225531adf584d35aeab8",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            23
+          ]
+        },
+        {
+          "cell": 4,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-004.png",
+          "sha256": "e95caec8f9371ca2c68a1937c9931c3736bf383656c7225531adf584d35aeab8",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            23
+          ]
+        },
+        {
+          "cell": 5,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-005.png",
+          "sha256": "e95caec8f9371ca2c68a1937c9931c3736bf383656c7225531adf584d35aeab8",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            23
+          ]
+        },
+        {
+          "cell": 6,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-006.png",
+          "sha256": "e95caec8f9371ca2c68a1937c9931c3736bf383656c7225531adf584d35aeab8",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            23
+          ]
+        },
+        {
+          "cell": 7,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-007.png",
+          "sha256": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            0,
+            0
+          ]
+        },
+        {
+          "cell": 8,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-008.png",
+          "sha256": "29c1ef8e83efdb065701987ae02a036f8f8a23a4e4feef0dd43d0708b0ba9940",
+          "width": 48,
+          "height": 48,
+          "origin": [
+            23,
+            39
+          ]
+        },
+        {
+          "cell": 9,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-009.png",
+          "sha256": "ec48eb4bb331ef8c52d51e47028ff8cb6ea70926ef4c531a4f98b0375fbe1e13",
+          "width": 48,
+          "height": 48,
+          "origin": [
+            23,
+            39
+          ]
+        },
+        {
+          "cell": 10,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-010.png",
+          "sha256": "d41c5a81028258418bf4b2402dad459136f22898ebd53a22f45522427e98421a",
+          "width": 48,
+          "height": 48,
+          "origin": [
+            23,
+            39
+          ]
+        },
+        {
+          "cell": 11,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-011.png",
+          "sha256": "e95caec8f9371ca2c68a1937c9931c3736bf383656c7225531adf584d35aeab8",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            23
+          ]
+        },
+        {
+          "cell": 12,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digicach/cell-012.png",
+          "sha256": "e95caec8f9371ca2c68a1937c9931c3736bf383656c7225531adf584d35aeab8",
+          "width": 32,
+          "height": 32,
+          "origin": [
+            15,
+            23
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": 0,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 0,
+              "ticks": 2
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 1,
+              "ticks": 3
+            },
+            {
+              "cell": 2,
+              "ticks": 5
+            },
+            {
+              "cell": 3,
+              "ticks": 5
+            },
+            {
+              "cell": 4,
+              "ticks": 6
+            },
+            {
+              "cell": 5,
+              "ticks": 6
+            },
+            {
+              "cell": 6,
+              "ticks": 6
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 7,
+              "ticks": 3
+            },
+            {
+              "cell": 7,
+              "ticks": 5
+            },
+            {
+              "cell": 7,
+              "ticks": 5
+            },
+            {
+              "cell": 8,
+              "ticks": 6
+            },
+            {
+              "cell": 9,
+              "ticks": 6
+            },
+            {
+              "cell": 10,
+              "ticks": 6
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "playbackMode": 2,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 11,
+              "ticks": 7
+            },
+            {
+              "cell": 12,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "playbackMode": 2,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 9,
+              "ticks": 7
+            },
+            {
+              "cell": 10,
+              "ticks": 7
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "e002_hunt_digicach.nanr": "67274727f8fe3796fb7ad1ef863a2d9c48a48042848720da5de02158252ff8b7",
+        "e002_hunt_digicach.ncbr": "6dbd6e621024c5b3b6917b64d25f859304ed6a54e2eaa3b4a3a8493b0e73a86f",
+        "e002_hunt_digicach.ncer": "4ee2196442d52e6ce3bc426df23edbea276861b983b3e4ce7462cf6a3d30a5ea",
+        "e002_hunt_digicach.nclr": "2f05a53dad470db62367ad8d917f8983cfeb2b57232c96f5a13589ab2084d282"
+      }
+    },
+    {
+      "kind": "CAPTURE_TRAP",
+      "itemIndex": 1,
+      "bank": "e002_hunt_digiprison",
+      "cells": [
+        {
+          "cell": 0,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-000.png",
+          "sha256": "f7f8ccf4b6a55af9d74c0f48772708d6ac10233cbd4998bce7af8a11d9eda982",
+          "width": 56,
+          "height": 32,
+          "origin": [
+            23,
+            15
+          ]
+        },
+        {
+          "cell": 1,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-001.png",
+          "sha256": "f7f8ccf4b6a55af9d74c0f48772708d6ac10233cbd4998bce7af8a11d9eda982",
+          "width": 56,
+          "height": 32,
+          "origin": [
+            23,
+            15
+          ]
+        },
+        {
+          "cell": 2,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-002.png",
+          "sha256": "2c811449ced701e60a7bf524ad92879ee9690a01284a97d8e21accb533e58374",
+          "width": 56,
+          "height": 32,
+          "origin": [
+            23,
+            15
+          ]
+        },
+        {
+          "cell": 3,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-003.png",
+          "sha256": "f3a10a977b8fec8f10bf81fa8a8652496ad165002fe73ee01862e9bb59ec3128",
+          "width": 56,
+          "height": 32,
+          "origin": [
+            23,
+            15
+          ]
+        },
+        {
+          "cell": 4,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-004.png",
+          "sha256": "edaa52705bceb92d02254b56e658eeb8b0c5e7ddc1462d54a6ad541fc2855f9f",
+          "width": 56,
+          "height": 32,
+          "origin": [
+            23,
+            15
+          ]
+        },
+        {
+          "cell": 5,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-005.png",
+          "sha256": "21e36f0b4e2120693810e3c6f23b2cfb6ba07703e5d1d42507c76a827288a5cc",
+          "width": 56,
+          "height": 32,
+          "origin": [
+            23,
+            15
+          ]
+        },
+        {
+          "cell": 6,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-006.png",
+          "sha256": "21e36f0b4e2120693810e3c6f23b2cfb6ba07703e5d1d42507c76a827288a5cc",
+          "width": 56,
+          "height": 32,
+          "origin": [
+            23,
+            15
+          ]
+        },
+        {
+          "cell": 7,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-007.png",
+          "sha256": "21e36f0b4e2120693810e3c6f23b2cfb6ba07703e5d1d42507c76a827288a5cc",
+          "width": 56,
+          "height": 32,
+          "origin": [
+            23,
+            15
+          ]
+        },
+        {
+          "cell": 8,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-008.png",
+          "sha256": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            0,
+            0
+          ]
+        },
+        {
+          "cell": 9,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-009.png",
+          "sha256": "a71adc40e116d5c1a14b12d0b2aebbf03ac2300f91a66d83e1726ca718ccff35",
+          "width": 32,
+          "height": 24,
+          "origin": [
+            31,
+            31
+          ]
+        },
+        {
+          "cell": 10,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-010.png",
+          "sha256": "5d338bd8e8cd5086aadda254f1b43ef3d35516c099478f0019460e53a0affe38",
+          "width": 64,
+          "height": 56,
+          "origin": [
+            31,
+            39
+          ]
+        },
+        {
+          "cell": 11,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-011.png",
+          "sha256": "20749d672e3cf2a2d7d9af552527df75bdef50d7a309e07c62a157b2c7607f8e",
+          "width": 64,
+          "height": 72,
+          "origin": [
+            31,
+            55
+          ]
+        },
+        {
+          "cell": 12,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-012.png",
+          "sha256": "f328a8e38ad84743a3869f1d1275e441c43eb5d32a27b07336908adb7d937a76",
+          "width": 64,
+          "height": 72,
+          "origin": [
+            31,
+            55
+          ]
+        },
+        {
+          "cell": 13,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-013.png",
+          "sha256": "f328a8e38ad84743a3869f1d1275e441c43eb5d32a27b07336908adb7d937a76",
+          "width": 64,
+          "height": 72,
+          "origin": [
+            31,
+            55
+          ]
+        },
+        {
+          "cell": 14,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-014.png",
+          "sha256": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628",
+          "width": 8,
+          "height": 8,
+          "origin": [
+            0,
+            0
+          ]
+        },
+        {
+          "cell": 15,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-015.png",
+          "sha256": "8693703cb64423f6488a9ca1f1f9ee8a78ec3eabdcaaa2329c60fc8633e03149",
+          "width": 32,
+          "height": 16,
+          "origin": [
+            15,
+            63
+          ]
+        },
+        {
+          "cell": 16,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-016.png",
+          "sha256": "904e92a030fc68c4c3910ea894fb85a8576c583b1d7877bc7d38735fb322c1cd",
+          "width": 64,
+          "height": 40,
+          "origin": [
+            31,
+            63
+          ]
+        },
+        {
+          "cell": 17,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-017.png",
+          "sha256": "b162661647dec2ecfdfd5c630312ebd808904b2fddb95e700515fbffbc583c8a",
+          "width": 64,
+          "height": 56,
+          "origin": [
+            31,
+            63
+          ]
+        },
+        {
+          "cell": 18,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-018.png",
+          "sha256": "17652db76f264c2ee0c796feac10d086f5bcec2721ba0426a7eeb90ff4656f06",
+          "width": 64,
+          "height": 72,
+          "origin": [
+            31,
+            63
+          ]
+        },
+        {
+          "cell": 19,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-019.png",
+          "sha256": "a44533f42ec7e9ce004c5a3ba6b80150da54ae01b52707499c047b0b9a5cf675",
+          "width": 64,
+          "height": 72,
+          "origin": [
+            31,
+            63
+          ]
+        },
+        {
+          "cell": 20,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-020.png",
+          "sha256": "21e36f0b4e2120693810e3c6f23b2cfb6ba07703e5d1d42507c76a827288a5cc",
+          "width": 56,
+          "height": 32,
+          "origin": [
+            23,
+            15
+          ]
+        },
+        {
+          "cell": 21,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-021.png",
+          "sha256": "f328a8e38ad84743a3869f1d1275e441c43eb5d32a27b07336908adb7d937a76",
+          "width": 64,
+          "height": 72,
+          "origin": [
+            31,
+            55
+          ]
+        },
+        {
+          "cell": 22,
+          "src": "assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_digiprison/cell-022.png",
+          "sha256": "5d10a5536d25d4ad6733714d8720b6bb97c20b345a04b7f8ab3c885883dd1ce3",
+          "width": 64,
+          "height": 32,
+          "origin": [
+            31,
+            15
+          ]
+        }
+      ],
+      "sequences": [
+        {
+          "id": 0,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 0,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 1,
+              "ticks": 7
+            },
+            {
+              "cell": 2,
+              "ticks": 7
+            },
+            {
+              "cell": 3,
+              "ticks": 7
+            },
+            {
+              "cell": 4,
+              "ticks": 7
+            },
+            {
+              "cell": 5,
+              "ticks": 7
+            },
+            {
+              "cell": 6,
+              "ticks": 7
+            },
+            {
+              "cell": 7,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 8,
+              "ticks": 7
+            },
+            {
+              "cell": 8,
+              "ticks": 7
+            },
+            {
+              "cell": 9,
+              "ticks": 7
+            },
+            {
+              "cell": 10,
+              "ticks": 7
+            },
+            {
+              "cell": 11,
+              "ticks": 7
+            },
+            {
+              "cell": 12,
+              "ticks": 7
+            },
+            {
+              "cell": 13,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 14,
+              "ticks": 7
+            },
+            {
+              "cell": 14,
+              "ticks": 7
+            },
+            {
+              "cell": 15,
+              "ticks": 7
+            },
+            {
+              "cell": 16,
+              "ticks": 7
+            },
+            {
+              "cell": 17,
+              "ticks": 7
+            },
+            {
+              "cell": 18,
+              "ticks": 7
+            },
+            {
+              "cell": 19,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "playbackMode": 2,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 20,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "playbackMode": 2,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 21,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "playbackMode": 2,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 19,
+              "ticks": 7
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "playbackMode": 1,
+          "loopStartFrame": 0,
+          "frames": [
+            {
+              "cell": 22,
+              "ticks": 7
+            }
+          ]
+        }
+      ],
+      "sourceHashes": {
+        "e002_hunt_digiprison.nanr": "a217d2b16fd74fc748dddd51cd52d30e3d59893eecc6f796bc75295a8e380b4f",
+        "e002_hunt_digiprison.ncbr": "149531b52f1668ec41cf2f0490b2efee114aba4eeb68d2d9dc12c2b90851a46b",
+        "e002_hunt_digiprison.ncer": "62ef912a3b62a99c111d33cbb9a8e8c0d078f20e96efe4fcbf8413a4faacd1c3",
+        "e002_hunt_digiprison.nclr": "dd33b7ae09e69ef159fbdda271527e635a3430199bea10f63162c965216e1b3f"
+      }
+    }
+  ],
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1"
+}

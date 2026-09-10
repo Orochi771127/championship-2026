@@ -1,0 +1,600 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 39,
+  "scenePath": "shop/shop_sub_scene.nxr",
+  "category": "Shop",
+  "overlayOwner": "OVL17",
+  "sourceEvidence": {
+    "fileId": 5458,
+    "fileName": "shop_sub_scene.nxr",
+    "sha256": "8584b46e6753ebbfaa7a6879684122abd58cfa5e7298f9c363720ac9b73c71fa",
+    "overlayMappingConfidence": "SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "SUB",
+    "roleEvidence": "FILENAME_HEURISTIC"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [
+    {
+      "resourceIndex": 0,
+      "resourceName": "menu_sub",
+      "cellCount": null,
+      "hasRenderBundle": false,
+      "source": {
+        "ncer": null,
+        "nanr": null,
+        "ncgr": null,
+        "ncbr": null,
+        "nclr": null,
+        "nscr": null
+      },
+      "spriteWitness": null,
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "money0",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 157,
+        "y": 155
+      },
+      "portraitProjection": {
+        "x": 662.3438,
+        "y": 1613.9062
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 1,
+      "name": "money1",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 166,
+        "y": 155
+      },
+      "portraitProjection": {
+        "x": 700.3125,
+        "y": 1613.9062
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 2,
+      "name": "money2",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 175,
+        "y": 155
+      },
+      "portraitProjection": {
+        "x": 738.2812,
+        "y": 1613.9062
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 3,
+      "name": "money3",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 184,
+        "y": 155
+      },
+      "portraitProjection": {
+        "x": 776.25,
+        "y": 1613.9062
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 4,
+      "name": "money4",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 193,
+        "y": 155
+      },
+      "portraitProjection": {
+        "x": 814.2188,
+        "y": 1613.9062
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 5,
+      "name": "money5",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 202,
+        "y": 155
+      },
+      "portraitProjection": {
+        "x": 852.1875,
+        "y": 1613.9062
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 6,
+      "name": "money6",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 211,
+        "y": 155
+      },
+      "portraitProjection": {
+        "x": 890.1562,
+        "y": 1613.9062
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 7,
+      "name": "unnamed0008",
+      "resourceIndex": 0,
+      "cellIndex": 6,
+      "sourcePosition": {
+        "x": 213,
+        "y": 146
+      },
+      "portraitProjection": {
+        "x": 898.5938,
+        "y": 1575.9375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 8,
+      "name": "unnamed0009",
+      "resourceIndex": 0,
+      "cellIndex": 6,
+      "sourcePosition": {
+        "x": 59,
+        "y": 119
+      },
+      "portraitProjection": {
+        "x": 248.9062,
+        "y": 1462.0312
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 9,
+      "name": "price4",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 57,
+        "y": 127
+      },
+      "portraitProjection": {
+        "x": 240.4688,
+        "y": 1495.7812
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 10,
+      "name": "price3",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 48,
+        "y": 127
+      },
+      "portraitProjection": {
+        "x": 202.5,
+        "y": 1495.7812
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 11,
+      "name": "price2",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 39,
+        "y": 127
+      },
+      "portraitProjection": {
+        "x": 164.5312,
+        "y": 1495.7812
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 12,
+      "name": "price1",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 30,
+        "y": 127
+      },
+      "portraitProjection": {
+        "x": 126.5625,
+        "y": 1495.7812
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 13,
+      "name": "price0",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 21,
+        "y": 127
+      },
+      "portraitProjection": {
+        "x": 88.5938,
+        "y": 1495.7812
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 14,
+      "name": "item_name",
+      "resourceIndex": -1,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 174,
+        "y": 49
+      },
+      "portraitProjection": {
+        "x": 734.0625,
+        "y": 1166.7188
+      },
+      "params": [
+        0,
+        0,
+        8,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 15,
+      "name": "item_desc",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 110,
+        "y": 64
+      },
+      "portraitProjection": {
+        "x": 464.0625,
+        "y": 1230.0
+      },
+      "params": [
+        0,
+        0,
+        8,
+        3
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 16,
+      "name": "item_icon",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 51,
+        "y": 87
+      },
+      "portraitProjection": {
+        "x": 215.1562,
+        "y": 1327.0312
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 17,
+      "name": "level_name",
+      "resourceIndex": 0,
+      "cellIndex": 11,
+      "sourcePosition": {
+        "x": 112,
+        "y": 125
+      },
+      "portraitProjection": {
+        "x": 472.5,
+        "y": 1487.3438
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 18,
+      "name": "level_1",
+      "resourceIndex": 0,
+      "cellIndex": 12,
+      "sourcePosition": {
+        "x": 189,
+        "y": 127
+      },
+      "portraitProjection": {
+        "x": 797.3438,
+        "y": 1495.7812
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 19,
+      "name": "level_2",
+      "resourceIndex": 0,
+      "cellIndex": 12,
+      "sourcePosition": {
+        "x": 205,
+        "y": 127
+      },
+      "portraitProjection": {
+        "x": 864.8438,
+        "y": 1495.7812
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 20,
+      "name": "level_3",
+      "resourceIndex": 0,
+      "cellIndex": 12,
+      "sourcePosition": {
+        "x": 221,
+        "y": 127
+      },
+      "portraitProjection": {
+        "x": 932.3438,
+        "y": 1495.7812
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 21,
+      "name": "have_num1",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 234,
+        "y": 127
+      },
+      "portraitProjection": {
+        "x": 987.1875,
+        "y": 1495.7812
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 22,
+      "name": "have_num0",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 225,
+        "y": 127
+      },
+      "portraitProjection": {
+        "x": 949.2188,
+        "y": 1495.7812
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 23,
+      "name": "have_cross",
+      "resourceIndex": 0,
+      "cellIndex": 7,
+      "sourcePosition": {
+        "x": 214,
+        "y": 128
+      },
+      "portraitProjection": {
+        "x": 902.8125,
+        "y": 1500.0
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    }
+  ],
+  "dynamicVirtualNodeCount": 3,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

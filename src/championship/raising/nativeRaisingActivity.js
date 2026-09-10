@@ -6,6 +6,7 @@ import {nativeRaisingHeadings} from './nativeRaisingGround.js';
 import {nativeHuntSpeciesByIndex} from '../hunt/capture/nativeHuntSources.js';
 import {BATTLE_CHARACTER_PROFILES,BATTLE_SPECIES_ENTITIES} from '../../data/championship/battleCharacterProfiles.js';
 import {battleAngleIndex} from '../battle/battleNativeMath.js';
+import {requestNativeRaisingFeedback} from './nativeRaisingFeedback.js';
 export const nativeActivityRandom=(actor,rng,max)=>Math.trunc((max-1)*rng.next(0x26+actor.poolSlot)/102);
 export function selectNativeCageReaction(definition,field18,poolSlot,rng) {
   const row=data.cage[definition];if(!row)throw new Error('RAISING_CAGE_REACTION_SOURCE_REQUIRED');
@@ -30,10 +31,13 @@ export function beginNativeActivityReaction(actor,id,ground,request) {
   actor.activityReaction=id;
   const spec=data.reactions[id];if(!spec)return 0; // original returns -1, retaining idle and its elapsed counter
   actor.state=spec.state;actor.activity={...spec,elapsed:0,alternatePhase:0};
-  if(spec.state===9&&spec.sequence>=0)request(actor,nativeSequence(actor,spec.sequence),true);
+  // 02119880 uses the conditional resident wrapper, not force-and-restart.
+  if(spec.state===9&&spec.sequence>=0)request(actor,nativeSequence(actor,spec.sequence));
+  actor.feedback=null;
+  if(spec.state===9)requestNativeRaisingFeedback(actor,spec.icon);
   if(spec.state===3||spec.state===16){
     actor.mode=1;actor.ticks=spec.movementTicks;actor.threshold=ground.readClearance(...tile(actor.positionQ12));
-    actor.destinationState=spec.destinationState;request(actor,nativeSequence(actor,spec.state===3?3:11),true);
+    actor.destinationState=spec.destinationState;request(actor,nativeSequence(actor,spec.state===3?3:11));
   }
   if(spec.state===13){actor.activity.phase=0;actor.activity.velocity=0x5000;request(actor,0,true,0);}
   return spec.conditionDelta;
@@ -44,9 +48,9 @@ export function selectNativeIdleActivity(actor,profile,{ground,actors,rng,reques
   const draw=nativeActivityRandom(actor,rng,4),choice=actor.slow?4:draw;
   if(choice===0)return beginNativeActivityReaction(actor,selectNativeCageReaction(actor.cageDefinitionIndex,data.species[actor.speciesIndex].field18,actor.poolSlot,rng),ground,request);
   if(choice===1)return beginNativeActivityReaction(actor,selectNativePersonalityReaction(profile.fields['018'],actor.poolSlot,rng),ground,request);
-  const walk=()=>{actor.state=2;actor.mode=0;actor.destinationState=1;actor.destinationQ12=nativeRaisingWanderTarget(actor,rng);request(actor,nativeSequence(actor,2),true);return 0;};
+  const walk=()=>{actor.state=2;actor.mode=0;actor.destinationState=1;actor.destinationQ12=nativeRaisingWanderTarget(actor,rng);request(actor,nativeSequence(actor,2));return 0;};
   // 02050010 -> Cage resident list, with its original physical slot order.
-  const peers=[...actors].filter(other=>other!==actor&&other.cageDefinitionIndex===actor.cageDefinitionIndex);
+  const peers=[...actors].filter(other=>other!==actor&&!other.detached&&other.cageDefinitionIndex===actor.cageDefinitionIndex);
   if(choice===4||!peers.length||nativeActivityRandom(actor,rng,3)===0)return walk();
   let peer=null,distance=-1;
   for(const other of peers){const dx=(other.positionQ12[0]>>12)-(actor.positionQ12[0]>>12),dy=(other.positionQ12[1]>>12)-(actor.positionQ12[1]>>12),d=dx*dx+dy*dy;
@@ -92,14 +96,18 @@ export function stepNativeActivityReaction(actor,ground,request) {
     actor.positionQ12=p;return false;
   }
   if(actor.state!==9)return false;
+  // 02119694..021196C8: reaction-local facing timer runs before the
+  // alternate/completion checks, including the last update of the reaction.
+  if(action.flipTicks>0&&action.elapsed%action.flipTicks===0)actor.flipBits=actor.flipBits===0?1:0;
   if(action.completion===1)return !actor.animator.getSnapshot().active;
   if(action.completion===2)return action.elapsed>=action.ticks;
   if(action.completion===4&&action.elapsed%action.alternateTicks===0){
     if(action.secondTicks>=0){
       if(action.alternatePhase)return true;
-      request(actor,action.alternate,true);action.alternatePhase=1;action.alternateTicks=action.secondTicks;
+      request(actor,action.alternate);requestNativeRaisingFeedback(actor,action.alternateIcon);
+      action.alternatePhase=1;action.alternateTicks=action.secondTicks;action.flipTicks=0;
     } else {
-      action.alternatePhase^=1;request(actor,action.alternatePhase?action.alternate:action.sequence,true);
+      action.alternatePhase^=1;request(actor,action.alternatePhase?action.alternate:action.sequence);
       if(!action.alternatePhase&&--action.alternateCount<=0)return true;
     }
   }

@@ -1,0 +1,1495 @@
+{
+  "classification": "RESEARCH_ONLY",
+  "entityId": "m330_geograymon",
+  "masters": [
+    {
+      "canonical": "m330_geograymon/main/cell_000",
+      "masterId": "m330_geograymon:master:b39166e64c99047a",
+      "members": [
+        "m330_geograymon/main/cell_000",
+        "m330_geograymon/main/cell_004",
+        "m330_geograymon/sub/cell_000"
+      ],
+      "size": [
+        192,
+        208
+      ],
+      "sourceRgbaSha256": "0a156f6981fd74114fd89709c6336cd0060a5674576cd1aa2c2e8d7507dda6dd"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_001",
+      "masterId": "m330_geograymon:master:cc40f00ac7155fce",
+      "members": [
+        "m330_geograymon/main/cell_001",
+        "m330_geograymon/sub/cell_001"
+      ],
+      "size": [
+        208,
+        200
+      ],
+      "sourceRgbaSha256": "cfd5dd77dfc13d60ff3a7ccbee41c7f585de995bd5b421fb371ef69c4bd6a247"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_002",
+      "masterId": "m330_geograymon:master:b90a098159b6ffc9",
+      "members": [
+        "m330_geograymon/main/cell_002",
+        "m330_geograymon/sub/cell_002"
+      ],
+      "size": [
+        192,
+        208
+      ],
+      "sourceRgbaSha256": "69053adc911057d41826d51bda645a1773603b310c5ea7478c4815c7d2bf7727"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_003",
+      "masterId": "m330_geograymon:master:74ef6a522a64f307",
+      "members": [
+        "m330_geograymon/main/cell_003",
+        "m330_geograymon/sub/cell_003"
+      ],
+      "size": [
+        208,
+        200
+      ],
+      "sourceRgbaSha256": "5e2df76202527a8bf8445e5e285118f7496008c460da03cc7cd8b5131fb2dcd6"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_005",
+      "masterId": "m330_geograymon:master:e54145c84e9e20c1",
+      "members": [
+        "m330_geograymon/main/cell_005"
+      ],
+      "size": [
+        192,
+        224
+      ],
+      "sourceRgbaSha256": "486aca28e523aca48d5004445e6f9d5a61eb5476d2526de2cb481992a9103459"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_006",
+      "masterId": "m330_geograymon:master:339c7b6ca0ff392f",
+      "members": [
+        "m330_geograymon/main/cell_006"
+      ],
+      "size": [
+        208,
+        224
+      ],
+      "sourceRgbaSha256": "057cf1bd6ac683d094bd0c580198c59bd08df8f001973c954c46b59311814327"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_007",
+      "masterId": "m330_geograymon:master:476c6d020d4f62fd",
+      "members": [
+        "m330_geograymon/main/cell_007",
+        "m330_geograymon/sub/cell_004"
+      ],
+      "size": [
+        288,
+        200
+      ],
+      "sourceRgbaSha256": "0a70c3a03a565c1aae0e85eeaad4ff088686f52b5fb335e802d82a861de8cabc"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_008",
+      "masterId": "m330_geograymon:master:61785f7b91c7bab9",
+      "members": [
+        "m330_geograymon/main/cell_008",
+        "m330_geograymon/main/cell_057",
+        "m330_geograymon/sub/cell_005"
+      ],
+      "size": [
+        224,
+        208
+      ],
+      "sourceRgbaSha256": "d64b4725415ce9748cc0393b27a5ea6760fb979c7f0745ed89552a90be39ccc6"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_009",
+      "masterId": "m330_geograymon:master:468a1eae3690c445",
+      "members": [
+        "m330_geograymon/main/cell_009",
+        "m330_geograymon/main/cell_013"
+      ],
+      "size": [
+        192,
+        224
+      ],
+      "sourceRgbaSha256": "da151bcdc998f46327351dd118d11e04ca40c8bbb6379075ca00adb38cbe7aa2"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_010",
+      "masterId": "m330_geograymon:master:f15d5d063e728d5a",
+      "members": [
+        "m330_geograymon/main/cell_010",
+        "m330_geograymon/main/cell_014"
+      ],
+      "size": [
+        280,
+        200
+      ],
+      "sourceRgbaSha256": "7b6d74fe1fb5539f7e6e29ac818ac1390118cfea89fb28973af0267992a2b62b"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_011",
+      "masterId": "m330_geograymon:master:6ca02c8b2350af27",
+      "members": [
+        "m330_geograymon/main/cell_011",
+        "m330_geograymon/main/cell_015"
+      ],
+      "size": [
+        216,
+        176
+      ],
+      "sourceRgbaSha256": "89e8477704ff94488f76b55fc4eee57daba6b3aebf5cfb9cf08f182ec06070e1"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_012",
+      "masterId": "m330_geograymon:master:1cbcee38117fd0e2",
+      "members": [
+        "m330_geograymon/main/cell_012",
+        "m330_geograymon/main/cell_016"
+      ],
+      "size": [
+        272,
+        208
+      ],
+      "sourceRgbaSha256": "adad96ba9449f3a29bbff8dfdfe2224875630e48f68f5d64295629f1c5b559e3"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_017",
+      "masterId": "m330_geograymon:master:812fb3ed042c6c14",
+      "members": [
+        "m330_geograymon/main/cell_017"
+      ],
+      "size": [
+        208,
+        216
+      ],
+      "sourceRgbaSha256": "7556ac690d17894ae48417b8e92ddc0638f5cd41cb924f8c6b02d1abfcc500c9"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_018",
+      "masterId": "m330_geograymon:master:094d7ef8a06c4dba",
+      "members": [
+        "m330_geograymon/main/cell_018"
+      ],
+      "size": [
+        208,
+        208
+      ],
+      "sourceRgbaSha256": "eb8a816f816cea263f488a167af4b98c65fa0ce25808af618037bd9391374f82"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_019",
+      "masterId": "m330_geograymon:master:59f4f55b1b5935df",
+      "members": [
+        "m330_geograymon/main/cell_019"
+      ],
+      "size": [
+        200,
+        200
+      ],
+      "sourceRgbaSha256": "49ec182a14590aae0cec62fddc65cb5cf3ad3ef3ec82c99173c40e3fb63ad6c8"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_020",
+      "masterId": "m330_geograymon:master:a31372a328e96dab",
+      "members": [
+        "m330_geograymon/main/cell_020"
+      ],
+      "size": [
+        192,
+        208
+      ],
+      "sourceRgbaSha256": "71bd06aed425a7744cd4834c371e47a8dd871556d3d68ace88e92cfd540a8290"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_021",
+      "masterId": "m330_geograymon:master:21297a0e01f85926",
+      "members": [
+        "m330_geograymon/main/cell_021",
+        "m330_geograymon/sub/cell_006"
+      ],
+      "size": [
+        240,
+        152
+      ],
+      "sourceRgbaSha256": "87b17d221f3da1fb0a1bf81f382241b95ce7e4c58ea5483109db594947090d33"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_022",
+      "masterId": "m330_geograymon:master:4e9fcdb883f72888",
+      "members": [
+        "m330_geograymon/main/cell_022"
+      ],
+      "size": [
+        192,
+        224
+      ],
+      "sourceRgbaSha256": "ffc0e3fd4ec643bf63365ef277a2cbfb46ba453e7ce7e7e0e620a92531aed956"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_023",
+      "masterId": "m330_geograymon:master:b16ff1abe09c95f7",
+      "members": [
+        "m330_geograymon/main/cell_023",
+        "m330_geograymon/main/cell_047",
+        "m330_geograymon/sub/cell_013"
+      ],
+      "size": [
+        208,
+        200
+      ],
+      "sourceRgbaSha256": "2558c1cf04f79f78c029257dfe5018e77adff1e6740ff9e71675066d2eeea86f"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_024",
+      "masterId": "m330_geograymon:master:8e646d16b6b3ecc9",
+      "members": [
+        "m330_geograymon/main/cell_024",
+        "m330_geograymon/sub/cell_007"
+      ],
+      "size": [
+        240,
+        152
+      ],
+      "sourceRgbaSha256": "4603f8df2399bdc7212fddc1b4e8387eb3b9dd9e2b7c31e2c6f109d1238915f8"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_025",
+      "masterId": "m330_geograymon:master:9465a7af446345d2",
+      "members": [
+        "m330_geograymon/main/cell_025",
+        "m330_geograymon/main/cell_029"
+      ],
+      "size": [
+        192,
+        208
+      ],
+      "sourceRgbaSha256": "70098ea1bba7424a4e939b89cd610abceb79bc1ac46466488fc0a772551210ee"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_026",
+      "masterId": "m330_geograymon:master:002c5b15c92928f2",
+      "members": [
+        "m330_geograymon/main/cell_026"
+      ],
+      "size": [
+        208,
+        200
+      ],
+      "sourceRgbaSha256": "199721ce5b00c1d96fbb6e7cd83f419a5183fc3b162185d4357e824720c0226d"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_027",
+      "masterId": "m330_geograymon:master:af3dc3757c529599",
+      "members": [
+        "m330_geograymon/main/cell_027"
+      ],
+      "size": [
+        192,
+        208
+      ],
+      "sourceRgbaSha256": "dbbc73212a8c4264e805ae8f00917b92be3a9e8702547ceb2024feea425d9cdc"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_028",
+      "masterId": "m330_geograymon:master:1353a0a60187c83f",
+      "members": [
+        "m330_geograymon/main/cell_028"
+      ],
+      "size": [
+        208,
+        200
+      ],
+      "sourceRgbaSha256": "e54c53213a5de0a33662e480bb1b77fb5542546294177b86582847bc86e092da"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_030",
+      "masterId": "m330_geograymon:master:fe75a44fd02e8c2c",
+      "members": [
+        "m330_geograymon/main/cell_030"
+      ],
+      "size": [
+        192,
+        224
+      ],
+      "sourceRgbaSha256": "d4aaabcc8fce89f5bf4fd866f614d34b3542c8db4598d36d2a3917e817ceb695"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_031",
+      "masterId": "m330_geograymon:master:92b829ecd891271b",
+      "members": [
+        "m330_geograymon/main/cell_031"
+      ],
+      "size": [
+        208,
+        224
+      ],
+      "sourceRgbaSha256": "78b87485868432a02009f1b56601e500738bebb21d2b1df5306cec7b3c18e2a6"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_032",
+      "masterId": "m330_geograymon:master:ce979fb51a2f77ad",
+      "members": [
+        "m330_geograymon/main/cell_032"
+      ],
+      "size": [
+        208,
+        216
+      ],
+      "sourceRgbaSha256": "fc36d2350c7fc616608a1c2a2ede76544a03bdc2724263fc4ce40e41bda207bb"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_033",
+      "masterId": "m330_geograymon:master:05801d51367ef28e",
+      "members": [
+        "m330_geograymon/main/cell_033"
+      ],
+      "size": [
+        192,
+        208
+      ],
+      "sourceRgbaSha256": "0d6c10709459640ca3e29b45938fe53c9748bb75c0916961003e56198edcfd10"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_034",
+      "masterId": "m330_geograymon:master:63afbcdde9d22c55",
+      "members": [
+        "m330_geograymon/main/cell_034"
+      ],
+      "size": [
+        200,
+        200
+      ],
+      "sourceRgbaSha256": "4690ab67b76ca4b4bdd21dd0e214f2350f8c81beb900fd2956592a0ca48318f5"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_035",
+      "masterId": "m330_geograymon:master:7e011c8f18d184a1",
+      "members": [
+        "m330_geograymon/main/cell_035"
+      ],
+      "size": [
+        192,
+        208
+      ],
+      "sourceRgbaSha256": "8d3a9875fc9114a08939679b15938b343cda70b2603e9dfe8fad7fe4e1bacfe1"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_036",
+      "masterId": "m330_geograymon:master:0aadca0ec6d8918d",
+      "members": [
+        "m330_geograymon/main/cell_036"
+      ],
+      "size": [
+        224,
+        136
+      ],
+      "sourceRgbaSha256": "ea85a1f9de1a35745976f363ef402f2f4527c8915ea5dbef9cd789e10a936258"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_037",
+      "masterId": "m330_geograymon:master:dc2a6b029f8e18e3",
+      "members": [
+        "m330_geograymon/main/cell_037"
+      ],
+      "size": [
+        192,
+        224
+      ],
+      "sourceRgbaSha256": "78be1518ef97e325a12e8cda64d11dd0c788956ffd15df1d3031d7c1b71ffdec"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_038",
+      "masterId": "m330_geograymon:master:33e98fa9a433ff32",
+      "members": [
+        "m330_geograymon/main/cell_038"
+      ],
+      "size": [
+        208,
+        200
+      ],
+      "sourceRgbaSha256": "e93376a35d1f8bad74b7ca33d8fd61c17169a865d1309b3f62ec3989bfa7c9dd"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_039",
+      "masterId": "m330_geograymon:master:d005e9974df603e0",
+      "members": [
+        "m330_geograymon/main/cell_039"
+      ],
+      "size": [
+        224,
+        136
+      ],
+      "sourceRgbaSha256": "fe1c919e0d2b21c2c1a34324c11970b7c7cc0bf3c5b9194cac8c5b0ed3c21031"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_040",
+      "masterId": "m330_geograymon:master:6f21db3e90ad1ac5",
+      "members": [
+        "m330_geograymon/main/cell_040"
+      ],
+      "size": [
+        208,
+        224
+      ],
+      "sourceRgbaSha256": "9babe756805be48d75b7b964f5ed2293a880dacdcab2164f3d742280785fcac5"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_041",
+      "masterId": "m330_geograymon:master:f26d5968f656ece1",
+      "members": [
+        "m330_geograymon/main/cell_041"
+      ],
+      "size": [
+        200,
+        224
+      ],
+      "sourceRgbaSha256": "39d10ccba15ad6b1407911bc67c343ad013394a49f87cecfaece60db3c690f10"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_042",
+      "masterId": "m330_geograymon:master:dabac28a9ac35959",
+      "members": [
+        "m330_geograymon/main/cell_042",
+        "m330_geograymon/sub/cell_008"
+      ],
+      "size": [
+        192,
+        208
+      ],
+      "sourceRgbaSha256": "fbf784764e2d3b59f3996f95eb1a56343ce28bebbda45e464be08ca4b2fd254b"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_043",
+      "masterId": "m330_geograymon:master:a682f5744209a208",
+      "members": [
+        "m330_geograymon/main/cell_043",
+        "m330_geograymon/sub/cell_009"
+      ],
+      "size": [
+        216,
+        192
+      ],
+      "sourceRgbaSha256": "f596ab996990db4405625306abb6db5d10f15b719fb9852070c0485c9f777056"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_044",
+      "masterId": "m330_geograymon:master:42b7f99576043df4",
+      "members": [
+        "m330_geograymon/main/cell_044",
+        "m330_geograymon/sub/cell_010"
+      ],
+      "size": [
+        200,
+        200
+      ],
+      "sourceRgbaSha256": "1ab61e736c00c7b0e26dbea19bde0d5d6fb9a7e157caca8330fdbd36b4291f9f"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_045",
+      "masterId": "m330_geograymon:master:8d366a1c8ae891c4",
+      "members": [
+        "m330_geograymon/main/cell_045",
+        "m330_geograymon/sub/cell_011"
+      ],
+      "size": [
+        208,
+        224
+      ],
+      "sourceRgbaSha256": "a827717e64d972c72c03c655af3796c845b268529ccba92df2a97ad387ad2ac5"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_046",
+      "masterId": "m330_geograymon:master:1ea037c408d4455e",
+      "members": [
+        "m330_geograymon/main/cell_046",
+        "m330_geograymon/sub/cell_012"
+      ],
+      "size": [
+        216,
+        192
+      ],
+      "sourceRgbaSha256": "e1231f1c195f81f06b4ea58819d0c21995e24591e2e75c72b65dc451fc4f7201"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_048",
+      "masterId": "m330_geograymon:master:510b157756e7d458",
+      "members": [
+        "m330_geograymon/main/cell_048",
+        "m330_geograymon/sub/cell_014"
+      ],
+      "size": [
+        200,
+        232
+      ],
+      "sourceRgbaSha256": "ab3cec938618653b162c7724b5aad4eaa856c612443abd8dd63d83e38e3f7b22"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_049",
+      "masterId": "m330_geograymon:master:f400f890b79c9d36",
+      "members": [
+        "m330_geograymon/main/cell_049",
+        "m330_geograymon/sub/cell_015"
+      ],
+      "size": [
+        224,
+        200
+      ],
+      "sourceRgbaSha256": "3ea71b2ea8c4ad045cac80d0feee3194be11b6ceaf582693135807d58794770e"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_050",
+      "masterId": "m330_geograymon:master:fc553c9ef7cc1917",
+      "members": [
+        "m330_geograymon/main/cell_050"
+      ],
+      "size": [
+        224,
+        192
+      ],
+      "sourceRgbaSha256": "b82ad2450beb66a094a7e61b34898ba6df7ef16d8785afe39f7449c0fa1a37e6"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_051",
+      "masterId": "m330_geograymon:master:be818c33043cc015",
+      "members": [
+        "m330_geograymon/main/cell_051"
+      ],
+      "size": [
+        200,
+        200
+      ],
+      "sourceRgbaSha256": "60d5095de2851be204b3dacef0cecb4b72b0024115452f30f8d2917db7536951"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_052",
+      "masterId": "m330_geograymon:master:1837b94eb22aa00f",
+      "members": [
+        "m330_geograymon/main/cell_052"
+      ],
+      "size": [
+        208,
+        256
+      ],
+      "sourceRgbaSha256": "db6821f1a4c285a2cba81f8e7b938165eb6d537e880ad9baf50487f487e69848"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_053",
+      "masterId": "m330_geograymon:master:043c09f3b86c38b7",
+      "members": [
+        "m330_geograymon/main/cell_053"
+      ],
+      "size": [
+        224,
+        216
+      ],
+      "sourceRgbaSha256": "ab37de9a88426066a409b2f2e3432bf162c6356de32dec20174007a7eed80761"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_054",
+      "masterId": "m330_geograymon:master:744f67cba6559776",
+      "members": [
+        "m330_geograymon/main/cell_054"
+      ],
+      "size": [
+        200,
+        216
+      ],
+      "sourceRgbaSha256": "b2934f4a3f1a6ccc99a43a86a88cbdf39eb80d694f07ea9fb15a5b3d49eee1a9"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_055",
+      "masterId": "m330_geograymon:master:20f15517ccb6894c",
+      "members": [
+        "m330_geograymon/main/cell_055",
+        "m330_geograymon/sub/cell_016"
+      ],
+      "size": [
+        176,
+        208
+      ],
+      "sourceRgbaSha256": "d11cb7e7609736c349a052da2dc5657eb8f569771ab9487d78e1572d71a15dce"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_056",
+      "masterId": "m330_geograymon:master:e956608902c40cee",
+      "members": [
+        "m330_geograymon/main/cell_056",
+        "m330_geograymon/sub/cell_017"
+      ],
+      "size": [
+        320,
+        152
+      ],
+      "sourceRgbaSha256": "0cad3930977dae3fbb46ac3fc3e985c9c43cc54146d634ead2a9624887f221f0"
+    },
+    {
+      "canonical": "m330_geograymon/main/cell_058",
+      "masterId": "m330_geograymon:master:2fc0558658ec7120",
+      "members": [
+        "m330_geograymon/main/cell_058"
+      ],
+      "size": [
+        192,
+        208
+      ],
+      "sourceRgbaSha256": "a7cdd51eb279e1c1251faa1344dc1df2add84d1de0b6ed875ded9ec3d0f621c4"
+    }
+  ],
+  "reusePolicy": "EXACT_RGBA_AND_DIMENSIONS_WITHIN_ENTITY_ONLY_PLACEMENT_RETAINED_PER_SLOT",
+  "schemaVersion": 1,
+  "slots": [
+    {
+      "declaredPreCompositeRgbaSha256": "9fc66cb3868d64a2c91d715c213e3ecf9c6c5f0be9169600099e72efad504775",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:b39166e64c99047a",
+      "sourceRgbaSha256": "0a156f6981fd74114fd89709c6336cd0060a5674576cd1aa2c2e8d7507dda6dd",
+      "sourceSize": [
+        192,
+        208
+      ],
+      "texture": "m330_geograymon/main/cell_000"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b1e65498031e68a9c6c1ca54ad4f39240db6530b7aa27ec5d1645222c406f1cd",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:cc40f00ac7155fce",
+      "sourceRgbaSha256": "cfd5dd77dfc13d60ff3a7ccbee41c7f585de995bd5b421fb371ef69c4bd6a247",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m330_geograymon/main/cell_001"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "8c74e793a5e12a5b6a1a75f7f45e3479f257f35d4adf571d3a3bff31a5ca5e1f",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:b90a098159b6ffc9",
+      "sourceRgbaSha256": "69053adc911057d41826d51bda645a1773603b310c5ea7478c4815c7d2bf7727",
+      "sourceSize": [
+        192,
+        208
+      ],
+      "texture": "m330_geograymon/main/cell_002"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "f2a224e1cdcfca83f31112326b16734fa567c63545badff936fa5711b653b936",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:74ef6a522a64f307",
+      "sourceRgbaSha256": "5e2df76202527a8bf8445e5e285118f7496008c460da03cc7cd8b5131fb2dcd6",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m330_geograymon/main/cell_003"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9fc66cb3868d64a2c91d715c213e3ecf9c6c5f0be9169600099e72efad504775",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:b39166e64c99047a",
+      "sourceRgbaSha256": "0a156f6981fd74114fd89709c6336cd0060a5674576cd1aa2c2e8d7507dda6dd",
+      "sourceSize": [
+        192,
+        208
+      ],
+      "texture": "m330_geograymon/main/cell_004"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "89238e5a7f644ecd941eb6801910aa92cf2fc9313da561efdcbc414e00865e8e",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:e54145c84e9e20c1",
+      "sourceRgbaSha256": "486aca28e523aca48d5004445e6f9d5a61eb5476d2526de2cb481992a9103459",
+      "sourceSize": [
+        192,
+        224
+      ],
+      "texture": "m330_geograymon/main/cell_005"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "1691c37cc8aa16dbcc3c158eb8549fb29e4602ef0ba78a4ccc32e7e0f4d283cb",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:339c7b6ca0ff392f",
+      "sourceRgbaSha256": "057cf1bd6ac683d094bd0c580198c59bd08df8f001973c954c46b59311814327",
+      "sourceSize": [
+        208,
+        224
+      ],
+      "texture": "m330_geograymon/main/cell_006"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "7be72744977a590842873b85c10d99e10822b982597d78faed2ea15c61ed4933",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:476c6d020d4f62fd",
+      "sourceRgbaSha256": "0a70c3a03a565c1aae0e85eeaad4ff088686f52b5fb335e802d82a861de8cabc",
+      "sourceSize": [
+        288,
+        200
+      ],
+      "texture": "m330_geograymon/main/cell_007"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "686b39b24ffd1e60941be255db5ec1c32cbcf597295e65e82e6a1a82cb75ad09",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:61785f7b91c7bab9",
+      "sourceRgbaSha256": "d64b4725415ce9748cc0393b27a5ea6760fb979c7f0745ed89552a90be39ccc6",
+      "sourceSize": [
+        224,
+        208
+      ],
+      "texture": "m330_geograymon/main/cell_008"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "92b3b3fc66390ed2611d65af3b4f9902176918ef81e7cbb75ad3b7005c81d94d",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:468a1eae3690c445",
+      "sourceRgbaSha256": "da151bcdc998f46327351dd118d11e04ca40c8bbb6379075ca00adb38cbe7aa2",
+      "sourceSize": [
+        192,
+        224
+      ],
+      "texture": "m330_geograymon/main/cell_009"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "2f089083caaf2a1e82834ebc05b8261b2129ba252d07659419d297695e9c8a1c",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:f15d5d063e728d5a",
+      "sourceRgbaSha256": "7b6d74fe1fb5539f7e6e29ac818ac1390118cfea89fb28973af0267992a2b62b",
+      "sourceSize": [
+        280,
+        200
+      ],
+      "texture": "m330_geograymon/main/cell_010"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e75a3d322d56403d1feae52dac4f1d611eb1a7a12447dd141517eedb1bc89342",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:6ca02c8b2350af27",
+      "sourceRgbaSha256": "89e8477704ff94488f76b55fc4eee57daba6b3aebf5cfb9cf08f182ec06070e1",
+      "sourceSize": [
+        216,
+        176
+      ],
+      "texture": "m330_geograymon/main/cell_011"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "ac505aaf2427c44b3a5909ac31687f7a1989eed05cccbd72968c4722c6f01fee",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:1cbcee38117fd0e2",
+      "sourceRgbaSha256": "adad96ba9449f3a29bbff8dfdfe2224875630e48f68f5d64295629f1c5b559e3",
+      "sourceSize": [
+        272,
+        208
+      ],
+      "texture": "m330_geograymon/main/cell_012"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "92b3b3fc66390ed2611d65af3b4f9902176918ef81e7cbb75ad3b7005c81d94d",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:468a1eae3690c445",
+      "sourceRgbaSha256": "da151bcdc998f46327351dd118d11e04ca40c8bbb6379075ca00adb38cbe7aa2",
+      "sourceSize": [
+        192,
+        224
+      ],
+      "texture": "m330_geograymon/main/cell_013"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "2f089083caaf2a1e82834ebc05b8261b2129ba252d07659419d297695e9c8a1c",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:f15d5d063e728d5a",
+      "sourceRgbaSha256": "7b6d74fe1fb5539f7e6e29ac818ac1390118cfea89fb28973af0267992a2b62b",
+      "sourceSize": [
+        280,
+        200
+      ],
+      "texture": "m330_geograymon/main/cell_014"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e75a3d322d56403d1feae52dac4f1d611eb1a7a12447dd141517eedb1bc89342",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:6ca02c8b2350af27",
+      "sourceRgbaSha256": "89e8477704ff94488f76b55fc4eee57daba6b3aebf5cfb9cf08f182ec06070e1",
+      "sourceSize": [
+        216,
+        176
+      ],
+      "texture": "m330_geograymon/main/cell_015"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "ac505aaf2427c44b3a5909ac31687f7a1989eed05cccbd72968c4722c6f01fee",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:1cbcee38117fd0e2",
+      "sourceRgbaSha256": "adad96ba9449f3a29bbff8dfdfe2224875630e48f68f5d64295629f1c5b559e3",
+      "sourceSize": [
+        272,
+        208
+      ],
+      "texture": "m330_geograymon/main/cell_016"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9aa52523ebc6c4cca8158c6a791126cb9872824ec70022705eeeec3fc6378f9e",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:812fb3ed042c6c14",
+      "sourceRgbaSha256": "7556ac690d17894ae48417b8e92ddc0638f5cd41cb924f8c6b02d1abfcc500c9",
+      "sourceSize": [
+        208,
+        216
+      ],
+      "texture": "m330_geograymon/main/cell_017"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b14b69c8b805f91d2dbfeae9b9cc187a3ac49f987c4a49c28dbef5e1da8c93e9",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:094d7ef8a06c4dba",
+      "sourceRgbaSha256": "eb8a816f816cea263f488a167af4b98c65fa0ce25808af618037bd9391374f82",
+      "sourceSize": [
+        208,
+        208
+      ],
+      "texture": "m330_geograymon/main/cell_018"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "a843fbe3ba2093d137bc17233ba44982d5394bfa6752a420ef6f1fd9c7646fee",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:59f4f55b1b5935df",
+      "sourceRgbaSha256": "49ec182a14590aae0cec62fddc65cb5cf3ad3ef3ec82c99173c40e3fb63ad6c8",
+      "sourceSize": [
+        200,
+        200
+      ],
+      "texture": "m330_geograymon/main/cell_019"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "3cdc42acac05360fd7048255aa57d7d86d84ded4e569935b93fe07099edc3b9b",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:a31372a328e96dab",
+      "sourceRgbaSha256": "71bd06aed425a7744cd4834c371e47a8dd871556d3d68ace88e92cfd540a8290",
+      "sourceSize": [
+        192,
+        208
+      ],
+      "texture": "m330_geograymon/main/cell_020"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "24b05dac3665d642e71437bb34523d89232278bc07131413bef31281cfd24ba9",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:21297a0e01f85926",
+      "sourceRgbaSha256": "87b17d221f3da1fb0a1bf81f382241b95ce7e4c58ea5483109db594947090d33",
+      "sourceSize": [
+        240,
+        152
+      ],
+      "texture": "m330_geograymon/main/cell_021"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "59412e931e2c6dab3496947f139b9c22040b36ccf185c44d959db7ce87a64627",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:4e9fcdb883f72888",
+      "sourceRgbaSha256": "ffc0e3fd4ec643bf63365ef277a2cbfb46ba453e7ce7e7e0e620a92531aed956",
+      "sourceSize": [
+        192,
+        224
+      ],
+      "texture": "m330_geograymon/main/cell_022"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "eb2d01784414feabb12af73ef7df03961d764d6f1e943612b71bca578d0ba9b1",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:b16ff1abe09c95f7",
+      "sourceRgbaSha256": "2558c1cf04f79f78c029257dfe5018e77adff1e6740ff9e71675066d2eeea86f",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m330_geograymon/main/cell_023"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "f4d8d390f17640f654d57626a34de6689c7d376730d1af1f6569a31f6c10a491",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:8e646d16b6b3ecc9",
+      "sourceRgbaSha256": "4603f8df2399bdc7212fddc1b4e8387eb3b9dd9e2b7c31e2c6f109d1238915f8",
+      "sourceSize": [
+        240,
+        152
+      ],
+      "texture": "m330_geograymon/main/cell_024"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "5ecb8549ca0d61936d4fb24208cecabd688b2519cf54b7eab49b6ab362072dc7",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:9465a7af446345d2",
+      "sourceRgbaSha256": "70098ea1bba7424a4e939b89cd610abceb79bc1ac46466488fc0a772551210ee",
+      "sourceSize": [
+        192,
+        208
+      ],
+      "texture": "m330_geograymon/main/cell_025"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "a18e1d2cc21a5e71bcc39cd5b5357bb674b34e4779ff9a29d2334d89aa3b4b36",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:002c5b15c92928f2",
+      "sourceRgbaSha256": "199721ce5b00c1d96fbb6e7cd83f419a5183fc3b162185d4357e824720c0226d",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m330_geograymon/main/cell_026"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "4ae9b7d65eb9ad4bde0fc8c5f664dcd76d7b187fa6485ea2649415391ca5d4e4",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:af3dc3757c529599",
+      "sourceRgbaSha256": "dbbc73212a8c4264e805ae8f00917b92be3a9e8702547ceb2024feea425d9cdc",
+      "sourceSize": [
+        192,
+        208
+      ],
+      "texture": "m330_geograymon/main/cell_027"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "d242f35cc54392ad0c9a3e5978106568568b40141d0b78df7529ee5723deb245",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:1353a0a60187c83f",
+      "sourceRgbaSha256": "e54c53213a5de0a33662e480bb1b77fb5542546294177b86582847bc86e092da",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m330_geograymon/main/cell_028"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "5ecb8549ca0d61936d4fb24208cecabd688b2519cf54b7eab49b6ab362072dc7",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:9465a7af446345d2",
+      "sourceRgbaSha256": "70098ea1bba7424a4e939b89cd610abceb79bc1ac46466488fc0a772551210ee",
+      "sourceSize": [
+        192,
+        208
+      ],
+      "texture": "m330_geograymon/main/cell_029"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "35e73ac9286ef216553474291e7627a3421979f14b33269410a6c2bea999f3ac",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:fe75a44fd02e8c2c",
+      "sourceRgbaSha256": "d4aaabcc8fce89f5bf4fd866f614d34b3542c8db4598d36d2a3917e817ceb695",
+      "sourceSize": [
+        192,
+        224
+      ],
+      "texture": "m330_geograymon/main/cell_030"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "084b486998b6f64bf11aaf32b8663d59b11e132ed96a698bed4a6aabfd7ae717",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:92b829ecd891271b",
+      "sourceRgbaSha256": "78b87485868432a02009f1b56601e500738bebb21d2b1df5306cec7b3c18e2a6",
+      "sourceSize": [
+        208,
+        224
+      ],
+      "texture": "m330_geograymon/main/cell_031"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b0e6365c73c2cc1ccdd0e21987a4c91ebcb82ecfac367e88beb334fb38546ee4",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:ce979fb51a2f77ad",
+      "sourceRgbaSha256": "fc36d2350c7fc616608a1c2a2ede76544a03bdc2724263fc4ce40e41bda207bb",
+      "sourceSize": [
+        208,
+        216
+      ],
+      "texture": "m330_geograymon/main/cell_032"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "0ae18a9c86290027708ef1ac826b7335347cef81edf37b9e474669ccd1b4aa1a",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:05801d51367ef28e",
+      "sourceRgbaSha256": "0d6c10709459640ca3e29b45938fe53c9748bb75c0916961003e56198edcfd10",
+      "sourceSize": [
+        192,
+        208
+      ],
+      "texture": "m330_geograymon/main/cell_033"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "3cfdf453a02b46c9b894cb2f006fced20df6aab238c3fdcae23294602c5fe576",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:63afbcdde9d22c55",
+      "sourceRgbaSha256": "4690ab67b76ca4b4bdd21dd0e214f2350f8c81beb900fd2956592a0ca48318f5",
+      "sourceSize": [
+        200,
+        200
+      ],
+      "texture": "m330_geograymon/main/cell_034"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "31562fb2ba7799ed01d0d6b49d84aa5218cb621a57c3e50a24443d33d4b4e361",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:7e011c8f18d184a1",
+      "sourceRgbaSha256": "8d3a9875fc9114a08939679b15938b343cda70b2603e9dfe8fad7fe4e1bacfe1",
+      "sourceSize": [
+        192,
+        208
+      ],
+      "texture": "m330_geograymon/main/cell_035"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "0aec9941fc0bba531681aa990e60abba07b41db3fa51e6b987304369bfced504",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:0aadca0ec6d8918d",
+      "sourceRgbaSha256": "ea85a1f9de1a35745976f363ef402f2f4527c8915ea5dbef9cd789e10a936258",
+      "sourceSize": [
+        224,
+        136
+      ],
+      "texture": "m330_geograymon/main/cell_036"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "66b641eee85b7f7cd614b552045e903c585bb02dccefa381d363d52e46258bbf",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:dc2a6b029f8e18e3",
+      "sourceRgbaSha256": "78be1518ef97e325a12e8cda64d11dd0c788956ffd15df1d3031d7c1b71ffdec",
+      "sourceSize": [
+        192,
+        224
+      ],
+      "texture": "m330_geograymon/main/cell_037"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "c13d5b30f5d941efd9caf88cd075f80742f63ba3859d5dba71ec4629a8601966",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:33e98fa9a433ff32",
+      "sourceRgbaSha256": "e93376a35d1f8bad74b7ca33d8fd61c17169a865d1309b3f62ec3989bfa7c9dd",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m330_geograymon/main/cell_038"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e52ec042c2088a762e9087e90b3f93d01b90d7f3e060d4009ea06f55da3c59e0",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:d005e9974df603e0",
+      "sourceRgbaSha256": "fe1c919e0d2b21c2c1a34324c11970b7c7cc0bf3c5b9194cac8c5b0ed3c21031",
+      "sourceSize": [
+        224,
+        136
+      ],
+      "texture": "m330_geograymon/main/cell_039"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "60692800826e58e4c63e4f858f6c776e538774cb5bb86a390af6cf15ce10d895",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:6f21db3e90ad1ac5",
+      "sourceRgbaSha256": "9babe756805be48d75b7b964f5ed2293a880dacdcab2164f3d742280785fcac5",
+      "sourceSize": [
+        208,
+        224
+      ],
+      "texture": "m330_geograymon/main/cell_040"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "d3556ea668aebcd28bc427e9b84937bce7c1100b7f83cfb9d214ee80c6505363",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:f26d5968f656ece1",
+      "sourceRgbaSha256": "39d10ccba15ad6b1407911bc67c343ad013394a49f87cecfaece60db3c690f10",
+      "sourceSize": [
+        200,
+        224
+      ],
+      "texture": "m330_geograymon/main/cell_041"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "61813710340205bf937eae96a1f40eecae7330855d7da35fd4b8e7a19b8d7342",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:dabac28a9ac35959",
+      "sourceRgbaSha256": "fbf784764e2d3b59f3996f95eb1a56343ce28bebbda45e464be08ca4b2fd254b",
+      "sourceSize": [
+        192,
+        208
+      ],
+      "texture": "m330_geograymon/main/cell_042"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "c2be7bfa234b3df86fe873dd1d1a366fe1d2a19908209d5c7f0a7f93fe159002",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:a682f5744209a208",
+      "sourceRgbaSha256": "f596ab996990db4405625306abb6db5d10f15b719fb9852070c0485c9f777056",
+      "sourceSize": [
+        216,
+        192
+      ],
+      "texture": "m330_geograymon/main/cell_043"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "2fe699ec16de214bc5843175c18cd39c1494091a632fb18143aa77e10247dd77",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:42b7f99576043df4",
+      "sourceRgbaSha256": "1ab61e736c00c7b0e26dbea19bde0d5d6fb9a7e157caca8330fdbd36b4291f9f",
+      "sourceSize": [
+        200,
+        200
+      ],
+      "texture": "m330_geograymon/main/cell_044"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "da42b07d97ef67200ec3c9e45f3bcc36d08ea76185209d30b8d616ce4088ca76",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:8d366a1c8ae891c4",
+      "sourceRgbaSha256": "a827717e64d972c72c03c655af3796c845b268529ccba92df2a97ad387ad2ac5",
+      "sourceSize": [
+        208,
+        224
+      ],
+      "texture": "m330_geograymon/main/cell_045"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "ff7d536aaf95117715f43cccda1a0cf7a6d9375ae428bbf055e0fff464c92c8c",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:1ea037c408d4455e",
+      "sourceRgbaSha256": "e1231f1c195f81f06b4ea58819d0c21995e24591e2e75c72b65dc451fc4f7201",
+      "sourceSize": [
+        216,
+        192
+      ],
+      "texture": "m330_geograymon/main/cell_046"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "eb2d01784414feabb12af73ef7df03961d764d6f1e943612b71bca578d0ba9b1",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:b16ff1abe09c95f7",
+      "sourceRgbaSha256": "2558c1cf04f79f78c029257dfe5018e77adff1e6740ff9e71675066d2eeea86f",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m330_geograymon/main/cell_047"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "3bd6f9b351897bddef700563fef5e331d0dcb382aa0258f1850c8d8cf7886df7",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:510b157756e7d458",
+      "sourceRgbaSha256": "ab3cec938618653b162c7724b5aad4eaa856c612443abd8dd63d83e38e3f7b22",
+      "sourceSize": [
+        200,
+        232
+      ],
+      "texture": "m330_geograymon/main/cell_048"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "903100f4faee58e3eb09e5ed6934e6f990dd27d777f98cf22f431766a7a80650",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:f400f890b79c9d36",
+      "sourceRgbaSha256": "3ea71b2ea8c4ad045cac80d0feee3194be11b6ceaf582693135807d58794770e",
+      "sourceSize": [
+        224,
+        200
+      ],
+      "texture": "m330_geograymon/main/cell_049"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "60e95ea4795b9af965cdeab12eaad6db778d3f718c5819f95db16e9e31e74a7f",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:fc553c9ef7cc1917",
+      "sourceRgbaSha256": "b82ad2450beb66a094a7e61b34898ba6df7ef16d8785afe39f7449c0fa1a37e6",
+      "sourceSize": [
+        224,
+        192
+      ],
+      "texture": "m330_geograymon/main/cell_050"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "55aa7d005ad9a466ce6dd825415d6e6b8c854851ea58d5d9992b1958b3028120",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:be818c33043cc015",
+      "sourceRgbaSha256": "60d5095de2851be204b3dacef0cecb4b72b0024115452f30f8d2917db7536951",
+      "sourceSize": [
+        200,
+        200
+      ],
+      "texture": "m330_geograymon/main/cell_051"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "d0c5fdfae2fcdacb340cdca10424096b7e74a9f6d78af5ba78396b4a4e021a82",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:1837b94eb22aa00f",
+      "sourceRgbaSha256": "db6821f1a4c285a2cba81f8e7b938165eb6d537e880ad9baf50487f487e69848",
+      "sourceSize": [
+        208,
+        256
+      ],
+      "texture": "m330_geograymon/main/cell_052"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "ebfa78946f2cf3b7b23f2e9bc2c04773f52f4be9c7d3ea0289b43dfde37d24d8",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:043c09f3b86c38b7",
+      "sourceRgbaSha256": "ab37de9a88426066a409b2f2e3432bf162c6356de32dec20174007a7eed80761",
+      "sourceSize": [
+        224,
+        216
+      ],
+      "texture": "m330_geograymon/main/cell_053"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "23f54e0b3af268ab66c32b1772b3f356dc1ce82978b57522f38ecfa81359311c",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:744f67cba6559776",
+      "sourceRgbaSha256": "b2934f4a3f1a6ccc99a43a86a88cbdf39eb80d694f07ea9fb15a5b3d49eee1a9",
+      "sourceSize": [
+        200,
+        216
+      ],
+      "texture": "m330_geograymon/main/cell_054"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "38a6e41ed03f8a32250a886e430b43424d9abdb7d081419835b138cf6172251c",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:20f15517ccb6894c",
+      "sourceRgbaSha256": "d11cb7e7609736c349a052da2dc5657eb8f569771ab9487d78e1572d71a15dce",
+      "sourceSize": [
+        176,
+        208
+      ],
+      "texture": "m330_geograymon/main/cell_055"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "2b7e155e92e0cfeb13abd2c9dd2948470f439e8d659cd1d5f5ab7bdc15d05787",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:e956608902c40cee",
+      "sourceRgbaSha256": "0cad3930977dae3fbb46ac3fc3e985c9c43cc54146d634ead2a9624887f221f0",
+      "sourceSize": [
+        320,
+        152
+      ],
+      "texture": "m330_geograymon/main/cell_056"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "686b39b24ffd1e60941be255db5ec1c32cbcf597295e65e82e6a1a82cb75ad09",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:61785f7b91c7bab9",
+      "sourceRgbaSha256": "d64b4725415ce9748cc0393b27a5ea6760fb979c7f0745ed89552a90be39ccc6",
+      "sourceSize": [
+        224,
+        208
+      ],
+      "texture": "m330_geograymon/main/cell_057"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "a496d58295bb2498b0d197c565fc5daa8694b7d42cfde6c5f2b0c3f867831391",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:2fc0558658ec7120",
+      "sourceRgbaSha256": "a7cdd51eb279e1c1251faa1344dc1df2add84d1de0b6ed875ded9ec3d0f621c4",
+      "sourceSize": [
+        192,
+        208
+      ],
+      "texture": "m330_geograymon/main/cell_058"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9fc66cb3868d64a2c91d715c213e3ecf9c6c5f0be9169600099e72efad504775",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:b39166e64c99047a",
+      "sourceRgbaSha256": "0a156f6981fd74114fd89709c6336cd0060a5674576cd1aa2c2e8d7507dda6dd",
+      "sourceSize": [
+        192,
+        208
+      ],
+      "texture": "m330_geograymon/sub/cell_000"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b1e65498031e68a9c6c1ca54ad4f39240db6530b7aa27ec5d1645222c406f1cd",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:cc40f00ac7155fce",
+      "sourceRgbaSha256": "cfd5dd77dfc13d60ff3a7ccbee41c7f585de995bd5b421fb371ef69c4bd6a247",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m330_geograymon/sub/cell_001"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "8c74e793a5e12a5b6a1a75f7f45e3479f257f35d4adf571d3a3bff31a5ca5e1f",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:b90a098159b6ffc9",
+      "sourceRgbaSha256": "69053adc911057d41826d51bda645a1773603b310c5ea7478c4815c7d2bf7727",
+      "sourceSize": [
+        192,
+        208
+      ],
+      "texture": "m330_geograymon/sub/cell_002"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "f2a224e1cdcfca83f31112326b16734fa567c63545badff936fa5711b653b936",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:74ef6a522a64f307",
+      "sourceRgbaSha256": "5e2df76202527a8bf8445e5e285118f7496008c460da03cc7cd8b5131fb2dcd6",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m330_geograymon/sub/cell_003"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "7be72744977a590842873b85c10d99e10822b982597d78faed2ea15c61ed4933",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:476c6d020d4f62fd",
+      "sourceRgbaSha256": "0a70c3a03a565c1aae0e85eeaad4ff088686f52b5fb335e802d82a861de8cabc",
+      "sourceSize": [
+        288,
+        200
+      ],
+      "texture": "m330_geograymon/sub/cell_004"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "686b39b24ffd1e60941be255db5ec1c32cbcf597295e65e82e6a1a82cb75ad09",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:61785f7b91c7bab9",
+      "sourceRgbaSha256": "d64b4725415ce9748cc0393b27a5ea6760fb979c7f0745ed89552a90be39ccc6",
+      "sourceSize": [
+        224,
+        208
+      ],
+      "texture": "m330_geograymon/sub/cell_005"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "24b05dac3665d642e71437bb34523d89232278bc07131413bef31281cfd24ba9",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:21297a0e01f85926",
+      "sourceRgbaSha256": "87b17d221f3da1fb0a1bf81f382241b95ce7e4c58ea5483109db594947090d33",
+      "sourceSize": [
+        240,
+        152
+      ],
+      "texture": "m330_geograymon/sub/cell_006"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "f4d8d390f17640f654d57626a34de6689c7d376730d1af1f6569a31f6c10a491",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:8e646d16b6b3ecc9",
+      "sourceRgbaSha256": "4603f8df2399bdc7212fddc1b4e8387eb3b9dd9e2b7c31e2c6f109d1238915f8",
+      "sourceSize": [
+        240,
+        152
+      ],
+      "texture": "m330_geograymon/sub/cell_007"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "61813710340205bf937eae96a1f40eecae7330855d7da35fd4b8e7a19b8d7342",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:dabac28a9ac35959",
+      "sourceRgbaSha256": "fbf784764e2d3b59f3996f95eb1a56343ce28bebbda45e464be08ca4b2fd254b",
+      "sourceSize": [
+        192,
+        208
+      ],
+      "texture": "m330_geograymon/sub/cell_008"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "c2be7bfa234b3df86fe873dd1d1a366fe1d2a19908209d5c7f0a7f93fe159002",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:a682f5744209a208",
+      "sourceRgbaSha256": "f596ab996990db4405625306abb6db5d10f15b719fb9852070c0485c9f777056",
+      "sourceSize": [
+        216,
+        192
+      ],
+      "texture": "m330_geograymon/sub/cell_009"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "2fe699ec16de214bc5843175c18cd39c1494091a632fb18143aa77e10247dd77",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:42b7f99576043df4",
+      "sourceRgbaSha256": "1ab61e736c00c7b0e26dbea19bde0d5d6fb9a7e157caca8330fdbd36b4291f9f",
+      "sourceSize": [
+        200,
+        200
+      ],
+      "texture": "m330_geograymon/sub/cell_010"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "da42b07d97ef67200ec3c9e45f3bcc36d08ea76185209d30b8d616ce4088ca76",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:8d366a1c8ae891c4",
+      "sourceRgbaSha256": "a827717e64d972c72c03c655af3796c845b268529ccba92df2a97ad387ad2ac5",
+      "sourceSize": [
+        208,
+        224
+      ],
+      "texture": "m330_geograymon/sub/cell_011"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "ff7d536aaf95117715f43cccda1a0cf7a6d9375ae428bbf055e0fff464c92c8c",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:1ea037c408d4455e",
+      "sourceRgbaSha256": "e1231f1c195f81f06b4ea58819d0c21995e24591e2e75c72b65dc451fc4f7201",
+      "sourceSize": [
+        216,
+        192
+      ],
+      "texture": "m330_geograymon/sub/cell_012"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "eb2d01784414feabb12af73ef7df03961d764d6f1e943612b71bca578d0ba9b1",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:b16ff1abe09c95f7",
+      "sourceRgbaSha256": "2558c1cf04f79f78c029257dfe5018e77adff1e6740ff9e71675066d2eeea86f",
+      "sourceSize": [
+        208,
+        200
+      ],
+      "texture": "m330_geograymon/sub/cell_013"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "3bd6f9b351897bddef700563fef5e331d0dcb382aa0258f1850c8d8cf7886df7",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:510b157756e7d458",
+      "sourceRgbaSha256": "ab3cec938618653b162c7724b5aad4eaa856c612443abd8dd63d83e38e3f7b22",
+      "sourceSize": [
+        200,
+        232
+      ],
+      "texture": "m330_geograymon/sub/cell_014"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "903100f4faee58e3eb09e5ed6934e6f990dd27d777f98cf22f431766a7a80650",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:f400f890b79c9d36",
+      "sourceRgbaSha256": "3ea71b2ea8c4ad045cac80d0feee3194be11b6ceaf582693135807d58794770e",
+      "sourceSize": [
+        224,
+        200
+      ],
+      "texture": "m330_geograymon/sub/cell_015"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "38a6e41ed03f8a32250a886e430b43424d9abdb7d081419835b138cf6172251c",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:20f15517ccb6894c",
+      "sourceRgbaSha256": "d11cb7e7609736c349a052da2dc5657eb8f569771ab9487d78e1572d71a15dce",
+      "sourceSize": [
+        176,
+        208
+      ],
+      "texture": "m330_geograymon/sub/cell_016"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "2b7e155e92e0cfeb13abd2c9dd2948470f439e8d659cd1d5f5ab7bdc15d05787",
+      "isBlank": false,
+      "masterId": "m330_geograymon:master:e956608902c40cee",
+      "sourceRgbaSha256": "0cad3930977dae3fbb46ac3fc3e985c9c43cc54146d634ead2a9624887f221f0",
+      "sourceSize": [
+        320,
+        152
+      ],
+      "texture": "m330_geograymon/sub/cell_017"
+    }
+  ]
+}

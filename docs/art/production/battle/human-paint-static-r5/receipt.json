@@ -1,0 +1,363 @@
+{
+  "schemaVersion": 1,
+  "batchId": "ART-BATTLE-HUMAN-PAINT-STATIC-R5-2026-09-02",
+  "tool": "BUILT_IN_IMAGEGEN_PLUS_DETERMINISTIC_PIL_NORMALIZATION",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "styleApprovalEvidence": "Owner message 2026-09-02: 新的風格我覺得可以",
+  "generatedBackgroundCount": 7,
+  "sharedLayer": {
+    "assetId": "art:battle:human-paint-r4:field-bm00-00-shared-layer",
+    "file": "docs/art/production/battle/human-paint-migration-r4/review/layers/field-bm00-00-shared-layer-human-paint.png",
+    "sha256": "1AF674BEC1AEA889D24F389668A7DFCAAA1A87FCE8C74A1FB793A090A8397E3D"
+  },
+  "assets": [
+    {
+      "assetId": "art:battle:human-paint-r5:field-bm01-01",
+      "fieldId": "field_bm01_01",
+      "function": "BATTLE_NORMAL",
+      "background": {
+        "file": "docs/art/production/battle/human-paint-static-r5/review/01/field-bm01-01-background-human-paint.png",
+        "sha256": "BD4EDDA53FC96917D7981FB31F51E4A804858048B310E6CCFE54BB8BF7061AA3",
+        "mode": "RGB"
+      },
+      "dependencies": [
+        "art:battle:human-paint-r4:field-bm00-00-shared-layer"
+      ],
+      "sharedLayer": "docs/art/production/battle/human-paint-migration-r4/review/layers/field-bm00-00-shared-layer-human-paint.png",
+      "objectLayerSeparation": "NO_VERIFIED_OBJECT_LAYER",
+      "objectLayers": [],
+      "frameCount": 1,
+      "frameDurationsRawTicks": null,
+      "composites": [
+        {
+          "frameIndex": 0,
+          "file": "docs/art/production/battle/human-paint-static-r5/review/01/field-bm01-01-composite.png",
+          "sha256": "8DCDDEDD0F0C5A98E01497A792C6CFA64E9E3FA02358E8EF7CA2636E6EABCC63",
+          "durationRawTicks": null
+        }
+      ],
+      "geometryAuthority": "R4_CANONICAL_BM00_AND_VERIFIED_EXISTING_OBJECT_LAYERS_NOT_IMAGE_MODEL"
+    },
+    {
+      "assetId": "art:battle:human-paint-r5:field-bm02-01",
+      "fieldId": "field_bm02_01",
+      "function": "BATTLE_GRASS",
+      "background": {
+        "file": "docs/art/production/battle/human-paint-static-r5/review/02/field-bm02-01-background-human-paint.png",
+        "sha256": "5D690F580B6A7E3469B2F0E8F1D700B99380F3DC8610AC7331219729004042A1",
+        "mode": "RGB"
+      },
+      "dependencies": [
+        "art:battle:human-paint-r4:field-bm00-00-shared-layer"
+      ],
+      "sharedLayer": "docs/art/production/battle/human-paint-migration-r4/review/layers/field-bm00-00-shared-layer-human-paint.png",
+      "objectLayerSeparation": "NO_VERIFIED_OBJECT_LAYER",
+      "objectLayers": [],
+      "frameCount": 1,
+      "frameDurationsRawTicks": null,
+      "composites": [
+        {
+          "frameIndex": 0,
+          "file": "docs/art/production/battle/human-paint-static-r5/review/02/field-bm02-01-composite.png",
+          "sha256": "67CA5FAAF2A77E661691549491D142613B8405E7BDE7042F57206BBE5924C859",
+          "durationRawTicks": null
+        }
+      ],
+      "geometryAuthority": "R4_CANONICAL_BM00_AND_VERIFIED_EXISTING_OBJECT_LAYERS_NOT_IMAGE_MODEL"
+    },
+    {
+      "assetId": "art:battle:human-paint-r5:field-bm05-01",
+      "fieldId": "field_bm05_01",
+      "function": "BATTLE_SOUTHPOLE",
+      "background": {
+        "file": "docs/art/production/battle/human-paint-static-r5/review/05/field-bm05-01-background-human-paint.png",
+        "sha256": "79A51962FF798BBF2C25E65333913EC4EFD1E2D920C026EABA00C9793A326A11",
+        "mode": "RGB"
+      },
+      "dependencies": [
+        "art:battle:human-paint-r4:field-bm00-00-shared-layer"
+      ],
+      "sharedLayer": "docs/art/production/battle/human-paint-migration-r4/review/layers/field-bm00-00-shared-layer-human-paint.png",
+      "objectLayerSeparation": "NO_VERIFIED_OBJECT_LAYER",
+      "objectLayers": [],
+      "frameCount": 1,
+      "frameDurationsRawTicks": null,
+      "composites": [
+        {
+          "frameIndex": 0,
+          "file": "docs/art/production/battle/human-paint-static-r5/review/05/field-bm05-01-composite.png",
+          "sha256": "56D8E3144B62A2F7612533DEFD1C5F7DA75675529F494620E756B4EA3D47D635",
+          "durationRawTicks": null
+        }
+      ],
+      "geometryAuthority": "R4_CANONICAL_BM00_AND_VERIFIED_EXISTING_OBJECT_LAYERS_NOT_IMAGE_MODEL"
+    },
+    {
+      "assetId": "art:battle:human-paint-r5:field-bm08-01",
+      "fieldId": "field_bm08_01",
+      "function": "BATTLE_HELL",
+      "background": {
+        "file": "docs/art/production/battle/human-paint-static-r5/review/08/field-bm08-01-background-human-paint.png",
+        "sha256": "5C46400A6EE2699EB4F29D3DD1BB322D8881D5F2D83696768F63199528CC9E81",
+        "mode": "RGB"
+      },
+      "dependencies": [
+        "art:battle:human-paint-r4:field-bm00-00-shared-layer"
+      ],
+      "sharedLayer": "docs/art/production/battle/human-paint-migration-r4/review/layers/field-bm00-00-shared-layer-human-paint.png",
+      "objectLayerSeparation": "VERIFIED_EXISTING_LAYER_RETAINED",
+      "objectLayers": [
+        {
+          "frameIndex": 0,
+          "file": "assets/production/internal-battle-review/hardening-r2/field-bm08-01-objects.png",
+          "sha256": "B3F432328A55F6EC96313C24C913B50BE246E82B4087E23DF2136A6D8B85C431"
+        }
+      ],
+      "frameCount": 1,
+      "frameDurationsRawTicks": null,
+      "composites": [
+        {
+          "frameIndex": 0,
+          "file": "docs/art/production/battle/human-paint-static-r5/review/08/field-bm08-01-composite.png",
+          "sha256": "7FAAD98B6FA1B2A6F6CAED5EAC00305DA2676D12F14945A5E9B0FFDC80D487EC",
+          "durationRawTicks": null
+        }
+      ],
+      "geometryAuthority": "R4_CANONICAL_BM00_AND_VERIFIED_EXISTING_OBJECT_LAYERS_NOT_IMAGE_MODEL"
+    },
+    {
+      "assetId": "art:battle:human-paint-r5:field-bm09-01",
+      "fieldId": "field_bm09_01",
+      "function": "BATTLE_COLOSSEUM",
+      "background": {
+        "file": "docs/art/production/battle/human-paint-static-r5/review/09/field-bm09-01-background-human-paint.png",
+        "sha256": "DEAAEE278C9D96C83593598214755C4C498E8FF56F0FF1E1D6EBD63DFF541BCC",
+        "mode": "RGB"
+      },
+      "dependencies": [
+        "art:battle:human-paint-r4:field-bm00-00-shared-layer"
+      ],
+      "sharedLayer": "docs/art/production/battle/human-paint-migration-r4/review/layers/field-bm00-00-shared-layer-human-paint.png",
+      "objectLayerSeparation": "NO_VERIFIED_OBJECT_LAYER",
+      "objectLayers": [],
+      "frameCount": 1,
+      "frameDurationsRawTicks": null,
+      "composites": [
+        {
+          "frameIndex": 0,
+          "file": "docs/art/production/battle/human-paint-static-r5/review/09/field-bm09-01-composite.png",
+          "sha256": "87B3DD2B5CB6955427CB2CFD2750EA3DDF345FB5D9F9ABD22513D3CA0218B79C",
+          "durationRawTicks": null
+        }
+      ],
+      "geometryAuthority": "R4_CANONICAL_BM00_AND_VERIFIED_EXISTING_OBJECT_LAYERS_NOT_IMAGE_MODEL"
+    },
+    {
+      "assetId": "art:battle:human-paint-r5:field-bm10-01",
+      "fieldId": "field_bm10_01",
+      "function": "BATTLE_STADIUM",
+      "background": {
+        "file": "docs/art/production/battle/human-paint-static-r5/review/10/field-bm10-01-background-human-paint.png",
+        "sha256": "B81FD23D455264F8B057BDF9FE72EB8B9777803F6FEE2F29B0374EE24BA95CDC",
+        "mode": "RGB"
+      },
+      "dependencies": [
+        "art:battle:human-paint-r4:field-bm00-00-shared-layer"
+      ],
+      "sharedLayer": "docs/art/production/battle/human-paint-migration-r4/review/layers/field-bm00-00-shared-layer-human-paint.png",
+      "objectLayerSeparation": "NO_VERIFIED_OBJECT_LAYER",
+      "objectLayers": [],
+      "frameCount": 1,
+      "frameDurationsRawTicks": null,
+      "composites": [
+        {
+          "frameIndex": 0,
+          "file": "docs/art/production/battle/human-paint-static-r5/review/10/field-bm10-01-composite.png",
+          "sha256": "CDCD6D3C002CFDAF4E2301EF633CA9981D18159C1F0AD5148982AC19A383CD83",
+          "durationRawTicks": null
+        }
+      ],
+      "geometryAuthority": "R4_CANONICAL_BM00_AND_VERIFIED_EXISTING_OBJECT_LAYERS_NOT_IMAGE_MODEL"
+    },
+    {
+      "assetId": "art:battle:human-paint-r5:field-bm11-01",
+      "fieldId": "field_bm11_01",
+      "function": "BATTLE_DOMESTADIUM",
+      "background": {
+        "file": "docs/art/production/battle/human-paint-static-r5/review/11/field-bm11-01-background-human-paint.png",
+        "sha256": "A1183F812D301E917490E71317DD5E78CC7C8583AADC11A658A9AAAA9833F7D5",
+        "mode": "RGB"
+      },
+      "dependencies": [
+        "art:battle:human-paint-r4:field-bm00-00-shared-layer"
+      ],
+      "sharedLayer": "docs/art/production/battle/human-paint-migration-r4/review/layers/field-bm00-00-shared-layer-human-paint.png",
+      "objectLayerSeparation": "VERIFIED_EXISTING_LAYER_RETAINED",
+      "objectLayers": [
+        {
+          "frameIndex": 0,
+          "file": "assets/production/internal-battle-review/hardening-r2/field-bm11-01-objects-frame-00.png",
+          "sha256": "0C5D6BAF286C72A9BD0D12A504797FB6D4C4F0D4E7823DB6D8B4A7424F28247C"
+        },
+        {
+          "frameIndex": 1,
+          "file": "assets/production/internal-battle-review/hardening-r2/field-bm11-01-objects-frame-01.png",
+          "sha256": "5558D458EE4D9A0AECEFBB748567E27493751F20A46526DBAB47055692D89FEE"
+        }
+      ],
+      "frameCount": 2,
+      "frameDurationsRawTicks": [
+        6,
+        6
+      ],
+      "composites": [
+        {
+          "frameIndex": 0,
+          "file": "docs/art/production/battle/human-paint-static-r5/review/11/field-bm11-01-composite-frame-00.png",
+          "sha256": "F49274F605D593A6DAA94CFA3F9C43294D10AF5D5543A8D1E080BFE69CFA9D26",
+          "durationRawTicks": 6
+        },
+        {
+          "frameIndex": 1,
+          "file": "docs/art/production/battle/human-paint-static-r5/review/11/field-bm11-01-composite-frame-01.png",
+          "sha256": "8FD539D8716BE0959305696E067AC5B39E6D9D1691730DD3229861F5B43DE7FE",
+          "durationRawTicks": 6
+        }
+      ],
+      "geometryAuthority": "R4_CANONICAL_BM00_AND_VERIFIED_EXISTING_OBJECT_LAYERS_NOT_IMAGE_MODEL"
+    }
+  ],
+  "layoutPreviews": [
+    {
+      "fieldId": "field_bm01_01",
+      "file": "docs/art/production/battle/human-paint-static-r5/review/layout/field-bm01-01-battle-layout-360x640.png",
+      "sha256": "5E1F7E9DEBFF8AA71D75CB25BC2405748E317738E03A27A18BD1CA2095F7D2AC",
+      "size": [
+        360,
+        640
+      ],
+      "fieldBand": {
+        "x": 0,
+        "y": 96,
+        "width": 360,
+        "height": 240
+      }
+    },
+    {
+      "fieldId": "field_bm02_01",
+      "file": "docs/art/production/battle/human-paint-static-r5/review/layout/field-bm02-01-battle-layout-360x640.png",
+      "sha256": "F0145A779E8CE0A017D1C203D30E7593E42F5AB234573ED7A19AEC478F8989F3",
+      "size": [
+        360,
+        640
+      ],
+      "fieldBand": {
+        "x": 0,
+        "y": 96,
+        "width": 360,
+        "height": 240
+      }
+    },
+    {
+      "fieldId": "field_bm05_01",
+      "file": "docs/art/production/battle/human-paint-static-r5/review/layout/field-bm05-01-battle-layout-360x640.png",
+      "sha256": "A111F1450702D00CF5EBC77EFF13048697C1A70A4213BEA22D3ED170BA0064E6",
+      "size": [
+        360,
+        640
+      ],
+      "fieldBand": {
+        "x": 0,
+        "y": 96,
+        "width": 360,
+        "height": 240
+      }
+    },
+    {
+      "fieldId": "field_bm08_01",
+      "file": "docs/art/production/battle/human-paint-static-r5/review/layout/field-bm08-01-battle-layout-360x640.png",
+      "sha256": "0F9833D64D575D7A115BABEA04F12B248CB2029D0A18C937BB2CD9A659C135C9",
+      "size": [
+        360,
+        640
+      ],
+      "fieldBand": {
+        "x": 0,
+        "y": 96,
+        "width": 360,
+        "height": 240
+      }
+    },
+    {
+      "fieldId": "field_bm09_01",
+      "file": "docs/art/production/battle/human-paint-static-r5/review/layout/field-bm09-01-battle-layout-360x640.png",
+      "sha256": "C692A83423C705F48216D33F524CDBAB76A685E0D8306875A9338004A9A04D5C",
+      "size": [
+        360,
+        640
+      ],
+      "fieldBand": {
+        "x": 0,
+        "y": 96,
+        "width": 360,
+        "height": 240
+      }
+    },
+    {
+      "fieldId": "field_bm10_01",
+      "file": "docs/art/production/battle/human-paint-static-r5/review/layout/field-bm10-01-battle-layout-360x640.png",
+      "sha256": "A76A6CCB99B9AA657310CF4CB061E49F8BF7DD2D0C333540D973918280F8B9F7",
+      "size": [
+        360,
+        640
+      ],
+      "fieldBand": {
+        "x": 0,
+        "y": 96,
+        "width": 360,
+        "height": 240
+      }
+    },
+    {
+      "fieldId": "field_bm11_01",
+      "file": "docs/art/production/battle/human-paint-static-r5/review/layout/field-bm11-01-battle-layout-360x640.png",
+      "sha256": "061DAEB8FB7656261BEBB4D9DD4BE59394409185281615B9946901DB70114199",
+      "size": [
+        360,
+        640
+      ],
+      "fieldBand": {
+        "x": 0,
+        "y": 96,
+        "width": 360,
+        "height": 240
+      }
+    }
+  ],
+  "contactSheet": {
+    "file": "docs/art/production/battle/human-paint-static-r5/review/human-paint-static-r5-contact-sheet.png",
+    "sha256": "C2203C1E7A5C379DC7B92EFD710EC7DF83D1BCE6FE3F3B1F55FEBCB0FE6724BA",
+    "size": [
+      2304,
+      1536
+    ]
+  },
+  "compositionRules": {
+    "imageModelOwns": [
+      "OPAQUE_ENVIRONMENT_PIXELS"
+    ],
+    "imageModelDoesNotOwn": [
+      "BM00_GEOMETRY",
+      "STANDING_RINGS",
+      "BM08_OBJECTS",
+      "BM11_OBJECT_ANIMATION"
+    ],
+    "bm11FrameDurationsRawTicks": [
+      6,
+      6
+    ]
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "allEntitiesRequireRedesign": true,
+  "approvedDesignCount": 4,
+  "approvedDesignCountMeaning": "OWNER_SELECTED_APPEARANCE_OPTIONS_NOT_FINAL_SETTING_OR_ANIMATION_APPROVAL",
+  "approvedRuntimeReplacementCount": 0,
+  "artDirectorSelectedBriefCount": 4,
+  "authorization": "OWNER_REQUESTED_IMPLEMENTATION_OF_REVIEW_GATED_PLAN",
+  "automaticWholeEntityReplacementAfterGates": true,
+  "completeRosterQueue": "pixel-v2/production-queue.json",
+  "conceptBoardCount": 4,
+  "conceptOptionCount": 8,
+  "currentIdentityReview": "pixel-v2/identity-start-review.json",
+  "currentStage": "ALL_224_IDENTITY_DRAWINGS_AND_REPRESENTATIVE_REVIEW",
+  "decisionDelegation": {
+    "advanceOnlyAfterStagePass": true,
+    "authority": "EXPLICIT_OWNER_CHAT_2026_09_06",
+    "automaticContinue": true,
+    "gameplayChangesAuthorized": false,
+    "noRoutineOwnerSelectionWait": true,
+    "preserveFirstFourOwnerChoices": true,
+    "publicReleaseAuthorized": false,
+    "remainingConceptSelector": "ART_DIRECTOR",
+    "routineProductionReview": "ART_DIRECTOR_AND_TECHNICAL_QA_AUTONOMOUS",
+    "selectionObjective": "LOWEST_ANIMATION_AND_IDENTITY_ERROR_RISK",
+    "stageSelfReviewRequired": true,
+    "technicalQaStillRequired": true,
+    "verbatim": "接下來的你,能幫我選擇嗎?就是選比較不容易出錯的,然後可以自動下去"
+  },
+  "designPolicy": {
+    "appearanceChange": "SUBSTANTIAL_WITH_SOURCE_MOTION_TOPOLOGY_PRESERVED",
+    "conceptsPerEntity": 2,
+    "deliveryMilestones": "PRESERVE_SEVEN_ORIGINAL_SOURCE_BATCHES_OF_32",
+    "entryStrategy": "ALL224_SOURCE_BRIEFS_THREE_PARALLEL_REGULAR_GROUPS_AND_EGGS_NO_M201_START_BLOCKER",
+    "firstCompleteEntity": "m201_agumon",
+    "firstPacket": [
+      "m201_agumon",
+      "m001_zurumon",
+      "m226_hagurumon",
+      "e000_digitama"
+    ],
+    "identityDirectionVersion": "creature-identity-v1",
+    "identityFamilies": [
+      "FELINE",
+      "CANINE",
+      "BIG_EYE",
+      "DRAGONFOLK",
+      "BEASTFOLK",
+      "OTHER_WITH_REASON"
+    ],
+    "nativePlaybackWitness": "m003_nyokimon",
+    "normalVisiblePaletteMaximum": 15,
+    "ownerReviewEntitiesPerPacket": 4,
+    "paletteDefault": "PRESERVE_SOURCE_DOMINANT_FAMILY_EXPLICIT_ALTERNATIVE_IN_CONCEPT_REVIEW",
+    "perFrameIndependentGeneration": false,
+    "productionOrder": [
+      "ALL224_SOURCE_WITNESSES_AND_IDENTITY_BRIEFS",
+      "ALL224_NEW_IDENTITY_DRAWINGS",
+      "ALL224_REPRESENTATIVE_POSE_SETTINGS",
+      "COMPLETE_ENTITY_MOTION_PACKS",
+      "VERIFIED_AUTOMATIC_DEFAULT_REPLACEMENT"
+    ],
+    "remainingOrder": "SOURCE_MANIFEST_ORDINAL_EXCLUDING_FIRST_EIGHT",
+    "secondPacket": [
+      "m222_tentomon",
+      "m228_palmon",
+      "m352_peckmon",
+      "m431_whamon"
+    ],
+    "speciesQuota": null,
+    "style": "SOURCE_NATIVE_GRID_INDEXED_PIXEL_ART"
+  },
+  "evidenceEntityCount": 224,
+  "fullRedrawnEntityCount": 0,
+  "historicalDesignPolicies": [
+    {
+      "appearanceChange": "SUBSTANTIAL_WITH_SOURCE_MOTION_TOPOLOGY_PRESERVED",
+      "conceptsPerEntity": 2,
+      "deliveryMilestones": "PRESERVE_SEVEN_ORIGINAL_SOURCE_BATCHES_OF_32",
+      "firstCompleteEntity": "m201_agumon",
+      "firstPacket": [
+        "m201_agumon",
+        "m001_zurumon",
+        "m226_hagurumon",
+        "e000_digitama"
+      ],
+      "nativePlaybackWitness": "m003_nyokimon",
+      "ownerReviewEntitiesPerPacket": 4,
+      "paletteDefault": "PRESERVE_SOURCE_DOMINANT_FAMILY_EXPLICIT_ALTERNATIVE_IN_CONCEPT_REVIEW",
+      "remainingOrder": "SOURCE_MANIFEST_ORDINAL_EXCLUDING_FIRST_EIGHT",
+      "secondPacket": [
+        "m222_tentomon",
+        "m228_palmon",
+        "m352_peckmon",
+        "m431_whamon"
+      ],
+      "speciesQuota": null,
+      "style": "CLEAN_OUTLINE_HD_HAND_DRAWN"
+    }
+  ],
+  "humanApproved": false,
+  "identityDesignQueue": "pixel-v2/identity-design-queue.json",
+  "lastPassedStageReview": "pixel-v2/stage-01-review.json",
+  "lastPassedStageReviewMeaning": "Historical pre-identity-direction method review; current identity acceptance is derived from setting-progress.json.",
+  "motionPolicy": {
+    "noFixedFpsReplacement": true,
+    "noFrameInterpolation": true,
+    "noIndependentPerFrameRecentering": true,
+    "preserve": [
+      "entityId",
+      "Main_Sub_identity",
+      "cell_keys",
+      "frame_order",
+      "cell_references",
+      "duration_ticks",
+      "raw_playback_mode",
+      "loop_start",
+      "native_owner_cadence",
+      "flip",
+      "blank_cells",
+      "status_cells",
+      "verified_pose_landmarks"
+    ],
+    "sourceOriginAuditRequired": true,
+    "unknownSemantics": "RAW_IDS_ONLY_UNKNOWN_REQUIRES_TRACE"
+  },
+  "nextPacketDecision": "batch-02/design-decisions.json",
+  "ownerDirectionDate": "2026-09-06",
+  "ownerSelectedDesignCount": 4,
+  "pixelProductionPolicy": "pixel-v2/policy.json",
+  "pixelSettingProgress": "pixel-v2/setting-progress.json",
+  "pixelSettingsGallery": "pixel-v2/settings.html",
+  "product": "CHAMPIONSHIP_2026_STANDALONE",
+  "programId": "CHARACTER_APPEARANCE_REFRESH_V1",
+  "redesignRequiredEntityCount": 224,
+  "repeatOwnerReplacementInstructionRequired": false,
+  "reviewGates": [
+    "OWNER_OR_DELEGATED_DESIGN_SELECTION",
+    "GEOMETRY_AND_LANDMARK_LOCK",
+    "HIGH_RISK_POSES",
+    "ALL_MAIN_SUB_ART",
+    "MOTION_COMPATIBILITY",
+    "TECHNICAL_PACKAGE",
+    "DELEGATED_VISUAL_REVIEW",
+    "NORMAL_PATH_QA"
+  ],
+  "runtimePolicy": {
+    "indexAuthority": "ART_PRODUCTION_INDEX.json",
+    "newRouterStoreTicker": false,
+    "normalEventBindings": "EXISTING_GAMEPLAY_OWNERS_ONLY",
+    "playerPackPicker": false,
+    "publicReleasePermitted": false,
+    "saveMigration": false,
+    "target": "PER_ENTITY_NORMAL_GAME_DEFAULT_AFTER_APPROVAL",
+    "wholeEntityReplacementOnly": true
+  },
+  "schemaVersion": 1,
+  "selectedDesignCount": 8,
+  "shippingReady": false,
+  "sourceArchive": "R:/Projects/Championship2026/YDIJ_PRIVATE_ROM_ART_PACK",
+  "sourcePolicy": "REFERENCE_ONLY_NO_SOURCE_PIXEL_PROMOTION_IN_THIS_PROGRAM",
+  "stageContinuationOwnerQuote": "請開始自動開工，每一階段完成請自我審查沒問題再進入下一階段。"
+}

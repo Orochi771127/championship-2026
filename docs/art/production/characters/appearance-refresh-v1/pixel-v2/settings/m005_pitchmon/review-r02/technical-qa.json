@@ -1,0 +1,64 @@
+{
+  "artReview": "PENDING_INDEPENDENT_VISUAL_REVIEW",
+  "decoderSha256": "d8690529211cf396e3b01c064a08f35d628ac30cf2f3ff92beffa8a4941b1d34",
+  "designVersion": "m005-creature-identity-r02",
+  "distinctSourceCanvasStates": 47,
+  "distinctSourcePosesSelected": 1,
+  "eggFullStateCoverage": null,
+  "entityId": "m005_pitchmon",
+  "fullMotionQa": "NOT_RUN",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "poseSamplingStatus": "INCOMPLETE",
+  "poses": [
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        2,
+        5,
+        13,
+        20
+      ],
+      "authoredRgbaSha256": "45919121f7c893f413ed9f691df665c1e15ce2f9c36a3d6f23475a393281a736",
+      "authoredVisiblePixels": 117,
+      "key": "main/cell_000",
+      "nativeBounds": [
+        -7,
+        -20,
+        9,
+        4
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        2,
+        5,
+        13,
+        20
+      ],
+      "sourceRgbaSha256": "9e4187f1b0ab9283c4b6f03de67cd0ccdc898d38461d293da725933eac5c3963",
+      "sourceVisiblePixels": 117,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    }
+  ],
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "17e1b4307614d5e8f79ef6d626b728f717222d6d01b6237ad708ea92e31c334c",
+  "settingPoseCount": 1,
+  "shippingReady": false,
+  "sourceFiles": {
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m005_pitchmon_main.nanr": "d39d0ef49cb66d055f5944e9923655299a17131ddb2b1dcf729f48c18a5d59f7",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m005_pitchmon_main.ncbr": "e3bdea671ba25ef1ca2e6914709419ffb56d2e1221c75d4296368d813da3b4c2",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m005_pitchmon_main.ncer": "2b9b5b3f8614510b937dd63de357358a074e694b603e4e5e32c69c812454fe48",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m005_pitchmon_main.nclr": "f962ae1933f292baeafa7985097697156990ade061e41da1ce19a790b7c13311",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m005_pitchmon_sub.nanr": "b92cb8a9fb90d40dfdfd950d6cee2dd81b4b75bc58f9c4417a31bf5a81aebe11",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m005_pitchmon_sub.ncer": "5e05683edf07d2cd6087291d055c19ced05f5fbdf15d0bc9e66e49d2502b17ff",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m005_pitchmon_sub.ncgr": "a0a7ef1aefcb04d0ce7d43f653e184b0c4f7de1bca3931ef7d666c4fc5348d66",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m005_pitchmon_sub.nclr": "2afa3c8e7bb8021770343693dd71db13c961b53e0a76595aea0f0ff44f1c6d23",
+    "08_FULL_FAMILY_CONVERSION/digimon/m005_pitchmon_main/animations.json": "c19e5dd34b7dc34ea1a12f387363eb965c50a226aa8754a442216b4fad17160f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m005_pitchmon_main/cells.json": "fbccc42769cdbce4a0ee3061e72faa53e7fa0b5ad2fc98a5f60f8febf020cad7",
+    "08_FULL_FAMILY_CONVERSION/digimon/m005_pitchmon_sub/animations.json": "e30134f30f5eadc2c047803bc7980a57c64219f8c1eeeadb0a52cb747b874836",
+    "08_FULL_FAMILY_CONVERSION/digimon/m005_pitchmon_sub/cells.json": "4016243189117929afbca6ebd7881540862d9ed239f1aff364914602122a5905"
+  },
+  "technicalStatus": "PASS",
+  "visiblePaletteCount": 8
+}

@@ -24,11 +24,13 @@ export function getCharacterStaticNativeSizing(record, runtime, side = "main", a
 /** One scene's texture resources, indexed by existing species identities. No gameplay state. */
 export async function loadLicensedCharacterRoster({
   PIXI, speciesIds, manifest, productionIndex, manifestUrl,
+  sides = ['main'],
   loadBundle = loadPixiCharacterRuntimeBundle,
   appearanceReplacements = manifest?.appearanceReplacements ?? [],
   baselineMotionContracts = manifest?.motionContractHashes ?? {},
   baselineOriginGeometryContracts = manifest?.originGeometryContractHashes ?? {}
 }) {
+  if(!Array.isArray(sides)||!sides.length||sides.some(side=>!['main','sub'].includes(side)))throw new Error('CHARACTER_ROSTER_SIDES_INVALID');
   const entry = productionIndex?.entries?.find((candidate) => candidate.assetId === LICENSED_CHARACTER_ASSET_ID);
   if (entry?.runtimeEligible !== true || entry.manifestPath !== LICENSED_CHARACTER_MANIFEST
     || entry.publicReleasePermitted !== false || manifest?.assetId !== entry.assetId
@@ -61,7 +63,7 @@ export async function loadLicensedCharacterRoster({
     try {
       const appearance = selectCharacterAppearance({ entityId, descriptors: appearanceReplacements,
         record, productionIndex, baselineMotionContracts, baselineOriginGeometryContracts, manifestUrl, baselineManifestPath: LICENSED_CHARACTER_MANIFEST });
-      if (appearance) {
+      if (appearance && sides.length===1 && sides[0]==='main') {
         const baselineRuntimeUrl = new URL(record.runtime, manifestUrl).href;
         let baselineLoaded = false;
         try {
@@ -86,7 +88,7 @@ export async function loadLicensedCharacterRoster({
     try {
       bundles.set(entityId, await loadBundle({ PIXI,
         runtimeUrl: new URL(record.runtime, manifestUrl).href,
-        sides: ["main"], cachePrefix: `licensed:${entityId}:` }));
+        sides, cachePrefix: `licensed:${entityId}:` }));
     } catch (error) {
       failures.push({ entityId, reason: error.message });
     }
@@ -113,6 +115,13 @@ export async function loadLicensedCharacterRoster({
       const entityId = identities.get(canonicalSpeciesId(speciesId));
       const bundle = bundles.get(entityId);
       if (!bundle) return null;
+      if(side==='sub'&&['result-win','result-loss'].includes(presentation)){
+        const animation=presentation==='result-win'?9:5;
+        if(!bundle.runtime.sides.sub.animations.some(a=>a.id===animation))return null;
+        const actor=bundle.createActor({side,animation,nativeSequence:true,reducedMotion:true});
+        return Object.freeze({sprite:actor.sprite,sequencePlayer:actor.sequencePlayer,entityId,
+          packedPixelsPerNativePixel:bundle.runtime.artProfile.scale,presentationState:'OVL8_NATIVE_RESULT_SUB_SEQUENCE'});
+      }
       // Each normal owner publishes this species' raw frame. The old M003-only
       // Hunt pilot gate left every other loaded atlas frozen on its first cell.
       const nativeFramePresentation = side === "main" && ["raising", "hunt"].includes(presentation);
@@ -137,10 +146,10 @@ export async function loadLicensedCharacterRoster({
     },
     getDiagnostics() {
       return Object.freeze({ assetId: manifest.assetId, entityCount: manifest.records.length,
-        loadedEntityIds: [...bundles.keys()], loadedSides: ["main"], failures: [...failures],
+        loadedEntityIds: [...bundles.keys()], loadedSides: [...sides], failures: [...failures],
         replacementFailures: [...replacementFailures],
         appearances: [...appearances].map(([entityId, pack]) => ({ entityId, assetId: pack.assetId, designVersion: pack.designVersion })),
-        rgbaBytes: [...bundles.keys()].reduce((sum, id) => sum + (appearances.get(id) ?? records.get(id)).sides.main.rgbaBytes, 0),
+        rgbaBytes: [...bundles.keys()].reduce((sum, id) => sum + sides.reduce((n,side)=>n+(appearances.get(id) ?? records.get(id)).sides[side].rgbaBytes,0), 0),
         animationBinding: manifest.animationBinding, runtimeEligible: true, shippingReady: false });
     },
     dispose() {

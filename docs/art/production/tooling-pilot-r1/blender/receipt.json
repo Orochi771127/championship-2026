@@ -1,0 +1,516 @@
+{
+  "schemaVersion": 1,
+  "classification": "OFFLINE_CC0_POSE_PROXY_NOT_CHARACTER_ART",
+  "source": {
+    "path": "R:\\Projects\\Championship2026\\_archive\\tooling-pilot-r1\\quaternius-monsters\\Blend\\Dragon.blend",
+    "sha256": "7052522e949ddb2633d4187a2c02fc804ebb5c253ba7c8e3ba9ed40bbbae2379",
+    "publisher": "Quaternius",
+    "page": "https://quaternius.itch.io/lowpoly-animated-monsters",
+    "license": "CC0-1.0"
+  },
+  "blenderVersion": "4.5.13 LTS",
+  "stockActionInventory": [
+    {
+      "name": "Dragon_Attack",
+      "range": [
+        0.0,
+        21.0
+      ]
+    },
+    {
+      "name": "Dragon_Attack2",
+      "range": [
+        0.0,
+        40.0
+      ]
+    },
+    {
+      "name": "Dragon_Death",
+      "range": [
+        0.0,
+        29.0
+      ]
+    },
+    {
+      "name": "Dragon_Flying",
+      "range": [
+        0.0,
+        40.0
+      ]
+    },
+    {
+      "name": "Dragon_Hit",
+      "range": [
+        0.0,
+        40.0
+      ]
+    }
+  ],
+  "originalBones": [
+    "Root",
+    "BodyRoot",
+    "Body",
+    "Neck",
+    "Head",
+    "Face",
+    "Nose",
+    "Shoulder.L",
+    "Wing1.L",
+    "Wing2.L",
+    "Wing3.L",
+    "Wing4.L",
+    "Shoulder.R",
+    "Wing1.R",
+    "Wing2.R",
+    "Wing3.R",
+    "Wing4.R",
+    "UpperLeg.L",
+    "LowerLeg.L",
+    "Feet.L",
+    "UpperLeg.R",
+    "LowerLeg.R",
+    "Feet.R",
+    "Tail1",
+    "Tail2",
+    "Tail3",
+    "Tail4"
+  ],
+  "originalVertices": 554,
+  "modifiedVertices": 376,
+  "camera": {
+    "resolution": [
+      464,
+      368
+    ],
+    "orthoScale": 38.66666793823242,
+    "nativeUnitsToPixels": 12,
+    "projectedSourceOrigin": [
+      184.00000190734863,
+      268.0000457763672
+    ],
+    "fixedAcrossAllPoses": true,
+    "groundMeaning": "UNKNOWN_REQUIRES_TRACE"
+  },
+  "sourcePoseMetadata": [
+    {
+      "schemaVersion": 1,
+      "assetId": "tooling-pilot-r1:m201:main:023",
+      "entityId": "m201_agumon",
+      "sourceCell": 23,
+      "classification": "RESEARCH_ONLY_POSE_REFERENCE_BRIEF",
+      "productionStatus": "PROXY_NOT_CREATED",
+      "runtimeEligible": false,
+      "shippingReady": false,
+      "sourceGuide": {
+        "path": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/main/cell-023.png",
+        "sha256": "c812760d6c317ff1d341b07f6ccb8cabcebd06c1776ab68b5c3d8c277735f12e",
+        "canvas": [
+          464,
+          368
+        ],
+        "commonSourceOrigin": [
+          184,
+          268
+        ],
+        "nativeScale": 12,
+        "groundMeaning": "UNKNOWN_REQUIRES_TRACE"
+      },
+      "sourceMetadataPath": "R:\\Projects\\Championship2026\\championship-2026\\docs\\art\\production\\characters\\appearance-refresh-v1/generated/entities/m201_agumon/origin-audit.json",
+      "nativeBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 5,
+        "minX": -16,
+        "minY": -11
+      },
+      "nativeAlphaBounds": [
+        -12,
+        -10,
+        11,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 3264,
+        "transferSizeBytes": 256
+      },
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16629,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -11
+        }
+      ],
+      "animationContractPath": "R:\\Projects\\Championship2026\\championship-2026\\docs\\art\\production\\characters\\appearance-refresh-v1/generated/entities/m201_agumon/motion-contract.json",
+      "rawSequenceReferences": [
+        {
+          "sequenceId": 13,
+          "frameIndex": 0,
+          "ticks": 37,
+          "playbackMode": 1,
+          "loopStartFrame": 0
+        }
+      ],
+      "semanticMeaning": "UNKNOWN_REQUIRES_TRACE",
+      "authoredComparison": {
+        "path": "R:\\Projects\\Championship2026\\championship-2026\\docs\\art\\production\\characters\\appearance-refresh-v1/pixel-v2/m201-a/build-r02/masters/main/cell_023.png",
+        "sha256": "d20e0738ff9c5b87ece12062a4257851636e8fba708f6a040459cab6ca447bc1",
+        "status": "EXISTING_AUTHORED_CANDIDATE"
+      },
+      "proxyCandidate": {
+        "publisher": "Quaternius",
+        "packPage": "https://quaternius.com/packs/ultimateanimatedanimals.html",
+        "releasePage": "https://www.patreon.com/quaternius/posts/ultimate-animals-53427821",
+        "downloadPage": "https://drive.google.com/drive/folders/1uJ3N5HfB7jKTseJUNQr3N4YaN0UuEtHk?usp=sharing",
+        "license": "CC0-1.0_PUBLISHER_DECLARED",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "localArchiveInspected": false,
+        "selectedModel": null,
+        "fit": "QUADRUPED_VOLUME_PROXY_ONLY_NOT_BIPED_IDENTITY_FIDELITY"
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "tooling-pilot-r1:m201:main:056",
+      "entityId": "m201_agumon",
+      "sourceCell": 56,
+      "classification": "RESEARCH_ONLY_POSE_REFERENCE_BRIEF",
+      "productionStatus": "PROXY_NOT_CREATED",
+      "runtimeEligible": false,
+      "shippingReady": false,
+      "sourceGuide": {
+        "path": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/main/cell-056.png",
+        "sha256": "17f40f3b21af697129872c4403dcbcb6b555f52d96f90589d302f4aad67f3b07",
+        "canvas": [
+          464,
+          368
+        ],
+        "commonSourceOrigin": [
+          184,
+          268
+        ],
+        "nativeScale": 12,
+        "groundMeaning": "UNKNOWN_REQUIRES_TRACE"
+      },
+      "sourceMetadataPath": "R:\\Projects\\Championship2026\\championship-2026\\docs\\art\\production\\characters\\appearance-refresh-v1/generated/entities/m201_agumon/origin-audit.json",
+      "nativeBounds": {
+        "maxXExclusive": 16,
+        "maxYExclusive": 5,
+        "minX": -16,
+        "minY": -19
+      },
+      "nativeAlphaBounds": [
+        -13,
+        -15,
+        11,
+        2
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 8960,
+        "transferSizeBytes": 384
+      },
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16621,
+          "rawAttr1": 33264,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -19
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16637,
+          "rawAttr1": 16880,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 32,
+          "x": -16,
+          "y": -3
+        }
+      ],
+      "animationContractPath": "R:\\Projects\\Championship2026\\championship-2026\\docs\\art\\production\\characters\\appearance-refresh-v1/generated/entities/m201_agumon/motion-contract.json",
+      "rawSequenceReferences": [
+        {
+          "sequenceId": 32,
+          "frameIndex": 0,
+          "ticks": 7,
+          "playbackMode": 1,
+          "loopStartFrame": 0
+        }
+      ],
+      "semanticMeaning": "UNKNOWN_REQUIRES_TRACE",
+      "authoredComparison": {
+        "path": null,
+        "status": "MISSING_PIXEL_MASTER_IN_R02_DO_NOT_SUBSTITUTE_SOURCE"
+      },
+      "proxyCandidate": {
+        "publisher": "Quaternius",
+        "packPage": "https://quaternius.com/packs/ultimateanimatedanimals.html",
+        "releasePage": "https://www.patreon.com/quaternius/posts/ultimate-animals-53427821",
+        "downloadPage": "https://drive.google.com/drive/folders/1uJ3N5HfB7jKTseJUNQr3N4YaN0UuEtHk?usp=sharing",
+        "license": "CC0-1.0_PUBLISHER_DECLARED",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "localArchiveInspected": false,
+        "selectedModel": null,
+        "fit": "QUADRUPED_VOLUME_PROXY_ONLY_NOT_BIPED_IDENTITY_FIDELITY"
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "tooling-pilot-r1:m201:main:062",
+      "entityId": "m201_agumon",
+      "sourceCell": 62,
+      "classification": "RESEARCH_ONLY_POSE_REFERENCE_BRIEF",
+      "productionStatus": "PROXY_NOT_CREATED",
+      "runtimeEligible": false,
+      "shippingReady": false,
+      "sourceGuide": {
+        "path": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/main/cell-062.png",
+        "sha256": "f9597e7270e6e5d2f1ccc5a22667db28fc3e3712f5e9772fe5ee023264539876",
+        "canvas": [
+          464,
+          368
+        ],
+        "commonSourceOrigin": [
+          184,
+          268
+        ],
+        "nativeScale": 12,
+        "groundMeaning": "UNKNOWN_REQUIRES_TRACE"
+      },
+      "sourceMetadataPath": "R:\\Projects\\Championship2026\\championship-2026\\docs\\art\\production\\characters\\appearance-refresh-v1/generated/entities/m201_agumon/origin-audit.json",
+      "nativeBounds": {
+        "maxXExclusive": 24,
+        "maxYExclusive": 5,
+        "minX": 0,
+        "minY": -19
+      },
+      "nativeAlphaBounds": [
+        0,
+        -15,
+        22,
+        0
+      ],
+      "sourceTransfer": {
+        "bitsPerPixel": 4,
+        "layout": "LINEAR_NCBR",
+        "sourceOffsetBytes": 10688,
+        "transferSizeBytes": 320
+      },
+      "oamEntries": [
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 0,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 237,
+          "rawAttr1": 16384,
+          "rawAttr2": 0,
+          "tileIndex": 0,
+          "verticalFlip": false,
+          "width": 16,
+          "x": 0,
+          "y": -19
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 16,
+          "horizontalFlip": false,
+          "ordinal": 1,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 33005,
+          "rawAttr1": 16,
+          "rawAttr2": 2,
+          "tileIndex": 2,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 16,
+          "y": -19
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 2,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 16637,
+          "rawAttr1": 0,
+          "rawAttr2": 3,
+          "tileIndex": 3,
+          "verticalFlip": false,
+          "width": 16,
+          "x": 0,
+          "y": -3
+        },
+        {
+          "affine": false,
+          "disabled": false,
+          "height": 8,
+          "horizontalFlip": false,
+          "ordinal": 3,
+          "paletteBank": 0,
+          "priority": 0,
+          "rawAttr0": 253,
+          "rawAttr1": 16,
+          "rawAttr2": 4,
+          "tileIndex": 4,
+          "verticalFlip": false,
+          "width": 8,
+          "x": 16,
+          "y": -3
+        }
+      ],
+      "animationContractPath": "R:\\Projects\\Championship2026\\championship-2026\\docs\\art\\production\\characters\\appearance-refresh-v1/generated/entities/m201_agumon/motion-contract.json",
+      "rawSequenceReferences": [
+        {
+          "sequenceId": 37,
+          "frameIndex": 0,
+          "ticks": 37,
+          "playbackMode": 1,
+          "loopStartFrame": 0
+        }
+      ],
+      "semanticMeaning": "UNKNOWN_REQUIRES_TRACE",
+      "authoredComparison": {
+        "path": null,
+        "status": "MISSING_PIXEL_MASTER_IN_R02_DO_NOT_SUBSTITUTE_SOURCE"
+      },
+      "proxyCandidate": {
+        "publisher": "Quaternius",
+        "packPage": "https://quaternius.com/packs/ultimateanimatedanimals.html",
+        "releasePage": "https://www.patreon.com/quaternius/posts/ultimate-animals-53427821",
+        "downloadPage": "https://drive.google.com/drive/folders/1uJ3N5HfB7jKTseJUNQr3N4YaN0UuEtHk?usp=sharing",
+        "license": "CC0-1.0_PUBLISHER_DECLARED",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "localArchiveInspected": false,
+        "selectedModel": null,
+        "fit": "QUADRUPED_VOLUME_PROXY_ONLY_NOT_BIPED_IDENTITY_FIDELITY"
+      }
+    }
+  ],
+  "studyPoses": [
+    {
+      "cell": "000",
+      "frame": 1,
+      "body": 0,
+      "tilt": 0,
+      "shift": [
+        0,
+        0,
+        0
+      ],
+      "leg": 0
+    },
+    {
+      "cell": "023",
+      "frame": 2,
+      "body": 18,
+      "tilt": -62,
+      "shift": [
+        2,
+        0,
+        -1
+      ],
+      "leg": 50
+    },
+    {
+      "cell": "056",
+      "frame": 3,
+      "body": 15,
+      "tilt": -25,
+      "shift": [
+        1,
+        0,
+        -1
+      ],
+      "leg": 35
+    },
+    {
+      "cell": "062",
+      "frame": 4,
+      "body": 0,
+      "tilt": 78,
+      "shift": [
+        7,
+        0,
+        3
+      ],
+      "leg": 40
+    }
+  ],
+  "renders": [
+    {
+      "cell": "000",
+      "path": "proxy-main-000.png",
+      "sha256": "c7df37bfcb511709308971edaa9e5858d3e7175a99eac1abb00bb2b4bfe51dd0"
+    },
+    {
+      "cell": "023",
+      "path": "proxy-main-023.png",
+      "sha256": "50f50b2b15d6155c2a6c9489810499ec6ec362c319839c2be25edcf6f4296904"
+    },
+    {
+      "cell": "056",
+      "path": "proxy-main-056.png",
+      "sha256": "1b56ee0664bd2bd820296c08e347264dea3e79f1bf10ff0e1cfc63f92f06edc2"
+    },
+    {
+      "cell": "062",
+      "path": "proxy-main-062.png",
+      "sha256": "9a83e4a0e33616090283432eb847d88ca46da37056e5272d8d7250c1aac5848a"
+    }
+  ],
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "humanApproved": false,
+  "fitVerdict": "NOT_ACCEPTED_AS_M201_REPLACEMENT",
+  "limitations": [
+    "No independently rigged hands/wrists",
+    "Dragon muzzle, horns and tail are not selected cat identity",
+    "Approximation poses are artist-authored, not ROM animation",
+    "Fixed projection validates coordinates only, not silhouette or motion fidelity"
+  ],
+  "blend": {
+    "path": "m201-offline-pose-proxy.blend",
+    "sha256": "b42a2726566ebb2ba889719b140412c0cdaebebacb8c9904f3dec5d8ad4015df"
+  },
+  "generationSeconds": 6.1
+}

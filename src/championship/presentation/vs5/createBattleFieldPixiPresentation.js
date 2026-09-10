@@ -170,6 +170,7 @@ function drawField(graphic, rect, frame, view, renderedSlots) {
  * both on dispose.
  */
 export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt = null, characterRoster = null, effectArt = null, autoAdvance = true,
+  onView = null,
   reducedMotion = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false }) {
   assertDependencies(stage, source);
   if (fieldArt !== null && (!fieldArt.displayObject || typeof fieldArt.update !== "function"
@@ -222,7 +223,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       }
       if (!combatant.present || !combatant.speciesId || !nativeScale) continue;
       if (!entry) {
-        const actor = characterRoster?.createActor({ speciesId: combatant.speciesId, reducedMotion, presentation:'battle' });
+        const actor = characterRoster?.createActor({ speciesId: combatant.speciesId, reducedMotion:false, presentation:'battle' });
         if (!actor) continue;
         entry = { actor, speciesId: combatant.speciesId };
         actors.set(combatant.slot, entry);
@@ -304,6 +305,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   function redraw() {
     if (disposed) return;
     const view = source.getView();
+    onView?.(view);
     const frame = source.getFrame();
     lastViewport = { width: app.screen.width, height: app.screen.height };
     const rect = { x: 0, y: 0, width: app.screen.width, height: app.screen.height };

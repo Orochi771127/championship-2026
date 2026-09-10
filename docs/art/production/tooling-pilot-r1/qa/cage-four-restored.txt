@@ -1,0 +1,39 @@
+- status:
+  - generic: Spring
+  - generic: Day
+  - generic: "1"
+  - generic: Training
+  - time: 22:00
+- region "Cage editor":
+  - generic: HOME
+  - heading "CAGE" [level=1]
+  - paragraph: One cage per hex. Rank opens 14–20. Overfill is allowed; extra Digimon stress more easily.
+  - button "Lower stand-in rank until title matches write it" [disabled]: −
+  - generic: RANK 0 · 4 / 14 HEX
+  - button "Raise stand-in rank until title matches write it": +
+  - grid "Ranch hex slots":
+    - gridcell "Cage 0 on hex 1. Defense up · Best for 2": Cage 0
+    - gridcell "Cage 1 on hex 2. HP up · Best for 6": Cage 1
+    - gridcell "Cage 15 on hex 3. HP & stress recover · Best for 2": Cage 15
+    - gridcell "Waiting Room on hex 4. No listed training": Waiting Room
+    - gridcell "Empty hex 5"
+    - gridcell "Empty hex 6"
+    - gridcell "Empty hex 7"
+    - gridcell "Empty hex 8"
+    - gridcell "Empty hex 9"
+    - gridcell "Empty hex 10"
+    - gridcell "Empty hex 11"
+    - gridcell "Empty hex 12"
+    - gridcell "Empty hex 13"
+    - gridcell "Empty hex 14"
+    - gridcell "Locked hex 15" [disabled]
+    - gridcell "Locked hex 16" [disabled]
+    - gridcell "Locked hex 17" [disabled]
+    - gridcell "Locked hex 18" [disabled]
+    - gridcell "Locked hex 19" [disabled]
+    - gridcell "Locked hex 20" [disabled]
+  - list "Owned cages":
+    - paragraph: Every owned cage is on the ranch.
+  - paragraph
+  - button "Keep this ranch layout" [disabled]: CONFIRM
+  - button "Return to Raising Home": BACK

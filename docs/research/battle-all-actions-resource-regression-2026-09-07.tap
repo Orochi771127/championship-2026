@@ -1,0 +1,130 @@
+TAP version 13
+# Subtest: the 9:16 frame is centred and never stretched
+ok 1 - the 9:16 frame is centred and never stretched
+  ---
+  duration_ms: 2.9422
+  type: 'test'
+  ...
+# Subtest: character art uses arena native pixels, keeps feet on stands after resize, and releases its roster once
+ok 2 - character art uses arena native pixels, keeps feet on stands after resize, and releases its roster once
+  ---
+  duration_ms: 11.2591
+  type: 'test'
+  ...
+# Subtest: unknown sizing retains neutral markers instead of guessing character proportions
+ok 3 - unknown sizing retains neutral markers instead of guessing character proportions
+  ---
+  duration_ms: 1.166
+  type: 'test'
+  ...
+# Subtest: animated geometry retains a fixed native origin across changing packing and viewport sizes
+ok 4 - animated geometry retains a fixed native origin across changing packing and viewport sizes
+  ---
+  duration_ms: 2.9422
+  type: 'test'
+  ...
+# Subtest: the band rectangles tile the frame with no gap and no overlap
+ok 5 - the band rectangles tile the frame with no gap and no overlap
+  ---
+  duration_ms: 0.4631
+  type: 'test'
+  ...
+# Subtest: the scene mounts, draws, and registers exactly one ticker and one resize observer
+ok 6 - the scene mounts, draws, and registers exactly one ticker and one resize observer
+  ---
+  duration_ms: 2.302
+  type: 'test'
+  ...
+# Subtest: cyberspace is framed with a rectangle, every other arena with the common ring
+ok 7 - cyberspace is framed with a rectangle, every other arena with the common ring
+  ---
+  duration_ms: 6.7296
+  type: 'test'
+  ...
+# Subtest: licensed field art hides the procedural plate and keeps stand markers
+ok 8 - licensed field art hides the procedural plate and keeps stand markers
+  ---
+  duration_ms: 2.1703
+  type: 'test'
+  ...
+# Subtest: the scene draws nothing that implies the viewer chooses an action
+ok 9 - the scene draws nothing that implies the viewer chooses an action
+  ---
+  duration_ms: 2.3425
+  type: 'test'
+  ...
+# Subtest: the battle runs itself and stops, and a stopped battle is still drawn
+ok 10 - the battle runs itself and stops, and a stopped battle is still drawn
+  ---
+  duration_ms: 10.5802
+  type: 'test'
+  ...
+# Subtest: 30, 60 and 120 Hz displays advance the same original battle frame count
+ok 11 - 30, 60 and 120 Hz displays advance the same original battle frame count
+  ---
+  duration_ms: 237.5451
+  type: 'test'
+  ...
+# Subtest: the scene draws the arena and leaves every label to the DOM
+ok 12 - the scene draws the arena and leaves every label to the DOM
+  ---
+  duration_ms: 3.0407
+  type: 'test'
+  ...
+# Subtest: the scene refuses a stage or a source that is not the real one
+ok 13 - the scene refuses a stage or a source that is not the real one
+  ---
+  duration_ms: 1.0292
+  type: 'test'
+  ...
+# Subtest: the scene imports nothing outside src and the contracts
+ok 14 - the scene imports nothing outside src and the contracts
+  ---
+  duration_ms: 1.1561
+  type: 'test'
+  ...
+# Subtest: the three battle screens follow the original's own screen names
+ok 15 - the three battle screens follow the original's own screen names
+  ---
+  duration_ms: 20.7948
+  type: 'test'
+  ...
+# Subtest: the complete 224-art/228-species material set has intact cells, source ticks and independent Main/Sub atlases
+ok 16 - the complete 224-art/228-species material set has intact cells, source ticks and independent Main/Sub atlases
+  ---
+  duration_ms: 2766.1401
+  type: 'test'
+  ...
+# Subtest: scene loading uses the species lookup crosswalk, deduplicates shared art and never assigns M201 to unknown species
+ok 17 - scene loading uses the species lookup crosswalk, deduplicates shared art and never assigns M201 to unknown species
+  ---
+  duration_ms: 3.8262
+  type: 'test'
+  ...
+# Subtest: missing art is isolated, unregistered/private-release-invalid entries are refused, and malformed paths cannot escape
+ok 18 - missing art is isolated, unregistered/private-release-invalid entries are refused, and malformed paths cannot escape
+  ---
+  duration_ms: 6.6292
+  type: 'test'
+  ...
+# Subtest: the real Pixi bundle loader loads Main only and releases resources when a cell reference is broken
+ok 19 - the real Pixi bundle loader loads Main only and releases resources when a cell reference is broken
+  ---
+  duration_ms: 6.6771
+  type: 'test'
+  ...
+# Subtest: decoded bitmaps close after asset-source destruction and repeated dispose awaits the same unload
+ok 20 - decoded bitmaps close after asset-source destruction and repeated dispose awaits the same unload
+  ---
+  duration_ms: 1.225
+  type: 'test'
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3913.5197

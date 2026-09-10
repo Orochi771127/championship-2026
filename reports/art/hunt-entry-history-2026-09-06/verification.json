@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-06",
+  "projectRoot": "R:/Projects/Championship2026/championship-2026",
+  "branch": "main",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "status": "APP_HISTORY_AND_FUNCTIONAL_POOL_SOURCES_PASS_NORMAL_CAPTURE_UNBOUND",
+  "authority": {
+    "app": "championshipStandaloneApp",
+    "writer": "ChampionshipPersistentSavePort",
+    "storageKey": "championshipModernSave:v1",
+    "outerSchemaVersion": 5,
+    "newStoreOrTicker": false
+  },
+  "sourceChecks": {
+    "species": 228,
+    "orderedBiomeCatalogs": 16,
+    "seasonalTables": 128,
+    "originalCpuCandidateCases": 640,
+    "builderDeterminism": true,
+    "catalogSha256": "9d76915304469991e62c5a7b70c2063b79a847f3841935a9008809c3e97778ce",
+    "rawArtOrTerrainCopied": false,
+    "researchFixtureImportedByRuntime": false
+  },
+  "focused": {
+    "command": "node --test <eight focused Hunt/history/identity/economy/navigation suites>",
+    "pass": 64,
+    "fail": 0,
+    "log": "reports/art/hunt-entry-history-2026-09-06/focused.log"
+  },
+  "regression": {
+    "command": "node --test --test-concurrency=1 tests/*.mjs",
+    "pass": 1000,
+    "fail": 0,
+    "log": "reports/art/hunt-entry-history-2026-09-06/regression.log",
+    "durationMs": 77560.9435
+  },
+  "browser": {
+    "surface": "Codex in-app browser",
+    "origin": "http://127.0.0.1:8736",
+    "isolatedFromUserOrigin8732": true,
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "path": [
+      "New Game",
+      "SAVE",
+      "SYSTEM Save & Quit",
+      "reload",
+      "Continue",
+      "SYSTEM Hunt",
+      "Grass",
+      "Tether I",
+      "BEGIN HUNT",
+      "RETURN HOME"
+    ],
+    "homeCanvases": 1,
+    "huntCanvases": 1,
+    "horizontalOverflow": false,
+    "consoleErrorsOrWarnings": [],
+    "nativeHuntToolsDisabled": 8,
+    "localStorageInspectedOrInjected": false,
+    "temporaryTabClosed": true,
+    "temporaryServerStopped": true
+  },
+  "diffCheck": {
+    "pass": true,
+    "existingLineEndingWarningsOnly": true,
+    "log": "reports/art/hunt-entry-history-2026-09-06/diff-check.log"
+  },
+  "acceptance": {
+    "appHistorySaveContinue": true,
+    "nativePoolFunctionalProvider": true,
+    "normalGeneratedEncounter": false,
+    "normalAnimationBinding": false,
+    "normalCaptureHomeAccepted": false,
+    "Battle": false,
+    "publicBuild": false
+  },
+  "publicBuild": {
+    "rerunThisTurn": false,
+    "knownUnresolvedTrackedDeletion": "src/data/championship/catalogs/entities.r1.json"
+  },
+  "limits": [
+    "No terrain/direction/model-node functional provider or carried actor registration closure",
+    "No normal entry RNG/history candidate transaction or return writer binding",
+    "Normal Hunt still prototype and tools disabled",
+    "No new art pixels or source archive census",
+    "No physical-device or public release acceptance"
+  ],
+  "files": {
+    "scripts/build-hunt-entry-catalog.py": {
+      "bytes": 5736,
+      "sha256": "4dfe8fc8bbf95c99bf273c60eeb4a972042f438df571b64bd2d36ad07cedeec9"
+    },
+    "scripts/research/check-hunt-pool-sources-cpu.py": {
+      "bytes": 4095,
+      "sha256": "c010e88a34286e717691750e0e048be3d1b6ae03fcbd13f0dbe0893bb684c4aa"
+    },
+    "src/data/championship/catalogs/hunt-entry.r1.json": {
+      "bytes": 293504,
+      "sha256": "9d76915304469991e62c5a7b70c2063b79a847f3841935a9008809c3e97778ce"
+    },
+    "src/championship/hunt/capture/nativeHuntSources.js": {
+      "bytes": 3411,
+      "sha256": "3a5dd36b2c47bad49cc567af05bca7d239f6635c172e4d462493ca10716c4dbb"
+    },
+    "src/championship/hunt/capture/nativeHuntPersistentState.js": {
+      "bytes": 2037,
+      "sha256": "81ce5c6c645973cf3afc6b05f3131a9c3d7b619967ecf4c3851c7a9d2304b67c"
+    },
+    "src/championship/app/championshipStandaloneApp.js": {
+      "bytes": 53120,
+      "sha256": "fc5a5542c498de8ea6e660316199336eb359393834d5480dac5d3b8dcbfec2a6"
+    },
+    "src/championship/app/championshipStandaloneSave.js": {
+      "bytes": 16559,
+      "sha256": "cdec76f9672329838358aa7cad31068f2e946cb1d888109a91767b6091d8430f"
+    },
+    "src/championship/app/ChampionshipPersistentSavePort.js": {
+      "bytes": 7866,
+      "sha256": "e179589f50a492db30cb34ede69c93b34920f47c48064b961de30e6ef80df6a1"
+    },
+    "tests/championship-hunt-persistent-sources-cases.mjs": {
+      "bytes": 11027,
+      "sha256": "70d92b4a9e3345706033e3ff06048cc22459c5057e7cfe8f4aa0f0f389180b14"
+    },
+    "docs/research/HUNT_POOL_SOURCES_CPU_CHECK_2026-09-06.json": {
+      "bytes": 155648,
+      "sha256": "6aa4fa9adcb0a48d5137fd1380615ee09cdc58a9a32a35af3d3b86554824f7e0"
+    },
+    "docs/contracts/championship/HUNT_ENTRY_SOURCES.v1.json": {
+      "bytes": 2602,
+      "sha256": "e5e8b02be849c02865b9350959543576c7f4cd39a49065073417683177832635"
+    },
+    "docs/contracts/championship/championship-save-envelope.v5.json": {
+      "bytes": 2633,
+      "sha256": "72a2d7e6fc0d61e9ecbb291b773a4653cc73281ce5ccc1c18b219dd99a1d724e"
+    },
+    "reports/art/hunt-entry-history-2026-09-06/continue-home-390.png": {
+      "bytes": 48624,
+      "sha256": "6bc2353c097a27a89e544306c40978164fab561910dfafaa92e116cc244d4322"
+    },
+    "reports/art/hunt-entry-history-2026-09-06/normal-hunt-390.png": {
+      "bytes": 61108,
+      "sha256": "c3b52344375735611ef1e2a7d78cf5a1beb6bd2469da32b50aa9430bc0c18db5"
+    },
+    "reports/art/hunt-entry-history-2026-09-06/focused.log": {
+      "bytes": 14718,
+      "sha256": "b45975d5ed29313571e4cb35cef8f6fb0a01ea0501fe6996d8e1dab874ab401d"
+    },
+    "reports/art/hunt-entry-history-2026-09-06/regression.log": {
+      "bytes": 211594,
+      "sha256": "d7df870d069751fd2891eb1a3093e078da7de23c11d6264bf92a89ea1287a070"
+    }
+  }
+}

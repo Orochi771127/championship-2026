@@ -1,0 +1,1197 @@
+{
+  "classification": "RESEARCH_ONLY",
+  "entityId": "m244_vmon",
+  "schemaVersion": 1,
+  "semanticPolicy": "RAW_SEQUENCE_IDS_ONLY",
+  "sides": {
+    "main": {
+      "frameKeys": [
+        "m244_vmon/main/cell_000",
+        "m244_vmon/main/cell_001",
+        "m244_vmon/main/cell_002",
+        "m244_vmon/main/cell_003",
+        "m244_vmon/main/cell_004",
+        "m244_vmon/main/cell_005",
+        "m244_vmon/main/cell_006",
+        "m244_vmon/main/cell_007",
+        "m244_vmon/main/cell_008",
+        "m244_vmon/main/cell_009",
+        "m244_vmon/main/cell_010",
+        "m244_vmon/main/cell_011",
+        "m244_vmon/main/cell_012",
+        "m244_vmon/main/cell_013",
+        "m244_vmon/main/cell_014",
+        "m244_vmon/main/cell_015",
+        "m244_vmon/main/cell_016",
+        "m244_vmon/main/cell_017",
+        "m244_vmon/main/cell_018",
+        "m244_vmon/main/cell_019",
+        "m244_vmon/main/cell_020",
+        "m244_vmon/main/cell_021",
+        "m244_vmon/main/cell_022",
+        "m244_vmon/main/cell_023",
+        "m244_vmon/main/cell_024",
+        "m244_vmon/main/cell_025",
+        "m244_vmon/main/cell_026",
+        "m244_vmon/main/cell_027",
+        "m244_vmon/main/cell_028",
+        "m244_vmon/main/cell_029",
+        "m244_vmon/main/cell_030",
+        "m244_vmon/main/cell_031",
+        "m244_vmon/main/cell_032",
+        "m244_vmon/main/cell_033",
+        "m244_vmon/main/cell_034",
+        "m244_vmon/main/cell_035",
+        "m244_vmon/main/cell_036",
+        "m244_vmon/main/cell_037",
+        "m244_vmon/main/cell_038",
+        "m244_vmon/main/cell_039",
+        "m244_vmon/main/cell_040",
+        "m244_vmon/main/cell_041",
+        "m244_vmon/main/cell_042",
+        "m244_vmon/main/cell_043",
+        "m244_vmon/main/cell_044",
+        "m244_vmon/main/cell_045",
+        "m244_vmon/main/cell_046",
+        "m244_vmon/main/cell_047",
+        "m244_vmon/main/cell_048",
+        "m244_vmon/main/cell_049",
+        "m244_vmon/main/cell_050",
+        "m244_vmon/main/cell_051",
+        "m244_vmon/main/cell_052",
+        "m244_vmon/main/cell_053",
+        "m244_vmon/main/cell_054",
+        "m244_vmon/main/cell_055",
+        "m244_vmon/main/cell_056",
+        "m244_vmon/main/cell_057",
+        "m244_vmon/main/cell_058",
+        "m244_vmon/main/cell_059",
+        "m244_vmon/main/cell_060",
+        "m244_vmon/main/cell_061",
+        "m244_vmon/main/cell_062",
+        "m244_vmon/main/cell_063",
+        "m244_vmon/main/cell_064",
+        "m244_vmon/main/cell_065",
+        "m244_vmon/main/cell_066",
+        "m244_vmon/main/cell_067",
+        "m244_vmon/main/cell_068"
+      ],
+      "sequences": [
+        {
+          "frames": [
+            {
+              "cell": 0,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_000",
+              "ticks": 31
+            },
+            {
+              "cell": 1,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_001",
+              "ticks": 22
+            }
+          ],
+          "id": 0,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 2,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_002",
+              "ticks": 37
+            },
+            {
+              "cell": 3,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_003",
+              "ticks": 28
+            }
+          ],
+          "id": 1,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 4,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_004",
+              "ticks": 15
+            },
+            {
+              "cell": 5,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_005",
+              "ticks": 12
+            }
+          ],
+          "id": 2,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 6,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_006",
+              "ticks": 7
+            },
+            {
+              "cell": 7,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_007",
+              "ticks": 7
+            }
+          ],
+          "id": 3,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 8,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_008",
+              "ticks": 37
+            }
+          ],
+          "id": 4,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 9,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_009",
+              "ticks": 7
+            }
+          ],
+          "id": 5,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 10,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_010",
+              "ticks": 7
+            }
+          ],
+          "id": 6,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 11,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_011",
+              "ticks": 15
+            },
+            {
+              "cell": 12,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_012",
+              "ticks": 37
+            }
+          ],
+          "id": 7,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 13,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_013",
+              "ticks": 15
+            },
+            {
+              "cell": 14,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_014",
+              "ticks": 37
+            }
+          ],
+          "id": 8,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 15,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_015",
+              "ticks": 3
+            },
+            {
+              "cell": 16,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_016",
+              "ticks": 3
+            },
+            {
+              "cell": 17,
+              "frameIndex": 2,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_017",
+              "ticks": 3
+            },
+            {
+              "cell": 18,
+              "frameIndex": 3,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_018",
+              "ticks": 3
+            },
+            {
+              "cell": 19,
+              "frameIndex": 4,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_019",
+              "ticks": 3
+            },
+            {
+              "cell": 14,
+              "frameIndex": 5,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_014",
+              "ticks": 31
+            }
+          ],
+          "id": 9,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 20,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_020",
+              "ticks": 1
+            },
+            {
+              "cell": 14,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_014",
+              "ticks": 1
+            },
+            {
+              "cell": 21,
+              "frameIndex": 2,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_021",
+              "ticks": 1
+            },
+            {
+              "cell": 14,
+              "frameIndex": 3,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_014",
+              "ticks": 1
+            },
+            {
+              "cell": 22,
+              "frameIndex": 4,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_022",
+              "ticks": 1
+            },
+            {
+              "cell": 14,
+              "frameIndex": 5,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_014",
+              "ticks": 1
+            },
+            {
+              "cell": 23,
+              "frameIndex": 6,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_023",
+              "ticks": 1
+            },
+            {
+              "cell": 14,
+              "frameIndex": 7,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_014",
+              "ticks": 1
+            },
+            {
+              "cell": 24,
+              "frameIndex": 8,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_024",
+              "ticks": 4
+            },
+            {
+              "cell": 14,
+              "frameIndex": 9,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_014",
+              "ticks": 31
+            }
+          ],
+          "id": 10,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 25,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_025",
+              "ticks": 5
+            },
+            {
+              "cell": 26,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_026",
+              "ticks": 6
+            }
+          ],
+          "id": 11,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 27,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_027",
+              "ticks": 37
+            },
+            {
+              "cell": 28,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_028",
+              "ticks": 37
+            }
+          ],
+          "id": 12,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 29,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_029",
+              "ticks": 37
+            }
+          ],
+          "id": 13,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 30,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_030",
+              "ticks": 25
+            },
+            {
+              "cell": 31,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_031",
+              "ticks": 31
+            }
+          ],
+          "id": 14,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 32,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_032",
+              "ticks": 31
+            }
+          ],
+          "id": 15,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 33,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_033",
+              "ticks": 31
+            },
+            {
+              "cell": 34,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_034",
+              "ticks": 22
+            }
+          ],
+          "id": 16,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 35,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_035",
+              "ticks": 37
+            },
+            {
+              "cell": 36,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_036",
+              "ticks": 28
+            }
+          ],
+          "id": 17,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 37,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_037",
+              "ticks": 15
+            },
+            {
+              "cell": 38,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_038",
+              "ticks": 12
+            }
+          ],
+          "id": 18,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 39,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_039",
+              "ticks": 7
+            },
+            {
+              "cell": 40,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_040",
+              "ticks": 7
+            }
+          ],
+          "id": 19,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 41,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_041",
+              "ticks": 37
+            }
+          ],
+          "id": 20,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 42,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_042",
+              "ticks": 5
+            },
+            {
+              "cell": 43,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_043",
+              "ticks": 6
+            }
+          ],
+          "id": 21,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 44,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_044",
+              "ticks": 37
+            },
+            {
+              "cell": 45,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_045",
+              "ticks": 37
+            }
+          ],
+          "id": 22,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 46,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_046",
+              "ticks": 37
+            }
+          ],
+          "id": 23,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 47,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_047",
+              "ticks": 25
+            },
+            {
+              "cell": 48,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_048",
+              "ticks": 31
+            }
+          ],
+          "id": 24,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 49,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_049",
+              "ticks": 31
+            }
+          ],
+          "id": 25,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 50,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_050",
+              "ticks": 6
+            },
+            {
+              "cell": 8,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_008",
+              "ticks": 3
+            },
+            {
+              "cell": 50,
+              "frameIndex": 2,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_050",
+              "ticks": 9
+            },
+            {
+              "cell": 51,
+              "frameIndex": 3,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_051",
+              "ticks": 9
+            }
+          ],
+          "id": 26,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 52,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_052",
+              "ticks": 2
+            }
+          ],
+          "id": 27,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 53,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_053",
+              "ticks": 15
+            },
+            {
+              "cell": 54,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_054",
+              "ticks": 21
+            }
+          ],
+          "id": 28,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 55,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_055",
+              "ticks": 11
+            },
+            {
+              "cell": 56,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_056",
+              "ticks": 16
+            }
+          ],
+          "id": 29,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 57,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_057",
+              "ticks": 10
+            },
+            {
+              "cell": 58,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_058",
+              "ticks": 37
+            }
+          ],
+          "id": 30,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 59,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_059",
+              "ticks": 37
+            }
+          ],
+          "id": 31,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 60,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_060",
+              "ticks": 7
+            }
+          ],
+          "id": 32,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 61,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_061",
+              "ticks": 31
+            },
+            {
+              "cell": 62,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_062",
+              "ticks": 37
+            }
+          ],
+          "id": 33,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 63,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_063",
+              "ticks": 37
+            }
+          ],
+          "id": 34,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 64,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_064",
+              "ticks": 37
+            }
+          ],
+          "id": 35,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 65,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_065",
+              "ticks": 37
+            }
+          ],
+          "id": 36,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 66,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_066",
+              "ticks": 37
+            }
+          ],
+          "id": 37,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 67,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_067",
+              "ticks": 7
+            }
+          ],
+          "id": 38,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 68,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/main/cell_068",
+              "ticks": 2
+            }
+          ],
+          "id": 39,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        }
+      ]
+    },
+    "sub": {
+      "frameKeys": [
+        "m244_vmon/sub/cell_000",
+        "m244_vmon/sub/cell_001",
+        "m244_vmon/sub/cell_002",
+        "m244_vmon/sub/cell_003",
+        "m244_vmon/sub/cell_004",
+        "m244_vmon/sub/cell_005",
+        "m244_vmon/sub/cell_006",
+        "m244_vmon/sub/cell_007",
+        "m244_vmon/sub/cell_008",
+        "m244_vmon/sub/cell_009",
+        "m244_vmon/sub/cell_010",
+        "m244_vmon/sub/cell_011",
+        "m244_vmon/sub/cell_012",
+        "m244_vmon/sub/cell_013",
+        "m244_vmon/sub/cell_014",
+        "m244_vmon/sub/cell_015",
+        "m244_vmon/sub/cell_016",
+        "m244_vmon/sub/cell_017"
+      ],
+      "sequences": [
+        {
+          "frames": [
+            {
+              "cell": 0,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/sub/cell_000",
+              "ticks": 31
+            },
+            {
+              "cell": 1,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/sub/cell_001",
+              "ticks": 22
+            }
+          ],
+          "id": 0,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 2,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/sub/cell_002",
+              "ticks": 37
+            },
+            {
+              "cell": 3,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/sub/cell_003",
+              "ticks": 28
+            }
+          ],
+          "id": 1,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 4,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/sub/cell_004",
+              "ticks": 7
+            }
+          ],
+          "id": 2,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 5,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/sub/cell_005",
+              "ticks": 7
+            }
+          ],
+          "id": 3,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 6,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/sub/cell_006",
+              "ticks": 37
+            }
+          ],
+          "id": 4,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 7,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/sub/cell_007",
+              "ticks": 31
+            }
+          ],
+          "id": 5,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 8,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/sub/cell_008",
+              "ticks": 2
+            }
+          ],
+          "id": 6,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 9,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/sub/cell_009",
+              "ticks": 15
+            },
+            {
+              "cell": 10,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/sub/cell_010",
+              "ticks": 21
+            }
+          ],
+          "id": 7,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 11,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/sub/cell_011",
+              "ticks": 11
+            },
+            {
+              "cell": 12,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/sub/cell_012",
+              "ticks": 16
+            }
+          ],
+          "id": 8,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 13,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/sub/cell_013",
+              "ticks": 10
+            },
+            {
+              "cell": 14,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/sub/cell_014",
+              "ticks": 37
+            }
+          ],
+          "id": 9,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 15,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/sub/cell_015",
+              "ticks": 37
+            }
+          ],
+          "id": 10,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 16,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/sub/cell_016",
+              "ticks": 37
+            }
+          ],
+          "id": 11,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 17,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m244_vmon/sub/cell_017",
+              "ticks": 37
+            }
+          ],
+          "id": 12,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        }
+      ]
+    }
+  },
+  "timingPolicy": "RAW_TICKS_ONLY_NO_ASSUMED_HZ"
+}

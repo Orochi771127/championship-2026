@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 68,
+  "scenePath": "ui/digimon_list_item.nxr",
+  "category": "Shared UI Components",
+  "overlayOwner": "Shared",
+  "sourceEvidence": {
+    "fileId": 6185,
+    "fileName": "digimon_list_item.nxr",
+    "sha256": "b7f9dc6a3d4e75e96556f6949cfa4831278d72ac53bc417d5acdc75315ace486",
+    "overlayMappingConfidence": "SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "UNKNOWN_REQUIRES_TRACE",
+    "roleEvidence": "UNKNOWN_REQUIRES_TRACE"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [
+    {
+      "resourceIndex": 0,
+      "resourceName": "list_window",
+      "cellCount": 7,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "ui/list_window.ncer",
+        "nanr": "ui/list_window.nanr",
+        "ncgr": null,
+        "ncbr": "ui/list_window.ncbr",
+        "nclr": "ui/list_window.nclr",
+        "nscr": null
+      },
+      "spriteWitness": "docs/art/production/ui/faithful-hd96/sprite-cell-witnesses-4x/ui__list_window__cells.png",
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "digimon",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": -23,
+        "y": 12
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 1,
+      "name": "name_text",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 4,
+        "y": -5
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 2,
+      "name": "new_mark",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 38,
+        "y": -15
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 3,
+      "name": "base",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": -52,
+        "y": -22
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        8,
+        3
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 4,
+      "name": "win_right",
+      "resourceIndex": 0,
+      "cellIndex": 2,
+      "sourcePosition": {
+        "x": 55,
+        "y": -25
+      },
+      "portraitProjection": null,
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 5,
+      "name": "win_center",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": -17,
+        "y": -25
+      },
+      "portraitProjection": null,
+      "params": [
+        2,
+        0,
+        9,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 6,
+      "name": "win_left",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": -57,
+        "y": -25
+      },
+      "portraitProjection": null,
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    }
+  ],
+  "dynamicVirtualNodeCount": 3,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

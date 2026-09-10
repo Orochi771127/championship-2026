@@ -1,0 +1,21 @@
+- status:
+  - generic: Spring
+  - generic: Day
+  - generic: "1"
+  - generic: Battle
+  - time: 08:00
+- region "對戰選單":
+  - generic: 對戰
+  - heading "選擇對戰" [level=1]
+  - img "戰鬥選單立方體，拖曳或使用左右方向鍵旋轉"
+  - group "對戰模式":
+    - button "冠軍賽" [disabled]
+    - button "頭銜賽" [disabled]
+    - button "自由對戰" [disabled]
+    - button "通訊對戰" [disabled]
+  - paragraph: 拖曳立方體或使用左右方向鍵查看模式。模式選擇尚未開放，可從下方選擇目前可用的對戰。
+  - list "目前可用的對戰":
+    - button "MATCH 00 150":
+      - text: MATCH 00
+      - generic: "150"
+  - button "返回育成"

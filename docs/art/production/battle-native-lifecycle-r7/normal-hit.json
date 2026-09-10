@@ -1,0 +1,186 @@
+{
+  "characters": [
+    {
+      "alpha": 1,
+      "animation": {
+        "active": 1,
+        "baseBounds": [
+          -13,
+          -24,
+          18,
+          3
+        ],
+        "cell": 13,
+        "elapsedQ12": 32768,
+        "frameIndex": 1,
+        "geometry": {
+          "blank": false,
+          "nativeBounds": [
+            -22,
+            -22,
+            16,
+            3
+          ],
+          "origin": [
+            216,
+            296
+          ],
+          "scale": 8,
+          "sourceSize": [
+            384,
+            352
+          ]
+        },
+        "originalTimingParity": false,
+        "playMode": 1,
+        "reducedMotion": false,
+        "sequenceId": 8,
+        "texture": "m313_gargomon/main/cell_013"
+      },
+      "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL",
+      "entityId": "m313_gargomon",
+      "nativeSizing": {
+        "evidence": "VERIFIED_STATIC_MAIN_FIRST_SOURCE_FRAME",
+        "packedPixelsPerNativePixel": 8,
+        "texture": "m313_gargomon/main/cell_000"
+      },
+      "position": {
+        "x": 99.05616612648716,
+        "y": 202.52094729958552
+      },
+      "rendered": true,
+      "slot": 0,
+      "speciesId": "species-081",
+      "tint": 16777215
+    },
+    {
+      "alpha": 1,
+      "animation": {
+        "active": 1,
+        "baseBounds": [
+          -9,
+          -30,
+          10,
+          2
+        ],
+        "cell": 12,
+        "elapsedQ12": 32768,
+        "frameIndex": 1,
+        "geometry": {
+          "blank": false,
+          "nativeBounds": [
+            -24,
+            -27,
+            7,
+            2
+          ],
+          "origin": [
+            260,
+            304
+          ],
+          "scale": 8,
+          "sourceSize": [
+            384,
+            352
+          ]
+        },
+        "originalTimingParity": false,
+        "playMode": 1,
+        "reducedMotion": false,
+        "sequenceId": 8,
+        "texture": "m353_meramon/main/cell_012"
+      },
+      "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL",
+      "entityId": "m353_meramon",
+      "nativeSizing": {
+        "evidence": "VERIFIED_STATIC_MAIN_FIRST_SOURCE_FRAME",
+        "packedPixelsPerNativePixel": 8,
+        "texture": "m353_meramon/main/cell_000"
+      },
+      "position": {
+        "x": 141.89712312970872,
+        "y": 226.51462980337996
+      },
+      "rendered": true,
+      "slot": 1,
+      "speciesId": "species-113",
+      "tint": 16777215
+    },
+    {
+      "alpha": 1,
+      "animation": {
+        "active": 1,
+        "baseBounds": [
+          -7,
+          -17,
+          9,
+          2
+        ],
+        "cell": 14,
+        "elapsedQ12": 32768,
+        "frameIndex": 1,
+        "geometry": {
+          "blank": false,
+          "nativeBounds": [
+            -14,
+            -16,
+            7,
+            2
+          ],
+          "origin": [
+            234,
+            296
+          ],
+          "scale": 12,
+          "sourceSize": [
+            384,
+            352
+          ]
+        },
+        "originalTimingParity": false,
+        "playMode": 1,
+        "reducedMotion": false,
+        "sequenceId": 8,
+        "texture": "m223_toyagumon/main/cell_014"
+      },
+      "animationBinding": "RAW_REQUESTS_EXISTING_DISPATCH_TIMING_PARTIAL",
+      "entityId": "m223_toyagumon",
+      "nativeSizing": {
+        "evidence": "VERIFIED_STATIC_MAIN_FIRST_SOURCE_FRAME",
+        "packedPixelsPerNativePixel": 12,
+        "texture": "m223_toyagumon/main/cell_000"
+      },
+      "position": {
+        "x": 102.33741607759272,
+        "y": 204.16019898414316
+      },
+      "rendered": true,
+      "slot": 3,
+      "speciesId": "species-050",
+      "tint": 16777215
+    }
+  ],
+  "frame": "113",
+  "height": 844,
+  "impacts": {
+    "active": 2,
+    "instances": [
+      {
+        "frame": 6,
+        "id": 1,
+        "slot": 0,
+        "systemId": "battle-hitspark_small",
+        "type": 0
+      },
+      {
+        "frame": 6,
+        "id": 2,
+        "slot": 0,
+        "systemId": "battle-hitspark_big",
+        "type": 1
+      }
+    ],
+    "visible": 2
+  },
+  "width": 390
+}

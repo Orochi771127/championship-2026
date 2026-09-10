@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "stage": "REPRESENTATIVE_EIGHT_PIXEL_SETTINGS",
+  "status": "PASS_SETTING_STAGE",
+  "nextStage": "ALL_224_PIXEL_SETTINGS",
+  "poseCount": 33,
+  "acceptedEntityCount": 8,
+  "reviewMethod": "Authored native pixel settings; producer self-review, root source/author visual comparison, and hash-locked technical/file gate. Root M201 independently reviewed by another technical artist.",
+  "stageGate": {
+    "accepted": 8,
+    "acceptedEntities": [
+      "m201_agumon",
+      "m001_zurumon",
+      "m226_hagurumon",
+      "e000_digitama",
+      "m222_tentomon",
+      "m228_palmon",
+      "m352_peckmon",
+      "m431_whamon"
+    ],
+    "expected": 8,
+    "mayAdvance": true,
+    "pending": [],
+    "runtimePromotionGranted": false,
+    "stageStatus": "PASS"
+  },
+  "entityEvidence": [
+    {
+      "entityId": "m201_agumon",
+      "designVersion": "m201-a-pixel-setting-r01",
+      "settingFileSha256": "0e452b638dfbb2c65e0362b5b96ee91c2f2e57f7398409c794506abb83b3fde8",
+      "technicalQaSha256": "7ed29e8f24a8c588e051300f43605f51f4b6a11d21f5f266a05fc040c5e6f0f3",
+      "sourceComparisonSha256": "621be4dce99b7c0df574ce9db23bf0c904afebc01bb816d79036b2d6c8649d0f",
+      "visualReviewSha256": "439d36366481ebac267c1cf6c5bb764391060d410fe5c06f232709a2cd2bc311",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "m001_zurumon",
+      "designVersion": "m001-b-pixel-setting-r02",
+      "settingFileSha256": "65460f75002ec1b9e96fd6956b5d719eaaeacd32d392986ad7b6c750d44e4611",
+      "technicalQaSha256": "8ddac8b8a4485a6f7bfe9b7f4513d0a1b0eefc6c85f98f52377113cd18e6d53d",
+      "sourceComparisonSha256": "04d7b4f90714cf4abc3f3a64340f850304f54590becb939ecc77211a108f5221",
+      "visualReviewSha256": "42a1a8e80d643effa345b2c4e59061f7861762efa4928688bb7363aafffbd7bb",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "m226_hagurumon",
+      "designVersion": "m226-b-pixel-stage1-r01",
+      "settingFileSha256": "1b51cc4516ba293215932476849f7ee7d1e90e3f4151e72fee2069fd2f29a238",
+      "technicalQaSha256": "4c42ad142f98241b5d28c50d1f9fd961f31e80700028108a3f243aa594dc2b89",
+      "sourceComparisonSha256": "90460f8c4dee4ca68ab83d586869b3b3c124c693d8c06d4ea27671776716db0b",
+      "visualReviewSha256": "455873d31f71a4f75d09bc42675ebe1b8e36255b7a9bc7d5821679222e10ca45",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "e000_digitama",
+      "designVersion": "e000_digitama-pixel-setting-v1",
+      "settingFileSha256": "4f5778b334c2dedacdcd1b52355fb775db910d68539ea7f09bd39c172715153e",
+      "technicalQaSha256": "e6f9913b5a0cdee3a813a30bd5ae782cc0daef32a6cd710528b9815cd4db8f52",
+      "sourceComparisonSha256": "e0a88263406682ce8454598b948bddae0c7e11b605b8802bad41b3445ac2ac5d",
+      "visualReviewSha256": "6bb429ba3e344436d11d5fdc18197b7db48fd85cc25aa956c4bec983c6b59b84",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "m222_tentomon",
+      "designVersion": "m222-a-pixel-stage1-r01",
+      "settingFileSha256": "bcaf80aed833775de533cfd4953258143a58a46bcb795a0e03d02abc2ed00e61",
+      "technicalQaSha256": "663b6d6551eee9269be6301b011c469a64b898da31b9084c736c884417fe2067",
+      "sourceComparisonSha256": "ac80b76883d744e1fb86c4ca08d33b07d6dd2edf262d18917d84aedc6345a166",
+      "visualReviewSha256": "19f90f5858d9de4f2064c11113cea71ba131fefc7439a2c8df467c9bf081dcae",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "m228_palmon",
+      "designVersion": "pixel-v2-m228-a-stage1-r02",
+      "settingFileSha256": "fee2d05113bee1a257782e1f522f031f05a7e5243962f2be37adc00db438231c",
+      "technicalQaSha256": "b51c994e2043a7eeb7dafe308c81b57ab5d48bcf8ffc68a13c990b10da9ada28",
+      "sourceComparisonSha256": "b1087a05fcbb0c0b54f41f04ab825d656b3a7041793ba9e14b46b3a8d0ee313c",
+      "visualReviewSha256": "0b3b1ec1e4976412371bd347dcb929e627015d3a34f14d57e525c0e3571287cc",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "m352_peckmon",
+      "designVersion": "pixel-v2-m352-b-stage1-r02",
+      "settingFileSha256": "d2c00eb21fbb0f6cec26303d828e0abbbaca37bac5c21000f2939217bc9c66a3",
+      "technicalQaSha256": "c88f1145f61e00182caa120e545e9851e88710c14d3fa73ee7707d0bd1fe4ffd",
+      "sourceComparisonSha256": "6b5bfc3e5803ee1c0782d84663a4fd76fae8fce76034c184832a3a3bf71a0040",
+      "visualReviewSha256": "6dd72e3b59fcf7961508fe651e700199ecc875d21f9a6964db9ecf70698c60c7",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "m431_whamon",
+      "designVersion": "pixel-v2-m431-a-stage1-r02",
+      "settingFileSha256": "da6e6cdf8cb83355400ae337be3246c33c3d01cfdbc22baa9439a5d635bec7fe",
+      "technicalQaSha256": "cec60799ae716596235f82d44ebb2bdf012af354b9d9707fd1eccac5fac787d8",
+      "sourceComparisonSha256": "01fe383a22a5b47e98b8ead114ef4568eab1ddc91b98ff0d74330c31bde80953",
+      "visualReviewSha256": "df765a7551a43130e82864cd8140f9278ecc1783eb1d38138a0eef3412734c3b",
+      "verdict": "PASS_SETTING_STAGE"
+    }
+  ],
+  "repairs": [
+    "M201 Main008 support restored; no source support removed in three setting poses.",
+    "M001 Main060 secondary mouth removed; earlier accepted setting preserved and replaced only after new review.",
+    "M226 top tooth, mouth mark and thin right edge repaired.",
+    "M222 Main011 right contact support restored.",
+    "E000 split-shell cracks/fragments and internal red positions repaired.",
+    "M228/M352/M431 source-color-map method rejected; complete authored material regions replace original internal pixel segmentation.",
+    "Stage gate rejects empty/truncated roster and missing/corrupt actual PNGs, even when receipt is modified."
+  ],
+  "verification": {
+    "pythonFocusedAndSourceTests": 48,
+    "javascriptRegressionPassed": 1097,
+    "browser": "Actual desktop gallery counts/search/image loading checked; final gallery smoke recorded separately.",
+    "normalGame": "NOT_RUN",
+    "physicalDevice": "NOT_RUN"
+  },
+  "fullMotionApprovedEntities": 0,
+  "defaultReplacedEntities": 0,
+  "shippingReady": false
+}

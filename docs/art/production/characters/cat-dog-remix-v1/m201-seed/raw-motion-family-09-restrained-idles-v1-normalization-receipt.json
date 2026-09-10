@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m201_agumon",
+  "candidateStrip": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-09-restrained-idles-v1.png",
+  "candidateStripSha256": "34E6FECA9134539149BADC0F4F35950E5B4624164D8E6D2BBCE27B8DC26EDBCF",
+  "backgroundExtraction": "EDGE_CONNECTED_BRIGHT_NEUTRAL_CHECKERBOARD",
+  "removedBackgroundPixels": 1118858,
+  "splitPolicy": "NEAREST_TRANSPARENT_COLUMN_RUN_AROUND_NOMINAL_BOUNDARY",
+  "splitBoundaries": [
+    0,
+    444,
+    887,
+    1330,
+    1774
+  ],
+  "slotCount": 4,
+  "slots": [
+    {
+      "slot": 0,
+      "cell": 27,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-09-restrained-idles-v1-slot-00-cell-027.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-027-remix-candidate.png",
+      "outputSha256": "B464BE01C7C819C451209FD321CCEDF9995BFDDCF9AD588D82FC1F6E5178EF55"
+    },
+    {
+      "slot": 1,
+      "cell": 28,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-09-restrained-idles-v1-slot-01-cell-028.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-028-remix-candidate.png",
+      "outputSha256": "A90E360D354DC8E883B8C4F8B57A7C872CAC2BC611C9CF2801029C2F6D535512"
+    },
+    {
+      "slot": 2,
+      "cell": 29,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-09-restrained-idles-v1-slot-02-cell-029.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-029-remix-candidate.png",
+      "outputSha256": "86598254E6A24636AE0D2CCAA13BFC99A1DB11E0467B2BF3B27757DC8897CBB1"
+    },
+    {
+      "slot": 3,
+      "cell": 30,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-09-restrained-idles-v1-slot-03-cell-030.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-030-remix-candidate.png",
+      "outputSha256": "1B0158D5B14A6F683AABD9629C7ACA2E409850C705F303A29B3E9831EFC47D94"
+    }
+  ],
+  "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+  "runtimeEligible": false,
+  "shippingReady": false
+}

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "authority": "EXPLICIT_OWNER_CHAT_2026_09_06",
+  "policy": "LOW_ERROR_FIRST",
+  "alreadySelected": {
+    "M201": "A",
+    "M001": "B",
+    "M226": "B",
+    "E000": "A"
+  },
+  "remainingChoiceOwner": "ART_DIRECTOR",
+  "autoContinue": true,
+  "scoring": [
+    {
+      "criterion": "Preserves limb topology and critical endpoints",
+      "weight": 30
+    },
+    {
+      "criterion": "Stable identity under source extreme poses and occlusion",
+      "weight": 25
+    },
+    {
+      "criterion": "Few large color regions and simple fixed features",
+      "weight": 20
+    },
+    {
+      "criterion": "Low material noise, transparency and reflection risk",
+      "weight": 15
+    },
+    {
+      "criterion": "No independent ornaments and simple outline",
+      "weight": 10
+    }
+  ],
+  "rules": [
+    "Score actual proposed designs, not A/B letters or species stereotypes.",
+    "Prefer original main color family unless the delegated alternative has a clear practical advantage.",
+    "Reject topology or motion changes rather than offsetting them with high visual scores.",
+    "Record chosen option and concrete rationale for each entity.",
+    "Repair failed poses automatically; do not promote failed or unreviewed art.",
+    "Keep original sequences/ticks/modes and existing gameplay owners.",
+    "Human or physical-device checks not executed stay pending; public release stays false."
+  ]
+}

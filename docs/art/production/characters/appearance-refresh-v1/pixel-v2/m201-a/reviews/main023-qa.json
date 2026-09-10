@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m201_agumon",
+  "cell": "main/cell_023",
+  "status": "CANDIDATE_PARTIAL_REQUIRES_ROOT_ART_REVIEW",
+  "authoring": "Explicit manual indexed glyph rows; source pixels not loaded by author script.",
+  "nativeBounds": [
+    -16,
+    -11,
+    16,
+    5
+  ],
+  "nativeSize": [
+    32,
+    16
+  ],
+  "paletteMatchesCanonical": true,
+  "visibleColors": 8,
+  "alphaAdded": [
+    [
+      9,
+      0
+    ],
+    [
+      14,
+      0
+    ],
+    [
+      8,
+      1
+    ],
+    [
+      9,
+      1
+    ],
+    [
+      10,
+      1
+    ],
+    [
+      13,
+      1
+    ],
+    [
+      14,
+      1
+    ],
+    [
+      15,
+      1
+    ],
+    [
+      8,
+      2
+    ],
+    [
+      15,
+      2
+    ],
+    [
+      7,
+      3
+    ],
+    [
+      16,
+      3
+    ]
+  ],
+  "alphaRemoved": [],
+  "alphaSupportOutsideHeadEarRowsMatches": true,
+  "rightLegTerminalLightPixel": [
+    25,
+    11
+  ],
+  "uprightProjectionTip": [
+    20,
+    1
+  ],
+  "headReuse": false,
+  "lowerPatchReuse": false,
+  "poseReview": "ONLY_ALPHA_SUPPORT_AND_RIGHT_LEG_ENDPOINT_CHECKED",
+  "artReview": "PENDING_ROOT_REVIEW",
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "uncertainties": [
+    "One gray wrist cue at (7,9)-(8,9) is an anatomical art interpretation; OAM alone does not prove which visible limb it belongs to.",
+    "Closed-looking three-pixel eye cue is a candidate expression; no gameplay name or trigger inferred.",
+    "Head cream area and ears require root identity review at native1x; preserving support does not prove complete motion."
+  ],
+  "resolvedCurrentMain000": {
+    "threeBoundaryPixelsRestored": true,
+    "eyeClosedPatchHeight": 2,
+    "review": "Resolved current bank rendered and visually checked; A pixel direction remains acceptable."
+  }
+}

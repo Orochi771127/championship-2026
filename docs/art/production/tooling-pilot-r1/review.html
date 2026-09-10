@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Blender × Aseprite — 離線工具試作</title>
+<style>
+body{margin:0;background:#edf5f7;color:#203d50;font:16px/1.65 system-ui,sans-serif}main{max-width:1100px;margin:auto;padding:32px 24px}h1{font-size:30px;line-height:1.25}h2{font-size:18px;margin:8px 0}a{color:#216180}.note,article{background:#fff;border:1px solid #bdd4dc;border-radius:14px;padding:20px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:20px 0}.image{width:100%;background:repeating-conic-gradient(#eef4f6 0% 25%,#fff 0% 50%) 0/24px 24px;border-radius:8px}.pixel{image-rendering:pixelated;width:256px;max-width:100%}.label{font-size:12px;letter-spacing:.1em;color:#805011;font-weight:700}p{margin:8px 0}small{color:#526675}
+</style>
+<main><p class="label">TOOLING PILOT R1 · 2026-09-06</p><h1>工具已跑通，角色仍以原生像素稿交付。</h1>
+<p class="note">以下模型來自 Quaternius CC0 Monster Pack，經過移除翅膀、重新配色與離線擺姿。它不是 M201 新造型，也不是原作動畫。四個 study frame 只是選擇姿勢用的編號；原始動畫的 frame、tick、loop 不由此檔決定。</p>
+<div class="grid">
+<article><p class="label">ASEPRITE · PIXEL EXACT</p><h2>既有 main_023 像素稿</h2><img class="pixel" src="aseprite/m201-main-023-roundtrip.png" alt="Aseprite 往返匯出的既有 32×16 像素稿"><p>32 × 16 原生格；9 種 RGBA 顏色含透明。匯入 Aseprite 再匯出，逐像素完全相同。這是既有稿的可編輯版本，不計入新增完成張數。</p><a href="aseprite/m201-main-023.aseprite">下載可編輯 Aseprite 檔</a></article>
+<article><p class="label">BLENDER · NEUTRAL STUDY</p><h2>固定側面相機</h2><img class="image" src="blender/proxy-main-000.png" alt="免費模型中立姿勢"><p>464 × 368，相同投影；source origin = (184,268)，每原生單位 12 像素。這個 origin 的地面語義仍未確認。</p><a href="blender/m201-offline-pose-proxy.blend">下載可編輯 Blender 檔</a></article>
+</div>
+<div class="grid">
+<article><p class="label">MAIN_023 · PROXY</p><h2>低伏方向研究</h2><img class="image" src="blender/proxy-main-023.png" alt="低伏離線姿勢代理"><p>可用來觀察身體的側面轉動，但長嘴、長尾和手腕輪廓不符合已選定的 M201 A。</p></article>
+<article><p class="label">MAIN_056 · PROXY</p><h2>頭部與腿部遮擋</h2><img class="image" src="blender/proxy-main-056.png" alt="斜向低伏離線姿勢代理"><p>現成 rig 沒有獨立手腕控制，無法精確重現原作手部端點；不接受為替換稿。</p></article>
+<article><p class="label">MAIN_062 · PROXY</p><h2>向右旋轉研究</h2><img class="image" src="blender/proxy-main-062.png" alt="向右旋轉離線姿勢代理"><p>保留共同投影以觀察旋轉。這是人工近似姿势，沒有證明原作輪廓、軌跡或動畫時序。</p></article>
+</div>
+<p class="note">試作結果：Blender 可以做相機與姿勢研究；此模型不適合直接轉為 M201。正式製作沿用現有 Aseprite／原生像素編譯流程，保留 056、062 等尚未完成的原稿缺口。</p>
+<p><a href="README.md">安裝與驗證紀錄</a> · <a href="qa/ui-after-390x844.png">Raising Home 明亮 UI 實機瀏覽器截圖</a> · <a href="blender/receipt.json">模型來源與渲染紀錄</a></p>
+</main></html>

@@ -42,7 +42,18 @@ const EXTERNAL_DEPENDENCY = /R:[\/]|https?:\/\/|(?:from|import\s*\()[^\n]*resear
 const HISTORICAL_NAMESPACE = /NexusLink|NEXUS_|nexus:/i;
 
 test("runtime has no external repository, CDN, or research import", () => {
-  const offenders = runtimeText().filter(({ text }) => EXTERNAL_DEPENDENCY.test(text)).map(({ file }) => relative(file));
+  const offenders = runtimeText().filter(({ file, text }) => {
+    if (relative(file) === 'src/data/championship/public-playtest.r1.json') {
+      // These two exact policy values identify the Owner's destination; they
+      // are not remote imports. All remaining policy text is still checked.
+      const policy = JSON.parse(text);
+      assert.equal(policy.origin, 'https://orochi771127.github.io');
+      assert.equal(policy.sourceRepository, 'https://github.com/Orochi771127/championship-2026');
+      const {origin, sourceRepository, ...rest} = policy;
+      return EXTERNAL_DEPENDENCY.test(JSON.stringify(rest));
+    }
+    return EXTERNAL_DEPENDENCY.test(text);
+  }).map(({ file }) => relative(file));
   assert.deepEqual(offenders, []);
 });
 

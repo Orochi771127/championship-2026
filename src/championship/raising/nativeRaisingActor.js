@@ -3,6 +3,7 @@
 import {BATTLE_CHARACTER_PROFILES,BATTLE_SPECIES_ENTITIES} from "../../data/championship/battleCharacterProfiles.js";
 import {createNativeCharacterAnimationTimeline} from "../presentation/characterAnimationTimeline.js";
 import {NATIVE_HUNT_CHARACTER_FRAME_CONTRACT} from "../presentation/nativeHuntCharacterAction.js";
+import {projectNativeRaisingFeedback,stepNativeRaisingStatusFeedback,projectNativeRaisingStatusFeedback,requestNativeRaisingFeedback} from './nativeRaisingFeedback.js';
 import {normalizeNativeIndividualProfile} from "./nativeIndividualProfile.js";
 import {constructNativeIndividualForm,selectNativeHatchSpecies} from "./nativeIndividualEvolution.js";
 import {nativeHuntSpeciesByIndex} from "../hunt/capture/nativeHuntSources.js";
@@ -16,6 +17,8 @@ import {nativeCageConditionEffects} from './nativeRaisingOvernight.js';
 import {NATIVE_RAISING_LIFECYCLE_RULES as lifecycleRules,evaluateNativeEvolution,evaluateNativeRebirth} from './nativeRaisingLifecycle.js';
 import {enterNativeRaisingSleep,exitNativeRaisingSleep,enterNativeRaisingMorning} from './nativeRaisingSleep.js';
 import {enterNativeRaisingTraining,applyNativeCageEntryConditions,createNativeTrainingTimeline,stepNativeTrainingTimeline} from './nativeRaisingTraining.js';
+import {nativeCarryPosition,nativeCarryVelocity,nativeReleaseVelocity,stepNativeRaisingFlight,nativeLandingReaction} from './nativeRaisingCarry.js';
+import {findNativeRaisingOpenTile} from './nativeRaisingGround.js';
 
 function request(actor, sequenceId, force=false, frame=null) {
   if(actor.sequenceId===sequenceId&&!force)return;
@@ -39,6 +42,8 @@ export function projectNativeRaisingActor(actor) {
     flipBits:actor.flipBits??0,speciesIndex:actor.speciesIndex,nativeFrame:actor.nativeFrame,eggPhase:actor.eggPhase,
     positionQ12:actor.positionQ12?Object.freeze([...actor.positionQ12]):null,cageDefinitionIndex:actor.cageDefinitionIndex??null,
     state:actor.state??(actor.speciesIndex<8?26:1),foodSlot:actor.foodSlot??null,
+    feedback:projectNativeRaisingFeedback(actor),
+    statusFeedback:projectNativeRaisingStatusFeedback(actor),
     treatment:actor.treatment?Object.freeze({kind:actor.treatment.kind,success:actor.treatment.success,elapsed:actor.treatment.elapsed,frame:actor.treatment.icon.getSnapshot().frameIndex}):null,
     training:actor.training?Object.freeze({phase:actor.training.phase,lanes:Object.freeze(actor.training.lanes.map(l=>Object.freeze({...l,command:l.command?Object.freeze({...l.command}):null})))}):null,
     evolution:actor.evolution?Object.freeze({...actor.evolution,targetActor:undefined,
@@ -56,7 +61,9 @@ export function touchNativeRaisingEgg(actor) {
 export function stepNativeRaisingActor(actor,profile,{ageDelta,rng,feeding=null,lifecycle=null}) {
   if(!Number.isInteger(ageDelta)||ageDelta<0||ageDelta>2)throw new TypeError("INVALID_RAISING_AGE_DELTA");
   actor.animator.advanceNative(4096);
+  if(actor.state===9)actor.feedback?.animator.advanceNative(4096);
   actor.nativeFrame++;
+  stepNativeRaisingStatusFeedback(actor,profile);
   if(actor.speciesIndex>=8)return lifecycle&&feeding?stepLifecycle(actor,profile,ageDelta,rng,feeding,lifecycle)
     :feeding ? stepFeeding(actor,profile,ageDelta,rng,feeding) : {profile,changed:false,hatched:false};
   if(actor.eggPhase===1) {
@@ -83,8 +90,10 @@ export function stepNativeRaisingActor(actor,profile,{ageDelta,rng,feeding=null,
 const nativeRandom=(actor,rng,max)=>Math.trunc((max-1)*rng.next(0x26+actor.poolSlot)/102);
 function enterIdle(actor,rng) {
   actor.state=1;actor.foodSlot=null;actor.station=-1;actor.biteLatched=false;
-  actor.idleElapsed=0;actor.activity=null;actor.activityReaction=-1;actor.peer=null;actor.destinationState=1;
-  actor.idleCounter=nativeRandom(actor,rng,60);actor.canDefecate=true;request(actor,actor.slow?1:0,true);
+  actor.idleElapsed=0;actor.activity=null;actor.feedback=null;actor.activityReaction=-1;actor.peer=null;actor.destinationState=1;
+  // OVL18 02117C4C -> 02112378 -> ARM9 02047984 preserves an already
+  // selected sequence. Re-entering idle must not rewind its cell/tick phase.
+  actor.idleCounter=nativeRandom(actor,rng,60);actor.canDefecate=true;request(actor,actor.slow?1:0);
 }
 function initializeLifecycle(actor,profile){
   const f=profile.fields,s=nativeHuntSpeciesByIndex(f['000']);actor.evolutionChecked=false;actor.evolution=null;actor.training=null;actor.trainingPending=false;actor.treatment=null;
@@ -143,11 +152,62 @@ export function treatNativeRaisingActor(actor,profile,kind,{foods,ground,rng,mod
   return {...result,profile:next,applied:true};
 }
 export function interruptNativeRaisingFeeding(actor,foods,rng) {detachFood(actor,foods);enterIdle(actor,rng);}
+function currentHeight(actor){const box=BATTLE_CHARACTER_PROFILES[BATTLE_SPECIES_ENTITIES[actor.speciesIndex]].cells[actor.animator.getSnapshot().cell];return box[3]-box[1];}
+export function beginNativeRaisingCarry(actor,profile,pointer,{foods,rng}){
+  // Original command 80 handlers for the currently implemented adult states.
+  if(![1,2,3,4,5,7,9,13,16,17,18,19].includes(actor.state)||actor.speciesIndex<8)return null;
+  let p=profile;
+  if(actor.state===4)p=exitNativeRaisingSleep(p,actor.poolSlot,rng);
+  if(actor.state===5&&(p.fields['008']|0)>=nativeHuntSpeciesByIndex(actor.speciesIndex).field1c){
+    p=structuredClone(p);p.fields['020']=Math.min(100,(p.fields['020']+2)|0);p.fields['00c']=(Math.trunc((p.fields['178']|0)/10)*8)>>>0;}
+  detachFood(actor,foods);actor.previousCageDefinition=actor.cageDefinitionIndex;
+  actor.detached=true;actor.state=6;actor.activity=null;actor.feedback=null;actor.training=null;actor.trainingPending=false;
+  actor.carryPointer={...pointer};actor.velocityQ12=[0,0,0];request(actor,11);
+  actor.positionQ12=nativeCarryPosition(pointer,currentHeight(actor));actor.growthFields['40c']=0;
+  p=structuredClone(p);p.fields['19c']=0;return normalizeNativeIndividualProfile(p);
+}
+export function releaseNativeRaisingCarry(actor,profile){
+  if(actor.state!==6)return null;
+  actor.velocityQ12=nativeReleaseVelocity(actor.velocityQ12);actor.carryPointer=null;actor.flightPhase=0;actor.state=7;
+  actor.badThrow=actor.velocityQ12[1]>=0;actor.flipBits=actor.velocityQ12[0]>=0?1:0;
+  request(actor,actor.badThrow?15:5);
+  if(!actor.badThrow)return profile;
+  const p=structuredClone(profile);p.fields['01c']=Math.min(100,(p.fields['01c']|0)+1);return normalizeNativeIndividualProfile(p);
+}
+function stepCarry(actor,profile,ground,rng,season,onJoin){
+  if(actor.state===6){const p=nativeCarryPosition(actor.carryPointer,currentHeight(actor));
+    actor.velocityQ12=nativeCarryVelocity(actor.velocityQ12,actor.positionQ12,p);actor.positionQ12=p;
+    return {profile,changed:false};}
+  const flight=stepNativeRaisingFlight({positionQ12:actor.positionQ12,velocityQ12:actor.velocityQ12,
+    destinationQ12:actor.destinationQ12,phase:actor.flightPhase},ground,{rng,poolSlot:actor.poolSlot,cameraX:actor.carryCameraX??0});
+  actor.positionQ12=flight.positionQ12;actor.velocityQ12=flight.velocityQ12;actor.destinationQ12=flight.destinationQ12;actor.flightPhase=flight.phase;
+  if(!flight.settled)return {profile,changed:false};
+  let x=Math.trunc((actor.positionQ12[0]>>12)/8),y=Math.trunc((actor.positionQ12[1]>>12)/8),cage=ground.cageAt(x*8,y*8);
+  for(let guard=0;!cage&&guard<100000;guard++){const open=findNativeRaisingOpenTile(ground,x,y,{rng,poolSlot:actor.poolSlot});x=open.x;y=open.y;cage=ground.cageAt(x*8,y*8);}
+  if(!cage)throw new Error('NATIVE_LANDING_CAGE_REQUIRED');
+  actor.cageDefinitionIndex=cage.definitionIndex;actor.detached=false;
+  onJoin?.();
+  let p=structuredClone(profile);p.fields['014']=cage.definitionIndex;
+  p=enterNativeRaisingCage(actor,p,{previousDefinition:actor.previousCageDefinition,ground,season},rng);
+  const f=p.fields,healthy=!['134','138','13c'].some(k=>f[k]===1)&&(f['050']|0)>Math.trunc((f['058']|0)/10);
+  if(healthy&&lifecycleRules.cages[cage.definitionIndex].entryReaction===-1){
+    const id=nativeLandingReaction(f['018'],actor.badThrow,actor.badThrow?0:rng.next(0x56+actor.poolSlot));
+    if(id===null)enterIdle(actor,rng);
+    else {const delta=beginNativeActivityReaction(actor,id,ground,request);if(delta){p=structuredClone(p);p.fields['01c']=Math.max(0,Math.min(100,p.fields['01c']+delta));}}
+  }
+  return {profile:normalizeNativeIndividualProfile(p),changed:true,landed:true};
+}
 export function removeNativeRaisingFoodTarget(actor,foods,rng) {
   const eating=actor.state===5;detachFood(actor,foods);
-  if(eating)react(actor,1,30);else enterIdle(actor,rng);
+  // 02118844: sequence 1, feedback 0, 30 updates (not reaction 18,
+  // which would also change stress).
+  if(eating)react(actor,1,30,0);else enterIdle(actor,rng);
 }
-function react(actor,sequence,ticks) {actor.state=9;actor.activity=null;actor.activityReaction=-1;actor.reactionTicks=ticks;actor.sequenceId=null;if(sequence>=0)request(actor,sequence);}
+function react(actor,sequence,ticks,icon=-1) {
+  actor.state=9;actor.activity=null;actor.activityReaction=-1;actor.reactionTicks=ticks;actor.feedback=null;
+  if(sequence>=0)request(actor,actor.slow&&sequence===0?1:sequence);
+  requestNativeRaisingFeedback(actor,icon);
+}
 function stepFeeding(actor,profile,ageDelta,rng,{ground,foods,signals,actors,fullGrowth=false}) {
   let next=profile,changed=false,foodChanged=false;
   const modify=()=>{if(next===profile||Object.isFrozen(next.fields))next=structuredClone(next);changed=true;return next.fields;};
@@ -175,8 +235,11 @@ function stepFeeding(actor,profile,ageDelta,rng,{ground,foods,signals,actors,ful
     const roll=nativeRandom(actor,rng,32767)%100;
     if(roll<50&&[0,4,5,6,7].includes(f["018"])) {
       detachFood(actor,foods);
-      if(f["018"]===0||f["018"]===4){f=modify();if(f["01c"]>0)f["01c"]--;react(actor,30,70);}
-      else react(actor,f["018"]===7?0:-1,60);
+      // 02116800 dispatches reactions 9 / 14 / 6. Reaction 14 retains
+      // the current character pose and displays fixed feedback frame 2.
+      const reaction=f['018']===0||f['018']===4?9:f['018']===7?6:14;
+      const delta=beginNativeActivityReaction(actor,reaction,ground,request);
+      if(delta){f=modify();f['01c']=Math.max(0,Math.min(100,f['01c']+delta));}
       return {profile:changed?normalizeNativeIndividualProfile(next):profile,changed,hatched:false,foodChanged};
     }
   }
@@ -188,7 +251,7 @@ function stepFeeding(actor,profile,ageDelta,rng,{ground,foods,signals,actors,ful
     }
   }
   if([2,3,16].includes(actor.state)) {
-    if(actor.state===3&&(f['00c']|0)>=Math.trunc((f['178']|0)/10)*9){actor.state=2;request(actor,actor.slow?12:2,true);}
+    if(actor.state===3&&(f['00c']|0)>=Math.trunc((f['178']|0)/10)*9){actor.state=2;request(actor,actor.slow?12:2);}
     const movement=stepNativeRaisingMovement({...actor,fast:f["01c"]>=90?1:0,hasFood:actor.foodSlot!==null},ground);Object.assign(actor,movement);
     if(nativeRaisingMovementArrived(actor)){
       if(actor.foodSlot!==null)actor.state=5;
@@ -226,7 +289,10 @@ function stepFeeding(actor,profile,ageDelta,rng,{ground,foods,signals,actors,ful
         detachFood(actor,foods);
         if((next.fields["008"]|0)>=species.field1c) {
           f=modify();f["020"]=Math.max(0,Math.min(100,(f["020"]+2)|0));
-          f["00c"]=(Math.trunc((f["178"]|0)/10)*8)>>>0;react(actor,28,60);
+          f["00c"]=(Math.trunc((f["178"]|0)/10)*8)>>>0;
+          // 02118810 dispatches reaction 27, including common sequence 6
+          // fixed frame 5. applyNativeFoodFrame already applies stress -10.
+          beginNativeActivityReaction(actor,27,ground,request);
         } else enterIdle(actor,rng);
       }
     }
@@ -243,7 +309,7 @@ export function wakeNativeRaisingActor(actor,profile,foods,rng) {
 }
 export function startNativeRaisingMorning(actor,profile,rng) {
   if(actor.speciesIndex<8)return profile;
-  actor.state=25;request(actor,13,true);
+  actor.state=25;request(actor,13); // 0211C9AC preserves an already playing sleep sequence.
   const morning=enterNativeRaisingMorning(profile,actor.poolSlot,rng);actor.morningWait=morning.waitFrames;actor.morningFrames=0;return morning.profile;
 }
 export function enterNativeRaisingCage(actor,profile,{previousDefinition,ground,season,level=0},rng){
@@ -303,15 +369,18 @@ export function stepNativeRaisingEvolution(actor,profile,rng) {
 
 function stepLifecycle(actor,profile,ageDelta,rng,feeding,context) {
   let next=profile,result={profile,changed:false};const s=nativeHuntSpeciesByIndex(actor.speciesIndex),a=actor.growthFields;
-  const residents=context.residents,capacity=lifecycleRules.cages[actor.cageDefinitionIndex].capacity;
-  a['40c']=residents.length;a['410']=(residents.length-capacity)>>>0;
+  let residents=context.residents,capacity=lifecycleRules.cages[actor.cageDefinitionIndex].capacity;
+  a['40c']=actor.detached?0:residents.length;a['410']=(residents.length-capacity)>>>0;
   const update=()=>{next=structuredClone(next);result.changed=true;return next.fields;};
-  if(actor.state===20){
+  if(actor.state===6||actor.state===7){result=stepCarry(actor,next,feeding.ground,rng,context.season,context.onJoin);next=result.profile;
+    if(result.landed){residents=context.getResidents?.()??residents;capacity=lifecycleRules.cages[actor.cageDefinitionIndex].capacity;
+      a['40c']=residents.length;a['410']=(residents.length-capacity)>>>0;}}
+  else if(actor.state===20){
     const treatment=actor.treatment,wait=advanceNativeTreatmentPresentation(treatment);
     if(wait.complete){
       actor.treatment=null;
-      if(wait.nextState===4){actor.state=4;request(actor,13,true);}
-      else if(wait.nextState===18){actor.state=18;request(actor,15,true);}
+      if(wait.nextState===4){actor.state=4;request(actor,13);}
+      else if(wait.nextState===18){actor.state=18;request(actor,15);}
       else {const delta=beginNativeActivityReaction(actor,treatment.reaction,feeding.ground,request);
         if(delta){const f=update();f['01c']=Math.max(0,Math.min(100,(f['01c']+delta)|0));}}
     }
@@ -347,10 +416,10 @@ function stepLifecycle(actor,profile,ageDelta,rng,feeding,context) {
   } else if(actor.state===1){
     const f=next.fields;
     if(actor.canDefecate&&f['190']>lifecycleRules.wasteThresholds[s.generation]){
-      if(feeding.ground.readClearance(Math.trunc((actor.positionQ12[0]>>12)/8),Math.trunc((actor.positionQ12[1]>>12)/8))>1){actor.state=14;actor.wasteFrames=0;request(actor,0,true);}
+      if(feeding.ground.readClearance(Math.trunc((actor.positionQ12[0]>>12)/8),Math.trunc((actor.positionQ12[1]>>12)/8))>1){actor.state=14;actor.wasteFrames=0;request(actor,actor.slow?1:0);}
       else actor.canDefecate=false;
     }
-    if(actor.state===1&&(f['00c']|0)>=(f['178']|0)){next=enterNativeRaisingSleep(next,actor.poolSlot,rng);result.changed=true;actor.state=4;request(actor,13,true);}
+    if(actor.state===1&&(f['00c']|0)>=(f['178']|0)){next=enterNativeRaisingSleep(next,actor.poolSlot,rng);result.changed=true;actor.state=4;request(actor,13);}
     if(actor.state===1){
       // 021177AC dirty environment periodic branch. Command pulses from actual
       // waste/rotten food are carried on the same Cage context.
@@ -371,14 +440,14 @@ function stepLifecycle(actor,profile,ageDelta,rng,feeding,context) {
       }
     }
     if(actor.state===1&&(next.fields['180']>=1200||next.fields['184']>=1200||(next.fields['050']|0)<=Math.trunc((next.fields['058']|0)/10))){
-      const f=update();f['13c']=1;f['020']=Math.max(0,f['020']-1);actor.state=18;request(actor,15,true);
+      const f=update();f['13c']=1;f['020']=Math.max(0,f['020']-1);actor.state=18;request(actor,15);
     }
     if(actor.state===1){const fed=stepFeeding(actor,next,ageDelta,rng,{...feeding,fullGrowth:true});result={...fed,changed:result.changed||fed.changed};next=fed.profile;}
   } else {result=stepFeeding(actor,next,ageDelta,rng,{...feeding,fullGrowth:true});next=result.profile;}
   if(actor.state===1&&actor.trainingPending){
     actor.trainingPending=false;actor.state=11;
     const trained=enterNativeRaisingTraining(next,{definition:actor.cageDefinitionIndex,season:context.season,level:context.cageLevel??0,stressed:a['404']===1},rng);
-    next=trained.profile;result.changed=true;actor.training=createNativeTrainingTimeline(trained.commands);if(trained.commands?.length)request(actor,30,true);
+    next=trained.profile;result.changed=true;actor.training=createNativeTrainingTimeline(trained.commands);if(trained.commands?.length)request(actor,30);
   }
   const grown=applyNativeRaisingGrowth(next,a,{state:actor.state,ageDelta,baseUnit:60,generation:s.generation,mode:context.season,minute:context.minute,
     ranchSize:capacity,effects:nativeCageConditionEffects(actor.cageDefinitionIndex,context.season,context.cageLevel??1),satietyMaximum:s.field1c,

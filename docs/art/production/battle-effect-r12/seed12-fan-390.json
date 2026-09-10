@@ -1,0 +1,5294 @@
+{
+  "effects": {
+    "active": 1,
+    "assetId": "art:vfx:battle-effects:local-reference:v1",
+    "created": 25,
+    "missingCells": [],
+    "released": 24,
+    "seenCells": [
+      "1:135",
+      "81:0",
+      "81:1",
+      "81:2"
+    ],
+    "sprites": [
+      {
+        "alpha": 1,
+        "anchorX": 0.125,
+        "anchorY": 0.4791666666666667,
+        "bankId": 81,
+        "cell": 2,
+        "depth": 148.6412636542132,
+        "id": 25,
+        "rotation": 0,
+        "scaleX": 0.9374999860301616,
+        "scaleY": 0.9374999860301616,
+        "tint": 16777215,
+        "visible": true,
+        "x": 218.0923429415771,
+        "y": 111.14126421300672
+      }
+    ],
+    "visible": 1
+  },
+  "frame": 962,
+  "lifecycle": {
+    "active": [
+      {
+        "activeChildren": 1,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 255,
+        "nativeCalls": [
+          [
+            34721476,
+            1
+          ],
+          [
+            34721752,
+            8
+          ],
+          [
+            34723092,
+            2
+          ],
+          [
+            34721428,
+            25
+          ],
+          [
+            34721404,
+            25
+          ],
+          [
+            34722760,
+            18
+          ],
+          [
+            34721780,
+            3
+          ],
+          [
+            34722360,
+            2
+          ],
+          [
+            34722456,
+            4
+          ],
+          [
+            34722244,
+            2
+          ],
+          [
+            34722216,
+            2
+          ],
+          [
+            34722272,
+            16
+          ],
+          [
+            34722840,
+            2
+          ],
+          [
+            34726792,
+            1
+          ],
+          [
+            34727116,
+            1
+          ],
+          [
+            34723596,
+            1
+          ],
+          [
+            34722656,
+            1
+          ],
+          [
+            34721872,
+            2
+          ],
+          [
+            34721852,
+            1
+          ],
+          [
+            34726596,
+            1
+          ],
+          [
+            34722620,
+            1
+          ],
+          [
+            34722728,
+            14
+          ],
+          [
+            34721648,
+            7
+          ],
+          [
+            34726100,
+            7
+          ],
+          [
+            34723148,
+            7
+          ],
+          [
+            34726540,
+            7
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285212672,
+        "owner": 268959744,
+        "ownerSlot": 4,
+        "phase": "PRIMARY",
+        "target": 268435456,
+        "unresolvedDetails": [
+          {
+            "args": [
+              0,
+              127,
+              0
+            ],
+            "routine": 33810992
+          }
+        ],
+        "unresolvedHostCalls": [
+          33810992
+        ]
+      }
+    ],
+    "contacts": {
+      "history": [],
+      "meleeCalls": 17,
+      "projectileCalls": 0,
+      "projectileHits": 0
+    },
+    "effectActors": [
+      {
+        "active": 1,
+        "actor": 537103856,
+        "alpha": 31,
+        "bankId": 81,
+        "box": {
+          "highX": 28,
+          "highY": 25,
+          "lowX": -4,
+          "lowY": -23
+        },
+        "cell": 2,
+        "cos": 4096,
+        "flip": 0,
+        "frame": 2,
+        "id": 25,
+        "name": "e003_H_Knuckle",
+        "point": [
+          952860,
+          413494,
+          163840
+        ],
+        "scaleX": 4096,
+        "scaleY": 4096,
+        "sequenceId": 0,
+        "sin": 0,
+        "tint": 32767
+      }
+    ],
+    "effectPool": {
+      "active": 1,
+      "created": 25,
+      "free": 495,
+      "loadedBanks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        19,
+        81
+      ],
+      "peak": 3,
+      "released": 24,
+      "unavailable": []
+    },
+    "impacts": {
+      "active": 0,
+      "created": 24,
+      "released": 24
+    },
+    "normalFlow": {
+      "evidence": "ROM_NORMAL_BRANCHES_CONTROLLED_INITIAL_RNG",
+      "history": [
+        {
+          "actionTarget": 3,
+          "clock": 0,
+          "frame": 0,
+          "moveId": 179,
+          "slot": 0,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 0,
+          "frame": 0,
+          "moveId": 254,
+          "slot": 1,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 0,
+          "frame": 0,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 0,
+          "frame": 0,
+          "moveId": 254,
+          "slot": 4,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 49,
+          "frame": 49,
+          "from": 4,
+          "slot": 0,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 49,
+          "frame": 49,
+          "from": 4,
+          "slot": 3,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 49,
+          "frame": 49,
+          "from": 4,
+          "slot": 4,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 0,
+          "clock": 50,
+          "frame": 50,
+          "moveId": 179,
+          "resourceAfter": 78,
+          "resourceBefore": 78,
+          "slot": 0,
+          "state": 14,
+          "targetSlot": 3,
+          "type": "LAUNCHED"
+        },
+        {
+          "actionIndex": 1,
+          "clock": 50,
+          "frame": 50,
+          "moveId": 179,
+          "resourceAfter": 78,
+          "resourceBefore": 78,
+          "slot": 3,
+          "state": 14,
+          "targetSlot": 0,
+          "type": "LAUNCHED"
+        },
+        {
+          "actionIndex": 2,
+          "clock": 50,
+          "frame": 50,
+          "moveId": 254,
+          "resourceAfter": 66,
+          "resourceBefore": 66,
+          "slot": 4,
+          "state": 14,
+          "targetSlot": 0,
+          "type": "LAUNCHED"
+        },
+        {
+          "clock": 53,
+          "frame": 53,
+          "from": 4,
+          "slot": 1,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 3,
+          "clock": 54,
+          "frame": 54,
+          "moveId": 254,
+          "resourceAfter": 66,
+          "resourceBefore": 66,
+          "slot": 1,
+          "state": 14,
+          "targetSlot": 3,
+          "type": "LAUNCHED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 95,
+          "frame": 95,
+          "moveId": 254,
+          "slot": 4,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 99,
+          "frame": 99,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 103,
+          "frame": 103,
+          "from": 14,
+          "slot": 0,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 104,
+          "frame": 104,
+          "moveId": 179,
+          "slot": 0,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 107,
+          "frame": 107,
+          "from": 14,
+          "slot": 1,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 108,
+          "frame": 108,
+          "moveId": 254,
+          "slot": 1,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 117,
+          "frame": 117,
+          "from": 4,
+          "slot": 1,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 0,
+          "clock": 118,
+          "frame": 118,
+          "moveId": 254,
+          "resourceAfter": 66,
+          "resourceBefore": 66,
+          "slot": 1,
+          "state": 14,
+          "targetSlot": 3,
+          "type": "LAUNCHED"
+        },
+        {
+          "clock": 120,
+          "frame": 120,
+          "from": 4,
+          "slot": 3,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 121,
+          "frame": 121,
+          "from": 4,
+          "slot": 0,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 1,
+          "clock": 121,
+          "frame": 121,
+          "moveId": 179,
+          "resourceAfter": 78,
+          "resourceBefore": 78,
+          "slot": 3,
+          "state": 14,
+          "targetSlot": 0,
+          "type": "LAUNCHED"
+        },
+        {
+          "actionIndex": 2,
+          "clock": 122,
+          "frame": 122,
+          "moveId": 179,
+          "resourceAfter": 78,
+          "resourceBefore": 78,
+          "slot": 0,
+          "state": 14,
+          "targetSlot": 3,
+          "type": "LAUNCHED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 163,
+          "frame": 163,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 163,
+          "frame": 163,
+          "moveId": 254,
+          "slot": 4,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 171,
+          "frame": 171,
+          "from": 14,
+          "slot": 1,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 172,
+          "frame": 172,
+          "moveId": 254,
+          "slot": 1,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 175,
+          "frame": 175,
+          "from": 14,
+          "slot": 0,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 176,
+          "frame": 176,
+          "moveId": 179,
+          "slot": 0,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 180,
+          "frame": 180,
+          "from": 4,
+          "slot": 4,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 0,
+          "clock": 181,
+          "frame": 181,
+          "moveId": 254,
+          "resourceAfter": 66,
+          "resourceBefore": 66,
+          "slot": 4,
+          "state": 14,
+          "targetSlot": 0,
+          "type": "LAUNCHED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 226,
+          "frame": 226,
+          "moveId": 179,
+          "slot": 0,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 226,
+          "frame": 226,
+          "moveId": null,
+          "slot": 1,
+          "state": 3,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 234,
+          "frame": 234,
+          "from": 14,
+          "slot": 4,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 235,
+          "frame": 235,
+          "moveId": 254,
+          "slot": 4,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 239,
+          "frame": 239,
+          "from": 4,
+          "slot": 0,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 0,
+          "clock": 240,
+          "frame": 240,
+          "moveId": 179,
+          "resourceAfter": 78,
+          "resourceBefore": 78,
+          "slot": 0,
+          "state": 14,
+          "targetSlot": 3,
+          "type": "LAUNCHED"
+        },
+        {
+          "clock": 240,
+          "frame": 240,
+          "from": 4,
+          "slot": 3,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 1,
+          "clock": 241,
+          "frame": 241,
+          "moveId": 179,
+          "resourceAfter": 78,
+          "resourceBefore": 78,
+          "slot": 3,
+          "state": 14,
+          "targetSlot": 0,
+          "type": "LAUNCHED"
+        },
+        {
+          "clock": 252,
+          "frame": 252,
+          "from": 4,
+          "slot": 4,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 2,
+          "clock": 253,
+          "frame": 253,
+          "moveId": 254,
+          "resourceAfter": 66,
+          "resourceBefore": 66,
+          "slot": 4,
+          "state": 14,
+          "targetSlot": 0,
+          "type": "LAUNCHED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 285,
+          "frame": 285,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 285,
+          "frame": 285,
+          "moveId": null,
+          "slot": 4,
+          "state": 3,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 293,
+          "frame": 293,
+          "from": 14,
+          "slot": 0,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 294,
+          "frame": 294,
+          "moveId": 179,
+          "slot": 0,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 302,
+          "frame": 302,
+          "from": 4,
+          "slot": 3,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 303,
+          "frame": 303,
+          "from": 4,
+          "slot": 0,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 0,
+          "clock": 303,
+          "frame": 303,
+          "moveId": 179,
+          "resourceAfter": 78,
+          "resourceBefore": 78,
+          "slot": 3,
+          "state": 14,
+          "targetSlot": 0,
+          "type": "LAUNCHED"
+        },
+        {
+          "clock": 304,
+          "frame": 304,
+          "from": 14,
+          "slot": 0,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 305,
+          "frame": 305,
+          "moveId": null,
+          "slot": 0,
+          "state": 3,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 307,
+          "frame": 307,
+          "moveId": 254,
+          "slot": 1,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 307,
+          "frame": 307,
+          "from": 3,
+          "slot": 1,
+          "to": 4,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 348,
+          "frame": 348,
+          "moveId": 179,
+          "slot": 0,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 348,
+          "frame": 348,
+          "moveId": 254,
+          "slot": 1,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 356,
+          "frame": 356,
+          "from": 14,
+          "slot": 3,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 357,
+          "frame": 357,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 365,
+          "frame": 365,
+          "from": 4,
+          "slot": 0,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 0,
+          "clock": 366,
+          "frame": 366,
+          "moveId": 179,
+          "resourceAfter": 78,
+          "resourceBefore": 78,
+          "slot": 0,
+          "state": 14,
+          "targetSlot": 3,
+          "type": "LAUNCHED"
+        },
+        {
+          "clock": 366,
+          "frame": 366,
+          "from": 4,
+          "slot": 3,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 366,
+          "frame": 366,
+          "moveId": 254,
+          "slot": 4,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 366,
+          "frame": 366,
+          "from": 3,
+          "slot": 4,
+          "to": 4,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 367,
+          "frame": 367,
+          "from": 14,
+          "slot": 3,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 368,
+          "frame": 368,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 369,
+          "frame": 369,
+          "from": 4,
+          "slot": 3,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 370,
+          "frame": 370,
+          "from": 14,
+          "slot": 3,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 371,
+          "frame": 371,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 371,
+          "frame": 371,
+          "from": 4,
+          "slot": 4,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 372,
+          "frame": 372,
+          "from": 4,
+          "slot": 3,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 1,
+          "clock": 372,
+          "frame": 372,
+          "moveId": 254,
+          "resourceAfter": 66,
+          "resourceBefore": 66,
+          "slot": 4,
+          "state": 14,
+          "targetSlot": 0,
+          "type": "LAUNCHED"
+        },
+        {
+          "clock": 373,
+          "frame": 373,
+          "from": 14,
+          "slot": 3,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 374,
+          "frame": 374,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 375,
+          "frame": 375,
+          "from": 4,
+          "slot": 3,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 376,
+          "frame": 376,
+          "from": 14,
+          "slot": 3,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 377,
+          "frame": 377,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 378,
+          "frame": 378,
+          "from": 4,
+          "slot": 3,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 379,
+          "frame": 379,
+          "from": 14,
+          "slot": 3,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 380,
+          "frame": 380,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 381,
+          "frame": 381,
+          "from": 4,
+          "slot": 1,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 381,
+          "frame": 381,
+          "from": 4,
+          "slot": 3,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 2,
+          "clock": 382,
+          "frame": 382,
+          "moveId": 254,
+          "resourceAfter": 66,
+          "resourceBefore": 66,
+          "slot": 1,
+          "state": 14,
+          "targetSlot": 3,
+          "type": "LAUNCHED"
+        },
+        {
+          "clock": 382,
+          "frame": 382,
+          "from": 14,
+          "slot": 3,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 411,
+          "frame": 411,
+          "moveId": 254,
+          "slot": 4,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 419,
+          "frame": 419,
+          "from": 14,
+          "slot": 0,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 420,
+          "frame": 420,
+          "moveId": 179,
+          "slot": 0,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 427,
+          "frame": 427,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 432,
+          "frame": 432,
+          "from": 4,
+          "slot": 4,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 0,
+          "clock": 433,
+          "frame": 433,
+          "moveId": 254,
+          "resourceAfter": 66,
+          "resourceBefore": 66,
+          "slot": 4,
+          "state": 14,
+          "targetSlot": 0,
+          "type": "LAUNCHED"
+        },
+        {
+          "clock": 435,
+          "frame": 435,
+          "from": 14,
+          "slot": 1,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 436,
+          "frame": 436,
+          "moveId": 254,
+          "slot": 1,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 449,
+          "frame": 449,
+          "from": 4,
+          "slot": 1,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 452,
+          "frame": 452,
+          "from": 4,
+          "slot": 3,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 1,
+          "clock": 453,
+          "frame": 453,
+          "moveId": 179,
+          "resourceAfter": 78,
+          "resourceBefore": 78,
+          "slot": 3,
+          "state": 14,
+          "targetSlot": 0,
+          "type": "LAUNCHED"
+        },
+        {
+          "clock": 486,
+          "frame": 486,
+          "from": 14,
+          "slot": 4,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 487,
+          "frame": 487,
+          "moveId": 254,
+          "slot": 4,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 498,
+          "frame": 498,
+          "moveId": null,
+          "slot": 0,
+          "state": 3,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 498,
+          "frame": 498,
+          "moveId": 254,
+          "slot": 1,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 506,
+          "frame": 506,
+          "from": 14,
+          "slot": 3,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 507,
+          "frame": 507,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 508,
+          "frame": 508,
+          "from": 4,
+          "slot": 3,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 509,
+          "frame": 509,
+          "from": 14,
+          "slot": 3,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 510,
+          "frame": 510,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 511,
+          "frame": 511,
+          "from": 4,
+          "slot": 3,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 512,
+          "frame": 512,
+          "from": 14,
+          "slot": 3,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 513,
+          "frame": 513,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 515,
+          "frame": 515,
+          "from": 4,
+          "slot": 1,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 0,
+          "clock": 516,
+          "frame": 516,
+          "moveId": 254,
+          "resourceAfter": 66,
+          "resourceBefore": 66,
+          "slot": 1,
+          "state": 14,
+          "targetSlot": 3,
+          "type": "LAUNCHED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 561,
+          "frame": 561,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 562,
+          "frame": 562,
+          "from": 4,
+          "slot": 3,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 1,
+          "clock": 563,
+          "frame": 563,
+          "moveId": 179,
+          "resourceAfter": 78,
+          "resourceBefore": 78,
+          "slot": 3,
+          "state": 14,
+          "targetSlot": 0,
+          "type": "LAUNCHED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 564,
+          "frame": 564,
+          "moveId": null,
+          "slot": 4,
+          "state": 3,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 564,
+          "frame": 564,
+          "from": 4,
+          "slot": 4,
+          "to": 3,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 569,
+          "frame": 569,
+          "from": 14,
+          "slot": 1,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 570,
+          "frame": 570,
+          "moveId": 254,
+          "slot": 1,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 608,
+          "frame": 608,
+          "moveId": null,
+          "slot": 0,
+          "state": 3,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 616,
+          "frame": 616,
+          "from": 14,
+          "slot": 3,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 617,
+          "frame": 617,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 627,
+          "frame": 627,
+          "from": 4,
+          "slot": 1,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 0,
+          "clock": 628,
+          "frame": 628,
+          "moveId": 254,
+          "resourceAfter": 66,
+          "resourceBefore": 66,
+          "slot": 1,
+          "state": 14,
+          "targetSlot": 3,
+          "type": "LAUNCHED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 645,
+          "frame": 645,
+          "moveId": 254,
+          "slot": 4,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 645,
+          "frame": 645,
+          "from": 3,
+          "slot": 4,
+          "to": 4,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 658,
+          "frame": 658,
+          "from": 4,
+          "slot": 4,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 1,
+          "clock": 659,
+          "frame": 659,
+          "moveId": 254,
+          "resourceAfter": 66,
+          "resourceBefore": 66,
+          "slot": 4,
+          "state": 14,
+          "targetSlot": 0,
+          "type": "LAUNCHED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 673,
+          "frame": 673,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 681,
+          "frame": 681,
+          "from": 14,
+          "slot": 1,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 682,
+          "frame": 682,
+          "moveId": 254,
+          "slot": 1,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 682,
+          "frame": 682,
+          "from": 4,
+          "slot": 3,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 0,
+          "clock": 683,
+          "frame": 683,
+          "moveId": 179,
+          "resourceAfter": 78,
+          "resourceBefore": 78,
+          "slot": 3,
+          "state": 14,
+          "targetSlot": 0,
+          "type": "LAUNCHED"
+        },
+        {
+          "clock": 691,
+          "frame": 691,
+          "from": 4,
+          "slot": 1,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 692,
+          "frame": 692,
+          "from": 14,
+          "slot": 1,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 693,
+          "frame": 693,
+          "moveId": 254,
+          "slot": 1,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 694,
+          "frame": 694,
+          "from": 4,
+          "slot": 1,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 695,
+          "frame": 695,
+          "from": 14,
+          "slot": 1,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 696,
+          "frame": 696,
+          "moveId": 254,
+          "slot": 1,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 697,
+          "frame": 697,
+          "from": 4,
+          "slot": 1,
+          "to": 14,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 698,
+          "frame": 698,
+          "from": 14,
+          "slot": 1,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 699,
+          "frame": 699,
+          "moveId": 254,
+          "slot": 1,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 712,
+          "frame": 712,
+          "from": 14,
+          "slot": 4,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 713,
+          "frame": 713,
+          "moveId": 254,
+          "slot": 4,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 728,
+          "frame": 728,
+          "moveId": 179,
+          "slot": 0,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 728,
+          "frame": 728,
+          "moveId": 254,
+          "slot": 1,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 736,
+          "frame": 736,
+          "from": 14,
+          "slot": 3,
+          "to": 1,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 737,
+          "frame": 737,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 790,
+          "frame": 790,
+          "moveId": 254,
+          "slot": 4,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 805,
+          "frame": 805,
+          "moveId": 179,
+          "slot": 0,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 805,
+          "frame": 805,
+          "moveId": 254,
+          "slot": 1,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 814,
+          "frame": 814,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 867,
+          "frame": 867,
+          "moveId": 254,
+          "slot": 4,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 882,
+          "frame": 882,
+          "moveId": null,
+          "slot": 0,
+          "state": 3,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 882,
+          "frame": 882,
+          "from": 4,
+          "slot": 0,
+          "to": 3,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 882,
+          "frame": 882,
+          "moveId": 254,
+          "slot": 1,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 891,
+          "frame": 891,
+          "moveId": 179,
+          "slot": 3,
+          "state": 4,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "actionTarget": 0,
+          "clock": 944,
+          "frame": 944,
+          "moveId": 255,
+          "slot": 4,
+          "state": 5,
+          "targetSlot": 0,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 944,
+          "frame": 944,
+          "from": 4,
+          "slot": 4,
+          "to": 5,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "clock": 953,
+          "frame": 953,
+          "from": 5,
+          "slot": 4,
+          "to": 15,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionIndex": 0,
+          "clock": 954,
+          "frame": 954,
+          "moveId": 255,
+          "resourceAfter": 54,
+          "resourceBefore": 66,
+          "slot": 4,
+          "state": 15,
+          "targetSlot": 0,
+          "type": "LAUNCHED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 959,
+          "frame": 1043,
+          "moveId": 255,
+          "slot": 1,
+          "state": 5,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 959,
+          "frame": 1043,
+          "from": 4,
+          "slot": 1,
+          "to": 5,
+          "type": "STATE_CHANGED"
+        },
+        {
+          "actionTarget": 3,
+          "clock": 961,
+          "frame": 1045,
+          "moveId": 179,
+          "slot": 0,
+          "state": 4,
+          "targetSlot": 3,
+          "type": "SELECTED"
+        },
+        {
+          "clock": 961,
+          "frame": 1045,
+          "from": 3,
+          "slot": 0,
+          "to": 4,
+          "type": "STATE_CHANGED"
+        }
+      ],
+      "initialRngBoundary": "0210CB94/CBB4: two 021140CC initializations per populated slot; pre-constructor RNG history is supplied by the fixture seed",
+      "slots": [
+        {
+          "launches": [
+            null,
+            null,
+            null
+          ],
+          "ownerLock": 0,
+          "point": [
+            872874,
+            350681,
+            0
+          ],
+          "state": 4,
+          "targetSlot": 3
+        },
+        {
+          "launches": [
+            null,
+            null,
+            null
+          ],
+          "ownerLock": 0,
+          "point": [
+            1266716,
+            271029,
+            0
+          ],
+          "state": 5,
+          "targetSlot": 3
+        },
+        null,
+        {
+          "launches": [
+            null,
+            null,
+            null
+          ],
+          "ownerLock": 0,
+          "point": [
+            1061089,
+            276640,
+            0
+          ],
+          "state": 4,
+          "targetSlot": 0
+        },
+        {
+          "launches": [
+            0,
+            null,
+            null
+          ],
+          "ownerLock": 285212672,
+          "point": [
+            1016901,
+            325037,
+            0
+          ],
+          "state": 15,
+          "targetSlot": 0
+        },
+        null
+      ],
+      "worldFlags": 1
+    },
+    "reactions": {
+      "battleEnding": false,
+      "combatants": [
+        {
+          "attemptIndex": 2,
+          "counter": 1,
+          "hp": 481,
+          "notification": 3,
+          "phase": 0,
+          "reaction": 0,
+          "speed": 0,
+          "state": 4,
+          "suspended": false
+        },
+        {
+          "attemptIndex": 2,
+          "counter": 2,
+          "hp": 766,
+          "notification": 7,
+          "phase": 0,
+          "reaction": 0,
+          "speed": 0,
+          "state": 5,
+          "suspended": false
+        },
+        null,
+        {
+          "attemptIndex": 2,
+          "counter": 2,
+          "hp": 442,
+          "notification": 7,
+          "phase": 0,
+          "reaction": 0,
+          "speed": 0,
+          "state": 4,
+          "suspended": false
+        },
+        {
+          "attemptIndex": 2,
+          "counter": 8,
+          "hp": 809,
+          "notification": 9,
+          "phase": 0,
+          "reaction": 0,
+          "speed": 0,
+          "state": 15,
+          "suspended": false
+        },
+        null
+      ],
+      "history": [
+        {
+          "clock": 66,
+          "frame": 66,
+          "slot": 3,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 66,
+          "frame": 66,
+          "hp": 983,
+          "notification": 15,
+          "reaction": 2,
+          "result": 2,
+          "slot": 3,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 66,
+          "frame": 66,
+          "slot": 4,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 66,
+          "frame": 66,
+          "hp": 1009,
+          "notification": 15,
+          "reaction": 2,
+          "result": 2,
+          "slot": 4,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 70,
+          "frame": 70,
+          "slot": 3,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 70,
+          "frame": 70,
+          "hp": 912,
+          "notification": 15,
+          "reaction": 1,
+          "result": 2,
+          "slot": 3,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 94,
+          "frame": 94,
+          "from": 15,
+          "hp": 1009,
+          "slot": 4,
+          "to": 1,
+          "type": "NOTIFICATION_CHANGED"
+        },
+        {
+          "clock": 98,
+          "frame": 98,
+          "from": 15,
+          "hp": 912,
+          "slot": 3,
+          "to": 1,
+          "type": "NOTIFICATION_CHANGED"
+        },
+        {
+          "clock": 134,
+          "frame": 134,
+          "slot": 3,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 134,
+          "frame": 134,
+          "hp": 841,
+          "notification": 15,
+          "reaction": 1,
+          "result": 2,
+          "slot": 3,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 134,
+          "frame": 134,
+          "slot": 4,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 134,
+          "frame": 134,
+          "hp": 957,
+          "notification": 15,
+          "reaction": 2,
+          "result": 2,
+          "slot": 4,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 162,
+          "frame": 162,
+          "from": 15,
+          "hp": 841,
+          "slot": 3,
+          "to": 1,
+          "type": "NOTIFICATION_CHANGED"
+        },
+        {
+          "clock": 162,
+          "frame": 162,
+          "from": 15,
+          "hp": 957,
+          "slot": 4,
+          "to": 1,
+          "type": "NOTIFICATION_CHANGED"
+        },
+        {
+          "clock": 197,
+          "frame": 197,
+          "slot": 0,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 197,
+          "frame": 197,
+          "hp": 1006,
+          "notification": 15,
+          "reaction": 1,
+          "result": 2,
+          "slot": 0,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 197,
+          "frame": 197,
+          "slot": 1,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 197,
+          "frame": 197,
+          "hp": 1030,
+          "notification": 15,
+          "reaction": 2,
+          "result": 2,
+          "slot": 1,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 225,
+          "frame": 225,
+          "from": 15,
+          "hp": 1006,
+          "slot": 0,
+          "to": 1,
+          "type": "NOTIFICATION_CHANGED"
+        },
+        {
+          "clock": 225,
+          "frame": 225,
+          "from": 15,
+          "hp": 1030,
+          "slot": 1,
+          "to": 1,
+          "type": "NOTIFICATION_CHANGED"
+        },
+        {
+          "clock": 256,
+          "frame": 256,
+          "slot": 3,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 256,
+          "frame": 256,
+          "hp": 745,
+          "notification": 15,
+          "reaction": 2,
+          "result": 2,
+          "slot": 3,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 256,
+          "frame": 256,
+          "slot": 4,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 256,
+          "frame": 256,
+          "hp": 882,
+          "notification": 15,
+          "reaction": 2,
+          "result": 2,
+          "slot": 4,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 284,
+          "frame": 284,
+          "from": 15,
+          "hp": 745,
+          "slot": 3,
+          "to": 1,
+          "type": "NOTIFICATION_CHANGED"
+        },
+        {
+          "clock": 284,
+          "frame": 284,
+          "from": 15,
+          "hp": 882,
+          "slot": 4,
+          "to": 1,
+          "type": "NOTIFICATION_CHANGED"
+        },
+        {
+          "clock": 319,
+          "frame": 319,
+          "slot": 0,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 319,
+          "frame": 319,
+          "hp": 909,
+          "notification": 15,
+          "reaction": 2,
+          "result": 2,
+          "slot": 0,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 319,
+          "frame": 319,
+          "slot": 1,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 319,
+          "frame": 319,
+          "hp": 956,
+          "notification": 15,
+          "reaction": 1,
+          "result": 2,
+          "slot": 1,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 347,
+          "frame": 347,
+          "from": 15,
+          "hp": 909,
+          "slot": 0,
+          "to": 1,
+          "type": "NOTIFICATION_CHANGED"
+        },
+        {
+          "clock": 347,
+          "frame": 347,
+          "from": 15,
+          "hp": 956,
+          "slot": 1,
+          "to": 1,
+          "type": "NOTIFICATION_CHANGED"
+        },
+        {
+          "clock": 382,
+          "frame": 382,
+          "slot": 3,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 382,
+          "frame": 382,
+          "hp": 653,
+          "notification": 15,
+          "reaction": 2,
+          "result": 2,
+          "slot": 3,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 382,
+          "frame": 382,
+          "slot": 4,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 382,
+          "frame": 382,
+          "hp": 809,
+          "notification": 15,
+          "reaction": 1,
+          "result": 2,
+          "slot": 4,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 398,
+          "frame": 398,
+          "slot": 3,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 398,
+          "frame": 398,
+          "hp": 582,
+          "notification": 15,
+          "reaction": 1,
+          "result": 2,
+          "slot": 3,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 410,
+          "frame": 410,
+          "from": 15,
+          "hp": 809,
+          "slot": 4,
+          "to": 1,
+          "type": "NOTIFICATION_CHANGED"
+        },
+        {
+          "clock": 426,
+          "frame": 426,
+          "from": 15,
+          "hp": 582,
+          "slot": 3,
+          "to": 1,
+          "type": "NOTIFICATION_CHANGED"
+        },
+        {
+          "clock": 449,
+          "frame": 449,
+          "slot": 0,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 449,
+          "frame": 449,
+          "hp": 836,
+          "notification": 15,
+          "reaction": 2,
+          "result": 2,
+          "slot": 0,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 449,
+          "frame": 449,
+          "slot": 1,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 449,
+          "frame": 449,
+          "hp": 905,
+          "notification": 15,
+          "reaction": 2,
+          "result": 2,
+          "slot": 1,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 469,
+          "frame": 469,
+          "slot": 0,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 469,
+          "frame": 469,
+          "hp": 742,
+          "notification": 15,
+          "reaction": 1,
+          "result": 2,
+          "slot": 0,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 469,
+          "frame": 469,
+          "slot": 1,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 469,
+          "frame": 469,
+          "hp": 836,
+          "notification": 15,
+          "reaction": 1,
+          "result": 2,
+          "slot": 1,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 497,
+          "frame": 497,
+          "from": 15,
+          "hp": 742,
+          "slot": 0,
+          "to": 1,
+          "type": "NOTIFICATION_CHANGED"
+        },
+        {
+          "clock": 497,
+          "frame": 497,
+          "from": 15,
+          "hp": 836,
+          "slot": 1,
+          "to": 1,
+          "type": "NOTIFICATION_CHANGED"
+        },
+        {
+          "clock": 532,
+          "frame": 532,
+          "slot": 3,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 532,
+          "frame": 532,
+          "hp": 513,
+          "notification": 15,
+          "reaction": 2,
+          "result": 2,
+          "slot": 3,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 560,
+          "frame": 560,
+          "from": 15,
+          "hp": 513,
+          "slot": 3,
+          "to": 1,
+          "type": "NOTIFICATION_CHANGED"
+        },
+        {
+          "clock": 579,
+          "frame": 579,
+          "slot": 0,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 579,
+          "frame": 579,
+          "hp": 645,
+          "notification": 15,
+          "reaction": 1,
+          "result": 2,
+          "slot": 0,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 607,
+          "frame": 607,
+          "from": 15,
+          "hp": 645,
+          "slot": 0,
+          "to": 1,
+          "type": "NOTIFICATION_CHANGED"
+        },
+        {
+          "clock": 644,
+          "frame": 644,
+          "slot": 3,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 644,
+          "frame": 644,
+          "hp": 442,
+          "notification": 15,
+          "reaction": 2,
+          "result": 2,
+          "slot": 3,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 672,
+          "frame": 672,
+          "from": 15,
+          "hp": 442,
+          "slot": 3,
+          "to": 1,
+          "type": "NOTIFICATION_CHANGED"
+        },
+        {
+          "clock": 675,
+          "frame": 675,
+          "slot": 0,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 675,
+          "frame": 675,
+          "hp": 571,
+          "notification": 15,
+          "reaction": 2,
+          "result": 2,
+          "slot": 0,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 699,
+          "frame": 699,
+          "slot": 0,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 699,
+          "frame": 699,
+          "hp": 481,
+          "notification": 15,
+          "reaction": 2,
+          "result": 2,
+          "slot": 0,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 699,
+          "frame": 699,
+          "slot": 1,
+          "type": "ACTION_INTERRUPTED"
+        },
+        {
+          "clock": 699,
+          "frame": 699,
+          "hp": 766,
+          "notification": 15,
+          "reaction": 2,
+          "result": 2,
+          "slot": 1,
+          "type": "HIT_STATE_WRITTEN"
+        },
+        {
+          "clock": 727,
+          "frame": 727,
+          "from": 15,
+          "hp": 481,
+          "slot": 0,
+          "to": 1,
+          "type": "NOTIFICATION_CHANGED"
+        },
+        {
+          "clock": 727,
+          "frame": 727,
+          "from": 15,
+          "hp": 766,
+          "slot": 1,
+          "to": 1,
+          "type": "NOTIFICATION_CHANGED"
+        }
+      ]
+    },
+    "recent": [
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 179,
+        "nativeCalls": [
+          [
+            34721476,
+            1
+          ],
+          [
+            34721752,
+            1
+          ],
+          [
+            34723092,
+            1
+          ],
+          [
+            34721428,
+            46
+          ],
+          [
+            34721404,
+            46
+          ],
+          [
+            34722760,
+            2
+          ],
+          [
+            34721780,
+            2
+          ],
+          [
+            34722360,
+            1
+          ],
+          [
+            34722456,
+            2
+          ],
+          [
+            34722244,
+            1
+          ],
+          [
+            34722216,
+            1
+          ],
+          [
+            34722272,
+            1
+          ],
+          [
+            34722840,
+            1
+          ],
+          [
+            34726540,
+            16
+          ],
+          [
+            34721852,
+            1
+          ],
+          [
+            34721800,
+            1
+          ],
+          [
+            34722656,
+            1
+          ],
+          [
+            34721872,
+            30
+          ],
+          [
+            34726596,
+            15
+          ],
+          [
+            34721648,
+            15
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285220864,
+        "owner": 268828672,
+        "ownerSlot": 3,
+        "phase": "PRELUDE",
+        "target": 268435456,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 254,
+        "nativeCalls": [
+          [
+            34721476,
+            1
+          ],
+          [
+            34721752,
+            1
+          ],
+          [
+            34723092,
+            1
+          ],
+          [
+            34721428,
+            46
+          ],
+          [
+            34721404,
+            46
+          ],
+          [
+            34722760,
+            2
+          ],
+          [
+            34721780,
+            2
+          ],
+          [
+            34722360,
+            1
+          ],
+          [
+            34722456,
+            2
+          ],
+          [
+            34722244,
+            1
+          ],
+          [
+            34722216,
+            1
+          ],
+          [
+            34722272,
+            1
+          ],
+          [
+            34722840,
+            1
+          ],
+          [
+            34726540,
+            16
+          ],
+          [
+            34721852,
+            1
+          ],
+          [
+            34721800,
+            1
+          ],
+          [
+            34722656,
+            1
+          ],
+          [
+            34721872,
+            30
+          ],
+          [
+            34726596,
+            15
+          ],
+          [
+            34721648,
+            15
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285229056,
+        "owner": 268959744,
+        "ownerSlot": 4,
+        "phase": "PRELUDE",
+        "target": 268435456,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 179,
+        "nativeCalls": [
+          [
+            34721476,
+            2
+          ],
+          [
+            34721752,
+            4
+          ],
+          [
+            34723092,
+            5
+          ],
+          [
+            34721428,
+            102
+          ],
+          [
+            34721404,
+            102
+          ],
+          [
+            34722760,
+            28
+          ],
+          [
+            34721780,
+            13
+          ],
+          [
+            34722360,
+            9
+          ],
+          [
+            34722456,
+            20
+          ],
+          [
+            34722244,
+            9
+          ],
+          [
+            34722216,
+            9
+          ],
+          [
+            34722272,
+            23
+          ],
+          [
+            34722840,
+            9
+          ],
+          [
+            34726540,
+            66
+          ],
+          [
+            34721852,
+            2
+          ],
+          [
+            34721800,
+            2
+          ],
+          [
+            34722656,
+            2
+          ],
+          [
+            34721872,
+            32
+          ],
+          [
+            34726596,
+            16
+          ],
+          [
+            34721648,
+            51
+          ],
+          [
+            34721532,
+            2
+          ],
+          [
+            34726024,
+            2
+          ],
+          [
+            34721452,
+            16
+          ],
+          [
+            34722960,
+            2
+          ],
+          [
+            34722620,
+            5
+          ],
+          [
+            34722728,
+            91
+          ],
+          [
+            34723148,
+            28
+          ],
+          [
+            34726100,
+            31
+          ],
+          [
+            34722528,
+            14
+          ],
+          [
+            34727116,
+            1
+          ],
+          [
+            34723596,
+            1
+          ],
+          [
+            34722492,
+            1
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285212672,
+        "owner": 268435456,
+        "ownerSlot": 0,
+        "phase": "DONE",
+        "target": 268828672,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 254,
+        "nativeCalls": [
+          [
+            34721476,
+            2
+          ],
+          [
+            34721752,
+            3
+          ],
+          [
+            34723092,
+            4
+          ],
+          [
+            34721428,
+            94
+          ],
+          [
+            34721404,
+            94
+          ],
+          [
+            34722760,
+            17
+          ],
+          [
+            34721780,
+            9
+          ],
+          [
+            34722360,
+            6
+          ],
+          [
+            34722456,
+            13
+          ],
+          [
+            34722244,
+            6
+          ],
+          [
+            34722216,
+            6
+          ],
+          [
+            34722272,
+            13
+          ],
+          [
+            34722840,
+            6
+          ],
+          [
+            34726540,
+            59
+          ],
+          [
+            34721852,
+            2
+          ],
+          [
+            34721800,
+            2
+          ],
+          [
+            34722656,
+            2
+          ],
+          [
+            34721872,
+            32
+          ],
+          [
+            34726596,
+            16
+          ],
+          [
+            34721648,
+            51
+          ],
+          [
+            34721532,
+            2
+          ],
+          [
+            34726024,
+            1
+          ],
+          [
+            34721452,
+            8
+          ],
+          [
+            34722960,
+            1
+          ],
+          [
+            34722620,
+            3
+          ],
+          [
+            34722728,
+            46
+          ],
+          [
+            34723148,
+            14
+          ],
+          [
+            34726100,
+            16
+          ],
+          [
+            34722528,
+            7
+          ],
+          [
+            34727116,
+            1
+          ],
+          [
+            34723596,
+            1
+          ],
+          [
+            34722492,
+            1
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285237248,
+        "owner": 268566528,
+        "ownerSlot": 1,
+        "phase": "DONE",
+        "target": 268828672,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 179,
+        "nativeCalls": [
+          [
+            34721476,
+            1
+          ],
+          [
+            34721752,
+            1
+          ],
+          [
+            34723092,
+            1
+          ],
+          [
+            34721428,
+            37
+          ],
+          [
+            34721404,
+            37
+          ],
+          [
+            34722760,
+            2
+          ],
+          [
+            34721780,
+            2
+          ],
+          [
+            34722360,
+            1
+          ],
+          [
+            34722456,
+            2
+          ],
+          [
+            34722244,
+            1
+          ],
+          [
+            34722216,
+            1
+          ],
+          [
+            34722272,
+            1
+          ],
+          [
+            34722840,
+            1
+          ],
+          [
+            34726540,
+            13
+          ],
+          [
+            34721852,
+            1
+          ],
+          [
+            34721800,
+            1
+          ],
+          [
+            34722656,
+            1
+          ],
+          [
+            34721872,
+            24
+          ],
+          [
+            34726596,
+            12
+          ],
+          [
+            34721648,
+            12
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285220864,
+        "owner": 268828672,
+        "ownerSlot": 3,
+        "phase": "PRELUDE",
+        "target": 268435456,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 254,
+        "nativeCalls": [
+          [
+            34721476,
+            2
+          ],
+          [
+            34721752,
+            4
+          ],
+          [
+            34723092,
+            5
+          ],
+          [
+            34721428,
+            102
+          ],
+          [
+            34721404,
+            102
+          ],
+          [
+            34722760,
+            28
+          ],
+          [
+            34721780,
+            13
+          ],
+          [
+            34722360,
+            9
+          ],
+          [
+            34722456,
+            20
+          ],
+          [
+            34722244,
+            9
+          ],
+          [
+            34722216,
+            9
+          ],
+          [
+            34722272,
+            23
+          ],
+          [
+            34722840,
+            9
+          ],
+          [
+            34726540,
+            66
+          ],
+          [
+            34721852,
+            2
+          ],
+          [
+            34721800,
+            2
+          ],
+          [
+            34722656,
+            2
+          ],
+          [
+            34721872,
+            32
+          ],
+          [
+            34726596,
+            16
+          ],
+          [
+            34721648,
+            51
+          ],
+          [
+            34721532,
+            2
+          ],
+          [
+            34726024,
+            2
+          ],
+          [
+            34721452,
+            16
+          ],
+          [
+            34722960,
+            2
+          ],
+          [
+            34722620,
+            5
+          ],
+          [
+            34722728,
+            91
+          ],
+          [
+            34723148,
+            28
+          ],
+          [
+            34726100,
+            31
+          ],
+          [
+            34722528,
+            14
+          ],
+          [
+            34727116,
+            1
+          ],
+          [
+            34723596,
+            1
+          ],
+          [
+            34722492,
+            1
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285212672,
+        "owner": 268566528,
+        "ownerSlot": 1,
+        "phase": "DONE",
+        "target": 268828672,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 179,
+        "nativeCalls": [
+          [
+            34721476,
+            2
+          ],
+          [
+            34721752,
+            2
+          ],
+          [
+            34723092,
+            3
+          ],
+          [
+            34721428,
+            86
+          ],
+          [
+            34721404,
+            86
+          ],
+          [
+            34722760,
+            6
+          ],
+          [
+            34721780,
+            5
+          ],
+          [
+            34722360,
+            3
+          ],
+          [
+            34722456,
+            6
+          ],
+          [
+            34722244,
+            3
+          ],
+          [
+            34722216,
+            3
+          ],
+          [
+            34722272,
+            3
+          ],
+          [
+            34722840,
+            3
+          ],
+          [
+            34726540,
+            52
+          ],
+          [
+            34721852,
+            2
+          ],
+          [
+            34721800,
+            2
+          ],
+          [
+            34722656,
+            2
+          ],
+          [
+            34721872,
+            32
+          ],
+          [
+            34726596,
+            16
+          ],
+          [
+            34721648,
+            51
+          ],
+          [
+            34721532,
+            2
+          ],
+          [
+            34727116,
+            1
+          ],
+          [
+            34723596,
+            1
+          ],
+          [
+            34722620,
+            1
+          ],
+          [
+            34722728,
+            1
+          ],
+          [
+            34726100,
+            1
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285229056,
+        "owner": 268435456,
+        "ownerSlot": 0,
+        "phase": "DONE",
+        "target": 268828672,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 254,
+        "nativeCalls": [
+          [
+            34721476,
+            2
+          ],
+          [
+            34721752,
+            4
+          ],
+          [
+            34723092,
+            5
+          ],
+          [
+            34721428,
+            102
+          ],
+          [
+            34721404,
+            102
+          ],
+          [
+            34722760,
+            28
+          ],
+          [
+            34721780,
+            13
+          ],
+          [
+            34722360,
+            9
+          ],
+          [
+            34722456,
+            20
+          ],
+          [
+            34722244,
+            9
+          ],
+          [
+            34722216,
+            9
+          ],
+          [
+            34722272,
+            23
+          ],
+          [
+            34722840,
+            9
+          ],
+          [
+            34726540,
+            66
+          ],
+          [
+            34721852,
+            2
+          ],
+          [
+            34721800,
+            2
+          ],
+          [
+            34722656,
+            2
+          ],
+          [
+            34721872,
+            32
+          ],
+          [
+            34726596,
+            16
+          ],
+          [
+            34721648,
+            51
+          ],
+          [
+            34721532,
+            2
+          ],
+          [
+            34726024,
+            2
+          ],
+          [
+            34721452,
+            16
+          ],
+          [
+            34722960,
+            2
+          ],
+          [
+            34722620,
+            5
+          ],
+          [
+            34722728,
+            91
+          ],
+          [
+            34723148,
+            28
+          ],
+          [
+            34726100,
+            31
+          ],
+          [
+            34722528,
+            14
+          ],
+          [
+            34727116,
+            1
+          ],
+          [
+            34723596,
+            1
+          ],
+          [
+            34722492,
+            1
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285212672,
+        "owner": 268959744,
+        "ownerSlot": 4,
+        "phase": "DONE",
+        "target": 268435456,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 179,
+        "nativeCalls": [
+          [
+            34721476,
+            1
+          ],
+          [
+            34721752,
+            1
+          ],
+          [
+            34723092,
+            1
+          ],
+          [
+            34721428,
+            43
+          ],
+          [
+            34721404,
+            43
+          ],
+          [
+            34722760,
+            2
+          ],
+          [
+            34721780,
+            2
+          ],
+          [
+            34722360,
+            1
+          ],
+          [
+            34722456,
+            2
+          ],
+          [
+            34722244,
+            1
+          ],
+          [
+            34722216,
+            1
+          ],
+          [
+            34722272,
+            1
+          ],
+          [
+            34722840,
+            1
+          ],
+          [
+            34726540,
+            15
+          ],
+          [
+            34721852,
+            1
+          ],
+          [
+            34721800,
+            1
+          ],
+          [
+            34722656,
+            1
+          ],
+          [
+            34721872,
+            28
+          ],
+          [
+            34726596,
+            14
+          ],
+          [
+            34721648,
+            14
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285220864,
+        "owner": 268828672,
+        "ownerSlot": 3,
+        "phase": "PRELUDE",
+        "target": 268435456,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 254,
+        "nativeCalls": [
+          [
+            34721476,
+            1
+          ],
+          [
+            34721752,
+            1
+          ],
+          [
+            34723092,
+            1
+          ],
+          [
+            34721428,
+            7
+          ],
+          [
+            34721404,
+            7
+          ],
+          [
+            34722760,
+            2
+          ],
+          [
+            34721780,
+            2
+          ],
+          [
+            34722360,
+            1
+          ],
+          [
+            34722456,
+            2
+          ],
+          [
+            34722244,
+            1
+          ],
+          [
+            34722216,
+            1
+          ],
+          [
+            34722272,
+            1
+          ],
+          [
+            34722840,
+            1
+          ],
+          [
+            34726540,
+            3
+          ],
+          [
+            34721852,
+            1
+          ],
+          [
+            34721800,
+            1
+          ],
+          [
+            34722656,
+            1
+          ],
+          [
+            34721872,
+            4
+          ],
+          [
+            34726596,
+            2
+          ],
+          [
+            34721648,
+            2
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285229056,
+        "owner": 268959744,
+        "ownerSlot": 4,
+        "phase": "PRELUDE",
+        "target": 268435456,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 179,
+        "nativeCalls": [
+          [
+            34721476,
+            2
+          ],
+          [
+            34721752,
+            4
+          ],
+          [
+            34723092,
+            5
+          ],
+          [
+            34721428,
+            102
+          ],
+          [
+            34721404,
+            102
+          ],
+          [
+            34722760,
+            28
+          ],
+          [
+            34721780,
+            13
+          ],
+          [
+            34722360,
+            9
+          ],
+          [
+            34722456,
+            20
+          ],
+          [
+            34722244,
+            9
+          ],
+          [
+            34722216,
+            9
+          ],
+          [
+            34722272,
+            23
+          ],
+          [
+            34722840,
+            9
+          ],
+          [
+            34726540,
+            66
+          ],
+          [
+            34721852,
+            2
+          ],
+          [
+            34721800,
+            2
+          ],
+          [
+            34722656,
+            2
+          ],
+          [
+            34721872,
+            32
+          ],
+          [
+            34726596,
+            16
+          ],
+          [
+            34721648,
+            51
+          ],
+          [
+            34721532,
+            2
+          ],
+          [
+            34726024,
+            2
+          ],
+          [
+            34721452,
+            16
+          ],
+          [
+            34722960,
+            2
+          ],
+          [
+            34722620,
+            5
+          ],
+          [
+            34722728,
+            91
+          ],
+          [
+            34723148,
+            28
+          ],
+          [
+            34726100,
+            31
+          ],
+          [
+            34722528,
+            14
+          ],
+          [
+            34727116,
+            1
+          ],
+          [
+            34723596,
+            1
+          ],
+          [
+            34722492,
+            1
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285212672,
+        "owner": 268435456,
+        "ownerSlot": 0,
+        "phase": "DONE",
+        "target": 268828672,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 179,
+        "nativeCalls": [
+          [
+            34721476,
+            2
+          ],
+          [
+            34721752,
+            4
+          ],
+          [
+            34723092,
+            5
+          ],
+          [
+            34721428,
+            102
+          ],
+          [
+            34721404,
+            102
+          ],
+          [
+            34722760,
+            28
+          ],
+          [
+            34721780,
+            13
+          ],
+          [
+            34722360,
+            9
+          ],
+          [
+            34722456,
+            20
+          ],
+          [
+            34722244,
+            9
+          ],
+          [
+            34722216,
+            9
+          ],
+          [
+            34722272,
+            23
+          ],
+          [
+            34722840,
+            9
+          ],
+          [
+            34726540,
+            66
+          ],
+          [
+            34721852,
+            2
+          ],
+          [
+            34721800,
+            2
+          ],
+          [
+            34722656,
+            2
+          ],
+          [
+            34721872,
+            32
+          ],
+          [
+            34726596,
+            16
+          ],
+          [
+            34721648,
+            51
+          ],
+          [
+            34721532,
+            2
+          ],
+          [
+            34726024,
+            2
+          ],
+          [
+            34721452,
+            16
+          ],
+          [
+            34722960,
+            2
+          ],
+          [
+            34722620,
+            5
+          ],
+          [
+            34722728,
+            91
+          ],
+          [
+            34723148,
+            28
+          ],
+          [
+            34726100,
+            31
+          ],
+          [
+            34722528,
+            14
+          ],
+          [
+            34727116,
+            1
+          ],
+          [
+            34723596,
+            1
+          ],
+          [
+            34722492,
+            1
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285212672,
+        "owner": 268828672,
+        "ownerSlot": 3,
+        "phase": "DONE",
+        "target": 268435456,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 254,
+        "nativeCalls": [
+          [
+            34721476,
+            1
+          ],
+          [
+            34721752,
+            1
+          ],
+          [
+            34723092,
+            1
+          ],
+          [
+            34721428,
+            28
+          ],
+          [
+            34721404,
+            28
+          ],
+          [
+            34722760,
+            2
+          ],
+          [
+            34721780,
+            2
+          ],
+          [
+            34722360,
+            1
+          ],
+          [
+            34722456,
+            2
+          ],
+          [
+            34722244,
+            1
+          ],
+          [
+            34722216,
+            1
+          ],
+          [
+            34722272,
+            1
+          ],
+          [
+            34722840,
+            1
+          ],
+          [
+            34726540,
+            10
+          ],
+          [
+            34721852,
+            1
+          ],
+          [
+            34721800,
+            1
+          ],
+          [
+            34722656,
+            1
+          ],
+          [
+            34721872,
+            18
+          ],
+          [
+            34726596,
+            9
+          ],
+          [
+            34721648,
+            9
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285220864,
+        "owner": 268959744,
+        "ownerSlot": 4,
+        "phase": "PRELUDE",
+        "target": 268435456,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 179,
+        "nativeCalls": [
+          [
+            34721476,
+            2
+          ],
+          [
+            34721752,
+            4
+          ],
+          [
+            34723092,
+            5
+          ],
+          [
+            34721428,
+            102
+          ],
+          [
+            34721404,
+            102
+          ],
+          [
+            34722760,
+            28
+          ],
+          [
+            34721780,
+            13
+          ],
+          [
+            34722360,
+            9
+          ],
+          [
+            34722456,
+            20
+          ],
+          [
+            34722244,
+            9
+          ],
+          [
+            34722216,
+            9
+          ],
+          [
+            34722272,
+            23
+          ],
+          [
+            34722840,
+            9
+          ],
+          [
+            34726540,
+            66
+          ],
+          [
+            34721852,
+            2
+          ],
+          [
+            34721800,
+            2
+          ],
+          [
+            34722656,
+            2
+          ],
+          [
+            34721872,
+            32
+          ],
+          [
+            34726596,
+            16
+          ],
+          [
+            34721648,
+            51
+          ],
+          [
+            34721532,
+            2
+          ],
+          [
+            34726024,
+            2
+          ],
+          [
+            34721452,
+            16
+          ],
+          [
+            34722960,
+            2
+          ],
+          [
+            34722620,
+            5
+          ],
+          [
+            34722728,
+            91
+          ],
+          [
+            34723148,
+            28
+          ],
+          [
+            34726100,
+            31
+          ],
+          [
+            34722528,
+            14
+          ],
+          [
+            34727116,
+            1
+          ],
+          [
+            34723596,
+            1
+          ],
+          [
+            34722492,
+            1
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285212672,
+        "owner": 268435456,
+        "ownerSlot": 0,
+        "phase": "DONE",
+        "target": 268828672,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 254,
+        "nativeCalls": [
+          [
+            34721476,
+            2
+          ],
+          [
+            34721752,
+            3
+          ],
+          [
+            34723092,
+            4
+          ],
+          [
+            34721428,
+            94
+          ],
+          [
+            34721404,
+            94
+          ],
+          [
+            34722760,
+            17
+          ],
+          [
+            34721780,
+            9
+          ],
+          [
+            34722360,
+            6
+          ],
+          [
+            34722456,
+            13
+          ],
+          [
+            34722244,
+            6
+          ],
+          [
+            34722216,
+            6
+          ],
+          [
+            34722272,
+            13
+          ],
+          [
+            34722840,
+            6
+          ],
+          [
+            34726540,
+            59
+          ],
+          [
+            34721852,
+            2
+          ],
+          [
+            34721800,
+            2
+          ],
+          [
+            34722656,
+            2
+          ],
+          [
+            34721872,
+            32
+          ],
+          [
+            34726596,
+            16
+          ],
+          [
+            34721648,
+            51
+          ],
+          [
+            34721532,
+            2
+          ],
+          [
+            34726024,
+            1
+          ],
+          [
+            34721452,
+            8
+          ],
+          [
+            34722960,
+            1
+          ],
+          [
+            34722620,
+            3
+          ],
+          [
+            34722728,
+            46
+          ],
+          [
+            34723148,
+            14
+          ],
+          [
+            34726100,
+            16
+          ],
+          [
+            34722528,
+            7
+          ],
+          [
+            34727116,
+            1
+          ],
+          [
+            34723596,
+            1
+          ],
+          [
+            34722492,
+            1
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285229056,
+        "owner": 268566528,
+        "ownerSlot": 1,
+        "phase": "DONE",
+        "target": 268828672,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 254,
+        "nativeCalls": [
+          [
+            34721476,
+            2
+          ],
+          [
+            34721752,
+            4
+          ],
+          [
+            34723092,
+            5
+          ],
+          [
+            34721428,
+            102
+          ],
+          [
+            34721404,
+            102
+          ],
+          [
+            34722760,
+            28
+          ],
+          [
+            34721780,
+            13
+          ],
+          [
+            34722360,
+            9
+          ],
+          [
+            34722456,
+            20
+          ],
+          [
+            34722244,
+            9
+          ],
+          [
+            34722216,
+            9
+          ],
+          [
+            34722272,
+            23
+          ],
+          [
+            34722840,
+            9
+          ],
+          [
+            34726540,
+            66
+          ],
+          [
+            34721852,
+            2
+          ],
+          [
+            34721800,
+            2
+          ],
+          [
+            34722656,
+            2
+          ],
+          [
+            34721872,
+            32
+          ],
+          [
+            34726596,
+            16
+          ],
+          [
+            34721648,
+            51
+          ],
+          [
+            34721532,
+            2
+          ],
+          [
+            34726024,
+            2
+          ],
+          [
+            34721452,
+            16
+          ],
+          [
+            34722960,
+            2
+          ],
+          [
+            34722620,
+            5
+          ],
+          [
+            34722728,
+            91
+          ],
+          [
+            34723148,
+            28
+          ],
+          [
+            34726100,
+            31
+          ],
+          [
+            34722528,
+            14
+          ],
+          [
+            34727116,
+            1
+          ],
+          [
+            34723596,
+            1
+          ],
+          [
+            34722492,
+            1
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285212672,
+        "owner": 268959744,
+        "ownerSlot": 4,
+        "phase": "DONE",
+        "target": 268435456,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 179,
+        "nativeCalls": [
+          [
+            34721476,
+            2
+          ],
+          [
+            34721752,
+            4
+          ],
+          [
+            34723092,
+            5
+          ],
+          [
+            34721428,
+            102
+          ],
+          [
+            34721404,
+            102
+          ],
+          [
+            34722760,
+            28
+          ],
+          [
+            34721780,
+            13
+          ],
+          [
+            34722360,
+            9
+          ],
+          [
+            34722456,
+            20
+          ],
+          [
+            34722244,
+            9
+          ],
+          [
+            34722216,
+            9
+          ],
+          [
+            34722272,
+            23
+          ],
+          [
+            34722840,
+            9
+          ],
+          [
+            34726540,
+            66
+          ],
+          [
+            34721852,
+            2
+          ],
+          [
+            34721800,
+            2
+          ],
+          [
+            34722656,
+            2
+          ],
+          [
+            34721872,
+            32
+          ],
+          [
+            34726596,
+            16
+          ],
+          [
+            34721648,
+            51
+          ],
+          [
+            34721532,
+            2
+          ],
+          [
+            34726024,
+            2
+          ],
+          [
+            34721452,
+            16
+          ],
+          [
+            34722960,
+            2
+          ],
+          [
+            34722620,
+            5
+          ],
+          [
+            34722728,
+            91
+          ],
+          [
+            34723148,
+            28
+          ],
+          [
+            34726100,
+            31
+          ],
+          [
+            34722528,
+            14
+          ],
+          [
+            34727116,
+            1
+          ],
+          [
+            34723596,
+            1
+          ],
+          [
+            34722492,
+            1
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285220864,
+        "owner": 268828672,
+        "ownerSlot": 3,
+        "phase": "DONE",
+        "target": 268435456,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 254,
+        "nativeCalls": [
+          [
+            34721476,
+            2
+          ],
+          [
+            34721752,
+            3
+          ],
+          [
+            34723092,
+            4
+          ],
+          [
+            34721428,
+            94
+          ],
+          [
+            34721404,
+            94
+          ],
+          [
+            34722760,
+            17
+          ],
+          [
+            34721780,
+            9
+          ],
+          [
+            34722360,
+            6
+          ],
+          [
+            34722456,
+            13
+          ],
+          [
+            34722244,
+            6
+          ],
+          [
+            34722216,
+            6
+          ],
+          [
+            34722272,
+            13
+          ],
+          [
+            34722840,
+            6
+          ],
+          [
+            34726540,
+            59
+          ],
+          [
+            34721852,
+            2
+          ],
+          [
+            34721800,
+            2
+          ],
+          [
+            34722656,
+            2
+          ],
+          [
+            34721872,
+            32
+          ],
+          [
+            34726596,
+            16
+          ],
+          [
+            34721648,
+            51
+          ],
+          [
+            34721532,
+            2
+          ],
+          [
+            34726024,
+            1
+          ],
+          [
+            34721452,
+            8
+          ],
+          [
+            34722960,
+            1
+          ],
+          [
+            34722620,
+            3
+          ],
+          [
+            34722728,
+            46
+          ],
+          [
+            34723148,
+            14
+          ],
+          [
+            34726100,
+            16
+          ],
+          [
+            34722528,
+            7
+          ],
+          [
+            34727116,
+            1
+          ],
+          [
+            34723596,
+            1
+          ],
+          [
+            34722492,
+            1
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285212672,
+        "owner": 268566528,
+        "ownerSlot": 1,
+        "phase": "DONE",
+        "target": 268828672,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 179,
+        "nativeCalls": [
+          [
+            34721476,
+            2
+          ],
+          [
+            34721752,
+            3
+          ],
+          [
+            34723092,
+            4
+          ],
+          [
+            34721428,
+            94
+          ],
+          [
+            34721404,
+            94
+          ],
+          [
+            34722760,
+            17
+          ],
+          [
+            34721780,
+            9
+          ],
+          [
+            34722360,
+            6
+          ],
+          [
+            34722456,
+            13
+          ],
+          [
+            34722244,
+            6
+          ],
+          [
+            34722216,
+            6
+          ],
+          [
+            34722272,
+            13
+          ],
+          [
+            34722840,
+            6
+          ],
+          [
+            34726540,
+            59
+          ],
+          [
+            34721852,
+            2
+          ],
+          [
+            34721800,
+            2
+          ],
+          [
+            34722656,
+            2
+          ],
+          [
+            34721872,
+            32
+          ],
+          [
+            34726596,
+            16
+          ],
+          [
+            34721648,
+            51
+          ],
+          [
+            34721532,
+            2
+          ],
+          [
+            34726024,
+            1
+          ],
+          [
+            34721452,
+            8
+          ],
+          [
+            34722960,
+            1
+          ],
+          [
+            34722620,
+            3
+          ],
+          [
+            34722728,
+            46
+          ],
+          [
+            34723148,
+            14
+          ],
+          [
+            34726100,
+            16
+          ],
+          [
+            34722528,
+            7
+          ],
+          [
+            34727116,
+            1
+          ],
+          [
+            34723596,
+            1
+          ],
+          [
+            34722492,
+            1
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285220864,
+        "owner": 268828672,
+        "ownerSlot": 3,
+        "phase": "DONE",
+        "target": 268435456,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 254,
+        "nativeCalls": [
+          [
+            34721476,
+            2
+          ],
+          [
+            34721752,
+            3
+          ],
+          [
+            34723092,
+            4
+          ],
+          [
+            34721428,
+            94
+          ],
+          [
+            34721404,
+            94
+          ],
+          [
+            34722760,
+            17
+          ],
+          [
+            34721780,
+            9
+          ],
+          [
+            34722360,
+            6
+          ],
+          [
+            34722456,
+            13
+          ],
+          [
+            34722244,
+            6
+          ],
+          [
+            34722216,
+            6
+          ],
+          [
+            34722272,
+            13
+          ],
+          [
+            34722840,
+            6
+          ],
+          [
+            34726540,
+            59
+          ],
+          [
+            34721852,
+            2
+          ],
+          [
+            34721800,
+            2
+          ],
+          [
+            34722656,
+            2
+          ],
+          [
+            34721872,
+            32
+          ],
+          [
+            34726596,
+            16
+          ],
+          [
+            34721648,
+            51
+          ],
+          [
+            34721532,
+            2
+          ],
+          [
+            34726024,
+            1
+          ],
+          [
+            34721452,
+            8
+          ],
+          [
+            34722960,
+            1
+          ],
+          [
+            34722620,
+            3
+          ],
+          [
+            34722728,
+            46
+          ],
+          [
+            34723148,
+            14
+          ],
+          [
+            34726100,
+            16
+          ],
+          [
+            34722528,
+            7
+          ],
+          [
+            34727116,
+            1
+          ],
+          [
+            34723596,
+            1
+          ],
+          [
+            34722492,
+            1
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285212672,
+        "owner": 268566528,
+        "ownerSlot": 1,
+        "phase": "DONE",
+        "target": 268828672,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 254,
+        "nativeCalls": [
+          [
+            34721476,
+            2
+          ],
+          [
+            34721752,
+            3
+          ],
+          [
+            34723092,
+            4
+          ],
+          [
+            34721428,
+            94
+          ],
+          [
+            34721404,
+            94
+          ],
+          [
+            34722760,
+            17
+          ],
+          [
+            34721780,
+            9
+          ],
+          [
+            34722360,
+            6
+          ],
+          [
+            34722456,
+            13
+          ],
+          [
+            34722244,
+            6
+          ],
+          [
+            34722216,
+            6
+          ],
+          [
+            34722272,
+            13
+          ],
+          [
+            34722840,
+            6
+          ],
+          [
+            34726540,
+            59
+          ],
+          [
+            34721852,
+            2
+          ],
+          [
+            34721800,
+            2
+          ],
+          [
+            34722656,
+            2
+          ],
+          [
+            34721872,
+            32
+          ],
+          [
+            34726596,
+            16
+          ],
+          [
+            34721648,
+            51
+          ],
+          [
+            34721532,
+            2
+          ],
+          [
+            34726024,
+            1
+          ],
+          [
+            34721452,
+            8
+          ],
+          [
+            34722960,
+            1
+          ],
+          [
+            34722620,
+            3
+          ],
+          [
+            34722728,
+            46
+          ],
+          [
+            34723148,
+            14
+          ],
+          [
+            34726100,
+            16
+          ],
+          [
+            34722528,
+            7
+          ],
+          [
+            34727116,
+            1
+          ],
+          [
+            34723596,
+            1
+          ],
+          [
+            34722492,
+            1
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285220864,
+        "owner": 268959744,
+        "ownerSlot": 4,
+        "phase": "DONE",
+        "target": 268435456,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      },
+      {
+        "activeChildren": 0,
+        "auxiliaryActive": 0,
+        "effectsUnavailable": [],
+        "error": null,
+        "moveId": 179,
+        "nativeCalls": [
+          [
+            34721476,
+            2
+          ],
+          [
+            34721752,
+            4
+          ],
+          [
+            34723092,
+            5
+          ],
+          [
+            34721428,
+            102
+          ],
+          [
+            34721404,
+            102
+          ],
+          [
+            34722760,
+            28
+          ],
+          [
+            34721780,
+            13
+          ],
+          [
+            34722360,
+            9
+          ],
+          [
+            34722456,
+            20
+          ],
+          [
+            34722244,
+            9
+          ],
+          [
+            34722216,
+            9
+          ],
+          [
+            34722272,
+            23
+          ],
+          [
+            34722840,
+            9
+          ],
+          [
+            34726540,
+            66
+          ],
+          [
+            34721852,
+            2
+          ],
+          [
+            34721800,
+            2
+          ],
+          [
+            34722656,
+            2
+          ],
+          [
+            34721872,
+            32
+          ],
+          [
+            34726596,
+            16
+          ],
+          [
+            34721648,
+            51
+          ],
+          [
+            34721532,
+            2
+          ],
+          [
+            34726024,
+            2
+          ],
+          [
+            34721452,
+            16
+          ],
+          [
+            34722960,
+            2
+          ],
+          [
+            34722620,
+            5
+          ],
+          [
+            34722728,
+            91
+          ],
+          [
+            34723148,
+            28
+          ],
+          [
+            34726100,
+            31
+          ],
+          [
+            34722528,
+            14
+          ],
+          [
+            34727116,
+            1
+          ],
+          [
+            34723596,
+            1
+          ],
+          [
+            34722492,
+            1
+          ]
+        ],
+        "needsObjectGraph": [],
+        "object": 285212672,
+        "owner": 268828672,
+        "ownerSlot": 3,
+        "phase": "DONE",
+        "target": 268435456,
+        "unresolvedDetails": [],
+        "unresolvedHostCalls": []
+      }
+    ]
+  },
+  "viewport": {
+    "height": 844,
+    "width": 390
+  }
+}

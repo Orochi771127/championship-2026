@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "pilotId": "ART-BATTLE-BM00-BM01-PILOT-2026-09-01",
+  "status": "OWNER_DIRECTED_INTERNAL_PIXI_REVIEW_PASSED_NOT_PROMOTED",
+  "artDirectionBrief": "ART_DIRECTION.md",
+  "buildScript": "scripts/build-battle-pilot-art.py",
+  "rights": {
+    "sourceKind": "ORIGINAL_AI_ASSISTED_GENERATION",
+    "generator": "OpenAI image generation through Codex imagegen skill",
+    "createdAt": "2026-09-01",
+    "referencePixelReuse": false,
+    "referencePaletteReuse": false,
+    "referenceGeometryReuse": false,
+    "licenseEvidenceStatus": "GENERATION_RECEIPT_RECORDED_TERMS_LINK_PENDING"
+  },
+  "assets": [
+    {
+      "id": "production:battle:shared:field-bm00-00",
+      "role": "canonical reusable Battle arena boundary",
+      "path": "review/field-bm00-00-shared-layer-candidate.png",
+      "status": "review-candidate",
+      "technical": {
+        "dimensions": "1536x1024",
+        "alpha": true,
+        "filtering": "linear",
+        "colorSpace": "sRGB"
+      },
+      "dependencies": [],
+      "source": {
+        "kind": "generated-original",
+        "sourceFile": "source/bm00-frame-only-white-matte-v2.png",
+        "promptRecord": "PROMPTS.md#bm00-canonical-shared-layer"
+      },
+      "standingZoneGeometry": {
+        "source": "DETERMINISTIC_BUILD_SCRIPT",
+        "centerAxisX": 768,
+        "rows": [
+          { "name": "rear", "y": 395, "centerOffsetX": 305, "width": 220, "height": 58 },
+          { "name": "middle", "y": 493, "centerOffsetX": 350, "width": 272, "height": 84 },
+          { "name": "front", "y": 626, "centerOffsetX": 365, "width": 310, "height": 114 }
+        ]
+      },
+      "verification": {
+        "nativeScaleReviewed": true,
+        "technicalChecksPassed": true,
+        "inEngineReviewed": true,
+        "humanApproved": true
+      }
+    },
+    {
+      "id": "production:battle:arena:field-bm01-01",
+      "role": "BM01 bright grassland arena-specific background",
+      "path": "review/field-bm01-01-background-candidate.png",
+      "status": "review-candidate",
+      "technical": {
+        "dimensions": "1536x1024",
+        "alpha": false,
+        "filtering": "linear",
+        "colorSpace": "sRGB"
+      },
+      "dependencies": [
+        "production:battle:shared:field-bm00-00"
+      ],
+      "source": {
+        "kind": "generated-original",
+        "sourceFile": "source/bm01-background.png",
+        "promptRecord": "PROMPTS.md#bm01-arena-specific-background"
+      },
+      "verification": {
+        "nativeScaleReviewed": true,
+        "technicalChecksPassed": true,
+        "inEngineReviewed": true,
+        "humanApproved": true
+      }
+    }
+  ],
+  "promotion": {
+    "runtimeIndexEntry": true,
+    "productionCrosswalkFilesLinked": false,
+    "readyForRuntime": false,
+    "shippingReady": false,
+    "runtimeQaReceipt": "docs/reports/art/battle/bm00-bm01-r1/browser-qa.json",
+    "nextGate": "LICENSE_TERMS_EVIDENCE_LINK_AND_EXPLICIT_FINAL_PROMOTION"
+  }
+}

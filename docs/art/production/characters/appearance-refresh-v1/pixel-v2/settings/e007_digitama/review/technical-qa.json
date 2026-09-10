@@ -1,0 +1,372 @@
+{
+  "artReview": "PENDING_INDEPENDENT_VISUAL_REVIEW",
+  "decoderSha256": "d8690529211cf396e3b01c064a08f35d628ac30cf2f3ff92beffa8a4941b1d34",
+  "designVersion": "e007-a-pixel-setting-r01",
+  "distinctSourceCanvasStates": 12,
+  "distinctSourcePosesSelected": 12,
+  "eggFullStateCoverage": true,
+  "entityId": "e007_digitama",
+  "fullMotionQa": "NOT_RUN",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "poseSamplingStatus": "PASS",
+  "poses": [
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        1,
+        3,
+        15,
+        21
+      ],
+      "authoredRgbaSha256": "5b17c066c98887cc17b9d78e5a83f12b35c05b3800c64f4285a11db8aea1418d",
+      "authoredVisiblePixels": 190,
+      "key": "main/cell_000",
+      "nativeBounds": [
+        -8,
+        -20,
+        8,
+        4
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        1,
+        3,
+        15,
+        21
+      ],
+      "sourceRgbaSha256": "cf3eae548c1481ef37f078800263989fefb851328fef74c57ae18e885b610898",
+      "sourceVisiblePixels": 190,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        1,
+        5,
+        15,
+        21
+      ],
+      "authoredRgbaSha256": "6ffbb050c8a32ab9d451c6dcf16cc7730c26f8977b5f3f48cc658f12588891f1",
+      "authoredVisiblePixels": 172,
+      "key": "main/cell_001",
+      "nativeBounds": [
+        -8,
+        -20,
+        8,
+        4
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        1,
+        5,
+        15,
+        21
+      ],
+      "sourceRgbaSha256": "467e85a9b012aaa20b8f705827603a2c3605be9f0690eed6811c4f6ea5ab1dde",
+      "sourceVisiblePixels": 172,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        0,
+        6,
+        16,
+        21
+      ],
+      "authoredRgbaSha256": "ba16c5c6f357b048fd6235feb3bdd7d3906841ac005c9d4c372d7dc8fe240dd3",
+      "authoredVisiblePixels": 182,
+      "key": "main/cell_002",
+      "nativeBounds": [
+        -8,
+        -20,
+        8,
+        4
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        0,
+        6,
+        16,
+        21
+      ],
+      "sourceRgbaSha256": "637644e901f64a28458c2838b3c060b844ec618025be140f45aaadcee1fabe7b",
+      "sourceVisiblePixels": 182,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        1,
+        3,
+        15,
+        21
+      ],
+      "authoredRgbaSha256": "6cf62696108ecac33fe99a946246e56d28e88341fed2a10fb4ec700a3eedf628",
+      "authoredVisiblePixels": 190,
+      "key": "main/cell_004",
+      "nativeBounds": [
+        -8,
+        -20,
+        8,
+        4
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        1,
+        3,
+        15,
+        21
+      ],
+      "sourceRgbaSha256": "d76207893de83d7e13fdb0131993483d8e91b6c9f27bb1015a1b3cf9a7673171",
+      "sourceVisiblePixels": 190,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        1,
+        5,
+        15,
+        21
+      ],
+      "authoredRgbaSha256": "f5f01bf4977fa5b3eb10b111cf662ca56423183ead61096098c6dff33e987ed5",
+      "authoredVisiblePixels": 172,
+      "key": "main/cell_005",
+      "nativeBounds": [
+        -8,
+        -20,
+        8,
+        4
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        1,
+        5,
+        15,
+        21
+      ],
+      "sourceRgbaSha256": "2ebad6b3d31a3a78e13a664f9a8da89065b7821ec60a7fc209d3a55c69b6c0bd",
+      "sourceVisiblePixels": 172,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        0,
+        6,
+        16,
+        21
+      ],
+      "authoredRgbaSha256": "aee2059cdd25656222632a02c297e3cb1dbf97397a068e5c228863b6593afdc0",
+      "authoredVisiblePixels": 182,
+      "key": "main/cell_006",
+      "nativeBounds": [
+        -8,
+        -20,
+        8,
+        4
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        0,
+        6,
+        16,
+        21
+      ],
+      "sourceRgbaSha256": "ea2aace7713a796dd7a20361297f951c74066075c0fc94dad8a321a9231e451c",
+      "sourceVisiblePixels": 182,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        0,
+        6,
+        15,
+        29
+      ],
+      "authoredRgbaSha256": "04806e72e4286d776be7c79a5626c212f874dc37d30e3a531cef79316a754473",
+      "authoredVisiblePixels": 246,
+      "key": "main/cell_007",
+      "nativeBounds": [
+        -8,
+        -28,
+        8,
+        4
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        0,
+        6,
+        15,
+        29
+      ],
+      "sourceRgbaSha256": "6d7db45b625f94c207223d787acb3a87e4580f6d3f96ffa4e9823512bffcb0ad",
+      "sourceVisiblePixels": 246,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        0,
+        7,
+        15,
+        29
+      ],
+      "authoredRgbaSha256": "caed16c4a6af7343552794dbc0f78e14c17738d4ba7c73fbbeac5ab590177d52",
+      "authoredVisiblePixels": 237,
+      "key": "main/cell_008",
+      "nativeBounds": [
+        -8,
+        -28,
+        8,
+        4
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        0,
+        7,
+        15,
+        29
+      ],
+      "sourceRgbaSha256": "3baeac2e8c54cc65314fa54dd8a25efbb64ad3587770b7203e860845919bff37",
+      "sourceVisiblePixels": 237,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        5,
+        6,
+        27,
+        29
+      ],
+      "authoredRgbaSha256": "8771c93b391ebb6be58dd1be545e709852ecd4ec461788e725caed5ae5249885",
+      "authoredVisiblePixels": 374,
+      "key": "main/cell_009",
+      "nativeBounds": [
+        -16,
+        -28,
+        16,
+        4
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        5,
+        6,
+        27,
+        29
+      ],
+      "sourceRgbaSha256": "741094f85ddc2ea65c10ca0aa7872ac4925e407828c7ea286d9a2776b27115fa",
+      "sourceVisiblePixels": 374,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "authoredRgbaSha256": "2e73f17ea5d3f74d13ebb13d48ec65d5563e5e761934075fe031fa546a13a4c1",
+      "authoredVisiblePixels": 812,
+      "key": "main/cell_010",
+      "nativeBounds": [
+        -16,
+        -28,
+        16,
+        4
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "sourceRgbaSha256": "7ea8678cb039cf9976dbef0d1dca0824483c11eea14a841e5a3758e0d645f84f",
+      "sourceVisiblePixels": 812,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        5,
+        6,
+        27,
+        26
+      ],
+      "authoredRgbaSha256": "69ad5c9bcf66de2c21ff151c13a560bc42586faf23d41bdb1883540785517a0b",
+      "authoredVisiblePixels": 348,
+      "key": "main/cell_011",
+      "nativeBounds": [
+        -16,
+        -28,
+        16,
+        4
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        5,
+        6,
+        27,
+        26
+      ],
+      "sourceRgbaSha256": "96c4ef6684c0d50d33e3c54b1bc318b2c6b83e1c2ad002357d608e8cf07abddf",
+      "sourceVisiblePixels": 348,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        5,
+        5,
+        11,
+        11
+      ],
+      "authoredRgbaSha256": "d467a7538bbeea21179324751777c8b7a3eeb3df91d13f475c250085005c38d7",
+      "authoredVisiblePixels": 24,
+      "key": "main/cell_012",
+      "nativeBounds": [
+        -8,
+        -20,
+        8,
+        -4
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        5,
+        5,
+        11,
+        11
+      ],
+      "sourceRgbaSha256": "f396fb75956ea0047103a0692ce6ef447e0e5f4dcf84ed882c7a44587c565e6b",
+      "sourceVisiblePixels": 24,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    }
+  ],
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "c53a9f242da048680b7c2fd9d63d87122e11090377b3bc0ca1926aa2a16d1cfc",
+  "settingPoseCount": 12,
+  "shippingReady": false,
+  "sourceFiles": {
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/e007_digitama_main.nanr": "fb928129e769b2624cfe82caa8d4f152e09b43d8efe01cb21e10409cd8eb6d99",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/e007_digitama_main.ncbr": "62bb70466c30250062df169f544241437c1fdac0beed9b3d1f9c10147cfd2b3e",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/e007_digitama_main.ncer": "71ca28bfb617eaeca534f50bc53cd8b37d9bcd42b1033c7e424addca994e66c5",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/e007_digitama_main.nclr": "33448e9f8b6fd37b050258a852d7842464844fdb909ba206eeb702c0f22cefc2",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/e007_digitama_sub.nanr": "fb928129e769b2624cfe82caa8d4f152e09b43d8efe01cb21e10409cd8eb6d99",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/e007_digitama_sub.ncer": "3c5913612f564a9ac0b93d30fc6772e7a58f12bfd56bf2133ebf94329ed5c3ae",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/e007_digitama_sub.ncgr": "0ad88eb2bccbdb956a79c0dc68a9ebd9b73cda8687b53ea092ee59890db5a8e6",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/e007_digitama_sub.nclr": "7a35ab8e8eff155c55cffcc35d53cb3aade200ba6573e295483907bcf5f4d04b",
+    "08_FULL_FAMILY_CONVERSION/digimon/e007_digitama_main/animations.json": "62cfe0954beb9796af74a32004c54bf198673821bab1594f626e730327b4ba25",
+    "08_FULL_FAMILY_CONVERSION/digimon/e007_digitama_main/cells.json": "58a81bc5740a5249329cf47b7b2404390048509d0a1f24cd2368fd76f6e2707c",
+    "08_FULL_FAMILY_CONVERSION/digimon/e007_digitama_sub/animations.json": "62cfe0954beb9796af74a32004c54bf198673821bab1594f626e730327b4ba25",
+    "08_FULL_FAMILY_CONVERSION/digimon/e007_digitama_sub/cells.json": "afad7a343de4b10e602ec2c9fc22f2dd76c85c3f1b2bb4de194de4423c599045"
+  },
+  "technicalStatus": "PASS",
+  "visiblePaletteCount": 13
+}

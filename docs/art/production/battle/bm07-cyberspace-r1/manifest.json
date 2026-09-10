@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "batchId": "ART-BATTLE-BM07-CYBERSPACE-R1-2026-09-02",
+  "status": "INTERNAL_PIXI_REVIEW_PASSED_NOT_OWNER_APPROVED_NOT_PROMOTED",
+  "artDirectionBrief": "ART_DIRECTION.md",
+  "promptRecord": "PROMPTS.md",
+  "buildScript": "scripts/build-battle-bm07-cyberspace.py",
+  "rights": {
+    "sourceKind": "ORIGINAL_AI_ASSISTED_GENERATION_WITH_DETERMINISTIC_GEOMETRY",
+    "generator": "OpenAI image generation through Codex imagegen skill",
+    "createdAt": "2026-09-02",
+    "referencePixelReuse": false,
+    "referencePaletteReuse": false,
+    "referenceGeometryReuse": false,
+    "licenseEvidenceStatus": "GENERATION_RECEIPT_RECORDED_TERMS_LINK_PENDING"
+  },
+  "referenceEvidence": {
+    "fieldId": "field_bm07_01",
+    "function": "BATTLE_CYBERSPACE",
+    "nativeDimensions": [
+      416,
+      272
+    ],
+    "catalogDependencies": [],
+    "commonLayer": "NOT_PRESENT_CATALOG",
+    "objectLayer": "NOT_PRESENT_CATALOG",
+    "animation": "NOT_PRESENT",
+    "productionReuse": "STRUCTURAL_FUNCTION_ONLY_NO_ROM_ASSET_REUSE"
+  },
+  "asset": {
+    "id": "production:battle:arena:field-bm07-01",
+    "fieldId": "field_bm07_01",
+    "function": "BATTLE_CYBERSPACE",
+    "sourceFile": "source/field-bm07-01-background-generated.png",
+    "dependencies": [],
+    "runtimeManifest": "assets/production/internal-battle-review/bm07-cyberspace-r1/runtime.review.json"
+  },
+  "reviewPolicy": {
+    "independentSingleLayer": true,
+    "technicalChecksPassed": true,
+    "runtimeQaPassed": true,
+    "runtimeQaReceipt": "docs/reports/art/battle/bm07-cyberspace-r1/browser-qa.json",
+    "humanApproved": false,
+    "readyForRuntime": false,
+    "shippingReady": false
+  }
+}

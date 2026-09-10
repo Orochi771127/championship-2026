@@ -1,0 +1,1532 @@
+{
+  "classification": "RESEARCH_ONLY",
+  "entityId": "m232_plotmon",
+  "masters": [
+    {
+      "canonical": "m232_plotmon/main/cell_000",
+      "masterId": "m232_plotmon:master:46e55946fbc212bd",
+      "members": [
+        "m232_plotmon/main/cell_000",
+        "m232_plotmon/sub/cell_000"
+      ],
+      "size": [
+        176,
+        160
+      ],
+      "sourceRgbaSha256": "5c3bdc52617249807fa0e5158f1397a589890270501d36860115c7ce79544188"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_001",
+      "masterId": "m232_plotmon:master:1b9dfd1bdb4c70c9",
+      "members": [
+        "m232_plotmon/main/cell_001",
+        "m232_plotmon/sub/cell_001"
+      ],
+      "size": [
+        176,
+        152
+      ],
+      "sourceRgbaSha256": "702c0d366bcc1098269db7314905ca0a394e6f98a6d840cf832f1d8aea489249"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_002",
+      "masterId": "m232_plotmon:master:0f364e412af7ff89",
+      "members": [
+        "m232_plotmon/main/cell_002",
+        "m232_plotmon/sub/cell_002"
+      ],
+      "size": [
+        176,
+        160
+      ],
+      "sourceRgbaSha256": "69585f5189f3fd1adaad5df5849566307d98386b18412cdce3e5f8ef8450eeaa"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_003",
+      "masterId": "m232_plotmon:master:246a608778d078f6",
+      "members": [
+        "m232_plotmon/main/cell_003",
+        "m232_plotmon/sub/cell_003"
+      ],
+      "size": [
+        176,
+        152
+      ],
+      "sourceRgbaSha256": "2a9b8d89f7517163545ca5546e2a96f27fb7a509366f414a16bb2ac7812bc9b9"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_004",
+      "masterId": "m232_plotmon:master:ea0facc108dafc46",
+      "members": [
+        "m232_plotmon/main/cell_004",
+        "m232_plotmon/main/cell_006"
+      ],
+      "size": [
+        176,
+        160
+      ],
+      "sourceRgbaSha256": "280f1cf4a7e03ce43e231d70b7beafa2acb94ca615183910f627860b931d82c1"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_005",
+      "masterId": "m232_plotmon:master:3ae029d26b9a9583",
+      "members": [
+        "m232_plotmon/main/cell_005",
+        "m232_plotmon/main/cell_007"
+      ],
+      "size": [
+        228,
+        228
+      ],
+      "sourceRgbaSha256": "530b40624e78ed355215b8c91e81fdbb693774f979f56372bd548eee0acba8f0"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_008",
+      "masterId": "m232_plotmon:master:6457ece41e7113f3",
+      "members": [
+        "m232_plotmon/main/cell_008"
+      ],
+      "size": [
+        192,
+        176
+      ],
+      "sourceRgbaSha256": "90bbcd7524ed7028a686b7276049667d19ae34c7a84ba991ba5ed0b715983768"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_009",
+      "masterId": "m232_plotmon:master:e7d8028abb71c8e3",
+      "members": [
+        "m232_plotmon/main/cell_009",
+        "m232_plotmon/main/cell_060",
+        "m232_plotmon/sub/cell_004",
+        "m232_plotmon/sub/cell_017"
+      ],
+      "size": [
+        224,
+        96
+      ],
+      "sourceRgbaSha256": "9007b4c22b56c3c4f614c10c83a5bdc594ac4e5eb68847e19dea0ee387a5f2ac"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_010",
+      "masterId": "m232_plotmon:master:dec5013a6da2e44f",
+      "members": [
+        "m232_plotmon/main/cell_010",
+        "m232_plotmon/main/cell_061",
+        "m232_plotmon/sub/cell_005"
+      ],
+      "size": [
+        176,
+        176
+      ],
+      "sourceRgbaSha256": "9dcfe6e89285165efbf2779c2cfe28690fd79aa65816a76b67673da131013bd9"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_011",
+      "masterId": "m232_plotmon:master:6fc03a39424373ea",
+      "members": [
+        "m232_plotmon/main/cell_011",
+        "m232_plotmon/main/cell_015"
+      ],
+      "size": [
+        176,
+        152
+      ],
+      "sourceRgbaSha256": "cd84650f3e25fabd946e5c9564f106c49fb8dc5ffaa01ee0459c5f597995de01"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_012",
+      "masterId": "m232_plotmon:master:6285ecce4ca09f65",
+      "members": [
+        "m232_plotmon/main/cell_012",
+        "m232_plotmon/main/cell_016"
+      ],
+      "size": [
+        200,
+        176
+      ],
+      "sourceRgbaSha256": "b0beee2eda08b8d62f8ed7225168f1f99056ddc73cc638025c91d057a81c8766"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_013",
+      "masterId": "m232_plotmon:master:991b8b1170a26e7c",
+      "members": [
+        "m232_plotmon/main/cell_013",
+        "m232_plotmon/main/cell_017"
+      ],
+      "size": [
+        184,
+        168
+      ],
+      "sourceRgbaSha256": "cf3a62a83135aa99caa9fb4abce7194dd0efdfc1fb8996cc719c826c233e5fc1"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_014",
+      "masterId": "m232_plotmon:master:e91e2721bb0117e9",
+      "members": [
+        "m232_plotmon/main/cell_014",
+        "m232_plotmon/main/cell_018"
+      ],
+      "size": [
+        200,
+        136
+      ],
+      "sourceRgbaSha256": "4d3f5afbab2174c5c68f9ad0e492e38fc86674a468597d882b35f73fe370f953"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_019",
+      "masterId": "m232_plotmon:master:9b0c54da85727340",
+      "members": [
+        "m232_plotmon/main/cell_019"
+      ],
+      "size": [
+        168,
+        152
+      ],
+      "sourceRgbaSha256": "4c162132948b3f2f4410024a5ca3d6d498c2510516543520c21b7376fa05b8fa"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_020",
+      "masterId": "m232_plotmon:master:4c030d4d6020656e",
+      "members": [
+        "m232_plotmon/main/cell_020"
+      ],
+      "size": [
+        200,
+        176
+      ],
+      "sourceRgbaSha256": "62ddbeb699d84cea321e2c18803a48dcbd379d4ae193d8e13cb691f227ea5ed3"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_021",
+      "masterId": "m232_plotmon:master:1e00aacd9d34aa22",
+      "members": [
+        "m232_plotmon/main/cell_021"
+      ],
+      "size": [
+        176,
+        160
+      ],
+      "sourceRgbaSha256": "be957763d1bbf607f8726397fec69fceb6788900754bf005f9d41a8fde9f5ee5"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_022",
+      "masterId": "m232_plotmon:master:973a2d5a0898ab5f",
+      "members": [
+        "m232_plotmon/main/cell_022"
+      ],
+      "size": [
+        228,
+        228
+      ],
+      "sourceRgbaSha256": "a5b644cc8f0d4bcd9c835da7c55ec68702e44ea10b990cb7eb99764136391fac"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_023",
+      "masterId": "m232_plotmon:master:2059fd2aafab2715",
+      "members": [
+        "m232_plotmon/main/cell_023",
+        "m232_plotmon/sub/cell_006"
+      ],
+      "size": [
+        192,
+        120
+      ],
+      "sourceRgbaSha256": "4b09963079df45166d42fad5e36cc9666dd8bd717558dfce27fd75e5e223d7b6"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_024",
+      "masterId": "m232_plotmon:master:f761a2a9ae442073",
+      "members": [
+        "m232_plotmon/main/cell_024"
+      ],
+      "size": [
+        192,
+        168
+      ],
+      "sourceRgbaSha256": "c8f678d879775661adc8ae6ce4323b9d610a0c974993a9c0ffc93b8fa5f85ac5"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_025",
+      "masterId": "m232_plotmon:master:27106b3c183e5a49",
+      "members": [
+        "m232_plotmon/main/cell_025"
+      ],
+      "size": [
+        192,
+        144
+      ],
+      "sourceRgbaSha256": "bccebf9cc2c5d0082de525da79f3b1dfba9e0ad1a84acaeb551e789c7a7eb4f7"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_026",
+      "masterId": "m232_plotmon:master:d2cd24c998ea1824",
+      "members": [
+        "m232_plotmon/main/cell_026",
+        "m232_plotmon/sub/cell_007"
+      ],
+      "size": [
+        192,
+        120
+      ],
+      "sourceRgbaSha256": "498b85b2427c1fc38d9136aae589b6bc5ddb7afa6b61ed2cb216b246841dcb2d"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_027",
+      "masterId": "m232_plotmon:master:c4c1637867183870",
+      "members": [
+        "m232_plotmon/main/cell_027"
+      ],
+      "size": [
+        176,
+        160
+      ],
+      "sourceRgbaSha256": "41533d11863cd5fb08cb1cc644fdce670938adfe4630ea9612d3a76f6a3293aa"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_028",
+      "masterId": "m232_plotmon:master:e8fb19aecf6f9dd8",
+      "members": [
+        "m232_plotmon/main/cell_028"
+      ],
+      "size": [
+        176,
+        152
+      ],
+      "sourceRgbaSha256": "b6998daa61e88577091c4aafd33e4a47de2c31c0aabe951db35a7ad0e62d2335"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_029",
+      "masterId": "m232_plotmon:master:138a4a302f5464fc",
+      "members": [
+        "m232_plotmon/main/cell_029"
+      ],
+      "size": [
+        176,
+        160
+      ],
+      "sourceRgbaSha256": "4e1b9e57ca4986e2f232abda9a45a69b64121370b64d652081fdca1f1cf257e3"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_030",
+      "masterId": "m232_plotmon:master:5d8f1cee5b060a8d",
+      "members": [
+        "m232_plotmon/main/cell_030"
+      ],
+      "size": [
+        176,
+        152
+      ],
+      "sourceRgbaSha256": "9a45060ae03317e120851fe5c6f9fbc84bb080afcbeae6af281d01d89c9b54de"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_031",
+      "masterId": "m232_plotmon:master:c0619070035e06d2",
+      "members": [
+        "m232_plotmon/main/cell_031",
+        "m232_plotmon/main/cell_033"
+      ],
+      "size": [
+        176,
+        160
+      ],
+      "sourceRgbaSha256": "90138ccb44d87cbd4619ee75ed817644d2cdbd9102afbe3d4bae1001e5e6a8d8"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_032",
+      "masterId": "m232_plotmon:master:54d47b4bcc2197fb",
+      "members": [
+        "m232_plotmon/main/cell_032",
+        "m232_plotmon/main/cell_034"
+      ],
+      "size": [
+        228,
+        228
+      ],
+      "sourceRgbaSha256": "814810ebaba406b7dd67730726de1e454b0f0ec7b2bfa840fe18e8b331333fbd"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_035",
+      "masterId": "m232_plotmon:master:47398297b9b4a199",
+      "members": [
+        "m232_plotmon/main/cell_035"
+      ],
+      "size": [
+        192,
+        176
+      ],
+      "sourceRgbaSha256": "98958ab521fb2183f5ebc1402ff47151d48400bd623efd6c5a30f932ac32fa52"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_036",
+      "masterId": "m232_plotmon:master:2fb299489d395a4b",
+      "members": [
+        "m232_plotmon/main/cell_036"
+      ],
+      "size": [
+        168,
+        152
+      ],
+      "sourceRgbaSha256": "f06d69330249b680d2acc0a36d00aa218c43f049daf8167f9c1fd687e18c2374"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_037",
+      "masterId": "m232_plotmon:master:585eee941188d242",
+      "members": [
+        "m232_plotmon/main/cell_037"
+      ],
+      "size": [
+        200,
+        176
+      ],
+      "sourceRgbaSha256": "658608236b90cfd790ee4c97b8ce6a1272a2dbc2477be164ea81db59b08bac32"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_038",
+      "masterId": "m232_plotmon:master:55531aa9ddbe186f",
+      "members": [
+        "m232_plotmon/main/cell_038"
+      ],
+      "size": [
+        176,
+        160
+      ],
+      "sourceRgbaSha256": "6690315daa409f5961701cba2d66db120868ed0b421df17a68ba0fa4bb965bd0"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_039",
+      "masterId": "m232_plotmon:master:b6f26038070ade8f",
+      "members": [
+        "m232_plotmon/main/cell_039"
+      ],
+      "size": [
+        228,
+        228
+      ],
+      "sourceRgbaSha256": "41d8f73f135ed1c3aaf45ed18134d96d862218950433c890f93248f333e0e4e5"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_040",
+      "masterId": "m232_plotmon:master:a9a319b40cd0f72f",
+      "members": [
+        "m232_plotmon/main/cell_040"
+      ],
+      "size": [
+        192,
+        120
+      ],
+      "sourceRgbaSha256": "5abb369914408c0da3e77f09034549cc409d7a3311e67f61531e797e430b8af8"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_041",
+      "masterId": "m232_plotmon:master:cae7d499610a7b28",
+      "members": [
+        "m232_plotmon/main/cell_041"
+      ],
+      "size": [
+        192,
+        168
+      ],
+      "sourceRgbaSha256": "f1482810601ef530cd6e71aab727450654a6c22a772d03dc2c91a1d50f2e2b56"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_042",
+      "masterId": "m232_plotmon:master:f05523b29aa79ac7",
+      "members": [
+        "m232_plotmon/main/cell_042"
+      ],
+      "size": [
+        176,
+        160
+      ],
+      "sourceRgbaSha256": "5acd45cca05d9bf9857a4b7236fed4ce5f0b49f19e33cb727b4484f3c800e261"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_043",
+      "masterId": "m232_plotmon:master:4bd24590b35b14ce",
+      "members": [
+        "m232_plotmon/main/cell_043"
+      ],
+      "size": [
+        192,
+        120
+      ],
+      "sourceRgbaSha256": "0ae62703ba98ecfeb1cc519e276ca58ec0ee1e4abaea367f3c7258cfe5eb8bc5"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_044",
+      "masterId": "m232_plotmon:master:a0be246a3ee59217",
+      "members": [
+        "m232_plotmon/main/cell_044"
+      ],
+      "size": [
+        192,
+        176
+      ],
+      "sourceRgbaSha256": "3b1a281bc743d21dbfd56e19763cfb1c13d956c2fcb4b611637d099a3803b0da"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_045",
+      "masterId": "m232_plotmon:master:094258f5ca0d1c8f",
+      "members": [
+        "m232_plotmon/main/cell_045"
+      ],
+      "size": [
+        192,
+        176
+      ],
+      "sourceRgbaSha256": "fc34e63531a143f8f6509b7143ffdf65c4568aa43c3d51009b767bcc742fe67f"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_046",
+      "masterId": "m232_plotmon:master:82a4993c25923103",
+      "members": [
+        "m232_plotmon/main/cell_046",
+        "m232_plotmon/sub/cell_008"
+      ],
+      "size": [
+        176,
+        160
+      ],
+      "sourceRgbaSha256": "d9c5d7c0aa52d1e96f5ad87824f268b3d51eae20e03a028cef73ab5b2d85a40b"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_047",
+      "masterId": "m232_plotmon:master:18ccccf79f28ffa6",
+      "members": [
+        "m232_plotmon/main/cell_047",
+        "m232_plotmon/main/cell_051",
+        "m232_plotmon/sub/cell_009",
+        "m232_plotmon/sub/cell_013"
+      ],
+      "size": [
+        176,
+        152
+      ],
+      "sourceRgbaSha256": "b189040dbfe71376e6afb75fa6fedb0c83389dbc5bb7207074b59d090f3cd766"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_048",
+      "masterId": "m232_plotmon:master:49eab9c4cb17c89d",
+      "members": [
+        "m232_plotmon/main/cell_048",
+        "m232_plotmon/sub/cell_010"
+      ],
+      "size": [
+        168,
+        160
+      ],
+      "sourceRgbaSha256": "072630640e4cd8971707d7d6def46aa60830dffd1c960c8f54ea4ea9cf02a259"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_049",
+      "masterId": "m232_plotmon:master:bbebf830bc81c86a",
+      "members": [
+        "m232_plotmon/main/cell_049",
+        "m232_plotmon/main/cell_055",
+        "m232_plotmon/sub/cell_011"
+      ],
+      "size": [
+        176,
+        160
+      ],
+      "sourceRgbaSha256": "ef162dd74065a302dd822100a720fda4809324e5bb6a091ec7ca27a02a82cd8e"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_050",
+      "masterId": "m232_plotmon:master:7917d0e47b6b6524",
+      "members": [
+        "m232_plotmon/main/cell_050",
+        "m232_plotmon/main/cell_056",
+        "m232_plotmon/sub/cell_012"
+      ],
+      "size": [
+        216,
+        176
+      ],
+      "sourceRgbaSha256": "a3fbc5eddc8e1e017947e6daa6cfff52e3f4e7122cc7c0fb184c39e178067ebe"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_052",
+      "masterId": "m232_plotmon:master:06f7ca6a7569d9a1",
+      "members": [
+        "m232_plotmon/main/cell_052",
+        "m232_plotmon/sub/cell_014"
+      ],
+      "size": [
+        192,
+        168
+      ],
+      "sourceRgbaSha256": "12fed7b7332f9d4ff4ce9cb44e10c5d7971bbf866ac009a72fcebb4cd9bd0e15"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_053",
+      "masterId": "m232_plotmon:master:59aa23a530c5aa57",
+      "members": [
+        "m232_plotmon/main/cell_053",
+        "m232_plotmon/sub/cell_015"
+      ],
+      "size": [
+        184,
+        128
+      ],
+      "sourceRgbaSha256": "c12c8cb04366e206c74e9805566a45fede91903501d4590540d4f8212057b0e3"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_054",
+      "masterId": "m232_plotmon:master:b583099d28dd2f21",
+      "members": [
+        "m232_plotmon/main/cell_054"
+      ],
+      "size": [
+        184,
+        136
+      ],
+      "sourceRgbaSha256": "bf4c9d1e6d912fb43fa7b4654d16c8c1425c6a2f623f3be0ffdfceeb0329d7fe"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_057",
+      "masterId": "m232_plotmon:master:378213475f82b7af",
+      "members": [
+        "m232_plotmon/main/cell_057"
+      ],
+      "size": [
+        176,
+        152
+      ],
+      "sourceRgbaSha256": "7d68355fbaa7d95ff04b69d711b053ba21559fb2af616ef30b201ccf5190d923"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_058",
+      "masterId": "m232_plotmon:master:e727ffd7138e6312",
+      "members": [
+        "m232_plotmon/main/cell_058"
+      ],
+      "size": [
+        200,
+        160
+      ],
+      "sourceRgbaSha256": "9bdafad8350a2ccf2a4ab31cb52763ee6674ab3c73529bd9dc941ee126f3059b"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_059",
+      "masterId": "m232_plotmon:master:5e2bacd9fd2f32b6",
+      "members": [
+        "m232_plotmon/main/cell_059",
+        "m232_plotmon/sub/cell_016"
+      ],
+      "size": [
+        176,
+        176
+      ],
+      "sourceRgbaSha256": "16fa71424addc579057638caf7780c74f29430cb107350c7c46b565f5aacd97b"
+    },
+    {
+      "canonical": "m232_plotmon/main/cell_062",
+      "masterId": "m232_plotmon:master:572a88c2ffe33614",
+      "members": [
+        "m232_plotmon/main/cell_062"
+      ],
+      "size": [
+        176,
+        160
+      ],
+      "sourceRgbaSha256": "a9985eafd5ed83f16904fd8fb2a1642e7df6631a792d24822beed07b644e2aef"
+    }
+  ],
+  "reusePolicy": "EXACT_RGBA_AND_DIMENSIONS_WITHIN_ENTITY_ONLY_PLACEMENT_RETAINED_PER_SLOT",
+  "schemaVersion": 1,
+  "slots": [
+    {
+      "declaredPreCompositeRgbaSha256": "ce5996b2c415052bf8ba603b91fb47e95cb2f9687526776bed795fd246e5bc6e",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:46e55946fbc212bd",
+      "sourceRgbaSha256": "5c3bdc52617249807fa0e5158f1397a589890270501d36860115c7ce79544188",
+      "sourceSize": [
+        176,
+        160
+      ],
+      "texture": "m232_plotmon/main/cell_000"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b94c181f14b1623adfd8c2d0ca6b5cd84d2810b64e56336d43fd0e9aa6d37b2f",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:1b9dfd1bdb4c70c9",
+      "sourceRgbaSha256": "702c0d366bcc1098269db7314905ca0a394e6f98a6d840cf832f1d8aea489249",
+      "sourceSize": [
+        176,
+        152
+      ],
+      "texture": "m232_plotmon/main/cell_001"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "a3f661510c13cf1c017b50bca650da0a6b79a165f87e42e60cda9a20e0f34cbe",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:0f364e412af7ff89",
+      "sourceRgbaSha256": "69585f5189f3fd1adaad5df5849566307d98386b18412cdce3e5f8ef8450eeaa",
+      "sourceSize": [
+        176,
+        160
+      ],
+      "texture": "m232_plotmon/main/cell_002"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b9e7452d4a0d2a73eb277831821d6a21dd84ce78c438ec4ca9666934ee0551b3",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:246a608778d078f6",
+      "sourceRgbaSha256": "2a9b8d89f7517163545ca5546e2a96f27fb7a509366f414a16bb2ac7812bc9b9",
+      "sourceSize": [
+        176,
+        152
+      ],
+      "texture": "m232_plotmon/main/cell_003"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "51fcf5ad633b3ba60496e02ea9f1c9644bcdbeeeb7f75fbb7e331142e6fa1bd8",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:ea0facc108dafc46",
+      "sourceRgbaSha256": "280f1cf4a7e03ce43e231d70b7beafa2acb94ca615183910f627860b931d82c1",
+      "sourceSize": [
+        176,
+        160
+      ],
+      "texture": "m232_plotmon/main/cell_004"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "3356c61ccf364d93f725486da459610cf4d10332f8c5b72a6ffa59968c5f341e",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:3ae029d26b9a9583",
+      "sourceRgbaSha256": "530b40624e78ed355215b8c91e81fdbb693774f979f56372bd548eee0acba8f0",
+      "sourceSize": [
+        228,
+        228
+      ],
+      "texture": "m232_plotmon/main/cell_005"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "51fcf5ad633b3ba60496e02ea9f1c9644bcdbeeeb7f75fbb7e331142e6fa1bd8",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:ea0facc108dafc46",
+      "sourceRgbaSha256": "280f1cf4a7e03ce43e231d70b7beafa2acb94ca615183910f627860b931d82c1",
+      "sourceSize": [
+        176,
+        160
+      ],
+      "texture": "m232_plotmon/main/cell_006"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "3356c61ccf364d93f725486da459610cf4d10332f8c5b72a6ffa59968c5f341e",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:3ae029d26b9a9583",
+      "sourceRgbaSha256": "530b40624e78ed355215b8c91e81fdbb693774f979f56372bd548eee0acba8f0",
+      "sourceSize": [
+        228,
+        228
+      ],
+      "texture": "m232_plotmon/main/cell_007"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e651a1067a675da2706149c7f97b49e93282097ab469f5f5da9b8ca853b704fe",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:6457ece41e7113f3",
+      "sourceRgbaSha256": "90bbcd7524ed7028a686b7276049667d19ae34c7a84ba991ba5ed0b715983768",
+      "sourceSize": [
+        192,
+        176
+      ],
+      "texture": "m232_plotmon/main/cell_008"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "7bfd04eff57e15a32e95dd4e757e966b2ce9bcec897dd7ad0866bec9b5dd75eb",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:e7d8028abb71c8e3",
+      "sourceRgbaSha256": "9007b4c22b56c3c4f614c10c83a5bdc594ac4e5eb68847e19dea0ee387a5f2ac",
+      "sourceSize": [
+        224,
+        96
+      ],
+      "texture": "m232_plotmon/main/cell_009"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "1298089220f4101131540371e04c5f9b0d9575e5ebe34aa797b1ea8ff0b9af78",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:dec5013a6da2e44f",
+      "sourceRgbaSha256": "9dcfe6e89285165efbf2779c2cfe28690fd79aa65816a76b67673da131013bd9",
+      "sourceSize": [
+        176,
+        176
+      ],
+      "texture": "m232_plotmon/main/cell_010"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "aa5e43cc3864cf3da551890a1629536740212ff7f6dc6c03f821956387ba2e88",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:6fc03a39424373ea",
+      "sourceRgbaSha256": "cd84650f3e25fabd946e5c9564f106c49fb8dc5ffaa01ee0459c5f597995de01",
+      "sourceSize": [
+        176,
+        152
+      ],
+      "texture": "m232_plotmon/main/cell_011"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "78ab991d568dd863fd3bdf2bebd0638ba7d47b78dd2e41a235beddf7c7ebbd3f",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:6285ecce4ca09f65",
+      "sourceRgbaSha256": "b0beee2eda08b8d62f8ed7225168f1f99056ddc73cc638025c91d057a81c8766",
+      "sourceSize": [
+        200,
+        176
+      ],
+      "texture": "m232_plotmon/main/cell_012"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "4765c7653f13c4dca5859fc9ebbc541df06e591d44aeffb78f82b26f04d71725",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:991b8b1170a26e7c",
+      "sourceRgbaSha256": "cf3a62a83135aa99caa9fb4abce7194dd0efdfc1fb8996cc719c826c233e5fc1",
+      "sourceSize": [
+        184,
+        168
+      ],
+      "texture": "m232_plotmon/main/cell_013"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "f8dbced532d36455e4130c6e5cdf5ca40950feb2d93ecd7092d52e4590e98855",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:e91e2721bb0117e9",
+      "sourceRgbaSha256": "4d3f5afbab2174c5c68f9ad0e492e38fc86674a468597d882b35f73fe370f953",
+      "sourceSize": [
+        200,
+        136
+      ],
+      "texture": "m232_plotmon/main/cell_014"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "aa5e43cc3864cf3da551890a1629536740212ff7f6dc6c03f821956387ba2e88",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:6fc03a39424373ea",
+      "sourceRgbaSha256": "cd84650f3e25fabd946e5c9564f106c49fb8dc5ffaa01ee0459c5f597995de01",
+      "sourceSize": [
+        176,
+        152
+      ],
+      "texture": "m232_plotmon/main/cell_015"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "78ab991d568dd863fd3bdf2bebd0638ba7d47b78dd2e41a235beddf7c7ebbd3f",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:6285ecce4ca09f65",
+      "sourceRgbaSha256": "b0beee2eda08b8d62f8ed7225168f1f99056ddc73cc638025c91d057a81c8766",
+      "sourceSize": [
+        200,
+        176
+      ],
+      "texture": "m232_plotmon/main/cell_016"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "4765c7653f13c4dca5859fc9ebbc541df06e591d44aeffb78f82b26f04d71725",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:991b8b1170a26e7c",
+      "sourceRgbaSha256": "cf3a62a83135aa99caa9fb4abce7194dd0efdfc1fb8996cc719c826c233e5fc1",
+      "sourceSize": [
+        184,
+        168
+      ],
+      "texture": "m232_plotmon/main/cell_017"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "f8dbced532d36455e4130c6e5cdf5ca40950feb2d93ecd7092d52e4590e98855",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:e91e2721bb0117e9",
+      "sourceRgbaSha256": "4d3f5afbab2174c5c68f9ad0e492e38fc86674a468597d882b35f73fe370f953",
+      "sourceSize": [
+        200,
+        136
+      ],
+      "texture": "m232_plotmon/main/cell_018"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "064fa9e75f1d97833e830d8f3d04453e574d649754b5ceae8a2da461d76175ff",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:9b0c54da85727340",
+      "sourceRgbaSha256": "4c162132948b3f2f4410024a5ca3d6d498c2510516543520c21b7376fa05b8fa",
+      "sourceSize": [
+        168,
+        152
+      ],
+      "texture": "m232_plotmon/main/cell_019"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "03a88d7dd67c12453fc5202e35a474f021f7730d4f34ca185af634e5dd2a590e",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:4c030d4d6020656e",
+      "sourceRgbaSha256": "62ddbeb699d84cea321e2c18803a48dcbd379d4ae193d8e13cb691f227ea5ed3",
+      "sourceSize": [
+        200,
+        176
+      ],
+      "texture": "m232_plotmon/main/cell_020"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "315509a26ab1afa7c6a1466ffc55e7d1f5bcbd93c95a8430f89a2fad0f6fde3d",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:1e00aacd9d34aa22",
+      "sourceRgbaSha256": "be957763d1bbf607f8726397fec69fceb6788900754bf005f9d41a8fde9f5ee5",
+      "sourceSize": [
+        176,
+        160
+      ],
+      "texture": "m232_plotmon/main/cell_021"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "58f5fd8b2341ddbb9f962f5d71ade9d50838a61d4f725b6070d4c696ff8c17b8",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:973a2d5a0898ab5f",
+      "sourceRgbaSha256": "a5b644cc8f0d4bcd9c835da7c55ec68702e44ea10b990cb7eb99764136391fac",
+      "sourceSize": [
+        228,
+        228
+      ],
+      "texture": "m232_plotmon/main/cell_022"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "d9d54bba5b9061a9eee47bfd205ccd495088baea5c93c66fd59d40496fc09ab2",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:2059fd2aafab2715",
+      "sourceRgbaSha256": "4b09963079df45166d42fad5e36cc9666dd8bd717558dfce27fd75e5e223d7b6",
+      "sourceSize": [
+        192,
+        120
+      ],
+      "texture": "m232_plotmon/main/cell_023"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "1254a7dfd2290a5c43432404ec27f3d5f1c41198bc1828cb6e89749446fd729e",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:f761a2a9ae442073",
+      "sourceRgbaSha256": "c8f678d879775661adc8ae6ce4323b9d610a0c974993a9c0ffc93b8fa5f85ac5",
+      "sourceSize": [
+        192,
+        168
+      ],
+      "texture": "m232_plotmon/main/cell_024"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "18a45870acbc51ab9c7769138f5a39e0cddd4b482a357080bc117ee27982b964",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:27106b3c183e5a49",
+      "sourceRgbaSha256": "bccebf9cc2c5d0082de525da79f3b1dfba9e0ad1a84acaeb551e789c7a7eb4f7",
+      "sourceSize": [
+        192,
+        144
+      ],
+      "texture": "m232_plotmon/main/cell_025"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "6a92d214a5d08f2240463f139bce51d5e4d8a3f413f65dfc401bb7d2a28f3460",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:d2cd24c998ea1824",
+      "sourceRgbaSha256": "498b85b2427c1fc38d9136aae589b6bc5ddb7afa6b61ed2cb216b246841dcb2d",
+      "sourceSize": [
+        192,
+        120
+      ],
+      "texture": "m232_plotmon/main/cell_026"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "59d521185b5ef914cfbf71c336fc06c3af50236f5bc4a1c1607fae12f49a2c27",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:c4c1637867183870",
+      "sourceRgbaSha256": "41533d11863cd5fb08cb1cc644fdce670938adfe4630ea9612d3a76f6a3293aa",
+      "sourceSize": [
+        176,
+        160
+      ],
+      "texture": "m232_plotmon/main/cell_027"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "bd575692b3aafc1833ac5577276dca06ce652595b4884e91409f75dc33df3814",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:e8fb19aecf6f9dd8",
+      "sourceRgbaSha256": "b6998daa61e88577091c4aafd33e4a47de2c31c0aabe951db35a7ad0e62d2335",
+      "sourceSize": [
+        176,
+        152
+      ],
+      "texture": "m232_plotmon/main/cell_028"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "024063a70d90ba9da82e982048c25de5658fd81706832788b78f6ddf75c4db83",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:138a4a302f5464fc",
+      "sourceRgbaSha256": "4e1b9e57ca4986e2f232abda9a45a69b64121370b64d652081fdca1f1cf257e3",
+      "sourceSize": [
+        176,
+        160
+      ],
+      "texture": "m232_plotmon/main/cell_029"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "8d29b7377adeb68883d171b0695bed55bca20abe8cdb7bacfff1f4fc37bf40aa",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:5d8f1cee5b060a8d",
+      "sourceRgbaSha256": "9a45060ae03317e120851fe5c6f9fbc84bb080afcbeae6af281d01d89c9b54de",
+      "sourceSize": [
+        176,
+        152
+      ],
+      "texture": "m232_plotmon/main/cell_030"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "3884585270efbbfc6480361d02d4a0ecc3e73d86cf8f3008af9bbd15698d5b88",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:c0619070035e06d2",
+      "sourceRgbaSha256": "90138ccb44d87cbd4619ee75ed817644d2cdbd9102afbe3d4bae1001e5e6a8d8",
+      "sourceSize": [
+        176,
+        160
+      ],
+      "texture": "m232_plotmon/main/cell_031"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "c2fadf35b339f28832e25c9d57790132d94d80a5e64464cef5d54dc20a65926d",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:54d47b4bcc2197fb",
+      "sourceRgbaSha256": "814810ebaba406b7dd67730726de1e454b0f0ec7b2bfa840fe18e8b331333fbd",
+      "sourceSize": [
+        228,
+        228
+      ],
+      "texture": "m232_plotmon/main/cell_032"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "3884585270efbbfc6480361d02d4a0ecc3e73d86cf8f3008af9bbd15698d5b88",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:c0619070035e06d2",
+      "sourceRgbaSha256": "90138ccb44d87cbd4619ee75ed817644d2cdbd9102afbe3d4bae1001e5e6a8d8",
+      "sourceSize": [
+        176,
+        160
+      ],
+      "texture": "m232_plotmon/main/cell_033"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "c2fadf35b339f28832e25c9d57790132d94d80a5e64464cef5d54dc20a65926d",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:54d47b4bcc2197fb",
+      "sourceRgbaSha256": "814810ebaba406b7dd67730726de1e454b0f0ec7b2bfa840fe18e8b331333fbd",
+      "sourceSize": [
+        228,
+        228
+      ],
+      "texture": "m232_plotmon/main/cell_034"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "d73eca3cc6f53fcd3a706a6a67d325eb9a3ffd50f2ef397e33994c508e7bb701",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:47398297b9b4a199",
+      "sourceRgbaSha256": "98958ab521fb2183f5ebc1402ff47151d48400bd623efd6c5a30f932ac32fa52",
+      "sourceSize": [
+        192,
+        176
+      ],
+      "texture": "m232_plotmon/main/cell_035"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "d4778e9bcf37dde32c6ee732f6d1ec8ed7bff8fe1b517d3c695722d05ea4346f",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:2fb299489d395a4b",
+      "sourceRgbaSha256": "f06d69330249b680d2acc0a36d00aa218c43f049daf8167f9c1fd687e18c2374",
+      "sourceSize": [
+        168,
+        152
+      ],
+      "texture": "m232_plotmon/main/cell_036"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "a7c3136d2b1de0dbf536d07ec3aadf2803082f9abe5df199e3a433152985a175",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:585eee941188d242",
+      "sourceRgbaSha256": "658608236b90cfd790ee4c97b8ce6a1272a2dbc2477be164ea81db59b08bac32",
+      "sourceSize": [
+        200,
+        176
+      ],
+      "texture": "m232_plotmon/main/cell_037"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "07f4a0fd5606c5cddde3b097a5409dbd73420458f4810cd0249b974196362c33",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:55531aa9ddbe186f",
+      "sourceRgbaSha256": "6690315daa409f5961701cba2d66db120868ed0b421df17a68ba0fa4bb965bd0",
+      "sourceSize": [
+        176,
+        160
+      ],
+      "texture": "m232_plotmon/main/cell_038"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "7aaf41e14cd41825dd955cd8898ac396632229a2276287ebee1c6c5f215a7584",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:b6f26038070ade8f",
+      "sourceRgbaSha256": "41d8f73f135ed1c3aaf45ed18134d96d862218950433c890f93248f333e0e4e5",
+      "sourceSize": [
+        228,
+        228
+      ],
+      "texture": "m232_plotmon/main/cell_039"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "c1764fc33ef28182584fd2a5a2c2e6b1a11afc658b0b92219cd0f7bb22ee6d1a",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:a9a319b40cd0f72f",
+      "sourceRgbaSha256": "5abb369914408c0da3e77f09034549cc409d7a3311e67f61531e797e430b8af8",
+      "sourceSize": [
+        192,
+        120
+      ],
+      "texture": "m232_plotmon/main/cell_040"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "6eba44115d836b8dac384e04d7b10cb093eb6d2aabd06c4cd5ce8e39f2bf3e17",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:cae7d499610a7b28",
+      "sourceRgbaSha256": "f1482810601ef530cd6e71aab727450654a6c22a772d03dc2c91a1d50f2e2b56",
+      "sourceSize": [
+        192,
+        168
+      ],
+      "texture": "m232_plotmon/main/cell_041"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "7133f77751bbd1e445cbde18a6cfd6d0ebca8a1141ed98ec91e181d20ca8b470",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:f05523b29aa79ac7",
+      "sourceRgbaSha256": "5acd45cca05d9bf9857a4b7236fed4ce5f0b49f19e33cb727b4484f3c800e261",
+      "sourceSize": [
+        176,
+        160
+      ],
+      "texture": "m232_plotmon/main/cell_042"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "82cba1ad69bc335c4c4a3e27edf38bb54052223fcee6cc7c86e7dd90feac119c",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:4bd24590b35b14ce",
+      "sourceRgbaSha256": "0ae62703ba98ecfeb1cc519e276ca58ec0ee1e4abaea367f3c7258cfe5eb8bc5",
+      "sourceSize": [
+        192,
+        120
+      ],
+      "texture": "m232_plotmon/main/cell_043"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "14900c52d3d31ed0a8b35a68cf5a4b1f7ba9d1b69282cf608bce5541d27b51ec",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:a0be246a3ee59217",
+      "sourceRgbaSha256": "3b1a281bc743d21dbfd56e19763cfb1c13d956c2fcb4b611637d099a3803b0da",
+      "sourceSize": [
+        192,
+        176
+      ],
+      "texture": "m232_plotmon/main/cell_044"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "f33b48544f63aae6a3108a7f2f893894ee5feecd59485311aad024898b8a445b",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:094258f5ca0d1c8f",
+      "sourceRgbaSha256": "fc34e63531a143f8f6509b7143ffdf65c4568aa43c3d51009b767bcc742fe67f",
+      "sourceSize": [
+        192,
+        176
+      ],
+      "texture": "m232_plotmon/main/cell_045"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "76ea0502bb0d3299296c28920436ff1448f81d624dc53b5a2c18c80996a2cf88",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:82a4993c25923103",
+      "sourceRgbaSha256": "d9c5d7c0aa52d1e96f5ad87824f268b3d51eae20e03a028cef73ab5b2d85a40b",
+      "sourceSize": [
+        176,
+        160
+      ],
+      "texture": "m232_plotmon/main/cell_046"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "6cd2e406dbad2d6294fda02b2254f40fe52648fcd9a7ffbaa9d97f3aa4fe4447",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:18ccccf79f28ffa6",
+      "sourceRgbaSha256": "b189040dbfe71376e6afb75fa6fedb0c83389dbc5bb7207074b59d090f3cd766",
+      "sourceSize": [
+        176,
+        152
+      ],
+      "texture": "m232_plotmon/main/cell_047"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e7135303e575a671fa1b48dd9c8921e6f2d689e2b98ca3d4254f2b571de423ac",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:49eab9c4cb17c89d",
+      "sourceRgbaSha256": "072630640e4cd8971707d7d6def46aa60830dffd1c960c8f54ea4ea9cf02a259",
+      "sourceSize": [
+        168,
+        160
+      ],
+      "texture": "m232_plotmon/main/cell_048"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9e0e28a0fa9bd09ff596e0ef0c790a62c7d41e402f89e7430266f38ba61abc76",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:bbebf830bc81c86a",
+      "sourceRgbaSha256": "ef162dd74065a302dd822100a720fda4809324e5bb6a091ec7ca27a02a82cd8e",
+      "sourceSize": [
+        176,
+        160
+      ],
+      "texture": "m232_plotmon/main/cell_049"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "36c0e8a45bf3afda543913445f12fbf1277dc1a3a1d15a9a21473fa0bf9c7201",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:7917d0e47b6b6524",
+      "sourceRgbaSha256": "a3fbc5eddc8e1e017947e6daa6cfff52e3f4e7122cc7c0fb184c39e178067ebe",
+      "sourceSize": [
+        216,
+        176
+      ],
+      "texture": "m232_plotmon/main/cell_050"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "6cd2e406dbad2d6294fda02b2254f40fe52648fcd9a7ffbaa9d97f3aa4fe4447",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:18ccccf79f28ffa6",
+      "sourceRgbaSha256": "b189040dbfe71376e6afb75fa6fedb0c83389dbc5bb7207074b59d090f3cd766",
+      "sourceSize": [
+        176,
+        152
+      ],
+      "texture": "m232_plotmon/main/cell_051"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "a86e8e44746c5cb7a4b9aae748ec5ca53f58a2e4147f7168ddfe6ff6a38b8e67",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:06f7ca6a7569d9a1",
+      "sourceRgbaSha256": "12fed7b7332f9d4ff4ce9cb44e10c5d7971bbf866ac009a72fcebb4cd9bd0e15",
+      "sourceSize": [
+        192,
+        168
+      ],
+      "texture": "m232_plotmon/main/cell_052"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "93b3241c9db8efeb0d4f110f927da123e2ca347912ad259babc1fe8f8b981ec0",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:59aa23a530c5aa57",
+      "sourceRgbaSha256": "c12c8cb04366e206c74e9805566a45fede91903501d4590540d4f8212057b0e3",
+      "sourceSize": [
+        184,
+        128
+      ],
+      "texture": "m232_plotmon/main/cell_053"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "f0fe674c67d6e86de1bd2036997c4ecc36d232a9d52b37b1b4d1ea547067ea29",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:b583099d28dd2f21",
+      "sourceRgbaSha256": "bf4c9d1e6d912fb43fa7b4654d16c8c1425c6a2f623f3be0ffdfceeb0329d7fe",
+      "sourceSize": [
+        184,
+        136
+      ],
+      "texture": "m232_plotmon/main/cell_054"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9e0e28a0fa9bd09ff596e0ef0c790a62c7d41e402f89e7430266f38ba61abc76",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:bbebf830bc81c86a",
+      "sourceRgbaSha256": "ef162dd74065a302dd822100a720fda4809324e5bb6a091ec7ca27a02a82cd8e",
+      "sourceSize": [
+        176,
+        160
+      ],
+      "texture": "m232_plotmon/main/cell_055"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "36c0e8a45bf3afda543913445f12fbf1277dc1a3a1d15a9a21473fa0bf9c7201",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:7917d0e47b6b6524",
+      "sourceRgbaSha256": "a3fbc5eddc8e1e017947e6daa6cfff52e3f4e7122cc7c0fb184c39e178067ebe",
+      "sourceSize": [
+        216,
+        176
+      ],
+      "texture": "m232_plotmon/main/cell_056"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "12c153e265c6acee17bfd9f77ba1edf0e6206464581e272874b4ba5d03865fb0",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:378213475f82b7af",
+      "sourceRgbaSha256": "7d68355fbaa7d95ff04b69d711b053ba21559fb2af616ef30b201ccf5190d923",
+      "sourceSize": [
+        176,
+        152
+      ],
+      "texture": "m232_plotmon/main/cell_057"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "da0b2bac7e1fe58af02613b186bcad0b6416ed1aa593f8a48fe39dc75cbdab2f",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:e727ffd7138e6312",
+      "sourceRgbaSha256": "9bdafad8350a2ccf2a4ab31cb52763ee6674ab3c73529bd9dc941ee126f3059b",
+      "sourceSize": [
+        200,
+        160
+      ],
+      "texture": "m232_plotmon/main/cell_058"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "489dd0860c1b8cf6b5c4f31429c242735429118025d99179822feaf0aac554bd",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:5e2bacd9fd2f32b6",
+      "sourceRgbaSha256": "16fa71424addc579057638caf7780c74f29430cb107350c7c46b565f5aacd97b",
+      "sourceSize": [
+        176,
+        176
+      ],
+      "texture": "m232_plotmon/main/cell_059"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "7bfd04eff57e15a32e95dd4e757e966b2ce9bcec897dd7ad0866bec9b5dd75eb",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:e7d8028abb71c8e3",
+      "sourceRgbaSha256": "9007b4c22b56c3c4f614c10c83a5bdc594ac4e5eb68847e19dea0ee387a5f2ac",
+      "sourceSize": [
+        224,
+        96
+      ],
+      "texture": "m232_plotmon/main/cell_060"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "1298089220f4101131540371e04c5f9b0d9575e5ebe34aa797b1ea8ff0b9af78",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:dec5013a6da2e44f",
+      "sourceRgbaSha256": "9dcfe6e89285165efbf2779c2cfe28690fd79aa65816a76b67673da131013bd9",
+      "sourceSize": [
+        176,
+        176
+      ],
+      "texture": "m232_plotmon/main/cell_061"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "af31d00c530ac54cdca91d7cd42e4fe1fc54cf9f4aaceb2dbb6025101cf760f6",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:572a88c2ffe33614",
+      "sourceRgbaSha256": "a9985eafd5ed83f16904fd8fb2a1642e7df6631a792d24822beed07b644e2aef",
+      "sourceSize": [
+        176,
+        160
+      ],
+      "texture": "m232_plotmon/main/cell_062"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "ce5996b2c415052bf8ba603b91fb47e95cb2f9687526776bed795fd246e5bc6e",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:46e55946fbc212bd",
+      "sourceRgbaSha256": "5c3bdc52617249807fa0e5158f1397a589890270501d36860115c7ce79544188",
+      "sourceSize": [
+        176,
+        160
+      ],
+      "texture": "m232_plotmon/sub/cell_000"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b94c181f14b1623adfd8c2d0ca6b5cd84d2810b64e56336d43fd0e9aa6d37b2f",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:1b9dfd1bdb4c70c9",
+      "sourceRgbaSha256": "702c0d366bcc1098269db7314905ca0a394e6f98a6d840cf832f1d8aea489249",
+      "sourceSize": [
+        176,
+        152
+      ],
+      "texture": "m232_plotmon/sub/cell_001"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "a3f661510c13cf1c017b50bca650da0a6b79a165f87e42e60cda9a20e0f34cbe",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:0f364e412af7ff89",
+      "sourceRgbaSha256": "69585f5189f3fd1adaad5df5849566307d98386b18412cdce3e5f8ef8450eeaa",
+      "sourceSize": [
+        176,
+        160
+      ],
+      "texture": "m232_plotmon/sub/cell_002"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b9e7452d4a0d2a73eb277831821d6a21dd84ce78c438ec4ca9666934ee0551b3",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:246a608778d078f6",
+      "sourceRgbaSha256": "2a9b8d89f7517163545ca5546e2a96f27fb7a509366f414a16bb2ac7812bc9b9",
+      "sourceSize": [
+        176,
+        152
+      ],
+      "texture": "m232_plotmon/sub/cell_003"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "7bfd04eff57e15a32e95dd4e757e966b2ce9bcec897dd7ad0866bec9b5dd75eb",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:e7d8028abb71c8e3",
+      "sourceRgbaSha256": "9007b4c22b56c3c4f614c10c83a5bdc594ac4e5eb68847e19dea0ee387a5f2ac",
+      "sourceSize": [
+        224,
+        96
+      ],
+      "texture": "m232_plotmon/sub/cell_004"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "1298089220f4101131540371e04c5f9b0d9575e5ebe34aa797b1ea8ff0b9af78",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:dec5013a6da2e44f",
+      "sourceRgbaSha256": "9dcfe6e89285165efbf2779c2cfe28690fd79aa65816a76b67673da131013bd9",
+      "sourceSize": [
+        176,
+        176
+      ],
+      "texture": "m232_plotmon/sub/cell_005"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "d9d54bba5b9061a9eee47bfd205ccd495088baea5c93c66fd59d40496fc09ab2",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:2059fd2aafab2715",
+      "sourceRgbaSha256": "4b09963079df45166d42fad5e36cc9666dd8bd717558dfce27fd75e5e223d7b6",
+      "sourceSize": [
+        192,
+        120
+      ],
+      "texture": "m232_plotmon/sub/cell_006"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "6a92d214a5d08f2240463f139bce51d5e4d8a3f413f65dfc401bb7d2a28f3460",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:d2cd24c998ea1824",
+      "sourceRgbaSha256": "498b85b2427c1fc38d9136aae589b6bc5ddb7afa6b61ed2cb216b246841dcb2d",
+      "sourceSize": [
+        192,
+        120
+      ],
+      "texture": "m232_plotmon/sub/cell_007"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "76ea0502bb0d3299296c28920436ff1448f81d624dc53b5a2c18c80996a2cf88",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:82a4993c25923103",
+      "sourceRgbaSha256": "d9c5d7c0aa52d1e96f5ad87824f268b3d51eae20e03a028cef73ab5b2d85a40b",
+      "sourceSize": [
+        176,
+        160
+      ],
+      "texture": "m232_plotmon/sub/cell_008"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "6cd2e406dbad2d6294fda02b2254f40fe52648fcd9a7ffbaa9d97f3aa4fe4447",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:18ccccf79f28ffa6",
+      "sourceRgbaSha256": "b189040dbfe71376e6afb75fa6fedb0c83389dbc5bb7207074b59d090f3cd766",
+      "sourceSize": [
+        176,
+        152
+      ],
+      "texture": "m232_plotmon/sub/cell_009"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e7135303e575a671fa1b48dd9c8921e6f2d689e2b98ca3d4254f2b571de423ac",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:49eab9c4cb17c89d",
+      "sourceRgbaSha256": "072630640e4cd8971707d7d6def46aa60830dffd1c960c8f54ea4ea9cf02a259",
+      "sourceSize": [
+        168,
+        160
+      ],
+      "texture": "m232_plotmon/sub/cell_010"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9e0e28a0fa9bd09ff596e0ef0c790a62c7d41e402f89e7430266f38ba61abc76",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:bbebf830bc81c86a",
+      "sourceRgbaSha256": "ef162dd74065a302dd822100a720fda4809324e5bb6a091ec7ca27a02a82cd8e",
+      "sourceSize": [
+        176,
+        160
+      ],
+      "texture": "m232_plotmon/sub/cell_011"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "36c0e8a45bf3afda543913445f12fbf1277dc1a3a1d15a9a21473fa0bf9c7201",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:7917d0e47b6b6524",
+      "sourceRgbaSha256": "a3fbc5eddc8e1e017947e6daa6cfff52e3f4e7122cc7c0fb184c39e178067ebe",
+      "sourceSize": [
+        216,
+        176
+      ],
+      "texture": "m232_plotmon/sub/cell_012"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "6cd2e406dbad2d6294fda02b2254f40fe52648fcd9a7ffbaa9d97f3aa4fe4447",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:18ccccf79f28ffa6",
+      "sourceRgbaSha256": "b189040dbfe71376e6afb75fa6fedb0c83389dbc5bb7207074b59d090f3cd766",
+      "sourceSize": [
+        176,
+        152
+      ],
+      "texture": "m232_plotmon/sub/cell_013"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "a86e8e44746c5cb7a4b9aae748ec5ca53f58a2e4147f7168ddfe6ff6a38b8e67",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:06f7ca6a7569d9a1",
+      "sourceRgbaSha256": "12fed7b7332f9d4ff4ce9cb44e10c5d7971bbf866ac009a72fcebb4cd9bd0e15",
+      "sourceSize": [
+        192,
+        168
+      ],
+      "texture": "m232_plotmon/sub/cell_014"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "93b3241c9db8efeb0d4f110f927da123e2ca347912ad259babc1fe8f8b981ec0",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:59aa23a530c5aa57",
+      "sourceRgbaSha256": "c12c8cb04366e206c74e9805566a45fede91903501d4590540d4f8212057b0e3",
+      "sourceSize": [
+        184,
+        128
+      ],
+      "texture": "m232_plotmon/sub/cell_015"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "489dd0860c1b8cf6b5c4f31429c242735429118025d99179822feaf0aac554bd",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:5e2bacd9fd2f32b6",
+      "sourceRgbaSha256": "16fa71424addc579057638caf7780c74f29430cb107350c7c46b565f5aacd97b",
+      "sourceSize": [
+        176,
+        176
+      ],
+      "texture": "m232_plotmon/sub/cell_016"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "7bfd04eff57e15a32e95dd4e757e966b2ce9bcec897dd7ad0866bec9b5dd75eb",
+      "isBlank": false,
+      "masterId": "m232_plotmon:master:e7d8028abb71c8e3",
+      "sourceRgbaSha256": "9007b4c22b56c3c4f614c10c83a5bdc594ac4e5eb68847e19dea0ee387a5f2ac",
+      "sourceSize": [
+        224,
+        96
+      ],
+      "texture": "m232_plotmon/sub/cell_017"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+TAP version 13
+# Subtest: 90 original CPU actor-native cases agree on returned values, writes and delegated animation calls
+ok 1 - 90 original CPU actor-native cases agree on returned values, writes and delegated animation calls
+  ---
+  duration_ms: 8.7392
+  type: 'test'
+  ...
+# Subtest: the original DS square-root boundary stays Q12 for all fourteen CPU samples
+ok 2 - the original DS square-root boundary stays Q12 for all fourteen CPU samples
+  ---
+  duration_ms: 0.365
+  type: 'test'
+  ...
+# Subtest: all 64 CPU launch pointer combinations include the field0C=2 reverse branch
+ok 3 - all 64 CPU launch pointer combinations include the field0C=2 reverse branch
+  ---
+  duration_ms: 0.9668
+  type: 'test'
+  ...
+# Subtest: resumed VM calls use this frame host and report this frame diagnostics
+not ok 4 - resumed VM calls use this frame host and report this frame diagnostics
+  ---
+  duration_ms: 7.2058
+  type: 'test'
+  location: 'R:\\Projects\\Championship2026\\championship-2026\\tests\\championship-battle-action-native-cpu-cases.mjs:39:1'
+  failureType: 'testCodeFailure'
+  error: 'resume must not append calls into the closed first-frame result'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///R:/Projects/Championship2026/championship-2026/tests/championship-battle-action-native-cpu-cases.mjs:44:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 3
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 267.5946

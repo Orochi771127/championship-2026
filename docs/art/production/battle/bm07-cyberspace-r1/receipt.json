@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "batchId": "ART-BATTLE-BM07-CYBERSPACE-R1-2026-09-02",
+  "status": "INTERNAL_PIXI_REVIEW_PASSED_NOT_OWNER_APPROVED_NOT_PROMOTED",
+  "source": {
+    "file": "source/field-bm07-01-background-generated.png",
+    "sha256": "055D31897F2BEA12BB9382E060F6BE685C111DE80C6F0E2A1BDE4BB0D49D88BA"
+  },
+  "output": {
+    "file": "review/field-bm07-01-independent-layer-candidate.png",
+    "sha256": "5F7B6F9D8AE35BB4F4DBD5BDE873D98C4C48DCCD4652DE1396C49550472F973C"
+  },
+  "runtime": {
+    "file": "assets/production/internal-battle-review/bm07-cyberspace-r1/field-bm07-01-independent-layer.png",
+    "sha256": "5F7B6F9D8AE35BB4F4DBD5BDE873D98C4C48DCCD4652DE1396C49550472F973C"
+  },
+  "ringContract": {
+    "count": 6,
+    "centers": [
+      [
+        440,
+        400
+      ],
+      [
+        768,
+        400
+      ],
+      [
+        1096,
+        400
+      ],
+      [
+        440,
+        632
+      ],
+      [
+        768,
+        632
+      ],
+      [
+        1096,
+        632
+      ]
+    ],
+    "radius": 96,
+    "columns": [
+      440,
+      768,
+      1096
+    ],
+    "rows": [
+      400,
+      632
+    ],
+    "source": "DETERMINISTIC_BUILDER_NOT_IMAGE_MODEL"
+  },
+  "viewportChecks": [
+    {
+      "viewport": [
+        360,
+        800
+      ],
+      "file": "review/viewport-360x800.png",
+      "sha256": "28D78B2A205429C90AA38A77111C5049F1D7F36288555A8CDADF2D422A9AD766"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "file": "review/viewport-390x844.png",
+      "sha256": "07E7E11EC858744F088608959F92A1BABC56EBDEE07942B7CE460B2C346C8F3F"
+    },
+    {
+      "viewport": [
+        393,
+        852
+      ],
+      "file": "review/viewport-393x852.png",
+      "sha256": "2D14A51ED7D5BE61C530F9212712E5F4D90F16542D75EB6DFEB75DD3DF17392E"
+    },
+    {
+      "viewport": [
+        412,
+        915
+      ],
+      "file": "review/viewport-412x915.png",
+      "sha256": "7E94ED17D248621A8B2FEA9F8CB7EAA6B628D7415056468AE13836620590B816"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "file": "review/viewport-430x932.png",
+      "sha256": "8F369222E516FDE83FF1823465A00DA27FEE150571F187DBF611889B24113B38"
+    }
+  ],
+  "promotion": {
+    "humanApproved": false,
+    "runtimeQaPassed": true,
+    "licenseEvidenceLinked": false,
+    "readyForRuntime": false,
+    "shippingReady": false
+  }
+}

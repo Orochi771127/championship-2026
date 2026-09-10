@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-06",
+  "scope": "INTERNAL_CHARACTER_MATERIALS_AND_NORMAL_STATIC_RAISING_HUNT",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "sourcePack": "R:/Projects/Championship2026/YDIJ_PRIVATE_ROM_ART_PACK",
+  "counts": {
+    "entities": 224,
+    "eggs": 8,
+    "regular": 216,
+    "cells": 17235,
+    "sequences": 11480,
+    "atlasPages": 503,
+    "bytes": 34788416
+  },
+  "speciesBindings": 228,
+  "focusedTests": {
+    "pass": 27,
+    "fail": 0
+  },
+  "regressionTests": {
+    "pass": 987,
+    "fail": 0
+  },
+  "gitDiffCheck": "PASS",
+  "indexRegeneration": "PASS",
+  "browser": {
+    "entry": "http://127.0.0.1:8732/championship.html",
+    "usesReviewQuery": false,
+    "flow": [
+      "New Game",
+      "Raising select",
+      "Save",
+      "Reload",
+      "Continue",
+      "System/Hunt",
+      "Gate01 via existing accessible list",
+      "Loadout",
+      "Begin Hunt",
+      "Pan",
+      "Return Home"
+    ],
+    "huntViewports": [
+      "360x800",
+      "390x844",
+      "393x852",
+      "412x915",
+      "430x932"
+    ],
+    "raisingViewport": "390x844",
+    "warningsAndErrors": 0,
+    "huntCanvasCount": 1,
+    "horizontalOverflow": false,
+    "physicalDeviceQA": false
+  },
+  "publicBuild": {
+    "status": "BLOCKED_PRE_EXISTING_DELETED_TRACKED_INPUT",
+    "missingPath": "src/data/championship/catalogs/entities.r1.json",
+    "internalCharacterOutputPresent": false,
+    "internalCharacterIndexEntryCount": 0
+  },
+  "animationBinding": "UNKNOWN_REQUIRES_TRACE_STATIC_FIRST_SOURCE_FRAME",
+  "shippingReady": false,
+  "coordinationWrites": [
+    {
+      "path": "docs/coordination/CODEX_ART_STATUS.json",
+      "beforeSha256": "1f7a63c7ccb8d826fa070b3daf195ca90b22acad88d0c1312ce495695e63f137",
+      "afterSha256": "fd19921e7f3ea6fdf45bc9097de6086da793e4409f7ec92123b8871fefacaa8b"
+    },
+    {
+      "path": "docs/coordination/CODEX_SYNC_DELTA.json",
+      "beforeSha256": "5c834f882dd77974fdc2289730088a15e84a5eface4f0b9f72e71b80625e722f",
+      "afterSha256": "e7c83f78a22198a8d7adc6b55763da2b9319a93567402a607bdd0a869a1909d5"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "reports/art/character-runtime-2026-09-06/continue-390x844.png",
+      "sha256": "3d582a80d4eee7497119ee61b9171ee335202f50eed67564442bf4ab745b8e6a"
+    },
+    {
+      "path": "reports/art/character-runtime-2026-09-06/hunt-360x800.png",
+      "sha256": "d6eb2a60cb4ba59d5089d8cc99dfe2ca191427408d0449a5206cf094363f31d8"
+    },
+    {
+      "path": "reports/art/character-runtime-2026-09-06/hunt-390x844.png",
+      "sha256": "14f2be3568d65aa5645a9dfe8ce80387f1f233b99a851edf5f812e1194757dc1"
+    },
+    {
+      "path": "reports/art/character-runtime-2026-09-06/hunt-393x852.png",
+      "sha256": "c007e599027183abde6e73c433224a29e243ded412925a45e898e76ddb7f692f"
+    },
+    {
+      "path": "reports/art/character-runtime-2026-09-06/hunt-412x915.png",
+      "sha256": "788675a6709691429b75d250f3cd73c094263069ece67a6a64df34f7074db3ad"
+    },
+    {
+      "path": "reports/art/character-runtime-2026-09-06/hunt-430x932.png",
+      "sha256": "0b07e92b69603a5561afaaa7bd5e3b7061af43c56d6bbd8bd667b19fd3992a3b"
+    },
+    {
+      "path": "reports/art/character-runtime-2026-09-06/hunt-pan-430x932.png",
+      "sha256": "cc60a4e2a1c8c815a3d64f9932d652abd9a8a89c5471c1fb544c6e954c19322a"
+    },
+    {
+      "path": "reports/art/character-runtime-2026-09-06/raising-390x844.png",
+      "sha256": "147751144e5f1324e30dfff596cf688f31592062ae279bbe9819bed6ae44058f"
+    },
+    {
+      "path": "reports/art/character-runtime-2026-09-06/return-home-390x844.png",
+      "sha256": "089d69abbc75c3f07a242a45fa22dda0a55c58132e0222a7d789c38c0f8ad759"
+    }
+  ]
+}

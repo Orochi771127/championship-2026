@@ -1,0 +1,94 @@
+TAP version 13
+# Subtest: the 9:16 frame is centred and never stretched
+ok 1 - the 9:16 frame is centred and never stretched
+  ---
+  duration_ms: 1.6567
+  type: 'test'
+  ...
+# Subtest: character art uses arena native pixels, keeps feet on stands after resize, and releases its roster once
+ok 2 - character art uses arena native pixels, keeps feet on stands after resize, and releases its roster once
+  ---
+  duration_ms: 9.47
+  type: 'test'
+  ...
+# Subtest: unknown sizing retains neutral markers instead of guessing character proportions
+ok 3 - unknown sizing retains neutral markers instead of guessing character proportions
+  ---
+  duration_ms: 1.4753
+  type: 'test'
+  ...
+# Subtest: animated geometry retains a fixed native origin across changing packing and viewport sizes
+ok 4 - animated geometry retains a fixed native origin across changing packing and viewport sizes
+  ---
+  duration_ms: 3.0072
+  type: 'test'
+  ...
+# Subtest: the band rectangles tile the frame with no gap and no overlap
+ok 5 - the band rectangles tile the frame with no gap and no overlap
+  ---
+  duration_ms: 0.3861
+  type: 'test'
+  ...
+# Subtest: the scene mounts, draws, and registers exactly one ticker and one resize observer
+ok 6 - the scene mounts, draws, and registers exactly one ticker and one resize observer
+  ---
+  duration_ms: 2.631
+  type: 'test'
+  ...
+# Subtest: cyberspace is framed with a rectangle, every other arena with the common ring
+ok 7 - cyberspace is framed with a rectangle, every other arena with the common ring
+  ---
+  duration_ms: 4.6642
+  type: 'test'
+  ...
+# Subtest: licensed field art hides the procedural plate and keeps stand markers
+ok 8 - licensed field art hides the procedural plate and keeps stand markers
+  ---
+  duration_ms: 1.7087
+  type: 'test'
+  ...
+# Subtest: the scene draws nothing that implies the viewer chooses an action
+ok 9 - the scene draws nothing that implies the viewer chooses an action
+  ---
+  duration_ms: 2.3233
+  type: 'test'
+  ...
+# Subtest: the battle runs itself and stops, and a stopped battle is still drawn
+ok 10 - the battle runs itself and stops, and a stopped battle is still drawn
+  ---
+  duration_ms: 8.6583
+  type: 'test'
+  ...
+# Subtest: the scene draws the arena and leaves every label to the DOM
+ok 11 - the scene draws the arena and leaves every label to the DOM
+  ---
+  duration_ms: 4.1409
+  type: 'test'
+  ...
+# Subtest: the scene refuses a stage or a source that is not the real one
+ok 12 - the scene refuses a stage or a source that is not the real one
+  ---
+  duration_ms: 1.4842
+  type: 'test'
+  ...
+# Subtest: the scene imports nothing outside src and the contracts
+ok 13 - the scene imports nothing outside src and the contracts
+  ---
+  duration_ms: 1.4878
+  type: 'test'
+  ...
+# Subtest: the three battle screens follow the original's own screen names
+ok 14 - the three battle screens follow the original's own screen names
+  ---
+  duration_ms: 18.9799
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 384.0223

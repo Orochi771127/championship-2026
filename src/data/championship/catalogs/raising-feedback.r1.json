@@ -1,0 +1,1080 @@
+{
+  "schemaVersion": 1,
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "bank": "e001_ikusei",
+  "sourceHashes": {
+    "e001_ikusei.nanr": "6f33e8794c131629333a44f1128eb12850bef5ea90d4e18599db520a0ac1ef0a",
+    "e001_ikusei.ncbr": "fa889a2c6532eb4308e96420a5e15403ddb1084d8d0410b530b268a5c3c5a7bf",
+    "e001_ikusei.ncer": "304871fec790969c8e8bba6dff636fd0533c0dedd4243c64cf8ec97aa65b93cd",
+    "e001_ikusei.nclr": "11e1dfb8a4e09437fbf26bd078f7006d44da156e1862140ced93a5f7680a11f3"
+  },
+  "evidence": "STATIC_BINARY_READ",
+  "sequences": [
+    {
+      "id": 0,
+      "playbackMode": 2,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 0,
+          "ticks": 7
+        },
+        {
+          "cell": 1,
+          "ticks": 10
+        },
+        {
+          "cell": 2,
+          "ticks": 7
+        },
+        {
+          "cell": 3,
+          "ticks": 20
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "playbackMode": 2,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 4,
+          "ticks": 5
+        },
+        {
+          "cell": 5,
+          "ticks": 10
+        },
+        {
+          "cell": 6,
+          "ticks": 15
+        },
+        {
+          "cell": 7,
+          "ticks": 5
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 8,
+          "ticks": 10
+        },
+        {
+          "cell": 9,
+          "ticks": 10
+        },
+        {
+          "cell": 10,
+          "ticks": 10
+        },
+        {
+          "cell": 11,
+          "ticks": 10
+        },
+        {
+          "cell": 12,
+          "ticks": 10
+        },
+        {
+          "cell": 13,
+          "ticks": 10
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 14,
+          "ticks": 6
+        },
+        {
+          "cell": 15,
+          "ticks": 6
+        },
+        {
+          "cell": 16,
+          "ticks": 6
+        },
+        {
+          "cell": 17,
+          "ticks": 6
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "playbackMode": 2,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 18,
+          "ticks": 6
+        },
+        {
+          "cell": 19,
+          "ticks": 6
+        },
+        {
+          "cell": 20,
+          "ticks": 6
+        },
+        {
+          "cell": 17,
+          "ticks": 6
+        },
+        {
+          "cell": 21,
+          "ticks": 6
+        },
+        {
+          "cell": 22,
+          "ticks": 6
+        },
+        {
+          "cell": 23,
+          "ticks": 6
+        },
+        {
+          "cell": 17,
+          "ticks": 6
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "playbackMode": 2,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 24,
+          "ticks": 4
+        },
+        {
+          "cell": 25,
+          "ticks": 4
+        },
+        {
+          "cell": 26,
+          "ticks": 18
+        },
+        {
+          "cell": 27,
+          "ticks": 4
+        },
+        {
+          "cell": 28,
+          "ticks": 4
+        },
+        {
+          "cell": 29,
+          "ticks": 18
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 30,
+          "ticks": 10
+        },
+        {
+          "cell": 31,
+          "ticks": 10
+        },
+        {
+          "cell": 32,
+          "ticks": 10
+        },
+        {
+          "cell": 33,
+          "ticks": 10
+        },
+        {
+          "cell": 34,
+          "ticks": 10
+        },
+        {
+          "cell": 35,
+          "ticks": 10
+        },
+        {
+          "cell": 36,
+          "ticks": 10
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 37,
+          "ticks": 5
+        },
+        {
+          "cell": 38,
+          "ticks": 4
+        },
+        {
+          "cell": 39,
+          "ticks": 4
+        },
+        {
+          "cell": 40,
+          "ticks": 4
+        },
+        {
+          "cell": 41,
+          "ticks": 3
+        },
+        {
+          "cell": 42,
+          "ticks": 3
+        },
+        {
+          "cell": 43,
+          "ticks": 3
+        },
+        {
+          "cell": 44,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "playbackMode": 2,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 45,
+          "ticks": 10
+        },
+        {
+          "cell": 46,
+          "ticks": 10
+        },
+        {
+          "cell": 47,
+          "ticks": 10
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "playbackMode": 2,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 48,
+          "ticks": 10
+        },
+        {
+          "cell": 49,
+          "ticks": 10
+        },
+        {
+          "cell": 50,
+          "ticks": 10
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "playbackMode": 2,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 51,
+          "ticks": 7
+        },
+        {
+          "cell": 52,
+          "ticks": 7
+        },
+        {
+          "cell": 53,
+          "ticks": 7
+        },
+        {
+          "cell": 54,
+          "ticks": 7
+        },
+        {
+          "cell": 55,
+          "ticks": 7
+        },
+        {
+          "cell": 56,
+          "ticks": 7
+        },
+        {
+          "cell": 57,
+          "ticks": 7
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 58,
+          "ticks": 3
+        },
+        {
+          "cell": 59,
+          "ticks": 3
+        },
+        {
+          "cell": 60,
+          "ticks": 3
+        },
+        {
+          "cell": 61,
+          "ticks": 3
+        },
+        {
+          "cell": 62,
+          "ticks": 3
+        },
+        {
+          "cell": 63,
+          "ticks": 3
+        },
+        {
+          "cell": 64,
+          "ticks": 3
+        },
+        {
+          "cell": 65,
+          "ticks": 3
+        },
+        {
+          "cell": 66,
+          "ticks": 3
+        },
+        {
+          "cell": 67,
+          "ticks": 3
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 68,
+          "ticks": 3
+        },
+        {
+          "cell": 69,
+          "ticks": 3
+        },
+        {
+          "cell": 70,
+          "ticks": 3
+        },
+        {
+          "cell": 71,
+          "ticks": 3
+        },
+        {
+          "cell": 72,
+          "ticks": 3
+        },
+        {
+          "cell": 73,
+          "ticks": 3
+        },
+        {
+          "cell": 74,
+          "ticks": 3
+        },
+        {
+          "cell": 75,
+          "ticks": 3
+        },
+        {
+          "cell": 76,
+          "ticks": 3
+        },
+        {
+          "cell": 77,
+          "ticks": 3
+        },
+        {
+          "cell": 78,
+          "ticks": 3
+        },
+        {
+          "cell": 79,
+          "ticks": 3
+        },
+        {
+          "cell": 80,
+          "ticks": 3
+        },
+        {
+          "cell": 81,
+          "ticks": 3
+        },
+        {
+          "cell": 82,
+          "ticks": 3
+        },
+        {
+          "cell": 83,
+          "ticks": 3
+        },
+        {
+          "cell": 84,
+          "ticks": 3
+        },
+        {
+          "cell": 85,
+          "ticks": 3
+        },
+        {
+          "cell": 86,
+          "ticks": 3
+        },
+        {
+          "cell": 87,
+          "ticks": 3
+        },
+        {
+          "cell": 88,
+          "ticks": 3
+        },
+        {
+          "cell": 89,
+          "ticks": 3
+        },
+        {
+          "cell": 90,
+          "ticks": 3
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 91,
+          "ticks": 3
+        },
+        {
+          "cell": 92,
+          "ticks": 3
+        },
+        {
+          "cell": 93,
+          "ticks": 3
+        },
+        {
+          "cell": 94,
+          "ticks": 3
+        },
+        {
+          "cell": 95,
+          "ticks": 3
+        },
+        {
+          "cell": 96,
+          "ticks": 3
+        },
+        {
+          "cell": 97,
+          "ticks": 3
+        },
+        {
+          "cell": 98,
+          "ticks": 3
+        },
+        {
+          "cell": 99,
+          "ticks": 3
+        },
+        {
+          "cell": 100,
+          "ticks": 3
+        },
+        {
+          "cell": 101,
+          "ticks": 3
+        },
+        {
+          "cell": 102,
+          "ticks": 3
+        },
+        {
+          "cell": 103,
+          "ticks": 3
+        },
+        {
+          "cell": 104,
+          "ticks": 3
+        },
+        {
+          "cell": 105,
+          "ticks": 3
+        },
+        {
+          "cell": 106,
+          "ticks": 3
+        },
+        {
+          "cell": 107,
+          "ticks": 3
+        },
+        {
+          "cell": 108,
+          "ticks": 3
+        },
+        {
+          "cell": 109,
+          "ticks": 3
+        },
+        {
+          "cell": 110,
+          "ticks": 3
+        },
+        {
+          "cell": 111,
+          "ticks": 3
+        },
+        {
+          "cell": 112,
+          "ticks": 3
+        },
+        {
+          "cell": 113,
+          "ticks": 18
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 114,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 115,
+          "ticks": 3
+        },
+        {
+          "cell": 116,
+          "ticks": 3
+        },
+        {
+          "cell": 117,
+          "ticks": 3
+        },
+        {
+          "cell": 118,
+          "ticks": 3
+        },
+        {
+          "cell": 119,
+          "ticks": 3
+        },
+        {
+          "cell": 120,
+          "ticks": 3
+        },
+        {
+          "cell": 121,
+          "ticks": 3
+        },
+        {
+          "cell": 122,
+          "ticks": 3
+        },
+        {
+          "cell": 123,
+          "ticks": 3
+        },
+        {
+          "cell": 124,
+          "ticks": 3
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 125,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 126,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 127,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 128,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "playbackMode": 2,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 129,
+          "ticks": 18
+        },
+        {
+          "cell": 130,
+          "ticks": 18
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 131,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 132,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 133,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 134,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "playbackMode": 2,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 135,
+          "ticks": 18
+        },
+        {
+          "cell": 136,
+          "ticks": 18
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "playbackMode": 2,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 137,
+          "ticks": 18
+        },
+        {
+          "cell": 138,
+          "ticks": 18
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "playbackMode": 2,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 139,
+          "ticks": 18
+        },
+        {
+          "cell": 140,
+          "ticks": 18
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 141,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 142,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "playbackMode": 2,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 141,
+          "ticks": 18
+        },
+        {
+          "cell": 143,
+          "ticks": 18
+        },
+        {
+          "cell": 141,
+          "ticks": 18
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "playbackMode": 2,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 144,
+          "ticks": 15
+        },
+        {
+          "cell": 145,
+          "ticks": 15
+        },
+        {
+          "cell": 146,
+          "ticks": 15
+        },
+        {
+          "cell": 147,
+          "ticks": 15
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 148,
+          "ticks": 9
+        },
+        {
+          "cell": 149,
+          "ticks": 9
+        },
+        {
+          "cell": 150,
+          "ticks": 9
+        },
+        {
+          "cell": 151,
+          "ticks": 9
+        },
+        {
+          "cell": 152,
+          "ticks": 9
+        },
+        {
+          "cell": 153,
+          "ticks": 9
+        },
+        {
+          "cell": 154,
+          "ticks": 9
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 155,
+          "ticks": 2
+        },
+        {
+          "cell": 156,
+          "ticks": 2
+        },
+        {
+          "cell": 157,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 158,
+          "ticks": 2
+        },
+        {
+          "cell": 159,
+          "ticks": 2
+        },
+        {
+          "cell": 160,
+          "ticks": 3
+        },
+        {
+          "cell": 161,
+          "ticks": 3
+        },
+        {
+          "cell": 162,
+          "ticks": 5
+        },
+        {
+          "cell": 163,
+          "ticks": 5
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 164,
+          "ticks": 5
+        },
+        {
+          "cell": 165,
+          "ticks": 5
+        },
+        {
+          "cell": 166,
+          "ticks": 5
+        },
+        {
+          "cell": 167,
+          "ticks": 5
+        },
+        {
+          "cell": 168,
+          "ticks": 5
+        },
+        {
+          "cell": 169,
+          "ticks": 5
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 170,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 171,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 172,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 173,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "playbackMode": 2,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 174,
+          "ticks": 18
+        },
+        {
+          "cell": 175,
+          "ticks": 18
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 176,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 177,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 178,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "playbackMode": 1,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 179,
+          "ticks": 2
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "playbackMode": 2,
+      "loopStartFrame": 0,
+      "frames": [
+        {
+          "cell": 180,
+          "ticks": 18
+        },
+        {
+          "cell": 181,
+          "ticks": 18
+        }
+      ]
+    }
+  ]
+}

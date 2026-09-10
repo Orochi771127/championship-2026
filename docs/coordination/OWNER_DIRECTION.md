@@ -1,5 +1,17 @@
 # Championship Owner Direction
 
+## 2026-09-10 — Commit completed work, open repository and publish the game
+
+Owner explicitly requests: 「請你把所有的完成的資料做好的資料全部都commit跟push至main。並且開放repo。讓我可以在網頁上就進行遊玩。」 Commit and push the integrated completed work to main, make `Orochi771127/championship-2026` public, and deploy the current game to its GitHub Pages URL. This supersedes earlier no-push/no-publication and loopback-only decisions for the selected rendered game files, as an Owner-authorized public playtest. Record exact reviewed input hashes under `WEB_BUILD_INPUTS.v1.json`; runtime destination is `src/data/championship/public-playtest.r1.json`. Keep ROM/native payloads, emulator states, private documents and credentials excluded. This instruction authorizes publication but does not assert a verified third-party licence, commercial-release acceptance, device QA or full original parity. Keep those facts pending and retain the separate verified-rights release target.
+
+## 2026-09-10 — One continuing all-character behavior restoration stage
+
+Owner asks to continue the earlier behavior corrections, verify whether every character and behavior is fully restored, and handle the remaining work in one stage. Continue source tracing, existing-owner fixes and normal-path acceptance under `docs/contracts/championship/CHARACTER_BEHAVIOR_RESTORATION_STAGE.v1.json`. Preserve the full Raising/Hunt/Battle scope; resource inventory and controlled helper coverage cannot close the stage. This is continuation authorization, not a new approval gate.
+
+## 2026-09-10 — Complete the video comparison findings in one repair stage
+
+Owner: 「延續話題,這些請你用一個階段修復跟做完,可以嗎?」. Complete the seven findings in `docs/reports/parity-audit/2026-09-10/VIDEO_GAME_ANIMATION_COMPARISON_ZH_TW.md` as one implementation and acceptance stage: original request continuity, Raising needs/reaction icons and hand interactions, character status presentation, Hunt tool art, battle results and the integrated 9:16 layout. Continue original ROM tracing where needed; preserve existing authorities and original gameplay. The existing internal-reference authorization and final public-release licence gate continue to apply. Do not mark the stage complete on resource coverage or isolated tests alone.
+
 ## 2026-09-09 — Integrate original character animations in Hunt, Battle and Raising
 
 Owner requests all original character motions in the three existing scenes and supplies `YDIJ_PRIVATE_ROM_ART_PACK/02_CHARACTERS`. Continue internal animation integration using those existing reference materials, the verified native frame/state contracts and the current scene owners. The supplied 503 atlas PNGs already match the registered 224-entry baseline; this authorization does not require duplicate resource copies. Preserve source sequence IDs, timing, origins, flips and intentional blanks. Full resource/frame binding and full original action-trigger parity are separate acceptance statements. Licence verification remains at the final public-release gate.

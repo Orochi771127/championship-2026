@@ -1,0 +1,1364 @@
+{
+  "classification": "RESEARCH_ONLY",
+  "entityId": "m514_piemon",
+  "masters": [
+    {
+      "canonical": "m514_piemon/main/cell_000",
+      "masterId": "m514_piemon:master:26f2c752f8084349",
+      "members": [
+        "m514_piemon/main/cell_000",
+        "m514_piemon/main/cell_025",
+        "m514_piemon/main/cell_044",
+        "m514_piemon/sub/cell_000",
+        "m514_piemon/sub/cell_009"
+      ],
+      "size": [
+        116,
+        148
+      ],
+      "sourceRgbaSha256": "fdbabfddf3d38b460b9c6d98d094a4cd1444ca6eb84b5b304665c2cf243d8d78"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_001",
+      "masterId": "m514_piemon:master:af2ebfb39b98fc6f",
+      "members": [
+        "m514_piemon/main/cell_001",
+        "m514_piemon/main/cell_026",
+        "m514_piemon/sub/cell_001"
+      ],
+      "size": [
+        124,
+        160
+      ],
+      "sourceRgbaSha256": "52707ebbcd930334bd7ceb937ac25164ce9c22a7f8052d9388b4887c9f63b0e5"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_002",
+      "masterId": "m514_piemon:master:6a1f289cc0307e1b",
+      "members": [
+        "m514_piemon/main/cell_002",
+        "m514_piemon/main/cell_027",
+        "m514_piemon/sub/cell_002"
+      ],
+      "size": [
+        232,
+        288
+      ],
+      "sourceRgbaSha256": "7f3ac505f116e6a4e6dac1150357279449d1e32b70b40c1f1142d25d4e74ab11"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_003",
+      "masterId": "m514_piemon:master:23c2916c2c41209a",
+      "members": [
+        "m514_piemon/main/cell_003",
+        "m514_piemon/main/cell_028",
+        "m514_piemon/sub/cell_003"
+      ],
+      "size": [
+        124,
+        156
+      ],
+      "sourceRgbaSha256": "bd5cdf543aef14acfbbe7df10605d0ef8f6d785597c8683ff6b25f0625b0743d"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_004",
+      "masterId": "m514_piemon:master:857f6ed64b926a3a",
+      "members": [
+        "m514_piemon/main/cell_004",
+        "m514_piemon/main/cell_029"
+      ],
+      "size": [
+        144,
+        152
+      ],
+      "sourceRgbaSha256": "310729359beda49bd91d2e357a0c78e6d34d4bbfa00981bd9c5b1209e7b0496b"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_005",
+      "masterId": "m514_piemon:master:d011e9167e51269a",
+      "members": [
+        "m514_piemon/main/cell_005",
+        "m514_piemon/main/cell_006",
+        "m514_piemon/main/cell_030",
+        "m514_piemon/main/cell_031"
+      ],
+      "size": [
+        124,
+        160
+      ],
+      "sourceRgbaSha256": "41cc4bad1a95d3951260c2e67238344cfced802f471ca99071ae0f76322d93d5"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_007",
+      "masterId": "m514_piemon:master:329030fd2064901c",
+      "members": [
+        "m514_piemon/main/cell_007",
+        "m514_piemon/main/cell_032"
+      ],
+      "size": [
+        124,
+        188
+      ],
+      "sourceRgbaSha256": "4a4c577a04d4117f87b0469801b269a4a40cc2d1c9f470ed742f15751518a8e2"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_008",
+      "masterId": "m514_piemon:master:d4c0e2ee4af3cb94",
+      "members": [
+        "m514_piemon/main/cell_008",
+        "m514_piemon/main/cell_021",
+        "m514_piemon/main/cell_037",
+        "m514_piemon/main/cell_057",
+        "m514_piemon/sub/cell_004",
+        "m514_piemon/sub/cell_006",
+        "m514_piemon/sub/cell_017"
+      ],
+      "size": [
+        188,
+        84
+      ],
+      "sourceRgbaSha256": "e41da759c5887410affde4829f50dedae46e26146c7b62e9c3e23c214e94a962"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_009",
+      "masterId": "m514_piemon:master:2b72d5fdc360da2b",
+      "members": [
+        "m514_piemon/main/cell_009",
+        "m514_piemon/main/cell_058",
+        "m514_piemon/sub/cell_005"
+      ],
+      "size": [
+        312,
+        304
+      ],
+      "sourceRgbaSha256": "28224240e5d2822d6c6b93730bd3f2366d1af11cd6a16410628f67a1afc91bfd"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_010",
+      "masterId": "m514_piemon:master:37cd94f79f72dd03",
+      "members": [
+        "m514_piemon/main/cell_010"
+      ],
+      "size": [
+        140,
+        140
+      ],
+      "sourceRgbaSha256": "07f7503e3210d18b656a84ceb875e44c51411e78a35b1ae45693a1e4d2ab1910"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_011",
+      "masterId": "m514_piemon:master:7d9e5ca9657d2b8f",
+      "members": [
+        "m514_piemon/main/cell_011"
+      ],
+      "size": [
+        168,
+        164
+      ],
+      "sourceRgbaSha256": "cce8b60432fb67759620a1156b7954291cdfa88553003c48938cd66748ac333e"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_012",
+      "masterId": "m514_piemon:master:a94a02d356a74b5f",
+      "members": [
+        "m514_piemon/main/cell_012",
+        "m514_piemon/main/cell_016"
+      ],
+      "size": [
+        116,
+        168
+      ],
+      "sourceRgbaSha256": "c7976714f26f399883dae6d68832432225b81112161a6e3cbb95dda95f30348f"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_013",
+      "masterId": "m514_piemon:master:f564e0649932c312",
+      "members": [
+        "m514_piemon/main/cell_013"
+      ],
+      "size": [
+        164,
+        152
+      ],
+      "sourceRgbaSha256": "2dda90079910feb59c7ce43edfda61bef03202068c324e4b23746be832a84f44"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_014",
+      "masterId": "m514_piemon:master:0d5f5bb8d3636f4b",
+      "members": [
+        "m514_piemon/main/cell_014"
+      ],
+      "size": [
+        232,
+        288
+      ],
+      "sourceRgbaSha256": "3b89913e1e4132cbd52d5702a6dae2f88870b89a6aada700e740a9d762f2f110"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_015",
+      "masterId": "m514_piemon:master:7318a580a5ac43f2",
+      "members": [
+        "m514_piemon/main/cell_015"
+      ],
+      "size": [
+        184,
+        164
+      ],
+      "sourceRgbaSha256": "e1638c0351dfa78cf040265eafce297afcde5ad1bcb487cda58b3cfa26f27d1e"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_017",
+      "masterId": "m514_piemon:master:0dd9d24f4e5e2069",
+      "members": [
+        "m514_piemon/main/cell_017",
+        "m514_piemon/main/cell_033"
+      ],
+      "size": [
+        124,
+        160
+      ],
+      "sourceRgbaSha256": "842810ae49432f8abfdc263273227db0017543312be6d93d0b17cf645eae68c5"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_018",
+      "masterId": "m514_piemon:master:a7ee50c780a785c6",
+      "members": [
+        "m514_piemon/main/cell_018",
+        "m514_piemon/main/cell_034"
+      ],
+      "size": [
+        124,
+        172
+      ],
+      "sourceRgbaSha256": "b7295f3b72f112e11e8a5f3e2087323017b8e5109074a1b23270e293e16d4a6e"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_019",
+      "masterId": "m514_piemon:master:d7c2f30b5ed594b8",
+      "members": [
+        "m514_piemon/main/cell_019",
+        "m514_piemon/main/cell_035"
+      ],
+      "size": [
+        144,
+        148
+      ],
+      "sourceRgbaSha256": "fa6447b2365cd580080d6147d354cb29560791ad1d6d0101db7380780c7037d3"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_020",
+      "masterId": "m514_piemon:master:75d4e00bc2f9420a",
+      "members": [
+        "m514_piemon/main/cell_020",
+        "m514_piemon/main/cell_036"
+      ],
+      "size": [
+        124,
+        152
+      ],
+      "sourceRgbaSha256": "1960ee0ecacc4892d5a1e4a09b2e9cbba39d930dbb327fc9b7b63f8b52107257"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_022",
+      "masterId": "m514_piemon:master:2f614ce5f6c805e9",
+      "members": [
+        "m514_piemon/main/cell_022",
+        "m514_piemon/main/cell_038"
+      ],
+      "size": [
+        116,
+        156
+      ],
+      "sourceRgbaSha256": "215abca628f110d7ead499f9e7d3e0f0611df69f107492abb838bbd470c0ed66"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_023",
+      "masterId": "m514_piemon:master:e3193dfa06ab3570",
+      "members": [
+        "m514_piemon/main/cell_023",
+        "m514_piemon/main/cell_039"
+      ],
+      "size": [
+        124,
+        148
+      ],
+      "sourceRgbaSha256": "5e0791d7d091f225276e713135c4d74a6914c94bbb5f48d8cb0fd0f90576d988"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_024",
+      "masterId": "m514_piemon:master:3396c371cb67d419",
+      "members": [
+        "m514_piemon/main/cell_024",
+        "m514_piemon/main/cell_040",
+        "m514_piemon/sub/cell_007"
+      ],
+      "size": [
+        188,
+        84
+      ],
+      "sourceRgbaSha256": "dc5c693378692772d6f7b2f70c8aa99c61b451a524930ba7c8a964c8dfb9ec16"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_041",
+      "masterId": "m514_piemon:master:749b0cee8db76ebe",
+      "members": [
+        "m514_piemon/main/cell_041"
+      ],
+      "size": [
+        124,
+        188
+      ],
+      "sourceRgbaSha256": "60ebdc19f72fd38ccb6c7133ba077631228b7d5a48f1b181168b56e07cc2ec7c"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_042",
+      "masterId": "m514_piemon:master:9322e81d3ffe88b8",
+      "members": [
+        "m514_piemon/main/cell_042"
+      ],
+      "size": [
+        124,
+        188
+      ],
+      "sourceRgbaSha256": "7070c6e1e2df1cef208a8c78ebd6baaa7c12c6a140309ad6cc773a27fc15708f"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_043",
+      "masterId": "m514_piemon:master:442f778e1484fa48",
+      "members": [
+        "m514_piemon/main/cell_043",
+        "m514_piemon/sub/cell_008"
+      ],
+      "size": [
+        116,
+        148
+      ],
+      "sourceRgbaSha256": "510d9b14c09746dbe741ab9911b70d84e31c5262fbd5549b56019781099d7398"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_045",
+      "masterId": "m514_piemon:master:68aa2dae48f7d655",
+      "members": [
+        "m514_piemon/main/cell_045",
+        "m514_piemon/sub/cell_010"
+      ],
+      "size": [
+        124,
+        160
+      ],
+      "sourceRgbaSha256": "f7651f472c593872f915050bd911d1bc0cbc1e15d6aa3e4d4f0223552ad4542c"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_046",
+      "masterId": "m514_piemon:master:fc14d2ae809385c7",
+      "members": [
+        "m514_piemon/main/cell_046",
+        "m514_piemon/sub/cell_011"
+      ],
+      "size": [
+        116,
+        144
+      ],
+      "sourceRgbaSha256": "bec73c78ca3d3f1cd58e4f45629f42747fe76e7dea2730859e736c7bd84a7f72"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_047",
+      "masterId": "m514_piemon:master:c57708481730e017",
+      "members": [
+        "m514_piemon/main/cell_047",
+        "m514_piemon/sub/cell_012"
+      ],
+      "size": [
+        124,
+        144
+      ],
+      "sourceRgbaSha256": "3fe2ebbfe824f2593e915a752d899eaa0ca1f72a41ad8afbcd8f011a43afb37b"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_048",
+      "masterId": "m514_piemon:master:8b58d0b29311915e",
+      "members": [
+        "m514_piemon/main/cell_048",
+        "m514_piemon/sub/cell_013"
+      ],
+      "size": [
+        232,
+        280
+      ],
+      "sourceRgbaSha256": "b0ce562b9dc708cca07d2f2170cb5c64dd424b1a8090262851b17956eece54e0"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_049",
+      "masterId": "m514_piemon:master:dc266aedfdaab78e",
+      "members": [
+        "m514_piemon/main/cell_049",
+        "m514_piemon/sub/cell_014"
+      ],
+      "size": [
+        124,
+        192
+      ],
+      "sourceRgbaSha256": "7f3bff285d269dbafe894273196347e7c1a70874e5d716eff51ea608ec5934b3"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_050",
+      "masterId": "m514_piemon:master:55e7555dc821da1a",
+      "members": [
+        "m514_piemon/main/cell_050",
+        "m514_piemon/sub/cell_015"
+      ],
+      "size": [
+        232,
+        280
+      ],
+      "sourceRgbaSha256": "4e1785e88234caee566bcf6c9ffc0f6f686e6b3596dde70a502a7be78f21635d"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_051",
+      "masterId": "m514_piemon:master:732828a001ea4e2b",
+      "members": [
+        "m514_piemon/main/cell_051"
+      ],
+      "size": [
+        176,
+        112
+      ],
+      "sourceRgbaSha256": "4afd4ec3d023763b314964651039d11b24b06b6b0f504a7c8be8d959dede079b"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_052",
+      "masterId": "m514_piemon:master:24883c1fd4ce5507",
+      "members": [
+        "m514_piemon/main/cell_052"
+      ],
+      "size": [
+        140,
+        156
+      ],
+      "sourceRgbaSha256": "b49733c74b5965b83503f826a63f346bbc795c79cc0ee8b14bd329ee19ce355a"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_053",
+      "masterId": "m514_piemon:master:7f68cf958430eb54",
+      "members": [
+        "m514_piemon/main/cell_053"
+      ],
+      "size": [
+        160,
+        168
+      ],
+      "sourceRgbaSha256": "bdf670baa5220edce632f0098f6b960ad170675a55772a8596731142d2bca989"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_054",
+      "masterId": "m514_piemon:master:17c760dd0fbdb379",
+      "members": [
+        "m514_piemon/main/cell_054"
+      ],
+      "size": [
+        232,
+        280
+      ],
+      "sourceRgbaSha256": "25744bfc87c71a5aa7f1af3556042d9e216fcd210c6a216c59bd54670d2c736c"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_055",
+      "masterId": "m514_piemon:master:71e663a14f183dac",
+      "members": [
+        "m514_piemon/main/cell_055"
+      ],
+      "size": [
+        116,
+        196
+      ],
+      "sourceRgbaSha256": "491a04bf1aef30906e59162c2ed5a8e43479ac3832e603d92a467367a112b614"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_056",
+      "masterId": "m514_piemon:master:bd5cefa51a526ac9",
+      "members": [
+        "m514_piemon/main/cell_056",
+        "m514_piemon/sub/cell_016"
+      ],
+      "size": [
+        312,
+        304
+      ],
+      "sourceRgbaSha256": "6c9aaaf1a09041af5f1d369be64b2b01e4efd33c09e1c3feb11748d10e4ba2a4"
+    },
+    {
+      "canonical": "m514_piemon/main/cell_059",
+      "masterId": "m514_piemon:master:a717fb122c3e82c7",
+      "members": [
+        "m514_piemon/main/cell_059"
+      ],
+      "size": [
+        116,
+        148
+      ],
+      "sourceRgbaSha256": "e6790304fa3f193aea1c2f5d93b64ce95a2158f4baf10bab3d3b43cbc6c0550b"
+    }
+  ],
+  "reusePolicy": "EXACT_RGBA_AND_DIMENSIONS_WITHIN_ENTITY_ONLY_PLACEMENT_RETAINED_PER_SLOT",
+  "schemaVersion": 1,
+  "slots": [
+    {
+      "declaredPreCompositeRgbaSha256": "e9e2ddcd6afa8e5fadfe95e512e5201598bfe38412d734715998c4cb232302c6",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:26f2c752f8084349",
+      "sourceRgbaSha256": "fdbabfddf3d38b460b9c6d98d094a4cd1444ca6eb84b5b304665c2cf243d8d78",
+      "sourceSize": [
+        116,
+        148
+      ],
+      "texture": "m514_piemon/main/cell_000"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "ef5ef603187e757b598cd56dc93e67e7cbbca0545bc1431c3a82158409947cbb",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:af2ebfb39b98fc6f",
+      "sourceRgbaSha256": "52707ebbcd930334bd7ceb937ac25164ce9c22a7f8052d9388b4887c9f63b0e5",
+      "sourceSize": [
+        124,
+        160
+      ],
+      "texture": "m514_piemon/main/cell_001"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9bb38216531f1ac3dc987fbc810dff24a7f77f1a916e59dd4e2a05f9531357db",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:6a1f289cc0307e1b",
+      "sourceRgbaSha256": "7f3ac505f116e6a4e6dac1150357279449d1e32b70b40c1f1142d25d4e74ab11",
+      "sourceSize": [
+        232,
+        288
+      ],
+      "texture": "m514_piemon/main/cell_002"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "8b835e2d2fd5b21b8486108a2ce5e7306f62a600ad3edfe1e99a9b7da6d33825",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:23c2916c2c41209a",
+      "sourceRgbaSha256": "bd5cdf543aef14acfbbe7df10605d0ef8f6d785597c8683ff6b25f0625b0743d",
+      "sourceSize": [
+        124,
+        156
+      ],
+      "texture": "m514_piemon/main/cell_003"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b42b3514c506fa7150492e50e4505402647bbdfbb403f9b9d59080cc82736363",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:857f6ed64b926a3a",
+      "sourceRgbaSha256": "310729359beda49bd91d2e357a0c78e6d34d4bbfa00981bd9c5b1209e7b0496b",
+      "sourceSize": [
+        144,
+        152
+      ],
+      "texture": "m514_piemon/main/cell_004"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "16108a8f987a4fe3e594622cc1d9a856532c64b8f789f7b71f9d80a78af2bbb9",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:d011e9167e51269a",
+      "sourceRgbaSha256": "41cc4bad1a95d3951260c2e67238344cfced802f471ca99071ae0f76322d93d5",
+      "sourceSize": [
+        124,
+        160
+      ],
+      "texture": "m514_piemon/main/cell_005"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "16108a8f987a4fe3e594622cc1d9a856532c64b8f789f7b71f9d80a78af2bbb9",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:d011e9167e51269a",
+      "sourceRgbaSha256": "41cc4bad1a95d3951260c2e67238344cfced802f471ca99071ae0f76322d93d5",
+      "sourceSize": [
+        124,
+        160
+      ],
+      "texture": "m514_piemon/main/cell_006"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9e1dc2f5a7dd293e6155f794097972804f78d67422b4dde408a54034b5523519",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:329030fd2064901c",
+      "sourceRgbaSha256": "4a4c577a04d4117f87b0469801b269a4a40cc2d1c9f470ed742f15751518a8e2",
+      "sourceSize": [
+        124,
+        188
+      ],
+      "texture": "m514_piemon/main/cell_007"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "94ccbb2c639ad76e39ec6fb27baf253590f359026ac034619bdfb0ab2eda1f89",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:d4c0e2ee4af3cb94",
+      "sourceRgbaSha256": "e41da759c5887410affde4829f50dedae46e26146c7b62e9c3e23c214e94a962",
+      "sourceSize": [
+        188,
+        84
+      ],
+      "texture": "m514_piemon/main/cell_008"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "088a23367dc19c1650d9be046695e7d3a83523ec22ff8a59d37263428237ba71",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:2b72d5fdc360da2b",
+      "sourceRgbaSha256": "28224240e5d2822d6c6b93730bd3f2366d1af11cd6a16410628f67a1afc91bfd",
+      "sourceSize": [
+        312,
+        304
+      ],
+      "texture": "m514_piemon/main/cell_009"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "5133798c3d76a0b492175a866afc2afa5846626b0aafa5aa5a9d4f8538809cff",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:37cd94f79f72dd03",
+      "sourceRgbaSha256": "07f7503e3210d18b656a84ceb875e44c51411e78a35b1ae45693a1e4d2ab1910",
+      "sourceSize": [
+        140,
+        140
+      ],
+      "texture": "m514_piemon/main/cell_010"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "93deb109a028f631e8b89cc59df5738dfdfca2cb43c64e871fe661ec8542f33f",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:7d9e5ca9657d2b8f",
+      "sourceRgbaSha256": "cce8b60432fb67759620a1156b7954291cdfa88553003c48938cd66748ac333e",
+      "sourceSize": [
+        168,
+        164
+      ],
+      "texture": "m514_piemon/main/cell_011"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "975442da887905eee6084e127afd85e4ea0da9c5a0c0428086b7ebb6e4590978",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:a94a02d356a74b5f",
+      "sourceRgbaSha256": "c7976714f26f399883dae6d68832432225b81112161a6e3cbb95dda95f30348f",
+      "sourceSize": [
+        116,
+        168
+      ],
+      "texture": "m514_piemon/main/cell_012"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b859ce9a0f27db1baf9ec81af7cac021eda29a8c1798506340dedb6ee7b5c9ca",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:f564e0649932c312",
+      "sourceRgbaSha256": "2dda90079910feb59c7ce43edfda61bef03202068c324e4b23746be832a84f44",
+      "sourceSize": [
+        164,
+        152
+      ],
+      "texture": "m514_piemon/main/cell_013"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "447ca3b3491c6714ab174faa7425c5606060b2902f6c762fb15ad28a081b7aaa",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:0d5f5bb8d3636f4b",
+      "sourceRgbaSha256": "3b89913e1e4132cbd52d5702a6dae2f88870b89a6aada700e740a9d762f2f110",
+      "sourceSize": [
+        232,
+        288
+      ],
+      "texture": "m514_piemon/main/cell_014"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "782c3f8bb8dfae29945545d2bbbd20ccfc3aebc12543ea456b4a8cab26c459b1",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:7318a580a5ac43f2",
+      "sourceRgbaSha256": "e1638c0351dfa78cf040265eafce297afcde5ad1bcb487cda58b3cfa26f27d1e",
+      "sourceSize": [
+        184,
+        164
+      ],
+      "texture": "m514_piemon/main/cell_015"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "975442da887905eee6084e127afd85e4ea0da9c5a0c0428086b7ebb6e4590978",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:a94a02d356a74b5f",
+      "sourceRgbaSha256": "c7976714f26f399883dae6d68832432225b81112161a6e3cbb95dda95f30348f",
+      "sourceSize": [
+        116,
+        168
+      ],
+      "texture": "m514_piemon/main/cell_016"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "942da55531267a0a3a6a4f8fde6f74c2b0fda7be86edd6fb011c13c0bc22ebca",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:0dd9d24f4e5e2069",
+      "sourceRgbaSha256": "842810ae49432f8abfdc263273227db0017543312be6d93d0b17cf645eae68c5",
+      "sourceSize": [
+        124,
+        160
+      ],
+      "texture": "m514_piemon/main/cell_017"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "8fb85fdf1a4012dbe422cef3d34243fb80682807051555bb9da3df782bc8abb4",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:a7ee50c780a785c6",
+      "sourceRgbaSha256": "b7295f3b72f112e11e8a5f3e2087323017b8e5109074a1b23270e293e16d4a6e",
+      "sourceSize": [
+        124,
+        172
+      ],
+      "texture": "m514_piemon/main/cell_018"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "3017d71ad6c21fd583286dcc831b57ec72b4d1fdc51e9db2e158e1955546dda2",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:d7c2f30b5ed594b8",
+      "sourceRgbaSha256": "fa6447b2365cd580080d6147d354cb29560791ad1d6d0101db7380780c7037d3",
+      "sourceSize": [
+        144,
+        148
+      ],
+      "texture": "m514_piemon/main/cell_019"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "c6dd8b4a5ccaed49f1dda2f2d368a301e10313c6acc23848b4ba243c063e9433",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:75d4e00bc2f9420a",
+      "sourceRgbaSha256": "1960ee0ecacc4892d5a1e4a09b2e9cbba39d930dbb327fc9b7b63f8b52107257",
+      "sourceSize": [
+        124,
+        152
+      ],
+      "texture": "m514_piemon/main/cell_020"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "94ccbb2c639ad76e39ec6fb27baf253590f359026ac034619bdfb0ab2eda1f89",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:d4c0e2ee4af3cb94",
+      "sourceRgbaSha256": "e41da759c5887410affde4829f50dedae46e26146c7b62e9c3e23c214e94a962",
+      "sourceSize": [
+        188,
+        84
+      ],
+      "texture": "m514_piemon/main/cell_021"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "5a738b51acdffb37e1be3316e0a3331c18f5a7185e824fcabb63e0b8bebdbdc3",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:2f614ce5f6c805e9",
+      "sourceRgbaSha256": "215abca628f110d7ead499f9e7d3e0f0611df69f107492abb838bbd470c0ed66",
+      "sourceSize": [
+        116,
+        156
+      ],
+      "texture": "m514_piemon/main/cell_022"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "1997dbd08a95d3039e8334b6ea7c6a24b1cac8436ce639b31dcae76e51819709",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:e3193dfa06ab3570",
+      "sourceRgbaSha256": "5e0791d7d091f225276e713135c4d74a6914c94bbb5f48d8cb0fd0f90576d988",
+      "sourceSize": [
+        124,
+        148
+      ],
+      "texture": "m514_piemon/main/cell_023"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "43697a6c15cba3f6e457381ac9e24f56d535b7d22eb57f1fd52b4538e0fa5574",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:3396c371cb67d419",
+      "sourceRgbaSha256": "dc5c693378692772d6f7b2f70c8aa99c61b451a524930ba7c8a964c8dfb9ec16",
+      "sourceSize": [
+        188,
+        84
+      ],
+      "texture": "m514_piemon/main/cell_024"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e9e2ddcd6afa8e5fadfe95e512e5201598bfe38412d734715998c4cb232302c6",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:26f2c752f8084349",
+      "sourceRgbaSha256": "fdbabfddf3d38b460b9c6d98d094a4cd1444ca6eb84b5b304665c2cf243d8d78",
+      "sourceSize": [
+        116,
+        148
+      ],
+      "texture": "m514_piemon/main/cell_025"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "ef5ef603187e757b598cd56dc93e67e7cbbca0545bc1431c3a82158409947cbb",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:af2ebfb39b98fc6f",
+      "sourceRgbaSha256": "52707ebbcd930334bd7ceb937ac25164ce9c22a7f8052d9388b4887c9f63b0e5",
+      "sourceSize": [
+        124,
+        160
+      ],
+      "texture": "m514_piemon/main/cell_026"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9bb38216531f1ac3dc987fbc810dff24a7f77f1a916e59dd4e2a05f9531357db",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:6a1f289cc0307e1b",
+      "sourceRgbaSha256": "7f3ac505f116e6a4e6dac1150357279449d1e32b70b40c1f1142d25d4e74ab11",
+      "sourceSize": [
+        232,
+        288
+      ],
+      "texture": "m514_piemon/main/cell_027"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "8b835e2d2fd5b21b8486108a2ce5e7306f62a600ad3edfe1e99a9b7da6d33825",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:23c2916c2c41209a",
+      "sourceRgbaSha256": "bd5cdf543aef14acfbbe7df10605d0ef8f6d785597c8683ff6b25f0625b0743d",
+      "sourceSize": [
+        124,
+        156
+      ],
+      "texture": "m514_piemon/main/cell_028"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "b42b3514c506fa7150492e50e4505402647bbdfbb403f9b9d59080cc82736363",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:857f6ed64b926a3a",
+      "sourceRgbaSha256": "310729359beda49bd91d2e357a0c78e6d34d4bbfa00981bd9c5b1209e7b0496b",
+      "sourceSize": [
+        144,
+        152
+      ],
+      "texture": "m514_piemon/main/cell_029"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "16108a8f987a4fe3e594622cc1d9a856532c64b8f789f7b71f9d80a78af2bbb9",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:d011e9167e51269a",
+      "sourceRgbaSha256": "41cc4bad1a95d3951260c2e67238344cfced802f471ca99071ae0f76322d93d5",
+      "sourceSize": [
+        124,
+        160
+      ],
+      "texture": "m514_piemon/main/cell_030"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "16108a8f987a4fe3e594622cc1d9a856532c64b8f789f7b71f9d80a78af2bbb9",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:d011e9167e51269a",
+      "sourceRgbaSha256": "41cc4bad1a95d3951260c2e67238344cfced802f471ca99071ae0f76322d93d5",
+      "sourceSize": [
+        124,
+        160
+      ],
+      "texture": "m514_piemon/main/cell_031"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9e1dc2f5a7dd293e6155f794097972804f78d67422b4dde408a54034b5523519",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:329030fd2064901c",
+      "sourceRgbaSha256": "4a4c577a04d4117f87b0469801b269a4a40cc2d1c9f470ed742f15751518a8e2",
+      "sourceSize": [
+        124,
+        188
+      ],
+      "texture": "m514_piemon/main/cell_032"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "942da55531267a0a3a6a4f8fde6f74c2b0fda7be86edd6fb011c13c0bc22ebca",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:0dd9d24f4e5e2069",
+      "sourceRgbaSha256": "842810ae49432f8abfdc263273227db0017543312be6d93d0b17cf645eae68c5",
+      "sourceSize": [
+        124,
+        160
+      ],
+      "texture": "m514_piemon/main/cell_033"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "8fb85fdf1a4012dbe422cef3d34243fb80682807051555bb9da3df782bc8abb4",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:a7ee50c780a785c6",
+      "sourceRgbaSha256": "b7295f3b72f112e11e8a5f3e2087323017b8e5109074a1b23270e293e16d4a6e",
+      "sourceSize": [
+        124,
+        172
+      ],
+      "texture": "m514_piemon/main/cell_034"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "3017d71ad6c21fd583286dcc831b57ec72b4d1fdc51e9db2e158e1955546dda2",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:d7c2f30b5ed594b8",
+      "sourceRgbaSha256": "fa6447b2365cd580080d6147d354cb29560791ad1d6d0101db7380780c7037d3",
+      "sourceSize": [
+        144,
+        148
+      ],
+      "texture": "m514_piemon/main/cell_035"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "c6dd8b4a5ccaed49f1dda2f2d368a301e10313c6acc23848b4ba243c063e9433",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:75d4e00bc2f9420a",
+      "sourceRgbaSha256": "1960ee0ecacc4892d5a1e4a09b2e9cbba39d930dbb327fc9b7b63f8b52107257",
+      "sourceSize": [
+        124,
+        152
+      ],
+      "texture": "m514_piemon/main/cell_036"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "94ccbb2c639ad76e39ec6fb27baf253590f359026ac034619bdfb0ab2eda1f89",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:d4c0e2ee4af3cb94",
+      "sourceRgbaSha256": "e41da759c5887410affde4829f50dedae46e26146c7b62e9c3e23c214e94a962",
+      "sourceSize": [
+        188,
+        84
+      ],
+      "texture": "m514_piemon/main/cell_037"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "5a738b51acdffb37e1be3316e0a3331c18f5a7185e824fcabb63e0b8bebdbdc3",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:2f614ce5f6c805e9",
+      "sourceRgbaSha256": "215abca628f110d7ead499f9e7d3e0f0611df69f107492abb838bbd470c0ed66",
+      "sourceSize": [
+        116,
+        156
+      ],
+      "texture": "m514_piemon/main/cell_038"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "1997dbd08a95d3039e8334b6ea7c6a24b1cac8436ce639b31dcae76e51819709",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:e3193dfa06ab3570",
+      "sourceRgbaSha256": "5e0791d7d091f225276e713135c4d74a6914c94bbb5f48d8cb0fd0f90576d988",
+      "sourceSize": [
+        124,
+        148
+      ],
+      "texture": "m514_piemon/main/cell_039"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "43697a6c15cba3f6e457381ac9e24f56d535b7d22eb57f1fd52b4538e0fa5574",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:3396c371cb67d419",
+      "sourceRgbaSha256": "dc5c693378692772d6f7b2f70c8aa99c61b451a524930ba7c8a964c8dfb9ec16",
+      "sourceSize": [
+        188,
+        84
+      ],
+      "texture": "m514_piemon/main/cell_040"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "acf28aad74b0edefeb9b989d44b6baaa7aa702671528cfd4e8851f1d18ed67d0",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:749b0cee8db76ebe",
+      "sourceRgbaSha256": "60ebdc19f72fd38ccb6c7133ba077631228b7d5a48f1b181168b56e07cc2ec7c",
+      "sourceSize": [
+        124,
+        188
+      ],
+      "texture": "m514_piemon/main/cell_041"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "29a71a92b7d9208691f7f35272f008d6f82803653ebb7deee0144244da870bf3",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:9322e81d3ffe88b8",
+      "sourceRgbaSha256": "7070c6e1e2df1cef208a8c78ebd6baaa7c12c6a140309ad6cc773a27fc15708f",
+      "sourceSize": [
+        124,
+        188
+      ],
+      "texture": "m514_piemon/main/cell_042"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "4cc69854a3b2bf690f59753841c765fdde2403c0134f4aa4899a06ab9ff3a760",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:442f778e1484fa48",
+      "sourceRgbaSha256": "510d9b14c09746dbe741ab9911b70d84e31c5262fbd5549b56019781099d7398",
+      "sourceSize": [
+        116,
+        148
+      ],
+      "texture": "m514_piemon/main/cell_043"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e9e2ddcd6afa8e5fadfe95e512e5201598bfe38412d734715998c4cb232302c6",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:26f2c752f8084349",
+      "sourceRgbaSha256": "fdbabfddf3d38b460b9c6d98d094a4cd1444ca6eb84b5b304665c2cf243d8d78",
+      "sourceSize": [
+        116,
+        148
+      ],
+      "texture": "m514_piemon/main/cell_044"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "f04ffdd009bd13dfc63fb07ed4fe013d8c1c116cbc91448564aa7065c6625f96",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:68aa2dae48f7d655",
+      "sourceRgbaSha256": "f7651f472c593872f915050bd911d1bc0cbc1e15d6aa3e4d4f0223552ad4542c",
+      "sourceSize": [
+        124,
+        160
+      ],
+      "texture": "m514_piemon/main/cell_045"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "5d42f703dc3d70d12a68bbaac257d37326eca96cf387fc17bf795a06c2917229",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:fc14d2ae809385c7",
+      "sourceRgbaSha256": "bec73c78ca3d3f1cd58e4f45629f42747fe76e7dea2730859e736c7bd84a7f72",
+      "sourceSize": [
+        116,
+        144
+      ],
+      "texture": "m514_piemon/main/cell_046"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e6862f7e5979a02ec5ea8276d6b31519af1fdac6d1faac46cdb4711c804846e5",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:c57708481730e017",
+      "sourceRgbaSha256": "3fe2ebbfe824f2593e915a752d899eaa0ca1f72a41ad8afbcd8f011a43afb37b",
+      "sourceSize": [
+        124,
+        144
+      ],
+      "texture": "m514_piemon/main/cell_047"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "8ceee6bf7c682da0d191157510cc94c644e58de5de881bb609432b0a3f30478e",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:8b58d0b29311915e",
+      "sourceRgbaSha256": "b0ce562b9dc708cca07d2f2170cb5c64dd424b1a8090262851b17956eece54e0",
+      "sourceSize": [
+        232,
+        280
+      ],
+      "texture": "m514_piemon/main/cell_048"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "033c98282b655507c79ac132e9bcdc312cb27b0316840703a43cfc01d9e0b472",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:dc266aedfdaab78e",
+      "sourceRgbaSha256": "7f3bff285d269dbafe894273196347e7c1a70874e5d716eff51ea608ec5934b3",
+      "sourceSize": [
+        124,
+        192
+      ],
+      "texture": "m514_piemon/main/cell_049"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "4f297016064c2ee10a08189520a98055418f491193d0783994ede38bb5322b45",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:55e7555dc821da1a",
+      "sourceRgbaSha256": "4e1785e88234caee566bcf6c9ffc0f6f686e6b3596dde70a502a7be78f21635d",
+      "sourceSize": [
+        232,
+        280
+      ],
+      "texture": "m514_piemon/main/cell_050"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "d5a8b6210ea58a5ebf1c40ce7bc5380e76fd276b018a47d3cd9e3b9d94680ca2",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:732828a001ea4e2b",
+      "sourceRgbaSha256": "4afd4ec3d023763b314964651039d11b24b06b6b0f504a7c8be8d959dede079b",
+      "sourceSize": [
+        176,
+        112
+      ],
+      "texture": "m514_piemon/main/cell_051"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "26d9e3c2dad96977010aaff83bbcbf774d680370e4d14b751680b0de211a4467",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:24883c1fd4ce5507",
+      "sourceRgbaSha256": "b49733c74b5965b83503f826a63f346bbc795c79cc0ee8b14bd329ee19ce355a",
+      "sourceSize": [
+        140,
+        156
+      ],
+      "texture": "m514_piemon/main/cell_052"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e049cb76f6a06445daf7b56e5e7e988f2fdb626c24f41a7a8f5ce0985d2844e3",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:7f68cf958430eb54",
+      "sourceRgbaSha256": "bdf670baa5220edce632f0098f6b960ad170675a55772a8596731142d2bca989",
+      "sourceSize": [
+        160,
+        168
+      ],
+      "texture": "m514_piemon/main/cell_053"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "f143546cafbea3735b4d8f73dda1ce882653e05658d2e160cc473e5b7ea75b17",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:17c760dd0fbdb379",
+      "sourceRgbaSha256": "25744bfc87c71a5aa7f1af3556042d9e216fcd210c6a216c59bd54670d2c736c",
+      "sourceSize": [
+        232,
+        280
+      ],
+      "texture": "m514_piemon/main/cell_054"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "947466ba49f7e7999fdd8ce8485e1cac1385438b39461c451f098366ebb7d9ad",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:71e663a14f183dac",
+      "sourceRgbaSha256": "491a04bf1aef30906e59162c2ed5a8e43479ac3832e603d92a467367a112b614",
+      "sourceSize": [
+        116,
+        196
+      ],
+      "texture": "m514_piemon/main/cell_055"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "4f0e7b5fd50d846389c6610c39250da86a0d7aecd6cb42315f91aa41d2ed4ffd",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:bd5cefa51a526ac9",
+      "sourceRgbaSha256": "6c9aaaf1a09041af5f1d369be64b2b01e4efd33c09e1c3feb11748d10e4ba2a4",
+      "sourceSize": [
+        312,
+        304
+      ],
+      "texture": "m514_piemon/main/cell_056"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "94ccbb2c639ad76e39ec6fb27baf253590f359026ac034619bdfb0ab2eda1f89",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:d4c0e2ee4af3cb94",
+      "sourceRgbaSha256": "e41da759c5887410affde4829f50dedae46e26146c7b62e9c3e23c214e94a962",
+      "sourceSize": [
+        188,
+        84
+      ],
+      "texture": "m514_piemon/main/cell_057"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "088a23367dc19c1650d9be046695e7d3a83523ec22ff8a59d37263428237ba71",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:2b72d5fdc360da2b",
+      "sourceRgbaSha256": "28224240e5d2822d6c6b93730bd3f2366d1af11cd6a16410628f67a1afc91bfd",
+      "sourceSize": [
+        312,
+        304
+      ],
+      "texture": "m514_piemon/main/cell_058"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e3eda4e770a30fb6360502cfaf5e7a4a9e2b7b8e42ff20c88d094b7b3959c750",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:a717fb122c3e82c7",
+      "sourceRgbaSha256": "e6790304fa3f193aea1c2f5d93b64ce95a2158f4baf10bab3d3b43cbc6c0550b",
+      "sourceSize": [
+        116,
+        148
+      ],
+      "texture": "m514_piemon/main/cell_059"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e9e2ddcd6afa8e5fadfe95e512e5201598bfe38412d734715998c4cb232302c6",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:26f2c752f8084349",
+      "sourceRgbaSha256": "fdbabfddf3d38b460b9c6d98d094a4cd1444ca6eb84b5b304665c2cf243d8d78",
+      "sourceSize": [
+        116,
+        148
+      ],
+      "texture": "m514_piemon/sub/cell_000"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "ef5ef603187e757b598cd56dc93e67e7cbbca0545bc1431c3a82158409947cbb",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:af2ebfb39b98fc6f",
+      "sourceRgbaSha256": "52707ebbcd930334bd7ceb937ac25164ce9c22a7f8052d9388b4887c9f63b0e5",
+      "sourceSize": [
+        124,
+        160
+      ],
+      "texture": "m514_piemon/sub/cell_001"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "9bb38216531f1ac3dc987fbc810dff24a7f77f1a916e59dd4e2a05f9531357db",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:6a1f289cc0307e1b",
+      "sourceRgbaSha256": "7f3ac505f116e6a4e6dac1150357279449d1e32b70b40c1f1142d25d4e74ab11",
+      "sourceSize": [
+        232,
+        288
+      ],
+      "texture": "m514_piemon/sub/cell_002"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "8b835e2d2fd5b21b8486108a2ce5e7306f62a600ad3edfe1e99a9b7da6d33825",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:23c2916c2c41209a",
+      "sourceRgbaSha256": "bd5cdf543aef14acfbbe7df10605d0ef8f6d785597c8683ff6b25f0625b0743d",
+      "sourceSize": [
+        124,
+        156
+      ],
+      "texture": "m514_piemon/sub/cell_003"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "94ccbb2c639ad76e39ec6fb27baf253590f359026ac034619bdfb0ab2eda1f89",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:d4c0e2ee4af3cb94",
+      "sourceRgbaSha256": "e41da759c5887410affde4829f50dedae46e26146c7b62e9c3e23c214e94a962",
+      "sourceSize": [
+        188,
+        84
+      ],
+      "texture": "m514_piemon/sub/cell_004"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "088a23367dc19c1650d9be046695e7d3a83523ec22ff8a59d37263428237ba71",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:2b72d5fdc360da2b",
+      "sourceRgbaSha256": "28224240e5d2822d6c6b93730bd3f2366d1af11cd6a16410628f67a1afc91bfd",
+      "sourceSize": [
+        312,
+        304
+      ],
+      "texture": "m514_piemon/sub/cell_005"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "94ccbb2c639ad76e39ec6fb27baf253590f359026ac034619bdfb0ab2eda1f89",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:d4c0e2ee4af3cb94",
+      "sourceRgbaSha256": "e41da759c5887410affde4829f50dedae46e26146c7b62e9c3e23c214e94a962",
+      "sourceSize": [
+        188,
+        84
+      ],
+      "texture": "m514_piemon/sub/cell_006"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "43697a6c15cba3f6e457381ac9e24f56d535b7d22eb57f1fd52b4538e0fa5574",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:3396c371cb67d419",
+      "sourceRgbaSha256": "dc5c693378692772d6f7b2f70c8aa99c61b451a524930ba7c8a964c8dfb9ec16",
+      "sourceSize": [
+        188,
+        84
+      ],
+      "texture": "m514_piemon/sub/cell_007"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "4cc69854a3b2bf690f59753841c765fdde2403c0134f4aa4899a06ab9ff3a760",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:442f778e1484fa48",
+      "sourceRgbaSha256": "510d9b14c09746dbe741ab9911b70d84e31c5262fbd5549b56019781099d7398",
+      "sourceSize": [
+        116,
+        148
+      ],
+      "texture": "m514_piemon/sub/cell_008"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e9e2ddcd6afa8e5fadfe95e512e5201598bfe38412d734715998c4cb232302c6",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:26f2c752f8084349",
+      "sourceRgbaSha256": "fdbabfddf3d38b460b9c6d98d094a4cd1444ca6eb84b5b304665c2cf243d8d78",
+      "sourceSize": [
+        116,
+        148
+      ],
+      "texture": "m514_piemon/sub/cell_009"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "f04ffdd009bd13dfc63fb07ed4fe013d8c1c116cbc91448564aa7065c6625f96",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:68aa2dae48f7d655",
+      "sourceRgbaSha256": "f7651f472c593872f915050bd911d1bc0cbc1e15d6aa3e4d4f0223552ad4542c",
+      "sourceSize": [
+        124,
+        160
+      ],
+      "texture": "m514_piemon/sub/cell_010"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "5d42f703dc3d70d12a68bbaac257d37326eca96cf387fc17bf795a06c2917229",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:fc14d2ae809385c7",
+      "sourceRgbaSha256": "bec73c78ca3d3f1cd58e4f45629f42747fe76e7dea2730859e736c7bd84a7f72",
+      "sourceSize": [
+        116,
+        144
+      ],
+      "texture": "m514_piemon/sub/cell_011"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "e6862f7e5979a02ec5ea8276d6b31519af1fdac6d1faac46cdb4711c804846e5",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:c57708481730e017",
+      "sourceRgbaSha256": "3fe2ebbfe824f2593e915a752d899eaa0ca1f72a41ad8afbcd8f011a43afb37b",
+      "sourceSize": [
+        124,
+        144
+      ],
+      "texture": "m514_piemon/sub/cell_012"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "8ceee6bf7c682da0d191157510cc94c644e58de5de881bb609432b0a3f30478e",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:8b58d0b29311915e",
+      "sourceRgbaSha256": "b0ce562b9dc708cca07d2f2170cb5c64dd424b1a8090262851b17956eece54e0",
+      "sourceSize": [
+        232,
+        280
+      ],
+      "texture": "m514_piemon/sub/cell_013"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "033c98282b655507c79ac132e9bcdc312cb27b0316840703a43cfc01d9e0b472",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:dc266aedfdaab78e",
+      "sourceRgbaSha256": "7f3bff285d269dbafe894273196347e7c1a70874e5d716eff51ea608ec5934b3",
+      "sourceSize": [
+        124,
+        192
+      ],
+      "texture": "m514_piemon/sub/cell_014"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "4f297016064c2ee10a08189520a98055418f491193d0783994ede38bb5322b45",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:55e7555dc821da1a",
+      "sourceRgbaSha256": "4e1785e88234caee566bcf6c9ffc0f6f686e6b3596dde70a502a7be78f21635d",
+      "sourceSize": [
+        232,
+        280
+      ],
+      "texture": "m514_piemon/sub/cell_015"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "4f0e7b5fd50d846389c6610c39250da86a0d7aecd6cb42315f91aa41d2ed4ffd",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:bd5cefa51a526ac9",
+      "sourceRgbaSha256": "6c9aaaf1a09041af5f1d369be64b2b01e4efd33c09e1c3feb11748d10e4ba2a4",
+      "sourceSize": [
+        312,
+        304
+      ],
+      "texture": "m514_piemon/sub/cell_016"
+    },
+    {
+      "declaredPreCompositeRgbaSha256": "94ccbb2c639ad76e39ec6fb27baf253590f359026ac034619bdfb0ab2eda1f89",
+      "isBlank": false,
+      "masterId": "m514_piemon:master:d4c0e2ee4af3cb94",
+      "sourceRgbaSha256": "e41da759c5887410affde4829f50dedae46e26146c7b62e9c3e23c214e94a962",
+      "sourceSize": [
+        188,
+        84
+      ],
+      "texture": "m514_piemon/sub/cell_017"
+    }
+  ]
+}

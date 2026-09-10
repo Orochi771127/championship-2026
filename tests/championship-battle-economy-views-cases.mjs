@@ -49,6 +49,18 @@ function useDocument(t) {
 
 const outcome = { ended: true, verdict: "TEAM_ZERO_AHEAD", reason: "TEAM_DOWN", winningTeam: 0 };
 
+test('rank and title pages require actual newly committed winning progress',(t)=>{
+  const root=useDocument(t),receipt={status:'SETTLED',won:true,credited:7000,walletAfter:7100};
+  const progression={rankBefore:0,rankAfter:1,earnedTitles:[{id:4,name:'測試頭銜'}]};
+  const view=createBattleResultView({root,outcome,receipt,progression});
+  assert.deepEqual(view.inspect().panels,['RESULT','PRIZE','RANK','TITLE']);
+  const next=()=>descendants(root).find(n=>n.textContent==='下一頁').click();next();next();
+  assert.match(textOf(root),/階級 0 → 1/);next();assert.match(textOf(root),/測試頭銜/);
+  for(const absent of [null,{...receipt,status:'ABANDONED'},{...receipt,won:false}])
+    assert.deepEqual(createBattleResultView({root,outcome,receipt:absent,progression}).inspect().panels,['RESULT','PRIZE']);
+  assert.deepEqual(createBattleResultView({root,outcome,receipt,progression:{rankBefore:1,rankAfter:1,earnedTitles:[]}}).inspect().panels,['RESULT','PRIZE']);
+});
+
 test('party selection enforces eligibility and slot limit; cancel never enters or charges', (t) => {
   const root = useDocument(t), entered = [];
   createBattleSelectView({root, matches:[{recordIndex:0,entryFee:150,payout:7000}],

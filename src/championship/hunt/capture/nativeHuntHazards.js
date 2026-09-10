@@ -47,6 +47,7 @@ export function createNativeHuntHazards(host,{consume,request}){
     if([...h.large,...h.small,...h.particles].every(p=>!p||!p.started||p.remaining===0))h.state=0;
   }
   function step(h){
+    h.visualTicks++;
     if(h.state===2){h.state=3;reset(h.kind);}
     else if(h.kind==='BOMB'){
       if(h.state===3){if(advance('BOMB')>240){h.state=4;reset('BOMB');}}
@@ -71,7 +72,7 @@ export function createNativeHuntHazards(host,{consume,request}){
       if(host.environment.readTerrain(...px(p).map(n=>Math.trunc(n/8)))===1){host.emit('BLOCKED_TERRAIN');return false;}
       const slot=pools[kind].findIndex(h=>!h||h.state===0);if(slot<0){host.emit('TOOL_POOL_FULL');return false;}
       if(!consume(item))return false;
-      const h={kind,item,positionQ12:[...p],state:2,particles:Array(20).fill(null),spawnEnabled:true};
+      const h={kind,item,positionQ12:[...p],state:2,visualTicks:0,particles:Array(20).fill(null),spawnEnabled:true};
       h.large=secondary(h,5,3,true);h.small=secondary(h,3,4,false);pools[kind][slot]=h;reset(kind);return true;
     },
     tick(){
@@ -104,7 +105,7 @@ export function createNativeHuntHazards(host,{consume,request}){
       const objects=[];
       for(const kind of ['BOMB','MINE'])for(const h of pools[kind]){
         if(!h||h.state===0)continue;
-        if(h.state<=4)objects.push({kind,x:h.positionQ12[0]/2048,y:h.positionQ12[1]/2048,itemIndex:h.item.nativeItemIndex,state:h.state});
+        if(h.state<=4)objects.push({kind,x:h.positionQ12[0]/2048,y:h.positionQ12[1]/2048,itemIndex:h.item.nativeItemIndex,state:h.state,visualTicks:h.visualTicks});
         for(const p of [...h.large,...h.small,...h.particles])if(p?.started&&p.remaining>0)objects.push({kind:'TOOL_BURST',
           sourceKind:kind,itemIndex:h.item.nativeItemIndex,sequence:p.sequence,x:p.positionQ12[0]/2048,y:p.positionQ12[1]/2048,remaining:p.remaining});
       }

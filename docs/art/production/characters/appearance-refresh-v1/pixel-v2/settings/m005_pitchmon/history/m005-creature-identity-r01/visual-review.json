@@ -1,0 +1,24 @@
+{
+  "candidateSource": "docs/art/production/characters/appearance-refresh-v1/_work/identity-roster-group1/m005_pitchmon",
+  "entityId": "m005_pitchmon",
+  "findings": [
+    "Coral horn-fin tips, paired deep eyes and pale cheek/belly produce a baby-dragon identity within the original floating silhouette.",
+    "One source standard pose only. Appearance direction is reviewed, but pose sampling remains incomplete and cannot pass the setting-stage gate."
+  ],
+  "fullMotionQa": "NOT_RUN",
+  "identityDirectionVersion": "creature-identity-v1",
+  "identityVerdict": "PASS_IDENTITY_DIRECTION",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "reviewMethod": "Actually viewed original/new comparison and native/enlarged authored contact board; independently compiled adopted pixels.",
+  "reviewer": "root / independent review of designer single-pose candidate",
+  "runtimePromotionGranted": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "00f5c83bf1e4e26e8e51ae2589419a7b7d5f72226afd0f373674b0c2c2ed8387",
+  "sourceComparisonSha256": "cd12668bede78261375e3ed97d07698411396ee8fab34aeb1f3d208eb60da517",
+  "technicalQaSha256": "7dcc07abffee76c838c21fac7355496750fa2b24bae5e027e6e0f61858b751c8",
+  "unresolvedBlockingIssues": [
+    "Additional source representative poses and continuity review required before setting acceptance."
+  ],
+  "verdict": "STANDARD_POSE_REVIEWED_NOT_SETTING_PASS"
+}

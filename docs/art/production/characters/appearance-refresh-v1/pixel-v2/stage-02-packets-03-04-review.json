@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "stage": "ALL_224_PIXEL_SETTINGS",
+  "stageStatus": "IN_PROGRESS",
+  "completedPackets": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "acceptedSettings": 16,
+  "requiredSettings": 224,
+  "remainingSettings": 208,
+  "settingPoseCount": 120,
+  "representativeStage": "PASS",
+  "fullMotionStage": "NOT_STARTED",
+  "runtimeDefaultReplaced": 0,
+  "newPacketReview": {
+    "packets": [
+      3,
+      4
+    ],
+    "entities": [
+      "e001_digitama",
+      "e002_digitama",
+      "e003_digitama",
+      "e004_digitama",
+      "e005_digitama",
+      "e006_digitama",
+      "e007_digitama",
+      "m002_choromon"
+    ],
+    "poseCount": 87,
+    "verdict": "PASS_SETTING_PACKETS_NOT_FULL_STAGE",
+    "repairs": [
+      "E002/E004/E005/E007 Main008 extra fragment preserved as individual variants.",
+      "E006 state-specific dark marks retained.",
+      "E001-E004 Main009 exposed lower shell repainted with correct entity material.",
+      "M002 outline adjusted through shared palette after actual light/dark native-size inspection."
+    ]
+  },
+  "nextPacket": [
+    "m003_nyokimon",
+    "m004_bubbmon",
+    "m005_pitchmon",
+    "m006_punimon"
+  ],
+  "verification": {
+    "settingReviewTests": 11,
+    "existingCompilerTestsWithActualArchive": 17,
+    "existingSourceWorkflowTestsWithActualArchive": 16,
+    "completeRosterQueueTests": 4,
+    "javascriptRegressionTests": 1097,
+    "normalGameQa": "NOT_RUN",
+    "physicalDeviceQa": "NOT_RUN"
+  },
+  "reviewedSettings": [
+    {
+      "entityId": "m201_agumon",
+      "designVersion": "m201-a-pixel-setting-r01",
+      "settingFileSha256": "0e452b638dfbb2c65e0362b5b96ee91c2f2e57f7398409c794506abb83b3fde8",
+      "visualReviewSha256": "439d36366481ebac267c1cf6c5bb764391060d410fe5c06f232709a2cd2bc311",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "m001_zurumon",
+      "designVersion": "m001-b-pixel-setting-r02",
+      "settingFileSha256": "65460f75002ec1b9e96fd6956b5d719eaaeacd32d392986ad7b6c750d44e4611",
+      "visualReviewSha256": "42a1a8e80d643effa345b2c4e59061f7861762efa4928688bb7363aafffbd7bb",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "m226_hagurumon",
+      "designVersion": "m226-b-pixel-stage1-r01",
+      "settingFileSha256": "1b51cc4516ba293215932476849f7ee7d1e90e3f4151e72fee2069fd2f29a238",
+      "visualReviewSha256": "455873d31f71a4f75d09bc42675ebe1b8e36255b7a9bc7d5821679222e10ca45",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "e000_digitama",
+      "designVersion": "e000_digitama-pixel-setting-v1",
+      "settingFileSha256": "4f5778b334c2dedacdcd1b52355fb775db910d68539ea7f09bd39c172715153e",
+      "visualReviewSha256": "6bb429ba3e344436d11d5fdc18197b7db48fd85cc25aa956c4bec983c6b59b84",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "m222_tentomon",
+      "designVersion": "m222-a-pixel-stage1-r01",
+      "settingFileSha256": "bcaf80aed833775de533cfd4953258143a58a46bcb795a0e03d02abc2ed00e61",
+      "visualReviewSha256": "19f90f5858d9de4f2064c11113cea71ba131fefc7439a2c8df467c9bf081dcae",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "m228_palmon",
+      "designVersion": "pixel-v2-m228-a-stage1-r02",
+      "settingFileSha256": "fee2d05113bee1a257782e1f522f031f05a7e5243962f2be37adc00db438231c",
+      "visualReviewSha256": "0b3b1ec1e4976412371bd347dcb929e627015d3a34f14d57e525c0e3571287cc",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "m352_peckmon",
+      "designVersion": "pixel-v2-m352-b-stage1-r02",
+      "settingFileSha256": "d2c00eb21fbb0f6cec26303d828e0abbbaca37bac5c21000f2939217bc9c66a3",
+      "visualReviewSha256": "6dd72e3b59fcf7961508fe651e700199ecc875d21f9a6964db9ecf70698c60c7",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "m431_whamon",
+      "designVersion": "pixel-v2-m431-a-stage1-r02",
+      "settingFileSha256": "da6e6cdf8cb83355400ae337be3246c33c3d01cfdbc22baa9439a5d635bec7fe",
+      "visualReviewSha256": "df765a7551a43130e82864cd8140f9278ecc1783eb1d38138a0eef3412734c3b",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "e001_digitama",
+      "designVersion": "e001_digitama-pixel-setting-v1",
+      "settingFileSha256": "86cd49165aa195c831562b350b561b798851efc3b91a957a449694e74e00fdcd",
+      "visualReviewSha256": "905432f3e42c543032f67fecec3c3838ae393e8c9fcd9c1d4a1e283cf08c5df5",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "e002_digitama",
+      "designVersion": "e002_digitama-pixel-setting-v1",
+      "settingFileSha256": "e70d6c9471841b082d7d1739f000437916bb41f6fc0e74ba48e04a9cbbc5dea0",
+      "visualReviewSha256": "3fc493e4a90168dd6b487f87b09fa00d75d3cbee536b7b9f286b93677d21b5d4",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "e003_digitama",
+      "designVersion": "e003_digitama-pixel-setting-v1",
+      "settingFileSha256": "8f407d49675262497a4ef3425f1bd9a73426b62fa96aa350d688a1b336785d7d",
+      "visualReviewSha256": "f45a5fdeb967c3237e77d523d1ce22d8e2ea1601df402518b6bef61bad3f0fed",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "e004_digitama",
+      "designVersion": "e004_digitama-pixel-setting-v1",
+      "settingFileSha256": "5800fc8a720a71b7799c0f03b9c9d20fd51c9a309e22facbb9ef3865a45bf23a",
+      "visualReviewSha256": "2ffab9418430c78c7382b5a98d183493fad2fc18d1b84228e5e1e19856f292e2",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "e005_digitama",
+      "designVersion": "e005-a-pixel-setting-r01",
+      "settingFileSha256": "c374ffc4a26a80516d643e74a78d2b7cddacad0b80462bde5766f825d4260f2c",
+      "visualReviewSha256": "aa5d143e9d4e4ea582aed46d4a6bcc5996434d564dd481984b298774438d5dcc",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "e006_digitama",
+      "designVersion": "e006-a-pixel-setting-r01",
+      "settingFileSha256": "17ed14a2575480ca9e8026f34d371f2daec6432450ad5b442b7f78dec099286e",
+      "visualReviewSha256": "ceade117daa5f1ad0b24a7e6400df8ed65e0664910b246636bd21a3cb4413465",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "e007_digitama",
+      "designVersion": "e007-a-pixel-setting-r01",
+      "settingFileSha256": "c53a9f242da048680b7c2fd9d63d87122e11090377b3bc0ca1926aa2a16d1cfc",
+      "visualReviewSha256": "df174c8bd20ac8e30377877c89cd424917782278020abd01d34dec2ad75fab6f",
+      "verdict": "PASS_SETTING_STAGE"
+    },
+    {
+      "entityId": "m002_choromon",
+      "designVersion": "pixel-v2-m002-a-stage2-r02",
+      "settingFileSha256": "ed9f381d6037c33de18d1f4a7cceb7b3767bb0d25b03a5274efdab6d1f988016",
+      "visualReviewSha256": "3faa10211c3c1e854c8233b0eee8b5c45ce58947f6bf3ad4c45d50a328284ff0",
+      "verdict": "PASS_SETTING_STAGE"
+    }
+  ]
+}

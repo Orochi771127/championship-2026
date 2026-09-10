@@ -1,0 +1,1852 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:battle:object-hardening-r2:original-review",
+  "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CALLER_OWNED_TICKER",
+  "status": "PASS_INTERNAL_REVIEW_ONLY_NOT_OWNER_APPROVED_OR_PROMOTED",
+  "resultSummary": "25 frame/viewport checks and 11 unified-gallery arena switches passed",
+  "results": [
+    {
+      "arena": "bm04",
+      "fieldId": "field_bm04_01",
+      "frameIndex": 0,
+      "viewport": {
+        "width": 360,
+        "height": 800
+      },
+      "screenshot": "battle-bm04-frame-0-360x800.png",
+      "diagnostics": {
+        "documentWidth": 360,
+        "documentHeight": 800,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 360,
+          "height": 800
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 360,
+              "height": 800
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm04_01",
+            "layerCount": 4,
+            "layerOrder": [
+              "animated_terrain_bed production:battle:animation:field-bm04-01",
+              "arena_terrain production:battle:arena:field-bm04-01",
+              "field_objects production:battle:objects:field-bm04-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 0,
+              "elapsedMs": 0,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "ANIMATED_TERRAIN_BED",
+                "layerIndex": 0,
+                "frameIndex": 0,
+                "elapsedMs": 0,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 360,
+              "height": 800,
+              "scale": 0.234375,
+              "x": 0,
+              "y": 235.2,
+              "renderedWidth": 360,
+              "renderedHeight": 240
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm04",
+      "fieldId": "field_bm04_01",
+      "frameIndex": 1,
+      "viewport": {
+        "width": 360,
+        "height": 800
+      },
+      "screenshot": "battle-bm04-frame-1-360x800.png",
+      "diagnostics": {
+        "documentWidth": 360,
+        "documentHeight": 800,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 360,
+          "height": 800
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 360,
+              "height": 800
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm04_01",
+            "layerCount": 4,
+            "layerOrder": [
+              "animated_terrain_bed production:battle:animation:field-bm04-01",
+              "arena_terrain production:battle:arena:field-bm04-01",
+              "field_objects production:battle:objects:field-bm04-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 1,
+              "elapsedMs": 65.69773773823698,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "ANIMATED_TERRAIN_BED",
+                "layerIndex": 0,
+                "frameIndex": 1,
+                "elapsedMs": 65.69773773823698,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 360,
+              "height": 800,
+              "scale": 0.234375,
+              "x": 0,
+              "y": 235.2,
+              "renderedWidth": 360,
+              "renderedHeight": 240
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm04",
+      "fieldId": "field_bm04_01",
+      "frameIndex": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "screenshot": "battle-bm04-frame-0-390x844.png",
+      "diagnostics": {
+        "documentWidth": 390,
+        "documentHeight": 844,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm04_01",
+            "layerCount": 4,
+            "layerOrder": [
+              "animated_terrain_bed production:battle:animation:field-bm04-01",
+              "arena_terrain production:battle:arena:field-bm04-01",
+              "field_objects production:battle:objects:field-bm04-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 0,
+              "elapsedMs": 0,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "ANIMATED_TERRAIN_BED",
+                "layerIndex": 0,
+                "frameIndex": 0,
+                "elapsedMs": 0,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "scale": 0.25390625,
+              "x": 0,
+              "y": 245.28,
+              "renderedWidth": 390,
+              "renderedHeight": 260
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm04",
+      "fieldId": "field_bm04_01",
+      "frameIndex": 1,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "screenshot": "battle-bm04-frame-1-390x844.png",
+      "diagnostics": {
+        "documentWidth": 390,
+        "documentHeight": 844,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm04_01",
+            "layerCount": 4,
+            "layerOrder": [
+              "animated_terrain_bed production:battle:animation:field-bm04-01",
+              "arena_terrain production:battle:arena:field-bm04-01",
+              "field_objects production:battle:objects:field-bm04-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 1,
+              "elapsedMs": 65.69773773823698,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "ANIMATED_TERRAIN_BED",
+                "layerIndex": 0,
+                "frameIndex": 1,
+                "elapsedMs": 65.69773773823698,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "scale": 0.25390625,
+              "x": 0,
+              "y": 245.28,
+              "renderedWidth": 390,
+              "renderedHeight": 260
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm04",
+      "fieldId": "field_bm04_01",
+      "frameIndex": 0,
+      "viewport": {
+        "width": 393,
+        "height": 852
+      },
+      "screenshot": "battle-bm04-frame-0-393x852.png",
+      "diagnostics": {
+        "documentWidth": 393,
+        "documentHeight": 852,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 393,
+          "height": 852
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 393,
+              "height": 852
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm04_01",
+            "layerCount": 4,
+            "layerOrder": [
+              "animated_terrain_bed production:battle:animation:field-bm04-01",
+              "arena_terrain production:battle:arena:field-bm04-01",
+              "field_objects production:battle:objects:field-bm04-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 0,
+              "elapsedMs": 0,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "ANIMATED_TERRAIN_BED",
+                "layerIndex": 0,
+                "frameIndex": 0,
+                "elapsedMs": 0,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 393,
+              "height": 852,
+              "scale": 0.255859375,
+              "x": 0,
+              "y": 247.79999999999998,
+              "renderedWidth": 393,
+              "renderedHeight": 262
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm04",
+      "fieldId": "field_bm04_01",
+      "frameIndex": 1,
+      "viewport": {
+        "width": 393,
+        "height": 852
+      },
+      "screenshot": "battle-bm04-frame-1-393x852.png",
+      "diagnostics": {
+        "documentWidth": 393,
+        "documentHeight": 852,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 393,
+          "height": 852
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 393,
+              "height": 852
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm04_01",
+            "layerCount": 4,
+            "layerOrder": [
+              "animated_terrain_bed production:battle:animation:field-bm04-01",
+              "arena_terrain production:battle:arena:field-bm04-01",
+              "field_objects production:battle:objects:field-bm04-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 1,
+              "elapsedMs": 65.69773773823698,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "ANIMATED_TERRAIN_BED",
+                "layerIndex": 0,
+                "frameIndex": 1,
+                "elapsedMs": 65.69773773823698,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 393,
+              "height": 852,
+              "scale": 0.255859375,
+              "x": 0,
+              "y": 247.79999999999998,
+              "renderedWidth": 393,
+              "renderedHeight": 262
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm04",
+      "fieldId": "field_bm04_01",
+      "frameIndex": 0,
+      "viewport": {
+        "width": 412,
+        "height": 915
+      },
+      "screenshot": "battle-bm04-frame-0-412x915.png",
+      "diagnostics": {
+        "documentWidth": 412,
+        "documentHeight": 915,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 412,
+          "height": 915
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 412,
+              "height": 915
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm04_01",
+            "layerCount": 4,
+            "layerOrder": [
+              "animated_terrain_bed production:battle:animation:field-bm04-01",
+              "arena_terrain production:battle:arena:field-bm04-01",
+              "field_objects production:battle:objects:field-bm04-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 0,
+              "elapsedMs": 0,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "ANIMATED_TERRAIN_BED",
+                "layerIndex": 0,
+                "frameIndex": 0,
+                "elapsedMs": 0,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 412,
+              "height": 915,
+              "scale": 0.2682291666666667,
+              "x": 0,
+              "y": 268.93999999999994,
+              "renderedWidth": 412,
+              "renderedHeight": 274.6666666666667
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm04",
+      "fieldId": "field_bm04_01",
+      "frameIndex": 1,
+      "viewport": {
+        "width": 412,
+        "height": 915
+      },
+      "screenshot": "battle-bm04-frame-1-412x915.png",
+      "diagnostics": {
+        "documentWidth": 412,
+        "documentHeight": 915,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 412,
+          "height": 915
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 412,
+              "height": 915
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm04_01",
+            "layerCount": 4,
+            "layerOrder": [
+              "animated_terrain_bed production:battle:animation:field-bm04-01",
+              "arena_terrain production:battle:arena:field-bm04-01",
+              "field_objects production:battle:objects:field-bm04-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 1,
+              "elapsedMs": 65.69773773823698,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "ANIMATED_TERRAIN_BED",
+                "layerIndex": 0,
+                "frameIndex": 1,
+                "elapsedMs": 65.69773773823698,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 412,
+              "height": 915,
+              "scale": 0.2682291666666667,
+              "x": 0,
+              "y": 268.93999999999994,
+              "renderedWidth": 412,
+              "renderedHeight": 274.6666666666667
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm04",
+      "fieldId": "field_bm04_01",
+      "frameIndex": 0,
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "screenshot": "battle-bm04-frame-0-430x932.png",
+      "diagnostics": {
+        "documentWidth": 430,
+        "documentHeight": 932,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 932
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 430,
+              "height": 932
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm04_01",
+            "layerCount": 4,
+            "layerOrder": [
+              "animated_terrain_bed production:battle:animation:field-bm04-01",
+              "arena_terrain production:battle:arena:field-bm04-01",
+              "field_objects production:battle:objects:field-bm04-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 0,
+              "elapsedMs": 0,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "ANIMATED_TERRAIN_BED",
+                "layerIndex": 0,
+                "frameIndex": 0,
+                "elapsedMs": 0,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 430,
+              "height": 932,
+              "scale": 0.2799479166666667,
+              "x": 0,
+              "y": 271.03999999999996,
+              "renderedWidth": 430,
+              "renderedHeight": 286.6666666666667
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm04",
+      "fieldId": "field_bm04_01",
+      "frameIndex": 1,
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "screenshot": "battle-bm04-frame-1-430x932.png",
+      "diagnostics": {
+        "documentWidth": 430,
+        "documentHeight": 932,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 932
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 430,
+              "height": 932
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm04_01",
+            "layerCount": 4,
+            "layerOrder": [
+              "animated_terrain_bed production:battle:animation:field-bm04-01",
+              "arena_terrain production:battle:arena:field-bm04-01",
+              "field_objects production:battle:objects:field-bm04-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 1,
+              "elapsedMs": 65.69773773823698,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "ANIMATED_TERRAIN_BED",
+                "layerIndex": 0,
+                "frameIndex": 1,
+                "elapsedMs": 65.69773773823698,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 430,
+              "height": 932,
+              "scale": 0.2799479166666667,
+              "x": 0,
+              "y": 271.03999999999996,
+              "renderedWidth": 430,
+              "renderedHeight": 286.6666666666667
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm08",
+      "fieldId": "field_bm08_01",
+      "frameIndex": 0,
+      "viewport": {
+        "width": 360,
+        "height": 800
+      },
+      "screenshot": "battle-bm08-frame-0-360x800.png",
+      "diagnostics": {
+        "documentWidth": 360,
+        "documentHeight": 800,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 360,
+          "height": 800
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 360,
+              "height": 800
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm08_01",
+            "layerCount": 3,
+            "layerOrder": [
+              "arena_background production:battle:arena:field-bm08-01",
+              "field_objects production:battle:objects:field-bm08-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": null,
+            "animations": [],
+            "viewport": {
+              "width": 360,
+              "height": 800,
+              "scale": 0.234375,
+              "x": 0,
+              "y": 235.2,
+              "renderedWidth": 360,
+              "renderedHeight": 240
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm08",
+      "fieldId": "field_bm08_01",
+      "frameIndex": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "screenshot": "battle-bm08-frame-0-390x844.png",
+      "diagnostics": {
+        "documentWidth": 390,
+        "documentHeight": 844,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm08_01",
+            "layerCount": 3,
+            "layerOrder": [
+              "arena_background production:battle:arena:field-bm08-01",
+              "field_objects production:battle:objects:field-bm08-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": null,
+            "animations": [],
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "scale": 0.25390625,
+              "x": 0,
+              "y": 245.28,
+              "renderedWidth": 390,
+              "renderedHeight": 260
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm08",
+      "fieldId": "field_bm08_01",
+      "frameIndex": 0,
+      "viewport": {
+        "width": 393,
+        "height": 852
+      },
+      "screenshot": "battle-bm08-frame-0-393x852.png",
+      "diagnostics": {
+        "documentWidth": 393,
+        "documentHeight": 852,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 393,
+          "height": 852
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 393,
+              "height": 852
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm08_01",
+            "layerCount": 3,
+            "layerOrder": [
+              "arena_background production:battle:arena:field-bm08-01",
+              "field_objects production:battle:objects:field-bm08-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": null,
+            "animations": [],
+            "viewport": {
+              "width": 393,
+              "height": 852,
+              "scale": 0.255859375,
+              "x": 0,
+              "y": 247.79999999999998,
+              "renderedWidth": 393,
+              "renderedHeight": 262
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm08",
+      "fieldId": "field_bm08_01",
+      "frameIndex": 0,
+      "viewport": {
+        "width": 412,
+        "height": 915
+      },
+      "screenshot": "battle-bm08-frame-0-412x915.png",
+      "diagnostics": {
+        "documentWidth": 412,
+        "documentHeight": 915,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 412,
+          "height": 915
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 412,
+              "height": 915
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm08_01",
+            "layerCount": 3,
+            "layerOrder": [
+              "arena_background production:battle:arena:field-bm08-01",
+              "field_objects production:battle:objects:field-bm08-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": null,
+            "animations": [],
+            "viewport": {
+              "width": 412,
+              "height": 915,
+              "scale": 0.2682291666666667,
+              "x": 0,
+              "y": 268.93999999999994,
+              "renderedWidth": 412,
+              "renderedHeight": 274.6666666666667
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm08",
+      "fieldId": "field_bm08_01",
+      "frameIndex": 0,
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "screenshot": "battle-bm08-frame-0-430x932.png",
+      "diagnostics": {
+        "documentWidth": 430,
+        "documentHeight": 932,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 932
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 430,
+              "height": 932
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm08_01",
+            "layerCount": 3,
+            "layerOrder": [
+              "arena_background production:battle:arena:field-bm08-01",
+              "field_objects production:battle:objects:field-bm08-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": null,
+            "animations": [],
+            "viewport": {
+              "width": 430,
+              "height": 932,
+              "scale": 0.2799479166666667,
+              "x": 0,
+              "y": 271.03999999999996,
+              "renderedWidth": 430,
+              "renderedHeight": 286.6666666666667
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm11",
+      "fieldId": "field_bm11_01",
+      "frameIndex": 0,
+      "viewport": {
+        "width": 360,
+        "height": 800
+      },
+      "screenshot": "battle-bm11-frame-0-360x800.png",
+      "diagnostics": {
+        "documentWidth": 360,
+        "documentHeight": 800,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 360,
+          "height": 800
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 360,
+              "height": 800
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm11_01",
+            "layerCount": 3,
+            "layerOrder": [
+              "arena_background production:battle:arena:field-bm11-01",
+              "field_objects production:battle:objects:field-bm11-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 0,
+              "elapsedMs": 0,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "FIELD_OBJECTS",
+                "layerIndex": 1,
+                "frameIndex": 0,
+                "elapsedMs": 0,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 360,
+              "height": 800,
+              "scale": 0.234375,
+              "x": 0,
+              "y": 235.2,
+              "renderedWidth": 360,
+              "renderedHeight": 240
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm11",
+      "fieldId": "field_bm11_01",
+      "frameIndex": 1,
+      "viewport": {
+        "width": 360,
+        "height": 800
+      },
+      "screenshot": "battle-bm11-frame-1-360x800.png",
+      "diagnostics": {
+        "documentWidth": 360,
+        "documentHeight": 800,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 360,
+          "height": 800
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 360,
+              "height": 800
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm11_01",
+            "layerCount": 3,
+            "layerOrder": [
+              "arena_background production:battle:arena:field-bm11-01",
+              "field_objects production:battle:objects:field-bm11-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 1,
+              "elapsedMs": 9.709321321471094,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "FIELD_OBJECTS",
+                "layerIndex": 1,
+                "frameIndex": 1,
+                "elapsedMs": 9.709321321471094,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 360,
+              "height": 800,
+              "scale": 0.234375,
+              "x": 0,
+              "y": 235.2,
+              "renderedWidth": 360,
+              "renderedHeight": 240
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm11",
+      "fieldId": "field_bm11_01",
+      "frameIndex": 0,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "screenshot": "battle-bm11-frame-0-390x844.png",
+      "diagnostics": {
+        "documentWidth": 390,
+        "documentHeight": 844,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm11_01",
+            "layerCount": 3,
+            "layerOrder": [
+              "arena_background production:battle:arena:field-bm11-01",
+              "field_objects production:battle:objects:field-bm11-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 0,
+              "elapsedMs": 0,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "FIELD_OBJECTS",
+                "layerIndex": 1,
+                "frameIndex": 0,
+                "elapsedMs": 0,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "scale": 0.25390625,
+              "x": 0,
+              "y": 245.28,
+              "renderedWidth": 390,
+              "renderedHeight": 260
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm11",
+      "fieldId": "field_bm11_01",
+      "frameIndex": 1,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "screenshot": "battle-bm11-frame-1-390x844.png",
+      "diagnostics": {
+        "documentWidth": 390,
+        "documentHeight": 844,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm11_01",
+            "layerCount": 3,
+            "layerOrder": [
+              "arena_background production:battle:arena:field-bm11-01",
+              "field_objects production:battle:objects:field-bm11-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 1,
+              "elapsedMs": 9.709321321471094,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "FIELD_OBJECTS",
+                "layerIndex": 1,
+                "frameIndex": 1,
+                "elapsedMs": 9.709321321471094,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 390,
+              "height": 844,
+              "scale": 0.25390625,
+              "x": 0,
+              "y": 245.28,
+              "renderedWidth": 390,
+              "renderedHeight": 260
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm11",
+      "fieldId": "field_bm11_01",
+      "frameIndex": 0,
+      "viewport": {
+        "width": 393,
+        "height": 852
+      },
+      "screenshot": "battle-bm11-frame-0-393x852.png",
+      "diagnostics": {
+        "documentWidth": 393,
+        "documentHeight": 852,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 393,
+          "height": 852
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 393,
+              "height": 852
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm11_01",
+            "layerCount": 3,
+            "layerOrder": [
+              "arena_background production:battle:arena:field-bm11-01",
+              "field_objects production:battle:objects:field-bm11-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 0,
+              "elapsedMs": 0,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "FIELD_OBJECTS",
+                "layerIndex": 1,
+                "frameIndex": 0,
+                "elapsedMs": 0,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 393,
+              "height": 852,
+              "scale": 0.255859375,
+              "x": 0,
+              "y": 247.79999999999998,
+              "renderedWidth": 393,
+              "renderedHeight": 262
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm11",
+      "fieldId": "field_bm11_01",
+      "frameIndex": 1,
+      "viewport": {
+        "width": 393,
+        "height": 852
+      },
+      "screenshot": "battle-bm11-frame-1-393x852.png",
+      "diagnostics": {
+        "documentWidth": 393,
+        "documentHeight": 852,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 393,
+          "height": 852
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 393,
+              "height": 852
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm11_01",
+            "layerCount": 3,
+            "layerOrder": [
+              "arena_background production:battle:arena:field-bm11-01",
+              "field_objects production:battle:objects:field-bm11-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 1,
+              "elapsedMs": 9.709321321471094,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "FIELD_OBJECTS",
+                "layerIndex": 1,
+                "frameIndex": 1,
+                "elapsedMs": 9.709321321471094,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 393,
+              "height": 852,
+              "scale": 0.255859375,
+              "x": 0,
+              "y": 247.79999999999998,
+              "renderedWidth": 393,
+              "renderedHeight": 262
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm11",
+      "fieldId": "field_bm11_01",
+      "frameIndex": 0,
+      "viewport": {
+        "width": 412,
+        "height": 915
+      },
+      "screenshot": "battle-bm11-frame-0-412x915.png",
+      "diagnostics": {
+        "documentWidth": 412,
+        "documentHeight": 915,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 412,
+          "height": 915
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 412,
+              "height": 915
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm11_01",
+            "layerCount": 3,
+            "layerOrder": [
+              "arena_background production:battle:arena:field-bm11-01",
+              "field_objects production:battle:objects:field-bm11-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 0,
+              "elapsedMs": 0,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "FIELD_OBJECTS",
+                "layerIndex": 1,
+                "frameIndex": 0,
+                "elapsedMs": 0,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 412,
+              "height": 915,
+              "scale": 0.2682291666666667,
+              "x": 0,
+              "y": 268.93999999999994,
+              "renderedWidth": 412,
+              "renderedHeight": 274.6666666666667
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm11",
+      "fieldId": "field_bm11_01",
+      "frameIndex": 1,
+      "viewport": {
+        "width": 412,
+        "height": 915
+      },
+      "screenshot": "battle-bm11-frame-1-412x915.png",
+      "diagnostics": {
+        "documentWidth": 412,
+        "documentHeight": 915,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 412,
+          "height": 915
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 412,
+              "height": 915
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm11_01",
+            "layerCount": 3,
+            "layerOrder": [
+              "arena_background production:battle:arena:field-bm11-01",
+              "field_objects production:battle:objects:field-bm11-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 1,
+              "elapsedMs": 9.709321321471094,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "FIELD_OBJECTS",
+                "layerIndex": 1,
+                "frameIndex": 1,
+                "elapsedMs": 9.709321321471094,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 412,
+              "height": 915,
+              "scale": 0.2682291666666667,
+              "x": 0,
+              "y": 268.93999999999994,
+              "renderedWidth": 412,
+              "renderedHeight": 274.6666666666667
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm11",
+      "fieldId": "field_bm11_01",
+      "frameIndex": 0,
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "screenshot": "battle-bm11-frame-0-430x932.png",
+      "diagnostics": {
+        "documentWidth": 430,
+        "documentHeight": 932,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 932
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 430,
+              "height": 932
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm11_01",
+            "layerCount": 3,
+            "layerOrder": [
+              "arena_background production:battle:arena:field-bm11-01",
+              "field_objects production:battle:objects:field-bm11-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 0,
+              "elapsedMs": 0,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "FIELD_OBJECTS",
+                "layerIndex": 1,
+                "frameIndex": 0,
+                "elapsedMs": 0,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 430,
+              "height": 932,
+              "scale": 0.2799479166666667,
+              "x": 0,
+              "y": 271.03999999999996,
+              "renderedWidth": 430,
+              "renderedHeight": 286.6666666666667
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    },
+    {
+      "arena": "bm11",
+      "fieldId": "field_bm11_01",
+      "frameIndex": 1,
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "screenshot": "battle-bm11-frame-1-430x932.png",
+      "diagnostics": {
+        "documentWidth": 430,
+        "documentHeight": 932,
+        "canvasCount": 1,
+        "canvasRect": {
+          "x": 0,
+          "y": 0,
+          "width": 430,
+          "height": 932
+        },
+        "runtime": {
+          "stage": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE",
+            "applicationCount": 1,
+            "ticker": "APPLICATION_OWNED",
+            "threeUsed": false,
+            "sceneCount": 1,
+            "contextLost": false,
+            "viewport": {
+              "width": 430,
+              "height": 932
+            }
+          },
+          "review": {
+            "renderer": "CHAMPIONSHIP_SINGLE_PIXI_STAGE_CHILD",
+            "fieldId": "field_bm11_01",
+            "layerCount": 3,
+            "layerOrder": [
+              "arena_background production:battle:arena:field-bm11-01",
+              "field_objects production:battle:objects:field-bm11-01",
+              "canonical_shared_layer production:battle:shared:field-bm00-00"
+            ],
+            "animation": {
+              "frameIndex": 1,
+              "elapsedMs": 9.709321321471094,
+              "frameCount": 2
+            },
+            "animations": [
+              {
+                "role": "FIELD_OBJECTS",
+                "layerIndex": 1,
+                "frameIndex": 1,
+                "elapsedMs": 9.709321321471094,
+                "frameCount": 2
+              }
+            ],
+            "viewport": {
+              "width": 430,
+              "height": 932,
+              "scale": 0.2799479166666667,
+              "x": 0,
+              "y": 271.03999999999996,
+              "renderedWidth": 430,
+              "renderedHeight": 286.6666666666667
+            },
+            "gameplayMounted": false,
+            "uiMounted": false,
+            "collisionMounted": false,
+            "disposed": false
+          }
+        }
+      },
+      "problems": []
+    }
+  ],
+  "galleryResults": [
+    {
+      "key": "bm01",
+      "fieldId": "field_bm01_01",
+      "canvasCount": 1,
+      "problems": []
+    },
+    {
+      "key": "bm02",
+      "fieldId": "field_bm02_01",
+      "canvasCount": 1,
+      "problems": []
+    },
+    {
+      "key": "bm03",
+      "fieldId": "field_bm03_01",
+      "canvasCount": 1,
+      "problems": []
+    },
+    {
+      "key": "bm04",
+      "fieldId": "field_bm04_01",
+      "canvasCount": 1,
+      "problems": []
+    },
+    {
+      "key": "bm05",
+      "fieldId": "field_bm05_01",
+      "canvasCount": 1,
+      "problems": []
+    },
+    {
+      "key": "bm06",
+      "fieldId": "field_bm06_01",
+      "canvasCount": 1,
+      "problems": []
+    },
+    {
+      "key": "bm07",
+      "fieldId": "field_bm07_01",
+      "canvasCount": 1,
+      "problems": []
+    },
+    {
+      "key": "bm08",
+      "fieldId": "field_bm08_01",
+      "canvasCount": 1,
+      "problems": []
+    },
+    {
+      "key": "bm09",
+      "fieldId": "field_bm09_01",
+      "canvasCount": 1,
+      "problems": []
+    },
+    {
+      "key": "bm10",
+      "fieldId": "field_bm10_01",
+      "canvasCount": 1,
+      "problems": []
+    },
+    {
+      "key": "bm11",
+      "fieldId": "field_bm11_01",
+      "canvasCount": 1,
+      "problems": []
+    }
+  ]
+}

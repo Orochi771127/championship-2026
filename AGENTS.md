@@ -2,6 +2,8 @@
 
 This repository is the standalone product authority for **DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD**.
 
+- Owner publication direction 2026-09-10: completed work may be committed/pushed to main; the repository and hash-selected rendered game files may be public as the designated GitHub Pages playtest. This dated directive supersedes older loopback-only/no-publication rules for that selected scope. It does not mark pending licence documents verified, approve a commercial release, or include ROM/native payloads, emulator saves, secrets or private documents. See `docs/coordination/OWNER_DIRECTION.md` and `src/data/championship/public-playtest.r1.json`.
+
 - Preserve verified original gameplay. Unknown behavior stays neutral until traced or approved by the Owner.
 - `src/` must never import from `research/` or any Nexus Link path.
 - Runtime-loadable art belongs only under `assets/production/`.

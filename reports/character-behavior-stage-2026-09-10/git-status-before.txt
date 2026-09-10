@@ -1,0 +1,413 @@
+ M CLAUDE_REBUILD_STATUS.json
+ M CLAUDE_SYNC_DELTA.json
+ M assets/production/ART_PRODUCTION_INDEX.json
+ M assets/production/internal-character-review/m201-remix-v1/main-review-atlas-00.json
+ M assets/production/internal-character-review/m201-remix-v1/main-review-atlas-00.png
+ M assets/production/internal-character-review/m201-remix-v1/manifest.json
+ M assets/production/internal-character-review/m201-remix-v1/sub-review-atlas-00.json
+ M assets/production/internal-character-review/m201-remix-v1/sub-review-atlas-00.png
+ M docs/art/ART_REBUILD_BACKLOG.md
+ M docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-47-unique-source-production-queue.png
+ M docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-all83-source-reuse.json
+ M docs/coordination/OWNER_DIRECTION.md
+ M docs/reports/vs1/screenshots/raising-home-360x800.png
+ M docs/reports/vs1/screenshots/raising-home-375x812.png
+ M docs/reports/vs1/screenshots/raising-home-390x844-before-reload.png
+ M docs/reports/vs1/screenshots/raising-home-390x844-pixi-fallback.png
+ M docs/reports/vs1/screenshots/raising-home-390x844-restored.png
+ M docs/reports/vs1/screenshots/raising-home-390x844.png
+ M docs/reports/vs1/screenshots/raising-home-393x852.png
+ M docs/reports/vs1/screenshots/raising-home-412x915.png
+ M docs/reports/vs1/screenshots/raising-home-430x932.png
+ M docs/reports/vs2-r1/screenshots/gate-2d-fallback-390x844.png
+ M docs/reports/vs2-r1/screenshots/gate-destination-selected-390x844.png
+ M docs/reports/vs2-r1/screenshots/gate-destination-selected-393x852.png
+ M docs/reports/vs2-r1/screenshots/gate-to-loadout-390x844.png
+ M docs/reports/vs2-r1/screenshots/gate-to-loadout-393x852.png
+ M docs/reports/vs2-r1/screenshots/gate-world-390x844.png
+ M docs/reports/vs2-r1/screenshots/gate-world-393x852.png
+ M docs/reports/vs2-r1/screenshots/gate-world-rotated-390x844.png
+ M docs/reports/vs2/screenshots/vs2-1-raising-390x844.png
+ M docs/reports/vs2/screenshots/vs2-1-raising-393x852.png
+ M docs/reports/vs2/screenshots/vs2-2-gates-390x844.png
+ M docs/reports/vs2/screenshots/vs2-2-gates-393x852.png
+ M docs/reports/vs2/screenshots/vs2-3-loadout-390x844.png
+ M docs/reports/vs2/screenshots/vs2-3-loadout-393x852.png
+ M docs/reports/vs2/screenshots/vs2-4-field-390x844.png
+ M docs/reports/vs2/screenshots/vs2-4-field-393x852.png
+ M docs/reports/vs2/screenshots/vs2-5-explored-390x844.png
+ M docs/reports/vs2/screenshots/vs2-5-explored-393x852.png
+ M docs/reports/vs2/screenshots/vs2-6-returned-390x844.png
+ M docs/reports/vs2/screenshots/vs2-6-returned-393x852.png
+ M docs/reports/vs3/screenshots/vs3-hunt-after-loop-390x844.png
+ M docs/reports/vs3/screenshots/vs3-hunt-field-before-loop-390x844.png
+ M docs/reports/vs3/screenshots/vs3-hunt-result-390x844.png
+ M docs/reports/vs3/screenshots/vs3-returned-home-390x844.png
+ M reports/art/3D_ASSET_MATRIX.csv
+ M reports/art/BATTLE_FIELD_ASSET_MATRIX.csv
+ M reports/art/CHARACTER_ASSET_MATRIX.csv
+ M reports/art/MAP_ASSET_MATRIX.csv
+ M reports/art/MISSING_ART_MATRIX.csv
+ M scripts/research/check-raising-activity-cpu.py
+ M src/championship/app/battleRuntime.js
+ M src/championship/app/championshipStandaloneApp.js
+ M src/championship/app/facilityBattleMobile.css
+ M src/championship/app/huntMobile.css
+ M src/championship/app/main.js
+ M src/championship/app/raisingHomeP1RView.js
+ M src/championship/app/raisingPresentationSource.js
+ M src/championship/app/vs5Screens.js
+ M src/championship/battle/nativeTitleProgression.js
+ M src/championship/hunt/capture/nativeHuntHazards.js
+ M src/championship/hunt/capture/nativeHuntLures.js
+ M src/championship/presentation/characterAnimationTimeline.js
+ M src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js
+ M src/championship/presentation/licensedCharacterRoster.js
+ M src/championship/presentation/pixiCharacterRuntimeBundle.js
+ M src/championship/presentation/vs2/createHuntFieldPixiPresentation.js
+ M src/championship/presentation/vs5/createBattleFieldPixiPresentation.js
+ M src/championship/raising/nativeRaisingActivity.js
+ M src/championship/raising/nativeRaisingActor.js
+ M src/data/championship/catalogs/raising-activity.r1.json
+ M tests/championship-art-production-a0-cases.mjs
+ M tests/championship-battle-economy-views-cases.mjs
+ M tests/championship-raising-lifecycle-app-cases.mjs
+ M tests/championship-title-progression-cases.mjs
+ M tests/fixtures/championship-character-scenes.html
+?? .serena/memories/original-layout/
+?? assets/production/internal-battle-review/
+?? assets/production/vfx/original-battle-2d-v1/
+?? battle-art-gallery.html
+?? battle-art-review.html
+?? docs/art/ART_PHASE1_REPORT.md
+?? docs/art/ART_PRODUCTION_CONTRACTS_PHASE1.md
+?? docs/art/ART_PRODUCTION_MASTER_PLAN_PHASE1.md
+?? docs/art/ART_SOURCE_CONTRACT_REPLACEMENT_CROSSWALK.md
+?? docs/art/CHARACTER_MATERIAL_RUNTIME_2026-09-06.md
+?? docs/art/HUNT_CHARACTER_ANIMATION_2026-09-06.md
+?? docs/art/HUNT_ENTRY_HISTORY_INTEGRATION_2026-09-06.md
+?? docs/art/HUNT_NORMAL_ENTRY_INTEGRATION_2026-09-06.md
+?? docs/art/production/battle-all-actions-r5/
+?? docs/art/production/battle-animation-r3/
+?? docs/art/production/battle-characters-shop-r2/
+?? docs/art/production/battle-effect-r10/
+?? docs/art/production/battle-effect-r11/
+?? docs/art/production/battle-effect-r12/
+?? docs/art/production/battle-focus-r4/
+?? docs/art/production/battle-hit-recovery-r8/
+?? docs/art/production/battle-native-lifecycle-r7/
+?? docs/art/production/battle-native-motion-r6/
+?? docs/art/production/battle-normal-closure-r9/
+?? docs/art/production/battle-normal-flow-r9/
+?? docs/art/production/battle-presentation-r13/
+?? docs/art/production/battle/bm00-bm01-pilot/
+?? docs/art/production/battle/bm02-r1/
+?? docs/art/production/battle/bm03-bm04-animated-r1/
+?? docs/art/production/battle/bm05-bm11-static-r1/
+?? docs/art/production/battle/bm07-cyberspace-r1/
+?? docs/art/production/battle/hardening-r2/
+?? docs/art/production/battle/human-paint-migration-r4/
+?? docs/art/production/battle/human-paint-static-r5/
+?? docs/art/production/battle/light-fence-pilot-r1/
+?? docs/art/production/battle/menu-cube-v1/README.md
+?? docs/art/production/battle/menu-cube-v1/championship-composite.svg
+?? docs/art/production/battle/menu-cube-v1/contact-sheet.png
+?? docs/art/production/battle/menu-cube-v1/free-battle-composite.svg
+?? docs/art/production/battle/menu-cube-v1/link-battle-composite.svg
+?? docs/art/production/battle/menu-cube-v1/title-match-composite.svg
+?? docs/art/production/battle/style-calibration-r3/
+?? docs/art/production/blender-web-ui-study-r1/
+?? docs/art/production/characters/appearance-refresh-v1/
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-027-pose-review.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-027-remix-candidate-qa.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-027-remix-candidate.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-028-pose-review.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-028-remix-candidate-qa.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-028-remix-candidate.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-029-pose-review.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-029-remix-candidate-qa.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-029-remix-candidate.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-030-pose-review.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-030-remix-candidate-qa.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-030-remix-candidate.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-032-pose-review.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-032-remix-candidate-qa.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-032-remix-candidate.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-035-pose-review.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-035-remix-candidate-qa.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-035-remix-candidate.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-036-pose-review.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-036-remix-candidate-qa.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-036-remix-candidate.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-037-pose-review.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-037-remix-candidate-qa.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-037-remix-candidate.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-039-pose-review.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-039-remix-candidate-qa.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-039-remix-candidate.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-040-pose-review.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-040-remix-candidate-qa.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-040-remix-candidate.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-041-pose-review.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-041-remix-candidate-qa.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-041-remix-candidate.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-042-pose-review.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-042-remix-candidate-qa.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-042-remix-candidate.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-055-pose-review.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-055-remix-candidate-qa.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-055-remix-candidate.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-057-pose-review.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-057-remix-candidate-qa.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-057-remix-candidate.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-058-pose-review.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-058-remix-candidate-qa.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-058-remix-candidate.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-059-pose-review.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-059-remix-candidate-qa.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-059-remix-candidate.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-060-pose-review.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-060-remix-candidate-qa.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-060-remix-candidate.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-061-pose-review.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-061-remix-candidate-qa.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-061-remix-candidate.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-064-pose-review.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-064-remix-candidate-qa.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-064-remix-candidate.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-motion-family-closure-06-candidates.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-motion-family-closure-06-candidates.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-motion-family-closure-07-candidates.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-motion-family-closure-07-candidates.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/family13-generate2dsprite/
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/family13-hd-generate2dsprite/
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-09-restrained-idles-v1-slot-00-cell-027.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-09-restrained-idles-v1-slot-01-cell-028.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-09-restrained-idles-v1-slot-02-cell-029.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-09-restrained-idles-v1-slot-03-cell-030.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-10-restrained-motion-v1-slot-00-cell-032.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-10-restrained-motion-v1-slot-01-cell-035.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-10-restrained-motion-v1-slot-02-cell-036.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-10-restrained-motion-v1-slot-03-cell-037.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-11-restrained-care-v1-slot-00-cell-039.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-11-restrained-care-v1-slot-01-cell-040.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-11-restrained-care-v1-slot-02-cell-041.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-11-restrained-care-v1-slot-03-cell-042.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-12-guard-shout-v1-slot-00-cell-055.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-12-guard-shout-v1-slot-01-cell-057.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-12-guard-shout-v1-slot-02-cell-058.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-12-guard-shout-v1-slot-03-cell-059.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-13-final-status-v2-transparent-slot-00-cell-060.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-13-final-status-v2-transparent-slot-01-cell-061.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-13-final-status-v2-transparent-slot-02-cell-064.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-13-final-status-v3-transparent-slot-00-cell-060.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-13-final-status-v3-transparent-slot-01-cell-061.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-13-final-status-v3-transparent-slot-02-cell-064.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-09-restrained-idles-v1-normalization-receipt.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-09-restrained-idles-v1.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-10-restrained-motion-v1-normalization-receipt.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-10-restrained-motion-v1.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-11-restrained-care-v1-normalization-receipt.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-11-restrained-care-v1.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-12-guard-shout-v1-normalization-receipt.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-12-guard-shout-v1.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-13-final-status-v1.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-13-final-status-v2-transparent-normalization-receipt.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-13-final-status-v2-transparent.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-13-final-status-v2.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-13-final-status-v3-transparent-normalization-receipt.json
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-13-final-status-v3-transparent.png
+?? docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-13-final-status-v3.png
+?? docs/art/production/facility-battle-mobile-r1/
+?? docs/art/production/mobile-continuous-r1/
+?? docs/art/production/native-ranch-startup-r4/
+?? docs/art/production/raising-home-ui-r3/
+?? docs/art/production/ranch-assembly-r1/
+?? docs/art/production/ranch-assembly-r2/
+?? docs/art/production/ranch-assembly-r2b/
+?? docs/art/production/tooling-pilot-r1/
+?? docs/planning/BATTLE_REMAINING_WORK_AND_R9_PLAN_2026-09-07.md
+?? docs/planning/CHAMPIONSHIP_ORIGINAL_PARITY_STATUS_AND_SKILL_PLAN_2026-09-06.md
+?? docs/planning/CHAMPIONSHIP_PARITY_COMPLETION_PLAN_2026-09-05.md
+?? docs/planning/HUNT_TWO_STAGE_COMPLETION_2026-09-08.md
+?? docs/planning/RAISING_RANCH_PRODUCTION_PLAN_2026-09-06.md
+?? docs/planning/rom-video-godot-blender-2026-09-08/
+?? docs/reports/art/
+?? docs/reports/battle-cube-v1/app-360x800.png
+?? docs/reports/battle-cube-v1/app-390x844.png
+?? docs/reports/battle-cube-v1/app-393x852.png
+?? docs/reports/battle-cube-v1/app-412x915.png
+?? docs/reports/battle-cube-v1/app-430x932.png
+?? docs/reports/battle-cube-v1/cube-rotated.png
+?? docs/reports/battle-cube-v1/cube-side-0.png
+?? docs/reports/battle-cube-v1/cube-side-1.png
+?? docs/reports/battle-cube-v1/cube-side-2.png
+?? docs/reports/battle-cube-v1/cube-side-3.png
+?? docs/reports/battle-cube-v1/texture-failure.png
+?? docs/reports/battle-cube-v1/webgl-fallback.png
+?? docs/reports/characters/
+?? docs/reports/inventory/2026-09-05/collect_inventory.py
+?? docs/reports/inventory/2026-09-05/external-private-pack-files.csv
+?? docs/reports/inventory/2026-09-05/files.csv
+?? docs/reports/inventory/2026-09-05/git-status-after.txt
+?? docs/reports/inventory/2026-09-05/git-status-before.txt
+?? docs/reports/inventory/2026-09-05/registry-reference-paths.csv
+?? docs/reports/inventory/2026-09-05/research-files.csv
+?? docs/reports/parity-audit/2026-09-05/battle-after-wait-390x844.png
+?? docs/reports/parity-audit/2026-09-05/battle-after-wait.dom.txt
+?? docs/reports/parity-audit/2026-09-05/battle-fee-payout-rom-check.py
+?? docs/reports/parity-audit/2026-09-05/battle-menu-390x844.png
+?? docs/reports/parity-audit/2026-09-05/battle-menu.dom.txt
+?? docs/reports/parity-audit/2026-09-05/battle-result-phase2.dom.txt
+?? docs/reports/parity-audit/2026-09-05/feed-ground-after-a.png
+?? docs/reports/parity-audit/2026-09-05/feed-ground-after-wait.png
+?? docs/reports/parity-audit/2026-09-05/feed-ground-after.dom.txt
+?? docs/reports/parity-audit/2026-09-05/feed-ground-before.png
+?? docs/reports/parity-audit/2026-09-05/feed-selected-390x844.png
+?? docs/reports/parity-audit/2026-09-05/feed-touch.dom.txt
+?? docs/reports/parity-audit/2026-09-05/home-390x844.png
+?? docs/reports/parity-audit/2026-09-05/hunt-geometry-rom-check.py
+?? docs/reports/parity-audit/2026-09-05/intro-care-tutorial.png
+?? docs/reports/parity-audit/2026-09-05/intro-feeding-tutorial-105.png
+?? docs/reports/parity-audit/2026-09-05/intro-sample-120.png
+?? docs/reports/parity-audit/2026-09-05/intro-training-confirmed.png
+?? docs/reports/parity-audit/2026-09-05/original-feed-before.png
+?? docs/reports/parity-audit/2026-09-05/original-feed-during-a.png
+?? docs/reports/parity-audit/2026-09-05/original-feed-ground-placement.png
+?? docs/reports/parity-audit/2026-09-05/parity-matrix.csv
+?? docs/reports/parity-audit/2026-09-05/shop-after-battle.dom.txt
+?? docs/reports/parity-audit/2026-09-05/verify_rom_sources.py
+?? docs/reports/parity-audit/2026-09-08/activity-mobile-clean.png
+?? docs/reports/parity-audit/2026-09-08/activity-mobile-final.png
+?? docs/reports/parity-audit/2026-09-08/activity-mobile-food.png
+?? docs/reports/parity-audit/2026-09-08/activity-mobile-roam-a.png
+?? docs/reports/parity-audit/2026-09-08/activity-mobile-roam-b.png
+?? docs/reports/parity-audit/2026-09-08/activity-mobile-roam-c.png
+?? docs/reports/parity-audit/2026-09-08/continue-dom.txt
+?? docs/reports/parity-audit/2026-09-08/feeding-mobile-consumed.png
+?? docs/reports/parity-audit/2026-09-08/feeding-mobile-placement.png
+?? docs/reports/parity-audit/2026-09-08/feeding-mobile-restored.png
+?? docs/reports/parity-audit/2026-09-08/gate-locked-390.png
+?? docs/reports/parity-audit/2026-09-08/git-status-after.txt
+?? docs/reports/parity-audit/2026-09-08/git-status-before.txt
+?? docs/reports/parity-audit/2026-09-08/home-390.png
+?? docs/reports/parity-audit/2026-09-08/home-dom.txt
+?? docs/reports/parity-audit/2026-09-08/hunt-390.png
+?? docs/reports/parity-audit/2026-09-08/hunt-entry-dom.txt
+?? docs/reports/parity-audit/2026-09-08/raising-book-browser.png
+?? docs/reports/parity-audit/2026-09-08/raising-hatch-continue.png
+?? docs/reports/parity-audit/2026-09-08/roster-dom.txt
+?? docs/reports/parity-audit/2026-09-08/save-dom.txt
+?? docs/reports/parity-audit/2026-09-08/two-stage-browser/home-360.png
+?? docs/reports/parity-audit/2026-09-08/two-stage-browser/home-375.png
+?? docs/reports/parity-audit/2026-09-08/two-stage-browser/home-390.png
+?? docs/reports/parity-audit/2026-09-08/two-stage-browser/home-412.png
+?? docs/reports/parity-audit/2026-09-08/two-stage-browser/home-430.png
+?? docs/research/CHARACTER_ANIMATION_USAGE_2026-09-10.md
+?? docs/research/RAISING_CARRY_CPU_2026-09-10.json
+?? docs/research/RAISING_FEEDBACK_CPU_2026-09-10.json
+?? docs/research/artifacts/
+?? docs/research/battle-action-native-cpu-2026-09-07.tap
+?? docs/research/battle-all-actions-final-focused-2026-09-07.tap
+?? docs/research/battle-all-actions-final-prelude-2026-09-07.tap
+?? docs/research/battle-all-actions-focused-2026-09-07.tap
+?? docs/research/battle-all-actions-full-regression-2026-09-07.tap
+?? docs/research/battle-all-actions-initial-2026-09-07.tap
+?? docs/research/battle-all-actions-movement-regression-2026-09-07.tap
+?? docs/research/battle-all-actions-regression-2026-09-07.tap
+?? docs/research/battle-all-actions-resource-regression-2026-09-07.tap
+?? docs/research/battle-focus-final-focused-2026-09-07.tap
+?? docs/research/battle-focus-full-regression-2026-09-07.tap
+?? docs/research/battle-focus-regression-2026-09-07.tap
+?? docs/research/battle-focus-scene-check.tap
+?? docs/research/ranch-assembly-2026-09-06/arm9-field-inspection.txt
+?? docs/research/ranch-assembly-2026-09-06/ovl15-linear-inspection.txt
+?? docs/research/ranch-assembly-2026-09-06/replay-ranch-compositor.py
+?? docs/research/ranch-assembly-2026-09-06/replay-ranch-geometry.py
+?? docs/research/ranch-assembly-2026-09-06/verify-ranch-entry.py
+?? docs/research/round2-clock-2026-09-05/clock-rom-check.py
+?? docs/research/video-BV13u411B7BK/VIDEO_OBSERVATIONS.csv
+?? docs/research/video-BV1RQ4y1B7up/VIDEO_OBSERVATIONS.csv
+?? docs/superpowers/
+?? reports/art/BATTLE_COMPOSITE_INTEGRITY_LIGHT_FENCE_PILOT_R1.json
+?? reports/art/appearance-refresh-v1/
+?? reports/art/character-runtime-2026-09-06/
+?? reports/art/hunt-character-animation-2026-09-06/
+?? reports/art/hunt-entry-history-2026-09-06/
+?? reports/art/hunt-normal-entry-2026-09-06/
+?? reports/battle-r13-all-blocks.json
+?? reports/battle-r13-all-interruptions.json
+?? reports/battle-r13-all-misses.json
+?? reports/battle-r13-all-moves.json
+?? reports/battle-r13-bound-moves.json
+?? reports/battle-r13-browser.json
+?? reports/battle-r13-family-moves.json
+?? reports/battle-r13-initial-moves.json
+?? reports/battle-r13-normal-24-final.json
+?? reports/battle-r13-normal-24.json
+?? reports/battle-r13-normal-timing-final.json
+?? reports/battle-r13-player-revival-search.json
+?? reports/battle-r8-runtime-scan.jsonl
+?? reports/battle-r9-final-seed-survey-33-96.jsonl
+?? reports/battle-r9-final-seed-survey.jsonl
+?? reports/battle-r9-normal-flow-cpu.json
+?? reports/battle-r9-probe.jsonl
+?? reports/battle-r9-recovery-probe.jsonl
+?? reports/battle-r9-seed-survey.jsonl
+?? reports/battle-r9-stuck.json
+?? reports/character-behavior-stage-2026-09-10/
+?? reports/hunt-capture-confirmation-2026-09-08/
+?? reports/hunt-core-two-stage-2026-09-08/acceptance.json
+?? reports/hunt-core-two-stage-2026-09-08/boundary-regression.txt
+?? reports/hunt-core-two-stage-2026-09-08/check-normal-capture.mjs
+?? reports/hunt-core-two-stage-2026-09-08/equipped-integration.txt
+?? reports/hunt-core-two-stage-2026-09-08/final-regression.txt
+?? reports/hunt-core-two-stage-2026-09-08/food-light.txt
+?? reports/hunt-core-two-stage-2026-09-08/hunt-hud-source.txt
+?? reports/hunt-core-two-stage-2026-09-08/item-coverage.csv
+?? reports/hunt-core-two-stage-2026-09-08/item-coverage.json
+?? reports/hunt-core-two-stage-2026-09-08/light-bomb.txt
+?? reports/hunt-core-two-stage-2026-09-08/light-controller.txt
+?? reports/hunt-core-two-stage-2026-09-08/loadout-final.txt
+?? reports/hunt-core-two-stage-2026-09-08/plugin-binding.txt
+?? reports/hunt-core-two-stage-2026-09-08/plugin-hud.txt
+?? reports/hunt-core-two-stage-2026-09-08/regression.txt
+?? reports/hunt-core-two-stage-2026-09-08/scatter-approved-regression.txt
+?? reports/hunt-core-two-stage-2026-09-08/scatter-controller.txt
+?? reports/hunt-core-two-stage-2026-09-08/shot-normal.txt
+?? reports/hunt-core-two-stage-2026-09-08/shot-resource.txt
+?? reports/hunt-core-two-stage-2026-09-08/spread-original-input.json
+?? reports/hunt-core-two-stage-2026-09-08/tool-controllers.txt
+?? reports/hunt-core-two-stage-2026-09-08/tool-resource-binding.txt
+?? reports/hunt-core-two-stage-2026-09-08/trap-ai.txt
+?? scripts/build-character-appearance-workflow.py
+?? scripts/build-character-hud-reference.py
+?? scripts/build-character-identity-design-queue.py
+?? scripts/build-character-identity-source-survey.py
+?? scripts/build-character-pixel-production-queue.py
+?? scripts/build-character-pixel-setting-gallery.py
+?? scripts/build-hunt-feedback-reference.py
+?? scripts/build-m201-blender-pose-study.py
+?? scripts/build-raising-feedback-reference.py
+?? scripts/compile-pixel-character-bank.py
+?? scripts/lib/native_object_reference.py
+?? scripts/research/audit-character-rom-animation-usage.py
+?? scripts/research/check-raising-carry-cpu.py
+?? scripts/research/check-raising-feedback-cpu.py
+?? scripts/review-character-pixel-settings.py
+?? scripts/verify-tooling-pilot.py
+?? src/championship/presentation/battleResultCharacters.js
+?? src/championship/presentation/characterHudArt.js
+?? src/championship/presentation/huntFeedbackArt.js
+?? src/championship/presentation/raisingFeedbackArt.js
+?? src/championship/raising/nativeRaisingCarry.js
+?? src/championship/raising/nativeRaisingFeedback.js
+?? src/data/championship/catalogs/raising-feedback.r1.json
+?? tests/championship-feedback-art-cases.mjs
+?? tests/championship-raising-carry-cases.mjs
+?? tests/championship-raising-feedback-cases.mjs
+?? tests/test-character-appearance-workflow.py
+?? tests/test-character-identity-design-queue.py
+?? tests/test-character-pixel-production-queue.py
+?? tests/test-character-pixel-setting-review.py
+?? tests/test-compile-pixel-character-bank.py

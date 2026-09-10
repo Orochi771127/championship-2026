@@ -1,0 +1,64 @@
+{
+  "artReview": "PENDING_INDEPENDENT_VISUAL_REVIEW",
+  "decoderSha256": "d8690529211cf396e3b01c064a08f35d628ac30cf2f3ff92beffa8a4941b1d34",
+  "designVersion": "m003-creature-identity-r01",
+  "distinctSourceCanvasStates": 50,
+  "distinctSourcePosesSelected": 1,
+  "eggFullStateCoverage": null,
+  "entityId": "m003_nyokimon",
+  "fullMotionQa": "NOT_RUN",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "poseSamplingStatus": "INCOMPLETE",
+  "poses": [
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        0,
+        7,
+        18,
+        21
+      ],
+      "authoredRgbaSha256": "0e6527d1141aab8c69eed2826cef9eab9403ef8e8224c0255563b139d5822855",
+      "authoredVisiblePixels": 155,
+      "key": "main/cell_000",
+      "nativeBounds": [
+        -7,
+        -18,
+        17,
+        6
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        0,
+        7,
+        18,
+        21
+      ],
+      "sourceRgbaSha256": "f0eaee0e90788ef4965fde8e5fd41d95bdb6815d5688ddb68e2e4138a62c0fa3",
+      "sourceVisiblePixels": 155,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    }
+  ],
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "ed68316b8c272f5ba08072fc304b297e3146af783fc1e7d3e57d898d7d088541",
+  "settingPoseCount": 1,
+  "shippingReady": false,
+  "sourceFiles": {
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m003_nyokimon_main.nanr": "1e9bcef8013a8bf8314791e54cd3f930492bba0efce853da0aa0323e4affc91f",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m003_nyokimon_main.ncbr": "ae0f524aea30b90f81340b4f16ea2bd795b0051f0429bdf963e443a444e0e6bd",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m003_nyokimon_main.ncer": "8e26b7ecf5483fa6a932c7779ac70c812fd986be502d7c593feaa506258da48f",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m003_nyokimon_main.nclr": "8382f638685068c5c1b8f255c5589f220a21f025479490bbbe283381c35f838a",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m003_nyokimon_sub.nanr": "7580b242d6d7dfce152063d68961a69b5e35c148cca9fac273a35f7c7b3adbc1",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m003_nyokimon_sub.ncer": "59583b1735259a39c3d0463b40740103f54bbec010689a4274d4771d2d883d82",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m003_nyokimon_sub.ncgr": "2577709b539bf198f2e017aecff8dba1f0b713cba5ff1327b9adf69317e1f779",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m003_nyokimon_sub.nclr": "66f425b596fa5dab05b39fdcc95264a6084947e72b09d1b5e6d8561b8d8b4f46",
+    "08_FULL_FAMILY_CONVERSION/digimon/m003_nyokimon_main/animations.json": "5f2ab608e3bc13ed6e8e117fb08e2dea162358e88008122f35086a37da88bb09",
+    "08_FULL_FAMILY_CONVERSION/digimon/m003_nyokimon_main/cells.json": "fba2f851107d74cf79c8e48265087525d53b71eee7356f06bb1972375f04fa6e",
+    "08_FULL_FAMILY_CONVERSION/digimon/m003_nyokimon_sub/animations.json": "8dbf3ef2f9ad0ff7604be5e6bacde3912647015bfb920c7b4aad5889f5db6b97",
+    "08_FULL_FAMILY_CONVERSION/digimon/m003_nyokimon_sub/cells.json": "9d3ee630f05f1b497fff92e1d6fa11343d9abbebfade9f07abb8c03035ae544f"
+  },
+  "technicalStatus": "PASS",
+  "visiblePaletteCount": 8
+}

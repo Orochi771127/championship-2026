@@ -1,0 +1,29 @@
+{
+  "deferredChecks": [
+    "Complete master bank and source-sequence continuity",
+    "All state-specific interior overlaps",
+    "Normal-game/physical-device QA"
+  ],
+  "entityId": "m352_peckmon",
+  "observations": [
+    "Red crest, cream cheek/neck wedge, broad gold shoulder and muted purple body remain coherent across upright, stretched and forward poses.",
+    "Source long beak, wing/crest tips and toe support preserved; new material regions intentionally simplify interior feather and metal detail.",
+    "Rejected first method using source RGB mapping; inspected replacement authoring code with full authored material regions plus local glyphs, source silhouette reference separately declared.",
+    "Actually viewed all authored contact sheets and independently compiled source comparisons at native/integer scale."
+  ],
+  "ownerHumanApproval": false,
+  "reviewedPoses": [
+    "main/cell_000",
+    "main/cell_007",
+    "main/cell_019"
+  ],
+  "reviewer": "ROOT_ART_DIRECTOR_INDEPENDENT_OF_AUTHOR",
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "d2c00eb21fbb0f6cec26303d828e0abbbaca37bac5c21000f2939217bc9c66a3",
+  "shippingReady": false,
+  "sourceComparisonSha256": "6b5bfc3e5803ee1c0782d84663a4fd76fae8fce76034c184832a3a3bf71a0040",
+  "technicalQaSha256": "c88f1145f61e00182caa120e545e9851e88710c14d3fa73ee7707d0bd1fe4ffd",
+  "unresolvedBlockingIssues": [],
+  "verdict": "PASS_SETTING_STAGE"
+}

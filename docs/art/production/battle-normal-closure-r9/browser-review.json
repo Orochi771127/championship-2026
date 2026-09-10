@@ -1,0 +1,56 @@
+{
+  "date": "2026-09-08",
+  "surface": "Browser skill selected browser, shared normal runtime test fixture",
+  "observed": [
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "seed": 9,
+      "clock": 1005,
+      "event": "PURSUIT_MOVE_SELECTED",
+      "slot": 4,
+      "moveId": 254,
+      "sequenceId": 3,
+      "clientWidth": 390,
+      "scrollWidth": 390
+    },
+    {
+      "viewport": [
+        320,
+        740
+      ],
+      "seed": 19,
+      "clock": 1316,
+      "event": "HP_RESTORED",
+      "slot": 3,
+      "hp": 54,
+      "maxHp": 1080,
+      "clientWidth": 320,
+      "scrollWidth": 320
+    },
+    {
+      "viewport": [
+        320,
+        740
+      ],
+      "seed": 19,
+      "clock": 1384,
+      "event": "RECOVERY_READY",
+      "slot": 3
+    },
+    {
+      "viewport": [
+        320,
+        740
+      ],
+      "seed": 19,
+      "event": "NORMAL_SETTLEMENT",
+      "result": "TEAM_ZERO_AHEAD",
+      "bits": 27400
+    }
+  ],
+  "errors": [],
+  "physicalDeviceAccepted": false
+}

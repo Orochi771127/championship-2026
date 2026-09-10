@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "generator": "builtin image_gen.imagegen",
+  "purpose": "FOUR_ENTITIES_TWO_APPEARANCE_OPTIONS_EACH",
+  "sourceReferences": "designs.json referencePaths",
+  "generationCount": 5,
+  "finalBoardCount": 4,
+  "m201Refinement": "Initial and targeted refinement both retained",
+  "ownerApproved": false,
+  "motionCompatibility": "NOT_VALIDATED",
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "files": [
+    {
+      "path": "batch-01/e000-concepts-v1.png",
+      "sha256": "bf5b04f9ca47e87222d0719fc5d7b1da3608e65af8cdd527476851e97cb9f4cd",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB"
+    },
+    {
+      "path": "batch-01/generation/e000-prompt.txt",
+      "sha256": "a52392caf5214bc47e90db7de489c5557442e24d8d6122e1c28defa2c4ca86ee"
+    },
+    {
+      "path": "batch-01/generation/m001-prompt.txt",
+      "sha256": "f4ca8653146960144cfcc6d5dd37a5cbf72ed046ce42e462c3670eeb170a2831"
+    },
+    {
+      "path": "batch-01/generation/m201-concepts-initial.png",
+      "sha256": "a4746dc456d449624a50d1fd22b00b6e3a46ea816663ad16f2653b4fc5c9c509",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB"
+    },
+    {
+      "path": "batch-01/generation/m201-prompt.txt",
+      "sha256": "6ff4f4461fb3363e87cad3c27ca631d4e355ecf8d7af25b2d8e61438ffcd65e4"
+    },
+    {
+      "path": "batch-01/generation/m201-refinement-prompt.txt",
+      "sha256": "2a270002d1451f48540e205a7bf6f6bc08ee6155d81875522bd23595a186e6e1"
+    },
+    {
+      "path": "batch-01/generation/m226-prompt.txt",
+      "sha256": "c0b51078eb06bf5504c8bdaa3a2f29250eaa8841109fb5eb1b8881bf2ffd8df6"
+    },
+    {
+      "path": "batch-01/m001-concepts-v1.png",
+      "sha256": "2a6d224052c6dbd011661ec8d611a8d6ad1c4b410e5ff87596b77e0db04b6bdd",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB"
+    },
+    {
+      "path": "batch-01/m201-concepts-v1.png",
+      "sha256": "bb8446f1b95c846bdd6a0d9effa481253e3a66ed503654794281b0d6f4e26c79",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB"
+    },
+    {
+      "path": "batch-01/m226-concepts-v1.png",
+      "sha256": "a023c0ebef00f86eafb4a74e27bebcb535bbe7adb995638a8d155c371ed77254",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB"
+    }
+  ]
+}

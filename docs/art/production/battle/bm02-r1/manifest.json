@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "batchId": "ART-BATTLE-BM02-R1-2026-09-02",
+  "status": "INTERNAL_PIXI_REVIEW_PASSED_NOT_OWNER_APPROVED_NOT_PROMOTED",
+  "artDirectionBrief": "ART_DIRECTION.md",
+  "buildScript": "scripts/build-battle-bm02-art.py",
+  "rights": {
+    "sourceKind": "ORIGINAL_AI_ASSISTED_GENERATION",
+    "generator": "OpenAI image generation through Codex imagegen skill",
+    "createdAt": "2026-09-02",
+    "referencePixelReuse": false,
+    "referencePaletteReuse": false,
+    "referenceGeometryReuse": false,
+    "generationReference": "original-created BM01 project background only",
+    "licenseEvidenceStatus": "GENERATION_RECEIPT_RECORDED_TERMS_LINK_PENDING"
+  },
+  "assets": [
+    {
+      "id": "production:battle:arena:field-bm02-01",
+      "role": "BM02 lush grass and forest-edge arena-specific background",
+      "path": "review/field-bm02-01-background-candidate.png",
+      "status": "review-candidate",
+      "technical": {
+        "dimensions": "1536x1024",
+        "alpha": false,
+        "filtering": "linear",
+        "colorSpace": "sRGB"
+      },
+      "dependencies": [
+        "production:battle:shared:field-bm00-00"
+      ],
+      "source": {
+        "kind": "generated-original",
+        "sourceFile": "source/field-bm02-01-background-generated.png",
+        "promptRecord": "PROMPTS.md#bm02-arena-specific-background"
+      },
+      "verification": {
+        "nativeScaleReviewed": true,
+        "technicalChecksPassed": true,
+        "inEngineReviewed": true,
+        "humanApproved": false
+      }
+    }
+  ],
+  "canonicalDependency": {
+    "id": "production:battle:shared:field-bm00-00",
+    "runtimeSource": "assets/production/internal-battle-review/bm00-bm01-r1/field-bm00-00-shared-layer.png",
+    "duplicatedIntoBm02Bundle": false
+  },
+  "promotion": {
+    "runtimeIndexEntry": true,
+    "productionCrosswalkFilesLinked": false,
+    "readyForRuntime": false,
+    "shippingReady": false,
+    "runtimeQaReceipt": "docs/reports/art/battle/bm02-r1/browser-qa.json",
+    "nextGate": "OWNER_VISUAL_APPROVAL_LICENSE_TERMS_EVIDENCE_LINK_AND_EXPLICIT_FINAL_PROMOTION"
+  }
+}

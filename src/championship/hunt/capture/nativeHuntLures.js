@@ -27,22 +27,25 @@ export function createNativeHuntLures(host,{consume,request}) {
       if(item.quantity<=0){host.emit('EMPTY');return false;}
       if(item.nativeSubcategory==='DECOY') {
         if(decoy.state!==0)return false;
-        Object.assign(decoy,{active:false,state:1,item,positionQ12:[...p],timer:0});return true;
+        Object.assign(decoy,{active:false,state:1,item,positionQ12:[...p],timer:0,visualTicks:0});return true;
       }
       if(item.nativeSubcategory==='LIGHT') {
         if(light.active)return false;
         if(!consume(item))return false;
-        Object.assign(light,{active:true,item,positionQ12:[...p],timer:0,
+        Object.assign(light,{active:true,item,positionQ12:[...p],timer:0,visualTicks:0,
           interval:host.nextChannel(0xb2)%10+25,remaining:32400*60/400});return true;
       }
       if(item.nativeSubcategory==='CAPTURE_TRAP') {
         if(trap)return false;
         if(!consume(item))return false;
-        trap={active:true,item,positionQ12:[...p],targetId:null};return true;
+        trap={active:true,item,positionQ12:[...p],targetId:null,visualTicks:0};return true;
       }
       return false;
     },
     tick() {
+      if(decoy.state)decoy.visualTicks++;
+      if(light.active)light.visualTicks++;
+      if(trap)trap.visualTicks++;
       if(decoy.state===1 && ++decoy.timer>180)launch([
         (host.camera[0]+Math.trunc(255*host.nextChannel(0xb2)/102))*Q12,
         (host.camera[1]+Math.trunc(191*host.nextChannel(0xb2)/102))*Q12,0]);
@@ -51,6 +54,7 @@ export function createNativeHuntLures(host,{consume,request}) {
         const next=decoy.positionQ12.map((n,i)=>n+decoy.directionQ12[i]);
         if(blocked(host,next)||host.triggerMine?.(next)){
           decoy.active=false;decoy.state=3;decoy.timer=nativeToolAnimation('DECOY',decoy.item.nativeItemIndex,1).ticks.reduce((a,b)=>a+b,0);
+          decoy.visualTicks=0;
           decoy.blinkPeriod=20;decoy.blinkTimer=0;
         }else decoy.positionQ12=next;
       } else if(decoy.state===3) {
@@ -94,13 +98,16 @@ export function createNativeHuntLures(host,{consume,request}) {
       const bounds=nativeToolAnimation('CAPTURE_TRAP',trap.item.nativeItemIndex);
       const [x,y]=p.slice(0,2).map(n=>n>>12),[tx,ty]=trap.positionQ12.slice(0,2).map(n=>n>>12);
       if(x<=tx+(bounds.width>>1)*-1 || x>=tx+(bounds.width>>1) || y<=ty-(bounds.height>>1)||y>=ty+(bounds.height>>1))return false;
-      if(!trap.targetId){trap.targetId=a.wildId;a.trapDestination=[...trap.positionQ12];a.enteredCaptureTrap=true;}
+      if(!trap.targetId){trap.targetId=a.wildId;trap.visualTicks=0;a.trapDestination=[...trap.positionQ12];a.enteredCaptureTrap=true;}
       return !a.enteredCaptureTrap;
     },
     enterCaptureTrap(a){a.destinationQ12=[...a.trapDestination];a.trapReady=false;request(a,15);},
     getObjects:()=>[
-      ...(decoy.state?[{kind:'DECOY',x:decoy.positionQ12[0]/2048,y:decoy.positionQ12[1]/2048,state:decoy.state}]:[]),
-      ...(light.active?[{kind:'LIGHT',x:light.positionQ12[0]/2048,y:light.positionQ12[1]/2048}]:[]),
-      ...(trap?[{kind:'CAPTURE_TRAP',x:trap.positionQ12[0]/2048,y:trap.positionQ12[1]/2048,triggered:!!trap.targetId}]:[])]
+      ...(decoy.state?[{kind:'DECOY',x:decoy.positionQ12[0]/2048,y:decoy.positionQ12[1]/2048,state:decoy.state,
+        itemIndex:decoy.item.nativeItemIndex,sequence:decoy.state===3?(decoy.timer>0?1:2):0,visualTicks:decoy.visualTicks,
+        visible:decoy.state!==3||decoy.timer>0||decoy.blinkTimer<decoy.blinkPeriod/2}]:[]),
+      ...(light.active?[{kind:'LIGHT',x:light.positionQ12[0]/2048,y:light.positionQ12[1]/2048,itemIndex:light.item.nativeItemIndex,visualTicks:light.visualTicks}]:[]),
+      ...(trap?[{kind:'CAPTURE_TRAP',x:trap.positionQ12[0]/2048,y:trap.positionQ12[1]/2048,triggered:!!trap.targetId,
+        itemIndex:trap.item.nativeItemIndex,visualTicks:trap.visualTicks}]:[])]
   };
 }

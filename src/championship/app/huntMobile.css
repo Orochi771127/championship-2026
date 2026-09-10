@@ -102,23 +102,32 @@
 
 /* Raising shares the continuous scene treatment; existing readouts and care
  * controls remain at their original app-owned seams. */
-.int-rh2-shell { display: block; border: 0; background: #eaf2df; }
-.int-rh2-header { position: absolute; z-index: 5; inset: 0 0 auto; background: linear-gradient(#edfbf4f5, #edfbf4b0, transparent); }
+.int-rh2-shell { display: grid; grid-template-rows: auto auto minmax(0,1fr) auto; border: 0; background: #eaf2df; }
+.int-rh2-header { position: relative; z-index: 5; inset: auto; background: linear-gradient(#edfbf4, #dcefe5); }
 .int-rh2-header__identity .int-rh2-kicker { display: none; }
 .int-rh2-title { font-size: 15px; }
-.int-rh2-companion { position: absolute; z-index: 4; top: 62px; left: 8px; right: 8px; margin: 0; padding: 8px 10px; pointer-events: none; }
+.int-rh2-companion { position: relative; z-index: 4; inset: auto; display: grid; grid-template-columns: minmax(72px, .7fr) minmax(0, 1fr); gap: 10px; min-height: 150px; margin: 0 8px 8px; padding: 10px; pointer-events: none; }
+.int-rh2-companion__portrait { display: grid; place-items: center; min-width: 0; min-height: 112px; background: #eff8d9; border: 1px solid #d2e5a7; border-radius: 3px; overflow: hidden; }
+.int-rh2-companion__portrait img { image-rendering: pixelated; object-fit: contain; max-width: 100%; max-height: 140px; }
+.int-rh2-companion__portrait img[hidden] { display: none; }
+.int-rh2-companion__copy { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.int-rh2-companion .int-rh2-vitals { display: grid; grid-template-columns: auto 1fr; margin: 0; gap: 6px; padding: 8px; }
+.int-rh2-companion .int-rh2-vitals__value { margin: 0; font-size: 13px; }
+.int-rh2-vitals__ap-bar { display: block; height: 7px; width: 100%; background: #eaad3f; border: 1px solid #96753d; }
+.int-rh2-vitals__ap-bar[hidden] { display: none; }
 .int-rh2-companion__copy > .int-rh2-kicker { display: none; }
-.int-rh2-field-frame { position: absolute; inset: 0; display: block; margin: 0; border: 0; border-radius: 0; box-shadow: none; }
+.int-rh2-field-frame { position: relative; inset: auto; min-height: 0; display: block; margin: 0; border: 0; border-radius: 0; box-shadow: none; }
 .int-rh2-field-frame__label { position: absolute; z-index: 3; inset: auto 8px 27px auto; min-height: 0; padding: 4px 7px; border: 0; border-radius: 3px; background: #eff8e7d9; pointer-events: none; }
 .int-rh2-field-frame__label .int-rh2-kicker { display: none; }
 .int-rh2-field-host { width: 100%; height: 100%; }
-.int-rh2-status { position: absolute; z-index: 4; bottom: 0; left: 0; right: 0; margin: 0; pointer-events: none; background: #eaf5dedb; }
+.int-rh2-status { position: relative; z-index: 4; inset: auto; margin: 0; pointer-events: none; background: #eaf5dedb; }
 @media (max-height: 650px) {
   .cm-vs2-root:is([data-screen="GATE_SELECT"], [data-screen="HUNT_LOADOUT"]) .cm-vs2-header { min-height: 62px; padding-top: 8px; }
   .cm-vs2-body--gate .cm-vs2-preview { min-height: 92px; padding: 7px 10px; }
   .cm-vs2-preview__image { width: 56px; height: 56px; }
   .cm-vs2-body--gate .cm-vs2-gate3d__hint { padding: 3px; font-size: 10px; }
-  .int-rh2-companion { top: 54px; padding-block: 6px; }
+  .int-rh2-companion { min-height: 116px; padding-block: 6px; }
+  .int-rh2-companion__portrait { min-height: 96px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .cm-vs2-root * { animation: none !important; transition: none !important; }

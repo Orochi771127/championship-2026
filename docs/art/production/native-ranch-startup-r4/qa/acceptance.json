@@ -1,0 +1,27 @@
+{
+  "date": "2026-09-06",
+  "url": "http://127.0.0.1:8738/championship.html",
+  "status": "BOUNDED_NATIVE_STARTUP_SLICE_VERIFIED",
+  "focusedTests": {"passed": 48, "failed": 0},
+  "regressionTests": {"passed": 1135, "failed": 0},
+  "browserActionsPassed": [
+    "Normal New Game shows blue Waiting Room and adjacent facilities",
+    "Select visible egg in Waiting Room",
+    "Drag ground horizontally to view connected track, pipe area and infirmary",
+    "Cage Edit displays 9 occupied cells and 4 disabled Waiting Room cells",
+    "Move Cage 0 from hex 9 to hex 11 then BACK: reentry preserves hex 9",
+    "Move Cage 0 from hex 9 to hex 11 then CONFIRM",
+    "Save & Quit, reload page, Continue, open Cage Edit: Cage 0 remains on hex 11",
+    "Restore Cage 0 to hex 9, CONFIRM, return Home, SAVE"
+  ],
+  "viewports": [
+    {"width": 320, "height": 568, "horizontalOverflow": false, "canvasCount": 1},
+    {"width": 390, "height": 844, "horizontalOverflow": false, "canvasCount": 1}
+  ],
+  "legacySavePreservation": "Automated regression coverage; no browser migration claim",
+  "rawResearchAssetsCopied": false,
+  "rawTileCompositorBound": false,
+  "nativeResidentFacilityMembershipBound": false,
+  "physicalDeviceQa": false,
+  "shippingReady": false
+}

@@ -1,0 +1,452 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 60,
+  "scenePath": "training/team_list_plate_scene.nxr",
+  "category": "Training / Home / Schedule",
+  "overlayOwner": "OVL18",
+  "sourceEvidence": {
+    "fileId": 6113,
+    "fileName": "team_list_plate_scene.nxr",
+    "sha256": "f24c555092f610146961ea7a5ef47d2d19a57af244eceb4bf6ce443762e978c1",
+    "overlayMappingConfidence": "SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "UNKNOWN_REQUIRES_TRACE",
+    "roleEvidence": "UNKNOWN_REQUIRES_TRACE"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [
+    {
+      "resourceIndex": 0,
+      "resourceName": "schedule_obj_main",
+      "cellCount": 32,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "training/schedule_obj_main.ncer",
+        "nanr": "training/schedule_obj_main.nanr",
+        "ncgr": null,
+        "ncbr": "training/schedule_obj_main.ncbr",
+        "nclr": "training/schedule_obj_main.nclr",
+        "nscr": null
+      },
+      "spriteWitness": "docs/art/production/ui/faithful-hd96/sprite-cell-witnesses-4x/training__schedule_obj_main__cells.png",
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "name_text",
+      "resourceIndex": -1,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 0,
+        "y": -14
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        6,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 1,
+      "name": "rank",
+      "resourceIndex": 0,
+      "cellIndex": 12,
+      "sourcePosition": {
+        "x": -78,
+        "y": 0
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 2,
+      "name": "money",
+      "resourceIndex": 0,
+      "cellIndex": 14,
+      "sourcePosition": {
+        "x": 4,
+        "y": 0
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 3,
+      "name": "money_05",
+      "resourceIndex": 0,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 19,
+        "y": -1
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 4,
+      "name": "money_04",
+      "resourceIndex": 0,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 28,
+        "y": -1
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 5,
+      "name": "money_03",
+      "resourceIndex": 0,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 37,
+        "y": -1
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 6,
+      "name": "money_02",
+      "resourceIndex": 0,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 46,
+        "y": -1
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 7,
+      "name": "money_01",
+      "resourceIndex": 0,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 55,
+        "y": -1
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 8,
+      "name": "bit",
+      "resourceIndex": 0,
+      "cellIndex": 11,
+      "sourcePosition": {
+        "x": 65,
+        "y": -1
+      },
+      "portraitProjection": null,
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 9,
+      "name": "star_10",
+      "resourceIndex": 0,
+      "cellIndex": 13,
+      "sourcePosition": {
+        "x": -10,
+        "y": 6
+      },
+      "portraitProjection": null,
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 10,
+      "name": "star_08",
+      "resourceIndex": 0,
+      "cellIndex": 13,
+      "sourcePosition": {
+        "x": -18,
+        "y": 6
+      },
+      "portraitProjection": null,
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 11,
+      "name": "star_06",
+      "resourceIndex": 0,
+      "cellIndex": 13,
+      "sourcePosition": {
+        "x": -26,
+        "y": 6
+      },
+      "portraitProjection": null,
+      "params": [
+        3,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 12,
+      "name": "star_04",
+      "resourceIndex": 0,
+      "cellIndex": 13,
+      "sourcePosition": {
+        "x": -34,
+        "y": 6
+      },
+      "portraitProjection": null,
+      "params": [
+        4,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 13,
+      "name": "star_02",
+      "resourceIndex": 0,
+      "cellIndex": 13,
+      "sourcePosition": {
+        "x": -42,
+        "y": 6
+      },
+      "portraitProjection": null,
+      "params": [
+        5,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 14,
+      "name": "star_09",
+      "resourceIndex": 0,
+      "cellIndex": 13,
+      "sourcePosition": {
+        "x": -14,
+        "y": 1
+      },
+      "portraitProjection": null,
+      "params": [
+        6,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 15,
+      "name": "star_07",
+      "resourceIndex": 0,
+      "cellIndex": 13,
+      "sourcePosition": {
+        "x": -22,
+        "y": 1
+      },
+      "portraitProjection": null,
+      "params": [
+        7,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 16,
+      "name": "star_05",
+      "resourceIndex": 0,
+      "cellIndex": 13,
+      "sourcePosition": {
+        "x": -30,
+        "y": 1
+      },
+      "portraitProjection": null,
+      "params": [
+        8,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 17,
+      "name": "star_03",
+      "resourceIndex": 0,
+      "cellIndex": 13,
+      "sourcePosition": {
+        "x": -38,
+        "y": 1
+      },
+      "portraitProjection": null,
+      "params": [
+        9,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 18,
+      "name": "star_01",
+      "resourceIndex": 0,
+      "cellIndex": 13,
+      "sourcePosition": {
+        "x": -46,
+        "y": 1
+      },
+      "portraitProjection": null,
+      "params": [
+        10,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 19,
+      "name": "base",
+      "resourceIndex": 0,
+      "cellIndex": 10,
+      "sourcePosition": {
+        "x": 0,
+        "y": 0
+      },
+      "portraitProjection": null,
+      "params": [
+        20,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    }
+  ],
+  "dynamicVirtualNodeCount": 1,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

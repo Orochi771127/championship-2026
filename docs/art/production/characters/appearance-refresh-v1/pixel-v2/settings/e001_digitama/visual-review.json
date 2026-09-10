@@ -1,0 +1,36 @@
+{
+  "deferredChecks": [
+    "Original full timeline playback and slot compilation",
+    "Normal game and physical device QA"
+  ],
+  "entityId": "e001_digitama",
+  "observations": [
+    "Two red chevrons on warm white, with a separate lower red stripe.",
+    "Viewed all12 authored state contact sheet, then independent corrected-source spot comparison of normal/open shell/internal light/remaining lower shell.",
+    "All12 source states individually verified for exact native bounds and alpha support; all26 slots referenced by the source reuse evidence.",
+    "Reuses new authored E000 shell/effect construction after per-state geometry/occlusion evidence; new pattern is explicitly authored, not original RGB recolor."
+  ],
+  "reviewedPoses": [
+    "main/cell_000",
+    "main/cell_001",
+    "main/cell_002",
+    "main/cell_004",
+    "main/cell_005",
+    "main/cell_006",
+    "main/cell_007",
+    "main/cell_008",
+    "main/cell_009",
+    "main/cell_010",
+    "main/cell_011",
+    "main/cell_012"
+  ],
+  "reviewer": "ROOT_ART_DIRECTOR_INDEPENDENT_OF_AUTHOR",
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "86cd49165aa195c831562b350b561b798851efc3b91a957a449694e74e00fdcd",
+  "shippingReady": false,
+  "sourceComparisonSha256": "16df3553d93258345e570e24f8c29a03f5b6c9aba43d70bf8e08ca7dea7e20fc",
+  "technicalQaSha256": "e82f8ed9266a12aae2dfc093931814570c6c45fdde48c2cd4988c78ea11ff9c6",
+  "unresolvedBlockingIssues": [],
+  "verdict": "PASS_SETTING_STAGE"
+}

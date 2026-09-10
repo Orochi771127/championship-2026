@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:battle:bm11-r1:original-review",
+  "family": "BATTLE",
+  "artifactMaturity": "INTERNAL_LAYERED_RUNTIME_REVIEW",
+  "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+  "shippingStatus": "NOT_SHIPPING_READY",
+  "humanApproved": false,
+  "ownerApproval": null,
+  "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+  "rights": {
+    "status": "ORIGINAL_CREATED_AI_ASSISTED_TERMS_LINK_PENDING",
+    "referencePixelReuse": false,
+    "referencePaletteReuse": false,
+    "referenceGeometryReuse": false
+  },
+  "internalReviewEligible": true,
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "sourceDimensions": [
+    1536,
+    1024
+  ],
+  "viewportPolicy": {
+    "fit": "CONTAIN",
+    "verticalAnchor": 0.42,
+    "contractViewports": [
+      [
+        360,
+        800
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        393,
+        852
+      ],
+      [
+        412,
+        915
+      ],
+      [
+        430,
+        932
+      ]
+    ]
+  },
+  "arena": {
+    "fieldId": "field_bm11_01",
+    "assetId": "production:battle:arena:field-bm11-01",
+    "dependencies": [
+      "production:battle:shared:field-bm00-00"
+    ],
+    "gameplayBinding": "EXTERNAL_NOT_MOUNTED",
+    "collisionBinding": "NONE_ART_REVIEW_ONLY",
+    "uiBinding": "NONE_ART_REVIEW_ONLY",
+    "layers": [
+      {
+        "assetId": "production:battle:arena:field-bm11-01",
+        "role": "ARENA_BACKGROUND",
+        "zIndex": 0,
+        "src": "assets/production/internal-battle-review/bm05-bm11-static-r1/field-bm11-01-background.png",
+        "sha256": "5FA50C4A05EC206E8E06D44ECE23B1E6939F768C1A45A8280914367394B2D3C1",
+        "alpha": false
+      },
+      {
+        "assetId": "production:battle:shared:field-bm00-00",
+        "role": "CANONICAL_SHARED_LAYER",
+        "zIndex": 10,
+        "src": "assets/production/internal-battle-review/bm00-bm01-r1/field-bm00-00-shared-layer.png",
+        "sha256": "0906D94C70BAE26F5A1A65B0C7F304222B3CFA78007259389B18A34B51C5EB17",
+        "alpha": true
+      }
+    ]
+  },
+  "promotionGate": "OWNER_VISUAL_APPROVAL_LICENSE_TERMS_LINK_AND_FINAL_LAYER_SEPARATION_REQUIRED"
+}

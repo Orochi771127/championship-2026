@@ -1,0 +1,256 @@
+TAP version 13
+# Subtest: v1 migrates at the existing key without changing any existing slice or R2 digest
+ok 1 - v1 migrates at the existing key without changing any existing slice or R2 digest
+  ---
+  duration_ms: 14.4974
+  type: 'test'
+  ...
+# Subtest: v2 wallet and receipt migrate to v5 together; old completion cannot be paid again
+ok 2 - v2 wallet and receipt migrate to v5 together; old completion cannot be paid again
+  ---
+  duration_ms: 5.873
+  type: 'test'
+  ...
+# Subtest: save constructors, serializers and loaders refuse unfinished battle attempts
+ok 3 - save constructors, serializers and loaders refuse unfinished battle attempts
+  ---
+  duration_ms: 3.058
+  type: 'test'
+  ...
+# Subtest: unknown fields, malformed histories and missing v2 slices fail closed
+ok 4 - unknown fields, malformed histories and missing v2 slices fail closed
+  ---
+  duration_ms: 4.0742
+  type: 'test'
+  ...
+# Subtest: the existing 64 KiB and nested forensic boundary still applies after migration
+ok 5 - the existing 64 KiB and nested forensic boundary still applies after migration
+  ---
+  duration_ms: 1.984
+  type: 'test'
+  ...
+# Subtest: the screen stack allows only declared transitions
+ok 6 - the screen stack allows only declared transitions
+  ---
+  duration_ms: 3.5878
+  type: 'test'
+  ...
+# Subtest: the screen stack pops one level and unwinds only where an exit is declared
+ok 7 - the screen stack pops one level and unwinds only where an exit is declared
+  ---
+  duration_ms: 0.6039
+  type: 'test'
+  ...
+# Subtest: the gate list preserves the reference-backed count and invents no unlock rule
+ok 8 - the gate list preserves the reference-backed count and invents no unlock rule
+  ---
+  duration_ms: 0.8315
+  type: 'test'
+  ...
+# Subtest: every gate builds a 128x128 world that is deterministic, connected and distinct
+ok 9 - every gate builds a 128x128 world that is deterministic, connected and distinct
+  ---
+  duration_ms: 173.1089
+  type: 'test'
+  ...
+# Subtest: the world is far larger than any supported viewport
+ok 10 - the world is far larger than any supported viewport
+  ---
+  duration_ms: 8.8879
+  type: 'test'
+  ...
+# Subtest: the player cannot walk into blocked terrain or out of the world
+ok 11 - the player cannot walk into blocked terrain or out of the world
+  ---
+  duration_ms: 48.415
+  type: 'test'
+  ...
+# Subtest: the camera is a window over the world and is always clamped inside it
+ok 12 - the camera is a window over the world and is always clamped inside it
+  ---
+  duration_ms: 52.0329
+  type: 'test'
+  ...
+# Subtest: wild creatures wander inside a bounded radius and never react to the player
+ok 13 - wild creatures wander inside a bounded radius and never react to the player
+  ---
+  duration_ms: 18.4645
+  type: 'test'
+  ...
+# Subtest: VS2 walks Raising Home to the Hunt field and back through the published seam
+ok 14 - VS2 walks Raising Home to the Hunt field and back through the published seam
+  ---
+  duration_ms: 277.9541
+  type: 'test'
+  ...
+# Subtest: the Hunt toolbar is the ROM-verified mode with every slot still unbound
+ok 15 - the Hunt toolbar is the ROM-verified mode with every slot still unbound
+  ---
+  duration_ms: 21.3742
+  type: 'test'
+  ...
+# Subtest: Hunt exposes only the authorized native controls/readouts and no invented terrain taxonomy
+ok 16 - Hunt exposes only the authorized native controls/readouts and no invented terrain taxonomy
+  ---
+  duration_ms: 18.9632
+  type: 'test'
+  ...
+# Subtest: Hunt exploration adds no transient save fields, and reload preserves history at Raising Home
+ok 17 - Hunt exploration adds no transient save fields, and reload preserves history at Raising Home
+  ---
+  duration_ms: 37.6278
+  type: 'test'
+  ...
+# Subtest: starting a new game clears any expedition in progress
+ok 18 - starting a new game clears any expedition in progress
+  ---
+  duration_ms: 20.269
+  type: 'test'
+  ...
+# Subtest: the legacy diagnostic grammar remains explicitly non-original
+ok 19 - the legacy diagnostic grammar remains explicitly non-original
+  ---
+  duration_ms: 6.1717
+  type: 'test'
+  ...
+# Subtest: a jitter shorter than 5px is ignored
+ok 20 - a jitter shorter than 5px is ignored
+  ---
+  duration_ms: 2.1983
+  type: 'test'
+  ...
+# Subtest: a 5px step is kept
+ok 21 - a 5px step is kept
+  ---
+  duration_ms: 0.4032
+  type: 'test'
+  ...
+# Subtest: a gap longer than 20px is interpolated
+ok 22 - a gap longer than 20px is interpolated
+  ---
+  duration_ms: 0.5733
+  type: 'test'
+  ...
+# Subtest: the stroke stores at most 20 points
+ok 23 - the stroke stores at most 20 points
+  ---
+  duration_ms: 0.897
+  type: 'test'
+  ...
+# Subtest: a short scribble does not close
+ok 24 - a short scribble does not close
+  ---
+  duration_ms: 0.8521
+  type: 'test'
+  ...
+# Subtest: an open line with enough points still does not close
+ok 25 - an open line with enough points still does not close
+  ---
+  duration_ms: 0.5898
+  type: 'test'
+  ...
+# Subtest: a tiny loop fails the minimum extent
+ok 26 - a tiny loop fails the minimum extent
+  ---
+  duration_ms: 0.3917
+  type: 'test'
+  ...
+# Subtest: a closed loop that spans 25px and returns within 15px captures
+ok 27 - a closed loop that spans 25px and returns within 15px captures
+  ---
+  duration_ms: 1.0808
+  type: 'test'
+  ...
+# Subtest: tether distance uses the product four bands (not ROM-verified)
+ok 28 - tether distance uses the product four bands (not ROM-verified)
+  ---
+  duration_ms: 1.6736
+  type: 'test'
+  ...
+# Subtest: a diagnostic circle followed by release cannot allocate, register, remove or save an individual
+ok 29 - a diagnostic circle followed by release cannot allocate, register, remove or save an individual
+  ---
+  duration_ms: 135.5681
+  type: 'test'
+  ...
+# Subtest: a diagnostic circle followed by cancel cannot allocate, register, remove or save an individual
+ok 30 - a diagnostic circle followed by cancel cannot allocate, register, remove or save an individual
+  ---
+  duration_ms: 56.8066
+  type: 'test'
+  ...
+# Subtest: a diagnostic circle followed by exit cannot allocate, register, remove or save an individual
+ok 31 - a diagnostic circle followed by exit cannot allocate, register, remove or save an individual
+  ---
+  duration_ms: 42.1338
+  type: 'test'
+  ...
+# Subtest: a diagnostic circle followed by back cannot allocate, register, remove or save an individual
+ok 32 - a diagnostic circle followed by back cannot allocate, register, remove or save an individual
+  ---
+  duration_ms: 35.6679
+  type: 'test'
+  ...
+# Subtest: native initial HP and no card cannot turn a circle into a capacity check or a collected creature
+ok 33 - native initial HP and no card cannot turn a circle into a capacity check or a collected creature
+  ---
+  duration_ms: 22.8672
+  type: 'test'
+  ...
+# Subtest: a point on a polygon edge counts as inside
+ok 34 - a point on a polygon edge counts as inside
+  ---
+  duration_ms: 1.7751
+  type: 'test'
+  ...
+# Subtest: a stroke on empty ground does not start enclosure
+ok 35 - a stroke on empty ground does not start enclosure
+  ---
+  duration_ms: 40.6368
+  type: 'test'
+  ...
+# Subtest: a closed loop around a nearby wild leaves that individual on the field
+ok 36 - a closed loop around a nearby wild leaves that individual on the field
+  ---
+  duration_ms: 13.9372
+  type: 'test'
+  ...
+# Subtest: an unclosed scribble on a wild does not take it
+ok 37 - an unclosed scribble on a wild does not take it
+  ---
+  duration_ms: 12.4319
+  type: 'test'
+  ...
+# Subtest: owned memory cards encode max G as last occupied slot: 32 / 64 / 96
+ok 38 - owned memory cards encode max G as last occupied slot: 32 / 64 / 96
+  ---
+  duration_ms: 2.2813
+  type: 'test'
+  ...
+# Subtest: over capacity is a compare against max, not a close-stroke subtract
+ok 39 - over capacity is a compare against max, not a close-stroke subtract
+  ---
+  duration_ms: 0.5635
+  type: 'test'
+  ...
+# Subtest: no owned card rejects the first bring-home (max 0)
+ok 40 - no owned card rejects the first bring-home (max 0)
+  ---
+  duration_ms: 0.5027
+  type: 'test'
+  ...
+# Subtest: a circle leaves the wild untouched before any capacity transaction
+ok 41 - a circle leaves the wild untouched before any capacity transaction
+  ---
+  duration_ms: 50.768
+  type: 'test'
+  ...
+1..41
+# tests 41
+# suites 0
+# pass 41
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2272.2362

@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-06",
+  "project": "R:/Projects/Championship2026/championship-2026",
+  "branch": "main",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "scope": "Normal unaccompanied Hunt entry transaction",
+  "normalEntryWithoutCarriedAccepted": true,
+  "fullAEntryAccepted": false,
+  "normalCaptureHomeAccepted": false,
+  "sources": {
+    "gates": 16,
+    "gateHourCpuCases": 352,
+    "nativeFieldIndices": 32,
+    "seasons": 4,
+    "uniqueEnvironments": 29,
+    "terrainCells": 475136,
+    "originalReaderCalls": 950504,
+    "actualMovementCalls": 208,
+    "gateSeasonHourGenerationCases": 192,
+    "originalEntryActors": 15,
+    "originalEntryRngChannels": 217,
+    "carriedControlledDispatches": 230
+  },
+  "checks": {
+    "focused": {
+      "passed": 53,
+      "failed": 0,
+      "log": "focused.log"
+    },
+    "regression": {
+      "passed": 1052,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 88.3388898,
+      "log": "regression.log"
+    },
+    "builderDeterminism": "PASS",
+    "diffCheck": "PASS"
+  },
+  "browser": {
+    "origin": "http://127.0.0.1:8737",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "authority": "Normal UI clicks only; no hidden state or storage injection",
+    "steps": [
+      "New Game",
+      "System/Hunt",
+      "Grass",
+      "Tether I",
+      "Begin Hunt",
+      "Return Home",
+      "Save",
+      "System/Save & Quit",
+      "reload",
+      "Continue",
+      "System/Hunt",
+      "Grass",
+      "Begin Hunt"
+    ],
+    "canvasCount": 1,
+    "horizontalOverflow": false,
+    "consoleErrors": 0,
+    "consoleWarnings": 0,
+    "disabledToolButtons": 8,
+    "screenshots": [
+      "normal-hunt-390.png",
+      "continue-home-390.png",
+      "continue-reentry-390.png"
+    ]
+  },
+  "pending": [
+    "carried request45 and whole-batch first dispatch",
+    "normal AI and nonzero target/controller lifetime",
+    "normal tool sampling/capture/nativeAnimation",
+    "normal capture-Result-Home-Save-Continue",
+    "Battle/other species/UI/VFX/complete visual and physical-device QA"
+  ],
+  "legacyMissingHistory": "reject entry without reseeding or rewriting saved history",
+  "publicPages": {
+    "rerun": false,
+    "accepted": false,
+    "priorBlocker": "tracked deletion entities.r1.json remains in build git ls-files enumeration"
+  },
+  "release": {
+    "commit": false,
+    "push": false,
+    "merge": false,
+    "deploy": false
+  },
+  "report": "docs/art/HUNT_NORMAL_ENTRY_INTEGRATION_2026-09-06.md"
+}

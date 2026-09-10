@@ -1,0 +1,24 @@
+{
+  "candidateSource": "docs/art/production/characters/appearance-refresh-v1/_work/identity-roster-group2/m356_yukidarumon",
+  "entityId": "m356_yukidarumon",
+  "findings": [
+    "Short cream canine muzzle, pink cheek and large amber eye replace the small snow-creature face; compact ears, round belly and native feet placement remain readable on light and dark backgrounds.",
+    "One source standard pose only. Appearance direction is reviewed, but pose sampling remains incomplete and cannot pass the setting-stage gate."
+  ],
+  "fullMotionQa": "NOT_RUN",
+  "identityDirectionVersion": "creature-identity-v1",
+  "identityVerdict": "PASS_IDENTITY_DIRECTION",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "reviewMethod": "Actually viewed original/new comparison and native/enlarged authored contact board; independently compiled adopted pixels.",
+  "reviewer": "root / independent review of designer single-pose candidate",
+  "runtimePromotionGranted": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "9fe46333bff9c827dbb6c10aba758e694305f9788ae478cc8162eb201dfb81db",
+  "sourceComparisonSha256": "dbe76586234e47bc960aef9470d175aa6d0f8fb908e479186d27c99a73612da9",
+  "technicalQaSha256": "0b6d0a06d7718714290a05912b5a6bffb2d521798d55bdca90ff01c936e628de",
+  "unresolvedBlockingIssues": [
+    "Additional source representative poses and continuity review required before setting acceptance."
+  ],
+  "verdict": "STANDARD_POSE_REVIEWED_NOT_SETTING_PASS"
+}

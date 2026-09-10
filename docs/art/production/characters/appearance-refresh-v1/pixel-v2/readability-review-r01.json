@@ -1,0 +1,36 @@
+{
+  "all224ReadabilityReviewed": false,
+  "completeMotionApproved": 0,
+  "independentReview": "docs/art/production/characters/appearance-refresh-v1/_work/readability-review/review-after.json",
+  "records": [
+    {
+      "entityId": "m003_nyokimon",
+      "identityVerdict": "PENDING_IDENTITY_REFINEMENT",
+      "poseSamplingStatus": "INCOMPLETE",
+      "readabilityVerdict": "ACCEPT_SINGLE_STANDARD_POSE_READABILITY_REVISION",
+      "settingSha256": "4d3e64b61cb2ca99113508d22dc3563cb7b89d88d88c9922cbefc6c36afcbaaa",
+      "technicalStatus": "PASS",
+      "version": "m003-creature-identity-r02"
+    },
+    {
+      "entityId": "m004_bubbmon",
+      "identityVerdict": "PASS_IDENTITY_DIRECTION",
+      "poseSamplingStatus": "INCOMPLETE",
+      "readabilityVerdict": "ACCEPT_SINGLE_STANDARD_POSE_READABILITY_REVISION",
+      "settingSha256": "4230ce6ca4f0b19393bdbdc46d419be9f55f73309286baa91e8690e2c16c2e20",
+      "technicalStatus": "PASS",
+      "version": "m004-creature-identity-r02"
+    },
+    {
+      "entityId": "m005_pitchmon",
+      "identityVerdict": "PENDING_IDENTITY_REFINEMENT",
+      "poseSamplingStatus": "INCOMPLETE",
+      "readabilityVerdict": "ACCEPT_SINGLE_STANDARD_POSE_READABILITY_REVISION",
+      "settingSha256": "17e1b4307614d5e8f79ef6d626b728f717222d6d01b6237ad708ea92e31c334c",
+      "technicalStatus": "PASS",
+      "version": "m005-creature-identity-r02"
+    }
+  ],
+  "runtimeDefaultsChanged": 0,
+  "scope": "Three single-pose readability repairs after Owner feedback"
+}

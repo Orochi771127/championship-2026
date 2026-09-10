@@ -1,0 +1,27 @@
+{
+  "entityId": "m005_pitchmon",
+  "findings": [
+    "Eye cream ends above body, belly patch separated. Nose/mouth bounded on left. Cyan body is continuous; appendage anchors are unchanged. Substantially less checker-like."
+  ],
+  "fullMotionQa": "NOT_RUN",
+  "identityDirectionVersion": "creature-identity-v1",
+  "identityVerdict": "PENDING_IDENTITY_REFINEMENT",
+  "independentReview": "docs/art/production/characters/appearance-refresh-v1/_work/readability-review/review-after.json",
+  "limitations": [
+    "16-pixel-wide canvas remains cramped. Horn fins and eye placement convey a tiny creature, but dragon identity should be checked across additional poses; avoid adding more face details."
+  ],
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "readabilityVerdict": "ACCEPT_SINGLE_STANDARD_POSE_READABILITY_REVISION",
+  "reviewer": "independent readability_review agent + root visual review",
+  "runtimePromotionGranted": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "17e1b4307614d5e8f79ef6d626b728f717222d6d01b6237ad708ea92e31c334c",
+  "sourceComparisonSha256": "4daa430c0ed4fdb341b06faf4e98a89fe0c83dd66ea3b360b958dfb106e91545",
+  "technicalQaSha256": "1db63f0807bd75f41ff7395a8b4efc30e5018f3586b706047d2e84d4a1175e9b",
+  "unresolvedBlockingIssues": [
+    "Additional representative poses and identity continuity review required.",
+    "16-pixel-wide canvas remains cramped. Horn fins and eye placement convey a tiny creature, but dragon identity should be checked across additional poses; avoid adding more face details."
+  ],
+  "verdict": "STANDARD_POSE_REVIEWED_NOT_SETTING_PASS"
+}

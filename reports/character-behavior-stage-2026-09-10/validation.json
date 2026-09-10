@@ -1,0 +1,95 @@
+{
+  "date": "2026-09-10",
+  "branch": "main",
+  "head": "65afff9d57cb530e8d78dfb186b24f83c68db27d",
+  "fullOriginalStageComplete": false,
+  "tests": {
+    "baseline": {
+      "tests": 1411,
+      "pass": 1411,
+      "fail": 0
+    },
+    "focused": {
+      "tests": 46,
+      "pass": 46,
+      "fail": 0
+    },
+    "regression": {
+      "tests": 1413,
+      "pass": 1413,
+      "fail": 0
+    },
+    "ci": {
+      "tests": 1196,
+      "pass": 1196,
+      "fail": 0
+    }
+  },
+  "files": [
+    {
+      "path": "src/championship/raising/nativeRaisingActivity.js",
+      "sha256": "21da8951709ffc5c5b152ddfee96d490cc28128404b65e751dd580081061e2c8"
+    },
+    {
+      "path": "src/data/championship/catalogs/raising-activity.r1.json",
+      "sha256": "550ae298f700cd5653eacd9bf9596dcd4063fe4e02da73c8bfe6a86b6ed88eaa"
+    },
+    {
+      "path": "scripts/research/check-raising-reaction-dispatch-cpu.py",
+      "sha256": "3867b50e7c947a2e0c16757eebe3f436a197c979befaacb296c3cf4624f4417e"
+    },
+    {
+      "path": "docs/research/RAISING_REACTION_DISPATCH_CPU_2026-09-10.json",
+      "sha256": "dc90ada96bdce5d521eddba0eb0c1c4819ff8c3784782b87ed539124e18dd093"
+    },
+    {
+      "path": "tests/championship-raising-reaction-dispatch-cases.mjs",
+      "sha256": "340df26e8f09451e9d6ae91dd957dcfb9ddd6ae736c2061d32d6f6f27316a8e6"
+    },
+    {
+      "path": "tests/ci-test-scope.v1.json",
+      "sha256": "eacb3567baf908a4d6b9717377c4002a8eab70871e43180499c8ca124e03c359"
+    }
+  ],
+  "nativeReplay": {
+    "reactionIds": 31,
+    "handlerVariants": 104,
+    "handlerUpdates": 8516,
+    "wrapperRequests": 18240
+  },
+  "sourceInventory": {
+    "speciesBindings": 228,
+    "uniqueCharacters": 224,
+    "banks": 896,
+    "sequences": 13008,
+    "runtimeTimelineMismatches": 0
+  },
+  "normalBrowser": {
+    "origin": "http://127.0.0.1:8768",
+    "setup": "Existing hungry-adult fixture; ordinary LOGIN/Continue and toolbar input afterwards",
+    "viewport": [
+      390,
+      844
+    ],
+    "canvasCount": 1,
+    "documentWidth": 390,
+    "foodStock": [
+      50,
+      49
+    ],
+    "observed": [
+      "hunger icon",
+      "resident movement",
+      "Food input accepted; later screenshot has no food or hunger icon",
+      "save confirmation"
+    ],
+    "allSpeciesVisualAcceptance": false,
+    "originalFrameByFrameComparison": false,
+    "physicalDevice": false,
+    "reloadContinue": {
+      "resident": "\u52d5\u756b\u9a57\u6536",
+      "foodStock": 49,
+      "result": "RETURNED_TO_RAISING"
+    }
+  }
+}

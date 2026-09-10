@@ -179,7 +179,7 @@ test("production index registers the licensed Hunt, Cage, Battle, and VFX pilots
   for (const entry of index.entries) {
     assert.match(entry.manifestPath, /^assets\/production\//);
     // Full manifest presence is verified by championship-art-local-manifests-cases.mjs.
-    if (['art:vfx:battle-effects:local-reference:v1','art:audio:battle:local-reference:v1'].includes(entry.assetId)) {
+    if (['art:vfx:battle-effects:local-reference:v1','art:audio:battle:local-reference:v1','art:vfx:raising-feedback:local-reference:v1','art:characters:hud:local-reference:v1','art:vfx:hunt-feedback:local-reference:v1'].includes(entry.assetId)) {
       assert.equal(entry.localOnly, true);
       assert.equal(entry.publicReleasePermitted, false);
       assert.equal(entry.runtimeScope, 'LOOPBACK_RESEARCH_ONLY');

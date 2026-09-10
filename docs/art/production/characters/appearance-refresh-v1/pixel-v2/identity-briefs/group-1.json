@@ -1,0 +1,2654 @@
+[
+  {
+    "observedBody": "低矮金色無肢膠體，右側分離液滴",
+    "chosenFamily": "FELINE",
+    "designName": "琥珀膠貓",
+    "fixedTraits": [
+      "連體軟耳峰",
+      "奶油大眼眶",
+      "短粉鼻",
+      "琥珀側斑"
+    ],
+    "changedRegions": [
+      "頭頂",
+      "面罩"
+    ],
+    "preservedMotion": [
+      "膠體壓扁伸長及原液滴",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "頭頂與面罩限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "保留 Owner B 琥珀膠體，以臉部與膠耳建立新身份",
+    "risk": "耳峰在壓扁時需貼身",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m001_zurumon",
+    "sourceImageSha256": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 17,
+      "maxYExclusive": 3,
+      "minX": -7,
+      "minY": -13
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證",
+    "ownerSelectedOption": "B"
+  },
+  {
+    "observedBody": "灰銀小機械體，兩支上伸細構件與短尾",
+    "chosenFamily": "CANINE",
+    "designName": "瓷銅巡犬",
+    "fixedTraits": [
+      "折角犬耳天線",
+      "銅鼻面板",
+      "瓷白眼框",
+      "短鉚釘頰"
+    ],
+    "changedRegions": [
+      "機械頭殼",
+      "前臉"
+    ],
+    "preservedMotion": [
+      "天線根部、短尾與機械本體位置",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "機械頭殼與前臉限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "短犬吻可嵌入前面板，不增加新的活動構件",
+    "risk": "細天線易在深底消失",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m002_choromon",
+    "sourceImageSha256": "92768f092ec0c58b81640333fef1f64eda8211259071e43ed7098d1d86351e16",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 4,
+      "minX": -8,
+      "minY": -20
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "綠色雙葉下方是白邊暗色小圓核",
+    "chosenFamily": "FELINE",
+    "designName": "薄荷葉耳貓種",
+    "fixedTraits": [
+      "雙葉耳色區",
+      "奶油雙眼",
+      "桃色三角鼻",
+      "翠綠種殼"
+    ],
+    "changedRegions": [
+      "葉片表面",
+      "種核臉"
+    ],
+    "preservedMotion": [
+      "葉根、圓核位置與懸浮關係",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "葉片表面與種核臉限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "已有雙葉可承載貓耳語言，保持植物結構",
+    "risk": "葉片翻轉時耳標記需一起翻",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m003_nyokimon",
+    "sourceImageSha256": "417989a3872d78aff8f5075be90918bb5dbff3037af93c6507cd3a86c0f74aa6",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 17,
+      "maxYExclusive": 6,
+      "minX": -7,
+      "minY": -18
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "綠色軟團，左側口部突出，上方兩泡",
+    "chosenFamily": "BIG_EYE",
+    "designName": "青檸泡泡幼靈",
+    "fixedTraits": [
+      "成對水亮大眼",
+      "奶油鼻口罩",
+      "青檸凝膠層",
+      "泡內小高光"
+    ],
+    "changedRegions": [
+      "軟團前臉",
+      "泡色塊"
+    ],
+    "preservedMotion": [
+      "突出嘴位、底部軟攤和獨立氣泡",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "軟團前臉與泡色塊限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "圓眼面罩比硬加耳朵適合流體形變",
+    "risk": "泡泡不能增減或變成耳朵",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m004_bubbmon",
+    "sourceImageSha256": "309726066293b37d0b594993bff8f3d1a67218dfbf5459693c2e687b29b93fe3",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 5,
+      "minX": -8,
+      "minY": -19
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "青藍細長漂浮體，頭頂短枝狀輪廓",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "水滴幼龍",
+    "fixedTraits": [
+      "短雙角水冠",
+      "深藍大瞳",
+      "奶油短吻",
+      "淺青腹線"
+    ],
+    "changedRegions": [
+      "頭冠",
+      "臉腹"
+    ],
+    "preservedMotion": [
+      "細長身軸與上下小突起",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "頭冠與臉腹限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "用龍角形色區建立龍幼體而維持漂浮軟身",
+    "risk": "狹小臉部不能塞入長吻",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m005_pitchmon",
+    "sourceImageSha256": "a9b68affb99bb3d59157dd7aaa1199b6cc1dcd0990e796b45acb548c743ed064",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 9,
+      "maxYExclusive": 4,
+      "minX": -7,
+      "minY": -20
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "红色圓團，頂部有短突起",
+    "chosenFamily": "CANINE",
+    "designName": "莓果團犬",
+    "fixedTraits": [
+      "短圓耳斑",
+      "奶油雙眉",
+      "深棗鼻",
+      "櫻紅團身"
+    ],
+    "changedRegions": [
+      "團面",
+      "上緣"
+    ],
+    "preservedMotion": [
+      "圓團接地和彈壓外形",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "團面與上緣限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "圓犬臉讓紅團有明確表情而不用增加腿",
+    "risk": "鼻口只能佔少量像素",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m006_punimon",
+    "sourceImageSha256": "2d0608988c8cae5b7da5dee1cd7b1bac2bd288cc633769fc1a84754a864dfda4",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 8,
+      "maxYExclusive": 4,
+      "minX": -8,
+      "minY": -12
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "黑灰絨球，雙頂尖及小黃面點",
+    "chosenFamily": "FELINE",
+    "designName": "煤絨夜貓",
+    "fixedTraits": [
+      "兩個尖耳面",
+      "金色大眼",
+      "灰色短頰",
+      "煤黑圓毛團"
+    ],
+    "changedRegions": [
+      "雙尖",
+      "中央臉"
+    ],
+    "preservedMotion": [
+      "原圓球重心和頂尖根部",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "雙尖與中央臉限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "現有双尖結構可直接發展貓科輪廓",
+    "risk": "深灰輪廓需與暗地分離",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m007_botamon",
+    "sourceImageSha256": "50394c581454eda75ded78d7df8ce566789ce3829995530467c7f07141d580b8",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 8,
+      "maxYExclusive": 4,
+      "minX": -8,
+      "minY": -12
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "淡青白色水滴團，底部短突起",
+    "chosenFamily": "BIG_EYE",
+    "designName": "冰露圓眼靈",
+    "fixedTraits": [
+      "湖藍圓瞳",
+      "奶油口鼻點",
+      "淡青滴形罩",
+      "底緣藍帶"
+    ],
+    "changedRegions": [
+      "滴形面",
+      "色帶"
+    ],
+    "preservedMotion": [
+      "水滴上端和底部支撐",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "滴形面與色帶限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "清楚雙眼足以重建水滴幼體身份",
+    "risk": "白臉在亮地上需外框",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m008_poyomon",
+    "sourceImageSha256": "19d5a38714e1ffa80cb42b9d71b10e60f3bd6e0ebbc745b93d52e71af55dbb40",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 9,
+      "maxYExclusive": 4,
+      "minX": -7,
+      "minY": -12
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "黑灰煙團與細下垂煙尾，頂部火光",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "燼煙小獅",
+    "fixedTraits": [
+      "燼金眉眼",
+      "圓獅鼻",
+      "煙圈頰鬃",
+      "火頂亮點"
+    ],
+    "changedRegions": [
+      "煙團臉",
+      "頰圈"
+    ],
+    "preservedMotion": [
+      "煙尾連接與火光所在槽位",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "煙團臉與頰圈限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "用煙圈表達獅鬃可保留非實體身形",
+    "risk": "鬃毛不可形成新擺動",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m009_mokumon",
+    "sourceImageSha256": "61322fabb21afa297be3393d576d486ea857ff733f9a60b794c09aa6224a7774",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 8,
+      "maxYExclusive": 4,
+      "minX": -8,
+      "minY": -20
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "白色圓團，頂部兩個小尖",
+    "chosenFamily": "CANINE",
+    "designName": "雪糰尖耳犬",
+    "fixedTraits": [
+      "霜藍眼框",
+      "灰藍大鼻",
+      "短白立耳",
+      "奶油頰底"
+    ],
+    "changedRegions": [
+      "團面",
+      "耳尖色塊"
+    ],
+    "preservedMotion": [
+      "圓團壓縮與雙尖位置",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "團面與耳尖色塊限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "犬鼻及立耳區別於其他白色軟團",
+    "risk": "白耳不得融入白背景",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m010_yukimibotamon",
+    "sourceImageSha256": "55fb78c4856a352db0a008e52df89f4075952c92abbdf4c5e979cf699e53bce6",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 8,
+      "maxYExclusive": 4,
+      "minX": -8,
+      "minY": -12
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "米白環狀軟體，頂部紫色長絲",
+    "chosenFamily": "BIG_EYE",
+    "designName": "奶霜絲絨靈",
+    "fixedTraits": [
+      "紫葡萄大瞳",
+      "奶油環頰",
+      "雙色觸絲",
+      "淺棕底沿"
+    ],
+    "changedRegions": [
+      "環面",
+      "觸絲配色"
+    ],
+    "preservedMotion": [
+      "長絲根部、環狀身段",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "環面與觸絲配色限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "將眼置於環中央可避免另長頭部",
+    "risk": "長絲可能遮住眼睛",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m011_yuramon",
+    "sourceImageSha256": "44a12cbcc363a93e034570688c15bf298f081aad4ef9084dfcf1b14865440a2d",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 17,
+      "maxYExclusive": 3,
+      "minX": -7,
+      "minY": -21
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "青綠橫向小體，背部紫點及向右尾形",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "碧潮短吻龍",
+    "fixedTraits": [
+      "墨青龍眼",
+      "淡金短吻",
+      "紫色背冠",
+      "青玉腹面"
+    ],
+    "changedRegions": [
+      "前臉",
+      "背冠"
+    ],
+    "preservedMotion": [
+      "橫向體軸和尾端",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "前臉與背冠限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "現有流線身適合水棲幼龍",
+    "risk": "短吻不得延長作用端",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m012_petimon",
+    "sourceImageSha256": "7935928d6eda0f6cd33a04561207119b058d6124cc9a2dfbe7ba3e99acc3b7d9",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 3,
+      "minX": -8,
+      "minY": -21
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "灰銀頭盔狀圓體，雙尖角與藍尾",
+    "chosenFamily": "FELINE",
+    "designName": "鈷甲耳貓",
+    "fixedTraits": [
+      "三角金屬耳殼",
+      "琥珀貓眼",
+      "銀色短鼻板",
+      "鈷藍尾環"
+    ],
+    "changedRegions": [
+      "頭殼",
+      "面板"
+    ],
+    "preservedMotion": [
+      "雙尖根點和尾形連接",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "頭殼與面板限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "機械貓臉與原金屬輪廓相容",
+    "risk": "不能把金屬角當可擺軟耳",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m101_caprimon",
+    "sourceImageSha256": "4ac63c021badf85817c76988d56d0d242442601e0f6cf8d15d24aca03dbdbcdd",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 4,
+      "minX": -8,
+      "minY": -12
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "粉紅圓體，長雙觸帶向上橫伸",
+    "chosenFamily": "CANINE",
+    "designName": "桃桃垂耳犬",
+    "fixedTraits": [
+      "桃色長垂耳帶",
+      "奶白吻罩",
+      "巧克力犬鼻",
+      "粉團雙頰"
+    ],
+    "changedRegions": [
+      "觸帶表面",
+      "臉"
+    ],
+    "preservedMotion": [
+      "雙帶根部與全部原擺幅",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "觸帶表面與臉限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "沿既有長帶設計垂耳，不另加構件",
+    "risk": "帶尾翻折容易變成額外耳朵",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m102_koromon",
+    "sourceImageSha256": "ed0f3e0bb7e1bf8267aaab02eeec21a32e231231a096cb3cdc5b8deb0260d728",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 17,
+      "maxYExclusive": 4,
+      "minX": -7,
+      "minY": -12
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "黃綠種子體，頂部兩長葉",
+    "chosenFamily": "CANINE",
+    "designName": "葉冠種子犬",
+    "fixedTraits": [
+      "折葉犬耳紋",
+      "豆棕鼻",
+      "奶油眉斑",
+      "嫩綠種殼"
+    ],
+    "changedRegions": [
+      "葉面",
+      "種子臉"
+    ],
+    "preservedMotion": [
+      "兩葉和種核中心",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "葉面與種子臉限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "用犬眉與鼻區分其他葉貓型",
+    "risk": "眼眉需避開葉柄遮擋",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m103_tanemon",
+    "sourceImageSha256": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 10,
+      "maxYExclusive": 3,
+      "minX": -14,
+      "minY": -21
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "橙白圓體，頂端長單角",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "蜜角龍糰",
+    "fixedTraits": [
+      "深藍角環",
+      "焦糖大眼",
+      "乳白短吻",
+      "橙金外殼"
+    ],
+    "changedRegions": [
+      "臉",
+      "角材質"
+    ],
+    "preservedMotion": [
+      "單角根部與圓體彈動",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "臉與角材質限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "單角龍身份沿用來源主要結構",
+    "risk": "不能增第二角改变單角輪廓",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m104_tunomon",
+    "sourceImageSha256": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 10,
+      "maxYExclusive": 3,
+      "minX": -6,
+      "minY": -21
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "米白小團，雙長耳豎起與短足",
+    "chosenFamily": "CANINE",
+    "designName": "奶油長耳幼犬",
+    "fixedTraits": [
+      "奶茶耳尖",
+      "圓黑犬鼻",
+      "杏色大眼",
+      "圓短掌斑"
+    ],
+    "changedRegions": [
+      "耳內",
+      "鼻口"
+    ],
+    "preservedMotion": [
+      "長耳高度、短足接地",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "耳內與鼻口限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "借現有長耳設計柔軟犬耳",
+    "risk": "大眼不能擠掉張嘴區",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m105_tokomon",
+    "sourceImageSha256": "e9a518f74a3f49df0a11181c1721fbe448572f79b1a3a74c08e30a684692387b",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 9,
+      "maxYExclusive": 4,
+      "minX": -7,
+      "minY": -20
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "黃球身，長細尾向右伸",
+    "chosenFamily": "FELINE",
+    "designName": "金鈴尾貓",
+    "fixedTraits": [
+      "虎斑額記",
+      "雙綠貓眼",
+      "奶油短吻",
+      "尾尖紫環"
+    ],
+    "changedRegions": [
+      "球臉",
+      "尾斑"
+    ],
+    "preservedMotion": [
+      "尾根、尾端和球體定位",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "球臉與尾斑限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "原球尾構造足以發展玩偶貓",
+    "risk": "尾斑跨姿態可能閃動",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m106_nyaromon",
+    "sourceImageSha256": "bf5a3f9a43b65bb648caaa63bfa05ffe43a183d1fede4c53aa564223c14a1db3",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 4,
+      "minX": -8,
+      "minY": -12
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "紫色圓身，雙長耳向兩側展",
+    "chosenFamily": "CANINE",
+    "designName": "紫芋飛耳犬",
+    "fixedTraits": [
+      "奶白犬眉",
+      "莓鼻短吻",
+      "紫灰耳內",
+      "圓眼黑邊"
+    ],
+    "changedRegions": [
+      "展耳",
+      "短臉"
+    ],
+    "preservedMotion": [
+      "兩耳根、耳梢和圓身",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "展耳與短臉限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "飛耳犬可利用既有耳動作",
+    "risk": "不能為表情縮短耳幅",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m107_pagumon",
+    "sourceImageSha256": "580fe3d424f0123a5c3adf933fec301dec872a2f8137ac9da2e33b5479e53120",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 7,
+      "minX": -8,
+      "minY": -17
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "粉紅短身，上方藍花冠與中央紅蕊",
+    "chosenFamily": "FELINE",
+    "designName": "花帽粉貓",
+    "fixedTraits": [
+      "貓形奶油面罩",
+      "花瓣耳紋",
+      "莓色短鼻",
+      "粉桃腹塊"
+    ],
+    "changedRegions": [
+      "臉",
+      "花瓣表面"
+    ],
+    "preservedMotion": [
+      "冠蕊中心、花冠寬幅及短身",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "臉與花瓣表面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "花帽保留植物特色，臉部貓化清楚",
+    "risk": "花瓣耳只是色紋不可另擺",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m108_pyokomon",
+    "sourceImageSha256": "9445fe3c43f99626caff2d93244cdc46d93766adbb7f473e2730c6c6c3c9c2a5",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 17,
+      "maxYExclusive": 6,
+      "minX": -7,
+      "minY": -18
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "灰色立起小體，有橘冠與長尾",
+    "chosenFamily": "CANINE",
+    "designName": "灰潮尾犬",
+    "fixedTraits": [
+      "海灰犬吻",
+      "橘紅短冠",
+      "奶白眉頰",
+      "深灰尾尖"
+    ],
+    "changedRegions": [
+      "頭臉",
+      "腹紋"
+    ],
+    "preservedMotion": [
+      "原後肢、前突吻和尾弧",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "頭臉與腹紋限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "長尾短身可做水棲犬系幼獸",
+    "risk": "面罩需適配側臉",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m109_pukamon",
+    "sourceImageSha256": "afab83b0cd6d768c4621b2ec46ce5f2a15ff5bce816280723b826e0f1f218c71",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 17,
+      "maxYExclusive": 2,
+      "minX": -15,
+      "minY": -30
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "橘色火焰團，多條火舌向右",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "焰鬚幼龍",
+    "fixedTraits": [
+      "深藍龍瞳",
+      "奶金短吻",
+      "赤紅火鬚根",
+      "橘黃焰身"
+    ],
+    "changedRegions": [
+      "火焰中央臉"
+    ],
+    "preservedMotion": [
+      "火舌末端和燃燒圖格",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "火焰中央臉限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "用龍臉融入原火團避免新增骨架",
+    "risk": "火舌不可解讀成新可動鬍鬚",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m110_petimemramon",
+    "sourceImageSha256": "af9e2886a3502324e8f74a96d2f0e29057c0ed26c3ff5b541824b3f9d1d3a7ef",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 17,
+      "maxYExclusive": 4,
+      "minX": -7,
+      "minY": -20
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "粉紅立起軟團，前伸小突起",
+    "chosenFamily": "BIG_EYE",
+    "designName": "桃糯大眼靈",
+    "fixedTraits": [
+      "兩顆莓色大瞳",
+      "奶白額罩",
+      "桃紅短嘴",
+      "腳底粉帶"
+    ],
+    "changedRegions": [
+      "軟團臉腹"
+    ],
+    "preservedMotion": [
+      "軟體伸壓和原小突起",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "軟團臉腹限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "大眼讓柔軟表情成为主要識別",
+    "risk": "眼睛隨壓扁不能浮出輪廓",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m111_mochimon",
+    "sourceImageSha256": "daab4a57628ad12a3f0c014981f99cb3eed965d645041d3808e7aac1f5b1f70f",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 8,
+      "maxYExclusive": 5,
+      "minX": -8,
+      "minY": -19
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "青色立起細龍體，尖吻與長尾",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "青瓷幼龍人",
+    "fixedTraits": [
+      "珊瑚小角",
+      "圓潤龍眼",
+      "奶瓷腹甲",
+      "短腮線"
+    ],
+    "changedRegions": [
+      "頭臉",
+      "腹甲"
+    ],
+    "preservedMotion": [
+      "尖吻端、尾弧和站立結構",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "頭臉與腹甲限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "已有龍形可重設成親和龍人",
+    "risk": "大眼化不得縮動吻端",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m112_bebydomon",
+    "sourceImageSha256": "711204a8c8c6df4e8e20c0b9161305fd581a4e83c5b1e97c144e76489f7b6a27",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 2,
+      "minX": -8,
+      "minY": -30
+    },
+    "sourceContactSheet": "group-1-page-1.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "橘紅低圓身，頂部長火苗",
+    "chosenFamily": "FELINE",
+    "designName": "日焰耳貓",
+    "fixedTraits": [
+      "雙焰耳色區",
+      "琥珀瞳",
+      "奶金貓鼻罩",
+      "赤銅底環"
+    ],
+    "changedRegions": [
+      "圓臉和焰面"
+    ],
+    "preservedMotion": [
+      "長焰根部和低身高度",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "圓臉和焰面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "火焰面罩可提供貓身份而不加新火舌",
+    "risk": "雙耳僅嵌在既有焰形內",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m113_sunmon",
+    "sourceImageSha256": "eef62ebf25ac96b0cf2feae63a86487a6f6979bab71a489d165cea8a5d257a36",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 8,
+      "maxYExclusive": 3,
+      "minX": -8,
+      "minY": -29
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "淡紫圓身，頂部細長彎垂構件",
+    "chosenFamily": "BIG_EYE",
+    "designName": "月滴夢靈",
+    "fixedTraits": [
+      "月白大眼框",
+      "深紫星瞳",
+      "淡藍鼻點",
+      "紫灰滴帽"
+    ],
+    "changedRegions": [
+      "圓面和長滴帽"
+    ],
+    "preservedMotion": [
+      "垂構件根點与彎幅",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "圓面和長滴帽限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "大眼夢靈保留單一長滴帽的辨識度",
+    "risk": "不能新增流動星點動作",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m114_moonmon",
+    "sourceImageSha256": "07b7965d7fe6cc116ea970961f817c726b2c5e20fa9b0ba3a14332a983ed8f13",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 8,
+      "maxYExclusive": 3,
+      "minX": -8,
+      "minY": -29
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "金黃二足爪獸，短臂與大足",
+    "chosenFamily": "FELINE",
+    "designName": "金鬃腕甲幼貓",
+    "fixedTraits": [
+      "短貓吻",
+      "奶油頰胸",
+      "連體立耳",
+      "簡銀腕環"
+    ],
+    "changedRegions": [
+      "頭臉、胸腹",
+      "腕部"
+    ],
+    "preservedMotion": [
+      "兩足接地、手端、頭轉軸及張嘴方向",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "頭臉、胸腹與腕部限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "保留 Owner A 金色幼獸身份，採貓科全臉轉化",
+    "risk": "耳胸斑須適配伏地張嘴",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m201_agumon",
+    "sourceImageSha256": "0ca75b1f1923653656399c1d2dd137e44f98720887ae0b5d1c769a9901e1acb1",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 8,
+      "maxYExclusive": 5,
+      "minX": -8,
+      "minY": -19
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證",
+    "ownerSelectedOption": "A"
+  },
+  {
+    "observedBody": "黃甲四足獸，背上大節甲",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "金背獾甲獸",
+    "fixedTraits": [
+      "黑白獾面罩",
+      "琥珀甲節",
+      "厚圓掌",
+      "短銅鼻"
+    ],
+    "changedRegions": [
+      "頭面",
+      "甲節紋"
+    ],
+    "preservedMotion": [
+      "四足結構、背甲高度與尾端",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "頭面與甲節紋限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "獾的低伏重身適合甲獸構造",
+    "risk": "側面面罩不可破壞眼位",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m202_armadimon",
+    "sourceImageSha256": "95b73e5f18ef59025c68a82fe87ae6dfe737218411e8807e8e9637784bf654fc",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 17,
+      "maxYExclusive": 4,
+      "minX": -15,
+      "minY": -20
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "紅色低伏多尾輪廓，四肢外伸",
+    "chosenFamily": "FELINE",
+    "designName": "赤電尾簇貓",
+    "fixedTraits": [
+      "尖耳額甲",
+      "深靛貓眼",
+      "奶白鼻頰",
+      "紅藍尾簇斑"
+    ],
+    "changedRegions": [
+      "头臉",
+      "尾簇表面"
+    ],
+    "preservedMotion": [
+      "多尾数量、分叉端及四肢接地",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "头臉與尾簇表面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "猫科臉與靈活低伏身可相容",
+    "risk": "多尾交疊最易身份漂移",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m203_elecmon",
+    "sourceImageSha256": "33ed7db76a78e7c839dfbb886bb7255c12196f1f1b7f1f1a4ce63d6119e840a8",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 17,
+      "maxYExclusive": 4,
+      "minX": -15,
+      "minY": -20
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "藍紫圓腹，尾巴高翹與細小足",
+    "chosenFamily": "BIG_EYE",
+    "designName": "泡腹圓眼幼獸",
+    "fixedTraits": [
+      "冰白大眼罩",
+      "深藍圓瞳",
+      "珊瑚短嘴",
+      "淡紫腹圓"
+    ],
+    "changedRegions": [
+      "圓頭腹面"
+    ],
+    "preservedMotion": [
+      "高翹尾、細足與腹部體積",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "圓頭腹面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "以大眼建立新身份而維持蝌蚪式體型",
+    "risk": "圓眼不能蓋住口部開合",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m204_otamamon",
+    "sourceImageSha256": "c3f63e6eab422acd20a04283ea104e340ff0ac2da06e585680cb210dc7d0d1c7",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 17,
+      "maxYExclusive": 4,
+      "minX": -15,
+      "minY": -20
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "藍色二足犬型，紅額帶與手套",
+    "chosenFamily": "CANINE",
+    "designName": "靛藍拳套幼犬",
+    "fixedTraits": [
+      "奶油犬眉",
+      "寬圓鼻",
+      "紅額帶結",
+      "白藍拳套分區"
+    ],
+    "changedRegions": [
+      "臉",
+      "手套甲面"
+    ],
+    "preservedMotion": [
+      "二足姿態、拳端與額帶根部",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "臉與手套甲面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "保留犬型動作，重設犬種與臉部語言",
+    "risk": "額帶飄動只沿來源軌跡",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m205_gaomon",
+    "sourceImageSha256": "4858399038308728dd8c3407b4f87eb5759e88efca58878b7f78eac58dcf6e12",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 17,
+      "maxYExclusive": 5,
+      "minX": -15,
+      "minY": -19
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "淡紫大耳二足獸，長臂爪與尾",
+    "chosenFamily": "CANINE",
+    "designName": "霜紫長耳狼童",
+    "fixedTraits": [
+      "墨藍犬鼻",
+      "冰灰眉斑",
+      "紫耳內面",
+      "白胸菱毛"
+    ],
+    "changedRegions": [
+      "大耳",
+      "臉胸"
+    ],
+    "preservedMotion": [
+      "大耳展幅、長爪端和尾",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "大耳與臉胸限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "長耳狼童適合原瘦長肢體",
+    "risk": "长吻不得再向外延伸",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m206_gazimon",
+    "sourceImageSha256": "f3387fe7cb951016e34d94f1bc415870a03570074af5306ae09dcca720c36d92",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 5,
+      "minX": -16,
+      "minY": -27
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "藍白披皮二足獸，單角與紫手足",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "雪披獅角童",
+    "fixedTraits": [
+      "獅形奶油吻",
+      "銅額角",
+      "藍斑披肩",
+      "厚紫掌垫"
+    ],
+    "changedRegions": [
+      "臉及披肩面紋"
+    ],
+    "preservedMotion": [
+      "單角、披皮邊與掌端",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "臉及披肩面紋限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "獅面與已有披肩能建立獸人輪廓",
+    "risk": "披肩不能重解為新翅膀",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m208_gabumon",
+    "sourceImageSha256": "50cb1d7d92a6f8e25650448cf6afdfd48ef017a2399916510a80fa2f17c5a183",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 5,
+      "minX": -16,
+      "minY": -27
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "綠色短肢獸，藍帽狀殼與圓腹",
+    "chosenFamily": "CANINE",
+    "designName": "苔帽龜犬",
+    "fixedTraits": [
+      "圓犬鼻",
+      "奶白眉",
+      "苔綠龜腹片",
+      "藍殼帽沿"
+    ],
+    "changedRegions": [
+      "臉",
+      "腹片"
+    ],
+    "preservedMotion": [
+      "帽殼高度、短足和腹圓",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "臉與腹片限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "在龜體裡放犬臉可保留全部短肢動作",
+    "risk": "犬耳只作帽面圖形",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m209_kamemon",
+    "sourceImageSha256": "81169d7ae523e8bd1bbcdfae62bc84334f870b402aebb7a787e03ca1c91732e2",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 10,
+      "maxYExclusive": 5,
+      "minX": -14,
+      "minY": -19
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "橘色低伏爪獸，背上多灰刺",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "銅刺地龍",
+    "fixedTraits": [
+      "玉綠龍眼",
+      "短寬龍吻",
+      "銅紅頰甲",
+      "灰岩背刺"
+    ],
+    "changedRegions": [
+      "臉",
+      "背刺表面"
+    ],
+    "preservedMotion": [
+      "背刺端、寬爪足和低身",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "臉與背刺表面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "地龍身份直接利用背刺爪足構造",
+    "risk": "不可增高背刺影響遮擋",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m210_gizamon",
+    "sourceImageSha256": "d927aee53dafabb7c8e9b1d966fd1bd6701fbc1e6023e0b6a6466d484c999b17",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 5,
+      "minX": -16,
+      "minY": -19
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "白綠蠟燭狀身，頂火與外伸短臂",
+    "chosenFamily": "BIG_EYE",
+    "designName": "燭光大眼靈",
+    "fixedTraits": [
+      "煤黑圓瞳",
+      "奶黃眉滴",
+      "橘芯火冠",
+      "薄荷蠟裙"
+    ],
+    "changedRegions": [
+      "蠟身臉与滴纹"
+    ],
+    "preservedMotion": [
+      "頂火位置、燭身高度及手端",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "蠟身臉与滴纹限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "大眼可在柱狀面建立清楚身份",
+    "risk": "不能把蠟滴當獨立飾品",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m211_candmon",
+    "sourceImageSha256": "03562178b39f050bfe8a1830608f47bf7d78528ac2769104dc61cb7232c6b204",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 3,
+      "minX": -16,
+      "minY": -29
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "黃色節蟲，大頭長觸角與多足",
+    "chosenFamily": "CANINE",
+    "designName": "麥穗觸角犬蟲",
+    "fixedTraits": [
+      "棕犬鼻面",
+      "奶油雙眉",
+      "麥金節甲",
+      "深藍尾節"
+    ],
+    "changedRegions": [
+      "頭面",
+      "節甲"
+    ],
+    "preservedMotion": [
+      "觸角端、多足數量及節體",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "頭面與節甲限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "犬臉嵌入蟲頭可改身份而保留節蟲動作",
+    "risk": "犬耳只能是頭甲色區",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m214_kunemon",
+    "sourceImageSha256": "691b86fddc8f2d3d3200580534bc15da4c5a1e7380099147b5413660638c34d4",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 5,
+      "minX": -16,
+      "minY": -27
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "灰色岩塊二足體，寬臂與短足",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "石頰熊童",
+    "fixedTraits": [
+      "圓熊面板",
+      "琥珀眼孔",
+      "灰白胸岩",
+      "厚石掌分塊"
+    ],
+    "changedRegions": [
+      "頭岩",
+      "胸岩"
+    ],
+    "preservedMotion": [
+      "岩體分塊关節和掌足端",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "頭岩與胸岩限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "熊面與寬厚岩體相容",
+    "risk": "圓化僅限內部色塊",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m217_gottumon",
+    "sourceImageSha256": "3486f2527a957d7eb54f170a06a8f045ef4939bbb90dac78461b759cba6e24e3",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 2,
+      "minX": -8,
+      "minY": -22
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "綠色二足人形，頭紅帶與手持棍",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "苔原狼棍童",
+    "fixedTraits": [
+      "短狼吻",
+      "奶灰眉頰",
+      "苔綠短毛",
+      "赤銅護腕"
+    ],
+    "changedRegions": [
+      "臉",
+      "身表面"
+    ],
+    "preservedMotion": [
+      "棍握點、二足站位和手長",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "臉與身表面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "保留棍手姿態可穩定轉獸人身份",
+    "risk": "狼吻只能替換原鼻口區",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m218_goburimon",
+    "sourceImageSha256": "96fba9641bd9b932ae19a279c623b60d684f9928420cdefebd44b03dba05e985",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 15,
+      "maxYExclusive": 5,
+      "minX": -17,
+      "minY": -19
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "淡青四足水生體，紅頭毛與長尾",
+    "chosenFamily": "CANINE",
+    "designName": "霜浪水犬",
+    "fixedTraits": [
+      "灰藍短犬吻",
+      "橘紅額毛",
+      "奶白頰肚",
+      "青色鰭掌"
+    ],
+    "changedRegions": [
+      "頭臉及腹面"
+    ],
+    "preservedMotion": [
+      "鰭掌落點、尾弧和頭毛根",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "頭臉及腹面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "水犬外觀可附於原水生行走構造",
+    "risk": "不把鰭掌改成新五指手",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m219_gomamon",
+    "sourceImageSha256": "15cd93158803533c3f8be38ceb8f17e206fe1fbe047510978a26925805d699c4",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 5,
+      "minX": -16,
+      "minY": -19
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "米白長耳二足體，綠手足與短角",
+    "chosenFamily": "CANINE",
+    "designName": "苔耳長耳犬",
+    "fixedTraits": [
+      "奶茶犬鼻",
+      "苔綠耳背",
+      "琥珀大眼",
+      "圓短角"
+    ],
+    "changedRegions": [
+      "臉、耳背",
+      "手足面"
+    ],
+    "preservedMotion": [
+      "長耳根梢、短角及足位",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "臉、耳背與手足面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "沿原長耳設計犬型降低輪廓改動",
+    "risk": "展耳會遮眼，需局部變體",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m221_terriermon",
+    "sourceImageSha256": "e9c294242bff0ddf8f295bd705d6836662911590caa83715aa519fc9f2443cc1",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 5,
+      "minX": -16,
+      "minY": -19
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "紅甲多肢昆蟲，綠頭與長觸角",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "紅甲獅面蟲",
+    "fixedTraits": [
+      "獅鼻額罩",
+      "金色複眼框",
+      "紅甲片節",
+      "淺綠觸角尖"
+    ],
+    "changedRegions": [
+      "頭甲面",
+      "甲片"
+    ],
+    "preservedMotion": [
+      "多肢端點、觸角幅度和甲片開合",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "頭甲面與甲片限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "使用獅面甲塑造身份，不新增毛肢",
+    "risk": "獅鬃只由原甲緣表达",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m222_tentomon",
+    "sourceImageSha256": "2ead0b85e871dfd7597dbaf0c005fa4ca4f4f526639b0caa62dbe5b5b8e93e8e",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 5,
+      "minX": -16,
+      "minY": -27
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "紅綠黃積木二足體",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "積木幼龍人",
+    "fixedTraits": [
+      "方形短龍吻",
+      "大藍眼窗",
+      "珊瑚額磚",
+      "奶白胸磚"
+    ],
+    "changedRegions": [
+      "頭磚",
+      "胸磚"
+    ],
+    "preservedMotion": [
+      "積木格、手腳方塊位置",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "頭磚與胸磚限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "龍人臉可直接落在原方塊網格",
+    "risk": "不可平滑積木邊改掉動作結構",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m223_toyagumon",
+    "sourceImageSha256": "0204e5ddf280eef826373a7e0ab6d87d8d356a11703f612df779ef1e47d08a50",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 9,
+      "maxYExclusive": 5,
+      "minX": -7,
+      "minY": -19
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "青色細長二足龍體，紅色背突",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "青銅大眼龍人",
+    "fixedTraits": [
+      "圓琥珀龍瞳",
+      "青瓷短吻",
+      "赤銅背棘",
+      "奶金腹甲"
+    ],
+    "changedRegions": [
+      "臉",
+      "鱗甲面"
+    ],
+    "preservedMotion": [
+      "吻端、背棘、尾與雙足",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "臉與鱗甲面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "已有龍體適合換成更親和的龍人身份",
+    "risk": "大眼面罩要留張口空間",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m224_dracomon",
+    "sourceImageSha256": "a5e0a73ad947b76a0b827641fdacdb2cc73f10e01140b8f6fe3be979c07874f9",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 5,
+      "minX": -8,
+      "minY": -19
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "藍白小四足體，長鼻狀吻與橘鬃",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "靛鬃貘幼獸",
+    "fixedTraits": [
+      "銀灰長鼻面",
+      "金眼框",
+      "橘鬃短簇",
+      "奶白蹄襪"
+    ],
+    "changedRegions": [
+      "頭面",
+      "鬃毛面"
+    ],
+    "preservedMotion": [
+      "長鼻端、四足落點和鬃根",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "頭面與鬃毛面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "保留貘式長吻可避免扭曲來源作用端",
+    "risk": "不能把長鼻縮成犬鼻",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m225_bakumon",
+    "sourceImageSha256": "3ef888ac1df173b8d76380f25eed400e68893259de12d968906dbcd64391bf5f",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 17,
+      "maxYExclusive": 4,
+      "minX": -15,
+      "minY": -20
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "灰金圓齒輪，紅眼面與側齒",
+    "chosenFamily": "CANINE",
+    "designName": "徽輪犬面機靈",
+    "fixedTraits": [
+      "礦金齒緣",
+      "紅晶犬眉",
+      "短銅鼻板",
+      "奶銀頰窗"
+    ],
+    "changedRegions": [
+      "中央犬面板",
+      "齒面"
+    ],
+    "preservedMotion": [
+      "齒輪中心、側齒及旋轉壓缩",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "中央犬面板與齒面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "保留 Owner B 礦物徽輪身份，增加明確犬鼻面罩",
+    "risk": "面板侧轉不可保持正面雙眼",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m226_hagurumon",
+    "sourceImageSha256": "5aea42909a6d500cba8f56f1fce94f4d6ff8e264305708b07619e0986199903c",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 2,
+      "minX": -16,
+      "minY": -22
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證",
+    "ownerSelectedOption": "B"
+  },
+  {
+    "observedBody": "橙白低圓獸，兩側巨大翼耳",
+    "chosenFamily": "FELINE",
+    "designName": "蜜翼耳貓",
+    "fixedTraits": [
+      "琥珀貓瞳",
+      "奶白短吻",
+      "焦糖翼耳內",
+      "橘額貓紋"
+    ],
+    "changedRegions": [
+      "面部和翼耳表面"
+    ],
+    "preservedMotion": [
+      "翼耳展幅、圓腹與短足",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "面部和翼耳表面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "翼耳貓可利用原大耳輪廓",
+    "risk": "翼耳不能多一個獨立耳根",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m227_patamon",
+    "sourceImageSha256": "5c09d6e63d9658854d2e870d6c4f9402b7dfae3e9d5184c43b80240c25aa3d84",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 9,
+      "maxYExclusive": 6,
+      "minX": -7,
+      "minY": -18
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "綠色直立植物，頂部紫粉花冠",
+    "chosenFamily": "FELINE",
+    "designName": "莓冠葉掌貓",
+    "fixedTraits": [
+      "葉尖耳面罩",
+      "奶油貓頰",
+      "莓色短鼻",
+      "深綠根足紋"
+    ],
+    "changedRegions": [
+      "臉葉",
+      "花冠表面"
+    ],
+    "preservedMotion": [
+      "花冠中心、枝手端与根足",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "臉葉與花冠表面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "花冠貓臉形成新身份而保留植物關節",
+    "risk": "貓頰必須隨葉面折疊",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m228_palmon",
+    "sourceImageSha256": "0df2b0cd01c6daaac6da9e52054f3969285b54230b7d94a007305f98a630efd1",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 9,
+      "maxYExclusive": 5,
+      "minX": -15,
+      "minY": -27
+    },
+    "sourceContactSheet": "group-1-page-2.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "深藍短身，雙翼展開",
+    "chosenFamily": "FELINE",
+    "designName": "夜翼尖耳貓",
+    "fixedTraits": [
+      "銀灰貓吻",
+      "紫金瞳",
+      "墨藍翼膜",
+      "頂角耳面"
+    ],
+    "changedRegions": [
+      "頭面",
+      "翼膜紋"
+    ],
+    "preservedMotion": [
+      "翼端、翼根和短身",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "頭面與翼膜紋限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "貓面小翼獸保留原飛行拓撲",
+    "risk": "不能新增尾巴填空白",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m229_picodevimon",
+    "sourceImageSha256": "986c32f7d28e456eb5b7eb34d9a80bd818895d3804755de3ea344e19fb81aad1",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 17,
+      "maxYExclusive": 4,
+      "minX": -7,
+      "minY": -20
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "粉紅二足鳥體，藍頭冠與翅",
+    "chosenFamily": "BIG_EYE",
+    "designName": "桃冠圓眼鳥",
+    "fixedTraits": [
+      "奶黃眼圈",
+      "梅紅大瞳",
+      "青藍冠羽",
+      "淡粉胸羽"
+    ],
+    "changedRegions": [
+      "鳥臉",
+      "胸羽"
+    ],
+    "preservedMotion": [
+      "喙端、鳥腿和翅端",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "鳥臉與胸羽限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "保留鳥型並用大眼幼態化改身份",
+    "risk": "圓眼不能取代鳥喙",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m230_piyomon",
+    "sourceImageSha256": "0ab44dfa2cb82ad7c883f6c16e5a298dc6712007fe4ed89e083a6682e82b8039",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 9,
+      "maxYExclusive": 4,
+      "minX": -7,
+      "minY": -20
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "灰紫直立鳥體，紅眼與方頭冠",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "暮羽貓頭鷹童",
+    "fixedTraits": [
+      "杏白心形臉盤",
+      "琥珀大瞳",
+      "墨紫方冠",
+      "赤銅足羽"
+    ],
+    "changedRegions": [
+      "臉盤",
+      "羽片"
+    ],
+    "preservedMotion": [
+      "鳥喙、翅肘和足端",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "臉盤與羽片限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "貓頭鷹式獸人面適合直立鳥體",
+    "risk": "臉盤在側身需壓窄",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m231_falcomon",
+    "sourceImageSha256": "46d560874f5f6e7c9dd9b6f2844e6a0bd06841fc5e3a56b61d587f8ad369ef9a",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 9,
+      "maxYExclusive": 4,
+      "minX": -7,
+      "minY": -20
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "奶白四足犬型，長耳與短尾",
+    "chosenFamily": "CANINE",
+    "designName": "奶茶垂耳幼犬",
+    "fixedTraits": [
+      "焦糖耳背",
+      "深棕圓鼻",
+      "杏眼黑框",
+      "奶白額心"
+    ],
+    "changedRegions": [
+      "犬種臉形",
+      "毛塊"
+    ],
+    "preservedMotion": [
+      "四足步態、長耳根与尾端",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "犬種臉形與毛塊限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "以犬種和臉頰重設形成完整新外貌",
+    "risk": "不能為可愛化放大頭造成脚滑",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m232_plotmon",
+    "sourceImageSha256": "101ab779902930d70088158e59da05f740b6900e2217d66d98b67fb23e8c6294",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 17,
+      "maxYExclusive": 4,
+      "minX": -15,
+      "minY": -20
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "細長綠植物，紅花頭與葉手",
+    "chosenFamily": "CANINE",
+    "designName": "紅冠葉耳犬",
+    "fixedTraits": [
+      "奶黃犬鼻罩",
+      "紅瓣垂耳紋",
+      "深綠眉葉",
+      "淺根襪"
+    ],
+    "changedRegions": [
+      "花面",
+      "枝身紋"
+    ],
+    "preservedMotion": [
+      "花頭軸、枝手及根足",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "花面與枝身紋限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "犬面與垂瓣配合可維持纖長植物動作",
+    "risk": "花瓣耳紋需要各方向變體",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m233_floramon",
+    "sourceImageSha256": "8ac91f3260466d4dfae1341923a752d9c416f7de3d9594d8e92aa6db556b33b4",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 9,
+      "maxYExclusive": 5,
+      "minX": -7,
+      "minY": -19
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "紫色大菇帽，小黃面與短肢",
+    "chosenFamily": "BIG_EYE",
+    "designName": "莓菇圓眼童",
+    "fixedTraits": [
+      "米白大眼罩",
+      "紫莓圓瞳",
+      "奶黃短鼻",
+      "菇帽圓斑"
+    ],
+    "changedRegions": [
+      "菇帽圖案",
+      "面部"
+    ],
+    "preservedMotion": [
+      "菇帽邊緣、帽柄和短手足",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "菇帽圖案與面部限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "大眼菇童保留寬帽遮擋結構",
+    "risk": "帽檐遮擋不得硬露雙眼",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m235_mushmon",
+    "sourceImageSha256": "bf6be13b3a20601663b6d34f42cc013aab174553a784f988d13280237e48ffdb",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 9,
+      "maxYExclusive": 4,
+      "minX": -7,
+      "minY": -20
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "冰藍二足爪獸，短臂與大足",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "霜甲幼龍人",
+    "fixedTraits": [
+      "鈷藍大瞳",
+      "短白龍吻",
+      "冰晶額甲",
+      "霜白腹片"
+    ],
+    "changedRegions": [
+      "頭臉",
+      "鱗甲"
+    ],
+    "preservedMotion": [
+      "爪端、張嘴方向與二足站位",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "頭臉與鱗甲限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "龍人外观適合原爪獸體型",
+    "risk": "冰晶額甲不可外長新角",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m236_yukiagumon",
+    "sourceImageSha256": "0c248e0e480942174209e31c4be1194612ff5e9ff80bcbabbe3817eedb8bfca7",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 8,
+      "maxYExclusive": 5,
+      "minX": -8,
+      "minY": -19
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "橘黃細長二足獸，長耳与尾",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "沙金耳狐武者",
+    "fixedTraits": [
+      "白狐短吻",
+      "墨紫眼線",
+      "沙金耳背",
+      "紫灰手套"
+    ],
+    "changedRegions": [
+      "狐面、胸毛",
+      "手套面"
+    ],
+    "preservedMotion": [
+      "長耳梢、長腿、尾根及手端",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "狐面、胸毛與手套面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "狐獸人與原修長人形自然相容",
+    "risk": "長耳轉身時需遮擋變體",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m237_renamon",
+    "sourceImageSha256": "8a9a6a7392bfd311fe6e5ca1e39f26fa35925aa7eb13ad5c622f98b4fdbfd4c5",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 5,
+      "minX": -8,
+      "minY": -19
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "橘紅二足獅形，火狀鬃與尾",
+    "chosenFamily": "FELINE",
+    "designName": "赤鬃圓眼獅童",
+    "fixedTraits": [
+      "奶金獅吻",
+      "碧綠圓瞳",
+      "赤銅鬃瓣",
+      "深棕掌背"
+    ],
+    "changedRegions": [
+      "臉与鬃甲表面"
+    ],
+    "preservedMotion": [
+      "鬃缘、尾火端和雙足",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "臉与鬃甲表面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "獅系重設集中在臉形和鬃毛節奏",
+    "risk": "鬃瓣細紋易跨幀閃爍",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m238_coronamon",
+    "sourceImageSha256": "ab1f02f054c9032b2f370eebdba68554624c3f6de7bacf7e2a77f0ffbf0a4f93",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 17,
+      "maxYExclusive": 5,
+      "minX": -7,
+      "minY": -27
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "淡紫雙長耳人形，深紫手足",
+    "chosenFamily": "CANINE",
+    "designName": "月莓長耳犬童",
+    "fixedTraits": [
+      "奶白犬眉",
+      "梅紫鼻",
+      "月灰耳內",
+      "紫莓護掌"
+    ],
+    "changedRegions": [
+      "臉",
+      "長耳表面"
+    ],
+    "preservedMotion": [
+      "雙耳擺幅、手掌與短腳",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "臉與長耳表面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "長耳犬童以原耳動作建立身份",
+    "risk": "不能把耳朵轉為新手臂",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m239_lunamon",
+    "sourceImageSha256": "5a98bea707ce877fc31af2f74da6567286ba46417573a72edfab7f0c2ad8ce83",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 5,
+      "minX": -16,
+      "minY": -27
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "灰黑二足爪獸，短臂大足",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "玄岩熊爪童",
+    "fixedTraits": [
+      "灰白熊吻",
+      "青金大眼",
+      "短圓額耳紋",
+      "墨石胸帶"
+    ],
+    "changedRegions": [
+      "臉胸和爪背"
+    ],
+    "preservedMotion": [
+      "原爪長、雙足與嘴端",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "臉胸和爪背限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "熊爪童提供與其他爪龍不同的形象",
+    "risk": "熊圓耳僅在核准頭區改輪廓",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m240_kuroagumon",
+    "sourceImageSha256": "cb2bf1ee7b5eba35b6835e9f8c3aeba3a4186117dbdd8377c4995f8a95e7c41e",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 8,
+      "maxYExclusive": 5,
+      "minX": -8,
+      "minY": -19
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "粉紫披皮二足獸，單角與綠足",
+    "chosenFamily": "CANINE",
+    "designName": "莓斑角犬",
+    "fixedTraits": [
+      "奶白犬吻",
+      "莓紫披皮斑",
+      "珊瑚單角",
+      "青綠掌套"
+    ],
+    "changedRegions": [
+      "臉",
+      "披皮圖案"
+    ],
+    "preservedMotion": [
+      "單角軸、披皮邊和足位",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "臉與披皮圖案限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "犬面與鮮明披皮可形成新獸類身份",
+    "risk": "披皮斑跨翻身需固定分區",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m241_psychemon",
+    "sourceImageSha256": "eb2d1e894f9265726070e1d65bcfcfee29a656731ca803f09476fece5fcc99f5",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 5,
+      "minX": -16,
+      "minY": -27
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "綠色植物人形，頂部紫花冠",
+    "chosenFamily": "CANINE",
+    "designName": "暮紫花耳犬",
+    "fixedTraits": [
+      "淺紫垂瓣耳紋",
+      "奶黃犬眉",
+      "梅鼻",
+      "墨綠根紋"
+    ],
+    "changedRegions": [
+      "花面与根身表面"
+    ],
+    "preservedMotion": [
+      "花冠擺幅、枝手和根足",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "花面与根身表面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "採犬眉垂瓣讓近似植物體仍各有身份",
+    "risk": "不可與M228共用未驗證姿態",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m242_alraumon",
+    "sourceImageSha256": "7054c24469b682279ed3548f3eb1e1473c3af6a2d7063d8e900e750a89fd2fb4",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 9,
+      "maxYExclusive": 5,
+      "minX": -15,
+      "minY": -27
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "紫色圓腹短獸，大翼耳",
+    "chosenFamily": "CANINE",
+    "designName": "暮翼耳犬",
+    "fixedTraits": [
+      "奶銀犬眉",
+      "莓鼻短吻",
+      "深紫翼耳",
+      "白腹彎塊"
+    ],
+    "changedRegions": [
+      "臉和翼耳表面"
+    ],
+    "preservedMotion": [
+      "大耳根梢、短足與圓腹",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "臉和翼耳表面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "犬型臉与原大耳形成獨立身份",
+    "risk": "側臉只呈現可見眼",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m243_tsukaimon",
+    "sourceImageSha256": "adb12c942824f00a9df8ae38d4d7ac46fa472b4aa3ab80af766e7b86e7285f9b",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 17,
+      "maxYExclusive": 6,
+      "minX": -7,
+      "minY": -18
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "藍色直立龍體，額頭長冠与尾",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "藍冠少年龍人",
+    "fixedTraits": [
+      "白色額菱",
+      "圓金龍眼",
+      "奶白短吻",
+      "海藍腹甲"
+    ],
+    "changedRegions": [
+      "頭冠",
+      "臉腹"
+    ],
+    "preservedMotion": [
+      "冠端、尾弧、手足和二足軸",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "頭冠與臉腹限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "少年龍人可延續原清楚二足輪廓",
+    "risk": "冠飾不能再增加枝角",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m244_vmon",
+    "sourceImageSha256": "20cde8271c5ba546265aea706e24683fa8afb1c4b79c1f98e736b98fe0d21470",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 5,
+      "minX": -8,
+      "minY": -19
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "紅橘二足龍，長耳角與長尾",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "赤陶獵龍童",
+    "fixedTraits": [
+      "墨青大眼",
+      "奶陶口鼻",
+      "深紅耳角",
+      "炭色胸印"
+    ],
+    "changedRegions": [
+      "臉、耳角与胸面"
+    ],
+    "preservedMotion": [
+      "長吻、角根、尾端及足位",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "臉、耳角与胸面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "用陶色龍人臉重設而保持長吻結構",
+    "risk": "胸印在腹壓時要按原姿態折",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m255_guilmon",
+    "sourceImageSha256": "008645a9f2eafe31ae8d3811a99757f3ba6876909b819f27500de2254122e1ae",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 5,
+      "minX": -8,
+      "minY": -19
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "黃甲大型四足獸，背刺與尾槌",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "岩背獾鎧獸",
+    "fixedTraits": [
+      "黑白獾眼罩",
+      "銅黃甲節",
+      "灰岩刺尖",
+      "厚爪襪"
+    ],
+    "changedRegions": [
+      "頭臉",
+      "甲節圖樣"
+    ],
+    "preservedMotion": [
+      "四足承重、背刺和尾槌端",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "頭臉與甲節圖樣限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "低伏獾臉適合重甲四足體",
+    "risk": "不能把尾槌改成會獨立張嘴的頭",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m301_ankylomon",
+    "sourceImageSha256": "a810b663e86eee7f6a02ece2f8c32b8cb7a061a4bcfa8e20a1090e4f06344be9",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 3,
+      "minX": -16,
+      "minY": -21
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "白紫大型水獸，長角与寬鰭足",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "霜鬚海獅獸",
+    "fixedTraits": [
+      "深藍圓眼",
+      "奶灰寬吻",
+      "紫霜額角",
+      "白毛鰭緣"
+    ],
+    "changedRegions": [
+      "臉、額角",
+      "毛面"
+    ],
+    "preservedMotion": [
+      "長角端、寬足和沉重腹線",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "臉、額角與毛面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "海獅式短臉與水獸大體型相容",
+    "risk": "新鬍鬚不能超出核准輪廓",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m303_ikkakumon",
+    "sourceImageSha256": "d4612718198b3b836e3151ce062a99f034515195cc81727246b4074a3356c813",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 5,
+      "minX": -16,
+      "minY": -27
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "紫色尖帽斗篷人形，持長杖",
+    "chosenFamily": "FELINE",
+    "designName": "暮帽貓術士",
+    "fixedTraits": [
+      "金色貓瞳",
+      "短銀貓鼻",
+      "紫帽耳折紋",
+      "奶灰手毛"
+    ],
+    "changedRegions": [
+      "帽下臉",
+      "衣面"
+    ],
+    "preservedMotion": [
+      "帽尖、杖端、握點和袍擺",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "帽下臉與衣面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "貓術士沿原衣裝和人形動作改身份",
+    "risk": "帽下遮臉不能硬補完整貓頭",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m304_wizarmon",
+    "sourceImageSha256": "cdffd5bdc4b0ad92be4b8f9dbbc336aa37da2600a08cd3b420c8f3ad883264d7",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 5,
+      "minX": -16,
+      "minY": -27
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "黃褐樹幹大型人形，多分枝與根足",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "古樹熊衛",
+    "fixedTraits": [
+      "圓熊樹洞臉",
+      "苔綠眉",
+      "蜜褐年輪胸",
+      "厚根掌"
+    ],
+    "changedRegions": [
+      "樹幹面",
+      "年輪圖案"
+    ],
+    "preservedMotion": [
+      "枝端、寬根足和樹幹關節",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "樹幹面與年輪圖案限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "熊面加重樹衛身份而不新增活動枝",
+    "risk": "熊耳只用現有枝結表達",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m305_woodmon",
+    "sourceImageSha256": "bc1a99ee7c2cd2c6d88d0d1bfad53a81d2b34dbf3fbea1f6665e3d8c53ffbbfb",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 3,
+      "minX": -16,
+      "minY": -29
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "藍色長蛇龍，紅大翼與長尾",
+    "chosenFamily": "DRAGONFOLK",
+    "designName": "雲翼長身龍",
+    "fixedTraits": [
+      "奶金短眉甲",
+      "琥珀龍眼",
+      "赤銅翼膜",
+      "藍瓷腹節"
+    ],
+    "changedRegions": [
+      "龍頭",
+      "翼腹材質"
+    ],
+    "preservedMotion": [
+      "長身曲線、翼根翼端和尾",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "龍頭與翼腹材質限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "長身龍以面部人格化達成龍人方向",
+    "risk": "不增加人形手腳",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m306_airdramon",
+    "sourceImageSha256": "551d26283c89f49a5b357e8349e266057a751841607286d5de60cdf302e4ce55",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 1,
+      "minX": -16,
+      "minY": -31
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "白藍長身人形，多翼與長杖",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "羽冠白狼使",
+    "fixedTraits": [
+      "銀白狼面罩",
+      "藍灰眼框",
+      "金羽冠",
+      "奶白腕毛"
+    ],
+    "changedRegions": [
+      "面罩",
+      "羽冠表面"
+    ],
+    "preservedMotion": [
+      "翼數翼端、杖端與長腿",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "面罩與羽冠表面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "白狼使保留人形多翼構造建立新身份",
+    "risk": "面罩不能改變未知眼部行為",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m308_angemon",
+    "sourceImageSha256": "e58f6769bc9c60d054a54849a924866e83b33efa2af7826ac356f7c02f106379",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 18,
+      "maxYExclusive": 3,
+      "minX": -14,
+      "minY": -29
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "綠色魁梧人形，雙角與棍棒",
+    "chosenFamily": "BEASTFOLK",
+    "designName": "苔甲野豬武者",
+    "fixedTraits": [
+      "短野豬吻",
+      "銅色下牙",
+      "苔綠鬃額",
+      "紅甲護腕"
+    ],
+    "changedRegions": [
+      "臉、胸与腕甲"
+    ],
+    "preservedMotion": [
+      "棍握點、長臂、角位與大足",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "臉、胸与腕甲限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "野豬獸人適合厚重上身與棍棒構造",
+    "risk": "獠牙不得移動攻擊作用端",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m310_orgemon",
+    "sourceImageSha256": "baf45712418cabc11c6dc053982005a6915dfb16236e3cdde05906cd34db0a05",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 16,
+      "maxYExclusive": 3,
+      "minX": -16,
+      "minY": -29
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  },
+  {
+    "observedBody": "藍色四足犬獸，紅大鬃或披帶",
+    "chosenFamily": "CANINE",
+    "designName": "蒼鬃疾風犬",
+    "fixedTraits": [
+      "銀白犬面",
+      "深藍眉",
+      "赤銅鬃片",
+      "冰藍掌襪"
+    ],
+    "changedRegions": [
+      "犬面",
+      "鬃表面"
+    ],
+    "preservedMotion": [
+      "四足跑姿、鬃緣及尾端",
+      "原槽位、序列、ticks、native bounds 與相對定位；全動作仍待逐姿態檢查"
+    ],
+    "allowedContourChanges": [
+      "犬面與鬃表面限各角色原生畫布內；接觸端與作用端不移動，新增耳鬃只附著既有身體"
+    ],
+    "rationale": "在既有犬身上重設犬種與鬃毛即可保持步態",
+    "risk": "鬃片不能增加來源沒有的飄動",
+    "artStatus": "BRIEF_ONLY_NOT_DRAWN",
+    "sourceVisualReviewed": true,
+    "entityId": "m311_gaogamon",
+    "sourceImageSha256": "c9db0b9f63874a07cf2892ff187e428aaf279c463a80d029c208ded8cd26ddae",
+    "sourceWitnessKey": "main/cell_000",
+    "sourceNativeBounds": {
+      "maxXExclusive": 18,
+      "maxYExclusive": 2,
+      "minX": -14,
+      "minY": -30
+    },
+    "sourceContactSheet": "group-1-page-3.png",
+    "visualReviewScope": "已逐卡查看三頁原作標準姿勢；本設計 brief 不代表全部動作或解剖點已驗證"
+  }
+]

@@ -62,6 +62,8 @@
     "battle:catalogs:build": "python scripts/build-battle-catalogs.py",
     "build:pages": "node scripts/build-github-pages.mjs",
     "validate:pages": "node scripts/validate-github-pages.mjs",
+    "build:playtest": "node scripts/build-github-pages.mjs --playtest",
+    "validate:playtest": "node scripts/validate-github-pages.mjs --playtest",
     "build:internal": "node scripts/build-internal-review.mjs",
     "validate:internal": "node scripts/validate-internal-review.mjs",
     "audit:build": "node scripts/audit-web-build.mjs",

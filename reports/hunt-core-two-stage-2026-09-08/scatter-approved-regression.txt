@@ -1,0 +1,1246 @@
+TAP version 13
+# Subtest: integer sub-minute arithmetic carries every calendar slot without rounding or invented history
+ok 1 - integer sub-minute arithmetic carries every calendar slot without rounding or invented history
+  ---
+  duration_ms: 12.4119
+  type: 'test'
+  ...
+# Subtest: clock units are exact across 30/60/120 frame chunks using absolute microsecond deltas
+ok 2 - clock units are exact across 30/60/120 frame chunks using absolute microsecond deltas
+  ---
+  duration_ms: 13.5371
+  type: 'test'
+  ...
+# Subtest: Training divisor consumes the raw saved remainder without scene-dependent scaling
+ok 3 - Training divisor consumes the raw saved remainder without scene-dependent scaling
+  ---
+  duration_ms: 32.1472
+  type: 'test'
+  ...
+# Subtest: verified stop clears raw elapsed atomically without inventing a minute or resident update
+ok 4 - verified stop clears raw elapsed atomically without inventing a minute or resident update
+  ---
+  duration_ms: 5.4268
+  type: 'test'
+  ...
+# Subtest: clock updates preserve all residents and do not spend the 256 player command IDs
+ok 5 - clock updates preserve all residents and do not spend the 256 player command IDs
+  ---
+  duration_ms: 96.1789
+  type: 'test'
+  ...
+# Subtest: zero, replay, malformed and paused deltas do not mutate or publish
+ok 6 - zero, replay, malformed and paused deltas do not mutate or publish
+  ---
+  duration_ms: 3.9992
+  type: 'test'
+  ...
+# Subtest: clock observer reentry cannot consume the same elapsed revision twice
+ok 7 - clock observer reentry cannot consume the same elapsed revision twice
+  ---
+  duration_ms: 1.0924
+  type: 'test'
+  ...
+# Subtest: v4 clock precision survives serialization, restore and further advancement
+ok 8 - v4 clock precision survives serialization, restore and further advancement
+  ---
+  duration_ms: 16.2428
+  type: 'test'
+  ...
+# Subtest: v1/v2/v3 migrations validate original digest domains and keep unknown date/year neutral
+ok 9 - v1/v2/v3 migrations validate original digest domains and keep unknown date/year neutral
+  ---
+  duration_ms: 24.377
+  type: 'test'
+  ...
+# Subtest: v4 exact clock allowlist and precision bounds reject corrupt saves
+ok 10 - v4 exact clock allowlist and precision bounds reject corrupt saves
+  ---
+  duration_ms: 8.5685
+  type: 'test'
+  ...
+# Subtest: v4 to v5 preserves exact residents/calendar and validates the old digest before migration
+ok 11 - v4 to v5 preserves exact residents/calendar and validates the old digest before migration
+  ---
+  duration_ms: 7.8019
+  type: 'test'
+  ...
+# Subtest: v5 empty resident membership survives restore; unknown/duplicate releases cannot change it
+ok 12 - v5 empty resident membership survives restore; unknown/duplicate releases cannot change it
+  ---
+  duration_ms: 8.131
+  type: 'test'
+  ...
+# Subtest: End Day shares calendar arithmetic, clears elapsed remainder and never updates residents
+ok 13 - End Day shares calendar arithmetic, clears elapsed remainder and never updates residents
+  ---
+  duration_ms: 2.1514
+  type: 'test'
+  ...
+# Subtest: coordinator dirty clock keeps exact save identity without notifying every frame
+ok 14 - coordinator dirty clock keeps exact save identity without notifying every frame
+  ---
+  duration_ms: 42.9156
+  type: 'test'
+  ...
+# Subtest: AI initialization matches 721 original CPU boundary cases, including the zero first heading roll
+ok 15 - AI initialization matches 721 original CPU boundary cases, including the zero first heading roll
+  ---
+  duration_ms: 8.7432
+  type: 'test'
+  ...
+# Subtest: all 228 species and 9 traits match original CPU initial speed
+ok 16 - all 228 species and 9 traits match original CPU initial speed
+  ---
+  duration_ms: 1.861
+  type: 'test'
+  ...
+# Subtest: same-species grouping matches native positions, query order and full RNG, including 64 blocked attempts
+ok 17 - same-species grouping matches native positions, query order and full RNG, including 64 blocked attempts
+  ---
+  duration_ms: 12.6571
+  type: 'test'
+  ...
+# Subtest: complete generation independently requests all 492 original entry RNG draws and produces the observed actors
+ok 18 - complete generation independently requests all 492 original entry RNG draws and produces the observed actors
+  ---
+  duration_ms: 20.1003
+  type: 'test'
+  ...
+# Subtest: missing scene/environment sources and unclosed carried actor cannot consume caller RNG
+ok 19 - missing scene/environment sources and unclosed carried actor cannot consume caller RNG
+  ---
+  duration_ms: 3.6023
+  type: 'test'
+  ...
+# Subtest: HP initialization and every soft-pull update match actual original ARM execution
+ok 20 - HP initialization and every soft-pull update match actual original ARM execution
+  ---
+  duration_ms: 8.5549
+  type: 'test'
+  ...
+# Subtest: Rope 39px / 3584 Q12 matches native boundaries and remainder
+ok 21 - Rope 39px / 3584 Q12 matches native boundaries and remainder
+  ---
+  duration_ms: 0.4814
+  type: 'test'
+  ...
+# Subtest: Rope 40px / 3584 Q12 matches native boundaries and remainder
+ok 22 - Rope 40px / 3584 Q12 matches native boundaries and remainder
+  ---
+  duration_ms: 1.065
+  type: 'test'
+  ...
+# Subtest: Rope 79px / 5000 Q12 matches native boundaries and remainder
+ok 23 - Rope 79px / 5000 Q12 matches native boundaries and remainder
+  ---
+  duration_ms: 0.3699
+  type: 'test'
+  ...
+# Subtest: Rope 80px / 3584 Q12 matches native boundaries and remainder
+ok 24 - Rope 80px / 3584 Q12 matches native boundaries and remainder
+  ---
+  duration_ms: 0.5492
+  type: 'test'
+  ...
+# Subtest: Rope 160px / 3584 Q12 matches native boundaries and remainder
+ok 25 - Rope 160px / 3584 Q12 matches native boundaries and remainder
+  ---
+  duration_ms: 0.259
+  type: 'test'
+  ...
+# Subtest: Rope 161px / 3584 Q12 matches native boundaries and remainder
+ok 26 - Rope 161px / 3584 Q12 matches native boundaries and remainder
+  ---
+  duration_ms: 0.4403
+  type: 'test'
+  ...
+# Subtest: untraced AI events reject before changing HP, and cancellation releases the tether
+ok 27 - untraced AI events reject before changing HP, and cancellation releases the tether
+  ---
+  duration_ms: 2.2055
+  type: 'test'
+  ...
+# Subtest: HP zero, down animation, hand event and insertion are separate ownership boundaries
+ok 28 - HP zero, down animation, hand event and insertion are separate ownership boundaries
+  ---
+  duration_ms: 122.8655
+  type: 'test'
+  ...
+# Subtest: an absent memory card leaves a ready wild in the field without allocating or saving
+ok 29 - an absent memory card leaves a ready wild in the field without allocating or saving
+  ---
+  duration_ms: 21.9445
+  type: 'test'
+  ...
+# Subtest: result confirmation atomically saves the captured source HP, name, stable ID, and home membership
+ok 30 - result confirmation atomically saves the captured source HP, name, stable ID, and home membership
+  ---
+  duration_ms: 70.3354
+  type: 'test'
+  ...
+# Subtest: failed Home save retains the card and unallocated ID; retry commits exactly once
+ok 31 - failed Home save retains the card and unallocated ID; retry commits exactly once
+  ---
+  duration_ms: 36.9618
+  type: 'test'
+  ...
+# Subtest: a full native 16-slot home pool retains the on-card individual without partial commit
+ok 32 - a full native 16-slot home pool retains the on-card individual without partial commit
+  ---
+  duration_ms: 288.8864
+  type: 'test'
+  ...
+# Subtest: on-card capacity uses species G and accepts equality; it does not use home collection count
+ok 33 - on-card capacity uses species G and accepts equality; it does not use home collection count
+  ---
+  duration_ms: 0.6435
+  type: 'test'
+  ...
+# Subtest: card release has an explicit cancellable choice and never resurrects the field target or allocates an ID
+ok 34 - card release has an explicit cancellable choice and never resurrects the field target or allocates an ID
+  ---
+  duration_ms: 19.0443
+  type: 'test'
+  ...
+# Subtest: full Home can replace an exact collection individual; failed save preserves both it and the card
+ok 35 - full Home can replace an exact collection individual; failed save preserves both it and the card
+  ---
+  duration_ms: 229.9133
+  type: 'test'
+  ...
+# Subtest: starter release removes canonical resident membership and survives save/Continue without resurrection
+ok 36 - starter release removes canonical resident membership and survives save/Continue without resurrection
+  ---
+  duration_ms: 44.2444
+  type: 'test'
+  ...
+# Subtest: normal Hunt follows original live clock receipt and clears the scene remainder
+ok 37 - normal Hunt follows original live clock receipt and clears the scene remainder
+  ---
+  duration_ms: 106.5664
+  type: 'test'
+  ...
+# Subtest: eight-hour and late-evening deadlines stop precisely and leave an empty expedition
+ok 38 - eight-hour and late-evening deadlines stop precisely and leave an empty expedition
+  ---
+  duration_ms: 110.7615
+  type: 'test'
+  ...
+# Subtest: repeated tool selections cannot pause the shared Hunt clock
+ok 39 - repeated tool selections cannot pause the shared Hunt clock
+  ---
+  duration_ms: 36.0224
+  type: 'test'
+  ...
+# Subtest: all 15 radar plugins match all 228 original species under ARM
+ok 40 - all 15 radar plugins match all 228 original species under ARM
+  ---
+  duration_ms: 8.0807
+  type: 'test'
+  ...
+# Subtest: analyzers preserve maximum HP, individual personality and least-significant family selection
+ok 41 - analyzers preserve maximum HP, individual personality and least-significant family selection
+  ---
+  duration_ms: 1.7844
+  type: 'test'
+  ...
+# Subtest: wire clipping intersections match 400 original ARM calls including collinear points
+ok 42 - wire clipping intersections match 400 original ARM calls including collinear points
+  ---
+  duration_ms: 3.2069
+  type: 'test'
+  ...
+# Subtest: explosion motion, wall reflection, landing friction and snap thresholds match 240 ARM calls
+ok 43 - explosion motion, wall reflection, landing friction and snap thresholds match 240 ARM calls
+  ---
+  duration_ms: 17.411
+  type: 'test'
+  ...
+# Subtest: all 34 consumables reach normal generated actors, consume stock and leave valid AI frames
+ok 44 - all 34 consumables reach normal generated actors, consume stock and leave valid AI frames
+  ---
+  duration_ms: 6296.031
+  type: 'test'
+  ...
+# Subtest: Hunt exact-original HD baseline covers all 30 source variants
+ok 45 - Hunt exact-original HD baseline covers all 30 source variants
+  ---
+  duration_ms: 2.2888
+  type: 'test'
+  ...
+# Subtest: Hunt fields preserve 128x128 data and deterministic 2048px HD frame zero
+ok 46 - Hunt fields preserve 128x128 data and deterministic 2048px HD frame zero
+  ---
+  duration_ms: 2013.0468
+  type: 'test'
+  ...
+# Subtest: all 13 native BSAR bundles export complete layer and composite frames
+ok 47 - all 13 native BSAR bundles export complete layer and composite frames
+  ---
+  duration_ms: 321.6152
+  type: 'test'
+  ...
+# Subtest: animated terrain stays below void-masked core land and objects
+ok 48 - animated terrain stays below void-masked core land and objects
+  ---
+  duration_ms: 2.6051
+  type: 'test'
+  ...
+# Subtest: Gate variant follows original node resolver and CPU rotation across all 17 nodes and supported hours
+ok 49 - Gate variant follows original node resolver and CPU rotation across all 17 nodes and supported hours
+  ---
+  duration_ms: 12.3077
+  type: 'test'
+  ...
+# Subtest: unresolved negative native trig indices and missing node inputs cannot silently select a field
+ok 50 - unresolved negative native trig indices and missing node inputs cannot silently select a field
+  ---
+  duration_ms: 1.1588
+  type: 'test'
+  ...
+# Subtest: all four Hunt HD remaster batches cover 30 variants without runtime promotion
+ok 51 - all four Hunt HD remaster batches cover 30 variants without runtime promotion
+  ---
+  duration_ms: 4.6995
+  type: 'test'
+  ...
+# Subtest: Hunt worlds remain complete 128x128 maps and portrait is only a draggable viewport
+ok 52 - Hunt worlds remain complete 128x128 maps and portrait is only a draggable viewport
+  ---
+  duration_ms: 1.0912
+  type: 'test'
+  ...
+# Subtest: source assembly, object placement records and raw gameplay maps are unchanged
+ok 53 - source assembly, object placement records and raw gameplay maps are unchanged
+  ---
+  duration_ms: 156.8408
+  type: 'test'
+  ...
+# Subtest: all verified Hunt animation frames and raw timing ticks are retained
+ok 54 - all verified Hunt animation frames and raw timing ticks are retained
+  ---
+  duration_ms: 1.3094
+  type: 'test'
+  ...
+# Subtest: every HD frame is hash locked and contains no large missing-region diagnostic red
+ok 55 - every HD frame is hash locked and contains no large missing-region diagnostic red
+  ---
+  duration_ms: 1384.4601
+  type: 'test'
+  ...
+# Subtest: history constructor and first-match selection follow original CPU across all 16 biomes
+ok 56 - history constructor and first-match selection follow original CPU across all 16 biomes
+  ---
+  duration_ms: 20.8229
+  type: 'test'
+  ...
+# Subtest: return writers and every returned species match original CPU and continuing channel1 RNG
+ok 57 - return writers and every returned species match original CPU and continuing channel1 RNG
+  ---
+  duration_ms: 36.251
+  type: 'test'
+  ...
+# Subtest: native save roundtrip preserves three slots and cursor, restores trait8, excludes carried slot
+ok 58 - native save roundtrip preserves three slots and cursor, restores trait8, excludes carried slot
+  ---
+  duration_ms: 2.0906
+  type: 'test'
+  ...
+# Subtest: missing sources fail before RNG; returned candidates cannot mutate the current history
+ok 59 - missing sources fail before RNG; returned candidates cannot mutate the current history
+  ---
+  duration_ms: 2.0094
+  type: 'test'
+  ...
+# Subtest: all 228 original species match constructor, post-update and continuing RNG
+ok 60 - all 228 original species match constructor, post-update and continuing RNG
+  ---
+  duration_ms: 60.7204
+  type: 'test'
+  ...
+# Subtest: complete pool selection executes constructor and post-update without a scripted draw schedule
+ok 61 - complete pool selection executes constructor and post-update without a scripted draw schedule
+  ---
+  duration_ms: 17.8677
+  type: 'test'
+  ...
+# Subtest: candidate weights follow native modifier bytes, including odd rounding and exhausted entries
+ok 62 - candidate weights follow native modifier bytes, including odd rounding and exhausted entries
+  ---
+  duration_ms: 0.4912
+  type: 'test'
+  ...
+# Subtest: carried individual remains slot zero, preserves existing stats and returns the original history write
+ok 63 - carried individual remains slot zero, preserves existing stats and returns the original history write
+  ---
+  duration_ms: 10.0413
+  type: 'test'
+  ...
+# Subtest: invalid carried and released inputs fail before any RNG consumption
+ok 64 - invalid carried and released inputs fail before any RNG consumption
+  ---
+  duration_ms: 1.353
+  type: 'test'
+  ...
+# Subtest: actual Gate 0 record order, B7 outputs, HP and positions replace the six prototype wilds in explicit live replay
+ok 65 - actual Gate 0 record order, B7 outputs, HP and positions replace the six prototype wilds in explicit live replay
+  ---
+  duration_ms: 8.1059
+  type: 'test'
+  ...
+# Subtest: every observed stylus-driven Rope numerical update matches native execution, including event 11 and 13
+ok 66 - every observed stylus-driven Rope numerical update matches native execution, including event 11 and 13
+  ---
+  duration_ms: 3.665
+  type: 'test'
+  ...
+# Subtest: native touch replay observes HP zero before hand-ready and card insertion without rewriting source HP
+ok 67 - native touch replay observes HP zero before hand-ready and card insertion without rewriting source HP
+  ---
+  duration_ms: 0.5048
+  type: 'test'
+  ...
+# Subtest: each of the 30 fitted plugins reaches the matching display without changing gameplay
+ok 68 - each of the 30 fitted plugins reaches the matching display without changing gameplay
+  ---
+  duration_ms: 12.1883
+  type: 'test'
+  ...
+# Subtest: all sixteen Gate previews resolve real production images by field identity, including shared variants
+ok 69 - all sixteen Gate previews resolve real production images by field identity, including shared variants
+  ---
+  duration_ms: 6.693
+  type: 'test'
+  ...
+# Subtest: selected target readout does not leak hidden identity or HP without an analyzer
+ok 70 - selected target readout does not leak hidden identity or HP without an analyzer
+  ---
+  duration_ms: 0.8061
+  type: 'test'
+  ...
+# Subtest: normal selection publishes target changes once through the existing source without adding save keys
+ok 71 - normal selection publishes target changes once through the existing source without adding save keys
+  ---
+  duration_ms: 144.6982
+  type: 'test'
+  ...
+# Subtest: every actual native movement call matches direction, delta, position and actor writes
+ok 72 - every actual native movement call matches direction, delta, position and actor writes
+  ---
+  duration_ms: 29.2335
+  type: 'test'
+  ...
+# Subtest: native direction and terrain grids reproduce each original observed read
+ok 73 - native direction and terrain grids reproduce each original observed read
+  ---
+  duration_ms: 7.738
+  type: 'test'
+  ...
+# Subtest: unclosed follower, controller and direction cases fail without changing caller state
+ok 74 - unclosed follower, controller and direction cases fail without changing caller state
+  ---
+  duration_ms: 2.8279
+  type: 'test'
+  ...
+# Subtest: controlled ARM probes verify all direction literals, flag precedence and signed rounding
+ok 75 - controlled ARM probes verify all direction literals, flag precedence and signed rounding
+  ---
+  duration_ms: 6.3325
+  type: 'test'
+  ...
+# Subtest: controlled ARM grid probes verify wrap, outside bounds and ordered terrain bit tests
+ok 76 - controlled ARM grid probes verify wrap, outside bounds and ordered terrain bit tests
+  ---
+  duration_ms: 2.201
+  type: 'test'
+  ...
+# Subtest: AI8 event 11/13 prefix matches every native call and consumes stun RNG in exact order
+ok 77 - AI8 event 11/13 prefix matches every native call and consumes stun RNG in exact order
+  ---
+  duration_ms: 8.5541
+  type: 'test'
+  ...
+# Subtest: AI10 entry normalization and every collision-checked motion match the live target
+ok 78 - AI10 entry normalization and every collision-checked motion match the live target
+  ---
+  duration_ms: 2.3763
+  type: 'test'
+  ...
+# Subtest: wild shake countdown uses native odd-tick ordering and matches every observed update
+ok 79 - wild shake countdown uses native odd-tick ordering and matches every observed update
+  ---
+  duration_ms: 4.6249
+  type: 'test'
+  ...
+# Subtest: hand controller matches all 94 pre-insertion updates, with one card write at native frame 480
+ok 80 - hand controller matches all 94 pre-insertion updates, with one card write at native frame 480
+  ---
+  duration_ms: 3.9641
+  type: 'test'
+  ...
+# Subtest: native stylus samples preserve ring slots, Q12 interpolation and the original circle center
+ok 81 - native stylus samples preserve ring slots, Q12 interpolation and the original circle center
+  ---
+  duration_ms: 5.6418
+  type: 'test'
+  ...
+# Subtest: slot completion is idempotent; edge-zone boundaries use native coordinates
+ok 82 - slot completion is idempotent; edge-zone boundaries use native coordinates
+  ---
+  duration_ms: 0.6736
+  type: 'test'
+  ...
+# Subtest: native clocks close down/hand/card in the existing flow and reject early completion callbacks
+ok 83 - native clocks close down/hand/card in the existing flow and reject early completion callbacks
+  ---
+  duration_ms: 3.6787
+  type: 'test'
+  ...
+# Subtest: wild RNG selects B2/B3 from channel-zero parity and scales endpoints
+ok 84 - wild RNG selects B2/B3 from channel-zero parity and scales endpoints
+  ---
+  duration_ms: 0.7716
+  type: 'test'
+  ...
+# Subtest: normal gestures capture, commit once and restore through Continue
+ok 85 - normal gestures capture, commit once and restore through Continue
+  ---
+  duration_ms: 522.0748
+  type: 'test'
+  ...
+# Subtest: all Gate node positions and 352 supported native variant cases use identity, never UI ordinal
+ok 86 - all Gate node positions and 352 supported native variant cases use identity, never UI ordinal
+  ---
+  duration_ms: 546.556
+  type: 'test'
+  ...
+# Subtest: 29 complete initial terrain readers match 475136 original CPU cell results and outside bounds
+ok 87 - 29 complete initial terrain readers match 475136 original CPU cell results and outside bounds
+  ---
+  duration_ms: 214.483
+  type: 'test'
+  ...
+# Subtest: production terrain/direction providers reproduce all 208 actual movement calls without query receipts
+ok 88 - production terrain/direction providers reproduce all 208 actual movement calls without query receipts
+  ---
+  duration_ms: 33.055
+  type: 'test'
+  ...
+# Subtest: normal functional sources reproduce original full entry actors and all 217 final RNG channels
+ok 89 - normal functional sources reproduce original full entry actors and all 217 final RNG channels
+  ---
+  duration_ms: 14.9602
+  type: 'test'
+  ...
+# Subtest: all 16 Gate identities across four seasons and three playable hours generate from the continuing RNG
+ok 90 - all 16 Gate identities across four seasons and three playable hours generate from the continuing RNG
+  ---
+  duration_ms: 619.1051
+  type: 'test'
+  ...
+# Subtest: persistent released history enters the native candidate path without clearing history on entry
+ok 91 - persistent released history enters the native candidate path without clearing history on entry
+  ---
+  duration_ms: 4.9922
+  type: 'test'
+  ...
+# Subtest: original carried post-registration probe proves common slot binding and an additional whole-batch state update
+ok 92 - original carried post-registration probe proves common slot binding and an additional whole-batch state update
+  ---
+  duration_ms: 7.7023
+  type: 'test'
+  ...
+# Subtest: normal app entry commits once, advances native AI on the shared RNG, and reentry continues it
+ok 93 - normal app entry commits once, advances native AI on the shared RNG, and reentry continues it
+  ---
+  duration_ms: 169.0062
+  type: 'test'
+  ...
+# Subtest: runtime failure after generation preserves RNG/history/save/Loadout; retry equals an uninterrupted entry
+ok 94 - runtime failure after generation preserves RNG/history/save/Loadout; retry equals an uninterrupted entry
+  ---
+  duration_ms: 101.6791
+  type: 'test'
+  ...
+# Subtest: entry save observers see one complete committed owner and cannot reenter RNG or leave mid-commit
+ok 95 - entry save observers see one complete committed owner and cannot reenter RNG or leave mid-commit
+  ---
+  duration_ms: 31.8882
+  type: 'test'
+  ...
+# Subtest: Save/Continue after entry produces the same next encounter, including a failed save retry
+ok 96 - Save/Continue after entry produces the same next encounter, including a failed save retry
+  ---
+  duration_ms: 119.4406
+  type: 'test'
+  ...
+# Subtest: legacy history and non-null carried actor fail before normal entry can mutate durable inputs
+ok 97 - legacy history and non-null carried actor fail before normal entry can mutate durable inputs
+  ---
+  duration_ms: 44.3331
+  type: 'test'
+  ...
+# Subtest: Hunt ROM trace records inverse-delta panning and the original 256x192 camera clamp
+ok 98 - Hunt ROM trace records inverse-delta panning and the original 256x192 camera clamp
+  ---
+  duration_ms: 3.8842
+  type: 'test'
+  ...
+# Subtest: research truth says portrait is a viewport and panning is not avatar locomotion
+ok 99 - research truth says portrait is a viewport and panning is not avatar locomotion
+  ---
+  duration_ms: 0.611
+  type: 'test'
+  ...
+# Subtest: the player field uses the dedicated camera pointer adapter and never avatar movement
+ok 100 - the player field uses the dedicated camera pointer adapter and never avatar movement
+  ---
+  duration_ms: 0.4396
+  type: 'test'
+  ...
+# Subtest: formal source catalog matches all original individual/speed inputs and ordered history catalogs
+ok 101 - formal source catalog matches all original individual/speed inputs and ordered history catalogs
+  ---
+  duration_ms: 22.0583
+  type: 'test'
+  ...
+# Subtest: 128 normal field/season source selections match 640 original CPU candidate expansions
+ok 102 - 128 normal field/season source selections match 640 original CPU candidate expansions
+  ---
+  duration_ms: 28.8231
+  type: 'test'
+  ...
+# Subtest: generated source species replace research inputs without changing actual native pool or RNG results
+ok 103 - generated source species replace research inputs without changing actual native pool or RNG results
+  ---
+  duration_ms: 19.6503
+  type: 'test'
+  ...
+# Subtest: persistent codec matches original save/load including trait8, omitted fourth slot and low-four-bit modifiers
+ok 104 - persistent codec matches original save/load including trait8, omitted fourth slot and low-four-bit modifiers
+  ---
+  duration_ms: 3.8928
+  type: 'test'
+  ...
+# Subtest: normal New Game, Gate roundtrip, Save and Continue preserve one app-owned history at the existing key
+ok 105 - normal New Game, Gate roundtrip, Save and Continue preserve one app-owned history at the existing key
+  ---
+  duration_ms: 152.713
+  type: 'test'
+  ...
+# Subtest: nonempty original CPU history survives app Continue, failed write and retry without reseeding or zeroing
+ok 106 - nonempty original CPU history survives app Continue, failed write and retry without reseeding or zeroing
+  ---
+  duration_ms: 51.245
+  type: 'test'
+  ...
+# Subtest: v1..v4 lack Hunt history: migrate as null and keep R2 bytes, wallet and v4 RNG unchanged
+ok 107 - v1..v4 lack Hunt history: migrate as null and keep R2 bytes, wallet and v4 RNG unchanged
+  ---
+  duration_ms: 101.6627
+  type: 'test'
+  ...
+# Subtest: malformed current Hunt slices fail before replacing an open session or touching its state
+ok 108 - malformed current Hunt slices fail before replacing an open session or touching its state
+  ---
+  duration_ms: 36.7718
+  type: 'test'
+  ...
+# Subtest: normal original entry and later updates reproduce every actual RNG return and final cursor
+ok 109 - normal original entry and later updates reproduce every actual RNG return and final cursor
+  ---
+  duration_ms: 20.8077
+  type: 'test'
+  ...
+# Subtest: RNG snapshots continue consumed state and do not alias callers or assume a master seed
+ok 110 - RNG snapshots continue consumed state and do not alias callers or assume a master seed
+  ---
+  duration_ms: 2.4942
+  type: 'test'
+  ...
+# Subtest: range sampling preserves native channel selection and all 103 possible branch results
+ok 111 - range sampling preserves native channel selection and all 103 possible branch results
+  ---
+  duration_ms: 4.4158
+  type: 'test'
+  ...
+# Subtest: spawn repair matches actual ARM probe query order, boundary exclusions and failure
+ok 112 - spawn repair matches actual ARM probe query order, boundary exclusions and failure
+  ---
+  duration_ms: 4.7186
+  type: 'test'
+  ...
+# Subtest: all 15 normal-entry initial positions derive from continuing RNG and original terrain queries
+ok 113 - all 15 normal-entry initial positions derive from continuing RNG and original terrain queries
+  ---
+  duration_ms: 6.062
+  type: 'test'
+  ...
+# Subtest: spawn requires actual RNG and terrain ports without introducing a fallback encounter
+ok 114 - spawn requires actual RNG and terrain ports without introducing a fallback encounter
+  ---
+  duration_ms: 0.7614
+  type: 'test'
+  ...
+# Subtest: all 34 consumables use their original equipment class and spend once on activation
+ok 115 - all 34 consumables use their original equipment class and spend once on activation
+  ---
+  duration_ms: 18.8246
+  type: 'test'
+  ...
+# Subtest: a host missing the explicit scatter response policy cannot emit arbitrary response bytes
+ok 116 - a host missing the explicit scatter response policy cannot emit arbitrary response bytes
+  ---
+  duration_ms: 0.5083
+  type: 'test'
+  ...
+# Subtest: approved scatter response matches ordinary Shot for all 228 species and preserves seven event payloads
+ok 117 - approved scatter response matches ordinary Shot for all 228 species and preserves seven event payloads
+  ---
+  duration_ms: 180.1256
+  type: 'test'
+  ...
+# Subtest: scatter keeps centre-first offsets and RNG order for seven, partial and full primary pools
+ok 118 - scatter keeps centre-first offsets and RNG order for seven, partial and full primary pools
+  ---
+  duration_ms: 0.8359
+  type: 'test'
+  ...
+# Subtest: all four held scatter shots retain 60 cooldown updates, one shell per volley and eight-tick primary cleanup
+ok 119 - all four held scatter shots retain 60 cooldown updates, one shell per volley and eight-tick primary cleanup
+  ---
+  duration_ms: 2.7196
+  type: 'test'
+  ...
+# Subtest: food and hazard pools reject an eleventh active object without spending inventory
+ok 120 - food and hazard pools reject an eleventh active object without spending inventory
+  ---
+  duration_ms: 1.7171
+  type: 'test'
+  ...
+# Subtest: cancelled or too-short wires never commit or consume; valid wires expire and free their slots
+ok 121 - cancelled or too-short wires never commit or consume; valid wires expire and free their slots
+  ---
+  duration_ms: 2.4411
+  type: 'test'
+  ...
+# Subtest: held shots obey the original cooldown, empty ammo cannot generate a hit, and feedback clears
+ok 122 - held shots obey the original cooldown, empty ammo cannot generate a hit, and feedback clears
+  ---
+  duration_ms: 5.8434
+  type: 'test'
+  ...
+# Subtest: moving decoy reserves a preview, launches on the second tap, and cannot launch without stock
+ok 123 - moving decoy reserves a preview, launches on the second tap, and cannot launch without stock
+  ---
+  duration_ms: 1.534
+  type: 'test'
+  ...
+# Subtest: night light emits attraction only at night and expires without duplicate consumption
+ok 124 - night light emits attraction only at night and expires without duplicate consumption
+  ---
+  duration_ms: 23.2889
+  type: 'test'
+  ...
+# Subtest: capture trap reserves one target and rejects collection when card capacity is full
+ok 125 - capture trap reserves one target and rejects collection when card capacity is full
+  ---
+  duration_ms: 4.1941
+  type: 'test'
+  ...
+# Subtest: each bomb resolves its fuse and all secondary feedback; mines require contact before exploding
+ok 126 - each bomb resolves its fuse and all secondary feedback; mines require contact before exploding
+  ---
+  duration_ms: 21.6239
+  type: 'test'
+  ...
+# Subtest: native poison, delayed stun, blindness, fatigue and recovery boundaries match ARM writes
+ok 127 - native poison, delayed stun, blindness, fatigue and recovery boundaries match ARM writes
+  ---
+  duration_ms: 4.2007
+  type: 'test'
+  ...
+# Subtest: binding bounce completes on the original seven updates and resets height
+ok 128 - binding bounce completes on the original seven updates and resets height
+  ---
+  duration_ms: 0.8409
+  type: 'test'
+  ...
+# Subtest: all 228 species × 12 ropes read the same rate as the original ARM branch
+ok 129 - all 228 species × 12 ropes read the same rate as the original ARM branch
+  ---
+  duration_ms: 7.3416
+  type: 'test'
+  ...
+# Subtest: 13 native effectiveness selectors preserve distraction and blindness override
+ok 130 - 13 native effectiveness selectors preserve distraction and blindness override
+  ---
+  duration_ms: 7.8274
+  type: 'test'
+  ...
+# Subtest: shot shake, wake counter, reaction and conditional RNG match native instructions
+ok 131 - shot shake, wake counter, reaction and conditional RNG match native instructions
+  ---
+  duration_ms: 7.176
+  type: 'test'
+  ...
+# Subtest: rope cap transitions preserve the original update lag and return transitions
+ok 132 - rope cap transitions preserve the original update lag and return transitions
+  ---
+  duration_ms: 1.8033
+  type: 'test'
+  ...
+# Subtest: all 640 OVL0 request/binding/status selectors match original CPU results
+ok 133 - all 640 OVL0 request/binding/status selectors match original CPU results
+  ---
+  duration_ms: 3.6137
+  type: 'test'
+  ...
+# Subtest: native raw modes match 9288 CPU updates, including stop, loop start and discarded overshoot
+ok 134 - native raw modes match 9288 CPU updates, including stop, loop start and discarded overshoot
+  ---
+  duration_ms: 54.8096
+  type: 'test'
+  ...
+# Subtest: same-species original stylus capture matches every animator call and all 476 rendered frames
+ok 135 - same-species original stylus capture matches every animator call and all 476 rendered frames
+  ---
+  duration_ms: 17.4793
+  type: 'test'
+  ...
+# Subtest: frame projection uses raw source textures and native flips, never archive aliases or GPU time
+ok 136 - frame projection uses raw source textures and native flips, never archive aliases or GPU time
+  ---
+  duration_ms: 10.4723
+  type: 'test'
+  ...
+# Subtest: every integrated character retains native frame identity and reduced-motion action transitions
+ok 137 - every integrated character retains native frame identity and reduced-motion action transitions
+  ---
+  duration_ms: 590.365
+  type: 'test'
+  ...
+# Subtest: the same seven seconds at 30/60/120 presentation fps yield one nominal native Training clock
+ok 138 - the same seven seconds at 30/60/120 presentation fps yield one nominal native Training clock
+  ---
+  duration_ms: 165.641
+  type: 'test'
+  ...
+# Subtest: manual save restores accepted raw clock precision without offline accrual or another save key
+ok 139 - manual save restores accepted raw clock precision without offline accrual or another save key
+  ---
+  duration_ms: 45.7985
+  type: 'test'
+  ...
+# Subtest: inactive, hidden, modal and lost-context drivers discard suspended elapsed baselines
+ok 140 - inactive, hidden, modal and lost-context drivers discard suspended elapsed baselines
+  ---
+  duration_ms: 25.6877
+  type: 'test'
+  ...
+# Subtest: long or invalid measured gaps never jump the calendar
+ok 141 - long or invalid measured gaps never jump the calendar
+  ---
+  duration_ms: 5.6232
+  type: 'test'
+  ...
+# Subtest: unknown Schedule mode gates time and returning Home never catches up its elapsed interval
+ok 142 - unknown Schedule mode gates time and returning Home never catches up its elapsed interval
+  ---
+  duration_ms: 6.5836
+  type: 'test'
+  ...
+# Subtest: verified Training and Shop transitions clear only elapsed remainder through the existing clock
+ok 143 - verified Training and Shop transitions clear only elapsed remainder through the existing clock
+  ---
+  duration_ms: 7.273
+  type: 'test'
+  ...
+# Subtest: New Game and Continue replace session identity without replaying old elapsed frames
+ok 144 - New Game and Continue replace session identity without replaying old elapsed frames
+  ---
+  duration_ms: 41.9343
+  type: 'test'
+  ...
+# Subtest: the native update reaches 22:00 then stops and clears remainder without running a new day
+ok 145 - the native update reaches 22:00 then stops and clears remainder without running a new day
+  ---
+  duration_ms: 10.8234
+  type: 'test'
+  ...
+# Subtest: more than 256 natural clock publications leave selection, relocation and End Day usable
+ok 146 - more than 256 natural clock publications leave selection, relocation and End Day usable
+  ---
+  duration_ms: 61.9806
+  type: 'test'
+  ...
+# Subtest: v1 migrates at the existing key without changing any existing slice or R2 digest
+ok 147 - v1 migrates at the existing key without changing any existing slice or R2 digest
+  ---
+  duration_ms: 13.8811
+  type: 'test'
+  ...
+# Subtest: v2 wallet and receipt migrate to v5 together; old completion cannot be paid again
+ok 148 - v2 wallet and receipt migrate to v5 together; old completion cannot be paid again
+  ---
+  duration_ms: 6.9423
+  type: 'test'
+  ...
+# Subtest: save constructors, serializers and loaders refuse unfinished battle attempts
+ok 149 - save constructors, serializers and loaders refuse unfinished battle attempts
+  ---
+  duration_ms: 1.8322
+  type: 'test'
+  ...
+# Subtest: unknown fields, malformed histories and missing v2 slices fail closed
+ok 150 - unknown fields, malformed histories and missing v2 slices fail closed
+  ---
+  duration_ms: 3.3997
+  type: 'test'
+  ...
+# Subtest: the existing 64 KiB and nested forensic boundary still applies after migration
+ok 151 - the existing 64 KiB and nested forensic boundary still applies after migration
+  ---
+  duration_ms: 1.7703
+  type: 'test'
+  ...
+# Subtest: shop display follows original record/item permutation, including wound versus illness medicine
+ok 152 - shop display follows original record/item permutation, including wound versus illness medicine
+  ---
+  duration_ms: 3.7541
+  type: 'test'
+  ...
+# Subtest: battle identity projects the existing session species; unknown species does not become a guessed creature
+ok 153 - battle identity projects the existing session species; unknown species does not become a guessed creature
+  ---
+  duration_ms: 2.2842
+  type: 'test'
+  ...
+# Subtest: toolbar tracks the full rail after safe-area or font changes without reserving submenu height
+ok 154 - toolbar tracks the full rail after safe-area or font changes without reserving submenu height
+  ---
+  duration_ms: 10.5284
+  type: 'test'
+  ...
+# Subtest: toolbar resize fallback has the same visibility and disposal behavior
+ok 155 - toolbar resize fallback has the same visibility and disposal behavior
+  ---
+  duration_ms: 1.7739
+  type: 'test'
+  ...
+# Subtest: Hunt never displays Raising care tools or menus and returning Home restores them
+ok 156 - Hunt never displays Raising care tools or menus and returning Home restores them
+  ---
+  duration_ms: 3.5951
+  type: 'test'
+  ...
+# Subtest: the five equipment classes and four plugin positions are preserved exactly
+ok 157 - the five equipment classes and four plugin positions are preserved exactly
+  ---
+  duration_ms: 4.9821
+  type: 'test'
+  ...
+# Subtest: the rope is the single equipped class and the rest are countable
+ok 158 - the rope is the single equipped class and the rest are countable
+  ---
+  duration_ms: 0.3832
+  type: 'test'
+  ...
+# Subtest: the six analyzer fields map onto the six recovered Hunt HUD nodes
+ok 159 - the six analyzer fields map onto the six recovered Hunt HUD nodes
+  ---
+  duration_ms: 0.4874
+  type: 'test'
+  ...
+# Subtest: the starting inventory follows the original initial_owned shape
+ok 160 - the starting inventory follows the original initial_owned shape
+  ---
+  duration_ms: 0.4932
+  type: 'test'
+  ...
+# Subtest: inventory quantity is capped at the per-item maximum
+ok 161 - inventory quantity is capped at the per-item maximum
+  ---
+  duration_ms: 0.4529
+  type: 'test'
+  ...
+# Subtest: availability is a Shop-side rule with its three recovered kinds
+ok 162 - availability is a Shop-side rule with its three recovered kinds
+  ---
+  duration_ms: 0.5635
+  type: 'test'
+  ...
+# Subtest: a class holds one item of its own class, and only if owned
+ok 163 - a class holds one item of its own class, and only if owned
+  ---
+  duration_ms: 1.4506
+  type: 'test'
+  ...
+# Subtest: a plugin occupies exactly one position
+ok 164 - a plugin occupies exactly one position
+  ---
+  duration_ms: 0.5682
+  type: 'test'
+  ...
+# Subtest: the Hunt HUD is dark until a plugin supplies each readout
+ok 165 - the Hunt HUD is dark until a plugin supplies each readout
+  ---
+  duration_ms: 1.2374
+  type: 'test'
+  ...
+# Subtest: analyzer fields report in the recovered order, not selection order
+ok 166 - analyzer fields report in the recovered order, not selection order
+  ---
+  duration_ms: 1.0065
+  type: 'test'
+  ...
+# Subtest: no item effect, no carry limit and no confirmation requirement is invented
+ok 167 - no item effect, no carry limit and no confirmation requirement is invented
+  ---
+  duration_ms: 0.9665
+  type: 'test'
+  ...
+# Subtest: the open unknowns stay declared as data
+ok 168 - the open unknowns stay declared as data
+  ---
+  duration_ms: 0.2984
+  type: 'test'
+  ...
+# Subtest: the loadout seam exposes the read-only surface and no companion
+ok 169 - the loadout seam exposes the read-only surface and no companion
+  ---
+  duration_ms: 55.4217
+  type: 'test'
+  ...
+# Subtest: the loadout adds no save field
+ok 170 - the loadout adds no save field
+  ---
+  duration_ms: 16.4912
+  type: 'test'
+  ...
+# Subtest: the screen stack allows only declared transitions
+ok 171 - the screen stack allows only declared transitions
+  ---
+  duration_ms: 4.8308
+  type: 'test'
+  ...
+# Subtest: the screen stack pops one level and unwinds only where an exit is declared
+ok 172 - the screen stack pops one level and unwinds only where an exit is declared
+  ---
+  duration_ms: 0.7288
+  type: 'test'
+  ...
+# Subtest: the gate list preserves the reference-backed count and invents no unlock rule
+ok 173 - the gate list preserves the reference-backed count and invents no unlock rule
+  ---
+  duration_ms: 1.0978
+  type: 'test'
+  ...
+# Subtest: every gate builds a 128x128 world that is deterministic, connected and distinct
+ok 174 - every gate builds a 128x128 world that is deterministic, connected and distinct
+  ---
+  duration_ms: 181.564
+  type: 'test'
+  ...
+# Subtest: the world is far larger than any supported viewport
+ok 175 - the world is far larger than any supported viewport
+  ---
+  duration_ms: 8.5262
+  type: 'test'
+  ...
+# Subtest: the player cannot walk into blocked terrain or out of the world
+ok 176 - the player cannot walk into blocked terrain or out of the world
+  ---
+  duration_ms: 42.5353
+  type: 'test'
+  ...
+# Subtest: the camera is a window over the world and is always clamped inside it
+ok 177 - the camera is a window over the world and is always clamped inside it
+  ---
+  duration_ms: 38.0708
+  type: 'test'
+  ...
+# Subtest: wild creatures wander inside a bounded radius and never react to the player
+ok 178 - wild creatures wander inside a bounded radius and never react to the player
+  ---
+  duration_ms: 10.8868
+  type: 'test'
+  ...
+# Subtest: VS2 walks Raising Home to the Hunt field and back through the published seam
+ok 179 - VS2 walks Raising Home to the Hunt field and back through the published seam
+  ---
+  duration_ms: 282.3479
+  type: 'test'
+  ...
+# Subtest: the Hunt toolbar is the ROM-verified mode with every slot still unbound
+ok 180 - the Hunt toolbar is the ROM-verified mode with every slot still unbound
+  ---
+  duration_ms: 24.1326
+  type: 'test'
+  ...
+# Subtest: Hunt exposes only the authorized native controls/readouts and no invented terrain taxonomy
+ok 181 - Hunt exposes only the authorized native controls/readouts and no invented terrain taxonomy
+  ---
+  duration_ms: 12.6688
+  type: 'test'
+  ...
+# Subtest: Hunt exploration adds no transient save fields, and reload preserves history at Raising Home
+ok 182 - Hunt exploration adds no transient save fields, and reload preserves history at Raising Home
+  ---
+  duration_ms: 35.7043
+  type: 'test'
+  ...
+# Subtest: starting a new game clears any expedition in progress
+ok 183 - starting a new game clears any expedition in progress
+  ---
+  duration_ms: 20.3615
+  type: 'test'
+  ...
+# Subtest: the legacy diagnostic grammar remains explicitly non-original
+ok 184 - the legacy diagnostic grammar remains explicitly non-original
+  ---
+  duration_ms: 2.2646
+  type: 'test'
+  ...
+# Subtest: a jitter shorter than 5px is ignored
+ok 185 - a jitter shorter than 5px is ignored
+  ---
+  duration_ms: 2.1802
+  type: 'test'
+  ...
+# Subtest: a 5px step is kept
+ok 186 - a 5px step is kept
+  ---
+  duration_ms: 0.4266
+  type: 'test'
+  ...
+# Subtest: a gap longer than 20px is interpolated
+ok 187 - a gap longer than 20px is interpolated
+  ---
+  duration_ms: 0.6643
+  type: 'test'
+  ...
+# Subtest: the stroke stores at most 20 points
+ok 188 - the stroke stores at most 20 points
+  ---
+  duration_ms: 0.7457
+  type: 'test'
+  ...
+# Subtest: a short scribble does not close
+ok 189 - a short scribble does not close
+  ---
+  duration_ms: 0.6666
+  type: 'test'
+  ...
+# Subtest: an open line with enough points still does not close
+ok 190 - an open line with enough points still does not close
+  ---
+  duration_ms: 0.5636
+  type: 'test'
+  ...
+# Subtest: a tiny loop fails the minimum extent
+ok 191 - a tiny loop fails the minimum extent
+  ---
+  duration_ms: 0.4243
+  type: 'test'
+  ...
+# Subtest: a closed loop that spans 25px and returns within 15px captures
+ok 192 - a closed loop that spans 25px and returns within 15px captures
+  ---
+  duration_ms: 1.7247
+  type: 'test'
+  ...
+# Subtest: tether distance uses the product four bands (not ROM-verified)
+ok 193 - tether distance uses the product four bands (not ROM-verified)
+  ---
+  duration_ms: 6.1417
+  type: 'test'
+  ...
+# Subtest: a diagnostic circle followed by release cannot allocate, register, remove or save an individual
+ok 194 - a diagnostic circle followed by release cannot allocate, register, remove or save an individual
+  ---
+  duration_ms: 114.1209
+  type: 'test'
+  ...
+# Subtest: a diagnostic circle followed by cancel cannot allocate, register, remove or save an individual
+ok 195 - a diagnostic circle followed by cancel cannot allocate, register, remove or save an individual
+  ---
+  duration_ms: 43.6444
+  type: 'test'
+  ...
+# Subtest: a diagnostic circle followed by exit cannot allocate, register, remove or save an individual
+ok 196 - a diagnostic circle followed by exit cannot allocate, register, remove or save an individual
+  ---
+  duration_ms: 40.0865
+  type: 'test'
+  ...
+# Subtest: a diagnostic circle followed by back cannot allocate, register, remove or save an individual
+ok 197 - a diagnostic circle followed by back cannot allocate, register, remove or save an individual
+  ---
+  duration_ms: 34.8526
+  type: 'test'
+  ...
+# Subtest: native initial HP and no card cannot turn a circle into a capacity check or a collected creature
+ok 198 - native initial HP and no card cannot turn a circle into a capacity check or a collected creature
+  ---
+  duration_ms: 18.8668
+  type: 'test'
+  ...
+# Subtest: a point on a polygon edge counts as inside
+ok 199 - a point on a polygon edge counts as inside
+  ---
+  duration_ms: 2.0606
+  type: 'test'
+  ...
+# Subtest: a stroke on empty ground does not start enclosure
+ok 200 - a stroke on empty ground does not start enclosure
+  ---
+  duration_ms: 59.0015
+  type: 'test'
+  ...
+# Subtest: a closed loop around a nearby wild leaves that individual on the field
+ok 201 - a closed loop around a nearby wild leaves that individual on the field
+  ---
+  duration_ms: 16.0808
+  type: 'test'
+  ...
+# Subtest: an unclosed scribble on a wild does not take it
+ok 202 - an unclosed scribble on a wild does not take it
+  ---
+  duration_ms: 21.0852
+  type: 'test'
+  ...
+# Subtest: owned memory cards encode max G as last occupied slot: 32 / 64 / 96
+ok 203 - owned memory cards encode max G as last occupied slot: 32 / 64 / 96
+  ---
+  duration_ms: 1.965
+  type: 'test'
+  ...
+# Subtest: over capacity is a compare against max, not a close-stroke subtract
+ok 204 - over capacity is a compare against max, not a close-stroke subtract
+  ---
+  duration_ms: 0.5206
+  type: 'test'
+  ...
+# Subtest: no owned card rejects the first bring-home (max 0)
+ok 205 - no owned card rejects the first bring-home (max 0)
+  ---
+  duration_ms: 0.4323
+  type: 'test'
+  ...
+# Subtest: a circle leaves the wild untouched before any capacity transaction
+ok 206 - a circle leaves the wild untouched before any capacity transaction
+  ---
+  duration_ms: 35.8419
+  type: 'test'
+  ...
+1..206
+# tests 206
+# suites 0
+# pass 206
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8454.5884

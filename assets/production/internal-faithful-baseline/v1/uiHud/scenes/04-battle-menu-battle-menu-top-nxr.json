@@ -1,0 +1,480 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 4,
+  "scenePath": "battle_menu/battle_menu_top.nxr",
+  "category": "Battle Menu / Setup",
+  "overlayOwner": "OVL10",
+  "sourceEvidence": {
+    "fileId": 111,
+    "fileName": "battle_menu_top.nxr",
+    "sha256": "016127349e286657d868aa97a780b5fd96612f4e72a36453b38d74a0c9523ea7",
+    "overlayMappingConfidence": "SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "MAIN",
+    "roleEvidence": "FILENAME_HEURISTIC"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [
+    {
+      "resourceIndex": 0,
+      "resourceName": "battle_field_name",
+      "cellCount": 11,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "battle_menu/battle_field_name.ncer",
+        "nanr": "battle_menu/battle_field_name.nanr",
+        "ncgr": null,
+        "ncbr": "battle_menu/battle_field_name.ncbr",
+        "nclr": "battle_menu/battle_field_name.nclr",
+        "nscr": null
+      },
+      "spriteWitness": "docs/art/production/ui/faithful-hd96/sprite-cell-witnesses-4x/battle_menu__battle_field_name__cells.png",
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    },
+    {
+      "resourceIndex": 1,
+      "resourceName": "battle_setting_window",
+      "cellCount": 11,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "battle_menu/battle_setting_window.ncer",
+        "nanr": "battle_menu/battle_setting_window.nanr",
+        "ncgr": null,
+        "ncbr": "battle_menu/battle_setting_window.ncbr",
+        "nclr": "battle_menu/battle_setting_window.nclr",
+        "nscr": null
+      },
+      "spriteWitness": "docs/art/production/ui/faithful-hd96/sprite-cell-witnesses-4x/battle_menu__battle_setting_window__cells.png",
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    },
+    {
+      "resourceIndex": 2,
+      "resourceName": "battle_setting_obj_main",
+      "cellCount": 23,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "battle_menu/battle_setting_obj_main.ncer",
+        "nanr": "battle_menu/battle_setting_obj_main.nanr",
+        "ncgr": null,
+        "ncbr": "battle_menu/battle_setting_obj_main.ncbr",
+        "nclr": "battle_menu/battle_setting_obj_main.nclr",
+        "nscr": null
+      },
+      "spriteWitness": "docs/art/production/ui/faithful-hd96/sprite-cell-witnesses-4x/battle_menu__battle_setting_obj_main__cells.png",
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "loc_digimon_0",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 24,
+        "y": 128
+      },
+      "portraitProjection": {
+        "x": 101.25,
+        "y": 690.0
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 1,
+      "name": "loc_digimon_1",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 50,
+        "y": 144
+      },
+      "portraitProjection": {
+        "x": 210.9375,
+        "y": 757.5
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 2,
+      "name": "loc_digimon_2",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 76,
+        "y": 128
+      },
+      "portraitProjection": {
+        "x": 320.625,
+        "y": 690.0
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 3,
+      "name": "loc_digimon_3",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 180,
+        "y": 128
+      },
+      "portraitProjection": {
+        "x": 759.375,
+        "y": 690.0
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 4,
+      "name": "loc_digimon_4",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 206,
+        "y": 144
+      },
+      "portraitProjection": {
+        "x": 869.0625,
+        "y": 757.5
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 5,
+      "name": "loc_digimon_5",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 232,
+        "y": 128
+      },
+      "portraitProjection": {
+        "x": 978.75,
+        "y": 690.0
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 6,
+      "name": "field_name",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 128,
+        "y": 52
+      },
+      "portraitProjection": {
+        "x": 540.0,
+        "y": 369.375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 7,
+      "name": "field_image",
+      "resourceIndex": 1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 128,
+        "y": 95
+      },
+      "portraitProjection": {
+        "x": 540.0,
+        "y": 550.7812
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 8,
+      "name": "touch_left",
+      "resourceIndex": 2,
+      "cellIndex": 15,
+      "sourcePosition": {
+        "x": 50,
+        "y": 72
+      },
+      "portraitProjection": {
+        "x": 210.9375,
+        "y": 453.75
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 9,
+      "name": "setting_arrow_left",
+      "resourceIndex": 2,
+      "cellIndex": 16,
+      "sourcePosition": {
+        "x": 50,
+        "y": 104
+      },
+      "portraitProjection": {
+        "x": 210.9375,
+        "y": 588.75
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 10,
+      "name": "touch_right",
+      "resourceIndex": 2,
+      "cellIndex": 15,
+      "sourcePosition": {
+        "x": 206,
+        "y": 72
+      },
+      "portraitProjection": {
+        "x": 869.0625,
+        "y": 453.75
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 11,
+      "name": "setting_arrow_right",
+      "resourceIndex": 2,
+      "cellIndex": 16,
+      "sourcePosition": {
+        "x": 206,
+        "y": 104
+      },
+      "portraitProjection": {
+        "x": 869.0625,
+        "y": 588.75
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 12,
+      "name": "team_name0",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 29,
+        "y": 13
+      },
+      "portraitProjection": {
+        "x": 122.3438,
+        "y": 204.8438
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 13,
+      "name": "team_name1",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 148,
+        "y": 13
+      },
+      "portraitProjection": {
+        "x": 624.375,
+        "y": 204.8438
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 14,
+      "name": "unnamed0015",
+      "resourceIndex": 2,
+      "cellIndex": 12,
+      "sourcePosition": {
+        "x": 72,
+        "y": 39
+      },
+      "portraitProjection": {
+        "x": 303.75,
+        "y": 314.5312
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 15,
+      "name": "col_setting0",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 11,
+        "y": 110
+      },
+      "portraitProjection": {
+        "x": 46.4062,
+        "y": 614.0625
+      },
+      "params": [
+        3,
+        0,
+        5,
+        2
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 16,
+      "name": "col_setting1",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 163,
+        "y": 108
+      },
+      "portraitProjection": {
+        "x": 687.6562,
+        "y": 605.625
+      },
+      "params": [
+        3,
+        0,
+        5,
+        2
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    }
+  ],
+  "dynamicVirtualNodeCount": 10,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

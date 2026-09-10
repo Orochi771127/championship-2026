@@ -4,6 +4,17 @@ const SUPPORTED_PLAYBACK = new Set([
 ]);
 const TICK_EPSILON = 1e-9;
 
+/** Pure sampling for a child advanced by whole, unit native ticks. */
+export function nativeAnimationCellAt(sequence,elapsed){
+  if(!sequence||!Number.isInteger(elapsed)||elapsed<0)return null;
+  const frames=sequence.frames,loop=sequence.loopStartFrame??0;
+  const duration=frames.slice(loop).reduce((sum,f)=>sum+f.ticks,0);
+  if(duration<=0)return null;
+  let ticks=sequence.playbackMode===2?elapsed%duration:Math.min(elapsed,duration-1);
+  for(let i=loop;i<frames.length;i++){if(ticks<frames[i].ticks)return frames[i].cell;ticks-=frames[i].ticks;}
+  return null;
+}
+
 function requireFinitePositive(value, label) {
   if (!Number.isFinite(value) || value <= 0) {
     throw new TypeError(`${label} must be a finite positive number`);

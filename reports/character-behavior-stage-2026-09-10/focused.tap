@@ -1,0 +1,286 @@
+TAP version 13
+# Subtest: 117 original OVL19 handler cases match the raw sequence selector; unknown notifications stay unknown
+ok 1 - 117 original OVL19 handler cases match the raw sequence selector; unknown notifications stay unknown
+  ---
+  duration_ms: 6.3653
+  type: 'test'
+  ...
+# Subtest: 232 original CPU entry branches choose reactions by hit variant, status and end-of-battle flag
+ok 2 - 232 original CPU entry branches choose reactions by hit variant, status and end-of-battle flag
+  ---
+  duration_ms: 1.0362
+  type: 'test'
+  ...
+# Subtest: all 49 original ARM9 SetIfChanged cases retain or reset elapsed time correctly
+ok 3 - all 49 original ARM9 SetIfChanged cases retain or reset elapsed time correctly
+  ---
+  duration_ms: 7.6947
+  type: 'test'
+  ...
+# Subtest: the four dispatch families select 7-10 and a down actor selects 15 without changing gameplay
+ok 4 - the four dispatch families select 7-10 and a down actor selects 15 without changing gameplay
+  ---
+  duration_ms: 7.2941
+  type: 'test'
+  ...
+# Subtest: native attack frames advance once per battle frame, stop at the end, and redraw never restarts them
+ok 5 - native attack frames advance once per battle frame, stop at the end, and redraw never restarts them
+  ---
+  duration_ms: 1.5665
+  type: 'test'
+  ...
+# Subtest: native force-and-seek starts attack frame 2 then restarts the same sequence at recovery frame 3 once
+ok 6 - native force-and-seek starts attack frame 2 then restarts the same sequence at recovery frame 3 once
+  ---
+  duration_ms: 0.7064
+  type: 'test'
+  ...
+# Subtest: reduced motion keeps the action identity; unsupported raw slots restore the original texture and anchor
+ok 7 - reduced motion keeps the action identity; unsupported raw slots restore the original texture and anchor
+  ---
+  duration_ms: 1.6784
+  type: 'test'
+  ...
+# Subtest: native actor snapshots freeze visual frames through exclusive/global pauses and late mounts
+ok 8 - native actor snapshots freeze visual frames through exclusive/global pauses and late mounts
+  ---
+  duration_ms: 0.9864
+  type: 'test'
+  ...
+# Subtest: all 13246 production Main cells retain verified per-frame packing, trim origin and current file hashes
+ok 9 - all 13246 production Main cells retain verified per-frame packing, trim origin and current file hashes
+  ---
+  duration_ms: 2120.7609
+  type: 'test'
+  ...
+# Subtest: battle animation is scoped to audited entities and rejects stale geometry hashes
+ok 10 - battle animation is scoped to audited entities and rejects stale geometry hashes
+  ---
+  duration_ms: 9.51
+  type: 'test'
+  ...
+# Subtest: all 640 OVL0 request/binding/status selectors match original CPU results
+ok 11 - all 640 OVL0 request/binding/status selectors match original CPU results
+  ---
+  duration_ms: 3.4169
+  type: 'test'
+  ...
+# Subtest: native raw modes match 9288 CPU updates, including stop, loop start and discarded overshoot
+ok 12 - native raw modes match 9288 CPU updates, including stop, loop start and discarded overshoot
+  ---
+  duration_ms: 39.3653
+  type: 'test'
+  ...
+# Subtest: same-species original stylus capture matches every animator call and all 476 rendered frames
+ok 13 - same-species original stylus capture matches every animator call and all 476 rendered frames
+  ---
+  duration_ms: 11.6861
+  type: 'test'
+  ...
+# Subtest: frame projection uses raw source textures and native flips, never archive aliases or GPU time
+ok 14 - frame projection uses raw source textures and native flips, never archive aliases or GPU time
+  ---
+  duration_ms: 6.0435
+  type: 'test'
+  ...
+# Subtest: every integrated character retains native frame identity and reduced-motion action transitions
+ok 15 - every integrated character retains native frame identity and reduced-motion action transitions
+  ---
+  duration_ms: 439.3118
+  type: 'test'
+  ...
+# Subtest: all 480 original CPU Cage/personality choices retain physical RNG channels and draw count
+ok 16 - all 480 original CPU Cage/personality choices retain physical RNG channels and draw count
+  ---
+  duration_ms: 7.1555
+  type: 'test'
+  ...
+# Subtest: 96 roaming targets equal the complete original Q12 and Nitro sine-table calculation
+ok 17 - 96 roaming targets equal the complete original Q12 and Nitro sine-table calculation
+  ---
+  duration_ms: 2.0494
+  type: 'test'
+  ...
+# Subtest: jump and tumble positions and completion match every original native handler frame
+ok 18 - jump and tumble positions and completion match every original native handler frame
+  ---
+  duration_ms: 2.0294
+  type: 'test'
+  ...
+# Subtest: 64 original peer choices retain reaction/follow/roam decisions and random draws
+ok 19 - 64 original peer choices retain reaction/follow/roam decisions and random draws
+  ---
+  duration_ms: 9.2606
+  type: 'test'
+  ...
+# Subtest: adult idle dispatch changes positions and native actions with no food, including every personality
+ok 20 - adult idle dispatch changes positions and native actions with no food, including every personality
+  ---
+  duration_ms: 138.2687
+  type: 'test'
+  ...
+# Subtest: every available adult Main bank can execute the spontaneous reaction set without a missing frame
+ok 21 - every available adult Main bank can execute the spontaneous reaction set without a missing frame
+  ---
+  duration_ms: 112.4729
+  type: 'test'
+  ...
+# Subtest: carrying position and velocity match 27 original CPU samples
+ok 22 - carrying position and velocity match 27 original CPU samples
+  ---
+  duration_ms: 4.5273
+  type: 'test'
+  ...
+# Subtest: flight friction bounce and obstruction branches match 96 original CPU samples
+ok 23 - flight friction bounce and obstruction branches match 96 original CPU samples
+  ---
+  duration_ms: 11.528
+  type: 'test'
+  ...
+# Subtest: 56 encoded reactions retain original fixed-frame selection and native placement
+ok 24 - 56 encoded reactions retain original fixed-frame selection and native placement
+  ---
+  duration_ms: 3.546
+  type: 'test'
+  ...
+# Subtest: all 96 native status combinations and 23136 updates retain rotation and sleep priority
+ok 25 - all 96 native status combinations and 23136 updates retain rotation and sleep priority
+  ---
+  duration_ms: 82.6785
+  type: 'test'
+  ...
+# Subtest: re-entering idle preserves a partially played Main frame and only spends the native idle draw
+ok 26 - re-entering idle preserves a partially played Main frame and only spends the native idle draw
+  ---
+  duration_ms: 8.9837
+  type: 'test'
+  ...
+# Subtest: held resident advances on the app clock, releases into native flight, lands and persists its original cage
+ok 27 - held resident advances on the app clock, releases into native flight, lands and persists its original cage
+  ---
+  duration_ms: 349.4153
+  type: 'test'
+  ...
+# Subtest: controlled neglected-adult save follows native disappearance and Continue does not resurrect the released starter
+ok 28 - controlled neglected-adult save follows native disappearance and Continue does not resurrect the released starter
+  ---
+  duration_ms: 226.2903
+  type: 'test'
+  ...
+# Subtest: normal ground relocation runs the original Cage program once; same-Cage drops do not retrain
+ok 29 - normal ground relocation runs the original Cage program once; same-Cage drops do not retrain
+  ---
+  duration_ms: 890.3364
+  type: 'test'
+  ...
+# Subtest: normal food, sleep and repeated days reach automatic evolution and retain identity across Save/Continue
+ok 30 - normal food, sleep and repeated days reach automatic evolution and retain identity across Save/Continue
+  ---
+  duration_ms: 1888.1195
+  type: 'test'
+  ...
+# Subtest: new-game hatch, food, two-pass night, original calendar acknowledgement and Continue share one durable state
+ok 31 - new-game hatch, food, two-pass night, original calendar acknowledgement and Continue share one durable state
+  ---
+  duration_ms: 356.3732
+  type: 'test'
+  ...
+# Subtest: failed day-end save preserves the last complete save and retry never settles overnight twice
+ok 32 - failed day-end save preserves the last complete save and retry never settles overnight twice
+  ---
+  duration_ms: 150.1407
+  type: 'test'
+  ...
+# Subtest: Continue from the calendar save settles the same pending night exactly once with the same RNG and ground objects
+ok 33 - Continue from the calendar save settles the same pending night exactly once with the same RNG and ground objects
+  ---
+  duration_ms: 342.452
+  type: 'test'
+  ...
+# Subtest: eight-day calendar registration, title wins and championship countdown match 1024 original CPU cases
+ok 34 - eight-day calendar registration, title wins and championship countdown match 1024 original CPU cases
+  ---
+  duration_ms: 53.3644
+  type: 'test'
+  ...
+# Subtest: lifetime disappearance completes the original state-21 sequence and releases only after its effect ends
+ok 35 - lifetime disappearance completes the original state-21 sequence and releases only after its effect ends
+  ---
+  duration_ms: 3.2922
+  type: 'test'
+  ...
+# Subtest: training label lanes and completion follow original CPU frames for zero through ten commands
+ok 36 - training label lanes and completion follow original CPU frames for zero through ten commands
+  ---
+  duration_ms: 2.8176
+  type: 'test'
+  ...
+# Subtest: all 28 Cage training writers match native seasonal, level, bound and blocked outcomes
+ok 37 - all 28 Cage training writers match native seasonal, level, bound and blocked outcomes
+  ---
+  duration_ms: 130.6185
+  type: 'test'
+  ...
+# Subtest: every species and forced lifetime outcome matches the original rebirth selector
+ok 38 - every species and forced lifetime outcome matches the original rebirth selector
+  ---
+  duration_ms: 93.539
+  type: 'test'
+  ...
+# Subtest: Cage capacity and shared forty-slot waste allocation match the original allocator
+ok 39 - Cage capacity and shared forty-slot waste allocation match the original allocator
+  ---
+  duration_ms: 4.4986
+  type: 'test'
+  ...
+# Subtest: ordinary evolution and rebirth preserve all original phase boundaries and commit at frame 272
+ok 40 - ordinary evolution and rebirth preserve all original phase boundaries and commit at frame 272
+  ---
+  duration_ms: 9.6828
+  type: 'test'
+  ...
+# Subtest: all original evolution predicates, order, ancestry, rank and capacity outcomes match the original CPU
+ok 41 - all original evolution predicates, order, ancestry, rank and capacity outcomes match the original CPU
+  ---
+  duration_ms: 871.6672
+  type: 'test'
+  ...
+# Subtest: sleep durations and interrupted/full sleep writes match 880 original entry/exit pairs
+ok 42 - sleep durations and interrupted/full sleep writes match 880 original entry/exit pairs
+  ---
+  duration_ms: 705.3708
+  type: 'test'
+  ...
+# Subtest: ordered overnight writes, food, illness, peers and Cage effects match 168 original CPU calls
+ok 43 - ordered overnight writes, food, illness, peers and Cage effects match 168 original CPU calls
+  ---
+  duration_ms: 4034.9027
+  type: 'test'
+  ...
+# Subtest: live growth with populated Cage lists matches original CPU profile, actor and RNG writes
+ok 44 - live growth with populated Cage lists matches original CPU profile, actor and RNG writes
+  ---
+  duration_ms: 41.0251
+  type: 'test'
+  ...
+# Subtest: 104 original reaction handler variants preserve every flip, alternate request and completion update
+ok 45 - 104 original reaction handler variants preserve every flip, alternate request and completion update
+  ---
+  duration_ms: 93.1936
+  type: 'test'
+  ...
+# Subtest: all 220 adult species bindings execute all 26 timed/animation reactions through their own Main bank
+ok 46 - all 220 adult species bindings execute all 26 timed/animation reactions through their own Main bank
+  ---
+  duration_ms: 2669.0785
+  type: 'test'
+  ...
+1..46
+# tests 46
+# suites 0
+# pass 46
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7411.2228

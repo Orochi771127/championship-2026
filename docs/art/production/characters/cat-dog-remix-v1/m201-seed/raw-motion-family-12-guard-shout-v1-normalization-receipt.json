@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m201_agumon",
+  "candidateStrip": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/raw-motion-family-12-guard-shout-v1.png",
+  "candidateStripSha256": "BA3D99178C7A175C8009F8951A7D48FA1DE63DC90A80232965C751A06AE8FD4C",
+  "backgroundExtraction": "EDGE_CONNECTED_BRIGHT_NEUTRAL_CHECKERBOARD",
+  "removedBackgroundPixels": 1184339,
+  "splitPolicy": "NEAREST_TRANSPARENT_COLUMN_RUN_AROUND_NOMINAL_BOUNDARY",
+  "splitBoundaries": [
+    0,
+    470,
+    940,
+    1411,
+    1881
+  ],
+  "slotCount": 4,
+  "slots": [
+    {
+      "slot": 0,
+      "cell": 55,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-12-guard-shout-v1-slot-00-cell-055.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-055-remix-candidate.png",
+      "outputSha256": "DD87054D1D7D6771B20A6A3101F93F226BC049337302CF0EB516B4CFAAB83E84"
+    },
+    {
+      "slot": 1,
+      "cell": 57,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-12-guard-shout-v1-slot-01-cell-057.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-057-remix-candidate.png",
+      "outputSha256": "3745CF6194A4AFC837874528219DFD0C8969C639C91D465420C0BA633DE5FFEB"
+    },
+    {
+      "slot": 2,
+      "cell": 58,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-12-guard-shout-v1-slot-02-cell-058.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-058-remix-candidate.png",
+      "outputSha256": "BB722A250E0FC920E6E5ACD5FE7B364837AE4E39301CB738B46C42A74DC53892"
+    },
+    {
+      "slot": 3,
+      "cell": 59,
+      "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+      "normalizationInput": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/motion-family-normalization-inputs/raw-motion-family-12-guard-shout-v1-slot-03-cell-059.png",
+      "output": "docs/art/production/characters/cat-dog-remix-v1/m201-seed/m201-main-cell-059-remix-candidate.png",
+      "outputSha256": "088E7DD40F257FC91C9AC2D10410C235AC60D44BFDFCDAE9D143A1F06C3A149D"
+    }
+  ],
+  "state": "TECHNICAL_CANVAS_PASS_VISUAL_AND_LANDMARK_REVIEW_REQUIRED",
+  "runtimeEligible": false,
+  "shippingReady": false
+}

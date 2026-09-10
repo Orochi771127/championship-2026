@@ -1,0 +1,24 @@
+{
+  "candidateSource": "docs/art/production/characters/appearance-refresh-v1/_work/identity-roster-group2/m347_bakemon",
+  "entityId": "m347_bakemon",
+  "findings": [
+    "Dark feline face mask, yellow eyes and cream cheek strip establish a cat-faced ghost, retaining hanging cloth edges and lower mouth opening.",
+    "One source standard pose only. Appearance direction is reviewed, but pose sampling remains incomplete and cannot pass the setting-stage gate."
+  ],
+  "fullMotionQa": "NOT_RUN",
+  "identityDirectionVersion": "creature-identity-v1",
+  "identityVerdict": "PASS_IDENTITY_DIRECTION",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "reviewMethod": "Actually viewed original/new comparison and native/enlarged authored contact board; independently compiled adopted pixels.",
+  "reviewer": "root / independent review of designer single-pose candidate",
+  "runtimePromotionGranted": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "20dd1648d5e57393e18fba1b0c9b5eaf79d2d89c16a690105c3bd48e5a42fc5b",
+  "sourceComparisonSha256": "69c31396fb1b3ef5cd978811e8f5998ad3c35955494bde1c1944cc6181eacbf8",
+  "technicalQaSha256": "29341d2e434562402b5b454ec6aeec9a34462a0801ee21e251ea3cf6373d61a8",
+  "unresolvedBlockingIssues": [
+    "Additional source representative poses and continuity review required before setting acceptance."
+  ],
+  "verdict": "STANDARD_POSE_REVIEWED_NOT_SETTING_PASS"
+}

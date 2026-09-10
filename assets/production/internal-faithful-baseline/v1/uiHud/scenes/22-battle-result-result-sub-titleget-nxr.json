@@ -1,0 +1,930 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 22,
+  "scenePath": "battle_result/result_sub_titleget.nxr",
+  "category": "Battle Result",
+  "overlayOwner": "OVL8",
+  "sourceEvidence": {
+    "fileId": 218,
+    "fileName": "result_sub_titleget.nxr",
+    "sha256": "0d40e38036bb8196be2ab697bf9b6d2eaa0dea376b6c94649c77517c56abade1",
+    "overlayMappingConfidence": "SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "SUB",
+    "roleEvidence": "FILENAME_HEURISTIC"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [
+    {
+      "resourceIndex": 0,
+      "resourceName": "result_obj_main",
+      "cellCount": 67,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "battle_result/result_obj_main.ncer",
+        "nanr": "battle_result/result_obj_main.nanr",
+        "ncgr": null,
+        "ncbr": "battle_result/result_obj_main.ncbr",
+        "nclr": "battle_result/result_obj_main.nclr",
+        "nscr": null
+      },
+      "spriteWitness": "docs/art/production/ui/faithful-hd96/sprite-cell-witnesses-4x/battle_result__result_obj_main__cells.png",
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "medal1",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 16,
+        "y": 130
+      },
+      "portraitProjection": {
+        "x": 67.5,
+        "y": 1508.4375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 1,
+      "name": "medal2",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 56,
+        "y": 130
+      },
+      "portraitProjection": {
+        "x": 236.25,
+        "y": 1508.4375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 2,
+      "name": "medal3",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 96,
+        "y": 130
+      },
+      "portraitProjection": {
+        "x": 405.0,
+        "y": 1508.4375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 3,
+      "name": "medal4",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 136,
+        "y": 130
+      },
+      "portraitProjection": {
+        "x": 573.75,
+        "y": 1508.4375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 4,
+      "name": "medal5",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 176,
+        "y": 130
+      },
+      "portraitProjection": {
+        "x": 742.5,
+        "y": 1508.4375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 5,
+      "name": "medal6",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 216,
+        "y": 130
+      },
+      "portraitProjection": {
+        "x": 911.25,
+        "y": 1508.4375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 6,
+      "name": "medal7",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 256,
+        "y": 130
+      },
+      "portraitProjection": {
+        "x": 1080.0,
+        "y": 1508.4375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 7,
+      "name": "title_name",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 128,
+        "y": 32
+      },
+      "portraitProjection": {
+        "x": 540.0,
+        "y": 1095.0
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 8,
+      "name": "title_medal_get",
+      "resourceIndex": 0,
+      "cellIndex": 30,
+      "sourcePosition": {
+        "x": 56,
+        "y": 88
+      },
+      "portraitProjection": {
+        "x": 236.25,
+        "y": 1331.25
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 9,
+      "name": "medal",
+      "resourceIndex": -1,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 120,
+        "y": 52
+      },
+      "portraitProjection": {
+        "x": 506.25,
+        "y": 1179.375
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 10,
+      "name": "number_brake",
+      "resourceIndex": 0,
+      "cellIndex": 26,
+      "sourcePosition": {
+        "x": 96,
+        "y": 101
+      },
+      "portraitProjection": {
+        "x": 405.0,
+        "y": 1386.0938
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 11,
+      "name": "tamer_rank_num",
+      "resourceIndex": 0,
+      "cellIndex": 25,
+      "sourcePosition": {
+        "x": 87,
+        "y": 93
+      },
+      "portraitProjection": {
+        "x": 367.0312,
+        "y": 1352.3438
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 12,
+      "name": "case_start",
+      "resourceIndex": 0,
+      "cellIndex": 29,
+      "sourcePosition": {
+        "x": 4,
+        "y": 115
+      },
+      "portraitProjection": {
+        "x": 16.875,
+        "y": 1445.1562
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 13,
+      "name": "unnamed0036",
+      "resourceIndex": 0,
+      "cellIndex": 29,
+      "sourcePosition": {
+        "x": 44,
+        "y": 115
+      },
+      "portraitProjection": {
+        "x": 185.625,
+        "y": 1445.1562
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 14,
+      "name": "unnamed0035",
+      "resourceIndex": 0,
+      "cellIndex": 29,
+      "sourcePosition": {
+        "x": 84,
+        "y": 115
+      },
+      "portraitProjection": {
+        "x": 354.375,
+        "y": 1445.1562
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 15,
+      "name": "unnamed0034",
+      "resourceIndex": 0,
+      "cellIndex": 29,
+      "sourcePosition": {
+        "x": 124,
+        "y": 115
+      },
+      "portraitProjection": {
+        "x": 523.125,
+        "y": 1445.1562
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 16,
+      "name": "unnamed0033",
+      "resourceIndex": 0,
+      "cellIndex": 29,
+      "sourcePosition": {
+        "x": 164,
+        "y": 115
+      },
+      "portraitProjection": {
+        "x": 691.875,
+        "y": 1445.1562
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 17,
+      "name": "unnamed0032",
+      "resourceIndex": 0,
+      "cellIndex": 29,
+      "sourcePosition": {
+        "x": 204,
+        "y": 115
+      },
+      "portraitProjection": {
+        "x": 860.625,
+        "y": 1445.1562
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 18,
+      "name": "case_end",
+      "resourceIndex": 0,
+      "cellIndex": 29,
+      "sourcePosition": {
+        "x": 244,
+        "y": 115
+      },
+      "portraitProjection": {
+        "x": 1029.375,
+        "y": 1445.1562
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 19,
+      "name": "bar_start",
+      "resourceIndex": 0,
+      "cellIndex": 28,
+      "sourcePosition": {
+        "x": 0,
+        "y": 113
+      },
+      "portraitProjection": {
+        "x": 0.0,
+        "y": 1436.7188
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 20,
+      "name": "unnamed0029",
+      "resourceIndex": 0,
+      "cellIndex": 28,
+      "sourcePosition": {
+        "x": 32,
+        "y": 113
+      },
+      "portraitProjection": {
+        "x": 135.0,
+        "y": 1436.7188
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 21,
+      "name": "unnamed0028",
+      "resourceIndex": 0,
+      "cellIndex": 28,
+      "sourcePosition": {
+        "x": 64,
+        "y": 113
+      },
+      "portraitProjection": {
+        "x": 270.0,
+        "y": 1436.7188
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 22,
+      "name": "unnamed0027",
+      "resourceIndex": 0,
+      "cellIndex": 28,
+      "sourcePosition": {
+        "x": 96,
+        "y": 113
+      },
+      "portraitProjection": {
+        "x": 405.0,
+        "y": 1436.7188
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 23,
+      "name": "unnamed0026",
+      "resourceIndex": 0,
+      "cellIndex": 28,
+      "sourcePosition": {
+        "x": 128,
+        "y": 113
+      },
+      "portraitProjection": {
+        "x": 540.0,
+        "y": 1436.7188
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 24,
+      "name": "unnamed0025",
+      "resourceIndex": 0,
+      "cellIndex": 28,
+      "sourcePosition": {
+        "x": 160,
+        "y": 113
+      },
+      "portraitProjection": {
+        "x": 675.0,
+        "y": 1436.7188
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 25,
+      "name": "unnamed0024",
+      "resourceIndex": 0,
+      "cellIndex": 28,
+      "sourcePosition": {
+        "x": 192,
+        "y": 113
+      },
+      "portraitProjection": {
+        "x": 810.0,
+        "y": 1436.7188
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 26,
+      "name": "unnamed0023",
+      "resourceIndex": 0,
+      "cellIndex": 28,
+      "sourcePosition": {
+        "x": 224,
+        "y": 113
+      },
+      "portraitProjection": {
+        "x": 945.0,
+        "y": 1436.7188
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 27,
+      "name": "unnamed0022",
+      "resourceIndex": 0,
+      "cellIndex": 28,
+      "sourcePosition": {
+        "x": 256,
+        "y": 113
+      },
+      "portraitProjection": {
+        "x": 1080.0,
+        "y": 1436.7188
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 28,
+      "name": "bar_end",
+      "resourceIndex": 0,
+      "cellIndex": 28,
+      "sourcePosition": {
+        "x": 288,
+        "y": 113
+      },
+      "portraitProjection": {
+        "x": 1215.0,
+        "y": 1436.7188
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 29,
+      "name": "unnamed0009",
+      "resourceIndex": 0,
+      "cellIndex": 24,
+      "sourcePosition": {
+        "x": 0,
+        "y": 90
+      },
+      "portraitProjection": {
+        "x": 0.0,
+        "y": 1339.6875
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 30,
+      "name": "unnamed0007",
+      "resourceIndex": 0,
+      "cellIndex": 8,
+      "sourcePosition": {
+        "x": 220,
+        "y": 136
+      },
+      "portraitProjection": {
+        "x": 928.125,
+        "y": 1533.75
+      },
+      "params": [
+        3,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 31,
+      "name": "unnamed0006",
+      "resourceIndex": 0,
+      "cellIndex": 6,
+      "sourcePosition": {
+        "x": 8,
+        "y": 136
+      },
+      "portraitProjection": {
+        "x": 33.75,
+        "y": 1533.75
+      },
+      "params": [
+        3,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 32,
+      "name": "unnamed0000",
+      "resourceIndex": 0,
+      "cellIndex": 0,
+      "sourcePosition": {
+        "x": 8,
+        "y": 6
+      },
+      "portraitProjection": {
+        "x": 33.75,
+        "y": 985.3125
+      },
+      "params": [
+        3,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 33,
+      "name": "unnamed0002",
+      "resourceIndex": 0,
+      "cellIndex": 2,
+      "sourcePosition": {
+        "x": 220,
+        "y": 6
+      },
+      "portraitProjection": {
+        "x": 928.125,
+        "y": 985.3125
+      },
+      "params": [
+        3,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 34,
+      "name": "unnamed0008",
+      "resourceIndex": 0,
+      "cellIndex": 7,
+      "sourcePosition": {
+        "x": 24,
+        "y": 144
+      },
+      "portraitProjection": {
+        "x": 101.25,
+        "y": 1567.5
+      },
+      "params": [
+        4,
+        0,
+        26,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 35,
+      "name": "unnamed0003",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 8,
+        "y": 46
+      },
+      "portraitProjection": {
+        "x": 33.75,
+        "y": 1154.0625
+      },
+      "params": [
+        4,
+        0,
+        1,
+        12
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 36,
+      "name": "unnamed0001",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 24,
+        "y": 6
+      },
+      "portraitProjection": {
+        "x": 101.25,
+        "y": 985.3125
+      },
+      "params": [
+        4,
+        0,
+        26,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 37,
+      "name": "unnamed0005",
+      "resourceIndex": 0,
+      "cellIndex": 5,
+      "sourcePosition": {
+        "x": 236,
+        "y": 30
+      },
+      "portraitProjection": {
+        "x": 995.625,
+        "y": 1086.5625
+      },
+      "params": [
+        4,
+        0,
+        1,
+        14
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 38,
+      "name": "unnamed0004",
+      "resourceIndex": 0,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 24,
+        "y": 16
+      },
+      "portraitProjection": {
+        "x": 101.25,
+        "y": 1027.5
+      },
+      "params": [
+        5,
+        0,
+        27,
+        16
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    }
+  ],
+  "dynamicVirtualNodeCount": 9,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

@@ -1,0 +1,92 @@
+{
+  "date": "2026-09-08",
+  "status": "PASS_BOUNDED_ORIGINAL_CAPTURE_CONFIRMATION",
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "inputAuthority": "DeSmuME stylus API only; no emulated memory writes or forced animation completion",
+  "nativeStylusUpdatesCompared": 198,
+  "boundaryDistances": [
+    39,
+    40,
+    79,
+    80,
+    160,
+    161
+  ],
+  "boundaryUpdates": 15,
+  "observedFrames": {
+    "hpZero": 351,
+    "handReady": 367,
+    "onCard": 480
+  },
+  "originalCard": {
+    "speciesIndex": 10,
+    "currentHp": 210,
+    "maxHp": 210
+  },
+  "controlledHomeCpuReplay": {
+    "initialHp": 210,
+    "damageQ12": 3584,
+    "pullTicks": 240,
+    "lastPull": [
+      240,
+      0,
+      120,
+      0
+    ],
+    "wildHpAtCapture": 0,
+    "cardHp": 210,
+    "homeHp": 210,
+    "homeCount": 1,
+    "cardCountAfterHome": 0
+  },
+  "liveVideo": {
+    "mediaTimeSeconds": 64.029113,
+    "playerClockLabel": "01:05",
+    "observation": "Two Pull labels; blue tether from left target to pointer. Local archived V08 and V50 frames separately re-inspected and hashes verified."
+  },
+  "runtimeModified": false,
+  "normalWebCaptureAccepted": false,
+  "physicalDeviceAccepted": false,
+  "batterySaveAccepted": false,
+  "batterySaveNote": "DeSmuME warned that battery save was RAM-only. Capture/card evidence uses the loaded checkpoint and no battery-save claim is made.",
+  "limits": [
+    "Japanese YDIJ versus English video; no binary version identity claim",
+    "One original touch encounter, not all species/tools/AI branches",
+    "CPU boundary replay uses declared host adapters and controlled state",
+    "No normal browser capture or new tool integration"
+  ],
+  "hashes": [
+    {
+      "path": "/R:/Projects/Championship2026/championship-2026/reports/hunt-capture-confirmation-2026-09-08/native-touch-replay.json",
+      "sha256": "60261235caa32700b9428835353daaa984d060e36cad7451e4d44b74deabb283"
+    },
+    {
+      "path": "/R:/Projects/Championship2026/championship-2026/reports/hunt-capture-confirmation-2026-09-08/native-distance-and-card.json",
+      "sha256": "e72fde2165aef6a41b7b30cb1816f23ef2ce91aab575b8281b9529aa6fbb3ee8"
+    },
+    {
+      "path": "/R:/Projects/Championship2026/championship-2026/reports/hunt-capture-confirmation-2026-09-08/verify-native-replay.mjs",
+      "sha256": "580020a34bbb814f6b805392a8b4561dc7abb79a89bf0e0c7ee09fd25b742021"
+    },
+    {
+      "path": "R:/Projects/Championship2026/_archive/hunt-confirmation-2026-09-08/circle_before_release.png",
+      "sha256": "d60716eda2cee07410e0de3bac136cdb590378e1abf8e342fdd306af4f6f6fae"
+    },
+    {
+      "path": "R:/Projects/Championship2026/_archive/hunt-confirmation-2026-09-08/bound_after_release.png",
+      "sha256": "fa73e7a95f01af3b22f2b4d39db260258b866dcf98741707edddaa204cd8fc02"
+    },
+    {
+      "path": "R:/Projects/Championship2026/_archive/hunt-confirmation-2026-09-08/down_hand_ready.png",
+      "sha256": "ad21cee808a6d3c804ee967b562b5b3220b6fcba3a7793f41d235ad436f92270"
+    },
+    {
+      "path": "R:/Projects/Championship2026/_archive/hunt-confirmation-2026-09-08/on_card.png",
+      "sha256": "306ddcb7aff3fc3265eff646c629cd0a9070aa019c8f5eb0fef3f31aa6b81682"
+    },
+    {
+      "path": "R:/Projects/Championship2026/_archive/hunt-confirmation-2026-09-08/video-pull-live.png",
+      "sha256": "66ed770334808af100d4ff900f7eedb20053c2d402ca5635b4efdb0ff5e95011"
+    }
+  ]
+}

@@ -1,0 +1,1395 @@
+{
+  "classification": "RESEARCH_ONLY",
+  "coverage": {
+    "coveredReuseSlotCount": 23,
+    "coveredReuseSlots": [
+      "m201_agumon/main/cell_000",
+      "m201_agumon/main/cell_004",
+      "m201_agumon/main/cell_006",
+      "m201_agumon/main/cell_009",
+      "m201_agumon/main/cell_012",
+      "m201_agumon/main/cell_016",
+      "m201_agumon/main/cell_023",
+      "m201_agumon/main/cell_027",
+      "m201_agumon/main/cell_031",
+      "m201_agumon/main/cell_033",
+      "m201_agumon/main/cell_044",
+      "m201_agumon/main/cell_046",
+      "m201_agumon/main/cell_047",
+      "m201_agumon/main/cell_054",
+      "m201_agumon/main/cell_056",
+      "m201_agumon/main/cell_059",
+      "m201_agumon/main/cell_061",
+      "m201_agumon/main/cell_064",
+      "m201_agumon/sub/cell_000",
+      "m201_agumon/sub/cell_004",
+      "m201_agumon/sub/cell_006",
+      "m201_agumon/sub/cell_014",
+      "m201_agumon/sub/cell_016"
+    ],
+    "remainingMasterCount": 35,
+    "remainingMasterIds": [
+      "m201_agumon:master:d5d469d86a99198c",
+      "m201_agumon:master:da4db7338460395f",
+      "m201_agumon:master:10a3381534ed9ade",
+      "m201_agumon:master:109dc6c3bedb0ec8",
+      "m201_agumon:master:50566dabd9a32bf2",
+      "m201_agumon:master:dfa28e1f5511bf76",
+      "m201_agumon:master:1a64724d21b1552d",
+      "m201_agumon:master:deb7dcd7ca52dbba",
+      "m201_agumon:master:81e7d5b443b15d18",
+      "m201_agumon:master:333ff820accbfa00",
+      "m201_agumon:master:da660f13ee25aece",
+      "m201_agumon:master:b5e676bb638c8f6a",
+      "m201_agumon:master:46a2dde9784df35d",
+      "m201_agumon:master:b8b47c5d0f67bdf9",
+      "m201_agumon:master:c30885547f1a1671",
+      "m201_agumon:master:273ff307aa55b6dc",
+      "m201_agumon:master:89924558f957fb3d",
+      "m201_agumon:master:6687b2060c8a5117",
+      "m201_agumon:master:8d1c5e8c52bd7896",
+      "m201_agumon:master:726bed6436750883",
+      "m201_agumon:master:4e1471f24d0b7c94",
+      "m201_agumon:master:cc1d763d31ef2865",
+      "m201_agumon:master:95ddb27027aef6c4",
+      "m201_agumon:master:6af1cea2c5d836cd",
+      "m201_agumon:master:96985b55248a1b8d",
+      "m201_agumon:master:c117ffc7cec7bca8",
+      "m201_agumon:master:d10da632d17483fa",
+      "m201_agumon:master:a72be42bc917b372",
+      "m201_agumon:master:87185e50ff210ecf",
+      "m201_agumon:master:1e4e7229f4f3e9fe",
+      "m201_agumon:master:57b18f79dfb865f5",
+      "m201_agumon:master:237ae480f60f1eb6",
+      "m201_agumon:master:8ff7e364046f72e3",
+      "m201_agumon:master:52bd0371352247fd",
+      "m201_agumon:master:6392412ecac43967"
+    ],
+    "selectedPoseCount": 12,
+    "selectedUniqueMasters": 12,
+    "sourceSlots": 83,
+    "sourceUniqueMasters": 47
+  },
+  "entityId": "m201_agumon",
+  "evidence": {
+    "generic08PngsUsed": false,
+    "guideIndexSha256": "d2e53625cf41eaf8030a7020cfe59591a55855d2b6665f98627f1ad93eb27b77",
+    "mainCellsVisuallyReviewed": 65,
+    "motionContractSha256": "0f7b37e5972f47cf56e151bfcb71fcee77f60b142266f59908baa9ac127c7c3b",
+    "originAuditSha256": "293b6d49b984e67007ed252aefcb037c9a7c1e03062fbbea1865fd7b5832dd3a",
+    "sourceReuseSha256": "4da0c874fd88eda7d2066179eb7439402d31cc36876cad8b7f4e551eb4dcb3dd",
+    "subCellsVisuallyReviewed": 18
+  },
+  "geometry": {
+    "anchor": [
+      0.39655172413793105,
+      0.7282608695652174
+    ],
+    "cellWiseFitOrBottomAlignment": "FORBIDDEN",
+    "commonSourceOrigin": [
+      184,
+      268
+    ],
+    "logicalCanvas": [
+      464,
+      368
+    ],
+    "sourcePixelScale": 12,
+    "transform": "logicalX=184+12*nativeX; logicalY=268+12*nativeY"
+  },
+  "ownerSelectedDesign": "A",
+  "poses": [
+    {
+      "actionSemantics": "UNKNOWN_REQUIRES_TRACE",
+      "cell": 0,
+      "hiddenJoints": "NOT_ANNOTATED",
+      "masterId": "m201_agumon:master:e87551bbd8c22c60",
+      "observedRegions": [
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "muzzle_front",
+          "logicalReviewRegion": [
+            88,
+            112,
+            124,
+            148
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -8,
+            -13,
+            -5,
+            -10
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "visible_eye",
+          "logicalReviewRegion": [
+            172,
+            100,
+            208,
+            136
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -1,
+            -14,
+            2,
+            -11
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "forward_forelimb_tip",
+          "logicalReviewRegion": [
+            88,
+            208,
+            136,
+            244
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -8,
+            -5,
+            -4,
+            -2
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "left_visible_toe_cluster",
+          "logicalReviewRegion": [
+            112,
+            244,
+            184,
+            280
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -6,
+            -2,
+            0,
+            1
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "right_visible_toe_cluster",
+          "logicalReviewRegion": [
+            184,
+            256,
+            256,
+            292
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            0,
+            -1,
+            6,
+            2
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        }
+      ],
+      "poseGeometryEvidence": "VERIFIED_CORRECTED_SOURCE_GUIDE",
+      "redesignConstraint": "鎖定 A 設計的基準比例；保持頭朝畫面左、前肢端點與兩足分離。",
+      "redesignedPoseQa": "NOT_RENDERED_NOT_APPROVED",
+      "reuseMembers": [
+        "m201_agumon/main/cell_000",
+        "m201_agumon/main/cell_004",
+        "m201_agumon/main/cell_006",
+        "m201_agumon/sub/cell_000"
+      ],
+      "side": "main",
+      "sourceGuide": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/main/cell-000.png",
+      "sourceGuideSha256": "af8b7014fbc319b96e639e4f375f9cb71da44337e9fb92c3161fd5bfaaa1db26",
+      "sourceLogicalAlphaBounds": [
+        88,
+        76,
+        280,
+        292
+      ],
+      "sourceNativeAlphaBounds": [
+        -8,
+        -16,
+        8,
+        2
+      ],
+      "sourcePoseInspection": "VISUALLY_INSPECTED",
+      "sourceSequenceReferences": [
+        {
+          "frameIndex": 0,
+          "loopStartFrame": 0,
+          "rawPlaybackMode": 2,
+          "sequenceId": 0,
+          "ticks": 31
+        }
+      ],
+      "texture": "m201_agumon/main/cell_000",
+      "visibleDescription": "直立基準；可見短前肢、兩足、尾端"
+    },
+    {
+      "actionSemantics": "UNKNOWN_REQUIRES_TRACE",
+      "cell": 9,
+      "hiddenJoints": "NOT_ANNOTATED",
+      "masterId": "m201_agumon:master:04eeb60efef3363e",
+      "observedRegions": [
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "vertical_open_mouth_region",
+          "logicalReviewRegion": [
+            328,
+            64,
+            376,
+            148
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            12,
+            -17,
+            16,
+            -10
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "raised_left_extremity",
+          "logicalReviewRegion": [
+            196,
+            76,
+            244,
+            148
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            1,
+            -16,
+            5,
+            -10
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "lower_visible_claw_cluster",
+          "logicalReviewRegion": [
+            196,
+            208,
+            304,
+            256
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            1,
+            -5,
+            10,
+            -1
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        }
+      ],
+      "poseGeometryEvidence": "VERIFIED_CORRECTED_SOURCE_GUIDE",
+      "redesignConstraint": "完整保留正 X 偏移與身體旋轉；不能將頭拉回基準直立位置，不能把抬起的足端貼地。",
+      "redesignedPoseQa": "NOT_RENDERED_NOT_APPROVED",
+      "reuseMembers": [
+        "m201_agumon/main/cell_009",
+        "m201_agumon/sub/cell_004"
+      ],
+      "side": "main",
+      "sourceGuide": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/main/cell-009.png",
+      "sourceGuideSha256": "28eeb5dce3c53f33d5678321d5486ba7a8453527d8ea8e78a38579c9b33d1530",
+      "sourceLogicalAlphaBounds": [
+        196,
+        52,
+        424,
+        256
+      ],
+      "sourceNativeAlphaBounds": [
+        1,
+        -18,
+        20,
+        -1
+      ],
+      "sourcePoseInspection": "VISUALLY_INSPECTED",
+      "sourceSequenceReferences": [
+        {
+          "frameIndex": 0,
+          "loopStartFrame": 0,
+          "rawPlaybackMode": 1,
+          "sequenceId": 5,
+          "ticks": 7
+        }
+      ],
+      "texture": "m201_agumon/main/cell_009",
+      "visibleDescription": "全身大幅旋轉；頭位於右上、張嘴呈接近垂直方向"
+    },
+    {
+      "actionSemantics": "UNKNOWN_REQUIRES_TRACE",
+      "cell": 12,
+      "hiddenJoints": "NOT_ANNOTATED",
+      "masterId": "m201_agumon:master:0fcbb10b9aef5f36",
+      "observedRegions": [
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "open_mouth_region",
+          "logicalReviewRegion": [
+            64,
+            100,
+            148,
+            172
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -10,
+            -14,
+            -3,
+            -8
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "upper_muzzle_front",
+          "logicalReviewRegion": [
+            64,
+            76,
+            112,
+            112
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -10,
+            -16,
+            -6,
+            -13
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "lower_jaw_front",
+          "logicalReviewRegion": [
+            76,
+            148,
+            124,
+            184
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -9,
+            -10,
+            -5,
+            -7
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "both_visible_toe_clusters",
+          "logicalReviewRegion": [
+            112,
+            244,
+            256,
+            292
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -6,
+            -2,
+            6,
+            2
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        }
+      ],
+      "poseGeometryEvidence": "VERIFIED_CORRECTED_SOURCE_GUIDE",
+      "redesignConstraint": "將新短吻與上下顎套進原張嘴區域；上顎、下顎及口腔開口必須各自可辨。",
+      "redesignedPoseQa": "NOT_RENDERED_NOT_APPROVED",
+      "reuseMembers": [
+        "m201_agumon/main/cell_012",
+        "m201_agumon/main/cell_016"
+      ],
+      "side": "main",
+      "sourceGuide": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/main/cell-012.png",
+      "sourceGuideSha256": "d00b3a06c53f5ce00a06ead7cfd5e2712dfe384fc4d27fa70e1e3d584d7185f5",
+      "sourceLogicalAlphaBounds": [
+        64,
+        76,
+        268,
+        292
+      ],
+      "sourceNativeAlphaBounds": [
+        -10,
+        -16,
+        7,
+        2
+      ],
+      "sourcePoseInspection": "VISUALLY_INSPECTED",
+      "sourceSequenceReferences": [
+        {
+          "frameIndex": 1,
+          "loopStartFrame": 0,
+          "rawPlaybackMode": 1,
+          "sequenceId": 7,
+          "ticks": 37
+        }
+      ],
+      "texture": "m201_agumon/main/cell_012",
+      "visibleDescription": "朝左張大嘴、身體直立"
+    },
+    {
+      "actionSemantics": "UNKNOWN_REQUIRES_TRACE",
+      "cell": 23,
+      "hiddenJoints": "NOT_ANNOTATED",
+      "masterId": "m201_agumon:master:5a4610c4b3a5739e",
+      "observedRegions": [
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "low_muzzle_front",
+          "logicalReviewRegion": [
+            40,
+            196,
+            88,
+            244
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -12,
+            -6,
+            -8,
+            -2
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "low_visible_eye",
+          "logicalReviewRegion": [
+            124,
+            196,
+            160,
+            220
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -5,
+            -6,
+            -2,
+            -4
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "raised_tail_region",
+          "logicalReviewRegion": [
+            220,
+            148,
+            268,
+            220
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            3,
+            -10,
+            7,
+            -4
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "lower_head_body_edge",
+          "logicalReviewRegion": [
+            52,
+            256,
+            196,
+            292
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -11,
+            -1,
+            1,
+            2
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        }
+      ],
+      "poseGeometryEvidence": "VERIFIED_CORRECTED_SOURCE_GUIDE",
+      "redesignConstraint": "保留橫向低姿外形與頭的下降幅度；新耳毛不能迫使整格縮小或抬頭。",
+      "redesignedPoseQa": "NOT_RENDERED_NOT_APPROVED",
+      "reuseMembers": [
+        "m201_agumon/main/cell_023",
+        "m201_agumon/sub/cell_006"
+      ],
+      "side": "main",
+      "sourceGuide": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/main/cell-023.png",
+      "sourceGuideSha256": "c812760d6c317ff1d341b07f6ccb8cabcebd06c1776ab68b5c3d8c277735f12e",
+      "sourceLogicalAlphaBounds": [
+        40,
+        148,
+        316,
+        292
+      ],
+      "sourceNativeAlphaBounds": [
+        -12,
+        -10,
+        11,
+        2
+      ],
+      "sourcePoseInspection": "VISUALLY_INSPECTED",
+      "sourceSequenceReferences": [
+        {
+          "frameIndex": 0,
+          "loopStartFrame": 0,
+          "rawPlaybackMode": 1,
+          "sequenceId": 13,
+          "ticks": 37
+        }
+      ],
+      "texture": "m201_agumon/main/cell_023",
+      "visibleDescription": "軀幹伏低、頭朝左、尾部上翹"
+    },
+    {
+      "actionSemantics": "UNKNOWN_REQUIRES_TRACE",
+      "cell": 27,
+      "hiddenJoints": "NOT_ANNOTATED",
+      "masterId": "m201_agumon:master:93e4162bcc5dbe0b",
+      "observedRegions": [
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "visible_eye",
+          "logicalReviewRegion": [
+            172,
+            100,
+            208,
+            136
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -1,
+            -14,
+            2,
+            -11
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "banded_torso_region",
+          "logicalReviewRegion": [
+            136,
+            172,
+            232,
+            256
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -4,
+            -8,
+            4,
+            -1
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "both_visible_toe_clusters",
+          "logicalReviewRegion": [
+            112,
+            244,
+            256,
+            292
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -6,
+            -2,
+            6,
+            2
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        }
+      ],
+      "poseGeometryEvidence": "VERIFIED_CORRECTED_SOURCE_GUIDE",
+      "redesignConstraint": "將可見明暗帶作為這一槽的來源狀態保留；不得自動刪掉或臆造繩索、服裝用途。",
+      "redesignedPoseQa": "NOT_RENDERED_NOT_APPROVED",
+      "reuseMembers": [
+        "m201_agumon/main/cell_027",
+        "m201_agumon/main/cell_031",
+        "m201_agumon/main/cell_033"
+      ],
+      "side": "main",
+      "sourceGuide": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/main/cell-027.png",
+      "sourceGuideSha256": "50c817119694ec4559b0e04711d464c02d8644f9a8b3a4b1ef8a85c2e63fe50b",
+      "sourceLogicalAlphaBounds": [
+        88,
+        76,
+        268,
+        292
+      ],
+      "sourceNativeAlphaBounds": [
+        -8,
+        -16,
+        7,
+        2
+      ],
+      "sourcePoseInspection": "VISUALLY_INSPECTED",
+      "sourceSequenceReferences": [
+        {
+          "frameIndex": 0,
+          "loopStartFrame": 0,
+          "rawPlaybackMode": 2,
+          "sequenceId": 16,
+          "ticks": 31
+        }
+      ],
+      "texture": "m201_agumon/main/cell_027",
+      "visibleDescription": "直立、胸腹與前肢區有橫向明暗帶"
+    },
+    {
+      "actionSemantics": "UNKNOWN_REQUIRES_TRACE",
+      "cell": 44,
+      "hiddenJoints": "NOT_ANNOTATED",
+      "masterId": "m201_agumon:master:251d264adc090fa6",
+      "observedRegions": [
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "mouth_front_region",
+          "logicalReviewRegion": [
+            88,
+            88,
+            148,
+            160
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -8,
+            -15,
+            -3,
+            -9
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "extended_left_forelimb_tip",
+          "logicalReviewRegion": [
+            100,
+            220,
+            148,
+            256
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -7,
+            -4,
+            -3,
+            -1
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "separated_lower_extremities",
+          "logicalReviewRegion": [
+            136,
+            232,
+            268,
+            280
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -4,
+            -3,
+            7,
+            1
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        }
+      ],
+      "poseGeometryEvidence": "VERIFIED_CORRECTED_SOURCE_GUIDE",
+      "redesignConstraint": "設計 A 必須仍可辨識；以來源顏色狀態為約束，不新增光暈或粒子，也不猜其 gameplay 效果。",
+      "redesignedPoseQa": "NOT_RENDERED_NOT_APPROVED",
+      "reuseMembers": [
+        "m201_agumon/main/cell_044",
+        "m201_agumon/main/cell_046"
+      ],
+      "side": "main",
+      "sourceGuide": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/main/cell-044.png",
+      "sourceGuideSha256": "398315bce7bbab42c9ba21731a03a499622eed5ad6b116b1fbbe374a698b9ccd",
+      "sourceLogicalAlphaBounds": [
+        88,
+        64,
+        292,
+        280
+      ],
+      "sourceNativeAlphaBounds": [
+        -8,
+        -17,
+        9,
+        1
+      ],
+      "sourcePoseInspection": "VISUALLY_INSPECTED",
+      "sourceSequenceReferences": [
+        {
+          "frameIndex": 0,
+          "loopStartFrame": 0,
+          "rawPlaybackMode": 1,
+          "sequenceId": 26,
+          "ticks": 6
+        }
+      ],
+      "texture": "m201_agumon/main/cell_044",
+      "visibleDescription": "紅橙色全身變體、朝左張嘴、四肢張開"
+    },
+    {
+      "actionSemantics": "UNKNOWN_REQUIRES_TRACE",
+      "cell": 47,
+      "hiddenJoints": "NOT_ANNOTATED",
+      "masterId": "m201_agumon:master:907e5225ba44911d",
+      "observedRegions": [
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "light_eye_region",
+          "logicalReviewRegion": [
+            184,
+            88,
+            208,
+            112
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            0,
+            -15,
+            2,
+            -13
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "forward_silhouette_tip",
+          "logicalReviewRegion": [
+            88,
+            88,
+            136,
+            124
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -8,
+            -15,
+            -4,
+            -12
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "lower_silhouette_extremities",
+          "logicalReviewRegion": [
+            136,
+            232,
+            268,
+            280
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -4,
+            -3,
+            7,
+            1
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        }
+      ],
+      "poseGeometryEvidence": "VERIFIED_CORRECTED_SOURCE_GUIDE",
+      "redesignConstraint": "製作設計 A 對應剪影而不是放回一般彩色角色；保持眼部亮區與原姿態位置。",
+      "redesignedPoseQa": "NOT_RENDERED_NOT_APPROVED",
+      "reuseMembers": [
+        "m201_agumon/main/cell_047"
+      ],
+      "side": "main",
+      "sourceGuide": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/main/cell-047.png",
+      "sourceGuideSha256": "b1fcc7633e191c6dec8f49bedc2f5dda911458880e638db3c67f6c78deae0c11",
+      "sourceLogicalAlphaBounds": [
+        88,
+        64,
+        292,
+        280
+      ],
+      "sourceNativeAlphaBounds": [
+        -8,
+        -17,
+        9,
+        1
+      ],
+      "sourcePoseInspection": "VISUALLY_INSPECTED",
+      "sourceSequenceReferences": [
+        {
+          "frameIndex": 3,
+          "loopStartFrame": 0,
+          "rawPlaybackMode": 1,
+          "sequenceId": 26,
+          "ticks": 9
+        }
+      ],
+      "texture": "m201_agumon/main/cell_047",
+      "visibleDescription": "深色實心剪影，保留淺色眼部小區"
+    },
+    {
+      "actionSemantics": "UNKNOWN_REQUIRES_TRACE",
+      "cell": 54,
+      "hiddenJoints": "NOT_ANNOTATED",
+      "masterId": "m201_agumon:master:6a147537c17e67e4",
+      "observedRegions": [
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "raised_open_mouth_region",
+          "logicalReviewRegion": [
+            100,
+            40,
+            160,
+            112
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -7,
+            -19,
+            -2,
+            -13
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "left_raised_toe_cluster",
+          "logicalReviewRegion": [
+            112,
+            184,
+            160,
+            232
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -6,
+            -7,
+            -2,
+            -3
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "right_raised_toe_cluster",
+          "logicalReviewRegion": [
+            184,
+            208,
+            268,
+            244
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            0,
+            -5,
+            7,
+            -2
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        }
+      ],
+      "poseGeometryEvidence": "VERIFIED_CORRECTED_SOURCE_GUIDE",
+      "redesignConstraint": "保留原始上移；最下方可見像素結束於 native y=-2，不能以貼地工具重新放到 y=2。",
+      "redesignedPoseQa": "NOT_RENDERED_NOT_APPROVED",
+      "reuseMembers": [
+        "m201_agumon/main/cell_054",
+        "m201_agumon/sub/cell_014"
+      ],
+      "side": "main",
+      "sourceGuide": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/main/cell-054.png",
+      "sourceGuideSha256": "8daabc5ef515a447adc5a403e2273fb1b08893c9788b6cca227779a93f87faf0",
+      "sourceLogicalAlphaBounds": [
+        88,
+        16,
+        280,
+        244
+      ],
+      "sourceNativeAlphaBounds": [
+        -8,
+        -21,
+        8,
+        -2
+      ],
+      "sourcePoseInspection": "VISUALLY_INSPECTED",
+      "sourceSequenceReferences": [
+        {
+          "frameIndex": 1,
+          "loopStartFrame": 0,
+          "rawPlaybackMode": 2,
+          "sequenceId": 30,
+          "ticks": 37
+        }
+      ],
+      "texture": "m201_agumon/main/cell_054",
+      "visibleDescription": "整個身體上移、張嘴、雙足均高於來源原點"
+    },
+    {
+      "actionSemantics": "UNKNOWN_REQUIRES_TRACE",
+      "cell": 56,
+      "hiddenJoints": "NOT_ANNOTATED",
+      "masterId": "m201_agumon:master:ad541b66671d3819",
+      "observedRegions": [
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "forward_muzzle_region",
+          "logicalReviewRegion": [
+            28,
+            124,
+            88,
+            196
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -13,
+            -12,
+            -8,
+            -6
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "left_lower_forelimb",
+          "logicalReviewRegion": [
+            64,
+            232,
+            112,
+            268
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -10,
+            -3,
+            -6,
+            0
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "middle_lower_forelimb",
+          "logicalReviewRegion": [
+            124,
+            244,
+            172,
+            280
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -5,
+            -2,
+            -1,
+            1
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "right_lower_extremity",
+          "logicalReviewRegion": [
+            244,
+            244,
+            316,
+            292
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            5,
+            -2,
+            11,
+            2
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        }
+      ],
+      "poseGeometryEvidence": "VERIFIED_CORRECTED_SOURCE_GUIDE",
+      "redesignConstraint": "保留四個可見下緣區域與橫向展開；這是來源輪廓觀察，不將其命名為新增四足步態。",
+      "redesignedPoseQa": "NOT_RENDERED_NOT_APPROVED",
+      "reuseMembers": [
+        "m201_agumon/main/cell_056"
+      ],
+      "side": "main",
+      "sourceGuide": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/main/cell-056.png",
+      "sourceGuideSha256": "17f40f3b21af697129872c4403dcbcb6b555f52d96f90589d302f4aad67f3b07",
+      "sourceLogicalAlphaBounds": [
+        28,
+        88,
+        316,
+        292
+      ],
+      "sourceNativeAlphaBounds": [
+        -13,
+        -15,
+        11,
+        2
+      ],
+      "sourcePoseInspection": "VISUALLY_INSPECTED",
+      "sourceSequenceReferences": [
+        {
+          "frameIndex": 0,
+          "loopStartFrame": 0,
+          "rawPlaybackMode": 1,
+          "sequenceId": 32,
+          "ticks": 7
+        }
+      ],
+      "texture": "m201_agumon/main/cell_056",
+      "visibleDescription": "軀幹前傾下降、前肢落低、後軀延伸"
+    },
+    {
+      "actionSemantics": "UNKNOWN_REQUIRES_TRACE",
+      "cell": 59,
+      "hiddenJoints": "NOT_ANNOTATED",
+      "masterId": "m201_agumon:master:d9c7cd579cbc3f02",
+      "observedRegions": [
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "downward_muzzle_region",
+          "logicalReviewRegion": [
+            76,
+            160,
+            136,
+            220
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -9,
+            -9,
+            -4,
+            -4
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "tilted_eye_region",
+          "logicalReviewRegion": [
+            148,
+            124,
+            184,
+            160
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -3,
+            -12,
+            0,
+            -9
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "both_visible_toe_clusters",
+          "logicalReviewRegion": [
+            112,
+            244,
+            256,
+            292
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -6,
+            -2,
+            6,
+            2
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        }
+      ],
+      "poseGeometryEvidence": "VERIFIED_CORRECTED_SOURCE_GUIDE",
+      "redesignConstraint": "保留頭軀相對旋轉；新耳型和額毛需隨頭姿旋轉，不能只把眼口貼回水平正臉。",
+      "redesignedPoseQa": "NOT_RENDERED_NOT_APPROVED",
+      "reuseMembers": [
+        "m201_agumon/main/cell_059"
+      ],
+      "side": "main",
+      "sourceGuide": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/main/cell-059.png",
+      "sourceGuideSha256": "4f26eb80b5ba580b76ae6cc82824f83c80ceec419ae5441d8970ebd3c8ffc4e4",
+      "sourceLogicalAlphaBounds": [
+        76,
+        88,
+        280,
+        292
+      ],
+      "sourceNativeAlphaBounds": [
+        -9,
+        -15,
+        8,
+        2
+      ],
+      "sourcePoseInspection": "VISUALLY_INSPECTED",
+      "sourceSequenceReferences": [
+        {
+          "frameIndex": 0,
+          "loopStartFrame": 0,
+          "rawPlaybackMode": 1,
+          "sequenceId": 34,
+          "ticks": 37
+        }
+      ],
+      "texture": "m201_agumon/main/cell_059",
+      "visibleDescription": "頭部向左下折、軀幹仍偏直立"
+    },
+    {
+      "actionSemantics": "UNKNOWN_REQUIRES_TRACE",
+      "cell": 64,
+      "hiddenJoints": "NOT_ANNOTATED",
+      "masterId": "m201_agumon:master:4401291d51932a67",
+      "observedRegions": [
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "forward_silhouette_region",
+          "logicalReviewRegion": [
+            88,
+            112,
+            136,
+            172
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -8,
+            -13,
+            -4,
+            -8
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "lower_silhouette_region",
+          "logicalReviewRegion": [
+            112,
+            244,
+            256,
+            292
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -6,
+            -2,
+            6,
+            2
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        }
+      ],
+      "poseGeometryEvidence": "VERIFIED_CORRECTED_SOURCE_GUIDE",
+      "redesignConstraint": "保留白色剪影槽的存在與不透明內容，不把近白像素誤判成待去除背景；無可見內部關節可標。",
+      "redesignedPoseQa": "NOT_RENDERED_NOT_APPROVED",
+      "reuseMembers": [
+        "m201_agumon/main/cell_064"
+      ],
+      "side": "main",
+      "sourceGuide": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/main/cell-064.png",
+      "sourceGuideSha256": "27e94f2558ad8a529b836921e809f4ae7b0dfe23a886df4d79df992220074ef9",
+      "sourceLogicalAlphaBounds": [
+        88,
+        76,
+        280,
+        292
+      ],
+      "sourceNativeAlphaBounds": [
+        -8,
+        -16,
+        8,
+        2
+      ],
+      "sourcePoseInspection": "VISUALLY_INSPECTED",
+      "sourceSequenceReferences": [
+        {
+          "frameIndex": 0,
+          "loopStartFrame": 0,
+          "rawPlaybackMode": 1,
+          "sequenceId": 39,
+          "ticks": 2
+        }
+      ],
+      "texture": "m201_agumon/main/cell_064",
+      "visibleDescription": "近白色實心角色剪影"
+    },
+    {
+      "actionSemantics": "UNKNOWN_REQUIRES_TRACE",
+      "cell": 16,
+      "hiddenJoints": "NOT_ANNOTATED",
+      "masterId": "m201_agumon:master:e8e935f254356153",
+      "observedRegions": [
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "left_muzzle_region",
+          "logicalReviewRegion": [
+            136,
+            88,
+            184,
+            136
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -4,
+            -15,
+            0,
+            -11
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "visible_eye_region",
+          "logicalReviewRegion": [
+            232,
+            76,
+            268,
+            124
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            4,
+            -16,
+            7,
+            -12
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "left_lower_toe_cluster",
+          "logicalReviewRegion": [
+            136,
+            220,
+            208,
+            268
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            -4,
+            -4,
+            2,
+            0
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        },
+        {
+          "confidence": "MEDIUM_VISIBLE_REGION",
+          "label": "right_lower_toe_cluster",
+          "logicalReviewRegion": [
+            220,
+            232,
+            292,
+            268
+          ],
+          "maximumRoundingUncertaintyNativePixels": 1,
+          "nativeReviewRegion": [
+            3,
+            -3,
+            9,
+            0
+          ],
+          "positionPrecision": "APPROXIMATE_REGION_NOT_EXACT_JOINT",
+          "reviewStatus": "PENDING_ART_TEAM_REVIEW"
+        }
+      ],
+      "poseGeometryEvidence": "VERIFIED_CORRECTED_SOURCE_GUIDE",
+      "redesignConstraint": "以 Sub 的確切来源座標檢查；不可重用 Main000 的位置或只將基準格去飽和代替本格。",
+      "redesignedPoseQa": "NOT_RENDERED_NOT_APPROVED",
+      "reuseMembers": [
+        "m201_agumon/main/cell_061",
+        "m201_agumon/sub/cell_016"
+      ],
+      "side": "sub",
+      "sourceGuide": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/sub/cell-016.png",
+      "sourceGuideSha256": "ce28ec576b5ddcbef111c0dfcee1e3b2f63046b856db506d70a191cf38da629e",
+      "sourceLogicalAlphaBounds": [
+        136,
+        40,
+        328,
+        268
+      ],
+      "sourceNativeAlphaBounds": [
+        -4,
+        -19,
+        12,
+        0
+      ],
+      "sourcePoseInspection": "VISUALLY_INSPECTED",
+      "sourceSequenceReferences": [
+        {
+          "frameIndex": 0,
+          "loopStartFrame": 0,
+          "rawPlaybackMode": 1,
+          "sequenceId": 11,
+          "ticks": 37
+        }
+      ],
+      "texture": "m201_agumon/sub/cell_016",
+      "visibleDescription": "灰黑色角色變體，與基準格有不同頭軀及位置"
+    }
+  ],
+  "qaBoundary": {
+    "allAnimationQa": "PENDING",
+    "anatomicalHiddenJointApproval": false,
+    "groundContactPolicy": "Lowest visible pixels do not establish world ground or collision contact.",
+    "redrawCandidateApproval": false,
+    "regionPolicy": "Visible regions support comparative review, not hard pixel-equality of redesigned outline.",
+    "runtimeCanvasAdapterQa": "PENDING"
+  },
+  "schemaVersion": 1,
+  "status": "SOURCE_POSE_LOCK_DRAFT_FOR_ART_TEAM_REVIEW"
+}

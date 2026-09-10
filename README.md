@@ -2,13 +2,15 @@
 
 **Standalone product repository.**
 
+**Public browser playtest (2026-09-10):** [Play Championship 2026](https://orochi771127.github.io/championship-2026/). The Owner authorized publication of the current completed work and this playable snapshot. Use a modern browser in portrait orientation; saves are stored in that browser and do not transfer automatically between devices or between localhost and this website. Original-game parity remains partial.
+
 **2026-09-09 checkpoint:** See the [current unfinished-work inventory](docs/reports/commercial-readiness/2026-09-09/MAIN_CHECKPOINT_ZH_TW.md). `npm run test:ci` runs explicitly classified repository-contained tests; `npm test` retains full local reference/art acceptance. Main pushes run CI; public Pages deployment requires explicit dispatch and release approval checks.
 
 **Target:** Web-first / mobile-first / portrait 9:16 / touch-first, with desktop-browser compatibility.
 
 **Nexus Link integration:** `FROZEN / OUT_OF_CURRENT_PRODUCT_SCOPE`. This repository does not import from or depend on a Nexus Link application, router, store, save system, gameplay system, or asset tree.
 
-**Original decoded assets:** `ROM_COPYRIGHTED_REFERENCE / RESEARCH_ONLY / NOT_SHIPPING_READY`. The private source pack is not fetched by the game. Only the explicitly registered, Owner-authorized battle reference bundles may run in the loopback research preview; the public build excludes them. This exception does not grant shipping acceptance.
+**Original decoded assets:** `ROM_COPYRIGHTED_REFERENCE / RESEARCH_ONLY / NOT_SHIPPING_READY`. The private source pack is not fetched by the game. The dated Owner public-playtest policy permits the exact selected rendered bundles at the official Pages URL. Native ROM payloads and private legal documents remain excluded. Publication approval does not change provenance, verify third-party rights, or grant commercial-release acceptance.
 
 **2026 runtime art:** every runtime-loadable image lives under `assets/production/`. Runtime registration and shipping readiness are separate; the current index includes temporary, reviewed, licensed and explicitly scoped loopback research bundles.
 
@@ -49,18 +51,19 @@ npm run serve:internal
 Open `http://127.0.0.1:8764/championship.html` to review the snapshot on a separate
 browser origin. Internal output is loopback-only and is not for uploading to a
 static host. The validator checks exact file lists, hashes and module closure.
-Rebuilding requires the listed local inputs; the current Git HEAD alone does
-not contain every private or uncommitted input.
+The published checkpoint includes the selected rendered inputs needed to
+rebuild the playable snapshot after `npm ci`.
 
-The GitHub Actions workflow uses `build:pages` and `validate:pages` for public
-output. Both enforce the release boundary. Pending rights, undeclared release
-scope, private dependencies or unapproved asset files reject the candidate.
-The current product has not passed those gates. A failed preflight preserves
-the previous output. Saves remain in each player's browser.
+The GitHub Actions workflow uses `build:playtest` and `validate:playtest`, checks
+the Owner policy and every selected file's SHA-256, then deploys to Pages.
+The separate `build:pages` and `validate:pages` commands still enforce the full
+verified-release gate; pending rights and asset acceptance continue to block
+that target. A failed preflight preserves the previous output. Saves remain in
+each player's browser.
 
 ```powershell
-npm run build:pages
-npm run validate:pages
+npm run build:playtest
+npm run validate:playtest
 npm run battle:catalogs:build -- --rom "C:\\path\\to\\original.nds"
 ```
 

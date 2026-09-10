@@ -69,8 +69,8 @@ for reaction in range(31):
     for off in [0x1a0,0x1a4,0x1b4,0x1b8,0x1bc,0x1c4]:put(actor+off,0)
     put(get(actor+0x114)+0x1c,50)
     before=get(get(actor+0x114)+0x1c);state=run(0x21156b4,actor,reaction)
-    reactions.append(dict(id=reaction,state=state,sequence=signed(get(actor+0x190)),ticks=get(actor+0x1a0),completion=get(actor+0x1c4),
-        alternate=signed(get(actor+0x194)),alternateTicks=get(actor+0x1bc),alternateCount=get(actor+0x1b8),secondTicks=signed(get(actor+0x1c8)),
+    reactions.append(dict(id=reaction,state=state,sequence=signed(get(actor+0x190)),icon=signed(get(actor+0x198)),alternateIcon=signed(get(actor+0x19c)),ticks=get(actor+0x1a0),completion=get(actor+0x1c4),
+        alternate=signed(get(actor+0x194)),alternateTicks=get(actor+0x1bc),alternateCount=get(actor+0x1b8),secondTicks=signed(get(actor+0x1c8)),flipTicks=get(actor+0x1a4),
         conditionDelta=signed(get(get(actor+0x114)+0x1c)-before),movementTicks=get(actor+0x14c),destinationState=signed(get(actor+0x154))))
 social=[]
 for species in [8,21,99,201]:

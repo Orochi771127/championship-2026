@@ -1,0 +1,37 @@
+{
+  "deferredChecks": [
+    "Original full timeline playback and slot compilation",
+    "Normal game and physical device QA"
+  ],
+  "entityId": "e002_digitama",
+  "observations": [
+    "Olive hollow diamond and lower band on ochre shell.",
+    "Viewed all12 authored state contact sheet, then independent corrected-source spot comparison of normal/open shell/internal light/remaining lower shell.",
+    "All12 source states individually verified for exact native bounds and alpha support; all26 slots referenced by the source reuse evidence.",
+    "Reuses new authored E000 shell/effect construction after per-state geometry/occlusion evidence; new pattern is explicitly authored, not original RGB recolor.",
+    "Own source Main008 extra opaque fragment local(10,16) preserved explicitly."
+  ],
+  "reviewedPoses": [
+    "main/cell_000",
+    "main/cell_001",
+    "main/cell_002",
+    "main/cell_004",
+    "main/cell_005",
+    "main/cell_006",
+    "main/cell_007",
+    "main/cell_008",
+    "main/cell_009",
+    "main/cell_010",
+    "main/cell_011",
+    "main/cell_012"
+  ],
+  "reviewer": "ROOT_ART_DIRECTOR_INDEPENDENT_OF_AUTHOR",
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "e70d6c9471841b082d7d1739f000437916bb41f6fc0e74ba48e04a9cbbc5dea0",
+  "shippingReady": false,
+  "sourceComparisonSha256": "dfbbff6170cf1513759f1d6d6b77d883d6e039deaaeafa1d9178888f8e22dd75",
+  "technicalQaSha256": "b6e2af2329ab2c96e39cb23b60f1f72759fed5aa4cfcae00f5228b1569a74fa0",
+  "unresolvedBlockingIssues": [],
+  "verdict": "PASS_SETTING_STAGE"
+}

@@ -1,0 +1,244 @@
+{
+  "schemaVersion": 1,
+  "entityId": "e005_digitama",
+  "kind": "egg",
+  "renderer": "PIXIJS_V8_SPRITESHEET",
+  "artProfile": {
+    "style": "ORIGINAL_HAND_DRAWN_PIXEL_ART_FAITHFUL_HD4X",
+    "scale": 4,
+    "filter": "nearest",
+    "logicalCanvas": [
+      384,
+      352
+    ],
+    "anchor": {
+      "x": 0.5,
+      "y": 0.9090909090909091
+    },
+    "alphaBoundary": "TRANSPARENT",
+    "palettePolicy": "ORIGINAL_MAJOR_PALETTE_EXACT"
+  },
+  "timing": {
+    "source": "ORIGINAL_NANR_DURATION_TICKS",
+    "tickRateHz": 60,
+    "tickRateEvidence": "NDS_VBLANK_BASIS_PROVISIONAL_PENDING_EXECUTABLE_TIMING_TRACE"
+  },
+  "sides": {
+    "main": {
+      "atlases": [
+        {
+          "image": "main-atlas-00.png",
+          "data": "main-atlas-00.json"
+        }
+      ],
+      "animations": [
+        {
+          "id": 0,
+          "name": "action_00",
+          "semanticAlias": "idle",
+          "semanticConfidence": "HIGH",
+          "playbackMode": 2,
+          "playback": "forward_then_backward_once",
+          "frames": [
+            {
+              "texture": "e005_digitama/main/cell_000",
+              "cell": 0,
+              "ticks": 15,
+              "millisecondsAt60Hz": 250.0
+            },
+            {
+              "texture": "e005_digitama/main/cell_001",
+              "cell": 1,
+              "ticks": 15,
+              "millisecondsAt60Hz": 250.0
+            },
+            {
+              "texture": "e005_digitama/main/cell_002",
+              "cell": 2,
+              "ticks": 15,
+              "millisecondsAt60Hz": 250.0
+            },
+            {
+              "texture": "e005_digitama/main/cell_003",
+              "cell": 3,
+              "ticks": 15,
+              "millisecondsAt60Hz": 250.0
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "name": "action_01",
+          "semanticAlias": "idle_blink",
+          "semanticConfidence": "HIGH",
+          "playbackMode": 1,
+          "playback": "forward_loop",
+          "frames": [
+            {
+              "texture": "e005_digitama/main/cell_004",
+              "cell": 4,
+              "ticks": 10,
+              "millisecondsAt60Hz": 166.667
+            },
+            {
+              "texture": "e005_digitama/main/cell_005",
+              "cell": 5,
+              "ticks": 10,
+              "millisecondsAt60Hz": 166.667
+            },
+            {
+              "texture": "e005_digitama/main/cell_006",
+              "cell": 6,
+              "ticks": 10,
+              "millisecondsAt60Hz": 166.667
+            },
+            {
+              "texture": "e005_digitama/main/cell_007",
+              "cell": 7,
+              "ticks": 10,
+              "millisecondsAt60Hz": 166.667
+            },
+            {
+              "texture": "e005_digitama/main/cell_008",
+              "cell": 8,
+              "ticks": 10,
+              "millisecondsAt60Hz": 166.667
+            },
+            {
+              "texture": "e005_digitama/main/cell_009",
+              "cell": 9,
+              "ticks": 10,
+              "millisecondsAt60Hz": 166.667
+            },
+            {
+              "texture": "e005_digitama/main/cell_010",
+              "cell": 10,
+              "ticks": 10,
+              "millisecondsAt60Hz": 166.667
+            },
+            {
+              "texture": "e005_digitama/main/cell_011",
+              "cell": 11,
+              "ticks": 10,
+              "millisecondsAt60Hz": 166.667
+            },
+            {
+              "texture": "e005_digitama/main/cell_012",
+              "cell": 12,
+              "ticks": 10,
+              "millisecondsAt60Hz": 166.667
+            }
+          ]
+        }
+      ]
+    },
+    "sub": {
+      "atlases": [
+        {
+          "image": "sub-atlas-00.png",
+          "data": "sub-atlas-00.json"
+        }
+      ],
+      "animations": [
+        {
+          "id": 0,
+          "name": "action_00",
+          "semanticAlias": null,
+          "semanticConfidence": "RAW_SLOT_ONLY",
+          "playbackMode": 2,
+          "playback": "forward_then_backward_once",
+          "frames": [
+            {
+              "texture": "e005_digitama/sub/cell_000",
+              "cell": 0,
+              "ticks": 15,
+              "millisecondsAt60Hz": 250.0
+            },
+            {
+              "texture": "e005_digitama/sub/cell_001",
+              "cell": 1,
+              "ticks": 15,
+              "millisecondsAt60Hz": 250.0
+            },
+            {
+              "texture": "e005_digitama/sub/cell_002",
+              "cell": 2,
+              "ticks": 15,
+              "millisecondsAt60Hz": 250.0
+            },
+            {
+              "texture": "e005_digitama/sub/cell_003",
+              "cell": 3,
+              "ticks": 15,
+              "millisecondsAt60Hz": 250.0
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "name": "action_01",
+          "semanticAlias": null,
+          "semanticConfidence": "RAW_SLOT_ONLY",
+          "playbackMode": 1,
+          "playback": "forward_loop",
+          "frames": [
+            {
+              "texture": "e005_digitama/sub/cell_004",
+              "cell": 4,
+              "ticks": 10,
+              "millisecondsAt60Hz": 166.667
+            },
+            {
+              "texture": "e005_digitama/sub/cell_005",
+              "cell": 5,
+              "ticks": 10,
+              "millisecondsAt60Hz": 166.667
+            },
+            {
+              "texture": "e005_digitama/sub/cell_006",
+              "cell": 6,
+              "ticks": 10,
+              "millisecondsAt60Hz": 166.667
+            },
+            {
+              "texture": "e005_digitama/sub/cell_007",
+              "cell": 7,
+              "ticks": 10,
+              "millisecondsAt60Hz": 166.667
+            },
+            {
+              "texture": "e005_digitama/sub/cell_008",
+              "cell": 8,
+              "ticks": 10,
+              "millisecondsAt60Hz": 166.667
+            },
+            {
+              "texture": "e005_digitama/sub/cell_009",
+              "cell": 9,
+              "ticks": 10,
+              "millisecondsAt60Hz": 166.667
+            },
+            {
+              "texture": "e005_digitama/sub/cell_010",
+              "cell": 10,
+              "ticks": 10,
+              "millisecondsAt60Hz": 166.667
+            },
+            {
+              "texture": "e005_digitama/sub/cell_011",
+              "cell": 11,
+              "ticks": 10,
+              "millisecondsAt60Hz": 166.667
+            },
+            {
+              "texture": "e005_digitama/sub/cell_012",
+              "cell": 12,
+              "ticks": 10,
+              "millisecondsAt60Hz": 166.667
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,31 @@
+- status:
+  - generic: Spring
+  - generic: Day
+  - generic: "1"
+  - generic: Shop
+  - time: 08:00
+- region "Shop":
+  - generic: HOME
+  - heading "SHOP" [level=1]
+  - paragraph: Buy goods, hunt gear, plugins and cages.
+  - generic: 0 / 9999999 BITS
+  - tablist "Shop categories":
+    - tab "GOODS" [selected]
+    - tab "HUNT"
+    - tab "PLUGINS"
+    - tab "CAGES"
+  - list:
+    - strong: Training Goods 0
+    - generic: 5 Bits · 50/99
+    - button "Buy Training Goods 0" [disabled]: BUY
+    - strong: Training Goods 1
+    - generic: 300 Bits · 10/99
+    - button "Buy Training Goods 1" [disabled]: BUY
+    - strong: Training Goods 3
+    - generic: 20 Bits · 10/99
+    - button "Buy Training Goods 3" [disabled]: BUY
+    - strong: Training Goods 2
+    - generic: 200 Bits · 10/99
+    - button "Buy Training Goods 2" [disabled]: BUY
+  - paragraph
+  - button "Return to Raising Home": BACK

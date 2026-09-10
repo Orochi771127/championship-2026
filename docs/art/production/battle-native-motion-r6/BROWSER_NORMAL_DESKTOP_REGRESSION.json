@@ -1,0 +1,15 @@
+{
+  "classification": "CODEX_BROWSER_PLAYWRIGHT_QA",
+  "boundary": "Existing explicit date/rank/match-1 preset fixture; no Home-owned party or full original-move acceptance",
+  "focus": {
+    "clock": "991",
+    "focus": "{\"slot\":4,\"moveId\":255,\"startFrame\":991,\"frame\":1,\"endFrame\":84,\"active\":true,\"zoomQ12\":5153,\"phase\":\"zoom\",\"sequence\":33,\"sequenceStart\":1,\"tintIndex\":0,\"cameraEnabled\":true,\"overlayVisible\":true,\"hyperVisible\":true,\"overlayAlpha\":0.25806451612903225,\"brightnessQ12\":3392,\"timingEvidence\":\"ORIGINAL_PRELUDE_CURRENT_DISPATCH_LAUNCH_PARTIAL\",\"framingEvidence\":\"MOBILE_VIEWPORT_ADAPTATION_WORLD_POSITIONS_PARTIAL\"}"
+  },
+  "result": "- complementary:\n  - text: 特殊招式測試場次：指定原作場次 1 與相同預設隊伍；正常 AI 選招，獨立記憶體存檔。\n  - checkbox \"減少動態效果\" [disabled]\n  - text: 減少動態效果\n  - button \"開始對戰測試\" [disabled]\n  - button \"推進 6 幀\" [disabled]\n  - button \"播放戰鬥\" [disabled]\n  - button \"推進到結算\" [disabled]\n  - button \"推進到下一次特寫\"\n  - status: 結算後 9400 bit\n- main:\n  - region \"Battle result\":\n    - text: 獎金\n    - heading \"0\" [level=1]\n    - paragraph: 持有 9400 Bits\n    - paragraph: 本場沒有獲得獎金。\n    - paragraph: MATCH 01\n    - button \"返回牧場\"",
+  "layout": {
+    "height": 720,
+    "scrollWidth": 1280,
+    "width": 1280
+  },
+  "errors": []
+}

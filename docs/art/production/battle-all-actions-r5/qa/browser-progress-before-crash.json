@@ -1,0 +1,6433 @@
+{
+  "kind": "CODEX_IN_APP_BROWSER_QA",
+  "completed": 186,
+  "failedBatchStart": 186,
+  "boundary": "Browser tab crashed during continuous group switch; investigating resource disposal",
+  "conditions": [
+    {
+      "condition": "攻擊動作二",
+      "characters": [
+        {
+          "entityId": "m201_agumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -8,
+              -18,
+              8,
+              2
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 8
+        },
+        {
+          "entityId": "m313_gargomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -13,
+              -23,
+              13,
+              3
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 8
+        },
+        {
+          "entityId": "m353_meramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -16,
+              -26,
+              10,
+              2
+            ],
+            "origin": [
+              216,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 8
+        },
+        {
+          "entityId": "m413_skullgreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -46,
+              29,
+              2
+            ],
+            "origin": [
+              162,
+              312
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 8
+        },
+        {
+          "entityId": "m518_blackwargreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -33,
+              -55,
+              17,
+              3
+            ],
+            "origin": [
+              224,
+              308
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 8
+        },
+        {
+          "entityId": "m534_victorygreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -11,
+              -45,
+              29,
+              3
+            ],
+            "origin": [
+              156,
+              308
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 8
+        }
+      ],
+      "height": 844,
+      "overflow": false,
+      "width": 390
+    },
+    {
+      "condition": "攻擊動作三",
+      "characters": [
+        {
+          "entityId": "m201_agumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -8,
+              -16,
+              8,
+              2
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 9
+        },
+        {
+          "entityId": "m313_gargomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -22,
+              -28,
+              11,
+              2
+            ],
+            "origin": [
+              236,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 9
+        },
+        {
+          "entityId": "m353_meramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -16,
+              -26,
+              10,
+              2
+            ],
+            "origin": [
+              216,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 9
+        },
+        {
+          "entityId": "m413_skullgreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -27,
+              -26,
+              19,
+              2
+            ],
+            "origin": [
+              208,
+              312
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 9
+        },
+        {
+          "entityId": "m518_blackwargreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -24,
+              -77,
+              32,
+              2
+            ],
+            "origin": [
+              176,
+              312
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 9
+        },
+        {
+          "entityId": "m534_victorygreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -17,
+              -61,
+              26,
+              3
+            ],
+            "origin": [
+              174,
+              308
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 9
+        }
+      ],
+      "height": 844,
+      "overflow": false,
+      "width": 390
+    },
+    {
+      "condition": "攻擊動作四",
+      "characters": [
+        {
+          "entityId": "m201_agumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -8,
+              -18,
+              8,
+              2
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 10
+        },
+        {
+          "entityId": "m313_gargomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -13,
+              -23,
+              13,
+              3
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 10
+        },
+        {
+          "entityId": "m353_meramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -16,
+              -26,
+              10,
+              2
+            ],
+            "origin": [
+              216,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 10
+        },
+        {
+          "entityId": "m413_skullgreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -46,
+              29,
+              2
+            ],
+            "origin": [
+              162,
+              312
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 10
+        },
+        {
+          "entityId": "m518_blackwargreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -33,
+              -55,
+              17,
+              3
+            ],
+            "origin": [
+              224,
+              308
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 10
+        },
+        {
+          "entityId": "m534_victorygreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -11,
+              -45,
+              29,
+              3
+            ],
+            "origin": [
+              156,
+              308
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 10
+        }
+      ],
+      "height": 844,
+      "overflow": false,
+      "width": 390
+    },
+    {
+      "condition": "受擊反應 3",
+      "characters": [
+        {
+          "entityId": "m201_agumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              0,
+              -15,
+              22,
+              0
+            ],
+            "origin": [
+              60,
+              320
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 37
+        },
+        {
+          "entityId": "m313_gargomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -10,
+              18,
+              5
+            ],
+            "origin": [
+              176,
+              280
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 37
+        },
+        {
+          "entityId": "m353_meramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -12,
+              -23,
+              18,
+              1
+            ],
+            "origin": [
+              168,
+              312
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 37
+        },
+        {
+          "entityId": "m413_skullgreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -15,
+              -19,
+              41,
+              2
+            ],
+            "origin": [
+              140,
+              312
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 37
+        },
+        {
+          "entityId": "m518_blackwargreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -38,
+              -32,
+              33,
+              -7
+            ],
+            "origin": [
+              202,
+              348
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 37
+        },
+        {
+          "entityId": "m534_victorygreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -28,
+              -25,
+              29,
+              3
+            ],
+            "origin": [
+              190,
+              308
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 37
+        }
+      ],
+      "height": 844,
+      "overflow": false,
+      "width": 390
+    },
+    {
+      "condition": "受擊反應 6",
+      "characters": [
+        {
+          "entityId": "m201_agumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -5,
+              -12,
+              11,
+              7
+            ],
+            "origin": [
+              156,
+              236
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 38
+        },
+        {
+          "entityId": "m313_gargomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -11,
+              -14,
+              23,
+              10
+            ],
+            "origin": [
+              144,
+              240
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 38
+        },
+        {
+          "entityId": "m353_meramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -12,
+              -14,
+              18,
+              15
+            ],
+            "origin": [
+              168,
+              200
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 38
+        },
+        {
+          "entityId": "m413_skullgreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -18,
+              -15,
+              22,
+              17
+            ],
+            "origin": [
+              184,
+              252
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 38
+        },
+        {
+          "entityId": "m518_blackwargreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -29,
+              -24,
+              28,
+              28
+            ],
+            "origin": [
+              194,
+              208
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 38
+        },
+        {
+          "entityId": "m534_victorygreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -22,
+              -18,
+              31,
+              29
+            ],
+            "origin": [
+              174,
+              204
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 38
+        }
+      ],
+      "height": 844,
+      "overflow": false,
+      "width": 390
+    },
+    {
+      "condition": "倒下",
+      "characters": [
+        {
+          "entityId": "m201_agumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -12,
+              -10,
+              11,
+              2
+            ],
+            "origin": [
+              196,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 15
+        },
+        {
+          "entityId": "m313_gargomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -10,
+              18,
+              5
+            ],
+            "origin": [
+              176,
+              280
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 15
+        },
+        {
+          "entityId": "m353_meramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -16,
+              -22,
+              16,
+              1
+            ],
+            "origin": [
+              192,
+              312
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 15
+        },
+        {
+          "entityId": "m413_skullgreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -32,
+              -21,
+              16,
+              2
+            ],
+            "origin": [
+              224,
+              312
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 15
+        },
+        {
+          "entityId": "m518_blackwargreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -35,
+              -19,
+              31,
+              5
+            ],
+            "origin": [
+              200,
+              300
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 15
+        },
+        {
+          "entityId": "m534_victorygreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -28,
+              -25,
+              29,
+              3
+            ],
+            "origin": [
+              190,
+              308
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 15
+        }
+      ],
+      "height": 844,
+      "overflow": false,
+      "width": 390
+    },
+    {
+      "condition": "復起",
+      "characters": [
+        {
+          "entityId": "m201_agumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -8,
+              -15,
+              8,
+              2
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 33
+        },
+        {
+          "entityId": "m313_gargomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -26,
+              21,
+              3
+            ],
+            "origin": [
+              164,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 33
+        },
+        {
+          "entityId": "m353_meramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -10,
+              -29,
+              15,
+              2
+            ],
+            "origin": [
+              172,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 33
+        },
+        {
+          "entityId": "m413_skullgreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -13,
+              -46,
+              15,
+              2
+            ],
+            "origin": [
+              188,
+              312
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 33
+        },
+        {
+          "entityId": "m518_blackwargreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -24,
+              -56,
+              18,
+              3
+            ],
+            "origin": [
+              204,
+              308
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 33
+        },
+        {
+          "entityId": "m534_victorygreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -17,
+              -42,
+              26,
+              3
+            ],
+            "origin": [
+              174,
+              308
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 33
+        }
+      ],
+      "height": 844,
+      "overflow": false,
+      "width": 390
+    },
+    {
+      "group": "large",
+      "condition": "移動",
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m511_saintgargomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -13,
+              -36,
+              12,
+              3
+            ],
+            "origin": [
+              196,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 3
+        },
+        {
+          "entityId": "m518_blackwargreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -19,
+              -50,
+              21,
+              1
+            ],
+            "origin": [
+              188,
+              316
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 3
+        },
+        {
+          "entityId": "m529_metalgarurumon_va",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -19,
+              -28,
+              23,
+              -1
+            ],
+            "origin": [
+              184,
+              324
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 3
+        },
+        {
+          "entityId": "m530_metalgarurumon_vi",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -19,
+              -28,
+              23,
+              -1
+            ],
+            "origin": [
+              184,
+              324
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 3
+        },
+        {
+          "entityId": "m533_zeedgarurumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -19,
+              -29,
+              24,
+              -1
+            ],
+            "origin": [
+              182,
+              324
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 3
+        },
+        {
+          "entityId": "m534_victorygreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -17,
+              -44,
+              26,
+              3
+            ],
+            "origin": [
+              174,
+              308
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 3
+        }
+      ],
+      "height": 844,
+      "overflow": false,
+      "width": 390
+    },
+    {
+      "group": "large",
+      "condition": "reduced-motion",
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m511_saintgargomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -11,
+              -35,
+              15,
+              3
+            ],
+            "origin": [
+              176,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 9
+        },
+        {
+          "entityId": "m518_blackwargreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -24,
+              -77,
+              32,
+              2
+            ],
+            "origin": [
+              176,
+              312
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 9
+        },
+        {
+          "entityId": "m529_metalgarurumon_va",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -15,
+              -25,
+              15,
+              3
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 9
+        },
+        {
+          "entityId": "m530_metalgarurumon_vi",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -15,
+              -25,
+              15,
+              3
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 9
+        },
+        {
+          "entityId": "m533_zeedgarurumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -27,
+              -24,
+              15,
+              3
+            ],
+            "origin": [
+              216,
+              308
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 9
+        },
+        {
+          "entityId": "m534_victorygreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -17,
+              -61,
+              26,
+              3
+            ],
+            "origin": [
+              174,
+              308
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 9
+        }
+      ],
+      "height": 844,
+      "overflow": false,
+      "width": 390
+    },
+    {
+      "group": "large",
+      "condition": "narrow-attack",
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m511_saintgargomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -12,
+              -34,
+              15,
+              3
+            ],
+            "origin": [
+              180,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 7
+        },
+        {
+          "entityId": "m518_blackwargreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -24,
+              -77,
+              32,
+              2
+            ],
+            "origin": [
+              176,
+              312
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 7
+        },
+        {
+          "entityId": "m529_metalgarurumon_va",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -15,
+              -25,
+              15,
+              3
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 7
+        },
+        {
+          "entityId": "m530_metalgarurumon_vi",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -15,
+              -25,
+              15,
+              3
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 7
+        },
+        {
+          "entityId": "m533_zeedgarurumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -27,
+              -24,
+              15,
+              3
+            ],
+            "origin": [
+              216,
+              308
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 7
+        },
+        {
+          "entityId": "m534_victorygreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -18,
+              -42,
+              28,
+              3
+            ],
+            "origin": [
+              172,
+              308
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 7
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "group": "eggs",
+      "condition": "idle",
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "e000_digitama",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -17,
+              7,
+              1
+            ],
+            "origin": [
+              192,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "e001_digitama",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -17,
+              7,
+              1
+            ],
+            "origin": [
+              192,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "e002_digitama",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -17,
+              7,
+              1
+            ],
+            "origin": [
+              192,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "e003_digitama",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -17,
+              7,
+              1
+            ],
+            "origin": [
+              192,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "e004_digitama",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -17,
+              7,
+              1
+            ],
+            "origin": [
+              192,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "e005_digitama",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -17,
+              7,
+              1
+            ],
+            "origin": [
+              192,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    }
+  ],
+  "groups": [
+    {
+      "firstSpecies": 0,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "e000_digitama",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -17,
+              7,
+              1
+            ],
+            "origin": [
+              192,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "e001_digitama",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -17,
+              7,
+              1
+            ],
+            "origin": [
+              192,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "e002_digitama",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -17,
+              7,
+              1
+            ],
+            "origin": [
+              192,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "e003_digitama",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -17,
+              7,
+              1
+            ],
+            "origin": [
+              192,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "e004_digitama",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -17,
+              7,
+              1
+            ],
+            "origin": [
+              192,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "e005_digitama",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -17,
+              7,
+              1
+            ],
+            "origin": [
+              192,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 6,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "e006_digitama",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -17,
+              7,
+              1
+            ],
+            "origin": [
+              192,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "e007_digitama",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -17,
+              7,
+              1
+            ],
+            "origin": [
+              192,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m001_zurumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -7,
+              12,
+              1
+            ],
+            "origin": [
+              162,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m002_choromon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -8,
+              -13,
+              9,
+              2
+            ],
+            "origin": [
+              186,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m003_nyokimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -11,
+              11,
+              3
+            ],
+            "origin": [
+              168,
+              284
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m004_bubbmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -14,
+              9,
+              3
+            ],
+            "origin": [
+              180,
+              284
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 12,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m005_pitchmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -5,
+              -15,
+              6,
+              0
+            ],
+            "origin": [
+              186,
+              320
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m006_punimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -5,
+              -9,
+              6,
+              1
+            ],
+            "origin": [
+              186,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m007_botamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -5,
+              -9,
+              6,
+              1
+            ],
+            "origin": [
+              186,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m008_poyomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -4,
+              -12,
+              6,
+              -1
+            ],
+            "origin": [
+              180,
+              332
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m009_mokumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -19,
+              5,
+              2
+            ],
+            "origin": [
+              204,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m010_yukimibotamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -6,
+              -11,
+              6,
+              1
+            ],
+            "origin": [
+              192,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 18,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m011_yuramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -6,
+              -18,
+              10,
+              -2
+            ],
+            "origin": [
+              168,
+              344
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m012_petimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -6,
+              -16,
+              11,
+              -3
+            ],
+            "origin": [
+              162,
+              356
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m101_caprimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -8,
+              -12,
+              12,
+              2
+            ],
+            "origin": [
+              168,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m102_koromon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -10,
+              11,
+              2
+            ],
+            "origin": [
+              168,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m103_tanemon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -8,
+              -16,
+              10,
+              2
+            ],
+            "origin": [
+              180,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m104_tunomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -6,
+              -14,
+              8,
+              1
+            ],
+            "origin": [
+              180,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 24,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m105_tokomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -5,
+              -19,
+              9,
+              2
+            ],
+            "origin": [
+              168,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m106_nyaromon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -9,
+              16,
+              2
+            ],
+            "origin": [
+              138,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m107_pagumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -6,
+              -11,
+              11,
+              1
+            ],
+            "origin": [
+              162,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m108_pyokomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -18,
+              10,
+              5
+            ],
+            "origin": [
+              174,
+              260
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m109_pukamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -8,
+              -24,
+              12,
+              -1
+            ],
+            "origin": [
+              176,
+              328
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m110_petimemramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -15,
+              10,
+              1
+            ],
+            "origin": [
+              174,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 30,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m111_mochimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -8,
+              -12,
+              6,
+              2
+            ],
+            "origin": [
+              204,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m112_bebydomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -25,
+              9,
+              -2
+            ],
+            "origin": [
+              184,
+              336
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m113_sunmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -26,
+              8,
+              -2
+            ],
+            "origin": [
+              188,
+              336
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m114_moonmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -6,
+              -24,
+              6,
+              -2
+            ],
+            "origin": [
+              192,
+              336
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m201_agumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -8,
+              -16,
+              8,
+              2
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m202_armadimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -11,
+              -19,
+              15,
+              1
+            ],
+            "origin": [
+              176,
+              312
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 36,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m203_elecmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -12,
+              -18,
+              15,
+              1
+            ],
+            "origin": [
+              180,
+              312
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m204_otamamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -12,
+              -15,
+              14,
+              2
+            ],
+            "origin": [
+              184,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m205_gaomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -8,
+              -19,
+              15,
+              2
+            ],
+            "origin": [
+              164,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m206_gazimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -20,
+              13,
+              3
+            ],
+            "origin": [
+              196,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m208_gabumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -9,
+              -20,
+              9,
+              2
+            ],
+            "origin": [
+              192,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m209_kamemon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -8,
+              -18,
+              10,
+              2
+            ],
+            "origin": [
+              180,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 42,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m210_gizamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -11,
+              -15,
+              13,
+              3
+            ],
+            "origin": [
+              184,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m211_candmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -10,
+              -24,
+              11,
+              1
+            ],
+            "origin": [
+              188,
+              312
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m214_kunemon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -13,
+              -23,
+              10,
+              4
+            ],
+            "origin": [
+              204,
+              288
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m217_gottumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -5,
+              -21,
+              9,
+              1
+            ],
+            "origin": [
+              168,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m218_goburimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -13,
+              -18,
+              9,
+              2
+            ],
+            "origin": [
+              208,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m219_gomamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -10,
+              -15,
+              10,
+              4
+            ],
+            "origin": [
+              192,
+              288
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 48,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m221_terriermon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -10,
+              -17,
+              15,
+              3
+            ],
+            "origin": [
+              172,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m222_tentomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -11,
+              -20,
+              13,
+              3
+            ],
+            "origin": [
+              184,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m223_toyagumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -17,
+              9,
+              2
+            ],
+            "origin": [
+              180,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m225_bakumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -8,
+              -18,
+              10,
+              2
+            ],
+            "origin": [
+              184,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m226_hagurumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -9,
+              -20,
+              10,
+              -4
+            ],
+            "origin": [
+              188,
+              352
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m227_patamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -14,
+              9,
+              2
+            ],
+            "origin": [
+              180,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 54,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m228_palmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -8,
+              -20,
+              8,
+              2
+            ],
+            "origin": [
+              192,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m229_picodevimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -17,
+              11,
+              -2
+            ],
+            "origin": [
+              168,
+              344
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m230_piyomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -20,
+              9,
+              2
+            ],
+            "origin": [
+              180,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m231_falcomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -6,
+              -17,
+              9,
+              2
+            ],
+            "origin": [
+              174,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m232_plotmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -10,
+              -18,
+              12,
+              2
+            ],
+            "origin": [
+              184,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m233_floramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -19,
+              9,
+              2
+            ],
+            "origin": [
+              180,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 60,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m235_mushmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -6,
+              -17,
+              9,
+              1
+            ],
+            "origin": [
+              174,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m236_yukiagumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -8,
+              -16,
+              8,
+              2
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m237_renamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -17,
+              10,
+              3
+            ],
+            "origin": [
+              174,
+              284
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m224_dracomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -17,
+              10,
+              2
+            ],
+            "origin": [
+              174,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m238_coronamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -6,
+              -24,
+              12,
+              2
+            ],
+            "origin": [
+              168,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m239_lunamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -11,
+              -20,
+              10,
+              2
+            ],
+            "origin": [
+              196,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 66,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m240_kuroagumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -8,
+              -16,
+              8,
+              2
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m241_psychemon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -9,
+              -20,
+              9,
+              2
+            ],
+            "origin": [
+              192,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m242_alraumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -8,
+              -20,
+              8,
+              2
+            ],
+            "origin": [
+              192,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m243_tsukaimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -14,
+              10,
+              2
+            ],
+            "origin": [
+              174,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m244_vmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -19,
+              13,
+              2
+            ],
+            "origin": [
+              156,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m255_guilmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -18,
+              10,
+              2
+            ],
+            "origin": [
+              174,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 72,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m301_ankylomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -15,
+              -21,
+              15,
+              2
+            ],
+            "origin": [
+              192,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m303_ikkakumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -12,
+              -20,
+              12,
+              3
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m304_wizarmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -13,
+              -23,
+              11,
+              2
+            ],
+            "origin": [
+              200,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m305_woodmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -26,
+              15,
+              2
+            ],
+            "origin": [
+              188,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m306_airdramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -15,
+              -29,
+              16,
+              0
+            ],
+            "origin": [
+              188,
+              320
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m308_angemon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -9,
+              -28,
+              18,
+              3
+            ],
+            "origin": [
+              156,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 78,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m310_orgemon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -16,
+              -28,
+              15,
+              2
+            ],
+            "origin": [
+              196,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m311_gaogamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -13,
+              -23,
+              17,
+              1
+            ],
+            "origin": [
+              176,
+              312
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m312_kabuterimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -16,
+              -26,
+              16,
+              5
+            ],
+            "origin": [
+              192,
+              280
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m313_gargomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -13,
+              -24,
+              18,
+              3
+            ],
+            "origin": [
+              172,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m314_garurumon_va",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -12,
+              -22,
+              17,
+              1
+            ],
+            "origin": [
+              172,
+              312
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m315_garurumon_vi",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -12,
+              -22,
+              17,
+              1
+            ],
+            "origin": [
+              172,
+              312
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 84,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m316_guardromon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -27,
+              14,
+              2
+            ],
+            "origin": [
+              192,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m317_kiwimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -10,
+              -27,
+              12,
+              3
+            ],
+            "origin": [
+              184,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m318_kyubimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -15,
+              -19,
+              16,
+              3
+            ],
+            "origin": [
+              188,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m320_graymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -9,
+              -24,
+              15,
+              2
+            ],
+            "origin": [
+              168,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m321_clockmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -27,
+              14,
+              2
+            ],
+            "origin": [
+              192,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m322_kuwagamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -17,
+              -22,
+              15,
+              5
+            ],
+            "origin": [
+              200,
+              280
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 90,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m323_gekomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -28,
+              10,
+              2
+            ],
+            "origin": [
+              208,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m324_gesomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -12,
+              -30,
+              19,
+              2
+            ],
+            "origin": [
+              164,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m325_centalmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -15,
+              -32,
+              19,
+              2
+            ],
+            "origin": [
+              176,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m326_cockatrimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -30,
+              16,
+              2
+            ],
+            "origin": [
+              184,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m328_thanderballmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -11,
+              -24,
+              14,
+              3
+            ],
+            "origin": [
+              180,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m329_shellmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -16,
+              -21,
+              16,
+              4
+            ],
+            "origin": [
+              192,
+              288
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 96,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m330_geograymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -9,
+              -24,
+              15,
+              2
+            ],
+            "origin": [
+              168,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m331_seadramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -13,
+              -25,
+              14,
+              1
+            ],
+            "origin": [
+              188,
+              312
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m333_scumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -9,
+              -16,
+              8,
+              3
+            ],
+            "origin": [
+              198,
+              284
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m334_starmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -10,
+              -23,
+              14,
+              2
+            ],
+            "origin": [
+              176,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m337_darcmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -13,
+              -29,
+              16,
+              3
+            ],
+            "origin": [
+              180,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m338_darktyranomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -9,
+              -21,
+              9,
+              2
+            ],
+            "origin": [
+              192,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 102,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m339_tyranomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -9,
+              -21,
+              9,
+              2
+            ],
+            "origin": [
+              192,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m340_tailmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -9,
+              -18,
+              14,
+              2
+            ],
+            "origin": [
+              172,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m341_devidramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -26,
+              16,
+              5
+            ],
+            "origin": [
+              184,
+              280
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m342_devimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -10,
+              -24,
+              12,
+              4
+            ],
+            "origin": [
+              184,
+              288
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m343_togemon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -10,
+              -25,
+              8,
+              0
+            ],
+            "origin": [
+              200,
+              320
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m345_tortamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -15,
+              -18,
+              13,
+              2
+            ],
+            "origin": [
+              200,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 108,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m346_numemon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -10,
+              -19,
+              8,
+              0
+            ],
+            "origin": [
+              204,
+              320
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m347_bakemon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -9,
+              -18,
+              8,
+              -1
+            ],
+            "origin": [
+              198,
+              332
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m349_bardramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -28,
+              16,
+              -2
+            ],
+            "origin": [
+              184,
+              336
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m351_vagimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -11,
+              -22,
+              10,
+              -1
+            ],
+            "origin": [
+              196,
+              328
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m352_peckmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -27,
+              15,
+              2
+            ],
+            "origin": [
+              160,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m353_meramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -9,
+              -30,
+              10,
+              2
+            ],
+            "origin": [
+              188,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 114,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m354_mojyamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -10,
+              -24,
+              11,
+              2
+            ],
+            "origin": [
+              188,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m355_monochromon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -13,
+              -20,
+              14,
+              2
+            ],
+            "origin": [
+              188,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m356_yukidarumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -8,
+              -21,
+              8,
+              2
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m357_unimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -16,
+              -23,
+              12,
+              2
+            ],
+            "origin": [
+              208,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m358_youkomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -15,
+              -19,
+              16,
+              3
+            ],
+            "origin": [
+              188,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m359_rynxmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -17,
+              -18,
+              13,
+              2
+            ],
+            "origin": [
+              208,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 120,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m362_raremon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -8,
+              -20,
+              9,
+              1
+            ],
+            "origin": [
+              186,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m363_leomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -11,
+              -26,
+              16,
+              2
+            ],
+            "origin": [
+              172,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m364_redvagimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -12,
+              -22,
+              10,
+              -1
+            ],
+            "origin": [
+              200,
+              328
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m366_coredramon_ten",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -11,
+              -23,
+              16,
+              3
+            ],
+            "origin": [
+              172,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m367_coredramon_ti",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -11,
+              -23,
+              16,
+              3
+            ],
+            "origin": [
+              172,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m368_firamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -17,
+              -29,
+              15,
+              2
+            ],
+            "origin": [
+              200,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 126,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m369_lekismon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -9,
+              -24,
+              14,
+              2
+            ],
+            "origin": [
+              172,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m370_icedevimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -10,
+              -24,
+              12,
+              4
+            ],
+            "origin": [
+              184,
+              288
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m371_grurumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -12,
+              -22,
+              17,
+              1
+            ],
+            "origin": [
+              172,
+              312
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m372_geremon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -10,
+              -19,
+              8,
+              0
+            ],
+            "origin": [
+              204,
+              320
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m374_sorcerimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -13,
+              -23,
+              11,
+              2
+            ],
+            "origin": [
+              200,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m375_akatorimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -30,
+              16,
+              2
+            ],
+            "origin": [
+              184,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 132,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m376_saverdramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -28,
+              16,
+              -2
+            ],
+            "origin": [
+              184,
+              336
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m377_icemon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -5,
+              -21,
+              9,
+              1
+            ],
+            "origin": [
+              168,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m378_vdramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -12,
+              -23,
+              14,
+              3
+            ],
+            "origin": [
+              184,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m379_growmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -11,
+              -23,
+              14,
+              3
+            ],
+            "origin": [
+              180,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m401_atlurkabuterimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -22,
+              -26,
+              15,
+              5
+            ],
+            "origin": [
+              220,
+              280
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m402_anomalocarimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -23,
+              -33,
+              23,
+              3
+            ],
+            "origin": [
+              192,
+              308
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 138,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m403_andromon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -7,
+              -29,
+              10,
+              2
+            ],
+            "origin": [
+              180,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m404_etemon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -35,
+              14,
+              3
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m405_angewomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -29,
+              17,
+              3
+            ],
+            "origin": [
+              180,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m406_oukuwamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -23,
+              -23,
+              15,
+              5
+            ],
+            "origin": [
+              224,
+              280
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m407_gurudamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -15,
+              -30,
+              16,
+              3
+            ],
+            "origin": [
+              188,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m408_gerbemon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -12,
+              -28,
+              11,
+              2
+            ],
+            "origin": [
+              196,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 144,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m410_cyberdramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -29,
+              16,
+              2
+            ],
+            "origin": [
+              184,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m412_jyureimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -18,
+              -36,
+              20,
+              3
+            ],
+            "origin": [
+              184,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m413_skullgreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -16,
+              -30,
+              16,
+              2
+            ],
+            "origin": [
+              192,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m414_zudomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -16,
+              -29,
+              16,
+              3
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m415_dagomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -16,
+              -37,
+              16,
+              3
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m416_deathmeramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -13,
+              -34,
+              14,
+              2
+            ],
+            "origin": [
+              188,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 150,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m417_delumon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -10,
+              -31,
+              24,
+              3
+            ],
+            "origin": [
+              136,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m418_tonosamagekomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -17,
+              -36,
+              18,
+              3
+            ],
+            "origin": [
+              188,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m419_toriceramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -15,
+              -30,
+              17,
+              2
+            ],
+            "origin": [
+              184,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m420_knightmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -9,
+              -32,
+              15,
+              2
+            ],
+            "origin": [
+              168,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m422_parrotmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -13,
+              -36,
+              17,
+              -5
+            ],
+            "origin": [
+              176,
+              360
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m423_hangyomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -15,
+              -29,
+              15,
+              3
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 156,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m424_pandamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -12,
+              -28,
+              15,
+              3
+            ],
+            "origin": [
+              180,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m426_bigmamemon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -15,
+              -27,
+              17,
+              3
+            ],
+            "origin": [
+              184,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m427_picklemon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -12,
+              -25,
+              13,
+              -1
+            ],
+            "origin": [
+              188,
+              328
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m428_fantomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -30,
+              17,
+              2
+            ],
+            "origin": [
+              180,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m430_vademon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -31,
+              9,
+              1
+            ],
+            "origin": [
+              212,
+              312
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m431_whamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -36,
+              -34,
+              37,
+              0
+            ],
+            "origin": [
+              190,
+              320
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 162,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m432_holyangemon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -12,
+              -29,
+              18,
+              3
+            ],
+            "origin": [
+              168,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m433_machgaogamon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -10,
+              -29,
+              15,
+              1
+            ],
+            "origin": [
+              172,
+              312
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m435_mamemon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -5,
+              -12,
+              6,
+              1
+            ],
+            "origin": [
+              186,
+              308
+            ],
+            "scale": 12,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m437_mammon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -28,
+              -29,
+              16,
+              3
+            ],
+            "origin": [
+              216,
+              308
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m438_megaseadramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -16,
+              -29,
+              15,
+              0
+            ],
+            "origin": [
+              196,
+              320
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m439_megadramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -30,
+              16,
+              1
+            ],
+            "origin": [
+              184,
+              312
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 168,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m440_metalgreymon_vi",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -29,
+              17,
+              2
+            ],
+            "origin": [
+              180,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m441_metalgreymon_va",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -14,
+              -29,
+              17,
+              2
+            ],
+            "origin": [
+              180,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m442_metaltyranomon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -13,
+              -29,
+              18,
+              2
+            ],
+            "origin": [
+              172,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m444_monzaemon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -11,
+              -28,
+              8,
+              3
+            ],
+            "origin": [
+              204,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m445_yatagaramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -16,
+              -31,
+              16,
+              -2
+            ],
+            "origin": [
+              192,
+              336
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m446_rizegreymon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -12,
+              -30,
+              16,
+              2
+            ],
+            "origin": [
+              176,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 174,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m447_rapidmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -15,
+              -30,
+              14,
+              2
+            ],
+            "origin": [
+              196,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m448_lilimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -11,
+              -30,
+              15,
+              2
+            ],
+            "origin": [
+              176,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m449_ladydevimon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -9,
+              -29,
+              15,
+              2
+            ],
+            "origin": [
+              168,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m450_warumonzaemon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -11,
+              -28,
+              11,
+              3
+            ],
+            "origin": [
+              192,
+              296
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m451_weregarurumon_va",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -9,
+              -29,
+              14,
+              2
+            ],
+            "origin": [
+              172,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m452_weregarurumon_vi",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -9,
+              -29,
+              14,
+              2
+            ],
+            "origin": [
+              172,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    },
+    {
+      "firstSpecies": 180,
+      "canvases": 1,
+      "characters": [
+        {
+          "entityId": "m453_wingdramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -20,
+              -35,
+              26,
+              2
+            ],
+            "origin": [
+              180,
+              312
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m454_grondramon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -25,
+              -28,
+              23,
+              2
+            ],
+            "origin": [
+              196,
+              312
+            ],
+            "scale": 4,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m455_flaremon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -9,
+              -30,
+              20,
+              2
+            ],
+            "origin": [
+              148,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m456_crescemon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -15,
+              -30,
+              16,
+              2
+            ],
+            "origin": [
+              188,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m457_superstarmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -13,
+              -28,
+              16,
+              1
+            ],
+            "origin": [
+              180,
+              312
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        },
+        {
+          "entityId": "m458_blackrapidmon",
+          "frame": 0,
+          "geometry": {
+            "blank": false,
+            "nativeBounds": [
+              -15,
+              -30,
+              14,
+              2
+            ],
+            "origin": [
+              196,
+              304
+            ],
+            "scale": 8,
+            "sourceSize": [
+              384,
+              352
+            ]
+          },
+          "rendered": true,
+          "sequence": 0
+        }
+      ],
+      "height": 740,
+      "overflow": false,
+      "width": 320
+    }
+  ]
+}

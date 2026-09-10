@@ -1,0 +1,64 @@
+{
+  "artReview": "PENDING_INDEPENDENT_VISUAL_REVIEW",
+  "decoderSha256": "d8690529211cf396e3b01c064a08f35d628ac30cf2f3ff92beffa8a4941b1d34",
+  "designVersion": "m347-creature-identity-v1-standard-r01",
+  "distinctSourceCanvasStates": 46,
+  "distinctSourcePosesSelected": 1,
+  "eggFullStateCoverage": null,
+  "entityId": "m347_bakemon",
+  "fullMotionQa": "NOT_RUN",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "poseSamplingStatus": "INCOMPLETE",
+  "poses": [
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        7,
+        3,
+        24,
+        20
+      ],
+      "authoredRgbaSha256": "e8dc99e298a30448f404303f0e7f76f875cf0730d430e2a55171e906cd739740",
+      "authoredVisiblePixels": 198,
+      "key": "main/cell_000",
+      "nativeBounds": [
+        -16,
+        -21,
+        8,
+        3
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        7,
+        3,
+        24,
+        20
+      ],
+      "sourceRgbaSha256": "79c1d8aef1537cb3ec1d19abfae94fc5738c1c027096ef0ff6c55452957bce26",
+      "sourceVisiblePixels": 198,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    }
+  ],
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "20dd1648d5e57393e18fba1b0c9b5eaf79d2d89c16a690105c3bd48e5a42fc5b",
+  "settingPoseCount": 1,
+  "shippingReady": false,
+  "sourceFiles": {
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m347_bakemon_main.nanr": "6ecffbd960cd0887c583ee096309e22d43e1800dcb77728cfc60af719128a024",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m347_bakemon_main.ncbr": "6efb08c4b77e781d05a423171fd296baa732cc16607506e8fadcf668f0d26b0f",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m347_bakemon_main.ncer": "09952b784ba233955dc74b068ef2f1340d21ba6071617ee39e44859b371029ea",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m347_bakemon_main.nclr": "f8e16642d8459febbe798e7b4b344543bc0067ec2fd16d2f79141d08cf413d67",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m347_bakemon_sub.nanr": "8482874b3fed0f9f452f05060976485bfb84b6ba0f1e820d83fa687d9208f9c5",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m347_bakemon_sub.ncer": "f227dfcb1fdc68eefbfcfe2927f4eb1cdbf490793406edd6c44f81906710af34",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m347_bakemon_sub.ncgr": "ea86f9645434286b25c0305ce3d8720e1763e644f4c62b019533aebcf136a458",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m347_bakemon_sub.nclr": "d5e93cd5bf5c68a6d10143f4739d2c480d406df063fa9181ac9d0b8a6c97ec4d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m347_bakemon_main/animations.json": "2637074b8a5c6c024be9c4fa6feaa059e33d011000b37bcc7a6ca583a3863725",
+    "08_FULL_FAMILY_CONVERSION/digimon/m347_bakemon_main/cells.json": "441a8c34dd198ad6f9a29293279199c81f84a8e7c65e7579324427759f09abf3",
+    "08_FULL_FAMILY_CONVERSION/digimon/m347_bakemon_sub/animations.json": "8633fdf4ea9a02f938fb749a26a1637bdbfb4a360b38db87939cbf5ad0b8ecbc",
+    "08_FULL_FAMILY_CONVERSION/digimon/m347_bakemon_sub/cells.json": "afee26facff5ceece0a8474483e86938578faafc70d0d498e23d2fc46c5a9d03"
+  },
+  "technicalStatus": "PASS",
+  "visiblePaletteCount": 11
+}

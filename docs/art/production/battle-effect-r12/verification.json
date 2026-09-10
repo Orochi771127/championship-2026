@@ -1,0 +1,190 @@
+{
+  "date": "2026-09-08",
+  "scope": "Supplied original 2D effect images and native-origin bindings in existing loopback battle preview",
+  "branch": "main",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "imageGenerationUsed": false,
+  "focused": {
+    "passed": 33,
+    "failed": 0,
+    "log": "reports/battle-effect-r12-focused.log"
+  },
+  "updatedM201Boundary": {
+    "passed": 14,
+    "failed": 0,
+    "log": "reports/battle-effect-r12-m201-boundary.log"
+  },
+  "regression": {
+    "passed": 1244,
+    "failed": 0,
+    "log": "reports/battle-effect-r12-regression.log",
+    "initialFailure": "Old M201 source-text regex asserted a removed variable; replaced with actual public path and index exclusion check, then rerun passed"
+  },
+  "sourcePngAndDeterminism": "PASS via build-battle-reference-art.py --check",
+  "gameplaySourceHashes": [
+    {
+      "file": "src/championship/battle/battleNormalFlow.js",
+      "sha256": "f6ca18842e8257de346ea9117cc6bdfb08807924cdc8330aa8cc90c828f9ed19",
+      "unchangedFromR11": true
+    },
+    {
+      "file": "src/championship/battle/battleNormalRuntime.js",
+      "sha256": "bf15f4f9c750120d289607c71ddaa8054795c7b5ec58547c0b90346047d471b9",
+      "unchangedFromR11": true
+    },
+    {
+      "file": "src/championship/battle/battleSession.js",
+      "sha256": "f1ab27d0d8320890fe634322b48a7e608c490871ba6cc22795e0764c4f1d0c35",
+      "unchangedFromR11": true
+    },
+    {
+      "file": "src/championship/battle/battleNativeLaunch.js",
+      "sha256": "622015abaa717ac790f6196c4bac7489ae68b755290251ff871a5de799af7e51",
+      "unchangedFromR11": true
+    },
+    {
+      "file": "src/championship/battle/battleScriptNatives.js",
+      "sha256": "62f65825b2ef1b929b9eeca97ba1a12a656ffbee7d9fdf23e5fd52614b52397b",
+      "unchangedFromR11": true
+    },
+    {
+      "file": "src/championship/battle/battleHitRuntime.js",
+      "sha256": "52d6b2702fa88a2f7c6264d0e69170bf6ccce833f29f3740930ecbccb777a514",
+      "unchangedFromR11": true
+    },
+    {
+      "file": "src/championship/battle/battleNativeActors.js",
+      "sha256": "3a2aed6ea48c028feaacbf2f96e5588e9a8786a3e1f00d1c621bd30dfb69c650",
+      "unchangedFromR11": true
+    },
+    {
+      "file": "src/championship/battle/battleEffectActors.js",
+      "sha256": "ec3d4fd40e3d2d124bca96bb6c0fc513675fa17da1e57a0b11c928e4ab22b2d6",
+      "unchangedFromR11": true
+    },
+    {
+      "file": "src/championship/battle/battleProjectileContact.js",
+      "sha256": "e01fa6207bf890773d998de2efe31cc48da9e56442984c48390fd7e5eba1bd1f",
+      "unchangedFromR11": true
+    },
+    {
+      "file": "src/championship/app/battleRuntime.js",
+      "sha256": "5fd44c49ab1c60d40a6d38e1f564a51c1603faca4f24d85a0884dc300d28f9bd",
+      "unchangedFromR11": true
+    },
+    {
+      "file": "src/data/championship/battleNormalFlowTables.json",
+      "sha256": "8be0e96b9874cecfae10d9d5e6bbaa6375b2c71f974f0478cab7c3116bf00a94",
+      "unchangedFromR11": true
+    },
+    {
+      "file": "src/data/championship/battleEffectProfiles.json",
+      "sha256": "10f48b6981a89d675a5c92c2f605f9c958c432e1ca3a7155127fc37f32488ba7",
+      "unchangedFromR11": true
+    }
+  ],
+  "normalBrowserScenarios": [
+    {
+      "file": "seed12-settlement-390.json",
+      "seed": 12,
+      "viewport": {
+        "height": 844,
+        "width": 390
+      },
+      "clock": 1983,
+      "created": 66,
+      "released": 66,
+      "missingCells": [],
+      "seenCells": [
+        "1:135",
+        "81:0",
+        "81:1",
+        "81:2",
+        "81:3",
+        "19:0",
+        "19:2",
+        "19:3",
+        "19:1",
+        "1:86",
+        "1:87",
+        "1:88",
+        "1:89",
+        "1:90",
+        "1:91"
+      ],
+      "poolFree": 496
+    },
+    {
+      "file": "seed21-settlement-320.json",
+      "seed": 21,
+      "viewport": {
+        "height": 712,
+        "width": 320
+      },
+      "clock": 2136,
+      "created": 52,
+      "released": 52,
+      "missingCells": [],
+      "seenCells": [
+        "1:135",
+        "19:0",
+        "19:2",
+        "19:3",
+        "19:1",
+        "81:0",
+        "1:86",
+        "81:1",
+        "1:87",
+        "81:2",
+        "81:3",
+        "1:88",
+        "1:89",
+        "1:90",
+        "1:91",
+        "1:142"
+      ],
+      "poolFree": 496
+    }
+  ],
+  "browserErrors": [],
+  "physicalDeviceAccepted": false,
+  "fullOriginalMovePresentationAccepted": false,
+  "publicBuild": {
+    "status": "BLOCKED_EXISTING_TRACKED_INPUT_DELETION",
+    "missingInput": "src/data/championship/catalogs/entities.r1.json",
+    "existingDeletionPreserved": true,
+    "log": "reports/battle-effect-r12-public-build.log",
+    "targetedExclusionTests": "PASS",
+    "deployed": false
+  },
+  "gitDiffCheck": "PASS",
+  "newTextWhitespaceCheck": "PASS",
+  "localOnly": true,
+  "publicReleasePermitted": false,
+  "shippingReady": false,
+  "changedSurfaceHashes": {
+    "AGENTS.md": "28062ba85f024e1297e1addb9a49d71210f05e680aaf38d27781efaabb20596f",
+    "docs/coordination/OWNER_DIRECTION.md": "fdea3ae071a4fbc9a2d1cdb560dc46adae9e14143d05030f082eecf64020eef0",
+    "docs/README.md": "cbd6d6536959655ddd9a903dafc36ec0bd1101a6105377b4413ae13d322e17f5",
+    "docs/CURRENT_PRODUCT_STATUS.md": "74bb7f18942a9005488eecbee6a79e0dc785fb05f3f0643a8e7bd8373b3d82f1",
+    "docs/REUSE_INVENTORY.md": "a807e602f37b6f364f4a24482a50b0cd0b136cc1083e16dad4c4ea4d3cf8ec3c",
+    "scripts/build-battle-reference-art.py": "969a4b0c4d0bbb17ccbe8998ffa2498e355d026bd605cd029261e5ae1d0db55d",
+    "scripts/lib/public-art-boundary.mjs": "676fba049d136fb21e3761d499c5f3c55a23dce40668ca6e8da4999c875faac2",
+    "scripts/serve.mjs": "fe93cf880dad058d85d305aa3def1a4dbfa64eb0f2ccff9041403c6d2910f3a4",
+    "scripts/build-github-pages.mjs": "e3a5c6c29ad5ab8d584da5d371312aaa41041764d8858abbfe6759779e5a2a11",
+    "scripts/validate-github-pages.mjs": "ccb54beec493f631dba338baa762e78868a2f8ef81fc13d23d9be9ce1fcd5808",
+    "src/championship/presentation/battleEffectArt.js": "a434408824498b979f7f7a87b3727b06abfd9134871a32672a3154a45808fb5d",
+    "src/championship/presentation/battleEffectSprites.js": "0ac964135f1b59bbb82610d11e87781f27f84a781a220c4d743e0d1892a787e4",
+    "assets/production/ART_PRODUCTION_INDEX.json": "acef926f3262ec627b096be31176b9410bdc46ee5dd78896517fa24d6314c7a2",
+    "assets/production/vfx/original-battle-2d-v1/manifest.json": "42ce4f580e0a27eaf30550cd27ad1c108c4f7950f726da10cfaccf121b5bc18c",
+    "assets/production/internal-faithful-baseline/battle-effects-v1/manifest.json": "77b00e48682556c79541140ba97f83017930f1c799e5129ef336636571ef713e",
+    "tests/championship-battle-effect-art-cases.mjs": "f475f917da0903e006490fc6496cf92a233532e582bfabd452c38c928ef4507d",
+    "tests/championship-battle-reference-boundary-cases.mjs": "69ebcc1cbd615c33fb253fb500c8ae417d6840475a800df229f31ec716925fe5",
+    "tests/championship-art-production-a0-cases.mjs": "cedcdeedb7e59c5fc2f5054b43436415901188e0cb1e59b04bc0bed5c9a6fe95",
+    "tests/championship-character-remix-m201-cases.mjs": "df9d177b07b9fd1d2703175566f8ab83fe4da668f5c2aa06e6cfd0ccc16a2f2b",
+    "docs/contracts/championship/battle-effect-pool.v1.json": "715516e479d16c570731b64f63a769725ff1d12dc829944b43d3ce2f5ec81f3a",
+    "docs/contracts/championship/battle-original-effect-preview.v1.json": "32600929fe12c3a9f23bbb8e4e7ba637b0ea979f0aafb3ac31f32ecf990f4f81",
+    "docs/art/production/battle-effect-r11/IMPLEMENTATION_2026-09-08.md": "00326f345c06a38d0896e21847c5cf547e0ef77d4ed7404cd3019d7e8d738627",
+    "docs/art/production/battle-effect-r12/IMPLEMENTATION_2026-09-08.md": "83085f43e2ea0380c17c40c470560bd35aa0f30cb58a5143debf5746a5b08d7d"
+  }
+}

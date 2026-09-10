@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m201_agumon",
+  "selectedConcept": "A",
+  "cell": "main/cell_000",
+  "candidatePath": "docs/art/production/characters/appearance-refresh-v1/m201-a/main-000-pose-attempt-v3.png",
+  "candidateSha256": "47a76e672b0ad30d8891e484e880b10ab44d2a16c2cace581dbc4729ebde9640",
+  "sourceGuidePath": "R:/Projects/Championship2026/_archive/character-appearance-refresh-v1/pose-guides/m201_agumon/main/cell-000.png",
+  "status": "REPAIR_REQUIRED",
+  "identityReview": "A_IDENTITY_RECOGNIZABLE",
+  "motionCompatibility": "FAIL_VISIBLE_POSE_MISMATCH",
+  "alphaStatus": "FAIL_RGB_PAINTED_CHECKERBOARD",
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "technicalProbe": {
+    "method": "Pillow Image.open read-only inspection",
+    "size": [1407, 1118],
+    "mode": "RGB",
+    "bands": ["R", "G", "B"],
+    "hasTransparencyMetadata": false,
+    "finding": "仍無 alpha 通道，背景棋盤已烘入 RGB。"
+  },
+  "preferredIdentityStyleSeed": {
+    "candidate": "v3",
+    "over": "v1",
+    "rationale": "三角耳、奶油短吻/胸腹、銀腕環與金尾持續保留 Owner 選定 A。v3 大色塊更連續、碎毛色斑已大幅減少，輪廓清楚且腕環反光簡化，較適合下一階段維持身份與材質一致。",
+    "role": "IDENTITY_AND_STYLE_REFERENCE_ONLY",
+    "notAllowedRoles": ["APPROVED_MAIN_000_MASTER", "MOTION_SEED", "ALPHA_MASTER", "RUNTIME_FRAME"],
+    "ownerSelectionUnchanged": true
+  },
+  "improvementsFromV1": [
+    "畫面左側前臂已前伸，優於 v1 的兩手下垂；但伸出高度現在過高，尚未對上來源。",
+    "吻/鼻在全畫布中的近似位置比 v1 更接近來源，不代表頭部比例或整組面部端點通過。",
+    "大金色和奶油區域更平順，減少容易逐幀閃爍的筆觸；保留 A 身份。"
+  ],
+  "remainingFailures": [
+    "左手伸出高度太高；右手仍垂落且偏右，兩個腕/手關係未保留來源。",
+    "兩足仍偏低、右足偏右，足距和前後錯開量尚未對上來源。",
+    "尾端仍朝右上抬高且突出，未保持來源較低短尾的位置。",
+    "頭部與耳的上方包絡較高；耳屬已選身份的允許局部改動，但頭/嘴作用點仍須按來源逐一檢查。",
+    "透明度仍失敗；再修 alpha 也不能解除上述姿態缺陷。"
+  ],
+  "approximateAlignment": {
+    "method": "目視估點，各自完整畫布正規化到 0–1；不是 alpha segmentation、原作解剖 landmark 或精準數值追蹤。",
+    "uncertaintyPerAxis": 0.03,
+    "usage": "提供具體返修方向，不用於自動變形或 motion PASS 判定。",
+    "points": [
+      {"label": "畫面左側前伸手端", "source": [0.23, 0.61], "candidate": [0.22, 0.51], "deltaCandidateMinusSource": [-0.01, -0.10], "repair": "保留前伸類型，但手端下移到來源高度；不能把伸手理解為舉高。"},
+      {"label": "畫面較右側可見手端", "source": [0.40, 0.65], "candidate": [0.52, 0.68], "deltaCandidateMinusSource": [0.12, 0.03], "repair": "向左恢復肘腕關係，不能沿右腿側垂下。"},
+      {"label": "畫面左足淺色端", "source": [0.29, 0.71], "candidate": [0.32, 0.80], "deltaCandidateMinusSource": [0.03, 0.09], "repair": "上移並略向左，重建來源錯開足位。"},
+      {"label": "畫面右足淺色端", "source": [0.47, 0.75], "candidate": [0.53, 0.82], "deltaCandidateMinusSource": [0.06, 0.07], "repair": "向左上收回，縮小過寬站姿。"},
+      {"label": "右方尾端", "source": [0.59, 0.60], "candidate": [0.65, 0.50], "deltaCandidateMinusSource": [0.06, -0.10], "repair": "尾端向左下回復，不能增加上翹擺向。"},
+      {"label": "左方吻/鼻端", "source": [0.22, 0.35], "candidate": [0.22, 0.35], "deltaCandidateMinusSource": [0.00, 0.00], "repair": "本估點接近僅表示粗略位置改善；頭向、嘴開口與眼位需重新逐項檢查。"}
+    ]
+  },
+  "recommendedNextStep": "保留 v3 作 A 的身份/材質參照，沿修正 guide 做受控幾何與透明母版處理。不要再把完整 v3 姿態當合格骨架繼續生成全部動作，也不要以透明提示的重複盲試宣稱 alpha 已解決。第一四選案不變。",
+  "scopeNote": "本評審只親自檢查 v1 與 v3；其他嘗試的 RGB/alpha 結論由各自技術記錄提供。"
+}

@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "batchId": "ART-BATTLE-BM05-BM11-STATIC-R1-2026-09-02",
+  "status": "INTERNAL_PIXI_REVIEW_PASSED_NOT_OWNER_APPROVED_NOT_PROMOTED",
+  "artDirectionBrief": "ART_DIRECTION.md",
+  "promptRecord": "PROMPTS.md",
+  "buildScript": "scripts/build-battle-static-arena-family.py",
+  "rights": {
+    "sourceKind": "ORIGINAL_AI_ASSISTED_GENERATION",
+    "generator": "OpenAI image generation through Codex imagegen skill",
+    "createdAt": "2026-09-02",
+    "referencePixelReuse": false,
+    "referencePaletteReuse": false,
+    "referenceGeometryReuse": false,
+    "generationReference": "original-created BM02 project background only",
+    "licenseEvidenceStatus": "GENERATION_RECEIPT_RECORDED_TERMS_LINK_PENDING"
+  },
+  "canonicalDependency": {
+    "id": "production:battle:shared:field-bm00-00",
+    "runtimeSource": "assets/production/internal-battle-review/bm00-bm01-r1/field-bm00-00-shared-layer.png",
+    "duplicatedIntoFamilyBundle": false
+  },
+  "assets": [
+    { "id": "production:battle:arena:field-bm05-01", "fieldId": "field_bm05_01", "function": "BATTLE_SOUTHPOLE", "sourceFile": "source/field-bm05-01-background-generated.png", "dependencies": ["production:battle:shared:field-bm00-00"], "referenceObjectLayerPresent": false },
+    { "id": "production:battle:arena:field-bm06-01", "fieldId": "field_bm06_01", "function": "BATTLE_DESERT", "sourceFile": "source/field-bm06-01-background-generated.png", "dependencies": ["production:battle:shared:field-bm00-00"], "referenceObjectLayerPresent": false },
+    { "id": "production:battle:arena:field-bm08-01", "fieldId": "field_bm08_01", "function": "BATTLE_HELL", "sourceFile": "source/field-bm08-01-background-generated.png", "dependencies": ["production:battle:shared:field-bm00-00"], "referenceObjectLayerPresent": true },
+    { "id": "production:battle:arena:field-bm09-01", "fieldId": "field_bm09_01", "function": "BATTLE_COLOSSEUM", "sourceFile": "source/field-bm09-01-background-generated.png", "dependencies": ["production:battle:shared:field-bm00-00"], "referenceObjectLayerPresent": false },
+    { "id": "production:battle:arena:field-bm10-01", "fieldId": "field_bm10_01", "function": "BATTLE_STADIUM", "sourceFile": "source/field-bm10-01-background-generated.png", "dependencies": ["production:battle:shared:field-bm00-00"], "referenceObjectLayerPresent": false },
+    { "id": "production:battle:arena:field-bm11-01", "fieldId": "field_bm11_01", "function": "BATTLE_DOMESTADIUM", "sourceFile": "source/field-bm11-01-background-generated.png", "dependencies": ["production:battle:shared:field-bm00-00"], "referenceObjectLayerPresent": true }
+  ],
+  "excluded": [
+    { "fieldId": "field_bm03_01", "reason": "ANIMATED_LAYER_UNKNOWN_REQUIRES_TRACE" },
+    { "fieldId": "field_bm04_01", "reason": "ANIMATED_LAYER_UNKNOWN_REQUIRES_TRACE" },
+    { "fieldId": "field_bm07_01", "reason": "INDEPENDENT_NO_BM00_DEPENDENCY_REQUIRES_SEPARATE_ARCHITECTURE_BATCH" }
+  ],
+  "reviewPolicy": {
+    "flattenedInternalReviewOnly": true,
+    "bm08Bm11ObjectSeparationRequiredBeforePromotion": true,
+    "technicalChecksPassed": true,
+    "runtimeQaPassed": true,
+    "runtimeQaReceipt": "docs/reports/art/battle/bm05-bm11-static-r1/browser-qa.json",
+    "humanApproved": false,
+    "readyForRuntime": false,
+    "shippingReady": false
+  }
+}

@@ -1,0 +1,306 @@
+{
+  "target": "creature",
+  "mode": "final_status",
+  "prompt": "M201 final status source family: golden restrained cat-creature, desaturated restrained cat-creature, and solid white status silhouette on chroma background; preserve source pose topology and identity.",
+  "role": "",
+  "input": "docs\\art\\production\\characters\\cat-dog-remix-v1\\m201-seed\\raw-motion-family-13-final-status-v2.png",
+  "threshold": 100,
+  "edge_threshold": 150,
+  "duration": 200,
+  "rows": 1,
+  "cols": 3,
+  "cell_size": 384,
+  "fit_scale": 0.86,
+  "trim_border": 4,
+  "edge_clean_depth": 2,
+  "align": "feet",
+  "shared_scale": true,
+  "scale_strategy": "preserve",
+  "component_mode": "largest",
+  "component_padding": 0,
+  "min_component_area": 1,
+  "edge_touch_margin": 0,
+  "frame_labels": [
+    "final_status-1",
+    "final_status-2",
+    "final_status-3"
+  ],
+  "frames": [
+    {
+      "grid": [
+        0,
+        0
+      ],
+      "source_box": [
+        0,
+        0,
+        643,
+        814
+      ],
+      "component_mode": "largest",
+      "component_count": 1,
+      "selected_component_area": 192045,
+      "selected_component_bbox": [
+        68,
+        37,
+        602,
+        725
+      ],
+      "crop_bbox": [
+        68,
+        37,
+        602,
+        725
+      ],
+      "source_frame_size": [
+        635,
+        806
+      ],
+      "is_empty": false,
+      "subject_area": 192045,
+      "body_core_area": 156015,
+      "body_area_fraction": 0.3048299173521424,
+      "anchor_source": [
+        265.0,
+        702.0
+      ],
+      "source_edge_touch": false,
+      "output_edge_touch": false,
+      "edge_touch": false,
+      "output_size": [
+        219,
+        282
+      ],
+      "preserved_subject_size": [
+        219,
+        282
+      ],
+      "paste_position": [
+        111,
+        86
+      ],
+      "unclamped_paste_position": [
+        111,
+        86
+      ],
+      "paste_clamped": false,
+      "aligned_bbox": [
+        111,
+        86,
+        330,
+        368
+      ],
+      "scale_adjustment": 1.0,
+      "source_to_output_scale": 0.40972704714640196,
+      "bbox_scale_applied": false,
+      "scale_changed": false,
+      "anchor_target": [
+        192.0,
+        358
+      ],
+      "scale_strategy": "preserve",
+      "shared_center_x": 192.0,
+      "shared_feet_y": 358
+    },
+    {
+      "grid": [
+        0,
+        1
+      ],
+      "source_box": [
+        643,
+        0,
+        1286,
+        814
+      ],
+      "component_mode": "largest",
+      "component_count": 2,
+      "selected_component_area": 189354,
+      "selected_component_bbox": [
+        133,
+        37,
+        635,
+        725
+      ],
+      "crop_bbox": [
+        133,
+        37,
+        635,
+        725
+      ],
+      "source_frame_size": [
+        635,
+        806
+      ],
+      "is_empty": false,
+      "subject_area": 189354,
+      "body_core_area": 150167,
+      "body_area_fraction": 0.2934038021922198,
+      "anchor_source": [
+        293.0,
+        697.0
+      ],
+      "source_edge_touch": true,
+      "output_edge_touch": false,
+      "edge_touch": true,
+      "output_size": [
+        206,
+        282
+      ],
+      "preserved_subject_size": [
+        206,
+        282
+      ],
+      "paste_position": [
+        126,
+        88
+      ],
+      "unclamped_paste_position": [
+        126,
+        88
+      ],
+      "paste_clamped": false,
+      "aligned_bbox": [
+        126,
+        88,
+        332,
+        370
+      ],
+      "scale_adjustment": 1.0,
+      "source_to_output_scale": 0.40972704714640196,
+      "bbox_scale_applied": false,
+      "scale_changed": false,
+      "anchor_target": [
+        192.0,
+        358
+      ],
+      "scale_strategy": "preserve",
+      "shared_center_x": 192.0,
+      "shared_feet_y": 358
+    },
+    {
+      "grid": [
+        0,
+        2
+      ],
+      "source_box": [
+        1286,
+        0,
+        1929,
+        814
+      ],
+      "component_mode": "largest",
+      "component_count": 4,
+      "selected_component_area": 180510,
+      "selected_component_bbox": [
+        128,
+        37,
+        635,
+        726
+      ],
+      "crop_bbox": [
+        128,
+        37,
+        635,
+        726
+      ],
+      "source_frame_size": [
+        635,
+        806
+      ],
+      "is_empty": false,
+      "subject_area": 180510,
+      "body_core_area": 151231,
+      "body_area_fraction": 0.295482698657705,
+      "anchor_source": [
+        289.0,
+        700.0
+      ],
+      "source_edge_touch": true,
+      "output_edge_touch": false,
+      "edge_touch": true,
+      "output_size": [
+        208,
+        282
+      ],
+      "preserved_subject_size": [
+        208,
+        282
+      ],
+      "paste_position": [
+        126,
+        86
+      ],
+      "unclamped_paste_position": [
+        126,
+        86
+      ],
+      "paste_clamped": false,
+      "aligned_bbox": [
+        126,
+        86,
+        334,
+        368
+      ],
+      "scale_adjustment": 1.0,
+      "source_to_output_scale": 0.40972704714640196,
+      "bbox_scale_applied": false,
+      "scale_changed": false,
+      "anchor_target": [
+        192.0,
+        358
+      ],
+      "scale_strategy": "preserve",
+      "shared_center_x": 192.0,
+      "shared_feet_y": 358
+    }
+  ],
+  "edge_touch_frames": [
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      2
+    ]
+  ],
+  "source_edge_touch_frames": [
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      2
+    ]
+  ],
+  "output_edge_touch_frames": [],
+  "empty_frames": [],
+  "paste_clamped_frames": [],
+  "qc_summary": {
+    "frame_count": 3,
+    "valid_frame_count": 3,
+    "empty_count": 0,
+    "edge_touch_count": 2,
+    "paste_clamped_count": 0,
+    "body_scale_mean": 0.5457882863796719,
+    "output_subject_height_mean": 282.0,
+    "body_scale_cv": 0.008319774100836359,
+    "anchor_x_std": 0.019472164819938485,
+    "anchor_y_std": 0.0025493854437423392,
+    "anchor_y_mean": 0.8680727874276261
+  },
+  "output_origin": [
+    192.0,
+    358
+  ],
+  "qc_config": {
+    "strict_qc": false,
+    "reject_edge_touch": false,
+    "allow_source_edge_touch": false,
+    "max_body_scale_cv": null,
+    "max_anchor_y_std": null,
+    "max_profile_scale_drift": null
+  }
+}

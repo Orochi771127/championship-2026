@@ -1,0 +1,31 @@
+{
+  "candidateSource": "docs/art/production/characters/appearance-refresh-v1/_work/identity-integration/schema-normalized/m419_toriceramon",
+  "entityId": "m419_toriceramon",
+  "findings": [
+    "大眼奶油眉甲、玉色短吻及暖銅腹甲形成新的親和龍人身份，與原多層藍綠甲面有實質差異。",
+    "可見鼻角、足底、尾端與手部外形仍在原站姿位置。內部肘腕分界較來源簡化，無法單靠目前一格宣稱關節或作用端相容。",
+    "青銅材質分區在亮暗底均可讀；眼和短吻是主要識別焦點。"
+  ],
+  "fullMotionQa": "NOT_RUN",
+  "identityDirectionVersion": "creature-identity-v1",
+  "identityVerdict": "PASS_IDENTITY_DIRECTION",
+  "independentReview": "docs\\art\\production\\characters\\appearance-refresh-v1\\_work\\identity-roster-group3-independent-review\\review.json",
+  "metadataNormalization": "Added canonical identityDesign.family alias from chosenFamily; all pose pixels, palette, bounds and identity rules unchanged.",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "priorIndependentEvidence": {
+    "settingFileSha256": "96af890345001605c6491180e539179e949873c7d44f88458145130919b5dbb9",
+    "technicalQaSha256": "58d2ee09ba0eed0220d5a20ba3f33af8713745e3832e79f7bb34530945586e94"
+  },
+  "reviewMethod": "Actually viewed original/new comparison and native/enlarged authored contact board; independently compiled adopted pixels.",
+  "reviewer": "root / schema normalization of independently reviewed unchanged artwork",
+  "runtimePromotionGranted": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "02245b996d60a537226e7ee651449cc2013f244f0436962bb5cd9c9b87ccaf87",
+  "sourceComparisonSha256": "3efc3653d2ef6723ac5c750836fa60e9d814ceae6ab025f4cb509881f33b4598",
+  "technicalQaSha256": "d042a66ecd15dfe1a8b46f3942236c83f7fb96c98159e363837eeab513e9e5fd",
+  "unresolvedBlockingIssues": [
+    "Additional source representative poses and continuity review required before setting acceptance."
+  ],
+  "verdict": "STANDARD_POSE_REVIEWED_NOT_SETTING_PASS"
+}

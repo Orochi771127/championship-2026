@@ -1,0 +1,30 @@
+{
+  "deferredChecks": [
+    "Complete master bank and source-sequence continuity",
+    "All state-specific interior overlaps",
+    "Normal-game/physical-device QA"
+  ],
+  "entityId": "m431_whamon",
+  "observations": [
+    "Matte gray-brown forehead, short surface arc and blue belly/fin bands remain coherent through standard, open jaw and turned pose.",
+    "Actual source/author comparison preserves external jaw gap and all fin/tail support; broad tooth color blocks are appearance choices requiring full-motion continuity review.",
+    "The pale arc is a designed surface mark, not a claim of a source-verified eyeball position.",
+    "Rejected first method using source RGB mapping; inspected replacement authoring code with full authored material regions plus local glyphs, source silhouette reference separately declared.",
+    "Actually viewed all authored contact sheets and independently compiled source comparisons at native/integer scale."
+  ],
+  "ownerHumanApproval": false,
+  "reviewedPoses": [
+    "main/cell_000",
+    "main/cell_008",
+    "main/cell_012"
+  ],
+  "reviewer": "ROOT_ART_DIRECTOR_INDEPENDENT_OF_AUTHOR",
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "da6e6cdf8cb83355400ae337be3246c33c3d01cfdbc22baa9439a5d635bec7fe",
+  "shippingReady": false,
+  "sourceComparisonSha256": "01fe383a22a5b47e98b8ead114ef4568eab1ddc91b98ff0d74330c31bde80953",
+  "technicalQaSha256": "cec60799ae716596235f82d44ebb2bdf012af354b9d9707fd1eccac5fac787d8",
+  "unresolvedBlockingIssues": [],
+  "verdict": "PASS_SETTING_STAGE"
+}

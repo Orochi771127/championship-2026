@@ -1,0 +1,2874 @@
+{
+  "ordinal": 28,
+  "entityId": "m108_pyokomon",
+  "kind": "digimon",
+  "preview": "cell-000-main-hd4x.png",
+  "previewSha256": "990E739B40D274A7DD1C36ACFC8157D3F97CBC31E2AF0533DF913C8EF3EC90D8",
+  "runtime": "runtime.json",
+  "runtimeSha256": "7F5FF85F2D105611F3387CAC459BAAC4C2E48F2F569FC821CBCF264C028FE878",
+  "main": {
+    "sourceSheetSha256": "3C20127676BBCA8E0008642BC262807F7C7F938A7A01895202BE4A9B6FAA324A",
+    "cellCount": 65,
+    "sequenceCount": 40,
+    "frameRecordCount": 66,
+    "atlasPages": [
+      {
+        "page": 0,
+        "image": "main-atlas-00.png",
+        "data": "main-atlas-00.json",
+        "width": 2020,
+        "height": 1996,
+        "frameCount": 65,
+        "imageSha256": "7F30A2F4A197D773F3FBBF910F86F21FD99F2BC96E61B4050189D39ED1B34147",
+        "dataSha256": "B8ACD44C761B650315383C2F46A1DEA6AB8A2B6EB88D7A1D742E6D78B9FFEE08"
+      }
+    ],
+    "frameManifest": {
+      "m108_pyokomon/main/cell_000": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 11,
+          "w": 51,
+          "h": 69
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "5DFE26EAAD5E49E8D338B2A6E9C576274C3B9FD9C1D354D7F946412F34FFF858",
+        "hdRgbaSha256": "5C72815DDC0FB525512527C30A6620601F4C758042B12811B4FE50BA9D2225E2",
+        "frame": {
+          "x": 8,
+          "y": 8,
+          "w": 204,
+          "h": 276
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 90,
+          "y": 44,
+          "w": 204,
+          "h": 276
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_001": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 27,
+          "w": 38,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "825737C932977F8AD6A92D4ED781E12824EF5226B60C8BDD754C3E3AAF5C8802",
+        "hdRgbaSha256": "FC318CEB190F627CA1D18F3F874C35FF86768934EBAADC55CF0E3F0670EE477A",
+        "frame": {
+          "x": 220,
+          "y": 8,
+          "w": 152,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 152,
+          "w": 152,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_002": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 23,
+          "w": 51,
+          "h": 57
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "C886EEC9F7F573983D6C7CEA6B682F6D6F06A885768B287F1766D7085B09CFED",
+        "hdRgbaSha256": "D2C918241D0B38C59B15BE779F8796D440E106E76389D64EC85C8BA8F8661E43",
+        "frame": {
+          "x": 380,
+          "y": 8,
+          "w": 204,
+          "h": 228
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 90,
+          "y": 92,
+          "w": 204,
+          "h": 228
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_003": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 33,
+          "y": 26,
+          "w": 48,
+          "h": 54
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "639EABD7353807797788177AE6E498C32F3F4C919EFA12776B2F3DA5B37C1435",
+        "hdRgbaSha256": "AAF27AD3C9204E02CE878C11969F336D7EB982CDB3401A0CDD1C8D115556F897",
+        "frame": {
+          "x": 592,
+          "y": 8,
+          "w": 192,
+          "h": 216
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 104,
+          "w": 192,
+          "h": 216
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_004": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 11,
+          "w": 51,
+          "h": 69
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "450C5772FC4E69ADBA65F9FD31D2B392378E7FF7B7A1E069FDA6E782BC86ABF3",
+        "hdRgbaSha256": "73BABCEB8509A51C4BBE35DF3951B38FE8AAF63B29499C2E62F5C1ACC272716F",
+        "frame": {
+          "x": 792,
+          "y": 8,
+          "w": 204,
+          "h": 276
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 90,
+          "y": 44,
+          "w": 204,
+          "h": 276
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_005": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 25,
+          "w": 40,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "F69C9573339BD15CA6957ED4F43F85CB59EBCA91182E1354E578E37D14100F0A",
+        "hdRgbaSha256": "1A2D739FE653BE9C6185C086AFAD516D4C5CF2619234B6FC236EBFB2BEB76535",
+        "frame": {
+          "x": 1004,
+          "y": 8,
+          "w": 160,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 112,
+          "y": 144,
+          "w": 160,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_006": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 11,
+          "w": 51,
+          "h": 69
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "450C5772FC4E69ADBA65F9FD31D2B392378E7FF7B7A1E069FDA6E782BC86ABF3",
+        "hdRgbaSha256": "73BABCEB8509A51C4BBE35DF3951B38FE8AAF63B29499C2E62F5C1ACC272716F",
+        "frame": {
+          "x": 1172,
+          "y": 8,
+          "w": 204,
+          "h": 276
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 90,
+          "y": 44,
+          "w": 204,
+          "h": 276
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_007": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 25,
+          "w": 40,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "F69C9573339BD15CA6957ED4F43F85CB59EBCA91182E1354E578E37D14100F0A",
+        "hdRgbaSha256": "1A2D739FE653BE9C6185C086AFAD516D4C5CF2619234B6FC236EBFB2BEB76535",
+        "frame": {
+          "x": 1384,
+          "y": 8,
+          "w": 160,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 112,
+          "y": 144,
+          "w": 160,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_008": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 42,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "3FC8A47F48C8BFE704F3F44CF6E615066A33E5B9BBF1447F0AB2878AF59826C2",
+        "hdRgbaSha256": "D7CD6CA12C19ED683DF64CB5AF52FED411D0F2A094B0D394D844CBBFEC319DB8",
+        "frame": {
+          "x": 1552,
+          "y": 8,
+          "w": 168,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 108,
+          "y": 120,
+          "w": 168,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_009": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 11,
+          "w": 54,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E342784A85EB05DAA45095111E97DD28152D68AA2F7A315685DD073A8B4595A7",
+        "hdRgbaSha256": "FCFD95A0AA1BF4AC905F831E5E659EC077FA85E761573984477DE5A8E9F7E88D",
+        "frame": {
+          "x": 1728,
+          "y": 8,
+          "w": 216,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 80,
+          "w": 216,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_010": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 21,
+          "y": 11,
+          "w": 54,
+          "h": 69
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "DF07F4D42ACA46941152D727B24718A252676CB7409DF6EAE04539A1784C3EB4",
+        "hdRgbaSha256": "4D37A251E87E08BDB2A0FAF0C27C1442D1057B307D280F59DE74C55F394FC4B6",
+        "frame": {
+          "x": 8,
+          "y": 292,
+          "w": 216,
+          "h": 276
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 44,
+          "w": 216,
+          "h": 276
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_011": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 25,
+          "w": 38,
+          "h": 46
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "705E5E4AE3AE7967CA7E243C94E2CEBE0499AADE386DB46F25213BF93AAA1149",
+        "hdRgbaSha256": "42F09C35493A306FF27EC3E9E07F77EB881E2CD9595FB0B33066A6C914198760",
+        "frame": {
+          "x": 232,
+          "y": 292,
+          "w": 152,
+          "h": 184
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 136,
+          "w": 152,
+          "h": 184
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_012": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 27,
+          "w": 40,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "CE8A2DB5E2BC73672C31AF2266A0DBCB78B4771D9FD4352384258E1B575FF62B",
+        "hdRgbaSha256": "B58C6BA5F7D4F016039C4312F1262E6098581B576F6B8AF1C8C88B1F5C74D8D7",
+        "frame": {
+          "x": 392,
+          "y": 292,
+          "w": 160,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 112,
+          "y": 120,
+          "w": 160,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_013": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 17,
+          "w": 54,
+          "h": 66
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "CC966685B5C7FF5645185217A68A42B7E58256F7637D3E5536CF05B2E7AD1F49",
+        "hdRgbaSha256": "40B5BD6236CA17178398ACA9A7CDF4689E497A3647D55FDBAFF1E6EF9C1D48E7",
+        "frame": {
+          "x": 560,
+          "y": 292,
+          "w": 216,
+          "h": 264
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 56,
+          "w": 216,
+          "h": 264
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_014": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 25,
+          "w": 46,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "AA6435672556DD99418B81C855A1A9A33F69781B16D4B2CF9B052B5BABE14D4A",
+        "hdRgbaSha256": "AEE991132F6ED5F05D3FF82B4CCAEA87E98BCE624EC4A0C11678B7510AF7769A",
+        "frame": {
+          "x": 784,
+          "y": 292,
+          "w": 184,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 152,
+          "w": 184,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_015": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 25,
+          "w": 38,
+          "h": 46
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "705E5E4AE3AE7967CA7E243C94E2CEBE0499AADE386DB46F25213BF93AAA1149",
+        "hdRgbaSha256": "42F09C35493A306FF27EC3E9E07F77EB881E2CD9595FB0B33066A6C914198760",
+        "frame": {
+          "x": 976,
+          "y": 292,
+          "w": 152,
+          "h": 184
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 136,
+          "w": 152,
+          "h": 184
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_016": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 27,
+          "w": 40,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "CE8A2DB5E2BC73672C31AF2266A0DBCB78B4771D9FD4352384258E1B575FF62B",
+        "hdRgbaSha256": "B58C6BA5F7D4F016039C4312F1262E6098581B576F6B8AF1C8C88B1F5C74D8D7",
+        "frame": {
+          "x": 1136,
+          "y": 292,
+          "w": 160,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 112,
+          "y": 120,
+          "w": 160,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_017": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 17,
+          "w": 54,
+          "h": 66
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "CC966685B5C7FF5645185217A68A42B7E58256F7637D3E5536CF05B2E7AD1F49",
+        "hdRgbaSha256": "40B5BD6236CA17178398ACA9A7CDF4689E497A3647D55FDBAFF1E6EF9C1D48E7",
+        "frame": {
+          "x": 1304,
+          "y": 292,
+          "w": 216,
+          "h": 264
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 56,
+          "w": 216,
+          "h": 264
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_018": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 40,
+          "h": 46
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "FE2ADE328B81848AD78A5051138244CC9655CD3BF7D386F8173B97259FC32EB9",
+        "hdRgbaSha256": "B35EEBC587407DB3D7FA09531D3302475016F732B0F0553BBF0D586BD005E107",
+        "frame": {
+          "x": 1528,
+          "y": 292,
+          "w": 160,
+          "h": 184
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 112,
+          "y": 136,
+          "w": 160,
+          "h": 184
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_019": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 34,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "4C93CF57619E87128B4B5B852143830D653B6F45FA100A0A5D11F9AFD164685B",
+        "hdRgbaSha256": "DCED9E043751DEACF3736148D61BB09BC5E008AC663F7DF5EF3B63DDA2DCFBD8",
+        "frame": {
+          "x": 1696,
+          "y": 292,
+          "w": 136,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 120,
+          "w": 136,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_020": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 11,
+          "w": 51,
+          "h": 69
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "71D517ABDA2A247D13C87A085965EAB94EA579228E10CA176F7F2E4A943FBF4F",
+        "hdRgbaSha256": "B81E3ABBA7260E22D08C0213C931EDCEB84CB5E7EBE5F48EAE9E2007EE57BA67",
+        "frame": {
+          "x": 8,
+          "y": 576,
+          "w": 204,
+          "h": 276
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 90,
+          "y": 44,
+          "w": 204,
+          "h": 276
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_021": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 25,
+          "w": 38,
+          "h": 46
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "705E5E4AE3AE7967CA7E243C94E2CEBE0499AADE386DB46F25213BF93AAA1149",
+        "hdRgbaSha256": "42F09C35493A306FF27EC3E9E07F77EB881E2CD9595FB0B33066A6C914198760",
+        "frame": {
+          "x": 220,
+          "y": 576,
+          "w": 152,
+          "h": 184
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 136,
+          "w": 152,
+          "h": 184
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_022": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 35,
+          "w": 46,
+          "h": 28
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "145FC39FEB7EDFA8F10E777C0D5C91584D4C31FCCA51B94EEED32948A858A74D",
+        "hdRgbaSha256": "27E83D6FA563AEFF574C8AC997E0BC356BBEDE39BF03BF12A8B558721092120B",
+        "frame": {
+          "x": 380,
+          "y": 576,
+          "w": 184,
+          "h": 112
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 208,
+          "w": 184,
+          "h": 112
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_023": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 27,
+          "w": 34,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "1869A18C787270E44C9DBE05E07DF7FC0A7B4569E25341C18E6AEDAE2BB44AD0",
+        "hdRgbaSha256": "CFC0EC603316C5B3DA40913462770EAB1F56C4E195DE3C20177A123134E0AC15",
+        "frame": {
+          "x": 572,
+          "y": 576,
+          "w": 136,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 120,
+          "w": 136,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_024": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 23,
+          "w": 42,
+          "h": 46
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "F87D8F4E188D159B21A3483C79946788A0654FEE73D8CBDB1A36856DB2B45CC9",
+        "hdRgbaSha256": "0ABA7980EAA351C20BB4055C223B12EC60C9A3A39C2AE4B7A29B462BC6D5BE78",
+        "frame": {
+          "x": 716,
+          "y": 576,
+          "w": 168,
+          "h": 184
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 108,
+          "y": 136,
+          "w": 168,
+          "h": 184
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_025": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 35,
+          "w": 46,
+          "h": 28
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "145FC39FEB7EDFA8F10E777C0D5C91584D4C31FCCA51B94EEED32948A858A74D",
+        "hdRgbaSha256": "27E83D6FA563AEFF574C8AC997E0BC356BBEDE39BF03BF12A8B558721092120B",
+        "frame": {
+          "x": 892,
+          "y": 576,
+          "w": 184,
+          "h": 112
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 208,
+          "w": 184,
+          "h": 112
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_026": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 11,
+          "w": 51,
+          "h": 69
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "797DDDAFE14D1EA787A9C7C57373CDFBEB880857850C0F418FCF93E9D393A75D",
+        "hdRgbaSha256": "D3084D2AA18911D470B99200BB7A29FB23C46A7F5BF98BDE2B3F399E89CC4791",
+        "frame": {
+          "x": 1084,
+          "y": 576,
+          "w": 204,
+          "h": 276
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 90,
+          "y": 44,
+          "w": 204,
+          "h": 276
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_027": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 25,
+          "w": 38,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "46C42CF862640958A3BEC896871F7507F04523D803ADD63D88FB55C105B7D208",
+        "hdRgbaSha256": "54B21E1074A508332C5962415F7AAA1BCA9AF0903A36642F65941F52611951F9",
+        "frame": {
+          "x": 1296,
+          "y": 576,
+          "w": 152,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 144,
+          "w": 152,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_028": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 23,
+          "w": 51,
+          "h": 57
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "A0E515BB941921D837237634010EEB8A3FE0CAF3DECAB5C695BFED15EBB9D17F",
+        "hdRgbaSha256": "E230A58C87FE37CCD07989391BF90E4B11A501EF0CBD239ED1A8AED70B015B32",
+        "frame": {
+          "x": 1456,
+          "y": 576,
+          "w": 204,
+          "h": 228
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 90,
+          "y": 92,
+          "w": 204,
+          "h": 228
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_029": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 33,
+          "y": 26,
+          "w": 48,
+          "h": 54
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "72C92F82908421F074F54DFCD9B23A07F84F7129D6B81A3ADFF3CE489EF5F409",
+        "hdRgbaSha256": "79F20D6191642EAEB1AFE41CC403EBECB64343F091806D842934F14FC8FA28F2",
+        "frame": {
+          "x": 1668,
+          "y": 576,
+          "w": 192,
+          "h": 216
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 104,
+          "w": 192,
+          "h": 216
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_030": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 11,
+          "w": 51,
+          "h": 69
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "797DDDAFE14D1EA787A9C7C57373CDFBEB880857850C0F418FCF93E9D393A75D",
+        "hdRgbaSha256": "D3084D2AA18911D470B99200BB7A29FB23C46A7F5BF98BDE2B3F399E89CC4791",
+        "frame": {
+          "x": 8,
+          "y": 860,
+          "w": 204,
+          "h": 276
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 90,
+          "y": 44,
+          "w": 204,
+          "h": 276
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_031": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 25,
+          "w": 40,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "763698B9FA73A2C2D686FB6CF7E2939694E8CC8AE71C1FCA2C6AFDF095F915ED",
+        "hdRgbaSha256": "E43E123EF146D0C1A5A2437217B47E27623D1179C557433886A8E42A05A0232B",
+        "frame": {
+          "x": 220,
+          "y": 860,
+          "w": 160,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 112,
+          "y": 144,
+          "w": 160,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_032": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 11,
+          "w": 51,
+          "h": 69
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "797DDDAFE14D1EA787A9C7C57373CDFBEB880857850C0F418FCF93E9D393A75D",
+        "hdRgbaSha256": "D3084D2AA18911D470B99200BB7A29FB23C46A7F5BF98BDE2B3F399E89CC4791",
+        "frame": {
+          "x": 388,
+          "y": 860,
+          "w": 204,
+          "h": 276
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 90,
+          "y": 44,
+          "w": 204,
+          "h": 276
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_033": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 25,
+          "w": 40,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "763698B9FA73A2C2D686FB6CF7E2939694E8CC8AE71C1FCA2C6AFDF095F915ED",
+        "hdRgbaSha256": "E43E123EF146D0C1A5A2437217B47E27623D1179C557433886A8E42A05A0232B",
+        "frame": {
+          "x": 600,
+          "y": 860,
+          "w": 160,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 112,
+          "y": 144,
+          "w": 160,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_034": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 42,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E5BD28C09E3171A00BE8011FA07F80C120F08A7F8594A918C49AF8B97C5992C7",
+        "hdRgbaSha256": "508EA50263ACA18067285E6CEE9A8EBABC9202CEA3DF034E064A79C19E645E7F",
+        "frame": {
+          "x": 768,
+          "y": 860,
+          "w": 168,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 108,
+          "y": 120,
+          "w": 168,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_035": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 40,
+          "h": 46
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E77920C22724589174E8AD69DD3F00D3A137FA8830319D4BD7C91EBE5B64143B",
+        "hdRgbaSha256": "5895CDEC6F96AD63F4394E16066F0400B5C487B230C8CE023F5E2BAEE449498D",
+        "frame": {
+          "x": 944,
+          "y": 860,
+          "w": 160,
+          "h": 184
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 112,
+          "y": 136,
+          "w": 160,
+          "h": 184
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_036": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 34,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "BE593A6200CE55187DFECD83C32018818A59B3E9DEBB1998DA6F7F2CAE3CFBFD",
+        "hdRgbaSha256": "B207AAA125E1D709867FB78247D8ABB01A1C548DC811CAE8CC0CAA6097943092",
+        "frame": {
+          "x": 1112,
+          "y": 860,
+          "w": 136,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 120,
+          "w": 136,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_037": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 11,
+          "w": 51,
+          "h": 69
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "A6A56F684E5D4E3DB6C1ED344B07172C8A1EAA859FD038961407D0E72CC448C7",
+        "hdRgbaSha256": "50BD4160EC4ED5D4A041F622BDF6CB9D69035549CC63DECF8CC32E3764AC77DF",
+        "frame": {
+          "x": 1256,
+          "y": 860,
+          "w": 204,
+          "h": 276
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 90,
+          "y": 44,
+          "w": 204,
+          "h": 276
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_038": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 25,
+          "w": 38,
+          "h": 46
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D751CA1FE3C68EB2C74409182195B991895BADDC91899711239C5A83851F19CE",
+        "hdRgbaSha256": "28AAA0E1BACD0209D8934FFAEE76B088219689973B9682632096E4C35E5E9602",
+        "frame": {
+          "x": 1468,
+          "y": 860,
+          "w": 152,
+          "h": 184
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 136,
+          "w": 152,
+          "h": 184
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_039": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 35,
+          "w": 46,
+          "h": 28
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "7D82B265BBCC5FA632AF02938296BBA0E7C424BF0149B7C640D411F64C55FC34",
+        "hdRgbaSha256": "165C4B4E1E5AAC5647E700327EBC1AA86013CCCA6B4BACCC9CFF7340A27BB632",
+        "frame": {
+          "x": 1628,
+          "y": 860,
+          "w": 184,
+          "h": 112
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 208,
+          "w": 184,
+          "h": 112
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_040": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 27,
+          "w": 34,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "66EA825E2BE3A423216B7A743A6DBB0283112B23B1A31E7EE16A36E7A47AFEBD",
+        "hdRgbaSha256": "1D2CDDC290BC11EB24490B588E0C44B4BF6D13B8040E39ECD02EE8256B7FB7B7",
+        "frame": {
+          "x": 1820,
+          "y": 860,
+          "w": 136,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 120,
+          "w": 136,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_041": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 23,
+          "w": 42,
+          "h": 46
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "195CD228102CBCAE4A4F454D6A7E28121DBCBE1BDF6CF1FBAAF5FC7839121A1C",
+        "hdRgbaSha256": "AA3589E9F893BAD2A9D75A439175CC2A15EB06064E6848CDA7684F9AE253046A",
+        "frame": {
+          "x": 8,
+          "y": 1144,
+          "w": 168,
+          "h": 184
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 108,
+          "y": 136,
+          "w": 168,
+          "h": 184
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_042": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 35,
+          "w": 46,
+          "h": 28
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "7D82B265BBCC5FA632AF02938296BBA0E7C424BF0149B7C640D411F64C55FC34",
+        "hdRgbaSha256": "165C4B4E1E5AAC5647E700327EBC1AA86013CCCA6B4BACCC9CFF7340A27BB632",
+        "frame": {
+          "x": 184,
+          "y": 1144,
+          "w": 184,
+          "h": 112
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 208,
+          "w": 184,
+          "h": 112
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_043": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 42,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "749221846177F2F73493FCEF46063483C0061AF83CB7790AD745886C63E10D0F",
+        "hdRgbaSha256": "291A2D24D0339FE495B75E41A0820E7513A0326112EA13728D66A657758A50D3",
+        "frame": {
+          "x": 376,
+          "y": 1144,
+          "w": 168,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 108,
+          "y": 120,
+          "w": 168,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_044": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 42,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "3FC8A47F48C8BFE704F3F44CF6E615066A33E5B9BBF1447F0AB2878AF59826C2",
+        "hdRgbaSha256": "D7CD6CA12C19ED683DF64CB5AF52FED411D0F2A094B0D394D844CBBFEC319DB8",
+        "frame": {
+          "x": 552,
+          "y": 1144,
+          "w": 168,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 108,
+          "y": 120,
+          "w": 168,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_045": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 42,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "749221846177F2F73493FCEF46063483C0061AF83CB7790AD745886C63E10D0F",
+        "hdRgbaSha256": "291A2D24D0339FE495B75E41A0820E7513A0326112EA13728D66A657758A50D3",
+        "frame": {
+          "x": 728,
+          "y": 1144,
+          "w": 168,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 108,
+          "y": 120,
+          "w": 168,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_046": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 25,
+          "w": 42,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "20F673F20B4B3E63C48F7F8AEABDB473435D4F4B31A0AD761E8B8C472ABDBAAC",
+        "hdRgbaSha256": "D089FE71F7398E003533B580812BD868F4C3D3C4CFC4BF480359802E4D2550CE",
+        "frame": {
+          "x": 904,
+          "y": 1144,
+          "w": 168,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 108,
+          "y": 120,
+          "w": 168,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_047": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 11,
+          "w": 51,
+          "h": 69
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "722400F333576EF219E4A9A3C9F318D50F4DC3C88AAF8F2607F50B0B8C2FD545",
+        "hdRgbaSha256": "4504462BCB56E8634503630E81D57D0A60B9C300E80208102934CAAE4D4DF3B3",
+        "frame": {
+          "x": 1080,
+          "y": 1144,
+          "w": 204,
+          "h": 276
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 90,
+          "y": 44,
+          "w": 204,
+          "h": 276
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_048": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 40,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "4E7AE16F2FF55E3A0C5882E5E7D4055282FCC68C9104EB18A53F31EDBD71E183",
+        "hdRgbaSha256": "7A7A83A1E7F1C10C6405A60B68357DA2B7C4966F2EC689E66EFC114100973EEB",
+        "frame": {
+          "x": 1292,
+          "y": 1144,
+          "w": 160,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 112,
+          "y": 152,
+          "w": 160,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_049": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 27,
+          "w": 38,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "69627E0D4FDEDE0A6DA3D1009D0FEA5F8F6985BB167FBC85209E9CC185E77C69",
+        "hdRgbaSha256": "49C4CF98B528CFAB357C3D5B60AD4E4BFA446B74130A7B1AB6182CFA1B4078A9",
+        "frame": {
+          "x": 1460,
+          "y": 1144,
+          "w": 152,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 120,
+          "w": 152,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_050": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 14,
+          "w": 51,
+          "h": 66
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D0637E3D9AE9AD301FEC4AADAD80747AF5E00280906EF986451482241FD29679",
+        "hdRgbaSha256": "94055DE58463A129E4BE07DB8AFA00CA63773364E307A58B81957BEEDA609E4C",
+        "frame": {
+          "x": 1620,
+          "y": 1144,
+          "w": 204,
+          "h": 264
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 90,
+          "y": 56,
+          "w": 204,
+          "h": 264
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_051": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 23,
+          "w": 38,
+          "h": 54
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "8502B6A90D8B49B5A575FCB9EBE6BAFB24A56CBB2198ED7DFC0B8B1533B0CE8E",
+        "hdRgbaSha256": "12BDD69FBF07E3E52288A2DF047A7A09CA1BF815CABE01FDF429A2A980A5377E",
+        "frame": {
+          "x": 1832,
+          "y": 1144,
+          "w": 152,
+          "h": 216
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 104,
+          "w": 152,
+          "h": 216
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_052": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 20,
+          "w": 60,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "902384A411D5398CEF359A118BE5F2EB6B94C8DDC7A06819012C551E7FFFD992",
+        "hdRgbaSha256": "D4B2DAA5DEF5ADE308D99B39115EFB492368F21A5017890787EACB0E752ED240",
+        "frame": {
+          "x": 8,
+          "y": 1428,
+          "w": 240,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 72,
+          "y": 80,
+          "w": 240,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_053": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 17,
+          "w": 34,
+          "h": 48
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D92BAF96862435FFD97515C6A80C21B1A5E3F5E6FC962428EA1C871EC14B7958",
+        "hdRgbaSha256": "EE0D3DB4E9CBE3891C8EE96FEFF61ED7B04CF7E24555455A7F251F464931A445",
+        "frame": {
+          "x": 256,
+          "y": 1428,
+          "w": 136,
+          "h": 192
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 128,
+          "w": 136,
+          "h": 192
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_054": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 33,
+          "y": 29,
+          "w": 48,
+          "h": 51
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "5309CE52BEE0C18B393555F8B9793674D6D44A3C0460032DA52F23FAAE124E7B",
+        "hdRgbaSha256": "DC9E6AE3C5A75A0B032E0BADB9F68F63047A2CE0EFB7B0D746F49604163980E8",
+        "frame": {
+          "x": 400,
+          "y": 1428,
+          "w": 192,
+          "h": 204
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 116,
+          "w": 192,
+          "h": 204
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_055": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 35,
+          "w": 46,
+          "h": 28
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "145FC39FEB7EDFA8F10E777C0D5C91584D4C31FCCA51B94EEED32948A858A74D",
+        "hdRgbaSha256": "27E83D6FA563AEFF574C8AC997E0BC356BBEDE39BF03BF12A8B558721092120B",
+        "frame": {
+          "x": 600,
+          "y": 1428,
+          "w": 184,
+          "h": 112
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 208,
+          "w": 184,
+          "h": 112
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_056": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 18,
+          "y": 20,
+          "w": 54,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "DE7FFE7274E0E0EF21002210669E03B4343DB2ABCED1AB380DB80A8E3E2755C9",
+        "hdRgbaSha256": "F773AEEB93006B2085EE71385553DAC98368828E7950A31E005DB3671A1A3E42",
+        "frame": {
+          "x": 792,
+          "y": 1428,
+          "w": 216,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 80,
+          "w": 216,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_057": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 14,
+          "w": 51,
+          "h": 66
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D0637E3D9AE9AD301FEC4AADAD80747AF5E00280906EF986451482241FD29679",
+        "hdRgbaSha256": "94055DE58463A129E4BE07DB8AFA00CA63773364E307A58B81957BEEDA609E4C",
+        "frame": {
+          "x": 1016,
+          "y": 1428,
+          "w": 204,
+          "h": 264
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 90,
+          "y": 56,
+          "w": 204,
+          "h": 264
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_058": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 23,
+          "w": 38,
+          "h": 54
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "8502B6A90D8B49B5A575FCB9EBE6BAFB24A56CBB2198ED7DFC0B8B1533B0CE8E",
+        "hdRgbaSha256": "12BDD69FBF07E3E52288A2DF047A7A09CA1BF815CABE01FDF429A2A980A5377E",
+        "frame": {
+          "x": 1228,
+          "y": 1428,
+          "w": 152,
+          "h": 216
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 104,
+          "w": 152,
+          "h": 216
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_059": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 20,
+          "w": 60,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "50A7640E24FC8470E79A4DB970A629B100C9486A56AB1833ECDD047B05A1ED90",
+        "hdRgbaSha256": "A4907A082AF9B935B2684C9D7FFBBC7DD3A85203A4F50AF506E96D6212A2D6D3",
+        "frame": {
+          "x": 1388,
+          "y": 1428,
+          "w": 240,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 72,
+          "y": 80,
+          "w": 240,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_060": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 23,
+          "w": 38,
+          "h": 46
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "3EBD7EB866B820CEB5BC1BBDC70CE7EBAEC92D93AC008D82B39083BDA8022645",
+        "hdRgbaSha256": "8449BB53225CA83364D3CF0172CE801EEC4C5C2CAF96F3D8D3E5C719AA151339",
+        "frame": {
+          "x": 1636,
+          "y": 1428,
+          "w": 152,
+          "h": 184
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 136,
+          "w": 152,
+          "h": 184
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_061": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 11,
+          "w": 54,
+          "h": 69
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "A8AB36A8546F3A37755F8F6994029D94DF1DB2358294DACC09AA6B888803C48B",
+        "hdRgbaSha256": "B701F9C4D9AA1B06785A529A15AB4544F6B48AAE709D35C3E4FC60488F010FF0",
+        "frame": {
+          "x": 1796,
+          "y": 1428,
+          "w": 216,
+          "h": 276
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 44,
+          "w": 216,
+          "h": 276
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_062": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 26,
+          "w": 63,
+          "h": 39
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "9AE2E36F8BD7BA0BC7E9D2F8C7CD46E578A4AA43EB8AB60DF42ABA7D5A73C40C",
+        "hdRgbaSha256": "AB24CA41E5A1335CC162E4EC1391A17D9BCC1B357BE0C5C547AD9929A9F85B8D",
+        "frame": {
+          "x": 8,
+          "y": 1712,
+          "w": 252,
+          "h": 156
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 66,
+          "y": 164,
+          "w": 252,
+          "h": 156
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_063": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 27,
+          "y": 14,
+          "w": 54,
+          "h": 69
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "DF07F4D42ACA46941152D727B24718A252676CB7409DF6EAE04539A1784C3EB4",
+        "hdRgbaSha256": "4D37A251E87E08BDB2A0FAF0C27C1442D1057B307D280F59DE74C55F394FC4B6",
+        "frame": {
+          "x": 268,
+          "y": 1712,
+          "w": 216,
+          "h": 276
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 44,
+          "w": 216,
+          "h": 276
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/main/cell_064": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 11,
+          "w": 51,
+          "h": 69
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "A458F9F7D1644601DB6A28646E7E6133F6CBF4A5C44A3CC7A9DA37D6DD3B22DF",
+        "hdRgbaSha256": "8E417D28F08F23F027B27112005D8BF51074B6F65DBE27858502C15749C1C0CF",
+        "frame": {
+          "x": 492,
+          "y": 1712,
+          "w": 204,
+          "h": 276
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 90,
+          "y": 44,
+          "w": 204,
+          "h": 276
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      }
+    }
+  },
+  "sub": {
+    "sourceSheetSha256": "013A487DC5F0F57281E82EA2A8F0E675ED977869D4C4E6C1AFB50B149A624A87",
+    "cellCount": 18,
+    "sequenceCount": 13,
+    "frameRecordCount": 18,
+    "atlasPages": [
+      {
+        "page": 0,
+        "image": "sub-atlas-00.png",
+        "data": "sub-atlas-00.json",
+        "width": 2004,
+        "height": 576,
+        "frameCount": 18,
+        "imageSha256": "6B958FCF7C6E468F7E5BB96E174F8BEC6042A2EB6CB34F8A004461497DD2A01F",
+        "dataSha256": "ED5094ED26CA6ABE3F329535CAD3A61B67B7BD9172B39E1F16865D28DAD78AC6"
+      }
+    ],
+    "frameManifest": {
+      "m108_pyokomon/sub/cell_000": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 11,
+          "w": 51,
+          "h": 69
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "5DFE26EAAD5E49E8D338B2A6E9C576274C3B9FD9C1D354D7F946412F34FFF858",
+        "hdRgbaSha256": "5C72815DDC0FB525512527C30A6620601F4C758042B12811B4FE50BA9D2225E2",
+        "frame": {
+          "x": 8,
+          "y": 8,
+          "w": 204,
+          "h": 276
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 90,
+          "y": 44,
+          "w": 204,
+          "h": 276
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/sub/cell_001": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 27,
+          "w": 38,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "825737C932977F8AD6A92D4ED781E12824EF5226B60C8BDD754C3E3AAF5C8802",
+        "hdRgbaSha256": "FC318CEB190F627CA1D18F3F874C35FF86768934EBAADC55CF0E3F0670EE477A",
+        "frame": {
+          "x": 220,
+          "y": 8,
+          "w": 152,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 152,
+          "w": 152,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/sub/cell_002": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 23,
+          "w": 51,
+          "h": 57
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "C886EEC9F7F573983D6C7CEA6B682F6D6F06A885768B287F1766D7085B09CFED",
+        "hdRgbaSha256": "D2C918241D0B38C59B15BE779F8796D440E106E76389D64EC85C8BA8F8661E43",
+        "frame": {
+          "x": 380,
+          "y": 8,
+          "w": 204,
+          "h": 228
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 90,
+          "y": 92,
+          "w": 204,
+          "h": 228
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/sub/cell_003": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 33,
+          "y": 26,
+          "w": 48,
+          "h": 54
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "639EABD7353807797788177AE6E498C32F3F4C919EFA12776B2F3DA5B37C1435",
+        "hdRgbaSha256": "AAF27AD3C9204E02CE878C11969F336D7EB982CDB3401A0CDD1C8D115556F897",
+        "frame": {
+          "x": 592,
+          "y": 8,
+          "w": 192,
+          "h": 216
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 104,
+          "w": 192,
+          "h": 216
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/sub/cell_004": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 11,
+          "w": 54,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E342784A85EB05DAA45095111E97DD28152D68AA2F7A315685DD073A8B4595A7",
+        "hdRgbaSha256": "FCFD95A0AA1BF4AC905F831E5E659EC077FA85E761573984477DE5A8E9F7E88D",
+        "frame": {
+          "x": 792,
+          "y": 8,
+          "w": 216,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 80,
+          "w": 216,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/sub/cell_005": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 21,
+          "y": 11,
+          "w": 54,
+          "h": 69
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "DF07F4D42ACA46941152D727B24718A252676CB7409DF6EAE04539A1784C3EB4",
+        "hdRgbaSha256": "4D37A251E87E08BDB2A0FAF0C27C1442D1057B307D280F59DE74C55F394FC4B6",
+        "frame": {
+          "x": 1016,
+          "y": 8,
+          "w": 216,
+          "h": 276
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 44,
+          "w": 216,
+          "h": 276
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/sub/cell_006": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 35,
+          "w": 46,
+          "h": 28
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "145FC39FEB7EDFA8F10E777C0D5C91584D4C31FCCA51B94EEED32948A858A74D",
+        "hdRgbaSha256": "27E83D6FA563AEFF574C8AC997E0BC356BBEDE39BF03BF12A8B558721092120B",
+        "frame": {
+          "x": 1240,
+          "y": 8,
+          "w": 184,
+          "h": 112
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 208,
+          "w": 184,
+          "h": 112
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/sub/cell_007": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 20,
+          "y": 35,
+          "w": 46,
+          "h": 28
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "145FC39FEB7EDFA8F10E777C0D5C91584D4C31FCCA51B94EEED32948A858A74D",
+        "hdRgbaSha256": "27E83D6FA563AEFF574C8AC997E0BC356BBEDE39BF03BF12A8B558721092120B",
+        "frame": {
+          "x": 1432,
+          "y": 8,
+          "w": 184,
+          "h": 112
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 100,
+          "y": 208,
+          "w": 184,
+          "h": 112
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/sub/cell_008": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 11,
+          "w": 51,
+          "h": 69
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "722400F333576EF219E4A9A3C9F318D50F4DC3C88AAF8F2607F50B0B8C2FD545",
+        "hdRgbaSha256": "4504462BCB56E8634503630E81D57D0A60B9C300E80208102934CAAE4D4DF3B3",
+        "frame": {
+          "x": 1624,
+          "y": 8,
+          "w": 204,
+          "h": 276
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 90,
+          "y": 44,
+          "w": 204,
+          "h": 276
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/sub/cell_009": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 26,
+          "y": 27,
+          "w": 40,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "4E7AE16F2FF55E3A0C5882E5E7D4055282FCC68C9104EB18A53F31EDBD71E183",
+        "hdRgbaSha256": "7A7A83A1E7F1C10C6405A60B68357DA2B7C4966F2EC689E66EFC114100973EEB",
+        "frame": {
+          "x": 1836,
+          "y": 8,
+          "w": 160,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 112,
+          "y": 152,
+          "w": 160,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/sub/cell_010": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 27,
+          "w": 38,
+          "h": 50
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "69627E0D4FDEDE0A6DA3D1009D0FEA5F8F6985BB167FBC85209E9CC185E77C69",
+        "hdRgbaSha256": "49C4CF98B528CFAB357C3D5B60AD4E4BFA446B74130A7B1AB6182CFA1B4078A9",
+        "frame": {
+          "x": 8,
+          "y": 292,
+          "w": 152,
+          "h": 200
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 120,
+          "w": 152,
+          "h": 200
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/sub/cell_011": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 14,
+          "w": 51,
+          "h": 66
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D0637E3D9AE9AD301FEC4AADAD80747AF5E00280906EF986451482241FD29679",
+        "hdRgbaSha256": "94055DE58463A129E4BE07DB8AFA00CA63773364E307A58B81957BEEDA609E4C",
+        "frame": {
+          "x": 168,
+          "y": 292,
+          "w": 204,
+          "h": 264
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 90,
+          "y": 56,
+          "w": 204,
+          "h": 264
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/sub/cell_012": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 23,
+          "w": 38,
+          "h": 54
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "8502B6A90D8B49B5A575FCB9EBE6BAFB24A56CBB2198ED7DFC0B8B1533B0CE8E",
+        "hdRgbaSha256": "12BDD69FBF07E3E52288A2DF047A7A09CA1BF815CABE01FDF429A2A980A5377E",
+        "frame": {
+          "x": 380,
+          "y": 292,
+          "w": 152,
+          "h": 216
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 104,
+          "w": 152,
+          "h": 216
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/sub/cell_013": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 20,
+          "w": 60,
+          "h": 60
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "902384A411D5398CEF359A118BE5F2EB6B94C8DDC7A06819012C551E7FFFD992",
+        "hdRgbaSha256": "D4B2DAA5DEF5ADE308D99B39115EFB492368F21A5017890787EACB0E752ED240",
+        "frame": {
+          "x": 540,
+          "y": 292,
+          "w": 240,
+          "h": 240
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 72,
+          "y": 80,
+          "w": 240,
+          "h": 240
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/sub/cell_014": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 17,
+          "w": 34,
+          "h": 48
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D92BAF96862435FFD97515C6A80C21B1A5E3F5E6FC962428EA1C871EC14B7958",
+        "hdRgbaSha256": "EE0D3DB4E9CBE3891C8EE96FEFF61ED7B04CF7E24555455A7F251F464931A445",
+        "frame": {
+          "x": 788,
+          "y": 292,
+          "w": 136,
+          "h": 192
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 128,
+          "w": 136,
+          "h": 192
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/sub/cell_015": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 33,
+          "y": 29,
+          "w": 48,
+          "h": 51
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "5309CE52BEE0C18B393555F8B9793674D6D44A3C0460032DA52F23FAAE124E7B",
+        "hdRgbaSha256": "DC9E6AE3C5A75A0B032E0BADB9F68F63047A2CE0EFB7B0D746F49604163980E8",
+        "frame": {
+          "x": 932,
+          "y": 292,
+          "w": 192,
+          "h": 204
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 116,
+          "w": 192,
+          "h": 204
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/sub/cell_016": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 11,
+          "w": 54,
+          "h": 69
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "A8AB36A8546F3A37755F8F6994029D94DF1DB2358294DACC09AA6B888803C48B",
+        "hdRgbaSha256": "B701F9C4D9AA1B06785A529A15AB4544F6B48AAE709D35C3E4FC60488F010FF0",
+        "frame": {
+          "x": 1132,
+          "y": 292,
+          "w": 216,
+          "h": 276
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 44,
+          "w": 216,
+          "h": 276
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m108_pyokomon/sub/cell_017": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 26,
+          "w": 63,
+          "h": 39
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "9AE2E36F8BD7BA0BC7E9D2F8C7CD46E578A4AA43EB8AB60DF42ABA7D5A73C40C",
+        "hdRgbaSha256": "AB24CA41E5A1335CC162E4EC1391A17D9BCC1B357BE0C5C547AD9929A9F85B8D",
+        "frame": {
+          "x": 1356,
+          "y": 292,
+          "w": 252,
+          "h": 156
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 66,
+          "y": 164,
+          "w": 252,
+          "h": 156
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      }
+    }
+  },
+  "productionStatus": "PIXEL_FAITHFUL_HD4X_FUNCTIONAL_BASELINE",
+  "runtimeEligible": false,
+  "shippingReady": false
+}

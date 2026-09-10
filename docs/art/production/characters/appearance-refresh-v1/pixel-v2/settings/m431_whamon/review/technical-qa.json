@@ -1,0 +1,120 @@
+{
+  "artReview": "PENDING_INDEPENDENT_VISUAL_REVIEW",
+  "decoderSha256": "d8690529211cf396e3b01c064a08f35d628ac30cf2f3ff92beffa8a4941b1d34",
+  "designVersion": "pixel-v2-m431-a-stage1-r02",
+  "distinctSourceCanvasStates": 41,
+  "distinctSourcePosesSelected": 3,
+  "eggFullStateCoverage": null,
+  "entityId": "m431_whamon",
+  "fullMotionQa": "NOT_RUN",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "poseSamplingStatus": "PASS",
+  "poses": [
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        3,
+        4,
+        76,
+        38
+      ],
+      "authoredRgbaSha256": "cb0e7a7dfcefaba8a41140c60e611b6c13f0787a9f4d33be9d8441c9b1c2dd43",
+      "authoredVisiblePixels": 1280,
+      "key": "main/cell_000",
+      "nativeBounds": [
+        -39,
+        -38,
+        41,
+        2
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        3,
+        4,
+        76,
+        38
+      ],
+      "sourceRgbaSha256": "9288848da2998572b2eec7474b820382dd78294ec1b60f8304e4c56a9769d03c",
+      "sourceVisiblePixels": 1280,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        2,
+        0,
+        65,
+        44
+      ],
+      "authoredRgbaSha256": "887379e865eefcd90fece64b83ce1dcd639c8722a9905bab35a5a80d6080dd2b",
+      "authoredVisiblePixels": 1290,
+      "key": "main/cell_008",
+      "nativeBounds": [
+        -31,
+        -46,
+        41,
+        2
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        2,
+        0,
+        65,
+        44
+      ],
+      "sourceRgbaSha256": "965905d7c1fb23edf50599657e74fe3a7e37a30d7e5fca709cf48457cd4154d8",
+      "sourceVisiblePixels": 1290,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        0,
+        3,
+        53,
+        48
+      ],
+      "authoredRgbaSha256": "2a34f6ab8e00f353c5aaae402750aba61afe97f2a1586984b4722e72bb8fd066",
+      "authoredVisiblePixels": 1141,
+      "key": "main/cell_012",
+      "nativeBounds": [
+        -39,
+        -46,
+        17,
+        2
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        0,
+        3,
+        53,
+        48
+      ],
+      "sourceRgbaSha256": "3df298b5e814bb49fe3962fcc8b70436b92604ba64465ce0685c4350712c4eb1",
+      "sourceVisiblePixels": 1141,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    }
+  ],
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "da6e6cdf8cb83355400ae337be3246c33c3d01cfdbc22baa9439a5d635bec7fe",
+  "settingPoseCount": 3,
+  "shippingReady": false,
+  "sourceFiles": {
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m431_whamon_main.nanr": "5f86472b64c12953e61a564b9bf13cb76b6a0bcbc9eafbe1c1fd43891f9a77d0",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m431_whamon_main.ncbr": "518847ac0defd526413f990903abb4f74e1212677ab656a7a6670c527a3326b5",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m431_whamon_main.ncer": "a2ab7675a8c03133dec73f79a4f7c92fa001fc0213c3de281c48f33730e93983",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m431_whamon_main.nclr": "e393731148d063ac239f06b52816e8255dc08c31b455ecf25a68cd9df334dc60",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m431_whamon_sub.nanr": "b92cb8a9fb90d40dfdfd950d6cee2dd81b4b75bc58f9c4417a31bf5a81aebe11",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m431_whamon_sub.ncer": "b63fd9ed7fe3ae0babec8ae6a3883f6559b822282ce515348cf12e5a482e9e01",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m431_whamon_sub.ncgr": "53dd308549ea7b159f428211b840d00cf7c503fac9e58b794bd179e64ddb7dcb",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m431_whamon_sub.nclr": "fdf811501d05d9c2b29490fbcf49a956069bb45672fffff888f9487863450fb3",
+    "08_FULL_FAMILY_CONVERSION/digimon/m431_whamon_main/animations.json": "c62e09f8c5fa74baaa676d1c0eaa71bb8d4501f61cc5379e3465e03f76dd2709",
+    "08_FULL_FAMILY_CONVERSION/digimon/m431_whamon_main/cells.json": "d4f29f04f3db2e30cefd8830ea342a5fb06d3f464aeaafd2a1a7028e6d6b1c35",
+    "08_FULL_FAMILY_CONVERSION/digimon/m431_whamon_sub/animations.json": "e30134f30f5eadc2c047803bc7980a57c64219f8c1eeeadb0a52cb747b874836",
+    "08_FULL_FAMILY_CONVERSION/digimon/m431_whamon_sub/cells.json": "1369d4bdb228962f6be03b964ae0378287356346880dee3248d6f2163516f6d6"
+  },
+  "technicalStatus": "PASS",
+  "visiblePaletteCount": 14
+}

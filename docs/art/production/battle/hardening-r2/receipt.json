@@ -1,0 +1,373 @@
+{
+  "schemaVersion": 1,
+  "batchId": "ART-BATTLE-OBJECT-HARDENING-R2-2026-09-02",
+  "status": "INTERNAL_PIXI_REVIEW_PASSED_NOT_OWNER_APPROVED_NOT_PROMOTED",
+  "sourcePolicy": "ORIGINAL_CREATED_PIXELS_WITH_METADATA_ONLY_REFERENCE_PLACEMENT",
+  "researchPixelsInRuntime": false,
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "sourceInputs": [
+    {
+      "file": "docs/art/production/battle/hardening-r2/source/field-bm04-01-palm-generated.png",
+      "sha256": "F0C45C3C327973106CE1F3DDD67D18EE2CE3C68EFDE8E7A5DA4D0C19B0E5B54C",
+      "alpha": true
+    },
+    {
+      "file": "docs/art/production/battle/hardening-r2/source/field-bm04-01-pylon-generated.png",
+      "sha256": "5CDA03A56EE60CF5738C638BD043702A67EAEC12A68A84FAA65CEFB40267F3BE",
+      "alpha": true
+    },
+    {
+      "file": "docs/art/production/battle/hardening-r2/source/field-bm08-01-dead-tree-generated.png",
+      "sha256": "1C46198BEFA1C94F7DB5257977F83F6A584F9349B934A072D993DCD2A8E4B0E3",
+      "alpha": true
+    },
+    {
+      "file": "docs/art/production/battle/hardening-r2/source/field-bm11-01-light-ribbon-generated.png",
+      "sha256": "66FB6EE44D9CD0FA10B1CA91EB5A9E2954F69CC060A061B8465DCAF0D464F42D",
+      "alpha": true
+    }
+  ],
+  "arenas": [
+    {
+      "key": "bm04",
+      "fieldId": "field_bm04_01",
+      "runtimeManifest": "assets/production/internal-battle-review/hardening-r2/runtime.bm04.review.json",
+      "layerRoles": [
+        "ANIMATED_TERRAIN_BED",
+        "ARENA_TERRAIN",
+        "FIELD_OBJECTS",
+        "CANONICAL_SHARED_LAYER"
+      ],
+      "placements": [
+        {
+          "ordinal": 0,
+          "sequenceId": 1,
+          "cellId": 1,
+          "sourceAnchor": [
+            24,
+            79
+          ],
+          "nativeBounds": {
+            "minX": -8,
+            "minY": -23,
+            "maxXExclusive": 16,
+            "maxYExclusive": 1
+          },
+          "productionEnvelope": [
+            59,
+            211,
+            89,
+            90
+          ],
+          "productionPaste": [
+            78,
+            211,
+            51,
+            90
+          ]
+        },
+        {
+          "ordinal": 1,
+          "sequenceId": 1,
+          "cellId": 1,
+          "sourceAnchor": [
+            208,
+            55
+          ],
+          "nativeBounds": {
+            "minX": -8,
+            "minY": -23,
+            "maxXExclusive": 16,
+            "maxYExclusive": 1
+          },
+          "productionEnvelope": [
+            738,
+            120,
+            89,
+            90
+          ],
+          "productionPaste": [
+            757,
+            120,
+            51,
+            90
+          ]
+        },
+        {
+          "ordinal": 2,
+          "sequenceId": 1,
+          "cellId": 1,
+          "sourceAnchor": [
+            24,
+            271
+          ],
+          "nativeBounds": {
+            "minX": -8,
+            "minY": -23,
+            "maxXExclusive": 16,
+            "maxYExclusive": 1
+          },
+          "productionEnvelope": [
+            59,
+            934,
+            89,
+            90
+          ],
+          "productionPaste": [
+            78,
+            934,
+            51,
+            90
+          ]
+        },
+        {
+          "ordinal": 3,
+          "sequenceId": 2,
+          "cellId": 2,
+          "sourceAnchor": [
+            392,
+            79
+          ],
+          "nativeBounds": {
+            "minX": -8,
+            "minY": -23,
+            "maxXExclusive": 16,
+            "maxYExclusive": 1
+          },
+          "productionEnvelope": [
+            1418,
+            211,
+            89,
+            90
+          ],
+          "productionPaste": [
+            1437,
+            211,
+            51,
+            90
+          ]
+        },
+        {
+          "ordinal": 4,
+          "sequenceId": 3,
+          "cellId": 3,
+          "sourceAnchor": [
+            392,
+            271
+          ],
+          "nativeBounds": {
+            "minX": -8,
+            "minY": -23,
+            "maxXExclusive": 16,
+            "maxYExclusive": 1
+          },
+          "productionEnvelope": [
+            1418,
+            934,
+            89,
+            90
+          ],
+          "productionPaste": [
+            1437,
+            934,
+            51,
+            90
+          ]
+        },
+        {
+          "ordinal": 5,
+          "sequenceId": 0,
+          "cellId": 0,
+          "sourceAnchor": [
+            352,
+            295
+          ],
+          "nativeBounds": {
+            "minX": -32,
+            "minY": -63,
+            "maxXExclusive": 32,
+            "maxYExclusive": 1
+          },
+          "productionEnvelope": [
+            1182,
+            873,
+            236,
+            241
+          ],
+          "productionPaste": [
+            1220,
+            873,
+            160,
+            241
+          ]
+        },
+        {
+          "ordinal": 6,
+          "sequenceId": 0,
+          "cellId": 0,
+          "sourceAnchor": [
+            400,
+            271
+          ],
+          "nativeBounds": {
+            "minX": -32,
+            "minY": -63,
+            "maxXExclusive": 32,
+            "maxYExclusive": 1
+          },
+          "productionEnvelope": [
+            1359,
+            783,
+            236,
+            241
+          ],
+          "productionPaste": [
+            1397,
+            783,
+            160,
+            241
+          ]
+        }
+      ],
+      "reviewFrames": [
+        {
+          "frameIndex": 0,
+          "file": "review/bm04/field-bm04-01-composite-frame-00.png",
+          "sha256": "5B6458FCD47E79771199A72D437E3E312630532330EC6C23ADC653A4C63297FE"
+        },
+        {
+          "frameIndex": 1,
+          "file": "review/bm04/field-bm04-01-composite-frame-01.png",
+          "sha256": "674EEB77C8FA5492677F1148E7DAF13CAA02D250B7E9EF381CF2A62C040C3B41"
+        }
+      ]
+    },
+    {
+      "key": "bm08",
+      "fieldId": "field_bm08_01",
+      "runtimeManifest": "assets/production/internal-battle-review/hardening-r2/runtime.bm08.review.json",
+      "layerRoles": [
+        "ARENA_BACKGROUND",
+        "FIELD_OBJECTS",
+        "CANONICAL_SHARED_LAYER"
+      ],
+      "placements": [
+        {
+          "ordinal": 0,
+          "sequenceId": 0,
+          "cellId": 0,
+          "sourceAnchor": [
+            368,
+            304
+          ],
+          "nativeBounds": {
+            "minX": -24,
+            "minY": -63,
+            "maxXExclusive": 32,
+            "maxYExclusive": 1
+          },
+          "productionEnvelope": [
+            1270,
+            907,
+            207,
+            241
+          ],
+          "productionPaste": [
+            1294,
+            907,
+            158,
+            241
+          ]
+        }
+      ],
+      "reviewFrames": [
+        {
+          "frameIndex": 0,
+          "file": "review/bm08/field-bm08-01-composite-frame-00.png",
+          "sha256": "375F780D8A117D10ACB5BBAEFB09C76E5945A89086CAA614572804154697B946"
+        }
+      ]
+    },
+    {
+      "key": "bm11",
+      "fieldId": "field_bm11_01",
+      "runtimeManifest": "assets/production/internal-battle-review/hardening-r2/runtime.bm11.review.json",
+      "layerRoles": [
+        "ARENA_BACKGROUND",
+        "FIELD_OBJECTS",
+        "CANONICAL_SHARED_LAYER"
+      ],
+      "placements": [
+        {
+          "ordinal": 0,
+          "sequenceId": 0,
+          "cellId": 0,
+          "sourceAnchor": [
+            208,
+            12
+          ],
+          "nativeBounds": {
+            "minX": -64,
+            "minY": -15,
+            "maxXExclusive": 64,
+            "maxYExclusive": 1
+          },
+          "productionEnvelope": [
+            532,
+            -11,
+            473,
+            60
+          ],
+          "productionPaste": [
+            532,
+            -11,
+            473,
+            60
+          ]
+        },
+        {
+          "ordinal": 0,
+          "sequenceId": 0,
+          "cellId": 1,
+          "sourceAnchor": [
+            208,
+            12
+          ],
+          "nativeBounds": {
+            "minX": -64,
+            "minY": -15,
+            "maxXExclusive": 64,
+            "maxYExclusive": 1
+          },
+          "productionEnvelope": [
+            532,
+            -11,
+            473,
+            60
+          ],
+          "productionPaste": [
+            532,
+            -11,
+            473,
+            60
+          ]
+        }
+      ],
+      "reviewFrames": [
+        {
+          "frameIndex": 0,
+          "file": "review/bm11/field-bm11-01-composite-frame-00.png",
+          "sha256": "443121545EA03C06645B8506EE1DD109A121BB5779A2D3C11B93481A938EFD76"
+        },
+        {
+          "frameIndex": 1,
+          "file": "review/bm11/field-bm11-01-composite-frame-01.png",
+          "sha256": "25C353006FF347482EE749C8B80805AE7B49932445032CC9C7A1C1876BB7B59E"
+        }
+      ]
+    }
+  ]
+}

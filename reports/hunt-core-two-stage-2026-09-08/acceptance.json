@@ -1,0 +1,87 @@
+{
+  "date": "2026-09-08",
+  "branch": "main",
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "phaseCount": 2,
+  "overallComplete": false,
+  "equipment": {
+    "total": 46,
+    "normalAvailable": 46,
+    "blockedScatter": 0,
+    "approvedScatter": 4
+  },
+  "pluginsIntegrated": 30,
+  "memoryCards": 3,
+  "finalRegression": {
+    "passed": 206,
+    "failed": 0,
+    "receipt": "scatter-approved-regression.txt"
+  },
+  "diffCheck": "PASS",
+  "normalApiCaptureHomeSaveContinue": "PASS",
+  "duplicateHomeCommitGuard": "PASS",
+  "browser": {
+    "url": "http://127.0.0.1:8738/championship.html",
+    "viewportReviewed": [
+      390,
+      844
+    ],
+    "normalEntry": "PASS",
+    "cameraPan": "PASS",
+    "foodPlacement": "PASS",
+    "ropeStrokeVisible": "PASS",
+    "huntClockAndAutomaticReturn": "OBSERVED",
+    "foodQuantityBefore": 10,
+    "foodQuantityAfter": 9,
+    "foodQuantityAfterSaveReloadContinue": 9,
+    "fullTouchCaptureToHome": "NOT_VERIFIED",
+    "devLogsAtCompletion": [],
+    "viewportOverrideReset": true,
+    "receiptScope": "Retained earlier two-stage browser observations; not rerun as scatter acceptance"
+  },
+  "physicalPhoneQa": "NOT_PERFORMED",
+  "fullToolVisualAudioParity": false,
+  "scatterOwnerDecision": "APPROVED_ORDINARY_SHOT_SPECIES_RESPONSE",
+  "shippingStatusChanged": false,
+  "report": "docs/research/HUNT_CORE_TWO_STAGE_IMPLEMENTATION_2026-09-08.md",
+  "previousRegression": {
+    "passed": 204,
+    "failed": 0,
+    "receipt": "final-regression.txt"
+  },
+  "normalConsumablesIntegration": {
+    "items": 34,
+    "controlledInput": "Starting owned inventory only",
+    "normalGeneratedActors": true,
+    "scatterAi9ReactionItems": 4,
+    "test": "tests/championship-hunt-equipped-integration-cases.mjs"
+  },
+  "scatterCorrection": {
+    "classification": "OWNER_APPROVED_ADAPTATION",
+    "ownerReply": "好的請開始開工",
+    "approval": "docs/coordination/OWNER_DIRECTION.md",
+    "response": "max(1, species.effectiveness[1])",
+    "ordinaryShotBehaviorChanged": false,
+    "variants": [
+      8,
+      9,
+      10,
+      11
+    ],
+    "speciesResponseComparisons": 912,
+    "preserved": [
+      "seven-pellet cap",
+      "centre-first position",
+      "B2/B3 order including final draws",
+      "native offsets",
+      "ten primary slots",
+      "60-update cooldown",
+      "one unit per volley",
+      "native normal/stun reaction",
+      "eight-update primary cleanup"
+    ],
+    "originalBugReceipt": "spread-original-input.json",
+    "browserScatterQa": "NOT_PERFORMED",
+    "test": "tests/championship-hunt-tool-lifecycle-cases.mjs"
+  }
+}

@@ -1,0 +1,2840 @@
+{
+  "ordinal": 11,
+  "entityId": "m003_nyokimon",
+  "kind": "digimon",
+  "preview": "cell-000-main-hd4x.png",
+  "previewSha256": "336251239AD1993144E78DDCF3C6F929E3C309C145A74FD0B8011A27D33AFA53",
+  "runtime": "runtime.json",
+  "runtimeSha256": "6E8EC724F71F02C4E390F6E1021349189B82378A2E0F90C9212EE6216F8A93D2",
+  "main": {
+    "sourceSheetSha256": "05D801B462AA060B7D35E5B2280D40B75BFA7673EDE5E2B97F94313A8CD2A408",
+    "cellCount": 64,
+    "sequenceCount": 40,
+    "frameRecordCount": 65,
+    "atlasPages": [
+      {
+        "page": 0,
+        "image": "main-atlas-00.png",
+        "data": "main-atlas-00.json",
+        "width": 2048,
+        "height": 1484,
+        "frameCount": 64,
+        "imageSha256": "6E8484126A0E9A9219DDCF3CE4ABA9A789A4BECB05CE2C66DFCAD6268B422F42",
+        "dataSha256": "13AEC8FF688C076A9DB7D715081C7E63B43EE90DEAB2EEEBF304066A69DC13D7"
+      }
+    ],
+    "frameManifest": {
+      "m003_nyokimon/main/cell_000": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 32,
+          "w": 54,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "35CBB524F91DC88F337C3D19DFEACB3278BD27EB4BDC4AA68831858F1430D554",
+        "hdRgbaSha256": "B2F84C5B4496E82A5BE6769F600F6EB76493E6C9547E56B05EA039F2266A92ED",
+        "frame": {
+          "x": 8,
+          "y": 8,
+          "w": 216,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 152,
+          "w": 216,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_001": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 15,
+          "y": 26,
+          "w": 48,
+          "h": 36
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "79B5CE86354B4BF8DE985068A61A2D6D2684820C5AD655A3F475ACA649D0DDD9",
+        "hdRgbaSha256": "E69E0D8EA36E6FB76AD2083E9CE855B44B8B400728737921F2EA58C6638E1826",
+        "frame": {
+          "x": 232,
+          "y": 8,
+          "w": 192,
+          "h": 144
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 176,
+          "w": 192,
+          "h": 144
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_002": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 32,
+          "w": 54,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "A1A55491426FC161409B9555AA2A74125E7EBC7883758041EFAC1024B60D50CF",
+        "hdRgbaSha256": "6744F1EAA6804DFAD6481D6339DE63F9C8BA445746A004464319B3EE82659FE6",
+        "frame": {
+          "x": 432,
+          "y": 8,
+          "w": 216,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 152,
+          "w": 216,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_003": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 15,
+          "y": 26,
+          "w": 48,
+          "h": 36
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "86D1212B547B783CAB6D50332F54C7C8A4A9CF1B65A4C916EAC448C95D2303A7",
+        "hdRgbaSha256": "0E274CE4912240E5EEDCBCD2E4D68CC5D47AF865746452766A50BB1CF0C3EB4E",
+        "frame": {
+          "x": 656,
+          "y": 8,
+          "w": 192,
+          "h": 144
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 176,
+          "w": 192,
+          "h": 144
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_004": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 26,
+          "w": 54,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "2B53EFFF75DFF47EBDB89F002C4DE8D5DED95AF3EC0D4B18C384C0FFCBB627E5",
+        "hdRgbaSha256": "836D3E24386B156B872E355F8B389C22D63E833048EB038DBEF1F2366B2C6EB6",
+        "frame": {
+          "x": 856,
+          "y": 8,
+          "w": 216,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 152,
+          "w": 216,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_005": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 23,
+          "w": 57,
+          "h": 45
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D19B4BF2AD1657C8AEB5D9152747E8DE2FC74BC3DE819F2B141D9E742FE048B1",
+        "hdRgbaSha256": "0CD61BACE61B807168E9FC1D0C925B21E148E6F61083293CE4E813010ABEF5AC",
+        "frame": {
+          "x": 1080,
+          "y": 8,
+          "w": 228,
+          "h": 180
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 78,
+          "y": 140,
+          "w": 228,
+          "h": 180
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_006": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 26,
+          "w": 54,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "2B53EFFF75DFF47EBDB89F002C4DE8D5DED95AF3EC0D4B18C384C0FFCBB627E5",
+        "hdRgbaSha256": "836D3E24386B156B872E355F8B389C22D63E833048EB038DBEF1F2366B2C6EB6",
+        "frame": {
+          "x": 1316,
+          "y": 8,
+          "w": 216,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 152,
+          "w": 216,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_007": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 23,
+          "w": 57,
+          "h": 45
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D19B4BF2AD1657C8AEB5D9152747E8DE2FC74BC3DE819F2B141D9E742FE048B1",
+        "hdRgbaSha256": "0CD61BACE61B807168E9FC1D0C925B21E148E6F61083293CE4E813010ABEF5AC",
+        "frame": {
+          "x": 1540,
+          "y": 8,
+          "w": 228,
+          "h": 180
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 78,
+          "y": 140,
+          "w": 228,
+          "h": 180
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_008": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 36,
+          "y": 27,
+          "w": 26,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "B2B16FB9A15BEFEE2899C748C3B930C78497255C90ED71633C2B58AC83593E9C",
+        "hdRgbaSha256": "5BF0760AA1168B74C22D436F3661136FC5C50DDAFDD0EDFCD2A769CF8BDA8C14",
+        "frame": {
+          "x": 1776,
+          "y": 8,
+          "w": 104,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 140,
+          "y": 144,
+          "w": 104,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_009": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 32,
+          "y": 17,
+          "w": 38,
+          "h": 48
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "CCB2CD5BE0B8DC6B49BFE7B1F0FFE1A01B802137E64B383FE518EE6781FB0FD2",
+        "hdRgbaSha256": "814506636D9E99294528745056FC229F1E9863450EA8538602C41595208270C0",
+        "frame": {
+          "x": 1888,
+          "y": 8,
+          "w": 152,
+          "h": 192
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 128,
+          "w": 152,
+          "h": 192
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_010": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 34,
+          "y": 29,
+          "w": 30,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "28657539CD0347722C7D82D9EACF612245B3DB1FE9B59EFA8E5BF494137825CD",
+        "hdRgbaSha256": "68D5D90C06AED55F9AD0EFDDFC3DAE53C0000944F37D6A1B362AB42A533610D8",
+        "frame": {
+          "x": 8,
+          "y": 208,
+          "w": 120,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 132,
+          "y": 152,
+          "w": 120,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_011": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 15,
+          "y": 26,
+          "w": 48,
+          "h": 36
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "49152F212D248E204D79A8FF570D68A73DF098D3C9FB6C56EBAC94A626F0D5B2",
+        "hdRgbaSha256": "9FB0AED1C612EC3C9F745767540B6A8D0ADC4EA05871E4536843C8D2EE02DA5D",
+        "frame": {
+          "x": 136,
+          "y": 208,
+          "w": 192,
+          "h": 144
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 176,
+          "w": 192,
+          "h": 144
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_012": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 33,
+          "w": 36,
+          "h": 32
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "09EB46AF7636355018E2929B0B24382B658397B9764E163356A0A3CBA708C7B0",
+        "hdRgbaSha256": "A3C52B6CD076A255A9B07C998374D22FE6A9BB5B6D0F90DA15E94E85AF7E2A9A",
+        "frame": {
+          "x": 336,
+          "y": 208,
+          "w": 144,
+          "h": 128
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 120,
+          "y": 192,
+          "w": 144,
+          "h": 128
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_013": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 35,
+          "w": 48,
+          "h": 30
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "740CB72CDF73D0D11A45F058A322971D7281DDF8F171ABC305CBD164D48990D5",
+        "hdRgbaSha256": "9E988DD280E686BB1F2E90AF8619F16E489FE55E9F63C8FAD041B4BD66313953",
+        "frame": {
+          "x": 488,
+          "y": 208,
+          "w": 192,
+          "h": 120
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 200,
+          "w": 192,
+          "h": 120
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_014": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 27,
+          "w": 34,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "E540FD832ED87197873663F2C242E12C31606DF0E63F35F6959F5841D35E4B01",
+        "hdRgbaSha256": "9EFC54307A9600E053722007FCC3AD8AB08373905866F42708DB66311D39D621",
+        "frame": {
+          "x": 688,
+          "y": 208,
+          "w": 136,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 124,
+          "y": 144,
+          "w": 136,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_015": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 15,
+          "y": 26,
+          "w": 48,
+          "h": 36
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "49152F212D248E204D79A8FF570D68A73DF098D3C9FB6C56EBAC94A626F0D5B2",
+        "hdRgbaSha256": "9FB0AED1C612EC3C9F745767540B6A8D0ADC4EA05871E4536843C8D2EE02DA5D",
+        "frame": {
+          "x": 832,
+          "y": 208,
+          "w": 192,
+          "h": 144
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 176,
+          "w": 192,
+          "h": 144
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_016": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 33,
+          "w": 36,
+          "h": 32
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "09EB46AF7636355018E2929B0B24382B658397B9764E163356A0A3CBA708C7B0",
+        "hdRgbaSha256": "A3C52B6CD076A255A9B07C998374D22FE6A9BB5B6D0F90DA15E94E85AF7E2A9A",
+        "frame": {
+          "x": 1032,
+          "y": 208,
+          "w": 144,
+          "h": 128
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 120,
+          "y": 192,
+          "w": 144,
+          "h": 128
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_017": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 35,
+          "w": 48,
+          "h": 30
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "740CB72CDF73D0D11A45F058A322971D7281DDF8F171ABC305CBD164D48990D5",
+        "hdRgbaSha256": "9E988DD280E686BB1F2E90AF8619F16E489FE55E9F63C8FAD041B4BD66313953",
+        "frame": {
+          "x": 1184,
+          "y": 208,
+          "w": 192,
+          "h": 120
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 200,
+          "w": 192,
+          "h": 120
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_018": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 35,
+          "w": 38,
+          "h": 28
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "3C8A909A030570C22BFDE5AF476CEBAA4B21BC0A906E3F087654BE8A0EA55FF3",
+        "hdRgbaSha256": "B57FDFC79123811AFFE42EC2859C745A840B1BB8ED5706871537B921C5F2DEEE",
+        "frame": {
+          "x": 1384,
+          "y": 208,
+          "w": 152,
+          "h": 112
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 208,
+          "w": 152,
+          "h": 112
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_019": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 11,
+          "w": 36,
+          "h": 66
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "AEAD96797FD02DA18AD34C29A35279E9E4E9563517F2615460743FED7C307563",
+        "hdRgbaSha256": "C70D22FB10FD91149C283579E918E83D850FB458B9A0997AF3A8CE746CA35EB8",
+        "frame": {
+          "x": 1544,
+          "y": 208,
+          "w": 144,
+          "h": 264
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 120,
+          "y": 56,
+          "w": 144,
+          "h": 264
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_020": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 15,
+          "y": 26,
+          "w": 48,
+          "h": 36
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "86D1212B547B783CAB6D50332F54C7C8A4A9CF1B65A4C916EAC448C95D2303A7",
+        "hdRgbaSha256": "0E274CE4912240E5EEDCBCD2E4D68CC5D47AF865746452766A50BB1CF0C3EB4E",
+        "frame": {
+          "x": 1696,
+          "y": 208,
+          "w": 192,
+          "h": 144
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 176,
+          "w": 192,
+          "h": 144
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_021": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 35,
+          "w": 48,
+          "h": 30
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "740CB72CDF73D0D11A45F058A322971D7281DDF8F171ABC305CBD164D48990D5",
+        "hdRgbaSha256": "9E988DD280E686BB1F2E90AF8619F16E489FE55E9F63C8FAD041B4BD66313953",
+        "frame": {
+          "x": 8,
+          "y": 480,
+          "w": 192,
+          "h": 120
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 200,
+          "w": 192,
+          "h": 120
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_022": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 18,
+          "y": 32,
+          "w": 57,
+          "h": 30
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "8010A7AE47537491311950D1D3F3A18B97BF48422D11124FBF0844699F8DF972",
+        "hdRgbaSha256": "652407DE4D33D8438A7C269E581BD9308887F5B2B29F6B496EA5C2E7760CE35D",
+        "frame": {
+          "x": 208,
+          "y": 480,
+          "w": 228,
+          "h": 120
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 78,
+          "y": 200,
+          "w": 228,
+          "h": 120
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_023": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 15,
+          "y": 26,
+          "w": 54,
+          "h": 48
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "78E7F03DB6FE17F94D7D57A07B8C1837765D673D4A5E0DD1127D61DB58EC955A",
+        "hdRgbaSha256": "8C5E048B5CEEA9C4DCD9D165CCA4E3BBA99AEA54B3BF4790A6A04250471EA9A9",
+        "frame": {
+          "x": 444,
+          "y": 480,
+          "w": 216,
+          "h": 192
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 128,
+          "w": 216,
+          "h": 192
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_024": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 15,
+          "y": 26,
+          "w": 48,
+          "h": 36
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "86D1212B547B783CAB6D50332F54C7C8A4A9CF1B65A4C916EAC448C95D2303A7",
+        "hdRgbaSha256": "0E274CE4912240E5EEDCBCD2E4D68CC5D47AF865746452766A50BB1CF0C3EB4E",
+        "frame": {
+          "x": 668,
+          "y": 480,
+          "w": 192,
+          "h": 144
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 176,
+          "w": 192,
+          "h": 144
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_025": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 35,
+          "w": 48,
+          "h": 30
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "740CB72CDF73D0D11A45F058A322971D7281DDF8F171ABC305CBD164D48990D5",
+        "hdRgbaSha256": "9E988DD280E686BB1F2E90AF8619F16E489FE55E9F63C8FAD041B4BD66313953",
+        "frame": {
+          "x": 868,
+          "y": 480,
+          "w": 192,
+          "h": 120
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 200,
+          "w": 192,
+          "h": 120
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_026": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 32,
+          "w": 54,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "B7895855F9E23C57CA6A3C30AA7E39F1EC06EE2281148818DBE7F7D06524A965",
+        "hdRgbaSha256": "22908C4BA5AB173A93945D7F6C77C5793B01160B6ABD721B6D53F52DCFB95CD8",
+        "frame": {
+          "x": 1068,
+          "y": 480,
+          "w": 216,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 152,
+          "w": 216,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_027": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 15,
+          "y": 26,
+          "w": 48,
+          "h": 36
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "D8160D26E0E80B24B336DEF6325B44E50603934B987489533DF362BEDCF24BBF",
+        "hdRgbaSha256": "515D65CF1891927183F84E37A93E18FCADB565714D7C6D6E8D5A3E9FDD5A3455",
+        "frame": {
+          "x": 1292,
+          "y": 480,
+          "w": 192,
+          "h": 144
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 176,
+          "w": 192,
+          "h": 144
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_028": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 32,
+          "w": 54,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "43AE2393718222FC0184CF6B10B2BE235C58EB6FFF31FF347199217634F168B9",
+        "hdRgbaSha256": "D0C9C2355CF7A5FC685B163D1BD4ECA21E86E2DD10B0A424BFD89378915D3EB3",
+        "frame": {
+          "x": 1492,
+          "y": 480,
+          "w": 216,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 152,
+          "w": 216,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_029": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 15,
+          "y": 26,
+          "w": 48,
+          "h": 36
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "FC949D3629BC0F28007F690C60D0D130C4F53150887E559F2D3C82FA4184940E",
+        "hdRgbaSha256": "61603EABC5A63790CD71C342787232691930A67B1F68D4C74311DF1290A4776F",
+        "frame": {
+          "x": 1716,
+          "y": 480,
+          "w": 192,
+          "h": 144
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 176,
+          "w": 192,
+          "h": 144
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_030": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 26,
+          "w": 54,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "B25233A2CF37570707F1873E8DCF32D7A7979E961318C913A118EA873DB2E529",
+        "hdRgbaSha256": "3D6D0AFF9FC91C31E303B9F6067CCA13939DF197FAC8E94F88B3849E2BDC0CC6",
+        "frame": {
+          "x": 8,
+          "y": 680,
+          "w": 216,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 152,
+          "w": 216,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_031": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 23,
+          "w": 57,
+          "h": 45
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "6FA8CD5ED14496CBD4631166830AB75B19BDFBEAF1DD22B4D1A3F3CC26684FA3",
+        "hdRgbaSha256": "FBA0705A2CD5F0C0ABD677298D565DCB7F3EDE02B59380C984AEE45BA69AB0B8",
+        "frame": {
+          "x": 232,
+          "y": 680,
+          "w": 228,
+          "h": 180
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 78,
+          "y": 140,
+          "w": 228,
+          "h": 180
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_032": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 26,
+          "w": 54,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "B25233A2CF37570707F1873E8DCF32D7A7979E961318C913A118EA873DB2E529",
+        "hdRgbaSha256": "3D6D0AFF9FC91C31E303B9F6067CCA13939DF197FAC8E94F88B3849E2BDC0CC6",
+        "frame": {
+          "x": 468,
+          "y": 680,
+          "w": 216,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 152,
+          "w": 216,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_033": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 23,
+          "w": 57,
+          "h": 45
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "6FA8CD5ED14496CBD4631166830AB75B19BDFBEAF1DD22B4D1A3F3CC26684FA3",
+        "hdRgbaSha256": "FBA0705A2CD5F0C0ABD677298D565DCB7F3EDE02B59380C984AEE45BA69AB0B8",
+        "frame": {
+          "x": 692,
+          "y": 680,
+          "w": 228,
+          "h": 180
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 78,
+          "y": 140,
+          "w": 228,
+          "h": 180
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_034": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 36,
+          "y": 27,
+          "w": 26,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "C34152D4A0EB48D18AB37E6DAFE6B740413222E9C0DE52CB2932A79B60A14EA4",
+        "hdRgbaSha256": "0B0B21303F5DC29B263065DBD5B16AC9F8561FD211DD8F344888E642F981E9B2",
+        "frame": {
+          "x": 928,
+          "y": 680,
+          "w": 104,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 140,
+          "y": 144,
+          "w": 104,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_035": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 35,
+          "w": 38,
+          "h": 28
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "028A16ABFCFA2889330CF6645B97D9C8F1DE588C5AF9FB2D6B34B14B552CA797",
+        "hdRgbaSha256": "966394795A0C722459EC790722FC4D0B62A1F7F4FEBF5D7A5128CFD4AC934E72",
+        "frame": {
+          "x": 1040,
+          "y": 680,
+          "w": 152,
+          "h": 112
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 208,
+          "w": 152,
+          "h": 112
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_036": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 11,
+          "w": 36,
+          "h": 66
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "ABF71865EBC4D3419D22F798C63B079868B545F658463FD82903AD750760E25E",
+        "hdRgbaSha256": "DDCD47775F209CA0E3F783A4119F02AEB5ED5321598A2E8D6621BBCE8800A086",
+        "frame": {
+          "x": 1200,
+          "y": 680,
+          "w": 144,
+          "h": 264
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 120,
+          "y": 56,
+          "w": 144,
+          "h": 264
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_037": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 15,
+          "y": 26,
+          "w": 48,
+          "h": 36
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "FB24F02344948D8BC0BF1A0023AFDBF92320E34A614411E70ECB913BFFCF74ED",
+        "hdRgbaSha256": "216DB87F4C30B241812DBFBBEB42D15BBEDFBB15E57CC8EE0DCA6358A8433EBA",
+        "frame": {
+          "x": 1352,
+          "y": 680,
+          "w": 192,
+          "h": 144
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 176,
+          "w": 192,
+          "h": 144
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_038": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 35,
+          "w": 48,
+          "h": 30
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "C0E1B125A5AA2A6E0D062637D001B30139B69E9CAFD9783E33544AB029018603",
+        "hdRgbaSha256": "9968E9568CC6B77CC8DFA807AD2C3A76414442060B229D3838B399F411178F6A",
+        "frame": {
+          "x": 1552,
+          "y": 680,
+          "w": 192,
+          "h": 120
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 200,
+          "w": 192,
+          "h": 120
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_039": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 18,
+          "y": 32,
+          "w": 57,
+          "h": 30
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "9C8FC4332A8DE5DBCD403509F92CFF4860453EFABF932CE70570119B90016C67",
+        "hdRgbaSha256": "2B66901416252506A334E317B52FF1D6E34DAB369972A7154A835C18348C84F1",
+        "frame": {
+          "x": 1752,
+          "y": 680,
+          "w": 228,
+          "h": 120
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 78,
+          "y": 200,
+          "w": 228,
+          "h": 120
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_040": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 15,
+          "y": 26,
+          "w": 54,
+          "h": 48
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "293D90207381722528306A4FE0EB08C0AA30B42C51E222B3B995C848D8E53960",
+        "hdRgbaSha256": "4D64C2077F5C9F810B29946AF12EFB88E1A985D72F3EF82C5874AAD037BC21A2",
+        "frame": {
+          "x": 8,
+          "y": 952,
+          "w": 216,
+          "h": 192
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 128,
+          "w": 216,
+          "h": 192
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_041": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 15,
+          "y": 26,
+          "w": 48,
+          "h": 36
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "FB7F80CE264C33B494859642C0EC8DD766849B4FCDC679C82185DFE1E6E79629",
+        "hdRgbaSha256": "1489DE459E1BA01E04E56F6B7987C6E9EDA80224BAE47E847691555C98453864",
+        "frame": {
+          "x": 232,
+          "y": 952,
+          "w": 192,
+          "h": 144
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 176,
+          "w": 192,
+          "h": 144
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_042": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 35,
+          "w": 48,
+          "h": 30
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "C0E1B125A5AA2A6E0D062637D001B30139B69E9CAFD9783E33544AB029018603",
+        "hdRgbaSha256": "9968E9568CC6B77CC8DFA807AD2C3A76414442060B229D3838B399F411178F6A",
+        "frame": {
+          "x": 432,
+          "y": 952,
+          "w": 192,
+          "h": 120
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 200,
+          "w": 192,
+          "h": 120
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_043": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 36,
+          "y": 27,
+          "w": 26,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "041473FEEE7B1AA918B2B0CEF589ADE6424EA28546845F9350A32F0BCB254F3F",
+        "hdRgbaSha256": "B8EB949B52E7C8344D4555AEC153E0BF6E7F9845049D1A6126FF730465C22327",
+        "frame": {
+          "x": 632,
+          "y": 952,
+          "w": 104,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 140,
+          "y": 144,
+          "w": 104,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_044": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 36,
+          "y": 27,
+          "w": 26,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "B2B16FB9A15BEFEE2899C748C3B930C78497255C90ED71633C2B58AC83593E9C",
+        "hdRgbaSha256": "5BF0760AA1168B74C22D436F3661136FC5C50DDAFDD0EDFCD2A769CF8BDA8C14",
+        "frame": {
+          "x": 744,
+          "y": 952,
+          "w": 104,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 140,
+          "y": 144,
+          "w": 104,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_045": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 36,
+          "y": 27,
+          "w": 26,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "041473FEEE7B1AA918B2B0CEF589ADE6424EA28546845F9350A32F0BCB254F3F",
+        "hdRgbaSha256": "B8EB949B52E7C8344D4555AEC153E0BF6E7F9845049D1A6126FF730465C22327",
+        "frame": {
+          "x": 856,
+          "y": 952,
+          "w": 104,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 140,
+          "y": 144,
+          "w": 104,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_046": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 36,
+          "y": 27,
+          "w": 26,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "BBCC3E3C5BF2A8261672DC0187F234DF11C907DF273914D8DCC3D57C4034E7AC",
+        "hdRgbaSha256": "5CCD64417CAC3583EEBED89DA6558B0DB477956EC1ED4D8A75AE8811C48F0E38",
+        "frame": {
+          "x": 968,
+          "y": 952,
+          "w": 104,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 140,
+          "y": 144,
+          "w": 104,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_047": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 32,
+          "w": 54,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "646D580A4E609983C52ED8E637E6AF6070AFA939A1C905ECF8AAF292CE74CF3A",
+        "hdRgbaSha256": "102F236CF075DB94DD361F35444FF80F8690C2E12D13935602C6A95ACD72F1B4",
+        "frame": {
+          "x": 1080,
+          "y": 952,
+          "w": 216,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 152,
+          "w": 216,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_048": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 31,
+          "w": 38,
+          "h": 26
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "4FB10AB92CE0740482D04437A1476CB9E38F5FC89FD947D5F7CCB2BC46AF5C22",
+        "hdRgbaSha256": "AAF6B8FA722E0267AE27A5A74633F4D3EED81BE0B2ECAF0C6DAA14E76F4EE08B",
+        "frame": {
+          "x": 1304,
+          "y": 952,
+          "w": 152,
+          "h": 104
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 216,
+          "w": 152,
+          "h": 104
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_049": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 23,
+          "w": 48,
+          "h": 39
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "C9403B9B4E9BF6EF1B2FBDC7B52D0F0A979786F01C0DA6E21E6DE8F043928B4F",
+        "hdRgbaSha256": "60025BCF2FA9707FB1B1B6D50CEA11A9A5A3ED3E7A77BB3143B69D664E49CB98",
+        "frame": {
+          "x": 1464,
+          "y": 952,
+          "w": 192,
+          "h": 156
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 164,
+          "w": 192,
+          "h": 156
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_050": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 11,
+          "w": 36,
+          "h": 63
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "10E2C31B4E532B3CEBE472B5FC27759EF2FBCBEE0F3727BDBF0AFCBE04F2578F",
+        "hdRgbaSha256": "530F531DE24A813151A4D868FD4CEAD3E2D58AEAB9799AA6AA25EA293A34E1D6",
+        "frame": {
+          "x": 1664,
+          "y": 952,
+          "w": 144,
+          "h": 252
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 120,
+          "y": 68,
+          "w": 144,
+          "h": 252
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_051": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 35,
+          "w": 38,
+          "h": 28
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "B029C50F32529B439DA335E9389B521A1F68EF71BF63A363DF1E8BE0BA5567B7",
+        "hdRgbaSha256": "89F1920D973C514226EEA532380FA5A1E5D6D712C27FDC6218486854F5578A07",
+        "frame": {
+          "x": 1816,
+          "y": 952,
+          "w": 152,
+          "h": 112
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 208,
+          "w": 152,
+          "h": 112
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_052": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 32,
+          "w": 54,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "7E0D7B4E131FDC9DA50F89355EFA2F11BD9DFA86190090C8918BBDD5DD0D51E5",
+        "hdRgbaSha256": "8A29514D71090314E2873D9E8EBBCB65552D5916EE610260924A06D960487A51",
+        "frame": {
+          "x": 8,
+          "y": 1212,
+          "w": 216,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 152,
+          "w": 216,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_053": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 11,
+          "w": 36,
+          "h": 66
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "B1467BDA007005336BD4C058C524B8D6B5CBBF6B8095077820D2CCB6CF82AAD9",
+        "hdRgbaSha256": "F225D2038214A444055FE610DF4AE7925982BC9AD53C1533101BF66269894E05",
+        "frame": {
+          "x": 232,
+          "y": 1212,
+          "w": 144,
+          "h": 264
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 120,
+          "y": 56,
+          "w": 144,
+          "h": 264
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_054": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 26,
+          "w": 39,
+          "h": 36
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "CA4485EC795647F700BC93D676D606B0FA0DC5ECD6FA48FC289DC4037F287FE8",
+        "hdRgbaSha256": "FF38E891DBDA0A381F98B1594A58D86F1C1650BF0922DD9D421A565BE5FDB109",
+        "frame": {
+          "x": 384,
+          "y": 1212,
+          "w": 156,
+          "h": 144
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 114,
+          "y": 176,
+          "w": 156,
+          "h": 144
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_055": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 29,
+          "w": 45,
+          "h": 39
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "61FF33C8E99A9639FCD0AD221AED437FBB5B06DC34C65A2C1344A5D6D6A3534B",
+        "hdRgbaSha256": "B98D6A5E12DE900272B79FCD6EFC8A24A8A6924347C051426D8599D1F83C634F",
+        "frame": {
+          "x": 548,
+          "y": 1212,
+          "w": 180,
+          "h": 156
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 102,
+          "y": 164,
+          "w": 180,
+          "h": 156
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_056": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 15,
+          "y": 26,
+          "w": 48,
+          "h": 36
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "3A56C337BD5412426C539D543A541552CEF639ED56B58AC08C42191F44957D0C",
+        "hdRgbaSha256": "A1761B0BCB5503A5BEAEA81B620E78724D63FB3E5BD7A707AB34A2DE08FF3A78",
+        "frame": {
+          "x": 736,
+          "y": 1212,
+          "w": 192,
+          "h": 144
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 176,
+          "w": 192,
+          "h": 144
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_057": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 34,
+          "y": 29,
+          "w": 26,
+          "h": 44
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "1418D67F8B5FFFFC9FAFD44119B42D1E265A7DDD8B4AAAFC2525466DB6F4E627",
+        "hdRgbaSha256": "311584B051BD3B4475855BCAC7606E0DD9D84C53B782160C98FC5EE5E107D539",
+        "frame": {
+          "x": 936,
+          "y": 1212,
+          "w": 104,
+          "h": 176
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 140,
+          "y": 144,
+          "w": 104,
+          "h": 176
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_058": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 23,
+          "w": 54,
+          "h": 54
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "070D79FF5EE0E995AD929AD3602ADA59FF53B232288A9D99B5B620A254877446",
+        "hdRgbaSha256": "172C9BAF2EE144E72502FC9299C93D796FBD48FBC1F254DF4FBE36420A8E22D3",
+        "frame": {
+          "x": 1048,
+          "y": 1212,
+          "w": 216,
+          "h": 216
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 104,
+          "w": 216,
+          "h": 216
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_059": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 29,
+          "w": 36,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "A2463B9634F2FC210273EBC86E7DE18BA92D6082DAF18D274B409EC0E24EA42E",
+        "hdRgbaSha256": "9381B7A76D9B851CDF6D1EB91A6BF40F8FD578D8CCC9669FAA443A2B174798B0",
+        "frame": {
+          "x": 1272,
+          "y": 1212,
+          "w": 144,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 120,
+          "y": 152,
+          "w": 144,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_060": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 34,
+          "y": 29,
+          "w": 30,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "3AEEAAE7A6FD2D4D50D517F2FE37A4913459C10FE4AAA61F220DD1DBE0768C39",
+        "hdRgbaSha256": "E78FE731216E4D0313109784E2DC7A0E4F9CBA42BA4E6BBAA4C84F77ADAA0F06",
+        "frame": {
+          "x": 1424,
+          "y": 1212,
+          "w": 120,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 132,
+          "y": 152,
+          "w": 120,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_061": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 37,
+          "w": 38,
+          "h": 20
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "790F821DF47697A973786D34829363638547ABE2097D783A9BFD537DC27D4661",
+        "hdRgbaSha256": "0606B7CEB57614AEDF68F4740C19CB4E4B11DFD0BBBA642373FB1ADB82AB79E1",
+        "frame": {
+          "x": 1552,
+          "y": 1212,
+          "w": 152,
+          "h": 80
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 240,
+          "w": 152,
+          "h": 80
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_062": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 32,
+          "y": 25,
+          "w": 30,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "28657539CD0347722C7D82D9EACF612245B3DB1FE9B59EFA8E5BF494137825CD",
+        "hdRgbaSha256": "68D5D90C06AED55F9AD0EFDDFC3DAE53C0000944F37D6A1B362AB42A533610D8",
+        "frame": {
+          "x": 1712,
+          "y": 1212,
+          "w": 120,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 132,
+          "y": 152,
+          "w": 120,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/main/cell_063": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 15,
+          "y": 26,
+          "w": 48,
+          "h": 36
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "01AFD1D019574DE229E5C2C3718010A0699EBE1BA50FFB02D2E44D5B2562CB3C",
+        "hdRgbaSha256": "495422B47B2B0356641ED673BB583F080342C9236047D0D4F8A42153C7899F77",
+        "frame": {
+          "x": 1840,
+          "y": 1212,
+          "w": 192,
+          "h": 144
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 176,
+          "w": 192,
+          "h": 144
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      }
+    }
+  },
+  "sub": {
+    "sourceSheetSha256": "3563B6AAD3C8D0E58A9A5387B381CDA4B9C53DFFEA9691D8A7C19DEB61A5CF5D",
+    "cellCount": 18,
+    "sequenceCount": 13,
+    "frameRecordCount": 18,
+    "atlasPages": [
+      {
+        "page": 0,
+        "image": "sub-atlas-00.png",
+        "data": "sub-atlas-00.json",
+        "width": 1964,
+        "height": 480,
+        "frameCount": 18,
+        "imageSha256": "7C649E729BF80DB8F050F49407C3EDEE831D80CA27D970390122553D70B9F998",
+        "dataSha256": "01FC60FE7844183319E0224CBF56059CBCE6337BEF91DFFA2001FBA4BD38B391"
+      }
+    ],
+    "frameManifest": {
+      "m003_nyokimon/sub/cell_000": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 32,
+          "w": 54,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "35CBB524F91DC88F337C3D19DFEACB3278BD27EB4BDC4AA68831858F1430D554",
+        "hdRgbaSha256": "B2F84C5B4496E82A5BE6769F600F6EB76493E6C9547E56B05EA039F2266A92ED",
+        "frame": {
+          "x": 8,
+          "y": 8,
+          "w": 216,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 152,
+          "w": 216,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/sub/cell_001": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 15,
+          "y": 26,
+          "w": 48,
+          "h": 36
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "79B5CE86354B4BF8DE985068A61A2D6D2684820C5AD655A3F475ACA649D0DDD9",
+        "hdRgbaSha256": "E69E0D8EA36E6FB76AD2083E9CE855B44B8B400728737921F2EA58C6638E1826",
+        "frame": {
+          "x": 232,
+          "y": 8,
+          "w": 192,
+          "h": 144
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 176,
+          "w": 192,
+          "h": 144
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/sub/cell_002": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 32,
+          "w": 54,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "A1A55491426FC161409B9555AA2A74125E7EBC7883758041EFAC1024B60D50CF",
+        "hdRgbaSha256": "6744F1EAA6804DFAD6481D6339DE63F9C8BA445746A004464319B3EE82659FE6",
+        "frame": {
+          "x": 432,
+          "y": 8,
+          "w": 216,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 152,
+          "w": 216,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/sub/cell_003": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 15,
+          "y": 26,
+          "w": 48,
+          "h": 36
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "86D1212B547B783CAB6D50332F54C7C8A4A9CF1B65A4C916EAC448C95D2303A7",
+        "hdRgbaSha256": "0E274CE4912240E5EEDCBCD2E4D68CC5D47AF865746452766A50BB1CF0C3EB4E",
+        "frame": {
+          "x": 656,
+          "y": 8,
+          "w": 192,
+          "h": 144
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 176,
+          "w": 192,
+          "h": 144
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/sub/cell_004": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 32,
+          "y": 17,
+          "w": 38,
+          "h": 48
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "CCB2CD5BE0B8DC6B49BFE7B1F0FFE1A01B802137E64B383FE518EE6781FB0FD2",
+        "hdRgbaSha256": "814506636D9E99294528745056FC229F1E9863450EA8538602C41595208270C0",
+        "frame": {
+          "x": 856,
+          "y": 8,
+          "w": 152,
+          "h": 192
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 128,
+          "w": 152,
+          "h": 192
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/sub/cell_005": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 34,
+          "y": 29,
+          "w": 30,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "28657539CD0347722C7D82D9EACF612245B3DB1FE9B59EFA8E5BF494137825CD",
+        "hdRgbaSha256": "68D5D90C06AED55F9AD0EFDDFC3DAE53C0000944F37D6A1B362AB42A533610D8",
+        "frame": {
+          "x": 1016,
+          "y": 8,
+          "w": 120,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 132,
+          "y": 152,
+          "w": 120,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/sub/cell_006": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 18,
+          "y": 32,
+          "w": 57,
+          "h": 30
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "8010A7AE47537491311950D1D3F3A18B97BF48422D11124FBF0844699F8DF972",
+        "hdRgbaSha256": "652407DE4D33D8438A7C269E581BD9308887F5B2B29F6B496EA5C2E7760CE35D",
+        "frame": {
+          "x": 1144,
+          "y": 8,
+          "w": 228,
+          "h": 120
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 78,
+          "y": 200,
+          "w": 228,
+          "h": 120
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/sub/cell_007": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 35,
+          "w": 48,
+          "h": 30
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "740CB72CDF73D0D11A45F058A322971D7281DDF8F171ABC305CBD164D48990D5",
+        "hdRgbaSha256": "9E988DD280E686BB1F2E90AF8619F16E489FE55E9F63C8FAD041B4BD66313953",
+        "frame": {
+          "x": 1380,
+          "y": 8,
+          "w": 192,
+          "h": 120
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 200,
+          "w": 192,
+          "h": 120
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/sub/cell_008": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 32,
+          "w": 54,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "646D580A4E609983C52ED8E637E6AF6070AFA939A1C905ECF8AAF292CE74CF3A",
+        "hdRgbaSha256": "102F236CF075DB94DD361F35444FF80F8690C2E12D13935602C6A95ACD72F1B4",
+        "frame": {
+          "x": 1580,
+          "y": 8,
+          "w": 216,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 152,
+          "w": 216,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/sub/cell_009": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 31,
+          "w": 38,
+          "h": 26
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "4FB10AB92CE0740482D04437A1476CB9E38F5FC89FD947D5F7CCB2BC46AF5C22",
+        "hdRgbaSha256": "AAF6B8FA722E0267AE27A5A74633F4D3EED81BE0B2ECAF0C6DAA14E76F4EE08B",
+        "frame": {
+          "x": 1804,
+          "y": 8,
+          "w": 152,
+          "h": 104
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 216,
+          "w": 152,
+          "h": 104
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/sub/cell_010": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 23,
+          "w": 48,
+          "h": 39
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "C9403B9B4E9BF6EF1B2FBDC7B52D0F0A979786F01C0DA6E21E6DE8F043928B4F",
+        "hdRgbaSha256": "60025BCF2FA9707FB1B1B6D50CEA11A9A5A3ED3E7A77BB3143B69D664E49CB98",
+        "frame": {
+          "x": 8,
+          "y": 208,
+          "w": 192,
+          "h": 156
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 96,
+          "y": 164,
+          "w": 192,
+          "h": 156
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/sub/cell_011": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 11,
+          "w": 36,
+          "h": 63
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "10E2C31B4E532B3CEBE472B5FC27759EF2FBCBEE0F3727BDBF0AFCBE04F2578F",
+        "hdRgbaSha256": "530F531DE24A813151A4D868FD4CEAD3E2D58AEAB9799AA6AA25EA293A34E1D6",
+        "frame": {
+          "x": 208,
+          "y": 208,
+          "w": 144,
+          "h": 252
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 120,
+          "y": 68,
+          "w": 144,
+          "h": 252
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/sub/cell_012": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 35,
+          "w": 38,
+          "h": 28
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "B029C50F32529B439DA335E9389B521A1F68EF71BF63A363DF1E8BE0BA5567B7",
+        "hdRgbaSha256": "89F1920D973C514226EEA532380FA5A1E5D6D712C27FDC6218486854F5578A07",
+        "frame": {
+          "x": 360,
+          "y": 208,
+          "w": 152,
+          "h": 112
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 208,
+          "w": 152,
+          "h": 112
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/sub/cell_013": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 12,
+          "y": 32,
+          "w": 54,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "7E0D7B4E131FDC9DA50F89355EFA2F11BD9DFA86190090C8918BBDD5DD0D51E5",
+        "hdRgbaSha256": "8A29514D71090314E2873D9E8EBBCB65552D5916EE610260924A06D960487A51",
+        "frame": {
+          "x": 520,
+          "y": 208,
+          "w": 216,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 84,
+          "y": 152,
+          "w": 216,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/sub/cell_014": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 30,
+          "y": 11,
+          "w": 36,
+          "h": 66
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "B1467BDA007005336BD4C058C524B8D6B5CBBF6B8095077820D2CCB6CF82AAD9",
+        "hdRgbaSha256": "F225D2038214A444055FE610DF4AE7925982BC9AD53C1533101BF66269894E05",
+        "frame": {
+          "x": 744,
+          "y": 208,
+          "w": 144,
+          "h": 264
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 120,
+          "y": 56,
+          "w": 144,
+          "h": 264
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/sub/cell_015": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 24,
+          "y": 26,
+          "w": 39,
+          "h": 36
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "CA4485EC795647F700BC93D676D606B0FA0DC5ECD6FA48FC289DC4037F287FE8",
+        "hdRgbaSha256": "FF38E891DBDA0A381F98B1594A58D86F1C1650BF0922DD9D421A565BE5FDB109",
+        "frame": {
+          "x": 896,
+          "y": 208,
+          "w": 156,
+          "h": 144
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 114,
+          "y": 176,
+          "w": 156,
+          "h": 144
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/sub/cell_016": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 34,
+          "y": 29,
+          "w": 30,
+          "h": 42
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "3AEEAAE7A6FD2D4D50D517F2FE37A4913459C10FE4AAA61F220DD1DBE0768C39",
+        "hdRgbaSha256": "E78FE731216E4D0313109784E2DC7A0E4F9CBA42BA4E6BBAA4C84F77ADAA0F06",
+        "frame": {
+          "x": 1060,
+          "y": 208,
+          "w": 120,
+          "h": 168
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 132,
+          "y": 152,
+          "w": 120,
+          "h": 168
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      },
+      "m003_nyokimon/sub/cell_017": {
+        "page": 0,
+        "nativeTrim": {
+          "x": 28,
+          "y": 37,
+          "w": 38,
+          "h": 20
+        },
+        "isBlank": false,
+        "nativeRgbaSha256": "790F821DF47697A973786D34829363638547ABE2097D783A9BFD537DC27D4661",
+        "hdRgbaSha256": "0606B7CEB57614AEDF68F4740C19CB4E4B11DFD0BBBA642373FB1ADB82AB79E1",
+        "frame": {
+          "x": 1188,
+          "y": 208,
+          "w": 152,
+          "h": 80
+        },
+        "rotated": false,
+        "trimmed": true,
+        "spriteSourceSize": {
+          "x": 116,
+          "y": 240,
+          "w": 152,
+          "h": 80
+        },
+        "sourceSize": {
+          "w": 384,
+          "h": 352
+        },
+        "anchor": {
+          "x": 0.5,
+          "y": 0.9090909090909091
+        }
+      }
+    }
+  },
+  "productionStatus": "PIXEL_FAITHFUL_HD4X_FUNCTIONAL_BASELINE",
+  "runtimeEligible": false,
+  "shippingReady": false
+}

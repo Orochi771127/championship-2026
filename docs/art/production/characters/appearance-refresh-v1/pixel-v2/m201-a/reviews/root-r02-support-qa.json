@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 2,
+  "source": "RAW_TRANSFER_AWARE_NCER_DECODE",
+  "bankSha256": "adfa93da8a8756754451280f3c7635b72bef7b1f49175e32968455c6c9431374",
+  "rows": [
+    {
+      "cell": 0,
+      "addedSupportPixels": [
+        [
+          4,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          9,
+          2
+        ],
+        [
+          10,
+          2
+        ],
+        [
+          11,
+          2
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          11,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          12,
+          4
+        ],
+        [
+          13,
+          8
+        ]
+      ],
+      "removedSupportPixels": [],
+      "lowerRows14To23Match": true,
+      "poseQa": "PARTIAL_VISIBLE_SUPPORT_ONLY",
+      "artQa": "A_IDENTITY_DIRECTION_ACCEPTED_NOT_COMPLETE_ENTITY"
+    },
+    {
+      "cell": 23,
+      "addedSupportPixels": [
+        [
+          9,
+          0
+        ],
+        [
+          14,
+          0
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          13,
+          1
+        ],
+        [
+          14,
+          1
+        ],
+        [
+          15,
+          1
+        ],
+        [
+          8,
+          2
+        ],
+        [
+          15,
+          2
+        ],
+        [
+          7,
+          3
+        ],
+        [
+          16,
+          3
+        ]
+      ],
+      "removedSupportPixels": [],
+      "lowerRows14To23Match": false,
+      "poseQa": "PARTIAL_VISIBLE_SUPPORT_ONLY",
+      "artQa": "A_IDENTITY_DIRECTION_ACCEPTED_NOT_COMPLETE_ENTITY"
+    }
+  ],
+  "fullMotionQa": "PENDING",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "acceptedWholeEntities": 0
+}

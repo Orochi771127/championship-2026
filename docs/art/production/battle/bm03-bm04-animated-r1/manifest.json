@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "batchId": "ART-BATTLE-BM03-BM04-ANIMATED-R1-2026-09-02",
+  "status": "INTERNAL_PIXI_ANIMATION_REVIEW_PASSED_NOT_OWNER_APPROVED_NOT_PROMOTED",
+  "artDirectionBrief": "ART_DIRECTION.md",
+  "promptRecord": "PROMPTS.md",
+  "buildScript": "scripts/build-battle-bm03-bm04-animated.py",
+  "trace": "docs/research/BATTLE_BM03_BM04_ANIMATION_TRACE_2026-09-02.json",
+  "rights": {
+    "sourceKind": "ORIGINAL_AI_ASSISTED_GENERATION_WITH_DETERMINISTIC_LAYER_SEPARATION",
+    "generator": "OpenAI image generation through Codex imagegen skill",
+    "createdAt": "2026-09-02",
+    "referencePixelReuse": false,
+    "referencePaletteReuse": false,
+    "referenceGeometryReuse": false,
+    "licenseEvidenceStatus": "GENERATION_RECEIPT_RECORDED_TERMS_LINK_PENDING"
+  },
+  "reviewPolicy": {
+    "technicalChecksPassed": true,
+    "runtimeQaPassed": true,
+    "runtimeQaReceipt": "docs/reports/art/battle/bm03-bm04-animated-r1/browser-qa.json",
+    "humanApproved": false,
+    "readyForRuntime": false,
+    "shippingReady": false
+  }
+}

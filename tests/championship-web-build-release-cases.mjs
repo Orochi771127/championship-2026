@@ -6,9 +6,10 @@ import {fileURLToPath} from 'node:url';
 import {spawn} from 'node:child_process';
 import {once} from 'node:events';
 import http from 'node:http';
-import {auditWebBuild,auditReleaseRights,sha256,BUILD_INPUT_PATH,ART_INDEX_PATH,RIGHTS_PATH} from '../scripts/lib/web-build-plan.mjs';
-import {buildWebArtifact,validateWebArtifact,INTERNAL_TARGET,PUBLIC_TARGET} from '../scripts/lib/web-build-artifact.mjs';
+import {auditWebBuild,auditReleaseRights,sha256,BUILD_INPUT_PATH,ART_INDEX_PATH,RIGHTS_PATH,PLAYTEST_PATH} from '../scripts/lib/web-build-plan.mjs';
+import {buildWebArtifact,validateWebArtifact,INTERNAL_TARGET,PUBLIC_TARGET,PLAYTEST_TARGET} from '../scripts/lib/web-build-artifact.mjs';
 import {isShippingArtEntry,publicArtIndex} from '../scripts/lib/public-art-boundary.mjs';
+import {isLocalBattleEffectPreview} from '../src/championship/presentation/battleEffectArt.js';
 
 const repo=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 function fixture(t){
@@ -34,6 +35,34 @@ function fixture(t){
   write(BUILD_INPUT_PATH,input);
   return {root,write,asset,art,evidence,input};
 }
+
+test('Owner public playtest validates exact reviewed files without claiming verified rights or commercial release',t=>{
+  const f=fixture(t),output=path.join(f.root,'dist/playtest');
+  f.evidence.document.status='PENDING_PRIVATE_DOCUMENT_LINK';f.write(RIGHTS_PATH,{entries:[f.evidence]});
+  assert.throws(()=>buildWebArtifact({root:f.root,output,target:PLAYTEST_TARGET}),/PUBLIC_PLAYTEST_NOT_APPROVED/);
+  const policy={id:'TEST_OWNER_PREVIEW',status:'OWNER_AUTHORIZED_PUBLIC_PLAYTEST',origin:'https://orochi771127.github.io',basePath:'/championship-2026/',rightsDocumentVerified:false,commercialReleaseAccepted:false};
+  f.write(PLAYTEST_PATH,policy);f.input.files.push(PLAYTEST_PATH);
+  f.input.publicPlaytest={policyId:policy.id,files:f.input.files.map(file=>({path:file,sha256:sha256(fs.readFileSync(path.join(f.root,file)))}))};
+  f.write(BUILD_INPUT_PATH,f.input);
+  buildWebArtifact({root:f.root,output,target:PLAYTEST_TARGET});
+  const m=validateWebArtifact({root:f.root,output,target:PLAYTEST_TARGET});
+  assert.equal(m.publicReleasePermitted,true);assert.equal(m.release.approved,false);
+  assert.equal(m.publicPlaytest.ownerApproved,true);assert.equal(m.publicPlaytest.rightsDocumentVerified,false);
+  assert.throws(()=>buildWebArtifact({root:f.root,output:path.join(f.root,'dist/release'),target:PUBLIC_TARGET}),/PUBLIC_RELEASE_NOT_APPROVED/);
+  f.write(f.asset,{unreviewed:true});
+  assert.throws(()=>buildWebArtifact({root:f.root,output,target:PLAYTEST_TARGET}),/PLAYTEST_APPROVED_BYTES_CHANGED/);
+  f.write(BUILD_INPUT_PATH,{...f.input,files:[...f.input.files,'docs/legal/private/licence.json']});
+  assert.throws(()=>buildWebArtifact({root:f.root,output,target:PLAYTEST_TARGET}),/INVALID_WEB_BUILD_INPUTS/);
+});
+
+test('reference presentation adds only the exact Owner playtest origin and repository path',()=>{
+  assert.equal(isLocalBattleEffectPreview('https://orochi771127.github.io/championship-2026/'),true);
+  assert.equal(isLocalBattleEffectPreview('https://orochi771127.github.io/championship-2026/championship.html'),true);
+  for(const url of ['http://orochi771127.github.io/championship-2026/',
+    'https://orochi771127.github.io/championship-2026-fake/',
+    'https://orochi771127.github.io/other-project/',
+    'https://orochi771127.github.io.evil.example/championship-2026/'])assert.equal(isLocalBattleEffectPreview(url),false);
+});
 
 test('unverified rights allow a closed internal build and refuse public output before replacing anything',t=>{
   const f=fixture(t);f.evidence.document.status='PENDING_PRIVATE_DOCUMENT_LINK';f.write(RIGHTS_PATH,{entries:[f.evidence]});

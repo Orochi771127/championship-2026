@@ -1,14 +1,14 @@
 <!doctype html><html lang="zh-Hant"><meta charset="utf-8"><title>角色動畫三場景驗收</title>
 <style>body{background:#142331;color:white;font:16px system-ui}button{padding:12px}iframe{display:block;width:390px;height:844px;border:0;margin-top:16px}</style>
 <p>本機受控測試存檔：成年角色、可參賽日期與入場費。後續操作使用正式遊戲入口，不注入動畫狀態。</p>
-<button id="prepare">準備三場景驗收存檔</button><p id="status" role="status">尚未準備</p><iframe title="正式遊戲"></iframe>
+<button id="prepare">準備三場景驗收存檔</button><button id="feedback">準備飢餓反應驗收存檔</button><p id="status" role="status">尚未準備</p><iframe title="正式遊戲"></iframe>
 <script type="module">
 import {createChampionshipStandaloneApp} from '../../src/championship/app/championshipStandaloneApp.js';
 import {createNativeHuntIndividual} from '../../src/championship/hunt/capture/nativeHuntIndividual.js';
 import {nativeHuntSpeciesByIndex} from '../../src/championship/hunt/capture/nativeHuntSources.js';
 import {nativeIndividualProfile} from '../../src/championship/raising/nativeIndividualProfile.js';
 import {CHAMPIONSHIP_MODERN_SAVE_KEY} from '../../src/championship/app/championshipStandaloneSave.js';
-document.querySelector('#prepare').onclick=async()=>{
+async function prepare(feedback=false){
  if(!['localhost','127.0.0.1','[::1]'].includes(location.hostname))throw Error('LOCAL_RESEARCH_ONLY');
  const catalog=await fetch('../../src/data/championship/catalogs/creature-species.r1.json').then(r=>r.json());
  const {cages}=await fetch('../../docs/contracts/championship/raising-home-presentation.v1.json').then(r=>r.json());
@@ -16,13 +16,17 @@ document.querySelector('#prepare').onclick=async()=>{
  try{
   await app.newGame();app.save();const save=JSON.parse(localStorage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY));
   save.creature.nativeProfile=nativeIndividualProfile(createNativeHuntIndividual({species:nativeHuntSpeciesByIndex(34),rng:{next:()=>11}}));
+  if(feedback){save.creature.nativeProfile=structuredClone(save.creature.nativeProfile);save.creature.nativeProfile.fields['008']=0;}
   save.creature.speciesId='species-034';save.creature.displayName='動畫驗收';
   localStorage.setItem(CHAMPIONSHIP_MODERN_SAVE_KEY,JSON.stringify(save));await app.continueGame();
   app.advanceClock({units:19*1440*400});app.creditBits(50000);app.save();
   document.querySelector('#status').textContent='受控存檔已準備；請登入並繼續遊戲，依序檢查牧場、狩獵與對戰。';
  }catch(error){document.querySelector('#status').textContent=error.message;throw error;}
  finally{await app.dispose();}
- document.querySelector('#prepare').disabled=true;
+  document.querySelector('#prepare').disabled=true;
+  document.querySelector('#feedback').disabled=true;
  document.querySelector('iframe').src='../../championship.html';
 };
+document.querySelector('#prepare').onclick=()=>prepare();
+document.querySelector('#feedback').onclick=()=>prepare(true);
 </script></html>

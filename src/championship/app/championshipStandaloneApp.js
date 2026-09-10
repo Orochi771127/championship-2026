@@ -44,7 +44,7 @@ import {createNativeRaisingMessages,normalizeNativeRaisingMessages,selectNativeM
   ageNativeRaisingMessages,openNativeRaisingMessage,closeNativeRaisingMessage,nativeRaisingMessageEffect} from '../raising/nativeRaisingMessages.js';
 import {normalizeNativeOpening} from './nativeOpeningState.js';
 import {nativeTreatmentAdmission} from '../raising/nativeRaisingTreatment.js';
-import {treatNativeRaisingActor,notifyNativeRaisingResidentAdded} from '../raising/nativeRaisingActor.js';
+import {treatNativeRaisingActor,notifyNativeRaisingResidentAdded,beginNativeRaisingCarry,releaseNativeRaisingCarry} from '../raising/nativeRaisingActor.js';
 import {createNativeRaisingActor,initializeNativeRaisingActor,interruptNativeRaisingFeeding,removeNativeRaisingFoodTarget,projectNativeRaisingActor,stepNativeRaisingActor,stepNativeRaisingAgeClock,touchNativeRaisingEgg,wakeNativeRaisingActor,startNativeRaisingMorning,stepNativeRaisingEvolution,enterNativeRaisingCage} from "../raising/nativeRaisingActor.js";
 import {createNativeRaisingGround,nativeRaisingSpawnPosition,nativeRaisingEntryPosition} from "../raising/nativeRaisingGround.js";
 import {createNativeRaisingFood,stepNativeRaisingFood,foodVisualQuarter,nativeRaisingFeast} from "../raising/nativeRaisingFood.js";
@@ -52,7 +52,7 @@ import {normalizeNativeRaisingHome,nativeRaisingRebuiltListOrder} from "../raisi
 import {allocateNativeRaisingWaste} from '../raising/nativeRaisingWaste.js';
 import {projectNativeRaisingCalendar} from '../raising/nativeRaisingCalendar.js';
 import {createNativeTitleProgress,emptyNativeTitleProgress,normalizeNativeTitleProgress,
-  toggleNativeTitleRegistration,toggleNativeChampionshipRegistration,resolveNativeTitleResult} from '../battle/nativeTitleProgression.js';
+  toggleNativeTitleRegistration,toggleNativeChampionshipRegistration,resolveNativeTitleResult,applyNativeBattleRecord} from '../battle/nativeTitleProgression.js';
 import {settleNativeRaisingCage,nativeCageConditionEffects} from '../raising/nativeRaisingOvernight.js';
 import { maxGFromInventory } from "../hunt/capture/memoryCardCapacity.js";
 import { createHuntInventory } from "../hunt/loadout/huntInventory.js";
@@ -511,15 +511,18 @@ export function createChampionshipStandaloneApp({
       for(const id of ids.sort((a,b)=>raisingPoolSlots[a]-raisingPoolSlots[b])) {
         const actor=nativeRaisingActor(id);
         if(!actor)continue;
-        const residents=[...raisingActors].filter(([,other])=>other.cageDefinitionIndex===actor.cageDefinitionIndex).sort((a,b)=>a[1].poolSlot-b[1].poolSlot);
+        const residents=[...raisingActors].filter(([,other])=>!other.detached&&other.cageDefinitionIndex===actor.cageDefinitionIndex).sort((a,b)=>a[1].poolSlot-b[1].poolSlot);
         const result=stepNativeRaisingActor(actor,raisingNativeProfile(id),{ageDelta:age.ageDelta,rng:{next:nextGameplayRandom},
           feeding:raisingGround?{ground:raisingGround,foods:raisingFoods,signals,actors:raisingActors.values()}:null,
           lifecycle:raisingGround?{rank:Math.min(9,tamerRankValue),minute:before.clockMinutes+minutes,season:before.season,
+            onJoin:()=>notifyNativeRaisingResidentAdded(actor,[...raisingActors.values()].filter(a=>!a.detached),{next:nextGameplayRandom}),
+            getResidents:()=>[...raisingActors].filter(([,a])=>!a.detached&&a.cageDefinitionIndex===actor.cageDefinitionIndex).sort((a,b)=>a[1].poolSlot-b[1].poolSlot).map(([key])=>raisingNativeProfile(key)),
             roster:[actor.speciesIndex,...ids.filter(other=>other!==id).map(other=>raisingNativeProfile(other).fields['000'])],
             residents:residents.map(([other])=>raisingNativeProfile(other)),wasteCount:raisingWaste.filter(w=>w.present&&w.cageDefinitionIndex===actor.cageDefinitionIndex).length,
             rottenFoodCount:raisingFoods.filter(f=>f.present&&f.cageDefinitionIndex===actor.cageDefinitionIndex&&f.freshness<=0).length,
             ...raisingDirtySignals.get(actor.cageDefinitionIndex),spawnWaste:(species,position)=>spawnRaisingWaste(actor.cageDefinitionIndex,species,position)}:null});
         if(result.changed) {writeRaisingNativeProfile(id,result.profile);changed=true;}
+        if(result.landed){storeNativeRaisingPositions();savePort.markDirty();}
         if(result.evolutionStarted){publishRaising();return;}
       }
       raisingDirtySignals.clear();
@@ -588,6 +591,7 @@ export function createChampionshipStandaloneApp({
       if(preparedRng)gameplayRng=preparedRng;
       for(const entry of individualResults)writeRaisingNativeProfile(entry.instanceId,entry.nativeProfile,{markDirty:false});
       if (result.receipt?.status === "SETTLED") {
+        nativeTitles=applyNativeBattleRecord(nativeTitles,result.receipt);
         const r=resolveNativeTitleResult({rank:tamerRankValue,category:result.receipt.mode,matchIndex:result.receipt.matchIndex,
           won:battleBadgesValue,...nativeTitles,rounds:[result.receipt.won?1:0]});
         battleBadgesValue=[...r.won];tamerRankValue=r.rank;
@@ -825,6 +829,23 @@ export function createChampionshipStandaloneApp({
       raisingDayTransition.phase='calendar-out';raisingDayTransition.frames=0;publishRaising();return true;
     },
 
+    beginRaisingCarry(instanceId,pointer){
+      if(this.hasRaisingPresentation()||huntCommitActive||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME||!raisingGround
+        ||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
+      const actor=raisingActors.get(instanceId),profile=raisingNativeProfile(instanceId);
+      if(!actor||!profile||[...raisingActors.values()].some(a=>a.state===6))return false;
+      const p=beginNativeRaisingCarry(actor,profile,pointer,{foods:raisingFoods,rng:{next:nextGameplayRandom}});if(!p)return false;
+      actor.carryCameraX=pointer.cameraX??0;writeRaisingNativeProfile(instanceId,p);savePort.markDirty();publishRaising();return true;
+    },
+    updateRaisingCarry(instanceId,pointer){
+      const actor=raisingActors.get(instanceId);if(actor?.state!==6||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
+      actor.carryPointer={x:pointer.x,y:pointer.y};actor.carryCameraX=pointer.cameraX??actor.carryCameraX;return true;
+    },
+    releaseRaisingCarry(instanceId){
+      const actor=raisingActors.get(instanceId),profile=raisingNativeProfile(instanceId);if(!actor||!profile)return false;
+      const p=releaseNativeRaisingCarry(actor,profile);if(!p)return false;
+      writeRaisingNativeProfile(instanceId,p);interactionCount++;savePort.markDirty();publishRaising();return true;
+    },
     // OVL18 02119280..021192A0: settled ground determines native membership.
     // This binds position/membership only; training-module reaction/effect
     // programs after 021192A8 remain a separate lifecycle boundary.

@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:battle:bm03-animated-r1:original-review",
+  "family": "BATTLE",
+  "artifactMaturity": "INTERNAL_ANIMATED_LAYERED_RUNTIME_REVIEW",
+  "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+  "shippingStatus": "NOT_SHIPPING_READY",
+  "humanApproved": false,
+  "ownerApproval": null,
+  "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+  "rights": {
+    "status": "ORIGINAL_CREATED_AI_ASSISTED_TERMS_LINK_PENDING",
+    "referencePixelReuse": false,
+    "referencePaletteReuse": false,
+    "referenceGeometryReuse": false
+  },
+  "internalReviewEligible": true,
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "sourceDimensions": [
+    1536,
+    1024
+  ],
+  "viewportPolicy": {
+    "fit": "CONTAIN",
+    "verticalAnchor": 0.42,
+    "contractViewports": [
+      [
+        360,
+        800
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        393,
+        852
+      ],
+      [
+        412,
+        915
+      ],
+      [
+        430,
+        932
+      ]
+    ]
+  },
+  "arena": {
+    "fieldId": "field_bm03_01",
+    "assetId": "production:battle:arena:field-bm03-01",
+    "dependencies": [
+      "production:battle:shared:field-bm00-00"
+    ],
+    "gameplayBinding": "EXTERNAL_NOT_MOUNTED",
+    "collisionBinding": "NONE_ART_REVIEW_ONLY",
+    "uiBinding": "NONE_ART_REVIEW_ONLY",
+    "animation": {
+      "frameCount": 2,
+      "timingEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK_ARM9_0x0204ED5C",
+      "placementEvidence": "HIGH_CONFIDENCE_CROSSCHECK_FULL_FIELD_GRID_EQUALS_BATTLE_ARENA",
+      "compositionOrder": "ANIMATED_TERRAIN_BED_THEN_STATIC_TERRAIN_AND_OBJECTS_THEN_BM00_COMMON",
+      "compositionEvidence": "HIGH_CONFIDENCE_CROSSCHECK_SHARED_BSAR_RENDERER_AND_ORIGINAL_VISUAL_REFERENCE",
+      "updateDriver": "CALLER_OWNED_APPLICATION_TICKER",
+      "semanticClaim": "FIELD_ANIMATION_ONLY_NO_GAMEPLAY_MEANING"
+    },
+    "layers": [
+      {
+        "assetId": "production:battle:animation:field-bm03-01",
+        "role": "ANIMATED_TERRAIN_BED",
+        "zIndex": 0,
+        "frames": [
+          {
+            "src": "assets/production/internal-battle-review/bm03-bm04-animated-r1/field-bm03-01-animation-frame-00.png",
+            "sha256": "539610364F1DDCB19372C8369B599B7EEAAE1795FF7D3172FC647221AD47985C",
+            "durationRawTicks": 50,
+            "durationMs": 835.7556556544072
+          },
+          {
+            "src": "assets/production/internal-battle-review/bm03-bm04-animated-r1/field-bm03-01-animation-frame-01.png",
+            "sha256": "C8212760AA998645EDF8440FA863BB2A2B9D479339F9E54877EE9C260BC250DC",
+            "durationRawTicks": 50,
+            "durationMs": 835.7556556544072
+          }
+        ],
+        "alpha": false
+      },
+      {
+        "assetId": "production:battle:arena:field-bm03-01",
+        "role": "ARENA_TERRAIN",
+        "zIndex": 10,
+        "src": "assets/production/internal-battle-review/bm03-bm04-animated-r1/field-bm03-01-terrain-overlay.png",
+        "sha256": "34A9B8DE72ABD8DC1C2225837765294DA02C6441BD3E3E895C210882ABFD45E2",
+        "alpha": true
+      },
+      {
+        "assetId": "production:battle:shared:field-bm00-00",
+        "role": "CANONICAL_SHARED_LAYER",
+        "zIndex": 20,
+        "src": "assets/production/internal-battle-review/bm00-bm01-r1/field-bm00-00-shared-layer.png",
+        "sha256": "0906D94C70BAE26F5A1A65B0C7F304222B3CFA78007259389B18A34B51C5EB17",
+        "alpha": true
+      }
+    ]
+  },
+  "promotionGate": "OWNER_VISUAL_APPROVAL_LICENSE_TERMS_LINK_AND_FINAL_OBJECT_SEPARATION_REQUIRED"
+}

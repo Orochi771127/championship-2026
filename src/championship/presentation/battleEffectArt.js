@@ -1,12 +1,18 @@
 // Owner-supplied original cells for loopback research comparison. Numeric
 // animation/collision remain in the existing pool. No generated-art fallback.
+import publicPlaytest from '../../data/championship/public-playtest.r1.json' with {type:'json'};
 export const BATTLE_EFFECT_ART_MANIFEST = 'assets/production/internal-faithful-baseline/battle-effects-v1/manifest.json';
 export const BATTLE_EFFECT_ART_ID = 'art:vfx:battle-effects:local-reference:v1';
 
 export function isLocalBattleEffectPreview(baseUrl) {
   try {
     const url = new URL(baseUrl);
-    return ['http:', 'https:'].includes(url.protocol) && ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
+    const local = ['http:', 'https:'].includes(url.protocol) && ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
+    // The Owner's 2026-09-10 publication instruction adds one exact Pages
+    // destination. It does not relabel the source assets as rights-verified.
+    const approvedPlaytest = publicPlaytest.status === 'OWNER_AUTHORIZED_PUBLIC_PLAYTEST'
+      && url.origin === publicPlaytest.origin && url.pathname.startsWith(publicPlaytest.basePath);
+    return local || approvedPlaytest;
   } catch { return false; }
 }
 

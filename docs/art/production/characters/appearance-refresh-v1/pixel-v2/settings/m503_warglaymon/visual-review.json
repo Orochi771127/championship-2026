@@ -1,0 +1,35 @@
+{
+  "candidateSource": "docs/art/production/characters/appearance-refresh-v1/_work/identity-roster-group3/candidates/m503_warglaymon",
+  "entityId": "m503_warglaymon",
+  "findings": [
+    "貓臉、大眼、短吻與虎斑身份維持；新銀灰板面在亮底、暗底及原生尺寸都可與金色身體區別。",
+    "背件左側增加深藍灰內緣，肩臂與背板不再讀成單塊連續毛皮。初次審查指出的材料與遮擋辨識缺口已在此站姿解除。",
+    "獨立比較歷史r01與本版索引網格：203個變更全在登記的右上內部區域，透明支撐、native bounds、貓臉和區外爪足像素未改。",
+    "這是單一站姿的可見分界改善；不據此推定骨架、轉身時的板件歸屬或整套動作端點相容。",
+    "最終補齊family FELINE metadata，r03/r04原生PNG與實看比較圖逐byte相同，沿用本次實際像素審查。"
+  ],
+  "fullMotionQa": "NOT_RUN",
+  "identityDirectionVersion": "creature-identity-v1",
+  "identityVerdict": "PASS_IDENTITY_DIRECTION",
+  "independentReview": "docs\\art\\production\\characters\\appearance-refresh-v1\\_work\\identity-roster-group3-independent-review\\review-r03.json",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "resolvedIssues": [
+    {
+      "id": "M503-BACK-SHOULDER-SEPARATION",
+      "resolution": "銀灰甲面與深藍灰內分界清楚區別金色身體與背部板件。",
+      "status": "RESOLVED_IN_SINGLE_STANDARD_POSE"
+    }
+  ],
+  "reviewMethod": "Actually viewed original/new comparison and native/enlarged authored contact board; independently compiled adopted pixels.",
+  "reviewer": "identity_m001_independent_pixel_designer",
+  "runtimePromotionGranted": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "0da19c04b8c1f990572a6fdcdf72f92e224722ae9f9decf403ff6b0d148dd963",
+  "sourceComparisonSha256": "f2b7753e6ca7803b7fabd5690c9a7e40443248e864d725dd87723cd310be4472",
+  "technicalQaSha256": "2c4791141aa731bc754e4b777e0bf089308d33d4173e9b481f69fb378e0b9b32",
+  "unresolvedBlockingIssues": [
+    "Additional source representative poses and continuity review required before setting acceptance."
+  ],
+  "verdict": "STANDARD_POSE_REVIEWED_NOT_SETTING_PASS"
+}

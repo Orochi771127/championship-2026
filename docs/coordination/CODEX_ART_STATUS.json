@@ -1,4 +1,20 @@
 {
+  "characterBehaviorStage20260910": {
+    "status": "IN_PROGRESS_FULL_ORIGINAL_BEHAVIOR_NOT_COMPLETE",
+    "report": "docs/reports/characters/CHARACTER_BEHAVIOR_STAGE_2026-09-10.md",
+    "contract": "docs/contracts/championship/CHARACTER_BEHAVIOR_RESTORATION_STAGE.v1.json",
+    "completedThisRun": "Original reaction 6/22/29 facing timer and reaction 29 second-phase stop; existing actor/renderer authorities preserved",
+    "originalHandlerVariants": 104,
+    "originalHandlerUpdates": 8516,
+    "controlledSpeciesReactionCases": 11440,
+    "focusedPass": 46,
+    "regressionPass": 1413,
+    "portableCiPass": 1196,
+    "fullOriginalStageComplete": false,
+    "physicalPhoneQA": false,
+    "shippingReady": false,
+    "remaining": "Natural triggers and interruption paths, music-state caller and auxiliary sound, Hunt special branches/steering, Battle notification/ending timing, all-applicable-species visual and device acceptance"
+  },
   "raisingLifecycleStage": {
     "date": "2026-09-09",
     "status": "CORE_FLOW_INTEGRATED_FULL_ORIGINAL_STAGE_OPEN",

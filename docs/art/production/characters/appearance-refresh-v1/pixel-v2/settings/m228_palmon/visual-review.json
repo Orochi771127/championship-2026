@@ -1,0 +1,29 @@
+{
+  "deferredChecks": [
+    "Complete master bank and source-sequence continuity",
+    "All state-specific interior overlaps",
+    "Normal-game/physical-device QA"
+  ],
+  "entityId": "m228_palmon",
+  "observations": [
+    "Dark green mask, pale cheek/leaf bib, berry-pink flower planes and brown root bands remain coherent across upright/open/low poses.",
+    "Source stamen, hand/root support and open-mouth gap remain in the original pixel support; all three native alpha masks exact.",
+    "Rejected first method using source RGB mapping; inspected replacement authoring code with full authored material regions plus local glyphs, source silhouette reference separately declared.",
+    "Actually viewed all authored contact sheets and independently compiled source comparisons at native/integer scale."
+  ],
+  "ownerHumanApproval": false,
+  "reviewedPoses": [
+    "main/cell_000",
+    "main/cell_007",
+    "main/cell_020"
+  ],
+  "reviewer": "ROOT_ART_DIRECTOR_INDEPENDENT_OF_AUTHOR",
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "fee2d05113bee1a257782e1f522f031f05a7e5243962f2be37adc00db438231c",
+  "shippingReady": false,
+  "sourceComparisonSha256": "b1087a05fcbb0c0b54f41f04ab825d656b3a7041793ba9e14b46b3a8d0ee313c",
+  "technicalQaSha256": "b51c994e2043a7eeb7dafe308c81b57ab5d48bcf8ffc68a13c990b10da9ada28",
+  "unresolvedBlockingIssues": [],
+  "verdict": "PASS_SETTING_STAGE"
+}

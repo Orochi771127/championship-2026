@@ -1,0 +1,15 @@
+﻿id,status,domain,finding,source,line
+ARCH,PARTIAL,架構權責,單一 app/screen/save/Pixi 基礎成立；玩法、資產政策與完整串接另行判定,src/championship/app/main.js,116
+DATA,VERIFIED_BOUNDED,ROM 與資料,6317原始資源逐位元組一致；16catalog重建一致；Shop826欄一致,docs/reports/parity-audit/2026-09-05/catalog-rom-comparison.json,1
+F01,MISSING_INTEGRATION,籠內空地投食,正確操作已改為FEED後点角色旁空地；目前未接投食命令與食物物件,src/championship/app/main.js,544
+F02,CONFIRMED_GAP,戰鬥費用與獎勵入帳,PRIZE150後Shop仍0；ROM重驗150是報名費、獎金欄位7000；consumer誤讀且未接報名扣款與結果入帳,src/championship/app/main.js,423
+F03,PRODUCT_AUTHORED,捕獲流程,圈線閉合且包含目標後直接捕獲並提交collection,src/championship/hunt/huntRuntime.js,344
+F04,PARTIAL,戰前準備與賽程,"以ROM預設隊伍代替玩家個體；賽程預設2,3；四模式disabled",src/championship/app/battleRuntime.js,85
+F05,MISSING_INTEGRATION,自然時間與養成,clock reducer存在；當前育成場景沒有持續時間推進呼叫,src/championship/raising/raisingHomeDefinition.js,211
+F06,CONFIRMED_GAP,手機版面,390x844 HP/TP與save status被固定toolbar遮住,src/championship/app/intRh2Styles.css,23
+HUNT_WORLD,PRODUCT_AUTHORED,野外地圖與AI,seeded橢圓collision、前三種非蛋species與固定6隻，未接原作分布,src/championship/hunt/huntWorld.js,41
+CAGE,PARTIAL,籠子,36identities存在；2列配置自訂；training magnitude未解,src/championship/cage/ranchSlotGeometry.js,62
+ART,PARTIAL,角色與UI美術,224角色及96UI工作區存在；預設角色仍fallback，未完整runtime綁定,src/championship/app/main.js,69
+LIFECYCLE,UNKNOWN_REQUIRES_TRACE,進化與持久個體,養成writers、rungs、進化與生命週期不能從表格欄位猜測,src/championship/raising/statLadder.js,1
+SAVE,PARTIAL,完整進度存檔,基本SAVE/Continue瀏覽器通過；完整遊戲狀態鏈未驗收,src/championship/app/ChampionshipPersistentSavePort.js,1
+AUDIO_VFX,NOT_FULLY_AUDITED,音效與特效,資源與部分整合存在，本次未逐事件驗收全部觸發,src/championship/app/main.js,387

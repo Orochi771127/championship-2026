@@ -1,0 +1,235 @@
+{
+  "artReview": "PENDING_INDEPENDENT_VISUAL_REVIEW",
+  "decoderSha256": "d8690529211cf396e3b01c064a08f35d628ac30cf2f3ff92beffa8a4941b1d34",
+  "designVersion": "m201-a-pixel-setting-r01",
+  "distinctSourceCanvasStates": 48,
+  "distinctSourcePosesSelected": 3,
+  "eggFullStateCoverage": null,
+  "entityId": "m201_agumon",
+  "fullMotionQa": "NOT_RUN",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "poseSamplingStatus": "PASS",
+  "poses": [
+    {
+      "addedSupport": [
+        [
+          -5,
+          -15
+        ],
+        [
+          -4,
+          -18
+        ],
+        [
+          -4,
+          -17
+        ],
+        [
+          -4,
+          -16
+        ],
+        [
+          -3,
+          -17
+        ],
+        [
+          -2,
+          -17
+        ],
+        [
+          1,
+          -17
+        ],
+        [
+          2,
+          -18
+        ],
+        [
+          2,
+          -17
+        ],
+        [
+          3,
+          -17
+        ],
+        [
+          3,
+          -16
+        ],
+        [
+          4,
+          -15
+        ],
+        [
+          5,
+          -11
+        ]
+      ],
+      "authoredAlphaBounds": [
+        0,
+        1,
+        16,
+        21
+      ],
+      "authoredRgbaSha256": "31690d80083fdd6de45eb20ecf57d1eb3af38e54ecc9422da7b235bf4f26a7b8",
+      "authoredVisiblePixels": 217,
+      "key": "main/cell_000",
+      "nativeBounds": [
+        -8,
+        -19,
+        8,
+        5
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        0,
+        3,
+        16,
+        21
+      ],
+      "sourceRgbaSha256": "aa88f6d38eafde64d9287c952a2873ab5f1158da85eb52610371d48695e657e2",
+      "sourceVisiblePixels": 204,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [
+        [
+          -4,
+          -18
+        ],
+        [
+          -4,
+          -17
+        ],
+        [
+          2,
+          -18
+        ]
+      ],
+      "authoredAlphaBounds": [
+        0,
+        1,
+        17,
+        20
+      ],
+      "authoredRgbaSha256": "bb4fd61e1dc6c83a52f4c802718135d7e207e8251cd286bbf68181421dd8fe9d",
+      "authoredVisiblePixels": 198,
+      "key": "main/cell_008",
+      "nativeBounds": [
+        -8,
+        -19,
+        16,
+        5
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        0,
+        2,
+        17,
+        20
+      ],
+      "sourceRgbaSha256": "a3fd72de77cb74b97a73ad36c122fe2e4c3d8fba9e6de45904dffa6ca97df8ae",
+      "sourceVisiblePixels": 195,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [
+        [
+          -9,
+          -8
+        ],
+        [
+          -8,
+          -10
+        ],
+        [
+          -8,
+          -9
+        ],
+        [
+          -7,
+          -11
+        ],
+        [
+          -7,
+          -10
+        ],
+        [
+          -6,
+          -10
+        ],
+        [
+          -3,
+          -10
+        ],
+        [
+          -2,
+          -11
+        ],
+        [
+          -2,
+          -10
+        ],
+        [
+          -1,
+          -10
+        ],
+        [
+          -1,
+          -9
+        ],
+        [
+          0,
+          -8
+        ]
+      ],
+      "authoredAlphaBounds": [
+        4,
+        0,
+        27,
+        13
+      ],
+      "authoredRgbaSha256": "79af205786d73ba62957b0da28cd89de9caa6e83d4716cdca9b643b43e3e0076",
+      "authoredVisiblePixels": 198,
+      "key": "main/cell_023",
+      "nativeBounds": [
+        -16,
+        -11,
+        16,
+        5
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        4,
+        1,
+        27,
+        13
+      ],
+      "sourceRgbaSha256": "72ce2938e3885ebc109e2e0d92e1ff4aebecd0aee2ace7480a3a370b89f115e7",
+      "sourceVisiblePixels": 186,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    }
+  ],
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "0e452b638dfbb2c65e0362b5b96ee91c2f2e57f7398409c794506abb83b3fde8",
+  "settingPoseCount": 3,
+  "shippingReady": false,
+  "sourceFiles": {
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m201_agumon_main.nanr": "d39d0ef49cb66d055f5944e9923655299a17131ddb2b1dcf729f48c18a5d59f7",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m201_agumon_main.ncbr": "b39c16f5f6bcd391974c25e29cf87de9a95193dd808cc1de919a08cddd26913c",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m201_agumon_main.ncer": "d9dfeb4a3537aba9b26f194e0b25b71ec7c9a1c750dedf33a0f2a4e018f94b15",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m201_agumon_main.nclr": "da365d3318bc99caf26209405b9d7c11658bae44956bd34084f751e880dae387",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m201_agumon_sub.nanr": "b92cb8a9fb90d40dfdfd950d6cee2dd81b4b75bc58f9c4417a31bf5a81aebe11",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m201_agumon_sub.ncer": "2e07b2d4b4632e09d6909b8b4d507f87837d3307e0ba1f35029abd059a8b078a",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m201_agumon_sub.ncgr": "0a41c5b66b4d543250d33d55ed15a047072a07f467d3f1e0da740ca174e02d05",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m201_agumon_sub.nclr": "98e821523423e251f29dbacccdca9e254e7ea93a586c03dc6e2600c272d24dec",
+    "08_FULL_FAMILY_CONVERSION/digimon/m201_agumon_main/animations.json": "c19e5dd34b7dc34ea1a12f387363eb965c50a226aa8754a442216b4fad17160f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m201_agumon_main/cells.json": "f76a8a8fca285740d7c4cde0e091ba61279dfadc54d9071088c923e145d9c3b5",
+    "08_FULL_FAMILY_CONVERSION/digimon/m201_agumon_sub/animations.json": "e30134f30f5eadc2c047803bc7980a57c64219f8c1eeeadb0a52cb747b874836",
+    "08_FULL_FAMILY_CONVERSION/digimon/m201_agumon_sub/cells.json": "eae633bde1466c2a17b95560be45c21924f2790ad3a692676eb9bfab67b04c1f"
+  },
+  "technicalStatus": "PASS",
+  "visiblePaletteCount": 11
+}

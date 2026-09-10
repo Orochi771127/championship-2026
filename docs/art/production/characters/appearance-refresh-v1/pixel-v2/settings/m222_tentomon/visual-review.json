@@ -1,0 +1,27 @@
+{
+  "deferredChecks": [
+    "Complete master bank and sequence playback",
+    "Normal game and physical-device QA"
+  ],
+  "entityId": "m222_tentomon",
+  "observations": [
+    "Matte red shell, green face, simple green antennae and pale limb tips remain consistent across closed, raised and compressed poses.",
+    "Viewed corrected-source comparisons after right contact repair; repaired Main011 local [20,20,31,30] alpha matches original support.",
+    "Distinct limbs and shell surfaces remain legible; full per-frame limb overlap still requires complete-motion QA."
+  ],
+  "ownerHumanApproval": false,
+  "reviewedPoses": [
+    "main/cell_000",
+    "main/cell_011",
+    "main/cell_023"
+  ],
+  "reviewer": "ROOT_ART_DIRECTOR_INDEPENDENT_OF_AUTHOR",
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "bcaf80aed833775de533cfd4953258143a58a46bcb795a0e03d02abc2ed00e61",
+  "shippingReady": false,
+  "unresolvedBlockingIssues": [],
+  "verdict": "PASS_SETTING_STAGE",
+  "technicalQaSha256": "663b6d6551eee9269be6301b011c469a64b898da31b9084c736c884417fe2067",
+  "sourceComparisonSha256": "ac80b76883d744e1fb86c4ca08d33b07d6dd2edf262d18917d84aedc6345a166"
+}

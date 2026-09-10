@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "batchId": "batch-01",
+  "status": "OWNER_REVIEWABLE",
+  "reviewMethod": "以 view_image 逐張檢視四張生成比較板，並與先前逐張檢視的四隻來源 Main/Sub 表比對可見姿態類型。",
+  "acceptanceMeaning": "可交給 Owner 選擇外貌方向；不是設計核准、精確座標比對、透明母版、全部動作驗收或正式遊戲驗收。",
+  "ownerSelection": "RECORDED_IN_OWNER_SELECTION_JSON",
+  "motionCompatibility": "NOT_VALIDATED",
+  "runtimeEligibility": false,
+  "reviewableCount": 4,
+  "regenerateRequiredForAppearanceSelectionCount": 0,
+  "sharedLimitations": [
+    "紙張背景、地面陰影、文字與色票都是比較板元素，不能裁出後直接作為正式透明圖格。",
+    "概念板的標準姿態與極端姿態只支持外貌選擇，必須重新按照各 source cell 座標、原點、接觸點與遮擋繪製。",
+    "未進行數值輪廓疊圖、native timeline 比對、實際場景縮放或手機觸控驗收。",
+    "圖上小尺寸副本是模型生成的示意，不是由大型畫稿按正式載入比例縮小的遊戲截圖。"
+  ],
+  "entities": [
+    {
+      "entityId": "m201_agumon",
+      "image": "m201-concepts-v1.png",
+      "sha256": "BB8446F1B95C846BDD6A0D9EFFA481253E3A66ED503654794281B0D6F4E26C79",
+      "status": "OWNER_REVIEWABLE",
+      "distinction": "A 三角耳、奶油腹、銀腕環和尖臉毛；B 圓耳、寬短吻、同色腹、淡色腕毛帶。大型圖足以辨識兩種身份，暖金主色保留。",
+      "styleAssessment": "大型與伏地圖有清楚深色輪廓、高清手繪色塊。底部縮圖仍帶像素化邊緣，不代表正式高清風格；兩側毛色筆觸稍碎，製作母版時須收斂。",
+      "poseAssessment": "都有二足站姿與頭朝左的低伏橫向姿態，符合所選来源的可見類型；頭身比例、腳掌間距、尾巴高度和嘴端尚未按 Main 0/23 原點核對，不能記 motion PASS。",
+      "briefReconciliation": [
+        "B 實際讀感更像圓耳熊獺幼獸，建議顯示名稱改為『蜜金圓耳幼獸』；水獺是最初方向，不能宣稱生成結果具有明確水獺解剖。",
+        "B 圖中奶油色集中在吻、頸和腕，腹部為金色；可作候選實際配色交給 Owner 看，不在文字中稱奶油腹。"
+      ],
+      "productionFixes": [
+        "從已選高清身份母版重新輸出真正縮圖，不把圖板上的像素化副本當製作 seed。",
+        "逐格鎖嘴端、手端、腳底與短厚尾的來源位置，再處理耳朵和臉毛允許範圍。",
+        "減少毛色碎斑，固定線條粗細；伏地姿態不沿用板上對稱前掌布局，須以原 cell 決定可見手腳。",
+        "移除所有紙色與接觸影，保留透明 alpha；無法以板圖證明其已存在。"
+      ]
+    },
+    {
+      "entityId": "m001_zurumon",
+      "image": "m001-concepts-v1.png",
+      "sha256": "2A6D224052C6DBD011661EC8D611A8D6AD1C4B410E5FF87596B77E0DB04B6BDD",
+      "status": "OWNER_REVIEWABLE",
+      "distinction": "A 半透明內核與深琥珀色；B 不透明金黃、奶油眉弧和赭色侧紋，材質身份差別明顯。兩案均保留無肢黃色軟膠主體。",
+      "styleAssessment": "輪廓與大形清楚、黃金色系符合方向；A 的透明高光與顆粒稍多，須避免逐幀閃爍。",
+      "poseAssessment": "標準低矮膠體與高伸展張口具可見類型對應，但候選更正面、規則。板上兩種姿態都沿用三個右側液滴；不能代替 Main 0/60 各自的來源數量與位置，亦不能宣稱此圖是相同動作。",
+      "briefReconciliation": [
+        "A 原本應在體內或貼合表面的琥珀島紋被畫成突出膠珠；可用於選擇琥珀材質，量產身份設定需修正。"
+      ],
+      "productionFixes": [
+        "將 A 的突出琥珀珠改成平齊或內嵌色塊，不引入新增可分離構件。",
+        "每個 source cell 分別還原液滴；來源沒有的滴不能新增，也不能用獨立粒子動畫代替。",
+        "重新對照嘴開口方向、最高點、底部外形與側後方膠體突起；不能僅將中性圖拉長。",
+        "固定 A 高光與 B 眉弧的表面附著，減少細粒紋理。"
+      ]
+    },
+    {
+      "entityId": "m226_hagurumon",
+      "image": "m226-concepts-v1.png",
+      "sha256": "A023C0EBEF00F86EAFB4A74E27BEBCB535BBE7ADB995638A8D155C371ED77254",
+      "status": "OWNER_REVIEWABLE",
+      "distinction": "A 灰鋼、象牙眉板、刻槽；B 深灰礦片、角面眉、裂紋。材質方向可比較，灰金主體與紅眼有保留。",
+      "styleAssessment": "材料描繪偏寫實且細紋密度過高，明顯比另三張更接近有紋理的立體渲染。這不妨礙 Owner 選擇鋼釉或礦面身份，但正式高清手繪版本須減少材質噪點和過強倒角。",
+      "poseAssessment": "較小極端圖有薄橫向側面，不只是正面垂直壓扁；但輪圈厚度、側齒尺寸/中心、齒數與眼部是否在 Main 23 可見均未通過源座標核對。不能從此板宣稱零件拓樸精確相容。",
+      "briefReconciliation": [
+        "B 的礦眉有明顯前凸量，違反原 brief 的平齊表面意圖；A 的眉板也有厚倒角，須在母版阶段限制。"
+      ],
+      "productionFixes": [
+        "將 B 礦眉壓回既有臉部平面，以色面表現礦物，不增加幾何突起。",
+        "刪除細刮痕與大部分細裂紋，改為三個可跨姿態追蹤的大材質明暗區，統一清楚手繪輪廓。",
+        "依 NCER/OAM 與 source cell 逐一核對所有零件中心、齒數、正側面遮擋；未核對前不得把生成板当齒輪模板。",
+        "薄側面只繪製來源可見内容，不能因前視圖有紅眼就自動保留紅眼或厚眉。"
+      ]
+    },
+    {
+      "entityId": "e000_digitama",
+      "image": "e000-concepts-v1.png",
+      "sha256": "BF5B04F9CA47E87222D0719FC5D7B1DA3608E65AF8CDD527476851E97CB9F4CD",
+      "status": "OWNER_REVIEWABLE",
+      "distinction": "A 灰釉帶與四斑；B 灰礦片斜紋；均維持白灰蛋形、深灰線條，差異在縮圖仍可見。",
+      "styleAssessment": "明暗與線條節制，B 礦片維持表面片區，没有突出晶體；本板風格可作後續高清手繪整理的參考。",
+      "poseAssessment": "有完整蛋與殼分開圖，紅黑內部仍然抽象，未新增可辨識幼獸。開口上下殼距離、裂縫齒形及內部可見面積尚未比對 Main 7，不代表姿態精確保留。",
+      "briefReconciliation": [
+        "A 實際是四個灰斑，且完整/開口/縮圖都一致；可以把本候選描述從三斑改成四斑，這是畫稿整理，不是 Owner 核准。",
+        "B 實際有較多細分礦面，應鎖定大斜紋布局，避免把每個微小切面當獨立動作特徵。"
+      ],
+      "productionFixes": [
+        "依來源各 cell 重建蛋的寬高、搖動、殼裂位置及開口，不從板圖推斷孵化順序。",
+        "A 按實際候選固定四斑與灰帶，跨裂殼繼續維持同一表面布局；B 固定大斜紋，減少不必要的小切面。",
+        "Main/Sub 青白效果格另按來源製作，不把蛋表面泛光當替代。",
+        "移除圖板地面陰影與紙色；開口中的紅黑形狀不補出來源未證明的生物。"
+      ]
+    }
+  ]
+}

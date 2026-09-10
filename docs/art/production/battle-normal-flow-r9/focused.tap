@@ -1,0 +1,106 @@
+TAP version 13
+# Subtest: status thresholds receive unclamped levels while the damage curve receives 26
+ok 1 - status thresholds receive unclamped levels while the damage curve receives 26
+  ---
+  duration_ms: 2.545
+  type: 'test'
+  ...
+# Subtest: original CPU status-tick branch: due ticks, exact zero, state/notification exit, world height and icon cleanup
+ok 2 - original CPU status-tick branch: due ticks, exact zero, state/notification exit, world height and icon cleanup
+  ---
+  duration_ms: 22.524
+  type: 'test'
+  ...
+# Subtest: normal AI seed 9: hit interruption, landing, recovery and final down
+ok 3 - normal AI seed 9: hit interruption, landing, recovery and final down
+  ---
+  duration_ms: 3800.8215
+  type: 'test'
+  ...
+# Subtest: normal AI seed 25: hit interruption, landing, recovery and final down
+ok 4 - normal AI seed 25: hit interruption, landing, recovery and final down
+  ---
+  duration_ms: 4041.78
+  type: 'test'
+  ...
+# Subtest: runtime ending cancels pending notification20 before recovery HP/resource writes
+ok 5 - runtime ending cancels pending notification20 before recovery HP/resource writes
+  ---
+  duration_ms: 1.4205
+  type: 'test'
+  ...
+# Subtest: R9 original CPU lock acquisition, owner-specific release and first matching launch-slot cleanup
+ok 6 - R9 original CPU lock acquisition, owner-specific release and first matching launch-slot cleanup
+  ---
+  duration_ms: 7.1058
+  type: 'test'
+  ...
+# Subtest: R9 original CPU persistent team support-selection counters and health thresholds
+ok 7 - R9 original CPU persistent team support-selection counters and health thresholds
+  ---
+  duration_ms: 4.3397
+  type: 'test'
+  ...
+# Subtest: R9 original CPU support writer reaches existing heal, clear, positive slots and ignores dead recipients
+ok 8 - R9 original CPU support writer reaches existing heal, clear, positive slots and ignores dead recipients
+  ---
+  duration_ms: 9.4174
+  type: 'test'
+  ...
+# Subtest: R9 original CPU target picker: all 13 selectors and mismatched random eligibility indices
+ok 9 - R9 original CPU target picker: all 13 selectors and mismatched random eligibility indices
+  ---
+  duration_ms: 33.3802
+  type: 'test'
+  ...
+# Subtest: R9 original CPU ordinary notification entries and long-run decay
+ok 10 - R9 original CPU ordinary notification entries and long-run decay
+  ---
+  duration_ms: 4.8986
+  type: 'test'
+  ...
+# Subtest: R9 original CPU common movement and decaying launch impulse
+ok 11 - R9 original CPU common movement and decaying launch impulse
+  ---
+  duration_ms: 19.536
+  type: 'test'
+  ...
+# Subtest: R9 original CPU six-actor world distance/angle matrix and contact separation
+ok 12 - R9 original CPU six-actor world distance/angle matrix and contact separation
+  ---
+  duration_ms: 10.5871
+  type: 'test'
+  ...
+# Subtest: R9 original CPU launch 14/15/16 controlled allocation, refusal, notify and completion counters
+ok 13 - R9 original CPU launch 14/15/16 controlled allocation, refusal, notify and completion counters
+  ---
+  duration_ms: 34.6875
+  type: 'test'
+  ...
+# Subtest: R9 original CPU states 3/4/5: distance, angle boundaries, movement choices and launch transition
+ok 14 - R9 original CPU states 3/4/5: distance, angle boundaries, movement choices and launch transition
+  ---
+  duration_ms: 55.5133
+  type: 'test'
+  ...
+# Subtest: R9 original CPU C144 guard order and debit: locks, busy object, absent/dead target and exact-cost equality
+ok 15 - R9 original CPU C144 guard order and debit: locks, busy object, absent/dead target and exact-cost equality
+  ---
+  duration_ms: 1.7909
+  type: 'test'
+  ...
+# Subtest: R9 original CPU one/two/three-member placement table and original speed RNG consumption
+ok 16 - R9 original CPU one/two/three-member placement table and original speed RNG consumption
+  ---
+  duration_ms: 1.1306
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8805.5291

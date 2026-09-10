@@ -1,0 +1,37 @@
+{
+  "deferredChecks": [
+    "Original full timeline playback and slot compilation",
+    "Normal game and physical device QA"
+  ],
+  "entityId": "e006_digitama",
+  "observations": [
+    "Gold diamond seal and dark locator spots on matte violet.",
+    "Viewed all12 authored state contact sheet, then independent corrected-source spot comparison of normal/open shell/internal light/remaining lower shell.",
+    "All12 source states individually verified for exact native bounds and alpha support; all26 slots referenced by the source reuse evidence.",
+    "Reuses new authored E000 shell/effect construction after per-state geometry/occlusion evidence; new pattern is explicitly authored, not original RGB recolor.",
+    "Additional source-dark markers for Main004/005/007/008 preserved as named state overrides."
+  ],
+  "reviewedPoses": [
+    "main/cell_000",
+    "main/cell_001",
+    "main/cell_002",
+    "main/cell_004",
+    "main/cell_005",
+    "main/cell_006",
+    "main/cell_007",
+    "main/cell_008",
+    "main/cell_009",
+    "main/cell_010",
+    "main/cell_011",
+    "main/cell_012"
+  ],
+  "reviewer": "ROOT_ART_DIRECTOR_INDEPENDENT_OF_AUTHOR",
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "17ed14a2575480ca9e8026f34d371f2daec6432450ad5b442b7f78dec099286e",
+  "shippingReady": false,
+  "sourceComparisonSha256": "8b5a3851cc42912b2dcce26506809acb7538c52b3c96a13fccd42437a53b9eee",
+  "technicalQaSha256": "40249a2ced3c808673d113901f9e6f10f2ebc5b82844039c15286d6230a09646",
+  "unresolvedBlockingIssues": [],
+  "verdict": "PASS_SETTING_STAGE"
+}

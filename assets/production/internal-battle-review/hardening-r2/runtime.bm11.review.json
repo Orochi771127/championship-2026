@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:battle:bm11-hardening-r2:original-review",
+  "family": "BATTLE",
+  "artifactMaturity": "INTERNAL_FIELD_OBJECT_LAYER_RUNTIME_REVIEW",
+  "productionStatus": "BROWSER_QA_PASSED_INTERNAL_REVIEW",
+  "shippingStatus": "NOT_SHIPPING_READY",
+  "humanApproved": false,
+  "ownerApproval": null,
+  "rightsStatus": "ORIGINAL_CREATED_AI_ASSISTED",
+  "rights": {
+    "status": "ORIGINAL_CREATED_AI_ASSISTED_TERMS_LINK_PENDING",
+    "referencePixelReuse": false,
+    "referencePaletteReuse": false,
+    "referenceGeometryReuse": false
+  },
+  "internalReviewEligible": true,
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "sourceDimensions": [
+    1536,
+    1024
+  ],
+  "viewportPolicy": {
+    "fit": "CONTAIN",
+    "verticalAnchor": 0.42,
+    "contractViewports": [
+      [
+        360,
+        800
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        393,
+        852
+      ],
+      [
+        412,
+        915
+      ],
+      [
+        430,
+        932
+      ]
+    ]
+  },
+  "arena": {
+    "fieldId": "field_bm11_01",
+    "assetId": "production:battle:arena:field-bm11-01",
+    "dependencies": [
+      "production:battle:shared:field-bm00-00"
+    ],
+    "gameplayBinding": "EXTERNAL_NOT_MOUNTED",
+    "collisionBinding": "NONE_ART_REVIEW_ONLY",
+    "uiBinding": "NONE_ART_REVIEW_ONLY",
+    "layers": [
+      {
+        "assetId": "production:battle:arena:field-bm11-01",
+        "role": "ARENA_BACKGROUND",
+        "zIndex": 0,
+        "src": "assets/production/internal-battle-review/bm05-bm11-static-r1/field-bm11-01-background.png",
+        "sha256": "5FA50C4A05EC206E8E06D44ECE23B1E6939F768C1A45A8280914367394B2D3C1",
+        "alpha": false
+      },
+      {
+        "assetId": "production:battle:objects:field-bm11-01",
+        "role": "FIELD_OBJECTS",
+        "zIndex": 10,
+        "frames": [
+          {
+            "src": "assets/production/internal-battle-review/hardening-r2/field-bm11-01-objects-frame-00.png",
+            "sha256": "0C5D6BAF286C72A9BD0D12A504797FB6D4C4F0D4E7823DB6D8B4A7424F28247C",
+            "durationRawTicks": 6,
+            "durationMs": 100.2906786785289
+          },
+          {
+            "src": "assets/production/internal-battle-review/hardening-r2/field-bm11-01-objects-frame-01.png",
+            "sha256": "5558D458EE4D9A0AECEFBB748567E27493751F20A46526DBAB47055692D89FEE",
+            "durationRawTicks": 6,
+            "durationMs": 100.2906786785289
+          }
+        ],
+        "alpha": true
+      },
+      {
+        "assetId": "production:battle:shared:field-bm00-00",
+        "role": "CANONICAL_SHARED_LAYER",
+        "zIndex": 20,
+        "src": "assets/production/internal-battle-review/bm00-bm01-r1/field-bm00-00-shared-layer.png",
+        "sha256": "0906D94C70BAE26F5A1A65B0C7F304222B3CFA78007259389B18A34B51C5EB17",
+        "alpha": true
+      }
+    ],
+    "animation": {
+      "frameCount": 2,
+      "timingEvidence": "RAW_NANR_TICKS_PLUS_HIGH_CONFIDENCE_PLATFORM_FRAME_CLOCK_CROSSCHECK",
+      "placementEvidence": "VERIFIED_OPMD_TO_NANR_TO_NCER_METADATA",
+      "compositionOrder": "ARENA_BACKGROUND_THEN_ANIMATED_FIELD_OBJECTS_THEN_BM00_COMMON",
+      "compositionEvidence": "VERIFIED_SOURCE_SEQUENCE_AND_PLACEMENT_STRUCTURE",
+      "updateDriver": "CALLER_OWNED_APPLICATION_TICKER",
+      "semanticClaim": "FIELD_PRESENTATION_ONLY_NO_GAMEPLAY_MEANING"
+    }
+  },
+  "promotionGate": "OWNER_VISUAL_APPROVAL_LICENSE_TERMS_LINK_AND_FINAL_ALIGNMENT_REVIEW_REQUIRED"
+}

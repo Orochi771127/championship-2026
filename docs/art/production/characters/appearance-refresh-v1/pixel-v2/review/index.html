@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>M201 像素母版工作台 · 內部美術檢視</title>
+  <link rel="stylesheet" href="./pixel-review.css">
+  <style>.palette label{min-width:0}.palette .hex-input{min-width:0;padding:0 2px;cursor:text;font:10px ui-monospace,monospace}.hex-input[aria-invalid="true"]{outline:2px solid #df8c71}</style>
+</head>
+<body>
+  <header class="page-header"><div><p class="eyebrow">CHAMPIONSHIP 2026 · ART WORKSPACE</p><h1>像素母版工作台</h1><p id="identity">讀取角色資料中</p></div><span class="review-badge">內部候選 · 尚未成為遊戲預設</span></header>
+  <main>
+    <form id="manifest-form" class="load-bar"><label for="manifest-path">檢視資料</label><input id="manifest-path" name="manifest" spellcheck="false" aria-label="preview-data.json 相對路徑"><button type="submit">載入</button></form>
+    <p id="error" class="error" role="alert" hidden></p>
+    <section id="coverage" class="coverage" aria-label="美術覆蓋狀態"><div><strong id="master-count">—</strong><span>已畫母版 / 全部母版</span></div><div><strong id="slot-count">—</strong><span>已覆蓋槽位 / 全部槽位</span></div><div><strong id="sequence-count">—</strong><span>原始序列 · 保留全部圖格</span></div></section>
+    <div id="workspace" class="workspace" hidden>
+      <section class="viewer panel" aria-labelledby="viewer-title">
+        <div class="panel-heading"><div><p class="eyebrow">SOURCE COORDINATES</p><h2 id="viewer-title">固定原點預覽</h2></div><label class="check-label"><input id="guides" type="checkbox" checked> 原點導引</label></div>
+        <div class="stage"><canvas id="pose-canvas" width="464" height="368" aria-label="目前槽位的新美術"></canvas><span id="unauthored" class="unauthored" hidden>UNAUTHORED<br><small>這個圖格尚未繪製</small></span></div>
+        <div class="frame-caption"><strong id="current-key">—</strong><span id="frame-state">—</span></div>
+        <p id="geometry" class="muted"></p>
+        <div class="playback-controls"><label>Main / Sub<select id="side"><option value="main">Main</option><option value="sub">Sub</option></select></label><label>原始序列<select id="sequence"></select></label><label>檢視速度<select id="rate"><option value="6">6 原始單位 / 秒</option><option value="12" selected>12 原始單位 / 秒</option><option value="24">24 原始單位 / 秒</option><option value="60">60 原始單位 / 秒</option></select></label></div>
+        <div class="button-row"><button id="play" class="primary" type="button">播放</button><button id="step-unit" type="button">前進 1 原始單位</button><button id="step-frame" type="button">下一個圖格</button><button id="restart" type="button">回到開頭</button></div>
+        <p id="sequence-state" class="sequence-state" role="status"></p>
+        <p class="muted fine-print">保留來源 ticks 和 raw mode。檢視速度只控制這個工作台；未繪製的圖格保持空白，不會借用舊美術。</p>
+        <details><summary>這條序列的完整圖格</summary><div class="table-scroll"><table><thead><tr><th>圖格</th><th>Cell</th><th>Ticks</th><th>美術狀態</th></tr></thead><tbody id="frames"></tbody></table></div></details>
+      </section>
+      <aside class="tools">
+        <section class="panel" aria-labelledby="native-title"><div class="panel-heading"><div><p class="eyebrow">INDEXED MASTER</p><h2 id="native-title">原生像素</h2></div><span id="native-size" class="tag">—</span></div><div class="native-stage"><canvas id="native-canvas" width="16" height="24" aria-label="目前母版原生像素放大圖"></canvas><span id="native-empty" hidden>UNAUTHORED</span></div><p class="muted">整數像素繪製 · NEAREST 放大</p></section>
+        <section class="panel" aria-labelledby="palette-title"><div class="panel-heading"><h2 id="palette-title">共用色盤</h2><button id="reset-palette" type="button">還原</button></div><p class="muted">修改色票會同步預覽所有引用的像素。只在本頁暫存。</p><div id="palette" class="palette"></div><p id="palette-state" class="muted" role="status">未修改色盤</p></section>
+        <section class="panel"><h2>母版引用</h2><p id="selected-master" class="mono">—</p><ul id="members" class="reference-list"></ul><h3>共用 patch</h3><div id="patches" class="patch-list"></div></section>
+      </aside>
+      <section class="panel master-panel" aria-labelledby="master-list-title"><div class="panel-heading"><div><p class="eyebrow">MASTER BANK</p><h2 id="master-list-title">逐隻動作母版</h2></div><label class="check-label"><input id="authored-only" type="checkbox"> 只看已繪製</label></div><div id="masters" class="master-grid"></div></section>
+    </div>
+  </main>
+  <footer>美術覆蓋、原始序列與正常遊戲接入各自驗收。這個工作台不修改檔案、存檔或正式資產登記。</footer>
+  <script type="module" src="./pixel-review.js"></script>
+</body>
+</html>

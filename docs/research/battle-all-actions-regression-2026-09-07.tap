@@ -1,0 +1,3136 @@
+TAP version 13
+# Subtest: the native's shape is the immediates the ROM uses
+ok 1 - the native's shape is the immediates the ROM uses
+  ---
+  duration_ms: 4.0853
+  type: 'test'
+  ...
+# Subtest: it walks the same six-slot roster the frame loop does
+ok 2 - it walks the same six-slot roster the frame loop does
+  ---
+  duration_ms: 0.1909
+  type: 'test'
+  ...
+# Subtest: this is the native the state graph says damage hangs off
+ok 3 - this is the native the state graph says damage hangs off
+  ---
+  duration_ms: 2.2566
+  type: 'test'
+  ...
+# Subtest: argument 2 is Q12 and the entry truncates it arithmetically
+ok 4 - argument 2 is Q12 and the entry truncates it arithmetically
+  ---
+  duration_ms: 0.7523
+  type: 'test'
+  ...
+# Subtest: the four rejections are the ones the ROM applies, in order
+ok 5 - the four rejections are the ones the ROM applies, in order
+  ---
+  duration_ms: 0.6262
+  type: 'test'
+  ...
+# Subtest: status 5 skips the same-side rejection entirely
+ok 6 - status 5 skips the same-side rejection entirely
+  ---
+  duration_ms: 0.2659
+  type: 'test'
+  ...
+# Subtest: the guard check only bites when the attacker has one
+ok 7 - the guard check only bites when the attacker has one
+  ---
+  duration_ms: 0.2999
+  type: 'test'
+  ...
+# Subtest: the walk returns the surviving slots and the count the routine returns
+ok 8 - the walk returns the surviving slots and the count the routine returns
+  ---
+  duration_ms: 0.5546
+  type: 'test'
+  ...
+# Subtest: the parameter block comes from the action or from argument 1
+ok 9 - the parameter block comes from the action or from argument 1
+  ---
+  duration_ms: 0.6238
+  type: 'test'
+  ...
+# Subtest: kind 13 is the only one that skips the write to action +0x20
+ok 10 - kind 13 is the only one that skips the write to action +0x20
+  ---
+  duration_ms: 0.5972
+  type: 'test'
+  ...
+# Subtest: malformed input is refused rather than guessed at
+ok 11 - malformed input is refused rather than guessed at
+  ---
+  duration_ms: 0.4998
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src
+ok 12 - the module imports nothing outside src
+  ---
+  duration_ms: 1.4884
+  type: 'test'
+  ...
+# Subtest: 90 original CPU actor-native cases agree on returned values, writes and delegated animation calls
+ok 13 - 90 original CPU actor-native cases agree on returned values, writes and delegated animation calls
+  ---
+  duration_ms: 8.5773
+  type: 'test'
+  ...
+# Subtest: the original DS square-root boundary stays Q12 for all fourteen CPU samples
+ok 14 - the original DS square-root boundary stays Q12 for all fourteen CPU samples
+  ---
+  duration_ms: 0.3295
+  type: 'test'
+  ...
+# Subtest: all 64 CPU launch pointer combinations include the field0C=2 reverse branch
+ok 15 - all 64 CPU launch pointer combinations include the field0C=2 reverse branch
+  ---
+  duration_ms: 0.765
+  type: 'test'
+  ...
+# Subtest: resumed VM calls use this frame host and report this frame diagnostics
+ok 16 - resumed VM calls use this frame host and report this frame diagnostics
+  ---
+  duration_ms: 10.1453
+  type: 'test'
+  ...
+# Subtest: offsets are the dumped ones
+ok 17 - offsets are the dumped ones
+  ---
+  duration_ms: 1.0384
+  type: 'test'
+  ...
+# Subtest: the guard is `blt`, so paying down to exactly zero is allowed
+ok 18 - the guard is `blt`, so paying down to exactly zero is allowed
+  ---
+  duration_ms: 0.2755
+  type: 'test'
+  ...
+# Subtest: a refused action costs nothing, because the original returns before the subtract
+ok 19 - a refused action costs nothing, because the original returns before the subtract
+  ---
+  duration_ms: 0.3458
+  type: 'test'
+  ...
+# Subtest: an ordinary charge subtracts the cost
+ok 20 - an ordinary charge subtracts the cost
+  ---
+  duration_ms: 0.1442
+  type: 'test'
+  ...
+# Subtest: a zero-cost action is charged, not refused
+ok 21 - a zero-cost action is charged, not refused
+  ---
+  duration_ms: 0.1516
+  type: 'test'
+  ...
+# Subtest: the AI reserve is min(max * percent / 100, current) over the same two fields
+ok 22 - the AI reserve is min(max * percent / 100, current) over the same two fields
+  ---
+  duration_ms: 0.3476
+  type: 'test'
+  ...
+# Subtest: invalid input is rejected instead of coerced
+ok 23 - invalid input is rejected instead of coerced
+  ---
+  duration_ms: 0.5813
+  type: 'test'
+  ...
+# Subtest: same-frame readiness ties resolve by ascending slot index
+ok 24 - same-frame readiness ties resolve by ascending slot index
+  ---
+  duration_ms: 0.2518
+  type: 'test'
+  ...
+# Subtest: constants are the dumped OVL19 tables
+ok 25 - constants are the dumped OVL19 tables
+  ---
+  duration_ms: 2.5
+  type: 'test'
+  ...
+# Subtest: Q12 move distances decode to 50, 80 and 110
+ok 26 - Q12 move distances decode to 50, 80 and 110
+  ---
+  duration_ms: 0.2845
+  type: 'test'
+  ...
+# Subtest: reserve is metricBase * percent / 100, truncated, capped by metricLimit
+ok 27 - reserve is metricBase * percent / 100, truncated, capped by metricLimit
+  ---
+  duration_ms: 1.1921
+  type: 'test'
+  ...
+# Subtest: a roll below T0 takes bucket 5 when the candidate clears the reserve
+ok 28 - a roll below T0 takes bucket 5 when the candidate clears the reserve
+  ---
+  duration_ms: 0.6674
+  type: 'test'
+  ...
+# Subtest: a candidate whose cost reaches the reserve falls through to the next bucket
+ok 29 - a candidate whose cost reaches the reserve falls through to the next bucket
+  ---
+  duration_ms: 0.328
+  type: 'test'
+  ...
+# Subtest: bucket 4 commits with no cost gate, unlike buckets 5 and 6
+ok 30 - bucket 4 commits with no cost gate, unlike buckets 5 and 6
+  ---
+  duration_ms: 0.2963
+  type: 'test'
+  ...
+# Subtest: the affordability scan is first-fit and strictly below the reserve
+ok 31 - the affordability scan is first-fit and strictly below the reserve
+  ---
+  duration_ms: 0.3503
+  type: 'test'
+  ...
+# Subtest: the group-1 roster scan keeps the greatest metric44, skips HP exactly 0
+ok 32 - the group-1 roster scan keeps the greatest metric44, skips HP exactly 0
+  ---
+  duration_ms: 0.3762
+  type: 'test'
+  ...
+# Subtest: the group-3 roster scan reads metric54 and applies no liveness test at all
+ok 33 - the group-3 roster scan reads metric54 and applies no liveness test at all
+  ---
+  duration_ms: 0.8055
+  type: 'test'
+  ...
+# Subtest: group 5 collects at most three living entries that carry no positive effect
+ok 34 - group 5 collects at most three living entries that carry no positive effect
+  ---
+  duration_ms: 0.5426
+  type: 'test'
+  ...
+# Subtest: the effect table maps action ids to the positive effect they would apply
+ok 35 - the effect table maps action ids to the positive effect they would apply
+  ---
+  duration_ms: 0.2329
+  type: 'test'
+  ...
+# Subtest: group 2 wins first and targets self without a roster scan
+ok 36 - group 2 wins first and targets self without a roster scan
+  ---
+  duration_ms: 0.4841
+  type: 'test'
+  ...
+# Subtest: a closed group-2 guard falls to group 1, which needs a roster target
+ok 37 - a closed group-2 guard falls to group 1, which needs a roster target
+  ---
+  duration_ms: 0.2623
+  type: 'test'
+  ...
+# Subtest: group 6 declines an action whose effect the combatant already carries
+ok 38 - group 6 declines an action whose effect the combatant already carries
+  ---
+  duration_ms: 0.4023
+  type: 'test'
+  ...
+# Subtest: group 5 picks uniformly among the entries it collected
+ok 39 - group 5 picks uniformly among the entries it collected
+  ---
+  duration_ms: 0.18
+  type: 'test'
+  ...
+# Subtest: exhausting all six groups falls to the move ladder and records the attempts
+ok 40 - exhausting all six groups falls to the move ladder and records the attempts
+  ---
+  duration_ms: 0.3014
+  type: 'test'
+  ...
+# Subtest: roll at or above T3 goes to the move ladder
+ok 41 - roll at or above T3 goes to the move ladder
+  ---
+  duration_ms: 0.1326
+  type: 'test'
+  ...
+# Subtest: empty buckets fall through the whole ladder to the move decision
+ok 42 - empty buckets fall through the whole ladder to the move decision
+  ---
+  duration_ms: 0.184
+  type: 'test'
+  ...
+# Subtest: pendingField24 above zero skips the action ladder entirely
+ok 43 - pendingField24 above zero skips the action ladder entirely
+  ---
+  duration_ms: 0.1447
+  type: 'test'
+  ...
+# Subtest: negative status 2 replaces both ladder rows with the override
+ok 44 - negative status 2 replaces both ladder rows with the override
+  ---
+  duration_ms: 0.2363
+  type: 'test'
+  ...
+# Subtest: profile 2 is far more likely to reach the targeted path than profile 0
+ok 45 - profile 2 is far more likely to reach the targeted path than profile 0
+  ---
+  duration_ms: 0.1262
+  type: 'test'
+  ...
+# Subtest: a roll outside 0..102 is rejected rather than skewing the ladder
+ok 46 - a roll outside 0..102 is rejected rather than skewing the ladder
+  ---
+  duration_ms: 0.1906
+  type: 'test'
+  ...
+# Subtest: invalid input is rejected instead of coerced
+ok 47 - invalid input is rejected instead of coerced
+  ---
+  duration_ms: 0.2568
+  type: 'test'
+  ...
+# Subtest: the module names no strategy and invents no accuracy or metric semantics
+ok 48 - the module names no strategy and invents no accuracy or metric semantics
+  ---
+  duration_ms: 1.7089
+  type: 'test'
+  ...
+# Subtest: all 228 species bindings resolve their own registered identities, including the four source aliases
+ok 49 - all 228 species bindings resolve their own registered identities, including the four source aliases
+  ---
+  duration_ms: 4.2501
+  type: 'test'
+  ...
+# Subtest: all 8656 raw Main sequences resolve every production frame and preserve original completion or loop behavior
+ok 50 - all 8656 raw Main sequences resolve every production frame and preserve original completion or loop behavior
+  ---
+  duration_ms: 385.7141
+  type: 'test'
+  ...
+# Subtest: every one of 325 special-prelude records takes its own species pose and restoration timing
+ok 51 - every one of 325 special-prelude records takes its own species pose and restoration timing
+  ---
+  duration_ms: 316.5174
+  type: 'test'
+  ...
+# Subtest: real notifications take precedence over the temporary committed-move presentation
+ok 52 - real notifications take precedence over the temporary committed-move presentation
+  ---
+  duration_ms: 0.5249
+  type: 'test'
+  ...
+# Subtest: an action first rendered several simulation frames late uses its actual sampled start frame
+ok 53 - an action first rendered several simulation frames late uses its actual sampled start frame
+  ---
+  duration_ms: 1.4098
+  type: 'test'
+  ...
+# Subtest: Battle pilot keeps BM00 canonical and BM01 dependency-only
+ok 54 - Battle pilot keeps BM00 canonical and BM01 dependency-only
+  ---
+  duration_ms: 3.5652
+  type: 'test'
+  ...
+# Subtest: Battle pilot review files have the required dimensions and alpha roles
+ok 55 - Battle pilot review files have the required dimensions and alpha roles
+  ---
+  duration_ms: 57.3289
+  type: 'test'
+  ...
+# Subtest: standing-zone rings are exact mirrored pairs on one perspective axis
+ok 56 - standing-zone rings are exact mirrored pairs on one perspective axis
+  ---
+  duration_ms: 0.7174
+  type: 'test'
+  ...
+# Subtest: Battle pilot checks every contract viewport but promotes nothing
+ok 57 - Battle pilot checks every contract viewport but promotes nothing
+  ---
+  duration_ms: 48.0967
+  type: 'test'
+  ...
+# Subtest: BM02 is one arena background depending on the canonical BM00 layer
+ok 58 - BM02 is one arena background depending on the canonical BM00 layer
+  ---
+  duration_ms: 1.9918
+  type: 'test'
+  ...
+# Subtest: BM02 output is opaque 1536x1024 and hashes match its receipt
+ok 59 - BM02 output is opaque 1536x1024 and hashes match its receipt
+  ---
+  duration_ms: 42.6632
+  type: 'test'
+  ...
+# Subtest: BM02 references BM00 in place and does not duplicate its PNG
+ok 60 - BM02 references BM00 in place and does not duplicate its PNG
+  ---
+  duration_ms: 15.526
+  type: 'test'
+  ...
+# Subtest: BM02 runtime manifest remains isolated and unpromoted
+ok 61 - BM02 runtime manifest remains isolated and unpromoted
+  ---
+  duration_ms: 47.3677
+  type: 'test'
+  ...
+# Subtest: BM03/BM04 trace closes placement and timing with metadata only
+ok 62 - BM03/BM04 trace closes placement and timing with metadata only
+  ---
+  duration_ms: 2.1309
+  type: 'test'
+  ...
+# Subtest: catalog and manifests retain both original animation and shared-layer facts
+ok 63 - catalog and manifests retain both original animation and shared-layer facts
+  ---
+  duration_ms: 12.3271
+  type: 'test'
+  ...
+# Subtest: original-created frames, alpha terrain, masks, composites and viewports match receipts
+ok 64 - original-created frames, alpha terrain, masks, composites and viewports match receipts
+  ---
+  duration_ms: 377.1157
+  type: 'test'
+  ...
+# Subtest: BM04 object separation remains explicit and promotion stays closed
+ok 65 - BM04 object separation remains explicit and promotion stays closed
+  ---
+  duration_ms: 0.2981
+  type: 'test'
+  ...
+# Subtest: runtime animated bundle contains no copied Nitro or ROM payload
+ok 66 - runtime animated bundle contains no copied Nitro or ROM payload
+  ---
+  duration_ms: 2.3317
+  type: 'test'
+  ...
+# Subtest: BM07 catalog evidence requires an independent static single layer
+ok 67 - BM07 catalog evidence requires an independent static single layer
+  ---
+  duration_ms: 1.979
+  type: 'test'
+  ...
+# Subtest: BM07 runtime manifest has no invented BM00 dependency or extra layer
+ok 68 - BM07 runtime manifest has no invented BM00 dependency or extra layer
+  ---
+  duration_ms: 1.2309
+  type: 'test'
+  ...
+# Subtest: BM07 standing-zone contract is exactly aligned and deterministic
+ok 69 - BM07 standing-zone contract is exactly aligned and deterministic
+  ---
+  duration_ms: 0.7283
+  type: 'test'
+  ...
+# Subtest: BM07 source, review, runtime, and viewport artifacts match receipts
+ok 70 - BM07 source, review, runtime, and viewport artifacts match receipts
+  ---
+  duration_ms: 97.2457
+  type: 'test'
+  ...
+# Subtest: BM07 browser QA stays internal and promotion remains closed
+ok 71 - BM07 browser QA stays internal and promotion remains closed
+  ---
+  duration_ms: 0.248
+  type: 'test'
+  ...
+# Subtest: the array's own extent is what fixes the group count at nine
+ok 72 - the array's own extent is what fixes the group count at nine
+  ---
+  duration_ms: 1.6617
+  type: 'test'
+  ...
+# Subtest: the jump table is 31 entries and group 0 takes everything it drops
+ok 73 - the jump table is 31 entries and group 0 takes everything it drops
+  ---
+  duration_ms: 1.7356
+  type: 'test'
+  ...
+# Subtest: two source words are all that ever get filed
+ok 74 - two source words are all that ever get filed
+  ---
+  duration_ms: 2.7124
+  type: 'test'
+  ...
+# Subtest: a zero source is skipped and an out-of-table one is dropped, not filed
+ok 75 - a zero source is skipped and an out-of-table one is dropped, not filed
+  ---
+  duration_ms: 0.8057
+  type: 'test'
+  ...
+# Subtest: an entry carries the action's own +0x48 cost from the move catalog
+ok 76 - an entry carries the action's own +0x48 cost from the move catalog
+  ---
+  duration_ms: 0.4203
+  type: 'test'
+  ...
+# Subtest: every code the table admits resolves to a real move record
+ok 77 - every code the table admits resolves to a real move record
+  ---
+  duration_ms: 2.3134
+  type: 'test'
+  ...
+# Subtest: the overrun the original would allow is refused here
+ok 78 - the overrun the original would allow is refused here
+  ---
+  duration_ms: 1.6497
+  type: 'test'
+  ...
+# Subtest: the built buckets drive the real AI with the original's dice
+ok 79 - the built buckets drive the real AI with the original's dice
+  ---
+  duration_ms: 2.8309
+  type: 'test'
+  ...
+# Subtest: the AI's bucket keys are group indices, so both sides agree
+ok 80 - the AI's bucket keys are group indices, so both sides agree
+  ---
+  duration_ms: 0.6867
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src
+ok 81 - the module imports nothing outside src
+  ---
+  duration_ms: 1.8625
+  type: 'test'
+  ...
+# Subtest: every catalog reports the record count the ROM converged on
+ok 82 - every catalog reports the record count the ROM converged on
+  ---
+  duration_ms: 2.3703
+  type: 'test'
+  ...
+# Subtest: each declared base, stride and count closes on the declared end address
+ok 83 - each declared base, stride and count closes on the declared end address
+  ---
+  duration_ms: 0.4162
+  type: 'test'
+  ...
+# Subtest: the two corrected bases are the record starts, not the field columns they were handed over as
+ok 84 - the two corrected bases are the record starts, not the field columns they were handed over as
+  ---
+  duration_ms: 0.2198
+  type: 'test'
+  ...
+# Subtest: hand-checked records decode from the original bytes
+ok 85 - hand-checked records decode from the original bytes
+  ---
+  duration_ms: 1.7572
+  type: 'test'
+  ...
+# Subtest: the move table converges on 596 and stops at species 223
+ok 86 - the move table converges on 596 and stops at species 223
+  ---
+  duration_ms: 1.6125
+  type: 'test'
+  ...
+# Subtest: the traced move enum fields keep the ranges their dispatch code allows
+ok 87 - the traced move enum fields keep the ranges their dispatch code allows
+  ---
+  duration_ms: 0.5689
+  type: 'test'
+  ...
+# Subtest: the species move scan stops at the eight the original keeps
+ok 88 - the species move scan stops at the eight the original keeps
+  ---
+  duration_ms: 0.4924
+  type: 'test'
+  ...
+# Subtest: the eleven arenas are the eleven BATTLE_ tokens, in table order
+ok 89 - the eleven arenas are the eleven BATTLE_ tokens, in table order
+  ---
+  duration_ms: 0.271
+  type: 'test'
+  ...
+# Subtest: the eligibility table is 46 records ending on the title base
+ok 90 - the eligibility table is 46 records ending on the title base
+  ---
+  duration_ms: 1.1041
+  type: 'test'
+  ...
+# Subtest: the title table is 62 records and the 62nd is the one the reward scan skips
+ok 91 - the title table is 62 records and the 62nd is the one the reward scan skips
+  ---
+  duration_ms: 1.1514
+  type: 'test'
+  ...
+# Subtest: the opponent-team index columns account for every battle preset exactly once
+ok 92 - the opponent-team index columns account for every battle preset exactly once
+  ---
+  duration_ms: 0.6299
+  type: 'test'
+  ...
+# Subtest: the preset table converges on 456 and its +0x04 column never decreases
+ok 93 - the preset table converges on 456 and its +0x04 column never decreases
+  ---
+  duration_ms: 0.2297
+  type: 'test'
+  ...
+# Subtest: no field is named beyond what a read site supports
+ok 94 - no field is named beyond what a read site supports
+  ---
+  duration_ms: 1.5832
+  type: 'test'
+  ...
+# Subtest: a field with one value across the table is declared once, not repeated
+ok 95 - a field with one value across the table is declared once, not repeated
+  ---
+  duration_ms: 0.2973
+  type: 'test'
+  ...
+# Subtest: no catalog carries original text beyond the ASCII arena tokens
+ok 96 - no catalog carries original text beyond the ASCII arena tokens
+  ---
+  duration_ms: 17.8647
+  type: 'test'
+  ...
+# Subtest: the builder takes the ROM path from the caller and hard-codes no drive
+ok 97 - the builder takes the ROM path from the caller and hard-codes no drive
+  ---
+  duration_ms: 1.1493
+  type: 'test'
+  ...
+# Subtest: the catalogs import nothing outside src
+ok 98 - the catalogs import nothing outside src
+  ---
+  duration_ms: 1.2892
+  type: 'test'
+  ...
+# Subtest: 117 original OVL19 handler cases match the raw sequence selector; unknown notifications stay unknown
+ok 99 - 117 original OVL19 handler cases match the raw sequence selector; unknown notifications stay unknown
+  ---
+  duration_ms: 1.654
+  type: 'test'
+  ...
+# Subtest: 232 original CPU entry branches choose reactions by hit variant, status and end-of-battle flag
+ok 100 - 232 original CPU entry branches choose reactions by hit variant, status and end-of-battle flag
+  ---
+  duration_ms: 0.5923
+  type: 'test'
+  ...
+# Subtest: all 49 original ARM9 SetIfChanged cases retain or reset elapsed time correctly
+ok 101 - all 49 original ARM9 SetIfChanged cases retain or reset elapsed time correctly
+  ---
+  duration_ms: 2.551
+  type: 'test'
+  ...
+# Subtest: the four dispatch families select 7-10 and a down actor selects 15 without changing gameplay
+ok 102 - the four dispatch families select 7-10 and a down actor selects 15 without changing gameplay
+  ---
+  duration_ms: 1.5885
+  type: 'test'
+  ...
+# Subtest: native attack frames advance once per battle frame, stop at the end, and redraw never restarts them
+ok 103 - native attack frames advance once per battle frame, stop at the end, and redraw never restarts them
+  ---
+  duration_ms: 0.7854
+  type: 'test'
+  ...
+# Subtest: reduced motion keeps the action identity; unsupported raw slots restore the original texture and anchor
+ok 104 - reduced motion keeps the action identity; unsupported raw slots restore the original texture and anchor
+  ---
+  duration_ms: 0.2779
+  type: 'test'
+  ...
+# Subtest: all 13246 production Main cells retain verified per-frame packing, trim origin and current file hashes
+ok 105 - all 13246 production Main cells retain verified per-frame packing, trim origin and current file hashes
+  ---
+  duration_ms: 1567.2668
+  type: 'test'
+  ...
+# Subtest: battle animation is scoped to audited entities and rejects stale geometry hashes
+ok 106 - battle animation is scoped to audited entities and rejects stale geometry hashes
+  ---
+  duration_ms: 9.2334
+  type: 'test'
+  ...
+# Subtest: constants are the dumped OVL19 immediates, not chosen numbers
+ok 107 - constants are the dumped OVL19 immediates, not chosen numbers
+  ---
+  duration_ms: 1.87
+  type: 'test'
+  ...
+# Subtest: a full BL scan of OVL19 finds exactly three DamageResolver call sites
+ok 108 - a full BL scan of OVL19 finds exactly three DamageResolver call sites
+  ---
+  duration_ms: 0.1387
+  type: 'test'
+  ...
+# Subtest: action +0x50 gate is the unsigned sub \#2 / cmp \#1 / bhi pair
+ok 109 - action +0x50 gate is the unsigned sub \#2 / cmp \#1 / bhi pair
+  ---
+  duration_ms: 0.4344
+  type: 'test'
+  ...
+# Subtest: action +0x54 of 0 or 1 selects the single-target walk
+ok 110 - action +0x54 of 0 or 1 selects the single-target walk
+  ---
+  duration_ms: 0.3399
+  type: 'test'
+  ...
+# Subtest: null target is rejected and advances the slot in both modes
+ok 111 - null target is rejected and advances the slot in both modes
+  ---
+  duration_ms: 0.4095
+  type: 'test'
+  ...
+# Subtest: HP <= 0 is rejected: multi skips to the next slot, single ends the walk
+ok 112 - HP <= 0 is rejected: multi skips to the next slot, single ends the walk
+  ---
+  duration_ms: 0.5798
+  type: 'test'
+  ...
+# Subtest: exactly HP 1 is alive; the gate is cmp \#0 / bgt, not a threshold
+ok 113 - exactly HP 1 is alive; the gate is cmp \#0 / bgt, not a threshold
+  ---
+  duration_ms: 0.3896
+  type: 'test'
+  ...
+# Subtest: single mode stops after one resolve; multi resolves up to three slots
+ok 114 - single mode stops after one resolve; multi resolves up to three slots
+  ---
+  duration_ms: 0.8918
+  type: 'test'
+  ...
+# Subtest: the deferred early-out returns before targeting and writes no phase
+ok 115 - the deferred early-out returns before targeting and writes no phase
+  ---
+  duration_ms: 0.6612
+  type: 'test'
+  ...
+# Subtest: more than three multi slots is rejected rather than silently truncated
+ok 116 - more than three multi slots is rejected rather than silently truncated
+  ---
+  duration_ms: 0.8863
+  type: 'test'
+  ...
+# Subtest: invalid input is rejected instead of coerced
+ok 117 - invalid input is rejected instead of coerced
+  ---
+  duration_ms: 0.3575
+  type: 'test'
+  ...
+# Subtest: the module invents no hit, accuracy, evasion, Sense or TP surface
+ok 118 - the module invents no hit, accuracy, evasion, Sense or TP surface
+  ---
+  duration_ms: 1.6214
+  type: 'test'
+  ...
+# Subtest: the curve is 27 rows of eight, and its columns are what the builder reads
+ok 119 - the curve is 27 rows of eight, and its columns are what the builder reads
+  ---
+  duration_ms: 2.6582
+  type: 'test'
+  ...
+# Subtest: the species table is 228 records and the absent id is one past the last
+ok 120 - the species table is 228 records and the absent id is one past the last
+  ---
+  duration_ms: 1.0674
+  type: 'test'
+  ...
+# Subtest: every preset in the ROM builds, and HP comes from the species not the preset
+ok 121 - every preset in the ROM builds, and HP comes from the species not the preset
+  ---
+  duration_ms: 7.6298
+  type: 'test'
+  ...
+# Subtest: nothing is computed: every stat is a curve row read back
+ok 122 - nothing is computed: every stat is a curve row read back
+  ---
+  duration_ms: 0.2552
+  type: 'test'
+  ...
+# Subtest: the one preset carrying -1 is unreachable rather than in need of a clamp
+ok 123 - the one preset carrying -1 is unreachable rather than in need of a clamp
+  ---
+  duration_ms: 1.9855
+  type: 'test'
+  ...
+# Subtest: a match expands three opponents, and an empty slot stays empty
+ok 124 - a match expands three opponents, and an empty slot stays empty
+  ---
+  duration_ms: 0.4198
+  type: 'test'
+  ...
+# Subtest: a built creature drops straight into the battle session's fields
+ok 125 - a built creature drops straight into the battle session's fields
+  ---
+  duration_ms: 139.903
+  type: 'test'
+  ...
+# Subtest: the object sizes are the ones the allocators ask for
+ok 126 - the object sizes are the ones the allocators ask for
+  ---
+  duration_ms: 1.3158
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src
+ok 127 - the module imports nothing outside src
+  ---
+  duration_ms: 1.5352
+  type: 'test'
+  ...
+# Subtest: four registered battle panels resolve to their own Chinese labels and valid PNGs
+ok 128 - four registered battle panels resolve to their own Chinese labels and valid PNGs
+  ---
+  duration_ms: 30.6625
+  type: 'test'
+  ...
+# Subtest: unregistered or disabled cube packs cannot supply runtime textures
+ok 129 - unregistered or disabled cube packs cannot supply runtime textures
+  ---
+  duration_ms: 0.9722
+  type: 'test'
+  ...
+# Subtest: foreign paths and duplicate face identities are refused
+ok 130 - foreign paths and duplicate face identities are refused
+  ---
+  duration_ms: 1.3836
+  type: 'test'
+  ...
+# Subtest: four-panel production does not claim complete original menu or gameplay parity
+ok 131 - four-panel production does not claim complete original menu or gameplay parity
+  ---
+  duration_ms: 0.2918
+  type: 'test'
+  ...
+# Subtest: the 27-entry curve is the ARM9 table at 0x020CA00C
+ok 132 - the 27-entry curve is the ARM9 table at 0x020CA00C
+  ---
+  duration_ms: 1.8327
+  type: 'test'
+  ...
+# Subtest: equal mid indices and power 100 yield trunc((5A/2) - A)
+ok 133 - equal mid indices and power 100 yield trunc((5A/2) - A)
+  ---
+  duration_ms: 0.3294
+  type: 'test'
+  ...
+# Subtest: an odd curve value truncates (5A)/2 toward zero
+ok 134 - an odd curve value truncates (5A)/2 toward zero
+  ---
+  duration_ms: 0.1521
+  type: 'test'
+  ...
+# Subtest: a larger defender index can make a negative core
+ok 135 - a larger defender index can make a negative core
+  ---
+  duration_ms: 0.1609
+  type: 'test'
+  ...
+# Subtest: the /100 step truncates toward zero and drops the remainder
+ok 136 - the /100 step truncates toward zero and drops the remainder
+  ---
+  duration_ms: 0.2743
+  type: 'test'
+  ...
+# Subtest: an index above 26 clamps to 26 like the original GT \#26 move
+ok 137 - an index above 26 clamps to 26 like the original GT \#26 move
+  ---
+  duration_ms: 0.193
+  type: 'test'
+  ...
+# Subtest: a negative index is rejected instead of inventing a 0-clamp the ARM does not do
+ok 138 - a negative index is rejected instead of inventing a 0-clamp the ARM does not do
+  ---
+  duration_ms: 0.5697
+  type: 'test'
+  ...
+# Subtest: power is the original u16 at action +0x4A
+ok 139 - power is the original u16 at action +0x4A
+  ---
+  duration_ms: 0.3393
+  type: 'test'
+  ...
+# Subtest: the core function does not take hit, TP, crit or field modifiers
+ok 140 - the core function does not take hit, TP, crit or field modifiers
+  ---
+  duration_ms: 1.6272
+  type: 'test'
+  ...
+# Subtest: damage core is not wired into the standalone app or screens
+ok 141 - damage core is not wired into the standalone app or screens
+  ---
+  duration_ms: 25.8423
+  type: 'test'
+  ...
+# Subtest: the damage curve is a column of the creature curve, proven not assumed
+ok 142 - the damage curve is a column of the creature curve, proven not assumed
+  ---
+  duration_ms: 1.8281
+  type: 'test'
+  ...
+# Subtest: the offsets are the ones the rest of the lane already reads
+ok 143 - the offsets are the ones the rest of the lane already reads
+  ---
+  duration_ms: 0.2041
+  type: 'test'
+  ...
+# Subtest: every level the resolver reads is one the creature builder writes
+ok 144 - every level the resolver reads is one the creature builder writes
+  ---
+  duration_ms: 0.1894
+  type: 'test'
+  ...
+# Subtest: the selector picks one of six defender levels and anything above five is the default
+ok 145 - the selector picks one of six defender levels and anything above five is the default
+  ---
+  duration_ms: 0.2563
+  type: 'test'
+  ...
+# Subtest: a buff raises exactly one step, and only the resistance it belongs to
+ok 146 - a buff raises exactly one step, and only the resistance it belongs to
+  ---
+  duration_ms: 0.4137
+  type: 'test'
+  ...
+# Subtest: the clamp is high only, exactly as the ROM's is
+ok 147 - the clamp is high only, exactly as the ROM's is
+  ---
+  duration_ms: 0.5476
+  type: 'test'
+  ...
+# Subtest: a target already down takes nothing, before any level is read
+ok 148 - a target already down takes nothing, before any level is read
+  ---
+  duration_ms: 0.3238
+  type: 'test'
+  ...
+# Subtest: the inputs feed the core the lane already had, end to end
+ok 149 - the inputs feed the core the lane already had, end to end
+  ---
+  duration_ms: 0.2909
+  type: 'test'
+  ...
+# Subtest: the module names roles, never RPG stats
+ok 150 - the module names roles, never RPG stats
+  ---
+  duration_ms: 2.0709
+  type: 'test'
+  ...
+# Subtest: only kinds 0 and 1 reach the curve-and-power term
+ok 151 - only kinds 0 and 1 reach the curve-and-power term
+  ---
+  duration_ms: 17.0834
+  type: 'test'
+  ...
+# Subtest: the move table backs the routing: power lives with kinds 0 and 1
+ok 152 - the move table backs the routing: power lives with kinds 0 and 1
+  ---
+  duration_ms: 5.2048
+  type: 'test'
+  ...
+# Subtest: the in-flight note no longer claims the contact walk closes the chain
+ok 153 - the in-flight note no longer claims the contact walk closes the chain
+  ---
+  duration_ms: 1.558
+  type: 'test'
+  ...
+# Subtest: 150 fee and 7000 reward use the one wallet, with manual save and fresh Continue
+ok 154 - 150 fee and 7000 reward use the one wallet, with manual save and fresh Continue
+  ---
+  duration_ms: 72.0731
+  type: 'test'
+  ...
+# Subtest: insufficient funds and leaving selection do not charge or allocate attempts
+ok 155 - insufficient funds and leaving selection do not charge or allocate attempts
+  ---
+  duration_ms: 4.1122
+  type: 'test'
+  ...
+# Subtest: duplicate confirmation and result notifications never charge or credit twice
+ok 156 - duplicate confirmation and result notifications never charge or credit twice
+  ---
+  duration_ms: 7.3912
+  type: 'test'
+  ...
+# Subtest: defeat keeps the paid fee and awards zero
+ok 157 - defeat keeps the paid fee and awards zero
+  ---
+  duration_ms: 9.6301
+  type: 'test'
+  ...
+# Subtest: reward receipt distinguishes nominal reward from wallet cap credit
+ok 158 - reward receipt distinguishes nominal reward from wallet cap credit
+  ---
+  duration_ms: 5.926
+  type: 'test'
+  ...
+# Subtest: failed save followed by shopping retries current wallet, inventory and receipt together
+ok 159 - failed save followed by shopping retries current wallet, inventory and receipt together
+  ---
+  duration_ms: 16.9343
+  type: 'test'
+  ...
+# Subtest: active battles cannot be serialized as resumable games
+ok 160 - active battles cannot be serialized as resumable games
+  ---
+  duration_ms: 13.2468
+  type: 'test'
+  ...
+# Subtest: wallet observers see the paired attempt and cannot settle halfway through debit
+ok 161 - wallet observers see the paired attempt and cannot settle halfway through debit
+  ---
+  duration_ms: 4.4543
+  type: 'test'
+  ...
+# Subtest: a real deterministic runtime verdict feeds settlement without reading UI winner text
+ok 162 - a real deterministic runtime verdict feeds settlement without reading UI winner text
+  ---
+  duration_ms: 79.7028
+  type: 'test'
+  ...
+# Subtest: the wallet rejects a transaction calculated from a stale balance
+ok 163 - the wallet rejects a transaction calculated from a stale balance
+  ---
+  duration_ms: 0.8467
+  type: 'test'
+  ...
+# Subtest: battle entry uses 150 Bits and a win pays 7000 in one immutable transition
+ok 164 - battle entry uses 150 Bits and a win pays 7000 in one immutable transition
+  ---
+  duration_ms: 3.5554
+  type: 'test'
+  ...
+# Subtest: insufficient funds neither debit nor consume the next attempt identity
+ok 165 - insufficient funds neither debit nor consume the next attempt identity
+  ---
+  duration_ms: 0.3275
+  type: 'test'
+  ...
+# Subtest: same entry request is idempotent; changed context cannot replace an active attempt
+ok 166 - same entry request is idempotent; changed context cannot replace an active attempt
+  ---
+  duration_ms: 0.3694
+  type: 'test'
+  ...
+# Subtest: missing rounds cannot win vacuously, and only the complete round set is settled
+ok 167 - missing rounds cannot win vacuously, and only the complete round set is settled
+  ---
+  duration_ms: 0.5194
+  type: 'test'
+  ...
+# Subtest: suppressed mode and wallet cap retain the traced reward semantics
+ok 168 - suppressed mode and wallet cap retain the traced reward semantics
+  ---
+  duration_ms: 1.1323
+  type: 'test'
+  ...
+# Subtest: duplicate completion after unrelated wallet changes never restores the old wallet
+ok 169 - duplicate completion after unrelated wallet changes never restores the old wallet
+  ---
+  duration_ms: 0.4322
+  type: 'test'
+  ...
+# Subtest: many finalized matches keep a bounded receipt and reject older replays
+ok 170 - many finalized matches keep a bounded receipt and reject older replays
+  ---
+  duration_ms: 24.9465
+  type: 'test'
+  ...
+# Subtest: prototype Leave closes the identity without inferring a refund or a victory
+ok 171 - prototype Leave closes the identity without inferring a refund or a victory
+  ---
+  duration_ms: 0.4644
+  type: 'test'
+  ...
+# Subtest: malformed contexts, flags and sequence gaps are rejected without mutation
+ok 172 - malformed contexts, flags and sequence gaps are rejected without mutation
+  ---
+  duration_ms: 1.238
+  type: 'test'
+  ...
+# Subtest: a missing receipt cannot display the advertised reward as money received
+ok 173 - a missing receipt cannot display the advertised reward as money received
+  ---
+  duration_ms: 2.6572
+  type: 'test'
+  ...
+# Subtest: the prize page displays the actual credit and resulting wallet when capped
+ok 174 - the prize page displays the actual credit and resulting wallet when capped
+  ---
+  duration_ms: 0.5126
+  type: 'test'
+  ...
+# Subtest: a settled loss displays zero received, distinct from an unsettled reward
+ok 175 - a settled loss displays zero received, distinct from an unsettled reward
+  ---
+  duration_ms: 0.5142
+  type: 'test'
+  ...
+# Subtest: the menu distinguishes fee and prize, and explains insufficient funds
+ok 176 - the menu distinguishes fee and prize, and explains insufficient funds
+  ---
+  duration_ms: 1.5299
+  type: 'test'
+  ...
+# Subtest: the 9:16 frame is centred and never stretched
+ok 177 - the 9:16 frame is centred and never stretched
+  ---
+  duration_ms: 2.132
+  type: 'test'
+  ...
+# Subtest: character art uses arena native pixels, keeps feet on stands after resize, and releases its roster once
+ok 178 - character art uses arena native pixels, keeps feet on stands after resize, and releases its roster once
+  ---
+  duration_ms: 7.5669
+  type: 'test'
+  ...
+# Subtest: unknown sizing retains neutral markers instead of guessing character proportions
+ok 179 - unknown sizing retains neutral markers instead of guessing character proportions
+  ---
+  duration_ms: 1.5171
+  type: 'test'
+  ...
+# Subtest: animated geometry retains a fixed native origin across changing packing and viewport sizes
+ok 180 - animated geometry retains a fixed native origin across changing packing and viewport sizes
+  ---
+  duration_ms: 2.549
+  type: 'test'
+  ...
+# Subtest: the band rectangles tile the frame with no gap and no overlap
+ok 181 - the band rectangles tile the frame with no gap and no overlap
+  ---
+  duration_ms: 0.3451
+  type: 'test'
+  ...
+# Subtest: the scene mounts, draws, and registers exactly one ticker and one resize observer
+ok 182 - the scene mounts, draws, and registers exactly one ticker and one resize observer
+  ---
+  duration_ms: 2.082
+  type: 'test'
+  ...
+# Subtest: cyberspace is framed with a rectangle, every other arena with the common ring
+ok 183 - cyberspace is framed with a rectangle, every other arena with the common ring
+  ---
+  duration_ms: 4.1626
+  type: 'test'
+  ...
+# Subtest: licensed field art hides the procedural plate and keeps stand markers
+ok 184 - licensed field art hides the procedural plate and keeps stand markers
+  ---
+  duration_ms: 1.3085
+  type: 'test'
+  ...
+# Subtest: the scene draws nothing that implies the viewer chooses an action
+ok 185 - the scene draws nothing that implies the viewer chooses an action
+  ---
+  duration_ms: 2.3327
+  type: 'test'
+  ...
+# Subtest: the battle runs itself and stops, and a stopped battle is still drawn
+ok 186 - the battle runs itself and stops, and a stopped battle is still drawn
+  ---
+  duration_ms: 9.9335
+  type: 'test'
+  ...
+# Subtest: 30, 60 and 120 Hz displays advance the same original battle frame count
+ok 187 - 30, 60 and 120 Hz displays advance the same original battle frame count
+  ---
+  duration_ms: 206.1572
+  type: 'test'
+  ...
+# Subtest: the scene draws the arena and leaves every label to the DOM
+ok 188 - the scene draws the arena and leaves every label to the DOM
+  ---
+  duration_ms: 3.3701
+  type: 'test'
+  ...
+# Subtest: the scene refuses a stage or a source that is not the real one
+ok 189 - the scene refuses a stage or a source that is not the real one
+  ---
+  duration_ms: 1.1575
+  type: 'test'
+  ...
+# Subtest: the scene imports nothing outside src and the contracts
+ok 190 - the scene imports nothing outside src and the contracts
+  ---
+  duration_ms: 1.405
+  type: 'test'
+  ...
+# Subtest: the three battle screens follow the original's own screen names
+ok 191 - the three battle screens follow the original's own screen names
+  ---
+  duration_ms: 18.069
+  type: 'test'
+  ...
+# Subtest: the loop's shape is the immediates the ROM uses
+ok 192 - the loop's shape is the immediates the ROM uses
+  ---
+  duration_ms: 2.0444
+  type: 'test'
+  ...
+# Subtest: the threshold table is eight entries because the move ladder starts there
+ok 193 - the threshold table is eight entries because the move ladder starts there
+  ---
+  duration_ms: 0.1623
+  type: 'test'
+  ...
+# Subtest: an empty slot escapes the whole body, counters included
+ok 194 - an empty slot escapes the whole body, counters included
+  ---
+  duration_ms: 0.7312
+  type: 'test'
+  ...
+# Subtest: slots resolve in ascending order, which is the whole tie-break
+ok 195 - slots resolve in ascending order, which is the whole tie-break
+  ---
+  duration_ms: 0.395
+  type: 'test'
+  ...
+# Subtest: a status with no time left clears, and skips the threshold phase
+ok 196 - a status with no time left clears, and skips the threshold phase
+  ---
+  duration_ms: 0.2029
+  type: 'test'
+  ...
+# Subtest: the damage-over-time tick decrements first, then tests the new value
+ok 197 - the damage-over-time tick decrements first, then tests the new value
+  ---
+  duration_ms: 0.5283
+  type: 'test'
+  ...
+# Subtest: the death test is `hp < 0`, so landing exactly on zero survives
+ok 198 - the death test is `hp < 0`, so landing exactly on zero survives
+  ---
+  duration_ms: 0.652
+  type: 'test'
+  ...
+# Subtest: dying arms the entry counter, not just the state
+ok 199 - dying arms the entry counter, not just the state
+  ---
+  duration_ms: 0.3721
+  type: 'test'
+  ...
+# Subtest: a survivor's state fields are left exactly as they came in
+ok 200 - a survivor's state fields are left exactly as they came in
+  ---
+  duration_ms: 0.5318
+  type: 'test'
+  ...
+# Subtest: a combatant that dies this frame still has its counters ticked
+ok 201 - a combatant that dies this frame still has its counters ticked
+  ---
+  duration_ms: 0.5113
+  type: 'test'
+  ...
+# Subtest: the threshold phase runs only with no status, and the compare is strict
+ok 202 - the threshold phase runs only with no status, and the compare is strict
+  ---
+  duration_ms: 0.3516
+  type: 'test'
+  ...
+# Subtest: the timer phase is gated by +0x160 and only fires once it is spent
+ok 203 - the timer phase is gated by +0x160 and only fires once it is spent
+  ---
+  duration_ms: 0.1813
+  type: 'test'
+  ...
+# Subtest: the two counters decrement only while strictly positive
+ok 204 - the two counters decrement only while strictly positive
+  ---
+  duration_ms: 0.1412
+  type: 'test'
+  ...
+# Subtest: untraced and malformed inputs are refused
+ok 205 - untraced and malformed inputs are refused
+  ---
+  duration_ms: 0.6607
+  type: 'test'
+  ...
+# Subtest: the frame result is frozen and the input is not mutated
+ok 206 - the frame result is frozen and the input is not mutated
+  ---
+  duration_ms: 0.1725
+  type: 'test'
+  ...
+# Subtest: the loop imports only the battle modules it delegates to
+ok 207 - the loop imports only the battle modules it delegates to
+  ---
+  duration_ms: 2.0464
+  type: 'test'
+  ...
+# Subtest: R4 records style approval without silently approving migrated assets
+ok 208 - R4 records style approval without silently approving migrated assets
+  ---
+  duration_ms: 1.0858
+  type: 'test'
+  ...
+# Subtest: BM00 uses the canonical alpha geometry rather than model-drawn transparency
+ok 209 - BM00 uses the canonical alpha geometry rather than model-drawn transparency
+  ---
+  duration_ms: 14.8102
+  type: 'test'
+  ...
+# Subtest: BM07 restores all six zones from fixed builder coordinates
+ok 210 - BM07 restores all six zones from fixed builder coordinates
+  ---
+  duration_ms: 18.0792
+  type: 'test'
+  ...
+# Subtest: BM03 and BM04 preserve verified two-frame timing and composition boundaries
+ok 211 - BM03 and BM04 preserve verified two-frame timing and composition boundaries
+  ---
+  duration_ms: 163.077
+  type: 'test'
+  ...
+# Subtest: portrait reviews place the full 3:2 field into the exact 9:16 field band
+ok 212 - portrait reviews place the full 3:2 field into the exact 9:16 field band
+  ---
+  duration_ms: 26.551
+  type: 'test'
+  ...
+# Subtest: the rejected BM07 candidate remains quarantined and documented
+ok 213 - the rejected BM07 candidate remains quarantined and documented
+  ---
+  duration_ms: 16.8581
+  type: 'test'
+  ...
+# Subtest: R5 is a seven-field internal review batch, not a runtime replacement
+ok 214 - R5 is a seven-field internal review batch, not a runtime replacement
+  ---
+  duration_ms: 1.5825
+  type: 'test'
+  ...
+# Subtest: all generated backgrounds and review composites are exact opaque 1536x1024 PNGs
+ok 215 - all generated backgrounds and review composites are exact opaque 1536x1024 PNGs
+  ---
+  duration_ms: 267.1393
+  type: 'test'
+  ...
+# Subtest: every shared-ring field depends on the exact R4 canonical BM00 layer
+ok 216 - every shared-ring field depends on the exact R4 canonical BM00 layer
+  ---
+  duration_ms: 6.6518
+  type: 'test'
+  ...
+# Subtest: BM08 and BM11 keep verified object-layer responsibilities separate
+ok 217 - BM08 and BM11 keep verified object-layer responsibilities separate
+  ---
+  duration_ms: 11.3683
+  type: 'test'
+  ...
+# Subtest: all exact 9:16 reviews reserve a 360x240 field band without black filler
+ok 218 - all exact 9:16 reviews reserve a 360x240 field band without black filler
+  ---
+  duration_ms: 82.5053
+  type: 'test'
+  ...
+# Subtest: R5 remains absent from runtime, gallery, review page, and production index
+ok 219 - R5 remains absent from runtime, gallery, review page, and production index
+  ---
+  duration_ms: 216.1928
+  type: 'test'
+  ...
+# Subtest: the frame walks the whole pool, not a combatant's three
+ok 220 - the frame walks the whole pool, not a combatant's three
+  ---
+  duration_ms: 1.1719
+  type: 'test'
+  ...
+# Subtest: the frame function runs eleven loops, and the in-flight walk is between the two named ones
+ok 221 - the frame function runs eleven loops, and the in-flight walk is between the two named ones
+  ---
+  duration_ms: 1.017
+  type: 'test'
+  ...
+# Subtest: kind 0 is the contact walk, and that is where damage comes from
+ok 222 - kind 0 is the contact walk, and that is where damage comes from
+  ---
+  duration_ms: 0.3522
+  type: 'test'
+  ...
+# Subtest: an orphaned object does nothing, and a lock elsewhere stops it
+ok 223 - an orphaned object does nothing, and a lock elsewhere stops it
+  ---
+  duration_ms: 0.2742
+  type: 'test'
+  ...
+# Subtest: the walk updates only the in-use objects and reports each index
+ok 224 - the walk updates only the in-use objects and reports each index
+  ---
+  duration_ms: 0.8119
+  type: 'test'
+  ...
+# Subtest: the owner and lock offsets are the ones the application module reads
+ok 225 - the owner and lock offsets are the ones the application module reads
+  ---
+  duration_ms: 1.4349
+  type: 'test'
+  ...
+# Subtest: no state handler reaches the damage resolver, and it never needed to
+ok 226 - no state handler reaches the damage resolver, and it never needed to
+  ---
+  duration_ms: 2.2476
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src
+ok 227 - the module imports nothing outside src
+  ---
+  duration_ms: 1.5441
+  type: 'test'
+  ...
+# Subtest: the first walk runs one frame in eight and only for engaged owners
+ok 228 - the first walk runs one frame in eight and only for engaged owners
+  ---
+  duration_ms: 1.4557
+  type: 'test'
+  ...
+# Subtest: engagement ends the state dispatch for the rest of the frame
+ok 229 - engagement ends the state dispatch for the rest of the frame
+  ---
+  duration_ms: 1.9266
+  type: 'test'
+  ...
+# Subtest: an object carries five script VMs, and kind 2 skips the primary
+ok 230 - an object carries five script VMs, and kind 2 skips the primary
+  ---
+  duration_ms: 0.7541
+  type: 'test'
+  ...
+# Subtest: a finished script releases only its own handles, out of twenty-four
+ok 231 - a finished script releases only its own handles, out of twenty-four
+  ---
+  duration_ms: 0.4312
+  type: 'test'
+  ...
+# Subtest: every frame loop carries the routines it calls, translated or not
+ok 232 - every frame loop carries the routines it calls, translated or not
+  ---
+  duration_ms: 1.4496
+  type: 'test'
+  ...
+# Subtest: the pool is twelve objects and bit 0 is the in-use flag
+ok 233 - the pool is twelve objects and bit 0 is the in-use flag
+  ---
+  duration_ms: 1.1588
+  type: 'test'
+  ...
+# Subtest: the allocator returns the lowest free object and never displaces it
+ok 234 - the allocator returns the lowest free object and never displaces it
+  ---
+  duration_ms: 0.6585
+  type: 'test'
+  ...
+# Subtest: twelve shared objects against three slots each is four combatants' worth
+ok 235 - twelve shared objects against three slots each is four combatants' worth
+  ---
+  duration_ms: 0.1964
+  type: 'test'
+  ...
+# Subtest: the charge refuses on the lock before it ever looks at the cost
+ok 236 - the charge refuses on the lock before it ever looks at the cost
+  ---
+  duration_ms: 0.2494
+  type: 'test'
+  ...
+# Subtest: the cost gate is battleActionResource's, and a refusal costs nothing
+ok 237 - the cost gate is battleActionResource's, and a refusal costs nothing
+  ---
+  duration_ms: 0.3204
+  type: 'test'
+  ...
+# Subtest: both refusals reach state 15 as one indistinguishable failure
+ok 238 - both refusals reach state 15 as one indistinguishable failure
+  ---
+  duration_ms: 1.8571
+  type: 'test'
+  ...
+# Subtest: the lock is the same field three separate traces landed on
+ok 239 - the lock is the same field three separate traces landed on
+  ---
+  duration_ms: 1.5213
+  type: 'test'
+  ...
+# Subtest: a successful charge spends exactly the cost and no more
+ok 240 - a successful charge spends exactly the cost and no more
+  ---
+  duration_ms: 0.2432
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src
+ok 241 - the module imports nothing outside src
+  ---
+  duration_ms: 2.1197
+  type: 'test'
+  ...
+# Subtest: a launch starts at the owner's position plus its sprite cell's centre
+ok 242 - a launch starts at the owner's position plus its sprite cell's centre
+  ---
+  duration_ms: 1.1394
+  type: 'test'
+  ...
+# Subtest: the position block is the one the script getters read and the setter writes
+ok 243 - the position block is the one the script getters read and the setter writes
+  ---
+  duration_ms: 2.4947
+  type: 'test'
+  ...
+# Subtest: light-fence pilot records the Owner decision and remains internal-only
+ok 244 - light-fence pilot records the Owner decision and remains internal-only
+  ---
+  duration_ms: 0.9342
+  type: 'test'
+  ...
+# Subtest: pilot is bounded to BM08 and BM10 with product-authored fixed geometry
+ok 245 - pilot is bounded to BM08 and BM10 with product-authored fixed geometry
+  ---
+  duration_ms: 0.8364
+  type: 'test'
+  ...
+# Subtest: each field has a distinct adapted fence, contact shadow, background, and composite
+ok 246 - each field has a distinct adapted fence, contact shadow, background, and composite
+  ---
+  duration_ms: 93.6709
+  type: 'test'
+  ...
+# Subtest: neutral shared layer is reproducible and does not reuse the rejected stone-ring asset
+ok 247 - neutral shared layer is reproducible and does not reuse the rejected stone-ring asset
+  ---
+  duration_ms: 2.8489
+  type: 'test'
+  ...
+# Subtest: the filter's bounds are the immediates the ROM compares against
+ok 248 - the filter's bounds are the immediates the ROM compares against
+  ---
+  duration_ms: 1.0649
+  type: 'test'
+  ...
+# Subtest: the two schedule columns partition every reachable record
+ok 249 - the two schedule columns partition every reachable record
+  ---
+  duration_ms: 1.5184
+  type: 'test'
+  ...
+# Subtest: the progress gate is `requirement <= counter >> 1`
+ok 250 - the progress gate is `requirement <= counter >> 1`
+  ---
+  duration_ms: 0.315
+  type: 'test'
+  ...
+# Subtest: the cap keeps the first matches in table order
+ok 251 - the cap keeps the first matches in table order
+  ---
+  duration_ms: 0.3143
+  type: 'test'
+  ...
+# Subtest: record 61 is unreachable through the filter and is the table's only zero entry fee
+ok 252 - record 61 is unreachable through the filter and is the table's only zero entry fee
+  ---
+  duration_ms: 0.3785
+  type: 'test'
+  ...
+# Subtest: fee and reward match the independent ROM reader/debit/credit fixture
+ok 253 - fee and reward match the independent ROM reader/debit/credit fixture
+  ---
+  duration_ms: 9.4275
+  type: 'test'
+  ...
+# Subtest: entry mode 4 replaces the list with that one record
+ok 254 - entry mode 4 replaces the list with that one record
+  ---
+  duration_ms: 1.7508
+  type: 'test'
+  ...
+# Subtest: a team expands into the three preset indices its columns hold
+ok 255 - a team expands into the three preset indices its columns hold
+  ---
+  duration_ms: 1.1064
+  type: 'test'
+  ...
+# Subtest: the inputs the original reads as integers are required as integers
+ok 256 - the inputs the original reads as integers are required as integers
+  ---
+  duration_ms: 0.9263
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src
+ok 257 - the module imports nothing outside src
+  ---
+  duration_ms: 1.8435
+  type: 'test'
+  ...
+# Subtest: the three buckets are the ladder's three states, at the offsets the loader writes
+ok 258 - the three buckets are the ladder's three states, at the offsets the loader writes
+  ---
+  duration_ms: 2.2426
+  type: 'test'
+  ...
+# Subtest: the bucketed kinds are exactly the kinds that reach the damage term
+ok 259 - the bucketed kinds are exactly the kinds that reach the damage term
+  ---
+  duration_ms: 0.657
+  type: 'test'
+  ...
+# Subtest: kind 1 splits on +0x0C, and anything else is dropped
+ok 260 - kind 1 splits on +0x0C, and anything else is dropped
+  ---
+  duration_ms: 1.1592
+  type: 'test'
+  ...
+# Subtest: each bucket takes three and drops the fourth rather than overwriting
+ok 261 - each bucket takes three and drops the fourth rather than overwriting
+  ---
+  duration_ms: 0.7217
+  type: 'test'
+  ...
+# Subtest: a real species produces real attacks, and the free one is in the ungated bucket
+ok 262 - a real species produces real attacks, and the free one is in the ungated bucket
+  ---
+  duration_ms: 0.6443
+  type: 'test'
+  ...
+# Subtest: every species in the table buckets within the list cap
+ok 263 - every species in the table buckets within the list cap
+  ---
+  duration_ms: 9.0373
+  type: 'test'
+  ...
+# Subtest: the reserve scalar is the clock tier, not a per-combatant field
+ok 264 - the reserve scalar is the clock tier, not a per-combatant field
+  ---
+  duration_ms: 1.7275
+  type: 'test'
+  ...
+# Subtest: the session feeds the ladder its own buckets and the cascade the nine groups
+ok 265 - the session feeds the ladder its own buckets and the cascade the nine groups
+  ---
+  duration_ms: 1.3601
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src
+ok 266 - the module imports nothing outside src
+  ---
+  duration_ms: 1.784
+  type: 'test'
+  ...
+# Subtest: the three entry columns are the ones B1 catalogued
+ok 267 - the three entry columns are the ones B1 catalogued
+  ---
+  duration_ms: 2.5306
+  type: 'test'
+  ...
+# Subtest: every value in those columns is a real script entry in the blob
+ok 268 - every value in those columns is a real script entry in the blob
+  ---
+  duration_ms: 10.6829
+  type: 'test'
+  ...
+# Subtest: the six-argument frame is the one the routine builds
+ok 269 - the six-argument frame is the one the routine builds
+  ---
+  duration_ms: 1.5148
+  type: 'test'
+  ...
+# Subtest: the move fields those arguments carry are signed bytes read as Q12
+ok 270 - the move fields those arguments carry are signed bytes read as Q12
+  ---
+  duration_ms: 1.6589
+  type: 'test'
+  ...
+# Subtest: argument k is local -(k+3), whatever the argument count
+ok 271 - argument k is local -(k+3), whatever the argument count
+  ---
+  duration_ms: 0.4464
+  type: 'test'
+  ...
+# Subtest: the negative locals the blob actually reads fit that mapping
+ok 272 - the negative locals the blob actually reads fit that mapping
+  ---
+  duration_ms: 4.9708
+  type: 'test'
+  ...
+# Subtest: the fifteen-deep frame is a script CALL, not a start site nobody found
+ok 273 - the fifteen-deep frame is a script CALL, not a start site nobody found
+  ---
+  duration_ms: 0.3862
+  type: 'test'
+  ...
+# Subtest: the built-in script is the run B2's reachability walk could not account for
+ok 274 - the built-in script is the run B2's reachability walk could not account for
+  ---
+  duration_ms: 0.8874
+  type: 'test'
+  ...
+# Subtest: its prologue reads exactly the locals the six-argument frame predicts
+ok 275 - its prologue reads exactly the locals the six-argument frame predicts
+  ---
+  duration_ms: 0.8766
+  type: 'test'
+  ...
+# Subtest: resolving an entry picks the column or the literal, and admits a null
+ok 276 - resolving an entry picks the column or the literal, and admits a null
+  ---
+  duration_ms: 0.8902
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src
+ok 277 - the module imports nothing outside src
+  ---
+  duration_ms: 1.6045
+  type: 'test'
+  ...
+# Subtest: the segment is the one the script catalog already carried
+ok 278 - the segment is the one the script catalog already carried
+  ---
+  duration_ms: 4.0535
+  type: 'test'
+  ...
+# Subtest: every move's three script columns land inside the segment
+ok 279 - every move's three script columns land inside the segment
+  ---
+  duration_ms: 2.5293
+  type: 'test'
+  ...
+# Subtest: the launch rewrites two pointers before starting them, in order
+ok 280 - the launch rewrites two pointers before starting them, in order
+  ---
+  duration_ms: 1.02
+  type: 'test'
+  ...
+# Subtest: a real move script runs the cartridge's own instructions
+ok 281 - a real move script runs the cartridge's own instructions
+  ---
+  duration_ms: 4.7163
+  type: 'test'
+  ...
+# Subtest: the six-argument frame is the traced one, Q12 fields included
+ok 282 - the six-argument frame is the traced one, Q12 fields included
+  ---
+  duration_ms: 1.975
+  type: 'test'
+  ...
+# Subtest: a column a move does not have is reported rather than guessed at
+ok 283 - a column a move does not have is reported rather than guessed at
+  ---
+  duration_ms: 0.3056
+  type: 'test'
+  ...
+# Subtest: the yield is what makes a script span frames instead of spinning
+ok 284 - the yield is what makes a script span frames instead of spinning
+  ---
+  duration_ms: 3.9015
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src
+ok 285 - the module imports nothing outside src
+  ---
+  duration_ms: 1.2615
+  type: 'test'
+  ...
+# Subtest: the two untraced columns had empty frames, and that was the real blocker
+ok 286 - the two untraced columns had empty frames, and that was the real blocker
+  ---
+  duration_ms: 3.0159
+  type: 'test'
+  ...
+# Subtest: most of the move table now runs to its end
+ok 287 - most of the move table now runs to its end
+  ---
+  duration_ms: 124.5173
+  type: 'test'
+  ...
+# Subtest: the host memory is scaffolding and the module says so
+ok 288 - the host memory is scaffolding and the module says so
+  ---
+  duration_ms: 1.9716
+  type: 'test'
+  ...
+# Subtest: BM04/BM08/BM11 object evidence is metadata-only and keeps exact placements
+ok 289 - BM04/BM08/BM11 object evidence is metadata-only and keeps exact placements
+  ---
+  duration_ms: 2.8016
+  type: 'test'
+  ...
+# Subtest: original-created cutouts and all runtime object layers are RGBA production assets
+ok 290 - original-created cutouts and all runtime object layers are RGBA production assets
+  ---
+  duration_ms: 69.8304
+  type: 'test'
+  ...
+# Subtest: R2 manifests enforce the three approved field-object architectures
+ok 291 - R2 manifests enforce the three approved field-object architectures
+  ---
+  duration_ms: 17.9024
+  type: 'test'
+  ...
+# Subtest: BM11 animates its field-object sprite from caller time without a second ticker
+ok 292 - BM11 animates its field-object sprite from caller time without a second ticker
+  ---
+  duration_ms: 3.8399
+  type: 'test'
+  ...
+# Subtest: receipts pin placement envelopes and keep promotion closed
+ok 293 - receipts pin placement envelopes and keep promotion closed
+  ---
+  duration_ms: 90.6515
+  type: 'test'
+  ...
+# Subtest: R2 runtime bundle contains no ROM or Nitro payload
+ok 294 - R2 runtime bundle contains no ROM or Nitro payload
+  ---
+  duration_ms: 2.3308
+  type: 'test'
+  ...
+# Subtest: the two teams of three are the six slots the frame already walks
+ok 295 - the two teams of three are the six slots the frame already walks
+  ---
+  duration_ms: 1.4213
+  type: 'test'
+  ...
+# Subtest: the clock is 7200 frames in eight 900-frame tiers
+ok 296 - the clock is 7200 frames in eight 900-frame tiers
+  ---
+  duration_ms: 2.5522
+  type: 'test'
+  ...
+# Subtest: the divisor is 900 across the whole range the ROM's magic number covers
+ok 297 - the divisor is 900 across the whole range the ROM's magic number covers
+  ---
+  duration_ms: 4.681
+  type: 'test'
+  ...
+# Subtest: more standing wins outright, and only the first `count` slots are counted
+ok 298 - more standing wins outright, and only the first `count` slots are counted
+  ---
+  duration_ms: 0.7145
+  type: 'test'
+  ...
+# Subtest: a level count is broken by summed health fractions in single precision
+ok 299 - a level count is broken by summed health fractions in single precision
+  ---
+  duration_ms: 0.5608
+  type: 'test'
+  ...
+# Subtest: both teams are tested with no early exit, and the time check still runs
+ok 300 - both teams are tested with no early exit, and the time check still runs
+  ---
+  duration_ms: 0.6
+  type: 'test'
+  ...
+# Subtest: frame 7200 still plays and frame 7201 does not
+ok 301 - frame 7200 still plays and frame 7201 does not
+  ---
+  duration_ms: 0.3431
+  type: 'test'
+  ...
+# Subtest: a team is out when downed reaches its count, not when it passes it
+ok 302 - a team is out when downed reaches its count, not when it passes it
+  ---
+  duration_ms: 0.3362
+  type: 'test'
+  ...
+# Subtest: type 2 inverts the test, and the level demotion can never change the answer
+ok 303 - type 2 inverts the test, and the level demotion can never change the answer
+  ---
+  duration_ms: 0.7146
+  type: 'test'
+  ...
+# Subtest: the round flag is written at the cursor and the cursor then advances
+ok 304 - the round flag is written at the cursor and the cursor then advances
+  ---
+  duration_ms: 0.9271
+  type: 'test'
+  ...
+# Subtest: the tally counts wins under gate 3 only, never resets, and caps at 9999
+ok 305 - the tally counts wins under gate 3 only, never resets, and caps at 9999
+  ---
+  duration_ms: 0.4274
+  type: 'test'
+  ...
+# Subtest: the payout needs every round of the tournament, which is the reward module's flag
+ok 306 - the payout needs every round of the tournament, which is the reward module's flag
+  ---
+  duration_ms: 2.7078
+  type: 'test'
+  ...
+# Subtest: a full tournament run composes end to end
+ok 307 - a full tournament run composes end to end
+  ---
+  duration_ms: 0.362
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src
+ok 308 - the module imports nothing outside src
+  ---
+  duration_ms: 1.4131
+  type: 'test'
+  ...
+# Subtest: the frame is 9:16 and the field band is exactly the 3:2 the arena art is drawn at
+ok 309 - the frame is 9:16 and the field band is exactly the 3:2 the arena art is drawn at
+  ---
+  duration_ms: 1.5351
+  type: 'test'
+  ...
+# Subtest: the bands tile the frame exactly once, with no gap and no overlap
+ok 310 - the bands tile the frame exactly once, with no gap and no overlap
+  ---
+  duration_ms: 1.1217
+  type: 'test'
+  ...
+# Subtest: the HUD bands carry the teams the roster init proves
+ok 311 - the HUD bands carry the teams the roster init proves
+  ---
+  duration_ms: 0.3634
+  type: 'test'
+  ...
+# Subtest: every HUD field names a traced read site, and the invented ones are refused by name
+ok 312 - every HUD field names a traced read site, and the invented ones are refused by name
+  ---
+  duration_ms: 2.1411
+  type: 'test'
+  ...
+# Subtest: the clock the screen shows is the traced one, and 7200 is not yet empty
+ok 313 - the clock the screen shows is the traced one, and 7200 is not yet empty
+  ---
+  duration_ms: 509.1264
+  type: 'test'
+  ...
+# Subtest: cyberspace has no common ring, and the frame says so
+ok 314 - cyberspace has no common ring, and the frame says so
+  ---
+  duration_ms: 1.1734
+  type: 'test'
+  ...
+# Subtest: no runtime art path is declared while the arena art is unpromoted
+ok 315 - no runtime art path is declared while the arena art is unpromoted
+  ---
+  duration_ms: 0.672
+  type: 'test'
+  ...
+# Subtest: a combatant projects only what the battle modules already read
+ok 316 - a combatant projects only what the battle modules already read
+  ---
+  duration_ms: 1.951
+  type: 'test'
+  ...
+# Subtest: a zero maximum is nothing to draw rather than a full bar or a crash
+ok 317 - a zero maximum is nothing to draw rather than a full bar or a crash
+  ---
+  duration_ms: 0.801
+  type: 'test'
+  ...
+# Subtest: stand positions are product-authored and say so
+ok 318 - stand positions are product-authored and say so
+  ---
+  duration_ms: 1.2751
+  type: 'test'
+  ...
+# Subtest: the discrete frame republishes on a real change and stays put otherwise
+ok 319 - the discrete frame republishes on a real change and stays put otherwise
+  ---
+  duration_ms: 2.7586
+  type: 'test'
+  ...
+# Subtest: the end of a battle reaches the screen as a side, not as a winner
+ok 320 - the end of a battle reaches the screen as a side, not as a winner
+  ---
+  duration_ms: 1.4556
+  type: 'test'
+  ...
+# Subtest: the source refuses anything that is not a six-slot session
+ok 321 - the source refuses anything that is not a six-slot session
+  ---
+  duration_ms: 0.7212
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src and the contracts
+ok 322 - the module imports nothing outside src and the contracts
+  ---
+  duration_ms: 1.4135
+  type: 'test'
+  ...
+# Subtest: the field matrix is the 11x11 signed table at 0x0213007C
+ok 323 - the field matrix is the 11x11 signed table at 0x0213007C
+  ---
+  duration_ms: 2.4658
+  type: 'test'
+  ...
+# Subtest: global percent 100 leaves the core unchanged; 15 truncates toward zero
+ok 324 - global percent 100 leaves the core unchanged; 15 truncates toward zero
+  ---
+  duration_ms: 0.7821
+  type: 'test'
+  ...
+# Subtest: a positive field cell scales by 120% and a negative cell on the second lookup also scales 120%
+ok 325 - a positive field cell scales by 120% and a negative cell on the second lookup also scales 120%
+  ---
+  duration_ms: 0.2909
+  type: 'test'
+  ...
+# Subtest: critical applies 1.5x only when the channel-216 roll is below the tier threshold
+ok 326 - critical applies 1.5x only when the channel-216 roll is below the tier threshold
+  ---
+  duration_ms: 0.4274
+  type: 'test'
+  ...
+# Subtest: variance adds trunc(damage * (roll % 100) / 1000) after the critical branch
+ok 327 - variance adds trunc(damage * (roll % 100) / 1000) after the critical branch
+  ---
+  duration_ms: 0.3751
+  type: 'test'
+  ...
+# Subtest: non-positive damage skips critical and variance
+ok 328 - non-positive damage skips critical and variance
+  ---
+  duration_ms: 1.1914
+  type: 'test'
+  ...
+# Subtest: HP write subtracts resolved damage and leaves a non-positive current HP alone
+ok 329 - HP write subtracts resolved damage and leaves a non-positive current HP alone
+  ---
+  duration_ms: 0.1976
+  type: 'test'
+  ...
+# Subtest: action cooldown is 90 - 2*speedIndex; Speed buff is trunc(base * 80 / 100)
+ok 330 - action cooldown is 90 - 2*speedIndex; Speed buff is trunc(base * 80 / 100)
+  ---
+  duration_ms: 0.1961
+  type: 'test'
+  ...
+# Subtest: a cooldown above 0 decrements by 1, matching OVL19 +0x28
+ok 331 - a cooldown above 0 decrements by 1, matching OVL19 +0x28
+  ---
+  duration_ms: 0.5235
+  type: 'test'
+  ...
+# Subtest: state-entry cooldown seed is 30 + (RNG216 rem 31), or fixed 42
+ok 332 - state-entry cooldown seed is 30 + (RNG216 rem 31), or fixed 42
+  ---
+  duration_ms: 0.7232
+  type: 'test'
+  ...
+# Subtest: optional buff fields raise curve indices inside the resolver the way OVL19 does
+ok 333 - optional buff fields raise curve indices inside the resolver the way OVL19 does
+  ---
+  duration_ms: 0.5048
+  type: 'test'
+  ...
+# Subtest: constants are the dumped OVL8/ARM9 immediates
+ok 334 - constants are the dumped OVL8/ARM9 immediates
+  ---
+  duration_ms: 1.8859
+  type: 'test'
+  ...
+# Subtest: the mode-1 payout table is 51 contiguous match ids 101..151
+ok 335 - the mode-1 payout table is 51 contiguous match ids 101..151
+  ---
+  duration_ms: 0.5462
+  type: 'test'
+  ...
+# Subtest: payout lookup returns the dumped values and null off the table
+ok 336 - payout lookup returns the dumped values and null off the table
+  ---
+  duration_ms: 0.2362
+  type: 'test'
+  ...
+# Subtest: group ratios are how the data was authored, not a rule the product applies
+ok 337 - group ratios are how the data was authored, not a rule the product applies
+  ---
+  duration_ms: 0.4857
+  type: 'test'
+  ...
+# Subtest: the win flag is cleared by any zero entry, and an empty list stays won
+ok 338 - the win flag is cleared by any zero entry, and an empty list stays won
+  ---
+  duration_ms: 0.2555
+  type: 'test'
+  ...
+# Subtest: a win pays the whole match payout
+ok 339 - a win pays the whole match payout
+  ---
+  duration_ms: 0.3247
+  type: 'test'
+  ...
+# Subtest: a loss pays nothing
+ok 340 - a loss pays nothing
+  ---
+  duration_ms: 0.188
+  type: 'test'
+  ...
+# Subtest: mode 1 index 61 is suppressed, and that gate precedes the win flag
+ok 341 - mode 1 index 61 is suppressed, and that gate precedes the win flag
+  ---
+  duration_ms: 0.21
+  type: 'test'
+  ...
+# Subtest: credit adds then clamps, and clears pending
+ok 342 - credit adds then clamps, and clears pending
+  ---
+  duration_ms: 1.4362
+  type: 'test'
+  ...
+# Subtest: the richest single payout still fits the wallet from zero
+ok 343 - the richest single payout still fits the wallet from zero
+  ---
+  duration_ms: 0.5808
+  type: 'test'
+  ...
+# Subtest: invalid input is rejected instead of coerced
+ok 344 - invalid input is rejected instead of coerced
+  ---
+  duration_ms: 0.8849
+  type: 'test'
+  ...
+# Subtest: the generator's constants are the dumped ones
+ok 345 - the generator's constants are the dumped ones
+  ---
+  duration_ms: 2.353
+  type: 'test'
+  ...
+# Subtest: the table is 103 entries and is not a permutation of 0..102
+ok 346 - the table is 103 entries and is not a permutation of 0..102
+  ---
+  duration_ms: 1.9099
+  type: 'test'
+  ...
+# Subtest: the magic division is a C truncating remainder over the whole int32 range
+ok 347 - the magic division is a C truncating remainder over the whole int32 range
+  ---
+  duration_ms: 5.5735
+  type: 'test'
+  ...
+# Subtest: a master seed fixes all 217 channels
+ok 348 - a master seed fixes all 217 channels
+  ---
+  duration_ms: 1.6329
+  type: 'test'
+  ...
+# Subtest: channel 216 is a fixed cycle of period 103
+ok 349 - channel 216 is a fixed cycle of period 103
+  ---
+  duration_ms: 0.8339
+  type: 'test'
+  ...
+# Subtest: every roll on every channel stays inside 0..102
+ok 350 - every roll on every channel stays inside 0..102
+  ---
+  duration_ms: 8.8673
+  type: 'test'
+  ...
+# Subtest: the threshold rate is the cycle count, which is not always the threshold
+ok 351 - the threshold rate is the cycle count, which is not always the threshold
+  ---
+  duration_ms: 2.3912
+  type: 'test'
+  ...
+# Subtest: the two untraced entry conditions are refused, not guessed
+ok 352 - the two untraced entry conditions are refused, not guessed
+  ---
+  duration_ms: 0.9038
+  type: 'test'
+  ...
+# Subtest: nothing outside the roll and the seeder can reach the generator's state
+ok 353 - nothing outside the roll and the seeder can reach the generator's state
+  ---
+  duration_ms: 0.6239
+  type: 'test'
+  ...
+# Subtest: the generator drives the status roll the battle module already takes
+ok 354 - the generator drives the status roll the battle module already takes
+  ---
+  duration_ms: 2.0945
+  type: 'test'
+  ...
+# Subtest: the builder takes the ROM path from the caller and hard-codes no drive
+ok 355 - the builder takes the ROM path from the caller and hard-codes no drive
+  ---
+  duration_ms: 6.7921
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src
+ok 356 - the module imports nothing outside src
+  ---
+  duration_ms: 1.7238
+  type: 'test'
+  ...
+# Subtest: the product's own creatures are declared, and the contract says so in every place
+ok 357 - the product's own creatures are declared, and the contract says so in every place
+  ---
+  duration_ms: 1.5984
+  type: 'test'
+  ...
+# Subtest: every declared level is inside the ROM's curve, so nothing has to be clamped
+ok 358 - every declared level is inside the ROM's curve, so nothing has to be clamped
+  ---
+  duration_ms: 1.3575
+  type: 'test'
+  ...
+# Subtest: a declared creature is built by the very same arithmetic as a ROM one
+ok 359 - a declared creature is built by the very same arithmetic as a ROM one
+  ---
+  duration_ms: 1.0167
+  type: 'test'
+  ...
+# Subtest: the ROM's side stays labelled traced, and a mixed roster reports the weaker label
+ok 360 - the ROM's side stays labelled traced, and a mixed roster reports the weaker label
+  ---
+  duration_ms: 1.0791
+  type: 'test'
+  ...
+# Subtest: the six slots are the player's three then the opponent's three
+ok 361 - the six slots are the player's three then the opponent's three
+  ---
+  duration_ms: 1.4281
+  type: 'test'
+  ...
+# Subtest: a short side leaves empty slots rather than repeating anyone
+ok 362 - a short side leaves empty slots rather than repeating anyone
+  ---
+  duration_ms: 0.8527
+  type: 'test'
+  ...
+# Subtest: no growth rule is invented for a resident that has been raised
+ok 363 - no growth rule is invented for a resident that has been raised
+  ---
+  duration_ms: 1.7164
+  type: 'test'
+  ...
+# Subtest: a built roster drops straight into a battle session and runs
+ok 364 - a built roster drops straight into a battle session and runs
+  ---
+  duration_ms: 233.1917
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src and the contracts
+ok 365 - the module imports nothing outside src and the contracts
+  ---
+  duration_ms: 2.0745
+  type: 'test'
+  ...
+# Subtest: the menu is capped at the original's five and no schedule means no available matches
+ok 366 - the menu is capped at the original's five and no schedule means no available matches
+  ---
+  duration_ms: 3.6868
+  type: 'test'
+  ...
+# Subtest: a match cannot start before it is chosen, and only an open one may be
+ok 367 - a match cannot start before it is chosen, and only an open one may be
+  ---
+  duration_ms: 0.5791
+  type: 'test'
+  ...
+# Subtest: a chosen match builds six slots out of real tables
+ok 368 - a chosen match builds six slots out of real tables
+  ---
+  duration_ms: 5.7394
+  type: 'test'
+  ...
+# Subtest: the pool is the original's twelve, and exhausting it is not an error
+ok 369 - the pool is the original's twelve, and exhausting it is not an error
+  ---
+  duration_ms: 104.6469
+  type: 'test'
+  ...
+# Subtest: observers are given the current view and stop on dispose
+ok 370 - observers are given the current view and stop on dispose
+  ---
+  duration_ms: 1.3732
+  type: 'test'
+  ...
+# Subtest: the screens import nothing, so a view cannot reach into the runtime
+ok 371 - the screens import nothing, so a view cannot reach into the runtime
+  ---
+  duration_ms: 0.3143
+  type: 'test'
+  ...
+# Subtest: no screen offers a control that implies choosing an action mid-match
+ok 372 - no screen offers a control that implies choosing an action mid-match
+  ---
+  duration_ms: 0.7316
+  type: 'test'
+  ...
+# Subtest: the stylesheet retains the field aspect and fits the available app height
+ok 373 - the stylesheet retains the field aspect and fits the available app height
+  ---
+  duration_ms: 2.2039
+  type: 'test'
+  ...
+# Subtest: the three battle intents are named, so no generic push can reach a match
+ok 374 - the three battle intents are named, so no generic push can reach a match
+  ---
+  duration_ms: 2.0819
+  type: 'test'
+  ...
+# Subtest: settlement reads one completed numeric round before publishing the final view
+ok 375 - settlement reads one completed numeric round before publishing the final view
+  ---
+  duration_ms: 150.7867
+  type: 'test'
+  ...
+# Subtest: economic fixture defaults do not imply a traced mapping from menu entry mode
+ok 376 - economic fixture defaults do not imply a traced mapping from menu entry mode
+  ---
+  duration_ms: 0.5215
+  type: 'test'
+  ...
+# Subtest: the runtime imports nothing outside src and the contracts
+ok 377 - the runtime imports nothing outside src and the contracts
+  ---
+  duration_ms: 1.8499
+  type: 'test'
+  ...
+# Subtest: all five contract bands exist in the DOM, and the CSS locks their heights
+ok 378 - all five contract bands exist in the DOM, and the CSS locks their heights
+  ---
+  duration_ms: 2.0323
+  type: 'test'
+  ...
+# Subtest: the band layout is labelled product-authored, not an original layout
+ok 379 - the band layout is labelled product-authored, not an original layout
+  ---
+  duration_ms: 1.3511
+  type: 'test'
+  ...
+# Subtest: a full match now deals damage and reaches a verdict
+ok 380 - a full match now deals damage and reaches a verdict
+  ---
+  duration_ms: 69.8341
+  type: 'test'
+  ...
+# Subtest: the side field is set per team, and without it nobody can be targeted
+ok 381 - the side field is set per team, and without it nobody can be targeted
+  ---
+  duration_ms: 6.4408
+  type: 'test'
+  ...
+# Subtest: the catalog holds all 67 and claims no names for any of them
+ok 382 - the catalog holds all 67 and claims no names for any of them
+  ---
+  duration_ms: 1.9809
+  type: 'test'
+  ...
+# Subtest: the catalogued addresses are exactly the ones the script blob calls
+ok 383 - the catalogued addresses are exactly the ones the script blob calls
+  ---
+  duration_ms: 2.8683
+  type: 'test'
+  ...
+# Subtest: forty-nine are implemented, the attack among them
+ok 384 - forty-nine are implemented, the attack among them
+  ---
+  duration_ms: 1.0629
+  type: 'test'
+  ...
+# Subtest: the three chained getters read +0x2C and then their own word
+ok 385 - the three chained getters read +0x2C and then their own word
+  ---
+  duration_ms: 0.6175
+  type: 'test'
+  ...
+# Subtest: the three guarded getters return zero for a null argument
+ok 386 - the three guarded getters return zero for a null argument
+  ---
+  duration_ms: 1.2687
+  type: 'test'
+  ...
+# Subtest: Q12 conversion happens in both directions, exactly as the ROM shifts
+ok 387 - Q12 conversion happens in both directions, exactly as the ROM shifts
+  ---
+  duration_ms: 0.6909
+  type: 'test'
+  ...
+# Subtest: the two +0x154 routines are compare-and-set, not plain writes
+ok 388 - the two +0x154 routines are compare-and-set, not plain writes
+  ---
+  duration_ms: 0.7378
+  type: 'test'
+  ...
+# Subtest: the two tail-calls guard on null and then hand off unread routines
+ok 389 - the two tail-calls guard on null and then hand off unread routines
+  ---
+  duration_ms: 0.4546
+  type: 'test'
+  ...
+# Subtest: the yield native gives up the frame and returns zero
+ok 390 - the yield native gives up the frame and returns zero
+  ---
+  duration_ms: 0.6108
+  type: 'test'
+  ...
+# Subtest: the sixteen-byte native is the entry that forces kind 13
+ok 391 - the sixteen-byte native is the entry that forces kind 13
+  ---
+  duration_ms: 0.6165
+  type: 'test'
+  ...
+# Subtest: the three animation natives match a literal transcription of the ARM
+ok 392 - the three animation natives match a literal transcription of the ARM
+  ---
+  duration_ms: 2.5693
+  type: 'test'
+  ...
+# Subtest: 0x0211D238 shifts into Q12 before it halves, which is not the same order
+ok 393 - 0x0211D238 shifts into Q12 before it halves, which is not the same order
+  ---
+  duration_ms: 0.2991
+  type: 'test'
+  ...
+# Subtest: the three keep the ROM's own null-argument guard
+ok 394 - the three keep the ROM's own null-argument guard
+  ---
+  duration_ms: 0.1687
+  type: 'test'
+  ...
+# Subtest: an empty animation table is zero, and the count is read unsigned
+ok 395 - an empty animation table is zero, and the count is read unsigned
+  ---
+  duration_ms: 0.1633
+  type: 'test'
+  ...
+# Subtest: a refused cell index names the boundary instead of inventing a box
+ok 396 - a refused cell index names the boundary instead of inventing a box
+  ---
+  duration_ms: 0.666
+  type: 'test'
+  ...
+# Subtest: only the natives that read halfwords demand a halfword host
+ok 397 - only the natives that read halfwords demand a halfword host
+  ---
+  duration_ms: 0.4235
+  type: 'test'
+  ...
+# Subtest: an address that is catalogued but unread raises rather than answering
+ok 398 - an address that is catalogued but unread raises rather than answering
+  ---
+  duration_ms: 0.3372
+  type: 'test'
+  ...
+# Subtest: a native refuses a host that cannot answer it, and short arguments
+ok 399 - a native refuses a host that cannot answer it, and short arguments
+  ---
+  duration_ms: 0.3078
+  type: 'test'
+  ...
+# Subtest: the builder takes the ROM path from the caller and hard-codes no drive
+ok 400 - the builder takes the ROM path from the caller and hard-codes no drive
+  ---
+  duration_ms: 1.7375
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src
+ok 401 - the module imports nothing outside src
+  ---
+  duration_ms: 1.6868
+  type: 'test'
+  ...
+# Subtest: the opcode table is 52 entries and the module agrees with the catalog
+ok 402 - the opcode table is 52 entries and the module agrees with the catalog
+  ---
+  duration_ms: 1.857
+  type: 'test'
+  ...
+# Subtest: operand sizes are exactly the seven one-byte and six four-byte forms
+ok 403 - operand sizes are exactly the seven one-byte and six four-byte forms
+  ---
+  duration_ms: 1.6258
+  type: 'test'
+  ...
+# Subtest: the whole blob decodes with no byte left over
+ok 404 - the whole blob decodes with no byte left over
+  ---
+  duration_ms: 15.1711
+  type: 'test'
+  ...
+# Subtest: every move record's script entry is a routine that reaches a RETURN
+ok 405 - every move record's script entry is a routine that reaches a RETURN
+  ---
+  duration_ms: 4.0658
+  type: 'test'
+  ...
+# Subtest: init lays out the frame the way RETURN expects to find it
+ok 406 - init lays out the frame the way RETURN expects to find it
+  ---
+  duration_ms: 0.6012
+  type: 'test'
+  ...
+# Subtest: RETURN through the zero frame stops the script and drops the value
+ok 407 - RETURN through the zero frame stops the script and drops the value
+  ---
+  duration_ms: 1.0299
+  type: 'test'
+  ...
+# Subtest: CALL saves the return address and frame base, RETURN restores both
+ok 408 - CALL saves the return address and frame base, RETURN restores both
+  ---
+  duration_ms: 0.4935
+  type: 'test'
+  ...
+# Subtest: locals are frame-relative and the operand is signed
+ok 409 - locals are frame-relative and the operand is signed
+  ---
+  duration_ms: 0.5657
+  type: 'test'
+  ...
+# Subtest: PUSH_ZEROS reserves locals and POP_N optionally carries the top down
+ok 410 - PUSH_ZEROS reserves locals and POP_N optionally carries the top down
+  ---
+  duration_ms: 0.7236
+  type: 'test'
+  ...
+# Subtest: indirect access is bounded to the VM's own slot array
+ok 411 - indirect access is bounded to the VM's own slot array
+  ---
+  duration_ms: 0.9877
+  type: 'test'
+  ...
+# Subtest: integer and fixed-point arithmetic are the two families the ROM splits
+ok 412 - integer and fixed-point arithmetic are the two families the ROM splits
+  ---
+  duration_ms: 1.2636
+  type: 'test'
+  ...
+# Subtest: logic, shifts and comparisons keep the ROM's signedness
+ok 413 - logic, shifts and comparisons keep the ROM's signedness
+  ---
+  duration_ms: 0.551
+  type: 'test'
+  ...
+# Subtest: the three branch opcodes take the ROM's polarity
+ok 414 - the three branch opcodes take the ROM's polarity
+  ---
+  duration_ms: 0.2624
+  type: 'test'
+  ...
+# Subtest: CALL_NATIVE dispatches outward and pushes what the handler returns
+ok 415 - CALL_NATIVE dispatches outward and pushes what the handler returns
+  ---
+  duration_ms: 0.3006
+  type: 'test'
+  ...
+# Subtest: a native can yield, which is how the run loop gives up the frame
+ok 416 - a native can yield, which is how the run loop gives up the frame
+  ---
+  duration_ms: 0.2286
+  type: 'test'
+  ...
+# Subtest: the two stack guards are the ones the ROM compares against
+ok 417 - the two stack guards are the ones the ROM compares against
+  ---
+  duration_ms: 0.373
+  type: 'test'
+  ...
+# Subtest: the original scripts execute without leaving the machine's own bounds
+ok 418 - the original scripts execute without leaving the machine's own bounds
+  ---
+  duration_ms: 46.2982
+  type: 'test'
+  ...
+# Subtest: the eighteen opcodes the battle scripts never use are recorded, not dropped
+ok 419 - the eighteen opcodes the battle scripts never use are recorded, not dropped
+  ---
+  duration_ms: 0.2882
+  type: 'test'
+  ...
+# Subtest: the script builder takes the ROM path from the caller and hard-codes no drive
+ok 420 - the script builder takes the ROM path from the caller and hard-codes no drive
+  ---
+  duration_ms: 7.0992
+  type: 'test'
+  ...
+# Subtest: the VM imports nothing outside src
+ok 421 - the VM imports nothing outside src
+  ---
+  duration_ms: 1.613
+  type: 'test'
+  ...
+# Subtest: a session is six slots and runs the frame function's two loops
+ok 422 - a session is six slots and runs the frame function's two loops
+  ---
+  duration_ms: 2.4663
+  type: 'test'
+  ...
+# Subtest: the tick loop runs even for a slot whose state does nothing
+ok 423 - the tick loop runs even for a slot whose state does nothing
+  ---
+  duration_ms: 2.686
+  type: 'test'
+  ...
+# Subtest: a spent cooldown reaches the action gate, and a running one does not
+ok 424 - a spent cooldown reaches the action gate, and a running one does not
+  ---
+  duration_ms: 3.0131
+  type: 'test'
+  ...
+# Subtest: without a pool the chain reaches a choice and stops at the allocator
+ok 425 - without a pool the chain reaches a choice and stops at the allocator
+  ---
+  duration_ms: 1.3297
+  type: 'test'
+  ...
+# Subtest: given a pool, the loop closes: choose, commit, cool down, choose again
+ok 426 - given a pool, the loop closes: choose, commit, cool down, choose again
+  ---
+  duration_ms: 4.2118
+  type: 'test'
+  ...
+# Subtest: a status that is not normal selection is a seam of its own
+ok 427 - a status that is not normal selection is a seam of its own
+  ---
+  duration_ms: 1.0951
+  type: 'test'
+  ...
+# Subtest: state 11 waits out its status and then hands back to the action gate
+ok 428 - state 11 waits out its status and then hands back to the action gate
+  ---
+  duration_ms: 1.5441
+  type: 'test'
+  ...
+# Subtest: the suspend bit freezes a slot without freezing the others
+ok 429 - the suspend bit freezes a slot without freezing the others
+  ---
+  duration_ms: 0.7253
+  type: 'test'
+  ...
+# Subtest: a full six-slot run carries every slot from cooldown to a committed action
+ok 430 - a full six-slot run carries every slot from cooldown to a committed action
+  ---
+  duration_ms: 16.2467
+  type: 'test'
+  ...
+# Subtest: an untraced state names its own handler address and changes nothing
+ok 431 - an untraced state names its own handler address and changes nothing
+  ---
+  duration_ms: 4.7217
+  type: 'test'
+  ...
+# Subtest: going down raises no seam, and the defeated state runs on its own period
+ok 432 - going down raises no seam, and the defeated state runs on its own period
+  ---
+  duration_ms: 1.9066
+  type: 'test'
+  ...
+# Subtest: a defeated combatant acts only when the notify code is 1
+ok 433 - a defeated combatant acts only when the notify code is 1
+  ---
+  duration_ms: 0.7164
+  type: 'test'
+  ...
+# Subtest: state 11's notify reaches +0x17C, which is what state 23 reads
+ok 434 - state 11's notify reaches +0x17C, which is what state 23 reads
+  ---
+  duration_ms: 0.3946
+  type: 'test'
+  ...
+# Subtest: the catalogs it would draw a roster from are reachable from here
+ok 435 - the catalogs it would draw a roster from are reachable from here
+  ---
+  duration_ms: 0.3337
+  type: 'test'
+  ...
+# Subtest: the session imports only battle modules and the contracts leaf
+ok 436 - the session imports only battle modules and the contracts leaf
+  ---
+  duration_ms: 1.6658
+  type: 'test'
+  ...
+# Subtest: a populated two-team session runs to a verdict instead of to its bound
+ok 437 - a populated two-team session runs to a verdict instead of to its bound
+  ---
+  duration_ms: 1.4228
+  type: 'test'
+  ...
+# Subtest: with nobody down the clock decides it, and 7200 frames is not enough
+ok 438 - with nobody down the clock decides it, and 7200 frames is not enough
+  ---
+  duration_ms: 2865.5587
+  type: 'test'
+  ...
+# Subtest: engagement stops the dispatch, so a later slot waits a frame
+ok 439 - engagement stops the dispatch, so a later slot waits a frame
+  ---
+  duration_ms: 0.8139
+  type: 'test'
+  ...
+# Subtest: given a contact resolver as well, the last seam closes and HP moves
+ok 440 - given a contact resolver as well, the last seam closes and HP moves
+  ---
+  duration_ms: 6.8153
+  type: 'test'
+  ...
+# Subtest: without a resolver nobody loses HP, which is why the seam is named
+ok 441 - without a resolver nobody loses HP, which is why the seam is named
+  ---
+  duration_ms: 2.8254
+  type: 'test'
+  ...
+# Subtest: 166 original CPU yielded frames match zoom, camera operands, raw pose, hold and return
+ok 442 - 166 original CPU yielded frames match zoom, camera operands, raw pose, hold and return
+  ---
+  duration_ms: 8.3543
+  type: 'test'
+  ...
+# Subtest: only traced prelude/character combinations bind; durations match current numeric production metadata
+ok 443 - only traced prelude/character combinations bind; durations match current numeric production metadata
+  ---
+  duration_ms: 6.0569
+  type: 'test'
+  ...
+# Subtest: normal AI entry plays a complete special prelude without advancing clock, HP or cooldown, then settles
+ok 444 - normal AI entry plays a complete special prelude without advancing clock, HP or cooldown, then settles
+  ---
+  duration_ms: 742.8082
+  type: 'test'
+  ...
+# Subtest: phone focus restores the identity transform; reduced motion never zooms the field
+ok 445 - phone focus restores the identity transform; reduced motion never zooms the field
+  ---
+  duration_ms: 0.5916
+  type: 'test'
+  ...
+# Subtest: the module names its sites and its evidence
+ok 446 - the module names its sites and its evidence
+  ---
+  duration_ms: 1.9612
+  type: 'test'
+  ...
+# Subtest: the transform matches a literal transcription of the ARM, case for case
+ok 447 - the transform matches a literal transcription of the ARM, case for case
+  ---
+  duration_ms: 2.1644
+  type: 'test'
+  ...
+# Subtest: both early exits hand back the cell's own box untouched
+ok 448 - both early exits hand back the cell's own box untouched
+  ---
+  duration_ms: 0.2929
+  type: 'test'
+  ...
+# Subtest: a flip keeps the low edge low, and so does a negative scale
+ok 449 - a flip keeps the low edge low, and so does a negative scale
+  ---
+  duration_ms: 0.2104
+  type: 'test'
+  ...
+# Subtest: the bank lookup bounds-checks unsigned and strides on attribute bit 0
+ok 450 - the bank lookup bounds-checks unsigned and strides on attribute bit 0
+  ---
+  duration_ms: 0.2609
+  type: 'test'
+  ...
+# Subtest: the resolved box feeds the launch position without renaming anything
+ok 451 - the resolved box feeds the launch position without renaming anything
+  ---
+  duration_ms: 0.3519
+  type: 'test'
+  ...
+# Subtest: it refuses what it cannot model, and imports nothing outside src
+ok 452 - it refuses what it cannot model, and imports nothing outside src
+  ---
+  duration_ms: 1.9317
+  type: 'test'
+  ...
+# Subtest: the launch always asks for the transform, and the owner is already modelled
+ok 453 - the launch always asks for the transform, and the owner is already modelled
+  ---
+  duration_ms: 0.3439
+  type: 'test'
+  ...
+# Subtest: the graph describes exactly the states the machine has
+ok 454 - the graph describes exactly the states the machine has
+  ---
+  duration_ms: 1.7127
+  type: 'test'
+  ...
+# Subtest: state 1 is the hub and the 14/15/16 group always comes back to it
+ok 455 - state 1 is the hub and the 14/15/16 group always comes back to it
+  ---
+  duration_ms: 1.046
+  type: 'test'
+  ...
+# Subtest: the inert states are exactly the four-byte handlers
+ok 456 - the inert states are exactly the four-byte handlers
+  ---
+  duration_ms: 0.245
+  type: 'test'
+  ...
+# Subtest: the periods a state arms are the immediates its handler writes
+ok 457 - the periods a state arms are the immediates its handler writes
+  ---
+  duration_ms: 0.1784
+  type: 'test'
+  ...
+# Subtest: no state handler applies damage or walks contact itself
+ok 458 - no state handler applies damage or walks contact itself
+  ---
+  duration_ms: 1.0688
+  type: 'test'
+  ...
+# Subtest: that damage native is one of the script's own CALL_NATIVE targets
+ok 459 - that damage native is one of the script's own CALL_NATIVE targets
+  ---
+  duration_ms: 1.7691
+  type: 'test'
+  ...
+# Subtest: state 0 arms a sixty-frame period and then does nothing
+ok 460 - state 0 arms a sixty-frame period and then does nothing
+  ---
+  duration_ms: 0.6775
+  type: 'test'
+  ...
+# Subtest: state 11 waits out the status, then resumes or drops to idle
+ok 461 - state 11 waits out the status, then resumes or drops to idle
+  ---
+  duration_ms: 0.3861
+  type: 'test'
+  ...
+# Subtest: state 23 is the defeated state, and it never leaves itself
+ok 462 - state 23 is the defeated state, and it never leaves itself
+  ---
+  duration_ms: 0.7992
+  type: 'test'
+  ...
+# Subtest: only three of the twenty-seven bodies are claimed as translated
+ok 463 - only three of the twenty-seven bodies are claimed as translated
+  ---
+  duration_ms: 1.5567
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src
+ok 464 - the module imports nothing outside src
+  ---
+  duration_ms: 2.6064
+  type: 'test'
+  ...
+# Subtest: the dispatcher's shape is the immediates the ROM uses
+ok 465 - the dispatcher's shape is the immediates the ROM uses
+  ---
+  duration_ms: 1.2744
+  type: 'test'
+  ...
+# Subtest: all 27 handlers are OVL19 code and the 28th entry would not be
+ok 466 - all 27 handlers are OVL19 code and the 28th entry would not be
+  ---
+  duration_ms: 0.3791
+  type: 'test'
+  ...
+# Subtest: every state code the ROM sets is inside the table
+ok 467 - every state code the ROM sets is inside the table
+  ---
+  duration_ms: 1.8447
+  type: 'test'
+  ...
+# Subtest: the three named states are the routines already translated here
+ok 468 - the three named states are the routines already translated here
+  ---
+  duration_ms: 0.1606
+  type: 'test'
+  ...
+# Subtest: the defeated state is the one the frame loop sets on death
+ok 469 - the defeated state is the one the frame loop sets on death
+  ---
+  duration_ms: 0.1503
+  type: 'test'
+  ...
+# Subtest: eight table entries do nothing, and none of them is ever set
+ok 470 - eight table entries do nothing, and none of them is ever set
+  ---
+  duration_ms: 0.4423
+  type: 'test'
+  ...
+# Subtest: entering a state arms the counter at the value the ROM writes
+ok 471 - entering a state arms the counter at the value the ROM writes
+  ---
+  duration_ms: 0.7838
+  type: 'test'
+  ...
+# Subtest: a state runs on entry, then only on multiples of its own period
+ok 472 - a state runs on entry, then only on multiples of its own period
+  ---
+  duration_ms: 0.5052
+  type: 'test'
+  ...
+# Subtest: a period of zero means every frame, because the divide returns zero
+ok 473 - a period of zero means every frame, because the divide returns zero
+  ---
+  duration_ms: 0.4932
+  type: 'test'
+  ...
+# Subtest: the suspend bit stops the handler and freezes the counter
+ok 474 - the suspend bit stops the handler and freezes the counter
+  ---
+  duration_ms: 0.54
+  type: 'test'
+  ...
+# Subtest: the cooldown gate is the join between the tick loop and an action
+ok 475 - the cooldown gate is the join between the tick loop and an action
+  ---
+  duration_ms: 0.2132
+  type: 'test'
+  ...
+# Subtest: the two frame phases run in the order the frame function calls them
+ok 476 - the two frame phases run in the order the frame function calls them
+  ---
+  duration_ms: 0.2469
+  type: 'test'
+  ...
+# Subtest: out-of-table states and malformed input are refused
+ok 477 - out-of-table states and malformed input are refused
+  ---
+  duration_ms: 0.3854
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src
+ok 478 - the module imports nothing outside src
+  ---
+  duration_ms: 2.09
+  type: 'test'
+  ...
+# Subtest: static family contains exactly six BM00-dependent arenas
+ok 479 - static family contains exactly six BM00-dependent arenas
+  ---
+  duration_ms: 2.2176
+  type: 'test'
+  ...
+# Subtest: BM03 and BM04 remain animation-blocked while BM07 stays independent
+ok 480 - BM03 and BM04 remain animation-blocked while BM07 stays independent
+  ---
+  duration_ms: 0.4914
+  type: 'test'
+  ...
+# Subtest: family references one canonical BM00 payload and duplicates none
+ok 481 - family references one canonical BM00 payload and duplicates none
+  ---
+  duration_ms: 4.7286
+  type: 'test'
+  ...
+# Subtest: all arena files, manifests and viewport receipts are deterministic
+ok 482 - all arena files, manifests and viewport receipts are deterministic
+  ---
+  duration_ms: 446.3511
+  type: 'test'
+  ...
+# Subtest: known BM08 and BM11 object structure stays a promotion blocker
+ok 483 - known BM08 and BM11 object structure stays a promotion blocker
+  ---
+  duration_ms: 0.4055
+  type: 'test'
+  ...
+# Subtest: action field_5C 1..13 maps to the runtime codes at 0x02115418
+ok 484 - action field_5C 1..13 maps to the runtime codes at 0x02115418
+  ---
+  duration_ms: 1.9521
+  type: 'test'
+  ...
+# Subtest: duration table at 0x0212FECC is u16: 0, then 600 for 1..11, 900 for 12..14
+ok 485 - duration table at 0x0212FECC is u16: 0, then 600 for 1..11, 900 for 12..14
+  ---
+  duration_ms: 1.2364
+  type: 'test'
+  ...
+# Subtest: one slot overwrites; it does not stack
+ok 486 - one slot overwrites; it does not stack
+  ---
+  duration_ms: 0.2215
+  type: 'test'
+  ...
+# Subtest: proc thresholds are the stride-8 first words, not advertised percentages
+ok 487 - proc thresholds are the stride-8 first words, not advertised percentages
+  ---
+  duration_ms: 0.247
+  type: 'test'
+  ...
+# Subtest: status applies only when the channel-216 roll is strictly below the threshold
+ok 488 - status applies only when the channel-216 roll is strictly below the threshold
+  ---
+  duration_ms: 0.4072
+  type: 'test'
+  ...
+# Subtest: DoT 7/13 ticks on remaining%180==0 after decrement, losing trunc(maxHP*3/100)
+ok 489 - DoT 7/13 ticks on remaining%180==0 after decrement, losing trunc(maxHP*3/100)
+  ---
+  duration_ms: 0.2602
+  type: 'test'
+  ...
+# Subtest: DoT 14 ticks on remaining%10==0 after decrement, losing trunc(maxHP*5/100)
+ok 490 - DoT 14 ticks on remaining%10==0 after decrement, losing trunc(maxHP*5/100)
+  ---
+  duration_ms: 0.307
+  type: 'test'
+  ...
+# Subtest: remaining already 0 at the start of a tick clears without a DoT
+ok 491 - remaining already 0 at the start of a tick clears without a DoT
+  ---
+  duration_ms: 0.18
+  type: 'test'
+  ...
+# Subtest: DoT that would take HP below 0 floors to 0 and clears the slot
+ok 492 - DoT that would take HP below 0 floors to 0 and clears the slot
+  ---
+  duration_ms: 0.4577
+  type: 'test'
+  ...
+# Subtest: status resistance source follows the OVL19 jump at 0x021152F4
+ok 493 - status resistance source follows the OVL19 jump at 0x021152F4
+  ---
+  duration_ms: 1.0669
+  type: 'test'
+  ...
+# Subtest: proc can take the resistance jump instead of a precomputed index
+ok 494 - proc can take the resistance jump instead of a precomputed index
+  ---
+  duration_ms: 0.3006
+  type: 'test'
+  ...
+# Subtest: action gate at 0x021157BC is a runtime-code switch, not reconstructed names
+ok 495 - action gate at 0x021157BC is a runtime-code switch, not reconstructed names
+  ---
+  duration_ms: 0.5456
+  type: 'test'
+  ...
+# Subtest: status helpers are not wired into the standalone app or screens
+ok 496 - status helpers are not wired into the standalone app or screens
+  ---
+  duration_ms: 38.8533
+  type: 'test'
+  ...
+# Subtest: human-paint calibration is a three-candidate review packet
+ok 497 - human-paint calibration is a three-candidate review packet
+  ---
+  duration_ms: 1.6188
+  type: 'test'
+  ...
+# Subtest: all candidates are exact 1536x1024 RGB files with pinned hashes
+ok 498 - all candidates are exact 1536x1024 RGB files with pinned hashes
+  ---
+  duration_ms: 60.6846
+  type: 'test'
+  ...
+# Subtest: comparison and portrait checks are deterministic
+ok 499 - comparison and portrait checks are deterministic
+  ---
+  duration_ms: 39.1257
+  type: 'test'
+  ...
+# Subtest: style pilot is absent from runtime registration and production assets
+ok 500 - style pilot is absent from runtime registration and production assets
+  ---
+  duration_ms: 2.0422
+  type: 'test'
+  ...
+# Subtest: brief records the human-authored correction without artist imitation
+ok 501 - brief records the human-authored correction without artist imitation
+  ---
+  duration_ms: 10.0188
+  type: 'test'
+  ...
+# Subtest: heal amounts are the six immediates at 0x0211558C–0x021155D8
+ok 502 - heal amounts are the six immediates at 0x0211558C–0x021155D8
+  ---
+  duration_ms: 2.3302
+  type: 'test'
+  ...
+# Subtest: heal adds then clamps current HP to max HP, matching the strgt at 0x0211565C
+ok 503 - heal adds then clamps current HP to max HP, matching the strgt at 0x0211565C
+  ---
+  duration_ms: 0.2005
+  type: 'test'
+  ...
+# Subtest: field_5C 20 clears the negative slot; field_5C 21..29 map to positive codes 1..9
+ok 504 - field_5C 20 clears the negative slot; field_5C 21..29 map to positive codes 1..9
+  ---
+  duration_ms: 0.2594
+  type: 'test'
+  ...
+# Subtest: a positive slot decrements while remaining > 0 and clears on the tick that reaches 0
+ok 505 - a positive slot decrements while remaining > 0 and clears on the tick that reaches 0
+  ---
+  duration_ms: 0.3122
+  type: 'test'
+  ...
+# Subtest: attacker curve index +1 when positive code is 1 or negative runtime is 1, then high-clamp 26
+ok 506 - attacker curve index +1 when positive code is 1 or negative runtime is 1, then high-clamp 26
+  ---
+  duration_ms: 0.2541
+  type: 'test'
+  ...
+# Subtest: defender curve index +1 uses action +0x58 selector → resist codes 2,5,6,8,9,7
+ok 507 - defender curve index +1 uses action +0x58 selector → resist codes 2,5,6,8,9,7
+  ---
+  duration_ms: 0.2785
+  type: 'test'
+  ...
+# Subtest: support helpers do not mention hit chance, TP, or a Sense accuracy bonus
+ok 508 - support helpers do not mention hit chance, TP, or a Sense accuracy bonus
+  ---
+  duration_ms: 1.2739
+  type: 'test'
+  ...
+# Subtest: support helpers are not wired into the standalone app or screens
+ok 509 - support helpers are not wired into the standalone app or screens
+  ---
+  duration_ms: 25.8785
+  type: 'test'
+  ...
+# Subtest: the launch slots are three words at +0x78
+ok 510 - the launch slots are three words at +0x78
+  ---
+  duration_ms: 1.7148
+  type: 'test'
+  ...
+# Subtest: the wait states advance on a free slot and re-enter the gate without one
+ok 511 - the wait states advance on a free slot and re-enter the gate without one
+  ---
+  duration_ms: 1.6783
+  type: 'test'
+  ...
+# Subtest: only state 7 notifies on its entry frame
+ok 512 - only state 7 notifies on its entry frame
+  ---
+  duration_ms: 0.1783
+  type: 'test'
+  ...
+# Subtest: the launch states abort on their own code, and all on a negative +0x180
+ok 513 - the launch states abort on their own code, and all on a negative +0x180
+  ---
+  duration_ms: 0.5789
+  type: 'test'
+  ...
+# Subtest: the two interrupt predicates share a tail and differ at the head
+ok 514 - the two interrupt predicates share a tail and differ at the head
+  ---
+  duration_ms: 0.4137
+  type: 'test'
+  ...
+# Subtest: the approach states are recorded but not implemented
+ok 515 - the approach states are recorded but not implemented
+  ---
+  duration_ms: 1.6318
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src
+ok 516 - the module imports nothing outside src
+  ---
+  duration_ms: 2.6744
+  type: 'test'
+  ...
+# Subtest: a launch takes the first free slot, or waits, or aborts
+ok 517 - a launch takes the first free slot, or waits, or aborts
+  ---
+  duration_ms: 0.3146
+  type: 'test'
+  ...
+# Subtest: the notify a launch raises is the move record's own field plus eight
+ok 518 - the notify a launch raises is the move record's own field plus eight
+  ---
+  duration_ms: 0.8012
+  type: 'test'
+  ...
+# Subtest: a failed allocation leaves the slot clear and changes no state
+ok 519 - a failed allocation leaves the slot clear and changes no state
+  ---
+  duration_ms: 0.5772
+  type: 'test'
+  ...
+# Subtest: a global abort and a failed initialise take the identical release path
+ok 520 - a global abort and a failed initialise take the identical release path
+  ---
+  duration_ms: 0.2547
+  type: 'test'
+  ...
+# Subtest: a launch adds 120 to +0x1C and wraps it as a signed halfword
+ok 521 - a launch adds 120 to +0x1C and wraps it as a signed halfword
+  ---
+  duration_ms: 0.1478
+  type: 'test'
+  ...
+1..521
+# tests 521
+# suites 0
+# pass 521
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 23193.065

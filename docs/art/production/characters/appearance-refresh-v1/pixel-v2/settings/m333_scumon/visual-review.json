@@ -1,0 +1,24 @@
+{
+  "candidateSource": "docs/art/production/characters/appearance-refresh-v1/_work/identity-roster-group2/m333_scumon",
+  "entityId": "m333_scumon",
+  "findings": [
+    "Chocolate ear-like side panels, cream short muzzle and dark nose establish a pudding-dog face. The pointed soft body, lower mouth and side arms remain source-supported; future poses must keep side panels separate from arm semantics.",
+    "One source standard pose only. Appearance direction is reviewed, but pose sampling remains incomplete and cannot pass the setting-stage gate."
+  ],
+  "fullMotionQa": "NOT_RUN",
+  "identityDirectionVersion": "creature-identity-v1",
+  "identityVerdict": "PASS_IDENTITY_DIRECTION",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "reviewMethod": "Actually viewed original/new comparison and native/enlarged authored contact board; independently compiled adopted pixels.",
+  "reviewer": "root / independent review of designer single-pose candidate",
+  "runtimePromotionGranted": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "3b407d480dbc51b0102f15135a4332fa547b3397e93626f7151fc99d008dff5e",
+  "sourceComparisonSha256": "212857a5a113a090f2bffe846599a4a277940cfa40975f89bb4e0742d268919c",
+  "technicalQaSha256": "568889ea8221d570facf7516e8d1229b80f03d604a4d96c5584374aea281254f",
+  "unresolvedBlockingIssues": [
+    "Additional source representative poses and continuity review required before setting acceptance."
+  ],
+  "verdict": "STANDARD_POSE_REVIEWED_NOT_SETTING_PASS"
+}

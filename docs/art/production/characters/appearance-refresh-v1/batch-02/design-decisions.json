@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "packetId": "packet-02",
+  "status": "BRIEFS_SELECTED_UNDER_OWNER_DELEGATION",
+  "authority": "docs/art/production/characters/appearance-refresh-v1/production-autonomy.json",
+  "selectionOwner": "ART_DIRECTOR",
+  "selectionMode": "LOW_ERROR_FIRST",
+  "executionBoundary": "僅接續工作佇列的設計 briefs 與文字選案；M201 先完成。沒有生成第二批圖像、沒有完成動畫或 runtime 切換。",
+  "firstPacketChoicesPreserved": {"M201":"A","M001":"B","M226":"B","E000":"A"},
+  "imageProductionStatus": "NOT_STARTED",
+  "motionCompatibility": "NOT_VALIDATED",
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "scoring": {
+    "scale": "每項 0–5，越高代表預期越不易出錯；由已描述的設計特徵評估，不是生成圖或動畫的實測分數。",
+    "formula": "weightedTotal = sum(score_i / 5 * weight_i)",
+    "criteria": [
+      {"id":"topologyEndpoints","weight":30},
+      {"id":"extremePoseOcclusion","weight":25},
+      {"id":"largeSimpleRegions","weight":20},
+      {"id":"lowMaterialNoise","weight":15},
+      {"id":"simpleOutlineNoIndependentOrnaments","weight":10}
+    ],
+    "hardGate": "新增拓樸、端點位移或獨立動作的方案直接拒絕，不能用總分補償。兩方案均以保持來源拓樸作設計前提，尚未通過實際逐格驗證。"
+  },
+  "evidenceLimits": [
+    "已實際 view 四隻 native-224 Main contact sheets，據此辨識主色、可見構造和高風險圖形；沒有從角色名稱猜全身構造。",
+    "既有 origin-audit 顯示 generic08RendererMismatchSlots 非零；接續動作製作必須使用 transfer-aware 修正 guide，舊 contact sheet 不能成為精確端點或來源 cell 像素權威。",
+    "以下 cell ID 是舊表可見差異的檢視線索，不把外觀命名推定為 gameplay 動作或確定的幀數/時序。"
+  ],
+  "entities": [
+    {
+      "entityId": "m222_tentomon",
+      "code": "M222",
+      "sourceMainSheet": "R:/Projects/Championship2026/YDIJ_PRIVATE_ROM_ART_PACK/02_CHARACTERS/native-224-catalog/assets/sheets/main/m222_tentomon_main_cells.png",
+      "sourceObserved": "紅色甲殼、亮綠頭部/長觸角、深灰分節肢體和淺色端點；部分圖可見背殼展開及淡青翅部。不是可直接換成四足哺乳類的構造。",
+      "inspectionWitnessCells": [0,7,10,11,25,41,42,59],
+      "originAudit": {"generic08RendererMismatchSlots":77,"slotCount":78,"uniqueNonblankMasters":47},
+      "motionLocks": ["保留每格原有肢體數量、節點、淺色作用端、觸角長度和朝向。", "背殼/翅部只在原有圖格可見，不新增翅扇頻率或開殼時序。"],
+      "concepts": [
+        {
+          "id":"A",
+          "title":"朱甲青額甲蟲",
+          "description":"保留紅綠主色，把甲殼重設為兩大片霧面朱紅面，外側一條寬深紅弧；頭部為清楚青綠額片、深色橢圓眼區，觸角只保留亮綠單色。",
+          "tokens":["兩大片霧朱红甲面","寬深紅弧","青綠額片","深色簡潔眼區"],
+          "palette":["#C83F3D","#852A30","#78A83D","#354047","#DCE7DB"],
+          "material":"不透明啞光甲殼、單一亮部；所有紋樣貼附既有構件。",
+          "scores":{"topologyEndpoints":5,"extremePoseOcclusion":4,"largeSimpleRegions":5,"lowMaterialNoise":5,"simpleOutlineNoIndependentOrnaments":5},
+          "weightedTotal":95,
+          "risk":"主殼開合仍有遮擋難度，必須逐格確認綠額與紅殼交界。"
+        },
+        {
+          "id":"B",
+          "title":"赤琉璃甲蟲",
+          "description":"同一構造改為深紅半透明甲殼、細緻六角內紋、翡翠綠頭甲，紅綠依舊，但有較強琉璃反光。不新增甲片或觸角。",
+          "tokens":["深紅半透明殼","六角內紋","翡翠額甲","局部琉璃反光"],
+          "palette":["#A52E42","#DF6570","#518E45","#2A373C","#C5E0DD"],
+          "material":"半透明甲面與多層內紋。",
+          "scores":{"topologyEndpoints":5,"extremePoseOcclusion":3,"largeSimpleRegions":3,"lowMaterialNoise":2,"simpleOutlineNoIndependentOrnaments":4},
+          "weightedTotal":71,
+          "risk":"半透明反光與六角網紋在分節旋轉/翅部遮擋時容易閃動，重繪成本較高。"
+        }
+      ],
+      "selected":"A",
+      "selectionState":"ART_DIRECTOR_SELECTED_UNDER_OWNER_DELEGATION",
+      "rationale":"A 用大面和單色觸角保留紅綠識別，避免半透明內紋追蹤；兩方案拓樸都不准改，A 的材質一致性預期較可靠。"
+    },
+    {
+      "entityId":"m228_palmon",
+      "code":"M228",
+      "sourceMainSheet":"R:/Projects/Championship2026/YDIJ_PRIVATE_ROM_ART_PACK/02_CHARACTERS/native-224-catalog/assets/sheets/main/m228_palmon_main_cells.png",
+      "sourceObserved":"綠色直立植物體、紫紅花冠與頂部細梗、棕色根足，可見伸長手端/紫色端色和横向倒置/低伏輪廓。不能自動換成毛皮手足或縮減花冠構造。",
+      "inspectionWitnessCells":[0,8,11,19,20,36,43,60],
+      "originAudit":{"generic08RendererMismatchSlots":78,"slotCount":79,"uniqueNonblankMasters":48},
+      "motionLocks":["花冠各構件數與可見輪廓以修正 guide 為準，不新增花瓣或花梗。", "保留手端伸長、根足接觸與軀幹形變；葉紋只能附著表面。"],
+      "concepts":[
+        {
+          "id":"A",
+          "title":"翠葉面罩花靈",
+          "description":"以一大片深綠葉形面罩和淺綠頰面重設臉部；紫紅花冠每片只留深淺兩面，根足用一圈寬棕色根紋，不添加細葉脈。",
+          "tokens":["深綠葉形面罩","淺綠頰面","雙色紫紅花面","寬棕色根紋"],
+          "palette":["#69A633","#386933","#A3C967","#B63771","#74512C"],
+          "material":"不透明柔葉與啞光花瓣，形變依來源。",
+          "scores":{"topologyEndpoints":5,"extremePoseOcclusion":4,"largeSimpleRegions":5,"lowMaterialNoise":5,"simpleOutlineNoIndependentOrnaments":5},
+          "weightedTotal":95,
+          "risk":"花冠覆臉和手端伸長時，面罩不能被誤畫為剛性面具。"
+        },
+        {
+          "id":"B",
+          "title":"蘭紋藤花靈",
+          "description":"同一植物構造使用紫紅斑點花面、細綠葉脈和深色藤織狀腹紋；臉部更像蘭花葉面，根足仍為原棕色構造。",
+          "tokens":["紫紅斑點花面","細綠葉脈","藤織狀腹紋","深綠葉臉"],
+          "palette":["#5D9635","#315E32","#B6CD75","#AC336D","#805B31"],
+          "material":"帶細脈的葉面與斑點花瓣，無新增藤條。",
+          "scores":{"topologyEndpoints":5,"extremePoseOcclusion":3,"largeSimpleRegions":3,"lowMaterialNoise":3,"simpleOutlineNoIndependentOrnaments":4},
+          "weightedTotal":74,
+          "risk":"斑點與細脈在伸展、花冠重疊時容易漂移；更多表面特徵需追蹤。"
+        }
+      ],
+      "selected":"A",
+      "selectionState":"ART_DIRECTOR_SELECTED_UNDER_OWNER_DELEGATION",
+      "rationale":"A 將身份集中在大面罩和雙色花冠，保留綠/紫紅/棕色來源色系，避免細葉脈在形變畫格漂移。"
+    },
+    {
+      "entityId":"m352_peckmon",
+      "code":"M352",
+      "sourceMainSheet":"R:/Projects/Championship2026/YDIJ_PRIVATE_ROM_ART_PACK/02_CHARACTERS/native-224-catalog/assets/sheets/main/m352_peckmon_main_cells.png",
+      "sourceObserved":"金黃/紅色鳥體、尖長喙、鳥腿、红冠和尾翼區，部分細節帶紫色。Main 12–17 可見大紫色錐形/旋紋圖形；其屬喙、效果或組合構件的精確分類仍需修正 guide 與證據，不能把它自由改成新裝備。",
+      "inspectionWitnessCells":[0,7,12,13,19,36,57,74],
+      "originAudit":{"generic08RendererMismatchSlots":90,"slotCount":93,"uniqueNonblankMasters":53},
+      "motionLocks":["保留喙端、頸角、鳥腿接觸點、翼尾可見結構；不新增羽片或披風。", "特殊紫色長形圖格保持原槽位與來源構造，分類未知時不改成新招式。"],
+      "concepts":[
+        {
+          "id":"A",
+          "title":"金釉紋羽地行鳥",
+          "description":"紅金主要羽區改成金屬釉羽材質，翼上加入細線漩羽紋、額前淺金面板與深紅冠；所有圖案維持原羽片表面。",
+          "tokens":["金屬釉羽","細線漩羽紋","淺金額面","深紅冠"],
+          "palette":["#CE9E2B","#A44030","#E8CE74","#66448C","#42382B"],
+          "material":"低鏡面金釉與細羽面刻紋。",
+          "scores":{"topologyEndpoints":5,"extremePoseOcclusion":3,"largeSimpleRegions":3,"lowMaterialNoise":2,"simpleOutlineNoIndependentOrnaments":4},
+          "weightedTotal":71,
+          "risk":"細漩紋在長喙前伸/翼尾遮擋時可能與動態旋紋混淆，反光有閃動風險。"
+        },
+        {
+          "id":"B",
+          "title":"赤冠金肩地行鳥",
+          "description":"用整塊深赤冠與頰帶、兩大片金黃翼肩色區、奶油頸前面改造身份。紫色只保留來源已有部位的色域，不增加裝備或發光。",
+          "tokens":["整塊深赤冠/頰帶","兩大片金肩區","奶油頸前面","啞光紫色既有部位"],
+          "palette":["#D5A12D","#A83F2C","#F0D898","#694B90","#433623"],
+          "material":"啞光大羽面、少量內線，喙和足按來源材質分區。",
+          "scores":{"topologyEndpoints":5,"extremePoseOcclusion":4,"largeSimpleRegions":5,"lowMaterialNoise":5,"simpleOutlineNoIndependentOrnaments":5},
+          "weightedTotal":95,
+          "risk":"特殊長形紫色畫格的分類與前後遮擋仍須來源確認，不能因本案高分跳過。"
+        }
+      ],
+      "selected":"B",
+      "selectionState":"ART_DIRECTOR_SELECTED_UNDER_OWNER_DELEGATION",
+      "rationale":"B 用冠/頰/肩三個大區域識別，較容易跨俯衝、低伏與伸展保持穩定；同時避免金屬反光和漩羽紋與來源特殊畫格混淆。"
+    },
+    {
+      "entityId":"m431_whamon",
+      "code":"M431",
+      "sourceMainSheet":"R:/Projects/Championship2026/YDIJ_PRIVATE_ROM_ART_PACK/02_CHARACTERS/native-224-catalog/assets/sheets/main/m431_whamon_main_cells.png",
+      "sourceObserved":"深灰棕色大頭背部、鮮藍腹/鰭/尾、可見白齒和紅口腔。存在捲曲翻向、張口及拉長圖形；不是通體藍色的一般鯨魚圖標。",
+      "inspectionWitnessCells":[0,8,12,19,22,51,54,63],
+      "originAudit":{"generic08RendererMismatchSlots":79,"slotCount":82,"uniqueNonblankMasters":38},
+      "motionLocks":["保持大頭比例、嘴部開口、齒列可見範圍、鰭尾根部與曲線端點。", "腹褶只按既有表面追蹤，不增加鰭、背刺、水花或新漂浮路徑。"],
+      "concepts":[
+        {
+          "id":"A",
+          "title":"霧背藍腹巨鯨",
+          "description":"深灰褐背面做霧面寬額片，眼周一個淺灰短弧；藍色腹鰭和尾保留大色面，腹面用三個寬明暗帶整理可讀性。",
+          "tokens":["深灰褐霧背","淺灰眼周短弧","大藍腹鰭","三個寬腹面明暗帶"],
+          "palette":["#534B49","#7C7370","#2F82C0","#75B9DF","#F0E5D3"],
+          "material":"啞光皮膚與寬幅陰影，無碎斑與濕亮閃點。",
+          "scores":{"topologyEndpoints":5,"extremePoseOcclusion":4,"largeSimpleRegions":5,"lowMaterialNoise":5,"simpleOutlineNoIndependentOrnaments":5},
+          "weightedTotal":95,
+          "risk":"三個明暗帶只是繪畫整理，不准改變來源實際腹褶幾何/數量；大張口需逐格追蹤嘴邊。"
+        },
+        {
+          "id":"B",
+          "title":"珠潮紋鯨",
+          "description":"同一深灰背/藍腹構造加入珠光皮膜、細銀點與波紋腹面，眼周為更明顯的銀灰弧；不加外部珠飾。",
+          "tokens":["深灰珠光背","細銀點","波紋藍腹","銀灰眼周弧"],
+          "palette":["#50545A","#9DA9AE","#367FB7","#8FC5DC","#F1E7D8"],
+          "material":"珠光皮膚與局部濕亮反光。",
+          "scores":{"topologyEndpoints":5,"extremePoseOcclusion":3,"largeSimpleRegions":3,"lowMaterialNoise":2,"simpleOutlineNoIndependentOrnaments":5},
+          "weightedTotal":73,
+          "risk":"銀點与反光跨大頭轉向/翻捲時易閃動，腹紋需要更密的表面追蹤。"
+        }
+      ],
+      "selected":"A",
+      "selectionState":"ART_DIRECTOR_SELECTED_UNDER_OWNER_DELEGATION",
+      "rationale":"A 尊重實際深灰褐背與藍色腹鰭的來源辨識，用低噪點大面保持大頭翻轉与張口的穩定；不以一般藍鯨印象覆蓋來源。"
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "pilotId": "ART-BATTLE-BM00-BM01-PILOT-2026-09-01",
+  "status": "OWNER_DIRECTED_INTERNAL_PIXI_REVIEW_REGISTERED_NOT_PROMOTED",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "sharedLayer": {
+    "assetId": "production:battle:shared:field-bm00-00",
+    "file": "review/field-bm00-00-shared-layer-candidate.png",
+    "sha256": "0906D94C70BAE26F5A1A65B0C7F304222B3CFA78007259389B18A34B51C5EB17",
+    "hasAlpha": true,
+    "alphaRange": [
+      0,
+      255
+    ],
+    "transparentRgbZero": true,
+    "standingZoneGeometry": {
+      "centerAxisX": 768,
+      "pairRule": "LEFT_X_PLUS_RIGHT_X_EQUALS_TWO_TIMES_CENTER_AXIS",
+      "rows": [
+        {
+          "name": "rear",
+          "y": 395,
+          "centerOffsetX": 305,
+          "width": 220,
+          "height": 58
+        },
+        {
+          "name": "middle",
+          "y": 493,
+          "centerOffsetX": 350,
+          "width": 272,
+          "height": 84
+        },
+        {
+          "name": "front",
+          "y": 626,
+          "centerOffsetX": 365,
+          "width": 310,
+          "height": 114
+        }
+      ]
+    }
+  },
+  "arena": {
+    "assetId": "production:battle:arena:field-bm01-01",
+    "file": "review/field-bm01-01-background-candidate.png",
+    "sha256": "9E32B5D886EF7F0B7E4ED5715BAAEEF682D88D18899EC5792A120E6371E0ECD1",
+    "dependencies": [
+      "production:battle:shared:field-bm00-00"
+    ]
+  },
+  "visualTarget": {
+    "file": "review/visual-target-candidate.png",
+    "sha256": "F5254F2B87EE0C0C4BE404918C707EA6DE12CAAB0D2792CB8A5EC4A4807DF946"
+  },
+  "compositeReview": {
+    "file": "review/bm00-bm01-composite-candidate.png",
+    "sha256": "ED6059D644C00410783F6D94BA8B71A6748145023C82D1B08B67F8DDF6B11666"
+  },
+  "viewportChecks": [
+    {
+      "viewport": [
+        360,
+        800
+      ],
+      "file": "review/viewport-360x800.png",
+      "sha256": "8BBB006C75A4F3B7F05DDAECE38A94F24DF03D2A136D5AD414E48EC22595FD0F"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "file": "review/viewport-390x844.png",
+      "sha256": "BCC86EF5A95F6F399F4398A788D23480B131CA61B573FFD62CEB6F473A74D913"
+    },
+    {
+      "viewport": [
+        393,
+        852
+      ],
+      "file": "review/viewport-393x852.png",
+      "sha256": "70B562BFBE69BEFAE571E7C065EFBBF91BB5C4C694826193ABE5FBA15624E03E"
+    },
+    {
+      "viewport": [
+        412,
+        915
+      ],
+      "file": "review/viewport-412x915.png",
+      "sha256": "EB4F6938610648DAB88B46DDE2FB885F206AC6799263390CACD8F19BCBF28BE6"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "file": "review/viewport-430x932.png",
+      "sha256": "CDA7AD42AF61A718F976F95EC7570F73EB0352F9CF4F01328D0E23FB443F2ED6"
+    }
+  ],
+  "promotion": {
+    "humanApproved": true,
+    "ownerVerdict": "CONTINUE_AFTER_RING_ALIGNMENT",
+    "runtimeQaPassed": null,
+    "runtimeQaAuthority": "docs/reports/art/battle/bm00-bm01-r1/browser-qa.json",
+    "licenseEvidenceLinked": false,
+    "readyForRuntime": false,
+    "shippingReady": false
+  }
+}

@@ -1,0 +1,364 @@
+TAP version 13
+# Subtest: 90 original CPU actor-native cases agree on returned values, writes and delegated animation calls
+ok 1 - 90 original CPU actor-native cases agree on returned values, writes and delegated animation calls
+  ---
+  duration_ms: 16.0776
+  type: 'test'
+  ...
+# Subtest: the original DS square-root boundary stays Q12 for all fourteen CPU samples
+ok 2 - the original DS square-root boundary stays Q12 for all fourteen CPU samples
+  ---
+  duration_ms: 0.4894
+  type: 'test'
+  ...
+# Subtest: all 64 CPU launch pointer combinations include the field0C=2 reverse branch
+ok 3 - all 64 CPU launch pointer combinations include the field0C=2 reverse branch
+  ---
+  duration_ms: 1.2096
+  type: 'test'
+  ...
+# Subtest: resumed VM calls use this frame host and report this frame diagnostics
+ok 4 - resumed VM calls use this frame host and report this frame diagnostics
+  ---
+  duration_ms: 25.4978
+  type: 'test'
+  ...
+# Subtest: all 228 species bindings resolve their own registered identities, including the four source aliases
+ok 5 - all 228 species bindings resolve their own registered identities, including the four source aliases
+  ---
+  duration_ms: 10.4319
+  type: 'test'
+  ...
+# Subtest: all 8656 raw Main sequences resolve every production frame and preserve original completion or loop behavior
+ok 6 - all 8656 raw Main sequences resolve every production frame and preserve original completion or loop behavior
+  ---
+  duration_ms: 666.0112
+  type: 'test'
+  ...
+# Subtest: every one of 325 special-prelude records takes its own species pose and restoration timing
+ok 7 - every one of 325 special-prelude records takes its own species pose and restoration timing
+  ---
+  duration_ms: 531.0312
+  type: 'test'
+  ...
+# Subtest: real notifications take precedence over the temporary committed-move presentation
+ok 8 - real notifications take precedence over the temporary committed-move presentation
+  ---
+  duration_ms: 0.6946
+  type: 'test'
+  ...
+# Subtest: 117 original OVL19 handler cases match the raw sequence selector; unknown notifications stay unknown
+ok 9 - 117 original OVL19 handler cases match the raw sequence selector; unknown notifications stay unknown
+  ---
+  duration_ms: 3.1018
+  type: 'test'
+  ...
+# Subtest: 232 original CPU entry branches choose reactions by hit variant, status and end-of-battle flag
+ok 10 - 232 original CPU entry branches choose reactions by hit variant, status and end-of-battle flag
+  ---
+  duration_ms: 0.8984
+  type: 'test'
+  ...
+# Subtest: all 49 original ARM9 SetIfChanged cases retain or reset elapsed time correctly
+ok 11 - all 49 original ARM9 SetIfChanged cases retain or reset elapsed time correctly
+  ---
+  duration_ms: 4.1009
+  type: 'test'
+  ...
+# Subtest: the four dispatch families select 7-10 and a down actor selects 15 without changing gameplay
+ok 12 - the four dispatch families select 7-10 and a down actor selects 15 without changing gameplay
+  ---
+  duration_ms: 3.7605
+  type: 'test'
+  ...
+# Subtest: native attack frames advance once per battle frame, stop at the end, and redraw never restarts them
+ok 13 - native attack frames advance once per battle frame, stop at the end, and redraw never restarts them
+  ---
+  duration_ms: 1.154
+  type: 'test'
+  ...
+# Subtest: reduced motion keeps the action identity; unsupported raw slots restore the original texture and anchor
+ok 14 - reduced motion keeps the action identity; unsupported raw slots restore the original texture and anchor
+  ---
+  duration_ms: 0.4023
+  type: 'test'
+  ...
+# Subtest: all 13246 production Main cells retain verified per-frame packing, trim origin and current file hashes
+ok 15 - all 13246 production Main cells retain verified per-frame packing, trim origin and current file hashes
+  ---
+  duration_ms: 2451.1913
+  type: 'test'
+  ...
+# Subtest: battle animation is scoped to audited entities and rejects stale geometry hashes
+ok 16 - battle animation is scoped to audited entities and rejects stale geometry hashes
+  ---
+  duration_ms: 9.9733
+  type: 'test'
+  ...
+# Subtest: the segment is the one the script catalog already carried
+ok 17 - the segment is the one the script catalog already carried
+  ---
+  duration_ms: 7.449
+  type: 'test'
+  ...
+# Subtest: every move's three script columns land inside the segment
+ok 18 - every move's three script columns land inside the segment
+  ---
+  duration_ms: 3.7961
+  type: 'test'
+  ...
+# Subtest: the launch rewrites two pointers before starting them, in order
+ok 19 - the launch rewrites two pointers before starting them, in order
+  ---
+  duration_ms: 1.3436
+  type: 'test'
+  ...
+# Subtest: a real move script runs the cartridge's own instructions
+ok 20 - a real move script runs the cartridge's own instructions
+  ---
+  duration_ms: 6.6132
+  type: 'test'
+  ...
+# Subtest: the six-argument frame is the traced one, Q12 fields included
+ok 21 - the six-argument frame is the traced one, Q12 fields included
+  ---
+  duration_ms: 3.9129
+  type: 'test'
+  ...
+# Subtest: a column a move does not have is reported rather than guessed at
+ok 22 - a column a move does not have is reported rather than guessed at
+  ---
+  duration_ms: 1.1686
+  type: 'test'
+  ...
+# Subtest: the yield is what makes a script span frames instead of spinning
+ok 23 - the yield is what makes a script span frames instead of spinning
+  ---
+  duration_ms: 15.4278
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src
+ok 24 - the module imports nothing outside src
+  ---
+  duration_ms: 2.6586
+  type: 'test'
+  ...
+# Subtest: the two untraced columns had empty frames, and that was the real blocker
+ok 25 - the two untraced columns had empty frames, and that was the real blocker
+  ---
+  duration_ms: 18.9359
+  type: 'test'
+  ...
+# Subtest: most of the move table now runs to its end
+ok 26 - most of the move table now runs to its end
+  ---
+  duration_ms: 281.7418
+  type: 'test'
+  ...
+# Subtest: the host memory is scaffolding and the module says so
+ok 27 - the host memory is scaffolding and the module says so
+  ---
+  duration_ms: 2.561
+  type: 'test'
+  ...
+# Subtest: the catalog holds all 67 and claims no names for any of them
+ok 28 - the catalog holds all 67 and claims no names for any of them
+  ---
+  duration_ms: 5.9524
+  type: 'test'
+  ...
+# Subtest: the catalogued addresses are exactly the ones the script blob calls
+ok 29 - the catalogued addresses are exactly the ones the script blob calls
+  ---
+  duration_ms: 3.9008
+  type: 'test'
+  ...
+# Subtest: forty-nine are implemented, the attack among them
+ok 30 - forty-nine are implemented, the attack among them
+  ---
+  duration_ms: 1.5589
+  type: 'test'
+  ...
+# Subtest: the three chained getters read +0x2C and then their own word
+ok 31 - the three chained getters read +0x2C and then their own word
+  ---
+  duration_ms: 4.3211
+  type: 'test'
+  ...
+# Subtest: the three guarded getters return zero for a null argument
+ok 32 - the three guarded getters return zero for a null argument
+  ---
+  duration_ms: 1.3321
+  type: 'test'
+  ...
+# Subtest: Q12 conversion happens in both directions, exactly as the ROM shifts
+ok 33 - Q12 conversion happens in both directions, exactly as the ROM shifts
+  ---
+  duration_ms: 2.3084
+  type: 'test'
+  ...
+# Subtest: the two +0x154 routines are compare-and-set, not plain writes
+ok 34 - the two +0x154 routines are compare-and-set, not plain writes
+  ---
+  duration_ms: 0.6295
+  type: 'test'
+  ...
+# Subtest: the two tail-calls guard on null and then hand off unread routines
+ok 35 - the two tail-calls guard on null and then hand off unread routines
+  ---
+  duration_ms: 0.6223
+  type: 'test'
+  ...
+# Subtest: the yield native gives up the frame and returns zero
+ok 36 - the yield native gives up the frame and returns zero
+  ---
+  duration_ms: 1.0848
+  type: 'test'
+  ...
+# Subtest: the sixteen-byte native is the entry that forces kind 13
+ok 37 - the sixteen-byte native is the entry that forces kind 13
+  ---
+  duration_ms: 0.9378
+  type: 'test'
+  ...
+# Subtest: the three animation natives match a literal transcription of the ARM
+ok 38 - the three animation natives match a literal transcription of the ARM
+  ---
+  duration_ms: 4.1171
+  type: 'test'
+  ...
+# Subtest: 0x0211D238 shifts into Q12 before it halves, which is not the same order
+ok 39 - 0x0211D238 shifts into Q12 before it halves, which is not the same order
+  ---
+  duration_ms: 0.5373
+  type: 'test'
+  ...
+# Subtest: the three keep the ROM's own null-argument guard
+ok 40 - the three keep the ROM's own null-argument guard
+  ---
+  duration_ms: 0.2885
+  type: 'test'
+  ...
+# Subtest: an empty animation table is zero, and the count is read unsigned
+ok 41 - an empty animation table is zero, and the count is read unsigned
+  ---
+  duration_ms: 0.3104
+  type: 'test'
+  ...
+# Subtest: a refused cell index names the boundary instead of inventing a box
+ok 42 - a refused cell index names the boundary instead of inventing a box
+  ---
+  duration_ms: 1.0346
+  type: 'test'
+  ...
+# Subtest: only the natives that read halfwords demand a halfword host
+ok 43 - only the natives that read halfwords demand a halfword host
+  ---
+  duration_ms: 0.5906
+  type: 'test'
+  ...
+# Subtest: an address that is catalogued but unread raises rather than answering
+ok 44 - an address that is catalogued but unread raises rather than answering
+  ---
+  duration_ms: 0.5118
+  type: 'test'
+  ...
+# Subtest: a native refuses a host that cannot answer it, and short arguments
+ok 45 - a native refuses a host that cannot answer it, and short arguments
+  ---
+  duration_ms: 0.5429
+  type: 'test'
+  ...
+# Subtest: the builder takes the ROM path from the caller and hard-codes no drive
+ok 46 - the builder takes the ROM path from the caller and hard-codes no drive
+  ---
+  duration_ms: 8.7254
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src
+ok 47 - the module imports nothing outside src
+  ---
+  duration_ms: 2.499
+  type: 'test'
+  ...
+# Subtest: 166 original CPU yielded frames match zoom, camera operands, raw pose, hold and return
+ok 48 - 166 original CPU yielded frames match zoom, camera operands, raw pose, hold and return
+  ---
+  duration_ms: 9.0515
+  type: 'test'
+  ...
+# Subtest: only traced prelude/character combinations bind; durations match current numeric production metadata
+ok 49 - only traced prelude/character combinations bind; durations match current numeric production metadata
+  ---
+  duration_ms: 8.506
+  type: 'test'
+  ...
+# Subtest: normal AI entry plays a complete special prelude without advancing clock, HP or cooldown, then settles
+ok 50 - normal AI entry plays a complete special prelude without advancing clock, HP or cooldown, then settles
+  ---
+  duration_ms: 786.6513
+  type: 'test'
+  ...
+# Subtest: phone focus restores the identity transform; reduced motion never zooms the field
+ok 51 - phone focus restores the identity transform; reduced motion never zooms the field
+  ---
+  duration_ms: 0.7391
+  type: 'test'
+  ...
+# Subtest: the module names its sites and its evidence
+ok 52 - the module names its sites and its evidence
+  ---
+  duration_ms: 9.492
+  type: 'test'
+  ...
+# Subtest: the transform matches a literal transcription of the ARM, case for case
+ok 53 - the transform matches a literal transcription of the ARM, case for case
+  ---
+  duration_ms: 5.5182
+  type: 'test'
+  ...
+# Subtest: both early exits hand back the cell's own box untouched
+ok 54 - both early exits hand back the cell's own box untouched
+  ---
+  duration_ms: 0.5956
+  type: 'test'
+  ...
+# Subtest: a flip keeps the low edge low, and so does a negative scale
+ok 55 - a flip keeps the low edge low, and so does a negative scale
+  ---
+  duration_ms: 0.3962
+  type: 'test'
+  ...
+# Subtest: the bank lookup bounds-checks unsigned and strides on attribute bit 0
+ok 56 - the bank lookup bounds-checks unsigned and strides on attribute bit 0
+  ---
+  duration_ms: 0.4399
+  type: 'test'
+  ...
+# Subtest: the resolved box feeds the launch position without renaming anything
+ok 57 - the resolved box feeds the launch position without renaming anything
+  ---
+  duration_ms: 0.5916
+  type: 'test'
+  ...
+# Subtest: it refuses what it cannot model, and imports nothing outside src
+ok 58 - it refuses what it cannot model, and imports nothing outside src
+  ---
+  duration_ms: 5.4507
+  type: 'test'
+  ...
+# Subtest: the launch always asks for the transform, and the owner is already modelled
+ok 59 - the launch always asks for the transform, and the owner is already modelled
+  ---
+  duration_ms: 0.6515
+  type: 'test'
+  ...
+1..59
+# tests 59
+# suites 0
+# pass 59
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3240.9083

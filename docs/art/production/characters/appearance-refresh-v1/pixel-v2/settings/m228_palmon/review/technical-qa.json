@@ -1,0 +1,120 @@
+{
+  "artReview": "PENDING_INDEPENDENT_VISUAL_REVIEW",
+  "decoderSha256": "d8690529211cf396e3b01c064a08f35d628ac30cf2f3ff92beffa8a4941b1d34",
+  "designVersion": "pixel-v2-m228-a-stage1-r02",
+  "distinctSourceCanvasStates": 48,
+  "distinctSourcePosesSelected": 3,
+  "eggFullStateCoverage": null,
+  "entityId": "m228_palmon",
+  "fullMotionQa": "NOT_RUN",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "poseSamplingStatus": "PASS",
+  "poses": [
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        7,
+        7,
+        23,
+        29
+      ],
+      "authoredRgbaSha256": "977fba0161ac2ba2471e347adb47c1eb798058b33ca8e95e1b0eff3d070649f9",
+      "authoredVisiblePixels": 214,
+      "key": "main/cell_000",
+      "nativeBounds": [
+        -15,
+        -27,
+        9,
+        5
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        7,
+        7,
+        23,
+        29
+      ],
+      "sourceRgbaSha256": "20b6d10ffadb6f054bbb63e12bbec9f43e027097131f4256313c89e761c70f68",
+      "sourceVisiblePixels": 214,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        0,
+        6,
+        15,
+        28
+      ],
+      "authoredRgbaSha256": "8f236a78712fc08e024c10b1ad1deb6c84d4eb50d478afe2b4ef075362ecad3f",
+      "authoredVisiblePixels": 229,
+      "key": "main/cell_007",
+      "nativeBounds": [
+        -7,
+        -27,
+        9,
+        5
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        0,
+        6,
+        15,
+        28
+      ],
+      "sourceRgbaSha256": "92d837fa7091d2a110fbe01a177be66f130789e6540308769ffb332aefd95434",
+      "sourceVisiblePixels": 229,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    },
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        4,
+        7,
+        26,
+        22
+      ],
+      "authoredRgbaSha256": "0aac21377b8e0d1ae8a72c2ac60e284a432d589c7b23af9a48b8a72a98aecfd5",
+      "authoredVisiblePixels": 195,
+      "key": "main/cell_020",
+      "nativeBounds": [
+        -15,
+        -19,
+        17,
+        5
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        4,
+        7,
+        26,
+        22
+      ],
+      "sourceRgbaSha256": "e86d9695a60d974838a62f3cabafe907e6f8f347789a5de8d2855e589a3e39f8",
+      "sourceVisiblePixels": 195,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    }
+  ],
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "fee2d05113bee1a257782e1f522f031f05a7e5243962f2be37adc00db438231c",
+  "settingPoseCount": 3,
+  "shippingReady": false,
+  "sourceFiles": {
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m228_palmon_main.nanr": "9e31555c23e3cd4c1a820e0eee6c1c5043eed6a16a7b0684134d5167ac373b7d",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m228_palmon_main.ncbr": "836ad7012e351189856a907291f011988c393f5da685028b6bf1d49350bc96da",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m228_palmon_main.ncer": "fbcc73614a30e5426d6e76b0bf2a4ded3815a22334aebdb7319ea7c4c4fb287c",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m228_palmon_main.nclr": "64743494cc2a4a457b195783dd4f3642bf2ab943dfeb771179733aa9f9c355e7",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m228_palmon_sub.nanr": "b92cb8a9fb90d40dfdfd950d6cee2dd81b4b75bc58f9c4417a31bf5a81aebe11",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m228_palmon_sub.ncer": "a531fcdc64688d9b766322d3b43329bc7bf0ceb28e0d3d82080115d57832f8b1",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m228_palmon_sub.ncgr": "6f16baee33aa54e36eb2b85525b52c8d39a8efe5374b4dea693ac6f8616570d7",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m228_palmon_sub.nclr": "ba8211d0a2fb33f043b482b62ef5633c6cf68272dfada3b783bbfa3ccc4e4ca0",
+    "08_FULL_FAMILY_CONVERSION/digimon/m228_palmon_main/animations.json": "b3f5748bf501170fdf23adb17346a0fccb4ed4aef32cf119c7b2ffacd38e57e4",
+    "08_FULL_FAMILY_CONVERSION/digimon/m228_palmon_main/cells.json": "d39f1411f9c640a2c4b6528e78c8356af8e2c0f2228296dad214d300182f02a3",
+    "08_FULL_FAMILY_CONVERSION/digimon/m228_palmon_sub/animations.json": "e30134f30f5eadc2c047803bc7980a57c64219f8c1eeeadb0a52cb747b874836",
+    "08_FULL_FAMILY_CONVERSION/digimon/m228_palmon_sub/cells.json": "09609d554d859001dd5e8d641d841d9c01daf0308b7cd5134deacc8a5b58132f"
+  },
+  "technicalStatus": "PASS",
+  "visiblePaletteCount": 14
+}

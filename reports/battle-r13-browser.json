@@ -1,0 +1,270 @@
+{
+  "date": "2026-09-08",
+  "normalAi": true,
+  "injectedHitOrOutcome": false,
+  "includesNativeSnapshotAndGlobalTiming": true,
+  "scenarios": [
+    {
+      "activeLaunches": 0,
+      "audio": {
+        "active": 0,
+        "assetId": "art:audio:battle:local-reference:v1",
+        "contextState": "closed",
+        "loaded": 0,
+        "missing": [],
+        "played": 49,
+        "released": 49
+      },
+      "effectSprites": {
+        "active": 0,
+        "assetId": "art:vfx:battle-effects:local-reference:v1",
+        "created": 47,
+        "missingCells": [],
+        "released": 47,
+        "seenCells": [
+          "1:135",
+          "81:0",
+          "1:86",
+          "81:1",
+          "81:2",
+          "1:87",
+          "81:3",
+          "1:88",
+          "1:89",
+          "1:90",
+          "1:91",
+          "19:0",
+          "19:1",
+          "19:2",
+          "19:3"
+        ],
+        "sprites": [],
+        "visible": 0
+      },
+      "impacts": {
+        "active": 0,
+        "created": 47,
+        "released": 47
+      },
+      "issues": [],
+      "nativePool": {
+        "active": 0,
+        "created": 47,
+        "free": 496,
+        "loadedBanks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          19,
+          81
+        ],
+        "peak": 6,
+        "released": 47,
+        "unavailable": []
+      },
+      "overflow": false,
+      "receipt": "結算後 27400 bit",
+      "seed": 8,
+      "timing": {
+        "issues": [],
+        "pause": 0,
+        "slowdown": 0
+      },
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "overflow": false,
+      "reactions": [
+        {
+          "animation": {
+            "nativeRequest": true,
+            "sequenceId": 33,
+            "sequenceInitialFrame": 0,
+            "sequenceRequestId": 172,
+            "sequenceStartFrame": 2198,
+            "timingEvidence": "ROM_NOTIFICATION_UPDATE"
+          },
+          "down": false,
+          "hp": {
+            "current": 54,
+            "maximum": 1080,
+            "ratio": 0.05
+          },
+          "motion": {
+            "alpha": 1,
+            "heightNativePx": 0,
+            "rotationCosQ12": 4096,
+            "rotationSinQ12": 0,
+            "tintRgb": 16777215
+          },
+          "slot": 0
+        },
+        {
+          "animation": {
+            "nativeRequest": true,
+            "sequenceId": 8,
+            "sequenceInitialFrame": 0,
+            "sequenceRequestId": 171,
+            "sequenceStartFrame": 2187,
+            "timingEvidence": "ROM_NOTIFICATION_UPDATE"
+          },
+          "down": false,
+          "hp": {
+            "current": 344,
+            "maximum": 1080,
+            "ratio": 0.31851851851851853
+          },
+          "motion": {
+            "alpha": 1,
+            "heightNativePx": 0,
+            "rotationCosQ12": 4096,
+            "rotationSinQ12": 0,
+            "tintRgb": 16777215
+          },
+          "slot": 1
+        },
+        null,
+        {
+          "animation": {
+            "nativeRequest": true,
+            "sequenceId": 15,
+            "sequenceInitialFrame": 0,
+            "sequenceRequestId": 154,
+            "sequenceStartFrame": 1952,
+            "timingEvidence": "ROM_NOTIFICATION_UPDATE"
+          },
+          "down": true,
+          "hp": {
+            "current": 0,
+            "maximum": 1080,
+            "ratio": 0
+          },
+          "motion": {
+            "alpha": 1,
+            "heightNativePx": 0,
+            "rotationCosQ12": 4096,
+            "rotationSinQ12": 0,
+            "tintRgb": 16777215
+          },
+          "slot": 3
+        },
+        {
+          "animation": {
+            "nativeRequest": true,
+            "sequenceId": 8,
+            "sequenceInitialFrame": 0,
+            "sequenceRequestId": 165,
+            "sequenceStartFrame": 2117,
+            "timingEvidence": "ROM_NOTIFICATION_UPDATE"
+          },
+          "down": false,
+          "hp": {
+            "current": 500,
+            "maximum": 1080,
+            "ratio": 0.46296296296296297
+          },
+          "motion": {
+            "alpha": 1,
+            "heightNativePx": 0,
+            "rotationCosQ12": 4096,
+            "rotationSinQ12": 0,
+            "tintRgb": 16777215
+          },
+          "slot": 4
+        },
+        null
+      ],
+      "receipt": "復起 HP 寫入；時鐘 1285；HP 54",
+      "seed": 30,
+      "stage": "REVIVAL",
+      "timing": {
+        "issues": [],
+        "pause": 0,
+        "slowdown": 0
+      },
+      "viewport": [
+        320,
+        712
+      ]
+    },
+    {
+      "activeLaunches": 0,
+      "audio": {
+        "active": 0,
+        "assetId": "art:audio:battle:local-reference:v1",
+        "contextState": "closed",
+        "loaded": 0,
+        "missing": [],
+        "played": 78,
+        "released": 78
+      },
+      "effectSprites": {
+        "active": 0,
+        "assetId": "art:vfx:battle-effects:local-reference:v1",
+        "created": 53,
+        "missingCells": [],
+        "released": 53,
+        "seenCells": [
+          "1:135",
+          "81:0",
+          "1:86",
+          "81:1",
+          "81:2",
+          "1:87",
+          "81:3",
+          "1:88",
+          "1:89",
+          "1:90",
+          "1:91",
+          "19:0",
+          "19:1",
+          "19:2",
+          "19:3"
+        ],
+        "sprites": [],
+        "visible": 0
+      },
+      "impacts": {
+        "active": 0,
+        "created": 75,
+        "released": 75
+      },
+      "issues": [],
+      "nativePool": {
+        "active": 0,
+        "created": 53,
+        "free": 496,
+        "loadedBanks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          19,
+          81
+        ],
+        "peak": 6,
+        "released": 53,
+        "unavailable": []
+      },
+      "overflow": false,
+      "receipt": "結算後 27400 bit",
+      "seed": 30,
+      "stage": "SETTLED_AFTER_REALTIME_PLAY_AND_NORMAL_STEPS",
+      "timing": {
+        "issues": [],
+        "pause": 0,
+        "slowdown": 0
+      },
+      "viewport": [
+        320,
+        712
+      ]
+    }
+  ]
+}

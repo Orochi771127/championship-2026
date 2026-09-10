@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "aseprite": {
+    "pixelExactRoundtrip": true,
+    "size": [
+      32,
+      16
+    ],
+    "rgbaColorCountIncludingTransparent": 9,
+    "newMasterAuthored": false
+  },
+  "blender": {
+    "fixedSourceOrigin": [
+      184,
+      268
+    ],
+    "hashesVerified": true,
+    "renders": [
+      {
+        "cell": "000",
+        "alphaBounds": [
+          114,
+          130,
+          232,
+          263
+        ],
+        "clipped": false
+      },
+      {
+        "cell": "023",
+        "alphaBounds": [
+          72,
+          214,
+          213,
+          313
+        ],
+        "clipped": false
+      },
+      {
+        "cell": "056",
+        "alphaBounds": [
+          81,
+          189,
+          228,
+          276
+        ],
+        "clipped": false
+      },
+      {
+        "cell": "062",
+        "alphaBounds": [
+          283,
+          140,
+          394,
+          273
+        ],
+        "clipped": false
+      }
+    ],
+    "poseParityAccepted": false
+  },
+  "ui": {
+    "hashesVerified": true,
+    "materialBytes": 12966,
+    "iconAtlasBytes": 158144,
+    "originalToolbarSlots": 8
+  }
+}

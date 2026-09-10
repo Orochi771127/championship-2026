@@ -1,0 +1,836 @@
+TAP version 13
+# Subtest: 117 original OVL19 handler cases match the raw sequence selector; unknown notifications stay unknown
+not ok 1 - 117 original OVL19 handler cases match the raw sequence selector; unknown notifications stay unknown
+  ---
+  duration_ms: 5.038
+  type: 'test'
+  location: 'R:\\Projects\\Championship2026\\championship-2026\\tests\\championship-battle-character-animation-cases.mjs:21:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    3 !== null
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: ~
+  actual: 3
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///R:/Projects/Championship2026/championship-2026/tests/championship-battle-character-animation-cases.mjs:25:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: all 49 original ARM9 SetIfChanged cases retain or reset elapsed time correctly
+ok 2 - all 49 original ARM9 SetIfChanged cases retain or reset elapsed time correctly
+  ---
+  duration_ms: 2.3035
+  type: 'test'
+  ...
+# Subtest: the four dispatch families select 7-10 and a down actor selects 15 without changing gameplay
+ok 3 - the four dispatch families select 7-10 and a down actor selects 15 without changing gameplay
+  ---
+  duration_ms: 1.482
+  type: 'test'
+  ...
+# Subtest: native attack frames advance once per battle frame, stop at the end, and redraw never restarts them
+ok 4 - native attack frames advance once per battle frame, stop at the end, and redraw never restarts them
+  ---
+  duration_ms: 0.7802
+  type: 'test'
+  ...
+# Subtest: reduced motion keeps the action identity; unsupported raw slots restore the original texture and anchor
+ok 5 - reduced motion keeps the action identity; unsupported raw slots restore the original texture and anchor
+  ---
+  duration_ms: 0.2751
+  type: 'test'
+  ...
+# Subtest: 179 production Main cells retain verified per-frame packing, trim origin and current file hashes
+not ok 6 - 179 production Main cells retain verified per-frame packing, trim origin and current file hashes
+  ---
+  duration_ms: 1782.1295
+  type: 'test'
+  location: 'R:\\Projects\\Championship2026\\championship-2026\\tests\\championship-battle-character-animation-cases.mjs:82:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    13246 !== 179
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 179
+  actual: 13246
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///R:/Projects/Championship2026/championship-2026/tests/championship-battle-character-animation-cases.mjs:101:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: battle animation is scoped to audited entities and rejects stale geometry hashes
+not ok 7 - battle animation is scoped to audited entities and rejects stale geometry hashes
+  ---
+  duration_ms: 13.5326
+  type: 'test'
+  location: 'R:\\Projects\\Championship2026\\championship-2026\\tests\\championship-battle-character-animation-cases.mjs:105:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+
+    + {
+    +   files: [
+    +     [
+    +       'e000_digitama/main-atlas-00.json',
+    +       'a5b65c49cb8f6fed5a3f7e465e25b40adbad63340dfb7711c246c2e6478b1a58'
+    +     ],
+    +     [
+    +       'e000_digitama/main-atlas-00.png',
+    +       'cd3bb8eabc01f6f26dd838f25bc76c61dcf33db9303c722ad42bc43f921bc508'
+    +     ],
+    +     [
+    +       'e000_digitama/runtime.json',
+    +       '37646dfb9b9bd3f86d14b2a572ee836f29b64d8e3bc5d3148323d09852cfafd2'
+    +     ],
+    +     [
+    +       'e000_digitama/sub-atlas-00.json',
+    +       'de37ebffe06ed6ae07a6564f7c283608bbe26f8fa8eb8fba39fece0ac58c2fe3'
+    +     ],
+    +     [
+    +       'e000_digitama/sub-atlas-00.png',
+    +       'cd3bb8eabc01f6f26dd838f25bc76c61dcf33db9303c722ad42bc43f921bc508'
+    +     ]
+    +   ],
+    +   frames: {
+    +     'e000_digitama/main/cell_000': {
+    +       blank: false,
+    +       nativeBounds: [
+    +         -7,
+    +         -17,
+    +         7,
+    +         1
+    +       ],
+    +       origin: [
+    +         192,
+    +         308
+    +       ],
+    +       scale: 12,
+    +       sourceSize: [
+    +         384,
+    +         352
+    +       ]
+    +     },
+    +     'e000_digitama/main/cell_001': {
+    +       blank: false,
+    +       nativeBounds: [
+    +         -7,
+    +         -15,
+    +         7,
+    +         1
+    +       ],
+    +       origin: [
+    +         192,
+    +         308
+    +       ],
+    +       scale: 12,
+    +       sourceSize: [
+    +         384,
+    +         352
+    +       ]
+    +     },
+    +     'e000_digitama/main/cell_002': {
+    +       blank: false,
+    +       nativeBounds: [
+    +         -8,
+    +         -14,
+    +         8,
+    +         1
+    +       ],
+    +       origin: [
+    +         192,
+    +         308
+    +       ],
+    +       scale: 12,
+    +       sourceSize: [
+    +         384,
+    +         352
+    +       ]
+    +     },
+    +     'e000_digitama/main/cell_003': {
+    +       blank: false,
+    +       nativeBounds: [
+    +         -7,
+    +         -15,
+    +         7,
+    +         1
+    +       ],
+    +       origin: [
+    +         192,
+    +         308
+    +       ],
+    +       scale: 12,
+    +       sourceSize: [
+    +         384,
+    +         352
+    +       ]
+    +     },
+    +     'e000_digitama/main/cell_004': {
+    +       blank: false,
+    +       nativeBounds: [
+    +         -7,
+    +         -17,
+    +         7,
+    +         1
+    +       ],
+    +       origin: [
+    +         192,
+    +         308
+    +       ],
+    +       scale: 12,
+    +       sourceSize: [
+    +         384,
+    +         352
+    +       ]
+    +     },
+    +     'e000_digitama/main/cell_005': {
+    +       blank: false,
+    +       nativeBounds: [
+    +         -7,
+    +         -15,
+    +         7,
+    +         1
+    +       ],
+    +       origin: [
+    +         192,
+    +         308
+    +       ],
+    +       scale: 12,
+    +       sourceSize: [
+    +         384,
+    +         352
+    +       ]
+    +     },
+    +     'e000_digitama/main/cell_006': {
+    +       blank: false,
+    +       nativeBounds: [
+    +         -8,
+    +         -14,
+    +         8,
+    +         1
+    +       ],
+    +       origin: [
+    +         192,
+    +         308
+    +       ],
+    +       scale: 12,
+    +       sourceSize: [
+    +         384,
+    +         352
+    +       ]
+    +     },
+    +     'e000_digitama/main/cell_007': {
+    +       blank: false,
+    +       nativeBounds: [
+    +         -8,
+    +         -22,
+    +         7,
+    +         1
+    +       ],
+    +       origin: [
+    +         196,
+    +         312
+    +       ],
+    +       scale: 8,
+    +       sourceSize: [
+    +         384,
+    +         352
+    +       ]
+    +     },
+    +     'e000_digitama/main/cell_008': {
+    +       blank: false,
+    +       nativeBounds: [
+    +         -8,
+    +         -21,
+    +         7,
+    +         1
+    +       ],
+    +       origin: [
+    +         196,
+    +         312
+    +       ],
+    +       scale: 8,
+    +       sourceSize: [
+    +         384,
+    +         352
+    +       ]
+    +     },
+    +     'e000_digitama/main/cell_009': {
+    +       blank: false,
+    +       nativeBounds: [
+    +         -11,
+    +         -22,
+    +         11,
+    +         1
+    +       ],
+    +       origin: [
+    +         192,
+    +         312
+    +       ],
+    +       scale: 8,
+    +       sourceSize: [
+    +         384,
+    +         352
+    +       ]
+    +     },
+    +     'e000_digitama/main/cell_010': {
+    +       blank: false,
+    +       nativeBounds: [
+    +         -16,
+    +         -28,
+    +         16,
+    +         4
+    +       ],
+    +       origin: [
+    +         192,
+    +         288
+    +       ],
+    +       scale: 8,
+    +       sourceSize: [
+    +         384,
+    +         352
+    +       ]
+    +     },
+    +     'e000_digitama/main/cell_011': {
+    +       blank: false,
+    +       nativeBounds: [
+    +         -11,
+    +         -22,
+    +         11,
+    +         -2
+    +       ],
+    +       origin: [
+    +         192,
+    +         336
+    +       ],
+    +       scale: 8,
+    +       sourceSize: [
+    +         384,
+    +         352
+    +       ]
+    +     },
+    +     'e000_digitama/main/cell_012': {
+    +       blank: false,
+    +       nativeBounds: [
+    +         -3,
+    +         -15,
+    +         3,
+    +         -9
+    +       ],
+    +       origin: [
+    +         192,
+    +         428
+    +       ],
+    +       scale: 12,
+    +       sourceSize: [
+    +         384,
+    +         352
+    +       ]
+    +     }
+    +   }
+    + }
+    - null
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: ~
+  actual:
+    files:
+      0:
+        0: 'e000_digitama/main-atlas-00.json'
+        1: 'a5b65c49cb8f6fed5a3f7e465e25b40adbad63340dfb7711c246c2e6478b1a58'
+      1:
+        0: 'e000_digitama/main-atlas-00.png'
+        1: 'cd3bb8eabc01f6f26dd838f25bc76c61dcf33db9303c722ad42bc43f921bc508'
+      2:
+        0: 'e000_digitama/runtime.json'
+        1: '37646dfb9b9bd3f86d14b2a572ee836f29b64d8e3bc5d3148323d09852cfafd2'
+      3:
+        0: 'e000_digitama/sub-atlas-00.json'
+        1: 'de37ebffe06ed6ae07a6564f7c283608bbe26f8fa8eb8fba39fece0ac58c2fe3'
+      4:
+        0: 'e000_digitama/sub-atlas-00.png'
+        1: 'cd3bb8eabc01f6f26dd838f25bc76c61dcf33db9303c722ad42bc43f921bc508'
+    frames:
+      e000_digitama/main/cell_000:
+        blank: false
+        scale: 12
+        origin:
+          0: 192
+          1: 308
+        sourceSize:
+          0: 384
+          1: 352
+        nativeBounds:
+          0: -7
+          1: -17
+          2: 7
+          3: 1
+      e000_digitama/main/cell_001:
+        blank: false
+        scale: 12
+        origin:
+          0: 192
+          1: 308
+        sourceSize:
+          0: 384
+          1: 352
+        nativeBounds:
+          0: -7
+          1: -15
+          2: 7
+          3: 1
+      e000_digitama/main/cell_002:
+        blank: false
+        scale: 12
+        origin:
+          0: 192
+          1: 308
+        sourceSize:
+          0: 384
+          1: 352
+        nativeBounds:
+          0: -8
+          1: -14
+          2: 8
+          3: 1
+      e000_digitama/main/cell_003:
+        blank: false
+        scale: 12
+        origin:
+          0: 192
+          1: 308
+        sourceSize:
+          0: 384
+          1: 352
+        nativeBounds:
+          0: -7
+          1: -15
+          2: 7
+          3: 1
+      e000_digitama/main/cell_004:
+        blank: false
+        scale: 12
+        origin:
+          0: 192
+          1: 308
+        sourceSize:
+          0: 384
+          1: 352
+        nativeBounds:
+          0: -7
+          1: -17
+          2: 7
+          3: 1
+      e000_digitama/main/cell_005:
+        blank: false
+        scale: 12
+        origin:
+          0: 192
+          1: 308
+        sourceSize:
+          0: 384
+          1: 352
+        nativeBounds:
+          0: -7
+          1: -15
+          2: 7
+          3: 1
+      e000_digitama/main/cell_006:
+        blank: false
+        scale: 12
+        origin:
+          0: 192
+          1: 308
+        sourceSize:
+          0: 384
+          1: 352
+        nativeBounds:
+          0: -8
+          1: -14
+          2: 8
+          3: 1
+      e000_digitama/main/cell_007:
+        blank: false
+        scale: 8
+        origin:
+          0: 196
+          1: 312
+        sourceSize:
+          0: 384
+          1: 352
+        nativeBounds:
+          0: -8
+          1: -22
+          2: 7
+          3: 1
+      e000_digitama/main/cell_008:
+        blank: false
+        scale: 8
+        origin:
+          0: 196
+          1: 312
+        sourceSize:
+          0: 384
+          1: 352
+        nativeBounds:
+          0: -8
+          1: -21
+          2: 7
+          3: 1
+      e000_digitama/main/cell_009:
+        blank: false
+        scale: 8
+        origin:
+          0: 192
+          1: 312
+        sourceSize:
+          0: 384
+          1: 352
+        nativeBounds:
+          0: -11
+          1: -22
+          2: 11
+          3: 1
+      e000_digitama/main/cell_010:
+        blank: false
+        scale: 8
+        origin:
+          0: 192
+          1: 288
+        sourceSize:
+          0: 384
+          1: 352
+        nativeBounds:
+          0: -16
+          1: -28
+          2: 16
+          3: 4
+      e000_digitama/main/cell_011:
+        blank: false
+        scale: 8
+        origin:
+          0: 192
+          1: 336
+        sourceSize:
+          0: 384
+          1: 352
+        nativeBounds:
+          0: -11
+          1: -22
+          2: 11
+          3: -2
+      e000_digitama/main/cell_012:
+        blank: false
+        scale: 12
+        origin:
+          0: 192
+          1: 428
+        sourceSize:
+          0: 384
+          1: 352
+        nativeBounds:
+          0: -3
+          1: -15
+          2: 3
+          3: -9
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///R:/Projects/Championship2026/championship-2026/tests/championship-battle-character-animation-cases.mjs:118:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: the segment is the one the script catalog already carried
+ok 8 - the segment is the one the script catalog already carried
+  ---
+  duration_ms: 4.8945
+  type: 'test'
+  ...
+# Subtest: every move's three script columns land inside the segment
+ok 9 - every move's three script columns land inside the segment
+  ---
+  duration_ms: 2.1109
+  type: 'test'
+  ...
+# Subtest: the launch rewrites two pointers before starting them, in order
+not ok 10 - the launch rewrites two pointers before starting them, in order
+  ---
+  duration_ms: 1.266
+  type: 'test'
+  location: 'R:\\Projects\\Championship2026\\championship-2026\\tests\\championship-battle-move-script-run-cases.mjs:69:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    3 !== 2
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  actual: 3
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///R:/Projects/Championship2026/championship-2026/tests/championship-battle-move-script-run-cases.mjs:71:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: a real move script runs the cartridge's own instructions
+ok 11 - a real move script runs the cartridge's own instructions
+  ---
+  duration_ms: 3.9304
+  type: 'test'
+  ...
+# Subtest: the six-argument frame is the traced one, Q12 fields included
+ok 12 - the six-argument frame is the traced one, Q12 fields included
+  ---
+  duration_ms: 1.7207
+  type: 'test'
+  ...
+# Subtest: a column a move does not have is reported rather than guessed at
+ok 13 - a column a move does not have is reported rather than guessed at
+  ---
+  duration_ms: 0.7136
+  type: 'test'
+  ...
+# Subtest: the yield is what makes a script span frames instead of spinning
+ok 14 - the yield is what makes a script span frames instead of spinning
+  ---
+  duration_ms: 6.1489
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src
+ok 15 - the module imports nothing outside src
+  ---
+  duration_ms: 1.8357
+  type: 'test'
+  ...
+# Subtest: the two untraced columns had empty frames, and that was the real blocker
+ok 16 - the two untraced columns had empty frames, and that was the real blocker
+  ---
+  duration_ms: 3.3916
+  type: 'test'
+  ...
+# Subtest: most of the move table now runs to its end
+ok 17 - most of the move table now runs to its end
+  ---
+  duration_ms: 142.6504
+  type: 'test'
+  ...
+# Subtest: the host memory is scaffolding and the module says so
+ok 18 - the host memory is scaffolding and the module says so
+  ---
+  duration_ms: 1.7297
+  type: 'test'
+  ...
+# Subtest: the catalog holds all 67 and claims no names for any of them
+ok 19 - the catalog holds all 67 and claims no names for any of them
+  ---
+  duration_ms: 1.9403
+  type: 'test'
+  ...
+# Subtest: the catalogued addresses are exactly the ones the script blob calls
+ok 20 - the catalogued addresses are exactly the ones the script blob calls
+  ---
+  duration_ms: 3.0573
+  type: 'test'
+  ...
+# Subtest: thirty-four are implemented, the attack among them
+not ok 21 - thirty-four are implemented, the attack among them
+  ---
+  duration_ms: 1.9266
+  type: 'test'
+  location: 'R:\\Projects\\Championship2026\\championship-2026\\tests\\championship-battle-script-natives-cases.mjs:84:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    49 !== 34
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 34
+  actual: 49
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///R:/Projects/Championship2026/championship-2026/tests/championship-battle-script-natives-cases.mjs:87:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: the three chained getters read +0x2C and then their own word
+ok 22 - the three chained getters read +0x2C and then their own word
+  ---
+  duration_ms: 0.7586
+  type: 'test'
+  ...
+# Subtest: the three guarded getters return zero for a null argument
+ok 23 - the three guarded getters return zero for a null argument
+  ---
+  duration_ms: 0.4094
+  type: 'test'
+  ...
+# Subtest: Q12 conversion happens in both directions, exactly as the ROM shifts
+ok 24 - Q12 conversion happens in both directions, exactly as the ROM shifts
+  ---
+  duration_ms: 0.5061
+  type: 'test'
+  ...
+# Subtest: the two +0x154 routines are compare-and-set, not plain writes
+ok 25 - the two +0x154 routines are compare-and-set, not plain writes
+  ---
+  duration_ms: 1.0593
+  type: 'test'
+  ...
+# Subtest: the two tail-calls guard on null and then hand off unread routines
+ok 26 - the two tail-calls guard on null and then hand off unread routines
+  ---
+  duration_ms: 0.4326
+  type: 'test'
+  ...
+# Subtest: the yield native gives up the frame and returns zero
+ok 27 - the yield native gives up the frame and returns zero
+  ---
+  duration_ms: 0.627
+  type: 'test'
+  ...
+# Subtest: the sixteen-byte native is the entry that forces kind 13
+ok 28 - the sixteen-byte native is the entry that forces kind 13
+  ---
+  duration_ms: 0.573
+  type: 'test'
+  ...
+# Subtest: the three animation natives match a literal transcription of the ARM
+ok 29 - the three animation natives match a literal transcription of the ARM
+  ---
+  duration_ms: 2.2992
+  type: 'test'
+  ...
+# Subtest: 0x0211D238 shifts into Q12 before it halves, which is not the same order
+ok 30 - 0x0211D238 shifts into Q12 before it halves, which is not the same order
+  ---
+  duration_ms: 0.2868
+  type: 'test'
+  ...
+# Subtest: the three keep the ROM's own null-argument guard
+ok 31 - the three keep the ROM's own null-argument guard
+  ---
+  duration_ms: 0.1578
+  type: 'test'
+  ...
+# Subtest: an empty animation table is zero, and the count is read unsigned
+ok 32 - an empty animation table is zero, and the count is read unsigned
+  ---
+  duration_ms: 0.1531
+  type: 'test'
+  ...
+# Subtest: a refused cell index names the boundary instead of inventing a box
+ok 33 - a refused cell index names the boundary instead of inventing a box
+  ---
+  duration_ms: 0.6232
+  type: 'test'
+  ...
+# Subtest: only the natives that read halfwords demand a halfword host
+ok 34 - only the natives that read halfwords demand a halfword host
+  ---
+  duration_ms: 0.3886
+  type: 'test'
+  ...
+# Subtest: an address that is catalogued but unread raises rather than answering
+not ok 35 - an address that is catalogued but unread raises rather than answering
+  ---
+  duration_ms: 0.3351
+  type: 'test'
+  location: 'R:\\Projects\\Championship2026\\championship-2026\\tests\\championship-battle-script-natives-cases.mjs:343:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    true !== false
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///R:/Projects/Championship2026/championship-2026/tests/championship-battle-script-natives-cases.mjs:347:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: a native refuses a host that cannot answer it, and short arguments
+ok 36 - a native refuses a host that cannot answer it, and short arguments
+  ---
+  duration_ms: 0.2598
+  type: 'test'
+  ...
+# Subtest: the builder takes the ROM path from the caller and hard-codes no drive
+ok 37 - the builder takes the ROM path from the caller and hard-codes no drive
+  ---
+  duration_ms: 6.5093
+  type: 'test'
+  ...
+# Subtest: the module imports nothing outside src
+ok 38 - the module imports nothing outside src
+  ---
+  duration_ms: 2.8496
+  type: 'test'
+  ...
+# Subtest: 166 original CPU yielded frames match zoom, camera operands, raw pose, hold and return
+ok 39 - 166 original CPU yielded frames match zoom, camera operands, raw pose, hold and return
+  ---
+  duration_ms: 6.4382
+  type: 'test'
+  ...
+# Subtest: only traced prelude/character combinations bind; durations match current numeric production metadata
+ok 40 - only traced prelude/character combinations bind; durations match current numeric production metadata
+  ---
+  duration_ms: 5.1109
+  type: 'test'
+  ...
+# Subtest: normal AI entry plays a complete special prelude without advancing clock, HP or cooldown, then settles
+ok 41 - normal AI entry plays a complete special prelude without advancing clock, HP or cooldown, then settles
+  ---
+  duration_ms: 442.4169
+  type: 'test'
+  ...
+# Subtest: phone focus restores the identity transform; reduced motion never zooms the field
+ok 42 - phone focus restores the identity transform; reduced motion never zooms the field
+  ---
+  duration_ms: 0.5516
+  type: 'test'
+  ...
+1..42
+# tests 42
+# suites 0
+# pass 36
+# fail 6
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2219.6289

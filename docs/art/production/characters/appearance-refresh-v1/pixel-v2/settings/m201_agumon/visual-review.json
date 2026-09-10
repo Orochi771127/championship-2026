@@ -1,0 +1,56 @@
+{
+  "candidateSource": "docs/art/production/characters/appearance-refresh-v1/_work/identity-m201-r02",
+  "entityId": "m201_agumon",
+  "findings": [
+    {
+      "observation": "The refreshed figure is visibly a gold feline cub: two pointed ears with pink inner accents, large pale eye field and dark pupil/green iris, cream cheek and short muzzle, plus darker shoulder/body banding. These are coordinated face and body changes rather than palette-only changes.",
+      "result": "PASS_IDENTITY_DIRECTION",
+      "scope": "identity"
+    },
+    {
+      "observation": "Standing pose has a shorter cream muzzle and upright feline ears. The visible side eye is larger and clearer than the previous narrow dark eye. Foot placements and forward wrist remain source-aligned in the comparison; original forward snout silhouette is intentionally trimmed only here.",
+      "result": "PASS_BOUNDED_VISUAL",
+      "scope": "main/cell_000"
+    },
+    {
+      "observation": "The large open mouth retains the source forward reach while the enlarged eye, ear accents and cream cheek preserve feline identity. It is reasonable for an extreme open-mouth pose to expose a longer jaw; do not force standing short-muzzle geometry onto this interaction endpoint.",
+      "result": "PASS_BOUNDED_VISUAL",
+      "scope": "main/cell_008"
+    },
+    {
+      "observation": "Prone pose keeps the closed-eyelid variant, cream cheek, paired ears and gold/dark striping. Forward paws, lower body and rear extension retain the source arrangement. The upper rear projection remains source structure, not evidence of a newly articulated ear or wing.",
+      "result": "PASS_BOUNDED_VISUAL",
+      "scope": "main/cell_023"
+    },
+    {
+      "observation": "Technical support changes are respectively 8 removed/13 added, 2 removed/4 added, and 3 removed/12 added. In the actual comparison these concentrate around the approved head/cheek/ear treatment and small internal contour repair. Same native bounds alone is not treated as proof of joint or endpoint equivalence.",
+      "result": "PASS_BOUNDED_VISUAL",
+      "scope": "coordinateEvidence"
+    }
+  ],
+  "fullMotionQa": "NOT_RUN",
+  "identityComparisonSha256": "c45d4832c50224019c5a4a8d40a76c9d847b61053f583c224b40c4f3f57590e9",
+  "identityDirectionVersion": "creature-identity-v1",
+  "identityVerdict": "PASS_IDENTITY_DIRECTION",
+  "nonBlockingLimitations": [
+    "Native pixels are small: green iris and pink inner ear are supporting accents; silhouette, large eye and cream muzzle must remain primary identifiers.",
+    "Only three source poses were reviewed. The remaining motion masters, wrist ornament continuity and tail/ear occlusion still need per-pose inspection.",
+    "This direction pass does not approve complete animation, normal-game default replacement, five phone viewports, physical device testing or shipping."
+  ],
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "reviewMethod": "Actually viewed identity-comparison.png and all three source/authored rows in source-comparison.png at native and enlarged scales; read setting rules and technical support changes. The decision is visual and bounded, not inferred from test PASS.",
+  "reviewedPoses": [
+    "main/cell_000",
+    "main/cell_008",
+    "main/cell_023"
+  ],
+  "reviewer": "identity_gate_review / independent technical artist",
+  "runtimePromotionGranted": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "cddfe483e5bd026e993d76bf358b447cb43f573f3b1c21ce4624e2c42f8bd9e5",
+  "sourceComparisonSha256": "29c1b42a9b6995407cb88a573c72e81020f739e58ba1268b123b17db1bdb5a8f",
+  "technicalQaSha256": "da8901d05da245ecd4d82115c1e6141f4718bf57a879b4f4a2dbc2605a61a7e1",
+  "unresolvedBlockingIssues": [],
+  "verdict": "PASS_SETTING_STAGE"
+}

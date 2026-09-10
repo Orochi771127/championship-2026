@@ -1,0 +1,29 @@
+{
+  "anchorFormula": "spriteAnchor=packedSourceOrigin/packedSourceSize",
+  "assetPixelsModified": false,
+  "blankSlots": 53,
+  "classification": "RESEARCH_ONLY_METADATA_NO_SOURCE_PIXELS",
+  "entitiesWithPerFrameOriginVariation": 224,
+  "entitiesWithPerFrameScaleVariation": 171,
+  "entityCount": 224,
+  "existingDecoderSha256": "d8690529211cf396e3b01c064a08f35d628ac30cf2f3ff92beffa8a4941b1d34",
+  "formula": "nativeCoordinate=(packedLogicalCoordinate-packedSourceOrigin)/packedPixelsPerNativePixel",
+  "originMeaning": "NCER_SOURCE_ORIGIN_NOT_ASSERTED_GROUND_OR_GAMEPLAY_POSITION",
+  "packedScaleHistogram": {
+    "4": 2947,
+    "8": 11091,
+    "12": 3144
+  },
+  "runtimeModified": false,
+  "runtimeRaisingFinalOamTransform": "UNKNOWN_REQUIRES_LIVE_OAM_OR_RENDER_CALL_TRACE",
+  "scaleFormula": "spriteScale=worldUnitsPerNativePixel*atlasResolution/packedPixelsPerNativePixel",
+  "schemaVersion": 1,
+  "shippingReady": false,
+  "slotCount": 17235,
+  "source": "RAW_NCER_TRANSFER_AWARE_NATIVE_DECODE_VS_CURRENT_RUNTIME_ATLAS_PNG",
+  "sourceManifestSha256": "212f204889023bdc4fcc54bcb2bb554ef23c29ce5ee773f163607f4f27b41858",
+  "sourceOamAffineCount": 0,
+  "verifiedVisibleSlots": 17182,
+  "verifierSha256": "f1433aaa281a1ef783401f0b0e78d30ba5e8be6b3fb479aa81e023b0e5d7bfab",
+  "worldUnitsPerNativePixel": "SCENE_CONTRACT_INPUT_NOT_CHOSEN_HERE"
+}

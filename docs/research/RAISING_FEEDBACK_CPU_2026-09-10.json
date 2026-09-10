@@ -1,0 +1,3913 @@
+{
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "evidence": "BOUNDED_NATIVE_REPLAY",
+  "boundary": "Original icon setup and status selector; body dimensions and renderer entry calls intercepted. No hardware rendering claim.",
+  "placements": [
+    {
+      "width": 16,
+      "height": 24,
+      "flip": 0,
+      "encoded": 0,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        426001,
+        286729,
+        40960
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 0,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 16,
+      "height": 24,
+      "flip": 0,
+      "encoded": 1,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        426001,
+        286729,
+        40960
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 1,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 16,
+      "height": 24,
+      "flip": 0,
+      "encoded": 5,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 5,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 16,
+      "height": 24,
+      "flip": 0,
+      "encoded": 518,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        73728
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 2
+        }
+      ]
+    },
+    {
+      "width": 16,
+      "height": 24,
+      "flip": 0,
+      "encoded": 774,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        73728
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 3
+        }
+      ]
+    },
+    {
+      "width": 16,
+      "height": 24,
+      "flip": 0,
+      "encoded": 1286,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        73728
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 5
+        }
+      ]
+    },
+    {
+      "width": 16,
+      "height": 24,
+      "flip": 0,
+      "encoded": 31,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        73728
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 31,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 16,
+      "height": 24,
+      "flip": 1,
+      "encoded": 0,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        393233,
+        286729,
+        40960
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 0,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 16,
+      "height": 24,
+      "flip": 1,
+      "encoded": 1,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        393233,
+        286729,
+        40960
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 1,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 16,
+      "height": 24,
+      "flip": 1,
+      "encoded": 5,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 5,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 16,
+      "height": 24,
+      "flip": 1,
+      "encoded": 518,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        73728
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 2
+        }
+      ]
+    },
+    {
+      "width": 16,
+      "height": 24,
+      "flip": 1,
+      "encoded": 774,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        73728
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 3
+        }
+      ]
+    },
+    {
+      "width": 16,
+      "height": 24,
+      "flip": 1,
+      "encoded": 1286,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        73728
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 5
+        }
+      ]
+    },
+    {
+      "width": 16,
+      "height": 24,
+      "flip": 1,
+      "encoded": 31,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        73728
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 31,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 31,
+      "height": 47,
+      "flip": 0,
+      "encoded": 0,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        438289,
+        286729,
+        81920
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 0,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 31,
+      "height": 47,
+      "flip": 0,
+      "encoded": 1,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        438289,
+        286729,
+        81920
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 1,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 31,
+      "height": 47,
+      "flip": 0,
+      "encoded": 5,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 5,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 31,
+      "height": 47,
+      "flip": 0,
+      "encoded": 518,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        155648
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 2
+        }
+      ]
+    },
+    {
+      "width": 31,
+      "height": 47,
+      "flip": 0,
+      "encoded": 774,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        155648
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 3
+        }
+      ]
+    },
+    {
+      "width": 31,
+      "height": 47,
+      "flip": 0,
+      "encoded": 1286,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        155648
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 5
+        }
+      ]
+    },
+    {
+      "width": 31,
+      "height": 47,
+      "flip": 0,
+      "encoded": 31,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        155648
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 31,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 31,
+      "height": 47,
+      "flip": 1,
+      "encoded": 0,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        380945,
+        286729,
+        81920
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 0,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 31,
+      "height": 47,
+      "flip": 1,
+      "encoded": 1,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        380945,
+        286729,
+        81920
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 1,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 31,
+      "height": 47,
+      "flip": 1,
+      "encoded": 5,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 5,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 31,
+      "height": 47,
+      "flip": 1,
+      "encoded": 518,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        155648
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 2
+        }
+      ]
+    },
+    {
+      "width": 31,
+      "height": 47,
+      "flip": 1,
+      "encoded": 774,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        155648
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 3
+        }
+      ]
+    },
+    {
+      "width": 31,
+      "height": 47,
+      "flip": 1,
+      "encoded": 1286,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        155648
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 5
+        }
+      ]
+    },
+    {
+      "width": 31,
+      "height": 47,
+      "flip": 1,
+      "encoded": 31,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        155648
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 31,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 8,
+      "height": 8,
+      "flip": 0,
+      "encoded": 0,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        417809,
+        286729,
+        16384
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 0,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 8,
+      "height": 8,
+      "flip": 0,
+      "encoded": 1,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        417809,
+        286729,
+        16384
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 1,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 8,
+      "height": 8,
+      "flip": 0,
+      "encoded": 5,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 5,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 8,
+      "height": 8,
+      "flip": 0,
+      "encoded": 518,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        24576
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 2
+        }
+      ]
+    },
+    {
+      "width": 8,
+      "height": 8,
+      "flip": 0,
+      "encoded": 774,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        24576
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 3
+        }
+      ]
+    },
+    {
+      "width": 8,
+      "height": 8,
+      "flip": 0,
+      "encoded": 1286,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        24576
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 5
+        }
+      ]
+    },
+    {
+      "width": 8,
+      "height": 8,
+      "flip": 0,
+      "encoded": 31,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        24576
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 31,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 8,
+      "height": 8,
+      "flip": 1,
+      "encoded": 0,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        401425,
+        286729,
+        16384
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 0,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 8,
+      "height": 8,
+      "flip": 1,
+      "encoded": 1,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        401425,
+        286729,
+        16384
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 1,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 8,
+      "height": 8,
+      "flip": 1,
+      "encoded": 5,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 5,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 8,
+      "height": 8,
+      "flip": 1,
+      "encoded": 518,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        24576
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 2
+        }
+      ]
+    },
+    {
+      "width": 8,
+      "height": 8,
+      "flip": 1,
+      "encoded": 774,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        24576
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 3
+        }
+      ]
+    },
+    {
+      "width": 8,
+      "height": 8,
+      "flip": 1,
+      "encoded": 1286,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        24576
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 5
+        }
+      ]
+    },
+    {
+      "width": 8,
+      "height": 8,
+      "flip": 1,
+      "encoded": 31,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        24576
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 31,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 64,
+      "height": 71,
+      "flip": 0,
+      "encoded": 0,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        475153,
+        286729,
+        122880
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 0,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 64,
+      "height": 71,
+      "flip": 0,
+      "encoded": 1,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        475153,
+        286729,
+        122880
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 1,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 64,
+      "height": 71,
+      "flip": 0,
+      "encoded": 5,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 5,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 64,
+      "height": 71,
+      "flip": 0,
+      "encoded": 518,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        237568
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 2
+        }
+      ]
+    },
+    {
+      "width": 64,
+      "height": 71,
+      "flip": 0,
+      "encoded": 774,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        237568
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 3
+        }
+      ]
+    },
+    {
+      "width": 64,
+      "height": 71,
+      "flip": 0,
+      "encoded": 1286,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        237568
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 5
+        }
+      ]
+    },
+    {
+      "width": 64,
+      "height": 71,
+      "flip": 0,
+      "encoded": 31,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        237568
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 31,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 64,
+      "height": 71,
+      "flip": 1,
+      "encoded": 0,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        344081,
+        286729,
+        122880
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 0,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 64,
+      "height": 71,
+      "flip": 1,
+      "encoded": 1,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        344081,
+        286729,
+        122880
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 1,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 64,
+      "height": 71,
+      "flip": 1,
+      "encoded": 5,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 5,
+          "frame": null
+        }
+      ]
+    },
+    {
+      "width": 64,
+      "height": 71,
+      "flip": 1,
+      "encoded": 518,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        237568
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 2
+        }
+      ]
+    },
+    {
+      "width": 64,
+      "height": 71,
+      "flip": 1,
+      "encoded": 774,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        237568
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 3
+        }
+      ]
+    },
+    {
+      "width": 64,
+      "height": 71,
+      "flip": 1,
+      "encoded": 1286,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        237568
+      ],
+      "calls": [
+        {
+          "address": "020479A4",
+          "sequence": 6,
+          "frame": 5
+        }
+      ]
+    },
+    {
+      "width": 64,
+      "height": 71,
+      "flip": 1,
+      "encoded": 31,
+      "positionQ12": [
+        409617,
+        286729,
+        8192
+      ],
+      "outputPositionQ12": [
+        409617,
+        286729,
+        237568
+      ],
+      "calls": [
+        {
+          "address": "02047904",
+          "sequence": 31,
+          "frame": null
+        }
+      ]
+    }
+  ],
+  "statuses": [
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 0,
+      "music": 0,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          241,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 0,
+      "music": 0,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          241,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 0,
+      "music": 0,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          241,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 0,
+      "music": 0,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          241,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 0,
+      "music": 0,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          241,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 0,
+      "music": 0,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          241,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 0,
+      "music": 0,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          241,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 0,
+      "music": 0,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          241,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 0,
+      "music": 0,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          241,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 0,
+      "music": 0,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          2,
+          60
+        ],
+        [
+          120,
+          1,
+          0
+        ],
+        [
+          180,
+          2,
+          60
+        ],
+        [
+          240,
+          1,
+          0
+        ],
+        [
+          241,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 0,
+      "music": 0,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          2,
+          60
+        ],
+        [
+          120,
+          1,
+          0
+        ],
+        [
+          180,
+          2,
+          60
+        ],
+        [
+          240,
+          1,
+          0
+        ],
+        [
+          241,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 0,
+      "music": 0,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          2,
+          60
+        ],
+        [
+          120,
+          1,
+          0
+        ],
+        [
+          180,
+          2,
+          60
+        ],
+        [
+          240,
+          1,
+          0
+        ],
+        [
+          241,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 0,
+      "music": 0,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          3,
+          1
+        ],
+        [
+          241,
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 0,
+      "music": 0,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          241,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 0,
+      "music": 0,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          3,
+          1
+        ],
+        [
+          241,
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 0,
+      "music": 0,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          3,
+          60
+        ],
+        [
+          120,
+          1,
+          0
+        ],
+        [
+          180,
+          3,
+          60
+        ],
+        [
+          240,
+          1,
+          0
+        ],
+        [
+          241,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 0,
+      "music": 0,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          241,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 0,
+      "music": 0,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          3,
+          60
+        ],
+        [
+          120,
+          1,
+          0
+        ],
+        [
+          180,
+          3,
+          60
+        ],
+        [
+          240,
+          1,
+          0
+        ],
+        [
+          241,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 0,
+      "music": 0,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          60,
+          3,
+          60
+        ],
+        [
+          120,
+          2,
+          0
+        ],
+        [
+          180,
+          3,
+          60
+        ],
+        [
+          240,
+          2,
+          0
+        ],
+        [
+          241,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 0,
+      "music": 0,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          241,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 0,
+      "music": 0,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          60,
+          3,
+          60
+        ],
+        [
+          120,
+          2,
+          0
+        ],
+        [
+          180,
+          3,
+          60
+        ],
+        [
+          240,
+          2,
+          0
+        ],
+        [
+          241,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 0,
+      "music": 0,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          2,
+          60
+        ],
+        [
+          120,
+          3,
+          120
+        ],
+        [
+          180,
+          1,
+          0
+        ],
+        [
+          240,
+          2,
+          60
+        ],
+        [
+          241,
+          2,
+          61
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 0,
+      "music": 0,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          2,
+          60
+        ],
+        [
+          120,
+          1,
+          0
+        ],
+        [
+          180,
+          2,
+          60
+        ],
+        [
+          240,
+          1,
+          0
+        ],
+        [
+          241,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 0,
+      "music": 0,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          2,
+          60
+        ],
+        [
+          120,
+          3,
+          120
+        ],
+        [
+          180,
+          1,
+          0
+        ],
+        [
+          240,
+          2,
+          60
+        ],
+        [
+          241,
+          2,
+          61
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 1,
+      "music": 0,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          5,
+          1
+        ],
+        [
+          241,
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 1,
+      "music": 0,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          5,
+          1
+        ],
+        [
+          241,
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 1,
+      "music": 0,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          5,
+          1
+        ],
+        [
+          241,
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 1,
+      "music": 0,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          5,
+          60
+        ],
+        [
+          120,
+          1,
+          0
+        ],
+        [
+          180,
+          5,
+          60
+        ],
+        [
+          240,
+          1,
+          0
+        ],
+        [
+          241,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 1,
+      "music": 0,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          5,
+          60
+        ],
+        [
+          120,
+          1,
+          0
+        ],
+        [
+          180,
+          5,
+          60
+        ],
+        [
+          240,
+          1,
+          0
+        ],
+        [
+          241,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 1,
+      "music": 0,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          5,
+          60
+        ],
+        [
+          120,
+          1,
+          0
+        ],
+        [
+          180,
+          5,
+          60
+        ],
+        [
+          240,
+          1,
+          0
+        ],
+        [
+          241,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 1,
+      "music": 0,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          60,
+          5,
+          60
+        ],
+        [
+          120,
+          2,
+          0
+        ],
+        [
+          180,
+          5,
+          60
+        ],
+        [
+          240,
+          2,
+          0
+        ],
+        [
+          241,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 1,
+      "music": 0,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          60,
+          5,
+          60
+        ],
+        [
+          120,
+          2,
+          0
+        ],
+        [
+          180,
+          5,
+          60
+        ],
+        [
+          240,
+          2,
+          0
+        ],
+        [
+          241,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 1,
+      "music": 0,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          60,
+          5,
+          60
+        ],
+        [
+          120,
+          2,
+          0
+        ],
+        [
+          180,
+          5,
+          60
+        ],
+        [
+          240,
+          2,
+          0
+        ],
+        [
+          241,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 1,
+      "music": 0,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          2,
+          60
+        ],
+        [
+          120,
+          5,
+          120
+        ],
+        [
+          180,
+          1,
+          0
+        ],
+        [
+          240,
+          2,
+          60
+        ],
+        [
+          241,
+          2,
+          61
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 1,
+      "music": 0,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          2,
+          60
+        ],
+        [
+          120,
+          5,
+          120
+        ],
+        [
+          180,
+          1,
+          0
+        ],
+        [
+          240,
+          2,
+          60
+        ],
+        [
+          241,
+          2,
+          61
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 1,
+      "music": 0,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          2,
+          60
+        ],
+        [
+          120,
+          5,
+          120
+        ],
+        [
+          180,
+          1,
+          0
+        ],
+        [
+          240,
+          2,
+          60
+        ],
+        [
+          241,
+          2,
+          61
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 1,
+      "music": 0,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          3,
+          1
+        ],
+        [
+          60,
+          5,
+          60
+        ],
+        [
+          120,
+          3,
+          0
+        ],
+        [
+          180,
+          5,
+          60
+        ],
+        [
+          240,
+          3,
+          0
+        ],
+        [
+          241,
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 1,
+      "music": 0,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          5,
+          1
+        ],
+        [
+          241,
+          5,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 1,
+      "music": 0,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          3,
+          1
+        ],
+        [
+          60,
+          5,
+          60
+        ],
+        [
+          120,
+          3,
+          0
+        ],
+        [
+          180,
+          5,
+          60
+        ],
+        [
+          240,
+          3,
+          0
+        ],
+        [
+          241,
+          3,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 1,
+      "music": 0,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          3,
+          60
+        ],
+        [
+          120,
+          5,
+          120
+        ],
+        [
+          180,
+          1,
+          0
+        ],
+        [
+          240,
+          3,
+          60
+        ],
+        [
+          241,
+          3,
+          61
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 1,
+      "music": 0,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          5,
+          60
+        ],
+        [
+          120,
+          1,
+          0
+        ],
+        [
+          180,
+          5,
+          60
+        ],
+        [
+          240,
+          1,
+          0
+        ],
+        [
+          241,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 1,
+      "music": 0,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          3,
+          60
+        ],
+        [
+          120,
+          5,
+          120
+        ],
+        [
+          180,
+          1,
+          0
+        ],
+        [
+          240,
+          3,
+          60
+        ],
+        [
+          241,
+          3,
+          61
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 1,
+      "music": 0,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          60,
+          3,
+          60
+        ],
+        [
+          120,
+          5,
+          120
+        ],
+        [
+          180,
+          2,
+          0
+        ],
+        [
+          240,
+          3,
+          60
+        ],
+        [
+          241,
+          3,
+          61
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 1,
+      "music": 0,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          60,
+          5,
+          60
+        ],
+        [
+          120,
+          2,
+          0
+        ],
+        [
+          180,
+          5,
+          60
+        ],
+        [
+          240,
+          2,
+          0
+        ],
+        [
+          241,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 1,
+      "music": 0,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          60,
+          3,
+          60
+        ],
+        [
+          120,
+          5,
+          120
+        ],
+        [
+          180,
+          2,
+          0
+        ],
+        [
+          240,
+          3,
+          60
+        ],
+        [
+          241,
+          3,
+          61
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 1,
+      "music": 0,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          2,
+          60
+        ],
+        [
+          120,
+          3,
+          120
+        ],
+        [
+          180,
+          5,
+          180
+        ],
+        [
+          240,
+          1,
+          0
+        ],
+        [
+          241,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 1,
+      "music": 0,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          2,
+          60
+        ],
+        [
+          120,
+          5,
+          120
+        ],
+        [
+          180,
+          1,
+          0
+        ],
+        [
+          240,
+          2,
+          60
+        ],
+        [
+          241,
+          2,
+          61
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 1,
+      "music": 0,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          60,
+          2,
+          60
+        ],
+        [
+          120,
+          3,
+          120
+        ],
+        [
+          180,
+          5,
+          180
+        ],
+        [
+          240,
+          1,
+          0
+        ],
+        [
+          241,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 0,
+      "music": 1,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 0,
+      "music": 1,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 0,
+      "music": 1,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 0,
+      "music": 1,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 0,
+      "music": 1,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 0,
+      "music": 1,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 0,
+      "music": 1,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 0,
+      "music": 1,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 0,
+      "music": 1,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 0,
+      "music": 1,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 0,
+      "music": 1,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 0,
+      "music": 1,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 0,
+      "music": 1,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 0,
+      "music": 1,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 0,
+      "music": 1,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 0,
+      "music": 1,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 0,
+      "music": 1,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 0,
+      "music": 1,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 0,
+      "music": 1,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 0,
+      "music": 1,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 0,
+      "music": 1,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 0,
+      "music": 1,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 0,
+      "music": 1,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 0,
+      "music": 1,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 1,
+      "music": 1,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 1,
+      "music": 1,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 1,
+      "music": 1,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 1,
+      "music": 1,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 1,
+      "music": 1,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 0,
+      "stress": 1,
+      "music": 1,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 1,
+      "music": 1,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 1,
+      "music": 1,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 1,
+      "music": 1,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 1,
+      "music": 1,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 1,
+      "music": 1,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 0,
+      "stress": 1,
+      "music": 1,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 1,
+      "music": 1,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 1,
+      "music": 1,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 1,
+      "music": 1,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 1,
+      "music": 1,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 1,
+      "music": 1,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 0,
+      "hungry": 1,
+      "stress": 1,
+      "music": 1,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 1,
+      "music": 1,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 1,
+      "music": 1,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 0,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 1,
+      "music": 1,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 1,
+      "music": 1,
+      "state": 1,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 1,
+      "music": 1,
+      "state": 4,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "sick": 1,
+      "wound": 1,
+      "hungry": 1,
+      "stress": 1,
+      "music": 1,
+      "state": 9,
+      "updates": 241,
+      "samples": [
+        [
+          1,
+          4,
+          1
+        ],
+        [
+          241,
+          4,
+          1
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "head": "d0c48f340baac61cf399bf5bd5922ce58f3d38c7",
+  "regressionPassed": 1240,
+  "focusedPassed": 45,
+  "offsetCpuCases": 64,
+  "impactCpuCases": 128,
+  "normalScenarios": 4,
+  "normalSourceHashesCurrent": true,
+  "gitDiffCheck": true,
+  "explicitFileWhitespaceCheck": true,
+  "sourceHashes": {
+    "src/championship/presentation/battleEffectArt.js": "35eadf310f874b6d28e46bf17a1cce79b2e104a21d1e963dd0c330d8865cac1a",
+    "src/championship/presentation/battleEffectSprites.js": "5605b834c3fabd5fb42380172d1e9b70d4ba01997e83030b7f4115d4f267dad7",
+    "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js": "2b8150f742bf824565372227eac6da76fb042e2afd0658481b0a3214c970ff2b",
+    "src/championship/battle/battleNativeLaunch.js": "622015abaa717ac790f6196c4bac7489ae68b755290251ff871a5de799af7e51",
+    "src/championship/app/battleRuntime.js": "5fd44c49ab1c60d40a6d38e1f564a51c1603faca4f24d85a0884dc300d28f9bd",
+    "src/championship/app/main.js": "b32a69f13d3b9b7102c17a982e7f82328e07a551d67247509a330c49e54d6c5f",
+    "tests/championship-battle-effect-art-cases.mjs": "2d709a856f739859080badf5cc80d622eda1c9ca6b6907d41b91b8818657b80d",
+    "tests/championship-battle-impact-continuation-cases.mjs": "fb121fc45f05bde8412b36d308a01555630b97661694ed890b27b6317480afb8",
+    "tests/championship-art-production-a0-cases.mjs": "e7e04776126662678f05b1ef9454bb18b218ade4e3928167bca13da5bc453962",
+    "tests/fixtures/championship-facility-battle-review.html": "8bff39c600e110d43b8203e11f1ddf14227e3f2f0a0f2d3b94dfb8aaae2b2140",
+    "scripts/research/trace-battle-impact-continuation-cpu.py": "4f355eefd71c5a97b1e074faf335f7732a0769bcf4e4e8e7034de38380c574b3",
+    "assets/production/vfx/original-battle-2d-v1/manifest.json": "3855513a8a8af95518f9754cf456519a5b452a93f165194ee04dea4cdf1064ac",
+    "assets/production/vfx/original-battle-2d-v1/effects.png": "e10febf69e9a2ccadf20f670594a11ccccfd2d3a3510555b8162abc8360c649c",
+    "assets/production/ART_PRODUCTION_INDEX.json": "99aaa3ae99c5c705570c8bbe8f27fb336390ad87a6406009d57e93d4086dfdc1",
+    "docs/contracts/championship/battle-impact-continuation.v1.json": "9f7644ee196680c16f2f59279f4b295bfaf90bd508121ced7456de0b9accd77b",
+    "docs/contracts/championship/battle-effect-pool.v1.json": "b450465909dce7ac0116e5d32e652a607f968734f2908cfef3880baf9b4b4caa"
+  },
+  "originalFullMatchParity": false,
+  "physicalDeviceAccepted": false,
+  "shippingReady": false
+}

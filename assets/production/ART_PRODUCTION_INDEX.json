@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 25,
+    "registeredRuntimeBundles": 28,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -283,7 +283,46 @@
       "humanApproved": false,
       "runtimeEligible": true,
       "shippingReady": false,
-        "maturity": "Meat, capsule, waste-tool icon, broom/dustpan, cake and celebration platter on existing Home"
+      "maturity": "Meat, capsule, waste-tool icon, broom/dustpan, cake and celebration platter on existing Home"
+    },
+    {
+      "assetId": "art:vfx:raising-feedback:local-reference:v1",
+      "manifestPath": "assets/production/internal-faithful-baseline/raising-feedback-v1/manifest.json",
+      "runtimeEligible": true,
+      "localOnly": true,
+      "runtimeScope": "LOOPBACK_RESEARCH_ONLY",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE",
+      "publicReleasePermitted": false,
+      "shippingReady": false,
+      "humanApproved": false,
+      "productionStatus": "OWNER_AUTHORIZED_LOCAL_REFERENCE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "assetId": "art:vfx:hunt-feedback:local-reference:v1",
+      "manifestPath": "assets/production/internal-faithful-baseline/hunt-feedback-v1/manifest.json",
+      "runtimeEligible": true,
+      "localOnly": true,
+      "runtimeScope": "LOOPBACK_RESEARCH_ONLY",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE",
+      "publicReleasePermitted": false,
+      "shippingReady": false,
+      "humanApproved": false,
+      "productionStatus": "OWNER_AUTHORIZED_LOCAL_REFERENCE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "assetId": "art:characters:hud:local-reference:v1",
+      "manifestPath": "assets/production/internal-faithful-baseline/character-hud-v1/manifest.json",
+      "runtimeEligible": true,
+      "localOnly": true,
+      "runtimeScope": "LOOPBACK_RESEARCH_ONLY",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE",
+      "publicReleasePermitted": false,
+      "shippingReady": false,
+      "humanApproved": false,
+      "productionStatus": "OWNER_AUTHORIZED_LOCAL_REFERENCE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
     }
   ]
 }

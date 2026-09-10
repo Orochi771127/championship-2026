@@ -1,0 +1,609 @@
+{
+  "scope": "NORMAL_AI_RUNTIME_WITH_EXPLICIT_SCHEDULE_FIXTURES",
+  "originalParityClaim": false,
+  "sourceHashes": {
+    "src/championship/battle/battleNativeActors.js": "7a99b75e79e10a65aeb6a4204df04bc94936ea4f5e7fb7e9952f61b276f42751",
+    "src/championship/battle/battleNativeLaunch.js": "9014e971bc63df821bdd815bff65a00a8b8c9bc71fd1f3cdc0eaf28d505fd11e",
+    "src/championship/battle/battleImpactEffects.js": "2aa100421aba8c59ac805e998d584b7867882f6ce821bd7f76737f262bfec6c4",
+    "src/championship/battle/battleScriptVm.js": "05f82b397d64dbbbfaca22450b0ef9d55942c5824164b659ae59697d48120146",
+    "src/championship/battle/battleScriptNatives.js": "2feabe53e40335f4393597d7ab9bec3ca1406865304b9fcb109993d593637282",
+    "src/championship/battle/battleMoveScriptRun.js": "18fd40b6c0200e9d46f90fcf0e021a083899ad6a9278c8c06566e5d25cc1f55b",
+    "src/championship/battle/battleActionApplication.js": "5adebdb60c79a3abcc6edf2693f71ec995a397f49fc34ce89b8e7f176c1684e7",
+    "src/championship/battle/battleSession.js": "dd32ed6271ed051c80645dcea2dd59873cefb01087b098bc8670758c70f919dd",
+    "src/championship/app/battleRuntime.js": "94e72d7b240acfac1443562fc4f023e22d9700be2addf12eefb84eb0c9220ad6",
+    "src/championship/app/battlePresentationSource.js": "9519892349e92c091c4573d04dcf2f8fb43f9408a6d07e26db68ea7e250bb729",
+    "src/championship/app/main.js": "86abf0e8ca26a46aad5621ebf88ebd9bd06484d3d93182cda4814c37085eb91f",
+    "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js": "e3f60cbe91051fc133f6eb5899bccce455e37338dba2018a9d35ac24372ce94b",
+    "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js": "a9aa5bddb7978628db212087f0ad5b06488a69b5e8c39cd62594474c26c42f6b"
+  },
+  "scenarios": [
+    {
+      "schedule": {
+        "entryMode": 0,
+        "scheduleSlotA": 2,
+        "scheduleSlotB": 3,
+        "progressCounter": 0
+      },
+      "match": 0,
+      "steps": 377,
+      "clock": 377,
+      "species": [
+        "species-081",
+        "species-113",
+        "species-050"
+      ],
+      "moves": [
+        179,
+        254,
+        98
+      ],
+      "poses": [
+        "species-081:8",
+        "species-113:8",
+        "species-050:8",
+        "species-081:0",
+        "species-113:0",
+        "species-050:0"
+      ],
+      "hpBefore": [
+        1080,
+        1080,
+        null,
+        520,
+        null,
+        null
+      ],
+      "hpAfter": [
+        878,
+        992,
+        null,
+        0,
+        null,
+        null
+      ],
+      "resourceBefore": [
+        78,
+        66,
+        null,
+        38,
+        null,
+        null
+      ],
+      "resourceAfter": [
+        78,
+        66,
+        null,
+        38,
+        null,
+        null
+      ],
+      "outcome": {
+        "ended": true,
+        "reason": "TEAM_DOWN",
+        "verdict": "TEAM_ZERO_AHEAD",
+        "winningTeam": 0
+      },
+      "settlement": {
+        "ended": true,
+        "verdict": 4,
+        "reason": 2,
+        "battleType": 0,
+        "mode": 0,
+        "matchIndex": 0,
+        "roundCursor": 1,
+        "outcomeEntries": [
+          1
+        ]
+      },
+      "peakEffects": 4,
+      "impacts": {
+        "created": 13,
+        "released": 13,
+        "active": 0
+      },
+      "activeLaunchesAfter": 0,
+      "impactStarts": [
+        {
+          "id": 1,
+          "type": 0,
+          "clock": 107,
+          "systemId": "battle-hitspark_small"
+        },
+        {
+          "id": 2,
+          "type": 1,
+          "clock": 107,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 3,
+          "type": 0,
+          "clock": 197,
+          "systemId": "battle-hitspark_small"
+        },
+        {
+          "id": 4,
+          "type": 0,
+          "clock": 197,
+          "systemId": "battle-hitspark_small"
+        },
+        {
+          "id": 5,
+          "type": 1,
+          "clock": 197,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 6,
+          "type": 1,
+          "clock": 197,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 7,
+          "type": 0,
+          "clock": 287,
+          "systemId": "battle-hitspark_small"
+        },
+        {
+          "id": 8,
+          "type": 0,
+          "clock": 287,
+          "systemId": "battle-hitspark_small"
+        },
+        {
+          "id": 9,
+          "type": 1,
+          "clock": 287,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 10,
+          "type": 1,
+          "clock": 287,
+          "systemId": "battle-hitspark_big"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "schedule": {
+        "entryMode": 0,
+        "scheduleSlotA": 2,
+        "scheduleSlotB": 6,
+        "progressCounter": 4
+      },
+      "match": 1,
+      "steps": 1335,
+      "clock": 1083,
+      "species": [
+        "species-081",
+        "species-113",
+        "species-081",
+        "species-113"
+      ],
+      "moves": [
+        179,
+        254,
+        255
+      ],
+      "poses": [
+        "species-081:8",
+        "species-113:8",
+        "species-081:0",
+        "species-113:0"
+      ],
+      "hpBefore": [
+        1080,
+        1080,
+        null,
+        1080,
+        1080,
+        null
+      ],
+      "hpAfter": [
+        0,
+        0,
+        null,
+        0,
+        0,
+        null
+      ],
+      "resourceBefore": [
+        78,
+        66,
+        null,
+        78,
+        66,
+        null
+      ],
+      "resourceAfter": [
+        78,
+        54,
+        null,
+        78,
+        42,
+        null
+      ],
+      "outcome": {
+        "ended": true,
+        "reason": "TEAM_DOWN",
+        "verdict": "TEAM_ONE_AHEAD",
+        "winningTeam": 1
+      },
+      "settlement": {
+        "ended": true,
+        "verdict": 3,
+        "reason": 2,
+        "battleType": 0,
+        "mode": 0,
+        "matchIndex": 1,
+        "roundCursor": 1,
+        "outcomeEntries": [
+          0
+        ]
+      },
+      "peakEffects": 8,
+      "impacts": {
+        "created": 59,
+        "released": 59,
+        "active": 0
+      },
+      "activeLaunchesAfter": 0,
+      "impactStarts": [
+        {
+          "id": 1,
+          "type": 1,
+          "clock": 107,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 2,
+          "type": 1,
+          "clock": 108,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 3,
+          "type": 1,
+          "clock": 197,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 4,
+          "type": 1,
+          "clock": 197,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 5,
+          "type": 1,
+          "clock": 197,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 6,
+          "type": 1,
+          "clock": 197,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 7,
+          "type": 1,
+          "clock": 197,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 8,
+          "type": 1,
+          "clock": 198,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 9,
+          "type": 1,
+          "clock": 287,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 10,
+          "type": 1,
+          "clock": 287,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 11,
+          "type": 1,
+          "clock": 287,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 12,
+          "type": 1,
+          "clock": 287,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 13,
+          "type": 1,
+          "clock": 288,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 14,
+          "type": 1,
+          "clock": 377,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 15,
+          "type": 1,
+          "clock": 377,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 16,
+          "type": 1,
+          "clock": 377,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 17,
+          "type": 1,
+          "clock": 377,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 18,
+          "type": 1,
+          "clock": 378,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 19,
+          "type": 1,
+          "clock": 378,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 20,
+          "type": 1,
+          "clock": 378,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 21,
+          "type": 1,
+          "clock": 378,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 22,
+          "type": 1,
+          "clock": 467,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 23,
+          "type": 1,
+          "clock": 467,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 24,
+          "type": 1,
+          "clock": 467,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 25,
+          "type": 1,
+          "clock": 467,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 26,
+          "type": 1,
+          "clock": 468,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 27,
+          "type": 1,
+          "clock": 468,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 28,
+          "type": 1,
+          "clock": 468,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 29,
+          "type": 1,
+          "clock": 468,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 30,
+          "type": 1,
+          "clock": 557,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 31,
+          "type": 1,
+          "clock": 557,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 32,
+          "type": 1,
+          "clock": 557,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 33,
+          "type": 1,
+          "clock": 557,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 34,
+          "type": 1,
+          "clock": 558,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 35,
+          "type": 1,
+          "clock": 558,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 36,
+          "type": 1,
+          "clock": 558,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 37,
+          "type": 1,
+          "clock": 558,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 38,
+          "type": 1,
+          "clock": 647,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 39,
+          "type": 1,
+          "clock": 647,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 40,
+          "type": 1,
+          "clock": 647,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 41,
+          "type": 1,
+          "clock": 647,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 42,
+          "type": 1,
+          "clock": 648,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 43,
+          "type": 1,
+          "clock": 648,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 44,
+          "type": 1,
+          "clock": 648,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 45,
+          "type": 1,
+          "clock": 648,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 46,
+          "type": 1,
+          "clock": 737,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 47,
+          "type": 1,
+          "clock": 737,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 48,
+          "type": 1,
+          "clock": 737,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 49,
+          "type": 1,
+          "clock": 738,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 50,
+          "type": 1,
+          "clock": 827,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 51,
+          "type": 1,
+          "clock": 827,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 52,
+          "type": 1,
+          "clock": 827,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 53,
+          "type": 1,
+          "clock": 831,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 54,
+          "type": 1,
+          "clock": 902,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 55,
+          "type": 1,
+          "clock": 918,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 56,
+          "type": 1,
+          "clock": 1007,
+          "systemId": "battle-hitspark_big"
+        },
+        {
+          "id": 57,
+          "type": 1,
+          "clock": 1008,
+          "systemId": "battle-hitspark_big"
+        }
+      ],
+      "issues": [
+        {
+          "moveId": 255,
+          "error": null,
+          "unresolvedHostCalls": [
+            "0x203ea30"
+          ],
+          "needsObjectGraph": []
+        }
+      ]
+    }
+  ]
+}

@@ -54,7 +54,7 @@ function cageName(frame, cageId) {
  * @param {object} options.source getFrame/subscribe/intents seam
  * @param {(args: {host: HTMLElement, source: object}) => object|Promise<object>} options.mountField
  */
-export async function createRaisingHomeP1RView({ root, source, mountField } = {}) {
+export async function createRaisingHomeP1RView({ root, source, mountField, hudArt=null } = {}) {
   if (!root) throw new TypeError("INT-RH2 P1R view requires a root element");
   const presentation = assertPresentationSource(source);
   if (typeof mountField !== "function") {
@@ -92,22 +92,26 @@ export async function createRaisingHomeP1RView({ root, source, mountField } = {}
 
   const companion = node("section", "int-rh2-companion");
   companion.setAttribute("aria-live", "polite");
+  const portraitSlot=node('div','int-rh2-companion__portrait');
+  const portrait=node('img');portrait.alt='';portrait.hidden=true;portraitSlot.append(portrait);
   const companionCopy = node("div", "int-rh2-companion__copy");
   const companionName = node("h2", "int-rh2-companion__name", "SELECT A RESIDENT");
   const companionLocation = node("p", "int-rh2-companion__location", "Touch a resident in the habitat.");
   companionCopy.append(node("p", "int-rh2-kicker", "COMPANION LINK"), companionName, companionLocation);
 
-  // HP and TP, through the traced species -> stat-curve path. The original's
-  // panel also shows AP, attack, defence, wisdom and speed; those are NOT here
-  // because the stat curve carries one shared value for all of them, so there is
-  // nothing to differentiate them with yet. Showing the same number under four
-  // labels would read as parity and be invented.
+  // OVL18 0211F790 uses the individual's current/max HP and TP. Its AP
+  // readout is a constant full bar, not a fabricated combat AP value.
   const vitals = node("dl", "int-rh2-vitals");
   const hpValue = node("dd", "int-rh2-vitals__value", "--");
   const tpValue = node("dd", "int-rh2-vitals__value", "--");
+  const apValue = node('dd','int-rh2-vitals__value int-rh2-vitals__ap');
+  const apBar=node('span','int-rh2-vitals__ap-bar');apBar.setAttribute('aria-label','AP');apValue.append(apBar);
+  const capacityValue=node('dd','int-rh2-vitals__value','--');
   vitals.append(
     node("dt", "int-rh2-vitals__label", "HP"), hpValue,
-    node("dt", "int-rh2-vitals__label", "TP"), tpValue
+    node("dt", "int-rh2-vitals__label", "TP"), tpValue,
+    node('dt','int-rh2-vitals__label','AP'),apValue,
+    node('dt','int-rh2-vitals__label','容量'),capacityValue
   );
   companionCopy.append(vitals);
   // The generic CARE button was removed on 2026-09-03 at the Owner's direction:
@@ -115,7 +119,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField } = {}
   // target" over six distinct tools, and its effects are UNKNOWN_REQUIRES_TRACE
   // in OVL18. The intent seam (careForCreature) stays; nothing calls it until
   // the traced tool behaviour exists.
-  companion.append(companionCopy);
+  companion.append(portraitSlot,companionCopy);
 
   // The 8-slot toolbar shell that used to sit here was removed on 2026-09-03
   // by the Claude lane: championshipToolbar.js now mounts the real toolbar at
@@ -219,10 +223,16 @@ export async function createRaisingHomeP1RView({ root, source, mountField } = {}
     const nativeRanch = frame.ranch?.layoutVersion === 'NATIVE_ANCHORS_V1';
     fieldState.textContent = uiText(nativeRanch ? 'SWIPE TO VIEW' : 'FIELD ONLINE');
     const resident = selectedResident(frame);
+    const image=hudArt?.getPortrait(resident?.speciesId);
+    portrait.hidden=!image;
+    if(image){if(portrait.getAttribute('src')!==image.src)portrait.src=image.src;
+      portrait.style.width=`${image.width*image.nativeScale}px`;portrait.style.height=`${image.height*image.nativeScale}px`;}
     companionName.textContent = resident?.displayName ?? uiText("SELECT A RESIDENT");
     const stats = resident?.stats ?? null;
     hpValue.textContent = uiText(stats ? `${stats.currentHp} / ${stats.maxHp}` : "--");
-    tpValue.textContent = uiText(stats ? String(stats.maxTp) : "--");
+    tpValue.textContent = uiText(stats ? `${stats.currentTp??stats.maxTp} / ${stats.maxTp}` : "--");
+    apBar.hidden=!resident;
+    capacityValue.textContent=Number.isInteger(resident?.displayCapacityG)?`${resident.displayCapacityG} G`:'--';
     vitals.dataset.evidence = stats?.evidence ?? "NONE";
 
     companionLocation.textContent = uiText(resident

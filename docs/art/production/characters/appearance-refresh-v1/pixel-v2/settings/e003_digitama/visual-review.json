@@ -1,0 +1,36 @@
+{
+  "deferredChecks": [
+    "Original full timeline playback and slot compilation",
+    "Normal game and physical device QA"
+  ],
+  "entityId": "e003_digitama",
+  "observations": [
+    "Offset pearl petal on lilac glaze with plum lower band.",
+    "Viewed all12 authored state contact sheet, then independent corrected-source spot comparison of normal/open shell/internal light/remaining lower shell.",
+    "All12 source states individually verified for exact native bounds and alpha support; all26 slots referenced by the source reuse evidence.",
+    "Reuses new authored E000 shell/effect construction after per-state geometry/occlusion evidence; new pattern is explicitly authored, not original RGB recolor."
+  ],
+  "reviewedPoses": [
+    "main/cell_000",
+    "main/cell_001",
+    "main/cell_002",
+    "main/cell_004",
+    "main/cell_005",
+    "main/cell_006",
+    "main/cell_007",
+    "main/cell_008",
+    "main/cell_009",
+    "main/cell_010",
+    "main/cell_011",
+    "main/cell_012"
+  ],
+  "reviewer": "ROOT_ART_DIRECTOR_INDEPENDENT_OF_AUTHOR",
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "8f407d49675262497a4ef3425f1bd9a73426b62fa96aa350d688a1b336785d7d",
+  "shippingReady": false,
+  "sourceComparisonSha256": "3075be2e639b4b099215364b59e04a547ee3e94aca7dad48d069a7ee6554b517",
+  "technicalQaSha256": "6c8500fca856a21886c66db8d5f4a5da1767f28b7d5aa35c7301a00731786717",
+  "unresolvedBlockingIssues": [],
+  "verdict": "PASS_SETTING_STAGE"
+}

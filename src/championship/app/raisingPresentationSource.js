@@ -10,6 +10,7 @@ import toolbarContract from "../../../docs/contracts/championship/CHAMPIONSHIP_T
 import { projectWorldClockDisplay } from "../time/championshipWorldClock.js";
 import {getCageDefinition} from "../cage/cageCatalog.js";
 import { raisingDisplayName, cageName } from "../text/zhHant.js";
+import {nativeHuntToolSpecies} from '../hunt/capture/nativeHuntToolRules.js';
 
 export const RAISING_PRESENTATION_CONTRACT_VERSION = "INT_RH2_RUNTIME_PRESENTATION_CONTRACT/v1";
 
@@ -225,6 +226,8 @@ export function createRaisingPresentationSource(app) {
         intent: member.creatureId === reactionCreatureId ? "care-reaction" : member.intent,
         selected: member.creatureId === selectedCreatureId,
         stats: member.stats ?? null,
+        displayCapacityG: /^championship:creature:species-\d{3}$/.test(member.speciesId)
+          ? nativeHuntToolSpecies(Number(member.speciesId.slice(-3))).displayCapacityG : null,
         nativeCageName: (()=>{const definition=app.getRaisingActorFrame?.(member.creatureId)?.cageDefinitionIndex;
           return Number.isInteger(definition)?cageName(definition, getCageDefinition(definition)?.displayName??null):null;})(),
         sprite: spriteProjection(member.spriteResident)
@@ -313,6 +316,9 @@ export function createRaisingPresentationSource(app) {
       acknowledgeCalendar(){return app.acknowledgeRaisingCalendar?.()??false;},
     confirmDayEnd(accepted){return app.confirmRaisingDayEnd?.(accepted)??false;},
     relocateToGround(creatureId,input) {const result=app.moveRaisingResidentToGround?.(creatureId,input)??false;publish();return result;},
+    beginCarry(creatureId,input){return app.beginRaisingCarry?.(creatureId,input)??false;},
+    updateCarry(creatureId,input){return app.updateRaisingCarry?.(creatureId,input)??false;},
+    releaseCarry(creatureId){return app.releaseRaisingCarry?.(creatureId)??false;},
     cleanFood(input) {const result=app.cleanRaisingFood?.(input)??false;publish();return result;},
     placeFood(input) {const result=app.placeRaisingFood?.(input)??{ok:false,reason:"UNAVAILABLE"};publish();return result;},
     touchEgg(creatureId) { return app.touchRaisingEgg?.(creatureId) ?? false; },

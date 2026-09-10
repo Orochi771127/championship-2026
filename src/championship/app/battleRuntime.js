@@ -610,6 +610,10 @@ export function createBattleRuntime(options = {}) {
       if (!source) throw runtimeError("NO_MATCH_STARTED");
       return source.getView().outcome;
     },
+    getResultParticipants(){
+      if(!session?.ended)throw runtimeError('MATCH_NOT_ENDED');
+      return deepFreeze(roster.slice(0,3).map(creature=>creature?{speciesId:`species-${String(creature.speciesId).padStart(3,'0')}`,instanceId:creature.instanceId??null}:null));
+    },
 
     dispose() {
       unsubscribe?.();

@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "assetId": "art:vfx:faithful-original:internal-v1",
+  "packId": "championship:pack:faithful-original",
+  "scope": "OWNER_AUTHORIZED_NON_PUBLIC_INTERNAL_BASELINE",
+  "rightsEvidenceId": "LIC-CHAMPIONSHIP-2026-001",
+  "internalRuntimeEligible": true,
+  "publicReleasePermitted": false,
+  "shippingReady": false,
+  "sourcePayloadIncluded": false,
+  "tickerPolicy": "CALLER_OWNED_UPDATE_DELTA_MS",
+  "gateEarthMounted": false,
+  "systems": [
+    {
+      "systemId": "hitspark_big",
+      "model": "assets/production/internal-faithful-baseline/v1/vfx/hitspark_big/hitspark_big.glb",
+      "sidecars": [],
+      "outputs": [
+        {
+          "path": "assets/production/internal-faithful-baseline/v1/vfx/hitspark_big/hitspark_big.glb",
+          "bytes": 42504,
+          "sha256": "56fdb4267a5fa08fe0437da69e821777496bbff94f562522e0f2c3493e7513f2",
+          "kind": "GLB"
+        },
+        {
+          "path": "assets/production/internal-faithful-baseline/v1/vfx/hitspark_big/hit_spark.png",
+          "bytes": 1160,
+          "sha256": "4a1e10bd8e4d05b667fc08f461741c230682642d3472f110a05944518f823a51",
+          "kind": "TEXTURE"
+        },
+        {
+          "path": "assets/production/internal-faithful-baseline/v1/vfx/hitspark_big/ip_circle.png",
+          "bytes": 392,
+          "sha256": "41ce4ebdde69d6a8537164505e981816c591c5e9d315ca2cd9fc4f68b8a6c0e6",
+          "kind": "TEXTURE"
+        }
+      ],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "knownGaps": [
+        "Exact trigger parameters, camera, and billboarding remain unresolved."
+      ]
+    },
+    {
+      "systemId": "hypereffect",
+      "model": "assets/production/internal-faithful-baseline/v1/vfx/hypereffect/hypereffect.glb",
+      "sidecars": [
+        "assets/production/internal-faithful-baseline/v1/vfx/hypereffect/hypereffect.visibility.json"
+      ],
+      "outputs": [
+        {
+          "path": "assets/production/internal-faithful-baseline/v1/vfx/hypereffect/hitmark.png",
+          "bytes": 394,
+          "sha256": "b65c00106eb65e79745538572cc1dd4a8338b633b0a7be9ab1a4afece02da763",
+          "kind": "TEXTURE"
+        },
+        {
+          "path": "assets/production/internal-faithful-baseline/v1/vfx/hypereffect/hypereffect.glb",
+          "bytes": 36812,
+          "sha256": "4abe7b99f20ee21196fc3ba43947bb1f6b5aa15dbf47f7ff270ac38cd1f9dcac",
+          "kind": "GLB"
+        },
+        {
+          "path": "assets/production/internal-faithful-baseline/v1/vfx/hypereffect/hypereffect.visibility.json",
+          "bytes": 1378,
+          "sha256": "75aa6275a4a16b76738398efab03e546e8cf450fa2dcaf1f8ff3419b286a9d39",
+          "kind": "ANIMATION_SIDECAR"
+        },
+        {
+          "path": "assets/production/internal-faithful-baseline/v1/vfx/hypereffect/new1.png",
+          "bytes": 656,
+          "sha256": "4a491ed0096631c28affa4742b1a2a3791ceac597862dadbf830a4a8cde59f84",
+          "kind": "TEXTURE"
+        }
+      ],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "knownGaps": [
+        "The source visibility timeline is decoded exactly; original caller frame cadence and trigger parameters remain unresolved.",
+        "Final camera remains unresolved."
+      ]
+    },
+    {
+      "systemId": "spark",
+      "model": "assets/production/internal-faithful-baseline/v1/vfx/spark/spark.glb",
+      "sidecars": [
+        "assets/production/internal-faithful-baseline/v1/vfx/spark/spark.material-animation.json"
+      ],
+      "outputs": [
+        {
+          "path": "assets/production/internal-faithful-baseline/v1/vfx/spark/m_spark_eff.png",
+          "bytes": 1428,
+          "sha256": "1990cde42ccb98cc4dd729808fe937e6d94523061b8f8c44c58ae1b85eb5c1a2",
+          "kind": "TEXTURE"
+        },
+        {
+          "path": "assets/production/internal-faithful-baseline/v1/vfx/spark/spark.glb",
+          "bytes": 23696,
+          "sha256": "6da6827b8951c5b8684e2237838250e4174d6ab9b0e3d604e01c967e01f9ce1c",
+          "kind": "GLB"
+        },
+        {
+          "path": "assets/production/internal-faithful-baseline/v1/vfx/spark/spark.material-animation.json",
+          "bytes": 5652,
+          "sha256": "9a0e774d16e2bf65274d69ed47afd9ed28473d49dd4691524d6ab4cd9a94a719",
+          "kind": "ANIMATION_SIDECAR"
+        }
+      ],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "knownGaps": [
+        "NSBTA conversion is experimental and uses glTF property-animation extensions.",
+        "The source material-color timeline is decoded exactly; original caller frame cadence remains unresolved.",
+        "The exact original caller remains unresolved."
+      ]
+    },
+    {
+      "systemId": "rain",
+      "model": "assets/production/internal-faithful-baseline/v1/vfx/rain/rain.glb",
+      "sidecars": [],
+      "outputs": [
+        {
+          "path": "assets/production/internal-faithful-baseline/v1/vfx/rain/rain.glb",
+          "bytes": 4032,
+          "sha256": "4ebc766b968c7b17dc097b1f7566212134346d768ed17dcd840e11f4fe4b6294",
+          "kind": "GLB"
+        },
+        {
+          "path": "assets/production/internal-faithful-baseline/v1/vfx/rain/rain_eff.png",
+          "bytes": 4142,
+          "sha256": "5eb28a78831fee5e8f83a44ed35d93c245e04b38d8aa48cc5207b56dca6bdc8e",
+          "kind": "TEXTURE"
+        }
+      ],
+      "triggerBinding": "EXTERNAL_PRESENTATION_EVENT_REQUIRED",
+      "playback": "CALLER_CONTROLLED_NO_PRIVATE_TICKER",
+      "knownGaps": [
+        "NSBTA conversion is experimental and uses glTF property-animation extensions.",
+        "Weather activation, projection, and camera remain unresolved."
+      ]
+    }
+  ]
+}

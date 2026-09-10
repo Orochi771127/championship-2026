@@ -1,0 +1,27 @@
+{
+  "entityId": "m003_nyokimon",
+  "findings": [
+    "Paired short cream eye caps are separated from nose and body. Body is one coherent green seed mass. Lower face no longer contains long joined cream strips. Leaf underside separated from face."
+  ],
+  "fullMotionQa": "NOT_RUN",
+  "identityDirectionVersion": "creature-identity-v1",
+  "identityVerdict": "PENDING_IDENTITY_REFINEMENT",
+  "independentReview": "docs/art/production/characters/appearance-refresh-v1/_work/readability-review/review-after.json",
+  "limitations": [
+    "At native size silhouette still reads leaf-seed creature more strongly than cat. This readability repair does not complete feline-identity proof. Do not label it final cat design."
+  ],
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "readabilityVerdict": "ACCEPT_SINGLE_STANDARD_POSE_READABILITY_REVISION",
+  "reviewer": "independent readability_review agent + root visual review",
+  "runtimePromotionGranted": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "4d3e64b61cb2ca99113508d22dc3563cb7b89d88d88c9922cbefc6c36afcbaaa",
+  "sourceComparisonSha256": "a17d11251d7423ef8ef7c3b12c9fb7777103dd283fcfc60437fdfaf5d7a6f543",
+  "technicalQaSha256": "7a8dbdbd53964079c925e67b4f5ae3f17e8626fe7bc45d7067563584f4c84ad9",
+  "unresolvedBlockingIssues": [
+    "Additional representative poses and identity continuity review required.",
+    "At native size silhouette still reads leaf-seed creature more strongly than cat. This readability repair does not complete feline-identity proof. Do not label it final cat design."
+  ],
+  "verdict": "STANDARD_POSE_REVIEWED_NOT_SETTING_PASS"
+}

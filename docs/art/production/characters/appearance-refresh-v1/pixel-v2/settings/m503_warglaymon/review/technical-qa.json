@@ -1,0 +1,64 @@
+{
+  "artReview": "PENDING_INDEPENDENT_VISUAL_REVIEW",
+  "decoderSha256": "d8690529211cf396e3b01c064a08f35d628ac30cf2f3ff92beffa8a4941b1d34",
+  "designVersion": "creature-identity-v1-m503-standard-r02",
+  "distinctSourceCanvasStates": 40,
+  "distinctSourcePosesSelected": 1,
+  "eggFullStateCoverage": null,
+  "entityId": "m503_warglaymon",
+  "fullMotionQa": "NOT_RUN",
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "poseSamplingStatus": "INCOMPLETE",
+  "poses": [
+    {
+      "addedSupport": [],
+      "authoredAlphaBounds": [
+        3,
+        1,
+        45,
+        54
+      ],
+      "authoredRgbaSha256": "0fad91f87326b1e7321bb1ace1c2f395975482d69f8d089602f4a4f67ea994ff",
+      "authoredVisiblePixels": 1416,
+      "key": "main/cell_000",
+      "nativeBounds": [
+        -24,
+        -51,
+        24,
+        5
+      ],
+      "removedSupport": [],
+      "sourceAlphaBounds": [
+        3,
+        1,
+        45,
+        54
+      ],
+      "sourceRgbaSha256": "ee60d5d5b21035c884c704bb92a190a9de0faf429845c1146a98381f7960b0f9",
+      "sourceVisiblePixels": 1416,
+      "supportMeaning": "VISIBLE_SUPPORT_ONLY_NOT_ANATOMICAL_LANDMARK_OR_ART_APPROVAL"
+    }
+  ],
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "0da19c04b8c1f990572a6fdcdf72f92e224722ae9f9decf403ff6b0d148dd963",
+  "settingPoseCount": 1,
+  "shippingReady": false,
+  "sourceFiles": {
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m503_warglaymon_main.nanr": "e3e5e5cc8223fe7895d02048dfa67c105305f831a6055ab52e7e9f6f52679aba",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m503_warglaymon_main.ncbr": "ea380ee5439ce6463df35e1ba4a94d81f4b17d62d7dd734fbac1a5f3b54d3e1d",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m503_warglaymon_main.ncer": "861be3c65b22d8cf3cc1127549ed11dd775ca4b0cdc8c8dc20feecca43821b8a",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m503_warglaymon_main.nclr": "7103829a322fea8ac52d7ca0f7e927878440a06c74a8391c247e3f3289ff13a6",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m503_warglaymon_sub.nanr": "3f0c1bf7c539cc5a1a03000f3cd9d8977c80cd8b36b2d049812d136201e444b4",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m503_warglaymon_sub.ncer": "cfade42f645d6aea10a480ad3dc33c04e12beb6563474b3dcdeb01c9007487f6",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m503_warglaymon_sub.ncgr": "9d637fc8406bc58210de783f0ad429e8c03fc93315a64c56830456d38ac6d9a1",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m503_warglaymon_sub.nclr": "2f1d25e11315fbc982453dce17658ad5156e9f565fba2d547f8cc5a850891210",
+    "08_FULL_FAMILY_CONVERSION/digimon/m503_warglaymon_main/animations.json": "0be90597d762b55271e74fbdc2fb1f4f1d650538ed1865a659d5fed7d51a6f2a",
+    "08_FULL_FAMILY_CONVERSION/digimon/m503_warglaymon_main/cells.json": "12fd3fca1258fbd6ba168564565fe5640da8a28fa02f032747de5f4c54f98921",
+    "08_FULL_FAMILY_CONVERSION/digimon/m503_warglaymon_sub/animations.json": "871209857d1b7fcf0fe83611395b79a6c5e1604aeba71f097e33c00d58783154",
+    "08_FULL_FAMILY_CONVERSION/digimon/m503_warglaymon_sub/cells.json": "d7b6dd3b8300eb81fe92092d1aa5e87826b6ed09bf2cab0e994b971af77c095b"
+  },
+  "technicalStatus": "PASS",
+  "visiblePaletteCount": 15
+}

@@ -1,0 +1,37 @@
+{
+  "syncRevision": 42,
+  "kind": "BOUNDED_HUNT_ROW_UPDATE_EXISTING_REVISION_PRESERVED",
+  "report": "docs/art/HUNT_NORMAL_ENTRY_INTEGRATION_2026-09-06.md",
+  "records": [
+    {
+      "path": "docs/contracts/championship/HUNT_ENTRY_SOURCES.v1.json",
+      "beforeSha256": "e5e8b02be849c02865b9350959543576c7f4cd39a49065073417683177832635",
+      "afterSha256": "9d2892a0a29a671db20cb4c03faa885891d84bb702052ac6bb2275da1a1ad268"
+    },
+    {
+      "path": "docs/CURRENT_PRODUCT_STATUS.md",
+      "beforeSha256": "86c465bd20375f53a0a715416515da6426c4b7e9d256808c39a8becdf487b334",
+      "afterSha256": "5a01dd857a922426f68a6bd263ce5359ed64765d0e13898d4f9971035a0f5ff4"
+    },
+    {
+      "path": "docs/coordination/CODEX_ART_STATUS.json",
+      "beforeSha256": "b47da0273073ef2342d227c7ad523a4c34a32c20519d7d6b0a460e4c071c2a92",
+      "afterSha256": "9d5bd364c6761dc8243869e0c0b178e7f3c37945b521cce621b73e6a761d461c"
+    },
+    {
+      "path": "docs/coordination/CODEX_SYNC_DELTA.json",
+      "beforeSha256": "463e140be80bc85abddfa3b3520fbbdd997411988de8f0b2e643dbee8dd64e35",
+      "afterSha256": "1f9fa72207a3dbf42205fc51f922e31a71c57bb82b56f86a1b194887c046ffd1"
+    },
+    {
+      "path": "docs/coordination/CHAMPIONSHIP_DEPENDENCY_MATRIX.csv",
+      "beforeSha256": "116c961027406f0018875f752ad12aee360fdc36162580cfb71ebd406ab3a5b6",
+      "afterSha256": "c91078744bb95dc66c9d3afb6cd7047491a48a6ed8485609252119a1f1bac03c"
+    },
+    {
+      "path": "docs/coordination/CHAMPIONSHIP_BLOCKER_LEDGER.csv",
+      "beforeSha256": "99908fbed227761c5481805604b109a229e83e2b0490d772b4862fa2e58433fd",
+      "afterSha256": "a45107be0d6246cac412247ec2ff06fbcd7ae11c12dd0644fc7c4cf5229dd5ec"
+    }
+  ]
+}

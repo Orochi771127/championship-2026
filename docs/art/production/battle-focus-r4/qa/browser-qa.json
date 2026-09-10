@@ -1,0 +1,207 @@
+{
+  "date": "2026-09-07",
+  "attribution": "CODEX_BROWSER_PLAYWRIGHT_QA",
+  "mode": "explicit date/rank/preset fixture through existing battle runtime and normal AI",
+  "viewports": [
+    {
+      "canvasCount": 2,
+      "clock": "991",
+      "field": {
+        "bottom": 678,
+        "height": 406,
+        "left": 0,
+        "right": 390.3999938964844,
+        "top": 272,
+        "width": 390.3999938964844,
+        "x": 0,
+        "y": 272
+      },
+      "focus": {
+        "active": true,
+        "brightnessQ12": 1366,
+        "cameraEnabled": true,
+        "endFrame": 84,
+        "frame": 19,
+        "framingEvidence": "MOBILE_VIEWPORT_ADAPTATION_WORLD_POSITIONS_PARTIAL",
+        "hyperVisible": true,
+        "moveId": 255,
+        "overlayAlpha": 1,
+        "overlayVisible": true,
+        "phase": "hold",
+        "sequence": 33,
+        "sequenceStart": 1,
+        "slot": 4,
+        "startFrame": 991,
+        "timingEvidence": "ORIGINAL_PRELUDE_CURRENT_DISPATCH_LAUNCH_PARTIAL",
+        "tintIndex": 7,
+        "zoomQ12": 8192
+      },
+      "overflow": false,
+      "vfx": {
+        "frame": 19,
+        "phase": "hold",
+        "slot": 4,
+        "visible": true,
+        "zoomQ12": 8192
+      },
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "clock": "991",
+      "field": {
+        "bottom": 574,
+        "height": 302,
+        "left": 0,
+        "right": 320,
+        "top": 272,
+        "width": 320,
+        "x": 0,
+        "y": 272
+      },
+      "focus": {
+        "active": true,
+        "brightnessQ12": 1366,
+        "cameraEnabled": true,
+        "endFrame": 84,
+        "frame": 19,
+        "framingEvidence": "MOBILE_VIEWPORT_ADAPTATION_WORLD_POSITIONS_PARTIAL",
+        "hyperVisible": true,
+        "moveId": 255,
+        "overlayAlpha": 1,
+        "overlayVisible": true,
+        "phase": "hold",
+        "sequence": 33,
+        "sequenceStart": 1,
+        "slot": 4,
+        "startFrame": 991,
+        "timingEvidence": "ORIGINAL_PRELUDE_CURRENT_DISPATCH_LAUNCH_PARTIAL",
+        "tintIndex": 7,
+        "zoomQ12": 8192
+      },
+      "overflow": false,
+      "viewport": [
+        320,
+        740
+      ]
+    }
+  ],
+  "returnPhase": {
+    "clock": "991",
+    "focus": {
+      "active": true,
+      "brightnessQ12": 2942,
+      "cameraEnabled": true,
+      "endFrame": 84,
+      "frame": 73,
+      "framingEvidence": "MOBILE_VIEWPORT_ADAPTATION_WORLD_POSITIONS_PARTIAL",
+      "hyperVisible": false,
+      "moveId": 255,
+      "overlayAlpha": 0.41935483870967744,
+      "overlayVisible": true,
+      "phase": "return",
+      "sequence": 8,
+      "sequenceStart": 69,
+      "slot": 4,
+      "startFrame": 991,
+      "timingEvidence": "ORIGINAL_PRELUDE_CURRENT_DISPATCH_LAUNCH_PARTIAL",
+      "tintIndex": null,
+      "zoomQ12": 5827
+    },
+    "vfx": {
+      "frame": 73,
+      "phase": "return",
+      "slot": 4,
+      "visible": false,
+      "zoomQ12": 5827
+    }
+  },
+  "resize": {
+    "field": {
+      "bottom": 678,
+      "height": 406,
+      "left": 0,
+      "right": 390.3999938964844,
+      "top": 272,
+      "width": 390.3999938964844,
+      "x": 0,
+      "y": 272
+    },
+    "focus": {
+      "frame": 19,
+      "phase": "hold",
+      "slot": 4,
+      "visible": true,
+      "zoomQ12": 8192
+    },
+    "viewport": [
+      390,
+      844
+    ]
+  },
+  "activeExit": {
+    "canvases": 0,
+    "overlays": 0,
+    "text": "已離開測試"
+  },
+  "reducedMotion": {
+    "focus": {
+      "active": true,
+      "brightnessQ12": 1366,
+      "cameraEnabled": true,
+      "endFrame": 84,
+      "frame": 19,
+      "framingEvidence": "MOBILE_VIEWPORT_ADAPTATION_WORLD_POSITIONS_PARTIAL",
+      "hyperVisible": true,
+      "moveId": 255,
+      "overlayAlpha": 1,
+      "overlayVisible": true,
+      "phase": "hold",
+      "sequence": 33,
+      "sequenceStart": 1,
+      "slot": 4,
+      "startFrame": 991,
+      "timingEvidence": "ORIGINAL_PRELUDE_CURRENT_DISPATCH_LAUNCH_PARTIAL",
+      "tintIndex": 7,
+      "zoomQ12": 8192
+    },
+    "overflow": false,
+    "reduced": true,
+    "vfx": {
+      "frame": 19,
+      "phase": "hold",
+      "slot": 4,
+      "visible": true,
+      "zoomQ12": 8192
+    },
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  "settlement": "- complementary:\n  - text: 特殊招式測試場次：指定原作場次 1 與相同預設隊伍；正常 AI 選招，獨立記憶體存檔。\n  - checkbox \"減少動態效果\" [disabled]\n  - text: 減少動態效果\n  - button \"開始對戰測試\" [disabled]\n  - button \"推進 6 幀\" [disabled]\n  - button \"播放戰鬥\" [disabled]\n  - button \"推進到結算\" [disabled]\n  - button \"推進到下一次特寫\"\n  - status: 結算後 9400 bit\n- main:\n  - region \"Battle result\":\n    - text: 獎金\n    - heading \"0\" [level=1]\n    - paragraph: 持有 9400 Bits\n    - paragraph: 本場沒有獲得獎金。\n    - paragraph: MATCH 01\n    - button \"返回牧場\"",
+  "resolvedDuringQa": [
+    {
+      "level": "error",
+      "message": "TypeError: Failed to resolve module specifier \"three\". Relative references must start with either \"/\", \"./\", or \"../\".",
+      "timestamp": "2026-09-06T17:29:08.208Z",
+      "url": "http://127.0.0.1:8738/tests/fixtures/championship-facility-battle-review.html?special"
+    },
+    {
+      "level": "error",
+      "message": "Error: MATCH_NOT_AVAILABLE\n    at start.onclick (http://127.0.0.1:8738/tests/fixtures/championship-facility-battle-review.html?special:41:24)",
+      "timestamp": "2026-09-06T17:29:47.476Z",
+      "url": "http://127.0.0.1:8738/tests/fixtures/championship-facility-battle-review.html?special"
+    },
+    {
+      "level": "error",
+      "message": "ChampionshipLicensedVfxError: CHAMPIONSHIP_LICENSED_VFX_INVALID: UNKNOWN_SYSTEM:hypereffect_ring\n    at fail (http://127.0.0.1:8738/src/championship/presentation/vfx/licensedVfxRuntimeBundle.js:17:17)\n    at Object.load (http://127.0.0.1:8738/src/championship/presentation/vfx/licensedVfxRuntimeBundle.js:163:18)\n    at mountBattleVfxThreeOverlay (http://127.0.0.1:8738/src/championship/presentation/vs5/createBattleVfxThreeOverlay.js:81:28)\n    at async start.onclick (http://127.0.0.1:8738/tests/fixtures/championship-facility-battle-review.html?special:53:11)",
+      "timestamp": "2026-09-06T17:31:15.348Z",
+      "url": "http://127.0.0.1:8738/tests/fixtures/championship-facility-battle-review.html?special"
+    }
+  ],
+  "physicalDevice": false,
+  "normalNewGameProgression": false
+}

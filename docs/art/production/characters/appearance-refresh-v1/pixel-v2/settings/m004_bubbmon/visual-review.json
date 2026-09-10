@@ -1,0 +1,26 @@
+{
+  "entityId": "m004_bubbmon",
+  "findings": [
+    "Cream mask/U removed. Eyes are separate features, left-side peach mouth stays locally bounded; lower green body is coherent. Reads as a soft creature with face instead of mosaic."
+  ],
+  "fullMotionQa": "NOT_RUN",
+  "identityDirectionVersion": "creature-identity-v1",
+  "identityVerdict": "PASS_IDENTITY_DIRECTION",
+  "independentReview": "docs/art/production/characters/appearance-refresh-v1/_work/readability-review/review-after.json",
+  "limitations": [
+    "Simplified green lower mass is intentionally flat. More highlights or texture would reintroduce clutter; add only after pose consistency is demonstrated."
+  ],
+  "normalGameQa": "NOT_RUN",
+  "physicalDeviceQa": "NOT_RUN",
+  "readabilityVerdict": "ACCEPT_SINGLE_STANDARD_POSE_READABILITY_REVISION",
+  "reviewer": "independent readability_review agent + root visual review",
+  "runtimePromotionGranted": false,
+  "schemaVersion": 1,
+  "settingFileSha256": "4230ce6ca4f0b19393bdbdc46d419be9f55f73309286baa91e8690e2c16c2e20",
+  "sourceComparisonSha256": "7acc15d63034c195b461708858358c54237021de1f1c8a96589ffd39d47da8eb",
+  "technicalQaSha256": "7d8b2c369003c73d6e1e0d126b5f82a21bbb1f37b76ba6e7447100f927314f31",
+  "unresolvedBlockingIssues": [
+    "Additional representative poses and identity continuity review required."
+  ],
+  "verdict": "STANDARD_POSE_REVIEWED_NOT_SETTING_PASS"
+}

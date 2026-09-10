@@ -1,0 +1,184 @@
+TAP version 13
+# Subtest: all 228 species preserve actual ARM9 soft-float movement helper results
+ok 1 - all 228 species preserve actual ARM9 soft-float movement helper results
+  ---
+  duration_ms: 2.0314
+  type: 'test'
+  ...
+# Subtest: 90 original CPU actor-native cases agree on returned values, writes and delegated animation calls
+ok 2 - 90 original CPU actor-native cases agree on returned values, writes and delegated animation calls
+  ---
+  duration_ms: 6.8305
+  type: 'test'
+  ...
+# Subtest: the original DS square-root boundary stays Q12 for all fourteen CPU samples
+ok 3 - the original DS square-root boundary stays Q12 for all fourteen CPU samples
+  ---
+  duration_ms: 0.2987
+  type: 'test'
+  ...
+# Subtest: all 64 CPU launch pointer combinations include the field0C=2 reverse branch
+ok 4 - all 64 CPU launch pointer combinations include the field0C=2 reverse branch
+  ---
+  duration_ms: 0.623
+  type: 'test'
+  ...
+# Subtest: resumed VM calls use this frame host and report this frame diagnostics
+ok 5 - resumed VM calls use this frame host and report this frame diagnostics
+  ---
+  duration_ms: 9.0313
+  type: 'test'
+  ...
+# Subtest: all 228 species bindings resolve their own registered identities, including the four source aliases
+ok 6 - all 228 species bindings resolve their own registered identities, including the four source aliases
+  ---
+  duration_ms: 4.5375
+  type: 'test'
+  ...
+# Subtest: all 8656 raw Main sequences resolve every production frame and preserve original completion or loop behavior
+ok 7 - all 8656 raw Main sequences resolve every production frame and preserve original completion or loop behavior
+  ---
+  duration_ms: 405.9613
+  type: 'test'
+  ...
+# Subtest: every one of 325 special-prelude records takes its own species pose and restoration timing
+ok 8 - every one of 325 special-prelude records takes its own species pose and restoration timing
+  ---
+  duration_ms: 337.73
+  type: 'test'
+  ...
+# Subtest: real notifications take precedence over the temporary committed-move presentation
+ok 9 - real notifications take precedence over the temporary committed-move presentation
+  ---
+  duration_ms: 0.4237
+  type: 'test'
+  ...
+# Subtest: an action first rendered several simulation frames late uses its actual sampled start frame
+ok 10 - an action first rendered several simulation frames late uses its actual sampled start frame
+  ---
+  duration_ms: 1.5026
+  type: 'test'
+  ...
+# Subtest: the 9:16 frame is centred and never stretched
+ok 11 - the 9:16 frame is centred and never stretched
+  ---
+  duration_ms: 1.3879
+  type: 'test'
+  ...
+# Subtest: character art uses arena native pixels, keeps feet on stands after resize, and releases its roster once
+ok 12 - character art uses arena native pixels, keeps feet on stands after resize, and releases its roster once
+  ---
+  duration_ms: 8.3054
+  type: 'test'
+  ...
+# Subtest: unknown sizing retains neutral markers instead of guessing character proportions
+ok 13 - unknown sizing retains neutral markers instead of guessing character proportions
+  ---
+  duration_ms: 0.9367
+  type: 'test'
+  ...
+# Subtest: animated geometry retains a fixed native origin across changing packing and viewport sizes
+ok 14 - animated geometry retains a fixed native origin across changing packing and viewport sizes
+  ---
+  duration_ms: 2.2326
+  type: 'test'
+  ...
+# Subtest: the band rectangles tile the frame with no gap and no overlap
+ok 15 - the band rectangles tile the frame with no gap and no overlap
+  ---
+  duration_ms: 0.3295
+  type: 'test'
+  ...
+# Subtest: the scene mounts, draws, and registers exactly one ticker and one resize observer
+ok 16 - the scene mounts, draws, and registers exactly one ticker and one resize observer
+  ---
+  duration_ms: 2.2896
+  type: 'test'
+  ...
+# Subtest: cyberspace is framed with a rectangle, every other arena with the common ring
+ok 17 - cyberspace is framed with a rectangle, every other arena with the common ring
+  ---
+  duration_ms: 3.809
+  type: 'test'
+  ...
+# Subtest: licensed field art hides the procedural plate and keeps stand markers
+ok 18 - licensed field art hides the procedural plate and keeps stand markers
+  ---
+  duration_ms: 1.184
+  type: 'test'
+  ...
+# Subtest: the scene draws nothing that implies the viewer chooses an action
+ok 19 - the scene draws nothing that implies the viewer chooses an action
+  ---
+  duration_ms: 3.5243
+  type: 'test'
+  ...
+# Subtest: the battle runs itself and stops, and a stopped battle is still drawn
+ok 20 - the battle runs itself and stops, and a stopped battle is still drawn
+  ---
+  duration_ms: 7.5691
+  type: 'test'
+  ...
+# Subtest: 30, 60 and 120 Hz displays advance the same original battle frame count
+ok 21 - 30, 60 and 120 Hz displays advance the same original battle frame count
+  ---
+  duration_ms: 228.3589
+  type: 'test'
+  ...
+# Subtest: the scene draws the arena and leaves every label to the DOM
+ok 22 - the scene draws the arena and leaves every label to the DOM
+  ---
+  duration_ms: 3.0102
+  type: 'test'
+  ...
+# Subtest: the scene refuses a stage or a source that is not the real one
+ok 23 - the scene refuses a stage or a source that is not the real one
+  ---
+  duration_ms: 1.5868
+  type: 'test'
+  ...
+# Subtest: the scene imports nothing outside src and the contracts
+ok 24 - the scene imports nothing outside src and the contracts
+  ---
+  duration_ms: 1.4328
+  type: 'test'
+  ...
+# Subtest: the three battle screens follow the original's own screen names
+ok 25 - the three battle screens follow the original's own screen names
+  ---
+  duration_ms: 20.0905
+  type: 'test'
+  ...
+# Subtest: 166 original CPU yielded frames match zoom, camera operands, raw pose, hold and return
+ok 26 - 166 original CPU yielded frames match zoom, camera operands, raw pose, hold and return
+  ---
+  duration_ms: 5.9016
+  type: 'test'
+  ...
+# Subtest: only traced prelude/character combinations bind; durations match current numeric production metadata
+ok 27 - only traced prelude/character combinations bind; durations match current numeric production metadata
+  ---
+  duration_ms: 6.9812
+  type: 'test'
+  ...
+# Subtest: normal AI entry plays a complete special prelude without advancing clock, HP or cooldown, then settles
+ok 28 - normal AI entry plays a complete special prelude without advancing clock, HP or cooldown, then settles
+  ---
+  duration_ms: 525.6351
+  type: 'test'
+  ...
+# Subtest: phone focus restores the identity transform; reduced motion never zooms the field
+ok 29 - phone focus restores the identity transform; reduced motion never zooms the field
+  ---
+  duration_ms: 1.5774
+  type: 'test'
+  ...
+1..29
+# tests 29
+# suites 0
+# pass 29
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3149.9421

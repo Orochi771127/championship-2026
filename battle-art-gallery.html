@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <link rel="icon" href="data:,">
+  <title>Championship Battle 11 場地統一審圖</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, sans-serif; background: #151a1d; color: #f4f0df; }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body { display: grid; grid-template-rows: auto minmax(0, 1fr); background: #151a1d; }
+    header { display: flex; align-items: center; gap: .7rem; min-height: 58px; padding: max(.55rem, env(safe-area-inset-top)) .75rem .55rem; background: #20272a; border-bottom: 1px solid #4d6762; }
+    h1 { margin: 0 auto 0 0; font-size: clamp(.85rem, 2.8vw, 1.1rem); line-height: 1.15; }
+    label { font-size: .78rem; color: #c7d8d3; }
+    select, button { min-height: 38px; border: 1px solid #6d8e86; border-radius: 7px; color: #f4f0df; background: #263330; padding: .35rem .55rem; }
+    button { width: 40px; font-size: 1rem; }
+    #gallery-host { min-height: 0; width: 100%; height: 100%; background: #191f25; }
+    #gallery-host canvas { display: block; width: 100%; height: 100%; }
+    #evidence { position: fixed; left: .55rem; bottom: max(.55rem, env(safe-area-inset-bottom)); z-index: 2; padding: .35rem .5rem; border-radius: 5px; background: rgb(10 15 17 / .78); color: #c9d8d4; font: 11px/1.25 ui-monospace, monospace; pointer-events: none; }
+    @media (max-width: 520px) { header { gap: .35rem; } label { position: absolute; width: 1px; height: 1px; overflow: hidden; } select { max-width: 42vw; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Battle 11 場地｜內部審圖</h1>
+    <button id="previous" type="button" aria-label="上一個場地">‹</button>
+    <label for="arena">場地</label>
+    <select id="arena" aria-label="選擇 Battle 場地"></select>
+    <button id="next" type="button" aria-label="下一個場地">›</button>
+  </header>
+  <main id="gallery-host" aria-label="Battle 場地視覺預覽"></main>
+  <output id="evidence" aria-live="polite">載入中</output>
+  <script type="module">
+    import * as PIXI from "./node_modules/pixi.js/dist/pixi.mjs";
+    import { createChampionshipPixiStage } from "./src/championship/presentation/championshipPixiStage.js";
+    import { loadRuntimeBattleArenaArtReview } from "./src/championship/presentation/runtimeBattleArenaArtReview.js";
+
+    const entries = Object.freeze([
+      ["bm01", "BM01｜初始場", "./assets/production/internal-battle-review/bm00-bm01-r1/runtime.review.json"],
+      ["bm02", "BM02｜森林", "./assets/production/internal-battle-review/bm02-r1/runtime.review.json"],
+      ["bm03", "BM03｜火山", "./assets/production/internal-battle-review/bm03-bm04-animated-r1/runtime.bm03.review.json"],
+      ["bm04", "BM04｜海島 R2", "./assets/production/internal-battle-review/hardening-r2/runtime.bm04.review.json"],
+      ["bm05", "BM05｜南極", "./assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm05.review.json"],
+      ["bm06", "BM06｜沙漠", "./assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm06.review.json"],
+      ["bm07", "BM07｜電腦空間", "./assets/production/internal-battle-review/bm07-cyberspace-r1/runtime.review.json"],
+      ["bm08", "BM08｜地獄 R2", "./assets/production/internal-battle-review/hardening-r2/runtime.bm08.review.json"],
+      ["bm09", "BM09｜競技場", "./assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm09.review.json"],
+      ["bm10", "BM10｜體育場", "./assets/production/internal-battle-review/bm05-bm11-static-r1/runtime.bm10.review.json"],
+      ["bm11", "BM11｜圓頂場 R2", "./assets/production/internal-battle-review/hardening-r2/runtime.bm11.review.json"]
+    ]);
+    const host = document.getElementById("gallery-host");
+    const select = document.getElementById("arena");
+    const evidence = document.getElementById("evidence");
+    entries.forEach(([key, label]) => select.add(new Option(label, key)));
+    const initial = new URLSearchParams(location.search).get("arena");
+    select.value = entries.some(([key]) => key === initial) ? initial : "bm01";
+    const stage = await createChampionshipPixiStage({ PIXI, canvasHost: host });
+    const root = stage.createSceneRoot("battle eleven arena gallery");
+    const unmark = stage.markScene("cm-battle-art-gallery-canvas");
+    let review = null;
+    let revision = 0;
+
+    async function show(key) {
+      const token = ++revision;
+      const entry = entries.find(([candidate]) => candidate === key);
+      if (!entry) throw new Error(`Unknown Battle gallery arena: ${key}`);
+      const manifest = await fetch(entry[2]).then((response) => {
+        if (!response.ok) throw new Error(`Battle gallery manifest load failed: ${response.status}`);
+        return response.json();
+      });
+      if (token !== revision) return;
+      if (review) {
+        await review.dispose();
+        review = null;
+      }
+      const nextReview = await loadRuntimeBattleArenaArtReview({ PIXI, manifest });
+      if (token !== revision) { await nextReview.dispose(); return; }
+      review = nextReview;
+      root.addChild(review.displayObject);
+      review.layout(stage.screen.width, stage.screen.height);
+      select.value = key;
+      history.replaceState(null, "", `?arena=${key}`);
+      const diagnostics = review.getDiagnostics();
+      evidence.value = `${diagnostics.fieldId} · ${diagnostics.layerCount} layers · ${diagnostics.animation ? `${diagnostics.animation.frameCount} frames` : "static"} · NOT SHIPPING`;
+    }
+
+    const unresize = stage.onResize(() => review?.layout(stage.screen.width, stage.screen.height));
+    stage.app.ticker.add((ticker) => review?.advance(ticker.deltaMS));
+    select.addEventListener("change", () => show(select.value));
+    function step(direction) {
+      const index = entries.findIndex(([key]) => key === select.value);
+      show(entries[(index + direction + entries.length) % entries.length][0]);
+    }
+    document.getElementById("previous").addEventListener("click", () => step(-1));
+    document.getElementById("next").addEventListener("click", () => step(1));
+    await show(select.value);
+    globalThis.__BATTLE_ART_GALLERY__ = Object.freeze({
+      select: show,
+      getDiagnostics: () => Object.freeze({ stage: stage.getDiagnostics(), review: review?.getDiagnostics(), arenaCount: entries.length })
+    });
+    globalThis.__BATTLE_ART_GALLERY_READY__ = true;
+  </script>
+</body>
+</html>

@@ -1,0 +1,534 @@
+{
+  "schemaVersion": 1,
+  "sceneId": 69,
+  "scenePath": "ui/digimon_list_main.nxr",
+  "category": "Shared UI Components",
+  "overlayOwner": "Shared",
+  "sourceEvidence": {
+    "fileId": 6186,
+    "fileName": "digimon_list_main.nxr",
+    "sha256": "36371d2dbbe84e239bf37627d556a80d0b270562c84b17f9c245c962c53a8172",
+    "overlayMappingConfidence": "SOURCE_LINKED_INFERENCE_FROM_SUBSYSTEM_PATH_AND_PREVIOUS_OVERLAY_TRACE"
+  },
+  "renderer": "DOM_UI_REFERENCE_COMPOSITION",
+  "sourceScreen": {
+    "width": 256,
+    "height": 192,
+    "role": "MAIN",
+    "roleEvidence": "FILENAME_HEURISTIC"
+  },
+  "portraitContract": {
+    "canvas": {
+      "width": 1080,
+      "height": 1920,
+      "aspect": "9:16"
+    },
+    "mainZone": {
+      "x": 0,
+      "y": 150,
+      "width": 1080,
+      "height": 810.0
+    },
+    "subZone": {
+      "x": 0,
+      "y": 960,
+      "width": 1080,
+      "height": 810.0
+    },
+    "safeBands": {
+      "top": 150,
+      "middle": 0.0,
+      "bottom": 150.0
+    },
+    "sourceToPortraitScale": 4.21875,
+    "touchTargetMinimumCssPx": 44
+  },
+  "resources": [
+    {
+      "resourceIndex": 0,
+      "resourceName": "menu_main",
+      "cellCount": 89,
+      "hasRenderBundle": true,
+      "source": {
+        "ncer": "ui/menu_main.ncer",
+        "nanr": "ui/menu_main.nanr",
+        "ncgr": null,
+        "ncbr": "ui/menu_main.ncbr",
+        "nclr": "ui/menu_main.nclr",
+        "nscr": null
+      },
+      "spriteWitness": "docs/art/production/ui/faithful-hd96/sprite-cell-witnesses-4x/ui__menu_main__cells.png",
+      "backgroundWitness": null,
+      "confidence": "VERIFIED_BINARY_PATH_AND_HEADER"
+    }
+  ],
+  "nodes": [
+    {
+      "nodeIndex": 0,
+      "name": "name_edit_button",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 203,
+        "y": 32
+      },
+      "portraitProjection": {
+        "x": 856.4062,
+        "y": 285.0
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 1,
+      "name": "delete_button",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 203,
+        "y": 64
+      },
+      "portraitProjection": {
+        "x": 856.4062,
+        "y": 420.0
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 2,
+      "name": "entry_button",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 203,
+        "y": 96
+      },
+      "portraitProjection": {
+        "x": 856.4062,
+        "y": 555.0
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 3,
+      "name": "num_cur1",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 177,
+        "y": 140
+      },
+      "portraitProjection": {
+        "x": 746.7188,
+        "y": 740.625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 4,
+      "name": "num_cur0",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 186,
+        "y": 140
+      },
+      "portraitProjection": {
+        "x": 784.6875,
+        "y": 740.625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 5,
+      "name": "num_limit1",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 223,
+        "y": 140
+      },
+      "portraitProjection": {
+        "x": 940.7812,
+        "y": 740.625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 6,
+      "name": "num_limit0",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 232,
+        "y": 140
+      },
+      "portraitProjection": {
+        "x": 978.75,
+        "y": 740.625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 7,
+      "name": "slash",
+      "resourceIndex": 0,
+      "cellIndex": 3,
+      "sourcePosition": {
+        "x": 203,
+        "y": 140
+      },
+      "portraitProjection": {
+        "x": 856.4062,
+        "y": 740.625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 8,
+      "name": "cur_unit",
+      "resourceIndex": 0,
+      "cellIndex": 38,
+      "sourcePosition": {
+        "x": 190,
+        "y": 138
+      },
+      "portraitProjection": {
+        "x": 801.5625,
+        "y": 732.1875
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 9,
+      "name": "limit_unit",
+      "resourceIndex": 0,
+      "cellIndex": 38,
+      "sourcePosition": {
+        "x": 236,
+        "y": 138
+      },
+      "portraitProjection": {
+        "x": 995.625,
+        "y": 732.1875
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 10,
+      "name": "num_cur2",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 168,
+        "y": 140
+      },
+      "portraitProjection": {
+        "x": 708.75,
+        "y": 740.625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 11,
+      "name": "num_limit2",
+      "resourceIndex": 0,
+      "cellIndex": 1,
+      "sourcePosition": {
+        "x": 214,
+        "y": 140
+      },
+      "portraitProjection": {
+        "x": 902.8125,
+        "y": 740.625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 12,
+      "name": "unnamed0018",
+      "resourceIndex": 0,
+      "cellIndex": 30,
+      "sourcePosition": {
+        "x": 143,
+        "y": 140
+      },
+      "portraitProjection": {
+        "x": 603.2812,
+        "y": 740.625
+      },
+      "params": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 13,
+      "name": "unnamed0019",
+      "resourceIndex": 0,
+      "cellIndex": 31,
+      "sourcePosition": {
+        "x": 167,
+        "y": 148
+      },
+      "portraitProjection": {
+        "x": 704.5312,
+        "y": 774.375
+      },
+      "params": [
+        1,
+        0,
+        9,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 14,
+      "name": "unnamed0020",
+      "resourceIndex": 0,
+      "cellIndex": 32,
+      "sourcePosition": {
+        "x": 232,
+        "y": 140
+      },
+      "portraitProjection": {
+        "x": 978.75,
+        "y": 740.625
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 15,
+      "name": "graph",
+      "resourceIndex": -1,
+      "cellIndex": 4,
+      "sourcePosition": {
+        "x": 203,
+        "y": 141
+      },
+      "portraitProjection": {
+        "x": 856.4062,
+        "y": 744.8438
+      },
+      "params": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": false
+    },
+    {
+      "nodeIndex": 16,
+      "name": "unnamed0015",
+      "resourceIndex": 0,
+      "cellIndex": 25,
+      "sourcePosition": {
+        "x": 191,
+        "y": 125
+      },
+      "portraitProjection": {
+        "x": 805.7812,
+        "y": 677.3438
+      },
+      "params": [
+        2,
+        0,
+        6,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 17,
+      "name": "unnamed0014",
+      "resourceIndex": 0,
+      "cellIndex": 24,
+      "sourcePosition": {
+        "x": 151,
+        "y": 117
+      },
+      "portraitProjection": {
+        "x": 637.0312,
+        "y": 643.5938
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 18,
+      "name": "unnamed0017",
+      "resourceIndex": 0,
+      "cellIndex": 27,
+      "sourcePosition": {
+        "x": 151,
+        "y": 132
+      },
+      "portraitProjection": {
+        "x": 637.0312,
+        "y": 706.875
+      },
+      "params": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 19,
+      "name": "unnamed0016",
+      "resourceIndex": 0,
+      "cellIndex": 26,
+      "sourcePosition": {
+        "x": 232,
+        "y": 117
+      },
+      "portraitProjection": {
+        "x": 978.75,
+        "y": 643.5938
+      },
+      "params": [
+        3,
+        0,
+        1,
+        1
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    },
+    {
+      "nodeIndex": 20,
+      "name": "unnamed0022",
+      "resourceIndex": 0,
+      "cellIndex": 33,
+      "sourcePosition": {
+        "x": 157,
+        "y": 128
+      },
+      "portraitProjection": {
+        "x": 662.3438,
+        "y": 690.0
+      },
+      "params": [
+        3,
+        0,
+        11.5,
+        3
+      ],
+      "colorModulationRaw": "0xFFFFFFFF",
+      "cellLinkValidated": true
+    }
+  ],
+  "dynamicVirtualNodeCount": 4,
+  "rightsStatus": "LICENSED_OWNER_REPORTED_DOCUMENT_LINK_PENDING",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false
+}

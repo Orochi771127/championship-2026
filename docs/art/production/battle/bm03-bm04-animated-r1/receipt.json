@@ -1,0 +1,322 @@
+{
+  "schemaVersion": 1,
+  "batchId": "ART-BATTLE-BM03-BM04-ANIMATED-R1-2026-09-02",
+  "status": "INTERNAL_PIXI_ANIMATION_REVIEW_PASSED_NOT_OWNER_APPROVED_NOT_PROMOTED",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "canonicalSharedLayer": {
+    "assetId": "production:battle:shared:field-bm00-00",
+    "file": "assets/production/internal-battle-review/bm00-bm01-r1/field-bm00-00-shared-layer.png",
+    "sha256": "0906D94C70BAE26F5A1A65B0C7F304222B3CFA78007259389B18A34B51C5EB17",
+    "copiedIntoBundle": false
+  },
+  "arenas": [
+    {
+      "key": "bm03",
+      "fieldId": "field_bm03_01",
+      "originalFunction": "BATTLE_VOLCANO",
+      "source": {
+        "file": "source/field-bm03-01-background-generated.png",
+        "sha256": "C786E8D27926DE351EAF8B4D4744B0979FBBA2544C76A56D5565514211CD49BE"
+      },
+      "runtimeManifest": "assets/production/internal-battle-review/bm03-bm04-animated-r1/runtime.bm03.review.json",
+      "animationFrames": [
+        {
+          "src": "assets/production/internal-battle-review/bm03-bm04-animated-r1/field-bm03-01-animation-frame-00.png",
+          "sha256": "539610364F1DDCB19372C8369B599B7EEAAE1795FF7D3172FC647221AD47985C",
+          "durationRawTicks": 50,
+          "durationMs": 835.7556556544072
+        },
+        {
+          "src": "assets/production/internal-battle-review/bm03-bm04-animated-r1/field-bm03-01-animation-frame-01.png",
+          "sha256": "C8212760AA998645EDF8440FA863BB2A2B9D479339F9E54877EE9C260BC250DC",
+          "durationRawTicks": 50,
+          "durationMs": 835.7556556544072
+        }
+      ],
+      "terrainOverlay": {
+        "file": "assets/production/internal-battle-review/bm03-bm04-animated-r1/field-bm03-01-terrain-overlay.png",
+        "sha256": "34A9B8DE72ABD8DC1C2225837765294DA02C6441BD3E3E895C210882ABFD45E2"
+      },
+      "mask": {
+        "file": "review/bm03/field-bm03-01-lava-mask.png",
+        "sha256": "271DF2ED5C24630CFFB2EE6BEEC9774C3E21676533FE1622117EFE0EFED75E36",
+        "coverage": 0.11739460564906301
+      },
+      "compositeFrames": [
+        {
+          "frameIndex": 0,
+          "file": "review/bm03/field-bm03-01-composite-frame-00.png",
+          "sha256": "EA7E579AE9A5FF4FED1D86EB49658E7A7B08C32A686BDCCBDD3658C1E2A55E04"
+        },
+        {
+          "frameIndex": 1,
+          "file": "review/bm03/field-bm03-01-composite-frame-01.png",
+          "sha256": "3EB0A1F2679D1B34B499EBEFE1A305DF7759B29A912EEA5544DA4CAB83315283"
+        }
+      ],
+      "viewportChecks": [
+        {
+          "frameIndex": 0,
+          "viewport": [
+            360,
+            800
+          ],
+          "file": "review/bm03/frame-00-viewport-360x800.png",
+          "sha256": "07A1E3C5DB8F9DAF8C000BE37E4F38743DD675D1D72046A628037FD59FE08E34"
+        },
+        {
+          "frameIndex": 0,
+          "viewport": [
+            390,
+            844
+          ],
+          "file": "review/bm03/frame-00-viewport-390x844.png",
+          "sha256": "F8EDD7DDA524D06D5DB21F0FC9D1AA95197A36B61EF69CA368CED3ED249E3DF1"
+        },
+        {
+          "frameIndex": 0,
+          "viewport": [
+            393,
+            852
+          ],
+          "file": "review/bm03/frame-00-viewport-393x852.png",
+          "sha256": "43D2A2B8066145429E5F53D713E430F78EF56F214FEBFF3459022631314EE1FE"
+        },
+        {
+          "frameIndex": 0,
+          "viewport": [
+            412,
+            915
+          ],
+          "file": "review/bm03/frame-00-viewport-412x915.png",
+          "sha256": "4EA11952FE6188A6128D0F0BA3D3D8ACF29A7E2CAC63CC7F054D0968C1A3AD2C"
+        },
+        {
+          "frameIndex": 0,
+          "viewport": [
+            430,
+            932
+          ],
+          "file": "review/bm03/frame-00-viewport-430x932.png",
+          "sha256": "C4D051D9D0239ABACE5142AE0F1669A0C1B7B09841C39E1F4199739E707890F2"
+        },
+        {
+          "frameIndex": 1,
+          "viewport": [
+            360,
+            800
+          ],
+          "file": "review/bm03/frame-01-viewport-360x800.png",
+          "sha256": "F1F6CA2E8A4A47ECE97DBDCD8C95060811AD26B293CA469015D571BA1A45D3C3"
+        },
+        {
+          "frameIndex": 1,
+          "viewport": [
+            390,
+            844
+          ],
+          "file": "review/bm03/frame-01-viewport-390x844.png",
+          "sha256": "D6BFD47A5AE3522B69070723F91A8B84D6A235174C149E07E3FD831B938E9869"
+        },
+        {
+          "frameIndex": 1,
+          "viewport": [
+            393,
+            852
+          ],
+          "file": "review/bm03/frame-01-viewport-393x852.png",
+          "sha256": "E099E2600B2E45FCB0A13F2D0F843D24E8950B2044AE1F0E49C9D5C05C027796"
+        },
+        {
+          "frameIndex": 1,
+          "viewport": [
+            412,
+            915
+          ],
+          "file": "review/bm03/frame-01-viewport-412x915.png",
+          "sha256": "605D9A38B69D8B16204E3F408676D735467C779F6E887956E008A55791E8D92D"
+        },
+        {
+          "frameIndex": 1,
+          "viewport": [
+            430,
+            932
+          ],
+          "file": "review/bm03/frame-01-viewport-430x932.png",
+          "sha256": "8DF7D12056A6DC2F810AE8A692BA5F9B39D66F03771B05A030AFAA811123BF28"
+        }
+      ],
+      "trace": {
+        "traceId": "BATTLE_BM03_BM04_ANIMATION_TRACE_2026_09_02",
+        "sourceEvidence": "VERIFIED_ROM_PAYLOAD_HASH_AND_BSAR_STRUCTURE",
+        "frameDurationsRawTicks": [
+          50,
+          50
+        ],
+        "compositionEvidence": "HIGH_CONFIDENCE_CROSSCHECK_SHARED_BSAR_RENDERER_AND_ORIGINAL_VISUAL_REFERENCE"
+      },
+      "referenceObjectLayerPresent": false,
+      "flattenedInternalReviewOnly": true,
+      "productionObjectSeparationRequired": false
+    },
+    {
+      "key": "bm04",
+      "fieldId": "field_bm04_01",
+      "originalFunction": "BATTLE_ISLAND",
+      "source": {
+        "file": "source/field-bm04-01-background-generated.png",
+        "sha256": "CDDAB49004B24C1D65ECE0FC6CDF48E4576E05C3810D247C374149A041D66ACD"
+      },
+      "runtimeManifest": "assets/production/internal-battle-review/bm03-bm04-animated-r1/runtime.bm04.review.json",
+      "animationFrames": [
+        {
+          "src": "assets/production/internal-battle-review/bm03-bm04-animated-r1/field-bm04-01-animation-frame-00.png",
+          "sha256": "239C01137EBEF9C66F415D4F8664BC81279038E27D5F023AB3096FD9FD827DCF",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285
+        },
+        {
+          "src": "assets/production/internal-battle-review/bm03-bm04-animated-r1/field-bm04-01-animation-frame-01.png",
+          "sha256": "023E3499D21748733E00CC65432EEFC090553E6D76081389566F318E301F9B0E",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285
+        }
+      ],
+      "terrainOverlay": {
+        "file": "assets/production/internal-battle-review/bm03-bm04-animated-r1/field-bm04-01-terrain-overlay.png",
+        "sha256": "B9984B36B912AF784D291BB77D87554113DF2979511631223F5A5723811587AA"
+      },
+      "mask": {
+        "file": "review/bm04/field-bm04-01-water-mask.png",
+        "sha256": "EB0236D4D08D69611B6D156C12B1500A2BBFFBB80BB9F47B58857BBF376A20BF",
+        "coverage": 0.3125647276834725
+      },
+      "compositeFrames": [
+        {
+          "frameIndex": 0,
+          "file": "review/bm04/field-bm04-01-composite-frame-00.png",
+          "sha256": "0D4B3DDCB38C3E6558721E7FB2E52CBB4A502320F6CAEDCA5C2A54BF9EFEE54C"
+        },
+        {
+          "frameIndex": 1,
+          "file": "review/bm04/field-bm04-01-composite-frame-01.png",
+          "sha256": "6F3A754F7790CFF0CD9116FE5F2A97C613EE0781374BDE1A04C367C765A0CF2A"
+        }
+      ],
+      "viewportChecks": [
+        {
+          "frameIndex": 0,
+          "viewport": [
+            360,
+            800
+          ],
+          "file": "review/bm04/frame-00-viewport-360x800.png",
+          "sha256": "FE2622B07B30B944ECDFD78D36B0F985CBB35F46D022B6CD4C497ADF1C53BE94"
+        },
+        {
+          "frameIndex": 0,
+          "viewport": [
+            390,
+            844
+          ],
+          "file": "review/bm04/frame-00-viewport-390x844.png",
+          "sha256": "016D55C147F81BB84BCF9D3AE8F0FD0DD77A559BD59671F97E686AED408FCB5D"
+        },
+        {
+          "frameIndex": 0,
+          "viewport": [
+            393,
+            852
+          ],
+          "file": "review/bm04/frame-00-viewport-393x852.png",
+          "sha256": "8701AAFECFCA0140B63585EBAA7400BD26A5BA0C422289309334D9BFAD7E1D65"
+        },
+        {
+          "frameIndex": 0,
+          "viewport": [
+            412,
+            915
+          ],
+          "file": "review/bm04/frame-00-viewport-412x915.png",
+          "sha256": "92A1BC4DD763D45B6A76C093AB83B485870D48A8BF924BF9485B5917FB1B03F1"
+        },
+        {
+          "frameIndex": 0,
+          "viewport": [
+            430,
+            932
+          ],
+          "file": "review/bm04/frame-00-viewport-430x932.png",
+          "sha256": "1003AD85CBB0028A4901CCF9ED805A64D8E779C84007387F969105C136FA0B8F"
+        },
+        {
+          "frameIndex": 1,
+          "viewport": [
+            360,
+            800
+          ],
+          "file": "review/bm04/frame-01-viewport-360x800.png",
+          "sha256": "67E42DD9FC42EB925BD0CACD63AED423DF86F73BE4001AA6EF4FAE2F5A0ECA27"
+        },
+        {
+          "frameIndex": 1,
+          "viewport": [
+            390,
+            844
+          ],
+          "file": "review/bm04/frame-01-viewport-390x844.png",
+          "sha256": "300E267DE8656028CAB60F3C37300A9D0A1075B900787D5549DF28D7A0BC9C86"
+        },
+        {
+          "frameIndex": 1,
+          "viewport": [
+            393,
+            852
+          ],
+          "file": "review/bm04/frame-01-viewport-393x852.png",
+          "sha256": "6C55BF588A0DDD4F3EA1847EC5CD880CD77CFADE0158C305715F4A1ECB0F20C2"
+        },
+        {
+          "frameIndex": 1,
+          "viewport": [
+            412,
+            915
+          ],
+          "file": "review/bm04/frame-01-viewport-412x915.png",
+          "sha256": "A854F046063FBE249554F1C8AB18649E4EBED4FF3618A6A9E7150B3ABC3BE7C9"
+        },
+        {
+          "frameIndex": 1,
+          "viewport": [
+            430,
+            932
+          ],
+          "file": "review/bm04/frame-01-viewport-430x932.png",
+          "sha256": "C4FD800FC411EEA5154C2E8F5120EBC08C9BA542452246D4AA1209506DB8485F"
+        }
+      ],
+      "trace": {
+        "traceId": "BATTLE_BM03_BM04_ANIMATION_TRACE_2026_09_02",
+        "sourceEvidence": "VERIFIED_ROM_PAYLOAD_HASH_AND_BSAR_STRUCTURE",
+        "frameDurationsRawTicks": [
+          20,
+          20
+        ],
+        "compositionEvidence": "HIGH_CONFIDENCE_CROSSCHECK_SHARED_BSAR_RENDERER_AND_ORIGINAL_VISUAL_REFERENCE"
+      },
+      "referenceObjectLayerPresent": true,
+      "flattenedInternalReviewOnly": true,
+      "productionObjectSeparationRequired": true
+    }
+  ],
+  "promotion": {
+    "humanApproved": false,
+    "runtimeQaPassed": true,
+    "licenseEvidenceLinked": false,
+    "readyForRuntime": false,
+    "shippingReady": false
+  }
+}

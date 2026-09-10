@@ -1,0 +1,40 @@
+- status:
+  - generic: Spring
+  - generic: Day
+  - generic: "1"
+  - generic: Training
+  - time: 08:00
+- main:
+  - paragraph: DIGIMON CHAMPIONSHIP · 2026
+  - heading "RAISING HOME" [level=1]
+  - time: 08:00
+  - button "SAVE"
+  - region "Playable Raising field":
+    - generic: LIVE HABITAT
+    - generic: FIELD ONLINE
+  - paragraph: COMPANION LINK
+  - heading "SELECT A RESIDENT" [level=2]
+  - paragraph: Touch a resident in the habitat.
+  - term: HP
+  - definition: "--"
+  - term: TP
+  - definition: "--"
+  - status: Raising Home restored from save.
+- menu
+- toolbar "Contextual toolbar":
+  - button "HAND":
+    - generic: HAND
+  - button "FEED" [pressed]:
+    - generic: FEED
+  - button "CLEAN":
+    - generic: CLEAN
+  - button "MED":
+    - generic: MED
+  - button "WOUND":
+    - generic: WOUND
+  - button "PROTEIN":
+    - generic: PROTEIN
+  - button "MANAGE":
+    - generic: MANAGE
+  - button "SYSTEM":
+    - generic: SYSTEM
