@@ -133,12 +133,20 @@ export async function mountRaisingFieldPixiPresentation({
   const careRoot = new URL('../../../../assets/production/raising-care-r1/', import.meta.url);
   const careTextures = fieldArt?.field?.presentationMode==='NATIVE_RANCH'
     ? await Promise.all(['meat-0','meat-1','meat-2','meat-3','protein-0','protein-1','protein-2','protein-3',
-      'feast-0','feast-1','feast-2','feast-3','cake-0','cake-1','cake-2','cake-3','broom']
+      'feast-0','feast-1','feast-2','feast-3','cake-0','cake-1','cake-2','cake-3','broom',
+      'broom-1','meat-rot-0','meat-rot-1','protein-rot-0','protein-rot-1','waste-0','waste-1']
       .map(name => PIXI.Assets.load(new URL(`${name}.svg`,careRoot).href))) : [];
   const toolPreview = careTextures.length?new PIXI.Sprite(careTextures[16]):null;
   if(toolPreview){toolPreview.anchor.set(0.5,0.9);toolPreview.eventMode='none';toolPreview.visible=false;
     toolPreview.label='Clean broom and dustpan';fxLayer.addChild(toolPreview);}
+  // i000_item plays spoiled food, waste and the sweep as two poses of 18
+  // native ticks each (sequences 4, 9, 10 and 11), and gives meat and the
+  // capsule one spoiled identity apiece rather than one per remaining amount.
+  // Those pose counts and that cadence are the original's; the artwork is not.
+  const CARE_BROOM=16,CARE_ROT=[18,20],CARE_WASTE=22;
+  const NATIVE_POSE_MS=18*560190/33513982*1000;
   let pointerPreview=null,cleanFeedback=null,careElapsed=0;
+  const carePose=()=>reducedMotion?0:Math.floor(careElapsed/NATIVE_POSE_MS)%2;
   const sheets = new Set();
   let disposed = false;
   let latestFrame = null;
@@ -542,6 +550,7 @@ export async function mountRaisingFieldPixiPresentation({
   function updateAnimations(ticker) {
     if(drag?.nativeHand)drag.carried=source.getActorFrame?.(drag.creatureId)?.state===6;
     fieldArt?.update(ticker.deltaMS);
+    careElapsed+=Math.min(100,Math.max(0,ticker.deltaMS));
     drawFood();
     drawWaste();
     drawCareTool(ticker.deltaMS);
@@ -623,15 +632,15 @@ export async function mountRaisingFieldPixiPresentation({
     const waste=source.getWasteFrame?.()??[],live=new Set(waste.map(w=>w.slot));
     for(const [slot,g] of wasteGraphics)if(!live.has(slot)){g.destroy();wasteGraphics.delete(slot);}
     const scale=getRaisingNativePixelScale(fieldArt?.field,app.screen);
+    if(!careTextures.length||!(scale>0))return;
+    const pose=carePose();
     for(const item of waste){let g=wasteGraphics.get(item.slot);
-      if(!g){g=new PIXI.Graphics();g.eventMode='none';g.label='Waste';
-        g.ellipse(0,1,9,3).fill({color:0x46502d,alpha:0.2})
-          .roundRect(-9,-6,18,7,3).fill(0x835c36).stroke({color:0x583c27,width:1})
-          .roundRect(-6,-10,12,6,3).fill(0x946b3f).stroke({color:0x583c27,width:1})
-          .poly([-3,-10,1,-15,4,-11,4,-7]).fill(0xa37949).stroke({color:0x583c27,width:1});
+      if(!g){g=new PIXI.Sprite();g.eventMode='none';g.label='Waste';g.anchor.set(0.5,0.85);
         actorLayer.addChild(g);wasteGraphics.set(item.slot,g);}
+      // Smaller than a whole meal, keeping the footprint the drawn shape had.
+      g.texture=careTextures[CARE_WASTE+pose];g.width=24*scale;g.height=24*scale;
       const point=raisingNativeToScreen(item.positionQ12,fieldArt?.field,app.screen,cameraX);
-      if(point){g.position.set(point.x,point.y);g.scale.set(scale);g.zIndex=Math.round(item.positionQ12[1]/4096);}}
+      if(point){g.position.set(point.x,point.y);g.zIndex=Math.round(item.positionQ12[1]/4096);}}
   }
 
   function drawEvolution(entry,native){
@@ -703,9 +712,13 @@ export async function mountRaisingFieldPixiPresentation({
         const sprite=new PIXI.Sprite();sprite.anchor.set(0.5,0.85);g.addChild(sprite);
         actorLayer.addChild(g);foodGraphics.set(food.slot,g);
       }
-      const sprite=g.children[1];sprite.texture=careTextures[(food.kind??(food.protein?1:0))*4+food.quarter];
+      const kind=food.kind??(food.protein?1:0),spoiled=food.freshness<=0,rot=spoiled?CARE_ROT[kind]:undefined;
+      const sprite=g.children[1];
+      // Celebration platter and cake have no original spoiled identity, so they
+      // keep the existing desaturation rather than borrowing the food's.
+      sprite.texture=careTextures[rot===undefined?kind*4+food.quarter:rot+carePose()];
       sprite.width=32;sprite.height=32;sprite.y=-food.heightQ12/4096;
-      sprite.tint=food.freshness<=0?0x8ca273:0xffffff;
+      sprite.tint=spoiled&&rot===undefined?0x8ca273:0xffffff;
       const point=raisingNativeToScreen(food.positionQ12,fieldArt?.field,app.screen,cameraX);
       if(point){g.position.set(point.x,point.y);g.scale.set(scale);g.zIndex=Math.round(food.positionQ12[1]/4096);}
     }
@@ -713,7 +726,6 @@ export async function mountRaisingFieldPixiPresentation({
 
   function drawCareTool(deltaMS) {
     if(!toolPreview)return;
-    careElapsed+=Math.min(100,Math.max(0,deltaMS));
     const tool=getSelectedTool();
     if(tool!=='clean')cleanFeedback=null;
     if(cleanFeedback){cleanFeedback.elapsed+=Math.min(100,Math.max(0,deltaMS));if(cleanFeedback.elapsed>=610)cleanFeedback=null;}
@@ -724,9 +736,7 @@ export async function mountRaisingFieldPixiPresentation({
     const scale=getRaisingNativePixelScale(fieldArt?.field,app.screen);
     toolPreview.width=32*scale;toolPreview.height=32*scale;
     toolPreview.position.set(point.x,point.y);
-    // i000_item sequence 11 uses two 18-native-tick poses. This independently
-    // authored tool alternates its presentation on that same cadence.
-    toolPreview.rotation=reducedMotion?0:(Math.floor(careElapsed/(18*560190/33513982*1000))%2===0?-0.12:0.12);
+    toolPreview.texture=careTextures[CARE_BROOM+carePose()];
   }
 
   app.stage.on("globalpointermove", moveDrag);
@@ -771,6 +781,10 @@ export async function mountRaisingFieldPixiPresentation({
         foodCount:foodGraphics.size,
         wasteCount:wasteGraphics.size,
         careArt:'INDEPENDENTLY_AUTHORED_VECTOR',
+        // Spoiled food, waste and the sweep share one clock so a QA run can
+        // read the pose instead of comparing pixels. 0 while reduced motion.
+        carePose:carePose(),
+        careTextureCount:careTextures.length,
         cleanToolVisible:toolPreview?.visible??false,
         nativeSizing: [...actors].map(([creatureId, entry]) => ({ creatureId,
           status: entry.nativeScale === null ? "UNVERIFIED_LEGACY_FALLBACK" : "SHARED_NATIVE_PIXEL_SCALE",
