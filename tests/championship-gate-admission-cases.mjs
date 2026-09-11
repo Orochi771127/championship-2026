@@ -145,7 +145,7 @@ for (const [matchIndex,biome] of [[7,"Ice"],[45,"Factory"],[46,"Jungle"]]) {
       app.creditBits(100000);
       const gate=()=>app.getGates().find(g=>g.biomeId===biome);
       assert.equal(gate().state,"LOCKED");
-      app.openBattle();const attempt=app.enterMatch({recordIndex:matchIndex,mode:1,battleType:0});assert.equal(attempt.ok,true);
+      app.openBattle();const attempt=await app.enterMatch({recordIndex:matchIndex,mode:1,battleType:0});assert.equal(attempt.ok,true);
       const result={attemptId:attempt.attempt.attemptId,ended:true,mode:1,battleType:0,matchIndex,outcomeEntries:[1]};
       app.finishMatch(result);assert.equal(gate().state,"AVAILABLE");assert.deepEqual(app.getBattleBadges(),[matchIndex]);
       app.finishMatch(result);assert.deepEqual(app.getBattleBadges(),[matchIndex]);
@@ -167,7 +167,7 @@ test('the final title victory grants the original gate waiver and actual paid-bi
   save.progression.nativeTitles.registered=[last];disk.setItem(key,JSON.stringify(save));
   app=make({storage:disk});await app.continueGame();
   const match=getMatchRecord(last);app.advanceClock({units:(match.field14*8+match.field18)*1440*400});app.creditBits(100000);
-  app.openBattle();const entry=app.enterMatch({recordIndex:last,mode:1,battleType:0});assert.equal(entry.ok,true);
+  app.openBattle();const entry=await app.enterMatch({recordIndex:last,mode:1,battleType:0});assert.equal(entry.ok,true);
   const result={attemptId:entry.attempt.attemptId,ended:true,mode:1,battleType:0,matchIndex:last,outcomeEntries:[1]};
   app.finishMatch(result);app.finishMatch(result);assert.equal(app.getTamerRank(),9);app.exitBattle();app.save();
   assert.equal(JSON.parse(disk.getItem(key)).progression.nativeTitles.feeWaiver,true);

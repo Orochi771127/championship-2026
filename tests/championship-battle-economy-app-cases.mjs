@@ -38,8 +38,8 @@ async function startMatchDateFixture(app) {
   assert.deepEqual(app.getBattleSchedule(), AUTUMN_DAY4_SCHEDULE);
 }
 
-function enter(app, attemptId = "battle:1") {
-  return app.enterMatch({ attemptId, recordIndex: 0, mode: 0, battleType: 0 });
+async function enter(app, attemptId = "battle:1") {
+  return await app.enterMatch({ attemptId, recordIndex: 0, mode: 0, battleType: 0 });
 }
 
 function outcome(attemptId = "battle:1", won = true) {
@@ -52,7 +52,7 @@ test("150 fee and 7000 reward use the one wallet, with manual save and fresh Con
   await startMatchDateFixture(app);
   app.creditBits(150); // Controlled fixture; production New Game remains unchanged.
   app.openBattle();
-  assert.equal(enter(app).ok, true);
+  assert.equal((await enter(app)).ok, true);
   assert.equal(app.getShopFrame().bits, 0);
   assert.equal(storage.writes, 0, "registration does not invent an autosave checkpoint");
   const settled = app.finishMatch(outcome());
@@ -82,7 +82,7 @@ test("insufficient funds and leaving selection do not charge or allocate attempt
   assert.equal(app.getShopFrame().bits, 0);
   app.creditBits(149);
   app.openBattle();
-  const rejected = enter(app);
+  const rejected = await enter(app);
   assert.equal(rejected.ok, false);
   assert.equal(rejected.reason, "INSUFFICIENT_FUNDS");
   assert.equal(app.getScreen(), "BATTLE_SELECT");
@@ -98,8 +98,8 @@ test("duplicate confirmation and result notifications never charge or credit twi
   await startMatchDateFixture(app);
   app.creditBits(1000);
   app.openBattle();
-  enter(app);
-  assert.equal(enter(app).duplicate, true);
+  await enter(app);
+  assert.equal((await enter(app)).duplicate, true);
   assert.equal(app.getShopFrame().bits, 850);
   assert.equal(app.finishMatch({ ...outcome(), ended: false }).ok, false);
   assert.equal(app.finishMatch({ ...outcome(), matchIndex: 1 }).ok, false);
@@ -110,10 +110,10 @@ test("duplicate confirmation and result notifications never charge or credit twi
   assert.equal(app.getShopFrame().bits, 7850);
   app.exitBattle();
   app.openBattle();
-  assert.equal(enter(app).duplicate, true, "old menu callback cannot buy a new attempt");
+  assert.equal((await enter(app)).duplicate, true, "old menu callback cannot buy a new attempt");
   assert.equal(app.getScreen(), "BATTLE_SELECT");
   assert.equal(app.getShopFrame().bits, 7850);
-  enter(app, "battle:2");
+  await enter(app, "battle:2");
   assert.equal(app.getShopFrame().bits, 7700);
   assert.equal(app.finishMatch(outcome()).duplicate, true, "previous result only returns its existing receipt");
   assert.equal(app.getBattleEconomyState().active.attemptId, "battle:2", "the new match remains unsettled");
@@ -127,7 +127,7 @@ test("defeat keeps the paid fee and awards zero", async () => {
   await startMatchDateFixture(app);
   app.creditBits(1000);
   app.openBattle();
-  enter(app);
+  await enter(app);
   const result = app.finishMatch(outcome("battle:1", false));
   assert.equal(result.receipt.rewardBits, 0);
   assert.equal(result.receipt.credited, 0);
@@ -140,7 +140,7 @@ test("reward receipt distinguishes nominal reward from wallet cap credit", async
   await startMatchDateFixture(app);
   app.creditBits(9_999_989);
   app.openBattle();
-  enter(app);
+  await enter(app);
   const result = app.finishMatch(outcome());
   assert.equal(result.receipt.rewardBits, 7000);
   assert.equal(result.receipt.credited, 160);
@@ -156,7 +156,7 @@ test("failed save followed by shopping retries current wallet, inventory and rec
   await startMatchDateFixture(app);
   app.creditBits(150);
   app.openBattle();
-  enter(app);
+  await enter(app);
   app.finishMatch(outcome());
   app.exitBattle();
   storage.failWrites = true;
@@ -184,7 +184,7 @@ test("active battles cannot be serialized as resumable games", async () => {
   await startMatchDateFixture(app);
   app.creditBits(150);
   app.openBattle();
-  enter(app);
+  await enter(app);
   assert.throws(() => app.save(), /SAVE_WHILE_BATTLE_ACTIVE/);
   assert.equal(storage.writes, 0);
   app.exitBattle();
@@ -209,7 +209,7 @@ test("wallet observers see the paired attempt and cannot settle halfway through 
     seen = { bits: app.getShopFrame().bits, active: app.getBattleEconomyState().active?.attemptId,
       blocked: app.finishMatch(outcome()) };
   });
-  enter(app);
+  await enter(app);
   off();
   assert.equal(seen.bits, 0);
   assert.equal(seen.active, "battle:1");
@@ -225,7 +225,7 @@ test("a real deterministic runtime verdict feeds settlement without reading UI w
   app.openBattle();
   const runtime = createBattleRuntime({ schedule: AUTUMN_DAY4_SCHEDULE, seed: 0x14 });
   runtime.chooseMatch(0);
-  const entered = app.enterMatch({ ...runtime.getEconomyContext(), attemptId: "battle:1" });
+  const entered = await app.enterMatch({ ...runtime.getEconomyContext(), attemptId: "battle:1" });
   assert.equal(entered.ok, true);
   const source = runtime.startMatch();
   for (let i = 0; i < 7201 && !source.getView().outcome.ended; i += 1) source.tick();

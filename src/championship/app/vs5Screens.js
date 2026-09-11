@@ -127,10 +127,10 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       ?`持有金額不足。報名費 ${fee} 位元幣；持有 ${wallet??'—'} 位元幣。`
       :result.message??menuCopy.entryRefused??'目前無法參加這場對戰。');
   }
-  function chooseParty(match){
+  async function chooseParty(match){
     selectedMatch=match;selectedIds=[];list.hidden=true;partyPanel.hidden=false;partyPanel.replaceChildren();entryNotice.hidden=true;
     for (const node of matchOnlyNodes) node.hidden = true;
-    const {candidates,limit}=getPartySelection(match.recordIndex);
+    const {candidates,limit}=await getPartySelection(match.recordIndex);
     partyPanel.append(element('h2','cm-vs5-title','選擇參賽數碼獸'),element('p','cm-vs5-entry-notice',`最多 ${limit} 隻`));
     const controls=[];
     const confirm=actionButton('決定',{primary:true});confirm.disabled=true;
@@ -170,7 +170,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       button.append(element("span", "cm-vs5-match__payout",
         `${menuCopy.prize ?? "獎金"} ${match.payout > 0 ? `${match.payout} 位元幣` : menuCopy.noPayout}`));
       button.addEventListener("click", async () => {
-        if(getPartySelection){chooseParty(match);return;}
+        if(getPartySelection){await chooseParty(match);return;}
         const result = await onEnter(match.recordIndex);
         if (result?.ok !== false) return;
         entryNotice.hidden = false;

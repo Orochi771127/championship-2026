@@ -26,7 +26,6 @@ import {
   renameEnclosedCreature
 } from "./championshipRaisingProduction.js";
 import { createChampionshipPersistentSavePort } from "./ChampionshipPersistentSavePort.js";
-import {battlePartyAdmission,battlePartyCondition,buildOwnedBattleCreature} from '../battle/battleParty.js';
 import {normalizeNativeIndividualProfile} from '../raising/nativeIndividualProfile.js';
 import { selectPhase1FirstCreature } from "./phase1ProductCreatures.js";
 import { CHAMPIONSHIP_SCREENS, createChampionshipScreenStack } from "./championshipScreenStack.js";
@@ -159,6 +158,12 @@ export function createChampionshipStandaloneApp({
   let battleEconomy = createBattleEconomyState();
   let battleTransactionActive = false;
   let battlePartyIds = null;
+  // Party admission, slot rules and owned-creature building are only read while
+  // the player is picking a team at the battle menu. Fetched then, cached after,
+  // and warmed in the background by main.js once any screen is up.
+  let battlePartyModule = null;
+  const loadBattleParty = async () =>
+    (battlePartyModule ??= await import("../battle/battleParty.js"));
   // The attempt a tournament round is being fought under, if any. A round is an
   // ordinary battle; what differs is that its verdict belongs to the run, and
   // the title result waits for the whole run rather than reading one round.
@@ -1640,14 +1645,18 @@ export function createChampionshipStandaloneApp({
       return battleEconomy.lastReceipt;
     },
 
-    getBattlePartyCandidates(recordIndex) {
+    async getBattlePartyCandidates(recordIndex) {
+      const {battlePartyAdmission}=await loadBattleParty();
       return this.getRaisingInstances().map(entry=>{
         const nativeProfile=entry.instanceId===creature?.creatureId?creature.nativeProfile:raisingNativeProfile(entry.instanceId);
         return Object.freeze({...entry,admission:battlePartyAdmission(nativeProfile,recordIndex)});
       });
     },
 
-    getBattlePartyLimit(recordIndex) {return battlePartyCondition(getMatchRecord(recordIndex).field0C).slots;},
+    async getBattlePartyLimit(recordIndex) {
+      const {battlePartyCondition}=await loadBattleParty();
+      return battlePartyCondition(getMatchRecord(recordIndex).field0C).slots;
+    },
 
     /**
      * The two multi-round tournaments as OVL10 sets them up: how many rounds,
@@ -1804,11 +1813,12 @@ export function createChampionshipStandaloneApp({
       return preparation;
     },
 
-    prepareBattleParty(recordIndex,instanceIds) {
+    async prepareBattleParty(recordIndex,instanceIds) {
+      const {battlePartyCondition,buildOwnedBattleCreature}=await loadBattleParty();
       const limit=battlePartyCondition(getMatchRecord(recordIndex).field0C).slots;
       if(!Array.isArray(instanceIds)||!instanceIds.length||instanceIds.length>limit||new Set(instanceIds).size!==instanceIds.length)
         return {ok:false,reason:'PARTY_SIZE',message:`請選擇 1 至 ${limit} 隻符合條件的數碼獸。`};
-      const candidates=this.getBattlePartyCandidates(recordIndex),individuals=[];
+      const candidates=await this.getBattlePartyCandidates(recordIndex),individuals=[];
       for(const instanceId of instanceIds){
         const entry=candidates.find(c=>c.instanceId===instanceId);
         if(!entry)return {ok:false,reason:'UNKNOWN_INDIVIDUAL',message:'選擇的數碼獸已不在目前名冊。'};
@@ -1820,7 +1830,7 @@ export function createChampionshipStandaloneApp({
       return {ok:true,individuals};
     },
 
-    enterMatch({ attemptId = nextBattleAttemptId(battleEconomy), recordIndex, mode, battleType, playerInstanceIds=null, rngPreparation=null } = {}) {
+    async enterMatch({ attemptId = nextBattleAttemptId(battleEconomy), recordIndex, mode, battleType, playerInstanceIds=null, rngPreparation=null } = {}) {
       requireSession();
       if (battleTransactionActive) return Object.freeze({ ok: false, reason: "TRANSACTION_ACTIVE" });
       const duplicateActive = battleEconomy.active?.attemptId === attemptId;
@@ -1833,7 +1843,7 @@ export function createChampionshipStandaloneApp({
           message: "這場比賽不符合目前日期或資格，請重新選擇。" });
       }
       if(!duplicateActive && playerInstanceIds!==null){
-        const admission=this.prepareBattleParty(recordIndex,playerInstanceIds);
+        const admission=await this.prepareBattleParty(recordIndex,playerInstanceIds);
         if(!admission.ok)return admission;
         if(mode!==1||battleType!==0)return {ok:false,reason:'OWNED_PARTY_MODE_REQUIRES_TRACE'};
       }

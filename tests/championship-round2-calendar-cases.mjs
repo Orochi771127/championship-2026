@@ -62,7 +62,7 @@ test("calendar change after selection rejects stale entry before fee or attempt 
   // Controlled domain advancement represents a stale menu event; natural
   // Battle mode time remains evidence-gated in this slice.
   app.advanceClock({ units: 1440 * 400 });
-  const refused = app.enterMatch({ ...selected, attemptId: "battle:1" });
+  const refused = await app.enterMatch({ ...selected, attemptId: "battle:1" });
   assert.equal(refused.ok, false);
   assert.equal(refused.reason, "MATCH_NOT_AVAILABLE");
   assert.equal(app.getShopFrame().bits, 1000);
@@ -99,7 +99,7 @@ test("legacy save with unknown calendar does not manufacture a today's Battle li
   t.after(() => runtime.dispose());
   assert.deepEqual(runtime.listMatches(), []);
   restored.openBattle();
-  assert.equal(restored.enterMatch({ recordIndex: 0, mode: 0, battleType: 0 }).reason, "MATCH_NOT_AVAILABLE");
+  assert.equal((await restored.enterMatch({ recordIndex: 0, mode: 0, battleType: 0 })).reason, "MATCH_NOT_AVAILABLE");
   assert.equal(restored.getShopFrame().bits, 1000);
 });
 

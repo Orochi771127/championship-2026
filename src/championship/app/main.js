@@ -99,6 +99,7 @@ function warmDeferredModules() {
       () => import("./battleRuntime.js"),
       () => import("../hunt/capture/nativeHuntEntryTransaction.js"),
       () => import("../hunt/huntRuntime.js"),
+      () => import("../battle/battleParty.js"),
       () => import("../presentation/licensedCharacterRoster.js"),
       () => import("../presentation/vs2/createGateSelectThreePresentation.js"),
       () => import("../presentation/vs5/createBattleSelectThreePresentation.js"),
@@ -474,7 +475,8 @@ async function mountBattleSelect() {
   return createBattleSelectView({
     root,
     matches: battleRuntime.listMatches(),
-    getPartySelection:recordIndex=>({candidates:app.getBattlePartyCandidates(recordIndex),limit:app.getBattlePartyLimit(recordIndex)}),
+    getPartySelection:async recordIndex=>({candidates:await app.getBattlePartyCandidates(recordIndex),
+      limit:await app.getBattlePartyLimit(recordIndex)}),
     menuCopy: BATTLE_MENU_LABELS,
     onOpenChampionship() { app.openChampionship(); },
     async onEnter(recordIndex,playerInstanceIds) {
@@ -483,7 +485,7 @@ async function mountBattleSelect() {
       if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started) {
         return { ok: false, reason: "BATTLE_NOT_READY", message: "遊戲場景尚未就緒，請返回育成場景後重試。" };
       }
-      const party=app.prepareBattleParty(recordIndex,playerInstanceIds);
+      const party=await app.prepareBattleParty(recordIndex,playerInstanceIds);
       if(!party.ok)return party;
       const rngPreparation=app.prepareBattleRng();
       const prepared = (await loadBattleRuntime())({ schedule: app.getBattleSchedule(), mode:1, battleType:0,playerIndividuals:party.individuals,rng:rngPreparation.rng });
@@ -494,7 +496,7 @@ async function mountBattleSelect() {
         prepared.startMatch();
         const context = prepared.getEconomyContext();
         const attemptId = `battle:${app.getBattleEconomyState().nextSequence}`;
-        const result = app.enterMatch({ ...context, attemptId,playerInstanceIds,rngPreparation });
+        const result = await app.enterMatch({ ...context, attemptId,playerInstanceIds,rngPreparation });
         if (result.ok && !result.duplicate) {
           battleRuntime?.dispose();
           battleRuntime = prepared;

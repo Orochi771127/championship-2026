@@ -43,14 +43,14 @@ test('owned individual runs actual battle, returns once, and survives fresh Cont
     data.set(key,JSON.stringify(save));await app.continueGame();
     app.advanceClock({units:19*1440*400});app.creditBits(150);app.openBattle();
     const id=app.getRaisingInstances()[0].instanceId;
-    assert.equal(app.prepareBattleParty(0,[]).ok,false);assert.equal(app.prepareBattleParty(0,[id,id]).ok,false);
-    const party=app.prepareBattleParty(0,[id]);assert.equal(party.ok,true);
+    assert.equal((await app.prepareBattleParty(0,[])).ok,false);assert.equal((await app.prepareBattleParty(0,[id,id])).ok,false);
+    const party=await app.prepareBattleParty(0,[id]);assert.equal(party.ok,true);
     const rngPreparation=app.prepareBattleRng(),beforeRng=app.getGameplayRngState();
     runtime=createBattleRuntime({schedule:app.getBattleSchedule(),mode:1,battleType:0,playerIndividuals:party.individuals,rng:rngPreparation.rng});
     runtime.chooseMatch(0);const source=runtime.startMatch();
     assert.equal(source.getFrame().combatants.filter(c=>c.present).length,2);
     assert.deepEqual(app.getGameplayRngState(),beforeRng,'unaccepted runtime preparation cannot consume game RNG');
-    const entry=app.enterMatch({...runtime.getEconomyContext(),playerInstanceIds:[id],rngPreparation});assert.equal(entry.ok,true);
+    const entry=await app.enterMatch({...runtime.getEconomyContext(),playerInstanceIds:[id],rngPreparation});assert.equal(entry.ok,true);
     assert.deepEqual(app.getGameplayRngState(),{version:1,...rngPreparation.rng.snapshot()});
     for(let i=0;i<30000&&!source.getView().outcome.ended;i++)source.tick();
     const result=runtime.getSettlementResult();assert.equal(result.ended,true);

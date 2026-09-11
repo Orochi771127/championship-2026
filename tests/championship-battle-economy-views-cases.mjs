@@ -61,7 +61,7 @@ test('rank and title pages require actual newly committed winning progress',(t)=
   assert.deepEqual(createBattleResultView({root,outcome,receipt,progression:{rankBefore:1,rankAfter:1,earnedTitles:[]}}).inspect().panels,['RESULT','PRIZE']);
 });
 
-test('party selection enforces eligibility and slot limit; cancel never enters or charges', (t) => {
+test('party selection enforces eligibility and slot limit; cancel never enters or charges', async (t) => {
   const root = useDocument(t), entered = [];
   createBattleSelectView({root, matches:[{recordIndex:0,entryFee:150,payout:7000}],
     menuCopy:{menu:'對戰',chooseMatch:'選擇對戰',availableMatches:'賽事',faceNotice:'模式'},
@@ -72,7 +72,9 @@ test('party selection enforces eligibility and slot limit; cancel never enters o
       {instanceId:'young',displayName:'幼年',admission:{ok:false,message:'尚未符合參賽資格'}}]})});
   const button = name => descendants(root).find(n=>n.tagName==='button'&&n.textContent===name);
   const match = findByClass(root,'cm-vs5-match__enter');
+  // The party list is fetched now, so the panel arrives a microtask later.
   match.click();
+  await Promise.resolve(); await Promise.resolve();
   assert.equal(button('決定').disabled,true);
   assert.equal(findByClass(root,'cm-vs5-cube').hidden,true);
   button('幼年').click();assert.equal(button('決定').disabled,true);
@@ -80,7 +82,8 @@ test('party selection enforces eligibility and slot limit; cancel never enters o
   button('乙').click();assert.deepEqual(entered,[]);
   button('返回賽事選擇').click();assert.deepEqual(entered,[]);
   assert.equal(findByClass(root,'cm-vs5-cube').hidden,false);
-  match.click();assert.equal(button('決定').disabled,true,'cancel discards the selection');
+  match.click(); await Promise.resolve(); await Promise.resolve();
+  assert.equal(button('決定').disabled,true,'cancel discards the selection');
   button('甲').click();button('甲').click();assert.equal(button('決定').disabled,true);
   button('乙').click();button('決定').click();assert.deepEqual(entered,[[0,['b']]]);
 });
