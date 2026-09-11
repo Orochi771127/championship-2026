@@ -28,7 +28,7 @@ Node 22 CI, manually dispatched hash-checked public Pages playtest, reuse invent
 
 - Raising: evolution hints, original audio, scene peer ordering and full species/condition/visual comparisons.
 - Hunt: remaining AI/tool/all-species ordinary capture comparisons. The steering branch is closed to a swept bound; which address a given encounter allocates is still not predicted.
-- Championship: the run opens, draws, records and settles through the app and survives Save/Continue, but no screen drives it yet and each round is recorded by its verdict rather than fought through the battle runtime. Whether the original's own save carries a run is untraced — see [the receipt](research/CHAMPIONSHIP_RUN_PERSISTENCE_2026-09-11.json).
+- Championship: the board is reachable from the battle menu, as ui/conference_list_item.nxr is in the original, and it opens, draws, records and settles a run that survives Save/Continue. Each round is still reported rather than fought through the battle runtime, and the board does not yet price entry the way battle_menu/titlematch_top_sub_scene.nxr does. Whether the original's own save carries a run is untraced — see [the receipt](research/CHAMPIONSHIP_RUN_PERSISTENCE_2026-09-11.json).
 - Tutorial: cartridge advance predicates and normal UI/event binding; inferred action names are proposals.
 - Battle/cross-scene: remaining caller/ending/per-move visual timing, individual transitions and physical-device acceptance.
 - Presentation: the celebration platter, cake and the toolbar icons are still authored art with no original counterpart promoted; spoiled food, waste and the sweep now use the original cells.

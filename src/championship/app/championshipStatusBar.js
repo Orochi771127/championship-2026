@@ -35,6 +35,9 @@ const MODE_LABELS = Object.freeze({
   HUNT_FIELD: "Hunt",
   HUNT_RESULT: "Hunt",
   BATTLE_SELECT: "Battle",
+  // The tournaments board is a row in the battle menu, not a mode of its own,
+  // so it reads Battle for the same reason Cage Edit reads Training.
+  CHAMPIONSHIP: "Battle",
   BATTLE_FIELD: "Battle",
   BATTLE_RESULT: "Battle"
 });

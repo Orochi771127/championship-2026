@@ -828,3 +828,59 @@ body[data-toolbar="on"] #cm-root {
   background: var(--cm-sheet-card); color: inherit; font: inherit; cursor: pointer;
 }
 .cm-tamer-back:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
+
+/* --- Tournaments: ui/conference_list_item + training/schedule_item ------- */
+.cm-championship-root { position: fixed; inset: 0; overflow: auto; background: var(--cm-sheet-ground); color: var(--cm-sheet-ink); }
+.cm-championship-shell {
+  width: min(100%, 430px); margin: 0 auto;
+  display: flex; flex-direction: column; gap: 0.7rem;
+  padding: calc(var(--cm-screen-top, 0px) + 0.8rem) 0.9rem calc(0.9rem + env(safe-area-inset-bottom, 0px));
+}
+.cm-championship-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em; color: var(--cm-sheet-accent); }
+.cm-championship-title { margin: 0; font-size: 1.15rem; letter-spacing: 0.06em; }
+.cm-championship-board { display: flex; flex-direction: column; gap: 0.6rem; }
+/* conference_list_item: a cup, a name, a plate. */
+.cm-championship-entry {
+  display: flex; align-items: center; gap: 0.7rem; width: 100%; min-height: 72px;
+  padding: 0.6rem 0.8rem; text-align: left; cursor: pointer; font: inherit; color: inherit;
+  border: 1px solid var(--cm-sheet-edge); border-radius: 3px 13px 3px 13px; background: var(--cm-sheet-card);
+}
+.cm-championship-entry:disabled { cursor: default; opacity: 0.7; }
+.cm-championship-entry[data-unlocked="true"]:not(:disabled):hover { border-color: var(--cm-sheet-selected-edge); background: var(--cm-sheet-selected); }
+.cm-championship-entry:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
+.cm-championship-cup { font-size: 1.5rem; line-height: 1; }
+.cm-championship-entry__copy { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+.cm-championship-entry__name { font-weight: 700; font-size: 0.95rem; }
+.cm-championship-entry__rounds { font-size: 0.68rem; color: var(--cm-sheet-muted); letter-spacing: 0.08em; }
+.cm-championship-entry__reason { font-size: 0.64rem; color: var(--cm-sheet-dim); line-height: 1.4; }
+/* schedule_item spends money_01..06 and a bit mark on a prize. */
+.cm-championship-prize { display: flex; align-items: baseline; gap: 0.3rem; margin: 0; font-variant-numeric: tabular-nums; }
+.cm-championship-prize__digits { font-weight: 700; font-size: 0.9rem; }
+.cm-championship-prize__bit { font-size: 0.62rem; color: var(--cm-sheet-muted); }
+
+.cm-championship-run {
+  display: flex; flex-direction: column; gap: 0.6rem; padding: 0.8rem;
+  border: 1px solid var(--cm-sheet-edge); border-radius: 3px 13px 3px 13px; background: var(--cm-sheet-inset);
+}
+.cm-championship-run__title { margin: 0; font-size: 1rem; letter-spacing: 0.05em; }
+.cm-championship-rounds { display: flex; gap: 0.4rem; margin: 0; padding: 0; list-style: none; }
+.cm-championship-round {
+  display: grid; place-items: center; min-width: 40px; min-height: 40px;
+  border: 1px solid var(--cm-sheet-edge); border-radius: 3px 9px 3px 9px;
+  background: var(--cm-sheet-card); font-size: 0.78rem; font-weight: 700;
+}
+.cm-championship-round[data-state="WON"] { border-color: var(--cm-sheet-selected-edge); background: var(--cm-sheet-selected); }
+.cm-championship-round[data-state="LOST"] { color: var(--cm-sheet-dim); }
+.cm-championship-round[data-state="NOW"] { border-color: var(--cm-sheet-accent); box-shadow: inset 0 0 0 1px var(--cm-sheet-accent); }
+.cm-championship-round[data-state="PENDING"] { color: var(--cm-sheet-dim); opacity: 0.75; }
+.cm-championship-opponent { margin: 0; font-size: 0.74rem; color: var(--cm-sheet-muted); }
+.cm-championship-actions { display: flex; gap: 0.5rem; }
+.cm-championship-action, .cm-championship-back {
+  flex: 1 1 auto; min-height: 44px; padding: 0 0.9rem; cursor: pointer; font: inherit; color: inherit;
+  border: 1px solid var(--cm-sheet-edge); border-radius: 3px 10px 3px 10px; background: var(--cm-sheet-card);
+}
+.cm-championship-action--primary { border-color: var(--cm-sheet-selected-edge); background: var(--cm-sheet-selected); font-weight: 700; }
+.cm-championship-action:focus-visible, .cm-championship-back:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
+.cm-championship-notice { margin: 0; font-size: 0.7rem; line-height: 1.45; color: var(--cm-sheet-dim); }
+.cm-championship-footer { display: flex; margin-top: auto; padding-top: 0.4rem; }
+.cm-championship-back { flex: 0 0 auto; align-self: flex-start; }

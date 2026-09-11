@@ -82,7 +82,7 @@ function shell(root, screen, label) {
  * so the box does not filter the list: it is drawn because the original has it,
  * and the missing link is stated on screen rather than faked.
  */
-export function createBattleSelectView({ root, matches, onEnter, onExit, mountCube, menuCopy, getPartySelection }) {
+export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, mountCube, menuCopy, getPartySelection }) {
   if (!Array.isArray(matches)) throw new TypeError("The Battle menu requires a resolved match list");
   if (typeof onEnter !== "function") throw new TypeError("The Battle menu requires an onEnter intent");
 
@@ -187,6 +187,15 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, mountCu
   }
   renderMatches(matches);
   section.append(list, partyPanel, entryNotice);
+
+  // The multi-round tournaments sit in this menu in the original too:
+  // ui/conference_list_item.nxr is a row here, not a screen of its own.
+  if (typeof onOpenChampionship === "function") {
+    const conference = actionButton(menuCopy.conference);
+    conference.classList.add("cm-vs5-conference");
+    conference.addEventListener("click", () => onOpenChampionship());
+    section.append(conference);
+  }
 
   if (typeof onExit === "function") {
     const exit = actionButton(menuCopy.returnHome);

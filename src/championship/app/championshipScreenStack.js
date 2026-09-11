@@ -44,6 +44,12 @@ export const CHAMPIONSHIP_SCREENS = deepFreeze({
   // ROM's background witnesses are battle_menu, then the match, then
   // battle_result, each with its _main / _sub pair.
   BATTLE_SELECT: "BATTLE_SELECT",
+  // The multi-round tournaments, reached from the battle menu as the original
+  // reaches them: ui/conference_list_item.nxr is a row in that menu, a cup and
+  // a name on a plate, and the entry it opens is priced the way
+  // battle_menu/titlematch_top_sub_scene.nxr prices one -- the fee against what
+  // the player holds, marked when it cannot be paid.
+  CHAMPIONSHIP: "CHAMPIONSHIP",
   BATTLE_FIELD: "BATTLE_FIELD",
   BATTLE_RESULT: "BATTLE_RESULT"
 });
@@ -68,7 +74,9 @@ const FORWARD_TRANSITIONS = deepFreeze({
   // A match is entered from the menu and leaves on its own verdict: the battle
   // stops itself on a wipe or on the clock passing 7200, so nothing forward of
   // BATTLE_FIELD is reachable by choice.
-  BATTLE_SELECT: ["BATTLE_FIELD"],
+  BATTLE_SELECT: ["BATTLE_FIELD", "CHAMPIONSHIP"],
+  // A run's rounds are not fought from here yet, so the only way out is back.
+  CHAMPIONSHIP: [],
   BATTLE_FIELD: ["BATTLE_RESULT"],
   BATTLE_RESULT: []
 });

@@ -1476,6 +1476,15 @@ export function createChampionshipStandaloneApp({
     },
 
     /** The toolbar's management submenu reaches the fixture board through here. */
+    /** The tournaments board, reached from the battle menu as the original does. */
+    openChampionship() {
+      requireSession();
+      if (screens.current() === CHAMPIONSHIP_SCREENS.CHAMPIONSHIP) return screens.current();
+      screens.enter(CHAMPIONSHIP_SCREENS.CHAMPIONSHIP);
+      publishScreens();
+      return screens.current();
+    },
+
     openSchedule() {
       requireSession();
       if (screens.current() === CHAMPIONSHIP_SCREENS.SCHEDULE) return screens.current();

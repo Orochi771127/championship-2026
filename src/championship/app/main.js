@@ -57,6 +57,8 @@ import { LICENSED_CHARACTER_ASSET_ID, LICENSED_CHARACTER_MANIFEST, loadLicensedC
 import { createChampionshipStatusBar } from "./championshipStatusBar.js";
 import { createDigimonListView } from "./digimonListScreen.js";
 import { createScheduleView } from "./scheduleScreen.js";
+import { createChampionshipView } from "./championshipScreen.js";
+import { BATTLE_OUTCOME_TEAM_ZERO_AHEAD, BATTLE_OUTCOME_TEAM_ONE_AHEAD } from "../battle/battleOutcome.js";
 import { createHelpView } from "./helpScreen.js";
 import { createTamerInfoView } from "./tamerInfoScreen.js";
 import { createOpeningPresentation } from './openingPresentation.js';
@@ -400,6 +402,7 @@ function mountBattleSelect() {
     matches: battleRuntime.listMatches(),
     getPartySelection:recordIndex=>({candidates:app.getBattlePartyCandidates(recordIndex),limit:app.getBattlePartyLimit(recordIndex)}),
     menuCopy: BATTLE_MENU_LABELS,
+    onOpenChampionship() { app.openChampionship(); },
     onEnter(recordIndex,playerInstanceIds) {
       // Battle simulation uses this existing Application's ticker. Do not
       // charge for a session that cannot start advancing on the shared stage.
@@ -605,6 +608,25 @@ async function mountCurrentScreen() {
       entries: projectRoster(),
       onExit() { app.leaveScreen(); }
     });
+    else if (target === CHAMPIONSHIP_SCREENS.CHAMPIONSHIP) {
+      view = createChampionshipView({
+        root,
+        source: {
+          getCategories: () => app.getChampionshipCategories(),
+          getRun: () => app.getChampionshipRun(),
+          intents: {
+            open: (category) => app.beginChampionship(category),
+            draw: () => app.drawChampionshipOpponent(),
+            // The battle runtime does not carry a run yet, so a round is
+            // reported. verdictIsWin's ordinary-type rule is what it reports.
+            record: (won) => app.recordChampionshipRound({
+              verdict: won ? BATTLE_OUTCOME_TEAM_ZERO_AHEAD : BATTLE_OUTCOME_TEAM_ONE_AHEAD }),
+            settle: () => app.settleChampionship(),
+            leave: () => app.leaveScreen()
+          }
+        }
+      });
+    }
     else if (target === CHAMPIONSHIP_SCREENS.SCHEDULE) {
       view = createScheduleView({
         root,
