@@ -33,7 +33,6 @@ import { CHAMPIONSHIP_SCREENS, createChampionshipScreenStack } from "./champions
 import { getChampionshipGate, listChampionshipGates } from "../gate/gateCatalog.js";
 import { gateAdmission, isGateUnlocked } from "../gate/gateAdmission.js";
 import { createHuntWorld } from "../hunt/huntWorld.js";
-import { createHuntRuntime } from "../hunt/huntRuntime.js";
 import { applyNativeHuntReturn } from "../hunt/capture/nativeHuntHistory.js";
 import { nativeHuntCatalogForBiome, nativeHuntSpeciesByIndex } from "../hunt/capture/nativeHuntSources.js";
 import { nativeIndividualProfile } from "../raising/nativeIndividualProfile.js";
@@ -122,7 +121,10 @@ export function createChampionshipStandaloneApp({
   slotId = STANDALONE_SLOT_ID,
   huntStartingInventory = HUNT_STARTING_INVENTORY,
   huntCaptureReplay = null,
-  huntRuntimeFactory = createHuntRuntime,
+  // Null means the built-in one, fetched when a hunt starts. Its subtree is
+  // the field controls, the wild actors and their tables, which nothing before
+  // the field reads. A caller that supplies its own factory never fetches it.
+  huntRuntimeFactory = null,
   rngClock = () => {
     const date = new Date();
     return { hour: date.getHours(), minute: date.getMinutes(), second: date.getSeconds() };
@@ -2026,7 +2028,9 @@ export function createChampionshipStandaloneApp({
           clock:requireSession().getRaisingHomeSnapshot(),
           rngSnapshot:gameplayRngSnapshot(), persistentState:huntPersistentState }) : null;
         const world = createHuntWorld(gate, entry);
-        const candidateRuntime = huntRuntimeFactory({ world, nativeEntry:entry,
+        const factory = huntRuntimeFactory
+          ?? (await import("../hunt/huntRuntime.js")).createHuntRuntime;
+        const candidateRuntime = factory({ world, nativeEntry:entry,
           captureReplay:huntCaptureReplay, maxCardG:maxGFromInventory(huntInventory),
           nativeControls:entry ? {loadout:requireLoadout(),consumeItem:(id,n=1)=>requireShop().consumeHuntItem(id,n),onChange:publishScreens} : null,
           fieldActor:{ actorId:"championship:2026:actor:tamer", displayName:"Tamer" } });

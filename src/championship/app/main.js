@@ -98,6 +98,7 @@ function warmDeferredModules() {
     for (const load of [
       () => import("./battleRuntime.js"),
       () => import("../hunt/capture/nativeHuntEntryTransaction.js"),
+      () => import("../hunt/huntRuntime.js"),
       () => import("../presentation/licensedCharacterRoster.js"),
       () => import("../presentation/vs2/createGateSelectThreePresentation.js"),
       () => import("../presentation/vs5/createBattleSelectThreePresentation.js"),
