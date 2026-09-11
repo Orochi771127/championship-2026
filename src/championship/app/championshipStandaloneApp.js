@@ -34,7 +34,6 @@ import { getChampionshipGate, listChampionshipGates } from "../gate/gateCatalog.
 import { gateAdmission, isGateUnlocked } from "../gate/gateAdmission.js";
 import { createHuntWorld } from "../hunt/huntWorld.js";
 import { createHuntRuntime } from "../hunt/huntRuntime.js";
-import { prepareNativeHuntEntry } from "../hunt/capture/nativeHuntEntryTransaction.js";
 import { applyNativeHuntReturn } from "../hunt/capture/nativeHuntHistory.js";
 import { nativeHuntCatalogForBiome, nativeHuntSpeciesByIndex } from "../hunt/capture/nativeHuntSources.js";
 import { nativeIndividualProfile } from "../raising/nativeIndividualProfile.js";
@@ -1999,7 +1998,7 @@ export function createChampionshipStandaloneApp({
      * Prepare the native encounter on isolated RNG/history candidates, then
      * commit only after the existing world and runtime both construct.
      */
-    beginHunt() {
+    async beginHunt() {
       if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) return screens.current();
       if (confirmedGateId === null) return screens.current();
       requireSession();
@@ -2018,6 +2017,11 @@ export function createChampionshipStandaloneApp({
       try {
         // Replay is explicitly requested by research fixtures only. Normal
         // startup has no recorded actor, fixed seed or prototype encounter.
+        // The scene catalog behind this is 1.5MB of run-length direction data
+        // for all 29 fields, and a hunt reads one. Nothing before this screen
+        // touches it, so it is fetched here; main.js warms it once a screen is
+        // up, which is several taps before anyone can reach this.
+        const { prepareNativeHuntEntry } = await import("../hunt/capture/nativeHuntEntryTransaction.js");
         const entry = huntCaptureReplay === null ? prepareNativeHuntEntry({ biomeId:gate.biomeId,
           clock:requireSession().getRaisingHomeSnapshot(),
           rngSnapshot:gameplayRngSnapshot(), persistentState:huntPersistentState }) : null;

@@ -12,8 +12,8 @@ function memoryStorage() {
   return { getItem: (k) => data.get(k) ?? null, setItem: (k, v) => data.set(k, v), removeItem: (k) => data.delete(k) };
 }
 const createApp = (storage, extra = {}) => createChampionshipStandaloneApp({ storage, catalog, cages: presentation.cages, ...extra });
-function enterHunt(app) {
-  app.openGate(); app.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId); app.confirmGate(); app.beginHunt();
+async function enterHunt(app) {
+  app.openGate(); app.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId); app.confirmGate(); await app.beginHunt();
 }
 function circle(app, target) {
   assert.equal(app.beginEnclosureStroke(target.worldX, target.worldY), true);
@@ -29,7 +29,7 @@ for (const ending of ["release", "cancel", "exit", "back"]) {
     app.save();
     const saved = storage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY);
     const raising = app.getRaisingState(), identity = app.getInstanceIdentityState();
-    enterHunt(app);
+    await enterHunt(app);
     const runtime = app.getHuntRuntime(), wilds = runtime.getWildCreatures();
     circle(app, wilds[0]);
     if (ending === "release") {
@@ -61,7 +61,7 @@ for (const ending of ["release", "cancel", "exit", "back"]) {
 }
 test("native initial HP and no card cannot turn a circle into a capacity check or a collected creature", async () => {
   const app = createApp(memoryStorage(), { huntStartingInventory: [] });
-  await app.newGame(); enterHunt(app);
+  await app.newGame(); await enterHunt(app);
   const source = createGateHuntPresentationSource(app);
   const view = source.field.getView({ viewportWidth: 390, viewportHeight: 844 });
   const target = view.wildCreatures[0];

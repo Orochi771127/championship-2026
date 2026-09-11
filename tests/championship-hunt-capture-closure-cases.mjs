@@ -21,7 +21,7 @@ function storage() {
     setItem(key, value) { if (this.fail) throw new Error("quota"); this.writes++; map.set(key, value); }, removeItem: (key) => map.delete(key) };
 }
 const appFor = (store, extra = {}) => createChampionshipStandaloneApp({ storage: store, catalog, cages, huntCaptureReplay: replay(), ...extra });
-function enter(app) { app.openGate(); app.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId); app.confirmGate(); app.beginHunt(); }
+async function enter(app) { app.openGate(); app.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId); app.confirmGate(); await app.beginHunt(); }
 function down(app) {
   const runtime = app.getHuntRuntime(), id = runtime.getWildCreatures()[0].wildId;
   assert.equal(runtime.attachNativeRope(id), true);
@@ -73,7 +73,7 @@ test("untraced AI events reject before changing HP, and cancellation releases th
   assert.throws(() => createNativeRope({ ...r.rope, maxHp: 210, coefficient: 0 }), /COEFFICIENT/);
 });
 test("HP zero, down animation, hand event and insertion are separate ownership boundaries", async () => {
-  const store = storage(), app = appFor(store); await app.newGame(); app.save(); enter(app);
+  const store = storage(), app = appFor(store); await app.newGame(); app.save(); await enter(app);
   const beforeSave = store.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY), beforeIdentity = app.getInstanceIdentityState();
   const { runtime, id } = down(app);
   assert.equal(runtime.getOnCardEntries().length, 0);
@@ -95,7 +95,7 @@ test("HP zero, down animation, hand event and insertion are separate ownership b
   await app.dispose();
 });
 test("an absent memory card leaves a ready wild in the field without allocating or saving", async () => {
-  const app = appFor(storage(), { huntStartingInventory: [] }); await app.newGame(); enter(app);
+  const app = appFor(storage(), { huntStartingInventory: [] }); await app.newGame(); await enter(app);
   const { runtime, id } = down(app); runtime.completeNativeDownAnimation(id);
   assert.deepEqual(runtime.collectNativeHand(id), { accepted: false, reason: "OVER_CAPACITY", event: 0x39 });
   assert.equal(runtime.getCaptureRecord(id).state, "HAND_READY");
@@ -103,7 +103,7 @@ test("an absent memory card leaves a ready wild in the field without allocating 
   await app.dispose();
 });
 test("result confirmation atomically saves the captured source HP, name, stable ID, and home membership", async () => {
-  const store = storage(), app = appFor(store); await app.newGame(); enter(app);
+  const store = storage(), app = appFor(store); await app.newGame(); await enter(app);
   const { runtime } = card(app);
   assert.equal(app.exitHunt(), "HUNT_RESULT"); assert.equal(app.getRaisingState().collection.length, 0);
   app.setHuntResultName("Native One");
@@ -117,13 +117,13 @@ test("result confirmation atomically saves the captured source HP, name, stable 
   await app.dispose(); const restored = appFor(store); await restored.continueGame();
   assert.deepEqual(restored.getRaisingState().collection[0], entry);
   assert.ok(restored.resolveRaisingInstance(entry.instanceId));
-  enter(restored); card(restored); restored.exitHunt(); restored.confirmHuntResult();
+  await enter(restored); card(restored); restored.exitHunt(); restored.confirmHuntResult();
   const second = restored.getRaisingState().collection[1];
   assert.notEqual(second.instanceId, entry.instanceId); assert.equal(second.speciesId, entry.speciesId);
   await restored.dispose();
 });
 test("failed Home save retains the card and unallocated ID; retry commits exactly once", async () => {
-  const store = storage(), app = appFor(store); await app.newGame(); app.save(); enter(app);
+  const store = storage(), app = appFor(store); await app.newGame(); app.save(); await enter(app);
   const { runtime } = card(app); app.exitHunt();
   const raising = app.getRaisingState(), identity = app.getInstanceIdentityState(), saved = store.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY);
   store.fail = true;
@@ -143,7 +143,7 @@ test("a full native 16-slot home pool retains the on-card individual without par
   const store = storage(), app = appFor(store); await app.newGame();
   while (app.getRaisingInstances().length < 16) await restoreLegacyIndividual(app, store);
   app.save(); const saved = store.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY);
-  enter(app); const { runtime } = card(app); app.exitHunt();
+  await enter(app); const { runtime } = card(app); app.exitHunt();
   assert.equal(app.confirmHuntResult(), "HUNT_RESULT");
   assert.equal(app.getHuntResult().commitError, "HOME_ROSTER_FULL");
   assert.equal(runtime.getOnCardEntries().length, 1);
@@ -162,7 +162,7 @@ test("on-card capacity uses species G and accepts equality; it does not use home
 });
 
 test("card release has an explicit cancellable choice and never resurrects the field target or allocates an ID", async () => {
-  const store = storage(), app = appFor(store); await app.newGame(); app.save(); enter(app);
+  const store = storage(), app = appFor(store); await app.newGame(); app.save(); await enter(app);
   const { runtime, id } = card(app); app.exitHunt();
   const identity = app.getInstanceIdentityState(), writes = store.writes;
   const row = app.getHuntResult().rows[0];
@@ -188,7 +188,7 @@ test("full Home can replace an exact collection individual; failed save preserve
   app.save(); const saved = store.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY);
   const old = app.getRaisingState(), first = old.collection[0], second = old.collection[1];
   const identity = app.getInstanceIdentityState();
-  enter(app); const { runtime } = card(app); app.exitHunt(); app.confirmHuntResult();
+  await enter(app); const { runtime } = card(app); app.exitHunt(); app.confirmHuntResult();
   assert.equal(app.getHuntResult().commitError, "HOME_ROSTER_FULL");
   const rows = app.getHuntResult().rows;
   assert.equal(rows[0].kind, "CARD");
@@ -218,7 +218,7 @@ test("full Home can replace an exact collection individual; failed save preserve
 test("starter release removes canonical resident membership and survives save/Continue without resurrection", async () => {
   const store = storage(), app = appFor(store); await app.newGame(); app.save();
   const starter = app.getRaisingInstances().find((entry) => entry.source.kind === "STARTER");
-  app.select(starter.instanceId); enter(app); const { runtime } = card(app); app.exitHunt();
+  app.select(starter.instanceId); await enter(app); const { runtime } = card(app); app.exitHunt();
   const before = app.getSnapshot(), raising = app.getRaisingState();
   assert.equal(app.requestHuntResultRelease(`home:${starter.instanceId}`), true);
   app.confirmHuntResultRelease(); store.fail = true;

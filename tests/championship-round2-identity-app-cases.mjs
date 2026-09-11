@@ -36,11 +36,11 @@ function createApp(storage = memoryStorage()) {
   return app;
 }
 
-function openFirstHunt(app) {
+async function openFirstHunt(app) {
   app.openGate();
   app.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId);
   app.confirmGate();
-  app.beginHunt();
+  await app.beginHunt();
   assert.equal(app.getScreen(), "HUNT_FIELD");
 }
 
@@ -234,7 +234,7 @@ test("an exhausted allocator is never touched by a diagnostic stroke and leaves 
   const app = createApp(storage);
   assert.equal(app.canContinue().loadable, true);
   await app.continueGame();
-  openFirstHunt(app);
+  await openFirstHunt(app);
   const field = app.getHuntRuntime();
   const before = field.getWildCreatures();
   const target = before[0];

@@ -11,7 +11,7 @@ async function start(minute=420){
     cages:read('docs/contracts/championship/raising-home-presentation.v1.json').cages,
     rngClock:()=>({hour:13,minute:20,second:50})});
   await app.newGame();app.advanceClock({units:(minute-420)*400+137,divisor:400});
-  app.openGate();app.selectGate(app.getGates().find(g=>g.biomeId==='Grass').gateId);app.confirmGate();app.beginHunt();
+  app.openGate();app.selectGate(app.getGates().find(g=>g.biomeId==='Grass').gateId);app.confirmGate();await app.beginHunt();
   assert.equal(app.getScreen(),'HUNT_FIELD');return app;
 }
 test('normal Hunt follows original live clock receipt and clears the scene remainder',async()=>{

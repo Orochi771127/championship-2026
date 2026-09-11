@@ -36,7 +36,7 @@ while(app.getRaisingInstances().length<16){
  enclosedAt:'2026-09-05T00:00:00.000Z',originGateId:app.getGates()[0].gateId,cageId:Object.values(saved.raising.assignments)[0]});
  storage.setItem(CHAMPIONSHIP_MODERN_SAVE_KEY,JSON.stringify(saved));await app.continueGame();
 }
-app.openGate();app.selectGate(app.getGates()[0].gateId);app.confirmGate();app.beginHunt();
+app.openGate();app.selectGate(app.getGates()[0].gateId);app.confirmGate();await app.beginHunt();
 const runtime=app.getHuntRuntime(),id=runtime.getWildCreatures()[7].wildId;
 runtime.attachNativeRope(id);
 while(runtime.getCaptureRecord(id).currentHp>0) runtime.tickNativeRope(id,{dxQ12:60*4096,dyQ12:0});

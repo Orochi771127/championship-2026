@@ -296,7 +296,7 @@ test("VS2 walks Raising Home to the Hunt field and back through the published se
   assert.equal(equipped.durability, 6, 'native basic rope byte, not the historical example value');
   assert.equal(equipped.durabilityConsumption, "ROM_NATIVE_PULL_CONTROLLER");
 
-  source.intents.beginHunt();
+  await source.intents.beginHunt();
   const field = source.getFrame().huntField;
   assert.equal(source.getFrame().screen, CHAMPIONSHIP_SCREENS.HUNT_FIELD);
   assert.equal(field.world.widthTiles.value, 128);
@@ -334,7 +334,7 @@ test("the Hunt toolbar is the ROM-verified mode with every slot still unbound", 
   source.intents.openGate();
   source.intents.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId);
   source.intents.confirmGate();
-  source.intents.beginHunt();
+  await source.intents.beginHunt();
 
   const toolbar = source.getFrame().huntField.toolbar;
   assert.equal(toolbar.mode.value, 2, "OVL0 0x0211A138 sets Hunt mode 2");
@@ -361,7 +361,7 @@ test("Hunt exposes only the authorized native controls/readouts and no invented 
   source.intents.openGate();
   source.intents.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId);
   source.intents.confirmGate();
-  source.intents.beginHunt();
+  await source.intents.beginHunt();
 
   // Capture uses named normal tool intents, never a shortcut that grants it.
   const intents = Object.keys(source.intents);
@@ -443,7 +443,7 @@ test("Hunt exploration adds no transient save fields, and reload preserves histo
   source.intents.openGate();
   source.intents.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId);
   source.intents.confirmGate();
-  source.intents.beginHunt();
+  await source.intents.beginHunt();
 
   // Saving mid-Hunt is allowed and writes only the existing envelope.
   source.intents.requestSave();
@@ -482,7 +482,7 @@ test("starting a new game clears any expedition in progress", async () => {
   source.intents.openGate();
   source.intents.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId);
   source.intents.confirmGate();
-  source.intents.beginHunt();
+  await source.intents.beginHunt();
   assert.equal(app.getScreen(), CHAMPIONSHIP_SCREENS.HUNT_FIELD);
 
   await app.newGame();

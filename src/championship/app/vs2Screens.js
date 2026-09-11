@@ -353,7 +353,7 @@ export function createHuntLoadoutView({ root, source }) {
   const begin = actionButton("開始狩獵", { primary: true });
   footer.append(back, begin);
   back.addEventListener("click", () => source.intents.leaveScreen());
-  begin.addEventListener("click", () => source.intents.beginHunt());
+  begin.addEventListener("click", () => { void source.intents.beginHunt(); });
 
   const classRows = new Map();
   const pluginRows = new Map();

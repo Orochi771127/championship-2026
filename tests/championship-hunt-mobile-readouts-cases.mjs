@@ -75,7 +75,7 @@ test('normal selection publishes target changes once through the existing source
     assert.equal(grass.entranceFeeBits, 0);
     assert.equal(source.getFrame().gateSelect.walletBits, app.getShopFrame().bits);
     source.intents.confirmGate();
-    source.intents.beginHunt();
+    await source.intents.beginHunt();
     const target = app.getHuntRuntime().getWildCreatures()[0];
     const before = events;
     const savedKeys = [...data.keys()];

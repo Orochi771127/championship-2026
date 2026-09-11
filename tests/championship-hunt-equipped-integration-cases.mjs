@@ -17,7 +17,7 @@ test('all 34 consumables reach normal generated actors, consume stock and leave 
       huntStartingInventory:[{itemId:item.itemId,quantity:2},{itemId:HUNT_MEMORY_CARDS[0].itemId,quantity:1}]});
     try{
       await app.newGame();app.openGate();app.selectGate(app.getGates().find(g=>g.biomeId==='Grass').gateId);app.confirmGate();
-      app.selectHuntEquipment(item.equipmentClass,item.itemId);app.beginHunt();
+      app.selectHuntEquipment(item.equipmentClass,item.itemId);await app.beginHunt();
       const before=app.getHuntLoadout().getSelectedEquipment().find(e=>e.itemId===item.itemId).quantity;
       const runtime=app.getHuntRuntime();assert.ok(runtime,item.itemId);
       assert.equal(runtime.selectTool(item.equipmentClass),true,item.itemId);runtime.tick(frame);

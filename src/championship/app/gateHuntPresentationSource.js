@@ -411,8 +411,8 @@ export function createGateHuntPresentationSource(app) {
       app.selectHuntMemoryCard(itemId);
       return commit();
     },
-    beginHunt() {
-      app.beginHunt();
+    async beginHunt() {
+      await app.beginHunt();
       return commit();
     },
     /** Continuous input goes to the existing field runtime only. */

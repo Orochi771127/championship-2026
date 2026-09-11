@@ -47,7 +47,7 @@ async function enterFirstHunt(app) {
   app.openGate();
   app.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId);
   app.confirmGate();
-  app.beginHunt();
+  await app.beginHunt();
 }
 
 function drawClosedLoop(host, cx, cy, radius = 36) {

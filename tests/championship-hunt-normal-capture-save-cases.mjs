@@ -10,7 +10,7 @@ const map=new Map(),storage={getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(
 const app=createChampionshipStandaloneApp({storage,catalog:read('src/data/championship/catalogs/creature-species.r1.json'),
   cages:read('docs/contracts/championship/raising-home-presentation.v1.json').cages,rngClock:()=>({hour:13,minute:20,second:50})});
 await app.newGame();const before=app.getRaisingInstances().map(r=>r.instanceId);try {app.openGate();app.selectGate(app.getGates().find(g=>g.biomeId==='Grass').gateId);app.confirmGate();
-app.getHuntLoadout().selectEquipment('ROPE','championship:2026:hunt-item:rope-i');app.beginHunt();
+app.getHuntLoadout().selectEquipment('ROPE','championship:2026:hunt-item:rope-i');await app.beginHunt();
 const runtime=app.getHuntRuntime(),frame=1000*560190/33513982;
 runtime.selectTool('ROPE');runtime.tick(frame);
 let target=runtime.getWildCreatures().sort((a,b)=>a.maxHp-b.maxHp)[0];

@@ -92,7 +92,7 @@ test("normal New Game, Gate roundtrip, Save and Continue preserve one app-owned 
   const before = app.getHuntPersistentState();
   assert.deepEqual(before, createNativeHuntPersistentState());
   const external = app.getHuntPersistentState(); external.modifiers[0][0] = 8; external.history.cursor = 2;
-  app.openGate(); app.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId); app.confirmGate(); app.beginHunt(); app.exitHunt();
+  app.openGate(); app.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId); app.confirmGate(); await app.beginHunt(); app.exitHunt();
   assert.deepEqual(app.getHuntPersistentState(), before);
   assert.equal(app.save().phase, "SAVED");
   const stored = JSON.parse(s.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY));
@@ -137,7 +137,7 @@ test("v1..v4 lack Hunt history: migrate as null and keep R2 bytes, wallet and v4
     assert.equal(s.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY), bytes);
     await app.continueGame(); assert.equal(app.getHuntPersistentState(), null);
     assert.deepEqual(app.getGameplayRngState(), legacy.gameplayRng ?? null);
-    app.openGate(); app.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId); app.confirmGate(); app.beginHunt(); app.exitHunt();
+    app.openGate(); app.selectGate(app.getGates().find(g => g.biomeId === "Grass").gateId); app.confirmGate(); await app.beginHunt(); app.exitHunt();
     assert.equal(app.getHuntPersistentState(), null); assert.equal(app.save().phase, "SAVED");
     const saved = JSON.parse(s.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY));
     assert.equal(saved.schemaVersion, CHAMPIONSHIP_MODERN_SAVE_SCHEMA_VERSION); assert.equal(saved.huntHistory, null);

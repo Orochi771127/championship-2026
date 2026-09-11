@@ -49,7 +49,7 @@ test("app owns advancing channels across Gate visits and Save/Continue; clock is
   const candidate = prepareNativeHuntEntry({biomeId:app.getConfirmedGate().biomeId,clock:app.getCalendar(),
     rngSnapshot:beforeGate,persistentState:app.getHuntPersistentState()});
   native = candidate.rng;
-  app.beginHunt(); app.exitHunt();
+  await app.beginHunt(); app.exitHunt();
   const afterGate = {version:1,...native.snapshot()};
   assert.deepEqual(app.getGameplayRngState(), afterGate);
   assert.notDeepEqual(afterGate,beforeGate);

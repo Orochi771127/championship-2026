@@ -53,7 +53,7 @@ test("rank zero exposes Grass admission; locked previews cannot bypass confirmat
     app.creditBits(10000); configure(app);
     assert.equal(app.getScreen(), "GATE_SELECT");
     assert.equal(app.getGateAdmission().reason, "GATE_LOCKED");
-    app.beginHunt(); assert.equal(app.getHuntRuntime(), null);
+    await app.beginHunt(); assert.equal(app.getHuntRuntime(), null);
     assert.equal(app.getShopFrame().bits, 10000);
   } finally { await app.dispose(); }
 });
@@ -67,7 +67,7 @@ test("insufficient fee refuses before RNG, history, clock, runtime or wallet mut
     const before = [app.getGameplayRngState(), app.getHuntPersistentState(), app.getSnapshot()];
     const source = createGateHuntPresentationSource(app);
     assert.equal(source.getFrame().huntLoadout.canBegin, false);
-    app.beginHunt();
+    await app.beginHunt();
     assert.equal(app.getScreen(), "HUNT_LOADOUT"); assert.equal(calls, 0);
     assert.equal(app.getHuntEntryError(), "INSUFFICIENT_FUNDS");
     assert.deepEqual([app.getGameplayRngState(), app.getHuntPersistentState(), app.getSnapshot()], before);
@@ -81,16 +81,16 @@ test("selection and cancellation cost nothing; actual paid entry debits once and
   try {
     app.setTamerRank(3); app.creditBits(900); configure(app);
     app.leaveScreen(); app.leaveScreen(); assert.equal(app.getShopFrame().bits, 900);
-    configure(app); app.beginHunt();
+    configure(app); await app.beginHunt();
     assert.equal(app.getScreen(), "HUNT_FIELD"); assert.equal(app.getShopFrame().bits, 450);
-    app.beginHunt(); assert.equal(app.getShopFrame().bits, 450);
+    await app.beginHunt(); assert.equal(app.getShopFrame().bits, 450);
     app.exitHunt(); assert.equal(app.getShopFrame().bits, 450);
     assert.equal(app.save().phase, "SAVED");
     restored = make({storage:disk}); await restored.continueGame();
     assert.equal(restored.getShopFrame().bits, 450); assert.equal(restored.getTamerRank(), 3);
-    configure(restored); restored.beginHunt();
+    configure(restored); await restored.beginHunt();
     assert.equal(restored.getScreen(), "HUNT_FIELD"); assert.equal(restored.getShopFrame().bits, 0);
-    restored.exitHunt(); configure(restored); restored.beginHunt();
+    restored.exitHunt(); configure(restored); await restored.beginHunt();
     assert.equal(restored.getScreen(), "HUNT_LOADOUT");
     assert.equal(disk.keys().length, 1);
   } finally { await app.dispose(); await restored?.dispose(); }
@@ -98,14 +98,14 @@ test("selection and cancellation cost nothing; actual paid entry debits once and
 
 test("free Grass works with zero Bits; runtime construction failure never charges", async () => {
   const app = make(); await app.newGame();
-  try { configure(app, "Grass"); app.beginHunt(); assert.equal(app.getScreen(), "HUNT_FIELD"); assert.equal(app.getShopFrame().bits, 0); }
+  try { configure(app, "Grass"); await app.beginHunt(); assert.equal(app.getScreen(), "HUNT_FIELD"); assert.equal(app.getShopFrame().bits, 0); }
   finally { await app.dispose(); }
   const broken = make({huntRuntimeFactory: () => {throw Error("TEST_RUNTIME_FAILURE");}});
   await broken.newGame();
   try {
     broken.setTamerRank(3); broken.creditBits(450); configure(broken);
     const before = [broken.getGameplayRngState(), broken.getHuntPersistentState(), broken.getSnapshot()];
-    broken.beginHunt();
+    await broken.beginHunt();
     assert.equal(broken.getHuntEntryError(), "TEST_RUNTIME_FAILURE");
     assert.equal(broken.getShopFrame().bits, 450); assert.equal(broken.getScreen(), "HUNT_LOADOUT");
     assert.deepEqual([broken.getGameplayRngState(), broken.getHuntPersistentState(), broken.getSnapshot()], before);
@@ -120,12 +120,14 @@ test("wallet observers see a committed Hunt and cannot reenter or change the fee
     const refusals = [];
     const unsub = app.subscribeShop(() => {
       observations.push([app.getScreen(), !!app.getHuntRuntime(), app.getShopFrame().bits]);
+      // Not awaited: the re-entrancy refusal is synchronous, and awaiting in
+      // this observer would change what it records.
       app.beginHunt(); app.leaveScreen();
       for (const attempt of [()=>app.creditBits(10),()=>app.setTamerRank(0),()=>app.save()]) {
         try { attempt(); refusals.push(null); } catch (error) { refusals.push(error.message); }
       }
     });
-    app.beginHunt(); unsub();
+    await app.beginHunt(); unsub();
     assert.deepEqual(observations, [["HUNT_FIELD", true, 0]]);
     assert.equal(refusals.length,3);
     assert.match(refusals[0],/HUNT_TRANSACTION_ACTIVE/);assert.match(refusals[1],/HUNT_TRANSACTION_ACTIVE/);assert.match(refusals[2],/HUNT_COMMIT_ACTIVE/);
@@ -171,7 +173,7 @@ test('the final title victory grants the original gate waiver and actual paid-bi
   assert.equal(JSON.parse(disk.getItem(key)).progression.nativeTitles.feeWaiver,true);
   await app.dispose();app=make({storage:disk});await app.continueGame();
   configure(app);const before=app.getShopFrame().bits;
-  assert.equal(app.getGateAdmission().chargeBits,0);app.beginHunt();
+  assert.equal(app.getGateAdmission().chargeBits,0);await app.beginHunt();
   assert.equal(app.getScreen(),'HUNT_FIELD');assert.equal(app.getShopFrame().bits,before);
   app.exitHunt();app.save();assert.equal(JSON.parse(disk.getItem(key)).progression.nativeTitles.feeWaiver,true);await app.dispose();
 });

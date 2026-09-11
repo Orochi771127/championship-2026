@@ -20,9 +20,9 @@ const store = () => { const map=new Map(); return { fail:false, getItem:k=>map.g
   setItem(k,v) { if (this.fail) throw Error("FULL"); map.set(k,v); }, removeItem:k=>map.delete(k) }; };
 const appFor = (storage, options={}) => createChampionshipStandaloneApp({ storage,catalog,cages,
   rngClock:()=>({hour:13,minute:20,second:50}), ...options });
-function enter(app, biomeId="Grass") {
+async function enter(app, biomeId="Grass") {
   app.openGate(); app.selectGate(app.getGates().find(g=>g.biomeId===biomeId).gateId); app.confirmGate();
-  return app.beginHunt();
+  return await app.beginHunt();
 }
 
 test("all Gate node positions and 352 supported native variant cases use identity, never UI ordinal", () => {
@@ -126,11 +126,11 @@ test("original carried post-registration probe proves common slot binding and an
 
 test("normal app entry commits once, advances native AI on the shared RNG, and reentry continues it", async () => {
   const app=appFor(store()); await app.newGame();
-  const before=app.getGameplayRngState(); enter(app);
+  const before=app.getGameplayRngState(); await enter(app);
   assert.equal(app.getHuntEntryError(),null); assert.ok(app.getHuntRuntime().world.nativeEntry);
   const first=app.getHuntRuntime().getNativeEntryState(), committed=app.getGameplayRngState();
   assert.notDeepEqual(committed,before);
-  app.beginHunt(); assert.deepEqual(app.getGameplayRngState(),committed);
+  await app.beginHunt(); assert.deepEqual(app.getGameplayRngState(),committed);
   const wilds=app.getHuntRuntime().getWildCreatures();
   app.getHuntRuntime().tick(1000);
   assert.notDeepEqual(app.getHuntRuntime().getWildCreatures(),wilds);
@@ -139,7 +139,7 @@ test("normal app entry commits once, advances native AI on the shared RNG, and r
   assert.equal(app.getHuntRuntime().getCaptureAvailability().canCollect,false);
   first.encounter.actors[0].individual.fields["050"]=0;
   assert.notEqual(app.getHuntRuntime().getNativeEntryState().encounter.actors[0].individual.fields["050"],0);
-  app.exitHunt(); enter(app); assert.notDeepEqual(app.getGameplayRngState(),committed);
+  app.exitHunt(); await enter(app); assert.notDeepEqual(app.getGameplayRngState(),committed);
   await app.dispose();
 });
 
@@ -148,11 +148,11 @@ test("runtime failure after generation preserves RNG/history/save/Loadout; retry
   const app=appFor(s,{huntRuntimeFactory(args) { assert.ok(args.nativeEntry.encounter.actors.length); if(fail)throw Error("CONTROLLED_RUNTIME_FAILURE"); return createHuntRuntime(args); }});
   const control=appFor(store()); await app.newGame(); await control.newGame(); app.save();
   const rng=app.getGameplayRngState(), history=app.getHuntPersistentState(), saved=s.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY);
-  enter(app); assert.equal(app.getHuntRuntime(),null); assert.equal(app.getHuntEntryError(),"CONTROLLED_RUNTIME_FAILURE");
+  await enter(app); assert.equal(app.getHuntRuntime(),null); assert.equal(app.getHuntEntryError(),"CONTROLLED_RUNTIME_FAILURE");
   assert.equal(app.getScreen(),"HUNT_LOADOUT");
   assert.deepEqual(app.getGameplayRngState(),rng); assert.deepEqual(app.getHuntPersistentState(),history);
   assert.equal(s.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY),saved);
-  fail=false; app.beginHunt(); enter(control);
+  fail=false; await app.beginHunt(); await enter(control);
   assert.deepEqual(app.getHuntRuntime().getNativeEntryState(),control.getHuntRuntime().getNativeEntryState());
   assert.deepEqual(app.getGameplayRngState(),control.getGameplayRngState());
   await app.dispose(); await control.dispose();
@@ -168,18 +168,20 @@ test("entry save observers see one complete committed owner and cannot reenter R
     // surface assertion failures outside that callback instead.
     try {
       assert.equal(app.getScreen(),"HUNT_FIELD"); assert.ok(app.getHuntRuntime()?.world.nativeEntry);
+      // Not awaited: this probes the synchronous re-entrancy refusal, which
+      // beginHunt still makes before it fetches anything.
       const rng=app.getGameplayRngState(); app.beginHunt(); app.exitHunt();
       assert.equal(app.getScreen(),"HUNT_FIELD"); assert.deepEqual(app.getGameplayRngState(),rng);
       assert.throws(()=>app.nextGameplayRandom(0),/WHILE_HUNT_COMMIT_ACTIVE/);
     } catch(error) { errors.push(error.message); }
   });
   app.openGate(); app.selectGate(app.getGates().find(g=>g.biomeId==="Grass").gateId); app.confirmGate();
-  armed=true; app.beginHunt(); armed=false; assert.equal(observed,1); assert.deepEqual(errors,[]); stop(); await app.dispose();
+  armed=true; await app.beginHunt(); armed=false; assert.equal(observed,1); assert.deepEqual(errors,[]); stop(); await app.dispose();
 });
 
 test("Save/Continue after entry produces the same next encounter, including a failed save retry", async () => {
   const s=store(), app=appFor(s); await app.newGame(); app.save(); const saved=s.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY);
-  enter(app); app.exitHunt(); const rng=app.getGameplayRngState(); s.fail=true;
+  await enter(app); app.exitHunt(); const rng=app.getGameplayRngState(); s.fail=true;
   assert.notEqual(app.save().phase,"SAVED"); assert.equal(s.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY),saved);
   assert.deepEqual(app.getGameplayRngState(),rng); s.fail=false; assert.equal(app.save().phase,"SAVED");
   const restored=appFor(s); await restored.continueGame();
@@ -187,7 +189,7 @@ test("Save/Continue after entry produces the same next encounter, including a fa
   // Advance the control by those same draws before comparing the next Hunt.
   app.nextGameplayRandom(0x26);app.nextGameplayRandom(0x26);
   assert.deepEqual(restored.getGameplayRngState(),app.getGameplayRngState());
-  enter(app); enter(restored);
+  await enter(app); await enter(restored);
   assert.deepEqual(restored.getHuntRuntime().getNativeEntryState(),app.getHuntRuntime().getNativeEntryState());
   assert.deepEqual(restored.getGameplayRngState(),app.getGameplayRngState());
   await app.dispose(); await restored.dispose();
@@ -196,7 +198,7 @@ test("Save/Continue after entry produces the same next encounter, including a fa
 test("legacy history and non-null carried actor fail before normal entry can mutate durable inputs", async () => {
   const s=store(), app=appFor(s); await app.newGame(); app.save(); const old=JSON.parse(s.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY));
   old.schemaVersion=4; delete old.huntHistory; s.setItem(CHAMPIONSHIP_MODERN_SAVE_KEY,JSON.stringify(old));
-  const legacy=appFor(s); await legacy.continueGame(); const rng=legacy.getGameplayRngState(); enter(legacy);
+  const legacy=appFor(s); await legacy.continueGame(); const rng=legacy.getGameplayRngState(); await enter(legacy);
   assert.equal(legacy.getHuntEntryError(),"HUNT_ENTRY_LEGACY_HISTORY_UNKNOWN");
   assert.equal(legacy.getHuntRuntime(),null); assert.equal(legacy.getHuntPersistentState(),null);
   assert.deepEqual(legacy.getGameplayRngState(),rng);
