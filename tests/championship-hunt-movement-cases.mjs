@@ -64,10 +64,26 @@ test("unclosed follower, controller and direction cases fail without changing ca
   const call = receipt.calls[0], state = structuredClone(call.before), before = structuredClone(state);
   assert.throws(() => stepNativeHuntMovement(state, 3, {}), /PORT_REQUIRED/);
   assert.throws(() => stepNativeHuntMovement({ ...state, followTarget: 1 }, 3, environment(call)), /FOLLOW_MOVEMENT_REQUIRES_TRACE/);
-  assert.throws(() => stepNativeHuntMovement(state, 3, { ...environment(call), readAttribute: () => 15 }), /UNASSIGNED_BRANCH_REQUIRES_TRACE/);
   assert.throws(() => stepNativeHuntMovement(state, 3, { ...environment(call), queryControllers: () => ({ obstacle: 2 }) }), /CONTROLLER_BRANCH_REQUIRES_TRACE/);
   assert.deepEqual(state, before);
   assert.deepEqual(nativeMovementTile([-4097, -8 * 4096, 0]), [0, -1]);
+});
+
+test("the unassigned direction nibble steers instead of refusing", () => {
+  // It used to belong in the refusal case above. The swept bound closed it; see
+  // championship-hunt-direction-unassigned-cases for the evidence it steers on.
+  // Its own permissive ports: the receipt-checked environment asserts the exact
+  // tiles and candidates of the recorded call, which a different direction moves.
+  const call = receipt.calls[0], state = structuredClone(call.before);
+  const grid = call.steps.find((s) => s.terrainGrid).terrainGrid;
+  const open = {
+    width: grid.width, height: grid.height, camera: call.before.camera,
+    readAttribute: () => 15, readTerrain: () => 0,
+    queryControllers: () => ({ obstacle: 0, secondaryBlocked: false, sideEffectsClosed: true })
+  };
+  let after;
+  assert.doesNotThrow(() => { after = stepNativeHuntMovement(state, 3, open); });
+  assert.notDeepEqual([...after.state.directionQ12], [...call.before.directionQ12]);
 });
 
 test("controlled ARM probes verify all direction literals, flag precedence and signed rounding", () => {

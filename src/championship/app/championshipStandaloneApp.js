@@ -1143,8 +1143,6 @@ export function createChampionshipStandaloneApp({
 
     getClockRunState() {
       if (!session) return Object.freeze({ running: false, reason: "NO_SESSION" });
-      if(screens.current()===CHAMPIONSHIP_SCREENS.HUNT_FIELD&&huntRuntime?.getToolState?.()?.fault)
-        return Object.freeze({running:false,reason:'HUNT_INTERRUPTED'});
       if(this.hasRaisingPresentation())return Object.freeze({running:false,reason:'RAISING_PRESENTATION'});
       const snapshot = session.getRaisingHomeSnapshot();
       if (snapshot.paused) return Object.freeze({ running: false, reason: "PAUSED" });

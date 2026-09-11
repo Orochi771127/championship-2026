@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import { steerNativeHuntDirection, steerNativeHuntDirectionCell, stepNativeHuntMovement } from "../src/championship/hunt/capture/nativeHuntMovement.js";
+import { steerNativeHuntDirection, steerNativeHuntDirectionCell, stepNativeHuntMovement, UNASSIGNED_TARGET_Q12 } from "../src/championship/hunt/capture/nativeHuntMovement.js";
 import { nativeNormalizeQ12 } from "../src/championship/hunt/capture/nativeCapturePhases.js";
 import {createNativeHuntFieldControls} from '../src/championship/hunt/capture/nativeHuntFieldControls.js';
 
@@ -96,31 +96,44 @@ test("every shipped field carries the blend rate the unassigned branch consumes"
   assert.ok(cells >= Object.keys(scene.environments).length, `only ${cells} unassigned palette cells`);
 });
 
-test('unobserved encounters cannot borrow a different actor heap address',()=>{
-  assert.throws(()=>steerNativeHuntDirection([0,1,0],15),/UNASSIGNED_BRANCH_REQUIRES_TRACE/);
-  assert.throws(()=>steerNativeHuntDirectionCell([0,1,0],{unknownDirection:15,blendQ12:205}),/UNASSIGNED_BRANCH_REQUIRES_TRACE/);
+test('an unobserved encounter steers at the swept bound instead of stopping',()=>{
+  const sweep=JSON.parse(fs.readFileSync('docs/research/HUNT_DIRECTION_ACTOR_SWEEP_2026-09-11.json','utf8'));
+  // The substitute is the output the original was observed producing, and the
+  // sweep says no address main RAM can hold moves the real one further than a
+  // few degrees -- far inside one entry of the original's own direction table.
+  assert.deepEqual([...UNASSIGNED_TARGET_Q12],[...sweep.liveProducer.observedNormalized]);
+  assert.ok(sweep.sweep.spreadDeg<sweep.tableStepDeg,'cone must be finer than the original table step');
+  const deg=degrees(UNASSIGNED_TARGET_Q12);
+  assert.ok(deg>=sweep.sweep.degMin&&deg<=sweep.sweep.degMax,'substitute must sit inside the swept cone');
+
+  // Every shipped attribute now returns a direction rather than throwing, and a
+  // caller that captured the encounter's own words still gets those exactly.
+  for(const attribute of SHIPPED){
+    const bounded=steerNativeHuntDirection([0,1,0],attribute);
+    assert.equal(bounded.length,3);
+    assert.ok(bounded.some(n=>n!==0),`attribute ${attribute} produced no steering`);
+    const replayed=steerNativeHuntDirection([0,1,0],attribute,NATIVE_UNASSIGNED_DIRECTION_SCRATCH);
+    assert.notDeepEqual([...replayed],[...bounded],'captured replay must not collapse onto the bound');
+  }
 });
 
-test('an untraced encounter stops once, disables tools and preserves completed card entries for exit',()=>{
+test('an untraced encounter keeps running, keeps its tools and still commits its cards',()=>{
   const pool=JSON.parse(fs.readFileSync('docs/research/HUNT_INDIVIDUAL_POOL_CPU_CHECK_2026-09-06.json','utf8'));
   const individual=structuredClone(pool.poolVectors[0].records[0]);
   const record={speciesIndex:individual.fields['000'],individual,positionQ12:[80*4096,80*4096,0],facing:1,
     ai:{state:8,speedQ12:4096,field054:8,field1e0:0,field1d8:600}};
-  let draws=0,notifications=0;
   const controls=createNativeHuntFieldControls({records:[record,structuredClone(record)],wildIds:['moving','collected'],
     environment:environment({unknownDirection:15,blendQ12:205,escapeBoundary:false}),
-    rng:{next:()=>{draws++;return 0;}},loadout:{getSelectedEquipment:()=>[]},consumeItem:()=>assert.fail('unexpected inventory write'),
-    maxCardG:32,onChange:()=>notifications++});
+    rng:{next:()=>0},loadout:{getSelectedEquipment:()=>[]},consumeItem:()=>assert.fail('unexpected inventory write'),
+    maxCardG:32,onChange:()=>{}});
   controls.actors[1].cardState='ON_CARD';
   const entries=controls.getOnCardEntries();
+  const before=[...controls.actors[0].directionQ12];
   assert.doesNotThrow(()=>controls.tick(17));
-  assert.equal(controls.getState().fault,'NATIVE_DIRECTION_UNASSIGNED_BRANCH_REQUIRES_TRACE');
-  assert.equal(controls.getState().notice,'HUNT_INTERRUPTED');
-  assert.equal(controls.hasPending(),false);
-  assert.equal(controls.selectTool('HAND'),false);assert.equal(controls.pointerDown(0,0),false);
-  const state=structuredClone(controls.getState()),count=draws;
-  controls.tick(100000);
-  assert.deepEqual(controls.getState(),state);assert.equal(draws,count);assert.equal(notifications,1);
+  assert.notDeepEqual([...controls.actors[0].directionQ12],before,'the wild must have steered');
+  assert.equal(controls.getState().notice,null);
+  assert.equal(controls.selectTool('HAND'),true);
+  assert.doesNotThrow(()=>controls.tick(1000));
   assert.deepEqual(controls.getOnCardEntries(),entries);
   controls.commit();assert.equal(controls.actors[1].cardState,'HOME_COMMITTED');
 });

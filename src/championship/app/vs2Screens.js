@@ -569,7 +569,7 @@ export async function createHuntFieldView({ root, source, mountField }) {
       for(const tool of next.toolState.tools){const button=toolButtons.get(tool.id);if(button){button.disabled=!tool.enabled;button.setAttribute("aria-pressed",String(next.toolState.activeTool===tool.id));
         const counter=plugins?.counters.find(c=>c.id===tool.id);button.textContent=uiText(tool.label+(counter?` ×${counter.quantity}`:''));}}
       const selectedTool=next.toolState.tools.find(t=>t.id===next.toolState.activeTool);
-      movementHint.textContent=uiText(({HUNT_INTERRUPTED:"狩獵暫停：此處的角色行為尚未完成還原。請按離開返回；已捕獲的數碼獸仍保留在記憶卡。",OVER_CAPACITY:"記憶卡容量不足",ROPE_BROKEN:"繩索斷了",ON_CARD:"已收入記憶卡",EMPTY:"道具已用完",
+      movementHint.textContent=uiText(({OVER_CAPACITY:"記憶卡容量不足",ROPE_BROKEN:"繩索斷了",ON_CARD:"已收入記憶卡",EMPTY:"道具已用完",
         BLOCKED_TERRAIN:"無法放在這個位置",FOOD_POOL_FULL:"場上的肉餌已滿",TOOL_POOL_FULL:"場上的道具已滿"})[next.toolState.notice]
         ?? ({ROPE:"快速畫圈綑綁 · 按住目標拉動繩索 · 放鬆可恢復耐久",SHOT:"按住目標射擊",WIRE:"拖曳拉出鋼索 · 放手完成",
           MEAT:"輕觸地面放置肉餌",DECOY:"輕觸放置玩具 · 再輕觸指定移動方向",LIGHT:"輕觸放置誘引燈 · 夜間吸引目標",

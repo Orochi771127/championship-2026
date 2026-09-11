@@ -1,0 +1,72 @@
+{
+  "evidence": "BOUNDED_NATIVE_REPLAY_WITH_LIVE_CONSTANT",
+  "inputClass": "ONE_FREE_WORD_SWEPT_OVER_ALL_OF_MAIN_RAM_SECOND_WORD_FIXED_BY_LIVE_TRACE",
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "liveProducer": {
+    "source": "docs/research/HUNT_STEERING_EDGE_LIVE_2026-09-09.json",
+    "xMeaning": "wild actor object address",
+    "yMeaning": "ARM9 02047D5C animation return address",
+    "yIsConstant": "02047944",
+    "observedX": "0230C484",
+    "observedNormalized": [
+      2922,
+      2692,
+      0
+    ],
+    "observedDeg": 42.654
+  },
+  "sweep": {
+    "mainRam": [
+      "02000000",
+      "02400000"
+    ],
+    "step": 256,
+    "actorAddresses": 16385,
+    "blendQ12": 205,
+    "samples": 16385,
+    "degMin": 41.8789,
+    "degMax": 45.253,
+    "spreadDeg": 3.3741,
+    "quadrants": [
+      "+x+y"
+    ],
+    "witnessMin": {
+      "actor": "023FEA00",
+      "target": [
+        3046,
+        2731,
+        0
+      ]
+    },
+    "witnessMax": {
+      "actor": "02000000",
+      "target": [
+        2818,
+        2843,
+        0
+      ]
+    },
+    "blendExample": {
+      "before": [
+        3138,
+        2633
+      ],
+      "target": [
+        2922,
+        2692,
+        0
+      ],
+      "out": [
+        3127,
+        2636,
+        0
+      ]
+    }
+  },
+  "tableStepDeg": 39.999,
+  "tableDirectionsInsideCone": [],
+  "limits": [
+    "The second stack word is a constant only for the one live sequence recorded.",
+    "Sweeping every main-RAM address bounds the branch; it does not predict which address a given encounter allocates."
+  ]
+}

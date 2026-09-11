@@ -6,7 +6,7 @@ Priority = (Impact + Risk) x (6 - Effort), inputs 1–5. Closed items remain rec
 
 | Debt | Impact / Risk / Effort | Score | Disposition |
 |---|---|---:|---|
-| Untraced steering escapes the Hunt ticker | 5 / 5 / 3 | 30 | Crash contained: explicit pause, tools/clock stop, completed card entries survive normal exit. Exact source producer remains unknown; no constant heap address substituted. |
+| Untraced steering escapes the Hunt ticker | 5 / 5 / 3 | 30 | Closed. The 2026-09-09 live trace already named both consumed words: the wild actor's object address and the ARM9 02047D5C animation return address. The second is a constant, so one word varies, not two. Sweeping it over all 4MB of main RAM at 256-byte steps — 16,385 addresses — puts the steering target in a 3.37-degree cone, entirely down-right, against a direction table whose own entries are 40 degrees apart: no address the allocator can hand out moves the real target as far as one entry of the vocabulary the original steers in. The port now steers at the output the original was observed producing, which sits inside that cone, and captured replays still get their own words exactly. The pause, the fault flag and the interrupted-hunt notice are removed with it. This is bounded equivalence at finer than the original's own resolution, not an identified heap address. See [the sweep](research/HUNT_DIRECTION_ACTOR_SWEEP_2026-09-11.json). |
 | Tutorial cursor changes omitted from Save | 4 / 4 / 1 | 40 | Fixed: begin/advance/skip dirty and publish the existing save. Valid older cursors outside the new subset are preserved and reported unavailable. |
 | Championship cursor accepts missing/future results or play after loss | 4 / 4 / 1 | 40 | Fixed: exact flag count, terminal loss, malformed progress rejected before RNG. |
 | Championship pool initializer overlooked | 4 / 4 / 3 | 24 | Resolved for selection: 28 teams, 824 original selector cases, channel 0. Full tournament flow still open. |
@@ -27,7 +27,7 @@ Node 22 CI, manually dispatched hash-checked public Pages playtest, reuse invent
 ## Open restoration obligations
 
 - Raising: evolution hints, original audio, scene peer ordering and full species/condition/visual comparisons.
-- Hunt: encounter-specific steering scratch producer and remaining AI/tool/all-species ordinary capture comparisons. Recovery is not original movement parity.
+- Hunt: remaining AI/tool/all-species ordinary capture comparisons. The steering branch is closed to a swept bound; which address a given encounter allocates is still not predicted.
 - Championship: normal entry/schedule/round transitions, owned party/result/save and presentation integration.
 - Tutorial: cartridge advance predicates and normal UI/event binding; inferred action names are proposals.
 - Battle/cross-scene: remaining caller/ending/per-move visual timing, individual transitions and physical-device acceptance.

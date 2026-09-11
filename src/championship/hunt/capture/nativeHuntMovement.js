@@ -56,18 +56,23 @@ export function nativeMovementTile(positionQ12) {
 // original falls through 0210D9B0 to 0210DAD4 without storing either direction
 // component, so it blends toward whatever the caller left at entry SP-0x30 and
 // SP-0x2C; only Z is re-zeroed, at 0210DADC. The live producer traced on
-// 2026-09-09 leaves X = the actor object address and Y = the animation return
-// address ARM9 02047D5C pushes. Running the original normalize 02002A6C over
-// sampled EWRAM pointers and ARM9 code addresses, all three blend rates and
-// incoming table directions puts those 9,216 samples in one down-right cone of
-// 38.94..45.86 degrees — narrower than the 30-degree step of the original's own
-// table, so the branch is bounded even though no original heap address is
-// reconstructible here. Shipped maps only reach it through attributes 0x0E,
-// 0x0F and 0x8F, all at blend rate 0xcd.
-// docs/research/HUNT_DIRECTION_UNASSIGNED_2026-09-10.json
-// A bounded direction cone does not identify the actor's exact scratch words.
-// Replay callers may supply captured words; normal play must not borrow a
-// different encounter's heap address. The field owns graceful interruption.
+// 2026-09-09 leaves X = the wild actor's object address and Y = the animation
+// return address ARM9 02047D5C pushes, and that return address is a constant.
+// So one word varies, not two. Running the original normalize 02002A6C with Y
+// held at 02047944 and X swept over all 4MB of main RAM at 256-byte steps —
+// 16,385 addresses — puts the steering target in a 41.88..45.25 degree cone,
+// 3.37 degrees wide and entirely down-right. The original's own direction table
+// steps 40 degrees, so no address the allocator can hand out moves this target
+// as far as one entry of the vocabulary the original steers in.
+// docs/research/HUNT_DIRECTION_ACTOR_SWEEP_2026-09-11.json
+//
+// UNASSIGNED_TARGET_Q12 is therefore not a chosen direction. It is the output
+// the original was observed producing on 2026-09-09, and the sweep shows no
+// reachable address puts the real one meaningfully elsewhere. Replay callers
+// that captured the encounter's own words still get those exactly.
+// Shipped maps reach this only through attributes 0x0E, 0x0F and 0x8F, all at
+// blend rate 0xcd.
+export const UNASSIGNED_TARGET_Q12 = Object.freeze([2922, 2692, 0]);
 export function steerNativeHuntDirection(before, attribute, scratchQ12=null) {
   if (!Number.isInteger(attribute) || attribute < 0 || attribute > 255) throw new TypeError("NATIVE_DIRECTION_BYTE_REQUIRED");
   const target2 = DIRECTIONS[attribute & 15];
@@ -79,9 +84,9 @@ export function steerNativeHuntDirection(before, attribute, scratchQ12=null) {
 // Production readers expose consumed steering fields, not raw ESC bytes.
 export function steerNativeHuntDirectionCell(before, cell) {
   const direction = vector(before);
-  if(cell?.unknownDirection!==undefined&&!cell.scratchQ12)throw Error('NATIVE_DIRECTION_UNASSIGNED_BRANCH_REQUIRES_TRACE');
   const target = cell?.unknownDirection !== undefined
-    ? [...vector(cell.scratchQ12).slice(0,2),0] : vector(cell?.targetQ12);
+    ? (cell.scratchQ12 ? [...vector(cell.scratchQ12).slice(0,2),0] : [...UNASSIGNED_TARGET_Q12])
+    : vector(cell?.targetQ12);
   const rate = cell.blendQ12;
   if (![Q12,0x59a,0xcd].includes(rate)) throw Error("NATIVE_DIRECTION_BLEND_REQUIRED");
   if (rate === Q12) return freeze(target);
