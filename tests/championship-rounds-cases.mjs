@@ -123,7 +123,7 @@ test("winning a round that is not the last restores the original share of HP and
   assert.equal(single.fields['050'], 40);
 });
 
-test("the application reports both tournaments and says plainly why entry is still shut", () => {
+test("the application reports both tournaments, each shut until its own stage", () => {
   const rows = makeApp().getChampionshipCategories();
   assert.equal(rows.length, 2);
   assert.deepEqual(rows.map(row => [row.id, row.rounds, row.prize]),
@@ -131,8 +131,12 @@ test("the application reports both tournaments and says plainly why entry is sti
   for (const row of rows) {
     assert.equal(row.poolSizes.length, row.rounds);
     assert.equal(row.arenaIndex, CHAMPIONSHIP_ARENA_INDEX);
-    assert.equal(row.entry, "CHAMPIONSHIP_ROUNDS_NORMAL_FLOW_NOT_INTEGRATED");
+    // A new game has reached neither stage and has neither entry taken.
+    assert.equal(row.unlocked, false);
+    assert.equal(row.registered, false);
+    assert.equal(row.active, false);
   }
+  // The run itself is covered in championship-rounds-flow-cases.
 });
 
 test('tournament progress rejects missing wins, future flags and any result after a lost round',()=>{

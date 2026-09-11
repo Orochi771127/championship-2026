@@ -73,7 +73,9 @@ import { createCageEditRuntime } from "../cage/cageEditRuntime.js";
 import { normalizeTamerRank, slotCountForTamerRank } from "../cage/cageCatalog.js";
 import { validateNativeRanch } from '../cage/nativeRanchLayout.js';
 import { getMatchRecord, matchEntryFee, matchPayout, resolveMatchList } from "../battle/battleMatchSelection.js";
-import { NATIVE_CHAMPIONSHIP_CATEGORIES, CHAMPIONSHIP_ARENA_INDEX } from "../battle/nativeChampionshipRounds.js";
+import { NATIVE_CHAMPIONSHIP_CATEGORIES, CHAMPIONSHIP_ARENA_INDEX, createNativeChampionshipRun,
+  normalizeNativeChampionshipRun, recordNativeChampionshipRound, nativeChampionshipContinues,
+  nativeChampionshipFinalRound, nativeChampionshipPayable, selectNativeChampionshipOpponent } from "../battle/nativeChampionshipRounds.js";
 import { DAY_END_MINUTES, projectWorldClockDisplay } from "../time/championshipWorldClock.js";
 import { NATIVE_CLOCK_CADENCE } from "./championshipClockDriver.js";
 import { createClockChannelRng, restoreChannelRng } from "../battle/battleRngChannel.js";
@@ -203,6 +205,9 @@ export function createChampionshipStandaloneApp({
   let tamerRankValue = 0;
   let battleBadgesValue = [];
   let nativeTitles=emptyNativeTitleProgress();
+  // The tournament in progress, or null. Carried through save so a round
+  // boundary is not a place the player can lose a run by closing the tab.
+  let championshipRun=null;
   let nativeMessages=createNativeRaisingMessages();
   let nativeOpening=null;
   let registeredSpeciesValue = Object.freeze([]);
@@ -616,7 +621,7 @@ export function createChampionshipStandaloneApp({
     const beforeCreature=creature,beforeRaising=raising,beforeRegistered=registeredSpeciesValue;
     const beforeRng=gameplayRng;
     const beforeBadges = battleBadgesValue;
-    const beforeRank=tamerRankValue,beforeTitles=nativeTitles,beforeMessages=nativeMessages;
+    const beforeRank=tamerRankValue,beforeTitles=nativeTitles,beforeMessages=nativeMessages,beforeRun=championshipRun;
     const expectedBits = requireShop().getBits();
     // One rollback for both ways this can fail. The wallet is committed last, so
     // until it succeeds every one of these is still the pre-transaction value.
@@ -625,7 +630,7 @@ export function createChampionshipStandaloneApp({
       creature=beforeCreature;raising=beforeRaising;registeredSpeciesValue=beforeRegistered;
       gameplayRng=beforeRng;
       battleBadgesValue = beforeBadges;
-      tamerRankValue=beforeRank;nativeTitles=beforeTitles;nativeMessages=beforeMessages;
+      tamerRankValue=beforeRank;nativeTitles=beforeTitles;nativeMessages=beforeMessages;championshipRun=beforeRun;
     };
     battleTransactionActive = true;
     try {
@@ -715,6 +720,7 @@ export function createChampionshipStandaloneApp({
       tamerRankValue = 0;
       battleBadgesValue = [];
       nativeTitles=createNativeTitleProgress();
+      championshipRun=null;
       nativeMessages=createNativeRaisingMessages();
       nativeOpening=opening;
       registeredSpeciesValue = Object.freeze([]);
@@ -777,6 +783,8 @@ export function createChampionshipStandaloneApp({
       tamerRankValue = normalizeTamerRank(read.save.progression.tamerRank);
       battleBadgesValue = [...read.save.progression.battleBadges];
       nativeTitles=normalizeNativeTitleProgress(read.save.progression.nativeTitles)??emptyNativeTitleProgress();
+      championshipRun=read.save.progression.championshipRun==null?null
+        :normalizeNativeChampionshipRun(read.save.progression.championshipRun);
       nativeMessages=normalizeNativeRaisingMessages(read.save.progression.nativeMessages)??createNativeRaisingMessages();
       nativeOpening=normalizeNativeOpening(read.save.progression.nativeOpening);
       registeredSpeciesValue = Object.freeze([...read.save.progression.registeredSpecies]);
@@ -1290,6 +1298,7 @@ export function createChampionshipStandaloneApp({
         tamerRank: tamerRankValue,
         battleBadges: battleBadgesValue,
         nativeTitles,
+        championshipRun,
         nativeMessages,
         nativeOpening,
         registeredSpecies: registeredSpeciesValue,
@@ -1627,11 +1636,113 @@ export function createChampionshipStandaloneApp({
      * See docs/research/CHAMPIONSHIP_POOLS_CPU_2026-09-10.json.
      */
     getChampionshipCategories() {
+      // stage 1 opens the Championship; winning it opens the World tournament.
+      // Registration is the existing native flag, not a new gate.
+      const stage=nativeTitles.championship.stage;
       return NATIVE_CHAMPIONSHIP_CATEGORIES.map(record => Object.freeze({
         category:record.category, id:record.id, rounds:record.rounds, prize:record.prize,
         poolSizes:record.poolSizes, arenaIndex:CHAMPIONSHIP_ARENA_INDEX,
-        entry:'CHAMPIONSHIP_ROUNDS_NORMAL_FLOW_NOT_INTEGRATED',
+        unlocked:stage>=record.category+1,
+        registered:(record.category===0?nativeTitles.championship.entry:nativeTitles.championship.worldEntry)===1,
+        active:championshipRun?.category===record.category,
       }));
+    },
+
+    /** The tournament in progress, with the round it is waiting on. */
+    getChampionshipRun() {
+      if(!championshipRun)return null;
+      const record=NATIVE_CHAMPIONSHIP_CATEGORIES[championshipRun.category];
+      return Object.freeze({...championshipRun, id:record.id,
+        round:championshipRun.cursor, finalRound:nativeChampionshipFinalRound(championshipRun),
+        continues:nativeChampionshipContinues(championshipRun),
+        payable:nativeChampionshipPayable(championshipRun)});
+    },
+
+    /**
+     * Open a tournament. The original starts a run by zeroing the cursor and
+     * taking the round count from the category descriptor; entry is refused
+     * unless the category is unlocked and entered, and a run already in
+     * progress is never replaced.
+     */
+    beginChampionship(category) {
+      requireSession();
+      if(battleTransactionActive)return Object.freeze({ok:false,reason:'TRANSACTION_ACTIVE'});
+      if(championshipRun)return Object.freeze({ok:false,reason:'CHAMPIONSHIP_ALREADY_RUNNING'});
+      const record=NATIVE_CHAMPIONSHIP_CATEGORIES[category];
+      if(!record)return Object.freeze({ok:false,reason:'UNKNOWN_CATEGORY'});
+      if(nativeTitles.championship.stage<record.category+1)
+        return Object.freeze({ok:false,reason:'CHAMPIONSHIP_LOCKED'});
+      const entered=(record.category===0?nativeTitles.championship.entry:nativeTitles.championship.worldEntry)===1;
+      if(!entered)return Object.freeze({ok:false,reason:'CHAMPIONSHIP_NOT_ENTERED'});
+      championshipRun=createNativeChampionshipRun(record.category);
+      savePort.markDirty();
+      return Object.freeze({ok:true,run:this.getChampionshipRun()});
+    },
+
+    /** The round's opponent, drawn on channel 0 over that round's pool. */
+    drawChampionshipOpponent() {
+      requireSession();
+      if(!championshipRun)return Object.freeze({ok:false,reason:'NO_CHAMPIONSHIP_RUNNING'});
+      if(!nativeChampionshipContinues(championshipRun))
+        return Object.freeze({ok:false,reason:'CHAMPIONSHIP_ALREADY_ENDED'});
+      const opponent=selectNativeChampionshipOpponent({category:championshipRun.category,
+        round:championshipRun.cursor,nextChannel:nextGameplayRandom});
+      return Object.freeze({ok:true,opponent});
+    },
+
+    /**
+     * One round's verdict. A lost round ends the run where it stands, which is
+     * what the payout gate at 0210D0C8 then reads.
+     */
+    recordChampionshipRound({verdict,battleType=0}={}) {
+      requireSession();
+      if(!championshipRun)return Object.freeze({ok:false,reason:'NO_CHAMPIONSHIP_RUNNING'});
+      if(!nativeChampionshipContinues(championshipRun))
+        return Object.freeze({ok:false,reason:'CHAMPIONSHIP_ALREADY_ENDED'});
+      const recorded=recordNativeChampionshipRound(championshipRun,{verdict,battleType});
+      championshipRun=recorded.run;
+      savePort.markDirty();
+      return Object.freeze({ok:true,won:recorded.won,complete:recorded.complete,
+        payable:recorded.payable,run:this.getChampionshipRun()});
+    },
+
+    /**
+     * Close a finished run. Every round played must be a win for the prize, and
+     * the title result reads the same flags, so a run that ended early settles
+     * to nothing rather than being abandoned silently.
+     */
+    settleChampionship() {
+      requireSession();
+      if(battleTransactionActive)return Object.freeze({ok:false,reason:'TRANSACTION_ACTIVE'});
+      if(!championshipRun)return Object.freeze({ok:false,reason:'NO_CHAMPIONSHIP_RUNNING'});
+      if(nativeChampionshipContinues(championshipRun))
+        return Object.freeze({ok:false,reason:'CHAMPIONSHIP_STILL_RUNNING'});
+      const run=championshipRun,payable=nativeChampionshipPayable(run);
+      const before=nativeTitles,beforeRank=tamerRankValue,beforeBadges=battleBadgesValue,beforeMessages=nativeMessages;
+      const r=resolveNativeTitleResult({rank:tamerRankValue,category:0,matchIndex:run.category,
+        won:battleBadgesValue,...nativeTitles,rounds:run.flags});
+      battleBadgesValue=[...r.won];tamerRankValue=r.rank;
+      nativeTitles=normalizeNativeTitleProgress({...nativeTitles,registered:r.registered,
+        championship:r.championship,feeWaiver:r.feeWaiver});
+      if(r.rankNotice!==null)nativeMessages=enqueueNativeRaisingMessage(nativeMessages,r.rankNotice);
+      if(r.championshipNotice)nativeMessages=enqueueNativeRaisingMessage(nativeMessages,r.championshipNotice);
+      // creditBits throws on an invalid amount and otherwise reports the wallet;
+      // the descriptor prize is always a valid amount, so a throw here is a bug
+      // rather than a refusal, and the title result is rolled back with it.
+      let wallet=null;
+      if(payable){
+        try{wallet=requireShop().creditBits(run.prize,{evidence:'ROM_VERIFIED'}).bits;}
+        catch(error){
+          nativeTitles=before;tamerRankValue=beforeRank;battleBadgesValue=beforeBadges;nativeMessages=beforeMessages;
+          return Object.freeze({ok:false,reason:'PRIZE_CREDIT_FAILED',message:error.message});
+        }
+      }
+      championshipRun=null;
+      if(battleBadgesValue!==beforeBadges)applyProgression();
+      savePort.markDirty();
+      return Object.freeze({ok:true,payable,prize:payable?run.prize:0,bits:wallet,
+        flags:Object.freeze([...run.flags]),rank:tamerRankValue,
+        championship:nativeTitles.championship});
     },
 
     prepareBattleRng() {
@@ -2006,7 +2117,7 @@ export function createChampionshipStandaloneApp({
         let status;
         try {
           status = savePort.save({ snapshot: candidateSnapshot, creature, sessionId,
-            revision: revision + 1, interactionCount, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, raising: candidateRaising,
+            revision: revision + 1, interactionCount, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, raising: candidateRaising,
             registeredSpecies: candidateBook,
             shop: shop ? shop.toSave() : null, cageEdit: cageEdit ? cageEdit.toSave() : null,
             battleEconomy, instanceIdentity: candidateIdentity, gameplayRng: gameplayRngSnapshot(),

@@ -110,6 +110,7 @@ export function createChampionshipPersistentSavePort({
       huntHistory: request.huntHistory,
       progression: {
         ...(request.nativeTitles!==undefined?{nativeTitles:request.nativeTitles}:{}),
+        ...(request.championshipRun!==undefined?{championshipRun:request.championshipRun}:{}),
         ...(request.nativeMessages!==undefined?{nativeMessages:request.nativeMessages}:{}),
         ...(request.nativeOpening!=null?{nativeOpening:request.nativeOpening}:{}),
         registeredSpecies: request.registeredSpecies ?? [],
