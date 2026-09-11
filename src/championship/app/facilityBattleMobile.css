@@ -1,10 +1,10 @@
 /* Shared bright mobile presentation for the Shop, Cage editor and Battle.
  * Existing screens and input owners only. The reference package stays external. */
 .cm-vs2-root:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"]), .cm-vs5-root {
-  color-scheme: light; color: #205164; background: #e7f5f1;
-  --vs2-ink: #205164; --vs2-muted: #4c717b; --vs2-cyan: #117893;
-  --vs2-gold: #d5a232; --vs2-gold-bright: #805819;
-  font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+  color-scheme: light; color: var(--cm-light-ink); background: #e7f5f1;
+  --vs2-ink: var(--cm-light-ink); --vs2-muted: var(--cm-light-muted); --vs2-cyan: var(--cm-light-cyan);
+  --vs2-gold: var(--cm-light-gold); --vs2-gold-bright: #805819;
+  font-family: var(--cm-light-font);
 }
 .cm-vs2-root:is([data-screen="SHOP"], [data-screen="CAGE_EDIT"]) .cm-vs2-shell, .cm-vs5-shell {
   border: 0; background: radial-gradient(ellipse at 70% 10%, #e5fbff, transparent 70%), linear-gradient(#d7f2f0, #f5f8e8);

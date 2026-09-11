@@ -1,6 +1,6 @@
 # Championship 2026 — Technical Debt Register
 
-Reviewed 2026-09-11 against implementation, Claude handoff and original evidence. See [the review](research/CHARACTER_BEHAVIOR_REVIEW_2026-09-11.md). Full character restoration remains open in its stage contract.
+Reviewed 2026-09-11 against implementation, Claude handoff, original evidence and a real-browser screenshot pass over Raising, Gate, Shop and Database. See [the review](research/CHARACTER_BEHAVIOR_REVIEW_2026-09-11.md). Full character restoration remains open in its stage contract.
 
 Priority = (Impact + Risk) x (6 - Effort), inputs 1–5. Closed items remain recorded to prevent regression.
 
@@ -14,6 +14,8 @@ Priority = (Impact + Risk) x (6 - Effort), inputs 1–5. Closed items remain rec
 | Browser QA overwrites committed reports | 3 / 4 / 1 | 35 | Fixed: shared helper stages under .tmp/browser-qa, deliberate export remains available. |
 | Raising gate assumes eggs support adult dragging | 4 / 3 / 2 | 28 | Fixed: ordinary egg taps, hatch, stroke, hold, move, landing and Save/Continue using readonly rendered hit centers. |
 | VS3 capture races frame sampling and targets | 3 / 4 / 3 | 21 | Fixed for the acceptance gate: per-render readonly coordinates (previously stale at DOM cadence), fixed startup clock input, twelve sampled circle points, inside-body press, observed native control-frame increments for every sample, actual overlap-selected rope target, blank-ground panning, target-following tether and native slack/durability recovery. Final acceptance is in the validation receipt; earlier artifact failure is retained there. |
+| Bright mobile screens carry three palettes | 3 / 4 / 2 | 28 | Fixed for text, structure, signal and type: Hunt, Shop/Cage/Battle and Raising drew from three drifted light palettes and two type families, now one shared set. Each screen keeps its own scene background, as the original gives each mode its own scene while sharing one chrome. Remaining: 641 colours still sit inline across nine sheets, and `--vs2-gold-bright` still serves both as on-dark text and as a bright fill. |
+| Status-bar day number vanished on bright screens | 4 / 3 / 1 | 35 | Fixed: it was the one status-bar part recoloured per screen instead of with its bar, so Hunt and Shop kept the dark bar's near-white on a bright bar. It now follows its own bar. Found by screenshotting the four screens, not by reading CSS. |
 | Stale completion claims | 5 / 5 / 2 | 40 | Current review supersedes historical claims; stage rows and validation receipt retain proof limits. Arbitrary prose is not automatically regenerated. |
 
 ## Existing infrastructure
@@ -27,5 +29,6 @@ Node 22 CI, manually dispatched hash-checked public Pages playtest, reuse invent
 - Championship: normal entry/schedule/round transitions, owned party/result/save and presentation integration.
 - Tutorial: cartridge advance predicates and normal UI/event binding; inferred action names are proposals.
 - Battle/cross-scene: remaining caller/ending/per-move visual timing, individual transitions and physical-device acceptance.
+- Presentation: the celebration platter, cake and the toolbar icons are still authored art with no original counterpart promoted; spoiled food, waste and the sweep now use the original cells.
 
 Public playtest permission is recorded. Commercial rights, complete original parity and device acceptance are separate open gates, not made true by fixing debt or pushing main.

@@ -1,11 +1,11 @@
 /* Raising Home visual revision. Original-inspired digital chrome, authored CSS.
  * Existing DOM controls and source events; no gameplay or asset authority. */
 .int-rh2-root {
-  --rh2-ink: #174e67;
-  --rh2-muted: #47717b;
-  --rh2-cyan: #087595;
+  --rh2-ink: var(--cm-light-ink);
+  --rh2-muted: var(--cm-light-muted);
+  --rh2-cyan: var(--cm-light-cyan);
   --rh2-display: #f3f8ed;
-  --rh2-font: Bahnschrift, "Segoe UI", "Microsoft JhengHei", sans-serif;
+  --rh2-font: var(--cm-light-font);
   color-scheme: light;
   background: #e5eee8;
 }

@@ -6,17 +6,17 @@
  */
 
 .cm-vs2-root {
-  --vs2-ink: #edf4f5;
-  --vs2-muted: #94a8ae;
+  --vs2-ink: var(--cm-dark-ink);
+  --vs2-muted: var(--cm-dark-muted);
   --vs2-dim: #657980;
   --vs2-gold: var(--cm-gold);
   --vs2-gold-bright: var(--cm-gold-bright);
   --vs2-cyan: var(--cm-cyan);
-  --vs2-shell: #2c3940;
-  --vs2-shell-dark: #111c22;
+  --vs2-shell: var(--cm-dark-shell);
+  --vs2-shell-dark: var(--cm-dark-shell-deep);
   --vs2-display: var(--cm-display);
   --vs2-panel: #0a202b;
-  --vs2-line: rgba(210, 173, 93, 0.34);
+  --vs2-line: var(--cm-gold-line);
   --vs2-cyan-line: rgba(101, 184, 195, 0.32);
   --vs2-safe-top: max(10px, env(safe-area-inset-top));
   --vs2-safe-bottom: max(8px, env(safe-area-inset-bottom));

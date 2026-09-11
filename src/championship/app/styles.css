@@ -23,6 +23,23 @@
   --cm-cyan: #65b8c3;
   --cm-display: #06141e;
   --cm-ui-font: Bahnschrift, "Arial Narrow", "Roboto Condensed", Arial, sans-serif;
+  /* The bright mobile screens had drifted into three palettes and two type
+     families. Text, structure and signal are one set here; each screen keeps
+     its own scene background, as the original gives each mode its own scene. */
+  --cm-light-ink: #174e67;
+  --cm-light-muted: #47717b;
+  --cm-light-dim: #6a8890;
+  --cm-light-gold: #d5a232;
+  --cm-light-cyan: #117893;
+  --cm-light-font: Bahnschrift, "Segoe UI", "Microsoft JhengHei", sans-serif;
+  /* The dark sets had drifted one to three per channel from each other, which
+     no one can see and which only widens. --cm-line is the gold at .34; panel
+     is not shared because the two differ in transparency, not in colour. */
+  --cm-dark-ink: #edf4f5;
+  --cm-dark-muted: #94a8ae;
+  --cm-dark-shell: #2c3940;
+  --cm-dark-shell-deep: #111c22;
+  --cm-gold-line: rgba(210, 173, 93, 0.34);
   --cm-screen-top: 0px;
   --cm-screen-bottom: 0px;
   --cm-screen-height: calc(100dvh - var(--cm-screen-top) - var(--cm-screen-bottom));
@@ -444,7 +461,10 @@ button { font: inherit; }
 .cm-status-bar__day-number {
   font-weight: 700;
   font-size: 1.15em;
-  color: #eaf6fc;
+  /* Follow the bar. This was the one status-bar part recoloured per screen
+     instead of with its bar, so it stayed near-white on the bright Hunt and
+     Shop bars and vanished. Weight and size carry the emphasis. */
+  color: inherit;
 }
 
 .cm-status-bar__mode {

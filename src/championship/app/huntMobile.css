@@ -1,13 +1,13 @@
 /* Owner-approved mobile adaptation: one continuous viewport, DOM overlays over
  * the existing world/field. No DS screen seam and no additional scene owner. */
 .cm-vs2-root:is([data-screen="GATE_SELECT"], [data-screen="HUNT_LOADOUT"], [data-screen="HUNT_FIELD"]) {
-  --vs2-ink: #174d62;
-  --vs2-muted: #386b80;
-  --vs2-dim: #6a8890;
-  --vs2-gold: #dca62c;
+  --vs2-ink: var(--cm-light-ink);
+  --vs2-muted: var(--cm-light-muted);
+  --vs2-dim: var(--cm-light-dim);
+  --vs2-gold: var(--cm-light-gold);
   --vs2-gold-bright: #ffe39a;
-  --vs2-cyan: #147eac;
-  --vs2-font: "Segoe UI", "Microsoft JhengHei", sans-serif;
+  --vs2-cyan: var(--cm-light-cyan);
+  --vs2-font: var(--cm-light-font);
   color-scheme: light;
   background: #e1f4f6;
 }
