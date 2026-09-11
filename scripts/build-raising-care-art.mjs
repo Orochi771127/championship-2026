@@ -18,39 +18,6 @@ for(const [kind,art] of [['meat',meat],['protein',capsule]])for(let q=0;q<4;q++)
 }
 await emit('clean.svg','<path d="M5 23c-2-2 0-5 3-5-1-3 1-5 4-5-1-3 1-5 5-7-1 4 4 4 3 8 4 0 6 4 3 6 5 2 5 7 1 8-7 2-17 1-20-1-2-1-1-3 1-4Z" fill="#bf7c36" stroke="#553923" stroke-width="1.3"/><path d="M9 18c3 2 8 2 11 0M6 23c4 3 12 3 17 0M13 13c2 1 4 1 6 0" fill="none" stroke="#ffe6a0" stroke-width="1.5" stroke-linecap="round"/>');
 await emit('broom.svg','<path d="m22 3-3 18" stroke="#4d3a2e" stroke-width="4" stroke-linecap="round"/><path d="m22 3-3 18" stroke="#cc8752" stroke-width="2" stroke-linecap="round"/><path d="m15 18 8 1 4 10c-5 2-10 0-14-2Z" fill="#efd481" stroke="#5a4c37" stroke-width="1.2"/><path d="m15 20 8 1" stroke="#66918b" stroke-width="3"/><path d="m17 23-1 4m4-4v5m2-4 1 4" stroke="#b48545" stroke-width="1"/><path d="m2 23 9-2 5 8-10 2Z" fill="#83a39e" stroke="#3d5556" stroke-width="1.2"/><path d="m2 23 5 5 9 1M7 28l4-5" fill="none" stroke="#dce9d3" stroke-width="1.2"/>');
-// Spoilage and the two-pose loops. The original gives meat and the capsule one
-// spoiled identity each and plays it as two poses rather than a per-amount
-// variant, and it plays waste and the sweep the same way. Identity and pose
-// count are gameplay; every contour and colour below is drawn here.
-const mold=(s)=>`<g stroke="#37541f" stroke-width=".9">`
-  +`<ellipse cx="${13+s}" cy="${11-s}" rx="3.4" ry="2.6" fill="#7ba63f"/>`
-  +`<ellipse cx="${19-s}" cy="${9+s}" rx="2.6" ry="2.1" fill="#96c254"/>`
-  +`<ellipse cx="${22+s}" cy="${14-s}" rx="2.1" ry="1.8" fill="#6b933a"/></g>`
-  +`<g fill="#cfe08a" stroke="none"><circle cx="${16-s}" cy="${8+s}" r=".9"/>`
-  +`<circle cx="${24+s}" cy="${11+s}" r=".8"/><circle cx="${11+s}" cy="${15-s}" r=".7"/></g>`;
-const meatRot='<path d="M10 21C6 15 11 7 18 5c6-2 12 3 11 9-1 6-8 11-14 10Z" fill="#6d3a2a" stroke="#3a2820" stroke-width="1.3"/>'
-  +'<path d="M11 18C9 13 14 8 19 7c4-1 7 2 7 5-1 5-8 9-12 9Z" fill="#8d6536"/>'
-  +'<path d="m16 18 3-4m1 6 3-4" stroke="#5d3324" stroke-width="1.3" stroke-linecap="round"/>';
-const capsuleRot='<g transform="rotate(42 16 16)">'
-  +'<rect x="10" y="2" width="12" height="28" rx="6" fill="#8f3a41" stroke="#2a3038" stroke-width="1.3"/>'
-  +'<path d="M10 16V8a6 6 0 0 1 12 0v8Z" fill="#8fa6a4" stroke="#2a3038" stroke-width="1.1"/>'
-  +'<path d="M19.5 18v6c0 2-1 3-2 3" fill="none" stroke="#6e2634" stroke-width="1.2"/></g>';
-for(const [kind,art] of [['meat',meatRot],['protein',capsuleRot]])for(let pose=0;pose<2;pose++){
-  await emit(`${kind}-rot-${pose}.svg`,`${kind==='meat'?bone:''}${art}${mold(pose?1:0)}`);
-}
-
-// Waste: a tapering swirl. Pose 1 settles a little and widens.
-const swirl=(pose)=>{const h=pose?2:0,w=pose?1:0;return ''
-  +`<ellipse cx="16" cy="${27-h/2}" rx="${9+w}" ry="2.6" fill="#00000026" stroke="none"/>`
-  +`<path d="M16 ${6+h}c4 2 3 5 1 6 5 1 6 5 2 6 6 1 7 6 1 7-7 1-13 0-13-3 0-3 3-4 5-4-4-1-3-5 1-6-3-2-1-5 3-6Z"`
-  +` fill="#ef6ab0" stroke="#8e2f63" stroke-width="1.3" stroke-linejoin="round"/>`
-  +`<path d="M12 ${13+h}c3 1 6 1 8 0M9 ${19+h}c5 2 11 2 15 0" fill="none" stroke="#ffb3da" stroke-width="1.4" stroke-linecap="round"/>`
-  +`<path d="M14 ${9+h}c2 1 3 1 4 0" fill="none" stroke="#ffd2e8" stroke-width="1.2" stroke-linecap="round"/>`;};
-for(let pose=0;pose<2;pose++)await emit(`waste-${pose}.svg`,swirl(pose));
-
-// Sweep pose 1: the same broom and pan, mid-stroke.
-await emit('broom-1.svg','<path d="m24 5-6 17" stroke="#4d3a2e" stroke-width="4" stroke-linecap="round"/><path d="m24 5-6 17" stroke="#cc8752" stroke-width="2" stroke-linecap="round"/><path d="m14 19 8 2 2 10c-5 1-10-2-13-5Z" fill="#efd481" stroke="#5a4c37" stroke-width="1.2"/><path d="m14 21 8 2" stroke="#66918b" stroke-width="3"/><path d="m16 24-2 4m5-3-1 5m3-4v4" stroke="#b48545" stroke-width="1"/><path d="m2 23 9-2 5 8-10 2Z" fill="#83a39e" stroke="#3d5556" stroke-width="1.2"/><path d="m2 23 5 5 9 1M7 28l4-5" fill="none" stroke="#dce9d3" stroke-width="1.2"/><path d="M12 30c3 1 6 1 9 0" fill="none" stroke="#cfe0dd" stroke-width="1" stroke-dasharray="2 2"/>');
-
 // Celebration food uses the same four remaining-amount frames as ordinary
 // food. These drawings are independent art; original food kinds/timing stay
 // in the native gameplay module.
@@ -60,5 +27,5 @@ for(const [kind,art] of [['cake',cake],['feast',feast]])for(let q=0;q<4;q++){
   const eaten=['','<path d="M20 0h12v32H23c0-3-3-3-3-5 3-2 1-4-2-5 3-1 1-4-1-5Z" fill="black"/>','<path d="M15 0h17v32H17c2-2-2-3-2-5 2-1-1-4-3-4 3-2 0-3-1-4Z" fill="black"/>','<path d="M0 0h32v24H0Z" fill="black"/><path d="M12 24h20v8H12Z" fill="black"/>'];
   await emit(`${kind}-${q}.svg`,`<defs><mask id="amount"><rect width="32" height="32" fill="white"/>${eaten[q]}</mask></defs><ellipse cx="16" cy="28" rx="13" ry="3" fill="#d6e8df" stroke="#53695f" stroke-width="1"/><g mask="url(#amount)">${art}</g>`);
 }
-await writeFile(new URL('manifest.json',dir),JSON.stringify({id:'raising-care-r1',source:'INDEPENDENTLY_AUTHORED_VECTOR',generator:'scripts/build-raising-care-art.mjs',reference:'Generic item identities: bone-in meat, two-color capsule, their spoiled forms, waste, broom, dustpan, birthday cake and roast platter. Spoiled food, waste and the sweep each use two poses, matching the original pose count and its 18-tick cadence. No original asset bytes copied.',files,runtimeEligible:true,scope:'Existing Raising food, celebration gift and Clean presentation',physicalDeviceQA:false,shippingReady:false},null,2)+'\n');
+await writeFile(new URL('manifest.json',dir),JSON.stringify({id:'raising-care-r1',source:'INDEPENDENTLY_AUTHORED_VECTOR',generator:'scripts/build-raising-care-art.mjs',reference:'Generic item identities: bone-in meat, two-color capsule, waste, broom, dustpan, birthday cake and roast platter. No original asset bytes copied.',files,runtimeEligible:true,scope:'Existing Raising food, celebration gift and Clean presentation',physicalDeviceQA:false,shippingReady:false},null,2)+'\n');
 console.log(`Wrote ${files.length} independently authored care SVGs.`);

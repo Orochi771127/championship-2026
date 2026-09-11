@@ -130,21 +130,34 @@ export async function mountRaisingFieldPixiPresentation({
   const evolutionWords=Array.from({length:6},(_,i)=>{const word=new PIXI.Text({text:i%2?'進化!!':'EVOLUTION',style:{fontFamily:'sans-serif',fontSize:16+(i%3)*4,fontWeight:'bold',fill:0x008bff}});evolutionWriting.addChild(word);return word;});
   const silhouette=new PIXI.ColorMatrixFilter();silhouette.matrix=[0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0];
   let evolutionCamera=null;
-  const careRoot = new URL('../../../../assets/production/raising-care-r1/', import.meta.url);
-  const careTextures = fieldArt?.field?.presentationMode==='NATIVE_RANCH'
-    ? await Promise.all(['meat-0','meat-1','meat-2','meat-3','protein-0','protein-1','protein-2','protein-3',
-      'feast-0','feast-1','feast-2','feast-3','cake-0','cake-1','cake-2','cake-3','broom',
-      'broom-1','meat-rot-0','meat-rot-1','protein-rot-0','protein-rot-1','waste-0','waste-1']
-      .map(name => PIXI.Assets.load(new URL(`${name}.svg`,careRoot).href))) : [];
-  const toolPreview = careTextures.length?new PIXI.Sprite(careTextures[16]):null;
-  if(toolPreview){toolPreview.anchor.set(0.5,0.9);toolPreview.eventMode='none';toolPreview.visible=false;
+  // Licensed original cells (common/i000_item) carry their own size and sprite
+  // origin, so each one is placed by its own geometry rather than a shared
+  // square. The celebration platter and cake have no original counterpart and
+  // stay authored vectors on the previous 32px square.
+  const FOOD_KINDS=['meat','protein','feast','cake'];
+  async function loadCareArt() {
+    const art=new Map();
+    const licensed=new URL('../../../../assets/production/raising-care/licensed-runtime-v1/',import.meta.url);
+    const manifest=await (await fetch(new URL('manifest.json',licensed).href)).json();
+    await Promise.all(manifest.cells.map(async cell=>art.set(`${cell.role}-${cell.pose}`,{
+      texture:await PIXI.Assets.load(new URL(cell.file,licensed).href),
+      width:cell.nativeWidth,height:cell.nativeHeight,
+      anchorX:cell.nativeAnchorX/cell.nativeWidth,anchorY:cell.nativeAnchorY/cell.nativeHeight})));
+    const authored=new URL('../../../../assets/production/raising-care-r1/',import.meta.url);
+    await Promise.all(['feast','cake'].flatMap(kind=>[0,1,2,3].map(async quarter=>art.set(`${kind}-${quarter}`,{
+      texture:await PIXI.Assets.load(new URL(`${kind}-${quarter}.svg`,authored).href),
+      width:32,height:32,anchorX:0.5,anchorY:0.85}))));
+    return art;
+  }
+  const careArt = fieldArt?.field?.presentationMode==='NATIVE_RANCH' ? await loadCareArt() : new Map();
+  const toolPreview = careArt.size?new PIXI.Sprite(careArt.get('broom-0').texture):null;
+  if(toolPreview){toolPreview.eventMode='none';toolPreview.visible=false;
     toolPreview.label='Clean broom and dustpan';fxLayer.addChild(toolPreview);}
   // i000_item plays spoiled food, waste and the sweep as two poses of 18
   // native ticks each (sequences 4, 9, 10 and 11), and gives meat and the
   // capsule one spoiled identity apiece rather than one per remaining amount.
-  // Those pose counts and that cadence are the original's; the artwork is not.
-  const CARE_BROOM=16,CARE_ROT=[18,20],CARE_WASTE=22;
   const NATIVE_POSE_MS=18*560190/33513982*1000;
+  const placeCare=(sprite,art)=>{sprite.texture=art.texture;sprite.anchor.set(art.anchorX,art.anchorY);};
   let pointerPreview=null,cleanFeedback=null,careElapsed=0;
   const carePose=()=>reducedMotion?0:Math.floor(careElapsed/NATIVE_POSE_MS)%2;
   const sheets = new Set();
@@ -632,13 +645,12 @@ export async function mountRaisingFieldPixiPresentation({
     const waste=source.getWasteFrame?.()??[],live=new Set(waste.map(w=>w.slot));
     for(const [slot,g] of wasteGraphics)if(!live.has(slot)){g.destroy();wasteGraphics.delete(slot);}
     const scale=getRaisingNativePixelScale(fieldArt?.field,app.screen);
-    if(!careTextures.length||!(scale>0))return;
-    const pose=carePose();
+    if(!careArt.size||!(scale>0))return;
+    const art=careArt.get(`waste-${carePose()}`);
     for(const item of waste){let g=wasteGraphics.get(item.slot);
-      if(!g){g=new PIXI.Sprite();g.eventMode='none';g.label='Waste';g.anchor.set(0.5,0.85);
+      if(!g){g=new PIXI.Sprite();g.eventMode='none';g.label='Waste';
         actorLayer.addChild(g);wasteGraphics.set(item.slot,g);}
-      // Smaller than a whole meal, keeping the footprint the drawn shape had.
-      g.texture=careTextures[CARE_WASTE+pose];g.width=24*scale;g.height=24*scale;
+      placeCare(g,art);g.width=art.width*scale;g.height=art.height*scale;
       const point=raisingNativeToScreen(item.positionQ12,fieldArt?.field,app.screen,cameraX);
       if(point){g.position.set(point.x,point.y);g.zIndex=Math.round(item.positionQ12[1]/4096);}}
   }
@@ -699,7 +711,7 @@ export async function mountRaisingFieldPixiPresentation({
   }
 
   function drawFood() {
-    if(!careTextures.length)return;
+    if(!careArt.size)return;
     const foods=source.getFoodFrame?.()??[],live=new Set(foods.map(f=>f.slot));
     for(const [slot,g] of foodGraphics)if(!live.has(slot)){g.destroy({children:true});foodGraphics.delete(slot);}
     const fit=raisingFieldViewport(fieldArt?.field,app.screen,12,cameraX);
@@ -712,13 +724,13 @@ export async function mountRaisingFieldPixiPresentation({
         const sprite=new PIXI.Sprite();sprite.anchor.set(0.5,0.85);g.addChild(sprite);
         actorLayer.addChild(g);foodGraphics.set(food.slot,g);
       }
-      const kind=food.kind??(food.protein?1:0),spoiled=food.freshness<=0,rot=spoiled?CARE_ROT[kind]:undefined;
-      const sprite=g.children[1];
+      const kind=food.kind??(food.protein?1:0),spoiled=food.freshness<=0,original=kind<2;
       // Celebration platter and cake have no original spoiled identity, so they
       // keep the existing desaturation rather than borrowing the food's.
-      sprite.texture=careTextures[rot===undefined?kind*4+food.quarter:rot+carePose()];
-      sprite.width=32;sprite.height=32;sprite.y=-food.heightQ12/4096;
-      sprite.tint=spoiled&&rot===undefined?0x8ca273:0xffffff;
+      const art=careArt.get(spoiled&&original?`${FOOD_KINDS[kind]}-rot-${carePose()}`:`${FOOD_KINDS[kind]}-${food.quarter}`);
+      const sprite=g.children[1];placeCare(sprite,art);
+      sprite.width=art.width;sprite.height=art.height;sprite.y=-food.heightQ12/4096;
+      sprite.tint=spoiled&&!original?0x8ca273:0xffffff;
       const point=raisingNativeToScreen(food.positionQ12,fieldArt?.field,app.screen,cameraX);
       if(point){g.position.set(point.x,point.y);g.scale.set(scale);g.zIndex=Math.round(food.positionQ12[1]/4096);}
     }
@@ -734,9 +746,9 @@ export async function mountRaisingFieldPixiPresentation({
     toolPreview.visible=tool==='clean'&&Boolean(inside&&(cleanFeedback||!pointerPreview?.touch||pointerPreview?.held));
     if(!toolPreview.visible)return;
     const scale=getRaisingNativePixelScale(fieldArt?.field,app.screen);
-    toolPreview.width=32*scale;toolPreview.height=32*scale;
+    const art=careArt.get(`broom-${carePose()}`);placeCare(toolPreview,art);
+    toolPreview.width=art.width*scale;toolPreview.height=art.height*scale;
     toolPreview.position.set(point.x,point.y);
-    toolPreview.texture=careTextures[CARE_BROOM+carePose()];
   }
 
   app.stage.on("globalpointermove", moveDrag);
@@ -780,11 +792,11 @@ export async function mountRaisingFieldPixiPresentation({
         residentCount: actors.size,
         foodCount:foodGraphics.size,
         wasteCount:wasteGraphics.size,
-        careArt:'INDEPENDENTLY_AUTHORED_VECTOR',
+        careArt:'LICENSED_PIXEL_FAITHFUL_WITH_AUTHORED_CELEBRATION',
         // Spoiled food, waste and the sweep share one clock so a QA run can
         // read the pose instead of comparing pixels. 0 while reduced motion.
         carePose:carePose(),
-        careTextureCount:careTextures.length,
+        careTextureCount:careArt.size,
         cleanToolVisible:toolPreview?.visible??false,
         nativeSizing: [...actors].map(([creatureId, entry]) => ({ creatureId,
           status: entry.nativeScale === null ? "UNVERIFIED_LEGACY_FALLBACK" : "SHARED_NATIVE_PIXEL_SCALE",

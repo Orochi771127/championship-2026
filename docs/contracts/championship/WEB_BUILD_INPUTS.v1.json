@@ -6058,7 +6058,6 @@
     "assets/production/internal-faithful-baseline/v1/vfx/spark/m_spark_eff.png",
     "assets/production/internal-faithful-baseline/v1/vfx/spark/spark.glb",
     "assets/production/internal-faithful-baseline/v1/vfx/spark/spark.material-animation.json",
-    "assets/production/raising-care-r1/broom-1.svg",
     "assets/production/raising-care-r1/broom.svg",
     "assets/production/raising-care-r1/cake-0.svg",
     "assets/production/raising-care-r1/cake-1.svg",
@@ -6074,16 +6073,27 @@
     "assets/production/raising-care-r1/meat-1.svg",
     "assets/production/raising-care-r1/meat-2.svg",
     "assets/production/raising-care-r1/meat-3.svg",
-    "assets/production/raising-care-r1/meat-rot-0.svg",
-    "assets/production/raising-care-r1/meat-rot-1.svg",
     "assets/production/raising-care-r1/protein-0.svg",
     "assets/production/raising-care-r1/protein-1.svg",
     "assets/production/raising-care-r1/protein-2.svg",
     "assets/production/raising-care-r1/protein-3.svg",
-    "assets/production/raising-care-r1/protein-rot-0.svg",
-    "assets/production/raising-care-r1/protein-rot-1.svg",
-    "assets/production/raising-care-r1/waste-0.svg",
-    "assets/production/raising-care-r1/waste-1.svg",
+    "assets/production/raising-care/licensed-runtime-v1/broom-0.png",
+    "assets/production/raising-care/licensed-runtime-v1/broom-1.png",
+    "assets/production/raising-care/licensed-runtime-v1/manifest.json",
+    "assets/production/raising-care/licensed-runtime-v1/meat-0.png",
+    "assets/production/raising-care/licensed-runtime-v1/meat-1.png",
+    "assets/production/raising-care/licensed-runtime-v1/meat-2.png",
+    "assets/production/raising-care/licensed-runtime-v1/meat-3.png",
+    "assets/production/raising-care/licensed-runtime-v1/meat-rot-0.png",
+    "assets/production/raising-care/licensed-runtime-v1/meat-rot-1.png",
+    "assets/production/raising-care/licensed-runtime-v1/protein-0.png",
+    "assets/production/raising-care/licensed-runtime-v1/protein-1.png",
+    "assets/production/raising-care/licensed-runtime-v1/protein-2.png",
+    "assets/production/raising-care/licensed-runtime-v1/protein-3.png",
+    "assets/production/raising-care/licensed-runtime-v1/protein-rot-0.png",
+    "assets/production/raising-care/licensed-runtime-v1/protein-rot-1.png",
+    "assets/production/raising-care/licensed-runtime-v1/waste-0.png",
+    "assets/production/raising-care/licensed-runtime-v1/waste-1.png",
     "assets/production/temporary/int-rh2/creatures/blazetail-kit/idle.png",
     "assets/production/temporary/int-rh2/creatures/blazetail-kit/portrait.png",
     "assets/production/temporary/int-rh2/creatures/blazetail-kit/touch.png",
@@ -6510,7 +6520,7 @@
     "files": [
       {
         "path": "assets/production/ART_PRODUCTION_INDEX.json",
-        "sha256": "6fa09b8646d0867272dfe9dbe9b87cda9cf7f07e9da9dcee626d1bea40367ae2"
+        "sha256": "072d8df3b9c6b55e4f17aad19c89d8a1fb1f82521994350c21bf9668544dd9ad"
       },
       {
         "path": "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png",
@@ -29713,10 +29723,6 @@
         "sha256": "9a0e774d16e2bf65274d69ed47afd9ed28473d49dd4691524d6ab4cd9a94a719"
       },
       {
-        "path": "assets/production/raising-care-r1/broom-1.svg",
-        "sha256": "6ec8c8be89e7c349cd577ee9d3396ef9bd17495a951f5bf53a167bb730d5e10e"
-      },
-      {
         "path": "assets/production/raising-care-r1/broom.svg",
         "sha256": "7cb4cede076b09f0d3f8318b5f7f8fbbf4e2417f9f660a19b04d544f57d81332"
       },
@@ -29758,7 +29764,7 @@
       },
       {
         "path": "assets/production/raising-care-r1/manifest.json",
-        "sha256": "9a41f5fea41896f56f8597d183634307910353b52a645a325222f70b877575bf"
+        "sha256": "15f68a0183d278e569bd5703fc0cea93648b7bfe1207f68ad44d2e76342e4558"
       },
       {
         "path": "assets/production/raising-care-r1/meat-0.svg",
@@ -29777,14 +29783,6 @@
         "sha256": "8402247dbe47ba7b7d8b77e21e68ee1c1e5a0c53fd76d4312c4452820e06b3a5"
       },
       {
-        "path": "assets/production/raising-care-r1/meat-rot-0.svg",
-        "sha256": "65adc0706beda1325a25684454c18a65b4673085db25045185a4cdc50956e17a"
-      },
-      {
-        "path": "assets/production/raising-care-r1/meat-rot-1.svg",
-        "sha256": "4fdd9247fa0d61a5417f81de5dc0484e96658df5b02f354a461b23320ad7339e"
-      },
-      {
         "path": "assets/production/raising-care-r1/protein-0.svg",
         "sha256": "94702ce02f8ce36e712f46708c8ff1e2f04edd157ec4fc5f250828e2ebb00b34"
       },
@@ -29801,20 +29799,72 @@
         "sha256": "9c588c2d5fa3e24d59cfdde1dad29a1b88154dccfa7e6c1abb33ad3ac67ab5e2"
       },
       {
-        "path": "assets/production/raising-care-r1/protein-rot-0.svg",
-        "sha256": "40f5e3416bb84940824ba06da62b71c78577f9fc301a70efe3882ce963dbc1f7"
+        "path": "assets/production/raising-care/licensed-runtime-v1/broom-0.png",
+        "sha256": "d2d10cb6d2a3604e6e486aa4388fe958de16e5e11c87f5115303c7dffc79e9e5"
       },
       {
-        "path": "assets/production/raising-care-r1/protein-rot-1.svg",
-        "sha256": "0f18f31788c441a9e72e0b3fb4f401d028b0c978d662cf3ad3cbd1d9426ebc24"
+        "path": "assets/production/raising-care/licensed-runtime-v1/broom-1.png",
+        "sha256": "280c63af37294baac8ea972ca440dfac81e10ac76da3fd5d9e61acf4cf405425"
       },
       {
-        "path": "assets/production/raising-care-r1/waste-0.svg",
-        "sha256": "4627d680070bb96e368ef15308cc4bd24703bcd00cbb803c192248a4433fe176"
+        "path": "assets/production/raising-care/licensed-runtime-v1/manifest.json",
+        "sha256": "074237cb9727367eb3f201ec627fc31c576a0e5d07b6d14b6a547ec4713a9acc"
       },
       {
-        "path": "assets/production/raising-care-r1/waste-1.svg",
-        "sha256": "2e119bfab9fe6faa4273436033d65a0487efc72898096b5651b91563b9b560d7"
+        "path": "assets/production/raising-care/licensed-runtime-v1/meat-0.png",
+        "sha256": "92c4f160332006cd9cdb093dc3a5e7cf4e5fb3cb82ddc0b91157a2c3fbee70b5"
+      },
+      {
+        "path": "assets/production/raising-care/licensed-runtime-v1/meat-1.png",
+        "sha256": "d3fc3331665fb4ca7ccf73406490b3d1134afd2bdcffd7f5f93d2b18b3d2b951"
+      },
+      {
+        "path": "assets/production/raising-care/licensed-runtime-v1/meat-2.png",
+        "sha256": "5dfd9b5b7f2d180d21144bddb7e2bbc62128f7da6242fd006b15a450eea3d10f"
+      },
+      {
+        "path": "assets/production/raising-care/licensed-runtime-v1/meat-3.png",
+        "sha256": "e2b0fc13c39ad4abdc841aaf1f251387aa16f82c7d927734348015c7bdc45ad8"
+      },
+      {
+        "path": "assets/production/raising-care/licensed-runtime-v1/meat-rot-0.png",
+        "sha256": "7bb9181d55dfd72f156fd02ef8f8eebb17305c17cedf53de9765f62502445bae"
+      },
+      {
+        "path": "assets/production/raising-care/licensed-runtime-v1/meat-rot-1.png",
+        "sha256": "acaeae5c4b0c5096320e821c1ecdef50f1c06a34597796843e6bf9c835e6c559"
+      },
+      {
+        "path": "assets/production/raising-care/licensed-runtime-v1/protein-0.png",
+        "sha256": "040d9d6df02e6ed36b6e72e31318c880f46c3b70fd728f047b4b8744ac1284c4"
+      },
+      {
+        "path": "assets/production/raising-care/licensed-runtime-v1/protein-1.png",
+        "sha256": "269cb1c0a4dd5810f27d3c516364d7e6e3ac6f986c9f5e821cda9d632db43c03"
+      },
+      {
+        "path": "assets/production/raising-care/licensed-runtime-v1/protein-2.png",
+        "sha256": "a1a69b6588d3a301cc32970c59d95af6d546dd10ee21fb063498a89a7693286e"
+      },
+      {
+        "path": "assets/production/raising-care/licensed-runtime-v1/protein-3.png",
+        "sha256": "308cb0de7617cdc057d8de031264040b6a12a83b2bbd30b252a566526181b0f3"
+      },
+      {
+        "path": "assets/production/raising-care/licensed-runtime-v1/protein-rot-0.png",
+        "sha256": "fe62aca2cada73d3dbf8c1ec01906ddae62ba7bde7006e1a826d1ea2cc90692b"
+      },
+      {
+        "path": "assets/production/raising-care/licensed-runtime-v1/protein-rot-1.png",
+        "sha256": "4bea5a754c5b00df59ffecb61f26079c9be1a89943756c844fb894a78620920b"
+      },
+      {
+        "path": "assets/production/raising-care/licensed-runtime-v1/waste-0.png",
+        "sha256": "0973cd29a8f84e63b6a83080ce9038afba2250dd8d339d34167e392ed2eb303e"
+      },
+      {
+        "path": "assets/production/raising-care/licensed-runtime-v1/waste-1.png",
+        "sha256": "a256b27825a9e15db0f3490368b205b95535eaca6e22c0ae1fa93b176c1817c9"
       },
       {
         "path": "assets/production/temporary/int-rh2/creatures/blazetail-kit/idle.png",
@@ -31078,7 +31128,7 @@
       },
       {
         "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
-        "sha256": "2fe86f8d2ef70a66ba0c32936d7e0d8137583fae4ce5410e944fedc26852a2ce"
+        "sha256": "2f18dfaf6d0e74e44071934634595f0607379ff406c7ee0b31108aad279a4950"
       },
       {
         "path": "src/championship/presentation/intRh2/raisingFieldViewport.js",
