@@ -1,0 +1,44 @@
+{
+  "evidence": "STATIC_DECODE",
+  "inputClass": "ROM_FILE_AND_CODE_READ_NOT_LIVE_PLAY",
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "question": "Which sprite does ui/conference_list_item.nxr draw for its cup node?",
+  "answer": "NOT_STATED_BY_THE_SCENE_BOUND_AT_RUNTIME",
+  "scene": {
+    "path": "ui/conference_list_item.nxr",
+    "fileId": 6184,
+    "uiFolderFirstId": 6142,
+    "indexWithinUi": 42,
+    "magic": "NXSR",
+    "bytes": 168,
+    "declaredResources": ["menu_main"],
+    "nodes": [
+      { "name": "loc_name", "resourceIndex": -1, "cellIndex": 0 },
+      { "name": "cup", "resourceIndex": -1, "cellIndex": 4 },
+      { "name": "base", "resourceIndex": 0, "cellIndex": 8 }
+    ],
+    "rawHeaderConfirms": "The -1 is in the file, not an artefact of the conversion: the node records read FF FF FF FF for loc_name and cup."
+  },
+  "decisive": {
+    "finding": "The declared cell indices do not describe what is drawn, for the named resource as well as the unnamed ones.",
+    "menuMainCells": {
+      "0": "88x32 blue plate",
+      "1": "88x32 blue plate",
+      "4": "16x16 glyph '2' -- what the cup node declares",
+      "8": "16x16 glyph '6' -- what the base node declares"
+    },
+    "reading": "A row plate is cell 0 or 1, so base declaring cell 8 cannot be the plate it draws. The scene therefore carries layout -- node names, positions, params, colour modulation -- and the sprites are bound by the code that opens it."
+  },
+  "ruledOut": [
+    "File id 6184 appears as no 16- or 32-bit literal in ARM9 or any overlay; the one ARM9 halfword match at 020586B0 is the encoding of `ldr r1, [pc, #0x828]`, not data.",
+    "No `mov #0x1800` / `orr #0x28` pair builds 6184 anywhere.",
+    "The strings 'conference', 'menu_main' and 'cup' appear in no code image, so scenes are not opened by name.",
+    "Searching the whole converted art pack for a gold 8..32px icon returns moons, digits and result glyphs; no trophy."
+  ],
+  "toClose": "Find the UI scene system's open and node-bind calls, then read what it hands the node whose resourceIndex is -1. That is the same class of trace the toolbar icon palette needs.",
+  "consequence": "The tournaments board keeps a stand-in mark for the cup. Promoting any sprite on the strength of this scene would be guessing, and the scene is not evidence for one.",
+  "limits": [
+    "This says the scene does not identify the sprite. It does not say the sprite is absent from the cartridge.",
+    "cellLinkValidated in the hd96 scene set means the index is in range for the declared resource, not that the pairing is what the game draws."
+  ]
+}

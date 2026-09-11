@@ -93,7 +93,10 @@ export function createChampionshipView({ root, source }) {
       row.type = "button";
       row.dataset.category = String(category.category);
       row.dataset.unlocked = String(category.unlocked);
-      // conference_list_item is a cup, a name and a plate; nothing else.
+      // conference_list_item is a cup, a name and a plate; nothing else. Which
+      // sprite the cup is, the scene does not say -- it carries layout only, so
+      // this mark is a stand-in. See
+      // docs/research/CONFERENCE_LIST_ITEM_CUP_BINDING_2026-09-11.json.
       row.append(element("span", "cm-championship-cup", "🏆"));
       const copy = element("span", "cm-championship-entry__copy");
       copy.append(element("span", "cm-championship-entry__name", categoryName(category.id)));
