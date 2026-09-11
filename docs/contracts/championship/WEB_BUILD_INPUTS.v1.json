@@ -6094,6 +6094,23 @@
     "assets/production/raising-care/licensed-runtime-v1/protein-rot-1.png",
     "assets/production/raising-care/licensed-runtime-v1/waste-0.png",
     "assets/production/raising-care/licensed-runtime-v1/waste-1.png",
+    "assets/production/toolbar/licensed-runtime-v1/clean-rest.png",
+    "assets/production/toolbar/licensed-runtime-v1/clean-selected.png",
+    "assets/production/toolbar/licensed-runtime-v1/feed-rest.png",
+    "assets/production/toolbar/licensed-runtime-v1/feed-selected.png",
+    "assets/production/toolbar/licensed-runtime-v1/hand-rest.png",
+    "assets/production/toolbar/licensed-runtime-v1/hand-selected.png",
+    "assets/production/toolbar/licensed-runtime-v1/manage-rest.png",
+    "assets/production/toolbar/licensed-runtime-v1/manage-selected.png",
+    "assets/production/toolbar/licensed-runtime-v1/manifest.json",
+    "assets/production/toolbar/licensed-runtime-v1/medicine-rest.png",
+    "assets/production/toolbar/licensed-runtime-v1/medicine-selected.png",
+    "assets/production/toolbar/licensed-runtime-v1/protein-rest.png",
+    "assets/production/toolbar/licensed-runtime-v1/protein-selected.png",
+    "assets/production/toolbar/licensed-runtime-v1/system-rest.png",
+    "assets/production/toolbar/licensed-runtime-v1/system-selected.png",
+    "assets/production/toolbar/licensed-runtime-v1/woundMedicine-rest.png",
+    "assets/production/toolbar/licensed-runtime-v1/woundMedicine-selected.png",
     "assets/production/temporary/int-rh2/creatures/blazetail-kit/idle.png",
     "assets/production/temporary/int-rh2/creatures/blazetail-kit/portrait.png",
     "assets/production/temporary/int-rh2/creatures/blazetail-kit/touch.png",
@@ -6520,7 +6537,7 @@
     "files": [
       {
         "path": "assets/production/ART_PRODUCTION_INDEX.json",
-        "sha256": "072d8df3b9c6b55e4f17aad19c89d8a1fb1f82521994350c21bf9668544dd9ad"
+        "sha256": "8ffb7591431ca2ee6d977757dc1364625a9d7299a659fbbb1a814134c265a4a8"
       },
       {
         "path": "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png",
@@ -29867,6 +29884,74 @@
         "sha256": "a256b27825a9e15db0f3490368b205b95535eaca6e22c0ae1fa93b176c1817c9"
       },
       {
+        "path": "assets/production/toolbar/licensed-runtime-v1/clean-rest.png",
+        "sha256": "b021bf21c4fd4b609ec6e9892fc574dff0d1e9e67b0615865fefc20003ebb2f2"
+      },
+      {
+        "path": "assets/production/toolbar/licensed-runtime-v1/clean-selected.png",
+        "sha256": "feda8c83e2ca1f79d344c4f7d81d0aa728241a1747af85663ea637458565b625"
+      },
+      {
+        "path": "assets/production/toolbar/licensed-runtime-v1/feed-rest.png",
+        "sha256": "86811d0ff41964fffe7c843b76fe44d8a6f8f33786710a6f95f0f115b5bb9fb5"
+      },
+      {
+        "path": "assets/production/toolbar/licensed-runtime-v1/feed-selected.png",
+        "sha256": "395d8f9411061097167d056acd1dc1e51560cc6e104163c65d557e5d67f47421"
+      },
+      {
+        "path": "assets/production/toolbar/licensed-runtime-v1/hand-rest.png",
+        "sha256": "6a2df798f9f74a03235d64815eafe9d88c3ab3cda9f5757f943c45d9565c45ab"
+      },
+      {
+        "path": "assets/production/toolbar/licensed-runtime-v1/hand-selected.png",
+        "sha256": "e192cf1bebf5d2d8c07002b6827da31b2069ab4e61482a922e7615369fbaf536"
+      },
+      {
+        "path": "assets/production/toolbar/licensed-runtime-v1/manage-rest.png",
+        "sha256": "d5aaeafe4f79d5091a38ee570c4e4518f25c6993fa210254e7edbf79b117d740"
+      },
+      {
+        "path": "assets/production/toolbar/licensed-runtime-v1/manage-selected.png",
+        "sha256": "0640c9f80e54a4e74937f2fcbb42ee915d80d2ea8b7ffb2acb4d163596e0962e"
+      },
+      {
+        "path": "assets/production/toolbar/licensed-runtime-v1/manifest.json",
+        "sha256": "9ace4898d068426dffa4039d1b402c10b18befb2c7e7fd5d994dc01a35ea6866"
+      },
+      {
+        "path": "assets/production/toolbar/licensed-runtime-v1/medicine-rest.png",
+        "sha256": "61da78324ee0ab1345e4ddcc8975b113380efdde0eab6093031972dce64cf63b"
+      },
+      {
+        "path": "assets/production/toolbar/licensed-runtime-v1/medicine-selected.png",
+        "sha256": "31b869a97c8a22ea6e877fd645fdd35e9fd81c2f23762997c0234a72d46ccd9a"
+      },
+      {
+        "path": "assets/production/toolbar/licensed-runtime-v1/protein-rest.png",
+        "sha256": "6815ea424b466b3ab812041a3241046ef47b8ba194a5d629a1decd9096c5e8d4"
+      },
+      {
+        "path": "assets/production/toolbar/licensed-runtime-v1/protein-selected.png",
+        "sha256": "3809673a9b8f002e7cceeea55f94c2d858c55ecfe2dc4f8e1821f42ef998f5f0"
+      },
+      {
+        "path": "assets/production/toolbar/licensed-runtime-v1/system-rest.png",
+        "sha256": "98ff1ed7e0401ada0ea3325274bb4c54932a5ea2cfefe11b1ae113541fd67c8f"
+      },
+      {
+        "path": "assets/production/toolbar/licensed-runtime-v1/system-selected.png",
+        "sha256": "8a381f7393b0531c42233559ae8ae3d572e66ee3f6e984583c56ecad34ee7246"
+      },
+      {
+        "path": "assets/production/toolbar/licensed-runtime-v1/woundMedicine-rest.png",
+        "sha256": "6925fd121cd7cf5e9185de5e93cf8256e39038a1b9208715db3e0850728ea570"
+      },
+      {
+        "path": "assets/production/toolbar/licensed-runtime-v1/woundMedicine-selected.png",
+        "sha256": "9ec8c04e64d00f7db52f5f33b768e0e910fee8310d944f9d43cfd4d129c4a59c"
+      },
+      {
         "path": "assets/production/temporary/int-rh2/creatures/blazetail-kit/idle.png",
         "sha256": "ecb235728bc776a72d12f3fef1d5dd5e258565172ec2e2a3c3faa91276fc7715"
       },
@@ -30516,7 +30601,7 @@
       },
       {
         "path": "src/championship/app/intRh2Styles.css",
-        "sha256": "18d8e95690ce1b125585af99b509baa24d9f71077e48869ec89a73dd68e4ff3e"
+        "sha256": "7206643cb8008a271851020d07200391f956b8fab07eb494c0276423206f6344"
       },
       {
         "path": "src/championship/app/main.js",

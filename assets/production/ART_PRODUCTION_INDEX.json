@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 29,
+    "registeredRuntimeBundles": 30,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -69,6 +69,17 @@
       "runtimeEligible": true,
       "shippingReady": false,
       "maturity": "LICENSED_PIXEL_FAITHFUL_NEAREST_HD_CARE_ITEMS"
+    },
+    {
+      "assetId": "art:toolbar:licensed-runtime:v1",
+      "manifestPath": "assets/production/toolbar/licensed-runtime-v1/manifest.json",
+      "rightsStatus": "LICENSED",
+      "productionStatus": "OWNER_APPROVED_LICENSED_PIXEL_RUNTIME",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "maturity": "LICENSED_PIXEL_FAITHFUL_NEAREST_HD_TOOLBAR_ICONS"
     },
     {
       "assetId": "art:raising_home:int-rh2:temporary-presentation-bundle",

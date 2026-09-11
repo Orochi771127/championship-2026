@@ -372,17 +372,26 @@
 .cm-toolbar[data-mode="1"] .cm-toolbar__entry { color: #4e5037; border-color: #b5a071; background: linear-gradient(180deg, #fffef4, #f0e8cd); box-shadow: inset 0 0 0 1px #fffdf3, 0 2px 0 #c7b67e; }
 .cm-toolbar[data-mode="1"] .cm-toolbar__cell { flex-direction: column; gap: 1px; min-height: 62px; padding: 3px 0 4px; border-radius: 7px; letter-spacing: 0; font-size: clamp(.42rem, 1.8vw, .52rem); font-weight: 700; }
 .cm-toolbar[data-mode="1"] .cm-toolbar__cell::before { content: ""; display: block; width: 34px; height: 34px; background-image: url("../../../assets/production/ui/tooling-pilot-r1/tool-icons.webp"); background-size: 300% 300%; pointer-events: none; }
-.cm-toolbar[data-mode="1"] [data-tool-id="hand"]::before { background-position: 0 0; }
-.cm-toolbar[data-mode="1"] [data-tool-id="feed"]::before { background-position: 50% 0; }
-.cm-toolbar[data-mode="1"] [data-tool-id="clean"]::before { background-position: 100% 0; }
-.cm-toolbar[data-mode="1"] [data-tool-id="medicine"]::before { background-position: 0 50%; }
-.cm-toolbar[data-mode="1"] [data-tool-id="woundMedicine"]::before { background-position: 50% 50%; }
-.cm-toolbar[data-mode="1"] [data-tool-id="protein"]::before { background-position: 100% 50%; }
-.cm-toolbar[data-mode="1"] [data-tool-id="feed"]::before { background-image: url("../../../assets/production/raising-care-r1/meat-0.svg"); background-size: contain; background-position: center; }
-.cm-toolbar[data-mode="1"] [data-tool-id="protein"]::before { background-image: url("../../../assets/production/raising-care-r1/protein-0.svg"); background-size: contain; background-position: center; }
-.cm-toolbar[data-mode="1"] [data-tool-id="clean"]::before { background-image: url("../../../assets/production/raising-care-r1/clean.svg"); background-size: contain; background-position: center; }
-.cm-toolbar[data-mode="1"] [data-menu-id="MANAGEMENT"]::before { background-position: 0 100%; }
-.cm-toolbar[data-mode="1"] [data-menu-id="SYSTEM"]::before { background-position: 50% 100%; }
+/* Original toolbar icons (ui/training_set). The game plays them grey and
+ * lights only the selected slot gold, so the two banks drive rest and
+ * aria-pressed rather than one drawing being tinted. Manage and System keep
+ * their authored icons: the contract has that slot mapping untraced. */
+.cm-toolbar[data-mode="1"] [data-tool-id="hand"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/hand-rest.png"); background-size: contain; background-position: center; image-rendering: pixelated; }
+.cm-toolbar[data-mode="1"] [data-tool-id="hand"][aria-pressed="true"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/hand-selected.png"); }
+.cm-toolbar[data-mode="1"] [data-tool-id="feed"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/feed-rest.png"); background-size: contain; background-position: center; image-rendering: pixelated; }
+.cm-toolbar[data-mode="1"] [data-tool-id="feed"][aria-pressed="true"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/feed-selected.png"); }
+.cm-toolbar[data-mode="1"] [data-tool-id="protein"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/protein-rest.png"); background-size: contain; background-position: center; image-rendering: pixelated; }
+.cm-toolbar[data-mode="1"] [data-tool-id="protein"][aria-pressed="true"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/protein-selected.png"); }
+.cm-toolbar[data-mode="1"] [data-tool-id="clean"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/clean-rest.png"); background-size: contain; background-position: center; image-rendering: pixelated; }
+.cm-toolbar[data-mode="1"] [data-tool-id="clean"][aria-pressed="true"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/clean-selected.png"); }
+.cm-toolbar[data-mode="1"] [data-tool-id="woundMedicine"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/woundMedicine-rest.png"); background-size: contain; background-position: center; image-rendering: pixelated; }
+.cm-toolbar[data-mode="1"] [data-tool-id="woundMedicine"][aria-pressed="true"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/woundMedicine-selected.png"); }
+.cm-toolbar[data-mode="1"] [data-tool-id="medicine"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/medicine-rest.png"); background-size: contain; background-position: center; image-rendering: pixelated; }
+.cm-toolbar[data-mode="1"] [data-tool-id="medicine"][aria-pressed="true"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/medicine-selected.png"); }
+.cm-toolbar[data-mode="1"] [data-menu-id="MANAGEMENT"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/manage-rest.png"); background-size: contain; background-position: center; image-rendering: pixelated; }
+.cm-toolbar[data-mode="1"] [data-menu-id="MANAGEMENT"][aria-expanded="true"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/manage-selected.png"); }
+.cm-toolbar[data-mode="1"] [data-menu-id="SYSTEM"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/system-rest.png"); background-size: contain; background-position: center; image-rendering: pixelated; }
+.cm-toolbar[data-mode="1"] [data-menu-id="SYSTEM"][aria-expanded="true"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/system-selected.png"); }
 .cm-toolbar[data-mode="1"] .cm-toolbar__cell:hover,
 .cm-toolbar[data-mode="1"] .cm-toolbar__entry:hover:not(:disabled) { background: #fff3c7; }
 .cm-toolbar[data-mode="1"] .cm-toolbar__cell[aria-pressed="true"] { background: #d8f0ce; border-color: #63874a; color: #294e26; }

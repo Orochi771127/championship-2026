@@ -37,17 +37,26 @@ FAMILIES = {
         },
         "counts": {"meat": 4, "protein": 4, "meat-rot": 2, "protein-rot": 2, "waste": 2, "broom": 2},
     },
-    # Toolbar icons. These two sequences are icon banks addressed by frame, not
-    # animations: the same ten icons in two tints. Frame 0 of each bank is blank.
+    # Toolbar icons. The contract names ui/training_set as the bank the toolbar
+    # reads, and its three sequences are banks addressed by frame, not
+    # animations: labels, then the same icons in gold and in grey. Frame 0 of
+    # each bank is blank. The original plays grey and lights the selected slot
+    # gold (video BV13u411B7BK t030).
+    #
+    # Slot mapping is UNKNOWN_REQUIRES_TRACE in the contract, so each frame is
+    # taken on what its drawing shows: six name their own tool, and the open
+    # book and the door are the seventh and eighth icons in the original's own
+    # toolbar (video BV13u411B7BK t030). That is observation, not a trace.
     "toolbar": {
-        "resource": "ui/UI_Icon_training",
+        "resource": "ui/training_set",
         "out": "docs/art/production/toolbar/faithful-hd4x",
-        "banks": {0: "lit", 1: "dim"},
+        "banks": {1: "selected", 2: "rest"},
         "icons": {1: "hand", 2: "feed", 3: "protein", 4: "clean",
-                  5: "woundMedicine", 6: "medicine", 7: "manage"},
+                  5: "woundMedicine", 6: "medicine", 10: "manage", 11: "system"},
         "counts": {f"{name}-{bank}": 1 for name in
-                   ["hand", "feed", "protein", "clean", "woundMedicine", "medicine", "manage"]
-                   for bank in ["lit", "dim"]},
+                   ["hand", "feed", "protein", "clean", "woundMedicine", "medicine",
+                    "manage", "system"]
+                   for bank in ["selected", "rest"]},
     },
 }
 
