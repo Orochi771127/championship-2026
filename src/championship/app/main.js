@@ -1030,6 +1030,11 @@ function boot() {
   installHomeEntries();
   refreshContinue();
   loginButton.disabled=false;
+  // The title is the longest idle moment the player gives us: they are reading
+  // it before pressing LOGIN. Warming only from mountCurrentScreen missed it
+  // entirely, because the title is not mounted through there, so the first Hunt
+  // still paid a cold fetch. Start the head start here.
+  warmDeferredModules();
 
   // Background/unload resets elapsed measurement. Only the existing explicit
   // Save / Save and Quit actions may persist the player's session.
