@@ -152,8 +152,8 @@ export function createChampionshipView({ root, source }) {
         uiText(`開始第 ${run.round + 1} 戰`));
       fight.type = "button";
       fight.dataset.round = String(run.round);
-      fight.addEventListener("click", () => {
-        const entered = intents.enterRound?.();
+      fight.addEventListener("click", async () => {
+        const entered = await intents.enterRound?.();
         if (!entered?.ok) { say(uiText("目前無法開始這一輪。")); render(); }
       });
       actions.append(fight);

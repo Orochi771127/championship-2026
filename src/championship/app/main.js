@@ -43,17 +43,12 @@ import {loadRegisteredCharacterHudArt} from '../presentation/characterHudArt.js'
 import {loadRegisteredHuntFeedbackArt} from '../presentation/huntFeedbackArt.js';
 import {mountBattleResultCharacters} from '../presentation/battleResultCharacters.js';
 import {nativeBattleWinPercent} from '../battle/nativeTitleProgression.js';
-import { mountBattleVfxThreeOverlay } from "../presentation/vs5/createBattleVfxThreeOverlay.js";
 import { mountBattleAudioPresentation } from '../presentation/battleAudioPresentation.js';
 // The battle menu box. Its four faces are ROM_VERIFIED from launcher13.nsbmd;
 // the geometry is original-created, exactly as the Gate world sphere is.
-import { mountBattleSelectThreePresentation } from "../presentation/vs5/createBattleSelectThreePresentation.js";
 import { BATTLE_MENU_LABELS, speciesName, raisingDisplayName, starterName, titleEventText } from "../text/zhHant.js";
 import { createBattleSelectView, createBattleFieldView, createBattleResultView } from "./vs5Screens.js";
-import { createBattleRuntime } from "./battleRuntime.js";
-import { mountGateSelectThreePresentation } from "../presentation/vs2/createGateSelectThreePresentation.js";
 import { loadPixiCharacterRuntimeBundle } from "../presentation/pixiCharacterRuntimeBundle.js";
-import { LICENSED_CHARACTER_ASSET_ID, LICENSED_CHARACTER_MANIFEST, loadLicensedCharacterRoster } from "../presentation/licensedCharacterRoster.js";
 import { createChampionshipStatusBar } from "./championshipStatusBar.js";
 import { createDigimonListView } from "./digimonListScreen.js";
 import { createScheduleView } from "./scheduleScreen.js";
@@ -75,6 +70,43 @@ import {
 import { createRaisingCageArtPlan } from "../presentation/raisingCageArtPlan.js";
 
 const PIXI_V8_MODULE_URL = "../../../node_modules/pixi.js/dist/pixi.mjs";
+// Three.js is about 2MB and only the bounded 3D views read it, so each mount is
+// fetched the first time that view asks for one. The wrappers keep the same
+// signature and return the same value the views already await.
+const mountBattleVfxThreeOverlay = async (options) =>
+  (await import("../presentation/vs5/createBattleVfxThreeOverlay.js")).mountBattleVfxThreeOverlay(options);
+const mountBattleSelectThreePresentation = async (options) =>
+  (await import("../presentation/vs5/createBattleSelectThreePresentation.js")).mountBattleSelectThreePresentation(options);
+const mountGateSelectThreePresentation = async (options) =>
+  (await import("../presentation/vs2/createGateSelectThreePresentation.js")).mountGateSelectThreePresentation(options);
+
+// battleRuntime reaches the character geometry, profiles, moves, presets and
+// scripts -- about 3.7MB no screen before the battle menu reads. Every caller
+// is already past that menu, so it is fetched then.
+const loadBattleRuntime = async () => (await import("./battleRuntime.js")).createBattleRuntime;
+
+// Deferring those modules buys a faster title at the cost of a slower first
+// Hunt or Battle, which is the wait the player actually notices. So once a
+// screen is up and the player is reading it, fetch them in the background: the
+// module cache means the real entry then costs nothing. Failures are ignored --
+// this is a head start, and every caller still awaits its own import.
+let warmed = false;
+function warmDeferredModules() {
+  if (warmed) return;
+  warmed = true;
+  const warm = () => {
+    for (const load of [
+      () => import("./battleRuntime.js"),
+      () => import("../presentation/licensedCharacterRoster.js"),
+      () => import("../presentation/vs2/createGateSelectThreePresentation.js"),
+      () => import("../presentation/vs5/createBattleSelectThreePresentation.js"),
+      () => import("../presentation/vs5/createBattleVfxThreeOverlay.js")
+    ]) load().catch(() => {});
+  };
+  if (typeof requestIdleCallback === "function") requestIdleCallback(warm, { timeout: 4000 });
+  else setTimeout(warm, 1200);
+}
+
 const CHARACTER_REVIEW_RUNTIME_URL = new URLSearchParams(globalThis.location?.search ?? "").get("characterArtReview") === "m201"
   ? "assets/production/internal-character-review/m201-remix-v1/runtime.review.json"
   : null;
@@ -150,6 +182,11 @@ async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main'
   if(sides.includes('sub')&&!isLocalBattleEffectPreview(location.href))return null;
   try {
     if (!CHARACTER_REVIEW_RUNTIME_URL) {
+      // The roster module carries the battle character geometry and sizing --
+      // about 1.9MB the title screen and the ranch never read -- so it is
+      // fetched when a character bundle is actually wanted.
+      const { LICENSED_CHARACTER_ASSET_ID, LICENSED_CHARACTER_MANIFEST, loadLicensedCharacterRoster } =
+        await import("../presentation/licensedCharacterRoster.js");
       const indexResponse = await fetch(new URL("assets/production/ART_PRODUCTION_INDEX.json", location.href));
       if (!indexResponse.ok) return null;
       const productionIndex = await indexResponse.json();
@@ -396,7 +433,7 @@ let battleProgressBefore = null;
  * A tournament round is an ordinary battle whose opponent came from the run's
  * own pool. Draw once, build the match on that team, then open the attempt.
  */
-function enterChampionshipRound() {
+async function enterChampionshipRound() {
   if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started) {
     return { ok: false, reason: "BATTLE_NOT_READY", message: "遊戲場景尚未就緒，請返回育成場景後重試。" };
   }
@@ -405,7 +442,7 @@ function enterChampionshipRound() {
   const drawn = app.drawChampionshipOpponent();
   if (!drawn.ok) return drawn;
   const rngPreparation = app.prepareBattleRng();
-  const prepared = createBattleRuntime({ schedule: app.getBattleSchedule(), mode: 0, battleType: 0,
+  const prepared = (await loadBattleRuntime())({ schedule: app.getBattleSchedule(), mode: 0, battleType: 0,
     rng: rngPreparation.rng });
   try {
     prepared.chooseChampionshipRound({ category: run.category, teamIndex: drawn.opponent.teamIndex });
@@ -427,9 +464,9 @@ function enterChampionshipRound() {
   }
 }
 
-function mountBattleSelect() {
+async function mountBattleSelect() {
   battleRuntime?.dispose();
-  battleRuntime = createBattleRuntime({ schedule: app.getBattleSchedule(), mode:1, battleType:0 });
+  battleRuntime = (await loadBattleRuntime())({ schedule: app.getBattleSchedule(), mode:1, battleType:0 });
   battleAttemptId = null;
   battleProgressBefore = null;
   return createBattleSelectView({
@@ -438,7 +475,7 @@ function mountBattleSelect() {
     getPartySelection:recordIndex=>({candidates:app.getBattlePartyCandidates(recordIndex),limit:app.getBattlePartyLimit(recordIndex)}),
     menuCopy: BATTLE_MENU_LABELS,
     onOpenChampionship() { app.openChampionship(); },
-    onEnter(recordIndex,playerInstanceIds) {
+    async onEnter(recordIndex,playerInstanceIds) {
       // Battle simulation uses this existing Application's ticker. Do not
       // charge for a session that cannot start advancing on the shared stage.
       if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started) {
@@ -447,7 +484,7 @@ function mountBattleSelect() {
       const party=app.prepareBattleParty(recordIndex,playerInstanceIds);
       if(!party.ok)return party;
       const rngPreparation=app.prepareBattleRng();
-      const prepared = createBattleRuntime({ schedule: app.getBattleSchedule(), mode:1, battleType:0,playerIndividuals:party.individuals,rng:rngPreparation.rng });
+      const prepared = (await loadBattleRuntime())({ schedule: app.getBattleSchedule(), mode:1, battleType:0,playerIndividuals:party.individuals,rng:rngPreparation.rng });
       try {
         prepared.chooseMatch(recordIndex);
         // Build before charging. startMatch creates the session but never ticks
@@ -692,10 +729,11 @@ async function mountCurrentScreen() {
     else if (target === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) view = createHuntLoadoutView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.HUNT_FIELD) view = await mountHuntField();
     else if (target === CHAMPIONSHIP_SCREENS.HUNT_RESULT) view = createHuntResultView({ root, source: expeditionSource });
-    else if (target === CHAMPIONSHIP_SCREENS.BATTLE_SELECT) view = mountBattleSelect();
+    else if (target === CHAMPIONSHIP_SCREENS.BATTLE_SELECT) view = await mountBattleSelect();
     else if (target === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) view = await mountBattleField();
     else if (target === CHAMPIONSHIP_SCREENS.BATTLE_RESULT) view = await mountBattleResult();
     mountedScreen = target;
+    warmDeferredModules();
   } finally {
     release();
   }
@@ -721,7 +759,7 @@ async function openGameplay() {
     view?.render?.(frame);
   });
   let calendarKey = "";
-  function refreshCalendarViews() {
+  async function refreshCalendarViews() {
     const calendar = app.getCalendar();
     const key = `${calendar.year}:${calendar.season}:${calendar.dayOfSeason}:${calendar.clockMinutes}:${app.getTamerRank()}`;
     if (key === calendarKey) return;
@@ -731,13 +769,13 @@ async function openGameplay() {
     if (app.getScreen() === CHAMPIONSHIP_SCREENS.SCHEDULE) {
       view?.render?.({ calendar, eligibleRecordIndices: app.getAvailableBattleRecordIndices(),progress:app.getTitleProgress() });
     } else if (app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_SELECT) {
-      const current = createBattleRuntime({ schedule: app.getBattleSchedule(), mode:1, battleType:0 });
+      const current = (await loadBattleRuntime())({ schedule: app.getBattleSchedule(), mode:1, battleType:0 });
       view?.render?.({ matches: current.listMatches() });
       current.dispose();
     }
   }
   unsubscribeScreen = app.subscribeScreen(() => {
-    refreshStatusBar(); refreshToolbarMode(); refreshCalendarViews(); void mountCurrentScreen();
+    refreshStatusBar(); refreshToolbarMode(); void refreshCalendarViews(); void mountCurrentScreen();
   });
   unsubscribeCalendar = app.getSession().subscribeRaisingHome(refreshCalendarViews);
 

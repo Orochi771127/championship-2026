@@ -148,7 +148,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       controls.push([entry,button]);partyPanel.append(button);
     }
     if(!candidates.some(c=>c.admission.ok))partyPanel.append(element('p','cm-vs5-entry-notice','目前沒有符合這場比賽條件的數碼獸。'));
-    confirm.addEventListener('click',()=>showRefusal(onEnter(selectedMatch.recordIndex,[...selectedIds]),selectedMatch));
+    confirm.addEventListener('click',async()=>showRefusal(await onEnter(selectedMatch.recordIndex,[...selectedIds]),selectedMatch));
     const back=actionButton('返回賽事選擇');back.addEventListener('click',()=>{partyPanel.hidden=true;list.hidden=false;entryNotice.hidden=true;for(const node of matchOnlyNodes)node.hidden=false;});
     partyPanel.append(confirm,back);
   }
@@ -169,9 +169,9 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
         `${menuCopy.entryFee ?? "報名費"} ${match.entryFee ?? "—"} 位元幣`));
       button.append(element("span", "cm-vs5-match__payout",
         `${menuCopy.prize ?? "獎金"} ${match.payout > 0 ? `${match.payout} 位元幣` : menuCopy.noPayout}`));
-      button.addEventListener("click", () => {
+      button.addEventListener("click", async () => {
         if(getPartySelection){chooseParty(match);return;}
-        const result = onEnter(match.recordIndex);
+        const result = await onEnter(match.recordIndex);
         if (result?.ok !== false) return;
         entryNotice.hidden = false;
         entryNotice.dataset.reason = result.reason ?? "ENTRY_REFUSED";

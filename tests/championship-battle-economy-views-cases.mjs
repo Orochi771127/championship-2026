@@ -120,7 +120,7 @@ test("a settled loss displays zero received, distinct from an unsettled reward",
   assert.doesNotMatch(textOf(root), /獎金尚未入帳/);
 });
 
-test("the menu distinguishes fee and prize, and explains insufficient funds", (t) => {
+test("the menu distinguishes fee and prize, and explains insufficient funds", async (t) => {
   const root = useDocument(t);
   const entries = [];
   let cubeAvailable = null;
@@ -142,7 +142,10 @@ test("the menu distinguishes fee and prize, and explains insufficient funds", (t
   });
   assert.equal(findByClass(root, "cm-vs5-match__fee").textContent, "報名費 150 位元幣");
   assert.equal(findByClass(root, "cm-vs5-match__payout").textContent, "獎金 7000 位元幣");
+  // Entering is async now: the battle runtime is fetched when the menu asks for
+  // one rather than at startup, so the refusal arrives a microtask later.
   findByClass(root, "cm-vs5-match__enter").click();
+  await Promise.resolve();
   assert.deepEqual(entries, [0]);
   const notice = findByClass(root, "cm-vs5-entry-notice");
   assert.equal(notice.hidden, false);

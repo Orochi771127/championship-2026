@@ -76,7 +76,9 @@
     "test:browser:characters:m201": "node tests/championship-character-remix-m201-browser.cjs",
     "test:browser:file-launch": "node tests/championship-file-launch-guard-browser.cjs",
     "test:browser:vfx": "node tests/championship-faithful-vfx-browser.cjs",
-    "test:ci": "node scripts/test-ci.mjs"
+    "test:ci": "node scripts/test-ci.mjs",
+    "build:preload": "node scripts/build-module-preload.mjs",
+    "validate:preload": "node scripts/build-module-preload.mjs --check"
   },
   "dependencies": {
     "pixi.js": "8.19.0",
