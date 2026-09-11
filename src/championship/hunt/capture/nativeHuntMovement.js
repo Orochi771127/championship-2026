@@ -52,21 +52,36 @@ export function nativeMovementTile(positionQ12) {
   return positionQ12.slice(0, 2).map((n) => Math.trunc((n >> 12) / 8) || 0);
 }
 
-export function steerNativeHuntDirection(before, attribute) {
+// The dispatch at 0210D9AC only covers low nibbles 0..11. For 12..15 the
+// original falls through 0210D9B0 to 0210DAD4 without storing either direction
+// component, so it blends toward whatever the caller left at entry SP-0x30 and
+// SP-0x2C; only Z is re-zeroed, at 0210DADC. The live producer traced on
+// 2026-09-09 leaves X = the actor object address and Y = the animation return
+// address ARM9 02047D5C pushes. Running the original normalize 02002A6C over
+// sampled EWRAM pointers and ARM9 code addresses, all three blend rates and
+// incoming table directions puts those 9,216 samples in one down-right cone of
+// 38.94..45.86 degrees — narrower than the 30-degree step of the original's own
+// table, so the branch is bounded even though no original heap address is
+// reconstructible here. Shipped maps only reach it through attributes 0x0E,
+// 0x0F and 0x8F, all at blend rate 0xcd.
+// docs/research/HUNT_DIRECTION_UNASSIGNED_2026-09-10.json
+// A bounded direction cone does not identify the actor's exact scratch words.
+// Replay callers may supply captured words; normal play must not borrow a
+// different encounter's heap address. The field owns graceful interruption.
+export function steerNativeHuntDirection(before, attribute, scratchQ12=null) {
   if (!Number.isInteger(attribute) || attribute < 0 || attribute > 255) throw new TypeError("NATIVE_DIRECTION_BYTE_REQUIRED");
   const target2 = DIRECTIONS[attribute & 15];
-  // Native leaves stack components unassigned for 12..15. Do not fabricate
-  // direction for such a branch or assume a zero vector from fresh JS memory.
-  if (!target2) throw new Error("NATIVE_DIRECTION_UNASSIGNED_BRANCH_REQUIRES_TRACE");
-  return steerNativeHuntDirectionCell(before, { targetQ12:[...target2,0],
+  return steerNativeHuntDirectionCell(before, {
+    ...(target2?{targetQ12:[...target2,0]}:{unknownDirection:attribute&15,scratchQ12}),
     blendQ12:attribute & 0x20 ? Q12 : attribute & 0x40 ? 0x59a : 0xcd });
 }
 
 // Production readers expose consumed steering fields, not raw ESC bytes.
 export function steerNativeHuntDirectionCell(before, cell) {
   const direction = vector(before);
-  if (cell?.unknownDirection !== undefined) throw new Error("NATIVE_DIRECTION_UNASSIGNED_BRANCH_REQUIRES_TRACE");
-  const target = vector(cell?.targetQ12);
+  if(cell?.unknownDirection!==undefined&&!cell.scratchQ12)throw Error('NATIVE_DIRECTION_UNASSIGNED_BRANCH_REQUIRES_TRACE');
+  const target = cell?.unknownDirection !== undefined
+    ? [...vector(cell.scratchQ12).slice(0,2),0] : vector(cell?.targetQ12);
   const rate = cell.blendQ12;
   if (![Q12,0x59a,0xcd].includes(rate)) throw Error("NATIVE_DIRECTION_BLEND_REQUIRED");
   if (rate === Q12) return freeze(target);

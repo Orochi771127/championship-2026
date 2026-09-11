@@ -1,68 +1,31 @@
 # Championship 2026 — Technical Debt Register
 
-Scoring: `Priority = (Impact + Risk) × (6 - Effort)`, each input 1–5.
+Reviewed 2026-09-11 against implementation, Claude handoff and original evidence. See [the review](research/CHARACTER_BEHAVIOR_REVIEW_2026-09-11.md). Full character restoration remains open in its stage contract.
 
-| Rank | Debt | Category | Impact | Risk | Effort | Score | Remediation |
-|---:|---|---|---:|---:|---:|---:|---|
-| 1 | Current implementation and old coordination status disagree | Documentation | 5 | 5 | 2 | 40 | Current-status SSOT + historical banners; update with every slice |
-| 2 | No automated CI on the new private GitHub repository | Infrastructure/Test | 4 | 5 | 2 | 36 | `RESOLVED_THIS_PASS`: Node 22 `npm ci` / `npm test` workflow added |
-| 3 | Generated browser QA evidence can leave the worktree dirty | Test/Documentation | 3 | 4 | 1 | 35 | Validate then commit a single evidence refresh or write outputs to a staging directory |
-| 4 | Final public branding/IP is intentionally undecided while internal names still reference the source | Product/Documentation | 5 | 5 | 3 | 30 | Keep neutral runtime IDs; close final IP gate only after functional completion |
-| 5 | No single reusable-component inventory existed | Documentation | 4 | 3 | 2 | 28 | Maintain `REUSE_INVENTORY.md` with tests and boundaries |
-| 6 | Cage assembly shapes/effects are required but exact parity data is incomplete | Gameplay/Data | 5 | 4 | 4 | 18 | Implement data contracts and neutral sandbox; replace only with traced values |
-| 7 | VS3 Capture/Result is the next missing playable transaction | Gameplay/Test | 5 | 4 | 4 | 18 | Build on the existing Hunt seam and save authority |
-| 8 | Current status is manually maintained | Documentation/Infrastructure | 3 | 3 | 3 | 18 | Generate portions from tests, manifests and Git metadata |
-| 9 | Untraced Hunt steering nibbles crash the field mid-play | Gameplay/Evidence | 5 | 5 | 3 | 30 | Trace ARM9 direction nibbles 14/15, then replace the guard with the original behaviour |
+Priority = (Impact + Risk) x (6 - Effort), inputs 1–5. Closed items remain recorded to prevent regression.
 
-## Debt 9 — untraced Hunt steering nibbles
+| Debt | Impact / Risk / Effort | Score | Disposition |
+|---|---|---:|---|
+| Untraced steering escapes the Hunt ticker | 5 / 5 / 3 | 30 | Crash contained: explicit pause, tools/clock stop, completed card entries survive normal exit. Exact source producer remains unknown; no constant heap address substituted. |
+| Tutorial cursor changes omitted from Save | 4 / 4 / 1 | 40 | Fixed: begin/advance/skip dirty and publish the existing save. Valid older cursors outside the new subset are preserved and reported unavailable. |
+| Championship cursor accepts missing/future results or play after loss | 4 / 4 / 1 | 40 | Fixed: exact flag count, terminal loss, malformed progress rejected before RNG. |
+| Championship pool initializer overlooked | 4 / 4 / 3 | 24 | Resolved for selection: 28 teams, 824 original selector cases, channel 0. Full tournament flow still open. |
+| Hand browser timer and latched input | 5 / 4 / 2 | 36 | Native classifier/release integrated; blur/navigation/resize/context loss cancel input. Normal hatch/stroke/carry/save accepted. |
+| Browser QA overwrites committed reports | 3 / 4 / 1 | 35 | Fixed: shared helper stages under .tmp/browser-qa, deliberate export remains available. |
+| Raising gate assumes eggs support adult dragging | 4 / 3 / 2 | 28 | Fixed: ordinary egg taps, hatch, stroke, hold, move, landing and Save/Continue using readonly rendered hit centers. |
+| VS3 capture races frame sampling and targets | 3 / 4 / 3 | 21 | Fixed for the acceptance gate: per-render readonly coordinates (previously stale at DOM cadence), fixed startup clock input, twelve sampled circle points, inside-body press, observed native control-frame increments for every sample, actual overlap-selected rope target, blank-ground panning, target-following tether and native slack/durability recovery. Final acceptance is in the validation receipt; earlier artifact failure is retained there. |
+| Stale completion claims | 5 / 5 / 2 | 40 | Current review supersedes historical claims; stage rows and validation receipt retain proof limits. Arbitrary prose is not automatically regenerated. |
 
-Found 2026-09-09 by driving a real capture in Chrome. `steerNativeHuntDirection`
-covers direction nibbles 0..11 and throws
-`NATIVE_DIRECTION_UNASSIGNED_BRANCH_REQUIRES_TRACE` for anything above, because
-the original leaves those stack components unassigned and this build refuses to
-fabricate a vector for them. That refusal is right. What is wrong is where it
-lands: the throw escapes the field's own ticker as an unhandled page error, so a
-wild that steps onto such a tile in movement mode 3 takes the whole Hunt down.
+## Existing infrastructure
 
-The catalog contains **159,429 of 475,136 tiles — 33.6%**, but this is
-NOT a probability of hitting the failure or proof that those tiles are ordinary
-walkable escape paths. The 2026-09-09 census found all 150,699 nibble-14 tiles
-are blocked terrain, and all 8,730 nibble-15 tiles are escape boundaries.
-Normal AI8 checks the boundary before movement; its first update immediately
-following a state transition is a distinct case.
+Node 22 CI, manually dispatched hash-checked public Pages playtest, reuse inventory and architecture documents already exist. Cage effects/assembly and the capture/card/result/Home transaction are implemented with bounded evidence. Older statements describing these as entirely missing are obsolete; complete original equivalence remains governed by subsystem contracts.
 
-New live original evidence reproduces that first-update exception at an edge:
-a normal stylus circle on wild index 3 reads attribute 0x8f. ARM9 animation
-routine 02047D5C pushes the current actor address and return address 02047944
-into the later steering scratch X/Y slots. The original blends and normalizes
-those values, then continues to escape handling. See
-[the live receipt](research/HUNT_STEERING_EDGE_LIVE_2026-09-09.json) and
-[the CPU probe](research/HUNT_STEERING_STACK_CPU_2026-09-09.json).
-This establishes one actual producer path; it does not establish a portable
-original heap-layout authority for every new encounter. No keep-direction
-adaptation has been installed. Owner asked to prioritize original behavior.
+## Open restoration obligations
 
-A separate verified bug was fixed: AI8 entry 02111310 stores direction Y=1;
-the port incorrectly stored 4096 before the first steering blend.
+- Raising: evolution hints, original audio, scene peer ordering and full species/condition/visual comparisons.
+- Hunt: encounter-specific steering scratch producer and remaining AI/tool/all-species ordinary capture comparisons. Recovery is not original movement parity.
+- Championship: normal entry/schedule/round transitions, owned party/result/save and presentation integration.
+- Tutorial: cartridge advance predicates and normal UI/event binding; inferred action names are proposals.
+- Battle/cross-scene: remaining caller/ending/per-move visual timing, individual transitions and physical-device acceptance.
 
-Remediation is a trace, not a patch: read what ARM9 does for nibbles 14/15 and
-implement it. Until then the guard must stay — a fallback direction chosen here
-would be invented gameplay — so the exposure is a known live crash, not a
-styling issue. Anything that only contains the throw still decides what the
-creature does instead, which is the same invention by another route and needs
-Owner approval.
-
-- documentation hub, current status, reuse inventory and stale-snapshot banners;
-- cleanly resolve current browser-QA evidence;
-- validate the new GitHub Actions test gate after push.
-
-### Next slice
-
-- VS3 Capture/Result using current Gate/Hunt/Loadout foundations;
-- begin versioned Cage board/module/effect data contracts without guessing parity values.
-
-### Later
-
-- automated status generation and link validation;
-- public-IP naming migration and final content-pack pipeline;
-- physical document relocation only if automated link rewriting makes it low risk.
+Public playtest permission is recorded. Commercial rights, complete original parity and device acceptance are separate open gates, not made true by fixing debt or pushing main.

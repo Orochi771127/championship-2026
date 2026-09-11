@@ -1,0 +1,307 @@
+{
+  "evidence": "BOUNDED_NATIVE_REPLAY",
+  "inputClass": "STATIC_DECODE_PLUS_SYNTHETIC_SCRATCH_SWEEP_NOT_LIVE_PLAY",
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "overlay": 0,
+  "overlayRamAddress": "0210B300",
+  "staticDecode": {
+    "dispatch": "0210D9AC",
+    "assignedRange": "0..11",
+    "unassignedRange": "12..15",
+    "unassignedTarget": "0210DAD4",
+    "zStoreAlways": "0210DADC str r1,[sp,#0x50] with r1=0",
+    "assignedCases": [
+      {
+        "lowNibble": 0,
+        "case": "0210D9E4",
+        "writesX": true,
+        "writesY": true
+      },
+      {
+        "lowNibble": 1,
+        "case": "0210D9F8",
+        "writesX": true,
+        "writesY": true
+      },
+      {
+        "lowNibble": 2,
+        "case": "0210DA0C",
+        "writesX": true,
+        "writesY": true
+      },
+      {
+        "lowNibble": 3,
+        "case": "0210DA20",
+        "writesX": true,
+        "writesY": true
+      },
+      {
+        "lowNibble": 4,
+        "case": "0210DA34",
+        "writesX": true,
+        "writesY": true
+      },
+      {
+        "lowNibble": 5,
+        "case": "0210DA48",
+        "writesX": true,
+        "writesY": true
+      },
+      {
+        "lowNibble": 6,
+        "case": "0210DA5C",
+        "writesX": true,
+        "writesY": true
+      },
+      {
+        "lowNibble": 7,
+        "case": "0210DA70",
+        "writesX": true,
+        "writesY": true
+      },
+      {
+        "lowNibble": 8,
+        "case": "0210DA84",
+        "writesX": true,
+        "writesY": true
+      },
+      {
+        "lowNibble": 9,
+        "case": "0210DA98",
+        "writesX": true,
+        "writesY": true
+      },
+      {
+        "lowNibble": 10,
+        "case": "0210DAB0",
+        "writesX": true,
+        "writesY": true
+      },
+      {
+        "lowNibble": 11,
+        "case": "0210DAC4",
+        "writesX": true,
+        "writesY": true
+      }
+    ]
+  },
+  "normalizeEntry": "02002A6C",
+  "normalizeControl": [
+    {
+      "in": [
+        0,
+        -4096,
+        0
+      ],
+      "out": [
+        0,
+        -4096,
+        0
+      ]
+    },
+    {
+      "in": [
+        2633,
+        -3138,
+        0
+      ],
+      "out": [
+        2633,
+        -3138,
+        0
+      ]
+    },
+    {
+      "in": [
+        3138,
+        -2633,
+        0
+      ],
+      "out": [
+        3138,
+        -2633,
+        0
+      ]
+    },
+    {
+      "in": [
+        4096,
+        0,
+        0
+      ],
+      "out": [
+        4096,
+        0,
+        0
+      ]
+    },
+    {
+      "in": [
+        3138,
+        2633,
+        0
+      ],
+      "out": [
+        3138,
+        2633,
+        0
+      ]
+    },
+    {
+      "in": [
+        2633,
+        3138,
+        0
+      ],
+      "out": [
+        2633,
+        3138,
+        0
+      ]
+    },
+    {
+      "in": [
+        0,
+        4096,
+        0
+      ],
+      "out": [
+        0,
+        4096,
+        0
+      ]
+    },
+    {
+      "in": [
+        -2633,
+        3138,
+        0
+      ],
+      "out": [
+        -2633,
+        3138,
+        0
+      ]
+    },
+    {
+      "in": [
+        -3138,
+        2633,
+        0
+      ],
+      "out": [
+        -3138,
+        2633,
+        0
+      ]
+    },
+    {
+      "in": [
+        -4096,
+        0,
+        0
+      ],
+      "out": [
+        -4096,
+        0,
+        0
+      ]
+    },
+    {
+      "in": [
+        -3138,
+        -2633,
+        0
+      ],
+      "out": [
+        -3138,
+        -2633,
+        0
+      ]
+    },
+    {
+      "in": [
+        -2633,
+        -3138,
+        0
+      ],
+      "out": [
+        -2633,
+        -3138,
+        0
+      ]
+    }
+  ],
+  "liveProducer": {
+    "source": "docs/research/HUNT_STEERING_EDGE_LIVE_2026-09-09.json",
+    "stackAtEntry": [
+      36750468,
+      33847620,
+      0
+    ],
+    "xMeaning": "actor object address",
+    "yMeaning": "ARM9 02047D5C animation return address 02047944",
+    "normalized": [
+      2922,
+      2692,
+      0
+    ],
+    "deg": 42.654
+  },
+  "bound": {
+    "samples": 9216,
+    "heapPointers": 16,
+    "codeAddresses": 32,
+    "blendRates": [
+      4096,
+      1434,
+      205
+    ],
+    "degMin": 38.9351,
+    "degMax": 45.8616,
+    "quadrant": "DOWN_RIGHT",
+    "witnessMin": {
+      "x": "02780000",
+      "y": "02000000",
+      "blendQ12": 205,
+      "before": [
+        2633,
+        -3138,
+        0
+      ],
+      "out": [
+        3186,
+        2574,
+        0
+      ],
+      "deg": 38.9351
+    },
+    "witnessMax": {
+      "x": "02000000",
+      "y": "020F8000",
+      "blendQ12": 1434,
+      "before": [
+        0,
+        0,
+        0
+      ],
+      "out": [
+        2849,
+        2936,
+        0
+      ],
+      "deg": 45.8616
+    },
+    "tableDirectionsInsideCone": [
+      {
+        "index": 4,
+        "targetQ12": [
+          3138,
+          2633
+        ],
+        "deg": 39.999
+      }
+    ]
+  },
+  "conclusion": "Low nibbles 12..15 skip both direction stores at 0210D9B0 and consume the caller stack words at entry SP-0x30/-0x2C; Z is re-zeroed at 0210DADC. For every EWRAM heap pointer and ARM9 code address, every blend rate and every incoming table direction, the original normalize at 02002A6C yields a direction inside a single down-right cone narrower than one step of the original 12-direction table. This bounds the branch; it does not reconstruct a specific original heap address."
+}

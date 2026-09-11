@@ -12,7 +12,7 @@ const { openFreshGame, openHunt, selectEnterableGate, RAISING_HOME, GATE_CONFIRM
 
 const BASE_URL = process.env.CHAMPIONSHIP_QA_URL || "http://127.0.0.1:8732/championship.html";
 const CHROME = process.env.CHAMPIONSHIP_CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe";
-const OUTPUT = path.resolve("docs/reports/vs2");
+const OUTPUT = require("./browser-qa-output.cjs")("vs2");
 const SCREENSHOTS = path.join(OUTPUT, "screenshots");
 const CONTRACT_PATH = path.resolve("docs/contracts/championship/VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT.json");
 const CONTRACT = JSON.parse(fs.readFileSync(CONTRACT_PATH, "utf8"));

@@ -1,0 +1,11642 @@
+{
+  "classification": "BOUNDED_NATIVE_REPLAY",
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "initializer": "ARM9:020998D4",
+  "selector": "OVL10:02110A90..02110AE8",
+  "correction": "BSS pools are populated by a ROM initializer from the existing static team records. No live RAM dump is required for these pools.",
+  "boundaries": [
+    "Initializer executes all original instructions without intercepted calls.",
+    "Selector uses synthetic session memory and intercepted channel-0 random input; original integer remainder executes.",
+    "Draw prefix ends before opponent individual construction; this is not complete tournament scene acceptance."
+  ],
+  "categories": [
+    {
+      "category": 0,
+      "rounds": 3,
+      "prize": 50000,
+      "pools": [
+        {
+          "round": 0,
+          "address": "0210B1E8",
+          "teamIndices": [
+            71,
+            72,
+            73,
+            74,
+            75,
+            76
+          ]
+        },
+        {
+          "round": 1,
+          "address": "0210B260",
+          "teamIndices": [
+            77,
+            78,
+            79,
+            80,
+            81,
+            82
+          ]
+        },
+        {
+          "round": 2,
+          "address": "0210B148",
+          "teamIndices": [
+            83,
+            84,
+            85,
+            86
+          ]
+        }
+      ]
+    },
+    {
+      "category": 1,
+      "rounds": 5,
+      "prize": 300000,
+      "pools": [
+        {
+          "round": 0,
+          "address": "0210B198",
+          "teamIndices": [
+            87,
+            88,
+            89,
+            90
+          ]
+        },
+        {
+          "round": 1,
+          "address": "0210B10C",
+          "teamIndices": [
+            91,
+            92,
+            93
+          ]
+        },
+        {
+          "round": 2,
+          "address": "0210B0E4",
+          "teamIndices": [
+            94,
+            95
+          ]
+        },
+        {
+          "round": 3,
+          "address": "0210B0BC",
+          "teamIndices": [
+            96,
+            97
+          ]
+        },
+        {
+          "round": 4,
+          "address": "0210B0A8",
+          "teamIndices": [
+            98
+          ]
+        }
+      ]
+    }
+  ],
+  "draws": [
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 0,
+      "teamIndex": 71,
+      "presets": [
+        213,
+        214,
+        215
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 1,
+      "teamIndex": 72,
+      "presets": [
+        216,
+        217,
+        218
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 2,
+      "teamIndex": 73,
+      "presets": [
+        219,
+        220,
+        221
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 3,
+      "teamIndex": 74,
+      "presets": [
+        222,
+        223,
+        224
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 4,
+      "teamIndex": 75,
+      "presets": [
+        225,
+        226,
+        227
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 5,
+      "teamIndex": 76,
+      "presets": [
+        228,
+        229,
+        230
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 6,
+      "teamIndex": 71,
+      "presets": [
+        213,
+        214,
+        215
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 7,
+      "teamIndex": 72,
+      "presets": [
+        216,
+        217,
+        218
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 8,
+      "teamIndex": 73,
+      "presets": [
+        219,
+        220,
+        221
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 9,
+      "teamIndex": 74,
+      "presets": [
+        222,
+        223,
+        224
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 10,
+      "teamIndex": 75,
+      "presets": [
+        225,
+        226,
+        227
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 11,
+      "teamIndex": 76,
+      "presets": [
+        228,
+        229,
+        230
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 12,
+      "teamIndex": 71,
+      "presets": [
+        213,
+        214,
+        215
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 13,
+      "teamIndex": 72,
+      "presets": [
+        216,
+        217,
+        218
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 14,
+      "teamIndex": 73,
+      "presets": [
+        219,
+        220,
+        221
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 15,
+      "teamIndex": 74,
+      "presets": [
+        222,
+        223,
+        224
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 16,
+      "teamIndex": 75,
+      "presets": [
+        225,
+        226,
+        227
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 17,
+      "teamIndex": 76,
+      "presets": [
+        228,
+        229,
+        230
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 18,
+      "teamIndex": 71,
+      "presets": [
+        213,
+        214,
+        215
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 19,
+      "teamIndex": 72,
+      "presets": [
+        216,
+        217,
+        218
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 20,
+      "teamIndex": 73,
+      "presets": [
+        219,
+        220,
+        221
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 21,
+      "teamIndex": 74,
+      "presets": [
+        222,
+        223,
+        224
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 22,
+      "teamIndex": 75,
+      "presets": [
+        225,
+        226,
+        227
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 23,
+      "teamIndex": 76,
+      "presets": [
+        228,
+        229,
+        230
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 24,
+      "teamIndex": 71,
+      "presets": [
+        213,
+        214,
+        215
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 25,
+      "teamIndex": 72,
+      "presets": [
+        216,
+        217,
+        218
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 26,
+      "teamIndex": 73,
+      "presets": [
+        219,
+        220,
+        221
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 27,
+      "teamIndex": 74,
+      "presets": [
+        222,
+        223,
+        224
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 28,
+      "teamIndex": 75,
+      "presets": [
+        225,
+        226,
+        227
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 29,
+      "teamIndex": 76,
+      "presets": [
+        228,
+        229,
+        230
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 30,
+      "teamIndex": 71,
+      "presets": [
+        213,
+        214,
+        215
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 31,
+      "teamIndex": 72,
+      "presets": [
+        216,
+        217,
+        218
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 32,
+      "teamIndex": 73,
+      "presets": [
+        219,
+        220,
+        221
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 33,
+      "teamIndex": 74,
+      "presets": [
+        222,
+        223,
+        224
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 34,
+      "teamIndex": 75,
+      "presets": [
+        225,
+        226,
+        227
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 35,
+      "teamIndex": 76,
+      "presets": [
+        228,
+        229,
+        230
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 36,
+      "teamIndex": 71,
+      "presets": [
+        213,
+        214,
+        215
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 37,
+      "teamIndex": 72,
+      "presets": [
+        216,
+        217,
+        218
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 38,
+      "teamIndex": 73,
+      "presets": [
+        219,
+        220,
+        221
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 39,
+      "teamIndex": 74,
+      "presets": [
+        222,
+        223,
+        224
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 40,
+      "teamIndex": 75,
+      "presets": [
+        225,
+        226,
+        227
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 41,
+      "teamIndex": 76,
+      "presets": [
+        228,
+        229,
+        230
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 42,
+      "teamIndex": 71,
+      "presets": [
+        213,
+        214,
+        215
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 43,
+      "teamIndex": 72,
+      "presets": [
+        216,
+        217,
+        218
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 44,
+      "teamIndex": 73,
+      "presets": [
+        219,
+        220,
+        221
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 45,
+      "teamIndex": 74,
+      "presets": [
+        222,
+        223,
+        224
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 46,
+      "teamIndex": 75,
+      "presets": [
+        225,
+        226,
+        227
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 47,
+      "teamIndex": 76,
+      "presets": [
+        228,
+        229,
+        230
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 48,
+      "teamIndex": 71,
+      "presets": [
+        213,
+        214,
+        215
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 49,
+      "teamIndex": 72,
+      "presets": [
+        216,
+        217,
+        218
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 50,
+      "teamIndex": 73,
+      "presets": [
+        219,
+        220,
+        221
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 51,
+      "teamIndex": 74,
+      "presets": [
+        222,
+        223,
+        224
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 52,
+      "teamIndex": 75,
+      "presets": [
+        225,
+        226,
+        227
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 53,
+      "teamIndex": 76,
+      "presets": [
+        228,
+        229,
+        230
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 54,
+      "teamIndex": 71,
+      "presets": [
+        213,
+        214,
+        215
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 55,
+      "teamIndex": 72,
+      "presets": [
+        216,
+        217,
+        218
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 56,
+      "teamIndex": 73,
+      "presets": [
+        219,
+        220,
+        221
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 57,
+      "teamIndex": 74,
+      "presets": [
+        222,
+        223,
+        224
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 58,
+      "teamIndex": 75,
+      "presets": [
+        225,
+        226,
+        227
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 59,
+      "teamIndex": 76,
+      "presets": [
+        228,
+        229,
+        230
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 60,
+      "teamIndex": 71,
+      "presets": [
+        213,
+        214,
+        215
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 61,
+      "teamIndex": 72,
+      "presets": [
+        216,
+        217,
+        218
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 62,
+      "teamIndex": 73,
+      "presets": [
+        219,
+        220,
+        221
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 63,
+      "teamIndex": 74,
+      "presets": [
+        222,
+        223,
+        224
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 64,
+      "teamIndex": 75,
+      "presets": [
+        225,
+        226,
+        227
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 65,
+      "teamIndex": 76,
+      "presets": [
+        228,
+        229,
+        230
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 66,
+      "teamIndex": 71,
+      "presets": [
+        213,
+        214,
+        215
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 67,
+      "teamIndex": 72,
+      "presets": [
+        216,
+        217,
+        218
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 68,
+      "teamIndex": 73,
+      "presets": [
+        219,
+        220,
+        221
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 69,
+      "teamIndex": 74,
+      "presets": [
+        222,
+        223,
+        224
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 70,
+      "teamIndex": 75,
+      "presets": [
+        225,
+        226,
+        227
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 71,
+      "teamIndex": 76,
+      "presets": [
+        228,
+        229,
+        230
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 72,
+      "teamIndex": 71,
+      "presets": [
+        213,
+        214,
+        215
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 73,
+      "teamIndex": 72,
+      "presets": [
+        216,
+        217,
+        218
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 74,
+      "teamIndex": 73,
+      "presets": [
+        219,
+        220,
+        221
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 75,
+      "teamIndex": 74,
+      "presets": [
+        222,
+        223,
+        224
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 76,
+      "teamIndex": 75,
+      "presets": [
+        225,
+        226,
+        227
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 77,
+      "teamIndex": 76,
+      "presets": [
+        228,
+        229,
+        230
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 78,
+      "teamIndex": 71,
+      "presets": [
+        213,
+        214,
+        215
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 79,
+      "teamIndex": 72,
+      "presets": [
+        216,
+        217,
+        218
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 80,
+      "teamIndex": 73,
+      "presets": [
+        219,
+        220,
+        221
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 81,
+      "teamIndex": 74,
+      "presets": [
+        222,
+        223,
+        224
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 82,
+      "teamIndex": 75,
+      "presets": [
+        225,
+        226,
+        227
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 83,
+      "teamIndex": 76,
+      "presets": [
+        228,
+        229,
+        230
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 84,
+      "teamIndex": 71,
+      "presets": [
+        213,
+        214,
+        215
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 85,
+      "teamIndex": 72,
+      "presets": [
+        216,
+        217,
+        218
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 86,
+      "teamIndex": 73,
+      "presets": [
+        219,
+        220,
+        221
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 87,
+      "teamIndex": 74,
+      "presets": [
+        222,
+        223,
+        224
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 88,
+      "teamIndex": 75,
+      "presets": [
+        225,
+        226,
+        227
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 89,
+      "teamIndex": 76,
+      "presets": [
+        228,
+        229,
+        230
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 90,
+      "teamIndex": 71,
+      "presets": [
+        213,
+        214,
+        215
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 91,
+      "teamIndex": 72,
+      "presets": [
+        216,
+        217,
+        218
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 92,
+      "teamIndex": 73,
+      "presets": [
+        219,
+        220,
+        221
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 93,
+      "teamIndex": 74,
+      "presets": [
+        222,
+        223,
+        224
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 94,
+      "teamIndex": 75,
+      "presets": [
+        225,
+        226,
+        227
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 95,
+      "teamIndex": 76,
+      "presets": [
+        228,
+        229,
+        230
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 96,
+      "teamIndex": 71,
+      "presets": [
+        213,
+        214,
+        215
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 97,
+      "teamIndex": 72,
+      "presets": [
+        216,
+        217,
+        218
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 98,
+      "teamIndex": 73,
+      "presets": [
+        219,
+        220,
+        221
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 99,
+      "teamIndex": 74,
+      "presets": [
+        222,
+        223,
+        224
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 100,
+      "teamIndex": 75,
+      "presets": [
+        225,
+        226,
+        227
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 101,
+      "teamIndex": 76,
+      "presets": [
+        228,
+        229,
+        230
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 0,
+      "roll": 102,
+      "teamIndex": 71,
+      "presets": [
+        213,
+        214,
+        215
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 0,
+      "teamIndex": 77,
+      "presets": [
+        231,
+        232,
+        233
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 1,
+      "teamIndex": 78,
+      "presets": [
+        234,
+        235,
+        236
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 2,
+      "teamIndex": 79,
+      "presets": [
+        237,
+        238,
+        239
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 3,
+      "teamIndex": 80,
+      "presets": [
+        240,
+        241,
+        242
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 4,
+      "teamIndex": 81,
+      "presets": [
+        243,
+        244,
+        245
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 5,
+      "teamIndex": 82,
+      "presets": [
+        246,
+        247,
+        248
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 6,
+      "teamIndex": 77,
+      "presets": [
+        231,
+        232,
+        233
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 7,
+      "teamIndex": 78,
+      "presets": [
+        234,
+        235,
+        236
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 8,
+      "teamIndex": 79,
+      "presets": [
+        237,
+        238,
+        239
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 9,
+      "teamIndex": 80,
+      "presets": [
+        240,
+        241,
+        242
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 10,
+      "teamIndex": 81,
+      "presets": [
+        243,
+        244,
+        245
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 11,
+      "teamIndex": 82,
+      "presets": [
+        246,
+        247,
+        248
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 12,
+      "teamIndex": 77,
+      "presets": [
+        231,
+        232,
+        233
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 13,
+      "teamIndex": 78,
+      "presets": [
+        234,
+        235,
+        236
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 14,
+      "teamIndex": 79,
+      "presets": [
+        237,
+        238,
+        239
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 15,
+      "teamIndex": 80,
+      "presets": [
+        240,
+        241,
+        242
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 16,
+      "teamIndex": 81,
+      "presets": [
+        243,
+        244,
+        245
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 17,
+      "teamIndex": 82,
+      "presets": [
+        246,
+        247,
+        248
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 18,
+      "teamIndex": 77,
+      "presets": [
+        231,
+        232,
+        233
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 19,
+      "teamIndex": 78,
+      "presets": [
+        234,
+        235,
+        236
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 20,
+      "teamIndex": 79,
+      "presets": [
+        237,
+        238,
+        239
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 21,
+      "teamIndex": 80,
+      "presets": [
+        240,
+        241,
+        242
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 22,
+      "teamIndex": 81,
+      "presets": [
+        243,
+        244,
+        245
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 23,
+      "teamIndex": 82,
+      "presets": [
+        246,
+        247,
+        248
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 24,
+      "teamIndex": 77,
+      "presets": [
+        231,
+        232,
+        233
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 25,
+      "teamIndex": 78,
+      "presets": [
+        234,
+        235,
+        236
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 26,
+      "teamIndex": 79,
+      "presets": [
+        237,
+        238,
+        239
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 27,
+      "teamIndex": 80,
+      "presets": [
+        240,
+        241,
+        242
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 28,
+      "teamIndex": 81,
+      "presets": [
+        243,
+        244,
+        245
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 29,
+      "teamIndex": 82,
+      "presets": [
+        246,
+        247,
+        248
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 30,
+      "teamIndex": 77,
+      "presets": [
+        231,
+        232,
+        233
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 31,
+      "teamIndex": 78,
+      "presets": [
+        234,
+        235,
+        236
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 32,
+      "teamIndex": 79,
+      "presets": [
+        237,
+        238,
+        239
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 33,
+      "teamIndex": 80,
+      "presets": [
+        240,
+        241,
+        242
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 34,
+      "teamIndex": 81,
+      "presets": [
+        243,
+        244,
+        245
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 35,
+      "teamIndex": 82,
+      "presets": [
+        246,
+        247,
+        248
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 36,
+      "teamIndex": 77,
+      "presets": [
+        231,
+        232,
+        233
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 37,
+      "teamIndex": 78,
+      "presets": [
+        234,
+        235,
+        236
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 38,
+      "teamIndex": 79,
+      "presets": [
+        237,
+        238,
+        239
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 39,
+      "teamIndex": 80,
+      "presets": [
+        240,
+        241,
+        242
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 40,
+      "teamIndex": 81,
+      "presets": [
+        243,
+        244,
+        245
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 41,
+      "teamIndex": 82,
+      "presets": [
+        246,
+        247,
+        248
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 42,
+      "teamIndex": 77,
+      "presets": [
+        231,
+        232,
+        233
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 43,
+      "teamIndex": 78,
+      "presets": [
+        234,
+        235,
+        236
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 44,
+      "teamIndex": 79,
+      "presets": [
+        237,
+        238,
+        239
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 45,
+      "teamIndex": 80,
+      "presets": [
+        240,
+        241,
+        242
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 46,
+      "teamIndex": 81,
+      "presets": [
+        243,
+        244,
+        245
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 47,
+      "teamIndex": 82,
+      "presets": [
+        246,
+        247,
+        248
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 48,
+      "teamIndex": 77,
+      "presets": [
+        231,
+        232,
+        233
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 49,
+      "teamIndex": 78,
+      "presets": [
+        234,
+        235,
+        236
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 50,
+      "teamIndex": 79,
+      "presets": [
+        237,
+        238,
+        239
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 51,
+      "teamIndex": 80,
+      "presets": [
+        240,
+        241,
+        242
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 52,
+      "teamIndex": 81,
+      "presets": [
+        243,
+        244,
+        245
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 53,
+      "teamIndex": 82,
+      "presets": [
+        246,
+        247,
+        248
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 54,
+      "teamIndex": 77,
+      "presets": [
+        231,
+        232,
+        233
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 55,
+      "teamIndex": 78,
+      "presets": [
+        234,
+        235,
+        236
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 56,
+      "teamIndex": 79,
+      "presets": [
+        237,
+        238,
+        239
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 57,
+      "teamIndex": 80,
+      "presets": [
+        240,
+        241,
+        242
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 58,
+      "teamIndex": 81,
+      "presets": [
+        243,
+        244,
+        245
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 59,
+      "teamIndex": 82,
+      "presets": [
+        246,
+        247,
+        248
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 60,
+      "teamIndex": 77,
+      "presets": [
+        231,
+        232,
+        233
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 61,
+      "teamIndex": 78,
+      "presets": [
+        234,
+        235,
+        236
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 62,
+      "teamIndex": 79,
+      "presets": [
+        237,
+        238,
+        239
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 63,
+      "teamIndex": 80,
+      "presets": [
+        240,
+        241,
+        242
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 64,
+      "teamIndex": 81,
+      "presets": [
+        243,
+        244,
+        245
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 65,
+      "teamIndex": 82,
+      "presets": [
+        246,
+        247,
+        248
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 66,
+      "teamIndex": 77,
+      "presets": [
+        231,
+        232,
+        233
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 67,
+      "teamIndex": 78,
+      "presets": [
+        234,
+        235,
+        236
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 68,
+      "teamIndex": 79,
+      "presets": [
+        237,
+        238,
+        239
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 69,
+      "teamIndex": 80,
+      "presets": [
+        240,
+        241,
+        242
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 70,
+      "teamIndex": 81,
+      "presets": [
+        243,
+        244,
+        245
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 71,
+      "teamIndex": 82,
+      "presets": [
+        246,
+        247,
+        248
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 72,
+      "teamIndex": 77,
+      "presets": [
+        231,
+        232,
+        233
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 73,
+      "teamIndex": 78,
+      "presets": [
+        234,
+        235,
+        236
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 74,
+      "teamIndex": 79,
+      "presets": [
+        237,
+        238,
+        239
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 75,
+      "teamIndex": 80,
+      "presets": [
+        240,
+        241,
+        242
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 76,
+      "teamIndex": 81,
+      "presets": [
+        243,
+        244,
+        245
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 77,
+      "teamIndex": 82,
+      "presets": [
+        246,
+        247,
+        248
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 78,
+      "teamIndex": 77,
+      "presets": [
+        231,
+        232,
+        233
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 79,
+      "teamIndex": 78,
+      "presets": [
+        234,
+        235,
+        236
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 80,
+      "teamIndex": 79,
+      "presets": [
+        237,
+        238,
+        239
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 81,
+      "teamIndex": 80,
+      "presets": [
+        240,
+        241,
+        242
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 82,
+      "teamIndex": 81,
+      "presets": [
+        243,
+        244,
+        245
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 83,
+      "teamIndex": 82,
+      "presets": [
+        246,
+        247,
+        248
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 84,
+      "teamIndex": 77,
+      "presets": [
+        231,
+        232,
+        233
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 85,
+      "teamIndex": 78,
+      "presets": [
+        234,
+        235,
+        236
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 86,
+      "teamIndex": 79,
+      "presets": [
+        237,
+        238,
+        239
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 87,
+      "teamIndex": 80,
+      "presets": [
+        240,
+        241,
+        242
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 88,
+      "teamIndex": 81,
+      "presets": [
+        243,
+        244,
+        245
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 89,
+      "teamIndex": 82,
+      "presets": [
+        246,
+        247,
+        248
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 90,
+      "teamIndex": 77,
+      "presets": [
+        231,
+        232,
+        233
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 91,
+      "teamIndex": 78,
+      "presets": [
+        234,
+        235,
+        236
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 92,
+      "teamIndex": 79,
+      "presets": [
+        237,
+        238,
+        239
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 93,
+      "teamIndex": 80,
+      "presets": [
+        240,
+        241,
+        242
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 94,
+      "teamIndex": 81,
+      "presets": [
+        243,
+        244,
+        245
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 95,
+      "teamIndex": 82,
+      "presets": [
+        246,
+        247,
+        248
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 96,
+      "teamIndex": 77,
+      "presets": [
+        231,
+        232,
+        233
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 97,
+      "teamIndex": 78,
+      "presets": [
+        234,
+        235,
+        236
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 98,
+      "teamIndex": 79,
+      "presets": [
+        237,
+        238,
+        239
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 99,
+      "teamIndex": 80,
+      "presets": [
+        240,
+        241,
+        242
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 100,
+      "teamIndex": 81,
+      "presets": [
+        243,
+        244,
+        245
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 101,
+      "teamIndex": 82,
+      "presets": [
+        246,
+        247,
+        248
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 1,
+      "roll": 102,
+      "teamIndex": 77,
+      "presets": [
+        231,
+        232,
+        233
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 0,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 1,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 2,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 3,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 4,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 5,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 6,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 7,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 8,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 9,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 10,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 11,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 12,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 13,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 14,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 15,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 16,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 17,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 18,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 19,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 20,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 21,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 22,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 23,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 24,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 25,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 26,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 27,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 28,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 29,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 30,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 31,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 32,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 33,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 34,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 35,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 36,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 37,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 38,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 39,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 40,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 41,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 42,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 43,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 44,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 45,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 46,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 47,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 48,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 49,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 50,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 51,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 52,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 53,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 54,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 55,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 56,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 57,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 58,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 59,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 60,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 61,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 62,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 63,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 64,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 65,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 66,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 67,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 68,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 69,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 70,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 71,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 72,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 73,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 74,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 75,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 76,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 77,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 78,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 79,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 80,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 81,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 82,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 83,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 84,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 85,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 86,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 87,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 88,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 89,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 90,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 91,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 92,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 93,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 94,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 95,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 96,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 97,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 98,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 99,
+      "teamIndex": 86,
+      "presets": [
+        258,
+        259,
+        260
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 100,
+      "teamIndex": 83,
+      "presets": [
+        249,
+        250,
+        251
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 101,
+      "teamIndex": 84,
+      "presets": [
+        252,
+        253,
+        254
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 0,
+      "round": 2,
+      "roll": 102,
+      "teamIndex": 85,
+      "presets": [
+        255,
+        256,
+        257
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 0,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 1,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 2,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 3,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 4,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 5,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 6,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 7,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 8,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 9,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 10,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 11,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 12,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 13,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 14,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 15,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 16,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 17,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 18,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 19,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 20,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 21,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 22,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 23,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 24,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 25,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 26,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 27,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 28,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 29,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 30,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 31,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 32,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 33,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 34,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 35,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 36,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 37,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 38,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 39,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 40,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 41,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 42,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 43,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 44,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 45,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 46,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 47,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 48,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 49,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 50,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 51,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 52,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 53,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 54,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 55,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 56,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 57,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 58,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 59,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 60,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 61,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 62,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 63,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 64,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 65,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 66,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 67,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 68,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 69,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 70,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 71,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 72,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 73,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 74,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 75,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 76,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 77,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 78,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 79,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 80,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 81,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 82,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 83,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 84,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 85,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 86,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 87,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 88,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 89,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 90,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 91,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 92,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 93,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 94,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 95,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 96,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 97,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 98,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 99,
+      "teamIndex": 90,
+      "presets": [
+        270,
+        271,
+        272
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 100,
+      "teamIndex": 87,
+      "presets": [
+        261,
+        262,
+        263
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 101,
+      "teamIndex": 88,
+      "presets": [
+        264,
+        265,
+        266
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 0,
+      "roll": 102,
+      "teamIndex": 89,
+      "presets": [
+        267,
+        268,
+        269
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 0,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 1,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 2,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 3,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 4,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 5,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 6,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 7,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 8,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 9,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 10,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 11,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 12,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 13,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 14,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 15,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 16,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 17,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 18,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 19,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 20,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 21,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 22,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 23,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 24,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 25,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 26,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 27,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 28,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 29,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 30,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 31,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 32,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 33,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 34,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 35,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 36,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 37,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 38,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 39,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 40,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 41,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 42,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 43,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 44,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 45,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 46,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 47,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 48,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 49,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 50,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 51,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 52,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 53,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 54,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 55,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 56,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 57,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 58,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 59,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 60,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 61,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 62,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 63,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 64,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 65,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 66,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 67,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 68,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 69,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 70,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 71,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 72,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 73,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 74,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 75,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 76,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 77,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 78,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 79,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 80,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 81,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 82,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 83,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 84,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 85,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 86,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 87,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 88,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 89,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 90,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 91,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 92,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 93,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 94,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 95,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 96,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 97,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 98,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 99,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 100,
+      "teamIndex": 92,
+      "presets": [
+        276,
+        277,
+        278
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 101,
+      "teamIndex": 93,
+      "presets": [
+        279,
+        280,
+        281
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 1,
+      "roll": 102,
+      "teamIndex": 91,
+      "presets": [
+        273,
+        274,
+        275
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 0,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 1,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 2,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 3,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 4,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 5,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 6,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 7,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 8,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 9,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 10,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 11,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 12,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 13,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 14,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 15,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 16,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 17,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 18,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 19,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 20,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 21,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 22,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 23,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 24,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 25,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 26,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 27,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 28,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 29,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 30,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 31,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 32,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 33,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 34,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 35,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 36,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 37,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 38,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 39,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 40,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 41,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 42,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 43,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 44,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 45,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 46,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 47,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 48,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 49,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 50,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 51,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 52,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 53,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 54,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 55,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 56,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 57,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 58,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 59,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 60,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 61,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 62,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 63,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 64,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 65,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 66,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 67,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 68,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 69,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 70,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 71,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 72,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 73,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 74,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 75,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 76,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 77,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 78,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 79,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 80,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 81,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 82,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 83,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 84,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 85,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 86,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 87,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 88,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 89,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 90,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 91,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 92,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 93,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 94,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 95,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 96,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 97,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 98,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 99,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 100,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 101,
+      "teamIndex": 95,
+      "presets": [
+        285,
+        286,
+        287
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 2,
+      "roll": 102,
+      "teamIndex": 94,
+      "presets": [
+        282,
+        283,
+        284
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 0,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 1,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 2,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 3,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 4,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 5,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 6,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 7,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 8,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 9,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 10,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 11,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 12,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 13,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 14,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 15,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 16,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 17,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 18,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 19,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 20,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 21,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 22,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 23,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 24,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 25,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 26,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 27,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 28,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 29,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 30,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 31,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 32,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 33,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 34,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 35,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 36,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 37,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 38,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 39,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 40,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 41,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 42,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 43,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 44,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 45,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 46,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 47,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 48,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 49,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 50,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 51,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 52,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 53,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 54,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 55,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 56,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 57,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 58,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 59,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 60,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 61,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 62,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 63,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 64,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 65,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 66,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 67,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 68,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 69,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 70,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 71,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 72,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 73,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 74,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 75,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 76,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 77,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 78,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 79,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 80,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 81,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 82,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 83,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 84,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 85,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 86,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 87,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 88,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 89,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 90,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 91,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 92,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 93,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 94,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 95,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 96,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 97,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 98,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 99,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 100,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 101,
+      "teamIndex": 97,
+      "presets": [
+        291,
+        292,
+        293
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 3,
+      "roll": 102,
+      "teamIndex": 96,
+      "presets": [
+        288,
+        289,
+        290
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 0,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 1,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 2,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 3,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 4,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 5,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 6,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 7,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 8,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 9,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 10,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 11,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 12,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 13,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 14,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 15,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 16,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 17,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 18,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 19,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 20,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 21,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 22,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 23,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 24,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 25,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 26,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 27,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 28,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 29,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 30,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 31,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 32,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 33,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 34,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 35,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 36,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 37,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 38,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 39,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 40,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 41,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 42,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 43,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 44,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 45,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 46,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 47,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 48,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 49,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 50,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 51,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 52,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 53,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 54,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 55,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 56,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 57,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 58,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 59,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 60,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 61,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 62,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 63,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 64,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 65,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 66,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 67,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 68,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 69,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 70,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 71,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 72,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 73,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 74,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 75,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 76,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 77,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 78,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 79,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 80,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 81,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 82,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 83,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 84,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 85,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 86,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 87,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 88,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 89,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 90,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 91,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 92,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 93,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 94,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 95,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 96,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 97,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 98,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 99,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 100,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 101,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    },
+    {
+      "category": 1,
+      "round": 4,
+      "roll": 102,
+      "teamIndex": 98,
+      "presets": [
+        294,
+        295,
+        296
+      ],
+      "channels": [
+        0
+      ]
+    }
+  ]
+}

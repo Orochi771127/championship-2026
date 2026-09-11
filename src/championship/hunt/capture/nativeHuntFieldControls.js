@@ -14,7 +14,7 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
   if (!rng?.next || !loadout?.getSelectedEquipment || typeof consumeItem!=="function") throw Error("NATIVE_HUNT_CONTROL_AUTHORITIES_REQUIRED");
   const actors=records.map((r,i)=>createNativeWildActor(r,wildIds[i]));
   let activeTool="HAND", pointer=null, stroke=null, closure=null, rope=null, selectedWildId=null;
-  let accumulator=0, frame=0, notice=null;
+  let accumulator=0, frame=0, notice=null, fault=null;
   const ages=Array(20).fill(0);
   const nextChannel=channel=>rng.next(channel), wildRandom=max=>nativeWildRandom(max,nextChannel);
   const emit=value=>{notice=value;onChange();};
@@ -87,16 +87,26 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
   }
   return Object.freeze({actors,
     tick(ms,camera=[0,0]){
+      if(fault)return;
       host.camera=camera.map(Math.floor);
       accumulator+=ms;
-      while(accumulator+1e-8>=FRAME_MS){accumulator-=FRAME_MS;step();}
+      while(accumulator+1e-8>=FRAME_MS){accumulator-=FRAME_MS;
+        try{step();}catch(error){
+          if(error.message!=='NATIVE_DIRECTION_UNASSIGNED_BRANCH_REQUIRES_TRACE')throw error;
+          // Stop the encounter explicitly; never manufacture movement, a catch
+          // or a refund. Completed card entries remain available to normal exit.
+          fault=error.message;pointer=null;stroke=null;rope=null;accumulator=0;
+          emit('HUNT_INTERRUPTED');return;
+        }}
     },
     selectTool(kind){
+      if(fault)return false;
       if(!['HAND','ROPE'].includes(kind)&&!consumables.canUse(kind))return false;
       if(kind!=="HAND" && !equipped(kind))return false;
       this.cancel();activeTool=kind;notice=null;onChange();return true;
     },
     pointerDown(x,y){
+      if(fault)return false;
       if(pointer)return false;
       const p=[Math.floor(x/2)*Q12,Math.floor(y/2)*Q12,0],a=targetAt(p);
       selectedWildId=a?.wildId??null;
@@ -143,12 +153,12 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
     rename(id,name){const a=actors.find(a=>a.wildId===id&&a.cardState==="ON_CARD");if(!a)return false;a.displayName=name;return true;},
     release(id){const a=actors.find(a=>a.wildId===id&&a.cardState==="ON_CARD");if(!a)return false;a.cardState="RELEASED";return true;},
     commit(){for(const a of actors)if(a.cardState==="ON_CARD")a.cardState="HOME_COMMITTED";},
-    hasPending:()=>actors.some(a=>a.cardState==="HAND_ANIMATION"),
-    getState:()=>({activeTool,frame,notice,tools:[{id:"HAND",label:"手",enabled:true},
+    hasPending:()=>!fault&&actors.some(a=>a.cardState==="HAND_ANIMATION"),
+    getState:()=>({activeTool,frame,notice,fault,tools:[{id:"HAND",label:"手",enabled:!fault},
       {id:"ROPE",label:"繩索",enabled:!!equipped("ROPE")},
       ...['SHOT','WIRE','ENTRAP','DAMAGE_TRAP'].filter(kind=>!!equipped(kind)).map(kind=>({id:kind,label:equipped(kind).displayName,
         subtype:equipped(kind).nativeSubcategory,quantity:equipped(kind).quantity,enabled:equipped(kind).quantity>0&&consumables.canUse(kind),
-        unavailableReason:consumables.canUse(kind)?null:'NATIVE_HUNT_TOOL_CONTROLLER_UNAVAILABLE'}))],
+        unavailableReason:consumables.canUse(kind)?null:'NATIVE_HUNT_TOOL_CONTROLLER_UNAVAILABLE'}))].map(tool=>fault?{...tool,enabled:false}:tool),
       objects:consumables.getObjects(),
       rope:rope?{wildId:rope.actor.wildId,from:[rope.actor.positionQ12[0]/2048,rope.actor.positionQ12[1]/2048-20],
         to:pointer.q12.slice(0,2).map(n=>n/2048),durability:rope.state.durability,capacity:rope.state.baseDurability,band:rope.state.band}:null,

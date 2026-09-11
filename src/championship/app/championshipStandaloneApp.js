@@ -43,8 +43,12 @@ import {createNativeHuntIndividual} from '../hunt/capture/nativeHuntIndividual.j
 import {createNativeRaisingMessages,normalizeNativeRaisingMessages,selectNativeMorningMessages,enqueueNativeRaisingMessage,
   ageNativeRaisingMessages,openNativeRaisingMessage,closeNativeRaisingMessage,nativeRaisingMessageEffect} from '../raising/nativeRaisingMessages.js';
 import {normalizeNativeOpening} from './nativeOpeningState.js';
+import {TUTORIAL_STEP_COUNT,createTutorialCursor, tutorialFinished, tutorialStepAt, advanceTutorial as advanceTutorialStep,
+  skipTutorial as skipTutorialCursor} from './nativeTutorialProgression.js';
+import {tutorialLine, tutorialPrompt} from '../text/tutorialMessages.zhHant.js';
 import {nativeTreatmentAdmission} from '../raising/nativeRaisingTreatment.js';
-import {treatNativeRaisingActor,notifyNativeRaisingResidentAdded,beginNativeRaisingCarry,releaseNativeRaisingCarry} from '../raising/nativeRaisingActor.js';
+import {treatNativeRaisingActor,notifyNativeRaisingResidentAdded,beginNativeRaisingCarry,releaseNativeRaisingCarry,beginNativeRaisingStroke,releaseNativeRaisingStroke,touchNativeRaisingActor} from '../raising/nativeRaisingActor.js';
+import {classifyNativeRaisingHand,stepNativeRaisingStrokeInput,nativeRaisingHandAdmission} from '../raising/nativeRaisingHand.js';
 import {createNativeRaisingActor,initializeNativeRaisingActor,interruptNativeRaisingFeeding,removeNativeRaisingFoodTarget,projectNativeRaisingActor,stepNativeRaisingActor,stepNativeRaisingAgeClock,touchNativeRaisingEgg,wakeNativeRaisingActor,startNativeRaisingMorning,stepNativeRaisingEvolution,enterNativeRaisingCage} from "../raising/nativeRaisingActor.js";
 import {createNativeRaisingGround,nativeRaisingSpawnPosition,nativeRaisingEntryPosition} from "../raising/nativeRaisingGround.js";
 import {createNativeRaisingFood,stepNativeRaisingFood,foodVisualQuarter,nativeRaisingFeast} from "../raising/nativeRaisingFood.js";
@@ -69,6 +73,7 @@ import { createCageEditRuntime } from "../cage/cageEditRuntime.js";
 import { normalizeTamerRank, slotCountForTamerRank } from "../cage/cageCatalog.js";
 import { validateNativeRanch } from '../cage/nativeRanchLayout.js';
 import { getMatchRecord, matchEntryFee, matchPayout, resolveMatchList } from "../battle/battleMatchSelection.js";
+import { NATIVE_CHAMPIONSHIP_CATEGORIES, CHAMPIONSHIP_ARENA_INDEX } from "../battle/nativeChampionshipRounds.js";
 import { DAY_END_MINUTES, projectWorldClockDisplay } from "../time/championshipWorldClock.js";
 import { NATIVE_CLOCK_CADENCE } from "./championshipClockDriver.js";
 import { createClockChannelRng, restoreChannelRng } from "../battle/battleRngChannel.js";
@@ -135,6 +140,7 @@ export function createChampionshipStandaloneApp({
   let raising = null;
   let selectedCreatureId = null;
   const raisingActors = new Map();
+  let raisingHand=null;
   let raisingGround=null;
   let raisingFoods=[];
   let raisingWaste=[];
@@ -213,6 +219,7 @@ export function createChampionshipStandaloneApp({
   }
 
   function publishScreens() {
+    if(screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)cancelRaisingHand();
     for (const listener of [...screenListeners]) {
       try { listener(screens.current()); } catch { /* observers never break navigation */ }
     }
@@ -437,7 +444,7 @@ export function createChampionshipStandaloneApp({
     // 02083910 settles daylight and night. Cage pool record order is distinct
     // from screen slot order: the original start is definitions 35, 0, 1, 15.
     const rng={next:nextGameplayRandom};
-    raisingActors.clear();synchronizeNativeRaisingActors({deferActivity:true});
+    raisingHand=null;raisingActors.clear();synchronizeNativeRaisingActors({deferActivity:true});
     for(const food of raisingFoods){food.occupants.fill(null);food.positionQ12[2]=0;}
     for(const [minutes,night] of [[remaining,false],[540,true]]) {
       for(const placement of raisingGround.placements){
@@ -497,6 +504,7 @@ export function createChampionshipStandaloneApp({
     const ids=listRaisingInstances(instanceSources()).map(entry=>entry.instanceId);
     let priorMinutes=0,changed=false;
     for(let frame=1;frame<=frames;frame++) {
+      advanceRaisingHand();
       const minutes=Math.floor((before.clockUnits+before.clockSubunits/1000+frame*NATIVE_CLOCK_CADENCE.elapsedUnitsPerFrame)/NATIVE_CLOCK_CADENCE.trainingDivisor);
       const age=stepNativeRaisingAgeClock(raisingAgeRemainder,minutes-priorMinutes);
       priorMinutes=minutes;raisingAgeRemainder=age.remainder;
@@ -529,6 +537,42 @@ export function createChampionshipStandaloneApp({
     }
     if(raisingGround)storeNativeRaisingHome();
     if(changed)publishRaising();
+  }
+
+  function advanceRaisingHand(){
+    const hand=raisingHand;if(!hand)return;
+    const actor=raisingActors.get(hand.id),profile=raisingNativeProfile(hand.id);
+    if(!actor||!profile){raisingHand=null;return;}
+    const write=p=>{if(p){writeRaisingNativeProfile(hand.id,p);savePort.markDirty();}};
+    if(hand.mode===3){
+      if(!hand.held){write(releaseNativeRaisingCarry(actor,profile));raisingHand=null;}
+      else if(actor.state===6){actor.carryPointer={...hand.pointer};actor.carryCameraX=hand.pointer.cameraX??0;}
+      else raisingHand=null;
+      return;
+    }
+    if(hand.mode===4){
+      const step=stepNativeRaisingStrokeInput({held:hand.held,elapsed:hand.elapsed,previous:hand.previous,pointer:hand.pointer,
+        actorScreen:{x:actor.positionQ12[0]/4096,y:(actor.positionQ12[1]-actor.positionQ12[2])/4096}});
+      hand.elapsed=step.counter;hand.previous={...hand.pointer};
+      if(step.result===0){releaseNativeRaisingStroke(actor);raisingHand=null;}
+      return;
+    }
+    const result=classifyNativeRaisingHand({held:hand.held,elapsed:hand.elapsed,origin:hand.origin,pointer:hand.pointer,
+      admit:command=>nativeRaisingHandAdmission(actor,command),inside:hand.inside});
+    hand.elapsed=(hand.elapsed+1)&65535;
+    if(result===-1)return;
+    if(result===3){const p=beginNativeRaisingCarry(actor,profile,hand.pointer,{foods:raisingFoods,rng:{next:nextGameplayRandom}});
+      if(p){actor.carryCameraX=hand.pointer.cameraX??0;write(p);hand.mode=3;return;}}
+    if(result===4){const p=beginNativeRaisingStroke(actor,profile,{foods:raisingFoods,rng:{next:nextGameplayRandom}});
+      if(p){write(p);hand.mode=4;hand.elapsed=0;hand.previous={...hand.pointer};return;}}
+    if(result===2)write(touchNativeRaisingActor(actor,profile,{foods:raisingFoods,rng:{next:nextGameplayRandom}}));
+    raisingHand=null;
+  }
+
+  function cancelRaisingHand(){
+    if(!raisingHand)return;
+    if(raisingHand.mode===1){raisingHand=null;return;}
+    raisingHand.held=false;advanceRaisingHand();
   }
 
   function battleSchedule() {
@@ -680,7 +724,7 @@ export function createChampionshipStandaloneApp({
       await openSession(createChampionshipSavePortR2());
       const creatureIds = session.getRaisingHomeSnapshot().residents.map((r) => r.residentId);
       raising = createRaisingProductionState({ cageIds, creatureIds });
-      raisingActors.clear();raisingAgeRemainder=0;
+      raisingHand=null;raisingActors.clear();raisingAgeRemainder=0;
       instanceIdentity = createRaisingInstanceIdentityState(instanceSources());
       selectedCreatureId = null;
       openShopAndHunt();
@@ -741,7 +785,7 @@ export function createChampionshipStandaloneApp({
       huntPersistentState = candidate.huntHistory;
       await openSession(seededRealmPort(candidate.snapshot));
       raising = candidate.production;
-      raisingActors.clear();raisingAgeRemainder=0;
+      raisingHand=null;raisingActors.clear();raisingAgeRemainder=0;
       instanceIdentity = candidate.identity;
       selectedCreatureId = null;
       openShopAndHunt({ shopSnapshot: read.save.shop });
@@ -829,6 +873,21 @@ export function createChampionshipStandaloneApp({
       raisingDayTransition.phase='calendar-out';raisingDayTransition.frames=0;publishRaising();return true;
     },
 
+    beginRaisingHand(instanceId,pointer){
+      if(raisingHand||this.hasRaisingPresentation()||huntCommitActive||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME
+        ||!raisingGround||!raisingActors.has(instanceId)||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
+      const point={...pointer,x:Math.floor(pointer.x),y:Math.floor(pointer.y)};
+      raisingHand={id:instanceId,mode:1,elapsed:0,held:true,inside:true,origin:{...point},pointer:{...point},previous:{...point}};return true;
+    },
+    updateRaisingHand(instanceId,pointer){
+      if(raisingHand?.id!==instanceId||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
+      raisingHand.pointer={...pointer,x:Math.floor(pointer.x),y:Math.floor(pointer.y)};raisingHand.inside=pointer.inside!==false;return true;
+    },
+    endRaisingHand(instanceId,{cancelled=false}={}){
+      if(raisingHand?.id!==instanceId)return false;
+      if(cancelled&&raisingHand.mode===1){raisingHand=null;return true;}
+      raisingHand.held=false;advanceRaisingHand();publishRaising();return true;
+    },
     beginRaisingCarry(instanceId,pointer){
       if(this.hasRaisingPresentation()||huntCommitActive||screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME||!raisingGround
         ||!Number.isFinite(pointer?.x)||!Number.isFinite(pointer?.y))return false;
@@ -951,6 +1010,55 @@ export function createChampionshipStandaloneApp({
     getTitleProgress(){return Object.freeze({...nativeTitles,rank:tamerRankValue,won:Object.freeze([...battleBadgesValue])});},
     getRaisingMailbox(){return nativeMessages;},
     getOpeningState(){return nativeOpening;},
+
+    /**
+     * The guided tutorial's cursor and the line it is on. The step catalogue is
+     * built from the observed original run; the wording is product copy. New
+     * games still start with no cursor, so this reads null until a caller opens
+     * the tutorial — turning it on for every new game is a separate change that
+     * has to move the existing flows with it.
+     */
+    getTutorial(){
+      const step=nativeOpening?.tutorialStep;
+      if(step===null||step===undefined)return null;
+      if(step>=TUTORIAL_STEP_COUNT)return Object.freeze({step,finished:false,available:false,reason:'TUTORIAL_CURSOR_REQUIRES_TRACE'});
+      if(tutorialFinished(step))return Object.freeze({step,finished:true,phase:null,textId:null,line:null,prompt:null,expected:null});
+      const record=tutorialStepAt(step);
+      return Object.freeze({step,finished:false,phase:record.phase,textId:record.textId,
+        line:tutorialLine(record.textId),prompt:tutorialPrompt(record.advance),expected:record.advance});
+    },
+
+    beginTutorial(){
+      requireSession();
+      if(!nativeOpening)return Object.freeze({ok:false,reason:'TUTORIAL_REQUIRES_OPENING'});
+      nativeOpening=normalizeNativeOpening({...nativeOpening,tutorialStep:createTutorialCursor()});
+      savePort.markDirty();publishRaising();
+      return Object.freeze({ok:true,tutorial:this.getTutorial()});
+    },
+
+    /** One taught action. A mismatch leaves the cursor and the save untouched. */
+    advanceTutorial(action){
+      requireSession();
+      const step=nativeOpening?.tutorialStep;
+      if(step===null||step===undefined)return Object.freeze({ok:false,reason:'TUTORIAL_NOT_STARTED'});
+      if(step>=TUTORIAL_STEP_COUNT)return Object.freeze({ok:false,reason:'TUTORIAL_CURSOR_REQUIRES_TRACE'});
+      const result=advanceTutorialStep(step,action);
+      if(!result.ok)return result;
+      nativeOpening=normalizeNativeOpening({...nativeOpening,tutorialStep:result.step});
+      savePort.markDirty();publishRaising();
+      return Object.freeze({ok:true,finished:result.finished,completed:result.completed,
+        phase:result.phase,tutorial:this.getTutorial()});
+    },
+
+    skipTutorial(){
+      requireSession();
+      const step=nativeOpening?.tutorialStep;
+      if(step===null||step===undefined)return Object.freeze({ok:false,reason:'TUTORIAL_NOT_STARTED'});
+      if(step>=TUTORIAL_STEP_COUNT)return Object.freeze({ok:false,reason:'TUTORIAL_CURSOR_REQUIRES_TRACE'});
+      nativeOpening=normalizeNativeOpening({...nativeOpening,tutorialStep:skipTutorialCursor(step)});
+      savePort.markDirty();publishRaising();
+      return Object.freeze({ok:true,tutorial:this.getTutorial()});
+    },
     deliverRaisingFeast(){
       if(!nativeMessages.cake||nativeMessages.activeId!==null||raisingDayTransition||!raisingGround)return false;
       for(const [kind,height] of nativeRaisingFeast(nativeMessages.cake)){
@@ -1035,6 +1143,8 @@ export function createChampionshipStandaloneApp({
 
     getClockRunState() {
       if (!session) return Object.freeze({ running: false, reason: "NO_SESSION" });
+      if(screens.current()===CHAMPIONSHIP_SCREENS.HUNT_FIELD&&huntRuntime?.getToolState?.()?.fault)
+        return Object.freeze({running:false,reason:'HUNT_INTERRUPTED'});
       if(this.hasRaisingPresentation())return Object.freeze({running:false,reason:'RAISING_PRESENTATION'});
       const snapshot = session.getRaisingHomeSnapshot();
       if (snapshot.paused) return Object.freeze({ running: false, reason: "PAUSED" });
@@ -1153,6 +1263,7 @@ export function createChampionshipStandaloneApp({
      */
     endDay() {
       if(this.hasRaisingPresentation())return Object.freeze({accepted:false,code:'RAISING_PRESENTATION'});
+      cancelRaisingHand();
       const before=requireSession().getRaisingHomeSnapshot();
       const result = dispatchRaisingHomeCommand({ type: RAISING_HOME_COMMANDS.END_DAY });
       if (result?.accepted){
@@ -1509,6 +1620,21 @@ export function createChampionshipStandaloneApp({
     },
 
     getBattlePartyLimit(recordIndex) {return battlePartyCondition(getMatchRecord(recordIndex).field0C).slots;},
+
+    /**
+     * The two multi-round tournaments as OVL10 sets them up: how many rounds,
+     * what a clean sweep pays, and how large the draw is each round. The round
+     * pools and bookkeeping are verified; normal entry, round-to-round battle
+     * construction and durable tournament settlement are not yet integrated.
+     * See docs/research/CHAMPIONSHIP_POOLS_CPU_2026-09-10.json.
+     */
+    getChampionshipCategories() {
+      return NATIVE_CHAMPIONSHIP_CATEGORIES.map(record => Object.freeze({
+        category:record.category, id:record.id, rounds:record.rounds, prize:record.prize,
+        poolSizes:record.poolSizes, arenaIndex:CHAMPIONSHIP_ARENA_INDEX,
+        entry:'CHAMPIONSHIP_ROUNDS_NORMAL_FLOW_NOT_INTEGRATED',
+      }));
+    },
 
     prepareBattleRng() {
       requireSession();
@@ -2019,6 +2145,7 @@ export function createChampionshipStandaloneApp({
 
     async dispose() {
       if (huntCommitActive) return false;
+      cancelRaisingHand();
       battlePartyIds = null;
       resetExpedition();
       if (!session) {await savePort.releaseSession();return;}

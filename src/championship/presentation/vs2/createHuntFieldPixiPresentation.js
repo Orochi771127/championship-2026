@@ -66,6 +66,7 @@ export async function mountHuntFieldPixiPresentation({
   fieldArt = null,
   feedbackArt = null,
   characterBundle = null,
+  onActorFrame = null,
   onFallback = () => {}
 }) {
   assertDependencies(stage, source);
@@ -425,6 +426,9 @@ export async function mountHuntFieldPixiPresentation({
     // The camera window is the only thing that moves the world.
     world.scale.set(view.transform.scale);
     world.position.set(-view.camera.left * view.transform.scale, -view.camera.top * view.transform.scale);
+    if(onActorFrame)onActorFrame(view.wildCreatures.map(wild=>({wildId:wild.wildId,
+      x:(wild.worldX-view.camera.left)*view.transform.scale,y:(wild.worldY-view.camera.top)*view.transform.scale,
+      state:wild.state??null,moving:wild.moving===true,currentHp:wild.currentHp??null,maxHp:wild.maxHp??null})),view.tools);
   }
 
   const pointer = createHuntFieldPointer({

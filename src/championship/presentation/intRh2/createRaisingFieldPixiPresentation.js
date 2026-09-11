@@ -95,6 +95,7 @@ export async function mountRaisingFieldPixiPresentation({
   feedbackArt = null,
   getSelectedTool = () => null,
   onTrainingFrame = () => {},
+  onActorFrame = null,
   reducedMotion = globalThis.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false
 }) {
   assertDependencies(stage, source);
@@ -261,6 +262,8 @@ export async function mountRaisingFieldPixiPresentation({
     const completed = drag;
     drag = null;
     completed.entry.root.cursor = "grab";
+    if(completed.nativeHand){source.intents.endHand?.(completed.creatureId,{cancelled:event.type==='pointercancel'||event.type==='pointerupoutside'});
+      sync(source.getFrame(),{force:true});return;}
     if(completed.carried){source.intents.releaseCarry?.(completed.creatureId);sync(source.getFrame(),{force:true});return;}
     const point = event.global ?? completed.lastPoint;
     const nativeFrame=source.getActorFrame?.(completed.creatureId)?.nativeFrame;
@@ -298,7 +301,7 @@ export async function mountRaisingFieldPixiPresentation({
     entry.root.cursor = "grab";
     entry.root.hitArea = new PIXI.Rectangle(-62, -124, 124, 132);
     entry.root.on("pointerdown", (event) => {
-      if (disposed) return;
+      if (disposed||drag||cameraDrag) return;
       if(source.getLifecycleFrame?.()?.day||source.getLifecycleFrame?.()?.evolution)return;
       event.stopPropagation();
       if(["feed","protein","clean"].includes(getSelectedTool())&&fieldArt?.field?.presentationMode==='NATIVE_RANCH') {
@@ -318,6 +321,10 @@ export async function mountRaisingFieldPixiPresentation({
         lastPoint: { x: event.global.x, y: event.global.y },
         moved: false
       };
+      if(drag.tool==='hand'&&latestFrame?.ranch?.layoutVersion==='NATIVE_ANCHORS_V1'){
+        const point=raisingScreenToNative(event.global,fieldArt?.field,app.screen,cameraX);
+        if(point)drag.nativeHand=source.intents.beginHand?.(creatureId,{...point,cameraX:cameraX/fieldArt.field.nativePixelWorldScale})??false;
+      }
       entry.root.cursor = "grabbing";
     });
   }
@@ -512,6 +519,10 @@ export async function mountRaisingFieldPixiPresentation({
     }
     if (!drag || event.pointerId !== drag.pointerId) return;
     drag.lastPoint = { x: event.global.x, y: event.global.y };
+    if(drag.nativeHand){const point=raisingScreenToNative(event.global,fieldArt?.field,app.screen,cameraX);
+      const local=drag.entry.root.toLocal(event.global);
+      if(point)source.intents.updateHand?.(drag.creatureId,{...point,cameraX:cameraX/fieldArt.field.nativePixelWorldScale,
+        inside:drag.entry.root.hitArea?.contains(local.x,local.y)??true});}
     if (!drag.moved) {
       drag.moved = Math.hypot(event.global.x - drag.startPoint.x, event.global.y - drag.startPoint.y) >= DRAG_THRESHOLD_PX;
     }
@@ -529,11 +540,7 @@ export async function mountRaisingFieldPixiPresentation({
   }
 
   function updateAnimations(ticker) {
-    if(drag&&!drag.carried&&drag.tool==='hand'&&latestFrame?.ranch?.layoutVersion==='NATIVE_ANCHORS_V1'){
-      const native=source.getActorFrame?.(drag.creatureId);
-      if(native?.nativeFrame-drag.nativeFrame>=10){const point=raisingScreenToNative(drag.lastPoint,fieldArt?.field,app.screen,cameraX);
-        if(point)drag.carried=source.intents.beginCarry?.(drag.creatureId,{...point,cameraX:cameraX/fieldArt.field.nativePixelWorldScale})??false;}
-    }
+    if(drag?.nativeHand)drag.carried=source.getActorFrame?.(drag.creatureId)?.state===6;
     fieldArt?.update(ticker.deltaMS);
     drawFood();
     drawWaste();
@@ -563,7 +570,7 @@ export async function mountRaisingFieldPixiPresentation({
         if(point)native.training.lanes.forEach((lane,index)=>{if(lane.stage>=2&&lane.command&&lane.command.outcome!=='BLOCKED')
           trainingLabels.push({id:`${creatureId}:${index}`,command:lane.command,x:point.x,y:point.y-(22+lane.rise/4096)*scale,alpha:Math.max(0,lane.alpha/31),scale});});
       }
-      if(native?.positionQ12&&fieldArt?.field?.presentationMode==='NATIVE_RANCH'&&(drag?.creatureId!==creatureId||drag?.carried)) {
+      if(native?.positionQ12&&fieldArt?.field?.presentationMode==='NATIVE_RANCH'&&(drag?.creatureId!==creatureId||drag?.carried||drag?.nativeHand)) {
         const point=raisingNativeToScreen(native.positionQ12,fieldArt.field,app.screen,cameraX);
         entry.root.position.set(point.x,point.y);entry.root.zIndex=native.state===6?100000:Math.round(native.positionQ12[1]/4096);
         entry.shadow?.scale.set(native.state===6?3277/4096:1);
@@ -592,6 +599,11 @@ export async function mountRaisingFieldPixiPresentation({
       drawEvolution(entry,native);
     }
     onTrainingFrame(trainingLabels);
+    if(onActorFrame)onActorFrame([...actors].map(([creatureId,entry])=>{
+      const area=entry.root.hitArea,point=entry.root.toGlobal(new PIXI.Point(area.x+area.width/2,area.y+area.height/2));
+      const native=source.getActorFrame?.(creatureId);
+      return {creatureId,x:point.x,y:point.y,state:native?.state,speciesIndex:native?.speciesIndex,nativeFrame:native?.nativeFrame,sequenceId:native?.sequenceId};
+    }));
   }
 
   function drawNativeFeedback(entry,native,covered,kind){
@@ -724,8 +736,18 @@ export async function mountRaisingFieldPixiPresentation({
   app.ticker.add(updateAnimations);
 
   const unsubscribe = source.subscribe(sync);
-  const unobserveResize = stage.onResize(resize);
+  function cancelInput(){
+    if(drag?.nativeHand)source.intents.endHand?.(drag.creatureId,{cancelled:true});
+    else if(drag?.carried)source.intents.releaseCarry?.(drag.creatureId);
+    if(drag)drag.entry.root.cursor='grab';
+    drag=null;cameraDrag=null;
+  }
+  const cancelHiddenInput=()=>{if(globalThis.document?.hidden)cancelInput();};
+  globalThis.addEventListener?.('blur',cancelInput);
+  globalThis.document?.addEventListener('visibilitychange',cancelHiddenInput);
+  const unobserveResize = stage.onResize(()=>{cancelInput();resize();});
   const unobserveContextLost = stage.onContextLost(() => {
+    cancelInput();
     onFallback("The 2D field context was lost. DOM screen controls remain available; reload to restore the field.");
   });
   resize();
@@ -765,8 +787,9 @@ export async function mountRaisingFieldPixiPresentation({
     dispose() {
       if (disposed) return;
       disposed = true;
-      if(drag?.carried)source.intents.releaseCarry?.(drag.creatureId);
-      drag = null;
+      cancelInput();
+      globalThis.removeEventListener?.('blur',cancelInput);
+      globalThis.document?.removeEventListener('visibilitychange',cancelHiddenInput);
       cameraDrag = null;
       unsubscribe();
       unmarkScene();

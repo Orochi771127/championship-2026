@@ -315,6 +315,8 @@ async function mountRaisingHome() {
           feedbackArt,
           getSelectedTool: () => toolbar?.getSelectedTool() ?? null,
           onTrainingFrame,
+          onActorFrame:new URLSearchParams(location.search).get('presentation')==='developer'
+            ? positions=>{host.dataset.residentScreenPositions=JSON.stringify(positions);}:null,
           onFallback(message) {
             root.dataset.fieldFallback = "true";
             console.warn(message);
@@ -346,7 +348,7 @@ async function mountHuntField() {
   return createHuntFieldView({
     root,
     source: expeditionSource,
-    async mountField({ host, source: fieldSource }) {
+    async mountField({ host, source: fieldSource, onActorFrame }) {
       let characterBundle = null;
       let fieldArt = null;
       let feedbackArt = null;
@@ -360,6 +362,7 @@ async function mountHuntField() {
         catch(error){console.warn('Hunt tool reference art unavailable',error);}
         delete root.dataset.fieldFallback;
         return await mountHuntFieldPixiPresentation({
+          onActorFrame,
           stage,
           source: fieldSource,
           fieldArt,

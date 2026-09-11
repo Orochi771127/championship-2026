@@ -1,0 +1,274 @@
+{
+  "gate": "CHAMPIONSHIP_VS2_P_BROWSER_QA",
+  "date": "2026-09-10T17:39:20.485Z",
+  "baseUrl": "http://127.0.0.1:8768/championship.html",
+  "contract": "VS2_GATE_HUNT_RUNTIME_PRESENTATION_CONTRACT/v1.3",
+  "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+  "requiredViewports": [
+    "360x800",
+    "390x844",
+    "393x852",
+    "412x915",
+    "430x932"
+  ],
+  "evidenceViewports": [
+    "390x844",
+    "393x852"
+  ],
+  "results": [
+    {
+      "viewport": "360x800",
+      "captured": false,
+      "gates": 16,
+      "placeholderSlots": 0,
+      "huntTools": 2,
+      "canvasesDuringHunt": 1,
+      "canvasesAfterReturn": 1,
+      "screens": [
+        {
+          "screen": "GATE_SELECT",
+          "root": "360x759",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        },
+        {
+          "screen": "HUNT_LOADOUT",
+          "root": "360x759",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        },
+        {
+          "screen": "HUNT_FIELD",
+          "root": "360x759",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        },
+        {
+          "screen": "EXPLORE",
+          "root": "360x759",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        }
+      ]
+    },
+    {
+      "viewport": "390x844",
+      "captured": true,
+      "gates": 16,
+      "placeholderSlots": 0,
+      "huntTools": 2,
+      "canvasesDuringHunt": 1,
+      "canvasesAfterReturn": 1,
+      "screens": [
+        {
+          "screen": "GATE_SELECT",
+          "root": "390x803",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        },
+        {
+          "screen": "HUNT_LOADOUT",
+          "root": "390x803",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        },
+        {
+          "screen": "HUNT_FIELD",
+          "root": "390x803",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        },
+        {
+          "screen": "EXPLORE",
+          "root": "390x803",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        }
+      ]
+    },
+    {
+      "viewport": "393x852",
+      "captured": true,
+      "gates": 16,
+      "placeholderSlots": 0,
+      "huntTools": 2,
+      "canvasesDuringHunt": 1,
+      "canvasesAfterReturn": 1,
+      "screens": [
+        {
+          "screen": "GATE_SELECT",
+          "root": "393x811",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        },
+        {
+          "screen": "HUNT_LOADOUT",
+          "root": "393x811",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        },
+        {
+          "screen": "HUNT_FIELD",
+          "root": "393x811",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        },
+        {
+          "screen": "EXPLORE",
+          "root": "393x811",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        }
+      ]
+    },
+    {
+      "viewport": "412x915",
+      "captured": false,
+      "gates": 16,
+      "placeholderSlots": 0,
+      "huntTools": 2,
+      "canvasesDuringHunt": 1,
+      "canvasesAfterReturn": 1,
+      "screens": [
+        {
+          "screen": "GATE_SELECT",
+          "root": "412x874",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        },
+        {
+          "screen": "HUNT_LOADOUT",
+          "root": "412x874",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        },
+        {
+          "screen": "HUNT_FIELD",
+          "root": "412x874",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        },
+        {
+          "screen": "EXPLORE",
+          "root": "412x874",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        }
+      ]
+    },
+    {
+      "viewport": "430x932",
+      "captured": false,
+      "gates": 16,
+      "placeholderSlots": 0,
+      "huntTools": 2,
+      "canvasesDuringHunt": 1,
+      "canvasesAfterReturn": 1,
+      "screens": [
+        {
+          "screen": "GATE_SELECT",
+          "root": "430x891",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        },
+        {
+          "screen": "HUNT_LOADOUT",
+          "root": "430x891",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        },
+        {
+          "screen": "HUNT_FIELD",
+          "root": "430x891",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        },
+        {
+          "screen": "EXPLORE",
+          "root": "430x891",
+          "uiAuthority": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R",
+          "presentationMode": "PLAYER_MODE",
+          "horizontalOverflow": false,
+          "clippedControls": 0,
+          "undersizedEnabledControls": 0
+        }
+      ]
+    }
+  ],
+  "developerMode": {
+    "viewport": "390x844",
+    "presentationMode": "DEVELOPER_EVIDENCE_MODE",
+    "rawSlotLabels": 8,
+    "toolbarSlotsBound": 0,
+    "verdict": "PASS"
+  },
+  "invariants": {
+    "pixiApplicationsPerScreen": 1,
+    "stageRebuiltOnScreenChange": false,
+    "toolbarSlots": 8,
+    "toolbarSlotsBound": 0,
+    "playerModeRawLabels": 0,
+    "storageKeys": [
+      "championshipModernSave:v1"
+    ],
+    "captureSurfacePresent": false
+  },
+  "verdict": "PASS"
+}

@@ -13,6 +13,38 @@ function frames(app,n){for(let i=0;i<n;i++){if(app.hasRaisingPresentation())app.
   const mailbox=app.getRaisingMailbox();if(mailbox.activeId!==null&&mailbox.queue.find(q=>q.id===mailbox.activeId)?.system)app.acknowledgeRaisingMail();}}
 async function hatch(app){const id=app.getRaisingInstances()[0].instanceId;for(let i=0;i<3;i++){app.touchRaisingEgg(id);frames(app,1);}frames(app,200);assert.ok(app.getRaisingActorFrame(id).speciesIndex>=8);return id;}
 
+test('normal hand input hatches the starter, strokes with movement, releases and retains individual care through Save/Continue',async()=>{
+  const h=setup(),app=h.create();await app.newGame();const id=app.getRaisingInstances()[0].instanceId;
+  for(let i=0;i<3;i++){const f=app.getRaisingActorFrame(id),point={x:f.positionQ12[0]/4096,y:f.positionQ12[1]/4096};
+    assert.equal(app.beginRaisingHand(id,point),true);assert.equal(app.endRaisingHand(id),true);frames(app,1);}
+  frames(app,200);assert.ok(app.getRaisingActorFrame(id).speciesIndex>=8);
+  for(let i=0;i<300&&! [1,2,3,5,17].includes(app.getRaisingActorFrame(id).state);i++)frames(app,1);
+  app.save();const before=JSON.parse([...h.data.values()][0]).creature.nativeProfile.fields;
+  const f=app.getRaisingActorFrame(id),point={x:f.positionQ12[0]/4096,y:f.positionQ12[1]/4096};
+  assert.equal(app.beginRaisingHand(id,point),true);app.updateRaisingHand(id,{x:point.x+4,y:point.y});frames(app,1);
+  assert.equal(app.getRaisingActorFrame(id).state,8);assert.equal(app.getRaisingActorFrame(id).sequenceId,28);
+  for(let i=0;i<1000;i++){app.updateRaisingHand(id,{x:point.x+(i%2?8:4),y:point.y});frames(app,1);}
+  assert.equal(app.getRaisingActorFrame(id).state,8);assert.equal(app.endRaisingHand(id),true);frames(app,2);
+  assert.notEqual(app.getRaisingActorFrame(id).state,8);
+  app.save();const after=JSON.parse([...h.data.values()][0]).creature.nativeProfile.fields;
+  assert.ok(after['020']>before['020'],'stroke age writer raises affection');
+  await app.dispose();const restored=h.create();assert.ok(await restored.continueGame());
+  assert.notEqual(restored.getRaisingActorFrame(id).state,8);restored.save();
+  assert.equal(JSON.parse([...h.data.values()][0]).creature.nativeProfile.fields['020'],after['020']);await restored.dispose();
+});
+
+test('native hand hold lifts after four updates and cancelled gestures cannot remain latched across navigation',async()=>{
+  const h=setup(),app=h.create();await app.newGame();const id=await hatch(app),f=app.getRaisingActorFrame(id);
+  const point={x:f.positionQ12[0]/4096,y:80};
+  assert.equal(app.beginRaisingHand(id,point),true);frames(app,3);assert.notEqual(app.getRaisingActorFrame(id).state,6);
+  frames(app,1);assert.equal(app.getRaisingActorFrame(id).state,6);
+  assert.equal(app.endRaisingHand(id,{cancelled:true}),true);assert.equal(app.getRaisingActorFrame(id).state,7);frames(app,300);
+  assert.equal(app.beginRaisingHand(id,point),true);assert.equal(app.beginRaisingHand(id,point),false);
+  assert.equal(app.endRaisingHand(id,{cancelled:true}),true);frames(app,4);assert.notEqual(app.getRaisingActorFrame(id).state,6);
+  assert.equal(app.beginRaisingHand(id,point),true);app.openHelp();app.leaveScreen();
+  assert.equal(app.beginRaisingHand(id,point),true);app.endRaisingHand(id,{cancelled:true});await app.dispose();
+});
+
 test('held resident advances on the app clock, releases into native flight, lands and persists its original cage',async()=>{
   const h=setup(),app=h.create();await app.newGame();const id=await hatch(app);
   const before=app.getRaisingActorFrame(id),point={x:before.positionQ12[0]/4096,y:80};

@@ -1,8 +1,6 @@
-// VS3 browser gate -- enclosure gesture to Hunt Result, no Capture button.
-//
-// Walks New Game -> list-selected Canyon -> Hunt field, draws a closed loop
-// around the first wild, and asserts Hunt Result copy. Original capture odds
-// stay untraced; this proves the translated field gesture is reachable.
+// VS3 browser gate: ordinary opening, equipped rope, native capture,
+// memory card, result naming and home membership. Browser time controls input
+// sampling without changing gameplay state, odds, HP or RNG authorities.
 
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
@@ -12,7 +10,7 @@ const { openFreshGame, openHunt, captureOneWild, leaveHuntField, RAISING_HOME } 
 
 const BASE_URL = process.env.CHAMPIONSHIP_QA_URL || "http://127.0.0.1:8732/championship.html";
 const CHROME = process.env.CHAMPIONSHIP_CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe";
-const OUTPUT = path.resolve("docs/reports/vs3");
+const OUTPUT = require("./browser-qa-output.cjs")("vs3");
 const SCREENSHOTS = path.join(OUTPUT, "screenshots");
 const VIEWPORT = { width: 390, height: 844 };
 
@@ -35,8 +33,12 @@ fs.mkdirSync(SCREENSHOTS, { recursive: true });
   assert.ok(world.wildCreatures[0], `${entryGate.gateId} must spawn a wild creature`);
 
   const browser = await chromium.launch({ headless: true, executablePath: CHROME });
-  const context = await browser.newContext({ viewport: VIEWPORT, deviceScaleFactor: 1 });
+  const context = await browser.newContext({ viewport: VIEWPORT, deviceScaleFactor: 1, timezoneId:'UTC' });
   const page = await context.newPage();
+  await page.clock.install({time: new Date("2026-09-10T12:00:00Z")});
+  // Original startup RNG is clock-seeded. Keep its clock input reproducible
+  // across source/artifact servers while performance/timer time still advances.
+  await page.clock.setFixedTime(new Date('2026-09-10T12:34:56Z'));
   const problems = [];
   page.on("pageerror", (error) => problems.push(`pageerror: ${error.message}`));
   page.on("console", (message) => { if (message.type() === "error") problems.push(`console: ${message.text()}`); });
@@ -74,20 +76,19 @@ fs.mkdirSync(SCREENSHOTS, { recursive: true });
 
     await page.screenshot({ path: path.join(SCREENSHOTS, "vs3-hunt-field-before-loop-390x844.png") });
 
-    // The capture is the native four-stage gesture now, not a single loop drawn
-    // on open ground: pan a wandering target back into the camera, bind it with
-    // a small fast rope loop, hold the rope taut until it goes down, then take
-    // it by hand. championship-browser-opening.cjs carries the gestures and why
-    // each one is shaped the way it is. Binding is chancy because the target
-    // keeps moving, so the helper retries whole attempts.
-    const capturedWildId = await captureOneWild(page, canvasBox, { attempts: 40 });
+    // Pause virtual time only after reaching the field through ordinary UI.
+    // Feed each pointer sample through the real clock/controller/render loop.
+    await page.clock.pauseAt(new Date('2026-09-10T12:35:00Z'));
+    const capturedWildId = await captureOneWild(page, canvasBox, { attempts: 12, controlledClock: true });
+    await page.clock.resume();
     await page.screenshot({ path: path.join(SCREENSHOTS, "vs3-hunt-after-loop-390x844.png") });
+    assert.deepEqual(problems, [], 'capture must not hide browser or asset errors');
     assert.ok(capturedWildId, `no wild reached the memory card. canvas=${Math.round(canvasBox.width)}x${Math.round(canvasBox.height)}`);
 
     const leftField = await leaveHuntField(page);
     assert.equal(leftField, "HUNT_RESULT", "a wild on the card must open Hunt Result on the way out");
     const resultText = await page.locator("#cm-root").innerText();
-    assert.doesNotMatch(resultText, /CAPTURE/);
+    assert.doesNotMatch(resultText, /\bCAPTURE\b/);
     assert.equal(await page.locator("[data-cm-name-edit]").count(), 1);
     await page.locator("[data-cm-name-edit]").fill("Ember");
     await page.screenshot({ path: path.join(SCREENSHOTS, "vs3-hunt-result-390x844.png") });
@@ -109,6 +110,9 @@ fs.mkdirSync(SCREENSHOTS, { recursive: true });
       selectedGateId: entryGate.gateId,
       capturedWildId,
       captureButtonPresent: false,
+      inputCadence: "WAIT_FOR_OBSERVED_NATIVE_FRAME_PER_POINTER_SAMPLE",
+      initialClock: "2026-09-10T12:34:56Z (UTC, fixed Date for original clock-seeded RNG)",
+      setup: "NORMAL_NEW_GAME_AND_LOADOUT_NO_STATE_INJECTION",
       verdict: "PASS"
     };
     fs.writeFileSync(path.join(OUTPUT, "VS3_BROWSER_QA.json"), `${JSON.stringify(report, null, 2)}\n`);

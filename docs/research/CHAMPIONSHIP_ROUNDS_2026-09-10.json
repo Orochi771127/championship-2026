@@ -1,0 +1,351 @@
+{
+  "evidence": "STATIC_DECODE",
+  "inputClass": "ROM_CODE_AND_TABLE_READ_NOT_LIVE_PLAY",
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "sessionBlock": {
+    "roundCursor": "0xCA4",
+    "totalRounds": "0xCA8",
+    "roundFlags": "0xCAC",
+    "category": "0xCA0",
+    "prize": "0xC94"
+  },
+  "consumers": {
+    "finalRoundTest": {
+      "site": "0210D204",
+      "overlay": 19,
+      "meaning": "gated on category==1 and +0xC98==0, marks the final round when cursor >= total-1"
+    },
+    "payoutGate": {
+      "site": "0210D0C8",
+      "overlay": 8,
+      "meaning": "walks flags[0..cursor-1]; any zero clears the paid flag"
+    },
+    "roundRecorder": {
+      "site": "0210E280",
+      "overlay": 19,
+      "meaning": "writes flags[cursor] then advances the cursor"
+    }
+  },
+  "totalRoundsWriters": [
+    {
+      "site": "02111C34",
+      "source": "IMMEDIATE",
+      "disassembly": [
+        "02111C0C  ldr r1, [pc, #0xbc]",
+        "02111C10  mvn r3, #0",
+        "02111C14  ldr r0, [r1]",
+        "02111C18  mov r2, #0",
+        "02111C1C  str r3, [r0, #0xca0]",
+        "02111C20  ldr r0, [r1]",
+        "02111C24  mov r3, #1",
+        "02111C28  str r2, [r0, #0xca4]",
+        "02111C2C  ldr r2, [r1]",
+        "02111C30  mov r0, r4",
+        "02111C34  str r3, [r2, #0xca8]",
+        "02111C38  ldr r4, [r1]"
+      ]
+    },
+    {
+      "site": "0211220C",
+      "source": "DESCRIPTOR_BYTE",
+      "disassembly": [
+        "021121E4  ldr r2, [r1]",
+        "021121E8  ldr r0, [pc, #0x9c]",
+        "021121EC  str r3, [r2, #0xca4]",
+        "021121F0  ldr r3, [r0, #0xc]",
+        "021121F4  ldr r2, [r1]",
+        "021121F8  ldr r3, [r3, #4]",
+        "021121FC  str r3, [r2, #0xc94]",
+        "02112200  ldr r2, [r0, #0xc]",
+        "02112204  ldr r0, [r1]",
+        "02112208  ldrb r1, [r2]",
+        "0211220C  str r1, [r0, #0xca8]",
+        "02112210  b #0x2112264"
+      ]
+    },
+    {
+      "site": "02112250",
+      "source": "DESCRIPTOR_BYTE",
+      "disassembly": [
+        "02112228  ldr r1, [pc, #0x48]",
+        "0211222C  mov r3, #0",
+        "02112230  ldr r2, [r1]",
+        "02112234  ldr r0, [pc, #0x50]",
+        "02112238  str r3, [r2, #0xca0]",
+        "0211223C  ldr r2, [r1]",
+        "02112240  str r3, [r2, #0xca4]",
+        "02112244  ldr r3, [r0, #8]",
+        "02112248  ldr r2, [r1]",
+        "0211224C  ldrb r3, [r3]",
+        "02112250  str r3, [r2, #0xca8]",
+        "02112254  ldr r2, [r0, #8]"
+      ]
+    },
+    {
+      "site": "02112870",
+      "source": "IMMEDIATE",
+      "disassembly": [
+        "02112848  ldr r0, [r0, #0x2dc]",
+        "0211284C  ldr r4, [r1]",
+        "02112850  bl #0x2089528",
+        "02112854  ldr r1, [pc, #0xa8]",
+        "02112858  str r0, [r4, #0xca0]",
+        "0211285C  ldr r0, [r1]",
+        "02112860  mov r2, #0",
+        "02112864  str r2, [r0, #0xca4]",
+        "02112868  ldr r0, [r1]",
+        "0211286C  mov r2, #1",
+        "02112870  str r2, [r0, #0xca8]",
+        "02112874  ldr r0, [r5, #0x20]"
+      ]
+    },
+    {
+      "site": "02112B5C",
+      "source": "IMMEDIATE",
+      "disassembly": [
+        "02112B34  bl #0x20438b0",
+        "02112B38  ldr r0, [pc, #0x40]",
+        "02112B3C  mvn r2, #0",
+        "02112B40  ldr r1, [r0]",
+        "02112B44  mov r3, #0",
+        "02112B48  str r2, [r1, #0xca0]",
+        "02112B4C  ldr r1, [r0]",
+        "02112B50  mov r2, #1",
+        "02112B54  str r3, [r1, #0xca4]",
+        "02112B58  ldr r1, [r0]",
+        "02112B5C  str r2, [r1, #0xca8]",
+        "02112B60  ldr r0, [r0]"
+      ]
+    },
+    {
+      "site": "02112BF0",
+      "source": "IMMEDIATE",
+      "disassembly": [
+        "02112BC8  bl #0x20438b0",
+        "02112BCC  ldr r0, [pc, #0x40]",
+        "02112BD0  mvn r2, #0",
+        "02112BD4  ldr r1, [r0]",
+        "02112BD8  mov r3, #0",
+        "02112BDC  str r2, [r1, #0xca0]",
+        "02112BE0  ldr r1, [r0]",
+        "02112BE4  mov r2, #1",
+        "02112BE8  str r3, [r1, #0xca4]",
+        "02112BEC  ldr r1, [r0]",
+        "02112BF0  str r2, [r1, #0xca8]",
+        "02112BF4  ldr r0, [r0]"
+      ]
+    },
+    {
+      "site": "02112C7C",
+      "source": "IMMEDIATE",
+      "disassembly": [
+        "02112C54  bl #0x20438b0",
+        "02112C58  ldr r0, [pc, #0xac]",
+        "02112C5C  mvn r2, #0",
+        "02112C60  ldr r1, [r0]",
+        "02112C64  mov r3, #0",
+        "02112C68  str r2, [r1, #0xca0]",
+        "02112C6C  ldr r1, [r0]",
+        "02112C70  mov r2, #1",
+        "02112C74  str r3, [r1, #0xca4]",
+        "02112C78  ldr r1, [r0]",
+        "02112C7C  str r2, [r1, #0xca8]",
+        "02112C80  ldr r0, [r0]"
+      ]
+    }
+  ],
+  "descriptors": {
+    "championship": {
+      "tableField": "0x08",
+      "descriptor": "020A9AB4",
+      "rounds": 3,
+      "prize": 50000,
+      "field08": 118,
+      "field0C": "020A9AC4",
+      "rawBytes": "0300000050c3000076000000c49a0a02"
+    },
+    "world": {
+      "tableField": "0x0C",
+      "descriptor": "020A9AA4",
+      "rounds": 5,
+      "prize": 300000,
+      "field08": 118,
+      "field0C": "020A9ADC",
+      "rawBytes": "05000000e093040076000000dc9a0a02"
+    }
+  },
+  "accesses": {
+    "totalRounds": {
+      "ovl9": [
+        {
+          "address": "0217B35C",
+          "op": "ldr",
+          "byte": true,
+          "rn": 4,
+          "rd": 15
+        }
+      ],
+      "ovl10": [
+        {
+          "address": "02111C34",
+          "op": "str",
+          "byte": false,
+          "rn": 2,
+          "rd": 3
+        },
+        {
+          "address": "0211220C",
+          "op": "str",
+          "byte": false,
+          "rn": 0,
+          "rd": 1
+        },
+        {
+          "address": "02112250",
+          "op": "str",
+          "byte": false,
+          "rn": 2,
+          "rd": 3
+        },
+        {
+          "address": "02112870",
+          "op": "str",
+          "byte": false,
+          "rn": 0,
+          "rd": 2
+        },
+        {
+          "address": "02112B5C",
+          "op": "str",
+          "byte": false,
+          "rn": 1,
+          "rd": 2
+        },
+        {
+          "address": "02112BF0",
+          "op": "str",
+          "byte": false,
+          "rn": 1,
+          "rd": 2
+        },
+        {
+          "address": "02112C7C",
+          "op": "str",
+          "byte": false,
+          "rn": 1,
+          "rd": 2
+        }
+      ],
+      "ovl19": [
+        {
+          "address": "0210D204",
+          "op": "ldr",
+          "byte": false,
+          "rn": 2,
+          "rd": 0
+        },
+        {
+          "address": "0210E604",
+          "op": "ldr",
+          "byte": false,
+          "rn": 3,
+          "rd": 1
+        },
+        {
+          "address": "0210EABC",
+          "op": "ldr",
+          "byte": false,
+          "rn": 2,
+          "rd": 0
+        },
+        {
+          "address": "0210EACC",
+          "op": "ldr",
+          "byte": false,
+          "rn": 0,
+          "rd": 0
+        }
+      ]
+    }
+  },
+  "opponentSelection": {
+    "selector": "02110A90",
+    "arguments": [
+      "category",
+      "roundCursor"
+    ],
+    "recordStride": 8,
+    "teamStride": 20,
+    "draw": "uniform over poolSize",
+    "modeDispatch": {
+      "site": "021110DC",
+      "field": "0xC98",
+      "0": "tournament pool path, arena forced to 10",
+      "2": "free path: arena drawn from {0,1,2,3,4,5,7}, team index = +0xCA0"
+    },
+    "categories": {
+      "championship": {
+        "roundList": "020A9AC4",
+        "rounds": [
+          {
+            "round": 0,
+            "poolSize": 6,
+            "poolPointer": "0210B1E8",
+            "poolResolvable": false
+          },
+          {
+            "round": 1,
+            "poolSize": 6,
+            "poolPointer": "0210B260",
+            "poolResolvable": false
+          },
+          {
+            "round": 2,
+            "poolSize": 4,
+            "poolPointer": "0210B148",
+            "poolResolvable": false
+          }
+        ]
+      },
+      "world": {
+        "roundList": "020A9ADC",
+        "rounds": [
+          {
+            "round": 0,
+            "poolSize": 4,
+            "poolPointer": "0210B198",
+            "poolResolvable": false
+          },
+          {
+            "round": 1,
+            "poolSize": 3,
+            "poolPointer": "0210B10C",
+            "poolResolvable": false
+          },
+          {
+            "round": 2,
+            "poolSize": 2,
+            "poolPointer": "0210B0E4",
+            "poolResolvable": false
+          },
+          {
+            "round": 3,
+            "poolSize": 2,
+            "poolPointer": "0210B0BC",
+            "poolResolvable": false
+          },
+          {
+            "round": 4,
+            "poolSize": 1,
+            "poolPointer": "0210B0A8",
+            "poolResolvable": false
+          }
+        ]
+      }
+    },
+    "poolsContiguous": true,
+    "poolTotalTeams": 28,
+    "poolContents": "UNKNOWN_REQUIRES_TRACE: every pool pointer lands above the ARM9 static image end, in runtime BSS. No NitroFS file supplies it, so the team records need a live RAM read, not a ROM decode."
+  },
+  "conclusion": "Five OVL10 entries store an immediate 1 into the total-round slot; two load it as a byte from an ARM9 descriptor reached through the OVL10 table at 02114D40. Those two give 3 rounds (prize 50,000) and 5 rounds (prize 300,000), and the 5-round entry also copies the descriptor +0x04 prize into the session prize slot. This fixes the round counts and the entries that use them. Per-round opponent selection is decoded as far as its shape - a uniform draw over a fixed per-round pool size, 6/6/4 for the 3-round category and 4/3/2/2/1 for the 5-round one - but every pool pointer lands in runtime BSS, so the team records themselves stay UNKNOWN_REQUIRES_TRACE."
+}

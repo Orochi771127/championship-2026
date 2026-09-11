@@ -18,7 +18,14 @@
     "presentation": "Existing DOM UI and one Pixi Application/ticker",
     "evidence": "Source -> condition/state -> numeric request -> native timeline -> cell/geometry -> feedback -> interruption/exit -> persistence"
   },
-  "acceptanceColumns": ["source", "runtime", "controlledDifferential", "normalPath", "visualComparison", "device"],
+  "acceptanceColumns": [
+    "source",
+    "runtime",
+    "controlledDifferential",
+    "normalPath",
+    "visualComparison",
+    "device"
+  ],
   "rules": [
     "A source sequence inventory cannot close a behavior row.",
     "Each applicable row needs original conditions, entry, continuation, interruption, exit and side effects.",
@@ -29,22 +36,116 @@
     "Full stage closure requires resolving every applicable row; no averaging, sampling or relabeling UNKNOWN as PASS."
   ],
   "workflows": [
-    {"id":"raising-spontaneous","scope":"Idle, walk/run, peer interaction, Cage/personality reactions, jump/tumble","status":"PARTIAL","evidence":"docs/research/RAISING_ACTIVITY_CPU_CHECK_2026-09-08.json","remaining":"Whole-scene peer ordering and normal per-species trigger/visual comparison"},
-    {"id":"raising-reaction-handler","scope":"All 31 reaction IDs; 26 use generic state 9","status":"BOUNDED_DIFFERENTIAL_PASS","evidence":"docs/research/RAISING_REACTION_DISPATCH_CPU_2026-09-10.json","remaining":"Auxiliary sound behavior and natural trigger coverage; other five IDs retain separate idle/movement/jump handling"},
-    {"id":"raising-food","scope":"Food/protein landing notice, approach, eating, satiety, removal and interruption","status":"PARTIAL","evidence":"docs/contracts/championship/RAISING_NATIVE_FEEDING.v1.json","remaining":"All personality/species combinations through ordinary inputs and original visual comparison"},
-    {"id":"raising-carry","scope":"Hand pickup, motion, release, flight, landing and Cage re-entry","status":"PARTIAL","evidence":"docs/research/RAISING_CARRY_CPU_2026-09-10.json","remaining":"All eligible states, height/velocity/edge cases and mobile normal-path comparison"},
-    {"id":"raising-training","scope":"Cage entry, exercise phases, stat writes, interruption and return","status":"PARTIAL","evidence":"docs/contracts/championship/RAISING_LIFECYCLE_STAGE.v1.json","remaining":"Every applicable Cage program, resident condition and visual/audio event"},
-    {"id":"raising-health-sleep","scope":"Illness, injury, treatment, fatigue, sleep and wake","status":"PARTIAL","evidence":"docs/contracts/championship/RAISING_LIFECYCLE_STAGE.v1.json","remaining":"Full entry/interrupt/recovery normal-path comparisons by applicable species"},
-    {"id":"raising-life","scope":"Egg/hatch, waste/Clean, evolution, rebirth/disappearance, night and morning","status":"PARTIAL","evidence":"docs/contracts/championship/RAISING_LIFECYCLE_STAGE.v1.json","remaining":"All applicable form pairs, morning triggers and original complete visual/audio transitions"},
-    {"id":"raising-status-feedback","scope":"Needs/condition rotation, reaction icons, selected character status","status":"PARTIAL","evidence":"docs/research/RAISING_FEEDBACK_CPU_2026-09-10.json","remaining":"Original music-state caller and full per-state priority/visual acceptance"},
-    {"id":"hunt-wild","scope":"Spawn, ordinary AI, movement, escape, avoidance and reaction requests","status":"PARTIAL","evidence":"docs/contracts/championship/HUNT_CHARACTER_PRESENTATION.v1.json","remaining":"Untraced steering producer and other AI branches; normal comparison for all applicable species"},
-    {"id":"hunt-tools","scope":"Shot/Wire/lures/light/traps and actor response/expiry","status":"PARTIAL","evidence":"docs/research/HUNT_CORE_TWO_STAGE_IMPLEMENTATION_2026-09-08.md","remaining":"Per-tool response, actor interruption, original visual/audio and touch comparisons"},
-    {"id":"hunt-capture","scope":"Bind/pull, resistance/break, down, hand/card, result and Home","status":"PARTIAL","evidence":"docs/contracts/championship/HUNT_CHARACTER_PRESENTATION.v1.json","remaining":"All eligible species and carried-entry variants through normal capture and Save/Continue"},
-    {"id":"battle-actions","scope":"Movement, all move families, preparation, attack, recovery and interruption","status":"PARTIAL","evidence":"docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTER_ANIMATION.v1.json","remaining":"Full normal AI/caller notification timing and per-move visual comparison"},
-    {"id":"battle-reactions-results","scope":"Hit/block/miss/status, down/revival, victory/defeat and result portraits","status":"PARTIAL","evidence":"docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTER_ANIMATION.v1.json","remaining":"Original ending caller/camera timing, all status/result combinations and visuals"},
-    {"id":"cross-scene-continuity","scope":"Same individual/resource across Home/Hunt/Battle/Save/Continue and suspend/resume","status":"PARTIAL","evidence":"docs/reports/commercial-readiness/2026-09-09/OWNED_PARTY_AND_SAVE_ZH_TW.md","remaining":"All eligible species; rapid state changes, reload, background and device acceptance"}
+    {
+      "id": "raising-spontaneous",
+      "scope": "Idle, walk/run, peer interaction, Cage/personality reactions, jump/tumble",
+      "status": "PARTIAL",
+      "evidence": "docs/research/RAISING_ACTIVITY_CPU_CHECK_2026-09-08.json",
+      "remaining": "Whole-scene peer ordering and normal per-species trigger/visual comparison"
+    },
+    {
+      "id": "raising-reaction-handler",
+      "scope": "All 31 reaction IDs; 26 use generic state 9",
+      "status": "BOUNDED_DIFFERENTIAL_PASS",
+      "evidence": "docs/research/RAISING_REACTION_DISPATCH_CPU_2026-09-10.json",
+      "remaining": "Auxiliary sound behavior and natural trigger coverage; other five IDs retain separate idle/movement/jump handling"
+    },
+    {
+      "id": "raising-food",
+      "scope": "Food/protein landing notice, approach, eating, satiety, removal and interruption",
+      "status": "PARTIAL",
+      "evidence": "docs/contracts/championship/RAISING_NATIVE_FEEDING.v1.json",
+      "remaining": "All personality/species combinations through ordinary inputs and original visual comparison"
+    },
+    {
+      "id": "raising-carry",
+      "scope": "Hand pickup, motion, release, flight, landing and Cage re-entry",
+      "status": "PARTIAL",
+      "evidence": "docs/research/RAISING_CARRY_CPU_2026-09-10.json",
+      "remaining": "All eligible states, height/velocity/edge cases and mobile normal-path comparison"
+    },
+    {
+      "id": "raising-hand",
+      "scope": "Tap, stroke, hold, admission, sleeping stroke, release, affection and stress",
+      "status": "PARTIAL",
+      "evidence": "docs/research/RAISING_HAND_CPU_2026-09-10.json",
+      "normalPath": "Browser egg hatch, stroke, pickup, landing, Save/Continue accepted",
+      "remaining": "Evolution hint actor+454, sound playback, all eligible species visual/device comparison"
+    },
+    {
+      "id": "raising-training",
+      "scope": "Cage entry, exercise phases, stat writes, interruption and return",
+      "status": "PARTIAL",
+      "evidence": "docs/contracts/championship/RAISING_LIFECYCLE_STAGE.v1.json",
+      "remaining": "Every applicable Cage program, resident condition and visual/audio event"
+    },
+    {
+      "id": "raising-health-sleep",
+      "scope": "Illness, injury, treatment, fatigue, sleep and wake",
+      "status": "PARTIAL",
+      "evidence": "docs/contracts/championship/RAISING_LIFECYCLE_STAGE.v1.json",
+      "remaining": "Full entry/interrupt/recovery normal-path comparisons by applicable species"
+    },
+    {
+      "id": "raising-life",
+      "scope": "Egg/hatch, waste/Clean, evolution, rebirth/disappearance, night and morning",
+      "status": "PARTIAL",
+      "evidence": "docs/contracts/championship/RAISING_LIFECYCLE_STAGE.v1.json",
+      "remaining": "All applicable form pairs, morning triggers and original complete visual/audio transitions"
+    },
+    {
+      "id": "raising-status-feedback",
+      "scope": "Needs/condition rotation, reaction icons, selected character status",
+      "status": "PARTIAL",
+      "evidence": "docs/research/RAISING_FEEDBACK_CPU_2026-09-10.json",
+      "remaining": "Original music-state caller and full per-state priority/visual acceptance"
+    },
+    {
+      "id": "hunt-wild",
+      "scope": "Spawn, ordinary AI, movement, escape, avoidance and reaction requests",
+      "status": "PARTIAL",
+      "evidence": "docs/contracts/championship/HUNT_CHARACTER_PRESENTATION.v1.json",
+      "remaining": "Untraced steering producer and other AI branches; normal comparison for all applicable species"
+    },
+    {
+      "id": "hunt-tools",
+      "scope": "Shot/Wire/lures/light/traps and actor response/expiry",
+      "status": "PARTIAL",
+      "evidence": "docs/research/HUNT_CORE_TWO_STAGE_IMPLEMENTATION_2026-09-08.md",
+      "remaining": "Per-tool response, actor interruption, original visual/audio and touch comparisons"
+    },
+    {
+      "id": "hunt-capture",
+      "scope": "Bind/pull, resistance/break, down, hand/card, result and Home",
+      "status": "PARTIAL",
+      "evidence": "docs/contracts/championship/HUNT_CHARACTER_PRESENTATION.v1.json",
+      "remaining": "All eligible species and carried-entry variants through normal capture and Save/Continue"
+    },
+    {
+      "id": "battle-actions",
+      "scope": "Movement, all move families, preparation, attack, recovery and interruption",
+      "status": "PARTIAL",
+      "evidence": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTER_ANIMATION.v1.json",
+      "remaining": "Full normal AI/caller notification timing and per-move visual comparison"
+    },
+    {
+      "id": "battle-reactions-results",
+      "scope": "Hit/block/miss/status, down/revival, victory/defeat and result portraits",
+      "status": "PARTIAL",
+      "evidence": "docs/contracts/championship/CHAMPIONSHIP_BATTLE_CHARACTER_ANIMATION.v1.json",
+      "remaining": "Original ending caller/camera timing, all status/result combinations and visuals"
+    },
+    {
+      "id": "cross-scene-continuity",
+      "scope": "Same individual/resource across Home/Hunt/Battle/Save/Continue and suspend/resume",
+      "status": "PARTIAL",
+      "evidence": "docs/reports/commercial-readiness/2026-09-09/OWNED_PARTY_AND_SAVE_ZH_TW.md",
+      "remaining": "All eligible species; rapid state changes, reload, background and device acceptance"
+    }
   ],
-  "nextSafeStep": "Trace Raising music-state producers and compare original state requests against ordinary Home input, then continue unresolved Hunt/Battle caller rows within this same stage.",
+  "nextSafeStep": "Trace Raising hint/audio, tutorial predicates, championship entry/round transitions and Hunt encounter-specific scratch producer; preserve all-species acceptance obligations.",
   "physicalDeviceAccepted": false,
-  "publicReleasePermitted": false
+  "publicReleasePermitted": false,
+  "lastReviewedOn": "2026-09-11",
+  "review": "docs/research/CHARACTER_BEHAVIOR_REVIEW_2026-09-11.md"
 }

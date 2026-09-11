@@ -153,6 +153,12 @@ test("only the authorized source families are present", () => {
       "battleStatus.js",
       "battleSupport.js",
       "battleTurnStates.js",
+      // Joined on 2026-09-10 with the multi-round tournament structure decoded
+      // from the OVL10 round-count writers and the 02110A90 opponent draw: round
+      // counts, prizes, per-round pool sizes and the run's flag bookkeeping. It
+      // composes the existing outcome helpers and owns no screen, session or RNG,
+      // and consumes the original initializer's verified team-index pools.
+      "nativeChampionshipRounds.js",
       // Joined on 2026-09-09 with the title/championship writers: OVL8 0210D1C0
       // category 1 and 0210D3EC category 0, plus the 0210E328 rank commit,
       // checked against the CPU oracle. It writes progression only, and changes

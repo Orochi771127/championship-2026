@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "purpose": "Explicit inputs for the existing game; local review permitted, public release subject to independent rights and content approval.",
   "authority": "FILE_SELECTION_ONLY_NOT_ASSET_PROMOTION",
-  "recordedOn": "2026-09-09",
+  "recordedOn": "2026-09-11",
   "release": {
     "platform": null,
     "territories": [],
@@ -38,6 +38,7 @@
     "src/championship/app/main.js",
     "src/championship/app/nativeOpeningState.js",
     "src/championship/app/nativeOpeningStory.js",
+    "src/championship/app/nativeTutorialProgression.js",
     "src/championship/app/openingPresentation.js",
     "src/championship/app/openingStoryPresentation.js",
     "src/championship/app/phase1ProductCreatures.js",
@@ -95,6 +96,7 @@
     "src/championship/battle/battleStatus.js",
     "src/championship/battle/battleSupport.js",
     "src/championship/battle/battleTurnStates.js",
+    "src/championship/battle/nativeChampionshipRounds.js",
     "src/championship/battle/nativeTitleProgression.js",
     "src/championship/battle/titleEventSchedule.js",
     "src/championship/cage/cageCatalog.js",
@@ -220,6 +222,7 @@
     "src/championship/raising/nativeRaisingFood.js",
     "src/championship/raising/nativeRaisingGround.js",
     "src/championship/raising/nativeRaisingGrowth.js",
+    "src/championship/raising/nativeRaisingHand.js",
     "src/championship/raising/nativeRaisingHomeState.js",
     "src/championship/raising/nativeRaisingLifecycle.js",
     "src/championship/raising/nativeRaisingMessages.js",
@@ -239,6 +242,7 @@
     "src/championship/shop/shopRuntime.js",
     "src/championship/text/catalogs.zhHant.js",
     "src/championship/text/raisingMessages.zhHant.js",
+    "src/championship/text/tutorialMessages.zhHant.js",
     "src/championship/text/uiText.js",
     "src/championship/text/zhHant.js",
     "src/championship/time/championshipWorldClock.js",
@@ -6239,6 +6243,7 @@
     "src/championship/app/main.js",
     "src/championship/app/nativeOpeningState.js",
     "src/championship/app/nativeOpeningStory.js",
+    "src/championship/app/nativeTutorialProgression.js",
     "src/championship/app/opening.css",
     "src/championship/app/openingPresentation.js",
     "src/championship/app/openingStoryPresentation.js",
@@ -6302,6 +6307,7 @@
     "src/championship/battle/battleStatus.js",
     "src/championship/battle/battleSupport.js",
     "src/championship/battle/battleTurnStates.js",
+    "src/championship/battle/nativeChampionshipRounds.js",
     "src/championship/battle/nativeTitleProgression.js",
     "src/championship/battle/titleEventSchedule.js",
     "src/championship/cage/cageCatalog.js",
@@ -6427,6 +6433,7 @@
     "src/championship/raising/nativeRaisingFood.js",
     "src/championship/raising/nativeRaisingGround.js",
     "src/championship/raising/nativeRaisingGrowth.js",
+    "src/championship/raising/nativeRaisingHand.js",
     "src/championship/raising/nativeRaisingHomeState.js",
     "src/championship/raising/nativeRaisingLifecycle.js",
     "src/championship/raising/nativeRaisingMessages.js",
@@ -6446,6 +6453,7 @@
     "src/championship/shop/shopRuntime.js",
     "src/championship/text/catalogs.zhHant.js",
     "src/championship/text/raisingMessages.zhHant.js",
+    "src/championship/text/tutorialMessages.zhHant.js",
     "src/championship/text/uiText.js",
     "src/championship/text/zhHant.js",
     "src/championship/time/championshipWorldClock.js",
@@ -6467,6 +6475,7 @@
     "src/data/championship/catalogs/battle-title-event-strings.r1.json",
     "src/data/championship/catalogs/battle-title-events.r1.json",
     "src/data/championship/catalogs/cage-definitions.r1.json",
+    "src/data/championship/catalogs/championship-pools.r1.json",
     "src/data/championship/catalogs/creature-species.r1.json",
     "src/data/championship/catalogs/creature-stat-curve.r1.json",
     "src/data/championship/catalogs/gate-table.r1.json",
@@ -6482,6 +6491,7 @@
     "src/data/championship/catalogs/rng-channels.r1.json",
     "src/data/championship/catalogs/shop.r1.json",
     "src/data/championship/catalogs/species-names.r1.json",
+    "src/data/championship/catalogs/tutorial-steps.r1.json",
     "src/data/championship/characterNativeSizing.js",
     "src/data/championship/nativeBookSpecies.js",
     "src/data/championship/public-playtest.r1.json",
@@ -30377,7 +30387,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "725a7ad779bdee36d761208c90cc161d7bd3363a1b4df927bb27a66defd0450b"
+        "sha256": "4db6025e353f4d1560b06df3d7fe3f69f9ec0b910c4ab6d7985658996b7b4a32"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -30425,7 +30435,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "fa42a51ed6ccda3a9e6e3920e6384fb8c1ad375d4ea5a91e680ae727febea2d1"
+        "sha256": "0a1970aac71125caa5c4e6c5f727a9af7b1fbf9b14d7bae10aff311005ea60d9"
       },
       {
         "path": "src/championship/app/nativeOpeningState.js",
@@ -30434,6 +30444,10 @@
       {
         "path": "src/championship/app/nativeOpeningStory.js",
         "sha256": "05c1cf994e3eec326eea4a2cf4049eb526a958b3bb8c4dfc02ce968ae798e3ba"
+      },
+      {
+        "path": "src/championship/app/nativeTutorialProgression.js",
+        "sha256": "8c3ba51b8d8b4ecfe2ce13986ea715209096667b241f290a76797b9b74f17164"
       },
       {
         "path": "src/championship/app/opening.css",
@@ -30461,7 +30475,7 @@
       },
       {
         "path": "src/championship/app/raisingPresentationSource.js",
-        "sha256": "af1e12ed19882cd4f57a68ca42694fd99b16b21e44b90fc5c55b0fed0e33b278"
+        "sha256": "b9de4b08dabca3f2ff54b94848f1820fb962a43455a58b9171f19b10a021a289"
       },
       {
         "path": "src/championship/app/scheduleScreen.js",
@@ -30481,7 +30495,7 @@
       },
       {
         "path": "src/championship/app/vs2Screens.js",
-        "sha256": "d9119fce2b847fa513039e456f708f6826375079153aa3e901d8039cfecc335f"
+        "sha256": "2add90299c0b2a64ecfad7ee6fcb6e610d2b49ba96c2b35ec474ea6a0b617d6b"
       },
       {
         "path": "src/championship/app/vs2Styles.css",
@@ -30688,6 +30702,10 @@
         "sha256": "16ae01419b7bac022832cd797100c8cff594edda2b52c060ad9d6d2ee5cbb021"
       },
       {
+        "path": "src/championship/battle/nativeChampionshipRounds.js",
+        "sha256": "e54b3468d40f3377f67d600a1f110cf63fc0881635811314c20deb8255f1ef18"
+      },
+      {
         "path": "src/championship/battle/nativeTitleProgression.js",
         "sha256": "e1cab34856560705fe2db6468531e9e5d6309a76225f3fbcd84de9ddee06caf4"
       },
@@ -30821,7 +30839,7 @@
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntFieldControls.js",
-        "sha256": "604b93abab5d9be92a57c3f09ee0d5fe7c63da1c5f6c01c102e267d13dec74fa"
+        "sha256": "5b1ad8ec50d37ebd8c5a45cddca36ad9b12629c8956967d433d8422865ed9d86"
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntGateVariant.js",
@@ -30853,7 +30871,7 @@
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntMovement.js",
-        "sha256": "7ec672ab45032b4cbaababc31719bfab563f5bbff445bf3b416c3bd83e76eeae"
+        "sha256": "ad924c3c9db3a907caa8f00ad4d3a922686cb9ca6ff8ec9e923ec696cdc09e2c"
       },
       {
         "path": "src/championship/hunt/capture/nativeHuntPersistentState.js",
@@ -30913,7 +30931,7 @@
       },
       {
         "path": "src/championship/hunt/huntRuntime.js",
-        "sha256": "398d3c35b5f8ff67f731c204190d759131cf3637a2c1a392cce91b064df8d56b"
+        "sha256": "cf13960e06e1ad9f078f8be9cedef93c05c12a5c5c167c20bdc826f3eff37eb1"
       },
       {
         "path": "src/championship/hunt/huntWorld.js",
@@ -31025,7 +31043,7 @@
       },
       {
         "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
-        "sha256": "94db3c27a6eeeef34337ccaf4865856267fc1c6ea314bdf6ec77d01aae934e57"
+        "sha256": "78241c45adf31d1c6a62b6fa4f7a3d4584a75dd1106038d86a324fec4bf94988"
       },
       {
         "path": "src/championship/presentation/intRh2/raisingFieldViewport.js",
@@ -31113,7 +31131,7 @@
       },
       {
         "path": "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
-        "sha256": "0b7938bd443a5d19a7abe18f87b7c3d3fa3ba9472ec3b952b8a5903552b8662d"
+        "sha256": "6f1e074cd0e43ad09618af8aac62b08af8cfbae33670fb0ad42bcea85faf154b"
       },
       {
         "path": "src/championship/presentation/vs2/huntFieldPointer.js",
@@ -31157,7 +31175,7 @@
       },
       {
         "path": "src/championship/raising/nativeRaisingActor.js",
-        "sha256": "df546512f42c3f690f70981e1d5cb00b10ee1a3d6bb2e0171ae9bf11d16a8445"
+        "sha256": "6fbc6f96706da6cfb521b43a1c53baa7f34389c2c0016f3dfac5299552dfd5b6"
       },
       {
         "path": "src/championship/raising/nativeRaisingCalendar.js",
@@ -31186,6 +31204,10 @@
       {
         "path": "src/championship/raising/nativeRaisingGrowth.js",
         "sha256": "6b678ed5a622fe11318422ae1a11542d39d044c72e648b912ff05461df6a417c"
+      },
+      {
+        "path": "src/championship/raising/nativeRaisingHand.js",
+        "sha256": "fa2b572bee78ab15f414579233f75c7d3ff6b6c2f775baff8ece58a128efc951"
       },
       {
         "path": "src/championship/raising/nativeRaisingHomeState.js",
@@ -31262,6 +31284,10 @@
       {
         "path": "src/championship/text/raisingMessages.zhHant.js",
         "sha256": "a385920ba4b90b146ba54281b59e884e6e6366b219149795c0b168fccf8f9206"
+      },
+      {
+        "path": "src/championship/text/tutorialMessages.zhHant.js",
+        "sha256": "799c8a8915abe8d22f7cdd02bbe19576e0458f0929bea08bedb82fbf1a4bd67b"
       },
       {
         "path": "src/championship/text/uiText.js",
@@ -31348,6 +31374,10 @@
         "sha256": "872e82510bcda4e44de0c0096b7fbd15f7a61670931935ee32e27e50e4dc7153"
       },
       {
+        "path": "src/data/championship/catalogs/championship-pools.r1.json",
+        "sha256": "6b8a0f7c212845f6f6692a7b2bfc61d6fd6c220384f96de5b71ccad99cff9ba3"
+      },
+      {
         "path": "src/data/championship/catalogs/creature-species.r1.json",
         "sha256": "d86ec0d6c97eca1827bf405ebae6a15275e60d47439ba7a8678f06e2dde34eba"
       },
@@ -31369,7 +31399,7 @@
       },
       {
         "path": "src/data/championship/catalogs/hunt-scene.r1.json",
-        "sha256": "220f3b80f7c8b6e28712628e33de6ab22e40e6c3b8252bd5afa2139865f40deb"
+        "sha256": "95c4c21f616a5f860c4db9abf2cb4ee5b866c240a5cafadf5e733d63d02aacd5"
       },
       {
         "path": "src/data/championship/catalogs/hunt-tools.r1.json",
@@ -31406,6 +31436,10 @@
       {
         "path": "src/data/championship/catalogs/species-names.r1.json",
         "sha256": "ff66fc0d6ba800e70864ffb483d09f40546f3e6cb679ac94afd3b3af3d920c6c"
+      },
+      {
+        "path": "src/data/championship/catalogs/tutorial-steps.r1.json",
+        "sha256": "63f0df9bd36425eac642eeb0e469554ad2da7332599d91294a750bdd983203a0"
       },
       {
         "path": "src/data/championship/characterNativeSizing.js",

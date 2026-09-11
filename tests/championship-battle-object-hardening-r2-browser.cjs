@@ -5,7 +5,7 @@ const { chromium } = require("playwright");
 
 const ORIGIN = process.env.CHAMPIONSHIP_BATTLE_ART_QA_ORIGIN || "http://127.0.0.1:8732";
 const CHROME = process.env.CHAMPIONSHIP_CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe";
-const OUTPUT = path.resolve("docs/reports/art/battle/hardening-r2");
+const OUTPUT = require("./browser-qa-output.cjs")("art/battle/hardening-r2");
 const VIEWPORTS = [
   { width: 360, height: 800 }, { width: 390, height: 844 }, { width: 393, height: 852 },
   { width: 412, height: 915 }, { width: 430, height: 932 }

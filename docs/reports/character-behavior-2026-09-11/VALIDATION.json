@@ -1,0 +1,104 @@
+{
+  "id": "CHARACTER_BEHAVIOR_CHECKPOINT_2026_09_11",
+  "date": "2026-09-11",
+  "fullOriginalParity": false,
+  "physicalDeviceAccepted": false,
+  "fullNode": {
+    "passed": 1450,
+    "failed": 0,
+    "skipped": 0,
+    "command": "node --test tests/*.mjs",
+    "finalRuntimePass": true
+  },
+  "portableCi": {
+    "passed": 1233,
+    "failed": 0,
+    "skipped": 0,
+    "command": "npm run test:ci"
+  },
+  "browser": {
+    "raising": {
+      "viewports": 6,
+      "normalHandSaveContinue": "PASS",
+      "receipt": "RAISING_BROWSER_QA.json",
+      "finalRuntimePass": true
+    },
+    "gateHunt": {
+      "viewports": 5,
+      "result": "PASS",
+      "receipt": "GATE_HUNT_BROWSER_QA.json"
+    },
+    "capture": {
+      "successfulRuns": 3,
+      "inputCadence": "Virtual browser time; input delivery, live native control-frame increments, actual overlap-selected rope target, native slack/durability recovery and strong pull toward the viewport center.",
+      "result": "PASS",
+      "receipt": "CAPTURE_BROWSER_QA.json",
+      "limit": "Repeatability evidence for this gate, not an exhaustive proof of all browser scheduling or all species",
+      "initialClock": "2026-09-10T12:34:56Z UTC fixed Date, normal clock-seeded RNG",
+      "failedEarlierProtocols": "Earlier fixed-duration samples and cached DOM tool frames failed in artifact runs; successful retries did not close the debt. Final protocol reads live view.tools and observed control-frame progress.",
+      "artifactPasses": 2,
+      "sourcePasses": 1,
+      "sourceReceipt": "CAPTURE_SOURCE_BROWSER_QA.json"
+    }
+  },
+  "sourceHashes": [
+    {
+      "path": "src/championship/app/championshipStandaloneApp.js",
+      "sha256": "4db6025e353f4d1560b06df3d7fe3f69f9ec0b910c4ab6d7985658996b7b4a32"
+    },
+    {
+      "path": "src/championship/raising/nativeRaisingHand.js",
+      "sha256": "fa2b572bee78ab15f414579233f75c7d3ff6b6c2f775baff8ece58a128efc951"
+    },
+    {
+      "path": "src/championship/raising/nativeRaisingActor.js",
+      "sha256": "6fbc6f96706da6cfb521b43a1c53baa7f34389c2c0016f3dfac5299552dfd5b6"
+    },
+    {
+      "path": "src/championship/hunt/capture/nativeHuntFieldControls.js",
+      "sha256": "5b1ad8ec50d37ebd8c5a45cddca36ad9b12629c8956967d433d8422865ed9d86"
+    },
+    {
+      "path": "src/championship/battle/nativeChampionshipRounds.js",
+      "sha256": "e54b3468d40f3377f67d600a1f110cf63fc0881635811314c20deb8255f1ef18"
+    },
+    {
+      "path": "src/championship/app/nativeTutorialProgression.js",
+      "sha256": "8c3ba51b8d8b4ecfe2ce13986ea715209096667b241f290a76797b9b74f17164"
+    },
+    {
+      "path": "tests/championship-browser-opening.cjs",
+      "sha256": "2b6067504b621d348ac9825c036adad435372933b376248dd438b454e86cd8d1"
+    },
+    {
+      "path": "tests/championship-int-rh2-browser.cjs",
+      "sha256": "60c19b11a29a04d1b64f5e8c98bc082c550c6a3541796fd3ce4e437ac659a125"
+    },
+    {
+      "path": "tests/championship-vs3-browser.cjs",
+      "sha256": "43624236883ac1afeda1a4a948bfb2223855e0824811b517fb67874d8e2f45b0"
+    },
+    {
+      "path": "src/championship/app/vs2Screens.js",
+      "sha256": "2add90299c0b2a64ecfad7ee6fcb6e610d2b49ba96c2b35ec474ea6a0b617d6b"
+    },
+    {
+      "path": "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
+      "sha256": "6f1e074cd0e43ad09618af8aac62b08af8cfbae33670fb0ad42bcea85faf154b"
+    }
+  ],
+  "limitations": "See docs/research/CHARACTER_BEHAVIOR_REVIEW_2026-09-11.md and the full stage contract.",
+  "restoredGuardFocused": {
+    "passed": 15,
+    "failed": 0,
+    "note": "Retained original unknown-direction guard and reviewed migration firewall."
+  },
+  "staticPlaytest": {
+    "build": "PASS",
+    "validate": "PASS",
+    "selectedInputs": 6239,
+    "fileCount": 6242,
+    "buildId": "b4dd274c96b36128cd709dd18815d6305582505ec2f74ab557c52bf9dcd5bb73",
+    "normalCaptureBrowser": "PASS_TWICE"
+  }
+}

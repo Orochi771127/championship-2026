@@ -6,7 +6,7 @@ const { startGame, login, playOpening } = require("./championship-browser-openin
 
 const BASE_URL = process.env.CHAMPIONSHIP_QA_URL || "http://127.0.0.1:8732/championship.html";
 const CHROME = process.env.CHAMPIONSHIP_CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe";
-const OUTPUT = path.resolve("docs/reports/vs1");
+const OUTPUT = require("./browser-qa-output.cjs")("vs1");
 const SCREENSHOTS = path.join(OUTPUT, "screenshots");
 const RESPONSIVE_CONTRACT_PATH = path.resolve("docs/contracts/championship/INT_RH2_RUNTIME_PRESENTATION_CONTRACT.json");
 const RESPONSIVE_CONTRACT = JSON.parse(fs.readFileSync(RESPONSIVE_CONTRACT_PATH, "utf8")).responsiveTargets;
@@ -85,13 +85,13 @@ async function inspectLayout(page, viewport) {
   }, viewport);
 }
 
-async function openRaising(context, { continueGame = false } = {}) {
+async function openRaising(context, { continueGame = false, developer = false } = {}) {
   const page = await context.newPage();
   const pageErrors = [];
   const failedRequests = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
   page.on("requestfailed", (request) => failedRequests.push(`${request.url()} :: ${request.failure()?.errorText}`));
-  await page.goto(BASE_URL, { waitUntil: "networkidle" });
+  await page.goto(developer ? BASE_URL + (BASE_URL.includes("?") ? "&" : "?") + "presentation=developer" : BASE_URL, { waitUntil: "networkidle" });
   await startGame(page, { continueGame });
   await page.waitForSelector(".cm-raising-pixi-canvas", { timeout: 30000 });
   await page.waitForTimeout(2500);
@@ -144,89 +144,46 @@ async function runViewport(browser, viewport) {
 
 async function runSaveReload(browser) {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
-  const first = await openRaising(context);
-  const page = first.page;
-  const host = await page.locator(".int-rh2-field-host").boundingBox();
-  assert.ok(host, "field host exists");
-
-  // The resident starts at the centre of the ranch ground. The old normalised
-  // pair was authored for the CM-authored 24x14 field and pointed at bare floor
-  // once the native ranch replaced it.
-  const actor = { x: host.x + host.width * 0.5, y: host.y + host.height * 0.5 };
-  const target = { x: host.x + host.width * 0.5, y: host.y + host.height * 0.58 };
-  // Compared against the placeholder this run actually rendered rather than an
-  // English literal, so the gate does not re-break every time the copy is
-  // translated. The screen is Traditional Chinese now.
-  const placeholderName = await page.locator(".int-rh2-companion__name").textContent();
-  await page.mouse.click(actor.x, actor.y);
-  await page.waitForFunction((placeholder) => document.querySelector(".int-rh2-companion__name")?.textContent !== placeholder, placeholderName);
-  const selectedName = await page.locator(".int-rh2-companion__name").textContent();
-  // No care click. The care affordance was withdrawn on 2026-09-03 because the
-  // original tool semantics are UNKNOWN_REQUIRES_TRACE in OVL18, so nothing in
-  // the UI reaches careForCreature today. The intent and its persistence are
-  // still covered by the unit suite; asserting a button here only asserted that
-  // a removed control was still present.
-  const groundPosition = (target_) => target_.evaluate(() => {
-    const stored = localStorage.getItem("championshipModernSave:v1");
-    if (!stored) return null;
-    const fields = JSON.parse(stored).creature.nativeProfile.fields;
-    return { x: fields["1c0"], y: fields["1c4"], cageDefinition: fields["014"] };
-  });
-  const commit = async (target_) => {
-    await target_.locator(".int-rh2-system-button").first().click();
-    await target_.waitForFunction(() => document.querySelector(".int-rh2-system-button")?.dataset.phase === "SAVED");
-  };
-  await commit(page);
-  const before = await groundPosition(page);
-
-  // Relocation is a ground placement now, not a drop into a product cage: under
-  // NATIVE_ANCHORS_V1 the field routes a completed drag to relocateToGround, and
-  // only while the hand tool is held. The drag therefore moves the resident
-  // inside the ranch and leaves its cage assignment alone.
-  await page.locator(".cm-toolbar__cell").first().click();
-  await page.mouse.move(actor.x, actor.y);
-  await page.mouse.down();
-  await page.mouse.move(target.x, target.y, { steps: 14 });
-  await page.mouse.up();
-  await commit(page);
-
-  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("championshipModernSave:v1")));
-  assert.ok(saved, "save payload exists");
-  const after = await groundPosition(page);
-  assert.notDeepEqual(after, before, "the hand-tool drag moved the resident on the ranch ground");
-  assert.equal(after.cageDefinition, before.cageDefinition, "a ground move is not a cage change");
-  await page.screenshot({ path: path.join(SCREENSHOTS, "raising-home-390x844-before-reload.png"), fullPage: true });
-  await page.close();
-
-  const restored = await openRaising(context, { continueGame: true });
-  const restoredPage = restored.page;
-  assert.deepEqual(await groundPosition(restoredPage), after, "the relocated ground position survives a real page reload");
-  const restoredHost = await restoredPage.locator(".int-rh2-field-host").boundingBox();
-  // Where the drag left it, not where it started: the restored position is the
-  // thing under test, so the gate has to reach for the resident there.
-  const restoredActor = { x: restoredHost.x + restoredHost.width * 0.5, y: restoredHost.y + restoredHost.height * 0.58 };
-  const restoredPlaceholder = await restoredPage.locator(".int-rh2-companion__name").textContent();
-  await restoredPage.mouse.click(restoredActor.x, restoredActor.y);
-  await restoredPage.waitForFunction((placeholder) => document.querySelector(".int-rh2-companion__name")?.textContent !== placeholder, restoredPlaceholder);
-  const restoredName = await restoredPage.locator(".int-rh2-companion__name").textContent();
-  assert.equal(restoredName, selectedName, "same resident restored after real page reload");
-  await restoredPage.screenshot({ path: path.join(SCREENSHOTS, "raising-home-390x844-restored.png"), fullPage: true });
-
-  const result = {
-    viewport: "390x844",
-    selectedResident: selectedName,
-    relocatedOnGround: { from: before, to: after },
-    careAffordance: "WITHDRAWN_PENDING_OVL18_TRACE",
-    savePayloadPresent: true,
-    restoredAfterPageReload: true,
-    transientSelectionRestored: false,
-    pageErrors: [...first.pageErrors, ...restored.pageErrors],
-    failedRequests: [...first.failedRequests, ...restored.failedRequests]
-  };
-  assert.deepEqual(result.pageErrors, []);
-  assert.deepEqual(result.failedRequests, []);
-  await context.close();
-  return result;
+  const first = await openRaising(context, { developer: true }), page = first.page;
+  const selector = '.int-rh2-field-host[data-resident-screen-positions]';
+  const residents = p => p.locator(selector).evaluate(n => JSON.parse(n.dataset.residentScreenPositions));
+  const point = async p => { const [a] = await residents(p), box = await p.locator(selector).boundingBox(); return { ...a, x: box.x+a.x, y: box.y+a.y }; };
+  const waitState = (p, allowed) => p.waitForFunction(({selector,allowed}) => {
+    const rows=JSON.parse(document.querySelector(selector)?.dataset.residentScreenPositions||'[]');return allowed.includes(rows[0]?.state);
+  }, {selector,allowed}, {timeout:15000});
+  const commit = async p => { await p.locator('.int-rh2-system-button').first().click();
+    await p.waitForFunction(() => document.querySelector('.int-rh2-system-button')?.dataset.phase === 'SAVED'); };
+  const saved = p => p.evaluate(() => JSON.parse(localStorage.getItem('championshipModernSave:v1')));
+  const ground = save => { const f=save.creature.nativeProfile.fields;return {x:f['1c0'],y:f['1c4'],cageDefinition:f['014']}; };
+  await page.waitForSelector(selector);await page.locator('.cm-toolbar__cell').first().click();
+  // Eggs accept taps, not carry commands. Hatch through the actual hand route.
+  for(let i=0;i<3;i++){const a=await point(page);await page.mouse.click(a.x,a.y);await page.waitForTimeout(70);}
+  await page.waitForFunction(selector => JSON.parse(document.querySelector(selector)?.dataset.residentScreenPositions||'[]')[0]?.speciesIndex>=8,selector,{timeout:15000});
+  await waitState(page,[1,2,3,5,17]);
+  let a=await point(page);await page.mouse.move(a.x,a.y);await page.mouse.down();await page.mouse.move(a.x+12,a.y);
+  await waitState(page,[8]);
+  for(let i=0;i<4;i++){await page.mouse.move(a.x+(i%2?18:12),a.y);await page.waitForTimeout(50);}
+  await page.mouse.up();await waitState(page,[1,2,3,9]);
+  await commit(page);const before=ground(await saved(page));
+  // Original 0210C4D0: hold within 3 native pixels for four updates, then move.
+  a=await point(page);await page.mouse.move(a.x,a.y);await page.mouse.down();await waitState(page,[6]);
+  await page.mouse.move(a.x+24,a.y+32,{steps:14});await page.mouse.up();
+  await waitState(page,[1,2,3,4,9,11,13,16,17,18]);await commit(page);
+  const afterSave=await saved(page),after=ground(afterSave);
+  assert.notDeepEqual(after,before,'held adult is released, lands and saves its new ground position');
+  a=await point(page);await page.mouse.click(a.x,a.y);
+  const selectedName=await page.locator('.int-rh2-companion__name').textContent();
+  await page.screenshot({path:path.join(SCREENSHOTS,'raising-home-390x844-before-reload.png'),fullPage:true});await page.close();
+  const restored=await openRaising(context,{continueGame:true,developer:true}),p=restored.page;
+  await p.waitForSelector(selector);assert.deepEqual(ground(await saved(p)),after);
+  const restoredActor=await point(p);assert.equal(restoredActor.speciesIndex,afterSave.creature.nativeProfile.fields['000']);
+  await p.mouse.click(restoredActor.x,restoredActor.y);
+  assert.equal(await p.locator('.int-rh2-companion__name').textContent(),selectedName);
+  await p.screenshot({path:path.join(SCREENSHOTS,'raising-home-390x844-restored.png'),fullPage:true});
+  const result={viewport:'390x844',selectedResident:selectedName,relocatedOnGround:{from:before,to:after},
+    nativeHand:{eggTap:true,stroke:true,holdCarry:true,releaseLanding:true},savePayloadPresent:true,restoredAfterPageReload:true,
+    pageErrors:[...first.pageErrors,...restored.pageErrors],failedRequests:[...first.failedRequests,...restored.failedRequests]};
+  assert.deepEqual(result.pageErrors,[]);assert.deepEqual(result.failedRequests,[]);await context.close();return result;
 }
 
 async function runPixiFallback(browser) {

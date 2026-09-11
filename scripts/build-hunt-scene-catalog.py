@@ -107,8 +107,11 @@ def build(path):
         cells,palette = [],[]
         for value in direction[5:]:
             low = value&15
-            cell = {'targetQ12':list(VECTORS[low])+[0],
-                'blendQ12':4096 if value&0x20 else 0x59a if value&0x40 else 0xcd} if low<12 else {'unknownDirection':low}
+            # 0210DAD4 reads the blend bits before the branch splits, so the
+            # unassigned low nibbles consume the same rate as the assigned ones.
+            rate = 4096 if value&0x20 else 0x59a if value&0x40 else 0xcd
+            cell = {'targetQ12':list(VECTORS[low])+[0],'blendQ12':rate} if low<12 else {
+                'unknownDirection':low,'blendQ12':rate}
             cell['escapeAnchor'] = bool(value & 0x80)
             cell['escapeBoundary'] = (value & ~0x20) in [0x0f, 0x8f]
             if cell not in palette: palette.append(cell)

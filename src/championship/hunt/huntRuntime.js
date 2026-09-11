@@ -294,11 +294,13 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null, capture
      * frame cannot teleport an actor through geometry.
      */
     tick(deltaMs) {
+      if(controls?.getState().fault)return;
       if (!Number.isFinite(deltaMs) || deltaMs <= 0) return;
       let remaining = Math.min(deltaMs, 1000);
       while (remaining > 0) {
         const slice = Math.min(remaining, HUNT_MAX_STEP_MS);
         advance(slice);
+        if(controls?.getState().fault)return;
         remaining -= slice;
       }
     },

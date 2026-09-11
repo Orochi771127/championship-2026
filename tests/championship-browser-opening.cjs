@@ -125,32 +125,13 @@ async function selectEnterableGate(page, { selector = ".cm-vs2-gate3d__node-hit:
 }
 
 // --- Hunt capture -----------------------------------------------------------
-//
-// The native capture is a four-stage gesture and every stage was found by
-// driving the running game, not by reading a spec:
-//
-//   1. PAN     the wilds wander out of the camera window and the player does
-//              not follow them, so a scripted run has to bring one back into
-//              view first. Dragging the ground only pans while the HAND tool is
-//              held; with ROPE selected a drag is a rope stroke instead.
-//   2. ROPE    a FAST loop around the target binds it (WILD -> TETHERED). The
-//              hint says 快速畫圈 and means it: pacing the loop so the native
-//              sampler sees more of it measured WORSE, because a slow loop
-//              gives the target time to walk out. Binding is chancy even when
-//              the aim is right -- roughly one stroke in three -- so the retry
-//              envelope, not the stroke shape, is what makes a run land.
-//   3. PULL    holding still on a bound target does nothing. The rope has to be
-//              dragged taut, roughly 120px, and then HELD: releasing restores
-//              the target's durability (放鬆可恢復耐久) and it recovers, which
-//              is why a pull-release-pull loop oscillates TETHERED/DOWN_ANIMATION
-//              forever. Held continuously it reaches HAND_READY in ~4-5s.
-//   4. HAND    switch to the hand and tap; the actor leaves the live list once
-//              it is on the memory card.
-//
-// The wilds are owned by the native controller and move every frame, so their
-// positions cannot be computed from the gate's spawn table. Developer Mode
-// publishes them on the field host, which is why a capture run needs
-// `presentation=developer`.
+// Normal input chain: pan on empty ground, sampled circle, hold a taut rope,
+// then hand collection. Developer diagnostics expose readonly rendered actor
+// positions; no test writes actor state, RNG, HP or inventory.
+// The VS3 gate controls browser time so every circle sample reaches the native
+// controller. Twelve samples fit its twenty-update slot lifetime. Pull begins
+// inside the actor rectangle and one update handles pointer-down before motion.
+// Following the live target keeps the tether in range while original AI runs.
 const WILD_POSITIONS = "[data-wild-screen-positions]";
 
 async function liveWilds(page) {
@@ -165,48 +146,74 @@ async function selectHuntTool(page, label) {
   await page.waitForTimeout(120);
 }
 
-/**
- * Capture one wild through the native gesture chain.
- *
- * Returns the captured wildId, or null once the budget is spent. Binding is
- * genuinely chancy -- the target keeps moving while the loop is being drawn --
- * so the caller's budget is a retry envelope, not a timeout on one attempt.
+/** Capture through normal tools, returning the collected identity or null.
+ * Virtual-time mode controls input cadence only; it never bypasses the game.
  */
-async function captureOneWild(page, box, { attempts = 12 } = {}) {
+async function captureOneWild(page, box, { attempts = 12, controlledClock = false } = {}) {
+  const trace=async stage=>{if(process.env.CHAMPIONSHIP_QA_TRACE)console.log(stage,await page.locator('[data-hunt-tool-state]').getAttribute('data-hunt-tool-state'));};
+  const advance = async ms => {
+    if(!controlledClock)return page.waitForTimeout(ms);
+    // Chromium may coalesce pointer events on its real compositor cadence.
+    // Let input delivery finish while game time is paused, then step timers.
+    await page.waitForTimeout(20);
+    return page.clock.runFor(ms);
+  };
+  const sampleFrame=async()=>{
+    const read=async()=>JSON.parse(await page.locator('[data-hunt-tool-state]').getAttribute('data-hunt-tool-state'));
+    const before=await read();
+    for(let poll=0;poll<8;poll++){
+      await advance(17);const after=await read();
+      if(after.fault)throw Error(after.fault);
+      if(after.frame>before.frame)return after;
+    }
+    throw Error('native Hunt controller did not process the pointer sample: '+JSON.stringify({before,after:await read(),browser:await page.evaluate(()=>({time:performance.now(),visibility:document.visibilityState,screen:document.querySelector('#cm-root')?.dataset.screen}))}));
+  };
+  const tool = async label => {
+    await page.locator('.cm-hunt-tools .cm-vs2-action').filter({hasText:label}).first().click({force:controlledClock});
+    await advance(120);
+  };
   const centre = { x: box.width / 2, y: box.height / 2 };
   const find = async (id) => (await liveWilds(page)).find((wild) => wild.wildId === id) ?? null;
   const onScreen = (list) => list.filter((wild) => wild.x > 40 && wild.y > 40 && wild.x < box.width - 50 && wild.y < box.height - 60);
-  // A standing target first, then the closest. A loop takes real time to draw
-  // and a walking creature is usually out of it by the time it closes, which is
-  // most of why a scripted bind misses.
+  // Prefer lower-HP targets for the initial rope, then standing and nearby
+  // targets. Their original HP, motion and capture conditions remain active.
   const nearest = (list) => list
     .map((wild) => ({ wild, distance: Math.hypot(wild.x - centre.x, wild.y - centre.y) }))
-    .sort((a, b) => (a.wild.moving === b.wild.moving ? a.distance - b.distance : (a.wild.moving ? 1 : -1)))[0] ?? null;
+    .sort((a, b) => (a.wild.maxHp-b.wild.maxHp) || (a.wild.moving === b.wild.moving ? a.distance - b.distance : (a.wild.moving ? 1 : -1)))[0] ?? null;
 
   async function panToward(wild) {
-    // huntFieldPointer reports dx as (previous - current)/scale and the camera
-    // centre moves by +dx, so pulling the pointer back by the offset brings the
-    // target in. The drag has to start on empty ground or it selects instead.
-    const from = { x: box.x + centre.x, y: box.y + centre.y };
-    const clamp = (value, lo, hi) => Math.min(hi, Math.max(lo, value));
-    const to = {
-      x: clamp(from.x - (wild.x - centre.x), box.x + 6, box.x + box.width - 6),
-      y: clamp(from.y - (wild.y - centre.y), box.y + 6, box.y + box.height - 6)
-    };
-    await page.mouse.move(from.x, from.y);
-    await page.mouse.down();
-    for (let step = 1; step <= 10; step += 1) {
-      await page.mouse.move(from.x + (to.x - from.x) * step / 10, from.y + (to.y - from.y) * step / 10);
+    for(let pan=0;pan<12;pan++) {
+      wild=await find(wild.wildId);
+      if(!wild||Math.hypot(wild.x-centre.x,wild.y-centre.y)<45)return;
+      // huntFieldPointer reports dx as (previous - current)/scale and the camera
+      // centre moves by +dx, so pulling the pointer back by the offset brings the
+      // target in. The drag has to start on empty ground or it selects instead.
+      const occupied=await liveWilds(page);
+      const blank=[{x:centre.x,y:centre.y},{x:30,y:centre.y},{x:box.width-30,y:centre.y},{x:centre.x,y:centre.y+100}]
+        .find(p=>!occupied.some(a=>Math.abs(a.x-p.x)<35&&Math.abs(a.y-p.y)<55));
+      if(!blank)return;
+      const from = { x: box.x + blank.x, y: box.y + blank.y };
+      const clamp = (value, lo, hi) => Math.min(hi, Math.max(lo, value));
+      const to = {
+        x: clamp(from.x - (wild.x - centre.x), box.x + 6, box.x + box.width - 6),
+        y: clamp(from.y - (wild.y - centre.y), box.y + 6, box.y + box.height - 6)
+      };
+      await page.mouse.move(from.x, from.y);
+      await page.mouse.down();
+      for (let step = 1; step <= 10; step += 1) {
+        await page.mouse.move(from.x + (to.x - from.x) * step / 10, from.y + (to.y - from.y) * step / 10);
+      }
+      await page.mouse.up();
+      await advance(200);
     }
-    await page.mouse.up();
-    await page.waitForTimeout(200);
   }
 
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
-    let pick = nearest(await liveWilds(page));
-    if (!pick) { await page.waitForTimeout(300); continue; }
+    const available=await liveWilds(page);
+    let pick = nearest(onScreen(available))??nearest(available);
+    if (!pick) { await advance(300); continue; }
     if (pick.distance > 90) {
-      await selectHuntTool(page, "手");
+      await tool("手");
       await panToward(pick.wild);
       pick = nearest(onScreen(await liveWilds(page)));
       if (!pick) continue;
@@ -223,62 +230,86 @@ async function captureOneWild(page, box, { attempts = 12 } = {}) {
       // the target running and the player does not follow, so without this the
       // second and later loops are drawn at a creature that has already left.
       if (Math.hypot(target.x - centre.x, target.y - centre.y) > 60) {
-        await selectHuntTool(page, "手");
+        await tool("手");
         await panToward(target);
         target = await find(pick.wild.wildId);
         if (!target) break;
       }
-      await selectHuntTool(page, "繩索");
+      await tool("繩索");
       // Wait out a stride rather than drawing around a target mid-step.
       for (let settle = 1; settle <= 6 && target.moving; settle += 1) {
-        await page.waitForTimeout(220);
+        await advance(220);
         target = await find(pick.wild.wildId);
         if (!target) break;
       }
       if (!target) break;
-      // Two rules shape this loop, and both come from the recognizer rather than
-      // from taste:
-      //   * recognizeNativeRopeStroke refuses a loop whose left-to-top extreme
-      //     span is 25 native pixels or less. Screen pixels are ~0.66 native at
-      //     this viewport, so radius 48 gives ~45 and clears it with room.
-      //   * the stroke is sampled by the native controller's own ~60Hz step
-      //     rather than by pointermove, and it needs six samples -- but pacing
-      //     the loop to feed that clock measured WORSE, because a slow loop
-      //     gives the target time to walk out of it. Fast and wide wins.
-      const cx = box.x + target.x, cy = box.y + target.y, radius = 48, arc = 20;
+      // Native recognition needs at least six samples and >25px extreme
+      // span. Keep the whole circle within the twenty-update slot lifetime.
+      const cx = box.x + target.x, cy = box.y + target.y, radius = 60, arc = controlledClock?12:20;
       await page.mouse.move(cx + radius, cy);
       await page.mouse.down();
+      if(controlledClock) await sampleFrame();
+      await trace('CIRCLE_DOWN');
       for (let step = 1; step <= arc; step += 1) {
         const angle = (step / arc) * Math.PI * 2;
         await page.mouse.move(cx + Math.cos(angle) * radius, cy + Math.sin(angle) * radius);
+        if(controlledClock) await sampleFrame();
       }
       await page.mouse.up();
-      await page.waitForTimeout(340);
+      if(controlledClock)await sampleFrame();
+      await trace('CIRCLE_RELEASE');
+      await advance(340);
       const now = await find(target.wildId);
       if (now?.state === "TETHERED") bound = now;
     }
     if (!bound) continue;
+    if(process.env.CHAMPIONSHIP_QA_TRACE)console.log('BOUND',JSON.stringify(bound));
+    if(bound.y<200||bound.y>box.height-100||bound.x<30||bound.x>box.width-110) {
+      await tool('手');await panToward(bound);await tool('繩索');
+      bound=await find(bound.wildId);
+      if(!bound||bound.state!=='TETHERED'||bound.x<30||bound.x>box.width-110||bound.y<200||bound.y>box.height-100)continue;
+    }
 
     // Taut and held: never release until it is down, or it recovers.
-    await page.mouse.move(box.x + bound.x, box.y + bound.y);
+    await page.mouse.move(box.x + bound.x, box.y + bound.y - 8);
     await page.mouse.down();
-    for (let step = 1; step <= 12; step += 1) await page.mouse.move(box.x + bound.x + step * 10, box.y + bound.y);
+    if(controlledClock){
+      const attached=await sampleFrame();
+      // Overlapping native hit boxes may select a different bound actor.
+      // Follow the controller's selected rope target, not our intended target.
+      bound=attached.rope?await find(attached.rope.wildId):null;
+      if(!bound){await page.mouse.up();await sampleFrame();continue;}
+    }
+    for (let step = 1; step <= 12; step += 1) await page.mouse.move(box.x + bound.x + step * 7.5, box.y + bound.y - 15);
     let down = null;
-    for (let poll = 1; poll <= 30; poll += 1) {
-      await page.waitForTimeout(400);
+    let refilling=false;
+    for (let poll = 1; poll <= (controlledClock?6000:30); poll += 1) {
+      const control=controlledClock?await sampleFrame():(await advance(400),null);
       const now = await find(bound.wildId);
       if (!now || now.state === "WILD") break;          // the rope gave out
       if (now.state === "HAND_READY") { down = now; break; }
+      if(controlledClock){
+        if(control.rope){
+          if(control.rope.durability<40)refilling=true;
+          if(control.rope.durability>control.rope.capacity*.85)refilling=false;
+        }
+        // Slack restores the rope without releasing; strong pulls point back
+        // into the viewport instead of walking the actor off its right edge.
+        const dx=centre.x-now.x,dy=centre.y-now.y,dist=Math.hypot(dx,dy);
+        const length=refilling?20:140;
+        const vx=dist>45?dx/dist:(now.x>centre.x?-1:1),vy=dist>45?dy/dist:0;
+        await page.mouse.move(box.x+now.x+vx*length,box.y+now.y-15+vy*length);
+      }
     }
     await page.mouse.up();
     if (!down) continue;
 
-    await selectHuntTool(page, "手");
+    await tool("手");
     for (let tap = 1; tap <= 10; tap += 1) {
       const now = await find(bound.wildId);
       if (!now) return bound.wildId;                     // on the card, off the live list
       await page.mouse.click(box.x + now.x, box.y + now.y);
-      await page.waitForTimeout(320);
+      await advance(320);
     }
     if (!(await find(bound.wildId))) return bound.wildId;
   }

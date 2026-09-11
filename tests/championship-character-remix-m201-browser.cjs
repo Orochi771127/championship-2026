@@ -7,7 +7,7 @@ const { openFreshGame, openHunt, selectEnterableGate, RAISING_HOME } = require("
 const RAW_BASE_URL = process.env.CHAMPIONSHIP_QA_URL || "http://127.0.0.1:8732/championship.html";
 const BASE_URL = `${RAW_BASE_URL}${RAW_BASE_URL.includes("?") ? "&" : "?"}characterArtReview=m201`;
 const CHROME = process.env.CHAMPIONSHIP_CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe";
-const OUTPUT = path.resolve("docs/reports/characters/m201-remix-v1");
+const OUTPUT = require("./browser-qa-output.cjs")("characters/m201-remix-v1");
 const VIEWPORT = { width: 390, height: 844 };
 
 fs.mkdirSync(OUTPUT, { recursive: true });

@@ -19,6 +19,7 @@ import {enterNativeRaisingSleep,exitNativeRaisingSleep,enterNativeRaisingMorning
 import {enterNativeRaisingTraining,applyNativeCageEntryConditions,createNativeTrainingTimeline,stepNativeTrainingTimeline} from './nativeRaisingTraining.js';
 import {nativeCarryPosition,nativeCarryVelocity,nativeReleaseVelocity,stepNativeRaisingFlight,nativeLandingReaction} from './nativeRaisingCarry.js';
 import {findNativeRaisingOpenTile} from './nativeRaisingGround.js';
+import {nativeRaisingHandAdmission,enterNativeRaisingStroke,stepNativeRaisingStroke,nativeRaisingTapWakes,enterNativeRaisingTap,selectNativeRaisingTapReaction} from './nativeRaisingHand.js';
 
 function request(actor, sequenceId, force=false, frame=null) {
   if(actor.sequenceId===sequenceId&&!force)return;
@@ -63,6 +64,7 @@ export function stepNativeRaisingActor(actor,profile,{ageDelta,rng,feeding=null,
   actor.animator.advanceNative(4096);
   if(actor.state===9)actor.feedback?.animator.advanceNative(4096);
   actor.nativeFrame++;
+  if(actor.tap)actor.tap.elapsed=Math.min(60,actor.tap.elapsed+1);
   stepNativeRaisingStatusFeedback(actor,profile);
   if(actor.speciesIndex>=8)return lifecycle&&feeding?stepLifecycle(actor,profile,ageDelta,rng,feeding,lifecycle)
     :feeding ? stepFeeding(actor,profile,ageDelta,rng,feeding) : {profile,changed:false,hatched:false};
@@ -89,6 +91,7 @@ export function stepNativeRaisingActor(actor,profile,{ageDelta,rng,feeding=null,
 
 const nativeRandom=(actor,rng,max)=>Math.trunc((max-1)*rng.next(0x26+actor.poolSlot)/102);
 function enterIdle(actor,rng) {
+  actor.stroke=null;actor.statusMusic=0;
   actor.state=1;actor.foodSlot=null;actor.station=-1;actor.biteLatched=false;
   actor.idleElapsed=0;actor.activity=null;actor.feedback=null;actor.activityReaction=-1;actor.peer=null;actor.destinationState=1;
   // OVL18 02117C4C -> 02112378 -> ARM9 02047984 preserves an already
@@ -155,7 +158,7 @@ export function interruptNativeRaisingFeeding(actor,foods,rng) {detachFood(actor
 function currentHeight(actor){const box=BATTLE_CHARACTER_PROFILES[BATTLE_SPECIES_ENTITIES[actor.speciesIndex]].cells[actor.animator.getSnapshot().cell];return box[3]-box[1];}
 export function beginNativeRaisingCarry(actor,profile,pointer,{foods,rng}){
   // Original command 80 handlers for the currently implemented adult states.
-  if(![1,2,3,4,5,7,9,13,16,17,18,19].includes(actor.state)||actor.speciesIndex<8)return null;
+  if(!nativeRaisingHandAdmission(actor,0x80))return null;
   let p=profile;
   if(actor.state===4)p=exitNativeRaisingSleep(p,actor.poolSlot,rng);
   if(actor.state===5&&(p.fields['008']|0)>=nativeHuntSpeciesByIndex(actor.speciesIndex).field1c){
@@ -165,6 +168,36 @@ export function beginNativeRaisingCarry(actor,profile,pointer,{foods,rng}){
   actor.carryPointer={...pointer};actor.velocityQ12=[0,0,0];request(actor,11);
   actor.positionQ12=nativeCarryPosition(pointer,currentHeight(actor));actor.growthFields['40c']=0;
   p=structuredClone(p);p.fields['19c']=0;return normalizeNativeIndividualProfile(p);
+}
+export function beginNativeRaisingStroke(actor,profile,{foods,rng}){
+  if(!nativeRaisingHandAdmission(actor,0x7f))return null;
+  actor.growthFields['430']=1;
+  if(actor.state===4)return profile;
+  let p=profile;
+  if(actor.state===5&&(p.fields['008']|0)>=nativeHuntSpeciesByIndex(actor.speciesIndex).field1c){
+    p=structuredClone(p);p.fields['020']=Math.min(100,(p.fields['020']+2)|0);p.fields['00c']=(Math.trunc((p.fields['178']|0)/10)*8)>>>0;}
+  detachFood(actor,foods);
+  const stroke=enterNativeRaisingStroke(p,id=>request(actor,id));
+  actor.state=8;actor.activity=null;actor.feedback=null;actor.stroke={phase:stroke.phase,counter:stroke.counter,music:0};
+  actor.growthFields['430']=1;actor.statusMusic=0;
+  return normalizeNativeIndividualProfile(stroke.profile);
+}
+export function releaseNativeRaisingStroke(actor){
+  if(actor.growthFields?.['430']!==1)return false;
+  actor.growthFields['430']=0;return true;
+}
+export function touchNativeRaisingActor(actor,profile,{foods,rng}){
+  if(!nativeRaisingHandAdmission(actor,0x7e))return null;
+  if(actor.speciesIndex<8){touchNativeRaisingEgg(actor);return profile;}
+  if(actor.state===4&&!nativeRaisingTapWakes(profile.fields['018'],actor.poolSlot,rng))return profile;
+  let p=profile;
+  if(actor.state===4)p=exitNativeRaisingSleep(p,actor.poolSlot,rng);
+  if(actor.state===5&&(p.fields['008']|0)>=nativeHuntSpeciesByIndex(actor.speciesIndex).field1c){
+    p=structuredClone(p);p.fields['020']=Math.min(100,(p.fields['020']+2)|0);p.fields['00c']=(Math.trunc((p.fields['178']|0)/10)*8)>>>0;}
+  detachFood(actor,foods);
+  actor.tap=enterNativeRaisingTap(actor.tap);actor.tap.previousState=actor.state;
+  actor.state=10;actor.activity=null;actor.feedback=null;
+  return normalizeNativeIndividualProfile(p);
 }
 export function releaseNativeRaisingCarry(actor,profile){
   if(actor.state!==6)return null;
@@ -372,7 +405,16 @@ function stepLifecycle(actor,profile,ageDelta,rng,feeding,context) {
   let residents=context.residents,capacity=lifecycleRules.cages[actor.cageDefinitionIndex].capacity;
   a['40c']=actor.detached?0:residents.length;a['410']=(residents.length-capacity)>>>0;
   const update=()=>{next=structuredClone(next);result.changed=true;return next.fields;};
-  if(actor.state===6||actor.state===7){result=stepCarry(actor,next,feeding.ground,rng,context.season,context.onJoin);next=result.profile;
+  if(actor.state===8){const stroke=stepNativeRaisingStroke(actor.stroke,a['430']===1);actor.statusMusic=stroke.music;
+    actor.strokeSound=stroke.sound;if(stroke.complete)enterIdle(actor,rng);}
+  else if(actor.state===10){
+    const id=selectNativeRaisingTapReaction(actor.tap,{healthy:!['134','138','13c'].some(k=>next.fields[k]!==0),
+      previousState:actor.tap.previousState,personality:next.fields['018'],poolSlot:actor.poolSlot},rng);
+    if(id===null)enterIdle(actor,rng);
+    else {const delta=beginNativeActivityReaction(actor,id,feeding.ground,request);
+      if(delta){const f=update();f['01c']=Math.max(0,Math.min(100,(f['01c']+delta)|0));}}
+  }
+  else if(actor.state===6||actor.state===7){result=stepCarry(actor,next,feeding.ground,rng,context.season,context.onJoin);next=result.profile;
     if(result.landed){residents=context.getResidents?.()??residents;capacity=lifecycleRules.cages[actor.cageDefinitionIndex].capacity;
       a['40c']=residents.length;a['410']=(residents.length-capacity)>>>0;}}
   else if(actor.state===20){
@@ -449,11 +491,12 @@ function stepLifecycle(actor,profile,ageDelta,rng,feeding,context) {
     const trained=enterNativeRaisingTraining(next,{definition:actor.cageDefinitionIndex,season:context.season,level:context.cageLevel??0,stressed:a['404']===1},rng);
     next=trained.profile;result.changed=true;actor.training=createNativeTrainingTimeline(trained.commands);if(trained.commands?.length)request(actor,30);
   }
-  const grown=applyNativeRaisingGrowth(next,a,{state:actor.state,ageDelta,baseUnit:60,generation:s.generation,mode:context.season,minute:context.minute,
+  const grown=applyNativeRaisingGrowth(next,a,{state:actor.state,phase:actor.stroke?.phase??0,ageDelta,baseUnit:60,generation:s.generation,mode:context.season,minute:context.minute,
     ranchSize:capacity,effects:nativeCageConditionEffects(actor.cageDefinitionIndex,context.season,context.cageLevel??1),satietyMaximum:s.field1c,
     peerCount:residents.length,residents,wasteCount:context.wasteCount,rottenFoodCount:context.rottenFoodCount,
     dirtyAdded:context.dirtyAdded,dirtyRemoved:context.dirtyRemoved},rng);
   actor.growthFields=grown.actorFields;
+  if(actor.state===8)actor.stroke.phase=grown.phase;
   return {...result,profile:grown.profile,changed:result.changed||ageDelta>0||grown.events.length>0||next!==profile};
 }
 

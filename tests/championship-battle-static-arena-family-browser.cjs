@@ -5,7 +5,7 @@ const { chromium } = require("playwright");
 
 const BASE_URL = process.env.CHAMPIONSHIP_BATTLE_ART_QA_URL || "http://127.0.0.1:8732/battle-art-review.html";
 const CHROME = process.env.CHAMPIONSHIP_CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe";
-const OUTPUT = path.resolve("docs/reports/art/battle/bm05-bm11-static-r1");
+const OUTPUT = require("./browser-qa-output.cjs")("art/battle/bm05-bm11-static-r1");
 const ARENAS = [
   { key: "bm05", fieldId: "field_bm05_01", roles: ["arena_background", "canonical_shared_layer"] },
   { key: "bm06", fieldId: "field_bm06_01", roles: ["arena_background", "canonical_shared_layer"] },

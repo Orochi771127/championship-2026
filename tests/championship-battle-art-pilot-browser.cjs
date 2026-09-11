@@ -5,7 +5,7 @@ const { chromium } = require("playwright");
 
 const BASE_URL = process.env.CHAMPIONSHIP_BATTLE_ART_QA_URL || "http://127.0.0.1:8732/battle-art-review.html";
 const CHROME = process.env.CHAMPIONSHIP_CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe";
-const OUTPUT = path.resolve("docs/reports/art/battle/bm00-bm01-r1");
+const OUTPUT = require("./browser-qa-output.cjs")("art/battle/bm00-bm01-r1");
 const VIEWPORTS = [
   { width: 360, height: 800 },
   { width: 390, height: 844 },
