@@ -1,0 +1,73 @@
+{
+  "evidence": "STATIC_DECODE",
+  "inputClass": "ROM_CODE_READ_NOT_LIVE_PLAY",
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "question": "Which struct holds the championship run fields, and does a save carry it?",
+  "runFields": {
+    "0xCA0": "category",
+    "0xCA4": "roundCursor",
+    "0xCA8": "totalRounds",
+    "0xCAC": "roundFlags",
+    "0xC94": "prize"
+  },
+  "runSites": [
+    {
+      "site": "02111C1C",
+      "globalPointerAt": "02111CD0",
+      "globalValue": 34585096,
+      "resolvedVia": "02111C14",
+      "overlay": "ovl10"
+    },
+    {
+      "site": "0211220C",
+      "globalPointerAt": "02112278",
+      "globalValue": 34585096,
+      "resolvedVia": "02112204",
+      "overlay": "ovl10"
+    },
+    {
+      "site": "02112238",
+      "globalPointerAt": "02112278",
+      "globalValue": 34585096,
+      "resolvedVia": "02112230",
+      "overlay": "ovl10"
+    },
+    {
+      "site": "02112858",
+      "globalPointerAt": "02112904",
+      "globalValue": 34585096,
+      "resolvedVia": "0211284C",
+      "overlay": "ovl10"
+    },
+    {
+      "site": "02112B48",
+      "globalPointerAt": "02112B80",
+      "globalValue": 34585096,
+      "resolvedVia": "02112B40",
+      "overlay": "ovl10"
+    }
+  ],
+  "runGlobals": [
+    "020FBA08"
+  ],
+  "verdict": "RUN_FIELDS_SHARE_ONE_STRUCT_PERSISTENCE_STILL_UNTRACED",
+  "limits": [
+    "Sharing a base global places the fields in one struct; it does not prove the save writes that struct.",
+    "The tamer-rank cross-check found no direct +0x0AE8 access and is not evidence either way."
+  ],
+  "resolved": {
+    "runStructGlobal": "020FBA08",
+    "allFiveSetupSitesAgree": true,
+    "descriptorTable": "02114D40 (OVL10); +8 Championship, +0xC World)",
+    "categories": {
+      "-1": "single match (title / free battle), totalRounds 1",
+      "0": "CHAMPIONSHIP, rounds from descriptor field 0x08",
+      "1": "WORLD, rounds from descriptor field 0x0C, prize written to +0xC94"
+    }
+  },
+  "openQuestion": {
+    "question": "Does a save write the struct at 020FBA08, so a tournament survives Continue mid-run?",
+    "why": "player+0x0AE8 was the intended cross-check, but no instruction in ARM9 or any overlay uses that offset directly, so the comment's base is not the one the code uses.",
+    "toClose": "Trace the save serializer and see whether its copied region covers +0xCA0..+0xCAC."
+  }
+}
