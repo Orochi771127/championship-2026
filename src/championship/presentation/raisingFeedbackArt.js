@@ -32,8 +32,18 @@ export async function loadRegisteredRaisingFeedbackArt({PIXI,baseUrl,fetchImpl=g
   // Reaction and treatment banks only. Other common cells are retained in the
   // private manifest without loading unrelated training lettering into Home.
   const selected=manifest.cells.filter(c=>c.cell<=36||c.cell>=144&&c.cell<=153);
+  // Forty-seven independent cells. Awaiting them one at a time made Home wait
+  // for forty-seven round trips in a row, which measured as roughly five
+  // seconds of the wait before the cage appeared. Nothing here depends on
+  // anything else here, so they load together. Settling rather than racing
+  // matters: a rejection must not leave a late success holding a texture that
+  // nothing will ever unload.
+  const results=await Promise.allSettled(selected.map(async c=>({c,texture:await PIXI.Assets.load(c.src)})));
+  for(const r of results)if(r.status==='fulfilled')loaded.push(r.value.c.src);
   try{
-    for(const c of selected){const texture=await PIXI.Assets.load(c.src);loaded.push(c.src);
+    const failed=results.find(r=>r.status==='rejected');
+    if(failed)throw failed.reason;
+    for(const {c,texture} of results.map(r=>r.value)){
       if(texture.width!==c.width||texture.height!==c.height)throw new Error('RAISING_FEEDBACK_DIMENSIONS');
       texture.source.scaleMode='nearest';cells.set(c.cell,{...c,texture});}
   }catch(error){await Promise.allSettled(loaded.map(src=>PIXI.Assets.unload(src)));throw error;}

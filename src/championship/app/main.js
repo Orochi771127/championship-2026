@@ -90,6 +90,54 @@ const loadBattleRuntime = async () => (await import("./battleRuntime.js")).creat
 // screen is up and the player is reading it, fetch them in the background: the
 // module cache means the real entry then costs nothing. Failures are ignored --
 // this is a head start, and every caller still awaits its own import.
+// The Home screen's art arrives as a chain of dependent fetches: the production
+// index, then a manifest for each family it draws from, then the care cells.
+// None of it starts until the player has already asked for the cage, so the
+// chain runs on the critical path -- measured on the deployed site over a 4G
+// profile it was still fetching eight seconds after the cage was asked for, and
+// the last link had not begun. Priming the same URLs while the player reads the
+// title and the opening moves the whole chain off that path. It adds no bytes:
+// the cage fetches exactly these, and warming only decides when.
+//
+// The ids are named rather than the paths so the index stays the one place that
+// knows where a family lives. An id the index no longer carries simply warms
+// nothing, which costs a cold fetch later and never a wrong one.
+const HOME_ART_ASSET_IDS = Object.freeze([
+  "art:cage:licensed-runtime:v1",
+  "art:raising-care:licensed-runtime:v1",
+  "art:raising:care:r1",
+  "art:toolbar:licensed-runtime:v1",
+  "art:raising_home:int-rh2:temporary-presentation-bundle",
+  "art:characters:licensed-internal:v1",
+  "art:characters:hud:local-reference:v1",
+  "art:vfx:raising-feedback:local-reference:v1",
+  "art:ui:raising-header-material:tooling-pilot-r1"
+]);
+const RAISING_CARE_ASSET_ID = "art:raising-care:licensed-runtime:v1";
+
+async function warmHomeArt() {
+  const at = (path, base = location.href) => new URL(path, base).href;
+  // Read each body so the response reaches the HTTP cache, but never parse it:
+  // this is a head start, not a consumer, and parsing would spend the main
+  // thread the warming is meant to protect.
+  const prime = (href) => fetch(href, { priority: "low" }).then((r) => r.arrayBuffer()).catch(() => {});
+  try {
+    const index = await fetch(at("assets/production/ART_PRODUCTION_INDEX.json")).then((r) => r.json());
+    const wanted = new Set(HOME_ART_ASSET_IDS);
+    const entries = (index?.entries ?? []).filter((entry) => wanted.has(entry.assetId));
+    const care = entries.find((entry) => entry.assetId === RAISING_CARE_ASSET_ID);
+    await Promise.all(entries.filter((entry) => entry !== care).map((entry) => prime(at(entry.manifestPath))));
+    if (!care) return;
+    // The care cells are the last link in the chain and total about 10 KB, so
+    // this manifest is the one worth reading rather than only caching.
+    const manifest = at(care.manifestPath);
+    const parsed = await fetch(manifest).then((r) => r.json()).catch(() => null);
+    await Promise.all((parsed?.cells ?? []).map((cell) => prime(at(cell.file, manifest))));
+  } catch {
+    // A head start that fails costs the cold fetch it was avoiding, nothing more.
+  }
+}
+
 let warmed = false;
 function warmDeferredModules() {
   if (warmed) return;
@@ -103,8 +151,11 @@ function warmDeferredModules() {
       () => import("../presentation/licensedCharacterRoster.js"),
       () => import("../presentation/vs2/createGateSelectThreePresentation.js"),
       () => import("../presentation/vs5/createBattleSelectThreePresentation.js"),
-      () => import("../presentation/vs5/createBattleVfxThreeOverlay.js")
+      () => import("../presentation/vs5/createBattleVfxThreeOverlay.js"),
+      () => import("../modes/createChampionshipModeShell.js"),
+      () => import(PIXI_V8_MODULE_URL)
     ]) load().catch(() => {});
+    void warmHomeArt();
   };
   if (typeof requestIdleCallback === "function") requestIdleCallback(warm, { timeout: 4000 });
   else setTimeout(warm, 1200);
@@ -344,10 +395,22 @@ async function mountRaisingHome() {
       let feedbackArt = null;
       try {
         const stage = await ensurePixiStage(host);
-        characterBundle = await loadOptionalCharacterReview(stage, fieldSource.getFrame().residents.map((resident) => resident.speciesId));
-        fieldArt = await loadOptionalCageFieldArt(stage);
-        try{feedbackArt=await loadRegisteredRaisingFeedbackArt({PIXI:stage.PIXI,baseUrl:location.href});}
-        catch(error){console.warn('Raising reaction art unavailable',error);}
+        // The three art loads need the stage and nothing from each other, but
+        // they were awaited in a row, so Home waited out three manifest chains
+        // end to end. Run them together. Settling rather than racing keeps the
+        // catch below able to dispose whatever did load when one of them fails.
+        const [review, cage, reactions] = await Promise.allSettled([
+          loadOptionalCharacterReview(stage, fieldSource.getFrame().residents.map((resident) => resident.speciesId)),
+          loadOptionalCageFieldArt(stage),
+          loadRegisteredRaisingFeedbackArt({ PIXI: stage.PIXI, baseUrl: location.href })
+        ]);
+        characterBundle = review.status === "fulfilled" ? review.value : null;
+        fieldArt = cage.status === "fulfilled" ? cage.value : null;
+        // Reaction art has always been optional: Home draws without it.
+        feedbackArt = reactions.status === "fulfilled" ? reactions.value : null;
+        if (reactions.status === "rejected") console.warn("Raising reaction art unavailable", reactions.reason);
+        if (review.status === "rejected") throw review.reason;
+        if (cage.status === "rejected") throw cage.reason;
         delete root.dataset.fieldFallback;
         return await mountRaisingFieldPixiPresentation({
           stage,

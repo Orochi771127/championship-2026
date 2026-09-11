@@ -61,14 +61,21 @@ export async function loadRegisteredHuntFeedbackArt({PIXI,baseUrl,fetchImpl=glob
   const index=await indexResponse.json();if(!index.entries?.some(e=>e.assetId===HUNT_FEEDBACK_ART_ID&&e.runtimeEligible))return null;
   const response=await fetchImpl(new URL(HUNT_FEEDBACK_ART_MANIFEST,baseUrl));if(!response.ok)throw new Error('HUNT_FEEDBACK_MANIFEST_UNAVAILABLE');
   const manifest=validateHuntFeedbackArt(await response.json(),index),banks=new Map(),loaded=[];
+  // Every cell of every bank is independent, so awaiting one at a time made the
+  // Hunt field wait for one round trip per cell. Load them all together and
+  // assemble the banks from what arrives; failure still unloads everything that
+  // loaded and rethrows the first problem, as before.
+  const pending=manifest.banks.flatMap(bank=>bank.cells.map(c=>({bank,c})));
+  const results=await Promise.allSettled(pending.map(async e=>({...e,texture:await PIXI.Assets.load(e.c.src)})));
+  for(const r of results)if(r.status==='fulfilled')loaded.push(r.value.c.src);
   try{
-    for(const bank of manifest.banks){
-      const cells=new Map();
-      for(const c of bank.cells){const texture=await PIXI.Assets.load(c.src);loaded.push(c.src);
-        if(texture.width!==c.width||texture.height!==c.height)throw new Error('HUNT_FEEDBACK_DIMENSIONS');
-        texture.source.scaleMode='nearest';cells.set(c.cell,{...c,texture});}
-      banks.set(`${bank.kind}:${bank.itemIndex}`,{...bank,cells});
-    }
+    const failed=results.find(r=>r.status==='rejected');
+    if(failed)throw failed.reason;
+    for(const bank of manifest.banks)banks.set(`${bank.kind}:${bank.itemIndex}`,{...bank,cells:new Map()});
+    for(const {bank,c,texture} of results.map(r=>r.value)){
+      if(texture.width!==c.width||texture.height!==c.height)throw new Error('HUNT_FEEDBACK_DIMENSIONS');
+      texture.source.scaleMode='nearest';
+      banks.get(`${bank.kind}:${bank.itemIndex}`).cells.set(c.cell,{...c,texture});}
   }catch(error){await Promise.allSettled(loaded.map(src=>PIXI.Assets.unload(src)));throw error;}
   let disposal;
   return {getFrame(object){

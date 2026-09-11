@@ -4,12 +4,21 @@ export async function mountBattleResultCharacters({stage,hudArt,participants,won
   const scene=stage.createSceneRoot('native result characters');
   const anchors=[[46,151],[127,172],[210,154]]; // result_sub_scene.nxr digimon1..3
   const sequence=won?9:5,actors=[],loaded=new Map();
-  try{for(const [i,p] of participants.slice(0,3).entries()){
-    if(!p||!hudArt)continue;
-    const cells=hudArt.getBattleCells(p.speciesId,sequence);if(!cells.length)continue;
-    for(const c of cells)if(!loaded.has(c.src)){const texture=await stage.PIXI.Assets.load(c.src);texture.source.scaleMode='nearest';loaded.set(c.src,texture);}
-    const sprite=new stage.PIXI.Sprite();scene.addChild(sprite);actors.push({sprite,speciesId:p.speciesId,anchor:anchors[i]});
-  }}catch(error){scene.destroy({children:true});await Promise.allSettled([...loaded.keys()].map(src=>stage.PIXI.Assets.unload(src)));throw error;}
+  // The three bodies share most of their cells and none of them waits on
+  // another, so awaiting one cell at a time made the result screen pay a round
+  // trip per frame. Gather the distinct sources, load them together, then build
+  // the sprites in participant order exactly as before.
+  try{
+    const chosen=participants.slice(0,3).map((p,i)=>({p,i,cells:p&&hudArt?hudArt.getBattleCells(p.speciesId,sequence):[]}))
+      .filter(e=>e.cells.length);
+    const sources=[...new Set(chosen.flatMap(e=>e.cells.map(c=>c.src)))];
+    const results=await Promise.allSettled(sources.map(async src=>({src,texture:await stage.PIXI.Assets.load(src)})));
+    for(const r of results)if(r.status==='fulfilled'){r.value.texture.source.scaleMode='nearest';loaded.set(r.value.src,r.value.texture);}
+    const failed=results.find(r=>r.status==='rejected');
+    if(failed)throw failed.reason;
+    for(const {p,i} of chosen){
+      const sprite=new stage.PIXI.Sprite();scene.addChild(sprite);actors.push({sprite,speciesId:p.speciesId,anchor:anchors[i]});}
+  }catch(error){scene.destroy({children:true});await Promise.allSettled([...loaded.keys()].map(src=>stage.PIXI.Assets.unload(src)));throw error;}
   let accumulator=0,disposed=false,elapsed=0;
   function apply(){for(const actor of actors){const cell=hudArt.getBattleFrame(actor.speciesId,sequence,elapsed);if(!cell)continue;
     actor.sprite.texture=loaded.get(cell.src);actor.sprite.anchor.set(cell.origin[0]/cell.width,cell.origin[1]/cell.height);}}
