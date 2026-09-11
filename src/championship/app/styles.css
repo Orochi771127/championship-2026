@@ -53,6 +53,7 @@
   --cm-sheet-selected: #fff2c9;
   --cm-sheet-selected-edge: #c2a146;
   --cm-sheet-today: #fff8de;
+  --cm-sheet-short: #9c2f22;
   --cm-sheet-inset: #f4fbf8;
   --cm-sheet-highlight: #9a6a16;
   --cm-screen-top: 0px;
@@ -736,6 +737,9 @@ body[data-toolbar="on"] #cm-root {
 .cm-schedule-facts dt { letter-spacing: 0.1em; color: var(--cm-sheet-muted); }
 .cm-schedule-facts dd { margin: 0; font-weight: 700; }
 .cm-schedule-untraced { margin: 0.3rem 0 0; font-size: 0.62rem; line-height: 1.45; color: var(--cm-sheet-dim); }
+/* titlematch_top_sub_scene turns pay_red on when the fee cannot be met. */
+.cm-schedule-facts dd[data-short="true"] { color: var(--cm-sheet-short); font-weight: 700; }
+.cm-schedule-short { grid-column: 1 / -1; margin: 0.2rem 0 0; font-size: 0.64rem; color: var(--cm-sheet-short); }
 .cm-schedule-empty { margin: 0; font-size: 0.72rem; color: var(--cm-sheet-dim); }
 .cm-schedule-footer { margin: 0; font-size: 0.62rem; line-height: 1.45; color: var(--cm-sheet-dim); }
 .cm-schedule-back {

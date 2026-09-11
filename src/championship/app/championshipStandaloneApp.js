@@ -73,6 +73,7 @@ import { createCageEditRuntime } from "../cage/cageEditRuntime.js";
 import { normalizeTamerRank, slotCountForTamerRank } from "../cage/cageCatalog.js";
 import { validateNativeRanch } from '../cage/nativeRanchLayout.js';
 import { getMatchRecord, matchEntryFee, matchPayout, resolveMatchList } from "../battle/battleMatchSelection.js";
+import { BATTLE_OUTCOME_TEAM_ZERO_AHEAD, BATTLE_OUTCOME_TEAM_ONE_AHEAD } from "../battle/battleOutcome.js";
 import { NATIVE_CHAMPIONSHIP_CATEGORIES, CHAMPIONSHIP_ARENA_INDEX, createNativeChampionshipRun,
   normalizeNativeChampionshipRun, recordNativeChampionshipRound, nativeChampionshipContinues,
   nativeChampionshipFinalRound, nativeChampionshipPayable, selectNativeChampionshipOpponent } from "../battle/nativeChampionshipRounds.js";
@@ -157,6 +158,10 @@ export function createChampionshipStandaloneApp({
   let battleEconomy = createBattleEconomyState();
   let battleTransactionActive = false;
   let battlePartyIds = null;
+  // The attempt a tournament round is being fought under, if any. A round is an
+  // ordinary battle; what differs is that its verdict belongs to the run, and
+  // the title result waits for the whole run rather than reading one round.
+  let championshipAttemptId = null;
   const battleRngPreparations = new WeakMap();
   let huntCommitActive = false;
   // One application-owned sequence. Expedition resets never replace it.
@@ -641,11 +646,17 @@ export function createChampionshipStandaloneApp({
       for(const entry of individualResults)writeRaisingNativeProfile(entry.instanceId,entry.nativeProfile,{markDirty:false});
       if (result.receipt?.status === "SETTLED") {
         nativeTitles=applyNativeBattleRecord(nativeTitles,result.receipt);
-        const r=resolveNativeTitleResult({rank:tamerRankValue,category:result.receipt.mode,matchIndex:result.receipt.matchIndex,
-          won:battleBadgesValue,...nativeTitles,rounds:[result.receipt.won?1:0]});
+        // A tournament round is not a title on its own: the payout gate and the
+        // title result both read the whole run, so settleChampionship resolves
+        // it once the last round is in.
+        const r=championshipAttemptId===result.receipt.attemptId?null
+          :resolveNativeTitleResult({rank:tamerRankValue,category:result.receipt.mode,matchIndex:result.receipt.matchIndex,
+            won:battleBadgesValue,...nativeTitles,rounds:[result.receipt.won?1:0]});
+        if(r){
         battleBadgesValue=[...r.won];tamerRankValue=r.rank;
         nativeTitles=normalizeNativeTitleProgress({...nativeTitles,registered:r.registered,championship:r.championship,feeWaiver:r.feeWaiver});
         if(r.rankNotice!==null)nativeMessages=enqueueNativeRaisingMessage(nativeMessages,r.rankNotice);
+        }
       }
       const committed = requireShop().applyBitsTransaction({ expectedBits, bits: result.wallet });
       if (!committed.ok) {
@@ -1700,6 +1711,35 @@ export function createChampionshipStandaloneApp({
     },
 
     /**
+     * Fight the round the run is waiting on. The tournament descriptor carries
+     * rounds, prize and two more fields and no entry fee, so a round is entered
+     * free; the prize is the run's, paid once at 0210D0C8's gate rather than per
+     * round. Everything else is an ordinary battle attempt.
+     */
+    enterChampionshipRound({ attemptId, playerInstanceIds = null, opponent = null } = {}) {
+      requireSession();
+      if (battleTransactionActive) return Object.freeze({ ok: false, reason: "TRANSACTION_ACTIVE" });
+      if (!championshipRun) return Object.freeze({ ok: false, reason: "NO_CHAMPIONSHIP_RUNNING" });
+      if (!nativeChampionshipContinues(championshipRun))
+        return Object.freeze({ ok: false, reason: "CHAMPIONSHIP_ALREADY_ENDED" });
+      if (battleEconomy.active) return Object.freeze({ ok: false, reason: "BATTLE_ATTEMPT_ACTIVE" });
+      // The caller may have drawn already to build the match; drawing twice
+      // would spend the channel twice.
+      const drawn = opponent ? { ok: true, opponent } : this.drawChampionshipOpponent();
+      if (!drawn.ok) return drawn;
+      const result = applyBattleTransaction(beginBattleAttempt(battleEconomy, {
+        attemptId, matchIndex: championshipRun.category, mode: 0, battleType: 0,
+        entryFee: 0, payout: 0, expectedRounds: 1
+      }, requireShop().getBits()));
+      if (!result.ok || result.duplicate) return result;
+      championshipAttemptId = attemptId;
+      battlePartyIds = playerInstanceIds === null ? null : [...playerInstanceIds];
+      screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);
+      publishScreens();
+      return Object.freeze({ ...result, opponent: drawn.opponent, round: championshipRun.cursor });
+    },
+
+    /**
      * One round's verdict. A lost round ends the run where it stands, which is
      * what the payout gate at 0210D0C8 then reads.
      */
@@ -1846,6 +1886,16 @@ export function createChampionshipStandaloneApp({
       if (!result.ok || result.duplicate) return result;
       for(const entry of updates)raisingActors.delete(entry.instanceId);
       battlePartyIds=null;
+      // A round fought under a run writes its flag here, from the same verdict
+      // the economy just settled on, so nothing judges the round twice.
+      if(championshipAttemptId===attemptId){
+        championshipAttemptId=null;
+        if(championshipRun&&nativeChampionshipContinues(championshipRun)){
+          championshipRun=recordNativeChampionshipRound(championshipRun,
+            {verdict:result.receipt.won?BATTLE_OUTCOME_TEAM_ZERO_AHEAD:BATTLE_OUTCOME_TEAM_ONE_AHEAD}).run;
+          savePort.markDirty();
+        }
+      }
       screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_RESULT);
       publishScreens();
       return result;
@@ -1868,7 +1918,15 @@ export function createChampionshipStandaloneApp({
         if (!result.ok) return screens.current();
       }
       battlePartyIds = null;
+      championshipAttemptId = null;
       screens.exit();
+      // A run still owed a round sends the player back to its board rather than
+      // to Home. The judged round is behind the reset either way.
+      if (championshipRun && nativeChampionshipContinues(championshipRun)
+        && screens.current() === CHAMPIONSHIP_SCREENS.RAISING_HOME) {
+        screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_SELECT);
+        screens.enter(CHAMPIONSHIP_SCREENS.CHAMPIONSHIP);
+      }
       publishScreens();
       return screens.current();
     },

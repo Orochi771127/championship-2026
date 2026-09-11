@@ -392,6 +392,41 @@ let battleRuntime = null;
 let battleAttemptId = null;
 let battleProgressBefore = null;
 
+/**
+ * A tournament round is an ordinary battle whose opponent came from the run's
+ * own pool. Draw once, build the match on that team, then open the attempt.
+ */
+function enterChampionshipRound() {
+  if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started) {
+    return { ok: false, reason: "BATTLE_NOT_READY", message: "遊戲場景尚未就緒，請返回育成場景後重試。" };
+  }
+  const run = app.getChampionshipRun();
+  if (!run) return { ok: false, reason: "NO_CHAMPIONSHIP_RUNNING" };
+  const drawn = app.drawChampionshipOpponent();
+  if (!drawn.ok) return drawn;
+  const rngPreparation = app.prepareBattleRng();
+  const prepared = createBattleRuntime({ schedule: app.getBattleSchedule(), mode: 0, battleType: 0,
+    rng: rngPreparation.rng });
+  try {
+    prepared.chooseChampionshipRound({ category: run.category, teamIndex: drawn.opponent.teamIndex });
+    prepared.startMatch();
+    const attemptId = `battle:${app.getBattleEconomyState().nextSequence}`;
+    const result = app.enterChampionshipRound({ attemptId, opponent: drawn.opponent });
+    if (result.ok && !result.duplicate) {
+      battleRuntime?.dispose();
+      battleRuntime = prepared;
+      battleAttemptId = attemptId;
+      battleProgressBefore = { rank: app.getTamerRank(), badges: app.getBattleBadges(),
+        shopIds: app.getShopFrame().listings.map((item) => item.shopRecordIndex) };
+    } else prepared.dispose();
+    return result;
+  } catch (error) {
+    prepared.dispose();
+    console.warn(`CHAMPIONSHIP_ROUND_PREPARE: ${error.message}`);
+    return { ok: false, reason: "BATTLE_NOT_READY" };
+  }
+}
+
 function mountBattleSelect() {
   battleRuntime?.dispose();
   battleRuntime = createBattleRuntime({ schedule: app.getBattleSchedule(), mode:1, battleType:0 });
@@ -617,10 +652,7 @@ async function mountCurrentScreen() {
           intents: {
             open: (category) => app.beginChampionship(category),
             draw: () => app.drawChampionshipOpponent(),
-            // The battle runtime does not carry a run yet, so a round is
-            // reported. verdictIsWin's ordinary-type rule is what it reports.
-            record: (won) => app.recordChampionshipRound({
-              verdict: won ? BATTLE_OUTCOME_TEAM_ZERO_AHEAD : BATTLE_OUTCOME_TEAM_ONE_AHEAD }),
+            enterRound: () => enterChampionshipRound(),
             settle: () => app.settleChampionship(),
             leave: () => app.leaveScreen()
           }
@@ -630,6 +662,7 @@ async function mountCurrentScreen() {
     else if (target === CHAMPIONSHIP_SCREENS.SCHEDULE) {
       view = createScheduleView({
         root,
+        bits: app.getShopFrame()?.bits ?? null,
         calendar: app.getCalendar(),
         eligibleRecordIndices: app.getAvailableBattleRecordIndices(),
         progress:app.getTitleProgress(),

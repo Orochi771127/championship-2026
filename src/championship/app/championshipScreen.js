@@ -15,7 +15,8 @@ import { uiText } from "../text/uiText.js";
 export const CHAMPIONSHIP_SCREEN_SOURCE_SCENES = Object.freeze([
   "ui/conference_list_item.nxr",
   "battle_menu/titlematch_top_sub_scene.nxr",
-  "training/schedule_item.nxr"
+  "training/schedule_item.nxr",
+  "ui/battle_title_champion_main.nxr"
 ]);
 
 function element(tag, className, text) {
@@ -31,6 +32,15 @@ function prizeRow(prize) {
   row.append(element("span", "cm-championship-prize__digits", prize.toLocaleString("en-US")));
   row.append(element("span", "cm-championship-prize__bit", uiText("位元幣")));
   return row;
+}
+
+/**
+ * ui/battle_title_champion_main.nxr banners a round as
+ * "チャンピオンシップ予選第3戦" -- the tournament, then the qualifying round
+ * number. The wording here is that, not a round counter of our own.
+ */
+function roundName(run) {
+  return uiText(`${categoryName(run.id)} 預賽第 ${run.round + 1} 戰 / 共 ${run.totalRounds} 戰`);
 }
 
 function categoryName(id) {
@@ -110,7 +120,7 @@ export function createChampionshipView({ root, source }) {
     panel.dataset.category = String(run.category);
     panel.append(element("span", "cm-championship-kicker", categoryName(run.id)));
     panel.append(element("h2", "cm-championship-run__title",
-      run.continues ? uiText(`第 ${run.round + 1} 輪 / 共 ${run.totalRounds} 輪`) : uiText("賽事結束")));
+      run.continues ? roundName(run) : uiText("賽事結束")));
 
     // One mark per round, as schedule_item spends one check per fixture.
     const marks = element("ol", "cm-championship-rounds");
@@ -132,21 +142,18 @@ export function createChampionshipView({ root, source }) {
         ? uiText(`本輪對手：第 ${drawn.opponent.index + 1} 隊 / 共 ${drawn.opponent.poolSize} 隊`)
         : uiText("本輪對手尚未抽出。");
       panel.append(opponent);
-      // Until a round is fought through the battle runtime, the verdict is
-      // reported here. The flags, the payout gate and the title result all read
-      // the same values either way.
+      // The round is fought as an ordinary battle; the verdict it settles on is
+      // what writes the flag, so this board never judges a round itself.
       const actions = element("div", "cm-championship-actions");
-      for (const [label, verdict] of [[uiText("這輪獲勝"), "WON"], [uiText("這輪落敗"), "LOST"]]) {
-        const button = element("button", "cm-championship-action", label);
-        button.type = "button";
-        button.dataset.verdict = verdict;
-        button.addEventListener("click", () => {
-          const recorded = intents.record?.(verdict === "WON");
-          say(recorded?.ok ? null : uiText("這一輪無法記錄。"));
-          render();
-        });
-        actions.append(button);
-      }
+      const fight = element("button", "cm-championship-action cm-championship-action--primary",
+        uiText(`開始第 ${run.round + 1} 戰`));
+      fight.type = "button";
+      fight.dataset.round = String(run.round);
+      fight.addEventListener("click", () => {
+        const entered = intents.enterRound?.();
+        if (!entered?.ok) { say(uiText("目前無法開始這一輪。")); render(); }
+      });
+      actions.append(fight);
       panel.append(actions);
     } else {
       const settle = element("button", "cm-championship-action cm-championship-action--primary",

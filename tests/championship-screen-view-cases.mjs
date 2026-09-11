@@ -57,7 +57,7 @@ function harness(t, { categories = CATEGORIES, run = null } = {}) {
       intents: {
         open(category) { calls.push(["open", category]); return { ok: true }; },
         draw() { calls.push(["draw"]); return { ok: true, opponent: { index: 2, poolSize: 6 } }; },
-        record(won) { calls.push(["record", won]); return { ok: true }; },
+        enterRound() { calls.push(["enterRound"]); return { ok: true }; },
         settle() { calls.push(["settle"]); return { ok: true, payable: true, prize: 50000 }; },
         leave() { calls.push(["leave"]); }
       }
@@ -71,7 +71,8 @@ test("the board names the original scenes it follows", (t) => {
   assert.deepEqual([...CHAMPIONSHIP_SCREEN_SOURCE_SCENES], [
     "ui/conference_list_item.nxr",
     "battle_menu/titlematch_top_sub_scene.nxr",
-    "training/schedule_item.nxr"
+    "training/schedule_item.nxr",
+    "ui/battle_title_champion_main.nxr"
   ]);
   assert.equal(root.dataset.sourceScenes, CHAMPIONSHIP_SCREEN_SOURCE_SCENES.join(" "));
 });
@@ -101,17 +102,17 @@ test("a running tournament shows one mark per round and draws that round's oppon
   assert.equal(byClass(root, "cm-championship-entry").length, 0);
   assert.deepEqual(byClass(root, "cm-championship-round").map((n) => n.dataset.state),
     ["WON", "NOW", "PENDING"]);
-  assert.match(byClass(root, "cm-championship-run__title")[0].textContent, /第 2 輪 \/ 共 3 輪/);
+  // battle_title_champion_main banners a round as "予選第N戦", not as a counter.
+  assert.match(byClass(root, "cm-championship-run__title")[0].textContent, /冠軍大會 預賽第 2 戰 \/ 共 3 戰/);
   assert.deepEqual(calls[0], ["draw"]);
   assert.match(byClass(root, "cm-championship-opponent")[0].textContent, /第 3 隊 \/ 共 6 隊/);
 
-  // Recording redraws, which draws the next round's opponent, so the record is
-  // asserted by what was sent rather than by what was sent last.
-  const [win, lose] = byClass(root, "cm-championship-action");
-  win.click();
-  assert.deepEqual(calls.filter((call) => call[0] === "record"), [["record", true]]);
-  lose.click();
-  assert.deepEqual(calls.filter((call) => call[0] === "record"), [["record", true], ["record", false]]);
+  // The board starts the round as a battle; it never judges one itself.
+  const [fight] = byClass(root, "cm-championship-action");
+  assert.match(fight.textContent, /開始第 2 戰/);
+  fight.click();
+  assert.deepEqual(calls.filter((call) => call[0] === "enterRound"), [["enterRound"]]);
+  assert.equal(calls.some((call) => call[0] === "record"), false);
 });
 
 test("a finished run offers the prize it is owed, and a lost one offers only an exit", (t) => {

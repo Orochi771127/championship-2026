@@ -437,6 +437,21 @@ export function createBattleRuntime(options = {}) {
       return scheduleEvidence;
     },
 
+    /**
+     * A tournament round names its opponent from the run's own pool rather than
+     * from a title record, so it hands the team index straight in. startMatch
+     * reads the same field either way, and a round carries no fee or payout of
+     * its own: the prize belongs to the run.
+     */
+    chooseChampionshipRound({ category, teamIndex } = {}) {
+      if (source) throw runtimeError("MATCH_ALREADY_STARTED");
+      if (!Number.isSafeInteger(category) || category < 0) throw runtimeError("CHAMPIONSHIP_CATEGORY_REQUIRED");
+      if (!Number.isSafeInteger(teamIndex) || teamIndex < 0) throw runtimeError("CHAMPIONSHIP_TEAM_REQUIRED");
+      chosen = deepFreeze({ recordIndex: category, payout: 0, entryFee: 0,
+        championship: true, record: { field08: teamIndex } });
+      return chosen;
+    },
+
     chooseMatch(recordIndex) {
       if (source) throw runtimeError("MATCH_ALREADY_STARTED");
       const match = listMatches().find((entry) => entry.recordIndex === recordIndex);

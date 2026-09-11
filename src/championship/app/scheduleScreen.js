@@ -62,7 +62,7 @@ function element(tag, className, text) {
  * @param {number} [options.dayOfSeason]  the current day, to mark today
  * @param {() => void} [options.onExit]
  */
-export function createScheduleView({ root, calendar = null, season = calendar?.season ?? null,
+export function createScheduleView({ root, bits = null, calendar = null, season = calendar?.season ?? null,
   dayOfSeason = calendar?.dayOfSeason ?? null, eligibleRecordIndices = [], progress=null,
   onToggleRegistration,onToggleChampionship,onExit } = {}) {
   if (!root) throw new TypeError("The schedule requires a root element");
@@ -117,14 +117,24 @@ export function createScheduleView({ root, calendar = null, season = calendar?.s
       element("dt", null, "RECORD"),
       element("dd", null, String(selected.recordIndex))
     );
+    // battle_menu/titlematch_top_sub_scene.nxr lays pay_1..pay_7 against
+    // have_1..have_7 and turns on pay_red when the fee cannot be met, so the
+    // fee is never shown without what the player actually holds beside it.
+    const fee = matchEntryFee(selected.recordIndex);
+    const short = Number.isInteger(bits) && bits < fee;
+    const feeValue = element("dd", null, `${fee} 位元幣`);
+    if (short) feeValue.dataset.short = "true";
     facts.append(
       element("dt", null, "TAMER RANK"),
       element("dd", null, String(selected.unlockThreshold * 2)),
       element("dt", null, "ENTRY FEE"),
-      element("dd", null, `${matchEntryFee(selected.recordIndex)} 位元幣`),
+      feeValue,
+      element("dt", null, "HELD"),
+      element("dd", null, Number.isInteger(bits) ? `${bits} 位元幣` : "—"),
       element("dt", null, "PRIZE"),
       element("dd", null, `${matchPayout(selected.recordIndex)} 位元幣`)
     );
+    if (short) facts.append(element("dt", null, ""), element("p", "cm-schedule-short", "持有金額不足以支付入場費。"));
     detail.append(facts);
 
     if(progress){

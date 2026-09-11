@@ -75,8 +75,10 @@ const FORWARD_TRANSITIONS = deepFreeze({
   // stops itself on a wipe or on the clock passing 7200, so nothing forward of
   // BATTLE_FIELD is reachable by choice.
   BATTLE_SELECT: ["BATTLE_FIELD", "CHAMPIONSHIP"],
-  // A run's rounds are not fought from here yet, so the only way out is back.
-  CHAMPIONSHIP: [],
+  // A round is fought from the board, and leaving the judged round unwinds the
+  // way every other match does; the application walks back to the board while a
+  // run is still owed a round, which is not re-entering the round.
+  CHAMPIONSHIP: ["BATTLE_FIELD"],
   BATTLE_FIELD: ["BATTLE_RESULT"],
   BATTLE_RESULT: []
 });

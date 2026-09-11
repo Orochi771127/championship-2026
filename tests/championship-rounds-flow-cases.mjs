@@ -161,3 +161,52 @@ test("the World tournament runs its own five rounds off its own stage", async ()
   assert.equal(settled.prize, 300000);
   assert.equal(settled.championship.stage, 3);
 });
+
+test("a round is fought as an ordinary battle attempt, and its verdict writes the flag", async () => {
+  const app = await appAtStage(memoryStorage(), { stage: 1 });
+  const wallet = app.getShopFrame().bits;
+  app.openBattle(); app.openChampionship();
+  app.beginChampionship(0);
+
+  const entered = app.enterChampionshipRound({ attemptId: "battle:1" });
+  assert.equal(entered.ok, true);
+  assert.equal(entered.round, 0);
+  assert.equal(entered.opponent.poolSize, NATIVE_CHAMPIONSHIP_CATEGORIES[0].poolSizes[0]);
+  // The descriptor carries no entry fee, so entering a round costs nothing.
+  assert.equal(app.getShopFrame().bits, wallet);
+  assert.equal(app.getScreen(), "BATTLE_FIELD");
+  // The run does not advance until the battle says so.
+  assert.deepEqual([...app.getChampionshipRun().flags], []);
+  assert.equal(app.enterChampionshipRound({ attemptId: "battle:2" }).reason, "BATTLE_ATTEMPT_ACTIVE");
+
+  const finished = app.finishMatch({ attemptId: "battle:1", ended: true, mode: 0, battleType: 0,
+    matchIndex: 0, outcomeEntries: [1] });
+  assert.equal(finished.ok, true);
+  assert.deepEqual([...app.getChampionshipRun().flags], [1]);
+  assert.equal(app.getChampionshipRun().round, 1);
+  // A round pays nothing on its own; the prize is the run's.
+  assert.equal(app.getShopFrame().bits, wallet);
+  // And it is not a title on its own either.
+  assert.equal(app.getTitleProgress().championship.stage, 1);
+});
+
+test("losing a fought round ends the run and refuses another", async () => {
+  const app = await appAtStage(memoryStorage(), { stage: 1 });
+  app.openBattle(); app.openChampionship();
+  app.beginChampionship(0);
+  app.enterChampionshipRound({ attemptId: "battle:1" });
+  app.finishMatch({ attemptId: "battle:1", ended: true, mode: 0, battleType: 0,
+    matchIndex: 0, outcomeEntries: [0] });
+  const run = app.getChampionshipRun();
+  assert.deepEqual([...run.flags], [0]);
+  assert.equal(run.continues, false);
+  app.exitBattle();
+  assert.equal(app.enterChampionshipRound({ attemptId: "battle:2" }).reason, "CHAMPIONSHIP_ALREADY_ENDED");
+  assert.equal(app.settleChampionship().payable, false);
+});
+
+test("a tournament without a run refuses to start a round", async () => {
+  const app = await appAtStage(memoryStorage(), { stage: 1 });
+  app.openBattle(); app.openChampionship();
+  assert.equal(app.enterChampionshipRound({ attemptId: "battle:1" }).reason, "NO_CHAMPIONSHIP_RUNNING");
+});
