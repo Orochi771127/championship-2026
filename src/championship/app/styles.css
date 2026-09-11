@@ -13,6 +13,16 @@
   --cm-accent: #7fd2f5;
   --cm-water: 127, 210, 245;
   --cm-rest: 150, 205, 158;
+  /* Shared chrome tokens. The original reuses one frame across screens
+     (desktop_top/desktop_under are byte-identical in five screen groups, and
+     it ships common_bg_top/common_bg_bottom), so these five are defined once
+     here and referenced by the vs2- and rh2- sets rather than restated.
+     Values are unchanged: both sets already held these exact bytes. */
+  --cm-gold: #d2ad5d;
+  --cm-gold-bright: #f0d58c;
+  --cm-cyan: #65b8c3;
+  --cm-display: #06141e;
+  --cm-ui-font: Bahnschrift, "Arial Narrow", "Roboto Condensed", Arial, sans-serif;
   --cm-screen-top: 0px;
   --cm-screen-bottom: 0px;
   --cm-screen-height: calc(100dvh - var(--cm-screen-top) - var(--cm-screen-bottom));

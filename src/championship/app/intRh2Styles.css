@@ -3,17 +3,17 @@
 :root {
   --rh2-ink: #e9f2f4;
   --rh2-muted: #9eafb5;
-  --rh2-gold: #d2ad5d;
-  --rh2-gold-bright: #f0d58c;
-  --rh2-cyan: #65b8c3;
+  --rh2-gold: var(--cm-gold);
+  --rh2-gold-bright: var(--cm-gold-bright);
+  --rh2-cyan: var(--cm-cyan);
   --rh2-shell: #27343c;
   --rh2-shell-dark: #121c22;
-  --rh2-display: #06141e;
+  --rh2-display: var(--cm-display);
   --rh2-panel: rgba(9, 25, 35, 0.96);
   --rh2-line: rgba(217, 185, 105, 0.34);
   --rh2-safe-top: max(10px, env(safe-area-inset-top));
   --rh2-safe-bottom: max(8px, env(safe-area-inset-bottom));
-  --rh2-font: Bahnschrift, "Arial Narrow", "Roboto Condensed", Arial, sans-serif;
+  --rh2-font: var(--cm-ui-font);
 }
 
 .int-rh2-root,
