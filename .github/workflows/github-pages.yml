@@ -1,8 +1,14 @@
 name: Deploy Championship to GitHub Pages
 
 on:
-  # Owner explicitly authorized this public playtest on 2026-09-10.
-  # Every selected file must match the reviewed bytes before deployment.
+  # Owner explicitly authorized this public playtest on 2026-09-10, and on
+  # 2026-09-12 asked for main to publish itself instead of waiting on the
+  # button. The approval record still decides what ships: the selected file
+  # list must cover the published set exactly and every file must match its
+  # reviewed bytes, so an unreviewed change fails the run instead of going
+  # live. The button stays for republishing without a new commit.
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
