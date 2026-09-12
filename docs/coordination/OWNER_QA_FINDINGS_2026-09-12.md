@@ -93,7 +93,7 @@ equivalent. The state change to `ON_CARD` happens with no animation.
 
 ---
 
-## 4. The hunt result does not show what was caught — CONFIRMED
+## 4. The hunt result does not show what was caught — FIXED
 
 *"原作結束狩獵會看得到抓到的數碼獸的外觀"*
 
@@ -103,6 +103,38 @@ sprite or canvas element in that view at all.
 
 The original's hunt screen keeps the caught creature's sprite in a panel — it
 is visible in the Owner's emulator photograph, top left.
+
+**Fixed.** The screen now draws the catch from `hudArt.getPortrait()` — the
+same registered bank the Raising home and the battle result already use, so
+this is one art language rather than a second source for the same creature.
+`main.js` loads it on demand exactly as `mountBattleResult` does, and a bank
+that fails to load leaves the portrait hidden rather than taking down the
+screen where the catch is named and saved.
+
+Framed as a slot in the skin's language, and drawn at twice the bank's native
+scale: at native scale on a phone it reads as an icon rather than as the answer
+to "what did I catch".
+
+**Verified on screen.** `tests/fixtures/championship-hunt-result-review.html`
+now renders it — 種子獸 in its frame above the name field.
+
+Two things had to be repaired to get there:
+
+- **The fixture was already broken at HEAD**, before this change. A fresh tamer
+  holds 0 bits and the first gate reads `GATE_LOCKED` at rank 3, so
+  `confirmGate()` never left `GATE_SELECT` and `beginHunt()` produced no
+  runtime. It now applies the same `applyQaUnlock` grant `?qa=unlock` uses —
+  admission still runs and still decides, only the prerequisites are supplied —
+  and throws with the admission reason if it still cannot enter, so the next
+  rule change fails loudly instead of silently.
+- The fixture also loaded only `vs2Styles.css`. It now loads all ten
+  stylesheets in the shipped order, so what it shows is what ships.
+
+While verifying, the "GIVEN NAME" label was found sitting on `--vs2-muted`, a
+tone chosen for the old pale panel and barely legible on the skin's blue mesh.
+Fixed alongside. That is finding 1's family reached from the other direction:
+not an overridden state, but a colour only ever readable against the surface it
+was written for. Worth sweeping for more.
 
 ---
 

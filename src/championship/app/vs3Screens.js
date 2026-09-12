@@ -29,7 +29,14 @@ function presentationMode() {
   }
 }
 
-export function createHuntResultView({ root, source }) {
+/**
+ * Owner QA, 2026-09-12: "原作結束狩獵會看得到抓到的數碼獸的外觀". This screen
+ * showed the species name and nothing else, so you could not see what you had
+ * caught. `hudArt` is the same registered portrait bank the Raising home and
+ * the battle result already draw from, which keeps one art language rather
+ * than introducing a second source for the same creature.
+ */
+export function createHuntResultView({ root, source, hudArt = null }) {
   const frame = source.getFrame();
   const block = frame.huntResult;
   if (!block) throw new Error("CHAMPIONSHIP_HUNT_RESULT_NOT_ACTIVE");
@@ -53,7 +60,34 @@ export function createHuntResultView({ root, source }) {
   header.append(copy);
 
   const body = element("div", "cm-vs2-result__body");
+  const portrait = document.createElement("img");
+  portrait.className = "cm-vs2-result__portrait";
+  portrait.alt = "";
+  portrait.decoding = "async";
+  // The name carries the identity for a reader; the portrait is decoration
+  // beside it, so it stays out of the accessibility tree rather than repeating
+  // the species that is already announced below it.
+  portrait.setAttribute("aria-hidden", "true");
   const species = element("p", "cm-vs2-result__species", speciesNameForId(block.speciesId, block.speciesLabel || block.displayName));
+
+  // The Raising home draws this bank at its native scale beside a stat block,
+  // where it is an identifier. Here it is the answer to "what did I catch",
+  // and at native scale on a phone it reads as an icon rather than a reveal.
+  // Doubling keeps the same art and the same pixel grid.
+  const PORTRAIT_DISPLAY_SCALE = 2;
+
+  // A missing or unregistered portrait hides the image rather than leaving a
+  // broken one: the screen still has to name and rename the catch.
+  function paintPortrait(speciesId) {
+    const image = hudArt?.getPortrait(speciesId) ?? null;
+    portrait.hidden = !image;
+    if (!image) return;
+    if (portrait.getAttribute("src") !== image.src) portrait.src = image.src;
+    const scale = image.nativeScale * PORTRAIT_DISPLAY_SCALE;
+    portrait.style.width = `${image.width * scale}px`;
+    portrait.style.height = `${image.height * scale}px`;
+  }
+  paintPortrait(block.speciesId);
   const nameField = element("label", "cm-vs2-result__name");
   nameField.append(element("span", "cm-vs2-result__name-label", "GIVEN NAME"));
   const nameInput = document.createElement("input");
@@ -68,6 +102,7 @@ export function createHuntResultView({ root, source }) {
   nameInput.spellcheck = false;
   nameField.append(nameInput);
   body.append(
+    portrait,
     species,
     nameField,
     element("p", "cm-vs2-result__note", "Name them, then return home. They will be waiting in the habitat.")
@@ -116,6 +151,7 @@ export function createHuntResultView({ root, source }) {
     copy.querySelector(".cm-vs2-title").textContent = uiText(next.title);
     copy.querySelector(".cm-vs2-subtitle").textContent = uiText(next.outcomeLabel);
     species.textContent = speciesNameForId(next.speciesId, next.speciesLabel || next.displayName);
+    paintPortrait(next.speciesId);
     nameField.hidden = !next.speciesId;
     if (document.activeElement !== nameInput) nameInput.value = next.displayName ?? "";
     presentedName = next.displayName ?? "";

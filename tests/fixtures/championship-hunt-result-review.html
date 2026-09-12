@@ -1,7 +1,16 @@
 <!doctype html>
 <html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hunt result research fixture</title>
+<link rel="stylesheet" href="../../src/championship/app/styles.css">
+<link rel="stylesheet" href="../../src/championship/app/intRh2Styles.css">
 <link rel="stylesheet" href="../../src/championship/app/vs2Styles.css">
+<link rel="stylesheet" href="../../src/championship/app/vs5Styles.css">
+<link rel="stylesheet" href="../../src/championship/app/raisingHomeHud.css">
+<link rel="stylesheet" href="../../src/championship/app/huntMobile.css">
+<link rel="stylesheet" href="../../src/championship/app/facilityBattleMobile.css">
+<link rel="stylesheet" href="../../src/championship/app/opening.css">
+<link rel="stylesheet" href="../../src/championship/app/trainingLabels.css">
+<link rel="stylesheet" href="../../src/championship/app/nativeUiSkin.css">
 <style>body{margin:0;background:#06141e;color:white;font-family:Arial}#fixture{position:fixed;z-index:20;bottom:0;left:0;background:#172d38;width:100%;padding:5px;font-size:12px}#fixture button{min-height:44px}#app.cm-vs2-root{bottom:78px}#outcome{white-space:pre-wrap}</style>
 <main id="app"></main>
 <aside id="fixture">RESEARCH FIXTURE — live encounter record, bounded soft-pull replay; no normal-entry capture claim.<br>
@@ -15,6 +24,8 @@ import { allocateRaisingInstanceIdentity } from '../../src/championship/raising/
 import { CHAMPIONSHIP_MODERN_SAVE_KEY } from '../../src/championship/app/championshipStandaloneSave.js';
 import { listChampionshipGates } from '../../src/championship/gate/gateCatalog.js';
 import { liveCaptureReplay } from './championship-live-capture-replay.mjs';
+import { loadRegisteredCharacterHudArt } from '../../src/championship/presentation/characterHudArt.js';
+import { applyQaUnlock } from '../../src/championship/app/qaUnlock.js';
 const read = async path => (await fetch(path)).json();
 const [catalog, presentation, encounter, touch] = await Promise.all([
  read('../../src/data/championship/catalogs/creature-species.r1.json'),
@@ -36,7 +47,14 @@ while(app.getRaisingInstances().length<16){
  enclosedAt:'2026-09-05T00:00:00.000Z',originGateId:app.getGates()[0].gateId,cageId:Object.values(saved.raising.assignments)[0]});
  storage.setItem(CHAMPIONSHIP_MODERN_SAVE_KEY,JSON.stringify(saved));await app.continueGame();
 }
+// A fresh tamer holds 0 bits and the first gate reads GATE_LOCKED at rank 3,
+// so confirmGate never leaves GATE_SELECT and this fixture had stopped
+// reaching its own screen. Grant rank and money through the application's own
+// seams -- the same ones ?qa=unlock uses -- rather than loosening a gate rule.
+// Admission still runs and still decides; only the prerequisites are supplied.
+applyQaUnlock(app, listChampionshipGates());
 app.openGate();app.selectGate(app.getGates()[0].gateId);app.confirmGate();await app.beginHunt();
+if(!app.getHuntRuntime())throw new Error(`fixture could not enter the gate: ${JSON.stringify(app.getGateAdmission(app.getGates()[0].gateId))}`);
 const runtime=app.getHuntRuntime(),id=runtime.getWildCreatures()[7].wildId;
 runtime.attachNativeRope(id);
 while(runtime.getCaptureRecord(id).currentHp>0) runtime.tickNativeRope(id,{dxQ12:60*4096,dyQ12:0});
@@ -45,7 +63,18 @@ runtime.collectNativeHand(id);
 for(let i=0;i<94;i++)runtime.tickNativeCapturePhases(id);
 app.exitHunt();app.confirmHuntResult();
 const source=createGateHuntPresentationSource(app),root=document.querySelector('#app');
-const view=createHuntResultView({root,source});
+// The shipped screen loads the registered portrait bank so the catch is
+// visible, not only named. Resolve it against the repository root, because
+// this fixture is two directories down from where the app runs.
+const repoRoot=new URL('../../',location.href).href;
+const registered=await loadRegisteredCharacterHudArt({baseUrl:repoRoot}).catch(()=>null);
+// Portrait paths in the manifest are relative to the application, which is
+// served from the repository root. This fixture is two directories down, so an
+// <img> would resolve them against tests/fixtures/ and miss. Absolute-ise them
+// here; the shipped screen needs no such adjustment.
+const hudArt=registered&&{...registered,getPortrait(id){const p=registered.getPortrait(id);
+ return p&&{...p,src:new URL(p.src,repoRoot).href};}};
+const view=createHuntResultView({root,source,hudArt});
 source.subscribe(frame=>{
  if(frame.screen==='HUNT_RESULT')view.render(frame);
  else {view.dispose();root.textContent='Returned Home';showOutcome();}

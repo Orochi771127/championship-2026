@@ -694,6 +694,15 @@ async function mountBattleField() {
   return view;
 }
 
+async function mountHuntResult() {
+  // The hunt result named the catch but never showed it. Load the same
+  // registered portrait bank the battle result and the Raising home use, on
+  // demand and the same way: a bank that fails to load must not take the
+  // screen down with it, because this is where the catch is named and saved.
+  const hudArt = await loadRegisteredCharacterHudArt({ baseUrl: location.href }).catch(() => null);
+  return createHuntResultView({ root, source: expeditionSource, hudArt });
+}
+
 async function mountBattleResult() {
   // The result consumes the app's actual receipt, including loss and clamping.
   const chosen = battleRuntime.getChosenMatch?.() ?? null;
@@ -811,7 +820,7 @@ async function mountCurrentScreen() {
     else if (target === CHAMPIONSHIP_SCREENS.GATE_SELECT) view = await mountGateSelect();
     else if (target === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT) view = createHuntLoadoutView({ root, source: expeditionSource });
     else if (target === CHAMPIONSHIP_SCREENS.HUNT_FIELD) view = await mountHuntField();
-    else if (target === CHAMPIONSHIP_SCREENS.HUNT_RESULT) view = createHuntResultView({ root, source: expeditionSource });
+    else if (target === CHAMPIONSHIP_SCREENS.HUNT_RESULT) view = await mountHuntResult();
     else if (target === CHAMPIONSHIP_SCREENS.BATTLE_SELECT) view = await mountBattleSelect();
     else if (target === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) view = await mountBattleField();
     else if (target === CHAMPIONSHIP_SCREENS.BATTLE_RESULT) view = await mountBattleResult();
