@@ -62,47 +62,51 @@ overrides remain open; do not remove their specificity or structural files by
 coverage count. See [handoff](coordination/CODEX_NOTE_2026-09-12_UI_THEME_UNIFICATION.md)
 and [dimension/ownership guide](art/production/ui/UI_STYLE_OWNERSHIP_2026-09-12.md).
 
-### 2026-09-13 capture VFX has no reachable trigger
+### 2026-09-13 you enter a hunt with nothing equipped
 
-**OPEN.** The capture-to-memory-card effect added on 2026-09-12 is correct code
-against the right clock, and its publisher is unit-tested — but nothing in the
-shipped game can put an actor into the state it hangs off, so no player can see
-it yet.
+**OPEN — corrected entry.** An earlier version of this section claimed the
+capture VFX "has no reachable trigger". **That was wrong, and it was my error.**
+The capture chain is wired end to end: the field's pointer adapter calls
+`intents.toolPointerDown/Move/Up`, which reach `huntRuntime.toolPointer*` and
+then `nativeHuntFieldControls.pointerDown/Move/Up`. Player touch does reach the
+rope. I traced the effect backwards from its draw site, found the dead legacy
+`endEnclosureStroke` path, and stopped before checking the live one.
 
-The chain, each link checked:
+The real finding is smaller and more useful.
 
-- The effect draws only for `cardState === "HAND_ANIMATION"`
-  (`createHuntFieldPixiPresentation` reads `view.tools.captureEffects`, which
-  `nativeHuntFieldControls` publishes for exactly that state).
-- That state is set only by `enterNativeWildState(a, 12)`, reached from AI
-  state 11 — the knocked-down state the field's own hint names,
-  「目標倒地後輕觸抓取」.
-- Nothing drives an actor there. `endEnclosureStroke` returns
-  `outcome: TOOL_TRACE_REQUIRED`, `successAuthority: UNKNOWN_REQUIRES_TRACE`,
-  and that string occurs exactly once in `src/` — at its own production site.
-  Nothing consumes it, so completing the circle grants no capture.
-- `attachNativeRope` / `collectNativeHand` read `captureFlows`, populated only
-  when a `huntCaptureReplay` is injected, i.e. by fixtures. That path never
-  runs `nativeHuntFieldControls`, so it publishes no `captureEffects` at all.
-  **The two paths are mutually exclusive.**
-- No test drives the state through the AI; the one test using `HAND_ANIMATION`
-  assigns it directly.
+**Every loadout slot starts `itemId: null`.** A new tamer owns 基礎捕捉繩 α
+(durability 6) but it is `selected: false`, and `beginHunt` deliberately permits
+entry with nothing equipped — "Entry is gated on the loadout being internally
+consistent, not on anything being equipped: no original rule requires a full
+loadout."
 
-Observed both ways in `tests/fixtures/championship-capture-vfx-review.html`,
-which mounts the real Hunt field: with the recorded replay the capture completes
-(hp reaches 0) and `captureEffects` is ABSENT; on the native path
-`captureEffects` is published and always empty. In the live build only HAND and
-ROPE are bound, with the shot and bait among the eight `RAW_SLOT` placeholders,
-and neither a rope stroke nor a tap engages a creature.
+So pressing 開始狩獵 without equipping anything gives a field that publishes:
 
-This is not a defect in the effect. It is the already-open Hunt capture trace
-surfacing: the effect will light up unchanged once the capture rule is traced
-and implemented. Recorded so nobody re-verifies the VFX and concludes it is
-broken.
+```
+[{"id":"HAND","label":"手","enabled":true},{"id":"ROPE","label":"繩索","enabled":false}]
+```
 
-The infirmary heal effect is **not** in this position: three cages carry
-`RECOVER_HP_STRESS` (definitions 15, 18, 28) and HP recovery is an existing
-traced writer, so its trigger is reachable in ordinary play. It has still not
-been seen on screen — no fixture mounts the Raising field — so it remains
-visually unverified rather than unreachable.
+The rope button is disabled, only the hand remains, nothing can be worn down,
+and **nothing can be caught** — with no warning at any point. Equipping the rope
+first flips `ROPE` to `enabled: true`; both states verified against the real
+loadout runtime.
 
+Entering empty-handed is deliberate and matches the original, so this is not a
+defect. It is a trap: the loadout screen lists the items beside the 開始狩獵
+button, and a player who does not realise the list is *selectable* walks into a
+hunt that cannot succeed. Whether to warn, preselect, or leave it is an Owner
+decision about fidelity versus kindness.
+
+**The capture VFX therefore remains visually unverified, not unreachable.** With
+the rope equipped I still could not complete a capture from automation: binding
+needs a stroke the recognizer accepts, and synthetic world-coordinate circles
+did not satisfy it. That is a harness limit. A human with the rope equipped
+should be able to reach it, and that is the cheapest way to see the effect.
+
+`tests/fixtures/championship-capture-vfx-review.html` mounts the real Hunt
+field — the first fixture to do so — and now equips the rope.
+
+The infirmary heal effect is unaffected: three cages carry `RECOVER_HP_STRESS`
+(definitions 15, 18, 28) and HP recovery is an existing traced writer, so its
+trigger is reachable in ordinary play. Still unseen, as no fixture mounts the
+Raising field.

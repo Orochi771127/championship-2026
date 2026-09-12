@@ -29,39 +29,26 @@
 </aside>
 <script type="module">
 /*
- * What this fixture is for, and what it proved.
+ * Mounts the REAL Hunt field presentation the way main.js does — the first
+ * fixture to do so.
  *
- * It mounts the REAL Hunt field presentation, the way main.js does — the first
- * fixture to do so. That part works: the field renders and the published view
- * is live.
+ * CORRECTION, 2026-09-13. An earlier version of this comment claimed the
+ * capture VFX had no reachable trigger. That was wrong. The chain is wired:
+ * the field pointer adapter calls intents.toolPointerDown/Move/Up, which reach
+ * huntRuntime.toolPointer* and then nativeHuntFieldControls. Touch does reach
+ * the rope. The mistake was tracing the effect backwards from its draw site,
+ * finding the dead legacy endEnclosureStroke path (which returns
+ * TOOL_TRACE_REQUIRED and is consumed by nothing), and stopping there.
  *
- * It does NOT show the capture-to-memory-card VFX, and cannot, because that
- * effect has no reachable trigger in the shipped game:
+ * What is true: every loadout slot starts itemId null, and entry is
+ * deliberately allowed with nothing equipped, so pressing 開始狩獵 without
+ * equipping publishes ROPE enabled:false and leaves only the hand — nothing can
+ * be worn down and nothing caught. This fixture now equips the rope first.
  *
- *   - The effect draws only for an actor whose cardState is HAND_ANIMATION
- *     (createHuntFieldPixiPresentation reads view.tools.captureEffects, which
- *     nativeHuntFieldControls publishes for exactly that state).
- *   - HAND_ANIMATION is set only by enterNativeWildState(a, 12), reached from
- *     AI state 11 — the knocked-down state the field's own hint describes as
- *     "目標倒地後輕觸抓取".
- *   - Nothing drives an actor there. endEnclosureStroke returns
- *     outcome TOOL_TRACE_REQUIRED / successAuthority UNKNOWN_REQUIRES_TRACE,
- *     and that string appears exactly once in src — where it is produced.
- *     Nothing consumes it, so a completed circle grants no capture.
- *   - attachNativeRope / collectNativeHand read `captureFlows`, which is
- *     populated only when a huntCaptureReplay is injected, i.e. by fixtures.
- *     That path does not run nativeHuntFieldControls, so it publishes no
- *     captureEffects at all — the two paths are mutually exclusive.
- *   - No test drives the state through the AI either; the single test that
- *     uses HAND_ANIMATION assigns it directly.
- *
- * Run it with the recorded replay and the capture completes (hp reaches 0) but
- * captureEffects is ABSENT. Run it on the native path and captureEffects is
- * published but always empty. Both were observed, 2026-09-13.
- *
- * So the effect is correct code hanging off a state the game cannot currently
- * enter. It should light up unchanged once the capture rule is traced, which
- * the debt register already carries as open Hunt work.
+ * Even so, a capture is not completed here: binding needs a stroke the
+ * recognizer accepts, and synthetic world-coordinate circles do not satisfy it.
+ * That is this harness's limit, not the game's. The effect is unverified
+ * visually, not unreachable.
  */
 import { createChampionshipStandaloneApp } from '../../src/championship/app/championshipStandaloneApp.js';
 import { createGateHuntPresentationSource } from '../../src/championship/app/gateHuntPresentationSource.js';
@@ -84,14 +71,21 @@ const [catalog, presentation, encounter, touch] = await Promise.all([
   read('../../docs/research/HUNT_NATIVE_TOUCH_REPLAY_2026-09-05.json')]);
 const values = new Map();
 const storage = { getItem: k => values.get(k) ?? null, setItem: (k, v) => values.set(k, v), removeItem: k => values.delete(k) };
-const app = createChampionshipStandaloneApp({ storage, catalog, cages: presentation.cages,
-  huntCaptureReplay: liveCaptureReplay(encounter, touch, listChampionshipGates()[0].gateId) });
+const app = createChampionshipStandaloneApp({ storage, catalog, cages: presentation.cages });
 await app.newGame();
 
 // A fresh tamer holds 0 bits and the first gate reads GATE_LOCKED, so supply the
 // prerequisites through the application's own seams. Admission still decides.
 applyQaUnlock(app, listChampionshipGates());
 app.openGate(); app.selectGate(app.getGates()[0].gateId); app.confirmGate();
+// EQUIP THE ROPE. Owning it is not enough: every loadout slot starts
+// itemId null, and entry is deliberately allowed with nothing equipped, so
+// walking straight past the loadout screen gives a field with the rope button
+// disabled and only the hand available -- nothing can be worn down, and
+// nothing can be caught.
+const loadout = app.getHuntLoadout();
+const ropeItem = loadout.listAvailableEquipment().find(x => x.equipmentClass === 'ROPE')?.items?.[0];
+if (ropeItem) loadout.selectEquipment('ROPE', ropeItem.itemId);
 await app.beginHunt();
 const runtime = app.getHuntRuntime();
 if (!runtime) throw new Error(`fixture could not enter: ${JSON.stringify(app.getGateAdmission(app.getGates()[0].gateId))}`);
@@ -129,26 +123,36 @@ function report(note) {
 
 document.querySelector('#run').onclick = async () => {
   const wilds = runtime.getWildCreatures();
-  // The replay's seventh actor is the one its recorded stroke reaches.
-  target = (wilds[7] ?? wilds[0])?.wildId;
+  target = wilds[0]?.wildId;
   if (!target) { report('no wild creature'); return; }
-  runtime.attachNativeRope(target);
-  let guard = 0;
-  while (runtime.getCaptureRecord(target).currentHp > 0 && guard++ < 4000) {
-    runtime.tickNativeRope(target, { dxQ12: 60 * 4096, dyQ12: 0 });
+  const wild = wilds[0];
+  // The tool must be chosen first. The rope is what wears a creature down; with
+  // the hand selected a drag is a camera pan, which is why an earlier attempt
+  // through raw mouse events did nothing.
+  const chosen = source.intents.selectHuntTool('ROPE');
+  report(`rope selected=${chosen}`);
+  // World coordinates straight into the published intents, so this exercises
+  // the same chain a touch does without depending on screen geometry.
+  source.intents.toolPointerDown(wild.worldX, wild.worldY);
+  for (let i = 0; i < 240; i++) {
+    const a = (i / 24) * Math.PI * 2;
+    source.intents.toolPointerMove(wild.worldX + Math.cos(a) * 26, wild.worldY + Math.sin(a) * 26);
+    runtime.tick(16);
   }
-  report('worn down');
-  for (let i = 0; i < 16; i++) runtime.tickNativeCapturePhases(target);
-  runtime.collectNativeHand(target);
-  report('hand collected');
-  // Walk the published capture phases a few frames at a time so the flight is
-  // observable rather than jumping straight to arrival.
-  for (const [count, label] of [[8, 'gather'], [24, 'lift'], [12, 'flight'], [18, 'arrival'], [14, 'inserted']]) {
-    for (let i = 0; i < count; i++) runtime.tickNativeCapturePhases(target);
-    report(label);
-    await new Promise(r => setTimeout(r, 420));
+  source.intents.toolPointerUp(wild.worldX, wild.worldY);
+  for (let i = 0; i < 120; i++) runtime.tick(16);
+  report('after rope stroke');
+  await new Promise(r => setTimeout(r, 500));
+  // Pull: hold and drag away, which is what takes stamina off.
+  for (let pull = 0; pull < 40; pull++) {
+    source.intents.toolPointerDown(wild.worldX, wild.worldY);
+    for (let i = 0; i < 20; i++) { source.intents.toolPointerMove(wild.worldX - 70, wild.worldY); runtime.tick(16); }
+    source.intents.toolPointerUp(wild.worldX - 70, wild.worldY);
+    for (let i = 0; i < 20; i++) runtime.tick(16);
+    if (pull % 10 === 0) report(`pull ${pull}`);
+    await new Promise(r => setTimeout(r, 40));
   }
-  report('done');
+  report('pulled');
 };
 document.querySelector('#step').onclick = () => {
   if (!target) return;
