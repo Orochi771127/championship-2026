@@ -41,7 +41,7 @@ paint rule with a filter.
 
 ---
 
-## 2. The wild Digimon's stamina is never shown — CONFIRMED
+## 2. The wild Digimon's stamina is never shown — FIXED
 
 *"狩獵場捕捉也看不到他的耐力減少，可是原作有耐力減少"*
 
@@ -54,8 +54,33 @@ depletes as it is worn down, with a status word above it (`弱っぱれ！`).
 under `?presentation=developer`, where it dumps positions into a dataset
 attribute for tests (`vs2Screens.js:550`).
 
-So this is a missing presentation, not missing simulation. Needs the bar drawn
-above the actor in the skin's language, plus the original's status word.
+So this was a missing presentation, not missing simulation.
+
+**Fixed.** `createHuntFieldPixiPresentation.js` now draws a gauge under each
+creature: dark track, fill green while healthy and red once low. It appears
+once a creature has actually been worn down, or while it is the one being
+worked on — a full gauge over every idle creature is noise, and depletion was
+the thing that could not be seen. The gauge cancels the parent node's facing
+mirror, so it is not drawn backwards when a creature walks left.
+
+The decision and the placement are a pure exported function, `huntStaminaGauge`,
+so the rule is testable without a renderer — 6 cases in
+`championship-hunt-stamina-gauge-cases.mjs`, covering visibility, the fraction,
+the three colour bands, malformed hit points, the geometry, and a check that
+both view producers still publish the fields the gauge reads.
+
+**Not photographed in a live capture, and here is why.** The field currently
+binds only two tools, `HAND` and `ROPE`; the shot and bait carried in from the
+loadout are among the eight `RAW_SLOT_*` placeholders, so there is no way to
+take stamina off a creature yet, and the harness could not get the binding
+stroke recognised. The gauge was therefore exercised through its tests and
+observed to correctly stay hidden for full-health untethered creatures, but the
+filled bar has not been seen on screen. Worth a look during QA: rope a
+creature, and the gauge should appear.
+
+The original also shows a status word above the bar (`弱っぱれ！` in the
+reference photograph). Not built — it needs the original's wording and its
+thresholds, neither of which is established.
 
 ---
 
@@ -157,3 +182,22 @@ machine and video cannot be read directly, so those were worked from the
 Owner's written description alone. **Still photographs are usable and were
 decisive** — the two emulator photographs settled findings 2 and 4 immediately.
 Either install ffmpeg so recordings can be sampled, or prefer stills.
+
+
+---
+
+## 8. The hunt field's placeholder slots collide with the header — NEW
+
+Found while capturing finding 2, not reported by the Owner.
+
+`gateHuntPresentationSource.js:84` states the rule: *"Render RAW_SLOT_0 through
+RAW_SLOT_7 in ROM order as neutral disabled placeholders."* Rendering them is
+deliberate and correct — they are the original's unimplemented field controls.
+
+Their **layout** is not. At 430x880 the eight hexagons overlap each other in a
+cramped row across the top of the field and sit on top of the gate name and the
+remaining-time readout, so `南橋峽谷` and `剩餘 07:50` are both partly covered.
+Capture: `.tmp/hunt-stamina/S3-hunt-field.png`.
+
+"Neutral placeholder" should mean quiet and out of the way. Mine to fix, after
+finding 4.

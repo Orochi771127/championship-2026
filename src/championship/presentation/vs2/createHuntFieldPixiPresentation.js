@@ -30,6 +30,57 @@ const TERRAIN = Object.freeze({
   gold: 0xd2ad5d
 });
 
+// The wild creature's stamina gauge.
+//
+// Owner QA: "狩獵場捕捉也看不到他的耐力減少，可是原作有耐力減少". The original
+// draws a bar with the creature while you wear it down; `currentHp` and `maxHp`
+// were already published to this renderer every frame and simply never drawn.
+//
+// Track dark, fill green while healthy and red once low, so the state reads at
+// the size a creature occupies on a phone. The original's exact palette is not
+// settled -- the reference photograph shows a green remnant on a red track for
+// a weakened target, which this matches, but a second photograph is ambiguous.
+// Treated as authored presentation until the recording confirms it.
+const STAMINA = Object.freeze({
+  width: 22, height: 3, offsetY: 9,
+  track: 0x0d1f18, edge: 0x061119,
+  high: 0x46d62c, mid: 0xffdf46, low: 0xe8402a
+});
+const staminaFill = (fraction) => (fraction > 0.5 ? STAMINA.high : fraction > 0.22 ? STAMINA.mid : STAMINA.low);
+
+/**
+ * Whether a creature's gauge is drawn, and how full. Pure, so the rule is
+ * testable without a renderer -- the drawing below is the only part that needs
+ * Pixi, and a rule that decides what the player can see should not need a
+ * browser to check.
+ *
+ * Drawn once a creature has actually been worn down, or while it is the one
+ * being worked on: a full gauge over every idle creature is noise, and what
+ * the Owner could not see was the depletion.
+ *
+ * @param {{currentHp:number, maxHp:number}} wild a published wild creature
+ * @param {boolean} tethered whether this is the selected creature
+ */
+export function huntStaminaGauge(wild, tethered) {
+  const currentHp = wild?.currentHp, maxHp = wild?.maxHp;
+  if (!Number.isFinite(currentHp) || !Number.isFinite(maxHp) || maxHp <= 0) {
+    return Object.freeze({ visible: false, fraction: 0, color: STAMINA.low });
+  }
+  const fraction = Math.max(0, Math.min(1, currentHp / maxHp));
+  const { width, height, offsetY } = STAMINA;
+  return Object.freeze({
+    visible: currentHp < maxHp || tethered === true,
+    fraction,
+    color: staminaFill(fraction),
+    // Centred on the creature and below its feet, which sit at y 0. Returned
+    // rather than computed at the draw site so the placement is testable: a
+    // gauge behind the sprite or off the actor is the failure that would
+    // otherwise only show up in someone's QA session.
+    x: -width / 2, y: offsetY, width, height,
+    fillWidth: fraction > 0 ? Math.max(1, width * fraction) : 0
+  });
+}
+
 function hash01(x, y, salt = 0) {
   let value = Math.imul(x + 0x9e3779b9, 0x85ebca6b)
     ^ Math.imul(y + 0xc2b2ae35, 0x27d4eb2f)
@@ -255,9 +306,30 @@ export async function mountHuntFieldPixiPresentation({
         node.lastCharacterY = null;
       }
     }
+    // Added last so it sits above the character sprite. The node itself is
+    // mirrored to face the creature's heading, so the gauge cancels that flip
+    // rather than being drawn backwards with it.
+    const stamina = new PIXI.Graphics();
+    stamina.visible = false;
+    node.addChild(stamina);
+    node.stamina = stamina;
     node.body = body;
     node.ring = ring;
     return node;
+  }
+
+  function syncStamina(node, wild, tethered) {
+    const gauge = huntStaminaGauge(wild, tethered);
+    node.stamina.visible = gauge.visible;
+    if (!gauge.visible) return;
+    // Undo the parent's facing mirror so the gauge keeps its own direction.
+    node.stamina.scale.x = node.scale.x < 0 ? -1 : 1;
+    node.stamina.clear()
+      .rect(gauge.x - 1, gauge.y - 1, gauge.width + 2, gauge.height + 2).fill({ color: STAMINA.edge, alpha: 0.85 })
+      .rect(gauge.x, gauge.y, gauge.width, gauge.height).fill(STAMINA.track);
+    if (gauge.fillWidth > 0) {
+      node.stamina.rect(gauge.x, gauge.y, gauge.fillWidth, gauge.height).fill(gauge.color);
+    }
   }
 
   function syncObjects(view) {
@@ -319,6 +391,7 @@ export async function mountHuntFieldPixiPresentation({
       node.ring.clear()
         .ellipse(0, 3, 13, 6)
         .stroke({ color: tethered ? TERRAIN.gold : TERRAIN.cyan, alpha: tethered ? 0.9 : 0.16, width: tethered ? 2 : 1.2 });
+      syncStamina(node, wild, tethered);
     }
   }
 
