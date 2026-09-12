@@ -148,9 +148,28 @@ async function runSaveReload(browser) {
   const selector = '.int-rh2-field-host[data-resident-screen-positions]';
   const residents = p => p.locator(selector).evaluate(n => JSON.parse(n.dataset.residentScreenPositions));
   const point = async p => { const [a] = await residents(p), box = await p.locator(selector).boundingBox(); return { ...a, x: box.x+a.x, y: box.y+a.y }; };
-  const waitState = (p, allowed) => p.waitForFunction(({selector,allowed}) => {
+  const waitState = (p, allowed, timeout = 15000) => p.waitForFunction(({selector,allowed}) => {
     const rows=JSON.parse(document.querySelector(selector)?.dataset.residentScreenPositions||'[]');return allowed.includes(rows[0]?.state);
-  }, {selector,allowed}, {timeout:15000});
+  }, {selector,allowed}, {timeout});
+  // A resident walks. The point sampled a moment ago is often no longer under
+  // the pointer by the time the press lands, and a press that misses the body
+  // simply does nothing -- the hand needs the pointer inside the actor to admit
+  // either command. That is not a product fault and it is not worth asserting
+  // on: it made this gate fail about half of its runs, on both the stroke and
+  // the carry. Press where the resident is now, and try again if the hand did
+  // not take. What is being tested is unchanged: a real hand command still has
+  // to reach the state the caller named.
+  const press = async (p, allowed, afterDown = async () => {}) => {
+    for (let attempt = 0; attempt < 12; attempt += 1) {
+      const a = await point(p);
+      await p.mouse.move(a.x, a.y);
+      await p.mouse.down();
+      await afterDown(a);
+      try { await waitState(p, allowed, 900); return a; }
+      catch { await p.mouse.up(); await p.waitForTimeout(90); }
+    }
+    throw new Error(`the hand never reached ${allowed}`);
+  };
   const commit = async p => { await p.locator('.int-rh2-system-button').first().click();
     await p.waitForFunction(() => document.querySelector('.int-rh2-system-button')?.dataset.phase === 'SAVED'); };
   const saved = p => p.evaluate(() => JSON.parse(localStorage.getItem('championshipModernSave:v1')));
@@ -160,13 +179,14 @@ async function runSaveReload(browser) {
   for(let i=0;i<3;i++){const a=await point(page);await page.mouse.click(a.x,a.y);await page.waitForTimeout(70);}
   await page.waitForFunction(selector => JSON.parse(document.querySelector(selector)?.dataset.residentScreenPositions||'[]')[0]?.speciesIndex>=8,selector,{timeout:15000});
   await waitState(page,[1,2,3,5,17]);
-  let a=await point(page);await page.mouse.move(a.x,a.y);await page.mouse.down();await page.mouse.move(a.x+12,a.y);
-  await waitState(page,[8]);
+  // Pressing and moving at once is a stroke, not a carry: the hand classifies a
+  // press that has already left its origin as command 0x7f.
+  let a=await press(page,[8],async origin=>{await page.mouse.move(origin.x+12,origin.y);});
   for(let i=0;i<4;i++){await page.mouse.move(a.x+(i%2?18:12),a.y);await page.waitForTimeout(50);}
   await page.mouse.up();await waitState(page,[1,2,3,9]);
   await commit(page);const before=ground(await saved(page));
   // Original 0210C4D0: hold within 3 native pixels for four updates, then move.
-  a=await point(page);await page.mouse.move(a.x,a.y);await page.mouse.down();await waitState(page,[6]);
+  a=await press(page,[6]);
   await page.mouse.move(a.x+24,a.y+32,{steps:14});await page.mouse.up();
   await waitState(page,[1,2,3,4,9,11,13,16,17,18]);await commit(page);
   const afterSave=await saved(page),after=ground(afterSave);
