@@ -375,6 +375,42 @@ export function createChampionshipStandaloneApp({
     };
   }
 
+  // listRaisingInstances answers by deep-cloning every source, revalidating each
+  // individual's hundred-odd ROM words twice and freezing the result, and the
+  // raising frame advance asks it for the roster on every frame. Profiled in the
+  // enclosure on a throttled phone that was about a fifth of the main thread
+  // with a single resident, and it grows with the collection.
+  //
+  // Every source here is immutable: a change replaces the object rather than
+  // writing into it, and the results are deep-frozen, so when all five are the
+  // same objects as last time the answer cannot have changed. Any new reference
+  // recomputes, so this sees a change exactly when the old code did -- it only
+  // stops redoing the work on data that did not move.
+  //
+  // Only the frame advance uses this. The public roster readers keep calling
+  // listRaisingInstances directly: they hand the array outward, and callers
+  // there are entitled to a fresh one.
+  //
+  // Every caller gets its own copy. Both frame-advance callers sort the list in
+  // place, which was harmless while each call built a new array and corrupts a
+  // shared one: caching without the copy fails the enclosure carry gate. The
+  // copy is sixteen strings; the work being skipped is the clone and the
+  // revalidation.
+  let instanceListCache = null;
+  function currentInstanceIds() {
+    const sources = instanceSources();
+    const cached = instanceListCache;
+    if (cached
+      && cached.creature === sources.creature
+      && cached.residents === sources.residents
+      && cached.collection === sources.collection
+      && cached.assignments === sources.assignments
+      && cached.interactions === sources.interactions) return cached.entries.slice();
+    const entries = listRaisingInstances(sources).map((entry) => entry.instanceId);
+    instanceListCache = { ...sources, entries };
+    return entries.slice();
+  }
+
   function raisingNativeProfile(instanceId) {
     if(instanceId===creature?.creatureId && raising?.assignments[instanceId]) return creature.nativeProfile ?? null;
     return raising?.collection.find(entry=>entry.instanceId===instanceId)?.nativeProfile ?? null;
@@ -485,7 +521,7 @@ export function createChampionshipStandaloneApp({
 
   function synchronizeNativeRaisingActors({deferActivity=false}={}) {
     if(!raisingGround)return;
-    const ids=listRaisingInstances(instanceSources()).map(e=>e.instanceId),live=new Set(ids);
+    const ids=currentInstanceIds(),live=new Set(ids);
     for(const id of Object.keys(raisingPoolSlots))if(!live.has(id)) {
       const actor=raisingActors.get(id);if(actor)interruptNativeRaisingFeeding(actor,raisingFoods,{next:nextGameplayRandom});
       delete raisingPoolSlots[id];raisingActors.delete(id);
@@ -517,7 +553,7 @@ export function createChampionshipStandaloneApp({
 
   function advanceNativeRaising(frames,before) {
     synchronizeNativeRaisingActors();
-    const ids=listRaisingInstances(instanceSources()).map(entry=>entry.instanceId);
+    const ids=currentInstanceIds();
     let priorMinutes=0,changed=false;
     for(let frame=1;frame<=frames;frame++) {
       advanceRaisingHand();
