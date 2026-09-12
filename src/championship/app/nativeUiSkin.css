@@ -1794,3 +1794,64 @@
   .cm-title__actions .cm-button { height: 44px; min-height: 44px; padding-block: 6px; }
 }
 .cm-title__note { pointer-events: none; }
+
+/* ====================================================================== *
+ * 15. Highlight states must not hide what they highlight
+ *
+ * Owner QA, 2026-09-12: the option under the cursor turned white and its
+ * label disappeared -- on the menu and on the icon rail both.
+ *
+ * Cause. Three older layers paint a PALE FILL for the hovered state:
+ *   raisingHomeHud  .cm-toolbar[data-mode="1"] .cm-toolbar__entry:hover  #d8f2e5
+ *   intRh2Styles    .cm-toolbar[data-mode="1"] .cm-toolbar__cell:hover   #fff3c7
+ *   styles          .cm-toolbar__cell:hover                    rgba(30,78,104,.95)
+ * and this skin answered each with `filter` alone. A filter cannot override a
+ * background -- different property, no conflict to win -- so the pale fill
+ * still painted and brightness() then washed it out to white on white.
+ *
+ * On the rail it read as a white SQUARE behind the hexagon, because the plate
+ * is drawn on ::after and does not reach the button's corners.
+ *
+ * The rule this encodes: a state must own the same properties as the layer
+ * beneath it. Lighting a control is not a filter, it is a defined surface.
+ * ====================================================================== */
+
+/* The rail: the plate IS the control, so the button carries no fill in any
+   state. Light the plate itself rather than a box behind it. */
+.cm-toolbar[data-mode] .cm-toolbar__cell:hover:not(:disabled),
+.cm-toolbar[data-mode] .cm-toolbar__cell:focus-visible {
+  background: none;
+  filter: none;
+}
+.cm-toolbar[data-mode] .cm-toolbar__cell:hover:not(:disabled)::after,
+.cm-toolbar[data-mode] .cm-toolbar__cell:focus-visible::after {
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.45)) brightness(1.18);
+}
+
+/* The menu: keep the dark slot and mark the choice with the gold rim the
+   original uses. Green stays rim, never fill -- and the label stays legible. */
+.cm-toolbar[data-mode] .cm-toolbar__entry:hover:not(:disabled),
+.cm-toolbar[data-mode] .cm-toolbar__entry:focus-visible {
+  background: linear-gradient(180deg, var(--ds-slot-lit) 0%, var(--ds-slot) 55%, var(--ds-slot-deep) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 0 0 2px var(--ds-gold),
+    0 0 0 3px var(--ds-ink),
+    0 0 14px rgba(255, 223, 70, 0.45);
+  color: var(--ds-text);
+  filter: none;
+}
+
+/* The two gold actions stay gold when hovered, with their dark ink intact. */
+.cm-toolbar[data-mode] .cm-toolbar__entry[data-entry-id="endDay"]:hover:not(:disabled),
+.cm-toolbar[data-mode] .cm-toolbar__entry[data-entry-id="saveQuit"]:hover:not(:disabled),
+.cm-toolbar[data-mode] .cm-toolbar__entry[data-entry-id="endDay"]:focus-visible,
+.cm-toolbar[data-mode] .cm-toolbar__entry[data-entry-id="saveQuit"]:focus-visible {
+  background: var(--ds-action-fill);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 0 0 2px var(--ds-ink),
+    0 0 18px rgba(255, 200, 60, 0.65);
+  color: #3a2100;
+  filter: brightness(1.05);
+}
