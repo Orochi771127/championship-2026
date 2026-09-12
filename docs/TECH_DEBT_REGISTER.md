@@ -34,3 +34,18 @@ Node 22 CI, manually dispatched hash-checked public Pages playtest, reuse invent
 - Presentation: the celebration platter, cake and the toolbar icons are still authored art with no original counterpart promoted; spoiled food, waste and the sweep now use the original cells.
 
 Public playtest permission is recorded. Commercial rights, complete original parity and device acceptance are separate open gates, not made true by fixing debt or pushing main.
+
+## 2026-09-12 UI skin review
+
+Confirmed entry/runtime handoff, QA progression overwrite, invalid badge save
+input, rank transaction reentrancy, battle cube context retirement, short-landscape
+Continue interception, hidden-panel resurrection, battle contrast and missing QA
+CI classification are repaired. Source-freeze regression: 1,476 passing tests;
+portable CI: 1,259. See
+[review and evidence](coordination/CODEX_NOTE_2026-09-12_UI_SKIN_REVIEW_FIXES.md).
+
+The layered legacy/skin selector stack remains **OPEN, bounded cleanup**. Concrete
+visibility and contrast failures are fixed; style rationale is now documentation,
+reducing the skin to 16,176 gzip bytes. Future consolidation must preserve the
+Owner-approved automatic orientation and current visual direction and compare all
+affected screens/states. No full-original or physical-device acceptance is implied.

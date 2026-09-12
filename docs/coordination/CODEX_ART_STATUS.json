@@ -1,4 +1,24 @@
 {
+  "uiSkinReview20260912": {
+    "date": "2026-09-12",
+    "status": "CONFIRMED_DEFECTS_REPAIRED_OWNER_QA_PENDING",
+    "baseHead": "96424e3073794d8609b3723d023c073fc170e9eb",
+    "report": "docs/coordination/CODEX_NOTE_2026-09-12_UI_SKIN_REVIEW_FIXES.md",
+    "ownerAdaptationsPreserved": [
+      "automatic portrait/landscape",
+      "QA maximum money/rank/badges; restoration deferred"
+    ],
+    "fullLocalPass": 1476,
+    "portableCiPass": 1259,
+    "battleCubeContexts": {
+      "created": 20,
+      "released": 20
+    },
+    "skinGzipBytes": 16176,
+    "physicalPhoneQA": false,
+    "fullOriginalParity": false,
+    "deployedThisReview": false
+  },
   "characterBehaviorStage20260910": {
     "status": "IN_PROGRESS_FULL_ORIGINAL_BEHAVIOR_NOT_COMPLETE",
     "report": "docs/reports/characters/CHARACTER_BEHAVIOR_STAGE_2026-09-10.md",

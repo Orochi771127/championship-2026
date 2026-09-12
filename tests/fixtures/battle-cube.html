@@ -5,6 +5,8 @@
 <link rel="stylesheet" href="../../src/championship/app/vs5Styles.css">
 <style>body{margin:0;background:#102732;color:#e2edf0;font-family:system-ui,sans-serif}#host{margin:20px auto;width:calc(100% - 32px);max-width:380px}</style>
 <div id="host" class="cm-vs5-cube"></div>
+<button id="cycle">檢查 20 次立方體建立與釋放</button>
+<output id="contexts" role="status">尚未檢查 context</output>
 <script type="module">
 import { mountBattleSelectThreePresentation } from "../../src/championship/presentation/vs5/createBattleSelectThreePresentation.js";
 import { Texture } from "../../node_modules/three/build/three.module.js";
@@ -14,5 +16,23 @@ window.mountCube = (options = {}) => window.cube = mountBattleSelectThreePresent
 });
 window.makeTexture = () => new Texture();
 window.mountCube();
+document.querySelector('#cycle').addEventListener('click', async () => {
+  const button = document.querySelector('#cycle');
+  const output = document.querySelector('#contexts');
+  button.disabled = true;
+  const contexts = [];
+  for (let i = 0; i < 20; i++) {
+    const canvas = document.querySelector('#host canvas');
+    if (canvas) contexts.push(canvas.getContext('webgl2'));
+    window.cube.dispose();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    if (i < 19) window.mountCube();
+  }
+  output.textContent = JSON.stringify({ created: contexts.length,
+    released: contexts.filter(context => context?.isContextLost()).length,
+    remainingCanvases: document.querySelectorAll('#host canvas').length });
+  window.mountCube();
+  button.disabled = false;
+});
 </script>
 </html>

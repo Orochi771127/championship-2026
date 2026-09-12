@@ -497,6 +497,31 @@ let battleRuntime = null;
 let battleAttemptId = null;
 let battleProgressBefore = null;
 
+// Entry publishes BATTLE_FIELD synchronously, before an async enterMatch
+// resolves. Its subscriber must already see the prepared simulation and ID.
+// Keep the previous runtime alive until entry accepts; a refusal restores it.
+async function enterPreparedBattle(prepared, attemptId, enter) {
+  const previous = { runtime: battleRuntime, attemptId: battleAttemptId, progress: battleProgressBefore };
+  battleRuntime = prepared;
+  battleAttemptId = attemptId;
+  battleProgressBefore = { rank: app.getTamerRank(), badges: app.getBattleBadges(),
+    shopIds: app.getShopFrame().listings.map(item => item.shopRecordIndex) };
+  let accepted = false;
+  try {
+    const result = await enter();
+    accepted = result.ok && !result.duplicate;
+    if (accepted) previous.runtime?.dispose();
+    return result;
+  } finally {
+    if (!accepted) {
+      battleRuntime = previous.runtime;
+      battleAttemptId = previous.attemptId;
+      battleProgressBefore = previous.progress;
+      prepared.dispose();
+    }
+  }
+}
+
 /**
  * A tournament round is an ordinary battle whose opponent came from the run's
  * own pool. Draw once, build the match on that team, then open the attempt.
@@ -516,14 +541,8 @@ async function enterChampionshipRound() {
     prepared.chooseChampionshipRound({ category: run.category, teamIndex: drawn.opponent.teamIndex });
     prepared.startMatch();
     const attemptId = `battle:${app.getBattleEconomyState().nextSequence}`;
-    const result = app.enterChampionshipRound({ attemptId, opponent: drawn.opponent });
-    if (result.ok && !result.duplicate) {
-      battleRuntime?.dispose();
-      battleRuntime = prepared;
-      battleAttemptId = attemptId;
-      battleProgressBefore = { rank: app.getTamerRank(), badges: app.getBattleBadges(),
-        shopIds: app.getShopFrame().listings.map((item) => item.shopRecordIndex) };
-    } else prepared.dispose();
+    const result = await enterPreparedBattle(prepared, attemptId,
+      () => app.enterChampionshipRound({ attemptId, opponent: drawn.opponent }));
     return result;
   } catch (error) {
     prepared.dispose();
@@ -561,13 +580,8 @@ async function mountBattleSelect() {
         prepared.startMatch();
         const context = prepared.getEconomyContext();
         const attemptId = `battle:${app.getBattleEconomyState().nextSequence}`;
-        const result = await app.enterMatch({ ...context, attemptId,playerInstanceIds,rngPreparation });
-        if (result.ok && !result.duplicate) {
-          battleRuntime?.dispose();
-          battleRuntime = prepared;
-          battleAttemptId = result.attempt.attemptId;
-          battleProgressBefore={rank:app.getTamerRank(),badges:app.getBattleBadges(),shopIds:app.getShopFrame().listings.map(item=>item.shopRecordIndex)};
-        } else prepared.dispose();
+        const result = await enterPreparedBattle(prepared, attemptId,
+          () => app.enterMatch({ ...context, attemptId,playerInstanceIds,rngPreparation }));
         return { ...result, wallet: app.getShopFrame().bits, entryFee: context.entryFee };
       } catch (error) {
         prepared.dispose();

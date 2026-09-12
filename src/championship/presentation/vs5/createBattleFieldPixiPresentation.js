@@ -55,7 +55,7 @@ import {battleFocusViewport,drawBattleDigitalCurtain} from '../battleFocusViewpo
 import {createBattleEffectSprites} from '../battleEffectSprites.js';
 
 const PALETTE = Object.freeze({
-  letterbox: 0xd2ebe5,
+  letterbox: 0x072f5e,
   ground: 0x123039,
   groundLow: 0x0d2530,
   ring: 0xd2ad5d,

@@ -289,6 +289,9 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
       edges.material.dispose();
       for (const material of materials) material.dispose();
       renderer.dispose();
+      // This private canvas is retired permanently; dispose alone releases
+      // Three resources but leaves its browser WebGL context alive until GC.
+      renderer.forceContextLoss();
       renderer.domElement.remove();
       overlay.remove();
       delete host.dataset.cubeTextures;

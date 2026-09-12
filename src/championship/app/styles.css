@@ -118,6 +118,9 @@ button { font: inherit; }
 /* ---------------- Raising screen ---------------- */
 
 #cm-root[hidden] { display: none; }
+/* Visibility is owned by the views. Responsive grid/flex skins must not
+   resurrect hidden panels and overlap the active chooser. */
+#cm-root [hidden] { display: none; }
 
 .cm-home {
   position: fixed;

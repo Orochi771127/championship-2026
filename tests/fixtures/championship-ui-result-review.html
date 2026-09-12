@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="../../"><title>結算換膚受控檢查</title>
+<link rel="stylesheet" href="src/championship/app/styles.css">
+<link rel="stylesheet" href="src/championship/app/intRh2Styles.css">
+<link rel="stylesheet" href="src/championship/app/vs2Styles.css">
+<link rel="stylesheet" href="src/championship/app/vs5Styles.css">
+<link rel="stylesheet" href="src/championship/app/raisingHomeHud.css">
+<link rel="stylesheet" href="src/championship/app/huntMobile.css">
+<link rel="stylesheet" href="src/championship/app/facilityBattleMobile.css">
+<link rel="stylesheet" href="src/championship/app/opening.css">
+<link rel="stylesheet" href="src/championship/app/trainingLabels.css">
+<link rel="stylesheet" href="src/championship/app/nativeUiSkin.css">
+</head><body><main id="cm-root"></main>
+<script type="module">
+// Explicit presentation fixture, not a gameplay or saved-state producer.
+// Exercise the actual result view and complete production stylesheet order.
+import { createBattleResultView } from './src/championship/app/vs5Screens.js';
+const won = !new URLSearchParams(location.search).has('loss');
+createBattleResultView({ root: document.querySelector('#cm-root'),
+  outcome: { verdict: won ? 'TEAM_ZERO_AHEAD' : 'TEAM_ONE_AHEAD', reason: 'TEAM_DOWN', winningTeam: won ? 0 : 1 },
+  receipt: { status: 'SETTLED', won, credited: won ? 150 : 0, rewardBits: won ? 7000 : 0,
+    walletAfter: won ? 9999999 : 9999849, clamped: won },
+  matchTitle: '受控結算外觀檢查', statistics: { battles: 1, winPercent: won ? 100 : 0, titleCount: 61 },
+  onExit() { document.querySelector('#cm-root').textContent = '檢查完成'; }
+});
+</script></body></html>

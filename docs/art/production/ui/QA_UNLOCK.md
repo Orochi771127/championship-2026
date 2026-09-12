@@ -12,10 +12,10 @@ is granted the three resources the original's own rules read:
 | Granted | Value | Derived from |
 |---|---|---|
 | Money | 9,999,999 (`BITS_WALLET_CAP`) | the cap the shop itself enforces |
-| Tamer rank | 8 | the highest `unlockParameter` among rank-gated gates |
-| Battle badges | 7, 45, 46 | every `unlockParameter` among badge-gated gates |
+| Tamer rank | 9 (existing higher values preserved) | `TAMER_RANK_TABLE_LAST_INDEX`, plus gate prerequisites |
+| Battle badges | all 61 ordinary titles, indices 0..60 | `TITLE_EVENT_SCAN_LIMIT`, plus gate prerequisites; existing flags preserved |
 
-Rank 8 also raises the ranch to its full 20 slots
+Rank 9 also raises the ranch to its full 20 slots
 (`TAMER_RANK_SLOT_TABLE`), so every cage module can be bought and placed.
 
 ## What it deliberately does not do
@@ -48,10 +48,11 @@ result could write.
   under `src/` so much as mentions the module.
 - **Cannot break a boot.** A seam that refuses is collected and reported, never
   thrown.
-- **Derived, not typed in.** The rank and badge list come from the gate catalog,
-  and a test asserts every gate in the catalog reads as unlocked under the plan.
-  A catalog that adds a harder gate fails the test rather than quietly leaving a
-  tester unable to reach it.
+- **Full grant, additive.** The Owner clarified on 2026-09-12 that money, rank
+  and badges should all be maxed for QA. The first implementation supplied only
+  gate prerequisites; review corrected it to the native rank/title tables.
+  Tests verify every gate and all 118 shop rows open, repeated grants preserve
+  progression, and title settlement plus Save/Continue retains it.
 
 ## Reverting
 
@@ -59,7 +60,9 @@ There is deliberately **no second QA save slot**: the repository rule is one sav
 repository and one save key, and a debug convenience is not a reason to break it.
 So the grant changes the running session, and saving while unlocked persists it.
 
-To return to ordinary progression, start a new game without the parameter.
+The Owner will decide the restoration workflow after QA; no automatic rollback
+or second save slot is introduced. Starting a new game without the parameter
+still uses ordinary progression. Removing the parameter does not undo a saved grant.
 
 To remove the feature entirely: delete `src/championship/app/qaUnlock.js`, its
 test, the two lines in `main.js`, and the `setBattleBadges` seam.

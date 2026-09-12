@@ -13,9 +13,9 @@
 //
 // WHAT IT GRANTS IS DERIVED, NOT TYPED IN
 // ---------------------------------------
-// The rank and the badge list are computed from the gate catalog, so a catalog
-// change cannot leave this module quietly granting too little. Today that reads
-// as rank 8 and badges 7/45/46, which is what the sixteen gates need.
+// Owner requests maximum money/rank/badges, not only the minimum needed for
+// gates. Use the last native rank and every ordinary title (exclude tutorial),
+// plus gate prerequisites. Preserve anything the session has already earned.
 //
 // OFF UNLESS ASKED FOR
 // --------------------
@@ -30,6 +30,8 @@
 // start a new game without the parameter.
 
 import { BITS_WALLET_CAP } from "../shop/shopCatalog.js";
+import { TAMER_RANK_TABLE_LAST_INDEX } from "../cage/cageCatalog.js";
+import { TITLE_EVENT_SCAN_LIMIT } from "../battle/titleEventSchedule.js";
 
 export const QA_UNLOCK_PARAMETER = "qa";
 export const QA_UNLOCK_VALUE = "unlock";
@@ -58,8 +60,11 @@ export function qaUnlockPlan(gates) {
     // The wallet cap, not the largest fee: the tester also has to be able to
     // buy the shop out, and the cap is the value the shop itself enforces.
     bits: BITS_WALLET_CAP,
-    tamerRank: rankGated.length ? Math.max(...rankGated) : 0,
-    battleBadges: Object.freeze([...new Set(badgeGated)].sort((a, b) => a - b)),
+    tamerRank: Math.max(TAMER_RANK_TABLE_LAST_INDEX, ...rankGated),
+    battleBadges: Object.freeze([...new Set([
+      ...Array.from({ length: TITLE_EVENT_SCAN_LIMIT }, (_, index) => index),
+      ...badgeGated
+    ])].sort((a, b) => a - b)),
     gateCount: rows.length
   });
 }
@@ -86,7 +91,10 @@ export function applyQaUnlock(app, gates) {
     const room = Math.max(0, plan.bits - current);
     return room === 0 ? current : app.creditBits(room).bits;
   });
-  attempt("tamerRank", () => app.setTamerRank(plan.tamerRank));
-  attempt("battleBadges", () => app.setBattleBadges([...plan.battleBadges]));
+  // A grant is additive: Continue must never revoke an earned title or rank.
+  attempt("tamerRank", () => app.setTamerRank(Math.max(app.getTamerRank?.() ?? 0, plan.tamerRank)));
+  attempt("battleBadges", () => app.setBattleBadges([
+    ...new Set([...(app.getBattleBadges?.() ?? []), ...plan.battleBadges])
+  ].sort((a, b) => a - b)));
   return Object.freeze({ ...granted, plan });
 }

@@ -20,7 +20,7 @@ export const UI_COPY = Object.freeze({
   "Spring": "春季", "Summer": "夏季", "Autumn": "秋季", "Winter": "冬季",
   "SPRING": "春季", "SUMMER": "夏季", "AUTUMN": "秋季", "WINTER": "冬季",
   "Day": "日", "END DAY": "結束今天", "End the day": "結束今天",
-  "SAVE": "儲存", "BACK": "返回", "RETURN HOME": "返回育成", "CONTINUE": "繼續",
+  "SAVE": "儲存", "BACK": "返回", "RETURN HOME": "返回育成", "RETURN TO RANCH": "返回牧場", "CONTINUE": "繼續",
   "NEXT": "下一頁", "LEAVE": "離開", "CONFIRM": "確認", "LIST": "列表",
   "SHOP": "商店", "Shop": "商店", "HUNT": "狩獵", "Hunt": "狩獵",
   "Battle": "對戰", "Battle result": "對戰結果", "DATABASE": "圖鑑", "Database": "圖鑑",

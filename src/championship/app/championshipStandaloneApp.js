@@ -1465,6 +1465,7 @@ export function createChampionshipStandaloneApp({
     setTamerRank(nextRank) {
       requireSession();
       if (huntCommitActive) throw new Error("CHAMPIONSHIP_HUNT_TRANSACTION_ACTIVE");
+      if (battleTransactionActive) throw new Error("CHAMPIONSHIP_BATTLE_TRANSACTION_ACTIVE");
       if (!Number.isSafeInteger(nextRank) || nextRank < 0) {
         throw new Error("INVALID_TAMER_RANK");
       }
@@ -1489,7 +1490,8 @@ export function createChampionshipStandaloneApp({
       requireSession();
       if (huntCommitActive) throw new Error("CHAMPIONSHIP_HUNT_TRANSACTION_ACTIVE");
       if (battleTransactionActive) throw new Error("CHAMPIONSHIP_BATTLE_TRANSACTION_ACTIVE");
-      if (!Array.isArray(badges) || badges.some((badge) => !Number.isSafeInteger(badge) || badge < 0)) {
+      if (!Array.isArray(badges) || badges.length > 62
+        || [...badges].some((badge) => !Number.isSafeInteger(badge) || badge < 0 || badge > 61)) {
         throw new Error("INVALID_BATTLE_BADGES");
       }
       const next = [...new Set(badges)].sort((a, b) => a - b);
