@@ -84,7 +84,7 @@ thresholds, neither of which is established.
 
 ---
 
-## 3. Nothing shows the catch being stored to the memory card — CONFIRMED
+## 3. Nothing shows the catch being stored to the memory card — FIXED (Codex)
 
 *"抓到以後收納進記憶卡會有一個飛進記憶卡的特效動畫"*
 
@@ -195,13 +195,13 @@ native geometry. Left alone rather than "fixed" on sight.
 
 ---
 
-## 6. The infirmary has no heal effect — REPORTED, not yet investigated
+## 6. The infirmary has no heal effect — FIXED (Codex)
 
 *"在保健室會有特效vfx表示回血"*
 
 ---
 
-## 7. The shop looks materially different from the original — REPORTED
+## 7. The shop looks materially different from the original — FIXED (Codex)
 
 *"這個是商店的樣子，跟現在遊戲裡面的還是很有差別"*
 
@@ -248,3 +248,35 @@ as written.
 The lesson is the one that nearly cost a wrong change: a developer-mode capture
 is not evidence about the shipped screen. The same check saved the RAW_SLOT
 rendering itself from being "fixed" earlier on the same page.
+
+
+---
+
+## Final state — 2026-09-13
+
+| # | finding | outcome |
+|---|---|---|
+| 1 | highlighted option hid its label | fixed, live |
+| 2 | wild stamina never drawn | fixed, live |
+| 3 | no capture-into-card VFX | fixed by Codex, live |
+| 4 | hunt result showed no portrait | fixed, live |
+| 5 | Digimon walked backwards | fixed, live |
+| 6 | no infirmary heal VFX | fixed by Codex, live |
+| 7 | shop differed from the original | fixed by Codex, live |
+| 8 | placeholder slots collided with the header | **withdrawn — my harness artifact, never a defect** |
+
+Landed in `a536885` after independent verification here: `npm test` 1487/1487,
+`test:ci` 1270/1270, build and validate both 6,282 files with matching id, the
+release audit clean, every approved text file LF with every recorded hash
+matching its bytes, and no research-root path or kana in shipped source.
+
+**Still open, and not claimed by any of the above:** pixel and frame parity for
+the two new effects, Chrome visual acceptance, physical-device acceptance, and
+full original parity. The shop's Traditional Chinese is PRODUCT_AUTHORED, not
+an official translation.
+
+One thing the register should carry forward. Findings 1 and 4 were the same
+defect family from two directions — a state rule that did not own the property
+beneath it, and a colour only ever legible against the surface it was written
+for. Both were found by looking, not by a failing test, and nothing in the
+suite would catch the next one.
