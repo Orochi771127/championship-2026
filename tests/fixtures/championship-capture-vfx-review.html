@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hunt field review fixture — capture VFX reachability</title>
+<link rel="stylesheet" href="../../src/championship/app/styles.css">
+<link rel="stylesheet" href="../../src/championship/app/intRh2Styles.css">
+<link rel="stylesheet" href="../../src/championship/app/vs2Styles.css">
+<link rel="stylesheet" href="../../src/championship/app/vs5Styles.css">
+<link rel="stylesheet" href="../../src/championship/app/raisingHomeHud.css">
+<link rel="stylesheet" href="../../src/championship/app/huntMobile.css">
+<link rel="stylesheet" href="../../src/championship/app/facilityBattleMobile.css">
+<link rel="stylesheet" href="../../src/championship/app/opening.css">
+<link rel="stylesheet" href="../../src/championship/app/trainingLabels.css">
+<link rel="stylesheet" href="../../src/championship/app/shopOriginalVideo.css">
+<link rel="stylesheet" href="../../src/championship/app/nativeUiSkin.css">
+<style>
+ body{margin:0;background:#06141e;color:#fff;font-family:Arial}
+ #fixture{position:fixed;z-index:30;bottom:0;left:0;right:0;background:#0d2330;padding:6px;font-size:12px}
+ #fixture button{min-height:40px;margin-right:4px}
+ #app.cm-vs2-root{bottom:64px}
+ #phase{display:inline-block;min-width:22ch}
+</style>
+<main id="app"></main>
+<aside id="fixture">
+ RESEARCH FIXTURE — the real Hunt field, mounted the way main.js mounts it.<br>
+ The capture VFX cannot be triggered from here: see the comment at the top of the module script.<br>
+ <button id="run">Capture and play the VFX</button>
+ <button id="step">Tick 1 phase</button>
+ <output id="phase">idle</output>
+</aside>
+<script type="module">
+/*
+ * What this fixture is for, and what it proved.
+ *
+ * It mounts the REAL Hunt field presentation, the way main.js does — the first
+ * fixture to do so. That part works: the field renders and the published view
+ * is live.
+ *
+ * It does NOT show the capture-to-memory-card VFX, and cannot, because that
+ * effect has no reachable trigger in the shipped game:
+ *
+ *   - The effect draws only for an actor whose cardState is HAND_ANIMATION
+ *     (createHuntFieldPixiPresentation reads view.tools.captureEffects, which
+ *     nativeHuntFieldControls publishes for exactly that state).
+ *   - HAND_ANIMATION is set only by enterNativeWildState(a, 12), reached from
+ *     AI state 11 — the knocked-down state the field's own hint describes as
+ *     "目標倒地後輕觸抓取".
+ *   - Nothing drives an actor there. endEnclosureStroke returns
+ *     outcome TOOL_TRACE_REQUIRED / successAuthority UNKNOWN_REQUIRES_TRACE,
+ *     and that string appears exactly once in src — where it is produced.
+ *     Nothing consumes it, so a completed circle grants no capture.
+ *   - attachNativeRope / collectNativeHand read `captureFlows`, which is
+ *     populated only when a huntCaptureReplay is injected, i.e. by fixtures.
+ *     That path does not run nativeHuntFieldControls, so it publishes no
+ *     captureEffects at all — the two paths are mutually exclusive.
+ *   - No test drives the state through the AI either; the single test that
+ *     uses HAND_ANIMATION assigns it directly.
+ *
+ * Run it with the recorded replay and the capture completes (hp reaches 0) but
+ * captureEffects is ABSENT. Run it on the native path and captureEffects is
+ * published but always empty. Both were observed, 2026-09-13.
+ *
+ * So the effect is correct code hanging off a state the game cannot currently
+ * enter. It should light up unchanged once the capture rule is traced, which
+ * the debt register already carries as open Hunt work.
+ */
+import { createChampionshipStandaloneApp } from '../../src/championship/app/championshipStandaloneApp.js';
+import { createGateHuntPresentationSource } from '../../src/championship/app/gateHuntPresentationSource.js';
+import { createHuntFieldView } from '../../src/championship/app/vs2Screens.js';
+import { createChampionshipPixiStage } from '../../src/championship/presentation/championshipPixiStage.js';
+import { mountHuntFieldPixiPresentation } from '../../src/championship/presentation/vs2/createHuntFieldPixiPresentation.js';
+import { applyQaUnlock } from '../../src/championship/app/qaUnlock.js';
+import { listChampionshipGates } from '../../src/championship/gate/gateCatalog.js';
+import { liveCaptureReplay } from './championship-live-capture-replay.mjs';
+
+const read = async path => (await fetch(path)).json();
+// The same bounded soft-pull replay the hunt result fixture uses. The native
+// entry path does wear a creature down, but only from a real rope stroke at a
+// real distance; this replay is the established way to reach a finished
+// capture deterministically, and it is what makes the phase clock observable.
+const [catalog, presentation, encounter, touch] = await Promise.all([
+  read('../../src/data/championship/catalogs/creature-species.r1.json'),
+  read('../../docs/contracts/championship/raising-home-presentation.v1.json'),
+  read('../../docs/research/HUNT_LIVE_ENCOUNTER_REPLAY_2026-09-05.json'),
+  read('../../docs/research/HUNT_NATIVE_TOUCH_REPLAY_2026-09-05.json')]);
+const values = new Map();
+const storage = { getItem: k => values.get(k) ?? null, setItem: (k, v) => values.set(k, v), removeItem: k => values.delete(k) };
+const app = createChampionshipStandaloneApp({ storage, catalog, cages: presentation.cages,
+  huntCaptureReplay: liveCaptureReplay(encounter, touch, listChampionshipGates()[0].gateId) });
+await app.newGame();
+
+// A fresh tamer holds 0 bits and the first gate reads GATE_LOCKED, so supply the
+// prerequisites through the application's own seams. Admission still decides.
+applyQaUnlock(app, listChampionshipGates());
+app.openGate(); app.selectGate(app.getGates()[0].gateId); app.confirmGate();
+await app.beginHunt();
+const runtime = app.getHuntRuntime();
+if (!runtime) throw new Error(`fixture could not enter: ${JSON.stringify(app.getGateAdmission(app.getGates()[0].gateId))}`);
+
+const source = createGateHuntPresentationSource(app);
+const root = document.querySelector('#app');
+const PIXI = await import('../../node_modules/pixi.js/dist/pixi.mjs');
+
+// Mount the real Hunt field the way main.js does, so the effect under review is
+// drawn by the shipped presentation rather than a stand-in.
+const view = await createHuntFieldView({
+  root, source,
+  async mountField({ host, source: fieldSource, onActorFrame }) {
+    const stage = await createChampionshipPixiStage({ PIXI, canvasHost: host });
+    return await mountHuntFieldPixiPresentation({ stage, source: fieldSource, onActorFrame });
+  }
+});
+source.subscribe(frame => { if (frame.screen === 'HUNT_FIELD') view.render(frame); });
+
+// Keep the presentation ticking; the capture clock is the native phase counter,
+// but the effect is drawn on the ordinary render loop.
+const phaseOut = document.querySelector('#phase');
+let target = null;
+function report(note) {
+  const state = target ? runtime.getCaptureRecord?.(target) : null;
+  const view = source.field.getView({ viewportWidth: 430, viewportHeight: 780 });
+  const fx = view?.tools?.captureEffects ?? null;
+  const card = view?.wildCreatures?.find(w => w.wildId === target)?.state ?? '-';
+  phaseOut.textContent = `${note} | hp=${state?.currentHp ?? '-'} | card=${card}`
+    + ` | captureEffects=${fx === null ? 'ABSENT' : fx.length}`
+    + (fx && fx[0] ? ` phase=${fx[0].phase} counter=${fx[0].counter}` : '');
+  document.body.dataset.vfxPhase = note;
+  document.body.dataset.vfxCount = String(fx === null ? -1 : fx.length);
+}
+
+document.querySelector('#run').onclick = async () => {
+  const wilds = runtime.getWildCreatures();
+  // The replay's seventh actor is the one its recorded stroke reaches.
+  target = (wilds[7] ?? wilds[0])?.wildId;
+  if (!target) { report('no wild creature'); return; }
+  runtime.attachNativeRope(target);
+  let guard = 0;
+  while (runtime.getCaptureRecord(target).currentHp > 0 && guard++ < 4000) {
+    runtime.tickNativeRope(target, { dxQ12: 60 * 4096, dyQ12: 0 });
+  }
+  report('worn down');
+  for (let i = 0; i < 16; i++) runtime.tickNativeCapturePhases(target);
+  runtime.collectNativeHand(target);
+  report('hand collected');
+  // Walk the published capture phases a few frames at a time so the flight is
+  // observable rather than jumping straight to arrival.
+  for (const [count, label] of [[8, 'gather'], [24, 'lift'], [12, 'flight'], [18, 'arrival'], [14, 'inserted']]) {
+    for (let i = 0; i < count; i++) runtime.tickNativeCapturePhases(target);
+    report(label);
+    await new Promise(r => setTimeout(r, 420));
+  }
+  report('done');
+};
+document.querySelector('#step').onclick = () => {
+  if (!target) return;
+  runtime.tickNativeCapturePhases(target);
+  report('stepped');
+};
+report('ready');
+</script></html>

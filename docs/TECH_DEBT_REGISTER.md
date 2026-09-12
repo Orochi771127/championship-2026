@@ -61,3 +61,48 @@ The earlier last-matched-rule inventory is not a deletion authority. Root/contex
 overrides remain open; do not remove their specificity or structural files by
 coverage count. See [handoff](coordination/CODEX_NOTE_2026-09-12_UI_THEME_UNIFICATION.md)
 and [dimension/ownership guide](art/production/ui/UI_STYLE_OWNERSHIP_2026-09-12.md).
+
+### 2026-09-13 capture VFX has no reachable trigger
+
+**OPEN.** The capture-to-memory-card effect added on 2026-09-12 is correct code
+against the right clock, and its publisher is unit-tested — but nothing in the
+shipped game can put an actor into the state it hangs off, so no player can see
+it yet.
+
+The chain, each link checked:
+
+- The effect draws only for `cardState === "HAND_ANIMATION"`
+  (`createHuntFieldPixiPresentation` reads `view.tools.captureEffects`, which
+  `nativeHuntFieldControls` publishes for exactly that state).
+- That state is set only by `enterNativeWildState(a, 12)`, reached from AI
+  state 11 — the knocked-down state the field's own hint names,
+  「目標倒地後輕觸抓取」.
+- Nothing drives an actor there. `endEnclosureStroke` returns
+  `outcome: TOOL_TRACE_REQUIRED`, `successAuthority: UNKNOWN_REQUIRES_TRACE`,
+  and that string occurs exactly once in `src/` — at its own production site.
+  Nothing consumes it, so completing the circle grants no capture.
+- `attachNativeRope` / `collectNativeHand` read `captureFlows`, populated only
+  when a `huntCaptureReplay` is injected, i.e. by fixtures. That path never
+  runs `nativeHuntFieldControls`, so it publishes no `captureEffects` at all.
+  **The two paths are mutually exclusive.**
+- No test drives the state through the AI; the one test using `HAND_ANIMATION`
+  assigns it directly.
+
+Observed both ways in `tests/fixtures/championship-capture-vfx-review.html`,
+which mounts the real Hunt field: with the recorded replay the capture completes
+(hp reaches 0) and `captureEffects` is ABSENT; on the native path
+`captureEffects` is published and always empty. In the live build only HAND and
+ROPE are bound, with the shot and bait among the eight `RAW_SLOT` placeholders,
+and neither a rope stroke nor a tap engages a creature.
+
+This is not a defect in the effect. It is the already-open Hunt capture trace
+surfacing: the effect will light up unchanged once the capture rule is traced
+and implemented. Recorded so nobody re-verifies the VFX and concludes it is
+broken.
+
+The infirmary heal effect is **not** in this position: three cages carry
+`RECOVER_HP_STRESS` (definitions 15, 18, 28) and HP recovery is an existing
+traced writer, so its trigger is reachable in ordinary play. It has still not
+been seen on screen — no fixture mounts the Raising field — so it remains
+visually unverified rather than unreachable.
+
