@@ -117,3 +117,44 @@ bytes". Owner's call — it changes what the release gate promises.
 `npm ci` and `test:ci` both pass on the runner. Pages is enabled, permissions and
 the `push:` trigger are correct, and deploy is only skipped because build failed.
 The Node 20 deprecation line on `actions/setup-node@v4` is a warning, not this.
+
+---
+
+## Resolved — 2026-09-12, after the theme-unification pass
+
+Applied once Codex finished and the tree was clean.
+
+The ten affected files were rewritten from their own committed bytes
+(`git show HEAD:<path>`), which is precisely what the Linux runner checks out.
+Each was asserted byte-identical to its blob after CRLF→LF before being touched,
+so no content moved. `git diff` was empty afterwards and nothing staged,
+confirming the working copy had only ever differed in line endings.
+
+`nativeUiSkin.css` had already dropped off the list: Codex's edits rewrote it
+with LF, so their nine stylesheets were already correct. What remained were the
+ten files from the earlier UI commits that nothing had rewritten since.
+
+`node scripts/refresh-playtest-approval.mjs` then re-recorded exactly those ten
+rows. The file allowlist was not widened and no other row moved.
+
+Verified after the fix:
+
+- **0 of 6,270** tracked approval rows mismatch the committed bytes, checked by
+  hashing every blob from HEAD rather than the working copy. Previously 10 did.
+  The remaining 6 rows are `node_modules` vendor files restored by `npm ci`.
+- `build:playtest` and `validate:playtest`: PASS, 6,279 files, identical build id
+  `7d88ddb851af0ca3adac99b1f6299fc368f237dd0d3d7beb2f86044579e79b08`.
+  This differs from the id Codex recorded because the bytes genuinely changed;
+  it is the id the runner will now reproduce.
+- `git status` showed only `WEB_BUILD_INPUTS.v1.json` modified.
+
+A side note for anyone who repeats this: after rewriting the files,
+`git status` kept reporting them modified while `git diff` was empty and the
+HEAD blob, index entry and working hash were all identical. That is a stale
+stat cache on this drive, not a real difference; `git update-index --refresh`
+did not clear it and re-adding the identical content did, staging nothing.
+Trust `git diff` / `git hash-object` over `git status` here.
+
+The hardening in the section above is still not done — this fix restores the
+deploy but does not stop a future Windows session from recording CRLF hashes
+again.
