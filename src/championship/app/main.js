@@ -49,6 +49,8 @@ import { mountBattleAudioPresentation } from '../presentation/battleAudioPresent
 import { BATTLE_MENU_LABELS, speciesName, raisingDisplayName, starterName, titleEventText } from "../text/zhHant.js";
 import { createBattleSelectView, createBattleFieldView, createBattleResultView } from "./vs5Screens.js";
 import { loadPixiCharacterRuntimeBundle } from "../presentation/pixiCharacterRuntimeBundle.js";
+import { applyQaUnlock, qaUnlockRequested } from "./qaUnlock.js";
+import { listChampionshipGates } from "../gate/gateCatalog.js";
 import { createChampionshipStatusBar } from "./championshipStatusBar.js";
 import { createDigimonListView } from "./digimonListScreen.js";
 import { createScheduleView } from "./scheduleScreen.js";
@@ -809,9 +811,19 @@ async function mountCurrentScreen() {
   if (app.getScreen() !== mountedScreen) await mountCurrentScreen();
 }
 
+// An explicit acceptance-testing grant, off unless the address asks for it.
+// It grants the three resources the original's rules read and changes none of
+// the rules, so a gate that opens here opened through its own admission check.
+function applyQaUnlockIfRequested() {
+  if (!qaUnlockRequested(globalThis.location?.search ?? "")) return;
+  const granted = applyQaUnlock(app, listChampionshipGates());
+  console.info("CHAMPIONSHIP_QA_UNLOCK", granted);
+}
+
 async function openGameplay() {
   titleScreen.hidden = true;
   root.hidden = false;
+  applyQaUnlockIfRequested();
 
   unsubscribeExpedition?.();
   unsubscribeScreen?.();

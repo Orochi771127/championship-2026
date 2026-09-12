@@ -1479,6 +1479,29 @@ export function createChampionshipStandaloneApp({
       return tamerRankValue;
     },
 
+    /**
+     * Write the earned battle badges. Gate unlock kind 2 reads this list, and
+     * until every title match exists the only other writer is a battle result,
+     * so this is the same PRODUCT_AUTHORED seam `setTamerRank` is -- symmetric
+     * with it on purpose, so a caller that can set one can set the other.
+     */
+    setBattleBadges(badges) {
+      requireSession();
+      if (huntCommitActive) throw new Error("CHAMPIONSHIP_HUNT_TRANSACTION_ACTIVE");
+      if (battleTransactionActive) throw new Error("CHAMPIONSHIP_BATTLE_TRANSACTION_ACTIVE");
+      if (!Array.isArray(badges) || badges.some((badge) => !Number.isSafeInteger(badge) || badge < 0)) {
+        throw new Error("INVALID_BATTLE_BADGES");
+      }
+      const next = [...new Set(badges)].sort((a, b) => a - b);
+      const changed = next.length !== battleBadgesValue.length
+        || next.some((badge, index) => badge !== battleBadgesValue[index]);
+      battleBadgesValue = next;
+      applyProgression();
+      if (changed) savePort.markDirty();
+      publishScreens();
+      return Object.freeze([...battleBadgesValue]);
+    },
+
     openShop() {
       requireSession();
       requireShop();
