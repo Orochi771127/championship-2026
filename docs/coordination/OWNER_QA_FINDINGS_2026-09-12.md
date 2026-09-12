@@ -218,7 +218,7 @@ Either install ffmpeg so recordings can be sampled, or prefer stills.
 
 ---
 
-## 8. The hunt field's placeholder slots collide with the header — NEW
+## 8. The hunt field's placeholder slots collide with the header — WITHDRAWN, not a defect
 
 Found while capturing finding 2, not reported by the Owner.
 
@@ -231,5 +231,20 @@ cramped row across the top of the field and sit on top of the gate name and the
 remaining-time readout, so `南橋峽谷` and `剩餘 07:50` are both partly covered.
 Capture: `.tmp/hunt-stamina/S3-hunt-field.png`.
 
-"Neutral placeholder" should mean quiet and out of the way. Mine to fix, after
-finding 4.
+**Withdrawn on 2026-09-13 after measuring player mode.** This was an artifact
+of my own harness, which ran with `?presentation=developer`.
+
+`vs2Screens.js:105` appends the `RAW_SLOT_00` text label **only** in developer
+mode. That text is what forced each button wide enough to overlap its
+neighbours and ride over the header. In player mode the hunt field renders
+**zero** `.cm-vs2-slot` elements — measured, not inferred: 0 slots, 0
+overlapping pairs, and the capture shows `南橋峽谷` and `剩餘 07:42` fully
+legible with only the two live tools on screen
+(`.tmp/hunt-stamina/P1-player-field.png`).
+
+No player has ever seen this. Nothing to fix, and the placeholder rule stands
+as written.
+
+The lesson is the one that nearly cost a wrong change: a developer-mode capture
+is not evidence about the shipped screen. The same check saved the RAW_SLOT
+rendering itself from being "fixed" earlier on the same page.
