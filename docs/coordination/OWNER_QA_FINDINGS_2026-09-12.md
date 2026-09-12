@@ -81,7 +81,7 @@ is visible in the Owner's emulator photograph, top left.
 
 ---
 
-## 5. Digimon walk backwards — CONFIRMED, needs ROM evidence to fix safely
+## 5. Digimon walk backwards — FIXED
 
 *"他們會倒著走，明明面對右邊，可是他卻往左邊走，原作是會轉方向"*
 
@@ -98,11 +98,43 @@ Traced the whole chain:
 holds for the hunt art, then this chain is inverted: moving right leaves the
 art unmirrored and therefore facing left, which is exactly the report.
 
-**Not changed yet.** The polarity looks wrong by one step, but this is
-ROM-traced code and the fix depends on which way the *hunt* character cells are
-authored, which the raising-home comment does not establish. Flipping a sign
-here on inference could invert every correct case instead. Needs the authored
-direction confirmed from the ROM cell data first.
+**Evidence gathered, then fixed.** Two independent confirmations:
+
+1. **The art.** `assets/production/internal-faithful-baseline/characters-v1/`
+   is the tier both Hunt and Raising draw from. Every one of Agumon's ~70 cells
+   faces **left** — snout left, tail right. So facing right is the case that
+   must mirror.
+2. **Five ROM-traced raising sites all state the opposite polarity to Hunt:**
+
+   | site | rule | meaning |
+   |---|---|---|
+   | `nativeRaisingMovement.js:44` | `delta[0] < 0 ? 0 : 1` | moving right → 1 |
+   | `nativeRaisingActor.js:205` | `velocityQ12[0] >= 0 ? 1 : 0` | moving right → 1 |
+   | `nativeRaisingActor.js:301` | actor left of food → 1 | right → 1 |
+   | `nativeRaisingActivity.js:72` | actor left of peer → 1 | right → 1 |
+   | `nativeRaisingActivity.js:83` | `flipBits === 0 ? -4096 : +4096` | 1 → moves +X |
+
+   `flipBits = 1` means right, consistently, and mirrors the left-authored art
+   to face right. Hunt alone returned `facing ? 0 : 1`, the exact inverse.
+
+`nativeWildActor.js:241` now returns `facing ? 1 : 0`. One character, but it
+was inverting every wild creature in the field.
+
+The observed-original evidence file `RAISING_HOME_REBUILD_OBSERVED_2026-09-09.json`
+does **not** settle this on its own: its `flipBits` values are construction-time
+spawn rolls (`nativeRandom % 2`) and do not correlate with `angleQ12`. Checked,
+and discarded as evidence, rather than read as agreement.
+
+Regression pinned in `championship-hunt-direction-unassigned-cases.mjs`, which
+asserts the hunt polarity *and* reads the two raising rules back out of source,
+so the two subsystems cannot drift apart again.
+
+**Ranch was already correct** and did not need changing: the
+`resident.facing === "left" ? -1 : 1` fallback in
+`createRaisingFieldPixiPresentation.js:520` would be inverted the same way, but
+line 616 resets the root scale whenever native frames are active, and the
+`flipBits` path then owns the mirroring. The fallback is only reachable without
+native geometry. Left alone rather than "fixed" on sight.
 
 ---
 

@@ -137,3 +137,30 @@ test('an untraced encounter keeps running, keeps its tools and still commits its
   assert.deepEqual(controls.getOnCardEntries(),entries);
   controls.commit();assert.equal(controls.actors[1].cardState,'HOME_COMMITTED');
 });
+
+// Owner QA, 2026-09-12: wild Digimon walked backwards -- drawn facing right
+// while moving left, and the reverse. The character cells are authored facing
+// LEFT (see assets/production/internal-faithful-baseline/characters-v1), so
+// facing right is the case that must mirror. Every ROM-traced raising site
+// states that polarity; the hunt frame stated the opposite. Pin them together,
+// because the two subsystems drawing the same art in opposite directions is
+// exactly what shipped.
+test("a wild Digimon faces the way it walks, on the same polarity the raising actor uses", async () => {
+  const { nativeWildCharacterFrame } = await import("../src/championship/hunt/capture/nativeWildActor.js");
+  const frameFor = (facing) => nativeWildCharacterFrame({
+    facing, animator: { getSnapshot: () => ({ sequenceId: 0, frameIndex: 0, elapsedQ12: 0, active: 1 }) } });
+
+  // facing 1 is right everywhere it is set: movement uses `delta[0] < 0 ? 0 : 1`,
+  // blinded drift uses `facing ? +64 : -64`, food approach uses `x < foodX ? 1 : 0`.
+  assert.equal(frameFor(1).flipBits, 1, "facing right must mirror the left-authored cells");
+  assert.equal(frameFor(0).flipBits, 0, "facing left must leave the cells unmirrored");
+
+  // The raising subsystem is the traced authority for this polarity. Read it
+  // from the source rather than restating it, so the two cannot drift apart.
+  const movement = fs.readFileSync("src/championship/raising/nativeRaisingMovement.js", "utf8");
+  assert.match(movement, /flipBits\s*=\s*delta\[0\]\s*<\s*0\s*\?\s*0\s*:\s*1/,
+    "raising movement still states flipBits 1 for rightward motion");
+  const actorSource = fs.readFileSync("src/championship/raising/nativeRaisingActor.js", "utf8");
+  assert.match(actorSource, /flipBits\s*=\s*actor\.velocityQ12\[0\]\s*>=\s*0\s*\?\s*1\s*:\s*0/,
+    "raising throw still states flipBits 1 for rightward velocity");
+});

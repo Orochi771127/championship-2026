@@ -237,6 +237,13 @@ export function nativeWildCaptureSnapshot(a) {
     ...(a.cardState === "ON_CARD" ? {nativeProfile:nativeIndividualProfile(a.individual, a.speciesId)} : {}),
     successAuthority:"NATIVE_NORMAL_HUNT_CONTROLLER"});
 }
+// `facing` is 1 for right everywhere it is set or read -- movement
+// (nativeHuntMovement), blinded drift and food approach all agree. The
+// character cells are authored facing LEFT, so facing right is the case that
+// has to mirror, and every ROM-traced raising site states the same polarity:
+// nativeRaisingMovement `delta[0]<0?0:1`, nativeRaisingActor `vx>=0?1:0`, and
+// the food/peer approaches. This returned the opposite, so a wild Digimon
+// walked backwards -- moving right while drawn facing left, and the reverse.
 export function nativeWildCharacterFrame(a) {
-  return Object.freeze({...a.animator.getSnapshot(),contract:NATIVE_HUNT_CHARACTER_FRAME_CONTRACT,flipBits:a.facing?0:1});
+  return Object.freeze({...a.animator.getSnapshot(),contract:NATIVE_HUNT_CHARACTER_FRAME_CONTRACT,flipBits:a.facing?1:0});
 }
