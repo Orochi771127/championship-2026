@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>介面皮層審查 — 原作風格 UI Kit</title>
+    <link rel="stylesheet" href="./src/championship/app/nativeUiSkin.css">
+    <style>
+      /* Review chrome only. Nothing here ships; the kit under test is
+         nativeUiSkin.css and every screen below is built from its classes. */
+      body { margin: 0; background: #0c1318; color: #d8e6ee;
+             font: 13px/1.5 Bahnschrift, "Microsoft JhengHei", system-ui, sans-serif; }
+      h1 { font-size: 15px; letter-spacing: .16em; margin: 0; padding: 14px 18px;
+           border-bottom: 1px solid #22323b; color: #9fd8ef; }
+      .sheet { display: flex; flex-wrap: wrap; gap: 26px; padding: 22px; align-items: flex-start; }
+      .slotbox { width: 300px; }
+      .slotbox > figcaption { font-size: 11px; letter-spacing: .12em; color: #7fa3b5;
+                              margin: 0 0 7px; text-transform: uppercase; }
+      /* Each mock is one DS screen at 300x225 -- the 4:3 the original uses. */
+      .screen { width: 300px; height: 225px; overflow: hidden; position: relative;
+                border: 1px solid #2b3d47; display: flex; flex-direction: column; }
+      .stack { display: flex; flex-direction: column; gap: 7px; padding: 10px; flex: 1; min-height: 0; }
+      .bar { display: flex; align-items: center; gap: 9px; padding: 4px 9px;
+             font: 700 11px/1.5 var(--ds-font); letter-spacing: .08em; }
+      .bar__mode { flex: 1; text-align: center; color: #ff7a18; font-size: 13px; letter-spacing: .14em;
+                   text-shadow: 0 0 1px #4a2100, 0 1px 0 #4a2100, 1px 0 0 #4a2100, -1px 0 0 #4a2100, 0 -1px 0 #4a2100; }
+      .bar__num { color: #fff; font-size: 13px;
+                  text-shadow: 0 0 1px #2a1600, 0 1px 0 #2a1600, 1px 0 0 #2a1600, -1px 0 0 #2a1600, 0 -1px 0 #2a1600; }
+      .season { padding: 1px 12px; border-radius: 999px; font-weight: 800;
+                background: linear-gradient(180deg, #fff, #e6f3ff); box-shadow: 0 0 0 2px var(--ds-ink); }
+      .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+      /* The rail: eight discs, art from the approved toolbar cell set. */
+      .rail { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; padding: 6px 7px;
+              align-items: center;
+              background: linear-gradient(180deg, #0d3c60, #07243c 46%, #03121e);
+              border-top: 2px solid var(--ds-ink); box-shadow: inset 0 2px 0 rgba(127,233,255,.45); }
+      .disc { position: relative; aspect-ratio: 1; border: 0; border-radius: 50%; padding: 0;
+              background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0) 52%),
+                          linear-gradient(180deg, #4a708a, #24485f 52%, #102a3c);
+              box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 0 0 2px var(--ds-ink), 0 2px 6px #0007; }
+      .disc.on { background: linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,0) 52%),
+                             linear-gradient(180deg, var(--ds-gold-lit), var(--ds-gold) 45%, var(--ds-amber));
+                 box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 0 0 2px var(--ds-ink), 0 0 16px #ffc83ca6; }
+      .disc img { position: absolute; inset: 13%; width: 74%; height: 74%;
+                  image-rendering: pixelated; filter: drop-shadow(0 1px 1px #0009); }
+      .swatches { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; width: 626px; }
+      .sw { height: 44px; border-radius: 6px; box-shadow: inset 0 0 0 1px #0008;
+            font: 700 9px/44px var(--ds-font); text-align: center; color: #00000099; }
+    </style>
+  </head>
+  <body>
+    <h1>介面皮層審查 · ORIGINAL-STYLE UI KIT（現代化） · nativeUiSkin.css</h1>
+
+    <div class="sheet">
+      <figure class="slotbox" style="width:626px">
+        <figcaption>01 · 調色盤（原作像素值為基準，微調飽和度與明度）</figcaption>
+        <div class="swatches">
+          <div class="sw" style="background:#0b56e8">blue</div>
+          <div class="sw" style="background:#0a68f2">blue-mid</div>
+          <div class="sw" style="background:#1f8bff">blue-lit</div>
+          <div class="sw" style="background:#7fe9ff">cyan-lit</div>
+          <div class="sw" style="background:#0a4a86">navy-band</div>
+          <div class="sw" style="background:#061119">ink</div>
+          <div class="sw" style="background:#fff6a8">gold-lit</div>
+          <div class="sw" style="background:#ffdf46">gold</div>
+          <div class="sw" style="background:#ffbe28">gold-mid</div>
+          <div class="sw" style="background:#f7931e">amber</div>
+          <div class="sw" style="background:#c46a04">amber-deep</div>
+          <div class="sw" style="background:#46d62c">rim</div>
+          <div class="sw" style="background:#0d3520">slot</div>
+          <div class="sw" style="background:#1d4132">panel</div>
+          <div class="sw" style="background:#10281d">panel-deep</div>
+          <div class="sw" style="background:#7ae84f">green-lit</div>
+          <div class="sw" style="background:#35b21c">green</div>
+          <div class="sw" style="background:#3a3fd6">indigo</div>
+        </div>
+      </figure>
+
+      <figure class="slotbox">
+        <figcaption>02 · 育成 HUD（讀數列＝深底＋亮綠描邊）</figcaption>
+        <div class="screen ds-ground">
+          <div class="ds-ribbon bar">
+            <span class="season" style="color:#2f9b2a">Spring</span>
+            <span>DAY <span class="bar__num">5</span></span>
+            <span class="bar__mode">TRAINING</span>
+            <span class="bar__num">19:50</span>
+          </div>
+          <div class="stack" style="gap:5px">
+            <div class="ds-slot"><span class="ds-pill ds-pill--label">HP</span><span class="ds-readout">230</span></div>
+            <div class="ds-slot"><span class="ds-pill ds-pill--label" style="background:linear-gradient(180deg,#ff9fcf,#d6267c)">TP</span><span class="ds-readout">18</span></div>
+            <div class="ds-slot"><span class="ds-pill ds-pill--label" style="background:linear-gradient(180deg,#8fd0ff,#1b64c8)">AP</span><span class="ds-readout">42</span></div>
+            <div class="ds-slot"><span class="ds-pill ds-pill--label">容量</span><span class="ds-readout">3 / 8</span></div>
+          </div>
+          <div class="rail">
+            <button class="disc on"><img alt="" src="./assets/production/toolbar/licensed-runtime-v1/hand-selected.png"></button>
+            <button class="disc"><img alt="" src="./assets/production/toolbar/licensed-runtime-v1/feed-rest.png"></button>
+            <button class="disc"><img alt="" src="./assets/production/toolbar/licensed-runtime-v1/protein-rest.png"></button>
+            <button class="disc"><img alt="" src="./assets/production/toolbar/licensed-runtime-v1/clean-rest.png"></button>
+            <button class="disc"><img alt="" src="./assets/production/toolbar/licensed-runtime-v1/woundMedicine-rest.png"></button>
+            <button class="disc"><img alt="" src="./assets/production/toolbar/licensed-runtime-v1/medicine-rest.png"></button>
+            <button class="disc"><img alt="" src="./assets/production/toolbar/licensed-runtime-v1/manage-rest.png"></button>
+            <button class="disc"><img alt="" src="./assets/production/toolbar/licensed-runtime-v1/system-rest.png"></button>
+          </div>
+        </div>
+      </figure>
+
+      <figure class="slotbox">
+        <figcaption>03 · 馴獸師資料（標籤＋讀數）</figcaption>
+        <div class="screen ds-ground">
+          <div class="ds-ribbon bar">
+            <span class="season" style="color:#e0397e">Summer</span>
+            <span>DAY <span class="bar__num">1</span></span>
+            <span class="bar__mode">TAMER</span>
+            <span class="bar__num">08:30</span>
+          </div>
+          <div class="stack" style="gap:5px">
+            <div class="ds-slot"><span class="ds-pill ds-pill--label">稱號</span><span class="ds-readout">見習</span></div>
+            <div class="ds-slot"><span class="ds-pill ds-pill--label">圖鑑</span><span class="ds-readout">13</span></div>
+            <div class="ds-slot"><span class="ds-pill ds-pill--label">地圖</span><span class="ds-readout">3</span></div>
+            <div class="ds-slot"><span class="ds-pill ds-pill--label">戰鬥</span><span class="ds-readout">0</span></div>
+            <div class="ds-slot ds-slot--gold"><span class="ds-pill ds-pill--label">獎金</span><span class="ds-readout" style="color:#ffdf46;text-shadow:0 0 12px #ffdf4699">1500</span></div>
+          </div>
+        </div>
+      </figure>
+
+      <figure class="slotbox">
+        <figcaption>04 · 管理選單（只有「要按的」才是滿色）</figcaption>
+        <div class="screen ds-ground">
+          <div class="ds-ribbon bar">
+            <span class="season" style="color:#2f9b2a">Spring</span>
+            <span>DAY <span class="bar__num">5</span></span>
+            <span class="bar__mode">TRAINING</span>
+            <span class="bar__num">19:52</span>
+          </div>
+          <div class="stack" style="justify-content:flex-end">
+            <div class="ds-panel">
+              <div class="ds-panel__inner grid2" style="padding:9px;gap:6px">
+                <button class="ds-pill">馴獸師</button>
+                <button class="ds-pill">行程</button>
+                <button class="ds-pill">設施配置</button>
+                <button class="ds-pill">數碼獸</button>
+                <button class="ds-pill ds-pill--gold" style="grid-column:1/-1">結束今天</button>
+              </div>
+            </div>
+          </div>
+          <div class="rail">
+            <button class="disc"><img alt="" src="./assets/production/toolbar/licensed-runtime-v1/hand-rest.png"></button>
+            <button class="disc"><img alt="" src="./assets/production/toolbar/licensed-runtime-v1/feed-rest.png"></button>
+            <button class="disc"><img alt="" src="./assets/production/toolbar/licensed-runtime-v1/protein-rest.png"></button>
+            <button class="disc"><img alt="" src="./assets/production/toolbar/licensed-runtime-v1/clean-rest.png"></button>
+            <button class="disc"><img alt="" src="./assets/production/toolbar/licensed-runtime-v1/woundMedicine-rest.png"></button>
+            <button class="disc"><img alt="" src="./assets/production/toolbar/licensed-runtime-v1/medicine-rest.png"></button>
+            <button class="disc on"><img alt="" src="./assets/production/toolbar/licensed-runtime-v1/manage-selected.png"></button>
+            <button class="disc"><img alt="" src="./assets/production/toolbar/licensed-runtime-v1/system-rest.png"></button>
+          </div>
+        </div>
+      </figure>
+
+      <figure class="slotbox">
+        <figcaption>05 · 清單（未選＝深底描邊，選中＝金色）</figcaption>
+        <div class="screen ds-ground">
+          <div class="ds-ribbon bar">
+            <span class="season" style="color:#d26a12">Autumn</span>
+            <span>DAY <span class="bar__num">3</span></span>
+            <span class="bar__mode">DIGIMON</span>
+            <span class="bar__num">11:05</span>
+          </div>
+          <div class="stack" style="gap:6px">
+            <div class="ds-slot" style="justify-content:space-between">阿豪<span class="ds-readout">成長期</span></div>
+            <div class="ds-slot ds-pill--gold" style="justify-content:space-between;color:#3a2100;text-shadow:0 1px 0 #fff9">小藍<span style="font-weight:800">成熟期</span></div>
+            <div class="ds-slot" style="justify-content:space-between">蛋兒<span class="ds-readout">幼年期</span></div>
+            <button class="ds-pill" style="width:100%;margin-top:4px">返回</button>
+          </div>
+        </div>
+      </figure>
+
+      <figure class="slotbox">
+        <figcaption>06 · 圖鑑（綠色底層）＋視窗標題膠囊</figcaption>
+        <div class="screen ds-ground-green">
+          <div class="ds-ribbon bar">
+            <span class="season" style="color:#1f7fc4">Winter</span>
+            <span>DAY <span class="bar__num">7</span></span>
+            <span class="bar__mode">ZUKAN</span>
+            <span class="bar__num">15:40</span>
+          </div>
+          <div class="stack">
+            <div class="ds-panel" style="margin-top:12px">
+              <h3 class="ds-panel__title">種類</h3>
+              <div class="ds-panel__inner" style="padding-top:16px">
+                <div class="grid2" style="gap:6px">
+                  <span class="ds-slot">幼年期</span>
+                  <span class="ds-slot">成長期</span>
+                  <span class="ds-slot">成熟期</span>
+                  <span class="ds-slot ds-pill--gold" style="color:#3a2100;text-shadow:0 1px 0 #fff9">完全體</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </figure>
+    </div>
+  </body>
+</html>

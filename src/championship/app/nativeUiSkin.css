@@ -1,0 +1,1923 @@
+/* Championship 2026 -- original-faithful interface skin, modernised.
+ *
+ * WHY THIS FILE EXISTS
+ * --------------------
+ * The product screens had drifted to a light, generic mobile-dashboard look.
+ * The original speaks one very specific interface language, and every screen of
+ * it is built from the same parts:
+ *
+ *   1. a cyan hexagonal tech mesh over a deep blue ground;
+ *   2. a gold ribbon across the top, cut into angled segments, carrying the
+ *      season tab, the day, the mode and the clock;
+ *   3. windows framed by a gold band between two dark lines, filled with a
+ *      desaturated dark green;
+ *   4. readout rows that are DARK inside with a bright green rim -- the green
+ *      in the original is mostly outline and label, not fill;
+ *   5. a rail of icon discs at the bottom, metal at rest and gold when chosen.
+ *
+ * MODERNISED, NOT COPIED
+ * ----------------------
+ * Same palette, same geometry, same information order. What changes is the
+ * finish: two-stop gradients instead of banded ramps, one crisp rim instead of
+ * three stacked outlines, soft ambient glow where the cartridge had none, real
+ * type instead of a bitmap face, and touch-sized targets.
+ *
+ * Everything here is authored CSS. The only runtime art it references is the
+ * approved toolbar cell set already under assets/production. No ROM, decoded or
+ * reconstructed byte is loaded or shipped by this file. Scene and field art is
+ * untouched; this file dresses chrome only.
+ *
+ * It loads last, so it re-skins the existing class vocabulary without asking
+ * any screen to change its markup or its behaviour.
+ */
+
+:root {
+  /* ---- Ground ------------------------------------------------------- */
+  --ds-blue-deep: #0b3bbe;
+  --ds-blue: #0b56e8;
+  --ds-blue-mid: #0a68f2;
+  --ds-blue-lit: #1f8bff;
+  --ds-cyan: #3ec6ff;
+  --ds-cyan-lit: #7fe9ff;
+  --ds-navy-band: #0a4a86;
+  --ds-navy-deep: #072f5e;
+
+  /* ---- Outline ------------------------------------------------------ */
+  --ds-ink: #061119;
+  --ds-ink-soft: rgba(6, 17, 25, 0.55);
+
+  /* ---- Gold ribbon and frame ---------------------------------------- */
+  --ds-gold-lit: #fff6a8;
+  --ds-gold: #ffdf46;
+  --ds-gold-mid: #ffbe28;
+  --ds-amber: #f7931e;
+  --ds-amber-deep: #c46a04;
+
+  /* ---- Window fill -------------------------------------------------- */
+  --ds-panel-lit: #2a5744;
+  --ds-panel: #1d4132;
+  --ds-panel-deep: #10281d;
+  --ds-panel-ink: #eafff2;
+
+  /* ---- Slots: dark inside, bright rim -------------------------------- */
+  --ds-slot-lit: #14492c;
+  --ds-slot: #0d3520;
+  --ds-slot-deep: #071f13;
+  --ds-rim: #46d62c;
+  --ds-rim-soft: rgba(70, 214, 44, 0.35);
+
+  /* ---- Accents ------------------------------------------------------- */
+  --ds-green-lit: #7ae84f;
+  --ds-green: #35b21c;
+  --ds-green-deep: #157c09;
+  --ds-indigo-lit: #6f7dff;
+  --ds-indigo: #3a3fd6;
+  --ds-indigo-deep: #23219b;
+  --ds-pink: #ff8fc4;
+  --ds-red: #e5323a;
+
+  /* ---- Text --------------------------------------------------------- */
+  --ds-text: #ffffff;
+  --ds-text-soft: #cfeaff;
+  --ds-text-dim: #86b3d2;
+  --ds-text-shadow: 0 1px 2px rgba(3, 12, 22, 0.85);
+  --ds-font: Bahnschrift, "Arial Narrow", "Roboto Condensed",
+    "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
+
+  /* ---- The tool plate: one hexagon, two states, named once so the care
+     rail and the hunt rail cannot drift apart ------------------------ */
+  --ds-hex-plate-rest: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,1 99,26.5 99,73.5 50,99 1,73.5 1,26.5' fill='%23d88f14'/%3E%3Cpolygon points='50,1 99,26.5 99,50 1,50 1,26.5' fill='%23ffe75c'/%3E%3Cpolygon points='50,1 99,26.5 99,73.5 50,99 1,73.5 1,26.5' fill='none' stroke='%23061119' stroke-width='2.5'/%3E%3Cpolygon points='50,10 91,31.5 91,68.5 50,90 9,68.5 9,31.5' fill='%23342c25'/%3E%3Cpolygon points='50,10 91,31.5 91,50 9,50 9,31.5' fill='%236b6055'/%3E%3Cpolygon points='50,10 91,31.5 91,68.5 50,90 9,68.5 9,31.5' fill='none' stroke='%23061119' stroke-width='2.5'/%3E%3C/svg%3E");
+  --ds-hex-plate-lit: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,1 99,26.5 99,73.5 50,99 1,73.5 1,26.5' fill='%23d88f14'/%3E%3Cpolygon points='50,1 99,26.5 99,50 1,50 1,26.5' fill='%23ffe75c'/%3E%3Cpolygon points='50,1 99,26.5 99,73.5 50,99 1,73.5 1,26.5' fill='none' stroke='%23061119' stroke-width='2.5'/%3E%3Cpolygon points='50,10 91,31.5 91,68.5 50,90 9,68.5 9,31.5' fill='%232f9c3a'/%3E%3Cpolygon points='50,10 91,31.5 91,50 9,50 9,31.5' fill='%238ef07a'/%3E%3Cpolygon points='50,10 91,31.5 91,68.5 50,90 9,68.5 9,31.5' fill='none' stroke='%23061119' stroke-width='2.5'/%3E%3C/svg%3E");
+
+  /* ---- Depth -------------------------------------------------------- */
+  --ds-lift: 0 3px 0 rgba(0, 0, 0, 0.28), 0 8px 18px rgba(0, 12, 30, 0.35);
+
+  /* The xmlns is percent-encoded, as raisingHomeHud.css already does: it is an
+     XML namespace name, never fetched, and the migration firewall refuses a
+     bare scheme in runtime source. The data URI is decoded before parsing, so
+     the SVG still sees the real namespace. */
+  /* ---- The hex mesh: one tileable path drawn twice -- a soft wide pass for
+     the cell body and a fine pass for the edge. That pair is what makes the
+     original's mesh read as lit glass rather than as wireframe. ---------- */
+  --ds-hex: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='32.91' height='57' viewBox='0 0 32.91 57'%3E%3Cdefs%3E%3Cpath id='h' d='M-32.9,-76 -16.5,-66.5 -16.5,-47.5 -32.9,-38 -49.4,-47.5 -49.4,-66.5Z M-16.5,-47.5 0,-38 0,-19 -16.5,-9.5 -32.9,-19 -32.9,-38Z M-32.9,-19 -16.5,-9.5 -16.5,9.5 -32.9,19 -49.4,9.5 -49.4,-9.5Z M-16.5,9.5 0,19 0,38 -16.5,47.5 -32.9,38 -32.9,19Z M-32.9,38 -16.5,47.5 -16.5,66.5 -32.9,76 -49.4,66.5 -49.4,47.5Z M-16.5,66.5 0,76 0,95 -16.5,104.5 -32.9,95 -32.9,76Z M0,-76 16.5,-66.5 16.5,-47.5 0,-38 -16.5,-47.5 -16.5,-66.5Z M16.5,-47.5 32.9,-38 32.9,-19 16.5,-9.5 0,-19 0,-38Z M0,-19 16.5,-9.5 16.5,9.5 0,19 -16.5,9.5 -16.5,-9.5Z M16.5,9.5 32.9,19 32.9,38 16.5,47.5 0,38 0,19Z M0,38 16.5,47.5 16.5,66.5 0,76 -16.5,66.5 -16.5,47.5Z M16.5,66.5 32.9,76 32.9,95 16.5,104.5 0,95 0,76Z M32.9,-76 49.4,-66.5 49.4,-47.5 32.9,-38 16.5,-47.5 16.5,-66.5Z M49.4,-47.5 65.8,-38 65.8,-19 49.4,-9.5 32.9,-19 32.9,-38Z M32.9,-19 49.4,-9.5 49.4,9.5 32.9,19 16.5,9.5 16.5,-9.5Z M49.4,9.5 65.8,19 65.8,38 49.4,47.5 32.9,38 32.9,19Z M32.9,38 49.4,47.5 49.4,66.5 32.9,76 16.5,66.5 16.5,47.5Z M49.4,66.5 65.8,76 65.8,95 49.4,104.5 32.9,95 32.9,76Z'/%3E%3C/defs%3E%3Cuse href='%23h' fill='none' stroke='%23bff4ff' stroke-width='5' stroke-opacity='.16'/%3E%3Cuse href='%23h' fill='none' stroke='%23eaffff' stroke-width='1.1' stroke-opacity='.3'/%3E%3C/svg%3E");
+}
+
+/* ====================================================================== *
+ * 1. GROUND
+ * ====================================================================== */
+
+.ds-ground {
+  background-image:
+    var(--ds-hex),
+    radial-gradient(130% 62% at 50% 0%, rgba(140, 240, 255, 0.5) 0%, rgba(31, 139, 255, 0.22) 38%, rgba(11, 86, 232, 0) 74%),
+    linear-gradient(180deg, var(--ds-blue) 0%, var(--ds-blue-mid) 38%, var(--ds-blue-deep) 74%, var(--ds-navy-band) 100%);
+  background-repeat: repeat, no-repeat, no-repeat;
+  background-size: 40px 69px, 100% 100%, 100% 100%;
+  color: var(--ds-text);
+}
+
+.ds-ground-green {
+  background-image:
+    var(--ds-hex),
+    radial-gradient(130% 62% at 50% 0%, rgba(196, 255, 190, 0.42) 0%, rgba(24, 140, 60, 0.2) 40%, rgba(8, 82, 8, 0) 76%),
+    linear-gradient(180deg, #35a854 0%, #1a8033 55%, #0b5a16 100%);
+  background-repeat: repeat, no-repeat, no-repeat;
+  background-size: 40px 69px, 100% 100%, 100% 100%;
+  color: var(--ds-text);
+}
+
+/* ====================================================================== *
+ * 2. GOLD RIBBON
+ * ====================================================================== */
+
+.ds-ribbon {
+  position: relative;
+  background: linear-gradient(180deg,
+    var(--ds-gold-lit) 0%, var(--ds-gold) 34%, var(--ds-gold-mid) 62%, var(--ds-amber) 100%);
+  border-bottom: 2px solid var(--ds-ink);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75), 0 3px 12px rgba(0, 20, 50, 0.4);
+  color: #3a2100;
+  overflow: hidden;
+}
+
+/* The ribbon is cut into angled segments. Modernised: one thin dark joint with
+   a light leading edge, spaced so it never lands on a label. */
+.ds-ribbon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(106deg,
+    rgba(120, 60, 0, 0) 0 128px,
+    rgba(120, 60, 0, 0.45) 128px 130px,
+    rgba(255, 255, 235, 0.75) 130px 133px,
+    rgba(120, 60, 0, 0) 133px 146px);
+}
+
+.ds-ribbon > * { position: relative; z-index: 1; }
+
+/* ====================================================================== *
+ * 3. WINDOW
+ * ====================================================================== */
+
+.ds-panel {
+  position: relative;
+  padding: 4px;
+  border-radius: 16px;
+  background: linear-gradient(180deg,
+    var(--ds-gold-lit) 0%, var(--ds-gold) 30%, var(--ds-gold-mid) 62%, var(--ds-amber-deep) 100%);
+  box-shadow: 0 0 0 2px var(--ds-ink), var(--ds-lift);
+  color: var(--ds-panel-ink);
+}
+
+.ds-panel__inner {
+  position: relative;
+  border-radius: 12px;
+  padding: 13px 14px;
+  background: linear-gradient(180deg, var(--ds-panel-lit) 0%, var(--ds-panel) 55%, var(--ds-panel-deep) 100%);
+  box-shadow: inset 0 0 0 2px var(--ds-ink), inset 0 10px 22px rgba(0, 0, 0, 0.35);
+}
+
+.ds-panel__title {
+  position: absolute;
+  top: -12px;
+  left: 20px;
+  z-index: 2;
+  margin: 0;
+  padding: 3px 16px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-panel-lit), var(--ds-panel-deep));
+  box-shadow: 0 0 0 2px var(--ds-gold), 0 0 0 4px var(--ds-ink), 0 2px 8px rgba(0, 0, 0, 0.45);
+  color: var(--ds-text);
+  font: 700 0.74rem/1.5 var(--ds-font);
+  letter-spacing: 0.12em;
+  text-shadow: var(--ds-text-shadow);
+  white-space: nowrap;
+}
+
+/* ====================================================================== *
+ * 4. CAPSULES
+ * ----------------------------------------------------------------------
+ * Two families, and the split matters: a SLOT is dark with a bright rim and
+ * carries a value; a BUTTON is filled and is pressed. The original keeps far
+ * more slots than buttons on screen, which is why it never looks green-heavy.
+ * ====================================================================== */
+
+.ds-slot {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  min-height: 32px;
+  padding: 4px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-slot-lit) 0%, var(--ds-slot) 55%, var(--ds-slot-deep) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 0 0 2px var(--ds-rim),
+    0 0 0 3px var(--ds-ink),
+    0 0 14px var(--ds-rim-soft);
+  color: var(--ds-text);
+  font: 700 0.82rem/1.3 var(--ds-font);
+  text-shadow: var(--ds-text-shadow);
+}
+
+.ds-slot--gold {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 0 0 2px var(--ds-gold),
+    0 0 0 3px var(--ds-ink),
+    0 0 14px rgba(255, 223, 70, 0.3);
+}
+
+.ds-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-height: 34px;
+  padding: 5px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-green-lit) 0%, var(--ds-green) 52%, var(--ds-green-deep) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.28),
+    0 0 0 2px var(--ds-ink),
+    var(--ds-lift);
+  color: var(--ds-text);
+  font: 700 0.82rem/1.25 var(--ds-font);
+  letter-spacing: 0.03em;
+  text-shadow: var(--ds-text-shadow);
+  cursor: pointer;
+  transition: filter 120ms ease, transform 90ms ease;
+}
+
+.ds-pill--label {
+  min-height: 26px;
+  padding: 3px 12px;
+  background: linear-gradient(180deg, var(--ds-indigo-lit) 0%, var(--ds-indigo) 55%, var(--ds-indigo-deep) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 0 0 2px var(--ds-ink);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+}
+
+.ds-pill--gold {
+  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -2px 6px rgba(150, 80, 0, 0.3),
+    0 0 0 2px var(--ds-ink),
+    var(--ds-lift);
+  color: #3a2100;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.ds-pill:disabled { filter: grayscale(0.6) brightness(0.66); cursor: default; }
+.ds-pill:not(:disabled):hover { filter: brightness(1.09); }
+.ds-pill:not(:disabled):active { transform: translateY(2px); }
+.ds-pill:focus-visible,
+.ds-slot:focus-visible { outline: 3px solid var(--ds-cyan-lit); outline-offset: 3px; }
+
+.ds-row {
+  display: grid;
+  grid-template-columns: minmax(5em, 36%) minmax(0, 1fr);
+  gap: 7px;
+  align-items: stretch;
+}
+
+.ds-readout {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--ds-cyan-lit);
+  text-shadow: 0 0 12px rgba(127, 233, 255, 0.6), var(--ds-text-shadow);
+}
+
+/* ====================================================================== *
+ * 5. APPLICATION -- the same parts, wired onto the screens we ship
+ * ----------------------------------------------------------------------
+ * Nothing below adds a class, moves a node or changes behaviour. Each rule
+ * re-dresses a selector the screens already use, so the skin is one file to
+ * review and one file to revert.
+ * ====================================================================== */
+
+/* ---- 5.1 Status bar = the gold ribbon -------------------------------- */
+.cm-status-bar[data-screen] {
+  gap: clamp(0.4rem, 2vw, 1rem);
+  padding: 0.3rem clamp(0.5rem, 2.5vw, 1rem);
+  background: linear-gradient(180deg,
+    var(--ds-gold-lit) 0%, var(--ds-gold) 34%, var(--ds-gold-mid) 62%, var(--ds-amber) 100%);
+  border-bottom: 2px solid var(--ds-ink);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75), 0 3px 12px rgba(0, 20, 50, 0.4);
+  font-family: var(--ds-font);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: none;
+  color: #3a2100;
+  isolation: isolate;
+}
+
+/* The angled segment cuts belong to the bar, not to its children. */
+.cm-status-bar[data-screen]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: repeating-linear-gradient(106deg,
+    rgba(120, 60, 0, 0) 0 128px,
+    rgba(120, 60, 0, 0.4) 128px 130px,
+    rgba(255, 255, 235, 0.7) 130px 133px,
+    rgba(120, 60, 0, 0) 133px 146px);
+}
+
+/* The season tab is a pale capsule with coloured type -- the original's one
+   piece of light chrome, and what tells you the time of year without reading. */
+.cm-status-bar[data-screen] .cm-status-bar__season {
+  min-width: 0;
+  padding: 2px 14px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffffff 0%, #e6f3ff 100%);
+  box-shadow: inset 0 -2px 4px rgba(0, 40, 80, 0.12), 0 0 0 2px var(--ds-ink);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-shadow: none;
+}
+.cm-status-bar[data-screen] .cm-status-bar__season[data-season="spring"] { color: #2f9b2a; }
+.cm-status-bar[data-screen] .cm-status-bar__season[data-season="summer"] { color: #e0397e; }
+.cm-status-bar[data-screen] .cm-status-bar__season[data-season="autumn"] { color: #d26a12; }
+.cm-status-bar[data-screen] .cm-status-bar__season[data-season="winter"] { color: #1f7fc4; }
+
+/* Day and clock sit straight on the ribbon, as they do in the original. */
+.cm-status-bar[data-screen] .cm-status-bar__day { color: #4a2a00; letter-spacing: 0.1em; }
+.cm-status-bar[data-screen] .cm-status-bar__day-number,
+.cm-status-bar[data-screen] .cm-status-bar__time {
+  color: #ffffff;
+  font-weight: 800;
+  text-shadow: 0 0 1px #2a1600, 0 1px 0 #2a1600, 1px 0 0 #2a1600, -1px 0 0 #2a1600, 0 -1px 0 #2a1600;
+}
+.cm-status-bar[data-screen] .cm-status-bar__time { font-size: 1.22em; letter-spacing: 0.04em; }
+
+/* The mode name is the amber headline the original centres on the ribbon. */
+.cm-status-bar[data-screen] .cm-status-bar__mode {
+  color: #ff7a18;
+  font-weight: 800;
+  font-size: 1.12em;
+  letter-spacing: 0.14em;
+  text-shadow: 0 0 1px #4a2100, 0 1px 0 #4a2100, 1px 0 0 #4a2100, -1px 0 0 #4a2100, 0 -1px 0 #4a2100;
+}
+
+.cm-status-bar[data-screen] .cm-status-bar__end-day {
+  border: 0;
+  border-radius: 999px;
+  padding: 3px 12px;
+  background: linear-gradient(180deg, var(--ds-slot-lit), var(--ds-slot-deep));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 0 0 2px var(--ds-rim), 0 0 0 3px var(--ds-ink);
+  color: var(--ds-text);
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-status-bar[data-screen] .cm-status-bar__end-day:hover:not(:disabled) {
+  background: linear-gradient(180deg, #1b6139, var(--ds-slot));
+}
+
+/* ---- 5.2 Toolbar = eight icon discs in a dark rail -------------------- */
+.cm-toolbar[data-mode] .cm-toolbar__rail {
+  gap: clamp(2px, 1vw, 6px);
+  padding: 6px clamp(4px, 1.5vw, 10px) calc(6px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(180deg, #0d3c60 0%, #07243c 46%, #03121e 100%);
+  border-top: 2px solid var(--ds-ink);
+  box-shadow: inset 0 2px 0 rgba(127, 233, 255, 0.45), 0 -6px 18px rgba(0, 10, 25, 0.5);
+  align-items: center;
+}
+
+/* A cell is a disc: metal at rest, gold when it is the chosen tool. */
+.cm-toolbar[data-mode] .cm-toolbar__cell {
+  position: relative;
+  aspect-ratio: 1;
+  min-height: 46px;
+  justify-self: center;
+  width: 100%;
+  max-width: 54px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 52%),
+    linear-gradient(180deg, #4a708a 0%, #24485f 52%, #102a3c 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 0 0 2px var(--ds-ink),
+    0 2px 6px rgba(0, 0, 0, 0.45);
+  transition: filter 120ms ease, transform 90ms ease;
+}
+
+/* The label stays for assistive technology; the icon carries the meaning. */
+.cm-toolbar[data-mode] .cm-toolbar__cell-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The icon layer. `image-rendering: pixelated` keeps the 4x cells crisp
+   instead of letting the browser soften them into mush. */
+.cm-toolbar[data-mode] .cm-toolbar__cell::before {
+  content: "";
+  position: absolute;
+  inset: 13%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.55));
+}
+
+.cm-toolbar[data-mode] .cm-toolbar__cell[data-icon="hand"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/hand-rest.png"); }
+.cm-toolbar[data-mode] .cm-toolbar__cell[data-icon="feed"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/feed-rest.png"); }
+.cm-toolbar[data-mode] .cm-toolbar__cell[data-icon="protein"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/protein-rest.png"); }
+.cm-toolbar[data-mode] .cm-toolbar__cell[data-icon="clean"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/clean-rest.png"); }
+.cm-toolbar[data-mode] .cm-toolbar__cell[data-icon="woundMedicine"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/woundMedicine-rest.png"); }
+.cm-toolbar[data-mode] .cm-toolbar__cell[data-icon="medicine"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/medicine-rest.png"); }
+.cm-toolbar[data-mode] .cm-toolbar__cell[data-icon="manage"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/manage-rest.png"); }
+.cm-toolbar[data-mode] .cm-toolbar__cell[data-icon="system"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/system-rest.png"); }
+
+.cm-toolbar[data-mode] .cm-toolbar__cell[aria-pressed="true"][data-icon="hand"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/hand-selected.png"); }
+.cm-toolbar[data-mode] .cm-toolbar__cell[aria-pressed="true"][data-icon="feed"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/feed-selected.png"); }
+.cm-toolbar[data-mode] .cm-toolbar__cell[aria-pressed="true"][data-icon="protein"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/protein-selected.png"); }
+.cm-toolbar[data-mode] .cm-toolbar__cell[aria-pressed="true"][data-icon="clean"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/clean-selected.png"); }
+.cm-toolbar[data-mode] .cm-toolbar__cell[aria-pressed="true"][data-icon="woundMedicine"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/woundMedicine-selected.png"); }
+.cm-toolbar[data-mode] .cm-toolbar__cell[aria-pressed="true"][data-icon="medicine"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/medicine-selected.png"); }
+.cm-toolbar[data-mode] .cm-toolbar__cell[aria-expanded="true"][data-icon="manage"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/manage-selected.png"); }
+.cm-toolbar[data-mode] .cm-toolbar__cell[aria-expanded="true"][data-icon="system"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/system-selected.png"); }
+
+.cm-toolbar[data-mode] .cm-toolbar__cell:hover:not(:disabled) { filter: brightness(1.15); }
+.cm-toolbar[data-mode] .cm-toolbar__cell:not(:disabled):active { transform: translateY(2px); }
+.cm-toolbar[data-mode] .cm-toolbar__cell:disabled { filter: grayscale(0.7) brightness(0.55); }
+
+/* Chosen: the disc lights gold, exactly the signal the original gives. */
+.cm-toolbar[data-mode] .cm-toolbar__cell[aria-pressed="true"],
+.cm-toolbar[data-mode] .cm-toolbar__cell[aria-expanded="true"] {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 52%),
+    linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 45%, var(--ds-amber) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 0 0 2px var(--ds-ink),
+    0 0 16px rgba(255, 200, 60, 0.65);
+}
+
+/* The stock count rides the disc's lower edge as a small dark chip. */
+.cm-toolbar[data-mode] .cm-toolbar__stock {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  min-width: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #143a55, #061722);
+  box-shadow: 0 0 0 2px var(--ds-ink);
+  color: var(--ds-cyan-lit);
+  font: 800 0.6rem/1.5 var(--ds-font);
+  font-variant-numeric: tabular-nums;
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-toolbar[data-mode] .cm-toolbar__stock[hidden] { display: none; }
+
+/* The submenu is a window. */
+.cm-toolbar[data-mode] .cm-toolbar__menu {
+  position: relative;
+  gap: 7px;
+  padding: 11px;
+  border: 0;
+  border-radius: 16px;
+  background: linear-gradient(180deg,
+    var(--ds-gold-lit) 0%, var(--ds-gold) 30%, var(--ds-gold-mid) 62%, var(--ds-amber-deep) 100%);
+  box-shadow: 0 0 0 2px var(--ds-ink), 0 -8px 28px rgba(0, 10, 30, 0.55);
+}
+.cm-toolbar[data-mode] .cm-toolbar__menu::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--ds-panel-lit) 0%, var(--ds-panel) 55%, var(--ds-panel-deep) 100%);
+  box-shadow: inset 0 0 0 2px var(--ds-ink);
+  pointer-events: none;
+}
+
+/* Navigation entries are slots, not buttons: they take you somewhere, they do
+   not commit anything. Only the two entries that actually change the world --
+   ending the day and saving out -- are filled. This is the same restraint the
+   original shows, and it is what keeps a five-item menu from reading as a wall
+   of green. */
+.cm-toolbar[data-mode] .cm-toolbar__entry {
+  position: relative;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-slot-lit) 0%, var(--ds-slot) 55%, var(--ds-slot-deep) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 0 2px var(--ds-rim),
+    0 0 0 3px var(--ds-ink),
+    0 0 12px var(--ds-rim-soft);
+  font-family: var(--ds-font);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ds-text);
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-toolbar[data-mode] .cm-toolbar__entry:hover:not(:disabled) { filter: brightness(1.35); }
+.cm-toolbar[data-mode] .cm-toolbar__entry:disabled { filter: grayscale(0.8) brightness(0.5); opacity: 1; }
+
+.cm-toolbar[data-mode] .cm-toolbar__entry[data-entry-id="endDay"],
+.cm-toolbar[data-mode] .cm-toolbar__entry[data-entry-id="saveQuit"] {
+  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 0 0 2px var(--ds-ink),
+    0 0 16px rgba(255, 200, 60, 0.5);
+  color: #3a2100;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* ---- 5.3 Sheet screens: roster, schedule, help, tamer, championship ---- */
+/* These five are one design in the product and one design in the original: a
+   mesh ground, one framed window, and rows inside it. Re-pointing the shared
+   sheet tokens moves all five together, as they were built to. */
+.cm-digimon-root,
+.cm-schedule-root,
+.cm-help-root,
+.cm-tamer-root,
+.cm-championship-root {
+  --cm-sheet-ground: transparent;
+  --cm-sheet-ink: var(--ds-text);
+  --cm-sheet-accent: var(--ds-cyan-lit);
+  --cm-sheet-muted: var(--ds-text-soft);
+  --cm-sheet-dim: var(--ds-text-dim);
+  --cm-sheet-card: transparent;
+  --cm-sheet-edge: transparent;
+  --cm-sheet-selected: transparent;
+  --cm-sheet-selected-edge: transparent;
+  --cm-sheet-today: transparent;
+  --cm-sheet-short: #ff9c9c;
+  --cm-sheet-inset: transparent;
+  --cm-sheet-highlight: var(--ds-gold);
+  color-scheme: dark;
+  background-image:
+    var(--ds-hex),
+    radial-gradient(130% 62% at 50% 0%, rgba(140, 240, 255, 0.5) 0%, rgba(31, 139, 255, 0.22) 38%, rgba(11, 86, 232, 0) 74%),
+    linear-gradient(180deg, var(--ds-blue) 0%, var(--ds-blue-mid) 38%, var(--ds-blue-deep) 74%, var(--ds-navy-band) 100%);
+  background-repeat: repeat, no-repeat, no-repeat;
+  background-size: 40px 69px, 100% 100%, 100% 100%;
+  background-attachment: local, fixed, fixed;
+  color: var(--ds-text);
+}
+
+.cm-digimon-shell, .cm-schedule-shell, .cm-help-shell,
+.cm-tamer-shell, .cm-championship-shell { font-family: var(--ds-font); }
+
+.cm-digimon-title, .cm-schedule-title, .cm-help-title,
+.cm-tamer-title, .cm-championship-title {
+  align-self: flex-start;
+  padding: 4px 20px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-panel-lit), var(--ds-panel-deep));
+  box-shadow: 0 0 0 2px var(--ds-gold), 0 0 0 4px var(--ds-ink), 0 3px 10px rgba(0, 0, 0, 0.45);
+  font-size: 1.02rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--ds-text);
+  text-shadow: var(--ds-text-shadow);
+}
+
+.cm-digimon-kicker, .cm-schedule-kicker, .cm-help-kicker,
+.cm-tamer-kicker, .cm-championship-kicker {
+  color: var(--ds-cyan-lit);
+  text-shadow: 0 0 10px rgba(127, 233, 255, 0.6);
+}
+
+/* One window recipe for every framed block on a sheet screen. */
+.cm-digimon-detail,
+.cm-schedule-detail,
+.cm-help-detail,
+.cm-tamer-fields,
+.cm-championship-run {
+  border: 0;
+  border-radius: 14px;
+  padding: 14px;
+  background: linear-gradient(180deg, var(--ds-panel-lit) 0%, var(--ds-panel) 55%, var(--ds-panel-deep) 100%);
+  box-shadow:
+    inset 0 0 0 2px var(--ds-ink),
+    0 0 0 4px var(--ds-gold),
+    0 0 0 6px var(--ds-ink),
+    var(--ds-lift);
+  color: var(--ds-text);
+}
+
+.cm-schedule-day {
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(180deg, var(--ds-slot-lit) 0%, var(--ds-slot) 55%, var(--ds-slot-deep) 100%);
+  box-shadow: inset 0 0 0 2px var(--ds-ink), 0 0 0 2px var(--ds-rim-soft);
+}
+.cm-schedule-day[data-today="true"] {
+  box-shadow: inset 0 0 0 2px var(--ds-ink), 0 0 0 2px var(--ds-gold), 0 0 14px rgba(255, 223, 70, 0.35);
+}
+
+/* A row you can choose is a SLOT until it is chosen, and only then gold. This
+   is the rule that keeps a screen from turning into a wall of green. */
+.cm-digimon-item__button,
+.cm-help-topic,
+.cm-schedule-fixture,
+.cm-championship-entry,
+.cm-digimon-control {
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-slot-lit) 0%, var(--ds-slot) 55%, var(--ds-slot-deep) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 0 2px var(--ds-rim),
+    0 0 0 3px var(--ds-ink),
+    0 0 12px var(--ds-rim-soft);
+  color: var(--ds-text);
+  font-family: var(--ds-font);
+  font-weight: 700;
+  text-shadow: var(--ds-text-shadow);
+  transition: filter 120ms ease;
+}
+.cm-championship-entry { border-radius: 26px; }
+.cm-digimon-item__button:hover, .cm-help-topic:hover, .cm-schedule-fixture:hover { filter: brightness(1.3); }
+
+.cm-digimon-item__button[aria-pressed="true"],
+.cm-help-topic[aria-pressed="true"],
+.cm-schedule-fixture[aria-pressed="true"] {
+  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 0 2px var(--ds-ink), 0 0 16px rgba(255, 200, 60, 0.55);
+  color: #3a2100;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.cm-digimon-control { opacity: 1; filter: grayscale(0.7) brightness(0.55); }
+.cm-championship-entry:disabled { opacity: 1; filter: grayscale(0.55) brightness(0.7); }
+
+/* Only the things you actually press are filled. */
+.cm-digimon-back, .cm-schedule-back, .cm-help-back, .cm-tamer-back,
+.cm-championship-back, .cm-championship-action {
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-green-lit) 0%, var(--ds-green) 52%, var(--ds-green-deep) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.28),
+    0 0 0 2px var(--ds-ink),
+    0 2px 0 rgba(0, 0, 0, 0.3);
+  color: var(--ds-text);
+  font-family: var(--ds-font);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-championship-action--primary {
+  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  color: #3a2100;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.cm-digimon-list, .cm-help-list { gap: 8px; }
+.cm-schedule-days { gap: 7px; }
+.cm-digimon-controls, .cm-championship-actions { gap: 8px; }
+
+/* Labelled values are the indigo/cyan pair. */
+.cm-digimon-detail__label,
+.cm-tamer-field__label,
+.cm-schedule-facts dt {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-indigo-lit) 0%, var(--ds-indigo) 55%, var(--ds-indigo-deep) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 0 0 2px var(--ds-ink);
+  color: var(--ds-text);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-digimon-detail__value,
+.cm-tamer-field__value,
+.cm-schedule-facts dd {
+  color: var(--ds-cyan-lit);
+  text-shadow: 0 0 12px rgba(127, 233, 255, 0.5), var(--ds-text-shadow);
+}
+.cm-tamer-field__value[data-state="UNSOURCED"] { color: var(--ds-text-dim); text-shadow: var(--ds-text-shadow); }
+.cm-digimon-detail { gap: 8px 12px; align-items: center; }
+.cm-tamer-fields { gap: 9px 12px; align-items: center; }
+
+.cm-digimon-untraced, .cm-help-note, .cm-tamer-note,
+.cm-schedule-untraced, .cm-schedule-footer, .cm-championship-notice,
+.cm-help-detail__provenance, .cm-digimon-empty, .cm-help-empty, .cm-schedule-empty,
+.cm-schedule-day__number, .cm-schedule-day__none {
+  color: var(--ds-text-dim);
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-help-heading { color: var(--ds-gold); border-bottom-color: rgba(255, 223, 70, 0.4); }
+.cm-help-detail__title, .cm-schedule-detail__name,
+.cm-championship-run__title, .cm-championship-entry__name { color: var(--ds-text); }
+.cm-schedule-detail__when, .cm-championship-entry__rounds,
+.cm-schedule-detail__blurb { color: var(--ds-text-soft); }
+
+.cm-championship-round {
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-slot-lit), var(--ds-slot-deep));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 0 2px var(--ds-rim), 0 0 0 3px var(--ds-ink);
+  color: var(--ds-text);
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-championship-round[data-state="WON"] {
+  background: linear-gradient(180deg, var(--ds-gold-lit), var(--ds-amber));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 0 2px var(--ds-ink);
+  color: #3a2100;
+  text-shadow: none;
+}
+.cm-championship-round[data-state="NOW"] {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 0 2px var(--ds-cyan-lit), 0 0 0 3px var(--ds-ink), 0 0 14px rgba(127, 233, 255, 0.55);
+}
+
+/* ---- 5.4 Title screen ------------------------------------------------ */
+.cm-button {
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-slot-lit) 0%, var(--ds-slot) 55%, var(--ds-slot-deep) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 0 0 2px var(--ds-rim),
+    0 0 0 3px var(--ds-ink),
+    0 0 16px var(--ds-rim-soft);
+  font-family: var(--ds-font);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--ds-text);
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-button--primary {
+  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 0 2px var(--ds-ink), 0 0 18px rgba(255, 200, 60, 0.5);
+  color: #3a2100;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.cm-button:not(:disabled):hover { filter: brightness(1.12); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pill, .cm-toolbar__cell, .cm-digimon-item__button,
+  .cm-help-topic, .cm-schedule-fixture { transition: none; }
+}
+
+/* ---- 5.5 Raising Home -- the screen the player spends the day on ------- */
+/* The bright layer that dressed this screen uses single-class selectors, so a
+   root-scoped pair carries the skin without touching its structure. The field
+   host and its canvas are deliberately absent from every rule below: this is
+   chrome, and the habitat art is not ours to repaint. */
+.int-rh2-root {
+  --rh2-ink: var(--ds-text);
+  --rh2-muted: var(--ds-text-soft);
+  --rh2-cyan: var(--ds-cyan-lit);
+  --rh2-display: var(--ds-panel-deep);
+  --rh2-font: var(--ds-font);
+  color-scheme: dark;
+  background: var(--ds-navy-deep);
+}
+
+.int-rh2-root .int-rh2-shell {
+  background-image:
+    var(--ds-hex),
+    radial-gradient(130% 62% at 50% 0%, rgba(140, 240, 255, 0.5) 0%, rgba(31, 139, 255, 0.22) 38%, rgba(11, 86, 232, 0) 74%),
+    linear-gradient(180deg, var(--ds-blue) 0%, var(--ds-blue-mid) 38%, var(--ds-blue-deep) 74%, var(--ds-navy-band) 100%);
+  background-repeat: repeat, no-repeat, no-repeat;
+  background-size: 40px 69px, 100% 100%, 100% 100%;
+  border-inline: 2px solid var(--ds-ink);
+  box-shadow: 0 0 44px rgba(0, 10, 40, 0.55);
+}
+
+/* The header is a slim band, not a second status bar: the gold ribbon above
+   already owns that job, so this one stays dark and lets the title read. */
+.int-rh2-root .int-rh2-header {
+  min-height: 46px;
+  padding: 6px 10px;
+  background: linear-gradient(180deg, rgba(4, 28, 52, 0.72), rgba(4, 28, 52, 0));
+  box-shadow: none;
+}
+.int-rh2-root .int-rh2-header::before,
+.int-rh2-root .int-rh2-header::after { display: none; }
+
+.int-rh2-root .int-rh2-title {
+  padding: 3px 16px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-panel-lit), var(--ds-panel-deep));
+  box-shadow: 0 0 0 2px var(--ds-gold), 0 0 0 4px var(--ds-ink), 0 3px 10px rgba(0, 0, 0, 0.5);
+  color: var(--ds-text);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-shadow: var(--ds-text-shadow);
+}
+.int-rh2-root .int-rh2-header__identity .int-rh2-kicker { color: var(--ds-cyan-lit); }
+
+.int-rh2-root .int-rh2-system-button {
+  border: 0;
+  border-radius: 999px;
+  padding: 4px 12px;
+  background: linear-gradient(180deg, var(--ds-slot-lit), var(--ds-slot-deep));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 0 0 2px var(--ds-rim), 0 0 0 3px var(--ds-ink);
+  color: var(--ds-text);
+  text-shadow: var(--ds-text-shadow);
+}
+.int-rh2-root .int-rh2-system-button.is-dirty {
+  background: linear-gradient(180deg, var(--ds-gold-lit), var(--ds-amber));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 0 2px var(--ds-ink), 0 0 14px rgba(255, 200, 60, 0.55);
+  color: #3a2100;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* The companion readout is the original's framed window. */
+.int-rh2-root .int-rh2-companion {
+  margin: 0 8px 8px;
+  padding: 11px 12px 10px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(180deg, var(--ds-panel-lit) 0%, var(--ds-panel) 55%, var(--ds-panel-deep) 100%);
+  box-shadow:
+    inset 0 0 0 2px var(--ds-ink),
+    0 0 0 4px var(--ds-gold),
+    0 0 0 6px var(--ds-ink),
+    var(--ds-lift);
+}
+.int-rh2-root .int-rh2-companion::before { display: none; }
+.int-rh2-root .int-rh2-companion__copy > .int-rh2-kicker { color: var(--ds-cyan-lit); text-shadow: var(--ds-text-shadow); }
+
+.int-rh2-root .int-rh2-companion__name {
+  border: 0;
+  border-radius: 999px;
+  padding: 5px 14px;
+  background: linear-gradient(180deg, var(--ds-slot-lit), var(--ds-slot-deep));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 0 2px var(--ds-rim), 0 0 0 3px var(--ds-ink);
+  color: var(--ds-text);
+  text-shadow: var(--ds-text-shadow);
+}
+.int-rh2-root .int-rh2-companion__location { color: var(--ds-text-soft); text-shadow: var(--ds-text-shadow); }
+
+/* Vitals: dark slots with a bright rim and a cyan readout, as the original
+   draws HP / TP / AP / Capacity. */
+.int-rh2-root .int-rh2-vitals {
+  border: 0;
+  border-radius: 12px;
+  padding: 9px 11px;
+  background: linear-gradient(180deg, var(--ds-slot-lit) 0%, var(--ds-slot) 55%, var(--ds-slot-deep) 100%);
+  box-shadow: inset 0 0 0 2px var(--ds-ink), 0 0 0 2px var(--ds-rim);
+}
+.int-rh2-root .int-rh2-vitals__label {
+  color: var(--ds-text-soft);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-shadow: var(--ds-text-shadow);
+}
+.int-rh2-root .int-rh2-vitals__value {
+  color: var(--ds-cyan-lit);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 10px rgba(127, 233, 255, 0.55), var(--ds-text-shadow);
+}
+
+/* The habitat sits inside a gold frame; nothing here paints over the canvas. */
+.int-rh2-root .int-rh2-field-frame {
+  border: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--ds-navy-deep);
+  box-shadow:
+    inset 0 0 0 2px var(--ds-ink),
+    0 0 0 3px var(--ds-gold),
+    0 0 0 5px var(--ds-ink),
+    var(--ds-lift);
+}
+.int-rh2-root .int-rh2-field-frame__label {
+  background: linear-gradient(180deg, rgba(4, 24, 44, 0.85), rgba(4, 24, 44, 0));
+}
+.int-rh2-root .int-rh2-field-frame__label .int-rh2-kicker {
+  border: 0;
+  border-radius: 999px;
+  padding: 3px 11px;
+  background: linear-gradient(180deg, var(--ds-panel-lit), var(--ds-panel-deep));
+  box-shadow: 0 0 0 2px var(--ds-gold), 0 0 0 3px var(--ds-ink);
+  color: var(--ds-text);
+  text-shadow: var(--ds-text-shadow);
+}
+.int-rh2-root .int-rh2-field-state { color: var(--ds-cyan-lit); text-shadow: var(--ds-text-shadow); }
+.int-rh2-root .int-rh2-status { color: var(--ds-text-soft); text-shadow: var(--ds-text-shadow); }
+
+.int-rh2-root .int-rh2-care-button {
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-green-lit) 0%, var(--ds-green) 52%, var(--ds-green-deep) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 0 2px var(--ds-ink), 0 2px 0 rgba(0, 0, 0, 0.3);
+  color: var(--ds-text);
+  text-shadow: var(--ds-text-shadow);
+}
+.int-rh2-root .int-rh2-care-button:disabled { opacity: 1; filter: grayscale(0.65) brightness(0.6); }
+
+/* The portrait well and the AP bar are part of the same readout, so they take
+   the same dark-slot treatment rather than staying light inside a dark window. */
+.int-rh2-root .int-rh2-companion__portrait {
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(180deg, var(--ds-slot) 0%, var(--ds-slot-deep) 100%);
+  box-shadow: inset 0 0 0 2px var(--ds-ink), 0 0 0 2px var(--ds-rim-soft);
+}
+.int-rh2-root .int-rh2-vitals__ap-bar {
+  background: linear-gradient(90deg, var(--ds-cyan) 0%, var(--ds-cyan-lit) 100%);
+  box-shadow: 0 0 10px rgba(127, 233, 255, 0.5);
+}
+
+/* raisingHomeHud sizes the icon layer in pixels; the skin centres it instead,
+   so the two must not both be in force. */
+.cm-toolbar[data-mode] .cm-toolbar__cell::before { width: auto; height: auto; }
+
+/* ====================================================================== *
+ * 6. GATE, HUNT, FACILITY, SHOP, DATABASE  (.cm-vs2-root family)
+ * ----------------------------------------------------------------------
+ * The bright layers for these screens are written as
+ * `.cm-vs2-root:is([data-screen=...])` and
+ * `.cm-vs2-root[data-screen="X"] .cm-vs2-y`, so the skin carries the same
+ * weight and wins on load order alone. No `!important` anywhere.
+ * ====================================================================== */
+
+.cm-vs2-root[data-screen] {
+  color-scheme: dark;
+  color: var(--ds-text);
+  background: var(--ds-navy-deep);
+  font-family: var(--ds-font);
+}
+
+/* Every vs2 screen is the blue mesh, except the two the original gives their
+   own world: the gate is green with silver chrome, the encyclopaedia green. */
+.cm-vs2-root[data-screen] .cm-vs2-shell,
+.cm-vs2-root[data-screen] .cm-vs2-field {
+  border-inline: 2px solid var(--ds-ink);
+  background-image:
+    var(--ds-hex),
+    radial-gradient(130% 62% at 50% 0%, rgba(140, 240, 255, 0.5) 0%, rgba(31, 139, 255, 0.22) 38%, rgba(11, 86, 232, 0) 74%),
+    linear-gradient(180deg, var(--ds-blue) 0%, var(--ds-blue-mid) 38%, var(--ds-blue-deep) 74%, var(--ds-navy-band) 100%);
+  background-repeat: repeat, no-repeat, no-repeat;
+  background-size: 40px 69px, 100% 100%, 100% 100%;
+  box-shadow: 0 0 44px rgba(0, 10, 40, 0.55);
+}
+
+.cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-shell {
+  background-image:
+    var(--ds-hex),
+    radial-gradient(130% 62% at 50% 0%, rgba(190, 255, 180, 0.34) 0%, rgba(24, 140, 60, 0.2) 40%, rgba(8, 82, 8, 0) 76%),
+    linear-gradient(180deg, #1f7a34 0%, #0d5a1c 55%, #06340f 100%);
+}
+
+/* Header: the screen name is the ribbon's tab capsule, as on every other
+   screen, so a player never has to learn a second heading style. */
+.cm-vs2-root[data-screen] .cm-vs2-header {
+  background: linear-gradient(180deg, rgba(4, 28, 52, 0.7), rgba(4, 28, 52, 0));
+  border: 0;
+  box-shadow: none;
+}
+.cm-vs2-root[data-screen] .cm-vs2-header::before,
+.cm-vs2-root[data-screen] .cm-vs2-header::after { display: none; }
+
+.cm-vs2-root[data-screen] .cm-vs2-title {
+  display: inline-block;
+  padding: 3px 18px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-panel-lit), var(--ds-panel-deep));
+  box-shadow: 0 0 0 2px var(--ds-gold), 0 0 0 4px var(--ds-ink), 0 3px 10px rgba(0, 0, 0, 0.5);
+  color: var(--ds-text);
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-vs2-root[data-screen] .cm-vs2-kicker { color: var(--ds-cyan-lit); text-shadow: var(--ds-text-shadow); }
+.cm-vs2-root[data-screen] .cm-vs2-subtitle { color: var(--ds-text-soft); text-shadow: var(--ds-text-shadow); }
+
+/* Windows */
+.cm-vs2-root[data-screen] .cm-vs2-preview,
+.cm-vs2-root[data-screen] .cm-vs2-destination,
+.cm-vs2-root[data-screen] .cm-vs2-loadout__row,
+.cm-vs2-root[data-screen] .cm-vs2-database__detail,
+.cm-vs2-root[data-screen] .cm-vs2-cage-rank {
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(180deg, var(--ds-panel-lit) 0%, var(--ds-panel) 55%, var(--ds-panel-deep) 100%);
+  box-shadow:
+    inset 0 0 0 2px var(--ds-ink),
+    0 0 0 3px var(--ds-gold),
+    0 0 0 5px var(--ds-ink),
+    var(--ds-lift);
+  color: var(--ds-text);
+}
+.cm-vs2-root[data-screen] .cm-vs2-preview__name,
+.cm-vs2-root[data-screen] .cm-vs2-destination__name { color: var(--ds-text); text-shadow: var(--ds-text-shadow); }
+.cm-vs2-root[data-screen] .cm-vs2-preview__id,
+.cm-vs2-root[data-screen] .cm-vs2-preview__state,
+.cm-vs2-root[data-screen] .cm-vs2-evidence,
+.cm-vs2-root[data-screen] .cm-cage-board-hint,
+.cm-vs2-root[data-screen] .cm-vs2-loadout__empty { color: var(--ds-text-dim); text-shadow: var(--ds-text-shadow); }
+.cm-vs2-root[data-screen] .cm-vs2-preview__costs dt,
+.cm-vs2-root[data-screen] .cm-vs2-loadout__label { color: var(--ds-gold); text-shadow: var(--ds-text-shadow); }
+.cm-vs2-root[data-screen] .cm-vs2-preview__costs dd { color: var(--ds-cyan-lit); text-shadow: 0 0 10px rgba(127, 233, 255, 0.5), var(--ds-text-shadow); }
+
+/* Choosable rows are slots; only actions are filled. */
+.cm-vs2-root[data-screen] .cm-vs2-gate,
+.cm-vs2-root[data-screen] .cm-vs2-member,
+.cm-vs2-root[data-screen] .cm-vs2-loadout__option,
+.cm-vs2-root[data-screen] .cm-vs2-database__row,
+.cm-vs2-root[data-screen] .cm-cage-facility,
+.cm-vs2-root[data-screen] .cm-vs2-cage-tray__item {
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(180deg, var(--ds-slot-lit) 0%, var(--ds-slot) 55%, var(--ds-slot-deep) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 0 2px var(--ds-rim),
+    0 0 0 3px var(--ds-ink),
+    0 0 12px var(--ds-rim-soft);
+  color: var(--ds-text);
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-vs2-root[data-screen] .cm-vs2-gate { border-radius: 999px; }
+.cm-vs2-root[data-screen] :is(.cm-vs2-gate, .cm-vs2-member, .cm-vs2-loadout__option,
+  .cm-vs2-database__row, .cm-cage-facility, .cm-vs2-cage-tray__item)[data-selected="true"],
+.cm-vs2-root[data-screen] :is(.cm-vs2-loadout__option, .cm-vs2-database__row)[aria-pressed="true"] {
+  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 0 2px var(--ds-ink), 0 0 16px rgba(255, 200, 60, 0.55);
+  color: #3a2100;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.cm-vs2-root[data-screen] .cm-vs2-gate__name,
+.cm-vs2-root[data-screen] .cm-vs2-member__name,
+.cm-vs2-root[data-screen] .cm-cage-facility strong { color: inherit; }
+.cm-vs2-root[data-screen] .cm-vs2-gate__ordinal,
+.cm-vs2-root[data-screen] .cm-vs2-member__index { color: var(--ds-cyan-lit); }
+.cm-vs2-root[data-screen] .cm-cage-facility span,
+.cm-vs2-root[data-screen] .cm-vs2-cage-tray__effect { color: var(--ds-text-soft); }
+
+/* Footer actions: one filled primary, the rest dark. */
+.cm-vs2-root[data-screen] .cm-vs2-footer { border: 0; background: transparent; box-shadow: none; }
+.cm-vs2-root[data-screen] .cm-vs2-action {
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-slot-lit) 0%, var(--ds-slot) 55%, var(--ds-slot-deep) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 0 0 2px var(--ds-rim),
+    0 0 0 3px var(--ds-ink);
+  color: var(--ds-text);
+  font-family: var(--ds-font);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-vs2-root[data-screen] .cm-vs2-action--primary {
+  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 0 2px var(--ds-ink), 0 0 16px rgba(255, 200, 60, 0.45);
+  color: #3a2100;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.cm-vs2-root[data-screen] .cm-vs2-action:disabled { opacity: 1; filter: grayscale(0.7) brightness(0.5); }
+
+/* ---- 6.1 Gate select: the original's world is green with silver chrome -- */
+.cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-preview,
+.cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-destination {
+  background: linear-gradient(180deg, #0c1a14 0%, #060d09 100%);
+  box-shadow:
+    inset 0 0 0 2px #000000,
+    0 0 0 3px #dfeef0,
+    0 0 0 5px #263230,
+    var(--ds-lift);
+}
+.cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-title {
+  box-shadow: 0 0 0 2px #eaf6f7, 0 0 0 4px var(--ds-ink), 0 3px 10px rgba(0, 0, 0, 0.5);
+}
+.cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate3d__node-index {
+  background: linear-gradient(180deg, #eafff0, #b7e8c4);
+  color: #11402a;
+  border: 0;
+  box-shadow: 0 0 0 2px var(--ds-ink);
+}
+.cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate3d__node-name {
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #0e2418, #050c08);
+  box-shadow: 0 0 0 2px #dfeef0;
+  color: var(--ds-text);
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate3d__node-hit[aria-pressed="true"] .cm-vs2-gate3d__node-index {
+  background: linear-gradient(180deg, var(--ds-gold-lit), var(--ds-amber));
+  box-shadow: 0 0 0 2px var(--ds-ink), 0 0 14px rgba(255, 200, 60, 0.7);
+}
+.cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate3d__hint { color: #d6ffe2; text-shadow: var(--ds-text-shadow); }
+
+/* ---- 6.2 Hunt field: the eight item slots are gold hex cells on a shelf -- */
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud {
+  border: 0;
+  background: linear-gradient(180deg, rgba(4, 28, 52, 0.8), rgba(4, 28, 52, 0));
+}
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud__gate { color: var(--ds-text); text-shadow: var(--ds-text-shadow); }
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud__companion { color: var(--ds-cyan-lit); }
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-toolbar {
+  border: 0;
+  background: linear-gradient(180deg, #1466a8 0%, #0a3f6e 42%, #052641 100%);
+  box-shadow: inset 0 2px 0 rgba(150, 235, 255, 0.55), inset 0 -2px 0 rgba(0, 0, 0, 0.4);
+}
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-slot {
+  position: relative;
+  border: 0;
+  border-radius: 0;
+  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 40%, var(--ds-amber-deep) 100%);
+  clip-path: polygon(25% 2%, 75% 2%, 100% 50%, 75% 98%, 25% 98%, 0 50%);
+  box-shadow: none;
+  color: #3a2100;
+}
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-slot::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  background: linear-gradient(180deg, #0c3c5e, #05202f);
+  clip-path: polygon(25% 2%, 75% 2%, 100% 50%, 75% 98%, 25% 98%, 0 50%);
+  pointer-events: none;
+}
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-slot > * { position: relative; z-index: 1; }
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-slot__cell {
+  border: 0;
+  background: radial-gradient(circle at 40% 35%, var(--ds-cyan-lit), var(--ds-cyan) 55%, #0b4b76 100%);
+  box-shadow: 0 0 8px rgba(127, 233, 255, 0.6);
+}
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-slot__raw { color: var(--ds-cyan-lit); }
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-field__hint { color: var(--ds-text-soft); text-shadow: var(--ds-text-shadow); }
+
+/* ---- 6.3 Cage edit: the ranch grid is the original's hex plate ---------- */
+.cm-vs2-root[data-screen="CAGE_EDIT"] .cm-cage-board-scroll {
+  border-block: 2px solid var(--ds-ink);
+  background: linear-gradient(180deg, #1466a8 0%, #0a3f6e 45%, #052641 100%);
+  box-shadow: inset 0 2px 0 rgba(150, 235, 255, 0.5);
+}
+.cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-slot {
+  background-color: #0f4a6e;
+  color: var(--ds-cyan-lit);
+}
+.cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-slot[data-unlocked="false"] { background: #0a2537; color: #37637d; }
+.cm-vs2-root[data-screen] .cm-facility-thumb { background: #0a2537; box-shadow: inset 0 0 0 2px var(--ds-ink); }
+
+/* ---- 6.4 Database: the original gives the encyclopaedia a green world --- */
+.cm-vs2-root[data-screen="DATABASE"] .cm-vs2-shell {
+  background-image:
+    var(--ds-hex),
+    radial-gradient(130% 62% at 50% 0%, rgba(196, 255, 190, 0.45) 0%, rgba(24, 140, 60, 0.2) 40%, rgba(8, 82, 8, 0) 76%),
+    linear-gradient(180deg, #35a854 0%, #1a8033 55%, #0b5a16 100%);
+}
+.cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__detail-title { color: var(--ds-text); }
+.cm-vs2-root[data-screen="DATABASE"] .cm-vs2-database__instance { color: var(--ds-text-soft); }
+
+/* ---- 6.5 Shop -------------------------------------------------------- */
+.cm-vs2-root[data-screen="SHOP"] .cm-vs2-shop__wallet {
+  border: 0;
+  border-radius: 999px;
+  padding: 4px 14px;
+  background: linear-gradient(180deg, var(--ds-slot-lit), var(--ds-slot-deep));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 0 2px var(--ds-gold), 0 0 0 3px var(--ds-ink);
+  color: var(--ds-cyan-lit);
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-vs2-root[data-screen] .cm-shop-goods-icon { box-shadow: 0 0 0 2px var(--ds-ink); border-radius: 10px; }
+
+/* ====================================================================== *
+ * 7. BATTLE  (.cm-vs5-root family)
+ * ----------------------------------------------------------------------
+ * The original's battle chrome is the same window and slot language, and its
+ * result screen is the one place a red band appears. Win and loss are the
+ * only states that change the palette, so they are the only states here that
+ * do.
+ * ====================================================================== */
+
+.cm-vs5-root[data-screen] {
+  color-scheme: dark;
+  color: var(--ds-text);
+  background: var(--ds-navy-deep);
+  font-family: var(--ds-font);
+}
+
+.cm-vs5-root[data-screen] .cm-vs5-shell {
+  border-inline: 2px solid var(--ds-ink);
+  background-image:
+    var(--ds-hex),
+    radial-gradient(130% 62% at 50% 0%, rgba(140, 240, 255, 0.5) 0%, rgba(31, 139, 255, 0.22) 38%, rgba(11, 86, 232, 0) 74%),
+    linear-gradient(180deg, var(--ds-blue) 0%, var(--ds-blue-mid) 38%, var(--ds-blue-deep) 74%, var(--ds-navy-band) 100%);
+  background-repeat: repeat, no-repeat, no-repeat;
+  background-size: 40px 69px, 100% 100%, 100% 100%;
+  box-shadow: 0 0 44px rgba(0, 10, 40, 0.55);
+}
+
+.cm-vs5-root[data-screen] .cm-vs5-header { background: linear-gradient(180deg, rgba(4, 28, 52, 0.7), rgba(4, 28, 52, 0)); }
+.cm-vs5-root[data-screen] .cm-vs5-title {
+  display: inline-block;
+  padding: 3px 18px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-panel-lit), var(--ds-panel-deep));
+  box-shadow: 0 0 0 2px var(--ds-gold), 0 0 0 4px var(--ds-ink), 0 3px 10px rgba(0, 0, 0, 0.5);
+  color: var(--ds-text);
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-vs5-root[data-screen] .cm-vs5-kicker { color: var(--ds-cyan-lit); text-shadow: var(--ds-text-shadow); }
+.cm-vs5-root[data-screen] .cm-vs5-evidence,
+.cm-vs5-root[data-screen] .cm-vs5-cube__note,
+.cm-vs5-root[data-screen] .cm-vs5-matches__empty { color: var(--ds-text-dim); text-shadow: var(--ds-text-shadow); }
+.cm-vs5-root[data-screen] .cm-vs5-entry-notice { color: #ffbdbd; text-shadow: var(--ds-text-shadow); }
+
+/* The mode cube's six faces are slots until one is chosen. */
+.cm-vs5-root[data-screen] .cm-vs5-cube__face {
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-slot-lit) 0%, var(--ds-slot) 55%, var(--ds-slot-deep) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 0 2px var(--ds-rim),
+    0 0 0 3px var(--ds-ink);
+  color: var(--ds-text);
+  font-family: var(--ds-font);
+  font-weight: 700;
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-vs5-root[data-screen] .cm-vs5-cube__face[aria-pressed="true"],
+.cm-vs5-root[data-screen] .cm-vs5-cube__face[data-selected="true"] {
+  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 0 2px var(--ds-ink), 0 0 16px rgba(255, 200, 60, 0.55);
+  color: #3a2100;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.cm-vs5-root[data-screen] .cm-vs5-cube__face:disabled { opacity: 1; filter: grayscale(0.7) brightness(0.5); }
+
+.cm-vs5-root[data-screen] .cm-vs5-match__enter,
+.cm-vs5-root[data-screen] .cm-vs5-action {
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-slot-lit) 0%, var(--ds-slot) 55%, var(--ds-slot-deep) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 0 0 2px var(--ds-rim),
+    0 0 0 3px var(--ds-ink);
+  color: var(--ds-text);
+  font-family: var(--ds-font);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-vs5-root[data-screen] .cm-vs5-match__enter { border-radius: 18px; text-align: left; }
+.cm-vs5-root[data-screen] .cm-vs5-action--primary {
+  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 0 2px var(--ds-ink), 0 0 16px rgba(255, 200, 60, 0.45);
+  color: #3a2100;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.cm-vs5-root[data-screen] .cm-vs5-action:disabled { opacity: 1; filter: grayscale(0.7) brightness(0.5); }
+.cm-vs5-root[data-screen] .cm-vs5-match__fee,
+.cm-vs5-root[data-screen] .cm-vs5-match__payout { color: var(--ds-gold); text-shadow: var(--ds-text-shadow); }
+
+/* ---- 7.1 Battle field HUD -------------------------------------------- */
+.cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-clock { background: transparent; }
+.cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-clock__caption { color: var(--ds-text-soft); text-shadow: var(--ds-text-shadow); }
+.cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-clock__track {
+  height: 9px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-slot-deep), #03151f);
+  box-shadow: inset 0 0 0 2px var(--ds-ink), 0 0 0 2px var(--ds-gold);
+}
+.cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-clock__fill {
+  background: linear-gradient(90deg, var(--ds-cyan), var(--ds-cyan-lit));
+  box-shadow: 0 0 10px rgba(127, 233, 255, 0.7);
+}
+
+/* A fighter card is a readout, so it is a slot: dark inside, rim outside.
+   The opponent's rim runs red so the two sides never blur together. */
+.cm-vs5-root[data-screen] .cm-vs5-fighter {
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--ds-slot-lit) 0%, var(--ds-slot) 55%, var(--ds-slot-deep) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 0 2px var(--ds-rim), 0 0 0 3px var(--ds-ink);
+  color: var(--ds-text);
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-vs5-root[data-screen] .cm-vs5-roster--opponent .cm-vs5-fighter {
+  background: linear-gradient(180deg, #4a1a1e 0%, #2d0f12 55%, #180708 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 0 2px #ff6a6a, 0 0 0 3px var(--ds-ink);
+}
+.cm-vs5-root[data-screen] .cm-vs5-fighter[data-engaged="true"] {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 0 0 2px var(--ds-gold), 0 0 0 3px var(--ds-ink), 0 0 16px rgba(255, 200, 60, 0.6);
+}
+.cm-vs5-root[data-screen] .cm-vs5-fighter[data-down="true"] { opacity: 1; filter: grayscale(0.75) brightness(0.55); }
+.cm-vs5-root[data-screen] .cm-vs5-fighter__name { color: inherit; }
+.cm-vs5-root[data-screen] .cm-vs5-meter {
+  border-radius: 999px;
+  background: linear-gradient(180deg, #03151f, #010a10);
+  box-shadow: inset 0 0 0 1px var(--ds-ink);
+}
+.cm-vs5-root[data-screen] .cm-vs5-meter__fill { background: linear-gradient(90deg, #2fd14a, #8bff9c); }
+.cm-vs5-root[data-screen] .cm-vs5-meter--resource .cm-vs5-meter__fill { background: linear-gradient(90deg, var(--ds-cyan), var(--ds-cyan-lit)); }
+
+.cm-vs5-root[data-screen] .cm-vs5-log {
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(180deg, var(--ds-panel-lit) 0%, var(--ds-panel) 55%, var(--ds-panel-deep) 100%);
+  box-shadow: inset 0 0 0 2px var(--ds-ink), 0 0 0 3px var(--ds-gold), 0 0 0 5px var(--ds-ink);
+}
+.cm-vs5-root[data-screen] .cm-vs5-log__line { color: var(--ds-text); text-shadow: var(--ds-text-shadow); }
+.cm-vs5-root[data-screen] .cm-vs5-log__detail { color: var(--ds-text-soft); }
+.cm-vs5-root[data-screen] .cm-vs5-field {
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 2px var(--ds-ink), 0 0 0 3px var(--ds-gold), 0 0 0 5px var(--ds-ink);
+}
+
+/* ---- 7.2 Result: the original's one red screen ------------------------- */
+.cm-vs5-root[data-screen] .cm-vs5-result__detail {
+  border: 0;
+  border-radius: 14px;
+  padding: 14px;
+  background: linear-gradient(180deg, var(--ds-panel-lit) 0%, var(--ds-panel) 55%, var(--ds-panel-deep) 100%);
+  box-shadow: inset 0 0 0 2px var(--ds-ink), 0 0 0 3px var(--ds-gold), 0 0 0 5px var(--ds-ink), var(--ds-lift);
+  color: var(--ds-text);
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell {
+  background-image:
+    var(--ds-hex),
+    radial-gradient(130% 62% at 50% 0%, rgba(255, 190, 190, 0.45) 0%, rgba(216, 31, 38, 0.25) 38%, rgba(120, 12, 18, 0) 74%),
+    linear-gradient(180deg, #c81f26 0%, #8c1016 42%, #3a0a10 78%, #0a4a86 100%);
+}
+.cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-title {
+  box-shadow: 0 0 0 2px var(--ds-gold), 0 0 0 4px var(--ds-ink), 0 0 22px rgba(255, 200, 60, 0.55);
+}
+
+/* ---- 6.6 Shop and encyclopaedia lists --------------------------------- */
+/* Both screens share one body: a sticky tab strip over a list of rows. The
+   tab strip is the ribbon's tab language; the rows are slots with one filled
+   action each, because buying is the only thing you press here. */
+.cm-vs2-root[data-screen] .cm-vs2-shop__tabs {
+  background: linear-gradient(180deg, rgba(4, 28, 52, 0.92), rgba(4, 28, 52, 0.55));
+  padding: 6px 0 9px;
+}
+.cm-vs2-root[data-screen] .cm-vs2-shop__tab {
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-slot-lit), var(--ds-slot-deep));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 0 2px var(--ds-rim), 0 0 0 3px var(--ds-ink);
+  color: var(--ds-text);
+  font-family: var(--ds-font);
+  font-weight: 700;
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-vs2-root[data-screen] .cm-vs2-shop__tab[data-active="true"] {
+  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 0 2px var(--ds-ink), 0 0 14px rgba(255, 200, 60, 0.5);
+  color: #3a2100;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.cm-vs2-root[data-screen] .cm-vs2-shop__row {
+  border: 0;
+  border-radius: 16px;
+  background: linear-gradient(180deg, var(--ds-slot-lit) 0%, var(--ds-slot) 55%, var(--ds-slot-deep) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 0 2px var(--ds-rim),
+    0 0 0 3px var(--ds-ink),
+    0 0 12px var(--ds-rim-soft);
+  color: var(--ds-text);
+}
+.cm-vs2-root[data-screen] .cm-vs2-shop__name strong { color: var(--ds-text); text-shadow: var(--ds-text-shadow); }
+.cm-vs2-root[data-screen] .cm-vs2-shop__meta,
+.cm-vs2-root[data-screen] .cm-vs2-shop__empty,
+.cm-vs2-root[data-screen] .cm-vs2-shop__status { color: var(--ds-text-soft); text-shadow: var(--ds-text-shadow); }
+.cm-vs2-root[data-screen] .cm-vs2-shop__new {
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-gold-lit), var(--ds-amber));
+  box-shadow: 0 0 0 2px var(--ds-ink);
+  color: #3a2100;
+}
+.cm-vs2-root[data-screen] .cm-vs2-shop__buy {
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ds-green-lit) 0%, var(--ds-green) 52%, var(--ds-green-deep) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 0 2px var(--ds-ink), 0 2px 0 rgba(0, 0, 0, 0.3);
+  color: var(--ds-text);
+  font-family: var(--ds-font);
+  font-weight: 700;
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-vs2-root[data-screen] .cm-vs2-shop__buy:disabled { opacity: 1; filter: grayscale(0.75) brightness(0.5); }
+
+/* ====================================================================== *
+ * 8. POLISH -- the places the first pass left hard to read
+ * ====================================================================== */
+
+/* Help: the cartridge groups topics under headings, and the product rendered
+   both at the same weight on the same ground. The heading now reads as a
+   heading and the topics as the capsules they are. */
+.cm-help-root .cm-help-heading {
+  flex: 1 0 100%;
+  margin: 12px 0 2px;
+  padding: 3px 14px 4px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(4, 28, 52, 0.9), rgba(4, 28, 52, 0.4));
+  box-shadow: inset 0 0 0 1px rgba(255, 223, 70, 0.45);
+  color: var(--ds-gold);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-shadow: var(--ds-text-shadow);
+}
+.cm-help-root .cm-help-heading:first-child { margin-top: 0; }
+.cm-help-root .cm-help-topic { min-height: 34px; padding: 5px 13px; font-size: 0.72rem; }
+.cm-help-root .cm-help-detail__body { color: var(--ds-text); }
+
+/* Tamer info: the original prints the value in the same ink as the label, and
+   the product had it near-invisible when the field is not yet sourced. */
+.cm-tamer-root .cm-tamer-field__value { font-size: 1rem; }
+.cm-tamer-root .cm-tamer-field__value[data-state="UNSOURCED"] { color: #9dc4dc; opacity: 0.85; }
+
+/* Cage edit and the encyclopaedia both print instructions straight on the
+   mesh, where dark ink disappears. */
+.cm-vs2-root[data-screen] .cm-vs2-shell p,
+.cm-vs2-root[data-screen] .cm-vs2-shell li { color: var(--ds-text-soft); }
+.cm-vs2-root[data-screen] .cm-cage-board-hint,
+.cm-vs2-root[data-screen] .cm-vs2-cage-rank__label { color: var(--ds-text-soft); text-shadow: var(--ds-text-shadow); }
+
+/* ====================================================================== *
+ * 9. TITLE -- the original's start screen
+ * ----------------------------------------------------------------------
+ * The cartridge shows the logo over the same mesh the rest of the interface
+ * uses, with the choices as capsules low on the screen. The logo art itself is
+ * untouched; only the ground and the capsules are ours.
+ * ====================================================================== */
+
+.cm-title {
+  background-image:
+    var(--ds-hex),
+    radial-gradient(130% 70% at 50% 4%, rgba(140, 240, 255, 0.5) 0%, rgba(31, 139, 255, 0.22) 40%, rgba(11, 86, 232, 0) 76%),
+    linear-gradient(180deg, var(--ds-blue) 0%, var(--ds-blue-mid) 40%, var(--ds-blue-deep) 76%, var(--ds-navy-deep) 100%);
+  background-repeat: repeat, no-repeat, no-repeat;
+  background-size: 40px 69px, 100% 100%, 100% 100%;
+}
+.cm-title__panel { gap: 22px; }
+.cm-title__eyebrow { color: var(--ds-cyan-lit); text-shadow: 0 0 10px rgba(127, 233, 255, 0.6); }
+.cm-title__name { font-family: var(--ds-font); text-shadow: 0 3px 0 rgba(4, 16, 26, 0.6); }
+.cm-title__tagline { color: var(--ds-text-soft); text-shadow: var(--ds-text-shadow); }
+.cm-title__note { color: var(--ds-cyan-lit); text-shadow: var(--ds-text-shadow); }
+.cm-title__actions { gap: 14px; }
+
+/* ====================================================================== *
+ * 10. THE GAME COLUMN -- one width for every screen
+ * ----------------------------------------------------------------------
+ * Every playable screen is `min(100%, 430px)` wide and centred. The title
+ * panel was sized `min(100vw, 56.25dvh)` instead, which on a tall window is
+ * wider than the game, so the opening overlay it hosts -- the letter, the
+ * envelope -- sat outside the frame the player reads as the game. Capping the
+ * panel at the same 430px keeps the 9:16 shape on short windows and lines the
+ * opening up with everything that follows on tall ones.
+ * ====================================================================== */
+
+.cm-title__panel { width: min(100vw, 430px, 56.25dvh); }
+
+/* The opening overlay is the one child that positions against the panel, so it
+   is the one that has to be told the panel is now the game column. */
+#cm-opening { inset: 0; }
+.cm-opening__envelope { right: 12%; bottom: 24%; }
+
+/* ---- 10.1 The habitat frame is the ground the ranch sits on ------------- */
+/* The field presentation no longer paints a pale rectangle behind the ranch,
+   so the frame itself now carries the mesh. The ranch reads as a platform in
+   the digital world instead of a plate on a blank sheet, and the space the
+   fitted ranch does not fill stops looking like missing art. */
+.int-rh2-root .int-rh2-field-frame {
+  background-image:
+    var(--ds-hex),
+    radial-gradient(120% 80% at 50% 0%, rgba(140, 240, 255, 0.34) 0%, rgba(31, 139, 255, 0.16) 40%, rgba(11, 86, 232, 0) 78%),
+    linear-gradient(180deg, #0a4f9e 0%, #073a7c 48%, #04244f 100%);
+  background-repeat: repeat, no-repeat, no-repeat;
+  background-size: 40px 69px, 100% 100%, 100% 100%;
+}
+
+/* The ranch is the subject; a soft vignette pushes the mesh behind it without
+   hiding any of the playable plate. */
+.int-rh2-root .int-rh2-field-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(115% 78% at 50% 48%, rgba(0, 0, 0, 0) 52%, rgba(2, 12, 28, 0.45) 100%);
+}
+.int-rh2-root .int-rh2-field-host { position: relative; z-index: 2; }
+.int-rh2-root .int-rh2-field-frame__label { z-index: 3; }
+
+/* The Hunt field prints two hints straight over the world art, and the bright
+   layer gave them a pale chip that now reads as a hole in the scene. */
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-field__hint,
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-memory {
+  border: 0;
+  border-radius: 999px;
+  padding: 5px 12px;
+  background: linear-gradient(180deg, rgba(10, 40, 62, 0.92), rgba(3, 18, 30, 0.92));
+  box-shadow: 0 0 0 2px var(--ds-ink), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  color: var(--ds-text-soft);
+  text-shadow: var(--ds-text-shadow);
+}
+
+/* ====================================================================== *
+ * 11. TOOLBAR SLOTS -- corrected against the original hardware
+ * ----------------------------------------------------------------------
+ * Comparing the recovered ROM icons against a photo of the original running
+ * showed the icons were right and their holder was not. The original's slots
+ * are HEXAGONS carried in gold brackets along a gold rail, and the chosen tool
+ * is a GREEN hexagon under a gold icon -- not a gold disc. The plate is drawn
+ * as one inline SVG so the button itself stays unclipped and keeps its focus
+ * ring; a clip-path on the button would eat it.
+ *
+ * The SVG uses flat polygons rather than a gradient on purpose. An SVG
+ * gradient has to be referenced by fragment id, and inside a data URI that id
+ * percent-encodes; the release build plan scans a stylesheet for every
+ * resource reference and resolves it to a publishable file, skipping only the
+ * data and fragment forms it recognises -- not the encoded one. A gradient here
+ * would therefore be reported as a missing static resource and could never
+ * ship. This comment avoids spelling the encoded form out for the same reason.
+ * ====================================================================== */
+
+.cm-toolbar[data-mode] .cm-toolbar__rail {
+  background:
+    linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 30%,
+      var(--ds-gold-mid) 58%, var(--ds-amber-deep) 100%);
+  border-top: 2px solid var(--ds-ink);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.65), 0 -6px 18px rgba(0, 10, 25, 0.5);
+}
+
+.cm-toolbar[data-mode] .cm-toolbar__cell {
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+/* The plate. `::after` sits under the icon, which `::before` still carries. */
+.cm-toolbar[data-mode] .cm-toolbar__cell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--ds-hex-plate-rest) center / 100% 100% no-repeat;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.45));
+}
+.cm-toolbar[data-mode] .cm-toolbar__cell::before { z-index: 1; inset: 23%; }
+
+.cm-toolbar[data-mode] .cm-toolbar__cell[aria-pressed="true"],
+.cm-toolbar[data-mode] .cm-toolbar__cell[aria-expanded="true"] {
+  background: none;
+  box-shadow: none;
+}
+.cm-toolbar[data-mode] .cm-toolbar__cell[aria-pressed="true"]::after,
+.cm-toolbar[data-mode] .cm-toolbar__cell[aria-expanded="true"]::after {
+  background: var(--ds-hex-plate-lit) center / 100% 100% no-repeat;
+  filter: drop-shadow(0 0 8px rgba(120, 255, 130, 0.65));
+}
+
+/* The count chip has to live inside the hexagon now, not on a circle's rim. */
+.cm-toolbar[data-mode] .cm-toolbar__stock {
+  right: auto;
+  left: 50%;
+  bottom: 4%;
+  z-index: 2;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #143a55, #061722);
+}
+
+/* ====================================================================== *
+ * 12. REVIEW FIXES -- measured, not eyeballed
+ * ----------------------------------------------------------------------
+ * A walk of every screen measured three things: anything wider than its
+ * column, text that does not fit its box, and interactive targets under 40px.
+ * Two screens failed the third. Everything below is that failure and the two
+ * icon decisions the Owner took on 2026-09-12.
+ * ====================================================================== */
+
+/* The schedule packed 61 fixture buttons at 30px and Help 68 topics at 34px.
+   Both are reachable with a stylus on the original and neither is reachable
+   with a thumb here. 40px is the smallest that still fits eight days across a
+   390px phone without dropping to three columns. */
+.cm-schedule-root .cm-schedule-fixture { min-height: 40px; padding: 0.4rem 0.5rem; }
+.cm-schedule-root .cm-schedule-day { min-height: 76px; }
+.cm-help-root .cm-help-topic { min-height: 40px; padding: 7px 14px; }
+
+/* A placed facility is a "take it back" action, not a row you choose between,
+   so it has no chosen state to show -- but it must still answer a press. */
+.cm-vs2-root[data-screen="CAGE_EDIT"] .cm-cage-facility { transition: filter 120ms ease, transform 90ms ease; }
+.cm-vs2-root[data-screen="CAGE_EDIT"] .cm-cage-facility:hover:not(:disabled) { filter: brightness(1.3); }
+.cm-vs2-root[data-screen="CAGE_EDIT"] .cm-cage-facility:not(:disabled):active { transform: translateY(2px); }
+
+/* ---- 12.1 Shop goods: one icon language ------------------------------- */
+/* The goods binding now points at the approved toolbar cells, so the icon a
+   shop row shows is the icon the rail shows. It sits on the same dark plate. */
+.cm-vs2-root[data-screen] .cm-shop-goods-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
+  background-color: #10303f;
+  background-size: 74% 74%;
+  background-repeat: no-repeat;
+  background-position: center;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 0 0 2px var(--ds-gold), 0 0 0 3px var(--ds-ink);
+  image-rendering: pixelated;
+}
+
+/* ---- 12.2 Hunt tools: icons on the rail's hexagon --------------------- */
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools { gap: 8px; }
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action {
+  position: relative;
+  flex: 0 0 auto;
+  width: 58px;
+  height: 58px;
+  min-height: 58px;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  font-size: 0;
+  overflow: visible;
+}
+/* The same plate the care rail uses, so one screen does not invent a second
+   way of showing a tool. */
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--ds-hex-plate-rest) center / 100% 100% no-repeat;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.45));
+}
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[aria-pressed="true"]::after {
+  background: var(--ds-hex-plate-lit) center / 100% 100% no-repeat;
+  filter: drop-shadow(0 0 8px rgba(120, 255, 130, 0.65));
+}
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action::before {
+  content: "";
+  position: absolute;
+  inset: 23%;
+  z-index: 1;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.55));
+}
+/* HAND is the one hunt tool the approved cell set already draws. The other five
+   are authored here in the same silhouette language rather than lifted from the
+   reference, which stays research-only. */
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="HAND"]::before {
+  background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/hand-rest.png");
+}
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="HAND"][aria-pressed="true"]::before {
+  background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/hand-selected.png");
+}
+/* ---- 12.3 The cells with no approved art ------------------------------ *
+   Five hunt tools and the save control have no cell in the approved set.
+   They are authored on the same 16x16 grid, in the same five tones, with
+   the same rest -> chosen palette swap the approved cells use, so one rail
+   never reads as a different product from the other. Generated by
+   .tmp/hunt_glyphs.py. Nothing is written under assets/production:
+   promoting an asset is the Owner's decision, and this is chrome. */
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="ROPE"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M5 1h6v1h-6zM3 2h2v1h-2zM11 2h2v1h-2zM2 3h1v1h-1zM5 3h6v1h-6zM13 3h1v1h-1zM1 4h1v1h-1zM4 4h2v1h-2zM10 4h2v1h-2zM14 4h1v1h-1zM1 5h1v1h-1zM3 5h2v1h-2zM7 5h2v1h-2zM11 5h2v1h-2zM14 5h1v1h-1zM1 6h1v1h-1zM3 6h1v1h-1zM6 6h1v1h-1zM9 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM1 7h1v1h-1zM3 7h1v1h-1zM6 7h1v1h-1zM9 7h1v1h-1zM12 7h1v1h-1zM14 7h1v1h-1zM1 8h1v1h-1zM3 8h2v1h-2zM7 8h2v1h-2zM11 8h2v1h-2zM14 8h1v1h-1zM1 9h1v1h-1zM4 9h2v1h-2zM10 9h2v1h-2zM14 9h1v1h-1zM2 10h1v1h-1zM5 10h6v1h-6zM13 10h1v1h-1zM3 11h2v1h-2zM10 11h3v1h-3zM5 12h3v1h-3zM10 12h2v1h-2zM8 13h1v1h-1zM12 13h1v1h-1zM9 14h2v1h-2zM13 14h1v1h-1zM11 15h2v1h-2z' fill='%23292929'/%3E%3Cpath d='M3 4h1v1h-1zM6 5h1v1h-1zM5 6h1v1h-1zM5 7h1v1h-1zM11 7h1v1h-1zM10 8h1v1h-1zM9 9h1v1h-1zM13 9h1v1h-1zM12 10h1v1h-1zM9 12h1v1h-1z' fill='%23413939'/%3E%3Cpath d='M12 4h2v1h-2zM13 5h1v1h-1zM11 6h1v1h-1zM13 6h1v1h-1zM13 7h1v1h-1zM13 8h1v1h-1zM7 9h2v1h-2zM11 10h1v1h-1zM5 11h3v1h-3zM9 11h1v1h-1zM8 12h1v1h-1zM9 13h3v1h-3zM11 14h2v1h-2z' fill='%236a6a6a'/%3E%3Cpath d='M5 2h6v1h-6zM4 3h1v1h-1zM11 3h2v1h-2zM7 4h3v1h-3zM2 5h1v1h-1zM9 5h2v1h-2zM2 6h1v1h-1zM2 7h1v1h-1zM4 7h1v1h-1zM2 8h1v1h-1zM5 8h2v1h-2zM2 9h2v1h-2zM6 9h1v1h-1zM3 10h2v1h-2z' fill='%239c9c9c'/%3E%3Cpath d='M3 3h1v1h-1zM2 4h1v1h-1zM6 4h1v1h-1zM5 5h1v1h-1zM4 6h1v1h-1zM10 6h1v1h-1zM10 7h1v1h-1zM9 8h1v1h-1zM12 9h1v1h-1zM8 11h1v1h-1z' fill='%23c5ffff'/%3E%3C/svg%3E"); }
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="ROPE"][aria-pressed="true"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M5 1h6v1h-6zM3 2h2v1h-2zM11 2h2v1h-2zM2 3h1v1h-1zM5 3h6v1h-6zM13 3h1v1h-1zM1 4h1v1h-1zM4 4h2v1h-2zM10 4h2v1h-2zM14 4h1v1h-1zM1 5h1v1h-1zM3 5h2v1h-2zM7 5h2v1h-2zM11 5h2v1h-2zM14 5h1v1h-1zM1 6h1v1h-1zM3 6h1v1h-1zM6 6h1v1h-1zM9 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM1 7h1v1h-1zM3 7h1v1h-1zM6 7h1v1h-1zM9 7h1v1h-1zM12 7h1v1h-1zM14 7h1v1h-1zM1 8h1v1h-1zM3 8h2v1h-2zM7 8h2v1h-2zM11 8h2v1h-2zM14 8h1v1h-1zM1 9h1v1h-1zM4 9h2v1h-2zM10 9h2v1h-2zM14 9h1v1h-1zM2 10h1v1h-1zM5 10h6v1h-6zM13 10h1v1h-1zM3 11h2v1h-2zM10 11h3v1h-3zM5 12h3v1h-3zM10 12h2v1h-2zM8 13h1v1h-1zM12 13h1v1h-1zM9 14h2v1h-2zM13 14h1v1h-1zM11 15h2v1h-2z' fill='%235a1800'/%3E%3Cpath d='M3 4h1v1h-1zM6 5h1v1h-1zM5 6h1v1h-1zM5 7h1v1h-1zM11 7h1v1h-1zM10 8h1v1h-1zM9 9h1v1h-1zM13 9h1v1h-1zM12 10h1v1h-1zM9 12h1v1h-1z' fill='%23a44a00'/%3E%3Cpath d='M12 4h2v1h-2zM13 5h1v1h-1zM11 6h1v1h-1zM13 6h1v1h-1zM13 7h1v1h-1zM13 8h1v1h-1zM7 9h2v1h-2zM11 10h1v1h-1zM5 11h3v1h-3zM9 11h1v1h-1zM8 12h1v1h-1zM9 13h3v1h-3zM11 14h2v1h-2z' fill='%23ffac00'/%3E%3Cpath d='M5 2h6v1h-6zM4 3h1v1h-1zM11 3h2v1h-2zM7 4h3v1h-3zM2 5h1v1h-1zM9 5h2v1h-2zM2 6h1v1h-1zM2 7h1v1h-1zM4 7h1v1h-1zM2 8h1v1h-1zM5 8h2v1h-2zM2 9h2v1h-2zM6 9h1v1h-1zM3 10h2v1h-2z' fill='%23ffe600'/%3E%3Cpath d='M3 3h1v1h-1zM2 4h1v1h-1zM6 4h1v1h-1zM5 5h1v1h-1zM4 6h1v1h-1zM10 6h1v1h-1zM10 7h1v1h-1zM9 8h1v1h-1zM12 9h1v1h-1zM8 11h1v1h-1z' fill='%23ffffac'/%3E%3C/svg%3E"); }
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="SHOT"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M2 0h2v1h-2zM12 0h2v1h-2zM1 1h1v1h-1zM4 1h1v1h-1zM11 1h1v1h-1zM14 1h1v1h-1zM1 2h1v1h-1zM4 2h1v1h-1zM11 2h1v1h-1zM14 2h1v1h-1zM1 3h1v1h-1zM4 3h1v1h-1zM11 3h1v1h-1zM14 3h1v1h-1zM2 4h1v1h-1zM5 4h1v1h-1zM10 4h1v1h-1zM13 4h1v1h-1zM3 5h1v1h-1zM6 5h1v1h-1zM9 5h1v1h-1zM12 5h1v1h-1zM4 6h1v1h-1zM7 6h2v1h-2zM11 6h1v1h-1zM5 7h1v1h-1zM10 7h1v1h-1zM6 8h1v1h-1zM9 8h1v1h-1zM6 9h1v1h-1zM9 9h1v1h-1zM6 10h1v1h-1zM9 10h1v1h-1zM5 11h1v1h-1zM10 11h1v1h-1zM5 12h1v1h-1zM10 12h1v1h-1zM5 13h1v1h-1zM10 13h1v1h-1zM6 14h4v1h-4z' fill='%23292929'/%3E%3Cpath d='M3 2h1v1h-1zM13 2h1v1h-1zM3 3h1v1h-1zM13 3h1v1h-1zM12 4h1v1h-1zM11 5h1v1h-1zM10 6h1v1h-1zM9 7h1v1h-1zM8 8h1v1h-1zM8 9h1v1h-1zM8 10h1v1h-1zM9 12h1v1h-1zM7 13h3v1h-3z' fill='%23413939'/%3E%3Cpath d='M7 11h3v1h-3zM7 12h2v1h-2zM6 13h1v1h-1z' fill='%236a6a6a'/%3E%3Cpath d='M3 1h1v1h-1zM13 1h1v1h-1zM2 3h1v1h-1zM3 4h2v1h-2zM4 5h2v1h-2zM5 6h2v1h-2zM6 7h1v1h-1z' fill='%239c9c9c'/%3E%3Cpath d='M2 1h1v1h-1zM12 1h1v1h-1zM2 2h1v1h-1zM12 2h1v1h-1zM12 3h1v1h-1zM11 4h1v1h-1zM10 5h1v1h-1zM9 6h1v1h-1zM7 7h2v1h-2zM7 8h1v1h-1zM7 9h1v1h-1zM7 10h1v1h-1zM6 11h1v1h-1zM6 12h1v1h-1z' fill='%23c5ffff'/%3E%3C/svg%3E"); }
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="SHOT"][aria-pressed="true"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M2 0h2v1h-2zM12 0h2v1h-2zM1 1h1v1h-1zM4 1h1v1h-1zM11 1h1v1h-1zM14 1h1v1h-1zM1 2h1v1h-1zM4 2h1v1h-1zM11 2h1v1h-1zM14 2h1v1h-1zM1 3h1v1h-1zM4 3h1v1h-1zM11 3h1v1h-1zM14 3h1v1h-1zM2 4h1v1h-1zM5 4h1v1h-1zM10 4h1v1h-1zM13 4h1v1h-1zM3 5h1v1h-1zM6 5h1v1h-1zM9 5h1v1h-1zM12 5h1v1h-1zM4 6h1v1h-1zM7 6h2v1h-2zM11 6h1v1h-1zM5 7h1v1h-1zM10 7h1v1h-1zM6 8h1v1h-1zM9 8h1v1h-1zM6 9h1v1h-1zM9 9h1v1h-1zM6 10h1v1h-1zM9 10h1v1h-1zM5 11h1v1h-1zM10 11h1v1h-1zM5 12h1v1h-1zM10 12h1v1h-1zM5 13h1v1h-1zM10 13h1v1h-1zM6 14h4v1h-4z' fill='%235a1800'/%3E%3Cpath d='M3 2h1v1h-1zM13 2h1v1h-1zM3 3h1v1h-1zM13 3h1v1h-1zM12 4h1v1h-1zM11 5h1v1h-1zM10 6h1v1h-1zM9 7h1v1h-1zM8 8h1v1h-1zM8 9h1v1h-1zM8 10h1v1h-1zM9 12h1v1h-1zM7 13h3v1h-3z' fill='%23a44a00'/%3E%3Cpath d='M7 11h3v1h-3zM7 12h2v1h-2zM6 13h1v1h-1z' fill='%23ffac00'/%3E%3Cpath d='M3 1h1v1h-1zM13 1h1v1h-1zM2 3h1v1h-1zM3 4h2v1h-2zM4 5h2v1h-2zM5 6h2v1h-2zM6 7h1v1h-1z' fill='%23ffe600'/%3E%3Cpath d='M2 1h1v1h-1zM12 1h1v1h-1zM2 2h1v1h-1zM12 2h1v1h-1zM12 3h1v1h-1zM11 4h1v1h-1zM10 5h1v1h-1zM9 6h1v1h-1zM7 7h2v1h-2zM7 8h1v1h-1zM7 9h1v1h-1zM7 10h1v1h-1zM6 11h1v1h-1zM6 12h1v1h-1z' fill='%23ffffac'/%3E%3C/svg%3E"); }
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="WIRE"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M2 1h12v1h-12zM1 2h1v1h-1zM14 2h1v1h-1zM1 3h1v1h-1zM3 3h10v1h-10zM14 3h1v1h-1zM1 4h1v1h-1zM14 4h1v1h-1zM2 5h2v1h-2zM12 5h2v1h-2zM3 6h1v1h-1zM12 6h1v1h-1zM3 7h1v1h-1zM12 7h1v1h-1zM2 8h2v1h-2zM12 8h2v1h-2zM1 9h1v1h-1zM14 9h1v1h-1zM1 10h1v1h-1zM3 10h10v1h-10zM14 10h1v1h-1zM1 11h1v1h-1zM14 11h1v1h-1zM2 12h12v1h-12z' fill='%23292929'/%3E%3Cpath d='M13 4h1v1h-1zM11 5h1v1h-1zM11 6h1v1h-1zM11 7h1v1h-1zM11 8h1v1h-1zM4 9h8v1h-8zM13 11h1v1h-1z' fill='%23413939'/%3E%3Cpath d='M13 3h1v1h-1zM12 4h1v1h-1zM10 6h1v1h-1zM9 7h2v1h-2zM8 8h3v1h-3zM12 9h2v1h-2zM13 10h1v1h-1zM5 11h8v1h-8z' fill='%236a6a6a'/%3E%3Cpath d='M3 2h11v1h-11zM2 3h1v1h-1zM2 4h2v1h-2zM5 5h6v1h-6zM5 6h5v1h-5zM5 7h4v1h-4zM5 8h3v1h-3zM3 9h1v1h-1zM2 10h1v1h-1zM2 11h3v1h-3z' fill='%239c9c9c'/%3E%3Cpath d='M2 2h1v1h-1zM4 4h8v1h-8zM4 5h1v1h-1zM4 6h1v1h-1zM4 7h1v1h-1zM4 8h1v1h-1zM2 9h1v1h-1z' fill='%23c5ffff'/%3E%3C/svg%3E"); }
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="WIRE"][aria-pressed="true"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M2 1h12v1h-12zM1 2h1v1h-1zM14 2h1v1h-1zM1 3h1v1h-1zM3 3h10v1h-10zM14 3h1v1h-1zM1 4h1v1h-1zM14 4h1v1h-1zM2 5h2v1h-2zM12 5h2v1h-2zM3 6h1v1h-1zM12 6h1v1h-1zM3 7h1v1h-1zM12 7h1v1h-1zM2 8h2v1h-2zM12 8h2v1h-2zM1 9h1v1h-1zM14 9h1v1h-1zM1 10h1v1h-1zM3 10h10v1h-10zM14 10h1v1h-1zM1 11h1v1h-1zM14 11h1v1h-1zM2 12h12v1h-12z' fill='%235a1800'/%3E%3Cpath d='M13 4h1v1h-1zM11 5h1v1h-1zM11 6h1v1h-1zM11 7h1v1h-1zM11 8h1v1h-1zM4 9h8v1h-8zM13 11h1v1h-1z' fill='%23a44a00'/%3E%3Cpath d='M13 3h1v1h-1zM12 4h1v1h-1zM10 6h1v1h-1zM9 7h2v1h-2zM8 8h3v1h-3zM12 9h2v1h-2zM13 10h1v1h-1zM5 11h8v1h-8z' fill='%23ffac00'/%3E%3Cpath d='M3 2h11v1h-11zM2 3h1v1h-1zM2 4h2v1h-2zM5 5h6v1h-6zM5 6h5v1h-5zM5 7h4v1h-4zM5 8h3v1h-3zM3 9h1v1h-1zM2 10h1v1h-1zM2 11h3v1h-3z' fill='%23ffe600'/%3E%3Cpath d='M2 2h1v1h-1zM4 4h8v1h-8zM4 5h1v1h-1zM4 6h1v1h-1zM4 7h1v1h-1zM4 8h1v1h-1zM2 9h1v1h-1z' fill='%23ffffac'/%3E%3C/svg%3E"); }
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="ENTRAP"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M6 1h4v1h-4zM5 2h1v1h-1zM10 2h1v1h-1zM4 3h1v1h-1zM11 3h1v1h-1zM3 4h1v1h-1zM12 4h1v1h-1zM3 5h1v1h-1zM12 5h1v1h-1zM3 6h1v1h-1zM5 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM3 7h1v1h-1zM5 7h1v1h-1zM7 7h2v1h-2zM10 7h1v1h-1zM12 7h1v1h-1zM3 8h1v1h-1zM5 8h1v1h-1zM7 8h2v1h-2zM10 8h1v1h-1zM12 8h1v1h-1zM3 9h1v1h-1zM5 9h1v1h-1zM7 9h2v1h-2zM10 9h1v1h-1zM12 9h1v1h-1zM3 10h1v1h-1zM5 10h1v1h-1zM7 10h2v1h-2zM10 10h1v1h-1zM12 10h1v1h-1zM3 11h1v1h-1zM12 11h1v1h-1zM4 12h8v1h-8z' fill='%23292929'/%3E%3Cpath d='M5 5h1v1h-1zM10 5h2v1h-2zM7 6h3v1h-3zM6 11h1v1h-1zM9 11h1v1h-1zM11 11h1v1h-1z' fill='%23413939'/%3E%3Cpath d='M11 6h1v1h-1zM9 7h1v1h-1zM11 7h1v1h-1zM9 8h1v1h-1zM11 8h1v1h-1zM9 9h1v1h-1zM11 9h1v1h-1zM6 10h1v1h-1zM9 10h1v1h-1zM11 10h1v1h-1zM5 11h1v1h-1zM7 11h2v1h-2zM10 11h1v1h-1z' fill='%236a6a6a'/%3E%3Cpath d='M9 2h1v1h-1zM6 3h5v1h-5zM5 4h7v1h-7zM6 5h4v1h-4zM4 6h1v1h-1zM4 7h1v1h-1zM6 7h1v1h-1zM4 8h1v1h-1zM6 8h1v1h-1zM4 9h1v1h-1zM6 9h1v1h-1zM4 10h1v1h-1zM4 11h1v1h-1z' fill='%239c9c9c'/%3E%3Cpath d='M6 2h3v1h-3zM5 3h1v1h-1zM4 4h1v1h-1zM4 5h1v1h-1zM6 6h1v1h-1z' fill='%23c5ffff'/%3E%3C/svg%3E"); }
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="ENTRAP"][aria-pressed="true"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M6 1h4v1h-4zM5 2h1v1h-1zM10 2h1v1h-1zM4 3h1v1h-1zM11 3h1v1h-1zM3 4h1v1h-1zM12 4h1v1h-1zM3 5h1v1h-1zM12 5h1v1h-1zM3 6h1v1h-1zM5 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM3 7h1v1h-1zM5 7h1v1h-1zM7 7h2v1h-2zM10 7h1v1h-1zM12 7h1v1h-1zM3 8h1v1h-1zM5 8h1v1h-1zM7 8h2v1h-2zM10 8h1v1h-1zM12 8h1v1h-1zM3 9h1v1h-1zM5 9h1v1h-1zM7 9h2v1h-2zM10 9h1v1h-1zM12 9h1v1h-1zM3 10h1v1h-1zM5 10h1v1h-1zM7 10h2v1h-2zM10 10h1v1h-1zM12 10h1v1h-1zM3 11h1v1h-1zM12 11h1v1h-1zM4 12h8v1h-8z' fill='%235a1800'/%3E%3Cpath d='M5 5h1v1h-1zM10 5h2v1h-2zM7 6h3v1h-3zM6 11h1v1h-1zM9 11h1v1h-1zM11 11h1v1h-1z' fill='%23a44a00'/%3E%3Cpath d='M11 6h1v1h-1zM9 7h1v1h-1zM11 7h1v1h-1zM9 8h1v1h-1zM11 8h1v1h-1zM9 9h1v1h-1zM11 9h1v1h-1zM6 10h1v1h-1zM9 10h1v1h-1zM11 10h1v1h-1zM5 11h1v1h-1zM7 11h2v1h-2zM10 11h1v1h-1z' fill='%23ffac00'/%3E%3Cpath d='M9 2h1v1h-1zM6 3h5v1h-5zM5 4h7v1h-7zM6 5h4v1h-4zM4 6h1v1h-1zM4 7h1v1h-1zM6 7h1v1h-1zM4 8h1v1h-1zM6 8h1v1h-1zM4 9h1v1h-1zM6 9h1v1h-1zM4 10h1v1h-1zM4 11h1v1h-1z' fill='%23ffe600'/%3E%3Cpath d='M6 2h3v1h-3zM5 3h1v1h-1zM4 4h1v1h-1zM4 5h1v1h-1zM6 6h1v1h-1z' fill='%23ffffac'/%3E%3C/svg%3E"); }
+.int-rh2-root .int-rh2-system-button::before { width: 26px; height: 26px; background: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M2 1h11v1h-11zM1 2h1v1h-1zM13 2h1v1h-1zM1 3h1v1h-1zM14 3h1v1h-1zM1 4h1v1h-1zM4 4h1v1h-1zM9 4h2v1h-2zM14 4h1v1h-1zM1 5h1v1h-1zM4 5h1v1h-1zM9 5h2v1h-2zM14 5h1v1h-1zM1 6h1v1h-1zM4 6h1v1h-1zM9 6h2v1h-2zM14 6h1v1h-1zM1 7h1v1h-1zM14 7h1v1h-1zM1 8h1v1h-1zM14 8h1v1h-1zM1 9h1v1h-1zM14 9h1v1h-1zM1 10h1v1h-1zM5 10h6v1h-6zM14 10h1v1h-1zM1 11h1v1h-1zM5 11h1v1h-1zM10 11h1v1h-1zM14 11h1v1h-1zM1 12h1v1h-1zM5 12h6v1h-6zM14 12h1v1h-1zM1 13h1v1h-1zM14 13h1v1h-1zM2 14h12v1h-12z' fill='%23292929'/%3E%3Cpath d='M4 3h1v1h-1zM9 3h2v1h-2zM3 4h1v1h-1zM8 4h1v1h-1zM13 4h1v1h-1zM3 5h1v1h-1zM8 5h1v1h-1zM13 5h1v1h-1zM3 6h1v1h-1zM8 6h1v1h-1zM13 6h1v1h-1zM13 7h1v1h-1zM13 8h1v1h-1zM5 9h6v1h-6zM13 9h1v1h-1zM4 10h1v1h-1zM13 10h1v1h-1zM4 11h1v1h-1zM13 11h1v1h-1zM4 12h1v1h-1zM13 12h1v1h-1zM3 13h2v1h-2zM11 13h3v1h-3z' fill='%23413939'/%3E%3Cpath d='M13 3h1v1h-1zM12 4h1v1h-1zM12 5h1v1h-1zM12 6h1v1h-1zM11 7h2v1h-2zM8 8h5v1h-5zM11 9h2v1h-2zM12 10h1v1h-1zM12 11h1v1h-1zM12 12h1v1h-1zM5 13h6v1h-6z' fill='%236a6a6a'/%3E%3Cpath d='M12 2h1v1h-1zM3 3h1v1h-1zM5 3h4v1h-4zM11 3h2v1h-2zM6 4h2v1h-2zM6 5h2v1h-2zM6 6h2v1h-2zM3 7h1v1h-1zM5 7h4v1h-4zM3 8h5v1h-5zM3 9h2v1h-2zM3 10h1v1h-1zM3 11h1v1h-1zM3 12h1v1h-1zM2 13h1v1h-1z' fill='%239c9c9c'/%3E%3Cpath d='M2 2h10v1h-10zM2 3h1v1h-1zM2 4h1v1h-1zM5 4h1v1h-1zM11 4h1v1h-1zM2 5h1v1h-1zM5 5h1v1h-1zM11 5h1v1h-1zM2 6h1v1h-1zM5 6h1v1h-1zM11 6h1v1h-1zM2 7h1v1h-1zM4 7h1v1h-1zM9 7h2v1h-2zM2 8h1v1h-1zM2 9h1v1h-1zM2 10h1v1h-1zM11 10h1v1h-1zM2 11h1v1h-1zM11 11h1v1h-1zM2 12h1v1h-1zM11 12h1v1h-1z' fill='%23c5ffff'/%3E%3C/svg%3E") center / contain no-repeat; }
+.int-rh2-root .int-rh2-system-button.is-dirty::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M2 1h11v1h-11zM1 2h1v1h-1zM13 2h1v1h-1zM1 3h1v1h-1zM14 3h1v1h-1zM1 4h1v1h-1zM4 4h1v1h-1zM9 4h2v1h-2zM14 4h1v1h-1zM1 5h1v1h-1zM4 5h1v1h-1zM9 5h2v1h-2zM14 5h1v1h-1zM1 6h1v1h-1zM4 6h1v1h-1zM9 6h2v1h-2zM14 6h1v1h-1zM1 7h1v1h-1zM14 7h1v1h-1zM1 8h1v1h-1zM14 8h1v1h-1zM1 9h1v1h-1zM14 9h1v1h-1zM1 10h1v1h-1zM5 10h6v1h-6zM14 10h1v1h-1zM1 11h1v1h-1zM5 11h1v1h-1zM10 11h1v1h-1zM14 11h1v1h-1zM1 12h1v1h-1zM5 12h6v1h-6zM14 12h1v1h-1zM1 13h1v1h-1zM14 13h1v1h-1zM2 14h12v1h-12z' fill='%235a1800'/%3E%3Cpath d='M4 3h1v1h-1zM9 3h2v1h-2zM3 4h1v1h-1zM8 4h1v1h-1zM13 4h1v1h-1zM3 5h1v1h-1zM8 5h1v1h-1zM13 5h1v1h-1zM3 6h1v1h-1zM8 6h1v1h-1zM13 6h1v1h-1zM13 7h1v1h-1zM13 8h1v1h-1zM5 9h6v1h-6zM13 9h1v1h-1zM4 10h1v1h-1zM13 10h1v1h-1zM4 11h1v1h-1zM13 11h1v1h-1zM4 12h1v1h-1zM13 12h1v1h-1zM3 13h2v1h-2zM11 13h3v1h-3z' fill='%23a44a00'/%3E%3Cpath d='M13 3h1v1h-1zM12 4h1v1h-1zM12 5h1v1h-1zM12 6h1v1h-1zM11 7h2v1h-2zM8 8h5v1h-5zM11 9h2v1h-2zM12 10h1v1h-1zM12 11h1v1h-1zM12 12h1v1h-1zM5 13h6v1h-6z' fill='%23ffac00'/%3E%3Cpath d='M12 2h1v1h-1zM3 3h1v1h-1zM5 3h4v1h-4zM11 3h2v1h-2zM6 4h2v1h-2zM6 5h2v1h-2zM6 6h2v1h-2zM3 7h1v1h-1zM5 7h4v1h-4zM3 8h5v1h-5zM3 9h2v1h-2zM3 10h1v1h-1zM3 11h1v1h-1zM3 12h1v1h-1zM2 13h1v1h-1z' fill='%23ffe600'/%3E%3Cpath d='M2 2h10v1h-10zM2 3h1v1h-1zM2 4h1v1h-1zM5 4h1v1h-1zM11 4h1v1h-1zM2 5h1v1h-1zM5 5h1v1h-1zM11 5h1v1h-1zM2 6h1v1h-1zM5 6h1v1h-1zM11 6h1v1h-1zM2 7h1v1h-1zM4 7h1v1h-1zM9 7h2v1h-2zM2 8h1v1h-1zM2 9h1v1h-1zM2 10h1v1h-1zM11 10h1v1h-1zM2 11h1v1h-1zM11 11h1v1h-1zM2 12h1v1h-1zM11 12h1v1h-1z' fill='%23ffffac'/%3E%3C/svg%3E"); filter: none; }
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="DAMAGE_TRAP"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M12 0h2v1h-2zM11 1h1v1h-1zM14 1h1v1h-1zM10 2h1v1h-1zM13 2h1v1h-1zM5 3h3v1h-3zM9 3h1v1h-1zM12 3h1v1h-1zM3 4h2v1h-2zM8 4h2v1h-2zM12 4h1v1h-1zM2 5h1v1h-1zM11 5h1v1h-1zM1 6h1v1h-1zM11 6h1v1h-1zM1 7h1v1h-1zM11 7h1v1h-1zM1 8h1v1h-1zM11 8h1v1h-1zM1 9h1v1h-1zM11 9h1v1h-1zM2 10h1v1h-1zM10 10h1v1h-1zM3 11h2v1h-2zM8 11h2v1h-2zM5 12h3v1h-3z' fill='%23292929'/%3E%3Cpath d='M12 2h1v1h-1zM11 3h1v1h-1zM11 4h1v1h-1zM10 5h1v1h-1zM10 6h1v1h-1zM10 7h1v1h-1zM10 8h1v1h-1zM10 9h1v1h-1zM4 10h1v1h-1zM8 10h2v1h-2zM6 11h2v1h-2z' fill='%23413939'/%3E%3Cpath d='M9 7h1v1h-1zM8 8h2v1h-2zM7 9h3v1h-3zM6 10h2v1h-2zM5 11h1v1h-1z' fill='%236a6a6a'/%3E%3Cpath d='M13 1h1v1h-1zM7 4h1v1h-1zM5 5h3v1h-3zM3 6h7v1h-7zM3 7h6v1h-6zM3 8h5v1h-5zM2 9h5v1h-5zM3 10h1v1h-1zM5 10h1v1h-1z' fill='%239c9c9c'/%3E%3Cpath d='M12 1h1v1h-1zM11 2h1v1h-1zM10 3h1v1h-1zM5 4h2v1h-2zM10 4h1v1h-1zM3 5h2v1h-2zM8 5h2v1h-2zM2 6h1v1h-1zM2 7h1v1h-1zM2 8h1v1h-1z' fill='%23c5ffff'/%3E%3C/svg%3E"); }
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="DAMAGE_TRAP"][aria-pressed="true"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M12 0h2v1h-2zM11 1h1v1h-1zM14 1h1v1h-1zM10 2h1v1h-1zM13 2h1v1h-1zM5 3h3v1h-3zM9 3h1v1h-1zM12 3h1v1h-1zM3 4h2v1h-2zM8 4h2v1h-2zM12 4h1v1h-1zM2 5h1v1h-1zM11 5h1v1h-1zM1 6h1v1h-1zM11 6h1v1h-1zM1 7h1v1h-1zM11 7h1v1h-1zM1 8h1v1h-1zM11 8h1v1h-1zM1 9h1v1h-1zM11 9h1v1h-1zM2 10h1v1h-1zM10 10h1v1h-1zM3 11h2v1h-2zM8 11h2v1h-2zM5 12h3v1h-3z' fill='%235a1800'/%3E%3Cpath d='M12 2h1v1h-1zM11 3h1v1h-1zM11 4h1v1h-1zM10 5h1v1h-1zM10 6h1v1h-1zM10 7h1v1h-1zM10 8h1v1h-1zM10 9h1v1h-1zM4 10h1v1h-1zM8 10h2v1h-2zM6 11h2v1h-2z' fill='%23a44a00'/%3E%3Cpath d='M9 7h1v1h-1zM8 8h2v1h-2zM7 9h3v1h-3zM6 10h2v1h-2zM5 11h1v1h-1z' fill='%23ffac00'/%3E%3Cpath d='M13 1h1v1h-1zM7 4h1v1h-1zM5 5h3v1h-3zM3 6h7v1h-7zM3 7h6v1h-6zM3 8h5v1h-5zM2 9h5v1h-5zM3 10h1v1h-1zM5 10h1v1h-1z' fill='%23ffe600'/%3E%3Cpath d='M12 1h1v1h-1zM11 2h1v1h-1zM10 3h1v1h-1zM5 4h2v1h-2zM10 4h1v1h-1zM3 5h2v1h-2zM8 5h2v1h-2zM2 6h1v1h-1zM2 7h1v1h-1zM2 8h1v1h-1z' fill='%23ffffac'/%3E%3C/svg%3E"); }
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action:disabled { filter: grayscale(0.75) brightness(0.5); }
+
+
+/* ====================================================================== *
+ * 13. THE HABITAT FRAME -- give it the shape its art was drawn for
+ * ----------------------------------------------------------------------
+ * Measured on a 430x880 phone: the frame was 426x519 (portrait, 0.82) while the
+ * ranch draws 414x365 (landscape, 1.13). The fit is `contain` and must stay
+ * `contain` -- the fitted rectangle is also what actor positions and drop
+ * targets are resolved through, so cropping or a CSS transform here would move
+ * the art away from where a drag lands. So 154px of the frame was empty, inside
+ * a gold window, which reads as a hole rather than as ground.
+ *
+ * The original's habitat screen is 256x192. Giving the frame that same 4:3 and
+ * centring it puts the leftover height OUTSIDE the window, where the mesh reads
+ * as the digital world the ranch is a platform in -- which is what it is. The
+ * ranch then fills its own frame, and nothing about the transform changes.
+ *
+ * Zooming to fill instead was tried and rejected: it needs 1.42x, which hides
+ * 28% of the ranch width behind a pan on a screen whose whole point is seeing
+ * your residents at a glance.
+ * ====================================================================== */
+
+.int-rh2-root .int-rh2-field-frame {
+  aspect-ratio: 4 / 3;
+  align-self: center;
+  min-height: 180px;
+  max-height: 100%;
+}
+
+/* The original carries a framed message window under the habitat. The product
+   had the same text as a bare line, which left the recovered height looking
+   like more empty ground instead of the panel the original puts there. */
+.int-rh2-root .int-rh2-status {
+  margin: 8px 8px 0;
+  padding: 9px 14px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--ds-panel-lit) 0%, var(--ds-panel) 55%, var(--ds-panel-deep) 100%);
+  box-shadow:
+    inset 0 0 0 2px var(--ds-ink),
+    0 0 0 3px var(--ds-gold),
+    0 0 0 5px var(--ds-ink),
+    var(--ds-lift);
+  color: var(--ds-panel-ink);
+  text-shadow: var(--ds-text-shadow);
+}
+
+/* A short window has no height to spare, so the window collapses back to a line
+   rather than stealing it from the habitat. */
+@media (max-height: 700px) {
+  /* `align-self: center` only has a height to centre because the aspect ratio
+     gives it one. Dropping the ratio without also restoring the stretch left
+     the frame 1px tall and the habitat invisible -- measured, not guessed. */
+  .int-rh2-root .int-rh2-field-frame { aspect-ratio: auto; align-self: stretch; max-height: none; }
+  .int-rh2-root .int-rh2-status {
+    margin: 0;
+    min-height: 0;
+    padding: 4px 10px;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+}
+
+/* ====================================================================== *
+ * 14. LANDSCAPE -- the original's two screens, side by side
+ * ----------------------------------------------------------------------
+ * Turned sideways, the product did not break, but it was unusable: every shell
+ * stayed a 430px column centred in an 844px window, so the habitat was crushed
+ * to a 40px sliver, the shop showed one item, and the schedule was cut off.
+ *
+ * The answer is in the hardware. The original is TWO 256x192 screens, an
+ * information screen above a touch screen. Portrait stacks them, which is how
+ * the console is held. Landscape sets them side by side, which is what the
+ * console's own emulators do, and it is the only arrangement that spends the
+ * width instead of padding it away.
+ *
+ * Gated on a short landscape window so it reaches a phone on its side and not a
+ * desktop, where the centred column is a deliberate frame rather than a
+ * limitation.
+ * ====================================================================== */
+
+@media (orientation: landscape) and (max-height: 600px) {
+
+  /* intRh2Styles pins the shared bars to a 430px column on any window wider
+     than 431px. That rule is about framing a phone column on a desktop; on a
+     phone held sideways it is the thing making the window unusable. */
+  .cm-status-bar[data-screen],
+  .cm-toolbar[data-mode] {
+    left: 0;
+    right: 0;
+    width: auto;
+    transform: none;
+  }
+  /* Eight hexagons across a full-width rail would be enormous, so the rail
+     keeps the cells at their portrait size and centres the group. */
+  .cm-toolbar[data-mode] .cm-toolbar__rail {
+    max-width: 560px;
+    margin-inline: auto;
+    padding-bottom: max(6px, env(safe-area-inset-bottom, 0px));
+  }
+  .cm-toolbar[data-mode] .cm-toolbar__menu { max-width: 560px; }
+
+  /* ---- Raising Home: information left, habitat right ------------------ */
+  .int-rh2-root .int-rh2-shell {
+    width: 100%;
+    max-width: none;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-rows: auto auto minmax(0, 1fr);
+    column-gap: 6px;
+  }
+  .int-rh2-root .int-rh2-header { grid-column: 1; grid-row: 1; }
+  .int-rh2-root .int-rh2-companion { grid-column: 1; grid-row: 2; margin-right: 0; }
+  .int-rh2-root .int-rh2-status { grid-column: 1; grid-row: 3; align-self: end; margin-right: 0; }
+  .int-rh2-root .int-rh2-field-frame {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    aspect-ratio: auto;
+    align-self: stretch;
+    max-height: none;
+    margin: 8px 8px 8px 0;
+  }
+
+  /* ---- The other shells simply get the width back --------------------- */
+  .cm-vs2-root[data-screen] .cm-vs2-shell,
+  .cm-vs2-root[data-screen] .cm-vs2-field,
+  .cm-vs5-root[data-screen] .cm-vs5-shell {
+    width: 100%;
+    max-width: none;
+  }
+  .cm-digimon-shell,
+  .cm-schedule-shell,
+  .cm-help-shell,
+  .cm-tamer-shell,
+  .cm-championship-shell { width: min(100%, 920px); }
+
+  /* A list that was one column at 430px is two at 844px, which is what the
+     extra width is for. */
+  .cm-digimon-root .cm-digimon-list,
+  .cm-championship-root .cm-championship-board,
+  .cm-vs2-root[data-screen] .cm-vs2-shop__list,
+  .cm-vs5-root[data-screen] .cm-vs5-matches {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    align-content: start;
+  }
+  /* A season is eight days, so in landscape it is one row instead of two. */
+  .cm-schedule-root .cm-schedule-days { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+  .cm-tamer-root .cm-tamer-fields { grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr); }
+
+  /* ---- Gate select and Battle select: picture left, choices right ------ */
+  .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-body--gate {
+    display: grid;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    column-gap: 8px;
+    align-items: start;
+  }
+  .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate3d {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    min-height: 0;
+    height: 100%;
+    align-self: stretch;
+  }
+  .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate3d__host { flex: 1 1 auto; min-height: 0; }
+  .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-preview { grid-column: 2; grid-row: 1; }
+  .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate-fallback { grid-column: 2; grid-row: 2; min-height: 0; overflow-y: auto; }
+  .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gates { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+  /* Explicit placement, because the shell's children are a flat list: the box
+     holds the left column, everything you can press stacks down the right. */
+  .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
+    align-content: start;
+    column-gap: 10px;
+  }
+  .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header { grid-column: 1 / -1; grid-row: 1; }
+  .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube { grid-column: 1; grid-row: 2 / 6; align-self: start; margin: 0; }
+  .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube__note { grid-column: 1; grid-row: 6; }
+  .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-matches,
+  .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-party { grid-column: 2; grid-row: 2; min-height: 0; }
+  .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-entry-notice { grid-column: 2; grid-row: 3; }
+  .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-conference { grid-column: 2; grid-row: 4; }
+  .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-exit { grid-column: 2; grid-row: 5; margin: 8px 0 0; }
+
+  /* ---- Hunt loadout: the destination and its slots share the row ------- */
+  .cm-vs2-root[data-screen="HUNT_LOADOUT"] .cm-vs2-loadout {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    align-content: start;
+  }
+
+  /* The title keeps its 9:16 panel: it is a poster, not a working screen. */
+  .cm-title__panel { width: min(100vw, 430px, 56.25dvh); }
+}

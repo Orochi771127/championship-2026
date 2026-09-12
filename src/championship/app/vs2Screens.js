@@ -530,6 +530,10 @@ export async function createHuntFieldView({ root, source, mountField }) {
   for (const tool of block.toolState?.tools ?? []) {
     const button = actionButton(tool.label);
     button.disabled = !tool.enabled;
+    // The original shows these as icons on the same hexagon plate the care rail
+    // uses, not as words. `data-tool` names which glyph; the skin paints it and
+    // the label stays in the DOM for assistive technology.
+    button.dataset.tool = tool.id;
     button.setAttribute("aria-pressed",String(block.toolState.activeTool===tool.id));
     button.addEventListener("click",()=>source.intents.selectHuntTool(tool.id));
     toolButtons.set(tool.id,button);tools.append(button);

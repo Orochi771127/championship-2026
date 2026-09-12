@@ -61,6 +61,38 @@ test('rank and title pages require actual newly committed winning progress',(t)=
   assert.deepEqual(createBattleResultView({root,outcome,receipt,progression:{rankBefore:1,rankAfter:1,earnedTitles:[]}}).inspect().panels,['RESULT','PRIZE']);
 });
 
+test('the battle box is disposed whether its lazily-imported mount lands before or after the screen closes', async (t) => {
+  // The application injects an async wrapper around the Three.js mount, so the
+  // presentation can arrive after the view is built and even after it is torn
+  // down. Both orders must release it: a renderer, its textures and its pointer
+  // listeners leak otherwise, once per visit to this screen.
+  const menuCopy = {menu:'對戰',chooseMatch:'選擇對戰',availableMatches:'賽事',faceNotice:'模式'};
+  const build = (mountCube) => createBattleSelectView({
+    root: useDocument(t), matches: [{recordIndex:0,entryFee:150,payout:7000}],
+    menuCopy, mountCube, onEnter: () => ({ok:true}), getPartySelection: () => ({limit:1,candidates:[]})
+  });
+
+  let disposals = 0;
+  const presentation = { dispose() { disposals += 1; } };
+
+  const settled = build(() => Promise.resolve(presentation));
+  await Promise.resolve(); await Promise.resolve();
+  settled.dispose();
+  assert.equal(disposals, 1, 'a mount that lands first is disposed on close');
+
+  disposals = 0;
+  const racing = build(() => Promise.resolve(presentation));
+  racing.dispose();
+  await Promise.resolve(); await Promise.resolve();
+  assert.equal(disposals, 1, 'a mount that lands after close is disposed on arrival');
+
+  // A synchronous injector keeps working exactly as before.
+  disposals = 0;
+  const direct = build(() => presentation);
+  direct.dispose();
+  assert.equal(disposals, 1, 'a synchronous mount is unchanged');
+});
+
 test('party selection enforces eligibility and slot limit; cancel never enters or charges', async (t) => {
   const root = useDocument(t), entered = [];
   createBattleSelectView({root, matches:[{recordIndex:0,entryFee:150,payout:7000}],

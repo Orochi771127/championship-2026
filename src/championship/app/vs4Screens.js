@@ -240,7 +240,10 @@ export function createDatabaseView({ root, source }) {
     list.hidden = false;
     detail.hidden = true;
     detail.replaceChildren();
-    back.textContent = uiText("BACK");
+    // Every neighbouring screen names where its exit goes ("返回牧場"); this one
+    // said only "返回", which reads as "go back one step" next to the detail
+    // view's own back control.
+    back.textContent = "返回牧場";
     back.setAttribute("aria-label", uiText("Return to Raising Home"));
     const rows = book.entries;
     list.replaceChildren();

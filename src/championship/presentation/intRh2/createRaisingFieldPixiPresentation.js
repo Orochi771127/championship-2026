@@ -211,13 +211,22 @@ export async function mountRaisingFieldPixiPresentation({
   }
 
   function drawField(frame) {
-    // Owner's bright HUD direction also covers unused space around the ranch.
-    // This is presentation paint only; cage geometry and actor transforms stay separate.
-    backdrop.clear().rect(0, 0, app.screen.width, app.screen.height).fill(0xeaf2df);
+    // Owner direction 2026-09-12 returns the interface to the original's
+    // language, and the space around the ranch belongs to that language rather
+    // than to a pale filler. The stage is transparent (backgroundAlpha 0), so
+    // painting nothing here lets the framed hex ground behind the canvas read
+    // through, and the ranch reads as a platform in the digital world -- which
+    // is what it is -- instead of a plate dropped on a blank sheet.
+    // This is presentation paint only; cage geometry and actor transforms stay
+    // separate.
+    backdrop.clear();
     if (!fieldArt) {
+      // Art missing is the one case that still needs its own ground, and it
+      // takes the same deep blue rather than a light one.
       backdrop
+        .rect(0, 0, app.screen.width, app.screen.height).fill(0x0b3bbe)
         .circle(app.screen.width * 0.22, app.screen.height * 0.12, app.screen.width * 0.46)
-        .fill({ color: 0xf8f3d9, alpha: 0.24 });
+        .fill({ color: 0x18d5ff, alpha: 0.18 });
     }
     layoutFieldArt();
 

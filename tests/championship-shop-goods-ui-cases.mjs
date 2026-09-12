@@ -8,8 +8,17 @@ test('shop display follows original record/item permutation, including wound ver
   assert.deepEqual(rows.map(r=>r.itemIndex),[0,1,3,2]);
   assert.deepEqual(rows.map(r=>r.name),['飼料','蛋白質','傷藥','藥品']);
   assert.deepEqual(rows.map(r=>r.icon),['feed','protein','woundMedicine','medicine']);
-  assert.deepEqual(rows.map(r=>r.backgroundPosition),['50% 0%','100% 50%','50% 50%','0% 50%']);
-  for(const row of rows)assert.match(row.src,/^assets\/production\//);
+  // One icon language: a shop row draws the same approved toolbar cell the rail
+  // draws, in its rest pose. Asserting the exact cell is a stronger guard than
+  // the atlas offset it replaces -- an offset can be right while the art is
+  // from the wrong set.
+  assert.deepEqual(rows.map(r=>r.backgroundPosition),['center','center','center','center']);
+  assert.deepEqual(rows.map(r=>r.src),[
+    'assets/production/toolbar/licensed-runtime-v1/feed-rest.png',
+    'assets/production/toolbar/licensed-runtime-v1/protein-rest.png',
+    'assets/production/toolbar/licensed-runtime-v1/woundMedicine-rest.png',
+    'assets/production/toolbar/licensed-runtime-v1/medicine-rest.png'
+  ]);
   for(const index of [4,83,-1,'0',null,1.5])assert.equal(shopGoodsPresentation(index),null);
 });
 

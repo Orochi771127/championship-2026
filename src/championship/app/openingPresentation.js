@@ -21,6 +21,6 @@ export function createOpeningPresentation({host,onStart}){
   function confirmTrainer(){const n=el('section','cm-opening__name');n.append(el('p','',`馴獸師姓名使用「${trainerName}」嗎？`));const row=el('div','cm-opening__choices');
     for(const [label,next] of [['是',giftMail],['否',()=>name('trainer',confirmTrainer)]]){const b=el('button','',label);b.type='button';b.addEventListener('click',next,{once:true});row.append(b);}n.append(row);show(n);}
   function giftMail(){envelope(()=>letter('從現在起，你也是數碼獸馴獸師了。\n與夥伴一起，朝冠軍賽優勝邁進吧！\n贈禮應該就快送到了。',()=>letter('這顆數碼蛋送給你。\n請替牠取個名字。',()=>name('egg',start),{egg:true})));}
-  async function start(){if(busy)return;busy=true;host.inert=true;try{if(await onStart({trainerName,eggName})===false){name('egg',start);return;}host.hidden=true;}finally{busy=false;host.inert=false;}}
+  async function start(){if(busy)return;busy=true;host.inert=true;try{if(await onStart({trainerName,eggName})===false){name('egg',start);return;}host.hidden=true;host.replaceChildren();}finally{busy=false;host.inert=false;}}
   return {begin(){trainerName='';eggName='';story?.dispose();story=createOpeningStoryPresentation({host,onComplete(){story=null;envelope(()=>letter('歡迎來到數位世界。\n首先，請輸入姓名，完成馴獸師登錄。',()=>name('trainer',confirmTrainer)));}});},reset(){story?.dispose();story=null;host.replaceChildren();host.hidden=true;host.inert=false;busy=false;}};
 }

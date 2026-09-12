@@ -94,17 +94,36 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   section.append(header);
 
   let cube = null;
+  // `mountCube` is injected. The application injects a lazily-imported wrapper,
+  // which is async, so the mount can land AFTER this function has returned and
+  // even after dispose() has run. Holding only the raw return value meant the
+  // Three.js cube was never disposed: its renderer, textures, geometry and
+  // pointer listeners leaked on every exit from this screen, and dispose() threw
+  // because a promise has no dispose(). A synchronous injector -- what the tests
+  // use -- still assigns straight through, so the pinned synchronous factory
+  // contract is unchanged.
+  let cubeDisposed = false;
   const matchOnlyNodes = [];
   if (typeof mountCube === "function") {
     const stage = element("div", "cm-vs5-cube");
     section.append(stage);
-    cube = mountCube({
+    const mounted = mountCube({
       host: stage,
       // Nothing is marked reachable: the kind-to-match mapping is untraced, so
       // no face may claim to lead somewhere.
       available: new Set(),
       onSelect() {}
     });
+    if (mounted && typeof mounted.then === "function") {
+      mounted.then((presentation) => {
+        // Losing the race to dispose() is normal: the player can leave before a
+        // lazily-imported renderer finishes arriving.
+        if (cubeDisposed) presentation?.dispose?.();
+        else cube = presentation;
+      }).catch(() => {});
+    } else {
+      cube = mounted;
+    }
     const note = element("p", "cm-vs5-cube__note",
       menuCopy.faceNotice);
     section.append(note);
@@ -214,7 +233,9 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       });
     },
     dispose() {
-      cube?.dispose();
+      cubeDisposed = true;
+      cube?.dispose?.();
+      cube = null;
       root.replaceChildren();
     }
   });

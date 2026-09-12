@@ -175,6 +175,12 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
     button.type = "button";
     button.dataset.cellIndex = String(index);
     button.dataset.slotMapping = TOOLBAR_SLOT_MAPPING_EVIDENCE;
+    // The original's rail is eight icon discs, not eight words. The art is the
+    // approved toolbar cell set; `data-icon` names which one, and the skin
+    // paints it. The label stays in the DOM for assistive technology.
+    button.dataset.icon = cell.kind === "tool"
+      ? cell.tool.id
+      : (cell.menu.id === "MANAGEMENT" ? "manage" : "system");
     if (cell.kind === "tool") {
       button.dataset.toolId = cell.tool.id;
       button.setAttribute("aria-pressed", "false");
