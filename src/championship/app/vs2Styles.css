@@ -238,9 +238,7 @@
   min-height: 300px;
   overflow: hidden;
   isolation: isolate;
-  background:
-    radial-gradient(circle at 50% 50%, rgba(101, 184, 195, 0.08), transparent 44%),
-    linear-gradient(90deg, transparent 49.8%, rgba(101, 184, 195, 0.08) 50%, transparent 50.2%);
+  background: radial-gradient(circle at 50% 50%, var(--ds-panel), var(--ds-slot-deep) 70%);
 }
 .cm-vs2-gate3d__host[hidden] { display: none; }
 
@@ -981,7 +979,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  color: var(--vs2-gold-bright);
+
   font: 700 0.62rem/1 var(--vs2-font);
   letter-spacing: 0.08em;
   white-space: nowrap;
@@ -1010,15 +1008,15 @@
   min-height: 36px;
   padding: 6px 10px;
   border: 1px solid rgba(210, 173, 93, 0.45);
-  border-radius: 8px;
-  color: var(--vs2-gold-bright);
-  background: rgba(8, 14, 20, 0.72);
+
+
+
   font: 700 0.58rem/1 var(--vs2-font);
   letter-spacing: 0.06em;
 }
 
 .cm-vs2-cage-tray__effect {
-  color: rgba(210, 173, 93, 0.78);
+
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: none;

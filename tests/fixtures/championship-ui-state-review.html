@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<base href="../../"><title>UI 狀態檢查 — 無存檔操作</title>
+<link rel="stylesheet" href="src/championship/app/styles.css">
+<link rel="stylesheet" href="src/championship/app/intRh2Styles.css">
+<link rel="stylesheet" href="src/championship/app/vs2Styles.css">
+<link rel="stylesheet" href="src/championship/app/vs5Styles.css">
+<link rel="stylesheet" href="src/championship/app/raisingHomeHud.css">
+<link rel="stylesheet" href="src/championship/app/huntMobile.css">
+<link rel="stylesheet" href="src/championship/app/facilityBattleMobile.css">
+<link rel="stylesheet" href="src/championship/app/opening.css">
+<link rel="stylesheet" href="src/championship/app/trainingLabels.css">
+<link rel="stylesheet" href="src/championship/app/nativeUiSkin.css">
+</head><body><div id="cm-root"></div><script type="module">
+// Controlled presentation inputs to the real view. No app, save, clock,
+// renderer or gameplay authority is created by this review fixture.
+import {createRaisingHomeP1RView} from './src/championship/app/raisingHomeP1RView.js';
+const params=new URLSearchParams(location.search),variant=params.get('case')??'calendar';
+const season=Math.max(0,Math.min(3,Number(params.get('season'))||0));
+const frame={revision:1,clock:{display:'07:00'},residents:[],cages:[],save:{phase:'CLEAN'},lifecycle:{}};
+const noop=()=>{};
+const intents={selectCreature:noop,relocateCreature:noop,careForCreature:noop,requestSave:noop,
+  confirmDayEnd:close,acknowledgeCalendar:close,acknowledgeMail:close,openMail:noop};
+let view;
+function close(){frame.lifecycle={};frame.revision++;view.render(frame);}
+if(variant==='calendar')frame.lifecycle.day={phase:'calendar',frames:16,calendar:{season,dayOfSeason:4,
+  days:Array.from({length:8},(_,day)=>({day,registered:day===4?2:0,unwon:day===4?3:0}))}};
+else if(variant==='confirm')frame.lifecycle.confirmation=true;
+else if(variant==='mail'||variant==='system-mail'||variant==='mail-wait')frame.lifecycle.mailbox={activeId:1,
+  activeFrames:variant==='mail-wait'?0:61,queue:[{id:1,sender:0,textId:94,system:variant==='system-mail',subjectName:'檢查用數碼獸'}]};
+else if(variant==='save-error')frame.lifecycle.day={phase:'saving',frames:0,savePhase:'SAVE_FAILED'};
+view=await createRaisingHomeP1RView({root:document.querySelector('#cm-root'),
+ source:{getFrame:()=>frame,subscribe:()=>noop,intents},
+ mountField:async({host})=>{host.textContent='場地繪圖不在此狀態檢查範圍';return {render:noop,dispose:noop};}});
+</script></body></html>

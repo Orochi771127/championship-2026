@@ -7,12 +7,12 @@
   --rh2-display: #f3f8ed;
   --rh2-font: var(--cm-light-font);
   color-scheme: light;
-  background: #e5eee8;
+
 }
 .int-rh2-shell {
   grid-template-rows: auto auto minmax(0, 1fr) auto;
   gap: 0;
-  background: #f3f8ed;
+
   border-inline: 1px solid #b4cdd0;
   box-shadow: 0 0 40px #315a6614;
 }
@@ -20,7 +20,7 @@
   min-height: 54px;
   padding: 7px 12px;
   border: 0;
-  background: linear-gradient(110deg, #fcffff, #e2f5f7);
+
   box-shadow: none;
 }
 .int-rh2-header::before, .int-rh2-header::after { display: none; }
@@ -131,10 +131,10 @@
   margin: 0 8px;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  border: 1px solid #8fb49d;
-  border-radius: 4px 12px 4px 12px;
+
+
   background: #eaf2df;
-  box-shadow: inset 0 0 0 2px #fff, 0 2px 0 #c2d2b3;
+
 }
 .int-rh2-field-frame__label {
   position: relative;
@@ -142,7 +142,7 @@
   padding: 5px 9px;
   min-height: 28px;
   border-bottom: 1px solid #abc3a8;
-  background: linear-gradient(90deg, #deebcb, #f3f8e8);
+
 }
 .int-rh2-field-frame__label .int-rh2-kicker {
   border: 0;
@@ -169,7 +169,7 @@
   color: #52736a;
   font-size: 10px;
   line-height: 1.3;
-  background: transparent;
+
 }
 
 /* Four original status fields, one shared component. */
@@ -196,10 +196,6 @@
   align-items: center;
   justify-content: center;
   padding: 3px 12px;
-  border-color: #c39527;
-  border-radius: 2px 9px 2px 9px;
-  background: linear-gradient(#fff3b5, #ffc850);
-  color: #785217;
   font-size: 11px;
   font-weight: 800;
 }

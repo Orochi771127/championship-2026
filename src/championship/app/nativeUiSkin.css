@@ -59,6 +59,16 @@
 
   /* ---- Depth -------------------------------------------------------- */
   --ds-lift: 0 3px 0 rgba(0, 0, 0, 0.28), 0 8px 18px rgba(0, 12, 30, 0.35);
+  --ds-window-fill: linear-gradient(180deg, var(--ds-panel-lit) 0%, var(--ds-panel) 55%, var(--ds-panel-deep) 100%);
+  --ds-window-frame: 0 0 0 2px var(--ds-ink), 0 0 0 4px var(--ds-gold), 0 0 0 6px var(--ds-ink), var(--ds-lift);
+  --ds-action-fill: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  --ds-action-ink: #3a2100;
+  /* Content-specific materials retained by Owner direction, 2026-09-12. */
+  --ds-calendar-date: #49454e;
+  --ds-paper: #f8e78d;
+  --ds-paper-lit: #fffef0;
+  --ds-paper-ink: #29291b;
+  --ds-paper-line: #c7b967;
 
   /* The xmlns is percent-encoded, as raisingHomeHud.css already does: it is an
      XML namespace name, never fetched, and the migration firewall refuses a
@@ -143,7 +153,7 @@
   position: relative;
   border-radius: 12px;
   padding: 13px 14px;
-  background: linear-gradient(180deg, var(--ds-panel-lit) 0%, var(--ds-panel) 55%, var(--ds-panel-deep) 100%);
+  background: var(--ds-window-fill);
   box-shadow: inset 0 0 0 2px var(--ds-ink), inset 0 10px 22px rgba(0, 0, 0, 0.35);
 }
 
@@ -224,7 +234,7 @@
 }
 
 .ds-pill--gold {
-  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  background: var(--ds-action-fill);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.8),
     inset 0 -2px 6px rgba(150, 80, 0, 0.3),
@@ -315,6 +325,9 @@
 
 /* The mode name is the amber headline the original centres on the ribbon. */
 .cm-status-bar[data-screen] .cm-status-bar__mode {
+  background: transparent;
+  border-color: transparent;
+  border-radius: 0;
   color: #ff7a18;
   font-weight: 800;
   font-size: 1.12em;
@@ -458,7 +471,7 @@
   position: absolute;
   inset: 4px;
   border-radius: 12px;
-  background: linear-gradient(180deg, var(--ds-panel-lit) 0%, var(--ds-panel) 55%, var(--ds-panel-deep) 100%);
+  background: var(--ds-window-fill);
   box-shadow: inset 0 0 0 2px var(--ds-ink);
   pointer-events: none;
 }
@@ -484,7 +497,7 @@
 
 .cm-toolbar[data-mode] .cm-toolbar__entry[data-entry-id="endDay"],
 .cm-toolbar[data-mode] .cm-toolbar__entry[data-entry-id="saveQuit"] {
-  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  background: var(--ds-action-fill);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.8),
     0 0 0 2px var(--ds-ink),
@@ -558,7 +571,7 @@
   border: 0;
   border-radius: 14px;
   padding: 14px;
-  background: linear-gradient(180deg, var(--ds-panel-lit) 0%, var(--ds-panel) 55%, var(--ds-panel-deep) 100%);
+  background: var(--ds-window-fill);
   box-shadow:
     inset 0 0 0 2px var(--ds-ink),
     0 0 0 4px var(--ds-gold),
@@ -599,12 +612,16 @@
   transition: filter 120ms ease;
 }
 .cm-championship-entry { border-radius: 26px; }
+.cm-schedule-fixture[data-registered="true"] {
+  box-shadow: inset 3px 0 var(--ds-gold), 0 0 0 2px var(--ds-gold), 0 0 0 3px var(--ds-ink);
+}
+.cm-schedule-fixture[data-won="true"] { opacity: 0.65; }
 .cm-digimon-item__button:hover, .cm-help-topic:hover, .cm-schedule-fixture:hover { filter: brightness(1.3); }
 
 .cm-digimon-item__button[aria-pressed="true"],
 .cm-help-topic[aria-pressed="true"],
 .cm-schedule-fixture[aria-pressed="true"] {
-  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  background: var(--ds-action-fill);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 0 2px var(--ds-ink), 0 0 16px rgba(255, 200, 60, 0.55);
   color: #3a2100;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
@@ -630,7 +647,7 @@
   text-shadow: var(--ds-text-shadow);
 }
 .cm-championship-action--primary {
-  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  background: var(--ds-action-fill);
   color: #3a2100;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
 }
@@ -713,7 +730,7 @@
   text-shadow: var(--ds-text-shadow);
 }
 .cm-button--primary {
-  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  background: var(--ds-action-fill);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 0 2px var(--ds-ink), 0 0 18px rgba(255, 200, 60, 0.5);
   color: #3a2100;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
@@ -775,7 +792,8 @@
 }
 .int-rh2-root .int-rh2-header__identity .int-rh2-kicker { color: var(--ds-cyan-lit); }
 
-.int-rh2-root .int-rh2-system-button {
+.int-rh2-root .int-rh2-system-button,
+.int-rh2-root .int-rh2-letter__ack {
   border: 0;
   border-radius: 999px;
   padding: 4px 12px;
@@ -797,7 +815,7 @@
   padding: 11px 12px 10px;
   border: 0;
   border-radius: 14px;
-  background: linear-gradient(180deg, var(--ds-panel-lit) 0%, var(--ds-panel) 55%, var(--ds-panel-deep) 100%);
+  background: var(--ds-window-fill);
   box-shadow:
     inset 0 0 0 2px var(--ds-ink),
     0 0 0 4px var(--ds-gold),
@@ -955,7 +973,7 @@
 .cm-vs2-root[data-screen] .cm-vs2-cage-rank {
   border: 0;
   border-radius: 14px;
-  background: linear-gradient(180deg, var(--ds-panel-lit) 0%, var(--ds-panel) 55%, var(--ds-panel-deep) 100%);
+  background: var(--ds-window-fill);
   box-shadow:
     inset 0 0 0 2px var(--ds-ink),
     0 0 0 3px var(--ds-gold),
@@ -996,7 +1014,7 @@
 .cm-vs2-root[data-screen] :is(.cm-vs2-gate, .cm-vs2-member, .cm-vs2-loadout__option,
   .cm-vs2-database__row, .cm-cage-facility, .cm-vs2-cage-tray__item)[data-selected="true"],
 .cm-vs2-root[data-screen] :is(.cm-vs2-loadout__option, .cm-vs2-database__row)[aria-pressed="true"] {
-  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  background: var(--ds-action-fill);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 0 2px var(--ds-ink), 0 0 16px rgba(255, 200, 60, 0.55);
   color: #3a2100;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
@@ -1026,7 +1044,7 @@
   text-shadow: var(--ds-text-shadow);
 }
 .cm-vs2-root[data-screen] .cm-vs2-action--primary {
-  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  background: var(--ds-action-fill);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 0 2px var(--ds-ink), 0 0 16px rgba(255, 200, 60, 0.45);
   color: #3a2100;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
@@ -1192,7 +1210,7 @@
 }
 .cm-vs5-root[data-screen] .cm-vs5-cube__face[aria-pressed="true"],
 .cm-vs5-root[data-screen] .cm-vs5-cube__face[data-selected="true"] {
-  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  background: var(--ds-action-fill);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 0 2px var(--ds-ink), 0 0 16px rgba(255, 200, 60, 0.55);
   color: #3a2100;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
@@ -1216,7 +1234,7 @@
 }
 .cm-vs5-root[data-screen] .cm-vs5-match__enter { border-radius: 18px; text-align: left; }
 .cm-vs5-root[data-screen] .cm-vs5-action--primary {
-  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  background: var(--ds-action-fill);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 0 2px var(--ds-ink), 0 0 16px rgba(255, 200, 60, 0.45);
   color: #3a2100;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
@@ -1270,7 +1288,7 @@
 .cm-vs5-root[data-screen] .cm-vs5-log {
   border: 0;
   border-radius: 14px;
-  background: linear-gradient(180deg, var(--ds-panel-lit) 0%, var(--ds-panel) 55%, var(--ds-panel-deep) 100%);
+  background: var(--ds-window-fill);
   box-shadow: inset 0 0 0 2px var(--ds-ink), 0 0 0 3px var(--ds-gold), 0 0 0 5px var(--ds-ink);
 }
 .cm-vs5-root[data-screen] .cm-vs5-log__line { color: var(--ds-text); text-shadow: var(--ds-text-shadow); }
@@ -1287,12 +1305,15 @@
   background: linear-gradient(180deg, var(--ds-panel-lit), var(--ds-panel-deep));
   border-color: var(--ds-gold);
 }
+.int-rh2-root .int-rh2-letter__ack:disabled { filter: grayscale(0.7) brightness(0.55); cursor: default; }
+.int-rh2-root .int-rh2-letter__ack:focus-visible { outline: 3px solid var(--ds-cyan-lit); outline-offset: 4px; }
+.int-rh2-root .int-rh2-letter__ack:not(:disabled):hover { filter: brightness(1.2); }
 .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__rank { color: var(--ds-text); }
 .cm-vs5-root[data-screen] .cm-vs5-result__detail {
   border: 0;
   border-radius: 14px;
   padding: 14px;
-  background: linear-gradient(180deg, var(--ds-panel-lit) 0%, var(--ds-panel) 55%, var(--ds-panel-deep) 100%);
+  background: var(--ds-window-fill);
   box-shadow: inset 0 0 0 2px var(--ds-ink), 0 0 0 3px var(--ds-gold), 0 0 0 5px var(--ds-ink), var(--ds-lift);
   color: var(--ds-text);
   text-shadow: var(--ds-text-shadow);
@@ -1326,7 +1347,7 @@
   text-shadow: var(--ds-text-shadow);
 }
 .cm-vs2-root[data-screen] .cm-vs2-shop__tab[data-active="true"] {
-  background: linear-gradient(180deg, var(--ds-gold-lit) 0%, var(--ds-gold) 38%, var(--ds-amber) 100%);
+  background: var(--ds-action-fill);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 0 2px var(--ds-ink), 0 0 14px rgba(255, 200, 60, 0.5);
   color: #3a2100;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
@@ -1621,7 +1642,7 @@
   justify-content: center;
   text-align: center;
   border-radius: 12px;
-  background: linear-gradient(180deg, var(--ds-panel-lit) 0%, var(--ds-panel) 55%, var(--ds-panel-deep) 100%);
+  background: var(--ds-window-fill);
   box-shadow:
     inset 0 0 0 2px var(--ds-ink),
     0 0 0 3px var(--ds-gold),

@@ -84,27 +84,23 @@ button { font: inherit; }
   display: grid;
   place-items: center;
   padding: max(24px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
-  background: radial-gradient(120% 90% at 50% 0%, #10314a 0%, #071722 70%);
+
   z-index: 20;
 }
 
 .cm-title[hidden] { display: none; }
 .cm-title__panel { width: min(420px, 100%); display: flex; flex-direction: column; gap: 18px; text-align: center; }
-.cm-title__eyebrow { margin: 0; font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: #6fb6d8; }
+.cm-title__eyebrow { margin: 0; font-size: 0.72rem;  text-transform: uppercase;  }
 .cm-title__name { margin: 0; font-size: clamp(1.9rem, 8vw, 2.6rem); line-height: 1.1; }
-.cm-title__tagline { margin: 0; font-size: 0.92rem; color: var(--cm-muted); }
+.cm-title__tagline { margin: 0; font-size: 0.92rem;  }
 .cm-title__actions { display: flex; flex-direction: column; gap: 12px; margin-top: 6px; }
-.cm-title__note { margin: 0; font-size: 0.78rem; color: var(--cm-dim); min-height: 1.2em; }
+.cm-title__note { margin: 0; font-size: 0.78rem;  min-height: 1.2em; }
 
 .cm-button {
   appearance: none;
-  border: 1px solid #2f6d8f;
-  border-radius: 12px;
-  background: linear-gradient(180deg, #14435f 0%, #0e2f45 100%);
-  color: var(--cm-ink);
+
   font-size: 1.02rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+
   padding: 15px 18px;
   min-height: 52px;
   cursor: pointer;
@@ -113,7 +109,7 @@ button { font: inherit; }
 .cm-button:disabled { opacity: 0.4; cursor: default; }
 .cm-button:not(:disabled):active { transform: translateY(1px); }
 .cm-button:focus-visible { outline: 3px solid var(--cm-accent); outline-offset: 2px; }
-.cm-button--primary { border-color: #4fa6cc; background: linear-gradient(180deg, #1d6d95 0%, #12506f 100%); }
+.cm-button--primary { border-color: #4fa6cc;  }
 
 /* ---------------- Raising screen ---------------- */
 
@@ -636,7 +632,7 @@ body[data-toolbar="on"] #cm-root {
 }
 
 /* --- Digimon roster: ui/digimon_list_* ----------------------------------- */
-.cm-digimon-root { position: fixed; inset: 0; overflow: auto; background: var(--cm-sheet-ground); color: var(--cm-sheet-ink); }
+.cm-digimon-root { position: fixed; inset: 0; overflow: auto; background: var(--cm-sheet-ground);  }
 .cm-digimon-shell {
   width: min(100%, 430px);
   margin: 0 auto;
@@ -644,42 +640,42 @@ body[data-toolbar="on"] #cm-root {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
-  font-family: "Segoe UI", system-ui, sans-serif;
+
 }
-.cm-digimon-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em; color: var(--cm-sheet-accent); }
-.cm-digimon-title { margin: 0; font-size: 1.5rem; letter-spacing: 0.04em; }
+.cm-digimon-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em;  }
+.cm-digimon-title { margin: 0; font-size: 1.5rem;  }
 .cm-digimon-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
 .cm-digimon-item__button {
   width: 100%; min-height: 44px; text-align: left;
-  border: 1px solid var(--cm-sheet-edge); border-radius: 3px;
-  background: var(--cm-sheet-card); color: inherit; font: inherit;
+
+    font: inherit;
   padding: 0.5rem 0.7rem; cursor: pointer;
 }
-.cm-digimon-item__button[aria-pressed="true"] { background: var(--cm-sheet-selected); border-color: var(--cm-sheet-selected-edge); }
+.cm-digimon-item__button[aria-pressed="true"] {  border-color: var(--cm-sheet-selected-edge); }
 .cm-digimon-item__button:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
 .cm-digimon-detail {
   display: grid; grid-template-columns: auto 1fr; gap: 0.2rem 0.7rem;
-  margin: 0; padding: 0.7rem; border: 1px solid var(--cm-sheet-edge); border-radius: 3px;
-  background: var(--cm-sheet-inset); font-variant-numeric: tabular-nums;
+  margin: 0; padding: 0.7rem;
+   font-variant-numeric: tabular-nums;
 }
-.cm-digimon-detail__label { font-size: 0.62rem; letter-spacing: 0.12em; color: var(--cm-sheet-muted); }
+.cm-digimon-detail__label { font-size: 0.62rem;   }
 .cm-digimon-detail__value { margin: 0; font-weight: 700; }
-.cm-digimon-untraced { grid-column: 1 / -1; margin: 0.4rem 0 0; font-size: 0.66rem; color: var(--cm-sheet-dim); }
+.cm-digimon-untraced { grid-column: 1 / -1; margin: 0.4rem 0 0; font-size: 0.66rem;  }
 .cm-digimon-controls { display: flex; gap: 4px; }
 .cm-digimon-control {
-  flex: 1; min-height: 40px; border: 1px solid var(--cm-sheet-edge); border-radius: 3px;
-  background: var(--cm-sheet-card); color: inherit; font: inherit; font-size: 0.62rem;
-  letter-spacing: 0.08em; opacity: 0.4; cursor: not-allowed;
+  flex: 1; min-height: 40px;
+    font: inherit; font-size: 0.62rem;
+  letter-spacing: 0.08em;  cursor: not-allowed;
 }
 .cm-digimon-back {
-  min-height: 44px; border: 1px solid var(--cm-sheet-edge); border-radius: 3px;
-  background: var(--cm-sheet-card); color: inherit; font: inherit; letter-spacing: 0.1em; cursor: pointer;
+  min-height: 44px;
+    font: inherit;  cursor: pointer;
 }
 .cm-digimon-back:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
-.cm-digimon-empty { color: var(--cm-sheet-dim); font-size: 0.8rem; }
+.cm-digimon-empty {  font-size: 0.8rem; }
 
 /* ---- Schedule board (ARM9 0x020CD004, scanned at 0x02089230) ------------- */
-.cm-schedule-root { position: fixed; inset: 0; overflow: auto; background: var(--cm-sheet-ground); color: var(--cm-sheet-ink); }
+.cm-schedule-root { position: fixed; inset: 0; overflow: auto; background: var(--cm-sheet-ground);  }
 .cm-schedule-shell {
   width: min(100%, 430px);
   margin: 0 auto;
@@ -687,10 +683,10 @@ body[data-toolbar="on"] #cm-root {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
-  font-family: "Segoe UI", system-ui, sans-serif;
+
 }
-.cm-schedule-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em; color: var(--cm-sheet-accent); }
-.cm-schedule-title { margin: 0; font-size: 1.5rem; letter-spacing: 0.04em; }
+.cm-schedule-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em;  }
+.cm-schedule-title { margin: 0; font-size: 1.5rem;  }
 .cm-schedule-board { display: flex; flex-direction: column; gap: 0.7rem; }
 .cm-schedule-season { display: flex; flex-direction: column; gap: 0.3rem; }
 .cm-schedule-season__name {
@@ -701,22 +697,20 @@ body[data-toolbar="on"] #cm-root {
 .cm-schedule-day {
   display: flex; flex-direction: column; gap: 3px; min-height: 62px;
   padding: 0.35rem 0.3rem;
-  border: 1px solid var(--cm-sheet-edge); border-radius: 3px;
-  background: var(--cm-sheet-inset);
+
 }
 .cm-schedule-day[data-today="true"] { border-color: var(--cm-sheet-selected-edge); background: var(--cm-sheet-today); }
 .cm-schedule-day__number {
-  margin: 0; font-size: 0.6rem; color: var(--cm-sheet-dim); font-variant-numeric: tabular-nums;
+  margin: 0; font-size: 0.6rem;  font-variant-numeric: tabular-nums;
 }
-.cm-schedule-day__none { margin: 0; font-size: 0.7rem; color: var(--cm-sheet-dim); }
+.cm-schedule-day__none { margin: 0; font-size: 0.7rem;  }
 .cm-schedule-fixture {
   width: 100%; min-height: 30px; text-align: left;
-  border: 1px solid var(--cm-sheet-edge); border-radius: 2px;
-  background: var(--cm-sheet-card); color: inherit;
+
   font: inherit; font-size: 0.62rem; line-height: 1.15;
   padding: 0.25rem 0.3rem; cursor: pointer;
 }
-.cm-schedule-fixture[aria-pressed="true"] { background: var(--cm-sheet-selected); border-color: var(--cm-sheet-selected-edge); }
+.cm-schedule-fixture[aria-pressed="true"] {  border-color: var(--cm-sheet-selected-edge); }
 .cm-schedule-fixture:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 1px; }
 /* A gated fixture is still shown -- the marker says the table gates it, not that
    this build has decided the player cannot enter. */
@@ -725,35 +719,35 @@ body[data-toolbar="on"] #cm-root {
 }
 .cm-schedule-detail {
   display: flex; flex-direction: column; gap: 0.4rem;
-  padding: 0.7rem; border: 1px solid var(--cm-sheet-edge); border-radius: 3px;
-  background: var(--cm-sheet-inset);
+  padding: 0.7rem;
+
 }
 .cm-schedule-detail__name { margin: 0; font-size: 1rem; }
-.cm-schedule-detail__when { margin: 0; font-size: 0.66rem; letter-spacing: 0.1em; color: var(--cm-sheet-muted); }
+.cm-schedule-detail__when { margin: 0; font-size: 0.66rem; letter-spacing: 0.1em;  }
 .cm-schedule-detail__blurb {
-  margin: 0; font-size: 0.72rem; line-height: 1.5; color: var(--cm-sheet-ink); white-space: pre-line;
+  margin: 0; font-size: 0.72rem; line-height: 1.5;  white-space: pre-line;
 }
 .cm-schedule-facts {
   display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 0.7rem; margin: 0.2rem 0 0;
   font-size: 0.66rem; font-variant-numeric: tabular-nums;
 }
-.cm-schedule-facts dt { letter-spacing: 0.1em; color: var(--cm-sheet-muted); }
+
 .cm-schedule-facts dd { margin: 0; font-weight: 700; }
-.cm-schedule-untraced { margin: 0.3rem 0 0; font-size: 0.62rem; line-height: 1.45; color: var(--cm-sheet-dim); }
+.cm-schedule-untraced { margin: 0.3rem 0 0; font-size: 0.62rem; line-height: 1.45;  }
 /* titlematch_top_sub_scene turns pay_red on when the fee cannot be met. */
 .cm-schedule-facts dd[data-short="true"] { color: var(--cm-sheet-short); font-weight: 700; }
 .cm-schedule-short { grid-column: 1 / -1; margin: 0.2rem 0 0; font-size: 0.64rem; color: var(--cm-sheet-short); }
-.cm-schedule-empty { margin: 0; font-size: 0.72rem; color: var(--cm-sheet-dim); }
-.cm-schedule-footer { margin: 0; font-size: 0.62rem; line-height: 1.45; color: var(--cm-sheet-dim); }
+.cm-schedule-empty { margin: 0; font-size: 0.72rem;  }
+.cm-schedule-footer { margin: 0; font-size: 0.62rem; line-height: 1.45;  }
 .cm-schedule-back {
   align-self: flex-start; min-height: 44px; padding: 0 1.1rem;
-  border: 1px solid var(--cm-sheet-edge); border-radius: 3px;
-  background: var(--cm-sheet-card); color: inherit; font: inherit; cursor: pointer;
+
+    font: inherit; cursor: pointer;
 }
 .cm-schedule-back:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
 
 /* ---- Help (help/help_main_scene.nxr, text from ui/txt/help_text_txt.dat) ---- */
-.cm-help-root { position: fixed; inset: 0; overflow: auto; background: var(--cm-sheet-ground); color: var(--cm-sheet-ink); }
+.cm-help-root { position: fixed; inset: 0; overflow: auto; background: var(--cm-sheet-ground);  }
 .cm-help-shell {
   width: min(100%, 430px);
   margin: 0 auto;
@@ -761,47 +755,46 @@ body[data-toolbar="on"] #cm-root {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-  font-family: "Segoe UI", system-ui, sans-serif;
+
 }
-.cm-help-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em; color: var(--cm-sheet-accent); }
-.cm-help-title { margin: 0; font-size: 1.5rem; letter-spacing: 0.04em; }
+.cm-help-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em;  }
+.cm-help-title { margin: 0; font-size: 1.5rem;  }
 .cm-help-list { display: flex; flex-wrap: wrap; gap: 4px; align-content: flex-start; }
 /* A heading has no body in the cartridge, so it is a label and takes a full row. */
 .cm-help-heading {
   flex: 1 0 100%; margin: 0.5rem 0 0.1rem;
-  font-size: 0.64rem; letter-spacing: 0.16em; color: var(--cm-sheet-accent);
+  font-size: 0.64rem; letter-spacing: 0.16em;
   border-bottom: 1px solid var(--cm-sheet-edge); padding-bottom: 0.25rem;
 }
 .cm-help-heading:first-child { margin-top: 0; }
 .cm-help-topic {
   min-height: 32px; text-align: left;
-  border: 1px solid var(--cm-sheet-edge); border-radius: 3px;
-  background: var(--cm-sheet-card); color: inherit;
+
   font: inherit; font-size: 0.68rem;
   padding: 0.3rem 0.55rem; cursor: pointer;
 }
-.cm-help-topic[aria-pressed="true"] { background: var(--cm-sheet-selected); border-color: var(--cm-sheet-selected-edge); }
+.cm-help-topic[aria-pressed="true"] {  border-color: var(--cm-sheet-selected-edge); }
 .cm-help-topic:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
 .cm-help-detail {
   display: flex; flex-direction: column; gap: 0.45rem;
-  padding: 0.8rem; border: 1px solid var(--cm-sheet-edge); border-radius: 3px;
-  background: var(--cm-sheet-inset);
+  padding: 0.8rem;
+
 }
 .cm-help-detail__title { margin: 0; font-size: 1rem; }
 /* The cartridge writes its own line breaks; keep them. */
 .cm-help-detail__body { margin: 0; font-size: 0.78rem; line-height: 1.65; white-space: pre-line; }
-.cm-help-detail__provenance { margin: 0; font-size: 0.6rem; color: var(--cm-sheet-dim); font-variant-numeric: tabular-nums; }
-.cm-help-empty { margin: 0; font-size: 0.72rem; color: var(--cm-sheet-dim); }
-.cm-help-note { margin: 0; font-size: 0.62rem; line-height: 1.45; color: var(--cm-sheet-dim); }
+.cm-help-detail__provenance { margin: 0; font-size: 0.6rem;  font-variant-numeric: tabular-nums; }
+.cm-help-empty { margin: 0; font-size: 0.72rem;  }
+.cm-help-note { margin: 0; font-size: 0.62rem; line-height: 1.45;  }
 .cm-help-back {
   align-self: flex-start; min-height: 44px; padding: 0 1.1rem;
-  border: 1px solid var(--cm-sheet-edge); border-radius: 3px;
-  background: var(--cm-sheet-card); color: inherit; font: inherit; cursor: pointer;
+
+    font: inherit; cursor: pointer;
 }
 .cm-help-back:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
 
 /* ---- Tamer Info (tamer_info_main_scene.nxr + tamer_info_sub_scene.nxr) ----- */
-.cm-tamer-root { position: fixed; inset: 0; overflow: auto; background: var(--cm-sheet-ground); color: var(--cm-sheet-ink); }
+.cm-tamer-root { position: fixed; inset: 0; overflow: auto; background: var(--cm-sheet-ground);  }
 .cm-tamer-shell {
   width: min(100%, 430px);
   margin: 0 auto;
@@ -809,16 +802,16 @@ body[data-toolbar="on"] #cm-root {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
-  font-family: "Segoe UI", system-ui, sans-serif;
+
 }
-.cm-tamer-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em; color: var(--cm-sheet-accent); }
-.cm-tamer-title { margin: 0; font-size: 1.5rem; letter-spacing: 0.04em; }
+.cm-tamer-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em;  }
+.cm-tamer-title { margin: 0; font-size: 1.5rem;  }
 .cm-tamer-fields {
   display: grid; grid-template-columns: auto 1fr; gap: 0.3rem 0.9rem; margin: 0;
-  padding: 0.8rem; border: 1px solid var(--cm-sheet-edge); border-radius: 3px;
-  background: var(--cm-sheet-inset);
+  padding: 0.8rem;
+
 }
-.cm-tamer-field__label { font-size: 0.64rem; letter-spacing: 0.14em; color: var(--cm-sheet-muted); align-self: center; }
+.cm-tamer-field__label { font-size: 0.64rem;   align-self: center; }
 /* The cartridge draws each digit as its own cell, so the value row is monospaced
    and right-aligned to keep the column the width the scene fixes. */
 .cm-tamer-field__value {
@@ -827,38 +820,38 @@ body[data-toolbar="on"] #cm-root {
   font-size: 0.95rem; font-weight: 700; letter-spacing: 0.08em;
   font-variant-numeric: tabular-nums;
 }
-.cm-tamer-field__value[data-state="UNSOURCED"] { color: var(--cm-sheet-dim); font-weight: 400; }
-.cm-tamer-note { margin: 0; font-size: 0.62rem; line-height: 1.5; color: var(--cm-sheet-dim); }
+.cm-tamer-field__value[data-state="UNSOURCED"] {  font-weight: 400; }
+.cm-tamer-note { margin: 0; font-size: 0.62rem; line-height: 1.5;  }
 .cm-tamer-back {
   align-self: flex-start; min-height: 44px; padding: 0 1.1rem;
-  border: 1px solid var(--cm-sheet-edge); border-radius: 3px;
-  background: var(--cm-sheet-card); color: inherit; font: inherit; cursor: pointer;
+
+    font: inherit; cursor: pointer;
 }
 .cm-tamer-back:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
 
 /* --- Tournaments: ui/conference_list_item + training/schedule_item ------- */
-.cm-championship-root { position: fixed; inset: 0; overflow: auto; background: var(--cm-sheet-ground); color: var(--cm-sheet-ink); }
+.cm-championship-root { position: fixed; inset: 0; overflow: auto; background: var(--cm-sheet-ground);  }
 .cm-championship-shell {
   width: min(100%, 430px); margin: 0 auto;
   display: flex; flex-direction: column; gap: 0.7rem;
   padding: calc(var(--cm-screen-top, 0px) + 0.8rem) 0.9rem calc(0.9rem + env(safe-area-inset-bottom, 0px));
 }
-.cm-championship-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em; color: var(--cm-sheet-accent); }
-.cm-championship-title { margin: 0; font-size: 1.15rem; letter-spacing: 0.06em; }
+.cm-championship-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em;  }
+.cm-championship-title { margin: 0; font-size: 1.15rem;  }
 .cm-championship-board { display: flex; flex-direction: column; gap: 0.6rem; }
 /* conference_list_item: a cup, a name, a plate. */
 .cm-championship-entry {
   display: flex; align-items: center; gap: 0.7rem; width: 100%; min-height: 72px;
-  padding: 0.6rem 0.8rem; text-align: left; cursor: pointer; font: inherit; color: inherit;
-  border: 1px solid var(--cm-sheet-edge); border-radius: 3px 13px 3px 13px; background: var(--cm-sheet-card);
+  padding: 0.6rem 0.8rem; text-align: left; cursor: pointer; font: inherit;
+
 }
-.cm-championship-entry:disabled { cursor: default; opacity: 0.7; }
+.cm-championship-entry:disabled { cursor: default;  }
 .cm-championship-entry[data-unlocked="true"]:not(:disabled):hover { border-color: var(--cm-sheet-selected-edge); background: var(--cm-sheet-selected); }
 .cm-championship-entry:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
 .cm-championship-cup { font-size: 1.5rem; line-height: 1; }
 .cm-championship-entry__copy { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
 .cm-championship-entry__name { font-weight: 700; font-size: 0.95rem; }
-.cm-championship-entry__rounds { font-size: 0.68rem; color: var(--cm-sheet-muted); letter-spacing: 0.08em; }
+.cm-championship-entry__rounds { font-size: 0.68rem;  letter-spacing: 0.08em; }
 .cm-championship-entry__reason { font-size: 0.64rem; color: var(--cm-sheet-dim); line-height: 1.4; }
 /* schedule_item spends money_01..06 and a bit mark on a prize. */
 .cm-championship-prize { display: flex; align-items: baseline; gap: 0.3rem; margin: 0; font-variant-numeric: tabular-nums; }
@@ -867,27 +860,27 @@ body[data-toolbar="on"] #cm-root {
 
 .cm-championship-run {
   display: flex; flex-direction: column; gap: 0.6rem; padding: 0.8rem;
-  border: 1px solid var(--cm-sheet-edge); border-radius: 3px 13px 3px 13px; background: var(--cm-sheet-inset);
+
 }
 .cm-championship-run__title { margin: 0; font-size: 1rem; letter-spacing: 0.05em; }
 .cm-championship-rounds { display: flex; gap: 0.4rem; margin: 0; padding: 0; list-style: none; }
 .cm-championship-round {
   display: grid; place-items: center; min-width: 40px; min-height: 40px;
-  border: 1px solid var(--cm-sheet-edge); border-radius: 3px 9px 3px 9px;
-  background: var(--cm-sheet-card); font-size: 0.78rem; font-weight: 700;
+
+   font-size: 0.78rem; font-weight: 700;
 }
-.cm-championship-round[data-state="WON"] { border-color: var(--cm-sheet-selected-edge); background: var(--cm-sheet-selected); }
+.cm-championship-round[data-state="WON"] { border-color: var(--cm-sheet-selected-edge);  }
 .cm-championship-round[data-state="LOST"] { color: var(--cm-sheet-dim); }
-.cm-championship-round[data-state="NOW"] { border-color: var(--cm-sheet-accent); box-shadow: inset 0 0 0 1px var(--cm-sheet-accent); }
+.cm-championship-round[data-state="NOW"] { border-color: var(--cm-sheet-accent);  }
 .cm-championship-round[data-state="PENDING"] { color: var(--cm-sheet-dim); opacity: 0.75; }
 .cm-championship-opponent { margin: 0; font-size: 0.74rem; color: var(--cm-sheet-muted); }
 .cm-championship-actions { display: flex; gap: 0.5rem; }
 .cm-championship-action, .cm-championship-back {
-  flex: 1 1 auto; min-height: 44px; padding: 0 0.9rem; cursor: pointer; font: inherit; color: inherit;
-  border: 1px solid var(--cm-sheet-edge); border-radius: 3px 10px 3px 10px; background: var(--cm-sheet-card);
+  flex: 1 1 auto; min-height: 44px; padding: 0 0.9rem; cursor: pointer; font: inherit;
+
 }
-.cm-championship-action--primary { border-color: var(--cm-sheet-selected-edge); background: var(--cm-sheet-selected); font-weight: 700; }
+.cm-championship-action--primary { border-color: var(--cm-sheet-selected-edge);  font-weight: 700; }
 .cm-championship-action:focus-visible, .cm-championship-back:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
-.cm-championship-notice { margin: 0; font-size: 0.7rem; line-height: 1.45; color: var(--cm-sheet-dim); }
+.cm-championship-notice { margin: 0; font-size: 0.7rem; line-height: 1.45;  }
 .cm-championship-footer { display: flex; margin-top: auto; padding-top: 0.4rem; }
 .cm-championship-back { flex: 0 0 auto; align-self: flex-start; }

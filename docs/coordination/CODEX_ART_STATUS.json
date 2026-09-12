@@ -1,4 +1,24 @@
 {
+  "uiThemeUnification20260912": {
+    "date": "2026-09-12",
+    "status": "BOUNDED_THEME_REPLACEMENT_AND_SAFE_PRUNE_COMPLETE_GLOBAL_CASCADE_PARTIAL",
+    "baseHead": "b42ead6f9ab420d548df1f8cd363f2de9b2569f5",
+    "report": "docs/coordination/CODEX_NOTE_2026-09-12_UI_THEME_UNIFICATION.md",
+    "guide": "docs/art/production/ui/UI_STYLE_OWNERSHIP_2026-09-12.md",
+    "redundantDeclarationsRemoved": 280,
+    "emptyRulesRemoved": 6,
+    "unchangedDeletionComparisons": 28,
+    "viewStateCases": 36,
+    "fullLocalPass": 1476,
+    "buildFiles": 6279,
+    "playtestBuildId": "d08eb96385efa5ecab9288b1fbf3b31c30da023970feaca298994d576653f2a6",
+    "ownerDecision": "Keep original calendar/paper content; unify surrounding frames and controls",
+    "gameplayChanged": false,
+    "fullCascadeFlattened": false,
+    "physicalPhoneQA": false,
+    "fullOriginalParity": false,
+    "publicationPerformed": false
+  },
   "uiSkinReview20260912": {
     "date": "2026-09-12",
     "status": "CONFIRMED_DEFECTS_REPAIRED_OWNER_QA_PENDING",

@@ -4,10 +4,10 @@
  * and the art lane's manifests, so this lane adds a file rather than editing a
  * contested one. The vs2 screens set the same precedent.
  *
- * The frame is 9:16 because the original is: two 256x192 screens stacked is
- * 256x384, and every ROM background witness comes in a _main / _sub pair. The
- * field band is 37.5% of the frame height, which at full width is exactly the
- * 3:2 the arena art is authored at.
+ * The 9:16 frame is this project's mobile adaptation. Two original 256x192
+ * screens stacked form 256x384 (2:3), not 9:16. The 37.5% field band fits
+ * the current 3:2 arena art inside that authored portrait frame; it is not
+ * evidence for original screen geometry or gameplay coordinates.
  */
 
 .cm-vs5-root {
@@ -18,9 +18,7 @@
   /* Not `stretch`: a stretched child overrides the shell's aspect-ratio, and
      the five band percentages are only correct on a 9:16 shell. */
   align-items: center;
-  background: var(--cm-deep, #071722);
-  color: #dce8ef;
-  font-family: inherit;
+
 }
 
 /* The shell IS the 9:16 frame, so a band's percentage height is a percentage
@@ -67,7 +65,7 @@
 
 .cm-vs5-clock__track {
   height: 5px;
-  background: #24424c;
+
   overflow: hidden;
 }
 
@@ -75,7 +73,7 @@
   display: block;
   height: 100%;
   width: 100%;
-  background: #9fd8de;
+
   transition: width 120ms linear;
 }
 
@@ -111,14 +109,14 @@
   margin: 0;
   font-size: 13px;
   letter-spacing: 0.1em;
-  color: #dce8ef;
+
 }
 
 .cm-vs5-log__detail {
   margin: 0;
   font-size: 11px;
   letter-spacing: 0.14em;
-  color: #8d8f9a;
+
 }
 
 .cm-vs5-log[data-verdict="TEAM_ZERO_AHEAD"] .cm-vs5-log__line { color: #6fd0d8; }
@@ -186,8 +184,7 @@
 
 .cm-vs5-match__payout {
   font-size: 11px;
-  letter-spacing: 0.1em;
-  color: #d2ad5d;
+
 }
 
 /* ---------------- The match ---------------- */
@@ -227,7 +224,7 @@
 
 .cm-vs5-fighter__name {
   font-size: 11px;
-  letter-spacing: 0.08em;
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -236,7 +233,7 @@
 .cm-vs5-meter {
   display: block;
   height: 6px;
-  background: #24424c;
+
   overflow: hidden;
 }
 
@@ -257,7 +254,7 @@
   aspect-ratio: 3 / 2;
   position: relative;
   overflow: hidden;
-  background: #123039;
+
 }
 
 .cm-vs5-field .cm-field-canvas {
@@ -285,24 +282,21 @@
   padding: 0 16px;
   font-size: 12px;
   letter-spacing: 0.08em;
-  color: #8d8f9a;
+
 }
 
 /* ---------------- Controls ---------------- */
 
 .cm-vs5-action {
   appearance: none;
-  border: 1px solid #1d6d95;
-  background: linear-gradient(180deg, #10394e 0%, #0b2836 100%);
-  color: #dce8ef;
+
   font: inherit;
   font-size: 13px;
-  letter-spacing: 0.1em;
+
   padding: 10px 14px;
   cursor: pointer;
 }
 
-.cm-vs5-action--primary { border-color: #4fa6cc; }
 .cm-vs5-action:focus-visible { outline: 2px solid #65b8c3; outline-offset: 2px; }
 .cm-vs5-party { display: flex; flex-direction: column; gap: 10px; overflow-y: auto; min-height: 0; }
 .cm-vs5-party[hidden], .cm-vs5-matches[hidden], .cm-vs5-cube[hidden], .cm-vs5-cube__note[hidden] { display: none; }
@@ -324,18 +318,17 @@
 .cm-vs5-cube__faces { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; margin-top: 0.5rem; }
 .cm-vs5-cube__face {
   min-height: 44px;
-  border: 1px solid rgba(126,197,224,0.3); border-radius: 3px;
-  background: rgba(18,52,73,0.85); color: #cfe8f4;
+
   font: inherit; font-size: 0.68rem; letter-spacing: 0.08em; cursor: pointer;
 }
 .cm-vs5-cube__face[aria-pressed="true"] { background: #2a5f7d; border-color: #9ad9f0; }
-.cm-vs5-cube__face:disabled { opacity: 0.45; cursor: default; }
+.cm-vs5-cube__face:disabled {  cursor: default; }
 .cm-vs5-cube__face:focus-visible { outline: 2px solid #7ec5e0; outline-offset: 2px; }
 .cm-vs5-cube__canvas:focus-visible { outline: 2px solid #7ec5e0; outline-offset: 2px; }
 .cm-vs5-cube__fallback { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .cm-vs5-cube__fallback img { display: block; width: 100%; height: auto; margin-bottom: 6px; }
 .cm-vs5-cube__fallback .cm-vs5-cube__face { padding: 5px 5px 10px; }
 .cm-vs5-cube__note {
-  margin: 0.5rem 0 0; font-size: 0.62rem; line-height: 1.45; color: #7c96a5;
+  margin: 0.5rem 0 0; font-size: 0.62rem; line-height: 1.45;
   max-width: 380px; margin-inline: auto;
 }

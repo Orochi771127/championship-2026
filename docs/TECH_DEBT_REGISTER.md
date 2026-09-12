@@ -49,3 +49,15 @@ visibility and contrast failures are fixed; style rationale is now documentation
 reducing the skin to 16,176 gzip bytes. Future consolidation must preserve the
 Owner-approved automatic orientation and current visual direction and compare all
 affected screens/states. No full-original or physical-device acceptance is implied.
+
+### 2026-09-12 conservative theme consolidation
+
+**PARTIALLY CLOSED.** Removed 280 exact-selector/property redundancies and six
+empty rules; 28 frozen DOM/style comparisons show zero differences for the
+deletion stage. Calendar/mail content distinctions were explicitly retained by
+the Owner; their frames/controls, the mode label, schedule states and Gate host
+now use the new design language. Full1476 and the selected playtest build pass.
+The earlier last-matched-rule inventory is not a deletion authority. Root/context
+overrides remain open; do not remove their specificity or structural files by
+coverage count. See [handoff](coordination/CODEX_NOTE_2026-09-12_UI_THEME_UNIFICATION.md)
+and [dimension/ownership guide](art/production/ui/UI_STYLE_OWNERSHIP_2026-09-12.md).

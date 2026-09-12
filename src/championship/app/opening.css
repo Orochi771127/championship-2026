@@ -6,8 +6,8 @@
 .cm-title__panel::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(60deg,transparent 0 34px,#90eaff35 35px 36px,transparent 37px 71px),repeating-linear-gradient(-60deg,transparent 0 34px,#90eaff35 35px 36px,transparent 37px 71px);mask-image:linear-gradient(#000,transparent 85%);pointer-events:none}
 .cm-title__logo{position:absolute;z-index:2;top:13%;left:5%;width:90%;filter:drop-shadow(0 5px 0 #04206e);transform:rotate(-3deg)}
 .cm-title__crown{display:block;margin:0 auto 8px;width:90px;height:48px;background:linear-gradient(#fff99d,#ffd532 50%,#eaa10b);clip-path:polygon(0 10%,25% 38%,50% 0,75% 38%,100% 10%,88% 85%,12% 85%)}
-.cm-title__eyebrow{font-size:clamp(16px,3.5dvh,28px);letter-spacing:.2em;font-weight:1000;color:#fcfcde;text-shadow:2px 2px #152d60}
-.cm-title__name{font:1000 clamp(34px,7.2dvh,65px)/1.06 system-ui,sans-serif;letter-spacing:-.04em;color:#f4ffc9;-webkit-text-stroke:1px #275c20;text-shadow:3px 3px #245f22,5px 5px #ffd849}
+.cm-title__eyebrow{font-size:clamp(16px,3.5dvh,28px);letter-spacing:.2em;font-weight:1000;}
+.cm-title__name{font:1000 clamp(34px,7.2dvh,65px)/1.06 system-ui,sans-serif;letter-spacing:-.04em;color:#f4ffc9;-webkit-text-stroke:1px #275c20;}
 .cm-title__name span{color:#ffe969;-webkit-text-stroke:1px #775200}
 .cm-title__edition{font-size:clamp(11px,1.8dvh,15px);margin:12px 0 0;font-weight:900;letter-spacing:.08em;color:#faffdd}.cm-title__edition b{color:#ffe044}
 .cm-title__world{position:absolute;width:160%;height:58%;left:-30%;bottom:-16%;border:3px solid #d2fcff;border-radius:50%;box-shadow:0 -8px 25px #98faff,0 -35px 80px #02e8ff66;transform:perspective(400px) rotateX(18deg);
@@ -15,7 +15,7 @@
 .cm-title__login,.cm-title__actions .cm-button{border-radius:0;clip-path:polygon(8% 0,100% 0,92% 100%,0 100%);border:0;border-top:3px solid #b8ffff;border-bottom:3px solid #20cbee;background:linear-gradient(#32cfea 0 13%,#001b42 13% 82%,#036caf 82%);min-height:56px;color:#fff;font-size:22px;font-weight:850;letter-spacing:.1em;text-shadow:2px 2px #00264b;cursor:pointer}
 .cm-title__login{position:absolute;z-index:2;left:22%;width:56%;top:68%}
 .cm-title__actions{position:absolute;z-index:3;top:62%;left:16%;width:68%;gap:16px;margin:0}.cm-title__actions[hidden],.cm-title__login[hidden],#cm-opening[hidden]{display:none}
-.cm-title__note{position:absolute;z-index:5;bottom:4%;left:8%;width:84%;color:#ecfcff;font-size:12px;text-shadow:1px 1px #032757}
+.cm-title__note{position:absolute;z-index:5;bottom:4%;left:8%;width:84%;font-size:12px;}
 #cm-opening{position:absolute;z-index:4;inset:0;display:grid;place-items:center;background:#030819;color:#17222a;padding:20px}
 .cm-opening__envelope{position:absolute;bottom:22%;right:8%;width:58px;height:44px;border:2px solid #eea911;background:linear-gradient(32deg,transparent 48%,#d2a343 49% 51%,transparent 52%),linear-gradient(-32deg,#fffce7 48%,#d2a343 49% 51%,#fff4b5 52%);cursor:pointer}
 .cm-opening__letter{width:100%;border:6px double #c29b26;padding:18px;background:repeating-linear-gradient(#fff2a7 0 29px,#d6c779 29px 30px);box-shadow:0 3px 0 #88651e;font-size:16px;line-height:30px;text-align:left}
