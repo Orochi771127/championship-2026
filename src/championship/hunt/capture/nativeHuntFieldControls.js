@@ -19,6 +19,18 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
   const nextChannel=channel=>rng.next(channel), wildRandom=max=>nativeWildRandom(max,nextChannel);
   const emit=value=>{notice=value;onChange();};
   const cardEntries=()=>actors.map(nativeWildCaptureSnapshot).filter(s=>s.state==="ON_CARD");
+  const captureEffects=()=>actors.filter(a=>a.cardState==="HAND_ANIMATION"&&a.handController).map(a=>({
+    wildId:a.wildId,
+    speciesId:a.speciesId,
+    worldX:a.positionQ12[0]/2048,
+    worldY:a.positionQ12[1]/2048,
+    worldZ:a.positionQ12[2]/2048,
+    phase:a.handController.phase,
+    counter:a.handController.counter,
+    wildHidden:a.hidden,
+    timingAuthority:"NATIVE_HAND_CONTROLLER",
+    presentationRole:"CAPTURE_TO_MEMORY_CARD"
+  }));
   const usedG=()=>cardEntries().reduce((sum,s)=>sum+s.gCost,0);
   const equipped=kind=>{const slot=loadout.getSelectedEquipment().find(s=>s.equipmentClass===kind);return slot?.itemId?{...getHuntCatalogItem(slot.itemId),quantity:slot.quantity}:null;};
   const stopRope=a=>{if(rope?.actor===a)rope=null;};
@@ -154,6 +166,7 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
         to:pointer.q12.slice(0,2).map(n=>n/2048),durability:rope.state.durability,capacity:rope.state.baseDurability,band:rope.state.band}:null,
       points:stroke?.slots.filter(Boolean).map(s=>({x:s.positionQ12[0]/2048,y:s.positionQ12[1]/2048}))??[],
       closure:closure?{x:closure.centerQ12[0]/2048,y:closure.centerQ12[1]/2048,ticks:closure.ticks}:null,
+      captureEffects:captureEffects(),
       usedG:usedG(),maxG:maxCardG}),
     getAvailability(){const a=actors.find(a=>a.wildId===selectedWildId);return {state:a?nativeWildCaptureSnapshot(a).state:"NO_TARGET",canCollect:a?.aiState===11||a?.aiState===16&&a.trapReady,targetWildId:selectedWildId,currentHp:a?.currentHp??null};}
   });

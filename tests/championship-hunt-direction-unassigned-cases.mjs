@@ -138,6 +138,24 @@ test('an untraced encounter keeps running, keeps its tools and still commits its
   controls.commit();assert.equal(controls.actors[1].cardState,'HOME_COMMITTED');
 });
 
+test('the normal Hunt controller publishes capture VFX without restoring the hidden actor',()=>{
+  const pool=JSON.parse(fs.readFileSync('docs/research/HUNT_INDIVIDUAL_POOL_CPU_CHECK_2026-09-06.json','utf8'));
+  const individual=structuredClone(pool.poolVectors[0].records[0]);
+  const record={speciesIndex:individual.fields['000'],individual,positionQ12:[80*4096,64*4096,0],facing:1,
+    ai:{state:8,speedQ12:4096,field054:8,field1e0:0,field1d8:600}};
+  const controls=createNativeHuntFieldControls({records:[record],wildIds:['capturing'],
+    environment:environment({unknownDirection:15,blendQ12:205,escapeBoundary:false}),
+    rng:{next:()=>0},loadout:{getSelectedEquipment:()=>[]},consumeItem:()=>assert.fail('unexpected inventory write'),
+    maxCardG:32,onChange:()=>{}});
+  const target=controls.actors[0];
+  target.cardState='HAND_ANIMATION';target.hidden=true;target.handController={phase:2,counter:20};
+  assert.equal(controls.getActors().length,0,'a hidden capture target cannot be drawn a second time');
+  assert.deepEqual(controls.getState().captureEffects,[{
+    wildId:'capturing',speciesId:target.speciesId,worldX:160,worldY:128,worldZ:0,
+    phase:2,counter:20,wildHidden:true,timingAuthority:'NATIVE_HAND_CONTROLLER',presentationRole:'CAPTURE_TO_MEMORY_CARD'
+  }]);
+});
+
 // Owner QA, 2026-09-12: wild Digimon walked backwards -- drawn facing right
 // while moving left, and the reverse. The character cells are authored facing
 // LEFT (see assets/production/internal-faithful-baseline/characters-v1), so

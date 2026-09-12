@@ -1,0 +1,372 @@
+/*
+ * Shop layout restored from the owner-supplied original gameplay recording
+ * video.MOV (2026-09-12). Structure and proportions are video-observed;
+ * every shape below is original-created CSS and uses no ROM/decoded pixels.
+ */
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop {
+  background-color: #062d69;
+  background-image:
+    linear-gradient(30deg, rgba(70, 157, 225, 0.1) 12%, transparent 12.5%, transparent 87%, rgba(70, 157, 225, 0.1) 87.5%),
+    linear-gradient(150deg, rgba(70, 157, 225, 0.1) 12%, transparent 12.5%, transparent 87%, rgba(70, 157, 225, 0.1) 87.5%),
+    linear-gradient(30deg, rgba(2, 18, 55, 0.24) 12%, transparent 12.5%, transparent 87%, rgba(2, 18, 55, 0.24) 87.5%),
+    linear-gradient(150deg, rgba(2, 18, 55, 0.24) 12%, transparent 12.5%, transparent 87%, rgba(2, 18, 55, 0.24) 87.5%),
+    linear-gradient(60deg, rgba(101, 199, 255, 0.07) 25%, transparent 25.5%, transparent 75%, rgba(101, 199, 255, 0.07) 75%);
+  background-position: 0 0, 0 0, 18px 32px, 18px 32px, 0 0;
+  background-size: 36px 64px;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-header {
+  border-bottom-color: rgba(128, 204, 255, 0.48);
+  background: linear-gradient(180deg, rgba(0, 27, 76, 0.96), rgba(5, 57, 116, 0.9));
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__wallet {
+  border: 1px solid #e2ba54;
+  border-radius: 4px;
+  padding: 7px 10px;
+  background: linear-gradient(180deg, #173462, #081c42);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.13), 0 2px 0 #03142f;
+  color: #fff0a8;
+  font-variant-numeric: tabular-nums;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__body {
+  display: grid;
+  grid-template-rows: minmax(142px, 1.2fr) auto minmax(154px, 0.92fr) minmax(18px, auto);
+  gap: 7px;
+  min-height: 0;
+  padding: 8px 9px 5px;
+  overflow: hidden;
+  background: transparent;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__detail {
+  display: grid;
+  grid-template-columns: minmax(96px, 36%) minmax(0, 1fr);
+  gap: 10px;
+  min-height: 0;
+  padding: 10px;
+  border: 2px solid #d9ad46;
+  border-radius: 7px;
+  background: linear-gradient(145deg, rgba(8, 31, 72, 0.98), rgba(3, 17, 46, 0.98));
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 240, 154, 0.2),
+    inset 0 -18px 40px rgba(9, 75, 129, 0.2),
+    0 3px 0 rgba(0, 12, 37, 0.82);
+  color: #eefaff;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__detail-art {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 96px;
+  border: 1px solid rgba(123, 209, 255, 0.55);
+  border-radius: 5px;
+  background:
+    radial-gradient(circle at 50% 46%, rgba(91, 203, 255, 0.22), transparent 55%),
+    linear-gradient(180deg, #0d4e8b, #061e4e);
+  box-shadow: inset 0 0 20px rgba(0, 15, 44, 0.72);
+  overflow: hidden;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__detail-copy {
+  display: grid;
+  align-content: center;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 7px;
+  min-width: 0;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__detail-name {
+  margin: 0;
+  color: #fff4bd;
+  font-size: clamp(0.88rem, 3.8vw, 1.08rem);
+  line-height: 1.25;
+  text-shadow: 0 2px 0 #001638;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__detail-description {
+  margin: 0;
+  overflow: auto;
+  color: #d9efff;
+  font-size: clamp(0.7rem, 2.9vw, 0.84rem);
+  font-weight: 650;
+  line-height: 1.55;
+  text-shadow: 0 1px 0 #001331;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__detail-meta {
+  margin: 0;
+  padding-top: 6px;
+  border-top: 1px solid rgba(128, 204, 255, 0.35);
+  color: #9fe9ff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__tabs {
+  position: static;
+  display: flex;
+  gap: 4px;
+  padding: 0;
+  overflow-x: auto;
+  background: transparent;
+  scrollbar-width: none;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__tabs::-webkit-scrollbar,
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__list::-webkit-scrollbar {
+  display: none;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__tab {
+  flex: 1 0 max-content;
+  min-height: 38px;
+  padding: 6px 10px;
+  border: 1px solid #5a9ad1;
+  border-radius: 5px 5px 2px 2px;
+  background: linear-gradient(180deg, #2367a7, #0a3975);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.18), 0 2px 0 #031b46;
+  color: #d9f3ff;
+  font-size: 0.68rem;
+  letter-spacing: 0.03em;
+  text-shadow: 0 1px 0 #001536;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__tab[data-active="true"] {
+  border-color: #efc65b;
+  background: linear-gradient(180deg, #ffe99a, #d8a637);
+  box-shadow: inset 0 1px #fff8cf, 0 2px 0 #6f4b0e;
+  color: #3b2600;
+  text-shadow: 0 1px rgba(255, 255, 255, 0.55);
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__shelf {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  gap: 5px;
+  min-height: 0;
+  align-items: stretch;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__arrow {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 1px solid #d6ad4e;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #1c5591, #071f4d);
+  box-shadow: inset 0 0 0 1px rgba(168, 225, 255, 0.18), 0 3px 0 #02112c;
+  color: #fff0a5;
+  font-size: 2rem;
+  line-height: 1;
+  text-shadow: 0 2px 0 #00102b;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__arrow:disabled {
+  opacity: 0.34;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__list {
+  display: flex;
+  grid-template-columns: none;
+  gap: 7px;
+  min-width: 0;
+  min-height: 0;
+  padding: 3px 2px 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__row {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: minmax(58px, 1fr) auto;
+  flex: 0 0 calc((100% - 7px) / 2);
+  gap: 4px;
+  min-width: 0;
+  min-height: 136px;
+  padding: 7px;
+  border: 2px solid #4f8dbf;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #123c72, #071c45 74%);
+  box-shadow: inset 0 0 0 1px rgba(213, 242, 255, 0.13), 0 3px 0 #02122f;
+  color: #e8f6ff;
+  text-align: center;
+  scroll-snap-align: center;
+}
+
+/* Latest Owner direction: selection is a green rim and label, never a green fill. */
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__row[data-selected="true"] {
+  border-color: #86e75a;
+  background: linear-gradient(180deg, #153e70, #081d46 74%);
+  box-shadow:
+    inset 0 0 0 2px rgba(179, 255, 124, 0.2),
+    0 0 0 1px #173b15,
+    0 0 12px rgba(105, 232, 75, 0.42),
+    0 3px 0 #02122f;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__card-art {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 58px;
+  border-radius: 4px;
+  background: radial-gradient(circle, rgba(106, 202, 255, 0.2), transparent 70%);
+  overflow: hidden;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__card-art .cm-facility-thumb,
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__card-art .cm-shop-goods-icon {
+  width: 58px;
+  height: 58px;
+  justify-self: center;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__detail-art .cm-vs2-shop__art-large {
+  width: min(92px, 82%);
+  height: min(92px, 82%);
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__art-fallback {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border: 1px solid rgba(150, 222, 255, 0.64);
+  border-radius: 50%;
+  background: radial-gradient(circle, #2577a8, #082c61 72%);
+  color: #dff7ff;
+  font-size: 0.68rem;
+  font-weight: 850;
+  text-shadow: 0 1px #001536;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__detail-art .cm-vs2-shop__art-fallback {
+  width: 78px;
+  height: 78px;
+  font-size: 0.82rem;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__name {
+  display: grid;
+  align-content: end;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__name strong {
+  overflow: hidden;
+  color: #e8f6ff;
+  font-size: 0.76rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-shadow: 0 1px #001432;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__row[data-selected="true"] .cm-vs2-shop__name strong {
+  color: #a9ff77;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__meta {
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  color: #9fcce6;
+  font-size: 0.56rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__new {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: #f1c750;
+  color: #2e1d00;
+  font-size: 0.46rem;
+  text-shadow: none;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__status {
+  min-height: 18px;
+  margin: 0;
+  color: #bcf2ff;
+  font-size: 0.66rem;
+  text-align: center;
+  text-shadow: 0 1px #001332;
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-footer {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  background: linear-gradient(180deg, rgba(2, 20, 52, 0.86), rgba(1, 12, 34, 0.98));
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__buy {
+  min-width: 0;
+  min-height: 44px;
+  border: 1px solid #e4bd5c;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #ffe798, #d5a63d);
+  box-shadow: inset 0 1px #fff7cf, 0 3px 0 #61400d;
+  color: #382300;
+  font-weight: 850;
+  text-shadow: 0 1px rgba(255, 255, 255, 0.58);
+}
+
+.cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__buy:disabled {
+  opacity: 0.55;
+  filter: grayscale(0.72) brightness(0.72);
+}
+
+@media (min-width: 700px) and (orientation: landscape) {
+  .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__body {
+    grid-template-columns: minmax(270px, 0.8fr) minmax(0, 1.2fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+
+  .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__detail {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+  }
+
+  .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__tabs,
+  .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__shelf,
+  .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__status {
+    grid-column: 2;
+  }
+
+  .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__row {
+    flex-basis: calc((100% - 14px) / 3);
+  }
+}
+
+@media (max-height: 670px) {
+  .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__body {
+    grid-template-rows: minmax(116px, 1fr) auto minmax(126px, 0.9fr) minmax(14px, auto);
+  }
+
+  .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__row {
+    min-height: 112px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__list {
+    scroll-behavior: auto;
+  }
+}

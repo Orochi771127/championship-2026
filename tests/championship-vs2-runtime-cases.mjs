@@ -376,9 +376,10 @@ test("Hunt exposes only the authorized native controls/readouts and no invented 
   // unexplained: they are ROM-verified plugin capabilities, so banning their
   // names would now ban the recovered original. What must stay out is a later
   // slice's MECHANICS - rewards, encounters, progression - and any capture
-  // affordance. Capture capacity is allowed through as a labelled readout,
-  // asserted separately below.
-  const ALLOWED_CAPTURE_KEYS = new Set(["captureCapacityG", "captureCapacityScope"]);
+  // affordance. Capture capacity is allowed through as a labelled readout.
+  // Owner-video repair also allows one presentation-only effect projection;
+  // it contains no action and is empty until the native hand controller runs.
+  const ALLOWED_CAPTURE_KEYS = new Set(["captureCapacityG", "captureCapacityScope", "captureEffects"]);
   const frame = source.getFrame();
   const offendingKeys = [];
   (function walkKeys(value, path) {
@@ -391,6 +392,8 @@ test("Hunt exposes only the authorized native controls/readouts and no invented 
     }
   })(frame, "frame");
   assert.deepEqual(offendingKeys, [], "VS2 exposed a field belonging to a later slice");
+  assert.deepEqual(frame.huntField.toolState.captureEffects, [],
+    "capture feedback cannot exist before the native hand controller enters capture");
 
   // Capture capacity is a number the Memory Checker displays, never an action.
   const capabilities = frame.huntField.hud.capabilities;

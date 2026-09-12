@@ -77,6 +77,7 @@ class Node {
   destroy(){this.destroyed=true;}
   clear(){return this;} ellipse(){return this;} fill(){return this;} stroke(){return this;}
   circle(){return this;} poly(){return this;} rect(){return this;} roundRect(){return this;}
+  moveTo(){return this;} lineTo(){return this;} star(){return this;}
 }
 test("real Raising scene shares native scale on resize/flip and keeps padded taps functional", async()=>{
   const {sprite,sizing}=fixture(); Object.assign(sprite,{scale:new Node().scale});

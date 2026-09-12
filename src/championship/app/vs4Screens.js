@@ -9,7 +9,9 @@ import { PRODUCT_GIVEN_NAME_MAX_LENGTH } from "./championshipRaisingProduction.j
 import { VS2_UI_AUTHORITY, VS2_PRESENTATION_MODES } from "./vs2Screens.js";
 import { cageUiImage, shopCageUiImage, cageEditorArtCells, cageUiName, shopCageUiName, cageUiSummary } from '../presentation/cageUiArt.js';
 import { uiText } from '../text/uiText.js';
+import { SHOP_DESCRIPTIONS_ZH, SHOP_NAMES_ZH } from '../text/catalogs.zhHant.js';
 import { shopGoodsPresentation } from '../presentation/shopGoodsUiArt.js';
+import { getHuntCatalogItem } from '../hunt/loadout/huntEquipmentCatalog.js';
 
 const CATEGORY_LABELS = Object.freeze({
   TRAINING_GOODS: "養成用品",
@@ -22,9 +24,23 @@ const RECEIPT_COPY = Object.freeze({
   PURCHASED: "購買完成。",
   INSUFFICIENT_FUNDS: "持有金額不足。",
   MAX_OWNED: "已達持有上限。",
-  UNAVAILABLE: "That item is not for sale.",
-  INVALID_QUANTITY: "That quantity cannot be bought."
+  UNAVAILABLE: "此商品目前不販售。",
+  INVALID_QUANTITY: "無法購買這個數量。"
 });
+
+const SHOP_PLACEHOLDERS = Object.freeze({
+  TRAINING_GOODS: "用品",
+  HUNT_ITEMS: "工具",
+  PLUGINS: "外掛",
+  CAGES: "設施"
+});
+
+export function shopItemDescription(row) {
+  const recordIndex = row?.shopRecordIndex;
+  return Number.isSafeInteger(recordIndex) && SHOP_DESCRIPTIONS_ZH[recordIndex]
+    ? SHOP_DESCRIPTIONS_ZH[recordIndex]
+    : "商品說明無法顯示。";
+}
 
 function element(tag, className, text) {
   const node = document.createElement(tag);
@@ -54,6 +70,7 @@ export function createShopView({ root, source }) {
   root.dataset.uiAuthority = VS2_UI_AUTHORITY;
   root.dataset.presentationMode = mode;
   root.dataset.screen = frame.screen;
+  root.dataset.shopLayout = "ORIGINAL_VIDEO_R1";
 
   const shell = element("section", "cm-vs2-shell cm-vs2-shop");
   shell.setAttribute("aria-label", uiText("Shop"));
@@ -69,25 +86,48 @@ export function createShopView({ root, source }) {
   header.append(copy, wallet);
 
   const body = element("div", "cm-vs2-body cm-vs2-shop__body");
+  const detail = element("article", "cm-vs2-shop__detail");
+  detail.setAttribute("aria-live", "polite");
+  const detailArt = element("div", "cm-vs2-shop__detail-art");
+  const detailCopy = element("div", "cm-vs2-shop__detail-copy");
+  const detailName = element("h2", "cm-vs2-shop__detail-name");
+  const detailDescription = element("p", "cm-vs2-shop__detail-description");
+  const detailMeta = element("p", "cm-vs2-shop__detail-meta");
+  detailCopy.append(detailName, detailDescription, detailMeta);
+  detail.append(detailArt, detailCopy);
   const tabs = element("div", "cm-vs2-shop__tabs");
   tabs.setAttribute("role", "tablist");
-  tabs.setAttribute("aria-label", uiText("Shop categories"));
+  tabs.setAttribute("aria-label", "商品分類");
+  const shelf = element("div", "cm-vs2-shop__shelf");
+  const previous = element("button", "cm-vs2-shop__arrow cm-vs2-shop__arrow--previous", "‹");
+  previous.type = "button";
+  previous.setAttribute("aria-label", "上一項商品");
   const list = element("div", "cm-vs2-shop__list");
-  list.setAttribute("role", "list");
+  list.setAttribute("role", "listbox");
+  list.setAttribute("aria-label", "商品選擇");
+  const next = element("button", "cm-vs2-shop__arrow cm-vs2-shop__arrow--next", "›");
+  next.type = "button";
+  next.setAttribute("aria-label", "下一項商品");
+  shelf.append(previous, list, next);
   const status = element("p", "cm-vs2-shop__status");
   status.setAttribute("aria-live", "polite");
-  body.append(tabs, list, status);
+  body.append(detail, tabs, shelf, status);
 
   const footer = element("footer", "cm-vs2-footer");
+  const buy = element("button", "cm-vs2-action cm-vs2-shop__buy", "購買");
+  buy.type = "button";
   const back = element("button", "cm-vs2-action cm-vs2-action--primary", "返回牧場");
   back.type = "button";
-  back.setAttribute("aria-label", uiText("Return to Raising Home"));
-  footer.append(back);
+  back.setAttribute("aria-label", "返回牧場");
+  footer.append(buy, back);
   shell.append(header, body, footer);
   root.append(shell);
 
   const categories = Object.keys(CATEGORY_LABELS);
   let activeCategory = categories[0];
+  let selectedRow = null;
+  let revealSelectedCard = true;
+  const selectedByCategory = new Map();
   const tabButtons = new Map();
 
   for (const category of categories) {
@@ -97,6 +137,7 @@ export function createShopView({ root, source }) {
     tab.setAttribute("role", "tab");
     tab.addEventListener("click", () => {
       activeCategory = category;
+      revealSelectedCard = true;
       paint(source.getFrame());
     });
     tabs.append(tab);
@@ -104,6 +145,59 @@ export function createShopView({ root, source }) {
   }
 
   back.addEventListener("click", () => source.intents.leaveScreen());
+  buy.addEventListener("click", () => {
+    if (selectedRow) source.intents.buyShopItem(selectedRow.shopRecordIndex, 1);
+  });
+
+  function productName(row) {
+    return uiText(SHOP_NAMES_ZH[row.shopRecordIndex]
+      ?? shopGoodsPresentation(row.shopRecordIndex)?.name
+      ?? getHuntCatalogItem(row.productItemId)?.displayName
+      ?? shopCageUiName(row.shopRecordIndex, uiText(row.displayName)));
+  }
+
+  function appendProductArt(host, row, { detailView = false } = {}) {
+    const goods = shopGoodsPresentation(row.shopRecordIndex);
+    const imageSrc = shopCageUiImage(row.shopRecordIndex);
+    host.replaceChildren();
+    host.dataset.hasArt = String(Boolean(imageSrc || goods?.src));
+    if (imageSrc) {
+      const image = element("img", detailView ? "cm-facility-thumb cm-vs2-shop__art-large" : "cm-facility-thumb");
+      image.src = imageSrc;
+      image.alt = productName(row);
+      image.loading = "lazy";
+      host.append(image);
+      return;
+    }
+    if (goods?.src) {
+      const icon = element("span", detailView ? "cm-shop-goods-icon cm-vs2-shop__art-large" : "cm-shop-goods-icon");
+      icon.setAttribute("aria-hidden", "true");
+      icon.dataset.icon = goods.icon;
+      icon.style.backgroundImage = `url("${goods.src}")`;
+      icon.style.backgroundPosition = goods.backgroundPosition;
+      host.append(icon);
+      return;
+    }
+    host.append(element("span", "cm-vs2-shop__art-fallback", SHOP_PLACEHOLDERS[row.category] ?? "商品"));
+  }
+
+  function moveSelection(offset) {
+    const rows = source.getFrame()?.shop?.listings.filter((row) => row.category === activeCategory) ?? [];
+    if (!rows.length) return;
+    const current = Math.max(0, rows.findIndex((row) => row.shopRecordIndex === selectedRow?.shopRecordIndex));
+    const index = Math.max(0, Math.min(rows.length - 1, current + offset));
+    selectedByCategory.set(activeCategory, rows[index].shopRecordIndex);
+    revealSelectedCard = true;
+    paint(source.getFrame());
+  }
+
+  previous.addEventListener("click", () => moveSelection(-1));
+  next.addEventListener("click", () => moveSelection(1));
+  list.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    event.preventDefault();
+    moveSelection(event.key === "ArrowLeft" ? -1 : 1);
+  });
 
   function paint(nextFrame) {
     const shop = nextFrame?.shop;
@@ -121,28 +215,42 @@ export function createShopView({ root, source }) {
     list.replaceChildren();
     if (rows.length === 0) {
       list.append(element("p", "cm-vs2-shop__empty", "這個分類目前沒有販售商品。"));
+      selectedRow = null;
+      detailArt.replaceChildren();
+      detailName.textContent = "";
+      detailDescription.textContent = "";
+      detailMeta.textContent = "";
+      buy.disabled = true;
+      previous.disabled = true;
+      next.disabled = true;
       return;
     }
+    const requested = selectedByCategory.get(activeCategory);
+    selectedRow = rows.find((row) => row.shopRecordIndex === requested) ?? rows[0];
+    selectedByCategory.set(activeCategory, selectedRow.shopRecordIndex);
+    const selectedIndex = rows.findIndex((row) => row.shopRecordIndex === selectedRow.shopRecordIndex);
+    const selectedName = productName(selectedRow);
+    appendProductArt(detailArt, selectedRow, { detailView: true });
+    detailName.textContent = uiText(selectedName);
+    detailDescription.textContent = shopItemDescription(selectedRow);
+    detailMeta.textContent = `${selectedRow.unitPriceBits.toLocaleString('en-US')} 位元幣 · 持有 ${selectedRow.owned}/${selectedRow.maxOwned}`;
+    buy.textContent = selectedRow.owned >= selectedRow.maxOwned ? "已持有" : "購買";
+    buy.disabled = selectedRow.owned >= selectedRow.maxOwned || shop.bits < selectedRow.unitPriceBits;
+    buy.setAttribute("aria-label", uiText(`購買${selectedName}`));
+    previous.disabled = selectedIndex <= 0;
+    next.disabled = selectedIndex >= rows.length - 1;
+    let selectedCard = null;
     for (const row of rows) {
-      const goods = shopGoodsPresentation(row.shopRecordIndex);
-      const displayName = goods?.name ?? shopCageUiName(row.shopRecordIndex, uiText(row.displayName));
-      const item = element("div", "cm-vs2-shop__row");
-      item.setAttribute("role", "listitem");
-      const imageSrc = shopCageUiImage(row.shopRecordIndex);
-      if (imageSrc) {
-        const image = element('img', 'cm-facility-thumb');
-        image.src = imageSrc; image.alt = displayName; image.loading = 'lazy';
-        item.append(image);
-      }
-      if (goods?.src) {
-        const icon = element('span', 'cm-shop-goods-icon');
-        icon.setAttribute('aria-hidden', 'true');
-        icon.dataset.icon = goods.icon;
-        icon.style.backgroundImage = `url("${goods.src}")`;
-        icon.style.backgroundPosition = goods.backgroundPosition;
-        item.append(icon);
-      }
-      item.dataset.hasArt = String(Boolean(imageSrc || goods?.src));
+      const displayName = productName(row);
+      const item = element("button", "cm-vs2-shop__row");
+      item.type = "button";
+      item.setAttribute("role", "option");
+      const selected = row.shopRecordIndex === selectedRow.shopRecordIndex;
+      if (selected) selectedCard = item;
+      item.dataset.selected = String(selected);
+      item.setAttribute("aria-selected", String(selected));
+      const art = element("span", "cm-vs2-shop__card-art");
+      appendProductArt(art, row);
       const name = element("div", "cm-vs2-shop__name");
       name.append(element("strong", "", displayName));
       if (row.visibility === "NEW") name.append(element("span", "cm-vs2-shop__new", "NEW"));
@@ -152,13 +260,16 @@ export function createShopView({ root, source }) {
         `${row.unitPriceBits.toLocaleString('en-US')} 位元幣 · 持有 ${row.owned}/${row.maxOwned}`
       );
       name.append(meta);
-      const buy = element("button", "cm-vs2-shop__buy", row.owned >= row.maxOwned ? "已持有" : "購買");
-      buy.type = "button";
-      buy.disabled = row.owned >= row.maxOwned || shop.bits < row.unitPriceBits;
-      buy.setAttribute("aria-label", uiText(`購買${displayName}`));
-      buy.addEventListener("click", () => source.intents.buyShopItem(row.shopRecordIndex, 1));
-      item.append(name, buy);
+      item.addEventListener("click", () => {
+        selectedByCategory.set(activeCategory, row.shopRecordIndex);
+        paint(source.getFrame());
+      });
+      item.append(art, name);
       list.append(item);
+    }
+    if (revealSelectedCard) {
+      selectedCard?.scrollIntoView({ block: "nearest", inline: "center" });
+      revealSelectedCard = false;
     }
   }
 
@@ -172,6 +283,15 @@ export function createShopView({ root, source }) {
       delete root.dataset.uiAuthority;
       delete root.dataset.presentationMode;
       delete root.dataset.screen;
+      delete root.dataset.shopLayout;
+    },
+    inspect() {
+      return Object.freeze({
+        layout: root.dataset.shopLayout,
+        activeCategory,
+        selectedShopRecordIndex: selectedRow?.shopRecordIndex ?? null,
+        listingCount: source.getFrame()?.shop?.listings.length ?? 0
+      });
     }
   });
 }

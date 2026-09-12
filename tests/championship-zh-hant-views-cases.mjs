@@ -4,7 +4,7 @@ import { createHelpView } from "../src/championship/app/helpScreen.js";
 import { createScheduleView } from "../src/championship/app/scheduleScreen.js";
 import { createDigimonListView } from "../src/championship/app/digimonListScreen.js";
 import { createTamerInfoView } from "../src/championship/app/tamerInfoScreen.js";
-import { createShopView, createDatabaseView } from "../src/championship/app/vs4Screens.js";
+import { createShopView, createDatabaseView, shopItemDescription } from "../src/championship/app/vs4Screens.js";
 import { createHuntResultView } from "../src/championship/app/vs3Screens.js";
 import { createGateHuntPresentationSource } from "../src/championship/app/gateHuntPresentationSource.js";
 import { listShopRecords } from "../src/championship/shop/shopCatalog.js";
@@ -96,15 +96,26 @@ test("Shop uses the existing equipment identities for all 118 rows, including lo
   const source = sourceFor("SHOP", { getShopFrame: () => raw });
   const frame = source.getFrame();
   assert.equal(frame.shop.listings.length, 118);
+  assert.match(shopItemDescription(frame.shop.listings[2]), /受傷.*傷藥/);
+  assert.match(shopItemDescription(frame.shop.listings[3]), /生病.*藥品/);
+  const fullAnalyzer = frame.shop.listings.find(row => row.category === "PLUGINS" && row.subcategory === "ANALYZER" && row.itemIndex === 8);
+  assert.match(shopItemDescription(fullAnalyzer), /世代、種族、屬性、生命值、性格、所需容量/);
   const bought = [];
-  createShopView({ root, source: { getFrame: () => frame, intents: { buyShopItem: (...args) => bought.push(args) } } });
+  const view = createShopView({ root, source: { getFrame: () => frame, intents: { buyShopItem: (...args) => bought.push(args) } } });
+  assert.deepEqual(view.inspect(), { layout: "ORIGINAL_VIDEO_R1", activeCategory: "TRAINING_GOODS", selectedShopRecordIndex: 0, listingCount: 118 });
+  assert.ok(root.querySelector(".cm-vs2-shop__detail"));
+  assert.ok(root.querySelector(".cm-vs2-shop__shelf"));
+  assert.equal(root.querySelectorAll(".cm-vs2-shop__buy").length, 1, "the original flow has one Buy action for the selected item");
   let count = 0;
   for (const tab of root.querySelectorAll(".cm-vs2-shop__tab")) {
     tab.click();
     const rows = root.querySelectorAll(".cm-vs2-shop__row");
     count += rows.length;
     noForeignCopy(root);
-    for (const row of rows) row.querySelector(".cm-vs2-shop__buy").click();
+    for (const row of rows) {
+      row.click();
+      root.querySelector(".cm-vs2-shop__buy").click();
+    }
   }
   assert.equal(count, 118);
   assert.deepEqual(bought.map(([id]) => id).sort((a, b) => a - b), listShopRecords().map(row => row.shopRecordIndex));

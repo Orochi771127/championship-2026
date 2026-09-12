@@ -5,6 +5,7 @@ import { enterNativeAi10, stepNativeAi10Motion, stepNativeDownClock, stepNativeH
   stepNativeAi8PullEvents, nativeWildRandom } from "../src/championship/hunt/capture/nativeCapturePhases.js";
 import { sampleNativeRopeStroke, recognizeNativeRopeStroke, expireNativeRopeSlots, isNativeHuntEdgeTouch } from "../src/championship/hunt/capture/nativeRopeStroke.js";
 import { createWildCaptureFlow } from "../src/championship/hunt/capture/wildCaptureFlow.js";
+import { captureStorageTarget, captureStorageVfxFrame } from "../src/championship/presentation/vfx/captureStorageVfx.js";
 const receipt = JSON.parse(fs.readFileSync("docs/research/HUNT_NATIVE_PHASE_REPLAY_2026-09-05.json", "utf8"));
 const signed = (n) => n | 0;
 const clock = (a) => ({ ticks: a[0], shakeX: signed(a[1]), shakeY: signed(a[2]), toggle: a[3] });
@@ -82,6 +83,24 @@ test("hand controller matches all 94 pre-insertion updates, with one card write 
   assert.deepEqual(counts, [41, 11, 31, 11]);
   assert.deepEqual(effects, [[396, "HIDE_WILD"], [427, "HAND_LIFT"], [438, "CARD_FLIGHT"], [469, "CARD_ARRIVAL"], [480, "INSERT_CARD"]]);
   assert.equal(stepNativeHandController({ phase: 4, counter: 0 }).insert, false);
+});
+
+test("owner-video capture feedback follows the existing four native hand phases", () => {
+  const start = { x: 112, y: 246 };
+  const target = captureStorageTarget(390, 780);
+  assert.deepEqual(target, { x: 346, y: 710 });
+  assert.equal(captureStorageVfxFrame({ phase: 0, counter: 9 }, start, target).visible, false);
+  assert.equal(captureStorageVfxFrame({ phase: 0, counter: 10 }, start, target).stage, "CONDENSE");
+  const lift = captureStorageVfxFrame({ phase: 1, counter: 10 }, start, target);
+  assert.equal(lift.stage, "LIFT");
+  assert.ok(lift.y < start.y);
+  const flight = captureStorageVfxFrame({ phase: 2, counter: 30 }, start, target);
+  assert.equal(flight.stage, "FLIGHT");
+  assert.ok(flight.x > lift.x && flight.x < target.x);
+  assert.ok(flight.y < target.y, "the memory-card path must visibly arc before arrival");
+  const arrival = captureStorageVfxFrame({ phase: 3, counter: 0 }, start, target);
+  assert.deepEqual({ stage: arrival.stage, x: arrival.x, y: arrival.y }, { stage: "ARRIVAL", ...target });
+  assert.equal(captureStorageVfxFrame({ phase: 4, counter: 0 }, start, target).visible, false);
 });
 
 const sampler = (s) => ({ last: s.last.map(signed), next: s.next, count: s.count, counter: s.counter,

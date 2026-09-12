@@ -6,7 +6,15 @@ import gates from "../src/data/championship/catalogs/gate-table.r1.json" with { 
 import names from "../src/data/championship/catalogs/species-names.r1.json" with { type: "json" };
 import help from "../src/data/championship/catalogs/help-text.r1.json" with { type: "json" };
 import events from "../src/data/championship/catalogs/battle-title-event-strings.r1.json" with { type: "json" };
-import { HELP_ZH, TITLE_EVENTS_ZH, SPECIES_NAMES_ZH } from "../src/championship/text/catalogs.zhHant.js";
+import shop from "../src/data/championship/catalogs/shop.r1.json" with { type: "json" };
+import {
+  HELP_ZH,
+  SHOP_DESCRIPTIONS_ZH,
+  SHOP_NAMES_ZH,
+  SHOP_TEXT_REFERENCE,
+  TITLE_EVENTS_ZH,
+  SPECIES_NAMES_ZH
+} from "../src/championship/text/catalogs.zhHant.js";
 import { uiText } from "../src/championship/text/uiText.js";
 import { speciesName, speciesNameForId, helpText, titleEventText, raisingDisplayName, starterName } from "../src/championship/text/zhHant.js";
 import { nativeIndividualName } from "../src/championship/hunt/capture/nativeHuntIndividual.js";
@@ -26,6 +34,28 @@ test("the translation layer declares itself product-authored", () => {
   assert.equal(TEXT_EVIDENCE, "PRODUCT_AUTHORED");
 });
 
+test("all 118 Shop descriptions are translated from the verified source catalog", () => {
+  assert.equal(SHOP_TEXT_REFERENCE.recordCount, shop.recordCount);
+  assert.equal(SHOP_TEXT_REFERENCE.sourceEvidence, "VERIFIED_ROM_TEXT_TRANSCRIPTION");
+  assert.equal(SHOP_TEXT_REFERENCE.localizationEvidence, "PRODUCT_AUTHORED");
+  assert.match(SHOP_TEXT_REFERENCE.sha256, /^[0-9a-f]{64}$/);
+  assert.equal(SHOP_NAMES_ZH.length, shop.records.length);
+  assert.equal(SHOP_DESCRIPTIONS_ZH.length, shop.records.length);
+  for (const record of shop.records) {
+    const name = SHOP_NAMES_ZH[record.shopRecordIndex];
+    const description = SHOP_DESCRIPTIONS_ZH[record.shopRecordIndex];
+    assert.ok(name, `Shop record ${record.shopRecordIndex} name`);
+    assert.doesNotMatch(name, /[\p{Script=Katakana}\p{Script=Hiragana}]/u, `Shop record ${record.shopRecordIndex} name`);
+    assert.match(description, /\p{Script=Han}/u, `Shop record ${record.shopRecordIndex}`);
+    assert.doesNotMatch(description, /[\p{Script=Katakana}\p{Script=Hiragana}]/u, `Shop record ${record.shopRecordIndex}`);
+  }
+  assert.equal(SHOP_NAMES_ZH[4], "數碼繩 α");
+  assert.equal(SHOP_NAMES_ZH[96], "小高山");
+  assert.match(SHOP_DESCRIPTIONS_ZH[32], /長度 24.*威力 10/);
+  assert.match(SHOP_DESCRIPTIONS_ZH[61], /世代、種族、屬性、生命值、性格、所需容量/);
+  assert.match(SHOP_DESCRIPTIONS_ZH[112], /回復生命值與壓力.*2 隻/);
+});
+
 test("it covers every cage and every gate the ROM catalogs hold", () => {
   for (const record of cages.records) {
     assert.ok(CAGE_NAMES[record.cageIndex], `cage ${record.cageIndex} has no Chinese name`);
@@ -35,6 +65,8 @@ test("it covers every cage and every gate the ROM catalogs hold", () => {
   }
   assert.equal(Object.keys(CAGE_NAMES).length, cages.recordCount);
   assert.equal(Object.keys(GATE_NAMES).length, gates.recordCount);
+  assert.equal(CAGE_NAMES[9], "高山");
+  assert.equal(CAGE_NAMES[32], "小高山");
 });
 
 test("every cage effect the ROM classifies has a Chinese label", () => {

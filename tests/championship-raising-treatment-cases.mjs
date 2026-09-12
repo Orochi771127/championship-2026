@@ -47,7 +47,10 @@ test('normal treatment changes the same individual and inventory and survives Sa
   assert.ok(save.creature.nativeProfile.fields['000']>=8);
   save.creature.nativeProfile.fields['134']=1;save.creature.nativeProfile.fields['138']=0;
   save.shop.quantities[3]=2;data.set(key,JSON.stringify(save));app=create();await app.continueGame();
-  assert.equal(app.getRaisingActorFrame(id).state,1);
+  const actorFrame=app.getRaisingActorFrame(id);
+  assert.equal(actorFrame.state,1);
+  assert.equal(actorFrame.currentHp,save.creature.nativeProfile.fields['050']);
+  assert.equal(actorFrame.maxHp,save.creature.nativeProfile.fields['058']);
   const result=app.treatRaisingResident(id,0);assert.deepEqual(result,{ok:true,consumed:true,applied:true,success:true});
   assert.equal(app.getRaisingActorFrame(id).state,20);
   assert.equal(app.treatRaisingResident(id,0).consumed,false);

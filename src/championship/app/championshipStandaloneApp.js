@@ -867,7 +867,14 @@ export function createChampionshipStandaloneApp({
 
     getRaisingActorFrame(instanceId) {
       const actor=nativeRaisingActor(instanceId);
-      return actor ? projectNativeRaisingActor(actor) : null;
+      const profile=raisingNativeProfile(instanceId);
+      return actor&&profile ? Object.freeze({
+        ...projectNativeRaisingActor(actor),
+        // Presentation may acknowledge a recovery only after this canonical
+        // profile actually rises. These reads do not create a second HP owner.
+        currentHp:profile.fields["050"],
+        maxHp:profile.fields["058"]
+      }) : null;
     },
 
     getRaisingFoodFrame() {

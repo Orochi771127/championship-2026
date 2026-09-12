@@ -16,6 +16,7 @@
 import { createHuntFieldPointer } from "./huntFieldPointer.js";
 import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
 import {huntTrapLayers} from '../huntFeedbackArt.js';
+import { captureStorageTarget, captureStorageVfxFrame } from '../vfx/captureStorageVfx.js';
 const ACTOR_BODY_RADIUS = 8;
 const TEMPORARY_ART_ID = "art:hunt_field:vs2:temporary-signal-grove-kit";
 
@@ -143,13 +144,37 @@ export async function mountHuntFieldPixiPresentation({
   const nativeTools = new PIXI.Container({label:'native tool feedback'});
   const toolSprites=[];
   const flashGraphic = new PIXI.Graphics();
+  // Screen-space, original-created capture feedback. The native hand controller
+  // publishes the phase/counter; this layer only presents that existing clock.
+  const captureLayer = new PIXI.Container({ label: "capture-to-memory-card VFX" });
+  const captureTrail = new PIXI.Graphics();
+  const captureNode = new PIXI.Container({ label: "capture light" });
+  const captureHalo = new PIXI.Graphics()
+    .circle(0, 0, 15).fill({ color: 0x6eeaf2, alpha: 0.14 })
+    .circle(0, 0, 9).fill({ color: 0x8ff7f2, alpha: 0.24 });
+  const captureRays = new PIXI.Graphics()
+    .star(0, 0, 8, 14, 2.2).fill({ color: 0xbafff6, alpha: 0.72 })
+    .star(0, 0, 4, 9, 1.5).fill({ color: 0xffffff, alpha: 0.9 });
+  const captureCore = new PIXI.Graphics()
+    .circle(0, 0, 5).fill(0xffffff)
+    .circle(0, 0, 7).stroke({ color: 0x6eeaf2, alpha: 0.82, width: 1.5 });
+  const captureArrival = new PIXI.Graphics()
+    .roundRect(-14, -19, 28, 38, 4).stroke({ color: 0xa9fff4, alpha: 0.88, width: 2 })
+    .moveTo(-19, -13).lineTo(-19, -20).lineTo(-12, -20)
+    .moveTo(19, -13).lineTo(19, -20).lineTo(12, -20)
+    .moveTo(-19, 13).lineTo(-19, 20).lineTo(-12, 20)
+    .moveTo(19, 13).lineTo(19, 20).lineTo(12, 20)
+    .stroke({ color: 0xffffff, alpha: 0.92, width: 2, cap: "round" });
+  captureNode.addChild(captureHalo, captureRays, captureCore, captureArrival);
+  captureLayer.addChild(captureTrail, captureNode);
+  captureLayer.visible = false;
   // Technical tool feedback; native rules and geometry never read these glyphs.
   strokeLayer.addChild(toolGraphic);
   strokeLayer.addChild(nativeTools);
   strokeLayer.addChild(strokeGraphic);
   if (fieldArt) productionArtLayer.addChild(fieldArt.displayObject);
   world.addChild(productionArtLayer, terrainLayer, objectLayer, actorLayer, strokeLayer);
-  scene.addChild(backdrop, world, flashGraphic);
+  scene.addChild(backdrop, world, captureLayer, flashGraphic);
 
   const chunkCache = new Map();
   const liveChunks = new Set();
@@ -161,6 +186,7 @@ export async function mountHuntFieldPixiPresentation({
   let backdropWidth = 0;
   let backdropHeight = 0;
   let characterAssetFailures = 0;
+  let captureVfxDiagnostics = Object.freeze({ visible: false, stage: "HIDDEN", wildId: null });
   if (characterBundle !== null && (typeof characterBundle.createActor !== "function"
     || typeof characterBundle.dispose !== "function" || typeof characterBundle.getDiagnostics !== "function")) {
     characterAssetFailures += 1;
@@ -458,6 +484,74 @@ export async function mountHuntFieldPixiPresentation({
     strokeGraphic.stroke({ color: TERRAIN.cyan, width: 3, cap: "round", join: "round", alpha: 0.92 });
   }
 
+  function capturePathPoint(path, progress) {
+    const inverse = 1 - progress;
+    return {
+      x: inverse * inverse * path.start.x
+        + 2 * inverse * progress * path.control.x
+        + progress * progress * path.end.x,
+      y: inverse * inverse * path.start.y
+        + 2 * inverse * progress * path.control.y
+        + progress * progress * path.end.y
+    };
+  }
+
+  function syncCaptureStorageVfx(view) {
+    const effect = view.tools?.captureEffects?.[0] ?? null;
+    if (!effect) {
+      if (captureLayer.visible) captureTrail.clear();
+      captureLayer.visible = false;
+      captureVfxDiagnostics = Object.freeze({ visible: false, stage: "HIDDEN", wildId: null });
+      return;
+    }
+    captureTrail.clear();
+
+    const scale = view.transform.scale;
+    const start = {
+      x: (effect.worldX - view.camera.left) * scale,
+      y: (effect.worldY - (effect.worldZ ?? 0) - view.camera.top) * scale
+    };
+    const target = captureStorageTarget(app.screen.width, app.screen.height);
+    const frame = captureStorageVfxFrame(effect, start, target);
+    captureLayer.visible = frame.visible;
+    captureNode.visible = frame.visible;
+    if (!frame.visible) {
+      captureVfxDiagnostics = Object.freeze({ visible: false, stage: frame.stage, wildId: effect.wildId });
+      return;
+    }
+
+    captureNode.position.set(frame.x, frame.y);
+    captureNode.scale.set(frame.scale);
+    captureNode.alpha = frame.alpha;
+    captureRays.rotation = (effect.counter ?? 0) * 0.075;
+    captureHalo.scale.set(0.82 + Math.sin((effect.counter ?? 0) * 0.38) * 0.12);
+    captureArrival.visible = frame.stage === "ARRIVAL";
+    captureArrival.alpha = frame.arrival;
+    captureCore.visible = frame.stage !== "ARRIVAL" || frame.progress < 0.72;
+
+    if (frame.stage === "FLIGHT" && frame.path && frame.trail > 0) {
+      const from = capturePathPoint(frame.path, Math.max(0, frame.progress - 0.2));
+      const midpoint = capturePathPoint(frame.path, Math.max(0, frame.progress - 0.09));
+      captureTrail
+        .moveTo(from.x, from.y)
+        .quadraticCurveTo(midpoint.x, midpoint.y, frame.x, frame.y)
+        .stroke({ color: 0x74e8ed, alpha: 0.22 + frame.trail * 0.5, width: 4, cap: "round" })
+        .moveTo(midpoint.x, midpoint.y)
+        .lineTo(frame.x, frame.y)
+        .stroke({ color: 0xeafffb, alpha: 0.62 + frame.trail * 0.32, width: 1.5, cap: "round" });
+    }
+
+    captureVfxDiagnostics = Object.freeze({
+      visible: true,
+      stage: frame.stage,
+      wildId: effect.wildId,
+      phase: effect.phase,
+      counter: effect.counter,
+      evidence: effect.timingAuthority,
+      art: "ORIGINAL_CREATED_VECTOR"
+    });
+  }
+
   function render() {
     if (disposed) return;
     const view = source.field.getView({
@@ -496,6 +590,7 @@ export async function mountHuntFieldPixiPresentation({
     }
     syncActors(view);
     syncEnclosure(view);
+    syncCaptureStorageVfx(view);
     // The camera window is the only thing that moves the world.
     world.scale.set(view.transform.scale);
     world.position.set(-view.camera.left * view.transform.scale, -view.camera.top * view.transform.scale);
@@ -580,6 +675,7 @@ export async function mountHuntFieldPixiPresentation({
         }))),
         selectedWildId: view?.selectedWildId ?? null,
         captureAvailability: view?.captureAvailability ?? null,
+        captureVfx: captureVfxDiagnostics,
         activePointerId: pointer.getOwner(),
         objectCount: objectNodes.size,
         characterAssetFailures,
