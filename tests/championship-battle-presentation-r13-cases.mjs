@@ -127,8 +127,11 @@ test('audio preloads before play, deduplicates publications and tears down every
   const source={getView:()=>view,subscribe(fn){observers.add(fn);return()=>observers.delete(fn);}};
   let requests=0;const fetchImpl=async url=>{requests++;const p=new URL(url).pathname.slice(1);return {ok:true,json:async()=>json(p),arrayBuffer:async()=>fs.readFileSync(p)};};
   assert.equal(await mountBattleAudioPresentation({source,baseUrl:'https://example.com/',fetchImpl,AudioContextClass:Context}),null);assert.equal(requests,0);
-  const audio=await mountBattleAudioPresentation({source,baseUrl:'http://127.0.0.1:8738/tests/fixture.html',fetchImpl,AudioContextClass:Context,eventTarget:target});
+  const pagesRequests=[];
+  const pagesFetch=async url=>{pagesRequests.push(String(url));assert.ok(new URL(url).pathname.startsWith('/championship-2026/assets/'));return fetchImpl(String(url).replace('/championship-2026/','/'));};
+  const audio=await mountBattleAudioPresentation({source,baseUrl:'https://orochi771127.github.io/championship-2026/championship.html',fetchImpl:pagesFetch,AudioContextClass:Context,eventTarget:target});
   assert.equal(audio.getDiagnostics().loaded,54);
+  assert.equal(pagesRequests.length,56);
   const events=[{id:1,soundId:0xff01,volume:127,kind:'STREAM'},{id:2,soundId:0xff01,volume:127,kind:'STREAM'},
     {id:3,soundId:0x200,volume:127,kind:'SEQUENCE'},{id:4,soundId:0x201,volume:127,kind:'SEQUENCE'},
     {id:5,soundId:0x202,volume:127,kind:'SEQUENCE'},{id:6,kind:'STOP_SEQUENCE',fadeFrames:6}];

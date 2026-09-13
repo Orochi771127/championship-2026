@@ -121,7 +121,7 @@
 .int-rh2-field-frame__label .int-rh2-kicker { display: none; }
 .int-rh2-field-host { width: 100%; height: 100%; }
 .int-rh2-status { position: relative; z-index: 4; inset: auto; margin: 0; pointer-events: none; background: #eaf5dedb; }
-@media (max-height: 650px) {
+@media (max-height: 650px) and (orientation: portrait) {
   .cm-vs2-root:is([data-screen="GATE_SELECT"], [data-screen="HUNT_LOADOUT"]) .cm-vs2-header { min-height: 62px; padding-top: 8px; }
   .cm-vs2-body--gate .cm-vs2-preview { min-height: 92px; padding: 7px 10px; }
   .cm-vs2-preview__image { width: 56px; height: 56px; }

@@ -285,7 +285,7 @@ export function createRuntimeMapArtFieldLoader({ PIXI }) {
  * @param {Array<{fieldId:string, x:number, y:number}>} options.placements
  */
 export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
-  placementEvidence = "UNKNOWN_REQUIRES_TRACE", presentationMode = "EXPLICIT_TILE_SET", residentViewport = null }) {
+  placementEvidence = "UNKNOWN_REQUIRES_TRACE", presentationMode = "EXPLICIT_TILE_SET", residentViewport = null, wrapWidthPx = null }) {
   assertPixi(PIXI);
   if (typeof PIXI.Container !== "function") throw new TypeError("Runtime map art tile sets require PIXI.Container");
   const checked = validateRuntimeMapArtBundle(manifest);
@@ -295,6 +295,7 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
   if (!Array.isArray(placements) || placements.length === 0) fail("TILE_SET_PLACEMENTS_REQUIRED");
   nonEmptyString(placementEvidence, "TILE_SET_PLACEMENT_EVIDENCE_REQUIRED");
   nonEmptyString(presentationMode, "TILE_SET_PRESENTATION_MODE_REQUIRED");
+  if(wrapWidthPx!==null&&(!(wrapWidthPx>0)||!Number.isFinite(wrapWidthPx)||presentationMode!=='NATIVE_RANCH'))fail('TILE_SET_WRAP_INVALID');
   const residentBounds = residentViewport ? freezeRecord({...residentViewport}) : null;
   if (residentBounds && (!['x','y','width','height'].every(key=>Number.isFinite(residentBounds[key]))
     || residentBounds.x<0 || residentBounds.y<0 || residentBounds.width<=0 || residentBounds.height<=0)) fail('RESIDENT_VIEWPORT_INVALID');
@@ -375,6 +376,15 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
     (tallest, placement, index) => Math.max(tallest, Math.round(placement.y) + loaded[index].field.worldHeightPx), 0
   );
 
+  // The ground already wraps at the native board width. These neighboring
+  // views share the loaded textures; they add no second asset ownership.
+  const repeats=[];
+  if(wrapWidthPx)for(const tile of loaded)for(const offset of [-wrapWidthPx,wrapWidthPx]){
+    const original=tile.displayObject,copy=new PIXI.Sprite(original.texture);
+    copy.position.set(original.x+offset,original.y);copy.width=original.width;copy.height=original.height;
+    copy.eventMode='none';container.addChild(copy);repeats.push({original,copy});
+  }
+
   let disposed = false;
   return Object.freeze({
     assetId: checked.assetId,
@@ -382,7 +392,8 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
     tileCount: loaded.length,
     field: Object.freeze({
       fieldId: `${checked.assetId}:composite`,
-      worldWidthPx,
+      worldWidthPx: wrapWidthPx ?? worldWidthPx,
+      wrapWidthPx,
       worldHeightPx,
       nativePixelWorldScale,
       placements: snapshot,
@@ -396,6 +407,7 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
     update(deltaMs) {
       if (disposed) return;
       for (const tile of loaded) tile.update(deltaMs);
+      for(const {original,copy} of repeats)copy.texture=original.texture;
     },
 
     getDiagnostics() {
@@ -415,6 +427,7 @@ export async function loadRuntimeMapArtTileSet({ PIXI, manifest, placements,
     async dispose() {
       if (disposed) return;
       disposed = true;
+      for(const {copy} of repeats){container.removeChild(copy);copy.destroy();}
       for (const tile of loaded) {
         if (tile.displayObject.parent === container) container.removeChild(tile.displayObject);
       }

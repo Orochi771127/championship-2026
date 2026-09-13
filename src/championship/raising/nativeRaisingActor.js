@@ -209,7 +209,11 @@ export function releaseNativeRaisingCarry(actor,profile){
 }
 function stepCarry(actor,profile,ground,rng,season,onJoin){
   if(actor.state===6){const p=nativeCarryPosition(actor.carryPointer,currentHeight(actor));
-    actor.velocityQ12=nativeCarryVelocity(actor.velocityQ12,actor.positionQ12,p);actor.positionQ12=p;
+    // The touch camera can cross the existing periodic ground seam. Express
+    // the previous sample in the same copy before the native velocity writer.
+    const previous=[...actor.positionQ12],period=ground.pixelWidth*4096;
+    previous[0]+=Math.round((p[0]-previous[0])/period)*period;
+    actor.velocityQ12=nativeCarryVelocity(actor.velocityQ12,previous,p);actor.positionQ12=p;
     return {profile,changed:false};}
   const flight=stepNativeRaisingFlight({positionQ12:actor.positionQ12,velocityQ12:actor.velocityQ12,
     destinationQ12:actor.destinationQ12,phase:actor.flightPhase},ground,{rng,poolSlot:actor.poolSlot,cameraX:actor.carryCameraX??0});

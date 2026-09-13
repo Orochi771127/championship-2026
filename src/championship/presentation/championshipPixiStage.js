@@ -39,7 +39,11 @@ export async function createChampionshipPixiStage({ PIXI, canvasHost }) {
     throw new TypeError("The Championship Pixi stage requires the PixiJS v8 presentation API");
   }
   let host = assertHost(canvasHost);
-  const rect = host.getBoundingClientRect();
+  // Layout dimensions exclude the portrait frame's outer display scale.
+  // Pixi maps pointer coordinates through the canvas's actual screen rect.
+  const size = () => ({width: host.clientWidth || host.getBoundingClientRect().width,
+    height: host.clientHeight || host.getBoundingClientRect().height});
+  const rect = size();
 
   const app = new PIXI.Application();
   await app.init({
@@ -71,7 +75,7 @@ export async function createChampionshipPixiStage({ PIXI, canvasHost }) {
 
   function applySize() {
     if (destroyed || contextLost) return;
-    const bounds = host.getBoundingClientRect();
+    const bounds = size();
     app.renderer.resize(Math.max(1, Math.round(bounds.width)), Math.max(1, Math.round(bounds.height)));
     app.stage.hitArea = new PIXI.Rectangle(0, 0, app.screen.width, app.screen.height);
     for (const listener of [...resizeListeners]) {

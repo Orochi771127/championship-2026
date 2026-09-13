@@ -108,7 +108,8 @@ export function createChampionshipStatusBar({ root, onEndDay } = {}) {
   const host = root.ownerDocument?.body ?? document.body;
   host.dataset.statusBar = "on";
   function syncHeight() {
-    const height = Math.ceil(bar.getBoundingClientRect().height);
+    // Transformed screen pixels would shrink this reservation twice in landscape.
+    const height = Math.ceil(bar.offsetHeight ?? bar.getBoundingClientRect().height);
     if (height > 0) host.style.setProperty("--cm-status-bar-height", `${height}px`);
   }
   syncHeight();

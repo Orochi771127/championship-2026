@@ -543,7 +543,9 @@ export async function createHuntFieldView({ root, source, mountField, loadTimeou
     toolButtons.set(tool.id,button);tools.append(button);
   }
   const movementHint = element("p", "cm-vs2-field__hint", "拖曳地面移動視野 · 輕觸數碼獸選取");
-  shell.append(viewport, hud, target,pluginHud);
+  const info = element('div', 'cm-hunt-info');
+  info.append(target, pluginHud);
+  shell.append(viewport, hud, info);
   if (mode === VS2_PRESENTATION_MODES.DEVELOPER) shell.append(toolbar);
   shell.append(movementHint);
   if(block.toolState) shell.append(tools);

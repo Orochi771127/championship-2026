@@ -2,6 +2,8 @@
 
 **Standalone product repository.**
 
+**Local portrait-first repair, 2026-09-13:** sideways windows now keep a centered 9:16 portrait frame, with keyboard-aware resizing and shared scene/control scaling. This repair batch has not been pushed or deployed. See the [orientation acceptance record](docs/reports/mobile-photo-repair-2026-09-13/直向優先階段驗收.md); physical iPhone/Safari acceptance and the separately listed original-parity gaps remain open.
+
 **Public browser playtest (2026-09-10):** [Play Championship 2026](https://orochi771127.github.io/championship-2026/). The Owner authorized publication of the current completed work and this playable snapshot. Use a modern browser in portrait orientation; saves are stored in that browser and do not transfer automatically between devices or between localhost and this website. Original-game parity remains partial.
 
 **Mobile full-progress QA save:** [Install the test save](https://orochi771127.github.io/championship-2026/full-qa-save.html). The installer first downloads a backup when that browser already has a save, then writes the schema-v5 QA save into the same origin and opens the game.

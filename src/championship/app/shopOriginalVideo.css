@@ -333,29 +333,7 @@
   filter: grayscale(0.72) brightness(0.72);
 }
 
-@media (min-width: 700px) and (orientation: landscape) {
-  .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__body {
-    grid-template-columns: minmax(270px, 0.8fr) minmax(0, 1.2fr);
-    grid-template-rows: auto minmax(0, 1fr) auto;
-  }
-
-  .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__detail {
-    grid-column: 1;
-    grid-row: 1 / span 3;
-  }
-
-  .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__tabs,
-  .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__shelf,
-  .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__status {
-    grid-column: 2;
-  }
-
-  .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__row {
-    flex-basis: calc((100% - 14px) / 3);
-  }
-}
-
-@media (max-height: 670px) {
+@media (max-height: 670px) and (orientation: portrait) {
   .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__body {
     grid-template-rows: minmax(116px, 1fr) auto minmax(126px, 0.9fr) minmax(14px, auto);
   }

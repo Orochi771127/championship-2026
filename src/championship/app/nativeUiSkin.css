@@ -1677,7 +1677,7 @@
 
 /* A short window has no height to spare, so the window collapses back to a line
    rather than stealing it from the habitat. */
-@media (max-height: 700px) {
+@media (max-height: 700px), (orientation: landscape) {
   /* `align-self: center` only has a height to centre because the aspect ratio
      gives it one. Dropping the ratio without also restoring the stretch left
      the frame 1px tall and the habitat invisible -- measured, not guessed. */
@@ -1692,131 +1692,86 @@
   }
 }
 
-@media (orientation: landscape) and (max-height: 600px) {
-
-  /* intRh2Styles pins the shared bars to a 430px column on any window wider
-     than 431px. That rule is about framing a phone column on a desktop; on a
-     phone held sideways it is the thing making the window unusable. */
-  .cm-status-bar[data-screen],
-  .cm-toolbar[data-mode] {
-    left: 0;
-    right: 0;
-    width: auto;
-    transform: none;
-  }
-  /* Eight hexagons across a full-width rail would be enormous, so the rail
-     keeps the cells at their portrait size and centres the group. */
-  .cm-toolbar[data-mode] .cm-toolbar__rail {
-    max-width: 560px;
-    margin-inline: auto;
-    padding-bottom: max(6px, env(safe-area-inset-bottom, 0px));
-  }
-  .cm-toolbar[data-mode] .cm-toolbar__menu { max-width: 560px; }
-
-  /* ---- Raising Home: information left, habitat right ------------------ */
-  .int-rh2-root .int-rh2-shell {
-    width: 100%;
-    max-width: none;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    grid-template-rows: auto auto minmax(0, 1fr);
-    column-gap: 6px;
-  }
-  .int-rh2-root .int-rh2-header { grid-column: 1; grid-row: 1; }
-  .int-rh2-root .int-rh2-companion { grid-column: 1; grid-row: 2; margin-right: 0; }
-  .int-rh2-root .int-rh2-status { grid-column: 1; grid-row: 3; align-self: end; margin-right: 0; }
-  .int-rh2-root .int-rh2-field-frame {
-    grid-column: 2;
-    grid-row: 1 / -1;
-    aspect-ratio: auto;
-    align-self: stretch;
-    max-height: none;
-    margin: 8px 8px 8px 0;
-  }
-
-  /* ---- The other shells simply get the width back --------------------- */
-  .cm-vs2-root[data-screen] .cm-vs2-shell,
-  .cm-vs2-root[data-screen] .cm-vs2-field,
-  .cm-vs5-root[data-screen] .cm-vs5-shell {
-    width: 100%;
-    max-width: none;
-  }
-  .cm-digimon-shell,
-  .cm-schedule-shell,
-  .cm-help-shell,
-  .cm-tamer-shell,
-  .cm-championship-shell { width: min(100%, 920px); }
-
-  /* A list that was one column at 430px is two at 844px, which is what the
-     extra width is for. */
-  .cm-digimon-root .cm-digimon-list,
-  .cm-championship-root .cm-championship-board,
-  .cm-vs2-root[data-screen] .cm-vs2-shop__list,
-  .cm-vs5-root[data-screen] .cm-vs5-matches {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-    align-content: start;
-  }
-  /* A season is eight days, so in landscape it is one row instead of two. */
-  .cm-schedule-root .cm-schedule-days { grid-template-columns: repeat(8, minmax(0, 1fr)); }
-  .cm-tamer-root .cm-tamer-fields { grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr); }
-
-  /* ---- Gate select and Battle select: picture left, choices right ------ */
-  .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-body--gate {
-    display: grid;
-    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-    grid-template-rows: auto minmax(0, 1fr);
-    column-gap: 8px;
-    align-items: start;
-  }
-  .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate3d {
-    grid-column: 1;
-    grid-row: 1 / -1;
-    min-height: 0;
-    height: 100%;
-    align-self: stretch;
-  }
-  .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate3d__host { flex: 1 1 auto; min-height: 0; }
-  .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-preview { grid-column: 2; grid-row: 1; }
-  .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate-fallback { grid-column: 2; grid-row: 2; min-height: 0; overflow-y: auto; }
-  .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gates { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-
-  /* Explicit placement, because the shell's children are a flat list: the box
-     holds the left column, everything you can press stacks down the right. */
-  .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-shell {
-    display: grid;
-    grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
-    align-content: start;
-    column-gap: 10px;
-  }
-  .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header { grid-column: 1 / -1; grid-row: 1; }
-  .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube { grid-column: 1; grid-row: 2 / 6; align-self: start; margin: 0; }
-  .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube__note { grid-column: 1; grid-row: 6; }
-  .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-matches,
-  .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-party { grid-column: 2; grid-row: 2; min-height: 0; }
-  .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-entry-notice { grid-column: 2; grid-row: 3; }
-  .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-conference { grid-column: 2; grid-row: 4; }
-  .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-exit { grid-column: 2; grid-row: 5; margin: 8px 0 0; }
-
-  /* ---- Hunt loadout: the destination and its slots share the row ------- */
-  .cm-vs2-root[data-screen="HUNT_LOADOUT"] .cm-vs2-loadout {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-    align-content: start;
-  }
-
-  /* The title keeps its 9:16 panel: it is a poster, not a working screen. */
-  .cm-title__panel { width: min(100vw, 430px, 56.25dvh); }
-}
+/* Owner 2026-09-13: the former landscape reflow is replaced by the
+   single portrait containing block below. */
 
 /* Keep the save notice below both actions on short displays. Its higher
    stacking order previously intercepted the Continue button at 740x360. */
-@media (max-height: 550px) {
+@media (max-height: 550px) and (orientation: portrait) {
   .cm-title__actions { top: auto; bottom: 12%; gap: 8px; }
   .cm-title__actions .cm-button { height: 44px; min-height: 44px; padding-block: 6px; }
 }
 .cm-title__note { pointer-events: none; }
+
+/* Photo QA 2026-09-13. One portrait frame on a sideways device. Its fixed
+   descendants share this containing block; renderer size remains in CSS units. */
+body[data-portrait-frame] {
+  position: fixed;
+  left: var(--cm-frame-center-x); top: var(--cm-frame-center-y);
+  width: 390px; height: var(--cm-viewport-height);
+  transform: translate(-50%, -50%) scale(var(--cm-frame-scale));
+  transform-origin: center;
+  overflow: hidden;
+}
+body[data-portrait-frame] .cm-status-bar[data-screen],
+body[data-portrait-frame] .cm-toolbar[data-mode] {
+  left: 0; right: 0; width: auto; transform: none;
+}
+body[data-portrait-frame] .cm-title__panel {
+  width: 390px; height: var(--cm-viewport-height);
+}
+body[data-portrait-frame] .cm-title__name { font-size: 50px; }
+body[data-portrait-frame] .cm-title__actions { top: auto; bottom: 12%; gap: 14px; }
+body[data-portrait-frame] .cm-title__actions .cm-button { min-height: 52px; height: auto; white-space: nowrap; }
+
+/* Lists own scrolling; rows retain their content height and their frames have
+   space outside the content box. This includes full-inventory QA saves. */
+.cm-vs2-root[data-screen="HUNT_LOADOUT"] .cm-vs2-body { padding: 10px 14px 18px; }
+.cm-vs2-root[data-screen="HUNT_LOADOUT"] .cm-vs2-body > * { flex-shrink: 0; }
+.cm-vs2-root[data-screen="HUNT_LOADOUT"] .cm-vs2-loadout { gap: 16px; }
+.cm-vs2-root[data-screen="HUNT_LOADOUT"] .cm-vs2-loadout__row {
+  grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 14px 12px;
+}
+.cm-vs2-root[data-screen="HUNT_LOADOUT"] .cm-vs2-loadout__label { font-size: 14px; }
+.cm-vs2-root[data-screen="HUNT_LOADOUT"] .cm-vs2-loadout__options {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;
+}
+.cm-vs2-root[data-screen="HUNT_LOADOUT"] .cm-vs2-loadout__option {
+  min-width: 0; min-height: 56px; display: flex; flex-direction: column;
+  align-items: flex-start; justify-content: center; gap: 4px; padding: 8px;
+}
+.cm-vs2-root[data-screen="HUNT_LOADOUT"] .cm-vs2-loadout__detail { color: var(--ds-text-soft); }
+.cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-shell > * { flex-shrink: 0; }
+.cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-party {
+  overflow: visible; padding: 8px 14px 14px; gap: 14px;
+}
+.cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-party > * { flex-shrink: 0; }
+.cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-action { white-space: normal; }
+
+/* A single row, in the source tool order. No button is spread across the field. */
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools {
+  display: flex; justify-content: center; gap: 4px;
+  left: 4px; right: 4px; bottom: 34px; padding: 6px 0;
+  background: #061f2cba; border-radius: 12px;
+}
+.cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action {
+  flex: 1 1 0; width: 0; min-width: 0; max-width: 52px; height: 48px; min-height: 48px;
+}
+.cm-hunt-info {
+  position: absolute; z-index: 5; top: 65px; left: 10px; right: 10px;
+  display: flex; align-items: flex-start; gap: 8px; pointer-events: none;
+}
+.cm-hunt-info .cm-vs2-target {
+  position: relative; top: auto; left: auto; flex: 1; width: auto; min-width: 0;
+}
+.cm-hunt-info .cm-hunt-plugin-hud { position: static; flex: 0 0 auto; }
+.cm-hunt-info .cm-hunt-radar { width: 64px; height: 64px; }
+.cm-hunt-info .cm-hunt-plugin-hud:has(> [hidden]):not(:has(> :not([hidden]))) { display: none; }
+.cm-hunt-info .cm-vs2-target__stats { grid-template-columns: auto minmax(0,1fr) auto minmax(0,1fr); gap: 4px; }
+
+.cm-vs2-result__row { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; text-align: left; }
+.cm-vs2-result__thumbnail { display: grid; place-items: center; width: 48px; height: 56px; }
+.cm-vs2-result__thumbnail img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
 
 /* ====================================================================== *
  * 15. Highlight states must not hide what they highlight

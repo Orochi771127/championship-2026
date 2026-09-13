@@ -209,7 +209,7 @@
   .int-rh2-care-button { min-width: 54px; }
 }
 
-@media (max-height: 820px) {
+@media (max-height: 820px), (orientation: landscape) {
   .int-rh2-field-frame { margin-top: 5px; }
   .int-rh2-companion { min-height: 66px; padding-block: 7px; }
   .int-rh2-status { font-size: 0.58rem; }

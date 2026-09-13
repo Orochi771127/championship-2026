@@ -1,5 +1,9 @@
 # Championship Owner Direction
 
+## 2026-09-13 — Complete portrait-first orientation stabilization locally
+
+Owner confirms the first landscape option: keep the existing 9:16 portrait game centered with empty sides when the phone is sideways; discuss a fully redesigned landscape interface later. Preserve character/ground proportions and gameplay. Complete this bounded stage with Skills and browser-plugin verification. The current session explicitly prohibits push, merge, deploy, rebase, reset or deleting existing work without authorization; earlier publication instructions do not authorize publication of this new batch. Record local acceptance separately from physical Safari acceptance and unresolved shop art, four-mode Battle wiring and cage-floor visual alignment. See `docs/reports/mobile-photo-repair-2026-09-13/直向優先階段驗收.md`.
+
 ## 2026-09-10 — Commit completed work, open repository and publish the game
 
 Owner explicitly requests: 「請你把所有的完成的資料做好的資料全部都commit跟push至main。並且開放repo。讓我可以在網頁上就進行遊玩。」 Commit and push the integrated completed work to main, make `Orochi771127/championship-2026` public, and deploy the current game to its GitHub Pages URL. This supersedes earlier no-push/no-publication and loopback-only decisions for the selected rendered game files, as an Owner-authorized public playtest. Record exact reviewed input hashes under `WEB_BUILD_INPUTS.v1.json`; runtime destination is `src/data/championship/public-playtest.r1.json`. Keep ROM/native payloads, emulator states, private documents and credentials excluded. This instruction authorizes publication but does not assert a verified third-party licence, commercial-release acceptance, device QA or full original parity. Keep those facts pending and retain the separate verified-rights release target.

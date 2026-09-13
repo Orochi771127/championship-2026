@@ -64,7 +64,7 @@ export function createRaisingCageArtPlan({ manifest, placements, previewFieldId 
         x:0,y,fragmentOfSlot:tile.slotIndex, sourceRect:{...sourceRect,x:width,width:field.worldWidthPx-width}});
     }
     return deepFreeze({mode:'NATIVE_RANCH', placementEvidence:'NATIVE_ORIGINS_AND_CROP_WITH_FLATTENED_ART',
-      residentViewport, placements:result});
+      residentViewport, wrapWidthPx:unlockedCount*48*(tiles[0].worldWidthPx/fields.get(tiles[0].fieldId).nativeWidthPx), placements:result});
   }
   const layout = layoutRanchTiles(tiles);
   return deepFreeze({ mode: "PLAYER_PLACEMENTS", placementEvidence: layout.evidence,

@@ -1,4 +1,26 @@
 {
+  "portraitFrameStage20260913": {
+    "date": "2026-09-13",
+    "status": "LOCAL_PORTRAIT_FIRST_STAGE_COMPLETE_DEVICE_QA_PENDING",
+    "baseHead": "96885deb42910a0fa63674a31c536768fc60d19c",
+    "report": "docs/reports/mobile-photo-repair-2026-09-13/直向優先階段驗收.md",
+    "previousPhotoRepair": "docs/reports/mobile-photo-repair-2026-09-13/驗收與交接.md",
+    "outputs": ["src/championship/app/portraitFrame.js", "tests/championship-portrait-frame-cases.mjs"],
+    "completed": "Centered 9:16 landscape frame, keyboard guard and input visibility, unscaled Pixi and bar layout, focused browser rotation flows",
+    "current": "Local orientation acceptance complete; no publication",
+    "checkpoint": "Local commit containing this entry; baseline recorded above",
+    "fullLocalPass": 1512,
+    "portableCiPass": 1295,
+    "buildFiles": 6285,
+    "playtestBuildId": "0428338cdba276d90f743423a93e96d52f4df32c9adcdf4a8916061da73b1496",
+    "dependenciesChanged": "One presentation module added to existing preload and build allowlist; no package dependency changes",
+    "gameplayChangedInOrientationStage": false,
+    "blocked": ["Physical iPhone Safari acceptance unverified", "79 shop item icons unmapped", "Four-mode Battle wiring unfinished", "Complete cage-floor and actor art alignment partial"],
+    "nextSafeStep": "Close the separately documented source and visual gaps; discuss full landscape design separately",
+    "fullOriginalParity": false,
+    "physicalPhoneQA": false,
+    "publicationPerformed": false
+  },
   "uiThemeUnification20260912": {
     "date": "2026-09-12",
     "status": "BOUNDED_THEME_REPLACEMENT_AND_SAFE_PRUNE_COMPLETE_GLOBAL_CASCADE_PARTIAL",

@@ -777,7 +777,7 @@
   .cm-vs2-entry.cm-button { width: auto; min-width: 0; }
 }
 
-@media (max-height: 820px) {
+@media (max-height: 820px), (orientation: landscape) {
   .cm-vs2-header { min-height: 94px; }
   .cm-vs2-preview, .cm-vs2-destination { min-height: 56px; padding-block: 7px; }
   .cm-vs2-gate3d__host { min-height: 260px; }

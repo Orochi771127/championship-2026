@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { createChampionshipToolbar, TOOLBAR_MODES } from "../src/championship/app/championshipToolbar.js";
+import { createChampionshipStatusBar } from "../src/championship/app/championshipStatusBar.js";
 
 function documentStub() {
   const listeners = new Map();
@@ -19,6 +20,7 @@ function documentStub() {
           getPropertyValue(key) { return styles.get(key) ?? ""; }
         },
         append(...nodes) { for (const node of nodes) { node.parentNode = this; this.children.push(node); } },
+        prepend(...nodes) { for (const node of nodes) node.parentNode = this; this.children.unshift(...nodes); },
         replaceChildren(...nodes) { this.children = []; this.append(...nodes); },
         setAttribute(key, value) { this.attributes[key] = value; },
         addEventListener(type, listener) { this.events[type] = listener; },
@@ -97,6 +99,33 @@ test("toolbar resize fallback has the same visibility and disposal behavior", (t
   toolbar.dispose();
   assert.equal(listeners.size, 0);
   assert.equal(doc.body.style.getPropertyValue("--cm-toolbar-height"), "");
+});
+
+test("landscape reserves unscaled toolbar and status heights across rotation", (t) => {
+  const { doc, toolbar, rail, observer } = fixture(t);
+  rail.offsetHeight = 87;
+  rail.height = 43.5;
+  toolbar.setMode(TOOLBAR_MODES.TRAINING);
+  const status = createChampionshipStatusBar({ root: doc.body });
+  status.element.offsetHeight = 34;
+  status.element.height = 17;
+  // Re-mount to exercise initial measurement as well as observed toolbar updates.
+  status.dispose();
+  const createElement = doc.createElement;
+  doc.createElement = function (...args) {
+    const element = createElement.apply(this, args);
+    element.offsetHeight = 34;
+    element.height = 17;
+    return element;
+  };
+  const scaledStatus = createChampionshipStatusBar({ root: doc.body });
+  assert.equal(doc.body.style.getPropertyValue("--cm-status-bar-height"), "34px");
+  assert.equal(doc.body.style.getPropertyValue("--cm-toolbar-height"), "87px");
+  rail.height = 87;
+  observer.callback();
+  assert.equal(doc.body.style.getPropertyValue("--cm-toolbar-height"), "87px", "rotation preserves layout reservation");
+  scaledStatus.dispose();
+  toolbar.dispose();
 });
 
 

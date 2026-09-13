@@ -219,7 +219,8 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
     if (disposed) return;
     // Only the rail occupies layout space. The submenu overlays the field.
     // The border box includes the rail's safe-area padding exactly once.
-    const height = bar.hidden ? 0 : Math.ceil(rail.getBoundingClientRect().height);
+    // Reserve layout pixels; the portrait frame scales the whole UI afterwards.
+    const height = bar.hidden ? 0 : Math.ceil(rail.offsetHeight ?? rail.getBoundingClientRect().height);
     if (height === measuredHeight) return;
     measuredHeight = height;
     host.style.setProperty("--cm-toolbar-height", `${height}px`);

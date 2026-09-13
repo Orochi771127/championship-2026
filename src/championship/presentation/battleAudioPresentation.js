@@ -25,7 +25,8 @@ export function validateBattleAudio(manifest,index) {
 export async function mountBattleAudioPresentation({source,baseUrl=globalThis.location?.href,
   fetchImpl=globalThis.fetch,AudioContextClass=globalThis.AudioContext,eventTarget=globalThis.document}={}) {
   if(!isLocalBattleEffectPreview(baseUrl) || !AudioContextClass)return null;
-  baseUrl=new URL('/',baseUrl).href;
+  // Keep the application directory, including the approved Pages subpath.
+  baseUrl=new URL('./',baseUrl).href;
   const loadJson=async path=>{const r=await fetchImpl(new URL(path,baseUrl));if(!r.ok)throw Error(`BATTLE_AUDIO_HTTP_${r.status}`);return r.json();};
   const index=await loadJson('assets/production/ART_PRODUCTION_INDEX.json');
   const manifest=validateBattleAudio(await loadJson(BATTLE_AUDIO_MANIFEST),index);

@@ -13,9 +13,15 @@
 <link rel="stylesheet" href="../../src/championship/app/nativeUiSkin.css">
 <style>body{margin:0;background:#06141e;color:white;font-family:Arial}#fixture{position:fixed;z-index:20;bottom:0;left:0;background:#172d38;width:100%;padding:5px;font-size:12px}#fixture button{min-height:44px}#app.cm-vs2-root{bottom:78px}#outcome{white-space:pre-wrap}</style>
 <main id="app"></main>
+<style>body[data-frame-review] #fixture{display:none}body[data-frame-review] #app.cm-vs2-root{bottom:0}</style>
 <aside id="fixture">RESEARCH FIXTURE — live encounter record, bounded soft-pull replay; no normal-entry capture claim.<br>
 <button id="failure">Enable save failure</button><button id="reload-save">Reload saved Home</button><output id="outcome"></output></aside>
 <script type="module">
+import {mountPortraitFrame} from '../../src/championship/app/portraitFrame.js';
+// Opt-in viewport QA omits fixture controls, leaving the real result view's
+// available height. The default save-failure review keeps those controls.
+if(new URL(location.href).searchParams.has('portraitFrameReview'))document.body.dataset.frameReview='true';
+mountPortraitFrame();
 import { createChampionshipStandaloneApp } from '../../src/championship/app/championshipStandaloneApp.js';
 import { createGateHuntPresentationSource } from '../../src/championship/app/gateHuntPresentationSource.js';
 import { createHuntResultView } from '../../src/championship/app/vs3Screens.js';

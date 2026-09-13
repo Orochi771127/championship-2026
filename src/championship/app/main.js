@@ -70,6 +70,7 @@ import {
   validateRuntimeMapArtBundle
 } from "../presentation/runtimeMapArtBundle.js";
 import { createRaisingCageArtPlan } from "../presentation/raisingCageArtPlan.js";
+import { mountPortraitFrame } from './portraitFrame.js';
 
 const PIXI_V8_MODULE_URL = "../../../node_modules/pixi.js/dist/pixi.mjs";
 // Three.js is about 2MB and only the bounded 3D views read it, so each mount is
@@ -179,6 +180,7 @@ const titleNote = document.getElementById("cm-title-note");
 const newGameButton = document.getElementById("cm-new-game");
 const continueButton = document.getElementById("cm-continue");
 const root = document.getElementById("cm-root");
+mountPortraitFrame();
 const loginButton=document.getElementById('cm-login');
 const titleActions=titleScreen.querySelector('.cm-title__actions');
 const openingPresentation=createOpeningPresentation({host:document.getElementById('cm-opening'),onStart:startNewGame});
@@ -319,6 +321,7 @@ async function loadOptionalCageFieldArt(stage) {
       manifest,
       placements: plan.placements,
       residentViewport: plan.residentViewport,
+      wrapWidthPx: plan.wrapWidthPx,
       placementEvidence: plan.placementEvidence,
       presentationMode: plan.mode
     });
@@ -669,7 +672,11 @@ async function mountBattleField() {
           if (disposed) {
             await vfxOverlay?.dispose();await effectArt?.dispose();await fieldArt?.dispose();await characterRoster?.dispose();return;
           }
-          battleAudio = await mountBattleAudioPresentation({source});
+          // Audio is optional presentation; an unavailable decoder/sample must
+          // never prevent the existing battle scene from starting.
+          battleAudio = await mountBattleAudioPresentation({source}).catch(error=>{
+            console.warn('Battle audio unavailable',error);return null;
+          });
           scene = await mountBattleFieldPixiPresentation({ stage, source, fieldArt, characterRoster, effectArt,onView:frame=>view.render(frame) });
           if (disposed) {
             await battleAudio?.dispose();

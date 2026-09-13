@@ -268,7 +268,7 @@
   .cm-toolbar[data-mode="1"] .cm-toolbar__cell { font-size: 7px; min-height: 58px; }
   .cm-toolbar[data-mode="1"] .cm-toolbar__cell::before { width: 27px; height: 27px; }
 }
-@media (max-height: 650px) {
+@media (max-height: 650px) and (orientation: portrait) {
   .int-rh2-header { min-height: 44px; padding-block: 4px; }
   .int-rh2-header__identity .int-rh2-kicker { display: none; }
   .int-rh2-companion { padding-block: 7px; margin-bottom: 6px; }

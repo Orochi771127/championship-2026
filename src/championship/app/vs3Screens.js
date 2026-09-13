@@ -163,6 +163,14 @@ export function createHuntResultView({ root, source, hudArt = null }) {
     for (const row of next.rows ?? []) {
       const line = element("div", "cm-vs2-result__row");
       const label = `${uiText(row.kind === "CARD" ? "MEMORY CARD" : "HOME")} — ${row.displayName}`;
+      const image = hudArt?.getPortrait(row.speciesId);
+      const thumbnail = element('span', 'cm-vs2-result__thumbnail');
+      if (image) {
+        const img = element('img');
+        img.src = image.src; img.alt = ''; img.decoding = 'async';
+        thumbnail.append(img);
+      }
+      line.append(thumbnail);
       line.append(element("span", "", label));
       const release = element("button", "cm-vs2-action", "RELEASE");
       release.type = "button";

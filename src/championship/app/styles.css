@@ -58,7 +58,7 @@
   --cm-sheet-highlight: #9a6a16;
   --cm-screen-top: 0px;
   --cm-screen-bottom: 0px;
-  --cm-screen-height: calc(100dvh - var(--cm-screen-top) - var(--cm-screen-bottom));
+  --cm-screen-height: calc(var(--cm-viewport-height, 100dvh) - var(--cm-screen-top) - var(--cm-screen-bottom));
 }
 
 * { box-sizing: border-box; }
@@ -513,7 +513,7 @@ button { font: inherit; }
 
 body[data-status-bar="on"] {
   --cm-screen-top: var(--cm-status-bar-height, 38px);
-  --cm-screen-height: calc(100dvh - var(--cm-screen-top) - var(--cm-screen-bottom));
+  --cm-screen-height: calc(var(--cm-viewport-height, 100dvh) - var(--cm-screen-top) - var(--cm-screen-bottom));
 }
 
 body[data-status-bar="on"] #cm-root {
@@ -621,7 +621,7 @@ body[data-status-bar="on"] #cm-root {
 
 body[data-toolbar="on"] {
   --cm-screen-bottom: var(--cm-toolbar-height, 56px);
-  --cm-screen-height: calc(100dvh - var(--cm-screen-top) - var(--cm-screen-bottom));
+  --cm-screen-height: calc(var(--cm-viewport-height, 100dvh) - var(--cm-screen-top) - var(--cm-screen-bottom));
 }
 
 body[data-toolbar="on"] #cm-root {

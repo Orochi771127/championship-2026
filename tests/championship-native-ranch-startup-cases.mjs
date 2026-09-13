@@ -109,6 +109,23 @@ test('a later invalid crop rolls back all acquired textures',async()=>{
   assert.deepEqual(resources.destroyed,[false]);
 });
 
+test('looping camera repeats cropped ground without reloading or double-destroying textures',async()=>{
+  const {PIXI,resources}=pixiFixture(),request=plan();
+  const bundle=await loadRuntimeMapArtTileSet({PIXI,manifest,placements:request.placements,
+    presentationMode:request.mode,wrapWidthPx:request.wrapWidthPx});
+  assert.equal(bundle.field.wrapWidthPx,14*48*4);
+  assert.equal(bundle.displayObject.children.length,12);
+  assert.equal(resources.loads.length,4);
+  const originals=bundle.displayObject.children.slice(0,4),copies=bundle.displayObject.children.slice(4);
+  assert.equal(copies[0].x,originals[0].x-request.wrapWidthPx);
+  assert.equal(copies[1].x,originals[0].x+request.wrapWidthPx);
+  assert.equal(copies[0].texture,originals[0].texture);
+  originals[0].texture={nextFrame:true};bundle.update(16);
+  assert.equal(copies[0].texture,originals[0].texture);
+  await bundle.dispose();await bundle.dispose();
+  assert.ok(copies.every(c=>c.destroyed));assert.equal(resources.unloads.length,4);
+});
+
 test('old saved placements keep their exact anchors and legacy renderer; new saves persist native configuration',async()=>{
   const data=new Map();const storage={getItem:k=>data.get(k)??null,setItem:(k,v)=>data.set(k,v),removeItem:k=>data.delete(k)};
   const options={storage,catalog:json('src/data/championship/catalogs/creature-species.r1.json'),

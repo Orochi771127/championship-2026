@@ -13,6 +13,24 @@ function frames(app,n){for(let i=0;i<n;i++){if(app.hasRaisingPresentation())app.
   const mailbox=app.getRaisingMailbox();if(mailbox.activeId!==null&&mailbox.queue.find(q=>q.id===mailbox.activeId)?.system)app.acknowledgeRaisingMail();}}
 async function hatch(app){const id=app.getRaisingInstances()[0].instanceId;for(let i=0;i<3;i++){app.touchRaisingEgg(id);frames(app,1);}frames(app,200);assert.ok(app.getRaisingActorFrame(id).speciesIndex>=8);return id;}
 
+test('carrying across the camera seam keeps gentle input and releases onto the native ground',async()=>{
+  const h=setup(),app=h.create();await app.newGame();const id=await hatch(app);
+  for(let i=0;i<300&&! [1,2,3,5,17].includes(app.getRaisingActorFrame(id).state);i++)frames(app,1);
+  const ground=createNativeRaisingGround(app.getCageEditFrame());
+  assert.equal(app.beginRaisingCarry(id,{x:ground.pixelWidth-1,y:70}),true);
+  frames(app,1);app.updateRaisingCarry(id,{x:1,y:70,cameraX:ground.pixelWidth-100});frames(app,1);
+  const actor=app.getRaisingActorFrame(id);
+  assert.equal(actor.positionQ12[0],4096);
+  assert.equal(app.releaseRaisingCarry(id),true);
+  frames(app,1);
+  const nextX=app.getRaisingActorFrame(id).positionQ12[0]/4096;
+  assert.ok(Math.min(Math.abs(nextX-1),Math.abs(nextX-1+ground.pixelWidth),Math.abs(nextX-1-ground.pixelWidth))<3,'the seam is not a full-width throw');
+  for(let i=0;i<600&&app.getRaisingActorFrame(id).state===7;i++)frames(app,1);
+  assert.notEqual(app.getRaisingActorFrame(id).state,7);
+  assert.equal(app.getRaisingActorFrame(id).positionQ12[2],0);
+  await app.dispose();
+});
+
 test('normal hand input hatches the starter, strokes with movement, releases and retains individual care through Save/Continue',async()=>{
   const h=setup(),app=h.create();await app.newGame();const id=app.getRaisingInstances()[0].instanceId;
   for(let i=0;i<3;i++){const f=app.getRaisingActorFrame(id),point={x:f.positionQ12[0]/4096,y:f.positionQ12[1]/4096};

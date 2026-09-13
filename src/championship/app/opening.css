@@ -42,4 +42,4 @@
 .cm-opening-story__champion::before{content:'';position:absolute;width:70%;aspect-ratio:1;left:15%;top:5%;border-radius:50%;background:radial-gradient(ellipse at 35% 12%,#fff,#92edfb 10%,#193f61 20%,#080d27 42%,#a1e8ed 62%,#122c50 70%);box-shadow:0 0 12px #79bcfc}
 .cm-opening-story__champion::after{content:'';position:absolute;inset:28% 35% 25%;background:linear-gradient(#82f8ff 0 27%,transparent 27% 38%,#18a5fe 38% 66%,transparent 66% 76%,#1371f9 76%);clip-path:polygon(14% 0,86% 0,100% 20%,83% 48%,100% 78%,85% 100%,15% 100%,0 80%,19% 51%,0 22%)}
 .cm-opening-story__card--3{justify-content:center}
-@media(max-height:550px){.cm-title__logo{top:7%}.cm-title__crown{height:32px;width:60px}.cm-title__actions{top:64%;gap:8px}.cm-title__actions .cm-button{min-height:44px;font-size:17px}}
+@media(max-height:550px) and (orientation:portrait){.cm-title__logo{top:7%}.cm-title__crown{height:32px;width:60px}.cm-title__actions{top:64%;gap:8px}.cm-title__actions .cm-button{min-height:44px;font-size:17px}}

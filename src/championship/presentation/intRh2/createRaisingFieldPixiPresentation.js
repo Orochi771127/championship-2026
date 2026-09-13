@@ -10,7 +10,7 @@
 
 import { getRaisingNativePixelScale, getRaisingNativeActorGeometry } from "./raisingNativeSizing.js";
 import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
-import { raisingFieldViewport, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative } from "./raisingFieldViewport.js";
+import { raisingFieldViewport, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingEdgeScroll } from "./raisingFieldViewport.js";
 import {
   RECOVERY_CAGE_VFX_DURATION_MS,
   recoveryCageVfxFrame,
@@ -575,7 +575,8 @@ export async function mountRaisingFieldPixiPresentation({
       if(!cameraDrag.moved)return;
       const fit = raisingFieldViewport(fieldArt.field, app.screen);
       const maxX = Math.max(0, fieldArt.field.worldWidthPx-(app.screen.width-24)/fit.scale);
-      cameraX = clamp(cameraDrag.origin-(event.global.x-cameraDrag.startX)/fit.scale, 0, maxX);
+      const next=cameraDrag.origin-(event.global.x-cameraDrag.startX)/fit.scale;
+      cameraX = fieldArt.field.wrapWidthPx ? wrapRaisingCamera(next,fieldArt.field.wrapWidthPx) : clamp(next, 0, maxX);
       sync(latestFrame, {force:true});
       return;
     }
@@ -603,6 +604,19 @@ export async function mountRaisingFieldPixiPresentation({
 
   function updateAnimations(ticker) {
     if(drag?.nativeHand)drag.carried=source.getActorFrame?.(drag.creatureId)?.state===6;
+    if(drag?.carried&&fieldArt?.field?.presentationMode==='NATIVE_RANCH'){
+      const fit=raisingFieldViewport(fieldArt.field,app.screen,12,cameraX);
+      const delta=raisingEdgeScroll(drag.lastPoint,app.screen,ticker.deltaMS)/fit.scale;
+      if(delta){
+        const next=cameraX+delta,maxX=Math.max(0,fieldArt.field.worldWidthPx-(app.screen.width-24)/fit.scale);
+        cameraX=fieldArt.field.wrapWidthPx?wrapRaisingCamera(next,fieldArt.field.wrapWidthPx):clamp(next,0,maxX);
+        layoutFieldArt();
+        const point=raisingScreenToNative(drag.lastPoint,fieldArt.field,app.screen,cameraX);
+        const pointer={...point,cameraX:cameraX/fieldArt.field.nativePixelWorldScale,inside:true};
+        if(drag.nativeHand)source.intents.updateHand?.(drag.creatureId,pointer);
+        source.intents.updateCarry?.(drag.creatureId,pointer);
+      }
+    }
     fieldArt?.update(ticker.deltaMS);
     careElapsed+=Math.min(100,Math.max(0,ticker.deltaMS));
     drawFood();
