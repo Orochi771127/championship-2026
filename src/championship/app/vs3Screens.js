@@ -1,5 +1,6 @@
 import { speciesNameForId } from "../text/zhHant.js";
 import { uiText } from "../text/uiText.js";
+import { appendMemoryCardFrame } from '../presentation/assembledUiArt.js';
 // VS3 -- Hunt Result presentation.
 //
 // Consumes only the injected Gate/Hunt presentation source. Collection has
@@ -101,8 +102,11 @@ export function createHuntResultView({ root, source, hudArt = null }) {
   nameInput.autocomplete = "off";
   nameInput.spellcheck = false;
   nameField.append(nameInput);
+  const portraitCard = element('div', 'cm-vs2-result__portrait-card');
+  portraitCard.append(portrait);
+  appendMemoryCardFrame(portraitCard);
   body.append(
-    portrait,
+    portraitCard,
     species,
     nameField,
     element("p", "cm-vs2-result__note", "Name them, then return home. They will be waiting in the habitat.")

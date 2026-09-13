@@ -6,6 +6,7 @@ import { ranchBoardCell } from '../cage/ranchSlotGeometry.js';
 import { getOriginalCageVisualBinding } from './originalCageVisualBindings.js';
 import { validateRuntimeMapArtBundle } from './runtimeMapArtBundle.js';
 import { cageName } from '../text/zhHant.js';
+import { assembledCageArt, assembledShopArt } from './assembledUiArt.js';
 
 const art = validateRuntimeMapArtBundle(manifest);
 export function cageUiName(moduleId, fallback = '') {
@@ -25,16 +26,18 @@ export function cageUiSummary(moduleId, fallback = '') {
   if (capacity !== null) parts.push(`建議 ${capacity} 隻`);
   return parts.join(' · ') || '固定待機區';
 }
-export function cageUiImage(moduleId) {
+export function cageUiImage(moduleId, baseUrl) {
   const definition = getCageDefinitionByModuleId(moduleId);
+  const thumbnail = assembledCageArt(definition?.cageDefinitionIndex, baseUrl);
+  if (thumbnail) return thumbnail.src;
   const binding = getOriginalCageVisualBinding(definition?.cageDefinitionIndex);
   return art.fields.find((field) => field.fieldId === binding?.fieldId)?.frames[0]?.src ?? null;
 }
-export function shopCageUiImage(shopRecordIndex) {
+export function shopCageUiImage(shopRecordIndex, baseUrl) {
   const definition = listCageDefinitions().find((entry) => entry.shopRecordIndex === shopRecordIndex);
-  return definition ? cageUiImage(definition.moduleId) : null;
+  return definition ? assembledShopArt(shopRecordIndex, baseUrl)?.src ?? cageUiImage(definition.moduleId, baseUrl) : null;
 }
-export function cageEditorArtCells(slots) {
+export function cageEditorArtCells(slots, baseUrl) {
   const cells = slots.map((slot) => ({ ...slot, ...ranchBoardCell(slot.slotIndex) }));
   return cells.map((cell) => {
     const peers = cell.moduleId ? cells.filter((other) => other.moduleId === cell.moduleId) : [cell];
@@ -42,11 +45,15 @@ export function cageEditorArtCells(slots) {
     const top = Math.min(...peers.map((entry) => entry.y));
     const width = (Math.max(...peers.map((entry) => entry.x)) - left + 24) * 2;
     const height = (Math.max(...peers.map((entry) => entry.y)) - top + 28) * 2;
-    const image = cageUiImage(cell.moduleId);
+    const definition = getCageDefinitionByModuleId(cell.moduleId);
+    const thumbnail = assembledCageArt(definition?.cageDefinitionIndex, baseUrl);
+    const image = cageUiImage(cell.moduleId, baseUrl);
     const field = art.fields.find(field=>field.frames[0]?.src === image);
-    const scale = field ? Math.min(width / field.worldWidthPx, height / field.worldHeightPx) : 1;
-    const imageWidth = field ? field.worldWidthPx * scale : width;
-    const imageHeight = field ? field.worldHeightPx * scale : height;
+    const sourceWidth = thumbnail?.width ?? field?.worldWidthPx ?? width;
+    const sourceHeight = thumbnail?.height ?? field?.worldHeightPx ?? height;
+    const scale = Math.min(width / sourceWidth, height / sourceHeight);
+    const imageWidth = sourceWidth * scale;
+    const imageHeight = sourceHeight * scale;
     return { slotIndex: cell.slotIndex, x: cell.x * 2, y: (cell.y - 8) * 2,
       image, imageWidth, imageHeight,
       imageX: (left - cell.x) * 2 + (width-imageWidth)/2,

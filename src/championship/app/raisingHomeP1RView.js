@@ -1,6 +1,7 @@
 import { uiText } from "../text/uiText.js";
 import {raisingMessageText,RAISING_MESSAGE_SENDERS} from '../text/raisingMessages.zhHant.js';
 import { speciesName } from "../text/zhHant.js";
+import { assembledHudArt } from '../presentation/assembledUiArt.js';
 // INT-RH2 — Codex-owned P1R DOM presentation.
 //
 // This module consumes only the published Raising presentation seam. It never
@@ -97,7 +98,10 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   const companionCopy = node("div", "int-rh2-companion__copy");
   const companionName = node("h2", "int-rh2-companion__name", "SELECT A RESIDENT");
   const companionLocation = node("p", "int-rh2-companion__location", "Touch a resident in the habitat.");
+  const ranchIcon = node('img', 'int-rh2-companion__ranch-icon');
+  ranchIcon.alt = ''; ranchIcon.hidden = true;
   companionCopy.append(node("p", "int-rh2-kicker", "COMPANION LINK"), companionName, companionLocation);
+  companionCopy.append(ranchIcon);
 
   // OVL18 0211F790 uses the individual's current/max HP and TP. Its AP
   // readout is a constant full bar, not a fabricated combat AP value.
@@ -223,6 +227,9 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     const nativeRanch = frame.ranch?.layoutVersion === 'NATIVE_ANCHORS_V1';
     fieldState.textContent = uiText(nativeRanch ? 'SWIPE TO VIEW' : 'FIELD ONLINE');
     const resident = selectedResident(frame);
+    const ranchImage = assembledHudArt(`ranch-${resident?.nativeCageDefinition}`);
+    ranchIcon.hidden = !ranchImage;
+    if (ranchImage && ranchIcon.getAttribute('src') !== ranchImage.src) ranchIcon.src = ranchImage.src;
     const image=hudArt?.getPortrait(resident?.speciesId);
     portrait.hidden=!image;
     if(image){if(portrait.getAttribute('src')!==image.src)portrait.src=image.src;

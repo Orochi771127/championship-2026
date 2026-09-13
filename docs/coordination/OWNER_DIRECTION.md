@@ -1,5 +1,9 @@
 # Championship Owner Direction
 
+## 2026-09-13 — Integrate the assembled-art audit in sequential local batches
+
+Owner approves starting the preceding assembled-art audit: 「自己分批完成一批結束後 再進下一批」. Batch 1 completes missing Shop/Hunt equipment pictures and dedicated cage previews. Batch 2 integrates useful original UI/HUD details into the existing portrait interface. Batch 3 checks remaining evolution/capture/recovery/reward presentation against existing events and source evidence, applying verified visual bindings and preserving unknowns. Finish with integrated local browser and regression acceptance. This is continuation authorization for the selected internal reference-art workflow; new source-derived images remain registered local research references, excluded from public authorization and commercial shipping. Do not copy the whole archive, redraw already-correct characters/maps, invent gameplay from an image, or publish this batch. Preserve the approved centered portrait frame.
+
 ## 2026-09-13 — Complete portrait-first orientation stabilization locally
 
 Owner confirms the first landscape option: keep the existing 9:16 portrait game centered with empty sides when the phone is sideways; discuss a fully redesigned landscape interface later. Preserve character/ground proportions and gameplay. Complete this bounded stage with Skills and browser-plugin verification. The current session explicitly prohibits push, merge, deploy, rebase, reset or deleting existing work without authorization; earlier publication instructions do not authorize publication of this new batch. Record local acceptance separately from physical Safari acceptance and unresolved shop art, four-mode Battle wiring and cage-floor visual alignment. See `docs/reports/mobile-photo-repair-2026-09-13/直向優先階段驗收.md`.

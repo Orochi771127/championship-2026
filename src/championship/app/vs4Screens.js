@@ -175,6 +175,7 @@ export function createShopView({ root, source }) {
       icon.dataset.icon = goods.icon;
       icon.style.backgroundImage = `url("${goods.src}")`;
       icon.style.backgroundPosition = goods.backgroundPosition;
+      if (goods.width && goods.height) icon.style.backgroundSize = 'contain';
       host.append(icon);
       return;
     }

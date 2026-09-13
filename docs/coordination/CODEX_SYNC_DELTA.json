@@ -1,4 +1,41 @@
 {
+  "assembledArtStage20260913": {
+    "date": "2026-09-13",
+    "status": "BOUNDED_LOCAL_ART_BATCHES_COMPLETE_REMAINING_SOURCE_BINDINGS_OPEN",
+    "baseHead": "d0e58dcce79421b17e31ed644c3f3847fee63cab",
+    "report": "docs/reports/mobile-photo-repair-2026-09-13/完整美術分批整合驗收.md",
+    "contract": "docs/contracts/championship/ASSEMBLED_UI_REFERENCE_INTEGRATION.v1.json",
+    "sourceEvidence": "docs/research/ASSEMBLED_EVOLUTION_ART_BINDING_2026-09-13.md",
+    "closedLocalGaps": [
+      "79 missing Shop equipment/plugin images",
+      "35 dedicated cage Shop previews and 36 editor definitions",
+      "Matching Hunt loadout icons",
+      "16 Gate icons, ranch HUD icons and 8-piece capture-result frame",
+      "Source-bound evolution ring, green and blue effects"
+    ],
+    "newSelectedPngs": 217,
+    "runtimeScope": "LOOPBACK_RESEARCH_ONLY",
+    "fullLocalPass": 1519,
+    "portableCiPass": 1302,
+    "focusedPass": 31,
+    "startupModules": 182,
+    "internalBuildFiles": 6503,
+    "internalBuildId": "cb782c70861a048a6ebc4a66f15a41c962756f8bf2a07d3b7949ef99634a1701",
+    "currentSourceHashMismatches": 0,
+    "gameplayAuthorityChanged": false,
+    "newPackageDependencies": false,
+    "fullOriginalParity": false,
+    "physicalPhoneQA": false,
+    "publicationPerformed": false,
+    "remaining": [
+      "Capture-storage and recovery-star source-cell bindings",
+      "Unverified reward/wipe draw states",
+      "Existing four-mode Battle wiring",
+      "Complete cage-floor/actor visual alignment",
+      "Physical iPhone Safari acceptance"
+    ],
+    "nextSafeStep": "Continue exact original draw-resource tracing for unresolved effects, and the separate gameplay/device acceptance items; do not substitute candidate cells by filename."
+  },
   "portraitFrameStage20260913": {
     "date": "2026-09-13",
     "status": "LOCAL_PORTRAIT_FIRST_STAGE_COMPLETE_DEVICE_QA_PENDING",

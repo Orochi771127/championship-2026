@@ -135,6 +135,7 @@ export function createGateHuntPresentationSource(app) {
       gates: app.getGates().map((gate) => ({
         gateId: gate.gateId,
         ordinal: gate.ordinal,
+        romRecordIndex: gate.romRecordIndex,
         // The recovered node identity is canonical; the display string is a
         // presentation default a localization layer may replace.
         biomeId: gate.biomeId,

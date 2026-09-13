@@ -1877,3 +1877,40 @@ body[data-portrait-frame] .cm-title__actions .cm-button { min-height: 52px; heig
   color: rgba(255, 255, 255, 0.82);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
+
+/* Complete item cells keep one identity in Shop and equipment selection. */
+.cm-vs2-root[data-screen="HUNT_LOADOUT"] .cm-vs2-loadout__option[data-has-art] {
+  display: grid; grid-template-columns: 34px minmax(0, 1fr);
+  grid-template-rows: auto auto; column-gap: 7px; min-height: 68px;
+}
+.cm-vs2-loadout__icon {
+  width: 34px; height: 42px; object-fit: contain; image-rendering: pixelated;
+  grid-column: 1; grid-row: 1 / span 2; align-self: center;
+}
+.cm-vs2-loadout__option[data-has-art] .cm-vs2-loadout__name,
+.cm-vs2-loadout__option[data-has-art] .cm-vs2-loadout__detail { grid-column: 2; }
+
+.cm-vs2-gate__aperture--complete {
+  background-size: contain; background-repeat: no-repeat; background-position: center;
+  image-rendering: pixelated;
+}
+.int-rh2-companion__ranch-icon { width: 44px; height: 28px; object-fit: contain; image-rendering: pixelated; }
+.cm-vs2-result__portrait-card { width: fit-content; max-width: 100%; margin: 0 auto 10px; }
+.cm-vs2-result__portrait-card.cm-memory-card-frame { padding: 22px; background: #0a2731; }
+.cm-vs2-root[data-screen] .cm-memory-card-frame .cm-vs2-result__portrait {
+  padding: 0; margin: 0; border-radius: 0; background: none; box-shadow: none;
+  max-width: 160px; max-height: 160px; object-fit: contain;
+}
+.cm-memory-card-frame { position: relative; isolation: isolate; }
+.cm-memory-card-frame__piece {
+  position: absolute; pointer-events: none; z-index: 2; image-rendering: pixelated;
+  width: 28px; height: 28px; background-repeat: no-repeat; background-size: 100% 100%;
+}
+.cm-memory-card-frame__piece--tl { left: 0; top: 0; width: 32px; height: 24px; }
+.cm-memory-card-frame__piece--tr { right: 0; top: 0; width: 40px; height: 16px; }
+.cm-memory-card-frame__piece--bl { left: 0; bottom: 0; width: 16px; height: 24px; }
+.cm-memory-card-frame__piece--br { right: 0; bottom: 0; width: 16px; height: 24px; }
+.cm-memory-card-frame__piece--top { left: 32px; right: 40px; top: 0; width: auto; height: 8px; }
+.cm-memory-card-frame__piece--bottom { left: 16px; right: 16px; bottom: 0; width: auto; height: 8px; }
+.cm-memory-card-frame__piece--left { left: 0; top: 24px; bottom: 24px; height: auto; width: 8px; }
+.cm-memory-card-frame__piece--right { right: 0; top: 16px; bottom: 24px; height: auto; width: 8px; }

@@ -13,7 +13,11 @@ import {RAISING_CAGES} from '../../src/championship/app/cageRoster.js';
 const host=document.querySelector('#field'),result=document.querySelector('#result'),prepare=document.querySelector('#prepare'),advance=document.querySelector('#advance'),finish=document.querySelector('#finish');
 const data=new Map(),storage={getItem:k=>data.get(k)??null,setItem:(k,v)=>data.set(k,v),removeItem:k=>data.delete(k)};
 const app=createChampionshipStandaloneApp({storage,catalog,cages:RAISING_CAGES});let stage,port,source,id;
-const step=()=>app.hasRaisingPresentation()?app.advanceRaisingPresentation({frames:1}):app.advanceNaturalClock({frames:1});
+const step=()=>{
+  if(app.hasRaisingPresentation())app.advanceRaisingPresentation({frames:1});else app.advanceNaturalClock({frames:1});
+  const mailbox=app.getRaisingMailbox();
+  if(mailbox.activeId!==null&&mailbox.queue.find(q=>q.id===mailbox.activeId)?.system)app.acknowledgeRaisingMail();
+};
 const report=()=>{const a=app.getRaisingActorFrame(id);result.textContent=JSON.stringify({date:app.getSnapshot().dayOfSeason+1,minute:app.getSnapshot().clockMinutes,instanceId:id,species:a?.speciesIndex,state:a?.state,evolution:a?.evolution?{phase:a.evolution.phase,elapsed:a.evolution.elapsed,totalFrames:a.evolution.totalFrames,target:a.evolution.target}:null,renderer:port?.getDiagnostics()},null,2);};
 const json=async path=>{const response=await fetch(new URL('../../'+path,import.meta.url));if(!response.ok)throw Error('HTTP '+response.status);return response.json();};
 prepare.onclick=async()=>{prepare.disabled=true;try{

@@ -1,17 +1,13 @@
 // SHOP_REVERSE_SPEC_v1.md:139-144; SHOP_REVERSE_CATALOG_118.csv:1-12.
 // Display binding only. Record order 0,1,2,3 maps to item indices 0,1,3,2.
 //
-// The shop sells exactly the four care items the toolbar already draws, and the
-// original draws each of them with the SAME icon in both places. This module
-// used a second, painted icon set, which left the product speaking two icon
-// languages at once -- pixel on the rail, painted illustration one screen away.
-// Owner direction 2026-09-12 is one language, so the binding now points at the
-// approved toolbar cells. The rights gate is unchanged in shape: the art is
-// only offered when its own manifest says it is runtime eligible AND the
-// production index agrees.
+// The four care goods share the existing toolbar cells. Other goods use the
+// separately registered complete-cell selections during local art review.
+// Each bundle keeps its own runtime scope and production-index validation.
 import manifest from '../../../assets/production/toolbar/licensed-runtime-v1/manifest.json' with {type:'json'};
 import productionIndex from '../../../assets/production/ART_PRODUCTION_INDEX.json' with {type:'json'};
 import {getShopRecord} from '../shop/shopCatalog.js';
+import {assembledShopArt} from './assembledUiArt.js';
 
 const goods = Object.freeze([
   {itemIndex:0, name:'飼料', icon:'feed'},
@@ -20,8 +16,13 @@ const goods = Object.freeze([
   {itemIndex:2, name:'藥品', icon:'medicine'}
 ].map(Object.freeze));
 
-export function shopGoodsPresentation(shopRecordIndex) {
+export function shopGoodsPresentation(shopRecordIndex, baseUrl) {
   if (!Number.isSafeInteger(shopRecordIndex)) return null;
+  const complete = assembledShopArt(shopRecordIndex, baseUrl);
+  if (complete && complete.category !== 'CAGES') return Object.freeze({
+    ...complete, name:null, icon:complete.subcategory.toLowerCase(), backgroundPosition:'center',
+    identityEvidence:'VERIFIED_BINARY', imageEvidence:'OWNER_AUTHORIZED_LOCAL_REFERENCE'
+  });
   const binding = goods[shopRecordIndex];
   if (!binding) return null;
   const record = getShopRecord(shopRecordIndex);

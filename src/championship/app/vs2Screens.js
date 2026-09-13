@@ -1,4 +1,7 @@
 import { uiText } from "../text/uiText.js";
+import { shopGoodsPresentation } from '../presentation/shopGoodsUiArt.js';
+import { getHuntCatalogItem } from '../hunt/loadout/huntEquipmentCatalog.js';
+import { assembledHudArt } from '../presentation/assembledUiArt.js';
 // VS2-P -- Championship Modern P1R presentation for Gate Select, Hunt Loadout
 // and the Hunt HUD.
 //
@@ -18,6 +21,15 @@ function element(tag, className, text) {
   if (className) node.className = className;
   if (text !== undefined) node.textContent = uiText(text);
   return node;
+}
+
+function appendEquipmentIcon(button, itemId) {
+  const art = shopGoodsPresentation(getHuntCatalogItem(itemId)?.shopRecordIndex);
+  if (!art?.src) return;
+  const image = element('img', 'cm-vs2-loadout__icon');
+  image.src = art.src; image.alt = ''; image.loading = 'lazy';
+  button.append(image);
+  button.dataset.hasArt = 'true';
 }
 
 function presentationMode() {
@@ -243,6 +255,11 @@ export async function createGateSelectView({ root, source, mountWorld }) {
         button.style.setProperty("--gate-phase", String((gate.ordinal - 1) % 8));
         const aperture = element("span", "cm-vs2-gate__aperture");
         aperture.setAttribute("aria-hidden", "true");
+        const gateIcon = assembledHudArt(`gate-${gate.romRecordIndex}`);
+        if (gateIcon) {
+          aperture.style.backgroundImage = `url("${gateIcon.src}")`;
+          aperture.classList.add('cm-vs2-gate__aperture--complete');
+        }
         button.append(
           aperture,
           element("span", "cm-vs2-gate__ordinal", String(gate.ordinal).padStart(2, "0")),
@@ -382,6 +399,7 @@ export function createHuntLoadoutView({ root, source }) {
         button = element("button", "cm-vs2-loadout__option");
         button.type = "button";
         button.dataset.itemId = item.itemId;
+        appendEquipmentIcon(button, item.itemId);
         button.append(element("span", "cm-vs2-loadout__name", item.displayName));
         // Quantity for the countable classes; durability for the rope.
         const detail = entry.countable
@@ -426,6 +444,7 @@ export function createHuntLoadoutView({ root, source }) {
           button = element("button", "cm-vs2-loadout__option");
           button.type = "button";
           button.dataset.itemId = plugin.itemId;
+          appendEquipmentIcon(button, plugin.itemId);
           button.append(element("span", "cm-vs2-loadout__name", plugin.displayName));
           button.addEventListener("click", () => {
             const current = source.getFrame().huntLoadout.selectedPlugins[position.position];

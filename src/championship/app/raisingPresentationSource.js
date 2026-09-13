@@ -228,6 +228,7 @@ export function createRaisingPresentationSource(app) {
         stats: member.stats ?? null,
         displayCapacityG: /^championship:creature:species-\d{3}$/.test(member.speciesId)
           ? nativeHuntToolSpecies(Number(member.speciesId.slice(-3))).displayCapacityG : null,
+        nativeCageDefinition: app.getRaisingActorFrame?.(member.creatureId)?.cageDefinitionIndex ?? null,
         nativeCageName: (()=>{const definition=app.getRaisingActorFrame?.(member.creatureId)?.cageDefinitionIndex;
           return Number.isInteger(definition)?cageName(definition, getCageDefinition(definition)?.displayName??null):null;})(),
         sprite: spriteProjection(member.spriteResident)

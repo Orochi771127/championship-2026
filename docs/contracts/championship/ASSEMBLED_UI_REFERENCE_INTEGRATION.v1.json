@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "id": "ASSEMBLED_UI_REFERENCE_INTEGRATION.v1",
+  "recordedOn": "2026-09-13",
+  "baseHead": "d0e58dcce79421b17e31ed644c3f3847fee63cab",
+  "assetId": "art:ui:assembled:local-reference:v1",
+  "manifest": "assets/production/internal-faithful-baseline/assembled-ui-v1/manifest.json",
+  "scope": "SELECTED_COMPLETE_CELLS_EXISTING_UI_AND_EVOLUTION_PRESENTATION",
+  "authority": {
+    "gameplay": "EXISTING_APPLICATION_AND_NATIVE_ACTOR_STATE",
+    "ui": "EXISTING_DOM_SCREEN_OWNERS",
+    "animation": "EXISTING_PIXI_APPLICATION_TICKER",
+    "newSourceArt": "LOOPBACK_RESEARCH_ONLY",
+    "publicReleasePermitted": false,
+    "shippingReady": false,
+    "humanApproved": false,
+    "fullOriginalParity": false
+  },
+  "shop": {
+    "join": ["shopRecordIndex", "category", "subcategory_raw_minus_one", "itemIndex"],
+    "evidence": "docs/research/SHOP_REVERSE_CATALOG_VERIFICATION_2026-09-13.md",
+    "huntGoods": 49,
+    "plugins": 30,
+    "cages": 35,
+    "existingCareGoodsPreserved": 4,
+    "newGoodsCreated": 0,
+    "selection": "NANR_SEQUENCE_AND_STATIC_FRAME_INDEX"
+  },
+  "cageEditor": {
+    "definitions": 36,
+    "selection": "training/cage_edit_icon sequence equals definition; frame zero",
+    "geometry": "ASSEMBLED_OAM_EXTENTS_SHARED_IMAGE_ORIGIN_ACROSS_OCCUPIED_SLOTS",
+    "changesActualRanchFloorOrCollision": false
+  },
+  "hud": {
+    "ranch": "training/training_sub sequence 4 frame equals nativeCageDefinition",
+    "gate": "ui/hunt/world/field_image_icon sequence 0 frame equals romRecordIndex; never world ordinal",
+    "memory": "ui/hunt/hunting/memory_card_plate sequences 0 through 7; each frame zero",
+    "layout": "OWNER_APPROVED_PORTRAIT_DOM_ADAPTATION",
+    "japaneseTextBakedIntoControls": false
+  },
+  "evolution": {
+    "source": "OVL18 02111124, 0211CD54, 0211A338, 0211B3A8, 0211DF10; ARM9 02065D3C, 02065DF4, 02065E28, 02065E7C",
+    "ring": "common/e001_evolution_all sequence 1 frame 5; phases 2 through 6; native 1x; below body",
+    "green": "common/e001_ikusei sequence 15; draw advances only in phase 3; native 2x",
+    "burst": "common/e001_evolution_all sequence 0; draw advances in phases 5 through 7; native 2x",
+    "sampling": "NANR_RAW_TICKS_EXISTING_NATIVE_PHASE_COUNTERS; ONE_TICK_BEFORE_DRAW",
+    "alpha": "ring +8/31 in phase 2; burst +8/31 in phase 6; burst -3/31 after phase 7 elapsed 15",
+    "backdrop": "EXISTING_PORTRAIT_ADAPTATION_WITH_SELECTED_ENGLISH_AND_DIGICODE_CELLS",
+    "formCommit": "UNCHANGED_EXISTING_LIFECYCLE_EXIT",
+    "disappearance": "PREVIOUS_PRESENTATION_PRESERVED"
+  },
+  "retained": [
+    "224 character resource roster and existing main/sub animation atlases",
+    "228 existing HUD species bindings",
+    "182 raising feedback cells, 254 Hunt feedback cells, 1231 Battle effect cells",
+    "16 care and 16 toolbar images; existing selected states",
+    "40 cage, 30 Hunt and 11 Battle map records",
+    "Existing calendar/paper, trainer, tutorial and Battle controls and results",
+    "Existing 61 medal images; minor palette difference is not missing artwork"
+  ],
+  "unresolvedSourceBindings": [
+    "Capture-storage orb: candidate digicach cells do not yet prove the collected-object renderer binding",
+    "Recovery stars: candidate sequence 32 lasts 63 native ticks; binding to HP recovery and observed 420 ms feedback not established",
+    "Remaining victory/medal-light/wipe states need exact runtime resource and draw-phase binding"
+  ],
+  "acceptanceBoundary": {
+    "resourceCompleteness": "217 selected PNGs exact byte hashes and OAM dimensions checked",
+    "browser": "LOCAL_CHROMIUM_NORMAL_SHOP_LOADOUT_CAGE_AND_CONTROLLED_LIFECYCLE_RESULT",
+    "physicalIphoneSafari": false,
+    "fullBattleModeWiring": false,
+    "completeCageFloorActorAlignment": false,
+    "publicationPerformed": false
+  }
+}

@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 30,
+    "registeredRuntimeBundles": 31,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -336,6 +336,20 @@
     {
       "assetId": "art:characters:hud:local-reference:v1",
       "manifestPath": "assets/production/internal-faithful-baseline/character-hud-v1/manifest.json",
+      "runtimeEligible": true,
+      "localOnly": true,
+      "runtimeScope": "LOOPBACK_RESEARCH_ONLY",
+      "rightsStatus": "ROM_COPYRIGHTED_REFERENCE",
+      "publicReleasePermitted": false,
+      "shippingReady": false,
+      "humanApproved": false,
+      "productionStatus": "OWNER_AUTHORIZED_LOCAL_REFERENCE",
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME"
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "art:ui:assembled:local-reference:v1",
+      "manifestPath": "assets/production/internal-faithful-baseline/assembled-ui-v1/manifest.json",
       "runtimeEligible": true,
       "localOnly": true,
       "runtimeScope": "LOOPBACK_RESEARCH_ONLY",
