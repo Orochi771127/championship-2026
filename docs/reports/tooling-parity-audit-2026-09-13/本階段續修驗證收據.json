@@ -1,0 +1,243 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-13",
+  "baseHead": "08445ba4629aac5757f31b0c1e68fbf40e7966de",
+  "status": "BOUNDED_REPAIRS_PASSED_REMAINING_SOURCE_GATES_OPEN",
+  "fullTests": {
+    "log": ".tmp/batch-stage-test.log",
+    "passed": 1498,
+    "failed": 0
+  },
+  "portableCi": {
+    "log": ".tmp/batch-stage-ci.log",
+    "passed": 1281,
+    "failed": 0
+  },
+  "huntLoading": {
+    "passed": true,
+    "delayedClock": true,
+    "cancelBeforeDownloadFinishes": true,
+    "reentryBeforeOldDownloadFinishes": true,
+    "timeoutWithoutClockLoss": true,
+    "optionalFeedbackFailure": true,
+    "errors": []
+  },
+  "normalCapture": {
+    "log": ".tmp/batch-stage-capture.log",
+    "passed": true
+  },
+  "controlledOwnedBattle": {
+    "log": ".tmp/batch-stage-battle.log",
+    "passed": true
+  },
+  "tutorial": {
+    "newProductCopy": 37,
+    "bankMessages": 72,
+    "cpuSelectors": 36,
+    "normalOnboardingAccepted": false,
+    "bankOnlyMessages": 14
+  },
+  "playtestBuild": {
+    "buildId": "5bb6263578840f93aec456704221e0e815ce4c8ea52549326db85b4213a191dc",
+    "built": true,
+    "published": false,
+    "validated": true,
+    "fileCount": 6282
+  },
+  "modulePreload": {
+    "modules": 179,
+    "passed": true
+  },
+  "gitDiffCheck": true,
+  "fullOriginalParity": false,
+  "physicalDeviceAccepted": false,
+  "stageComplete": false,
+  "pushed": false,
+  "deployed": false,
+  "remaining": [
+    "完整正常導覽與專用演練流程",
+    "79 項商品圖示及個別使用效果的畫面驗收",
+    "36 籠子及 26 特效逐狀態原作比對",
+    "名單容量計數與三操作",
+    "戰鬥模式與自然育成到參賽",
+    "實體手機及長期遊玩"
+  ],
+  "changedFiles": [
+    {
+      "sha256": "62bcc603ab0e2eea744aab272693a748653d27d6ae9e022ac47dfab120b11e9a",
+      "path": "championship.html"
+    },
+    {
+      "sha256": "1675c8a76bd4f4f9da4e42249bf27450071e7bfe049c8ab89a83bbdf32ec868a",
+      "path": "docs/contracts/championship/WEB_BUILD_INPUTS.v1.json"
+    },
+    {
+      "sha256": "e659ff45b87995267c4ad174b1bce35fc5feb4b542b550c6cae6d327a1c85069",
+      "path": "scripts/build-tutorial-steps.py"
+    },
+    {
+      "sha256": "ed2f6e515fa818829b0b64d351e70411a6681be803698747ee4deea9928ca32f",
+      "path": "scripts/research/build-tutorial-message-coverage.py"
+    },
+    {
+      "sha256": "e83365f0a27d1e670873e38ecdda79af6b2b2b6c4d29ecb7dcc72bb58aa02610",
+      "path": "scripts/research/check-tutorial-message-dispatch-cpu.py"
+    },
+    {
+      "sha256": "bf06f2d0758338711b1fe1985ee70085781076073ebf3dc550735c4de8c46c80",
+      "path": "src/championship/app/championshipClockDriver.js"
+    },
+    {
+      "sha256": "4e6a0c9451ed93abf9f3bac17b9515e93d0c41c0a2c5858ffe541726fa57130d",
+      "path": "src/championship/app/digimonListScreen.js"
+    },
+    {
+      "sha256": "229dc598b0df87fe6e0d284baf750e4c51995187c9115352b0ef2f36514e6026",
+      "path": "src/championship/app/main.js"
+    },
+    {
+      "sha256": "319de66aad80771d44d4e0263f4cb8fced6c36abd2e2988cfa9e5884f48d7b3a",
+      "path": "src/championship/app/nativeTutorialProgression.js"
+    },
+    {
+      "path": "src/championship/app/nativeUiSkin.css",
+      "sha256": "4a1eb2c472b5aaa5cf993b767fc57994a64faeb92a3ff18126e182985b7c3c8b"
+    },
+    {
+      "sha256": "3710187fe64cbe9289be0e899bd144e7df9a17378308940ac6b4941d3e4f43ef",
+      "path": "src/championship/app/tamerInfoScreen.js"
+    },
+    {
+      "sha256": "4ee0b502f308d1cf764be94b3690062813a264bda115c5fac3ffdca75d83e036",
+      "path": "src/championship/app/vs2Screens.js"
+    },
+    {
+      "sha256": "4076278d81cffd0aa373c5798460be7a364d6642ab422747b0f7fd8bff272c95",
+      "path": "src/championship/app/vs2Styles.css"
+    },
+    {
+      "sha256": "0fc9fed06f56e425816f008ae2f91dc911935bc9d061d15f55e155cd9600ab4e",
+      "path": "src/championship/app/vs5Screens.js"
+    },
+    {
+      "sha256": "2fb373414e3104a34c2d25bc1f476baa26d91e32d442614127321e656d4fc947",
+      "path": "src/championship/app/vs5Styles.css"
+    },
+    {
+      "sha256": "bfd1cb54936989c71b05262fe345142bc095d8ac9213dad063f49b8bbf64a88a",
+      "path": "src/championship/cage/cageCatalog.js"
+    },
+    {
+      "sha256": "986d468dda7d4b039586ecbe8d68991d1ed1f706e513e957cc0451a8305eff24",
+      "path": "src/championship/cage/cageEffects.js"
+    },
+    {
+      "sha256": "b89f32d21fc7068a727f16781937e8fbc396fd1f253c13d7333ac609e9453c95",
+      "path": "src/championship/presentation/huntFeedbackArt.js"
+    },
+    {
+      "sha256": "34636cd30e5db4a8c1ed6ed354df92457f0951eb77910a6f485a5844c621286a",
+      "path": "src/championship/presentation/pixiCharacterRuntimeBundle.js"
+    },
+    {
+      "sha256": "596cea4bc1ffbc2443e7b32a3336dd978809cd60c25fc5bc34f1d8da79df7f71",
+      "path": "src/championship/presentation/shopGoodsUiArt.js"
+    },
+    {
+      "sha256": "5ee571b4ddf719006b5b5ad5dab4ddbc947900a1254bdcccf09e6f1686a29186",
+      "path": "src/championship/raising/nativeIndividualProfile.js"
+    },
+    {
+      "sha256": "7b6a99ad95e90aef08b5ad771d675d9c9d7463c0c72098d6f27c4c474e222e9a",
+      "path": "src/championship/text/tutorialMessages.zhHant.js"
+    },
+    {
+      "sha256": "ef9a2b4eb70f08edf63dad64572e039ef48a7445a9a314dac8db57f9b7f10a27",
+      "path": "src/championship/text/uiText.js"
+    },
+    {
+      "sha256": "54578aac86488d41f6f3eec030581007c62fa9f73484bcafbab152d43cb4034f",
+      "path": "src/championship/text/zhHant.js"
+    },
+    {
+      "sha256": "06a1e1d42720a28d5462bd0641af774a2327289c69fc58b6b54196a7b69f993e",
+      "path": "src/data/championship/catalogs/tutorial-steps.r1.json"
+    },
+    {
+      "sha256": "1ddb922cc1f6176df87bf1d282cca336208e1008bd3ad0116af3d7b55802f6d9",
+      "path": "tests/championship-asset-ownership-cases.mjs"
+    },
+    {
+      "sha256": "e222a51dd6726d2765c0915f8d05a16187c1ef6c0f9289f3516eb707c04e25d7",
+      "path": "tests/championship-cage-identity-crosswalk-cases.mjs"
+    },
+    {
+      "sha256": "63e741f9258990420fd943b142d6285187c29c9785196a0005f00940cca14f39",
+      "path": "tests/championship-feedback-art-cases.mjs"
+    },
+    {
+      "sha256": "c5a8b943756c0df11a0a674e99b2d3c0c7e7f1d0ed61d9fb15ea347c2e11caa8",
+      "path": "tests/championship-hunt-loading-browser.cjs"
+    },
+    {
+      "sha256": "d9879fda4e3c3a0240854ff2c6641feae4d06c87adff12c555a6790882df953c",
+      "path": "tests/championship-native-individual-profile-cases.mjs"
+    },
+    {
+      "sha256": "14351d26b2b1e51abaf990acfeadb63395ce00a6e4d499ebfd703492e9c1ede5",
+      "path": "tests/championship-owned-battle-browser.cjs"
+    },
+    {
+      "sha256": "75497762443d609764b8b3d7e82a161c5fdddddf2dde58bdd4a8b39fcece26f3",
+      "path": "tests/championship-round2-clock-driver-cases.mjs"
+    },
+    {
+      "sha256": "d802202e25d02cdffcb5997e9ad79559aa7b7b01accf966383c9ec92826586b0",
+      "path": "tests/championship-tamer-info-cases.mjs"
+    },
+    {
+      "sha256": "34d27191642773c5e3f6b9407cf94683628257d936b32d2ad702d8f6e5115830",
+      "path": "tests/championship-tutorial-cases.mjs"
+    },
+    {
+      "sha256": "92b070b90ae7f148583bd9872e57805b2b35d64da2c5b45e43e63277f397ef63",
+      "path": "tests/championship-vs4-cage-edit-cases.mjs"
+    },
+    {
+      "sha256": "65044cd6431bd09cb9cf8f33e416445b8c8ffedcf38215f7c0aa1e1663d9049e",
+      "path": "tests/championship-zh-hant-views-cases.mjs"
+    },
+    {
+      "sha256": "18e8674752d7c386b2a9b9122fac58564116e229d4f7e0edc9419f2bd72a60ae",
+      "path": "tests/ci-test-scope.v1.json"
+    }
+  ],
+  "allPages": {
+    "captures": 17,
+    "helpTopicsClicked": 68,
+    "scheduleFixturesClicked": 61,
+    "errors": [],
+    "failures": []
+  },
+  "rosterResistanceGraph": {
+    "function": "ARM9 0208890C",
+    "channels": [
+      "HEAT",
+      "COLD",
+      "THUNDER",
+      "LIGHT",
+      "DARK"
+    ],
+    "pixels": 78,
+    "pyghidraRevalidated": true,
+    "focusedTestPassed": true
+  },
+  "artValidation": {
+    "uiScenes": 96,
+    "uiNodes": 1369,
+    "vfxReferenceSystems": 26,
+    "characters": 224,
+    "animationSequences": 11480,
+    "passed": true
+  }
+}

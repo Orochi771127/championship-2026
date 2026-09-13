@@ -37,7 +37,8 @@ test("all cage text identities agree with existing shop and visual identities", 
     const shop = shops.find((record) => record.itemIndex === index);
     assert.equal(row.shopRecordIndex, shop?.shopRecordIndex ?? null);
     assert.equal(definitions[index].shopRecordIndex, row.shopRecordIndex);
-    assert.equal(getCageTraining(index).magnitudeParity, "UNKNOWN_REQUIRES_TRACE");
+    assert.equal(getCageTraining(index).magnitudeParity, "ROM_VERIFIED_NATIVE_COMMAND_WRITERS");
+    assert.equal(getCageTraining(index).magnitudeScope, "NATIVE_PROFILE_TRAINING_COMMANDS_ONLY");
   }
 });
 

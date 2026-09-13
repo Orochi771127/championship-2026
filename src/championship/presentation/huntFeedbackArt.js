@@ -54,7 +54,7 @@ export function validateHuntFeedbackArt(manifest,index){
   return structuredClone(manifest);
 }
 
-export async function loadRegisteredHuntFeedbackArt({PIXI,baseUrl,fetchImpl=globalThis.fetch}){
+export async function loadRegisteredHuntFeedbackArt({PIXI,baseUrl,fetchImpl=globalThis.fetch,kinds=null}){
   if(!isLocalBattleEffectPreview(baseUrl))return null;
   const indexResponse=await fetchImpl(new URL('assets/production/ART_PRODUCTION_INDEX.json',baseUrl));
   if(!indexResponse.ok)throw new Error('HUNT_FEEDBACK_INDEX_UNAVAILABLE');
@@ -65,13 +65,17 @@ export async function loadRegisteredHuntFeedbackArt({PIXI,baseUrl,fetchImpl=glob
   // Hunt field wait for one round trip per cell. Load them all together and
   // assemble the banks from what arrives; failure still unloads everything that
   // loaded and rethrows the first problem, as before.
-  const pending=manifest.banks.flatMap(bank=>bank.cells.map(c=>({bank,c})));
+  // The carried loadout is fixed for this expedition. A rope-only trip cannot
+  // emit mines, bombs or food; downloading all their animation cells delayed
+  // the first visible map. Keep every item/sequence of each carried kind.
+  const selectedBanks=kinds===null?manifest.banks:manifest.banks.filter(bank=>kinds.includes(bank.kind));
+  const pending=selectedBanks.flatMap(bank=>bank.cells.map(c=>({bank,c})));
   const results=await Promise.allSettled(pending.map(async e=>({...e,texture:await PIXI.Assets.load(e.c.src)})));
   for(const r of results)if(r.status==='fulfilled')loaded.push(r.value.c.src);
   try{
     const failed=results.find(r=>r.status==='rejected');
     if(failed)throw failed.reason;
-    for(const bank of manifest.banks)banks.set(`${bank.kind}:${bank.itemIndex}`,{...bank,cells:new Map()});
+    for(const bank of selectedBanks)banks.set(`${bank.kind}:${bank.itemIndex}`,{...bank,cells:new Map()});
     for(const {bank,c,texture} of results.map(r=>r.value)){
       if(texture.width!==c.width||texture.height!==c.height)throw new Error('HUNT_FEEDBACK_DIMENSIONS');
       texture.source.scaleMode='nearest';

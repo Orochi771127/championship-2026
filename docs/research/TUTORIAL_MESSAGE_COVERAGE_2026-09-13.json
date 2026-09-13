@@ -1,0 +1,857 @@
+{
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "bank": "ui/txt/txt_list_txt.dat",
+  "bankEntryCount": 1568,
+  "inventoryCount": 72,
+  "legacySegmentCount": 35,
+  "omittedFromLegacySegment": [
+    1495,
+    1496,
+    1497,
+    1498,
+    1499,
+    1500,
+    1501,
+    1502,
+    1503,
+    1504,
+    1505,
+    1506,
+    1507,
+    1508,
+    1509,
+    1510,
+    1511,
+    1512,
+    1513,
+    1514,
+    1550,
+    1551,
+    1552,
+    1553,
+    1554,
+    1555,
+    1556,
+    1557,
+    1558,
+    1559,
+    1560,
+    1561,
+    1562,
+    1563,
+    1564,
+    1565,
+    1566
+  ],
+  "cpuDispatchedCount": 36,
+  "observedCount": 34,
+  "bankOnlyCount": 14,
+  "normalOnboardingAccepted": false,
+  "fullOriginalProgressionVerified": false,
+  "orderIsControlFlow": false,
+  "scriptWitness": {
+    "privatePath": "R:\\Projects\\Championship2026\\_archive\\lifecycle-two-stage-2026-09-09\\tutorial-script.asm",
+    "sha256": "bbdc605e18a9642950f3b8a1f1badb1c08ed2fb04a14f748dc2e54884781d29d",
+    "entry": "021265B8",
+    "initialRaising": "021267EF",
+    "returnFromHunt": "02127AB6",
+    "returnFromBattle": "02127BD1",
+    "nativeCallCount": 55
+  },
+  "evidenceSources": [
+    "TUTORIAL_MESSAGE_DISPATCH_CPU_2026-09-13.json",
+    "TUTORIAL_CONTINUATION_OBSERVED_2026-09-09.json"
+  ],
+  "messages": [
+    {
+      "textId": 1495,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": 0,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1496,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": 1,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1497,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": 2,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1498,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": 3,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1499,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": 4,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1500,
+      "lineCount": 1,
+      "legacyCursor": null,
+      "raisingSelector": 5,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1501,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": 6,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1502,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": 7,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1503,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": 8,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1504,
+      "lineCount": 1,
+      "legacyCursor": null,
+      "raisingSelector": 9,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1505,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": 10,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1506,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": 11,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1507,
+      "lineCount": 1,
+      "legacyCursor": null,
+      "raisingSelector": 12,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1508,
+      "lineCount": 1,
+      "legacyCursor": null,
+      "raisingSelector": 13,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1509,
+      "lineCount": 1,
+      "legacyCursor": null,
+      "raisingSelector": 14,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1510,
+      "lineCount": 1,
+      "legacyCursor": null,
+      "raisingSelector": 15,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1511,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": 16,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1512,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": 17,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1513,
+      "lineCount": 3,
+      "legacyCursor": null,
+      "raisingSelector": 18,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1514,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": 19,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1515,
+      "lineCount": 2,
+      "legacyCursor": 0,
+      "raisingSelector": 20,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1516,
+      "lineCount": 2,
+      "legacyCursor": 1,
+      "raisingSelector": 21,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1517,
+      "lineCount": 2,
+      "legacyCursor": 2,
+      "raisingSelector": 22,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1518,
+      "lineCount": 2,
+      "legacyCursor": 3,
+      "raisingSelector": 23,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1519,
+      "lineCount": 1,
+      "legacyCursor": 4,
+      "raisingSelector": 24,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1520,
+      "lineCount": 2,
+      "legacyCursor": 5,
+      "raisingSelector": 25,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1521,
+      "lineCount": 2,
+      "legacyCursor": 6,
+      "raisingSelector": 26,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1522,
+      "lineCount": 1,
+      "legacyCursor": 7,
+      "raisingSelector": 27,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1523,
+      "lineCount": 1,
+      "legacyCursor": 8,
+      "raisingSelector": 28,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1524,
+      "lineCount": 1,
+      "legacyCursor": 9,
+      "raisingSelector": 29,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1525,
+      "lineCount": 3,
+      "legacyCursor": 10,
+      "raisingSelector": 30,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1526,
+      "lineCount": 3,
+      "legacyCursor": 11,
+      "raisingSelector": 31,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1527,
+      "lineCount": 2,
+      "legacyCursor": 12,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1528,
+      "lineCount": 2,
+      "legacyCursor": 13,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1529,
+      "lineCount": 2,
+      "legacyCursor": 14,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1530,
+      "lineCount": 2,
+      "legacyCursor": 15,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1531,
+      "lineCount": 1,
+      "legacyCursor": 16,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1532,
+      "lineCount": 1,
+      "legacyCursor": 17,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1533,
+      "lineCount": 1,
+      "legacyCursor": 18,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1534,
+      "lineCount": 1,
+      "legacyCursor": 19,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1535,
+      "lineCount": 1,
+      "legacyCursor": 20,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1536,
+      "lineCount": 2,
+      "legacyCursor": 21,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1537,
+      "lineCount": 3,
+      "legacyCursor": 22,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1538,
+      "lineCount": 2,
+      "legacyCursor": 23,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1539,
+      "lineCount": 2,
+      "legacyCursor": 24,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1540,
+      "lineCount": 2,
+      "legacyCursor": 25,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1541,
+      "lineCount": 2,
+      "legacyCursor": 26,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1542,
+      "lineCount": 1,
+      "legacyCursor": 27,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1543,
+      "lineCount": 2,
+      "legacyCursor": 28,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1544,
+      "lineCount": 1,
+      "legacyCursor": 29,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1545,
+      "lineCount": 2,
+      "legacyCursor": 30,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1546,
+      "lineCount": 1,
+      "legacyCursor": 31,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1547,
+      "lineCount": 2,
+      "legacyCursor": 32,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1548,
+      "lineCount": 2,
+      "legacyCursor": 33,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1549,
+      "lineCount": 2,
+      "legacyCursor": 34,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "ORIGINAL_RUN_MESSAGE_OBSERVED"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1550,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1551,
+      "lineCount": 1,
+      "legacyCursor": null,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1552,
+      "lineCount": 1,
+      "legacyCursor": null,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1553,
+      "lineCount": 1,
+      "legacyCursor": null,
+      "raisingSelector": 32,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1554,
+      "lineCount": 1,
+      "legacyCursor": null,
+      "raisingSelector": 33,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1555,
+      "lineCount": 1,
+      "legacyCursor": null,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1556,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1557,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1558,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1559,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1560,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1561,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1562,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1563,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1564,
+      "lineCount": 3,
+      "legacyCursor": null,
+      "raisingSelector": 34,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1565,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": 35,
+      "evidence": [
+        "TEXT_BANK_PRESENT",
+        "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    },
+    {
+      "textId": 1566,
+      "lineCount": 2,
+      "legacyCursor": null,
+      "raisingSelector": null,
+      "evidence": [
+        "TEXT_BANK_PRESENT"
+      ],
+      "advancePredicate": "UNKNOWN_REQUIRES_TRACE"
+    }
+  ]
+}

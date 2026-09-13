@@ -48,7 +48,7 @@ import { mountBattleAudioPresentation } from '../presentation/battleAudioPresent
 // the geometry is original-created, exactly as the Gate world sphere is.
 import { BATTLE_MENU_LABELS, speciesName, raisingDisplayName, starterName, titleEventText } from "../text/zhHant.js";
 import { createBattleSelectView, createBattleFieldView, createBattleResultView } from "./vs5Screens.js";
-import { loadPixiCharacterRuntimeBundle } from "../presentation/pixiCharacterRuntimeBundle.js";
+import { loadPixiCharacterRuntimeBundle, createPixiAssetScope } from "../presentation/pixiCharacterRuntimeBundle.js";
 import { applyQaUnlock, qaUnlockRequested } from "./qaUnlock.js";
 import { listChampionshipGates } from "../gate/gateCatalog.js";
 import { createChampionshipStatusBar } from "./championshipStatusBar.js";
@@ -212,8 +212,9 @@ function note(message) {
   if (titleNote) titleNote.textContent = uiText(message);
 }
 
-async function ensurePixiStage(canvasHost) {
+async function ensurePixiStage(canvasHost, signal) {
   const PIXI = await import(PIXI_V8_MODULE_URL);
+  signal?.throwIfAborted();
   if (!pixiStage) pixiStage = await createChampionshipPixiStage({ PIXI, canvasHost });
   else pixiStage.attach(canvasHost);
   if (!clockDriver) {
@@ -221,7 +222,10 @@ async function ensurePixiStage(canvasHost) {
       app, ticker: pixiStage.app.ticker,
       isVisible: () => document.visibilityState === "visible",
       isContextLost: () => pixiStage.contextLost,
-      isModalOpen: () => toolbar?.getOpenMenuId() != null
+      isModalOpen: () => toolbar?.getOpenMenuId() != null,
+      // Browser asset latency is outside the native clock. A screen publication
+      // can precede its awaited mount; discard that interval without catch-up.
+      isSceneReady: () => mountedScreen === app.getScreen() && view?.isPlayable !== false
     });
     pixiStage.onContextLost(() => clockDriver.reset());
     pixiStage.onContextRestored(() => {
@@ -236,6 +240,7 @@ async function ensurePixiStage(canvasHost) {
 
 async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main']) {
   if(sides.includes('sub')&&!isLocalBattleEffectPreview(location.href))return null;
+  const PIXI = createPixiAssetScope(stage.PIXI);
   try {
     if (!CHARACTER_REVIEW_RUNTIME_URL) {
       // The roster module carries the battle character geometry and sizing --
@@ -250,11 +255,11 @@ async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main'
       const manifestUrl = new URL(LICENSED_CHARACTER_MANIFEST, location.href).href;
       const response = await fetch(manifestUrl);
       if (!response.ok) throw new Error(`CHARACTER_MANIFEST_HTTP_${response.status}`);
-      return await loadLicensedCharacterRoster({ PIXI: stage.PIXI, speciesIds,sides,
+      return await loadLicensedCharacterRoster({ PIXI, speciesIds,sides,
         productionIndex, manifestUrl, manifest: await response.json() });
     }
     return await loadPixiCharacterRuntimeBundle({
-      PIXI: stage.PIXI,
+      PIXI,
       runtimeUrl: CHARACTER_REVIEW_RUNTIME_URL,
       cachePrefix: "m201-internal-review:"
     });
@@ -280,7 +285,7 @@ async function loadOptionalHuntFieldArt(stage) {
     if (!response.ok) throw new Error(`HUNT_ART_MANIFEST_HTTP_${response.status}`);
     const manifest = validateRuntimeMapArtBundle(await response.json());
     if (!manifest.fields.some((field) => field.fieldId === wanted)) return null;
-    return createRuntimeMapArtFieldLoader({ PIXI: stage.PIXI }).load({ manifest, fieldId: wanted });
+    return createRuntimeMapArtFieldLoader({ PIXI: createPixiAssetScope(stage.PIXI) }).load({ manifest, fieldId: wanted });
   } catch (error) {
     console.warn(`CHAMPIONSHIP_HUNT_ART_FALLBACK: ${error.message}`);
     return null;
@@ -374,6 +379,7 @@ function fieldFallback(host, error) {
   host.append(message);
   console.warn(`CHAMPIONSHIP_PIXI_FALLBACK: ${error.message}`);
   return Object.freeze({
+    isPlayable: false,
     render() {},
     getDiagnostics() {
       return Object.freeze({ renderer: "DOM_FALLBACK", applicationCount: 0, ticker: "NONE", threeUsed: false });
@@ -455,20 +461,46 @@ async function mountHuntField() {
   return createHuntFieldView({
     root,
     source: expeditionSource,
-    async mountField({ host, source: fieldSource, onActorFrame }) {
+    async mountField({ host, source: fieldSource, onActorFrame, signal }) {
       let characterBundle = null;
       let fieldArt = null;
       let feedbackArt = null;
+      const owned = new Set();
+      const releaseArt = () => {
+        for (const art of owned) void Promise.resolve(art?.dispose()).catch(error => console.warn('Hunt art cleanup failed', error));
+        owned.clear();
+      };
+      const own = promise => promise.then(art => {
+        if (signal.aborted) { void Promise.resolve(art?.dispose()).catch(error => console.warn('Hunt art cleanup failed', error)); return null; }
+        if (art) owned.add(art);
+        return art;
+      });
+      signal.addEventListener('abort', releaseArt, { once: true });
       try {
-        const stage = await ensurePixiStage(host);
-        characterBundle = await loadOptionalCharacterReview(stage,
-          fieldSource.field.getView({ viewportWidth: stage.app.screen.width, viewportHeight: stage.app.screen.height })
-            .wildCreatures.map((wild) => wild.speciesId));
-        fieldArt = await loadOptionalHuntFieldArt(stage);
-        try{feedbackArt=await loadRegisteredHuntFeedbackArt({PIXI:stage.PIXI,baseUrl:location.href});}
-        catch(error){console.warn('Hunt tool reference art unavailable',error);}
+        const stage = await ensurePixiStage(host, signal);
+        signal.throwIfAborted();
+        const speciesIds = fieldSource.field.getView({
+          viewportWidth: stage.app.screen.width, viewportHeight: stage.app.screen.height
+        }).wildCreatures.map((wild) => wild.speciesId);
+        const loaded = await Promise.allSettled([
+          own(loadOptionalCharacterReview(stage, speciesIds)),
+          own(loadOptionalHuntFieldArt(stage)),
+          own(loadRegisteredHuntFeedbackArt({PIXI:createPixiAssetScope(stage.PIXI),baseUrl:location.href,
+            kinds:fieldSource.getFrame().huntField.toolState?.tools.map(tool=>tool.subtype??tool.id)??null}))
+        ]);
+        [characterBundle, fieldArt, feedbackArt] = loaded.map((result) =>
+          result.status === 'fulfilled' ? result.value : null);
+        for (const result of loaded) if (result.status === 'rejected') {
+          console.warn('Hunt art unavailable', result.reason);
+        }
+        // An exit received during loading must not attach the abandoned field
+        // or start its native actor ticker. The serial mount then returns Home.
+        if (signal.aborted || app.getScreen() !== CHAMPIONSHIP_SCREENS.HUNT_FIELD) {
+          releaseArt();
+          return { isPlayable: false, render() {}, dispose() {} };
+        }
         delete root.dataset.fieldFallback;
-        return await mountHuntFieldPixiPresentation({
+        const scene = await mountHuntFieldPixiPresentation({
           onActorFrame,
           stage,
           source: fieldSource,
@@ -480,12 +512,14 @@ async function mountHuntField() {
             console.warn(message);
           }
         });
+        // The mounted scene now owns these bundles and releases them on exit.
+        owned.clear();
+        return scene;
       } catch (error) {
-        void feedbackArt?.dispose();
-        void fieldArt?.dispose();
-        void characterBundle?.dispose();
+        releaseArt();
+        if (signal.aborted) return { isPlayable: false, render() {}, dispose() {} };
         return fieldFallback(host, error);
-      }
+      } finally { signal.removeEventListener('abort', releaseArt); }
     }
   });
 }
@@ -608,7 +642,7 @@ async function mountBattleField() {
     root,
     frame: { ...source.getFrame(), rosterEvidence: activeRuntime.rosterEvidence() },
     hudArt,
-    mountField({ host }) {
+    mountField({ host,onReady,onError }) {
       let disposed = false;
       let scene = null;
       let vfxOverlay = null;
@@ -620,27 +654,17 @@ async function mountBattleField() {
         try {
           const stage = await ensurePixiStage(host);
           if (disposed) return;
-          fieldArt = await loadOptionalBattleFieldArt(stage, source);
-          if (disposed) {
-            await fieldArt?.dispose();
-            return;
-          }
-          characterRoster = await loadOptionalCharacterReview(stage,
-            source.getFrame().combatants.filter(entry => entry.present && entry.speciesId).map(entry => entry.speciesId));
-          if (disposed) {
-            await fieldArt?.dispose();
-            await characterRoster?.dispose();
-            return;
-          }
-          delete root.dataset.fieldFallback;
-          try {
-            effectArt = await loadRegisteredBattleEffectArt({PIXI:stage.PIXI, baseUrl:location.href});
-          } catch (error) {
-            console.warn(`CHAMPIONSHIP_BATTLE_EFFECT_ART_FALLBACK: ${error.message}`);
-          }
+          const loaded=await Promise.allSettled([
+            loadOptionalBattleFieldArt(stage,source),
+            loadOptionalCharacterReview(stage,source.getFrame().combatants.filter(entry=>entry.present&&entry.speciesId).map(entry=>entry.speciesId)),
+            loadRegisteredBattleEffectArt({PIXI:stage.PIXI,baseUrl:location.href})
+          ]);
+          [fieldArt,characterRoster,effectArt]=loaded.map(result=>result.status==='fulfilled'?result.value:null);
+          for(const result of loaded)if(result.status==='rejected')console.warn('Battle art unavailable',result.reason);
           if (disposed) {
             await effectArt?.dispose();await fieldArt?.dispose();await characterRoster?.dispose();return;
           }
+          delete root.dataset.fieldFallback;
           vfxOverlay = await loadOptionalBattleVfxOverlay(host, stage, source, () => scene?.getFocusPlacement(), () => scene?.getFieldPlacement());
           if (disposed) {
             await vfxOverlay?.dispose();await effectArt?.dispose();await fieldArt?.dispose();await characterRoster?.dispose();return;
@@ -653,6 +677,7 @@ async function mountBattleField() {
             scene?.dispose();
             return;
           }
+          onReady?.();
         } catch (error) {
           void fieldArt?.dispose();
           void characterRoster?.dispose();
@@ -663,6 +688,7 @@ async function mountBattleField() {
           // This scene owns the callback on the shared ticker. A failed mount
           // cannot claim a running or naturally resolving battle.
           root.dataset.fieldFallback = "true";
+          onError?.();
           console.warn(error);
         }
       })();
@@ -759,6 +785,9 @@ async function mountCurrentScreen() {
 
   try {
     const target = app.getScreen();
+    // Multiple publications may queue behind one async mount. Re-check after
+    // acquiring it, so a queued HUD update cannot remount the same scene.
+    if (target === mountedScreen) return;
     view?.dispose?.();
     view = null;
     if (target !== CHAMPIONSHIP_SCREENS.RAISING_HOME) raisingSource = null;
@@ -805,13 +834,14 @@ async function mountCurrentScreen() {
       onExit() { app.leaveScreen(); }
     });
     else if (target === CHAMPIONSHIP_SCREENS.TAMER_INFO) {
-      // Only two of the eight fields have a traced source; the view draws the
-      // rest at their ROM width rather than inventing a number.
+      // OVL4 0210BB9C reads rank capacity/slots and lifetime completion counters.
       const shopFrame = app.getShopFrame?.() ?? null;
       view = createTamerInfoView({
         root,
         walletBits: Number.isInteger(shopFrame?.bits) ? shopFrame.bits : null,
-        rosterCount: projectRoster().length,
+        titleCount:app.getBattleBadges().filter(id=>id>=0&&id<61).length,
+        registeredCount:app.getDatabaseFrame().registeredCount,
+        battleRecord:app.getTitleProgress().record??null,
         tamerRank: app.getTamerRank?.() ?? null,
         trainerName:app.getOpeningState()?.trainerName??null,
         onExit() { app.leaveScreen(); }
@@ -973,7 +1003,7 @@ async function returnToTitle() {
  * The roster the Digimon screen lists.
  *
  * One instance resolver shared with Raising Home. Species classification is
- * catalog data; persistent player HP/TP and growth profiles remain unknown.
+ * catalog data; individual values come from the canonical persisted profile.
  */
 function projectRoster() {
   const snapshot = app.getSnapshot();
@@ -991,7 +1021,7 @@ function projectRoster() {
         ...identity,
         // Eggs (0..7) and the four past the run carry no name; absent, not blank.
         speciesName: speciesName(identity.recordIndex, NAME_BY_INDEX.get(identity.recordIndex) ?? null),
-        familyOrdinal: identity.familyBits === 0 ? null : Math.log2(identity.familyBits) + 1
+        familyOrdinal: identity.familyBits === 0 ? null : 32-Math.clz32((identity.familyBits & -identity.familyBits)>>>0)
       }
     };
   };

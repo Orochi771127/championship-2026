@@ -1,0 +1,3888 @@
+{
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "function": "02088480",
+  "evidence": "BOUNDED_ORIGINAL_CPU_UI_ARGUMENT_REPLAY",
+  "seams": [
+    "synthetic screen and individual buffers",
+    "formatting, text and rendering stubs",
+    "Q12 divider adapter; win rate excluded"
+  ],
+  "cases": [
+    {
+      "speciesIndex": 0,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 230,
+        "currentTp": 10,
+        "capacityG": 12,
+        "attack": 11,
+        "defense": 10,
+        "wisdom": 11,
+        "speed": 10,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 230,
+        "maxTp": 10
+      }
+    },
+    {
+      "speciesIndex": 1,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 210,
+        "currentTp": 11,
+        "capacityG": 12,
+        "attack": 11,
+        "defense": 11,
+        "wisdom": 10,
+        "speed": 11,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 210,
+        "maxTp": 11
+      }
+    },
+    {
+      "speciesIndex": 2,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 220,
+        "currentTp": 10,
+        "capacityG": 12,
+        "attack": 10,
+        "defense": 11,
+        "wisdom": 11,
+        "speed": 10,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 220,
+        "maxTp": 10
+      }
+    },
+    {
+      "speciesIndex": 3,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 230,
+        "currentTp": 10,
+        "capacityG": 12,
+        "attack": 10,
+        "defense": 11,
+        "wisdom": 11,
+        "speed": 11,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 230,
+        "maxTp": 10
+      }
+    },
+    {
+      "speciesIndex": 4,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 230,
+        "currentTp": 10,
+        "capacityG": 12,
+        "attack": 11,
+        "defense": 10,
+        "wisdom": 11,
+        "speed": 11,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 230,
+        "maxTp": 10
+      }
+    },
+    {
+      "speciesIndex": 5,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 230,
+        "currentTp": 11,
+        "capacityG": 12,
+        "attack": 10,
+        "defense": 11,
+        "wisdom": 10,
+        "speed": 11,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 230,
+        "maxTp": 11
+      }
+    },
+    {
+      "speciesIndex": 6,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 210,
+        "currentTp": 10,
+        "capacityG": 12,
+        "attack": 11,
+        "defense": 11,
+        "wisdom": 11,
+        "speed": 11,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 210,
+        "maxTp": 10
+      }
+    },
+    {
+      "speciesIndex": 7,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 210,
+        "currentTp": 11,
+        "capacityG": 12,
+        "attack": 10,
+        "defense": 10,
+        "wisdom": 10,
+        "speed": 11,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 210,
+        "maxTp": 11
+      }
+    },
+    {
+      "speciesIndex": 8,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 200,
+        "currentTp": 10,
+        "capacityG": 12,
+        "attack": 10,
+        "defense": 10,
+        "wisdom": 11,
+        "speed": 10,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 200,
+        "maxTp": 10
+      }
+    },
+    {
+      "speciesIndex": 9,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 220,
+        "currentTp": 10,
+        "capacityG": 12,
+        "attack": 11,
+        "defense": 10,
+        "wisdom": 11,
+        "speed": 11,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 220,
+        "maxTp": 10
+      }
+    },
+    {
+      "speciesIndex": 10,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 200,
+        "currentTp": 11,
+        "capacityG": 12,
+        "attack": 10,
+        "defense": 10,
+        "wisdom": 11,
+        "speed": 11,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 200,
+        "maxTp": 11
+      }
+    },
+    {
+      "speciesIndex": 11,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 230,
+        "currentTp": 10,
+        "capacityG": 12,
+        "attack": 11,
+        "defense": 10,
+        "wisdom": 10,
+        "speed": 10,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 230,
+        "maxTp": 10
+      }
+    },
+    {
+      "speciesIndex": 12,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 220,
+        "currentTp": 11,
+        "capacityG": 12,
+        "attack": 11,
+        "defense": 11,
+        "wisdom": 10,
+        "speed": 10,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 220,
+        "maxTp": 11
+      }
+    },
+    {
+      "speciesIndex": 13,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 210,
+        "currentTp": 11,
+        "capacityG": 12,
+        "attack": 10,
+        "defense": 10,
+        "wisdom": 10,
+        "speed": 11,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 210,
+        "maxTp": 11
+      }
+    },
+    {
+      "speciesIndex": 14,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 290,
+        "currentTp": 11,
+        "capacityG": 12,
+        "attack": 10,
+        "defense": 11,
+        "wisdom": 11,
+        "speed": 10,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 290,
+        "maxTp": 11
+      }
+    },
+    {
+      "speciesIndex": 15,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 200,
+        "currentTp": 11,
+        "capacityG": 12,
+        "attack": 10,
+        "defense": 10,
+        "wisdom": 10,
+        "speed": 11,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 200,
+        "maxTp": 11
+      }
+    },
+    {
+      "speciesIndex": 16,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 230,
+        "currentTp": 11,
+        "capacityG": 12,
+        "attack": 10,
+        "defense": 10,
+        "wisdom": 10,
+        "speed": 10,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 230,
+        "maxTp": 11
+      }
+    },
+    {
+      "speciesIndex": 17,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 300,
+        "currentTp": 10,
+        "capacityG": 12,
+        "attack": 11,
+        "defense": 10,
+        "wisdom": 11,
+        "speed": 10,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 300,
+        "maxTp": 10
+      }
+    },
+    {
+      "speciesIndex": 18,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 210,
+        "currentTp": 11,
+        "capacityG": 12,
+        "attack": 11,
+        "defense": 11,
+        "wisdom": 11,
+        "speed": 11,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 210,
+        "maxTp": 11
+      }
+    },
+    {
+      "speciesIndex": 19,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 200,
+        "currentTp": 11,
+        "capacityG": 12,
+        "attack": 10,
+        "defense": 10,
+        "wisdom": 10,
+        "speed": 10,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 200,
+        "maxTp": 11
+      }
+    },
+    {
+      "speciesIndex": 20,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 290,
+        "currentTp": 18,
+        "capacityG": 14,
+        "attack": 18,
+        "defense": 19,
+        "wisdom": 14,
+        "speed": 14,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 290,
+        "maxTp": 18
+      }
+    },
+    {
+      "speciesIndex": 21,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 370,
+        "currentTp": 14,
+        "capacityG": 12,
+        "attack": 18,
+        "defense": 19,
+        "wisdom": 19,
+        "speed": 18,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 370,
+        "maxTp": 14
+      }
+    },
+    {
+      "speciesIndex": 22,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 310,
+        "currentTp": 19,
+        "capacityG": 12,
+        "attack": 19,
+        "defense": 19,
+        "wisdom": 18,
+        "speed": 18,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 310,
+        "maxTp": 19
+      }
+    },
+    {
+      "speciesIndex": 23,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 360,
+        "currentTp": 14,
+        "capacityG": 12,
+        "attack": 19,
+        "defense": 18,
+        "wisdom": 18,
+        "speed": 18,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 360,
+        "maxTp": 14
+      }
+    },
+    {
+      "speciesIndex": 24,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 390,
+        "currentTp": 19,
+        "capacityG": 14,
+        "attack": 14,
+        "defense": 19,
+        "wisdom": 19,
+        "speed": 19,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 390,
+        "maxTp": 19
+      }
+    },
+    {
+      "speciesIndex": 25,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 370,
+        "currentTp": 14,
+        "capacityG": 12,
+        "attack": 15,
+        "defense": 15,
+        "wisdom": 15,
+        "speed": 18,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 370,
+        "maxTp": 14
+      }
+    },
+    {
+      "speciesIndex": 26,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 280,
+        "currentTp": 18,
+        "capacityG": 12,
+        "attack": 15,
+        "defense": 22,
+        "wisdom": 22,
+        "speed": 14,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 280,
+        "maxTp": 18
+      }
+    },
+    {
+      "speciesIndex": 27,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 380,
+        "currentTp": 15,
+        "capacityG": 12,
+        "attack": 19,
+        "defense": 19,
+        "wisdom": 19,
+        "speed": 18,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 380,
+        "maxTp": 15
+      }
+    },
+    {
+      "speciesIndex": 28,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 390,
+        "currentTp": 14,
+        "capacityG": 12,
+        "attack": 19,
+        "defense": 19,
+        "wisdom": 19,
+        "speed": 19,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 390,
+        "maxTp": 14
+      }
+    },
+    {
+      "speciesIndex": 29,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 380,
+        "currentTp": 18,
+        "capacityG": 12,
+        "attack": 19,
+        "defense": 19,
+        "wisdom": 15,
+        "speed": 19,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 380,
+        "maxTp": 18
+      }
+    },
+    {
+      "speciesIndex": 30,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 390,
+        "currentTp": 18,
+        "capacityG": 12,
+        "attack": 18,
+        "defense": 18,
+        "wisdom": 18,
+        "speed": 19,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 390,
+        "maxTp": 18
+      }
+    },
+    {
+      "speciesIndex": 31,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 460,
+        "currentTp": 18,
+        "capacityG": 12,
+        "attack": 22,
+        "defense": 22,
+        "wisdom": 19,
+        "speed": 22,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 460,
+        "maxTp": 18
+      }
+    },
+    {
+      "speciesIndex": 32,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 360,
+        "currentTp": 22,
+        "capacityG": 12,
+        "attack": 22,
+        "defense": 19,
+        "wisdom": 23,
+        "speed": 18,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 360,
+        "maxTp": 22
+      }
+    },
+    {
+      "speciesIndex": 33,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 370,
+        "currentTp": 23,
+        "capacityG": 12,
+        "attack": 19,
+        "defense": 23,
+        "wisdom": 22,
+        "speed": 22,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 370,
+        "maxTp": 23
+      }
+    },
+    {
+      "speciesIndex": 34,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 640,
+        "currentTp": 32,
+        "capacityG": 14,
+        "attack": 32,
+        "defense": 32,
+        "wisdom": 30,
+        "speed": 33,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 640,
+        "maxTp": 32
+      }
+    },
+    {
+      "speciesIndex": 35,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 640,
+        "currentTp": 32,
+        "capacityG": 16,
+        "attack": 31,
+        "defense": 41,
+        "wisdom": 31,
+        "speed": 27,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 640,
+        "maxTp": 32
+      }
+    },
+    {
+      "speciesIndex": 36,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 600,
+        "currentTp": 32,
+        "capacityG": 14,
+        "attack": 31,
+        "defense": 26,
+        "wisdom": 27,
+        "speed": 31,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 600,
+        "maxTp": 32
+      }
+    },
+    {
+      "speciesIndex": 37,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 540,
+        "currentTp": 26,
+        "capacityG": 14,
+        "attack": 26,
+        "defense": 26,
+        "wisdom": 26,
+        "speed": 33,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 540,
+        "maxTp": 26
+      }
+    },
+    {
+      "speciesIndex": 38,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 620,
+        "currentTp": 41,
+        "capacityG": 14,
+        "attack": 33,
+        "defense": 31,
+        "wisdom": 33,
+        "speed": 40,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 620,
+        "maxTp": 41
+      }
+    },
+    {
+      "speciesIndex": 39,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 670,
+        "currentTp": 33,
+        "capacityG": 16,
+        "attack": 32,
+        "defense": 30,
+        "wisdom": 32,
+        "speed": 32,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 670,
+        "maxTp": 33
+      }
+    },
+    {
+      "speciesIndex": 40,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 640,
+        "currentTp": 31,
+        "capacityG": 14,
+        "attack": 31,
+        "defense": 30,
+        "wisdom": 33,
+        "speed": 40,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 640,
+        "maxTp": 31
+      }
+    },
+    {
+      "speciesIndex": 41,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 520,
+        "currentTp": 30,
+        "capacityG": 14,
+        "attack": 30,
+        "defense": 38,
+        "wisdom": 32,
+        "speed": 26,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 520,
+        "maxTp": 30
+      }
+    },
+    {
+      "speciesIndex": 42,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 640,
+        "currentTp": 26,
+        "capacityG": 14,
+        "attack": 39,
+        "defense": 31,
+        "wisdom": 27,
+        "speed": 32,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 640,
+        "maxTp": 26
+      }
+    },
+    {
+      "speciesIndex": 43,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 530,
+        "currentTp": 27,
+        "capacityG": 14,
+        "attack": 31,
+        "defense": 27,
+        "wisdom": 26,
+        "speed": 30,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 530,
+        "maxTp": 27
+      }
+    },
+    {
+      "speciesIndex": 44,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 530,
+        "currentTp": 33,
+        "capacityG": 14,
+        "attack": 27,
+        "defense": 33,
+        "wisdom": 27,
+        "speed": 27,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 530,
+        "maxTp": 33
+      }
+    },
+    {
+      "speciesIndex": 45,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 810,
+        "currentTp": 27,
+        "capacityG": 16,
+        "attack": 30,
+        "defense": 30,
+        "wisdom": 26,
+        "speed": 27,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 810,
+        "maxTp": 27
+      }
+    },
+    {
+      "speciesIndex": 46,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 640,
+        "currentTp": 27,
+        "capacityG": 14,
+        "attack": 33,
+        "defense": 27,
+        "wisdom": 27,
+        "speed": 33,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 640,
+        "maxTp": 27
+      }
+    },
+    {
+      "speciesIndex": 47,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 660,
+        "currentTp": 30,
+        "capacityG": 14,
+        "attack": 31,
+        "defense": 30,
+        "wisdom": 39,
+        "speed": 27,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 660,
+        "maxTp": 30
+      }
+    },
+    {
+      "speciesIndex": 48,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 640,
+        "currentTp": 30,
+        "capacityG": 14,
+        "attack": 30,
+        "defense": 30,
+        "wisdom": 33,
+        "speed": 39,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 640,
+        "maxTp": 30
+      }
+    },
+    {
+      "speciesIndex": 49,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 670,
+        "currentTp": 30,
+        "capacityG": 14,
+        "attack": 32,
+        "defense": 38,
+        "wisdom": 40,
+        "speed": 30,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 670,
+        "maxTp": 30
+      }
+    },
+    {
+      "speciesIndex": 50,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 540,
+        "currentTp": 26,
+        "capacityG": 14,
+        "attack": 33,
+        "defense": 39,
+        "wisdom": 27,
+        "speed": 31,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 540,
+        "maxTp": 26
+      }
+    },
+    {
+      "speciesIndex": 51,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 650,
+        "currentTp": 30,
+        "capacityG": 14,
+        "attack": 26,
+        "defense": 41,
+        "wisdom": 41,
+        "speed": 30,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 650,
+        "maxTp": 30
+      }
+    },
+    {
+      "speciesIndex": 52,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 630,
+        "currentTp": 26,
+        "capacityG": 14,
+        "attack": 33,
+        "defense": 40,
+        "wisdom": 26,
+        "speed": 39,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 630,
+        "maxTp": 26
+      }
+    },
+    {
+      "speciesIndex": 53,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 620,
+        "currentTp": 27,
+        "capacityG": 12,
+        "attack": 26,
+        "defense": 30,
+        "wisdom": 31,
+        "speed": 31,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 620,
+        "maxTp": 27
+      }
+    },
+    {
+      "speciesIndex": 54,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 660,
+        "currentTp": 27,
+        "capacityG": 14,
+        "attack": 26,
+        "defense": 27,
+        "wisdom": 32,
+        "speed": 27,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 660,
+        "maxTp": 27
+      }
+    },
+    {
+      "speciesIndex": 55,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 540,
+        "currentTp": 30,
+        "capacityG": 12,
+        "attack": 31,
+        "defense": 27,
+        "wisdom": 39,
+        "speed": 32,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 540,
+        "maxTp": 30
+      }
+    },
+    {
+      "speciesIndex": 56,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 540,
+        "currentTp": 33,
+        "capacityG": 14,
+        "attack": 26,
+        "defense": 27,
+        "wisdom": 32,
+        "speed": 40,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 540,
+        "maxTp": 33
+      }
+    },
+    {
+      "speciesIndex": 57,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 540,
+        "currentTp": 41,
+        "capacityG": 14,
+        "attack": 30,
+        "defense": 32,
+        "wisdom": 32,
+        "speed": 38,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 540,
+        "maxTp": 41
+      }
+    },
+    {
+      "speciesIndex": 58,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 600,
+        "currentTp": 26,
+        "capacityG": 14,
+        "attack": 26,
+        "defense": 27,
+        "wisdom": 30,
+        "speed": 32,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 600,
+        "maxTp": 26
+      }
+    },
+    {
+      "speciesIndex": 59,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 600,
+        "currentTp": 33,
+        "capacityG": 14,
+        "attack": 32,
+        "defense": 31,
+        "wisdom": 31,
+        "speed": 31,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 600,
+        "maxTp": 33
+      }
+    },
+    {
+      "speciesIndex": 60,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 670,
+        "currentTp": 26,
+        "capacityG": 14,
+        "attack": 26,
+        "defense": 32,
+        "wisdom": 26,
+        "speed": 26,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 670,
+        "maxTp": 26
+      }
+    },
+    {
+      "speciesIndex": 61,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 830,
+        "currentTp": 41,
+        "capacityG": 14,
+        "attack": 33,
+        "defense": 40,
+        "wisdom": 31,
+        "speed": 30,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 830,
+        "maxTp": 41
+      }
+    },
+    {
+      "speciesIndex": 62,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 660,
+        "currentTp": 41,
+        "capacityG": 14,
+        "attack": 30,
+        "defense": 26,
+        "wisdom": 30,
+        "speed": 38,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 660,
+        "maxTp": 41
+      }
+    },
+    {
+      "speciesIndex": 63,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 930,
+        "currentTp": 39,
+        "capacityG": 14,
+        "attack": 46,
+        "defense": 41,
+        "wisdom": 40,
+        "speed": 41,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 930,
+        "maxTp": 39
+      }
+    },
+    {
+      "speciesIndex": 64,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 760,
+        "currentTp": 30,
+        "capacityG": 14,
+        "attack": 38,
+        "defense": 41,
+        "wisdom": 41,
+        "speed": 33,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 760,
+        "maxTp": 30
+      }
+    },
+    {
+      "speciesIndex": 65,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 770,
+        "currentTp": 38,
+        "capacityG": 14,
+        "attack": 31,
+        "defense": 40,
+        "wisdom": 40,
+        "speed": 47,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 770,
+        "maxTp": 38
+      }
+    },
+    {
+      "speciesIndex": 66,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 770,
+        "currentTp": 31,
+        "capacityG": 14,
+        "attack": 39,
+        "defense": 40,
+        "wisdom": 32,
+        "speed": 33,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 770,
+        "maxTp": 31
+      }
+    },
+    {
+      "speciesIndex": 67,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 650,
+        "currentTp": 38,
+        "capacityG": 14,
+        "attack": 31,
+        "defense": 31,
+        "wisdom": 32,
+        "speed": 39,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 650,
+        "maxTp": 38
+      }
+    },
+    {
+      "speciesIndex": 68,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 650,
+        "currentTp": 33,
+        "capacityG": 14,
+        "attack": 30,
+        "defense": 31,
+        "wisdom": 30,
+        "speed": 26,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 650,
+        "maxTp": 33
+      }
+    },
+    {
+      "speciesIndex": 69,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 550,
+        "currentTp": 30,
+        "capacityG": 12,
+        "attack": 32,
+        "defense": 30,
+        "wisdom": 33,
+        "speed": 40,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 550,
+        "maxTp": 30
+      }
+    },
+    {
+      "speciesIndex": 70,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 820,
+        "currentTp": 32,
+        "capacityG": 14,
+        "attack": 38,
+        "defense": 31,
+        "wisdom": 31,
+        "speed": 46,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 820,
+        "maxTp": 32
+      }
+    },
+    {
+      "speciesIndex": 71,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 990,
+        "currentTp": 32,
+        "capacityG": 14,
+        "attack": 41,
+        "defense": 30,
+        "wisdom": 32,
+        "speed": 40,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 990,
+        "maxTp": 32
+      }
+    },
+    {
+      "speciesIndex": 72,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1160,
+        "currentTp": 47,
+        "capacityG": 16,
+        "attack": 48,
+        "defense": 81,
+        "wisdom": 48,
+        "speed": 39,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1160,
+        "maxTp": 47
+      }
+    },
+    {
+      "speciesIndex": 73,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1580,
+        "currentTp": 54,
+        "capacityG": 16,
+        "attack": 69,
+        "defense": 69,
+        "wisdom": 56,
+        "speed": 48,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1580,
+        "maxTp": 54
+      }
+    },
+    {
+      "speciesIndex": 74,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 970,
+        "currentTp": 69,
+        "capacityG": 14,
+        "attack": 41,
+        "defense": 48,
+        "wisdom": 78,
+        "speed": 46,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 970,
+        "maxTp": 69
+      }
+    },
+    {
+      "speciesIndex": 75,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1660,
+        "currentTp": 47,
+        "capacityG": 16,
+        "attack": 48,
+        "defense": 47,
+        "wisdom": 40,
+        "speed": 39,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1660,
+        "maxTp": 47
+      }
+    },
+    {
+      "speciesIndex": 76,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1080,
+        "currentTp": 67,
+        "capacityG": 16,
+        "attack": 70,
+        "defense": 48,
+        "wisdom": 49,
+        "speed": 66,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1080,
+        "maxTp": 67
+      }
+    },
+    {
+      "speciesIndex": 77,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1120,
+        "currentTp": 66,
+        "capacityG": 14,
+        "attack": 58,
+        "defense": 59,
+        "wisdom": 83,
+        "speed": 59,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1120,
+        "maxTp": 66
+      }
+    },
+    {
+      "speciesIndex": 78,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1150,
+        "currentTp": 46,
+        "capacityG": 16,
+        "attack": 58,
+        "defense": 59,
+        "wisdom": 46,
+        "speed": 55,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1150,
+        "maxTp": 46
+      }
+    },
+    {
+      "speciesIndex": 79,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1430,
+        "currentTp": 66,
+        "capacityG": 16,
+        "attack": 68,
+        "defense": 47,
+        "wisdom": 48,
+        "speed": 80,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1430,
+        "maxTp": 66
+      }
+    },
+    {
+      "speciesIndex": 80,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1410,
+        "currentTp": 56,
+        "capacityG": 16,
+        "attack": 66,
+        "defense": 79,
+        "wisdom": 59,
+        "speed": 56,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1410,
+        "maxTp": 56
+      }
+    },
+    {
+      "speciesIndex": 81,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1190,
+        "currentTp": 79,
+        "capacityG": 16,
+        "attack": 54,
+        "defense": 49,
+        "wisdom": 49,
+        "speed": 80,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1190,
+        "maxTp": 79
+      }
+    },
+    {
+      "speciesIndex": 82,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1330,
+        "currentTp": 66,
+        "capacityG": 16,
+        "attack": 71,
+        "defense": 55,
+        "wisdom": 49,
+        "speed": 68,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1330,
+        "maxTp": 66
+      }
+    },
+    {
+      "speciesIndex": 83,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1380,
+        "currentTp": 71,
+        "capacityG": 16,
+        "attack": 69,
+        "defense": 57,
+        "wisdom": 46,
+        "speed": 69,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1380,
+        "maxTp": 71
+      }
+    },
+    {
+      "speciesIndex": 84,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1660,
+        "currentTp": 49,
+        "capacityG": 18,
+        "attack": 54,
+        "defense": 80,
+        "wisdom": 46,
+        "speed": 41,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1660,
+        "maxTp": 49
+      }
+    },
+    {
+      "speciesIndex": 85,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 970,
+        "currentTp": 48,
+        "capacityG": 16,
+        "attack": 47,
+        "defense": 46,
+        "wisdom": 46,
+        "speed": 48,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 970,
+        "maxTp": 48
+      }
+    },
+    {
+      "speciesIndex": 86,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 940,
+        "currentTp": 55,
+        "capacityG": 16,
+        "attack": 56,
+        "defense": 55,
+        "wisdom": 56,
+        "speed": 78,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 940,
+        "maxTp": 55
+      }
+    },
+    {
+      "speciesIndex": 87,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1570,
+        "currentTp": 47,
+        "capacityG": 16,
+        "attack": 71,
+        "defense": 57,
+        "wisdom": 46,
+        "speed": 48,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1570,
+        "maxTp": 47
+      }
+    },
+    {
+      "speciesIndex": 88,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 980,
+        "currentTp": 58,
+        "capacityG": 16,
+        "attack": 55,
+        "defense": 68,
+        "wisdom": 54,
+        "speed": 57,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 980,
+        "maxTp": 58
+      }
+    },
+    {
+      "speciesIndex": 89,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1120,
+        "currentTp": 58,
+        "capacityG": 16,
+        "attack": 67,
+        "defense": 66,
+        "wisdom": 59,
+        "speed": 55,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1120,
+        "maxTp": 58
+      }
+    },
+    {
+      "speciesIndex": 90,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 930,
+        "currentTp": 49,
+        "capacityG": 16,
+        "attack": 47,
+        "defense": 46,
+        "wisdom": 39,
+        "speed": 66,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 930,
+        "maxTp": 49
+      }
+    },
+    {
+      "speciesIndex": 91,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1160,
+        "currentTp": 58,
+        "capacityG": 18,
+        "attack": 69,
+        "defense": 47,
+        "wisdom": 38,
+        "speed": 56,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1160,
+        "maxTp": 58
+      }
+    },
+    {
+      "speciesIndex": 92,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1150,
+        "currentTp": 47,
+        "capacityG": 16,
+        "attack": 70,
+        "defense": 46,
+        "wisdom": 56,
+        "speed": 67,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1150,
+        "maxTp": 47
+      }
+    },
+    {
+      "speciesIndex": 93,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 950,
+        "currentTp": 39,
+        "capacityG": 16,
+        "attack": 67,
+        "defense": 48,
+        "wisdom": 41,
+        "speed": 41,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 950,
+        "maxTp": 39
+      }
+    },
+    {
+      "speciesIndex": 94,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 960,
+        "currentTp": 69,
+        "capacityG": 14,
+        "attack": 46,
+        "defense": 67,
+        "wisdom": 59,
+        "speed": 81,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 960,
+        "maxTp": 69
+      }
+    },
+    {
+      "speciesIndex": 95,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 980,
+        "currentTp": 48,
+        "capacityG": 16,
+        "attack": 56,
+        "defense": 80,
+        "wisdom": 40,
+        "speed": 39,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 980,
+        "maxTp": 48
+      }
+    },
+    {
+      "speciesIndex": 96,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1660,
+        "currentTp": 54,
+        "capacityG": 16,
+        "attack": 71,
+        "defense": 70,
+        "wisdom": 49,
+        "speed": 46,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1660,
+        "maxTp": 54
+      }
+    },
+    {
+      "speciesIndex": 97,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1360,
+        "currentTp": 71,
+        "capacityG": 18,
+        "attack": 70,
+        "defense": 58,
+        "wisdom": 48,
+        "speed": 58,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1360,
+        "maxTp": 71
+      }
+    },
+    {
+      "speciesIndex": 98,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 950,
+        "currentTp": 41,
+        "capacityG": 14,
+        "attack": 46,
+        "defense": 41,
+        "wisdom": 41,
+        "speed": 38,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 950,
+        "maxTp": 41
+      }
+    },
+    {
+      "speciesIndex": 99,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 790,
+        "currentTp": 46,
+        "capacityG": 14,
+        "attack": 46,
+        "defense": 78,
+        "wisdom": 59,
+        "speed": 55,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 790,
+        "maxTp": 46
+      }
+    },
+    {
+      "speciesIndex": 100,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1340,
+        "currentTp": 70,
+        "capacityG": 16,
+        "attack": 67,
+        "defense": 66,
+        "wisdom": 46,
+        "speed": 58,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1340,
+        "maxTp": 70
+      }
+    },
+    {
+      "speciesIndex": 101,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1160,
+        "currentTp": 39,
+        "capacityG": 16,
+        "attack": 71,
+        "defense": 47,
+        "wisdom": 30,
+        "speed": 47,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1160,
+        "maxTp": 39
+      }
+    },
+    {
+      "speciesIndex": 102,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1140,
+        "currentTp": 39,
+        "capacityG": 16,
+        "attack": 57,
+        "defense": 49,
+        "wisdom": 46,
+        "speed": 47,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1140,
+        "maxTp": 39
+      }
+    },
+    {
+      "speciesIndex": 103,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 790,
+        "currentTp": 54,
+        "capacityG": 16,
+        "attack": 41,
+        "defense": 48,
+        "wisdom": 55,
+        "speed": 54,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 790,
+        "maxTp": 54
+      }
+    },
+    {
+      "speciesIndex": 104,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1410,
+        "currentTp": 57,
+        "capacityG": 18,
+        "attack": 67,
+        "defense": 57,
+        "wisdom": 66,
+        "speed": 59,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1410,
+        "maxTp": 57
+      }
+    },
+    {
+      "speciesIndex": 105,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1100,
+        "currentTp": 68,
+        "capacityG": 16,
+        "attack": 54,
+        "defense": 59,
+        "wisdom": 69,
+        "speed": 56,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1100,
+        "maxTp": 68
+      }
+    },
+    {
+      "speciesIndex": 106,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1590,
+        "currentTp": 54,
+        "capacityG": 16,
+        "attack": 58,
+        "defense": 59,
+        "wisdom": 49,
+        "speed": 47,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1590,
+        "maxTp": 54
+      }
+    },
+    {
+      "speciesIndex": 107,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 790,
+        "currentTp": 40,
+        "capacityG": 18,
+        "attack": 59,
+        "defense": 80,
+        "wisdom": 47,
+        "speed": 41,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 790,
+        "maxTp": 40
+      }
+    },
+    {
+      "speciesIndex": 108,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 790,
+        "currentTp": 47,
+        "capacityG": 14,
+        "attack": 40,
+        "defense": 49,
+        "wisdom": 40,
+        "speed": 39,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 790,
+        "maxTp": 47
+      }
+    },
+    {
+      "speciesIndex": 109,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 770,
+        "currentTp": 46,
+        "capacityG": 12,
+        "attack": 47,
+        "defense": 47,
+        "wisdom": 47,
+        "speed": 59,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 770,
+        "maxTp": 46
+      }
+    },
+    {
+      "speciesIndex": 110,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1410,
+        "currentTp": 57,
+        "capacityG": 16,
+        "attack": 54,
+        "defense": 58,
+        "wisdom": 58,
+        "speed": 69,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1410,
+        "maxTp": 57
+      }
+    },
+    {
+      "speciesIndex": 111,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1160,
+        "currentTp": 58,
+        "capacityG": 16,
+        "attack": 46,
+        "defense": 48,
+        "wisdom": 41,
+        "speed": 46,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1160,
+        "maxTp": 58
+      }
+    },
+    {
+      "speciesIndex": 112,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1140,
+        "currentTp": 68,
+        "capacityG": 16,
+        "attack": 71,
+        "defense": 48,
+        "wisdom": 57,
+        "speed": 79,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1140,
+        "maxTp": 68
+      }
+    },
+    {
+      "speciesIndex": 113,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1080,
+        "currentTp": 67,
+        "capacityG": 16,
+        "attack": 56,
+        "defense": 70,
+        "wisdom": 49,
+        "speed": 55,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1080,
+        "maxTp": 67
+      }
+    },
+    {
+      "speciesIndex": 114,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1350,
+        "currentTp": 38,
+        "capacityG": 16,
+        "attack": 41,
+        "defense": 68,
+        "wisdom": 38,
+        "speed": 38,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1350,
+        "maxTp": 38
+      }
+    },
+    {
+      "speciesIndex": 115,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1140,
+        "currentTp": 41,
+        "capacityG": 16,
+        "attack": 57,
+        "defense": 71,
+        "wisdom": 46,
+        "speed": 40,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1140,
+        "maxTp": 41
+      }
+    },
+    {
+      "speciesIndex": 116,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1410,
+        "currentTp": 59,
+        "capacityG": 16,
+        "attack": 58,
+        "defense": 58,
+        "wisdom": 58,
+        "speed": 49,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1410,
+        "maxTp": 59
+      }
+    },
+    {
+      "speciesIndex": 117,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1170,
+        "currentTp": 59,
+        "capacityG": 16,
+        "attack": 58,
+        "defense": 47,
+        "wisdom": 55,
+        "speed": 66,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1170,
+        "maxTp": 59
+      }
+    },
+    {
+      "speciesIndex": 118,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 960,
+        "currentTp": 67,
+        "capacityG": 16,
+        "attack": 58,
+        "defense": 46,
+        "wisdom": 54,
+        "speed": 55,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 960,
+        "maxTp": 67
+      }
+    },
+    {
+      "speciesIndex": 119,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 950,
+        "currentTp": 71,
+        "capacityG": 16,
+        "attack": 58,
+        "defense": 48,
+        "wisdom": 38,
+        "speed": 48,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 950,
+        "maxTp": 71
+      }
+    },
+    {
+      "speciesIndex": 120,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1180,
+        "currentTp": 40,
+        "capacityG": 16,
+        "attack": 49,
+        "defense": 40,
+        "wisdom": 39,
+        "speed": 46,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1180,
+        "maxTp": 40
+      }
+    },
+    {
+      "speciesIndex": 121,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1610,
+        "currentTp": 57,
+        "capacityG": 16,
+        "attack": 67,
+        "defense": 71,
+        "wisdom": 49,
+        "speed": 57,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1610,
+        "maxTp": 57
+      }
+    },
+    {
+      "speciesIndex": 122,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1360,
+        "currentTp": 57,
+        "capacityG": 16,
+        "attack": 48,
+        "defense": 54,
+        "wisdom": 40,
+        "speed": 46,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1360,
+        "maxTp": 57
+      }
+    },
+    {
+      "speciesIndex": 123,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1610,
+        "currentTp": 78,
+        "capacityG": 16,
+        "attack": 80,
+        "defense": 71,
+        "wisdom": 54,
+        "speed": 92,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1610,
+        "maxTp": 78
+      }
+    },
+    {
+      "speciesIndex": 124,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1810,
+        "currentTp": 68,
+        "capacityG": 16,
+        "attack": 66,
+        "defense": 81,
+        "wisdom": 55,
+        "speed": 56,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1810,
+        "maxTp": 68
+      }
+    },
+    {
+      "speciesIndex": 125,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1670,
+        "currentTp": 83,
+        "capacityG": 18,
+        "attack": 71,
+        "defense": 67,
+        "wisdom": 68,
+        "speed": 70,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1670,
+        "maxTp": 83
+      }
+    },
+    {
+      "speciesIndex": 126,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1320,
+        "currentTp": 80,
+        "capacityG": 16,
+        "attack": 69,
+        "defense": 68,
+        "wisdom": 80,
+        "speed": 82,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1320,
+        "maxTp": 80
+      }
+    },
+    {
+      "speciesIndex": 127,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1110,
+        "currentTp": 69,
+        "capacityG": 16,
+        "attack": 68,
+        "defense": 55,
+        "wisdom": 69,
+        "speed": 55,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1110,
+        "maxTp": 69
+      }
+    },
+    {
+      "speciesIndex": 128,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1170,
+        "currentTp": 68,
+        "capacityG": 16,
+        "attack": 69,
+        "defense": 55,
+        "wisdom": 47,
+        "speed": 70,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1170,
+        "maxTp": 68
+      }
+    },
+    {
+      "speciesIndex": 129,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1080,
+        "currentTp": 48,
+        "capacityG": 16,
+        "attack": 57,
+        "defense": 46,
+        "wisdom": 38,
+        "speed": 38,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1080,
+        "maxTp": 48
+      }
+    },
+    {
+      "speciesIndex": 130,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 980,
+        "currentTp": 71,
+        "capacityG": 14,
+        "attack": 49,
+        "defense": 55,
+        "wisdom": 83,
+        "speed": 46,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 980,
+        "maxTp": 71
+      }
+    },
+    {
+      "speciesIndex": 131,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1190,
+        "currentTp": 48,
+        "capacityG": 16,
+        "attack": 71,
+        "defense": 49,
+        "wisdom": 41,
+        "speed": 47,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1190,
+        "maxTp": 48
+      }
+    },
+    {
+      "speciesIndex": 132,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1100,
+        "currentTp": 58,
+        "capacityG": 16,
+        "attack": 57,
+        "defense": 49,
+        "wisdom": 47,
+        "speed": 67,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1100,
+        "maxTp": 58
+      }
+    },
+    {
+      "speciesIndex": 133,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1110,
+        "currentTp": 48,
+        "capacityG": 16,
+        "attack": 56,
+        "defense": 66,
+        "wisdom": 38,
+        "speed": 47,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1110,
+        "maxTp": 48
+      }
+    },
+    {
+      "speciesIndex": 134,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1340,
+        "currentTp": 54,
+        "capacityG": 16,
+        "attack": 66,
+        "defense": 68,
+        "wisdom": 57,
+        "speed": 82,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1340,
+        "maxTp": 54
+      }
+    },
+    {
+      "speciesIndex": 135,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1600,
+        "currentTp": 46,
+        "capacityG": 16,
+        "attack": 66,
+        "defense": 71,
+        "wisdom": 41,
+        "speed": 48,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1600,
+        "maxTp": 46
+      }
+    },
+    {
+      "speciesIndex": 136,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2420,
+        "currentTp": 108,
+        "capacityG": 24,
+        "attack": 121,
+        "defense": 132,
+        "wisdom": 108,
+        "speed": 102,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2420,
+        "maxTp": 108
+      }
+    },
+    {
+      "speciesIndex": 137,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2110,
+        "currentTp": 105,
+        "capacityG": 32,
+        "attack": 105,
+        "defense": 135,
+        "wisdom": 92,
+        "speed": 83,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2110,
+        "maxTp": 105
+      }
+    },
+    {
+      "speciesIndex": 138,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2050,
+        "currentTp": 107,
+        "capacityG": 18,
+        "attack": 123,
+        "defense": 121,
+        "wisdom": 108,
+        "speed": 91,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2050,
+        "maxTp": 107
+      }
+    },
+    {
+      "speciesIndex": 139,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2770,
+        "currentTp": 94,
+        "capacityG": 18,
+        "attack": 119,
+        "defense": 103,
+        "wisdom": 122,
+        "speed": 118,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2770,
+        "maxTp": 94
+      }
+    },
+    {
+      "speciesIndex": 140,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2160,
+        "currentTp": 132,
+        "capacityG": 18,
+        "attack": 108,
+        "defense": 122,
+        "wisdom": 137,
+        "speed": 121,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2160,
+        "maxTp": 132
+      }
+    },
+    {
+      "speciesIndex": 141,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2070,
+        "currentTp": 105,
+        "capacityG": 24,
+        "attack": 117,
+        "defense": 118,
+        "wisdom": 107,
+        "speed": 102,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2070,
+        "maxTp": 105
+      }
+    },
+    {
+      "speciesIndex": 142,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2460,
+        "currentTp": 135,
+        "capacityG": 18,
+        "attack": 118,
+        "defense": 102,
+        "wisdom": 132,
+        "speed": 135,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2460,
+        "maxTp": 135
+      }
+    },
+    {
+      "speciesIndex": 143,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1800,
+        "currentTp": 91,
+        "capacityG": 18,
+        "attack": 95,
+        "defense": 78,
+        "wisdom": 95,
+        "speed": 80,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1800,
+        "maxTp": 91
+      }
+    },
+    {
+      "speciesIndex": 144,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2180,
+        "currentTp": 136,
+        "capacityG": 18,
+        "attack": 106,
+        "defense": 118,
+        "wisdom": 133,
+        "speed": 133,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2180,
+        "maxTp": 136
+      }
+    },
+    {
+      "speciesIndex": 145,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2740,
+        "currentTp": 80,
+        "capacityG": 24,
+        "attack": 83,
+        "defense": 93,
+        "wisdom": 103,
+        "speed": 78,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2740,
+        "maxTp": 80
+      }
+    },
+    {
+      "speciesIndex": 146,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2170,
+        "currentTp": 91,
+        "capacityG": 18,
+        "attack": 119,
+        "defense": 81,
+        "wisdom": 82,
+        "speed": 82,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2170,
+        "maxTp": 91
+      }
+    },
+    {
+      "speciesIndex": 147,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2700,
+        "currentTp": 105,
+        "capacityG": 20,
+        "attack": 118,
+        "defense": 132,
+        "wisdom": 105,
+        "speed": 95,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2700,
+        "maxTp": 105
+      }
+    },
+    {
+      "speciesIndex": 148,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2060,
+        "currentTp": 122,
+        "capacityG": 24,
+        "attack": 138,
+        "defense": 92,
+        "wisdom": 92,
+        "speed": 103,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2060,
+        "maxTp": 122
+      }
+    },
+    {
+      "speciesIndex": 149,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2160,
+        "currentTp": 118,
+        "capacityG": 18,
+        "attack": 122,
+        "defense": 121,
+        "wisdom": 91,
+        "speed": 102,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2160,
+        "maxTp": 118
+      }
+    },
+    {
+      "speciesIndex": 150,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1860,
+        "currentTp": 92,
+        "capacityG": 18,
+        "attack": 93,
+        "defense": 90,
+        "wisdom": 106,
+        "speed": 95,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1860,
+        "maxTp": 92
+      }
+    },
+    {
+      "speciesIndex": 151,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2660,
+        "currentTp": 82,
+        "capacityG": 24,
+        "attack": 90,
+        "defense": 82,
+        "wisdom": 81,
+        "speed": 83,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2660,
+        "maxTp": 82
+      }
+    },
+    {
+      "speciesIndex": 152,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2380,
+        "currentTp": 82,
+        "capacityG": 20,
+        "attack": 120,
+        "defense": 134,
+        "wisdom": 94,
+        "speed": 78,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2380,
+        "maxTp": 82
+      }
+    },
+    {
+      "speciesIndex": 153,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2360,
+        "currentTp": 94,
+        "capacityG": 18,
+        "attack": 135,
+        "defense": 121,
+        "wisdom": 81,
+        "speed": 93,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2360,
+        "maxTp": 94
+      }
+    },
+    {
+      "speciesIndex": 154,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2070,
+        "currentTp": 105,
+        "capacityG": 18,
+        "attack": 108,
+        "defense": 93,
+        "wisdom": 108,
+        "speed": 122,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2070,
+        "maxTp": 105
+      }
+    },
+    {
+      "speciesIndex": 155,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1870,
+        "currentTp": 108,
+        "capacityG": 18,
+        "attack": 102,
+        "defense": 92,
+        "wisdom": 78,
+        "speed": 121,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1870,
+        "maxTp": 108
+      }
+    },
+    {
+      "speciesIndex": 156,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1820,
+        "currentTp": 91,
+        "capacityG": 18,
+        "attack": 121,
+        "defense": 94,
+        "wisdom": 81,
+        "speed": 95,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1820,
+        "maxTp": 91
+      }
+    },
+    {
+      "speciesIndex": 157,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2650,
+        "currentTp": 107,
+        "capacityG": 20,
+        "attack": 118,
+        "defense": 138,
+        "wisdom": 94,
+        "speed": 91,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2650,
+        "maxTp": 107
+      }
+    },
+    {
+      "speciesIndex": 158,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1900,
+        "currentTp": 119,
+        "capacityG": 12,
+        "attack": 106,
+        "defense": 95,
+        "wisdom": 134,
+        "speed": 135,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1900,
+        "maxTp": 119
+      }
+    },
+    {
+      "speciesIndex": 159,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1660,
+        "currentTp": 91,
+        "capacityG": 14,
+        "attack": 94,
+        "defense": 83,
+        "wisdom": 92,
+        "speed": 136,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1660,
+        "maxTp": 91
+      }
+    },
+    {
+      "speciesIndex": 160,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1580,
+        "currentTp": 91,
+        "capacityG": 14,
+        "attack": 108,
+        "defense": 82,
+        "wisdom": 123,
+        "speed": 78,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1580,
+        "maxTp": 91
+      }
+    },
+    {
+      "speciesIndex": 161,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 3030,
+        "currentTp": 80,
+        "capacityG": 32,
+        "attack": 121,
+        "defense": 105,
+        "wisdom": 102,
+        "speed": 78,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 3030,
+        "maxTp": 80
+      }
+    },
+    {
+      "speciesIndex": 162,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2640,
+        "currentTp": 118,
+        "capacityG": 18,
+        "attack": 117,
+        "defense": 123,
+        "wisdom": 132,
+        "speed": 134,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2640,
+        "maxTp": 118
+      }
+    },
+    {
+      "speciesIndex": 163,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2420,
+        "currentTp": 134,
+        "capacityG": 18,
+        "attack": 121,
+        "defense": 104,
+        "wisdom": 120,
+        "speed": 152,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2420,
+        "maxTp": 134
+      }
+    },
+    {
+      "speciesIndex": 164,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1590,
+        "currentTp": 118,
+        "capacityG": 12,
+        "attack": 135,
+        "defense": 138,
+        "wisdom": 91,
+        "speed": 132,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1590,
+        "maxTp": 118
+      }
+    },
+    {
+      "speciesIndex": 165,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 3000,
+        "currentTp": 79,
+        "capacityG": 24,
+        "attack": 102,
+        "defense": 106,
+        "wisdom": 78,
+        "speed": 80,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 3000,
+        "maxTp": 79
+      }
+    },
+    {
+      "speciesIndex": 166,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2470,
+        "currentTp": 104,
+        "capacityG": 18,
+        "attack": 134,
+        "defense": 137,
+        "wisdom": 92,
+        "speed": 122,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2470,
+        "maxTp": 104
+      }
+    },
+    {
+      "speciesIndex": 167,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2450,
+        "currentTp": 102,
+        "capacityG": 18,
+        "attack": 134,
+        "defense": 119,
+        "wisdom": 103,
+        "speed": 120,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2450,
+        "maxTp": 102
+      }
+    },
+    {
+      "speciesIndex": 168,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2780,
+        "currentTp": 103,
+        "capacityG": 20,
+        "attack": 138,
+        "defense": 136,
+        "wisdom": 102,
+        "speed": 104,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2780,
+        "maxTp": 103
+      }
+    },
+    {
+      "speciesIndex": 169,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2650,
+        "currentTp": 104,
+        "capacityG": 20,
+        "attack": 132,
+        "defense": 135,
+        "wisdom": 105,
+        "speed": 105,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2650,
+        "maxTp": 104
+      }
+    },
+    {
+      "speciesIndex": 170,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2050,
+        "currentTp": 92,
+        "capacityG": 18,
+        "attack": 102,
+        "defense": 118,
+        "wisdom": 92,
+        "speed": 95,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2050,
+        "maxTp": 92
+      }
+    },
+    {
+      "speciesIndex": 171,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2740,
+        "currentTp": 95,
+        "capacityG": 18,
+        "attack": 107,
+        "defense": 102,
+        "wisdom": 94,
+        "speed": 94,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2740,
+        "maxTp": 95
+      }
+    },
+    {
+      "speciesIndex": 172,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2160,
+        "currentTp": 149,
+        "capacityG": 14,
+        "attack": 133,
+        "defense": 106,
+        "wisdom": 123,
+        "speed": 149,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2160,
+        "maxTp": 149
+      }
+    },
+    {
+      "speciesIndex": 173,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2650,
+        "currentTp": 121,
+        "capacityG": 18,
+        "attack": 133,
+        "defense": 134,
+        "wisdom": 117,
+        "speed": 119,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2650,
+        "maxTp": 121
+      }
+    },
+    {
+      "speciesIndex": 174,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2110,
+        "currentTp": 118,
+        "capacityG": 18,
+        "attack": 119,
+        "defense": 120,
+        "wisdom": 106,
+        "speed": 136,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2110,
+        "maxTp": 118
+      }
+    },
+    {
+      "speciesIndex": 175,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1880,
+        "currentTp": 149,
+        "capacityG": 14,
+        "attack": 104,
+        "defense": 104,
+        "wisdom": 138,
+        "speed": 135,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1880,
+        "maxTp": 149
+      }
+    },
+    {
+      "speciesIndex": 176,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2090,
+        "currentTp": 137,
+        "capacityG": 18,
+        "attack": 119,
+        "defense": 107,
+        "wisdom": 138,
+        "speed": 121,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2090,
+        "maxTp": 137
+      }
+    },
+    {
+      "speciesIndex": 177,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 3050,
+        "currentTp": 93,
+        "capacityG": 18,
+        "attack": 122,
+        "defense": 103,
+        "wisdom": 90,
+        "speed": 92,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 3050,
+        "maxTp": 93
+      }
+    },
+    {
+      "speciesIndex": 178,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2380,
+        "currentTp": 117,
+        "capacityG": 18,
+        "attack": 133,
+        "defense": 123,
+        "wisdom": 104,
+        "speed": 122,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2380,
+        "maxTp": 117
+      }
+    },
+    {
+      "speciesIndex": 179,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2400,
+        "currentTp": 119,
+        "capacityG": 18,
+        "attack": 136,
+        "defense": 119,
+        "wisdom": 106,
+        "speed": 121,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2400,
+        "maxTp": 119
+      }
+    },
+    {
+      "speciesIndex": 180,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 3040,
+        "currentTp": 147,
+        "capacityG": 24,
+        "attack": 152,
+        "defense": 135,
+        "wisdom": 147,
+        "speed": 167,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 3040,
+        "maxTp": 147
+      }
+    },
+    {
+      "speciesIndex": 181,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 3250,
+        "currentTp": 138,
+        "capacityG": 24,
+        "attack": 149,
+        "defense": 164,
+        "wisdom": 152,
+        "speed": 132,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 3250,
+        "maxTp": 138
+      }
+    },
+    {
+      "speciesIndex": 182,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 3050,
+        "currentTp": 153,
+        "capacityG": 18,
+        "attack": 132,
+        "defense": 132,
+        "wisdom": 122,
+        "speed": 118,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 3050,
+        "maxTp": 153
+      }
+    },
+    {
+      "speciesIndex": 183,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2640,
+        "currentTp": 148,
+        "capacityG": 18,
+        "attack": 135,
+        "defense": 118,
+        "wisdom": 138,
+        "speed": 138,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2640,
+        "maxTp": 148
+      }
+    },
+    {
+      "speciesIndex": 184,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 1910,
+        "currentTp": 91,
+        "capacityG": 16,
+        "attack": 102,
+        "defense": 135,
+        "wisdom": 106,
+        "speed": 119,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 1910,
+        "maxTp": 91
+      }
+    },
+    {
+      "speciesIndex": 185,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2110,
+        "currentTp": 118,
+        "capacityG": 18,
+        "attack": 119,
+        "defense": 117,
+        "wisdom": 108,
+        "speed": 138,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2110,
+        "maxTp": 118
+      }
+    },
+    {
+      "speciesIndex": 186,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2760,
+        "currentTp": 135,
+        "capacityG": 16,
+        "attack": 133,
+        "defense": 135,
+        "wisdom": 90,
+        "speed": 108,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2760,
+        "maxTp": 135
+      }
+    },
+    {
+      "speciesIndex": 187,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 4720,
+        "currentTp": 185,
+        "capacityG": 24,
+        "attack": 204,
+        "defense": 224,
+        "wisdom": 165,
+        "speed": 167,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 4720,
+        "maxTp": 185
+      }
+    },
+    {
+      "speciesIndex": 188,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 3290,
+        "currentTp": 185,
+        "capacityG": 18,
+        "attack": 199,
+        "defense": 186,
+        "wisdom": 206,
+        "speed": 222,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 3290,
+        "maxTp": 185
+      }
+    },
+    {
+      "speciesIndex": 189,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 4400,
+        "currentTp": 184,
+        "capacityG": 32,
+        "attack": 218,
+        "defense": 223,
+        "wisdom": 188,
+        "speed": 186,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 4400,
+        "maxTp": 184
+      }
+    },
+    {
+      "speciesIndex": 190,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 3670,
+        "currentTp": 162,
+        "capacityG": 24,
+        "attack": 206,
+        "defense": 216,
+        "wisdom": 164,
+        "speed": 199,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 3670,
+        "maxTp": 162
+      }
+    },
+    {
+      "speciesIndex": 191,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 3960,
+        "currentTp": 181,
+        "capacityG": 20,
+        "attack": 217,
+        "defense": 221,
+        "wisdom": 186,
+        "speed": 183,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 3960,
+        "maxTp": 181
+      }
+    },
+    {
+      "speciesIndex": 192,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 3400,
+        "currentTp": 187,
+        "capacityG": 20,
+        "attack": 187,
+        "defense": 168,
+        "wisdom": 170,
+        "speed": 181,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 3400,
+        "maxTp": 187
+      }
+    },
+    {
+      "speciesIndex": 193,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 3290,
+        "currentTp": 167,
+        "capacityG": 20,
+        "attack": 184,
+        "defense": 182,
+        "wisdom": 182,
+        "speed": 204,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 3290,
+        "maxTp": 167
+      }
+    },
+    {
+      "speciesIndex": 194,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 4100,
+        "currentTp": 199,
+        "capacityG": 24,
+        "attack": 198,
+        "defense": 185,
+        "wisdom": 187,
+        "speed": 224,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 4100,
+        "maxTp": 199
+      }
+    },
+    {
+      "speciesIndex": 195,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 5170,
+        "currentTp": 260,
+        "capacityG": 32,
+        "attack": 253,
+        "defense": 238,
+        "wisdom": 206,
+        "speed": 273,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 5170,
+        "maxTp": 260
+      }
+    },
+    {
+      "speciesIndex": 196,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 4050,
+        "currentTp": 147,
+        "capacityG": 20,
+        "attack": 205,
+        "defense": 149,
+        "wisdom": 148,
+        "speed": 147,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 4050,
+        "maxTp": 147
+      }
+    },
+    {
+      "speciesIndex": 197,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 3340,
+        "currentTp": 180,
+        "capacityG": 24,
+        "attack": 224,
+        "defense": 202,
+        "wisdom": 188,
+        "speed": 149,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 3340,
+        "maxTp": 180
+      }
+    },
+    {
+      "speciesIndex": 198,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 4120,
+        "currentTp": 185,
+        "capacityG": 20,
+        "attack": 203,
+        "defense": 200,
+        "wisdom": 198,
+        "speed": 202,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 4120,
+        "maxTp": 185
+      }
+    },
+    {
+      "speciesIndex": 199,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 4420,
+        "currentTp": 198,
+        "capacityG": 20,
+        "attack": 218,
+        "defense": 205,
+        "wisdom": 222,
+        "speed": 198,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 4420,
+        "maxTp": 198
+      }
+    },
+    {
+      "speciesIndex": 200,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 3700,
+        "currentTp": 218,
+        "capacityG": 20,
+        "attack": 205,
+        "defense": 199,
+        "wisdom": 219,
+        "speed": 202,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 3700,
+        "maxTp": 218
+      }
+    },
+    {
+      "speciesIndex": 201,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 3410,
+        "currentTp": 180,
+        "capacityG": 18,
+        "attack": 198,
+        "defense": 164,
+        "wisdom": 185,
+        "speed": 205,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 3410,
+        "maxTp": 180
+      }
+    },
+    {
+      "speciesIndex": 202,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 3730,
+        "currentTp": 203,
+        "capacityG": 20,
+        "attack": 166,
+        "defense": 183,
+        "wisdom": 200,
+        "speed": 166,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 3730,
+        "maxTp": 203
+      }
+    },
+    {
+      "speciesIndex": 203,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 3080,
+        "currentTp": 187,
+        "capacityG": 18,
+        "attack": 199,
+        "defense": 180,
+        "wisdom": 148,
+        "speed": 184,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 3080,
+        "maxTp": 187
+      }
+    },
+    {
+      "speciesIndex": 204,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 4460,
+        "currentTp": 168,
+        "capacityG": 32,
+        "attack": 218,
+        "defense": 223,
+        "wisdom": 188,
+        "speed": 223,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 4460,
+        "maxTp": 168
+      }
+    },
+    {
+      "speciesIndex": 205,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 2940,
+        "currentTp": 187,
+        "capacityG": 18,
+        "attack": 180,
+        "defense": 187,
+        "wisdom": 180,
+        "speed": 217,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 2940,
+        "maxTp": 187
+      }
+    },
+    {
+      "speciesIndex": 206,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 4790,
+        "currentTp": 165,
+        "capacityG": 20,
+        "attack": 203,
+        "defense": 203,
+        "wisdom": 181,
+        "speed": 152,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 4790,
+        "maxTp": 165
+      }
+    },
+    {
+      "speciesIndex": 207,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 5130,
+        "currentTp": 183,
+        "capacityG": 32,
+        "attack": 223,
+        "defense": 240,
+        "wisdom": 183,
+        "speed": 182,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 5130,
+        "maxTp": 183
+      }
+    },
+    {
+      "speciesIndex": 208,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 4460,
+        "currentTp": 224,
+        "capacityG": 20,
+        "attack": 219,
+        "defense": 200,
+        "wisdom": 234,
+        "speed": 239,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 4460,
+        "maxTp": 224
+      }
+    },
+    {
+      "speciesIndex": 209,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 4710,
+        "currentTp": 255,
+        "capacityG": 20,
+        "attack": 238,
+        "defense": 200,
+        "wisdom": 216,
+        "speed": 291,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 4710,
+        "maxTp": 255
+      }
+    },
+    {
+      "speciesIndex": 210,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 5510,
+        "currentTp": 258,
+        "capacityG": 32,
+        "attack": 257,
+        "defense": 278,
+        "wisdom": 200,
+        "speed": 234,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 5510,
+        "maxTp": 258
+      }
+    },
+    {
+      "speciesIndex": 211,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 4030,
+        "currentTp": 183,
+        "capacityG": 20,
+        "attack": 206,
+        "defense": 220,
+        "wisdom": 218,
+        "speed": 201,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 4030,
+        "maxTp": 183
+      }
+    },
+    {
+      "speciesIndex": 212,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 4130,
+        "currentTp": 201,
+        "capacityG": 20,
+        "attack": 223,
+        "defense": 200,
+        "wisdom": 206,
+        "speed": 200,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 4130,
+        "maxTp": 201
+      }
+    },
+    {
+      "speciesIndex": 213,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 3990,
+        "currentTp": 204,
+        "capacityG": 20,
+        "attack": 216,
+        "defense": 205,
+        "wisdom": 202,
+        "speed": 198,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 3990,
+        "maxTp": 204
+      }
+    },
+    {
+      "speciesIndex": 214,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 5120,
+        "currentTp": 202,
+        "capacityG": 32,
+        "attack": 223,
+        "defense": 216,
+        "wisdom": 187,
+        "speed": 238,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 5120,
+        "maxTp": 202
+      }
+    },
+    {
+      "speciesIndex": 215,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 3720,
+        "currentTp": 236,
+        "capacityG": 18,
+        "attack": 203,
+        "defense": 201,
+        "wisdom": 219,
+        "speed": 277,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 3720,
+        "maxTp": 236
+      }
+    },
+    {
+      "speciesIndex": 216,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 5100,
+        "currentTp": 253,
+        "capacityG": 24,
+        "attack": 278,
+        "defense": 238,
+        "wisdom": 203,
+        "speed": 259,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 5100,
+        "maxTp": 253
+      }
+    },
+    {
+      "speciesIndex": 217,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 5070,
+        "currentTp": 238,
+        "capacityG": 32,
+        "attack": 271,
+        "defense": 257,
+        "wisdom": 199,
+        "speed": 253,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 5070,
+        "maxTp": 238
+      }
+    },
+    {
+      "speciesIndex": 218,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 5460,
+        "currentTp": 271,
+        "capacityG": 32,
+        "attack": 299,
+        "defense": 257,
+        "wisdom": 254,
+        "speed": 290,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 5460,
+        "maxTp": 271
+      }
+    },
+    {
+      "speciesIndex": 219,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 5890,
+        "currentTp": 242,
+        "capacityG": 32,
+        "attack": 270,
+        "defense": 278,
+        "wisdom": 205,
+        "speed": 222,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 5890,
+        "maxTp": 242
+      }
+    },
+    {
+      "speciesIndex": 220,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 4770,
+        "currentTp": 218,
+        "capacityG": 24,
+        "attack": 223,
+        "defense": 216,
+        "wisdom": 199,
+        "speed": 198,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 4770,
+        "maxTp": 218
+      }
+    },
+    {
+      "speciesIndex": 221,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 4340,
+        "currentTp": 235,
+        "capacityG": 24,
+        "attack": 217,
+        "defense": 206,
+        "wisdom": 216,
+        "speed": 217,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 4340,
+        "maxTp": 235
+      }
+    },
+    {
+      "speciesIndex": 222,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 5510,
+        "currentTp": 273,
+        "capacityG": 32,
+        "attack": 253,
+        "defense": 252,
+        "wisdom": 223,
+        "speed": 276,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 5510,
+        "maxTp": 273
+      }
+    },
+    {
+      "speciesIndex": 223,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 5080,
+        "currentTp": 255,
+        "capacityG": 32,
+        "attack": 275,
+        "defense": 274,
+        "wisdom": 252,
+        "speed": 254,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 5080,
+        "maxTp": 255
+      }
+    },
+    {
+      "speciesIndex": 224,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 4790,
+        "currentTp": 11,
+        "capacityG": 18,
+        "attack": 15,
+        "defense": 15,
+        "wisdom": 15,
+        "speed": 15,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 4790,
+        "maxTp": 11
+      }
+    },
+    {
+      "speciesIndex": 225,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 4720,
+        "currentTp": 11,
+        "capacityG": 32,
+        "attack": 239,
+        "defense": 240,
+        "wisdom": 237,
+        "speed": 242,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 4720,
+        "maxTp": 11
+      }
+    },
+    {
+      "speciesIndex": 226,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 4790,
+        "currentTp": 234,
+        "capacityG": 18,
+        "attack": 239,
+        "defense": 242,
+        "wisdom": 240,
+        "speed": 239,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 4790,
+        "maxTp": 234
+      }
+    },
+    {
+      "speciesIndex": 227,
+      "battleCountOverride": 18,
+      "actual": {
+        "currentHp": 4690,
+        "currentTp": 236,
+        "capacityG": 18,
+        "attack": 234,
+        "defense": 237,
+        "wisdom": 241,
+        "speed": 242,
+        "battleCount": 18,
+        "rebirthCount": 0,
+        "maxHp": 4690,
+        "maxTp": 236
+      }
+    }
+  ]
+}

@@ -10,9 +10,10 @@
 //
 // WHAT IT MUST NOT CLAIM
 // ----------------------
-// Tick magnitudes, stacking, which resident field is written, and how much
-// extra stress overfill adds. Numeric effects require a separate raising
-// reader/writer trace; a table-column resemblance is not proof. OVL18
+// Numeric training now has a separate CPU-verified reader/writer at
+// nativeRaisingTraining.js (02113C2C / 0211459C); the text summary here does not
+// execute or duplicate it. General overfill semantics remain separate from
+// the bounded native stressed-actor +3 writer. OVL18
 // `ldrb [r2,#8]` at 0x0210A9E8 / 0x0210AA34 is a 4-slot type==5 state poke,
 // not a CageDefinition load. OVL15 0x0210C650 is a generic ~0x62-byte copy,
 // not a 40-byte cage record writer.
@@ -28,14 +29,14 @@ import cageDefinitions from "../../data/championship/catalogs/cage-definitions.r
 
 export const CAGE_TRAINING_CHANNEL_EVIDENCE = "VERIFIED_TEXT";
 export const CAGE_TRAINING_CAPACITY_EVIDENCE = "VERIFIED_TEXT";
-export const CAGE_TRAINING_MAGNITUDE_PARITY = "UNKNOWN_REQUIRES_TRACE";
+export const CAGE_TRAINING_MAGNITUDE_PARITY = "ROM_VERIFIED_NATIVE_COMMAND_WRITERS";
 
 // Original glossary: you MAY exceed the recommended count. The only named
 // consequence is that stress accumulates more easily — no delta is given.
 export const CAGE_CAPACITY_RULE = "SOFT_CAP_OVERFILL_ALLOWED";
 export const CAGE_CAPACITY_RULE_EVIDENCE = "VERIFIED_TEXT";
 export const CAGE_CAPACITY_OVERFILL_CONSEQUENCE = "STRESS_ACCUMULATES_MORE_EASILY";
-export const CAGE_CAPACITY_OVERFILL_MAGNITUDE_PARITY = CAGE_TRAINING_MAGNITUDE_PARITY;
+export const CAGE_CAPACITY_OVERFILL_MAGNITUDE_PARITY = "UNKNOWN_REQUIRES_TRACE";
 
 export const CAGE_TRAINING_MODES = Object.freeze({
   UP: "UP",
@@ -155,7 +156,8 @@ function training(channels, capacity) {
     summary: summarize(frozenChannels, capacity),
     channelEvidence: channels.length > 0 ? CAGE_TRAINING_CHANNEL_EVIDENCE : "EMPTY_ORIGINAL_DESCRIPTION",
     capacityEvidence: capacity == null ? "EMPTY_ORIGINAL_DESCRIPTION" : CAGE_TRAINING_CAPACITY_EVIDENCE,
-    magnitudeParity: CAGE_TRAINING_MAGNITUDE_PARITY
+    magnitudeParity: CAGE_TRAINING_MAGNITUDE_PARITY,
+    magnitudeScope: 'NATIVE_PROFILE_TRAINING_COMMANDS_ONLY'
   });
 }
 

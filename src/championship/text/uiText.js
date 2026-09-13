@@ -160,6 +160,6 @@ const PATTERNS = [
 ];
 
 export const TAMER_FIELD_LABELS = Object.freeze({
-  title: '頭銜', guid: '未確認欄位一', map: '未確認欄位二', battle: '對戰', win: '勝利',
-  name: '名稱', rank: '階級', money: '持有金額', time: '遊玩時間', license: '執照', have: '持有數量', cage: '設施'
+  title: '頭銜完成度', guid: '圖鑑完成度', map: '地圖完成度', battle: '對戰次數', win: '勝率',
+  name: '名稱', rank: '階級', money: '持有金額', time: '遊玩時間', license: '育成執照', have: '收納容量', cage: '設施格數'
 });

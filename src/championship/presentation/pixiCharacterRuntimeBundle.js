@@ -197,3 +197,54 @@ export async function loadPixiCharacterRuntimeBundle({
     }
   });
 }
+// A cancelled scene and its replacement may briefly share cached downloads.
+// Keep URL ownership around the existing Assets singleton: releasing the old
+// scene must not destroy a texture that the new scene is using. This scope is
+// for our explicit single-URL loaders (not aliases or arbitrary Pixi bundles).
+const assetOwners = new WeakMap();
+export function createPixiAssetScope(PIXI, baseUrl = globalThis.location?.href) {
+  const assets = PIXI.Assets;
+  let shared = assetOwners.get(assets);
+  if (!shared) assetOwners.set(assets, shared = new Map());
+  const held = new Map();
+  const keyOf = value => {
+    const src = typeof value === 'string' ? value : value.src;
+    return baseUrl ? new URL(src, baseUrl).href : src;
+  };
+  const scoped = {
+    load(value) {
+      const key = keyOf(value);
+      if (held.has(key)) return held.get(key).promise;
+      let entry = shared.get(key);
+      if (entry?.releasing) return entry.releasing.then(() => scoped.load(value));
+      if (!entry) {
+        entry = { refs: 0, source: typeof value === 'string' ? key : { ...value, src: key } };
+        entry.promise = Promise.resolve().then(() => assets.load(entry.source)).catch(error => {
+          // Some callers fail before they can construct a disposable bundle.
+          // A failed cache entry must never poison a later scene's retry.
+          if (shared.get(key) === entry) shared.delete(key);
+          throw error;
+        });
+        shared.set(key, entry);
+      }
+      entry.refs++;
+      held.set(key, entry);
+      return entry.promise;
+    },
+    async unload(value) {
+      const key = keyOf(value), entry = held.get(key);
+      if (!entry) return;
+      held.delete(key);
+      if (--entry.refs > 0) return;
+      entry.releasing = (async () => {
+        try {
+          try { await entry.promise; } catch { return; }
+          await assets.unload(key);
+        }
+        finally { if (shared.get(key) === entry) shared.delete(key); }
+      })();
+      await entry.releasing;
+    }
+  };
+  return { ...PIXI, Assets: scoped };
+}

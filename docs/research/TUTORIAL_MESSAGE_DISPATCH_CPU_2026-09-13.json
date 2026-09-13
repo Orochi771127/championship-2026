@@ -1,0 +1,231 @@
+{
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "function": "02085EF4",
+  "table": "020CBC64",
+  "evidence": "BOUNDED_ORIGINAL_CPU_MESSAGE_DISPATCH",
+  "scope": "36 Raising tutorial message selectors; not full tutorial progression or visual acceptance",
+  "seams": [
+    "VM argument reader returns selector Q12",
+    "text-bank lookup returns numeric handle",
+    "message renderer records handle"
+  ],
+  "normalOnboardingAccepted": false,
+  "cases": [
+    {
+      "selector": 0,
+      "vmArgumentQ12": 0,
+      "textId": 1495,
+      "passed": true
+    },
+    {
+      "selector": 1,
+      "vmArgumentQ12": 4096,
+      "textId": 1496,
+      "passed": true
+    },
+    {
+      "selector": 2,
+      "vmArgumentQ12": 8192,
+      "textId": 1497,
+      "passed": true
+    },
+    {
+      "selector": 3,
+      "vmArgumentQ12": 12288,
+      "textId": 1498,
+      "passed": true
+    },
+    {
+      "selector": 4,
+      "vmArgumentQ12": 16384,
+      "textId": 1499,
+      "passed": true
+    },
+    {
+      "selector": 5,
+      "vmArgumentQ12": 20480,
+      "textId": 1500,
+      "passed": true
+    },
+    {
+      "selector": 6,
+      "vmArgumentQ12": 24576,
+      "textId": 1501,
+      "passed": true
+    },
+    {
+      "selector": 7,
+      "vmArgumentQ12": 28672,
+      "textId": 1502,
+      "passed": true
+    },
+    {
+      "selector": 8,
+      "vmArgumentQ12": 32768,
+      "textId": 1503,
+      "passed": true
+    },
+    {
+      "selector": 9,
+      "vmArgumentQ12": 36864,
+      "textId": 1504,
+      "passed": true
+    },
+    {
+      "selector": 10,
+      "vmArgumentQ12": 40960,
+      "textId": 1505,
+      "passed": true
+    },
+    {
+      "selector": 11,
+      "vmArgumentQ12": 45056,
+      "textId": 1506,
+      "passed": true
+    },
+    {
+      "selector": 12,
+      "vmArgumentQ12": 49152,
+      "textId": 1507,
+      "passed": true
+    },
+    {
+      "selector": 13,
+      "vmArgumentQ12": 53248,
+      "textId": 1508,
+      "passed": true
+    },
+    {
+      "selector": 14,
+      "vmArgumentQ12": 57344,
+      "textId": 1509,
+      "passed": true
+    },
+    {
+      "selector": 15,
+      "vmArgumentQ12": 61440,
+      "textId": 1510,
+      "passed": true
+    },
+    {
+      "selector": 16,
+      "vmArgumentQ12": 65536,
+      "textId": 1511,
+      "passed": true
+    },
+    {
+      "selector": 17,
+      "vmArgumentQ12": 69632,
+      "textId": 1512,
+      "passed": true
+    },
+    {
+      "selector": 18,
+      "vmArgumentQ12": 73728,
+      "textId": 1513,
+      "passed": true
+    },
+    {
+      "selector": 19,
+      "vmArgumentQ12": 77824,
+      "textId": 1514,
+      "passed": true
+    },
+    {
+      "selector": 20,
+      "vmArgumentQ12": 81920,
+      "textId": 1515,
+      "passed": true
+    },
+    {
+      "selector": 21,
+      "vmArgumentQ12": 86016,
+      "textId": 1516,
+      "passed": true
+    },
+    {
+      "selector": 22,
+      "vmArgumentQ12": 90112,
+      "textId": 1517,
+      "passed": true
+    },
+    {
+      "selector": 23,
+      "vmArgumentQ12": 94208,
+      "textId": 1518,
+      "passed": true
+    },
+    {
+      "selector": 24,
+      "vmArgumentQ12": 98304,
+      "textId": 1519,
+      "passed": true
+    },
+    {
+      "selector": 25,
+      "vmArgumentQ12": 102400,
+      "textId": 1520,
+      "passed": true
+    },
+    {
+      "selector": 26,
+      "vmArgumentQ12": 106496,
+      "textId": 1521,
+      "passed": true
+    },
+    {
+      "selector": 27,
+      "vmArgumentQ12": 110592,
+      "textId": 1522,
+      "passed": true
+    },
+    {
+      "selector": 28,
+      "vmArgumentQ12": 114688,
+      "textId": 1523,
+      "passed": true
+    },
+    {
+      "selector": 29,
+      "vmArgumentQ12": 118784,
+      "textId": 1524,
+      "passed": true
+    },
+    {
+      "selector": 30,
+      "vmArgumentQ12": 122880,
+      "textId": 1525,
+      "passed": true
+    },
+    {
+      "selector": 31,
+      "vmArgumentQ12": 126976,
+      "textId": 1526,
+      "passed": true
+    },
+    {
+      "selector": 32,
+      "vmArgumentQ12": 131072,
+      "textId": 1553,
+      "passed": true
+    },
+    {
+      "selector": 33,
+      "vmArgumentQ12": 135168,
+      "textId": 1554,
+      "passed": true
+    },
+    {
+      "selector": 34,
+      "vmArgumentQ12": 139264,
+      "textId": 1564,
+      "passed": true
+    },
+    {
+      "selector": 35,
+      "vmArgumentQ12": 143360,
+      "textId": 1565,
+      "passed": true
+    }
+  ]
+}

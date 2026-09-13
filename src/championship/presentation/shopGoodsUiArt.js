@@ -34,5 +34,5 @@ export function shopGoodsPresentation(shopRecordIndex) {
   return Object.freeze({name:binding.name, icon:binding.icon, itemIndex:binding.itemIndex,
     src:enabled && cell ? cell.src : null,
     backgroundPosition:'center',
-    identityEvidence:'VERIFIED_BINARY', imageEvidence:'ORIGINAL_CREATED'});
+    identityEvidence:'VERIFIED_BINARY', imageEvidence:manifest.productionStatus});
 }

@@ -1,5 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import {readFileSync} from 'node:fs';
+import {nativeBattleWinPercent} from '../src/championship/battle/nativeTitleProgression.js';
+import {NATIVE_RAISING_LIFECYCLE_RULES} from '../src/championship/raising/nativeRaisingLifecycle.js';
+import {slotCountForTamerRank} from '../src/championship/cage/cageCatalog.js';
 
 import {
   TAMER_INFO_FIELDS,
@@ -7,9 +11,22 @@ import {
   TAMER_INFO_MONEY_CAP,
   TAMER_INFO_SCENES,
   TAMER_INFO_UNSOURCED_EVIDENCE,
-  TAMER_INFO_UNSOURCED_FIELDS
+  TAMER_INFO_UNSOURCED_FIELDS,
+  tamerCompletionPercent
 } from "../src/championship/app/tamerInfoScreen.js";
 import { BATTLE_REWARD_WALLET_CAP } from "../src/championship/battle/battleRewardTransaction.js";
+
+test('Tamer counters and rank limits match original OVL4 CPU across every rank',()=>{
+  const receipt=JSON.parse(readFileSync('docs/research/TAMER_UI_FIELDS_CPU_2026-09-13.json','utf8'));
+  assert.equal(receipt.cases.length,40);
+  for(const row of receipt.cases){
+    assert.equal(tamerCompletionPercent(row.titleCount,61),row.actual.title);
+    assert.equal(tamerCompletionPercent(row.registeredCount,216),row.actual.guid);
+    assert.equal(nativeBattleWinPercent(row.record),row.actual.win);
+    assert.equal(NATIVE_RAISING_LIFECYCLE_RULES.ranks[row.rank].capacity,row.actual.have);
+    assert.equal(slotCountForTamerRank(row.rank),row.actual.cage);
+  }
+});
 
 test("the fields are the two scenes' node rows, in scene order", () => {
   // An earlier version of this list had 8 entries because the scene dump had been
@@ -71,11 +88,11 @@ test("the 7-digit money width agrees with the battle reward wallet cap", () => {
 
 test("only the fields with a real source claim one", () => {
   const sourced = TAMER_INFO_FIELDS.filter((field) => field.source !== null);
-  assert.deepEqual(sourced.map((field) => field.id), ["rank", "money", "have"]);
-  assert.deepEqual(sourced.map((field) => field.source), ["tamerRank", "shopWalletBits", "rosterCount"]);
+  assert.deepEqual(sourced.map((field) => field.id), ["title","guid","battle","win","name","rank","money","license","have","cage"]);
+  assert.equal(TAMER_INFO_FIELDS.find(field=>field.id==='have').source,'nativeRankCapacity');
   assert.deepEqual(
     [...TAMER_INFO_UNSOURCED_FIELDS],
-    ["title", "guid", "map", "battle", "win", "name", "time", "license", "cage"]
+    ["map", "time"]
   );
   assert.equal(TAMER_INFO_UNSOURCED_EVIDENCE, "UNKNOWN_REQUIRES_TRACE");
   assert.equal(TAMER_INFO_UNSOURCED_FIELDS.length + sourced.length, TAMER_INFO_FIELDS.length);
@@ -85,5 +102,5 @@ test("the field table is frozen, so a caller cannot quietly add a source", () =>
   assert.throws(() => { TAMER_INFO_FIELDS.push({ id: "invented" }); });
   assert.throws(() => { TAMER_INFO_FIELDS[0].source = "madeUp"; }, undefined,
     "an untraced field must not become sourced by assignment");
-  assert.equal(TAMER_INFO_FIELDS[0].source, null);
+  assert.equal(TAMER_INFO_FIELDS[0].source, 'titleCompletionPercent');
 });

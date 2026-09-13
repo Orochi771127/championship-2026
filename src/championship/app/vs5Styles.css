@@ -265,6 +265,8 @@
   z-index: 1;
 }
 
+.cm-vs5-field__loading { position:absolute; z-index:5; inset:50% 1rem auto; margin:0; padding:.65rem; transform:translateY(-50%); border-radius:.75rem; background:#163c35; color:#fff; text-align:center; font-size:.85rem; }
+
 /* Bounded Three overlay. Pointer-none so Auto Battle still takes no field input. */
 .cm-vs5-vfx-overlay {
   position: absolute;

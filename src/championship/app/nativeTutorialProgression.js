@@ -1,5 +1,6 @@
-// The guided tutorial's cursor, over the step catalogue built from the observed
-// original run. `tutorialStep` already exists in the opening save (see
+// Legacy middle-segment cursor: 1515..1549, not the original tutorial's opening
+// or conclusion. Do not prepend newly traced messages to these saved indices.
+// `tutorialStep` already exists in the opening save (see
 // nativeOpeningState.js); nothing wrote or read it before this module.
 //
 // The catalogue holds indices and structure only. What each step says is
@@ -15,6 +16,8 @@ import catalogue from "../../data/championship/catalogs/tutorial-steps.r1.json" 
 import { deepFreeze } from "../contracts/championshipContracts.js";
 
 export const TUTORIAL_CONTRACT = catalogue.contract;
+export const TUTORIAL_COVERAGE = catalogue.coverage;
+export const TUTORIAL_NORMAL_ONBOARDING_ELIGIBLE = catalogue.normalOnboardingEligible;
 export const TUTORIAL_STEP_COUNT = catalogue.stepCount;
 export const TUTORIAL_PHASES = deepFreeze(["RAISING", "GATE", "HUNT"]);
 /** The opening save's "finished or skipped" cursor; nativeOpeningState allows -1. */

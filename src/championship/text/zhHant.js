@@ -29,6 +29,21 @@ export const TEXT_LOCALE = "zh-Hant";
 export const TEXT_EVIDENCE = "PRODUCT_AUTHORED";
 export const TEXT_SOURCE_LANGUAGE = "ja";
 
+// Display translations keyed by the original text-bank selectors confirmed at
+// ARM9 02088480 and OVL4 0210BB9C (2026-09-13). Unknown indices stay absent.
+const GENERATIONS = Object.freeze(['數碼蛋','幼年期Ⅰ','幼年期Ⅱ','成長期','成熟期','完全體','究極體']);
+const PERSONALITIES = Object.freeze(['坦率','任性','急躁','悠閒','熱血','冷靜','大膽','膽小','？？？']);
+const ROSTER_FAMILIES = Object.freeze(['無','獸','機械','昆蟲植物','鳥','龍','水','聖','暗黑']);
+const TAMER_RANK_NAMES = Object.freeze(['綠階','藍階','紅階','白階','青銅','白銀','黃金','白金','冠軍','大師']);
+const SPECIAL_SKILLS = Object.freeze(['無','挑釁','治癒 α','治癒 β','治癒 γ','全體治癒 α','全體治癒 β','全體治癒 γ',
+  '淨化','全體淨化','強化攻擊','全體強化攻擊','防護','全體防護','加速','全體加速','感知','全體感知',
+  '耐火','全體耐火','耐水','全體耐水','耐雷','全體耐雷','耐光','全體耐光','耐暗','全體耐暗','復活 α','復活 β','勇氣']);
+export const generationName = index => GENERATIONS[index] ?? null;
+export const personalityName = index => PERSONALITIES[index] ?? null;
+export const rosterFamilyName = ordinal => ROSTER_FAMILIES[ordinal] ?? null;
+export const tamerRankName = index => TAMER_RANK_NAMES[index] ?? null;
+export const specialSkillName = index => SPECIAL_SKILLS[index] ?? null;
+
 /** The status bar's mode field. The cartridge's own words are in the comments. */
 export const MODE_LABELS = deepFreeze({
   RAISING: "育成",      // イクセイ

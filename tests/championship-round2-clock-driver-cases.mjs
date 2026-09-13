@@ -30,7 +30,7 @@ function clock(app) {
 
 function driverHarness(app, { active = true } = {}) {
   const listeners = new Set();
-  const flags = { visible: true, contextLost: false, modal: false };
+  const flags = { visible: true, contextLost: false, modal: false, loading: false };
   let milliseconds = 0;
   const ticker = {
     adds: 0, removes: 0,
@@ -41,7 +41,8 @@ function driverHarness(app, { active = true } = {}) {
     app, ticker, now: () => milliseconds,
     isVisible: () => flags.visible,
     isContextLost: () => flags.contextLost,
-    isModalOpen: () => flags.modal
+    isModalOpen: () => flags.modal,
+    isSceneReady: () => !flags.loading
   });
   driver.setActive(active);
   return {
@@ -113,8 +114,8 @@ test("manual save restores accepted raw clock precision without offline accrual 
   await restored.dispose();
 });
 
-test("inactive, hidden, modal and lost-context drivers discard suspended elapsed baselines", async () => {
-  for (const guard of ["inactive", "hidden", "modal", "contextLost"]) {
+test("inactive, hidden, modal, loading and lost-context drivers discard suspended elapsed baselines", async () => {
+  for (const guard of ["inactive", "hidden", "modal", "loading", "contextLost"]) {
     const storage = memoryStorage();
     const app = createApp(storage);
     await app.newGame();

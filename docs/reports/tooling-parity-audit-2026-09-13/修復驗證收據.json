@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-13",
+  "baseHead": "08445ba4629aac5757f31b0c1e68fbf40e7966de",
+  "status": "MULTIPLE_BOUNDED_REPAIRS_VERIFIED_FULL_PARITY_INCOMPLETE",
+  "fullTests": {
+    "tests": 1493,
+    "pass": 1493,
+    "fail": 0
+  },
+  "portableCi": {
+    "tests": 1276,
+    "pass": 1276,
+    "fail": 0
+  },
+  "allPages": {
+    "captures": 17,
+    "pages": [
+      "TITLE",
+      "RAISING_HOME",
+      "SHOP",
+      "SHOP_TRAINING_GOODS",
+      "SHOP_HUNT_ITEMS",
+      "SHOP_PLUGINS",
+      "SHOP_CAGES",
+      "CAGE_EDIT",
+      "DATABASE",
+      "DIGIMON_LIST",
+      "TAMER_INFO",
+      "SCHEDULE",
+      "SCHEDULE_LAST_EVENT",
+      "HELP",
+      "HELP_LAST_TOPIC",
+      "BATTLE_SELECT",
+      "CHAMPIONSHIP"
+    ],
+    "helpTopics": 68,
+    "scheduleEntries": 61,
+    "errors": [],
+    "failures": [],
+    "horizontalOverflow": false
+  },
+  "huntLoading": {
+    "passed": true,
+    "delayedClock": true,
+    "cancel": true,
+    "reentry": true,
+    "optionalFeedbackFailure": true,
+    "errors": []
+  },
+  "controlledBattle": {
+    "passed": true,
+    "fixture": "tests/fixtures/championship-owned-party.html",
+    "ordinaryEntry": true,
+    "naturalAdultProgression": false,
+    "delayedLoading": true,
+    "simulatedMilliseconds": 28000,
+    "resultText": "一方全員倒下\n對手獲勝\n下一頁",
+    "panels": [
+      "一方全員倒下\n對手獲勝\n下一頁",
+      "獎金0\n\n持有 0 位元幣\n\n本場沒有獲得獎金。\n\n存取突擊兵\n\n下一頁",
+      "戰績\n對戰場次\n1\n勝率\n0%\n頭銜數\n0\n返回牧場"
+    ],
+    "returnedHome": true,
+    "errors": []
+  },
+  "normalCaptureReceipt": "R:\\Projects\\Championship2026\\tools\\development-toolkit\\reports\\batch-repair-2026-09-13\\final\\vs3\\VS3_BROWSER_QA.json",
+  "sourceOracles": {
+    "rosterFieldsCases": 228,
+    "rosterFieldsPerCase": 11,
+    "rosterWinRateCases": 50,
+    "tamerCases": 40,
+    "tutorialChoiceBranches": 2
+  },
+  "unresolved": {
+    "tutorial": "NOT_IN_NORMAL_NEW_GAME",
+    "huntItemIcons": 79,
+    "cageIndividualVisualAcceptance": "INCOMPLETE",
+    "effectSystems": 26,
+    "rosterControls": [
+      "rename",
+      "delete",
+      "entry"
+    ],
+    "battleModes": "PARTIAL"
+  },
+  "fullOriginalParity": false,
+  "physicalDeviceAccepted": false,
+  "publicBuildVerified": false,
+  "pushed": false,
+  "deployed": false,
+  "changedTrackedFiles": [
+    {
+      "path": "src/championship/app/championshipClockDriver.js",
+      "sha256": "bf06f2d0758338711b1fe1985ee70085781076073ebf3dc550735c4de8c46c80"
+    },
+    {
+      "path": "src/championship/app/digimonListScreen.js",
+      "sha256": "d60861b48c747c5d61441ce9703023fa8bdd91fea1cc34e7ee3887e875c82889"
+    },
+    {
+      "path": "src/championship/app/main.js",
+      "sha256": "c8d9c305c13d2ddcf2871952135002a670a2c4c5b3f9d113fbfe9a7c5d4b1653"
+    },
+    {
+      "path": "src/championship/app/tamerInfoScreen.js",
+      "sha256": "3710187fe64cbe9289be0e899bd144e7df9a17378308940ac6b4941d3e4f43ef"
+    },
+    {
+      "path": "src/championship/app/vs2Screens.js",
+      "sha256": "0da22a7efb1b3272b680d8c03111cdd3405370c9e0a4f4aa40a133b26c258d5c"
+    },
+    {
+      "path": "src/championship/app/vs2Styles.css",
+      "sha256": "4076278d81cffd0aa373c5798460be7a364d6642ab422747b0f7fd8bff272c95"
+    },
+    {
+      "path": "src/championship/app/vs5Screens.js",
+      "sha256": "0fc9fed06f56e425816f008ae2f91dc911935bc9d061d15f55e155cd9600ab4e"
+    },
+    {
+      "path": "src/championship/app/vs5Styles.css",
+      "sha256": "2fb373414e3104a34c2d25bc1f476baa26d91e32d442614127321e656d4fc947"
+    },
+    {
+      "path": "src/championship/cage/cageCatalog.js",
+      "sha256": "bfd1cb54936989c71b05262fe345142bc095d8ac9213dad063f49b8bbf64a88a"
+    },
+    {
+      "path": "src/championship/cage/cageEffects.js",
+      "sha256": "986d468dda7d4b039586ecbe8d68991d1ed1f706e513e957cc0451a8305eff24"
+    },
+    {
+      "path": "src/championship/presentation/huntFeedbackArt.js",
+      "sha256": "b89f32d21fc7068a727f16781937e8fbc396fd1f253c13d7333ac609e9453c95"
+    },
+    {
+      "path": "src/championship/presentation/shopGoodsUiArt.js",
+      "sha256": "596cea4bc1ffbc2443e7b32a3336dd978809cd60c25fc5bc34f1d8da79df7f71"
+    },
+    {
+      "path": "src/championship/raising/nativeIndividualProfile.js",
+      "sha256": "18520b3cd85d5830c83194dbaa7e490756e964730dec82f16b394db804be58a6"
+    },
+    {
+      "path": "src/championship/text/uiText.js",
+      "sha256": "ef9a2b4eb70f08edf63dad64572e039ef48a7445a9a314dac8db57f9b7f10a27"
+    },
+    {
+      "path": "src/championship/text/zhHant.js",
+      "sha256": "54578aac86488d41f6f3eec030581007c62fa9f73484bcafbab152d43cb4034f"
+    },
+    {
+      "path": "tests/championship-cage-identity-crosswalk-cases.mjs",
+      "sha256": "e222a51dd6726d2765c0915f8d05a16187c1ef6c0f9289f3516eb707c04e25d7"
+    },
+    {
+      "path": "tests/championship-feedback-art-cases.mjs",
+      "sha256": "63e741f9258990420fd943b142d6285187c29c9785196a0005f00940cca14f39"
+    },
+    {
+      "path": "tests/championship-native-individual-profile-cases.mjs",
+      "sha256": "e01d56210ded7269a7bd011146ea014167acad2a7ca01e97481fa6a3ad8e8a88"
+    },
+    {
+      "path": "tests/championship-round2-clock-driver-cases.mjs",
+      "sha256": "75497762443d609764b8b3d7e82a161c5fdddddf2dde58bdd4a8b39fcece26f3"
+    },
+    {
+      "path": "tests/championship-tamer-info-cases.mjs",
+      "sha256": "d802202e25d02cdffcb5997e9ad79559aa7b7b01accf966383c9ec92826586b0"
+    },
+    {
+      "path": "tests/championship-vs4-cage-edit-cases.mjs",
+      "sha256": "92b070b90ae7f148583bd9872e57805b2b35d64da2c5b45e43e63277f397ef63"
+    },
+    {
+      "path": "tests/championship-zh-hant-views-cases.mjs",
+      "sha256": "65044cd6431bd09cb9cf8f33e416445b8c8ffedcf38215f7c0aa1e1663d9049e"
+    }
+  ]
+}

@@ -1,0 +1,892 @@
+{
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "function": "OVL4 0210BB9C",
+  "evidence": "BOUNDED_ORIGINAL_CPU_UI_ARGUMENT_REPLAY",
+  "seams": [
+    "synthetic player buffers",
+    "digit-renderer stub",
+    "emulated DS integer divider; original ARM9 arithmetic"
+  ],
+  "cases": [
+    {
+      "rank": 0,
+      "titleCount": 0,
+      "registeredCount": 0,
+      "mapCount": 0,
+      "record": {
+        "battles": 1,
+        "wins": 0
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 64,
+        "cage": 14,
+        "title": 0,
+        "guid": 0,
+        "map": 0,
+        "battle": 1,
+        "win": 0
+      }
+    },
+    {
+      "rank": 0,
+      "titleCount": 1,
+      "registeredCount": 1,
+      "mapCount": 1,
+      "record": {
+        "battles": 3,
+        "wins": 2
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 64,
+        "cage": 14,
+        "title": 1,
+        "guid": 0,
+        "map": 5,
+        "battle": 3,
+        "win": 67
+      }
+    },
+    {
+      "rank": 0,
+      "titleCount": 30,
+      "registeredCount": 107,
+      "mapCount": 8,
+      "record": {
+        "battles": 2,
+        "wins": 1
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 64,
+        "cage": 14,
+        "title": 49,
+        "guid": 49,
+        "map": 47,
+        "battle": 2,
+        "win": 50
+      }
+    },
+    {
+      "rank": 0,
+      "titleCount": 61,
+      "registeredCount": 216,
+      "mapCount": 17,
+      "record": {
+        "battles": 9999,
+        "wins": 2499
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 64,
+        "cage": 14,
+        "title": 100,
+        "guid": 100,
+        "map": 100,
+        "battle": 9999,
+        "win": 25
+      }
+    },
+    {
+      "rank": 1,
+      "titleCount": 0,
+      "registeredCount": 0,
+      "mapCount": 0,
+      "record": {
+        "battles": 1,
+        "wins": 0
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 74,
+        "cage": 14,
+        "title": 0,
+        "guid": 0,
+        "map": 0,
+        "battle": 1,
+        "win": 0
+      }
+    },
+    {
+      "rank": 1,
+      "titleCount": 1,
+      "registeredCount": 1,
+      "mapCount": 1,
+      "record": {
+        "battles": 3,
+        "wins": 2
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 74,
+        "cage": 14,
+        "title": 1,
+        "guid": 0,
+        "map": 5,
+        "battle": 3,
+        "win": 67
+      }
+    },
+    {
+      "rank": 1,
+      "titleCount": 30,
+      "registeredCount": 107,
+      "mapCount": 8,
+      "record": {
+        "battles": 2,
+        "wins": 1
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 74,
+        "cage": 14,
+        "title": 49,
+        "guid": 49,
+        "map": 47,
+        "battle": 2,
+        "win": 50
+      }
+    },
+    {
+      "rank": 1,
+      "titleCount": 61,
+      "registeredCount": 216,
+      "mapCount": 17,
+      "record": {
+        "battles": 9999,
+        "wins": 2499
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 74,
+        "cage": 14,
+        "title": 100,
+        "guid": 100,
+        "map": 100,
+        "battle": 9999,
+        "win": 25
+      }
+    },
+    {
+      "rank": 2,
+      "titleCount": 0,
+      "registeredCount": 0,
+      "mapCount": 0,
+      "record": {
+        "battles": 1,
+        "wins": 0
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 96,
+        "cage": 16,
+        "title": 0,
+        "guid": 0,
+        "map": 0,
+        "battle": 1,
+        "win": 0
+      }
+    },
+    {
+      "rank": 2,
+      "titleCount": 1,
+      "registeredCount": 1,
+      "mapCount": 1,
+      "record": {
+        "battles": 3,
+        "wins": 2
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 96,
+        "cage": 16,
+        "title": 1,
+        "guid": 0,
+        "map": 5,
+        "battle": 3,
+        "win": 67
+      }
+    },
+    {
+      "rank": 2,
+      "titleCount": 30,
+      "registeredCount": 107,
+      "mapCount": 8,
+      "record": {
+        "battles": 2,
+        "wins": 1
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 96,
+        "cage": 16,
+        "title": 49,
+        "guid": 49,
+        "map": 47,
+        "battle": 2,
+        "win": 50
+      }
+    },
+    {
+      "rank": 2,
+      "titleCount": 61,
+      "registeredCount": 216,
+      "mapCount": 17,
+      "record": {
+        "battles": 9999,
+        "wins": 2499
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 96,
+        "cage": 16,
+        "title": 100,
+        "guid": 100,
+        "map": 100,
+        "battle": 9999,
+        "win": 25
+      }
+    },
+    {
+      "rank": 3,
+      "titleCount": 0,
+      "registeredCount": 0,
+      "mapCount": 0,
+      "record": {
+        "battles": 1,
+        "wins": 0
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 112,
+        "cage": 16,
+        "title": 0,
+        "guid": 0,
+        "map": 0,
+        "battle": 1,
+        "win": 0
+      }
+    },
+    {
+      "rank": 3,
+      "titleCount": 1,
+      "registeredCount": 1,
+      "mapCount": 1,
+      "record": {
+        "battles": 3,
+        "wins": 2
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 112,
+        "cage": 16,
+        "title": 1,
+        "guid": 0,
+        "map": 5,
+        "battle": 3,
+        "win": 67
+      }
+    },
+    {
+      "rank": 3,
+      "titleCount": 30,
+      "registeredCount": 107,
+      "mapCount": 8,
+      "record": {
+        "battles": 2,
+        "wins": 1
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 112,
+        "cage": 16,
+        "title": 49,
+        "guid": 49,
+        "map": 47,
+        "battle": 2,
+        "win": 50
+      }
+    },
+    {
+      "rank": 3,
+      "titleCount": 61,
+      "registeredCount": 216,
+      "mapCount": 17,
+      "record": {
+        "battles": 9999,
+        "wins": 2499
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 112,
+        "cage": 16,
+        "title": 100,
+        "guid": 100,
+        "map": 100,
+        "battle": 9999,
+        "win": 25
+      }
+    },
+    {
+      "rank": 4,
+      "titleCount": 0,
+      "registeredCount": 0,
+      "mapCount": 0,
+      "record": {
+        "battles": 1,
+        "wins": 0
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 160,
+        "cage": 18,
+        "title": 0,
+        "guid": 0,
+        "map": 0,
+        "battle": 1,
+        "win": 0
+      }
+    },
+    {
+      "rank": 4,
+      "titleCount": 1,
+      "registeredCount": 1,
+      "mapCount": 1,
+      "record": {
+        "battles": 3,
+        "wins": 2
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 160,
+        "cage": 18,
+        "title": 1,
+        "guid": 0,
+        "map": 5,
+        "battle": 3,
+        "win": 67
+      }
+    },
+    {
+      "rank": 4,
+      "titleCount": 30,
+      "registeredCount": 107,
+      "mapCount": 8,
+      "record": {
+        "battles": 2,
+        "wins": 1
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 160,
+        "cage": 18,
+        "title": 49,
+        "guid": 49,
+        "map": 47,
+        "battle": 2,
+        "win": 50
+      }
+    },
+    {
+      "rank": 4,
+      "titleCount": 61,
+      "registeredCount": 216,
+      "mapCount": 17,
+      "record": {
+        "battles": 9999,
+        "wins": 2499
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 160,
+        "cage": 18,
+        "title": 100,
+        "guid": 100,
+        "map": 100,
+        "battle": 9999,
+        "win": 25
+      }
+    },
+    {
+      "rank": 5,
+      "titleCount": 0,
+      "registeredCount": 0,
+      "mapCount": 0,
+      "record": {
+        "battles": 1,
+        "wins": 0
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 168,
+        "cage": 18,
+        "title": 0,
+        "guid": 0,
+        "map": 0,
+        "battle": 1,
+        "win": 0
+      }
+    },
+    {
+      "rank": 5,
+      "titleCount": 1,
+      "registeredCount": 1,
+      "mapCount": 1,
+      "record": {
+        "battles": 3,
+        "wins": 2
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 168,
+        "cage": 18,
+        "title": 1,
+        "guid": 0,
+        "map": 5,
+        "battle": 3,
+        "win": 67
+      }
+    },
+    {
+      "rank": 5,
+      "titleCount": 30,
+      "registeredCount": 107,
+      "mapCount": 8,
+      "record": {
+        "battles": 2,
+        "wins": 1
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 168,
+        "cage": 18,
+        "title": 49,
+        "guid": 49,
+        "map": 47,
+        "battle": 2,
+        "win": 50
+      }
+    },
+    {
+      "rank": 5,
+      "titleCount": 61,
+      "registeredCount": 216,
+      "mapCount": 17,
+      "record": {
+        "battles": 9999,
+        "wins": 2499
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 168,
+        "cage": 18,
+        "title": 100,
+        "guid": 100,
+        "map": 100,
+        "battle": 9999,
+        "win": 25
+      }
+    },
+    {
+      "rank": 6,
+      "titleCount": 0,
+      "registeredCount": 0,
+      "mapCount": 0,
+      "record": {
+        "battles": 1,
+        "wins": 0
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 180,
+        "cage": 20,
+        "title": 0,
+        "guid": 0,
+        "map": 0,
+        "battle": 1,
+        "win": 0
+      }
+    },
+    {
+      "rank": 6,
+      "titleCount": 1,
+      "registeredCount": 1,
+      "mapCount": 1,
+      "record": {
+        "battles": 3,
+        "wins": 2
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 180,
+        "cage": 20,
+        "title": 1,
+        "guid": 0,
+        "map": 5,
+        "battle": 3,
+        "win": 67
+      }
+    },
+    {
+      "rank": 6,
+      "titleCount": 30,
+      "registeredCount": 107,
+      "mapCount": 8,
+      "record": {
+        "battles": 2,
+        "wins": 1
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 180,
+        "cage": 20,
+        "title": 49,
+        "guid": 49,
+        "map": 47,
+        "battle": 2,
+        "win": 50
+      }
+    },
+    {
+      "rank": 6,
+      "titleCount": 61,
+      "registeredCount": 216,
+      "mapCount": 17,
+      "record": {
+        "battles": 9999,
+        "wins": 2499
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 180,
+        "cage": 20,
+        "title": 100,
+        "guid": 100,
+        "map": 100,
+        "battle": 9999,
+        "win": 25
+      }
+    },
+    {
+      "rank": 7,
+      "titleCount": 0,
+      "registeredCount": 0,
+      "mapCount": 0,
+      "record": {
+        "battles": 1,
+        "wins": 0
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 192,
+        "cage": 20,
+        "title": 0,
+        "guid": 0,
+        "map": 0,
+        "battle": 1,
+        "win": 0
+      }
+    },
+    {
+      "rank": 7,
+      "titleCount": 1,
+      "registeredCount": 1,
+      "mapCount": 1,
+      "record": {
+        "battles": 3,
+        "wins": 2
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 192,
+        "cage": 20,
+        "title": 1,
+        "guid": 0,
+        "map": 5,
+        "battle": 3,
+        "win": 67
+      }
+    },
+    {
+      "rank": 7,
+      "titleCount": 30,
+      "registeredCount": 107,
+      "mapCount": 8,
+      "record": {
+        "battles": 2,
+        "wins": 1
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 192,
+        "cage": 20,
+        "title": 49,
+        "guid": 49,
+        "map": 47,
+        "battle": 2,
+        "win": 50
+      }
+    },
+    {
+      "rank": 7,
+      "titleCount": 61,
+      "registeredCount": 216,
+      "mapCount": 17,
+      "record": {
+        "battles": 9999,
+        "wins": 2499
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 192,
+        "cage": 20,
+        "title": 100,
+        "guid": 100,
+        "map": 100,
+        "battle": 9999,
+        "win": 25
+      }
+    },
+    {
+      "rank": 8,
+      "titleCount": 0,
+      "registeredCount": 0,
+      "mapCount": 0,
+      "record": {
+        "battles": 1,
+        "wins": 0
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 200,
+        "cage": 20,
+        "title": 0,
+        "guid": 0,
+        "map": 0,
+        "battle": 1,
+        "win": 0
+      }
+    },
+    {
+      "rank": 8,
+      "titleCount": 1,
+      "registeredCount": 1,
+      "mapCount": 1,
+      "record": {
+        "battles": 3,
+        "wins": 2
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 200,
+        "cage": 20,
+        "title": 1,
+        "guid": 0,
+        "map": 5,
+        "battle": 3,
+        "win": 67
+      }
+    },
+    {
+      "rank": 8,
+      "titleCount": 30,
+      "registeredCount": 107,
+      "mapCount": 8,
+      "record": {
+        "battles": 2,
+        "wins": 1
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 200,
+        "cage": 20,
+        "title": 49,
+        "guid": 49,
+        "map": 47,
+        "battle": 2,
+        "win": 50
+      }
+    },
+    {
+      "rank": 8,
+      "titleCount": 61,
+      "registeredCount": 216,
+      "mapCount": 17,
+      "record": {
+        "battles": 9999,
+        "wins": 2499
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 200,
+        "cage": 20,
+        "title": 100,
+        "guid": 100,
+        "map": 100,
+        "battle": 9999,
+        "win": 25
+      }
+    },
+    {
+      "rank": 9,
+      "titleCount": 0,
+      "registeredCount": 0,
+      "mapCount": 0,
+      "record": {
+        "battles": 1,
+        "wins": 0
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 200,
+        "cage": 20,
+        "title": 0,
+        "guid": 0,
+        "map": 0,
+        "battle": 1,
+        "win": 0
+      }
+    },
+    {
+      "rank": 9,
+      "titleCount": 1,
+      "registeredCount": 1,
+      "mapCount": 1,
+      "record": {
+        "battles": 3,
+        "wins": 2
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 200,
+        "cage": 20,
+        "title": 1,
+        "guid": 0,
+        "map": 5,
+        "battle": 3,
+        "win": 67
+      }
+    },
+    {
+      "rank": 9,
+      "titleCount": 30,
+      "registeredCount": 107,
+      "mapCount": 8,
+      "record": {
+        "battles": 2,
+        "wins": 1
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 200,
+        "cage": 20,
+        "title": 49,
+        "guid": 49,
+        "map": 47,
+        "battle": 2,
+        "win": 50
+      }
+    },
+    {
+      "rank": 9,
+      "titleCount": 61,
+      "registeredCount": 216,
+      "mapCount": 17,
+      "record": {
+        "battles": 9999,
+        "wins": 2499
+      },
+      "actual": {
+        "money": 1234567,
+        "hours": 2,
+        "minutes": 1,
+        "have": 200,
+        "cage": 20,
+        "title": 100,
+        "guid": 100,
+        "map": 100,
+        "battle": 9999,
+        "win": 25
+      }
+    }
+  ]
+}

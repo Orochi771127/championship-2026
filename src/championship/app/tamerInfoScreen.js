@@ -1,4 +1,8 @@
 import { uiText, TAMER_FIELD_LABELS } from "../text/uiText.js";
+import {generationName,tamerRankName} from '../text/zhHant.js';
+import {NATIVE_RAISING_LIFECYCLE_RULES} from '../raising/nativeRaisingLifecycle.js';
+import {slotCountForTamerRank} from '../cage/cageCatalog.js';
+import {nativeBattleWinPercent} from '../battle/nativeTitleProgression.js';
 // Tamer Info -- the original's tamer_info_main_scene and tamer_info_sub_scene.
 //
 // THE FIELD LIST AND THE DIGIT WIDTHS ARE ROM_VERIFIED
@@ -38,23 +42,21 @@ import { uiText, TAMER_FIELD_LABELS } from "../text/uiText.js";
 //
 // WHAT HAS A SOURCE AND WHAT DOES NOT
 // ------------------------------------
-// Three of the twelve fields have a traced value source in this build:
+// OVL4 0210BB9C now closes the numeric/text bindings (2026-09-13):
 //
 //   money  the shop wallet, which is persisted and ROM-capped at 9999999
-//   have   the roster length
+//   have   rank-table capacity (020E1E14), NOT the number of held residents
 //   rank   the tamer rank -- PlayerData +0x0AE8, the same u16 the title-match scan
 //          at ARM9 0x02089230 halves to gate a fixture, and the index into the
 //          rank table at ARM9 0x020E1E18 that sets the ranch slot count
 //
-// title, guid, map, battle, win and time are lifetime counters the cartridge keeps
-// in its save. This build has no traced read site for any of them, so they are
-// drawn as unsourced at their correct width rather than as zeros. A zero in a
-// counter reads as "you have won nothing"; a row of dashes reads as "this build
-// does not know", which is the true statement.
+// title/guid/map are completion percentages (61/216/17 records), battle is
+// player +4D8, win is rounded percentage of +4DA/+4D8, time is minutes +AEA.
+// The original map flags and elapsed play minutes have no durable Web writer;
+// their known read addresses do not justify inventing history in old saves.
 //
-// The labels are the ROM's own node names. No English gloss is invented for the
-// ambiguous ones -- `guid` and `map` are what the scene calls them, and guessing
-// at "Guide entries" or "Maps discovered" would put my reading on screen.
+// Player labels use the verified completion/count bindings; internal NXR node
+// names remain in data-field-id for comparison with the source scene.
 
 import { deepFreeze } from "../contracts/championshipContracts.js";
 
@@ -69,22 +71,22 @@ export const TAMER_INFO_SCENES = deepFreeze([
  * tables fix. `source` names where a value comes from, or null when none is traced.
  */
 export const TAMER_INFO_FIELDS = deepFreeze([
-  { id: "title", scene: "main", y: 22, digits: 3, source: null },
-  { id: "guid", scene: "main", y: 44, digits: 3, source: null },
+  { id: "title", scene: "main", y: 22, digits: 3, source: "titleCompletionPercent" },
+  { id: "guid", scene: "main", y: 44, digits: 3, source: "bookCompletionPercent" },
   { id: "map", scene: "main", y: 66, digits: 3, source: null },
-  { id: "battle", scene: "main", y: 109, digits: 4, source: null },
-  { id: "win", scene: "main", y: 131, digits: 3, source: null },
+  { id: "battle", scene: "main", y: 109, digits: 4, source: "nativeBattleRecord" },
+  { id: "win", scene: "main", y: 131, digits: 3, source: "nativeBattleWinPercent" },
   // Not digit cells: a text label and two dynamic regions the cartridge fills.
-  { id: "name", scene: "sub", y: 38, kind: "text", source: null },
+  { id: "name", scene: "sub", y: 38, kind: "text", source: "trainerName" },
   { id: "rank", scene: "sub", y: 51, kind: "region", source: "tamerRank" },
   { id: "money", scene: "sub", y: 72, digits: 7, source: "shopWalletBits" },
   // The only field the cartridge splits with a separator node: three digits, the
   // separator at x=87, then two more. A clock, not a plain counter.
   { id: "time", scene: "sub", y: 113, digits: 3, minorDigits: 2, source: null },
-  { id: "license", scene: "sub", y: 119, kind: "region", source: null },
-  { id: "have", scene: "sub", y: 154, digits: 3, source: "rosterCount" },
+  { id: "license", scene: "sub", y: 119, kind: "region", source: "nativeRankGeneration" },
+  { id: "have", scene: "sub", y: 154, digits: 3, source: "nativeRankCapacity" },
   // Shares the y=154 row with `have`, sitting right at x=206/215.
-  { id: "cage", scene: "sub", y: 154, digits: 2, source: null }
+  { id: "cage", scene: "sub", y: 154, digits: 2, source: "nativeRankSlots" }
 ]);
 
 /** The `G` node at y=161 is the unit glyph beside the capacity figure, not a field. */
@@ -110,17 +112,28 @@ function padToWidth(value, digits) {
   return String(value).padStart(digits, "0");
 }
 
+// 0210BB9C uses rounded Q12 division, then drops the percentage fraction for
+// completion rows. Battle win percentage uses the distinct rounded rule.
+export function tamerCompletionPercent(count,total){
+  if(!Number.isInteger(count)||count<0||count>total)return null;
+  const q=Number(((BigInt(count)<<32n)/BigInt(total)+0x80000n)>>20n);
+  return (q*100)>>12;
+}
+
 /**
  * Mount Tamer Info.
  *
  * @param {object} options
  * @param {HTMLElement} options.root
  * @param {number|null} [options.walletBits]  the shop wallet, or null if unavailable
- * @param {number|null} [options.rosterCount] how many Digimon the player holds
+ * @param {number|null} [options.titleCount] completed original title records
+ * @param {number|null} [options.registeredCount] registered original book entries
+ * @param {object|null} [options.battleRecord] existing persistent player battle totals
  * @param {number|null} [options.tamerRank]   PlayerData +0x0AE8
  * @param {() => void} [options.onExit]
  */
-export function createTamerInfoView({ root, walletBits = null, rosterCount = null, tamerRank = null, trainerName=null, onExit } = {}) {
+export function createTamerInfoView({ root, walletBits = null, tamerRank = null, trainerName=null,
+  titleCount=null,registeredCount=null,battleRecord=null,onExit } = {}) {
   if (!root) throw new TypeError("Tamer Info requires a root element");
 
   root.replaceChildren();
@@ -128,10 +141,17 @@ export function createTamerInfoView({ root, walletBits = null, rosterCount = nul
   root.dataset.uiAuthority = "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R";
   root.dataset.originalScenes = TAMER_INFO_SCENES.join(",");
 
+  const rank=Number.isInteger(tamerRank)?NATIVE_RAISING_LIFECYCLE_RULES.ranks[tamerRank]:null;
   const values = {
     money: Number.isInteger(walletBits) ? Math.min(walletBits, TAMER_INFO_MONEY_CAP) : null,
-    have: Number.isInteger(rosterCount) ? rosterCount : null,
-    rank: Number.isInteger(tamerRank) ? tamerRank : null,
+    have:rank?.capacity??null,
+    cage:rank?slotCountForTamerRank(tamerRank):null,
+    license:rank?generationName(rank.generation):null,
+    rank:tamerRankName(tamerRank),
+    title:tamerCompletionPercent(titleCount,61),
+    guid:tamerCompletionPercent(registeredCount,216),
+    battle:battleRecord?.battles??null,
+    win:nativeBattleWinPercent(battleRecord),
     name:trainerName
   };
 
@@ -155,7 +175,8 @@ export function createTamerInfoView({ root, walletBits = null, rosterCount = nul
       sourced += 1;
       cell.dataset.state = "SOURCED";
       cell.dataset.source = field.source??'trainerName';
-      cell.textContent = uiText(field.digits ? padToWidth(value, field.digits) : String(value));
+      const suffix=['title','guid','win'].includes(field.id)?' %':field.id==='have'?' G':'';
+      cell.textContent = field.id==='name'?String(value):uiText((field.digits ? padToWidth(value, field.digits) : String(value))+suffix);
     } else {
       // Drawn at the ROM's width so the screen keeps its shape, but never as a
       // number -- an unsourced counter must not read as a real total. The name,
@@ -172,6 +193,7 @@ export function createTamerInfoView({ root, walletBits = null, rosterCount = nul
 
   const note = element("p", "cm-tamer-note",
     `共 ${TAMER_INFO_FIELDS.length} 個欄位，其中 ${TAMER_INFO_FIELDS.length-sourced} 個欄位的資料來源尚待確認，以橫線表示，並非零。`);
+  note.hidden = new URLSearchParams(globalThis.location?.search??'').get('presentation') !== 'developer';
 
   const back = element("button", "cm-tamer-back", "BACK");
   back.type = "button";

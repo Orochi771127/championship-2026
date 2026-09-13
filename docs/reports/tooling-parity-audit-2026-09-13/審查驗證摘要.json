@@ -1,0 +1,175 @@
+{
+  "date": "2026-09-13",
+  "head": "08445ba4629aac5757f31b0c1e68fbf40e7966de",
+  "productCodeChanged": false,
+  "fullLocalTests": {
+    "passed": 1487,
+    "failed": 0
+  },
+  "portableCi": {
+    "passed": 1270,
+    "failed": 0
+  },
+  "sourceInventory": {
+    "romFilesMatched": 6419,
+    "nxrFilesMatched": 96,
+    "indexedNodes": 1369
+  },
+  "catalog": {
+    "shopRows": 118,
+    "shopImageBound": 39,
+    "shopPlaceholders": 79,
+    "cageDefinitions": 36,
+    "cageImages": 36,
+    "cagePrograms": 108,
+    "byCategory": {
+      "TRAINING_GOODS": 4,
+      "HUNT_ITEMS": 49,
+      "PLUGINS": 30,
+      "CAGES": 35
+    },
+    "bySubcategory": {
+      "TRAINING_GOODS": 4,
+      "ROPE": 12,
+      "SHOT": 12,
+      "WIRE": 6,
+      "MEAT": 4,
+      "DECOY": 2,
+      "LIGHT": 2,
+      "BOMB": 4,
+      "MINE": 2,
+      "CAPTURE_TRAP": 2,
+      "MEMORY_CARD": 3,
+      "ANALYZER": 9,
+      "CHECKER": 5,
+      "RADAR_SEARCH": 15,
+      "MEMORY_CHECKER": 1,
+      "CAGE": 35
+    },
+    "limits": "Inventory and binding census, not all-item gameplay/visual acceptance"
+  },
+  "shopBrowser": {
+    "setup": "EXISTING_QA_UNLOCK_GRANTS_IN_ISOLATED_CONTEXT; NORMAL_UI_PURCHASES; NOT_NATURAL_UNLOCK_ACCEPTANCE",
+    "rows": 118,
+    "purchased": 113,
+    "alreadyAtCap": 5,
+    "errors": [],
+    "allFieldUsesAccepted": false
+  },
+  "originalTutorialReplay": {
+    "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+    "stateSha256": "91d19ca30f2cff8ff6ceb57a54fc7d93a3de6dfa7ab83d02a4664ec08e7c7888",
+    "state": "R:\\Projects\\Championship2026\\_archive\\lifecycle-two-stage-2026-09-09\\title-observe\\first-home.dst",
+    "scope": "Original saved-state replay; no gameplay RAM modification",
+    "screenshots": [
+      "invitation.png"
+    ],
+    "branches": [
+      {
+        "choice": "accept",
+        "touch": [
+          79,
+          94
+        ],
+        "heldFrames": 5,
+        "afterReleaseFrames": 240,
+        "screenshot": "accept.png"
+      },
+      {
+        "choice": "decline",
+        "touch": [
+          174,
+          94
+        ],
+        "heldFrames": 5,
+        "afterReleaseFrames": 240,
+        "screenshot": "decline.png"
+      }
+    ]
+  },
+  "ghidra": [
+    {
+      "name": "ARM9",
+      "base": "0x2000000",
+      "functions": 3285,
+      "staticAnalysisComplete": true,
+      "semanticParity": false
+    },
+    {
+      "name": "OVL0",
+      "base": "0x210b300",
+      "functions": 494,
+      "staticAnalysisComplete": true,
+      "semanticParity": false
+    },
+    {
+      "name": "OVL18",
+      "base": "0x210b300",
+      "functions": 376,
+      "staticAnalysisComplete": true,
+      "semanticParity": false
+    }
+  ],
+  "ghidraMcpQueries": [
+    {
+      "tool": "list_project_binaries",
+      "ok": true
+    },
+    {
+      "tool": "decompile_function",
+      "ok": true
+    },
+    {
+      "tool": "disassemble",
+      "ok": true
+    }
+  ],
+  "nativeLifecycle": {
+    "catalogMatchesCurrent": true,
+    "trainingCases": 672,
+    "trainingTimelines": 6,
+    "evolutionCases": 2736,
+    "sleepPairs": 880,
+    "overnightCases": 168,
+    "wasteCases": 216
+  },
+  "huntToolCpuCases": 4009,
+  "raisingGrowthCpuCases": 768,
+  "normalHuntBrowser": {
+    "gate": "CHAMPIONSHIP_VS3_ENCLOSURE_BROWSER_QA",
+    "date": "2026-09-12T23:05:06.795Z",
+    "baseUrl": "http://127.0.0.1:8732/championship.html",
+    "viewport": "390x844",
+    "selectedGateId": "championship:2026:gate:grass",
+    "capturedWildId": "championship:2026:gate:grass:native-wild:14",
+    "captureButtonPresent": false,
+    "inputCadence": "WAIT_FOR_OBSERVED_NATIVE_FRAME_PER_POINTER_SAMPLE",
+    "initialClock": "2026-09-10T12:34:56Z (UTC, fixed Date for original clock-seeded RNG)",
+    "setup": "NORMAL_NEW_GAME_AND_LOADOUT_NO_STATE_INJECTION",
+    "verdict": "PASS"
+  },
+  "raisingBrowser": {
+    "outcome": "PASS",
+    "viewports": 6,
+    "saveReload": true,
+    "fallback": true
+  },
+  "ordinaryPageWalk": {
+    "helpTopicsClicked": 68,
+    "scheduleItemsClicked": 61,
+    "battleMenuFollowupErrors": [],
+    "normalBattleFieldAndResultReached": false
+  },
+  "fullOriginalParity": false,
+  "physicalDeviceAccepted": false,
+  "remaining": [
+    "P0 Hunt readiness repair",
+    "tutorial UI and full progression",
+    "79 shop item images and loadout icons",
+    "roster controls and details",
+    "8 Tamer fields",
+    "battle mode bindings and result art",
+    "all-item field-use and all-cage VFX acceptance",
+    "all original scene semantic/visual/audio comparison"
+  ]
+}

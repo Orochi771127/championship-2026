@@ -1,4 +1,7 @@
-"""Build the guided-tutorial step catalogue.
+"""Build the legacy observed middle-segment tutorial catalogue.
+
+This is not a complete opening tutorial. Preserve cursor identity for existing
+saves; never prepend the missing first 20 messages to this version's cursor.
 
 Order and identity come from the observed original run
 (docs/research/TUTORIAL_CONTINUATION_OBSERVED_2026-09-09.json); the ROM is read
@@ -120,6 +123,10 @@ def main():
         'schemaVersion': 1,
         'contract': 'TUTORIAL_STEPS.v1',
         'evidence': 'OBSERVED_RUN_PLUS_BANK_INDEX',
+        'coverage': 'LEGACY_MIDDLE_SEGMENT_ONLY',
+        'normalOnboardingEligible': False,
+        'fullOriginalProgressionVerified': False,
+        'coverageSource': 'docs/research/TUTORIAL_MESSAGE_COVERAGE_2026-09-13.json',
         'romSha256': SHA,
         'bank': BANK,
         'bankEntryCount': count,

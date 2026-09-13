@@ -1,8 +1,29 @@
 // Product-authored Traditional Chinese copy for the guided tutorial, keyed by
-// the original's text-bank record id. The step order, phase and advance
-// condition are the catalogue's; only the wording is ours. No original string
-// is transcribed here.
+// the original's text-bank record id. Copy coverage is not progression coverage:
+// the legacy 35-step catalogue is only a middle segment. In particular, text
+// wording does not establish whether the original waits for input or performs
+// a demonstration. See TUTORIAL_MESSAGE_COVERAGE_2026-09-13.json.
 const lines = {
+  1495: '在育成畫面裡，可以照顧你的數碼獸。',
+  1496: '這是一顆數碼蛋，數碼獸會從蛋裡誕生。',
+  1497: '稍等一下，看看數碼獸的變化吧。',
+  1498: '數碼獸進化了，開始照顧牠吧。',
+  1499: '出現肉的圖案，表示牠肚子餓了。',
+  1500: '先選擇肉的圖示。',
+  1501: '再點一下數碼獸附近的地面，放下食物。',
+  1502: '排泄物和吃剩的食物，都要記得清理。',
+  1503: '食物放得太久就會腐壞。',
+  1504: '先選擇清潔圖示。',
+  1505: '點一下排泄物或剩下的食物，就能清除。',
+  1506: '環境髒亂，數碼獸就可能生病。',
+  1507: '用藥幫牠治療吧。',
+  1508: '先選擇藥品圖示。',
+  1509: '再點一下要治療的數碼獸。',
+  1510: '接下來，認識訓練功能。',
+  1511: '數碼獸生活的房間，就是育成區。',
+  1512: '選擇手掌圖示後，可以拖曳畫面查看育成區；方向操作也可以移動視野。',
+  1513: '使用手掌工具，按住數碼獸就能把牠拿起來。',
+  1514: '把牠移到不同的育成區，讓牠接受訓練、繼續成長。',
   1515: '把夥伴放進訓練育成區的那一刻，訓練就開始了。',
   1516: '訓練會消耗飽足度，也會減少 HP。',
   1517: '把牠移到保健室育成區，讓 HP 恢復吧。',
@@ -38,6 +59,23 @@ const lines = {
   1547: '在附近放下食物，把牠引過來。',
   1548: '用彈射可以讓數碼獸停下動作。',
   1549: '趁牠麻痺的時候，用繩索把牠抓住。',
+  1550: '畫面上方會顯示剩餘時間，可以狩獵到時間結束。',
+  1551: '也可以查看捕獲的數碼獸，或將牠放走。',
+  1552: '在剩餘時間內，繼續尋找數碼獸吧。',
+  1553: '最後，來認識對戰功能。',
+  1554: '請從子選單開啟「對戰」。',
+  1555: '選擇「頭銜賽」。',
+  1556: '每天可以參加的頭銜賽會有所不同。',
+  1557: '這裡會顯示對手和對戰場地。',
+  1558: '先安排自己的參賽隊伍吧。',
+  1559: '選擇要上場的數碼獸。',
+  1560: '可以分別替每隻數碼獸設定特殊攻擊等選項，',
+  1561: '安排牠在戰鬥中的作戰方式。',
+  1562: '設定完成後，選擇「返回」。',
+  1563: '選擇「開始對戰」，數碼獸就會自動進行戰鬥。',
+  1564: '持續訓練、讓數碼獸進化，為贏得對戰做好準備。',
+  1565: '向數碼獸冠軍賽的優勝邁進吧！',
+  1566: '培育強大的數碼獸，一起挑戰冠軍。',
 };
 
 /** Short prompts for the steps that wait on an action rather than a tap. */

@@ -680,6 +680,29 @@
 }
 .cm-tamer-field__value[data-state="UNSOURCED"] { color: var(--ds-text-dim); text-shadow: var(--ds-text-shadow); }
 .cm-digimon-detail { gap: 8px 12px; align-items: center; }
+.cm-digimon-resistance {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto minmax(96px, 1fr);
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.cm-digimon-resistance__title { color: var(--ds-text); font-size: 0.68rem; font-weight: 700; }
+.cm-digimon-resistance__bar {
+  display: flex;
+  min-height: 12px;
+  overflow: hidden;
+  border: 2px solid var(--ds-ink);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.34);
+}
+.cm-digimon-resistance__segment { min-width: 0; }
+.cm-digimon-resistance__segment--heat { background: #f05b3c; }
+.cm-digimon-resistance__segment--cold { background: #54c5e8; }
+.cm-digimon-resistance__segment--thunder { background: #f6cf3d; }
+.cm-digimon-resistance__segment--light { background: #f5f2d0; }
+.cm-digimon-resistance__segment--dark { background: #7254a7; }
 .cm-tamer-fields { gap: 9px 12px; align-items: center; }
 
 .cm-digimon-untraced, .cm-help-note, .cm-tamer-note,

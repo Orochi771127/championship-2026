@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import { TUTORIAL_CONTRACT, TUTORIAL_STEP_COUNT, TUTORIAL_PHASES, TUTORIAL_FINISHED,
+import { TUTORIAL_CONTRACT, TUTORIAL_STEP_COUNT, TUTORIAL_PHASES, TUTORIAL_FINISHED, TUTORIAL_COVERAGE, TUTORIAL_NORMAL_ONBOARDING_ELIGIBLE,
   createTutorialCursor, tutorialFinished, tutorialStepAt, tutorialStepsForPhase,
   tutorialExpectedAction, advanceTutorial, skipTutorial }
   from "../src/championship/app/nativeTutorialProgression.js";
@@ -109,9 +109,19 @@ test("the cursor the tutorial produces is one the opening save already accepts",
   assert.equal(skipTutorial(TUTORIAL_FINISHED), TUTORIAL_FINISHED);
 });
 
-test("every step has Chinese copy and every action has a prompt, with nothing spare", () => {
+test("copy covers all 72 bank messages while the legacy cursor remains the observed middle segment", () => {
   assert.deepEqual([...TUTORIAL_TEXT_IDS].sort((a, b) => a - b),
-    catalogue.steps.map((step) => step.textId));
+    Array.from({ length: 72 }, (_, i) => 1495 + i));
+  assert.equal(TUTORIAL_COVERAGE, 'LEGACY_MIDDLE_SEGMENT_ONLY');
+  assert.equal(TUTORIAL_NORMAL_ONBOARDING_ELIGIBLE, false);
+  assert.equal(tutorialStepAt(0).textId, 1515, 'existing saves must not silently move to a different lesson');
+  const coverage = JSON.parse(fs.readFileSync('docs/research/TUTORIAL_MESSAGE_COVERAGE_2026-09-13.json', 'utf8'));
+  assert.deepEqual(coverage.messages.map(row => row.textId), TUTORIAL_TEXT_IDS);
+  assert.equal(coverage.normalOnboardingAccepted, false);
+  for (const id of TUTORIAL_TEXT_IDS) {
+    assert.ok(tutorialLine(id).length > 0);
+    assert.doesNotMatch(tutorialLine(id), /[぀-ゟ゠-ヿ]/);
+  }
   for (const step of catalogue.steps) {
     const line = tutorialLine(step.textId);
     assert.ok(line.length > 0, `step ${step.step} has empty copy`);

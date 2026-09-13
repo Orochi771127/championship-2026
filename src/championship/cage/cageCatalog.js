@@ -6,13 +6,11 @@
 //     ranch slot count 14 / 16 / 18 / 20
 //   • OVL15 0x0210C660..0x0210C71C: rank-mask and cover switch
 //
-// The existing editor stores one module per anchor and does not yet enforce
-// the original shape masks. OVL15 0x0210C118 reads 16 masks at 0x0210DB40;
-// masks may occupy several cells. See the R2 native-geometry contract before
-// changing existing saves or placement behavior. Channel identity and the recommended
-// Digimon count come from original descriptions (VERIFIED_TEXT). Overfill is
-// allowed and only named as "stress rises more easily"; tick magnitudes stay
-// UNKNOWN_REQUIRES_TRACE — see cageEffects.js.
+// New native-layout saves use the original multi-cell masks through
+// nativeRanchLayout.js and cageEditRuntime.js. The placement constants below
+// describe only older saves without that marker. OVL15 0210C118 reads 16 masks
+// at 0210DB40. Training deltas are owned by nativeRaisingTraining.js; descriptions
+// and recommended counts remain text evidence, separate from overfill parity.
 
 import { deepFreeze } from "../contracts/championshipContracts.js";
 import { SHOP_PURCHASE_DOMAIN, listShopRecords } from "../shop/shopCatalog.js";
@@ -32,6 +30,7 @@ export const MAX_SLOT_COUNT = 20;
 export const STARTING_SLOT_COUNT = 14;
 export const SLOT_COUNTS = Object.freeze([14, 16, 18, 20]);
 export const SLOT_COUNT_EVIDENCE = "VERIFIED_BINARY";
+// Compatibility defaults; native frames override both through layoutVersion.
 export const PLACEMENT_MODEL = "ONE_MODULE_PER_HEX_SLOT";
 export const PLACEMENT_EVIDENCE = "PRODUCT_AUTHORED_PENDING_ORIGINAL_FOOTPRINT_MIGRATION";
 export const EFFECT_PARITY = CAGE_TRAINING_MAGNITUDE_PARITY;

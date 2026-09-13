@@ -368,6 +368,9 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
 
   const host = element("div", "cm-vs5-field");
   host.setAttribute("aria-label", uiText("Battle field. The match runs on its own."));
+  host.setAttribute('aria-busy','true');
+  const loading=element('p','cm-vs5-field__loading','正在準備對戰場地…');
+  loading.setAttribute('role','status');host.append(loading);
 
   // The arena name and the evidence label live INSIDE the clock band: the shell
   // holds the contract's five bands and nothing else, so a sixth child cannot
@@ -389,7 +392,10 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   // three, the field, the player's three, the record.
   section.append(clock.band, opponents, host, players, log.band);
 
-  const field = mountField({ host });
+  const field = mountField({ host,
+    onReady(){host.setAttribute('aria-busy','false');loading.remove();},
+    onError(){host.setAttribute('aria-busy','false');loading.textContent='對戰場地載入失敗，請返回牧場後再試。';}
+  });
 
   return Object.freeze({
     /** Called with each view the presentation source publishes. */

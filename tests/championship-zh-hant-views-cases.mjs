@@ -49,7 +49,7 @@ function useDocument(t) {
 const allNodes = root => [root, ...root.querySelectorAll("*")];
 const visibleCopy = root => allNodes(root).flatMap(node => [node.textContent, node.attributes["aria-label"], node.title]).filter(Boolean).join("\n");
 // G is the original capacity unit, and α/β/γ are item variant marks.
-const noForeignCopy = root => assert.doesNotMatch(visibleCopy(root).replace(/\d+G\b/g, ""), /[a-zA-Z\p{Script=Katakana}\p{Script=Hiragana}]/u);
+const noForeignCopy = root => assert.doesNotMatch(visibleCopy(root).replace(/\d+\s*G\b/g, ""), /[a-zA-Z\p{Script=Katakana}\p{Script=Hiragana}]/u);
 const buttonWithText = (root, text) => root.querySelectorAll("button").find(node => node.textContent === text);
 function sourceFor(screen, overrides) {
   const app = new Proxy({
@@ -148,14 +148,36 @@ test("roster labels are Chinese and player names bypass UI translation and casin
   }
 });
 
+test('roster presents current/max vitals and individual details without inventing legacy values',t=>{
+  const root=useDocument(t);
+  createDigimonListView({root,entries:[{displayName:'夥伴',stats:{currentHp:37,maxHp:240,currentTp:12,maxTp:80,
+    capacityG:7,attack:52,defense:31,wisdom:44,speed:29,battleCount:18,rebirthCount:2,winPercent:33.3251953125}}]});
+  const values=root.querySelectorAll('.cm-digimon-detail__value').map(n=>n.textContent);
+  for(const expected of ['37/240','12/80','7 G','52','31','44','29','18','2','33.3 %'])assert.ok(values.includes(expected),expected);
+  assert.equal(values.includes('240'),false,'HP is not silently replaced by its maximum');
+  createDigimonListView({root,entries:[{displayName:'舊存檔'}]});
+  assert.deepEqual(root.querySelectorAll('.cm-digimon-detail__value').map(n=>n.textContent),['舊存檔']);
+});
+
 test("Tamer Info translates unknown field labels without filling unknown values", t => {
   const root = useDocument(t);
   const view = createTamerInfoView({ root, walletBits: 1024, rosterCount: 3, tamerRank: 2 });
-  assert.equal(view.inspect().sourcedCount, 3);
+  assert.equal(view.inspect().sourcedCount, 5);
   const values = root.querySelectorAll(".cm-tamer-field__value");
   assert.equal(values.find(row => row.dataset.fieldId === "money").textContent, "0001024");
   assert.equal(values.find(row => row.dataset.fieldId === "guid").textContent, "---");
+  assert.equal(values.find(row => row.dataset.fieldId === "have").textContent, "096 G",'ROM 020E1E14 + 2*36 is capacity, not three residents');
+  assert.equal(values.find(row => row.dataset.fieldId === "cage").textContent, "16");
   noForeignCopy(root);
+});
+
+test('Tamer Info uses separate completion and win-percentage rounding and preserves player names',t=>{
+  const root=useDocument(t);
+  createTamerInfoView({root,trainerName:'HUNT',tamerRank:0,titleCount:4,registeredCount:7,battleRecord:{battles:3,wins:2}});
+  const values=root.querySelectorAll('.cm-tamer-field__value');
+  const value=id=>values.find(row=>row.dataset.fieldId===id).textContent;
+  assert.equal(value('name'),'HUNT');assert.equal(value('title'),'006 %');assert.equal(value('guid'),'003 %');
+  assert.equal(value('battle'),'0003');assert.equal(value('win'),'067 %');assert.equal(value('have'),'064 G');
 });
 
 test("Hunt Result translates failure/release UI without committing a displayed default name", t => {

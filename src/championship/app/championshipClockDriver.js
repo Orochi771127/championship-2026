@@ -23,7 +23,8 @@ export function createChampionshipClockDriver({
   now = () => performance.now(),
   isVisible = () => true,
   isContextLost = () => false,
-  isModalOpen = () => false
+  isModalOpen = () => false,
+  isSceneReady = () => true
 } = {}) {
   if (!app || typeof app.advanceNaturalClock !== "function" || typeof ticker?.add !== "function" || typeof ticker?.remove !== "function") {
     throw new TypeError("The clock driver requires the existing app and Application ticker");
@@ -45,7 +46,7 @@ export function createChampionshipClockDriver({
     if (disposed) return;
     const session = app.getSession();
     if (session !== currentSession) reset();
-    if (!active || !session || !isVisible() || isContextLost() || isModalOpen()) {
+    if (!active || !session || !isVisible() || isContextLost() || isModalOpen() || !isSceneReady()) {
       reset();
       return;
     }

@@ -346,7 +346,7 @@ export function createHuntLoadoutView({ root, source }) {
   entryStatus.setAttribute("role", "status");
   entryStatus.hidden = true;
   body.append(gatePlate, equipmentList, pluginList, entryStatus);
-  const evidence = developerOnly(mode, "Five equipment classes and four plugin positions are ROM_VERIFIED. Item identities, stat values and the empty-loadout rule are PRODUCT_AUTHORED. No item effect is applied.");
+  const evidence = developerOnly(mode, "Five equipment classes and four plugin positions are ROM_VERIFIED. Native item and plugin effects use the existing Hunt runtime. The empty-loadout confirmation rule remains PRODUCT_AUTHORED; individual icon parity is incomplete.");
   if (evidence) body.append(evidence);
 
   const back = actionButton("返回選場");
@@ -477,7 +477,7 @@ export function createHuntLoadoutView({ root, source }) {
   });
 }
 
-export async function createHuntFieldView({ root, source, mountField }) {
+export async function createHuntFieldView({ root, source, mountField, loadTimeoutMs = 30000 }) {
   if (typeof mountField !== "function") throw new TypeError("The Hunt field view requires the published field mounter");
   const frame = source.getFrame();
   const block = frame.huntField;
@@ -506,8 +506,12 @@ export async function createHuntFieldView({ root, source, mountField }) {
   const viewport = element("div", "cm-vs2-field__viewport");
   viewport.append(element("span", "cm-vs2-field__corner cm-vs2-field__corner--a"), element("span", "cm-vs2-field__corner cm-vs2-field__corner--b"));
   const fieldHost = element("div", "cm-vs2-field__canvas");
+  fieldHost.setAttribute("aria-busy", "true");
   fieldHost.setAttribute("aria-label", uiText("Exploration field. Drag empty ground to look around. Touch a creature to select it."));
   viewport.append(fieldHost);
+  const loading = element('p', 'cm-vs2-field__loading', '正在準備狩獵場…');
+  loading.setAttribute('role', 'status');
+  viewport.append(loading);
   const target = element("section", "cm-vs2-target");
   target.setAttribute('aria-label', uiText('狩獵目標資訊'));
   const targetName = element('strong', 'cm-vs2-target__name', '輕觸數碼獸查看');
@@ -529,7 +533,7 @@ export async function createHuntFieldView({ root, source, mountField }) {
   const toolButtons = new Map();
   for (const tool of block.toolState?.tools ?? []) {
     const button = actionButton(tool.label);
-    button.disabled = !tool.enabled;
+    button.disabled = true;
     // The original shows these as icons on the same hexagon plate the care rail
     // uses, not as words. `data-tool` names which glyph; the skin paints it and
     // the label stays in the DOM for assistive technology.
@@ -545,14 +549,42 @@ export async function createHuntFieldView({ root, source, mountField }) {
   if(block.toolState) shell.append(tools);
   root.append(shell);
 
-  exit.addEventListener("click", () => source.intents.exitHunt());
-  const field = await mountField({ host: fieldHost, source,
+  const load = new AbortController();
+  let timedOut = false;
+  exit.addEventListener("click", () => {
+    if (fieldHost.getAttribute('aria-busy') === 'true') {
+      loading.textContent = '正在返回牧場…';
+      exit.disabled = true;
+    }
+    load.abort();
+    source.intents.exitHunt();
+  });
+  // Network time belongs to this view, not to the native Hunt timer. Releasing
+  // the mount queue on cancellation also lets Home open if a request hangs.
+  const cancelled = new Promise(resolve => load.signal.addEventListener('abort', () => resolve(null), { once: true }));
+  const timeout = setTimeout(() => { timedOut = true; load.abort(); }, loadTimeoutMs);
+  let field;
+  try {
+    const pending = Promise.resolve().then(() => mountField({ host: fieldHost, source, signal: load.signal,
     onActorFrame:mode===VS2_PRESENTATION_MODES.DEVELOPER
       ? (positions,toolState)=>{fieldHost.dataset.wildScreenPositions=JSON.stringify(positions);
-        fieldHost.dataset.huntToolState=JSON.stringify(toolState);} : null });
+        fieldHost.dataset.huntToolState=JSON.stringify(toolState);} : null }));
+    // A late result belongs to the abandoned view even if another Hunt is open.
+    field = await Promise.race([pending.then(result => {
+      if (load.signal.aborted) { result?.dispose?.(); return null; }
+      return result;
+    }), cancelled]);
+  } finally { clearTimeout(timeout); }
+  if (!field && load.signal.aborted) {
+    fieldHost.setAttribute('aria-busy', 'false');
+    if (timedOut) loading.textContent = '狩獵場載入時間過長，請返回牧場後再試一次。';
+    return Object.freeze({ isPlayable: false, render() {}, dispose() { load.abort(); shell.remove(); } });
+  }
   if (!field || typeof field.render !== "function" || typeof field.dispose !== "function") {
     throw new TypeError("Published field presenter must expose render(frame) and dispose()");
   }
+  fieldHost.setAttribute('aria-busy', 'false');
+  loading.remove();
 
   function render(nextFrame) {
     const next = nextFrame?.huntField;
@@ -570,7 +602,7 @@ export async function createHuntFieldView({ root, source, mountField }) {
     radar.hidden=!plugins?.radar;radar.replaceChildren();
     for(const marker of plugins?.radar??[]){const dot=element('i');dot.style.left=`${marker.x*100}%`;dot.style.top=`${marker.y*100}%`;radar.append(dot);}
     if(next.toolState){
-      for(const tool of next.toolState.tools){const button=toolButtons.get(tool.id);if(button){button.disabled=!tool.enabled;button.setAttribute("aria-pressed",String(next.toolState.activeTool===tool.id));
+      for(const tool of next.toolState.tools){const button=toolButtons.get(tool.id);if(button){button.disabled=field.isPlayable===false||!tool.enabled;button.setAttribute("aria-pressed",String(next.toolState.activeTool===tool.id));
         const counter=plugins?.counters.find(c=>c.id===tool.id);button.textContent=uiText(tool.label+(counter?` ×${counter.quantity}`:''));}}
       const selectedTool=next.toolState.tools.find(t=>t.id===next.toolState.activeTool);
       movementHint.textContent=uiText(({OVER_CAPACITY:"記憶卡容量不足",ROPE_BROKEN:"繩索斷了",ON_CARD:"已收入記憶卡",EMPTY:"道具已用完",
@@ -594,9 +626,11 @@ export async function createHuntFieldView({ root, source, mountField }) {
 
   render(frame);
   return Object.freeze({
+    isPlayable: field.isPlayable !== false,
     render,
     getDiagnostics() { return field.getDiagnostics?.() ?? null; },
     dispose() {
+      load.abort();
       field.dispose();
       root.replaceChildren();
       root.className = "";

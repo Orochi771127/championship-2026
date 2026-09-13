@@ -17,6 +17,7 @@ import {
   CAGE_TRAINING_MAGNITUDE_PARITY,
   CAGE_CAPACITY_RULE,
   CAGE_CAPACITY_OVERFILL_CONSEQUENCE,
+  CAGE_CAPACITY_OVERFILL_MAGNITUDE_PARITY,
   evaluateCageOccupancy,
   getCageTraining
 } from "../src/championship/cage/cageEffects.js";
@@ -266,7 +267,7 @@ test("recommended count is a soft cap: overfill is allowed and only named as ext
   assert.equal(atCap.overRecommended, false);
   assert.equal(atCap.capacityRule, CAGE_CAPACITY_RULE);
   assert.equal(atCap.overfillConsequence, CAGE_CAPACITY_OVERFILL_CONSEQUENCE);
-  assert.equal(atCap.stressParity, CAGE_TRAINING_MAGNITUDE_PARITY);
+  assert.equal(atCap.stressParity, CAGE_CAPACITY_OVERFILL_MAGNITUDE_PARITY);
 
   const over = evaluateCageOccupancy({ capacity: 2, occupantCount: 3 });
   assert.equal(over.overRecommended, true);

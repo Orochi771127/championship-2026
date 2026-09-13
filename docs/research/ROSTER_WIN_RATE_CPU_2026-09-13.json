@@ -1,0 +1,313 @@
+{
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "function": "ARM9 02088480",
+  "evidence": "BOUNDED_ORIGINAL_CPU_FLOAT_ARGUMENT_REPLAY",
+  "seams": [
+    "synthetic individual/view",
+    "emulated DS integer divider",
+    "text and render stubs",
+    "final formatting excluded"
+  ],
+  "cases": [
+    {
+      "battles": 0,
+      "wins": 0,
+      "percent": 0.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 1,
+      "wins": 0,
+      "percent": 0.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 1,
+      "wins": 1,
+      "percent": 100.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 2,
+      "wins": 0,
+      "percent": 0.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 2,
+      "wins": 1,
+      "percent": 50.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 2,
+      "wins": 2,
+      "percent": 100.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 3,
+      "wins": 0,
+      "percent": 0.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 3,
+      "wins": 1,
+      "percent": 33.3251953125,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 3,
+      "wins": 2,
+      "percent": 66.6748046875,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 3,
+      "wins": 3,
+      "percent": 100.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 7,
+      "wins": 0,
+      "percent": 0.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 7,
+      "wins": 2,
+      "percent": 28.564453125,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 7,
+      "wins": 3,
+      "percent": 42.8466796875,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 7,
+      "wins": 6,
+      "percent": 85.7177734375,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 7,
+      "wins": 7,
+      "percent": 100.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 10,
+      "wins": 0,
+      "percent": 0.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 10,
+      "wins": 3,
+      "percent": 30.0048828125,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 10,
+      "wins": 5,
+      "percent": 50.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 10,
+      "wins": 9,
+      "percent": 89.990234375,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 10,
+      "wins": 10,
+      "percent": 100.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 19,
+      "wins": 0,
+      "percent": 0.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 19,
+      "wins": 6,
+      "percent": 31.5673828125,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 19,
+      "wins": 9,
+      "percent": 47.36328125,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 19,
+      "wins": 18,
+      "percent": 94.7265625,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 19,
+      "wins": 19,
+      "percent": 100.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 61,
+      "wins": 0,
+      "percent": 0.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 61,
+      "wins": 20,
+      "percent": 32.7880859375,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 61,
+      "wins": 30,
+      "percent": 49.169921875,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 61,
+      "wins": 60,
+      "percent": 98.3642578125,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 61,
+      "wins": 61,
+      "percent": 100.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 100,
+      "wins": 0,
+      "percent": 0.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 100,
+      "wins": 33,
+      "percent": 33.0078125,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 100,
+      "wins": 50,
+      "percent": 50.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 100,
+      "wins": 99,
+      "percent": 98.9990234375,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 100,
+      "wins": 100,
+      "percent": 100.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 999,
+      "wins": 0,
+      "percent": 0.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 999,
+      "wins": 333,
+      "percent": 33.3251953125,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 999,
+      "wins": 499,
+      "percent": 49.951171875,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 999,
+      "wins": 998,
+      "percent": 99.90234375,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 999,
+      "wins": 999,
+      "percent": 100.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 9999,
+      "wins": 0,
+      "percent": 0.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 9999,
+      "wins": 3333,
+      "percent": 33.3251953125,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 9999,
+      "wins": 4999,
+      "percent": 50.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 9999,
+      "wins": 9998,
+      "percent": 100.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 9999,
+      "wins": 9999,
+      "percent": 100.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 65535,
+      "wins": 0,
+      "percent": 0.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 65535,
+      "wins": 21845,
+      "percent": 33.3251953125,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 65535,
+      "wins": 32767,
+      "percent": 50.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 65535,
+      "wins": 65534,
+      "percent": 100.0,
+      "format": "%.1f %"
+    },
+    {
+      "battles": 65535,
+      "wins": 65535,
+      "percent": 100.0,
+      "format": "%.1f %"
+    }
+  ]
+}

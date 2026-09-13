@@ -1,0 +1,139 @@
+{
+  "scope": "System Chrome fresh isolated browser context. No clock or gameplay-state overrides. Normal title/opening/gate/loadout/field entry.",
+  "url": "https://orochi771127.github.io/championship-2026/",
+  "errors": [],
+  "failedHttpResponses": [],
+  "steps": [
+    {
+      "label": "title",
+      "screen": null,
+      "canvases": 0,
+      "pending": []
+    },
+    {
+      "label": "after-opening",
+      "screen": null,
+      "canvases": 1,
+      "pending": [
+        {
+          "url": "https://orochi771127.github.io/championship-2026/assets/production/internal-faithful-baseline/raising-feedback-v1/cell-032.png",
+          "ageMs": 283
+        },
+        {
+          "url": "https://orochi771127.github.io/championship-2026/assets/production/cage/licensed-runtime-v1/fields/field_cm02_01/frame-00.png",
+          "ageMs": 279
+        },
+        {
+          "url": "https://orochi771127.github.io/championship-2026/assets/production/internal-faithful-baseline/raising-feedback-v1/cell-031.png",
+          "ageMs": 227
+        },
+        {
+          "url": "https://orochi771127.github.io/championship-2026/assets/production/internal-faithful-baseline/raising-feedback-v1/cell-029.png",
+          "ageMs": 227
+        },
+        {
+          "url": "https://orochi771127.github.io/championship-2026/assets/production/internal-faithful-baseline/raising-feedback-v1/cell-030.png",
+          "ageMs": 227
+        },
+        {
+          "url": "https://orochi771127.github.io/championship-2026/assets/production/internal-faithful-baseline/raising-feedback-v1/cell-028.png",
+          "ageMs": 227
+        },
+        {
+          "url": "https://orochi771127.github.io/championship-2026/assets/production/internal-faithful-baseline/raising-feedback-v1/cell-027.png",
+          "ageMs": 221
+        },
+        {
+          "url": "https://orochi771127.github.io/championship-2026/assets/production/internal-faithful-baseline/raising-feedback-v1/cell-026.png",
+          "ageMs": 206
+        }
+      ]
+    },
+    {
+      "label": "gate",
+      "screen": "GATE_SELECT",
+      "canvases": 1,
+      "pending": []
+    },
+    {
+      "label": "loadout",
+      "screen": "HUNT_LOADOUT",
+      "canvases": 0,
+      "pending": [
+        {
+          "url": "https://orochi771127.github.io/championship-2026/assets/production/hunt/licensed-runtime-v1/fields/field_hm01_01/frame-00.png",
+          "ageMs": 118
+        }
+      ]
+    },
+    {
+      "label": "hunt",
+      "screen": "HUNT_FIELD",
+      "canvases": 1,
+      "pending": [
+        {
+          "url": "https://orochi771127.github.io/championship-2026/assets/production/internal-faithful-baseline/characters-v1/m203_elecmon/runtime.json",
+          "ageMs": 81
+        }
+      ]
+    },
+    {
+      "label": "hunt-10s",
+      "screen": "HUNT_FIELD",
+      "canvases": 1,
+      "pending": [
+        {
+          "url": "https://orochi771127.github.io/championship-2026/assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-016.png",
+          "ageMs": 281
+        },
+        {
+          "url": "https://orochi771127.github.io/championship-2026/assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-015.png",
+          "ageMs": 269
+        },
+        {
+          "url": "https://orochi771127.github.io/championship-2026/assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-014.png",
+          "ageMs": 251
+        },
+        {
+          "url": "https://orochi771127.github.io/championship-2026/assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-013.png",
+          "ageMs": 251
+        },
+        {
+          "url": "https://orochi771127.github.io/championship-2026/assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-012.png",
+          "ageMs": 242
+        },
+        {
+          "url": "https://orochi771127.github.io/championship-2026/assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-011.png",
+          "ageMs": 198
+        },
+        {
+          "url": "https://orochi771127.github.io/championship-2026/assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-010.png",
+          "ageMs": 176
+        },
+        {
+          "url": "https://orochi771127.github.io/championship-2026/assets/production/internal-faithful-baseline/hunt-feedback-v1/e002_hunt_hugemine/cell-009.png",
+          "ageMs": 84
+        }
+      ]
+    },
+    {
+      "label": "hunt-30s",
+      "screen": "HUNT_FIELD",
+      "canvases": 1,
+      "pending": []
+    },
+    {
+      "label": "hunt-60s",
+      "screen": "HUNT_FIELD",
+      "canvases": 1,
+      "pending": []
+    }
+  ],
+  "visualInspection": {
+    "hunt": "BLANK",
+    "hunt-10s": "BLANK",
+    "hunt-30s": "MAP_AND_CREATURES_VISIBLE",
+    "hunt-60s": "NOT_VISUALLY_REVIEWED"
+  },
+  "warning": "A 1-canvas DOM count and no JavaScript errors did not detect blank content."
+}

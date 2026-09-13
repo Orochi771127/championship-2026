@@ -2,7 +2,7 @@ import fs from "node:fs";
 import assert from "node:assert/strict";
 import test from "node:test";
 import {createHash} from "node:crypto";
-import {nativeIndividualProfile, normalizeNativeIndividualProfile, projectNativeIndividualStats} from "../src/championship/raising/nativeIndividualProfile.js";
+import {nativeIndividualProfile, normalizeNativeIndividualProfile, projectNativeIndividualStats, nativeResistanceGraph} from "../src/championship/raising/nativeIndividualProfile.js";
 import {recordCapturedCardCreature, createRaisingProductionState, renameEnclosedCreature, normalizeRaisingProductionState} from "../src/championship/app/championshipRaisingProduction.js";
 import {listRaisingInstances} from "../src/championship/raising/raisingInstanceIdentity.js";
 import {createNativeWildActor} from "../src/championship/hunt/capture/nativeWildActor.js";
@@ -15,6 +15,37 @@ const read = p => JSON.parse(fs.readFileSync(p,"utf8"));
 const inputs=read("docs/research/HUNT_INDIVIDUAL_POOL_CPU_CHECK_2026-09-06.json");
 const copies=read("docs/research/NATIVE_INDIVIDUAL_HOME_CPU_CHECK_2026-09-08.json");
 const sample=()=>nativeIndividualProfile(structuredClone(inputs.individualVectors[8].after),"species-008");
+
+test('roster win percentage matches original fixed-point and soft-float instructions in 50 cases',()=>{
+  const receipt=read('docs/research/ROSTER_WIN_RATE_CPU_2026-09-13.json');
+  assert.equal(receipt.cases.length,50);
+  for(const row of receipt.cases){
+    const p=structuredClone(sample());p.fields['024']=row.battles;p.fields['028']=row.wins;
+    assert.equal(projectNativeIndividualStats(p).winPercent,row.percent,`${row.wins}/${row.battles}`);
+    assert.equal(row.format,'%.1f %');
+  }
+});
+
+test('roster resistance graph keeps the original five-word order and 78-pixel total',()=>{
+  const p=structuredClone(sample());
+  Object.assign(p.fields,{'070':10,'074':20,'080':30,'078':10,'07c':8});
+  assert.deepEqual(nativeResistanceGraph(p),[
+    {id:'HEAT',pixels:10},{id:'COLD',pixels:20},{id:'THUNDER',pixels:30},
+    {id:'LIGHT',pixels:10},{id:'DARK',pixels:8}
+  ]);
+  assert.equal(projectNativeIndividualStats(p).resistanceGraph.reduce((sum,part)=>sum+part.pixels,0),78);
+});
+
+test('roster projection matches 228 original CPU UI argument recordings, including current/max vitals',()=>{
+  const receipt=read('docs/research/ROSTER_UI_FIELDS_CPU_2026-09-13.json');
+  assert.equal(receipt.cases.length,228);
+  for(const row of receipt.cases){
+    const p=structuredClone(inputs.individualVectors.find(v=>v.speciesIndex===row.speciesIndex).after);
+    p.fields['024']=row.battleCountOverride;
+    const actual=projectNativeIndividualStats(nativeIndividualProfile(p));
+    for(const [field,value] of Object.entries(row.actual))assert.equal(actual[field],value,`species ${row.speciesIndex}: ${field}`);
+  }
+});
 
 test("all 228 persistent profiles retain the fields preserved by 684 original Home copies",()=>{
   for(const v of inputs.individualVectors){

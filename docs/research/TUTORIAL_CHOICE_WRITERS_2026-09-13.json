@@ -1,0 +1,87 @@
+{
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "stateSha256": "91d19ca30f2cff8ff6ceb57a54fc7d93a3de6dfa7ab83d02a4664ec08e7c7888",
+  "root": "0x21c1500",
+  "player": "0x21c24c0",
+  "scope": "245 original frames from same state, stylus only; watches root +0..F00; no RAM injection",
+  "branches": [
+    {
+      "choice": "accept",
+      "changes": [
+        {
+          "offset": "0xa8",
+          "before": 0,
+          "after": 1
+        },
+        {
+          "offset": "0xac",
+          "before": 0,
+          "after": 1
+        }
+      ],
+      "writers": [
+        {
+          "offset": "0xa8",
+          "pc": "0x2110130",
+          "writes": 1
+        },
+        {
+          "offset": "0xac",
+          "pc": "0x2110384",
+          "writes": 1
+        },
+        {
+          "offset": "0xc0",
+          "pc": "0x210fa64",
+          "writes": 1
+        },
+        {
+          "offset": "0xa4",
+          "pc": "0x211d008",
+          "writes": 1
+        },
+        {
+          "offset": "0xbc",
+          "pc": "0x2083984",
+          "writes": 1
+        },
+        {
+          "offset": "0xc0",
+          "pc": "0x2083990",
+          "writes": 1
+        }
+      ],
+      "eventCount": 6
+    },
+    {
+      "choice": "decline",
+      "changes": [
+        {
+          "offset": "0xa8",
+          "before": 0,
+          "after": 6
+        },
+        {
+          "offset": "0xac",
+          "before": 0,
+          "after": 1
+        }
+      ],
+      "writers": [
+        {
+          "offset": "0xa8",
+          "pc": "0x21100f8",
+          "writes": 1
+        },
+        {
+          "offset": "0xac",
+          "pc": "0x2110384",
+          "writes": 1
+        }
+      ],
+      "eventCount": 2
+    }
+  ],
+  "evidence": "ORIGINAL_DESMUME_STYLUS_BRANCH_OBSERVATION",
+  "writerPcConvention": "DeSmuME write callback PC is observed after instruction; use disassembly addresses in companion document"
+}
