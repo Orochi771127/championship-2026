@@ -12,7 +12,8 @@ export const SOURCE_PAYLOAD=/\.(?:nds|srl|nxr|ncer|ncgr|nclr|nanr|nscr|nbs|nbsr|
 export const sha256=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 export function permittedCopyPath(file){
   return safeInputPath(file) && !SOURCE_PAYLOAD.test(file)
-    && (file==='championship.html'||file.startsWith('src/championship/')||file.startsWith('src/data/championship/')
+    && (file==='championship.html'||file==='full-qa-save.html'||file==='qa/championship-full-qa-save.json'
+      ||file.startsWith('src/championship/')||file.startsWith('src/data/championship/')
       ||file.startsWith('assets/production/')||/^docs\/contracts\/championship\/[^/]+\.json$/.test(file)
       ||/^node_modules\/(?:pixi\.js\/dist\/pixi\.mjs|three\/(?:build\/three\.(?:module|core)\.js|examples\/jsm\/(?:loaders\/GLTFLoader|utils\/(?:BufferGeometryUtils|SkeletonUtils))\.js))$/.test(file));
 }

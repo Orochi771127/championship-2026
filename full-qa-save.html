@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#102230">
+  <title>Championship 全功能 QA 存檔</title>
+  <style>
+    :root{color-scheme:dark;font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:linear-gradient(#102230,#07131b);color:#f7fbff}
+    main{width:min(100%,680px);margin:auto;padding:max(24px,env(safe-area-inset-top)) 18px max(28px,env(safe-area-inset-bottom))}
+    section{padding:22px;border:1px solid #4b829e;border-radius:18px;background:#19384a;box-shadow:0 16px 42px #0007}
+    h1{font-size:clamp(1.45rem,7vw,2rem);line-height:1.2;margin:0 0 14px;color:#ffe275}
+    p,li{line-height:1.65}ul{padding-left:1.3em}.warning{padding:12px;border-radius:10px;background:#4b2c22;color:#ffe6b0}
+    button,a{display:block;width:100%;margin:12px 0 0;padding:14px 16px;border:0;border-radius:12px;background:#ffd85b;color:#102230;font:800 1rem system-ui;text-align:center;text-decoration:none;cursor:pointer}
+    button[disabled]{opacity:.55;cursor:wait}.secondary{background:#d5edf7}.quiet{color:#bdd7e4;font-size:.9rem}code{word-break:break-all}
+    [data-state="ready"]{color:#bfffbf}[data-state="error"]{color:#ffb6aa}
+  </style>
+</head>
+<body>
+<main>
+  <section>
+    <h1>全功能 QA 測試存檔</h1>
+    <p>這個頁面會在目前手機建立可自由測試的進階存檔：</p>
+    <ul>
+      <li>9,999,999 金錢、全部商店商品與籠子。</li>
+      <li>全部 Gate、階級、徽章、冠軍大會與世界大會入口。</li>
+      <li>全圖鑑與充足的狩獵／育成道具。</li>
+      <li>牧場內有戰鬥暴龍獸、閃光暴龍獸、黑暗戰鬥暴龍獸、鋼鐵加魯魯獸與公爵獸。</li>
+    </ul>
+    <p class="warning"><strong>安裝會取代這個網址在本手機上的目前進度。</strong>若已有存檔，按鈕會先下載一份備份 JSON。請先關閉其他正在執行遊戲的分頁。</p>
+    <button id="install" disabled>正在準備 QA 存檔…</button>
+    <button id="download" class="secondary" disabled>只下載 QA 存檔 JSON</button>
+    <a href="./championship.html">不安裝，返回遊戲</a>
+    <p id="status" role="status" aria-live="polite">正在讀取並驗證存檔。</p>
+    <p class="quiet">使用正式存檔鍵：<code>championshipModernSave:v1</code>。這是測試進度，正常玩家規則沒有被關閉。</p>
+  </section>
+</main>
+<script type="module">
+import {
+  CHAMPIONSHIP_MODERN_SAVE_KEY,
+  deserializeChampionshipModernSave,
+  serializeChampionshipModernSave
+} from './src/championship/app/championshipStandaloneSave.js';
+
+const install = document.querySelector('#install');
+const download = document.querySelector('#download');
+const status = document.querySelector('#status');
+let qaText = null;
+
+function downloadText(text, filename) {
+  const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function setStatus(message, state) {
+  status.textContent = message;
+  status.dataset.state = state;
+}
+
+try {
+  const response = await fetch('./qa/championship-full-qa-save.json', { cache: 'no-store' });
+  if (!response.ok) throw Error(`讀取 QA 存檔失敗：HTTP ${response.status}`);
+  qaText = serializeChampionshipModernSave(deserializeChampionshipModernSave((await response.text()).trim()));
+  install.disabled = false;
+  download.disabled = false;
+  install.textContent = '備份目前進度、安裝 QA 存檔並開啟遊戲';
+  setStatus('QA 存檔已驗證，可以安裝。', 'ready');
+} catch (error) {
+  install.textContent = 'QA 存檔目前無法使用';
+  setStatus(error.message, 'error');
+}
+
+download.onclick = () => {
+  if (!qaText) return;
+  downloadText(qaText, 'championship-full-qa-save.json');
+  setStatus('QA 存檔已下載，手機上的目前進度沒有變更。', 'ready');
+};
+
+install.onclick = async () => {
+  if (!qaText) return;
+  install.disabled = true;
+  download.disabled = true;
+  try {
+    let installed = false;
+    const write = async () => {
+      const previous = localStorage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY);
+      if (previous) downloadText(previous, `championship-backup-${Date.now()}.json`);
+      localStorage.setItem(CHAMPIONSHIP_MODERN_SAVE_KEY, qaText);
+      installed = localStorage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY) === qaText;
+    };
+    if (navigator.locks) {
+      await navigator.locks.request(CHAMPIONSHIP_MODERN_SAVE_KEY, { mode: 'exclusive', ifAvailable: true }, async (lock) => {
+        if (!lock) throw Error('另一個遊戲分頁正在使用存檔，請先關閉後再按一次。');
+        await write();
+      });
+    } else await write();
+    if (!installed) throw Error('瀏覽器沒有保留 QA 存檔，請確認沒有使用無痕模式或封鎖網站資料。');
+    setStatus('QA 存檔已安裝，正在開啟遊戲。', 'ready');
+    location.href = './championship.html';
+  } catch (error) {
+    install.disabled = false;
+    download.disabled = false;
+    setStatus(error.message, 'error');
+  }
+};
+</script>
+</body>
+</html>

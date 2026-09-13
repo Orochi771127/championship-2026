@@ -4,6 +4,8 @@
 
 **Public browser playtest (2026-09-10):** [Play Championship 2026](https://orochi771127.github.io/championship-2026/). The Owner authorized publication of the current completed work and this playable snapshot. Use a modern browser in portrait orientation; saves are stored in that browser and do not transfer automatically between devices or between localhost and this website. Original-game parity remains partial.
 
+**Mobile full-progress QA save:** [Install the test save](https://orochi771127.github.io/championship-2026/full-qa-save.html). The installer first downloads a backup when that browser already has a save, then writes the schema-v5 QA save into the same origin and opens the game.
+
 **2026-09-09 checkpoint:** See the [current unfinished-work inventory](docs/reports/commercial-readiness/2026-09-09/MAIN_CHECKPOINT_ZH_TW.md). `npm run test:ci` runs explicitly classified repository-contained tests; `npm test` retains full local reference/art acceptance. Main pushes run CI; public Pages deployment requires explicit dispatch and release approval checks.
 
 **Target:** Web-first / mobile-first / portrait 9:16 / touch-first, with desktop-browser compatibility.
