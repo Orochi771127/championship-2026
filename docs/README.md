@@ -32,6 +32,7 @@ Do not infer current implementation state from one historical coordination file.
 | Reference-to-production mapping | [Art Production Crosswalk](art/ART_PRODUCTION_CROSSWALK.json) |
 | Complete production direction | [Master Game Production Plan](planning/CHAMPIONSHIP_2026_MASTER_GAME_PRODUCTION_PLAN.md) |
 | Solo + AI execution order | [Solo AI Parity-First Plan](planning/CHAMPIONSHIP_2026_SOLO_AI_PARITY_FIRST_PLAN_ZH_TW.md) |
+| Post-parity visual/mobile/online modernization and community-feature roadmap | [原作重建後現代化與擴充計畫](planning/CHAMPIONSHIP_POST_PARITY_MODERNIZATION_PLAN_ZH_TW.md) |
 | Modular Cage requirement | [Modular Cage System Spec](planning/CHAMPIONSHIP_2026_MODULAR_CAGE_SYSTEM_SPEC_ZH_TW.md) |
 | Prioritized cleanup work | [Technical Debt Register](TECH_DEBT_REGISTER.md) |
 | Repository/document organization decision | [ADR-0001](adr/ADR-0001-CANONICAL-REPOSITORY-AND-DOCUMENTATION.md) |
@@ -62,7 +63,7 @@ When it disagrees with executable evidence, fix the index in the same change.
 | `docs/research/` | Gameplay/source catalog and readiness audit | No |
 | `docs/art/` | Original-art metadata, replacement backlog and pipeline rules | No |
 | `reports/art/` | Generated per-domain Art-A matrices | No |
-| `research/original-evidence/` | Research policy and external archive index only | Never |
+| `research/original-evidence/` | Research policy and external archive index only; no runtime imports | Never |
 | `docs/coordination/` | Claude/Codex status history and evidence ledgers | No |
 | `docs/migration/` | Repository migration provenance | No |
 
