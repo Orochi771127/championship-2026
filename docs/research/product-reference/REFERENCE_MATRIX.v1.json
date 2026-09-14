@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "date": "2026-09-14",
   "status": "RESEARCH_ONLY",
   "purpose": "Prevent repeated full-game research. Consult this matrix before opening new external-reference research.",
@@ -66,6 +66,43 @@
       "source": "https://www.gematsu.com/2019/08/digimon-rearise-coming-west-in-2019"
     },
     {
+      "title": "Digimon: New Century / 数码宝贝：新世纪",
+      "region": "Mainland China",
+      "strengths": [
+        "LaiEn_Island_player_home",
+        "resident_scene_AI",
+        "resident_building_interaction",
+        "player_creature_dialogue",
+        "functional_buildings",
+        "free_layout_and_multiple_saved_layouts",
+        "resource_production",
+        "food_crafting",
+        "food_preferences",
+        "intimacy_progression",
+        "digimon_dispatch",
+        "incubation",
+        "prosperity_progression",
+        "original_story_plus_archive_story",
+        "branching_evolution"
+      ],
+      "patterns": [
+        "HABITAT_IS_HOME_AND_PRODUCTION_LOOP",
+        "RESIDENT_AI_USES_PLACED_BUILDINGS",
+        "LAYOUT_IS_PERSISTENT_PLAYER_EXPRESSION",
+        "OFFLINE_PROGRESS_IS_CHARACTER_ACTION",
+        "CARE_HAS_CROSS_SYSTEM_EFFECT",
+        "HOME_IS_OPERATIONAL_BASE"
+      ],
+      "sources": [
+        "https://www.taptap.cn/moment/187656649169701891",
+        "https://www.taptap.cn/moment/169166704604089799",
+        "https://www.taptap.cn/moment/210331657759098218",
+        "https://game.xiaomi.com/viewpoint/1345365192_1635058185451_13",
+        "https://www.qixia.com/product-dm.html"
+      ],
+      "note": "High-priority Habitat reference. Do not copy monetization/gacha or visual expression; extract the interaction and home-loop principles."
+    },
+    {
       "title": "Digimon Story Time Stranger",
       "strengths": ["450_plus_roster", "personality", "bond", "digifarm", "nonlinear_digivolution", "story"],
       "patterns": ["PERSONALITY_IS_PROGRESSION_INPUT", "BOND_IS_CROSS_SYSTEM_STAT", "LARGE_ROSTER_NEEDS_DATA_DRIVEN_GROWTH"],
@@ -82,12 +119,16 @@
     "COLLECTION_CHANGES_HOME",
     "BATTLE_VALIDATES_RAISING",
     "HABITAT_OBJECT_HAS_FUNCTION",
+    "HABITAT_IS_HOME_AND_PRODUCTION_LOOP",
+    "RESIDENT_AI_USES_PLACED_BUILDINGS",
+    "LAYOUT_IS_PERSISTENT_PLAYER_EXPRESSION",
     "OFFLINE_PROGRESS_IS_CHARACTER_ACTION",
     "PERSONALITY_HAS_MECHANICAL_EFFECT",
     "RELATIONSHIP_AFFECTS_OUTCOME",
     "STORY_DECISION_BECOMES_LIFE_EVENT",
     "HOME_IS_OPERATIONAL_BASE",
     "OWNED_CREATURES_SHOULD_BE_VISIBLE",
+    "CARE_HAS_CROSS_SYSTEM_EFFECT",
     "PERSONALITY_IS_PROGRESSION_INPUT",
     "BOND_IS_CROSS_SYSTEM_STAT",
     "LARGE_ROSTER_NEEDS_DATA_DRIVEN_GROWTH"
