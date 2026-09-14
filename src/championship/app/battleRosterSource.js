@@ -29,6 +29,7 @@
 
 import contract from "../../../docs/contracts/championship/battle-player-roster.v1.json" with { type: "json" };
 import presetCatalog from "../../data/championship/catalogs/battle-presets.r1.json" with { type: "json" };
+import {freeBattlePreset} from '../battle/nativeFreeBattle.js';
 import { deepFreeze } from "../contracts/championshipContracts.js";
 import {
   BATTLE_CREATURE_OPPONENTS_PER_MATCH,
@@ -104,7 +105,7 @@ function padTeam(indices) {
 
 /** Build the opponent side out of the ROM's preset table. */
 export function buildOpponentTeamFromPresets(presetIndices) {
-  return buildOpponentTeam(presetIndices, (index) => presetCatalog.records[index] ?? null);
+  return buildOpponentTeam(presetIndices, (index) => index>=456?freeBattlePreset(index):presetCatalog.records[index] ?? null);
 }
 
 /**

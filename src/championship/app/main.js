@@ -563,23 +563,23 @@ async function enterPreparedBattle(prepared, attemptId, enter) {
  * A tournament round is an ordinary battle whose opponent came from the run's
  * own pool. Draw once, build the match on that team, then open the attempt.
  */
-async function enterChampionshipRound() {
+async function enterChampionshipRound(playerInstanceIds) {
   if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started) {
     return { ok: false, reason: "BATTLE_NOT_READY", message: "遊戲場景尚未就緒，請返回育成場景後重試。" };
   }
   const run = app.getChampionshipRun();
   if (!run) return { ok: false, reason: "NO_CHAMPIONSHIP_RUNNING" };
-  const drawn = app.drawChampionshipOpponent();
-  if (!drawn.ok) return drawn;
-  const rngPreparation = app.prepareBattleRng();
+  const party=await app.prepareChampionshipBattle(playerInstanceIds);
+  if(!party.ok)return party;
+  const {rngPreparation,opponent}=party;
   const prepared = (await loadBattleRuntime())({ schedule: app.getBattleSchedule(), mode: 0, battleType: 0,
-    rng: rngPreparation.rng });
+    rng: rngPreparation.rng, playerIndividuals:party.individuals,arenaIndex:10 });
   try {
-    prepared.chooseChampionshipRound({ category: run.category, teamIndex: drawn.opponent.teamIndex });
+    prepared.chooseChampionshipRound({ category: run.category, teamIndex: opponent.teamIndex,cursor:run.cursor,totalRounds:run.totalRounds });
     prepared.startMatch();
     const attemptId = `battle:${app.getBattleEconomyState().nextSequence}`;
     const result = await enterPreparedBattle(prepared, attemptId,
-      () => app.enterChampionshipRound({ attemptId, opponent: drawn.opponent }));
+      () => app.enterChampionshipRound({ attemptId, playerInstanceIds,rngPreparation }));
     return result;
   } catch (error) {
     prepared.dispose();
@@ -596,15 +596,64 @@ async function mountBattleSelect() {
   return createBattleSelectView({
     root,
     matches: battleRuntime.listMatches(),
-    getPartySelection:async recordIndex=>({candidates:await app.getBattlePartyCandidates(recordIndex),
-      limit:await app.getBattlePartyLimit(recordIndex)}),
+    arenaChoices:battleRuntime.listSelectableArenas(),
+    getPracticeSelection:async()=>({candidates:await app.getBattlePartyCandidates(null)}),
+    getPasswordSelection:async()=>({maxLength:22}),
+    getLinkSelection:async()=>({
+      candidates:await app.getBattlePartyCandidates(null),
+      createInvite:instanceIds=>app.createLinkBattleInvite(instanceIds),
+      prepareGuest:(inviteCode,instanceIds)=>app.prepareLinkBattle({role:'GUEST',inviteCode,instanceIds}),
+      prepareHost:(inviteCode,replyCode)=>app.prepareLinkBattle({role:'HOST',inviteCode,replyCode})
+    }),
+    getPartySelection:async(recordIndex,mode)=>mode==='FREE_BATTLE'
+      ?{candidates:await app.getBattlePartyCandidates(null),limit:app.getFreeBattleMatches().find(m=>m.id===recordIndex)?.slots??3}
+      :{candidates:await app.getBattlePartyCandidates(recordIndex),limit:await app.getBattlePartyLimit(recordIndex)},
+    getModeMatches:async mode=>mode==='TITLE_MATCH'?battleRuntime.listMatches():app.openFreeBattle().map(match=>({
+      ...match,recordIndex:match.id,title:`${match.kind==='SINGLE'?'單隻對戰':'三隻對戰'} — ${match.speciesIndices.map(index=>speciesName(index)).join('、')}`})),
     menuCopy: BATTLE_MENU_LABELS,
     onOpenChampionship() { app.openChampionship(); },
-    async onEnter(recordIndex,playerInstanceIds) {
+    async onEnter(recordIndex,playerInstanceIds,mode,selectedArena=null) {
       // Battle simulation uses this existing Application's ticker. Do not
       // charge for a session that cannot start advancing on the shared stage.
       if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started) {
         return { ok: false, reason: "BATTLE_NOT_READY", message: "遊戲場景尚未就緒，請返回育成場景後重試。" };
+      }
+      if(mode==='FREE_BATTLE'){
+        const party=await app.prepareFreeBattle(recordIndex,playerInstanceIds,selectedArena);if(!party.ok)return party;
+        const prepared=(await loadBattleRuntime())({mode:2,battleType:0,playerIndividuals:party.individuals,rng:party.rngPreparation.rng});
+        try{
+          prepared.chooseFreeBattle({presetIndices:party.match.presetIndices,arenaIndex:party.arenaIndex});prepared.startMatch();
+          const attemptId=`battle:${app.getBattleEconomyState().nextSequence}`;
+          return await enterPreparedBattle(prepared,attemptId,()=>app.enterFreeBattle({attemptId,playerInstanceIds,rngPreparation:party.rngPreparation}));
+        }catch(error){prepared.dispose();console.warn(`FREE_BATTLE_PREPARE: ${error.message}`);return {ok:false,reason:'BATTLE_NOT_READY'};}
+      }
+      if(mode==='PRACTICE_BATTLE'){
+        const party=await app.preparePracticeBattle(playerInstanceIds,selectedArena);if(!party.ok)return party;
+        const prepared=(await loadBattleRuntime())({mode:5,battleType:0,playerIndividuals:party.parties[0],opponentIndividuals:party.parties[1],rng:party.rngPreparation.rng});
+        try{
+          prepared.choosePracticeBattle({arenaIndex:party.arenaIndex});prepared.startMatch();
+          const attemptId=`battle:${app.getBattleEconomyState().nextSequence}`;
+          return await enterPreparedBattle(prepared,attemptId,()=>app.enterPracticeBattle({attemptId,playerInstanceIds:playerInstanceIds.flat(),rngPreparation:party.rngPreparation}));
+        }catch(error){prepared.dispose();console.warn(`PRACTICE_BATTLE_PREPARE: ${error.message}`);return {ok:false,reason:'BATTLE_NOT_READY'};}
+      }
+      if(mode==='PASSWORD_BATTLE'){
+        const party=await app.preparePasswordBattle(playerInstanceIds);if(!party.ok)return party;
+        const prepared=(await loadBattleRuntime())({mode:4,battleType:0,playerIndividuals:party.parties[0],opponentIndividuals:party.parties[1],rng:party.rngPreparation.rng});
+        try{
+          prepared.choosePasswordBattle({arenaIndex:party.arenaIndex});prepared.startMatch();
+          const attemptId=`battle:${app.getBattleEconomyState().nextSequence}`;
+          return await enterPreparedBattle(prepared,attemptId,()=>app.enterPasswordBattle({attemptId,passwords:party.passwords,rngPreparation:party.rngPreparation}));
+        }catch(error){prepared.dispose();console.warn(`PASSWORD_BATTLE_PREPARE: ${error.message}`);return {ok:false,reason:'BATTLE_NOT_READY'};}
+      }
+      if(mode==='LINK_BATTLE'){
+        const party=playerInstanceIds;if(!party?.ok)return party??{ok:false,reason:'LINK_BATTLE_NOT_READY'};
+        const prepared=(await loadBattleRuntime())({mode:3,battleType:0,playerIndividuals:party.parties[0],opponentIndividuals:party.parties[1],
+          localTeamIndex:party.localTeamIndex,rng:party.rngPreparation.rng});
+        try{
+          prepared.chooseLinkBattle({arenaIndex:party.arenaIndex});prepared.startMatch();
+          const attemptId=`battle:${app.getBattleEconomyState().nextSequence}`;
+          return await enterPreparedBattle(prepared,attemptId,()=>app.enterLinkBattle({attemptId,linkKey:party.linkKey,rngPreparation:party.rngPreparation}));
+        }catch(error){prepared.dispose();console.warn(`LINK_BATTLE_PREPARE: ${error.message}`);return {ok:false,reason:'BATTLE_NOT_READY'};}
       }
       const party=await app.prepareBattleParty(recordIndex,playerInstanceIds);
       if(!party.ok)return party;
@@ -644,6 +693,7 @@ async function mountBattleField() {
   const view = createBattleFieldView({
     root,
     frame: { ...source.getFrame(), rosterEvidence: activeRuntime.rosterEvidence() },
+    localTeamIndex:activeRuntime.localTeamIndex(),
     hudArt,
     mountField({ host,onReady,onError }) {
       let disposed = false;
@@ -745,7 +795,8 @@ async function mountBattleResult() {
     root,
     outcome: battleRuntime.outcome(),
     receipt: app.getBattleReceipt(),
-    matchTitle: chosen ? titleEventText(chosen.recordIndex, "name", chosen.title) : null,
+    matchTitle: chosen?.link?'通訊對戰':chosen?.password?'密碼對戰':chosen?.practice?'練習對戰':chosen?.freeBattle?'自由對戰':chosen?.championship?`${chosen.recordIndex===0?'冠軍大會':'世界大會'} 第 ${chosen.cursor+1} 戰`
+      :chosen?titleEventText(chosen.recordIndex,"name",chosen.title):null,
     hudArt,
     statistics:{battles:record?.battles??null,winPercent:nativeBattleWinPercent(record),titleCount:app.getBattleBadges().length},
     unlocks:battleProgressBefore?app.getShopFrame().listings.filter(item=>!battleProgressBefore.shopIds.includes(item.shopRecordIndex)).map(item=>({name:uiText(item.displayName)})):[],
@@ -814,10 +865,10 @@ async function mountCurrentScreen() {
         source: {
           getCategories: () => app.getChampionshipCategories(),
           getRun: () => app.getChampionshipRun(),
+          getPartySelection:async()=>({candidates:await app.getBattlePartyCandidates(null),limit:3}),
           intents: {
             open: (category) => app.beginChampionship(category),
-            draw: () => app.drawChampionshipOpponent(),
-            enterRound: () => enterChampionshipRound(),
+            enterRound: ids => enterChampionshipRound(ids),
             settle: () => app.settleChampionship(),
             leave: () => app.leaveScreen()
           }

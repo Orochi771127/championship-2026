@@ -12,11 +12,6 @@ import { getRaisingNativePixelScale, getRaisingNativeActorGeometry } from "./rai
 import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
 import {loadAssembledEvolutionArt, evolutionArtClock} from '../assembledUiArt.js';
 import { raisingFieldViewport, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingEdgeScroll } from "./raisingFieldViewport.js";
-import {
-  RECOVERY_CAGE_VFX_DURATION_MS,
-  recoveryCageVfxFrame,
-  shouldStartRecoveryCageVfx
-} from "../vfx/recoveryCageVfx.js";
 
 const DRAG_THRESHOLD_PX = 6;
 
@@ -40,29 +35,6 @@ function fallbackCreature(PIXI) {
     .circle(27, -32, 3).fill(0x101727);
   graphic.label = "original-created neutral resident fallback";
   return graphic;
-}
-
-function createRecoveryCageGlyph(PIXI) {
-  const root = new PIXI.Container({ label: "original-created infirmary recovery pulse" });
-  root.eventMode = "none";
-  root.visible = false;
-  const halo = new PIXI.Graphics()
-    .circle(0, 0, 16).stroke({ color: 0x9dfff0, width: 2, alpha: 0.78 })
-    .circle(0, 0, 10).stroke({ color: 0x42e8c0, width: 1.5, alpha: 0.72 });
-  const rays = new PIXI.Graphics();
-  for (let index = 0; index < 8; index += 1) {
-    const angle = index * Math.PI / 4;
-    const inner = index % 2 === 0 ? 7 : 9;
-    const outer = index % 2 === 0 ? 22 : 17;
-    rays.moveTo(Math.cos(angle) * inner, Math.sin(angle) * inner)
-      .lineTo(Math.cos(angle) * outer, Math.sin(angle) * outer);
-  }
-  rays.stroke({ color: 0x63ffd2, width: 2.4, cap: "round", alpha: 0.92 });
-  const core = new PIXI.Graphics()
-    .star(0, 0, 6, 10, 3).fill({ color: 0xd9fff6, alpha: 0.96 })
-    .circle(0, 0, 3.2).fill(0xffffff);
-  root.addChild(halo, rays, core);
-  return { root, halo, rays };
 }
 
 async function parseGridSheet(PIXI, spec, cachePrefix) {
@@ -404,9 +376,8 @@ export async function mountRaisingFieldPixiPresentation({
     const shadow = new PIXI.Graphics().ellipse(0, 3, 42, 12).fill({ color: 0x02070a, alpha: 0.38 });
     const selection = new PIXI.Graphics().ellipse(0, 0, 54, 17).stroke({ color: 0xf0d083, width: 3, alpha: 0.82 });
     const fallback = fallbackCreature(PIXI);
-    const recoveryVfx = createRecoveryCageGlyph(PIXI);
     selection.visible = resident.selected;
-    root.addChild(shadow, selection, fallback, recoveryVfx.root);
+    root.addChild(shadow, selection, fallback);
     actorLayer.addChild(root);
     const entry = {
       root,
@@ -420,9 +391,6 @@ export async function mountRaisingFieldPixiPresentation({
       idleTextures: null,
       reactionTextures: null,
       lastReactionRevision: -1,
-      recoveryVfx,
-      recoveryElapsedMs: RECOVERY_CAGE_VFX_DURATION_MS,
-      recoverySnapshot: null,
       loadToken: 0
     };
     if (characterBundle) {
@@ -654,7 +622,8 @@ export async function mountRaisingFieldPixiPresentation({
       const native=source.getActorFrame?.(creatureId);
       drawNativeFeedback(entry,native,covered,'feedback');
       drawNativeFeedback(entry,native,covered,'statusFeedback');
-      updateRecoveryCageVfx(entry,native,ticker.deltaMS,covered);
+      // OVL18 02110FB0: native stars in the recovery cages, same effect bank as the icons.
+      drawNativeFeedback(entry,native,covered,'recoveryStars');
       drawTreatment(entry,native?.treatment,covered);
       if(!covered&&native?.training?.phase===0&&native.positionQ12){
         const point=raisingNativeToScreen(native.positionQ12,fieldArt?.field,app.screen,cameraX),scale=getRaisingNativePixelScale(fieldArt?.field,app.screen);
@@ -792,28 +761,6 @@ export async function mountRaisingFieldPixiPresentation({
       g.circle(0,y,radius).stroke({color:0xcffff0,width:1.5,alpha:1-(phase%4)*0.15});
       g.rect(-2,y-7,4,14).fill(0x50d6a5).rect(-7,y-2,14,4).fill(0x50d6a5);
     } else {g.circle(-5+phase,y-2,5).fill({color:0xc4c9d0,alpha:0.8}).circle(3+phase,y+1,6).fill({color:0x7a8596,alpha:0.8});}
-  }
-
-  function updateRecoveryCageVfx(entry,native,deltaMs,covered) {
-    const snapshot = native && Number.isFinite(native.currentHp)
-      ? { currentHp: native.currentHp, cageDefinitionIndex: native.cageDefinitionIndex }
-      : null;
-    if (shouldStartRecoveryCageVfx(entry.recoverySnapshot, snapshot)) entry.recoveryElapsedMs = 0;
-    entry.recoverySnapshot = snapshot;
-    const frame = recoveryCageVfxFrame(entry.recoveryElapsedMs);
-    const glyph = entry.recoveryVfx;
-    glyph.root.visible = frame.visible && !covered;
-    if (!glyph.root.visible) {
-      if (covered) entry.recoveryElapsedMs = RECOVERY_CAGE_VFX_DURATION_MS;
-      return;
-    }
-    const y = -(entry.nativeSizing?.height ?? 34) * 0.54;
-    glyph.root.position.set(0, y);
-    glyph.root.alpha = frame.alpha;
-    glyph.root.scale.set(reducedMotion ? 1 : frame.scale);
-    glyph.halo.scale.set(reducedMotion ? 1 : frame.haloScale);
-    glyph.rays.rotation = reducedMotion ? 0 : frame.rayRotation;
-    entry.recoveryElapsedMs += Math.min(100, Math.max(0, deltaMs ?? 0));
   }
 
   function drawFood() {

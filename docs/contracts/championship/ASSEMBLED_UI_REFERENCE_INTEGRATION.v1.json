@@ -60,8 +60,8 @@
     "Existing 61 medal images; minor palette difference is not missing artwork"
   ],
   "unresolvedSourceBindings": [
-    "Capture-storage orb: candidate digicach cells do not yet prove the collected-object renderer binding",
-    "Recovery stars: candidate sequence 32 lasts 63 native ticks; binding to HP recovery and observed 420 ms feedback not established",
+    "Capture-storage orb PARTIAL 2026-09-14: OVL0 state 25 plays common/e002_hunt sequence 29 (cells 132-135, 20 ticks) at the actor, not digicach; the lift/flight object (vtable 0x02129E88 +0x3C4) is untraced, so the observed presentation stays. See docs/research/HUNT_CAPTURE_LIGHT_BINDING_2026-09-14.md",
+    "Recovery stars RESOLVED 2026-09-14: OVL18 02110FB0 loop, cages 15/18/28, e001_ikusei sequence 32 via 02065DF4; not HP-triggered. See docs/research/RAISING_RECOVERY_STARS_2026-09-14.md",
     "Remaining victory/medal-light/wipe states need exact runtime resource and draw-phase binding"
   ],
   "acceptanceBoundary": {

@@ -6,6 +6,7 @@ import { createChampionshipStandaloneApp } from "../src/championship/app/champio
 import { CHAMPIONSHIP_MODERN_SAVE_KEY, deserializeChampionshipModernSave } from "../src/championship/app/championshipStandaloneSave.js";
 import { prepareNativeHuntEntry } from "../src/championship/hunt/capture/nativeHuntEntryTransaction.js";
 import { createNativeRaisingStarter } from "../src/championship/raising/nativeRaisingStarter.js";
+import { generateNativeFreeBattleMenu } from "../src/championship/battle/nativeFreeBattle.js";
 
 const read = (path) => JSON.parse(fs.readFileSync(new URL(path, import.meta.url), "utf8"));
 const receipt = read("../docs/research/GAMEPLAY_RNG_CLOCK_CPU_CHECK_2026-09-06.json");
@@ -34,6 +35,7 @@ test("app owns advancing channels across Gate visits and Save/Continue; clock is
   await app.newGame();
   let native = restoreChannelRng(receipt.cases.find((r) => r.clock.second === 50).rng);
   assert.deepEqual(app.getCreature().nativeProfile,createNativeRaisingStarter(native));
+  generateNativeFreeBattleMenu({season:0,nextChannel:channel=>native.next(channel)});
   // Native Home construction consumes facing and direction on the physical
   // slot's channel. It does not replace or reseed the shared generator.
   native.next(0x26);native.next(0x26);
@@ -108,6 +110,38 @@ test("failed writes retain current RNG; retry saves the latest sequence without 
   const current = app.getGameplayRngState(); s.fail = false;
   assert.equal(app.save().phase, "SAVED");
   assert.deepEqual(deserializeChampionshipModernSave(s.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY)).gameplayRng, current);
+  await app.dispose();
+});
+
+test('the daily Free Battle menu survives Continue and failed writes without drawing again',async()=>{
+  const s=storage(),app=appFor(s);await app.newGame();app.save();
+  const original=app.getFreeBattleMatches();assert.ok(original.length>=10);
+  const saved=JSON.parse(s.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY));
+  for(let load=0;load<2;load++){
+    await app.continueGame();const before=app.getGameplayRngState();app.openBattle();
+    assert.deepEqual(app.openFreeBattle(),original);assert.deepEqual(app.getGameplayRngState(),before);app.exitBattle();
+  }
+  app.advanceClock({units:1440*400});const next=app.getFreeBattleMatches();assert.notDeepEqual(next,original);
+  s.fail=true;assert.equal(app.save().phase,'SAVE_FAILED');assert.deepEqual(app.getFreeBattleMatches(),next);
+  s.fail=false;assert.equal(app.save().phase,'SAVED');await app.continueGame();assert.deepEqual(app.getFreeBattleMatches(),next);
+  // Existing saves without the optional menu keep their stream on load. Only
+  // explicitly opening Free Battle builds that missing list, once.
+  delete saved.progression.freeBattleMenu;s.setItem(CHAMPIONSHIP_MODERN_SAVE_KEY,JSON.stringify(saved));
+  await app.continueGame();const before=app.getGameplayRngState();assert.deepEqual(app.getFreeBattleMatches(),[]);
+  assert.deepEqual(app.getGameplayRngState(),before);app.openBattle();const legacy=app.openFreeBattle();
+  assert.ok(legacy.length>=10);const after=app.getGameplayRngState();assert.notDeepEqual(after,before);
+  assert.deepEqual(app.openFreeBattle(),legacy);assert.deepEqual(app.getGameplayRngState(),after);await app.dispose();
+});
+
+test('invalid persisted Free Battle menus are rejected before replacing the active session',async()=>{
+  const s=storage(),app=appFor(s);await app.newGame();app.save();
+  const saved=JSON.parse(s.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY)),session=app.getSession();
+  const before=app.getGameplayRngState(),menu=app.getFreeBattleMatches();
+  for(const mutate of [m=>m.singles.push(m.singles[0]),m=>m.teams[0].pop(),m=>m.teams[0][1]=999,m=>m.unknown=true]){
+    const bad=structuredClone(saved);mutate(bad.progression.freeBattleMenu);s.setItem(CHAMPIONSHIP_MODERN_SAVE_KEY,JSON.stringify(bad));
+    assert.equal(app.canContinue().loadable,false);assert.equal(await app.continueGame(),null);
+    assert.equal(app.getSession(),session);assert.deepEqual(app.getGameplayRngState(),before);assert.deepEqual(app.getFreeBattleMatches(),menu);
+  }
   await app.dispose();
 });
 

@@ -109,6 +109,7 @@ export function createChampionshipPersistentSavePort({
       gameplayRng: request.gameplayRng,
       huntHistory: request.huntHistory,
       progression: {
+        ...(request.freeBattleMenu!==undefined?{freeBattleMenu:request.freeBattleMenu}:{}),
         ...(request.nativeTitles!==undefined?{nativeTitles:request.nativeTitles}:{}),
         ...(request.championshipRun!==undefined?{championshipRun:request.championshipRun}:{}),
         ...(request.nativeMessages!==undefined?{nativeMessages:request.nativeMessages}:{}),

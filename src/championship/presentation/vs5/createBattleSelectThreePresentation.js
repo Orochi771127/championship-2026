@@ -12,9 +12,8 @@
 //     _04_free_bg    _04_free_l    _04_free_u
 //     _05_tushin_bg
 //
-// These four identities agree with the help topics. The source ALSO contains
-// _06_password and _07_rensyu groups; this is the Owner-requested four-face
-// batch, not a claim that the original contains only four menu identities.
+// All six identities also agree with the help-bank mode dispatch traced on
+// 2026-09-14. The production texture pack currently covers the four side faces.
 // _l/_u meanings and original face directions are not traced. The artwork's
 // background/emblem/label split and orientation are PRODUCT_AUTHORED.
 //
@@ -32,12 +31,14 @@ import * as THREE from "../../../../node_modules/three/build/three.module.js";
 import { BATTLE_FACE_LABELS } from "../../text/zhHant.js";
 import { BATTLE_CUBE_ART_ID, resolveBattleCubeArt } from "./battleCubeArt.js";
 
-/** ROM_VERIFIED identities; this four-entry subset does not establish the original total. */
+/** Mode identities confirmed against OVL10's original help-bank dispatch. */
 export const BATTLE_CUBE_FACES = Object.freeze([
   Object.freeze({ id: "CHAMPIONSHIP", node: "_02_champ", label: BATTLE_FACE_LABELS.CHAMPIONSHIP, helpTopic: 72 }),
   Object.freeze({ id: "TITLE_MATCH", node: "_03_title", label: BATTLE_FACE_LABELS.TITLE_MATCH, helpTopic: 71 }),
   Object.freeze({ id: "FREE_BATTLE", node: "_04_free", label: BATTLE_FACE_LABELS.FREE_BATTLE, helpTopic: 70 }),
-  Object.freeze({ id: "LINK_BATTLE", node: "_05_tushin", label: BATTLE_FACE_LABELS.LINK_BATTLE, helpTopic: 73 })
+  Object.freeze({ id: "LINK_BATTLE", node: "_05_tushin", label: BATTLE_FACE_LABELS.LINK_BATTLE, helpTopic: 73 }),
+  Object.freeze({ id: "PASSWORD_BATTLE", node: "_06_password", label: BATTLE_FACE_LABELS.PASSWORD_BATTLE }),
+  Object.freeze({ id: "PRACTICE_BATTLE", node: "_07_rensyu", label: BATTLE_FACE_LABELS.PRACTICE_BATTLE })
 ]);
 
 export const BATTLE_CUBE_FACE_EVIDENCE = "ROM_VERIFIED";
@@ -49,7 +50,9 @@ const FACE_COLOUR = Object.freeze({
   CHAMPIONSHIP: 0xd8b45c,
   TITLE_MATCH: 0xc4694c,
   FREE_BATTLE: 0x5d9fb5,
-  LINK_BATTLE: 0x6f8f74
+  LINK_BATTLE: 0x6f8f74,
+  PASSWORD_BATTLE: 0x7b739f,
+  PRACTICE_BATTLE: 0x679691
 });
 
 const EDGE_COLOUR = 0x1a2c38;
@@ -59,10 +62,10 @@ const UNLABELLED_COLOUR = 0x24404f;
  * Face materials in Three's BoxGeometry order: +X, -X, +Y, -Y, +Z, -Z.
  *
  * The four labelled faces take the four side positions so that rotating about Y
- * cycles through them; the top and bottom stay plain. That arrangement is this
+ * cycles through them; the two additional modes use top and bottom. This is the
  * product's choice -- see BATTLE_CUBE_ORIENTATION_EVIDENCE.
  */
-const SIDE_ORDER = Object.freeze(["TITLE_MATCH", "LINK_BATTLE", null, null, "CHAMPIONSHIP", "FREE_BATTLE"]);
+const SIDE_ORDER = Object.freeze(["TITLE_MATCH", "LINK_BATTLE", "PASSWORD_BATTLE", "PRACTICE_BATTLE", "CHAMPIONSHIP", "FREE_BATTLE"]);
 
 function faceMaterials() {
   return SIDE_ORDER.map((faceId) => new THREE.MeshStandardMaterial({
@@ -327,7 +330,7 @@ function mountFlatFallback({ host, onSelect, available }) {
   return Object.freeze({
     ready: Promise.resolve(),
     getSelected: () => selected,
-    getDiagnostics: () => Object.freeze({ renderer: "DOM_BATTLE_CUBE_FALLBACK", faceCount: 4, textureCount: 0, artAssetId: BATTLE_CUBE_ART_ID }),
+    getDiagnostics: () => Object.freeze({ renderer: "DOM_BATTLE_CUBE_FALLBACK", faceCount: BATTLE_CUBE_FACES.length, textureCount: 0, artAssetId: BATTLE_CUBE_ART_ID }),
     dispose: () => grid.remove()
   });
 }

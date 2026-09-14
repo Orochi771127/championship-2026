@@ -74,6 +74,7 @@ import { BATTLE_OUTCOME_TEAM_ZERO_AHEAD, BATTLE_OUTCOME_TEAM_ONE_AHEAD } from ".
 import { NATIVE_CHAMPIONSHIP_CATEGORIES, CHAMPIONSHIP_ARENA_INDEX, createNativeChampionshipRun,
   normalizeNativeChampionshipRun, recordNativeChampionshipRound, nativeChampionshipContinues,
   nativeChampionshipFinalRound, nativeChampionshipPayable, selectNativeChampionshipOpponent } from "../battle/nativeChampionshipRounds.js";
+import {generateNativeFreeBattleMenu,listNativeFreeBattleMatches,FREE_BATTLE_ARENAS} from '../battle/nativeFreeBattle.js';
 import { DAY_END_MINUTES, projectWorldClockDisplay } from "../time/championshipWorldClock.js";
 import { NATIVE_CLOCK_CADENCE } from "./championshipClockDriver.js";
 import { createClockChannelRng, restoreChannelRng } from "../battle/battleRngChannel.js";
@@ -164,6 +165,12 @@ export function createChampionshipStandaloneApp({
   let battlePartyModule = null;
   const loadBattleParty = async () =>
     (battlePartyModule ??= await import("../battle/battleParty.js"));
+  let passwordBattleModule = null;
+  const loadPasswordBattle = async () =>
+    (passwordBattleModule ??= await import("../battle/nativePasswordBattle.js"));
+  let linkBattleModule = null;
+  const loadLinkBattle = async () =>
+    (linkBattleModule ??= await import("../battle/nativeLinkBattle.js"));
   // The attempt a tournament round is being fought under, if any. A round is an
   // ordinary battle; what differs is that its verdict belongs to the run, and
   // the title result waits for the whole run rather than reading one round.
@@ -219,6 +226,7 @@ export function createChampionshipStandaloneApp({
   // The tournament in progress, or null. Carried through save so a round
   // boundary is not a place the player can lose a run by closing the tab.
   let championshipRun=null;
+  let freeBattleMenu=null;
   let nativeMessages=createNativeRaisingMessages();
   let nativeOpening=null;
   let registeredSpeciesValue = Object.freeze([]);
@@ -640,6 +648,33 @@ export function createChampionshipStandaloneApp({
     });
   }
 
+  function rebuildFreeBattleMenu(){
+    const season=requireSession().getRaisingHomeSnapshot().season;
+    if(!Number.isInteger(season)||season<0||season>3){freeBattleMenu=null;return;}
+    freeBattleMenu=generateNativeFreeBattleMenu({season,nextChannel:nextGameplayRandom});
+    savePort.markDirty();
+  }
+
+  function enterPreparedLocalBattle({mode,attemptId,playerInstanceIds=[],passwords=null,linkKey=null,rngPreparation}){
+    requireSession();
+    if(battleTransactionActive)return {ok:false,reason:'TRANSACTION_ACTIVE'};
+    if(screens.current()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT)return {ok:false,reason:'BATTLE_SELECT_NOT_ACTIVE'};
+    const prepared=battleRngPreparations.get(rngPreparation);
+    const passwordMode=mode===4,linkMode=mode===3,transientMode=passwordMode||linkMode;
+    if(!prepared||prepared.localMode!==mode||prepared.session!==session||prepared.base!==JSON.stringify(gameplayRngSnapshot())
+      ||(mode===2&&prepared.freeMenu!==freeBattleMenu)
+      ||(transientMode
+        ?(passwordMode?JSON.stringify(passwords)!==JSON.stringify(prepared.passwords):linkKey!==prepared.linkKey)
+        :JSON.stringify(playerInstanceIds)!==JSON.stringify(prepared.individuals.map(p=>p.instanceId)))
+      ||(!transientMode&&prepared.individuals.some(p=>JSON.stringify(raisingNativeProfile(p.instanceId))!==JSON.stringify(p.nativeProfile))))
+      return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'隊伍或遊戲進度已更新，請重新選擇。'};
+    const result=applyBattleTransaction(beginBattleAttempt(battleEconomy,{attemptId,matchIndex:-1,mode,battleType:0,
+      entryFee:0,payout:mode===2?prepared.freeMatch.payout:0,expectedRounds:1},requireShop().getBits()),[],prepared.rng);
+    if(!result.ok||result.duplicate)return result;
+    battleRngPreparations.delete(rngPreparation);battlePartyIds=transientMode?null:[...playerInstanceIds];
+    screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);publishScreens();return result;
+  }
+
   function restoreCandidate(save) {
     const { document } = deserializeRaisingHomeSaveR2(save.raisingHome);
     const snapshot = restoreRaisingHomeSnapshotR2(document, { sessionId });
@@ -788,6 +823,7 @@ export function createChampionshipStandaloneApp({
       selectedCreatureId = null;
       openShopAndHunt();
       cageEdit = createCageEditRuntime({ initializeOriginal: true });
+      rebuildFreeBattleMenu();
       initializeNativeRaisingHome();
       selectedDatabaseSpeciesIndex = null;
       resetExpedition();
@@ -851,6 +887,7 @@ export function createChampionshipStandaloneApp({
       selectedCreatureId = null;
       openShopAndHunt({ shopSnapshot: read.save.shop });
       cageEdit = createCageEditRuntime({ snapshot: read.save.cageEdit });
+      freeBattleMenu=read.save.progression.freeBattleMenu??null;
       initializeNativeRaisingHome();
       selectedDatabaseSpeciesIndex = null;
       resetExpedition();
@@ -870,8 +907,8 @@ export function createChampionshipStandaloneApp({
       const profile=raisingNativeProfile(instanceId);
       return actor&&profile ? Object.freeze({
         ...projectNativeRaisingActor(actor),
-        // Presentation may acknowledge a recovery only after this canonical
-        // profile actually rises. These reads do not create a second HP owner.
+        // Current and maximum HP for frame readers. These reads do not create
+        // a second HP owner; the recovery-cage stars do not read them.
         currentHp:profile.fields["050"],
         maxHp:profile.fields["058"]
       }) : null;
@@ -1205,6 +1242,8 @@ export function createChampionshipStandaloneApp({
       const before = active.getRaisingHomeSnapshot();
       const result = active.advanceRaisingClock({ units, subunits, divisor, clearElapsed,
         expectedClockRevision: expectedClockRevision ?? before.clockRevision });
+      const after=active.getRaisingHomeSnapshot();
+      if(after.season!==before.season||after.dayOfSeason!==before.dayOfSeason)rebuildFreeBattleMenu();
       if (active.getRaisingHomeSnapshot() !== before) savePort.markDirty();
       return result;
     },
@@ -1333,6 +1372,7 @@ export function createChampionshipStandaloneApp({
       const before=requireSession().getRaisingHomeSnapshot();
       const result = dispatchRaisingHomeCommand({ type: RAISING_HOME_COMMANDS.END_DAY });
       if (result?.accepted){
+        rebuildFreeBattleMenu();
         storeNativeRaisingPositions();storeNativeRaisingHome();
         if(raisingGround)raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({...raising.nativeHome,pendingOvernightMinutes:Math.max(0,1320-before.clockMinutes)})});
         nativeMessages=normalizeNativeRaisingMessages({...ageNativeRaisingMessages(nativeMessages,1440-before.clockMinutes+420),entryChecked:false,morningPending:true});
@@ -1359,6 +1399,7 @@ export function createChampionshipStandaloneApp({
         battleBadges: battleBadgesValue,
         nativeTitles,
         championshipRun,
+        freeBattleMenu,
         nativeMessages,
         nativeOpening,
         registeredSpecies: registeredSpeciesValue,
@@ -1709,6 +1750,133 @@ export function createChampionshipStandaloneApp({
       return battleEconomy;
     },
 
+    getFreeBattleMatches(){return listNativeFreeBattleMatches(freeBattleMenu);},
+
+    openFreeBattle(){
+      requireSession();if(screens.current()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT)return [];
+      // Old saves contain no daily menu. Resolve the missing slice only on an
+      // explicit mode-entry action; Continue and inspection never spend RNG.
+      if(!freeBattleMenu)rebuildFreeBattleMenu();return this.getFreeBattleMatches();
+    },
+
+    async prepareFreeBattle(matchId,instanceIds,selectedArena=null){
+      const match=this.getFreeBattleMatches().find(row=>row.id===matchId);
+      if(!match)return {ok:false,reason:'MATCH_NOT_AVAILABLE'};
+      const party=await this.prepareBattleParty(null,instanceIds);
+      if(!party.ok)return party;
+      if(instanceIds.length>match.slots)return {ok:false,reason:'PARTY_SIZE',message:`這場對戰最多 ${match.slots} 隻。`};
+      const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
+      prepared.localMode=2;prepared.freeMatch=match;prepared.freeMenu=freeBattleMenu;prepared.individuals=party.individuals;
+      const drawnArena=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
+      if(selectedArena!==null&&!FREE_BATTLE_ARENAS.includes(selectedArena))return {ok:false,reason:'ARENA_UNAVAILABLE'};
+      const arenaIndex=selectedArena??drawnArena;
+      return {ok:true,match,arenaIndex,individuals:party.individuals,rngPreparation};
+    },
+
+    async preparePracticeBattle(teams,selectedArena=null){
+      if(!Array.isArray(teams)||teams.length!==2||teams.some(ids=>!Array.isArray(ids)||ids.length<1||ids.length>3))return {ok:false,reason:'TWO_PARTIES_REQUIRED'};
+      const ids=teams.flat();if(new Set(ids).size!==ids.length)return {ok:false,reason:'DUPLICATE_PARTICIPANT',message:'同一隻數碼獸只能加入一隊。'};
+      const parties=[];
+      for(const team of teams){const party=await this.prepareBattleParty(null,team);if(!party.ok)return party;parties.push(party.individuals);}
+      if(selectedArena!==null&&!FREE_BATTLE_ARENAS.includes(selectedArena))return {ok:false,reason:'ARENA_UNAVAILABLE'};
+      const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
+      const drawnArena=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
+      prepared.localMode=5;prepared.individuals=parties.flat();
+      return {ok:true,parties,arenaIndex:selectedArena??drawnArena,rngPreparation};
+    },
+
+    async createLinkBattleInvite(instanceIds){
+      requireSession();
+      if(screens.current()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT)return {ok:false,reason:'BATTLE_SELECT_NOT_ACTIVE'};
+      const party=await this.prepareBattleParty(null,instanceIds);if(!party.ok)return party;
+      const preview=this.prepareBattleRng(),prepared=battleRngPreparations.get(preview);
+      try{
+        const arenaIndex=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
+        const {createNativeLinkInvite}=await loadLinkBattle();
+        const invite=createNativeLinkInvite({individuals:party.individuals,arenaIndex});
+        return {ok:true,inviteCode:invite.code,arenaIndex};
+      }catch(error){
+        return {ok:false,reason:error?.message??'LINK_BATTLE_INVITE_FAILED',message:'無法建立通訊邀請碼，請重新選擇隊伍。'};
+      }finally{battleRngPreparations.delete(preview);}
+    },
+
+    async prepareLinkBattle({role,inviteCode,replyCode=null,instanceIds=[]}={}){
+      requireSession();
+      if(screens.current()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT)return {ok:false,reason:'BATTLE_SELECT_NOT_ACTIVE'};
+      if(!['HOST','GUEST'].includes(role))return {ok:false,reason:'LINK_ROLE_REQUIRED'};
+      try{
+        const link=await loadLinkBattle();let packet,responseCode=null,hostIndividuals,guestIndividuals;
+        if(role==='GUEST'){
+          const party=await this.prepareBattleParty(null,instanceIds);if(!party.ok)return party;
+          const response=link.createNativeLinkReply({inviteCode,individuals:party.individuals});responseCode=response.code;
+          packet=link.readNativeLinkInvite(inviteCode);hostIndividuals=packet.hostIndividuals;guestIndividuals=party.individuals;
+        }else{
+          packet=link.readNativeLinkReply(inviteCode,replyCode);hostIndividuals=packet.hostIndividuals;guestIndividuals=packet.guestIndividuals;
+        }
+        const {battlePartyAdmission,buildOwnedBattleCreature}=await loadBattleParty();
+        for(const individual of [...hostIndividuals,...guestIndividuals]){
+          const admission=battlePartyAdmission(individual.nativeProfile,null);if(!admission.ok)
+            return {ok:false,reason:'LINK_TEAM_INELIGIBLE',message:'通訊碼內含不能參戰的數碼獸。'};
+          buildOwnedBattleCreature(individual);
+        }
+        const rng=link.createNativeLinkBattleRng(),rngPreparation=Object.freeze({rng});
+        const replyId=(responseCode??replyCode).split('.')[1],linkKey=`${role}:${packet.id??packet.inviteId}:${replyId}`;
+        battleRngPreparations.set(rngPreparation,{base:JSON.stringify(gameplayRngSnapshot()),rng,session,localMode:3,linkKey,
+          individuals:[...hostIndividuals,...guestIndividuals]});
+        return {ok:true,role,inviteCode:packet.code??inviteCode,replyCode:responseCode??replyCode,linkKey,
+          parties:[hostIndividuals,guestIndividuals],localTeamIndex:role==='HOST'?0:1,arenaIndex:packet.arenaIndex,rngPreparation};
+      }catch(error){
+        const known=/^LINK_BATTLE_/.test(error?.message??'');
+        return {ok:false,reason:known?error.message:'LINK_BATTLE_CODE_INVALID',
+          message:known?'通訊碼無法辨識、已損壞，或不是同一場邀請。':'通訊對戰準備失敗，請重新交換通訊碼。'};
+      }
+    },
+
+    async preparePasswordBattle(passwords){
+      requireSession();
+      if(screens.current()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT)return {ok:false,reason:'BATTLE_SELECT_NOT_ACTIVE'};
+      if(!Array.isArray(passwords)||passwords.length!==2||passwords.some(value=>typeof value!=='string'||value.length<1))
+        return {ok:false,reason:'TWO_PASSWORDS_REQUIRED',message:'請輸入 A 隊與 B 隊的密碼。'};
+      const {createNativePasswordPlaceholders,decodeNativePasswordTeam,nativePasswordTeamAdmission}=await loadPasswordBattle();
+      const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
+      try{
+        const teams=passwords.map((password,index)=>decodeNativePasswordTeam(password,{
+          placeholders:createNativePasswordPlaceholders(prepared.rng),instancePrefix:`password-${index===0?'a':'b'}`
+        }));
+        for(const team of teams){const admission=nativePasswordTeamAdmission(team);if(!admission.ok){
+          battleRngPreparations.delete(rngPreparation);return admission;
+        }}
+        const normalized=teams.map(team=>team.password);
+        const parties=teams.map(team=>team.members.filter(Boolean).map(member=>({
+          instanceId:member.instanceId,nativeProfile:member.nativeProfile
+        })));
+        const arenaIndex=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
+        prepared.localMode=4;prepared.passwords=normalized;prepared.individuals=parties.flat();
+        return {ok:true,passwords:normalized,teams,parties,arenaIndex,rngPreparation};
+      }catch(error){
+        battleRngPreparations.delete(rngPreparation);
+        const known=/^PASSWORD_BATTLE_/.test(error?.message??'');
+        return {ok:false,reason:known?error.message:'PASSWORD_BATTLE_INVALID',
+          message:known?'密碼無法辨識或校驗不正確，請確認後再輸入。':'密碼隊伍準備失敗，請重新輸入。'};
+      }
+    },
+
+    enterPracticeBattle({attemptId=nextBattleAttemptId(battleEconomy),playerInstanceIds,rngPreparation}={}){
+      return enterPreparedLocalBattle({mode:5,attemptId,playerInstanceIds,rngPreparation});
+    },
+
+    enterFreeBattle({attemptId=nextBattleAttemptId(battleEconomy),playerInstanceIds,rngPreparation}={}){
+      return enterPreparedLocalBattle({mode:2,attemptId,playerInstanceIds,rngPreparation});
+    },
+
+    enterPasswordBattle({attemptId=nextBattleAttemptId(battleEconomy),passwords,rngPreparation}={}){
+      return enterPreparedLocalBattle({mode:4,attemptId,passwords,rngPreparation});
+    },
+
+    enterLinkBattle({attemptId=nextBattleAttemptId(battleEconomy),linkKey,rngPreparation}={}){
+      return enterPreparedLocalBattle({mode:3,attemptId,linkKey,rngPreparation});
+    },
+
     getBattleReceipt() {
       return battleEconomy.lastReceipt;
     },
@@ -1723,14 +1891,14 @@ export function createChampionshipStandaloneApp({
 
     async getBattlePartyLimit(recordIndex) {
       const {battlePartyCondition}=await loadBattleParty();
-      return battlePartyCondition(getMatchRecord(recordIndex).field0C).slots;
+      return battlePartyCondition(recordIndex===null?-1:getMatchRecord(recordIndex).field0C).slots;
     },
 
     /**
      * The two multi-round tournaments as OVL10 sets them up: how many rounds,
      * what a clean sweep pays, and how large the draw is each round. The round
-     * pools and bookkeeping are verified; normal entry, round-to-round battle
-     * construction and durable tournament settlement are not yet integrated.
+     * pools and bookkeeping feed the same owned-party battle and durable
+     * settlement path as the ordinary title match.
      * See docs/research/CHAMPIONSHIP_POOLS_CPU_2026-09-10.json.
      */
     getChampionshipCategories() {
@@ -1794,13 +1962,22 @@ export function createChampionshipStandaloneApp({
      * free; the prize is the run's, paid once at 0210D0C8's gate rather than per
      * round. Everything else is an ordinary battle attempt.
      */
-    enterChampionshipRound({ attemptId, playerInstanceIds = null, opponent = null } = {}) {
+    enterChampionshipRound({ attemptId, playerInstanceIds = null, opponent = null, rngPreparation=null } = {}) {
       requireSession();
       if (battleTransactionActive) return Object.freeze({ ok: false, reason: "TRANSACTION_ACTIVE" });
       if (!championshipRun) return Object.freeze({ ok: false, reason: "NO_CHAMPIONSHIP_RUNNING" });
       if (!nativeChampionshipContinues(championshipRun))
         return Object.freeze({ ok: false, reason: "CHAMPIONSHIP_ALREADY_ENDED" });
       if (battleEconomy.active) return Object.freeze({ ok: false, reason: "BATTLE_ATTEMPT_ACTIVE" });
+      const prepared=rngPreparation===null?null:battleRngPreparations.get(rngPreparation);
+      if(playerInstanceIds!==null||rngPreparation!==null){
+        if(!prepared||prepared.session!==session||prepared.base!==JSON.stringify(gameplayRngSnapshot())
+          ||prepared.championshipRun!==JSON.stringify(championshipRun)
+          ||JSON.stringify(playerInstanceIds)!==JSON.stringify(prepared.individuals?.map(p=>p.instanceId))
+          ||prepared.individuals.some(p=>JSON.stringify(raisingNativeProfile(p.instanceId))!==JSON.stringify(p.nativeProfile)))
+          return {ok:false,reason:'BATTLE_PREPARATION_STALE',message:'隊伍或遊戲進度已更新，請重新選擇參賽隊伍。'};
+        opponent=prepared.opponent;
+      }
       // The caller may have drawn already to build the match; drawing twice
       // would spend the channel twice.
       const drawn = opponent ? { ok: true, opponent } : this.drawChampionshipOpponent();
@@ -1808,8 +1985,9 @@ export function createChampionshipStandaloneApp({
       const result = applyBattleTransaction(beginBattleAttempt(battleEconomy, {
         attemptId, matchIndex: championshipRun.category, mode: 0, battleType: 0,
         entryFee: 0, payout: 0, expectedRounds: 1
-      }, requireShop().getBits()));
+      }, requireShop().getBits()),[],prepared?.rng??null);
       if (!result.ok || result.duplicate) return result;
+      if(rngPreparation)battleRngPreparations.delete(rngPreparation);
       championshipAttemptId = attemptId;
       battlePartyIds = playerInstanceIds === null ? null : [...playerInstanceIds];
       screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);
@@ -1881,9 +2059,22 @@ export function createChampionshipStandaloneApp({
       return preparation;
     },
 
+    async prepareChampionshipBattle(instanceIds) {
+      const run=championshipRun;
+      if(!run||!nativeChampionshipContinues(run))return {ok:false,reason:'NO_CHAMPIONSHIP_ROUND'};
+      const party=await this.prepareBattleParty(null,instanceIds);
+      if(!party.ok)return party;
+      if(championshipRun!==run)return {ok:false,reason:'BATTLE_PREPARATION_STALE'};
+      const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
+      const opponent=selectNativeChampionshipOpponent({category:run.category,round:run.cursor,
+        nextChannel:channel=>prepared.rng.next(channel)});
+      prepared.championshipRun=JSON.stringify(run);prepared.individuals=party.individuals;prepared.opponent=opponent;
+      return {ok:true,individuals:party.individuals,opponent,rngPreparation};
+    },
+
     async prepareBattleParty(recordIndex,instanceIds) {
       const {battlePartyCondition,buildOwnedBattleCreature}=await loadBattleParty();
-      const limit=battlePartyCondition(getMatchRecord(recordIndex).field0C).slots;
+      const limit=battlePartyCondition(recordIndex===null?-1:getMatchRecord(recordIndex).field0C).slots;
       if(!Array.isArray(instanceIds)||!instanceIds.length||instanceIds.length>limit||new Set(instanceIds).size!==instanceIds.length)
         return {ok:false,reason:'PARTY_SIZE',message:`請選擇 1 至 ${limit} 隻符合條件的數碼獸。`};
       const candidates=await this.getBattlePartyCandidates(recordIndex),individuals=[];
@@ -2270,7 +2461,7 @@ export function createChampionshipStandaloneApp({
         let status;
         try {
           status = savePort.save({ snapshot: candidateSnapshot, creature, sessionId,
-            revision: revision + 1, interactionCount, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, raising: candidateRaising,
+            revision: revision + 1, interactionCount, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, raising: candidateRaising,
             registeredSpecies: candidateBook,
             shop: shop ? shop.toSave() : null, cageEdit: cageEdit ? cageEdit.toSave() : null,
             battleEconomy, instanceIdentity: candidateIdentity, gameplayRng: gameplayRngSnapshot(),

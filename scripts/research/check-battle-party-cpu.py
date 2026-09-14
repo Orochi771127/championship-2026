@@ -12,6 +12,7 @@ from hunt_original_probe import load_rom, ROM_SHA
 ap = argparse.ArgumentParser()
 ap.add_argument('--out', required=True)
 ap.add_argument('--catalog', required=True)
+ap.add_argument('--modes', default='0,1')
 a = ap.parse_args()
 rom, arm, _ = load_rom()
 ov = rom.loadArm9Overlays([19])[19]
@@ -62,7 +63,7 @@ catalog = dict(version=1, evidence='BOUNDED_NATIVE_REPLAY', romSha256=ROM_SHA,
                source='ARM9 02092380 / 02092244; title condition caller OVL10 02112638..02112660', rules=rules, species=species)
 results=[]
 root, battle = 0x02502000, 0x02504000
-for mode in [0,1]:
+for mode in [int(n) for n in a.modes.split(',')]:
  for verdict in [3,4,5]:
   for event in [-1,0,1]:
    for variant in range(12):
@@ -83,5 +84,5 @@ for mode in [0,1]:
       output=dict(fields={key:word(individual+int(key,16)) for key in fields},narrowFields={'044':u.mem_read(individual+0x44,1)[0],'046':int.from_bytes(u.mem_read(individual+0x46,2),'little')})))
 Path(a.catalog).write_text(json.dumps(catalog,separators=(',',':'))+'\n',encoding='utf-8',newline='\n')
 Path(a.out).write_text(json.dumps(dict(classification='RESEARCH_ONLY',runtimeEligible=False,romSha256=ROM_SHA,
-    scope='Original qualification and per-individual modes 0/1 type 0 result writer with controlled caller registers; excludes UI and surrounding event writers',vectors=vectors,results=results),separators=(',',':'))+'\n',encoding='utf-8',newline='\n')
+    scope=f'Original qualification and per-individual modes {a.modes} type 0 result writer with controlled caller registers; excludes UI and surrounding event writers',vectors=vectors,results=results),separators=(',',':'))+'\n',encoding='utf-8',newline='\n')
 print(json.dumps(dict(rules=len(rules),species=len(species),qualificationVectors=len(vectors),resultVectors=len(results))))

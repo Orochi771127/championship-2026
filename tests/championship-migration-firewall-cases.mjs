@@ -159,6 +159,13 @@ test("only the authorized source families are present", () => {
       // composes the existing outcome helpers and owns no screen, session or RNG,
       // and consumes the original initializer's verified team-index pools.
       "nativeChampionshipRounds.js",
+      "nativeFreeBattle.js",
+      // Joined on 2026-09-14 with the Owner's battle-mode gap closure: the Link
+      // team exchange (host arena, fixed 0x14 seed, no record write) and the
+      // 22-character Password codec. Both feed the existing battle runtime and
+      // own no screen, session or save.
+      "nativeLinkBattle.js",
+      "nativePasswordBattle.js",
       // Joined on 2026-09-09 with the title/championship writers: OVL8 0210D1C0
       // category 1 and 0210D3EC category 0, plus the 0210E328 rank commit,
       // checked against the CPU oracle. It writes progression only, and changes

@@ -78,11 +78,10 @@ function shell(root, screen, label) {
  * table of battle_menu/launcher13.nsbmd. So the screen has two layers: pick a
  * kind on the box, then a match within it.
  *
- * `mountCube` injects that box. WHICH matches belong to which kind is NOT traced,
- * so the box does not filter the list: it is drawn because the original has it,
- * and the missing link is stated on screen rather than faked.
+ * Mode identity is now traced through OVL10 0210F88C's help-bank dispatch.
+ * The application supplies each mode's entries; this view holds only selection.
  */
-export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, mountCube, menuCopy, getPartySelection }) {
+export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, arenaChoices=[] }) {
   if (!Array.isArray(matches)) throw new TypeError("The Battle menu requires a resolved match list");
   if (typeof onEnter !== "function") throw new TypeError("The Battle menu requires an onEnter intent");
 
@@ -103,16 +102,33 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   // use -- still assigns straight through, so the pinned synchronous factory
   // contract is unchanged.
   let cubeDisposed = false;
+  let selectedMode='TITLE_MATCH',modeRequest=0,partyRequest=0,entering=false;
   const matchOnlyNodes = [];
+  async function selectMode(id){
+    if(cubeDisposed||entering)return;
+    if(id==='CHAMPIONSHIP'){onOpenChampionship?.();return;}
+    if(id==='PRACTICE_BATTLE'&&getPracticeSelection){modeRequest++;await choosePractice();return;}
+    if(id==='PASSWORD_BATTLE'&&getPasswordSelection){modeRequest++;await choosePassword();return;}
+    if(id==='LINK_BATTLE'&&getLinkSelection){modeRequest++;await chooseLink();return;}
+    if(!['TITLE_MATCH','FREE_BATTLE'].includes(id)||!getModeMatches)return;
+    const request=++modeRequest;
+    let next;
+    try{next=await getModeMatches(id);if(!Array.isArray(next))throw new Error('BATTLE_MATCH_LIST_REQUIRED');}
+    catch(error){if(!cubeDisposed&&request===modeRequest)showRefusal({ok:false,message:'對戰清單載入失敗，請重新選擇模式。'},{});return;}
+    if(cubeDisposed||request!==modeRequest)return;
+    partyRequest++;selectedMatch=null;selectedIds=[];
+    selectedMode=id;partyPanel.hidden=true;list.hidden=false;entryNotice.hidden=true;
+    section.dataset.battleMode=id;
+    for(const node of matchOnlyNodes)node.hidden=false;
+    renderMatches(next);
+  }
   if (typeof mountCube === "function") {
     const stage = element("div", "cm-vs5-cube");
     section.append(stage);
     const mounted = mountCube({
       host: stage,
-      // Nothing is marked reachable: the kind-to-match mapping is untraced, so
-      // no face may claim to lead somewhere.
-      available: new Set(),
-      onSelect() {}
+      available: new Set(['TITLE_MATCH',...(onOpenChampionship?['CHAMPIONSHIP']:[]),...(getModeMatches?['FREE_BATTLE']:[]),...(getLinkSelection?['LINK_BATTLE']:[]),...(getPasswordSelection?['PASSWORD_BATTLE']:[]),...(getPracticeSelection?['PRACTICE_BATTLE']:[])]),
+      onSelect:id=>{void selectMode(id);}
     });
     if (mounted && typeof mounted.then === "function") {
       mounted.then((presentation) => {
@@ -138,6 +154,12 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   entryNotice.hidden = true;
   const partyPanel=element('section','cm-vs5-party');partyPanel.hidden=true;
   let selectedMatch=null,selectedIds=[];
+  function arenaSelector(){
+    const label=element('label','cm-vs5-arena-choice','對戰場地'),select=element('select');
+    select.setAttribute('aria-label','對戰場地');select.append(element('option','','隨機場地'));select.children[0].value='';
+    for(const arena of arenaChoices){const option=element('option','',arena.identifier.replace('BATTLE_',''));option.value=String(arena.index);select.append(option);}
+    label.append(select);return {node:label,value:()=>select.value?Number(select.value):null};
+  }
   function showRefusal(result,match){
     if(result?.ok!==false)return;
     entryNotice.hidden=false;entryNotice.dataset.reason=result.reason??'ENTRY_REFUSED';
@@ -147,10 +169,19 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       :result.message??menuCopy.entryRefused??'目前無法參加這場對戰。');
   }
   async function chooseParty(match){
+    const request=++partyRequest,mode=selectedMode;
     selectedMatch=match;selectedIds=[];list.hidden=true;partyPanel.hidden=false;partyPanel.replaceChildren();entryNotice.hidden=true;
     for (const node of matchOnlyNodes) node.hidden = true;
-    const {candidates,limit}=await getPartySelection(match.recordIndex);
+    let selection;
+    try{selection=await getPartySelection(match.recordIndex,mode);}
+    catch(error){
+      if(!cubeDisposed&&request===partyRequest){partyPanel.hidden=true;list.hidden=false;for(const node of matchOnlyNodes)node.hidden=false;showRefusal({ok:false,message:'參賽隊伍載入失敗，請再試一次。'},match);}
+      return;
+    }
+    if(cubeDisposed||request!==partyRequest)return;
+    const {candidates,limit}=selection;
     partyPanel.append(element('h2','cm-vs5-title','選擇參賽數碼獸'),element('p','cm-vs5-entry-notice',`最多 ${limit} 隻`));
+    const arena=mode==='FREE_BATTLE'?arenaSelector():null;if(arena)partyPanel.append(arena.node);
     const controls=[];
     const confirm=actionButton('決定',{primary:true});confirm.disabled=true;
     for(const entry of candidates){
@@ -167,9 +198,147 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       controls.push([entry,button]);partyPanel.append(button);
     }
     if(!candidates.some(c=>c.admission.ok))partyPanel.append(element('p','cm-vs5-entry-notice','目前沒有符合這場比賽條件的數碼獸。'));
-    confirm.addEventListener('click',async()=>showRefusal(await onEnter(selectedMatch.recordIndex,[...selectedIds]),selectedMatch));
-    const back=actionButton('返回賽事選擇');back.addEventListener('click',()=>{partyPanel.hidden=true;list.hidden=false;entryNotice.hidden=true;for(const node of matchOnlyNodes)node.hidden=false;});
+    confirm.addEventListener('click',async()=>{if(confirm.disabled||entering)return;confirm.disabled=true;entering=true;back.disabled=true;
+      try{showRefusal(await onEnter(match.recordIndex,[...selectedIds],mode,...(arena?[arena.value()]:[])),match);}
+      catch(error){if(!cubeDisposed)showRefusal({ok:false,message:'對戰準備失敗，請再試一次。'},match);}
+      finally{entering=false;if(!cubeDisposed){confirm.disabled=selectedIds.length===0;back.disabled=false;}}});
+    const back=actionButton('返回賽事選擇');back.addEventListener('click',()=>{if(entering)return;partyRequest++;selectedMatch=null;selectedIds=[];partyPanel.hidden=true;list.hidden=false;entryNotice.hidden=true;for(const node of matchOnlyNodes)node.hidden=false;});
     partyPanel.append(confirm,back);
+  }
+
+  async function choosePractice(){
+    const request=++partyRequest;selectedMode='PRACTICE_BATTLE';section.dataset.battleMode=selectedMode;
+    list.hidden=true;partyPanel.hidden=false;partyPanel.replaceChildren();entryNotice.hidden=true;
+    for(const node of matchOnlyNodes)node.hidden=true;
+    const back=actionButton('返回賽事選擇');back.addEventListener('click',()=>{if(!entering)void selectMode('TITLE_MATCH');});
+    partyPanel.append(element('h2','cm-vs5-title','練習對戰'),element('p','cm-vs5-entry-notice','將自己培育的數碼獸分成兩隊，每隊最多 3 隻。'));
+    let candidates;
+    try{({candidates}=await getPracticeSelection());}
+    catch(error){if(!cubeDisposed&&request===partyRequest){showRefusal({ok:false,message:'參賽隊伍載入失敗，請再試一次。'},{});partyPanel.append(back);}return;}
+    if(cubeDisposed||request!==partyRequest)return;
+    const teams=[[],[]],controls=[],summary=element('p','cm-vs5-entry-notice'),arena=arenaSelector();
+    const confirm=actionButton('開始練習',{primary:true});confirm.disabled=true;
+    const refresh=()=>{
+      summary.textContent=`A 隊 ${teams[0].length}／3　B 隊 ${teams[1].length}／3`;
+      for(const {button,entry,team} of controls){const picked=teams[team].includes(entry.instanceId);
+        button.setAttribute('aria-pressed',String(picked));button.disabled=entering||!entry.admission.ok
+          ||teams[1-team].includes(entry.instanceId)||(!picked&&teams[team].length>=3);}
+      confirm.disabled=entering||teams.some(ids=>ids.length===0);back.disabled=entering;
+    };
+    partyPanel.append(summary,arena.node);
+    for(const entry of candidates){
+      const row=element('div','cm-vs5-practice-member'),name=entry.displayName??entry.name??entry.instanceId;
+      row.append(element('span','cm-vs5-practice-member__name',name));
+      if(!entry.admission.ok)row.append(element('span','cm-vs5-match__fee',entry.admission.message));
+      for(const team of [0,1]){const button=actionButton(`${team===0?'A':'B'} 隊`);button.setAttribute('aria-label',`${name} ${team===0?'A':'B'} 隊`);
+        button.addEventListener('click',()=>{if(button.disabled)return;const ids=teams[team],at=ids.indexOf(entry.instanceId);if(at<0)ids.push(entry.instanceId);else ids.splice(at,1);refresh();});
+        controls.push({button,entry,team});row.append(button);}
+      partyPanel.append(row);
+    }
+    if(candidates.filter(c=>c.admission.ok).length<2)partyPanel.append(element('p','cm-vs5-entry-notice','練習對戰需要至少兩隻可以參賽的數碼獸。'));
+    confirm.addEventListener('click',async()=>{
+      if(confirm.disabled)return;entering=true;refresh();
+      try{showRefusal(await onEnter(-1,teams.map(ids=>[...ids]),'PRACTICE_BATTLE',arena.value()),{});}
+      catch(error){if(!cubeDisposed)showRefusal({ok:false,message:'對戰準備失敗，請再試一次。'},{});}
+      finally{entering=false;if(!cubeDisposed)refresh();}
+    });
+    refresh();partyPanel.append(confirm,back);
+  }
+
+  async function choosePassword(){
+    const request=++partyRequest;selectedMode='PASSWORD_BATTLE';section.dataset.battleMode=selectedMode;
+    list.hidden=true;partyPanel.hidden=false;partyPanel.replaceChildren();entryNotice.hidden=true;
+    for(const node of matchOnlyNodes)node.hidden=true;
+    const back=actionButton('返回賽事選擇');back.addEventListener('click',()=>{if(!entering)void selectMode('TITLE_MATCH');});
+    let setup;
+    try{setup=await getPasswordSelection();}
+    catch(error){if(!cubeDisposed&&request===partyRequest){showRefusal({ok:false,message:'密碼對戰載入失敗，請再試一次。'},{});partyPanel.append(back);}return;}
+    if(cubeDisposed||request!==partyRequest)return;
+    const maxLength=Number.isInteger(setup?.maxLength)?setup.maxLength:22;
+    partyPanel.append(element('h2','cm-vs5-title','密碼對戰'),
+      element('p','cm-vs5-entry-notice','輸入兩組隊伍密碼。每組密碼可還原最多 3 隻數碼獸。'));
+    const inputs=[];
+    for(const team of ['A','B']){
+      const label=element('label','cm-vs5-password-label',`${team} 隊密碼`);
+      const input=element('input','cm-vs5-password-input');input.value='';input.maxLength=maxLength;
+      input.setAttribute('maxlength',String(maxLength));input.setAttribute('autocomplete','off');input.setAttribute('autocapitalize','none');
+      input.setAttribute('spellcheck','false');input.setAttribute('aria-label',`${team} 隊密碼`);
+      label.append(input);inputs.push(input);partyPanel.append(label);
+    }
+    const confirm=actionButton('開始密碼對戰',{primary:true});confirm.disabled=true;
+    const refresh=()=>{confirm.disabled=entering||inputs.some(input=>![...input.value].length);back.disabled=entering;};
+    for(const input of inputs)input.addEventListener('input',refresh);
+    confirm.addEventListener('click',async()=>{
+      if(confirm.disabled)return;entering=true;refresh();entryNotice.hidden=true;
+      try{showRefusal(await onEnter(-1,inputs.map(input=>input.value),'PASSWORD_BATTLE'),{});}
+      catch(error){if(!cubeDisposed)showRefusal({ok:false,message:'密碼對戰準備失敗，請再試一次。'},{});}
+      finally{entering=false;if(!cubeDisposed)refresh();}
+    });
+    refresh();partyPanel.append(confirm,back);
+  }
+
+  async function chooseLink(){
+    const request=++partyRequest;selectedMode='LINK_BATTLE';section.dataset.battleMode=selectedMode;
+    list.hidden=true;partyPanel.hidden=false;partyPanel.replaceChildren();entryNotice.hidden=true;
+    for(const node of matchOnlyNodes)node.hidden=true;
+    const back=actionButton('返回賽事選擇');back.addEventListener('click',()=>{if(!entering)void selectMode('TITLE_MATCH');});
+    let setup;
+    try{setup=await getLinkSelection();if(!Array.isArray(setup?.candidates))throw new Error('LINK_SELECTION_REQUIRED');}
+    catch(error){if(!cubeDisposed&&request===partyRequest){showRefusal({ok:false,message:'通訊對戰載入失敗，請再試一次。'},{});partyPanel.append(back);}return;}
+    if(cubeDisposed||request!==partyRequest)return;
+    const rolePanel=element('section','cm-vs5-link');
+    const title=element('h2','cm-vs5-title','通訊對戰');
+    const note=element('p','cm-vs5-entry-notice','兩台裝置交換邀請碼與回覆碼，完成後會使用相同隊伍、場地與戰鬥亂數。');
+    const host=actionButton('建立邀請'),guest=actionButton('加入邀請');
+    partyPanel.append(title,note,host,guest,rolePanel,back);
+
+    const teamPicker=(container,selected,refresh)=>{
+      const controls=[];container.append(element('h3','cm-vs5-link__heading','選擇參賽數碼獸（1 至 3 隻）'));
+      for(const entry of setup.candidates){
+        const button=actionButton(entry.displayName??entry.name??entry.instanceId);button.setAttribute('aria-pressed','false');
+        button.disabled=!entry.admission.ok;
+        if(!entry.admission.ok)button.append(element('span','cm-vs5-match__fee',entry.admission.message));
+        button.addEventListener('click',()=>{const at=selected.indexOf(entry.instanceId);if(at<0)selected.push(entry.instanceId);else selected.splice(at,1);refresh();});
+        controls.push({entry,button});container.append(button);
+      }
+      return ()=>{for(const {entry,button} of controls){const picked=selected.includes(entry.instanceId);button.setAttribute('aria-pressed',String(picked));button.disabled=entering||!entry.admission.ok||(!picked&&selected.length>=3);}};
+    };
+    const codeField=(labelText,readOnly=false)=>{
+      const label=element('label','cm-vs5-password-label',labelText),field=element('textarea','cm-vs5-link-code');
+      field.value='';field.setAttribute('aria-label',labelText);field.setAttribute('autocomplete','off');field.setAttribute('spellcheck','false');
+      if(readOnly){field.readOnly=true;field.setAttribute('readonly','');}
+      label.append(field);return {label,field};
+    };
+    const start=async prepared=>{
+      entering=true;host.disabled=true;guest.disabled=true;back.disabled=true;entryNotice.hidden=true;
+      try{showRefusal(await onEnter(-1,prepared,'LINK_BATTLE'),{});}
+      catch(error){if(!cubeDisposed)showRefusal({ok:false,message:'通訊對戰準備失敗，請再交換一次通訊碼。'},{});}
+      finally{entering=false;if(!cubeDisposed){host.disabled=false;guest.disabled=false;back.disabled=false;}}
+    };
+    const renderHost=()=>{
+      rolePanel.replaceChildren();const selected=[],invite=codeField('邀請碼',true),reply=codeField('對方回覆碼');
+      const create=actionButton('產生邀請碼',{primary:true}),begin=actionButton('讀取回覆並開始',{primary:true});begin.disabled=true;
+      let updateButtons=()=>{};
+      const refresh=()=>{updateButtons();create.disabled=entering||selected.length===0;begin.disabled=entering||!invite.field.value||!reply.field.value;};
+      updateButtons=teamPicker(rolePanel,selected,refresh);reply.field.addEventListener('input',refresh);
+      create.addEventListener('click',async()=>{if(create.disabled)return;entering=true;refresh();
+        const result=await setup.createInvite([...selected]);entering=false;if(result.ok){invite.field.value=result.inviteCode;invite.field.dataset.arena=String(result.arenaIndex);}else showRefusal(result,{});refresh();});
+      begin.addEventListener('click',async()=>{if(begin.disabled)return;entering=true;refresh();const prepared=await setup.prepareHost(invite.field.value,reply.field.value);
+        entering=false;refresh();if(!prepared.ok){showRefusal(prepared,{});return;}await start(prepared);});
+      rolePanel.append(create,invite.label,reply.label,begin);refresh();
+    };
+    const renderGuest=()=>{
+      rolePanel.replaceChildren();const selected=[],invite=codeField('對方邀請碼'),reply=codeField('回覆碼',true);
+      const create=actionButton('產生回覆碼',{primary:true}),begin=actionButton('已分享回覆碼，開始對戰',{primary:true});begin.disabled=true;
+      let prepared=null,updateButtons=()=>{};
+      const refresh=()=>{updateButtons();create.disabled=entering||selected.length===0||!invite.field.value;begin.disabled=entering||!prepared;};
+      updateButtons=teamPicker(rolePanel,selected,refresh);invite.field.addEventListener('input',()=>{prepared=null;reply.field.value='';refresh();});
+      create.addEventListener('click',async()=>{if(create.disabled)return;entering=true;refresh();prepared=await setup.prepareGuest(invite.field.value,[...selected]);entering=false;
+        if(prepared.ok)reply.field.value=prepared.replyCode;else{showRefusal(prepared,{});prepared=null;}refresh();});
+      begin.addEventListener('click',async()=>{if(!begin.disabled)await start(prepared);});
+      rolePanel.append(invite.label,create,reply.label,begin);refresh();
+    };
+    host.addEventListener('click',renderHost);guest.addEventListener('click',renderGuest);renderHost();
   }
   function renderMatches(nextMatches) {
     if (!Array.isArray(nextMatches)) return;
@@ -182,7 +351,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     for (const match of matches) {
       const item = element("li", "cm-vs5-match");
       item.dataset.recordIndex = String(match.recordIndex);
-      const button = actionButton(titleEventText(match.recordIndex, "name", match.title ?? `${menuCopy.match} ${match.recordIndex}`), { primary: true });
+      const button = actionButton(selectedMode==='FREE_BATTLE'?match.title:titleEventText(match.recordIndex, "name", match.title ?? `${menuCopy.match} ${match.recordIndex}`), { primary: true });
       button.classList.add("cm-vs5-match__enter");
       button.append(element("span", "cm-vs5-match__fee",
         `${menuCopy.entryFee ?? "報名費"} ${match.entryFee ?? "—"} 位元幣`));
@@ -190,7 +359,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
         `${menuCopy.prize ?? "獎金"} ${match.payout > 0 ? `${match.payout} 位元幣` : menuCopy.noPayout}`));
       button.addEventListener("click", async () => {
         if(getPartySelection){await chooseParty(match);return;}
-        const result = await onEnter(match.recordIndex);
+        const result = await onEnter(match.recordIndex,undefined,selectedMode);
         if (result?.ok !== false) return;
         entryNotice.hidden = false;
         entryNotice.dataset.reason = result.reason ?? "ENTRY_REFUSED";
@@ -224,12 +393,13 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   }
 
   return Object.freeze({
-    render(reading = {}) { renderMatches(reading.matches); },
+    render(reading = {}) { if(selectedMode==='TITLE_MATCH')renderMatches(reading.matches); },
     inspect() {
       return Object.freeze({
         screen: "BATTLE_SELECT",
         count: matches.length,
-        cube: cube ? cube.getDiagnostics() : null
+        mode: selectedMode,
+        cube: cube?.getDiagnostics?.() ?? null
       });
     },
     dispose() {
@@ -348,9 +518,10 @@ function combatantCard(combatant, compact,hudArt=null) {
  * The match. `mountField` attaches the Pixi scene to the host this creates; the
  * DOM carries the words the scene cannot draw and nothing else.
  */
-export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null }) {
+export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null,localTeamIndex=0 }) {
   if (!frame || !Array.isArray(frame.combatants)) throw new TypeError("The Battle field view requires a battle frame");
   if (typeof mountField !== "function") throw new TypeError("The Battle field view requires the published field mounter");
+  if(![0,1].includes(localTeamIndex))throw new TypeError('The Battle field view requires a local team');
 
   const section = shell(root, "BATTLE_FIELD", "Battle");
   section.dataset.arena = frame.arena.identifier;
@@ -360,7 +531,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
   const players = element("ul", "cm-vs5-roster cm-vs5-roster--player");
   const cards = new Map();
   for (const combatant of frame.combatants) {
-    const compact = combatant.team === 1;
+    const compact = combatant.team !== localTeamIndex;
     const built = combatantCard(combatant, compact,hudArt);
     cards.set(combatant.slot, built);
     (compact ? opponents : players).append(built.card);
@@ -382,6 +553,9 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
     VS5_EVIDENCE_LABELS[frame.rosterEvidence] ?? VS5_EVIDENCE_LABELS.PRODUCT_AUTHORED));
   clock.band.prepend(caption);
   const log = eventLogBand({ running: "對戰進行中" });
+  const localOutcome=outcome=>localTeamIndex===0?outcome:{...outcome,
+    verdict:outcome.verdict==='TEAM_ZERO_AHEAD'?'TEAM_ONE_AHEAD':outcome.verdict==='TEAM_ONE_AHEAD'?'TEAM_ZERO_AHEAD':outcome.verdict,
+    winningTeam:outcome.winningTeam===null?null:1-outcome.winningTeam};
 
   const exit = actionButton("離開對戰");
   exit.classList.add("cm-vs5-exit");
@@ -405,7 +579,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
         cards.get(combatant.slot)?.update(combatant,view.animationFrame??0,view.outcome);
       }
       clock.update(view.clock);
-      log.update(view.outcome);
+      log.update(localOutcome(view.outcome));
       section.dataset.ended = String(view.outcome.ended);
       if (view.outcome.ended) {
         section.dataset.verdict = view.outcome.verdict;

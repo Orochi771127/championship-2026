@@ -63,6 +63,7 @@ export function createChampionshipView({ root, source }) {
     throw new TypeError("The tournament board requires a categories and run source");
   }
   const intents = source.intents ?? {};
+  let renderVersion=0,disposed=false;
   root.replaceChildren();
   root.className = "cm-championship-root";
   root.dataset.uiAuthority = "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R";
@@ -139,12 +140,7 @@ export function createChampionshipView({ root, source }) {
     panel.append(marks);
 
     if (run.continues) {
-      const opponent = element("p", "cm-championship-opponent");
-      const drawn = intents.draw?.();
-      opponent.textContent = drawn?.ok
-        ? uiText(`本輪對手：第 ${drawn.opponent.index + 1} 隊 / 共 ${drawn.opponent.poolSize} 隊`)
-        : uiText("本輪對手尚未抽出。");
-      panel.append(opponent);
+      panel.append(element("p", "cm-championship-opponent",uiText("選擇本輪參賽數碼獸；確認後抽出對手。")));
       // The round is fought as an ordinary battle; the verdict it settles on is
       // what writes the flag, so this board never judges a round itself.
       const actions = element("div", "cm-championship-actions");
@@ -152,9 +148,40 @@ export function createChampionshipView({ root, source }) {
         uiText(`開始第 ${run.round + 1} 戰`));
       fight.type = "button";
       fight.dataset.round = String(run.round);
+      let selectedIds=[],busy=false;
+      if(source.getPartySelection){
+        fight.disabled=true;
+        const party=element('div','cm-vs5-party');party.append(element('h2','cm-vs5-title',uiText('選擇參賽數碼獸')));
+        panel.append(party);
+        const version=renderVersion;
+        Promise.resolve(source.getPartySelection()).then(({candidates,limit})=>{
+          if(disposed||version!==renderVersion)return;
+          party.append(element('p','cm-championship-opponent',uiText(`最多 ${limit} 隻`)));
+          const controls=[];
+          for(const entry of candidates){
+            const button=element('button','cm-championship-action',uiText(entry.displayName??entry.instanceId));
+            button.type='button';button.dataset.instanceId=entry.instanceId;button.setAttribute('aria-pressed','false');
+            button.disabled=!entry.admission.ok;
+            if(!entry.admission.ok)button.append(element('span','cm-vs5-match__fee',uiText(entry.admission.message)));
+            button.addEventListener('click',()=>{
+              if(busy)return;
+              selectedIds=selectedIds.includes(entry.instanceId)?selectedIds.filter(id=>id!==entry.instanceId):[...selectedIds,entry.instanceId];
+              for(const [candidate,control]of controls){const picked=selectedIds.includes(candidate.instanceId);
+                control.setAttribute('aria-pressed',String(picked));control.disabled=!candidate.admission.ok||(!picked&&selectedIds.length>=limit);}
+              fight.disabled=selectedIds.length===0;
+            });
+            controls.push([entry,button]);party.append(button);
+          }
+          if(!candidates.some(c=>c.admission.ok))party.append(element('p','cm-championship-notice',uiText('目前沒有可以參賽的數碼獸。')));
+        }).catch(()=>{if(!disposed&&version===renderVersion)say(uiText('隊伍資料讀取失敗，請返回後再試。'));});
+      }
       fight.addEventListener("click", async () => {
-        const entered = await intents.enterRound?.();
-        if (!entered?.ok) { say(uiText("目前無法開始這一輪。")); render(); }
+        if(busy)return;busy=true;fight.disabled=true;
+        try{
+          const entered = await intents.enterRound?.([...selectedIds]);
+          if (!entered?.ok) { say(uiText(entered?.message??"目前無法開始這一輪。")); render(); }
+        }catch{say(uiText("目前無法開始這一輪。"));render();}
+        finally{busy=false;}
       });
       actions.append(fight);
       panel.append(actions);
@@ -175,6 +202,7 @@ export function createChampionshipView({ root, source }) {
   }
 
   function render() {
+    renderVersion+=1;
     board.replaceChildren();
     const run = source.getRun();
     if (run) renderRun(run); else renderCategories();
@@ -188,6 +216,6 @@ export function createChampionshipView({ root, source }) {
       sourceScenes: CHAMPIONSHIP_SCREEN_SOURCE_SCENES,
       running: source.getRun() !== null
     }),
-    dispose() { root.replaceChildren(); }
+    dispose() { disposed=true;renderVersion+=1;root.replaceChildren(); }
   });
 }

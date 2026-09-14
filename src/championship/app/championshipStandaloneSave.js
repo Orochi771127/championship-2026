@@ -18,6 +18,7 @@ import { normalizeRegisteredSpecies, retainOwnedBookSpecies } from "../database/
 import { normalizeNativeRaisingHome } from "../raising/nativeRaisingHomeState.js";
 import { normalizeNativeTitleProgress } from "../battle/nativeTitleProgression.js";
 import { normalizeNativeChampionshipRun } from "../battle/nativeChampionshipRounds.js";
+import { normalizeFreeBattleMenu } from "../battle/nativeFreeBattle.js";
 import { normalizeNativeRaisingMessages } from "../raising/nativeRaisingMessages.js";
 import { normalizeNativeOpening } from './nativeOpeningState.js';
 
@@ -46,7 +47,7 @@ const ALLOWED_TOP_LEVEL_KEYS_V4 = Object.freeze([...ALLOWED_TOP_LEVEL_KEYS_V3, "
 const ALLOWED_TOP_LEVEL_KEYS = Object.freeze([...ALLOWED_TOP_LEVEL_KEYS_V4, "huntHistory"]);
 
 const ALLOWED_CREATURE_KEYS = Object.freeze(["creatureId", "speciesId", "displayName", "nativeProfile"]);
-const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision", "tamerRank", "battleBadges", "registeredSpecies", "nativeTitles", "nativeMessages", "nativeOpening", "championshipRun"]);
+const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision", "tamerRank", "battleBadges", "registeredSpecies", "nativeTitles", "nativeMessages", "nativeOpening", "championshipRun", "freeBattleMenu"]);
 const ALLOWED_SHOP_KEYS = Object.freeze(["bits", "visibility", "quantities", "cageOwned"]);
 const ALLOWED_CAGE_EDIT_KEYS = Object.freeze(["placements", "layoutVersion"]);
 const ALLOWED_CAGE_PLACEMENT_KEYS = Object.freeze(["moduleId", "slotIndex"]);
@@ -293,6 +294,7 @@ export function createChampionshipModernSave({
       ? createRaisingInstanceIdentityState(identitySources)
       : normalizeRaisingInstanceIdentityState(instanceIdentity, identitySources),
     progression: {
+      ...(progression.freeBattleMenu!==undefined?{freeBattleMenu:normalizeFreeBattleMenu(progression.freeBattleMenu)}:{}),
       ...(progression.nativeTitles!==undefined?{nativeTitles:normalizeNativeTitleProgress(progression.nativeTitles)}:{}),
       // A tournament runs over several rounds, and a browser tab can close
       // between them, so the run is carried. Whether the original's own save

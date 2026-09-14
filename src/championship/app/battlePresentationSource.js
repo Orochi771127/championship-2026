@@ -25,6 +25,7 @@
 // this reports it as product-authored placement and labels it as such.
 
 import contract from "../../../docs/contracts/championship/battle-field-presentation.v1.json" with { type: "json" };
+export const BATTLE_PRESENTATION_ARENAS = Object.freeze(contract.arenaArt.arenas);
 import { deepFreeze } from "../contracts/championshipContracts.js";
 import speciesCatalog from "../../data/championship/catalogs/creature-species.r1.json" with { type: "json" };
 import { SPECIES_NAMES_ZH } from "../text/catalogs.zhHant.js";

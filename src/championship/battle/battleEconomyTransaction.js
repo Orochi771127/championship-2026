@@ -46,7 +46,7 @@ function context(value) {
   return {
     attemptId: value.attemptId,
     sequence,
-    matchIndex: integer(value.matchIndex, "BATTLE_MATCH_INDEX", 0, 65535),
+    matchIndex: integer(value.matchIndex, "BATTLE_MATCH_INDEX", [2,3,4,5].includes(value.mode)?-1:0, 65535),
     mode: integer(value.mode, "BATTLE_REWARD_MODE", 0, 5),
     battleType: integer(value.battleType, "BATTLE_TYPE", 0, 255),
     entryFee: integer(value.entryFee, "BATTLE_ENTRY_FEE", 0, BATTLE_REWARD_WALLET_CAP),

@@ -117,7 +117,7 @@ test('party selection enforces eligibility and slot limit; cancel never enters o
   match.click(); await Promise.resolve(); await Promise.resolve();
   assert.equal(button('決定').disabled,true,'cancel discards the selection');
   button('甲').click();button('甲').click();assert.equal(button('決定').disabled,true);
-  button('乙').click();button('決定').click();assert.deepEqual(entered,[[0,['b']]]);
+  button('乙').click();button('決定').click();assert.deepEqual(entered,[[0,['b'],'TITLE_MATCH']]);
 });
 
 function showPrize(root, receipt) {
@@ -125,6 +125,77 @@ function showPrize(root, receipt) {
   descendants(root).find((node) => node.textContent === "下一頁").click();
   return view;
 }
+
+test('Practice selection requires two distinct owned teams and passes the selected arena',async t=>{
+  const root=useDocument(t),entered=[];let cube;
+  const view=createBattleSelectView({root,matches:[],menuCopy:{menu:'對戰',chooseMatch:'選擇對戰',availableMatches:'賽事',faceNotice:'模式'},
+    mountCube:options=>{cube=options;return {dispose(){}};},getModeMatches:()=>[],onEnter:(...args)=>{entered.push(args);return {ok:true};},
+    arenaChoices:[{index:1,identifier:'BATTLE_GRASS'}],getPracticeSelection:()=>({candidates:[
+      {instanceId:'a',displayName:'甲',admission:{ok:true}},{instanceId:'b',displayName:'乙',admission:{ok:true}}]})});
+  cube.onSelect('PRACTICE_BATTLE');await Promise.resolve();await Promise.resolve();
+  const find=name=>descendants(root).find(n=>n.attributes['aria-label']===name);
+  const confirm=descendants(root).find(n=>n.textContent==='開始練習');assert.equal(confirm.disabled,true);
+  find('甲 A 隊').click();assert.equal(find('甲 B 隊').disabled,true);assert.equal(confirm.disabled,true);
+  find('乙 B 隊').click();assert.equal(confirm.disabled,false);find('對戰場地').value='1';confirm.click();
+  assert.deepEqual(entered,[[-1,[['a'],['b']],'PRACTICE_BATTLE',1]]);assert.equal(confirm.disabled,true);
+  await Promise.resolve();view.dispose();
+});
+
+test('Password selection requires two bounded passwords and passes no owned party or arena',async t=>{
+  const root=useDocument(t),entered=[];let cube;
+  const view=createBattleSelectView({root,matches:[],menuCopy:{menu:'對戰',chooseMatch:'選擇對戰',availableMatches:'賽事',faceNotice:'模式'},
+    mountCube:options=>{cube=options;return {dispose(){}};},getModeMatches:()=>[],getPasswordSelection:()=>({maxLength:22}),
+    onEnter:(...args)=>{entered.push(args);return {ok:true};}});
+  assert.deepEqual([...cube.available],['TITLE_MATCH','FREE_BATTLE','PASSWORD_BATTLE']);
+  cube.onSelect('PASSWORD_BATTLE');await Promise.resolve();await Promise.resolve();
+  const input=label=>descendants(root).find(node=>node.attributes['aria-label']===label);
+  const confirm=descendants(root).find(node=>node.textContent==='開始密碼對戰');assert.equal(confirm.disabled,true);
+  input('A 隊密碼').value='密碼甲';input('A 隊密碼').listeners.input();assert.equal(confirm.disabled,true);
+  input('B 隊密碼').value='密碼乙';input('B 隊密碼').listeners.input();assert.equal(confirm.disabled,false);
+  confirm.click();assert.deepEqual(entered,[[-1,['密碼甲','密碼乙'],'PASSWORD_BATTLE']]);
+  assert.equal(input('A 隊密碼').maxLength,22);assert.equal(confirm.disabled,true);
+  await Promise.resolve();view.dispose();
+});
+
+test('Link selection exposes host and guest code exchange before starting',async t=>{
+  const root=useDocument(t),entered=[];let cube;
+  const prepared={ok:true,replyCode:'CM26-LINK-REPLY',parties:[[{instanceId:'host'}],[{instanceId:'guest'}]],arenaIndex:7};
+  const view=createBattleSelectView({root,matches:[],menuCopy:{menu:'對戰',chooseMatch:'選擇對戰',availableMatches:'賽事',faceNotice:'模式'},
+    mountCube:options=>{cube=options;return {dispose(){}};},getModeMatches:()=>[],onEnter:(...args)=>{entered.push(args);return {ok:true};},
+    getLinkSelection:()=>({candidates:[{instanceId:'guest',displayName:'乙',admission:{ok:true}}],
+      createInvite:()=>({ok:true,inviteCode:'CM26-LINK-INVITE',arenaIndex:7}),prepareHost:()=>prepared,prepareGuest:()=>prepared})});
+  cube.onSelect('LINK_BATTLE');await Promise.resolve();await Promise.resolve();
+  const button=text=>descendants(root).find(node=>node.tagName==='button'&&node.textContent===text);
+  button('加入邀請').click();const invite=descendants(root).find(node=>node.attributes['aria-label']==='對方邀請碼');
+  invite.value='CM26-LINK-INVITE';invite.listeners.input();button('乙').click();button('產生回覆碼').click();
+  await Promise.resolve();await Promise.resolve();
+  const reply=descendants(root).find(node=>node.attributes['aria-label']==='回覆碼');assert.equal(reply.value,'CM26-LINK-REPLY');
+  button('已分享回覆碼，開始對戰').click();await Promise.resolve();
+  assert.deepEqual(entered,[[-1,prepared,'LINK_BATTLE']]);view.dispose();
+});
+
+test('mode switching keeps free opponents separate from scheduled titles and rejects stale asynchronous menus',async t=>{
+  const root=useDocument(t),entered=[],pending=new Map();let cube;
+  const view=createBattleSelectView({root,matches:[{recordIndex:0,entryFee:150,payout:7000}],
+    menuCopy:{menu:'對戰',chooseMatch:'選擇對戰',availableMatches:'賽事',faceNotice:'模式'},
+    mountCube:options=>{cube=options;return {dispose(){}};},onEnter:(...args)=>{entered.push(args);return {ok:true};},
+    getModeMatches:mode=>new Promise((resolve,reject)=>pending.set(mode,{resolve,reject})),
+    getPartySelection:()=>({limit:1,candidates:[{instanceId:'a',displayName:'甲',admission:{ok:true}}]})});
+  assert.deepEqual([...cube.available],['TITLE_MATCH','FREE_BATTLE']);
+  cube.onSelect('FREE_BATTLE');cube.onSelect('TITLE_MATCH');
+  pending.get('TITLE_MATCH').resolve([{recordIndex:1,entryFee:100,payout:200}]);await Promise.resolve();await Promise.resolve();
+  pending.get('FREE_BATTLE').resolve([{recordIndex:'single:0',title:'自由對手',entryFee:0,payout:25}]);await Promise.resolve();
+  assert.equal(view.inspect().mode,'TITLE_MATCH');assert.equal(findByClass(root,'cm-vs5-match').dataset.recordIndex,'1');
+  cube.onSelect('FREE_BATTLE');pending.get('FREE_BATTLE').reject(new Error('network'));await Promise.resolve();await Promise.resolve();
+  assert.match(textOf(root),/清單載入失敗/);assert.equal(view.inspect().mode,'TITLE_MATCH');
+  cube.onSelect('FREE_BATTLE');pending.get('FREE_BATTLE').resolve([{recordIndex:'single:0',title:'自由對手',entryFee:0,payout:25}]);await Promise.resolve();await Promise.resolve();
+  view.render({matches:[{recordIndex:2}]});assert.equal(view.inspect().mode,'FREE_BATTLE');assert.equal(findByClass(root,'cm-vs5-match').dataset.recordIndex,'single:0');
+  findByClass(root,'cm-vs5-match__enter').click();await Promise.resolve();await Promise.resolve();
+  descendants(root).find(n=>n.textContent==='甲').click();descendants(root).find(n=>n.textContent==='決定').click();
+  assert.deepEqual(entered,[['single:0',['a'],'FREE_BATTLE',null]]);
+  await Promise.resolve();cube.onSelect('TITLE_MATCH');view.dispose();pending.get('TITLE_MATCH').resolve([]);await Promise.resolve();
+  assert.deepEqual(root.children,[]);
+});
 
 test("a missing receipt cannot display the advertised reward as money received", (t) => {
   const root = useDocument(t);
@@ -186,5 +257,5 @@ test("the menu distinguishes fee and prize, and explains insufficient funds", as
   assert.equal(notice.hidden, false);
   assert.equal(notice.attributes.role, "status");
   assert.match(notice.textContent, /150 位元幣.*149 位元幣/);
-  assert.deepEqual(cubeAvailable, [], "fixing entry economics does not enable untraced modes");
+  assert.deepEqual(cubeAvailable, ['TITLE_MATCH'], "only modes supplied by the application can be entered");
 });

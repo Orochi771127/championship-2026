@@ -39,14 +39,15 @@ import {
   planBattleContactTargets,
   BATTLE_CONTACT_ACCEPTED
 } from "../battle/battleContactTargeting.js";
-import { battleTeamOfSlot, recordRoundOutcome } from "../battle/battleOutcome.js";
+import { battleTeamOfSlot, recordRoundOutcome, BATTLE_OUTCOME_TEAM_ONE_AHEAD, BATTLE_OUTCOME_TEAM_ZERO_AHEAD } from "../battle/battleOutcome.js";
 import {
   BATTLE_ACTION_APPLY_BODY,
   battleNativeMeleeContact,
   selectActionTargets
 } from "../battle/battleActionApplication.js";
 import { BATTLE_CREATURE_STAT_MAP } from "../battle/battleCreatureBuild.js";
-import {buildOwnedBattleCreature,settleOwnedBattleIndividual} from '../battle/battleParty.js';
+import {buildOwnedBattleCreature,settleOwnedBattleIndividual,drawNativeTitleBattleArena} from '../battle/battleParty.js';
+import {freeBattlePayout,FREE_BATTLE_ARENAS} from '../battle/nativeFreeBattle.js';
 import {
   BATTLE_LAUNCH_POOL_SIZE,
   allocateLaunchObject,
@@ -66,7 +67,7 @@ import { battleHitEligible } from '../battle/battleHitState.js';
 import { projectBattleCharacterRequest } from '../presentation/battleCharacterAction.js';
 import { battleSpecialPreludeInputs, sampleBattleSpecialPrelude } from "../battle/battleSpecialPrelude.js";
 import { BATTLE_SPECIES_MOVEMENT } from "../../data/championship/battleCharacterProfiles.js";
-import { createBattlePresentationSource } from "./battlePresentationSource.js";
+import { createBattlePresentationSource, BATTLE_PRESENTATION_ARENAS } from "./battlePresentationSource.js";
 import {
   BATTLE_ROSTER_PROFILES,
   buildBattleRoster,
@@ -95,6 +96,7 @@ export function createBattleRuntime(options = {}) {
   // this runtime cannot create, heal or reroll a player's party at entry.
   const residentIds = options.residentIds ?? [];
   const playerIndividuals = options.playerIndividuals ?? null;
+  const opponentIndividuals = options.opponentIndividuals ?? null;
   if(playerIndividuals!==null&&(!Array.isArray(playerIndividuals)||playerIndividuals.length<1||playerIndividuals.length>3))
     throw runtimeError('OWNED_PARTY_REQUIRED');
   // Which team stands in for the player is a stand-in, not a reading: a title
@@ -102,11 +104,16 @@ export function createBattleRuntime(options = {}) {
   // other side in the original.
   const playerTeamIndex = options.playerTeamIndex ?? 1;
   const seed = options.seed ?? BATTLE_RNG_TRACED_MASTER_SEED;
-  const arenaIndex = options.arenaIndex ?? 0;
-  // These are separate from menu entryMode. The existing single-match fixture
-  // uses zero; no four-face-to-mode mapping is implied or enabled by this seam.
+  const rng = options.rng ?? createChannelRng(seed);
+  // These are separate from the context's menu entryMode.
   const mode = options.mode ?? 0;
   const battleType = options.battleType ?? 0;
+  const localTeamIndex=options.localTeamIndex??0;
+  if(![0,1].includes(localTeamIndex)||localTeamIndex!==0&&mode!==3)throw runtimeError('LOCAL_TEAM_CONTEXT_REQUIRED');
+  if(opponentIndividuals!==null&&(![3,4,5].includes(mode)||!playerIndividuals||!Array.isArray(opponentIndividuals)
+    ||opponentIndividuals.length<1||opponentIndividuals.length>3
+    ||new Set([...playerIndividuals,...opponentIndividuals].map(p=>p.instanceId)).size!==playerIndividuals.length+opponentIndividuals.length))
+    throw runtimeError('DISTINCT_LOCAL_TEAMS_REQUIRED');
   if (!Number.isSafeInteger(mode) || mode < 0 || mode > 5) throw runtimeError("MODE_MUST_BE_0_TO_5");
   if (!Number.isSafeInteger(battleType) || battleType < 0) throw runtimeError("INVALID_BATTLE_TYPE");
   const economyContextEvidence = options.mode === undefined || options.battleType === undefined
@@ -115,6 +122,16 @@ export function createBattleRuntime(options = {}) {
   // views. A missing legacy date does not silently select Autumn Day 4.
   const schedule = options.schedule ? { ...options.schedule } : null;
   const scheduleEvidence = options.schedule ? "CALLER_SUPPLIED" : BATTLE_RUNTIME_DEFAULT_SCHEDULE_EVIDENCE;
+
+  const localVerdict=verdict=>localTeamIndex===0?verdict
+    :verdict===BATTLE_OUTCOME_TEAM_ZERO_AHEAD?BATTLE_OUTCOME_TEAM_ONE_AHEAD
+    :verdict===BATTLE_OUTCOME_TEAM_ONE_AHEAD?BATTLE_OUTCOME_TEAM_ZERO_AHEAD:verdict;
+  const localPresentationOutcome=outcome=>{
+    if(localTeamIndex===0)return outcome;
+    const verdict=outcome.verdict==='TEAM_ZERO_AHEAD'?'TEAM_ONE_AHEAD':outcome.verdict==='TEAM_ONE_AHEAD'?'TEAM_ZERO_AHEAD':outcome.verdict;
+    const winningTeam=outcome.winningTeam===null?null:1-outcome.winningTeam;
+    return deepFreeze({...outcome,verdict,winningTeam});
+  };
 
   /**
    * A creature's level fields keyed by the creature offsets the resolver reads,
@@ -443,12 +460,13 @@ export function createBattleRuntime(options = {}) {
      * reads the same field either way, and a round carries no fee or payout of
      * its own: the prize belongs to the run.
      */
-    chooseChampionshipRound({ category, teamIndex } = {}) {
+    chooseChampionshipRound({ category, teamIndex, cursor=0, totalRounds=category===0?3:5 } = {}) {
       if (source) throw runtimeError("MATCH_ALREADY_STARTED");
-      if (!Number.isSafeInteger(category) || category < 0) throw runtimeError("CHAMPIONSHIP_CATEGORY_REQUIRED");
+      if (![0,1].includes(category)) throw runtimeError("CHAMPIONSHIP_CATEGORY_REQUIRED");
       if (!Number.isSafeInteger(teamIndex) || teamIndex < 0) throw runtimeError("CHAMPIONSHIP_TEAM_REQUIRED");
+      if(!Number.isInteger(cursor)||cursor<0||cursor>=totalRounds||totalRounds!==(category===0?3:5))throw runtimeError("CHAMPIONSHIP_ROUND_REQUIRED");
       chosen = deepFreeze({ recordIndex: category, payout: 0, entryFee: 0,
-        championship: true, record: { field08: teamIndex } });
+        championship: true, cursor, totalRounds, record: { field08: teamIndex } });
       return chosen;
     },
 
@@ -456,9 +474,40 @@ export function createBattleRuntime(options = {}) {
       if (source) throw runtimeError("MATCH_ALREADY_STARTED");
       const match = listMatches().find((entry) => entry.recordIndex === recordIndex);
       if (!match) throw runtimeError("MATCH_IS_NOT_OPEN");
-      chosen = match;
-      return match;
+      chosen = deepFreeze({...match,arenaIndex:options.arenaIndex??drawNativeTitleBattleArena(recordIndex,rng)});
+      return chosen;
     },
+
+    chooseFreeBattle({presetIndices,arenaIndex:fieldIndex}={}) {
+      if(source)throw runtimeError('MATCH_ALREADY_STARTED');
+      if(mode!==2||!Array.isArray(presetIndices)||![1,3].includes(presetIndices.length)||!FREE_BATTLE_ARENAS.includes(fieldIndex))
+        throw runtimeError('FREE_BATTLE_CONTEXT_REQUIRED');
+      chosen=deepFreeze({recordIndex:-1,freeBattle:true,presetIndices:[...presetIndices],arenaIndex:fieldIndex,
+        payout:freeBattlePayout(presetIndices),entryFee:0,record:{}});
+      return chosen;
+    },
+
+    choosePracticeBattle({arenaIndex:fieldIndex}={}){
+      if(source)throw runtimeError('MATCH_ALREADY_STARTED');
+      if(mode!==5||battleType!==0||!opponentIndividuals||!FREE_BATTLE_ARENAS.includes(fieldIndex))throw runtimeError('PRACTICE_CONTEXT_REQUIRED');
+      chosen=deepFreeze({recordIndex:-1,practice:true,arenaIndex:fieldIndex,entryFee:0,payout:0,record:{}});return chosen;
+    },
+
+    choosePasswordBattle({arenaIndex:fieldIndex}={}){
+      if(source)throw runtimeError('MATCH_ALREADY_STARTED');
+      if(mode!==4||battleType!==0||!playerIndividuals||!opponentIndividuals||!FREE_BATTLE_ARENAS.includes(fieldIndex))
+        throw runtimeError('PASSWORD_BATTLE_CONTEXT_REQUIRED');
+      chosen=deepFreeze({recordIndex:-1,password:true,arenaIndex:fieldIndex,entryFee:0,payout:0,record:{}});return chosen;
+    },
+
+    chooseLinkBattle({arenaIndex:fieldIndex}={}){
+      if(source)throw runtimeError('MATCH_ALREADY_STARTED');
+      if(mode!==3||battleType!==0||!playerIndividuals||!opponentIndividuals||!FREE_BATTLE_ARENAS.includes(fieldIndex))
+        throw runtimeError('LINK_BATTLE_CONTEXT_REQUIRED');
+      chosen=deepFreeze({recordIndex:-1,link:true,arenaIndex:fieldIndex,entryFee:0,payout:0,record:{}});return chosen;
+    },
+
+    listSelectableArenas(){return FREE_BATTLE_ARENAS.map(index=>({index,identifier:BATTLE_PRESENTATION_ARENAS[index].identifier}));},
 
     getChosenMatch() {
       return chosen;
@@ -482,15 +531,15 @@ export function createBattleRuntime(options = {}) {
       if (!session) throw runtimeError("NO_MATCH_STARTED");
       return deepFreeze({
         ended: session.ended,
-        verdict: session.verdict,
+        verdict: localVerdict(session.verdict),
         reason: session.endReason,
         battleType, mode, matchIndex: chosen.recordIndex,
         roundCursor: completedRound?.cursor ?? 0,
-        outcomeEntries: completedRound ? [...completedRound.flags] : [],
-        ...(playerIndividuals&&session.ended?{individualResults:roster.slice(0,3).flatMap((creature,i)=>creature?[{
+        outcomeEntries: completedRound ? [...(mode===3?recordRoundOutcome({verdict:localVerdict(session.verdict),battleType,flags:[],cursor:0}).flags:completedRound.flags)] : [],
+        ...(playerIndividuals&&session.ended&&![3,4].includes(mode)?{individualResults:roster.slice(0,chosen.practice?6:3).flatMap((creature,i)=>creature?[{
           instanceId:creature.instanceId,nativeProfile:settleOwnedBattleIndividual(creature.nativeProfile,{
             currentHp:session.slots[i].currentHp,metricLimit:session.slots[i].metricLimit,
-            verdict:session.verdict,mode})}]:[])}:{})
+            verdict:session.verdict,mode,teamIndex:Math.floor(i/3),...(chosen.championship?{event:chosen.recordIndex,cursor:chosen.cursor+1,totalRounds:chosen.totalRounds}:{})})}]:[])}:{})
       });
     },
 
@@ -502,13 +551,17 @@ export function createBattleRuntime(options = {}) {
       // A title record names an opponent team; the team names preset indices.
       // +0x08 is the permutation this lane already found is NOT the identity.
       const teamIndex = chosen.record.field08 ?? -1;
-      const presetIndices = expandOpponentTeam(teamIndex);
+      const presetIndices = chosen.practice||chosen.password||chosen.link?[]:chosen.freeBattle?chosen.presetIndices:expandOpponentTeam(teamIndex);
       const playerPresets = residentIds.length > 0 || playerIndividuals ? [] : expandOpponentTeam(playerTeamIndex);
       roster = buildBattleRoster({ residentIds, presetIndices, playerPresetIndices: playerPresets });
       if(playerIndividuals){
         const owned=playerIndividuals.map(buildOwnedBattleCreature);
         while(owned.length<3)owned.push(null);
         roster=deepFreeze([...owned,...roster.slice(3)]);
+      }
+      if(chosen.practice||chosen.password||chosen.link){
+        const owned=opponentIndividuals.map(buildOwnedBattleCreature);while(owned.length<3)owned.push(null);
+        roster=deepFreeze([...roster.slice(0,3),...owned]);
       }
       builtRoster = roster;
 
@@ -532,7 +585,7 @@ export function createBattleRuntime(options = {}) {
             ? createSessionCombatant({ state: BATTLE_STATE_COOLDOWN_GATE, field28: 0, statePeriod: 1, ...fields })
             : null;
         }),
-        rng: options.rng ?? createChannelRng(seed),
+        rng,
         allocateAction(slot, decision, launchContext=null) {
           const move=moveRecordFor(decision);if(!move)return null;
           // Normal states supply the original packed-team target. Preserve the
@@ -593,7 +646,7 @@ export function createBattleRuntime(options = {}) {
           if(!blocked&&(move.field46||critical))impactFlashFrame=session.frame;
         }});
       session.normalFlow=createBattleNormalRuntime({session,actors:nativeActors,creatures:roster,initialize:prepareActionLaunch,applyStatus:hitRuntime.status});
-      source = createBattlePresentationSource({ session, step: stepMatch, arenaIndex, getSpecialPrelude,
+      source = createBattlePresentationSource({ session, step: stepMatch, arenaIndex:chosen.championship?10:chosen.arenaIndex, getSpecialPrelude,
         getNativeActor:slot=>nativeActors.project(slot),getImpactEffects:()=>impactEffects.snapshot({
           exclusiveOwner:session.slots.find(c=>c?.field94)?.field94??0}),getNativeLifecycle:()=>({
           active:[...nativeLaunches].map(v=>v.snapshot()),recent:[...nativeHistory],impacts:impactEffects.diagnostics(),sound:soundEvents.snapshot(),
@@ -623,11 +676,12 @@ export function createBattleRuntime(options = {}) {
 
     outcome() {
       if (!source) throw runtimeError("NO_MATCH_STARTED");
-      return source.getView().outcome;
+      return localPresentationOutcome(source.getView().outcome);
     },
+    localTeamIndex(){return localTeamIndex;},
     getResultParticipants(){
       if(!session?.ended)throw runtimeError('MATCH_NOT_ENDED');
-      return deepFreeze(roster.slice(0,3).map(creature=>creature?{speciesId:`species-${String(creature.speciesId).padStart(3,'0')}`,instanceId:creature.instanceId??null}:null));
+      return deepFreeze(roster.slice(localTeamIndex*3,localTeamIndex*3+3).map(creature=>creature?{speciesId:`species-${String(creature.speciesId).padStart(3,'0')}`,instanceId:creature.instanceId??null}:null));
     },
 
     dispose() {

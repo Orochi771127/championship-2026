@@ -6,6 +6,16 @@ import {getBattleCatalogRecord} from './battleCatalogs.js';
 import {getMatchRecord} from './battleMatchSelection.js';
 import {BATTLE_CREATURE_STAT_MAP} from './battleCreatureBuild.js';
 import {deepFreeze} from '../contracts/championshipContracts.js';
+import {FREE_BATTLE_ARENAS} from './nativeFreeBattle.js';
+
+// OVL10 02112680..0211269C and 02112E50..02112F58. Only an
+// unrestricted condition draws; the title caller pins condition -1 to field 9.
+export function drawNativeTitleBattleArena(recordIndex,rng){
+  const conditionIndex=getMatchRecord(recordIndex).field0C;
+  if(conditionIndex===-1)return 9;
+  const fixed=battlePartyCondition(conditionIndex).field10;
+  return fixed===-1?FREE_BATTLE_ARENAS[rng.next(0)%FREE_BATTLE_ARENAS.length]:fixed;
+}
 
 export function battlePartyCondition(index) {
   if(index===-1)return {slots:3,family:0,generation:7,attribute:0,field10:-1,field14:0,minimum03c:0,minimum010:0,individual018:-1,species014:0};
@@ -28,12 +38,12 @@ export function nativeBattleQualification(profile, condition) {
   return condition.field14===0||condition.field14===s.field68||s.field68===3;
 }
 
-export function battlePartyAdmission(profile,recordIndex) {
+export function battlePartyAdmission(profile,recordIndex=null) {
   if(!profile)return {ok:false,reason:'PROFILE_UNAVAILABLE',message:'這隻數碼獸的個體資料尚未完整。'};
   const f=profile.fields,s=conditions.species[f['000']];
   if(!s||s.fields['0c']<=1)return {ok:false,reason:'TOO_YOUNG',message:'這隻數碼獸還太幼小，暫時無法參賽。'};
   if(['134','138','13c'].some(k=>f[k]!==0))return {ok:false,reason:'CONDITION_UNFIT',message:'這隻數碼獸目前的身體狀況無法參賽。'};
-  if(!nativeBattleQualification(profile,battlePartyCondition(getMatchRecord(recordIndex).field0C)))
+  if(!nativeBattleQualification(profile,battlePartyCondition(recordIndex===null?-1:getMatchRecord(recordIndex).field0C)))
     return {ok:false,reason:'MATCH_CONDITION',message:'這隻數碼獸不符合本場比賽的參賽條件。'};
   return {ok:true};
 }
@@ -52,8 +62,9 @@ export function buildOwnedBattleCreature({instanceId,nativeProfile}) {
   return deepFreeze(creature);
 }
 
-export function settleOwnedBattleIndividual(profile,{currentHp,metricLimit,verdict,mode,event=-1,cursor=1,totalRounds=1}) {
-  if(![0,1].includes(mode)||![3,4,5].includes(verdict)||!Number.isInteger(currentHp)||!Number.isInteger(metricLimit))
+export function settleOwnedBattleIndividual(profile,{currentHp,metricLimit,verdict,mode,event=-1,cursor=1,totalRounds=1,teamIndex=0}) {
+  if(![0,1,2,5].includes(mode)||![3,4,5].includes(verdict)||!Number.isInteger(currentHp)||!Number.isInteger(metricLimit)
+    ||![0,1].includes(teamIndex)||(teamIndex===1&&mode!==5))
     throw new Error('BATTLE_PARTY_UNTRACED_RESULT_CONTEXT');
   const next=structuredClone(profile),f=next.fields;
   f['050']=currentHp;f['054']=metricLimit;f['014']=35;
@@ -65,9 +76,11 @@ export function settleOwnedBattleIndividual(profile,{currentHp,metricLimit,verdi
     f['054']=Math.min(f['05c'],f['054']+Math.trunc((f['05c']|0)/10)*3);
   }
   next.narrowFields['044']=0;next.narrowFields['046']=0;
-  if(verdict===4){
+  // Type 0 source treats every non-4 verdict as the second team's individual
+  // win, including the draw code. Preserve the CPU-observed writer literally.
+  if(teamIndex===0?verdict===4:verdict!==4){
     if((f['028']|0)<999)f['028']=(f['028']+1)>>>0;
-    const gain=mode===1||event===0?3:event===1?10:0;
+    const gain=mode===5?0:mode===2?1:mode===1||event===0?3:event===1?10:0;
     f['020']=Math.min(100,(f['020']|0)+gain);
   }else f['040']=Math.min(100,(f['040']|0)+10);
   return deepFreeze(next);

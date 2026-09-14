@@ -1,0 +1,94 @@
+{
+  "classification": "BOUNDED_NATIVE_REPLAY",
+  "romSha256": "8ad375ba0bd9b652a25f72dead2b47f78da401e188a8f3e1b7a6f2867ee0c5d1",
+  "sites": {
+    "menuSelection": "OVL10:02111318..021113E0",
+    "helpDispatch": "OVL10:0210F7A8..0210F8CC",
+    "nativeHelpBank": "ui/txt/txt_list_txt.dat",
+    "defaultPartyCondition": "ARM9:02092204",
+    "championshipArena": "OVL10:0211110C",
+    "freeArenaDraw": "OVL10:02111144..02111190"
+  },
+  "modes": [
+    {
+      "id": "CHAMPIONSHIP",
+      "sessionMode": 0,
+      "helpTextId": 667
+    },
+    {
+      "id": "TITLE_MATCH",
+      "sessionMode": 1,
+      "helpTextId": 668
+    },
+    {
+      "id": "FREE_BATTLE",
+      "sessionMode": 2,
+      "helpTextId": 669
+    },
+    {
+      "id": "LINK_BATTLE",
+      "sessionMode": 3,
+      "helpTextId": 670
+    },
+    {
+      "id": "PASSWORD_BATTLE",
+      "sessionMode": 4,
+      "helpTextId": 671
+    },
+    {
+      "id": "PRACTICE_BATTLE",
+      "sessionMode": 5,
+      "helpTextId": 672
+    }
+  ],
+  "vectors": [
+    {
+      "localSelection": 0,
+      "sessionMode": 1,
+      "helpTextId": 668,
+      "bannerGroup": 2,
+      "bannerSequence": 4
+    },
+    {
+      "localSelection": 1,
+      "sessionMode": 0,
+      "helpTextId": 667,
+      "bannerGroup": 2,
+      "bannerSequence": 5
+    },
+    {
+      "localSelection": 2,
+      "sessionMode": 4,
+      "helpTextId": 671,
+      "bannerGroup": 2,
+      "bannerSequence": 2
+    },
+    {
+      "localSelection": 3,
+      "sessionMode": 3,
+      "helpTextId": 670,
+      "bannerGroup": 2,
+      "bannerSequence": 3
+    },
+    {
+      "localSelection": 4,
+      "sessionMode": 2,
+      "helpTextId": 669,
+      "bannerGroup": 2,
+      "bannerSequence": 1
+    },
+    {
+      "localSelection": 5,
+      "sessionMode": 5,
+      "helpTextId": 672,
+      "bannerGroup": 2,
+      "bannerSequence": 0
+    }
+  ],
+  "boundaries": [
+    "Runs the original selection and helper dispatch instructions with synthetic screen/session RAM.",
+    "Six UI renderer/text calls intercepted at documented helper addresses; does not execute the renderer or input device.",
+    "Help bank IDs checked against original Japanese wording; original strings and ROM bytes are not exported.",
+    "Communication transport, password codec and every subsequent screen require separate verification."
+  ]
+}

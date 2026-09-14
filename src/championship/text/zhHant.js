@@ -121,18 +121,20 @@ export const GATE_NAMES = deepFreeze({
   16: "教學關卡"
 });
 
-/** The battle box's four faces. */
+/** Original battle mode identities; native dispatch is traced separately. */
 export const BATTLE_FACE_LABELS = deepFreeze({
   CHAMPIONSHIP: "冠軍賽",
   TITLE_MATCH: "頭銜賽",
   FREE_BATTLE: "自由對戰",
-  LINK_BATTLE: "通訊對戰"
+  LINK_BATTLE: "通訊對戰",
+  PASSWORD_BATTLE: "密碼對戰",
+  PRACTICE_BATTLE: "練習對戰"
 });
 
 /** Copy for the bounded battle-menu panel; match titles keep their source text. */
 export const BATTLE_MENU_LABELS = deepFreeze({
   menu: "對戰選單", kicker: "對戰", chooseMatch: "選擇對戰",
-  faceNotice: "拖曳立方體或使用左右方向鍵查看模式。模式選擇尚未開放，可從下方選擇目前可用的對戰。",
+  faceNotice: "拖曳立方體或使用左右方向鍵選擇模式，再選擇參加的對戰。",
   availableMatches: "目前可用的對戰", noMatch: "目前沒有開放的對戰。",
   match: "對戰", noPayout: "無獎金", returnHome: "返回育成", conference: "多輪賽事"
 });

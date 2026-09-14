@@ -4,6 +4,7 @@ import {BATTLE_CHARACTER_PROFILES,BATTLE_SPECIES_ENTITIES} from "../../data/cham
 import {createNativeCharacterAnimationTimeline} from "../presentation/characterAnimationTimeline.js";
 import {NATIVE_HUNT_CHARACTER_FRAME_CONTRACT} from "../presentation/nativeHuntCharacterAction.js";
 import {projectNativeRaisingFeedback,stepNativeRaisingStatusFeedback,projectNativeRaisingStatusFeedback,requestNativeRaisingFeedback} from './nativeRaisingFeedback.js';
+import {stepNativeRaisingRecoveryStars,projectNativeRaisingRecoveryStars} from './nativeRaisingRecoveryStars.js';
 import {normalizeNativeIndividualProfile} from "./nativeIndividualProfile.js";
 import {constructNativeIndividualForm,selectNativeHatchSpecies} from "./nativeIndividualEvolution.js";
 import {nativeHuntSpeciesByIndex} from "../hunt/capture/nativeHuntSources.js";
@@ -45,6 +46,7 @@ export function projectNativeRaisingActor(actor) {
     state:actor.state??(actor.speciesIndex<8?26:1),foodSlot:actor.foodSlot??null,
     feedback:projectNativeRaisingFeedback(actor),
     statusFeedback:projectNativeRaisingStatusFeedback(actor),
+    recoveryStars:projectNativeRaisingRecoveryStars(actor),
     treatment:actor.treatment?Object.freeze({kind:actor.treatment.kind,success:actor.treatment.success,elapsed:actor.treatment.elapsed,frame:actor.treatment.icon.getSnapshot().frameIndex}):null,
     training:actor.training?Object.freeze({phase:actor.training.phase,lanes:Object.freeze(actor.training.lanes.map(l=>Object.freeze({...l,command:l.command?Object.freeze({...l.command}):null})))}):null,
     evolution:actor.evolution?Object.freeze({...actor.evolution,targetActor:undefined,
@@ -66,6 +68,7 @@ export function stepNativeRaisingActor(actor,profile,{ageDelta,rng,feeding=null,
   actor.nativeFrame++;
   if(actor.tap)actor.tap.elapsed=Math.min(60,actor.tap.elapsed+1);
   stepNativeRaisingStatusFeedback(actor,profile);
+  stepNativeRaisingRecoveryStars(actor); // OVL18 02110FB0 follows the status selector
   if(actor.speciesIndex>=8)return lifecycle&&feeding?stepLifecycle(actor,profile,ageDelta,rng,feeding,lifecycle)
     :feeding ? stepFeeding(actor,profile,ageDelta,rng,feeding) : {profile,changed:false,hatched:false};
   if(actor.eggPhase===1) {

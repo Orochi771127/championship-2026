@@ -54,10 +54,11 @@ function harness(t, { categories = CATEGORIES, run = null } = {}) {
     source: {
       getCategories: () => categories,
       getRun: () => run,
+      getPartySelection: async () => ({limit:3,candidates:[{instanceId:'owned-a',displayName:'甲',admission:{ok:true}}]}),
       intents: {
         open(category) { calls.push(["open", category]); return { ok: true }; },
         draw() { calls.push(["draw"]); return { ok: true, opponent: { index: 2, poolSize: 6 } }; },
-        enterRound() { calls.push(["enterRound"]); return { ok: true }; },
+        enterRound(ids) { calls.push(["enterRound",ids]); return { ok: true }; },
         settle() { calls.push(["settle"]); return { ok: true, payable: true, prize: 50000 }; },
         leave() { calls.push(["leave"]); }
       }
@@ -95,7 +96,7 @@ test("each tournament is a cup, a name and its prize, and a shut one says why", 
   assert.equal(calls.filter((call) => call[0] === "open").length, 1);
 });
 
-test("a running tournament shows one mark per round and draws that round's opponent", (t) => {
+test("a running tournament waits for an owned party before the round can draw its opponent", async (t) => {
   const run = { category: 0, id: "CHAMPIONSHIP", totalRounds: 3, prize: 50000, cursor: 1, flags: [1],
     round: 1, finalRound: false, continues: true, payable: false };
   const { root, calls } = harness(t, { run });
@@ -104,14 +105,18 @@ test("a running tournament shows one mark per round and draws that round's oppon
     ["WON", "NOW", "PENDING"]);
   // battle_title_champion_main banners a round as "予選第N戦", not as a counter.
   assert.match(byClass(root, "cm-championship-run__title")[0].textContent, /冠軍大會 預賽第 2 戰 \/ 共 3 戰/);
-  assert.deepEqual(calls[0], ["draw"]);
-  assert.match(byClass(root, "cm-championship-opponent")[0].textContent, /第 3 隊 \/ 共 6 隊/);
+  assert.equal(calls.length,0);
+  assert.match(byClass(root, "cm-championship-opponent")[0].textContent, /確認後抽出對手/);
 
   // The board starts the round as a battle; it never judges one itself.
   const [fight] = byClass(root, "cm-championship-action");
   assert.match(fight.textContent, /開始第 2 戰/);
+  assert.equal(fight.disabled,true);
+  await Promise.resolve();
+  const candidate=descendants(root).find(n=>n.dataset.instanceId==='owned-a');
+  candidate.click();assert.equal(fight.disabled,false);
   fight.click();
-  assert.deepEqual(calls.filter((call) => call[0] === "enterRound"), [["enterRound"]]);
+  assert.deepEqual(calls.filter((call) => call[0] === "enterRound"), [["enterRound",['owned-a']]]);
   assert.equal(calls.some((call) => call[0] === "record"), false);
 });
 

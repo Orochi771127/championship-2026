@@ -1,6 +1,6 @@
 {
   "owner": "Claude Code",
-  "deltaDate": "2026-09-03",
+  "deltaDate": "2026-09-15",
   "syncRevision": null,
   "note": "Claude-owned delta. Shared Master Sync, Dependency Matrix and Blocker Ledger are Codex's to merge; changes that belong there are recorded here instead of edited directly. Art registry reconciled against the ROM binary on 2026-09-01; see docs/art/ART_ROM_RECONCILIATION.md and the artScopeCorrection entry for the shared ledger.",
   "added": [
@@ -673,6 +673,43 @@
       "path": "tests/championship-zh-hant-text-cases.mjs",
       "kind": "test",
       "summary": "6 cases: full cage and gate coverage, every classified cage effect labelled, stat order matching the bank, fallback to Japanese on an unknown key, and a guard that the ROM catalogs keep their Japanese untouched."
+    },
+    {
+      "path": "tests/championship-cage-ground-art-alignment-cases.mjs",
+      "kind": "test",
+      "evidence": "Composes the real createNativeRaisingGround (ARM9 020502D8 field arrays) with the real createRaisingCageArtPlan and decodes every licensed-runtime-v1 cage frame.",
+      "summary": "3 cases: all 37 ground fields equal their cage picture size; the starting ranch at 14/16/18/20 slots; every shop cage 0..34 in each legal board row at 14 and 20 slots plus the last legal (edge-wrapping) slot. Every walkable ground block must be fully covered by opaque cage pixels. Result: 0 of 6,459 walkable blocks sit on transparent art. Front-object occlusion is NOT claimed: the ranch compositor replay covers ground planes only."
+    },
+    {
+      "path": "src/championship/raising/nativeRaisingRecoveryStars.js",
+      "kind": "runtime module",
+      "evidence": "VERIFIED_BINARY bank (OVL18 02111230..0211124C via ARM9 02065DF4); BOUNDED_NATIVE_REPLAY control flow (OVL18 02110FB0..021110D4)",
+      "summary": "Recovery-cage star loop: cages 15/18/28, not in states 6/7/20 to start, stopped only by state 6, common e001_ikusei sequence 32 (63 ticks) then a 120-update rest, body position lifted 0x1000. Reads no HP."
+    },
+    {
+      "path": "tests/championship-raising-recovery-stars-cases.mjs",
+      "kind": "test",
+      "summary": "4 cases: all 901 replay updates (flag, rest, start, submit, lifted position, frame); star cages equal the catalog RECOVER:HP_AND_STRESS cages; no HP read; real application clock shows cells 148-154 in the mini infirmary with >=120-update rests and none while carried or in the Waiting Room."
+    },
+    {
+      "path": "scripts/research/check-raising-recovery-stars-cpu.py",
+      "kind": "research script",
+      "summary": "Unicorn replay of OVL18 02110FB0..021110D4 from the verified ROM; animator start/finished/advance and sprite submit intercepted."
+    },
+    {
+      "path": "docs/research/RAISING_RECOVERY_STARS_CPU_2026-09-14.json",
+      "kind": "research receipt",
+      "summary": "901 updates, 6 starts, 347 submits."
+    },
+    {
+      "path": "docs/research/RAISING_RECOVERY_STARS_2026-09-14.md",
+      "kind": "research note",
+      "summary": "Loop, bank proof, receipts and boundaries."
+    },
+    {
+      "path": "docs/research/HUNT_CAPTURE_LIGHT_BINDING_2026-09-14.md",
+      "kind": "research note",
+      "summary": "PARTIAL: Hunt common bank is common/e002_hunt (OVL0 0211A144 -> 02065D3C); OVL0 state 25 (021160C8) plays sequence 29 on +0x3C0 at the actor. The flight into the tool rail is untraced; no runtime change."
     }
   ],
   "modified": [
@@ -1135,6 +1172,50 @@
     {
       "path": "src/championship/app/main.js",
       "summary": "The result reads the chosen match back so the prize panel uses the record payout rather than inventing one, and the panel is omitted entirely when the record carries none."
+    },
+    {
+      "path": "tests/championship-migration-firewall-cases.mjs",
+      "summary": "Allowlist gained nativeLinkBattle.js and nativePasswordBattle.js. Codex added both modules on 2026-09-14 (battle-mode gap closure) and listed only nativeFreeBattle.js, so the full suite failed 1 case after its focused runs passed. Edited inside Codex's uncommitted batch; no src/ file was changed."
+    },
+    {
+      "path": "src/championship/raising/nativeRaisingActor.js",
+      "summary": "Steps the recovery stars right after the status selector (original order) and projects them as recoveryStars on the actor frame."
+    },
+    {
+      "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
+      "summary": "Draws recoveryStars through the existing native feedback drawer; the HP-triggered 420 ms vector pulse and its glyph are removed."
+    },
+    {
+      "path": "src/championship/presentation/raisingFeedbackArt.js",
+      "summary": "Loads cell 154 so sequence 32 (148-154) is complete; 48 cells."
+    },
+    {
+      "path": "src/championship/presentation/vfx/recoveryCageVfx.js",
+      "summary": "DELETED. Video-derived HP-rise pulse superseded by the traced loop; no remaining importer."
+    },
+    {
+      "path": "championship.html",
+      "summary": "Modulepreload block regenerated by scripts/build-module-preload.mjs (184 startup modules)."
+    },
+    {
+      "path": "tests/championship-raising-growth-cases.mjs",
+      "summary": "Removed the case for the deleted HP-rise pulse."
+    },
+    {
+      "path": "src/championship/app/championshipStandaloneApp.js",
+      "summary": "Comment on currentHp/maxHp no longer claims presentation uses them for a recovery pulse. No behaviour change."
+    },
+    {
+      "path": "docs/contracts/championship/ASSEMBLED_UI_REFERENCE_INTEGRATION.v1.json",
+      "summary": "unresolvedSourceBindings: recovery stars marked resolved; capture orb marked partial with evidence. Edited inside Codex-authored contract."
+    },
+    {
+      "path": "docs/coordination/ORIGINAL_PARITY_CLOSURE_2026-09-14.md",
+      "summary": "Batch table and batch 2/3 results updated. Edited inside Codex's working record at the Owner's handoff."
+    },
+    {
+      "path": "tests/ci-test-scope.v1.json",
+      "summary": "2026-09-15: classified six unlisted test files as portable (free/link/password/password-app battle cases from Codex; cage ground-art alignment and recovery stars from Claude). All read tracked files only (git check-ignore clean; all 40 cage frames tracked). npm run test:ci 1331/1331; without this the CI step, and so the Pages workflow, failed before running tests."
     }
   ],
   "forSharedLedger": [
@@ -1555,12 +1636,21 @@
       "doNotShift": "This must NOT be fixed by shifting the whole table. There are 40 art fields against 36 definitions, and the existing binding already jumps irregularly at the tail (27->cm30, 30->cm34, 32->cm37, 33->cm39, 35->cm28). It is a crosswalk to re-derive record by record, not an offset.",
       "nowFeasible": "Re-deriving it is far easier than before, because the 36 cage NAMES and descriptions are now transcribed. Most renders identify themselves on sight -- track, stadium, dojo, gym, volcano, beach, ice field, graveyard, hot spring -- and the MINI cages state 'the mini version of X' in their own description, which pairs them to their full-size art.",
       "handedTo": "docs/coordination/CODEX_HANDOFF_2026-09-05_CAGE_ART_AND_BATTLE_CUBE.md, written from the Claude lane and attributed."
+    },
+    {
+      "id": "PUBLIC_PLAYTEST_APPROVAL_OUT_OF_DATE_2026-09-15",
+      "raisedBy": "Claude Code",
+      "date": "2026-09-15",
+      "proven": "WEB_BUILD_INPUTS.v1.json still lists the deleted recoveryCageVfx.js and omits nativeRaisingRecoveryStars.js, nativeLinkBattle.js, nativePasswordBattle.js and nativeFreeBattle.js. A push to main triggers github-pages.yml, whose validate:playtest will fail until the Owner approves a refreshed file list; the live site stays on its previous build.",
+      "ownerDecisionRequired": true
     }
   ],
   "dependenciesChanged": false,
   "checkpointCommitted": false,
   "codexLaneNotice": {
-    "statusBarAndRanchTiling": "Two new Claude-owned contracts under docs/contracts/championship/ specify the work Owner queued as items 2 and 3. Presentation of the status bar is Codex-owned; the time cascade and ranch placement state are Claude-owned. Neither contract has been implemented yet. Both name what must NOT be invented: no weeks or months, no continuous day/night cycle, no tetris ownership masks, and no guessed coordinates written into the licensed art manifest."
+    "statusBarAndRanchTiling": "Two new Claude-owned contracts under docs/contracts/championship/ specify the work Owner queued as items 2 and 3. Presentation of the status bar is Codex-owned; the time cascade and ranch placement state are Claude-owned. Neither contract has been implemented yet. Both name what must NOT be invented: no weeks or months, no continuous day/night cycle, no tetris ownership masks, and no guessed coordinates written into the licensed art manifest.",
+    "takeover2026-09-14": "Codex ran out of quota at 2026-09-14 ~15:06 local, right after closing Password and Link battle (its focused tests green) and before editing anything in the cage/footing batch. Claude continued that batch: carry edge-scroll and the wrap back to the Waiting Room were already implemented on 2026-09-13 (unit-tested, browser-checked by Codex); the tall-resident clipping in the Owner's photo is the public build, the local build reserves 64 native px of headroom (re-observed at 390x844 with the full QA save). The ground-vs-picture alignment is now closed by the new alignment test. Still open: front fences/walls drawn over residents (untraced; flattened frames cannot occlude), capture orb / heal starburst / victory-transition VFX source mapping, physical iPhone Safari. Nothing committed, pushed or deployed.",
+    "takeover2-2026-09-15": "Codex resumed at 2026-09-14 23:30 and stopped at 23:35 after ROM probing only (a probe script under _archive, no product edit). Claude continued batch 3: recovery stars implemented from the original; capture light traced to common/e002_hunt sequence 29 but its flight object remains untraced, so the observed orb stays; victory/medal/wipe, cage front-object occlusion and batch 4 not started. Nothing pushed."
   },
   "ownerAuthorizationForSharedLedger": {
     "date": "2026-09-01",
@@ -1579,11 +1669,11 @@
     ]
   },
   "verificationLatest": {
-    "date": "2026-09-04",
+    "date": "2026-09-15",
     "command": "npm test",
-    "total": 777,
-    "passed": 777,
+    "total": 1548,
+    "passed": 1548,
     "failed": 0,
-    "browser": "PARTIAL. Battle menu and match entry verified live (MATCH 00, payout 150). The result panels could NOT be verified live: the battle advances from the Pixi stage ticker, which is requestAnimationFrame driven, and the automation pane is hidden for long stretches so rAF does not fire - a probe of the rAF rate itself timed out for the same reason. The match sitting at ended=false after two minutes is the harness, NOT a product defect."
+    "browser": "PARTIAL. Ranch rendered at 390x844 with the full QA save. A scripted hand carry could not be driven: with the automation pane hidden the Pixi ticker stopped (clock frozen, no resident positions published). The application-clock star test stands in; physical-device QA open."
   }
 }

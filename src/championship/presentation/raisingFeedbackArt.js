@@ -29,10 +29,10 @@ export async function loadRegisteredRaisingFeedbackArt({PIXI,baseUrl,fetchImpl=g
   const response=await fetchImpl(new URL(RAISING_FEEDBACK_ART_MANIFEST,baseUrl));
   if(!response.ok)throw new Error('RAISING_FEEDBACK_MANIFEST_UNAVAILABLE');
   const manifest=validateRaisingFeedbackArt(await response.json(),index),cells=new Map(),loaded=[];
-  // Reaction and treatment banks only. Other common cells are retained in the
+  // Reaction, treatment and recovery-star (sequence 32) cells only. Other common cells are retained in the
   // private manifest without loading unrelated training lettering into Home.
-  const selected=manifest.cells.filter(c=>c.cell<=36||c.cell>=144&&c.cell<=153);
-  // Forty-seven independent cells. Awaiting them one at a time made Home wait
+  const selected=manifest.cells.filter(c=>c.cell<=36||c.cell>=144&&c.cell<=154);
+  // Forty-eight independent cells. Awaiting them one at a time made Home wait
   // for forty-seven round trips in a row, which measured as roughly five
   // seconds of the wait before the cage appeared. Nothing here depends on
   // anything else here, so they load together. Settling rather than racing

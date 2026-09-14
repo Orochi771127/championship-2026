@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "contractId": "CHAMPIONSHIP_BATTLE_MODES",
+  "date": "2026-09-14",
+  "authority": "CHAMPIONSHIP_2026_PRODUCT",
+  "scope": "Original mode dispatch, owned-party Championship continuation, daily Free Battle and Practice Battle",
+  "evidence": {
+    "modeIdentity": "docs/research/BATTLE_MENU_MODES_CPU_2026-09-14.json",
+    "freeOpponents": "docs/research/FREE_BATTLE_CPU_2026-09-14.json",
+    "freeIndividualResults": "docs/research/BATTLE_FREE_PARTY_RESULT_CPU_2026-09-14.json",
+    "championshipRounds": "docs/research/CHAMPIONSHIP_POOLS_CPU_2026-09-10.json",
+    "sourceReport": "R:/NEXUS LINK/原作/BATTLE_REVERSE_SPEC_v1.md",
+    "sourceReportSha256": "d0580f2a6ea1b6755b2d04499d58742986de05800d0cca368a269d08427d5f57"
+  },
+  "modes": [
+    {"id":"CHAMPIONSHIP","mode":0,"localSelection":1,"helpText":667},
+    {"id":"TITLE_MATCH","mode":1,"localSelection":0,"helpText":668},
+    {"id":"FREE_BATTLE","mode":2,"localSelection":4,"helpText":669},
+    {"id":"LINK_BATTLE","mode":3,"localSelection":3,"helpText":670},
+    {"id":"PASSWORD_BATTLE","mode":4,"localSelection":2,"helpText":671},
+    {"id":"PRACTICE_BATTLE","mode":5,"localSelection":5,"helpText":672}
+  ],
+  "championship": {
+    "party": "One to three eligible owned individuals, default condition ARM9 02092204",
+    "arena": 10,
+    "draw": "Existing category/cursor pools, one accepted draw through shared gameplay RNG",
+    "roundResult": "Pass category, incremented cursor and total round count to OVL19 individual writer; before the final winning round restore trunc(maximum/10)*3 HP and TP",
+    "prize": "Existing run settlement only after all required wins; no per-round prize"
+  },
+  "freeBattle": {
+    "generator": "ARM9 02068C04..02069184; functional preset indices 456..575",
+    "refreshCallers": ["ARM9 020603A0 day callback", "ARM9 0206776C context reset"],
+    "menu": "Separate single and three-member lists; 5..9 entries each. Preserve source season pools, duplicate candidates, tier order and channel 0 draws",
+    "entry": "Mode 2, type 0, match index -1, cursor 0, one round, zero fee",
+    "reward": "Sum of selected presets' field0C; actual credit uses existing outcome, wallet-cap and duplicate guards",
+    "arenas": [0,1,2,3,4,5,7],
+    "arenaEvidence": "OVL10 0210E9DC..0210EA38 builds selectable list; 02112E64..02112EB0 draws default; 02113670..02113690 accepts selection",
+    "individualWinGain": 1,
+    "remainingTrace": "Whole native context reset/save-restore RNG interleaving is not established by isolated generator vectors"
+  },
+  "practiceBattle": {
+    "entrySites": ["OVL10 02112BB0..02112C10", "OVL10 02112C40..02112D08"],
+    "entry": "Mode 5, type 0, match index -1, cursor 0, one round, zero fee and reward",
+    "party": "Two teams of distinct owned individuals, each one to three members, default qualification condition",
+    "ready": "OVL10 0210FFF0..0211007C requires both teams non-empty",
+    "arena": "Same seven selectable fields and initial channel 0 draw as Free Battle",
+    "individualWriter": "OVL19 0210E544..0210E7B4 loops both teams; 0210E688..0210E6DC chooses winning individual side using type and team index; mode 5 has zero win growth gain",
+    "globalProgress": "Existing native progression excludes mode 5 from player title/win records; individual records still update",
+    "cpuReplay": "docs/research/PRACTICE_BATTLE_CPU_2026-09-14.json"
+  },
+  "runtimePolicy": {
+    "application": "Existing championshipStandaloneApp",
+    "battle": "Existing battleRuntime, battleRosterSource and battleParty",
+    "rng": "Existing gameplay channel RNG; prepare copy before acceptance, commit once, reject stale session/menu/profile/RNG",
+    "save": "Existing envelope and battle transaction only; no additional storage key or autosave",
+    "presentation": "Existing DOM battle menu and Pixi field; no extra router, store, bootstrap or ticker"
+  },
+  "remaining": {
+    "communicationTransport": "UNKNOWN_REQUIRES_TRACE_AND_WEB_TRANSPORT_IMPLEMENTATION",
+    "passwordCodecAndSnapshotAdmission": "UNKNOWN_REQUIRES_TRACE",
+    "fullOriginalAcceptance": false,
+    "physicalIphoneSafariAcceptance": false,
+    "shippingReady": false
+  }
+}
