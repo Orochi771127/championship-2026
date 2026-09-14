@@ -9,8 +9,7 @@ Migration reconciliation: the prior shared-repository wording below is retained 
 
 Owner: Claude Code · Last updated: 2026-08-28 · Kind: VS2-R2 - Original Hunt Loadout runtime reconstructed; companion selection demoted to developer-only
 
-Describes the architecture **as it actually is today**, not as planned. Every
-layer is marked `IMPLEMENTED`, `PARTIAL`, `PLANNED`, or `FORBIDDEN`.
+The body below describes the **dated architecture snapshot**, not a fresh inventory of the current checkout. Use the current architecture linked above for active boundaries. Each historical layer is marked `IMPLEMENTED`, `PARTIAL`, `PLANNED`, or `FORBIDDEN`.
 
 ---
 
@@ -38,7 +37,7 @@ looks the way it does:
 
 Practical consequence: what used to be described as "path B, the standalone
 exception" is now **the only path**. The Nexus bootstrap is no longer part of
-this architecture; it is another application that happens to share a repository.
+this standalone architecture; the former shared-repository arrangement is historical.
 
 ---
 

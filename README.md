@@ -8,7 +8,7 @@
 
 **Mobile full-progress QA save:** [Install the test save](https://orochi771127.github.io/championship-2026/full-qa-save.html). The installer first downloads a backup when that browser already has a save, then writes the schema-v5 QA save into the same origin and opens the game.
 
-**2026-09-09 checkpoint:** See the [current unfinished-work inventory](docs/reports/commercial-readiness/2026-09-09/MAIN_CHECKPOINT_ZH_TW.md). `npm run test:ci` runs explicitly classified repository-contained tests; `npm test` retains full local reference/art acceptance. Main pushes run CI; public Pages deployment requires explicit dispatch and release approval checks.
+**2026-09-09 checkpoint:** See the [current unfinished-work inventory](docs/reports/commercial-readiness/2026-09-09/MAIN_CHECKPOINT_ZH_TW.md). `npm run test:ci` runs explicitly classified repository-contained tests; `npm test` retains full local reference/art acceptance. This is a dated engineering receipt. Current CI and Pages triggering are described below; its test counts do not establish acceptance of a later checkout.
 
 **Target:** Web-first / mobile-first / portrait 9:16 / touch-first, with desktop-browser compatibility.
 
@@ -58,6 +58,8 @@ static host. The validator checks exact file lists, hashes and module closure.
 The published checkpoint includes the selected rendered inputs needed to
 rebuild the playable snapshot after `npm ci`.
 
+The GitHub Pages workflow runs on `push` to `main` and also supports `workflow_dispatch`. These triggers do not grant permission to push or publish a new batch.
+
 The GitHub Actions workflow uses `build:playtest` and `validate:playtest`, checks
 the Owner policy and every selected file's SHA-256, then deploys to Pages.
 The separate `build:pages` and `validate:pages` commands still enforce the full
@@ -86,7 +88,7 @@ The browser gates exercise the required 360×800, 390×844, 393×852, 412×915, 
 |---|---|
 | DOM | screen UI, menus, panels, toolbar, and text |
 | PixiJS | playable 2D field, creatures, sprites, and 2D VFX |
-| Three.js | bounded 3D only when verified or explicitly approved; currently unmounted |
+| Three.js | verified or approved bounded scenes/effects; see current architecture for mounted integrations |
 
 There is one standalone application, one Championship mode authority, one domain session, one save repository/key, and one PixiJS Application/ticker. Historical Nexus decisions remain in coordination history as superseded or frozen facts, not dependencies.
 

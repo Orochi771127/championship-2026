@@ -11,7 +11,9 @@ Do not infer current implementation state from one historical coordination file.
 
 | Need | Canonical entry |
 |---|---|
+| Post-parity modernization / Astra visual POC candidates (planned, not implementation authorization) | [Championship Post-Parity Modernization Plan](planning/CHAMPIONSHIP_POST_PARITY_MODERNIZATION_PLAN_ZH_TW.md) |
 | What works on current `main` | [Current Product Status](CURRENT_PRODUCT_STATUS.md) |
+| Agent task instructions and instruction-maintenance evidence | [Reusable task prompt](coordination/CODEX_TASK_PROMPT_TEMPLATE_ZH_TW.md) · [2026-09-14 instruction and skills report](reports/instruction-audit/2026-09-14/IMPLEMENTATION_ZH_TW.md) |
 | Current battle effect pictures and original impact continuation | [R12 supplied original effects](art/production/battle-effect-r12/IMPLEMENTATION_2026-09-08.md) · [R11 impact continuation](art/production/battle-effect-r11/IMPLEMENTATION_2026-09-08.md) · [Local art contract](contracts/championship/battle-original-effect-preview.v1.json) |
 | Current battle normal approach/launch, three slots, attack lock and R8 integration | [Battle normal flow R9](art/production/battle-normal-flow-r9/IMPLEMENTATION_2026-09-07.md) · [Remaining work](planning/BATTLE_REMAINING_WORK_AND_R9_PLAN_2026-09-07.md) |
 | Battle remaining native bodies, exact direction math and controlled attack motion | [Battle native motion R6](art/production/battle-native-motion-r6/IMPLEMENTATION_2026-09-07.md) |
@@ -36,18 +38,23 @@ Do not infer current implementation state from one historical coordination file.
 | Prioritized cleanup work | [Technical Debt Register](TECH_DEBT_REGISTER.md) |
 | Repository/document organization decision | [ADR-0001](adr/ADR-0001-CANONICAL-REPOSITORY-AND-DOCUMENTATION.md) |
 
-## Authority order
+## Authority by question
 
-1. Latest explicit Owner direction.
-2. Current `main` source, tests, production manifests and save/runtime contracts.
-3. [Current Product Status](CURRENT_PRODUCT_STATUS.md), which indexes current integrated evidence.
-4. Current planning and runtime contracts.
-5. QA reports from the commit that generated them.
-6. Research catalogs and web cross-checks.
-7. Coordination/migration snapshots, which preserve history but may predate later slices.
+Choose evidence for the question being answered; do not put all source types in one ranking.
 
-`CURRENT_PRODUCT_STATUS.md` is an index, not a replacement for tests or source.
-When it disagrees with executable evidence, fix the index in the same change.
+| Question | Authority and limits |
+|---|---|
+| What did the original game do? | Verified ROM/CPU/emulator traces, decoded evidence and provenance, expressed in source-bounded contracts. Current product code, tests, art or Owner preference cannot prove original behavior. |
+| What does this checkout implement? | Current source, runtime/save contracts and production manifests, with executed acceptance tied to its commit and environment. A test's existence alone is not a passing result. |
+| What may this task intentionally change? | The latest explicit Owner direction applicable to that scope/batch, within host constraints. Record a deliberate departure as `OWNER_APPROVED_ADAPTATION`; never promote it to `ROM_VERIFIED`. |
+| What is accepted, licensed or publishable? | Separate source, controlled, normal-path, visual, device, rights and publication records. The production index and applicable build-input/public-playtest policy select the allowed assets and destination; approval of one column does not close another. |
+| What did earlier agents report? | Dated coordination, migration and QA snapshots are provenance. `CURRENT_PRODUCT_STATUS.md` is an index of evidence, not a substitute for source or executed checks. |
+
+Resolve contradictions within the relevant question. Retain unknowns, record material conflicts and ask the Owner only for decisions the evidence or current task cannot settle. Do not infer original behavior from implementation or reinterpret approval as proof of rights.
+
+Read the applicable Owner entries for the current task. Historical `Current`, `SYNC ONLY`, VS1-only or arithmetic-only wording applies to its dated batch; later explicit continuation applies to its own scope. Use [the shared-file protocol](coordination/SHARED_FILE_UPDATE_PROTOCOL.md) only when coordinating or writing shared state.
+
+When an index disagrees with newly verified executable evidence, correct the affected index entry in the same change while preserving dated receipts. Do not relabel old test counts as current or rewrite another agent's owned status.
 
 ## Directory map
 
@@ -81,4 +88,4 @@ When it disagrees with executable evidence, fix the index in the same change.
 - New reusable systems must be added to `REUSE_INVENTORY.md` with their tests and constraints.
 - Slice-specific generated evidence stays under `docs/reports/<slice>/`.
 - Historical coordination records remain in place to preserve links; add a stale/superseded banner instead of duplicating or deleting them.
-- ROM/decoded/reconstruction payloads never enter this repository or Git history.
+- ROM/decoded/reconstruction material defaults to `RESEARCH_ONLY`. The recorded local-reference and hash-selected public-playtest exceptions in [repository rules](../AGENTS.md) govern only their permitted rendered inputs and destinations; they do not authorize importing the private source archive, raw ROM payloads or commercial shipping.

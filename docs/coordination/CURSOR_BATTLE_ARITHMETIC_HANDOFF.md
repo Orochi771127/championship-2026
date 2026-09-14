@@ -1,5 +1,7 @@
 # Cursor → Claude Code：戰鬥算術交接（先審查，再繼續）
 
+> 歷史交接，2026-08-31：本文保留當時的算術範圍與驗證紀錄。「不要做戰鬥畫面」、app 尚無 Battle 等文字不代表目前限制；後續 2026-09-08 起的戰鬥延續授權及現行 contract 適用於其指定工作。命中／TP／Sense 等未證實行為仍不可猜測。請依 [Owner Direction](OWNER_DIRECTION.md) 與 [目前狀態](../CURRENT_PRODUCT_STATUS.md) 判斷當前工作；不要重跑本文的歷史審查只為滿足舊開工條件。
+
 日期：2026-08-31  
 來源：Cursor（Grok）戰鬥轉譯工作階段  
 Owner：Terence

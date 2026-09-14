@@ -1,5 +1,7 @@
 # Championship Owner Direction
 
+> Reading guide — instruction maintenance, 2026-09-14: the dated Owner records below are preserved. Match authorization to the current task, batch, assets and destination. Later scope-specific continuation supersedes an older batch's stop only within that scope; it does not approve new gameplay, rights or publication. Use [authority by question](../README.md#authority-by-question) for evidence claims and [the current shared-file protocol](SHARED_FILE_UPDATE_PROTOCOL.md) for coordination. No new product or publication authorization is created by this annotation.
+
 ## 2026-09-13 — Integrate the assembled-art audit in sequential local batches
 
 Owner approves starting the preceding assembled-art audit: 「自己分批完成一批結束後 再進下一批」. Batch 1 completes missing Shop/Hunt equipment pictures and dedicated cage previews. Batch 2 integrates useful original UI/HUD details into the existing portrait interface. Batch 3 checks remaining evolution/capture/recovery/reward presentation against existing events and source evidence, applying verified visual bindings and preserving unknowns. Finish with integrated local browser and regression acceptance. This is continuation authorization for the selected internal reference-art workflow; new source-derived images remain registered local research references, excluded from public authorization and commercial shipping. Do not copy the whole archive, redraw already-correct characters/maps, invent gameplay from an image, or publish this batch. Preserve the approved centered portrait frame.
@@ -56,7 +58,7 @@ Repository authority: `CHAMPIONSHIP_2026_PRODUCT_SSOT` (`.`).
 Migration state: standalone product; historical Nexus integration decisions are preserved below as superseded/frozen context only.
 
 Authority: **OWNER ONLY**  
-Last explicit direction: **2026-09-08 — begin the continuation of the ROM/video/current-game audit in two implementation stages**
+Historical header (superseded by the later dated entries above): **2026-09-08 — begin the continuation of the ROM/video/current-game audit in two implementation stages**
 
 Agents may index this file and may transcribe a later explicit Owner directive,
 but may not reinterpret or independently change product direction.
@@ -329,11 +331,16 @@ promotion into `assets/production` or shipping.
   integration; VS7 production art/animation/VFX/audio/packaging.
 - Original decoded art remains `ROM_COPYRIGHTED_REFERENCE / RESEARCH_ONLY` and
   must stay separate from 2026 production assets.
+
+> Historical batch applicability: the documentation-only/VS2 restriction below belongs to the standalone migration reconciliation. Later 2026-09-08 through 2026-09-13 continuation entries supersede it for their named work; retain the original record for provenance.
+
 - The current authorization is documentation reconciliation only. Stop after
   updating coordination/integration documentation; it is not a VS2
   implementation GO.
 
 ## Coordination authority
+
+> Historical location/precedence wording below describes the pre-migration shared repository. Current coordination lives at this repository's `docs/coordination/`; Nexus Link is outside product scope. Owner direction controls permitted changes, not historical ROM facts or proof of rights. The current authority-by-question and shared-file documents linked above govern those questions.
 
 - The canonical coordination root is `docs/coordination/championship/` in the
   formal NexusLink repository.
@@ -345,6 +352,8 @@ promotion into `assets/production` or shipping.
 
 ## Ownership
 
+> The named status-file ownership remains protected. Historical runtime/art lane assignments below describe that collaboration; the current explicitly authorized task defines an agent's work scope. Agent identity cannot determine gameplay evidence or grant another agent's status-writing rights.
+
 - Claude Code exclusively owns `CLAUDE_REBUILD_STATUS.json` and
   `CLAUDE_SYNC_DELTA.json`, plus the runtime implementation/reconstruction lane.
 - Codex Art exclusively owns `CODEX_ART_STATUS.json` and
@@ -355,7 +364,9 @@ promotion into `assets/production` or shipping.
   Owner authority. Shared coordination files may be updated only from verified
   repo evidence and both owned deltas.
 
-## Pending Cursor → Claude Code handoff (2026-08-31)
+## Historical Cursor → Claude Code handoff (2026-08-31)
+
+> Arithmetic-only/no-BATTLE restrictions and the not-started status below describe the 2026-08-31 handoff. The 2026-09-08 battle continuation and later stage records supersede that restriction for authorized existing Battle work. Unproven hit/miss, TP or Sense semantics remain evidence-gated; this note does not invent them.
 
 Cursor left battle **arithmetic only** (not a BATTLE screen) for Claude Code
 to **review first, then continue** from original ROM numbers.
@@ -372,6 +383,8 @@ missing art does not authorize Claude to invent visual production authority.
 
 ## Required synchronization
 
+> Applicability: the batch-wide sequence below is retained as the historical synchronization workflow. Today it applies when performing shared coordination or a handoff, using [the current protocol](SHARED_FILE_UPDATE_PROTOCOL.md). Read-only audits and unrelated small edits do not open a sync round or update statuses.
+
 Before each bounded batch, record Git status, branch, and HEAD, then read this
 direction, both agent status files, the Master Sync, Dependency Matrix, and
 Blocker Ledger. When an owned file is absent, record it as not reported; do not
@@ -385,7 +398,9 @@ when the underlying fact changes.
 Owner/QA-approved bounded work should receive a recoverable local checkpoint.
 A commit is not a merge, shipping promotion, or deployment.
 
-## Current synchronization-only gate
+## Historical synchronization-only gate — SYNC-2
+
+> This gate belongs to the recorded SYNC-2 round. Master Sync records a later syncRevision 3, and subsequent dated Owner entries authorize further bounded work. Do not copy `syncRevision: 2` or the STOP below into a new task. Preserve the unchanged-base-hash, stable-ID, validation and ownership protections in the current protocol.
 
 SYNC-2 may run only after both local checkpoints, both owned status updates,
 both owned deltas, the Claude-owned toolbar contract, and CL-007 hardening are
@@ -402,7 +417,7 @@ This round remains `SYNC ONLY`:
 - Complete the synchronization and **STOP FOR OWNER REVIEW**. Do not start O2,
   O4, P3-P6, a new environment, gameplay phase, or reverse batch.
 
-## Current art direction carried into sync
+## Historical art direction carried into the synchronization round
 
 - O1 Original UI: complete and Owner-approved reference baseline.
 - ART-R2R Character Fidelity Pipeline: Owner-approved reference baseline.
