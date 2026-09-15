@@ -2,6 +2,10 @@
 
 > Reading guide — instruction maintenance, 2026-09-14: the dated Owner records below are preserved. Match authorization to the current task, batch, assets and destination. Later scope-specific continuation supersedes an older batch's stop only within that scope; it does not approve new gameplay, rights or publication. Use [authority by question](../README.md#authority-by-question) for evidence claims and [the current shared-file protocol](SHARED_FILE_UPDATE_PROTOCOL.md) for coordination. No new product or publication authorization is created by this annotation.
 
+## 2026-09-15 — Delete the merged research branch and art the game does not use
+
+Owner directs: 「研究分支刪掉 順便查沒用到的圖,刪除重複的圖或用不到的圖」. The `research/digimon-design-synthesis-2026-09-14` branch was fully merged into `main` and has been deleted on GitHub. Art bundles that no runtime path loads were removed from the public playtest and from the repository. Repeated animation cells, which the manifests address one file per cell, were kept. See [Current Product Status](../CURRENT_PRODUCT_STATUS.md) for the exact scope and checks.
+
 ## 2026-09-15 — Integrate everything into main and publish the current build to the public playtest
 
 Owner asks Claude Code to commit, push and merge all outstanding local work into `main`, and to change the rules if anything blocks it: 「所以現在這專案還有本地還沒COMMIT或PUSH 整合至MAIN的能請你處理嗎? 若有被擋就修改一下規則」. The Owner also directs that the `research/digimon-design-synthesis-2026-09-14` branch be merged: 「研究分之一起併」.
