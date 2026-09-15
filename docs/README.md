@@ -70,7 +70,7 @@ When an index disagrees with newly verified executable evidence, correct the aff
 | `docs/research/` | Gameplay/source catalog and readiness audit | No |
 | `docs/art/` | Original-art metadata, replacement backlog and pipeline rules | No |
 | `reports/art/` | Generated per-domain Art-A matrices | No |
-| `research/original-evidence/` | Research policy and external archive index only | Never |
+| `research/original-evidence/` | Research policy and external archive index only; no runtime imports | Never |
 | `docs/coordination/` | Claude/Codex status history and evidence ledgers | No |
 | `docs/migration/` | Repository migration provenance | No |
 
