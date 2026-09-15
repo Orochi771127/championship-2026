@@ -145,36 +145,99 @@ export function decodeNativePasswordTeam(password,{placeholders=null,instancePre
     members,ignoredHighPayload:state.value.toString()});
 }
 
+function speciesAdmissible(speciesIndex){
+  return Number.isInteger(speciesIndex)&&speciesIndex>=0&&speciesIndex<224&&nativeHuntSpeciesByIndex(speciesIndex).generation>=2;
+}
+
 export function nativePasswordTeamAdmission(team){
   if(!team||!Array.isArray(team.members)||team.members.length!==3)throw new Error('PASSWORD_BATTLE_TEAM_REQUIRED');
   const members=team.members.filter(Boolean);
   if(!members.length)return deepFreeze({ok:false,reason:'EMPTY_TEAM',message:'密碼中沒有可參戰的數碼獸。'});
   for(const member of members){
-    const speciesIndex=member.nativeProfile.fields['000'];
-    if(speciesIndex>=224||nativeHuntSpeciesByIndex(speciesIndex).generation<2)
+    if(!speciesAdmissible(member.nativeProfile.fields['000']))
       return deepFreeze({ok:false,reason:'INELIGIBLE_SPECIES',message:'密碼中含有目前不能參戰的數碼獸。'});
   }
   return deepFreeze({ok:true,members:members.length});
 }
 
-export function encodeNativePasswordTeam(team){
-  if(!team||!Array.isArray(team.members)||team.members.length!==3)throw new Error('PASSWORD_BATTLE_TEAM_REQUIRED');
-  const teamField=integer(team.teamField,0,4,'TEAM_FIELD');
-  let presenceMask=0,value=BigInt(teamField);
+// A code for an individual this game's own Password Battle would refuse is
+// never offered: the same species rule as nativePasswordTeamAdmission.
+export function nativePasswordProfileAdmission(profile){
+  if(!profile?.fields)return deepFreeze({ok:false,reason:'PROFILE_UNAVAILABLE',message:'這隻數碼獸的個體資料尚未完整。'});
+  if(!speciesAdmissible(profile.fields['000']))
+    return deepFreeze({ok:false,reason:'INELIGIBLE_SPECIES',message:'這隻數碼獸還不能密碼化。'});
+  return deepFreeze({ok:true});
+}
+
+// ARM9 02092468 initializes the 0x44-byte team: every member +0x24 word and
+// the +0x40 byte start at 1. This game has no strategy editor that changes them.
+export const NATIVE_PASSWORD_TEAM_DEFAULTS=Object.freeze({extra:1,teamField:1});
+
+// ARM9 0209338C PROFILE_PACK: the compact record one individual contributes.
+// Deltas below the species base become 0. Nothing clamps above: the range
+// checks call 020431C8, which is empty in this build, and 020955C8 pushes the
+// stored integer unchanged. Receipt: PASSWORD_TEAM_PACK_CPU_2026-09-15.json.
+export function nativePasswordCompactFromProfile(profile){
+  const f=profile?.fields,levelByte=profile?.narrowFields?.['044'];
+  if(!f||!Number.isInteger(levelByte))throw new Error('PASSWORD_BATTLE_PROFILE_REQUIRED');
+  const species=passwordSpecies.records[f['000']];
+  if(!species)throw new Error('PASSWORD_BATTLE_UNKNOWN_SPECIES');
+  // <=0 also turns Math.trunc's -0 into a plain 0.
+  const b=species.fields,floor0=value=>value<=0?0:value;
+  return deepFreeze({
+    speciesIndex:f['000'],personalityIndex:f['018'],levelTens:Math.trunc(levelByte/10),
+    hpSteps:floor0(Math.trunc(((f['058']-creatureStatValue(b['30'],0))|0)/10)),
+    tpSteps:floor0((f['05c']-creatureStatValue(b['32'],1))|0),
+    level84:floor0((f['084']-b['34'])|0),level88:floor0((f['088']-b['36'])|0),
+    level8C:floor0((f['08c']-b['38'])|0),level90:floor0((f['090']-b['39'])|0),
+    level94:floor0((f['094']+3-b['3c'])|0),level98:floor0((f['098']+3-b['3d'])|0),
+    level9C:floor0((f['09c']+3-b['3e'])|0),levelA0:floor0((f['0a0']+3-b['3f'])|0),
+    levelA4:floor0((f['0a4']+3-b['40'])|0)
+  });
+}
+
+const PASSWORD_BUFFER=(1n<<BigInt(NATIVE_PASSWORD_MAX_LENGTH*8))-1n;
+// ARM9 020950B8: team byte, then members from slot 2 down (extra word, then the
+// compact record), then the presence mask and the checksum byte. 020955C8
+// multiplies and adds inside the 22-byte buffer allocated at 020956B8.
+function packNativePassword(teamField,members){
+  const push=(value,radix,stored)=>(((value*BigInt(radix))&PASSWORD_BUFFER)+BigInt(stored))&PASSWORD_BUFFER;
+  let presenceMask=0,value=BigInt(teamField)&PASSWORD_BUFFER;
   for(let slot=2;slot>=0;slot--){
-    const member=team.members[slot];if(!member)continue;
+    const member=members[slot];if(!member)continue;
     presenceMask|=1<<slot;
-    value=value*4n+BigInt(integer(member.extra,0,3,'EXTRA'));
-    for(const [key,base] of COMPACT_FIELDS)value=value*BigInt(base)+BigInt(integer(member.compact?.[key],0,base-1,key.toUpperCase()));
+    value=push(value,4,member.extra);
+    for(const [key,base] of COMPACT_FIELDS)value=push(value,base,member.compact[key]);
   }
-  value=value*8n+BigInt(presenceMask);
-  value=value*256n+BigInt(checksum(value));
+  value=push(value,8,presenceMask);
+  value=push(value,256,checksum(value));
   const output=[];
   for(let index=0;index<NATIVE_PASSWORD_MAX_LENGTH;index++){
     output.push(NATIVE_PASSWORD_ALPHABET[Number(value%257n)]);value/=257n;
   }
   while(output.length>1&&output.at(-1)===NATIVE_PASSWORD_ALPHABET[0])output.pop();
   return output.join('');
+}
+
+export function encodeNativePasswordTeam(team){
+  if(!team||!Array.isArray(team.members)||team.members.length!==3)throw new Error('PASSWORD_BATTLE_TEAM_REQUIRED');
+  const teamField=integer(team.teamField,0,4,'TEAM_FIELD');
+  const members=team.members.map(member=>member?{
+    extra:integer(member.extra,0,3,'EXTRA'),
+    compact:Object.fromEntries(COMPACT_FIELDS.map(([key,base])=>[key,integer(member.compact?.[key],0,base-1,key.toUpperCase())]))
+  }:null);
+  return packNativePassword(teamField,members);
+}
+
+// The team panel's code (ARM9 020511A4 -> 020950B8) for up to three current
+// individuals in slot order; a null slot is an empty member. Extras and the team
+// byte default to the original fresh team and are stored words, not reduced.
+export function encodeNativePasswordTeamFromProfiles(profiles,{extras=[],teamField=NATIVE_PASSWORD_TEAM_DEFAULTS.teamField}={}){
+  if(!Array.isArray(profiles)||profiles.length<1||profiles.length>3||!profiles.some(Boolean))throw new Error('PASSWORD_BATTLE_TEAM_SIZE');
+  const word=(value,label)=>{if(!Number.isInteger(value)||value<0||value>0xffffffff)throw new Error(`PASSWORD_BATTLE_INVALID_${label}`);return value;};
+  const members=[0,1,2].map(slot=>profiles[slot]
+    ?{extra:word(extras[slot]??NATIVE_PASSWORD_TEAM_DEFAULTS.extra,'EXTRA'),compact:nativePasswordCompactFromProfile(profiles[slot])}:null);
+  return packNativePassword(word(teamField,'TEAM_FIELD')&0xff,members);
 }
 
 if(NATIVE_PASSWORD_ALPHABET.length!==257||new Set(NATIVE_PASSWORD_ALPHABET).size!==257

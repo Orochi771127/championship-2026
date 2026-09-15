@@ -3,9 +3,52 @@ import test from 'node:test';
 import {readFileSync} from 'node:fs';
 import {createChampionshipStandaloneApp} from '../src/championship/app/championshipStandaloneApp.js';
 import {createBattleRuntime} from '../src/championship/app/battleRuntime.js';
+import {CHAMPIONSHIP_MODERN_SAVE_KEY} from '../src/championship/app/championshipStandaloneSave.js';
+import {decodeNativePasswordTeam,nativePasswordTeamAdmission} from '../src/championship/battle/nativePasswordBattle.js';
+import {createFullQaSaveText} from '../scripts/lib/championshipFullQaSave.mjs';
 
 const read=path=>JSON.parse(readFileSync(new URL(`../${path}`,import.meta.url),'utf8'));
 const passwords=['四ぬ体石た＿ダヨせＶ７ぶッ九ぐ','ザワヌＴ木タぬケ五パチる真ミどどＤＣＬサコぃ'];
+
+async function qaSaveApp(){
+  const data=new Map(),storage={getItem:key=>data.get(key)??null,setItem:(key,value)=>data.set(key,value),removeItem:key=>data.delete(key)};
+  const cages=read('docs/contracts/championship/raising-home-presentation.v1.json').cages;
+  const make=()=>createChampionshipStandaloneApp({storage,locks:null,cages,catalog:read('src/data/championship/catalogs/creature-species.r1.json'),
+    rngClock:()=>({hour:13,minute:20,second:50}),now:()=>'2026-09-15T00:00:00.000Z'});
+  const first=make();await first.newGame();first.save();
+  const text=createFullQaSaveText(JSON.parse(data.get(CHAMPIONSHIP_MODERN_SAVE_KEY)),{cageIds:cages.map(entry=>entry.cageId)});
+  await first.dispose();data.set(CHAMPIONSHIP_MODERN_SAVE_KEY,text);
+  const app=make();await app.continueGame();
+  return {app,data};
+}
+
+test('Team password encodes the live roster and changes no save, RNG or screen',async()=>{
+  const {app,data}=await qaSaveApp();
+  try{
+    const candidates=await app.getPasswordTeamCandidates();
+    const ready=candidates.filter(entry=>entry.admission.ok).slice(0,3);assert.equal(ready.length,3);
+    const before={rng:app.getGameplayRngState(),screen:app.getScreen(),saved:data.get(CHAMPIONSHIP_MODERN_SAVE_KEY)};
+    const made=await app.createTeamPassword(ready.map(entry=>entry.instanceId));
+    assert.equal(made.ok,true,made.message);assert.equal(made.members,3);
+    assert.equal((await app.createTeamPassword(ready.map(entry=>entry.instanceId))).password,made.password,'same team, same code');
+    const decoded=decodeNativePasswordTeam(made.password);
+    assert.equal(decoded.presenceMask,7);assert.equal(decoded.teamField,1);assert.equal(nativePasswordTeamAdmission(decoded).ok,true);
+    assert.deepEqual({rng:app.getGameplayRngState(),screen:app.getScreen(),saved:data.get(CHAMPIONSHIP_MODERN_SAVE_KEY)},before);
+    assert.equal((await app.createTeamPassword([])).reason,'PARTY_SIZE');
+    assert.equal((await app.createTeamPassword(candidates.slice(0,4).map(entry=>entry.instanceId))).reason,'PARTY_SIZE');
+    assert.equal((await app.createTeamPassword(['not-in-roster'])).reason,'PROFILE_UNAVAILABLE');
+  }finally{await app.dispose();}
+});
+
+test('Team password refuses an individual Password Battle could not load',async()=>{
+  const app=createApp();
+  try{
+    await app.newGame();
+    const [egg]=await app.getPasswordTeamCandidates();
+    assert.equal(egg.admission.reason,'INELIGIBLE_SPECIES');
+    assert.equal((await app.createTeamPassword([egg.instanceId])).reason,'INELIGIBLE_SPECIES');
+  }finally{await app.dispose();}
+});
 
 function createApp(){
   const data=new Map(),storage={getItem:key=>data.get(key)??null,setItem:(key,value)=>data.set(key,value),removeItem:key=>data.delete(key)};

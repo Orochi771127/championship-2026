@@ -1832,6 +1832,34 @@ export function createChampionshipStandaloneApp({
       }
     },
 
+    async getPasswordTeamCandidates(){
+      requireSession();
+      const {nativePasswordProfileAdmission}=await loadPasswordBattle();
+      return this.getRaisingInstances().map(entry=>{
+        const nativeProfile=entry.instanceId===creature?.creatureId?creature.nativeProfile:raisingNativeProfile(entry.instanceId);
+        return Object.freeze({...entry,admission:nativePasswordProfileAdmission(nativeProfile)});
+      });
+    },
+
+    // The original team panel prints the code of the team on it (ARM9 020511A4
+    // -> 020950B8). Making a code reads current profiles only: no save, RNG,
+    // roster or screen state changes.
+    async createTeamPassword(instanceIds){
+      requireSession();
+      if(!Array.isArray(instanceIds)||instanceIds.length<1||instanceIds.length>3||new Set(instanceIds).size!==instanceIds.length)
+        return {ok:false,reason:'PARTY_SIZE',message:'請選擇 1 至 3 隻數碼獸。'};
+      const {encodeNativePasswordTeamFromProfiles,nativePasswordProfileAdmission}=await loadPasswordBattle();
+      const owned=new Set(this.getRaisingInstances().map(entry=>entry.instanceId)),profiles=[];
+      for(const instanceId of instanceIds){
+        const nativeProfile=!owned.has(instanceId)?null
+          :instanceId===creature?.creatureId?creature.nativeProfile:raisingNativeProfile(instanceId);
+        const admission=nativePasswordProfileAdmission(nativeProfile);
+        if(!admission.ok)return admission;
+        profiles.push(nativeProfile);
+      }
+      return {ok:true,password:encodeNativePasswordTeamFromProfiles(profiles),members:profiles.length};
+    },
+
     async preparePasswordBattle(passwords){
       requireSession();
       if(screens.current()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT)return {ok:false,reason:'BATTLE_SELECT_NOT_ACTIVE'};

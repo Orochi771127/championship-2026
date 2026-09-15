@@ -160,6 +160,27 @@ test('Password selection requires two bounded passwords and passes no owned part
   await Promise.resolve();view.dispose();
 });
 
+test('Password panel makes a copyable code for up to three of the player’s own Digimon',async t=>{
+  const root=useDocument(t),made=[];let cube;
+  const candidates=[['a','甲'],['b','乙'],['c','丙'],['d','丁']].map(([instanceId,displayName])=>({instanceId,displayName,admission:{ok:true}}))
+    .concat([{instanceId:'egg',displayName:'蛋',admission:{ok:false,message:'這隻數碼獸還不能密碼化。'}}]);
+  const view=createBattleSelectView({root,matches:[],menuCopy:{menu:'對戰',chooseMatch:'選擇對戰',availableMatches:'賽事',faceNotice:'模式'},
+    mountCube:options=>{cube=options;return {dispose(){}};},getModeMatches:()=>[],onEnter:()=>({ok:true}),
+    getPasswordSelection:()=>({maxLength:22,candidates,createPassword:ids=>{made.push(ids);return {ok:true,password:'四ぬ体石た'};}})});
+  cube.onSelect('PASSWORD_BATTLE');await Promise.resolve();await Promise.resolve();
+  const pick=id=>descendants(root).find(node=>node.dataset?.instanceId===id);
+  const button=text=>descendants(root).find(node=>node.tagName==='button'&&node.textContent===text);
+  const output=descendants(root).find(node=>node.attributes['aria-label']==='我的隊伍密碼');
+  assert.equal(button('產生密碼').disabled,true);assert.equal(pick('egg').disabled,true);
+  for(const id of ['a','b','c'])pick(id).click();
+  assert.equal(pick('d').disabled,true,'a fourth member is refused');assert.equal(button('產生密碼').disabled,false);
+  button('產生密碼').click();await Promise.resolve();await Promise.resolve();
+  assert.deepEqual(made,[['a','b','c']]);assert.equal(output.value,'四ぬ体石た');assert.equal(output.readOnly,true);
+  assert.equal(button('複製密碼').hidden,false);
+  pick('a').click();assert.equal(output.value,'','changing the team clears the old code');assert.equal(button('複製密碼').hidden,true);
+  view.dispose();
+});
+
 test('Link selection exposes host and guest code exchange before starting',async t=>{
   const root=useDocument(t),entered=[];let cube;
   const prepared={ok:true,replyCode:'CM26-LINK-REPLY',parties:[[{instanceId:'host'}],[{instanceId:'guest'}]],arenaIndex:7};

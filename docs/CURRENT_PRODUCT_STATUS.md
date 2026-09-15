@@ -1,5 +1,16 @@
 # Championship 2026 — Current Product Status
 
+**2026-09-15 — 「我的隊伍密碼」: players can make a Password Battle code from their own Digimon (local, not yet published).**
+
+Evidence: the shared team panel is the original encoder's only caller (ARM9 `020511A4`). The OVL10 battle menu passes a registered team; OVL9 password and link flows reuse the panel. `PROFILE_PACK` (`0209338C`) and `ENCODE` (`020950B8`) were replayed on 61 vectors: the QA save's individuals, every radix edge, and 22-byte buffer overflow ([receipt](research/PASSWORD_TEAM_PACK_CPU_2026-09-15.json); re-run with `scripts/research/check-password-team-pack-cpu.py`). A fresh team carries member extras 1 and team byte 1 (`02092468`). This build has no strategy editor, so those defaults apply.
+
+What changed:
+- The Password Battle screen lists the player's Digimon. Eggs and the youngest forms (generation below 2), which Password Battle cannot load, are refused.
+- Picking one to three members makes a copyable code. Making it changes no save, RNG, roster or screen.
+- Picked members in the party, practice, link and password pickers had looked unpicked, because the skin erased the picked state. They now show a gold rim and a check mark.
+
+Checks: `test:ci` 1,338/1,338; the 61 CPU vectors in JS and in the replay; the owned-battle and battle-cube browser gates. A headless normal-UI run made a code from two owned Digimon, pasted it into both teams and opened the battle. Picked and unpicked styles measured as different in the password maker and a three-member party. `build:playtest` and `validate:playtest` pass.
+
 **2026-09-15 — Review and QA pass; four player-facing fixes; assembled UI cells shown on the public playtest.** Fixes:
 - Password Battle accepts half-width letters, digits and symbols typed on phone keyboards, and ignores copied spaces. In 179 of 200 sampled codes, a phone keyboard would have produced a rejected character. The first push still capped the field at 22 characters including spaces, so a leading space cut the last symbol and failed the checksum on the live site. The field now leaves room for spaces, and the decoder checks the real length.
 - Link Battle code fields use 16px text, so iPhone Safari does not zoom the page.

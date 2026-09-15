@@ -277,7 +277,53 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       catch(error){if(!cubeDisposed)showRefusal({ok:false,message:'密碼對戰準備失敗，請再試一次。'},{});}
       finally{entering=false;if(!cubeDisposed)refresh();}
     });
-    refresh();partyPanel.append(confirm,back);
+    // The original team panel prints its team's code (ARM9 020511A4). Here the
+    // player picks up to three of their own Digimon and copies the code.
+    let maker=null;
+    if(Array.isArray(setup?.candidates)&&typeof setup.createPassword==='function'){
+      maker=element('section','cm-vs5-password-maker');
+      maker.append(element('h3','cm-vs5-link__heading','我的隊伍密碼'),
+        element('p','cm-vs5-entry-notice','選擇最多 3 隻自己的數碼獸，產生可以分享給朋友的密碼。密碼保存的是現在的狀態。'));
+      const chosen=[],picks=[];
+      const output=element('input','cm-vs5-password-input');output.value='';output.readOnly=true;
+      output.setAttribute('readonly','');output.setAttribute('aria-label','我的隊伍密碼');
+      const make=actionButton('產生密碼',{primary:true}),copy=actionButton('複製密碼');copy.hidden=true;
+      const status=element('p','cm-vs5-entry-notice');status.hidden=true;status.setAttribute('role','status');
+      const sync=()=>{
+        for(const {entry,button} of picks){const picked=chosen.includes(entry.instanceId);button.setAttribute('aria-pressed',String(picked));
+          button.disabled=!entry.admission.ok||(!picked&&chosen.length>=3);}
+        make.disabled=chosen.length===0;
+      };
+      for(const entry of setup.candidates){
+        const button=actionButton(entry.displayName??entry.name??entry.instanceId);button.dataset.instanceId=entry.instanceId;
+        if(!entry.admission.ok)button.append(element('span','cm-vs5-match__fee',entry.admission.message));
+        button.addEventListener('click',()=>{
+          if(button.disabled)return;const at=chosen.indexOf(entry.instanceId);
+          if(at<0)chosen.push(entry.instanceId);else chosen.splice(at,1);
+          output.value='';copy.hidden=true;status.hidden=true;sync();
+        });
+        picks.push({entry,button});maker.append(button);
+      }
+      if(!setup.candidates.some(entry=>entry.admission.ok))maker.append(element('p','cm-vs5-entry-notice','目前沒有可以密碼化的數碼獸。'));
+      make.addEventListener('click',async()=>{
+        if(make.disabled)return;make.disabled=true;
+        let made;
+        try{made=await setup.createPassword([...chosen]);}catch(error){made=null;}
+        if(cubeDisposed)return;
+        if(made?.ok){output.value=made.password;copy.hidden=false;status.hidden=true;}
+        else{output.value='';copy.hidden=true;status.hidden=false;status.textContent=uiText(made?.message??'密碼產生失敗，請再試一次。');}
+        sync();
+      });
+      copy.addEventListener('click',async()=>{
+        if(!output.value)return;
+        let copied=false;
+        try{if(globalThis.navigator?.clipboard){await globalThis.navigator.clipboard.writeText(output.value);copied=true;}}catch(error){copied=false;}
+        if(!copied)output.select?.();
+        status.hidden=false;status.textContent=uiText(copied?'已複製密碼。':'請長按密碼欄位手動複製。');
+      });
+      maker.append(make,output,copy,status);sync();
+    }
+    refresh();partyPanel.append(confirm);if(maker)partyPanel.append(maker);partyPanel.append(back);
   }
 
   async function chooseLink(){

@@ -598,7 +598,8 @@ async function mountBattleSelect() {
     matches: battleRuntime.listMatches(),
     arenaChoices:battleRuntime.listSelectableArenas(),
     getPracticeSelection:async()=>({candidates:await app.getBattlePartyCandidates(null)}),
-    getPasswordSelection:async()=>({maxLength:22}),
+    getPasswordSelection:async()=>({maxLength:22,candidates:await app.getPasswordTeamCandidates(),
+      createPassword:instanceIds=>app.createTeamPassword(instanceIds)}),
     getLinkSelection:async()=>({
       candidates:await app.getBattlePartyCandidates(null),
       createInvite:instanceIds=>app.createLinkBattleInvite(instanceIds),

@@ -9,6 +9,8 @@
     "freeOpponents": "docs/research/FREE_BATTLE_CPU_2026-09-14.json",
     "freeIndividualResults": "docs/research/BATTLE_FREE_PARTY_RESULT_CPU_2026-09-14.json",
     "championshipRounds": "docs/research/CHAMPIONSHIP_POOLS_CPU_2026-09-10.json",
+    "passwordCodec": "docs/research/PASSWORD_BATTLE_CODEC_CPU_2026-09-14.json",
+    "passwordTeamPack": "docs/research/PASSWORD_TEAM_PACK_CPU_2026-09-15.json",
     "sourceReport": "R:/NEXUS LINK/原作/BATTLE_REVERSE_SPEC_v1.md",
     "sourceReportSha256": "d0580f2a6ea1b6755b2d04499d58742986de05800d0cca368a269d08427d5f57"
   },
@@ -48,6 +50,15 @@
     "globalProgress": "Existing native progression excludes mode 5 from player title/win records; individual records still update",
     "cpuReplay": "docs/research/PRACTICE_BATTLE_CPU_2026-09-14.json"
   },
+  "passwordBattle": {
+    "decode": "OVL9 input screens call ARM9 02095248 for two team codes; profiles rebuilt over species-34 placeholders",
+    "teamCode": "ARM9 020511A4 prints the code of the team on the shared team panel (OVL10 battle menu passes player +0x158 + index*0x44; OVL9 password/link flows reuse the panel)",
+    "profilePack": "ARM9 0209338C: species, personality, level byte/10, (maxHp-curve)/10, maxTp-curve, level deltas; negatives become 0; no upper clamp",
+    "packing": "ARM9 020950B8: team byte, members slot 2..0 (extra word, compact record), presence mask, checksum; 22-byte buffer",
+    "teamDefaults": "ARM9 02092468 fresh team: member extras 1, team byte 1; no strategy editor exists in this build",
+    "webAdaptation": "OWNER_REQUESTED_2026-09-15: the Password Battle screen offers 我的隊伍密碼 for one to three owned individuals the codec can load, with copy; the original panel placement stays the evidence",
+    "cpuReplay": "61 vectors including QA-save individuals, radix edges and 22-byte overflow; scripts/research/check-password-team-pack-cpu.py re-runs them"
+  },
   "runtimePolicy": {
     "application": "Existing championshipStandaloneApp",
     "battle": "Existing battleRuntime, battleRosterSource and battleParty",
@@ -57,7 +68,7 @@
   },
   "remaining": {
     "communicationTransport": "UNKNOWN_REQUIRES_TRACE_AND_WEB_TRANSPORT_IMPLEMENTATION",
-    "passwordCodecAndSnapshotAdmission": "UNKNOWN_REQUIRES_TRACE",
+    "passwordCodecAndSnapshotAdmission": "CODEC_AND_TEAM_PACK_REPLAYED; strategy editor, registered-team save writers and panel drawing remain untraced",
     "fullOriginalAcceptance": false,
     "physicalIphoneSafariAcceptance": false,
     "shippingReady": false

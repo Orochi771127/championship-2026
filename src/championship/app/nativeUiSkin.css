@@ -1263,6 +1263,25 @@
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 .cm-vs5-root[data-screen] .cm-vs5-action:disabled { opacity: 1; filter: grayscale(0.7) brightness(0.5); }
+/* The skin above replaced vs5Styles' picked state, so picked party, practice,
+   link and password members looked unpicked. A gold rim and a check mark keep
+   the state readable without relying on colour alone. */
+.cm-vs5-root[data-screen] .cm-vs5-party .cm-vs5-action[aria-pressed="true"] {
+  position: relative;
+  padding-right: 44px;
+  background: linear-gradient(180deg, #2f8a52 0%, #1d6a3c 55%, #0f4526 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 3px var(--ds-gold), 0 0 14px rgba(255, 223, 70, 0.55);
+}
+.cm-vs5-root[data-screen] .cm-vs5-party .cm-vs5-action[aria-pressed="true"]::after {
+  content: "✓";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ds-gold);
+  font-size: 20px;
+  font-weight: 900;
+}
 .cm-vs5-root[data-screen] .cm-vs5-match__fee,
 .cm-vs5-root[data-screen] .cm-vs5-match__payout { color: var(--ds-gold); text-shadow: var(--ds-text-shadow); }
 /* Gold fee text disappears on the gold primary card; use the card's own ink. */
