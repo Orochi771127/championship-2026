@@ -1265,6 +1265,9 @@
 .cm-vs5-root[data-screen] .cm-vs5-action:disabled { opacity: 1; filter: grayscale(0.7) brightness(0.5); }
 .cm-vs5-root[data-screen] .cm-vs5-match__fee,
 .cm-vs5-root[data-screen] .cm-vs5-match__payout { color: var(--ds-gold); text-shadow: var(--ds-text-shadow); }
+/* Gold fee text disappears on the gold primary card; use the card's own ink. */
+.cm-vs5-root[data-screen] .cm-vs5-action--primary .cm-vs5-match__fee,
+.cm-vs5-root[data-screen] .cm-vs5-action--primary .cm-vs5-match__payout { color: #5a3a00; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55); }
 
 /* ---- 7.1 Battle field HUD -------------------------------------------- */
 .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-clock { background: transparent; }

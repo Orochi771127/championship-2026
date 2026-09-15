@@ -2,7 +2,7 @@
 // Display binding only. Record order 0,1,2,3 maps to item indices 0,1,3,2.
 //
 // The four care goods share the existing toolbar cells. Other goods use the
-// separately registered complete-cell selections during local art review.
+// separately registered complete-cell selections where assembledUiArt allows.
 // Each bundle keeps its own runtime scope and production-index validation.
 import manifest from '../../../assets/production/toolbar/licensed-runtime-v1/manifest.json' with {type:'json'};
 import productionIndex from '../../../assets/production/ART_PRODUCTION_INDEX.json' with {type:'json'};

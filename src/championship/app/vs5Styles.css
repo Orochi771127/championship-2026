@@ -316,7 +316,8 @@
 .cm-vs5-password-input:focus-visible { outline: 2px solid #65b8c3; outline-offset: 2px; }
 .cm-vs5-link { display: flex; flex-direction: column; gap: 8px; }
 .cm-vs5-link__heading { margin: 4px 0; font-size: 14px; color: #efffe9; }
-.cm-vs5-link-code { width: 100%; min-height: 92px; resize: vertical; box-sizing: border-box; padding: 8px 10px; color: #f7fff2; background: #0b2f28; border: 1px solid #a8d68d; border-radius: 8px; font: 12px/1.35 ui-monospace, Consolas, monospace; overflow-wrap: anywhere; }
+/* 16px: iPhone Safari zooms the whole page into any focused field below 16px. */
+.cm-vs5-link-code { width: 100%; min-height: 92px; resize: vertical; box-sizing: border-box; padding: 8px 10px; color: #f7fff2; background: #0b2f28; border: 1px solid #a8d68d; border-radius: 8px; font: 16px/1.35 ui-monospace, Consolas, monospace; overflow-wrap: anywhere; }
 .cm-vs5-link-code:focus-visible { outline: 2px solid #65b8c3; outline-offset: 2px; }
 
 .cm-vs5-exit {

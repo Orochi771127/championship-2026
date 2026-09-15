@@ -1,15 +1,16 @@
-// Selected complete cells, registered for the Owner's local art review only.
-// Published playtest allowlists do not authorize these new source images.
+// Selected complete cells for the Owner's art review. Loopback previews and,
+// by the Owner's 2026-09-15 decision, the one Owner-approved playtest URL draw
+// them. They remain unlicensed source references, not rights-verified art.
 import manifest from '../../../assets/production/internal-faithful-baseline/assembled-ui-v1/manifest.json' with {type:'json'};
 import index from '../../../assets/production/ART_PRODUCTION_INDEX.json' with {type:'json'};
 import {nativeAnimationCellAt} from './characterAnimationTimeline.js';
+import {isLocalBattleEffectPreview} from './battleEffectArt.js';
 
 export const ASSEMBLED_UI_ART_ID = 'art:ui:assembled:local-reference:v1';
 export function isAssembledUiPreview(baseUrl = globalThis.location?.href) {
-  try {
-    const url = new URL(baseUrl);
-    return ['http:', 'https:'].includes(url.protocol) && ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
-  } catch { return false; }
+  // Same destinations as the other source-reference bundles: loopback, or the
+  // exact origin and base path in public-playtest.r1.json.
+  return isLocalBattleEffectPreview(baseUrl);
 }
 export function validateAssembledUiArt(data, productionIndex) {
   const entry = productionIndex?.entries?.find(e => e.assetId === ASSEMBLED_UI_ART_ID);

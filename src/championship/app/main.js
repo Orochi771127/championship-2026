@@ -798,6 +798,9 @@ async function mountBattleResult() {
     matchTitle: chosen?.link?'通訊對戰':chosen?.password?'密碼對戰':chosen?.practice?'練習對戰':chosen?.freeBattle?'自由對戰':chosen?.championship?`${chosen.recordIndex===0?'冠軍大會':'世界大會'} 第 ${chosen.cursor+1} 戰`
       :chosen?titleEventText(chosen.recordIndex,"name",chosen.title):null,
     hudArt,
+    // exitBattle returns to the tournament board while the run is still owed
+    // a round; the verdict is already recorded when this result mounts.
+    exitLabel:chosen?.championship&&app.getChampionshipRun()?.continues?'返回賽事':undefined,
     statistics:{battles:record?.battles??null,winPercent:nativeBattleWinPercent(record),titleCount:app.getBattleBadges().length},
     unlocks:battleProgressBefore?app.getShopFrame().listings.filter(item=>!battleProgressBefore.shopIds.includes(item.shopRecordIndex)).map(item=>({name:uiText(item.displayName)})):[],
     progression:battleProgressBefore?{rankBefore:battleProgressBefore.rank,rankAfter:app.getTamerRank(),

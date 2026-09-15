@@ -2,6 +2,10 @@
 
 > Reading guide — instruction maintenance, 2026-09-14: the dated Owner records below are preserved. Match authorization to the current task, batch, assets and destination. Later scope-specific continuation supersedes an older batch's stop only within that scope; it does not approve new gameplay, rights or publication. Use [authority by question](../README.md#authority-by-question) for evidence claims and [the current shared-file protocol](SHARED_FILE_UPDATE_PROTOCOL.md) for coordination. No new product or publication authorization is created by this annotation.
 
+## 2026-09-15 — Publish the QA fixes and show the assembled UI cells on the public playtest
+
+After a local review and QA pass, the Owner was told the 2026-09-13 assembled shop, cage-editor, HUD and evolution cells only render on localhost. The Owner directs: 「現在推上去新圖示也顯示」. The cells now render on the exact Owner-approved playtest destination in `public-playtest.r1.json`, the same host rule used by the other source-reference bundles. Publish the local QA fixes in the same push. Provenance stays `LOOPBACK_RESEARCH_ONLY` / `ROM_COPYRIGHTED_REFERENCE` with `publicReleasePermitted:false`; no rights evidence or commercial release is created.
+
 ## 2026-09-15 — Delete the merged research branch and art the game does not use
 
 Owner directs: 「研究分支刪掉 順便查沒用到的圖,刪除重複的圖或用不到的圖」. The `research/digimon-design-synthesis-2026-09-14` branch was fully merged into `main` and has been deleted on GitHub. Art bundles that no runtime path loads were removed from the public playtest and from the repository. Repeated animation cells, which the manifests address one file per cell, were kept. See [Current Product Status](../CURRENT_PRODUCT_STATUS.md) for the exact scope and checks.

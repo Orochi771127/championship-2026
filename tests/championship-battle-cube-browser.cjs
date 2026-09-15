@@ -4,7 +4,10 @@ const path = require("node:path");
 const { chromium } = require("playwright");
 const { openFreshGame, startGame } = require("./championship-browser-opening.cjs");
 const ORIGIN = process.env.CHAMPIONSHIP_QA_ORIGIN || "http://127.0.0.1:8732";
-const OUTPUT = "docs/reports/battle-cube-v1";
+const OUTPUT = require("./browser-qa-output.cjs")("battle-cube-v1");
+// Six mode faces since the 2026-09-15 password/practice wiring; the texture
+// pack still covers the four side faces.
+const FACE_COUNT = 6;
 const VIEWPORTS = [ {width:360,height:800}, {width:390,height:844}, {width:393,height:852}, {width:412,height:915}, {width:430,height:932} ];
 fs.mkdirSync(OUTPUT, {recursive:true});
 
@@ -28,9 +31,10 @@ async function fixture(page) {
       await page.waitForFunction(()=>Math.abs(document.querySelector('canvas').width-document.querySelector('#host').clientWidth*2)<3);
       const info=await page.evaluate(()=>({
         diagnostics:window.cube.getDiagnostics(),overflow:document.documentElement.scrollWidth>innerWidth,
-        buttons:[...document.querySelectorAll('button')].map(b=>({text:b.textContent,disabled:b.disabled,height:b.getBoundingClientRect().height}))
+        buttons:[...document.querySelectorAll('.cm-vs5-cube__face')].map(b=>({text:b.textContent,disabled:b.disabled,height:b.getBoundingClientRect().height}))
       }));
       assert.equal(info.overflow,false); assert.equal(info.diagnostics.textureCount,4);
+      assert.equal(info.buttons.length,FACE_COUNT);
       assert.ok(info.buttons.every(b=>b.height>=44&&b.disabled));
       report.viewports.push({ ...viewport, ...info });
     }
@@ -68,7 +72,7 @@ async function fixture(page) {
     await fixture(page);
     const failed=await page.evaluate(()=>window.cube.getDiagnostics());
     assert.equal(failed.textureCount,3);assert.equal(failed.textureStates.TITLE_MATCH,'FALLBACK_COLOUR');
-    assert.equal(await page.locator('button').count(),4);report.failureFallback=true;
+    assert.equal(await page.locator('.cm-vs5-cube__face').count(),FACE_COUNT);report.failureFallback=true;
     await page.screenshot({path:path.join(OUTPUT,'texture-failure.png')});
     await page.unroute('**/menu-cube-v1/title-match.png');
     assert.deepEqual(errors,[]);
@@ -77,7 +81,7 @@ async function fixture(page) {
     await fallbackContext.addInitScript(()=>{const original=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){return type==='webgl'||type==='webgl2'?null:original.call(this,type,...args);};});
     const flat=await fallbackContext.newPage();await fixture(flat);
     assert.equal(await flat.evaluate(()=>window.cube.getDiagnostics().renderer),'DOM_BATTLE_CUBE_FALLBACK');
-    assert.equal(await flat.locator('button').count(),4);assert.equal(await flat.locator('img').count(),4);
+    assert.equal(await flat.locator('.cm-vs5-cube__face').count(),FACE_COUNT);assert.equal(await flat.locator('img').count(),4);
     await flat.screenshot({path:path.join(OUTPUT,'webgl-fallback.png')});report.webglFallback=true;await fallbackContext.close();
     // Real application entry, return and repeated mount at the mobile contracts.
     const appContext=await browser.newContext({viewport:VIEWPORTS[1],deviceScaleFactor:2});
@@ -93,7 +97,9 @@ async function fixture(page) {
       await app.screenshot({path:path.join(OUTPUT,`app-${viewport.width}x${viewport.height}.png`),fullPage:true});
       assert.equal(await app.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
     }
-    assert.equal(await app.locator('.cm-vs5-cube__face:disabled').count(),4);
+    // Every mode is wired in the real application, so no face stays disabled.
+    assert.equal(await app.locator('.cm-vs5-cube__face').count(),FACE_COUNT);
+    assert.equal(await app.locator('.cm-vs5-cube__face:disabled').count(),0);
     await app.click('.cm-vs5-exit');await app.waitForSelector('[data-screen="RAISING_HOME"]');
     assert.equal(await app.locator('canvas[data-renderer="THREE_BOUNDED_BATTLE_SELECT"]').count(),0);
     await app.locator('button[data-menu-id="SYSTEM"]').click();await app.click('[data-entry-id="battle"]');

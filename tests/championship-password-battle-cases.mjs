@@ -54,5 +54,19 @@ test('alternate input glyphs normalize and a checksum change is rejected',()=>{
   const original=receipt.vectors[0].password;
   const replacement=NATIVE_PASSWORD_ALPHABET[(NATIVE_PASSWORD_ALPHABET.indexOf(original[0])+1)%257];
   assert.throws(()=>decodeNativePasswordTeam(replacement+original.slice(1)),/PASSWORD_BATTLE_CHECKSUM/);
-  assert.throws(()=>decodeNativePasswordTeam('A'),/PASSWORD_BATTLE_CHARACTER/);
+  assert.throws(()=>decodeNativePasswordTeam('中'),/PASSWORD_BATTLE_CHARACTER/);
+});
+
+test('half-width phone keyboard input and copied spaces decode as the shown code',()=>{
+  const wide=c=>c.charCodeAt(0)>=0xff01&&c.charCodeAt(0)<=0xff5e;
+  const vector=receipt.vectors.find(v=>[...v.password].some(wide));
+  assert.ok(vector,'a receipt password must contain a full-width letter, digit or symbol');
+  const typed=[...vector.password].map(c=>wide(c)?String.fromCharCode(c.charCodeAt(0)-0xfee0):c).join('');
+  assert.notEqual(typed,vector.password);
+  const decoded=decodeNativePasswordTeam(` ${typed.slice(0,4)}　${typed.slice(4)}\n`);
+  assert.equal(decoded.password,vector.password);
+  assert.equal(encodeNativePasswordTeam(decoded),vector.password);
+  assert.equal(normalizeNativePassword(typed),vector.password);
+  // Lookalike letters still land on their canonical symbols after widening.
+  assert.equal(normalizeNativePassword('lIOo'),'１１００');
 });

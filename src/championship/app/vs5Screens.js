@@ -625,7 +625,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
  * Panels advance one at a time, which is how the original presents them; the
  * last one returns home.
  */
-export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], hudArt=null, onExit }) {
+export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], hudArt=null, onExit, exitLabel="返回牧場" }) {
   if (!outcome || typeof outcome !== "object") throw new TypeError("The Battle result requires an outcome");
 
   const section = shell(root, "BATTLE_RESULT", "Battle result");
@@ -713,7 +713,7 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     for(const item of unlocks)frag.append(element('p','cm-vs5-result__detail',item.name));return frag;
   }});}
   const advance = actionButton("下一頁", { primary: true });
-  const exit = actionButton("返回牧場", { primary: true });
+  const exit = actionButton(exitLabel, { primary: true });
   exit.classList.add("cm-vs5-exit");
   if (typeof onExit === "function") exit.addEventListener("click", () => onExit());
 

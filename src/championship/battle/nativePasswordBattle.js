@@ -44,7 +44,14 @@ function checksum(value){
 
 function normalizedCharacters(password){
   if(typeof password!=='string')throw new Error('PASSWORD_BATTLE_PASSWORD_REQUIRED');
-  const characters=[...password].map(character=>NORMALIZATION.get(character)??character);
+  // Web input adaptation, not codec behaviour: phone keyboards type half-width
+  // letters, digits and symbols, and copied codes carry spaces. The codec's
+  // symbols are the full-width forms (U+FF01..U+FF5E) and none is whitespace.
+  const characters=[...password.replace(/\s+/gu,'')].map(character=>{
+    const code=character.charCodeAt(0);
+    const wide=code>=0x21&&code<=0x7e?String.fromCharCode(code+0xfee0):character;
+    return NORMALIZATION.get(wide)??wide;
+  });
   if(characters.length<1||characters.length>NATIVE_PASSWORD_MAX_LENGTH)throw new Error('PASSWORD_BATTLE_LENGTH');
   while(characters.length<NATIVE_PASSWORD_MAX_LENGTH)characters.push(NATIVE_PASSWORD_ALPHABET[0]);
   return characters;

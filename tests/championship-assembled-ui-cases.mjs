@@ -36,9 +36,13 @@ test('complete cells retain PNG dimensions and exact selected source bytes',()=>
   }
   assert.equal(assembledCageArt(5,local).width,96); // NCER includes 8px unused padding
 });
-test('new source cells stay in local review; invalid registration and paths fail closed',()=>{
-  for(const url of ['https://orochi771127.github.io/championship-2026/','https://example.com/','file:///tmp/test',undefined])
-    assert.equal(assembledShopArt(4,url),null);
+test('complete cells draw on loopback and the Owner playtest URL only; invalid registration and paths fail closed',()=>{
+  // Owner 2026-09-15: the approved Pages destination shows the assembled cells.
+  for(const url of ['https://orochi771127.github.io/championship-2026/','https://orochi771127.github.io/championship-2026/championship.html'])
+    assert.equal(assembledShopArt(112,url).sourceCell,15);
+  for(const url of ['https://example.com/','file:///tmp/test',undefined,'http://orochi771127.github.io/championship-2026/',
+    'https://orochi771127.github.io/other-project/','https://orochi771127.github.io.evil.example/championship-2026/'])
+    assert.equal(assembledShopArt(112,url),null);
   for(const alter of [m=>m.localOnly=false,m=>m.cells[0].src+='?x',m=>m.cells[0].origin=[NaN,0],m=>m.goods.pop()]) {
     const m=structuredClone(manifest);alter(m);assert.throws(()=>validateAssembledUiArt(m,index),/ASSEMBLED_UI/);
   }
