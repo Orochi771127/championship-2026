@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "classification": "ART_PROPOSAL",
+  "asset": "concept-board-v1.png",
+  "generationMode": "BUILT_IN_IMAGEGEN",
+  "resolvedModel": "UNKNOWN_TOOL_NOT_EXPOSED",
+  "apiUsageCost": "UNKNOWN_TOOL_NOT_EXPOSED",
+  "inputReferenceImages": [],
+  "prompt": "prompt.txt",
+  "promptSha256": "ec3182904a158964a991904405c2a51ff554f35ab325cc544236262bd6dcefe0",
+  "sha256": "8e1f24370d659e288ba3cf8668e2bb665b7beae5b05c123b42a39967e151302f",
+  "width": 1536,
+  "height": 1024,
+  "pngColorType": 2,
+  "runtimeEligible": false,
+  "runtimeIntegrated": false,
+  "productionIndexRegistered": false,
+  "humanApproved": false,
+  "shippingReady": false,
+  "publicReleasePermitted": false,
+  "review": {
+    "concept": "REVIEWED_CANDIDATE",
+    "nativePixelPalette": "NOT_TESTED",
+    "motion": "NOT_AUTHORED",
+    "origin": "NOT_VALIDATED",
+    "normalGame": "NOT_INTEGRATED",
+    "notes": [
+      "Six visible subjects, coherent bright color family, no text; checked by primary agent.",
+      "Concept background and ground shadows are part of the board, not transparent sprites.",
+      "Scales, spots and grass detail need simplification for native-size artwork.",
+      "Cage concepts do not define footprints, floor masks, object positions or collision.",
+      "No existing franchise image was used as image input; independent output review remains required."
+    ]
+  }
+}

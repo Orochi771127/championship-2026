@@ -2,6 +2,8 @@
 
 ## Master Game Production Plan
 
+> Current execution priority, 2026-09-15: [complete original-created characters and the existing cage environments first](ORIGINAL_CHARACTER_CAGE_FIRST_2026-09-15.md). Retain the implemented game and complete its applicable gaps; Habitat life simulation, offline redesign, dispatch and online services are later work, not blockers for this art/content stage. The small production-validation batch does not reduce the retained full inventory or predetermine a public launch count.
+
 Date: 2026-08-29  
 Product state: planning baseline; no runtime slice is authorized by this document alone  
 Primary target: phone portrait, 9:16, touch-first  

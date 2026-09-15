@@ -11,6 +11,7 @@ Do not infer current implementation state from one historical coordination file.
 
 | Need | Canonical entry |
 |---|---|
+| Current original-content priority: characters and existing cages first | [2026-09-15 原創角色與棲地籠子優先](planning/ORIGINAL_CHARACTER_CAGE_FIRST_2026-09-15.md) · [concept and cost work packet](art/production/original-character-cage-r1/README.md) |
 | Post-parity modernization / Astra visual POC candidates (planned, not implementation authorization) | [Championship Post-Parity Modernization Plan](planning/CHAMPIONSHIP_POST_PARITY_MODERNIZATION_PLAN_ZH_TW.md) |
 | What works on current `main` | [Current Product Status](CURRENT_PRODUCT_STATUS.md) |
 | Agent task instructions and instruction-maintenance evidence | [Reusable task prompt](coordination/CODEX_TASK_PROMPT_TEMPLATE_ZH_TW.md) · [2026-09-14 instruction and skills report](reports/instruction-audit/2026-09-14/IMPLEMENTATION_ZH_TW.md) |
@@ -29,7 +30,7 @@ Do not infer current implementation state from one historical coordination file.
 | Cursor live-watch notes for those two videos (coarse; do not override frame indexes) | [Cursor Live Watch 2026-09-03](research/video-cursor-live-watch-2026-09-03/CURSOR_LIVE_WATCH_ZH_TW.md) |
 | Codex prompt: consolidate video evidence + Claude audit (docs only) | [Codex Video Evidence Consolidation Prompt](coordination/CODEX_VIDEO_EVIDENCE_CONSOLIDATION_PROMPT.md) |
 | Machine-readable original-art registry | [Art Asset Registry](art/ART_ASSET_REGISTRY.json) |
-| Licensed remake visual authority | [Licensed Remake Style Bible](art/CHAMPIONSHIP_2026_LICENSED_REMAKE_STYLE_BIBLE.md) |
+| Historical licensed-remake visual specification; new original batch follows the dated priority above | [Licensed Remake Style Bible](art/CHAMPIONSHIP_2026_LICENSED_REMAKE_STYLE_BIBLE.md) |
 | Art batch order and A1 work packet | [Art Production Batch Plan](art/ART_PRODUCTION_BATCH_PLAN.md) |
 | Reference-to-production mapping | [Art Production Crosswalk](art/ART_PRODUCTION_CROSSWALK.json) |
 | Complete production direction | [Master Game Production Plan](planning/CHAMPIONSHIP_2026_MASTER_GAME_PRODUCTION_PLAN.md) |
