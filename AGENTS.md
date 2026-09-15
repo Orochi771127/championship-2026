@@ -35,3 +35,20 @@ Within the current authorization, finish implementation, relevant validation and
 Read-only work reports without updating project state. Documentation/skill changes need content, reference and scoped diff checks; product changes need affected focused/regression/contract checks, including normal browser coverage when relevant. Do not run unrelated full suites for a text-only change. Preserve other agents' files and ownership; never overwrite concurrent work.
 
 Commit, push, merge, deploy, rebase, reset and deletion require applicable authorization. Publication of an earlier snapshot does not authorize a later batch, and a successful build does not itself authorize publication.
+
+## External product-reference research
+
+Before starting new research into Digimon or other commercial reference games, read:
+
+1. `docs/research/product-reference/DIGIMON_PRODUCT_SYNTHESIS_2026-09-14_ZH_TW.md`
+2. `docs/research/product-reference/REFERENCE_MATRIX.v1.json`
+3. `docs/planning/GAME_AND_CREATURE_PRODUCTION_WORKFLOW_2026-09-14_ZH_TW.md`
+
+Rules:
+
+- Do not comprehensively re-research a title when the current product question is already covered by the reference matrix.
+- Research a missing product question, not an entire game, unless the Owner explicitly asks for a full-title study.
+- Extract a design principle before proposing implementation; do not clone a reference feature one-for-one.
+- External reference research is `RESEARCH_ONLY` until an Owner-approved planning or contract document promotes a decision.
+- Prefer mapping new findings into existing `CreatureInstance`, `Habitat`, `LifeEvent`, `Evolution`, `Battle` or progression owners instead of creating parallel systems.
+- Record new sources and material corrections in the existing reference report / matrix instead of creating duplicate inspiration memos.

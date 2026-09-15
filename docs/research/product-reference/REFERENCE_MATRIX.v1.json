@@ -1,0 +1,188 @@
+{
+  "version": 3,
+  "date": "2026-09-14",
+  "status": "RESEARCH_ONLY",
+  "purpose": "Prevent repeated full-game research. Consult this matrix before opening new external-reference research.",
+  "rules": [
+    "Research product questions, not entire titles, unless the Owner explicitly asks for a full-title study.",
+    "Do not treat external game mechanics as current runtime truth.",
+    "Extract design principles before proposing implementation.",
+    "Prefer adding conclusions to an existing product pattern over creating a parallel subsystem.",
+    "Do not re-research a covered question unless current evidence is insufficient or the external product has materially changed."
+  ],
+  "references": [
+    {
+      "title": "Digimon World",
+      "strengths": ["partner_lifecycle", "care", "recruitment_changes_home", "File_City_growth"],
+      "patterns": ["COLLECTION_CHANGES_HOME", "PARTNER_LIFE_HAS_CONSEQUENCES"],
+      "source": "https://gamefaqs.gamespot.com/ps/913684-digimon-world/faqs/73895"
+    },
+    {
+      "title": "Digimon World Championship",
+      "strengths": ["raising", "cage", "training", "hunt", "capture", "calendar", "auto_battle", "championship"],
+      "patterns": ["GAME_SPINE", "PREPARATION_DETERMINES_AUTO_BATTLE"],
+      "source": "repository evidence and parity contracts"
+    },
+    {
+      "title": "Digimon World Dawn / Dusk",
+      "strengths": ["farm_island", "terrain", "farm_goods", "training", "daily_report", "live_events"],
+      "patterns": ["HABITAT_OBJECT_HAS_FUNCTION", "HOME_HAS_CAPACITY_AND_GROWTH_RULES"],
+      "source": "https://gamefaqs.gamespot.com/ds/937345-digimon-world-dawn/faqs/80295"
+    },
+    {
+      "title": "Digimon Story Lost Evolution",
+      "strengths": ["farm_jobs", "exploration_dispatch", "equipment_output"],
+      "patterns": ["OFFLINE_PROGRESS_IS_CHARACTER_ACTION"],
+      "source": "https://gamefaqs.gamespot.com/ds/980253/digimon-story-lost-evolution/faqs/78408/explorations"
+    },
+    {
+      "title": "Digimon Story Cyber Sleuth / Hacker's Memory",
+      "strengths": ["large_roster", "digifarm", "train", "develop", "investigate", "story_rpg"],
+      "patterns": ["PERSONALITY_HAS_MECHANICAL_EFFECT", "LARGE_ROSTER_USES_SYSTEMIC_PARTICIPATION"],
+      "source": "https://www.bandainamcoent.com/games/digimon-story-cyber-sleuth-complete-edition"
+    },
+    {
+      "title": "Digimon World Next Order",
+      "strengths": ["two_partners", "bond", "care", "AI_battle", "Floatia_growth", "recruitment"],
+      "patterns": ["RELATIONSHIP_AFFECTS_OUTCOME", "RECRUITMENT_CHANGES_WORLD", "BATTLE_VALIDATES_RAISING"],
+      "source": "https://www.bandainamcoent.com/games/digimon-world-next-order"
+    },
+    {
+      "title": "Digimon Survive",
+      "strengths": ["choice", "affinity", "story_consequence", "choice_affects_evolution_and_ending"],
+      "patterns": ["STORY_DECISION_BECOMES_LIFE_EVENT"],
+      "source": "https://en.bandainamcoent.eu/digimon/digimon-survive"
+    },
+    {
+      "title": "Digimon Links",
+      "strengths": ["farm_as_base", "facilities", "training", "3v3", "coop"],
+      "patterns": ["HOME_IS_OPERATIONAL_BASE"],
+      "source": "https://www.gematsu.com/2017/09/digimon-links-first-english-trailer"
+    },
+    {
+      "title": "Digimon ReArise",
+      "strengths": ["visible_residents", "DigiTown", "care", "mood", "bond", "requests", "creature_interaction"],
+      "patterns": ["OWNED_CREATURES_SHOULD_BE_VISIBLE", "CARE_HAS_CROSS_SYSTEM_EFFECT"],
+      "source": "https://www.gematsu.com/2019/08/digimon-rearise-coming-west-in-2019"
+    },
+    {
+      "title": "Digimon: New Century / 数码宝贝：新世纪",
+      "region": "Mainland China",
+      "strengths": [
+        "LaiEn_Island_player_home",
+        "resident_scene_AI",
+        "resident_building_interaction",
+        "player_creature_dialogue",
+        "functional_buildings",
+        "free_layout_and_multiple_saved_layouts",
+        "resource_production",
+        "food_crafting",
+        "food_preferences",
+        "intimacy_progression",
+        "digimon_dispatch",
+        "incubation",
+        "prosperity_progression",
+        "original_story_plus_archive_story",
+        "branching_evolution"
+      ],
+      "patterns": [
+        "HABITAT_IS_HOME_AND_PRODUCTION_LOOP",
+        "RESIDENT_AI_USES_PLACED_BUILDINGS",
+        "LAYOUT_IS_PERSISTENT_PLAYER_EXPRESSION",
+        "OFFLINE_PROGRESS_IS_CHARACTER_ACTION",
+        "CARE_HAS_CROSS_SYSTEM_EFFECT",
+        "HOME_IS_OPERATIONAL_BASE"
+      ],
+      "sources": [
+        "https://www.taptap.cn/moment/187656649169701891",
+        "https://www.taptap.cn/moment/169166704604089799",
+        "https://www.taptap.cn/moment/210331657759098218",
+        "https://game.xiaomi.com/viewpoint/1345365192_1635058185451_13",
+        "https://www.qixia.com/product-dm.html"
+      ],
+      "note": "Separate official Mainland China reference. The user's BV16Zt36gEga link was later identified as Digital Tamers 2 and is not evidence for New Century."
+    },
+    {
+      "title": "Digital Tamers 2 / 數碼馴獸師重生2",
+      "type": "fangame",
+      "creator": "dragonrod342",
+      "platforms": ["Windows", "Android"],
+      "engine": "GameMaker",
+      "strengths": [
+        "virtual_pet_raising",
+        "hatch_train_evolve",
+        "optional_reborn_lifecycle",
+        "hybrid_AI_plus_player_command_combat",
+        "compact_multi_zone_world_exploration",
+        "main_story_and_quest_layers",
+        "village_and_Server_City_recruitment",
+        "functional_NPC_services",
+        "building_and_shop_upgrades",
+        "gathering_and_expedition",
+        "day_night_accessibility",
+        "large_2D_roster",
+        "post_launch_mode_reuse"
+      ],
+      "patterns": [
+        "SOLO_SCALE_INTEGRATION_REFERENCE",
+        "COMPLEX_EVOLUTION_NEEDS_IN_GAME_EXPLANATION",
+        "REBIRTH_CONVERTS_LOSS_INTO_LONG_TERM_PROGRESSION",
+        "AUTO_BATTLE_CAN_ALLOW_SPARSE_PLAYER_INTERVENTION",
+        "SMALL_ZONES_CAN_CREATE_A_LARGE_WORLD",
+        "STORY_CAN_BE_BUILT_AS_PROGRESSIVE_QUEST_LAYERS",
+        "RECRUITMENT_EXPANDS_FUNCTIONAL_HOME",
+        "WORLD_ACTIVITIES_FEED_HOME_PROGRESSION",
+        "REAL_TIME_FLAVOR_NEEDS_PLAYER_ESCAPE_HATCH",
+        "NEW_MODES_SHOULD_RECOMBINE_EXISTING_SYSTEMS",
+        "CONTENT_SCALE_COMES_FROM_SYSTEM_REUSE"
+      ],
+      "sources": [
+        "https://dragonrod342.itch.io/digital-tamers-2",
+        "https://dragonrod342.itch.io/digital-tamers-2/devlog/1649260/anniversary-update-v200-is-now-available",
+        "https://forum.gamer.com.tw/C.php?bsn=7255&snA=9749"
+      ],
+      "note": "High-value completion/workflow reference, not an official commercial precedent. Do not treat its Digimon IP use as a shipping/legal model for the original product."
+    },
+    {
+      "title": "Digimon Story Time Stranger",
+      "strengths": ["450_plus_roster", "personality", "bond", "digifarm", "nonlinear_digivolution", "story"],
+      "patterns": ["PERSONALITY_IS_PROGRESSION_INPUT", "BOND_IS_CROSS_SYSTEM_STAT", "LARGE_ROSTER_NEEDS_DATA_DRIVEN_GROWTH"],
+      "source": "https://www.bandainamcoent.com/news/digimon-story-time-stranger-what-you-need-to-know"
+    },
+    {
+      "title": "DIGIMON UP",
+      "strengths": ["mobile_short_loop", "feed", "train", "digivolve", "battle"],
+      "patterns": ["MOBILE_RAISE_GROW_BATTLE_LOOP"],
+      "source": "https://dgup.bn-ent.net/en/"
+    }
+  ],
+  "productPatterns": [
+    "COLLECTION_CHANGES_HOME",
+    "BATTLE_VALIDATES_RAISING",
+    "HABITAT_OBJECT_HAS_FUNCTION",
+    "HABITAT_IS_HOME_AND_PRODUCTION_LOOP",
+    "RESIDENT_AI_USES_PLACED_BUILDINGS",
+    "LAYOUT_IS_PERSISTENT_PLAYER_EXPRESSION",
+    "OFFLINE_PROGRESS_IS_CHARACTER_ACTION",
+    "PERSONALITY_HAS_MECHANICAL_EFFECT",
+    "RELATIONSHIP_AFFECTS_OUTCOME",
+    "STORY_DECISION_BECOMES_LIFE_EVENT",
+    "HOME_IS_OPERATIONAL_BASE",
+    "OWNED_CREATURES_SHOULD_BE_VISIBLE",
+    "CARE_HAS_CROSS_SYSTEM_EFFECT",
+    "PERSONALITY_IS_PROGRESSION_INPUT",
+    "BOND_IS_CROSS_SYSTEM_STAT",
+    "LARGE_ROSTER_NEEDS_DATA_DRIVEN_GROWTH",
+    "SOLO_SCALE_INTEGRATION_REFERENCE",
+    "COMPLEX_EVOLUTION_NEEDS_IN_GAME_EXPLANATION",
+    "REBIRTH_CONVERTS_LOSS_INTO_LONG_TERM_PROGRESSION",
+    "AUTO_BATTLE_CAN_ALLOW_SPARSE_PLAYER_INTERVENTION",
+    "SMALL_ZONES_CAN_CREATE_A_LARGE_WORLD",
+    "STORY_CAN_BE_BUILT_AS_PROGRESSIVE_QUEST_LAYERS",
+    "RECRUITMENT_EXPANDS_FUNCTIONAL_HOME",
+    "WORLD_ACTIVITIES_FEED_HOME_PROGRESSION",
+    "REAL_TIME_FLAVOR_NEEDS_PLAYER_ESCAPE_HATCH",
+    "NEW_MODES_SHOULD_RECOMBINE_EXISTING_SYSTEMS",
+    "CONTENT_SCALE_COMES_FROM_SYSTEM_REUSE"
+  ]
+}
