@@ -153,7 +153,10 @@ test('Password selection requires two bounded passwords and passes no owned part
   input('A 隊密碼').value='密碼甲';input('A 隊密碼').listeners.input();assert.equal(confirm.disabled,true);
   input('B 隊密碼').value='密碼乙';input('B 隊密碼').listeners.input();assert.equal(confirm.disabled,false);
   confirm.click();assert.deepEqual(entered,[[-1,['密碼甲','密碼乙'],'PASSWORD_BATTLE']]);
-  assert.equal(input('A 隊密碼').maxLength,22);assert.equal(confirm.disabled,true);
+  // Still bounded, with room for copied spaces: a 22-symbol cap that counted a
+  // leading space cut the last symbol and failed the checksum on the live site.
+  // The decoder enforces the real 22-symbol length.
+  assert.equal(input('A 隊密碼').maxLength,66);assert.equal(confirm.disabled,true);
   await Promise.resolve();view.dispose();
 });
 

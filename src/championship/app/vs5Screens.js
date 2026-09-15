@@ -260,8 +260,11 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     const inputs=[];
     for(const team of ['A','B']){
       const label=element('label','cm-vs5-password-label',`${team} 隊密碼`);
-      const input=element('input','cm-vs5-password-input');input.value='';input.maxLength=maxLength;
-      input.setAttribute('maxlength',String(maxLength));input.setAttribute('autocomplete','off');input.setAttribute('autocapitalize','none');
+      // Spaces in a copied code do not count and the decoder checks the real
+      // length, so a leading space must not push the last symbol out of the field.
+      const inputCap=maxLength*3;
+      const input=element('input','cm-vs5-password-input');input.value='';input.maxLength=inputCap;
+      input.setAttribute('maxlength',String(inputCap));input.setAttribute('autocomplete','off');input.setAttribute('autocapitalize','none');
       input.setAttribute('spellcheck','false');input.setAttribute('aria-label',`${team} 隊密碼`);
       label.append(input);inputs.push(input);partyPanel.append(label);
     }

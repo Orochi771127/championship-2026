@@ -1,7 +1,7 @@
 # Championship 2026 — Current Product Status
 
 **2026-09-15 — Review and QA pass; four player-facing fixes; assembled UI cells shown on the public playtest.** Fixes:
-- Password Battle accepts half-width letters, digits and symbols typed on phone keyboards, and ignores copied spaces. In 179 of 200 sampled codes, a phone keyboard would have produced a rejected character.
+- Password Battle accepts half-width letters, digits and symbols typed on phone keyboards, and ignores copied spaces. In 179 of 200 sampled codes, a phone keyboard would have produced a rejected character. The first push still capped the field at 22 characters including spaces, so a leading space cut the last symbol and failed the checksum on the live site. The field now leaves room for spaces, and the decoder checks the real length.
 - Link Battle code fields use 16px text, so iPhone Safari does not zoom the page.
 - A championship result whose run continues offers 「返回賽事」, matching `exitBattle`, instead of 「返回牧場」.
 - Fee and prize text on gold match cards uses dark ink.
