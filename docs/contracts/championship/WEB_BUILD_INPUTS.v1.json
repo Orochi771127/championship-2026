@@ -204,7 +204,6 @@
     "src/championship/presentation/vfx/licensedVfxRuntimeBundle.js",
     "src/championship/presentation/vfx/nitroVfxAnimationSidecar.js",
     "src/championship/presentation/vfx/originalVfxSystemBindings.js",
-    "src/championship/presentation/vfx/recoveryCageVfx.js",
     "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
     "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
     "src/championship/presentation/vs2/huntFieldPointer.js",
@@ -6570,6 +6569,9 @@
     "src/championship/battle/battleSupport.js",
     "src/championship/battle/battleTurnStates.js",
     "src/championship/battle/nativeChampionshipRounds.js",
+    "src/championship/battle/nativeFreeBattle.js",
+    "src/championship/battle/nativeLinkBattle.js",
+    "src/championship/battle/nativePasswordBattle.js",
     "src/championship/battle/nativeTitleProgression.js",
     "src/championship/battle/titleEventSchedule.js",
     "src/championship/cage/cageCatalog.js",
@@ -6677,7 +6679,6 @@
     "src/championship/presentation/vfx/licensedVfxRuntimeBundle.js",
     "src/championship/presentation/vfx/nitroVfxAnimationSidecar.js",
     "src/championship/presentation/vfx/originalVfxSystemBindings.js",
-    "src/championship/presentation/vfx/recoveryCageVfx.js",
     "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
     "src/championship/presentation/vs2/createHuntFieldPixiPresentation.js",
     "src/championship/presentation/vs2/huntFieldPointer.js",
@@ -6704,6 +6705,7 @@
     "src/championship/raising/nativeRaisingMessages.js",
     "src/championship/raising/nativeRaisingMovement.js",
     "src/championship/raising/nativeRaisingOvernight.js",
+    "src/championship/raising/nativeRaisingRecoveryStars.js",
     "src/championship/raising/nativeRaisingSleep.js",
     "src/championship/raising/nativeRaisingStarter.js",
     "src/championship/raising/nativeRaisingTraining.js",
@@ -6743,11 +6745,13 @@
     "src/data/championship/catalogs/championship-pools.r1.json",
     "src/data/championship/catalogs/creature-species.r1.json",
     "src/data/championship/catalogs/creature-stat-curve.r1.json",
+    "src/data/championship/catalogs/free-battle.r1.json",
     "src/data/championship/catalogs/gate-table.r1.json",
     "src/data/championship/catalogs/help-text.r1.json",
     "src/data/championship/catalogs/hunt-entry.r1.json",
     "src/data/championship/catalogs/hunt-scene.r1.json",
     "src/data/championship/catalogs/hunt-tools.r1.json",
+    "src/data/championship/catalogs/password-battle-species.r1.json",
     "src/data/championship/catalogs/raising-activity.r1.json",
     "src/data/championship/catalogs/raising-feedback.r1.json",
     "src/data/championship/catalogs/raising-ground.r1.json",
@@ -6768,7 +6772,7 @@
     "files": [
       {
         "path": "assets/production/ART_PRODUCTION_INDEX.json",
-        "sha256": "8ffb7591431ca2ee6d977757dc1364625a9d7299a659fbbb1a814134c265a4a8"
+        "sha256": "cb6a850de38107fb408d36dd9f88b548e62b2a55f0d989efeae0d9f8a1ccfd7d"
       },
       {
         "path": "assets/production/battle/licensed-runtime-v1/fields/field_bm01_01/frame-00.png",
@@ -30560,7 +30564,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "a13dd68877e1c7647a4c319010ef5cc8b72b0863f4c6dbb1e3dcff820146b83b"
+        "sha256": "7298f326948de4aa90463374de912f8f361fd683bd783dafa2a8f0266bb64bc3"
       },
       {
         "path": "full-qa-save.html",
@@ -30764,19 +30768,19 @@
       },
       {
         "path": "src/championship/app/ChampionshipPersistentSavePort.js",
-        "sha256": "d2ff0a437ca6216d2a1fb83743e9950ce9f4e63d7a550edfb53c7e457498ba9b"
+        "sha256": "d8b32fc0f21cff862f29a30e932e0139b519b861da52efb58c8eac46cea11f84"
       },
       {
         "path": "src/championship/app/battlePresentationSource.js",
-        "sha256": "1c6cf3bd022385e4327b4e0ba6869944fdba5d11ee4002e49dfe4658d79bdb1d"
+        "sha256": "47f627731d1571e8615218baac838de7de2622a1b5e9ced899ace503641044c6"
       },
       {
         "path": "src/championship/app/battleRosterSource.js",
-        "sha256": "1496a5c832f24bbb5a1b4b5953811ed58f82ca1629d49a5ec4c9d265299f3d00"
+        "sha256": "abc791d4b0a8de8745004f331072a117e25bb34124f55982e9657942992cd8ed"
       },
       {
         "path": "src/championship/app/battleRuntime.js",
-        "sha256": "33a52b5bd23709424676728ef882022b4f6d8ef621223d853073b77add870121"
+        "sha256": "c07ad84e6568812a4787c29cb3f6f6c2da0481208aa693696ccf34757134b28c"
       },
       {
         "path": "src/championship/app/cageRoster.js",
@@ -30796,7 +30800,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "620f28479db22b1510f9751ff3918f70ab45e5fb0b7606ecfdbdeff4760f46f9"
+        "sha256": "4283f3e9089f14e7fd5d73b6b152fe7ef40dd0fa9d0b61b12f48aca8669556a8"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -30804,11 +30808,11 @@
       },
       {
         "path": "src/championship/app/championshipScreen.js",
-        "sha256": "a110e2fdf64441e332c415a484eb05dc01d0c553aeb4ddde7f01f4063467beb7"
+        "sha256": "22113364ce6751257a2f6c0495d6fc87ef99b905f112de2e67653a2d67442a4b"
       },
       {
         "path": "src/championship/app/championshipStandaloneSave.js",
-        "sha256": "2f5e3aaa131d4142858d6f7857995c0b9fbe6d22d25793f334cead70c8e3a023"
+        "sha256": "d78a17cb2aedda5da0c85760838f0c304e672f500e576ced0cf9fc36349b5449"
       },
       {
         "path": "src/championship/app/championshipStatusBar.js",
@@ -30832,7 +30836,7 @@
       },
       {
         "path": "src/championship/app/gateHuntPresentationSource.js",
-        "sha256": "287d7d43d7ef82224acecd0359bcb575e5e3f8e04e9658470035e3cc55c6583d"
+        "sha256": "324806ecb5f5089e8c7d6bedd4913630b6fa8c2b57a9c63ecd8aaec71f0aef4d"
       },
       {
         "path": "src/championship/app/helpScreen.js",
@@ -30848,7 +30852,7 @@
       },
       {
         "path": "src/championship/app/nativeUiSkin.css",
-        "sha256": "ba0722046655f0fad96883aedb391aaf7d08f2213b3124c30a71c757d954255d"
+        "sha256": "9cd7f28f8849023479d0ec97a67f14372b6ecc6f7b6d4d74f0fa504cc7f5065c"
       },
       {
         "path": "src/championship/app/qaUnlock.js",
@@ -30856,7 +30860,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "fbbba55243ec2a25547100181f4ad687b00d3285ae4f5ee9f02f95f9024f2086"
+        "sha256": "2006f91c9eb60cb882e80205554d58dc8dc3176a73ce92249fe74a4b6a3e92ac"
       },
       {
         "path": "src/championship/app/nativeOpeningState.js",
@@ -30892,11 +30896,11 @@
       },
       {
         "path": "src/championship/app/raisingHomeP1RView.js",
-        "sha256": "755cce7e6d3000d3398cec3cd2214b26b8bb62f31c707fbd0bf61251973d08ac"
+        "sha256": "cbae5a80c9d5b81a87e1fbcc05ad0c46983523a3bca7f749adb9e3c15424c883"
       },
       {
         "path": "src/championship/app/raisingPresentationSource.js",
-        "sha256": "b9de4b08dabca3f2ff54b94848f1820fb962a43455a58b9171f19b10a021a289"
+        "sha256": "c80fbffb76b048201a557b40ec8292241d0369ea7f47ed9af16dde7c5dfedce7"
       },
       {
         "path": "src/championship/app/scheduleScreen.js",
@@ -30920,7 +30924,7 @@
       },
       {
         "path": "src/championship/app/vs2Screens.js",
-        "sha256": "41905a2aab55e6e996ad001a0350da84ea9da16ce7e1514e6cd0296fb514fe0f"
+        "sha256": "7d030f70c67aa8902d6412a7d2a22912395e772b6a61de153309f4b917183ccb"
       },
       {
         "path": "src/championship/app/vs2Styles.css",
@@ -30928,19 +30932,19 @@
       },
       {
         "path": "src/championship/app/vs3Screens.js",
-        "sha256": "d8101d3195863ac6662e96254c758680b5c3ec18e125121d541ff126f5a44d68"
+        "sha256": "a2cc590d21c476a5ceb270b86476ab4d0a7a2ecc2603f4017184e28a2ffd777e"
       },
       {
         "path": "src/championship/app/vs4Screens.js",
-        "sha256": "f0a110210ba0a4735402b36f3edcc31b963029f6755eeeef3ced4e18c9746165"
+        "sha256": "07c88f6adba1c72b6d3b6b9906add1f9bf231d1fd981b35e77afa9bb82507be9"
       },
       {
         "path": "src/championship/app/vs5Screens.js",
-        "sha256": "0fc9fed06f56e425816f008ae2f91dc911935bc9d061d15f55e155cd9600ab4e"
+        "sha256": "0f0f9108d9ed471f7624afc3d8e117dcb10122ccfaf133ac3f4fdd2b9576de3b"
       },
       {
         "path": "src/championship/app/vs5Styles.css",
-        "sha256": "2fb373414e3104a34c2d25bc1f476baa26d91e32d442614127321e656d4fc947"
+        "sha256": "679bc0e6ebd2ed8cb4074d0b8c9411eab22f646965966c87510c9ac27aa9ae04"
       },
       {
         "path": "src/championship/battle/battleActionApplication.js",
@@ -30984,7 +30988,7 @@
       },
       {
         "path": "src/championship/battle/battleEconomyTransaction.js",
-        "sha256": "1322977b0b3d8ea41a6f634ccbad289c9938964c7ed44d26d6b81a3f57c9e545"
+        "sha256": "b7524b977ca055b370165be8b9590e3de4141b2c1b03225af124ecc1e8af80fb"
       },
       {
         "path": "src/championship/battle/battleEffectActors.js",
@@ -31060,7 +31064,7 @@
       },
       {
         "path": "src/championship/battle/battleParty.js",
-        "sha256": "06b9fef8302acb2e3a583385b9836567380bd1dfdd5168f233de6bff32984f4d"
+        "sha256": "75fee5284b9fe9d501e910cc2d1cd432762decbd15133ff179317c89df0ea60c"
       },
       {
         "path": "src/championship/battle/battlePresentationHost.js",
@@ -31432,7 +31436,7 @@
       },
       {
         "path": "src/championship/presentation/cageUiArt.js",
-        "sha256": "8033844f373c3f706a6d4321310d3e4796c9336b1fc323904151404173c17a4b"
+        "sha256": "58369be79f973e4fa37c378d0d194c1d06b3cd9f0074861b12f0ab83838a3cfe"
       },
       {
         "path": "src/championship/presentation/championshipPixiStage.js",
@@ -31468,7 +31472,7 @@
       },
       {
         "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
-        "sha256": "a8d04fb49c68ffe78ba1f3303bd60c2121bea25f9afac723b314ab7f945fd6ce"
+        "sha256": "e00a7a53137dcbcde3e3da7fbfaeb9267a15b8ea80fd21ffe8908821e4514dad"
       },
       {
         "path": "src/championship/presentation/intRh2/raisingFieldViewport.js",
@@ -31516,7 +31520,7 @@
       },
       {
         "path": "src/championship/presentation/raisingFeedbackArt.js",
-        "sha256": "382a44322780bc9e5bff5a8d6c9761d2059408e5587b8d23d68ec630f219a96e"
+        "sha256": "edb8ffe3b733d23655e49c89786871ec2a584d8b6409107cd38ea8b0afa21d14"
       },
       {
         "path": "src/championship/presentation/runtimeBattleArenaArtReview.js",
@@ -31528,7 +31532,7 @@
       },
       {
         "path": "src/championship/presentation/shopGoodsUiArt.js",
-        "sha256": "596cea4bc1ffbc2443e7b32a3336dd978809cd60c25fc5bc34f1d8da79df7f71"
+        "sha256": "30f9a4e7ad071f412c99c32f41309ad9fea7faefc00e83452a8988d0aeb74a07"
       },
       {
         "path": "src/championship/presentation/vfx/battleWeatherVfxPresentation.js",
@@ -31555,10 +31559,6 @@
         "sha256": "060c6b86488faed804ad643f24582ce64cfb579d5d3f57ff36924a4dacbf499b"
       },
       {
-        "path": "src/championship/presentation/vfx/recoveryCageVfx.js",
-        "sha256": "abb6b5d241ca4a311b659b65f92f5d73855ac91b0a7a57a2f68d4a911c2604ed"
-      },
-      {
         "path": "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
         "sha256": "2fdca36c3122a06337c92aaaeb43dd6629773f0f755484a29193bf7d2ce3d3a7"
       },
@@ -31580,7 +31580,7 @@
       },
       {
         "path": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
-        "sha256": "12f4b6a10a39e8d3aed116e4a2b83a9ccbc5ef6017d6b8bcede0e708fe0b2810"
+        "sha256": "a35eb67f0a73c89157ee9d363d79830b0b3bce9a8481010b3d3709d0a7afae2b"
       },
       {
         "path": "src/championship/presentation/vs5/createBattleVfxThreeOverlay.js",
@@ -31608,7 +31608,7 @@
       },
       {
         "path": "src/championship/raising/nativeRaisingActor.js",
-        "sha256": "c413eb08a6af07fdeffe1c7d3d5bc0fb0ce8134a25eb0547163c40a68df9bcd7"
+        "sha256": "03299e23f856a6bf4a643eb59e004f6b6449f4ff2e4097a9bccb898be2f32d02"
       },
       {
         "path": "src/championship/raising/nativeRaisingCalendar.js",
@@ -31728,7 +31728,7 @@
       },
       {
         "path": "src/championship/text/zhHant.js",
-        "sha256": "54578aac86488d41f6f3eec030581007c62fa9f73484bcafbab152d43cb4034f"
+        "sha256": "e09b6c217de7e752fe212f5b09e58848453e45d8a7b377da4771a249151498c7"
       },
       {
         "path": "src/championship/time/championshipWorldClock.js",
@@ -31893,6 +31893,906 @@
       {
         "path": "src/championship/app/portraitFrame.js",
         "sha256": "6493f209e58ed48428e6b490b320191cb2803f2bf5e7605d82f34de22b9673df"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--000.png",
+        "sha256": "6cad66556cda46a445bdc5f4097052976744dd7d543a3da6632bbc41f15e1628"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--001.png",
+        "sha256": "c28d8bcfccce49ee7f88affdeef732a1129045852a142e5b9acfd3f4fb825acb"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--002.png",
+        "sha256": "910ed3ecf14311438e9172c1d989d0edbe7466436361c750ec1e112bd970669d"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--003.png",
+        "sha256": "4ab8af1162747e6547f39e44ce9b55dd3de1b390c6f9a8ee510a678e2e48870b"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--004.png",
+        "sha256": "4ab1a76644f32bb52ca82bbcef3b1c4ad57f846a4d5eddce0dc56c54636f5a01"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--005.png",
+        "sha256": "f56fc41365d87f5d181cb1405ffb776ddb917672bbeb5265919fb04a7a65b256"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--006.png",
+        "sha256": "1336ad1c0bb4a73f0e64e4656e398edf4ff95aee738957bd4463ee104831b7ce"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--007.png",
+        "sha256": "bdd03dd3cfbefb45b3003a259f82724bb891a6f23f0334edfa6ea565021f4651"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--008.png",
+        "sha256": "7f6978ab8961941155c40785d151612d70c2dfc54874bb6d16d13e24ec911c3f"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--009.png",
+        "sha256": "1fd33a5d36ddbfc8d2d5514c0acc012768016160c8caf2a2fb5e4c5fa80fc550"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--010.png",
+        "sha256": "ee236386f011daaafaf70a7060c7446f5a3ae66092a67e171b825c2ab510093a"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--011.png",
+        "sha256": "8189edf949da79f42f129b957868d115d51a5ad9b5ec877c5056f452adda0b11"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--012.png",
+        "sha256": "e0f89dc98bc3cd5e36fe43afbf3d9ce142f69be881931e0a9733700e0df30628"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--013.png",
+        "sha256": "f54d1df56c6d1b0b98c07dc25fa9a54d9098ad0393c65b3e146b207fa33aa5f2"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--014.png",
+        "sha256": "d480fc7cc5f5905bb42b69d1eee97f1a5861a0b4535db5a1b396ee8f00143db7"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--017.png",
+        "sha256": "2775f885a2de2616ee487aa2539f116a75b08d8665dc7ee71491b33ed6aba33f"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_evolution_all--018.png",
+        "sha256": "77b5d266433ce27a2b604d90b34f762e666f123f0f52842e366b6c076f7b140b"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_ikusei--115.png",
+        "sha256": "8d851c6fb01136c023849700730e43686cc5089e843049d71e1367042dedf63b"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_ikusei--116.png",
+        "sha256": "56828f4857a55255a3aef9d63470ab88d7af936463cb1eabf50f5baf4b5b2382"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_ikusei--117.png",
+        "sha256": "511eaba0c1e3aad4101c7018e348052f690eef1a1c0bf4ffcbf3f3295d22299d"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_ikusei--118.png",
+        "sha256": "63f616b6b74ed5ca060bd3796fb2807d3c2fbf0a97c094e6c77e7b6053be49e4"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_ikusei--119.png",
+        "sha256": "4b405b71d584e4b5cd23bb29e0b56af3369c749682407e1203886ec4db252252"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_ikusei--120.png",
+        "sha256": "d46c0833d567a51d1ece31331c60f0c8bbb8e5d4dd3ed27b607b5f0e8163f703"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_ikusei--121.png",
+        "sha256": "f06c3339e2a846221090201456c4fdc58151abd3ddbc12ea76dcfe5ec98c1ea2"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_ikusei--122.png",
+        "sha256": "5d03fe7395c46d2dc525f9102330394aa9d6e8f569023244d4332780f760ce37"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_ikusei--123.png",
+        "sha256": "0b5e60231e366b50076824df41e96e77a3f8ce1ac13e0bf43ea2b1fc8af5e480"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/common--e001_ikusei--124.png",
+        "sha256": "a8630d8069c4c603afe43f335e8db394dafc3885da739e3d1430e95814f5a46c"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/manifest.json",
+        "sha256": "860219c36c6b6584e7908281bf86977d79f8c919346a00d3ca91a98762ab5ad1"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--000.png",
+        "sha256": "a4aaedf68c786ee7cfc84b23998424041cdf61fccc99147c0e9b773c2991e382"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--001.png",
+        "sha256": "ed163e218d5cb59f945e0b082ea48320e90782364b1d52dec5a29a7b91b04ffc"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--002.png",
+        "sha256": "8ae7cd38bc12e27a225540153daf768c3b7369da626a961fd4a56c457c20cd32"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--003.png",
+        "sha256": "a301c24a5d3a87fb8262188d92f1ce8ed04ac96b37d37eacb2c6fc112ae23e28"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--004.png",
+        "sha256": "fade3a94a641699b4fa212795a0ea5753970e35540adeb36b7a3466ed956e2e0"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--005.png",
+        "sha256": "6c2651d6f8aef7530b2e2c14443ab6a28a342c318915ac13f7090489dec08be4"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--006.png",
+        "sha256": "7869a6b20df78c4a15d7e6a745fe3ae5774ed1890fad1cd33d185a242958b670"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--007.png",
+        "sha256": "6350691f68256eacfa7c3e049162913d132f866169f452f88f1af8355b02d05a"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--008.png",
+        "sha256": "989572c7c487dfa7043d067cd820d406267eef9ddce07875071fe227fd70b8cb"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--009.png",
+        "sha256": "166eccac46894d3006f3b788c6ede211786515ee580619035c3c56b836092cce"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--010.png",
+        "sha256": "080030a0d070e2ec67616a001ad1a097c3eb609489584bf82a1d816493a54469"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--011.png",
+        "sha256": "2fdf72cc1a498243d9dde5515f818f547dcd7c8431c3c7738406b833c90e25c6"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--012.png",
+        "sha256": "56181899fc9aba20c6bf77e49ffd43c2f28ecf9aa8226a302c465ed9f6c345c4"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--013.png",
+        "sha256": "dc2c3c8120e75e678f49f38aac4e765f33ad46077639aa67313046e9ede7de59"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--014.png",
+        "sha256": "45952b7104ba38ea00a38498fd84825e60858cd7057b4c0b365acd2b97931305"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--015.png",
+        "sha256": "8021aa310312898cb6128ee405d5aec19bf231e0dd7e84a0cbf51756c09b53ad"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--016.png",
+        "sha256": "3a93451daefc45764ed1216053cd9e5befa21e3acd39578a810c8c82dedb84ea"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--017.png",
+        "sha256": "51e31e3be3cd947da0c773d8e7020188641a03c228c30a6938bf9d29f2b90bdb"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--018.png",
+        "sha256": "ffbf164c202e5fd5e37abdaf811aecff00444a2b3ff050a80c173da0551139ce"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--019.png",
+        "sha256": "a3f12d65ff27cb97920a588a75c4b8fed50f91a8eb8d2da6475f79edf8e9649c"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--020.png",
+        "sha256": "4de24127eb2e80cd90f91ba296ffabb23d1850e28070faa98a740e5c566a46bd"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--021.png",
+        "sha256": "1e8fcc4993245b58c5d91267e3c1c7024b34831e0b1c09f5c38daca6bc1082f2"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--022.png",
+        "sha256": "0bde00e347f3b60d44b0414e9679ee17860ceb4523f94db91c86fd7199c3458f"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--023.png",
+        "sha256": "488689d20d2f40cd7edaaf1614fa50b4421f62370b384644caaa7a4bcddf094f"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--024.png",
+        "sha256": "924972c2e641610c75cf7ea024974fc4ee71fafa9d3a3b7544ebe802ceae03c2"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--025.png",
+        "sha256": "b04137f2e3adb9952a6c1feb7e4bda04c1a50fd51cf09ca52d25389339258b76"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--026.png",
+        "sha256": "0eca3c17c0409cac72fe7c62bf8f002af5b776764652f0ee5853f4fb27a6f21b"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--027.png",
+        "sha256": "108f3070afb48e6f9442bf81073aa53118715f223d879bb5e85f586709365d88"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--028.png",
+        "sha256": "9d7c50ae484c059ef54d13948840db5c6bcfa3f18e7b753cf5098a8d25e1179c"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--029.png",
+        "sha256": "1115c72ac53b84ce38411495b98e4dd861f8de7271cef16f8521fd5a3bb5049b"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--030.png",
+        "sha256": "0f491fc5f6f505a3294f13239ec7c9082044be07263ecf819f930e197d0404c0"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--031.png",
+        "sha256": "312c91b068a20b5d2a38eb2ae3853470f14cbf98e5a2f9bc3a651b8b6e108037"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--032.png",
+        "sha256": "f00778978486f66cdda0d5abbd8d8a39c8c2f5d1d171961a8b585529d58c7376"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--033.png",
+        "sha256": "d5fcdede434254b3710435b9b4fcfaf6523dee4fd1f782b1d5e252d94593174f"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--034.png",
+        "sha256": "242eb6c258c9754be2d84825d3db375f2d2ba2291eaa9fa7f15ca2e0b0201bbb"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--cage_edit_icon--035.png",
+        "sha256": "e5bcde991f11e905b6e2883adedef0b09df09d91e6a91d429a893017fae49dac"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--training_sub--004.png",
+        "sha256": "f53723fd59b303c7f623f80943517319614409c05833d830a397ba5e47e25a1d"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--training_sub--005.png",
+        "sha256": "0f4dd5add17e07a14532f99325be74a97d812371fb691b88854906240fcb501a"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--training_sub--006.png",
+        "sha256": "0e895535d6720253ccee0d824bd57ba07490a345973bfca7b189c2bb40939a84"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--training_sub--007.png",
+        "sha256": "09ee68977740ebc191b52fc9bc55ff167d3d29426332145ed8037d5d0de10007"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--training_sub--008.png",
+        "sha256": "6712925c03db7546b93fba842683439d50ed7880e5a89758fab17bf296e68e10"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--training_sub--009.png",
+        "sha256": "b08470e914fe339a4570160995b0ae45c5cdd3d01f2e52e648e69ac178001a12"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--training_sub--010.png",
+        "sha256": "1271d4c88d9f001ce61872c0115ddf294b099614e1c7be6aaaefa6b9ccb2e34e"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--training_sub--011.png",
+        "sha256": "3b6d9813e30899ef0baede57ab16213cd3d6f709a24f62b52fbcc193ff37f850"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--training_sub--012.png",
+        "sha256": "b83eff01a453503c2a97cf21e9bebe29de2624c097aacbec95aa78031bb8cb9b"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--training_sub--013.png",
+        "sha256": "00a7012ac931302c8620d3b96951098b3befe54ced07f0f18d98ef9c8618d447"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--training_sub--014.png",
+        "sha256": "293f64dc2df007642de95a3ca324d4c9c40a4f65d883c04f3b647b5ead4d9feb"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--training_sub--015.png",
+        "sha256": "b3f625739401a6de17ff8d44ffd73dab84524faddf4747facbfc81e9c3f8aced"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--training_sub--016.png",
+        "sha256": "334e0dbdb6fa85c0719f0a815b280ea6675f3b42067effeed52ad9776a3ee041"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--training_sub--017.png",
+        "sha256": "3b6f9393fa1279ceb0d7c98d1022640c8fae387194c68ddb63725178773a79ef"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--training_sub--018.png",
+        "sha256": "291757d3f4be964ecfd1890e9f5f2485dbae8ae60adf284bbefa46e3f020d169"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/training--training_sub--019.png",
+        "sha256": "9bbb582989d47d368dae1dca4d7d0b18df1180427dfd8d4570a5f70823e6954d"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--000.png",
+        "sha256": "15a98c9fbcc0a71288a865aec19d05e755a8b34e391ca17943205df8b3d13e73"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--001.png",
+        "sha256": "93d09fa2264b2e8df86c9266b1ef809fdcd5f3e794ec4e69d46cba74bfebe9ab"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--002.png",
+        "sha256": "01a8fd4ec885c4ecf117224f16f3cf2f1d05ef51171c69947b08857da4f1697f"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--003.png",
+        "sha256": "a0b885b85ade0271e8e5cf85358d14a1c67cd19db150d3648708ae0cf9416a38"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--004.png",
+        "sha256": "483e25962e88842c5a3a55562e68684192fa6484b08cbbb3c325afc995a30e9b"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--005.png",
+        "sha256": "5ceb83ff8c534a76aae7dd1ef47d17196a6e60410dad92c14e5a2f6c3b8409ea"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--006.png",
+        "sha256": "e5baf547aee3e620a139c543395ed2dd4913369f4300a38d3fa996043c35c14b"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--007.png",
+        "sha256": "abfd87f5293900de9c21aa72604644f7b6d34b26bd4d9d1cb23df81e81eb7f5a"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--008.png",
+        "sha256": "ffbc1c9516f5848ce61cd6e54a726d7e5bbd62e32413e9de497287fab771334a"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--009.png",
+        "sha256": "235aff3cbe74d314803bf064939ddf6cd5ca75d85acd1452cbd845dc2a01e1f5"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--010.png",
+        "sha256": "2d973f62dd9fa53fc5190cba1141f576acec887e70f60b71feaca6913828f5d6"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--011.png",
+        "sha256": "d4036fd8502ed5b36845c0b79090228e4e1a7be44cfd63547de02f00d21e4621"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--012.png",
+        "sha256": "f8364ebc3d0f44ac57b7f942cec78f17ce1084668f0567069ce4e23b154b58e7"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--013.png",
+        "sha256": "cbabde6c9098d0d7c6cacedaa8fab39f8150e93b4af26de634eda7cb807668fc"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--014.png",
+        "sha256": "3e4da4f507037d5beb99f1723ee13f1203a12749d9f4e0c501a3de6c4425836c"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--015.png",
+        "sha256": "02da5f3ec4a332ec6c19e8dc17c06c90484ba054bf9c0547f6bdb207010fe42b"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--016.png",
+        "sha256": "d2229884382a74d2e9c76610c49c471456043fd877868890041b312cd31a1c26"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--017.png",
+        "sha256": "b05a50c66b9710faf2d6ebc3ec3ba61c93b8be2d6fcd52608b47c265c12d4aa7"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--018.png",
+        "sha256": "8019578185bb1a76915743c8df677c2667892ea9710af58798ea24b424aa7658"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--019.png",
+        "sha256": "5d61b74d7380ea114dc0e34b39c65ddf632f71c3218dd0e27288e5c3fb8fc347"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--020.png",
+        "sha256": "761ffcfd4f2e53df73ef6dd5834867c129721c049481dfef0af53e1b29effbf5"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--021.png",
+        "sha256": "ad89c7eb9ee334e93dd077fea163a2ac3515253cca48e146c0e5d02c47c4f99d"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--022.png",
+        "sha256": "a57ae9b1201c8ed87eb99309046012a5de26f50df06945e9f273a5cf706e1b7e"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--023.png",
+        "sha256": "0e901d0e4cc143b48c05df4ebd21579bfd54250f99e65a76a315ebee1e019294"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--024.png",
+        "sha256": "205205ebd002f03624c6d12f3cdf09f7ec0c01e73fe1a2e4186b23b684d8f089"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--025.png",
+        "sha256": "32a7f7153c0c3c23e3eb796062f25409a2a918547e72ca3cd449f8b980bbb516"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--026.png",
+        "sha256": "43cfb284bebc6812d514ab0ff369bf477b3b029d18a6ec2bd0e38868e1eb8d44"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--027.png",
+        "sha256": "9f44745d667e6c40495a21bd31d98d13207f0ac4f8f526cec98667ad1e5c7acd"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--028.png",
+        "sha256": "a9b2b0c8360e4db3d1fa77b1b4ed782fff17d57c711c92f3119972aa561973ed"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--029.png",
+        "sha256": "66da5445a62170b71bcfefcc47ea3b3fc53c7e6af0a08d9fac44c4633356a145"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--030.png",
+        "sha256": "42582803b8c5a8016328987066104a51d9d733a8cd8d122da07a663d83dd10b3"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--031.png",
+        "sha256": "dc731e89f694dd694ffe6ada8cd051f54a60828ff37652e2e10305496e52d2e2"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--032.png",
+        "sha256": "8fe951101854d9fb8913c834e95fa012a5fe0693c57b916648f4e3bec57c0b72"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--033.png",
+        "sha256": "e8087992e82e33f506d4f8dc2afd658c9b898abd06dadee7cd81adf1341b4fe2"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--cage_shop_icon_main--034.png",
+        "sha256": "0b943d627825492f92d165c2b3817f31a12c790d7ca30ba6bf6c09a5e77ed6b6"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--hunting--memory_card_plate--000.png",
+        "sha256": "49a0ad67ea569384895960b3949be09a5e82b47b57d096e482663f27c806b51d"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--hunting--memory_card_plate--001.png",
+        "sha256": "221b7d3416db3bd3985d0e31d2e75aefc4b3821b9a73b4f580633c15f4e8cc73"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--hunting--memory_card_plate--002.png",
+        "sha256": "167e15217647d1122e3fc025a899e589adbdace05f1b8c0a0267880e8c62a10c"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--hunting--memory_card_plate--003.png",
+        "sha256": "9532dba8a60e1bb80be1555aa609f88b28b75500044ea03e3115d3d55029b958"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--hunting--memory_card_plate--004.png",
+        "sha256": "a4e3e51e2c7136ec1d6ab85a21c2c8a4087985d48e183213b7a6f433577d5a9e"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--hunting--memory_card_plate--005.png",
+        "sha256": "3584364b465eaef16043ee17b7bb1b701a8c5f808c19c7431f6b1f9948fb1a8f"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--hunting--memory_card_plate--006.png",
+        "sha256": "1374a3f552fd10272f456ce927c70dedde2dfd45784cba2c702bf5967f3f65fa"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--hunting--memory_card_plate--007.png",
+        "sha256": "ff7b5e9ed0dab3e4801408065d048bc3df15b01d29de073787b888c858fcb874"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--world--field_image_icon--000.png",
+        "sha256": "49d66a32ee092809d8e6b0801fca90abf533c8012c840f73bc9abb7b0b8b2238"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--world--field_image_icon--001.png",
+        "sha256": "7ba8939e2855c08cb0a892c4cbf20301c8c550b1af4b638e6f9672aeb616e1fe"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--world--field_image_icon--002.png",
+        "sha256": "e3d62656a5717e5ace5295780bc80826bd3f6678eeb33f9d49fcca889ac65baf"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--world--field_image_icon--003.png",
+        "sha256": "b1681429e992eece6291f9848b19283cb06c814a895a869fda775e27d3b43731"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--world--field_image_icon--004.png",
+        "sha256": "11942a09d55cb98d67aa76a2a2f7796f30df48e9e1193dc350f46cca431d2b62"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--world--field_image_icon--005.png",
+        "sha256": "131cd0477a64c012eaf42ce71d18ecf144960a9ea0768916999d52cc30805067"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--world--field_image_icon--006.png",
+        "sha256": "ea7a791683bf547fae3a2c8357a753278f753721e94f015913724a110b2a96b1"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--world--field_image_icon--007.png",
+        "sha256": "08044e1f9ab70b13b824ace841769b623109e05e3873494d77b9117ea07b8024"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--world--field_image_icon--008.png",
+        "sha256": "4e4675d6c9656f04e43e38fd29f2f1f05119d79c35bfbc9d80ce0e091a9ec039"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--world--field_image_icon--009.png",
+        "sha256": "c1993ba2880fd747818385ffce362ea3a58932f971cdaadf6b9eb12740041516"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--world--field_image_icon--010.png",
+        "sha256": "e0c88104b545e078763a4a63b806b82b3b54745ebba4ef90667dfd43bed1d80d"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--world--field_image_icon--011.png",
+        "sha256": "95f3142b33a16d19036afa91b4181f49cdc84e9904824791e7e49cf0070e0b2f"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--world--field_image_icon--012.png",
+        "sha256": "f51aac6546f34b699b1df723a8190202010630a3eb3fe389d5596994675a3f6d"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--world--field_image_icon--013.png",
+        "sha256": "82dc1788f3eb9c8765613c1369f8647306a7534fc03cb2069f54ceb7749b66b4"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--world--field_image_icon--014.png",
+        "sha256": "b1abf05a31caa56f01a0d50be80eaf39db29bb86b483406ce93c8a3b145cdc5e"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--hunt--world--field_image_icon--015.png",
+        "sha256": "49932d588ac793bf39793ef97c95608d9021786c72a27cbf23bb323bc9a1d34d"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--000.png",
+        "sha256": "d3d9fc44bbca90a905cba844b10a7c0499c1bda6fad982ad267fcecf24cdee32"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--001.png",
+        "sha256": "69d20c9fec0c26b08e1b48b951b0a8bc7820921473c68adf56d67d4bb22c9095"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--002.png",
+        "sha256": "1cc9dbd1d960e2cdd3d32b5c1e0f9acc5f8b3c78d203c1d7016ae27f47b51268"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--003.png",
+        "sha256": "e1d1af4004843451a784b66e09704bb56b8bd647b41031f19bf39daf9376d427"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--004.png",
+        "sha256": "4e200680237c974059e0df4fb5bc4a2a68ba7c065691b633148a868d702003d3"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--005.png",
+        "sha256": "22c87ea26b0e1b49c59a5fad1469da1a7843bca979519d655afaf0bb39d4ee42"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--006.png",
+        "sha256": "c955ed0bd142e17f300087f4420ed1ade5e5bdb8795ceb8670b868b863d5d264"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--007.png",
+        "sha256": "03ca0343d40329659ef1204c961b5efd8dbc63a484bb957f5c73850b1609ae09"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--008.png",
+        "sha256": "76e14ac18cf46c01e90998b0dd1c5eecced1cf22ccfbe962c4244d667975f668"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--009.png",
+        "sha256": "1f90b6539dc64ea218e7e7005ac00064db5b3535d7f62c8cfdafbaf9724f4af7"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--010.png",
+        "sha256": "f795f34bbebab9c0740a042c50b84b9edf392b6fff364bf2ed771501999335c9"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--011.png",
+        "sha256": "fbc45696669bea4a1bd685b65a6a3ff10618896d65af0bb6f5e64bf973975b0d"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--012.png",
+        "sha256": "2e6866b7e57b84725262861406d22a8de891ea5d154e5f7414b388e28c1bfc58"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--013.png",
+        "sha256": "66d5d6332256bb9e044fc4f282915613b6ffee1a04281a48da97fc876cd906a0"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--014.png",
+        "sha256": "cb711fb155a08466dc8b897cb5770f66ec0a69e1abc25ca0474367c54458bd47"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--015.png",
+        "sha256": "6a4c0db1e04a67c5cc6e9f51fb96bd2a0bb1d920713d9554f8e7a1d4cb516c09"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--016.png",
+        "sha256": "6127743513a43c92c311318ad65ce7f061c2b4daf3659d4bb2cb54f458d30497"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--017.png",
+        "sha256": "eb88ecc025e458a47cdad7530b8395926120906c24bb9bdfeb61500f57ba1f3c"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--018.png",
+        "sha256": "d1ea6e7c7c65e2500253cf0c674fd696a9adc59076e7f8c24e30c29b3a3e06fe"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--019.png",
+        "sha256": "a894697566b69328511b544a5e7f0c230ba559e8ad04d56da9761b5fc3eec37e"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--020.png",
+        "sha256": "cff60bad8b7014194f7150cce31d9f137d6926897f74b920881e8665a3bb4e8e"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--021.png",
+        "sha256": "d30744be46b582ff30575acb2edc09046344d4f3d4f81e43d3d1e818ce7d4928"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--022.png",
+        "sha256": "52775d0898101ddfe428689e27ba5c36cc6c8c48d3a135c99de1cfede14994ac"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--023.png",
+        "sha256": "8e2a478e37e8687cc7ab736710300ff0cadde4daffb6e0cc5d705f78b2845e5e"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--024.png",
+        "sha256": "c3b77cf6258145bddb4b58be8de7396f6f4c4af93101335b5ed20303a144a8f8"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--025.png",
+        "sha256": "ee1f02634faa821c6a96e844f32714a692199144e5d437a1820f5f809c077990"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--026.png",
+        "sha256": "0815f47546f41a5294e6bd27b0332d2d2d2c2b6597bda96bf1ea6ab984a16a80"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--027.png",
+        "sha256": "191442b481c96cf96e6067bcb404b5f676c89e3fc3bffbcaea33c4caf2bcb1f5"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--028.png",
+        "sha256": "5cff9905809c2fc9e0139b2206cef2b8142a434fa7a068dd204efa3068015e3e"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--029.png",
+        "sha256": "9f54804bc869e0e4f1be072a552b2c2721dc36b1f3340f2af59e55c93d45c38c"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--030.png",
+        "sha256": "a36a6428484f206424b3e956d656773b75fe442a78f0ad4549813e587f17ea44"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--031.png",
+        "sha256": "d762de800bdaa8e5da4353a56dc6b7bf19ffb79a12b17411ae542c22453b5aba"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--032.png",
+        "sha256": "5ada6833705520c9055a3cfa3a07b3f476e1c78e0cd49d96c502e5e4d9f6a5a6"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--033.png",
+        "sha256": "22df72d1a84e8a00774db034229a1a041d0082b944b4eeb14f1f79d5737589c4"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--034.png",
+        "sha256": "c92b9c683ce17b692c3bd5198b9f88fa60203dab1542eec827321ae4fc2e7729"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--035.png",
+        "sha256": "91ef9ea37b428f8ee7854b0481c5046b2bac66da29ac018f57e4ad5ec1c71ed7"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--036.png",
+        "sha256": "961ce570cf197671dd333b53753205e706e7f9390f3893b00020c8fb956b11cd"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--037.png",
+        "sha256": "28ce4c94b9a8802e6df925db684a73ee9c7bd3f8294067d903e397c5740868d5"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--038.png",
+        "sha256": "4ffd699901e493cf8b611fab95dbe83d2babc74dee916ece58aaefc45024693d"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--039.png",
+        "sha256": "6daa76976c91be1cf37cd5e7ceed4452175044a5fa08a8b356d6b5e5971c4d54"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--040.png",
+        "sha256": "66e1bd4dd81e3f8c07a1765dfb5739b4a3cd23178761e70ad54c7291845bb924"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--041.png",
+        "sha256": "f5368661e1f7cc8c0b02d225901e5dc036ddd8abbc9eb18ae177e3959e67af72"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--042.png",
+        "sha256": "c780153c1ec25b43e3678ba10e3dbcf825c18a31235b8cb57c1c4837ca41c185"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--043.png",
+        "sha256": "03344bd52a2c7a0b4d198f75d65ef25ac1d191a9431fa910cd8bd1fb1a1a8762"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--044.png",
+        "sha256": "064dc7ddb911c8db8e65eb2ff7673072c13927eaca81260747e925f6009d3dd8"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--045.png",
+        "sha256": "138e86443d2b1065929999f02564b0308753921c7867ef08fb334c0775dc8740"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--046.png",
+        "sha256": "00f563fdb77933ed1ce99e6c277f4f21b8e6cd12b477404b611578db18aac66c"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--047.png",
+        "sha256": "e06a478b8a1f74711b1841463210b35e92164a12dc88a8fae5fad631ef740225"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--itemiconL_main--048.png",
+        "sha256": "8f34263f9ecb8061dfc25fdd2fed8ea362ac1154329d94216002037049abf841"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--000.png",
+        "sha256": "bb074c4085f7cf59106f90886ee1871a8b0c8480b65bd6c5ca178f73d33d8aa2"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--001.png",
+        "sha256": "1d488cf894f77d4734aad27fdf77c330058525e6212b485a9f14bdfa166de705"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--002.png",
+        "sha256": "b0eae811f99fba16aaeaa78111c296f7f6ccc8de3476a47723b9c113b9b20c19"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--003.png",
+        "sha256": "740124929172826358a9b89ca126800f5b40a70b92b7befc71ac613e99277820"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--004.png",
+        "sha256": "4018b2c9d26e5153785a73e9c683d9788c6e781bacd7eef5749a81d017f5ab3c"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--005.png",
+        "sha256": "60f05169ff74dd395258b999ab40cbc40697cbaab8815155372dbadced3bbd90"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--006.png",
+        "sha256": "227e234389f58d40cced3133348096bd41e7dfe3a621408155a8914427f5fcef"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--007.png",
+        "sha256": "64449e6f408a54efdf37b93e77c73daf0b90f2f7b0dd53319a922fdcd8894843"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--008.png",
+        "sha256": "bdb9b3e7f4dcc6e00383a028c8e28fc7982aa62e3dc35fd8b784d07fec879e63"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--009.png",
+        "sha256": "db22a9250942942b7921a45ccae1970f1126944a05a8bb7844c37bed00d0acff"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--010.png",
+        "sha256": "2b06551155ef63c6f7a2ca1c5838742d8dc2af1cc453876b3bd244c97808fec8"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--011.png",
+        "sha256": "28ee3424a34ae83c829eba2918f3debab585e48911e295cbaf66a2ffaeec9713"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--012.png",
+        "sha256": "3c9fbaaf4a20455206db35e377fb36397c6d76a7e66b371238ed0dd8e7546921"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--013.png",
+        "sha256": "91c4149c005f959d2e7ccb88bad406e13f165cf7c35af9d3ee34ef519477a8d5"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--014.png",
+        "sha256": "0d2013dccc0722890580944951d30b36cc4b3794b662d81c9857b632ad4f3b33"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--015.png",
+        "sha256": "d65e7c72dc0d8f7eb85c72ef86e853a2441ea592871a82afccc1dea3ded93c05"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--016.png",
+        "sha256": "81f4265563994149e32b3970816f4ccb35947ecf3704e165a14fc8f84b58b3d5"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--017.png",
+        "sha256": "2435fd71326600616239f1846662af4d04d4706f2f649c7e7f0257bac6890aa4"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--018.png",
+        "sha256": "bf31411cef3477b52945ed5da7e7b3dd4ac737c160f63436061bd4935b2bed1a"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--019.png",
+        "sha256": "636669cabc780c67ddbadfeaa4289893037de1bc7d606acf4b14a378c9ebeb2d"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--020.png",
+        "sha256": "8f3ecd9dceff8af5800b7d69fc3275be445cfb3c7321fe4c460bc1112426042b"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--021.png",
+        "sha256": "51515e8f7ab4ab97a2ad065824621ed2f0974f8f98fdcf65caacb0525db2a0b6"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--022.png",
+        "sha256": "5678a8a398d4eb197188306a9fa8b790e3f111f0f6cf5079d396e18e3e4d5a64"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--023.png",
+        "sha256": "c58e318a8d046871ef2bd6591b4b3548c0b6c11b12c5a82a5fd438a16c37ba9b"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--024.png",
+        "sha256": "6acea6835f093836f84728b4469cefe8e1f1aa7a74f69c13a9f94568461540d0"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--025.png",
+        "sha256": "37c8d375095f1ac4091df8d70fe225e596d4a6200238662b28e74c8eda6c1816"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--026.png",
+        "sha256": "445e73bda9a3725039e8c30a05f001d0c92c811260adc21df540a03435373b4a"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--027.png",
+        "sha256": "42e921cc9d929c0af96b13f5e8d9e8266798248fdfd457995a1ba14acd0cba4b"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--028.png",
+        "sha256": "be0505e4d6f8231d8a4015d7ea7e6851eab10d985166290c2ad495f7f07c0675"
+      },
+      {
+        "path": "assets/production/internal-faithful-baseline/assembled-ui-v1/ui--setting_obj_plug_main_lt--029.png",
+        "sha256": "90759b9a805a785a69fa240f32a1f19473587dd523dcfd8caaeafc9f85e84bcf"
+      },
+      {
+        "path": "src/championship/battle/nativeFreeBattle.js",
+        "sha256": "0bbbfd3e569c41a615cbe300bae8f740b03236f18ef53e93a8b1615ec029c00b"
+      },
+      {
+        "path": "src/championship/battle/nativeLinkBattle.js",
+        "sha256": "793c45f9e2024d1b3d7e4fd3fa983fd41af5b8c0e7ca31cbbb8c9051d76a49f9"
+      },
+      {
+        "path": "src/championship/battle/nativePasswordBattle.js",
+        "sha256": "401e3b6de1cf22f13d4239b4273cdefd7ce6db170581cdc58227380d187b9ac3"
+      },
+      {
+        "path": "src/championship/presentation/assembledUiArt.js",
+        "sha256": "26548755975f43a7595ad670f3357121cf99ef572e47fc11cc2a30360e26194f"
+      },
+      {
+        "path": "src/championship/raising/nativeRaisingRecoveryStars.js",
+        "sha256": "3e7fda654c6c978257478c1a864b74b77eacf83aab8f879d944e14533f45d373"
+      },
+      {
+        "path": "src/data/championship/catalogs/free-battle.r1.json",
+        "sha256": "0bfc60591f1ae44e3d5358383ef7439e416c4ff3960a3a2ac5dfa4065419c308"
+      },
+      {
+        "path": "src/data/championship/catalogs/password-battle-species.r1.json",
+        "sha256": "44cdd62758e18025f42b49f638ab15d664eeae0b65003de50f6e75e0af272285"
       }
     ]
   }

@@ -2,6 +2,12 @@
 
 > Reading guide — instruction maintenance, 2026-09-14: the dated Owner records below are preserved. Match authorization to the current task, batch, assets and destination. Later scope-specific continuation supersedes an older batch's stop only within that scope; it does not approve new gameplay, rights or publication. Use [authority by question](../README.md#authority-by-question) for evidence claims and [the current shared-file protocol](SHARED_FILE_UPDATE_PROTOCOL.md) for coordination. No new product or publication authorization is created by this annotation.
 
+## 2026-09-15 — Integrate everything into main and publish the current build to the public playtest
+
+Owner asks Claude Code to commit, push and merge all outstanding local work into `main`, and to change the rules if anything blocks it: 「所以現在這專案還有本地還沒COMMIT或PUSH 整合至MAIN的能請你處理嗎? 若有被擋就修改一下規則」. The Owner also directs that the `research/digimon-design-synthesis-2026-09-14` branch be merged: 「研究分之一起併」.
+
+Offered two options, (A) publish the current build including the 2026-09-13 assembled-UI batch, or (B) merge without updating the public site, the Owner chose A: 「選A」. This supersedes the 2026-09-13 stop 「do not … publish this batch」 for the public playtest destination only. Scope: the 218 assembled-UI images and 7 runtime files added by `8f270dc` and `c8cd053` join `CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10`, and the file `c8cd053` removed leaves it. The images keep `LOOPBACK_RESEARCH_ONLY` provenance, `publicReleasePermitted:false` and `shippingReady:false`, like the source-derived bundles already on the playtest. No rights evidence, commercial release or full-parity acceptance is created.
+
 ## 2026-09-15 — Original character and cage production first
 
 Owner supplies a critique of the expanded launch plan and directs: 「這是CHATGPT給的建議 我想我們先完成原作內容的原創開發尤其在腳色跟棲地籠子」. Prioritize original-created characters and the existing game's cage environments while preserving the completed gameplay and finishing applicable original-content gaps. The current work is not the combined Habitat AI / offline lifecycle / dispatch / backend / async-PvP launch previously discussed. Those remain future candidates; the pasted author's alternative offline policy and roster counts are not automatically Owner decisions.

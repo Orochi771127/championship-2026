@@ -1642,7 +1642,8 @@
       "raisedBy": "Claude Code",
       "date": "2026-09-15",
       "proven": "WEB_BUILD_INPUTS.v1.json still lists the deleted recoveryCageVfx.js and omits nativeRaisingRecoveryStars.js, nativeLinkBattle.js, nativePasswordBattle.js and nativeFreeBattle.js. A push to main triggers github-pages.yml, whose validate:playtest will fail until the Owner approves a refreshed file list; the live site stays on its previous build.",
-      "ownerDecisionRequired": true
+      "ownerDecisionRequired": false,
+      "resolved": "2026-09-15: Owner chose to publish the current build, including the 2026-09-13 assembled-UI batch (OWNER_DIRECTION 2026-09-15). The deleted module left moduleEntries and files; 7 runtime files and 218 assembled-UI images joined the approval list, and 28 changed files were re-hashed. The approval list now matches the input list at 6,506 files."
     }
   ],
   "dependenciesChanged": false,
