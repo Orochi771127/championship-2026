@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "classification": "ART_PROPOSAL_REFERENCE_BACKED",
+  "requestedProduct": "CHATGPT_IMAGES_2_5",
+  "generationMode": "BUILT_IN_IMAGEGEN",
+  "resolvedModel": "UNKNOWN_TOOL_NOT_EXPOSED",
+  "referencePolicy": {
+    "ownerRequestedOriginalPngReference": true,
+    "referencesAreResearchOnly": true,
+    "referencePixelsCopiedIntoRepository": false,
+    "allowedUse": "coarse silhouette envelope, body topology, attachment/support locations, center of mass and bottom/feet anchor",
+    "mustRedesign": "face, palette, markings, costume, materials, armor language, names and identifying features"
+  },
+  "inputs": [
+    {
+      "entityId": "m006_punimon",
+      "role": "REFERENCE_ONLY",
+      "path": "R:/Projects/Championship2026/YDIJ_ART_PACK_ASSEMBLED/05_角色/digimon/m006_punimon_main/cells/cell-000.png",
+      "sha256": "e35d231b8ef5efbd9a28f9c1e0b17cd9004758e197e48d0ce9a7c9937c8c8bbe"
+    },
+    {
+      "entityId": "m312_kabuterimon",
+      "role": "REFERENCE_ONLY",
+      "path": "R:/Projects/Championship2026/YDIJ_ART_PACK_ASSEMBLED/05_角色/digimon/m312_kabuterimon_main/cells/cell-000.png",
+      "sha256": "67e7586fdbbb8e8ed73837291c422f5e49bf73085b84c0446a89255b5a6c4563"
+    },
+    {
+      "entityId": "m418_tonosamagekomon",
+      "role": "REFERENCE_ONLY",
+      "path": "R:/Projects/Championship2026/YDIJ_ART_PACK_ASSEMBLED/05_角色/digimon/m418_tonosamagekomon_main/cells/cell-000.png",
+      "sha256": "70b337576c4346b31275bc28742a8bdb00c1da4288602285c858135b0f36afc6"
+    },
+    {
+      "entityId": "e000_digitama",
+      "role": "REFERENCE_ONLY",
+      "path": "R:/Projects/Championship2026/YDIJ_ART_PACK_ASSEMBLED/05_角色/digimon/e000_digitama_main/cells/cell-000.png",
+      "sha256": "c13e8165d662c975ab61dffbf09ed098046ca411b50e9fd45f75bb45df8f3e58"
+    }
+  ],
+  "output": {
+    "board": "concept-board-r03-transparent.png",
+    "sha256": "a3b45e5f009a8ee78e0169e001e348714092a137f39f1ee51ee5f39f187a40fa",
+    "width": 1254,
+    "height": 1254,
+    "pngPixelFormat": "Format32bppArgb",
+    "directTransparentOutput": true,
+    "alpha0Pixels": 871568,
+    "alpha255Pixels": 2811,
+    "partialAlphaPixels": 698137,
+    "cornerAlpha": 0,
+    "emptyCenterAlpha": 0,
+    "hardAlphaReady": false
+  },
+  "characters": [
+    {
+      "entityId": "m006_punimon",
+      "designName": "莓果團犬",
+      "quadrant": "TOP_LEFT",
+      "asset": "m006_punimon-concept-r03-transparent.png",
+      "sha256": "2237e6e21ff5e34fb93d2f1ce5d0a181b4d860dafA4db7174e61e5dda96df4aa",
+      "conceptReview": "PASS_CANDIDATE_BODY_TOPOLOGY_CORRECTED"
+    },
+    {
+      "entityId": "m312_kabuterimon",
+      "designName": "靛甲角龍衛",
+      "quadrant": "TOP_RIGHT",
+      "asset": "m312_kabuterimon-concept-r03-transparent.png",
+      "sha256": "53e90eefae17892ebc4c83e19d8e6849810d6244f4367bf3a63e14ede9b7ea1a",
+      "conceptReview": "PASS_CANDIDATE_BODY_TOPOLOGY_CORRECTED"
+    },
+    {
+      "entityId": "m418_tonosamagekomon",
+      "designName": "鼓頰獅王",
+      "quadrant": "BOTTOM_LEFT",
+      "asset": "m418_tonosamagekomon-concept-r03-transparent.png",
+      "sha256": "366e11327b4bda4a0fd9dd9e9ea63f7844f81ce69860b8940059e6ce44d546b6",
+      "conceptReview": "PASS_CANDIDATE"
+    },
+    {
+      "entityId": "e000_digitama",
+      "designName": "瓷釉貓掌蛋",
+      "quadrant": "BOTTOM_RIGHT",
+      "asset": "e000_digitama-concept-r03-transparent.png",
+      "sha256": "b975f8c71dffc53ade185cc986f30629c28a769ce8b45aa4634c8da4e360cad9",
+      "conceptReview": "PASS_CANDIDATE"
+    }
+  ],
+  "review": {
+    "exactRosterMapping": "PASS_4_OF_224_CONCEPT_CANDIDATES",
+    "transparentBackground": "PASS_DIRECT_ALPHA",
+    "sourceReferenceSeparation": "PASS",
+    "humanApproved": false,
+    "nativePixelSetting": "NOT_AUTHORED",
+    "palette15PlusTransparency": "NOT_VALIDATED",
+    "hardAlpha0Or255": "NOT_READY",
+    "motionPackage": "NOT_AUTHORED",
+    "normalGame": "NOT_INTEGRATED",
+    "physicalDeviceQa": false,
+    "runtimeEligible": false,
+    "shippingReady": false,
+    "publicReleasePermitted": false
+  }
+}

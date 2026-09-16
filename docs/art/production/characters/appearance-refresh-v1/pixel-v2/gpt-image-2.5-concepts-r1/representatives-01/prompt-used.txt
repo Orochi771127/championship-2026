@@ -1,0 +1,29 @@
+STEP 1 - REFERENCE-BACKED GENERATION
+
+Use case: style-transfer
+Asset type: original 2D pixel-art creature replacement identity board for a mobile monster-raising game
+Input images:
+- Image 1 is reference only for the tiny round grounded silhouette envelope, native footprint, center of mass and attachment limits.
+- Image 2 is reference only for the tall upright multi-limbed horned silhouette envelope, limb support points and folded wing/horn extents.
+- Image 3 is reference only for the broad-bellied biped silhouette envelope, feet baseline and two large side-of-head circular attachment positions.
+- Image 4 is reference only for the egg silhouette envelope, baseline and oval proportions.
+Primary request: Completely redesign all four subjects into legally distinct original characters. Do not preserve or imitate the original faces, colors, markings, costume details, symbols or franchise identity. Preserve only the coarse motion-compatible silhouette envelope, body topology, attachment locations, center of mass, and bottom/feet anchor needed to fit later animation slots.
+Create exactly four full-body characters in an exact 2x2 grid in this fixed order:
+1) top-left, mapped to Image 1: "莓果團犬", a tiny berry-red compressible canine blob with no legs; short rounded ear markings attached inside the existing upper contour, cream double eyebrows, a tiny dark-red nose, and a clear friendly face.
+2) top-right, mapped to Image 2: "靛甲角龍衛", an indigo dragon-insect guardian; amber dragon eyes, segmented forehead horn scales, pale inverted-triangle chest plate, deep-blue elbow armor, thin folded wings; retain the reference's number of visible limbs and support points.
+3) bottom-left, mapped to Image 3: "鼓頰獅王", a broad-bellied lion-beast guardian; round lion nose, short split muzzle, rust-red cheek mane close to the face, ivory belly shield, and two side-head sound organs redesigned as wood-grain bronze drum rings, never as arms.
+4) bottom-right, mapped to Image 4: "瓷釉貓掌蛋", an ivory glazed egg with exactly four small gray cat-paw markings and a gray glaze band near the bottom; no limbs and no clue about what hatches from it.
+Style/medium: polished hand-authored-looking native pixel art, crisp pixel clusters, readable at very small size, restrained shading, one shared production visual language, clearly original
+Composition/framing: exact 2x2 equal grid without visible separators; each character centered independently, full body inside the central 60-65% of its cell, generous empty padding; preserve each reference's standing-equivalent scale and stable bottom/feet line within its own cell
+Scene/backdrop: 100% solid flat #FF00FF magenta; no gradient, no floor, no cast shadow
+Color palette: no more than 15 visible colors per character plus magenta
+Constraints: strong thumbnail readability; eyes, mouth, chest/belly, armor and limbs must not merge; all appendages stay inside their cells; transformation must be substantial, not a recolor or accessory overlay
+Avoid: recognizable Digimon or Pokemon design language, copied emblems or costume motifs, original reference colors or markings, text, labels, numbers, UI, watermark, signature, grid lines, borders, scenery, detached effects, cropped limbs, overlap between cells
+
+STEP 2 - BODY-TOPOLOGY CORRECTION
+
+Change only the top-left and top-right characters. Remove all top-left paws and legs so the body contacts the ground as one squash-and-stretch mass. Restore the top-right character to an upright two-legged guardian stance with the same visible limb count and support topology as its source reference; it must not read as a four-legged dragon. Keep the bottom row unchanged.
+
+STEP 3 - DIRECT TRANSPARENT OUTPUT
+
+Remove the magenta background completely and output a genuinely transparent PNG with alpha. Preserve the four characters, their positions, scale, crisp pixel-art appearance, 2x2 arrangement and spacing. Every empty pixel around and between the characters must have alpha 0. Do not paint a checkerboard, solid fill, shadow, halo or fringe.
