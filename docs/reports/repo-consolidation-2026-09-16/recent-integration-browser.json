@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-16T06:22:23.051Z",
+  "origin": "http://127.0.0.1:8732",
+  "setup": "existing QA installer in an isolated browser context",
+  "physicalDeviceAccepted": false,
+  "layouts": [
+    {
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "scrollHeight": 844,
+      "toolbarSlots": 8,
+      "canvasCount": 1
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "scrollWidth": 844,
+      "scrollHeight": 390,
+      "toolbarSlots": 8,
+      "canvasCount": 1
+    }
+  ],
+  "realNavigationSaveContinue": true,
+  "password": {
+    "members": 3,
+    "codeLength": 22,
+    "fourthMemberRefused": true,
+    "selectionClearsCode": true,
+    "pastedSpacesPreserved": true,
+    "reachedBattleResult": true
+  },
+  "pageErrors": [],
+  "missingResources": [],
+  "outcome": "PASS"
+}

@@ -1,0 +1,185 @@
+{
+  "schemaVersion": 1,
+  "id": "REPO_LOCAL_CONSOLIDATION_20260916",
+  "generatedAt": "2026-09-16T06:27:10.021Z",
+  "scope": "recent committed runtime, local proposal inventory, reproducible browser acceptance and current documentation",
+  "git": {
+    "branch": "main",
+    "inspectedHead": "3e212c2e1b80306e51f2b2593484a28442dca4d3",
+    "remoteMainVerified": "3e212c2e1b80306e51f2b2593484a28442dca4d3",
+    "incomingUntrackedPath": "docs/art/production/characters/appearance-refresh-v1/pixel-v2/gpt-image-2.5-concepts-r1",
+    "incomingFileCount": 13,
+    "incomingBytes": 6707704,
+    "commitPerformed": false,
+    "pushPerformed": false
+  },
+  "checks": {
+    "fullSuite": {
+      "command": "node --test --test-concurrency=2 tests/*.mjs",
+      "exitCode": 0,
+      "tests": 1555,
+      "pass": 1555,
+      "fail": 0,
+      "skipped": 0
+    },
+    "preload": {
+      "command": "node scripts/build-module-preload.mjs --check",
+      "exitCode": 0,
+      "startupModules": 184
+    },
+    "playtest": {
+      "buildCommand": "node scripts/build-github-pages.mjs --playtest",
+      "validateCommand": "node scripts/validate-github-pages.mjs --playtest",
+      "exitCode": 0,
+      "fileCount": 3964,
+      "buildId": "43fb1cb958e852b1b50953c5ebe7d1c745c0ef5ccdfb8146dbf3f4409142ba40"
+    },
+    "homeBrowser": {
+      "outcome": "PASS",
+      "receipt": "home-browser.json",
+      "viewportCount": 6,
+      "firstAttempt": "CONTINUE_FIELD_MOUNT_TIMEOUT_30000MS",
+      "diagnosis": "INTERMITTENT_UNREPRODUCED",
+      "retry": "PASS",
+      "limitation": "First failure page was not captured. Diagnostic capture was added; no runtime fix or root-cause claim."
+    },
+    "recentBrowser": {
+      "outcome": "PASS",
+      "receipt": "recent-integration-browser.json",
+      "command": "npm run test:browser:recent",
+      "pageErrors": [],
+      "missingResources": []
+    }
+  },
+  "existingPublication": {
+    "observedOnly": true,
+    "deploymentPerformed": false,
+    "commit": "3e212c2e1b80306e51f2b2593484a28442dca4d3",
+    "manifest": "https://orochi771127.github.io/championship-2026/pages-build.json",
+    "matchesLocalBuildId": true,
+    "ci": "https://github.com/Orochi771127/championship-2026/actions/runs/35050755505",
+    "pages": "https://github.com/Orochi771127/championship-2026/actions/runs/35050755483",
+    "conclusion": "success"
+  },
+  "concepts": {
+    "classification": "ART_PROPOSAL_REFERENCE_BACKED",
+    "outputHashes": [
+      {
+        "file": "concept-board-r03-transparent.png",
+        "sha256": "a3b45e5f009a8ee78e0169e001e348714092a137f39f1ee51ee5f39f187a40fa",
+        "matchesManifest": true
+      },
+      {
+        "file": "m006_punimon-concept-r03-transparent.png",
+        "sha256": "2237e6e21ff5e34fb93d2f1ce5d0a181b4d860dafa4db7174e61e5dda96df4aa",
+        "matchesManifest": true
+      },
+      {
+        "file": "m312_kabuterimon-concept-r03-transparent.png",
+        "sha256": "53e90eefae17892ebc4c83e19d8e6849810d6244f4367bf3a63e14ede9b7ea1a",
+        "matchesManifest": true
+      },
+      {
+        "file": "m418_tonosamagekomon-concept-r03-transparent.png",
+        "sha256": "366e11327b4bda4a0fd9dd9e9ea63f7844f81ce69860b8940059e6ce44d546b6",
+        "matchesManifest": true
+      },
+      {
+        "file": "e000_digitama-concept-r03-transparent.png",
+        "sha256": "b975f8c71dffc53ade185cc986f30629c28a769ce8b45aa4634c8da4e360cad9",
+        "matchesManifest": true
+      }
+    ],
+    "sourceReferenceHashesVerified": 4,
+    "alphaRecount": {
+      "width": 1254,
+      "height": 1254,
+      "transparent": 871568,
+      "opaque": 2811,
+      "partial": 698137
+    },
+    "humanApproved": false,
+    "runtimeEligible": false,
+    "shippingReady": false,
+    "publicReleasePermitted": false
+  },
+  "acceptance": {
+    "runtimeSourceChanged": false,
+    "saveSchemaChanged": false,
+    "fullOriginalParity": false,
+    "physicalDeviceAccepted": false,
+    "commercialReleaseAccepted": false
+  },
+  "toolLimits": {
+    "pixiMcp": "UNAVAILABLE_CDP_9222",
+    "browser": "Windows Chrome through Playwright; not physical-device QA"
+  },
+  "testFiles": [
+    {
+      "file": "tests/championship-int-rh2-browser.cjs",
+      "sha256": "5686d8d11f0e67acd0097e98e693cdbfd4c53efce557242caf51c432e6b045c9"
+    },
+    {
+      "file": "tests/championship-recent-integration-browser.cjs",
+      "sha256": "4dd0b89103c81ff1c4c548b01a00a0add0f60c7f9ffc41c9e378b629583245de"
+    }
+  ],
+  "artifacts": [
+    {
+      "file": "home-browser.json",
+      "sha256": "6f1bd9175a0ae20b8ac57782ab8f7c193c4dda0777577e1fe4f3137870d8356b"
+    },
+    {
+      "file": "recent-integration-browser.json",
+      "sha256": "f979c3431d4abb2ac69541d1a3219a18a0a60f7837ddae7977b30bfa2e5ab4d3"
+    },
+    {
+      "file": "home-390x844.png",
+      "sha256": "16595f151b38d156b65ccc4f64fe3cc90fffa724662fdb30ff378a8872d88b3d"
+    },
+    {
+      "file": "home-844x390.png",
+      "sha256": "a11abf6100f77875f2a7be266aef9894c3c508956f74c60bd3aa69769c7b0a3a"
+    },
+    {
+      "file": "password-result.png",
+      "sha256": "bd06b1132248dcd5d54a07effa36ab60464cd5fbf47fc63c6891afe5eb2c41b3"
+    },
+    {
+      "file": "screenshots/raising-home-360x800.png",
+      "sha256": "180a8af3f00b241e6d298c4966b311149b5ea19b1e67456ff2b62124def4cd1e"
+    },
+    {
+      "file": "screenshots/raising-home-375x812.png",
+      "sha256": "84fd814fdfdc075fdd3f3cec14fc09941651d045c06040871b716a160b9cc661"
+    },
+    {
+      "file": "screenshots/raising-home-390x844-before-reload.png",
+      "sha256": "5b682bcac46a43514b1e59d5415de91bd87c7a468a5a33fcda88bca0b08941a1"
+    },
+    {
+      "file": "screenshots/raising-home-390x844-pixi-fallback.png",
+      "sha256": "4575bf4721f58161df0b8a5e065f652a3e2a0317a218ba6fdb18b95bf3500974"
+    },
+    {
+      "file": "screenshots/raising-home-390x844-restored.png",
+      "sha256": "85d0f3d335b21f5aea4088ad2487673e61428204fc7ad1af6932e5d1bac50763"
+    },
+    {
+      "file": "screenshots/raising-home-390x844.png",
+      "sha256": "5cb234305bf80a5073486216431b9c3879a734af445ad3301737d0942f80edd5"
+    },
+    {
+      "file": "screenshots/raising-home-393x852.png",
+      "sha256": "d27815bedfe08a4b1baedbb5fdfc7a760e4243f98605ebc683debb8675eaf2c3"
+    },
+    {
+      "file": "screenshots/raising-home-412x915.png",
+      "sha256": "ac1f40e27b502634feb67b00eb4cd414afefe0e366624613945550c56f293ecb"
+    },
+    {
+      "file": "screenshots/raising-home-430x932.png",
+      "sha256": "147e91c6e308b52f6a45ffbf5a299d9c295a4ae4607daae66b1af154a6fcd69e"
+    }
+  ]
+}
