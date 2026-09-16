@@ -7,8 +7,24 @@ This is the standalone product authority for **DIGIMON CHAMPIONSHIP — 2026 MOD
 - `ROM_VERIFIED = DEFAULT_PRESERVE`; `PARTIAL` preserves known structure; `UNKNOWN_REQUIRES_TRACE` stays neutral. Only an applicable `OWNER_APPROVED_ADAPTATION` may intentionally change original gameplay. Develop the authorized playable slice through its acceptance criteria.
 - Use the existing application, router/screen stack, store/domain session and save repository/key. Keep one PixiJS Application and its existing ticker; do not introduce a second authority or global ticker.
 - DOM owns application UI; PixiJS owns playable 2D presentation. Three.js is limited to verified or explicitly approved bounded 3D scenes/effects. Consult current source and architecture for mounted scenes; this rule does not prescribe a scene inventory.
-- `src/` must not import from `research/` or any Nexus Link path. Runtime-loadable art belongs under `assets/production/`. Nexus Link code, save, assets and gameplay are outside this product.
+- `src/` must not import from `research/` or any Nexus Link path. Runtime-loadable art belongs under `assets/production/`. Nexus Link code, save, assets and gameplay are outside the current Championship parity product until separately authorized.
 - ROM/native payloads and decoded/reference material default to `RESEARCH_ONLY`, excluded from shipping. Dated local-reference exceptions and hash-selected public-playtest approvals apply only to their recorded assets and destinations; they do not grant rights or commercial-release acceptance. Never fetch the private source archive as a runtime URL.
+
+## Future original-product productization
+
+Owner direction: if/when the future Nexus Link / original commercial product phase is authorized, it must **evolve this existing codebase in place**, not become a second game implementation.
+
+Read `docs/planning/NEXUS_LINK_IN_PLACE_PRODUCTIZATION_PLAN_2026-09-16_ZH_TW.md` before proposing original-product architecture.
+
+Non-negotiable defaults for that future phase:
+
+- reuse the current application shell, router/screen stack, canonical save authority, input layer, simulation modules, Pixi application/ticker, content manifests, asset pipeline and tests wherever technically viable;
+- transform existing Raising, Cage, Gate/Hunt, Capture, Battle, Progression, Shop and Database through content replacement, adapters and bounded extensions before considering replacement;
+- do not create a second app, second `src` game tree, second save, second router, second global state, second Pixi application, parallel Battle core or parallel Habitat simulation truth;
+- preserve Championship parity/baseline tests while original-product presentation and mechanics are introduced behind explicit Owner-approved productization gates;
+- a rewrite proposal requires concrete evidence that the existing subsystem cannot support the required product behavior, plus migration cost, save/test impact and Owner approval. "Cleaner architecture" alone is not sufficient reason to rebuild.
+
+Until that productization gate is authorized, this section is planning guidance only and does not permit Nexus Link runtime integration into the current parity build.
 
 ## Read according to the task
 
