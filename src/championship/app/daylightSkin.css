@@ -15,36 +15,11 @@
  * back; the rules after it repaint the few surfaces that named a dark colour
  * directly instead of asking for a token.
  * ====================================================================== */
-:root {
-  /* The ribbon keeps its gold, warmed so it sits on a light ground. */
-  --ds-gold-lit: #fff3cd;
-  --ds-gold: #ffd873;
-  --ds-gold-mid: #f7c04b;
-  --ds-amber: #efa63a;
-  --ds-amber-deep: #cf861f;
-
-  /* Windows: frosted glass. */
-  --ds-panel-lit: #ffffff;
-  --ds-panel: #eef8ff;
-  --ds-panel-deep: #d9edfa;
-  --ds-panel-ink: #14415c;
-
-  /* Slots: light inside, cyan rim -- the original's rule, in daylight. */
-  --ds-slot-lit: #ffffff;
-  --ds-slot: #f2fafe;
-  --ds-slot-deep: #dcedf9;
-  --ds-rim: #62c8ef;
-  --ds-rim-soft: rgba(98, 200, 239, 0.45);
-
-  --ds-green-lit: #c2f2b0;
-  --ds-green: #74d290;
-  --ds-green-deep: #3da571;
-
-  --ds-lift: 0 2px 0 rgba(20, 74, 104, 0.08), 0 10px 22px rgba(20, 74, 104, 0.18);
-  --ds-action-fill: linear-gradient(180deg, #ffffff 0%, #ddf2ff 45%, #b9e5fb 100%);
-  --ds-action-ink: #0f4761;
-
-}
+/* No shared token is retuned any more. Changing the panel and slot tokens
+   turned every untouched component that pairs them with the light type token
+   into white on white -- screen titles, dialogs, notices. Each surface below
+   names its own colours instead, so an unstyled component simply keeps the
+   original look. */
 
 /* ---- 16.1 The Raising Home readout, in the reference's arrangement ----- */
 .int-rh2-root .int-rh2-companion {
@@ -616,3 +591,160 @@
     inset 0 0 0 1px rgba(214, 164, 52, 0.45);
   color: #6d4a0e;
 }
+
+/* ====================================================================== *
+ * 4. EVERY SCREEN
+ *
+ * Owner 2026-09-16: 「狩獵跟對戰還有其他每個頁面都麻煩你」. A walk over all
+ * thirty-three reachable screens found four leftovers from the night skin:
+ * indigo capsule labels inside the new light panels, a battle column that had
+ * turned into one white sheet, the hunt rail's hexagon plates, and menu,
+ * calendar and dialog blocks that were still hard rectangles.
+ * ====================================================================== */
+
+/* ---- 4.1 Labelled values: a lit tag and dark ink, not an indigo capsule -- */
+:is(.cm-digimon-root, .cm-tamer-root, .cm-schedule-root) :is(.cm-digimon-detail__label, .cm-tamer-field__label, .cm-schedule-facts dt) {
+  border-radius: 3px;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+  background: linear-gradient(180deg, #eaf7ff 0%, #cfe9f9 100%);
+  box-shadow: inset 3px 0 0 #2fa9e0;
+  color: #12506e;
+  text-shadow: none;
+}
+:is(.cm-digimon-root, .cm-tamer-root, .cm-schedule-root) :is(.cm-digimon-detail__value, .cm-tamer-field__value, .cm-schedule-facts dd) {
+  color: #0f3f5c;
+  font-weight: 800;
+  text-shadow: none;
+}
+.cm-tamer-root .cm-tamer-field__value[data-state="UNSOURCED"] { color: #6f93a8; opacity: 1; }
+.cm-digimon-root .cm-digimon-resistance__title { color: #14415c; text-shadow: none; }
+.cm-digimon-root .cm-digimon-resistance__bar { border: 0; box-shadow: inset 0 0 0 1px rgba(122, 190, 224, 0.6); }
+
+/* ---- 4.2 Help headings: a lit divider on the ground ------------------- */
+.cm-help-root .cm-help-heading {
+  border-radius: 0;
+  background: linear-gradient(90deg, rgba(47, 169, 224, 0.32) 0%, rgba(47, 169, 224, 0) 72%);
+  box-shadow: inset 3px 0 0 #7fe9ff;
+  color: #e3f7ff;
+  letter-spacing: 0.12em;
+}
+
+/* ---- 4.3 The battle column is a column, not a sheet ------------------ */
+.cm-vs5-root[data-screen][data-screen] .cm-vs5-party {
+  border-radius: 0;
+  clip-path: none;
+  background: none;
+  box-shadow: none;
+  filter: none;
+}
+.cm-vs5-root[data-screen][data-screen] :is(.cm-vs5-password-input, .cm-vs5-link-code, .cm-vs5-arena-choice select) {
+  border: 0;
+  border-radius: 3px;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: inset 3px 0 0 #2fa9e0, inset 0 0 0 1px rgba(122, 190, 224, 0.5);
+  color: #0f3f5c;
+}
+.cm-vs5-root[data-screen][data-screen] .cm-vs5-practice-member {
+  border: 0;
+  border-radius: 3px;
+  clip-path: polygon(0 0, calc(100% - 13px) 0, 100% 13px, 100% 100%, 13px 100%, 0 calc(100% - 13px));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(221, 241, 253, 0.88));
+  box-shadow: inset 3px 0 0 rgba(47, 169, 224, 0.85), inset 0 0 0 1px rgba(122, 190, 224, 0.28);
+}
+.cm-vs5-root[data-screen][data-screen] .cm-vs5-practice-member__name { color: #14415c; text-shadow: none; }
+
+/* ---- 4.4 The hunt rail: dark glass pills, because its glyphs are light - */
+.cm-vs2-root[data-screen="HUNT_FIELD"][data-screen] .cm-hunt-tools {
+  border-radius: 18px;
+  background: rgba(6, 30, 50, 0.4);
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+.cm-vs2-root[data-screen="HUNT_FIELD"][data-screen] .cm-hunt-tools .cm-vs2-action {
+  border-radius: 14px;
+  clip-path: none;
+  background: linear-gradient(180deg, rgba(44, 98, 138, 0.9) 0%, rgba(12, 44, 70, 0.9) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 0 1px rgba(127, 233, 255, 0.35);
+}
+.cm-vs2-root[data-screen="HUNT_FIELD"][data-screen] .cm-hunt-tools .cm-vs2-action::after { display: none; }
+.cm-vs2-root[data-screen="HUNT_FIELD"][data-screen] .cm-hunt-tools .cm-vs2-action[aria-pressed="true"] {
+  background: linear-gradient(180deg, #ffe7a3 0%, #f0b429 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 0 0 1px rgba(214, 164, 52, 0.7), 0 0 12px rgba(255, 200, 60, 0.5);
+}
+
+/* ---- 4.5 Menu entries and calendar cells take the strip and the panel -- */
+.cm-toolbar[data-mode] .cm-toolbar__entry {
+  border-radius: 3px;
+  clip-path: polygon(0 0, calc(100% - 11px) 0, 100% 11px, 100% 100%, 11px 100%, 0 calc(100% - 11px));
+  box-shadow:
+    inset 3px 0 0 rgba(47, 169, 224, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 0 1px rgba(122, 190, 224, 0.3);
+}
+.cm-schedule-root .cm-schedule-day {
+  border-radius: 3px;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+}
+.cm-schedule-root .cm-schedule-day[data-today="true"] {
+  background: linear-gradient(180deg, #fffbea 0%, #ffe9b0 100%);
+  box-shadow: inset 3px 0 0 #e9a11d, inset 0 0 0 1px rgba(214, 164, 52, 0.45);
+}
+.cm-schedule-root .cm-schedule-fixture {
+  border-radius: 3px;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  box-shadow: inset 2px 0 0 rgba(47, 169, 224, 0.85), inset 0 0 0 1px rgba(122, 190, 224, 0.28);
+}
+
+/* ---- 4.6 The opening's name dialog ----------------------------------- */
+.cm-opening__name {
+  border: 0;
+  border-radius: 4px;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(226, 244, 255, 0.9));
+  box-shadow: inset 0 1px 0 #fff, inset 0 0 0 1px rgba(122, 190, 224, 0.35);
+  color: #14415c;
+}
+.cm-opening__name input {
+  border: 0;
+  border-radius: 3px;
+  background: #ffffff;
+  box-shadow: inset 3px 0 0 #2fa9e0, inset 0 0 0 1px rgba(122, 190, 224, 0.6);
+  color: #0f3f5c;
+}
+
+/* ---- 4.7 What showed once the shared tokens went back ---------------- */
+/* Tamer info keeps its light tags and dark values, so its window becomes the
+   glass panel they were written for. */
+.cm-tamer-root .cm-tamer-fields {
+  border: 0;
+  border-radius: 4px;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
+  background:
+    linear-gradient(90deg, rgba(47, 169, 224, 0.85) 0 20px, rgba(47, 169, 224, 0) 20px) no-repeat 11px 9px / 20px 2px,
+    linear-gradient(180deg, rgba(47, 169, 224, 0.85) 0 20px, rgba(47, 169, 224, 0) 20px) no-repeat 9px 11px / 2px 20px,
+    linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(228, 245, 255, 0.88) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 0 0 1px rgba(122, 190, 224, 0.32);
+  filter: drop-shadow(0 6px 13px rgba(20, 74, 104, 0.14));
+}
+
+/* The party heading inside a championship run sits on the run's dark window. */
+.cm-championship-root .cm-vs5-party .cm-vs5-title {
+  color: #e3f7ff;
+  text-shadow: 0 1px 2px rgba(3, 12, 22, 0.85);
+}
+
+/* Placed facilities read as the same strips as the tray below them. */
+.cm-vs2-root[data-screen][data-screen] .cm-cage-facility {
+  border: 0;
+  border-radius: 3px;
+  clip-path: polygon(0 0, calc(100% - 13px) 0, 100% 13px, 100% 100%, 13px 100%, 0 calc(100% - 13px));
+  background:
+    linear-gradient(112deg, rgba(255, 255, 255, 0.5) 0 24%, rgba(255, 255, 255, 0) 24.4%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(221, 241, 253, 0.88) 100%);
+  box-shadow: inset 3px 0 0 rgba(47, 169, 224, 0.85), inset 0 0 0 1px rgba(122, 190, 224, 0.28);
+  color: #14415c;
+}
+.cm-vs2-root[data-screen][data-screen] .cm-cage-facility :is(span, p, strong, small, div) { color: inherit; text-shadow: none; }
+.cm-vs2-root[data-screen][data-screen] .cm-vs2-cage-tray__item :is(span, p, strong, small, div) { color: #14415c; text-shadow: none; }
