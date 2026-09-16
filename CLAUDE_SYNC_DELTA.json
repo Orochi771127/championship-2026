@@ -1,6 +1,6 @@
 {
   "owner": "Claude Code",
-  "deltaDate": "2026-09-15",
+  "deltaDate": "2026-09-16",
   "syncRevision": null,
   "note": "Claude-owned delta. Shared Master Sync, Dependency Matrix and Blocker Ledger are Codex's to merge; changes that belong there are recorded here instead of edited directly. Art registry reconciled against the ROM binary on 2026-09-01; see docs/art/ART_ROM_RECONCILIATION.md and the artScopeCorrection entry for the shared ledger.",
   "added": [
@@ -713,6 +713,26 @@
     }
   ],
   "modified": [
+    {
+      "path": "src/championship/app/raisingHomeP1RView.js",
+      "summary": "Owner 2026-09-16: the title band, the SAVE button and the standing save line are gone; the readout is a card floating over the habitat, open only while a resident is picked, and a notice carries what the save line alone used to say. Codex-lane file; see codexLaneNotice.raisingHomeRebuild2026-09-16."
+    },
+    {
+      "path": "src/championship/presentation/intRh2/raisingFieldViewport.js",
+      "summary": "The ranch window fills the frame's height instead of a fixed 256-native-pixel width, capped at two screen pixels per original pixel so a tall phone frame does not magnify one cage over the whole screen."
+    },
+    {
+      "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
+      "summary": "Opens the camera on a resident on the first paint, and a tap on bare ground with a tool that places nothing clears the selection, which is what puts the floating readout away."
+    },
+    {
+      "path": "src/championship/app/main.js",
+      "summary": "Writes the session when the page is hidden (visibilitychange and pagehide), carrying the guards the removed SAVE button had. Save & Quit is unchanged."
+    },
+    {
+      "path": "tests/championship-int-rh2-browser.cjs",
+      "summary": "Saves through the page-hidden write rather than the removed SAVE button, and checks the readout, not that button, in the Pixi fallback."
+    },
     {
       "path": "tests/championship-migration-firewall-cases.mjs",
       "summary": "Added battleContactTargeting.js to the asserted battle directory listing and extended the authorization comment. The firewall states the battle folder contents in both directions, so a new module must be declared there."
@@ -1649,6 +1669,7 @@
   "dependenciesChanged": false,
   "checkpointCommitted": false,
   "codexLaneNotice": {
+    "raisingHomeRebuild2026-09-16": "Owner-directed Raising Home rework from phone screenshots (OWNER_DIRECTION.md#2026-09-16). Claude edited Codex-lane presentation: raisingHomeP1RView.js lost the title band, its SAVE button and the status line, and the companion readout became a card floating inside the field frame with a transient notice for save failures, tab conflicts and lifecycle events; intRh2Styles.css, raisingHomeHud.css, huntMobile.css and nativeUiSkin.css lost the rules for those removed parts and gained the card, notice and full-height habitat. Claude-lane changes alongside them: raisingFieldViewport.js fills the frame height under a 2x native zoom cap, createRaisingFieldPixiPresentation.js opens the camera on a resident and clears the selection on a bare-ground tap, and main.js writes the save when the page is hidden.",
     "passwordTeamCode2026-09-15": "Owner-requested 我的隊伍密碼. Claude edited Codex-lane presentation: vs5Screens.js choosePassword gained the maker (candidates and createPassword arrive from main.js getPasswordSelection); vs5Styles.css gained .cm-vs5-password-maker; nativeUiSkin.css gained a picked-state rule for .cm-vs5-party .cm-vs5-action[aria-pressed=true], because the skin had erased the picked state in every vs5 picker. Codec: nativePasswordBattle.js encodeNativePasswordTeamFromProfiles, backed by docs/research/PASSWORD_TEAM_PACK_CPU_2026-09-15.json.",
     "qaFixes2026-09-15": "At the Owner's request Claude edited Codex-lane presentation files. vs5Screens.js: createBattleResultView gained exitLabel (default 返回牧場); main.js passes 返回賽事 while a championship run continues. nativeUiSkin.css: dark ink for .cm-vs5-match__fee/__payout inside primary gold cards. vs5Styles.css: .cm-vs5-link-code 12px→16px to stop iPhone Safari focus zoom. tests/championship-battle-cube-browser.cjs: six faces, output under .tmp. assembledUiArt.js now shares isLocalBattleEffectPreview, so the assembled cells render on the Owner playtest URL (Owner Direction 2026-09-15). Still open for the presentation lane: the Championship party picker's refusal text (dark red on bright green, clipped) and faint heading.",
     "statusBarAndRanchTiling": "Two new Claude-owned contracts under docs/contracts/championship/ specify the work Owner queued as items 2 and 3. Presentation of the status bar is Codex-owned; the time cascade and ranch placement state are Claude-owned. Neither contract has been implemented yet. Both name what must NOT be invented: no weeks or months, no continuous day/night cycle, no tetris ownership masks, and no guessed coordinates written into the licensed art manifest.",

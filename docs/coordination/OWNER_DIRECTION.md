@@ -2,6 +2,14 @@
 
 > Reading guide — instruction maintenance, 2026-09-14: the dated Owner records below are preserved. Match authorization to the current task, batch, assets and destination. Later scope-specific continuation supersedes an older batch's stop only within that scope; it does not approve new gameplay, rights or publication. Use [authority by question](../README.md#authority-by-question) for evidence claims and [the current shared-file protocol](SHARED_FILE_UPDATE_PROTOCOL.md) for coordination. No new product or publication authorization is created by this annotation.
 
+## 2026-09-16 — Rebuild Raising Home around the habitat
+
+From phone screenshots of the public playtest the Owner directs: 「下面籠子格會偏移」, 「上方角色資料格能不能清楚簡潔比較現代游戲的設計感」, 「把上方儲存拿掉,因為工具列裡已經有儲存離開選項,未來也打算改成及時存檔跟帳號登入」, 「把最下面有尚未儲存的變更那格拿掉」, 「這樣整個籠子框架可以重新設計」.
+
+Four options were put to the Owner, who chose: the resident readout becomes a card floating over the habitat; the session is written when the page is hidden, in place of the SAVE button; the habitat fills the frame's height and is panned sideways; and the batch goes to the public playtest once local verification passes.
+
+Scope: the Raising Home screen and its stylesheets, the ranch viewport transform, and the page-hidden save. No gameplay, save-format, rights or art-source change. Save & Quit in the toolbar's System menu is unchanged, and the traced lifecycle overlays keep their own screens. A real-time save and account sign-in remain a later decision.
+
 ## 2026-09-15 — Build team passwords before any online service
 
 After a discussion of free hosting for uploaded teams, the Owner directs: 「好 先做 顯示我的密碼」.

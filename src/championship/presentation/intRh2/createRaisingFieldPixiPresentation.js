@@ -270,6 +270,26 @@ export async function mountRaisingFieldPixiPresentation({
     });
   }
 
+  // Owner 2026-09-16: the habitat fills the screen now, so fewer cages fit
+  // across it and the ranch's left edge is often bare ground. Open on a
+  // resident, once, so the player lands on somebody rather than on a fence.
+  let cameraStarted = false;
+  function startCameraOnResident(frame) {
+    if (cameraStarted || fieldArt?.field?.presentationMode !== 'NATIVE_RANCH') return;
+    const unit = fieldArt.field.nativePixelWorldScale;
+    const fit = raisingFieldViewport(fieldArt.field, app.screen, 12, cameraX);
+    if (!(unit > 0) || !(fit.scale > 0)) return;
+    const nativeX = frame.residents
+      .map((resident) => source.getActorFrame?.(resident.creatureId)?.positionQ12?.[0])
+      .find((value) => Number.isFinite(value));
+    if (!Number.isFinite(nativeX)) return;
+    cameraStarted = true;
+    const target = nativeX / 4096 * unit - (app.screen.width - 24) / fit.scale / 2;
+    cameraX = fieldArt.field.wrapWidthPx
+      ? wrapRaisingCamera(target, fieldArt.field.wrapWidthPx)
+      : Math.max(0, target);
+  }
+
   function actorPoint(resident) {
     const native=source.getActorFrame?.(resident.creatureId);
     if(native?.positionQ12&&latestFrame?.ranch?.layoutVersion==='NATIVE_ANCHORS_V1') {
@@ -297,6 +317,10 @@ export async function mountRaisingFieldPixiPresentation({
           cleanFeedback={point,elapsed:0};
         } else source.intents.placeFood?.({...point,protein:completed.tool==='protein'});}
       }
+      // Owner 2026-09-16: the readout now floats over the habitat, so tapping
+      // bare ground with a tool that places nothing puts it away again.
+      else if(!completed.moved&&event.type!=="pointercancel"&&event.type!=="pointerupoutside"
+        &&source.getFrame().selection?.creatureId!=null) source.intents.selectCreature(null);
       if(pointerPreview)pointerPreview.held=false;
       if(event.type==='pointercancel'||event.type==='pointerupoutside'){pointerPreview=null;cleanFeedback=null;}
     }
@@ -500,6 +524,7 @@ export async function mountRaisingFieldPixiPresentation({
     if (disposed || !frame || (!force && frame.revision === latestRevision)) return;
     latestFrame = frame;
     latestRevision = frame.revision;
+    startCameraOnResident(frame);
     drawField(frame);
     const live = new Set(frame.residents.map((resident) => resident.creatureId));
     for (const [creatureId, entry] of actors) {

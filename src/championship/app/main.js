@@ -1040,6 +1040,28 @@ function runToolbarMenuEntry(entry) {
   else if (entry.screen === CHAMPIONSHIP_SCREENS.TAMER_INFO) app.openTamerInfo();
 }
 
+/**
+ * Owner 2026-09-16: the Raising Home SAVE button is gone, so the session is
+ * written when the page goes away instead. A phone browser discards a
+ * backgrounded tab without warning, and Save & Quit is otherwise the only way
+ * back to disk. A real-time save and an account sign-in are the intended
+ * replacements; this is the bridge to them.
+ *
+ * It carries the guards the button had: Raising Home only, and never while a
+ * day change, an evolution, a confirmation or a letter owns the screen. The
+ * port refuses outright during a battle or a hunt commit, so a refusal is
+ * logged rather than shown -- the player has already left the page.
+ */
+function autosaveOnHide() {
+  if (mountedScreen !== CHAMPIONSHIP_SCREENS.RAISING_HOME || !raisingSource) return;
+  const lifecycle = raisingSource.getFrame()?.lifecycle;
+  if (lifecycle?.day || lifecycle?.evolution || lifecycle?.confirmation) return;
+  const mailbox = lifecycle?.mailbox;
+  if (mailbox?.queue?.some((entry) => entry.id === mailbox.activeId)) return;
+  try { raisingSource.intents.requestSave(); }
+  catch (error) { console.warn(`CHAMPIONSHIP_AUTOSAVE_ON_HIDE: ${error.message}`); }
+}
+
 /** Save & Quit returns to the title, which is where the original ends a session. */
 async function returnToTitle() {
   clockDriver?.setActive(false);
@@ -1226,9 +1248,13 @@ function boot() {
   // still paid a cold fetch. Start the head start here.
   warmDeferredModules();
 
-  // Background/unload resets elapsed measurement. Only the existing explicit
-  // Save / Save and Quit actions may persist the player's session.
-  window.addEventListener("pagehide", () => clockDriver?.reset());
+  // Background/unload resets elapsed measurement, and now also writes the
+  // session: the Raising Home SAVE button was removed on 2026-09-16, so leaving
+  // the page is what commits it. Save & Quit still commits explicitly.
+  window.addEventListener("pagehide", () => { clockDriver?.reset(); autosaveOnHide(); });
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") autosaveOnHide();
+  });
 }
 
 boot();

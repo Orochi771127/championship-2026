@@ -170,8 +170,18 @@ async function runSaveReload(browser) {
     }
     throw new Error(`the hand never reached ${allowed}`);
   };
-  const commit = async p => { await p.locator('.int-rh2-system-button').first().click();
-    await p.waitForFunction(() => document.querySelector('.int-rh2-system-button')?.dataset.phase === 'SAVED'); };
+  // Owner 2026-09-16 removed the Raising Home SAVE button: leaving the page is
+  // what writes the session now, so the gate leaves the page the way a phone
+  // does when the player switches away, and waits for the bytes to change.
+  const commit = async p => {
+    const before = await p.evaluate(() => localStorage.getItem('championshipModernSave:v1'));
+    await p.evaluate(() => {
+      Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'hidden' });
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+    await p.waitForFunction(stored => localStorage.getItem('championshipModernSave:v1') !== stored, before);
+    await p.evaluate(() => { delete document.visibilityState; document.dispatchEvent(new Event('visibilitychange')); });
+  };
   const saved = p => p.evaluate(() => JSON.parse(localStorage.getItem('championshipModernSave:v1')));
   const ground = save => { const f=save.creature.nativeProfile.fields;return {x:f['1c0'],y:f['1c4'],cageDefinition:f['014']}; };
   await page.waitForSelector(selector);await page.locator('.cm-toolbar__cell').first().click();
@@ -218,7 +228,9 @@ async function runPixiFallback(browser) {
   await playOpening(page);
   await page.waitForSelector(".int-rh2-field-fallback");
   assert.equal(await page.locator("canvas").count(), 0, "failed Pixi bootstrap creates no partial canvas");
-  assert.equal(await page.locator(".int-rh2-system-button").first().isEnabled(), true, "save remains available in field fallback");
+  // Saving left this screen for the toolbar's System menu and the page-hidden
+  // write, so what matters in the fallback is that the toolbar is still there.
+  assert.equal(await page.locator(".int-rh2-companion").count(), 1, "the readout survives the field fallback");
   // The toolbar is mounted by the application, not by the field, so a failed
   // Pixi bootstrap must not take it down with the canvas.
   assert.equal(await page.locator(".cm-toolbar__cell").count(), 8, "toolbar survives the field fallback");

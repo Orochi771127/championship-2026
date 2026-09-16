@@ -791,30 +791,9 @@
   box-shadow: 0 0 44px rgba(0, 10, 40, 0.55);
 }
 
-/* The header is a slim band, not a second status bar: the gold ribbon above
-   already owns that job, so this one stays dark and lets the title read. */
-.int-rh2-root .int-rh2-header {
-  min-height: 46px;
-  padding: 6px 10px;
-  background: linear-gradient(180deg, rgba(4, 28, 52, 0.72), rgba(4, 28, 52, 0));
-  box-shadow: none;
-}
-.int-rh2-root .int-rh2-header::before,
-.int-rh2-root .int-rh2-header::after { display: none; }
-
-.int-rh2-root .int-rh2-title {
-  padding: 3px 16px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, var(--ds-panel-lit), var(--ds-panel-deep));
-  box-shadow: 0 0 0 2px var(--ds-gold), 0 0 0 4px var(--ds-ink), 0 3px 10px rgba(0, 0, 0, 0.5);
-  color: var(--ds-text);
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-shadow: var(--ds-text-shadow);
-}
-.int-rh2-root .int-rh2-header__identity .int-rh2-kicker { color: var(--ds-cyan-lit); }
-
+/* The title band and its SAVE button left on 2026-09-16; the gold ribbon above
+   already names the screen. The system button styling stays: the recovery
+   export, the day-end retry and the confirmation buttons all use it. */
 .int-rh2-root .int-rh2-system-button,
 .int-rh2-root .int-rh2-letter__ack {
   border: 0;
@@ -825,60 +804,145 @@
   color: var(--ds-text);
   text-shadow: var(--ds-text-shadow);
 }
-.int-rh2-root .int-rh2-system-button.is-dirty {
-  background: linear-gradient(180deg, var(--ds-gold-lit), var(--ds-amber));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 0 2px var(--ds-ink), 0 0 14px rgba(255, 200, 60, 0.55);
-  color: #3a2100;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
-}
 
-/* The companion readout is the original's framed window. */
+/* ---- Raising Home readout, Owner 2026-09-16 ---------------------------- */
+/* One card floating over the habitat's headroom: dark glass, a single gold rim,
+   cyan readouts. Same height in both states, so the habitat under it never
+   changes shape, and it never takes a tap away from a resident. */
 .int-rh2-root .int-rh2-companion {
-  margin: 0 8px 8px;
-  padding: 11px 12px 10px;
   border: 0;
   border-radius: 14px;
-  background: var(--ds-window-fill);
+  background: linear-gradient(180deg, rgba(6, 32, 58, 0.9), rgba(4, 20, 40, 0.84));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   box-shadow:
-    inset 0 0 0 2px var(--ds-ink),
-    0 0 0 4px var(--ds-gold),
-    0 0 0 6px var(--ds-ink),
+    inset 0 0 0 1px rgba(127, 233, 255, 0.16),
+    0 0 0 2px var(--ds-gold),
+    0 0 0 3px var(--ds-ink),
     var(--ds-lift);
 }
 .int-rh2-root .int-rh2-companion::before { display: none; }
-.int-rh2-root .int-rh2-companion__copy > .int-rh2-kicker { color: var(--ds-cyan-lit); text-shadow: var(--ds-text-shadow); }
 
-.int-rh2-root .int-rh2-companion__name {
+.int-rh2-root .int-rh2-companion__portrait {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  overflow: hidden;
   border: 0;
-  border-radius: 999px;
-  padding: 5px 14px;
-  background: linear-gradient(180deg, var(--ds-slot-lit), var(--ds-slot-deep));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 0 2px var(--ds-rim), 0 0 0 3px var(--ds-ink);
+  border-radius: 10px;
+  background: linear-gradient(180deg, var(--ds-slot) 0%, var(--ds-slot-deep) 100%);
+  box-shadow: inset 0 0 0 2px var(--ds-ink), 0 0 0 2px var(--ds-rim-soft);
+}
+.int-rh2-root .int-rh2-companion__portrait img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.int-rh2-root .int-rh2-companion__copy {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 8px;
+  row-gap: 5px;
+  min-width: 0;
+}
+.int-rh2-root .int-rh2-companion__name {
+  grid-column: 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
   color: var(--ds-text);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
   text-shadow: var(--ds-text-shadow);
 }
-.int-rh2-root .int-rh2-companion__location { color: var(--ds-text-soft); text-shadow: var(--ds-text-shadow); }
+.int-rh2-root .int-rh2-companion__place {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 9px 2px 4px;
+  border-radius: 999px;
+  background: rgba(8, 40, 70, 0.75);
+  box-shadow: inset 0 0 0 1px var(--ds-rim-soft);
+}
+.int-rh2-root .int-rh2-companion__location {
+  margin: 0;
+  color: var(--ds-text-soft);
+  font-size: 11px;
+  text-shadow: var(--ds-text-shadow);
+}
+.int-rh2-root .int-rh2-companion__ranch-icon { width: 26px; height: 17px; }
+.int-rh2-root .int-rh2-companion__ranch-icon[hidden] { display: none; }
 
-/* Vitals: dark slots with a bright rim and a cyan readout, as the original
-   draws HP / TP / AP / Capacity. */
+/* HP and TP as a number over a slim meter; AP keeps the original's constant
+   full bar, and capacity stays a plain readout. */
 .int-rh2-root .int-rh2-vitals {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 4px 7px;
+  margin: 0;
+  padding: 0;
   border: 0;
-  border-radius: 12px;
-  padding: 9px 11px;
-  background: linear-gradient(180deg, var(--ds-slot-lit) 0%, var(--ds-slot) 55%, var(--ds-slot-deep) 100%);
-  box-shadow: inset 0 0 0 2px var(--ds-ink), 0 0 0 2px var(--ds-rim);
+  background: none;
+  box-shadow: none;
 }
 .int-rh2-root .int-rh2-vitals__label {
   color: var(--ds-text-soft);
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-shadow: var(--ds-text-shadow);
 }
 .int-rh2-root .int-rh2-vitals__value {
+  display: grid;
+  gap: 2px;
+  margin: 0;
   color: var(--ds-cyan-lit);
+  font-size: 11px;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 10px rgba(127, 233, 255, 0.55), var(--ds-text-shadow);
+  text-shadow: 0 0 8px rgba(127, 233, 255, 0.45), var(--ds-text-shadow);
+}
+.int-rh2-root .int-rh2-vitals__bar {
+  display: block;
+  height: 4px;
+  border-radius: 3px;
+  background: rgba(3, 18, 36, 0.85);
+  box-shadow: inset 0 0 0 1px var(--ds-rim-soft);
+}
+.int-rh2-root .int-rh2-vitals__bar::before {
+  content: "";
+  display: block;
+  width: var(--fill, 0%);
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--ds-cyan) 0%, var(--ds-cyan-lit) 100%);
+  box-shadow: 0 0 8px rgba(127, 233, 255, 0.5);
+}
+.int-rh2-root .int-rh2-vitals__bar[hidden] { display: none; }
+
+/* The notice keeps the window dressing the removed save line had: when it
+   speaks at all, it is worth reading. */
+.int-rh2-root .int-rh2-notice {
+  border-radius: 12px;
+  background: var(--ds-window-fill);
+  box-shadow:
+    inset 0 0 0 2px var(--ds-ink),
+    0 0 0 3px var(--ds-gold),
+    0 0 0 5px var(--ds-ink),
+    var(--ds-lift);
+  color: var(--ds-panel-ink);
+  text-shadow: var(--ds-text-shadow);
 }
 
 /* The habitat sits inside a gold frame; nothing here paints over the canvas. */
@@ -896,17 +960,15 @@
 .int-rh2-root .int-rh2-field-frame__label {
   background: linear-gradient(180deg, rgba(4, 24, 44, 0.85), rgba(4, 24, 44, 0));
 }
-.int-rh2-root .int-rh2-field-frame__label .int-rh2-kicker {
-  border: 0;
+/* The hint reads over the habitat itself, so it carries its own plate. */
+.int-rh2-root .int-rh2-field-state {
+  padding: 3px 10px;
   border-radius: 999px;
-  padding: 3px 11px;
-  background: linear-gradient(180deg, var(--ds-panel-lit), var(--ds-panel-deep));
-  box-shadow: 0 0 0 2px var(--ds-gold), 0 0 0 3px var(--ds-ink);
-  color: var(--ds-text);
+  background: rgba(4, 24, 44, 0.72);
+  box-shadow: inset 0 0 0 1px var(--ds-rim-soft);
+  color: var(--ds-cyan-lit);
   text-shadow: var(--ds-text-shadow);
 }
-.int-rh2-root .int-rh2-field-state { color: var(--ds-cyan-lit); text-shadow: var(--ds-text-shadow); }
-.int-rh2-root .int-rh2-status { color: var(--ds-text-soft); text-shadow: var(--ds-text-shadow); }
 
 .int-rh2-root .int-rh2-care-button {
   border: 0;
@@ -918,17 +980,13 @@
 }
 .int-rh2-root .int-rh2-care-button:disabled { opacity: 1; filter: grayscale(0.65) brightness(0.6); }
 
-/* The portrait well and the AP bar are part of the same readout, so they take
-   the same dark-slot treatment rather than staying light inside a dark window. */
-.int-rh2-root .int-rh2-companion__portrait {
-  border: 0;
-  border-radius: 10px;
-  background: linear-gradient(180deg, var(--ds-slot) 0%, var(--ds-slot-deep) 100%);
-  box-shadow: inset 0 0 0 2px var(--ds-ink), 0 0 0 2px var(--ds-rim-soft);
-}
+/* AP is the original's constant full bar, drawn like the HP and TP meters. */
 .int-rh2-root .int-rh2-vitals__ap-bar {
+  display: block;
+  height: 4px;
+  border-radius: 3px;
   background: linear-gradient(90deg, var(--ds-cyan) 0%, var(--ds-cyan-lit) 100%);
-  box-shadow: 0 0 10px rgba(127, 233, 255, 0.5);
+  box-shadow: 0 0 8px rgba(127, 233, 255, 0.5);
 }
 
 /* raisingHomeHud sizes the icon layer in pixels; the skin centres it instead,
@@ -1663,55 +1721,16 @@
 .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="ENTRAP"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M6 1h4v1h-4zM5 2h1v1h-1zM10 2h1v1h-1zM4 3h1v1h-1zM11 3h1v1h-1zM3 4h1v1h-1zM12 4h1v1h-1zM3 5h1v1h-1zM12 5h1v1h-1zM3 6h1v1h-1zM5 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM3 7h1v1h-1zM5 7h1v1h-1zM7 7h2v1h-2zM10 7h1v1h-1zM12 7h1v1h-1zM3 8h1v1h-1zM5 8h1v1h-1zM7 8h2v1h-2zM10 8h1v1h-1zM12 8h1v1h-1zM3 9h1v1h-1zM5 9h1v1h-1zM7 9h2v1h-2zM10 9h1v1h-1zM12 9h1v1h-1zM3 10h1v1h-1zM5 10h1v1h-1zM7 10h2v1h-2zM10 10h1v1h-1zM12 10h1v1h-1zM3 11h1v1h-1zM12 11h1v1h-1zM4 12h8v1h-8z' fill='%23292929'/%3E%3Cpath d='M5 5h1v1h-1zM10 5h2v1h-2zM7 6h3v1h-3zM6 11h1v1h-1zM9 11h1v1h-1zM11 11h1v1h-1z' fill='%23413939'/%3E%3Cpath d='M11 6h1v1h-1zM9 7h1v1h-1zM11 7h1v1h-1zM9 8h1v1h-1zM11 8h1v1h-1zM9 9h1v1h-1zM11 9h1v1h-1zM6 10h1v1h-1zM9 10h1v1h-1zM11 10h1v1h-1zM5 11h1v1h-1zM7 11h2v1h-2zM10 11h1v1h-1z' fill='%236a6a6a'/%3E%3Cpath d='M9 2h1v1h-1zM6 3h5v1h-5zM5 4h7v1h-7zM6 5h4v1h-4zM4 6h1v1h-1zM4 7h1v1h-1zM6 7h1v1h-1zM4 8h1v1h-1zM6 8h1v1h-1zM4 9h1v1h-1zM6 9h1v1h-1zM4 10h1v1h-1zM4 11h1v1h-1z' fill='%239c9c9c'/%3E%3Cpath d='M6 2h3v1h-3zM5 3h1v1h-1zM4 4h1v1h-1zM4 5h1v1h-1zM6 6h1v1h-1z' fill='%23c5ffff'/%3E%3C/svg%3E"); }
 .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="ENTRAP"][aria-pressed="true"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M6 1h4v1h-4zM5 2h1v1h-1zM10 2h1v1h-1zM4 3h1v1h-1zM11 3h1v1h-1zM3 4h1v1h-1zM12 4h1v1h-1zM3 5h1v1h-1zM12 5h1v1h-1zM3 6h1v1h-1zM5 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM3 7h1v1h-1zM5 7h1v1h-1zM7 7h2v1h-2zM10 7h1v1h-1zM12 7h1v1h-1zM3 8h1v1h-1zM5 8h1v1h-1zM7 8h2v1h-2zM10 8h1v1h-1zM12 8h1v1h-1zM3 9h1v1h-1zM5 9h1v1h-1zM7 9h2v1h-2zM10 9h1v1h-1zM12 9h1v1h-1zM3 10h1v1h-1zM5 10h1v1h-1zM7 10h2v1h-2zM10 10h1v1h-1zM12 10h1v1h-1zM3 11h1v1h-1zM12 11h1v1h-1zM4 12h8v1h-8z' fill='%235a1800'/%3E%3Cpath d='M5 5h1v1h-1zM10 5h2v1h-2zM7 6h3v1h-3zM6 11h1v1h-1zM9 11h1v1h-1zM11 11h1v1h-1z' fill='%23a44a00'/%3E%3Cpath d='M11 6h1v1h-1zM9 7h1v1h-1zM11 7h1v1h-1zM9 8h1v1h-1zM11 8h1v1h-1zM9 9h1v1h-1zM11 9h1v1h-1zM6 10h1v1h-1zM9 10h1v1h-1zM11 10h1v1h-1zM5 11h1v1h-1zM7 11h2v1h-2zM10 11h1v1h-1z' fill='%23ffac00'/%3E%3Cpath d='M9 2h1v1h-1zM6 3h5v1h-5zM5 4h7v1h-7zM6 5h4v1h-4zM4 6h1v1h-1zM4 7h1v1h-1zM6 7h1v1h-1zM4 8h1v1h-1zM6 8h1v1h-1zM4 9h1v1h-1zM6 9h1v1h-1zM4 10h1v1h-1zM4 11h1v1h-1z' fill='%23ffe600'/%3E%3Cpath d='M6 2h3v1h-3zM5 3h1v1h-1zM4 4h1v1h-1zM4 5h1v1h-1zM6 6h1v1h-1z' fill='%23ffffac'/%3E%3C/svg%3E"); }
 .int-rh2-root .int-rh2-system-button::before { width: 26px; height: 26px; background: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M2 1h11v1h-11zM1 2h1v1h-1zM13 2h1v1h-1zM1 3h1v1h-1zM14 3h1v1h-1zM1 4h1v1h-1zM4 4h1v1h-1zM9 4h2v1h-2zM14 4h1v1h-1zM1 5h1v1h-1zM4 5h1v1h-1zM9 5h2v1h-2zM14 5h1v1h-1zM1 6h1v1h-1zM4 6h1v1h-1zM9 6h2v1h-2zM14 6h1v1h-1zM1 7h1v1h-1zM14 7h1v1h-1zM1 8h1v1h-1zM14 8h1v1h-1zM1 9h1v1h-1zM14 9h1v1h-1zM1 10h1v1h-1zM5 10h6v1h-6zM14 10h1v1h-1zM1 11h1v1h-1zM5 11h1v1h-1zM10 11h1v1h-1zM14 11h1v1h-1zM1 12h1v1h-1zM5 12h6v1h-6zM14 12h1v1h-1zM1 13h1v1h-1zM14 13h1v1h-1zM2 14h12v1h-12z' fill='%23292929'/%3E%3Cpath d='M4 3h1v1h-1zM9 3h2v1h-2zM3 4h1v1h-1zM8 4h1v1h-1zM13 4h1v1h-1zM3 5h1v1h-1zM8 5h1v1h-1zM13 5h1v1h-1zM3 6h1v1h-1zM8 6h1v1h-1zM13 6h1v1h-1zM13 7h1v1h-1zM13 8h1v1h-1zM5 9h6v1h-6zM13 9h1v1h-1zM4 10h1v1h-1zM13 10h1v1h-1zM4 11h1v1h-1zM13 11h1v1h-1zM4 12h1v1h-1zM13 12h1v1h-1zM3 13h2v1h-2zM11 13h3v1h-3z' fill='%23413939'/%3E%3Cpath d='M13 3h1v1h-1zM12 4h1v1h-1zM12 5h1v1h-1zM12 6h1v1h-1zM11 7h2v1h-2zM8 8h5v1h-5zM11 9h2v1h-2zM12 10h1v1h-1zM12 11h1v1h-1zM12 12h1v1h-1zM5 13h6v1h-6z' fill='%236a6a6a'/%3E%3Cpath d='M12 2h1v1h-1zM3 3h1v1h-1zM5 3h4v1h-4zM11 3h2v1h-2zM6 4h2v1h-2zM6 5h2v1h-2zM6 6h2v1h-2zM3 7h1v1h-1zM5 7h4v1h-4zM3 8h5v1h-5zM3 9h2v1h-2zM3 10h1v1h-1zM3 11h1v1h-1zM3 12h1v1h-1zM2 13h1v1h-1z' fill='%239c9c9c'/%3E%3Cpath d='M2 2h10v1h-10zM2 3h1v1h-1zM2 4h1v1h-1zM5 4h1v1h-1zM11 4h1v1h-1zM2 5h1v1h-1zM5 5h1v1h-1zM11 5h1v1h-1zM2 6h1v1h-1zM5 6h1v1h-1zM11 6h1v1h-1zM2 7h1v1h-1zM4 7h1v1h-1zM9 7h2v1h-2zM2 8h1v1h-1zM2 9h1v1h-1zM2 10h1v1h-1zM11 10h1v1h-1zM2 11h1v1h-1zM11 11h1v1h-1zM2 12h1v1h-1zM11 12h1v1h-1z' fill='%23c5ffff'/%3E%3C/svg%3E") center / contain no-repeat; }
-.int-rh2-root .int-rh2-system-button.is-dirty::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M2 1h11v1h-11zM1 2h1v1h-1zM13 2h1v1h-1zM1 3h1v1h-1zM14 3h1v1h-1zM1 4h1v1h-1zM4 4h1v1h-1zM9 4h2v1h-2zM14 4h1v1h-1zM1 5h1v1h-1zM4 5h1v1h-1zM9 5h2v1h-2zM14 5h1v1h-1zM1 6h1v1h-1zM4 6h1v1h-1zM9 6h2v1h-2zM14 6h1v1h-1zM1 7h1v1h-1zM14 7h1v1h-1zM1 8h1v1h-1zM14 8h1v1h-1zM1 9h1v1h-1zM14 9h1v1h-1zM1 10h1v1h-1zM5 10h6v1h-6zM14 10h1v1h-1zM1 11h1v1h-1zM5 11h1v1h-1zM10 11h1v1h-1zM14 11h1v1h-1zM1 12h1v1h-1zM5 12h6v1h-6zM14 12h1v1h-1zM1 13h1v1h-1zM14 13h1v1h-1zM2 14h12v1h-12z' fill='%235a1800'/%3E%3Cpath d='M4 3h1v1h-1zM9 3h2v1h-2zM3 4h1v1h-1zM8 4h1v1h-1zM13 4h1v1h-1zM3 5h1v1h-1zM8 5h1v1h-1zM13 5h1v1h-1zM3 6h1v1h-1zM8 6h1v1h-1zM13 6h1v1h-1zM13 7h1v1h-1zM13 8h1v1h-1zM5 9h6v1h-6zM13 9h1v1h-1zM4 10h1v1h-1zM13 10h1v1h-1zM4 11h1v1h-1zM13 11h1v1h-1zM4 12h1v1h-1zM13 12h1v1h-1zM3 13h2v1h-2zM11 13h3v1h-3z' fill='%23a44a00'/%3E%3Cpath d='M13 3h1v1h-1zM12 4h1v1h-1zM12 5h1v1h-1zM12 6h1v1h-1zM11 7h2v1h-2zM8 8h5v1h-5zM11 9h2v1h-2zM12 10h1v1h-1zM12 11h1v1h-1zM12 12h1v1h-1zM5 13h6v1h-6z' fill='%23ffac00'/%3E%3Cpath d='M12 2h1v1h-1zM3 3h1v1h-1zM5 3h4v1h-4zM11 3h2v1h-2zM6 4h2v1h-2zM6 5h2v1h-2zM6 6h2v1h-2zM3 7h1v1h-1zM5 7h4v1h-4zM3 8h5v1h-5zM3 9h2v1h-2zM3 10h1v1h-1zM3 11h1v1h-1zM3 12h1v1h-1zM2 13h1v1h-1z' fill='%23ffe600'/%3E%3Cpath d='M2 2h10v1h-10zM2 3h1v1h-1zM2 4h1v1h-1zM5 4h1v1h-1zM11 4h1v1h-1zM2 5h1v1h-1zM5 5h1v1h-1zM11 5h1v1h-1zM2 6h1v1h-1zM5 6h1v1h-1zM11 6h1v1h-1zM2 7h1v1h-1zM4 7h1v1h-1zM9 7h2v1h-2zM2 8h1v1h-1zM2 9h1v1h-1zM2 10h1v1h-1zM11 10h1v1h-1zM2 11h1v1h-1zM11 11h1v1h-1zM2 12h1v1h-1zM11 12h1v1h-1z' fill='%23ffffac'/%3E%3C/svg%3E"); filter: none; }
 .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="DAMAGE_TRAP"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M12 0h2v1h-2zM11 1h1v1h-1zM14 1h1v1h-1zM10 2h1v1h-1zM13 2h1v1h-1zM5 3h3v1h-3zM9 3h1v1h-1zM12 3h1v1h-1zM3 4h2v1h-2zM8 4h2v1h-2zM12 4h1v1h-1zM2 5h1v1h-1zM11 5h1v1h-1zM1 6h1v1h-1zM11 6h1v1h-1zM1 7h1v1h-1zM11 7h1v1h-1zM1 8h1v1h-1zM11 8h1v1h-1zM1 9h1v1h-1zM11 9h1v1h-1zM2 10h1v1h-1zM10 10h1v1h-1zM3 11h2v1h-2zM8 11h2v1h-2zM5 12h3v1h-3z' fill='%23292929'/%3E%3Cpath d='M12 2h1v1h-1zM11 3h1v1h-1zM11 4h1v1h-1zM10 5h1v1h-1zM10 6h1v1h-1zM10 7h1v1h-1zM10 8h1v1h-1zM10 9h1v1h-1zM4 10h1v1h-1zM8 10h2v1h-2zM6 11h2v1h-2z' fill='%23413939'/%3E%3Cpath d='M9 7h1v1h-1zM8 8h2v1h-2zM7 9h3v1h-3zM6 10h2v1h-2zM5 11h1v1h-1z' fill='%236a6a6a'/%3E%3Cpath d='M13 1h1v1h-1zM7 4h1v1h-1zM5 5h3v1h-3zM3 6h7v1h-7zM3 7h6v1h-6zM3 8h5v1h-5zM2 9h5v1h-5zM3 10h1v1h-1zM5 10h1v1h-1z' fill='%239c9c9c'/%3E%3Cpath d='M12 1h1v1h-1zM11 2h1v1h-1zM10 3h1v1h-1zM5 4h2v1h-2zM10 4h1v1h-1zM3 5h2v1h-2zM8 5h2v1h-2zM2 6h1v1h-1zM2 7h1v1h-1zM2 8h1v1h-1z' fill='%23c5ffff'/%3E%3C/svg%3E"); }
 .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action[data-tool="DAMAGE_TRAP"][aria-pressed="true"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M12 0h2v1h-2zM11 1h1v1h-1zM14 1h1v1h-1zM10 2h1v1h-1zM13 2h1v1h-1zM5 3h3v1h-3zM9 3h1v1h-1zM12 3h1v1h-1zM3 4h2v1h-2zM8 4h2v1h-2zM12 4h1v1h-1zM2 5h1v1h-1zM11 5h1v1h-1zM1 6h1v1h-1zM11 6h1v1h-1zM1 7h1v1h-1zM11 7h1v1h-1zM1 8h1v1h-1zM11 8h1v1h-1zM1 9h1v1h-1zM11 9h1v1h-1zM2 10h1v1h-1zM10 10h1v1h-1zM3 11h2v1h-2zM8 11h2v1h-2zM5 12h3v1h-3z' fill='%235a1800'/%3E%3Cpath d='M12 2h1v1h-1zM11 3h1v1h-1zM11 4h1v1h-1zM10 5h1v1h-1zM10 6h1v1h-1zM10 7h1v1h-1zM10 8h1v1h-1zM10 9h1v1h-1zM4 10h1v1h-1zM8 10h2v1h-2zM6 11h2v1h-2z' fill='%23a44a00'/%3E%3Cpath d='M9 7h1v1h-1zM8 8h2v1h-2zM7 9h3v1h-3zM6 10h2v1h-2zM5 11h1v1h-1z' fill='%23ffac00'/%3E%3Cpath d='M13 1h1v1h-1zM7 4h1v1h-1zM5 5h3v1h-3zM3 6h7v1h-7zM3 7h6v1h-6zM3 8h5v1h-5zM2 9h5v1h-5zM3 10h1v1h-1zM5 10h1v1h-1z' fill='%23ffe600'/%3E%3Cpath d='M12 1h1v1h-1zM11 2h1v1h-1zM10 3h1v1h-1zM5 4h2v1h-2zM10 4h1v1h-1zM3 5h2v1h-2zM8 5h2v1h-2zM2 6h1v1h-1zM2 7h1v1h-1zM2 8h1v1h-1z' fill='%23ffffac'/%3E%3C/svg%3E"); }
 .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools .cm-vs2-action:disabled { filter: grayscale(0.75) brightness(0.5); }
 
+/* Owner 2026-09-16: the habitat fills the frame. It used to be pinned to 4:3
+   and centred, so picking a resident grew the readout, shortened this row, and
+   the frame answered by narrowing itself and sitting to one side. */
 .int-rh2-root .int-rh2-field-frame {
-  aspect-ratio: 4 / 3;
-  align-self: center;
+  align-self: stretch;
   min-height: 180px;
-  max-height: 100%;
-}
-
-/* The original carries a framed message window under the habitat. The product
-   had the same text as a bare line, which left the recovered height looking
-   like more empty ground instead of the panel the original puts there. */
-.int-rh2-root .int-rh2-status {
-  margin: 8px 8px 0;
-  padding: 9px 14px;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  border-radius: 12px;
-  background: var(--ds-window-fill);
-  box-shadow:
-    inset 0 0 0 2px var(--ds-ink),
-    0 0 0 3px var(--ds-gold),
-    0 0 0 5px var(--ds-ink),
-    var(--ds-lift);
-  color: var(--ds-panel-ink);
-  text-shadow: var(--ds-text-shadow);
-}
-
-/* A short window has no height to spare, so the window collapses back to a line
-   rather than stealing it from the habitat. */
-@media (max-height: 700px), (orientation: landscape) {
-  /* `align-self: center` only has a height to centre because the aspect ratio
-     gives it one. Dropping the ratio without also restoring the stretch left
-     the frame 1px tall and the habitat invisible -- measured, not guessed. */
-  .int-rh2-root .int-rh2-field-frame { aspect-ratio: auto; align-self: stretch; max-height: none; }
-  .int-rh2-root .int-rh2-status {
-    margin: 0;
-    min-height: 0;
-    padding: 4px 10px;
-    border-radius: 0;
-    background: none;
-    box-shadow: none;
-  }
 }
 
 /* Owner 2026-09-13: the former landscape reflow is replaced by the
@@ -1916,7 +1935,6 @@ body[data-portrait-frame] .cm-title__actions .cm-button { min-height: 52px; heig
   background-size: contain; background-repeat: no-repeat; background-position: center;
   image-rendering: pixelated;
 }
-.int-rh2-companion__ranch-icon { width: 44px; height: 28px; object-fit: contain; image-rendering: pixelated; }
 .cm-vs2-result__portrait-card { width: fit-content; max-width: 100%; margin: 0 auto 10px; }
 .cm-vs2-result__portrait-card.cm-memory-card-frame { padding: 22px; background: #0a2731; }
 .cm-vs2-root[data-screen] .cm-memory-card-frame .cm-vs2-result__portrait {

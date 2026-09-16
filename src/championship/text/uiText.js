@@ -50,6 +50,7 @@ export const UI_COPY = Object.freeze({
   "Raising Home time": "育成時間", "Playable Raising field": "育成活動場地",
   "LIVE HABITAT": "育成場地", "FIELD ONLINE": "場地已就緒", "COMPANION LINK": "夥伴狀態",
   "SELECT A RESIDENT": "選擇數碼獸", "Touch a resident in the habitat.": "點選場地中的數碼獸。",
+  "TAP A RESIDENT": "點數碼獸看狀態",
   "Original toolbar structure, commands unverified": "工具列結構，指令尚待確認",
   "TRAINING TOOLBAR · MODE 1": "育成工具列 · 模式一", "8-SLOT SHELL · ROM VERIFIED": "八格工具列 · 結構已驗證",
   "Commands, icons, submenu membership, enable mask and slot 7 identity remain unverified.": "指令、圖示、子選單歸屬、啟用條件與第八格用途仍待確認。",

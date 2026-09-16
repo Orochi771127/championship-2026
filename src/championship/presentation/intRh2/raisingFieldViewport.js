@@ -6,13 +6,22 @@ export function raisingFieldViewport(field, viewport, padding = 12, cameraX = 0)
   if (!(field?.worldWidthPx > 0 && field?.worldHeightPx > 0)) {
     return { x: 0, y: 0, width: viewport.width, height: viewport.height, scale: 1 };
   }
-  // Portrait camera adaptation: a 256-native-pixel-wide window over the ranch,
-  // instead of shrinking every facility and resident into a thumbnail overview.
+  // Portrait camera adaptation: a window over the ranch, rather than shrinking
+  // every facility and resident into a thumbnail overview. Owner 2026-09-16:
+  // the window fills the frame's height and the player swipes sideways, so the
+  // habitat no longer leaves empty bands above and below itself. The ranch is
+  // always wider than the frame, so filling the height leaves no gap at all.
   const nativeWindow = field.presentationMode === 'NATIVE_RANCH' && field.nativePixelWorldScale > 0;
-  const fitWidth = nativeWindow ? Math.min(field.worldWidthPx,256*field.nativePixelWorldScale) : field.worldWidthPx;
   const headroom = nativeWindow && field.wrapWidthPx ? 64*field.nativePixelWorldScale : 0;
-  const scale = Math.min(Math.max(1, viewport.width - padding * 2) / fitWidth,
-    Math.max(1, viewport.height - padding * 2) / (field.worldHeightPx+headroom));
+  const heightScale = Math.max(1, viewport.height - padding * 2) / (field.worldHeightPx+headroom);
+  // The ranch is a wide, 192-native-pixel-tall strip. Filling a tall phone's
+  // height outright magnified it until one cage covered the screen and its
+  // neighbours, and often every resident, sat outside the frame -- measured at
+  // 390x844. Two screen pixels per original pixel is the stop: large enough to
+  // read a resident, wide enough to keep the next cage in view.
+  const zoomCap = 2 / field.nativePixelWorldScale;
+  const scale = nativeWindow ? Math.min(heightScale, zoomCap)
+    : Math.min(Math.max(1, viewport.width - padding * 2) / field.worldWidthPx, heightScale);
   const width = field.worldWidthPx * scale;
   const height = field.worldHeightPx * scale;
   const maxCameraX = Math.max(0,field.worldWidthPx - (viewport.width-padding*2)/scale);
