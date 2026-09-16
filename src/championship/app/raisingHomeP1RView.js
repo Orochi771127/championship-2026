@@ -241,6 +241,9 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     if (ranchImage && ranchIcon.getAttribute('src') !== ranchImage.src) ranchIcon.src = ranchImage.src;
     const image=hudArt?.getPortrait(resident?.speciesId);
     portrait.hidden=!image;
+    // The portrait art is local-only, so on the public build the well would be
+    // an empty black square beside the name. No picture, no well.
+    portraitSlot.hidden=!image;
     // Sized by its well, not by the source pixels. Setting the source size here
     // is what made a tall portrait grow the card and reshape the frame below it.
     if(image&&portrait.getAttribute('src')!==image.src)portrait.src=image.src;

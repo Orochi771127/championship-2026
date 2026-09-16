@@ -840,6 +840,7 @@
   object-fit: contain;
   image-rendering: pixelated;
 }
+.int-rh2-root .int-rh2-companion__portrait[hidden] { display: none; }
 
 .int-rh2-root .int-rh2-companion__copy {
   display: grid;
