@@ -131,6 +131,14 @@ def template(contract, image):
             f'<text x="110" y="{o["order"]*18}">{o["objectId"]} seq {o["sequenceId"]} cell {o["cellId"]}</text>',
             f'<text x="110" y="{o["order"]*18+5}">placement {x},{y}; pivot {px},{py}</text>',
             f'<text x="110" y="{o["order"]*18+10}">root {x-px},{y-py}; {w}x{h}</text>']
+    parts.append('<text x="110" y="80">Separate board space: shape 0 / mask 1</text>')
+    # Debug diagram uses the recorded board coordinates at 0.5x plus label padding.
+    # This transform never feeds the object compositor or a runtime placement.
+    for cell in contract['geometry']['boardCells']:
+        x=110+cell['x']/2; y=85+cell['y']/2
+        parts += [f'<rect class="box" x="{x}" y="{y}" width="11" height="9" stroke="#5fffa3"/>',
+            f'<text x="{x+1}" y="{y+6}">{cell["slotIndex"]}</text>']
+    parts.append('<text x="110" y="115">Slots 8 / 9: upper crop / lower full; 13 wraps.</text>')
     parts += ['<text x="0" y="120">Numbers = RAW collision classes, not invented walkability.</text>',
         '<text x="0" y="126">Dashed = allowed alpha; order = source ordinal; outside core is clipped.</text>',
         '<text x="0" y="132">Board shape/row/crop/wrap and ground guide: geometry.json + layout PNGs.</text>', '</svg>']

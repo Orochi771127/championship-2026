@@ -1,0 +1,96 @@
+{
+  "date": "2026-09-16",
+  "runtimeBaseline": "d7a7dcfd8f7cda41976f12329d99f50a77882371",
+  "remotePlanningStart": "20c9b5692cc0048bb234e2fe4c62fe9ad00d263c",
+  "implementationCheckpoint": "d9fc798",
+  "mainSyncIntoPlanning": "82aad00",
+  "environment": {
+    "node": "22.17.0",
+    "python": "3.12",
+    "pillow": "12.3.0",
+    "pixi": "8.19.0",
+    "playwright": "1.62.1",
+    "browser": "installed Windows Google Chrome headless, DPR 1"
+  },
+  "runtimeFilesIdenticalToMain": true,
+  "tests": [
+    {
+      "command": "npm run art:cage:proof",
+      "status": "PASS",
+      "count": 7,
+      "log": ".tmp/convergence/cage-proof.log",
+      "logSha256": "3a91c9deb0f81c26a49915967ee973e4c3cf99867bcc0a14a15a744564a68ef3",
+      "summary": "\"status\": \"PASS\""
+    },
+    {
+      "command": "npm run test:cage:proof",
+      "status": "PASS",
+      "count": 7,
+      "log": ".tmp/convergence/python-tests.log",
+      "logSha256": "c7dcf4e51a8301819d2d390bf45b4f38644b8dea0b8871f7d330f869fbbbe203",
+      "summary": "Ran 7 tests"
+    },
+    {
+      "command": "npm test",
+      "status": "PASS",
+      "count": 1558,
+      "log": ".tmp/convergence/node-tests-final.log",
+      "logSha256": "ec15a21c8db0f6cf72a6d44deb899c91c6248d147d83ab02dd8f892701701278",
+      "summary": "# pass 1558"
+    },
+    {
+      "command": "npm run test:ci",
+      "status": "PASS",
+      "count": 1341,
+      "log": ".tmp/convergence/ci-tests-final.log",
+      "logSha256": "f6fcb505e8f854222d71a3af83a3e17c2cbad6017af545b4aa25035dd385dea7",
+      "summary": "# pass 1341"
+    },
+    {
+      "command": "npm run validate:preload",
+      "status": "PASS",
+      "count": 184,
+      "log": ".tmp/convergence/preload-final.log",
+      "logSha256": "fac87ec05b7e35f088003d1b8e3cfec23582a65668dc66e9aa18618178910111",
+      "summary": "184 startup modules"
+    },
+    {
+      "command": "npm run test:browser:convergence",
+      "status": "PASS",
+      "count": 8,
+      "log": ".tmp/convergence/browser-proof-final.log",
+      "logSha256": "1cbafe403b3f5ebc99761e2f0e6206f7810d319d6488517936835967d22e8e3c",
+      "summary": "CONVERGENCE_BROWSER_PASS checks=8"
+    },
+    {
+      "command": "npm run test:browser",
+      "status": "PASS",
+      "count": 6,
+      "log": ".tmp/convergence/browser-existing-final.log",
+      "logSha256": "3e7f42def6ecf41f735b26790961e9dfa0a7694fb316fb329834b1f05c54832f",
+      "summary": "INT_RH2_BROWSER_QA_PASS viewports=6"
+    },
+    {
+      "command": "npm run test:browser:recent",
+      "status": "PASS",
+      "count": 1,
+      "log": ".tmp/convergence/browser-recent-final.log",
+      "logSha256": "7d66db78bebca304629c9318b21a1334d78737273d1a8400161aa5a9570cc861",
+      "summary": "RECENT_INTEGRATION_BROWSER_QA_PASS"
+    }
+  ],
+  "newArtGenerated": 0,
+  "newThirdPartyDependencies": 0,
+  "manualPlacementCorrections": 0,
+  "productShippingApproval": false,
+  "physicalDeviceAcceptance": false,
+  "proofSourceHashes": {
+    "scripts/build-cage-authoring-proof.py": "b9d0e282dab9a58a6619fe2788bf254bde6f67cc80d562f2249fca8fe1f0d21e",
+    "scripts/lib/ydij_map_formats.py": "d3d78d91c4586a5485d3cc6b5be3e0fc7638f937f68b5c66a0cc0898aec24df6",
+    "scripts/lib/cage-authoring-geometry.mjs": "92a5ca6b9c90af78f828eee89bb5c0432a994a513612d5aff3713e2969e38317",
+    "tests/championship-cage-authoring-contract-cases.mjs": "e59664d6815729982813b84840b4aa0a8d8bbff048f3364cc4620be2c10c2ae3",
+    "tests/championship-convergence-browser.cjs": "c6a81177ee92b5997b3efd18157cda92761ea4abdde34e4edfca221b3c636204",
+    "tests/test_cage_authoring_proof.py": "ea351326aa565be35287b439145a3a4a0fe6002bbbda2f0ce71eac1c77716bc2",
+    "docs/art/contracts/cage/field_cm01_01.v1.json": "59f2d792671fd6449d0e9285d74588adf0d47e6c143b12abbc311ec942d1ab0d"
+  }
+}

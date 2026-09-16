@@ -1,6 +1,6 @@
 # DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD
 
-> **2026-09-16 收束校正：** 本文件的 R0–R8 排程與早期 slice 狀態是 2026-08-29 規劃快照；現況查 `CURRENT_PRODUCT_STATUS.md` 與本輪[收束報告](../reports/convergence-2026-09-16/REPORT_ZH_TW.md)，不再另建 roadmap。原創商業產品沿此 repo 原地演進，外部 Nexus repo 的 code/save/assets 仍保持隔離。本輪执行範圍以 [Convergence Handoff](../coordination/CODEX_CONVERGENCE_HANDOFF_2026-09-16_ZH_TW.md) 為準：先 `field_cm01_01` 既有素材 proof，再三尺寸 responsive foundation；Creature 僅檢查 readiness。實測結果與唯一下一步清單見[收束報告](../reports/convergence-2026-09-16/REPORT_ZH_TW.md)。下文未完成的產品設計仍為 `DEFERRED`，不構成額外施工或批量生成授權。
+> **2026-09-16 收束校正：** 本文件的 R0–R8 排程與早期 slice 狀態是 2026-08-29 規劃快照；現況查 `CURRENT_PRODUCT_STATUS.md` 與本輪[收束報告](../reports/convergence-2026-09-16/REPORT_ZH_TW.md)，不再另建 roadmap。原創商業產品沿此 repo 原地演進，外部 Nexus repo 的 code/save/assets 仍保持隔離。本輪執行範圍以 [Convergence Handoff](../coordination/CODEX_CONVERGENCE_HANDOFF_2026-09-16_ZH_TW.md) 為準：先 `field_cm01_01` 既有素材 proof，再三尺寸 responsive foundation；Creature 僅檢查 readiness。實測結果與唯一下一步清單見[收束報告](../reports/convergence-2026-09-16/REPORT_ZH_TW.md)。下文未完成的產品設計仍為 `DEFERRED`，不構成額外施工或批量生成授權。
 
 ## Master Game Production Plan
 

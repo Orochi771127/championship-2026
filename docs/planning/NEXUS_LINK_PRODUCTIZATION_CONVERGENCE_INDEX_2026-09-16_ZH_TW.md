@@ -1,6 +1,6 @@
 # Nexus Link / Championship 2026 產品化收束索引
 
-> **2026-09-16 收束校正：** 本輪执行範圍以 [Convergence Handoff](../coordination/CODEX_CONVERGENCE_HANDOFF_2026-09-16_ZH_TW.md) 為準：先 `field_cm01_01` 既有素材 proof，再三尺寸 responsive foundation；Creature 僅檢查 readiness。實測結果與唯一下一步清單見[收束報告](../reports/convergence-2026-09-16/REPORT_ZH_TW.md)。下文未完成的產品設計仍為 `DEFERRED`，不構成額外施工或批量生成授權。
+> **2026-09-16 收束校正：** 本輪執行範圍以 [Convergence Handoff](../coordination/CODEX_CONVERGENCE_HANDOFF_2026-09-16_ZH_TW.md) 為準：先 `field_cm01_01` 既有素材 proof，再三尺寸 responsive foundation；Creature 僅檢查 readiness。實測結果與唯一下一步清單見[收束報告](../reports/convergence-2026-09-16/REPORT_ZH_TW.md)。下文未完成的產品設計仍為 `DEFERRED`，不構成額外施工或批量生成授權。
 
 日期：2026-09-16  
 狀態：`PLANNING_ENTRYPOINT / READ_THIS_FIRST`
@@ -164,7 +164,7 @@ existing evidence
 
 ### Environment responsive rule
 
-不是每個裝置重新畫背景，而是 modular / layered / overscan scene，讓 Compact crop 中央、Expanded 顯示更多世界。
+未來可用 modular / layered / overscan scene 共用背景；目前大螢幕仍有 410px host 限制，Expanded 更多世界與資訊重排尚未實作。
 
 ---
 
@@ -205,7 +205,7 @@ UNKNOWN_REQUIRES_TRACE
 - 一套 art production workflow；
 - 一套 Cage replacement contract；
 - 一套 adaptive layout rule；
-- 三個最小 pilots；
+- 兩個最小 proof 與一份 Creature readiness 檢查；
 - 清楚的 STOP point。
 
 若找到重複或矛盾 planning，應更新既有 canonical 文件／索引，而不是再新增另一份競爭 roadmap。
