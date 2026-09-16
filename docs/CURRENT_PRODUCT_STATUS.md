@@ -1,5 +1,14 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: CURRENT_CONSOLIDATION_20260916 -->
+**2026-09-16 — 近期 repo／本地遊戲收束：新版養成首頁與自己的隊伍密碼已整合並已發布。** 本次重新確認本地 `main`、GitHub `main`、既有 Pages 部署均為 `3e212c2`；本地試玩建置與線上 build ID 相同，共 3,964 檔。今天的首頁包含浮動角色資訊、離頁保存、長名字顯示及無頭像時隱藏空框。保存仍走既有唯一存檔，不是帳號或即時雲端存檔。
+
+本次驗證：完整程式測試 **1,555/1,555**；184 個預載模組檢查與試玩建置／驗證通過；6 種直向首頁、角色操作、Save/Continue 和 Pixi 失敗備援通過；新增 `npm run test:browser:recent`，驗證直橫向、真實離頁保存、三人隊伍／第四人限制、改選清碼、帶空白的 22 字密碼到對戰結果，無 page error 或缺檔。首輪首頁 Continue 有一次 30 秒逾時，補診斷後重跑通過，原因仍為 `INTERMITTENT_UNREPRODUCED`，不宣稱修好未知存檔缺陷。
+
+本地原先未追蹤的 4 個角色概念候選（整包 13 檔）已核對圖片與來源指紋及透明度，仍為 `ART_PROPOSAL_REFERENCE_BACKED`，未通過完整動作、人工核准或 runtime／shipping。原創角色與起始籠子 35／0／1／15 仍依既有優先計畫推進。這輪新增驗收工具及文件，未改動遊戲 runtime、未提交或重新發布。實機、完整原作與商業驗收仍開放。
+
+證據與操作入口：[2026-09-16 收束回條](reports/repo-consolidation-2026-09-16/README_ZH_TW.md) · [機器可讀驗證](reports/repo-consolidation-2026-09-16/validation.json)。以下各日期段落保留當時狀態；9 月 15 日「尚未發布」與「尚無密碼產生畫面」已由本段和實際原始碼／部署查證更新。
+
 **2026-09-15 — 「我的隊伍密碼」: players can make a Password Battle code from their own Digimon (local, not yet published).**
 
 Evidence: the shared team panel is the original encoder's only caller (ARM9 `020511A4`). The OVL10 battle menu passes a registered team; OVL9 password and link flows reuse the panel. `PROFILE_PACK` (`0209338C`) and `ENCODE` (`020950B8`) were replayed on 61 vectors: the QA save's individuals, every radix edge, and 22-byte buffer overflow ([receipt](research/PASSWORD_TEAM_PACK_CPU_2026-09-15.json); re-run with `scripts/research/check-password-team-pack-cpu.py`). A fresh team carries member extras 1 and team byte 1 (`02092468`). This build has no strategy editor, so those defaults apply.

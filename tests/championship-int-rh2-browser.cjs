@@ -93,7 +93,17 @@ async function openRaising(context, { continueGame = false, developer = false } 
   page.on("requestfailed", (request) => failedRequests.push(`${request.url()} :: ${request.failure()?.errorText}`));
   await page.goto(developer ? BASE_URL + (BASE_URL.includes("?") ? "&" : "?") + "presentation=developer" : BASE_URL, { waitUntil: "networkidle" });
   await startGame(page, { continueGame });
-  await page.waitForSelector(".cm-raising-pixi-canvas", { timeout: 30000 });
+  try {
+    await page.waitForSelector(".cm-raising-pixi-canvas", { timeout: 30000 });
+  } catch (error) {
+    const label = continueGame ? "continue-failure" : "opening-failure";
+    await page.screenshot({ path: path.join(SCREENSHOTS, `${label}.png`), fullPage: true });
+    fs.writeFileSync(path.join(OUTPUT, `${label}.json`), JSON.stringify({
+      pageErrors, failedRequests, text: await page.locator('body').innerText(),
+      save: await page.evaluate(() => localStorage.getItem('championshipModernSave:v1'))
+    }, null, 2));
+    throw error;
+  }
   await page.waitForTimeout(2500);
   return { page, pageErrors, failedRequests };
 }

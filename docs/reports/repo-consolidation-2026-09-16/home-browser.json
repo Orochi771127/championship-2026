@@ -1,0 +1,649 @@
+{
+  "schemaVersion": 1,
+  "batch": "CHAMPIONSHIP_2026_VS1_INT_RH2",
+  "generatedAt": "2026-09-16T06:16:27.571Z",
+  "rendererPolicy": {
+    "dom": "P1R screen UI",
+    "pixi": "one field-scoped Application",
+    "three": "not used"
+  },
+  "responsiveContract": {
+    "source": "docs/contracts/championship/INT_RH2_RUNTIME_PRESENTATION_CONTRACT.json",
+    "requiredViewports": [
+      "360x800",
+      "390x844",
+      "393x852",
+      "412x915",
+      "430x932"
+    ],
+    "supplementalViewports": [
+      "375x812"
+    ],
+    "missingRequiredViewports": []
+  },
+  "viewports": [
+    {
+      "viewport": "360x800",
+      "layout": {
+        "viewport": {
+          "width": 360,
+          "height": 800
+        },
+        "documentWidth": 360,
+        "documentHeight": 800,
+        "shell": {
+          "width": 360,
+          "height": 703,
+          "top": 37,
+          "bottom": 740
+        },
+        "fieldHost": {
+          "width": 344,
+          "height": 690
+        },
+        "canvas": {
+          "width": 344,
+          "height": 690
+        },
+        "canvasCount": 1,
+        "toolbarSlots": 8,
+        "toolbarEnabled": 8,
+        "uiAuthority": "P1R_DOM",
+        "rendererSplit": "DOM_UI_PIXI_FIELD",
+        "threeElements": 0,
+        "interactive": [
+          {
+            "id": "cm-toolbar__cell",
+            "width": 40.5,
+            "height": 46,
+            "top": 748,
+            "bottom": 794
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 40.515625,
+            "height": 46,
+            "top": 748,
+            "bottom": 794
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 40.5,
+            "height": 46,
+            "top": 748,
+            "bottom": 794
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 40.515625,
+            "height": 46,
+            "top": 748,
+            "bottom": 794
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 40.5,
+            "height": 46,
+            "top": 748,
+            "bottom": 794
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 40.515625,
+            "height": 46,
+            "top": 748,
+            "bottom": 794
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 40.5,
+            "height": 46,
+            "top": 748,
+            "bottom": 794
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 40.515625,
+            "height": 46,
+            "top": 748,
+            "bottom": 794
+          }
+        ]
+      },
+      "framePacing": {
+        "sampledFrames": 120,
+        "averageFps": 60.03,
+        "medianFrameMs": 16.7,
+        "p95FrameMs": 16.8
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "screenshot": "screenshots/raising-home-360x800.png"
+    },
+    {
+      "viewport": "390x844",
+      "layout": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "documentWidth": 390,
+        "documentHeight": 844,
+        "shell": {
+          "width": 390,
+          "height": 747,
+          "top": 37,
+          "bottom": 784
+        },
+        "fieldHost": {
+          "width": 370,
+          "height": 731
+        },
+        "canvas": {
+          "width": 370,
+          "height": 731
+        },
+        "canvasCount": 1,
+        "toolbarSlots": 8,
+        "toolbarEnabled": 8,
+        "uiAuthority": "P1R_DOM",
+        "rendererSplit": "DOM_UI_PIXI_FIELD",
+        "threeElements": 0,
+        "interactive": [
+          {
+            "id": "cm-toolbar__cell",
+            "width": 43.875,
+            "height": 46,
+            "top": 792,
+            "bottom": 838
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 43.890625,
+            "height": 46,
+            "top": 792,
+            "bottom": 838
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 43.875,
+            "height": 46,
+            "top": 792,
+            "bottom": 838
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 43.890625,
+            "height": 46,
+            "top": 792,
+            "bottom": 838
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 43.890625,
+            "height": 46,
+            "top": 792,
+            "bottom": 838
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 43.875,
+            "height": 46,
+            "top": 792,
+            "bottom": 838
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 43.890625,
+            "height": 46,
+            "top": 792,
+            "bottom": 838
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 43.890625,
+            "height": 46,
+            "top": 792,
+            "bottom": 838
+          }
+        ]
+      },
+      "framePacing": {
+        "sampledFrames": 120,
+        "averageFps": 60.03,
+        "medianFrameMs": 16.7,
+        "p95FrameMs": 16.7
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "screenshot": "screenshots/raising-home-390x844.png"
+    },
+    {
+      "viewport": "393x852",
+      "layout": {
+        "viewport": {
+          "width": 393,
+          "height": 852
+        },
+        "documentWidth": 393,
+        "documentHeight": 852,
+        "shell": {
+          "width": 393,
+          "height": 755,
+          "top": 37,
+          "bottom": 792
+        },
+        "fieldHost": {
+          "width": 373,
+          "height": 739
+        },
+        "canvas": {
+          "width": 373,
+          "height": 739
+        },
+        "canvasCount": 1,
+        "toolbarSlots": 8,
+        "toolbarEnabled": 8,
+        "uiAuthority": "P1R_DOM",
+        "rendererSplit": "DOM_UI_PIXI_FIELD",
+        "threeElements": 0,
+        "interactive": [
+          {
+            "id": "cm-toolbar__cell",
+            "width": 44.21875,
+            "height": 46,
+            "top": 800,
+            "bottom": 846
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 44.21875,
+            "height": 46,
+            "top": 800,
+            "bottom": 846
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 44.21875,
+            "height": 46,
+            "top": 800,
+            "bottom": 846
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 44.21875,
+            "height": 46,
+            "top": 800,
+            "bottom": 846
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 44.21875,
+            "height": 46,
+            "top": 800,
+            "bottom": 846
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 44.21875,
+            "height": 46,
+            "top": 800,
+            "bottom": 846
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 44.21875,
+            "height": 46,
+            "top": 800,
+            "bottom": 846
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 44.234375,
+            "height": 46,
+            "top": 800,
+            "bottom": 846
+          }
+        ]
+      },
+      "framePacing": {
+        "sampledFrames": 120,
+        "averageFps": 60.03,
+        "medianFrameMs": 16.7,
+        "p95FrameMs": 16.8
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "screenshot": "screenshots/raising-home-393x852.png"
+    },
+    {
+      "viewport": "412x915",
+      "layout": {
+        "viewport": {
+          "width": 412,
+          "height": 915
+        },
+        "documentWidth": 412,
+        "documentHeight": 915,
+        "shell": {
+          "width": 412,
+          "height": 818,
+          "top": 37,
+          "bottom": 855
+        },
+        "fieldHost": {
+          "width": 392,
+          "height": 802
+        },
+        "canvas": {
+          "width": 392,
+          "height": 802
+        },
+        "canvasCount": 1,
+        "toolbarSlots": 8,
+        "toolbarEnabled": 8,
+        "uiAuthority": "P1R_DOM",
+        "rendererSplit": "DOM_UI_PIXI_FIELD",
+        "threeElements": 0,
+        "interactive": [
+          {
+            "id": "cm-toolbar__cell",
+            "width": 46.359375,
+            "height": 46.359375,
+            "top": 862.625,
+            "bottom": 908.984375
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 46.359375,
+            "height": 46.359375,
+            "top": 862.625,
+            "bottom": 908.984375
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 46.359375,
+            "height": 46.359375,
+            "top": 862.625,
+            "bottom": 908.984375
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 46.359375,
+            "height": 46.359375,
+            "top": 862.625,
+            "bottom": 908.984375
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 46.359375,
+            "height": 46.359375,
+            "top": 862.625,
+            "bottom": 908.984375
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 46.359375,
+            "height": 46.359375,
+            "top": 862.625,
+            "bottom": 908.984375
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 46.359375,
+            "height": 46.359375,
+            "top": 862.625,
+            "bottom": 908.984375
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 46.375,
+            "height": 46.375,
+            "top": 862.625,
+            "bottom": 909
+          }
+        ]
+      },
+      "framePacing": {
+        "sampledFrames": 120,
+        "averageFps": 60.02,
+        "medianFrameMs": 16.7,
+        "p95FrameMs": 16.8
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "screenshot": "screenshots/raising-home-412x915.png"
+    },
+    {
+      "viewport": "430x932",
+      "layout": {
+        "viewport": {
+          "width": 430,
+          "height": 932
+        },
+        "documentWidth": 430,
+        "documentHeight": 932,
+        "shell": {
+          "width": 430,
+          "height": 833,
+          "top": 37,
+          "bottom": 870
+        },
+        "fieldHost": {
+          "width": 410,
+          "height": 817
+        },
+        "canvas": {
+          "width": 410,
+          "height": 817
+        },
+        "canvasCount": 1,
+        "toolbarSlots": 8,
+        "toolbarEnabled": 8,
+        "uiAuthority": "P1R_DOM",
+        "rendererSplit": "DOM_UI_PIXI_FIELD",
+        "threeElements": 0,
+        "interactive": [
+          {
+            "id": "cm-toolbar__cell",
+            "width": 48.375,
+            "height": 48.375,
+            "top": 877.609375,
+            "bottom": 925.984375
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 48.375,
+            "height": 48.375,
+            "top": 877.609375,
+            "bottom": 925.984375
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 48.390625,
+            "height": 48.390625,
+            "top": 877.609375,
+            "bottom": 926
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 48.375,
+            "height": 48.375,
+            "top": 877.609375,
+            "bottom": 925.984375
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 48.375,
+            "height": 48.375,
+            "top": 877.609375,
+            "bottom": 925.984375
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 48.390625,
+            "height": 48.390625,
+            "top": 877.609375,
+            "bottom": 926
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 48.375,
+            "height": 48.375,
+            "top": 877.609375,
+            "bottom": 925.984375
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 48.390625,
+            "height": 48.390625,
+            "top": 877.609375,
+            "bottom": 926
+          }
+        ]
+      },
+      "framePacing": {
+        "sampledFrames": 120,
+        "averageFps": 60.03,
+        "medianFrameMs": 16.7,
+        "p95FrameMs": 16.8
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "screenshot": "screenshots/raising-home-430x932.png"
+    },
+    {
+      "viewport": "375x812",
+      "layout": {
+        "viewport": {
+          "width": 375,
+          "height": 812
+        },
+        "documentWidth": 375,
+        "documentHeight": 812,
+        "shell": {
+          "width": 375,
+          "height": 715,
+          "top": 37,
+          "bottom": 752
+        },
+        "fieldHost": {
+          "width": 355,
+          "height": 702
+        },
+        "canvas": {
+          "width": 355,
+          "height": 702
+        },
+        "canvasCount": 1,
+        "toolbarSlots": 8,
+        "toolbarEnabled": 8,
+        "uiAuthority": "P1R_DOM",
+        "rendererSplit": "DOM_UI_PIXI_FIELD",
+        "threeElements": 0,
+        "interactive": [
+          {
+            "id": "cm-toolbar__cell",
+            "width": 42.1875,
+            "height": 46,
+            "top": 760,
+            "bottom": 806
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 42.1875,
+            "height": 46,
+            "top": 760,
+            "bottom": 806
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 42.1875,
+            "height": 46,
+            "top": 760,
+            "bottom": 806
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 42.1875,
+            "height": 46,
+            "top": 760,
+            "bottom": 806
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 42.1875,
+            "height": 46,
+            "top": 760,
+            "bottom": 806
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 42.1875,
+            "height": 46,
+            "top": 760,
+            "bottom": 806
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 42.1875,
+            "height": 46,
+            "top": 760,
+            "bottom": 806
+          },
+          {
+            "id": "cm-toolbar__cell",
+            "width": 42.1875,
+            "height": 46,
+            "top": 760,
+            "bottom": 806
+          }
+        ]
+      },
+      "framePacing": {
+        "sampledFrames": 120,
+        "averageFps": 60.02,
+        "medianFrameMs": 16.7,
+        "p95FrameMs": 16.8
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "screenshot": "screenshots/raising-home-375x812.png"
+    }
+  ],
+  "saveReload": {
+    "viewport": "390x844",
+    "selectedResident": "小蛋",
+    "relocatedOnGround": {
+      "from": {
+        "x": 128,
+        "y": 120,
+        "cageDefinition": 35
+      },
+      "to": {
+        "x": 140,
+        "y": 142,
+        "cageDefinition": 35
+      }
+    },
+    "nativeHand": {
+      "eggTap": true,
+      "stroke": true,
+      "holdCarry": true,
+      "releaseLanding": true
+    },
+    "savePayloadPresent": true,
+    "restoredAfterPageReload": true,
+    "pageErrors": [],
+    "failedRequests": []
+  },
+  "pixiFallback": {
+    "viewport": "390x844",
+    "partialCanvasCount": 0,
+    "saveAvailable": true,
+    "toolbarSlots": 8,
+    "pageErrors": [],
+    "outcome": "PASS"
+  },
+  "outcome": "PASS"
+}
