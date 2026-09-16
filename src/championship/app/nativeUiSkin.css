@@ -858,7 +858,7 @@
   background: none;
   box-shadow: none;
   color: var(--ds-text);
-  font-size: 15px;
+  font-size: clamp(13px, 4vw, 15px);
   font-weight: 800;
   letter-spacing: 0.02em;
   text-shadow: var(--ds-text-shadow);

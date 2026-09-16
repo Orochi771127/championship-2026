@@ -97,9 +97,9 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   const companionLocation = node("p", "int-rh2-companion__location", "Touch a resident in the habitat.");
   const ranchIcon = node('img', 'int-rh2-companion__ranch-icon');
   ranchIcon.alt = ''; ranchIcon.hidden = true;
-  const place = node('div', 'int-rh2-companion__place');
-  place.append(ranchIcon, companionLocation);
-  companionCopy.append(companionName, place);
+  const placeChip = node('div', 'int-rh2-companion__place');
+  placeChip.append(ranchIcon, companionLocation);
+  companionCopy.append(companionName, placeChip);
 
   // OVL18 0211F790 uses the individual's current/max HP and TP. Its AP
   // readout is a constant full bar, not a fabricated combat AP value.
@@ -259,9 +259,14 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     capacityValue.textContent=Number.isInteger(resident?.displayCapacityG)?`${resident.displayCapacityG} G`:'--';
     vitals.dataset.evidence = stats?.evidence ?? "NONE";
 
-    companionLocation.textContent = uiText(resident
-      ? `Living in ${nativeRanch ? resident.nativeCageName??'Raising Home' : cageName(frame, resident.cageId)}`
-      : "Touch a resident in the habitat.");
+    // The icon and the chip already say "where", and the sentence form pushed a
+    // seven-character name into an ellipsis at 320px. The full wording stays as
+    // the chip's title for anyone reading it out.
+    const livesIn = resident
+      ? nativeRanch ? resident.nativeCageName ?? 'Raising Home' : cageName(frame, resident.cageId)
+      : null;
+    companionLocation.textContent = uiText(livesIn ?? "Touch a resident in the habitat.");
+    placeChip.title = livesIn ? uiText(`Living in ${livesIn}`) : '';
 
     paintSaveStatus(frame.save);
     const lifecycle=frame.lifecycle,day=lifecycle?.day;
