@@ -8,6 +8,8 @@ From phone screenshots of the public playtest the Owner directs: 「下面籠子
 
 Four options were put to the Owner, who chose: the resident readout becomes a card floating over the habitat; the session is written when the page is hidden, in place of the SAVE button; the habitat fills the frame's height and is panned sideways; and the batch goes to the public playtest once local verification passes.
 
+Later the same day, from a reference image: 「那全遊戲介面風格配色先調整這樣看看」, with 「上方資料卡不要有底框,可能像你說的透明玻璃感」, 「春季 第一日 時間 那邊也是同樣的透明感」, 「下面工具列改成圓角膠囊」, 「數值可以直接顯示在那個長條計量條內」, 「還有些長條選項除了圓角外,也能做比較現在未來科技感的設計感嗎」 and, after a first pass, 「因為都圓角又變一堆膠囊」 and 「那個背景的圖我喜歡原來的 全遊戲的底圖背景先用原來的」. The restyle therefore keeps the original ground and puts the new look in the panels: one added stylesheet, `src/championship/app/daylightSkin.css`, linked last.
+
 Scope: the Raising Home screen and its stylesheets, the ranch viewport transform, and the page-hidden save. No gameplay, save-format, rights or art-source change. Save & Quit in the toolbar's System menu is unchanged, and the traced lifecycle overlays keep their own screens. A real-time save and account sign-in remain a later decision.
 
 ## 2026-09-15 — Build team passwords before any online service

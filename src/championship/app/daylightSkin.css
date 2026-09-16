@@ -1,0 +1,618 @@
+/* Daylight skin. The last layer over every other stylesheet.
+ *
+ * Owner direction 2026-09-16: the product should read like the reference the
+ * Owner sent -- daylight glass, rounded, fewer hard boxes -- instead of the
+ * night-blue cabinet. It lives in one file, linked last in championship.html,
+ * so the whole look can be tuned or taken off in one place. It changes no
+ * markup and no behaviour: colours, corners, and where a readout sits.
+ */
+/* ====================================================================== *
+ * 1. PALETTE — the token retune every screen follows
+ *
+ * The Owner asked for the reference's feel: daylight glass in place of the
+ * night-blue cabinet, with every part left where it is. This is a token
+ * retune first, so the whole product moves together and one block takes it
+ * back; the rules after it repaint the few surfaces that named a dark colour
+ * directly instead of asking for a token.
+ * ====================================================================== */
+:root {
+  /* The ribbon keeps its gold, warmed so it sits on a light ground. */
+  --ds-gold-lit: #fff3cd;
+  --ds-gold: #ffd873;
+  --ds-gold-mid: #f7c04b;
+  --ds-amber: #efa63a;
+  --ds-amber-deep: #cf861f;
+
+  /* Windows: frosted glass. */
+  --ds-panel-lit: #ffffff;
+  --ds-panel: #eef8ff;
+  --ds-panel-deep: #d9edfa;
+  --ds-panel-ink: #14415c;
+
+  /* Slots: light inside, cyan rim -- the original's rule, in daylight. */
+  --ds-slot-lit: #ffffff;
+  --ds-slot: #f2fafe;
+  --ds-slot-deep: #dcedf9;
+  --ds-rim: #62c8ef;
+  --ds-rim-soft: rgba(98, 200, 239, 0.45);
+
+  --ds-green-lit: #c2f2b0;
+  --ds-green: #74d290;
+  --ds-green-deep: #3da571;
+
+  --ds-lift: 0 2px 0 rgba(20, 74, 104, 0.08), 0 10px 22px rgba(20, 74, 104, 0.18);
+  --ds-action-fill: linear-gradient(180deg, #ffffff 0%, #ddf2ff 45%, #b9e5fb 100%);
+  --ds-action-ink: #0f4761;
+
+}
+
+/* ---- 16.1 The Raising Home readout, in the reference's arrangement ----- */
+.int-rh2-root .int-rh2-companion {
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(226, 244, 255, 0.88));
+  backdrop-filter: blur(10px) saturate(1.15);
+  -webkit-backdrop-filter: blur(10px) saturate(1.15);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 0 0 1px rgba(255, 255, 255, 0.8),
+    0 12px 26px rgba(10, 52, 80, 0.26);
+  color: #12405c;
+}
+
+.int-rh2-root .int-rh2-companion__portrait {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 38%, #10456f, #06233c);
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.95),
+    0 0 0 4px rgba(99, 208, 245, 0.55),
+    0 6px 14px rgba(10, 52, 80, 0.26);
+}
+.int-rh2-root .int-rh2-companion__portrait img { border-radius: 50%; }
+
+.int-rh2-root .int-rh2-companion__name {
+  color: #10405c;
+  font-size: clamp(14px, 4.4vw, 17px);
+  text-shadow: none;
+}
+.int-rh2-root .int-rh2-companion__place {
+  padding: 3px 10px 3px 5px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: inset 0 0 0 1px rgba(98, 170, 205, 0.5);
+}
+.int-rh2-root .int-rh2-companion__location { color: #17506e; font-size: 11px; text-shadow: none; }
+
+/* One row per readout: icon and label, then a meter with its number inside. */
+.int-rh2-root .int-rh2-vitals {
+  grid-column: 1 / -1;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 4px 9px;
+}
+.int-rh2-root .int-rh2-vitals__label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #2b6484;
+  font-size: 11px;
+  font-weight: 800;
+  text-shadow: none;
+}
+.int-rh2-root .int-rh2-vitals__label::before {
+  content: "";
+  width: 13px;
+  height: 13px;
+  background: center / contain no-repeat;
+}
+.int-rh2-root .int-rh2-vitals__label[data-stat="hp"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 24 24' fill='%232f86b4'%3E%3Cpath d='M12 21S3.6 15.6 3.6 9.9A4.8 4.8 0 0 1 12 6.8a4.8 4.8 0 0 1 8.4 3.1C20.4 15.6 12 21 12 21z'/%3E%3C/svg%3E");
+}
+.int-rh2-root .int-rh2-vitals__label[data-stat="tp"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 24 24' fill='%232f86b4'%3E%3Cpath d='M13.2 2 4 14h6.1L9 22l9.4-12.4H12z'/%3E%3C/svg%3E");
+}
+.int-rh2-root .int-rh2-vitals__label[data-stat="ap"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 24 24' fill='%232f86b4'%3E%3Cpath d='M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zm0 3.6a5.4 5.4 0 1 1 0 10.8 5.4 5.4 0 0 1 0-10.8zm0 3.6a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6z'/%3E%3C/svg%3E");
+}
+.int-rh2-root .int-rh2-vitals__label[data-stat="capacity"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 24 24' fill='%232f86b4'%3E%3Cpath d='M12 2 3 7v10l9 5 9-5V7zm0 2.4 6.2 3.4L12 11.2 5.8 7.8z'/%3E%3C/svg%3E");
+}
+.int-rh2-root .int-rh2-vitals__value { display: block; margin: 0; }
+.int-rh2-root .int-rh2-vitals__bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 16px;
+  padding: 0 9px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(17, 76, 110, 0.13);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.75);
+}
+.int-rh2-root .int-rh2-vitals__bar::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--fill, 0%);
+  background: linear-gradient(90deg, #34b3ef 0%, #8ee5ff 100%);
+  box-shadow: 0 0 10px rgba(80, 200, 255, 0.45);
+}
+.int-rh2-root .int-rh2-vitals__bar[data-stat="capacity"]::before { display: none; }
+.int-rh2-root .int-rh2-vitals__num {
+  position: relative;
+  color: #0e3f5c;
+  font-size: 11px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+.int-rh2-root .int-rh2-vitals__num[hidden] { display: none; }
+
+/* The habitat's own hint and its notice, in the same glass. */
+.int-rh2-root .int-rh2-field-state {
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9), 0 6px 14px rgba(10, 52, 80, 0.22);
+  color: #17506e;
+  font-size: 11px;
+  font-weight: 700;
+  text-shadow: none;
+}
+.int-rh2-root .int-rh2-notice {
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.93);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9), 0 10px 22px rgba(10, 52, 80, 0.26);
+  color: #14415c;
+  text-shadow: none;
+}
+
+/* ---- 16.2 Glass, not panels ------------------------------------------- *
+ * Owner 2026-09-16: the readout and the season ribbon should read as glass
+ * over the world, not as boxes on top of it. The fill goes; a blur and a
+ * hairline stay, and the type carries a light halo so it holds over both the
+ * bright ground and a dark resident underneath it.
+ * ---------------------------------------------------------------------- */
+.int-rh2-root .int-rh2-companion {
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.38), rgba(219, 241, 255, 0.24));
+  backdrop-filter: blur(14px) saturate(1.25);
+  -webkit-backdrop-filter: blur(14px) saturate(1.25);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  color: #0e3a55;
+}
+.int-rh2-root .int-rh2-companion__name { text-shadow: 0 1px 0 rgba(255, 255, 255, 0.72); }
+.int-rh2-root .int-rh2-companion__place {
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+}
+.int-rh2-root .int-rh2-companion__location,
+.int-rh2-root .int-rh2-vitals__label { text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7); }
+.int-rh2-root .int-rh2-vitals__bar {
+  background: rgba(255, 255, 255, 0.42);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+}
+
+/* The season ribbon: same glass, dark type, no gold plate. */
+.cm-status-bar[data-screen] {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.46), rgba(222, 243, 255, 0.28));
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 6px 16px rgba(20, 74, 104, 0.14);
+  color: #123f59;
+}
+.cm-status-bar[data-screen]::before { display: none; }
+.cm-status-bar[data-screen] .cm-status-bar__season,
+.cm-status-bar[data-screen] .cm-status-bar__time {
+  padding: 3px 11px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+  color: #14506e;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.cm-status-bar[data-screen] .cm-status-bar__day,
+.cm-status-bar[data-screen] .cm-status-bar__day-number { color: #2c6485; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7); }
+.cm-status-bar[data-screen] .cm-status-bar__mode {
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.52);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.65);
+  color: #0f4460;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.cm-status-bar[data-screen] .cm-status-bar__end-day {
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffffff, #d8f0ff);
+  box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgba(255, 255, 255, 0.7), 0 3px 8px rgba(20, 74, 104, 0.18);
+  color: #10495f;
+}
+
+/* ---- 16.3 The tool rail: rounded pills with their names showing -------- */
+.cm-toolbar[data-mode] .cm-toolbar__rail {
+  gap: 6px;
+  padding: 7px clamp(6px, 2vw, 12px) calc(7px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.52), rgba(220, 242, 255, 0.34));
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 -6px 18px rgba(20, 74, 104, 0.14);
+}
+.cm-toolbar[data-mode] .cm-toolbar__cell {
+  aspect-ratio: auto;
+  max-width: none;
+  min-height: 54px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 5px 3px 4px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(224, 243, 255, 0.82));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 0 0 1px rgba(255, 255, 255, 0.72),
+    0 4px 10px rgba(20, 74, 104, 0.16);
+  color: #15506e;
+}
+.cm-toolbar[data-mode] .cm-toolbar__cell::before {
+  position: static;
+  inset: auto;
+  width: 26px;
+  height: 26px;
+  filter: none;
+}
+.cm-toolbar[data-mode] .cm-toolbar__cell-label {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip-path: none;
+  color: #2a6b8c;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.cm-toolbar[data-mode] .cm-toolbar__cell[aria-pressed="true"],
+.cm-toolbar[data-mode] .cm-toolbar__cell[aria-expanded="true"] {
+  background: linear-gradient(180deg, #fff8e0 0%, #ffdf8f 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 0 0 1px rgba(214, 164, 52, 0.55),
+    0 6px 14px rgba(170, 120, 24, 0.22);
+  color: #6d4a0e;
+}
+.cm-toolbar[data-mode] .cm-toolbar__cell[aria-pressed="true"] .cm-toolbar__cell-label,
+.cm-toolbar[data-mode] .cm-toolbar__cell[aria-expanded="true"] .cm-toolbar__cell-label { color: #6d4a0e; }
+.cm-toolbar[data-mode] .cm-toolbar__menu {
+  border: 0;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(226, 244, 255, 0.9));
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.75), 0 -10px 28px rgba(20, 74, 104, 0.22);
+}
+.cm-toolbar[data-mode] .cm-toolbar__entry {
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #ffffff, #e6f5ff);
+  box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgba(255, 255, 255, 0.7), 0 3px 8px rgba(20, 74, 104, 0.14);
+  color: #14506e;
+}
+
+/* The portrait well was a dark disc, which reads as a hole punched in glass. */
+.int-rh2-root .int-rh2-companion__portrait {
+  background: radial-gradient(circle at 50% 34%, rgba(255, 255, 255, 0.96), rgba(211, 238, 253, 0.85));
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.95),
+    0 0 0 4px rgba(99, 208, 245, 0.5),
+    0 6px 14px rgba(20, 74, 104, 0.2);
+}
+
+/* ---- 16.5 The pill replaces the plate ------------------------------- *
+ * The hexagon plate is drawn by the cell's ::after, above the cell's own
+ * background, so the pill only appears once the plate stands down. The count
+ * chip was placed for a hexagon's waist; on a pill it belongs in the corner.
+ * -------------------------------------------------------------------- */
+.cm-toolbar[data-mode] .cm-toolbar__cell::after { display: none; }
+.cm-toolbar[data-mode] .cm-toolbar__cell::before { inset: auto; z-index: 1; }
+.cm-toolbar[data-mode] .cm-toolbar__stock {
+  left: auto;
+  right: 5px;
+  bottom: auto;
+  top: 4px;
+  transform: none;
+  padding: 1px 5px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: inset 0 0 0 1px rgba(98, 170, 205, 0.5);
+  color: #16506e;
+  font-size: 9px;
+  font-weight: 800;
+  text-shadow: none;
+}
+
+/* ====================================================================== *
+ * 2. FEWER BOXES
+ *
+ * Owner 2026-09-16: 「這個的方塊感太多了」. Every screen was a stack of hard
+ * rectangles with a dark rim around each one. One corner, one glass fill and
+ * one soft shadow for the blocks all of them are built from.
+ *
+ * The doubled `[data-screen][data-screen]` is deliberate: the shop and a few
+ * other screens carry their own layout sheet that loads after this one at
+ * four attributes deep, and a rule has to outweigh it rather than merely
+ * follow it.
+ * ====================================================================== */
+.cm-vs2-root[data-screen][data-screen] :is(
+  .cm-vs2-preview, .cm-vs2-destination, .cm-vs2-loadout__row, .cm-vs2-loadout__option,
+  .cm-vs2-database__row, .cm-vs2-database__detail, .cm-vs2-database__instance,
+  .cm-vs2-gate, .cm-vs2-member, .cm-vs2-cage-tray__item, .cm-vs2-cage-slot,
+  .cm-vs2-shop__detail, .cm-vs2-shop__item, .cm-vs2-shop__tab, .cm-vs2-shop__wallet,
+  .cm-vs2-shop__detail-artwork, .cm-vs2-shop__detail-copy, .cm-vs2-hud__gate
+),
+.cm-vs5-root[data-screen][data-screen] :is(
+  .cm-vs5-match, .cm-vs5-fighter, .cm-vs5-log, .cm-vs5-cube__face, .cm-vs5-party, .cm-vs5-result__body
+),
+:is(.cm-championship-root, .cm-digimon-root, .cm-help-root, .cm-schedule-root, .cm-tamer-root) :is(
+  .cm-championship-entry, .cm-championship-round, .cm-championship-prize, .cm-championship-notice,
+  .cm-digimon-item__button, .cm-digimon-detail, .cm-help-topic, .cm-help-detail,
+  .cm-schedule-day, .cm-schedule-fixture, .cm-schedule-detail, .cm-tamer-card
+) {
+  border: 0;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(226, 244, 255, 0.82));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 0 0 1px rgba(255, 255, 255, 0.7),
+    0 6px 14px rgba(20, 74, 104, 0.14);
+  color: #14415c;
+}
+
+/* The one a player has chosen keeps the original's rule: gold is the choice. */
+.cm-vs2-root[data-screen][data-screen] :is(.cm-vs2-shop__tab, .cm-vs2-shop__item, .cm-vs2-gate, .cm-vs2-member, .cm-vs2-loadout__option, .cm-vs2-database__row)[aria-pressed="true"],
+.cm-vs2-root[data-screen][data-screen] :is(.cm-vs2-shop__tab, .cm-vs2-shop__item, .cm-vs2-gate, .cm-vs2-member, .cm-vs2-loadout__option, .cm-vs2-database__row)[aria-selected="true"],
+.cm-vs5-root[data-screen][data-screen] :is(.cm-vs5-match, .cm-vs5-fighter, .cm-vs5-cube__face)[aria-pressed="true"],
+:is(.cm-championship-root, .cm-digimon-root, .cm-help-root, .cm-schedule-root) :is(.cm-championship-entry, .cm-digimon-item__button, .cm-help-topic, .cm-schedule-fixture)[aria-pressed="true"] {
+  background: linear-gradient(180deg, #fff8e2 0%, #ffe09a 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 0 0 1px rgba(214, 164, 52, 0.55),
+    0 6px 14px rgba(170, 120, 24, 0.22);
+  color: #6d4a0e;
+}
+
+/* Screens that paint their own ground let the daylight shell show through. */
+.cm-vs2-root[data-screen][data-screen] :is(
+  .cm-vs2-shop, .cm-vs2-shop__body, .cm-vs2-shop__tabs, .cm-vs2-shop__items, .cm-vs2-shop__detail-meta,
+  .cm-vs2-body, .cm-vs2-database, .cm-vs2-gates, .cm-vs2-loadout, .cm-vs2-cage-board
+) {
+  background: transparent;
+  border-color: transparent;
+}
+
+/* Type inside those blocks, so a cyan-on-navy readout does not stay cyan on
+   white. Numbers keep their weight; the accent moves to a readable blue. */
+.cm-vs2-root[data-screen][data-screen] :is(
+  .cm-vs2-shop__detail-name, .cm-vs2-shop__detail-description, .cm-vs2-shop__detail-cost,
+  .cm-vs2-shop__item-name, .cm-vs2-shop__item-cost, .cm-vs2-gate__name, .cm-vs2-gate__ordinal,
+  .cm-vs2-database__row, .cm-vs2-loadout__name, .cm-vs2-loadout__detail, .cm-vs2-destination__name
+),
+.cm-vs5-root[data-screen][data-screen] :is(.cm-vs5-fighter__name, .cm-vs5-log__line, .cm-vs5-log__detail),
+:is(.cm-championship-root, .cm-digimon-root, .cm-help-root, .cm-schedule-root) :is(
+  .cm-championship-entry__name, .cm-championship-entry__reason, .cm-digimon-detail__value, .cm-help-detail__body
+) {
+  color: #14415c;
+  text-shadow: none;
+}
+
+/* Screen headings and the back rail: pills, not plates. */
+.cm-vs2-root[data-screen][data-screen] :is(.cm-vs2-action, .cm-vs2-back),
+.cm-vs5-root[data-screen][data-screen] .cm-vs5-action,
+:is(.cm-championship-root, .cm-digimon-root, .cm-help-root, .cm-schedule-root, .cm-tamer-root) :is(
+  .cm-championship-action, .cm-championship-back, .cm-digimon-control, .cm-digimon-back,
+  .cm-help-back, .cm-schedule-back, .cm-tamer-back
+) {
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffffff 0%, #dcf1ff 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 0 0 1px rgba(255, 255, 255, 0.72),
+    0 4px 10px rgba(20, 74, 104, 0.16);
+  color: #10495f;
+  text-shadow: none;
+}
+.cm-vs2-root[data-screen][data-screen] .cm-vs2-action--primary,
+.cm-vs5-root[data-screen][data-screen] .cm-vs5-action--primary,
+:is(.cm-championship-root) .cm-championship-action--primary {
+  background: linear-gradient(180deg, #fff6d4 0%, #ffd873 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 0 0 1px rgba(214, 164, 52, 0.5),
+    0 6px 14px rgba(170, 120, 24, 0.2);
+  color: #6d4a0e;
+}
+
+/* ====================================================================== *
+ * 3. A SHAPE LANGUAGE, NOT A PILE OF PILLS
+ *
+ * Owner 2026-09-16: 「因為都圓角又變一堆膠囊」. One radius on everything
+ * flattens the hierarchy -- every element shouts the same. Three shapes:
+ *
+ *   panel  a wide surface, one bevelled corner, two bracket ticks
+ *   strip  a list row: bevelled corners, a lit left edge, flat face
+ *   pill   the primary action only, so a capsule means "this is the button"
+ *
+ * The bevel is cut with clip-path, so the drop shadow is drawn with a filter
+ * -- a box-shadow would be clipped away with the corner.
+ * ====================================================================== */
+
+/* ---- 3.1 Strips ------------------------------------------------------- */
+.cm-vs2-root[data-screen][data-screen] :is(
+  .cm-vs2-shop__row, .cm-vs2-shop__tab, .cm-vs2-database__row, .cm-vs2-loadout__option,
+  .cm-vs2-gate, .cm-vs2-member, .cm-vs2-cage-tray__item
+),
+:is(.cm-championship-root, .cm-digimon-root, .cm-help-root, .cm-schedule-root) :is(
+  .cm-championship-entry, .cm-digimon-item__button, .cm-help-topic, .cm-schedule-fixture
+) {
+  border: 0;
+  border-radius: 3px;
+  clip-path: polygon(0 0, calc(100% - 13px) 0, 100% 13px, 100% 100%, 13px 100%, 0 calc(100% - 13px));
+  background:
+    linear-gradient(112deg, rgba(255, 255, 255, 0.5) 0 24%, rgba(255, 255, 255, 0) 24.4%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(221, 241, 253, 0.88) 100%);
+  box-shadow:
+    inset 3px 0 0 rgba(47, 169, 224, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    inset 0 0 0 1px rgba(122, 190, 224, 0.28);
+  color: #14415c;
+}
+
+.cm-vs2-root[data-screen][data-screen] :is(
+  .cm-vs2-shop__row, .cm-vs2-shop__tab, .cm-vs2-database__row, .cm-vs2-loadout__option, .cm-vs2-gate, .cm-vs2-member
+):is([aria-pressed="true"], [aria-selected="true"], [data-selected="true"]),
+:is(.cm-championship-root, .cm-digimon-root, .cm-help-root, .cm-schedule-root) :is(
+  .cm-championship-entry, .cm-digimon-item__button, .cm-help-topic, .cm-schedule-fixture
+):is([aria-pressed="true"], [aria-selected="true"]) {
+  background:
+    linear-gradient(112deg, rgba(255, 255, 255, 0.6) 0 24%, rgba(255, 255, 255, 0) 24.4%),
+    linear-gradient(180deg, #fff9e6 0%, #ffe6ab 100%);
+  box-shadow:
+    inset 3px 0 0 #e9a11d,
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 0 1px rgba(214, 164, 52, 0.45);
+  color: #6d4a0e;
+}
+
+/* ---- 3.2 Panels ------------------------------------------------------- */
+.cm-vs2-root[data-screen][data-screen] :is(
+  .cm-vs2-shop__detail, .cm-vs2-shop__shelf, .cm-vs2-database__detail, .cm-vs2-database__instance,
+  .cm-vs2-preview, .cm-vs2-destination, .cm-vs2-loadout__row
+),
+.cm-vs5-root[data-screen][data-screen] :is(.cm-vs5-log, .cm-vs5-party, .cm-vs5-result__body),
+:is(.cm-championship-root, .cm-digimon-root, .cm-help-root, .cm-schedule-root, .cm-tamer-root) :is(
+  .cm-digimon-detail, .cm-help-detail, .cm-schedule-detail, .cm-championship-board, .cm-championship-prize
+) {
+  border: 0;
+  border-radius: 4px;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
+  background:
+    linear-gradient(90deg, rgba(47, 169, 224, 0.85) 0 20px, rgba(47, 169, 224, 0) 20px) no-repeat 11px 9px / 20px 2px,
+    linear-gradient(180deg, rgba(47, 169, 224, 0.85) 0 20px, rgba(47, 169, 224, 0) 20px) no-repeat 9px 11px / 2px 20px,
+    linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(228, 245, 255, 0.88) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 0 1px rgba(122, 190, 224, 0.32);
+  filter: drop-shadow(0 6px 13px rgba(20, 74, 104, 0.14));
+  color: #14415c;
+}
+
+/* The art wells inside those panels were navy plates. */
+.cm-vs2-root[data-screen][data-screen] :is(
+  .cm-vs2-shop__card-art, .cm-vs2-shop__detail-art, .cm-vs2-shop__art-large, .cm-vs2-shop__art-fallback
+) {
+  border: 0;
+  border-radius: 3px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(213, 238, 252, 0.86));
+  box-shadow: inset 0 0 0 1px rgba(122, 190, 224, 0.4);
+}
+
+/* ---- 3.3 One capsule, and it is the action --------------------------- */
+.cm-vs2-root[data-screen][data-screen] .cm-vs2-action,
+.cm-vs5-root[data-screen][data-screen] .cm-vs5-action {
+  border-radius: 4px;
+  clip-path: polygon(0 0, calc(100% - 11px) 0, 100% 11px, 100% 100%, 11px 100%, 0 calc(100% - 11px));
+}
+.cm-vs2-root[data-screen][data-screen] .cm-vs2-action--primary,
+.cm-vs5-root[data-screen][data-screen] .cm-vs5-action--primary,
+.cm-vs2-root[data-screen][data-screen] .cm-vs2-shop__buy,
+.cm-championship-root .cm-championship-action--primary {
+  clip-path: none;
+  border-radius: 999px;
+}
+
+/* Small readouts stay quiet: a thin lit underline instead of another box. */
+.cm-vs2-root[data-screen][data-screen] :is(.cm-vs2-shop__meta, .cm-vs2-shop__status, .cm-vs2-shop__wallet) {
+  border: 0;
+  border-radius: 3px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(226, 244, 255, 0.78));
+  box-shadow: inset 0 -2px 0 rgba(47, 169, 224, 0.55), inset 0 0 0 1px rgba(122, 190, 224, 0.3);
+  color: #14415c;
+}
+
+/* ---- 3.4 What the shop still had tuned for navy ---------------------- */
+.cm-vs2-root[data-screen][data-screen] :is(
+  .cm-vs2-shop__name, .cm-vs2-shop__meta, .cm-vs2-shop__status, .cm-vs2-shop__wallet,
+  .cm-vs2-shop__detail-name, .cm-vs2-shop__detail-description, .cm-vs2-shop__detail-meta
+) {
+  color: #14415c;
+  text-shadow: none;
+}
+.cm-vs2-root[data-screen][data-screen] .cm-vs2-shop__new { color: #a15c00; }
+
+/* The goods icon sits on the panel now, so it drops its navy plate. */
+.cm-vs2-root[data-screen][data-screen] .cm-shop-goods-icon {
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(122, 190, 224, 0.45);
+}
+
+/* The shelf arrows. */
+.cm-vs2-root[data-screen][data-screen] .cm-vs2-shop__arrow {
+  border: 0;
+  border-radius: 3px;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(220, 241, 253, 0.84));
+  box-shadow: inset 0 0 0 1px rgba(122, 190, 224, 0.4);
+  color: #17506e;
+}
+.cm-vs2-root[data-screen][data-screen] .cm-vs2-shop__arrow:disabled { opacity: 0.45; }
+
+/* The shop names its own type one level deeper, and keeps a navy action bar. */
+.cm-vs2-root[data-screen][data-screen] :is(.cm-vs2-shop__name, .cm-vs2-shop__meta, .cm-vs2-shop__status) strong {
+  color: #14415c;
+  text-shadow: none;
+}
+.cm-vs2-root[data-screen][data-screen] .cm-vs2-shop__row:is([data-selected="true"], [aria-selected="true"]) .cm-vs2-shop__name strong {
+  color: #7a5200;
+}
+.cm-vs2-root[data-screen][data-screen] .cm-vs2-footer {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(226, 244, 255, 0.42));
+  backdrop-filter: blur(12px) saturate(1.15);
+  -webkit-backdrop-filter: blur(12px) saturate(1.15);
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 -6px 16px rgba(20, 74, 104, 0.12);
+}
+
+/* The battle-mode faces are list options too, so they take the strip. */
+.cm-vs5-root[data-screen][data-screen] .cm-vs5-cube__face {
+  border: 0;
+  border-radius: 3px;
+  clip-path: polygon(0 0, calc(100% - 13px) 0, 100% 13px, 100% 100%, 13px 100%, 0 calc(100% - 13px));
+  background:
+    linear-gradient(112deg, rgba(255, 255, 255, 0.5) 0 24%, rgba(255, 255, 255, 0) 24.4%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(221, 241, 253, 0.88) 100%);
+  box-shadow:
+    inset 3px 0 0 rgba(47, 169, 224, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    inset 0 0 0 1px rgba(122, 190, 224, 0.28);
+  color: #14415c;
+}
+.cm-vs5-root[data-screen][data-screen] .cm-vs5-cube__face[aria-pressed="true"] {
+  background:
+    linear-gradient(112deg, rgba(255, 255, 255, 0.6) 0 24%, rgba(255, 255, 255, 0) 24.4%),
+    linear-gradient(180deg, #fff9e6 0%, #ffe6ab 100%);
+  box-shadow:
+    inset 3px 0 0 #e9a11d,
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 0 1px rgba(214, 164, 52, 0.45);
+  color: #6d4a0e;
+}

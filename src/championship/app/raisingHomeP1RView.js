@@ -103,24 +103,28 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
 
   // OVL18 0211F790 uses the individual's current/max HP and TP. Its AP
   // readout is a constant full bar, not a fabricated combat AP value.
+  //
+  // Owner 2026-09-16: one row per readout, and the number rides inside its own
+  // meter rather than claiming a column of its own.
   const vitals = node("dl", "int-rh2-vitals");
-  function meter(label) {
+  function meter(stat, label) {
+    const term = node("dt", "int-rh2-vitals__label", label);
+    term.dataset.stat = stat;
     const value = node("dd", "int-rh2-vitals__value");
-    const text = node("span", "int-rh2-vitals__num", "--");
     const bar = node("span", "int-rh2-vitals__bar");
-    value.append(text, bar);
-    return { label: node("dt", "int-rh2-vitals__label", label), value, text, bar };
+    bar.dataset.stat = stat;
+    const text = node("span", "int-rh2-vitals__num", "--");
+    bar.append(text);
+    value.append(bar);
+    vitals.append(term, value);
+    return { term, value, bar, text };
   }
-  const hp = meter("HP"), tp = meter("TP");
-  const apValue = node('dd','int-rh2-vitals__value int-rh2-vitals__ap');
-  const apBar=node('span','int-rh2-vitals__ap-bar');apBar.setAttribute('aria-label','AP');apValue.append(apBar);
-  const capacityValue=node('dd','int-rh2-vitals__value int-rh2-vitals__capacity','--');
-  vitals.append(
-    hp.label, hp.value,
-    tp.label, tp.value,
-    node('dt','int-rh2-vitals__label','AP'),apValue,
-    node('dt','int-rh2-vitals__label','容量'),capacityValue
-  );
+  const hp = meter('hp', 'HP');
+  const tp = meter('tp', 'TP');
+  const ap = meter('ap', 'AP');
+  const capacity = meter('capacity', '容量');
+  ap.bar.setAttribute('aria-label', 'AP');
+  ap.text.hidden = true;
   companionCopy.append(vitals);
   // The generic CARE button was removed on 2026-09-03 at the Owner's direction:
   // the original has no such control. Care there is "pick a tool, touch the
@@ -149,7 +153,11 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     setTimeout(()=>URL.revokeObjectURL(url),1000);
   });
   notice.append(noticeText, recovery);
-  fieldFrame.append(companion, notice);
+  // Readout and notice share one column at the top of the habitat, so the
+  // notice never has to be told how tall the card is.
+  const overlay = node("div", "int-rh2-overlay");
+  overlay.append(companion, notice);
+  fieldFrame.append(overlay);
 
   // One screen: the habitat, with its readout and notices over it. The shared
   // status bar and toolbar remain mounted by the existing application.
@@ -257,9 +265,8 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     tp.text.textContent = uiText(stats ? `${currentTp} / ${stats.maxTp}` : "--");
     hp.bar.style.setProperty('--fill', stats ? fill(stats.currentHp, stats.maxHp) : '0%');
     tp.bar.style.setProperty('--fill', stats ? fill(currentTp, stats.maxTp) : '0%');
-    hp.bar.hidden = tp.bar.hidden = !stats;
-    apBar.hidden=!resident;
-    capacityValue.textContent=Number.isInteger(resident?.displayCapacityG)?`${resident.displayCapacityG} G`:'--';
+    ap.bar.style.setProperty('--fill', resident ? '100%' : '0%');
+    capacity.text.textContent=Number.isInteger(resident?.displayCapacityG)?`${resident.displayCapacityG} G`:'--';
     vitals.dataset.evidence = stats?.evidence ?? "NONE";
 
     // The icon and the chip already say "where", and the sentence form pushed a
