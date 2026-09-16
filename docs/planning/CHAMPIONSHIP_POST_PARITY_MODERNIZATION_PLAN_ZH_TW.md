@@ -1,5 +1,7 @@
 # Championship 2026 — 原作重建後現代化與擴充計畫
 
+> **2026-09-16 收束校正：** 本輪由 Handoff 指定 Cage proof → responsive foundation → Creature readiness；下文 Gate Select POC 與其他未來階段保留為歷史候選，並非本輪第二份 roadmap。Nexus 原創內容在 Championship 現有架構上演進；「另開原創 IP」指內容與權利範圍，不能解讀為第二個 app。本輪执行範圍以 [Convergence Handoff](../coordination/CODEX_CONVERGENCE_HANDOFF_2026-09-16_ZH_TW.md) 為準：先 `field_cm01_01` 既有素材 proof，再三尺寸 responsive foundation；Creature 僅檢查 readiness。實測結果與唯一下一步清單見[收束報告](../reports/convergence-2026-09-16/REPORT_ZH_TW.md)。下文未完成的產品設計仍為 `DEFERRED`，不構成額外施工或批量生成授權。
+
 > **2026-09-15 現行工作順序：** Owner 已要求先完成原作內容的原創開發，優先角色與棲地籠子。依[本階段工作包](ORIGINAL_CHARACTER_CAGE_FIRST_2026-09-15.md)處理完整角色動作與既有籠子外觀；本文件的 Habitat 新生活AI、派遣、離線、線上等保留為未來規劃，不作本階段完成條件。先前聊天選過的未來偏好不因排序調整自動改變；Electron及Render/PostgreSQL也不是本階段的必要選型。
 
 日期：2026-09-14  

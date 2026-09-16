@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 1,
+  "fieldId": "field_cm01_01",
+  "status": "AUTHORING_PROOF_ONLY",
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "geometryAuthority": "EXISTING_SOURCE_AND_DECODED_EVIDENCE_NOT_NEW_GAMEPLAY",
+  "geometry": {
+    "definitionIndex": 0,
+    "shapeIndex": 0,
+    "shapeMask": 1,
+    "coordinateSpaces": [
+      "CAGE_EDIT_BOARD_256x192",
+      "OCCUPANCY_COLUMN_MAJOR",
+      "ORIGINAL_FIELD_DESTINATION_TILES",
+      "OBJECT_LOCAL_NATIVE_PIXELS"
+    ],
+    "boardCells": [
+      {
+        "slotIndex": 8,
+        "column": 4,
+        "row": 0,
+        "x": 98,
+        "y": 8,
+        "hiddenByCover": false
+      },
+      {
+        "slotIndex": 9,
+        "column": 4,
+        "row": 1,
+        "x": 110,
+        "y": 30,
+        "hiddenByCover": false
+      }
+    ],
+    "tileOrigins": [
+      {
+        "tileX": 48,
+        "tileY": 0,
+        "coordinateSpace": "ORIGINAL_FIELD_DESTINATION_TILES",
+        "evidence": "VERIFIED_BINARY_NATIVE_REPLAY"
+      },
+      {
+        "tileX": 54,
+        "tileY": 8,
+        "coordinateSpace": "ORIGINAL_FIELD_DESTINATION_TILES",
+        "evidence": "VERIFIED_BINARY_NATIVE_REPLAY"
+      }
+    ]
+  },
+  "core": {
+    "sourceImage": "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/core-native.png",
+    "size": [
+      96,
+      112
+    ]
+  },
+  "objects": [
+    {
+      "objectId": "obj-000",
+      "order": 0,
+      "sequenceId": 1,
+      "cellId": 1,
+      "ticks": 2,
+      "sourceImage": "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/object-cells/cell-001.png",
+      "size": [
+        64,
+        48
+      ],
+      "placement": [
+        68,
+        88
+      ],
+      "pivot": [
+        40,
+        35
+      ],
+      "horizontalFlip": false,
+      "verticalFlip": false,
+      "safeAlphaBounds": [
+        1,
+        0,
+        63,
+        48
+      ],
+      "layerRole": "SOURCE_ORDER_STATIC_BAKED_OBJECT",
+      "placementBinding": "OPMD_TO_NANR_TO_NCER"
+    },
+    {
+      "objectId": "obj-001",
+      "order": 1,
+      "sequenceId": 2,
+      "cellId": 2,
+      "ticks": 2,
+      "sourceImage": "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/object-cells/cell-002.png",
+      "size": [
+        32,
+        64
+      ],
+      "placement": [
+        62,
+        17
+      ],
+      "pivot": [
+        19,
+        56
+      ],
+      "horizontalFlip": false,
+      "verticalFlip": false,
+      "safeAlphaBounds": [
+        3,
+        2,
+        32,
+        56
+      ],
+      "layerRole": "SOURCE_ORDER_STATIC_BAKED_OBJECT",
+      "placementBinding": "OPMD_TO_NANR_TO_NCER"
+    },
+    {
+      "objectId": "obj-002",
+      "order": 2,
+      "sequenceId": 0,
+      "cellId": 0,
+      "ticks": 2,
+      "sourceImage": "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/object-cells/cell-000.png",
+      "size": [
+        48,
+        80
+      ],
+      "placement": [
+        50,
+        19
+      ],
+      "pivot": [
+        23,
+        66
+      ],
+      "horizontalFlip": false,
+      "verticalFlip": false,
+      "safeAlphaBounds": [
+        0,
+        1,
+        48,
+        77
+      ],
+      "layerRole": "SOURCE_ORDER_STATIC_BAKED_OBJECT",
+      "placementBinding": "OPMD_TO_NANR_TO_NCER"
+    },
+    {
+      "objectId": "obj-003",
+      "order": 3,
+      "sequenceId": 3,
+      "cellId": 3,
+      "ticks": 2,
+      "sourceImage": "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/object-cells/cell-003.png",
+      "size": [
+        32,
+        64
+      ],
+      "placement": [
+        84,
+        22
+      ],
+      "pivot": [
+        9,
+        44
+      ],
+      "horizontalFlip": false,
+      "verticalFlip": false,
+      "safeAlphaBounds": [
+        0,
+        1,
+        22,
+        52
+      ],
+      "layerRole": "SOURCE_ORDER_STATIC_BAKED_OBJECT",
+      "placementBinding": "OPMD_TO_NANR_TO_NCER"
+    }
+  ],
+  "rules": {
+    "composition": "CORE_THEN_SOURCE_ORDER_OBJECTS",
+    "objectRoot": "placement - pivot",
+    "crop": "CLIP_TO_EXISTING_96x112_FIELD_BOUNDS_INCLUDING_NEGATIVE_OBJECT_ROOTS",
+    "allowNewAlphaOutsideSafeBounds": false,
+    "runtimeObjectPass": false,
+    "changedCanvasOrPivot": "REQUIRES_NEW_EXPLICIT_CONTRACT_VERSION_AND_REVIEW",
+    "collisionSemantics": "RAW_CLASSES_ONLY_USE_EXISTING_GROUND_RUNTIME_FOR_PLAYABILITY",
+    "connectorSemantics": "EXISTING_TILE_CROP_AND_WRAP_NO_INVENTED_SOCKETS",
+    "foregroundOcclusion": "UNKNOWN_REQUIRES_TRACE"
+  },
+  "sourceLocks": {
+    "docs/art/production/cage/faithful-hd40/manifest.json": "7304D850AFBAFBC3DDBC3B12194288E46D9233617AF13616EF553E73C50B4AFF",
+    "assets/production/cage/licensed-runtime-v1/manifest.json": "AAEDCF8BC2CA34A3B0A2EA79891570904B8FE02ED2611B984EE144CEB170F709",
+    "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/attribute-raw-classes.json": "2B3AAB2ACAA7DFFF12C3FFE75AC6449D9ED78D8D3519E91330372C7609266E51",
+    "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/collision-raw-classes.json": "3D73F56218A1B3ED11E2545E2B5FF036C05A955157B107C79B68BB50ECE7EF07",
+    "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/core-tilemap.json": "1393AED7733816AFBCE5AAD2857EC2C2B9B800FB62D6D71EFCCED41104154D29",
+    "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/object-animation-bank.json": "DF40F58FBE9AFECDBA99439D516F55704849E42FEF755BA8F8F10596D95584D9",
+    "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/object-cell-bank.json": "7BA0C52C993350626FBEECA2F4F8AA684412B0651C4D9733B96C90CD05818FB3",
+    "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/object-placement.json": "9FB462A178B9A2C93C3D13F3564000BDF1A7F342C9B83A75A03B5DF1D9C1D034",
+    "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/core-native.png": "87152FFFDF8278FD2772A78F410D28BBEA7F12C7897282A8DCD7A78B5943DBC7",
+    "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/faithful-hd4x.png": "816EC7851457DF8DF012A71CF36CEBC69DBDAF62E42B2C091D746733FA1DBB0A",
+    "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/native-original.png": "241BC59C24E0A89F2481708E45450553940C9834D734D7A71A1C9C49E4113862",
+    "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/static-composite-native.png": "241BC59C24E0A89F2481708E45450553940C9834D734D7A71A1C9C49E4113862",
+    "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/object-cells/cell-000.png": "F8A6CBD1A8C02BE24A8843BFA9C0FD52E02EBA2E2D0BA2693A52CD9D13E31C2A",
+    "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/object-cells/cell-001.png": "6C80214AE4B4478772579D20914C8B96BF678F249110BCD38EABE5AAC07BFCAE",
+    "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/object-cells/cell-002.png": "2DBA29F3CF79859CEFCE5C91085A505168A14D67D7A6753A3CB4FE5FAEC0DB9B",
+    "docs/art/production/cage/faithful-hd40/fields/field_cm01_01/object-cells/cell-003.png": "BE2F7C82BEAB44860747D6A09D5AB007F433F08CD4F759EFCFA2CB820DF5DAA4",
+    "src/championship/cage/ranchSlotGeometry.js": "5507C4A39B0711F9662A911F817919DFEF4C15E89838F9F63DBD4BC31248A6DD",
+    "src/championship/cage/ranchTileComposition.js": "5AF25A2BDC50AE67C031D3B0B2742D7FA95BE193641555AF0584583B9C061E56",
+    "src/championship/cage/nativeRanchLayout.js": "816F0A52801307872E76E228F5F0130C23FF6C7AD084A0E7F62B015A2F5E0454",
+    "src/championship/cage/cageCatalog.js": "BFD1CB54936989C71B05262FE345142BC095D8AC9213DAD063F49B8BBF64A88A",
+    "src/championship/presentation/raisingCageArtPlan.js": "EBB9E6C0923DA0866C5E91101765DA1EFEA40C95F63CBCE1BC6C3B1870970E63",
+    "src/championship/raising/nativeRaisingGround.js": "C0163AADBD8CDD90266B615366297CA9654F3B5C841E95BF4E8CF4C2D91AB538",
+    "src/data/championship/catalogs/raising-ground.r1.json": "272CAA8E575F9C107AB3058DA351D45E75FE156B0B2FB6361AA74C3BC70D1242"
+  }
+}

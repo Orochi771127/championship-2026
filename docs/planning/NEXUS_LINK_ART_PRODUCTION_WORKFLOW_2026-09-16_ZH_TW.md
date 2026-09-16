@@ -1,5 +1,7 @@
 # Championship 2026 → Nexus Link：美術量產工作流
 
+> **2026-09-16 收束校正：** 本輪执行範圍以 [Convergence Handoff](../coordination/CODEX_CONVERGENCE_HANDOFF_2026-09-16_ZH_TW.md) 為準：先 `field_cm01_01` 既有素材 proof，再三尺寸 responsive foundation；Creature 僅檢查 readiness。實測結果與唯一下一步清單見[收束報告](../reports/convergence-2026-09-16/REPORT_ZH_TW.md)。下文未完成的產品設計仍為 `DEFERRED`，不構成額外施工或批量生成授權。
+
 日期：2026-09-16  
 狀態：`OWNER_DIRECTION / PLANNING_ONLY / NO_RUNTIME_REWRITE_AUTHORIZED`
 
@@ -17,7 +19,7 @@
 1. 同一角色跨姿勢／跨動畫的身分一致；
 2. 角色比例、朝向、色彩、配件不漂移；
 3. 透明背景與邊緣乾淨；
-4. 每格共用 scale / anchor，進遊戲不滑動；
+4. 依適用 AnimationProfile 保存座標：native 替換保留每格 origin/offset/scale/timing/flip/blank；新原創 profile 才可宣告共享設計比例與參考底線；
 5. 動作在 64–128px gameplay 尺度仍可讀；
 6. 不把每一 frame 都當成獨立 AI 圖重新生成；
 7. 圖片產出後能自動整理成 frames / strip / atlas / manifest；
@@ -311,6 +313,8 @@ canonical anchor
 - 禁止因一個 action 失敗而重生整隻角色全部動畫。
 
 ### Stage E — `CLEAN_AND_NORMALIZE`
+
+**適用範圍校正：** 下列 shared scale / bottom-center 是新原創 profile 的 authoring 方法。既有 native 角色必須先經 `build-character-appearance-workflow.py` / `compile-pixel-character-bank.py` 的逐格證據與幾何驗證；禁止把 generic sprite-pipeline 的 normalization 直接套到 native frames。第 5 節兩個 production pilot 及 ComfyUI A/B 均為未來 `DEFERRED`，本輪只有 readiness。
 
 自動化：
 

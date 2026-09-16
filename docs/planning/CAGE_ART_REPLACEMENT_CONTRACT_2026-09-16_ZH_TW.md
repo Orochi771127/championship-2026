@@ -1,5 +1,7 @@
 # Championship 2026 Cage / Habitat 美術替換契約
 
+> **2026-09-16 收束校正：** 本輪执行範圍以 [Convergence Handoff](../coordination/CODEX_CONVERGENCE_HANDOFF_2026-09-16_ZH_TW.md) 為準：先 `field_cm01_01` 既有素材 proof，再三尺寸 responsive foundation；Creature 僅檢查 readiness。實測結果與唯一下一步清單見[收束報告](../reports/convergence-2026-09-16/REPORT_ZH_TW.md)。下文未完成的產品設計仍為 `DEFERRED`，不構成額外施工或批量生成授權。
+
 日期：2026-09-16  
 狀態：`PLANNING_ONLY / EVIDENCE-GROUNDED / NO_RUNTIME_REWRITE_AUTHORIZED`
 
@@ -203,7 +205,7 @@ old full image
  -> replace frame-00.png
 ```
 
-問題：小物件仍由 runtime placement 疊加，可能造成 duplicate、錯位、遮擋與接縫。
+校正：目前 `runtimeMapArtBundle.js` 載入的是已合成 field frame，native ranch 再按模組裁切／回捲；沒有第二次疊加這四個 object cells。完整 PNG 可以是 build output；它不能是唯一 authoring master。只有未來誤加第二次 object pass 才會重複。
 
 ### 禁止 B — 目測重新擺 object
 
@@ -349,7 +351,7 @@ AI / Artist 接到的工作不是「看原圖重畫」，而是：
 
 1. 自動讀取 `field_cm01_01` evidence；
 2. 產生 authoring template；
-3. 將 4 個 object cells 改成測試用原創 visual；
+3. 本輪沿用 4 個既有 object cells；原創 visual replacement 延後，不因 proof PASS 自動開始；
 4. anchor/placement 不改；
 5. 自動 composite；
 6. 顯示 geometry overlay；

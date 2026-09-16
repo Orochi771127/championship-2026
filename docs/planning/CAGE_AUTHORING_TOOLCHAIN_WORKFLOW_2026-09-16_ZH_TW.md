@@ -1,5 +1,7 @@
 # Championship 2026 Cage / Habitat Authoring Toolchain
 
+> **2026-09-16 收束校正：** 本輪执行範圍以 [Convergence Handoff](../coordination/CODEX_CONVERGENCE_HANDOFF_2026-09-16_ZH_TW.md) 為準：先 `field_cm01_01` 既有素材 proof，再三尺寸 responsive foundation；Creature 僅檢查 readiness。實測結果與唯一下一步清單見[收束報告](../reports/convergence-2026-09-16/REPORT_ZH_TW.md)。下文未完成的產品設計仍為 `DEFERRED`，不構成額外施工或批量生成授權。
+
 日期：2026-09-16  
 狀態：`PLANNING_ONLY / TOOLCHAIN_PROPOSAL / NO_RUNTIME_ENGINE_CHANGE`
 
@@ -91,7 +93,9 @@ Repository：`Garhoogin/NitroPaint`
 
 ---
 
-### D. Sharp — `DEFAULT_DETERMINISTIC_COMPOSITOR_CANDIDATE`
+### D. Sharp — `DEFERRED_EQUIVALENT_EXISTS`
+
+已找到 `scripts/lib/ydij_map_formats.py` 與 `build-cage-faithful-hd40.py`。本輪沿用 Pillow，增加 exported-cell compositor proof；Sharp 沒有新增。下列命令是原先提案，實際入口為 `npm run art:cage:proof`、`npm run test:cage:proof`、`npm run test:browser:convergence`。Tiled / NitroPaint / Aseprite / Blender 均不是本 proof 的必要安裝。upstream、license、維護狀態與 compatibility 見收束報告；沒有 vendoring 第三方程式碼。
 
 Repository：`lovell/sharp`
 
@@ -206,7 +210,7 @@ scene / placement        props / pivots
        │                       │
        └───────────┬───────────┘
                    ▼
-               Sharp build
+      Existing Python/Pillow build
                    │
        ┌───────────┴───────────┐
        ▼                       ▼

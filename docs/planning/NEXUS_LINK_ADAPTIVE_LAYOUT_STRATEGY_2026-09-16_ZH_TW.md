@@ -1,5 +1,7 @@
 # Nexus Link / Championship 2026 自適應畫面策略：iPad、Foldable、Desktop
 
+> **2026-09-16 收束校正：** 本輪执行範圍以 [Convergence Handoff](../coordination/CODEX_CONVERGENCE_HANDOFF_2026-09-16_ZH_TW.md) 為準：先 `field_cm01_01` 既有素材 proof，再三尺寸 responsive foundation；Creature 僅檢查 readiness。實測結果與唯一下一步清單見[收束報告](../reports/convergence-2026-09-16/REPORT_ZH_TW.md)。下文未完成的產品設計仍為 `DEFERRED`，不構成額外施工或批量生成授權。
+
 日期：2026-09-16  
 狀態：`PLANNING_ONLY / SAME_RUNTIME_ONLY / NO_SECOND_UI_SYSTEM`
 
@@ -170,7 +172,7 @@ foreground
 ambient FX
 ```
 
-Phone 顯示中心 crop；iPad/Fold 顯示更多左右場景。可使用 overscan / modular tiles，而不是為每種比例重畫。
+此段是未來 composition 目標。現況使用同一個 Raising camera / portraitFrame，實際可见寬度由 host 與相機決定；不得保證 iPad 一定顯示更多世界。先量測三尺寸，side inspector、rail、背景延伸與 fold APIs 均留 `DEFERRED`，不增加裝置專屬素材。
 
 ### UI
 

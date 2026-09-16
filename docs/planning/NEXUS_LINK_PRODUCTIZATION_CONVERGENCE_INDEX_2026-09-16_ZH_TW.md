@@ -1,5 +1,7 @@
 # Nexus Link / Championship 2026 產品化收束索引
 
+> **2026-09-16 收束校正：** 本輪执行範圍以 [Convergence Handoff](../coordination/CODEX_CONVERGENCE_HANDOFF_2026-09-16_ZH_TW.md) 為準：先 `field_cm01_01` 既有素材 proof，再三尺寸 responsive foundation；Creature 僅檢查 readiness。實測結果與唯一下一步清單見[收束報告](../reports/convergence-2026-09-16/REPORT_ZH_TW.md)。下文未完成的產品設計仍為 `DEFERRED`，不構成額外施工或批量生成授權。
+
 日期：2026-09-16  
 狀態：`PLANNING_ENTRYPOINT / READ_THIS_FIRST`
 
@@ -143,7 +145,7 @@ approved identity
  -> action blueprint
  -> whole action generation / pose control
  -> cleanup
- -> shared scale + bottom-center anchor
+ -> approved profile geometry (native per-frame origins preserved)
  -> runtime QA
 ```
 
@@ -170,46 +172,19 @@ existing evidence
 
 在規劃收束完成後，只批准以下最小 proof：
 
-### Pilot 1 — `field_cm01_01` Cage Art Pipeline
+### Proof A — `field_cm01_01` Cage Art Pipeline
 
-先不畫新圖：
+沿用 `scripts/lib/ydij_map_formats.py`，增加已解碼 cell export 入口，使用既有 core + 4 cells 重建。契約、模板、上下排／回捲／起始場地比較及測試由 `npm run art:cage:proof` 重建；不生成新圖、不升版 production manifest。詳細結果與限制見收束報告。
 
-1. 從現有 evidence 產生 machine-readable contract；
-2. 產生 geometry/anchor template；
-3. 用現有 core + 4 objects 由新 deterministic compositor 重建；
-4. 對照既有 composite；
-5. Playwright screenshot；
-6. PASS 後才替換測試 visual。
+### Proof B — Responsive Composition foundation
 
-### Pilot 2 — One Creature Production Pipeline
+同一個 `championship.html`、DOM UI、Pixi stage 與 Save，在 390×844、820×1180、1024×1366 及回縮手機尺寸驗證。量測既有能力；persistent inspector / nav rail 等重新排列仍屬 `DEFERRED`，不得把 viewport PASS 當作完整 Expanded UI 完成。
 
-只做一隻原創 test creature：
+### Creature — Pipeline readiness only
 
-```text
-Idle
-Move
-Attack
-Hit
-Eat
-Sleep
-```
+只檢查未來單隻 approved creature 的 Idle / Move / Attack / Hit / Eat / Sleep 所需 identity、逐格資料、alpha、預覽及 promotion gate。這次生成數量為 0，不執行一隻或整批動畫生成。原生替換保留每格 source origin、offset、timing、flip 與 blank；新原創 profile 的共享設計比例不能覆寫 native contract。
 
-測 identity drift、anchor、runtime readability、生成/人工成本。
-
-### Pilot 3 — Responsive Composition
-
-只驗證現有同一個 screen 在：
-
-```text
-390×844
-820×1180
-1024×1366
-```
-
-重新排列 UI，不重寫 gameplay。
-
-其他功能在這三個 proof 前不得擴大 scope。
-
+本輪在 A、B 及 readiness 報告完成後停止。
 ---
 
 ## 7. 收束完成的定義
