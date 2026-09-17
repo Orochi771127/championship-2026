@@ -62,6 +62,10 @@ const hash=s=>crypto.createHash('sha256').update(s).digest('hex');
         assert.equal(measurement.uiAuthority,'P1R_DOM');assert.equal(measurement.rendererSplit,'DOM_UI_PIXI_FIELD');
         assert.ok(Math.abs(measurement.host.width-measurement.canvas.width)<=1);
         assert.ok(Math.abs(measurement.host.height-measurement.canvas.height)<=1);
+        // Sep17 bounded reflow replaces the old measured 410px wide host.
+        // Compact keeps its exact baseline; wider hosts must use the space.
+        if(viewport.width===390)assert.equal(measurement.host.width,370);
+        else assert.ok(measurement.host.width>=viewport.width-40,'wide Raising host uses available width');
         for(const c of measurement.controls){assert.ok(c.height>=44,c.id);assert.ok(c.x>=0&&c.y>=0&&c.x+c.width<=viewport.width+1&&c.y+c.height<=viewport.height+1,c.id);}
         const after=await page.evaluate(key=>localStorage.getItem(key),key);assert.equal(after,before,'resize alone preserves saved bytes');
         const profile=viewport.width<600?'COMPACT':viewport.width<840?'MEDIUM':'EXPANDED';
@@ -74,7 +78,7 @@ const hash=s=>crypto.createHash('sha256').update(s).digest('hex');
     await context.close();
   }finally{await browser.close();}
   const report={status:'PASS',generatedRequests,results,errors,
-    limitation:'Browser layout/resize and static Cage reconstruction only; no physical-device or new expanded side-pane acceptance.'};
+    limitation:'Browser layout/resize and static Cage reconstruction only; interactions are covered by test:browser:cage-layout. No physical-device, foreground-occlusion or art approval.'};
   fs.writeFileSync(path.join(OUTPUT,'browser-qa.json'),JSON.stringify(report,null,2)+'\n');
   console.log(`CONVERGENCE_BROWSER_PASS checks=${results.length} generatedRequests=${generatedRequests}`);
 })().catch(e=>{console.error(e);process.exitCode=1;});

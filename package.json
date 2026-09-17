@@ -9,6 +9,7 @@
     "art:cage:proof": "python scripts/build-cage-authoring-proof.py",
     "test:cage:proof": "python -m unittest discover -s tests -p test_cage_authoring_proof.py -v",
     "test:browser:convergence": "node tests/championship-convergence-browser.cjs",
+    "test:browser:cage-layout": "node tests/championship-cage-layout-browser.cjs",
     "art:promote:licensed-hunt-runtime": "node scripts/promote-licensed-hunt-runtime.mjs",
     "art:promote:licensed-cage-runtime": "node scripts/promote-licensed-cage-runtime.mjs",
     "art:promote:licensed-battle-runtime": "node scripts/promote-licensed-battle-runtime.mjs",

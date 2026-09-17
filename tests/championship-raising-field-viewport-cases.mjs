@@ -61,3 +61,22 @@ test('edge scroll continues at stationary pointer, respects direction and stops 
   for(const p of [{x:-1,y:100},{x:391,y:100},{x:2,y:-1},{x:388,y:331}])assert.equal(raisingEdgeScroll(p,viewport,16),0);
   assert.equal(raisingEdgeScroll({x:390,y:100},viewport,1000),9,'background resume does not jump the camera');
 });
+
+test('wide Raising hosts reveal more ranch at the same native scale and retain pointer round trips',()=>{
+  const field={worldWidthPx:2688,worldHeightPx:768,nativePixelWorldScale:4,presentationMode:'NATIVE_RANCH',wrapWidthPx:2688};
+  const screens=[{width:370,height:740},{width:800,height:1076},{width:1004,height:1262}];
+  let previousVisible=0;
+  for(const screen of screens){
+    const fit=raisingFieldViewport(field,screen);
+    assert.equal(fit.scale*field.nativePixelWorldScale,2,'existing cap keeps actors and cages at two screen pixels per native pixel');
+    const visible=(screen.width-24)/fit.scale;
+    assert.ok(visible>previousVisible,'extra host width shows extra world instead of enlarging sprites');
+    previousVisible=visible;
+    for(const camera of [-20,0,2600,5390])for(const point of [{x:12,y:300},{x:screen.width/2,y:400},{x:screen.width-12,y:500}]){
+      const native=raisingScreenToNative(point,field,screen,camera);
+      const projected=raisingNativeToScreen([native.x*4096,native.y*4096],field,screen,camera);
+      assert.ok(Math.abs(projected.x-point.x)<1e-7);
+      assert.ok(Math.abs(projected.y-point.y)<1e-7);
+    }
+  }
+});

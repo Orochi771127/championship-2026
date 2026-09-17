@@ -1,5 +1,7 @@
 # Nexus Link / Championship 2026 產品化收束索引
 
+> **2026-09-17 接續批次：** Owner 明確授權完成 Cage proof 技術驗收及 Raising/Cage 大螢幕最小排版，並提交／推送 planning 分支、更新 Draft PR #2。最新結果、前後截圖與停止點見[本批驗收紀錄](../reports/cage-layout-2026-09-17/REPORT_ZH_TW.md)。下列 9 月 16 日 Handoff／報告保留其歷史範圍；不再把已完成 STOP POINT 當作本批施工阻擋。角色 readiness 沿用，不生成、不擴畫面、不合併或發布。
+
 > **2026-09-16 收束校正：** 本輪執行範圍以 [Convergence Handoff](../coordination/CODEX_CONVERGENCE_HANDOFF_2026-09-16_ZH_TW.md) 為準：先 `field_cm01_01` 既有素材 proof，再三尺寸 responsive foundation；Creature 僅檢查 readiness。實測結果與唯一下一步清單見[收束報告](../reports/convergence-2026-09-16/REPORT_ZH_TW.md)。下文未完成的產品設計仍為 `DEFERRED`，不構成額外施工或批量生成授權。
 
 日期：2026-09-16  
@@ -164,13 +166,13 @@ existing evidence
 
 ### Environment responsive rule
 
-未來可用 modular / layered / overscan scene 共用背景；目前大螢幕仍有 410px host 限制，Expanded 更多世界與資訊重排尚未實作。
+未來可用 modular / layered / overscan scene 共用背景。9 月 17 日 planning 分支已僅對 Raising/Cage 放寬 host：三尺寸 Raising 分別為 370／800／1004px，沿用 native zoom cap；原有角色數值、工具列與 Cage 清單重排。其他畫面、persistent inspector、nav rail、Fold API 仍延後；詳見本批驗收紀錄。
 
 ---
 
-## 6. 下一個真正落地的最小工程 Gate
+## 6. 2026-09-16 已完成 proof 與 2026-09-17 接續驗收
 
-在規劃收束完成後，只批准以下最小 proof：
+以下是前輪 proof 範圍。9 月 17 日只接續技術驗收與 Raising/Cage 排版，不擴展美術生產：
 
 ### Proof A — `field_cm01_01` Cage Art Pipeline
 
@@ -178,7 +180,7 @@ existing evidence
 
 ### Proof B — Responsive Composition foundation
 
-同一個 `championship.html`、DOM UI、Pixi stage 與 Save，在 390×844、820×1180、1024×1366 及回縮手機尺寸驗證。量測既有能力；persistent inspector / nav rail 等重新排列仍屬 `DEFERRED`，不得把 viewport PASS 當作完整 Expanded UI 完成。
+同一個 `championship.html`、DOM UI、Pixi stage 與 Save，在 390×844、820×1180、1024×1366 及往返縮放驗證。9 月 17 日在此基礎落地 Raising/Cage 的既有元件重排與操作驗收；persistent inspector、nav rail 及其他畫面重設計仍屬 `DEFERRED`。瀏覽器驗收不代表實機完成。
 
 ### Creature — Pipeline readiness only
 

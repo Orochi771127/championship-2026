@@ -1,9 +1,11 @@
 # Nexus Link / Championship 2026 自適應畫面策略：iPad、Foldable、Desktop
 
+> **2026-09-17 最小落地：** Owner 授權範圍僅 Raising/Cage。沿用 `daylightSkin.css`，在可用視窗 ≥600px 且未使用既有橫向 portrait frame 時，外框上限由 430px 放寬至 1080px；角色數值改為兩組並排、工具圖示與文字橫排，Cage 已放置／持有清單並排。仍是相同元件、座標與狀態，沒有側欄。390×844 的 field host 保留 370px；820×1180、1024×1366 為 800／1004px。詳見[本批驗收與前後截圖](../reports/cage-layout-2026-09-17/REPORT_ZH_TW.md)。以下 persistent inspector／nav rail／Fold／其他畫面安排仍是未實作規劃。
+
 > **2026-09-16 收束校正：** 本輪執行範圍以 [Convergence Handoff](../coordination/CODEX_CONVERGENCE_HANDOFF_2026-09-16_ZH_TW.md) 為準：先 `field_cm01_01` 既有素材 proof，再三尺寸 responsive foundation；Creature 僅檢查 readiness。實測結果與唯一下一步清單見[收束報告](../reports/convergence-2026-09-16/REPORT_ZH_TW.md)。下文未完成的產品設計仍為 `DEFERRED`，不構成額外施工或批量生成授權。
 
 日期：2026-09-16  
-狀態：`PLANNING_ONLY / SAME_RUNTIME_ONLY / NO_SECOND_UI_SYSTEM`
+狀態：`RAISING_CAGE_BOUNDED_IMPLEMENTATION / REMAINDER_PLANNED / SAME_RUNTIME_ONLY / NO_SECOND_UI_SYSTEM`
 
 > 核心原則：**不為 iPad、折疊機或 Desktop 重新做一套遊戲。**  
 > 所有裝置共用同一套 Championship 2026 simulation、save、router、Pixi application、DOM components、assets 與 gameplay state；差異只存在於 layout composition、camera framing 與可見資訊密度。
@@ -172,7 +174,7 @@ foreground
 ambient FX
 ```
 
-此段是未來 composition 目標。現況使用同一個 Raising camera / portraitFrame，實際可見寬度由 host 與相機決定；不得保證 iPad 一定顯示更多世界。先量測三尺寸，side inspector、rail、背景延伸與 fold APIs 均留 `DEFERRED`，不增加裝置專屬素材。
+此段是未來 composition 目標。現況使用同一個 Raising camera / portraitFrame；9 月 17 日三個直向尺寸已確認較寬 host 在相同 zoom cap 下顯示更多既有世界。橫向仍沿用 portraitFrame，不宣稱所有裝置姿態都已擴展。side inspector、rail、背景延伸與 fold APIs 均留 `DEFERRED`，不增加裝置專屬素材。
 
 ### UI
 

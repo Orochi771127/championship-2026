@@ -748,3 +748,69 @@
 }
 .cm-vs2-root[data-screen][data-screen] .cm-cage-facility :is(span, p, strong, small, div) { color: inherit; text-shadow: none; }
 .cm-vs2-root[data-screen][data-screen] .cm-vs2-cage-tray__item :is(span, p, strong, small, div) { color: #14415c; text-shadow: none; }
+
+/* Owner 2026-09-17: bounded Raising/Cage reflow. Keep the compact shell and
+ * the existing landscape portrait frame. Wider hosts reveal more ranch at
+ * the existing native zoom cap; no camera, sprite or board geometry changes.
+ * Scope the shared bars by the mounted screen so other modes keep their UI. */
+@media (min-width: 600px) {
+  body:not([data-portrait-frame]) .int-rh2-shell,
+  body:not([data-portrait-frame]) .cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-shell {
+    width: min(100%, 1080px);
+  }
+  body:not([data-portrait-frame]):has(.int-rh2-root, .cm-vs2-root[data-screen="CAGE_EDIT"]) .cm-status-bar[data-screen],
+  body:not([data-portrait-frame]):has(.int-rh2-root) .cm-toolbar[data-mode="1"] {
+    left: 50%;
+    right: auto;
+    width: min(100%, 1080px);
+    transform: translateX(-50%);
+  }
+
+  /* The same floating card, now with two pairs of meters. Its pointer-through
+   * behaviour and closed-state space remain unchanged. No extra inspector. */
+  body:not([data-portrait-frame]) .int-rh2-overlay {
+    max-width: 780px;
+    margin-inline: auto;
+  }
+  body:not([data-portrait-frame]) .int-rh2-root .int-rh2-companion__copy {
+    grid-template-columns: minmax(100px, 1fr) minmax(0, 2fr);
+    column-gap: 20px;
+  }
+  body:not([data-portrait-frame]) .int-rh2-root .int-rh2-companion__name { grid-area: 1 / 1; }
+  body:not([data-portrait-frame]) .int-rh2-root .int-rh2-companion__place {
+    grid-area: 2 / 1;
+    justify-self: start;
+    max-width: 100%;
+  }
+  body:not([data-portrait-frame]) .int-rh2-root .int-rh2-vitals {
+    grid-area: 1 / 2 / 3 / 3;
+    grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 8px;
+    margin: 0;
+  }
+  body:not([data-portrait-frame]):has(.int-rh2-root) .cm-toolbar[data-mode="1"] .cm-toolbar__cell {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Keep all 508x102 board pixels and their input targets. Reflow only the
+   * existing placed/owned lists; their DOM order and actions do not change. */
+  body:not([data-portrait-frame]) .cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-edit__body {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto auto auto auto;
+    align-content: start;
+    align-items: start;
+  }
+  body:not([data-portrait-frame]) .cm-vs2-root[data-screen="CAGE_EDIT"] :is(.cm-cage-board-hint, .cm-cage-board-scroll, .cm-vs2-shop__status) {
+    grid-column: 1 / -1;
+    min-width: 0;
+  }
+  body:not([data-portrait-frame]) .cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-board { margin-inline: auto; }
+  body:not([data-portrait-frame]) .cm-vs2-root[data-screen="CAGE_EDIT"] .cm-cage-facilities { grid-column: 1; }
+  body:not([data-portrait-frame]) .cm-vs2-root[data-screen="CAGE_EDIT"] .cm-vs2-cage-tray {
+    grid-column: 2;
+    min-width: 0;
+  }
+}
