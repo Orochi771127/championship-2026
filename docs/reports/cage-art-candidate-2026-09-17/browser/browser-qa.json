@@ -1,0 +1,167 @@
+{
+  "status": "PASS_WITH_FOREGROUND_OCCLUSION_UNKNOWN",
+  "fieldId": "field_cm01_01",
+  "productionManifestModified": false,
+  "candidateFrame": "docs/art/production/original-character-cage-r1/cage-field-cm01-breeze-meadow-v1/previews/composite-hd4x.png",
+  "candidateSha256": "e906222c131f80c8ab0464170dbbc84f274239d33f682141466f8233c606fb90",
+  "candidateRequests": 1,
+  "grounding": {
+    "method": "NORMAL_HAND_HOLD_CARRY_RELEASE",
+    "viewport": {
+      "width": 1024,
+      "height": 1366
+    },
+    "requestedScreenPoint": {
+      "x": 783.08,
+      "y": 639.52
+    },
+    "landedResident": {
+      "x": 865.4892578125,
+      "y": 553.681640625,
+      "state": 9,
+      "nativeFrame": 247
+    }
+  },
+  "screenshots": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "filename": "raising-candidate-390x844.png",
+      "cameraPanGestures": 4,
+      "measurement": {
+        "host": {
+          "x": 10,
+          "y": 40,
+          "width": 370,
+          "height": 727
+        },
+        "canvas": {
+          "x": 10,
+          "y": 40,
+          "width": 370,
+          "height": 727
+        },
+        "residents": [
+          {
+            "creatureId": "resident:species-000",
+            "x": 258.4892578125,
+            "y": 286.681640625,
+            "state": 11,
+            "speciesIndex": 14,
+            "nativeFrame": 358,
+            "sequenceId": 30
+          }
+        ],
+        "canvasCount": 1,
+        "document": {
+          "width": 390,
+          "height": 844
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "fallback": null
+      }
+    },
+    {
+      "viewport": {
+        "width": 820,
+        "height": 1180
+      },
+      "filename": "raising-candidate-820x1180.png",
+      "cameraPanGestures": 0,
+      "measurement": {
+        "host": {
+          "x": 10,
+          "y": 40,
+          "width": 800,
+          "height": 1063
+        },
+        "canvas": {
+          "x": 10,
+          "y": 40,
+          "width": 800,
+          "height": 1063
+        },
+        "residents": [
+          {
+            "creatureId": "resident:species-000",
+            "x": 258.4892578125,
+            "y": 454.681640625,
+            "state": 11,
+            "speciesIndex": 14,
+            "nativeFrame": 389,
+            "sequenceId": 30
+          }
+        ],
+        "canvasCount": 1,
+        "document": {
+          "width": 820,
+          "height": 1180
+        },
+        "viewport": {
+          "width": 820,
+          "height": 1180
+        },
+        "fallback": null
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 1366
+      },
+      "filename": "raising-candidate-1024x1366.png",
+      "cameraPanGestures": 0,
+      "measurement": {
+        "host": {
+          "x": 10,
+          "y": 40,
+          "width": 1004,
+          "height": 1249
+        },
+        "canvas": {
+          "x": 10,
+          "y": 40,
+          "width": 1004,
+          "height": 1249
+        },
+        "residents": [
+          {
+            "creatureId": "resident:species-000",
+            "x": 259.4892578125,
+            "y": 556.681640625,
+            "state": 1,
+            "speciesIndex": 14,
+            "nativeFrame": 428,
+            "sequenceId": 0
+          }
+        ],
+        "canvasCount": 1,
+        "document": {
+          "width": 1024,
+          "height": 1366
+        },
+        "viewport": {
+          "width": 1024,
+          "height": 1366
+        },
+        "fallback": null
+      }
+    }
+  ],
+  "errors": [],
+  "missingResources": [],
+  "checks": {
+    "sameApplicationAndRenderer": true,
+    "normalGameActorPresent": true,
+    "actorWithinFieldBounds": true,
+    "actorFootContactOnCandidate": "PASS_NORMAL_HAND_CARRY_RELEASE_VISIBLE_IN_SCREENSHOTS",
+    "threeViewportScreenshots": true,
+    "physicalDeviceAccepted": false,
+    "foregroundActorObjectOrdering": "UNKNOWN_REQUIRES_TRACE"
+  }
+}

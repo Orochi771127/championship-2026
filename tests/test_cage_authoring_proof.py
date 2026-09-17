@@ -1,4 +1,4 @@
-"""Structural/negative cases for the export seam; no new art is published."""
+"""Structural/negative cases for the baseline and complete candidate export seams."""
 import copy
 import importlib.util
 import sys
@@ -80,5 +80,42 @@ class CageAuthoringProof(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'INTEGER'):
             proof.composite_rendered_object_placements(Image.new('RGBA',(8,8)),[
                 {'image':Image.new('RGBA',(1,1)),'placement':[1.5,2],'pivot':[0,0]}])
+
+    def test_complete_candidate_package_loads_without_geometry_drift(self):
+        candidate=ROOT/'docs/art/production/original-character-cage-r1/cage-field-cm01-breeze-meadow-v1'
+        image=proof.compose_candidate(self.contract,candidate)
+        self.assertEqual(image.size,(96,112))
+        self.assertEqual(image.mode,'RGBA')
+        self.assertGreater(image.getchannel('A').getbbox()[2],0)
+
+    def test_incomplete_candidate_never_falls_back_to_reference_objects(self):
+        source=ROOT/'docs/art/production/original-character-cage-r1/cage-field-cm01-breeze-meadow-v1'
+        with tempfile.TemporaryDirectory() as folder:
+            candidate=Path(folder)
+            (candidate/'object-cells').mkdir()
+            (candidate/'manifest.json').write_bytes((source/'manifest.json').read_bytes())
+            (candidate/'core-native.png').write_bytes((source/'core-native.png').read_bytes())
+            for relative in ['source/core-generated.png','prompts/core.prompt.txt']:
+                target=candidate/relative; target.parent.mkdir(parents=True,exist_ok=True); target.write_bytes((source/relative).read_bytes())
+            for object_id in ['obj-000','obj-001','obj-002','obj-003']:
+                for relative in [f'source/{object_id}-generated.png',f'prompts/{object_id}.prompt.txt']:
+                    target=candidate/relative; target.parent.mkdir(parents=True,exist_ok=True); target.write_bytes((source/relative).read_bytes())
+            for object_id in ['obj-000','obj-001','obj-002']:
+                (candidate/'object-cells'/f'{object_id}.png').write_bytes((source/'object-cells'/f'{object_id}.png').read_bytes())
+            with self.assertRaisesRegex(ValueError,'OBJECT_EXPORT_SET_INCOMPLETE'):
+                proof.compose_candidate(self.contract,candidate)
+
+    def test_candidate_source_hash_drift_is_refused(self):
+        source=ROOT/'docs/art/production/original-character-cage-r1/cage-field-cm01-breeze-meadow-v1'
+        with tempfile.TemporaryDirectory() as folder:
+            candidate=Path(folder)
+            for relative in ['manifest.json','prompts/core.prompt.txt',
+                *[f'prompts/obj-{index:03d}.prompt.txt' for index in range(4)],
+                *[f'source/obj-{index:03d}-generated.png' for index in range(4)]]:
+                target=candidate/relative; target.parent.mkdir(parents=True,exist_ok=True); target.write_bytes((source/relative).read_bytes())
+            target=candidate/'source/core-generated.png'; target.parent.mkdir(parents=True,exist_ok=True)
+            target.write_bytes((source/'source/core-generated.png').read_bytes()+b'changed')
+            with self.assertRaisesRegex(ValueError,'CANDIDATE_SOURCE_HASH_MISMATCH'):
+                proof.candidate_manifest(self.contract,candidate)
 
 if __name__=='__main__': unittest.main()

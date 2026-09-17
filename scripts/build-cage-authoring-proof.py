@@ -103,6 +103,124 @@ def compose(contract, overrides=None):
     with Image.open(ROOT/contract['core']['sourceImage']) as core:
         return composite_rendered_object_placements(core, objects)
 
+def candidate_manifest(contract, candidate):
+    path = candidate / 'manifest.json'
+    require(path.is_file(), 'CANDIDATE_MANIFEST_MISSING')
+    manifest = read(path)
+    require(manifest.get('fieldId') == contract['fieldId'], 'CANDIDATE_FIELD_MISMATCH')
+    require(manifest.get('status') == 'ART_PROPOSAL', 'CANDIDATE_STATUS_MUST_BE_ART_PROPOSAL')
+    require(manifest.get('runtimeEligible') is False, 'CANDIDATE_RUNTIME_MUST_REMAIN_FALSE')
+    require(manifest.get('shippingReady') is False, 'CANDIDATE_SHIPPING_MUST_REMAIN_FALSE')
+    require(manifest.get('humanApproved') is False, 'CANDIDATE_HUMAN_APPROVAL_MUST_REMAIN_FALSE')
+    require(manifest.get('rightsStatus') == 'ORIGINAL_CREATED', 'CANDIDATE_RIGHTS_STATUS_INVALID')
+    require(manifest.get('geometryContract') == CONTRACT.relative_to(ROOT).as_posix(), 'CANDIDATE_CONTRACT_MISMATCH')
+    sources = manifest.get('sources') or {}
+    expected = {o['objectId'] for o in contract['objects']}
+    require(set((sources.get('objects') or {}).keys()) == expected, 'CANDIDATE_SOURCE_OBJECT_SET_INCOMPLETE')
+    prompts = manifest.get('prompts') or {}
+    require(set((prompts.get('objects') or {}).keys()) == expected, 'CANDIDATE_PROMPT_OBJECT_SET_INCOMPLETE')
+    source_paths = [sources.get('core'), *sources['objects'].values()]
+    for relative in [*source_paths, prompts.get('core'), *prompts['objects'].values()]:
+        require(isinstance(relative, str) and (candidate/relative).is_file(), 'CANDIDATE_SOURCE_OR_PROMPT_MISSING')
+    source_hashes = (manifest.get('generation') or {}).get('sourceSha256') or {}
+    require(set(source_hashes) == {Path(relative).name for relative in source_paths}, 'CANDIDATE_SOURCE_HASH_SET_INCOMPLETE')
+    for relative in source_paths:
+        require(digest(candidate/relative) == source_hashes[Path(relative).name], 'CANDIDATE_SOURCE_HASH_MISMATCH')
+    return manifest
+
+def _opaque_core_source(source, size):
+    image = source.convert('RGBA')
+    target_ratio = size[0] / size[1]
+    source_ratio = image.width / image.height
+    if source_ratio > target_ratio:
+        crop_width = round(image.height * target_ratio)
+        left = (image.width - crop_width) // 2
+        image = image.crop((left, 0, left + crop_width, image.height))
+    elif source_ratio < target_ratio:
+        crop_height = round(image.width / target_ratio)
+        top = (image.height - crop_height) // 2
+        image = image.crop((0, top, image.width, top + crop_height))
+    image = image.resize(tuple(size), Image.Resampling.LANCZOS)
+    image.putalpha(Image.new('L', image.size, 255))
+    # Pair the outer three pixel bands so the authored ground wraps without an
+    # alpha or colour crack. This changes no Cage coordinate or placement.
+    pixels=image.load()
+    for inset in range(3):
+        for y in range(image.height):
+            left,right=pixels[inset,y],pixels[image.width-1-inset,y]
+            shared=tuple(round((left[i]+right[i])/2) for i in range(4))
+            pixels[inset,y]=shared; pixels[image.width-1-inset,y]=shared
+        for x in range(image.width):
+            top,bottom=pixels[x,inset],pixels[x,image.height-1-inset]
+            shared=tuple(round((top[i]+bottom[i])/2) for i in range(4))
+            pixels[x,inset]=shared; pixels[x,image.height-1-inset]=shared
+    return image
+
+def _fit_object_source(source, record, inset=1):
+    image = source.convert('RGBA')
+    alpha = image.getchannel('A')
+    threshold = alpha.point(lambda value: 255 if value >= 16 else 0)
+    bounds = threshold.getbbox()
+    require(bounds is not None, f"CANDIDATE_SOURCE_EMPTY:{record['objectId']}")
+    image = image.crop(bounds)
+    allowed = record['safeAlphaBounds']
+    left = allowed[0] + inset
+    top = allowed[1] + inset
+    right = allowed[2] - inset
+    bottom = allowed[3] - inset
+    require(right > left and bottom > top, f"CANDIDATE_SAFE_BOUNDS_TOO_SMALL:{record['objectId']}")
+    scale = min((right-left)/image.width, (bottom-top)/image.height)
+    resized_size = (max(1, round(image.width*scale)), max(1, round(image.height*scale)))
+    # Premultiplied resizing prevents transparent RGB from creating dark halos.
+    image = image.convert('RGBa').resize(resized_size, Image.Resampling.LANCZOS).convert('RGBA')
+    image.putalpha(image.getchannel('A').point(lambda value: 0 if value < 8 else value))
+    canvas = Image.new('RGBA', tuple(record['size']))
+    x = left + (right-left-image.width)//2
+    y = bottom-image.height
+    canvas.alpha_composite(image, (x, y))
+    return canvas
+
+def prepare_candidate(contract, candidate):
+    manifest = candidate_manifest(contract, candidate)
+    sources = manifest['sources']
+    with Image.open(candidate/sources['core']) as source:
+        core = _opaque_core_source(source, contract['core']['size'])
+    core.save(candidate/'core-native.png', optimize=True)
+    object_dir = candidate/'object-cells'
+    object_dir.mkdir(parents=True, exist_ok=True)
+    records = {o['objectId']: o for o in contract['objects']}
+    for object_id, relative in sources['objects'].items():
+        with Image.open(candidate/relative) as source:
+            image = _fit_object_source(source, records[object_id])
+        image.save(object_dir/f'{object_id}.png', optimize=True)
+
+def load_candidate_export(contract, candidate):
+    candidate_manifest(contract, candidate)
+    core_path = candidate/'core-native.png'
+    require(core_path.is_file(), 'CANDIDATE_CORE_EXPORT_MISSING')
+    core = Image.open(core_path).convert('RGBA')
+    require(list(core.size) == contract['core']['size'], 'CANDIDATE_CORE_DIMENSION_DRIFT')
+    require(core.getchannel('A').getextrema() == (255,255), 'CANDIDATE_CORE_MUST_BE_OPAQUE')
+    expected = {o['objectId'] for o in contract['objects']}
+    object_dir = candidate/'object-cells'
+    actual = {p.stem for p in object_dir.glob('*.png')} if object_dir.is_dir() else set()
+    require(actual == expected, 'CANDIDATE_OBJECT_EXPORT_SET_INCOMPLETE')
+    overrides = {object_id: Image.open(object_dir/f'{object_id}.png').convert('RGBA') for object_id in expected}
+    try:
+        objects = load_export(contract, overrides)
+    finally:
+        for image in overrides.values():
+            image.close()
+    return core, objects
+
+def compose_candidate(contract, candidate):
+    validate_contract(contract)
+    core, objects = load_candidate_export(contract, candidate)
+    try:
+        return composite_rendered_object_placements(core, objects)
+    finally:
+        core.close()
+
 def diff_count(a, b):
     require(a.size == b.size, 'COMPARISON_DIMENSIONS_DIFFER')
     left, right = a.convert('RGBA').tobytes(), b.convert('RGBA').tobytes()
@@ -184,14 +302,85 @@ def build(contract, output):
     (output/'proof.json').write_text(dump(report),encoding='utf-8')
     return report
 
+def build_candidate(contract, candidate, output):
+    manifest = candidate_manifest(contract, candidate)
+    image = compose_candidate(contract, candidate)
+    output.mkdir(parents=True, exist_ok=True)
+    image.save(output/'composite-native.png', optimize=True)
+    image.resize((image.width*4,image.height*4),Image.Resampling.NEAREST).save(output/'composite-hd4x.png', optimize=True)
+    adjacency=Image.new('RGBA',(image.width*3,image.height*2))
+    for row in range(2):
+        for column in range(3): adjacency.alpha_composite(image,(column*image.width,row*image.height))
+    adjacency.resize((adjacency.width*4,adjacency.height*4),Image.Resampling.NEAREST).save(output/'adjacency-hd4x.png',optimize=True)
+    (output/'template.svg').write_text(template(contract,image),encoding='utf-8')
+    geo=geometry(); (output/'geometry.json').write_text(dump(geo),encoding='utf-8')
+    scenarios=[]
+    for scenario in geo['scenarios']:
+        preview=layout_image(scenario,image)
+        preview.save(output/f'{scenario["id"]}.png', optimize=True)
+        scenarios.append({'id':scenario['id'],'width':preview.width,'height':preview.height,
+            'sha256':digest(output/f'{scenario["id"]}.png')})
+    alpha={}; review_scale=4; review_cell=(96,96)
+    review=Image.new('RGBA',(review_cell[0]*4*review_scale,review_cell[1]*review_scale),(24,36,48,255))
+    draw=ImageDraw.Draw(review)
+    for y in range(0,review.height,16):
+        for x in range(0,review.width,16):
+            if (x//16+y//16)%2==0: draw.rectangle((x,y,x+15,y+15),fill=(52,68,80,255))
+    for record in contract['objects']:
+        path=candidate/'object-cells'/f'{record["objectId"]}.png'
+        with Image.open(path).convert('RGBA') as object_image:
+            channel=object_image.getchannel('A'); bounds=channel.getbbox()
+            edge=sum(1 for x in range(object_image.width) for y in (0,object_image.height-1) if channel.getpixel((x,y)))
+            edge+=sum(1 for y in range(1,object_image.height-1) for x in (0,object_image.width-1) if channel.getpixel((x,y)))
+            alpha[record['objectId']]={'bounds':list(bounds),'edgeAlphaPixels':edge,'sha256':digest(path)}
+            require(edge==0,f'CANDIDATE_OBJECT_TOUCHES_CANVAS_EDGE:{record["objectId"]}')
+            enlarged=object_image.resize((object_image.width*review_scale,object_image.height*review_scale),Image.Resampling.NEAREST)
+            column=record['order']; x=column*review_cell[0]*review_scale+(review_cell[0]*review_scale-enlarged.width)//2
+            y=(review_cell[1]*review_scale-enlarged.height)//2
+            review.alpha_composite(enlarged,(x,y))
+            draw.text((column*review_cell[0]*review_scale+8,8),record['objectId'],fill=(255,255,255,255))
+    review.save(output/'object-review.png',optimize=True)
+    with Image.open(candidate/'core-native.png').convert('RGBA') as core:
+        def mean_edge_delta(first,second):
+            a=first.convert('RGB').tobytes(); b=second.convert('RGB').tobytes()
+            values=[sum(abs(a[i+j]-b[i+j]) for j in range(3))/3 for i in range(0,len(a),3)]
+            return round(sum(values)/len(values),3)
+        seam={'leftRightMeanRgbDelta':mean_edge_delta(core.crop((0,0,1,core.height)),core.crop((core.width-1,0,core.width,core.height))),
+            'topBottomMeanRgbDelta':mean_edge_delta(core.crop((0,0,core.width,1)),core.crop((0,core.height-1,core.width,core.height))),
+            'transparentGapPixels':core.getchannel('A').tobytes().count(0),
+            'status':'VISUAL_REVIEW_REQUIRED_NO_ALPHA_GAPS'}
+    report={'fieldId':FIELD,'assetId':manifest['assetId'],'status':'CANDIDATE_GEOMETRY_PASS_VISUAL_REVIEW_REQUIRED',
+        'formula':'placement - pivot','manualCorrections':0,'geometryUnchanged':True,'completePackage':True,
+        'rightsStatus':'ORIGINAL_CREATED','humanApproved':False,'runtimeEligible':False,'shippingReady':False,
+        'core':{'size':contract['core']['size'],'opaque':True,'sha256':digest(candidate/'core-native.png')},
+        'objects':alpha,'seamQa':seam,'scenarios':scenarios,
+        'limits':['Generated-art geometry and completeness pass; this is not pixel equality with research material.',
+            'Foreground actor-object ordering remains UNKNOWN_REQUIRES_TRACE until separately traced and approved.',
+            'Browser screenshots are local candidate preview evidence, not production-manifest promotion or physical-device acceptance.'],
+        'outputs':{p.name:digest(p) for p in sorted(output.iterdir()) if p.suffix in ('.png','.svg','.json') and p.name!='candidate-proof.json'}}
+    (output/'candidate-proof.json').write_text(dump(report),encoding='utf-8')
+    return report
+
 def main():
-    parser=argparse.ArgumentParser(); parser.add_argument('--write-contract',action='store_true'); parser.add_argument('--output',type=Path,default=OUTPUT)
+    parser=argparse.ArgumentParser(); parser.add_argument('--write-contract',action='store_true'); parser.add_argument('--output',type=Path)
+    parser.add_argument('--candidate',type=Path); parser.add_argument('--prepare-candidate',action='store_true')
     args=parser.parse_args(); contract=extract_contract()
     if args.write_contract:
         require(not CONTRACT.exists(), 'CONTRACT_ALREADY_EXISTS_REVIEW_INSTEAD_OF_OVERWRITING')
         CONTRACT.parent.mkdir(parents=True,exist_ok=True); CONTRACT.write_text(dump(contract),encoding='utf-8')
     require(CONTRACT.exists(),'CONTRACT_MISSING_USE_WRITE_CONTRACT_ONCE')
-    print(dump(build(read(CONTRACT),args.output)))
+    contract=read(CONTRACT)
+    if args.candidate:
+        candidate=args.candidate if args.candidate.is_absolute() else ROOT/args.candidate
+        if args.prepare_candidate: prepare_candidate(contract,candidate)
+        output=args.output or candidate/'previews'
+        output=output if output.is_absolute() else ROOT/output
+        print(dump(build_candidate(contract,candidate,output)))
+    else:
+        require(not args.prepare_candidate,'PREPARE_CANDIDATE_REQUIRES_CANDIDATE')
+        output=args.output or OUTPUT
+        output=output if output.is_absolute() else ROOT/output
+        print(dump(build(contract,output)))
 
 if __name__=='__main__':
     main()

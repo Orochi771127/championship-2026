@@ -1,0 +1,112 @@
+{
+  "fieldId": "field_cm01_01",
+  "assetId": "art:map:field-cm01-01:breeze-meadow-v1",
+  "status": "CANDIDATE_GEOMETRY_PASS_VISUAL_REVIEW_REQUIRED",
+  "formula": "placement - pivot",
+  "manualCorrections": 0,
+  "geometryUnchanged": true,
+  "completePackage": true,
+  "rightsStatus": "ORIGINAL_CREATED",
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "core": {
+    "size": [
+      96,
+      112
+    ],
+    "opaque": true,
+    "sha256": "4BB1939339738AD9D83561837125B1006C6255C01CD9372519A066536C4E0FCA"
+  },
+  "objects": {
+    "obj-000": {
+      "bounds": [
+        2,
+        24,
+        62,
+        47
+      ],
+      "edgeAlphaPixels": 0,
+      "sha256": "1ADE973112AC964131C20E1A9DF9AFDD2CBC5F505269CB7FE6316454CA82291C"
+    },
+    "obj-001": {
+      "bounds": [
+        7,
+        3,
+        27,
+        55
+      ],
+      "edgeAlphaPixels": 0,
+      "sha256": "5139D260C775AD8B8CB139C1BDEB05BA4582AD51A1C3C78B6061AB7EE489C5B0"
+    },
+    "obj-002": {
+      "bounds": [
+        1,
+        2,
+        47,
+        76
+      ],
+      "edgeAlphaPixels": 0,
+      "sha256": "6F1947BFB02DEEEB1B4C1892987E4CAB400265ED1F6052FAC8FFFB635C3ECC70"
+    },
+    "obj-003": {
+      "bounds": [
+        1,
+        2,
+        21,
+        51
+      ],
+      "edgeAlphaPixels": 0,
+      "sha256": "DEC8C464429FDB91994DE5680386461A8D3B6542C4D1B55A7BA429D8B832860D"
+    }
+  },
+  "seamQa": {
+    "leftRightMeanRgbDelta": 0.0,
+    "topBottomMeanRgbDelta": 0.0,
+    "transparentGapPixels": 0,
+    "status": "VISUAL_REVIEW_REQUIRED_NO_ALPHA_GAPS"
+  },
+  "scenarios": [
+    {
+      "id": "upper-row",
+      "width": 672,
+      "height": 192,
+      "sha256": "95D30AED34F68A7C5CA14EC87F0BB557F1D0F42EE418C83EB6486ECFD5D21FDA"
+    },
+    {
+      "id": "lower-row",
+      "width": 672,
+      "height": 192,
+      "sha256": "8B99443906F9172A16547D7E87506B1DB77FDA5CC24199E416B5663242D56D8E"
+    },
+    {
+      "id": "wrap-edge",
+      "width": 672,
+      "height": 192,
+      "sha256": "7268EA59832F1274997EABC39B96D11965F7FA812EB87E1E0FC308A3EBE15E6C"
+    },
+    {
+      "id": "starting-ranch",
+      "width": 672,
+      "height": 192,
+      "sha256": "4820A58211DCEC3A0F671DE290AD86AB67B9FD0721D7728C568B4F8B2A5BE9A8"
+    }
+  ],
+  "limits": [
+    "Generated-art geometry and completeness pass; this is not pixel equality with research material.",
+    "Foreground actor-object ordering remains UNKNOWN_REQUIRES_TRACE until separately traced and approved.",
+    "Browser screenshots are local candidate preview evidence, not production-manifest promotion or physical-device acceptance."
+  ],
+  "outputs": {
+    "adjacency-hd4x.png": "648E94A7B0910E68931CA4BF763C6BB7974A17BF06F48AF266AE25E7E0083891",
+    "composite-hd4x.png": "E906222C131F80C8AB0464170DBBC84F274239D33F682141466F8233C606FB90",
+    "composite-native.png": "0F72F90FD066835AA7D24C893D84059959E004A2B1852760146DD7C7A7ABFF3E",
+    "geometry.json": "26CE69F73F201FB001BB4A590A4485CFC26FDEA2705E085A295CA1E4E263AE2E",
+    "lower-row.png": "8B99443906F9172A16547D7E87506B1DB77FDA5CC24199E416B5663242D56D8E",
+    "object-review.png": "260F9EA65D2DD33BF294FAAEBA17EA3CF0D4AB121B067B0C3B6746C8922DCB58",
+    "starting-ranch.png": "4820A58211DCEC3A0F671DE290AD86AB67B9FD0721D7728C568B4F8B2A5BE9A8",
+    "template.svg": "2DAD4F49612DE6672EA3251899264ACAE94DBDEE72170C5DA0DC38A8E6760112",
+    "upper-row.png": "95D30AED34F68A7C5CA14EC87F0BB557F1D0F42EE418C83EB6486ECFD5D21FDA",
+    "wrap-edge.png": "7268EA59832F1274997EABC39B96D11965F7FA812EB87E1E0FC308A3EBE15E6C"
+  }
+}
