@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "fieldId": "field_cm01_01",
   "candidateAssetId": "art:map:field-cm01-01:breeze-meadow-v1",
-  "completedAt": "2026-09-17",
+  "completedAt": "2026-09-18",
   "status": "LOCAL_CANDIDATE_PASS_OWNER_VISUAL_APPROVAL_REQUIRED",
   "productionManifestModified": false,
   "humanApproved": false,
@@ -17,7 +17,7 @@
     {
       "command": "npm run art:cage:candidate:cm01",
       "result": "PASS",
-      "detail": "completePackage=true; geometryUnchanged=true; manualCorrections=0; four object edge-alpha counts=0"
+      "detail": "completePackage=true; geometryUnchanged=true; manualCorrections=0; real alpha exterior; four connector edges present; blueRimPixels=2166; four object edge-alpha counts=0"
     },
     {
       "command": "npm run test:cage:proof",
@@ -32,7 +32,7 @@
     {
       "command": "npm run test:browser:cage-candidate",
       "result": "PASS_WITH_FOREGROUND_OCCLUSION_UNKNOWN",
-      "detail": "three viewports; normal hand hold/carry/release grounding; one Pixi canvas; page errors=0; missing resources=0"
+      "detail": "three responsive viewports plus dedicated grounding screenshot; normal hand hold/edge-scroll/carry/release; one Pixi canvas; page errors=0; missing resources=0"
     },
     {
       "command": "npm test",

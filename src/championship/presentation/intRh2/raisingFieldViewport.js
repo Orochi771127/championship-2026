@@ -14,12 +14,12 @@ export function raisingFieldViewport(field, viewport, padding = 12, cameraX = 0)
   const nativeWindow = field.presentationMode === 'NATIVE_RANCH' && field.nativePixelWorldScale > 0;
   const headroom = nativeWindow && field.wrapWidthPx ? 64*field.nativePixelWorldScale : 0;
   const heightScale = Math.max(1, viewport.height - padding * 2) / (field.worldHeightPx+headroom);
-  // The ranch is a wide, 192-native-pixel-tall strip. Filling a tall phone's
-  // height outright magnified it until one cage covered the screen and its
-  // neighbours, and often every resident, sat outside the frame -- measured at
-  // 390x844. Two screen pixels per original pixel is the stop: large enough to
-  // read a resident, wide enough to keep the next cage in view.
-  const zoomCap = 2 / field.nativePixelWorldScale;
+  // Never shrink below two screen pixels per native pixel; then use available
+  // phone/tablet/desktop width to enlarge the same ranch plane instead of
+  // exposing large empty surroundings. The single fitted transform still owns
+  // art, residents, input and camera round trips.
+  const nativeScreenPixels = Math.min(4.5, Math.max(2, viewport.width / 160));
+  const zoomCap = nativeScreenPixels / field.nativePixelWorldScale;
   const scale = nativeWindow ? Math.min(heightScale, zoomCap)
     : Math.min(Math.max(1, viewport.width - padding * 2) / field.worldWidthPx, heightScale);
   const width = field.worldWidthPx * scale;

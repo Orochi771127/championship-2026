@@ -90,16 +90,16 @@ class CageAuthoringProof(unittest.TestCase):
 
     def test_incomplete_candidate_never_falls_back_to_reference_objects(self):
         source=ROOT/'docs/art/production/original-character-cage-r1/cage-field-cm01-breeze-meadow-v1'
+        manifest=proof.read(source/'manifest.json')
         with tempfile.TemporaryDirectory() as folder:
             candidate=Path(folder)
             (candidate/'object-cells').mkdir()
             (candidate/'manifest.json').write_bytes((source/'manifest.json').read_bytes())
             (candidate/'core-native.png').write_bytes((source/'core-native.png').read_bytes())
-            for relative in ['source/core-generated.png','prompts/core.prompt.txt']:
+            inputs=[manifest['sources']['core'],manifest['prompts']['core'],
+                *manifest['sources']['objects'].values(),*manifest['prompts']['objects'].values()]
+            for relative in inputs:
                 target=candidate/relative; target.parent.mkdir(parents=True,exist_ok=True); target.write_bytes((source/relative).read_bytes())
-            for object_id in ['obj-000','obj-001','obj-002','obj-003']:
-                for relative in [f'source/{object_id}-generated.png',f'prompts/{object_id}.prompt.txt']:
-                    target=candidate/relative; target.parent.mkdir(parents=True,exist_ok=True); target.write_bytes((source/relative).read_bytes())
             for object_id in ['obj-000','obj-001','obj-002']:
                 (candidate/'object-cells'/f'{object_id}.png').write_bytes((source/'object-cells'/f'{object_id}.png').read_bytes())
             with self.assertRaisesRegex(ValueError,'OBJECT_EXPORT_SET_INCOMPLETE'):
@@ -107,14 +107,15 @@ class CageAuthoringProof(unittest.TestCase):
 
     def test_candidate_source_hash_drift_is_refused(self):
         source=ROOT/'docs/art/production/original-character-cage-r1/cage-field-cm01-breeze-meadow-v1'
+        manifest=proof.read(source/'manifest.json')
         with tempfile.TemporaryDirectory() as folder:
             candidate=Path(folder)
-            for relative in ['manifest.json','prompts/core.prompt.txt',
-                *[f'prompts/obj-{index:03d}.prompt.txt' for index in range(4)],
-                *[f'source/obj-{index:03d}-generated.png' for index in range(4)]]:
+            inputs=[manifest['prompts']['core'],*manifest['prompts']['objects'].values(),
+                *manifest['sources']['objects'].values()]
+            for relative in ['manifest.json',*inputs]:
                 target=candidate/relative; target.parent.mkdir(parents=True,exist_ok=True); target.write_bytes((source/relative).read_bytes())
-            target=candidate/'source/core-generated.png'; target.parent.mkdir(parents=True,exist_ok=True)
-            target.write_bytes((source/'source/core-generated.png').read_bytes()+b'changed')
+            core=manifest['sources']['core']; target=candidate/core; target.parent.mkdir(parents=True,exist_ok=True)
+            target.write_bytes((source/core).read_bytes()+b'changed')
             with self.assertRaisesRegex(ValueError,'CANDIDATE_SOURCE_HASH_MISMATCH'):
                 proof.candidate_manifest(self.contract,candidate)
 

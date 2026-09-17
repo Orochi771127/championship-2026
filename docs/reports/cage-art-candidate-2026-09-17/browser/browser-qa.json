@@ -3,24 +3,26 @@
   "fieldId": "field_cm01_01",
   "productionManifestModified": false,
   "candidateFrame": "docs/art/production/original-character-cage-r1/cage-field-cm01-breeze-meadow-v1/previews/composite-hd4x.png",
-  "candidateSha256": "e906222c131f80c8ab0464170dbbc84f274239d33f682141466f8233c606fb90",
+  "candidateSha256": "23fedc3782296578172a779754199909d0b29bbb1ced55f6cd2255191255363d",
   "candidateRequests": 1,
   "grounding": {
     "method": "NORMAL_HAND_HOLD_CARRY_RELEASE",
+    "edgeScrollMs": 7000,
     "viewport": {
       "width": 1024,
       "height": 1366
     },
     "requestedScreenPoint": {
-      "x": 783.08,
-      "y": 639.52
+      "x": 732.88,
+      "y": 614.5400000000001
     },
     "landedResident": {
-      "x": 865.4892578125,
-      "y": 553.681640625,
+      "x": 646.598143475926,
+      "y": 492.714599609375,
       "state": 9,
-      "nativeFrame": 247
-    }
+      "nativeFrame": 681
+    },
+    "screenshot": "raising-candidate-grounding-1024x1366.png"
   },
   "screenshots": [
     {
@@ -29,7 +31,7 @@
         "height": 844
       },
       "filename": "raising-candidate-390x844.png",
-      "cameraPanGestures": 4,
+      "cameraPanGestures": 0,
       "measurement": {
         "host": {
           "x": 10,
@@ -46,11 +48,11 @@
         "residents": [
           {
             "creatureId": "resident:species-000",
-            "x": 258.4892578125,
-            "y": 286.681640625,
+            "x": 338.1129348417952,
+            "y": 295.7769470214844,
             "state": 11,
             "speciesIndex": 14,
-            "nativeFrame": 358,
+            "nativeFrame": 723,
             "sequenceId": 30
           }
         ],
@@ -89,11 +91,11 @@
         "residents": [
           {
             "creatureId": "resident:species-000",
-            "x": 258.4892578125,
-            "y": 454.681640625,
+            "x": 616.0131676587844,
+            "y": 391.7300638834636,
             "state": 11,
             "speciesIndex": 14,
-            "nativeFrame": 389,
+            "nativeFrame": 753,
             "sequenceId": 30
           }
         ],
@@ -132,12 +134,12 @@
         "residents": [
           {
             "creatureId": "resident:species-000",
-            "x": 259.4892578125,
-            "y": 556.681640625,
-            "state": 1,
+            "x": 639.848143475926,
+            "y": 479.214599609375,
+            "state": 11,
             "speciesIndex": 14,
-            "nativeFrame": 428,
-            "sequenceId": 0
+            "nativeFrame": 786,
+            "sequenceId": 30
           }
         ],
         "canvasCount": 1,
@@ -158,8 +160,8 @@
   "checks": {
     "sameApplicationAndRenderer": true,
     "normalGameActorPresent": true,
-    "actorWithinFieldBounds": true,
-    "actorFootContactOnCandidate": "PASS_NORMAL_HAND_CARRY_RELEASE_VISIBLE_IN_SCREENSHOTS",
+    "actorWithinFieldBoundsAtGrounding": true,
+    "actorFootContactOnCandidate": "PASS_NORMAL_HAND_CARRY_RELEASE_VISIBLE_IN_GROUNDING_SCREENSHOT",
     "threeViewportScreenshots": true,
     "physicalDeviceAccepted": false,
     "foregroundActorObjectOrdering": "UNKNOWN_REQUIRES_TRACE"

@@ -128,32 +128,17 @@ def candidate_manifest(contract, candidate):
         require(digest(candidate/relative) == source_hashes[Path(relative).name], 'CANDIDATE_SOURCE_HASH_MISMATCH')
     return manifest
 
-def _opaque_core_source(source, size):
+def _fit_modular_core_source(source, size):
     image = source.convert('RGBA')
-    target_ratio = size[0] / size[1]
-    source_ratio = image.width / image.height
-    if source_ratio > target_ratio:
-        crop_width = round(image.height * target_ratio)
-        left = (image.width - crop_width) // 2
-        image = image.crop((left, 0, left + crop_width, image.height))
-    elif source_ratio < target_ratio:
-        crop_height = round(image.width / target_ratio)
-        top = (image.height - crop_height) // 2
-        image = image.crop((0, top, image.width, top + crop_height))
-    image = image.resize(tuple(size), Image.Resampling.LANCZOS)
-    image.putalpha(Image.new('L', image.size, 255))
-    # Pair the outer three pixel bands so the authored ground wraps without an
-    # alpha or colour crack. This changes no Cage coordinate or placement.
-    pixels=image.load()
-    for inset in range(3):
-        for y in range(image.height):
-            left,right=pixels[inset,y],pixels[image.width-1-inset,y]
-            shared=tuple(round((left[i]+right[i])/2) for i in range(4))
-            pixels[inset,y]=shared; pixels[image.width-1-inset,y]=shared
-        for x in range(image.width):
-            top,bottom=pixels[x,inset],pixels[x,image.height-1-inset]
-            shared=tuple(round((top[i]+bottom[i])/2) for i in range(4))
-            pixels[x,inset]=shared; pixels[x,image.height-1-inset]=shared
+    alpha = image.getchannel('A')
+    threshold = alpha.point(lambda value: 255 if value >= 16 else 0)
+    bounds = threshold.getbbox()
+    require(bounds is not None, 'CANDIDATE_CORE_SOURCE_EMPTY')
+    # Alpha trim and fit the authored four-way connector silhouette to the
+    # existing 96x112 contract. No placement, pivot or hand-tuned X/Y offset is
+    # introduced; the visible source bounds define all four contact edges.
+    image = image.crop(bounds).convert('RGBa').resize(tuple(size), Image.Resampling.LANCZOS).convert('RGBA')
+    image.putalpha(image.getchannel('A').point(lambda value: 0 if value < 8 else value))
     return image
 
 def _fit_object_source(source, record, inset=1):
@@ -184,7 +169,7 @@ def prepare_candidate(contract, candidate):
     manifest = candidate_manifest(contract, candidate)
     sources = manifest['sources']
     with Image.open(candidate/sources['core']) as source:
-        core = _opaque_core_source(source, contract['core']['size'])
+        core = _fit_modular_core_source(source, contract['core']['size'])
     core.save(candidate/'core-native.png', optimize=True)
     object_dir = candidate/'object-cells'
     object_dir.mkdir(parents=True, exist_ok=True)
@@ -200,7 +185,11 @@ def load_candidate_export(contract, candidate):
     require(core_path.is_file(), 'CANDIDATE_CORE_EXPORT_MISSING')
     core = Image.open(core_path).convert('RGBA')
     require(list(core.size) == contract['core']['size'], 'CANDIDATE_CORE_DIMENSION_DRIFT')
-    require(core.getchannel('A').getextrema() == (255,255), 'CANDIDATE_CORE_MUST_BE_OPAQUE')
+    alpha = core.getchannel('A')
+    require(alpha.getextrema() == (0,255), 'CANDIDATE_CORE_REQUIRES_REAL_ALPHA')
+    require(alpha.getbbox() == (0,0,core.width,core.height), 'CANDIDATE_CORE_CONNECTORS_MUST_REACH_ALL_EDGES')
+    require(all(alpha.getpixel(point) == 0 for point in ((0,0),(core.width-1,0),(0,core.height-1),(core.width-1,core.height-1))),
+        'CANDIDATE_CORE_CORNERS_MUST_REMAIN_TRANSPARENT')
     expected = {o['objectId'] for o in contract['objects']}
     object_dir = candidate/'object-cells'
     actual = {p.stem for p in object_dir.glob('*.png')} if object_dir.is_dir() else set()
@@ -341,18 +330,25 @@ def build_candidate(contract, candidate, output):
             draw.text((column*review_cell[0]*review_scale+8,8),record['objectId'],fill=(255,255,255,255))
     review.save(output/'object-review.png',optimize=True)
     with Image.open(candidate/'core-native.png').convert('RGBA') as core:
-        def mean_edge_delta(first,second):
-            a=first.convert('RGB').tobytes(); b=second.convert('RGB').tobytes()
-            values=[sum(abs(a[i+j]-b[i+j]) for j in range(3))/3 for i in range(0,len(a),3)]
-            return round(sum(values)/len(values),3)
-        seam={'leftRightMeanRgbDelta':mean_edge_delta(core.crop((0,0,1,core.height)),core.crop((core.width-1,0,core.width,core.height))),
-            'topBottomMeanRgbDelta':mean_edge_delta(core.crop((0,0,core.width,1)),core.crop((0,core.height-1,core.width,core.height))),
-            'transparentGapPixels':core.getchannel('A').tobytes().count(0),
-            'status':'VISUAL_REVIEW_REQUIRED_NO_ALPHA_GAPS'}
+        channel=core.getchannel('A'); pixels=core.load()
+        edge_alpha={
+            'top':sum(channel.getpixel((x,0))>0 for x in range(core.width)),
+            'bottom':sum(channel.getpixel((x,core.height-1))>0 for x in range(core.width)),
+            'left':sum(channel.getpixel((0,y))>0 for y in range(core.height)),
+            'right':sum(channel.getpixel((core.width-1,y))>0 for y in range(core.height))}
+        require(all(value>0 for value in edge_alpha.values()),'CANDIDATE_CORE_MISSING_CONNECTOR_EDGE')
+        transparent=channel.tobytes().count(0)
+        require(transparent>=core.width*core.height*.05,'CANDIDATE_CORE_TRANSPARENT_EXTERIOR_TOO_SMALL')
+        blue=sum(1 for y in range(core.height) for x in range(core.width)
+            if channel.getpixel((x,y))>=32 and pixels[x,y][2]>=pixels[x,y][0]+25)
+        require(blue>=core.width*core.height*.08,'CANDIDATE_CORE_BLUE_RIM_NOT_READABLE')
+        seam={'connectorEdgeAlphaPixels':edge_alpha,'transparentExteriorPixels':transparent,
+            'blueRimPixels':blue,'status':'GEOMETRY_PASS_VISUAL_JOIN_REVIEW_REQUIRED'}
     report={'fieldId':FIELD,'assetId':manifest['assetId'],'status':'CANDIDATE_GEOMETRY_PASS_VISUAL_REVIEW_REQUIRED',
         'formula':'placement - pivot','manualCorrections':0,'geometryUnchanged':True,'completePackage':True,
         'rightsStatus':'ORIGINAL_CREATED','humanApproved':False,'runtimeEligible':False,'shippingReady':False,
-        'core':{'size':contract['core']['size'],'opaque':True,'sha256':digest(candidate/'core-native.png')},
+        'core':{'size':contract['core']['size'],'opaque':False,'alphaBounds':list(channel.getbbox()),
+            'sha256':digest(candidate/'core-native.png')},
         'objects':alpha,'seamQa':seam,'scenarios':scenarios,
         'limits':['Generated-art geometry and completeness pass; this is not pixel equality with research material.',
             'Foreground actor-object ordering remains UNKNOWN_REQUIRES_TRACE until separately traced and approved.',
