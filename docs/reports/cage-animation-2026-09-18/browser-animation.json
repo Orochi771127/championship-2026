@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "method": "ISOLATED_QA_SAVE_NORMAL_SHOP_CAGE_PLACEMENT_PAN_AND_SCREENSHOT_PIXELS",
+  "viewport": {
+    "width": 1024,
+    "height": 1366
+  },
+  "frames": [
+    "http://127.0.0.1:8741/assets/production/cage/licensed-runtime-v1/fields/field_cm07_01/frame-01.png",
+    "http://127.0.0.1:8741/assets/production/cage/licensed-runtime-v1/fields/field_cm07_01/frame-00.png"
+  ],
+  "pixelCheck": {
+    "visibleLavaPixels": 66546,
+    "changingLavaPixels": 4023,
+    "samples": 8
+  },
+  "oneCanvas": true,
+  "errors": [],
+  "missing": [],
+  "physicalDeviceAccepted": false,
+  "originalCpuCompositionAccepted": false
+}

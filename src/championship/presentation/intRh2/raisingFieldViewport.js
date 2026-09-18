@@ -1,3 +1,13 @@
+/** Screen pixels kept clear along the top of the frame for the floating
+ * readout. A fixed band, not a share of the leftover: the readout does not
+ * grow with the ranch. */
+export const RAISING_READOUT_BAND_PX = 96;
+
+/** The chunkiest one native pixel is allowed to get on screen. The art is
+ * already 4x, so this is twice its own resolution; past that a desktop frame
+ * would show less than a cage. */
+export const RAISING_MAX_NATIVE_SCREEN_PIXELS = 8;
+
 /** Presentation transform only. Legacy habitat regions retain their identity
  * and normalized geometry; this does not assign residents to native modules.
  * Art, actor positions and drop targets share this fitted rectangle.
@@ -11,23 +21,27 @@ export function raisingFieldViewport(field, viewport, padding = 12, cameraX = 0)
   // the window fills the frame's height and the player swipes sideways, so the
   // habitat no longer leaves empty bands above and below itself. The ranch is
   // always wider than the frame, so filling the height leaves no gap at all.
+  //
+  // Owner 2026-09-18 chose that literally, over keeping the old width-derived
+  // zoom: the ranch is enlarged until it reaches the readout band, and it is
+  // laid on the floor of the frame so the one strip that is left is the sky
+  // above it. The previous rule reserved a headroom that grew with the art and
+  // then split the slack top and bottom, which left the ranch hovering in the
+  // middle of a mostly empty frame. Seeing fewer cages at once is the trade;
+  // the board wraps, so sideways is always available.
   const nativeWindow = field.presentationMode === 'NATIVE_RANCH' && field.nativePixelWorldScale > 0;
-  const headroom = nativeWindow && field.wrapWidthPx ? 64*field.nativePixelWorldScale : 0;
-  const heightScale = Math.max(1, viewport.height - padding * 2) / (field.worldHeightPx+headroom);
-  // Never shrink below two screen pixels per native pixel; then use available
-  // phone/tablet/desktop width to enlarge the same ranch plane instead of
-  // exposing large empty surroundings. The single fitted transform still owns
-  // art, residents, input and camera round trips.
-  const nativeScreenPixels = Math.min(4.5, Math.max(2, viewport.width / 160));
-  const zoomCap = nativeScreenPixels / field.nativePixelWorldScale;
-  const scale = nativeWindow ? Math.min(heightScale, zoomCap)
+  const headroom = nativeWindow && field.wrapWidthPx ? RAISING_READOUT_BAND_PX : 0;
+  const heightScale = Math.max(1, viewport.height - padding * 2 - headroom) / field.worldHeightPx;
+  const scale = nativeWindow
+    ? Math.min(heightScale, RAISING_MAX_NATIVE_SCREEN_PIXELS / field.nativePixelWorldScale)
     : Math.min(Math.max(1, viewport.width - padding * 2) / field.worldWidthPx, heightScale);
   const width = field.worldWidthPx * scale;
   const height = field.worldHeightPx * scale;
   const maxCameraX = Math.max(0,field.worldWidthPx - (viewport.width-padding*2)/scale);
   const scroll=field.wrapWidthPx ? wrapRaisingCamera(cameraX,field.wrapWidthPx) : Math.min(maxCameraX,Math.max(0,cameraX));
   const x = nativeWindow ? padding - scroll*scale : (viewport.width-width)/2;
-  return { x, y: (viewport.height - height + headroom*scale) / 2, width, height, scale };
+  const y = nativeWindow ? viewport.height - padding - height : (viewport.height - height) / 2;
+  return { x, y, width, height, scale };
 }
 
 export function wrapRaisingCamera(value,width){return ((value%width)+width)%width;}

@@ -26,5 +26,6 @@ test('templates project existing native multi-cell, row crop, wrap and starting-
   const lower=scenarios[1].plan.placements.find(p=>p.fieldId==='field_cm01_01');
   assert.equal(upper.sourceRect.y,96);assert.equal(lower.sourceRect.y,0);
   assert.equal(scenarios[2].plan.placements.filter(p=>p.fieldId==='field_cm01_01').length,2);
-  assert.equal(scenarios[3].plan.placements.length,4);
+  assert.equal(scenarios[3].plan.placements.filter(p=>p.structuralRole!=='LID').length,4);
+  assert.equal(scenarios[3].plan.placements.filter(p=>p.structuralRole==='LID').length,6);
 });

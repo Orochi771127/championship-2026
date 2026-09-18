@@ -1010,17 +1010,85 @@
             "sha256": "AAB17BE837E23591D506FDABBE18528E0D909C8BED482DC2A14ADFE951DC0229"
           }
         ],
-        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER",
+        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER_PLUS_FRAME0_PIXEL_MATCH_REPAINT",
         "alternateCompositeFrame": {
           "file": "fields/field_cm07_01/native-composite-frame-01.png",
-          "sha256": "B1DB06ED7D5DC07423519611871B1A5441E517E7B53173E06E472572522576AC"
+          "sha256": "09D1DCF24693B60CC3263C40F9092EF6B750688370AB72FF88205D1100912F62"
         },
         "alternateFaithfulHd4xFrame": {
           "file": "fields/field_cm07_01/faithful-hd4x-frame-01.png",
-          "sha256": "E1433E5F90A7FAA45F2BB025FBFFED1A741458B17CAA368A6E3B635BBECEDADE",
+          "sha256": "68C9D477645445D0D57ED93DE95F4A184093EE7CFB963A7909475E09EE1402BA",
           "scale": 4,
           "filter": "NEAREST"
-        }
+        },
+        "animationBoundCoreCells": [
+          [
+            10,
+            3
+          ],
+          [
+            11,
+            3
+          ],
+          [
+            12,
+            3
+          ],
+          [
+            13,
+            3
+          ],
+          [
+            10,
+            4
+          ],
+          [
+            11,
+            4
+          ],
+          [
+            12,
+            4
+          ],
+          [
+            11,
+            5
+          ],
+          [
+            12,
+            5
+          ],
+          [
+            15,
+            21
+          ],
+          [
+            23,
+            21
+          ],
+          [
+            24,
+            21
+          ],
+          [
+            22,
+            22
+          ],
+          [
+            23,
+            22
+          ],
+          [
+            24,
+            22
+          ],
+          [
+            25,
+            22
+          ]
+        ],
+        "animationBoundCellSemantics": "RGBA_EQUAL_FRAME0_TILE_RECONSTRUCTION_NOT_VERIFIED_VRAM_BINDING",
+        "compositionEvidence": "PIXEL_MATCH_RECONSTRUCTION_CPU_BINDING_UNKNOWN_REQUIRES_TRACE"
       },
       "sourcePayloadHashes": {
         "nbs": {
@@ -1332,7 +1400,7 @@
             "sha256": "E0660A778D97D0297316C95B874C715411B9EC152D46745B260CEAB67731504A"
           }
         ],
-        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER",
+        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER_PLUS_FRAME0_PIXEL_MATCH_REPAINT",
         "alternateCompositeFrame": {
           "file": "fields/field_cm09_01/native-composite-frame-01.png",
           "sha256": "6C68CCF9F8CB2E7831A7BF523DEABEBDD915F5DC2F38976E815C2FF973591054"
@@ -1342,7 +1410,10 @@
           "sha256": "291464CF4533806DB2631E777232DFA4B1CF0E409C3C6A1C97C574B5EC1CD230",
           "scale": 4,
           "filter": "NEAREST"
-        }
+        },
+        "animationBoundCoreCells": [],
+        "animationBoundCellSemantics": "RGBA_EQUAL_FRAME0_TILE_RECONSTRUCTION_NOT_VERIFIED_VRAM_BINDING",
+        "compositionEvidence": "PIXEL_MATCH_RECONSTRUCTION_CPU_BINDING_UNKNOWN_REQUIRES_TRACE"
       },
       "sourcePayloadHashes": {
         "nbs": {
@@ -3084,7 +3155,7 @@
             "sha256": "635D0CB7C30413AF984E0F57FE139C48251D9465496431C99784BA44B6D04C1B"
           }
         ],
-        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER",
+        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER_PLUS_FRAME0_PIXEL_MATCH_REPAINT",
         "alternateCompositeFrame": {
           "file": "fields/field_cm21_01/native-composite-frame-01.png",
           "sha256": "AC82B8942E826954F98A9E00B948F0814A5E6398B408F56C2D3C91AB6455BB8C"
@@ -3094,7 +3165,10 @@
           "sha256": "0275ADA68225E249C361ECA5377686D9B0827D59560C6C8B5717C45ABC0700E4",
           "scale": 4,
           "filter": "NEAREST"
-        }
+        },
+        "animationBoundCoreCells": [],
+        "animationBoundCellSemantics": "RGBA_EQUAL_FRAME0_TILE_RECONSTRUCTION_NOT_VERIFIED_VRAM_BINDING",
+        "compositionEvidence": "PIXEL_MATCH_RECONSTRUCTION_CPU_BINDING_UNKNOWN_REQUIRES_TRACE"
       },
       "sourcePayloadHashes": {
         "nbs": {
@@ -5668,7 +5742,7 @@
             "sha256": "5B532756732E9E7137CF01D6B24BCC37E1D586F602DF9322CE065B0B4991969E"
           }
         ],
-        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER",
+        "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER_PLUS_FRAME0_PIXEL_MATCH_REPAINT",
         "alternateCompositeFrame": {
           "file": "fields/field_cm39_01/native-composite-frame-01.png",
           "sha256": "3D99C20AD22039B9D4A80BA26F62D46A273E2B562957433D759FB15C2FD02EF1"
@@ -5678,7 +5752,10 @@
           "sha256": "ACE51F1404591C3EFEE2D7280E9C229F58ED1CAF0F3F99A4EFCAD3BBDA956754",
           "scale": 4,
           "filter": "NEAREST"
-        }
+        },
+        "animationBoundCoreCells": [],
+        "animationBoundCellSemantics": "RGBA_EQUAL_FRAME0_TILE_RECONSTRUCTION_NOT_VERIFIED_VRAM_BINDING",
+        "compositionEvidence": "PIXEL_MATCH_RECONSTRUCTION_CPU_BINDING_UNKNOWN_REQUIRES_TRACE"
       },
       "sourcePayloadHashes": {
         "nbs": {

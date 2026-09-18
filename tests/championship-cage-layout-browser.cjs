@@ -144,7 +144,9 @@ function bounds(m) {
       await page.setViewportSize(viewport); await page.waitForTimeout(200);
       const hand = page.locator('[data-tool-id="hand"]');
       if (await hand.getAttribute('aria-pressed') !== 'true') await hand.click();
-      let a = await press(page, [8], origin => page.mouse.move(origin.x + 12, origin.y));
+      // Stroke admission needs >3 native pixels. The enlarged ranch can use
+      // eight screen pixels per native pixel, so the old 12px gesture was a hold.
+      let a = await press(page, [8], origin => page.mouse.move(origin.x + 32, origin.y));
       await page.mouse.move(a.x + 18, a.y); await page.mouse.up();
       await waitState(page, [1, 2, 3, 9]);
       a = await press(page, [6]);

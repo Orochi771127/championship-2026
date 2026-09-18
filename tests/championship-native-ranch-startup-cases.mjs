@@ -46,9 +46,14 @@ test('multi-cell placement rejects covered cells, lower-row crossings and rank b
 test('normal initial art plan joins Waiting Room and three facilities with original origins and upper-row crop',()=>{
   const actual=plan();
   assert.equal(actual.mode,'NATIVE_RANCH');
-  assert.deepEqual(actual.placements.map(p=>[p.fieldId,p.x,p.y,p.sourceRect.y]),[
-    ['field_cm28_01',0,0,96],['field_cm01_01',1536,0,96],
-    ['field_cm02_01',768,0,96],['field_cm16_01',1344,256,0]]);
+  assert.deepEqual(actual.placements.filter(p=>p.structuralRole!=='LID').map(p=>[p.fieldId,p.x,p.y,p.sourceRect.y]),[
+    ['field_cm28_01',0,0,96],['field_cm02_01',768,0,96],
+    ['field_cm01_01',1536,0,96],['field_cm16_01',1344,256,0]]);
+  const lids=actual.placements.filter(p=>p.structuralRole==='LID');
+  assert.deepEqual(lids.filter(p=>p.fragmentOfSlot===undefined).map(p=>p.slotIndex),[9,10,11,12,13]);
+  assert.ok(lids.every(p=>p.fieldId==='field_cm29_01'&&p.moduleId===null));
+  assert.deepEqual(lids.at(-1).sourceRect,{x:192,y:0,width:192,height:448});
+  assert.ok(actual.placements.slice(0,6).every(p=>p.structuralRole==='LID'),'lids stay behind occupied cage art');
   assert.deepEqual(actual.residentViewport,{x:0,y:0,width:960,height:704});
   assert.equal(actual.placementEvidence,'NATIVE_ORIGINS_AND_CROP_WITH_FLATTENED_ART');
   assert.ok(Object.isFrozen(actual.placements[0].sourceRect));
@@ -91,15 +96,16 @@ function pixiFixture() {
       async unload(src){resources.unloads.push(src);}}};
   return {PIXI,resources};
 }
-test('existing texture authority loads four cropped fields and releases crop views without destroying shared sources',async()=>{
+test('existing texture authority shares the lid texture and releases crop views without destroying shared sources',async()=>{
   const {PIXI,resources}=pixiFixture();const request=plan();
   const bundle=await loadRuntimeMapArtTileSet({PIXI,manifest,placements:request.placements,
     presentationMode:request.mode,placementEvidence:request.placementEvidence,residentViewport:request.residentViewport});
-  assert.equal(bundle.field.worldWidthPx,1920);assert.equal(bundle.field.worldHeightPx,704);
-  assert.equal(resources.loads.length,4);assert.equal(resources.crops[0].frame.y,96);
+  assert.equal(bundle.field.worldWidthPx,2688);assert.equal(bundle.field.worldHeightPx,704);
+  assert.equal(resources.loads.length,5);assert.equal(new Set(resources.loads).size,5);
+  assert.equal(resources.crops[6].frame.y,96);
   assert.deepEqual(bundle.field.residentViewport,request.residentViewport);
   await bundle.dispose();await bundle.dispose();
-  assert.equal(resources.unloads.length,4);assert.deepEqual(resources.destroyed,[false,false,false,false]);
+  assert.equal(resources.unloads.length,5);assert.deepEqual(resources.destroyed,Array(10).fill(false));
 });
 
 test('a later invalid crop rolls back all acquired textures',async()=>{
@@ -114,16 +120,16 @@ test('looping camera repeats cropped ground without reloading or double-destroyi
   const bundle=await loadRuntimeMapArtTileSet({PIXI,manifest,placements:request.placements,
     presentationMode:request.mode,wrapWidthPx:request.wrapWidthPx});
   assert.equal(bundle.field.wrapWidthPx,14*48*4);
-  assert.equal(bundle.displayObject.children.length,12);
-  assert.equal(resources.loads.length,4);
-  const originals=bundle.displayObject.children.slice(0,4),copies=bundle.displayObject.children.slice(4);
+  assert.equal(bundle.displayObject.children.length,30);
+  assert.equal(resources.loads.length,5);
+  const originals=bundle.displayObject.children.slice(0,10),copies=bundle.displayObject.children.slice(10);
   assert.equal(copies[0].x,originals[0].x-request.wrapWidthPx);
   assert.equal(copies[1].x,originals[0].x+request.wrapWidthPx);
   assert.equal(copies[0].texture,originals[0].texture);
   originals[0].texture={nextFrame:true};bundle.update(16);
   assert.equal(copies[0].texture,originals[0].texture);
   await bundle.dispose();await bundle.dispose();
-  assert.ok(copies.every(c=>c.destroyed));assert.equal(resources.unloads.length,4);
+  assert.ok(copies.every(c=>c.destroyed));assert.equal(resources.unloads.length,5);
 });
 
 test('old saved placements keep their exact anchors and legacy renderer; new saves persist native configuration',async()=>{

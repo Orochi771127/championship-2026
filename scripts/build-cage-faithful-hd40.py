@@ -15,6 +15,10 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw
 
+from lib.cage_animation import (
+    BOUND_CELL_SEMANTICS, COMPOSITION_EVIDENCE, COMPOSITION_ORDER,
+    animation_bound_cells, compose_animated_field_frames,
+)
 from lib.ydij_map_formats import (
     composite_object_placements,
     decode_ncgr as decode_map_ncgr,
@@ -423,7 +427,8 @@ def build(archive_root: Path, raw_root: Path, output_root: Path) -> None:
                 "frameDurationsRawTicks": animation["frameDurationsRawTicks"],
                 "timingSemantics": animation["timingSemantics"],
                 "layerFrames": layer_frames,
-                "compositionOrder": "ANIMATED_LAYER_BEHIND_STATIC_CORE_AND_OBJECT_LAYER",
+                "compositionOrder": COMPOSITION_ORDER,
+                "compositionEvidence": COMPOSITION_EVIDENCE,
             }
         elif field_id in ANIMATED_FIELDS:
             raise ValueError(f"Expected animated layer missing: {field_id}")
@@ -602,12 +607,11 @@ def build(archive_root: Path, raw_root: Path, output_root: Path) -> None:
 
         source_image = static_clean
         if animation_layers:
-            composite_frames = []
-            for layer in animation_layers:
-                composite = layer.copy()
-                composite.alpha_composite(static_clean)
-                composite_frames.append(composite)
+            composite_frames = compose_animated_field_frames(static_clean, animation_layers)
             source_image = composite_frames[0]
+            # Pixel-match reconstruction, not a verified native VRAM binding.
+            animation_record["animationBoundCoreCells"] = animation_bound_cells(static_clean, animation_layers[0])
+            animation_record["animationBoundCellSemantics"] = BOUND_CELL_SEMANTICS
             alternate_native_out = field_dir / "native-composite-frame-01.png"
             composite_frames[1].save(alternate_native_out, optimize=True)
             alternate_hd = composite_frames[1].resize(
