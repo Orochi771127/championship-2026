@@ -1,6 +1,6 @@
 {
   "date": "2026-09-18",
-  "status": "LOCAL_FIX_AND_BROWSER_ACCEPTED",
+  "status": "PUBLISHED_AND_BROWSER_ACCEPTED",
   "root": "R:\\Projects\\Championship2026\\championship-2026",
   "branch": "main",
   "baseHead": "87278b40f566fa42b7ed7181bff089a8d163fce9",
@@ -64,11 +64,38 @@
     "cageMovedFrom": 8,
     "cageMovedTo": 10
   },
+  "publication": {
+    "fixCommit": "4e847d4fffd04a0c36da05a169e424852114baae",
+    "ci": {
+      "id": 35335263867,
+      "status": "success",
+      "url": "https://github.com/Orochi771127/championship-2026/actions/runs/35335263867"
+    },
+    "pages": {
+      "id": 35335263525,
+      "status": "success",
+      "url": "https://github.com/Orochi771127/championship-2026/actions/runs/35335263525"
+    },
+    "liveUrl": "https://orochi771127.github.io/championship-2026/",
+    "httpStatus": 200,
+    "runtimeHashesMatchMain": true,
+    "liveBrowser": {
+      "status": "PASS",
+      "viewportJourneys": 14,
+      "interactions": 6,
+      "errors": [],
+      "missingResources": [],
+      "managementClock": {"before": "07:02", "after": "07:03"},
+      "systemClock": {"before": "07:03", "after": "07:04"},
+      "saveContinue": true
+    }
+  },
   "physicalDeviceAccepted": false,
-  "published": false,
+  "published": true,
   "artifacts": [
     "REPORT_ZH_TW.md",
     "validation.json",
+    "PUBLICATION_ZH_TW.md",
     "raising-390x844.png",
     "cage-edit-390x844.png"
   ]

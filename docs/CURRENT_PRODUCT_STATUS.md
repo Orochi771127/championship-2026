@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: CAGE_GRID_CLOCK_PUBLICATION_20260918 -->
+**2026-09-18 — 籠子格位與工具列時間修復已發布。** 修復提交 `4e847d4` 已推送到 GitHub `main`；[CI](https://github.com/Orochi771127/championship-2026/actions/runs/35335263867)與 [Pages](https://github.com/Orochi771127/championship-2026/actions/runs/35335263525)均成功。正式站回應 200，三個修復檔案的 SHA-256 與 `main` 完全一致。正式站再跑 390／820／1024 三尺寸、14 次畫面旅程與 6 組操作均通過，無頁面錯誤或缺檔；管理及系統選單開啟期間時鐘繼續前進，籠子移動、離頁保存、重新載入與 Continue 成功。詳見[發布回條](reports/cage-grid-clock-fix-2026-09-18/PUBLICATION_ZH_TW.md)。
+
 <!-- record-id: CAGE_GRID_CLOCK_FIX_20260918 -->
 **2026-09-18 — 籠子格位、牧場顯示與工具列時間修復，本機驗收通過。** 育成牧場的原生像素顯示上限由 8 恢復為 2，使相鄰設施與格位重新可見；牧場配置改為只依原始形狀遮罩標示佔用格，修正定位點被誤畫成額外格位的問題。新增全矩陣檢查，涵蓋 36 種設施、20 個格位、14／16／18／20 格牧場，共 1,102 組合法放置，逐一核對形狀、圖片原點、裁切、環繞與邊界。管理及系統工具列浮層不再暫停時間。完整測試 1,563/1,563、CI 1,346/1,346；390／820／1024 三尺寸瀏覽器、保存與 Continue 通過，兩個選單開啟期間時鐘均繼續前進。詳見[中文紀錄](reports/cage-grid-clock-fix-2026-09-18/REPORT_ZH_TW.md)與[機器回條](reports/cage-grid-clock-fix-2026-09-18/validation.json)。本段先記錄本機驗收；發布結果由後續回條更新。實體裝置驗收仍未升格。
 
