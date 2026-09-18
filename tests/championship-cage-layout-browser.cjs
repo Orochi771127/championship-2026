@@ -24,6 +24,19 @@ async function actor(page) {
 async function waitState(page, allowed, timeout = 15000) {
   await page.waitForFunction(({ host, allowed }) => allowed.includes(JSON.parse(document.querySelector(host)?.dataset.residentScreenPositions || '[]')[0]?.state), { host, allowed }, { timeout });
 }
+async function proveToolbarMenuKeepsTimeRunning(page, menuId) {
+  const button = page.locator(`button[data-menu-id="${menuId}"]`);
+  const clock = page.locator('.cm-status-bar__time');
+  const before = await clock.textContent();
+  await button.click();
+  await page.locator(`.cm-toolbar__menu[data-menu-id="${menuId}"]`).waitFor();
+  await page.waitForFunction(value => document.querySelector('.cm-status-bar__time')?.textContent !== value, before, { timeout: 5000 });
+  const after = await clock.textContent();
+  assert.notEqual(after, before, `${menuId} toolbar overlay must not pause the game clock`);
+  assert.equal(await page.locator(`.cm-toolbar__menu[data-menu-id="${menuId}"]`).isVisible(), true);
+  await button.click();
+  return { menuId, before, after };
+}
 async function press(page, allowed, afterDown = async () => {}) {
   for (let attempt = 0; attempt < 12; attempt++) {
     const a = await actor(page);
@@ -99,6 +112,9 @@ function bounds(m) {
     await page.goto(`${base}${base.includes('?') ? '&' : '?'}presentation=developer`, { waitUntil: 'networkidle' });
     await startGame(page);
     await page.locator(`${host}[data-resident-screen-positions]`).waitFor();
+    report.toolbarClock = [];
+    report.toolbarClock.push(await proveToolbarMenuKeepsTimeRunning(page, 'MANAGEMENT'));
+    report.toolbarClock.push(await proveToolbarMenuKeepsTimeRunning(page, 'SYSTEM'));
     await page.locator('[data-tool-id="hand"]').click();
     for (let i = 0; i < 3; i++) { const a = await actor(page); await page.mouse.click(a.x, a.y); await page.waitForTimeout(70); }
     await page.waitForFunction(host => JSON.parse(document.querySelector(host)?.dataset.residentScreenPositions || '[]')[0]?.speciesIndex >= 8, host);
@@ -144,9 +160,9 @@ function bounds(m) {
       await page.setViewportSize(viewport); await page.waitForTimeout(200);
       const hand = page.locator('[data-tool-id="hand"]');
       if (await hand.getAttribute('aria-pressed') !== 'true') await hand.click();
-      // Stroke admission needs >3 native pixels. The enlarged ranch can use
-      // eight screen pixels per native pixel, so the old 12px gesture was a hold.
-      let a = await press(page, [8], origin => page.mouse.move(origin.x + 32, origin.y));
+      // Stroke admission needs >3 native pixels; at the board-context scale a
+      // 12px gesture clears that threshold without becoming a long drag.
+      let a = await press(page, [8], origin => page.mouse.move(origin.x + 12, origin.y));
       await page.mouse.move(a.x + 18, a.y); await page.mouse.up();
       await waitState(page, [1, 2, 3, 9]);
       a = await press(page, [6]);

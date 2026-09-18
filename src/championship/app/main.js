@@ -224,7 +224,8 @@ async function ensurePixiStage(canvasHost, signal) {
       app, ticker: pixiStage.app.ticker,
       isVisible: () => document.visibilityState === "visible",
       isContextLost: () => pixiStage.contextLost,
-      isModalOpen: () => toolbar?.getOpenMenuId() != null,
+      // The Management/System panel is a non-blocking toolbar overlay. Keeping
+      // it open must not stop raising time or resident simulation.
       // Browser asset latency is outside the native clock. A screen publication
       // can precede its awaited mount; discard that interval without catch-up.
       isSceneReady: () => mountedScreen === app.getScreen() && view?.isPlayable !== false

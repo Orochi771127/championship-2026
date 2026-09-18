@@ -1,5 +1,8 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: CAGE_GRID_CLOCK_FIX_20260918 -->
+**2026-09-18 — 籠子格位、牧場顯示與工具列時間修復，本機驗收通過。** 育成牧場的原生像素顯示上限由 8 恢復為 2，使相鄰設施與格位重新可見；牧場配置改為只依原始形狀遮罩標示佔用格，修正定位點被誤畫成額外格位的問題。新增全矩陣檢查，涵蓋 36 種設施、20 個格位、14／16／18／20 格牧場，共 1,102 組合法放置，逐一核對形狀、圖片原點、裁切、環繞與邊界。管理及系統工具列浮層不再暫停時間。完整測試 1,563/1,563、CI 1,346/1,346；390／820／1024 三尺寸瀏覽器、保存與 Continue 通過，兩個選單開啟期間時鐘均繼續前進。詳見[中文紀錄](reports/cage-grid-clock-fix-2026-09-18/REPORT_ZH_TW.md)與[機器回條](reports/cage-grid-clock-fix-2026-09-18/validation.json)。本段先記錄本機驗收；發布結果由後續回條更新。實體裝置驗收仍未升格。
+
 <!-- record-id: CAGE_PUBLICATION_20260918 -->
 **2026-09-18 — Claude 工作目錄的全部完成內容已提交、合併 `main` 並發布。** 原分支提交為 `abea062`，正式合併提交為 `81938d7`；GitHub `main`、本機 `main` 與首次發布來源一致。GitHub CI 及 Pages 工作流程均成功，公開版 3,965 個檔案，build ID 為 `869fe6bb5defb89bf5aaa36eecbb9a1667390b3ed9b64267838f1126f35e3969`。正式頁面回應 200，線上 cm07 火山第二幀 SHA-256 `68c9d477645445d0d57ed93de95f4a184093ee7cfb963a7909475e09ee1402ba` 與 `main` 完全一致。GitHub 倉庫簡介及 README 已改成繁體中文。詳見[發布回條](reports/cage-animation-2026-09-18/PUBLICATION_ZH_TW.md)。這次發布不升格實體裝置、前景遮擋、原機逐像素等效、第三方權利或商業 shipping 驗收。
 

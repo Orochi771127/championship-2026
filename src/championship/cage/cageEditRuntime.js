@@ -102,7 +102,10 @@ export function createCageEditRuntime({ snapshot = null, initializeOriginal = fa
     const unlockedCount = slotCountForTamerRank(tamerRank);
     draft = dropInvalid(draft, owned, unlockedCount);
     committed = dropInvalid(committed, owned, unlockedCount);
-    const occupied = new Map(draft.map((entry) => [entry.slotIndex, entry.moduleId]));
+    // A native entry stores an anchor, but several original masks do not
+    // occupy that anchor bit. Build those cells only from the traced mask;
+    // adding the anchor first would paint a phantom extra hex in Cage Edit.
+    const occupied = new Map(layoutVersion ? [] : draft.map((entry) => [entry.slotIndex, entry.moduleId]));
     if (layoutVersion) for (const entry of draft) {
       const mask = nativePlacementMask(entry);
       for (let slot = 0; slot < MAX_SLOT_COUNT; slot++) if (mask & (1 << slot)) occupied.set(slot, entry.moduleId);

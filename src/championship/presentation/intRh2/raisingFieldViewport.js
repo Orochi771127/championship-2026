@@ -3,10 +3,11 @@
  * grow with the ranch. */
 export const RAISING_READOUT_BAND_PX = 96;
 
-/** The chunkiest one native pixel is allowed to get on screen. The art is
- * already 4x, so this is twice its own resolution; past that a desktop frame
- * would show less than a cage. */
-export const RAISING_MAX_NATIVE_SCREEN_PIXELS = 8;
+/** The largest one original native pixel may appear on screen. At two screen
+ * pixels the resident remains readable while a phone still shows the current
+ * cage in its neighbouring-board context. Larger values make one cage cover
+ * most of the ranch and look detached from the cells it actually occupies. */
+export const RAISING_MAX_NATIVE_SCREEN_PIXELS = 2;
 
 /** Presentation transform only. Legacy habitat regions retain their identity
  * and normalized geometry; this does not assign residents to native modules.
@@ -16,19 +17,9 @@ export function raisingFieldViewport(field, viewport, padding = 12, cameraX = 0)
   if (!(field?.worldWidthPx > 0 && field?.worldHeightPx > 0)) {
     return { x: 0, y: 0, width: viewport.width, height: viewport.height, scale: 1 };
   }
-  // Portrait camera adaptation: a window over the ranch, rather than shrinking
-  // every facility and resident into a thumbnail overview. Owner 2026-09-16:
-  // the window fills the frame's height and the player swipes sideways, so the
-  // habitat no longer leaves empty bands above and below itself. The ranch is
-  // always wider than the frame, so filling the height leaves no gap at all.
-  //
-  // Owner 2026-09-18 chose that literally, over keeping the old width-derived
-  // zoom: the ranch is enlarged until it reaches the readout band, and it is
-  // laid on the floor of the frame so the one strip that is left is the sky
-  // above it. The previous rule reserved a headroom that grew with the art and
-  // then split the slack top and bottom, which left the ranch hovering in the
-  // middle of a mostly empty frame. Seeing fewer cages at once is the trade;
-  // the board wraps, so sideways is always available.
+  // The native ranch remains a sideways window over one continuous board. It
+  // is laid on the bottom edge, below the fixed readout band, and it never
+  // enlarges past the scale that keeps adjacent cells visible on a phone.
   const nativeWindow = field.presentationMode === 'NATIVE_RANCH' && field.nativePixelWorldScale > 0;
   const headroom = nativeWindow && field.wrapWidthPx ? RAISING_READOUT_BAND_PX : 0;
   const heightScale = Math.max(1, viewport.height - padding * 2 - headroom) / field.worldHeightPx;

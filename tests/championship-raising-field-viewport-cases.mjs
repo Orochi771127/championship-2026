@@ -63,21 +63,20 @@ test('edge scroll continues at stationary pointer, respects direction and stops 
   assert.equal(raisingEdgeScroll({x:390,y:100},viewport,1000),9,'background resume does not jump the camera');
 });
 
-test('the ranch fills every host height below the readout band and retains pointer round trips',()=>{
+test('the ranch keeps adjacent cells visible at two screen pixels per native pixel and retains pointer round trips',()=>{
   const field={worldWidthPx:2688,worldHeightPx:768,nativePixelWorldScale:4,presentationMode:'NATIVE_RANCH',wrapWidthPx:2688};
   const screens=[{width:370,height:740},{width:800,height:1076},{width:1004,height:1262}];
-  let previousNativeScale=0;
   for(const screen of screens){
     const fit=raisingFieldViewport(field,screen);
     const nativeScale=fit.scale*field.nativePixelWorldScale;
     const heightLimited=(screen.height-24-RAISING_READOUT_BAND_PX)/field.worldHeightPx*field.nativePixelWorldScale;
     assert.equal(nativeScale,Math.min(heightLimited,RAISING_MAX_NATIVE_SCREEN_PIXELS));
-    assert.ok(nativeScale>=previousNativeScale,'a taller host enlarges the one shared art and input plane');
+    assert.equal(nativeScale,2,'large phones and tablets keep the same legible board-context scale');
     assert.ok(Math.abs(fit.y+fit.height-(screen.height-12))<1e-7,'no gap below the ranch');
-    assert.ok(screen.height-12-fit.height-fit.y<1e-7 && fit.y>=12+RAISING_READOUT_BAND_PX-1e-7,
-      'the only blank left is the readout band above');
-    previousNativeScale=nativeScale;
-    for(const camera of [-20,0,2600,5390])for(const point of [{x:12,y:300},{x:screen.width/2,y:400},{x:screen.width-12,y:500}]){
+    assert.ok(fit.y>=12+RAISING_READOUT_BAND_PX-1e-7,'the fixed readout band stays clear');
+    for(const camera of [-20,0,2600,5390])for(const point of [
+      {x:12,y:fit.y+20},{x:screen.width/2,y:fit.y+fit.height/2},{x:screen.width-12,y:fit.y+fit.height-20}
+    ]){
       const native=raisingScreenToNative(point,field,screen,camera);
       const projected=raisingNativeToScreen([native.x*4096,native.y*4096],field,screen,camera);
       assert.ok(Math.abs(projected.x-point.x)<1e-7);

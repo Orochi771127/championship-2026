@@ -1,0 +1,75 @@
+{
+  "date": "2026-09-18",
+  "status": "LOCAL_FIX_AND_BROWSER_ACCEPTED",
+  "root": "R:\\Projects\\Championship2026\\championship-2026",
+  "branch": "main",
+  "baseHead": "87278b40f566fa42b7ed7181bff089a8d163fce9",
+  "facilityPlacementAudit": {
+    "definitions": 36,
+    "shopCages": 35,
+    "boardCells": 20,
+    "ranchSizes": [14, 16, 18, 20],
+    "legalPlacementsBySize": {
+      "14": 202,
+      "16": 251,
+      "18": 300,
+      "20": 349
+    },
+    "legalPlacementsTotal": 1102,
+    "checks": [
+      "native footprint mask",
+      "editor cell position",
+      "shared facility image origin",
+      "upper-row crop",
+      "horizontal wrap",
+      "source strip continuity",
+      "destination board containment",
+      "waiting room containment",
+      "empty structural lid containment"
+    ]
+  },
+  "fullTests": {
+    "tests": 1563,
+    "pass": 1563,
+    "fail": 0
+  },
+  "ciTests": {
+    "tests": 1346,
+    "pass": 1346,
+    "fail": 0
+  },
+  "modulePreload": {
+    "status": "PASS",
+    "startupModules": 184
+  },
+  "playtestBuild": {
+    "status": "PASS",
+    "files": 3965,
+    "buildId": "27630154054c83c7f80cfe69c491046c0b424237a901b20f3234c8f7aba1c811"
+  },
+  "browser": {
+    "status": "PASS",
+    "viewports": [
+      {"width": 390, "height": 844},
+      {"width": 820, "height": 1180},
+      {"width": 1024, "height": 1366}
+    ],
+    "viewportJourneys": 14,
+    "interactions": 6,
+    "errors": [],
+    "missingResources": [],
+    "managementClock": {"before": "07:01", "after": "07:02"},
+    "systemClock": {"before": "07:02", "after": "07:03"},
+    "saveContinue": true,
+    "cageMovedFrom": 8,
+    "cageMovedTo": 10
+  },
+  "physicalDeviceAccepted": false,
+  "published": false,
+  "artifacts": [
+    "REPORT_ZH_TW.md",
+    "validation.json",
+    "raising-390x844.png",
+    "cage-edit-390x844.png"
+  ]
+}
