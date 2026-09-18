@@ -1,0 +1,37 @@
+{
+  "fieldId": "field_cm01_01",
+  "status": "PASS",
+  "comparisonsChangedPixels": {
+    "static-composite-native.png": 0,
+    "native-original.png": 0,
+    "runtime-frame-00.png": 0,
+    "upper-row": 0,
+    "lower-row": 0,
+    "wrap-edge": 0,
+    "starting-ranch": 0
+  },
+  "formula": "placement - pivot",
+  "manualCorrections": 0,
+  "newArtGenerated": 0,
+  "geometryUnchanged": true,
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "limits": [
+    "Pixel equality proves this static fixture, not arbitrary artwork semantics or foreground occlusion.",
+    "Replacement exports must retain identity, canvas, pivot and safe bounds; visible foot contact and baked duplicates still need review."
+  ],
+  "outputs": {
+    "composite-hd4x.png": "816EC7851457DF8DF012A71CF36CEBC69DBDAF62E42B2C091D746733FA1DBB0A",
+    "composite-native.png": "241BC59C24E0A89F2481708E45450553940C9834D734D7A71A1C9C49E4113862",
+    "geometry.json": "26CE69F73F201FB001BB4A590A4485CFC26FDEA2705E085A295CA1E4E263AE2E",
+    "lower-row-ground-guide.png": "CBA6E2D1059488DD3041BF9D6D1F6BDA11C9501BB60ED60A283140D825CB8C50",
+    "lower-row.png": "12A16065C4133339EF0478078C2E91C2A7002A15D4EEDEDDB0E566D2603A08EF",
+    "starting-ranch-ground-guide.png": "D43833E1F57D7548DCD820E8DE9565B8886BC5A63894EE1DA173D24A1F758779",
+    "starting-ranch.png": "FC967B28D6783422B45B816DAEE88B28FD385078C55812CDCDB3FE7195C61E9B",
+    "template.svg": "2DAD4F49612DE6672EA3251899264ACAE94DBDEE72170C5DA0DC38A8E6760112",
+    "upper-row-ground-guide.png": "5BE85435291646E6700E92E5E8B67C8A5BDE22B44B8671791B08981929F14A44",
+    "upper-row.png": "06F904B3E046D366ABEFFBCDAF2AB8B72B22E0532087213010EB75446D3F24B2",
+    "wrap-edge-ground-guide.png": "7D0046E628377DA01B15DEB45D124E46ADF9A560BB7B1C9B5E95B24BB8AE051C",
+    "wrap-edge.png": "6497E318C813C369D4B0C4DAF35DA21C95BB0EF2EDD937D38097A2DCCA5F174C"
+  }
+}

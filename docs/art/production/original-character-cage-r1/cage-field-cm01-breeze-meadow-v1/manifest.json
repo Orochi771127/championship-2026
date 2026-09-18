@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "candidateRevision": 2,
+  "assetId": "art:map:field-cm01-01:breeze-meadow-v1",
+  "fieldId": "field_cm01_01",
+  "title": "Breeze Meadow Nursery",
+  "status": "ART_PROPOSAL",
+  "productionStatus": "NEEDS_HUMAN_VISUAL_APPROVAL",
+  "runtimeEligible": false,
+  "humanApproved": false,
+  "shippingReady": false,
+  "publicReleasePermitted": false,
+  "rightsStatus": "ORIGINAL_CREATED",
+  "geometryContract": "docs/art/contracts/cage/field_cm01_01.v1.json",
+  "geometryPolicy": "PRESERVE_EXISTING_CANVAS_PLACEMENT_PIVOT_CROP_AND_COORDINATE_FORMULA",
+  "design": {
+    "summary": "Soft sage nursery meadow with pale mineral inlays, restrained amber energy threads, an original cobalt-and-cyan four-way coupling rim, and four original teal leaf-and-stone care objects.",
+    "style": "CLEAN_MODERN_PIXEL_ART_INSPIRED_SMALL_SCALE_READABLE",
+    "palette": ["sage", "mint", "pale-warm-stone", "deep-teal", "amber-accent"],
+    "mapMode": "scene_mode",
+    "visualModel": "layered_raster",
+    "runtimeObjectModel": "separate_props_authored_then_baked_by_existing_compositor",
+    "collisionModel": "EXISTING_EXTERNAL_GAMEPLAY_AUTHORITY"
+  },
+  "generation": {
+    "tool": "BUILT_IN_IMAGEGEN",
+    "resolvedModel": "UNKNOWN_TOOL_NOT_EXPOSED",
+    "generatedAt": "2026-09-18",
+    "apiBatch": false,
+    "paidApiReceipt": "NOT_APPLICABLE_BUILT_IN_TOOL",
+    "referenceImagesProvidedToGenerator": ["source/core-generated.png"],
+    "researchPixelsUsedAsGeneratorInput": false,
+    "notes": "Revision 2 edits only the candidate's own original ground generation to add an original four-way blue coupling rim and real transparent exterior. The four independent object generations are unchanged. No research image was supplied to imagegen; research art was inspected only for dimensions, placement, and the structural need for a joinable perimeter.",
+    "sourceSha256": {
+      "core-rim-generated-v2.png": "054F40EAF272B8055267337F73B6E0FC6F59A5A513245703F7148BFCAF02783B",
+      "obj-000-generated.png": "A0101F760C3EB15A12229AB0F557C743FE8247A8161AFFF01C5B6F4BF6973A9E",
+      "obj-001-generated.png": "38A1C8EF4BD95E5DE52ECBB82D2C5716E937434AD336CFAC3EFCF944D6BED788",
+      "obj-002-generated.png": "6B0F6C88518CE2704BCA3190B7E5F8D99B0F9D36543EB1BCEA8672A9D15EDD48",
+      "obj-003-generated.png": "52FAE34F5421D141C112BAB6EFD04F91EE1BB068E7DA6FDB4AAE3A1B5E17AEA7"
+    }
+  },
+  "sources": {
+    "core": "source/core-rim-generated-v2.png",
+    "objects": {
+      "obj-000": "source/obj-000-generated.png",
+      "obj-001": "source/obj-001-generated.png",
+      "obj-002": "source/obj-002-generated.png",
+      "obj-003": "source/obj-003-generated.png"
+    }
+  },
+  "prompts": {
+    "core": "prompts/core-rim-v2.prompt.txt",
+    "objects": {
+      "obj-000": "prompts/obj-000.prompt.txt",
+      "obj-001": "prompts/obj-001.prompt.txt",
+      "obj-002": "prompts/obj-002.prompt.txt",
+      "obj-003": "prompts/obj-003.prompt.txt"
+    }
+  },
+  "exports": {
+    "core": "core-native.png",
+    "objects": {
+      "obj-000": "object-cells/obj-000.png",
+      "obj-001": "object-cells/obj-001.png",
+      "obj-002": "object-cells/obj-002.png",
+      "obj-003": "object-cells/obj-003.png"
+    },
+    "previewDirectory": "previews"
+  },
+  "processing": {
+    "core": "ALPHA_TRIM_PREMULTIPLIED_LANCZOS_RESIZE_TO_FIXED_96x112_WITH_AUTHORED_CONNECTORS_AT_ALL_FOUR_EDGES",
+    "objects": "ALPHA_TRIM_PREMULTIPLIED_LANCZOS_CONTAIN_IN_SAFE_BOUNDS_BOTTOM_ALIGN_ONE_PIXEL_INSET",
+    "creativeDrawingByScript": false,
+    "manualXYCorrections": 0
+  },
+  "review": {
+    "geometry": "PASS_COMPLETE_PACKAGE_FIXED_CONTRACT",
+    "visual": "OWNER_REVIEW_REQUIRED",
+    "foregroundOcclusion": "UNKNOWN_REQUIRES_TRACE",
+    "actorFootContactOnCandidate": "PASS_NORMAL_HAND_CARRY_RELEASE_IN_DEDICATED_GROUNDING_SCREENSHOT",
+    "browserQa": "docs/reports/cage-art-candidate-2026-09-17/browser/browser-qa.json",
+    "physicalDevice": "NOT_TESTED"
+  }
+}

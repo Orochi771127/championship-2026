@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import fs from "node:fs";
 
 import {
   createRuntimeMapArtFieldLoader,
@@ -37,8 +38,10 @@ function manifest(overrides = {}) {
 function pixiDouble() {
   const loaded = [];
   const unloaded = [];
+  const sprites = [];
   class Sprite {
     constructor(texture) {
+      sprites.push(this);
       this.texture = texture;
       this.position = { set: (x, y) => { this.x = x; this.y = y; } };
     }
@@ -63,9 +66,25 @@ function pixiDouble() {
       AnimatedSprite
     },
     loaded,
-    unloaded
+    unloaded,
+    sprites
   };
 }
+
+test('Cage proof pilot loads one baked field sprite, without a second object-cell pass', async () => {
+  const cage = JSON.parse(fs.readFileSync('assets/production/cage/licensed-runtime-v1/manifest.json', 'utf8'));
+  const { PIXI, loaded, unloaded, sprites } = pixiDouble();
+  const field = await loadRuntimeMapArtField({ PIXI, manifest: cage, fieldId: 'field_cm01_01' });
+  const source = 'assets/production/cage/licensed-runtime-v1/fields/field_cm01_01/frame-00.png';
+  assert.deepEqual(loaded, [source]);
+  assert.equal(sprites.length, 1, 'core and four source objects are already baked into the single field');
+  assert.equal(field.displayObject, sprites[0]);
+  assert.equal(field.getDiagnostics().frameCount, 1);
+  assert.equal(field.displayObject.width, 384);
+  assert.equal(field.displayObject.height, 448);
+  await field.dispose();
+  assert.deepEqual(unloaded, [source]);
+});
 
 test("runtime map art accepts only production paths and explicit external gameplay bindings", () => {
   const checked = validateRuntimeMapArtBundle(manifest());

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { raisingFieldViewport, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingEdgeScroll } from '../src/championship/presentation/intRh2/raisingFieldViewport.js';
+import { raisingFieldViewport, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingEdgeScroll, RAISING_READOUT_BAND_PX, RAISING_MAX_NATIVE_SCREEN_PIXELS } from '../src/championship/presentation/intRh2/raisingFieldViewport.js';
 import { getRaisingNativePixelScale } from '../src/championship/presentation/intRh2/raisingNativeSizing.js';
 
 test('portrait and landscape letterboxing keep actor/drop coordinates on the same art plane', () => {
@@ -50,7 +50,8 @@ test('periodic ranch aligns actor and drop target on both sides of the waiting-a
   assert.equal(wrapRaisingCamera(-4,2688),2684);
   assert.deepEqual(raisingFieldViewport(field,viewport,12,0),raisingFieldViewport(field,viewport,12,2688));
   const fit=raisingFieldViewport(field,viewport);
-  assert.ok(fit.y-64*4*fit.scale>=12-1e-7,'large sprites retain headroom at unchanged ground-relative scale');
+  assert.ok(fit.y>=12+RAISING_READOUT_BAND_PX-1e-7,'the floating readout band stays clear of the ranch');
+  assert.ok(Math.abs(fit.y+fit.height-(viewport.height-12))<1e-7,'the ranch is laid on the floor of the frame');
 });
 
 test('edge scroll continues at stationary pointer, respects direction and stops outside the field',()=>{
@@ -60,4 +61,27 @@ test('edge scroll continues at stationary pointer, respects direction and stops 
   assert.ok(raisingEdgeScroll({x:385,y:100},viewport,16)>0);
   for(const p of [{x:-1,y:100},{x:391,y:100},{x:2,y:-1},{x:388,y:331}])assert.equal(raisingEdgeScroll(p,viewport,16),0);
   assert.equal(raisingEdgeScroll({x:390,y:100},viewport,1000),9,'background resume does not jump the camera');
+});
+
+test('the ranch fills every host height below the readout band and retains pointer round trips',()=>{
+  const field={worldWidthPx:2688,worldHeightPx:768,nativePixelWorldScale:4,presentationMode:'NATIVE_RANCH',wrapWidthPx:2688};
+  const screens=[{width:370,height:740},{width:800,height:1076},{width:1004,height:1262}];
+  let previousNativeScale=0;
+  for(const screen of screens){
+    const fit=raisingFieldViewport(field,screen);
+    const nativeScale=fit.scale*field.nativePixelWorldScale;
+    const heightLimited=(screen.height-24-RAISING_READOUT_BAND_PX)/field.worldHeightPx*field.nativePixelWorldScale;
+    assert.equal(nativeScale,Math.min(heightLimited,RAISING_MAX_NATIVE_SCREEN_PIXELS));
+    assert.ok(nativeScale>=previousNativeScale,'a taller host enlarges the one shared art and input plane');
+    assert.ok(Math.abs(fit.y+fit.height-(screen.height-12))<1e-7,'no gap below the ranch');
+    assert.ok(screen.height-12-fit.height-fit.y<1e-7 && fit.y>=12+RAISING_READOUT_BAND_PX-1e-7,
+      'the only blank left is the readout band above');
+    previousNativeScale=nativeScale;
+    for(const camera of [-20,0,2600,5390])for(const point of [{x:12,y:300},{x:screen.width/2,y:400},{x:screen.width-12,y:500}]){
+      const native=raisingScreenToNative(point,field,screen,camera);
+      const projected=raisingNativeToScreen([native.x*4096,native.y*4096],field,screen,camera);
+      assert.ok(Math.abs(projected.x-point.x)<1e-7);
+      assert.ok(Math.abs(projected.y-point.y)<1e-7);
+    }
+  }
 });

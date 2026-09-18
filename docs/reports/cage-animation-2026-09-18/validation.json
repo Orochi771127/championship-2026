@@ -1,0 +1,140 @@
+{
+  "date": "2026-09-18",
+  "status": "LOCAL_FIX_AND_BROWSER_ACCEPTED",
+  "root": "R:\\Projects\\Championship2026\\championship-2026-convergence-20260916",
+  "branch": "planning/nexus-link-product-scope-2026-09-16",
+  "baseHead": "72b9ec1f7627bbd1c2c09463ebaf50e75288afe1",
+  "fullTests": {
+    "tests": 1560,
+    "pass": 1560,
+    "fail": 0
+  },
+  "ciTests": {
+    "tests": 1343,
+    "pass": 1343,
+    "fail": 0
+  },
+  "pythonTests": {
+    "tests": 7,
+    "pass": 7,
+    "fail": 0
+  },
+  "preloadModules": 184,
+  "changedRuntimePngsAgainstBase": [
+    "assets/production/cage/licensed-runtime-v1/fields/field_cm07_01/frame-01.png"
+  ],
+  "animatedFields": [
+    {
+      "fieldId": "field_cm07_01",
+      "durationMs": [
+        835.7556556544072,
+        835.7556556544072
+      ],
+      "changedNativePixels": 254,
+      "alphaUnchanged": true,
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm07_01/frame-00.png",
+          "sha256": "E1433E5F90A7FAA45F2BB025FBFFED1A741458B17CAA368A6E3B635BBECEDADE",
+          "durationMs": 835.7556556544072,
+          "durationRawTicks": 50,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm07_01/frame-01.png",
+          "sha256": "68C9D477645445D0D57ED93DE95F4A184093EE7CFB963A7909475E09EE1402BA",
+          "durationRawTicks": 50,
+          "durationMs": 835.7556556544072,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm09_01",
+      "durationMs": [
+        334.30226226176285,
+        334.30226226176285
+      ],
+      "changedNativePixels": 11583,
+      "alphaUnchanged": true,
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm09_01/frame-00.png",
+          "sha256": "6FADF023400285D92D737B63E368AA4955ECF4DFBF29FEC007F0B585A9B9ACF9",
+          "durationMs": 334.30226226176285,
+          "durationRawTicks": 20,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm09_01/frame-01.png",
+          "sha256": "291464CF4533806DB2631E777232DFA4B1CF0E409C3C6A1C97C574B5EC1CD230",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm21_01",
+      "durationMs": [
+        334.30226226176285,
+        334.30226226176285
+      ],
+      "changedNativePixels": 740,
+      "alphaUnchanged": true,
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm21_01/frame-00.png",
+          "sha256": "6612CC28F0869071CFAD64EBD648F8D6012FB42427AC3C313F67F067D4CE0395",
+          "durationMs": 334.30226226176285,
+          "durationRawTicks": 20,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm21_01/frame-01.png",
+          "sha256": "0275ADA68225E249C361ECA5377686D9B0827D59560C6C8B5717C45ABC0700E4",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_cm39_01",
+      "durationMs": [
+        334.30226226176285,
+        334.30226226176285
+      ],
+      "changedNativePixels": 3484,
+      "alphaUnchanged": true,
+      "frames": [
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm39_01/frame-00.png",
+          "sha256": "60C527184B0104E1354EE945F7B3336E6FD93654C013410B96C3734187189E10",
+          "durationMs": 334.30226226176285,
+          "durationRawTicks": 20,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        },
+        {
+          "src": "assets/production/cage/licensed-runtime-v1/fields/field_cm39_01/frame-01.png",
+          "sha256": "ACE51F1404591C3EFEE2D7280E9C229F58ED1CAF0F3F99A4EFCAD3BBDA956754",
+          "durationRawTicks": 20,
+          "durationMs": 334.30226226176285,
+          "durationEvidence": "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
+        }
+      ]
+    }
+  ],
+  "compositionEvidence": "PIXEL_MATCH_RECONSTRUCTION_CPU_BINDING_UNKNOWN_REQUIRES_TRACE",
+  "commitCreated": false,
+  "mainChanged": false,
+  "published": false,
+  "physicalDeviceAccepted": false,
+  "artifacts": {
+    "authoring-proof.json": "DB93B1C0AD337022BF343ACCAAC7057FE9D851AC0C9A20B9D8C3CE0627EAB126",
+    "browser-animation.json": "D901D88C80A5D9667B3820D417FE8974B28AC65F2945960313BD86B37C96BBA2",
+    "browser-layout.json": "6C7FF9F5D09EC5949E53FC3C0D274EFF987B7193F7A730774B5F2A8A80D27051",
+    "normal-ranch-volcano.png": "5A4D1109183F2D4D1818216BE31A22E325F5177F6978AC11FD4872E625D1361B",
+    "REPORT_ZH_TW.md": "787DDA15A9869A61D26606CBE0A226765F1D96CE03876A887DF22E75C791D1E9"
+  }
+}

@@ -99,6 +99,9 @@ test("licensed Cage frames live under production, hash-match HD4x, and keep veri
     assert.equal(field.frames[0].durationMs, originalMapAnimationTicksToMs(ticks[0]));
     assert.equal(field.frames[1].durationMs, originalMapAnimationTicksToMs(ticks[1]));
     assert.equal(sha256File(field.frames[1].src), sourceField.animatedLayer.alternateFaithfulHd4xFrame.sha256);
+    assert.equal(sha256File(field.frames[1].src), field.frames[1].sha256);
+    assert.notEqual(sha256File(field.frames[0].src), sha256File(field.frames[1].src),
+      `${field.fieldId}: a declared terrain animation must not contain duplicate PNGs`);
   }
   assert.equal(
     checked.fields.find((field) => field.fieldId === "field_cm01_01").frames[0].sha256,

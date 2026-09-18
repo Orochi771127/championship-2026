@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "fieldId": "field_cm01_01",
+  "candidateAssetId": "art:map:field-cm01-01:breeze-meadow-v1",
+  "completedAt": "2026-09-18",
+  "status": "LOCAL_CANDIDATE_PASS_OWNER_VISUAL_APPROVAL_REQUIRED",
+  "productionManifestModified": false,
+  "humanApproved": false,
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "checks": [
+    {
+      "command": "npm run art:cage:proof",
+      "result": "PASS",
+      "detail": "7/7 source-rebuild comparisons have zero changed pixels; manualCorrections=0"
+    },
+    {
+      "command": "npm run art:cage:candidate:cm01",
+      "result": "PASS",
+      "detail": "completePackage=true; geometryUnchanged=true; manualCorrections=0; real alpha exterior; four connector edges present; blueRimPixels=2166; four object edge-alpha counts=0"
+    },
+    {
+      "command": "npm run test:cage:proof",
+      "result": "PASS",
+      "detail": "10/10 including refusal of a candidate package missing obj-003 or containing generated-source hash drift"
+    },
+    {
+      "command": "node --test tests/championship-cage-authoring-contract-cases.mjs",
+      "result": "PASS",
+      "detail": "3/3"
+    },
+    {
+      "command": "npm run test:browser:cage-candidate",
+      "result": "PASS_WITH_FOREGROUND_OCCLUSION_UNKNOWN",
+      "detail": "three responsive viewports plus dedicated grounding screenshot; normal hand hold/edge-scroll/carry/release; one Pixi canvas; page errors=0; missing resources=0"
+    },
+    {
+      "command": "npm test",
+      "result": "PASS",
+      "detail": "1560/1560"
+    },
+    {
+      "command": "npm run test:ci",
+      "result": "PASS",
+      "detail": "1343/1343 portable tests; 27 declared local-reference modules reported separately by the existing CI classifier"
+    },
+    {
+      "command": "npm run validate:preload",
+      "result": "PASS",
+      "detail": "184 startup modules"
+    }
+  ],
+  "openLimits": [
+    "Foreground actor-object ordering remains UNKNOWN_REQUIRES_TRACE.",
+    "Physical-device acceptance has not been performed.",
+    "Owner has not approved the candidate shapes or production promotion."
+  ]
+}

@@ -1,5 +1,7 @@
 # DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD
 
+> **2026-09-16 收束校正：** 本文件的 R0–R8 排程與早期 slice 狀態是 2026-08-29 規劃快照；現況查 `CURRENT_PRODUCT_STATUS.md` 與本輪[收束報告](../reports/convergence-2026-09-16/REPORT_ZH_TW.md)，不再另建 roadmap。原創商業產品沿此 repo 原地演進，外部 Nexus repo 的 code/save/assets 仍保持隔離。本輪執行範圍以 [Convergence Handoff](../coordination/CODEX_CONVERGENCE_HANDOFF_2026-09-16_ZH_TW.md) 為準：先 `field_cm01_01` 既有素材 proof，再三尺寸 responsive foundation；Creature 僅檢查 readiness。實測結果與唯一下一步清單見[收束報告](../reports/convergence-2026-09-16/REPORT_ZH_TW.md)。下文未完成的產品設計仍為 `DEFERRED`，不構成額外施工或批量生成授權。
+
 ## Master Game Production Plan
 
 > Current execution priority, 2026-09-15: [complete original-created characters and the existing cage environments first](ORIGINAL_CHARACTER_CAGE_FIRST_2026-09-15.md). Retain the implemented game and complete its applicable gaps; Habitat life simulation, offline redesign, dispatch and online services are later work, not blockers for this art/content stage. The small production-validation batch does not reduce the retained full inventory or predetermine a public launch count.
@@ -319,7 +321,7 @@ Renderer assignment follows evidence:
 - a 3D effect never turns the surrounding 2D scene into a 3D scene;
 - missing evidence remains blocked or uses an explicitly approved modern adaptation.
 
-Character production uses approved seed frames and whole-strip generation/redraw. All frames in one animation share silhouette, palette, scale and bottom-center ground anchor. Frame-by-frame independent generation is rejected because it causes identity drift.
+Character production uses approved seed frames and whole-strip generation/redraw. For an approved new original AnimationProfile, the design shares silhouette, palette and a declared reference scale/origin. Replacements of existing native animation must preserve each frame's source origin, offset, timing, flips, blank cells and declared scale; do not auto-centre, bbox-fit or impose a shared bottom anchor. Frame-by-frame independent generation is rejected because it causes identity drift.
 
 The full asset pipeline is in `CHAMPIONSHIP_2026_HD_ASSET_PRODUCTION_PLAN.md`.
 

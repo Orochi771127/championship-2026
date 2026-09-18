@@ -1,48 +1,42 @@
-# DIGIMON CHAMPIONSHIP — 2026 MODERN REBUILD
+# 數碼寶貝冠軍賽 — 2026 現代化網頁重製版
 
-**Standalone product repository.**
+這是獨立的遊戲產品倉庫。專案以網頁與手機為優先，採直向 9:16、觸控優先設計，同時支援桌面瀏覽器。
 
-**Local portrait-first repair, 2026-09-13:** sideways windows now keep a centered 9:16 portrait frame, with keyboard-aware resizing and shared scene/control scaling. This repair batch has not been pushed or deployed. See the [orientation acceptance record](docs/reports/mobile-photo-repair-2026-09-13/直向優先階段驗收.md); physical iPhone/Safari acceptance and the separately listed original-parity gaps remain open.
+## 立即遊玩
 
-**Public browser playtest (2026-09-10):** [Play Championship 2026](https://orochi771127.github.io/championship-2026/). The Owner authorized publication of the current completed work and this playable snapshot. Use a modern browser in portrait orientation; saves are stored in that browser and do not transfer automatically between devices or between localhost and this website. Original-game parity remains partial.
+- [開啟公開網頁試玩版](https://orochi771127.github.io/championship-2026/)
+- [安裝完整進度 QA 存檔](https://orochi771127.github.io/championship-2026/full-qa-save.html)
 
-**Mobile full-progress QA save:** [Install the test save](https://orochi771127.github.io/championship-2026/full-qa-save.html). The installer first downloads a backup when that browser already has a save, then writes the schema-v5 QA save into the same origin and opens the game.
+公開試玩版的存檔保存在目前瀏覽器中，不會自動同步到其他裝置，也不會在本機網址與公開網址之間自動轉移。QA 存檔安裝器會先下載既有存檔備份，再寫入 schema v5 測試存檔並開啟遊戲。
 
-**2026-09-09 checkpoint:** See the [current unfinished-work inventory](docs/reports/commercial-readiness/2026-09-09/MAIN_CHECKPOINT_ZH_TW.md). `npm run test:ci` runs explicitly classified repository-contained tests; `npm test` retains full local reference/art acceptance. This is a dated engineering receipt. Current CI and Pages triggering are described below; its test counts do not establish acceptance of a later checkout.
+目前已整合育成、狩獵、捕獲、商店、籠子編輯、資料庫與多種對戰流程；完整原作一致性、全套原創美術、實體手機驗收及商業發布驗收仍在進行中。最新完成的籠子批次修復了火山熔岩第二幀，保留既有 836 毫秒播放時間，並完成正常遊戲流程、Save/Continue 與三種畫面寬度的瀏覽器驗證。
 
-**Target:** Web-first / mobile-first / portrait 9:16 / touch-first, with desktop-browser compatibility.
+## 本機安裝與啟動
 
-**Nexus Link integration:** `FROZEN / OUT_OF_CURRENT_PRODUCT_SCOPE`. This repository does not import from or depend on a Nexus Link application, router, store, save system, gameplay system, or asset tree.
+Windows 可以直接執行 `START_CHAMPIONSHIP.cmd`。遊玩期間請保持伺服器視窗開啟；不要直接雙擊 `championship.html`，因為瀏覽器會在 `file://` 模式下阻擋 JavaScript 模組。
 
-**Original decoded assets:** `ROM_COPYRIGHTED_REFERENCE / RESEARCH_ONLY / NOT_SHIPPING_READY`. The private source pack is not fetched by the game. The dated Owner public-playtest policy permits the exact selected rendered bundles at the official Pages URL. Native ROM payloads and private legal documents remain excluded. Publication approval does not change provenance, verify third-party rights, or grant commercial-release acceptance.
-
-**2026 runtime art:** every runtime-loadable image lives under `assets/production/`. Runtime registration and shipping readiness are separate; the current index includes temporary, reviewed, licensed and explicitly scoped loopback research bundles.
-
-**Current implementation (2026-09-08):** normal Hunt generation/tools/capture/return and individual-field persistence are integrated. New Game constructs the original starter; native time/short-touch hatching preserves its identity and form through Save/Continue. The corrected 216-entry encyclopedia retains registrations. The one-stage Feeding slice is playable: original ground/actor initialization, food/protein placement and stock, approach/eating, Clean and remaining-food/individual Save/Continue. Normal 9:16 browser flow and full1326/1326 regression pass. Gate fees, rank/match unlocks, battle wallet transactions, Shop and Cage have working slices. Full Raising AI/training/treatment, adult evolution/lifetime, player-owned battle teams, long-term progression, replacement art/audio and device/shipping acceptance remain partial. See [Feeding completion and limits](docs/research/RAISING_FEEDING_STAGE_2026-09-08.md), [the two-stage work record](docs/reports/parity-audit/2026-09-08/TWO_STAGE_IMPLEMENTATION.md) and [current product status](docs/CURRENT_PRODUCT_STATUS.md).
-
-**Latest correction:** autonomous Raising activity, corrected meat/capsule art, visible Clean tools and active-Home calendar continuation are now integrated. See [the correction record](docs/research/RAISING_ACTIVITY_CARE_FIX_2026-09-08.md) for validation and remaining overnight/lifecycle limits.
-
-## Install and run
-
-On Windows, double-click `START_CHAMPIONSHIP.cmd`. Keep its server window open
-while playing. Do not open `championship.html` directly: browsers block the
-game's JavaScript modules under the `file://` protocol.
-
-Or start it from PowerShell:
+也可以從 PowerShell 啟動：
 
 ```powershell
 npm install
 npm run serve
 ```
 
-Open `http://127.0.0.1:8732/championship.html`.
+接著開啟 `http://127.0.0.1:8732/championship.html`。
 
-## Internal review and public builds
+## 測試與公開版建置
 
-Formal licence verification is deferred until the final public-release gate.
-Internal engineering can continue using the explicit input list in
-`docs/contracts/championship/WEB_BUILD_INPUTS.v1.json` and the existing approved
-local sources. This list selects files; it does not promote art or grant rights.
+```powershell
+npm test
+npm run test:ci
+npm run validate:preload
+npm run build:playtest
+npm run validate:playtest
+```
+
+GitHub Pages 工作流程會在 `main` 更新後執行 CI、建立公開試玩版、核對核准檔案與 SHA-256，再發布網站。公開版使用明確檔案清單；檔案進入清單不代表第三方權利、商業發布或實體裝置驗收已完成。
+
+內部審查版可用以下指令建立：
 
 ```powershell
 npm run audit:build
@@ -52,71 +46,47 @@ $env:CHAMPIONSHIP_PORT = '8764'
 npm run serve:internal
 ```
 
-Open `http://127.0.0.1:8764/championship.html` to review the snapshot on a separate
-browser origin. Internal output is loopback-only and is not for uploading to a
-static host. The validator checks exact file lists, hashes and module closure.
-The published checkpoint includes the selected rendered inputs needed to
-rebuild the playable snapshot after `npm ci`.
+接著開啟 `http://127.0.0.1:8764/championship.html`。內部版僅供本機審查，不應上傳到公開靜態網站。
 
-The GitHub Pages workflow runs on `push` to `main` and also supports `workflow_dispatch`. These triggers do not grant permission to push or publish a new batch.
+## 專案架構
 
-The GitHub Actions workflow uses `build:playtest` and `validate:playtest`, checks
-the Owner policy and every selected file's SHA-256, then deploys to Pages.
-The separate `build:pages` and `validate:pages` commands still enforce the full
-verified-release gate; pending rights and asset acceptance continue to block
-that target. A failed preflight preserves the previous output. Saves remain in
-each player's browser.
-
-```powershell
-npm run build:playtest
-npm run validate:playtest
-npm run battle:catalogs:build -- --rom "C:\\path\\to\\original.nds"
-```
-
-```powershell
-npm test
-npm run test:browser
-npm run test:browser:vs2
-npm run test:browser:vs2-r1
-```
-
-The browser gates exercise the required 360×800, 390×844, 393×852, 412×915, and 430×932 contract viewports, plus 375×812 as supplementary coverage. The repository is intentionally self-contained after `npm install`; runtime does not load PixiJS from a CDN or another project.
-
-## Product architecture
-
-| Layer | Authority |
+| 層級 | 負責內容 |
 |---|---|
-| DOM | screen UI, menus, panels, toolbar, and text |
-| PixiJS | playable 2D field, creatures, sprites, and 2D VFX |
-| Three.js | verified or approved bounded scenes/effects; see current architecture for mounted integrations |
+| DOM | 畫面介面、選單、面板、工具列與文字 |
+| PixiJS | 可遊玩的 2D 場景、角色、精靈與 2D 特效 |
+| Three.js | 已驗證或明確核准的限定 3D 場景與效果 |
 
-There is one standalone application, one Championship mode authority, one domain session, one save repository/key, and one PixiJS Application/ticker. Historical Nexus decisions remain in coordination history as superseded or frozen facts, not dependencies.
+專案只保留一套應用程式、路由、狀態、存檔與 PixiJS Application／ticker。Nexus Link 是另一個獨立產品，本倉庫不依賴其應用程式、玩法、存檔或資產。
 
-## Evidence firewall
+## 美術與研究資料界線
 
-- `assets/production/` — runtime-loadable product art only.
-- `research/original-evidence/` — evidence policy and external archive index only; no runtime imports.
-- `docs/coordination/` — `CHAMPIONSHIP_2026_PRODUCT_SSOT` coordination snapshots.
-- `docs/migration/` — checkpoint provenance and migration verification.
+- `assets/production/`：遊戲執行時可以載入的產品美術。
+- `research/original-evidence/`：原作證據政策與外部資料索引；不提供遊戲執行時載入。
+- `docs/art/`：美術盤點、契約、製作狀態與驗收紀錄。
+- `docs/coordination/`：Owner 指示與跨工作階段協調紀錄。
 
-## Documentation
+ROM 解碼素材屬於研究資料，不會由遊戲下載。公開試玩授權只涵蓋核准清單中的既有輸出，不會自動改變來源、權利或商業發布狀態。
 
-Start at [docs/README.md](docs/README.md). It separates current integrated truth from historical Claude/Codex coordination snapshots.
+## 文件入口
 
-The original-game art audit starts at [docs/art/ART_MASTER_INVENTORY.md](docs/art/ART_MASTER_INVENTORY.md); ROM graphics and reconstruction galleries remain external under `R:\NEXUS LINK\原作\research-only`.
+- [文件總覽](docs/README.md)
+- [目前產品狀態](docs/CURRENT_PRODUCT_STATUS.md)
+- [籠子火山動畫修復與驗收](docs/reports/cage-animation-2026-09-18/REPORT_ZH_TW.md)
+- [可重用實作盤點](docs/REUSE_INVENTORY.md)
+- [總製作計畫](docs/planning/CHAMPIONSHIP_2026_MASTER_GAME_PRODUCTION_PLAN.md)
+- [技術債登記](docs/TECH_DEBT_REGISTER.md)
+- [美術總盤點](docs/art/ART_MASTER_INVENTORY.md)
 
-- [Current product status](docs/CURRENT_PRODUCT_STATUS.md)
-- [Reusable implementation inventory](docs/REUSE_INVENTORY.md)
-- [Production plan](docs/planning/CHAMPIONSHIP_2026_MASTER_GAME_PRODUCTION_PLAN.md)
-- [Technical debt register](docs/TECH_DEBT_REGISTER.md)
+`docs/CURRENT_PRODUCT_STATUS.md` 會保留各日期的驗收回條；較舊段落描述的是當時狀態，遇到衝突時以檔案最上方的新紀錄、目前程式碼與最新部署結果為準。
 
-## Roadmap gate
+## 目前範圍
 
-| Slice | Scope | State |
-|---|---|---|
-| VS1 | Raising Home: boot → select → care → relocate → save → real reload → continue → restore | accepted baseline; migrated and revalidated |
-| VS2 | Gate Select → Hunt Loadout → Hunt Field → Explore → Return Home, including bounded Gate 3D and the recovered Loadout runtime | integrated bounded baseline |
-| VS3 | Native capture → hand/card → Hunt Result → Home/save | normal application path integrated; browser success/device parity still pending |
-| VS4–VS7 | daily systems, battle, progression and production finish | multiple integrated slices; complete raising, own-party battle, progression, art and device acceptance remain partial |
+| 階段 | 狀態 |
+|---|---|
+| 育成首頁、照護、搬移、保存與 Continue | 已有可玩基線，持續補齊原作細節 |
+| Gate 選擇、裝備、狩獵、捕獲與返回 | 已整合主要流程，觸控與實機驗收仍持續 |
+| 商店、籠子編輯與牧場顯示 | 已整合；火山動畫已修復，完整遮擋與美術核准仍開放 |
+| 自由對戰、密碼對戰、連線流程模擬與冠軍賽 | 已有多個可玩流程，完整玩家隊伍與長期進度仍部分完成 |
+| 全角色原創美術、音效與商業發布 | 製作中，尚未整體升格為完成 |
 
-The normal application now includes Capture, Hunt Result, Battle, Shop and Database surfaces. Historical exploration fixtures retain their narrower scope. The Hunt world is a 128×128 modular field traversed by a camera: 9:16 is the viewport, never the world.
+本專案的公開頁面是 Owner 核准的開發中試玩版，不代表整體遊戲、第三方權利或商業版本已完成驗收。

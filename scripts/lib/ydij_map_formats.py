@@ -338,6 +338,30 @@ def composite_object_placements(
     return image, invalid_cell_ids
 
 
+def composite_rendered_object_placements(base: Image.Image, objects: list[dict]) -> Image.Image:
+    """Authoring entry for already decoded cells; same local origin as NCER.
+
+    Pixels outside the field canvas are clipped, as in draw_object_cell. The
+    caller validates the export contract before invoking this raster operation.
+    Flips reflect around the object origin, never around the field centre.
+    """
+    image = base.convert("RGBA").copy()
+    for item in objects:
+        cell = item["image"].convert("RGBA")
+        x, y = item["placement"]
+        px, py = item["pivot"]
+        if not all(type(v) is int for v in (x, y, px, py)):
+            raise ValueError("INTEGER_PLACEMENT_AND_PIVOT_REQUIRED")
+        if item.get("horizontalFlip", False):
+            cell = cell.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+            px = cell.width - px
+        if item.get("verticalFlip", False):
+            cell = cell.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
+            py = cell.height - py
+        image.alpha_composite(cell, (x - px, y - py))
+    return image
+
+
 def render_bsar_frame(
     animation: dict,
     tiles: list[bytes],

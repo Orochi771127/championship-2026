@@ -1,0 +1,163 @@
+{
+  "date": "2026-09-17",
+  "branch": "planning/nexus-link-product-scope-2026-09-16",
+  "baselineCommit": "7f049dc58563d7e7dc5ccbc42b188d1cc429624d",
+  "mainAtStart": "d7a7dcfd8f7cda41976f12329d99f50a77882371",
+  "sourceOfFinalCommit": "Git commit containing gitBlobHashes; final handoff and PR checks record exact pushed SHA",
+  "environment": {
+    "node": "22.17.0",
+    "python": "3.12.10",
+    "pillow": "12.3.0",
+    "playwright": "1.62.1",
+    "browser": "Windows Chrome 140.0.7339.186 headless, DPR 1",
+    "origin": "http://127.0.0.1:8734"
+  },
+  "tests": [
+    {
+      "command": "npm run art:cage:proof",
+      "status": "PASS",
+      "count": 7,
+      "log": ".tmp/cage-layout-20260917/cage-proof.log",
+      "logSha256": "3a91c9deb0f81c26a49915967ee973e4c3cf99867bcc0a14a15a744564a68ef3"
+    },
+    {
+      "command": "npm run test:cage:proof",
+      "status": "PASS",
+      "count": 7,
+      "log": ".tmp/cage-layout-20260917/cage-python.log",
+      "logSha256": "e5eb00bb261be263615a88b9c1b50463be67cf82647a69410d2dcf070058b620"
+    },
+    {
+      "command": "node --test tests/championship-cage-authoring-contract-cases.mjs",
+      "status": "PASS",
+      "count": 3,
+      "log": ".tmp/cage-layout-20260917/cage-structural.log",
+      "logSha256": "eb669d285b0d8cf8dbb79f36b08a5131a4fd93a3eea03b120e51ace0a4f25da6"
+    },
+    {
+      "command": "node --test tests/championship-cage-authoring-contract-cases.mjs tests/championship-raising-field-viewport-cases.mjs tests/championship-raising-native-sizing-cases.mjs tests/championship-vs4-cage-edit-cases.mjs tests/championship-licensed-cage-runtime-cases.mjs tests/championship-cage-ground-art-alignment-cases.mjs tests/championship-runtime-map-art-bundle-cases.mjs",
+      "status": "PASS",
+      "count": 38,
+      "log": ".tmp/cage-layout-20260917/focused.log",
+      "logSha256": "a70ff35f045d88a5a89af45ef1193c2b308aece558c1245140edef8abab73e48"
+    },
+    {
+      "command": "npm test",
+      "status": "PASS",
+      "count": 1560,
+      "log": ".tmp/cage-layout-20260917/npm-test.log",
+      "logSha256": "c3a59596af2243011289232751f271d7d4550dedfdbb93d280f44fce077131d6"
+    },
+    {
+      "command": "npm run test:ci",
+      "status": "PASS",
+      "count": 1343,
+      "log": ".tmp/cage-layout-20260917/test-ci.log",
+      "logSha256": "c060d592abfb265c28e5cdf62b0b61048330d2ec1d2c651d7e37dfbdf565c20f"
+    },
+    {
+      "command": "npm run validate:preload",
+      "status": "PASS",
+      "count": 184,
+      "log": ".tmp/cage-layout-20260917/preload.log",
+      "logSha256": "fac87ec05b7e35f088003d1b8e3cfec23582a65668dc66e9aa18618178910111"
+    },
+    {
+      "command": "npm run test:browser:cage-layout",
+      "status": "PASS",
+      "count": 14,
+      "log": ".tmp/cage-layout-20260917/test-browser-cage-layout.log",
+      "logSha256": "da602f3f42f0136e13e8c7f477a21561c12f265ce926a1e1fdc2e53033dcfe0a"
+    },
+    {
+      "command": "npm run test:browser:convergence",
+      "status": "PASS",
+      "count": 8,
+      "log": ".tmp/cage-layout-20260917/test-browser-convergence.log",
+      "logSha256": "c845ac9db2fff3988f226879382cfdc9985c6576859098f60d2d3d431a6015a1"
+    },
+    {
+      "command": "npm run test:browser",
+      "status": "PASS",
+      "count": 6,
+      "log": ".tmp/cage-layout-20260917/test-browser.log",
+      "logSha256": "985c585fbf2c4bc644947501dde3f18d436e6a0899d0074fefdb117af63a2ce1"
+    },
+    {
+      "command": "npm run test:browser:recent",
+      "status": "PASS",
+      "count": 1,
+      "log": ".tmp/cage-layout-20260917/test-browser-recent.log",
+      "logSha256": "56407ace3393ac092890d40b7d1296fa28efde1bce33eee1dd34f56c3815327a"
+    },
+    {
+      "command": "npm run test:browser:vs2-r1",
+      "status": "PASS",
+      "count": 2,
+      "log": ".tmp/cage-layout-20260917/test-browser-vs2-r1.log",
+      "logSha256": "c0f0d7cebd093ae648158428a09b95f0c7e918e3a7c81a97485f06f08c6ca20a"
+    }
+  ],
+  "sourceHashes": {
+    "src/championship/app/daylightSkin.css": "b6225ae59a6c4907529c224a68eaaba9f35325a5450184dbed85cc840f385c4f",
+    "package.json": "cd68c66b202ef6623f7eade85034bc1b3a2fd553dd0cccb74df33fb0b7d64b21",
+    "tests/championship-cage-layout-browser.cjs": "5e0a2ca661958dc5afd90c7c4116d71d6531c302c74d87753291b79ea330688e",
+    "tests/championship-convergence-browser.cjs": "df8c6b7f5dddb64305862d9762a7c17b6666b2157cca7e99eaed1b9167681e08",
+    "tests/championship-int-rh2-browser.cjs": "43f8c1eb37abfdcbea4fa34ed24c18e23020444526fe9d674bffbac85654ad5a",
+    "tests/championship-raising-field-viewport-cases.mjs": "005c5dd9177d2f4ce2523c95856faedd4a5d9f14b997dff1fb8885c7b7865081",
+    "tests/championship-runtime-map-art-bundle-cases.mjs": "61f997296a5cfb6086ff61314d449aecb5808e55dcfbc5ba664cd0135c975769",
+    "scripts/build-cage-authoring-proof.py": "b9d0e282dab9a58a6619fe2788bf254bde6f67cc80d562f2249fca8fe1f0d21e",
+    "scripts/lib/ydij_map_formats.py": "d3d78d91c4586a5485d3cc6b5be3e0fc7638f937f68b5c66a0cc0898aec24df6",
+    "tests/test_cage_authoring_proof.py": "ea351326aa565be35287b439145a3a4a0fe6002bbbda2f0ce71eac1c77716bc2",
+    "docs/art/contracts/cage/field_cm01_01.v1.json": "59f2d792671fd6449d0e9285d74588adf0d47e6c143b12abbc311ec942d1ab0d"
+  },
+  "gitBlobHashes": {
+    "src/championship/app/daylightSkin.css": "b6225ae59a6c4907529c224a68eaaba9f35325a5450184dbed85cc840f385c4f",
+    "package.json": "cd68c66b202ef6623f7eade85034bc1b3a2fd553dd0cccb74df33fb0b7d64b21",
+    "tests/championship-cage-layout-browser.cjs": "5e0a2ca661958dc5afd90c7c4116d71d6531c302c74d87753291b79ea330688e",
+    "tests/championship-convergence-browser.cjs": "df8c6b7f5dddb64305862d9762a7c17b6666b2157cca7e99eaed1b9167681e08",
+    "tests/championship-int-rh2-browser.cjs": "43f8c1eb37abfdcbea4fa34ed24c18e23020444526fe9d674bffbac85654ad5a",
+    "tests/championship-raising-field-viewport-cases.mjs": "005c5dd9177d2f4ce2523c95856faedd4a5d9f14b997dff1fb8885c7b7865081",
+    "tests/championship-runtime-map-art-bundle-cases.mjs": "61f997296a5cfb6086ff61314d449aecb5808e55dcfbc5ba664cd0135c975769",
+    "scripts/build-cage-authoring-proof.py": "b9d0e282dab9a58a6619fe2788bf254bde6f67cc80d562f2249fca8fe1f0d21e",
+    "scripts/lib/ydij_map_formats.py": "ad4195897cc6a87e908bb74038e31d70c97e1ff0ce7ef99a9488683ad643bbe2",
+    "tests/test_cage_authoring_proof.py": "ea351326aa565be35287b439145a3a4a0fe6002bbbda2f0ce71eac1c77716bc2",
+    "docs/art/contracts/cage/field_cm01_01.v1.json": "e936b83c2986930ca21b68f7573d652a5a7128f40059e8ee20af1ff4b913f46d"
+  },
+  "hashPolicy": "sourceHashes are tested Windows working-tree bytes; gitBlobHashes are staged repository blobs. Unchanged Python library and contract have checkout-only CRLF differences, verified identical after newline normalization; no source locks are rewritten.",
+  "screenshotHashes": {
+    "after/cage-1024x1366.png": "0395742fb0992c1b767c4c9ceb8e17caef41e0917eca61be4e1240b8dd4701e2",
+    "after/cage-390x844.png": "91108700f920d514959fa05cd734e7fb695db36f1a21f9e1886cbbba55c1abf7",
+    "after/cage-820x1180.png": "802d6379b48060533e1428b3f38cd5394ab547b034dd64748d486d5cac4a6660",
+    "after/raising-1024x1366.png": "b750d008017a3601173fa4d3f75df393939cc5317c2506d17335a78cc329cd6c",
+    "after/raising-390x844.png": "23f2760cda8c0499031fc57d044c440016ed383ed9f7b07501acd68d80895cce",
+    "after/raising-820x1180.png": "e5fd142acd9d5af2e3a25c7f23cd8ae0a9e80ba594ef64b72ef5647d47ecbd10",
+    "before/cage-1024x1366.png": "279a6fcbdc3154b0c5437aecb82b47c63496e5f164c2495594032cd0378577ec",
+    "before/cage-390x844.png": "f6994805b7eaf3f19a24017daaa375fe06e90a198a94034fc302031098c15baf",
+    "before/cage-820x1180.png": "8b035cc036fe1f5d9910e005a71f815c152ccc512e9b11818147309dd74c70c7",
+    "before/raising-1024x1366.png": "192a7cac7ac84b9e9e7f89efcb2dd904653e27bbf00033a85382a53309fa55d3",
+    "before/raising-390x844.png": "89513e39640616b7f081a49f88cd6be95d3d137eea6451d6ea8b8b1a292afa4c",
+    "before/raising-820x1180.png": "6a767443c4806a494854eeb8fecd87d50ef88d19f809802376d40820abb80970"
+  },
+  "browserJourneyCounts": {
+    "resize": 14,
+    "interactionGroups": 6,
+    "shopDatabaseRegression": 6,
+    "saveQuitContinue": 1
+  },
+  "runtimeChanges": [
+    "src/championship/app/daylightSkin.css"
+  ],
+  "newArtGenerated": 0,
+  "newDependencies": 0,
+  "physicalDeviceAcceptance": false,
+  "shippingApproval": false,
+  "unresolved": [
+    "Physical phone/iPad/Fold/Safari acceptance",
+    "Foreground occlusion and actor-object ordering",
+    "Art/rights/shipping approval",
+    "Immediate departure during screen remount not certified by this batch"
+  ],
+  "selfReview": "CSS limited to mounted Raising/Cage and wide non-portrait-frame layouts; existing coordinates/save/state/render owners retained; no blocking issue in this batch",
+  "githubCI": "Check PR #2 against final pushed commit; prior-run success is not reused"
+}

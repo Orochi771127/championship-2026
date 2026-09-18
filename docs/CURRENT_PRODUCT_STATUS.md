@@ -1,5 +1,11 @@
 # Championship 2026 — Current Product Status
 
+<!-- record-id: CAGE_ANIMATION_TAKEOVER_20260918 -->
+**2026-09-18 — planning 工作目錄：火山動畫中斷修復與牧場變更收尾，本機驗收通過。** 火山 cm07 第二幀恢復 254 個原生像素的變化；第一幀、透明範圍、其他 39 張籠子與播放時間不變。補上四張動畫重建／指紋／防重複檢查，以及原有蓋板、貼圖共用和美術規格指紋的驗證。完整測試 1,560/1,560，CI 1,343/1,343，Python 7/7；正常遊戲放置火山後，8 張連續截圖測到 4,023 個岩漿像素變化。390／820／1024 三尺寸的 14 次畫面旅程、6 組互動與 Save/Continue 通過。修補屬像素匹配重建；原作 VRAM／CPU 合成仍為 UNKNOWN_REQUIRES_TRACE。詳見[本批紀錄](reports/cage-animation-2026-09-18/REPORT_ZH_TW.md)及[驗證回條](reports/cage-animation-2026-09-18/validation.json)。未提交、未合併 main、未發布；實機、前景遮擋、原機逐像素等效與 shipping 未升格。下方 9 月 17 日的 native zoom cap 描述保留為當時狀態，本批保留並驗證了 Claude 後續的放大顯示修改。
+
+<!-- record-id: CAGE_LAYOUT_PLANNING_20260917 -->
+**2026-09-17 — planning 分支：Cage proof 技術驗收與 Raising/Cage 最小大螢幕排版。** 此段只描述 `planning/nexus-link-product-scope-2026-09-16` 的本批成果，未 merge main、未發布。`field_cm01_01` 沿用原契約／compositor，7 組重建比較全部 0 changed pixels；補上真實 runtime loader 僅產生一張 baked field sprite 的測試。產品改動限既有玻璃 skin 的 CSS，390／820／1024 寬度下 Raising host 為 370／800／1004px，既有數值、工具與 Cage 清單重排，Cage 508×102 座標及 native zoom cap 保留。來源、測試、三尺寸前後截圖與未驗收事項見[本批驗收紀錄](reports/cage-layout-2026-09-17/REPORT_ZH_TW.md)及[機器回條](reports/cage-layout-2026-09-17/validation.json)。原有角色 readiness 不變；實機、前景遮擋、美術核准與 shipping 未升格。下列較早段落保留其當時 main／發布狀態。
+
 <!-- record-id: CURRENT_CONSOLIDATION_20260916 -->
 **2026-09-16 — 近期 repo／本地遊戲收束：新版養成首頁與自己的隊伍密碼已整合並已發布。** 本次重新確認本地 `main`、GitHub `main`、既有 Pages 部署均為 `3e212c2`；本地試玩建置與線上 build ID 相同，共 3,964 檔。今天的首頁包含浮動角色資訊、離頁保存、長名字顯示及無頭像時隱藏空框。保存仍走既有唯一存檔，不是帳號或即時雲端存檔。
 

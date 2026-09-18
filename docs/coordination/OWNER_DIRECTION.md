@@ -2,6 +2,20 @@
 
 > Reading guide — instruction maintenance, 2026-09-14: the dated Owner records below are preserved. Match authorization to the current task, batch, assets and destination. Later scope-specific continuation supersedes an older batch's stop only within that scope; it does not approve new gameplay, rights or publication. Use [authority by question](../README.md#authority-by-question) for evidence claims and [the current shared-file protocol](SHARED_FILE_UPDATE_PROTOCOL.md) for coordination. No new product or publication authorization is created by this annotation.
 
+## 2026-09-18 — Commit, merge the completed Cage work to main, and publish it
+
+After reviewing the completed local Volcano animation repair and the inherited Raising/Cage convergence changes, the Owner explicitly directs: 「請COMMIT提交PUSH合併到MAIN」. Commit the coherent completed work in `championship-2026-convergence-20260916`, push its planning branch, merge it into `main`, and push `main`. Because the repository's existing GitHub Pages workflow publishes every accepted `main` push, this also authorizes refreshing the already-listed public-playtest hashes for the changed Cage/Raising files and publishing them to the existing destination in `public-playtest.r1.json` after the recorded local gates pass.
+
+This supersedes the 2026-09-17 stop after the named planning branch for this completed batch only. Preserve the evidence labels: the pixel-match Volcano reconstruction does not prove the original CPU/VRAM binding; physical-device, foreground-occlusion, rights and commercial shipping acceptance remain separate. No force push, rebase, reset, cleanup deletion, unrelated asset addition or publication-target expansion is authorized.
+
+## 2026-09-17 — Cage proof acceptance and bounded Raising/Cage wide layout
+
+The Owner explicitly authorizes continuing the completed convergence handoff in `championship-2026-convergence-20260916`, on `planning/nexus-link-product-scope-2026-09-16`: technically accept the existing `field_cm01_01` contract/template/compositor, repair only concrete gaps, then minimally reflow the existing Raising/Cage screens at 390×844, 820×1180 and 1024×1366. Preserve compact quality, glass styling, scene proportions, input coordinates, selection and progress through repeated resizing. This is `OWNER_APPROVED_ADAPTATION` of presentation, not new original-game evidence.
+
+Reuse the same app, router, store, save, DOM components, Pixi Application and ticker. No new cage/character art, other 39 cages, sprite factory, side-system, Battle/Habitat rewrite, Nexus app, Async PvP or broad screen redesign. Prior Creature readiness is carried forward only. Browser proof does not close physical-device or art/occlusion acceptance.
+
+This batch explicitly permits focused implementation, self-review, relevant full/CI/preload/browser checks, exact-path staging, commit, push to the named planning branch, and updating Draft PR #2 plus concise acceptance evidence and the existing convergence entry. Preserve the prior report. No merge to main, deploy, force push, reset, clean, stash/drop or deletion. Stop after this batch; routine implementation/commit/push needs no repeat approval.
+
 ## 2026-09-16 — Rebuild Raising Home around the habitat
 
 From phone screenshots of the public playtest the Owner directs: 「下面籠子格會偏移」, 「上方角色資料格能不能清楚簡潔比較現代游戲的設計感」, 「把上方儲存拿掉,因為工具列裡已經有儲存離開選項,未來也打算改成及時存檔跟帳號登入」, 「把最下面有尚未儲存的變更那格拿掉」, 「這樣整個籠子框架可以重新設計」.

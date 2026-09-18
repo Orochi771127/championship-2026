@@ -71,27 +71,29 @@ for (const fieldId of wanted) {
   if (!packIds.has(fieldId)) fail(`MISSING_SOURCE_FIELD:${fieldId}`);
 }
 
-fs.rmSync(DEST, { recursive: true, force: true });
-fs.mkdirSync(DEST, { recursive: true });
+const checkOnly = process.argv.includes("--check");
+const copies = [];
 const runtimeFields = [];
 
 for (const entry of source.fields) {
   const fieldDirRel = `${DEST_REL}/fields/${entry.fieldId}`;
   const fieldDir = path.join(root, fieldDirRel);
-  fs.mkdirSync(fieldDir, { recursive: true });
 
   const hd4x = path.join(SOURCE, entry.faithfulHd4x.file);
   if (!fs.existsSync(hd4x)) fail(`MISSING_HD4X:${entry.fieldId}`);
   const frame0 = path.join(fieldDir, "frame-00.png");
-  fs.copyFileSync(hd4x, frame0);
+  const firstHash = sha256File(hd4x);
+  if (firstHash !== entry.faithfulHd4x.sha256) fail(`SOURCE_HASH_MISMATCH:${entry.fieldId}:0`);
+  copies.push([hd4x, frame0, firstHash]);
 
   const frames = [{
     src: `${fieldDirRel}/frame-00.png`.replaceAll("\\", "/"),
-    sha256: null,
+    sha256: firstHash,
     durationMs: null
   }];
 
   const animated = entry.animatedLayer?.status === "PRESENT_VERIFIED_ROM_DECODED";
+  if (animated !== ANIMATED_FIELD_IDS.includes(entry.fieldId)) fail(`ANIMATED_FIELD_STATUS_DRIFT:${entry.fieldId}`);
   if (animated) {
     if (entry.animatedLayer.frameCount !== 2) fail(`UNEXPECTED_ANIM_FRAME_COUNT:${entry.fieldId}`);
     const ticks = entry.animatedLayer.frameDurationsRawTicks;
@@ -99,13 +101,18 @@ for (const entry of source.fields) {
     const extra = path.join(SOURCE, entry.animatedLayer.alternateFaithfulHd4xFrame.file);
     if (!fs.existsSync(extra)) fail(`MISSING_HD4X_FRAME_01:${entry.fieldId}`);
     const frame1 = path.join(fieldDir, "frame-01.png");
-    fs.copyFileSync(extra, frame1);
+    const secondHash = sha256File(extra);
+    if (secondHash !== entry.animatedLayer.alternateFaithfulHd4xFrame.sha256) fail(`SOURCE_HASH_MISMATCH:${entry.fieldId}:1`);
+    copies.push([extra, frame1, secondHash]);
+    // A field that declares an animation must actually animate. cm07 shipped
+    // the same picture twice for weeks because nothing here looked.
+    if (firstHash === secondHash) fail(`ANIMATED_FRAMES_IDENTICAL:${entry.fieldId}`);
     frames[0].durationRawTicks = ticks[0];
     frames[0].durationMs = originalMapAnimationTicksToMs(ticks[0]);
     frames[0].durationEvidence = "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK";
     frames.push({
       src: `${fieldDirRel}/frame-01.png`.replaceAll("\\", "/"),
-      sha256: null,
+      sha256: secondHash,
       durationRawTicks: ticks[1],
       durationMs: originalMapAnimationTicksToMs(ticks[1]),
       durationEvidence: "VERIFIED_BINARY_PLUS_PLATFORM_VIDEO_CLOCK"
@@ -124,12 +131,6 @@ for (const entry of source.fields) {
     collisionBinding: "EXTERNAL_NOT_IN_ART_BUNDLE",
     frames
   });
-}
-
-for (const field of runtimeFields) {
-  for (const frame of field.frames) {
-    frame.sha256 = sha256File(path.join(root, frame.src));
-  }
 }
 
 runtimeFields.sort((left, right) => left.fieldId.localeCompare(right.fieldId));
@@ -157,7 +158,11 @@ const manifest = {
   fieldCount: runtimeFields.length,
   defaultPreviewFieldId: "field_cm01_01",
   defaultPreviewNote: "CageDefinition 0 visual. VS1 habitat regions remain product-authored drop targets; this is not original ranch layout.",
-  memoryPolicy: "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
+  // The ranch draws several cage tiles at once, so the bundle is no longer a
+  // one-field loader. This is the value runtimeMapArtBundle.js accepts and the
+  // licensed-cage-runtime test asserts; the old string was left behind when the
+  // composite ranch landed and would fail both on the next promotion.
+  memoryPolicy: "N_ACTIVE_TILES_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
   filter: "nearest",
   fields: runtimeFields,
   notes: [
@@ -165,8 +170,26 @@ const manifest = {
     "cm33/cm36/cm38 are stored unreferenced assets. cm29 is LID. cm28 is Waiting Room.",
     "Animated water/terrain uses verified raw ticks. Do not invent 60fps.",
     "CM27 center-mark removal is remake-only. This bundle keeps the exact original pixels."
-  ]
+  ],
+  memoryPolicyNote:
+    "Cages are small shaped tiles that composite into one ranch, not whole maps visited one at a time. Hunt and Battle keep ONE_ACTIVE_FIELD."
 };
 
-fs.writeFileSync(path.join(DEST, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
-console.log(`Wrote licensed Cage runtime: ${runtimeFields.length} fields, ${ANIMATED_FIELD_IDS.length} animated.`);
+const manifestPath = path.join(DEST, "manifest.json");
+const manifestText = `${JSON.stringify(manifest, null, 2)}\n`;
+if (checkOnly) {
+  for (const [, destination, hash] of copies) {
+    if (!fs.existsSync(destination) || sha256File(destination) !== hash) fail(`RUNTIME_FRAME_STALE:${destination}`);
+  }
+  if (!fs.existsSync(manifestPath) || fs.readFileSync(manifestPath, "utf8").replaceAll("\r\n", "\n") !== manifestText) fail("RUNTIME_MANIFEST_STALE");
+  console.log(`Checked licensed Cage runtime: ${runtimeFields.length} fields, ${ANIMATED_FIELD_IDS.length} animated.`);
+} else {
+  // Validate the entire source set before touching runtime. Keep unrelated
+  // files and skip already matching frames instead of deleting the bundle.
+  for (const [sourcePath, destination, hash] of copies) {
+    fs.mkdirSync(path.dirname(destination), { recursive: true });
+    if (!fs.existsSync(destination) || sha256File(destination) !== hash) fs.copyFileSync(sourcePath, destination);
+  }
+  fs.writeFileSync(manifestPath, manifestText);
+  console.log(`Wrote licensed Cage runtime: ${runtimeFields.length} fields, ${ANIMATED_FIELD_IDS.length} animated.`);
+}

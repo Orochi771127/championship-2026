@@ -1,0 +1,169 @@
+{
+  "status": "PASS_WITH_FOREGROUND_OCCLUSION_UNKNOWN",
+  "fieldId": "field_cm01_01",
+  "productionManifestModified": false,
+  "candidateFrame": "docs/art/production/original-character-cage-r1/cage-field-cm01-breeze-meadow-v1/previews/composite-hd4x.png",
+  "candidateSha256": "23fedc3782296578172a779754199909d0b29bbb1ced55f6cd2255191255363d",
+  "candidateRequests": 1,
+  "grounding": {
+    "method": "NORMAL_HAND_HOLD_CARRY_RELEASE",
+    "edgeScrollMs": 7000,
+    "viewport": {
+      "width": 1024,
+      "height": 1366
+    },
+    "requestedScreenPoint": {
+      "x": 732.88,
+      "y": 614.5400000000001
+    },
+    "landedResident": {
+      "x": 646.598143475926,
+      "y": 492.714599609375,
+      "state": 9,
+      "nativeFrame": 681
+    },
+    "screenshot": "raising-candidate-grounding-1024x1366.png"
+  },
+  "screenshots": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "filename": "raising-candidate-390x844.png",
+      "cameraPanGestures": 0,
+      "measurement": {
+        "host": {
+          "x": 10,
+          "y": 40,
+          "width": 370,
+          "height": 727
+        },
+        "canvas": {
+          "x": 10,
+          "y": 40,
+          "width": 370,
+          "height": 727
+        },
+        "residents": [
+          {
+            "creatureId": "resident:species-000",
+            "x": 338.1129348417952,
+            "y": 295.7769470214844,
+            "state": 11,
+            "speciesIndex": 14,
+            "nativeFrame": 723,
+            "sequenceId": 30
+          }
+        ],
+        "canvasCount": 1,
+        "document": {
+          "width": 390,
+          "height": 844
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "fallback": null
+      }
+    },
+    {
+      "viewport": {
+        "width": 820,
+        "height": 1180
+      },
+      "filename": "raising-candidate-820x1180.png",
+      "cameraPanGestures": 0,
+      "measurement": {
+        "host": {
+          "x": 10,
+          "y": 40,
+          "width": 800,
+          "height": 1063
+        },
+        "canvas": {
+          "x": 10,
+          "y": 40,
+          "width": 800,
+          "height": 1063
+        },
+        "residents": [
+          {
+            "creatureId": "resident:species-000",
+            "x": 616.0131676587844,
+            "y": 391.7300638834636,
+            "state": 11,
+            "speciesIndex": 14,
+            "nativeFrame": 753,
+            "sequenceId": 30
+          }
+        ],
+        "canvasCount": 1,
+        "document": {
+          "width": 820,
+          "height": 1180
+        },
+        "viewport": {
+          "width": 820,
+          "height": 1180
+        },
+        "fallback": null
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 1366
+      },
+      "filename": "raising-candidate-1024x1366.png",
+      "cameraPanGestures": 0,
+      "measurement": {
+        "host": {
+          "x": 10,
+          "y": 40,
+          "width": 1004,
+          "height": 1249
+        },
+        "canvas": {
+          "x": 10,
+          "y": 40,
+          "width": 1004,
+          "height": 1249
+        },
+        "residents": [
+          {
+            "creatureId": "resident:species-000",
+            "x": 639.848143475926,
+            "y": 479.214599609375,
+            "state": 11,
+            "speciesIndex": 14,
+            "nativeFrame": 786,
+            "sequenceId": 30
+          }
+        ],
+        "canvasCount": 1,
+        "document": {
+          "width": 1024,
+          "height": 1366
+        },
+        "viewport": {
+          "width": 1024,
+          "height": 1366
+        },
+        "fallback": null
+      }
+    }
+  ],
+  "errors": [],
+  "missingResources": [],
+  "checks": {
+    "sameApplicationAndRenderer": true,
+    "normalGameActorPresent": true,
+    "actorWithinFieldBoundsAtGrounding": true,
+    "actorFootContactOnCandidate": "PASS_NORMAL_HAND_CARRY_RELEASE_VISIBLE_IN_GROUNDING_SCREENSHOT",
+    "threeViewportScreenshots": true,
+    "physicalDeviceAccepted": false,
+    "foregroundActorObjectOrdering": "UNKNOWN_REQUIRES_TRACE"
+  }
+}

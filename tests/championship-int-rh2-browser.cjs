@@ -214,13 +214,24 @@ async function runSaveReload(browser) {
   a=await point(page);await page.mouse.click(a.x,a.y);
   const selectedName=await page.locator('.int-rh2-companion__name').textContent();
   await page.screenshot({path:path.join(SCREENSHOTS,'raising-home-390x844-before-reload.png'),fullPage:true});await page.close();
+  // The actor continues walking while selected and while the screenshot is
+  // captured. pagehide then saves its newer ground position. Continue must
+  // restore that final canonical save, not the earlier explicit-save sample.
+  const departureState=await context.storageState();
+  const departureText=departureState.origins.find(o=>o.origin===new URL(BASE_URL).origin)
+    ?.localStorage.find(entry=>entry.name==='championshipModernSave:v1')?.value;
+  assert.ok(departureText,'page departure retains the canonical save');
+  const departureSave=JSON.parse(departureText),departureGround=ground(departureSave);
+  assert.equal(departureSave.creature.creatureId,afterSave.creature.creatureId,'autosave preserves resident identity');
+  assert.equal(departureSave.creature.nativeProfile.fields['000'],afterSave.creature.nativeProfile.fields['000']);
   const restored=await openRaising(context,{continueGame:true,developer:true}),p=restored.page;
-  await p.waitForSelector(selector);assert.deepEqual(ground(await saved(p)),after);
+  await p.waitForSelector(selector);assert.deepEqual(ground(await saved(p)),departureGround);
   const restoredActor=await point(p);assert.equal(restoredActor.speciesIndex,afterSave.creature.nativeProfile.fields['000']);
   await p.mouse.click(restoredActor.x,restoredActor.y);
   assert.equal(await p.locator('.int-rh2-companion__name').textContent(),selectedName);
   await p.screenshot({path:path.join(SCREENSHOTS,'raising-home-390x844-restored.png'),fullPage:true});
   const result={viewport:'390x844',selectedResident:selectedName,relocatedOnGround:{from:before,to:after},
+    finalDepartureGround:departureGround,
     nativeHand:{eggTap:true,stroke:true,holdCarry:true,releaseLanding:true},savePayloadPresent:true,restoredAfterPageReload:true,
     pageErrors:[...first.pageErrors,...restored.pageErrors],failedRequests:[...first.failedRequests,...restored.failedRequests]};
   assert.deepEqual(result.pageErrors,[]);assert.deepEqual(result.failedRequests,[]);await context.close();return result;

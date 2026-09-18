@@ -1,5 +1,7 @@
 # Championship 2026 模組化籠子／培育地形系統規格
 
+> **2026-09-16 收束校正：** 以下證據表按現有 source/contract 校正。第 3 節模型是舊概念詞彙，請映射現有 `nativeRanchLayout` / `cageCatalog` / `cageEditRuntime`；不新增第二個 board/store/simulation。本輪執行範圍以 [Convergence Handoff](../coordination/CODEX_CONVERGENCE_HANDOFF_2026-09-16_ZH_TW.md) 為準：先 `field_cm01_01` 既有素材 proof，再三尺寸 responsive foundation；Creature 僅檢查 readiness。實測結果與唯一下一步清單見[收束報告](../reports/convergence-2026-09-16/REPORT_ZH_TW.md)。下文未完成的產品設計仍為 `DEFERRED`，不構成額外施工或批量生成授權。
+
 狀態：Owner 核心玩法指令，納入完整重製範圍  
 日期：2026-08-29  
 適用：9:16 觸控網頁版、PWA 與後續手機封裝
@@ -25,9 +27,9 @@
 | 各模組具有特定形狀 | `OWNER_VERIFIED_ORIGINAL_BEHAVIOR` | 必須使用 shape mask，不得全部退化成同尺寸卡片 |
 | 40 個 `field_cm` 物理場地資產組 | `VERIFIED_BINARY` | 作為研究 crosswalk；原圖不進公開版 |
 | 36 個 CageDefinitions：35 商店籠子＋1 Waiting Room | `VERIFIED_BINARY` | 保留資料容量與 ownership 分離 |
-| 初始 14 格、擴充至 20 格 | `WEB_CROSSCHECK_PENDING_BINARY` | schema 預留，不先宣稱精確 parity |
+| 初始 14／16／18／20 格 | `CONFIRMED`：`cageCatalog.js` 的 verified rank table | 沿用目前 unlock / save，不新增容量模型 |
 | Attack／Defense／HP／TP／Speed／Wisdom、家族、屬性抗性、恢復與自動化效果族 | `WEB_CROSSCHECK_PENDING_BINARY` | 建立效果通道；精確映射與數值仍需追蹤 |
-| 每個原作模組的格狀 footprint | `UNKNOWN_REQUIRES_TRACE` | 先用中性測試形狀，原作 parity 資料不可猜 |
+| 每個原作模組的格狀 footprint | `CONFIRMED`：16 masks、36 definition-shape bindings，附 native replay contract | 新存檔用 `NATIVE_ANCHORS_V1`；舊存檔相容路徑保留，不退回中性假形狀 |
 | 旋轉、鏡射、鄰接、堆疊、效果 tick 與上限 | `UNKNOWN_REQUIRES_TRACE` | 沒有證據前保持關閉或標成產品測試規則 |
 
 Owner 的確認補足「系統必須存在」的權威；它不自動證明尚未取得的形狀表與數值表。

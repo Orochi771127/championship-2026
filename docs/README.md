@@ -11,6 +11,7 @@ Do not infer current implementation state from one historical coordination file.
 
 | Need | Canonical entry |
 |---|---|
+| 原地產品化收束與 Cage / Responsive 驗收 | [Convergence index](planning/NEXUS_LINK_PRODUCTIZATION_CONVERGENCE_INDEX_2026-09-16_ZH_TW.md) · [2026-09-17 Cage 技術驗收與 Raising/Cage 排版](reports/cage-layout-2026-09-17/REPORT_ZH_TW.md) · [前輪 Handoff](coordination/CODEX_CONVERGENCE_HANDOFF_2026-09-16_ZH_TW.md) · [2026-09-16 歷史報告](reports/convergence-2026-09-16/REPORT_ZH_TW.md) |
 | Current original-content priority: characters and existing cages first | [2026-09-15 原創角色與棲地籠子優先](planning/ORIGINAL_CHARACTER_CAGE_FIRST_2026-09-15.md) · [concept and cost work packet](art/production/original-character-cage-r1/README.md) |
 | Post-parity modernization / Astra visual POC candidates (planned, not implementation authorization) | [Championship Post-Parity Modernization Plan](planning/CHAMPIONSHIP_POST_PARITY_MODERNIZATION_PLAN_ZH_TW.md) |
 | What works on current `main` | [Current Product Status](CURRENT_PRODUCT_STATUS.md) |
