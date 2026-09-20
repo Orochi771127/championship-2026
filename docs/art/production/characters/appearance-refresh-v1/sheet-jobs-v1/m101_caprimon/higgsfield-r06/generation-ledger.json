@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m101_caprimon",
+  "provider": "HIGGSFIELD",
+  "model": "gpt_image_2_5",
+  "jobId": "f7a43ae5-55ed-4ec5-9763-a9a08be58959",
+  "status": "COMPLETED",
+  "submitted": {
+    "aspectRatio": "4:3",
+    "count": 1,
+    "quality": "high",
+    "resolution": "2k",
+    "background": "transparent",
+    "useUnlimited": false,
+    "estimatedCredits": 3
+  },
+  "references": {
+    "originalIdentityMediaId": "60555007-b8ff-4741-98c1-27dabf42dce8",
+    "motionLayoutGuideMediaId": "dd9b589d-8655-477e-9ff1-03c61e875c43"
+  },
+  "rawSheet": {
+    "relativePath": "../batch-r02/raw-sheet.png",
+    "sha256": "a29a3f827c173c176f95032b4d4e34c41b516c02b0ffb3050749b6bd05ae5987",
+    "size": [
+      2336,
+      1744
+    ],
+    "providerAlphaExtrema": [
+      0,
+      254
+    ]
+  },
+  "normalizedSheet": {
+    "relativePath": "../batch-r02/normalized-sheet.png",
+    "sha256": "7a91330c999c42116f43e9efa5586e3087503f1648550fed2d06b009610ae0ea",
+    "size": [
+      512,
+      384
+    ],
+    "operation": "SHARED_55PX_NORMALIZATION_TO_NATIVE_64PX_PANELS_ALPHA_THRESHOLD_AND_PALETTE_QUANTIZATION"
+  },
+  "normalization": {
+    "sampleSize": 55,
+    "sharedOffset": [
+      1,
+      4
+    ],
+    "alphaThreshold": 128,
+    "perCellResize": false,
+    "bboxRecenter": false
+  },
+  "outcome": {
+    "occupiedPanels": 48,
+    "requiredOccupiedPanels": 48,
+    "rawUnexpectedOccupiedBlankPanels": [],
+    "normalizedUnexpectedOccupiedBlankPanels": 0,
+    "paidRepairJobs": 0,
+    "deterministicRepairOnly": true
+  }
+}

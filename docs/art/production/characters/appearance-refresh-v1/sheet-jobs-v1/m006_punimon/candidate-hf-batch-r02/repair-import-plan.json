@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m006_punimon",
+  "baseDirectory": "candidate-hf-batch-r01",
+  "outputDirectory": "candidate-hf-batch-r02",
+  "alphaThreshold": 128,
+  "placement": "ONE_SHARED_SCALE_AND_OFFSET_PER_SHEET",
+  "perCellResize": false,
+  "bboxRecenter": false,
+  "groups": [
+    {
+      "kind": "bound",
+      "jobId": "46303027-8088-4d8f-abf2-0440a8733290",
+      "source": "cell030-bound-raw.png",
+      "sourceSha256": "70948a093feb593de51de5900f64959978d1e8d6d63ce034b7a8aee584486ce8",
+      "sampleSize": 64,
+      "sharedOffset": [
+        1,
+        0
+      ],
+      "semanticReview": "CENTRAL_BODY_RESTRAINT_RESTORED_FACE_AND_TWO_CRYSTAL_CRESTS_REMAIN_READABLE"
+    }
+  ]
+}

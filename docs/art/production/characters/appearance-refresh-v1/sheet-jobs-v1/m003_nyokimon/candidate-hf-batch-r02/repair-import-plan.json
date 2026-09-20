@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m003_nyokimon",
+  "baseDirectory": "candidate-hf-batch-r01",
+  "outputDirectory": "candidate-hf-batch-r02",
+  "alphaThreshold": 128,
+  "placement": "ONE_SHARED_SCALE_AND_OFFSET_PER_SHEET",
+  "perCellResize": false,
+  "bboxRecenter": false,
+  "groups": [
+    {
+      "kind": "bound",
+      "jobId": "3a7dec02-189a-4706-ae2f-89bc978f9559",
+      "source": "bound-raw.png",
+      "sourceSha256": "cd4a46de4bb9ea95799ba16cdcb58f9400ef11395eee17405c48a2a0982b61a2",
+      "sampleSize": 30,
+      "sharedOffset": [10, 15],
+      "semanticReview": "BODY_RESTRAINT_PRESENT_LEAVES_REMAIN_FREE"
+    },
+    {
+      "kind": "normal",
+      "jobId": "5bf3dccf-1c9e-4611-a079-a5fe696c6eba",
+      "source": "normal-raw.png",
+      "sourceSha256": "4f9b1910fa757e8818fcedd585fbf7443c78961f5698b8585084b84c32bb9950",
+      "sampleSize": 43,
+      "sharedOffset": [3, 7],
+      "semanticReview": "UNBOUND_POSES_NO_RESTRAINT_PROP"
+    }
+  ]
+}

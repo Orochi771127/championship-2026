@@ -1,0 +1,44 @@
+{
+  "entityId": "m104_tunomon",
+  "candidate": "candidate-hf-batch-r02",
+  "status": "PASS_CANDIDATE_VISUAL_AND_NORMAL_GAME_REVIEW",
+  "reviewedAgainst": "donor-review-v1/m104_tunomon/review.json",
+  "checks": {
+    "morphology": "PASS_ORIGINAL_TIDAL_COMPASS_BEAD_LOW_ROUND_MIDNIGHT_BLUE_BODY_SINGLE_CYAN_VIOLET_COMPASS_VANE_IVORY_CRESCENT_FACE_AMBER_EYE_CORAL_SIGNAL_SLIT_TEAL_CONTACT_NODES",
+    "locomotion": "PASS_WHOLE_BODY_SQUASH_TINY_HOPS_UPRIGHT_ROTATION_DIAGONAL_LEAN_FORWARD_STRETCH_PRONE_COLLAPSE_AND_DISPLACED_DEFEAT",
+    "faceAndExpression": "PASS_IVORY_FACE_WINDOW_COMPRESSES_TURNS_OCCLUDES_AND_CORAL_SIGNAL_SLIT_CHANGES_BY_SOURCE_POSE",
+    "appendages": "PASS_EXACTLY_ONE_ATTACHED_TAPERED_COMPASS_VANE_NO_ARMS_LEGS_WINGS_SECOND_SPIKE_FLOATING_ORNAMENTS_OR_TAIL",
+    "restraint": "PASS_MAIN_027_043_USE_BODY_MASK_CLIPPED_TWO_TONE_GOLD_EXTERNAL_BINDING_WITH_AXIS_BY_BODY_ASPECT",
+    "specialStates": "PASS_MAIN_047_048_BLACK_MAIN_061_STONE_GRAY_MAIN_064_WHITE_DERIVED_DETERMINISTICALLY",
+    "nativeScaleAndOrigin": "PASS_64PX_ORIGIN_22_34_ONE_SHARED_46PX_NORMALIZATION_OFFSET_2_5_NO_PER_CELL_RESIZE_OR_RECENTER",
+    "mainSubMapping": "PASS_65_MAIN_18_SUB_EXACT_CANONICAL_ALIASES_AND_TRANSLATIONS",
+    "timing": "PASS_53_SOURCE_SEQUENCES_1863_BROWSER_TICKS"
+  },
+  "limits": {
+    "fullCharacterArtAcceptance": false,
+    "normalGameQa": "PASS_EXPECTED_SOURCE_PROGRESSION_GATE_AND_ISOLATED_CAPTURE",
+    "publicationOrRightsAcceptance": "NOT_IN_SCOPE",
+    "designSettingStatus": "ORIGINAL_IDENTITY_BOUND_TO_DONOR_REVIEW"
+  },
+  "paidGeneration": {
+    "completedProviderJobs": 1,
+    "failedProviderJobs": 0,
+    "estimatedSubmittedCredits": 3,
+    "settledCreditLedger": "NOT_EXPOSED_BY_PROVIDER_TOOL",
+    "nextPaidGeneration": "NOT_NEEDED_FOR_CURRENT_CANDIDATE"
+  },
+  "deterministicPostprocess": {
+    "background": "ALPHA_THRESHOLD_128",
+    "unusedPanels": "ALL_THREE_MANIFEST_RESERVED_PANELS_EMPTY",
+    "specialStateColor": [
+      "main/cell_044",
+      "main/cell_047",
+      "main/cell_048",
+      "main/cell_061",
+      "main/cell_064"
+    ],
+    "displacedDefeatCorrection": "main/cell_062_TRANSLATION_14_7_WITHOUT_RESIZE_OR_RECENTER",
+    "restraintReadability": "FOURTEEN_CANONICAL_BOUND_MASTERS_RECEIVED_BODY_MASK_CLIPPED_TWO_TONE_GOLD_BINDING; ALIASES_REBUILT_FROM_CANONICALS",
+    "additionalPaidJobs": 0
+  }
+}

@@ -1,0 +1,2999 @@
+{
+  "canvas": [
+    64,
+    64
+  ],
+  "counts": {
+    "masters": 53,
+    "sequences": 53,
+    "slots": 83
+  },
+  "designSha256": "c60560fa16d38ce820a41da73d9937b4478f64ed16ec5e3bb94df1158e33713e",
+  "entityId": "m001_zurumon",
+  "motionContractSha256": "63abd349b5316eceb2268105741cbfc6acbd7bbc78ce3e932351ea06c9f32dbb",
+  "nativeBoundsUnion": [
+    -16,
+    -21,
+    17,
+    8
+  ],
+  "nativeScale": 1,
+  "prohibitions": [
+    "NO_NEW_ACTION_SEMANTICS",
+    "NO_BBOX_RECENTER",
+    "NO_PER_CELL_AUTOFIT",
+    "NO_SOURCE_PIXELS_IN_OUTPUT",
+    "NO_UNIVERSAL_BOUND_CELL_RANGE",
+    "NO_INTERPOLATED_TIMING",
+    "NO_NEW_LIMBS"
+  ],
+  "schemaVersion": 1,
+  "sequences": {
+    "main": {
+      "frameKeys": [
+        "m001_zurumon/main/cell_000",
+        "m001_zurumon/main/cell_001",
+        "m001_zurumon/main/cell_002",
+        "m001_zurumon/main/cell_003",
+        "m001_zurumon/main/cell_004",
+        "m001_zurumon/main/cell_005",
+        "m001_zurumon/main/cell_006",
+        "m001_zurumon/main/cell_007",
+        "m001_zurumon/main/cell_008",
+        "m001_zurumon/main/cell_009",
+        "m001_zurumon/main/cell_010",
+        "m001_zurumon/main/cell_011",
+        "m001_zurumon/main/cell_012",
+        "m001_zurumon/main/cell_013",
+        "m001_zurumon/main/cell_014",
+        "m001_zurumon/main/cell_015",
+        "m001_zurumon/main/cell_016",
+        "m001_zurumon/main/cell_017",
+        "m001_zurumon/main/cell_018",
+        "m001_zurumon/main/cell_019",
+        "m001_zurumon/main/cell_020",
+        "m001_zurumon/main/cell_021",
+        "m001_zurumon/main/cell_022",
+        "m001_zurumon/main/cell_023",
+        "m001_zurumon/main/cell_024",
+        "m001_zurumon/main/cell_025",
+        "m001_zurumon/main/cell_026",
+        "m001_zurumon/main/cell_027",
+        "m001_zurumon/main/cell_028",
+        "m001_zurumon/main/cell_029",
+        "m001_zurumon/main/cell_030",
+        "m001_zurumon/main/cell_031",
+        "m001_zurumon/main/cell_032",
+        "m001_zurumon/main/cell_033",
+        "m001_zurumon/main/cell_034",
+        "m001_zurumon/main/cell_035",
+        "m001_zurumon/main/cell_036",
+        "m001_zurumon/main/cell_037",
+        "m001_zurumon/main/cell_038",
+        "m001_zurumon/main/cell_039",
+        "m001_zurumon/main/cell_040",
+        "m001_zurumon/main/cell_041",
+        "m001_zurumon/main/cell_042",
+        "m001_zurumon/main/cell_043",
+        "m001_zurumon/main/cell_044",
+        "m001_zurumon/main/cell_045",
+        "m001_zurumon/main/cell_046",
+        "m001_zurumon/main/cell_047",
+        "m001_zurumon/main/cell_048",
+        "m001_zurumon/main/cell_049",
+        "m001_zurumon/main/cell_050",
+        "m001_zurumon/main/cell_051",
+        "m001_zurumon/main/cell_052",
+        "m001_zurumon/main/cell_053",
+        "m001_zurumon/main/cell_054",
+        "m001_zurumon/main/cell_055",
+        "m001_zurumon/main/cell_056",
+        "m001_zurumon/main/cell_057",
+        "m001_zurumon/main/cell_058",
+        "m001_zurumon/main/cell_059",
+        "m001_zurumon/main/cell_060",
+        "m001_zurumon/main/cell_061",
+        "m001_zurumon/main/cell_062",
+        "m001_zurumon/main/cell_063",
+        "m001_zurumon/main/cell_064"
+      ],
+      "sequences": [
+        {
+          "frames": [
+            {
+              "cell": 0,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_000",
+              "ticks": 31
+            },
+            {
+              "cell": 1,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_001",
+              "ticks": 22
+            }
+          ],
+          "id": 0,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 2,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_002",
+              "ticks": 37
+            },
+            {
+              "cell": 3,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_003",
+              "ticks": 28
+            }
+          ],
+          "id": 1,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 4,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_004",
+              "ticks": 15
+            },
+            {
+              "cell": 5,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_005",
+              "ticks": 12
+            }
+          ],
+          "id": 2,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 6,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_006",
+              "ticks": 7
+            },
+            {
+              "cell": 7,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_007",
+              "ticks": 7
+            }
+          ],
+          "id": 3,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 8,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_008",
+              "ticks": 37
+            }
+          ],
+          "id": 4,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 9,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_009",
+              "ticks": 7
+            }
+          ],
+          "id": 5,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 10,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_010",
+              "ticks": 7
+            }
+          ],
+          "id": 6,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 11,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_011",
+              "ticks": 15
+            },
+            {
+              "cell": 12,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_012",
+              "ticks": 37
+            }
+          ],
+          "id": 7,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 13,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_013",
+              "ticks": 15
+            },
+            {
+              "cell": 14,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_014",
+              "ticks": 37
+            }
+          ],
+          "id": 8,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 15,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_015",
+              "ticks": 15
+            },
+            {
+              "cell": 16,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_016",
+              "ticks": 37
+            }
+          ],
+          "id": 9,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 17,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_017",
+              "ticks": 15
+            },
+            {
+              "cell": 18,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_018",
+              "ticks": 37
+            }
+          ],
+          "id": 10,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 19,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_019",
+              "ticks": 5
+            },
+            {
+              "cell": 20,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_020",
+              "ticks": 6
+            }
+          ],
+          "id": 11,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 21,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_021",
+              "ticks": 37
+            },
+            {
+              "cell": 22,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_022",
+              "ticks": 37
+            }
+          ],
+          "id": 12,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 23,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_023",
+              "ticks": 37
+            }
+          ],
+          "id": 13,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 24,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_024",
+              "ticks": 25
+            },
+            {
+              "cell": 25,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_025",
+              "ticks": 31
+            }
+          ],
+          "id": 14,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 26,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_026",
+              "ticks": 31
+            }
+          ],
+          "id": 15,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 27,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_027",
+              "ticks": 31
+            },
+            {
+              "cell": 28,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_028",
+              "ticks": 22
+            }
+          ],
+          "id": 16,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 29,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_029",
+              "ticks": 37
+            },
+            {
+              "cell": 30,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_030",
+              "ticks": 28
+            }
+          ],
+          "id": 17,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 31,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_031",
+              "ticks": 15
+            },
+            {
+              "cell": 32,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_032",
+              "ticks": 12
+            }
+          ],
+          "id": 18,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 33,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_033",
+              "ticks": 7
+            },
+            {
+              "cell": 34,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_034",
+              "ticks": 7
+            }
+          ],
+          "id": 19,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 35,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_035",
+              "ticks": 37
+            }
+          ],
+          "id": 20,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 36,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_036",
+              "ticks": 5
+            },
+            {
+              "cell": 37,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_037",
+              "ticks": 6
+            }
+          ],
+          "id": 21,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 38,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_038",
+              "ticks": 37
+            },
+            {
+              "cell": 39,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_039",
+              "ticks": 37
+            }
+          ],
+          "id": 22,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 40,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_040",
+              "ticks": 37
+            }
+          ],
+          "id": 23,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 41,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_041",
+              "ticks": 25
+            },
+            {
+              "cell": 42,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_042",
+              "ticks": 31
+            }
+          ],
+          "id": 24,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 43,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_043",
+              "ticks": 31
+            }
+          ],
+          "id": 25,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 44,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_044",
+              "ticks": 6
+            },
+            {
+              "cell": 45,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_045",
+              "ticks": 3
+            },
+            {
+              "cell": 46,
+              "frameIndex": 2,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_046",
+              "ticks": 9
+            },
+            {
+              "cell": 47,
+              "frameIndex": 3,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_047",
+              "ticks": 9
+            }
+          ],
+          "id": 26,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 48,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_048",
+              "ticks": 2
+            }
+          ],
+          "id": 27,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 49,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_049",
+              "ticks": 15
+            },
+            {
+              "cell": 50,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_050",
+              "ticks": 21
+            }
+          ],
+          "id": 28,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 51,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_051",
+              "ticks": 11
+            },
+            {
+              "cell": 52,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_052",
+              "ticks": 16
+            }
+          ],
+          "id": 29,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 53,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_053",
+              "ticks": 10
+            },
+            {
+              "cell": 54,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_054",
+              "ticks": 37
+            }
+          ],
+          "id": 30,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 55,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_055",
+              "ticks": 37
+            }
+          ],
+          "id": 31,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 56,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_056",
+              "ticks": 7
+            }
+          ],
+          "id": 32,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 57,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_057",
+              "ticks": 31
+            },
+            {
+              "cell": 58,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_058",
+              "ticks": 37
+            }
+          ],
+          "id": 33,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 59,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_059",
+              "ticks": 37
+            }
+          ],
+          "id": 34,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 60,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_060",
+              "ticks": 37
+            }
+          ],
+          "id": 35,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 61,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_061",
+              "ticks": 37
+            }
+          ],
+          "id": 36,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 62,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_062",
+              "ticks": 37
+            }
+          ],
+          "id": 37,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 63,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_063",
+              "ticks": 7
+            }
+          ],
+          "id": 38,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 64,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/main/cell_064",
+              "ticks": 2
+            }
+          ],
+          "id": 39,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        }
+      ]
+    },
+    "sub": {
+      "frameKeys": [
+        "m001_zurumon/sub/cell_000",
+        "m001_zurumon/sub/cell_001",
+        "m001_zurumon/sub/cell_002",
+        "m001_zurumon/sub/cell_003",
+        "m001_zurumon/sub/cell_004",
+        "m001_zurumon/sub/cell_005",
+        "m001_zurumon/sub/cell_006",
+        "m001_zurumon/sub/cell_007",
+        "m001_zurumon/sub/cell_008",
+        "m001_zurumon/sub/cell_009",
+        "m001_zurumon/sub/cell_010",
+        "m001_zurumon/sub/cell_011",
+        "m001_zurumon/sub/cell_012",
+        "m001_zurumon/sub/cell_013",
+        "m001_zurumon/sub/cell_014",
+        "m001_zurumon/sub/cell_015",
+        "m001_zurumon/sub/cell_016",
+        "m001_zurumon/sub/cell_017"
+      ],
+      "sequences": [
+        {
+          "frames": [
+            {
+              "cell": 0,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/sub/cell_000",
+              "ticks": 31
+            },
+            {
+              "cell": 1,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/sub/cell_001",
+              "ticks": 22
+            }
+          ],
+          "id": 0,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 2,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/sub/cell_002",
+              "ticks": 37
+            },
+            {
+              "cell": 3,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/sub/cell_003",
+              "ticks": 28
+            }
+          ],
+          "id": 1,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 4,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/sub/cell_004",
+              "ticks": 7
+            }
+          ],
+          "id": 2,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 5,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/sub/cell_005",
+              "ticks": 7
+            }
+          ],
+          "id": 3,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 6,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/sub/cell_006",
+              "ticks": 37
+            }
+          ],
+          "id": 4,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 7,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/sub/cell_007",
+              "ticks": 31
+            }
+          ],
+          "id": 5,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 8,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/sub/cell_008",
+              "ticks": 2
+            }
+          ],
+          "id": 6,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 9,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/sub/cell_009",
+              "ticks": 15
+            },
+            {
+              "cell": 10,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/sub/cell_010",
+              "ticks": 21
+            }
+          ],
+          "id": 7,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 11,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/sub/cell_011",
+              "ticks": 11
+            },
+            {
+              "cell": 12,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/sub/cell_012",
+              "ticks": 16
+            }
+          ],
+          "id": 8,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 13,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/sub/cell_013",
+              "ticks": 10
+            },
+            {
+              "cell": 14,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/sub/cell_014",
+              "ticks": 37
+            }
+          ],
+          "id": 9,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 15,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/sub/cell_015",
+              "ticks": 37
+            }
+          ],
+          "id": 10,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 16,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/sub/cell_016",
+              "ticks": 37
+            }
+          ],
+          "id": 11,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 17,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m001_zurumon/sub/cell_017",
+              "ticks": 37
+            }
+          ],
+          "id": 12,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        }
+      ]
+    }
+  },
+  "slots": {
+    "main/cell_000": {
+      "blank": false,
+      "canonical": "main/cell_000",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "f26c32b3a83f9793ed6486cd06457ebc596ce8d066376bb0314ed23477e070bc",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -7,
+        12,
+        1
+      ]
+    },
+    "main/cell_001": {
+      "blank": false,
+      "canonical": "main/cell_001",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "1b8bf82cb697d9b6869e7a923701351cd36fa1ba4f05078b6ee16b64153a81e7",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -8,
+        11,
+        1
+      ]
+    },
+    "main/cell_002": {
+      "blank": false,
+      "canonical": "main/cell_002",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "108868f5bf503968ea6a5b31cfb79cd6769b14261ceb607a11f74a213f19b623",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -7,
+        12,
+        1
+      ]
+    },
+    "main/cell_003": {
+      "blank": false,
+      "canonical": "main/cell_003",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "54f33f2a48c99a2f0e820d12780f847a3d81d9305589031fd8dfc02c5adfaaf7",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -8,
+        11,
+        1
+      ]
+    },
+    "main/cell_004": {
+      "blank": false,
+      "canonical": "main/cell_000",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "f26c32b3a83f9793ed6486cd06457ebc596ce8d066376bb0314ed23477e070bc",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -7,
+        12,
+        1
+      ]
+    },
+    "main/cell_005": {
+      "blank": false,
+      "canonical": "main/cell_005",
+      "nativeBounds": [
+        -7,
+        -21,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "91e0d1c8eea128c2e5830b1a91b0054fe13f5ecd93b4f218fe885e9b1fe0e384",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -17,
+        11,
+        -2
+      ]
+    },
+    "main/cell_006": {
+      "blank": false,
+      "canonical": "main/cell_000",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "f26c32b3a83f9793ed6486cd06457ebc596ce8d066376bb0314ed23477e070bc",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -7,
+        12,
+        1
+      ]
+    },
+    "main/cell_007": {
+      "blank": false,
+      "canonical": "main/cell_005",
+      "nativeBounds": [
+        -7,
+        -21,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "91e0d1c8eea128c2e5830b1a91b0054fe13f5ecd93b4f218fe885e9b1fe0e384",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -17,
+        11,
+        -2
+      ]
+    },
+    "main/cell_008": {
+      "blank": false,
+      "canonical": "main/cell_008",
+      "nativeBounds": [
+        -7,
+        -21,
+        9,
+        3
+      ],
+      "sourceRgbaSha256": "66ca6209c5948221c50e443e3f437e3a91e8057d350aff869885276442f2e69b",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -17,
+        7,
+        0
+      ]
+    },
+    "main/cell_009": {
+      "blank": false,
+      "canonical": "main/cell_009",
+      "nativeBounds": [
+        -7,
+        -21,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "22fecbf7f2ede63a057901b15e333f88ff9447e26eb03d728bee0243d20445cf",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -5,
+        -18,
+        13,
+        -3
+      ]
+    },
+    "main/cell_010": {
+      "blank": false,
+      "canonical": "main/cell_010",
+      "nativeBounds": [
+        -15,
+        -21,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "5ce459c0e1567e7473142240123c18a1613eb853afde8a5e88457c8d5b67f686",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        11,
+        -1
+      ]
+    },
+    "main/cell_011": {
+      "blank": false,
+      "canonical": "main/cell_011",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "ff69108c493af7957f37dea31b1d2831ad52da365f6cad7ee76428490060ac9a",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -5,
+        -10,
+        12,
+        1
+      ]
+    },
+    "main/cell_012": {
+      "blank": false,
+      "canonical": "main/cell_012",
+      "nativeBounds": [
+        -15,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "2e57f2fce89c4b0121ff9fa4eb17ff269b4db2da6c740905f56b8d032d2fce49",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -11,
+        11,
+        1
+      ]
+    },
+    "main/cell_013": {
+      "blank": false,
+      "canonical": "main/cell_013",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "82a5ddd6fe5cb21e589eac9a82183336c6e15f47ca41f02e86798c5e3e643085",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -4,
+        -10,
+        13,
+        -1
+      ]
+    },
+    "main/cell_014": {
+      "blank": false,
+      "canonical": "main/cell_014",
+      "nativeBounds": [
+        -15,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "8a21f246ae6309c7efef894ef645803aeaa8e2a8d6e2e550fbea5cb9c0a64815",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -10,
+        -9,
+        14,
+        1
+      ]
+    },
+    "main/cell_015": {
+      "blank": false,
+      "canonical": "main/cell_011",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "ff69108c493af7957f37dea31b1d2831ad52da365f6cad7ee76428490060ac9a",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -5,
+        -10,
+        12,
+        1
+      ]
+    },
+    "main/cell_016": {
+      "blank": false,
+      "canonical": "main/cell_012",
+      "nativeBounds": [
+        -15,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "2e57f2fce89c4b0121ff9fa4eb17ff269b4db2da6c740905f56b8d032d2fce49",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -11,
+        11,
+        1
+      ]
+    },
+    "main/cell_017": {
+      "blank": false,
+      "canonical": "main/cell_013",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "82a5ddd6fe5cb21e589eac9a82183336c6e15f47ca41f02e86798c5e3e643085",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -4,
+        -10,
+        13,
+        -1
+      ]
+    },
+    "main/cell_018": {
+      "blank": false,
+      "canonical": "main/cell_014",
+      "nativeBounds": [
+        -15,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "8a21f246ae6309c7efef894ef645803aeaa8e2a8d6e2e550fbea5cb9c0a64815",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -10,
+        -9,
+        14,
+        1
+      ]
+    },
+    "main/cell_019": {
+      "blank": false,
+      "canonical": "main/cell_019",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "e09b048eef13b561bd318067e7fff389e05c588b839d9cb5fec263746003be82",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -8,
+        12,
+        1
+      ]
+    },
+    "main/cell_020": {
+      "blank": false,
+      "canonical": "main/cell_020",
+      "nativeBounds": [
+        -15,
+        -21,
+        9,
+        3
+      ],
+      "sourceRgbaSha256": "5502e25ce950d9ebccffe57c6d397e5c083f41714e99449dbec2c32e60dbcddb",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -18,
+        9,
+        -2
+      ]
+    },
+    "main/cell_021": {
+      "blank": false,
+      "canonical": "main/cell_021",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "1be410fefda9049c52bfd43893780717c2bb66d464ac9c979e9654af94e85527",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -7,
+        12,
+        1
+      ]
+    },
+    "main/cell_022": {
+      "blank": false,
+      "canonical": "main/cell_022",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "f62b236e6a5c7165178c0624db12ad1ec367f8365f9d26f393388446b9750ed1",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -8,
+        11,
+        1
+      ]
+    },
+    "main/cell_023": {
+      "blank": false,
+      "canonical": "main/cell_023",
+      "nativeBounds": [
+        -15,
+        -13,
+        9,
+        3
+      ],
+      "sourceRgbaSha256": "64de7b545c1e3704772209397b75ad18b00c9f00bac472c5cace4913207156d0",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -6,
+        9,
+        1
+      ]
+    },
+    "main/cell_024": {
+      "blank": false,
+      "canonical": "main/cell_024",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "402aeaabee7a67339876fa9f5520f53eda7638f9374271093770503543e37d75",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -9,
+        11,
+        1
+      ]
+    },
+    "main/cell_025": {
+      "blank": false,
+      "canonical": "main/cell_025",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "dd8515a0f1db88753e320869c2e581f86f143a9b2d9cb9c3142f4f414cb1cb37",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -9,
+        13,
+        1
+      ]
+    },
+    "main/cell_026": {
+      "blank": false,
+      "canonical": "main/cell_026",
+      "nativeBounds": [
+        -15,
+        -13,
+        9,
+        3
+      ],
+      "sourceRgbaSha256": "4e32cf287aa86724e0f699672a5668d45fa0185d7ec478ca34e2c52fa9a64e33",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -6,
+        9,
+        1
+      ]
+    },
+    "main/cell_027": {
+      "blank": false,
+      "canonical": "main/cell_027",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "d6455740312bc69fc3bc71dffe1a6b276e5f7581b4f1a7faca525bf96c06eb02",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -7,
+        12,
+        1
+      ]
+    },
+    "main/cell_028": {
+      "blank": false,
+      "canonical": "main/cell_028",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "c9ea597b09316d596ef833410067c91612961c9d81b38ea6bc2abff2d9d1e47f",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -8,
+        11,
+        1
+      ]
+    },
+    "main/cell_029": {
+      "blank": false,
+      "canonical": "main/cell_029",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "f98b36bec8f38cb3d79efb38c1a20472c375f9d9abc4d74de9306ab664dc2e45",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -7,
+        12,
+        1
+      ]
+    },
+    "main/cell_030": {
+      "blank": false,
+      "canonical": "main/cell_030",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "a89c5379dad5a4e56208e3cbbf7a32e26cdb5c2bd21cd9e61ece5e0b249e33d2",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -8,
+        11,
+        1
+      ]
+    },
+    "main/cell_031": {
+      "blank": false,
+      "canonical": "main/cell_031",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "3cf4dc20e813baafbf8bf6acca74c4351d7b9bd1ca8cbfcc26ea25234fcd3a10",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -7,
+        12,
+        1
+      ]
+    },
+    "main/cell_032": {
+      "blank": false,
+      "canonical": "main/cell_032",
+      "nativeBounds": [
+        -7,
+        -21,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "0ab8ae21672f71130223bceebee9fefd74efa7a370470e1b7be9f5b4cc54b2b8",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -17,
+        11,
+        -2
+      ]
+    },
+    "main/cell_033": {
+      "blank": false,
+      "canonical": "main/cell_031",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "3cf4dc20e813baafbf8bf6acca74c4351d7b9bd1ca8cbfcc26ea25234fcd3a10",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -7,
+        12,
+        1
+      ]
+    },
+    "main/cell_034": {
+      "blank": false,
+      "canonical": "main/cell_032",
+      "nativeBounds": [
+        -7,
+        -21,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "0ab8ae21672f71130223bceebee9fefd74efa7a370470e1b7be9f5b4cc54b2b8",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -17,
+        11,
+        -2
+      ]
+    },
+    "main/cell_035": {
+      "blank": false,
+      "canonical": "main/cell_035",
+      "nativeBounds": [
+        -7,
+        -21,
+        9,
+        3
+      ],
+      "sourceRgbaSha256": "da5adfe05cdae75849eb449a1a7d1105ebb52437d0d29ba5ce76aeb73c508286",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -17,
+        7,
+        0
+      ]
+    },
+    "main/cell_036": {
+      "blank": false,
+      "canonical": "main/cell_036",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "6027f437093811fbffa325f43771ae87c93bb8183070346aa8ae312ecacf2f04",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -8,
+        12,
+        1
+      ]
+    },
+    "main/cell_037": {
+      "blank": false,
+      "canonical": "main/cell_037",
+      "nativeBounds": [
+        -15,
+        -21,
+        9,
+        3
+      ],
+      "sourceRgbaSha256": "46b3f08a2eac0ffe947d94d923f5ac1ba12c932d106a3858db2e7a4c015eb029",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -18,
+        9,
+        -2
+      ]
+    },
+    "main/cell_038": {
+      "blank": false,
+      "canonical": "main/cell_038",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "03a2a34d976c8412037e969ec221654f8eea4f746ad65f38831137b7a8d587df",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -7,
+        12,
+        1
+      ]
+    },
+    "main/cell_039": {
+      "blank": false,
+      "canonical": "main/cell_039",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "765386f205f8813b9f2ff542de9302678ed948560d89050a921cd63d83d0ffcb",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -8,
+        11,
+        1
+      ]
+    },
+    "main/cell_040": {
+      "blank": false,
+      "canonical": "main/cell_040",
+      "nativeBounds": [
+        -15,
+        -13,
+        9,
+        3
+      ],
+      "sourceRgbaSha256": "5a7867fa28ff7b2488eea1629bae97cfc83fe2e925ba77886a52f94eac2662c6",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -6,
+        9,
+        1
+      ]
+    },
+    "main/cell_041": {
+      "blank": false,
+      "canonical": "main/cell_041",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "6b3045bd8a605226f3bba139b475d683da28b98012e1caa6328147dfc6278397",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -9,
+        11,
+        1
+      ]
+    },
+    "main/cell_042": {
+      "blank": false,
+      "canonical": "main/cell_042",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "d7fbd8887dce7f167dfebfccbef178ee5552e2d579912b32937c83016f1a3f94",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -9,
+        13,
+        1
+      ]
+    },
+    "main/cell_043": {
+      "blank": false,
+      "canonical": "main/cell_043",
+      "nativeBounds": [
+        -15,
+        -13,
+        9,
+        3
+      ],
+      "sourceRgbaSha256": "19a7067ac598f04ece74c703cf347cb7be72da90964f5fa6810a74c7f066eedd",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -12,
+        9,
+        1
+      ]
+    },
+    "main/cell_044": {
+      "blank": false,
+      "canonical": "main/cell_044",
+      "nativeBounds": [
+        -7,
+        -21,
+        9,
+        3
+      ],
+      "sourceRgbaSha256": "c01b3ba476e6ae11df1d55390592131f016c65b2593f91ba59561a3e7a76d4e9",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -17,
+        7,
+        0
+      ]
+    },
+    "main/cell_045": {
+      "blank": false,
+      "canonical": "main/cell_008",
+      "nativeBounds": [
+        -7,
+        -21,
+        9,
+        3
+      ],
+      "sourceRgbaSha256": "66ca6209c5948221c50e443e3f437e3a91e8057d350aff869885276442f2e69b",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -17,
+        7,
+        0
+      ]
+    },
+    "main/cell_046": {
+      "blank": false,
+      "canonical": "main/cell_044",
+      "nativeBounds": [
+        -7,
+        -21,
+        9,
+        3
+      ],
+      "sourceRgbaSha256": "c01b3ba476e6ae11df1d55390592131f016c65b2593f91ba59561a3e7a76d4e9",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -17,
+        7,
+        0
+      ]
+    },
+    "main/cell_047": {
+      "blank": false,
+      "canonical": "main/cell_047",
+      "nativeBounds": [
+        -7,
+        -21,
+        9,
+        3
+      ],
+      "sourceRgbaSha256": "c5a36d9715b08627825f7809a433e20fa0ca0974a90d85d93ff01629c7a8ef77",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -17,
+        7,
+        0
+      ]
+    },
+    "main/cell_048": {
+      "blank": false,
+      "canonical": "main/cell_048",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "d8361a8f8c92cec44b55db32307a9a61158ef358aa87c50faf7a3266815fbbef",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -7,
+        12,
+        1
+      ]
+    },
+    "main/cell_049": {
+      "blank": false,
+      "canonical": "main/cell_049",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "df436ba8af05f54f4837095b5f12109ed6a57d38bdf1073c4f51573ed60fee6f",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -12,
+        14,
+        1
+      ]
+    },
+    "main/cell_050": {
+      "blank": false,
+      "canonical": "main/cell_050",
+      "nativeBounds": [
+        -15,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "2f29143984723419deb8b71e942c2b619576d2e83fb0f0ce110bc3bc2fa340ac",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -9,
+        -11,
+        13,
+        1
+      ]
+    },
+    "main/cell_051": {
+      "blank": false,
+      "canonical": "main/cell_051",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "838950cdaef20e02ad7c2cfc343306428ba89aec25d16e3c901fb8a5837f4487",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -8,
+        11,
+        1
+      ]
+    },
+    "main/cell_052": {
+      "blank": false,
+      "canonical": "main/cell_052",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "d7aa621891d0b80f5a47951c8f853fb5a8b346b1a1a98df0873300c1990716d5",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -8,
+        12,
+        1
+      ]
+    },
+    "main/cell_053": {
+      "blank": false,
+      "canonical": "main/cell_053",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "e302e39971dd8c14e54c0ec779b57350421c2cf9d6f852b63f884ebf7de36e25",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -7,
+        12,
+        1
+      ]
+    },
+    "main/cell_054": {
+      "blank": false,
+      "canonical": "main/cell_054",
+      "nativeBounds": [
+        -7,
+        -21,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "c5d4c1c56f4c6451811d36be7e8ec0ce62479a523ddd204a358282b98b64ba32",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -4,
+        -16,
+        14,
+        -1
+      ]
+    },
+    "main/cell_055": {
+      "blank": false,
+      "canonical": "main/cell_055",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "9b9bd926ee3f1cf06f252c994e50970a96393e9da7e33afc6c1fe82d278157f8",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -8,
+        12,
+        1
+      ]
+    },
+    "main/cell_056": {
+      "blank": false,
+      "canonical": "main/cell_056",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "627b73243356dd678c1ee40e83d6d39b7650e09613f0ea273b690efb3a21df7f",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -8,
+        11,
+        1
+      ]
+    },
+    "main/cell_057": {
+      "blank": false,
+      "canonical": "main/cell_057",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "86af2b23e3ecb993ac00d4723c6cb668deb8e18d8b37d086906cd074f15d8c9f",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -8,
+        11,
+        1
+      ]
+    },
+    "main/cell_058": {
+      "blank": false,
+      "canonical": "main/cell_058",
+      "nativeBounds": [
+        -15,
+        -21,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "85354760926ef8218140e677a5e2e958e0b9feaee5199acccc10c34c7e005634",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -11,
+        -14,
+        12,
+        0
+      ]
+    },
+    "main/cell_059": {
+      "blank": false,
+      "canonical": "main/cell_059",
+      "nativeBounds": [
+        -15,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "5290677871114b52ed4c08e65d2249ecae55e905e6cfce4c9d09c40d660b6ad7",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -9,
+        -11,
+        10,
+        1
+      ]
+    },
+    "main/cell_060": {
+      "blank": false,
+      "canonical": "main/cell_060",
+      "nativeBounds": [
+        -7,
+        -21,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "796476d9bad01fd30912b61f19ca58ef745aa013dbb48b527d741b9c537dc9a7",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -4,
+        -16,
+        14,
+        -1
+      ]
+    },
+    "main/cell_061": {
+      "blank": false,
+      "canonical": "main/cell_061",
+      "nativeBounds": [
+        -15,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "97f0558a92d09fee22239bca68f0a30f355bdf318091a3936a4fe9294f8e1a28",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -10,
+        14,
+        1
+      ]
+    },
+    "main/cell_062": {
+      "blank": false,
+      "canonical": "main/cell_062",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "e5f753608181874bcd3761c57b4c28643986ea3724c960011cea15a2d30851ba",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -6,
+        12,
+        1
+      ]
+    },
+    "main/cell_063": {
+      "blank": false,
+      "canonical": "main/cell_010",
+      "nativeBounds": [
+        -16,
+        -16,
+        8,
+        8
+      ],
+      "sourceRgbaSha256": "5ce459c0e1567e7473142240123c18a1613eb853afde8a5e88457c8d5b67f686",
+      "translation": [
+        -6,
+        4
+      ],
+      "visibleBounds": [
+        -14,
+        -12,
+        5,
+        3
+      ]
+    },
+    "main/cell_064": {
+      "blank": false,
+      "canonical": "main/cell_064",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "96b86a3e8e4df139c4c87bda52a70f802f04858ad4e0ae8725ee26b4d3c76b2a",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -7,
+        12,
+        1
+      ]
+    },
+    "sub/cell_000": {
+      "blank": false,
+      "canonical": "main/cell_000",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "f26c32b3a83f9793ed6486cd06457ebc596ce8d066376bb0314ed23477e070bc",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -7,
+        12,
+        1
+      ]
+    },
+    "sub/cell_001": {
+      "blank": false,
+      "canonical": "main/cell_001",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "1b8bf82cb697d9b6869e7a923701351cd36fa1ba4f05078b6ee16b64153a81e7",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -8,
+        11,
+        1
+      ]
+    },
+    "sub/cell_002": {
+      "blank": false,
+      "canonical": "main/cell_002",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "108868f5bf503968ea6a5b31cfb79cd6769b14261ceb607a11f74a213f19b623",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -7,
+        12,
+        1
+      ]
+    },
+    "sub/cell_003": {
+      "blank": false,
+      "canonical": "main/cell_003",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "54f33f2a48c99a2f0e820d12780f847a3d81d9305589031fd8dfc02c5adfaaf7",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -8,
+        11,
+        1
+      ]
+    },
+    "sub/cell_004": {
+      "blank": false,
+      "canonical": "main/cell_009",
+      "nativeBounds": [
+        -7,
+        -21,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "22fecbf7f2ede63a057901b15e333f88ff9447e26eb03d728bee0243d20445cf",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -5,
+        -18,
+        13,
+        -3
+      ]
+    },
+    "sub/cell_005": {
+      "blank": false,
+      "canonical": "main/cell_010",
+      "nativeBounds": [
+        -15,
+        -21,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "5ce459c0e1567e7473142240123c18a1613eb853afde8a5e88457c8d5b67f686",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        11,
+        -1
+      ]
+    },
+    "sub/cell_006": {
+      "blank": false,
+      "canonical": "main/cell_023",
+      "nativeBounds": [
+        -15,
+        -13,
+        9,
+        3
+      ],
+      "sourceRgbaSha256": "64de7b545c1e3704772209397b75ad18b00c9f00bac472c5cace4913207156d0",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -6,
+        9,
+        1
+      ]
+    },
+    "sub/cell_007": {
+      "blank": false,
+      "canonical": "main/cell_026",
+      "nativeBounds": [
+        -15,
+        -13,
+        9,
+        3
+      ],
+      "sourceRgbaSha256": "4e32cf287aa86724e0f699672a5668d45fa0185d7ec478ca34e2c52fa9a64e33",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -6,
+        9,
+        1
+      ]
+    },
+    "sub/cell_008": {
+      "blank": false,
+      "canonical": "main/cell_048",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "d8361a8f8c92cec44b55db32307a9a61158ef358aa87c50faf7a3266815fbbef",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -7,
+        12,
+        1
+      ]
+    },
+    "sub/cell_009": {
+      "blank": false,
+      "canonical": "main/cell_049",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "df436ba8af05f54f4837095b5f12109ed6a57d38bdf1073c4f51573ed60fee6f",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -12,
+        14,
+        1
+      ]
+    },
+    "sub/cell_010": {
+      "blank": false,
+      "canonical": "main/cell_050",
+      "nativeBounds": [
+        -15,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "2f29143984723419deb8b71e942c2b619576d2e83fb0f0ce110bc3bc2fa340ac",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -9,
+        -11,
+        13,
+        1
+      ]
+    },
+    "sub/cell_011": {
+      "blank": false,
+      "canonical": "main/cell_051",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "838950cdaef20e02ad7c2cfc343306428ba89aec25d16e3c901fb8a5837f4487",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -8,
+        11,
+        1
+      ]
+    },
+    "sub/cell_012": {
+      "blank": false,
+      "canonical": "main/cell_052",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "d7aa621891d0b80f5a47951c8f853fb5a8b346b1a1a98df0873300c1990716d5",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -8,
+        12,
+        1
+      ]
+    },
+    "sub/cell_013": {
+      "blank": false,
+      "canonical": "main/cell_053",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "e302e39971dd8c14e54c0ec779b57350421c2cf9d6f852b63f884ebf7de36e25",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -7,
+        12,
+        1
+      ]
+    },
+    "sub/cell_014": {
+      "blank": false,
+      "canonical": "main/cell_054",
+      "nativeBounds": [
+        -7,
+        -21,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "c5d4c1c56f4c6451811d36be7e8ec0ce62479a523ddd204a358282b98b64ba32",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -4,
+        -16,
+        14,
+        -1
+      ]
+    },
+    "sub/cell_015": {
+      "blank": false,
+      "canonical": "main/cell_055",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "9b9bd926ee3f1cf06f252c994e50970a96393e9da7e33afc6c1fe82d278157f8",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -8,
+        12,
+        1
+      ]
+    },
+    "sub/cell_016": {
+      "blank": false,
+      "canonical": "main/cell_061",
+      "nativeBounds": [
+        -15,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "97f0558a92d09fee22239bca68f0a30f355bdf318091a3936a4fe9294f8e1a28",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -10,
+        14,
+        1
+      ]
+    },
+    "sub/cell_017": {
+      "blank": false,
+      "canonical": "main/cell_062",
+      "nativeBounds": [
+        -7,
+        -13,
+        17,
+        3
+      ],
+      "sourceRgbaSha256": "e5f753608181874bcd3761c57b4c28643986ea3724c960011cea15a2d30851ba",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -6,
+        12,
+        1
+      ]
+    }
+  },
+  "sourceFiles": {
+    "02_CHARACTERS/use-ready-pixi-hd4x-224/batch-01/m001_zurumon/main-atlas-00.json": "10bda510a4af9cca84a85f96d31abced24824e5a5f4e8374b2e8c0c52d86e8b7",
+    "02_CHARACTERS/use-ready-pixi-hd4x-224/batch-01/m001_zurumon/main-atlas-00.png": "8e636b22c5a001d16df699fdb4d8c1b15cf0eb9c43054d84de841b7d4eceb43e",
+    "02_CHARACTERS/use-ready-pixi-hd4x-224/batch-01/m001_zurumon/manifest.json": "e3f486ca71ac5506b7cfb1372d445f72340bfc7e85fa7bd07a7da64fe89aa1cb",
+    "02_CHARACTERS/use-ready-pixi-hd4x-224/batch-01/m001_zurumon/runtime.json": "1c345ab77414842f47848a9e9699b7d9e99b047848ce58bed8ae5dbb1e1303dc",
+    "02_CHARACTERS/use-ready-pixi-hd4x-224/batch-01/m001_zurumon/sub-atlas-00.json": "d4bc50a6d1274115c506b4ebc94dfe857bf9e826dcbbf184f75b7ee853cba78e",
+    "02_CHARACTERS/use-ready-pixi-hd4x-224/batch-01/m001_zurumon/sub-atlas-00.png": "70b45c15f1cc7c9872f8b4da4c579bc5619bd05620002e62542c056f3471fa3f",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m001_zurumon_main.nanr": "d39d0ef49cb66d055f5944e9923655299a17131ddb2b1dcf729f48c18a5d59f7",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m001_zurumon_main.ncbr": "797c1be6a3fcf6dfdc5ec786b6eb11dec57d45500cfa05bf201a37a412083437",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m001_zurumon_main.ncer": "dcfc79552af84937d9ee0d76dd65c4bde2f50b58980a109f8d01ee97972821c7",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m001_zurumon_main.nclr": "92540375141ff0e992d864eb257019ee6aa7808140bfaec72dd75f4354d51953",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m001_zurumon_sub.nanr": "b92cb8a9fb90d40dfdfd950d6cee2dd81b4b75bc58f9c4417a31bf5a81aebe11",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m001_zurumon_sub.ncer": "b51242b9cc3b12722613af09ed598429912afafa3f0cdbef09bbd80f6beab9cc",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m001_zurumon_sub.ncgr": "8696b85f9ac30ca2f7bb506e7371af29e0ca51c44c64ad6589959cb8cca617df",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m001_zurumon_sub.nclr": "6c76c36633b454c805d43e69982c83648fc458299616011dfb6d99550b702eac",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/animations.json": "c19e5dd34b7dc34ea1a12f387363eb965c50a226aa8754a442216b4fad17160f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells.json": "e2c14cde4ef9ce0bf0d8e283e994bb7bbcf036874860b77c623e85e121385507",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-000.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-001.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-002.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-003.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-004.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-005.png": "7bcc86bc53eaef2f841370c6506ea8440434bb19c1df32b380a3584bdf32f02d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-006.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-007.png": "7bcc86bc53eaef2f841370c6506ea8440434bb19c1df32b380a3584bdf32f02d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-008.png": "4757e9476c16dfe53e4ddb5ea88eecf06be1d85648129b59d3e983d9c3239f24",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-009.png": "7bcc86bc53eaef2f841370c6506ea8440434bb19c1df32b380a3584bdf32f02d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-010.png": "53d245837e2bb9ad684d188de930034ce63d1d57dc11852cd1eec1071da2894b",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-011.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-012.png": "4b48e06d57a8386d089082009bee40cd30a46426100632064c0eb45b1765bc2f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-013.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-014.png": "4b48e06d57a8386d089082009bee40cd30a46426100632064c0eb45b1765bc2f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-015.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-016.png": "4b48e06d57a8386d089082009bee40cd30a46426100632064c0eb45b1765bc2f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-017.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-018.png": "4b48e06d57a8386d089082009bee40cd30a46426100632064c0eb45b1765bc2f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-019.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-020.png": "0d00fcf2a92815385fea435f9aacc733bbab6a13d7644fc8945b8a4aeffe549e",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-021.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-022.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-023.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-024.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-025.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-026.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-027.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-028.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-029.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-030.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-031.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-032.png": "7bcc86bc53eaef2f841370c6506ea8440434bb19c1df32b380a3584bdf32f02d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-033.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-034.png": "7bcc86bc53eaef2f841370c6506ea8440434bb19c1df32b380a3584bdf32f02d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-035.png": "4757e9476c16dfe53e4ddb5ea88eecf06be1d85648129b59d3e983d9c3239f24",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-036.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-037.png": "0d00fcf2a92815385fea435f9aacc733bbab6a13d7644fc8945b8a4aeffe549e",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-038.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-039.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-040.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-041.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-042.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-043.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-044.png": "454e1f094aa38b488570fd21f2b88fa1f138dadc1d684247a51d2835f9357a48",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-045.png": "4757e9476c16dfe53e4ddb5ea88eecf06be1d85648129b59d3e983d9c3239f24",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-046.png": "454e1f094aa38b488570fd21f2b88fa1f138dadc1d684247a51d2835f9357a48",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-047.png": "454e1f094aa38b488570fd21f2b88fa1f138dadc1d684247a51d2835f9357a48",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-048.png": "41968cc595242335965451826eff8106eef381480a13f205fbfc9f31f230729d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-049.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-050.png": "4b48e06d57a8386d089082009bee40cd30a46426100632064c0eb45b1765bc2f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-051.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-052.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-053.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-054.png": "0d00fcf2a92815385fea435f9aacc733bbab6a13d7644fc8945b8a4aeffe549e",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-055.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-056.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-057.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-058.png": "53d245837e2bb9ad684d188de930034ce63d1d57dc11852cd1eec1071da2894b",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-059.png": "4b48e06d57a8386d089082009bee40cd30a46426100632064c0eb45b1765bc2f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-060.png": "0d00fcf2a92815385fea435f9aacc733bbab6a13d7644fc8945b8a4aeffe549e",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-061.png": "77a4dcf9eefa7221f09fcea4551b79c9ec3d89ba1c5cf6e9cf0bdc169e6025d5",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-062.png": "98264953c49da403299c34f7a6743ca22d06ff8094a9f3e148d28daa4a8dab06",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-063.png": "0d00fcf2a92815385fea435f9aacc733bbab6a13d7644fc8945b8a4aeffe549e",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/cells/cell-064.png": "2858ef6cc504170e2175227607bc029fe2de43b07d067a1a22e70a419982c475",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_main/family.json": "0072283273fc135ca9c6eccb8fa19c59f194fb861752b6ff2969d11e30418c5d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/animations.json": "e30134f30f5eadc2c047803bc7980a57c64219f8c1eeeadb0a52cb747b874836",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/cells.json": "dfef19b4ebd6e5d4baf4813a4d621911bba7f56b89af237279cfda254a207bdf",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/cells/cell-000.png": "fcd73b2555e59aaf75907fe1eb15406127b58e99aa198ee3a3c7c3ed003a4059",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/cells/cell-001.png": "fcd73b2555e59aaf75907fe1eb15406127b58e99aa198ee3a3c7c3ed003a4059",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/cells/cell-002.png": "fcd73b2555e59aaf75907fe1eb15406127b58e99aa198ee3a3c7c3ed003a4059",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/cells/cell-003.png": "fcd73b2555e59aaf75907fe1eb15406127b58e99aa198ee3a3c7c3ed003a4059",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/cells/cell-004.png": "fbd9d720f9a34a13430f8c58872466c77191b959acddbd049fc202719febb7f9",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/cells/cell-005.png": "2194290f2c1453b9980c18466f916257cc2a01148946a423286c0874993e1605",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/cells/cell-006.png": "fcd73b2555e59aaf75907fe1eb15406127b58e99aa198ee3a3c7c3ed003a4059",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/cells/cell-007.png": "fcd73b2555e59aaf75907fe1eb15406127b58e99aa198ee3a3c7c3ed003a4059",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/cells/cell-008.png": "fcd73b2555e59aaf75907fe1eb15406127b58e99aa198ee3a3c7c3ed003a4059",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/cells/cell-009.png": "fcd73b2555e59aaf75907fe1eb15406127b58e99aa198ee3a3c7c3ed003a4059",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/cells/cell-010.png": "5688ef8033eaf8335114ad8a22bbb084e59afaff7327b865f600774c7bdc3bc9",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/cells/cell-011.png": "fcd73b2555e59aaf75907fe1eb15406127b58e99aa198ee3a3c7c3ed003a4059",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/cells/cell-012.png": "fcd73b2555e59aaf75907fe1eb15406127b58e99aa198ee3a3c7c3ed003a4059",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/cells/cell-013.png": "fcd73b2555e59aaf75907fe1eb15406127b58e99aa198ee3a3c7c3ed003a4059",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/cells/cell-014.png": "fbd9d720f9a34a13430f8c58872466c77191b959acddbd049fc202719febb7f9",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/cells/cell-015.png": "fcd73b2555e59aaf75907fe1eb15406127b58e99aa198ee3a3c7c3ed003a4059",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/cells/cell-016.png": "5688ef8033eaf8335114ad8a22bbb084e59afaff7327b865f600774c7bdc3bc9",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/cells/cell-017.png": "fcd73b2555e59aaf75907fe1eb15406127b58e99aa198ee3a3c7c3ed003a4059",
+    "08_FULL_FAMILY_CONVERSION/digimon/m001_zurumon_sub/family.json": "3f7eed2388703b8a7f15cf6243296334c00c798e5be43f7bdea5df778cc0e995"
+  },
+  "sourceOrigin": [
+    31,
+    38
+  ],
+  "species": {
+    "attributeIndex": 0,
+    "familyBits": 0,
+    "generationIndex": 1,
+    "generationScaledByte": 6,
+    "huntClassByte": 1,
+    "identifier": "ZURUMON",
+    "lookupKey": "m001_zurumon",
+    "recordIndex": 8,
+    "statCurveIndex": 0
+  },
+  "speciesCatalogSha256": "d86ec0d6c97eca1827bf405ebae6a15275e60d47439ba7a8678f06e2dde34eba"
+}

@@ -1,0 +1,138 @@
+{
+  "status": "PASS_EXPECTED_SOURCE_PROGRESSION_GATE_AND_ISOLATED_CAPTURE",
+  "entity": "m102_koromon",
+  "revision": "r03",
+  "gateId": "championship:2026:gate:savanna",
+  "freshTamerGate": {
+    "freshTamerPrimaryActionDisabled": true,
+    "progressionBypassed": false,
+    "sourceRoute": "AVAILABLE_AFTER_GATE_PROGRESSION"
+  },
+  "isolatedCapture": {
+    "gate": "CHAMPIONSHIP_VS3_ENCLOSURE_BROWSER_QA",
+    "date": "2026-09-20T12:47:50.645Z",
+    "baseUrl": "http://127.0.0.1:8732/championship.html?characterArtReview=m102&qa=unlock",
+    "viewport": "390x844",
+    "selectedGateId": "championship:2026:gate:savanna",
+    "capturedWildId": "championship:2026:gate:savanna:native-wild:5",
+    "capturedSpeciesId": "species-021",
+    "resultPortrait": "assets/production/internal-character-review/m102_koromon-hf-r03/hud-r01/main-cell_000.png",
+    "reviewAssets": [
+      "/assets/production/internal-character-review/m102_koromon-hf-r03/hud-r01/manifest.json",
+      "/assets/production/internal-character-review/m102_koromon-hf-r03/runtime.review.json",
+      "/assets/production/internal-character-review/m102_koromon-hf-r03/main.json",
+      "/assets/production/internal-character-review/m102_koromon-hf-r03/main.png",
+      "/assets/production/internal-character-review/m102_koromon-hf-r03/hud-r01/main-cell_000.png"
+    ],
+    "boundSamples": [
+      {
+        "wildId": "championship:2026:gate:savanna:native-wild:5",
+        "speciesId": "species-021",
+        "x": 192.22805976867787,
+        "y": 640.9648418426514,
+        "state": "TETHERED",
+        "moving": false,
+        "currentHp": 370,
+        "maxHp": 370
+      }
+    ],
+    "raisingSamples": [
+      {
+        "speciesIndex": 21,
+        "state": 1,
+        "nativeFrame": 2,
+        "sequenceId": 0,
+        "x": 330,
+        "y": 667
+      },
+      {
+        "speciesIndex": 21,
+        "state": 1,
+        "nativeFrame": 15,
+        "sequenceId": 0,
+        "x": 330,
+        "y": 667
+      },
+      {
+        "speciesIndex": 21,
+        "state": 2,
+        "nativeFrame": 26,
+        "sequenceId": 2,
+        "x": 325.88720703125,
+        "y": 672.95166015625
+      },
+      {
+        "speciesIndex": 21,
+        "state": 2,
+        "nativeFrame": 38,
+        "sequenceId": 2,
+        "x": 315.88818359375,
+        "y": 659.47021484375
+      },
+      {
+        "speciesIndex": 21,
+        "state": 2,
+        "nativeFrame": 49,
+        "sequenceId": 2,
+        "x": 324.361328125,
+        "y": 646.7646484375
+      },
+      {
+        "speciesIndex": 21,
+        "state": 2,
+        "nativeFrame": 61,
+        "sequenceId": 2,
+        "x": 340.9326171875,
+        "y": 632.58740234375
+      },
+      {
+        "speciesIndex": 21,
+        "state": 2,
+        "nativeFrame": 71,
+        "sequenceId": 2,
+        "x": 345.6494140625,
+        "y": 624.50927734375
+      },
+      {
+        "speciesIndex": 21,
+        "state": 2,
+        "nativeFrame": 83,
+        "sequenceId": 2,
+        "x": 362.3095703125,
+        "y": 610.41552734375
+      },
+      {
+        "speciesIndex": 21,
+        "state": 14,
+        "nativeFrame": 94,
+        "sequenceId": 0,
+        "x": 364.2529296875,
+        "y": 608.39990234375
+      },
+      {
+        "speciesIndex": 21,
+        "state": 14,
+        "nativeFrame": 106,
+        "sequenceId": 0,
+        "x": 364.2529296875,
+        "y": 608.39990234375
+      }
+    ],
+    "captureButtonPresent": false,
+    "inputCadence": "WAIT_FOR_OBSERVED_NATIVE_FRAME_PER_POINTER_SAMPLE",
+    "initialClock": "2026-09-10T02:00:00Z (UTC, fixed Date for original clock-seeded RNG)",
+    "setup": "ISOLATED_QA_GATE_UNLOCK_NORMAL_NATIVE_SPAWN_AND_POINTER_CAPTURE",
+    "worldRouteSetup": {
+      "endDaysThroughPublicAppFixture": 1,
+      "targetHour": 8,
+      "browserEntry": "CONTINUE_NORMAL_SAVE"
+    },
+    "verdict": "PASS"
+  },
+  "rendererValidation": "PASS_LOOPBACK_RUNTIME_RENDERER_REVIEW",
+  "normalCaptureSequenceQa": "PASS_NATIVE_SPAWN_TETHER_RESULT_AND_RAISING_HOME_ANIMATION",
+  "calendarPrecondition": "1_END_DAY_THROUGH_PUBLIC_APP_RULE_AND_NORMAL_SAVE_CONTINUE",
+  "defaultRuntimeChanged": false,
+  "fullCharacterArtAcceptance": false,
+  "pageErrors": []
+}

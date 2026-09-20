@@ -1,0 +1,23 @@
+{
+  "entityId": "m003_nyokimon",
+  "candidate": "candidate-hf-batch-r03",
+  "status": "PASS_CANDIDATE_VISUAL_REVIEW_NORMAL_GAME_PENDING",
+  "reviewedAgainst": "donor-review-v1/m003_nyokimon/review.json",
+  "checks": {
+    "morphology": "PASS_SUSPENDED_SEED_TWO_LEAVES_NO_LEGS",
+    "locomotion": "PASS_TILT_SPREAD_RISE_FOLD_WITHOUT_INVENTED_GAIT",
+    "faceAndExpression": "PASS_VISIBLE_OPENINGS_AND_SOURCE_OCCLUSIONS_RETAINED",
+    "restraint": "PASS_GOLD_WRAP_ON_SEED_BODY_LEAF_TIPS_FREE",
+    "specialStates": "PASS_RED_BLACK_STONE_WHITE_PRESENT",
+    "nativeScaleAndOrigin": "PASS_64PX_ORIGIN_23_37_SHARED_NORMALIZATION",
+    "mainSubMapping": "PASS_CANONICAL_ALIASES_AND_TRANSLATIONS",
+    "timing": "PASS_53_SOURCE_SEQUENCES_1980_BROWSER_TICKS"
+  },
+  "limits": {
+    "fullCharacterArtAcceptance": false,
+    "normalGameQa": "PASS_LOOPBACK_RUNTIME_RENDERER_REVIEW_NAVIGATION_NOT_RUN",
+    "publicationOrRightsAcceptance": "NOT_IN_SCOPE",
+    "designSettingStatus": "STANDARD_POSE_REVIEWED_NOT_SETTING_PASS"
+  },
+  "nextPaidGeneration": "NOT_NEEDED_FOR_CURRENT_REPAIR_SET"
+}

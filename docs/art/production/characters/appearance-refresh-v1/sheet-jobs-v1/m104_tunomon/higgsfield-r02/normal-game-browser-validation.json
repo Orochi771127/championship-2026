@@ -1,0 +1,69 @@
+{
+  "status": "PASS_EXPECTED_SOURCE_PROGRESSION_GATE_AND_ISOLATED_CAPTURE",
+  "entity": "m104_tunomon",
+  "revision": "r02",
+  "gateId": "championship:2026:gate:desert",
+  "freshTamerGate": {
+    "freshTamerPrimaryActionDisabled": true,
+    "progressionBypassed": false,
+    "sourceRoute": "AVAILABLE_AFTER_GATE_PROGRESSION",
+    "progressionDays": 2
+  },
+  "isolatedCapture": {
+    "gate": "CHAMPIONSHIP_VS3_ENCLOSURE_BROWSER_QA",
+    "date": "2026-09-20T19:15:14.246Z",
+    "baseUrl": "http://127.0.0.1:8732/championship.html?characterArtReview=m104&qa=unlock",
+    "viewport": "390x844",
+    "selectedGateId": "championship:2026:gate:desert",
+    "capturedWildId": "championship:2026:gate:desert:native-wild:12",
+    "capturedSpeciesId": "species-023",
+    "resultPortrait": "assets/production/internal-character-review/m104_tunomon-hf-r02/hud-r01/main-cell_000.png",
+    "reviewAssets": [
+      "/assets/production/internal-character-review/m104_tunomon-hf-r02/hud-r01/manifest.json",
+      "/assets/production/internal-character-review/m104_tunomon-hf-r02/runtime.review.json",
+      "/assets/production/internal-character-review/m104_tunomon-hf-r02/main.json",
+      "/assets/production/internal-character-review/m104_tunomon-hf-r02/main.png",
+      "/assets/production/internal-character-review/m104_tunomon-hf-r02/hud-r01/main-cell_000.png"
+    ],
+    "boundSamples": [
+      {
+        "wildId": "championship:2026:gate:desert:native-wild:12",
+        "speciesId": "species-023",
+        "x": 231.7409744262681,
+        "y": 412.8895111083986,
+        "state": "TETHERED",
+        "moving": false,
+        "currentHp": 370,
+        "maxHp": 370
+      }
+    ],
+    "raisingSamples": [
+      {"speciesIndex": 23, "state": 1, "nativeFrame": 3, "sequenceId": 0, "x": 85, "y": 480},
+      {"speciesIndex": 23, "state": 9, "nativeFrame": 15, "sequenceId": 35, "x": 76, "y": 480},
+      {"speciesIndex": 23, "state": 9, "nativeFrame": 27, "sequenceId": 35, "x": 76, "y": 480},
+      {"speciesIndex": 23, "state": 9, "nativeFrame": 38, "sequenceId": 35, "x": 76, "y": 480},
+      {"speciesIndex": 23, "state": 9, "nativeFrame": 50, "sequenceId": 35, "x": 76, "y": 480},
+      {"speciesIndex": 23, "state": 9, "nativeFrame": 62, "sequenceId": 35, "x": 76, "y": 480},
+      {"speciesIndex": 23, "state": 1, "nativeFrame": 73, "sequenceId": 0, "x": 76, "y": 480},
+      {"speciesIndex": 23, "state": 1, "nativeFrame": 86, "sequenceId": 0, "x": 85, "y": 480},
+      {"speciesIndex": 23, "state": 1, "nativeFrame": 97, "sequenceId": 0, "x": 85, "y": 480},
+      {"speciesIndex": 23, "state": 1, "nativeFrame": 109, "sequenceId": 0, "x": 82, "y": 493}
+    ],
+    "captureButtonPresent": false,
+    "inputCadence": "WAIT_FOR_OBSERVED_NATIVE_FRAME_PER_POINTER_SAMPLE",
+    "initialClock": "2026-09-10T01:00:00Z (UTC, fixed Date for original clock-seeded RNG)",
+    "setup": "ISOLATED_QA_GATE_UNLOCK_NORMAL_NATIVE_SPAWN_AND_POINTER_CAPTURE",
+    "worldRouteSetup": {
+      "endDaysThroughPublicAppFixture": 2,
+      "targetHour": 8,
+      "browserEntry": "CONTINUE_NORMAL_SAVE"
+    },
+    "verdict": "PASS"
+  },
+  "rendererValidation": "PASS_LOOPBACK_RUNTIME_RENDERER_REVIEW",
+  "normalCaptureSequenceQa": "PASS_NATIVE_SPAWN_TETHER_RESULT_AND_RAISING_HOME_ANIMATION",
+  "calendarPrecondition": "2_END_DAYS_THROUGH_PUBLIC_APP_RULE_AND_NORMAL_SAVE_CONTINUE",
+  "defaultRuntimeChanged": false,
+  "fullCharacterArtAcceptance": false,
+  "pageErrors": []
+}

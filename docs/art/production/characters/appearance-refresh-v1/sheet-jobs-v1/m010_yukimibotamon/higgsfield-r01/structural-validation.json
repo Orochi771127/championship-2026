@@ -1,0 +1,54 @@
+{
+  "entityId": "m010_yukimibotamon",
+  "candidate": "candidate-hf-batch-r02",
+  "status": "PASS_CANDIDATE_STRUCTURAL_VALIDATION",
+  "nativeCanvas": [
+    64,
+    64
+  ],
+  "sourceOrigin": [
+    24,
+    42
+  ],
+  "cellCounts": {
+    "main": 65,
+    "sub": 18
+  },
+  "canonicalMasters": 39,
+  "sequenceCount": 53,
+  "browserTicks": 1863,
+  "binaryAlphaValues": [
+    0,
+    255
+  ],
+  "aliasMapping": "PASS_EXACT_CANONICAL_TRANSLATION",
+  "motionContract": "PASS_BYTE_EQUIVALENT_SEQUENCE_RECORDS",
+  "restraintPaletteBoundary": "PASS_GOLD_ONLY_REVIEWED_BOUND_RANGE",
+  "normalization": {
+    "bboxRecenter": false,
+    "perCellResize": false,
+    "sampleSize": 43,
+    "sharedOffset": [
+      4,
+      7
+    ]
+  },
+  "repairNormalizations": [],
+  "deterministicAnchorCorrections": [],
+  "bboxDeltaRange": {
+    "min": [
+      -15,
+      -10,
+      -16,
+      -7
+    ],
+    "max": [
+      3,
+      3,
+      4,
+      3
+    ]
+  },
+  "perCellResize": false,
+  "bboxRecenter": false
+}

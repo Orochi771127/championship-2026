@@ -1,0 +1,86 @@
+{
+  "entityId": "m005_pitchmon",
+  "candidate": "candidate-hf-batch-r06",
+  "status": "PASS_CANDIDATE_STRUCTURAL_VALIDATION",
+  "nativeCanvas": [
+    64,
+    64
+  ],
+  "sourceOrigin": [
+    31,
+    38
+  ],
+  "cellCounts": {
+    "main": 65,
+    "sub": 18
+  },
+  "canonicalMasters": 45,
+  "sequenceCount": 53,
+  "browserTicks": 1863,
+  "binaryAlphaValues": [
+    0,
+    255
+  ],
+  "aliasMapping": "PASS_EXACT_CANONICAL_TRANSLATION",
+  "motionContract": "PASS_BYTE_EQUIVALENT_SEQUENCE_RECORDS",
+  "restraintPaletteBoundary": "PASS_GOLD_ONLY_REVIEWED_BOUND_RANGE",
+  "normalization": {
+    "bboxRecenter": false,
+    "perCellResize": false,
+    "sampleSize": 40,
+    "sharedOffset": [
+      11,
+      8
+    ]
+  },
+  "repairNormalizations": [
+    {
+      "bboxRecenter": false,
+      "grid": [
+        4,
+        3
+      ],
+      "jobId": "e31cc3f2-6a3f-4ec8-b000-9230e396a512",
+      "kind": "bound",
+      "perCellResize": false,
+      "sampleSize": 50,
+      "sharedOffset": [
+        7,
+        8
+      ],
+      "sourceSha256": "734f2b808cfe2039e5e33d147036e0559bc4cafe556ecfd1de6a381a06d04c71"
+    },
+    {
+      "bboxRecenter": false,
+      "grid": [
+        3,
+        3
+      ],
+      "jobId": "35e1b294-df4e-4da2-ae61-cb04e1efc4a4",
+      "kind": "normal",
+      "perCellResize": false,
+      "sampleSize": 40,
+      "sharedOffset": [
+        11,
+        11
+      ],
+      "sourceSha256": "25efd2865ece7d1621d3c3a6b3130d8cb2b725f78d4d328aecc5cc620066c66e"
+    }
+  ],
+  "bboxDeltaRange": {
+    "min": [
+      -5,
+      -10,
+      -5,
+      -5
+    ],
+    "max": [
+      2,
+      4,
+      4,
+      4
+    ]
+  },
+  "perCellResize": false,
+  "bboxRecenter": false
+}

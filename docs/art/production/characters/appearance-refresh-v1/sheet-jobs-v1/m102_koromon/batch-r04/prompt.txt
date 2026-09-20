@@ -1,0 +1,66 @@
+Create a complete ORIGINAL pixel-game animation sheet.
+Reference IMAGE 1 is our ORIGINAL identity seed and the only appearance/style authority.
+IMAGE 2 is a research MOTION/LAYOUT GUIDE only: preserve every occupied slot pose, facing, whole-body deformation, expression visibility, restrained/unrestrained state, native scale and local origin, while replacing every commercial-character appearance with the original identity from IMAGE 1.
+Do not copy source RGB colors, recognizable markings, face design or proprietary character appearance.
+
+Original identity (m102-tideglass-sprig-r01): Original pearl-cyan tideglass sprig with twin indigo kelp ribbons, navy face lens, mint flank, gold eye and coral seed-pod tail; donor supplies motion, timing, bounds and mapping only. No donor RGB or copied source pixels.
+Fixed identity traits: 珍珠青藍玻璃芽身; 雙靛紫海藻帶觸鬚; 深海藍臉窗與金色單眼; 薄荷側紋與珊瑚種莢尾.
+Face rules: 深海藍臉窗必須依 donor 角度壓縮、轉側或遮蔽；張嘴格顯示珊瑚色口腔。 金色單眼只在來源角度可見時出現，不得將同一正面表情複製到所有格。
+Ornament rules: 雙海藻帶觸鬚與單一種莢尾都附著身體並依 donor 彎折、豎起、貼地或捲曲；不得新增手臂、腿、翅膀、角、漂浮物或第二尾。 main026-042 的金色束帶是外部道具，必須跨越身體且不得與薄荷側紋混同。
+Morphology contract: Small low limbless/short-contact juvenile body with a compact rounded head-body, two long attached flexible feelers and one tapering curled tail. It remains ground-hugging except for source-authored vertical lifts, curls and tumbles.
+Locomotion contract: Source cells show low rocking and sliding, horizontal stretch/compression, tight curl/spin, diagonal turn, short lift, tall upright rear and complete collapse. Preserve raw sequence IDs because action names are not proven.
+Expression contract: One leading eye and a small mouth change with pose: neutral/closed expressions dominate low cells, while tall and effort cells visibly open the mouth; rear, curled, silhouette and collapsed cells intentionally occlude the face.
+Appendage prohibition: Two attached flexible feelers and one attached tapering tail are the only long appendages. Do not add arms, legs, wings, horns, detached particles or a second tail; feeler and tail direction follows each donor cell.
+Restraint contract: Main 026-042 is the complete restrained block. A gold/dark external binding crosses or wraps low, flat, curled and upright poses; every canonical restrained master and all aliases must retain readable binding.
+
+OUTPUT: exactly 8 columns by 6 rows, 48 equal square cells, transparent RGBA canvas, no grid lines, words, labels, numbers, ground shadows, glow halo, background, decorations, anti-aliasing or painterly effects.
+Each cell represents one logical 64x64 image enlarged uniformly 4x for this sheet. Keep the creature VERY SMALL inside each cell at the position and relative size shown by IMAGE 2, with broad transparent margins.
+Do not center, bottom-align, crop, rotate or resize cells independently. Use one shared scale and translation for the complete sheet.
+Shared native origin is [23, 38]. Preserve crisp nearest-neighbor pixel clusters and the limited palette.
+Gold-brown binding is a separate physical prop, never anatomy. No tweening and no invented actions.
+Preserve expression changes per slot; the facial window may stretch, compress, shift or become occluded exactly as the guide shows. Do not paste one identical face on every pose.
+
+Read occupied slots left-to-right, top-to-bottom. The following indices are instructions only; do not print them:
+1: main/cell_001: Reviewed in assembled main all-cell sheet with sequence usage labels: low side compression with shortened body and trailing tail.
+2: main/cell_002: Reviewed in assembled main all-cell sheet with sequence usage labels: low side forward stretch with the face leading.
+3: main/cell_003: Reviewed in assembled main all-cell sheet with sequence usage labels: flattened curled side pose with body and tail compressed.
+4: main/cell_005: Reviewed in assembled main all-cell sheet with sequence usage labels: compact upright curl with the face rotated and feelers folded.
+5: main/cell_009: Reviewed in assembled main all-cell sheet with sequence usage labels: taller upright/rearward stretch with both feelers vertical.
+6: main/cell_010: Reviewed in assembled main all-cell sheet with sequence usage labels: upright curled turn with tail folded under.
+7: main/cell_011: Reviewed in assembled main all-cell sheet with sequence usage labels: low side neutral/recovery.
+8: main/cell_012: Reviewed in assembled main all-cell sheet with sequence usage labels: small low diagonal pose with face partly occluded.
+9: main/cell_014: Reviewed in assembled main all-cell sheet with sequence usage labels: upright front/diagonal lift with feelers raised.
+10: main/cell_018: Reviewed in assembled main all-cell sheet with sequence usage labels: tall upright curl with compressed lower body.
+11: main/cell_019: Reviewed in assembled main all-cell sheet with sequence usage labels: upright diagonal turn with one visible eye.
+12: main/cell_020: Reviewed in assembled main all-cell sheet with sequence usage labels: low side neutral.
+13: main/cell_021: Reviewed in assembled main all-cell sheet with sequence usage labels: fully flattened horizontal compression.
+14: main/cell_022: Reviewed in assembled main all-cell sheet with sequence usage labels: flattened forward stretch with tail extended.
+15: main/cell_023: Reviewed in assembled main all-cell sheet with sequence usage labels: tight spinning/curl pose with face rotated.
+16: main/cell_024: Reviewed in assembled main all-cell sheet with sequence usage labels: low side neutral with tail trailing.
+17: main/cell_026: Reviewed in assembled main all-cell sheet with sequence usage labels: restrained low side pose; attached gold/dark external binding crosses the body.
+18: main/cell_027: Reviewed in assembled main all-cell sheet with sequence usage labels: restrained compact diagonal pose; attached gold/dark binding remains readable.
+19: main/cell_028: Reviewed in assembled main all-cell sheet with sequence usage labels: restrained low side pose with binding across the rear body.
+20: main/cell_029: Reviewed in assembled main all-cell sheet with sequence usage labels: restrained flattened pose with binding attached across the body.
+21: main/cell_031: Reviewed in assembled main all-cell sheet with sequence usage labels: restrained upright curl; external binding follows the raised body.
+22: main/cell_034: Reviewed in assembled main all-cell sheet with sequence usage labels: restrained tall upright pose with long feelers raised.
+23: main/cell_035: Reviewed in assembled main all-cell sheet with sequence usage labels: restrained tall turning pose with compressed base.
+24: main/cell_036: Reviewed in assembled main all-cell sheet with sequence usage labels: restrained upright/diagonal pose with a bent feeler silhouette.
+25: main/cell_037: Reviewed in assembled main all-cell sheet with sequence usage labels: restrained low diagonal pose.
+26: main/cell_038: Reviewed in assembled main all-cell sheet with sequence usage labels: restrained low side compression.
+27: main/cell_039: Reviewed in assembled main all-cell sheet with sequence usage labels: restrained flattened forward stretch.
+28: main/cell_040: Reviewed in assembled main all-cell sheet with sequence usage labels: restrained upright curled effort pose.
+29: main/cell_041: Reviewed in assembled main all-cell sheet with sequence usage labels: restrained low side recovery pose.
+30: main/cell_042: Reviewed in assembled main all-cell sheet with sequence usage labels: restrained fully flattened pose.
+31: main/cell_049: Reviewed in assembled main all-cell sheet with sequence usage labels: low side normal-palette recovery.
+32: main/cell_050: Reviewed in assembled main all-cell sheet with sequence usage labels: low side neutral.
+33: main/cell_051: Reviewed in assembled main all-cell sheet with sequence usage labels: tall upright normal-palette lift.
+34: main/cell_053: Reviewed in assembled main all-cell sheet with sequence usage labels: compact upright curl/spin pose.
+35: main/cell_054: Reviewed in assembled main all-cell sheet with sequence usage labels: low curled pose with both feelers compressed.
+36: main/cell_055: Reviewed in assembled main all-cell sheet with sequence usage labels: flattened low travel pose.
+37: main/cell_057: Reviewed in assembled main all-cell sheet with sequence usage labels: tall upright open-mouth/effort pose.
+38: main/cell_058: Reviewed in assembled main all-cell sheet with sequence usage labels: curled diagonal fall/turn pose.
+39: main/cell_059: Reviewed in assembled main all-cell sheet with sequence usage labels: upright diagonal open-mouth/effort pose.
+40: main/cell_061: Reviewed in assembled main all-cell sheet with sequence usage labels: fully collapsed/defeated flat pose with face near the ground.
+
+All remaining slots [41, 42, 43, 44, 45, 46, 47, 48] must be fully transparent and empty.
+This is production sprite art, not a poster or presentation character sheet.

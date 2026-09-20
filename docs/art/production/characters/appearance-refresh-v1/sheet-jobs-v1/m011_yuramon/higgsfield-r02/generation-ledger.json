@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m011_yuramon",
+  "provider": "HIGGSFIELD",
+  "model": "gpt_image_2_5",
+  "jobId": "a34fbbb9-05f9-422a-82a4-b3e6a3a0efd6",
+  "status": "COMPLETED",
+  "submitted": {
+    "aspectRatio": "4:3",
+    "count": 1,
+    "quality": "high",
+    "resolution": "2k",
+    "background": "transparent",
+    "useUnlimited": false,
+    "estimatedCredits": 3
+  },
+  "references": {
+    "originalIdentityMediaId": "d7399e5d-1633-4ae8-aaf8-b6e53e53b8ba",
+    "motionLayoutGuideMediaId": "cad5143c-26db-4807-a026-15bc05a34d65"
+  },
+  "rawSheet": {
+    "relativePath": "../batch-r02/raw-sheet.png",
+    "sha256": "5aeb611610185eb3051d909331ff6c2a4d39d6c003b7c67010916e5d0e94cd7c",
+    "size": [2336, 1744],
+    "providerAlphaExtrema": [0, 254]
+  },
+  "normalization": {
+    "sampleSize": 53,
+    "sharedOffset": [2, -1],
+    "alphaThreshold": 128,
+    "perCellResize": false,
+    "bboxRecenter": false
+  },
+  "outcome": {
+    "occupiedPanels": 39,
+    "requiredOccupiedPanels": 39,
+    "unexpectedOccupiedBlankPanels": 0,
+    "paidRepairJobs": 0,
+    "deterministicRepairOnly": true
+  }
+}

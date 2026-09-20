@@ -1,0 +1,99 @@
+{
+  "maxBatchCredits": 30,
+  "estimatedRepairCredits": 12,
+  "cumulativeEstimatedCredits": 18,
+  "requests": [
+    {
+      "index": 0,
+      "params": {
+        "model": "gpt_image_2_5",
+        "variant": "flare",
+        "quality": "high",
+        "resolution": "2k",
+        "background": "transparent",
+        "aspect_ratio": "4:3",
+        "count": 1,
+        "prompt": "Create a complete ORIGINAL pixel-game animation sheet. Reference IMAGE 1 is our ORIGINAL identity seed and the only appearance/style authority. IMAGE 2 is a research MOTION/LAYOUT GUIDE only: preserve each slot pose, facing, compression, face visibility, appendage and bubble positions, bound/unbound state, scale and local origin, but replace all commercial character artwork with the identity from IMAGE 1. Do not copy the donor colored pixels or recognizable donor facial design. Mint leaf-eared seed creature: coherent jade/mint green round seed, two leaf-ear surfaces, two separated cream eye caps, dark jade pupils, small peach triangular nose and short separate mouth. Keep the leafy limbless anatomy; feline identity is expressed by facial marks only, never add cat legs, tail or extra ears.\n\nEVERY character in this request is RESTRAINED. A snug GOLDEN ROPE wraps the MAIN BODY, in every pose. The leaves/bubbles are not tied. Include binding in every occupied slot.\nReturn exactly 4 columns x 3 rows of EQUAL SQUARE CELLS, transparent RGBA background. Each cell corresponds to64x64 native pixels. Copy image2 LOCAL PLACEMENT, RELATIVE NATIVE SIZE, pose geometry and visible expression exactly, but draw the original identity from image1. Body must remain SMALL inside each cell, occupying only the source guide bounds with generous transparent margins. NO GLOW, background, shading outside body, labels, text, grid lines, poster layout, extra images or anti-aliasing. DO NOT center/resize/reorder individual characters. Preserve dramatic flat vs tall vs sideways poses: no generic same front-facing face on every cell. Never add legs. Face openings, closed/compressed expression and occluded face must follow the guide. Do not draw eyes on top of occluding leaves or swept upper-body surfaces.\n1: main/cell_026 Round suspended seed below two horizontally spread leaves; forward small face marks. Gold restraint wraps the seed BODY and remains attached below leaves.\n2: main/cell_027 Round seed rises slightly; leaf pair bends downward closer to head. Gold restraint wraps the seed BODY and remains attached below leaves.\n3: main/cell_028 Horizontal leaves and compact forward seed face. Gold restraint wraps the seed BODY and remains attached below leaves.\n4: main/cell_029 Leaf pair droops around small front seed. Gold restraint wraps the seed BODY and remains attached below leaves.\n5: main/cell_030 Raised seed with rounded leaf caps. Gold restraint wraps the seed BODY and remains attached below leaves.\n6: main/cell_031 Seed tilts right under offset nearly horizontal leaves. Gold restraint wraps the seed BODY and remains attached below leaves.\n7: main/cell_034 Two long leaves upright V above round seed. Gold restraint wraps the seed BODY and remains attached below leaves.\n8: main/cell_035 Forward seed and asymmetrically spread short leaves. Gold restraint wraps the seed BODY and remains attached below leaves.\nExactly 8 sprites in row-major order. Last 4 cells are EMPTY TRANSPARENT. Do not print labels. EVERY character in this request is RESTRAINED. A snug GOLDEN ROPE wraps the MAIN BODY, in every pose. The leaves/bubbles are not tied. Include binding in every occupied slot.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "3afbd5e1-07bf-4228-ad0c-48bc0b2ac800"
+          },
+          {
+            "role": "image",
+            "value": "e962170b-11d5-498d-a561-a66ff9b13de2"
+          }
+        ]
+      }
+    },
+    {
+      "index": 1,
+      "params": {
+        "model": "gpt_image_2_5",
+        "variant": "flare",
+        "quality": "high",
+        "resolution": "2k",
+        "background": "transparent",
+        "aspect_ratio": "1:1",
+        "count": 1,
+        "prompt": "Create a complete ORIGINAL pixel-game animation sheet. Reference IMAGE 1 is our ORIGINAL identity seed and the only appearance/style authority. IMAGE 2 is a research MOTION/LAYOUT GUIDE only: preserve each slot pose, facing, compression, face visibility, appendage and bubble positions, bound/unbound state, scale and local origin, but replace all commercial character artwork with the identity from IMAGE 1. Do not copy the donor colored pixels or recognizable donor facial design. Mint leaf-eared seed creature: coherent jade/mint green round seed, two leaf-ear surfaces, two separated cream eye caps, dark jade pupils, small peach triangular nose and short separate mouth. Keep the leafy limbless anatomy; feline identity is expressed by facial marks only, never add cat legs, tail or extra ears.\n\nEVERY character in this request is FREE AND UNBOUND. ABSOLUTELY NO ROPE, NO GOLD BAND, NO BELT, NO COLLAR, NO GOLDEN BOTTOM RIM anywhere. These are normal poses, not restrained variants. Do not use any gold, orange or brown on body or outline. Use only the green/cream/peach original identity palette.\nReturn exactly 4 columns x 4 rows of EQUAL SQUARE CELLS, transparent RGBA background. Each cell corresponds to64x64 native pixels. Copy image2 LOCAL PLACEMENT, RELATIVE NATIVE SIZE, pose geometry and visible expression exactly, but draw the original identity from image1. Body must remain SMALL inside each cell, occupying only the source guide bounds with generous transparent margins. NO GLOW, background, shading outside body, labels, text, grid lines, poster layout, extra images or anti-aliasing. DO NOT center/resize/reorder individual characters. Preserve dramatic flat vs tall vs sideways poses: no generic same front-facing face on every cell. Never add legs. Face openings, closed/compressed expression and occluded face must follow the guide. Do not draw eyes on top of occluding leaves or swept upper-body surfaces.\n1: main/cell_013 Seed compressed below folded horizontal leaf canopy; face mostly narrowed/covered.\n2: main/cell_014 Seed extends sideward right with long leaves rising upward.\n3: main/cell_022 Low seed stretches right with nearly horizontal leaves.\n4: main/cell_048 Short leaves sweep right; seed tilted.\n5: main/cell_049 Forward seed and drooping leaf pair.\n6: main/cell_050 Long upright leaves, centered round seed.\n7: main/cell_051 Right-tilted seed under swept short leaves.\n8: main/cell_052 Forward seed below spread leaves.\n9: main/cell_053 Long upright leaves with different seed/face height.\n10: main/cell_054 Leaves folded around seed, hiding much of face.\n11: main/cell_055 Leaf tips fold down over body, strong face occlusion.\n12: main/cell_056 Short drooping leaves and round forward seed.\n13: main/cell_057 Upright long V leaves with visible central face mark.\n14: main/cell_058 Large folded leaf covers left/front of seed; seed partly visible at right.\n15: main/cell_059 Asymmetric long left leaf and shorter swept-right leaf.\nExactly 15 sprites in row-major order. Last 1 cells are EMPTY TRANSPARENT. Do not print labels. EVERY character in this request is FREE AND UNBOUND. ABSOLUTELY NO ROPE, NO GOLD BAND, NO BELT, NO COLLAR, NO GOLDEN BOTTOM RIM anywhere. These are normal poses, not restrained variants. Do not use any gold, orange or brown on body or outline. Use only the green/cream/peach original identity palette.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "3afbd5e1-07bf-4228-ad0c-48bc0b2ac800"
+          },
+          {
+            "role": "image",
+            "value": "d9a03242-5d99-4ab6-bfc9-3ffdf2f1d513"
+          }
+        ]
+      }
+    },
+    {
+      "index": 2,
+      "params": {
+        "model": "gpt_image_2_5",
+        "variant": "flare",
+        "quality": "high",
+        "resolution": "2k",
+        "background": "transparent",
+        "aspect_ratio": "3:2",
+        "count": 1,
+        "prompt": "Create a complete ORIGINAL pixel-game animation sheet. Reference IMAGE 1 is our ORIGINAL identity seed and the only appearance/style authority. IMAGE 2 is a research MOTION/LAYOUT GUIDE only: preserve each slot pose, facing, compression, face visibility, appendage and bubble positions, bound/unbound state, scale and local origin, but replace all commercial character artwork with the identity from IMAGE 1. Do not copy the donor colored pixels or recognizable donor facial design. Lime bubble spirit: coherent lime-jade soft gel body, paired large bright cream eye caps separated by green, dark pupils, tiny peach-edged short left-facing mouth area, detached bubbles with small cream highlights. Keep body soft and limbless, no paws, legs, arms or tail.\n\nEVERY character in this request is RESTRAINED. A snug GOLDEN ROPE wraps the MAIN BODY, in every pose. The leaves/bubbles are not tied. Include binding in every occupied slot.\nReturn exactly 3 columns x 2 rows of EQUAL SQUARE CELLS, transparent RGBA background. Each cell corresponds to64x64 native pixels. Copy image2 LOCAL PLACEMENT, RELATIVE NATIVE SIZE, pose geometry and visible expression exactly, but draw the original identity from image1. Body must remain SMALL inside each cell, occupying only the source guide bounds with generous transparent margins. NO GLOW, background, shading outside body, labels, text, grid lines, poster layout, extra images or anti-aliasing. DO NOT center/resize/reorder individual characters. Preserve dramatic flat vs tall vs sideways poses: no generic same front-facing face on every cell. Never add legs. Face openings, closed/compressed expression and occluded face must follow the guide. Do not draw eyes on top of occluding leaves or swept upper-body surfaces.\n1: main/cell_027 Upright soft mound facing left, protruding left mouth region, one separate bubble above. Golden binding encircles lower/main body; bubbles remain separate and unbound.\n2: main/cell_028 Slightly lower body with rear soft base extended right; bubble above. Golden binding encircles lower/main body; bubbles remain separate and unbound.\n3: main/cell_029 Upright soft body, small left facial region; separate upper bubble. Golden binding encircles lower/main body; bubbles remain separate and unbound.\n4: main/cell_030 Lower squashed body with longer right base; upper bubble displaced. Golden binding encircles lower/main body; bubbles remain separate and unbound.\n5: main/cell_032 Body leans low right with expanded rear base; bubble above-left. Golden binding encircles lower/main body; bubbles remain separate and unbound.\n6: main/cell_035 Tall elongated soft body with left protruding face and multiple bubbles. Golden binding encircles lower/main body; bubbles remain separate and unbound.\nExactly 6 sprites in row-major order. Last 0 cells are EMPTY TRANSPARENT. Do not print labels. EVERY character in this request is RESTRAINED. A snug GOLDEN ROPE wraps the MAIN BODY, in every pose. The leaves/bubbles are not tied. Include binding in every occupied slot.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "870dc5ab-44b8-4b95-a04d-f86b5c62414d"
+          },
+          {
+            "role": "image",
+            "value": "a8053ec9-f874-4b4c-a2e5-13196ea718df"
+          }
+        ]
+      }
+    },
+    {
+      "index": 3,
+      "params": {
+        "model": "gpt_image_2_5",
+        "variant": "flare",
+        "quality": "high",
+        "resolution": "2k",
+        "background": "transparent",
+        "aspect_ratio": "5:4",
+        "count": 1,
+        "prompt": "Create a complete ORIGINAL pixel-game animation sheet. Reference IMAGE 1 is our ORIGINAL identity seed and the only appearance/style authority. IMAGE 2 is a research MOTION/LAYOUT GUIDE only: preserve each slot pose, facing, compression, face visibility, appendage and bubble positions, bound/unbound state, scale and local origin, but replace all commercial character artwork with the identity from IMAGE 1. Do not copy the donor colored pixels or recognizable donor facial design. Lime bubble spirit: coherent lime-jade soft gel body, paired large bright cream eye caps separated by green, dark pupils, tiny peach-edged short left-facing mouth area, detached bubbles with small cream highlights. Keep body soft and limbless, no paws, legs, arms or tail.\n\nEVERY character in this request is FREE AND UNBOUND. ABSOLUTELY NO ROPE, NO GOLD BAND, NO BELT, NO COLLAR, NO GOLDEN BOTTOM RIM anywhere. These are normal poses, not restrained variants. Do not use any gold, orange or brown on body or outline. Use only the green/cream/peach original identity palette.\nReturn exactly 5 columns x 4 rows of EQUAL SQUARE CELLS, transparent RGBA background. Each cell corresponds to64x64 native pixels. Copy image2 LOCAL PLACEMENT, RELATIVE NATIVE SIZE, pose geometry and visible expression exactly, but draw the original identity from image1. Body must remain SMALL inside each cell, occupying only the source guide bounds with generous transparent margins. NO GLOW, background, shading outside body, labels, text, grid lines, poster layout, extra images or anti-aliasing. DO NOT center/resize/reorder individual characters. Preserve dramatic flat vs tall vs sideways poses: no generic same front-facing face on every cell. Never add legs. Face openings, closed/compressed expression and occluded face must follow the guide. Do not draw eyes on top of occluding leaves or swept upper-body surfaces.\n1: main/cell_009 Whole body lifted and nearly vertical, bubbles separated around it.\n2: main/cell_010 Body flattened horizontally, left face extended low, bubble upper-left.\n3: main/cell_013 Sloped compact body with clustered upper bubbles.\n4: main/cell_014 Swept upper surface over low body; keep this visible motion smear/canopy.\n5: main/cell_023 Low lateral stretch with upper-left bubble.\n6: main/cell_025 Compact sloped mound, visible left facial point.\n7: main/cell_049 Low mound and one upper bubble.\n8: main/cell_050 Upright compact body with left facial point.\n9: main/cell_051 Low side body and lifted upper lobe.\n10: main/cell_052 Tall rounded body with multiple bubbles.\n11: main/cell_054 Tall rounded soft body with left facial point and multiple bubbles.\n12: main/cell_055 Flattened low body, clustered bubbles at upper-left.\n13: main/cell_056 Small compact mound and close bubble.\n14: main/cell_057 Wide soft base, paired rounded upper lobes, high bubble.\n15: main/cell_058 Tall narrow body, prominent central pale region, scattered bubbles.\n16: main/cell_059 Low body under swept green upper surface; preserve face occlusion.\n17: main/cell_060 Very tall stretched body, elongated upper bubbles.\n18: main/cell_062 Long very flat body with thin ends spread on ground plane.\n19: main/cell_063 Vertical oblique body with small detached bubbles on both sides.\nExactly 19 sprites in row-major order. Last 1 cells are EMPTY TRANSPARENT. Do not print labels. EVERY character in this request is FREE AND UNBOUND. ABSOLUTELY NO ROPE, NO GOLD BAND, NO BELT, NO COLLAR, NO GOLDEN BOTTOM RIM anywhere. These are normal poses, not restrained variants. Do not use any gold, orange or brown on body or outline. Use only the green/cream/peach original identity palette.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "870dc5ab-44b8-4b95-a04d-f86b5c62414d"
+          },
+          {
+            "role": "image",
+            "value": "831123b6-efcb-4b76-9168-78f9dfea65c5"
+          }
+        ]
+      }
+    }
+  ]
+}

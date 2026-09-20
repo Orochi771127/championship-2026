@@ -1,0 +1,80 @@
+{
+  "entityId": "m007_botamon",
+  "candidate": "candidate-hf-batch-r05",
+  "status": "PASS_CANDIDATE_STRUCTURAL_VALIDATION",
+  "nativeCanvas": [
+    64,
+    64
+  ],
+  "sourceOrigin": [
+    24,
+    42
+  ],
+  "cellCounts": {
+    "main": 65,
+    "sub": 18
+  },
+  "canonicalMasters": 39,
+  "sequenceCount": 53,
+  "browserTicks": 1863,
+  "binaryAlphaValues": [
+    0,
+    255
+  ],
+  "aliasMapping": "PASS_EXACT_CANONICAL_TRANSLATION",
+  "motionContract": "PASS_BYTE_EQUIVALENT_SEQUENCE_RECORDS",
+  "restraintPaletteBoundary": "PASS_GOLD_ONLY_REVIEWED_BOUND_RANGE",
+  "normalization": {
+    "bboxRecenter": false,
+    "perCellResize": false,
+    "sampleSize": 49,
+    "sharedOffset": [
+      4,
+      9
+    ]
+  },
+  "repairNormalizations": [
+    {
+      "bboxRecenter": false,
+      "grid": [
+        4,
+        3
+      ],
+      "jobId": "bdd3f478-1289-4169-82b3-f489c22d38fd",
+      "kind": "bound",
+      "perCellResize": false,
+      "sampleSize": 47,
+      "sharedOffset": [
+        4,
+        12
+      ],
+      "sourceSha256": "6179ddb2d70ae6a854483e04d6ffed3b8e580e8c3c8c5088e2fd2ec2bfb181f7"
+    }
+  ],
+  "deterministicAnchorCorrections": [
+    {
+      "evidence": "donor-review-v1 visibleBounds plus sourceOrigin: expected left edge x=34 and baseline y=43; generated bbox [17,35,37,42]; preserve generated size while restoring donor far-right local offset",
+      "key": "main/cell_062",
+      "translation": [
+        17,
+        0
+      ]
+    }
+  ],
+  "bboxDeltaRange": {
+    "min": [
+      -2,
+      -8,
+      -4,
+      -5
+    ],
+    "max": [
+      3,
+      5,
+      3,
+      4
+    ]
+  },
+  "perCellResize": false,
+  "bboxRecenter": false
+}

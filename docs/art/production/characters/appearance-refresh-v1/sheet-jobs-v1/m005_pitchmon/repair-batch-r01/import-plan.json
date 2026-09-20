@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m005_pitchmon",
+  "baseDirectory": "candidate-hf-batch-r05-base",
+  "outputDirectory": "candidate-hf-batch-r06",
+  "alphaThreshold": 128,
+  "placement": "ONE_SHARED_SCALE_AND_OFFSET_PER_SHEET",
+  "perCellResize": false,
+  "bboxRecenter": false,
+  "groups": [
+    {
+      "kind": "bound",
+      "jobId": "e31cc3f2-6a3f-4ec8-b000-9230e396a512",
+      "source": "bound-raw.png",
+      "sourceSha256": "734f2b808cfe2039e5e33d147036e0559bc4cafe556ecfd1de6a381a06d04c71",
+      "sampleSize": 50,
+      "sharedOffset": [
+        7,
+        8
+      ],
+      "semanticReview": "CENTRAL_BODY_RESTRAINT_PRESENT_IN_ALL_BOUND_MASTERS"
+    },
+    {
+      "kind": "normal",
+      "jobId": "35e1b294-df4e-4da2-ae61-cb04e1efc4a4",
+      "source": "normal-raw.png",
+      "sourceSha256": "25efd2865ece7d1621d3c3a6b3130d8cb2b725f78d4d328aecc5cc620066c66e",
+      "sampleSize": 40,
+      "sharedOffset": [
+        11,
+        11
+      ],
+      "semanticReview": "FREE_POSES_CONTAIN_NO_RESTRAINT_PROP"
+    }
+  ]
+}

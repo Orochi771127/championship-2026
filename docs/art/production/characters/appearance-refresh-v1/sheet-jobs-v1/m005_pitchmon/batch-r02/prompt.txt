@@ -1,0 +1,47 @@
+Create a complete ORIGINAL pixel-game animation sheet. Reference IMAGE 1 is our ORIGINAL identity seed and the only appearance/style authority. IMAGE 2 is a research MOTION/LAYOUT GUIDE only: preserve each slot pose, facing, body compression, face visibility, horn-fin placement, restrained/unrestrained state, native scale and local origin, while replacing every commercial character appearance with the original identity from IMAGE 1. Do not copy donor RGB colors, markings or recognizable donor facial design.
+
+Original character identity: a tiny limbless water-dragon larva with one continuous light-cyan soft body, exactly two short coral-like horn-fins on top, deep navy eyes/face marks, a separate cream short muzzle and belly line, and one warm peach mouth accent. No legs, arms, tail, ears, wings or extra fins. The same creature must remain consistent in every occupied cell.
+
+OUTPUT: exactly 8 columns by 6 rows, 48 equal square cells, transparent RGBA canvas, no grid lines, words, labels, numbers, ground shadows, glow, background, decorations, anti-aliasing or painterly effects. Each cell represents one logical 64x64 image enlarged uniformly 4x for this sheet. Keep the creature SMALL inside each cell at the position and relative size shown by IMAGE 2, with broad transparent margins. Do not center, bottom-align, crop, or resize cells independently. Shared native origin is [31, 38]. Preserve crisp nearest-neighbor pixel clusters and the limited palette. Gold rope is a separate physical prop, never anatomy. No tweening and no invented actions. Preserve each source-specific expression: open peach mouth only where the guide shows an open face; compressed/occluded faces must stay compressed/occluded. Restrained poses must show a snug gold rope around the CENTRAL BODY in every such cell, following tall, curled and flat orientations while leaving both horn-fins free.
+
+Read slots left-to-right, top-to-bottom. The following indices are instructions only; do not print them:
+1: main/cell_001: Same upright larva compressed slightly lower; upper fins and face remain distinct.
+2: main/cell_002: Compact upright pose with the torso raised and facial mark visible on the left.
+3: main/cell_003: Lower compressed idle pose; preserve the smaller face opening and reduced height.
+4: main/cell_004: Canonical source pose cell 4; preserve exact left-facing face visibility, horn-fin placement, body compression, native bounds and origin.
+5: main/cell_005: Compact pose with upper fins folded closer to the body and left-facing face visible.
+6: main/cell_008: Tall fully extended upright pose; red mouth/face opening on the left and horn-fins stretched upward.
+7: main/cell_009: Fast low diagonal sweep toward the right; elongated body and trailing fin silhouette.
+8: main/cell_010: Tall forward/vertical pose with two long upper fins and compressed lower body.
+9: main/cell_011: Low rounded crouch/landing pose with the face tucked close to the body.
+10: main/cell_012: Tall expanded expression pose with wide red face opening and extended torso.
+11: main/cell_013: Very low curled mound; face mostly hidden by the compressed body.
+12: main/cell_014: Horizontal side stretch with the head/face at left and body streaming right.
+13: main/cell_019: Compact lowered pose with the torso curled and face visible on the left.
+14: main/cell_021: Upright compact transition with small face opening and paired upper fins.
+15: main/cell_022: Low rounded posture; short upper fins stay attached to the same body axis.
+16: main/cell_023: Flattened horizontal rest/impact posture with the facial region strongly compressed.
+17: main/cell_024: Tall upright transition with red face opening and long body axis.
+18: main/cell_025: Compact upright turn/settle pose with fins close to the head.
+19: main/cell_027: Compact upright restrained pose. A gold binding wraps the main body; horn-fins and face remain outside it.
+20: main/cell_028: Lower compressed restrained pose. Gold binding follows the body compression without becoming a belt or limb.
+21: main/cell_029: Upright restrained pose with the face visible left; binding encircles the central body.
+22: main/cell_030: Low restrained posture; binding stays attached to the body and preserves the smaller face opening.
+23: main/cell_035: Tall fully extended restrained pose with open red face. Binding stretches around the central torso.
+24: main/cell_036: Compact restrained curl; face remains visible and binding follows the curved torso.
+25: main/cell_037: Tall restrained horn-fin pose; long upper fins remain free above the body wrap.
+26: main/cell_038: Low restrained crouch/landing pose with binding compressed around the main body.
+27: main/cell_039: Upright restrained expression pose with open red face and central gold wrap.
+28: main/cell_040: Very low restrained curl; preserve face occlusion and flattened binding orientation.
+29: main/cell_041: Tall restrained transition with visible face and upward fins.
+30: main/cell_042: Compact restrained transition; paired fins remain recognizable and unbound.
+31: main/cell_050: Compact arched transition with the face low on the left and upper fin mass swept back.
+32: main/cell_051: Tall upright pose with two long horn-fins and a wide red face opening.
+33: main/cell_052: Tall diagonal/tilted pose with horn-fins separated and face visible.
+34: main/cell_054: Tall upright horn-fin pose with open red face and compact lower body.
+35: main/cell_056: Larger rounded/expanded body pose with fins and facial region still readable.
+36: main/cell_057: Diagonal compact transition; body axis leans while the left-facing face remains visible.
+37: main/cell_058: Tall elongated horn-fin pose with strong vertical body line and red face opening.
+38: main/cell_060: Tall horn-fin transition with open face and slightly shifted lower body.
+39: main/cell_062: Extremely flat prone/defeated posture along the ground plane; face and fins collapse into the horizontal body.
+All remaining slots [40, 41, 42, 43, 44, 45, 46, 47, 48] must be fully transparent and empty. This is production sprite art, not a poster or character sheet.

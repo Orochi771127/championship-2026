@@ -1,0 +1,123 @@
+{
+  "artAccepted": false,
+  "batchId": "hf-batch-20260920-01",
+  "blankPanels": [
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+  ],
+  "derived": {
+    "main/cell_044": {
+      "base": "main/cell_008",
+      "operation": "red",
+      "sourceProof": {
+        "limitation": "Color relation is not a global donor LUT; use original authored face marks and palette, never donor RGB.",
+        "operationClass": "EXACT_ALPHA_ORIGINAL_COLOR_RULE",
+        "sourceAlphaSha256": "65743b638fc766f8a168aa34f3c48b10eb241de0c1544be0c667c55ebfcde868",
+        "targetColorCount": 6
+      }
+    },
+    "main/cell_047": {
+      "base": "main/cell_008",
+      "operation": "black",
+      "sourceProof": {
+        "limitation": "Color relation is not a global donor LUT; use original authored face marks and palette, never donor RGB.",
+        "operationClass": "EXACT_ALPHA_ORIGINAL_COLOR_RULE",
+        "sourceAlphaSha256": "65743b638fc766f8a168aa34f3c48b10eb241de0c1544be0c667c55ebfcde868",
+        "targetColorCount": 2
+      }
+    }
+  },
+  "designSha256": "3b015f5af58f3e7f8b5906b927e95d82e3990b89b6d3067376d077ab103f1eda",
+  "designVersion": "m010-frost-muzzle-r01",
+  "entityId": "m010_yukimibotamon",
+  "grid": [
+    8,
+    6
+  ],
+  "inventorySha256": "e606c487c46a897153d4f4bafc526fde341029d60f517f91d0a5c7befc58b7e9",
+  "keys": [
+    "main/cell_001",
+    "main/cell_002",
+    "main/cell_003",
+    "main/cell_005",
+    "main/cell_008",
+    "main/cell_009",
+    "main/cell_010",
+    "main/cell_011",
+    "main/cell_012",
+    "main/cell_014",
+    "main/cell_022",
+    "main/cell_023",
+    "main/cell_024",
+    "main/cell_025",
+    "main/cell_027",
+    "main/cell_028",
+    "main/cell_029",
+    "main/cell_030",
+    "main/cell_032",
+    "main/cell_035",
+    "main/cell_036",
+    "main/cell_039",
+    "main/cell_040",
+    "main/cell_041",
+    "main/cell_042",
+    "main/cell_048",
+    "main/cell_050",
+    "main/cell_051",
+    "main/cell_052",
+    "main/cell_054",
+    "main/cell_055",
+    "main/cell_056",
+    "main/cell_061",
+    "main/cell_062",
+    "main/cell_063",
+    "main/cell_064"
+  ],
+  "nativeCanvas": [
+    64,
+    64
+  ],
+  "nonDerivableSpecialCells": [
+    "main/cell_048",
+    "main/cell_061",
+    "main/cell_064"
+  ],
+  "palette": [
+    "#00000000",
+    "#16324A",
+    "#315C78",
+    "#5C98B5",
+    "#A9DDEB",
+    "#F4FBF7",
+    "#EAD4A0",
+    "#759FC5",
+    "#1B405C",
+    "#B9EEFF"
+  ],
+  "retainedMasters": [
+    "main/cell_000"
+  ],
+  "reviewScope": "STANDARD_POSE_READABILITY_ACCEPTED_MULTI_POSE_CANDIDATE_ONLY",
+  "reviewSha256": "6fb4d16ca3d280fefa9003c1e2045674e8a87253d54cde493d1e16a4d97e2b9f",
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "sourceCounts": {
+    "masters": 39,
+    "sequences": 53,
+    "slots": 83
+  },
+  "sourceOrigin": [
+    24,
+    42
+  ]
+}

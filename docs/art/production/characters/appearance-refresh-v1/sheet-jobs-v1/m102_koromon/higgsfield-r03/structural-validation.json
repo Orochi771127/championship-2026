@@ -1,0 +1,74 @@
+{
+  "entityId": "m102_koromon",
+  "candidate": "candidate-hf-batch-r03",
+  "status": "PASS_CANDIDATE_STRUCTURAL_VALIDATION",
+  "nativeCanvas": [
+    64,
+    64
+  ],
+  "sourceOrigin": [
+    23,
+    38
+  ],
+  "cellCounts": {
+    "main": 64,
+    "sub": 18
+  },
+  "canonicalMasters": 47,
+  "sequenceCount": 53,
+  "browserTicks": 1788,
+  "binaryAlphaValues": [
+    0,
+    255
+  ],
+  "aliasMapping": "PASS_EXACT_CANONICAL_TRANSLATION",
+  "motionContract": "PASS_BYTE_EQUIVALENT_SEQUENCE_RECORDS",
+  "restraintPaletteBoundary": "PASS_GOLD_ONLY_REVIEWED_BOUND_RANGE",
+  "normalization": {
+    "bboxRecenter": false,
+    "perCellResize": false,
+    "sampleSize": 48,
+    "sharedOffset": [
+      2,
+      9
+    ]
+  },
+  "repairNormalizations": [],
+  "deterministicAnchorCorrections": [],
+  "bboxDeltaRange": {
+    "min": [
+      -13,
+      -11,
+      -13,
+      -4
+    ],
+    "max": [
+      3,
+      10,
+      6,
+      17
+    ]
+  },
+  "perCellResize": false,
+  "bboxRecenter": false,
+  "sourceUnexpectedOccupiedPanels": [
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+  ],
+  "ignoredOutOfManifestPanels": [
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+  ]
+}

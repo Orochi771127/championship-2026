@@ -1,0 +1,38 @@
+{
+  "alphaThreshold": 128,
+  "anchorCorrections": {},
+  "baseDirectory": "candidate-hf-batch-r02",
+  "bboxRecenter": false,
+  "deterministicDerivations": {
+    "main/cell_045": {
+      "base": "main/cell_045",
+      "evidence": "Donor cell 045 supplies a distinct compact silhouette only. Preserve its authored original-character alpha contour, then apply deterministic black with the original ivory faceplate retained; no provider-selected state color remains.",
+      "operation": "black_with_pale_features",
+      "paleSourceColors": [
+        [
+          247,
+          255,
+          251,
+          255
+        ]
+      ],
+      "paleTargetColor": [
+        247,
+        255,
+        251,
+        255
+      ]
+    },
+    "main/cell_061": {
+      "base": "main/cell_061",
+      "evidence": "Donor cell 061 supplies a distinct white evolution silhouette contour. Preserve the authored original-character alpha contour and deterministically fill it white; no provider-selected state color remains.",
+      "operation": "white"
+    }
+  },
+  "entityId": "m103_tanemon",
+  "groups": [],
+  "outputDirectory": "candidate-hf-batch-r03",
+  "perCellResize": false,
+  "placement": "ONE_SHARED_SCALE_AND_OFFSET_PER_SHEET",
+  "schemaVersion": 1
+}

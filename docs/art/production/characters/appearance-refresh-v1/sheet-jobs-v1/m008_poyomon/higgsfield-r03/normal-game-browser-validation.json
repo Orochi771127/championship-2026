@@ -1,0 +1,116 @@
+{
+  "gate": "CHAMPIONSHIP_VS3_ENCLOSURE_BROWSER_QA",
+  "date": "2026-09-20T10:15:05.116Z",
+  "baseUrl": "http://127.0.0.1:8732/championship.html?characterArtReview=m008&qa=unlock",
+  "viewport": "390x844",
+  "selectedGateId": "championship:2026:gate:damp",
+  "capturedWildId": "championship:2026:gate:damp:native-wild:14",
+  "capturedSpeciesId": "species-015",
+  "resultPortrait": "assets/production/internal-character-review/m008_poyomon-hf-r03/hud-r01/main-cell_000.png",
+  "reviewAssets": [
+    "/assets/production/internal-character-review/m008_poyomon-hf-r03/hud-r01/manifest.json",
+    "/assets/production/internal-character-review/m008_poyomon-hf-r03/runtime.review.json",
+    "/assets/production/internal-character-review/m008_poyomon-hf-r03/main.json",
+    "/assets/production/internal-character-review/m008_poyomon-hf-r03/main.png",
+    "/assets/production/internal-character-review/m008_poyomon-hf-r03/hud-r01/main-cell_000.png"
+  ],
+  "boundSamples": [
+    {
+      "wildId": "championship:2026:gate:damp:native-wild:14",
+      "speciesId": "species-015",
+      "x": 221.69702911376953,
+      "y": 392.4246978759762,
+      "state": "TETHERED",
+      "moving": false,
+      "currentHp": 200,
+      "maxHp": 200
+    }
+  ],
+  "raisingSamples": [
+    {
+      "speciesIndex": 15,
+      "state": 1,
+      "nativeFrame": 3,
+      "sequenceId": 0,
+      "x": 83,
+      "y": 502
+    },
+    {
+      "speciesIndex": 15,
+      "state": 1,
+      "nativeFrame": 16,
+      "sequenceId": 0,
+      "x": 83,
+      "y": 502
+    },
+    {
+      "speciesIndex": 15,
+      "state": 1,
+      "nativeFrame": 27,
+      "sequenceId": 0,
+      "x": 83,
+      "y": 502
+    },
+    {
+      "speciesIndex": 15,
+      "state": 1,
+      "nativeFrame": 38,
+      "sequenceId": 0,
+      "x": 85,
+      "y": 504
+    },
+    {
+      "speciesIndex": 15,
+      "state": 1,
+      "nativeFrame": 49,
+      "sequenceId": 0,
+      "x": 85,
+      "y": 504
+    },
+    {
+      "speciesIndex": 15,
+      "state": 9,
+      "nativeFrame": 61,
+      "sequenceId": 0,
+      "x": 85,
+      "y": 504
+    },
+    {
+      "speciesIndex": 15,
+      "state": 9,
+      "nativeFrame": 72,
+      "sequenceId": 0,
+      "x": 83,
+      "y": 502
+    },
+    {
+      "speciesIndex": 15,
+      "state": 9,
+      "nativeFrame": 84,
+      "sequenceId": 0,
+      "x": 83,
+      "y": 502
+    },
+    {
+      "speciesIndex": 15,
+      "state": 9,
+      "nativeFrame": 94,
+      "sequenceId": 0,
+      "x": 85,
+      "y": 504
+    },
+    {
+      "speciesIndex": 15,
+      "state": 9,
+      "nativeFrame": 106,
+      "sequenceId": 0,
+      "x": 85,
+      "y": 504
+    }
+  ],
+  "captureButtonPresent": false,
+  "inputCadence": "WAIT_FOR_OBSERVED_NATIVE_FRAME_PER_POINTER_SAMPLE",
+  "initialClock": "2026-01-10T12:34:56Z (UTC, fixed Date for original clock-seeded RNG)",
+  "setup": "ISOLATED_QA_GATE_UNLOCK_NORMAL_NATIVE_SPAWN_AND_POINTER_CAPTURE",
+  "verdict": "PASS"
+}

@@ -1,0 +1,127 @@
+{
+  "artAccepted": false,
+  "batchId": "hf-batch-20260920-01",
+  "blankPanels": [
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+  ],
+  "derived": {
+    "main/cell_044": {
+      "base": "main/cell_008",
+      "operation": "red",
+      "sourceProof": {
+        "limitation": "Color relation is not a global donor LUT; use original authored face marks and palette, never donor RGB.",
+        "operationClass": "EXACT_ALPHA_ORIGINAL_COLOR_RULE",
+        "sourceAlphaSha256": "69208c96f669710934115774ec22620766432d0976a22a5032df5e45b6256bab",
+        "targetColorCount": 6
+      }
+    },
+    "main/cell_047": {
+      "base": "main/cell_008",
+      "operation": "black",
+      "sourceProof": {
+        "approvedForProduction": false,
+        "deterministicFill": null,
+        "operationClass": "PALETTE_LOOKUP",
+        "productionRule": "AUTHOR_ORIGINAL_TARGET_PALETTE_OR_FILL_BEFORE_USE",
+        "relationSha256": "07659a683b4f818dc463c41cdb0241d894bdfadc2571ccdf2085294a15005d2a",
+        "sourceColorCount": 5,
+        "stateSemantics": "UNKNOWN_REQUIRES_EXISTING_CONTRACT",
+        "targetColorCount": 2
+      }
+    }
+  },
+  "designSha256": "962b0d7ec6347064c6a8b7086257fa9d10e295cea0a8762305ff3167946ed669",
+  "designVersion": "m007-ember-bud-r01",
+  "entityId": "m007_botamon",
+  "grid": [
+    8,
+    6
+  ],
+  "inventorySha256": "218d676b1001bbf31dc930616b3f9e0a635c282a0b8426ac92e1efd0ac1e0baf",
+  "keys": [
+    "main/cell_001",
+    "main/cell_002",
+    "main/cell_003",
+    "main/cell_005",
+    "main/cell_008",
+    "main/cell_009",
+    "main/cell_010",
+    "main/cell_011",
+    "main/cell_012",
+    "main/cell_014",
+    "main/cell_022",
+    "main/cell_023",
+    "main/cell_024",
+    "main/cell_025",
+    "main/cell_027",
+    "main/cell_028",
+    "main/cell_029",
+    "main/cell_030",
+    "main/cell_032",
+    "main/cell_035",
+    "main/cell_036",
+    "main/cell_039",
+    "main/cell_040",
+    "main/cell_041",
+    "main/cell_042",
+    "main/cell_048",
+    "main/cell_050",
+    "main/cell_051",
+    "main/cell_052",
+    "main/cell_054",
+    "main/cell_055",
+    "main/cell_056",
+    "main/cell_061",
+    "main/cell_062",
+    "main/cell_063",
+    "main/cell_064"
+  ],
+  "nativeCanvas": [
+    64,
+    64
+  ],
+  "nonDerivableSpecialCells": [
+    "main/cell_048",
+    "main/cell_061",
+    "main/cell_064"
+  ],
+  "palette": [
+    "#00000000",
+    "#141827",
+    "#2B3044",
+    "#4B4358",
+    "#D66E3D",
+    "#FF9C3D",
+    "#FFD06A",
+    "#FFF0B5",
+    "#777C91",
+    "#F8F4E8"
+  ],
+  "retainedMasters": [
+    "main/cell_000"
+  ],
+  "reviewScope": "STANDARD_POSE_READABILITY_ACCEPTED_MULTI_POSE_CANDIDATE_ONLY",
+  "reviewSha256": "68aa5e0622af0f303141863dbdceb627d52160a1616570a0622a0098b85a63c5",
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "sourceCounts": {
+    "masters": 39,
+    "sequences": 53,
+    "slots": 83
+  },
+  "sourceOrigin": [
+    24,
+    42
+  ]
+}

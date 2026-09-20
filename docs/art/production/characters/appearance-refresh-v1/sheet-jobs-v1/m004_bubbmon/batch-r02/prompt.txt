@@ -1,0 +1,49 @@
+Create a complete ORIGINAL pixel-game animation sheet. Reference IMAGE 1 is our ORIGINAL identity seed and the only appearance/style authority. IMAGE 2 is a research MOTION/LAYOUT GUIDE only: preserve each slot pose, facing, compression, face visibility, appendage and bubble positions, bound/unbound state, scale and local origin, but replace all commercial character artwork with the identity from IMAGE 1. Do not copy the donor colored pixels or recognizable donor facial design. Lime bubble spirit: coherent lime-jade soft gel body, paired large bright cream eye caps separated by green, dark pupils, tiny peach-edged short left-facing mouth area, detached bubbles with small cream highlights. Keep body soft and limbless, no paws, legs, arms or tail.
+OUTPUT: exactly 8 columns by 6 rows, 48 equally sized cells, transparent RGBA canvas, no grid lines, words, labels, numbers, ground shadows, glow, background, decorations, anti-aliasing or painterly effects. Each cell represents a logical64x64 image enlarged uniformly4x for this2K sheet. Keep the character SMALL within each cell, exactly at the positions and size of image2, with broad transparent margins. Do not fill each cell, auto-center, bottom-align or resize individual characters. The same shared coordinate origin is [24, 37]. Preserve small pixel clusters and limited palette of the seed; gold rope is a separate physical prop. No motion interpolation or new actions. Retain different visible face openings, squeezed/closed faces and occlusion: do not put a smiling face on every frame. Restraint must visibly wrap the BODY in each bound pose and change orientation with it; never omit it on flattened poses. Folded leaves or swept upper body hide face exactly as the guide.
+Read positions left-to-right then top-to-bottom; indexed slots below are layout instructions, DO NOT print these labels:
+1: main/cell_001: Slightly lower body with rear soft base extended right; bubble above.
+2: main/cell_002: Upright soft body, small left facial region; separate upper bubble.
+3: main/cell_003: Lower squashed body with longer right base; upper bubble displaced.
+4: main/cell_005: Body leans low right with expanded rear base; bubble above-left.
+5: main/cell_008: Tall elongated soft body with left protruding face and multiple bubbles.
+6: main/cell_009: Whole body lifted and nearly vertical, bubbles separated around it.
+7: main/cell_010: Body flattened horizontally, left face extended low, bubble upper-left.
+8: main/cell_011: Low mound with visible left face and small upper bubble.
+9: main/cell_012: Tall expanded face/body with several separated bubbles.
+10: main/cell_013: Sloped compact body with clustered upper bubbles.
+11: main/cell_014: Swept upper surface over low body; keep this visible motion smear/canopy.
+12: main/cell_019: Compact mound with multiple close upper bubbles.
+13: main/cell_020: Low elongated mound with two raised upper lobes.
+14: main/cell_021: Upright body, prominent left protruding face.
+15: main/cell_022: Compact lower mound with left face area.
+16: main/cell_023: Low lateral stretch with upper-left bubble.
+17: main/cell_024: Tall expanded front with separate upper bubbles.
+18: main/cell_025: Compact sloped mound, visible left facial point.
+19: main/cell_027: Upright soft mound facing left, protruding left mouth region, one separate bubble above. Golden binding encircles lower/main body; bubbles remain separate and unbound.
+20: main/cell_028: Slightly lower body with rear soft base extended right; bubble above. Golden binding encircles lower/main body; bubbles remain separate and unbound.
+21: main/cell_029: Upright soft body, small left facial region; separate upper bubble. Golden binding encircles lower/main body; bubbles remain separate and unbound.
+22: main/cell_030: Lower squashed body with longer right base; upper bubble displaced. Golden binding encircles lower/main body; bubbles remain separate and unbound.
+23: main/cell_032: Body leans low right with expanded rear base; bubble above-left. Golden binding encircles lower/main body; bubbles remain separate and unbound.
+24: main/cell_035: Tall elongated soft body with left protruding face and multiple bubbles. Golden binding encircles lower/main body; bubbles remain separate and unbound.
+25: main/cell_036: Compact mound with multiple close upper bubbles. Golden binding encircles lower/main body; bubbles remain separate and unbound.
+26: main/cell_037: Low elongated mound with two raised upper lobes. Golden binding encircles lower/main body; bubbles remain separate and unbound.
+27: main/cell_038: Upright body, prominent left protruding face. Golden binding encircles lower/main body; bubbles remain separate and unbound.
+28: main/cell_039: Compact lower mound with left face area. Golden binding encircles lower/main body; bubbles remain separate and unbound.
+29: main/cell_040: Low lateral stretch with upper-left bubble. Golden binding encircles lower/main body; bubbles remain separate and unbound.
+30: main/cell_041: Tall expanded front with separate upper bubbles. Golden binding encircles lower/main body; bubbles remain separate and unbound.
+31: main/cell_042: Compact sloped mound, visible left facial point. Golden binding encircles lower/main body; bubbles remain separate and unbound.
+32: main/cell_043: Flattened low body and left bubble. Golden binding encircles lower/main body; bubbles remain separate and unbound.
+33: main/cell_049: Low mound and one upper bubble.
+34: main/cell_050: Upright compact body with left facial point.
+35: main/cell_051: Low side body and lifted upper lobe.
+36: main/cell_052: Tall rounded body with multiple bubbles.
+37: main/cell_054: Tall rounded soft body with left facial point and multiple bubbles.
+38: main/cell_055: Flattened low body, clustered bubbles at upper-left.
+39: main/cell_056: Small compact mound and close bubble.
+40: main/cell_057: Wide soft base, paired rounded upper lobes, high bubble.
+41: main/cell_058: Tall narrow body, prominent central pale region, scattered bubbles.
+42: main/cell_059: Low body under swept green upper surface; preserve face occlusion.
+43: main/cell_060: Very tall stretched body, elongated upper bubbles.
+44: main/cell_062: Long very flat body with thin ends spread on ground plane.
+45: main/cell_063: Vertical oblique body with small detached bubbles on both sides.
+All remaining slots [46, 47, 48] must remain fully transparent and empty. This is game production art, not a poster or character design presentation.

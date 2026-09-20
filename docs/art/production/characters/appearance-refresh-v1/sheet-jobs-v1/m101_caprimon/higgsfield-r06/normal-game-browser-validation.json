@@ -1,0 +1,138 @@
+{
+  "status": "PASS_EXPECTED_SOURCE_PROGRESSION_GATE_AND_ISOLATED_CAPTURE",
+  "entity": "m101_caprimon",
+  "revision": "r06",
+  "gateId": "championship:2026:gate:sewer",
+  "freshTamerGate": {
+    "freshTamerPrimaryActionDisabled": true,
+    "progressionBypassed": false,
+    "sourceRoute": "AVAILABLE_AFTER_GATE_PROGRESSION"
+  },
+  "isolatedCapture": {
+    "gate": "CHAMPIONSHIP_VS3_ENCLOSURE_BROWSER_QA",
+    "date": "2026-09-20T12:19:17.724Z",
+    "baseUrl": "http://127.0.0.1:8732/championship.html?characterArtReview=m101&qa=unlock",
+    "viewport": "390x844",
+    "selectedGateId": "championship:2026:gate:sewer",
+    "capturedWildId": "championship:2026:gate:sewer:native-wild:5",
+    "capturedSpeciesId": "species-020",
+    "resultPortrait": "assets/production/internal-character-review/m101_caprimon-hf-r06/hud-r01/main-cell_000.png",
+    "reviewAssets": [
+      "/assets/production/internal-character-review/m101_caprimon-hf-r06/hud-r01/manifest.json",
+      "/assets/production/internal-character-review/m101_caprimon-hf-r06/runtime.review.json",
+      "/assets/production/internal-character-review/m101_caprimon-hf-r06/main.json",
+      "/assets/production/internal-character-review/m101_caprimon-hf-r06/main.png",
+      "/assets/production/internal-character-review/m101_caprimon-hf-r06/hud-r01/main-cell_000.png"
+    ],
+    "boundSamples": [
+      {
+        "wildId": "championship:2026:gate:sewer:native-wild:5",
+        "speciesId": "species-020",
+        "x": 170.97143363952637,
+        "y": 414.37042427062966,
+        "state": "TETHERED",
+        "moving": false,
+        "currentHp": 280,
+        "maxHp": 280
+      }
+    ],
+    "raisingSamples": [
+      {
+        "speciesIndex": 20,
+        "state": 1,
+        "nativeFrame": 4,
+        "sequenceId": 0,
+        "x": 329,
+        "y": 667
+      },
+      {
+        "speciesIndex": 20,
+        "state": 13,
+        "nativeFrame": 17,
+        "sequenceId": 0,
+        "x": 329,
+        "y": 667
+      },
+      {
+        "speciesIndex": 20,
+        "state": 13,
+        "nativeFrame": 28,
+        "sequenceId": 0,
+        "x": 329,
+        "y": 667
+      },
+      {
+        "speciesIndex": 20,
+        "state": 13,
+        "nativeFrame": 39,
+        "sequenceId": 0,
+        "x": 329,
+        "y": 667
+      },
+      {
+        "speciesIndex": 20,
+        "state": 13,
+        "nativeFrame": 50,
+        "sequenceId": 0,
+        "x": 347,
+        "y": 670
+      },
+      {
+        "speciesIndex": 20,
+        "state": 1,
+        "nativeFrame": 62,
+        "sequenceId": 0,
+        "x": 347,
+        "y": 670
+      },
+      {
+        "speciesIndex": 20,
+        "state": 1,
+        "nativeFrame": 73,
+        "sequenceId": 0,
+        "x": 351,
+        "y": 667
+      },
+      {
+        "speciesIndex": 20,
+        "state": 1,
+        "nativeFrame": 84,
+        "sequenceId": 0,
+        "x": 351,
+        "y": 667
+      },
+      {
+        "speciesIndex": 20,
+        "state": 1,
+        "nativeFrame": 95,
+        "sequenceId": 0,
+        "x": 351,
+        "y": 667
+      },
+      {
+        "speciesIndex": 20,
+        "state": 1,
+        "nativeFrame": 107,
+        "sequenceId": 0,
+        "x": 351,
+        "y": 667
+      }
+    ],
+    "captureButtonPresent": false,
+    "inputCadence": "WAIT_FOR_OBSERVED_NATIVE_FRAME_PER_POINTER_SAMPLE",
+    "initialClock": "2026-09-10T04:00:00Z (UTC, fixed Date for original clock-seeded RNG)",
+    "setup": "ISOLATED_QA_GATE_UNLOCK_NORMAL_NATIVE_SPAWN_AND_POINTER_CAPTURE",
+    "worldRouteSetup": {
+      "endDaysThroughPublicAppFixture": 1,
+      "targetHour": 8,
+      "browserEntry": "CONTINUE_NORMAL_SAVE"
+    },
+    "verdict": "PASS"
+  },
+  "rendererValidation": "PASS_LOOPBACK_RUNTIME_RENDERER_REVIEW",
+  "normalCaptureSequenceQa": "PASS_NATIVE_SPAWN_TETHER_RESULT_AND_RAISING_HOME_ANIMATION",
+  "calendarPrecondition": "1_END_DAY_THROUGH_PUBLIC_APP_RULE_AND_NORMAL_SAVE_CONTINUE",
+  "defaultRuntimeChanged": false,
+  "fullCharacterArtAcceptance": false,
+  "pageErrors": []
+}

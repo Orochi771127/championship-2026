@@ -1,0 +1,166 @@
+{
+  "artAccepted": false,
+  "batchId": "hf-batch-20260920-01",
+  "blankPanels": [
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+  ],
+  "derived": {
+    "main/cell_043": {
+      "base": "main/cell_008",
+      "operation": "red",
+      "sourceProof": {
+        "approvedForProduction": false,
+        "deterministicFill": null,
+        "operationClass": "PALETTE_LOOKUP",
+        "productionRule": "AUTHOR_ORIGINAL_TARGET_PALETTE_OR_FILL_BEFORE_USE",
+        "relationSha256": "d7a517e3764e10b4e4da1a8c38689ba76faa64e3cce64372b6486a99e1335280",
+        "sourceColorCount": 11,
+        "stateSemantics": "UNKNOWN_REQUIRES_EXISTING_CONTRACT",
+        "targetColorCount": 8
+      }
+    },
+    "main/cell_044": {
+      "base": "main/cell_008",
+      "operation": "black",
+      "sourceProof": {
+        "limitation": "Color relation is not a global donor LUT; use original authored face marks and palette, never donor RGB.",
+        "operationClass": "EXACT_ALPHA_ORIGINAL_COLOR_RULE",
+        "sourceAlphaSha256": "b03020f1cae7472cb584f5fe3c2509c043b873cd2699e79ce6b12b04612e707a",
+        "targetColorCount": 2
+      }
+    },
+    "main/cell_045": {
+      "base": "main/cell_000",
+      "operation": "black",
+      "sourceProof": {
+        "limitation": "Color relation is not a global donor LUT; use original authored face marks and palette, never donor RGB.",
+        "operationClass": "EXACT_ALPHA_ORIGINAL_COLOR_RULE",
+        "sourceAlphaSha256": "16066448bf0e57656ca714a44f1d4632a2abf0e8d258558c388d6e4a2e209b79",
+        "targetColorCount": 2
+      }
+    },
+    "main/cell_058": {
+      "base": "main/cell_010",
+      "operation": "gray",
+      "sourceProof": {
+        "approvedForProduction": false,
+        "deterministicFill": null,
+        "operationClass": "PALETTE_LOOKUP",
+        "productionRule": "AUTHOR_ORIGINAL_TARGET_PALETTE_OR_FILL_BEFORE_USE",
+        "relationSha256": "446ee61d5c6aaadb9da9036dd565bc60589f7628bdbc3dfd1f8abf298fd5c84c",
+        "sourceColorCount": 11,
+        "stateSemantics": "UNKNOWN_REQUIRES_EXISTING_CONTRACT",
+        "targetColorCount": 8
+      }
+    },
+    "main/cell_061": {
+      "base": "main/cell_000",
+      "operation": "white",
+      "sourceProof": {
+        "approvedForProduction": false,
+        "deterministicFill": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "operationClass": "SOLID_ALPHA_FILL",
+        "productionRule": "AUTHOR_ORIGINAL_TARGET_PALETTE_OR_FILL_BEFORE_USE",
+        "relationSha256": "5757178e642b80ed25b368880fddea34a5fedaeb58c5089403e7aec404c64188",
+        "sourceColorCount": 11,
+        "stateSemantics": "UNKNOWN_REQUIRES_EXISTING_CONTRACT",
+        "targetColorCount": 1
+      }
+    }
+  },
+  "designSha256": "645eb2cb62e24da3da873b9ed47fb428f484cb8e36de9f820ce0e6219fe4b666",
+  "designVersion": "m009-aurora-signal-r01",
+  "entityId": "m009_mokumon",
+  "grid": [
+    8,
+    6
+  ],
+  "inventorySha256": "7dcc51b33c71f26a9ab558d8447b42df1ab359070404d9f76def81bbd2beff02",
+  "keys": [
+    "main/cell_001",
+    "main/cell_002",
+    "main/cell_003",
+    "main/cell_005",
+    "main/cell_008",
+    "main/cell_009",
+    "main/cell_010",
+    "main/cell_011",
+    "main/cell_012",
+    "main/cell_014",
+    "main/cell_019",
+    "main/cell_020",
+    "main/cell_021",
+    "main/cell_022",
+    "main/cell_023",
+    "main/cell_024",
+    "main/cell_026",
+    "main/cell_027",
+    "main/cell_028",
+    "main/cell_029",
+    "main/cell_031",
+    "main/cell_034",
+    "main/cell_036",
+    "main/cell_037",
+    "main/cell_038",
+    "main/cell_039",
+    "main/cell_040",
+    "main/cell_041",
+    "main/cell_046",
+    "main/cell_047",
+    "main/cell_048",
+    "main/cell_049",
+    "main/cell_050",
+    "main/cell_051",
+    "main/cell_052",
+    "main/cell_053",
+    "main/cell_054",
+    "main/cell_055",
+    "main/cell_056",
+    "main/cell_057",
+    "main/cell_059"
+  ],
+  "nativeCanvas": [
+    64,
+    64
+  ],
+  "nonDerivableSpecialCells": [],
+  "palette": [
+    "#00000000",
+    "#102F3D",
+    "#185A63",
+    "#297E83",
+    "#8EDBD1",
+    "#E6FFF2",
+    "#CDEB55",
+    "#D44A9B",
+    "#F4C45E",
+    "#EEF8DE"
+  ],
+  "retainedMasters": [
+    "main/cell_000"
+  ],
+  "reviewScope": "STANDARD_POSE_READABILITY_ACCEPTED_MULTI_POSE_CANDIDATE_ONLY",
+  "reviewSha256": "f4879c195c2a7f5da3e8cf1cc73d74f5ae11faeb3c3fd41cff9180c5f9f92512",
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "sourceCounts": {
+    "masters": 47,
+    "sequences": 53,
+    "slots": 80
+  },
+  "sourceOrigin": [
+    28,
+    38
+  ]
+}

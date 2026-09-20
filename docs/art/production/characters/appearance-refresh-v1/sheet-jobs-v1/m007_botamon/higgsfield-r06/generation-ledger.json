@@ -1,0 +1,31 @@
+{
+  "entityId": "m007_botamon",
+  "provider": "HIGGSFIELD",
+  "model": "gpt_image_2_5",
+  "estimatedSubmittedCredits": 5,
+  "settledCreditLedger": "NOT_EXPOSED_BY_PROVIDER_TOOL",
+  "jobs": [
+    {
+      "purpose": "full 8x6 candidate sheet",
+      "jobId": "f6c1a0a5-d95b-41f6-9a78-97aa26735587",
+      "estimatedCredits": 3,
+      "resultSha256": "2cfc970f4ed136844c89e627f057ccdd4faf5156e04868c9ee380e2b88e533a6"
+    },
+    {
+      "purpose": "targeted canonical restrained-pose repair sheet",
+      "jobId": "bdd3f478-1289-4169-82b3-f489c22d38fd",
+      "estimatedCredits": 2,
+      "resultSha256": "6179ddb2d70ae6a854483e04d6ffed3b8e580e8c3c8c5088e2fd2ec2bfb181f7"
+    }
+  ],
+  "deterministicPostprocess": {
+    "unusedPanelCleanupSha256": "00e9b2815267d91ad0970783229dae078537ad909315185daecb86c6d79b946e",
+    "specialStates": [
+      "main/cell_048 black silhouette with pale facial features from main/cell_000",
+      "main/cell_061 grayscale stone state from main/cell_010",
+      "main/cell_064 white silhouette from main/cell_000"
+    ],
+    "anchorCorrection": "main/cell_062 translated [17,0] from donor-reviewed local bounds"
+  },
+  "policy": "One full-sheet generation; only detected restraint-semantic NG cells receive a targeted repair. Unused panels and derivable special states are deterministic."
+}

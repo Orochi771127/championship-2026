@@ -1,0 +1,111 @@
+{
+  "entityId": "m002_choromon",
+  "base": "candidate-r02",
+  "output": "candidate-r03-higgsfield-final",
+  "image": "result.png",
+  "grid": [
+    3,
+    2
+  ],
+  "sourceOrigin": [
+    24,
+    38
+  ],
+  "designVersion": "m002-original-sheet-r03-higgsfield-binding",
+  "jobId": "d398f90f-2df3-4913-87ba-deebb131e0ca",
+  "baseBankSha256": "2fd8fb47e89f459e1eb06d1ac5fbc0b6026707e1c535ba197bfcd0433c539a69",
+  "imageSha256": "8c833c9bbac3db2f2b1df4830f93dbe95954247261882568e95a83e4892f459d",
+  "protectedPaletteIndices": [
+    2,
+    3,
+    4
+  ],
+  "bindingColors": [
+    [
+      89,
+      76,
+      63,
+      255
+    ],
+    [
+      135,
+      82,
+      23,
+      255
+    ],
+    [
+      214,
+      155,
+      38,
+      255
+    ],
+    [
+      255,
+      218,
+      109,
+      255
+    ]
+  ],
+  "panels": [
+    {
+      "key": "main/cell_027",
+      "panel": 0,
+      "region": [
+        25,
+        28,
+        30,
+        39
+      ]
+    },
+    {
+      "key": "main/cell_029",
+      "panel": 1,
+      "region": [
+        24,
+        28,
+        30,
+        39
+      ]
+    },
+    {
+      "key": "main/cell_035",
+      "panel": 2,
+      "region": [
+        26,
+        29,
+        31,
+        39
+      ]
+    },
+    {
+      "key": "main/cell_038",
+      "panel": 3,
+      "region": [
+        25,
+        32,
+        31,
+        40
+      ]
+    },
+    {
+      "key": "main/cell_040",
+      "panel": 4,
+      "region": [
+        24,
+        32,
+        30,
+        40
+      ]
+    },
+    {
+      "key": "main/cell_043",
+      "panel": 5,
+      "region": [
+        25,
+        35,
+        31,
+        41
+      ]
+    }
+  ]
+}

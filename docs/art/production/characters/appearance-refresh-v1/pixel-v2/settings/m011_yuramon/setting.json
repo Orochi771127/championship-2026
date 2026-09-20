@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m011_yuramon",
+  "designVersion": "m011-tideglass-reed-r01",
+  "stage": "SINGLE_STANDARD_POSE_IDENTITY_CANDIDATE",
+  "selectedOption": "LOW_MOTION_RISK_ORIGINAL_TIDEGLASS_REED_CAPSULE",
+  "artReview": "ORIGINAL_DESIGN_LOCK_CREATED_FULL_MOTION_PENDING",
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "authoringSource": "Codex independent pixel design after complete donor motion review",
+  "sourceRefs": [],
+  "sourceUse": "Original turquoise tideglass capsule with twin reed fins, navy face window, coral side seam and cream lower plate; donor supplies motion, timing, bounds and mapping only. No donor RGB or copied source pixels.",
+  "features": [
+    "青綠潮玻璃囊身",
+    "不對稱雙蘆鰭",
+    "深海藍臉窗",
+    "珊瑚側縫與奶油底板"
+  ],
+  "faceRules": [
+    "深海藍臉窗與內部亮點依 donor 格位伸長、壓縮、偏移或遮蔽；直立表情格要形成明顯的大開口。",
+    "臉窗只能存在於囊身表面，不可變成獨立頭部、第二張臉或漂浮物。"
+  ],
+  "ornamentRules": [
+    "雙蘆鰭與珊瑚側縫附著同一囊身並隨全身彎折；不得增加手、腳、翅膀、獨立尾巴、氣泡或漂浮裝飾。",
+    "受綁格的金棕色束帶是外部道具，不得取代珊瑚側縫或成為身體結構。"
+  ],
+  "identityDesign": {
+    "directionVersion": "creature-identity-v1",
+    "family": "TIDEGLASS_REED_CAPSULE",
+    "fixedTraits": [
+      "青綠潮玻璃囊身",
+      "不對稱雙蘆鰭",
+      "深海藍臉窗",
+      "珊瑚側縫與奶油底板"
+    ],
+    "changedRegions": [
+      "全身材質與青綠配色",
+      "頂部雙蘆鰭輪廓",
+      "深海藍臉窗與亮點",
+      "珊瑚側縫及奶油色底板"
+    ],
+    "allowedContourChanges": [
+      "維持 donor 每格的小型連續囊身、雙頂部延伸、直立與橫向極值以及本地原點；只在該運動輪廓中重設材質、臉窗與附著細節。"
+    ],
+    "preservedMotion": [
+      "整體搖動、壓縮、直立抽高、斜向抬升、橫向折伏與倒地",
+      "雙蘆鰭隨 donor 頂部延伸後掠、豎起、分叉或壓平",
+      "臉窗隨 donor 表情張合、偏移與遮蔽",
+      "原槽位、sequence、ticks、native bounds、origin、受綁區塊與 Main/Sub 映射"
+    ]
+  },
+  "palette": [
+    "#00000000",
+    "#102B3A",
+    "#146B72",
+    "#28A9B3",
+    "#A8EEF0",
+    "#F7F6DE",
+    "#E46F5D",
+    "#F0B44D",
+    "#173D58",
+    "#8CDAA5"
+  ],
+  "poses": [
+    {
+      "key": "main/cell_000",
+      "nativeBounds": [-6, -18, 10, -2],
+      "pixels": [
+        [0,0,0,0,0,3,0,0,0,0,3,0,0,0,0,0],
+        [0,0,0,0,3,4,0,0,0,0,4,3,0,0,0,0],
+        [0,0,0,0,3,4,3,0,0,3,4,3,0,0,0,0],
+        [0,0,0,0,0,3,3,0,0,3,3,0,0,0,0,0],
+        [0,0,0,0,1,3,2,2,2,2,3,1,0,0,0,0],
+        [0,0,1,1,2,4,4,2,2,4,4,2,1,1,0,0],
+        [0,1,2,2,4,4,9,4,4,9,4,4,2,2,1,0],
+        [1,2,4,4,8,8,8,8,8,8,8,4,4,6,6,1],
+        [1,2,4,8,8,8,8,8,8,8,8,8,4,6,6,1],
+        [1,2,4,8,5,8,8,8,8,5,8,8,4,6,6,1],
+        [1,2,4,8,4,8,8,7,7,4,8,8,4,6,6,1],
+        [1,2,4,4,8,8,8,8,8,8,8,4,4,6,2,1],
+        [1,2,2,4,4,4,5,5,5,5,4,4,2,2,2,1],
+        [0,1,2,2,4,5,5,5,5,5,5,4,2,2,1,0],
+        [0,0,1,2,2,2,5,5,5,5,2,2,2,1,0,0],
+        [0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0]
+      ],
+      "role": "原創潮玻璃蘆芽標準側姿；完整動作待生成與逐格審查",
+      "poseReview": "ORIGINAL_IDENTITY_LOCK_FULL_MOTION_PENDING",
+      "changeNotes": [
+        "Tideglass Reed Capsule / 潮玻璃蘆芽",
+        "青綠玻璃囊身、深海藍臉窗與珊瑚側縫建立獨立外觀",
+        "雙蘆鰭保留動作所需的柔性頂部延伸，但以水草鰭片取代 donor 造型"
+      ]
+    }
+  ]
+}

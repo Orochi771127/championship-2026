@@ -1,0 +1,130 @@
+{
+  "artAccepted": false,
+  "batchId": "hf-batch-20260920-01",
+  "blankPanels": [
+    45,
+    46,
+    47
+  ],
+  "derived": {
+    "main/cell_043": {
+      "base": "main/cell_008",
+      "operation": "red",
+      "sourceProof": {
+        "approvedForProduction": false,
+        "deterministicFill": null,
+        "operationClass": "PALETTE_LOOKUP",
+        "productionRule": "AUTHOR_ORIGINAL_TARGET_PALETTE_OR_FILL_BEFORE_USE",
+        "relationSha256": "88862c88fc2e9fe6ea80dcd7ff52d966131c30e9eaf3a92dbf72cc3d3da4dc3f",
+        "sourceColorCount": 10,
+        "stateSemantics": "UNKNOWN_REQUIRES_EXISTING_CONTRACT",
+        "targetColorCount": 7
+      }
+    },
+    "main/cell_060": {
+      "base": "main/cell_010",
+      "operation": "gray",
+      "sourceProof": {
+        "approvedForProduction": false,
+        "deterministicFill": null,
+        "operationClass": "PALETTE_LOOKUP",
+        "productionRule": "AUTHOR_ORIGINAL_TARGET_PALETTE_OR_FILL_BEFORE_USE",
+        "relationSha256": "d3280e88fb33e39ac5bbfbf192d87c89fa6683322cd9a61ec33e16e8fcb1b760",
+        "sourceColorCount": 11,
+        "stateSemantics": "UNKNOWN_REQUIRES_EXISTING_CONTRACT",
+        "targetColorCount": 6
+      }
+    }
+  },
+  "designSha256": "4d3e64b61cb2ca99113508d22dc3563cb7b89d88d88c9922cbefc6c36afcbaaa",
+  "designVersion": "m003-creature-identity-r02",
+  "entityId": "m003_nyokimon",
+  "grid": [
+    8,
+    6
+  ],
+  "inventorySha256": "a92190a8e10469c9e6304a6e0586d2a594b475f12e878216b425123b8af99190",
+  "keys": [
+    "main/cell_001",
+    "main/cell_002",
+    "main/cell_003",
+    "main/cell_004",
+    "main/cell_005",
+    "main/cell_008",
+    "main/cell_009",
+    "main/cell_010",
+    "main/cell_011",
+    "main/cell_012",
+    "main/cell_013",
+    "main/cell_014",
+    "main/cell_018",
+    "main/cell_019",
+    "main/cell_022",
+    "main/cell_023",
+    "main/cell_026",
+    "main/cell_027",
+    "main/cell_028",
+    "main/cell_029",
+    "main/cell_030",
+    "main/cell_031",
+    "main/cell_034",
+    "main/cell_035",
+    "main/cell_036",
+    "main/cell_037",
+    "main/cell_038",
+    "main/cell_039",
+    "main/cell_040",
+    "main/cell_041",
+    "main/cell_046",
+    "main/cell_047",
+    "main/cell_048",
+    "main/cell_049",
+    "main/cell_050",
+    "main/cell_051",
+    "main/cell_052",
+    "main/cell_053",
+    "main/cell_054",
+    "main/cell_055",
+    "main/cell_056",
+    "main/cell_057",
+    "main/cell_058",
+    "main/cell_059",
+    "main/cell_063"
+  ],
+  "nativeCanvas": [
+    64,
+    64
+  ],
+  "nonDerivableSpecialCells": [
+    "main/cell_046",
+    "main/cell_047",
+    "main/cell_063"
+  ],
+  "palette": [
+    "#00000000",
+    "#27634E",
+    "#3CA67C",
+    "#8ED393",
+    "#F4F0CB",
+    "#223B41",
+    "#EDA990",
+    "#247A62",
+    "#D8DA73"
+  ],
+  "retainedMasters": [
+    "main/cell_000"
+  ],
+  "reviewScope": "STANDARD_POSE_READABILITY_ACCEPTED_MULTI_POSE_CANDIDATE_ONLY",
+  "reviewSha256": "dd7259ef35c124dfb6226dab4eebe0e0d9e42b5947e28eae0d1b8c461654560c",
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "sourceCounts": {
+    "masters": 48,
+    "sequences": 53,
+    "slots": 82
+  },
+  "sourceOrigin": [
+    23,
+    37
+  ]
+}

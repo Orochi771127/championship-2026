@@ -1,0 +1,43 @@
+{
+  "entityId": "m012_petimon",
+  "candidate": "candidate-hf-batch-r03",
+  "status": "PASS_CANDIDATE_VISUAL_AND_NORMAL_GAME_REVIEW",
+  "reviewedAgainst": "donor-review-v1/m012_petimon/review.json",
+  "checks": {
+    "morphology": "PASS_ORIGINAL_COPPERLEAF_CERAMIC_SKIMMER_LOW_OVAL_BODY_TWO_ATTACHED_TOP_VANES_SINGLE_REAR_RUDDER_MINUTE_CONTACTS",
+    "locomotion": "PASS_LOW_ROCK_GLIDE_COMPRESSION_DIAGONAL_PIVOT_LIFTED_TURN_UPRIGHT_STRETCH",
+    "faceAndExpression": "PASS_INDIGO_FACE_WINDOW_SHIFTS_COMPRESSES_OCCLUDES_AND_OPENS_TO_DARK_MAGENTA_UPRIGHT_MOUTH",
+    "appendages": "PASS_NO_ARMS_LONG_LEGS_PAWS_WINGS_HORNS_SECOND_TAIL_OR_DETACHED_PARTICLES",
+    "restraint": "PASS_ALL_MAIN_026_042_SHOW_EXTERNAL_VERTICAL_GOLD_BINDING_ACROSS_LOW_DIAGONAL_UPRIGHT_AND_FLATTENED_FORMS",
+    "specialStates": "PASS_ORANGE_RED_BLACK_STONE_GRAY_AND_WHITE_STATES_WITH_DETERMINISTIC_COLOR",
+    "nativeScaleAndOrigin": "PASS_64PX_ORIGIN_32_45_ONE_SHARED_51PX_NORMALIZATION_OFFSET_6_7_NO_PER_CELL_RECENTER",
+    "mainSubMapping": "PASS_CANONICAL_ALIASES_AND_TRANSLATIONS",
+    "timing": "PASS_53_SOURCE_SEQUENCES_1863_BROWSER_TICKS"
+  },
+  "limits": {
+    "fullCharacterArtAcceptance": false,
+    "normalGameQa": "PASS_EXPECTED_SOURCE_PROGRESSION_GATE_AND_ISOLATED_CAPTURE",
+    "publicationOrRightsAcceptance": "NOT_IN_SCOPE",
+    "designSettingStatus": "ORIGINAL_IDENTITY_BOUND_TO_DONOR_REVIEW"
+  },
+  "paidGeneration": {
+    "completedProviderJobs": 1,
+    "failedProviderJobs": 0,
+    "estimatedSubmittedCredits": 3,
+    "settledCreditLedger": "NOT_EXPOSED_BY_PROVIDER_TOOL",
+    "nextPaidGeneration": "NOT_NEEDED_FOR_CURRENT_CANDIDATE"
+  },
+  "deterministicPostprocess": {
+    "background": "ALPHA_THRESHOLD_128",
+    "unusedPanels": "RAW_EXTRA_PANELS_34_37_CLEARED_FROM_NORMALIZED_INPUT_WITH_REQUIRED_PANELS_UNCHANGED",
+    "specialStateColor": [
+      "main/cell_043",
+      "main/cell_046",
+      "main/cell_047",
+      "main/cell_060",
+      "main/cell_063"
+    ],
+    "restraintReadability": "TEN_CANONICAL_BOUND_MASTERS_RECEIVED_ONE_PIXEL_BENT_VERTICAL_TWO_TONE_BINDING_BAND_FROM_CANDIDATE_BOUNDS_ONLY",
+    "additionalPaidJobs": 0
+  }
+}

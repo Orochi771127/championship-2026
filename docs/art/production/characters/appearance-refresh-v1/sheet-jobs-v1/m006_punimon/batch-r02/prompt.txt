@@ -1,0 +1,49 @@
+Create a complete ORIGINAL pixel-game animation sheet. Reference IMAGE 1 is our ORIGINAL identity seed and the only appearance/style authority. IMAGE 2 is a research MOTION/LAYOUT GUIDE only: preserve each slot pose, facing, body compression, facial visibility, two-crest placement, restrained/unrestrained state, native scale and local origin, while replacing every commercial character appearance with the original identity from IMAGE 1. Do not copy donor RGB colors, markings or recognizable donor facial design.
+
+Original character identity: Prism Kernel, a tiny limbless blue-green crystalline gel seed with one continuous soft rounded body, exactly TWO short asymmetric faceted crystal crests on its upper edge, two separated deep-indigo eyes, cyan body planes, pale mint highlights and small lavender crystal accents. It has no arms, legs, feet, ears, tail, wings, mouth muzzle, floating gems or extra crests. The same original creature must remain consistent in every occupied cell.
+
+OUTPUT: exactly 8 columns by 6 rows, 48 equal square cells, transparent RGBA canvas, no grid lines, words, labels, numbers, ground shadows, glow, background, decorations, anti-aliasing or painterly effects. Each cell represents one logical 64x64 image enlarged uniformly 4x for this sheet. Keep the creature VERY SMALL inside each cell at the position and relative size shown by IMAGE 2, with broad transparent margins. Do not center, bottom-align, crop, or resize cells independently. Shared native origin is [24, 38]. Preserve crisp nearest-neighbor pixel clusters and the limited palette. Gold rope is a separate physical prop, never anatomy. No tweening and no invented actions. Preserve each source-specific expression: the separated eyes and facial aperture may stretch, compress or become occluded exactly as the guide shows; do not paste one identical face on every pose. Restrained poses must show a snug gold rope around the CENTRAL BODY in every such cell, following tall, curled and flat orientations while leaving both crystal crests free.
+
+Read slots left-to-right, top-to-bottom. The following indices are instructions only; do not print them:
+1: main/cell_001: Flattened compact idle; the two upper points spread outward while the body compresses toward the ground.
+2: main/cell_002: Rounded compact pose with the face kept low and both upper points readable.
+3: main/cell_003: Low horizontal compression; face and upper points remain attached to the same soft body.
+4: main/cell_005: Compact tilted transition with one side raised; no separate limb or tail.
+5: main/cell_008: Tall full-body stretch with the soft body arcing upward and the facial region elongated.
+6: main/cell_009: Tall diagonal sweep; the body axis leans and the upper points trail with the motion.
+7: main/cell_010: Shorter diagonal upright transition with a compressed lower body and readable face.
+8: main/cell_011: Low rounded crouch/landing pose with the face close to the ground.
+9: main/cell_012: Tall expanded expression pose; upper points separate and the face aperture opens along the front.
+10: main/cell_014: Long horizontal sweep with the main body stretched sideways and no invented walking anatomy.
+11: main/cell_020: Compact mid-height curl/turn; preserve the paired upper points and single continuous silhouette.
+12: main/cell_022: Small rounded settle pose with the face and horn points compressed together.
+13: main/cell_023: Extremely flat prone/impact posture along the ground plane.
+14: main/cell_024: Tall upright stretch with the facial region elongated and both points lifted.
+15: main/cell_025: Low compact transition; the body shortens and settles without adding feet.
+16: main/cell_026: Very flat horizontal rest/impact pose; facial detail is largely compressed or occluded.
+17: main/cell_027: Compact upright restrained pose. A gold binding wraps the central body while face and upper points remain free.
+18: main/cell_028: Low restrained compression; the gold wrap follows the flattened body.
+19: main/cell_029: Compact curled restrained pose with the wrap centered on the soft torso.
+20: main/cell_030: Low restrained posture; face stays readable and binding remains a separate prop.
+21: main/cell_032: Small compact restrained transition with the wrap following the body curl.
+22: main/cell_035: Tall fully extended restrained pose; binding stretches around the central body axis.
+23: main/cell_036: Low restrained settle/curl; upper points remain outside the wrap.
+24: main/cell_037: Compact raised restrained pose with readable face and central gold wrap.
+25: main/cell_039: Compact restrained transition; the body rotates while the wrap stays centered.
+26: main/cell_040: Very flat restrained prone pose; binding flattens with the body and never becomes anatomy.
+27: main/cell_041: Tall restrained stretch; face and upper points remain visible above the wrap.
+28: main/cell_042: Low compact restrained transition with the gold prop compressed around the body.
+29: main/cell_043: Flat restrained rest/impact pose with the wrap aligned to the ground plane.
+30: main/cell_050: Low arched transition with the face at the leading edge and both horn points swept back.
+31: main/cell_051: Compact upright turn with face visible and upper points close together.
+32: main/cell_052: Compact raised pose; paired points and facial aperture remain distinct.
+33: main/cell_053: Small rounded transition with a short body axis and no separate appendage motion.
+34: main/cell_054: Expanded upright expression pose with the face open and both points lifted.
+35: main/cell_055: Low diagonal transition; the body leans while its underside stays close to the ground.
+36: main/cell_056: Broad flattened/expanded body pose with the face compressed toward the leading edge.
+37: main/cell_057: Compact low transition with the two upper points folded close to the body.
+38: main/cell_058: Tall elongated expression pose with a strong vertical body axis and separated upper points.
+39: main/cell_059: Rounded upright settle/turn with the face visible on the front edge.
+40: main/cell_060: Compact diagonal transition with the body axis shifted and face still readable.
+41: main/cell_062: Extremely flat prone/defeated silhouette along the ground plane.
+All remaining slots [42, 43, 44, 45, 46, 47, 48] must be fully transparent and empty. This is production sprite art, not a poster or character sheet.

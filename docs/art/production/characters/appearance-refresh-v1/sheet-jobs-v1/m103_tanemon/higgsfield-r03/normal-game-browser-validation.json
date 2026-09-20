@@ -1,0 +1,138 @@
+{
+  "status": "PASS_EXPECTED_SOURCE_PROGRESSION_GATE_AND_ISOLATED_CAPTURE",
+  "entity": "m103_tanemon",
+  "revision": "r03",
+  "gateId": "championship:2026:gate:damp",
+  "freshTamerGate": {
+    "freshTamerPrimaryActionDisabled": true,
+    "progressionBypassed": false,
+    "sourceRoute": "AVAILABLE_AFTER_GATE_PROGRESSION"
+  },
+  "isolatedCapture": {
+    "gate": "CHAMPIONSHIP_VS3_ENCLOSURE_BROWSER_QA",
+    "date": "2026-09-20T13:25:34.694Z",
+    "baseUrl": "http://127.0.0.1:8732/championship.html?characterArtReview=m103&qa=unlock",
+    "viewport": "390x844",
+    "selectedGateId": "championship:2026:gate:damp",
+    "capturedWildId": "championship:2026:gate:damp:native-wild:6",
+    "capturedSpeciesId": "species-022",
+    "resultPortrait": "assets/production/internal-character-review/m103_tanemon-hf-r03/hud-r01/main-cell_000.png",
+    "reviewAssets": [
+      "/assets/production/internal-character-review/m103_tanemon-hf-r03/hud-r01/manifest.json",
+      "/assets/production/internal-character-review/m103_tanemon-hf-r03/runtime.review.json",
+      "/assets/production/internal-character-review/m103_tanemon-hf-r03/main.json",
+      "/assets/production/internal-character-review/m103_tanemon-hf-r03/main.png",
+      "/assets/production/internal-character-review/m103_tanemon-hf-r03/hud-r01/main-cell_000.png"
+    ],
+    "boundSamples": [
+      {
+        "wildId": "championship:2026:gate:damp:native-wild:6",
+        "speciesId": "species-022",
+        "x": 235.61558151245117,
+        "y": 389.5125846862793,
+        "state": "TETHERED",
+        "moving": false,
+        "currentHp": 280,
+        "maxHp": 280
+      }
+    ],
+    "raisingSamples": [
+      {
+        "speciesIndex": 22,
+        "state": 1,
+        "nativeFrame": 4,
+        "sequenceId": 0,
+        "x": 116,
+        "y": 436
+      },
+      {
+        "speciesIndex": 22,
+        "state": 1,
+        "nativeFrame": 15,
+        "sequenceId": 0,
+        "x": 116,
+        "y": 436
+      },
+      {
+        "speciesIndex": 22,
+        "state": 1,
+        "nativeFrame": 26,
+        "sequenceId": 0,
+        "x": 116,
+        "y": 436
+      },
+      {
+        "speciesIndex": 22,
+        "state": 1,
+        "nativeFrame": 38,
+        "sequenceId": 0,
+        "x": 126,
+        "y": 439
+      },
+      {
+        "speciesIndex": 22,
+        "state": 9,
+        "nativeFrame": 49,
+        "sequenceId": 0,
+        "x": 126,
+        "y": 439
+      },
+      {
+        "speciesIndex": 22,
+        "state": 9,
+        "nativeFrame": 61,
+        "sequenceId": 0,
+        "x": 126,
+        "y": 439
+      },
+      {
+        "speciesIndex": 22,
+        "state": 9,
+        "nativeFrame": 71,
+        "sequenceId": 0,
+        "x": 116,
+        "y": 436
+      },
+      {
+        "speciesIndex": 22,
+        "state": 9,
+        "nativeFrame": 83,
+        "sequenceId": 0,
+        "x": 116,
+        "y": 436
+      },
+      {
+        "speciesIndex": 22,
+        "state": 9,
+        "nativeFrame": 94,
+        "sequenceId": 0,
+        "x": 126,
+        "y": 439
+      },
+      {
+        "speciesIndex": 22,
+        "state": 1,
+        "nativeFrame": 106,
+        "sequenceId": 0,
+        "x": 126,
+        "y": 439
+      }
+    ],
+    "captureButtonPresent": false,
+    "inputCadence": "WAIT_FOR_OBSERVED_NATIVE_FRAME_PER_POINTER_SAMPLE",
+    "initialClock": "2026-09-10T07:00:00Z (UTC, fixed Date for original clock-seeded RNG)",
+    "setup": "ISOLATED_QA_GATE_UNLOCK_NORMAL_NATIVE_SPAWN_AND_POINTER_CAPTURE",
+    "worldRouteSetup": {
+      "endDaysThroughPublicAppFixture": 1,
+      "targetHour": 8,
+      "browserEntry": "CONTINUE_NORMAL_SAVE"
+    },
+    "verdict": "PASS"
+  },
+  "rendererValidation": "PASS_LOOPBACK_RUNTIME_RENDERER_REVIEW",
+  "normalCaptureSequenceQa": "PASS_NATIVE_SPAWN_TETHER_RESULT_AND_RAISING_HOME_ANIMATION",
+  "calendarPrecondition": "1_END_DAY_THROUGH_PUBLIC_APP_RULE_AND_NORMAL_SAVE_CONTINUE",
+  "defaultRuntimeChanged": false,
+  "fullCharacterArtAcceptance": false,
+  "pageErrors": []
+}

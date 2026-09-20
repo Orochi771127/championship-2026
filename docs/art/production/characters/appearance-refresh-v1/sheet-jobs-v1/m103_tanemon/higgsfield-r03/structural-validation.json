@@ -1,0 +1,56 @@
+{
+  "entityId": "m103_tanemon",
+  "candidate": "candidate-hf-batch-r03",
+  "status": "PASS_CANDIDATE_STRUCTURAL_VALIDATION",
+  "nativeCanvas": [
+    64,
+    64
+  ],
+  "sourceOrigin": [
+    22,
+    38
+  ],
+  "cellCounts": {
+    "main": 62,
+    "sub": 18
+  },
+  "canonicalMasters": 50,
+  "sequenceCount": 53,
+  "browserTicks": 1863,
+  "binaryAlphaValues": [
+    0,
+    255
+  ],
+  "aliasMapping": "PASS_EXACT_CANONICAL_TRANSLATION",
+  "motionContract": "PASS_BYTE_EQUIVALENT_SEQUENCE_RECORDS",
+  "restraintPaletteBoundary": "PASS_GOLD_ONLY_REVIEWED_BOUND_RANGE",
+  "normalization": {
+    "bboxRecenter": false,
+    "perCellResize": false,
+    "sampleSize": 58,
+    "sharedOffset": [
+      -2,
+      0
+    ]
+  },
+  "repairNormalizations": [],
+  "deterministicAnchorCorrections": [],
+  "bboxDeltaRange": {
+    "min": [
+      -6,
+      -11,
+      -7,
+      -15
+    ],
+    "max": [
+      6,
+      5,
+      6,
+      5
+    ]
+  },
+  "perCellResize": false,
+  "bboxRecenter": false,
+  "sourceUnexpectedOccupiedPanels": [],
+  "ignoredOutOfManifestPanels": []
+}

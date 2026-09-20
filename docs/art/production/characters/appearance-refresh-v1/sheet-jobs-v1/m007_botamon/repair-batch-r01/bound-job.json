@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m007_botamon",
+  "kind": "bound",
+  "grid": [
+    4,
+    3
+  ],
+  "keys": [
+    "main/cell_027",
+    "main/cell_028",
+    "main/cell_029",
+    "main/cell_030",
+    "main/cell_032",
+    "main/cell_035",
+    "main/cell_036",
+    "main/cell_039",
+    "main/cell_040",
+    "main/cell_041",
+    "main/cell_042"
+  ],
+  "purpose": "restore donor-reviewed restrained semantics without regenerating the full sheet",
+  "provider": "HIGGSFIELD",
+  "model": "gpt_image_2_5",
+  "providerJobId": "bdd3f478-1289-4169-82b3-f489c22d38fd"
+}

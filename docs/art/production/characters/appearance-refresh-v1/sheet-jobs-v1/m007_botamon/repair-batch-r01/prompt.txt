@@ -1,0 +1,5 @@
+Edit the supplied 4-column by 3-row pixel sprite sheet. Keep the same original Ember Bud / Charmin character, exact pose, facing, expression, native size, local position, one attached curved ember sprout, smoky-plum palette and transparent background in every occupied panel.
+
+Add a snug GOLD ROPE restraint around the CENTRAL BODY in each of the first 11 panels. The rope is a separate physical prop: three limited pixel colors (dark ochre shadow, warm gold, pale gold highlight), crisp hard pixel clusters, no anti-aliasing. It must visibly wrap around the body contour and follow each compact, tall crescent or flat orientation. Keep both eyes and the single ember sprout outside the rope and readable. Do not add anatomy, limbs, ears, horns, tail, sparks, glow, background, shadows, text, numbers or a grid.
+
+Output exactly 4 equal columns by 3 equal rows with the same panel order. Preserve all broad transparent margins. Panel 12 must remain fully transparent and empty. Do not move, resize, recenter or redraw the character except where the rope physically crosses the body. Transparent RGBA output, nearest-neighbor pixel art, no halo.

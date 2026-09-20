@@ -1,0 +1,29 @@
+{
+  "entityId": "m005_pitchmon",
+  "candidate": "candidate-hf-batch-r06",
+  "status": "PASS_CANDIDATE_VISUAL_AND_PROGRESSION_GATED_ROUTE_REVIEW",
+  "reviewedAgainst": "donor-review-v1/m005_pitchmon/review.json",
+  "checks": {
+    "morphology": "PASS_LIMBLESS_AQUATIC_DRAGONFOLK_SINGLE_SOFT_BODY_AXIS",
+    "locomotion": "PASS_BOB_CURL_VERTICAL_STRETCH_HORIZONTAL_SWEEP_AND_FLAT_COLLAPSE",
+    "faceAndExpression": "PASS_SMALL_OPEN_COMPRESSED_AND_OCCLUDED_FACE_VARIATION",
+    "appendages": "PASS_PAIRED_HORN_FINS_NO_ARMS_LEGS_TAIL_OR_EXTRA_FINS",
+    "restraint": "PASS_GOLD_WRAP_ON_CENTRAL_BODY_FACE_AND_HORN_FINS_REMAIN_READABLE",
+    "specialStates": "PASS_RED_BLACK_STONE_AND_WHITE_PRESENT_WITH_DETERMINISTIC_DERIVATIONS",
+    "nativeScaleAndOrigin": "PASS_64PX_ORIGIN_31_38_WHOLE_SHEET_SHARED_NORMALIZATION",
+    "mainSubMapping": "PASS_CANONICAL_ALIASES_AND_TRANSLATIONS",
+    "timing": "PASS_53_SOURCE_SEQUENCES_1863_BROWSER_TICKS"
+  },
+  "limits": {
+    "fullCharacterArtAcceptance": false,
+    "normalGameQa": "PASS_RENDERER_AND_EXPECTED_SOURCE_PROGRESSION_GATE; FULL_HUNT_BIND_CAPTURE_RESULT_NA_UNTIL_EXISTING_GATE_UNLOCK; BATTLE_NA_TOO_YOUNG",
+    "publicationOrRightsAcceptance": "NOT_IN_SCOPE",
+    "designSettingStatus": "STANDARD_POSE_REVIEWED_NOT_SETTING_PASS"
+  },
+  "paidGeneration": {
+    "completedProviderJobs": 3,
+    "failedProviderJobs": 1,
+    "creditsObservedForEntity": 6,
+    "nextPaidGeneration": "NOT_NEEDED_FOR_CURRENT_CANDIDATE"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "entityId": "m008_poyomon",
+  "provider": "HIGGSFIELD",
+  "model": "gpt_image_2_5",
+  "estimatedSubmittedCredits": 3,
+  "settledCreditLedger": "NOT_EXPOSED_BY_PROVIDER_TOOL",
+  "jobs": [
+    {
+      "purpose": "full 8x6 candidate sheet",
+      "jobId": "58ad583a-e607-4177-bf0d-27c0968eaad7",
+      "estimatedCredits": 3,
+      "resultSha256": "08653ea1a7be2af7a605ac461bc2743fe963e50ab510dff134e9492f11650d9f"
+    }
+  ],
+  "deterministicPostprocess": {
+    "specialStates": [
+      "main/cell_048 black state with pale amber-coral facial window from main/cell_005"
+    ],
+    "anchorCorrection": "main/cell_009 translated [5,2] from donor-reviewed local bounds; main/cell_062 reuses the corrected canonical pose",
+    "sameAsCell": "All non-canonical main/sub slots are reconstructed from bank.json canonical mappings"
+  },
+  "policy": "One full-sheet generation; unused panels, canonical aliases, derivable special states and measured anchor corrections are deterministic. Paid repair is used only for a detected motion-semantic or identity failure."
+}

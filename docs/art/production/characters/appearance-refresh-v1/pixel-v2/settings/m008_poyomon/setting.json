@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m008_poyomon",
+  "designVersion": "m008-tide-lantern-r01",
+  "stage": "SINGLE_STANDARD_POSE_IDENTITY_CANDIDATE",
+  "selectedOption": "USER_CONCEPT_ALIGNED_LOW_MOTION_RISK",
+  "artReview": "ORIGINAL_DESIGN_LOCK_CREATED_FULL_MOTION_PENDING",
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "authoringSource": "Codex independent pixel design aligned to the user supplied translucent water-creature direction after complete donor motion review",
+  "sourceRefs": [],
+  "sourceUse": "Original deep-indigo tide-lantern body, diagonal seafoam current band and amber-coral facial window; donor supplies motion, timing, bounds and mapping only. No donor RGB or copied source pixels.",
+  "features": [
+    "深靛單一水滴軟體",
+    "斜向海沫潮紋",
+    "琥珀新月形臉窗與珊瑚內光",
+    "無肢無獨立尾巴"
+  ],
+  "faceRules": [
+    "琥珀臉窗是身體前側的一個連續發光孔；依 donor 格位放大、縮小、偏移或遮蔽，不使用固定貼圖臉。",
+    "珊瑚內光只存在於臉窗內，不能變成第二張臉、眼睛或漂浮物。",
+    "貼地與背向格必須遵循 donor 的臉部遮蔽程度。"
+  ],
+  "ornamentRules": [
+    "海沫潮紋貼在身體表面並隨同一軟體變形；不得增加泡泡、光環、手腳、翅膀或獨立尾巴。"
+  ],
+  "identityDesign": {
+    "directionVersion": "creature-identity-v1",
+    "family": "TIDE_LANTERN_SEED",
+    "fixedTraits": [
+      "深靛單一水滴軟體",
+      "斜向海沫潮紋",
+      "琥珀新月形臉窗與珊瑚內光",
+      "無肢無獨立尾巴"
+    ],
+    "changedRegions": [
+      "全身主色與材質",
+      "身體表面斜向潮紋",
+      "臉部開口的色彩與新月結構",
+      "高光與陰影配置"
+    ],
+    "allowedContourChanges": [
+      "維持 donor 每格的單一軟身外輪廓、伸展極值與接地關係；只在輪廓內重新設計材質、潮紋與臉窗。"
+    ],
+    "preservedMotion": [
+      "單一軟身的彈跳、壓扁、直立伸長、斜彎、橫向掃動與倒地",
+      "臉窗隨表情放大、縮小、偏移與遮蔽",
+      "原槽位、序列、ticks、native bounds、origin、受綁區塊與 Main/Sub 映射"
+    ]
+  },
+  "palette": [
+    "#00000000",
+    "#172143",
+    "#283D78",
+    "#4F6FD0",
+    "#65C9B7",
+    "#C5F1D8",
+    "#F4C45E",
+    "#F27F73",
+    "#EEF8DE",
+    "#314F9A"
+  ],
+  "poses": [
+    {
+      "key": "main/cell_000",
+      "nativeBounds": [
+        -4,
+        -12,
+        6,
+        -1
+      ],
+      "pixels": [
+        [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 1, 4, 2, 1, 0, 0, 0],
+        [0, 0, 1, 2, 4, 3, 2, 1, 0, 0],
+        [0, 1, 2, 3, 4, 5, 3, 2, 1, 0],
+        [1, 2, 3, 4, 5, 3, 3, 2, 2, 1],
+        [1, 2, 6, 6, 4, 3, 9, 3, 2, 1],
+        [1, 2, 6, 7, 6, 4, 3, 3, 2, 1],
+        [1, 2, 6, 6, 4, 4, 3, 2, 2, 1],
+        [1, 2, 3, 3, 3, 3, 2, 2, 2, 1],
+        [0, 1, 2, 2, 2, 2, 2, 2, 1, 0],
+        [0, 0, 1, 1, 1, 1, 1, 1, 0, 0]
+      ],
+      "role": "原創潮燈芽標準姿勢；完整動作仍需生成與逐格審查",
+      "poseReview": "ORIGINAL_IDENTITY_LOCK_FULL_MOTION_PENDING",
+      "changeNotes": [
+        "Tide Lantern / 潮燈芽",
+        "深靛水滴軟體與海沫斜紋建立獨立外觀",
+        "琥珀新月臉窗與珊瑚內光承接 donor 的臉部表情語意"
+      ]
+    }
+  ]
+}

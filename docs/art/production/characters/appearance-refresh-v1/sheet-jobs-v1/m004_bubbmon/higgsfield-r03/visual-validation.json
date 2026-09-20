@@ -1,0 +1,23 @@
+{
+  "entityId": "m004_bubbmon",
+  "candidate": "candidate-hf-batch-r03",
+  "status": "PASS_CANDIDATE_VISUAL_REVIEW_NORMAL_GAME_PENDING",
+  "reviewedAgainst": "donor-review-v1/m004_bubbmon/review.json",
+  "checks": {
+    "morphology": "PASS_SOFT_MOUND_DETACHED_BUBBLES_NO_LEGS",
+    "locomotion": "PASS_SQUASH_EXTEND_TILT_FLAT_VERTICAL_WITHOUT_INVENTED_GAIT",
+    "faceAndExpression": "PASS_LEFT_FACE_EXPANSION_COMPRESSION_AND_OCCLUSION",
+    "restraint": "PASS_GOLD_WRAP_ON_MAIN_BODY_DETACHED_BUBBLES_FREE",
+    "specialStates": "PASS_RED_BLACK_STONE_WHITE_PRESENT_STONE_REBUILT_FROM_REPAIRED_010",
+    "nativeScaleAndOrigin": "PASS_64PX_ORIGIN_24_37_SHARED_NORMALIZATION",
+    "mainSubMapping": "PASS_CANONICAL_ALIASES_AND_TRANSLATIONS",
+    "timing": "PASS_53_SOURCE_SEQUENCES_1969_BROWSER_TICKS"
+  },
+  "limits": {
+    "fullCharacterArtAcceptance": false,
+    "normalGameQa": "PASS_LOOPBACK_RUNTIME_RENDERER_REVIEW_NAVIGATION_NOT_RUN",
+    "publicationOrRightsAcceptance": "NOT_IN_SCOPE",
+    "designSettingStatus": "STANDARD_POSE_REVIEWED_NOT_SETTING_PASS"
+  },
+  "nextPaidGeneration": "NOT_NEEDED_FOR_CURRENT_REPAIR_SET"
+}

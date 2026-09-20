@@ -1,0 +1,39 @@
+{
+  "entityId": "m011_yuramon",
+  "candidate": "candidate-hf-batch-r02",
+  "status": "PASS_CANDIDATE_VISUAL_AND_NORMAL_GAME_REVIEW",
+  "reviewedAgainst": "donor-review-v1/m011_yuramon/review.json",
+  "checks": {
+    "morphology": "PASS_ORIGINAL_TIDEGLASS_REED_CAPSULE_SINGLE_COMPACT_BODY_TWO_ATTACHED_FLEXIBLE_REED_FINS",
+    "locomotion": "PASS_COMPACT_ROCK_LOW_COMPRESSION_UPRIGHT_STRETCH_DIAGONAL_LIFT_HORIZONTAL_FOLD",
+    "faceAndExpression": "PASS_NAVY_FACE_WINDOW_NARROWS_SHIFTS_OPENS_VERTICALLY_AND_OCCLUDES_BY_POSE",
+    "appendages": "PASS_NO_ARMS_LEGS_PAWS_WINGS_SEPARATE_TAIL_OR_DETACHED_PARTICLES",
+    "restraint": "PASS_ALL_MAIN_026_042_SHOW_EXTERNAL_GOLD_BINDING_ACROSS_COMPACT_UPRIGHT_DIAGONAL_AND_LOW_FORMS",
+    "specialStates": "PASS_ORANGE_RED_BLACK_STONE_GRAY_PALE_LOW_AND_WHITE_STATES_WITH_DETERMINISTIC_COLOR",
+    "nativeScaleAndOrigin": "PASS_64PX_ORIGIN_23_42_ONE_SHARED_53PX_NORMALIZATION_OFFSET_2_NEGATIVE_1_NO_PER_CELL_RECENTER",
+    "mainSubMapping": "PASS_CANONICAL_ALIASES_AND_TRANSLATIONS",
+    "timing": "PASS_53_SOURCE_SEQUENCES_1863_BROWSER_TICKS"
+  },
+  "limits": {
+    "fullCharacterArtAcceptance": false,
+    "normalGameQa": "PASS_FRESH_TAMER_GATE_LOCK_AND_ISOLATED_ICE_NATIVE_CAPTURE_TETHER_RESULT_PORTRAIT_RAISING_HOME",
+    "publicationOrRightsAcceptance": "NOT_IN_SCOPE",
+    "designSettingStatus": "ORIGINAL_IDENTITY_BOUND_TO_DONOR_REVIEW"
+  },
+  "paidGeneration": {
+    "completedProviderJobs": 1,
+    "failedProviderJobs": 0,
+    "estimatedSubmittedCredits": 3,
+    "settledCreditLedger": "NOT_EXPOSED_BY_PROVIDER_TOOL",
+    "nextPaidGeneration": "NOT_NEEDED_FOR_CURRENT_CANDIDATE"
+  },
+  "deterministicPostprocess": {
+    "background": "ALPHA_THRESHOLD_128",
+    "specialStateColor": [
+      "main/cell_047",
+      "main/cell_060"
+    ],
+    "restraintReadability": "TWELVE_CANONICAL_BOUND_MASTERS_RECEIVED_ONE_PIXEL_BENT_TWO_TONE_BINDING_BAND_FROM_CANDIDATE_BOUNDS_ONLY",
+    "additionalPaidJobs": 0
+  }
+}

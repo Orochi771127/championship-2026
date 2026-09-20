@@ -1,0 +1,43 @@
+{
+  "entityId": "m102_koromon",
+  "candidate": "candidate-hf-batch-r03",
+  "status": "PASS_CANDIDATE_VISUAL_AND_NORMAL_GAME_REVIEW",
+  "reviewedAgainst": "donor-review-v1/m102_koromon/review.json",
+  "checks": {
+    "morphology": "PASS_ORIGINAL_TIDEGLASS_SPRIG_LOW_ROUNDED_BODY_TWO_ATTACHED_KELP_RIBBON_FEELERS_SINGLE_SEED_POD_TAIL",
+    "locomotion": "PASS_LOW_SLIDE_STRETCH_COMPRESSION_TUMBLE_DIAGONAL_TURN_UPRIGHT_CURL_AND_COLLAPSE",
+    "faceAndExpression": "PASS_NAVY_FACE_LENS_ROTATES_COMPRESSES_OCCLUDES_AND_SHOWS_CORAL_MOUTH_ONLY_WHERE_SOURCE_POSE_REQUIRES",
+    "appendages": "PASS_TWO_ATTACHED_FLEXIBLE_FEELERS_ONE_ATTACHED_TAIL_NO_ARMS_LEGS_WINGS_OR_DETACHED_ORNAMENTS",
+    "restraint": "PASS_ALL_MAIN_026_042_ALIASES_SHOW_BODY_CLIPPED_TWO_TONE_GOLD_EXTERNAL_BINDING",
+    "specialStates": "PASS_ORANGE_RED_BLACK_STONE_GRAY_AND_WHITE_STATES_DERIVED_DETERMINISTICALLY_FROM_ORIGINAL_BASES",
+    "nativeScaleAndOrigin": "PASS_64PX_ORIGIN_23_38_ONE_SHARED_48PX_NORMALIZATION_OFFSET_2_9_NO_PER_CELL_RECENTER",
+    "mainSubMapping": "PASS_64_MAIN_18_SUB_EXACT_CANONICAL_ALIASES_AND_TRANSLATIONS",
+    "timing": "PASS_53_SOURCE_SEQUENCES_1788_BROWSER_TICKS"
+  },
+  "limits": {
+    "fullCharacterArtAcceptance": false,
+    "normalGameQa": "PASS_EXPECTED_SOURCE_PROGRESSION_GATE_AND_ISOLATED_CAPTURE",
+    "publicationOrRightsAcceptance": "NOT_IN_SCOPE",
+    "designSettingStatus": "ORIGINAL_IDENTITY_BOUND_TO_DONOR_REVIEW"
+  },
+  "paidGeneration": {
+    "completedProviderJobs": 1,
+    "failedProviderJobs": 0,
+    "estimatedSubmittedCredits": 3,
+    "settledCreditLedger": "NOT_EXPOSED_BY_PROVIDER_TOOL",
+    "nextPaidGeneration": "NOT_NEEDED_FOR_CURRENT_CANDIDATE"
+  },
+  "deterministicPostprocess": {
+    "background": "ALPHA_THRESHOLD_128",
+    "unusedPanels": "EIGHT_SOURCE_ONLY_PANELS_IGNORED_BY_MANIFEST_BOUNDARY",
+    "specialStateColor": [
+      "main/cell_043",
+      "main/cell_046",
+      "main/cell_047",
+      "main/cell_060",
+      "main/cell_063"
+    ],
+    "restraintReadability": "FOURTEEN_CANONICAL_BOUND_MASTERS_RECEIVED_BODY_MASK_CLIPPED_TWO_TONE_GOLD_BINDING_BAND_FROM_CANDIDATE_BOUNDS_ONLY",
+    "additionalPaidJobs": 0
+  }
+}

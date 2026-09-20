@@ -1,0 +1,62 @@
+Create a complete ORIGINAL pixel-game animation sheet.
+Reference IMAGE 1 is our ORIGINAL identity seed and the only appearance/style authority.
+IMAGE 2 is a research MOTION/LAYOUT GUIDE only: preserve every occupied slot pose, facing, whole-body deformation, expression visibility, restrained/unrestrained state, native scale and local origin, while replacing every commercial-character appearance with the original identity from IMAGE 1.
+Do not copy source RGB colors, recognizable markings, face design or proprietary character appearance.
+
+Original identity (m010-frost-muzzle-r01): Original powder-blue snow-soft signal pup with slate muzzle, cream chin pad and cyan-rimmed short ears; donor supplies motion, timing, bounds and mapping only. No donor RGB or copied source pixels.
+Fixed identity traits: 霜藍眼框; 灰藍大鼻; 短白立耳; 奶油頰底.
+Face rules: 灰藍大鼻與口鼻墊依 donor 格位伸長、壓縮、偏移或遮蔽；直立驚訝格必須保留大幅張開表情。 霜藍眼框跟隨頭部轉向；後向、石化、剪影與扁平格可按 donor 遮蔽，不可每格貼同一張臉。
+Ornament rules: 兩隻短耳附著同一雪軟身體並隨整體壓縮；不得增加四肢、獨立尾巴、飄雪、光環、冰晶飾品或漂浮物。 白耳使用青藍外緣保持透明背景辨識度。
+Morphology contract: Tiny ground-contact snow-soft body with one continuous rounded mass and two short top points. The original replacement may read as a compact canine face and ears, but may not gain legs, paws, arms, wings or a separate tail.
+Locomotion contract: The whole body compresses low, rocks side to side, stretches vertically, leans diagonally, lifts slightly and collapses into a long flat state. Preserve raw sequence IDs and timing; do not assign or invent action names.
+Expression contract: The face changes with the body: a compact neutral mask becomes a large dark vertical mouth or muzzle opening in tall alarm/stretch poses, shifts toward the leading side in diagonal poses, compresses near the ground and disappears in rear, silhouette, stone or fully flattened states.
+Appendage prohibition: Only two short attached ears/top points may protrude. They bend and compress with the body. No limbs, independent tail, floating snow pieces, halo or detached ornament may be added.
+Restraint contract: Main cells 027-043 form the restrained block, including aliases. Gold-brown binding wraps the central body as the creature remains compact, leans, stretches upright or collapses flat. The band is an external prop and must not become fur, anatomy or a platform.
+
+OUTPUT: exactly 8 columns by 6 rows, 48 equal square cells, transparent RGBA canvas, no grid lines, words, labels, numbers, ground shadows, glow halo, background, decorations, anti-aliasing or painterly effects.
+Each cell represents one logical 64x64 image enlarged uniformly 4x for this sheet. Keep the creature VERY SMALL inside each cell at the position and relative size shown by IMAGE 2, with broad transparent margins.
+Do not center, bottom-align, crop, rotate or resize cells independently. Use one shared scale and translation for the complete sheet.
+Shared native origin is [24, 42]. Preserve crisp nearest-neighbor pixel clusters and the limited palette.
+Gold-brown binding is a separate physical prop, never anatomy. No tweening and no invented actions.
+Preserve expression changes per slot; the facial window may stretch, compress, shift or become occluded exactly as the guide shows. Do not paste one identical face on every pose.
+
+Read occupied slots left-to-right, top-to-bottom. The following indices are instructions only; do not print them:
+1: main/cell_001: Lower compressed side rest; the continuous body widens slightly while the face remains readable.
+2: main/cell_002: Compact turned pose with the face shifted toward the leading side and both top points close together.
+3: main/cell_003: Low compact settle; face and lower contour compress toward the contact line.
+4: main/cell_005: Compact rearward or closed-face turn; one side of the face is reduced and the body shifts locally.
+5: main/cell_008: Tall upright stretch with a long dark vertical facial opening and ears retained at the top.
+6: main/cell_009: Tall forward-leaning expression pose; the dark mouth/muzzle opening widens and shifts toward travel.
+7: main/cell_010: Diagonal lifted pose with the rounded body elongated and the facial features turned to the side.
+8: main/cell_011: Compact settle after extension; the facial mask is small and centered low on the rounded body.
+9: main/cell_012: Tall upright stretch variant with a long central dark expression and compressed base.
+10: main/cell_014: Broad diagonal lean; body mass stretches sideways while the face remains near the leading edge.
+11: main/cell_022: Very low compact crouch with the top points still visible and facial features compressed.
+12: main/cell_023: Long flat horizontal collapse; top points and face are mostly occluded by the flattened body.
+13: main/cell_024: Tall upright expression pose with a large dark opening and a narrow ground-contact base.
+14: main/cell_025: Compact neutral recovery with the rounded body and short top points restored.
+15: main/cell_027: Restrained diagonal compact pose; the gold-brown binding crosses the central body.
+16: main/cell_028: Restrained compact front/side rest with the external band wrapped around the body core.
+17: main/cell_029: Restrained compact turn; face shifts laterally while the binding stays body-centered.
+18: main/cell_030: Restrained low settle; body compresses around the band without using it as a platform.
+19: main/cell_032: Restrained diagonal lean; ears and face tilt together while the binding follows the torso.
+20: main/cell_035: Restrained tall upright expression with the long dark opening above the central binding.
+21: main/cell_036: Restrained compact recovery; rounded body closes around the external band.
+22: main/cell_039: Restrained compact side pose with the face readable and band wrapped around the center.
+23: main/cell_040: Restrained flat horizontal collapse; binding rotates with the flattened body.
+24: main/cell_041: Restrained tall upright expression with narrow contact and a large vertical facial opening.
+25: main/cell_042: Restrained compact pose with short ears visible and the band remaining external.
+26: main/cell_048: Black silhouette of the compact rounded pose; preserve exact alpha and retained pale feature.
+27: main/cell_050: Compact turned recovery; the face shifts to one side while the body stays grounded.
+28: main/cell_051: Compact low neutral pose with both short top points and a reduced face.
+29: main/cell_052: Compact diagonal lift with the front edge raised and the face following the leading side.
+30: main/cell_054: Tall narrow upward/rear pose; the body elongates and facial readability changes with the turn.
+31: main/cell_055: Compact rear or closed-face pose; rounded back surface is presented and the face is hidden.
+32: main/cell_056: Low horizontal crouch with the face close to the ground and top points flattened backward.
+33: main/cell_061: Stone-gray special state; retain its compact sculpted contour and common ground contact.
+34: main/cell_062: Very flat pale-blue horizontal state with no readable face; preserve its distinct contour and offset.
+35: main/cell_063: Tall narrow expression pose with the short top points separated and face shifted upward.
+36: main/cell_064: White evolution silhouette of the compact rounded pose; preserve the full accepted original alpha contour.
+
+All remaining slots [37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48] must be fully transparent and empty.
+This is production sprite art, not a poster or presentation character sheet.

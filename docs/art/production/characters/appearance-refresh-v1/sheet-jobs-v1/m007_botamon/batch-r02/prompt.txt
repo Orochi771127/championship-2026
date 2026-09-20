@@ -1,0 +1,45 @@
+Create a complete ORIGINAL pixel-game animation sheet. Reference IMAGE 1 is our ORIGINAL identity seed and the only appearance/style authority. IMAGE 2 is a research MOTION/LAYOUT GUIDE only: preserve every slot pose, facing, whole-body compression, facial visibility, restrained/unrestrained state, native scale and local origin, while replacing every commercial character appearance with the original identity from IMAGE 1. Do not copy donor RGB colors, black-body design, paired ear-like silhouette, markings or recognizable donor face.
+
+Original character identity: Ember Bud / Charmin, a tiny limbless smoky-plum charcoal-gel seed with one continuous rounded soft body, exactly ONE curved attached glowing ember sprout on top, two separated cream eyes with amber pupils, copper-orange ember flecks and muted violet body planes. It has no ears, twin horns, arms, legs, feet, wings, separate tail, mouth muzzle, floating sparks or extra sprouts. Translate the guide’s upper contour motion into this same single curved sprout without changing the body pose. The same original creature must remain consistent in every occupied cell.
+
+OUTPUT: exactly 8 columns by 6 rows, 48 equal square cells, transparent RGBA canvas, no grid lines, words, labels, numbers, ground shadows, glow halo, background, decorations, anti-aliasing or painterly effects. Each cell represents one logical 64x64 image enlarged uniformly 4x for this sheet. Keep the creature VERY SMALL inside each cell at the position and relative size shown by IMAGE 2, with broad transparent margins. Do not center, bottom-align, crop or resize cells independently. Shared native origin is [24, 42]. Preserve crisp nearest-neighbor pixel clusters and the limited palette. Gold rope is a separate physical prop, never anatomy. No tweening and no invented actions. Preserve expression changes: separated eyes may stretch, compress, shift or become occluded exactly as the guide shows; do not paste one identical face on every pose. Restrained poses must show a snug gold rope around the CENTRAL BODY, following tall crescent, compact and flat orientations while leaving the face and single ember sprout free.
+
+Read slots left-to-right, top-to-bottom. The following indices are instructions only; do not print them:
+1: main/cell_001: Slight horizontal idle compression; source upper contour, rendered as the single ember sprout and paired facial lights remain attached to one body.
+2: main/cell_002: Compact rounded settle pose with the facial lights low on the front.
+3: main/cell_003: Low side compression with a small rear sweep contained in the continuous body.
+4: main/cell_005: Tilted compact transition; one upper tuft leads while the body leans without limbs.
+5: main/cell_008: Tall crescent-like full-body stretch; the lower body remains the only ground contact.
+6: main/cell_009: Tall diagonal curl with the body axis swept backward and face compressed near the leading edge.
+7: main/cell_010: Short diagonal upright transition; facial lights compress into the front contour.
+8: main/cell_011: Low compact crouch or landing; body spread close to the ground.
+9: main/cell_012: Tall expanded expression pose with the body top stretches while the single ember sprout remains attached and the front aperture enlarged.
+10: main/cell_014: Broad upright/sideways bulge; the continuous body swells and the facial lights shift toward the front.
+11: main/cell_022: Low arched transition with a short rear sweep and readable face.
+12: main/cell_023: Extremely flat horizontal prone or impact posture; face mostly occluded.
+13: main/cell_024: Tall crescent stretch with the body arcing upward from one ground contact.
+14: main/cell_025: Low compact settle; source upper contour, rendered as the single ember sprout fold toward the body.
+15: main/cell_027: Compact upright restrained pose. Gold binding crosses the central body while face and source upper contour, rendered as the single ember sprout remain free.
+16: main/cell_028: Low restrained compression; gold wrap follows the flattened central body.
+17: main/cell_029: Compact restrained curl with binding centered on the soft body.
+18: main/cell_030: Low restrained pose with face readable above the gold wrap.
+19: main/cell_032: Small compact restrained transition; binding remains a separate physical prop.
+20: main/cell_035: Tall fully extended restrained crescent; gold binding follows the central vertical body axis.
+21: main/cell_036: Low restrained settle with both source upper contour, rendered as the single ember sprout outside the wrap.
+22: main/cell_039: Compact restrained raised transition; face remains visible.
+23: main/cell_040: Very flat restrained prone posture; gold binding flattens along the body.
+24: main/cell_041: Tall restrained stretch with face and source upper contour, rendered as the single ember sprout visible above the wrap.
+25: main/cell_042: Low compact restrained transition; wrap stays centered as the body compresses.
+26: main/cell_048: Black silhouette of the compact idle with a pale rectangular facial aperture preserved.
+27: main/cell_050: Low diagonal sweep with the continuous body trailing behind the face.
+28: main/cell_051: Compact upright turn with single ember sprout readable.
+29: main/cell_052: Rounded raised transition; paired facial lights shift with the body turn.
+30: main/cell_054: Expanded upright expression pose; face opens across the front of the body.
+31: main/cell_055: Small diagonal upright transition with a shortened body axis.
+32: main/cell_056: Broad low horizontal sweep or collapse; face compressed at the leading edge.
+33: main/cell_061: Stone/gray state of the short diagonal upright pose; preserve its alpha contour.
+34: main/cell_062: Far-right flat defeated or sleep-like body; preserve the source-local horizontal offset relative to origin.
+35: main/cell_063: Small upright diagonal transition with a narrow lower contact and readable facial light.
+36: main/cell_064: White evolution silhouette of the compact idle; preserve the full alpha contour.
+
+All remaining slots [37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48] must be fully transparent and empty. This is production sprite art, not a poster or character sheet.

@@ -54,6 +54,14 @@ export async function loadRegisteredCharacterHudArt({baseUrl,fetchImpl=globalThi
   if(!response.ok)throw new Error('CHARACTER_HUD_MANIFEST_UNAVAILABLE');
   const manifest=validateCharacterHudArt(await response.json(),index),portraits=new Map(manifest.portraits.map(p=>[p.speciesId,p]));
   const battle=new Map((manifest.battle??[]).map(b=>[b.speciesId,{sequences:b.sequences,cells:new Map(b.cells.map(c=>[c.cell,c]))}]));
+  if(new URL(baseUrl).searchParams.get('characterArtReview')==='m001'){
+    const {applyM001HudReview}=await import('./m001CharacterHudReview.js');
+    await applyM001HudReview({baseUrl,fetchImpl,portraits,battle});
+  }
+  if(['m003','m004','m005','m006','m007','m008','m009','m010','m011','m012','m101','m102','m103','m104'].includes(new URL(baseUrl).searchParams.get('characterArtReview'))){
+    const {applyCandidateCharacterHudReview}=await import('./candidateCharacterHudReview.js');
+    await applyCandidateCharacterHudReview({baseUrl,fetchImpl,portraits,battle});
+  }
   const canonical=id=>id?.replace(/^championship:creature:/,'');
   return Object.freeze({getPortrait(speciesId){return portraits.get(canonical(speciesId))??null;},
     getMedal(titleId){return manifest.medals?.find(m=>m.titleId===titleId)??null;},

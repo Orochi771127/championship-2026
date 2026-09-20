@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "estimatedCredits": 3,
+  "initialBalance": 3010,
+  "authorization": "User explicitly requested Higgsfield assistance after plan and per-image costs were reported; bounded one-sheet repair",
+  "params": {
+    "model": "gpt_image_2_5",
+    "variant": "flare",
+    "quality": "high",
+    "resolution": "2k",
+    "background": "transparent",
+    "aspect_ratio": "3:2",
+    "count": 1,
+    "medias": [
+      {
+        "role": "image",
+        "value": "02d562a4-58dd-477d-b8c0-6389c1e68b55"
+      }
+    ],
+    "prompt": "Edit the supplied ORIGINAL game sprite sheet, a 3-column by 2-row grid, six poses of the SAME tiny porcelain-and-copper creature. This is a pixel-exact game production repair, NOT a redesign. Retain its porcelain cream body, copper rim/rear appendage and teal face marks, its limbless anatomy, all six silhouettes and facing directions. Preserve the transparent canvas and exact grid layout, every sprite's position and scale within its cell, with broad transparent padding exactly like the input. Do not enlarge or center the individual creatures. Each cell represents a 64 by 64 native pixel canvas, enlarged by nearest-neighbor. Output square-edged pixels aligned to that same native grid, no antialiasing, glow, shadows, text, numbers, borders, background or extra parts. TASK: make the existing physical RESTRAINT around the RIGHT/REAR SIDE OF THE MAIN BODY clearly readable as a snug golden rope binding, distinct from the normal copper-colored appendage. Use 2 narrow golden ochre turns with dark brown separations/highlight pixels following body curvature. Every one of the six poses is restrained: the binding wraps the BODY, not merely a floating loop or accessory, and must remain present in the flattened bottom-middle and low bottom-right poses. The top-left pose faces forward, top-middle is side-facing with face marks occluded, top-right is upright front with a compressed face. Bottom-left is a low side pose with compressed teal face line, bottom-middle is flattened, bottom-right is very low horizontal body with rear component vertical. Preserve all those facial visibility and compression differences. Only improve binding readability, leaving the rest of the pose and visual identity unchanged. No human limbs or new walking action. No commercial characters."
+  }
+}

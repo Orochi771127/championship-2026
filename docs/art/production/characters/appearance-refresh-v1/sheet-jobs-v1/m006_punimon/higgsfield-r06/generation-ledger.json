@@ -1,0 +1,22 @@
+{
+  "entityId": "m006_punimon",
+  "provider": "HIGGSFIELD",
+  "model": "gpt_image_2_5",
+  "estimatedSubmittedCredits": 4,
+  "settledCreditLedger": "NOT_EXPOSED_BY_PROVIDER_TOOL",
+  "jobs": [
+    {
+      "purpose": "full 8x6 candidate sheet",
+      "jobId": "7f4c24cb-d935-49cc-bdf7-697ed404daf3",
+      "estimatedCredits": 3,
+      "resultSha256": "70bd395eb67a28b72d04e43a81d08d2ff6c58d72abf1e89f9a9d60fe305dd677"
+    },
+    {
+      "purpose": "targeted main/cell_030 restraint repair",
+      "jobId": "46303027-8088-4d8f-abf2-0440a8733290",
+      "estimatedCredits": 1,
+      "resultSha256": "70948a093feb593de51de5900f64959978d1e8d6d63ce034b7a8aee584486ce8"
+    }
+  ],
+  "policy": "One full-sheet generation; only detected semantic NG cells receive a targeted repair."
+}

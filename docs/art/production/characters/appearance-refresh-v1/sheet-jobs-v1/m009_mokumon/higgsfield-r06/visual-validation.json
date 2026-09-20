@@ -1,0 +1,30 @@
+{
+  "entityId": "m009_mokumon",
+  "candidate": "candidate-hf-batch-r06",
+  "status": "PASS_CANDIDATE_VISUAL_AND_PROGRESSIVE_SOURCE_ROUTE_REVIEW",
+  "reviewedAgainst": "donor-review-v1/m009_mokumon/review.json",
+  "checks": {
+    "morphology": "PASS_TINY_CONTINUOUS_MIDNIGHT_TEAL_AURORA_VAPOR_BODY_WITH_ATTACHED_REFRACTIVE_CREST",
+    "locomotion": "PASS_HOVER_SETTLE_VERTICAL_STRETCH_SIDE_FLARE_DIAGONAL_SWEEP_HORIZONTAL_COLLAPSE",
+    "faceAndExpression": "PASS_LIME_MAGENTA_DIAMOND_APERTURE_WIDENS_COMPRESSES_SHIFTS_AND_OCCLUDES_BY_POSE",
+    "appendages": "PASS_NO_LEGS_FEET_HANDS_SKELETAL_ARMS_WINGS_OR_SEPARATE_TAIL",
+    "restraint": "PASS_ALL_MAIN_026_042_SHOW_GOLD_LOWER_CENTRAL_BINDING_WITH_DETERMINISTIC_WRAPPED_BAND_FOR_MAIN_031_AND_ALIAS_033",
+    "specialStates": "PASS_ORANGE_RED_BLACK_STONE_GRAY_AND_WHITE_DERIVED_FROM_ACCEPTED_ORIGINAL_POSES",
+    "nativeScaleAndOrigin": "PASS_64PX_ORIGIN_28_38_ONE_SHARED_48PX_NORMALIZATION_AND_OFFSET_3_5_NO_PER_CELL_RECENTER",
+    "mainSubMapping": "PASS_CANONICAL_ALIASES_AND_TRANSLATIONS",
+    "timing": "PASS_53_SOURCE_SEQUENCES_1863_BROWSER_TICKS"
+  },
+  "limits": {
+    "fullCharacterArtAcceptance": false,
+    "normalGameQa": "PASS_FRESH_TAMER_SOURCE_GATE_LOCK_PLUS_ISOLATED_QA_UNLOCK_NATIVE_SPAWN_TETHER_CAPTURE_RESULT_AND_RAISING_HOME; BATTLE_NA_TOO_YOUNG",
+    "publicationOrRightsAcceptance": "NOT_IN_SCOPE",
+    "designSettingStatus": "ORIGINAL_IDENTITY_BOUND_TO_DONOR_REVIEW"
+  },
+  "paidGeneration": {
+    "completedProviderJobs": 1,
+    "failedProviderJobs": 0,
+    "estimatedSubmittedCredits": 3,
+    "settledCreditLedger": "NOT_EXPOSED_BY_PROVIDER_TOOL",
+    "nextPaidGeneration": "NOT_NEEDED_FOR_CURRENT_CANDIDATE"
+  }
+}

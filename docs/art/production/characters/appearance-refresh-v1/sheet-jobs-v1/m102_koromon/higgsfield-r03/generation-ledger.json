@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m102_koromon",
+  "provider": "HIGGSFIELD",
+  "model": "gpt_image_2_5",
+  "jobId": "198e5213-8aa5-468e-b1cf-f1cc7fccf128",
+  "status": "COMPLETED",
+  "submitted": {
+    "aspectRatio": "4:3",
+    "count": 1,
+    "quality": "high",
+    "resolution": "2k",
+    "background": "transparent",
+    "useUnlimited": false,
+    "estimatedCredits": 3
+  },
+  "references": {
+    "originalIdentityMediaId": "bf4d614b-e84d-47e7-baa7-57c83e9c7b22",
+    "motionLayoutGuideMediaId": "e0b0712e-7dd6-4ce0-983f-27d3821f0406"
+  },
+  "rawSheet": {
+    "relativePath": "../batch-r04/raw-sheet.png",
+    "sha256": "8d2199d4ae10360e3c2d55397c0de6b0647b433fb1a91c7c78f69a722adadfaf",
+    "size": [
+      2336,
+      1744
+    ],
+    "providerAlphaExtrema": [
+      0,
+      254
+    ]
+  },
+  "normalization": {
+    "sampleSize": 48,
+    "sharedOffset": [
+      2,
+      9
+    ],
+    "alphaThreshold": 128,
+    "perCellResize": false,
+    "bboxRecenter": false
+  },
+  "outcome": {
+    "occupiedManifestPanels": 40,
+    "requiredOccupiedManifestPanels": 40,
+    "sourceUnexpectedOccupiedBlankPanels": [
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47
+    ],
+    "ignoredOutOfManifestPanels": [
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47
+    ],
+    "unresolvedUnexpectedOccupiedPanels": [],
+    "paidRepairJobs": 0,
+    "deterministicRepairOnly": true
+  }
+}

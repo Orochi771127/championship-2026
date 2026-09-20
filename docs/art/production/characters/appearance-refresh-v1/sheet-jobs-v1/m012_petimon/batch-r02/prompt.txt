@@ -1,0 +1,59 @@
+Create a complete ORIGINAL pixel-game animation sheet.
+Reference IMAGE 1 is our ORIGINAL identity seed and the only appearance/style authority.
+IMAGE 2 is a research MOTION/LAYOUT GUIDE only: preserve every occupied slot pose, facing, whole-body deformation, expression visibility, restrained/unrestrained state, native scale and local origin, while replacing every commercial-character appearance with the original identity from IMAGE 1.
+Do not copy source RGB colors, recognizable markings, face design or proprietary character appearance.
+
+Original identity (m012-copperleaf-skimmer-r01): Original cream ceramic skimmer with twin copper leaf vanes, indigo face window, mint rear rudder and coral contact nubs; donor supplies motion, timing, bounds and mapping only. No donor RGB or copied source pixels.
+Fixed identity traits: 奶油陶瓷橢圓身; 雙銅葉後掠帆; 靛藍臉窗; 薄荷尾舵與珊瑚接觸點.
+Face rules: 靛藍臉窗與水藍亮點依 donor 格位壓縮、偏移、遮蔽或垂直張開；直立格必須保留深色大開口與珊瑚內緣。 臉窗附著在橢圓身體前側，不可變成獨立頭、鳥喙或第二張臉。
+Ornament rules: 雙銅葉帆與薄荷尾舵都附著在同一身體，依 donor 角度後掠、抬起或壓平；不得新增手、長腳、翅膀、角、第二條尾巴或漂浮粒子。 受綁格的金色束帶是外部道具，不能與銅葉帆、尾舵或身體花紋合併。
+Morphology contract: Tiny low-profile aquatic or seedling-like creature with one oval body mass, a pointed leading face, paired swept-back top fins, a single rear fin and minute underside contacts. The replacement must keep this low limbed-or-fin-contact motion topology so every compressed, lifted and upright donor pose remains readable.
+Locomotion contract: The low body rocks and glides laterally, compresses flat, pivots diagonally, makes short lifted turns and rears into a narrow upright stretch. Preserve raw sequence IDs, exact timing and the common origin; do not assign or invent action names.
+Expression contract: The leading-side eye is clear in neutral and diagonal poses. Low or rear-facing poses compress or hide it. Upright effort and alarm poses open a tall dark mouth with a magenta lower interior; silhouette and stone states reduce the face to their donor-proven marks.
+Appendage prohibition: The silhouette has two attached swept-back top fins or ear-like crests, one pointed rear fin, and tiny underside contact nubs. These parts bend, flatten or tuck with the body. Do not add arms, long legs, paws, wings, horns, detached particles or a second tail.
+Restraint contract: Main cells 026-042 are the restrained block, including aliases. A gold external band crosses the body while the creature repeats low side, diagonal, upright open-mouth and flattened poses. The band follows body rotation and compression and must remain external equipment rather than anatomy.
+
+OUTPUT: exactly 8 columns by 6 rows, 48 equal square cells, transparent RGBA canvas, no grid lines, words, labels, numbers, ground shadows, glow halo, background, decorations, anti-aliasing or painterly effects.
+Each cell represents one logical 64x64 image enlarged uniformly 4x for this sheet. Keep the creature VERY SMALL inside each cell at the position and relative size shown by IMAGE 2, with broad transparent margins.
+Do not center, bottom-align, crop, rotate or resize cells independently. Use one shared scale and translation for the complete sheet.
+Shared native origin is [32, 45]. Preserve crisp nearest-neighbor pixel clusters and the limited palette.
+Gold-brown binding is a separate physical prop, never anatomy. No tweening and no invented actions.
+Preserve expression changes per slot; the facial window may stretch, compress, shift or become occluded exactly as the guide shows. Do not paste one identical face on every pose.
+
+Read occupied slots left-to-right, top-to-bottom. The following indices are instructions only; do not print them:
+1: main/cell_001: Compact forward settle; the body lowers slightly while the rear fin and top fins remain aligned with the side silhouette.
+2: main/cell_002: Side-rest variant with a slightly fuller body and both underside contacts visible.
+3: main/cell_003: Low forward-compressed pose with the leading edge near the ground and the rear fin extended.
+4: main/cell_005: Compact diagonal lift or turn; the face stays on the leading side while the body pivots around the common origin.
+5: main/cell_008: Tall upright effort pose with the body reared vertically, top fins raised and a large dark mouth with magenta lower interior.
+6: main/cell_009: Diagonal reared pose with the leading eye open and the mouth partly exposed during the turn.
+7: main/cell_010: Very low flattened pose; the body and rear fin lie nearly horizontal and the face is mostly occluded.
+8: main/cell_011: Compact side recovery with the eye readable and the underside contacts near the origin.
+9: main/cell_012: Tall upright open-mouth pose with the paired top fins swept back and a narrow contact base.
+10: main/cell_014: Rear-facing or back-turned body; the face is hidden while the top and rear fins preserve orientation.
+11: main/cell_021: Compact side pose with a more pronounced rear-fin extension and a low body line.
+12: main/cell_023: Upright alarm or effort expression with the mouth opened vertically and the body stretched above the origin.
+13: main/cell_024: Low neutral recovery used by several aliases; preserve its local placement and small underside contacts.
+14: main/cell_026: Restrained compact neutral; a gold band crosses the body core without replacing any appendage.
+15: main/cell_027: Restrained low side recovery with the band angled through the body and the rear fin still readable.
+16: main/cell_028: Restrained fuller side rest; the band remains centered while the eye and contact nubs stay visible.
+17: main/cell_029: Restrained forward-compressed pose with a reduced face and rear fin extended behind the band.
+18: main/cell_031: Restrained diagonal lift or turn; the binding follows the body angle and does not act as a platform.
+19: main/cell_034: Restrained tall upright effort pose with the dark-magenta mouth opening and band along the stretched body.
+20: main/cell_038: Restrained low side recovery with the eye visible beside the central band.
+21: main/cell_039: Restrained flattened pose; body, band and rear fin form one low horizontal line.
+22: main/cell_040: Restrained upright open-mouth pose with the band following the vertical body stretch.
+23: main/cell_041: Restrained compact side settle with both top fins and the rear fin preserved.
+24: main/cell_048: Low side glide with the body elongated and the top fins swept back.
+25: main/cell_049: Compact side rock with the underside contacts separated and the rear fin held low.
+26: main/cell_050: Small forward-compressed pose with the face lowered and the body centered near the origin.
+27: main/cell_051: High diagonal stretch with the leading eye readable and the rear fin trailing along the motion line.
+28: main/cell_053: Lifted rounded pose with the body rotated upward and the rear fin tucked toward the origin.
+29: main/cell_054: Broad front or near-front compact pose; the side profile shortens while both top fins remain identifiable.
+30: main/cell_055: Very low forward slide with the face close to the ground and the rear fin extended behind.
+31: main/cell_060: Stone-gray special state using the compact rounded contour.
+32: main/cell_061: Distinct very low horizontal state with the top fins flattened along the back; preserve its authored displacement.
+33: main/cell_062: Rounded lifted or turned pose with the body shortened and the rear fin visible on the trailing side.
+
+All remaining slots [34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48] must be fully transparent and empty.
+This is production sprite art, not a poster or presentation character sheet.

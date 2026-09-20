@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m005_pitchmon",
+  "provider": "HIGGSFIELD",
+  "model": "gpt_image_2_5",
+  "attempts": [
+    {
+      "jobId": "14c0eefe-d7d3-439c-8d47-5f737b0264c1",
+      "costCredits": 1,
+      "quality": "low",
+      "resolution": "1k",
+      "background": "auto",
+      "accepted": false,
+      "reason": "RGB checkerboard plus biped/rabbit anatomy"
+    },
+    {
+      "jobId": "92ac7eec-fdd2-4a69-8b9a-9586cd575cc3",
+      "costCredits": 3,
+      "quality": "high",
+      "resolution": "2k",
+      "background": "transparent",
+      "acceptedForImport": true,
+      "reason": "RGBA and limbless donor-compatible body; five pixels groups in specified blank panels removed deterministically"
+    }
+  ],
+  "totalCredits": 4,
+  "sourceSha256": "7cf20153bca7be5b4b91db88ab284d0a0ace26e2db00ea6c333863cb4ff76df3",
+  "normalizedSha256": "120395d230b98c1a138775a6d7e26fdc9b40437ec5ed86e5a57ae1d3fe9bb329",
+  "normalization": {
+    "resize": [
+      512,
+      384
+    ],
+    "filter": "NEAREST",
+    "clearedPanels": [
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47
+    ]
+  },
+  "artAccepted": false,
+  "runtimeEligible": false
+}

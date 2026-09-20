@@ -1,0 +1,158 @@
+{
+  "status": "PASS_EXPECTED_SOURCE_PROGRESSION_GATE_AND_ISOLATED_CAPTURE",
+  "entity": "m011_yuramon",
+  "revision": "r02",
+  "defaultRuntimeChanged": false,
+  "fullCharacterArtAcceptance": false,
+  "sourceProgressionGateQa": {
+    "status": "PASS_EXPECTED_SOURCE_PROGRESSION_GATE",
+    "entity": "m011_yuramon",
+    "revision": "r02",
+    "gateId": "championship:2026:gate:ice",
+    "freshTamerPrimaryActionDisabled": true,
+    "progressionBypassed": false,
+    "sourceRoute": "AVAILABLE_AFTER_GATE_PROGRESSION",
+    "rendererValidation": "PASS_LOOPBACK_RUNTIME_RENDERER_REVIEW",
+    "normalCaptureSequenceQa": "NOT_RUN_UNTIL_SOURCE_GATE_UNLOCK",
+    "defaultRuntimeChanged": false,
+    "fullCharacterArtAcceptance": false,
+    "pageErrors": []
+  },
+  "isolatedUnlockedCaptureQa": {
+    "gate": "CHAMPIONSHIP_VS3_ENCLOSURE_BROWSER_QA",
+    "date": "2026-09-20T11:12:58.368Z",
+    "baseUrl": "http://127.0.0.1:8732/championship.html?characterArtReview=m011&qa=unlock",
+    "viewport": "390x844",
+    "selectedGateId": "championship:2026:gate:ice",
+    "capturedWildId": "championship:2026:gate:ice:native-wild:10",
+    "capturedSpeciesId": "species-018",
+    "resultPortrait": "assets/production/internal-character-review/m011_yuramon-hf-r02/hud-r01/main-cell_000.png",
+    "reviewAssets": [
+      "/assets/production/internal-character-review/m011_yuramon-hf-r02/hud-r01/manifest.json",
+      "/assets/production/internal-character-review/m011_yuramon-hf-r02/runtime.review.json",
+      "/assets/production/internal-character-review/m011_yuramon-hf-r02/main.json",
+      "/assets/production/internal-character-review/m011_yuramon-hf-r02/main.png",
+      "/assets/production/internal-character-review/m011_yuramon-hf-r02/hud-r01/main-cell_000.png"
+    ],
+    "boundSamples": [
+      {
+        "wildId": "championship:2026:gate:ice:native-wild:10",
+        "speciesId": "species-018",
+        "x": 193.00000000000068,
+        "y": 96.7591552734375,
+        "state": "TETHERED",
+        "moving": false,
+        "currentHp": 220,
+        "maxHp": 220
+      },
+      {
+        "wildId": "championship:2026:gate:ice:native-wild:10",
+        "speciesId": "species-018",
+        "x": 192.1997146606441,
+        "y": 115.12015914916992,
+        "state": "TETHERED",
+        "moving": false,
+        "currentHp": 220,
+        "maxHp": 220
+      },
+      {
+        "wildId": "championship:2026:gate:ice:native-wild:10",
+        "speciesId": "species-018",
+        "x": 220.1881160736102,
+        "y": 246.54170036315918,
+        "state": "TETHERED",
+        "moving": false,
+        "currentHp": 220,
+        "maxHp": 220
+      }
+    ],
+    "raisingSamples": [
+      {
+        "speciesIndex": 18,
+        "state": 14,
+        "nativeFrame": 3,
+        "sequenceId": 0,
+        "x": 85,
+        "y": 479
+      },
+      {
+        "speciesIndex": 18,
+        "state": 14,
+        "nativeFrame": 16,
+        "sequenceId": 0,
+        "x": 85,
+        "y": 479
+      },
+      {
+        "speciesIndex": 18,
+        "state": 14,
+        "nativeFrame": 26,
+        "sequenceId": 0,
+        "x": 85,
+        "y": 479
+      },
+      {
+        "speciesIndex": 18,
+        "state": 14,
+        "nativeFrame": 38,
+        "sequenceId": 0,
+        "x": 86,
+        "y": 479
+      },
+      {
+        "speciesIndex": 18,
+        "state": 14,
+        "nativeFrame": 49,
+        "sequenceId": 0,
+        "x": 86,
+        "y": 479
+      },
+      {
+        "speciesIndex": 18,
+        "state": 1,
+        "nativeFrame": 61,
+        "sequenceId": 0,
+        "x": 86,
+        "y": 479
+      },
+      {
+        "speciesIndex": 18,
+        "state": 1,
+        "nativeFrame": 71,
+        "sequenceId": 0,
+        "x": 85,
+        "y": 479
+      },
+      {
+        "speciesIndex": 18,
+        "state": 2,
+        "nativeFrame": 83,
+        "sequenceId": 2,
+        "x": 83.94287109375,
+        "y": 478.08251953125
+      },
+      {
+        "speciesIndex": 18,
+        "state": 2,
+        "nativeFrame": 94,
+        "sequenceId": 2,
+        "x": 72.314453125,
+        "y": 467.990234375
+      },
+      {
+        "speciesIndex": 18,
+        "state": 2,
+        "nativeFrame": 106,
+        "sequenceId": 2,
+        "x": 64.62890625,
+        "y": 465.98046875
+      }
+    ],
+    "captureButtonPresent": false,
+    "inputCadence": "WAIT_FOR_OBSERVED_NATIVE_FRAME_PER_POINTER_SAMPLE",
+    "initialClock": "2026-09-10T01:00:00Z (UTC, fixed Date for original clock-seeded RNG)",
+    "setup": "ISOLATED_QA_GATE_UNLOCK_NORMAL_NATIVE_SPAWN_AND_POINTER_CAPTURE",
+    "verdict": "PASS"
+  },
+  "interpretation": "The ordinary Ice source route remains locked for a fresh tamer. Existing loopback qa=unlock was used only to exercise normal native spawn, tether, capture, result portrait and Raising Home rendering without changing source progression, spawn tables or RNG."
+}

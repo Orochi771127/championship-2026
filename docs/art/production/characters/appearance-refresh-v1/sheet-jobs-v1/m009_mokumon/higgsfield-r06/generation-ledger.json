@@ -1,0 +1,28 @@
+{
+  "entityId": "m009_mokumon",
+  "provider": "HIGGSFIELD",
+  "model": "gpt_image_2_5",
+  "estimatedSubmittedCredits": 3,
+  "settledCreditLedger": "NOT_EXPOSED_BY_PROVIDER_TOOL",
+  "jobs": [
+    {
+      "purpose": "full 8x6 candidate sheet",
+      "jobId": "d90e9558-96ff-4e5a-b463-3e03f86289e7",
+      "estimatedCredits": 3,
+      "resultSha256": "8e626e2fbdd35d0330c7e09c1895707fcbd1fdd95c0c08981b75099bd7f82494"
+    }
+  ],
+  "deterministicPostprocess": {
+    "specialStates": [
+      "main/cell_043 orange-red palette state from main/cell_008",
+      "main/cell_044 black silhouette from main/cell_008",
+      "main/cell_045 black silhouette from main/cell_000",
+      "main/cell_058 stone-gray state from main/cell_010",
+      "main/cell_061 white silhouette from main/cell_000"
+    ],
+    "restraintRepair": "main/cell_031 receives a one-pixel wrapped gold band from its own accepted body bounds; main/cell_033 reuses that canonical pose",
+    "anchorCorrection": "none; the shared sheet normalization preserves reviewed local placement",
+    "sameAsCell": "All non-canonical main/sub slots are reconstructed from bank.json canonical mappings"
+  },
+  "policy": "One full-sheet generation; unused panels, canonical aliases, derivable special states and the missing restraint band are deterministic. Paid repair is reserved for a motion-semantic or identity failure."
+}

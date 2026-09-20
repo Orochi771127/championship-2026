@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m008_poyomon",
+  "baseDirectory": "candidate-hf-batch-r02",
+  "outputDirectory": "candidate-hf-batch-r03",
+  "alphaThreshold": 128,
+  "placement": "ONE_SHARED_SCALE_AND_OFFSET_PER_SHEET",
+  "perCellResize": false,
+  "bboxRecenter": false,
+  "groups": [],
+  "deterministicDerivations": {
+    "main/cell_048": {
+      "base": "main/cell_005",
+      "operation": "black_with_pale_features",
+      "paleSourceColors": [
+        [244, 196, 94, 255],
+        [242, 127, 115, 255]
+      ],
+      "paleTargetColor": [238, 248, 222, 255],
+      "evidence": "Donor alpha proof: main/cell_005 and main/cell_048 have byte-identical source alpha masks and reviewed bounds [-5,-10,7,0]. Derive the black state from the accepted original low pose while retaining its amber-coral facial window as pale features."
+    }
+  },
+  "anchorCorrections": {
+    "main/cell_009": {
+      "translation": [5, 2],
+      "evidence": "Donor-reviewed visible bounds plus source origin require the flat horizontal canonical pose at [30,31,44,39]; generated bounds were [25,29,40,36]. Preserve generated size and restore its source-local horizontal and baseline placement. main/cell_062 reuses this same canonical pose."
+    }
+  }
+}

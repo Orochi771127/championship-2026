@@ -1,0 +1,138 @@
+{
+  "status": "PASS_EXPECTED_SOURCE_PROGRESSION_GATE_AND_ISOLATED_CAPTURE",
+  "entity": "m009_mokumon",
+  "revision": "r06",
+  "defaultRuntimeChanged": false,
+  "fullCharacterArtAcceptance": false,
+  "sourceProgressionGateQa": {
+    "status": "PASS_EXPECTED_SOURCE_PROGRESSION_GATE",
+    "entity": "m009_mokumon",
+    "revision": "r06",
+    "gateId": "championship:2026:gate:canyon",
+    "freshTamerPrimaryActionDisabled": true,
+    "progressionBypassed": false,
+    "sourceRoute": "AVAILABLE_AFTER_GATE_PROGRESSION",
+    "rendererValidation": "PASS_LOOPBACK_RUNTIME_RENDERER_REVIEW",
+    "normalCaptureSequenceQa": "NOT_RUN_UNTIL_SOURCE_GATE_UNLOCK",
+    "defaultRuntimeChanged": false,
+    "fullCharacterArtAcceptance": false,
+    "pageErrors": []
+  },
+  "isolatedUnlockedCaptureQa": {
+    "gate": "CHAMPIONSHIP_VS3_ENCLOSURE_BROWSER_QA",
+    "date": "2026-09-20T10:36:43.267Z",
+    "baseUrl": "http://127.0.0.1:8732/championship.html?characterArtReview=m009&qa=unlock",
+    "viewport": "390x844",
+    "selectedGateId": "championship:2026:gate:canyon",
+    "capturedWildId": "championship:2026:gate:canyon:native-wild:0",
+    "capturedSpeciesId": "species-016",
+    "resultPortrait": "assets/production/internal-character-review/m009_mokumon-hf-r06/hud-r01/main-cell_000.png",
+    "reviewAssets": [
+      "/assets/production/internal-character-review/m009_mokumon-hf-r06/hud-r01/manifest.json",
+      "/assets/production/internal-character-review/m009_mokumon-hf-r06/runtime.review.json",
+      "/assets/production/internal-character-review/m009_mokumon-hf-r06/main.json",
+      "/assets/production/internal-character-review/m009_mokumon-hf-r06/main.png",
+      "/assets/production/internal-character-review/m009_mokumon-hf-r06/hud-r01/main-cell_000.png"
+    ],
+    "boundSamples": [
+      {
+        "wildId": "championship:2026:gate:canyon:native-wild:0",
+        "speciesId": "species-016",
+        "x": 39.544002532959325,
+        "y": 276.2730712890625,
+        "state": "TETHERED",
+        "moving": false,
+        "currentHp": 210,
+        "maxHp": 210
+      }
+    ],
+    "raisingSamples": [
+      {
+        "speciesIndex": 16,
+        "state": 1,
+        "nativeFrame": 2,
+        "sequenceId": 0,
+        "x": 144,
+        "y": 579
+      },
+      {
+        "speciesIndex": 16,
+        "state": 2,
+        "nativeFrame": 15,
+        "sequenceId": 2,
+        "x": 144.771484375,
+        "y": 573.453125
+      },
+      {
+        "speciesIndex": 16,
+        "state": 2,
+        "nativeFrame": 26,
+        "sequenceId": 2,
+        "x": 146.89306640625,
+        "y": 558.19921875
+      },
+      {
+        "speciesIndex": 16,
+        "state": 2,
+        "nativeFrame": 38,
+        "sequenceId": 2,
+        "x": 148.20751953125,
+        "y": 545.55859375
+      },
+      {
+        "speciesIndex": 16,
+        "state": 2,
+        "nativeFrame": 48,
+        "sequenceId": 2,
+        "x": 150.13623046875,
+        "y": 531.69140625
+      },
+      {
+        "speciesIndex": 16,
+        "state": 2,
+        "nativeFrame": 60,
+        "sequenceId": 2,
+        "x": 153.45068359375,
+        "y": 511.05078125
+      },
+      {
+        "speciesIndex": 16,
+        "state": 2,
+        "nativeFrame": 71,
+        "sequenceId": 2,
+        "x": 154.572265625,
+        "y": 499.796875
+      },
+      {
+        "speciesIndex": 16,
+        "state": 2,
+        "nativeFrame": 82,
+        "sequenceId": 2,
+        "x": 157.69384765625,
+        "y": 480.54296875
+      },
+      {
+        "speciesIndex": 16,
+        "state": 2,
+        "nativeFrame": 93,
+        "sequenceId": 2,
+        "x": 158.8154296875,
+        "y": 469.2890625
+      },
+      {
+        "speciesIndex": 16,
+        "state": 2,
+        "nativeFrame": 105,
+        "sequenceId": 2,
+        "x": 162.1298828125,
+        "y": 448.6484375
+      }
+    ],
+    "captureButtonPresent": false,
+    "inputCadence": "WAIT_FOR_OBSERVED_NATIVE_FRAME_PER_POINTER_SAMPLE",
+    "initialClock": "2026-09-10T08:00:00Z (UTC, fixed Date for original clock-seeded RNG)",
+    "setup": "ISOLATED_QA_GATE_UNLOCK_NORMAL_NATIVE_SPAWN_AND_POINTER_CAPTURE",
+    "verdict": "PASS"
+  },
+  "interpretation": "The ordinary Canyon source route remains locked for a fresh tamer. Existing loopback qa=unlock was used only to exercise the normal native spawn, tether, capture, result portrait and Raising Home renderer without changing source progression, spawn tables or RNG."
+}

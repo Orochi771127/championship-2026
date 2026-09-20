@@ -1,0 +1,32 @@
+{
+  "status": "PASS_REGION_IMPORT_STRUCTURE",
+  "cellCount": 83,
+  "canonicalMasters": 51,
+  "sequencesComparedExactly": 53,
+  "origin": [
+    24,
+    38
+  ],
+  "all83AlphaMasksUnchanged": true,
+  "allAliasesAndTranslationsVerified": true,
+  "hashReceiptVerified": true,
+  "changedSlots": [
+    "main/cell_027",
+    "main/cell_029",
+    "main/cell_031",
+    "main/cell_033",
+    "main/cell_035",
+    "main/cell_038",
+    "main/cell_040",
+    "main/cell_043"
+  ],
+  "unchangedSlots": 75,
+  "fullCharacterArtReview": "PENDING",
+  "normalGameQa": "NOT_RUN",
+  "publicRelease": false,
+  "estimatedCredits": 3,
+  "observedBalanceBefore": 3010,
+  "observedBalanceAfter": 3010,
+  "actualCharge": "NOT_EXPOSED_OR_NOT_YET_REFLECTED",
+  "jobId": "d398f90f-2df3-4913-87ba-deebb131e0ca"
+}

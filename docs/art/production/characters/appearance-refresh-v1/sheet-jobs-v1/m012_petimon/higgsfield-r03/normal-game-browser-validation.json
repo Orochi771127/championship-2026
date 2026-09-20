@@ -1,0 +1,138 @@
+{
+  "status": "PASS_EXPECTED_SOURCE_PROGRESSION_GATE_AND_ISOLATED_CAPTURE",
+  "entity": "m012_petimon",
+  "revision": "r03",
+  "gateId": "championship:2026:gate:ruins",
+  "freshTamerGate": {
+    "freshTamerPrimaryActionDisabled": true,
+    "progressionBypassed": false,
+    "sourceRoute": "AVAILABLE_AFTER_GATE_PROGRESSION"
+  },
+  "isolatedCapture": {
+    "gate": "CHAMPIONSHIP_VS3_ENCLOSURE_BROWSER_QA",
+    "date": "2026-09-20T11:48:32.770Z",
+    "baseUrl": "http://127.0.0.1:8732/championship.html?characterArtReview=m012&qa=unlock",
+    "viewport": "390x844",
+    "selectedGateId": "championship:2026:gate:ruins",
+    "capturedWildId": "championship:2026:gate:ruins:native-wild:9",
+    "capturedSpeciesId": "species-019",
+    "resultPortrait": "assets/production/internal-character-review/m012_petimon-hf-r03/hud-r01/main-cell_000.png",
+    "reviewAssets": [
+      "/assets/production/internal-character-review/m012_petimon-hf-r03/hud-r01/manifest.json",
+      "/assets/production/internal-character-review/m012_petimon-hf-r03/runtime.review.json",
+      "/assets/production/internal-character-review/m012_petimon-hf-r03/main.json",
+      "/assets/production/internal-character-review/m012_petimon-hf-r03/main.png",
+      "/assets/production/internal-character-review/m012_petimon-hf-r03/hud-r01/main-cell_000.png"
+    ],
+    "boundSamples": [
+      {
+        "wildId": "championship:2026:gate:ruins:native-wild:9",
+        "speciesId": "species-019",
+        "x": 189.84596252441304,
+        "y": 385.16835021972656,
+        "state": "TETHERED",
+        "moving": false,
+        "currentHp": 230,
+        "maxHp": 230
+      }
+    ],
+    "raisingSamples": [
+      {
+        "speciesIndex": 19,
+        "state": 1,
+        "nativeFrame": 4,
+        "sequenceId": 0,
+        "x": 85,
+        "y": 479
+      },
+      {
+        "speciesIndex": 19,
+        "state": 9,
+        "nativeFrame": 16,
+        "sequenceId": 8,
+        "x": 80,
+        "y": 484
+      },
+      {
+        "speciesIndex": 19,
+        "state": 9,
+        "nativeFrame": 27,
+        "sequenceId": 8,
+        "x": 83,
+        "y": 475
+      },
+      {
+        "speciesIndex": 19,
+        "state": 9,
+        "nativeFrame": 38,
+        "sequenceId": 8,
+        "x": 83,
+        "y": 475
+      },
+      {
+        "speciesIndex": 19,
+        "state": 9,
+        "nativeFrame": 49,
+        "sequenceId": 8,
+        "x": 83,
+        "y": 475
+      },
+      {
+        "speciesIndex": 19,
+        "state": 1,
+        "nativeFrame": 61,
+        "sequenceId": 0,
+        "x": 83,
+        "y": 475
+      },
+      {
+        "speciesIndex": 19,
+        "state": 1,
+        "nativeFrame": 72,
+        "sequenceId": 0,
+        "x": 85,
+        "y": 479
+      },
+      {
+        "speciesIndex": 19,
+        "state": 1,
+        "nativeFrame": 84,
+        "sequenceId": 0,
+        "x": 85,
+        "y": 479
+      },
+      {
+        "speciesIndex": 19,
+        "state": 1,
+        "nativeFrame": 94,
+        "sequenceId": 0,
+        "x": 85,
+        "y": 479
+      },
+      {
+        "speciesIndex": 19,
+        "state": 2,
+        "nativeFrame": 106,
+        "sequenceId": 2,
+        "x": 84,
+        "y": 484
+      }
+    ],
+    "captureButtonPresent": false,
+    "inputCadence": "WAIT_FOR_OBSERVED_NATIVE_FRAME_PER_POINTER_SAMPLE",
+    "initialClock": "2026-09-10T01:00:00Z (UTC, fixed Date for original clock-seeded RNG)",
+    "setup": "ISOLATED_QA_GATE_UNLOCK_NORMAL_NATIVE_SPAWN_AND_POINTER_CAPTURE",
+    "worldRouteSetup": {
+      "endDaysThroughPublicAppFixture": 16,
+      "targetHour": 8,
+      "browserEntry": "CONTINUE_NORMAL_SAVE"
+    },
+    "verdict": "PASS"
+  },
+  "rendererValidation": "PASS_LOOPBACK_RUNTIME_RENDERER_REVIEW",
+  "normalCaptureSequenceQa": "PASS_NATIVE_SPAWN_TETHER_RESULT_AND_RAISING_HOME_ANIMATION",
+  "calendarPrecondition": "16_END_DAYS_THROUGH_PUBLIC_APP_RULE_AND_NORMAL_SAVE_CONTINUE",
+  "defaultRuntimeChanged": false,
+  "fullCharacterArtAcceptance": false,
+  "pageErrors": []
+}

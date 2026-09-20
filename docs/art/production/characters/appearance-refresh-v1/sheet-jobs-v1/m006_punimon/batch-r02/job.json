@@ -1,0 +1,166 @@
+{
+  "artAccepted": false,
+  "batchId": "hf-batch-20260920-01",
+  "blankPanels": [
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+  ],
+  "derived": {
+    "main/cell_044": {
+      "base": "main/cell_008",
+      "operation": "red",
+      "sourceProof": {
+        "limitation": "Color relation is not a global donor LUT; use original authored face marks and palette, never donor RGB.",
+        "operationClass": "EXACT_ALPHA_ORIGINAL_COLOR_RULE",
+        "sourceAlphaSha256": "ee16ba8adf1490f25461388ac1d7357af1388ad3a5c782f3bf7d2cec79bad5ee",
+        "targetColorCount": 6
+      }
+    },
+    "main/cell_047": {
+      "base": "main/cell_008",
+      "operation": "black",
+      "sourceProof": {
+        "approvedForProduction": false,
+        "deterministicFill": null,
+        "operationClass": "PALETTE_LOOKUP",
+        "productionRule": "AUTHOR_ORIGINAL_TARGET_PALETTE_OR_FILL_BEFORE_USE",
+        "relationSha256": "c63f09ab4bd2a90c879f8ebbceb0fb7426a73a111e44c6e120c76f1b43305d0b",
+        "sourceColorCount": 7,
+        "stateSemantics": "UNKNOWN_REQUIRES_EXISTING_CONTRACT",
+        "targetColorCount": 2
+      }
+    },
+    "main/cell_048": {
+      "base": "main/cell_000",
+      "operation": "black",
+      "sourceProof": {
+        "limitation": "Color relation is not a global donor LUT; use original authored face marks and palette, never donor RGB.",
+        "operationClass": "EXACT_ALPHA_ORIGINAL_COLOR_RULE",
+        "sourceAlphaSha256": "ef77875ab928c6ce8d397c5333ca31b35972d541968af9c9e93e7cbdaaf47b20",
+        "targetColorCount": 2
+      }
+    },
+    "main/cell_061": {
+      "base": "main/cell_010",
+      "operation": "gray",
+      "sourceProof": {
+        "approvedForProduction": false,
+        "deterministicFill": null,
+        "operationClass": "PALETTE_LOOKUP",
+        "productionRule": "AUTHOR_ORIGINAL_TARGET_PALETTE_OR_FILL_BEFORE_USE",
+        "relationSha256": "ad385962618eeb2ea38b5b68e781381f27d6a3a249896e7883c7a75ca48e2f91",
+        "sourceColorCount": 6,
+        "stateSemantics": "UNKNOWN_REQUIRES_EXISTING_CONTRACT",
+        "targetColorCount": 5
+      }
+    },
+    "main/cell_064": {
+      "base": "main/cell_000",
+      "operation": "white",
+      "sourceProof": {
+        "approvedForProduction": false,
+        "deterministicFill": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "operationClass": "SOLID_ALPHA_FILL",
+        "productionRule": "AUTHOR_ORIGINAL_TARGET_PALETTE_OR_FILL_BEFORE_USE",
+        "relationSha256": "512dafae34af7cd0c4f186c14829bfedc3fc64237ceaf0169fc09e544a12be52",
+        "sourceColorCount": 9,
+        "stateSemantics": "UNKNOWN_REQUIRES_EXISTING_CONTRACT",
+        "targetColorCount": 1
+      }
+    }
+  },
+  "designSha256": "4dee862c2614b6ef2886d9931338b964d24060e9c9a5cb2a2a515b4fa1b116f5",
+  "designVersion": "m006-prism-kernel-r01",
+  "entityId": "m006_punimon",
+  "grid": [
+    8,
+    6
+  ],
+  "inventorySha256": "ca7b5463ff6ec93953331f956f12f6993be8fe75eeca7cff48394cf2eb36936a",
+  "keys": [
+    "main/cell_001",
+    "main/cell_002",
+    "main/cell_003",
+    "main/cell_005",
+    "main/cell_008",
+    "main/cell_009",
+    "main/cell_010",
+    "main/cell_011",
+    "main/cell_012",
+    "main/cell_014",
+    "main/cell_020",
+    "main/cell_022",
+    "main/cell_023",
+    "main/cell_024",
+    "main/cell_025",
+    "main/cell_026",
+    "main/cell_027",
+    "main/cell_028",
+    "main/cell_029",
+    "main/cell_030",
+    "main/cell_032",
+    "main/cell_035",
+    "main/cell_036",
+    "main/cell_037",
+    "main/cell_039",
+    "main/cell_040",
+    "main/cell_041",
+    "main/cell_042",
+    "main/cell_043",
+    "main/cell_050",
+    "main/cell_051",
+    "main/cell_052",
+    "main/cell_053",
+    "main/cell_054",
+    "main/cell_055",
+    "main/cell_056",
+    "main/cell_057",
+    "main/cell_058",
+    "main/cell_059",
+    "main/cell_060",
+    "main/cell_062"
+  ],
+  "nativeCanvas": [
+    64,
+    64
+  ],
+  "nonDerivableSpecialCells": [],
+  "palette": [
+    "#00000000",
+    "#20304A",
+    "#356C8C",
+    "#58AAC1",
+    "#AEE8E4",
+    "#8177D9",
+    "#C8C2FF",
+    "#17243E",
+    "#F0A17E",
+    "#F7FCFF"
+  ],
+  "retainedMasters": [
+    "main/cell_000"
+  ],
+  "reviewScope": "STANDARD_POSE_READABILITY_ACCEPTED_MULTI_POSE_CANDIDATE_ONLY",
+  "reviewSha256": "ba08100916b6a579fb0513d56ffa3e1faed6dcf2cf3637fda712df5d62b8c79b",
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "sourceCounts": {
+    "masters": 47,
+    "sequences": 53,
+    "slots": 83
+  },
+  "sourceOrigin": [
+    24,
+    38
+  ]
+}

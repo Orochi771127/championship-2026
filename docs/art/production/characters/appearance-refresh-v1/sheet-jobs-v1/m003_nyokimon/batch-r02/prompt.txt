@@ -1,0 +1,47 @@
+Create a complete ORIGINAL pixel-game animation sheet. Reference IMAGE 1 is our ORIGINAL identity seed and the only appearance/style authority. IMAGE 2 is a research MOTION/LAYOUT GUIDE only: preserve each slot pose, facing, compression, face visibility, appendage and bubble positions, bound/unbound state, scale and local origin, but replace all commercial character artwork with the identity from IMAGE 1. Do not copy the donor colored pixels or recognizable donor facial design. Mint leaf-eared seed creature: coherent jade/mint green round seed, two leaf-ear surfaces, two separated cream eye caps, dark jade pupils, small peach triangular nose and short separate mouth. Keep the leafy limbless anatomy; feline identity is expressed by facial marks only, never add cat legs, tail or extra ears.
+OUTPUT: exactly 8 columns by 6 rows, 48 equally sized cells, transparent RGBA canvas, no grid lines, words, labels, numbers, ground shadows, glow, background, decorations, anti-aliasing or painterly effects. Each cell represents a logical64x64 image enlarged uniformly4x for this2K sheet. Keep the character SMALL within each cell, exactly at the positions and size of image2, with broad transparent margins. Do not fill each cell, auto-center, bottom-align or resize individual characters. The same shared coordinate origin is [23, 37]. Preserve small pixel clusters and limited palette of the seed; gold rope is a separate physical prop. No motion interpolation or new actions. Retain different visible face openings, squeezed/closed faces and occlusion: do not put a smiling face on every frame. Restraint must visibly wrap the BODY in each bound pose and change orientation with it; never omit it on flattened poses. Folded leaves or swept upper body hide face exactly as the guide.
+Read positions left-to-right then top-to-bottom; indexed slots below are layout instructions, DO NOT print these labels:
+1: main/cell_001: Round seed rises slightly; leaf pair bends downward closer to head.
+2: main/cell_002: Horizontal leaves and compact forward seed face.
+3: main/cell_003: Leaf pair droops around small front seed.
+4: main/cell_004: Raised seed with rounded leaf caps.
+5: main/cell_005: Seed tilts right under offset nearly horizontal leaves.
+6: main/cell_008: Two long leaves upright V above round seed.
+7: main/cell_009: Whole seed-and-leaves axis tilted diagonally toward upper right.
+8: main/cell_010: Round seed offset right; V leaves rise toward upper left.
+9: main/cell_011: Leaf pair low above forward round seed.
+10: main/cell_012: Expanded vertical open front face region; leaves remain spread.
+11: main/cell_013: Seed compressed below folded horizontal leaf canopy; face mostly narrowed/covered.
+12: main/cell_014: Seed extends sideward right with long leaves rising upward.
+13: main/cell_018: Forward seed and asymmetrically spread short leaves.
+14: main/cell_019: Round seed under long upright V leaves.
+15: main/cell_022: Low seed stretches right with nearly horizontal leaves.
+16: main/cell_023: Front face region expanded vertically below short leaves.
+17: main/cell_026: Round suspended seed below two horizontally spread leaves; forward small face marks. Gold restraint wraps the seed BODY and remains attached below leaves.
+18: main/cell_027: Round seed rises slightly; leaf pair bends downward closer to head. Gold restraint wraps the seed BODY and remains attached below leaves.
+19: main/cell_028: Horizontal leaves and compact forward seed face. Gold restraint wraps the seed BODY and remains attached below leaves.
+20: main/cell_029: Leaf pair droops around small front seed. Gold restraint wraps the seed BODY and remains attached below leaves.
+21: main/cell_030: Raised seed with rounded leaf caps. Gold restraint wraps the seed BODY and remains attached below leaves.
+22: main/cell_031: Seed tilts right under offset nearly horizontal leaves. Gold restraint wraps the seed BODY and remains attached below leaves.
+23: main/cell_034: Two long leaves upright V above round seed. Gold restraint wraps the seed BODY and remains attached below leaves.
+24: main/cell_035: Forward seed and asymmetrically spread short leaves. Gold restraint wraps the seed BODY and remains attached below leaves.
+25: main/cell_036: Round seed under long upright V leaves. Gold restraint wraps the seed BODY and remains attached below leaves.
+26: main/cell_037: Low pair of leaves above forward compact face. Gold restraint wraps the seed BODY and remains attached below leaves.
+27: main/cell_038: Canopy droops over compressed face; preserve occlusion. Gold restraint wraps the seed BODY and remains attached below leaves.
+28: main/cell_039: Low seed stretches right with nearly horizontal leaves. Gold restraint wraps the seed BODY and remains attached below leaves.
+29: main/cell_040: Front face region expanded vertically below short leaves. Gold restraint wraps the seed BODY and remains attached below leaves.
+30: main/cell_041: Front region compressed under short leaves. Gold restraint wraps the seed BODY and remains attached below leaves.
+31: main/cell_048: Short leaves sweep right; seed tilted.
+32: main/cell_049: Forward seed and drooping leaf pair.
+33: main/cell_050: Long upright leaves, centered round seed.
+34: main/cell_051: Right-tilted seed under swept short leaves.
+35: main/cell_052: Forward seed below spread leaves.
+36: main/cell_053: Long upright leaves with different seed/face height.
+37: main/cell_054: Leaves folded around seed, hiding much of face.
+38: main/cell_055: Leaf tips fold down over body, strong face occlusion.
+39: main/cell_056: Short drooping leaves and round forward seed.
+40: main/cell_057: Upright long V leaves with visible central face mark.
+41: main/cell_058: Large folded leaf covers left/front of seed; seed partly visible at right.
+42: main/cell_059: Asymmetric long left leaf and shorter swept-right leaf.
+43: main/cell_063: White silhouette of spread-leaf seed.
+All remaining slots [44, 45, 46, 47, 48] must remain fully transparent and empty. This is game production art, not a poster or character design presentation.

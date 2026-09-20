@@ -1,0 +1,211 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m006_punimon",
+  "designVersion": "m006-prism-kernel-r01",
+  "stage": "SINGLE_STANDARD_POSE_IDENTITY_CANDIDATE",
+  "selectedOption": "DELEGATED_LOW_MOTION_RISK",
+  "artReview": "ORIGINAL_DESIGN_LOCK_CREATED_FULL_MOTION_PENDING",
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "authoringSource": "Codex independent pixel design after complete donor motion review",
+  "sourceRefs": [],
+  "sourceUse": "Independent original pixel geometry and palette constrained only by the reviewed donor motion contract, native bounds and two-crest limbless morphology. No donor RGB or copied source pixels.",
+  "features": [
+    "非對稱雙晶冠",
+    "藍綠凝膠晶核",
+    "分離式深色雙眼",
+    "單一無肢軟體"
+  ],
+  "faceRules": [
+    "雙眼以身體色隔開，伸展時可拉長但不可合併成面罩。",
+    "低伏與倒地格允許眼部壓縮或遮蔽，不在每格貼相同笑臉。",
+    "晶冠固定為兩個，隨姿勢折疊或分離，不增生第三冠。"
+  ],
+  "ornamentRules": [
+    "高光與晶面只能附著於既有身體與兩枚晶冠，不增加漂浮物或獨立肢體。"
+  ],
+  "identityDesign": {
+    "directionVersion": "creature-identity-v1",
+    "family": "CRYSTAL_SEED",
+    "fixedTraits": [
+      "非對稱雙晶冠",
+      "藍綠凝膠晶核",
+      "分離式深色雙眼",
+      "單一無肢軟體"
+    ],
+    "changedRegions": [
+      "全身材質",
+      "晶冠",
+      "臉部色區"
+    ],
+    "allowedContourChanges": [
+      "在 donor 每格既有軟體支撐內重新設計晶面與兩冠輪廓；不可改變動作極值與接地關係。"
+    ],
+    "preservedMotion": [
+      "單一軟身軸的彈跳、壓扁、直立伸長、橫向掃動與倒地",
+      "原槽位、序列、ticks、native bounds、origin 與 Main/Sub 映射"
+    ]
+  },
+  "palette": [
+    "#00000000",
+    "#20304A",
+    "#356C8C",
+    "#58AAC1",
+    "#AEE8E4",
+    "#8177D9",
+    "#C8C2FF",
+    "#17243E",
+    "#F0A17E",
+    "#F7FCFF"
+  ],
+  "poses": [
+    {
+      "key": "main/cell_000",
+      "nativeBounds": [
+        -5,
+        -9,
+        6,
+        1
+      ],
+      "pixels": [
+        [
+          0,
+          0,
+          0,
+          5,
+          0,
+          0,
+          0,
+          6,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          6,
+          1,
+          0,
+          1,
+          5,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          5,
+          3,
+          2,
+          1,
+          2,
+          3,
+          6,
+          1,
+          0
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          3,
+          2,
+          3,
+          4,
+          3,
+          2,
+          1
+        ],
+        [
+          1,
+          3,
+          4,
+          9,
+          3,
+          2,
+          4,
+          9,
+          3,
+          2,
+          1
+        ],
+        [
+          1,
+          3,
+          7,
+          4,
+          3,
+          2,
+          4,
+          7,
+          3,
+          2,
+          1
+        ],
+        [
+          1,
+          2,
+          3,
+          3,
+          4,
+          4,
+          3,
+          3,
+          2,
+          2,
+          1
+        ],
+        [
+          0,
+          1,
+          2,
+          4,
+          3,
+          3,
+          3,
+          4,
+          2,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          2,
+          2,
+          3,
+          2,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0
+        ]
+      ],
+      "role": "原創晶核仔標準姿勢；完整動作仍需生成與逐格審查",
+      "poseReview": "ORIGINAL_IDENTITY_LOCK_FULL_MOTION_PENDING",
+      "changeNotes": [
+        "Prism Kernel / 晶核仔",
+        "以藍綠晶質凝膠取代原作紅色軟體外觀",
+        "保留無肢、雙短冠與低面部位置作為動作相容條件"
+      ]
+    }
+  ]
+}

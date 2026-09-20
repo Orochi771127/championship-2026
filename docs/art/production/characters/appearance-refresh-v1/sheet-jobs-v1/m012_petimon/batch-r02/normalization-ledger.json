@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "operation": "DETERMINISTIC_SAMPLE_AND_CLEAR_UNUSED_PANELS",
+  "source": "raw-sheet.png",
+  "sourceSha256": "9c65fec77121ab596309816cba45e81f1544412235d494510b76f903a46e7d90",
+  "output": "normalized-sheet.png",
+  "outputSha256": "31e6614f49428a6b97154c56a592b560262d8ec31e3059f647d941bb01af3332",
+  "sampleGrid": [
+    8,
+    6
+  ],
+  "sampleSize": 52,
+  "alphaThreshold": 128,
+  "clearedUnusedPanels": [
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+  ],
+  "modifiedRequiredPanels": false,
+  "paidGenerationCallsAdded": 0
+}

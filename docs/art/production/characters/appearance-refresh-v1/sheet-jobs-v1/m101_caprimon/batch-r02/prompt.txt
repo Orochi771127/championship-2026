@@ -1,0 +1,74 @@
+Create a complete ORIGINAL pixel-game animation sheet.
+Reference IMAGE 1 is our ORIGINAL identity seed and the only appearance/style authority.
+IMAGE 2 is a research MOTION/LAYOUT GUIDE only: preserve every occupied slot pose, facing, whole-body deformation, expression visibility, restrained/unrestrained state, native scale and local origin, while replacing every commercial-character appearance with the original identity from IMAGE 1.
+Do not copy source RGB colors, recognizable markings, face design or proprietary character appearance.
+
+Original identity (m101-crescent-reed-mink-r01): Original deep-plum reed mink with twin teal crescent ear vanes, ivory face mask, amber eye, mint belly ribbon, constellation back marks and coral tail tip; donor supplies motion, timing, bounds and mapping only. No donor RGB or copied source pixels.
+Fixed identity traits: 深梅色低矮水貂身; 雙青綠月牙耳帆; 象牙臉罩與琥珀眼; 薄荷腹帶、星點背紋與珊瑚尾尖.
+Face rules: 象牙臉罩必須依 donor 角度壓縮、轉側、遮蔽；張嘴格顯示深色口腔與珊瑚內緣。 琥珀單眼只在來源角度可見時出現，不可把側姿複製成每格正面臉。
+Ornament rules: 雙月牙耳帆附著頭部、尾尖附著單一長尾；依 donor 抬升、後掠、貼地或捲曲。不得新增手臂、翅膀、第二尾或漂浮裝飾。 main027-043 的金色束帶是外部道具，須覆跨身體且不得與薄荷腹帶混同。
+Morphology contract: Low elongated four-contact juvenile creature with a compact gray face, two tall attached triangular head points, a blue underside and a long tapering blue tail; it stays quadrupedal/ground-hugging except for source-authored lifts and rears.
+Locomotion contract: Source cells show low crawl/run rocking, horizontal stretch and compression, diagonal pivot, short airborne/tail-led lifts, upright rear, curl, slide and fully collapsed poses. Preserve raw sequence IDs because action names are not proven.
+Expression contract: The visible leading eye, brow/ear angle and red mouth change by pose. Mouth-open effort/alarm is clear in the frontal/upright cells; rear, curled and flattened cells intentionally occlude much of the face.
+Appendage prohibition: Four minute ground contacts, two attached triangular head points and one long flexible tail. No arms, wings, detached ornaments or additional tails may be introduced; contact endpoints and tail direction follow each donor cell.
+Restraint contract: Main 027-043 is the complete restrained block. A gold/dark external binding crosses or wraps the body in low, diagonal, upright, open-mouth and flattened poses; every canonical restrained master and all aliases must retain readable binding.
+
+OUTPUT: exactly 8 columns by 6 rows, 48 equal square cells, transparent RGBA canvas, no grid lines, words, labels, numbers, ground shadows, glow halo, background, decorations, anti-aliasing or painterly effects.
+Each cell represents one logical 64x64 image enlarged uniformly 4x for this sheet. Keep the creature VERY SMALL inside each cell at the position and relative size shown by IMAGE 2, with broad transparent margins.
+Do not center, bottom-align, crop, rotate or resize cells independently. Use one shared scale and translation for the complete sheet.
+Shared native origin is [24, 44]. Preserve crisp nearest-neighbor pixel clusters and the limited palette.
+Gold-brown binding is a separate physical prop, never anatomy. No tweening and no invented actions.
+Preserve expression changes per slot; the facial window may stretch, compress, shift or become occluded exactly as the guide shows. Do not paste one identical face on every pose.
+
+Read occupied slots left-to-right, top-to-bottom. The following indices are instructions only; do not print them:
+1: main/cell_001: Reviewed in all-cell sheet and its source sequence page: low side compression.
+2: main/cell_002: Reviewed in all-cell sheet and its source sequence page: flattened forward stretch.
+3: main/cell_003: Reviewed in all-cell sheet and its source sequence page: longer prone stretch.
+4: main/cell_004: Reviewed in all-cell sheet and its source sequence page: low alert with eye forward.
+5: main/cell_005: Reviewed in all-cell sheet and its source sequence page: short upright/tail lift.
+6: main/cell_009: Reviewed in all-cell sheet and its source sequence page: vertical/back-facing lift with tail curled.
+7: main/cell_010: Reviewed in all-cell sheet and its source sequence page: diagonal prone slide.
+8: main/cell_011: Reviewed in all-cell sheet and its source sequence page: low side neutral.
+9: main/cell_012: Reviewed in all-cell sheet and its source sequence page: tail-up body lift.
+10: main/cell_013: Reviewed in all-cell sheet and its source sequence page: front-diagonal compact pose.
+11: main/cell_014: Reviewed in all-cell sheet and its source sequence page: rearward extended leap/turn.
+12: main/cell_019: Reviewed in all-cell sheet and its source sequence page: fully flattened horizontal pose.
+13: main/cell_020: Reviewed in all-cell sheet and its source sequence page: upright rear with body vertical.
+14: main/cell_021: Reviewed in all-cell sheet and its source sequence page: low side travel pose.
+15: main/cell_022: Reviewed in all-cell sheet and its source sequence page: low open-mouth expression.
+16: main/cell_023: Reviewed in all-cell sheet and its source sequence page: flat stretched pose.
+17: main/cell_024: Reviewed in all-cell sheet and its source sequence page: low open-mouth effort.
+18: main/cell_025: Reviewed in all-cell sheet and its source sequence page: low side recovery.
+19: main/cell_026: Reviewed in all-cell sheet and its source sequence page: flat horizontal pre-restraint pose.
+20: main/cell_027: Reviewed in all-cell sheet and its source sequence page: restrained canonical pose 27; external gold/dark binding remains visibly attached while the donor body is low side/diagonal.
+21: main/cell_028: Reviewed in all-cell sheet and its source sequence page: restrained canonical pose 28; external gold/dark binding remains visibly attached while the donor body is low side/diagonal.
+22: main/cell_029: Reviewed in all-cell sheet and its source sequence page: restrained canonical pose 29; external gold/dark binding remains visibly attached while the donor body is low side/diagonal.
+23: main/cell_030: Reviewed in all-cell sheet and its source sequence page: restrained canonical pose 30; external gold/dark binding remains visibly attached while the donor body is low side/diagonal.
+24: main/cell_031: Reviewed in all-cell sheet and its source sequence page: restrained canonical pose 31; external gold/dark binding remains visibly attached while the donor body is low side/diagonal.
+25: main/cell_032: Reviewed in all-cell sheet and its source sequence page: restrained canonical pose 32; external gold/dark binding remains visibly attached while the donor body is upright/lifted.
+26: main/cell_035: Reviewed in all-cell sheet and its source sequence page: restrained canonical pose 35; external gold/dark binding remains visibly attached while the donor body is open-mouth/effort.
+27: main/cell_036: Reviewed in all-cell sheet and its source sequence page: restrained canonical pose 36; external gold/dark binding remains visibly attached while the donor body is flattened/extended.
+28: main/cell_037: Reviewed in all-cell sheet and its source sequence page: restrained canonical pose 37; external gold/dark binding remains visibly attached while the donor body is upright/lifted.
+29: main/cell_038: Reviewed in all-cell sheet and its source sequence page: restrained canonical pose 38; external gold/dark binding remains visibly attached while the donor body is low side/diagonal.
+30: main/cell_039: Reviewed in all-cell sheet and its source sequence page: restrained canonical pose 39; external gold/dark binding remains visibly attached while the donor body is low side/diagonal.
+31: main/cell_040: Reviewed in all-cell sheet and its source sequence page: restrained canonical pose 40; external gold/dark binding remains visibly attached while the donor body is flattened/extended.
+32: main/cell_041: Reviewed in all-cell sheet and its source sequence page: restrained canonical pose 41; external gold/dark binding remains visibly attached while the donor body is open-mouth/effort.
+33: main/cell_042: Reviewed in all-cell sheet and its source sequence page: restrained canonical pose 42; external gold/dark binding remains visibly attached while the donor body is low side/diagonal.
+34: main/cell_043: Reviewed in all-cell sheet and its source sequence page: restrained canonical pose 43; external gold/dark binding remains visibly attached while the donor body is flattened/extended.
+35: main/cell_049: Reviewed in all-cell sheet and its source sequence page: low side recovery after special states.
+36: main/cell_050: Reviewed in all-cell sheet and its source sequence page: diagonal lifted turn.
+37: main/cell_051: Reviewed in all-cell sheet and its source sequence page: low side pose.
+38: main/cell_052: Reviewed in all-cell sheet and its source sequence page: upright open-mouth expression.
+39: main/cell_053: Reviewed in all-cell sheet and its source sequence page: low side pose with tail trailing.
+40: main/cell_054: Reviewed in all-cell sheet and its source sequence page: tall upright rear.
+41: main/cell_055: Reviewed in all-cell sheet and its source sequence page: collapsed/knocked-flat pose.
+42: main/cell_056: Reviewed in all-cell sheet and its source sequence page: upright open-mouth pose.
+43: main/cell_057: Reviewed in all-cell sheet and its source sequence page: low side pose.
+44: main/cell_058: Reviewed in all-cell sheet and its source sequence page: low open-mouth pose.
+45: main/cell_059: Reviewed in all-cell sheet and its source sequence page: tight curled body/tail pose.
+46: main/cell_060: Reviewed in all-cell sheet and its source sequence page: tail-high curved lift.
+47: main/cell_062: Reviewed in all-cell sheet and its source sequence page: blue fully collapsed/defeated pose.
+48: main/cell_063: Reviewed in all-cell sheet and its source sequence page: normal tail-high side pose.
+
+All remaining slots [] must be fully transparent and empty.
+This is production sprite art, not a poster or presentation character sheet.

@@ -1,0 +1,30 @@
+{
+  "entityId": "m006_punimon",
+  "candidate": "candidate-hf-batch-r06",
+  "status": "PASS_CANDIDATE_VISUAL_AND_ORDINARY_HUNT_ROUTE_REVIEW",
+  "reviewedAgainst": "donor-review-v1/m006_punimon/review.json",
+  "checks": {
+    "morphology": "PASS_TINY_LIMBLESS_SINGLE_GEL_BODY_WITH_EXACTLY_TWO_CRYSTAL_CRESTS",
+    "locomotion": "PASS_BOB_COMPRESSION_CURL_VERTICAL_STRETCH_HORIZONTAL_SWEEP_AND_FLAT_COLLAPSE",
+    "faceAndExpression": "PASS_SEPARATED_EYES_WITH_STRETCHED_COMPRESSED_AND_OCCLUDED_FACE_VARIATION",
+    "appendages": "PASS_NO_ARMS_LEGS_FEET_EARS_TAIL_WINGS_OR_EXTRA_CRESTS",
+    "restraint": "PASS_ALL_MAIN_027_043_SHOW_GOLD_CENTRAL_BINDING_INCLUDING_REPAIRED_CELL_030",
+    "specialStates": "PASS_ORANGE_BLACK_STONE_AND_WHITE_WITH_DETERMINISTIC_DERIVATIONS",
+    "nativeScaleAndOrigin": "PASS_64PX_ORIGIN_24_38_SHARED_NORMALIZATION_AND_CELL_062_DONOR_BOUNDS_CORRECTION",
+    "mainSubMapping": "PASS_CANONICAL_ALIASES_AND_TRANSLATIONS",
+    "timing": "PASS_53_SOURCE_SEQUENCES_1863_BROWSER_TICKS"
+  },
+  "limits": {
+    "fullCharacterArtAcceptance": false,
+    "normalGameQa": "PASS_HUNT_BIND_CAPTURE_RESULT_AND_RAISING_HOME; BATTLE_NA_TOO_YOUNG",
+    "publicationOrRightsAcceptance": "NOT_IN_SCOPE",
+    "designSettingStatus": "ORIGINAL_IDENTITY_BOUND_TO_DONOR_REVIEW"
+  },
+  "paidGeneration": {
+    "completedProviderJobs": 2,
+    "failedProviderJobs": 0,
+    "estimatedSubmittedCredits": 4,
+    "settledCreditLedger": "NOT_EXPOSED_BY_PROVIDER_TOOL",
+    "nextPaidGeneration": "NOT_NEEDED_FOR_CURRENT_CANDIDATE"
+  }
+}

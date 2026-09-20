@@ -1,0 +1,160 @@
+{
+  "artAccepted": false,
+  "batchId": "hf-batch-20260920-01",
+  "blankPanels": [
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+  ],
+  "derived": {
+    "main/cell_043": {
+      "base": "main/cell_008",
+      "operation": "red",
+      "sourceProof": {
+        "approvedForProduction": false,
+        "deterministicFill": null,
+        "operationClass": "PALETTE_LOOKUP",
+        "productionRule": "AUTHOR_ORIGINAL_TARGET_PALETTE_OR_FILL_BEFORE_USE",
+        "relationSha256": "75b0ea005086099b2746bd93372620c5f34972b72bd2938684d4fa9e5e25d225",
+        "sourceColorCount": 9,
+        "stateSemantics": "UNKNOWN_REQUIRES_EXISTING_CONTRACT",
+        "targetColorCount": 7
+      }
+    },
+    "main/cell_046": {
+      "base": "main/cell_008",
+      "operation": "black",
+      "sourceProof": {
+        "approvedForProduction": false,
+        "deterministicFill": null,
+        "operationClass": "PALETTE_LOOKUP",
+        "productionRule": "AUTHOR_ORIGINAL_TARGET_PALETTE_OR_FILL_BEFORE_USE",
+        "relationSha256": "ec1309d8355880c0fb9c445f5ada3f88b9b654da8269643125d9cf2daee12e5c",
+        "sourceColorCount": 9,
+        "stateSemantics": "UNKNOWN_REQUIRES_EXISTING_CONTRACT",
+        "targetColorCount": 2
+      }
+    },
+    "main/cell_047": {
+      "base": "main/cell_000",
+      "operation": "black",
+      "sourceProof": {
+        "limitation": "Color relation is not a global donor LUT; use original authored face marks and palette, never donor RGB.",
+        "operationClass": "EXACT_ALPHA_ORIGINAL_COLOR_RULE",
+        "sourceAlphaSha256": "0f120f5d793acb7751812e9919055cd076d9bdc9bb1854e2e1417dfca8d51d20",
+        "targetColorCount": 2
+      }
+    },
+    "main/cell_063": {
+      "base": "main/cell_000",
+      "operation": "white",
+      "sourceProof": {
+        "approvedForProduction": false,
+        "deterministicFill": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "operationClass": "SOLID_ALPHA_FILL",
+        "productionRule": "AUTHOR_ORIGINAL_TARGET_PALETTE_OR_FILL_BEFORE_USE",
+        "relationSha256": "f3be098f0e0fffdd50659ba2da5306818f66dd688a1260836186393179fe878e",
+        "sourceColorCount": 9,
+        "stateSemantics": "UNKNOWN_REQUIRES_EXISTING_CONTRACT",
+        "targetColorCount": 1
+      }
+    }
+  },
+  "designSha256": "c2d4e889a23ff9c13ab92942acb283877b97b0c5b36fb481c109a080be2d82c5",
+  "designVersion": "m012-copperleaf-skimmer-r01",
+  "entityId": "m012_petimon",
+  "grid": [
+    8,
+    6
+  ],
+  "inventorySha256": "4cc70a42a3f8ff5af556ac9cc4c641acd13c3e32844db950b3490b34e47530fc",
+  "keys": [
+    "main/cell_001",
+    "main/cell_002",
+    "main/cell_003",
+    "main/cell_005",
+    "main/cell_008",
+    "main/cell_009",
+    "main/cell_010",
+    "main/cell_011",
+    "main/cell_012",
+    "main/cell_014",
+    "main/cell_021",
+    "main/cell_023",
+    "main/cell_024",
+    "main/cell_026",
+    "main/cell_027",
+    "main/cell_028",
+    "main/cell_029",
+    "main/cell_031",
+    "main/cell_034",
+    "main/cell_038",
+    "main/cell_039",
+    "main/cell_040",
+    "main/cell_041",
+    "main/cell_048",
+    "main/cell_049",
+    "main/cell_050",
+    "main/cell_051",
+    "main/cell_053",
+    "main/cell_054",
+    "main/cell_055",
+    "main/cell_060",
+    "main/cell_061",
+    "main/cell_062"
+  ],
+  "nativeCanvas": [
+    64,
+    64
+  ],
+  "nonDerivableSpecialCells": [
+    "main/cell_060"
+  ],
+  "palette": [
+    "#00000000",
+    "#24234B",
+    "#C9B17A",
+    "#F1D89A",
+    "#FFF6D2",
+    "#313A78",
+    "#BFE7FF",
+    "#C75A38",
+    "#F39A4B",
+    "#4DB69C",
+    "#A7E5C6",
+    "#E86A7F"
+  ],
+  "retainedMasters": [
+    "main/cell_000"
+  ],
+  "reviewScope": "STANDARD_POSE_READABILITY_ACCEPTED_MULTI_POSE_CANDIDATE_ONLY",
+  "reviewSha256": "029452be8521c96755a9738cfa85241cb8df6dcb6040a186296df5b674403cbf",
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "sourceCounts": {
+    "masters": 38,
+    "sequences": 53,
+    "slots": 82
+  },
+  "sourceOrigin": [
+    32,
+    45
+  ]
+}

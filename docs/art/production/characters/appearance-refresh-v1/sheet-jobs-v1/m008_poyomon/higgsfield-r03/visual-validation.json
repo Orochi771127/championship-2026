@@ -1,0 +1,30 @@
+{
+  "entityId": "m008_poyomon",
+  "candidate": "candidate-hf-batch-r03",
+  "status": "PASS_CANDIDATE_VISUAL_AND_ISOLATED_SOURCE_ROUTE_REVIEW",
+  "reviewedAgainst": "donor-review-v1/m008_poyomon/review.json",
+  "checks": {
+    "morphology": "PASS_TINY_LIMBLESS_SINGLE_DEEP_INDIGO_DROPLET_BODY_WITH_DIAGONAL_SEAFOAM_SURFACE_BAND",
+    "locomotion": "PASS_BOB_SETTLE_UPRIGHT_STRETCH_DIAGONAL_BEND_HORIZONTAL_SWEEP_AND_LOW_COLLAPSE",
+    "faceAndExpression": "PASS_AMBER_CRESCENT_WINDOW_WITH_CORAL_INNER_LIGHT_STRETCHED_COMPRESSED_SHIFTED_AND_OCCLUDED",
+    "appendages": "PASS_NO_ARMS_LEGS_FEET_WINGS_SEPARATE_TAIL_BUBBLES_OR_FLOATING_ORNAMENTS",
+    "restraint": "PASS_ALL_MAIN_027_043_SHOW_GOLD_LOWER_CENTRAL_BINDING_ACROSS_COMPACT_TALL_TILTED_AND_BACK_POSES",
+    "specialStates": "PASS_ORANGE_BLACK_STONE_AND_WHITE_WITH_DETERMINISTIC_CELL_048",
+    "nativeScaleAndOrigin": "PASS_64PX_ORIGIN_31_38_SHARED_NORMALIZATION_AND_MAIN_009_CANONICAL_BOUNDS_CORRECTION",
+    "mainSubMapping": "PASS_CANONICAL_ALIASES_AND_TRANSLATIONS",
+    "timing": "PASS_53_SOURCE_SEQUENCES_1863_BROWSER_TICKS"
+  },
+  "limits": {
+    "fullCharacterArtAcceptance": false,
+    "normalGameQa": "PASS_HUNT_BIND_CAPTURE_RESULT_AND_RAISING_HOME_VIA_EXISTING_QA_UNLOCK; ORDINARY_FRESH_START_ROUTE_REQUIRES_AUTUMN_OR_WINTER; BATTLE_NA_TOO_YOUNG",
+    "publicationOrRightsAcceptance": "NOT_IN_SCOPE",
+    "designSettingStatus": "ORIGINAL_IDENTITY_BOUND_TO_DONOR_REVIEW"
+  },
+  "paidGeneration": {
+    "completedProviderJobs": 1,
+    "failedProviderJobs": 0,
+    "estimatedSubmittedCredits": 3,
+    "settledCreditLedger": "NOT_EXPOSED_BY_PROVIDER_TOOL",
+    "nextPaidGeneration": "NOT_NEEDED_FOR_CURRENT_CANDIDATE"
+  }
+}

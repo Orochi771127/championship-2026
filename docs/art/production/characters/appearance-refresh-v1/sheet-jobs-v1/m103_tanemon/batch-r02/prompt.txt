@@ -1,0 +1,71 @@
+Create a complete ORIGINAL pixel-game animation sheet.
+Reference IMAGE 1 is our ORIGINAL identity seed and the only appearance/style authority.
+IMAGE 2 is a research MOTION/LAYOUT GUIDE only: preserve every occupied slot pose, facing, whole-body deformation, expression visibility, restrained/unrestrained state, native scale and local origin, while replacing every commercial-character appearance with the original identity from IMAGE 1.
+Do not copy source RGB colors, recognizable markings, face design or proprietary character appearance.
+
+Original identity (m103-aurora-chime-pod-r01): Original navy ceramic chime-pod with two attached cyan-violet sound ribbons, ivory crescent faceplate, gold single eye, coral resonator slit and teal contact nodes; donor supplies motion, timing, bounds and mapping only. No donor RGB or copied source pixels.
+Fixed identity traits: 深海藍陶瓷風鈴莢身; 雙青藍紫極光聲帶; 象牙月牙臉板與金色單眼; 珊瑚共鳴縫與青綠接地節點.
+Face rules: 象牙月牙臉板必須依 donor 角度壓縮、轉側或被聲帶遮蔽；張嘴格以珊瑚共鳴縫擴張呈現。 金色單眼只在來源角度可見時出現，不得將同一張臉複製到所有格。
+Ornament rules: 兩條極光聲帶固定於頭頂，依 donor 上揚、後掠、垂落、貼地或包覆身體；不得新增手臂、翅膀、角、葉片、漂浮物或尾巴。 main026-042 的金色束帶是外部道具，必須跨越莢身且不能被誤讀為陶瓷花紋。
+Morphology contract: Small upright seed/pod creature with one compact oval body, two broad flexible crown blades attached at the top, a readable frontal face and tiny root-like ground contacts; it has no torso limbs, wings or tail.
+Locomotion contract: Motion is driven by tiny root contacts and whole-body squash, hop, lean, stretch, curl, prone collapse and tumble. The two crown blades lag, lift, trail, fold over the face or spread along the ground according to each source cell.
+Expression contract: The pale frontal face rotates, compresses or becomes partly covered by the crown blades. Several effort/alert cells expose a red open mouth; compact, prone and special silhouettes preserve the donor visibility or occlusion rather than repeating one face.
+Appendage prohibition: Exactly two broad crown blades are attached to the body crown and deform as a paired flexible structure. No arms, hands, wings, horns, floating ornaments, tail or additional leaf is permitted.
+Restraint contract: Main cells 026-042 are the donor-specific restrained contract, including aliases. A separate brown/gold horizontal binding wraps the body through neutral, compressed, tall, open-mouth and prone states; it is a prop, never anatomy.
+
+OUTPUT: exactly 8 columns by 6 rows, 48 equal square cells, transparent RGBA canvas, no grid lines, words, labels, numbers, ground shadows, glow halo, background, decorations, anti-aliasing or painterly effects.
+Each cell represents one logical 64x64 image enlarged uniformly 4x for this sheet. Keep the creature VERY SMALL inside each cell at the position and relative size shown by IMAGE 2, with broad transparent margins.
+Do not center, bottom-align, crop, rotate or resize cells independently. Use one shared scale and translation for the complete sheet.
+Shared native origin is [22, 38]. Preserve crisp nearest-neighbor pixel clusters and the limited palette.
+Gold-brown binding is a separate physical prop, never anatomy. No tweening and no invented actions.
+Preserve expression changes per slot; the facial window may stretch, compress, shift or become occluded exactly as the guide shows. Do not paste one identical face on every pose.
+
+Read occupied slots left-to-right, top-to-bottom. The following indices are instructions only; do not print them:
+1: main/cell_001: Reviewed in assembled main all-cell and sequence sheets: slightly compressed upright phase; crown blades droop lower while the face and two root contacts remain grounded.
+2: main/cell_002: Reviewed in assembled main all-cell and sequence sheets: neutral upright return phase with asymmetric crown-blade bend and centered face.
+3: main/cell_003: Reviewed in assembled main all-cell and sequence sheets: compact shaded upright phase; face remains front readable while the body compresses one pixel.
+4: main/cell_005: Reviewed in assembled main all-cell and sequence sheets: upright effort/expression phase; red mouth opens beneath the face and the crown blades dip.
+5: main/cell_009: Reviewed in assembled main all-cell and sequence sheets: fully flattened prone pose; face is partially visible under crown blades spread horizontally along the ground.
+6: main/cell_010: Reviewed in assembled main all-cell and sequence sheets: tall diagonal extension; narrow body leans to screen right while both crown blades stream rearward.
+7: main/cell_011: Reviewed in assembled main all-cell and sequence sheets: diagonal travel pose; body and root contacts tilt while the crown blades trail to screen left.
+8: main/cell_012: Reviewed in assembled main all-cell and sequence sheets: tall alert/effort pose; crown blades cross upward and red mouth is visible on the stretched body.
+9: main/cell_013: Reviewed in assembled main all-cell and sequence sheets: low diagonal push with one root contact advanced; crown blades sweep rearward.
+10: main/cell_014: Reviewed in assembled main all-cell and sequence sheets: tight curled turn; body rotates under crown blades that loop over the face.
+11: main/cell_018: Reviewed in assembled main all-cell and sequence sheets: neutral compact reset with symmetric drooping crown blades and stable ground contact.
+12: main/cell_019: Reviewed in assembled main all-cell and sequence sheets: maximum upright lift; long body rises while blades spread into a high antler-like fork.
+13: main/cell_020: Reviewed in assembled main all-cell and sequence sheets: neutral upright hold with centered face and two low contacts.
+14: main/cell_021: Reviewed in assembled main all-cell and sequence sheets: compressed upright hold; crown mass lowers over the face.
+15: main/cell_022: Reviewed in assembled main all-cell and sequence sheets: prone collapse; body lies nearly hidden beneath broad crown blades spread across the ground.
+16: main/cell_023: Reviewed in assembled main all-cell and sequence sheets: upright open-mouth expression; red mouth is exposed and one crown blade curls down beside the face.
+17: main/cell_024: Reviewed in assembled main all-cell and sequence sheets: neutral recovery pose with asymmetric blade hang and both root contacts near the source origin.
+18: main/cell_026: Reviewed in assembled main all-cell and sequence sheets: restrained neutral upright pose; attached brown/gold external binding wraps horizontally across the body.
+19: main/cell_027: Reviewed in assembled main all-cell and sequence sheets: restrained compressed upright phase; binding stays across the body while crown blades droop.
+20: main/cell_028: Reviewed in assembled main all-cell and sequence sheets: restrained neutral return with face readable above the attached wrap.
+21: main/cell_029: Reviewed in assembled main all-cell and sequence sheets: restrained shaded compact phase; external wrap remains distinct from the plant body.
+22: main/cell_031: Reviewed in assembled main all-cell and sequence sheets: restrained compact phase with the body slightly turned and the horizontal binding still readable.
+23: main/cell_034: Reviewed in assembled main all-cell and sequence sheets: restrained tall extension; binding crosses the raised body below the splayed crown blades.
+24: main/cell_035: Reviewed in assembled main all-cell and sequence sheets: restrained neutral/turn pose; crown blades curl over the face and the wrap remains body-attached.
+25: main/cell_036: Reviewed in assembled main all-cell and sequence sheets: restrained maximum upright lift; long body and high fork retain the external binding at mid-body.
+26: main/cell_037: Reviewed in assembled main all-cell and sequence sheets: restrained neutral recovery with a centered face and horizontal wrap.
+27: main/cell_038: Reviewed in assembled main all-cell and sequence sheets: restrained compressed hold; darker body phase and binding preserve the same compact semantics.
+28: main/cell_039: Reviewed in assembled main all-cell and sequence sheets: restrained prone collapse; crown blades cover the low body while the binding remains attached across it.
+29: main/cell_040: Reviewed in assembled main all-cell and sequence sheets: restrained upright open-mouth effort; red mouth and horizontal binding are both visible.
+30: main/cell_041: Reviewed in assembled main all-cell and sequence sheets: restrained neutral recovery; face remains visible and the wrap crosses the compact body.
+31: main/cell_045: Reviewed in assembled main all-cell and sequence sheets: compact black silhouette state; drooping crown-blade contour and pale face feature remain readable.
+32: main/cell_046: Reviewed in assembled main all-cell and sequence sheets: unbound diagonal lean/travel pose; blades trail and one root contact leads.
+33: main/cell_047: Reviewed in assembled main all-cell and sequence sheets: unbound neutral compact pose with drooping crown blades and centered face.
+34: main/cell_048: Reviewed in assembled main all-cell and sequence sheets: unbound diagonal stretch; body leans beneath rearward blades.
+35: main/cell_049: Reviewed in assembled main all-cell and sequence sheets: unbound neutral hold with stable low contacts.
+36: main/cell_050: Reviewed in assembled main all-cell and sequence sheets: unbound compact recovery; face and asymmetric blade bend remain visible.
+37: main/cell_051: Reviewed in assembled main all-cell and sequence sheets: unbound tall extension with high forked crown blades.
+38: main/cell_052: Reviewed in assembled main all-cell and sequence sheets: unbound curled/fallen side pose; body rotates low and blades fold over the face.
+39: main/cell_053: Reviewed in assembled main all-cell and sequence sheets: unbound long diagonal push/hop; body projects forward while blades stream behind.
+40: main/cell_054: Reviewed in assembled main all-cell and sequence sheets: unbound diagonal travel pose with one root contact forward and open facial marking.
+41: main/cell_055: Reviewed in assembled main all-cell and sequence sheets: unbound neutral recovery with both crown blades lowered.
+42: main/cell_056: Reviewed in assembled main all-cell and sequence sheets: closed leaf-shell/curl pose; broad crown blades enclose most of the body in a vertical pod shape.
+43: main/cell_057: Reviewed in assembled main all-cell and sequence sheets: extreme tall narrow extension; body lengthens and both blades merge into a high rearward stalk.
+44: main/cell_060: Reviewed in assembled main all-cell and sequence sheets: low displaced tumble/defeat pose; body sits below/right of the normal origin with blades splayed and face rotated.
+45: main/cell_061: Reviewed in assembled main all-cell and sequence sheets: white evolution silhouette using the compact upright crown-blade contour.
+
+All remaining slots [46, 47, 48] must be fully transparent and empty.
+This is production sprite art, not a poster or presentation character sheet.

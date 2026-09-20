@@ -1,0 +1,80 @@
+{
+  "entityId": "m006_punimon",
+  "candidate": "candidate-hf-batch-r06",
+  "status": "PASS_CANDIDATE_STRUCTURAL_VALIDATION",
+  "nativeCanvas": [
+    64,
+    64
+  ],
+  "sourceOrigin": [
+    24,
+    38
+  ],
+  "cellCounts": {
+    "main": 65,
+    "sub": 18
+  },
+  "canonicalMasters": 47,
+  "sequenceCount": 53,
+  "browserTicks": 1863,
+  "binaryAlphaValues": [
+    0,
+    255
+  ],
+  "aliasMapping": "PASS_EXACT_CANONICAL_TRANSLATION",
+  "motionContract": "PASS_BYTE_EQUIVALENT_SEQUENCE_RECORDS",
+  "restraintPaletteBoundary": "PASS_GOLD_ONLY_REVIEWED_BOUND_RANGE",
+  "normalization": {
+    "bboxRecenter": false,
+    "perCellResize": false,
+    "sampleSize": 45,
+    "sharedOffset": [
+      5,
+      8
+    ]
+  },
+  "repairNormalizations": [
+    {
+      "bboxRecenter": false,
+      "grid": [
+        1,
+        1
+      ],
+      "jobId": "46303027-8088-4d8f-abf2-0440a8733290",
+      "kind": "bound",
+      "perCellResize": false,
+      "sampleSize": 64,
+      "sharedOffset": [
+        1,
+        0
+      ],
+      "sourceSha256": "70948a093feb593de51de5900f64959978d1e8d6d63ce034b7a8aee584486ce8"
+    }
+  ],
+  "deterministicAnchorCorrections": [
+    {
+      "evidence": "donor-review-v1 visibleBounds plus sourceOrigin: expected [34,31,51,39]; generated [19,29,36,35]; align source horizontal position and ground baseline without redrawing",
+      "key": "main/cell_062",
+      "translation": [
+        15,
+        4
+      ]
+    }
+  ],
+  "bboxDeltaRange": {
+    "min": [
+      -3,
+      -5,
+      -4,
+      -3
+    ],
+    "max": [
+      4,
+      6,
+      3,
+      5
+    ]
+  },
+  "perCellResize": false,
+  "bboxRecenter": false
+}

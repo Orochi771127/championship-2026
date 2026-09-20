@@ -1,0 +1,54 @@
+{
+  "entityId": "m101_caprimon",
+  "candidate": "candidate-hf-batch-r05",
+  "status": "PASS_CANDIDATE_STRUCTURAL_VALIDATION",
+  "nativeCanvas": [
+    64,
+    64
+  ],
+  "sourceOrigin": [
+    24,
+    44
+  ],
+  "cellCounts": {
+    "main": 65,
+    "sub": 18
+  },
+  "canonicalMasters": 55,
+  "sequenceCount": 53,
+  "browserTicks": 1863,
+  "binaryAlphaValues": [
+    0,
+    255
+  ],
+  "aliasMapping": "PASS_EXACT_CANONICAL_TRANSLATION",
+  "motionContract": "PASS_BYTE_EQUIVALENT_SEQUENCE_RECORDS",
+  "restraintPaletteBoundary": "PASS_GOLD_ONLY_REVIEWED_BOUND_RANGE",
+  "normalization": {
+    "bboxRecenter": false,
+    "perCellResize": false,
+    "sampleSize": 55,
+    "sharedOffset": [
+      1,
+      4
+    ]
+  },
+  "repairNormalizations": [],
+  "deterministicAnchorCorrections": [],
+  "bboxDeltaRange": {
+    "min": [
+      -8,
+      -6,
+      -9,
+      -5
+    ],
+    "max": [
+      4,
+      7,
+      6,
+      5
+    ]
+  },
+  "perCellResize": false,
+  "bboxRecenter": false
+}

@@ -1,0 +1,28 @@
+{
+  "entityId": "m010_yukimibotamon",
+  "provider": "HIGGSFIELD",
+  "model": "gpt_image_2_5",
+  "estimatedSubmittedCredits": 3,
+  "settledCreditLedger": "NOT_EXPOSED_BY_PROVIDER_TOOL",
+  "jobs": [
+    {
+      "purpose": "full 8x6 candidate sheet",
+      "jobId": "5e20fd71-662a-4386-bcf6-3fb1e4644678",
+      "estimatedCredits": 3,
+      "resultSha256": "eef4c7b12ea910fd29f23c27b5d4d1ef1fc3ee3e5ccd8a8428e3bdedcc99d7c8"
+    }
+  ],
+  "deterministicPostprocess": {
+    "specialStates": [
+      "main/cell_044 and main/cell_046 orange-red palette state from main/cell_008",
+      "main/cell_047 black silhouette from main/cell_008",
+      "main/cell_048 black silhouette uses its authored distinct alpha with pale feature retained",
+      "main/cell_061 stone-gray uses its authored distinct alpha and local deterministic grayscale",
+      "main/cell_064 white evolution silhouette uses its authored distinct alpha and local deterministic white fill"
+    ],
+    "alphaCleanup": "Low-alpha transparent-background haze removed by the fixed 128 threshold before palette quantization.",
+    "anchorCorrection": "none; one shared 43px sampling scale and offset [4,7] for the complete sheet",
+    "sameAsCell": "All non-canonical Main/Sub slots reconstructed from bank.json canonical mappings"
+  },
+  "policy": "One full-sheet generation; canonical aliases and state colors are deterministic. No paid repair was required."
+}

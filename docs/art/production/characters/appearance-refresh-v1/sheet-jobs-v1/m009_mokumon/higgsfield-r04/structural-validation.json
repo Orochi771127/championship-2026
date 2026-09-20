@@ -1,0 +1,54 @@
+{
+  "entityId": "m009_mokumon",
+  "candidate": "candidate-hf-batch-r04",
+  "status": "PASS_CANDIDATE_STRUCTURAL_VALIDATION",
+  "nativeCanvas": [
+    64,
+    64
+  ],
+  "sourceOrigin": [
+    28,
+    38
+  ],
+  "cellCounts": {
+    "main": 62,
+    "sub": 18
+  },
+  "canonicalMasters": 47,
+  "sequenceCount": 53,
+  "browserTicks": 1863,
+  "binaryAlphaValues": [
+    0,
+    255
+  ],
+  "aliasMapping": "PASS_EXACT_CANONICAL_TRANSLATION",
+  "motionContract": "PASS_BYTE_EQUIVALENT_SEQUENCE_RECORDS",
+  "restraintPaletteBoundary": "PASS_GOLD_ONLY_REVIEWED_BOUND_RANGE",
+  "normalization": {
+    "bboxRecenter": false,
+    "perCellResize": false,
+    "sampleSize": 48,
+    "sharedOffset": [
+      3,
+      5
+    ]
+  },
+  "repairNormalizations": [],
+  "deterministicAnchorCorrections": [],
+  "bboxDeltaRange": {
+    "min": [
+      -9,
+      -11,
+      -11,
+      -6
+    ],
+    "max": [
+      8,
+      7,
+      5,
+      5
+    ]
+  },
+  "perCellResize": false,
+  "bboxRecenter": false
+}

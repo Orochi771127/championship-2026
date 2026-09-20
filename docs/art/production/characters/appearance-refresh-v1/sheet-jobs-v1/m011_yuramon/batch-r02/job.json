@@ -1,0 +1,141 @@
+{
+  "artAccepted": false,
+  "batchId": "hf-batch-20260920-01",
+  "blankPanels": [
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+  ],
+  "derived": {
+    "main/cell_043": {
+      "base": "main/cell_008",
+      "operation": "red",
+      "sourceProof": {
+        "limitation": "Color relation is not a global donor LUT; use original authored face marks and palette, never donor RGB.",
+        "operationClass": "EXACT_ALPHA_ORIGINAL_COLOR_RULE",
+        "sourceAlphaSha256": "5a8e258ebda653ae458c71515f3022c02afced8c8f0c38c1f05c073d5b355415",
+        "targetColorCount": 7
+      }
+    },
+    "main/cell_046": {
+      "base": "main/cell_008",
+      "operation": "black",
+      "sourceProof": {
+        "limitation": "Color relation is not a global donor LUT; use original authored face marks and palette, never donor RGB.",
+        "operationClass": "EXACT_ALPHA_ORIGINAL_COLOR_RULE",
+        "sourceAlphaSha256": "5a8e258ebda653ae458c71515f3022c02afced8c8f0c38c1f05c073d5b355415",
+        "targetColorCount": 2
+      }
+    },
+    "main/cell_063": {
+      "base": "main/cell_000",
+      "operation": "white",
+      "sourceProof": {
+        "approvedForProduction": false,
+        "deterministicFill": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "operationClass": "SOLID_ALPHA_FILL",
+        "productionRule": "AUTHOR_ORIGINAL_TARGET_PALETTE_OR_FILL_BEFORE_USE",
+        "relationSha256": "754a5e5cc761153184b0f1dcd3f4af393817bfdb965d6e0dd3ff163b6c908a22",
+        "sourceColorCount": 11,
+        "stateSemantics": "UNKNOWN_REQUIRES_EXISTING_CONTRACT",
+        "targetColorCount": 1
+      }
+    }
+  },
+  "designSha256": "992a371296cb7f5d86b8b10a141609e5067c3a7817f9f1c66d66b0a7e9d719a7",
+  "designVersion": "m011-tideglass-reed-r01",
+  "entityId": "m011_yuramon",
+  "grid": [
+    8,
+    6
+  ],
+  "inventorySha256": "3af7103c35ef86836965fcdcadd9c5832d83507ebb10a5b746a886ecf2802824",
+  "keys": [
+    "main/cell_001",
+    "main/cell_002",
+    "main/cell_003",
+    "main/cell_005",
+    "main/cell_008",
+    "main/cell_009",
+    "main/cell_010",
+    "main/cell_012",
+    "main/cell_014",
+    "main/cell_018",
+    "main/cell_019",
+    "main/cell_021",
+    "main/cell_022",
+    "main/cell_023",
+    "main/cell_024",
+    "main/cell_026",
+    "main/cell_027",
+    "main/cell_028",
+    "main/cell_029",
+    "main/cell_031",
+    "main/cell_034",
+    "main/cell_035",
+    "main/cell_036",
+    "main/cell_038",
+    "main/cell_039",
+    "main/cell_040",
+    "main/cell_041",
+    "main/cell_047",
+    "main/cell_049",
+    "main/cell_050",
+    "main/cell_051",
+    "main/cell_053",
+    "main/cell_054",
+    "main/cell_055",
+    "main/cell_057",
+    "main/cell_058",
+    "main/cell_059",
+    "main/cell_060",
+    "main/cell_061"
+  ],
+  "nativeCanvas": [
+    64,
+    64
+  ],
+  "nonDerivableSpecialCells": [
+    "main/cell_047",
+    "main/cell_060"
+  ],
+  "palette": [
+    "#00000000",
+    "#102B3A",
+    "#146B72",
+    "#28A9B3",
+    "#A8EEF0",
+    "#F7F6DE",
+    "#E46F5D",
+    "#F0B44D",
+    "#173D58",
+    "#8CDAA5"
+  ],
+  "retainedMasters": [
+    "main/cell_000"
+  ],
+  "reviewScope": "STANDARD_POSE_READABILITY_ACCEPTED_MULTI_POSE_CANDIDATE_ONLY",
+  "reviewSha256": "4c8fb4ced6c2e6f072c4c805b8f4b709a2b875881f1d46dbcee005cd49a25b4e",
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "sourceCounts": {
+    "masters": 43,
+    "sequences": 53,
+    "slots": 82
+  },
+  "sourceOrigin": [
+    23,
+    42
+  ]
+}

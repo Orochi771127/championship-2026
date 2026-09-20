@@ -1,0 +1,2930 @@
+{
+  "canvas": [
+    64,
+    64
+  ],
+  "counts": {
+    "masters": 50,
+    "sequences": 53,
+    "slots": 80
+  },
+  "designSha256": "1cbf86cf1338ae1b248b98c64a70180c7acbeb88993c43929c465a3343844165",
+  "entityId": "m103_tanemon",
+  "motionContractSha256": "ebd0c9dd9a03a89b6b3a90f3ac95308e7f2a4b6bd0d8d4bef86139b2def308ae",
+  "nativeBoundsUnion": [
+    -14,
+    -29,
+    34,
+    16
+  ],
+  "nativeScale": 1,
+  "prohibitions": [
+    "NO_NEW_ACTION_SEMANTICS",
+    "NO_BBOX_RECENTER",
+    "NO_PER_CELL_AUTOFIT",
+    "NO_SOURCE_PIXELS_IN_OUTPUT",
+    "NO_UNIVERSAL_BOUND_CELL_RANGE",
+    "NO_INTERPOLATED_TIMING",
+    "NO_NEW_LIMBS"
+  ],
+  "schemaVersion": 1,
+  "sequences": {
+    "main": {
+      "frameKeys": [
+        "m103_tanemon/main/cell_000",
+        "m103_tanemon/main/cell_001",
+        "m103_tanemon/main/cell_002",
+        "m103_tanemon/main/cell_003",
+        "m103_tanemon/main/cell_004",
+        "m103_tanemon/main/cell_005",
+        "m103_tanemon/main/cell_006",
+        "m103_tanemon/main/cell_007",
+        "m103_tanemon/main/cell_008",
+        "m103_tanemon/main/cell_009",
+        "m103_tanemon/main/cell_010",
+        "m103_tanemon/main/cell_011",
+        "m103_tanemon/main/cell_012",
+        "m103_tanemon/main/cell_013",
+        "m103_tanemon/main/cell_014",
+        "m103_tanemon/main/cell_015",
+        "m103_tanemon/main/cell_016",
+        "m103_tanemon/main/cell_017",
+        "m103_tanemon/main/cell_018",
+        "m103_tanemon/main/cell_019",
+        "m103_tanemon/main/cell_020",
+        "m103_tanemon/main/cell_021",
+        "m103_tanemon/main/cell_022",
+        "m103_tanemon/main/cell_023",
+        "m103_tanemon/main/cell_024",
+        "m103_tanemon/main/cell_025",
+        "m103_tanemon/main/cell_026",
+        "m103_tanemon/main/cell_027",
+        "m103_tanemon/main/cell_028",
+        "m103_tanemon/main/cell_029",
+        "m103_tanemon/main/cell_030",
+        "m103_tanemon/main/cell_031",
+        "m103_tanemon/main/cell_032",
+        "m103_tanemon/main/cell_033",
+        "m103_tanemon/main/cell_034",
+        "m103_tanemon/main/cell_035",
+        "m103_tanemon/main/cell_036",
+        "m103_tanemon/main/cell_037",
+        "m103_tanemon/main/cell_038",
+        "m103_tanemon/main/cell_039",
+        "m103_tanemon/main/cell_040",
+        "m103_tanemon/main/cell_041",
+        "m103_tanemon/main/cell_042",
+        "m103_tanemon/main/cell_043",
+        "m103_tanemon/main/cell_044",
+        "m103_tanemon/main/cell_045",
+        "m103_tanemon/main/cell_046",
+        "m103_tanemon/main/cell_047",
+        "m103_tanemon/main/cell_048",
+        "m103_tanemon/main/cell_049",
+        "m103_tanemon/main/cell_050",
+        "m103_tanemon/main/cell_051",
+        "m103_tanemon/main/cell_052",
+        "m103_tanemon/main/cell_053",
+        "m103_tanemon/main/cell_054",
+        "m103_tanemon/main/cell_055",
+        "m103_tanemon/main/cell_056",
+        "m103_tanemon/main/cell_057",
+        "m103_tanemon/main/cell_058",
+        "m103_tanemon/main/cell_059",
+        "m103_tanemon/main/cell_060",
+        "m103_tanemon/main/cell_061"
+      ],
+      "sequences": [
+        {
+          "frames": [
+            {
+              "cell": 0,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_000",
+              "ticks": 31
+            },
+            {
+              "cell": 1,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_001",
+              "ticks": 22
+            }
+          ],
+          "id": 0,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 2,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_002",
+              "ticks": 37
+            },
+            {
+              "cell": 3,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_003",
+              "ticks": 28
+            }
+          ],
+          "id": 1,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 4,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_004",
+              "ticks": 15
+            },
+            {
+              "cell": 5,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_005",
+              "ticks": 12
+            }
+          ],
+          "id": 2,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 6,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_006",
+              "ticks": 7
+            },
+            {
+              "cell": 7,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_007",
+              "ticks": 7
+            }
+          ],
+          "id": 3,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 8,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_008",
+              "ticks": 37
+            }
+          ],
+          "id": 4,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 9,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_009",
+              "ticks": 7
+            }
+          ],
+          "id": 5,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 10,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_010",
+              "ticks": 7
+            }
+          ],
+          "id": 6,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 11,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_011",
+              "ticks": 15
+            },
+            {
+              "cell": 12,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_012",
+              "ticks": 37
+            }
+          ],
+          "id": 7,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 13,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_013",
+              "ticks": 15
+            },
+            {
+              "cell": 14,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_014",
+              "ticks": 37
+            }
+          ],
+          "id": 8,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 15,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_015",
+              "ticks": 15
+            },
+            {
+              "cell": 12,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_012",
+              "ticks": 37
+            }
+          ],
+          "id": 9,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 16,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_016",
+              "ticks": 15
+            },
+            {
+              "cell": 17,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_017",
+              "ticks": 37
+            }
+          ],
+          "id": 10,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 18,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_018",
+              "ticks": 5
+            },
+            {
+              "cell": 19,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_019",
+              "ticks": 6
+            }
+          ],
+          "id": 11,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 20,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_020",
+              "ticks": 37
+            },
+            {
+              "cell": 21,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_021",
+              "ticks": 37
+            }
+          ],
+          "id": 12,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 22,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_022",
+              "ticks": 37
+            }
+          ],
+          "id": 13,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 23,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_023",
+              "ticks": 25
+            },
+            {
+              "cell": 24,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_024",
+              "ticks": 31
+            }
+          ],
+          "id": 14,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 25,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_025",
+              "ticks": 31
+            }
+          ],
+          "id": 15,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 26,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_026",
+              "ticks": 31
+            },
+            {
+              "cell": 27,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_027",
+              "ticks": 22
+            }
+          ],
+          "id": 16,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 28,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_028",
+              "ticks": 37
+            },
+            {
+              "cell": 29,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_029",
+              "ticks": 28
+            }
+          ],
+          "id": 17,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 30,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_030",
+              "ticks": 15
+            },
+            {
+              "cell": 31,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_031",
+              "ticks": 12
+            }
+          ],
+          "id": 18,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 32,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_032",
+              "ticks": 7
+            },
+            {
+              "cell": 33,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_033",
+              "ticks": 7
+            }
+          ],
+          "id": 19,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 34,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_034",
+              "ticks": 37
+            }
+          ],
+          "id": 20,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 35,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_035",
+              "ticks": 5
+            },
+            {
+              "cell": 36,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_036",
+              "ticks": 6
+            }
+          ],
+          "id": 21,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 37,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_037",
+              "ticks": 37
+            },
+            {
+              "cell": 38,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_038",
+              "ticks": 37
+            }
+          ],
+          "id": 22,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 39,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_039",
+              "ticks": 37
+            }
+          ],
+          "id": 23,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 40,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_040",
+              "ticks": 25
+            },
+            {
+              "cell": 41,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_041",
+              "ticks": 31
+            }
+          ],
+          "id": 24,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 42,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_042",
+              "ticks": 31
+            }
+          ],
+          "id": 25,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 43,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_043",
+              "ticks": 6
+            },
+            {
+              "cell": 8,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_008",
+              "ticks": 3
+            },
+            {
+              "cell": 43,
+              "frameIndex": 2,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_043",
+              "ticks": 9
+            },
+            {
+              "cell": 44,
+              "frameIndex": 3,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_044",
+              "ticks": 9
+            }
+          ],
+          "id": 26,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 45,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_045",
+              "ticks": 2
+            }
+          ],
+          "id": 27,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 46,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_046",
+              "ticks": 15
+            },
+            {
+              "cell": 47,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_047",
+              "ticks": 21
+            }
+          ],
+          "id": 28,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 48,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_048",
+              "ticks": 11
+            },
+            {
+              "cell": 49,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_049",
+              "ticks": 16
+            }
+          ],
+          "id": 29,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 50,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_050",
+              "ticks": 10
+            },
+            {
+              "cell": 51,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_051",
+              "ticks": 37
+            }
+          ],
+          "id": 30,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 52,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_052",
+              "ticks": 37
+            }
+          ],
+          "id": 31,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 53,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_053",
+              "ticks": 7
+            }
+          ],
+          "id": 32,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 54,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_054",
+              "ticks": 31
+            },
+            {
+              "cell": 55,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_055",
+              "ticks": 37
+            }
+          ],
+          "id": 33,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 56,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_056",
+              "ticks": 37
+            }
+          ],
+          "id": 34,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 57,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_057",
+              "ticks": 37
+            }
+          ],
+          "id": 35,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 58,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_058",
+              "ticks": 37
+            }
+          ],
+          "id": 36,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 59,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_059",
+              "ticks": 37
+            }
+          ],
+          "id": 37,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 60,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_060",
+              "ticks": 7
+            }
+          ],
+          "id": 38,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 61,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/main/cell_061",
+              "ticks": 2
+            }
+          ],
+          "id": 39,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        }
+      ]
+    },
+    "sub": {
+      "frameKeys": [
+        "m103_tanemon/sub/cell_000",
+        "m103_tanemon/sub/cell_001",
+        "m103_tanemon/sub/cell_002",
+        "m103_tanemon/sub/cell_003",
+        "m103_tanemon/sub/cell_004",
+        "m103_tanemon/sub/cell_005",
+        "m103_tanemon/sub/cell_006",
+        "m103_tanemon/sub/cell_007",
+        "m103_tanemon/sub/cell_008",
+        "m103_tanemon/sub/cell_009",
+        "m103_tanemon/sub/cell_010",
+        "m103_tanemon/sub/cell_011",
+        "m103_tanemon/sub/cell_012",
+        "m103_tanemon/sub/cell_013",
+        "m103_tanemon/sub/cell_014",
+        "m103_tanemon/sub/cell_015",
+        "m103_tanemon/sub/cell_016",
+        "m103_tanemon/sub/cell_017"
+      ],
+      "sequences": [
+        {
+          "frames": [
+            {
+              "cell": 0,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/sub/cell_000",
+              "ticks": 31
+            },
+            {
+              "cell": 1,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/sub/cell_001",
+              "ticks": 22
+            }
+          ],
+          "id": 0,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 2,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/sub/cell_002",
+              "ticks": 37
+            },
+            {
+              "cell": 3,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/sub/cell_003",
+              "ticks": 28
+            }
+          ],
+          "id": 1,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 4,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/sub/cell_004",
+              "ticks": 7
+            }
+          ],
+          "id": 2,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 5,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/sub/cell_005",
+              "ticks": 7
+            }
+          ],
+          "id": 3,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 6,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/sub/cell_006",
+              "ticks": 37
+            }
+          ],
+          "id": 4,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 7,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/sub/cell_007",
+              "ticks": 31
+            }
+          ],
+          "id": 5,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 8,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/sub/cell_008",
+              "ticks": 2
+            }
+          ],
+          "id": 6,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 9,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/sub/cell_009",
+              "ticks": 15
+            },
+            {
+              "cell": 10,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/sub/cell_010",
+              "ticks": 21
+            }
+          ],
+          "id": 7,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 11,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/sub/cell_011",
+              "ticks": 11
+            },
+            {
+              "cell": 12,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/sub/cell_012",
+              "ticks": 16
+            }
+          ],
+          "id": 8,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 13,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/sub/cell_013",
+              "ticks": 10
+            },
+            {
+              "cell": 14,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/sub/cell_014",
+              "ticks": 37
+            }
+          ],
+          "id": 9,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 15,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/sub/cell_015",
+              "ticks": 37
+            }
+          ],
+          "id": 10,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 16,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/sub/cell_016",
+              "ticks": 37
+            }
+          ],
+          "id": 11,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 17,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m103_tanemon/sub/cell_017",
+              "ticks": 37
+            }
+          ],
+          "id": 12,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        }
+      ]
+    }
+  },
+  "slots": {
+    "main/cell_000": {
+      "blank": false,
+      "canonical": "main/cell_000",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "bc84f927d61a3880937c54a82465acbc6dba1013c6ea64a3ffabead0a301bde1",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "main/cell_001": {
+      "blank": false,
+      "canonical": "main/cell_001",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "8e57b366a874de9350a58ee2374324fe1fbdc36b4d4e1ad74e118317fe6b283f",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -16,
+        9,
+        2
+      ]
+    },
+    "main/cell_002": {
+      "blank": false,
+      "canonical": "main/cell_002",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "18119d4b9c9b07956274b310b55a54be4eaea42516f6922fb4ce6f9033f190d4",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "main/cell_003": {
+      "blank": false,
+      "canonical": "main/cell_003",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "529f50f233d1d82380b46634ed0c9c10432931dc7563b70ed67a8ee72553dc09",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -16,
+        9,
+        2
+      ]
+    },
+    "main/cell_004": {
+      "blank": false,
+      "canonical": "main/cell_000",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "bc84f927d61a3880937c54a82465acbc6dba1013c6ea64a3ffabead0a301bde1",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "main/cell_005": {
+      "blank": false,
+      "canonical": "main/cell_005",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "215c7832a1c88de637c19eadd050fad17f456a78eb4cfd695325e64e305bc4b5",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -16,
+        9,
+        2
+      ]
+    },
+    "main/cell_006": {
+      "blank": false,
+      "canonical": "main/cell_000",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "bc84f927d61a3880937c54a82465acbc6dba1013c6ea64a3ffabead0a301bde1",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "main/cell_007": {
+      "blank": false,
+      "canonical": "main/cell_005",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "215c7832a1c88de637c19eadd050fad17f456a78eb4cfd695325e64e305bc4b5",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -16,
+        9,
+        2
+      ]
+    },
+    "main/cell_008": {
+      "blank": false,
+      "canonical": "main/cell_008",
+      "nativeBounds": [
+        -14,
+        -29,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "c20926b6dba03ce0f39876dec4ef527e40dead27827c300c6f2f6e7d86d34a47",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -22,
+        12,
+        0
+      ]
+    },
+    "main/cell_009": {
+      "blank": false,
+      "canonical": "main/cell_009",
+      "nativeBounds": [
+        -14,
+        -13,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "4b7a936fc701a29fb8204dbf43e32ca271ff0dda32cecf646207569d79df7f77",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -10,
+        -10,
+        15,
+        2
+      ]
+    },
+    "main/cell_010": {
+      "blank": false,
+      "canonical": "main/cell_010",
+      "nativeBounds": [
+        -6,
+        -29,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "426ae98a4cf22926b581d78924d7ad821e20036e6d12e144bc7cb377a87ae92f",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -5,
+        -22,
+        15,
+        -1
+      ]
+    },
+    "main/cell_011": {
+      "blank": false,
+      "canonical": "main/cell_011",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "fe5faa6ff168feef5d41b1b0c2ad6d2a3def2271ac07f73ab54187848b187324",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -10,
+        -19,
+        10,
+        2
+      ]
+    },
+    "main/cell_012": {
+      "blank": false,
+      "canonical": "main/cell_012",
+      "nativeBounds": [
+        -14,
+        -29,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "d38495098c4281dfa450ca371e8b3eb531cf30fc38e9419ba73296357a5790c0",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -22,
+        12,
+        2
+      ]
+    },
+    "main/cell_013": {
+      "blank": false,
+      "canonical": "main/cell_013",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "078446966e3a8d7dc504ba26ab151a76129060113bd0ca00fbff01f254361254",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -10,
+        -16,
+        10,
+        3
+      ]
+    },
+    "main/cell_014": {
+      "blank": false,
+      "canonical": "main/cell_014",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "a4199d797dcdfec5d39be2ed8d2ef2d79f33d1bbc2988ddeca6fe1492b62961b",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -10,
+        -19,
+        7,
+        0
+      ]
+    },
+    "main/cell_015": {
+      "blank": false,
+      "canonical": "main/cell_011",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "fe5faa6ff168feef5d41b1b0c2ad6d2a3def2271ac07f73ab54187848b187324",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -10,
+        -19,
+        10,
+        2
+      ]
+    },
+    "main/cell_016": {
+      "blank": false,
+      "canonical": "main/cell_013",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "078446966e3a8d7dc504ba26ab151a76129060113bd0ca00fbff01f254361254",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -10,
+        -16,
+        10,
+        3
+      ]
+    },
+    "main/cell_017": {
+      "blank": false,
+      "canonical": "main/cell_014",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "a4199d797dcdfec5d39be2ed8d2ef2d79f33d1bbc2988ddeca6fe1492b62961b",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -10,
+        -19,
+        7,
+        0
+      ]
+    },
+    "main/cell_018": {
+      "blank": false,
+      "canonical": "main/cell_018",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "c89556bfa21e22d2a10a7095ee1518d64b68e455459880041c6b26865155843b",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "main/cell_019": {
+      "blank": false,
+      "canonical": "main/cell_019",
+      "nativeBounds": [
+        -14,
+        -29,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "f327570edae95394555a4285cffee467167f3f5f34eff9a81215d5b397dd4e05",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -23,
+        12,
+        -1
+      ]
+    },
+    "main/cell_020": {
+      "blank": false,
+      "canonical": "main/cell_020",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "64c70792b50f760cbdefaa0134605180f8eda10fffb1444e0038880146e9f9a8",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "main/cell_021": {
+      "blank": false,
+      "canonical": "main/cell_021",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "2b14037a65aa7aa720f708f43546d64db5d8f8ff41cfc4b0e70fbb2c881eb4b2",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -16,
+        9,
+        2
+      ]
+    },
+    "main/cell_022": {
+      "blank": false,
+      "canonical": "main/cell_022",
+      "nativeBounds": [
+        -14,
+        -13,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "5ec8524fa9b41b54ee19c95e4e7c1883d63250fecd149ad917d6575e5563dbd6",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -13,
+        -8,
+        11,
+        3
+      ]
+    },
+    "main/cell_023": {
+      "blank": false,
+      "canonical": "main/cell_023",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "a4d9381e83223b4609e0f4184f88c467cf99f286a4ee1838ce64c6c322ff7014",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -19,
+        10,
+        2
+      ]
+    },
+    "main/cell_024": {
+      "blank": false,
+      "canonical": "main/cell_024",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "cbab89dc8ab7d61d4776654d40aa9d098593fb532e82b36429e79fd34896fd91",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "main/cell_025": {
+      "blank": false,
+      "canonical": "main/cell_022",
+      "nativeBounds": [
+        -14,
+        -13,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "5ec8524fa9b41b54ee19c95e4e7c1883d63250fecd149ad917d6575e5563dbd6",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -13,
+        -8,
+        11,
+        3
+      ]
+    },
+    "main/cell_026": {
+      "blank": false,
+      "canonical": "main/cell_026",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "8a611824db618b5e377374f81b4436b4612b9c044665ce703370e9ee52c65edc",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "main/cell_027": {
+      "blank": false,
+      "canonical": "main/cell_027",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "c188d0875a9ec7b7b1f8522a055b220c28050038718da8f32f1b79379f1eab09",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -16,
+        9,
+        2
+      ]
+    },
+    "main/cell_028": {
+      "blank": false,
+      "canonical": "main/cell_028",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "08a1ade8551d6f242e0cf745a687621fe71603db14f4a2d174838ee77db84a36",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "main/cell_029": {
+      "blank": false,
+      "canonical": "main/cell_029",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "efb3ffb5ec588ef4891a526dffb408c2a9eea539f7ad54c2e83f4f64ab53278e",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -16,
+        9,
+        2
+      ]
+    },
+    "main/cell_030": {
+      "blank": false,
+      "canonical": "main/cell_026",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "8a611824db618b5e377374f81b4436b4612b9c044665ce703370e9ee52c65edc",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "main/cell_031": {
+      "blank": false,
+      "canonical": "main/cell_031",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "13a5ba01f17be8881add7771899f1f7e3c62af29a8ee86fa575f93d101981b79",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -16,
+        9,
+        2
+      ]
+    },
+    "main/cell_032": {
+      "blank": false,
+      "canonical": "main/cell_026",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "8a611824db618b5e377374f81b4436b4612b9c044665ce703370e9ee52c65edc",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "main/cell_033": {
+      "blank": false,
+      "canonical": "main/cell_031",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "13a5ba01f17be8881add7771899f1f7e3c62af29a8ee86fa575f93d101981b79",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -16,
+        9,
+        2
+      ]
+    },
+    "main/cell_034": {
+      "blank": false,
+      "canonical": "main/cell_034",
+      "nativeBounds": [
+        -14,
+        -29,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "273c0c00eab072fa2524fcea9dd7e928b42da07c701edc4f26beb4f337f82d74",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -22,
+        12,
+        0
+      ]
+    },
+    "main/cell_035": {
+      "blank": false,
+      "canonical": "main/cell_035",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "5e509b2924163d8a3eec06936b1e297ca0471c94dc494b06eb0e397529f112de",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "main/cell_036": {
+      "blank": false,
+      "canonical": "main/cell_036",
+      "nativeBounds": [
+        -14,
+        -29,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "611e15a8c005e33080086fe2d5189e623c5a6249d1ea8ff9594e7042a45096d7",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -23,
+        12,
+        -1
+      ]
+    },
+    "main/cell_037": {
+      "blank": false,
+      "canonical": "main/cell_037",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "b0dee48e4bf880b79af3f0e3d366639307301c213244082ac825447ad0b10369",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "main/cell_038": {
+      "blank": false,
+      "canonical": "main/cell_038",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "cdd1eeb64533de46a9e3b0c4995b20909abe16f3671a57eff3d3a96fc3008647",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -16,
+        9,
+        2
+      ]
+    },
+    "main/cell_039": {
+      "blank": false,
+      "canonical": "main/cell_039",
+      "nativeBounds": [
+        -14,
+        -13,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "34562694a3f31efedc7e59e2207d591fb636b09340ff6e70d32606814e82efee",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -13,
+        -8,
+        11,
+        3
+      ]
+    },
+    "main/cell_040": {
+      "blank": false,
+      "canonical": "main/cell_040",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "b3b135b3d49b81d0f60e6bfd8ebaaaa741d3dea48425827d08b2cb520e6eb74a",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -19,
+        10,
+        2
+      ]
+    },
+    "main/cell_041": {
+      "blank": false,
+      "canonical": "main/cell_041",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "5cd793cfeae72cc69a0ed03ff48da171d3d8ad57d12e502a9acd8bc5ca9c0c09",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "main/cell_042": {
+      "blank": false,
+      "canonical": "main/cell_039",
+      "nativeBounds": [
+        -14,
+        -13,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "34562694a3f31efedc7e59e2207d591fb636b09340ff6e70d32606814e82efee",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -13,
+        -8,
+        11,
+        3
+      ]
+    },
+    "main/cell_043": {
+      "blank": false,
+      "canonical": "main/cell_043",
+      "nativeBounds": [
+        -14,
+        -29,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "1ab83fab01f082d5748a58db36a6c04b6be4848becc272c99babffb82456d15a",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -22,
+        12,
+        0
+      ]
+    },
+    "main/cell_044": {
+      "blank": false,
+      "canonical": "main/cell_044",
+      "nativeBounds": [
+        -14,
+        -29,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "dd898281f6ed1bf8e4f2256917eb11c7d4e1bfb9d1da0d8d4dd1e44b2d444046",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -22,
+        12,
+        0
+      ]
+    },
+    "main/cell_045": {
+      "blank": false,
+      "canonical": "main/cell_045",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "a11aa03649d6abd500aedee4f9b551fb4d3a09966ab7abf534b539b15003079b",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "main/cell_046": {
+      "blank": false,
+      "canonical": "main/cell_046",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "5a14851e5862d1687e055123b112c21e30cc5261925855a3ada182014e8c5ab2",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -10,
+        -19,
+        10,
+        2
+      ]
+    },
+    "main/cell_047": {
+      "blank": false,
+      "canonical": "main/cell_047",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "6df251d02fc8cf7bf183701a42028da616314260be6da1c17f2bc981d78afbc1",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "main/cell_048": {
+      "blank": false,
+      "canonical": "main/cell_048",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "4e0f5adaa5418583828389a1128b9f11cdb8513b5b747937cd7d782c60b0872f",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -10,
+        -19,
+        10,
+        2
+      ]
+    },
+    "main/cell_049": {
+      "blank": false,
+      "canonical": "main/cell_049",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "a1c3aacc15ff426f831d8a59544db6a06fd98f730ccfa1ca9149fac5f56d9d75",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "main/cell_050": {
+      "blank": false,
+      "canonical": "main/cell_050",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "360e9c27c5289136742cbc68c8d419596ed035f9ce4efa017d456e89280ba31c",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "main/cell_051": {
+      "blank": false,
+      "canonical": "main/cell_051",
+      "nativeBounds": [
+        -14,
+        -29,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "64ef648f17bad0ce75893a805f94ff80c1d0f9eadbbbbed7956a667bd89ced79",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -23,
+        12,
+        -1
+      ]
+    },
+    "main/cell_052": {
+      "blank": false,
+      "canonical": "main/cell_052",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "17e9feab610384e521789645b7ed310ee87212328e14afb909625c008e96bf92",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -14,
+        9,
+        1
+      ]
+    },
+    "main/cell_053": {
+      "blank": false,
+      "canonical": "main/cell_053",
+      "nativeBounds": [
+        -14,
+        -21,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "2180055833ba8c7d3fffc5994225b03c7555387dcfee34d882268d4873038bdc",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -19,
+        12,
+        2
+      ]
+    },
+    "main/cell_054": {
+      "blank": false,
+      "canonical": "main/cell_054",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "75577edeb33b52959e2b286726c7f3207808daf2ba8f0f9e77d1f376ad493714",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -10,
+        -19,
+        10,
+        2
+      ]
+    },
+    "main/cell_055": {
+      "blank": false,
+      "canonical": "main/cell_055",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "345817ed03fa054950f79df96f0598cecb71bfcc7a6924a87f9684c747b814d3",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "main/cell_056": {
+      "blank": false,
+      "canonical": "main/cell_056",
+      "nativeBounds": [
+        -14,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "58f4fe67331161f82609253b3485f405ae11154315212847d3a11d8c1ec4d354",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -13,
+        5,
+        3
+      ]
+    },
+    "main/cell_057": {
+      "blank": false,
+      "canonical": "main/cell_057",
+      "nativeBounds": [
+        -14,
+        -29,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "f74585267cf1563ab808b813ede26fc5df58188afab66276bd8b519776e67d86",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -11,
+        -26,
+        6,
+        0
+      ]
+    },
+    "main/cell_058": {
+      "blank": false,
+      "canonical": "main/cell_058",
+      "nativeBounds": [
+        -6,
+        -29,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "78d166ddf6d2d1b8d65267080d999e680aac32a249abdb458c260e95cf13f8d2",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -5,
+        -22,
+        15,
+        -1
+      ]
+    },
+    "main/cell_059": {
+      "blank": false,
+      "canonical": "main/cell_009",
+      "nativeBounds": [
+        2,
+        -13,
+        34,
+        3
+      ],
+      "sourceRgbaSha256": "4b7a936fc701a29fb8204dbf43e32ca271ff0dda32cecf646207569d79df7f77",
+      "translation": [
+        16,
+        0
+      ],
+      "visibleBounds": [
+        6,
+        -10,
+        31,
+        2
+      ]
+    },
+    "main/cell_060": {
+      "blank": false,
+      "canonical": "main/cell_060",
+      "nativeBounds": [
+        -8,
+        -16,
+        16,
+        16
+      ],
+      "sourceRgbaSha256": "5c73d8e9f592c85709aebca4a83f17173649ed645f6a8f9398cff49b9d43a703",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -3,
+        -9,
+        16,
+        12
+      ]
+    },
+    "main/cell_061": {
+      "blank": false,
+      "canonical": "main/cell_061",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "97ef995589858679f714eb3ce70461eef58569acf057d15bb83eca5d2c22828b",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "sub/cell_000": {
+      "blank": false,
+      "canonical": "main/cell_000",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "bc84f927d61a3880937c54a82465acbc6dba1013c6ea64a3ffabead0a301bde1",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "sub/cell_001": {
+      "blank": false,
+      "canonical": "main/cell_001",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "8e57b366a874de9350a58ee2374324fe1fbdc36b4d4e1ad74e118317fe6b283f",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -16,
+        9,
+        2
+      ]
+    },
+    "sub/cell_002": {
+      "blank": false,
+      "canonical": "main/cell_002",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "18119d4b9c9b07956274b310b55a54be4eaea42516f6922fb4ce6f9033f190d4",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "sub/cell_003": {
+      "blank": false,
+      "canonical": "main/cell_003",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "529f50f233d1d82380b46634ed0c9c10432931dc7563b70ed67a8ee72553dc09",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -16,
+        9,
+        2
+      ]
+    },
+    "sub/cell_004": {
+      "blank": false,
+      "canonical": "main/cell_009",
+      "nativeBounds": [
+        -14,
+        -13,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "4b7a936fc701a29fb8204dbf43e32ca271ff0dda32cecf646207569d79df7f77",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -10,
+        -10,
+        15,
+        2
+      ]
+    },
+    "sub/cell_005": {
+      "blank": false,
+      "canonical": "main/cell_010",
+      "nativeBounds": [
+        -6,
+        -29,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "426ae98a4cf22926b581d78924d7ad821e20036e6d12e144bc7cb377a87ae92f",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -5,
+        -22,
+        15,
+        -1
+      ]
+    },
+    "sub/cell_006": {
+      "blank": false,
+      "canonical": "main/cell_022",
+      "nativeBounds": [
+        -14,
+        -13,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "5ec8524fa9b41b54ee19c95e4e7c1883d63250fecd149ad917d6575e5563dbd6",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -13,
+        -8,
+        11,
+        3
+      ]
+    },
+    "sub/cell_007": {
+      "blank": false,
+      "canonical": "main/cell_022",
+      "nativeBounds": [
+        -14,
+        -13,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "5ec8524fa9b41b54ee19c95e4e7c1883d63250fecd149ad917d6575e5563dbd6",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -13,
+        -8,
+        11,
+        3
+      ]
+    },
+    "sub/cell_008": {
+      "blank": false,
+      "canonical": "main/cell_045",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "a11aa03649d6abd500aedee4f9b551fb4d3a09966ab7abf534b539b15003079b",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "sub/cell_009": {
+      "blank": false,
+      "canonical": "main/cell_046",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "5a14851e5862d1687e055123b112c21e30cc5261925855a3ada182014e8c5ab2",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -10,
+        -19,
+        10,
+        2
+      ]
+    },
+    "sub/cell_010": {
+      "blank": false,
+      "canonical": "main/cell_047",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "6df251d02fc8cf7bf183701a42028da616314260be6da1c17f2bc981d78afbc1",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "sub/cell_011": {
+      "blank": false,
+      "canonical": "main/cell_048",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "4e0f5adaa5418583828389a1128b9f11cdb8513b5b747937cd7d782c60b0872f",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -10,
+        -19,
+        10,
+        2
+      ]
+    },
+    "sub/cell_012": {
+      "blank": false,
+      "canonical": "main/cell_049",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "a1c3aacc15ff426f831d8a59544db6a06fd98f730ccfa1ca9149fac5f56d9d75",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "sub/cell_013": {
+      "blank": false,
+      "canonical": "main/cell_050",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "360e9c27c5289136742cbc68c8d419596ed035f9ce4efa017d456e89280ba31c",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -16,
+        10,
+        2
+      ]
+    },
+    "sub/cell_014": {
+      "blank": false,
+      "canonical": "main/cell_051",
+      "nativeBounds": [
+        -14,
+        -29,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "64ef648f17bad0ce75893a805f94ff80c1d0f9eadbbbbed7956a667bd89ced79",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -23,
+        12,
+        -1
+      ]
+    },
+    "sub/cell_015": {
+      "blank": false,
+      "canonical": "main/cell_052",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "17e9feab610384e521789645b7ed310ee87212328e14afb909625c008e96bf92",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -14,
+        9,
+        1
+      ]
+    },
+    "sub/cell_016": {
+      "blank": false,
+      "canonical": "main/cell_058",
+      "nativeBounds": [
+        -6,
+        -29,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "78d166ddf6d2d1b8d65267080d999e680aac32a249abdb458c260e95cf13f8d2",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -5,
+        -22,
+        15,
+        -1
+      ]
+    },
+    "sub/cell_017": {
+      "blank": false,
+      "canonical": "main/cell_009",
+      "nativeBounds": [
+        2,
+        -13,
+        34,
+        3
+      ],
+      "sourceRgbaSha256": "4b7a936fc701a29fb8204dbf43e32ca271ff0dda32cecf646207569d79df7f77",
+      "translation": [
+        16,
+        0
+      ],
+      "visibleBounds": [
+        6,
+        -10,
+        31,
+        2
+      ]
+    }
+  },
+  "sourceFiles": {
+    "02_CHARACTERS/use-ready-pixi-hd4x-224/batch-01/m103_tanemon/main-atlas-00.json": "8612b19d393e0cb825bea8b3683f343e2336323622bce5a4381806474e45c5a4",
+    "02_CHARACTERS/use-ready-pixi-hd4x-224/batch-01/m103_tanemon/main-atlas-00.png": "8f456a038573a49d2226ac0ba931a27a23aa02807ca029c5d3e5b6a383e342b4",
+    "02_CHARACTERS/use-ready-pixi-hd4x-224/batch-01/m103_tanemon/manifest.json": "daaefc882f85e2b7f00065f5e23b3253ec52cb06eafe22d28a783061e3636daf",
+    "02_CHARACTERS/use-ready-pixi-hd4x-224/batch-01/m103_tanemon/runtime.json": "747e73d66cb6c3cfa6d67808e2ae453daaa9da398c6f412a589f6ee6ff4042e0",
+    "02_CHARACTERS/use-ready-pixi-hd4x-224/batch-01/m103_tanemon/sub-atlas-00.json": "5b8e37ac3bbd3a0448a01bb920851661133a25540d2f67cda69010343e24e1d9",
+    "02_CHARACTERS/use-ready-pixi-hd4x-224/batch-01/m103_tanemon/sub-atlas-00.png": "186bd784593fa3102f58d756950559c7f0dadb0356f1e6e866214d0e6c4967bc",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m103_tanemon_main.nanr": "94b898f1f5ad086927e1576561bc75003aaf4b30d0fa25bee53066c83dd168e4",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m103_tanemon_main.ncbr": "79e1c8d7c537c0f7c6514ee523ed654831065c9f9fd17b5f758efde167bac5e1",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m103_tanemon_main.ncer": "2c251ffb6ca025c9d3040350a05c2d69040499557ff65e9aedc4b88e924d44fd",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m103_tanemon_main.nclr": "d5c99b0712ce2f66a8c86c452aecce42396abc6307173bf089cf8cebd262da89",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m103_tanemon_sub.nanr": "b92cb8a9fb90d40dfdfd950d6cee2dd81b4b75bc58f9c4417a31bf5a81aebe11",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m103_tanemon_sub.ncer": "26e89a13b6ab25b698429dbd5ecc6dc0a696d68f626bfd0e4e58ebf4e39ac548",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m103_tanemon_sub.ncgr": "ff4d8b1def414fc3b59b60ed1ac5f288dbd3cfecc1944eb29aac0b331b3aef2e",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m103_tanemon_sub.nclr": "23732280f95459b7230798f559b5726b69dbaa4778fb40d32dff1892a44e5d7f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/animations.json": "5c69b7182ff0d2b7e1d5ea03bc9e26b71c452ba8e17903c91bb813883d6b0b3a",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells.json": "777876e77afc1559456df7c9044e20ebc17fc9bb8df9eaf56a677f8897e97479",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-000.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-001.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-002.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-003.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-004.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-005.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-006.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-007.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-008.png": "d095dc96a05cb8ec087cc0b15e50169ffe89561fb0aaf9910656dc14e0ff52b0",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-009.png": "08c93c0d12526285c11909f3d77e60576301d77882ff3b410d1f8391139f677d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-010.png": "dccd24731f08b39e1212e3c3cd995f7545923eb6dba2c53275c5b80bad24ced2",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-011.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-012.png": "d095dc96a05cb8ec087cc0b15e50169ffe89561fb0aaf9910656dc14e0ff52b0",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-013.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-014.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-015.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-016.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-017.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-018.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-019.png": "d095dc96a05cb8ec087cc0b15e50169ffe89561fb0aaf9910656dc14e0ff52b0",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-020.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-021.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-022.png": "08c93c0d12526285c11909f3d77e60576301d77882ff3b410d1f8391139f677d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-023.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-024.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-025.png": "08c93c0d12526285c11909f3d77e60576301d77882ff3b410d1f8391139f677d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-026.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-027.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-028.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-029.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-030.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-031.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-032.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-033.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-034.png": "d095dc96a05cb8ec087cc0b15e50169ffe89561fb0aaf9910656dc14e0ff52b0",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-035.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-036.png": "d095dc96a05cb8ec087cc0b15e50169ffe89561fb0aaf9910656dc14e0ff52b0",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-037.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-038.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-039.png": "08c93c0d12526285c11909f3d77e60576301d77882ff3b410d1f8391139f677d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-040.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-041.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-042.png": "08c93c0d12526285c11909f3d77e60576301d77882ff3b410d1f8391139f677d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-043.png": "5d3f4a819ef46d5858052a63d9489f243d92c0872cb451c4d921bbfcb4dcd02c",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-044.png": "d095dc96a05cb8ec087cc0b15e50169ffe89561fb0aaf9910656dc14e0ff52b0",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-045.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-046.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-047.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-048.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-049.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-050.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-051.png": "d095dc96a05cb8ec087cc0b15e50169ffe89561fb0aaf9910656dc14e0ff52b0",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-052.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-053.png": "0f3a554e692c19755baffbbf3f4c09376e4efca82b36ff813a2c157760ed38e6",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-054.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-055.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-056.png": "0f2b8c660ee9a9aea1dee4530bdd43cccb1b4d5fdd63056f4f15a3080b222dba",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-057.png": "dccd24731f08b39e1212e3c3cd995f7545923eb6dba2c53275c5b80bad24ced2",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-058.png": "80d47f82d605cf3a88fad2f0cfbc401bb0d7cc85dadb2aa45d25bf6d9be4a58e",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-059.png": "08c93c0d12526285c11909f3d77e60576301d77882ff3b410d1f8391139f677d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-060.png": "dccd24731f08b39e1212e3c3cd995f7545923eb6dba2c53275c5b80bad24ced2",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/cells/cell-061.png": "d641acffdcb931e934c247365177c03bd91a4f86fc8999a4fbcdba52ba77679d",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_main/family.json": "7f81d095a6ef626dee8c66ca035340b16c23b054138cd8d759fef80596569bdc",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/animations.json": "e30134f30f5eadc2c047803bc7980a57c64219f8c1eeeadb0a52cb747b874836",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/cells.json": "b0c65ed0df5fdbb863e583d4c37f1209780b0ce3706e310cc66022501eac1456",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/cells/cell-000.png": "424042f1621ed498863f53a4277ea7674d19f9869b854db749570ef5bb03be74",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/cells/cell-001.png": "424042f1621ed498863f53a4277ea7674d19f9869b854db749570ef5bb03be74",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/cells/cell-002.png": "424042f1621ed498863f53a4277ea7674d19f9869b854db749570ef5bb03be74",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/cells/cell-003.png": "424042f1621ed498863f53a4277ea7674d19f9869b854db749570ef5bb03be74",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/cells/cell-004.png": "025c317dc449f16ac45688cbc6e233b88ff3a4d323e7cabf25e3145dc95ba1ff",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/cells/cell-005.png": "4fae1d707f871e0d2f81bf6b4229f848d6c7f34b56e3afd52aa1f30663a768bb",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/cells/cell-006.png": "025c317dc449f16ac45688cbc6e233b88ff3a4d323e7cabf25e3145dc95ba1ff",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/cells/cell-007.png": "025c317dc449f16ac45688cbc6e233b88ff3a4d323e7cabf25e3145dc95ba1ff",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/cells/cell-008.png": "424042f1621ed498863f53a4277ea7674d19f9869b854db749570ef5bb03be74",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/cells/cell-009.png": "424042f1621ed498863f53a4277ea7674d19f9869b854db749570ef5bb03be74",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/cells/cell-010.png": "424042f1621ed498863f53a4277ea7674d19f9869b854db749570ef5bb03be74",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/cells/cell-011.png": "424042f1621ed498863f53a4277ea7674d19f9869b854db749570ef5bb03be74",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/cells/cell-012.png": "424042f1621ed498863f53a4277ea7674d19f9869b854db749570ef5bb03be74",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/cells/cell-013.png": "424042f1621ed498863f53a4277ea7674d19f9869b854db749570ef5bb03be74",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/cells/cell-014.png": "82b02f38a189d67eb3ab7597d9cb58702194639d764ed2c3753741a3c1dcdfef",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/cells/cell-015.png": "424042f1621ed498863f53a4277ea7674d19f9869b854db749570ef5bb03be74",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/cells/cell-016.png": "4fae1d707f871e0d2f81bf6b4229f848d6c7f34b56e3afd52aa1f30663a768bb",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/cells/cell-017.png": "025c317dc449f16ac45688cbc6e233b88ff3a4d323e7cabf25e3145dc95ba1ff",
+    "08_FULL_FAMILY_CONVERSION/digimon/m103_tanemon_sub/family.json": "b73090f45cdc8b3d5a768cf5c5d46f6344be2940c951389e6b82c113fe7aeeb7"
+  },
+  "sourceOrigin": [
+    22,
+    38
+  ],
+  "species": {
+    "attributeIndex": 0,
+    "familyBits": 4,
+    "generationIndex": 2,
+    "generationScaledByte": 8,
+    "huntClassByte": 1,
+    "identifier": "TANEMON",
+    "lookupKey": "m103_tanemon",
+    "recordIndex": 22,
+    "statCurveIndex": 1
+  },
+  "speciesCatalogSha256": "d86ec0d6c97eca1827bf405ebae6a15275e60d47439ba7a8678f06e2dde34eba"
+}

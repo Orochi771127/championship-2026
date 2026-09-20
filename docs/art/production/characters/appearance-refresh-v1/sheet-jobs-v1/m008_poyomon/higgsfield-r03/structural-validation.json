@@ -1,0 +1,63 @@
+{
+  "entityId": "m008_poyomon",
+  "candidate": "candidate-hf-batch-r03",
+  "status": "PASS_CANDIDATE_STRUCTURAL_VALIDATION",
+  "nativeCanvas": [
+    64,
+    64
+  ],
+  "sourceOrigin": [
+    31,
+    38
+  ],
+  "cellCounts": {
+    "main": 65,
+    "sub": 18
+  },
+  "canonicalMasters": 31,
+  "sequenceCount": 53,
+  "browserTicks": 1863,
+  "binaryAlphaValues": [
+    0,
+    255
+  ],
+  "aliasMapping": "PASS_EXACT_CANONICAL_TRANSLATION",
+  "motionContract": "PASS_BYTE_EQUIVALENT_SEQUENCE_RECORDS",
+  "restraintPaletteBoundary": "PASS_GOLD_ONLY_REVIEWED_BOUND_RANGE",
+  "normalization": {
+    "bboxRecenter": false,
+    "perCellResize": false,
+    "sampleSize": 32,
+    "sharedOffset": [
+      16,
+      9
+    ]
+  },
+  "repairNormalizations": [],
+  "deterministicAnchorCorrections": [
+    {
+      "evidence": "Donor-reviewed visible bounds plus source origin require the flat horizontal canonical pose at [30,31,44,39]; generated bounds were [25,29,40,36]. Preserve generated size and restore its source-local horizontal and baseline placement. main/cell_062 reuses this same canonical pose.",
+      "key": "main/cell_009",
+      "translation": [
+        5,
+        2
+      ]
+    }
+  ],
+  "bboxDeltaRange": {
+    "min": [
+      -2,
+      -3,
+      -2,
+      -1
+    ],
+    "max": [
+      3,
+      4,
+      6,
+      5
+    ]
+  },
+  "perCellResize": false,
+  "bboxRecenter": false
+}

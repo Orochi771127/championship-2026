@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m004_bubbmon",
+  "baseDirectory": "candidate-hf-batch-r01",
+  "outputDirectory": "candidate-hf-batch-r03",
+  "alphaThreshold": 128,
+  "placement": "ONE_SHARED_SCALE_AND_OFFSET_PER_SHEET",
+  "perCellResize": false,
+  "bboxRecenter": false,
+  "groups": [
+    {
+      "kind": "bound",
+      "jobId": "ff437558-7762-4aee-95a5-3be9a5f9dcc7",
+      "source": "bound-raw.png",
+      "sourceSha256": "3b8118d0671bf763dd1fe82e3473350a0700f7a117b9230d7a75b87283a04d11",
+      "sampleSize": 40,
+      "sharedOffset": [6, 10],
+      "semanticReview": "BODY_RESTRAINT_PRESENT_DETACHED_BUBBLES_REMAIN_FREE"
+    },
+    {
+      "kind": "normal",
+      "jobId": "98e9e62f-71dd-4609-b9d2-8a86b70d834f",
+      "source": "normal-raw.png",
+      "sourceSha256": "2ad5e1314afc46619fcfbbb37bfae2b8e8cc3db4554336ea8ad9d32c4c9f6042",
+      "sampleSize": 42,
+      "sharedOffset": [6, 5],
+      "semanticReview": "UNBOUND_POSES_NO_RESTRAINT_PROP"
+    }
+  ]
+}

@@ -1,0 +1,2999 @@
+{
+  "canvas": [
+    64,
+    64
+  ],
+  "counts": {
+    "masters": 48,
+    "sequences": 53,
+    "slots": 83
+  },
+  "designSha256": "e4df4ff6de5d0de45c43932740f6d2cc1142c9a73c59189f4f261beec23d94c9",
+  "entityId": "m104_tunomon",
+  "motionContractSha256": "231b3fee0ef0bad84705eebce1543ad6bfb49e19f79ec958524b6ea01e5071f4",
+  "nativeBoundsUnion": [
+    -14,
+    -21,
+    34,
+    16
+  ],
+  "nativeScale": 1,
+  "prohibitions": [
+    "NO_NEW_ACTION_SEMANTICS",
+    "NO_BBOX_RECENTER",
+    "NO_PER_CELL_AUTOFIT",
+    "NO_SOURCE_PIXELS_IN_OUTPUT",
+    "NO_UNIVERSAL_BOUND_CELL_RANGE",
+    "NO_INTERPOLATED_TIMING",
+    "NO_NEW_LIMBS"
+  ],
+  "schemaVersion": 1,
+  "sequences": {
+    "main": {
+      "frameKeys": [
+        "m104_tunomon/main/cell_000",
+        "m104_tunomon/main/cell_001",
+        "m104_tunomon/main/cell_002",
+        "m104_tunomon/main/cell_003",
+        "m104_tunomon/main/cell_004",
+        "m104_tunomon/main/cell_005",
+        "m104_tunomon/main/cell_006",
+        "m104_tunomon/main/cell_007",
+        "m104_tunomon/main/cell_008",
+        "m104_tunomon/main/cell_009",
+        "m104_tunomon/main/cell_010",
+        "m104_tunomon/main/cell_011",
+        "m104_tunomon/main/cell_012",
+        "m104_tunomon/main/cell_013",
+        "m104_tunomon/main/cell_014",
+        "m104_tunomon/main/cell_015",
+        "m104_tunomon/main/cell_016",
+        "m104_tunomon/main/cell_017",
+        "m104_tunomon/main/cell_018",
+        "m104_tunomon/main/cell_019",
+        "m104_tunomon/main/cell_020",
+        "m104_tunomon/main/cell_021",
+        "m104_tunomon/main/cell_022",
+        "m104_tunomon/main/cell_023",
+        "m104_tunomon/main/cell_024",
+        "m104_tunomon/main/cell_025",
+        "m104_tunomon/main/cell_026",
+        "m104_tunomon/main/cell_027",
+        "m104_tunomon/main/cell_028",
+        "m104_tunomon/main/cell_029",
+        "m104_tunomon/main/cell_030",
+        "m104_tunomon/main/cell_031",
+        "m104_tunomon/main/cell_032",
+        "m104_tunomon/main/cell_033",
+        "m104_tunomon/main/cell_034",
+        "m104_tunomon/main/cell_035",
+        "m104_tunomon/main/cell_036",
+        "m104_tunomon/main/cell_037",
+        "m104_tunomon/main/cell_038",
+        "m104_tunomon/main/cell_039",
+        "m104_tunomon/main/cell_040",
+        "m104_tunomon/main/cell_041",
+        "m104_tunomon/main/cell_042",
+        "m104_tunomon/main/cell_043",
+        "m104_tunomon/main/cell_044",
+        "m104_tunomon/main/cell_045",
+        "m104_tunomon/main/cell_046",
+        "m104_tunomon/main/cell_047",
+        "m104_tunomon/main/cell_048",
+        "m104_tunomon/main/cell_049",
+        "m104_tunomon/main/cell_050",
+        "m104_tunomon/main/cell_051",
+        "m104_tunomon/main/cell_052",
+        "m104_tunomon/main/cell_053",
+        "m104_tunomon/main/cell_054",
+        "m104_tunomon/main/cell_055",
+        "m104_tunomon/main/cell_056",
+        "m104_tunomon/main/cell_057",
+        "m104_tunomon/main/cell_058",
+        "m104_tunomon/main/cell_059",
+        "m104_tunomon/main/cell_060",
+        "m104_tunomon/main/cell_061",
+        "m104_tunomon/main/cell_062",
+        "m104_tunomon/main/cell_063",
+        "m104_tunomon/main/cell_064"
+      ],
+      "sequences": [
+        {
+          "frames": [
+            {
+              "cell": 0,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_000",
+              "ticks": 31
+            },
+            {
+              "cell": 1,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_001",
+              "ticks": 22
+            }
+          ],
+          "id": 0,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 2,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_002",
+              "ticks": 37
+            },
+            {
+              "cell": 3,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_003",
+              "ticks": 28
+            }
+          ],
+          "id": 1,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 4,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_004",
+              "ticks": 15
+            },
+            {
+              "cell": 5,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_005",
+              "ticks": 12
+            }
+          ],
+          "id": 2,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 6,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_006",
+              "ticks": 7
+            },
+            {
+              "cell": 7,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_007",
+              "ticks": 7
+            }
+          ],
+          "id": 3,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 8,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_008",
+              "ticks": 37
+            }
+          ],
+          "id": 4,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 9,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_009",
+              "ticks": 7
+            }
+          ],
+          "id": 5,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 10,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_010",
+              "ticks": 7
+            }
+          ],
+          "id": 6,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 11,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_011",
+              "ticks": 15
+            },
+            {
+              "cell": 12,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_012",
+              "ticks": 37
+            }
+          ],
+          "id": 7,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 13,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_013",
+              "ticks": 15
+            },
+            {
+              "cell": 14,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_014",
+              "ticks": 37
+            }
+          ],
+          "id": 8,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 15,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_015",
+              "ticks": 15
+            },
+            {
+              "cell": 16,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_016",
+              "ticks": 37
+            }
+          ],
+          "id": 9,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 17,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_017",
+              "ticks": 15
+            },
+            {
+              "cell": 18,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_018",
+              "ticks": 37
+            }
+          ],
+          "id": 10,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 19,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_019",
+              "ticks": 5
+            },
+            {
+              "cell": 20,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_020",
+              "ticks": 6
+            }
+          ],
+          "id": 11,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 21,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_021",
+              "ticks": 37
+            },
+            {
+              "cell": 22,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_022",
+              "ticks": 37
+            }
+          ],
+          "id": 12,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 23,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_023",
+              "ticks": 37
+            }
+          ],
+          "id": 13,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 24,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_024",
+              "ticks": 25
+            },
+            {
+              "cell": 25,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_025",
+              "ticks": 31
+            }
+          ],
+          "id": 14,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 26,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_026",
+              "ticks": 31
+            }
+          ],
+          "id": 15,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 27,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_027",
+              "ticks": 31
+            },
+            {
+              "cell": 28,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_028",
+              "ticks": 22
+            }
+          ],
+          "id": 16,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 29,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_029",
+              "ticks": 37
+            },
+            {
+              "cell": 30,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_030",
+              "ticks": 28
+            }
+          ],
+          "id": 17,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 31,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_031",
+              "ticks": 15
+            },
+            {
+              "cell": 32,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_032",
+              "ticks": 12
+            }
+          ],
+          "id": 18,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 33,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_033",
+              "ticks": 7
+            },
+            {
+              "cell": 34,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_034",
+              "ticks": 7
+            }
+          ],
+          "id": 19,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 35,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_035",
+              "ticks": 37
+            }
+          ],
+          "id": 20,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 36,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_036",
+              "ticks": 5
+            },
+            {
+              "cell": 37,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_037",
+              "ticks": 6
+            }
+          ],
+          "id": 21,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 38,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_038",
+              "ticks": 37
+            },
+            {
+              "cell": 39,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_039",
+              "ticks": 37
+            }
+          ],
+          "id": 22,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 40,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_040",
+              "ticks": 37
+            }
+          ],
+          "id": 23,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 41,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_041",
+              "ticks": 25
+            },
+            {
+              "cell": 42,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_042",
+              "ticks": 31
+            }
+          ],
+          "id": 24,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 43,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_043",
+              "ticks": 31
+            }
+          ],
+          "id": 25,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 44,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_044",
+              "ticks": 6
+            },
+            {
+              "cell": 45,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_045",
+              "ticks": 3
+            },
+            {
+              "cell": 46,
+              "frameIndex": 2,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_046",
+              "ticks": 9
+            },
+            {
+              "cell": 47,
+              "frameIndex": 3,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_047",
+              "ticks": 9
+            }
+          ],
+          "id": 26,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 48,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_048",
+              "ticks": 2
+            }
+          ],
+          "id": 27,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 49,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_049",
+              "ticks": 15
+            },
+            {
+              "cell": 50,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_050",
+              "ticks": 21
+            }
+          ],
+          "id": 28,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 51,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_051",
+              "ticks": 11
+            },
+            {
+              "cell": 52,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_052",
+              "ticks": 16
+            }
+          ],
+          "id": 29,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 53,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_053",
+              "ticks": 10
+            },
+            {
+              "cell": 54,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_054",
+              "ticks": 37
+            }
+          ],
+          "id": 30,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 55,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_055",
+              "ticks": 37
+            }
+          ],
+          "id": 31,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 56,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_056",
+              "ticks": 7
+            }
+          ],
+          "id": 32,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 57,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_057",
+              "ticks": 31
+            },
+            {
+              "cell": 58,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_058",
+              "ticks": 37
+            }
+          ],
+          "id": 33,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 59,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_059",
+              "ticks": 37
+            }
+          ],
+          "id": 34,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 60,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_060",
+              "ticks": 37
+            }
+          ],
+          "id": 35,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 61,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_061",
+              "ticks": 37
+            }
+          ],
+          "id": 36,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 62,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_062",
+              "ticks": 37
+            }
+          ],
+          "id": 37,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 63,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_063",
+              "ticks": 7
+            }
+          ],
+          "id": 38,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 64,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/main/cell_064",
+              "ticks": 2
+            }
+          ],
+          "id": 39,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        }
+      ]
+    },
+    "sub": {
+      "frameKeys": [
+        "m104_tunomon/sub/cell_000",
+        "m104_tunomon/sub/cell_001",
+        "m104_tunomon/sub/cell_002",
+        "m104_tunomon/sub/cell_003",
+        "m104_tunomon/sub/cell_004",
+        "m104_tunomon/sub/cell_005",
+        "m104_tunomon/sub/cell_006",
+        "m104_tunomon/sub/cell_007",
+        "m104_tunomon/sub/cell_008",
+        "m104_tunomon/sub/cell_009",
+        "m104_tunomon/sub/cell_010",
+        "m104_tunomon/sub/cell_011",
+        "m104_tunomon/sub/cell_012",
+        "m104_tunomon/sub/cell_013",
+        "m104_tunomon/sub/cell_014",
+        "m104_tunomon/sub/cell_015",
+        "m104_tunomon/sub/cell_016",
+        "m104_tunomon/sub/cell_017"
+      ],
+      "sequences": [
+        {
+          "frames": [
+            {
+              "cell": 0,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/sub/cell_000",
+              "ticks": 31
+            },
+            {
+              "cell": 1,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/sub/cell_001",
+              "ticks": 22
+            }
+          ],
+          "id": 0,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 2,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/sub/cell_002",
+              "ticks": 37
+            },
+            {
+              "cell": 3,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/sub/cell_003",
+              "ticks": 28
+            }
+          ],
+          "id": 1,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 4,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/sub/cell_004",
+              "ticks": 7
+            }
+          ],
+          "id": 2,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 5,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/sub/cell_005",
+              "ticks": 7
+            }
+          ],
+          "id": 3,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 6,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/sub/cell_006",
+              "ticks": 37
+            }
+          ],
+          "id": 4,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 7,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/sub/cell_007",
+              "ticks": 31
+            }
+          ],
+          "id": 5,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 8,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/sub/cell_008",
+              "ticks": 2
+            }
+          ],
+          "id": 6,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 9,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/sub/cell_009",
+              "ticks": 15
+            },
+            {
+              "cell": 10,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/sub/cell_010",
+              "ticks": 21
+            }
+          ],
+          "id": 7,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 11,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/sub/cell_011",
+              "ticks": 11
+            },
+            {
+              "cell": 12,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/sub/cell_012",
+              "ticks": 16
+            }
+          ],
+          "id": 8,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 13,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/sub/cell_013",
+              "ticks": 10
+            },
+            {
+              "cell": 14,
+              "frameIndex": 1,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/sub/cell_014",
+              "ticks": 37
+            }
+          ],
+          "id": 9,
+          "loopStartFrame": 0,
+          "playbackMode": 2,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 15,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/sub/cell_015",
+              "ticks": 37
+            }
+          ],
+          "id": 10,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 16,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/sub/cell_016",
+              "ticks": 37
+            }
+          ],
+          "id": 11,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        },
+        {
+          "frames": [
+            {
+              "cell": 17,
+              "frameIndex": 0,
+              "rawMarker": 48879,
+              "texture": "m104_tunomon/sub/cell_017",
+              "ticks": 37
+            }
+          ],
+          "id": 12,
+          "loopStartFrame": 0,
+          "playbackMode": 1,
+          "rawWordA": 65536
+        }
+      ]
+    }
+  },
+  "slots": {
+    "main/cell_000": {
+      "blank": false,
+      "canonical": "main/cell_000",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "d5989149953a6a32c54591641939212e5d59b1fe7fa2e8008cd97f59dde22c2d",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -14,
+        8,
+        1
+      ]
+    },
+    "main/cell_001": {
+      "blank": false,
+      "canonical": "main/cell_001",
+      "nativeBounds": [
+        -6,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "649fa0c3a3f7b78a5f73419dc125753f085e5922859f71db6dd385a8d17cbfb8",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -13,
+        8,
+        1
+      ]
+    },
+    "main/cell_002": {
+      "blank": false,
+      "canonical": "main/cell_002",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "a04b57528833eed51d420ab6d5a97e5d9bc412e1ad058354b0b1350cf4ddd171",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -14,
+        8,
+        1
+      ]
+    },
+    "main/cell_003": {
+      "blank": false,
+      "canonical": "main/cell_003",
+      "nativeBounds": [
+        -6,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "0a628281abaf124905f73fb36da1d8b372f95572451fe7fa90c1c115090edf49",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -13,
+        8,
+        1
+      ]
+    },
+    "main/cell_004": {
+      "blank": false,
+      "canonical": "main/cell_004",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "f767f19eb7702c8ac2db95846c375c233e33d04637c5c7ad3f254694c1ad9201",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -14,
+        8,
+        1
+      ]
+    },
+    "main/cell_005": {
+      "blank": false,
+      "canonical": "main/cell_005",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "1a19e8c48edea0c4af4481fdff443b2b8c3e459ec81b68ba463440d58bd8a207",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -16,
+        8,
+        -1
+      ]
+    },
+    "main/cell_006": {
+      "blank": false,
+      "canonical": "main/cell_004",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "f767f19eb7702c8ac2db95846c375c233e33d04637c5c7ad3f254694c1ad9201",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -14,
+        8,
+        1
+      ]
+    },
+    "main/cell_007": {
+      "blank": false,
+      "canonical": "main/cell_005",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "1a19e8c48edea0c4af4481fdff443b2b8c3e459ec81b68ba463440d58bd8a207",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -16,
+        8,
+        -1
+      ]
+    },
+    "main/cell_008": {
+      "blank": false,
+      "canonical": "main/cell_008",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "75f371c245709746f16881cfe4a9ac96b0760f9e91de28d56083bc702042a928",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -19,
+        6,
+        -3
+      ]
+    },
+    "main/cell_009": {
+      "blank": false,
+      "canonical": "main/cell_009",
+      "nativeBounds": [
+        -14,
+        -13,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "e3b486a55a39f9ae626c24ce00ce044c095be31c2503c6b58e4f96d723143325",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -7,
+        12,
+        1
+      ]
+    },
+    "main/cell_010": {
+      "blank": false,
+      "canonical": "main/cell_010",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "26ad5fc4705d791335ccc44f3c970f6acc6fdccc3d2941a154ecc442dd1170df",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -3,
+        -17,
+        10,
+        -1
+      ]
+    },
+    "main/cell_011": {
+      "blank": false,
+      "canonical": "main/cell_001",
+      "nativeBounds": [
+        -6,
+        -13,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "649fa0c3a3f7b78a5f73419dc125753f085e5922859f71db6dd385a8d17cbfb8",
+      "translation": [
+        4,
+        0
+      ],
+      "visibleBounds": [
+        -2,
+        -13,
+        12,
+        1
+      ]
+    },
+    "main/cell_012": {
+      "blank": false,
+      "canonical": "main/cell_012",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "7291e30dc010bd6311731b959345cbb36b9293f82f2279dfc70b3dccd4a6676e",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -14,
+        -15,
+        6,
+        -4
+      ]
+    },
+    "main/cell_013": {
+      "blank": false,
+      "canonical": "main/cell_001",
+      "nativeBounds": [
+        -6,
+        -13,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "649fa0c3a3f7b78a5f73419dc125753f085e5922859f71db6dd385a8d17cbfb8",
+      "translation": [
+        4,
+        0
+      ],
+      "visibleBounds": [
+        -2,
+        -13,
+        12,
+        1
+      ]
+    },
+    "main/cell_014": {
+      "blank": false,
+      "canonical": "main/cell_012",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "7291e30dc010bd6311731b959345cbb36b9293f82f2279dfc70b3dccd4a6676e",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -14,
+        -15,
+        6,
+        -4
+      ]
+    },
+    "main/cell_015": {
+      "blank": false,
+      "canonical": "main/cell_001",
+      "nativeBounds": [
+        -6,
+        -13,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "649fa0c3a3f7b78a5f73419dc125753f085e5922859f71db6dd385a8d17cbfb8",
+      "translation": [
+        4,
+        0
+      ],
+      "visibleBounds": [
+        -2,
+        -13,
+        12,
+        1
+      ]
+    },
+    "main/cell_016": {
+      "blank": false,
+      "canonical": "main/cell_012",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "7291e30dc010bd6311731b959345cbb36b9293f82f2279dfc70b3dccd4a6676e",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -14,
+        -15,
+        6,
+        -4
+      ]
+    },
+    "main/cell_017": {
+      "blank": false,
+      "canonical": "main/cell_001",
+      "nativeBounds": [
+        -6,
+        -13,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "649fa0c3a3f7b78a5f73419dc125753f085e5922859f71db6dd385a8d17cbfb8",
+      "translation": [
+        4,
+        0
+      ],
+      "visibleBounds": [
+        -2,
+        -13,
+        12,
+        1
+      ]
+    },
+    "main/cell_018": {
+      "blank": false,
+      "canonical": "main/cell_012",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "7291e30dc010bd6311731b959345cbb36b9293f82f2279dfc70b3dccd4a6676e",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -14,
+        -15,
+        6,
+        -4
+      ]
+    },
+    "main/cell_019": {
+      "blank": false,
+      "canonical": "main/cell_019",
+      "nativeBounds": [
+        -14,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "6c70e07be833dbaca6a2f252963b40d8e6813b2b0c2e67f19edd24fb8adeca87",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -10,
+        10,
+        1
+      ]
+    },
+    "main/cell_020": {
+      "blank": false,
+      "canonical": "main/cell_008",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "75f371c245709746f16881cfe4a9ac96b0760f9e91de28d56083bc702042a928",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -19,
+        6,
+        -3
+      ]
+    },
+    "main/cell_021": {
+      "blank": false,
+      "canonical": "main/cell_021",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "e3502602762282121cc3e5eb43fcb040d4e7ea6bdf271a71df4c464127ebbbf2",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -14,
+        8,
+        1
+      ]
+    },
+    "main/cell_022": {
+      "blank": false,
+      "canonical": "main/cell_022",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "1650885f28287fad40754612f13419ac79ed386f874dc56a6c1802637e98fa07",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -16,
+        8,
+        -1
+      ]
+    },
+    "main/cell_023": {
+      "blank": false,
+      "canonical": "main/cell_023",
+      "nativeBounds": [
+        -14,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "a4d1e09d74b6f1cdef72e1abf12efbae6677ae666927e07602af718392ccdb33",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -12,
+        10,
+        1
+      ]
+    },
+    "main/cell_024": {
+      "blank": false,
+      "canonical": "main/cell_024",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "4fbecd207da13cabd011857b4149425010d771b72fc50957a881a2affd24d689",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -17,
+        8,
+        1
+      ]
+    },
+    "main/cell_025": {
+      "blank": false,
+      "canonical": "main/cell_025",
+      "nativeBounds": [
+        -6,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "37476c2669ad94c6575f9d3696ddfe2e44aaecfb82a3191bb49a2b59a62acb6f",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -13,
+        8,
+        1
+      ]
+    },
+    "main/cell_026": {
+      "blank": false,
+      "canonical": "main/cell_026",
+      "nativeBounds": [
+        -14,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "31c5c0054669745504475ab26a57d1f29a4a79a0b5529c40f3f0f50d0380c85d",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -10,
+        10,
+        1
+      ]
+    },
+    "main/cell_027": {
+      "blank": false,
+      "canonical": "main/cell_027",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "f25ea3f8706b512aa4c5a457d7c00a3039c9c6fd6ee8a1fba9b055de0a3bd0d6",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -14,
+        8,
+        1
+      ]
+    },
+    "main/cell_028": {
+      "blank": false,
+      "canonical": "main/cell_028",
+      "nativeBounds": [
+        -6,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "0e46716adef2d7dafbdd1619abbbf4e952041c6ddf20d3a408eaefab12eb7925",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -13,
+        8,
+        1
+      ]
+    },
+    "main/cell_029": {
+      "blank": false,
+      "canonical": "main/cell_029",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "8818d9aea6c4285f2f050a2b03e268641e143456202bd7822f27eea62f97dd00",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -14,
+        8,
+        1
+      ]
+    },
+    "main/cell_030": {
+      "blank": false,
+      "canonical": "main/cell_030",
+      "nativeBounds": [
+        -6,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "129cc3008d6c72a0c49652bae9c8d0dc27f3218d411d3c20113bd06fd1250ccb",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -13,
+        8,
+        1
+      ]
+    },
+    "main/cell_031": {
+      "blank": false,
+      "canonical": "main/cell_031",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "83dfd0e80e81df30a6aeef842457b7dac72914469e0e06049d3b9e43a29fd14c",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -14,
+        8,
+        1
+      ]
+    },
+    "main/cell_032": {
+      "blank": false,
+      "canonical": "main/cell_032",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "c7d3a387aa6c153e28bddc928f52d19867c732b81378771daed8a8d72b3c48eb",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -16,
+        8,
+        -1
+      ]
+    },
+    "main/cell_033": {
+      "blank": false,
+      "canonical": "main/cell_031",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "83dfd0e80e81df30a6aeef842457b7dac72914469e0e06049d3b9e43a29fd14c",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -14,
+        8,
+        1
+      ]
+    },
+    "main/cell_034": {
+      "blank": false,
+      "canonical": "main/cell_032",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "c7d3a387aa6c153e28bddc928f52d19867c732b81378771daed8a8d72b3c48eb",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -16,
+        8,
+        -1
+      ]
+    },
+    "main/cell_035": {
+      "blank": false,
+      "canonical": "main/cell_035",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "6eca59ef4dd20899c2b22c218814c6cdf65e36a082da6d34c186fa88d7d7d7eb",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -19,
+        7,
+        -3
+      ]
+    },
+    "main/cell_036": {
+      "blank": false,
+      "canonical": "main/cell_036",
+      "nativeBounds": [
+        -14,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "61c2540147f498021c476c9d872796baea8928eedb336899065b470b4ced794a",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -10,
+        10,
+        1
+      ]
+    },
+    "main/cell_037": {
+      "blank": false,
+      "canonical": "main/cell_035",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "6eca59ef4dd20899c2b22c218814c6cdf65e36a082da6d34c186fa88d7d7d7eb",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -19,
+        7,
+        -3
+      ]
+    },
+    "main/cell_038": {
+      "blank": false,
+      "canonical": "main/cell_038",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "9f0993825cd7c38e74f4aad7b47dd7c17ab3610d1a8f56ab04bb669083cee945",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -14,
+        8,
+        1
+      ]
+    },
+    "main/cell_039": {
+      "blank": false,
+      "canonical": "main/cell_039",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "a09b2d0e8b38cb45e3bdb100196837c4795b0a8f39061b0a5fd7ca5fefce65f8",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -16,
+        8,
+        -1
+      ]
+    },
+    "main/cell_040": {
+      "blank": false,
+      "canonical": "main/cell_040",
+      "nativeBounds": [
+        -14,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "6038c350625e871c9f37beb9731c8801e598f7347a80fb250b022c0f45d08ee9",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -12,
+        10,
+        1
+      ]
+    },
+    "main/cell_041": {
+      "blank": false,
+      "canonical": "main/cell_041",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "ce20f354dd973e63973ab7e9ea06ccf48fc4a4e4965ce562c7ad004ae9fa8a3f",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -17,
+        9,
+        1
+      ]
+    },
+    "main/cell_042": {
+      "blank": false,
+      "canonical": "main/cell_042",
+      "nativeBounds": [
+        -6,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "8e0a45c238e5584fcb5a247e424c55fbe4bd1597386c28847a18884ea826a4f2",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -13,
+        8,
+        1
+      ]
+    },
+    "main/cell_043": {
+      "blank": false,
+      "canonical": "main/cell_043",
+      "nativeBounds": [
+        -14,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "ff4576eecff8d5982f1fbcd71e0b96b7b3af4753bd50bc49ade8b6eaeb6e19d7",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -10,
+        10,
+        1
+      ]
+    },
+    "main/cell_044": {
+      "blank": false,
+      "canonical": "main/cell_044",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "b003e3ab199fb652b7a9e750130dd4c700d698c32a8e7413d372cce2365b9d08",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -19,
+        6,
+        -3
+      ]
+    },
+    "main/cell_045": {
+      "blank": false,
+      "canonical": "main/cell_008",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "75f371c245709746f16881cfe4a9ac96b0760f9e91de28d56083bc702042a928",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -19,
+        6,
+        -3
+      ]
+    },
+    "main/cell_046": {
+      "blank": false,
+      "canonical": "main/cell_044",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "b003e3ab199fb652b7a9e750130dd4c700d698c32a8e7413d372cce2365b9d08",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -19,
+        6,
+        -3
+      ]
+    },
+    "main/cell_047": {
+      "blank": false,
+      "canonical": "main/cell_047",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "4209b640852b38b9d95f2a71db12f7a525fe78c0ac04ac6e2764720b9a02de13",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -19,
+        6,
+        -3
+      ]
+    },
+    "main/cell_048": {
+      "blank": false,
+      "canonical": "main/cell_048",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "8f1ac868fa57935b08a760120ad6b7a2e5983529f34b5b50395621c9fbfc778d",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -14,
+        8,
+        1
+      ]
+    },
+    "main/cell_049": {
+      "blank": false,
+      "canonical": "main/cell_049",
+      "nativeBounds": [
+        -6,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "d1b6965bfa62887e0fa51ce0ff9a9b562e7757e039a6cf862f134625c30b2e33",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -13,
+        8,
+        1
+      ]
+    },
+    "main/cell_050": {
+      "blank": false,
+      "canonical": "main/cell_050",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "46db5c1a78f37e38909ef8fb0edd21cd9356ddcc76762e42901b5a05b8dd9ab9",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -17,
+        7,
+        -2
+      ]
+    },
+    "main/cell_051": {
+      "blank": false,
+      "canonical": "main/cell_051",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "1cc3dd415441544d55eb4910680c3580b2333a332840340af4dade8341cad3fc",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -14,
+        8,
+        1
+      ]
+    },
+    "main/cell_052": {
+      "blank": false,
+      "canonical": "main/cell_052",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "73702f4da0ff6fcefaadc1e369f8ba6682f128e3f58b9e86466d412ac3f4ebe4",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -17,
+        8,
+        1
+      ]
+    },
+    "main/cell_053": {
+      "blank": false,
+      "canonical": "main/cell_053",
+      "nativeBounds": [
+        -6,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "e0faeff740b8ee0cbae3b6a72f53fb919dd331c78924b7d98f625c4dc3f2aed7",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -13,
+        8,
+        1
+      ]
+    },
+    "main/cell_054": {
+      "blank": false,
+      "canonical": "main/cell_054",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "a8332963b6f74cf767a0e1a9518e80b3fa8d399b0b0cd00180d439cca6e856e9",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -4,
+        -17,
+        9,
+        0
+      ]
+    },
+    "main/cell_055": {
+      "blank": false,
+      "canonical": "main/cell_055",
+      "nativeBounds": [
+        -14,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "cddf5ba5dbf556125f38c93e2129cb8cde602885004223293f3ce8b44ce4c6ac",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -10,
+        8,
+        1
+      ]
+    },
+    "main/cell_056": {
+      "blank": false,
+      "canonical": "main/cell_056",
+      "nativeBounds": [
+        -6,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "049835f7460ceba3f928b5a2d2baea922f57760d61ddf00e3bd576492db37ac9",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -13,
+        8,
+        1
+      ]
+    },
+    "main/cell_057": {
+      "blank": false,
+      "canonical": "main/cell_057",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "43165883d12d0493271d9825bf745acd10d18a37d2d57ee58292de461783e9bb",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -14,
+        8,
+        1
+      ]
+    },
+    "main/cell_058": {
+      "blank": false,
+      "canonical": "main/cell_058",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "8af287840652e81081860b5465b060af0b459d964ff0b51021b2693129ddab70",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -17,
+        8,
+        1
+      ]
+    },
+    "main/cell_059": {
+      "blank": false,
+      "canonical": "main/cell_059",
+      "nativeBounds": [
+        -14,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "d3180d595fc692c535fdfb996e60862e50e0b27c105d76a969c7dc49e4d1507b",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -9,
+        8,
+        1
+      ]
+    },
+    "main/cell_060": {
+      "blank": false,
+      "canonical": "main/cell_008",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "75f371c245709746f16881cfe4a9ac96b0760f9e91de28d56083bc702042a928",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -19,
+        6,
+        -3
+      ]
+    },
+    "main/cell_061": {
+      "blank": false,
+      "canonical": "main/cell_061",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "63f584267dfb154b3fc513724325674a4463d83c241cdef9780786eea39ab10e",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -19,
+        6,
+        -3
+      ]
+    },
+    "main/cell_062": {
+      "blank": false,
+      "canonical": "main/cell_062",
+      "nativeBounds": [
+        2,
+        -13,
+        34,
+        3
+      ],
+      "sourceRgbaSha256": "d60069750c0320eb0690c43922bd16ed542a42d3c9872ae8366d358b0c37dd50",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        8,
+        -7,
+        28,
+        1
+      ]
+    },
+    "main/cell_063": {
+      "blank": false,
+      "canonical": "main/cell_010",
+      "nativeBounds": [
+        -8,
+        -8,
+        16,
+        16
+      ],
+      "sourceRgbaSha256": "26ad5fc4705d791335ccc44f3c970f6acc6fdccc3d2941a154ecc442dd1170df",
+      "translation": [
+        0,
+        11
+      ],
+      "visibleBounds": [
+        -3,
+        -6,
+        10,
+        10
+      ]
+    },
+    "main/cell_064": {
+      "blank": false,
+      "canonical": "main/cell_064",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "b80d33342a8447786f3a5677580a9d7f0a68e5893d6b2ed5e1c902a7fc627757",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -14,
+        8,
+        1
+      ]
+    },
+    "sub/cell_000": {
+      "blank": false,
+      "canonical": "main/cell_000",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "d5989149953a6a32c54591641939212e5d59b1fe7fa2e8008cd97f59dde22c2d",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -14,
+        8,
+        1
+      ]
+    },
+    "sub/cell_001": {
+      "blank": false,
+      "canonical": "main/cell_001",
+      "nativeBounds": [
+        -6,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "649fa0c3a3f7b78a5f73419dc125753f085e5922859f71db6dd385a8d17cbfb8",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -13,
+        8,
+        1
+      ]
+    },
+    "sub/cell_002": {
+      "blank": false,
+      "canonical": "main/cell_002",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "a04b57528833eed51d420ab6d5a97e5d9bc412e1ad058354b0b1350cf4ddd171",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -14,
+        8,
+        1
+      ]
+    },
+    "sub/cell_003": {
+      "blank": false,
+      "canonical": "main/cell_003",
+      "nativeBounds": [
+        -6,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "0a628281abaf124905f73fb36da1d8b372f95572451fe7fa90c1c115090edf49",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -13,
+        8,
+        1
+      ]
+    },
+    "sub/cell_004": {
+      "blank": false,
+      "canonical": "main/cell_009",
+      "nativeBounds": [
+        -14,
+        -13,
+        18,
+        3
+      ],
+      "sourceRgbaSha256": "e3b486a55a39f9ae626c24ce00ce044c095be31c2503c6b58e4f96d723143325",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -7,
+        12,
+        1
+      ]
+    },
+    "sub/cell_005": {
+      "blank": false,
+      "canonical": "main/cell_010",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "26ad5fc4705d791335ccc44f3c970f6acc6fdccc3d2941a154ecc442dd1170df",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -3,
+        -17,
+        10,
+        -1
+      ]
+    },
+    "sub/cell_006": {
+      "blank": false,
+      "canonical": "main/cell_023",
+      "nativeBounds": [
+        -14,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "a4d1e09d74b6f1cdef72e1abf12efbae6677ae666927e07602af718392ccdb33",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -12,
+        10,
+        1
+      ]
+    },
+    "sub/cell_007": {
+      "blank": false,
+      "canonical": "main/cell_026",
+      "nativeBounds": [
+        -14,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "31c5c0054669745504475ab26a57d1f29a4a79a0b5529c40f3f0f50d0380c85d",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -8,
+        -10,
+        10,
+        1
+      ]
+    },
+    "sub/cell_008": {
+      "blank": false,
+      "canonical": "main/cell_048",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "8f1ac868fa57935b08a760120ad6b7a2e5983529f34b5b50395621c9fbfc778d",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -14,
+        8,
+        1
+      ]
+    },
+    "sub/cell_009": {
+      "blank": false,
+      "canonical": "main/cell_049",
+      "nativeBounds": [
+        -6,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "d1b6965bfa62887e0fa51ce0ff9a9b562e7757e039a6cf862f134625c30b2e33",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -13,
+        8,
+        1
+      ]
+    },
+    "sub/cell_010": {
+      "blank": false,
+      "canonical": "main/cell_050",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "46db5c1a78f37e38909ef8fb0edd21cd9356ddcc76762e42901b5a05b8dd9ab9",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -17,
+        7,
+        -2
+      ]
+    },
+    "sub/cell_011": {
+      "blank": false,
+      "canonical": "main/cell_051",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "1cc3dd415441544d55eb4910680c3580b2333a332840340af4dade8341cad3fc",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -14,
+        8,
+        1
+      ]
+    },
+    "sub/cell_012": {
+      "blank": false,
+      "canonical": "main/cell_052",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "73702f4da0ff6fcefaadc1e369f8ba6682f128e3f58b9e86466d412ac3f4ebe4",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -17,
+        8,
+        1
+      ]
+    },
+    "sub/cell_013": {
+      "blank": false,
+      "canonical": "main/cell_053",
+      "nativeBounds": [
+        -6,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "e0faeff740b8ee0cbae3b6a72f53fb919dd331c78924b7d98f625c4dc3f2aed7",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -6,
+        -13,
+        8,
+        1
+      ]
+    },
+    "sub/cell_014": {
+      "blank": false,
+      "canonical": "main/cell_054",
+      "nativeBounds": [
+        -6,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "a8332963b6f74cf767a0e1a9518e80b3fa8d399b0b0cd00180d439cca6e856e9",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -4,
+        -17,
+        9,
+        0
+      ]
+    },
+    "sub/cell_015": {
+      "blank": false,
+      "canonical": "main/cell_055",
+      "nativeBounds": [
+        -14,
+        -13,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "cddf5ba5dbf556125f38c93e2129cb8cde602885004223293f3ce8b44ce4c6ac",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -10,
+        8,
+        1
+      ]
+    },
+    "sub/cell_016": {
+      "blank": false,
+      "canonical": "main/cell_061",
+      "nativeBounds": [
+        -14,
+        -21,
+        10,
+        3
+      ],
+      "sourceRgbaSha256": "63f584267dfb154b3fc513724325674a4463d83c241cdef9780786eea39ab10e",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        -7,
+        -19,
+        6,
+        -3
+      ]
+    },
+    "sub/cell_017": {
+      "blank": false,
+      "canonical": "main/cell_062",
+      "nativeBounds": [
+        2,
+        -13,
+        34,
+        3
+      ],
+      "sourceRgbaSha256": "d60069750c0320eb0690c43922bd16ed542a42d3c9872ae8366d358b0c37dd50",
+      "translation": [
+        0,
+        0
+      ],
+      "visibleBounds": [
+        8,
+        -7,
+        28,
+        1
+      ]
+    }
+  },
+  "sourceFiles": {
+    "02_CHARACTERS/use-ready-pixi-hd4x-224/batch-01/m104_tunomon/main-atlas-00.json": "9fb2632b5144b93da98b64d123edc0133b52a9b84040688b21953b79d4eba477",
+    "02_CHARACTERS/use-ready-pixi-hd4x-224/batch-01/m104_tunomon/main-atlas-00.png": "9c7fbf3212608a6c75e950b117fa0f569574b2f3bd77244977f4d7f528fc1364",
+    "02_CHARACTERS/use-ready-pixi-hd4x-224/batch-01/m104_tunomon/manifest.json": "e9b99304c7d42f9884e602bed26d732e420a68128dcfcb9b1d09bb21b3918555",
+    "02_CHARACTERS/use-ready-pixi-hd4x-224/batch-01/m104_tunomon/runtime.json": "519e0bb9a4f0de706b6714d7ae51fb10a3236a328802aee91be580a1081a0379",
+    "02_CHARACTERS/use-ready-pixi-hd4x-224/batch-01/m104_tunomon/sub-atlas-00.json": "9ed8a3fa7a48a6d2dcaa9d224c34cb32fb54e28b1d174c42f83db11dd81793aa",
+    "02_CHARACTERS/use-ready-pixi-hd4x-224/batch-01/m104_tunomon/sub-atlas-00.png": "de4789092bd02c314a3ca4fcf27821199e0ff6ab35d27c50e107bff730b18439",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m104_tunomon_main.nanr": "d39d0ef49cb66d055f5944e9923655299a17131ddb2b1dcf729f48c18a5d59f7",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m104_tunomon_main.ncbr": "29c6e49c1d5b6ed4592fc530512889c4af4930a12dc1e6ce27103e3d7a17bfd4",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m104_tunomon_main.ncer": "bfe7d1bf03b60e4ee864fea1b6ae3c8a30763da7a947cdd03cf2b62cd11f3846",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m104_tunomon_main.nclr": "ab6056278b2e615603cf0bcf061c5530eeb17bdf6fe4249e7fdac6da4675481f",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m104_tunomon_sub.nanr": "b92cb8a9fb90d40dfdfd950d6cee2dd81b4b75bc58f9c4417a31bf5a81aebe11",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m104_tunomon_sub.ncer": "47c0b4fef81963c5a7a10afa327f3dd10dfa9c2b1cf7effcfbbc145743a66de2",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m104_tunomon_sub.ncgr": "5f1960425dcd067bc89b2f732ca6f22b35a46db83303ad979c5bac0b08bbcf53",
+    "07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon/m104_tunomon_sub.nclr": "ebc56e8e55da0ebe6d22d7a3abd734c5cc2066fad36012aafa424830f2a583b7",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/animations.json": "c19e5dd34b7dc34ea1a12f387363eb965c50a226aa8754a442216b4fad17160f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells.json": "a066060427bb959f19bf6ecb7976ef4cae5363175d44a8b8e4b25f556461490f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-000.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-001.png": "e45c05ae87f09468d0fcc1bd6598a8f96fe6de42cc26746c319886146d9bc22c",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-002.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-003.png": "e45c05ae87f09468d0fcc1bd6598a8f96fe6de42cc26746c319886146d9bc22c",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-004.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-005.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-006.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-007.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-008.png": "d39abb1d8b4acf34cae4f58625fe02113d4e52008f26fef779dfd93324fa4185",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-009.png": "39d841f4fb1b97d1665693fc1ad05b15c7f79ec0d0a298eec1d2012fc8d4c3de",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-010.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-011.png": "4397b9387dd84206740a5308de0d24911bc8aa709ca745cb81172c177621e3c4",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-012.png": "d39abb1d8b4acf34cae4f58625fe02113d4e52008f26fef779dfd93324fa4185",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-013.png": "4397b9387dd84206740a5308de0d24911bc8aa709ca745cb81172c177621e3c4",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-014.png": "d39abb1d8b4acf34cae4f58625fe02113d4e52008f26fef779dfd93324fa4185",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-015.png": "4397b9387dd84206740a5308de0d24911bc8aa709ca745cb81172c177621e3c4",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-016.png": "d39abb1d8b4acf34cae4f58625fe02113d4e52008f26fef779dfd93324fa4185",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-017.png": "4397b9387dd84206740a5308de0d24911bc8aa709ca745cb81172c177621e3c4",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-018.png": "d39abb1d8b4acf34cae4f58625fe02113d4e52008f26fef779dfd93324fa4185",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-019.png": "4397b9387dd84206740a5308de0d24911bc8aa709ca745cb81172c177621e3c4",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-020.png": "d39abb1d8b4acf34cae4f58625fe02113d4e52008f26fef779dfd93324fa4185",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-021.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-022.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-023.png": "4397b9387dd84206740a5308de0d24911bc8aa709ca745cb81172c177621e3c4",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-024.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-025.png": "e45c05ae87f09468d0fcc1bd6598a8f96fe6de42cc26746c319886146d9bc22c",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-026.png": "4397b9387dd84206740a5308de0d24911bc8aa709ca745cb81172c177621e3c4",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-027.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-028.png": "e45c05ae87f09468d0fcc1bd6598a8f96fe6de42cc26746c319886146d9bc22c",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-029.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-030.png": "e45c05ae87f09468d0fcc1bd6598a8f96fe6de42cc26746c319886146d9bc22c",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-031.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-032.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-033.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-034.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-035.png": "d39abb1d8b4acf34cae4f58625fe02113d4e52008f26fef779dfd93324fa4185",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-036.png": "4397b9387dd84206740a5308de0d24911bc8aa709ca745cb81172c177621e3c4",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-037.png": "d39abb1d8b4acf34cae4f58625fe02113d4e52008f26fef779dfd93324fa4185",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-038.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-039.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-040.png": "4397b9387dd84206740a5308de0d24911bc8aa709ca745cb81172c177621e3c4",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-041.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-042.png": "e45c05ae87f09468d0fcc1bd6598a8f96fe6de42cc26746c319886146d9bc22c",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-043.png": "4397b9387dd84206740a5308de0d24911bc8aa709ca745cb81172c177621e3c4",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-044.png": "7b9bd992dfce30da509c4e8ca92de84897b64bf859ba352c88ba64b334b17e55",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-045.png": "d39abb1d8b4acf34cae4f58625fe02113d4e52008f26fef779dfd93324fa4185",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-046.png": "7b9bd992dfce30da509c4e8ca92de84897b64bf859ba352c88ba64b334b17e55",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-047.png": "d39abb1d8b4acf34cae4f58625fe02113d4e52008f26fef779dfd93324fa4185",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-048.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-049.png": "e45c05ae87f09468d0fcc1bd6598a8f96fe6de42cc26746c319886146d9bc22c",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-050.png": "d39abb1d8b4acf34cae4f58625fe02113d4e52008f26fef779dfd93324fa4185",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-051.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-052.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-053.png": "e45c05ae87f09468d0fcc1bd6598a8f96fe6de42cc26746c319886146d9bc22c",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-054.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-055.png": "4397b9387dd84206740a5308de0d24911bc8aa709ca745cb81172c177621e3c4",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-056.png": "e45c05ae87f09468d0fcc1bd6598a8f96fe6de42cc26746c319886146d9bc22c",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-057.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-058.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-059.png": "4397b9387dd84206740a5308de0d24911bc8aa709ca745cb81172c177621e3c4",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-060.png": "d39abb1d8b4acf34cae4f58625fe02113d4e52008f26fef779dfd93324fa4185",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-061.png": "7b9bd992dfce30da509c4e8ca92de84897b64bf859ba352c88ba64b334b17e55",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-062.png": "39d841f4fb1b97d1665693fc1ad05b15c7f79ec0d0a298eec1d2012fc8d4c3de",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-063.png": "d39abb1d8b4acf34cae4f58625fe02113d4e52008f26fef779dfd93324fa4185",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/cells/cell-064.png": "50f525867bd1120aa3a685e91dbc2dad15f7c35680a5dd8fe7d69fd6c086548f",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_main/family.json": "92d03b6606c890424b618e691f8e60ba745d400e48c783631fc7ad3a35bc11fe",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/animations.json": "e30134f30f5eadc2c047803bc7980a57c64219f8c1eeeadb0a52cb747b874836",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/cells.json": "384e783ba01dd576a73e64fe8fb54372663ad29a55d95616b643d787512b5371",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/cells/cell-000.png": "1dc4c8591936d247ec4eebd6c616342a16917333a039c159993241bdd17b117b",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/cells/cell-001.png": "05218992b38e54d0d0c055194ab9d5b5ad42c2131f52372c08f6d15a7287eba9",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/cells/cell-002.png": "1dc4c8591936d247ec4eebd6c616342a16917333a039c159993241bdd17b117b",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/cells/cell-003.png": "05218992b38e54d0d0c055194ab9d5b5ad42c2131f52372c08f6d15a7287eba9",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/cells/cell-004.png": "a3d249e4cfe5383e95f4c6a82aeb422dac865a07e5b183516aeeff8dc6c2a9c6",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/cells/cell-005.png": "1dc4c8591936d247ec4eebd6c616342a16917333a039c159993241bdd17b117b",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/cells/cell-006.png": "4223d8e91d0601a5adb62d44fcad0b54c1c4128ff8bd5f423a85fb3496a89453",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/cells/cell-007.png": "4223d8e91d0601a5adb62d44fcad0b54c1c4128ff8bd5f423a85fb3496a89453",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/cells/cell-008.png": "1dc4c8591936d247ec4eebd6c616342a16917333a039c159993241bdd17b117b",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/cells/cell-009.png": "05218992b38e54d0d0c055194ab9d5b5ad42c2131f52372c08f6d15a7287eba9",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/cells/cell-010.png": "e248d6349d8edb60ad31acf4e9c236e5b09a8e988d72f77c6cb502d00ddffa95",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/cells/cell-011.png": "1dc4c8591936d247ec4eebd6c616342a16917333a039c159993241bdd17b117b",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/cells/cell-012.png": "1dc4c8591936d247ec4eebd6c616342a16917333a039c159993241bdd17b117b",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/cells/cell-013.png": "05218992b38e54d0d0c055194ab9d5b5ad42c2131f52372c08f6d15a7287eba9",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/cells/cell-014.png": "1dc4c8591936d247ec4eebd6c616342a16917333a039c159993241bdd17b117b",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/cells/cell-015.png": "4223d8e91d0601a5adb62d44fcad0b54c1c4128ff8bd5f423a85fb3496a89453",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/cells/cell-016.png": "e248d6349d8edb60ad31acf4e9c236e5b09a8e988d72f77c6cb502d00ddffa95",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/cells/cell-017.png": "a3d249e4cfe5383e95f4c6a82aeb422dac865a07e5b183516aeeff8dc6c2a9c6",
+    "08_FULL_FAMILY_CONVERSION/digimon/m104_tunomon_sub/family.json": "996a9056e0edd66c51b6a1d45b9ec89616431f9dcf2b9351547925ae96a0a81f"
+  },
+  "sourceOrigin": [
+    22,
+    34
+  ],
+  "species": {
+    "attributeIndex": 0,
+    "familyBits": 1,
+    "generationIndex": 2,
+    "generationScaledByte": 8,
+    "huntClassByte": 2,
+    "identifier": "TUNOMON",
+    "lookupKey": "m104_tunomon",
+    "recordIndex": 23,
+    "statCurveIndex": 2
+  },
+  "speciesCatalogSha256": "d86ec0d6c97eca1827bf405ebae6a15275e60d47439ba7a8678f06e2dde34eba"
+}

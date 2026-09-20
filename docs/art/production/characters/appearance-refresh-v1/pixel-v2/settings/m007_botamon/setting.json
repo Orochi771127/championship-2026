@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m007_botamon",
+  "designVersion": "m007-ember-bud-r01",
+  "stage": "SINGLE_STANDARD_POSE_IDENTITY_CANDIDATE",
+  "selectedOption": "USER_CONCEPT_ALIGNED_LOW_MOTION_RISK",
+  "artReview": "ORIGINAL_DESIGN_LOCK_CREATED_FULL_MOTION_PENDING",
+  "runtimeEligible": false,
+  "shippingReady": false,
+  "authoringSource": "Codex independent pixel design aligned to the user supplied Charmin ember-bud concept after complete donor motion review",
+  "sourceRefs": [],
+  "sourceUse": "Original smoky-plum charcoal gel and single curled ember sprout; donor supplies motion, timing, bounds and mapping only. No donor RGB or copied source pixels.",
+  "features": [
+    "單一彎曲火芽",
+    "煙紫炭泥軟體",
+    "分離式奶油眼與琥珀瞳",
+    "無肢單一身體"
+  ],
+  "faceRules": [
+    "兩眼以身體色隔開；隨伸展壓縮、偏移或遮蔽，不使用固定貼圖臉。",
+    "只保留單一火芽，不產生 donor 的雙耳輪廓。",
+    "火芽與身體相連，不能變成尾巴、手腳或漂浮物。"
+  ],
+  "ornamentRules": [
+    "橙色發光只出現在單一火芽、瞳孔與少量身體炭點；不增加光環或背景光。"
+  ],
+  "identityDesign": {
+    "directionVersion": "creature-identity-v1",
+    "family": "EMBER_SEED",
+    "fixedTraits": [
+      "單一彎曲火芽",
+      "煙紫炭泥軟體",
+      "分離式奶油眼與琥珀瞳",
+      "無肢單一身體"
+    ],
+    "changedRegions": [
+      "全身材質",
+      "頭頂輪廓",
+      "眼睛結構",
+      "炭點紋理"
+    ],
+    "allowedContourChanges": [
+      "在 donor 每格既有軟身軸內把雙尖輪廓改成單一彎曲火芽；不可改變動作極值、受縛語意或接地關係。"
+    ],
+    "preservedMotion": [
+      "單一軟身的彈跳、壓扁、月牙伸長、橫向掃動與倒地",
+      "原槽位、序列、ticks、native bounds、origin 與 Main/Sub 映射"
+    ]
+  },
+  "palette": [
+    "#00000000",
+    "#141827",
+    "#2B3044",
+    "#4B4358",
+    "#D66E3D",
+    "#FF9C3D",
+    "#FFD06A",
+    "#FFF0B5",
+    "#777C91",
+    "#F8F4E8"
+  ],
+  "poses": [
+    {
+      "key": "main/cell_000",
+      "nativeBounds": [
+        -5,
+        -9,
+        6,
+        1
+      ],
+      "pixels": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          4,
+          6,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          5,
+          2,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          2,
+          2,
+          2,
+          2,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          2,
+          2,
+          3,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          2,
+          3,
+          7,
+          4,
+          2,
+          7,
+          4,
+          2,
+          1,
+          0
+        ],
+        [
+          1,
+          2,
+          3,
+          1,
+          6,
+          2,
+          1,
+          6,
+          2,
+          1,
+          0
+        ],
+        [
+          1,
+          2,
+          2,
+          3,
+          2,
+          5,
+          2,
+          3,
+          2,
+          2,
+          1
+        ],
+        [
+          0,
+          1,
+          2,
+          2,
+          3,
+          2,
+          3,
+          2,
+          2,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0
+        ]
+      ],
+      "role": "原創炭芽仔標準姿勢；完整動作仍需生成與逐格審查",
+      "poseReview": "ORIGINAL_IDENTITY_LOCK_FULL_MOTION_PENDING",
+      "changeNotes": [
+        "Ember Bud / 炭芽仔",
+        "單一彎曲火芽取代 donor 雙耳形上緣",
+        "煙紫炭泥、奶油眼與琥珀瞳建立獨立外觀"
+      ]
+    }
+  ]
+}

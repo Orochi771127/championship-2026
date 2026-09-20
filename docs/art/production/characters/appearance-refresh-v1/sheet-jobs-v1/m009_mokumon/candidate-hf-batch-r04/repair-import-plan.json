@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m009_mokumon",
+  "baseDirectory": "candidate-hf-batch-r03",
+  "outputDirectory": "candidate-hf-batch-r04",
+  "alphaThreshold": 128,
+  "placement": "ONE_SHARED_SCALE_AND_OFFSET_PER_SHEET",
+  "perCellResize": false,
+  "bboxRecenter": false,
+  "groups": [],
+  "deterministicDerivations": {
+    "main/cell_031": {
+      "base": "main/cell_031",
+      "operation": "binding_band",
+      "heightRatio": 0.68,
+      "padding": 1,
+      "darkColor": [193, 139, 38, 255],
+      "lightColor": [244, 196, 94, 255],
+      "evidence": "Donor review classifies main/cell_031 as restrained, but the accepted full-sheet panel omitted the binding. Add a generic two-tone band from the original candidate body bounds only; no donor pixels or donor RGB are transferred."
+    }
+  },
+  "anchorCorrections": {}
+}

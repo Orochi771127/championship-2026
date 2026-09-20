@@ -1,0 +1,52 @@
+Create a complete ORIGINAL pixel-game animation sheet.
+Reference IMAGE 1 is our ORIGINAL identity seed and the only appearance/style authority.
+IMAGE 2 is a research MOTION/LAYOUT GUIDE only: preserve every occupied slot pose, facing, whole-body deformation, expression visibility, restrained/unrestrained state, native scale and local origin, while replacing every commercial-character appearance with the original identity from IMAGE 1.
+Do not copy source RGB colors, recognizable markings, face design or proprietary character appearance.
+
+Original identity (m008-tide-lantern-r01): Original deep-indigo tide-lantern body, diagonal seafoam current band and amber-coral facial window; donor supplies motion, timing, bounds and mapping only. No donor RGB or copied source pixels.
+Fixed identity traits: 深靛單一水滴軟體; 斜向海沫潮紋; 琥珀新月形臉窗與珊瑚內光; 無肢無獨立尾巴.
+Face rules: 琥珀臉窗是身體前側的一個連續發光孔；依 donor 格位放大、縮小、偏移或遮蔽，不使用固定貼圖臉。 珊瑚內光只存在於臉窗內，不能變成第二張臉、眼睛或漂浮物。 貼地與背向格必須遵循 donor 的臉部遮蔽程度。
+Ornament rules: 海沫潮紋貼在身體表面並隨同一軟體變形；不得增加泡泡、光環、手腳、翅膀或獨立尾巴。
+Morphology contract: Tiny limbless aquatic larva formed by one continuous soft droplet body. Upright poses narrow into a short trailing lower lobe; low poses compress the same body into a mound or horizontal sweep.
+Locomotion contract: The whole body bobs, settles, stretches upright, bends diagonally, sweeps horizontally and collapses low. No donor action semantics are renamed or invented.
+Expression contract: A large pale oval facial aperture sits high on the front. A red inner opening appears, widens, narrows or becomes hidden according to the source cell; low cells reduce the aperture to small marks or fully occlude it.
+Appendage prohibition: No arms, legs, feet, wings or separate tail. The narrow lower lobe and horizontal sweep are deformations of the same continuous body and must not become independent anatomy.
+Restraint contract: Main cells 027-043 form the restrained block, including sameAs aliases. A gold-brown binding crosses the lower-central body and follows compact, upright and tilted poses while leaving the facial aperture readable.
+
+OUTPUT: exactly 8 columns by 6 rows, 48 equal square cells, transparent RGBA canvas, no grid lines, words, labels, numbers, ground shadows, glow halo, background, decorations, anti-aliasing or painterly effects.
+Each cell represents one logical 64x64 image enlarged uniformly 4x for this sheet. Keep the creature VERY SMALL inside each cell at the position and relative size shown by IMAGE 2, with broad transparent margins.
+Do not center, bottom-align, crop, rotate or resize cells independently. Use one shared scale and translation for the complete sheet.
+Shared native origin is [31, 38]. Preserve crisp nearest-neighbor pixel clusters and the limited palette.
+Gold-brown binding is a separate physical prop, never anatomy. No tweening and no invented actions.
+Preserve expression changes per slot; the facial window may stretch, compress, shift or become occluded exactly as the guide shows. Do not paste one identical face on every pose.
+
+Read occupied slots left-to-right, top-to-bottom. The following indices are instructions only; do not print them:
+1: main/cell_001: Lower rounded settle; body compresses vertically and the facial aperture sits closer to the base.
+2: main/cell_002: Compact upright idle variant with the front aperture slightly shifted.
+3: main/cell_003: Low rounded settle variant with the face compressed near the lower front.
+4: main/cell_005: Broad low crouch or landing; continuous body spreads sideways without producing limbs.
+5: main/cell_008: Tall upright stretch with the large pale aperture high on the front and red inner opening visible.
+6: main/cell_009: Very flat rightward horizontal sweep or prone posture; face is largely occluded.
+7: main/cell_010: Tall diagonal bend with a red inner opening and the lower body trailing down and right.
+8: main/cell_011: Low compact crouch with the facial aperture reduced near the base.
+9: main/cell_012: Tall left-leaning bend; red inner opening enlarges while the continuous lower lobe trails right.
+10: main/cell_014: Broad horizontal body sweep with rounded leading mass and tapering rear; no separate tail.
+11: main/cell_024: Raised diagonal expression pose with the red inner opening prominently visible.
+12: main/cell_025: Compact upright turn with pale facial aperture and narrow contact.
+13: main/cell_026: Low rounded back or closed-face posture; facial aperture is mostly hidden.
+14: main/cell_027: Compact restrained upright pose with gold-brown binding around the lower-central body.
+15: main/cell_029: Compact restrained variant; binding remains separate from the body and face stays readable.
+16: main/cell_032: Low tilted restrained pose; binding follows the compressed body angle.
+17: main/cell_035: Tall fully stretched restrained pose; binding follows the lower vertical body while the aperture remains free.
+18: main/cell_039: Low restrained compression with the binding angled around the lower body.
+19: main/cell_041: Raised diagonal restrained pose with a widened inner facial opening.
+20: main/cell_042: Compact restrained settle with binding crossing the lower center.
+21: main/cell_043: Rear or closed-face restrained posture; pale back plane remains above the binding.
+22: main/cell_048: Black silhouette of the low compact pose with pale lower facial marks retained.
+23: main/cell_050: Low compact landing or crouch with the facial aperture close to the base.
+24: main/cell_051: Compact upright expression with a small red inner opening.
+25: main/cell_052: Low compact expression with the face compressed along the base.
+26: main/cell_060: Tall expanded or surprised expression pose with a larger top curve and readable red opening.
+
+All remaining slots [27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48] must be fully transparent and empty.
+This is production sprite art, not a poster or presentation character sheet.

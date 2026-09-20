@@ -258,8 +258,18 @@ async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main'
       const manifestUrl = new URL(LICENSED_CHARACTER_MANIFEST, location.href).href;
       const response = await fetch(manifestUrl);
       if (!response.ok) throw new Error(`CHARACTER_MANIFEST_HTTP_${response.status}`);
-      return await loadLicensedCharacterRoster({ PIXI, speciesIds,sides,
-        productionIndex, manifestUrl, manifest: await response.json() });
+      const rosterOptions={PIXI,speciesIds,sides,productionIndex,manifestUrl,manifest:await response.json()};
+      if(new URLSearchParams(location.search).get('characterArtReview')==='m001'
+        && ['localhost','127.0.0.1','[::1]'].includes(location.hostname)){
+        const {loadM001CharacterArtReview}=await import('../presentation/m001CharacterArtReview.js');
+        return await loadM001CharacterArtReview(rosterOptions,location.href);
+      }
+      if(['m003','m004','m005','m006','m007','m008','m009','m010','m011','m012','m101','m102','m103','m104'].includes(new URLSearchParams(location.search).get('characterArtReview'))
+        && ['localhost','127.0.0.1','[::1]'].includes(location.hostname)){
+        const {loadCandidateCharacterArtReview}=await import('../presentation/candidateCharacterArtReview.js');
+        return await loadCandidateCharacterArtReview(rosterOptions,location.href);
+      }
+      return await loadLicensedCharacterRoster(rosterOptions);
     }
     return await loadPixiCharacterRuntimeBundle({
       PIXI,

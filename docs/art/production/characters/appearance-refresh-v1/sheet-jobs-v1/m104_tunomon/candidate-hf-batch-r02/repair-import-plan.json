@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m104_tunomon",
+  "baseDirectory": "candidate-hf-batch-r01",
+  "outputDirectory": "candidate-hf-batch-r02",
+  "alphaThreshold": 128,
+  "placement": "ONE_SHARED_SCALE_AND_OFFSET_PER_SHEET",
+  "perCellResize": false,
+  "bboxRecenter": false,
+  "groups": [],
+  "deterministicDerivations": {
+    "main/cell_027": {
+      "base": "main/cell_027",
+      "operation": "binding_band",
+      "heightRatio": 0.68,
+      "evidence": "Donor main/cell_027 is explicitly restrained. Apply a body-mask-clipped two-tone gold external wrap to the accepted original-character pixels; preserve pose, expression, contour and source origin."
+    },
+    "main/cell_028": {
+      "base": "main/cell_028",
+      "operation": "binding_band",
+      "heightRatio": 0.68,
+      "evidence": "Donor main/cell_028 is explicitly restrained. Apply a body-mask-clipped two-tone gold external wrap to the accepted original-character pixels; preserve pose, expression, contour and source origin."
+    },
+    "main/cell_029": {
+      "base": "main/cell_029",
+      "operation": "binding_band",
+      "heightRatio": 0.68,
+      "evidence": "Donor main/cell_029 is explicitly restrained. Apply a body-mask-clipped two-tone gold external wrap to the accepted original-character pixels; preserve pose, expression, contour and source origin."
+    },
+    "main/cell_030": {
+      "base": "main/cell_030",
+      "operation": "binding_band",
+      "heightRatio": 0.68,
+      "evidence": "Donor main/cell_030 is explicitly restrained. Apply a body-mask-clipped two-tone gold external wrap to the accepted original-character pixels; preserve pose, expression, contour and source origin."
+    },
+    "main/cell_031": {
+      "base": "main/cell_031",
+      "operation": "binding_band",
+      "heightRatio": 0.68,
+      "evidence": "Donor main/cell_031 is explicitly restrained. Apply a body-mask-clipped two-tone gold external wrap to the accepted original-character pixels; preserve pose, expression, contour and source origin."
+    },
+    "main/cell_032": {
+      "base": "main/cell_032",
+      "operation": "binding_band",
+      "heightRatio": 0.68,
+      "evidence": "Donor main/cell_032 is explicitly restrained. Apply a body-mask-clipped two-tone gold external wrap to the accepted original-character pixels; preserve pose, expression, contour and source origin."
+    },
+    "main/cell_035": {
+      "base": "main/cell_035",
+      "operation": "binding_band",
+      "heightRatio": 0.68,
+      "evidence": "Donor main/cell_035 is explicitly restrained. Apply a body-mask-clipped two-tone gold external wrap to the accepted original-character pixels; preserve pose, expression, contour and source origin."
+    },
+    "main/cell_036": {
+      "base": "main/cell_036",
+      "operation": "binding_band_vertical",
+      "widthRatio": 0.62,
+      "evidence": "Donor main/cell_036 is explicitly restrained. Apply a body-mask-clipped two-tone gold external wrap to the accepted original-character pixels; preserve pose, expression, contour and source origin."
+    },
+    "main/cell_038": {
+      "base": "main/cell_038",
+      "operation": "binding_band",
+      "heightRatio": 0.68,
+      "evidence": "Donor main/cell_038 is explicitly restrained. Apply a body-mask-clipped two-tone gold external wrap to the accepted original-character pixels; preserve pose, expression, contour and source origin."
+    },
+    "main/cell_039": {
+      "base": "main/cell_039",
+      "operation": "binding_band",
+      "heightRatio": 0.68,
+      "evidence": "Donor main/cell_039 is explicitly restrained. Apply a body-mask-clipped two-tone gold external wrap to the accepted original-character pixels; preserve pose, expression, contour and source origin."
+    },
+    "main/cell_040": {
+      "base": "main/cell_040",
+      "operation": "binding_band_vertical",
+      "widthRatio": 0.62,
+      "evidence": "Donor main/cell_040 is explicitly restrained. Apply a body-mask-clipped two-tone gold external wrap to the accepted original-character pixels; preserve pose, expression, contour and source origin."
+    },
+    "main/cell_041": {
+      "base": "main/cell_041",
+      "operation": "binding_band",
+      "heightRatio": 0.68,
+      "evidence": "Donor main/cell_041 is explicitly restrained. Apply a body-mask-clipped two-tone gold external wrap to the accepted original-character pixels; preserve pose, expression, contour and source origin."
+    },
+    "main/cell_042": {
+      "base": "main/cell_042",
+      "operation": "binding_band",
+      "heightRatio": 0.68,
+      "evidence": "Donor main/cell_042 is explicitly restrained. Apply a body-mask-clipped two-tone gold external wrap to the accepted original-character pixels; preserve pose, expression, contour and source origin."
+    },
+    "main/cell_043": {
+      "base": "main/cell_043",
+      "operation": "binding_band_vertical",
+      "widthRatio": 0.62,
+      "evidence": "Donor main/cell_043 is explicitly restrained. Apply a body-mask-clipped two-tone gold external wrap to the accepted original-character pixels; preserve pose, expression, contour and source origin."
+    },
+    "main/cell_047": {
+      "base": "main/cell_047",
+      "operation": "black_with_pale_features",
+      "paleSourceColors": [
+        [
+          245,
+          241,
+          214,
+          255
+        ]
+      ],
+      "paleTargetColor": [
+        245,
+        241,
+        214,
+        255
+      ],
+      "evidence": "Donor main047 supplies the distinct tall black-silhouette contour. Preserve the generated original-character alpha and ivory face feature, and deterministically replace state colors."
+    },
+    "main/cell_048": {
+      "base": "main/cell_048",
+      "operation": "black_with_pale_features",
+      "paleSourceColors": [
+        [
+          245,
+          241,
+          214,
+          255
+        ]
+      ],
+      "paleTargetColor": [
+        245,
+        241,
+        214,
+        255
+      ],
+      "evidence": "Donor main048 supplies the distinct compact black-silhouette contour. Preserve the generated original-character alpha and ivory face feature, and deterministically replace state colors."
+    },
+    "main/cell_061": {
+      "base": "main/cell_061",
+      "operation": "stone_gray",
+      "evidence": "Donor main061 supplies a distinct petrified contour. Preserve the generated original-character alpha and internal light-dark regions, and map them to a deterministic three-tone stone palette."
+    },
+    "main/cell_064": {
+      "base": "main/cell_064",
+      "operation": "white",
+      "evidence": "Donor main064 supplies a distinct white evolution silhouette. Preserve the generated original-character alpha contour and fill it deterministically white."
+    }
+  },
+  "anchorCorrections": {
+    "main/cell_062": {
+      "translation": [
+        14,
+        7
+      ],
+      "evidence": "Donor main062 is a deliberately displaced prone defeat/sleep pose at visible bounds [30,27,50,35]. The generated OC contour measured [16,20,36,29]; translate the whole accepted cell by [14,7] without resizing or recentering to preserve that source-relative displacement."
+    }
+  }
+}

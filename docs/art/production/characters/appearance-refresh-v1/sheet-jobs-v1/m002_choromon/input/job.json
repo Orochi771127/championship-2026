@@ -1,0 +1,115 @@
+{
+  "artReview": "PENDING",
+  "blankPanels": [
+    44,
+    45,
+    46,
+    47
+  ],
+  "derived": {
+    "main/cell_047": {
+      "base": "main/cell_044",
+      "operation": "black_with_original_teal_marks"
+    },
+    "main/cell_048": {
+      "base": "main/cell_000",
+      "operation": "black_with_original_teal_marks"
+    },
+    "main/cell_061": {
+      "base": "main/cell_010",
+      "operation": "grayscale"
+    },
+    "main/cell_064": {
+      "base": "main/cell_000",
+      "operation": "white"
+    }
+  },
+  "designSha256": "ed9f381d6037c33de18d1f4a7cceb7b3767bb0d25b03a5274efdab6d1f988016",
+  "entityId": "m002_choromon",
+  "grid": [
+    8,
+    6
+  ],
+  "inventorySha256": "5323d65c8bc632a98d130e4c6def3711af71bd2236ec1730837e92a0b01acdbb",
+  "keys": [
+    "main/cell_001",
+    "main/cell_003",
+    "main/cell_005",
+    "main/cell_008",
+    "main/cell_009",
+    "main/cell_011",
+    "main/cell_012",
+    "main/cell_013",
+    "main/cell_014",
+    "main/cell_019",
+    "main/cell_020",
+    "main/cell_021",
+    "main/cell_022",
+    "main/cell_023",
+    "main/cell_024",
+    "main/cell_025",
+    "main/cell_026",
+    "main/cell_027",
+    "main/cell_028",
+    "main/cell_029",
+    "main/cell_030",
+    "main/cell_032",
+    "main/cell_035",
+    "main/cell_036",
+    "main/cell_037",
+    "main/cell_038",
+    "main/cell_039",
+    "main/cell_040",
+    "main/cell_041",
+    "main/cell_042",
+    "main/cell_043",
+    "main/cell_044",
+    "main/cell_050",
+    "main/cell_051",
+    "main/cell_052",
+    "main/cell_053",
+    "main/cell_054",
+    "main/cell_055",
+    "main/cell_056",
+    "main/cell_058",
+    "main/cell_059",
+    "main/cell_060",
+    "main/cell_062",
+    "main/cell_063"
+  ],
+  "normalization": {
+    "bboxRecenter": false,
+    "nativeCanvas": [
+      64,
+      64
+    ],
+    "perCellScale": false
+  },
+  "palette": [
+    "#00000000",
+    "#646D65",
+    "#24565B",
+    "#3E9297",
+    "#A4D4C7",
+    "#F0E6C9",
+    "#C3B493",
+    "#9B673D",
+    "#D19B5A",
+    "#FFF4DA",
+    "#D07C42",
+    "#594C3F"
+  ],
+  "pilotAcceptanceSha256": "47c688439a40a9e97b3e5f61344b60402c5c3540624bc660253597222163f767",
+  "retainedMasters": [
+    "main/cell_000",
+    "main/cell_002",
+    "main/cell_010"
+  ],
+  "reviewSha256": "e0bb9a8a337a40850e45b801342559dcf61e87fccbb0d93f932ba6f35b031062",
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "sourceOrigin": [
+    24,
+    38
+  ]
+}

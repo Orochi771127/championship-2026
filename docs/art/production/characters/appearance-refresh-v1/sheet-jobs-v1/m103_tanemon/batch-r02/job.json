@@ -1,0 +1,155 @@
+{
+  "artAccepted": false,
+  "batchId": "hf-batch-20260920-01",
+  "blankPanels": [
+    45,
+    46,
+    47
+  ],
+  "derived": {
+    "main/cell_043": {
+      "base": "main/cell_008",
+      "operation": "red",
+      "sourceProof": {
+        "limitation": "Color relation is not a global donor LUT; use original authored face marks and palette, never donor RGB.",
+        "operationClass": "EXACT_ALPHA_ORIGINAL_COLOR_RULE",
+        "sourceAlphaSha256": "9b1d04ff193ac128a044b69f66c1b4982f2254362f3b43b4d23cb3b35e3e5ee1",
+        "targetColorCount": 7
+      },
+      "translation": [
+        0,
+        0
+      ]
+    },
+    "main/cell_044": {
+      "base": "main/cell_008",
+      "operation": "black",
+      "sourceProof": {
+        "limitation": "Color relation is not a global donor LUT; use original authored face marks and palette, never donor RGB.",
+        "operationClass": "EXACT_ALPHA_ORIGINAL_COLOR_RULE",
+        "sourceAlphaSha256": "9b1d04ff193ac128a044b69f66c1b4982f2254362f3b43b4d23cb3b35e3e5ee1",
+        "targetColorCount": 2
+      },
+      "translation": [
+        0,
+        0
+      ]
+    },
+    "main/cell_058": {
+      "base": "main/cell_010",
+      "operation": "gray",
+      "sourceProof": {
+        "alphaOccupancyMismatchPixels": 0,
+        "limitation": "Donor alpha is proof only. Translate and recolor the original-character base; never transfer donor pixels or RGB.",
+        "maximumAllowedMismatchPixels": 0,
+        "operationClass": "TRANSLATED_NEAR_ALPHA_ORIGINAL_COLOR_RULE",
+        "sourceAlphaSha256": "9bb5b0f2efc0c417852b8508f80494e47e9a354e072b49b8fb9be1beee497345",
+        "targetAlphaSha256": "9bb5b0f2efc0c417852b8508f80494e47e9a354e072b49b8fb9be1beee497345",
+        "targetColorCount": 4,
+        "translation": [
+          0,
+          0
+        ]
+      },
+      "translation": [
+        0,
+        0
+      ]
+    }
+  },
+  "designSha256": "1cbf86cf1338ae1b248b98c64a70180c7acbeb88993c43929c465a3343844165",
+  "designVersion": "m103-aurora-chime-pod-r01",
+  "entityId": "m103_tanemon",
+  "grid": [
+    8,
+    6
+  ],
+  "inventorySha256": "c43e993863fa617edd80b40f7056ed902ab9da73674dd13d9b2472fa9e9d827d",
+  "keys": [
+    "main/cell_001",
+    "main/cell_002",
+    "main/cell_003",
+    "main/cell_005",
+    "main/cell_009",
+    "main/cell_010",
+    "main/cell_011",
+    "main/cell_012",
+    "main/cell_013",
+    "main/cell_014",
+    "main/cell_018",
+    "main/cell_019",
+    "main/cell_020",
+    "main/cell_021",
+    "main/cell_022",
+    "main/cell_023",
+    "main/cell_024",
+    "main/cell_026",
+    "main/cell_027",
+    "main/cell_028",
+    "main/cell_029",
+    "main/cell_031",
+    "main/cell_034",
+    "main/cell_035",
+    "main/cell_036",
+    "main/cell_037",
+    "main/cell_038",
+    "main/cell_039",
+    "main/cell_040",
+    "main/cell_041",
+    "main/cell_045",
+    "main/cell_046",
+    "main/cell_047",
+    "main/cell_048",
+    "main/cell_049",
+    "main/cell_050",
+    "main/cell_051",
+    "main/cell_052",
+    "main/cell_053",
+    "main/cell_054",
+    "main/cell_055",
+    "main/cell_056",
+    "main/cell_057",
+    "main/cell_060",
+    "main/cell_061"
+  ],
+  "nativeCanvas": [
+    64,
+    64
+  ],
+  "nonDerivableSpecialCells": [
+    "main/cell_045",
+    "main/cell_061"
+  ],
+  "palette": [
+    "#00000000",
+    "#10233D",
+    "#24496A",
+    "#3F8DA0",
+    "#D8F3F0",
+    "#F7FFFB",
+    "#5B54D9",
+    "#70DAE0",
+    "#F4C84B",
+    "#F26D78",
+    "#A9F3D0",
+    "#FFFFFF",
+    "#C58A19"
+  ],
+  "retainedMasters": [
+    "main/cell_000",
+    "main/cell_008"
+  ],
+  "reviewScope": "STANDARD_POSE_READABILITY_ACCEPTED_MULTI_POSE_CANDIDATE_ONLY",
+  "reviewSha256": "0ad42617952b7bdfc3e3f1f1d165cb239d83c3f49bd0cf855b26c5763f48613b",
+  "runtimeEligible": false,
+  "schemaVersion": 1,
+  "sourceCounts": {
+    "masters": 50,
+    "sequences": 53,
+    "slots": 80
+  },
+  "sourceOrigin": [
+    22,
+    38
+  ]
+}
