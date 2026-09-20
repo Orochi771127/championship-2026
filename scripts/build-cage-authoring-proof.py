@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""One-field authoring proof from committed exports. No ROM, generation or promotion."""
+"""Legacy baseline/candidate and independent HD-part proof. No generation or promotion."""
 from __future__ import annotations
 import argparse
 import hashlib
 import json
+import shutil
 import subprocess
 from pathlib import Path
 from PIL import Image, ImageDraw
@@ -357,10 +358,289 @@ def build_candidate(contract, candidate, output):
     (output/'candidate-proof.json').write_text(dump(report),encoding='utf-8')
     return report
 
+def _pack_file(pack, relative):
+    require(isinstance(relative,str),'MODULAR_PATH_INVALID')
+    path=(pack/relative).resolve()
+    require(path.is_relative_to(pack.resolve()),'MODULAR_PATH_OUTSIDE_PACK')
+    require(path.is_file(),'MODULAR_ASSET_MISSING')
+    return path
+
+
+def load_modular_pack(pack,frame_index=0):
+    """HD adapter, not a second compositor. All coordinates remain native in data."""
+    manifest=read(pack/'modular-manifest.json')
+    require(manifest.get('schemaVersion')==1,'MODULAR_SCHEMA_INVALID')
+    require(manifest.get('status')=='ART_PROPOSAL','MODULAR_STATUS_INVALID')
+    require(all(manifest.get(k) is False for k in ('runtimeEligible','shippingReady','humanApproved')),
+            'MODULAR_APPROVAL_NOT_GRANTED')
+    generation=manifest.get('generation',{})
+    if 'receipt' in generation:
+        receipt_path=_pack_file(pack,generation['receipt'])
+        require(digest(receipt_path)==generation.get('receiptSha256'),'MODULAR_RECEIPT_HASH_DRIFT')
+    spec_path=_pack_file(pack,manifest.get('sourceSpec'))
+    require(digest(spec_path)==manifest.get('sourceSpecSha256'),'MODULAR_SPEC_HASH_DRIFT')
+    spec=read(spec_path)
+    require(manifest.get('fieldId')==spec['id'],'MODULAR_FIELD_MISMATCH')
+    require(spec['outputContract']['fieldIds']==[spec['id']] and spec['outputContract']['neighborFieldIds']==[],
+            'MODULAR_MUST_BE_ONE_FIELD')
+    scale=manifest.get('pixelScale')
+    require(type(scale) is int and scale==4,'MODULAR_SCALE_INVALID')
+    require(spec['worldSize']==[x*scale for x in spec['nativeSize']],'MODULAR_CANVAS_DRIFT')
+    runtime=next((f for f in read(ROOT/'assets/production/cage/licensed-runtime-v1/manifest.json')['fields']
+                  if f['fieldId']==spec['id']),None)
+    require(runtime is not None,'MODULAR_UNKNOWN_FIELD')
+    require(spec['nativeSize']==[runtime['nativeWidthPx'],runtime['nativeHeightPx']] and
+            spec['worldSize']==[runtime['worldWidthPx'],runtime['worldHeightPx']], 'MODULAR_CANVAS_AUTHORITY_DRIFT')
+    contract=spec['outputContract']
+    require(contract['nativeOrigin']==[0,0] and contract['sourceCropApplied'] is False and
+            contract['canvasPx']==spec['worldSize'],'MODULAR_ORIGIN_OR_CROP_DRIFT')
+    require(len(runtime['frames'])==len(spec['frames']),'MODULAR_ANIMATION_FRAME_COUNT_DRIFT')
+    frame_count=len(spec['frames'])
+    require(type(frame_index) is int and 0<=frame_index<frame_count,'MODULAR_FRAME_INDEX_INVALID')
+    core_frames=manifest.get('coreFrames')
+    if frame_count>1:
+        require(isinstance(core_frames,list) and len(core_frames)==frame_count,'MODULAR_ANIMATION_INCOMPLETE')
+        require(manifest['core']=={k:core_frames[0][k] for k in ('src','sha256')},'MODULAR_FIRST_FRAME_BINDING_DRIFT')
+        for actual,wanted,native in zip(core_frames,spec['frames'],runtime['frames']):
+            for key in ('durationMs','durationRawTicks','durationEvidence'):
+                require(actual.get(key)==wanted.get(key)==native.get(key),'MODULAR_ANIMATION_TIMING_DRIFT')
+            require(isinstance(actual.get('durationMs'),(int,float)) and actual['durationMs']>0,
+                    'MODULAR_ANIMATION_DURATION_INVALID')
+    else:
+        require(core_frames is None,'MODULAR_UNEXPECTED_ANIMATION')
+    # Validate against current numeric authority, not merely a self-authored manifest.
+    ground=next(f for f in read(ROOT/'src/data/championship/catalogs/raising-ground.r1.json')['fields']
+                if f['definitionIndex']==spec['definitionIndex'])
+    require(ground==spec['ground'],'MODULAR_GROUND_AUTHORITY_DRIFT')
+    source=EVIDENCE/'fields'/spec['id']
+    placements=read(source/'object-placement.json')['placements']
+    bank={c['cellIndex']:c for c in read(source/'object-cell-bank.json')['renderedCells']} if placements else {}
+    expected=spec['objects']; records=manifest.get('objects')
+    require(isinstance(records,list) and len(records)==len(expected)==len(placements),'MODULAR_OBJECT_SET_INCOMPLETE')
+    for src,wanted,actual in zip(placements,expected,records):
+        cell=bank[src['resolvedFirstFrameCellId']]
+        authority={'order':src['ordinal'],'sequenceId':src['sequenceId'],
+                   'placement':[src['sourceX'],src['sourceY']], 'pivot':[cell['anchorX'],cell['anchorY']],
+                   'size':[cell['width'],cell['height']], 'horizontalFlip':src['horizontalFlip'],
+                   'verticalFlip':src['verticalFlip']}
+        require(all(wanted[k]==v for k,v in authority.items()),'MODULAR_SOURCE_PLACEMENT_DRIFT')
+        require(src['sequenceFrameCount']==wanted['sequenceFrameCount']==1,'MODULAR_ANIMATION_NOT_IMPLEMENTED')
+        require(actual.get('objectId')==f"obj-{wanted['order']:03d}" and actual.get('sourceOrdinal')==wanted['order'],
+                'MODULAR_OBJECT_ORDER_DRIFT')
+        require(all(actual.get(k)==wanted[k] for k in ('sequenceId','size','placement','pivot','horizontalFlip','verticalFlip')),
+                'MODULAR_PLACEMENT_OR_PIVOT_DRIFT')
+        require(actual.get('src')==f"object-cells/{actual['objectId']}.png",'MODULAR_OBJECT_FILE_BINDING_DRIFT')
+    expected_files={f"{o['objectId']}.png" for o in records}
+    require({p.name for p in (pack/'object-cells').glob('*.png')}==expected_files,'MODULAR_EXTRA_OR_MISSING_OBJECT')
+    def raster(record,size,allow_empty=False):
+        path=_pack_file(pack,record.get('src'))
+        require(digest(path)==record.get('sha256'),'MODULAR_IMAGE_HASH_DRIFT')
+        with Image.open(path) as source_image:
+            require(source_image.mode=='RGBA','MODULAR_RGBA_REQUIRED')
+            image=source_image.copy()
+        try:
+            require(list(image.size)==size,'MODULAR_IMAGE_DIMENSION_DRIFT')
+            require(allow_empty or image.getchannel('A').getbbox() is not None,'MODULAR_EMPTY_IMAGE')
+        except Exception:
+            image.close()
+            raise
+        return image
+    core=None
+    try:
+        # Validate every frame even when a caller only requests frame zero.
+        for index,record in enumerate(core_frames or [manifest['core']]):
+            image=raster(record,spec['worldSize'])
+            if index==frame_index:core=image
+            else:image.close()
+    except Exception:
+        if core:core.close()
+        raise
+    objects=[]
+    try:
+        for record in records:
+            cell=raster(record,[x*scale for x in record['size']])
+            objects.append({**record,'image':cell,
+                            'placement':[x*scale for x in record['placement']],
+                            'pivot':[x*scale for x in record['pivot']]})
+    except Exception:
+        core.close()
+        for obj in objects: obj['image'].close()
+        raise
+    return manifest,spec,core,objects
+
+
+def compose_modular_pack(pack,frame_index=0):
+    manifest,spec,core,objects=load_modular_pack(pack,frame_index)
+    try:
+        image=composite_rendered_object_placements(core,objects)
+    finally:
+        core.close()
+        for obj in objects: obj['image'].close()
+    return manifest,spec,image
+
+
+def stage_modular_core_variant(pack,generated,receipt_path,destination):
+    """Normalize a local ComfyUI core candidate without resizing or changing its mask.
+
+    This stages a separate review pack. It never edits the source pack or promotes art.
+    """
+    require(not destination.exists(),'MODULAR_VARIANT_DESTINATION_EXISTS')
+    manifest,spec,core,objects=load_modular_pack(pack)
+    try:
+        require(len(spec['frames'])==1,'MODULAR_REFINEMENT_ANIMATION_UNSUPPORTED')
+        receipt=read(receipt_path)
+        require(receipt.get('fieldId')==spec['id'] and receipt.get('part')=='core', 'MODULAR_REFINEMENT_BINDING_DRIFT')
+        require(receipt.get('sourceCoreSha256')==manifest['core']['sha256'] and
+                receipt.get('outputSha256')==digest(generated),'MODULAR_REFINEMENT_HASH_DRIFT')
+        require(receipt.get('runtimeEligible') is False and receipt.get('humanApproved') is False,
+                'MODULAR_APPROVAL_NOT_GRANTED')
+        with Image.open(generated) as raw:
+            require(raw.size==core.size,'MODULAR_REFINEMENT_DIMENSION_DRIFT')
+            refined=raw.convert('RGBA')
+        # Generated RGB is only a surface candidate, never the owner of the footprint.
+        refined.putalpha(core.getchannel('A'))
+        destination.mkdir(parents=True)
+        (destination/'object-cells').mkdir()
+        shutil.copy2(pack/manifest['sourceSpec'],destination/'spec.json')
+        for obj in manifest['objects']:
+            shutil.copy2(pack/obj['src'],destination/obj['src'])
+        refined.save(destination/'base.png',optimize=True)
+        refined.close()
+        shutil.copy2(receipt_path,destination/'generation-receipt.json')
+        result={**manifest,'sourceSpec':'spec.json',
+                'core':{'src':'base.png','sha256':digest(destination/'base.png')},
+                'generation':{'tool':'ComfyUI existing img2img workflow','originalRasterInputs':[],
+                              'receipt':'generation-receipt.json','receiptSha256':digest(destination/'generation-receipt.json'),
+                              'alphaAuthority':'Source original procedural core; dimensions exact; no resizing',
+                              'reviewStatus':receipt['reviewStatus'],
+                              'sourceManifestSha256':digest(pack/'modular-manifest.json')}}
+        (destination/'modular-manifest.json').write_text(dump(result),encoding='utf8')
+    finally:
+        core.close()
+        for obj in objects: obj['image'].close()
+    return build_modular_pack(destination,destination/'previews')
+
+
+def modular_ground_coverage(spec,image):
+    ground=spec['ground']; alpha=image.getchannel('A'); index=0
+    checked=transparent=0
+    for count,owned,terrain,_ in ground['runs']:
+        for _ in range(count):
+            if owned and terrain!=1:
+                x=(index%ground['width'])*32; y=(index//ground['width'])*32
+                histogram=alpha.crop((x,y,x+32,y+32)).histogram()
+                checked+=1024
+                transparent+=histogram[0]
+            index+=1
+    require(index==ground['width']*ground['height'],'MODULAR_GROUND_RLE_INVALID')
+    return {'walkablePixels':checked,'fullyTransparentWalkablePixels':transparent,
+            'pass':transparent==0,'scope':'alpha coverage only, not visual obstacles or actor occlusion'}
+
+
+def build_modular_pack(pack,output):
+    manifest,spec,image=compose_modular_pack(pack)
+    # Preview uses only new candidate pixels; never falls back to research rasters.
+    plans=json.loads(subprocess.check_output(['node','scripts/lib/cage-authoring-geometry.mjs','--definition',str(spec['definitionIndex'])],cwd=ROOT,text=True))
+    require(plans['fieldId']==spec['id'],'MODULAR_DEFINITION_BINDING_DRIFT')
+    require(bool(plans['scenarios']),'MODULAR_NO_LEGAL_PLACEMENTS')
+    # Revalidate all inputs before considering cache reuse. The key includes the actual
+    # authority-produced plans and composition bytes, not merely user-authored hashes.
+    dependencies={'manifest':digest(pack/'modular-manifest.json'),'spec':digest(pack/manifest['sourceSpec']),
+                  'builder':digest(Path(__file__)),'compositor':digest(ROOT/'scripts/lib/ydij_map_formats.py'),
+                  'geometryHelper':digest(ROOT/'scripts/lib/cage-authoring-geometry.mjs'),
+                  'plans':plans,'compositePixels':hashlib.sha256(image.tobytes()).hexdigest()}
+    cache_key=hashlib.sha256(dump(dependencies).encode('utf8')).hexdigest().upper()
+    report_path=output/'modular-proof.json'
+    if report_path.is_file():
+        try:
+            previous=read(report_path)
+            if (previous.get('cacheKey')==cache_key and previous.get('status')=='ASSEMBLY_PASS_ART_REVIEW_REQUIRED' and
+                    len(spec['frames'])==1 and set(previous.get('outputs',{}))=={'composite-hd4x.png','placement-preview.png'} and
+                    all((output/name).is_file() and digest(output/name)==sha for name,sha in previous['outputs'].items())):
+                image.close()
+                return {**previous,'cacheHit':True}
+        except (ValueError,OSError):
+            pass
+    output.mkdir(parents=True,exist_ok=True)
+    image.save(output/'composite-hd4x.png',optimize=True)
+    scenarios=[]
+    preview_written=False
+    for scenario in plans['scenarios']:
+        fragments=scenario['fragments']
+        require(bool(fragments),'MODULAR_TARGET_NOT_PRESENT_IN_PLAN')
+        cursor=0
+        for part in sorted(fragments,key=lambda p:p['sourceRect']['x']):
+            rect=part['sourceRect']
+            require(part['fieldId']==spec['id'],'MODULAR_NEIGHBOR_IN_PLAN')
+            require(rect['x']==cursor,'MODULAR_WRAP_GAP_OR_OVERLAP')
+            cursor+=rect['width']
+            require(rect['x']>=0 and rect['y']>=0 and rect['x']+rect['width']<=image.width and rect['y']+rect['height']<=image.height,
+                    'MODULAR_CROP_OUTSIDE_SOURCE')
+            require(part['x']>=0 and part['y']>=0 and part['x']+rect['width']<=scenario['wrapWidthPx'] and part['y']+rect['height']<=scenario['heightPx'],
+                    'MODULAR_DESTINATION_OUTSIDE_RANCH')
+        require(cursor==image.width,'MODULAR_SOURCE_WIDTH_NOT_FULLY_USED')
+        scenarios.append({'id':scenario['id'],'fragments':len(fragments),'cropTopPx':fragments[0]['sourceRect']['y'],'pass':True})
+        if not preview_written:
+            preview=Image.new('RGBA',(scenario['wrapWidthPx'],scenario['heightPx']))
+            for p in fragments:
+                r=p['sourceRect']; preview.alpha_composite(image.crop((r['x'],r['y'],r['x']+r['width'],r['y']+r['height'])),(p['x'],p['y']))
+            preview.save(output/'placement-preview.png',optimize=True)
+            preview.close(); preview_written=True
+    coverage=modular_ground_coverage(spec,image)
+    frame_results=[];animation_outputs={}
+    if len(spec['frames'])>1:
+        for index,timing in enumerate(spec['frames']):
+            _,_,animated=compose_modular_pack(pack,index)
+            name=f'frame-{index:02d}.png';animated.save(output/name,optimize=True)
+            frame_coverage=modular_ground_coverage(spec,animated)
+            frame_results.append({'index':index,**timing,'groundCoverage':frame_coverage,
+                                  'sha256':digest(output/name)})
+            animation_outputs[name]=digest(output/name);animated.close()
+        coverage['pass']=coverage['pass'] and all(f['groundCoverage']['pass'] for f in frame_results)
+        require(len(set(f['sha256'] for f in frame_results))>1,'MODULAR_ANIMATION_FROZEN')
+    signature=digest(pack/'modular-manifest.json')
+    report={'fieldId':spec['id'],'status':'ASSEMBLY_PASS_ART_REVIEW_REQUIRED' if coverage['pass'] else 'GROUND_COVERAGE_FAILED',
+            'cacheKey':cache_key,'cacheHit':False,
+            'artReviewStatus':manifest.get('generation',{}).get('reviewStatus','STRUCTURAL_DRAFT_NOT_ACCEPTED'),
+            'compositor':'lib.ydij_map_formats.composite_rendered_object_placements',
+            'formula':'(placement - pivot) * 4','sourceManifestSha256':signature,
+            'objectCount':len(manifest['objects']),'outputSize':list(image.size),
+            'groundCoverage':coverage,'legalPlacementChecks':scenarios,
+            'animationFrames':frame_results,
+            'runtimeEligible':False,'shippingReady':False,'humanApproved':False,
+            'limits':['Not final art acceptance','Placement checks validate crop/wrap arithmetic, not visual seam aesthetics',
+                      'No runtime promotion, browser or physical-device proof','Other fields are transparent in the placement preview'],
+            'outputs':{'composite-hd4x.png':digest(output/'composite-hd4x.png'),
+                       'placement-preview.png':digest(output/'placement-preview.png'),**animation_outputs}}
+    (output/'modular-proof.json').write_text(dump(report),encoding='utf8')
+    image.close()
+    require(coverage['pass'],'MODULAR_GROUND_COVERAGE_FAILED')
+    return report
+
+
 def main():
     parser=argparse.ArgumentParser(); parser.add_argument('--write-contract',action='store_true'); parser.add_argument('--output',type=Path)
     parser.add_argument('--candidate',type=Path); parser.add_argument('--prepare-candidate',action='store_true')
-    args=parser.parse_args(); contract=extract_contract()
+    parser.add_argument('--modular-pack',type=Path,help='Independent HD core + object-cells, using the same compositor')
+    parser.add_argument('--refined-core',type=Path,help='Exact-size ComfyUI output, staged as a separate review variant')
+    parser.add_argument('--refinement-record',type=Path)
+    parser.add_argument('--variant-pack',type=Path)
+    args=parser.parse_args()
+    refinement=[args.refined_core,args.refinement_record,args.variant_pack]
+    require(not any(refinement) or (args.modular_pack and all(refinement)), 'MODULAR_REFINEMENT_ARGUMENTS_INCOMPLETE')
+    if args.modular_pack:
+        require(not(args.candidate or args.prepare_candidate or args.write_contract),'MODULAR_AND_LEGACY_MODES_ARE_EXCLUSIVE')
+        pack=args.modular_pack if args.modular_pack.is_absolute() else ROOT/args.modular_pack
+        if args.refined_core:
+            require(args.output is None,'MODULAR_VARIANT_USES_OWN_PREVIEWS')
+            paths=[p if p.is_absolute() else ROOT/p for p in refinement]
+            print(dump(stage_modular_core_variant(pack,*paths)))
+            return
+        output=args.output or pack/'previews'
+        output=output if output.is_absolute() else ROOT/output
+        print(dump(build_modular_pack(pack,output)))
+        return
+    contract=extract_contract()
     if args.write_contract:
         require(not CONTRACT.exists(), 'CONTRACT_ALREADY_EXISTS_REVIEW_INSTEAD_OF_OVERWRITING')
         CONTRACT.parent.mkdir(parents=True,exist_ok=True); CONTRACT.write_text(dump(contract),encoding='utf-8')

@@ -1,0 +1,107 @@
+{
+  "1": {
+    "inputs": {
+      "ckpt_name": "dreamshaperPixelart_v10.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Pixel Checkpoint"
+    }
+  },
+  "2": {
+    "inputs": {
+      "text": "original pixel art environment material candidate for a mobile game cage map, square ground material study, layered moss and mineral soil, subtle near-edge ground thickness, clean hard-edged pixel clusters, restrained 16-color palette, readable at native resolution, consistent light from upper left, no characters, no buildings, no objects, no text, no logo, no frame, no checkerboard",
+      "clip": [
+        "1",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Material Positive Prompt"
+    }
+  },
+  "3": {
+    "inputs": {
+      "text": "photorealistic, 3d render, isometric grid, smooth gradients, blur, soft focus, anti-aliased edges, noisy dithering, excessive detail, watermark, text, logo, character, face, UI, border frame, copied game art",
+      "clip": [
+        "1",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Material Negative Prompt"
+    }
+  },
+  "4": {
+    "inputs": {
+      "seed": 26091901,
+      "steps": 24,
+      "cfg": 7.0,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1.0,
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "2",
+        0
+      ],
+      "negative": [
+        "3",
+        0
+      ],
+      "latent_image": [
+        "5",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "Material Candidate Sampler"
+    }
+  },
+  "5": {
+    "inputs": {
+      "width": 768,
+      "height": 768,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Material Candidate Size"
+    }
+  },
+  "6": {
+    "inputs": {
+      "samples": [
+        "4",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "Decode Material Candidate"
+    }
+  },
+  "7": {
+    "inputs": {
+      "filename_prefix": "championship_cage/material_candidate",
+      "images": [
+        "6",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Material Candidate"
+    }
+  }
+}

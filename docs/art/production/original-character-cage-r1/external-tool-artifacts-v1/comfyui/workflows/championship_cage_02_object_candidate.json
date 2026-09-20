@@ -1,0 +1,107 @@
+{
+  "1": {
+    "inputs": {
+      "ckpt_name": "dreamshaperPixelart_v10.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Pixel Checkpoint"
+    }
+  },
+  "2": {
+    "inputs": {
+      "text": "single original pixel art care prop for a small game cage, centered isolated object on a flat solid warm background, strong readable silhouette, clean hard pixel edges, limited palette, simple upper-left light, clear base contact, no cast shadow touching the image border, no character, no text, no logo, no UI",
+      "clip": [
+        "1",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Object Positive Prompt"
+    }
+  },
+  "3": {
+    "inputs": {
+      "text": "photorealistic, 3d render, smooth gradients, blur, soft focus, anti-aliased edges, transparent checkerboard, multiple objects, cropped object, floating object, character, face, watermark, text, logo, UI, frame, copied game art",
+      "clip": [
+        "1",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Object Negative Prompt"
+    }
+  },
+  "4": {
+    "inputs": {
+      "seed": 26091902,
+      "steps": 24,
+      "cfg": 7.0,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1.0,
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "2",
+        0
+      ],
+      "negative": [
+        "3",
+        0
+      ],
+      "latent_image": [
+        "5",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "Object Candidate Sampler"
+    }
+  },
+  "5": {
+    "inputs": {
+      "width": 512,
+      "height": 512,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Object Candidate Size"
+    }
+  },
+  "6": {
+    "inputs": {
+      "samples": [
+        "4",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "Decode Object Candidate"
+    }
+  },
+  "7": {
+    "inputs": {
+      "filename_prefix": "championship_cage/object_candidate",
+      "images": [
+        "6",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Object Candidate"
+    }
+  }
+}

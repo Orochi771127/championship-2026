@@ -1,0 +1,107 @@
+{
+  "1": {
+    "inputs": {
+      "ckpt_name": "DreamShaper_8_pruned.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Pixel Checkpoint"
+    }
+  },
+  "2": {
+    "inputs": {
+      "text": "seamless texture of red brown EPDM granulated rubber running track flooring, flat uniform material sample, fine dense random small grains, evenly lit diffuse surface, orthographic top down, detailed game texture, homogeneous color across the entire image, texture only",
+      "clip": [
+        "1",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Material Positive Prompt"
+    }
+  },
+  "3": {
+    "inputs": {
+      "text": "object, perspective, horizon, white lines, lane markings, tile, grid, seams, diagonal line, circle, iris, eye, hole, large cracks, macro photography, vignette, shadow, text, logo, watermark, pixel art, border, frame",
+      "clip": [
+        "1",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Material Negative Prompt"
+    }
+  },
+  "4": {
+    "inputs": {
+      "seed": 26092031,
+      "steps": 28,
+      "cfg": 6,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 1,
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "2",
+        0
+      ],
+      "negative": [
+        "3",
+        0
+      ],
+      "latent_image": [
+        "5",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "Material Candidate Sampler"
+    }
+  },
+  "5": {
+    "inputs": {
+      "width": 512,
+      "height": 512,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Material Candidate Size"
+    }
+  },
+  "6": {
+    "inputs": {
+      "samples": [
+        "4",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "Decode Material Candidate"
+    }
+  },
+  "7": {
+    "inputs": {
+      "filename_prefix": "championship_cage/daylight_surface",
+      "images": [
+        "6",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Material Candidate"
+    }
+  }
+}

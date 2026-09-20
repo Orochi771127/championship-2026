@@ -1,0 +1,121 @@
+{
+  "1": {
+    "inputs": {
+      "ckpt_name": "dreamshaperPixelart_v10.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Pixel Checkpoint"
+    }
+  },
+  "2": {
+    "inputs": {
+      "image": "example.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Upload Candidate In ComfyUI"
+    }
+  },
+  "3": {
+    "inputs": {
+      "text": "preserve the main silhouette and composition, refine into original hard-edged pixel art, limited palette, clean pixel clusters, clear base contact, consistent upper-left light, remove accidental noise and stray details, no text, no logo",
+      "clip": [
+        "1",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Refine Positive Prompt"
+    }
+  },
+  "4": {
+    "inputs": {
+      "text": "photorealistic, 3d render, blur, smooth gradients, anti-aliased edges, watermark, text, logo, character, UI, copied game art",
+      "clip": [
+        "1",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Refine Negative Prompt"
+    }
+  },
+  "5": {
+    "inputs": {
+      "pixels": [
+        "2",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "Encode Uploaded Candidate"
+    }
+  },
+  "6": {
+    "inputs": {
+      "seed": 26091903,
+      "steps": 20,
+      "cfg": 6.5,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 0.35,
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "3",
+        0
+      ],
+      "negative": [
+        "4",
+        0
+      ],
+      "latent_image": [
+        "5",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "Low-Denoise Local Refinement"
+    }
+  },
+  "7": {
+    "inputs": {
+      "samples": [
+        "6",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "Decode Refined Candidate"
+    }
+  },
+  "8": {
+    "inputs": {
+      "filename_prefix": "championship_cage/refined_candidate",
+      "images": [
+        "7",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Refined Candidate"
+    }
+  }
+}

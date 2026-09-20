@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "status": "CLAUDE_CODE_HANDOFF_COPY_REVIEW_ONLY",
+  "createdAt": "2026-09-21",
+  "productRoot": "R:/Projects/Championship2026/championship-2026",
+  "handoffRoot": "docs/art/production/original-character-cage-r1/external-tool-artifacts-v1",
+  "counts": {
+    "totalFiles": 38,
+    "totalBytes": 18873967,
+    "comfyWorkflows": 6,
+    "comfyInputs": 2,
+    "comfyOutputs": 24,
+    "higgsfieldPreviews": 6
+  },
+  "sources": {
+    "comfyRuntime": "C:/Users/User/Documents/ComfyUI",
+    "comfyWorkflows": "C:/Users/User/Documents/ComfyUI/user/default/workflows/championship_cage_*.json",
+    "comfyInputs": "C:/Users/User/Documents/ComfyUI/input/championship_*.png",
+    "comfyOutputs": "C:/Users/User/Documents/ComfyUI/output/championship_cage",
+    "higgsfieldPreviews": "C:/Users/User/.codex/visualizations/2026/09/19/01a0b905-62f9-76d0-b7e7-3ed65933d3c8",
+    "higgsfieldProject": "https://higgsfield.ai/3d-jutsu/f7c92a20-d1ba-4d42-b009-6d897cd06f34"
+  },
+  "higgsfield": {
+    "projectId": "f7c92a20-d1ba-4d42-b009-6d897cd06f34",
+    "revision": 1,
+    "glb": {
+      "size": 469768,
+      "etag": "069a4404e8716c0828940297cf00feb2",
+      "localCopy": false
+    },
+    "blend": {
+      "size": 1230367,
+      "etag": "ef140536c32903c1ab4428a066d6c90e",
+      "localCopy": false
+    },
+    "preview": {
+      "artifactId": "44c5118ed0e7c56b75b11d65be609edb",
+      "size": 806191,
+      "localCopy": true
+    }
+  },
+  "copyPolicy": "R drive is the handoff source; C drive originals are preserved and are not product authority.",
+  "runtimeEligible": false
+}
