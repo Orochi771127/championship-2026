@@ -1,0 +1,33 @@
+{
+  "status": "PASS_LOOPBACK_RUNTIME_RENDERER_REVIEW",
+  "entity": "m002_choromon",
+  "origin": [
+    24,
+    38
+  ],
+  "sequenceCount": 53,
+  "frameCount": 83,
+  "diagnostics": {
+    "entityId": "m002_choromon",
+    "textureCount": 83,
+    "sheetCount": 2,
+    "reviewOnly": true,
+    "runtimeEligible": false,
+    "ticker": "SCENE_OWNED_APPLICATION_TICKER_REQUIRED"
+  },
+  "projections": [
+    "native-hunt",
+    "battle"
+  ],
+  "scales": [
+    1,
+    4,
+    8
+  ],
+  "transparentPaddingExcludedFromBodySize": true,
+  "failures": [],
+  "pageErrors": [],
+  "normalGameNavigationQa": "NOT_RUN",
+  "defaultRuntimeChanged": false,
+  "fullCharacterArtAcceptance": false
+}

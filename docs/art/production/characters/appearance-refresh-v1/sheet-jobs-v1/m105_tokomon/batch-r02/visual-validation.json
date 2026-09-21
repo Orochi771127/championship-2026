@@ -1,0 +1,46 @@
+{
+  "entityId": "m105_tokomon",
+  "candidate": "candidate-hf-batch-r01",
+  "status": "PASS_CANDIDATE_VISUAL_REVIEW",
+  "reviewedAgainst": "donor-review-v1/m105_tokomon/review.json",
+  "reviewer": "DELEGATED_AGENT_REVIEW_ONLY_NOT_HUMAN_AND_NOT_PHYSICAL_DEVICE",
+  "reviewedArtifacts": [
+    "batch-r02/raw-sheet.png",
+    "batch-r02/special-visual-review-8x.png",
+    "batch-r02/bound-visual-review-8x.png",
+    "batch-r02/normal-visual-review-8x.png"
+  ],
+  "checks": {
+    "morphology": "PASS_ORIGINAL_CREAM_LOW_ROUND_PUP_WITH_TWO_LONG_TAPERED_EARS_PALE_FACE_WINDOW_ROUND_BLACK_NOSE_AND_APRICOT_EYES_NO_ARMS_WINGS_OR_TAIL",
+    "identityStability": "PASS_EARS_FACE_WINDOW_AND_BODY_PROPORTION_HOLD_ACROSS_THE_45_GENERATED_PANELS",
+    "locomotion": "PASS_SQUASH_HOP_UPRIGHT_CALL_HEAD_DOWN_LUNGE_WIDE_SIDE_REST_PRONE_COLLAPSE_BACK_ROLL_AND_DISPLACED_DEFEAT_FOLLOW_THE_GUIDE",
+    "restraint": "PASS_THE_GOLD_BROWN_WRAP_CROSSES_THE_BODY_IN_THE_RESTRAINED_BLOCK_AND_IS_ABSENT_FROM_MAIN_CELL_024",
+    "specialStates": "PASS_TINT_FLASH_IS_ORANGE_RED_WITH_THE_FACE_STILL_READABLE; BLACK_SILHOUETTES_KEEP_TWO_WHITE_EYE_MARKS; STONE_GRAY_AND_WHITE_ARE_PRESENT",
+    "sheetLayout": "PASS_8_BY_6_WITH_45_OCCUPIED_PANELS_AND_THE_LAST_THREE_EMPTY_AS_INSTRUCTED",
+    "nativeScaleAndOrigin": "PASS_64PX_CANVAS_ORIGIN_23_42_ONE_SHARED_SCALE_AND_OFFSET_NO_PER_CELL_RESIZE_OR_RECENTER",
+    "mainSubMapping": "PASS_63_MAIN_18_SUB_51_CANONICAL_MASTERS",
+    "timing": "PASS_53_SEQUENCES_1923_BROWSER_TICKS",
+    "alpha": "PASS_BINARY_ALPHA_0_AND_255"
+  },
+  "reservations": {
+    "boundsDrift": "The imported bounding boxes differ from the donor slots by up to 15 pixels on one edge (bboxDeltaRange min [-5,-15,-4,-8], max [4,7,8,6]). That is within the validator's tolerance but larger than a tight redraw would give, so poses may sit slightly taller or lower than the donor.",
+    "petrifiedCell": "main/cell_059 could not be derived from the hit pose because the donor alpha diverges there, so it was generated. It reads as a flat gray body and should be checked again in the in-game capture."
+  },
+  "limits": {
+    "fullCharacterArtAcceptance": false,
+    "normalGameQa": "PENDING",
+    "publicationOrRightsAcceptance": "NOT_IN_SCOPE",
+    "designSettingStatus": "ORIGINAL_IDENTITY_BOUND_TO_DONOR_REVIEW"
+  },
+  "paidGeneration": {
+    "completedProviderJobs": 1,
+    "failedProviderJobs": 0,
+    "estimatedSubmittedCredits": 3,
+    "settledCreditLedger": "NOT_EXPOSED_BY_PROVIDER_TOOL",
+    "nextPaidGeneration": "NOT_NEEDED_FOR_CURRENT_CANDIDATE"
+  },
+  "deterministicPostprocess": {
+    "specialStateDerivation": "Four special cells were derived locally from the generated masters through the sequence-derived proposals (tint, black, black, white); main/cell_059 stayed generated.",
+    "additionalPaidJobs": 0
+  }
+}

@@ -2,6 +2,7 @@ import {loadLicensedCharacterRoster} from './licensedCharacterRoster.js';
 import {loadPixiCharacterRuntimeBundle} from './pixiCharacterRuntimeBundle.js';
 
 const CANDIDATES=Object.freeze({
+  m002:Object.freeze({entityId:'m002_choromon',speciesId:'species-009',origin:[24,38],folder:'m002_choromon-hf-r01'}),
   m003:Object.freeze({entityId:'m003_nyokimon',speciesId:'species-010',origin:[23,37],folder:'m003_nyokimon-hf-r03'}),
   m004:Object.freeze({entityId:'m004_bubbmon',speciesId:'species-011',origin:[24,37],folder:'m004_bubbmon-hf-r03'}),
   m005:Object.freeze({entityId:'m005_pitchmon',speciesId:'species-012',origin:[31,38],folder:'m005_pitchmon-hf-r06'}),
@@ -15,7 +16,8 @@ const CANDIDATES=Object.freeze({
   m101:Object.freeze({entityId:'m101_caprimon',speciesId:'species-020',origin:[24,44],folder:'m101_caprimon-hf-r06'}),
   m102:Object.freeze({entityId:'m102_koromon',speciesId:'species-021',origin:[23,38],folder:'m102_koromon-hf-r03'}),
   m103:Object.freeze({entityId:'m103_tanemon',speciesId:'species-022',origin:[22,38],folder:'m103_tanemon-hf-r03'}),
-  m104:Object.freeze({entityId:'m104_tunomon',speciesId:'species-023',origin:[22,34],folder:'m104_tunomon-hf-r02'})
+  m104:Object.freeze({entityId:'m104_tunomon',speciesId:'species-023',origin:[22,34],folder:'m104_tunomon-hf-r02'}),
+  m105:Object.freeze({entityId:'m105_tokomon',speciesId:'species-024',origin:[23,42],folder:'m105_tokomon-hf-r01'})
 });
 const canonical=value=>Array.isArray(value)?value.map(canonical):value&&typeof value==='object'
   ?Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonical(value[key])])):value;

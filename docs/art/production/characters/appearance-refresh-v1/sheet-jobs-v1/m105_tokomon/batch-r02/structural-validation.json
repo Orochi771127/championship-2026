@@ -1,0 +1,56 @@
+{
+  "entityId": "m105_tokomon",
+  "candidate": "candidate-hf-batch-r01",
+  "status": "PASS_CANDIDATE_STRUCTURAL_VALIDATION",
+  "nativeCanvas": [
+    64,
+    64
+  ],
+  "sourceOrigin": [
+    23,
+    42
+  ],
+  "cellCounts": {
+    "main": 63,
+    "sub": 18
+  },
+  "canonicalMasters": 51,
+  "sequenceCount": 53,
+  "browserTicks": 1923,
+  "binaryAlphaValues": [
+    0,
+    255
+  ],
+  "aliasMapping": "PASS_EXACT_CANONICAL_TRANSLATION",
+  "motionContract": "PASS_BYTE_EQUIVALENT_SEQUENCE_RECORDS",
+  "restraintPaletteBoundary": "PASS_GOLD_ONLY_REVIEWED_BOUND_RANGE",
+  "normalization": {
+    "bboxRecenter": false,
+    "perCellResize": false,
+    "sampleSize": 64,
+    "sharedOffset": [
+      0,
+      0
+    ]
+  },
+  "repairNormalizations": [],
+  "deterministicAnchorCorrections": [],
+  "bboxDeltaRange": {
+    "min": [
+      -5,
+      -15,
+      -4,
+      -8
+    ],
+    "max": [
+      4,
+      7,
+      8,
+      6
+    ]
+  },
+  "perCellResize": false,
+  "bboxRecenter": false,
+  "sourceUnexpectedOccupiedPanels": [],
+  "ignoredOutOfManifestPanels": []
+}

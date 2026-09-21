@@ -1,0 +1,321 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m002_choromon",
+  "baseDirectory": "candidate-r03-higgsfield-final",
+  "outputDirectory": "candidate-r06-binding-standard",
+  "alphaThreshold": 128,
+  "placement": "ONE_SHARED_SCALE_AND_OFFSET_PER_SHEET",
+  "perCellResize": false,
+  "bboxRecenter": false,
+  "groups": [],
+  "purpose": "Bring the restrained states to the shared binding standard without a new paid job. validate-character-batch-candidate.py reported RESTRAINT_PALETTE_DRIFT: no bound cell carried the shared gold, and five reviewed bound cells carried no binding at all.",
+  "deterministicDerivations": {
+    "main/cell_027": {
+      "base": "main/cell_027",
+      "operation": "binding_palette",
+      "colors": [
+        {
+          "from": [
+            135,
+            82,
+            23,
+            255
+          ],
+          "to": [
+            193,
+            139,
+            38,
+            255
+          ]
+        },
+        {
+          "from": [
+            214,
+            155,
+            38,
+            255
+          ],
+          "to": [
+            250,
+            208,
+            101,
+            255
+          ]
+        }
+      ],
+      "evidence": "The accepted region sheet drew this binding in a candidate-local brown pair. Only those two colors are remapped to the shared gold; shape, alpha and body pixels are untouched."
+    },
+    "main/cell_029": {
+      "base": "main/cell_029",
+      "operation": "binding_palette",
+      "colors": [
+        {
+          "from": [
+            135,
+            82,
+            23,
+            255
+          ],
+          "to": [
+            193,
+            139,
+            38,
+            255
+          ]
+        },
+        {
+          "from": [
+            214,
+            155,
+            38,
+            255
+          ],
+          "to": [
+            250,
+            208,
+            101,
+            255
+          ]
+        }
+      ],
+      "evidence": "Same remap as main/cell_027."
+    },
+    "main/cell_035": {
+      "base": "main/cell_035",
+      "operation": "binding_palette",
+      "colors": [
+        {
+          "from": [
+            135,
+            82,
+            23,
+            255
+          ],
+          "to": [
+            193,
+            139,
+            38,
+            255
+          ]
+        },
+        {
+          "from": [
+            214,
+            155,
+            38,
+            255
+          ],
+          "to": [
+            250,
+            208,
+            101,
+            255
+          ]
+        }
+      ],
+      "evidence": "Same remap as main/cell_027."
+    },
+    "main/cell_038": {
+      "base": "main/cell_038",
+      "operation": "binding_palette",
+      "colors": [
+        {
+          "from": [
+            135,
+            82,
+            23,
+            255
+          ],
+          "to": [
+            193,
+            139,
+            38,
+            255
+          ]
+        },
+        {
+          "from": [
+            214,
+            155,
+            38,
+            255
+          ],
+          "to": [
+            250,
+            208,
+            101,
+            255
+          ]
+        }
+      ],
+      "evidence": "Same remap as main/cell_027."
+    },
+    "main/cell_040": {
+      "base": "main/cell_040",
+      "operation": "binding_palette",
+      "colors": [
+        {
+          "from": [
+            135,
+            82,
+            23,
+            255
+          ],
+          "to": [
+            193,
+            139,
+            38,
+            255
+          ]
+        },
+        {
+          "from": [
+            214,
+            155,
+            38,
+            255
+          ],
+          "to": [
+            250,
+            208,
+            101,
+            255
+          ]
+        }
+      ],
+      "evidence": "Same remap as main/cell_027."
+    },
+    "main/cell_043": {
+      "base": "main/cell_043",
+      "operation": "binding_palette",
+      "colors": [
+        {
+          "from": [
+            135,
+            82,
+            23,
+            255
+          ],
+          "to": [
+            193,
+            139,
+            38,
+            255
+          ]
+        },
+        {
+          "from": [
+            214,
+            155,
+            38,
+            255
+          ],
+          "to": [
+            250,
+            208,
+            101,
+            255
+          ]
+        }
+      ],
+      "evidence": "Same remap as main/cell_027."
+    },
+    "main/cell_028": {
+      "base": "main/cell_028",
+      "operation": "binding_band",
+      "heightRatio": 0.5,
+      "padding": 1,
+      "darkColor": [
+        193,
+        139,
+        38,
+        255
+      ],
+      "lightColor": [
+        250,
+        208,
+        101,
+        255
+      ],
+      "evidence": "The donor review classifies this cell as restrained, but the accepted sheet omitted the binding. A generic two-tone band is clipped to the candidate body bounds; no donor pixels or donor RGB are transferred."
+    },
+    "main/cell_030": {
+      "base": "main/cell_030",
+      "operation": "binding_band",
+      "heightRatio": 0.5,
+      "padding": 1,
+      "darkColor": [
+        193,
+        139,
+        38,
+        255
+      ],
+      "lightColor": [
+        250,
+        208,
+        101,
+        255
+      ],
+      "evidence": "Same as main/cell_028."
+    },
+    "main/cell_036": {
+      "base": "main/cell_036",
+      "operation": "binding_band",
+      "heightRatio": 0.5,
+      "padding": 1,
+      "darkColor": [
+        193,
+        139,
+        38,
+        255
+      ],
+      "lightColor": [
+        250,
+        208,
+        101,
+        255
+      ],
+      "evidence": "Same as main/cell_028."
+    },
+    "main/cell_037": {
+      "base": "main/cell_037",
+      "operation": "binding_band",
+      "heightRatio": 0.5,
+      "padding": 1,
+      "darkColor": [
+        193,
+        139,
+        38,
+        255
+      ],
+      "lightColor": [
+        250,
+        208,
+        101,
+        255
+      ],
+      "evidence": "Same as main/cell_028."
+    },
+    "main/cell_039": {
+      "base": "main/cell_039",
+      "operation": "binding_band",
+      "heightRatio": 0.5,
+      "padding": 1,
+      "darkColor": [
+        193,
+        139,
+        38,
+        255
+      ],
+      "lightColor": [
+        250,
+        208,
+        101,
+        255
+      ],
+      "evidence": "Same as main/cell_028."
+    }
+  },
+  "anchorCorrections": {},
+  "bandHeightEvidence": "heightRatio 0.5 chosen after rendering 0.40, 0.50, 0.58 and 0.66 for the five cells: 0.58 and above read as a plate under the body, 0.40 rides the back, 0.50 crosses the body like a wrap."
+}

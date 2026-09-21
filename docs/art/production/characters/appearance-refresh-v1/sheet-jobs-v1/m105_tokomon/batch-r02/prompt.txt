@@ -1,0 +1,71 @@
+Create a complete ORIGINAL pixel-game animation sheet.
+Reference IMAGE 1 is our ORIGINAL identity seed and the only appearance/style authority.
+IMAGE 2 is a research MOTION/LAYOUT GUIDE only: preserve every occupied slot pose, facing, whole-body deformation, expression visibility, restrained/unrestrained state, native scale and local origin, while replacing every commercial-character appearance with the original identity from IMAGE 1.
+Do not copy source RGB colors, recognizable markings, face design or proprietary character appearance.
+
+Original identity (m105-cream-longear-pup-r01): Original cream long-eared pup with milk-tea ear tips over an oat inner-ear channel, a light muzzle patch carrying one round black dog nose, two large apricot eyes with a single highlight, and round short paw patches at the contact line; donor supplies motion, timing, bounds and mapping only. No donor RGB or copied source pixels.
+Fixed identity traits: 奶茶耳尖; 圓黑犬鼻; 杏色大眼; 圓短掌斑.
+Face rules: 杏色大眼與圓黑犬鼻必須依 donor 角度轉側、壓縮或被身體遮蔽；張嘴格以上下白色齒列擴張呈現，大眼必須上移讓出張嘴區，不得擠壓嘴部範圍。 淺色鼻口斑只在來源角度可見時出現，不得把同一張臉複製到所有格。
+Ornament rules: 只允許兩隻固定於頭冠的長耳，依 donor 豎起、後掠、貼地或隨身體擺動；不得新增手腳、翅膀、第三耳、角、漂浮物或尾巴。長耳高度依 donor 槽位保持。 main025-041 的金棕束帶是外部道具，必須跨越身體且不能被誤讀為毛色花紋或耳內紋理。
+Morphology contract: Very small low round juvenile body, broadest at the base, carrying two long slender upright ears that taper toward the tip. One pale front/side facial window holds the eyes and mouth. There are small forefeet at the ground contact and no arms, hands, wings or tail.
+Locomotion contract: Motion is driven by whole-body squash and stretch, small translated hops, upright rise to a tall call pose, head-down forward lunges, wide side-lying rest, prone collapse, a back-roll tumble and a displaced defeat pose. Both ears bend, trail, fold back and sweep with the body; they are never used as limbs and no new action meaning may be added.
+Expression contract: The pale facial window turns, compresses, inverts and is partly occluded with body angle. The mouth is closed in neutral and rest poses and opens wide showing an upper and lower tooth row in the call, lunge and restrained call poses; a small mouth mark reads at the leading edge in pitched and prone poses. One identical face must not be pasted across poses.
+Appendage prohibition: Exactly two long upright ears attached at the crown, deforming with the body. No arms, hands, legs beyond the small forefeet, wings, horn, third ear, floating ornament or tail is permitted.
+Restraint contract: Main cells 025-041 are the donor-specific restrained contract, including aliases main029 and main031 to main025 and main032 to main030. A separate gold-brown external wrap crosses the body through the neutral, lifted, wide-rest, fast-step, open-face and prone states, and sequences 16-25 mirror sequences 0-15 tick for tick. main024 is the unbound pre-restraint low pose.
+
+OUTPUT: exactly 8 columns by 6 rows, 48 equal square cells, transparent RGBA canvas, no grid lines, words, labels, numbers, ground shadows, glow halo, background, decorations, anti-aliasing or painterly effects.
+Each cell represents one logical 64x64 image enlarged uniformly 4x for this sheet. Keep the creature VERY SMALL inside each cell at the position and relative size shown by IMAGE 2, with broad transparent margins.
+Do not center, bottom-align, crop, rotate or resize cells independently. Use one shared scale and translation for the complete sheet.
+Shared native origin is [23, 42]. Preserve crisp nearest-neighbor pixel clusters and the limited palette.
+Gold-brown binding is a separate physical prop, never anatomy. No tweening and no invented actions.
+Preserve expression changes per slot; the facial window may stretch, compress, shift or become occluded exactly as the guide shows. Do not paste one identical face on every pose.
+
+Read occupied slots left-to-right, top-to-bottom. The following indices are instructions only; do not print them:
+1: main/cell_001: Reviewed in assembled main all-cell and sequence sheets: idle partner pose at sequence 0 frame 1, 22 ticks. The body lifts and narrows slightly while both ears stay vertical; facing and mouth are unchanged. Reads as breathing, not as a separate action.
+2: main/cell_002: Reviewed in assembled main all-cell and sequence sheets: wide side-lying rest at sequence 1 frame 0, 37 ticks. The body flattens and elongates horizontally, both ears fold back along the body and the face stays readable in profile with the mouth closed.
+3: main/cell_003: Reviewed in assembled main all-cell and sequence sheets: wide-rest partner at sequence 1 frame 1, 28 ticks. Slightly shorter body with the ears still laid back; the silhouette stays low and horizontal.
+4: main/cell_005: Reviewed in assembled main all-cell and sequence sheets: hop apex at sequence 2 frame 1, 12 ticks. The whole body is lifted clear of the ground contact with the ears trailing slightly. The source encodes the hop as a translation of the neutral pose plus this lifted partner. Aliased by main007.
+5: main/cell_009: Reviewed in assembled main all-cell and sequence sheets: tumbled pose at sequence 5, 7 ticks. The body rolls onto its back with the feet up and the ears splayed; the face is inverted and compressed. A brief single-frame reaction.
+6: main/cell_010: Reviewed in assembled main all-cell and sequence sheets: low leaning pose at sequence 6, 37 ticks, with the mouth open and the body turned and widened toward the source left. Aliased by main061 and used as the base contour for the petrified state.
+7: main/cell_011: Reviewed in assembled main all-cell and sequence sheets: upright open-mouth entry frame at sequence 7 frame 0, 15 ticks; body at mid height with both ears vertical. Aliased by main015.
+8: main/cell_012: Reviewed in assembled main all-cell and sequence sheets: wide side-lying hold at sequence 7 frame 1, 37 ticks, which both sequence 7 and sequence 9 settle into.
+9: main/cell_013: Reviewed in assembled main all-cell and sequence sheets: compact upright at sequence 8 frame 0, 15 ticks, with the mouth closed and both ears vertical. Aliased by main016.
+10: main/cell_014: Reviewed in assembled main all-cell and sequence sheets: low wide hold at sequence 8 frame 1, 37 ticks, shared as the settle frame of sequence 10.
+11: main/cell_017: Reviewed in assembled main all-cell and sequence sheets: fast-step frame A at sequence 11 frame 0, 5 ticks. Upright narrow body with both ears vertical; the very short tick count marks this as a rapid two-frame cycle.
+12: main/cell_018: Reviewed in assembled main all-cell and sequence sheets: fast-step frame B at sequence 11 frame 1, 6 ticks. The body pitches head-down with the ears swept back and the mouth mark visible at the leading edge, reading as a forward lunge.
+13: main/cell_019: Reviewed in assembled main all-cell and sequence sheets: side-facing wide stance at sequence 12 frame 0, 37 ticks, with both ears angled outward near horizontal and the mouth closed.
+14: main/cell_020: Reviewed in assembled main all-cell and sequence sheets: wide-stance partner at sequence 12 frame 1, 37 ticks; the body sits slightly more upright with the ears still angled out.
+15: main/cell_021: Reviewed in assembled main all-cell and sequence sheets: flattened low pose at sequence 13, 37 ticks, with the ears laid out sideways and the body pressed toward the ground contact.
+16: main/cell_022: Reviewed in assembled main all-cell and sequence sheets: tall upright at sequence 14 frame 0, 25 ticks, with the mouth open wide showing the tooth row and both ears fully vertical.
+17: main/cell_023: Reviewed in assembled main all-cell and sequence sheets: upright compact partner at sequence 14 frame 1, 31 ticks, mouth closed and ears vertical. Aliased by main055.
+18: main/cell_024: Reviewed in assembled main all-cell and sequence sheets: the unbound pre-restraint low pose at sequence 15, 31 ticks. Flattened resting body with the ears folded back and no wrap of any kind. This is the last cell before the donor restrained block begins and it must stay free of wrap material.
+19: main/cell_025: Reviewed in assembled main all-cell and sequence sheets: restrained neutral low idle at sequence 16 frame 0, 31 ticks. Same posture and timing as main000, with a separate gold-brown external wrap crossing the round body; both ears stay raised and free above the wrap. Aliased by main029 and main031.
+20: main/cell_026: Reviewed in assembled main all-cell and sequence sheets: restrained idle partner at sequence 16 frame 1, 22 ticks, matching the lift and timing of main001 with the wrap held across the body.
+21: main/cell_027: Reviewed in assembled main all-cell and sequence sheets: restrained wide side-lying rest at sequence 17 frame 0, 37 ticks, matching main002; the wrap follows the flattened body and the ears stay folded back.
+22: main/cell_028: Reviewed in assembled main all-cell and sequence sheets: restrained wide-rest partner at sequence 17 frame 1, 28 ticks, matching main003. Low horizontal silhouette with the wrap crossing the body.
+23: main/cell_030: Reviewed in assembled main all-cell and sequence sheets: restrained hop apex at sequence 18 frame 1, 12 ticks, matching main005; the body is lifted clear of the ground contact with the wrap still crossing it. Aliased by main032.
+24: main/cell_033: Reviewed in assembled main all-cell and sequence sheets: restrained tall upright call pose at sequence 20, 37 ticks, matching main008. The mouth is wide open with the tooth row visible and the wrap crosses the stretched body.
+25: main/cell_034: Reviewed in assembled main all-cell and sequence sheets: restrained fast-step frame A at sequence 21 frame 0, 5 ticks, matching main017; upright narrow body with the wrap held across it.
+26: main/cell_035: Reviewed in assembled main all-cell and sequence sheets: restrained fast-step frame B at sequence 21 frame 1, 6 ticks, matching main018. The body pitches head-down and leaves the ground contact entirely, so this cell sits wholly above the source baseline; the wrap follows the pitched body.
+27: main/cell_036: Reviewed in assembled main all-cell and sequence sheets: restrained wide stance at sequence 22 frame 0, 37 ticks, matching main019, ears angled outward with the wrap crossing the widened body.
+28: main/cell_037: Reviewed in assembled main all-cell and sequence sheets: restrained wide-stance partner at sequence 22 frame 1, 37 ticks, matching main020.
+29: main/cell_038: Reviewed in assembled main all-cell and sequence sheets: restrained flattened low hold at sequence 23, 37 ticks, matching main021; the ears lie sideways and the wrap follows the compressed body.
+30: main/cell_039: Reviewed in assembled main all-cell and sequence sheets: restrained open-mouth upright at sequence 24 frame 0, 25 ticks, matching main022, tooth row visible and the wrap crossing the stretched body.
+31: main/cell_040: Reviewed in assembled main all-cell and sequence sheets: restrained upright compact partner at sequence 24 frame 1, 31 ticks, matching main023.
+32: main/cell_041: Reviewed in assembled main all-cell and sequence sheets: restrained low resting hold at sequence 25, 31 ticks, matching the posture and timing of main024 but wrapped. This closes the donor restrained block.
+33: main/cell_047: Reviewed in assembled main all-cell and sequence sheets: upright battle-ready stance at sequence 28 frame 0, 15 ticks, ears vertical and the mouth mark visible.
+34: main/cell_048: Reviewed in assembled main all-cell and sequence sheets: upright partner at sequence 28 frame 1, 21 ticks; the body settles slightly lower with the ears still vertical.
+35: main/cell_049: Reviewed in assembled main all-cell and sequence sheets: forward lunge at sequence 29 frame 0, 11 ticks, mouth open wide showing the tooth row and the body stretched toward the source right.
+36: main/cell_050: Reviewed in assembled main all-cell and sequence sheets: open-mouth follow-through at sequence 29 frame 1, 16 ticks; the body returns upright with the ears tall and the tooth row still visible.
+37: main/cell_051: Reviewed in assembled main all-cell and sequence sheets: compact recoil at sequence 30 frame 0, 10 ticks; the body draws in with the ears vertical and the mouth closed.
+38: main/cell_052: Reviewed in assembled main all-cell and sequence sheets: leaning hold at sequence 30 frame 1, 37 ticks, body turned down with the ears angled back.
+39: main/cell_053: Reviewed in assembled main all-cell and sequence sheets: flattened prone hold at sequence 31, 37 ticks, with the mouth mark visible and the body pressed low and wide.
+40: main/cell_054: Reviewed in assembled main all-cell and sequence sheets: curled tumble at sequence 32, 7 ticks, with the ears sweeping across the body; a brief single-frame reaction.
+41: main/cell_056: Reviewed in assembled main all-cell and sequence sheets: open-mouth upright hold at sequence 33 frame 1, 37 ticks, tooth row visible and both ears fully vertical.
+42: main/cell_057: Reviewed in assembled main all-cell and sequence sheets: low flattened rest at sequence 34, 37 ticks, head toward the source right and the ears laid back.
+43: main/cell_058: Reviewed in assembled main all-cell and sequence sheets: tall thin upright at sequence 35, 37 ticks, with the ears at maximum extension over a small compact body.
+44: main/cell_059: Reviewed in assembled main all-cell and sequence sheets: stone-gray petrified state at sequence 36, 37 ticks. The curled low main010 contour is redrawn in a flat desaturated gray-green with interior detail suppressed. Source alpha diverges widely from the base cell here, so this state cannot be derived and must be authored.
+45: main/cell_060: Reviewed in assembled main all-cell and sequence sheets: displaced prone defeat pose at sequence 37, 37 ticks. The body lies flat and is deliberately offset far toward the source right of its own cell box, away from every other cell occupancy. This displacement is part of the contract and must be preserved rather than recentered.
+
+All remaining slots [46, 47, 48] must be fully transparent and empty.
+This is production sprite art, not a poster or presentation character sheet.

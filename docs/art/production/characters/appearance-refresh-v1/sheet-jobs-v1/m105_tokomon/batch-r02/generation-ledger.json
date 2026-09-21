@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m105_tokomon",
+  "provider": "HIGGSFIELD",
+  "model": "gpt_image_2_5",
+  "jobs": [
+    {
+      "jobId": "7b09780f-4b52-4111-a31c-53a4417120a6",
+      "purpose": "ONE_COMPLETE_8_BY_6_MASTER_SHEET",
+      "status": "completed",
+      "estimatedCredits": 3,
+      "count": 1,
+      "quality": "high",
+      "resolution": "2k",
+      "aspectRatio": "4:3",
+      "background": "transparent",
+      "identityMediaId": "847e58c4-ea7d-41ac-946b-1ed71cebfe0b",
+      "poseGuideMediaId": "53fa56bc-8db7-42ad-8022-795b1c4b00d0",
+      "rawSheetSha256Prefix": "4c16cd79ab1ab763"
+    }
+  ],
+  "completedJobs": 1,
+  "failedJobs": 0,
+  "estimatedSubmittedCredits": 3,
+  "additionalPaidRepairJobs": 0,
+  "settledProviderLedger": "NOT_EXPOSED_BY_PROVIDER_TOOL",
+  "balanceBeforeSubmission": 2989,
+  "note": "Submitted from the Claude Code session on 2026-09-21 under the Owner's instruction to run the batch on Higgsfield. One job only; the sheet was imported and repaired locally."
+}

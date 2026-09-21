@@ -1,0 +1,57 @@
+{
+  "entityId": "m002_choromon",
+  "candidate": "candidate-r06-binding-standard",
+  "status": "PASS_CANDIDATE_VISUAL_REVIEW",
+  "reviewedAgainst": "donor-review-v1/m002_choromon/review.json",
+  "reviewer": "DELEGATED_AGENT_REVIEW_ONLY_NOT_HUMAN_AND_NOT_PHYSICAL_DEVICE",
+  "reviewedArtifacts": [
+    "candidate-r03-higgsfield-final/main-contact.png",
+    "candidate-r03-higgsfield-final/cells/main-cell_000.png",
+    "candidate-r03-higgsfield-final/cells/main-cell_002.png",
+    "candidate-r03-higgsfield-final/cells/main-cell_009.png",
+    "candidate-r03-higgsfield-final/cells/main-cell_027.png",
+    "candidate-r03-higgsfield-final/cells/main-cell_044.png",
+    "candidate-r03-higgsfield-final/cells/main-cell_047.png",
+    "candidate-r03-higgsfield-final/cells/main-cell_061.png",
+    "candidate-r03-higgsfield-final/cells/main-cell_062.png",
+    "candidate-r03-higgsfield-final/cells/main-cell_064.png"
+  ],
+  "checks": {
+    "morphology": "PASS_ORIGINAL_CREAM_ROUNDED_BODY_TWO_TAPERED_TAN_HORNS_TEAL_EYE_BAND_AND_AMBER_MUZZLE_NO_ARMS_LEGS_OR_WINGS",
+    "identityStability": "PASS_HORN_PAIR_EYE_BAND_AND_BODY_PROPORTION_HOLD_ACROSS_ALL_65_MAIN_CELLS",
+    "locomotion": "PASS_WHOLE_BODY_SQUASH_HOP_CURL_FORWARD_LEAN_PRONE_COLLAPSE_FOLLOW_THE_DONOR_POSES",
+    "restraint": "PASS_AFTER_REPAIR_ALL_THIRTEEN_REVIEWED_BOUND_CELLS_CARRY_THE_SHARED_TWO_TONE_GOLD_BINDING_CLIPPED_TO_THE_BODY_MASK",
+    "specialStates": "PASS_MAIN_044_AND_046_TINT_FLASH_5_COLOURS_047_AND_048_BLACK_WITH_ONE_WHITE_EYE_PIXEL_061_STONE_GRAY_9_GRAYS_064_PURE_WHITE",
+    "nativeScaleAndOrigin": "PASS_64PX_CANVAS_ORIGIN_24_38_NO_PER_CELL_RESIZE_OR_RECENTER",
+    "mainSubMapping": "PASS_65_MAIN_18_SUB_83_SLOTS_MATCHING_THE_DONOR_CONTRACT",
+    "timing": "PASS_40_MAIN_AND_13_SUB_SEQUENCES_1863_CONTRACT_TICKS",
+    "palette": "PASS_14_NORMAL_VISIBLE_COLOURS_WITHIN_THE_15_LIMIT_MAXIMUM_12_PER_CELL",
+    "alpha": "PASS_ALL_83_CELLS_ARE_64X64_WITH_BINARY_ALPHA"
+  },
+  "reservations": {
+    "readability": "WEAKER_THAN_THE_COMPLETED_SET. The cream body and tan horns sit close in value, so internal shapes flatten at native size.",
+    "poseLegibility": "main/cell_009 reads as an ambiguous curl at native size.",
+    "recommendation": "Acceptable for review-only routing. A contrast pass on the horn-to-body boundary is advisable before any approval decision."
+  },
+  "limits": {
+    "fullCharacterArtAcceptance": false,
+    "normalGameQa": "PENDING",
+    "publicationOrRightsAcceptance": "NOT_IN_SCOPE",
+    "designSettingStatus": "ORIGINAL_IDENTITY_BOUND_TO_DONOR_REVIEW"
+  },
+  "paidGeneration": {
+    "completedProviderJobs": 1,
+    "failedProviderJobs": 0,
+    "estimatedSubmittedCredits": 3,
+    "settledCreditLedger": "NOT_EXPOSED_BY_PROVIDER_TOOL",
+    "nextPaidGeneration": "NOT_NEEDED_FOR_CURRENT_CANDIDATE"
+  },
+  "deterministicPostprocess": {
+    "regionRepair": "higgsfield-r01/region-final-manifest.json rebuilt main/cell_027, 029, 035, 038, 040 and 043 from one 3x2 region sheet; aliases rebuilt from the canonical masters",
+    "bindingStandardisation": "repair-batch-r01/import-plan.json, applied with no paid job: the six region-repaired masters had their candidate-local brown binding pair remapped to the shared gold (binding_palette, alpha asserted unchanged), and main/cell_028, 030, 036, 037 and 039 - reviewed as restrained but drawn without a binding - received the deterministic binding_band at heightRatio 0.5, chosen after rendering 0.40, 0.50, 0.58 and 0.66",
+    "bindingRepairEvidence": "Before the repair, validate-character-batch-candidate.py failed with RESTRAINT_PALETTE_DRIFT on thirteen bound cells; candidate-r06-binding-standard passes with restraintPaletteBoundary PASS_GOLD_ONLY_REVIEWED_BOUND_RANGE",
+    "structuralValidation": "higgsfield-r01/validation.json PASS_REGION_IMPORT_STRUCTURE with all 83 alpha masks unchanged",
+    "browserPreview": "higgsfield-r01/browser-validation.json PASS_53_SEQUENCE_PREVIEW with no page errors",
+    "additionalPaidJobs": 0
+  }
+}

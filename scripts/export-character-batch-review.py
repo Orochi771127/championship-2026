@@ -11,6 +11,7 @@ spec=importlib.util.spec_from_file_location('sheet_jobs',ROOT/'scripts/character
 J=importlib.util.module_from_spec(spec);spec.loader.exec_module(J)
 P=J.P
 CONFIG={
+    'm002_choromon':{'candidate':'candidate-r06-binding-standard','review':'higgsfield-r01','folder':'m002_choromon-hf-r01'},
     'm003_nyokimon':{'candidate':'candidate-hf-batch-r03','review':'higgsfield-r03','folder':'m003_nyokimon-hf-r03'},
     'm004_bubbmon':{'candidate':'candidate-hf-batch-r03','review':'higgsfield-r03','folder':'m004_bubbmon-hf-r03'},
     'm005_pitchmon':{'candidate':'candidate-hf-batch-r06','review':'higgsfield-r06','folder':'m005_pitchmon-hf-r06'},
@@ -25,13 +26,14 @@ CONFIG={
     'm102_koromon':{'candidate':'candidate-hf-batch-r03','review':'higgsfield-r03','folder':'m102_koromon-hf-r03'},
     'm103_tanemon':{'candidate':'candidate-hf-batch-r03','review':'higgsfield-r03','folder':'m103_tanemon-hf-r03'},
     'm104_tunomon':{'candidate':'candidate-hf-batch-r02','review':'higgsfield-r02','folder':'m104_tunomon-hf-r02'},
+    'm105_tokomon':{'candidate':'candidate-hf-batch-r01','review':'batch-r02','folder':'m105_tokomon-hf-r01'},
 }
 ALLOWED=tuple(CONFIG)
-SPECIES={'m003_nyokimon':'species-010','m004_bubbmon':'species-011','m005_pitchmon':'species-012',
+SPECIES={'m002_choromon':'species-009','m003_nyokimon':'species-010','m004_bubbmon':'species-011','m005_pitchmon':'species-012',
          'm006_punimon':'species-013','m007_botamon':'species-014','m008_poyomon':'species-015',
          'm009_mokumon':'species-016','m010_yukimibotamon':'species-017','m011_yuramon':'species-018',
          'm012_petimon':'species-019','m101_caprimon':'species-020','m102_koromon':'species-021',
-         'm103_tanemon':'species-022','m104_tunomon':'species-023'}
+         'm103_tanemon':'species-022','m104_tunomon':'species-023','m105_tokomon':'species-024'}
 
 
 def build(entity):

@@ -1,0 +1,2633 @@
+{
+  "artProfile": {
+    "alphaBoundary": "TRANSPARENT",
+    "anchor": {
+      "x": 0.375,
+      "y": 0.59375
+    },
+    "designVersion": "m002_choromon-r06-binding-standard",
+    "filter": "nearest",
+    "logicalCanvas": [
+      64,
+      64
+    ],
+    "publicReleasePermitted": false,
+    "reviewOnly": true,
+    "runtimeEligible": false,
+    "scale": 1,
+    "shippingReady": false,
+    "style": "ORIGINAL_HIGGSFIELD_CANDIDATE"
+  },
+  "entityId": "m002_choromon",
+  "kind": "digimon",
+  "motionContractSha256": "f5cdb340825650b4e050a694e51e8917306a9a188b18d33675724c6b78a8459b",
+  "renderer": "PIXIJS_V8_SPRITESHEET",
+  "reviewGeometry": {
+    "frames": {
+      "m002_choromon/main/cell_000": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -13,
+          9,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_001": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -14,
+          11,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_002": {
+        "blank": false,
+        "nativeBounds": [
+          -11,
+          -13,
+          9,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_003": {
+        "blank": false,
+        "nativeBounds": [
+          -11,
+          -12,
+          11,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_004": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -13,
+          9,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_005": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -11,
+          13,
+          3
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_006": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -13,
+          9,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_007": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -11,
+          13,
+          3
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_008": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -16,
+          7,
+          1
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_009": {
+        "blank": false,
+        "nativeBounds": [
+          2,
+          -20,
+          15,
+          -1
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_010": {
+        "blank": false,
+        "nativeBounds": [
+          -10,
+          -18,
+          8,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_011": {
+        "blank": false,
+        "nativeBounds": [
+          -7,
+          -14,
+          9,
+          1
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_012": {
+        "blank": false,
+        "nativeBounds": [
+          -10,
+          -18,
+          10,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_013": {
+        "blank": false,
+        "nativeBounds": [
+          -7,
+          -12,
+          11,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_014": {
+        "blank": false,
+        "nativeBounds": [
+          -12,
+          -19,
+          4,
+          0
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_015": {
+        "blank": false,
+        "nativeBounds": [
+          -7,
+          -14,
+          9,
+          1
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_016": {
+        "blank": false,
+        "nativeBounds": [
+          -10,
+          -18,
+          10,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_017": {
+        "blank": false,
+        "nativeBounds": [
+          -7,
+          -12,
+          11,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_018": {
+        "blank": false,
+        "nativeBounds": [
+          -12,
+          -19,
+          4,
+          0
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_019": {
+        "blank": false,
+        "nativeBounds": [
+          -7,
+          -13,
+          9,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_020": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -12,
+          11,
+          3
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_021": {
+        "blank": false,
+        "nativeBounds": [
+          -7,
+          -13,
+          10,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_022": {
+        "blank": false,
+        "nativeBounds": [
+          -7,
+          -13,
+          10,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_023": {
+        "blank": false,
+        "nativeBounds": [
+          -9,
+          -5,
+          12,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_024": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -13,
+          9,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_025": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -13,
+          10,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_026": {
+        "blank": false,
+        "nativeBounds": [
+          -9,
+          -15,
+          10,
+          4
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_027": {
+        "blank": false,
+        "nativeBounds": [
+          -9,
+          -15,
+          9,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_028": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -13,
+          9,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_029": {
+        "blank": false,
+        "nativeBounds": [
+          -11,
+          -13,
+          9,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_030": {
+        "blank": false,
+        "nativeBounds": [
+          -11,
+          -13,
+          10,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_031": {
+        "blank": false,
+        "nativeBounds": [
+          -9,
+          -15,
+          9,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_032": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -12,
+          11,
+          3
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_033": {
+        "blank": false,
+        "nativeBounds": [
+          -9,
+          -15,
+          9,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_034": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -12,
+          11,
+          3
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_035": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -15,
+          9,
+          1
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_036": {
+        "blank": false,
+        "nativeBounds": [
+          -7,
+          -13,
+          10,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_037": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -12,
+          12,
+          3
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_038": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -14,
+          10,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_039": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -13,
+          11,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_040": {
+        "blank": false,
+        "nativeBounds": [
+          -11,
+          -7,
+          12,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_041": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -13,
+          10,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_042": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -12,
+          10,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_043": {
+        "blank": false,
+        "nativeBounds": [
+          -9,
+          -14,
+          10,
+          3
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_044": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -19,
+          8,
+          1
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_045": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -16,
+          7,
+          1
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_046": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -19,
+          8,
+          1
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_047": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -19,
+          8,
+          1
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_048": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -13,
+          9,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_049": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -13,
+          10,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_050": {
+        "blank": false,
+        "nativeBounds": [
+          -9,
+          -12,
+          7,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_051": {
+        "blank": false,
+        "nativeBounds": [
+          -11,
+          -12,
+          10,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_052": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -17,
+          8,
+          1
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_053": {
+        "blank": false,
+        "nativeBounds": [
+          -7,
+          -13,
+          10,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_054": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -14,
+          10,
+          -1
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_055": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -12,
+          11,
+          3
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_056": {
+        "blank": false,
+        "nativeBounds": [
+          -11,
+          -12,
+          10,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_057": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -13,
+          11,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_058": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -16,
+          8,
+          1
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_059": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -13,
+          10,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_060": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -13,
+          10,
+          1
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_061": {
+        "blank": false,
+        "nativeBounds": [
+          -10,
+          -18,
+          8,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_062": {
+        "blank": false,
+        "nativeBounds": [
+          1,
+          -6,
+          29,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_063": {
+        "blank": false,
+        "nativeBounds": [
+          -1,
+          -12,
+          11,
+          10
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/main/cell_064": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -13,
+          9,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/sub/cell_000": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -13,
+          9,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/sub/cell_001": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -14,
+          11,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/sub/cell_002": {
+        "blank": false,
+        "nativeBounds": [
+          -11,
+          -13,
+          9,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/sub/cell_003": {
+        "blank": false,
+        "nativeBounds": [
+          -11,
+          -12,
+          11,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/sub/cell_004": {
+        "blank": false,
+        "nativeBounds": [
+          2,
+          -20,
+          15,
+          -1
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/sub/cell_005": {
+        "blank": false,
+        "nativeBounds": [
+          -10,
+          -18,
+          8,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/sub/cell_006": {
+        "blank": false,
+        "nativeBounds": [
+          -9,
+          -5,
+          12,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/sub/cell_007": {
+        "blank": false,
+        "nativeBounds": [
+          -9,
+          -15,
+          10,
+          4
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/sub/cell_008": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -13,
+          9,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/sub/cell_009": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -13,
+          10,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/sub/cell_010": {
+        "blank": false,
+        "nativeBounds": [
+          -9,
+          -12,
+          7,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/sub/cell_011": {
+        "blank": false,
+        "nativeBounds": [
+          -11,
+          -12,
+          10,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/sub/cell_012": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -17,
+          8,
+          1
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/sub/cell_013": {
+        "blank": false,
+        "nativeBounds": [
+          -7,
+          -13,
+          10,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/sub/cell_014": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -14,
+          10,
+          -1
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/sub/cell_015": {
+        "blank": false,
+        "nativeBounds": [
+          -8,
+          -12,
+          11,
+          3
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/sub/cell_016": {
+        "blank": false,
+        "nativeBounds": [
+          -10,
+          -18,
+          8,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      },
+      "m002_choromon/sub/cell_017": {
+        "blank": false,
+        "nativeBounds": [
+          1,
+          -6,
+          29,
+          2
+        ],
+        "origin": [
+          24,
+          38
+        ],
+        "scale": 1,
+        "sourceSize": [
+          64,
+          64
+        ]
+      }
+    }
+  },
+  "schemaVersion": 1,
+  "sides": {
+    "main": {
+      "animations": [
+        {
+          "frames": [
+            {
+              "cell": 0,
+              "millisecondsAt60Hz": 516.667,
+              "texture": "m002_choromon/main/cell_000",
+              "ticks": 31
+            },
+            {
+              "cell": 1,
+              "millisecondsAt60Hz": 366.667,
+              "texture": "m002_choromon/main/cell_001",
+              "ticks": 22
+            }
+          ],
+          "id": 0,
+          "name": "action_00",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 2,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_002",
+              "ticks": 37
+            },
+            {
+              "cell": 3,
+              "millisecondsAt60Hz": 466.667,
+              "texture": "m002_choromon/main/cell_003",
+              "ticks": 28
+            }
+          ],
+          "id": 1,
+          "name": "action_01",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 4,
+              "millisecondsAt60Hz": 250,
+              "texture": "m002_choromon/main/cell_004",
+              "ticks": 15
+            },
+            {
+              "cell": 5,
+              "millisecondsAt60Hz": 200,
+              "texture": "m002_choromon/main/cell_005",
+              "ticks": 12
+            }
+          ],
+          "id": 2,
+          "name": "action_02",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 6,
+              "millisecondsAt60Hz": 116.667,
+              "texture": "m002_choromon/main/cell_006",
+              "ticks": 7
+            },
+            {
+              "cell": 7,
+              "millisecondsAt60Hz": 116.667,
+              "texture": "m002_choromon/main/cell_007",
+              "ticks": 7
+            }
+          ],
+          "id": 3,
+          "name": "action_03",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 8,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_008",
+              "ticks": 37
+            }
+          ],
+          "id": 4,
+          "name": "action_04",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "MEDIUM_HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 9,
+              "millisecondsAt60Hz": 116.667,
+              "texture": "m002_choromon/main/cell_009",
+              "ticks": 7
+            }
+          ],
+          "id": 5,
+          "name": "action_05",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "VERY_HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 10,
+              "millisecondsAt60Hz": 116.667,
+              "texture": "m002_choromon/main/cell_010",
+              "ticks": 7
+            }
+          ],
+          "id": 6,
+          "name": "action_06",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 11,
+              "millisecondsAt60Hz": 250,
+              "texture": "m002_choromon/main/cell_011",
+              "ticks": 15
+            },
+            {
+              "cell": 12,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_012",
+              "ticks": 37
+            }
+          ],
+          "id": 7,
+          "name": "action_07",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "MEDIUM",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 13,
+              "millisecondsAt60Hz": 250,
+              "texture": "m002_choromon/main/cell_013",
+              "ticks": 15
+            },
+            {
+              "cell": 14,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_014",
+              "ticks": 37
+            }
+          ],
+          "id": 8,
+          "name": "action_08",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "MEDIUM",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 15,
+              "millisecondsAt60Hz": 250,
+              "texture": "m002_choromon/main/cell_015",
+              "ticks": 15
+            },
+            {
+              "cell": 16,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_016",
+              "ticks": 37
+            }
+          ],
+          "id": 9,
+          "name": "action_09",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 17,
+              "millisecondsAt60Hz": 250,
+              "texture": "m002_choromon/main/cell_017",
+              "ticks": 15
+            },
+            {
+              "cell": 18,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_018",
+              "ticks": 37
+            }
+          ],
+          "id": 10,
+          "name": "action_10",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "MEDIUM",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 19,
+              "millisecondsAt60Hz": 83.333,
+              "texture": "m002_choromon/main/cell_019",
+              "ticks": 5
+            },
+            {
+              "cell": 20,
+              "millisecondsAt60Hz": 100,
+              "texture": "m002_choromon/main/cell_020",
+              "ticks": 6
+            }
+          ],
+          "id": 11,
+          "name": "action_11",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 21,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_021",
+              "ticks": 37
+            },
+            {
+              "cell": 22,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_022",
+              "ticks": 37
+            }
+          ],
+          "id": 12,
+          "name": "action_12",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "MEDIUM_HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 23,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_023",
+              "ticks": 37
+            }
+          ],
+          "id": 13,
+          "name": "action_13",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 24,
+              "millisecondsAt60Hz": 416.667,
+              "texture": "m002_choromon/main/cell_024",
+              "ticks": 25
+            },
+            {
+              "cell": 25,
+              "millisecondsAt60Hz": 516.667,
+              "texture": "m002_choromon/main/cell_025",
+              "ticks": 31
+            }
+          ],
+          "id": 14,
+          "name": "action_14",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 26,
+              "millisecondsAt60Hz": 516.667,
+              "texture": "m002_choromon/main/cell_026",
+              "ticks": 31
+            }
+          ],
+          "id": 15,
+          "name": "action_15",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 27,
+              "millisecondsAt60Hz": 516.667,
+              "texture": "m002_choromon/main/cell_027",
+              "ticks": 31
+            },
+            {
+              "cell": 28,
+              "millisecondsAt60Hz": 366.667,
+              "texture": "m002_choromon/main/cell_028",
+              "ticks": 22
+            }
+          ],
+          "id": 16,
+          "name": "action_16",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 29,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_029",
+              "ticks": 37
+            },
+            {
+              "cell": 30,
+              "millisecondsAt60Hz": 466.667,
+              "texture": "m002_choromon/main/cell_030",
+              "ticks": 28
+            }
+          ],
+          "id": 17,
+          "name": "action_17",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 31,
+              "millisecondsAt60Hz": 250,
+              "texture": "m002_choromon/main/cell_031",
+              "ticks": 15
+            },
+            {
+              "cell": 32,
+              "millisecondsAt60Hz": 200,
+              "texture": "m002_choromon/main/cell_032",
+              "ticks": 12
+            }
+          ],
+          "id": 18,
+          "name": "action_18",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 33,
+              "millisecondsAt60Hz": 116.667,
+              "texture": "m002_choromon/main/cell_033",
+              "ticks": 7
+            },
+            {
+              "cell": 34,
+              "millisecondsAt60Hz": 116.667,
+              "texture": "m002_choromon/main/cell_034",
+              "ticks": 7
+            }
+          ],
+          "id": 19,
+          "name": "action_19",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 35,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_035",
+              "ticks": 37
+            }
+          ],
+          "id": 20,
+          "name": "action_20",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 36,
+              "millisecondsAt60Hz": 83.333,
+              "texture": "m002_choromon/main/cell_036",
+              "ticks": 5
+            },
+            {
+              "cell": 37,
+              "millisecondsAt60Hz": 100,
+              "texture": "m002_choromon/main/cell_037",
+              "ticks": 6
+            }
+          ],
+          "id": 21,
+          "name": "action_21",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 38,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_038",
+              "ticks": 37
+            },
+            {
+              "cell": 39,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_039",
+              "ticks": 37
+            }
+          ],
+          "id": 22,
+          "name": "action_22",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 40,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_040",
+              "ticks": 37
+            }
+          ],
+          "id": 23,
+          "name": "action_23",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 41,
+              "millisecondsAt60Hz": 416.667,
+              "texture": "m002_choromon/main/cell_041",
+              "ticks": 25
+            },
+            {
+              "cell": 42,
+              "millisecondsAt60Hz": 516.667,
+              "texture": "m002_choromon/main/cell_042",
+              "ticks": 31
+            }
+          ],
+          "id": 24,
+          "name": "action_24",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 43,
+              "millisecondsAt60Hz": 516.667,
+              "texture": "m002_choromon/main/cell_043",
+              "ticks": 31
+            }
+          ],
+          "id": 25,
+          "name": "action_25",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 44,
+              "millisecondsAt60Hz": 100,
+              "texture": "m002_choromon/main/cell_044",
+              "ticks": 6
+            },
+            {
+              "cell": 45,
+              "millisecondsAt60Hz": 50,
+              "texture": "m002_choromon/main/cell_045",
+              "ticks": 3
+            },
+            {
+              "cell": 46,
+              "millisecondsAt60Hz": 150,
+              "texture": "m002_choromon/main/cell_046",
+              "ticks": 9
+            },
+            {
+              "cell": 47,
+              "millisecondsAt60Hz": 150,
+              "texture": "m002_choromon/main/cell_047",
+              "ticks": 9
+            }
+          ],
+          "id": 26,
+          "name": "action_26",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "VERY_HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 48,
+              "millisecondsAt60Hz": 33.333,
+              "texture": "m002_choromon/main/cell_048",
+              "ticks": 2
+            }
+          ],
+          "id": 27,
+          "name": "action_27",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH_RELATIONSHIP_EXACT_LABEL_UNRESOLVED",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 49,
+              "millisecondsAt60Hz": 250,
+              "texture": "m002_choromon/main/cell_049",
+              "ticks": 15
+            },
+            {
+              "cell": 50,
+              "millisecondsAt60Hz": 350,
+              "texture": "m002_choromon/main/cell_050",
+              "ticks": 21
+            }
+          ],
+          "id": 28,
+          "name": "action_28",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 51,
+              "millisecondsAt60Hz": 183.333,
+              "texture": "m002_choromon/main/cell_051",
+              "ticks": 11
+            },
+            {
+              "cell": 52,
+              "millisecondsAt60Hz": 266.667,
+              "texture": "m002_choromon/main/cell_052",
+              "ticks": 16
+            }
+          ],
+          "id": 29,
+          "name": "action_29",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 53,
+              "millisecondsAt60Hz": 166.667,
+              "texture": "m002_choromon/main/cell_053",
+              "ticks": 10
+            },
+            {
+              "cell": 54,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_054",
+              "ticks": 37
+            }
+          ],
+          "id": 30,
+          "name": "action_30",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 55,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_055",
+              "ticks": 37
+            }
+          ],
+          "id": 31,
+          "name": "action_31",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "MEDIUM_HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 56,
+              "millisecondsAt60Hz": 116.667,
+              "texture": "m002_choromon/main/cell_056",
+              "ticks": 7
+            }
+          ],
+          "id": 32,
+          "name": "action_32",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "VERY_HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 57,
+              "millisecondsAt60Hz": 516.667,
+              "texture": "m002_choromon/main/cell_057",
+              "ticks": 31
+            },
+            {
+              "cell": 58,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_058",
+              "ticks": 37
+            }
+          ],
+          "id": 33,
+          "name": "action_33",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "MEDIUM_HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 59,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_059",
+              "ticks": 37
+            }
+          ],
+          "id": 34,
+          "name": "action_34",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "MEDIUM",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 60,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_060",
+              "ticks": 37
+            }
+          ],
+          "id": 35,
+          "name": "action_35",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "MEDIUM",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 61,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_061",
+              "ticks": 37
+            }
+          ],
+          "id": 36,
+          "name": "action_36",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "MEDIUM",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 62,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/main/cell_062",
+              "ticks": 37
+            }
+          ],
+          "id": 37,
+          "name": "action_37",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "VERY_HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 63,
+              "millisecondsAt60Hz": 116.667,
+              "texture": "m002_choromon/main/cell_063",
+              "ticks": 7
+            }
+          ],
+          "id": 38,
+          "name": "action_38",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 64,
+              "millisecondsAt60Hz": 33.333,
+              "texture": "m002_choromon/main/cell_064",
+              "ticks": 2
+            }
+          ],
+          "id": 39,
+          "name": "action_39",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "HIGH_ROLE_EXACT_LABEL_UNRESOLVED",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        }
+      ],
+      "atlases": [
+        {
+          "data": "main.json",
+          "image": "main.png"
+        }
+      ]
+    },
+    "sub": {
+      "animations": [
+        {
+          "frames": [
+            {
+              "cell": 0,
+              "millisecondsAt60Hz": 516.667,
+              "texture": "m002_choromon/sub/cell_000",
+              "ticks": 31
+            },
+            {
+              "cell": 1,
+              "millisecondsAt60Hz": 366.667,
+              "texture": "m002_choromon/sub/cell_001",
+              "ticks": 22
+            }
+          ],
+          "id": 0,
+          "name": "action_00",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "RAW_SLOT_ONLY",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 2,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/sub/cell_002",
+              "ticks": 37
+            },
+            {
+              "cell": 3,
+              "millisecondsAt60Hz": 466.667,
+              "texture": "m002_choromon/sub/cell_003",
+              "ticks": 28
+            }
+          ],
+          "id": 1,
+          "name": "action_01",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "RAW_SLOT_ONLY",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 4,
+              "millisecondsAt60Hz": 116.667,
+              "texture": "m002_choromon/sub/cell_004",
+              "ticks": 7
+            }
+          ],
+          "id": 2,
+          "name": "action_02",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "RAW_SLOT_ONLY",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 5,
+              "millisecondsAt60Hz": 116.667,
+              "texture": "m002_choromon/sub/cell_005",
+              "ticks": 7
+            }
+          ],
+          "id": 3,
+          "name": "action_03",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "RAW_SLOT_ONLY",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 6,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/sub/cell_006",
+              "ticks": 37
+            }
+          ],
+          "id": 4,
+          "name": "action_04",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "RAW_SLOT_ONLY",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 7,
+              "millisecondsAt60Hz": 516.667,
+              "texture": "m002_choromon/sub/cell_007",
+              "ticks": 31
+            }
+          ],
+          "id": 5,
+          "name": "action_05",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "RAW_SLOT_ONLY",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 8,
+              "millisecondsAt60Hz": 33.333,
+              "texture": "m002_choromon/sub/cell_008",
+              "ticks": 2
+            }
+          ],
+          "id": 6,
+          "name": "action_06",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "RAW_SLOT_ONLY",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 9,
+              "millisecondsAt60Hz": 250,
+              "texture": "m002_choromon/sub/cell_009",
+              "ticks": 15
+            },
+            {
+              "cell": 10,
+              "millisecondsAt60Hz": 350,
+              "texture": "m002_choromon/sub/cell_010",
+              "ticks": 21
+            }
+          ],
+          "id": 7,
+          "name": "action_07",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "RAW_SLOT_ONLY",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 11,
+              "millisecondsAt60Hz": 183.333,
+              "texture": "m002_choromon/sub/cell_011",
+              "ticks": 11
+            },
+            {
+              "cell": 12,
+              "millisecondsAt60Hz": 266.667,
+              "texture": "m002_choromon/sub/cell_012",
+              "ticks": 16
+            }
+          ],
+          "id": 8,
+          "name": "action_08",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "RAW_SLOT_ONLY",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 13,
+              "millisecondsAt60Hz": 166.667,
+              "texture": "m002_choromon/sub/cell_013",
+              "ticks": 10
+            },
+            {
+              "cell": 14,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/sub/cell_014",
+              "ticks": 37
+            }
+          ],
+          "id": 9,
+          "name": "action_09",
+          "playback": "forward_then_backward_once",
+          "playbackMode": 2,
+          "semanticAlias": null,
+          "semanticConfidence": "RAW_SLOT_ONLY",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 15,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/sub/cell_015",
+              "ticks": 37
+            }
+          ],
+          "id": 10,
+          "name": "action_10",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "RAW_SLOT_ONLY",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 16,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/sub/cell_016",
+              "ticks": 37
+            }
+          ],
+          "id": 11,
+          "name": "action_11",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "RAW_SLOT_ONLY",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        },
+        {
+          "frames": [
+            {
+              "cell": 17,
+              "millisecondsAt60Hz": 616.667,
+              "texture": "m002_choromon/sub/cell_017",
+              "ticks": 37
+            }
+          ],
+          "id": 12,
+          "name": "action_12",
+          "playback": "forward_loop",
+          "playbackMode": 1,
+          "semanticAlias": null,
+          "semanticConfidence": "RAW_SLOT_ONLY",
+          "semanticEvidence": "UNKNOWN_REQUIRES_TRACE"
+        }
+      ],
+      "atlases": [
+        {
+          "data": "sub.json",
+          "image": "sub.png"
+        }
+      ]
+    }
+  },
+  "sourceBankSha256": "af4be860ba35f25bd0158cda486b0777b12d1d62f485ba350e3ef55b3d1ef9e3",
+  "timing": {
+    "source": "ORIGINAL_NANR_DURATION_TICKS",
+    "tickRateEvidence": "NDS_VBLANK_BASIS_PROVISIONAL_PENDING_EXECUTABLE_TIMING_TRACE",
+    "tickRateHz": 60
+  }
+}

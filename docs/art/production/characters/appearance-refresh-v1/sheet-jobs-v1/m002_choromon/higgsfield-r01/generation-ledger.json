@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "entityId": "m002_choromon",
+  "provider": "HIGGSFIELD",
+  "model": "gpt_image_2_5",
+  "jobs": [
+    {
+      "jobId": "d398f90f-2df3-4913-87ba-deebb131e0ca",
+      "purpose": "ONE_3_BY_2_REGION_SHEET_FOR_RESTRAINED_STATE_READABILITY",
+      "status": "completed",
+      "estimatedCredits": 3,
+      "count": 1,
+      "quality": "high",
+      "variant": "flare",
+      "recordedIn": "higgsfield-r01/request.json and higgsfield-r01/submission.json"
+    }
+  ],
+  "completedJobs": 1,
+  "failedJobs": 0,
+  "estimatedSubmittedCredits": 3,
+  "additionalPaidRepairJobs": 0,
+  "settledProviderLedger": "NOT_EXPOSED_BY_PROVIDER_TOOL",
+  "note": "The base sheet masters predate this ledger and were produced with the mixed built-in workflow recorded in candidate-r03-higgsfield-final/bank.json (generationCalls 3, higgsfieldCalls 1). No further paid job was submitted for this candidate."
+}

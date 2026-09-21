@@ -264,7 +264,7 @@ async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main'
         const {loadM001CharacterArtReview}=await import('../presentation/m001CharacterArtReview.js');
         return await loadM001CharacterArtReview(rosterOptions,location.href);
       }
-      if(['m003','m004','m005','m006','m007','m008','m009','m010','m011','m012','m101','m102','m103','m104'].includes(new URLSearchParams(location.search).get('characterArtReview'))
+      if(['m002','m003','m004','m005','m006','m007','m008','m009','m010','m011','m012','m101','m102','m103','m104','m105'].includes(new URLSearchParams(location.search).get('characterArtReview'))
         && ['localhost','127.0.0.1','[::1]'].includes(location.hostname)){
         const {loadCandidateCharacterArtReview}=await import('../presentation/candidateCharacterArtReview.js');
         return await loadCandidateCharacterArtReview(rosterOptions,location.href);

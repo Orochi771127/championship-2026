@@ -21,6 +21,7 @@ const WORLD_HOUR = Number(process.env.CHAMPIONSHIP_QA_WORLD_HOUR || 7);
 const REVIEW_KEY = new URL(BASE_URL).searchParams.get('characterArtReview');
 const REVIEW_CONFIG = {
   m001:{speciesId:'species-008',folder:'m001-r05-anchored'},
+  m002:{speciesId:'species-009',folder:'m002_choromon-hf-r01'},
   m003:{speciesId:'species-010',folder:'m003_nyokimon-hf-r03'},
   m004:{speciesId:'species-011',folder:'m004_bubbmon-hf-r03'},
   m005:{speciesId:'species-012',folder:'m005_pitchmon-hf-r06'},
@@ -34,7 +35,8 @@ const REVIEW_CONFIG = {
   m101:{speciesId:'species-020',folder:'m101_caprimon-hf-r06'},
   m102:{speciesId:'species-021',folder:'m102_koromon-hf-r03'},
   m103:{speciesId:'species-022',folder:'m103_tanemon-hf-r03'},
-  m104:{speciesId:'species-023',folder:'m104_tunomon-hf-r02'}
+  m104:{speciesId:'species-023',folder:'m104_tunomon-hf-r02'},
+  m105:{speciesId:'species-024',folder:'m105_tokomon-hf-r01'}
 }[REVIEW_KEY] ?? null;
 
 fs.mkdirSync(SCREENSHOTS, { recursive: true });

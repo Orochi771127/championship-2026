@@ -58,7 +58,7 @@ export async function loadRegisteredCharacterHudArt({baseUrl,fetchImpl=globalThi
     const {applyM001HudReview}=await import('./m001CharacterHudReview.js');
     await applyM001HudReview({baseUrl,fetchImpl,portraits,battle});
   }
-  if(['m003','m004','m005','m006','m007','m008','m009','m010','m011','m012','m101','m102','m103','m104'].includes(new URL(baseUrl).searchParams.get('characterArtReview'))){
+  if(['m002','m003','m004','m005','m006','m007','m008','m009','m010','m011','m012','m101','m102','m103','m104','m105'].includes(new URL(baseUrl).searchParams.get('characterArtReview'))){
     const {applyCandidateCharacterHudReview}=await import('./candidateCharacterHudReview.js');
     await applyCandidateCharacterHudReview({baseUrl,fetchImpl,portraits,battle});
   }

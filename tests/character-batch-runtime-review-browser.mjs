@@ -3,11 +3,15 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 
 const entity=process.argv[2];
-const revisions={m003_nyokimon:'r03',m004_bubbmon:'r03',m005_pitchmon:'r06',m006_punimon:'r06',m007_botamon:'r06',m008_poyomon:'r03',m009_mokumon:'r06',m010_yukimibotamon:'r01',m011_yuramon:'r02',m012_petimon:'r03',m101_caprimon:'r06',m102_koromon:'r03',m103_tanemon:'r03',m104_tunomon:'r02'};
+const revisions={m002_choromon:'r01',m003_nyokimon:'r03',m004_bubbmon:'r03',m005_pitchmon:'r06',m006_punimon:'r06',m007_botamon:'r06',m008_poyomon:'r03',m009_mokumon:'r06',m010_yukimibotamon:'r01',m011_yuramon:'r02',m012_petimon:'r03',m101_caprimon:'r06',m102_koromon:'r03',m103_tanemon:'r03',m104_tunomon:'r02',m105_tokomon:'r01'};
 assert.ok(entity in revisions);
 const revision=revisions[entity];
 const bundleFolder='assets/production/internal-character-review/'+entity+'-hf-'+revision;
-const reportFolder='docs/art/production/characters/appearance-refresh-v1/sheet-jobs-v1/'+entity+'/higgsfield-'+revision;
+// Most review folders are named higgsfield-<revision>; entities prepared through the batch job keep
+// the batch folder they were prepared in, so they are named here rather than renamed on disk.
+const reviewFolders={m105_tokomon:'batch-r02'};
+const reportFolder='docs/art/production/characters/appearance-refresh-v1/sheet-jobs-v1/'+entity+'/'
+  +(reviewFolders[entity]??('higgsfield-'+revision));
 let priorReport={};
 try { priorReport=JSON.parse(await fs.readFile(reportFolder+'/runtime-renderer-validation.json','utf8')); } catch {}
 const priorNormalGameQa=String(priorReport.normalGameNavigationQa??'');
