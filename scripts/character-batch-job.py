@@ -14,7 +14,7 @@ ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location('sheet_jobs',ROOT/'scripts/character-sheet-job.py')
 J=importlib.util.module_from_spec(spec);spec.loader.exec_module(J)
 P=J.P
-ALLOWED=('m003_nyokimon','m004_bubbmon','m005_pitchmon','m006_punimon','m007_botamon','m008_poyomon','m009_mokumon',
+ALLOWED=('m002_choromon','m003_nyokimon','m004_bubbmon','m005_pitchmon','m006_punimon','m007_botamon','m008_poyomon','m009_mokumon',
          'm010_yukimibotamon','m011_yuramon','m012_petimon','m101_caprimon','m102_koromon','m103_tanemon',
          'm104_tunomon','m105_tokomon')
 
@@ -113,30 +113,41 @@ def generation_request(entity):
             'policy':'one full sheet; targeted grouped repair only after structural and visual inspection'}
 
 
+# Sequence 26 plays tint, normal, tint, black, so its own second frame is the base pose for both
+# recolours. Sequence 27 (black) and 39 (white) recolour the idle pose, 36 (stone gray) the hit pose.
+# Derived this way the proposals reproduce the tables that used to be written per entity: same target
+# cells, same operations and the same canonical bases once aliases resolve. Only the exceptions below
+# need naming, and a proposal that cannot be proved against the donor still falls back to generation.
+SPECIAL_OVERRIDES={'m101_caprimon':{61:(63,'gray',(2,2),4)}}
+
+
+def special_proposals(entity,inv,images):
+    contract=P.read(P.PACK/'generated/entities'/entity/'motion-contract.json')
+    sequences={s['id']:[f['cell'] for f in s['frames']] for s in contract['sides']['main']['sequences']}
+    idle=(sequences.get(0) or [None])[0];hit=(sequences.get(6) or [None])[0];flash=sequences.get(26) or []
+    wanted=[]
+    if len(flash)>=4:wanted+=[(flash[0],flash[1],'red'),(flash[3],flash[1],'black')]
+    wanted+=[(cell,idle,'black') for cell in sequences.get(27,[])]
+    wanted+=[(cell,hit,'gray') for cell in sequences.get(36,[])]
+    wanted+=[(cell,idle,'white') for cell in sequences.get(39,[])]
+    overrides=SPECIAL_OVERRIDES.get(entity,{});proposed=[];seen=set()
+    for target,base,operation in wanted:
+        if target in seen or base is None or f'main/cell_{target:03d}' not in images:continue
+        seen.add(target)
+        if target in overrides:
+            base,operation,translation,tolerance=overrides[target]
+            proposed.append((target,base,operation,translation,tolerance));continue
+        proposed.append((target,base,operation,(0,0),2))
+    for target,(base,operation,translation,tolerance) in overrides.items():
+        if target not in seen:proposed.append((target,base,operation,translation,tolerance))
+    return sorted(proposed)
+
+
 def prepare(entity):
     inv,setting=load(entity);images=source_images(entity,inv)
     palette=P.PIXEL.parse_palette(setting['palette'])
     seeds={p['key']:P.place_authored(p,palette,inv['sourceOrigin']) for p in setting['poses']}
-    proposed=([(44,8,'red',(0,0),0),(47,8,'black',(0,0),0),(48,0,'black',(0,0),2),
-               (61,63,'gray',(2,2),4),(64,0,'white',(0,0),2)]
-              if entity=='m101_caprimon' else
-              [(43,8,'red',(0,0),0),(46,8,'black',(0,0),0),(47,0,'black',(0,0),0),
-               (60,10,'gray',(0,0),0),(63,0,'white',(0,0),2)]
-              if entity=='m102_koromon' else
-              [(43,8,'red',(0,0),0),(46,8,'black',(0,0),0),(47,0,'black',(0,0),0),
-               (60,10,'gray',(0,0),0),(63,0,'white',(0,0),0)]
-              if entity.startswith(('m003','m011','m012')) else
-              [(43,8,'red',(0,0),0),(44,8,'black',(0,0),0),(45,0,'black',(0,0),0),
-               (58,10,'gray',(0,0),0),(61,0,'white',(0,0),0)]
-              if entity.startswith(('m009','m103')) else
-              # This contract stops at main062, so the shared default's main064
-              # does not exist and its main044/main061 targets are aliases of
-              # main042/main010. The special states sit two indices lower.
-              [(42,8,'red',(0,0),0),(45,8,'black',(0,0),0),(46,0,'black',(0,0),0),
-               (59,10,'gray',(0,0),0),(62,0,'white',(0,0),0)]
-              if entity=='m105_tokomon' else
-              [(44,8,'red',(0,0),0),(47,8,'black',(0,0),0),(48,0,'black',(0,0),0),
-               (61,10,'gray',(0,0),0),(64,0,'white',(0,0),0)])
+    proposed=special_proposals(entity,inv,images)
     derived={};not_derived=[]
     canonical={r['canonical'] for r in inv['slots'].values()}
     for target,base,operation,translation,max_alpha_mismatch in proposed:
@@ -476,6 +487,17 @@ def import_repairs(entity):
                 luminance=(pixel[0]*299+pixel[1]*587+pixel[2]*114)//1000
                 return dark if luminance<64 else mid if luminance<160 else light
             derived=base_image.copy();derived.putdata([stone(pixel) for pixel in base_image.get_flattened_data()])
+        elif operation=='binding_palette':
+            # Normalise an already authored restraint prop to the shared two-tone
+            # gold. Only the listed source colors are replaced, so the silhouette,
+            # the alpha and every body pixel stay exactly as authored, and the
+            # band keeps the shape the accepted sheet drew.
+            mapping={tuple(pair['from']):tuple(pair['to']) for pair in rule['colors']}
+            P.require(mapping,'EMPTY_BINDING_PALETTE_MAP '+key)
+            derived=base_image.copy()
+            derived.putdata([mapping.get(pixel,pixel) for pixel in base_image.get_flattened_data()])
+            P.require(derived.getchannel('A').tobytes()==base_image.getchannel('A').tobytes(),
+                      'BINDING_PALETTE_ALPHA_DRIFT '+key)
         elif operation=='binding_band':
             # Deterministic generic restraint prop for a reviewed bound cell
             # whose generated panel omitted it. This uses the accepted OC body
@@ -541,6 +563,20 @@ def import_repairs(entity):
             'poseExpressionRestraintQa':'DONOR_BOUNDS_ANCHOR_CORRECTED_FULL_REVIEW_PENDING'})
         records[key]=record
         anchor_corrections.append({'key':key,'translation':[dx,dy],'evidence':correction['evidence']})
+    # Candidates authored before the per-cell bounds review carry records without
+    # candidateVisibleBounds or sourceVisibleBounds, which leaves validation with
+    # no delta to compare. Backfill both by measurement, using the same formulas
+    # the repair import path uses: the candidate bounds come from the assembled
+    # master's alpha, the source bounds from the donor inventory. Nothing is
+    # asserted that was not measured, and records that already carry a value keep it.
+    for key,record in records.items():
+        if key in masters and 'candidateVisibleBounds' not in record:
+            bounds=masters[key].getchannel('A').getbbox()
+            if bounds is not None:record['candidateVisibleBounds']=list(bounds)
+        slot=inv['slots'].get(key)
+        if slot and 'sourceVisibleBounds' not in record:
+            origin=inv['sourceOrigin'];visible=slot['visibleBounds']
+            record['sourceVisibleBounds']=[visible[index]+origin[index%2] for index in range(4)]
     assembly_plan={'slots':{key:{**slot,'sourceTranslationFromCanonical':slot['translation']}
                             for key,slot in inv['slots'].items()}}
     changed=[]
