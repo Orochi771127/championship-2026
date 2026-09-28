@@ -2,6 +2,10 @@
 
 > Reading guide — instruction maintenance, 2026-09-14: the dated Owner records below are preserved. Match authorization to the current task, batch, assets and destination. Later scope-specific continuation supersedes an older batch's stop only within that scope; it does not approve new gameplay, rights or publication. Use [authority by question](../README.md#authority-by-question) for evidence claims and [the current shared-file protocol](SHARED_FILE_UPDATE_PROTOCOL.md) for coordination. No new product or publication authorization is created by this annotation.
 
+## 2026-09-28 — Publish the page and flow integration to the public playtest
+
+After the merge below, the Owner directs: 「請發佈到正式站」. Publish the page and flow integration merged into `main` at `fd6cb67` to the existing public-playtest destination in `public-playtest.r1.json`. This authorizes adding the batch's new first-party module `src/championship/app/uiDialog.js` to `WEB_BUILD_INPUTS.v1.json` and its public-playtest approval list, and refreshing the approved hashes of the 23 already-listed files the batch changed, once `build:playtest`, `validate:playtest` and the local gates pass. It adds no asset, destination or rights claim; physical-device, rights and commercial-release acceptance stay separate. No force push, rebase, reset or cleanup is authorized.
+
 ## 2026-09-28 — Commit and merge the page and flow integration to main
 
 After the local page, flow and system-integration pass below was reported, the Owner directs: 「請commit提交push合併到main」. Commit this batch's own paths on `feat/ui-integration-2026-09-28`, push that branch, merge it into `main` and push `main`. The two files that also hold other agents' uncommitted edits (`championship.html`, `tests/championship-browser-opening.cjs`) are committed with this batch's lines only; the other 614 uncommitted entries stay in the working tree as found.
