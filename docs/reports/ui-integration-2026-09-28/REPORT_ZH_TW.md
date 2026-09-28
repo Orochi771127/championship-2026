@@ -2,7 +2,7 @@
 
 ## CURRENT TRUTH
 
-本批依 [Owner Direction 2026-09-28](../../coordination/OWNER_DIRECTION.md) 在 `main`（HEAD `c63f591`）工作樹完成**本機實作與驗證**；之後依 Owner 同日指示提交並合併到 `main`，未部署（見〈提交與合併〉）。所有結論只依本次原始碼、實際掛載畫面與本次執行的測試；舊報告只當背景。
+本批依 [Owner Direction 2026-09-28](../../coordination/OWNER_DIRECTION.md) 在 `main`（HEAD `c63f591`）工作樹完成**本機實作與驗證**；之後依 Owner 同日指示提交並合併到 `main`，再依後續指示發布到公開試玩版（見〈提交與合併〉與[發布回條](PUBLICATION_ZH_TW.md)）。所有結論只依本次原始碼、實際掛載畫面與本次執行的測試；舊報告只當背景。
 
 - 從正常入口（標題 → LOGIN → 開場或繼續 → 工具列選單）走訪全部 16 個畫面、開場、工具列選單與生命週期彈窗，分別用全新遊戲與既有 QA 存檔安裝頁建立的進階存檔，在 390×844、820×1180、1024×1366、1440×900 截圖與量測。
 - 找到並修正兩個 **P0 存檔風險**：在商店等非首頁畫面離開頁面時進度不會寫入（購買遺失）；已有存檔時「開始新遊戲」不警告，完成開場命名就清掉舊存檔，而新遊戲在第一次離頁前也沒有存檔。
@@ -170,7 +170,7 @@
   3. 夥伴名單「移除」「報名」：原作語意未追蹤（`UNKNOWN_REQUIRES_TRACE`），維持停用並註明；初始夥伴改名需決定是否寫入原作名字欄位。
   4. 中途離開對戰的報名費：原作退費規則未追蹤；本批只在確認視窗說明目前不退費。
 - **保留原樣**：狩獵場與對戰場地寬度（Pixi 場景與輸入座標）；桌面沿用直向框；原作選單成員與順序；馴獸師資料的固定位數。
-- **其他**：`full-qa-save.html`（QA 安裝頁）沒有圖示連結，Chrome 會記一筆 favicon 404；遊戲頁不受影響。實體裝置、權利與發布驗收仍開放。本批已提交並合併 `main`，未部署。
+- **其他**：`full-qa-save.html`（QA 安裝頁）沒有圖示連結，Chrome 會記一筆 favicon 404；遊戲頁不受影響。實體裝置、權利與商業發布驗收仍開放。本批已提交、合併 `main` 並發布到公開試玩版。
 
 ## 提交與合併
 
@@ -181,7 +181,7 @@ Owner 於 2026-09-28 指示「請commit提交push合併到main」（[Owner Direc
 | 分支與合併 | 本批提交在 `feat/ui-integration-2026-09-28`（基底 `c63f591`），推送該分支後以合併提交併入 `main` 並推送。沒有 force push、rebase、reset 或清理。 |
 | 提交範圍 | 34 個既有檔案的修改、2 個新檔（`uiDialog.js`、`championship-ui-integration-browser.cjs`）與本報告資料夾。`championship.html` 只帶 modulepreload 清單的本批變動（加入 `uiDialog.js`、調整順序），並沿用已提交建置腳本的 `as="fetch" crossorigin` 寫法；`tests/championship-browser-opening.cjs` 只帶 `playOpening` 的新遊戲確認。另一位代理的 614 筆未提交修改（包括這兩個檔案裡的 `as="json"` 與 `captureOneWild` 段落）留在工作樹，沒有提交。 |
 | 提交內容重驗 | 把暫存區完整匯出到 `.tmp/commit-check`（不含任何人的未提交工作）後重跑：`npm run validate:preload` 通過（185 個啟動模組）。`npm run test:ci` 在關閉 Web Locks（同 CI 的 Node 22）時 1,346/1,346；桌面 Node 24 直接跑有 31 項失敗，全部落在 10 個 `locks: null` 修正仍未提交的既有測試檔，與本批無關。`npm test`（同樣關閉 Web Locks）1,567/1,584，失敗的是 5 個既有美術審查工具，以及 2 個讀取未納入版本控制之本機籠子素材的測試。13 個瀏覽器閘門（含 `test:browser:ui-integration`）在 `127.0.0.1:8762` 全部通過；`test:browser:convergence` 使用複製過來的本機 `.tmp/cage-authoring-proof`。 |
-| 發布 | 未發布。本次指示只有提交、推送與合併；`WEB_BUILD_INPUTS.v1.json` 未更新，新檔 `uiDialog.js` 未列入公開建置清單，所以 `npm run build:playtest` 以 `WEB_INPUTS_NOT_CLOSED` 停止。`main` 的 Pages 工作流程會在建置步驟失敗，正式站維持 `c63f591` 的版本；之後的 `main` 推送也會停在同一檢查。要發布時需另行指示：把 `uiDialog.js` 列入建置清單，並更新 23 個已列檔案的雜湊。 |
+| 發布 | 合併時未發布：該次指示只有提交、推送與合併，`WEB_BUILD_INPUTS.v1.json` 未更新，新檔 `uiDialog.js` 不在公開建置清單，`fd6cb67` 的 Pages 工作流程停在 `WEB_INPUTS_NOT_CLOSED`，正式站維持 `c63f591` 的版本。之後 Owner 指示「請發佈到正式站」，核准提交 `f16a84f` 把 `uiDialog.js` 列入清單並更新 23 個已列檔案的雜湊，已發布；見[發布回條](PUBLICATION_ZH_TW.md)。 |
 
 ## 啟動與試玩路線
 

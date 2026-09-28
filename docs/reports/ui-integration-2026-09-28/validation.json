@@ -12,8 +12,8 @@
     "branch": "feat/ui-integration-2026-09-28",
     "committed": true,
     "mergeTarget": "main",
-    "deployed": false,
-    "publication": "Not authorized. WEB_BUILD_INPUTS.v1.json is not refreshed and src/championship/app/uiDialog.js is not listed, so build:playtest stops at WEB_INPUTS_NOT_CLOSED and the public playtest keeps the c63f591 build."
+    "deployed": true,
+    "publication": "Merged unpublished at fd6cb67 (Pages stopped at WEB_INPUTS_NOT_CLOSED); published on the Owner's later 2026-09-28 instruction by approval commit f16a84f. See publication."
   },
   "baseline": {
     "uncommittedEntriesBefore": 614,
@@ -776,5 +776,248 @@
     "artwork or layout for the Home band above the ranch",
     "roster Delete/Entry semantics (UNKNOWN_REQUIRES_TRACE) and renaming the starter",
     "refund on abandoning a match (original rule untraced)"
-  ]
+  ],
+  "publication": {
+    "authorization": "docs/coordination/OWNER_DIRECTION.md#2026-09-28 — Publish the page and flow integration to the public playtest (「請發佈到正式站」)",
+    "approvalCommit": "f16a84f92434e970f796b2032832e3c227fd9d19",
+    "buildInputs": {
+      "added": [
+        "src/championship/app/uiDialog.js"
+      ],
+      "refreshed": [
+        "championship.html",
+        "src/championship/app/championshipScreen.js",
+        "src/championship/app/championshipStandaloneApp.js",
+        "src/championship/app/championshipStatusBar.js",
+        "src/championship/app/championshipToolbar.js",
+        "src/championship/app/daylightSkin.css",
+        "src/championship/app/digimonListScreen.js",
+        "src/championship/app/helpScreen.js",
+        "src/championship/app/main.js",
+        "src/championship/app/nativeUiSkin.css",
+        "src/championship/app/opening.css",
+        "src/championship/app/raisingHomeP1RView.js",
+        "src/championship/app/scheduleScreen.js",
+        "src/championship/app/shopOriginalVideo.css",
+        "src/championship/app/styles.css",
+        "src/championship/app/tamerInfoScreen.js",
+        "src/championship/app/vs2Screens.js",
+        "src/championship/app/vs2Styles.css",
+        "src/championship/app/vs4Screens.js",
+        "src/championship/app/vs5Screens.js",
+        "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
+        "src/championship/text/uiText.js",
+        "src/championship/text/zhHant.js"
+      ],
+      "refreshedCount": 23,
+      "fileCount": {
+        "before": 3962,
+        "after": 3963
+      },
+      "method": "scripts/refresh-playtest-approval.mjs on `git -c core.autocrlf=false archive fd6cb67` (LF, as on CI); no uncommitted work hashed"
+    },
+    "prePublication": {
+      "buildPlaytest": "pass: 3966 files, buildId 3d10c93949c524dc99947b0c1c6d26648ef0eb6f87a3b4ec6190afaafb611d82",
+      "validatePlaytest": "pass: 3966 files, same buildId",
+      "testCiWebLocksOff": {
+        "tests": 1346,
+        "pass": 1346,
+        "fail": 0
+      },
+      "artifactServer": "built dist/github-playtest served on 127.0.0.1:8763; the two fixture gates also served /tests/ from the export because tests/fixtures is not published",
+      "artifactGates": [
+        {
+          "gate": "tests/championship-ui-integration-browser.cjs",
+          "mode": "direct",
+          "exit": 0,
+          "seconds": 81,
+          "lastLine": "UI_INTEGRATION_BROWSER_PASS [\"gateHuntReturn\",\"newGameContinue\",\"shop\",\"cageEdit\",\"roster\",\"sheets\",\"battle\",\"layout\"]"
+        },
+        {
+          "gate": "tests/championship-int-rh2-browser.cjs",
+          "mode": "direct",
+          "exit": 0,
+          "seconds": 88,
+          "lastLine": "INT_RH2_BROWSER_QA_PASS viewports=6 required=5 saveReload=true"
+        },
+        {
+          "gate": "tests/championship-recent-integration-browser.cjs",
+          "mode": "direct",
+          "exit": 0,
+          "seconds": 49,
+          "lastLine": "RECENT_INTEGRATION_BROWSER_QA_PASS realNavigationSaveContinue=true passwordBattleResult=true"
+        },
+        {
+          "gate": "tests/championship-cage-layout-browser.cjs",
+          "mode": "direct",
+          "exit": 0,
+          "seconds": 24,
+          "lastLine": "CAGE_LAYOUT_BROWSER_PASS journeys=14 interactions=6 baseline=false"
+        },
+        {
+          "gate": "tests/championship-owned-battle-browser.cjs",
+          "mode": "direct",
+          "exit": 1,
+          "seconds": 91,
+          "lastLine": "}"
+        },
+        {
+          "gate": "tests/championship-cage-animation-browser.cjs",
+          "mode": "direct",
+          "exit": 0,
+          "seconds": 13,
+          "lastLine": "CAGE_ANIMATION_BROWSER_PASS {\"visibleLavaPixels\": 2612, \"changingLavaPixels\": 148, \"samples\": 8}"
+        },
+        {
+          "gate": "tests/championship-vs2-browser.cjs",
+          "mode": "direct",
+          "exit": 0,
+          "seconds": 69,
+          "lastLine": "CHAMPIONSHIP_VS2_P_BROWSER_QA_PASS viewports=5 evidence=2"
+        },
+        {
+          "gate": "tests/championship-vs3-browser.cjs",
+          "mode": "direct",
+          "exit": 0,
+          "seconds": 16,
+          "lastLine": "CHAMPIONSHIP_VS3_ENCLOSURE_BROWSER_QA_PASS"
+        },
+        {
+          "gate": "tests/championship-vs2-r1-gate-browser.cjs",
+          "mode": "direct",
+          "exit": 0,
+          "seconds": 26,
+          "lastLine": "VS2_R1_GATE_3D_BROWSER_QA_PASS viewports=2 fallback=PASS"
+        },
+        {
+          "gate": "tests/championship-battle-cube-browser.cjs",
+          "mode": "direct",
+          "exit": 1,
+          "seconds": 31,
+          "lastLine": "}"
+        },
+        {
+          "gate": "tests/championship-full-qa-save-browser.cjs",
+          "mode": "direct",
+          "exit": 0,
+          "seconds": 3,
+          "lastLine": "CHAMPIONSHIP_FULL_QA_SAVE_BROWSER_PASS"
+        },
+        {
+          "gate": "tests/championship-hunt-loading-browser.cjs",
+          "mode": "direct",
+          "exit": 0,
+          "seconds": 20,
+          "lastLine": "CHAMPIONSHIP_HUNT_LOADING_BROWSER_PASS"
+        },
+        {
+          "gate": "tests/championship-owned-battle-browser.cjs",
+          "mode": "artifact + tests overlay",
+          "exit": 0,
+          "seconds": 25,
+          "lastLine": "CHAMPIONSHIP_OWNED_BATTLE_BROWSER_PASS"
+        },
+        {
+          "gate": "tests/championship-battle-cube-browser.cjs",
+          "mode": "artifact + tests overlay",
+          "exit": 0,
+          "seconds": 10,
+          "lastLine": "BATTLE_CUBE_BROWSER_PASS viewports=5 textures=4 failure_fallback=PASS late_dispose=PASS webgl_fallback=PASS app_reentry=PASS"
+        }
+      ],
+      "note": "owned-battle and battle-cube first failed on the artifact alone because they open tests/fixtures pages (404); with only /tests/ overlaid they pass against the built product files."
+    },
+    "github": {
+      "ci": {
+        "run": "https://github.com/Orochi771127/championship-2026/actions/runs/36433868359",
+        "conclusion": "success"
+      },
+      "pages": {
+        "run": "https://github.com/Orochi771127/championship-2026/actions/runs/36433868641",
+        "build": "success",
+        "deploy": "success"
+      }
+    },
+    "live": {
+      "url": "https://orochi771127.github.io/championship-2026/",
+      "indexStatus": 200,
+      "indexMatchesChampionshipHtml": true,
+      "pagesBuild": {
+        "buildId": "3d10c93949c524dc99947b0c1c6d26648ef0eb6f87a3b4ec6190afaafb611d82",
+        "commit": "f16a84f92434e970f796b2032832e3c227fd9d19",
+        "fileCount": 3966
+      },
+      "batchFiles": 24,
+      "allMatchMainPlain": true,
+      "allMatchMainCacheBusted": true,
+      "gates": [
+        {
+          "gate": "tests/championship-ui-integration-browser.cjs",
+          "mode": "direct",
+          "exit": 1,
+          "seconds": 195,
+          "lastLine": "}"
+        },
+        {
+          "gate": "tests/championship-int-rh2-browser.cjs",
+          "mode": "direct",
+          "exit": 0,
+          "seconds": 763,
+          "lastLine": "INT_RH2_BROWSER_QA_PASS viewports=6 required=5 saveReload=true"
+        },
+        {
+          "gate": "tests/championship-cage-layout-browser.cjs",
+          "mode": "direct",
+          "exit": 0,
+          "seconds": 133,
+          "lastLine": "CAGE_LAYOUT_BROWSER_PASS journeys=14 interactions=6 baseline=false"
+        },
+        {
+          "gate": "tests/championship-ui-integration-browser.cjs",
+          "mode": "retry",
+          "exit": 1,
+          "seconds": 152,
+          "lastLine": "}"
+        }
+      ],
+      "gateAdjustment": "network waits 120 s in temporary copies inside the disposable export only; assertions unchanged; repository gates keep their settings",
+      "uiIntegrationStop": "Passed New Game with save, Home today summary, day label, shop refusal reason and footer order, gate lock marking; stopped when the existing 30 s Hunt field load limit (vs2Screens.js loadTimeoutMs, commit 3a4b52a) fired: 「狩獵場載入時間過長，請返回牧場後再試一次。」",
+      "bandwidth": {
+        "githubPagesBytesPerSecond": [
+          56453,
+          47229
+        ],
+        "jsDelivrBytesPerSecond": 130013,
+        "huntMapFrames": [
+          {
+            "file": "hunt/licensed-runtime-v1/fields/field_hm01_01/frame-00.png",
+            "bytes": 930345,
+            "seconds": [
+              25.1,
+              19.7
+            ]
+          },
+          {
+            "file": "hunt/licensed-runtime-v1/fields/field_hm01_01/frame-01.png",
+            "bytes": 977033,
+            "seconds": [
+              19.2
+            ]
+          }
+        ]
+      },
+      "huntProbe": {
+        "runs": 3,
+        "outcome": "TIMED_OUT_30S in all runs",
+        "requestsDuringLoad": "9-11",
+        "failedRequests": 0
+      },
+      "assessment": "Environment bandwidth on the test machine, not the deployment: the same flow passes on the identical artifact, and the Hunt loader and its assets are unchanged by this batch. Players below about 0.5 Mbps may hit the same pre-existing limit; changing it is a separate decision."
+    },
+    "notVerified": [
+      "physical phones and tablets",
+      "Safari/WebKit",
+      "rights and commercial release acceptance"
+    ]
+  }
 }
