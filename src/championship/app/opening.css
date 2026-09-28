@@ -14,6 +14,8 @@
   background:repeating-radial-gradient(ellipse at 50% 0,transparent 0 30px,#88e8ff55 31px 32px),repeating-linear-gradient(90deg,transparent 0 44px,#72d9ff55 45px 46px),radial-gradient(ellipse at 50% 0,#1189bb,#062860 65%);pointer-events:none}
 .cm-title__login,.cm-title__actions .cm-button{border-radius:0;clip-path:polygon(8% 0,100% 0,92% 100%,0 100%);border:0;border-top:3px solid #b8ffff;border-bottom:3px solid #20cbee;background:linear-gradient(#32cfea 0 13%,#001b42 13% 82%,#036caf 82%);min-height:56px;color:#fff;font-size:22px;font-weight:850;letter-spacing:.1em;text-shadow:2px 2px #00264b;cursor:pointer}
 .cm-title__login{position:absolute;z-index:2;left:22%;width:56%;top:68%}
+/* The choice a returning player expects carries the gold edge. */
+.cm-title__actions .cm-button--primary{border-top-color:#fff3a8;border-bottom-color:#f2c33a;text-shadow:2px 2px #00264b,0 0 12px rgba(255,214,90,.55)}
 .cm-title__actions{position:absolute;z-index:3;top:62%;left:16%;width:68%;gap:16px;margin:0}.cm-title__actions[hidden],.cm-title__login[hidden],#cm-opening[hidden]{display:none}
 .cm-title__note{position:absolute;z-index:5;bottom:4%;left:8%;width:84%;font-size:12px;}
 #cm-opening{position:absolute;z-index:4;inset:0;display:grid;place-items:center;background:#030819;color:#17222a;padding:20px}

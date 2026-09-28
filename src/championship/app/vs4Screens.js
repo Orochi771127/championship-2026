@@ -12,6 +12,7 @@ import { uiText } from '../text/uiText.js';
 import { SHOP_DESCRIPTIONS_ZH, SHOP_NAMES_ZH } from '../text/catalogs.zhHant.js';
 import { shopGoodsPresentation } from '../presentation/shopGoodsUiArt.js';
 import { getHuntCatalogItem } from '../hunt/loadout/huntEquipmentCatalog.js';
+import { showChoiceDialog } from './uiDialog.js';
 
 const CATEGORY_LABELS = Object.freeze({
   TRAINING_GOODS: "養成用品",
@@ -59,6 +60,14 @@ function presentationMode() {
   }
 }
 
+/** A short confirmation pulse on the element that changed; none under reduced motion. */
+function pulse(node) {
+  if (globalThis.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches) return;
+  node.animate?.([{ transform: "scale(1)", filter: "brightness(1)" },
+    { transform: "scale(1.06)", filter: "brightness(1.18)" }, { transform: "scale(1)", filter: "brightness(1)" }],
+  { duration: 320, easing: "ease-out" });
+}
+
 export function createShopView({ root, source }) {
   const frame = source.getFrame();
   const block = frame.shop;
@@ -93,7 +102,11 @@ export function createShopView({ root, source }) {
   const detailName = element("h2", "cm-vs2-shop__detail-name");
   const detailDescription = element("p", "cm-vs2-shop__detail-description");
   const detailMeta = element("p", "cm-vs2-shop__detail-meta");
-  detailCopy.append(detailName, detailDescription, detailMeta);
+  // Why Buy is unavailable, said beside the price rather than left to a grey
+  // button (2026-09-28 QA: 0 Bits greyed Buy with no reason).
+  const detailState = element("p", "cm-vs2-shop__detail-state");
+  detailState.hidden = true;
+  detailCopy.append(detailName, detailDescription, detailMeta, detailState);
   detail.append(detailArt, detailCopy);
   const tabs = element("div", "cm-vs2-shop__tabs");
   tabs.setAttribute("role", "tablist");
@@ -113,13 +126,14 @@ export function createShopView({ root, source }) {
   status.setAttribute("aria-live", "polite");
   body.append(detail, tabs, shelf, status);
 
+  // Footer rule: leave on the left, the one primary action -- Buy -- on the
+  // right. Leaving used to wear the gold while Buy looked secondary.
   const footer = element("footer", "cm-vs2-footer");
-  const buy = element("button", "cm-vs2-action cm-vs2-shop__buy", "購買");
-  buy.type = "button";
-  const back = element("button", "cm-vs2-action cm-vs2-action--primary", "返回牧場");
+  const back = element("button", "cm-vs2-action", "返回牧場");
   back.type = "button";
-  back.setAttribute("aria-label", "返回牧場");
-  footer.append(buy, back);
+  const buy = element("button", "cm-vs2-action cm-vs2-action--primary cm-vs2-shop__buy", "購買");
+  buy.type = "button";
+  footer.append(back, buy);
   shell.append(header, body, footer);
   root.append(shell);
 
@@ -145,8 +159,15 @@ export function createShopView({ root, source }) {
   }
 
   back.addEventListener("click", () => source.intents.leaveScreen());
+  // One tap buys one. Two taps landing within a double-tap window are one
+  // intent, so the second is dropped instead of charging twice.
+  let lastBuy = { at: -Infinity, record: null };
   buy.addEventListener("click", () => {
-    if (selectedRow) source.intents.buyShopItem(selectedRow.shopRecordIndex, 1);
+    if (!selectedRow) return;
+    const now = globalThis.performance?.now?.() ?? Date.now();
+    if (lastBuy.record === selectedRow.shopRecordIndex && now - lastBuy.at < 220) return;
+    lastBuy = { at: now, record: selectedRow.shopRecordIndex };
+    source.intents.buyShopItem(selectedRow.shopRecordIndex, 1);
   });
 
   function productName(row) {
@@ -200,12 +221,28 @@ export function createShopView({ root, source }) {
     moveSelection(event.key === "ArrowLeft" ? -1 : 1);
   });
 
+  let paintedBits = null;
+  let paintedReceipt = null;
   function paint(nextFrame) {
     const shop = nextFrame?.shop;
     if (!shop) return;
     wallet.textContent = uiText(`持有 ${shop.bits.toLocaleString('en-US')} 位元幣`);
+    // A spend is visible where the money is shown, not only in the numbers.
+    if (paintedBits !== null && shop.bits !== paintedBits) {
+      wallet.dataset.change = shop.bits < paintedBits ? "spent" : "gained";
+      pulse(wallet);
+    }
+    paintedBits = shop.bits;
     const receipt = shop.lastReceipt;
-    status.textContent = uiText(receipt ? (RECEIPT_COPY[receipt.reason] ?? "") : "");
+    // Name the item and its new count, so a second purchase of the same item
+    // reads differently from the first instead of repeating the same line.
+    const boughtRow = receipt?.ok ? shop.listings.find((row) => row.shopRecordIndex === receipt.shopRecordIndex) : null;
+    status.textContent = uiText(receipt
+      ? (boughtRow ? `已購買「${productName(boughtRow)}」，持有 ${boughtRow.owned}/${boughtRow.maxOwned}。` : (RECEIPT_COPY[receipt.reason] ?? ""))
+      : "");
+    status.dataset.tone = receipt ? (receipt.ok ? "ok" : "refused") : "";
+    if (receipt && receipt !== paintedReceipt) pulse(status);
+    paintedReceipt = receipt ?? null;
 
     for (const [category, tab] of tabButtons) {
       tab.dataset.active = category === activeCategory ? "true" : "false";
@@ -235,9 +272,15 @@ export function createShopView({ root, source }) {
     detailName.textContent = uiText(selectedName);
     detailDescription.textContent = shopItemDescription(selectedRow);
     detailMeta.textContent = `${selectedRow.unitPriceBits.toLocaleString('en-US')} 位元幣 · 持有 ${selectedRow.owned}/${selectedRow.maxOwned}`;
-    buy.textContent = selectedRow.owned >= selectedRow.maxOwned ? "已持有" : "購買";
-    buy.disabled = selectedRow.owned >= selectedRow.maxOwned || shop.bits < selectedRow.unitPriceBits;
-    buy.setAttribute("aria-label", uiText(`購買${selectedName}`));
+    const full = selectedRow.owned >= selectedRow.maxOwned;
+    const shortBits = full ? 0 : Math.max(0, selectedRow.unitPriceBits - shop.bits);
+    buy.textContent = full ? (selectedRow.maxOwned === 1 ? "已持有" : "已達上限") : "購買";
+    buy.disabled = full || shortBits > 0;
+    buy.setAttribute("aria-label", uiText(full ? `${selectedName}已達持有上限` : `購買${selectedName}`));
+    detailState.hidden = !buy.disabled;
+    detailState.textContent = full
+      ? (selectedRow.maxOwned === 1 ? "已經持有，無法再購買。" : `已達持有上限 ${selectedRow.maxOwned}。`)
+      : shortBits > 0 ? `持有金額不足，還差 ${shortBits.toLocaleString('en-US')} 位元幣。` : "";
     previous.disabled = selectedIndex <= 0;
     next.disabled = selectedIndex >= rows.length - 1;
     let selectedCard = null;
@@ -329,14 +372,17 @@ export function createDatabaseView({ root, source }) {
   detail.hidden = true;
   body.append(list, detail);
 
+  // Leaving is not this screen's primary action, so it does not wear gold.
   const footer = element("footer", "cm-vs2-footer");
-  const back = element("button", "cm-vs2-action cm-vs2-action--primary", "BACK");
+  const back = element("button", "cm-vs2-action", "BACK");
   back.type = "button";
   back.setAttribute("aria-label", uiText("Return to Raising Home"));
   footer.append(back);
   shell.append(header, body, footer);
   root.append(shell);
 
+  let listScroll = null;
+  let lastOpened = null;
   back.addEventListener("click", () => {
     const current = source.getFrame().database;
     if (current?.selected) source.intents.selectDatabaseSpecies(null);
@@ -346,13 +392,13 @@ export function createDatabaseView({ root, source }) {
   function paint(nextFrame) {
     const book = nextFrame?.database;
     if (!book) return;
-    census.textContent = uiText(`${book.registeredCount} / ${book.slotCount}`);
+    census.textContent = uiText(`已登錄 ${book.registeredCount} / ${book.slotCount}`);
     body.dataset.mode = book.selected ? "detail" : "list";
 
     if (book.selected) {
       list.hidden = true;
       detail.hidden = false;
-      back.textContent = uiText("LIST");
+      back.textContent = uiText("Return to database list");
       back.setAttribute("aria-label", uiText("Return to database list"));
       paintDetail(book.selected, book);
       return;
@@ -368,21 +414,33 @@ export function createDatabaseView({ root, source }) {
     back.setAttribute("aria-label", uiText("Return to Raising Home"));
     const rows = book.entries;
     list.replaceChildren();
+    let reopened = null;
     for (const row of rows) {
       const item = element("button", "cm-vs2-shop__row cm-vs2-database__row");
+      item.dataset.speciesIndex = String(row.speciesIndex);
+      if (row.speciesIndex === lastOpened) reopened = item;
       item.type = "button";
       item.dataset.state = row.state;
       item.setAttribute("aria-label", uiText(row.state === "REGISTERED" ? speciesName(row.speciesIndex, row.displayName) : `未登錄 ${row.bookOrdinal + 1}`));
       const name = element("div", "cm-vs2-shop__name");
       name.append(element("strong", "", row.state === "REGISTERED" ? speciesName(row.speciesIndex, row.displayName) : "-----"));
-      name.append(element(
-        "span",
-        "cm-vs2-shop__meta",
-        `${String(row.bookOrdinal + 1).padStart(3, "0")} · ${row.state === "REGISTERED" ? "已登錄" : "未登錄"}`
-      ));
+      // The number stays; "registered / not" is carried by the tile itself
+      // and by its accessible name.
+      name.append(element("span", "cm-vs2-shop__meta", String(row.bookOrdinal + 1).padStart(3, "0")));
       item.append(name);
-      item.addEventListener("click", () => source.intents.selectDatabaseSpecies(row.speciesIndex));
+      item.addEventListener("click", () => {
+        // Coming back from an entry lands where the player left the book,
+        // not at number 001 again.
+        listScroll = list.scrollTop ?? 0;
+        lastOpened = row.speciesIndex;
+        source.intents.selectDatabaseSpecies(row.speciesIndex);
+      });
       list.append(item);
+    }
+    if (listScroll !== null) {
+      list.scrollTop = listScroll;
+      reopened?.focus?.({ preventScroll: true });
+      listScroll = null;
     }
   }
 
@@ -447,7 +505,9 @@ export function createDatabaseView({ root, source }) {
 const CAGE_VERDICT_COPY = Object.freeze({
   PLACED: "Placed.",
   REMOVED: "Removed from the ranch.",
-  CONFIRMED: "Layout kept. Save on Home to write it to disk.",
+  // Home has had no SAVE button since 2026-09-16; the layout is written with
+  // the rest of the game when the page is left or on Save & Quit.
+  CONFIRMED: "配置已套用。",
   SLOT_LOCKED: "That hex is still locked.",
   OCCUPIED: "That hex already has a cage.",
   FOOTPRINT_BLOCKED: "The full cage footprint must fit in free, unlocked cells.",
@@ -458,7 +518,7 @@ const CAGE_VERDICT_COPY = Object.freeze({
   OUT_OF_BOUNDS: "That hex is outside the ranch."
 });
 
-export function createCageEditView({ root, source }) {
+export function createCageEditView({ root, source, askToLeave = showChoiceDialog }) {
   const frame = source.getFrame();
   const block = frame.cageEdit;
   if (!block) throw new Error("CHAMPIONSHIP_CAGE_EDIT_NOT_ACTIVE");
@@ -476,7 +536,7 @@ export function createCageEditView({ root, source }) {
   const copy = element("div", "cm-vs2-header__copy");
   copy.append(
     element("span", "cm-vs2-kicker", "HOME"),
-    element("h1", "cm-vs2-title", "牧場配置"),
+    element("h1", "cm-vs2-title", "設施配置"),
     element("p", "cm-vs2-subtitle", block.layoutVersion
       ? "待機區固定。點選設施取回，再選擇空格放置。"
       : "One cage per hex. Rank opens 14–20. Overfill is allowed; extra Digimon stress more easily.")
@@ -500,18 +560,42 @@ export function createCageEditView({ root, source }) {
   facilities.setAttribute('aria-label', uiText('已放置設施'));
   body.append(element('p', 'cm-cage-board-hint', '牧場平面配置 · 左右滑動查看所有格位'), boardScroll, facilities, tray, status);
 
+  // Footer rule shared by every screen: leave on the left, the one primary
+  // action on the right.
   const footer = element("footer", "cm-vs2-footer");
+  const back = element("button", "cm-vs2-action", "返回牧場");
+  back.type = "button";
   const confirm = element("button", "cm-vs2-action cm-vs2-action--primary", "確認配置");
   confirm.type = "button";
   confirm.setAttribute("aria-label", uiText("Keep this ranch layout"));
-  const back = element("button", "cm-vs2-action", "返回牧場");
-  back.type = "button";
-  back.setAttribute("aria-label", uiText("Return to Raising Home"));
-  footer.append(confirm, back);
+  footer.append(back, confirm);
   shell.append(header, body, footer);
   root.append(shell);
 
-  back.addEventListener("click", () => source.intents.leaveScreen());
+  // Leaving reverts an unconfirmed layout (the runtime's revert). That used to
+  // happen without a word; an unconfirmed change now asks first.
+  let asking = false;
+  back.addEventListener("click", async () => {
+    if (asking) return;
+    if (!source.getFrame()?.cageEdit?.dirty) { source.intents.leaveScreen(); return; }
+    asking = true;
+    let choice = null;
+    try {
+      choice = await askToLeave({
+        title: "配置還沒有套用",
+        message: "這次調整的設施位置尚未確認。要套用後返回牧場，還是放棄這些變更？",
+        actions: [
+          { id: "stay", label: "繼續編輯", tone: "secondary" },
+          { id: "discard", label: "放棄變更", tone: "danger" },
+          { id: "apply", label: "套用並返回", tone: "primary" }
+        ],
+        cancelId: "stay"
+      });
+    } finally { asking = false; }
+    if (source.getFrame()?.screen !== "CAGE_EDIT") return;
+    if (choice === "apply") source.intents.confirmCageEdit();
+    if (choice === "apply" || choice === "discard") source.intents.leaveScreen();
+  });
   confirm.addEventListener("click", () => source.intents.confirmCageEdit());
 
   function paint(nextFrame) {

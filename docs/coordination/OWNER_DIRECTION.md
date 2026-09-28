@@ -2,6 +2,20 @@
 
 > Reading guide — instruction maintenance, 2026-09-14: the dated Owner records below are preserved. Match authorization to the current task, batch, assets and destination. Later scope-specific continuation supersedes an older batch's stop only within that scope; it does not approve new gameplay, rights or publication. Use [authority by question](../README.md#authority-by-question) for evidence claims and [the current shared-file protocol](SHARED_FILE_UPDATE_PROTOCOL.md) for coordination. No new product or publication authorization is created by this annotation.
 
+## 2026-09-28 — Commit and merge the page and flow integration to main
+
+After the local page, flow and system-integration pass below was reported, the Owner directs: 「請commit提交push合併到main」. Commit this batch's own paths on `feat/ui-integration-2026-09-28`, push that branch, merge it into `main` and push `main`. The two files that also hold other agents' uncommitted edits (`championship.html`, `tests/championship-browser-opening.cjs`) are committed with this batch's lines only; the other 614 uncommitted entries stay in the working tree as found.
+
+Deployment is not part of this instruction: the pass below left it for a separate instruction, and this one names commit, push and merge only. `WEB_BUILD_INPUTS.v1.json` is not refreshed and the new `src/championship/app/uiDialog.js` is not added to it, so the GitHub Pages run for this `main` push stops at `WEB_INPUTS_NOT_CLOSED` and the public playtest keeps the `c63f591` build. Later `main` pushes stop at the same check until the Owner asks for this batch to be published; the 2026-09-18 publication covered that batch only. No force push, rebase, reset or cleanup is authorized.
+
+## 2026-09-28 — Whole-game page, flow and system-integration pass
+
+The Owner asks for 「全遊戲頁面、操作流程與既有系統整合改善」: walk every existing player screen from the normal entry, list the problems with evidence, propose one overall page plan that fits the existing screens, then implement it in P0 → P1 → P2 batches with browser verification and before/after screenshots, without stopping at a proposal. Routine layout, component, existing-behaviour fixes and tests are in scope without per-item approval.
+
+Keep the existing app, screen stack, session/store, single save authority and key, the one Pixi Application and ticker, DOM-for-UI / Pixi-for-play and bounded Three.js. Keep verified original gameplay; invent no numbers, evolution rules, capture odds or rewards; unknown original behaviour stays `UNKNOWN_REQUIRES_TRACE`. New gameplay, accounts or cloud services, save-format migration, a replacement technology or paid services need the Owner's decision. The forum images are inspiration only. Presentation changes made under this entry are `OWNER_APPROVED_ADAPTATION` of presentation, not original evidence.
+
+This entry authorizes local implementation and verification only. Commit, push, merge and deploy are left for a separate instruction; no reset, clean, deletion of existing work, overwriting the player's save, or moving research material into the product. Scope, evidence and results: [page and flow integration report](../reports/ui-integration-2026-09-28/REPORT_ZH_TW.md).
+
 ## 2026-09-18 — Commit, merge the completed Cage work to main, and publish it
 
 After reviewing the completed local Volcano animation repair and the inherited Raising/Cage convergence changes, the Owner explicitly directs: 「請COMMIT提交PUSH合併到MAIN」. Commit the coherent completed work in `championship-2026-convergence-20260916`, push its planning branch, merge it into `main`, and push `main`. Because the repository's existing GitHub Pages workflow publishes every accepted `main` push, this also authorizes refreshing the already-listed public-playtest hashes for the changed Cage/Raising files and publishing them to the existing destination in `public-playtest.r1.json` after the recorded local gates pass.

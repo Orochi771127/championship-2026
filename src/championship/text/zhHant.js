@@ -136,7 +136,7 @@ export const BATTLE_MENU_LABELS = deepFreeze({
   menu: "對戰選單", kicker: "對戰", chooseMatch: "選擇對戰",
   faceNotice: "拖曳立方體或使用左右方向鍵選擇模式，再選擇參加的對戰。",
   availableMatches: "目前可用的對戰", noMatch: "目前沒有開放的對戰。",
-  match: "對戰", noPayout: "無獎金", returnHome: "返回育成", conference: "多輪賽事"
+  match: "對戰", noPayout: "無獎金", returnHome: "返回牧場", conference: "多輪賽事"
 });
 
 function lookup(table, key, fallback) {

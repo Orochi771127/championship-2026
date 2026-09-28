@@ -61,23 +61,23 @@ export const TOOLBAR_MENUS = Object.freeze([
     id: "MANAGEMENT",
     label: "MANAGE",
     entries: Object.freeze([
-      { id: "tamer", label: "Tamer", screen: "TAMER_INFO" },
-      { id: "schedule", label: "Schedule", screen: "SCHEDULE" },
-      { id: "cageEdit", label: "Cage Edit", screen: "CAGE_EDIT" },
-      { id: "digimon", label: "Digimon", screen: "DIGIMON_LIST" },
-      { id: "endDay", label: "End Day", action: "END_DAY" }
+      { id: "tamer", label: "Tamer", screen: "TAMER_INFO", hint: "階級、戰績與收納容量" },
+      { id: "schedule", label: "Schedule", screen: "SCHEDULE", hint: "全年頭銜賽與登錄" },
+      { id: "cageEdit", label: "Cage Edit", screen: "CAGE_EDIT", hint: "調整牧場設施位置" },
+      { id: "digimon", label: "Digimon", screen: "DIGIMON_LIST", hint: "夥伴名單與能力值" },
+      { id: "endDay", label: "End Day", action: "END_DAY", hint: "結束今天，進入隔天" }
     ])
   }),
   Object.freeze({
     id: "SYSTEM",
     label: "SYSTEM",
     entries: Object.freeze([
-      { id: "help", label: "Help", screen: "HELP" },
-      { id: "saveQuit", label: "Save & Quit", action: "SAVE_AND_QUIT" },
-      { id: "database", label: "Database", screen: "DATABASE" },
-      { id: "hunt", label: "Hunt", screen: "GATE_SELECT" },
-      { id: "battle", label: "Battle", screen: "BATTLE_SELECT" },
-      { id: "shop", label: "Shop", screen: "SHOP" }
+      { id: "help", label: "Help", screen: "HELP", hint: "操作與規則說明" },
+      { id: "saveQuit", label: "Save & Quit", action: "SAVE_AND_QUIT", hint: "儲存進度並回到標題" },
+      { id: "database", label: "Database", screen: "DATABASE", hint: "已登錄的數碼獸" },
+      { id: "hunt", label: "Hunt", screen: "GATE_SELECT", hint: "前往傳送門捕捉數碼獸" },
+      { id: "battle", label: "Battle", screen: "BATTLE_SELECT", hint: "參加比賽贏得獎金" },
+      { id: "shop", label: "Shop", screen: "SHOP", hint: "購買食物、道具與設施" }
     ])
   })
 ]);
@@ -133,7 +133,12 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
     menuPanel.replaceChildren();
     menuPanel.dataset.menuId = menu.id;
     for (const entry of menu.entries) {
-      const button = element("button", "cm-toolbar__entry", entry.label);
+      // Two lines: the original entry name, then what it is for, so Hunt,
+      // Battle and Shop can be found without knowing the menus by heart.
+      const button = element("button", "cm-toolbar__entry");
+      button.append(element("span", "cm-toolbar__entry-label", entry.label));
+      if (entry.hint) button.append(element("span", "cm-toolbar__entry-hint", entry.hint));
+      button.setAttribute("aria-label", uiText(entry.label));
       button.type = "button";
       button.setAttribute("role", "menuitem");
       button.dataset.entryId = entry.id;

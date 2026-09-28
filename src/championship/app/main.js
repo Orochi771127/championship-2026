@@ -56,6 +56,7 @@ import { createDigimonListView } from "./digimonListScreen.js";
 import { createScheduleView } from "./scheduleScreen.js";
 import { createChampionshipView } from "./championshipScreen.js";
 import { BATTLE_OUTCOME_TEAM_ZERO_AHEAD, BATTLE_OUTCOME_TEAM_ONE_AHEAD } from "../battle/battleOutcome.js";
+import { BATTLE_MATCH_LIST_CAP } from "../battle/battleMatchSelection.js";
 import { createHelpView } from "./helpScreen.js";
 import { createTamerInfoView } from "./tamerInfoScreen.js";
 import { createOpeningPresentation } from './openingPresentation.js';
@@ -71,6 +72,7 @@ import {
 } from "../presentation/runtimeMapArtBundle.js";
 import { createRaisingCageArtPlan } from "../presentation/raisingCageArtPlan.js";
 import { mountPortraitFrame } from './portraitFrame.js';
+import { showChoiceDialog } from './uiDialog.js';
 
 const PIXI_V8_MODULE_URL = "../../../node_modules/pixi.js/dist/pixi.mjs";
 // Three.js is about 2MB and only the bounded 3D views read it, so each mount is
@@ -411,6 +413,13 @@ async function mountRaisingHome() {
     root,
     hudArt,
     source: raisingSource,
+    // What Home says about the rest of the loop: money held, and how many
+    // title matches the Battle menu will list today (the same capped list).
+    summary: {
+      get: () => ({ bits: app.getShopFrame()?.bits ?? null,
+        todayMatches: Math.min(app.getAvailableBattleRecordIndices().length, BATTLE_MATCH_LIST_CAP) }),
+      openBattle: () => { if (!app.hasRaisingPresentation() && app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) app.openBattle(); }
+    },
     async mountField({ host, source: fieldSource,onTrainingFrame }) {
       let characterBundle = null;
       let fieldArt = null;
@@ -576,7 +585,7 @@ async function enterPreparedBattle(prepared, attemptId, enter) {
  */
 async function enterChampionshipRound(playerInstanceIds) {
   if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started) {
-    return { ok: false, reason: "BATTLE_NOT_READY", message: "遊戲場景尚未就緒，請返回育成場景後重試。" };
+    return { ok: false, reason: "BATTLE_NOT_READY", message: "遊戲場景尚未就緒，請返回牧場後重試。" };
   }
   const run = app.getChampionshipRun();
   if (!run) return { ok: false, reason: "NO_CHAMPIONSHIP_RUNNING" };
@@ -628,7 +637,7 @@ async function mountBattleSelect() {
       // Battle simulation uses this existing Application's ticker. Do not
       // charge for a session that cannot start advancing on the shared stage.
       if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started) {
-        return { ok: false, reason: "BATTLE_NOT_READY", message: "遊戲場景尚未就緒，請返回育成場景後重試。" };
+        return { ok: false, reason: "BATTLE_NOT_READY", message: "遊戲場景尚未就緒，請返回牧場後重試。" };
       }
       if(mode==='FREE_BATTLE'){
         const party=await app.prepareFreeBattle(recordIndex,playerInstanceIds,selectedArena);if(!party.ok)return party;
@@ -707,6 +716,7 @@ async function mountBattleField() {
     frame: { ...source.getFrame(), rosterEvidence: activeRuntime.rosterEvidence() },
     localTeamIndex:activeRuntime.localTeamIndex(),
     hudArt,
+    askToLeave: showChoiceDialog,
     mountField({ host,onReady,onError }) {
       let disposed = false;
       let scene = null;
@@ -872,6 +882,10 @@ async function mountCurrentScreen() {
     else if (target === CHAMPIONSHIP_SCREENS.DIGIMON_LIST) view = createDigimonListView({
       root,
       entries: projectRoster(),
+      onRename(instanceId, name) {
+        const result = app.renameRosterInstance(instanceId, name);
+        return result.ok ? { ...result, entries: projectRoster() } : result;
+      },
       onExit() { app.leaveScreen(); }
     });
     else if (target === CHAMPIONSHIP_SCREENS.CHAMPIONSHIP) {
@@ -928,6 +942,9 @@ async function mountCurrentScreen() {
     else if (target === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) view = await mountBattleField();
     else if (target === CHAMPIONSHIP_SCREENS.BATTLE_RESULT) view = await mountBattleResult();
     mountedScreen = target;
+    // One attribute every screen carries, whichever view family drew it. The
+    // views' own data-screen stays theirs (the status bar also carries one).
+    root.dataset.activeScreen = target;
     warmDeferredModules();
   } finally {
     release();
@@ -1063,13 +1080,35 @@ function runToolbarMenuEntry(entry) {
  * port refuses outright during a battle or a hunt commit, so a refusal is
  * logged rather than shown -- the player has already left the page.
  */
+// Owner 2026-09-28 QA: a purchase made in the Shop was lost when the page was
+// left from the Shop, because only Raising Home wrote on hide. These screens
+// hold no half-finished transaction: whatever they changed (a purchase, a
+// confirmed cage layout, a rename, a registration) is already complete in the
+// session, so writing it is what Save & Quit would do. The Hunt field, a
+// capture waiting on the memory card and a running or unsettled battle stay
+// excluded -- the save port refuses those anyway, and the hunt's entry fee
+// must not persist without the hunt it paid for.
+const HIDE_SAVE_SCREENS = new Set([
+  CHAMPIONSHIP_SCREENS.SHOP, CHAMPIONSHIP_SCREENS.DATABASE, CHAMPIONSHIP_SCREENS.CAGE_EDIT,
+  CHAMPIONSHIP_SCREENS.DIGIMON_LIST, CHAMPIONSHIP_SCREENS.SCHEDULE, CHAMPIONSHIP_SCREENS.HELP,
+  CHAMPIONSHIP_SCREENS.TAMER_INFO, CHAMPIONSHIP_SCREENS.GATE_SELECT, CHAMPIONSHIP_SCREENS.HUNT_LOADOUT,
+  CHAMPIONSHIP_SCREENS.BATTLE_SELECT, CHAMPIONSHIP_SCREENS.CHAMPIONSHIP
+]);
+
 function autosaveOnHide() {
-  if (mountedScreen !== CHAMPIONSHIP_SCREENS.RAISING_HOME || !raisingSource) return;
-  const lifecycle = raisingSource.getFrame()?.lifecycle;
-  if (lifecycle?.day || lifecycle?.evolution || lifecycle?.confirmation) return;
-  const mailbox = lifecycle?.mailbox;
-  if (mailbox?.queue?.some((entry) => entry.id === mailbox.activeId)) return;
-  try { raisingSource.intents.requestSave(); }
+  if (!app || !mountedScreen || mountedScreen !== app.getScreen()) return;
+  if (mountedScreen === CHAMPIONSHIP_SCREENS.RAISING_HOME) {
+    if (!raisingSource) return;
+    const lifecycle = raisingSource.getFrame()?.lifecycle;
+    if (lifecycle?.day || lifecycle?.evolution || lifecycle?.confirmation) return;
+    const mailbox = lifecycle?.mailbox;
+    if (mailbox?.queue?.some((entry) => entry.id === mailbox.activeId)) return;
+    try { raisingSource.intents.requestSave(); }
+    catch (error) { console.warn(`CHAMPIONSHIP_AUTOSAVE_ON_HIDE: ${error.message}`); }
+    return;
+  }
+  if (!HIDE_SAVE_SCREENS.has(mountedScreen) || app.hasRaisingPresentation()) return;
+  try { app.save(); }
   catch (error) { console.warn(`CHAMPIONSHIP_AUTOSAVE_ON_HIDE: ${error.message}`); }
 }
 
@@ -1111,6 +1150,9 @@ function projectRoster() {
     return {
       displayName: raisingDisplayName({ displayName, speciesId, source }),
       instanceId,
+      // The starter's name is set by the opening; collected ones can be renamed.
+      renameable: source?.kind !== "STARTER"
+        && Boolean(app.getRaisingState()?.collection?.some((entry) => entry.instanceId === instanceId)),
       stats: profile,
       identity: identity && {
         ...identity,
@@ -1182,6 +1224,10 @@ async function startNewGame(names={}) {
   continueButton.disabled = true;
   try {
     await app.newGame(names);
+    // newGame clears the previous save before the first write, so until the
+    // page is next hidden there would be no save at all. Write the new game
+    // once now, through the same port, so Continue always has something.
+    try { app.save(); } catch (error) { console.warn(`CHAMPIONSHIP_NEW_GAME_SAVE: ${error.message}`); }
     await openGameplay();
     return true;
   } catch (error) {
@@ -1220,6 +1266,12 @@ function refreshContinue() {
   const { loadable, reason } = app.canContinue();
   continueButton.disabled = !loadable;
   continueButton.hidden=!loadable;
+  // With a save to go back to, Continue is the expected choice: it comes first
+  // and carries the primary style. New Game follows and asks before replacing.
+  if (loadable && titleActions.firstElementChild !== continueButton) titleActions.prepend(continueButton);
+  if (!loadable && titleActions.firstElementChild !== newGameButton) titleActions.prepend(newGameButton);
+  continueButton.classList.toggle("cm-button--primary", loadable);
+  newGameButton.classList.toggle("cm-button--primary", !loadable);
   if (inspected.present && !loadable) {
     note(`A saved game was found but this build cannot open it: ${reason} Start a new game.`);
   } else if (inspected.present) {
@@ -1248,7 +1300,25 @@ function boot() {
   }
 
   loginButton.addEventListener('click',()=>{loginButton.hidden=true;titleActions.hidden=false;refreshContinue();(continueButton.disabled?newGameButton:continueButton).focus({preventScroll:true});});
-  newGameButton.addEventListener("click", () => { titleActions.hidden=true;note('');openingPresentation.begin(); });
+  newGameButton.addEventListener("click", async () => {
+    // The opening ends by replacing whatever is stored, so a player who
+    // already has a game is asked first, while nothing has changed yet.
+    const inspected = app.inspectSave();
+    if (inspected.present) {
+      const name = starterName(inspected.save?.creature?.displayName ?? "");
+      const choice = await showChoiceDialog({
+        title: "要開始新遊戲嗎？",
+        message: `${name ? `目前存檔「${name}」` : "目前的存檔"}會在完成開場命名後被新遊戲取代，而且無法復原。想接著玩請選「繼續遊戲」。`,
+        actions: [
+          { id: "cancel", label: "取消", tone: "secondary" },
+          { id: "new", label: "開始新遊戲", tone: "danger" }
+        ],
+        cancelId: "cancel"
+      });
+      if (choice !== "new") return;
+    }
+    titleActions.hidden=true;note('');openingPresentation.begin();
+  });
   continueButton.addEventListener("click", () => { void continueGame(); });
   installHomeEntries();
   refreshContinue();

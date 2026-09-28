@@ -74,11 +74,13 @@ export function createScheduleView({ root, bits = null, calendar = null, season 
   root.dataset.scanSite = "ARM9:0x02089230";
 
   const grid = titleEventYearGrid();
+  const developer = new URLSearchParams(globalThis.location?.search ?? "").get("presentation") === "developer";
 
   const shell = element("section", "cm-schedule-shell");
   shell.append(
-    element("p", "cm-schedule-kicker", "TITLE MATCHES"),
-    element("h1", "cm-schedule-title", "SCHEDULE")
+    element("p", "cm-schedule-kicker", "管理"),
+    element("h1", "cm-schedule-title", "SCHEDULE"),
+    element("p", "cm-screen-lede", "點選賽事查看報名費、獎金與參賽階級。今天可參加的賽事會標示出來。")
   );
 
   // Selection starts on today when the caller knows it, else on the first
@@ -93,7 +95,23 @@ export function createScheduleView({ root, bits = null, calendar = null, season 
   }
 
   const board = element("div", "cm-schedule-board");
-  const detail = element("div", "cm-schedule-detail");
+  // The detail opens as a sheet over the board, where the player is looking,
+  // instead of below 32 calendar cells where a tap seemed to do nothing.
+  const sheet = element("div", "cm-sheet");
+  sheet.hidden = true;
+  const scrim = element("div", "cm-sheet__scrim");
+  scrim.addEventListener("click", () => closeDetail());
+  const detail = element("div", "cm-schedule-detail cm-sheet__panel");
+  detail.setAttribute("role", "dialog");
+  detail.setAttribute("aria-label", "賽事詳細");
+  sheet.append(scrim, detail);
+  let opener = null;
+  function closeDetail() {
+    if (sheet.hidden) return;
+    sheet.hidden = true;
+    opener?.focus?.({ preventScroll: true });
+  }
+  sheet.addEventListener("keydown", (event) => { if (event.key === "Escape") closeDetail(); });
 
   function renderDetail() {
     detail.replaceChildren();
@@ -113,46 +131,60 @@ export function createScheduleView({ root, bits = null, calendar = null, season 
     }
 
     const facts = element("dl", "cm-schedule-facts");
-    facts.append(
-      element("dt", null, "RECORD"),
-      element("dd", null, String(selected.recordIndex))
-    );
+    // The record index is the table row, useful when comparing with the ROM
+    // and meaningless to a player; it stays in developer presentation.
+    if (developer) facts.append(element("dt", null, "RECORD"), element("dd", null, String(selected.recordIndex)));
     // battle_menu/titlematch_top_sub_scene.nxr lays pay_1..pay_7 against
     // have_1..have_7 and turns on pay_red when the fee cannot be met, so the
     // fee is never shown without what the player actually holds beside it.
     const fee = matchEntryFee(selected.recordIndex);
     const short = Number.isInteger(bits) && bits < fee;
-    const feeValue = element("dd", null, `${fee} 位元幣`);
+    const feeValue = element("dd", null, `${fee.toLocaleString("en-US")} 位元幣`);
     if (short) feeValue.dataset.short = "true";
+    const rankNeeded = selected.unlockThreshold * 2;
+    const rankShort = Number.isInteger(progress?.rank) && selected.unlockThreshold > (progress.rank >>> 1);
+    const rankValue = element("dd", null, rankNeeded > 0 ? `${rankNeeded} 以上` : "不限");
+    if (rankShort) rankValue.dataset.short = "true";
     facts.append(
-      element("dt", null, "TAMER RANK"),
-      element("dd", null, String(selected.unlockThreshold * 2)),
+      element("dt", null, "參賽階級"),
+      rankValue,
       element("dt", null, "ENTRY FEE"),
       feeValue,
-      element("dt", null, "HELD"),
-      element("dd", null, Number.isInteger(bits) ? `${bits} 位元幣` : "—"),
+      // Not the shared "HELD" copy: in the Shop that word means "at the limit".
+      element("dt", null, "持有金額"),
+      element("dd", null, Number.isInteger(bits) ? `${bits.toLocaleString("en-US")} 位元幣` : "—"),
       element("dt", null, "PRIZE"),
-      element("dd", null, `${matchPayout(selected.recordIndex)} 位元幣`)
+      element("dd", null, `${matchPayout(selected.recordIndex).toLocaleString("en-US")} 位元幣`)
     );
-    if (short) facts.append(element("dt", null, ""), element("p", "cm-schedule-short", "持有金額不足以支付入場費。"));
+    if (short) facts.append(element("p", "cm-schedule-short", "持有金額不足以支付報名費。"));
+    if (rankShort) facts.append(element("p", "cm-schedule-short", `馴獸師階級達到 ${rankNeeded} 後才能登錄這場比賽。`));
     detail.append(facts);
 
+    const actions = element("div", "cm-sheet__actions");
+    const close = element("button", "cm-screen-back cm-sheet__close", "關閉");
+    close.type = "button";
+    close.addEventListener("click", () => closeDetail());
+    actions.append(close);
     if(progress){
       const won=progress.won.includes(selected.recordIndex),registered=progress.registered.includes(selected.recordIndex);
-      const register=element('button','cm-schedule-back',won?'已獲勝':registered?'取消登錄':'登錄比賽');
+      const register=element('button','cm-screen-primary cm-schedule-register',won?'已獲勝':registered?'取消登錄':'登錄比賽');
       register.type='button';register.dataset.action='title-registration';
-      register.disabled=won||selected.unlockThreshold>(progress.rank>>>1)||!onToggleRegistration;
+      register.disabled=won||rankShort||!onToggleRegistration;
       register.addEventListener('click',()=>{progress=onToggleRegistration(selected.recordIndex)??progress;renderDetail();renderRegistration();});
-      detail.append(register);
+      actions.append(register);
     }
+    detail.append(actions);
   }
 
-  function select(event) {
+  function select(event, button = null) {
     selected = event;
     for (const cell of board.querySelectorAll("[data-record-index]")) {
       cell.setAttribute("aria-pressed", String(Number(cell.dataset.recordIndex) === event.recordIndex));
     }
     renderDetail();
+    opener = button;
+    sheet.hidden = false;
+    detail.querySelector?.(".cm-sheet__close")?.focus?.({ preventScroll: true });
   }
 
   grid.forEach((seasonDays, seasonIndex) => {
@@ -180,7 +212,7 @@ export function createScheduleView({ root, bits = null, calendar = null, season 
           button.setAttribute("aria-pressed", String(event.recordIndex === selected?.recordIndex));
           if (event.unlockThreshold > 0) button.dataset.gated = String(event.unlockThreshold);
           button.append(element("span", "cm-schedule-fixture__name", titleEventText(event.recordIndex, "name", event.name ?? `#${event.recordIndex}`)));
-          button.addEventListener("click", () => select(event));
+          button.addEventListener("click", () => select(event, button));
           cell.append(button);
         }
       }
@@ -193,18 +225,20 @@ export function createScheduleView({ root, bits = null, calendar = null, season 
 
   const footer = element("p", "cm-schedule-footer", `${TITLE_EVENT_SCAN_LIMIT} scheduled fixtures across four seasons.`);
 
-
-  const back = element("button", "cm-schedule-back", "BACK");
+  // Leave on the left, the screen's one other action on the right.
+  const actionBar = element("footer", "cm-screen-footer");
+  const back = element("button", "cm-screen-back", "返回牧場");
   back.type = "button";
   back.addEventListener("click", () => { onExit?.(); });
 
-  const championship=element('button','cm-schedule-back');championship.type='button';
+  const championship=element('button','cm-screen-primary cm-schedule-championship');championship.type='button';
   championship.addEventListener('click',()=>{progress=onToggleChampionship?.()??progress;renderRegistration();});
+  actionBar.append(back, championship);
   // Appended in final order rather than inserted before BACK: every other node
   // in this file is placed with append, and insertBefore is the one DOM call
   // the mounted-view suites do not provide.
-  shell.append(board, detail, footer, championship, back);
-  root.append(shell);
+  shell.append(board, footer, actionBar);
+  root.append(shell, sheet);
   renderDetail();
 
   function renderRegistration(){
@@ -212,10 +246,17 @@ export function createScheduleView({ root, bits = null, calendar = null, season 
       const id=Number(button.dataset.recordIndex);
       button.dataset.registered=String(progress?.registered.includes(id)??false);
       button.dataset.won=String(progress?.won.includes(id)??false);
+      // A lock the player can read replaces the bare rank-tier digit.
+      const threshold=Number(button.dataset.gated??0);
+      button.dataset.locked=String(Number.isInteger(progress?.rank)&&threshold>(progress.rank>>>1));
     }
     championship.hidden=!progress||progress.championship.stage<1;
     const key=calendar?.year%4===3?'worldEntry':'entry';
-    championship.textContent=`${progress?.championship[key]?'取消登錄':'登錄'}${key==='worldEntry'?'世界冠軍賽':'冠軍賽'}`;
+    const entered=Boolean(progress?.championship[key]);
+    championship.textContent=`${entered?'取消登錄':'登錄'}${key==='worldEntry'?'世界冠軍賽':'冠軍賽'}`;
+    // Registering is the action this footer offers; withdrawing is not a
+    // primary action, so it drops the gold.
+    championship.className=entered?'cm-screen-back cm-schedule-championship':'cm-screen-primary cm-schedule-championship';
     championship.disabled=!onToggleChampionship||!Number.isInteger(calendar?.year);
   }
   renderRegistration();
@@ -223,7 +264,9 @@ export function createScheduleView({ root, bits = null, calendar = null, season 
   function renderCalendar(next = {}) {
     if(next.progress){progress=next.progress;renderDetail();renderRegistration();}
     if (!next.calendar) return;
-    calendar=next.calendar;
+    // Keep the year the caller gave at mount: the Championship toggle needs
+    // it, and a {season, day} refresh used to drop it until the next minute.
+    calendar={...(calendar??{}),...next.calendar};
     season = next.calendar.season;
     dayOfSeason = next.calendar.dayOfSeason;
     for (const cell of board.querySelectorAll(".cm-schedule-day")) {

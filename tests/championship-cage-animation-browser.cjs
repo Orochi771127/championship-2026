@@ -44,7 +44,7 @@ const origin = process.env.CHAMPIONSHIP_QA_ORIGIN || 'http://127.0.0.1:8741';
     await page.locator('.cm-vs2-cage-slot[data-slot-index="4"]').click();
     await page.waitForFunction(() => document.querySelector('.cm-vs2-cage-slot[data-slot-index="4"]')?.title === '火山');
     await page.locator('.cm-vs2-action--primary').click();
-    await page.getByRole('button', { name: '返回育成基地', exact: true }).click();
+    await page.getByRole('button', { name: '返回牧場', exact: true }).click();
     await page.locator('.cm-raising-pixi-canvas').waitFor();
     await page.waitForTimeout(600);
     const host = page.locator('.int-rh2-field-host');

@@ -288,8 +288,12 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
       const block = frame?.gateSelect;
       if (!block) return;
       const selected = new Set(block.gates.filter((gate) => gate.selected).map((gate) => gate.gateId));
+      // The node label carries the gate's current availability, so a locked
+      // destination reads as locked before the player has to tap it.
+      const states = new Map(block.gates.map((gate) => [gate.gateId, gate.state]));
       for (const record of nodeRecords) {
         const active = selected.has(record.gateId);
+        record.button.dataset.availability = states.get(record.gateId) ?? "";
         record.ring.material = active ? selectedRingMaterial : neutralRingMaterial;
         record.node.scale.setScalar(active ? 1.32 : 1);
         record.button.dataset.selected = String(active);

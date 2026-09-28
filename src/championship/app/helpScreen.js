@@ -66,17 +66,37 @@ export function createHelpView({ root, entryIndex = null, onExit } = {}) {
 
   const records = helpCatalog.records;
   const topics = records.filter((record) => record.kind === "topic");
+  const developer = new URLSearchParams(globalThis.location?.search ?? "").get("presentation") === "developer";
 
   let selected =
     records.find((record) => record.entryIndex === entryIndex && record.kind === "topic")
     ?? topics[0]
     ?? null;
 
+  // The screen is Help; the first record's title ("Hunt") is a section
+  // heading and was being shown as if it were the screen's name.
   const shell = element("section", "cm-help-shell");
-  shell.append(element("p", "cm-help-kicker", "HELP"), element("h1", "cm-help-title", helpText(0, "title", helpCatalog.records[0].title)));
+  shell.append(element("p", "cm-help-kicker", "系統"), element("h1", "cm-help-title", "說明"),
+    element("p", "cm-screen-lede", "點選主題閱讀說明。分類與主題依原作順序排列。"));
 
   const list = element("div", "cm-help-list");
-  const detail = element("article", "cm-help-detail");
+  // A topic opens as a sheet over the list rather than at the end of a long
+  // page, and closing it leaves the list where it was.
+  const sheet = element("div", "cm-sheet");
+  sheet.hidden = true;
+  const scrim = element("div", "cm-sheet__scrim");
+  scrim.addEventListener("click", () => closeDetail());
+  const detail = element("article", "cm-help-detail cm-sheet__panel");
+  detail.setAttribute("role", "dialog");
+  detail.setAttribute("aria-label", "說明內容");
+  sheet.append(scrim, detail);
+  let opener = null;
+  function closeDetail() {
+    if (sheet.hidden) return;
+    sheet.hidden = true;
+    opener?.focus?.({ preventScroll: true });
+  }
+  sheet.addEventListener("keydown", (event) => { if (event.key === "Escape") closeDetail(); });
 
   function renderDetail() {
     detail.replaceChildren();
@@ -88,18 +108,28 @@ export function createHelpView({ root, entryIndex = null, onExit } = {}) {
     const body = element("p", "cm-help-detail__body");
     body.textContent = helpText(selected.entryIndex, "body", selected.body);
     detail.append(body);
-    const provenance = element("p", "cm-help-detail__provenance",
-      `Entry ${selected.entryIndex} — title string ${selected.titleStringIndex}, body string ${selected.bodyStringIndex}.`);
-    detail.append(provenance);
+    // String indices are for comparing with the cartridge, not for players.
+    if (developer) {
+      detail.append(element("p", "cm-help-detail__provenance",
+        `Entry ${selected.entryIndex} — title string ${selected.titleStringIndex}, body string ${selected.bodyStringIndex}.`));
+    }
+    const actions = element("div", "cm-sheet__actions");
+    const close = element("button", "cm-screen-back cm-sheet__close", "關閉");
+    close.type = "button";
+    close.addEventListener("click", () => closeDetail());
+    actions.append(close);
+    detail.append(actions);
   }
 
-  function select(record) {
+  function select(record, button = null) {
     selected = record;
-    for (const button of list.querySelectorAll("[data-entry-index]")) {
-      button.setAttribute("aria-pressed", String(Number(button.dataset.entryIndex) === record.entryIndex));
+    for (const node of list.querySelectorAll("[data-entry-index]")) {
+      node.setAttribute("aria-pressed", String(Number(node.dataset.entryIndex) === record.entryIndex));
     }
     renderDetail();
-    detail.scrollIntoView({ block: "nearest" });
+    opener = button;
+    sheet.hidden = false;
+    detail.querySelector?.(".cm-sheet__close")?.focus?.({ preventScroll: true });
   }
 
   for (const record of records) {
@@ -116,19 +146,23 @@ export function createHelpView({ root, entryIndex = null, onExit } = {}) {
     button.dataset.entryIndex = String(record.entryIndex);
     button.dataset.kind = "topic";
     button.setAttribute("aria-pressed", String(record.entryIndex === selected?.entryIndex));
-    button.addEventListener("click", () => select(record));
+    button.addEventListener("click", () => select(record, button));
     list.append(button);
   }
 
+  // The grouping caveat is an evidence note, not player copy.
   const note = element("p", "cm-help-note",
     `依原作順序列出 ${HELP_TOPIC_COUNT} 個說明主題與 ${HELP_HEADING_COUNT} 個分類標題。分類與主題的從屬關係尚待確認。`);
+  note.hidden = !developer;
 
-  const back = element("button", "cm-help-back", "BACK");
+  const footer = element("footer", "cm-screen-footer");
+  const back = element("button", "cm-screen-back", "返回牧場");
   back.type = "button";
   back.addEventListener("click", () => { onExit?.(); });
+  footer.append(back);
 
-  shell.append(list, detail, note, back);
-  root.append(shell);
+  shell.append(list, note, footer);
+  root.append(shell, sheet);
   renderDetail();
 
   return Object.freeze({

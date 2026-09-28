@@ -185,7 +185,8 @@ export async function createGateSelectView({ root, source, mountWorld }) {
   if (evidence) body.append(evidence);
 
   const back = actionButton("返回牧場");
-  const confirm = actionButton("狩獵設定", { primary: true });
+  // The button names where it goes next, not just the next screen's title.
+  const confirm = actionButton("前往狩獵設定", { primary: true });
   footer.append(back, confirm);
   back.addEventListener("click", () => source.intents.leaveScreen());
   confirm.addEventListener("click", () => source.intents.confirmGate());

@@ -1,0 +1,780 @@
+{
+  "schemaVersion": 1,
+  "record": "UI_INTEGRATION_MAIN_20260928",
+  "authorization": [
+    "docs/coordination/OWNER_DIRECTION.md#2026-09-28 — Whole-game page, flow and system-integration pass (local implementation and verification)",
+    "docs/coordination/OWNER_DIRECTION.md#2026-09-28 — Commit and merge the page and flow integration to main (commit, push, merge; no deployment)"
+  ],
+  "repository": {
+    "root": "R:/Projects/Championship2026/championship-2026",
+    "baseBranch": "main",
+    "baseHead": "c63f591a23df98b2a8aa18c70e58926bff64548c",
+    "branch": "feat/ui-integration-2026-09-28",
+    "committed": true,
+    "mergeTarget": "main",
+    "deployed": false,
+    "publication": "Not authorized. WEB_BUILD_INPUTS.v1.json is not refreshed and src/championship/app/uiDialog.js is not listed, so build:playtest stops at WEB_INPUTS_NOT_CLOSED and the public playtest keeps the c63f591 build."
+  },
+  "baseline": {
+    "uncommittedEntriesBefore": 614,
+    "preserved": true,
+    "note": "Other agents' art review assets, scripts, modulepreload as=json and locks:null test edits were left as found and are not committed. The commit carries only this batch's lines of the two shared files (championship.html keeps the committed build script's as=\"fetch\" crossorigin form); the other agent's lines stay uncommitted in the working tree."
+  },
+  "committedTreeCheck": {
+    "method": "git checkout-index of the staged tree into .tmp/commit-check (no uncommitted work from anyone), node_modules/pixi.js and three copied for the browser, served on 127.0.0.1:8762",
+    "validatePreload": "module preload check ok: 185 startup modules",
+    "testCiWebLocksOff": {
+      "tests": 1346,
+      "pass": 1346,
+      "fail": 0,
+      "failingFiles": [],
+      "note": "navigator.locks removed with --import, as on CI Node 22"
+    },
+    "testCiNode24": {
+      "tests": 1346,
+      "pass": 1315,
+      "fail": 31,
+      "failingFiles": [
+        "tests\\championship-battle-economy-app-cases.mjs",
+        "tests\\championship-battle-owned-party-cases.mjs",
+        "tests\\championship-gate-admission-cases.mjs",
+        "tests\\championship-hunt-normal-entry-cases.mjs",
+        "tests\\championship-link-battle-cases.mjs",
+        "tests\\championship-qa-unlock-cases.mjs",
+        "tests\\championship-round2-calendar-cases.mjs",
+        "tests\\championship-rounds-flow-cases.mjs",
+        "tests\\championship-save-conflict-cases.mjs",
+        "tests\\championship-tutorial-cases.mjs"
+      ],
+      "note": "Web Locks leak on desktop Node 24 in the ten test files whose locks:null fix is still uncommitted work; not this batch"
+    },
+    "npmTestWebLocksOff": {
+      "tests": 1584,
+      "pass": 1567,
+      "fail": 17,
+      "failingFiles": [
+        "tests\\championship-cage-hex-authoring-cases.mjs",
+        "tests\\championship-cage-preview-server-cases.mjs",
+        "tests\\character-batch-progression-gate-review-browser.mjs",
+        "tests\\character-batch-runtime-review-browser.mjs",
+        "tests\\character-sheet-review-browser.mjs",
+        "tests\\m001-expression-review-browser.mjs",
+        "tests\\m001-runtime-review-browser.mjs"
+      ],
+      "note": "five art-review CLI tools need arguments or a server; the two cage authoring tests read untracked local authoring output under docs/art/production/original-character-cage-r1"
+    },
+    "buildPlaytest": "exit 1: WEB_INPUTS_NOT_CLOSED (uiDialog.js imported by main.js and vs4Screens.js and preloaded by championship.html is not in WEB_BUILD_INPUTS.v1.json); expected while publication is not authorized",
+    "browserGates": [
+      {
+        "gate": "tests/championship-ui-integration-browser.cjs",
+        "exit": 0,
+        "seconds": 79,
+        "lastLine": "UI_INTEGRATION_BROWSER_PASS [\"gateHuntReturn\",\"newGameContinue\",\"shop\",\"cageEdit\",\"roster\",\"sheets\",\"battle\",\"layout\"]"
+      },
+      {
+        "gate": "tests/championship-int-rh2-browser.cjs",
+        "exit": 0,
+        "seconds": 87,
+        "lastLine": "INT_RH2_BROWSER_QA_PASS viewports=6 required=5 saveReload=true"
+      },
+      {
+        "gate": "tests/championship-recent-integration-browser.cjs",
+        "exit": 0,
+        "seconds": 47,
+        "lastLine": "RECENT_INTEGRATION_BROWSER_QA_PASS realNavigationSaveContinue=true passwordBattleResult=true"
+      },
+      {
+        "gate": "tests/championship-cage-layout-browser.cjs",
+        "exit": 0,
+        "seconds": 26,
+        "lastLine": "CAGE_LAYOUT_BROWSER_PASS journeys=14 interactions=6 baseline=false"
+      },
+      {
+        "gate": "tests/championship-owned-battle-browser.cjs",
+        "exit": 0,
+        "seconds": 25,
+        "lastLine": "CHAMPIONSHIP_OWNED_BATTLE_BROWSER_PASS"
+      },
+      {
+        "gate": "tests/championship-cage-animation-browser.cjs",
+        "exit": 0,
+        "seconds": 14,
+        "lastLine": "CAGE_ANIMATION_BROWSER_PASS {\"visibleLavaPixels\": 2612, \"changingLavaPixels\": 148, \"samples\": 8}"
+      },
+      {
+        "gate": "tests/championship-vs2-browser.cjs",
+        "exit": 0,
+        "seconds": 70,
+        "lastLine": "CHAMPIONSHIP_VS2_P_BROWSER_QA_PASS viewports=5 evidence=2"
+      },
+      {
+        "gate": "tests/championship-vs3-browser.cjs",
+        "exit": 0,
+        "seconds": 17,
+        "lastLine": "CHAMPIONSHIP_VS3_ENCLOSURE_BROWSER_QA_PASS"
+      },
+      {
+        "gate": "tests/championship-vs2-r1-gate-browser.cjs",
+        "exit": 0,
+        "seconds": 32,
+        "lastLine": "VS2_R1_GATE_3D_BROWSER_QA_PASS viewports=2 fallback=PASS"
+      },
+      {
+        "gate": "tests/championship-battle-cube-browser.cjs",
+        "exit": 0,
+        "seconds": 11,
+        "lastLine": "BATTLE_CUBE_BROWSER_PASS viewports=5 textures=4 failure_fallback=PASS late_dispose=PASS webgl_fallback=PASS app_reentry=PASS"
+      },
+      {
+        "gate": "tests/championship-full-qa-save-browser.cjs",
+        "exit": 0,
+        "seconds": 3,
+        "lastLine": "CHAMPIONSHIP_FULL_QA_SAVE_BROWSER_PASS"
+      },
+      {
+        "gate": "tests/championship-hunt-loading-browser.cjs",
+        "exit": 0,
+        "seconds": 20,
+        "lastLine": "CHAMPIONSHIP_HUNT_LOADING_BROWSER_PASS"
+      },
+      {
+        "gate": "tests/championship-convergence-browser.cjs",
+        "exit": 0,
+        "seconds": 15,
+        "lastLine": "CONVERGENCE_BROWSER_PASS checks=8 generatedRequests=2"
+      }
+    ]
+  },
+  "environment": {
+    "os": "Windows 11 Home 10.0.26200",
+    "node": "v24.18.0",
+    "chrome": "153.0.8010.53",
+    "playwright": "1.62.1",
+    "origin": "http://127.0.0.1:8761 (isolated; the player normally uses 8732)",
+    "browser": "Chrome headless via Playwright, fresh contexts; viewport emulation, not physical devices"
+  },
+  "evidence": {
+    "S1_leaveFromShop": {
+      "before": {
+        "walletAfterBuy": 9999989,
+        "feedAfterBuy": 92,
+        "saveWritten": false,
+        "walletAfterContinue": 9999999,
+        "feedAfterContinue": 90
+      },
+      "after": {
+        "walletAfterBuy": 9999989,
+        "feedAfterBuy": 92,
+        "saveWritten": true,
+        "walletAfterContinue": 9999989,
+        "feedAfterContinue": 92
+      }
+    },
+    "S2_newGameWithSave": {
+      "before": {
+        "titleOrder": [
+          "開始新遊戲",
+          "繼續遊戲"
+        ],
+        "confirmation": false,
+        "oldSaveAfterOpening": "cleared",
+        "newGameSaved": false
+      },
+      "after": {
+        "titleOrder": [
+          "繼續遊戲",
+          "開始新遊戲"
+        ],
+        "confirmation": true,
+        "cancelKeepsSave": true,
+        "newGameSaved": true
+      }
+    }
+  },
+  "walkthrough": {
+    "before": {
+      "freshGame": [
+        {
+          "viewport": "390x844",
+          "pageErrors": 0,
+          "consoleErrors": [],
+          "missing": [],
+          "snapshots": 32,
+          "walkerErrors": [
+            "TAMER_INFO-ERROR",
+            "SCHEDULE-ERROR",
+            "DIGIMON_LIST-ERROR",
+            "HELP-ERROR"
+          ],
+          "pageSidewaysOverflow": [],
+          "smallTargetsUnder40px": [
+            "cm-vs2-shop__tab|外掛",
+            "cm-vs2-shop__tab|狩獵工具",
+            "cm-vs2-shop__tab|籠子設施",
+            "cm-vs2-shop__tab|養成用品"
+          ]
+        }
+      ],
+      "qaSave": [
+        {
+          "viewport": "390x844",
+          "pageErrors": 0,
+          "consoleErrors": [
+            "Failed to load resource: the server responded with a status of 404 (Not Found)"
+          ],
+          "missing": [],
+          "snapshots": 40,
+          "walkerErrors": [],
+          "pageSidewaysOverflow": [],
+          "smallTargetsUnder40px": [
+            "cm-vs2-shop__tab|外掛",
+            "cm-vs2-shop__tab|狩獵工具",
+            "cm-vs2-shop__tab|籠子設施",
+            "cm-vs2-shop__tab|養成用品"
+          ]
+        },
+        {
+          "viewport": "820x1180",
+          "pageErrors": 0,
+          "consoleErrors": [],
+          "missing": [],
+          "snapshots": 40,
+          "walkerErrors": [],
+          "pageSidewaysOverflow": [],
+          "smallTargetsUnder40px": [
+            "cm-vs2-shop__tab|外掛",
+            "cm-vs2-shop__tab|狩獵工具",
+            "cm-vs2-shop__tab|籠子設施",
+            "cm-vs2-shop__tab|養成用品"
+          ]
+        },
+        {
+          "viewport": "1024x1366",
+          "pageErrors": 0,
+          "consoleErrors": [],
+          "missing": [],
+          "snapshots": 40,
+          "walkerErrors": [],
+          "pageSidewaysOverflow": [],
+          "smallTargetsUnder40px": [
+            "cm-vs2-shop__tab|外掛",
+            "cm-vs2-shop__tab|狩獵工具",
+            "cm-vs2-shop__tab|籠子設施",
+            "cm-vs2-shop__tab|養成用品"
+          ]
+        },
+        {
+          "viewport": "1440x900",
+          "pageErrors": 0,
+          "consoleErrors": [],
+          "missing": [],
+          "snapshots": 40,
+          "walkerErrors": [],
+          "pageSidewaysOverflow": [],
+          "smallTargetsUnder40px": []
+        }
+      ]
+    },
+    "after": {
+      "freshGame": [
+        {
+          "viewport": "390x844",
+          "pageErrors": 0,
+          "consoleErrors": [],
+          "missing": [],
+          "snapshots": 42,
+          "walkerErrors": [],
+          "pageSidewaysOverflow": [],
+          "smallTargetsUnder40px": []
+        }
+      ],
+      "qaSave": [
+        {
+          "viewport": "390x844",
+          "pageErrors": 0,
+          "consoleErrors": [
+            "Failed to load resource: the server responded with a status of 404 (Not Found)"
+          ],
+          "missing": [],
+          "snapshots": 40,
+          "walkerErrors": [],
+          "pageSidewaysOverflow": [],
+          "smallTargetsUnder40px": []
+        },
+        {
+          "viewport": "820x1180",
+          "pageErrors": 0,
+          "consoleErrors": [],
+          "missing": [],
+          "snapshots": 40,
+          "walkerErrors": [],
+          "pageSidewaysOverflow": [],
+          "smallTargetsUnder40px": []
+        },
+        {
+          "viewport": "1024x1366",
+          "pageErrors": 0,
+          "consoleErrors": [],
+          "missing": [],
+          "snapshots": 40,
+          "walkerErrors": [],
+          "pageSidewaysOverflow": [],
+          "smallTargetsUnder40px": []
+        },
+        {
+          "viewport": "1440x900",
+          "pageErrors": 0,
+          "consoleErrors": [],
+          "missing": [],
+          "snapshots": 40,
+          "walkerErrors": [],
+          "pageSidewaysOverflow": [],
+          "smallTargetsUnder40px": []
+        }
+      ]
+    }
+  },
+  "performance": {
+    "before": {
+      "label": "before",
+      "firstHome": 1227,
+      "memory": {
+        "canvases": 1,
+        "heap": 59
+      },
+      "rows": {
+        "TAMER_INFO": {
+          "open": [
+            90,
+            40,
+            43
+          ],
+          "openMedian": 43,
+          "home": [
+            76,
+            84,
+            71
+          ],
+          "homeMedian": 76
+        },
+        "SCHEDULE": {
+          "open": [
+            74,
+            50,
+            45
+          ],
+          "openMedian": 50,
+          "home": [
+            72,
+            71,
+            71
+          ],
+          "homeMedian": 71
+        },
+        "CAGE_EDIT": {
+          "open": [
+            106,
+            51,
+            55
+          ],
+          "openMedian": 55,
+          "home": [
+            61,
+            72,
+            169
+          ],
+          "homeMedian": 72
+        },
+        "DIGIMON_LIST": {
+          "open": [
+            56,
+            42,
+            56
+          ],
+          "openMedian": 56,
+          "home": [
+            79,
+            828,
+            87
+          ],
+          "homeMedian": 87
+        },
+        "HELP": {
+          "open": [
+            68,
+            55,
+            51
+          ],
+          "openMedian": 55,
+          "home": [
+            86,
+            71,
+            74
+          ],
+          "homeMedian": 74
+        },
+        "DATABASE": {
+          "open": [
+            89,
+            65,
+            62
+          ],
+          "openMedian": 65,
+          "home": [
+            87,
+            75,
+            72
+          ],
+          "homeMedian": 75
+        },
+        "SHOP": {
+          "open": [
+            76,
+            42,
+            42
+          ],
+          "openMedian": 42,
+          "home": [
+            73,
+            72,
+            72
+          ],
+          "homeMedian": 72
+        },
+        "BATTLE_SELECT": {
+          "open": [
+            188,
+            73,
+            99
+          ],
+          "openMedian": 99,
+          "home": [
+            70,
+            71,
+            71
+          ],
+          "homeMedian": 71
+        },
+        "GATE_SELECT": {
+          "open": [
+            267,
+            107,
+            102
+          ],
+          "openMedian": 107,
+          "home": [
+            72,
+            71,
+            72
+          ],
+          "homeMedian": 72
+        }
+      }
+    },
+    "after": {
+      "label": "after",
+      "firstHome": 730,
+      "memory": {
+        "canvases": 1,
+        "heap": 58
+      },
+      "rows": {
+        "TAMER_INFO": {
+          "open": [
+            164,
+            42,
+            40
+          ],
+          "openMedian": 42,
+          "home": [
+            96,
+            71,
+            70
+          ],
+          "homeMedian": 71
+        },
+        "SCHEDULE": {
+          "open": [
+            85,
+            52,
+            50
+          ],
+          "openMedian": 52,
+          "home": [
+            73,
+            72,
+            73
+          ],
+          "homeMedian": 73
+        },
+        "CAGE_EDIT": {
+          "open": [
+            88,
+            52,
+            49
+          ],
+          "openMedian": 52,
+          "home": [
+            71,
+            72,
+            71
+          ],
+          "homeMedian": 71
+        },
+        "DIGIMON_LIST": {
+          "open": [
+            57,
+            43,
+            38
+          ],
+          "openMedian": 43,
+          "home": [
+            72,
+            70,
+            72
+          ],
+          "homeMedian": 72
+        },
+        "HELP": {
+          "open": [
+            58,
+            42,
+            43
+          ],
+          "openMedian": 43,
+          "home": [
+            70,
+            71,
+            70
+          ],
+          "homeMedian": 70
+        },
+        "DATABASE": {
+          "open": [
+            88,
+            64,
+            67
+          ],
+          "openMedian": 67,
+          "home": [
+            72,
+            72,
+            71
+          ],
+          "homeMedian": 72
+        },
+        "SHOP": {
+          "open": [
+            71,
+            41,
+            42
+          ],
+          "openMedian": 42,
+          "home": [
+            73,
+            70,
+            71
+          ],
+          "homeMedian": 71
+        },
+        "BATTLE_SELECT": {
+          "open": [
+            176,
+            98,
+            74
+          ],
+          "openMedian": 98,
+          "home": [
+            71,
+            71,
+            72
+          ],
+          "homeMedian": 71
+        },
+        "GATE_SELECT": {
+          "open": [
+            246,
+            107,
+            103
+          ],
+          "openMedian": 107,
+          "home": [
+            70,
+            72,
+            73
+          ],
+          "homeMedian": 72
+        }
+      }
+    }
+  },
+  "unit": {
+    "npm run test:ci": {
+      "tests": 1346,
+      "pass": 1346,
+      "fail": 0,
+      "failingFiles": []
+    },
+    "npm test": {
+      "tests": 1586,
+      "pass": 1581,
+      "fail": 5,
+      "failingFiles": [
+        "tests\\character-batch-progression-gate-review-browser.mjs",
+        "tests\\character-batch-runtime-review-browser.mjs",
+        "tests\\character-sheet-review-browser.mjs",
+        "tests\\m001-expression-review-browser.mjs",
+        "tests\\m001-runtime-review-browser.mjs"
+      ]
+    },
+    "npmTestFailuresNote": "Five tracked character-art review tools under tests/ need CLI arguments or a server on 127.0.0.1:8732; with that server the two m001 tools pass and the other three still need their arguments. Unrelated to this batch."
+  },
+  "preload": "npm run validate:preload: module preload check ok, 185 startup modules",
+  "browserGates": [
+    {
+      "gate": "tests/championship-ui-integration-browser.cjs",
+      "exit": 0,
+      "seconds": 82,
+      "lastLine": "UI_INTEGRATION_BROWSER_PASS [\"gateHuntReturn\",\"newGameContinue\",\"shop\",\"cageEdit\",\"roster\",\"sheets\",\"battle\",\"layout\"]"
+    },
+    {
+      "gate": "tests/championship-int-rh2-browser.cjs",
+      "exit": 0,
+      "seconds": 88,
+      "lastLine": "INT_RH2_BROWSER_QA_PASS viewports=6 required=5 saveReload=true"
+    },
+    {
+      "gate": "tests/championship-recent-integration-browser.cjs",
+      "exit": 0,
+      "seconds": 48,
+      "lastLine": "RECENT_INTEGRATION_BROWSER_QA_PASS realNavigationSaveContinue=true passwordBattleResult=true"
+    },
+    {
+      "gate": "tests/championship-cage-layout-browser.cjs",
+      "exit": 0,
+      "seconds": 26,
+      "lastLine": "CAGE_LAYOUT_BROWSER_PASS journeys=14 interactions=6 baseline=false"
+    },
+    {
+      "gate": "tests/championship-convergence-browser.cjs",
+      "exit": 0,
+      "seconds": 14,
+      "lastLine": "CONVERGENCE_BROWSER_PASS checks=8 generatedRequests=2"
+    },
+    {
+      "gate": "tests/championship-vs2-r1-gate-browser.cjs",
+      "exit": 0,
+      "seconds": 27,
+      "lastLine": "VS2_R1_GATE_3D_BROWSER_QA_PASS viewports=2 fallback=PASS"
+    },
+    {
+      "gate": "tests/championship-battle-cube-browser.cjs",
+      "exit": 0,
+      "seconds": 12,
+      "lastLine": "BATTLE_CUBE_BROWSER_PASS viewports=5 textures=4 failure_fallback=PASS late_dispose=PASS webgl_fallback=PASS app_reentry=PASS"
+    },
+    {
+      "gate": "tests/championship-vs2-browser.cjs",
+      "exit": 0,
+      "seconds": 70,
+      "lastLine": "CHAMPIONSHIP_VS2_P_BROWSER_QA_PASS viewports=5 evidence=2"
+    },
+    {
+      "gate": "tests/championship-full-qa-save-browser.cjs",
+      "exit": 0,
+      "seconds": 3,
+      "lastLine": "CHAMPIONSHIP_FULL_QA_SAVE_BROWSER_PASS"
+    },
+    {
+      "gate": "tests/championship-owned-battle-browser.cjs",
+      "exit": 0,
+      "seconds": 26,
+      "lastLine": "CHAMPIONSHIP_OWNED_BATTLE_BROWSER_PASS"
+    },
+    {
+      "gate": "tests/championship-hunt-loading-browser.cjs",
+      "exit": 0,
+      "seconds": 20,
+      "lastLine": "CHAMPIONSHIP_HUNT_LOADING_BROWSER_PASS"
+    },
+    {
+      "gate": "tests/championship-cage-animation-browser.cjs",
+      "exit": 0,
+      "seconds": 14,
+      "lastLine": "CAGE_ANIMATION_BROWSER_PASS {\"visibleLavaPixels\": 2612, \"changingLavaPixels\": 148, \"samples\": 8}"
+    },
+    {
+      "gate": "tests/championship-vs3-browser.cjs",
+      "exit": 0,
+      "seconds": 17,
+      "lastLine": "CHAMPIONSHIP_VS3_ENCLOSURE_BROWSER_QA_PASS"
+    }
+  ],
+  "uiIntegrationRerun": {
+    "reason": "toolbar inventory and 24-character name checks added after the final run started",
+    "result": "UI_INTEGRATION_BROWSER_PASS [\"gateHuntReturn\",\"newGameContinue\",\"shop\",\"cageEdit\",\"roster\",\"sheets\",\"battle\",\"layout\"]",
+    "shop": {
+      "doubleTapChargedOnce": true,
+      "leaveFromShopPersists": true,
+      "bitsBefore": 9999999,
+      "bitsAfter": 9999989,
+      "feedBefore": 90,
+      "feedAfter": 92
+    }
+  },
+  "screenshots": {
+    "folder": "docs/reports/ui-integration-2026-09-28/{before,after}",
+    "format": "webp q80",
+    "count": 41
+  },
+  "changedFiles": {
+    "championship.html": "46C6A59641771DE6DB9BBBB3497FC5D63D8686A6651E9E7B1FB514D05A6A5C69",
+    "package.json": "C96D74CDDEB97F4524A61FF2E9C2489ED7455793DE0FA1B10223A438988E4422",
+    "docs/CURRENT_PRODUCT_STATUS.md": "131D4AF377A5C415A8770F4258C423C1D8DE9B8C24644F206183D9A3102FE72A",
+    "docs/README.md": "60D0A4D48705F0A87125606A26235CD25C88FA97E1192ABFB61A961FDB7D8807",
+    "docs/REUSE_INVENTORY.md": "DDF56657809EED0ABE872C93005D2D43D44B2CAF00912436EAF77FDB9E8EE36F",
+    "docs/coordination/OWNER_DIRECTION.md": "E9BD10FECA885D9A126B97420A4ECE5C11C005DF13F613BDFE4888072824FE4F",
+    "src/championship/app/championshipScreen.js": "8F5BF2BB0984ECC7CBCBA16B34EB7CEBC097509E006246A04F53E47E1158030D",
+    "src/championship/app/championshipStandaloneApp.js": "A03736C32E3B3A4925A8CBA9255B13F8846FF09029D3E228F22915DEC6C7D505",
+    "src/championship/app/championshipStatusBar.js": "03F5BCBBD2CF57287C0F019C4E8F441168B6686B34E9231460B81F5F22A6D326",
+    "src/championship/app/championshipToolbar.js": "038FFD6FE8F398CFEAFEBFC472459127687FD981CACF920F03055F67994D77BB",
+    "src/championship/app/daylightSkin.css": "5D21134E22B4074013DCFAB5EF31FEBAB370E2E87B6DC211671F9877DB5185A0",
+    "src/championship/app/digimonListScreen.js": "410D3D5114F06E4DF93A2B4601E94E1A262CD329C19431C412DAC4654F084A06",
+    "src/championship/app/helpScreen.js": "2A4ECEA4DB2B2D114A7C140A2DE7BD1AFC67D0F9573300165E57693D23CEA43C",
+    "src/championship/app/main.js": "153EC87FC1C3090419B4ED7396FC62234F47166E21C6B44767B9049968FFDAA9",
+    "src/championship/app/nativeUiSkin.css": "A7CC9E02601596A5B79BCBE6DE28E06620EC6456F1136D4F32A40A965094AE1B",
+    "src/championship/app/opening.css": "C766C8929102190AFA3F75416F37488EF7AB44D17AC14BB7DA64562B75BA9637",
+    "src/championship/app/raisingHomeP1RView.js": "741CE36D194E75D33E408E27EAC16706A899666416C8721E9B2FE283F70884C8",
+    "src/championship/app/scheduleScreen.js": "36EEBC823505C61E0B16DDED9FA2DBBAD6BBD6E50A2EF59CE76C61994027A2B6",
+    "src/championship/app/shopOriginalVideo.css": "C2F446FC535BC896500FF96A88EA27A95BC33F8918B25F50A1EA7474F501569E",
+    "src/championship/app/styles.css": "FFCF83653E2E0281EC7024DBCD12D00F9CF01ABB2F937568B3EFA278904AF8DC",
+    "src/championship/app/tamerInfoScreen.js": "B6D7506F3AF354F13DB2952AE91BC30691D3F862BCE1D681C3E85C67EBABE31D",
+    "src/championship/app/uiDialog.js": "C718CED9AD96C29351490A0EA1D1A8DA15A40FC4830B53868B128B339FC221E9",
+    "src/championship/app/vs2Screens.js": "7DA485C34EA5F96646AD4F9671E4D1184C3D780C6FB5905FCDB10526F7FA9776",
+    "src/championship/app/vs2Styles.css": "EC7B70903FE247C84E7DE2ED6CFC82AB25E1790366878E73AC4FB95B8AB9A2E4",
+    "src/championship/app/vs4Screens.js": "59EE2BBBA00D6F0D33221CF4459619D6CC40239283C87380D7BBB6C53ABF9012",
+    "src/championship/app/vs5Screens.js": "20ABD236981A704404778D3F3A644DC00061DD5778A15D65C0EAE666509F092F",
+    "src/championship/presentation/vs2/createGateSelectThreePresentation.js": "841FDE221CCCC65F8743292AB70C35498D85BBC136170A82CD3EC4B3A0873D72",
+    "src/championship/text/uiText.js": "ED55399E24386030FD923F1706A84E3C15360223330DA2C796B30B3C907F3BE6",
+    "src/championship/text/zhHant.js": "966EC86F67F434C029D6B0A464B6BBBD5B832E87AC6F051AA978E77F451BE67A",
+    "tests/championship-battle-economy-views-cases.mjs": "329E48C03B7CAB95594AE30676CA8EDD9D30AA0D32041696A0C8D4E6F5DA0BEC",
+    "tests/championship-browser-opening.cjs": "B01C9EDE62150458269607D6CBFF16CD1E4CD9250E6BA997286BEFEAC17718FE",
+    "tests/championship-cage-animation-browser.cjs": "AA2FB3B395F2408088953050254BF9B3F303A3FE07727C8524B9352E112CD752",
+    "tests/championship-cage-layout-browser.cjs": "4ABD0FDF9558902BF77A1865DAB66891EB630B51294967378381EF3E8F7377F7",
+    "tests/championship-owned-battle-browser.cjs": "54EAFB0E279E8A03F307B4F9743A32395A8FB23E10C66867E883591754BE66B6",
+    "tests/championship-ui-integration-browser.cjs": "E6C49F8152BAF9E8204E721FADF0C54EAE001F7C9F52EB20B903B7A16486CA3C",
+    "tests/championship-zh-hant-views-cases.mjs": "B0CC57D5EF1F9E3349E4E7A10D36874CFEDFF4480809F7591DD1AA69FA22D1C8"
+  },
+  "notVerified": [
+    "physical iPhone/Android phones and tablets",
+    "Safari/WebKit",
+    "screen reader walkthrough",
+    "original pixel parity"
+  ],
+  "ownerDecisions": [
+    "wire the traced tutorial into New Game",
+    "artwork or layout for the Home band above the ranch",
+    "roster Delete/Entry semantics (UNKNOWN_REQUIRES_TRACE) and renaming the starter",
+    "refund on abandoning a match (original rule untraced)"
+  ]
+}

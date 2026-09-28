@@ -156,7 +156,7 @@ export function createTamerInfoView({ root, walletBits = null, tamerRank = null,
   };
 
   const shell = element("section", "cm-tamer-shell");
-  shell.append(element("p", "cm-tamer-kicker", "TAMER"), element("h1", "cm-tamer-title", "TAMER INFO"));
+  shell.append(element("p", "cm-tamer-kicker", "管理"), element("h1", "cm-tamer-title", "TAMER INFO"));
 
   const table = element("dl", "cm-tamer-fields");
   let sourced = 0;
@@ -195,11 +195,14 @@ export function createTamerInfoView({ root, walletBits = null, tamerRank = null,
     `共 ${TAMER_INFO_FIELDS.length} 個欄位，其中 ${TAMER_INFO_FIELDS.length-sourced} 個欄位的資料來源尚待確認，以橫線表示，並非零。`);
   note.hidden = new URLSearchParams(globalThis.location?.search??'').get('presentation') !== 'developer';
 
-  const back = element("button", "cm-tamer-back", "BACK");
+  // Every screen leaves from the same sticky footer, named for where it goes.
+  const footer = element("footer", "cm-screen-footer");
+  const back = element("button", "cm-screen-back cm-tamer-back", "返回牧場");
   back.type = "button";
   back.addEventListener("click", () => { onExit?.(); });
+  footer.append(back);
 
-  shell.append(table, note, back);
+  shell.append(table, note, footer);
   root.append(shell);
 
   return Object.freeze({

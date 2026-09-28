@@ -236,8 +236,8 @@ test("the prize page displays the actual credit and resulting wallet when capped
     status: "SETTLED", rewardBits: 7000, credited: 1, walletAfter: 9999999, clamped: true
   });
   assert.equal(findByClass(root, "cm-vs5-title").textContent, "1");
-  assert.match(textOf(root), /持有 9999999 位元幣/);
-  assert.match(textOf(root), /獎金 7000 位元幣；持有金額已達上限/);
+  assert.match(textOf(root), /持有 9,999,999 位元幣/);
+  assert.match(textOf(root), /獎金 7,000 位元幣；持有金額已達上限/);
   assert.equal(view.inspect().credited, 1);
 });
 
@@ -271,7 +271,7 @@ test("the menu distinguishes fee and prize, and explains insufficient funds", as
     }
   });
   assert.equal(findByClass(root, "cm-vs5-match__fee").textContent, "報名費 150 位元幣");
-  assert.equal(findByClass(root, "cm-vs5-match__payout").textContent, "獎金 7000 位元幣");
+  assert.equal(findByClass(root, "cm-vs5-match__payout").textContent, "獎金 7,000 位元幣");
   // Entering is async now: the battle runtime is fetched when the menu asks for
   // one rather than at startup, so the refusal arrives a microtask later.
   findByClass(root, "cm-vs5-match__enter").click();
