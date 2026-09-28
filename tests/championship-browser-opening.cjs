@@ -30,6 +30,10 @@ async function login(page) {
  */
 async function playOpening(page, { trainerName = "測試", eggName = "小蛋" } = {}) {
   await page.click("#cm-new-game");
+  // With a save already stored, New Game first asks before the opening can
+  // replace it (2026-09-28). A gate that means to start over says so here.
+  const replace = page.locator('dialog.cm-dialog [data-action="new"]');
+  if (await replace.isVisible().catch(() => false)) await replace.click();
   // The story advances on click once a card has finished revealing, and ends on
   // its own otherwise. Nudge it so a gate does not sit through the full run.
   const story = page.locator(".cm-opening-story");

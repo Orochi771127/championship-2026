@@ -223,7 +223,7 @@ function bounds(m) {
     await page.locator('.cm-vs2-cage-slot[data-slot-index="10"]').click();
     assert.equal(await page.locator('.cm-vs2-cage-slot[data-slot-index="10"]').getAttribute('data-filled'), 'true');
     await page.locator('.cm-vs2-action--primary').click();
-    await page.getByRole('button', { name: '返回育成基地', exact: true }).click();
+    await page.getByRole('button', { name: '返回牧場', exact: true }).click();
     await page.locator('.cm-raising-pixi-canvas').waitFor();
     await page.locator('button[data-menu-id="SYSTEM"]').click();
     await page.locator('[data-entry-id="saveQuit"]').click();
@@ -239,16 +239,17 @@ function bounds(m) {
     assert.equal(await page.locator('.cm-vs2-cage-slot[data-slot-index="10"]').getAttribute('data-filled'), 'true');
     assert.equal(await page.locator('.cm-vs2-cage-slot[data-slot-index="8"]').getAttribute('data-filled'), 'false');
     report.saveContinue = { explicitSaveAndQuit: true, realPageDeparture: true, canonicalSaveHash: hash(savedText), cageMovedFrom: 8, cageMovedTo: 10, residentRestored: true };
-    await page.getByRole('button', { name: '返回育成基地', exact: true }).click();
+    await page.getByRole('button', { name: '返回牧場', exact: true }).click();
     report.otherScreens = [];
     for (const viewport of sizes) {
       await page.setViewportSize(viewport);
-      for (const [entry, screen, back] of [['shop', 'SHOP', '返回牧場'], ['database', 'DATABASE', '返回育成基地']]) {
+      for (const [entry, screen, back] of [['shop', 'SHOP', '返回牧場'], ['database', 'DATABASE', '返回牧場']]) {
         await page.locator('button[data-menu-id="SYSTEM"]').click();
         await page.locator(`[data-entry-id="${entry}"]`).click();
         await page.locator(`.cm-vs2-root[data-screen="${screen}"]`).waitFor();
         const m = await measure(page);
-        assert.equal(m.shell.width, Math.min(viewport.width, 430), 'other screens retain their existing shell');
+        // 2026-09-28: Shop and Database take the tablet column (760px) at >=700px; phones keep 430.
+        assert.equal(m.shell.width, Math.min(viewport.width, viewport.width >= 700 ? 760 : 430), 'other screens use their phone or tablet column');
         assert.equal(m.document.width, viewport.width); assert.equal(m.document.height, viewport.height);
         await page.screenshot({ path: path.join(output, `${entry}-${viewport.width}x${viewport.height}.png`) });
         report.otherScreens.push({ screen, viewport, shellWidth: m.shell.width, noOverflow: true });

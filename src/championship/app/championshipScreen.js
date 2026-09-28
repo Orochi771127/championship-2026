@@ -70,13 +70,14 @@ export function createChampionshipView({ root, source }) {
   root.dataset.sourceScenes = CHAMPIONSHIP_SCREEN_SOURCE_SCENES.join(" ");
 
   const shell = element("section", "cm-championship-shell");
-  shell.append(element("p", "cm-championship-kicker", uiText("大會")),
+  shell.append(element("p", "cm-championship-kicker", uiText("對戰")),
     element("h1", "cm-championship-title", uiText("多輪賽事")));
   const board = element("div", "cm-championship-board");
   const notice = element("p", "cm-championship-notice");
   notice.hidden = true;
-  const footer = element("footer", "cm-championship-footer");
-  const back = element("button", "cm-championship-back", uiText("返回"));
+  // The board is reached from the battle menu, and leaving returns there.
+  const footer = element("footer", "cm-screen-footer cm-championship-footer");
+  const back = element("button", "cm-screen-back cm-championship-back", uiText("返回對戰選單"));
   back.type = "button";
   back.addEventListener("click", () => intents.leave?.());
   footer.append(back);

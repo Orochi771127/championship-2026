@@ -194,7 +194,7 @@ test("Hunt Result translates failure/release UI without committing a displayed d
   const view = createHuntResultView({ root, source });
   assert.equal(root.querySelector(".cm-vs2-result__species").textContent, "亞古獸");
   assert.match(visibleCopy(root), /儲存失敗/);
-  buttonWithText(root, "返回育成").click();
+  buttonWithText(root, "返回牧場").click();
   assert.equal(home, 1); assert.deepEqual(names, []);
   buttonWithText(root, "放生").click();
   assert.deepEqual(releases, ["card:wild-3"]);

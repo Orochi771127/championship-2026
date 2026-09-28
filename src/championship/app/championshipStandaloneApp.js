@@ -1666,8 +1666,29 @@ export function createChampionshipStandaloneApp({
         throw new Error("CHAMPIONSHIP_DATABASE_NOT_ACTIVE");
       }
       raising = renameEnclosedCreature(raising, instanceId, displayName);
+      savePort.markDirty();
       publishScreens();
       return raising.collection.find((entry) => entry.instanceId === instanceId)?.displayName ?? null;
+    },
+
+    /**
+     * The roster's Name Edit, on the same product given-name rule the
+     * Database and Hunt Result already apply to collected individuals. The
+     * starter's name lives in its native profile, which this rule does not
+     * write, so it is refused rather than half-renamed.
+     */
+    renameRosterInstance(instanceId, displayName) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.DIGIMON_LIST) {
+        throw new Error("CHAMPIONSHIP_DIGIMON_LIST_NOT_ACTIVE");
+      }
+      if (!raising?.collection?.some((entry) => entry.instanceId === instanceId)) {
+        return Object.freeze({ ok: false, reason: "NOT_RENAMEABLE" });
+      }
+      try { raising = renameEnclosedCreature(raising, instanceId, displayName); }
+      catch { return Object.freeze({ ok: false, reason: "INVALID_GIVEN_NAME" }); }
+      savePort.markDirty();
+      publishScreens();
+      return Object.freeze({ ok: true, displayName: raising.collection.find((entry) => entry.instanceId === instanceId)?.displayName ?? null });
     },
 
     getCageEditFrame() {

@@ -79,7 +79,9 @@ export function createChampionshipStatusBar({ root, onEndDay } = {}) {
   season.dataset.node = "season_icon";
   const day = element("span", "cm-status-bar__day");
   day.dataset.node = "day+day_number";
-  day.append(element("span", "cm-status-bar__day-word", "Day"), element("span", "cm-status-bar__day-number", "—"));
+  // Read as 「第 1 日」: the English "Day 1" order came out as 「日 1」.
+  day.append(element("span", "cm-status-bar__day-word", "第"), element("span", "cm-status-bar__day-number", "—"),
+    element("span", "cm-status-bar__day-word", "日"));
   const mode = element("span", "cm-status-bar__mode", "—");
   mode.dataset.node = "mode_name";
   const time = element("time", "cm-status-bar__time", "--:--");

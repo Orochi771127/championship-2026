@@ -77,6 +77,7 @@
     "test": "node --test tests/*.mjs",
     "test:browser": "node tests/championship-int-rh2-browser.cjs",
     "test:browser:recent": "node tests/championship-recent-integration-browser.cjs",
+    "test:browser:ui-integration": "node tests/championship-ui-integration-browser.cjs",
     "test:browser:vs2": "node tests/championship-vs2-browser.cjs",
     "test:browser:vs2-r1": "node tests/championship-vs2-r1-gate-browser.cjs",
     "test:browser:vs3": "node tests/championship-vs3-browser.cjs",

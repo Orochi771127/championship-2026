@@ -728,6 +728,24 @@
   cursor: pointer;
 }
 
+/* 2026-09-28: 216 full-width cards, most reading "-----", made the few
+   registered entries hard to find. The book is a grid of small numbered
+   tiles; the state is carried by the tile, the name by registered tiles. */
+.cm-vs2-database .cm-vs2-shop__list {
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  align-content: start;
+}
+.cm-vs2-database .cm-vs2-database__row {
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 64px;
+  padding: 8px 6px;
+  text-align: center;
+}
+.cm-vs2-database .cm-vs2-database__row .cm-vs2-shop__name { justify-items: center; gap: 4px; }
+.cm-vs2-database .cm-vs2-database__row .cm-vs2-shop__name strong { max-width: 100%; font-size: 0.74rem; }
+.cm-vs2-database .cm-vs2-database__row .cm-vs2-shop__meta { order: -1; font-size: 0.62rem; letter-spacing: 0.04em; }
+.cm-vs2-database .cm-vs2-database__row[data-state="UNDISCOVERED"] { opacity: 0.62; }
+
 .cm-vs2-database__row[data-state="UNDISCOVERED"] strong {
   color: var(--vs2-dim);
   letter-spacing: 0.18em;

@@ -667,11 +667,6 @@ body[data-toolbar="on"] #cm-root {
     font: inherit; font-size: 0.62rem;
   letter-spacing: 0.08em;  cursor: not-allowed;
 }
-.cm-digimon-back {
-  min-height: 44px;
-    font: inherit;  cursor: pointer;
-}
-.cm-digimon-back:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
 .cm-digimon-empty {  font-size: 0.8rem; }
 
 /* ---- Schedule board (ARM9 0x020CD004, scanned at 0x02089230) ------------- */
@@ -739,12 +734,6 @@ body[data-toolbar="on"] #cm-root {
 .cm-schedule-short { grid-column: 1 / -1; margin: 0.2rem 0 0; font-size: 0.64rem; color: var(--cm-sheet-short); }
 .cm-schedule-empty { margin: 0; font-size: 0.72rem;  }
 .cm-schedule-footer { margin: 0; font-size: 0.62rem; line-height: 1.45;  }
-.cm-schedule-back {
-  align-self: flex-start; min-height: 44px; padding: 0 1.1rem;
-
-    font: inherit; cursor: pointer;
-}
-.cm-schedule-back:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
 
 /* ---- Help (help/help_main_scene.nxr, text from ui/txt/help_text_txt.dat) ---- */
 .cm-help-root { position: fixed; inset: 0; overflow: auto; background: var(--cm-sheet-ground);  }
@@ -786,12 +775,6 @@ body[data-toolbar="on"] #cm-root {
 .cm-help-detail__provenance { margin: 0; font-size: 0.6rem;  font-variant-numeric: tabular-nums; }
 .cm-help-empty { margin: 0; font-size: 0.72rem;  }
 .cm-help-note { margin: 0; font-size: 0.62rem; line-height: 1.45;  }
-.cm-help-back {
-  align-self: flex-start; min-height: 44px; padding: 0 1.1rem;
-
-    font: inherit; cursor: pointer;
-}
-.cm-help-back:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
 
 /* ---- Tamer Info (tamer_info_main_scene.nxr + tamer_info_sub_scene.nxr) ----- */
 .cm-tamer-root { position: fixed; inset: 0; overflow: auto; background: var(--cm-sheet-ground);  }
@@ -822,12 +805,6 @@ body[data-toolbar="on"] #cm-root {
 }
 .cm-tamer-field__value[data-state="UNSOURCED"] {  font-weight: 400; }
 .cm-tamer-note { margin: 0; font-size: 0.62rem; line-height: 1.5;  }
-.cm-tamer-back {
-  align-self: flex-start; min-height: 44px; padding: 0 1.1rem;
-
-    font: inherit; cursor: pointer;
-}
-.cm-tamer-back:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
 
 /* --- Tournaments: ui/conference_list_item + training/schedule_item ------- */
 .cm-championship-root { position: fixed; inset: 0; overflow: auto; background: var(--cm-sheet-ground);  }
@@ -875,12 +852,11 @@ body[data-toolbar="on"] #cm-root {
 .cm-championship-round[data-state="PENDING"] { color: var(--cm-sheet-dim); opacity: 0.75; }
 .cm-championship-opponent { margin: 0; font-size: 0.74rem; color: var(--cm-sheet-muted); }
 .cm-championship-actions { display: flex; gap: 0.5rem; }
-.cm-championship-action, .cm-championship-back {
+.cm-championship-action {
   flex: 1 1 auto; min-height: 44px; padding: 0 0.9rem; cursor: pointer; font: inherit;
 
 }
 .cm-championship-action--primary { border-color: var(--cm-sheet-selected-edge);  font-weight: 700; }
-.cm-championship-action:focus-visible, .cm-championship-back:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
+.cm-championship-action:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
 .cm-championship-notice { margin: 0; font-size: 0.7rem; line-height: 1.45;  }
 .cm-championship-footer { display: flex; margin-top: auto; padding-top: 0.4rem; }
-.cm-championship-back { flex: 0 0 auto; align-self: flex-start; }

@@ -1,4 +1,4 @@
-import { titleEventText } from "../text/zhHant.js";
+import { titleEventText, raisingDisplayName } from "../text/zhHant.js";
 import { uiText } from "../text/uiText.js";
 // VS5-P — Championship Modern presentation for the Battle menu, the match and
 // the result.
@@ -49,6 +49,11 @@ function element(tag, className, text, localize = true) {
   return node;
 }
 
+/** The roster's name for a member, so every picker agrees with Raising Home. */
+function memberName(entry) {
+  return entry?.speciesId || entry?.source ? raisingDisplayName(entry) : (entry?.displayName ?? entry?.name ?? entry?.instanceId);
+}
+
 function actionButton(label, { primary = false } = {}) {
   const button = element("button", `cm-vs5-action${primary ? " cm-vs5-action--primary" : ""}`, label);
   button.type = "button";
@@ -92,6 +97,21 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   header.append(element("h1", "cm-vs5-title", menuCopy.chooseMatch));
   section.append(header);
 
+  // One footer for the whole menu. At the top level it leaves for the ranch;
+  // inside a mode's panel it holds that panel's way back and its one primary
+  // action, so a level never offers two or three different exits.
+  const footer = element("footer", "cm-vs5-footer");
+  let exit = null;
+  let conference = null;
+  function setPanelFooter(back, primary = null) {
+    footer.replaceChildren(...[back, primary].filter(Boolean));
+    footer.dataset.level = "panel";
+  }
+  function setMenuFooter() {
+    footer.replaceChildren(...[exit, conference].filter(Boolean));
+    footer.dataset.level = "menu";
+  }
+
   let cube = null;
   // `mountCube` is injected. The application injects a lazily-imported wrapper,
   // which is async, so the mount can land AFTER this function has returned and
@@ -102,6 +122,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   // use -- still assigns straight through, so the pinned synchronous factory
   // contract is unchanged.
   let cubeDisposed = false;
+  let cubeFailed = typeof mountCube !== "function";
   let selectedMode='TITLE_MATCH',modeRequest=0,partyRequest=0,entering=false;
   const matchOnlyNodes = [];
   async function selectMode(id){
@@ -120,6 +141,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     selectedMode=id;partyPanel.hidden=true;list.hidden=false;entryNotice.hidden=true;
     section.dataset.battleMode=id;
     for(const node of matchOnlyNodes)node.hidden=false;
+    setMenuFooter();
     renderMatches(next);
   }
   if (typeof mountCube === "function") {
@@ -136,7 +158,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
         // lazily-imported renderer finishes arriving.
         if (cubeDisposed) presentation?.dispose?.();
         else cube = presentation;
-      }).catch(() => {});
+      }).catch(() => { cubeFailed = true; if (conference) conference.hidden = false; });
     } else {
       cube = mounted;
     }
@@ -185,7 +207,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     const controls=[];
     const confirm=actionButton('決定',{primary:true});confirm.disabled=true;
     for(const entry of candidates){
-      const button=actionButton(entry.displayName??entry.name??entry.instanceId);
+      const button=actionButton(memberName(entry));
       button.dataset.instanceId=entry.instanceId;button.setAttribute('aria-pressed','false');
       button.disabled=!entry.admission.ok;
       if(!entry.admission.ok)button.append(element('span','cm-vs5-match__fee',entry.admission.message));
@@ -202,8 +224,8 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       try{showRefusal(await onEnter(match.recordIndex,[...selectedIds],mode,...(arena?[arena.value()]:[])),match);}
       catch(error){if(!cubeDisposed)showRefusal({ok:false,message:'對戰準備失敗，請再試一次。'},match);}
       finally{entering=false;if(!cubeDisposed){confirm.disabled=selectedIds.length===0;back.disabled=false;}}});
-    const back=actionButton('返回賽事選擇');back.addEventListener('click',()=>{if(entering)return;partyRequest++;selectedMatch=null;selectedIds=[];partyPanel.hidden=true;list.hidden=false;entryNotice.hidden=true;for(const node of matchOnlyNodes)node.hidden=false;});
-    partyPanel.append(confirm,back);
+    const back=actionButton('返回賽事選擇');back.addEventListener('click',()=>{if(entering)return;partyRequest++;selectedMatch=null;selectedIds=[];partyPanel.hidden=true;list.hidden=false;entryNotice.hidden=true;for(const node of matchOnlyNodes)node.hidden=false;setMenuFooter();});
+    setPanelFooter(back,confirm);
   }
 
   async function choosePractice(){
@@ -214,7 +236,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     partyPanel.append(element('h2','cm-vs5-title','練習對戰'),element('p','cm-vs5-entry-notice','將自己培育的數碼獸分成兩隊，每隊最多 3 隻。'));
     let candidates;
     try{({candidates}=await getPracticeSelection());}
-    catch(error){if(!cubeDisposed&&request===partyRequest){showRefusal({ok:false,message:'參賽隊伍載入失敗，請再試一次。'},{});partyPanel.append(back);}return;}
+    catch(error){if(!cubeDisposed&&request===partyRequest){showRefusal({ok:false,message:'參賽隊伍載入失敗，請再試一次。'},{});setPanelFooter(back);}return;}
     if(cubeDisposed||request!==partyRequest)return;
     const teams=[[],[]],controls=[],summary=element('p','cm-vs5-entry-notice'),arena=arenaSelector();
     const confirm=actionButton('開始練習',{primary:true});confirm.disabled=true;
@@ -227,7 +249,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     };
     partyPanel.append(summary,arena.node);
     for(const entry of candidates){
-      const row=element('div','cm-vs5-practice-member'),name=entry.displayName??entry.name??entry.instanceId;
+      const row=element('div','cm-vs5-practice-member'),name=memberName(entry);
       row.append(element('span','cm-vs5-practice-member__name',name));
       if(!entry.admission.ok)row.append(element('span','cm-vs5-match__fee',entry.admission.message));
       for(const team of [0,1]){const button=actionButton(`${team===0?'A':'B'} 隊`);button.setAttribute('aria-label',`${name} ${team===0?'A':'B'} 隊`);
@@ -242,7 +264,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       catch(error){if(!cubeDisposed)showRefusal({ok:false,message:'對戰準備失敗，請再試一次。'},{});}
       finally{entering=false;if(!cubeDisposed)refresh();}
     });
-    refresh();partyPanel.append(confirm,back);
+    refresh();setPanelFooter(back,confirm);
   }
 
   async function choosePassword(){
@@ -252,7 +274,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     const back=actionButton('返回賽事選擇');back.addEventListener('click',()=>{if(!entering)void selectMode('TITLE_MATCH');});
     let setup;
     try{setup=await getPasswordSelection();}
-    catch(error){if(!cubeDisposed&&request===partyRequest){showRefusal({ok:false,message:'密碼對戰載入失敗，請再試一次。'},{});partyPanel.append(back);}return;}
+    catch(error){if(!cubeDisposed&&request===partyRequest){showRefusal({ok:false,message:'密碼對戰載入失敗，請再試一次。'},{});setPanelFooter(back);}return;}
     if(cubeDisposed||request!==partyRequest)return;
     const maxLength=Number.isInteger(setup?.maxLength)?setup.maxLength:22;
     partyPanel.append(element('h2','cm-vs5-title','密碼對戰'),
@@ -295,7 +317,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
         make.disabled=chosen.length===0;
       };
       for(const entry of setup.candidates){
-        const button=actionButton(entry.displayName??entry.name??entry.instanceId);button.dataset.instanceId=entry.instanceId;
+        const button=actionButton(memberName(entry));button.dataset.instanceId=entry.instanceId;
         if(!entry.admission.ok)button.append(element('span','cm-vs5-match__fee',entry.admission.message));
         button.addEventListener('click',()=>{
           if(button.disabled)return;const at=chosen.indexOf(entry.instanceId);
@@ -323,7 +345,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       });
       maker.append(make,output,copy,status);sync();
     }
-    refresh();partyPanel.append(confirm);if(maker)partyPanel.append(maker);partyPanel.append(back);
+    refresh();if(maker)partyPanel.append(maker);setPanelFooter(back,confirm);
   }
 
   async function chooseLink(){
@@ -333,18 +355,18 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     const back=actionButton('返回賽事選擇');back.addEventListener('click',()=>{if(!entering)void selectMode('TITLE_MATCH');});
     let setup;
     try{setup=await getLinkSelection();if(!Array.isArray(setup?.candidates))throw new Error('LINK_SELECTION_REQUIRED');}
-    catch(error){if(!cubeDisposed&&request===partyRequest){showRefusal({ok:false,message:'通訊對戰載入失敗，請再試一次。'},{});partyPanel.append(back);}return;}
+    catch(error){if(!cubeDisposed&&request===partyRequest){showRefusal({ok:false,message:'通訊對戰載入失敗，請再試一次。'},{});setPanelFooter(back);}return;}
     if(cubeDisposed||request!==partyRequest)return;
     const rolePanel=element('section','cm-vs5-link');
     const title=element('h2','cm-vs5-title','通訊對戰');
-    const note=element('p','cm-vs5-entry-notice','兩台裝置交換邀請碼與回覆碼，完成後會使用相同隊伍、場地與戰鬥亂數。');
+    const note=element('p','cm-vs5-entry-notice','兩台裝置交換邀請碼與回覆碼，完成後雙方會看到同一場對戰。');
     const host=actionButton('建立邀請'),guest=actionButton('加入邀請');
-    partyPanel.append(title,note,host,guest,rolePanel,back);
+    partyPanel.append(title,note,host,guest,rolePanel);setPanelFooter(back);
 
     const teamPicker=(container,selected,refresh)=>{
       const controls=[];container.append(element('h3','cm-vs5-link__heading','選擇參賽數碼獸（1 至 3 隻）'));
       for(const entry of setup.candidates){
-        const button=actionButton(entry.displayName??entry.name??entry.instanceId);button.setAttribute('aria-pressed','false');
+        const button=actionButton(memberName(entry));button.setAttribute('aria-pressed','false');
         button.disabled=!entry.admission.ok;
         if(!entry.admission.ok)button.append(element('span','cm-vs5-match__fee',entry.admission.message));
         button.addEventListener('click',()=>{const at=selected.indexOf(entry.instanceId);if(at<0)selected.push(entry.instanceId);else selected.splice(at,1);refresh();});
@@ -400,12 +422,13 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     for (const match of matches) {
       const item = element("li", "cm-vs5-match");
       item.dataset.recordIndex = String(match.recordIndex);
-      const button = actionButton(selectedMode==='FREE_BATTLE'?match.title:titleEventText(match.recordIndex, "name", match.title ?? `${menuCopy.match} ${match.recordIndex}`), { primary: true });
+      // A match is a list choice, not the screen's primary action.
+      const button = actionButton(selectedMode==='FREE_BATTLE'?match.title:titleEventText(match.recordIndex, "name", match.title ?? `${menuCopy.match} ${match.recordIndex}`));
       button.classList.add("cm-vs5-match__enter");
       button.append(element("span", "cm-vs5-match__fee",
-        `${menuCopy.entryFee ?? "報名費"} ${match.entryFee ?? "—"} 位元幣`));
+        `${menuCopy.entryFee ?? "報名費"} ${Number.isSafeInteger(match.entryFee) ? match.entryFee.toLocaleString("en-US") : "—"} 位元幣`));
       button.append(element("span", "cm-vs5-match__payout",
-        `${menuCopy.prize ?? "獎金"} ${match.payout > 0 ? `${match.payout} 位元幣` : menuCopy.noPayout}`));
+        `${menuCopy.prize ?? "獎金"} ${match.payout > 0 ? `${match.payout.toLocaleString("en-US")} 位元幣` : menuCopy.noPayout}`));
       button.addEventListener("click", async () => {
         if(getPartySelection){await chooseParty(match);return;}
         const result = await onEnter(match.recordIndex,undefined,selectedMode);
@@ -426,20 +449,23 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   section.append(list, partyPanel, entryNotice);
 
   // The multi-round tournaments sit in this menu in the original too:
-  // ui/conference_list_item.nxr is a row here, not a screen of its own.
+  // ui/conference_list_item.nxr is a row here, not a screen of its own. The
+  // cube's Championship face already opens them, so this row is only shown
+  // when the cube could not be drawn and would otherwise be the only way in.
   if (typeof onOpenChampionship === "function") {
-    const conference = actionButton(menuCopy.conference);
+    conference = actionButton(menuCopy.conference);
     conference.classList.add("cm-vs5-conference");
+    conference.hidden = !cubeFailed;
     conference.addEventListener("click", () => onOpenChampionship());
-    section.append(conference);
   }
 
   if (typeof onExit === "function") {
-    const exit = actionButton(menuCopy.returnHome);
+    exit = actionButton(menuCopy.returnHome);
     exit.classList.add("cm-vs5-exit");
     exit.addEventListener("click", () => onExit());
-    section.append(exit);
   }
+  setMenuFooter();
+  section.append(footer);
 
   return Object.freeze({
     render(reading = {}) { if(selectedMode==='TITLE_MATCH')renderMatches(reading.matches); },
@@ -567,7 +593,7 @@ function combatantCard(combatant, compact,hudArt=null) {
  * The match. `mountField` attaches the Pixi scene to the host this creates; the
  * DOM carries the words the scene cannot draw and nothing else.
  */
-export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null,localTeamIndex=0 }) {
+export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=null,localTeamIndex=0, askToLeave=null }) {
   if (!frame || !Array.isArray(frame.combatants)) throw new TypeError("The Battle field view requires a battle frame");
   if (typeof mountField !== "function") throw new TypeError("The Battle field view requires the published field mounter");
   if(![0,1].includes(localTeamIndex))throw new TypeError('The Battle field view requires a local team');
@@ -608,7 +634,29 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
 
   const exit = actionButton("離開對戰");
   exit.classList.add("cm-vs5-exit");
-  if (typeof onExit === "function") exit.addEventListener("click", () => onExit());
+  // Leaving a running match abandons it, and this build refunds no fee. One
+  // stray tap in the record band used to do that without a word.
+  let viewDisposed = false, asking = false;
+  if (typeof onExit === "function") exit.addEventListener("click", async () => {
+    // The screens import display copy only; the app injects the dialog.
+    if (section.dataset.ended === "true" || typeof askToLeave !== "function") { onExit(); return; }
+    if (asking) return;
+    asking = true;
+    let choice = null;
+    try {
+      choice = await askToLeave({
+        title: "要離開這場對戰嗎？",
+        message: "離開後對戰會中止並記為放棄，不會獲得獎金；已支付的報名費不會退回。",
+        actions: [
+          { id: "stay", label: "繼續觀戰", tone: "secondary" },
+          { id: "leave", label: "離開對戰", tone: "danger" }
+        ],
+        cancelId: "stay"
+      });
+    } finally { asking = false; }
+    // The match may have judged itself while the question was open.
+    if (choice === "leave" && !viewDisposed && section.dataset.ended !== "true") onExit();
+  });
   log.band.append(exit);
 
   // The five bands the contract declares, in its order: clock, the opponent's
@@ -644,6 +692,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
       });
     },
     dispose() {
+      viewDisposed = true;
       field?.dispose?.();
       root.replaceChildren();
     }
@@ -715,16 +764,20 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     scene: "result_sub_prize_scene",
     build() {
       const frag = document.createDocumentFragment();
-      frag.append(element("span", "cm-vs5-kicker", "獎金"));
-      frag.append(element("h1", "cm-vs5-title", credited ? String(receipt.credited) : "—"));
+      // Kicker and title share a header, as the verdict panel does, so the
+      // title plate no longer sits over its own label.
+      const head = element("header", "cm-vs5-header");
+      head.append(element("span", "cm-vs5-kicker", "獎金"),
+        element("h1", "cm-vs5-title", credited ? receipt.credited.toLocaleString("en-US") : "—"));
+      frag.append(head);
       if (!credited) {
         frag.append(element("p", "cm-vs5-result__detail", "獎金尚未入帳。"));
         return frag;
       }
-      frag.append(element("p", "cm-vs5-result__detail", `持有 ${receipt.walletAfter} 位元幣`));
+      frag.append(element("p", "cm-vs5-result__detail", `持有 ${receipt.walletAfter.toLocaleString("en-US")} 位元幣`));
       if (receipt.clamped) {
         frag.append(element("p", "cm-vs5-result__detail",
-          `獎金 ${receipt.rewardBits} 位元幣；持有金額已達上限。`));
+          `獎金 ${receipt.rewardBits.toLocaleString("en-US")} 位元幣；持有金額已達上限。`));
       } else if (receipt.credited === 0) {
         frag.append(element("p", "cm-vs5-result__detail", "本場沒有獲得獎金。"));
       }

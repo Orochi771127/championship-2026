@@ -378,7 +378,9 @@
 .cm-vs2-root[data-screen][data-screen] :is(
   .cm-vs2-shop__detail-name, .cm-vs2-shop__detail-description, .cm-vs2-shop__detail-cost,
   .cm-vs2-shop__item-name, .cm-vs2-shop__item-cost, .cm-vs2-gate__name, .cm-vs2-gate__ordinal,
-  .cm-vs2-database__row, .cm-vs2-loadout__name, .cm-vs2-loadout__detail, .cm-vs2-destination__name
+  .cm-vs2-database__row, .cm-vs2-loadout__name, .cm-vs2-loadout__detail, .cm-vs2-destination__name,
+  .cm-vs2-preview__costs dt, .cm-vs2-preview__costs dd, .cm-vs2-preview__id, .cm-vs2-loadout__label,
+  .cm-vs2-destination .cm-vs2-kicker, .cm-vs2-destination__fee, .cm-vs2-loadout__empty, .cm-vs2-preview__name
 ),
 .cm-vs5-root[data-screen][data-screen] :is(.cm-vs5-fighter__name, .cm-vs5-log__line, .cm-vs5-log__detail),
 :is(.cm-championship-root, .cm-digimon-root, .cm-help-root, .cm-schedule-root) :is(
@@ -391,10 +393,7 @@
 /* Screen headings and the back rail: pills, not plates. */
 .cm-vs2-root[data-screen][data-screen] :is(.cm-vs2-action, .cm-vs2-back),
 .cm-vs5-root[data-screen][data-screen] .cm-vs5-action,
-:is(.cm-championship-root, .cm-digimon-root, .cm-help-root, .cm-schedule-root, .cm-tamer-root) :is(
-  .cm-championship-action, .cm-championship-back, .cm-digimon-control, .cm-digimon-back,
-  .cm-help-back, .cm-schedule-back, .cm-tamer-back
-) {
+:is(.cm-championship-root, .cm-digimon-root) :is(.cm-championship-action, .cm-digimon-control) {
   border: 0;
   border-radius: 999px;
   background: linear-gradient(180deg, #ffffff 0%, #dcf1ff 100%);
@@ -813,4 +812,489 @@
     grid-column: 2;
     min-width: 0;
   }
+}
+
+/* ====================================================================== *
+ * 5. SHARED INTERACTION RULES — Owner 2026-09-28 page/flow integration
+ *
+ * One confirmation dialog, one footer order (leave on the left, the single
+ * primary action on the right) and one feedback line for every screen. New
+ * components only: nothing here re-dresses a rule from an earlier layer.
+ * ====================================================================== */
+
+/* ---- 5.1 The confirmation dialog (uiDialog.js) ------------------------ */
+dialog.cm-dialog {
+  width: min(92vw, 380px);
+  max-width: none;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #14415c;
+  overflow: visible;
+}
+dialog.cm-dialog::backdrop {
+  background: rgba(4, 20, 36, 0.58);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+.cm-dialog__panel {
+  display: grid;
+  gap: 12px;
+  padding: 20px 18px 18px;
+  border-radius: 4px;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
+  background:
+    linear-gradient(90deg, rgba(47, 169, 224, 0.85) 0 20px, rgba(47, 169, 224, 0) 20px) no-repeat 11px 9px / 20px 2px,
+    linear-gradient(180deg, rgba(47, 169, 224, 0.85) 0 20px, rgba(47, 169, 224, 0) 20px) no-repeat 9px 11px / 2px 20px,
+    linear-gradient(180deg, #ffffff 0%, #e4f5ff 100%);
+  box-shadow: inset 0 1px 0 #fff, inset 0 0 0 1px rgba(122, 190, 224, 0.4);
+  filter: drop-shadow(0 16px 30px rgba(3, 20, 38, 0.4));
+}
+.cm-dialog__title { margin: 4px 0 0; font-size: 1.05rem; font-weight: 800; line-height: 1.4; color: #0f3a55; }
+.cm-dialog__message { margin: 0; font-size: 0.86rem; line-height: 1.65; color: #24506a; }
+.cm-dialog__actions { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 10px; margin-top: 4px; }
+.cm-dialog__actions[data-count="3"] { grid-auto-flow: row; }
+.cm-dialog__actions[data-count="3"] .cm-dialog__action--primary { order: -2; }
+.cm-dialog__actions[data-count="3"] .cm-dialog__action--danger { order: -1; }
+.cm-dialog__action {
+  min-height: 46px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 3px;
+  clip-path: polygon(0 0, calc(100% - 11px) 0, 100% 11px, 100% 100%, 11px 100%, 0 calc(100% - 11px));
+  background: linear-gradient(180deg, #ffffff 0%, #dff2fd 100%);
+  box-shadow: inset 3px 0 0 rgba(47, 169, 224, 0.85), inset 0 0 0 1px rgba(122, 190, 224, 0.45);
+  color: #10495f;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.cm-dialog__action--danger { box-shadow: inset 3px 0 0 #d4553b, inset 0 0 0 1px rgba(212, 85, 59, 0.45); color: #a3321d; }
+.cm-dialog__action--primary {
+  clip-path: none;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fff6d4 0%, #ffd873 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 0 0 1px rgba(214, 164, 52, 0.55), 0 6px 14px rgba(170, 120, 24, 0.22);
+  color: #6d4a0e;
+}
+.cm-dialog__action:focus-visible { outline: 3px solid #2fa9e0; outline-offset: 2px; }
+.cm-dialog__action:active { transform: translateY(1px); }
+
+/* ---- 5.2 One footer for the management screens ----------------------- *
+ * Tamer, Schedule, Help, Roster and the tournament board used to end in a
+ * lone back button after all of their content, off screen on a long page.
+ * They now share the vs2/vs5 rule: a footer that stays at the bottom of the
+ * scrolling screen, leave on the left, the one primary action on the right.
+ * -------------------------------------------------------------------- */
+:is(.cm-tamer-shell, .cm-schedule-shell, .cm-help-shell, .cm-digimon-shell, .cm-championship-shell) {
+  box-sizing: border-box;
+  min-height: 100%;
+  padding-inline: 1rem;
+  padding-bottom: 0;
+}
+.cm-screen-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: auto -1rem 0;
+  padding: 10px 1rem calc(10px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(226, 244, 255, 0.5));
+  backdrop-filter: blur(12px) saturate(1.15);
+  -webkit-backdrop-filter: blur(12px) saturate(1.15);
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 -6px 16px rgba(20, 74, 104, 0.12);
+}
+.cm-screen-back,
+.cm-screen-primary {
+  min-height: 46px;
+  padding: 0 18px;
+  border: 0;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-shadow: none;
+  cursor: pointer;
+}
+.cm-screen-back {
+  flex: 0 1 auto;
+  min-width: 116px;
+  border-radius: 3px;
+  clip-path: polygon(0 0, calc(100% - 11px) 0, 100% 11px, 100% 100%, 11px 100%, 0 calc(100% - 11px));
+  background: linear-gradient(180deg, #ffffff 0%, #dcf1ff 100%);
+  box-shadow: inset 3px 0 0 rgba(47, 169, 224, 0.85), inset 0 0 0 1px rgba(122, 190, 224, 0.45);
+  color: #10495f;
+}
+.cm-screen-primary {
+  flex: 1 1 auto;
+  margin-left: auto;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fff6d4 0%, #ffd873 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 0 0 1px rgba(214, 164, 52, 0.55), 0 6px 14px rgba(170, 120, 24, 0.22);
+  color: #6d4a0e;
+}
+.cm-screen-primary[hidden], .cm-screen-back[hidden] { display: none; }
+:is(.cm-screen-back, .cm-screen-primary):disabled { opacity: 0.5; cursor: default; }
+:is(.cm-screen-back, .cm-screen-primary):focus-visible { outline: 3px solid #2fa9e0; outline-offset: 2px; }
+:is(.cm-screen-back, .cm-screen-primary):active:not(:disabled) { transform: translateY(1px); }
+
+/* A single line under a screen title that says what the screen is for. */
+.cm-screen-lede {
+  margin: -4px 0 2px;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: #e6f7ff;
+  text-shadow: 0 1px 2px rgba(3, 12, 22, 0.65);
+}
+
+/* ---- 5.3 Detail sheet: opens where the player tapped ----------------- */
+.cm-sheet {
+  position: fixed;
+  top: var(--cm-screen-top, 0px);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.cm-sheet[hidden] { display: none; }
+.cm-sheet__scrim { position: absolute; inset: 0; background: rgba(4, 20, 36, 0.46); }
+.cm-sheet > .cm-sheet__panel {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(100% - 16px, 560px);
+  max-height: calc(100% - 48px);
+  margin: 0 8px calc(8px + env(safe-area-inset-bottom, 0px));
+  padding: 20px 16px 14px;
+  overflow: auto;
+  animation: cm-sheet-in 180ms ease-out;
+}
+@keyframes cm-sheet-in { from { transform: translateY(24px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .cm-sheet > .cm-sheet__panel { animation: none; } }
+.cm-sheet > .cm-sheet__panel {
+  background:
+    linear-gradient(90deg, rgba(47, 169, 224, 0.85) 0 20px, rgba(47, 169, 224, 0) 20px) no-repeat 11px 9px / 20px 2px,
+    linear-gradient(180deg, rgba(47, 169, 224, 0.85) 0 20px, rgba(47, 169, 224, 0) 20px) no-repeat 9px 11px / 2px 20px,
+    linear-gradient(180deg, #ffffff 0%, #eaf7ff 100%);
+  color: #14415c;
+}
+/* The detail blocks were written for the night window: white headings and
+   pale cyan copy. On the daylight sheet they take dark ink. */
+.cm-sheet__panel :is(h2, h3) { margin: 0; color: #0f3a55; font-size: 1.05rem; text-shadow: none; }
+.cm-sheet__panel :is(p) { color: #24506a; text-shadow: none; }
+.cm-sheet__panel .cm-schedule-detail__when { margin: 0; font-size: 0.8rem; font-weight: 700; color: #2c6485; }
+.cm-sheet__panel :is(.cm-schedule-detail__blurb, .cm-help-detail__body) { margin: 0; font-size: 0.86rem; line-height: 1.7; white-space: pre-line; color: #1d4a64; }
+.cm-sheet__actions { display: flex; gap: 10px; margin-top: 4px; }
+.cm-sheet__actions .cm-screen-back { min-width: 96px; }
+
+/* ---- 5.4 Schedule: states a player can read ------------------------- */
+.cm-schedule-root .cm-schedule-fixture[data-gated]::after { content: none; }
+.cm-schedule-root .cm-schedule-fixture[data-locked="true"] { color: #6f8ea2; }
+.cm-schedule-root .cm-schedule-fixture[data-locked="true"] .cm-schedule-fixture__name::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 11px;
+  margin-right: 3px;
+  vertical-align: -1px;
+  background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 10 11'%3E%3Cpath d='M2 5V3.5a3 3 0 0 1 6 0V5h1v6H1V5zm1.5 0h3V3.5a1.5 1.5 0 0 0-3 0z' fill='%236f8ea2'/%3E%3C/svg%3E");
+}
+.cm-schedule-root .cm-schedule-fixture[data-registered="true"] { box-shadow: inset 3px 0 0 #e9a11d, inset 0 0 0 1px rgba(214, 164, 52, 0.55); }
+.cm-schedule-root .cm-schedule-fixture[data-registered="true"] .cm-schedule-fixture__name::after { content: " ✓"; color: #b27300; font-weight: 800; }
+.cm-schedule-root .cm-schedule-fixture[data-won="true"] { opacity: 0.6; }
+.cm-schedule-root .cm-schedule-fixture[data-eligible-today="true"] { box-shadow: inset 3px 0 0 #1ba7d8, 0 0 0 2px rgba(47, 169, 224, 0.55); }
+.cm-schedule-root .cm-schedule-facts dd[data-short="true"] { color: #b3321d; }
+.cm-schedule-root .cm-schedule-short { grid-column: 1 / -1; margin: 2px 0 0; color: #a3321d; font-size: 0.78rem; font-weight: 700; }
+
+/* ---- 5.5 Menu entries say what they open ---------------------------- */
+.cm-toolbar[data-mode] .cm-toolbar__entry {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 3px;
+  min-height: 54px;
+  padding: 7px 14px 7px 16px;
+  text-align: left;
+}
+.cm-toolbar__entry-label { font-size: 0.9rem; font-weight: 800; line-height: 1.2; }
+.cm-toolbar__entry-hint { font-size: 0.66rem; font-weight: 600; line-height: 1.3; color: #4d7590; letter-spacing: 0; }
+.cm-toolbar[data-mode] .cm-toolbar__entry:is([data-entry-id="endDay"], [data-entry-id="saveQuit"]) .cm-toolbar__entry-hint { color: #7a5a1a; }
+
+/* ---- 5.6 Home: today's summary in the band above the ranch ----------- */
+.int-rh2-root .int-rh2-overlay { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; }
+.int-rh2-root .int-rh2-overlay > .int-rh2-summary,
+.int-rh2-root .int-rh2-overlay > .int-rh2-companion { grid-area: 1 / 1; }
+.int-rh2-root .int-rh2-overlay > .int-rh2-notice { grid-area: 2 / 1; }
+.int-rh2-summary {
+  justify-self: start;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+.int-rh2-summary[hidden],
+.int-rh2-overlay[data-resident="open"] > .int-rh2-summary { opacity: 0; visibility: hidden; }
+.int-rh2-summary__money,
+.int-rh2-summary__matches {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  margin: 0;
+  padding: 0 14px 0 10px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(222, 243, 255, 0.78));
+  backdrop-filter: blur(10px) saturate(1.2);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8), 0 6px 14px rgba(10, 52, 80, 0.22);
+  color: #10405c;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.int-rh2-summary__money::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff6c8 0 22%, #f3c647 23% 62%, #b98314 63%);
+  box-shadow: inset 0 0 0 1.5px #946508;
+}
+.int-rh2-summary__matches {
+  min-height: 44px;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.int-rh2-summary__matches::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 24 24' fill='%232f86b4'%3E%3Cpath d='M6 3h12v3a6 6 0 0 1-4 5.66V14h3v2H7v-2h3v-2.34A6 6 0 0 1 6 6zm-3 1h2v2a2 2 0 0 0 1 1.73V9.9A4 4 0 0 1 3 6zm16 0h2v2a4 4 0 0 1-3 3.9V7.73A2 2 0 0 0 19 6zM7 18h10v3H7z'/%3E%3C/svg%3E");
+}
+.int-rh2-summary__matches[data-count="0"] { color: #4d7590; }
+.int-rh2-summary__matches:not([data-count="0"]) {
+  background: linear-gradient(180deg, #fff8e0 0%, #ffe39a 100%);
+  box-shadow: inset 0 0 0 1px rgba(214, 164, 52, 0.6), 0 6px 14px rgba(170, 120, 24, 0.24);
+  color: #6d4a0e;
+}
+.int-rh2-summary__matches:focus-visible { outline: 3px solid #2fa9e0; outline-offset: 2px; }
+.int-rh2-summary__matches:active { transform: translateY(1px); }
+
+/* ---- 5.7 End day: yes/no are answers, not saves --------------------- */
+.int-rh2-root .int-rh2-day-confirm .int-rh2-system-button::before { display: none; }
+.int-rh2-root .int-rh2-day-confirm .int-rh2-system-button { min-height: 46px; min-width: 104px; font-size: 0.95rem; }
+
+/* ---- 5.8 Shop: why Buy is unavailable, and what just happened -------- */
+.cm-vs2-root[data-screen][data-screen] .cm-vs2-shop__detail-state {
+  margin: 0;
+  color: #b3321d;
+  font-size: 0.74rem;
+  font-weight: 800;
+  line-height: 1.4;
+  text-shadow: none;
+}
+.cm-vs2-root[data-screen][data-screen] .cm-vs2-shop__status[data-tone="ok"] { color: #1f6b3a; font-weight: 800; }
+.cm-vs2-root[data-screen][data-screen] .cm-vs2-shop__status[data-tone="refused"] { color: #b3321d; font-weight: 800; }
+.cm-vs2-root[data-screen][data-screen] .cm-vs2-shop__wallet[data-change="spent"] { box-shadow: inset 0 -2px 0 rgba(233, 161, 29, 0.85), inset 0 0 0 1px rgba(214, 164, 52, 0.45); }
+
+/* ---- 5.9 Battle menu: one footer per level ------------------------- */
+.cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(226, 244, 255, 0.5));
+  backdrop-filter: blur(12px) saturate(1.15);
+  -webkit-backdrop-filter: blur(12px) saturate(1.15);
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 -6px 16px rgba(20, 74, 104, 0.12);
+}
+.cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer > .cm-vs5-action { flex: 1 1 0; margin: 0; min-height: 46px; }
+.cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer[data-level="panel"] > .cm-vs5-action:not(.cm-vs5-action--primary) { flex: 0 1 auto; min-width: 128px; }
+.cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer > [hidden] { display: none; }
+/* Refusal reasons inside a member row read on the light row. */
+.cm-vs5-root[data-screen][data-screen] :is(.cm-vs5-action, .cm-vs5-practice-member) .cm-vs5-match__fee { color: #8c3a17; text-shadow: none; font-weight: 700; }
+/* Inside a mode's panel the mode name is a section heading under the page
+   title, not a second title plate. */
+.cm-vs5-root[data-screen][data-screen] .cm-vs5-party > .cm-vs5-title {
+  display: block;
+  margin: 6px 0 0;
+  padding: 0 0 0 10px;
+  border-radius: 0;
+  background: none;
+  box-shadow: inset 3px 0 0 #7fe9ff;
+  color: #ffffff;
+  font-size: 1.05rem;
+  text-shadow: 0 1px 2px rgba(3, 12, 22, 0.7);
+}
+.cm-vs5-root[data-screen][data-screen] .cm-vs5-match__enter .cm-vs5-match__fee,
+.cm-vs5-root[data-screen][data-screen] .cm-vs5-match__enter .cm-vs5-match__payout { color: #24506a; font-weight: 700; }
+.cm-vs5-root[data-screen][data-screen] .cm-vs5-entry-notice { color: #e6f7ff; text-shadow: 0 1px 2px rgba(3, 12, 22, 0.75); }
+.cm-vs5-root[data-screen][data-screen] > .cm-vs5-shell > .cm-vs5-entry-notice[data-reason] {
+  margin: 8px 12px;
+  padding: 8px 12px;
+  border-radius: 3px;
+  background: rgba(255, 245, 232, 0.95);
+  box-shadow: inset 3px 0 0 #d4553b;
+  color: #8c2f19;
+  font-weight: 800;
+  text-shadow: none;
+}
+
+/* ---- 5.10 Battle result: panel headers like the verdict's ---------- */
+.cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__body > .cm-vs5-header {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 0 0 6px;
+  background: none;
+}
+
+/* ---- 5.11 Gate: locked destinations read as locked ------------------ */
+.cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate[data-availability="LOCKED"] { filter: saturate(0.35); }
+.cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gate[data-availability="LOCKED"] .cm-vs2-gate__name::before,
+.cm-vs2-gate3d__node-hit[data-availability="LOCKED"] .cm-vs2-gate3d__node-index::after {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 11px;
+  margin-right: 3px;
+  vertical-align: -1px;
+  background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 10 11'%3E%3Cpath d='M2 5V3.5a3 3 0 0 1 6 0V5h1v6H1V5zm1.5 0h3V3.5a1.5 1.5 0 0 0-3 0z' fill='%23557a8e'/%3E%3C/svg%3E");
+}
+.cm-vs2-gate3d__node-hit[data-availability="LOCKED"] .cm-vs2-gate3d__node-index::after { margin: 0 0 0 2px; }
+.cm-vs2-gate3d__node-hit[data-availability="LOCKED"]:not([data-selected="true"]) { opacity: 0.72; }
+.cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-body > .cm-vs2-status {
+  margin: 0 12px;
+  padding: 8px 12px;
+  border-radius: 3px;
+  background: rgba(255, 245, 232, 0.94);
+  box-shadow: inset 3px 0 0 #d4553b;
+  color: #8c2f19;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-shadow: none;
+}
+
+/* ---- 5.12 Roster: name edit in place, and why two controls are grey -- */
+.cm-digimon-root .cm-digimon-control[data-state="READY"]:not(:disabled) {
+  filter: none;
+  cursor: pointer;
+  border-radius: 3px;
+  clip-path: polygon(0 0, calc(100% - 11px) 0, 100% 11px, 100% 100%, 11px 100%, 0 calc(100% - 11px));
+  background: linear-gradient(180deg, #ffffff 0%, #dcf1ff 100%);
+  box-shadow: inset 3px 0 0 rgba(47, 169, 224, 0.85), inset 0 0 0 1px rgba(122, 190, 224, 0.45);
+  color: #10495f;
+  text-shadow: none;
+}
+.cm-digimon-controls-note { margin: -4px 0 0; font-size: 0.74rem; color: #e6f7ff; text-shadow: 0 1px 2px rgba(3, 12, 22, 0.65); }
+.cm-digimon-rename {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 4px;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #eaf7ff 100%);
+  box-shadow: inset 0 0 0 1px rgba(122, 190, 224, 0.4);
+  color: #14415c;
+}
+.cm-digimon-rename[hidden] { display: none; }
+.cm-digimon-rename { scroll-margin-bottom: 96px; }
+.cm-digimon-rename__label { display: grid; gap: 6px; font-size: 0.8rem; font-weight: 800; }
+.cm-digimon-rename__input {
+  min-height: 46px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 3px;
+  background: #ffffff;
+  box-shadow: inset 3px 0 0 #2fa9e0, inset 0 0 0 1px rgba(122, 190, 224, 0.6);
+  color: #0f3f5c;
+  font: inherit;
+  font-size: 16px;
+}
+.cm-digimon-rename__message { margin: 0; min-height: 1em; color: #b3321d; font-size: 0.78rem; font-weight: 700; }
+.cm-digimon-rename__actions { display: flex; gap: 10px; }
+
+/* ---- 5.13 Tablet portrait: use the width ---------------------------- *
+ * 2026-09-28 QA at 820x1180 and 1024x1366: every screen but Home and Cage
+ * Edit stayed a 430px phone column, stretched vertically until the Shop's
+ * cards were 380px tall. Lists and boards get a wider column and more
+ * columns. The Hunt field and the Battle field keep their width: their Pixi
+ * scenes and input mapping are sized for it. The sideways portrait frame
+ * (data-portrait-frame) is untouched.
+ * -------------------------------------------------------------------- */
+@media (min-width: 700px) {
+  body:not([data-portrait-frame]) .cm-vs2-root:is([data-screen="SHOP"], [data-screen="DATABASE"], [data-screen="GATE_SELECT"], [data-screen="HUNT_LOADOUT"]) .cm-vs2-shell {
+    width: min(100%, 760px);
+  }
+  body:not([data-portrait-frame]) .cm-vs2-root[data-screen="HUNT_RESULT"] .cm-vs2-shell { width: min(100%, 600px); }
+
+  /* Shop: four cards to a shelf, rows at their content height. */
+  body:not([data-portrait-frame]) .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__body {
+    grid-template-rows: minmax(170px, 250px) auto minmax(170px, 230px) auto;
+    align-content: start;
+  }
+  body:not([data-portrait-frame]) .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ORIGINAL_VIDEO_R1"] .cm-vs2-shop__row {
+    flex-basis: calc((100% - 21px) / 4);
+  }
+
+  /* Gate list: all sixteen destinations in two rows of eight. */
+  body:not([data-portrait-frame]) .cm-vs2-root[data-screen="GATE_SELECT"] .cm-vs2-gates { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+
+  /* Battle menu: a wider column, three mode faces to a row. */
+  body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-shell { width: min(100%, 760px); max-width: 760px; }
+  body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube__faces { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  /* Management screens. */
+  body:not([data-portrait-frame]) :is(.cm-tamer-shell, .cm-championship-shell) { width: min(100%, 680px); }
+  body:not([data-portrait-frame]) :is(.cm-help-shell) { width: min(100%, 760px); }
+  body:not([data-portrait-frame]) .cm-schedule-shell { width: min(100%, 980px); }
+  body:not([data-portrait-frame]) .cm-schedule-root .cm-schedule-days { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+  body:not([data-portrait-frame]) .cm-tamer-root .cm-tamer-fields { grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr); column-gap: 16px; }
+
+  /* Roster: the list beside the detail, as a two-pane book. */
+  body:not([data-portrait-frame]) .cm-digimon-shell {
+    width: min(100%, 900px);
+    display: grid;
+    grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+    grid-template-areas:
+      "kicker kicker"
+      "title title"
+      "list detail"
+      "list controls"
+      "list note"
+      "list editor"
+      "footer footer";
+    grid-template-rows: auto auto auto auto auto minmax(0, 1fr) auto;
+    align-items: start;
+    column-gap: 16px;
+  }
+  body:not([data-portrait-frame]) .cm-digimon-shell > .cm-digimon-kicker { grid-area: kicker; }
+  body:not([data-portrait-frame]) .cm-digimon-shell > .cm-digimon-title { grid-area: title; justify-self: start; }
+  body:not([data-portrait-frame]) .cm-digimon-shell > .cm-digimon-list { grid-area: list; }
+  body:not([data-portrait-frame]) .cm-digimon-shell > .cm-digimon-detail { grid-area: detail; }
+  body:not([data-portrait-frame]) .cm-digimon-shell > .cm-digimon-controls { grid-area: controls; }
+  body:not([data-portrait-frame]) .cm-digimon-shell > .cm-digimon-controls-note { grid-area: note; }
+  body:not([data-portrait-frame]) .cm-digimon-shell > .cm-digimon-rename { grid-area: editor; }
+  body:not([data-portrait-frame]) .cm-digimon-shell > .cm-screen-footer { grid-area: footer; align-self: end; }
 }

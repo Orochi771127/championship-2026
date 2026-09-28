@@ -630,8 +630,7 @@
 .cm-championship-entry:disabled { opacity: 1; filter: grayscale(0.55) brightness(0.7); }
 
 /* Only the things you actually press are filled. */
-.cm-digimon-back, .cm-schedule-back, .cm-help-back, .cm-tamer-back,
-.cm-championship-back, .cm-championship-action {
+.cm-championship-action {
   border: 0;
   border-radius: 999px;
   background: linear-gradient(180deg, var(--ds-green-lit) 0%, var(--ds-green) 52%, var(--ds-green-deep) 100%);
@@ -1330,6 +1329,9 @@
   padding-right: 44px;
   background: linear-gradient(180deg, #2f8a52 0%, #1d6a3c 55%, #0f4526 100%);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 3px var(--ds-gold), 0 0 14px rgba(255, 223, 70, 0.55);
+  /* The daylight rows set dark ink; on the green pick it disappeared. */
+  color: #ffffff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.55);
 }
 .cm-vs5-root[data-screen] .cm-vs5-party .cm-vs5-action[aria-pressed="true"]::after {
   content: "✓";
@@ -1413,15 +1415,21 @@
 .int-rh2-root .int-rh2-letter__ack:focus-visible { outline: 3px solid var(--ds-cyan-lit); outline-offset: 4px; }
 .int-rh2-root .int-rh2-letter__ack:not(:disabled):hover { filter: brightness(1.2); }
 .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result__rank { color: var(--ds-text); }
+/* Result lines are statements, not controls: a window with a gold ring read
+   as a button (2026-09-28 QA), so they sit as plain rows on the panel. */
 .cm-vs5-root[data-screen] .cm-vs5-result__detail {
   border: 0;
-  border-radius: 14px;
-  padding: 14px;
-  background: var(--ds-window-fill);
-  box-shadow: inset 0 0 0 2px var(--ds-ink), 0 0 0 3px var(--ds-gold), 0 0 0 5px var(--ds-ink), var(--ds-lift);
-  color: var(--ds-text);
-  text-shadow: var(--ds-text-shadow);
+  border-radius: 0;
+  padding: 6px 4px;
+  background: none;
+  box-shadow: none;
+  color: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  text-shadow: none;
 }
+.cm-vs5-root[data-screen] .cm-vs5-result__detail + .cm-vs5-result__detail { border-top: 1px solid rgba(122, 190, 224, 0.4); }
 .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell {
   background-image:
     var(--ds-hex),

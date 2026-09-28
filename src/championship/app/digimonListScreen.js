@@ -78,7 +78,10 @@ function vital(current,maximum) {
 }
 
 /** Controls the original carries that this build has not implemented. */
-export const UNIMPLEMENTED_CONTROLS = Object.freeze(["name_edit_button", "delete_button", "entry_button"]);
+export const UNIMPLEMENTED_CONTROLS = Object.freeze(["delete_button", "entry_button"]);
+/** Name edit now uses the product given-name rule the Database already uses. */
+export const ROSTER_CONTROLS = Object.freeze(["name_edit_button", ...UNIMPLEMENTED_CONTROLS]);
+const ROSTER_NAME_MAX_LENGTH = 24;
 
 function element(tag, className, text, localize = true) {
   const node = document.createElement(tag);
@@ -94,8 +97,9 @@ function element(tag, className, text, localize = true) {
  * @param {HTMLElement} options.root
  * @param {Array<object>} options.entries roster entries with displayName, stats, identity
  * @param {() => void} options.onExit
+ * @param {(instanceId: string, name: string) => ({ok: boolean, entries?: Array<object>})} [options.onRename]
  */
-export function createDigimonListView({ root, entries = [], onExit } = {}) {
+export function createDigimonListView({ root, entries = [], onExit, onRename = null } = {}) {
   if (!root) throw new TypeError("The Digimon list requires a root element");
 
   root.replaceChildren();
@@ -104,7 +108,7 @@ export function createDigimonListView({ root, entries = [], onExit } = {}) {
   root.dataset.originalScenes = "ui/digimon_list_main.nxr,ui/digimon_list_sub.nxr,ui/digimon_list_item.nxr";
 
   const shell = element("section", "cm-digimon-shell");
-  shell.append(element("p", "cm-digimon-kicker", "DIGIMON"), element("h1", "cm-digimon-title", "ROSTER"));
+  shell.append(element("p", "cm-digimon-kicker", "管理"), element("h1", "cm-digimon-title", "ROSTER"));
 
   const list = element("ul", "cm-digimon-list");
   const detail = element("dl", "cm-digimon-detail");
@@ -161,8 +165,10 @@ export function createDigimonListView({ root, entries = [], onExit } = {}) {
       button.append(element("span", "cm-digimon-item__name", entry.displayName, false));
       button.addEventListener("click", () => {
         selectedIndex = index;
+        closeEditor();
         renderList();
         renderDetail();
+        refreshControls();
       });
       item.append(button);
       list.append(item);
@@ -171,23 +177,94 @@ export function createDigimonListView({ root, entries = [], onExit } = {}) {
   }
 
   const controls = element("div", "cm-digimon-controls");
-  for (const id of UNIMPLEMENTED_CONTROLS) {
+  let nameEdit = null;
+  for (const id of ROSTER_CONTROLS) {
     const button = element("button", "cm-digimon-control", id.replace("_button", "").replace("_", " ").toUpperCase());
     button.type = "button";
+    button.dataset.control = id;
+    if (id === "name_edit_button") { nameEdit = button; continue; }
     button.disabled = true;
     button.dataset.state = "NOT_IMPLEMENTED";
     button.title = uiText("In the original, not yet in this build");
     controls.append(button);
   }
+  controls.prepend(nameEdit);
+  // Say why two of the three stay grey instead of leaving a silent row.
+  const controlsNote = element("p", "cm-digimon-controls-note", "移除與報名尚未開放。");
 
-  const back = element("button", "cm-digimon-back", "BACK");
+  // Name edit opens in place under the controls and writes through the
+  // existing rename; the starter's name comes from the opening and is fixed.
+  const editor = element("form", "cm-digimon-rename");
+  editor.hidden = true;
+  const editorLabel = element("label", "cm-digimon-rename__label", "新的暱稱");
+  const editorInput = element("input", "cm-digimon-rename__input");
+  editorInput.type = "text";
+  editorInput.maxLength = ROSTER_NAME_MAX_LENGTH;
+  editorInput.autocomplete = "off";
+  editorInput.spellcheck = false;
+  editorInput.setAttribute("aria-label", "新的暱稱");
+  editorLabel.append(editorInput);
+  const editorMessage = element("p", "cm-digimon-rename__message");
+  editorMessage.setAttribute("role", "status");
+  const editorActions = element("div", "cm-digimon-rename__actions");
+  const editorCancel = element("button", "cm-screen-back", "取消");
+  editorCancel.type = "button";
+  const editorSave = element("button", "cm-screen-primary", "儲存名稱");
+  editorSave.type = "submit";
+  editorActions.append(editorCancel, editorSave);
+  editor.append(editorLabel, editorMessage, editorActions);
+  function closeEditor() { editor.hidden = true; editorMessage.textContent = ""; }
+  function refreshControls() {
+    const entry = entries[selectedIndex];
+    const renameable = Boolean(onRename && entry && entry.renameable !== false);
+    nameEdit.disabled = !renameable;
+    nameEdit.dataset.state = onRename ? "READY" : "NOT_IMPLEMENTED";
+    nameEdit.title = !onRename ? uiText("In the original, not yet in this build")
+      : entry?.renameable === false ? "初始夥伴的名字在開場時決定，無法更改。" : "";
+  }
+  nameEdit.addEventListener("click", () => {
+    const entry = entries[selectedIndex];
+    if (!entry || nameEdit.disabled) return;
+    editorInput.value = entry.displayName ?? "";
+    editorMessage.textContent = "";
+    editor.hidden = false;
+    // The editor opens under the controls; bring it above the footer.
+    editor.scrollIntoView?.({ block: "center" });
+    editorInput.focus?.({ preventScroll: true });
+  });
+  editorCancel.addEventListener("click", () => closeEditor());
+  editor.addEventListener("submit", (event) => {
+    event?.preventDefault?.();
+    const entry = entries[selectedIndex];
+    const name = String(editorInput.value ?? "").trim();
+    if (!entry || !name || name.length > ROSTER_NAME_MAX_LENGTH) {
+      editorMessage.textContent = `名稱需為 1 至 ${ROSTER_NAME_MAX_LENGTH} 個字。`;
+      return;
+    }
+    const result = onRename?.(entry.instanceId, name);
+    if (!result?.ok) {
+      editorMessage.textContent = result?.reason === "NOT_RENAMEABLE" ? "這隻數碼獸的名字無法更改。" : `名稱需為 1 至 ${ROSTER_NAME_MAX_LENGTH} 個字。`;
+      return;
+    }
+    if (Array.isArray(result.entries)) entries = result.entries;
+    closeEditor();
+    renderList();
+    renderDetail();
+    refreshControls();
+    editorMessage.textContent = "";
+  });
+
+  const footer = element("footer", "cm-screen-footer");
+  const back = element("button", "cm-screen-back cm-digimon-back", "返回牧場");
   back.type = "button";
   back.addEventListener("click", () => { onExit?.(); });
+  footer.append(back);
 
-  shell.append(list, detail, controls, back);
+  shell.append(list, detail, controls, controlsNote, editor, footer);
   root.append(shell);
   renderList();
   renderDetail();
+  refreshControls();
 
   return Object.freeze({
     render() {},

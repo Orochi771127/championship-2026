@@ -55,7 +55,7 @@ function cageName(frame, cageId) {
  * @param {object} options.source getFrame/subscribe/intents seam
  * @param {(args: {host: HTMLElement, source: object}) => object|Promise<object>} options.mountField
  */
-export async function createRaisingHomeP1RView({ root, source, mountField, hudArt=null } = {}) {
+export async function createRaisingHomeP1RView({ root, source, mountField, hudArt=null, summary=null } = {}) {
   if (!root) throw new TypeError("INT-RH2 P1R view requires a root element");
   const presentation = assertPresentationSource(source);
   if (typeof mountField !== "function") {
@@ -153,10 +153,46 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     setTimeout(()=>URL.revokeObjectURL(url),1000);
   });
   notice.append(noticeText, recovery);
+  // Owner 2026-09-28: with nobody picked, the band above the ranch showed only
+  // background, and nothing on Home said what the player holds or whether a
+  // title match is on today. The same slot the resident card uses now carries
+  // that, and gives way to the card when a resident is picked. The match line
+  // opens the Battle menu the toolbar's System menu already reaches.
+  const summaryCard = node("section", "int-rh2-summary");
+  summaryCard.setAttribute("aria-label", "今日狀態");
+  summaryCard.hidden = !summary;
+  const summaryMoney = node("p", "int-rh2-summary__money");
+  const summaryMatches = node("button", "int-rh2-summary__matches");
+  summaryMatches.type = "button";
+  summaryMatches.addEventListener("click", () => summary?.openBattle?.());
+  summaryCard.append(summaryMoney, summaryMatches);
+  let summaryKey = null;
+  let summaryCheckedAt = -Infinity;
+  function paintSummary(force = false) {
+    if (!summary) return;
+    const now = globalThis.performance?.now?.() ?? Date.now();
+    if (!force && now - summaryCheckedAt < 400) return;
+    summaryCheckedAt = now;
+    const reading = summary.get?.() ?? null;
+    const key = JSON.stringify(reading);
+    if (key === summaryKey) return;
+    summaryKey = key;
+    summaryMoney.textContent = Number.isSafeInteger(reading?.bits) ? `${reading.bits.toLocaleString("en-US")} 位元幣` : "—";
+    summaryMoney.setAttribute("aria-label", Number.isSafeInteger(reading?.bits) ? `持有 ${reading.bits.toLocaleString("en-US")} 位元幣` : "持有金額");
+    const count = reading?.todayMatches ?? 0;
+    summaryMatches.dataset.count = String(count);
+    summaryMatches.textContent = count > 0 ? `今日頭銜賽 ${count} 場 ›` : "今日沒有頭銜賽 ›";
+    summaryMatches.setAttribute("aria-label", count > 0 ? `今日有 ${count} 場頭銜賽，開啟對戰選單` : "今日沒有頭銜賽，開啟對戰選單");
+  }
+
+  // Painted now, not on the first frame: the field can take a moment to load
+  // and an empty pill would sit in its place until then.
+  paintSummary(true);
+
   // Readout and notice share one column at the top of the habitat, so the
   // notice never has to be told how tall the card is.
   const overlay = node("div", "int-rh2-overlay");
-  overlay.append(companion, notice);
+  overlay.append(summaryCard, companion, notice);
   fieldFrame.append(overlay);
 
   // One screen: the habitat, with its readout and notices over it. The shared
@@ -257,6 +293,8 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     if(image&&portrait.getAttribute('src')!==image.src)portrait.src=image.src;
     companion.dataset.open = resident ? "true" : "false";
     companion.setAttribute("aria-hidden", resident ? "false" : "true");
+    overlay.dataset.resident = resident ? "open" : "none";
+    paintSummary();
     companionName.textContent = resident?.displayName ?? uiText("SELECT A RESIDENT");
     const stats = resident?.stats ?? null;
     const fill = (current, max) => `${max > 0 ? Math.max(0, Math.min(100, Math.round(current / max * 100))) : 0}%`;
