@@ -43,6 +43,7 @@ import {normalizeNativeOpening} from './nativeOpeningState.js';
 import {TUTORIAL_STEP_COUNT,createTutorialCursor, tutorialFinished, tutorialStepAt, advanceTutorial as advanceTutorialStep,
   skipTutorial as skipTutorialCursor} from './nativeTutorialProgression.js';
 import {tutorialLine, tutorialPrompt} from '../text/tutorialMessages.zhHant.js';
+import { uiText } from '../text/uiText.js';
 import {nativeTreatmentAdmission} from '../raising/nativeRaisingTreatment.js';
 import {treatNativeRaisingActor,notifyNativeRaisingResidentAdded,beginNativeRaisingCarry,releaseNativeRaisingCarry,beginNativeRaisingStroke,releaseNativeRaisingStroke,touchNativeRaisingActor} from '../raising/nativeRaisingActor.js';
 import {classifyNativeRaisingHand,stepNativeRaisingStrokeInput,nativeRaisingHandAdmission} from '../raising/nativeRaisingHand.js';
@@ -1785,7 +1786,7 @@ export function createChampionshipStandaloneApp({
       if(!match)return {ok:false,reason:'MATCH_NOT_AVAILABLE'};
       const party=await this.prepareBattleParty(null,instanceIds);
       if(!party.ok)return party;
-      if(instanceIds.length>match.slots)return {ok:false,reason:'PARTY_SIZE',message:`這場對戰最多 ${match.slots} 隻。`};
+      if(instanceIds.length>match.slots)return {ok:false,reason:'PARTY_SIZE',message:uiText('這場對戰最多 {count} 隻。',{count:match.slots})};
       const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
       prepared.localMode=2;prepared.freeMatch=match;prepared.freeMenu=freeBattleMenu;prepared.individuals=party.individuals;
       const drawnArena=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
@@ -2125,7 +2126,7 @@ export function createChampionshipStandaloneApp({
       const {battlePartyCondition,buildOwnedBattleCreature}=await loadBattleParty();
       const limit=battlePartyCondition(recordIndex===null?-1:getMatchRecord(recordIndex).field0C).slots;
       if(!Array.isArray(instanceIds)||!instanceIds.length||instanceIds.length>limit||new Set(instanceIds).size!==instanceIds.length)
-        return {ok:false,reason:'PARTY_SIZE',message:`請選擇 1 至 ${limit} 隻符合條件的數碼獸。`};
+        return {ok:false,reason:'PARTY_SIZE',message:uiText('請選擇 1 至 {limit} 隻符合條件的數碼獸。',{limit})};
       const candidates=await this.getBattlePartyCandidates(recordIndex),individuals=[];
       for(const instanceId of instanceIds){
         const entry=candidates.find(c=>c.instanceId===instanceId);

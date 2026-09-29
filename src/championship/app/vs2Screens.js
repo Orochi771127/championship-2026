@@ -83,10 +83,10 @@ function actionButton(label, { primary = false } = {}) {
 
 function gateAdmissionMessage(admission) {
   if (admission?.reason === "GATE_LOCKED") return admission.unlockKind === 1
-    ? `馴獸師階級達到 ${admission.unlockParameter} 後開放。`
+    ? uiText("馴獸師階級達到 {rank} 後開放。", { rank: admission.unlockParameter })
     : "取得對應比賽勝利後開放。";
   if (admission?.reason === "INSUFFICIENT_FUNDS") {
-    return `持有金額不足，入場需要 ${admission.chargeBits.toLocaleString("en-US")} 位元幣。`;
+    return uiText("持有金額不足，入場需要 {bits} 位元幣。", { bits: admission.chargeBits });
   }
   return "";
 }
@@ -276,12 +276,12 @@ export async function createGateSelectView({ root, source, mountWorld }) {
       if (gate.selected) {
         previewName.textContent = uiText(gate.displayName);
         previewId.textContent = uiText(gate.codeString ?? "");
-        fee.textContent = uiText(Number.isSafeInteger(gate.entranceFeeBits) ? `${gate.entranceFeeBits.toLocaleString('en-US')} 位元幣` : "—");
+        fee.textContent = Number.isSafeInteger(gate.entranceFeeBits) ? uiText("{bits} 位元幣", { bits: gate.entranceFeeBits }) : "—";
         const thumbnail = gate.art?.thumbnail;
         previewImage.hidden = !thumbnail;
         if (thumbnail) {
           if (previewImage.getAttribute('src') !== thumbnail.src) previewImage.src = thumbnail.src;
-          previewImage.alt = `${gate.displayName}・日間場地預覽`;
+          previewImage.alt = uiText("{gate}・日間場地預覽", { gate: gate.displayName });
         } else previewImage.removeAttribute('src');
       }
     }
@@ -292,7 +292,7 @@ export async function createGateSelectView({ root, source, mountWorld }) {
       previewImage.removeAttribute('src');
       fee.textContent = uiText("—");
     }
-    wallet.textContent = uiText(Number.isSafeInteger(block.walletBits) ? `${block.walletBits.toLocaleString('en-US')} 位元幣` : "—");
+    wallet.textContent = Number.isSafeInteger(block.walletBits) ? uiText("{bits} 位元幣", { bits: block.walletBits }) : "—";
     confirm.disabled = !block.canConfirm;
     admissionStatus.textContent = uiText(gateAdmissionMessage(block.admission));
     admissionStatus.hidden = !admissionStatus.textContent;
@@ -428,7 +428,7 @@ export function createHuntLoadoutView({ root, source }) {
       if (!row) {
         row = element("div", "cm-vs2-loadout__row");
         row.dataset.pluginPosition = String(position.position);
-        const label = element("span", "cm-vs2-loadout__label", `外掛 ${position.position + 1}`);
+        const label = element("span", "cm-vs2-loadout__label", uiText("外掛 {n}", { n: position.position + 1 }));
         const options = element("div", "cm-vs2-loadout__options");
         row.append(label, options);
         pluginRows.set(position.position, { row, options, buttons: new Map() });
@@ -465,8 +465,8 @@ export function createHuntLoadoutView({ root, source }) {
     const block = frame.huntLoadout;
     if (!block) return;
     gateName.textContent = uiText(block.gate?.displayName ?? "");
-    gateFee.textContent = uiText(block.admission
-      ? `入場費 ${block.admission.chargeBits.toLocaleString("en-US")} 位元幣 · 持有 ${block.admission.walletBits.toLocaleString("en-US")} 位元幣` : "");
+    gateFee.textContent = block.admission
+      ? uiText("入場費 {fee} 位元幣 · 持有 {wallet} 位元幣", { fee: block.admission.chargeBits, wallet: block.admission.walletBits }) : "";
     for (const entry of block.availableEquipment) {
       const selected = block.selectedEquipment.find((slot) => slot.equipmentClass === entry.equipmentClass);
       renderClass(entry, selected);
@@ -497,7 +497,16 @@ export function createHuntLoadoutView({ root, source }) {
   });
 }
 
-export async function createHuntFieldView({ root, source, mountField, loadTimeoutMs = 30000 }) {
+// Without an injected watchdog the view keeps a plain deadline, which is what
+// every Hunt load had before slow links were told apart from stalled ones.
+function fixedDeadlineWatchdog({ onExpire, maxMs }) {
+  let state = 'WAITING';
+  const timer = setTimeout(() => { if (state === 'WAITING') { state = 'TOO_LONG'; onExpire(state); } }, maxMs);
+  return { activity() {}, stop() { if (state === 'WAITING') state = 'STOPPED'; clearTimeout(timer); }, state: () => state };
+}
+
+export async function createHuntFieldView({ root, source, mountField, watchLoad = null,
+  stallTimeoutMs = 30000, maxLoadMs = 240000, slowNoticeMs = 8000 }) {
   if (typeof mountField !== "function") throw new TypeError("The Hunt field view requires the published field mounter");
   const frame = source.getFrame();
   const block = frame.huntField;
@@ -529,8 +538,25 @@ export async function createHuntFieldView({ root, source, mountField, loadTimeou
   fieldHost.setAttribute("aria-busy", "true");
   fieldHost.setAttribute("aria-label", uiText("Exploration field. Drag empty ground to look around. Touch a creature to select it."));
   viewport.append(fieldHost);
-  const loading = element('p', 'cm-vs2-field__loading', '正在準備狩獵場…');
+  // Loading reads as a sentence, a bar once the download size is known, and a
+  // note if it is slow. The status role only speaks at whole tens of percent.
+  const loading = element('div', 'cm-vs2-field__loading');
   loading.setAttribute('role', 'status');
+  const loadingText = element('p', 'cm-vs2-field__loading-text', '正在準備狩獵場…');
+  const loadingBar = element('span', 'cm-vs2-field__progress');
+  loadingBar.setAttribute('role', 'progressbar');
+  loadingBar.setAttribute('aria-label', uiText('狩獵場下載進度'));
+  loadingBar.setAttribute('aria-valuemin', '0');
+  loadingBar.setAttribute('aria-valuemax', '100');
+  loadingBar.hidden = true;
+  const loadingFill = element('span', 'cm-vs2-field__progress-fill');
+  loadingBar.append(loadingFill);
+  const loadingBytes = element('p', 'cm-vs2-field__loading-bytes');
+  loadingBytes.setAttribute('aria-hidden', 'true');
+  loadingBytes.hidden = true;
+  const loadingNote = element('p', 'cm-vs2-field__loading-note');
+  loadingNote.hidden = true;
+  loading.append(loadingText, loadingBar, loadingBytes, loadingNote);
   viewport.append(loading);
   const target = element("section", "cm-vs2-target");
   target.setAttribute('aria-label', uiText('狩獵目標資訊'));
@@ -572,10 +598,13 @@ export async function createHuntFieldView({ root, source, mountField, loadTimeou
   root.append(shell);
 
   const load = new AbortController();
-  let timedOut = false;
+  let expired = null;
   exit.addEventListener("click", () => {
     if (fieldHost.getAttribute('aria-busy') === 'true') {
-      loading.textContent = '正在返回牧場…';
+      loadingText.textContent = uiText('正在返回牧場…');
+      loadingBar.hidden = true;
+      loadingBytes.hidden = true;
+      loadingNote.hidden = true;
       exit.disabled = true;
     }
     load.abort();
@@ -583,11 +612,58 @@ export async function createHuntFieldView({ root, source, mountField, loadTimeou
   });
   // Network time belongs to this view, not to the native Hunt timer. Releasing
   // the mount queue on cancellation also lets Home open if a request hangs.
+  // A slow link keeps loading as long as bytes keep arriving; only a load that
+  // has stopped moving (or run past the outer limit) is given up.
   const cancelled = new Promise(resolve => load.signal.addEventListener('abort', () => resolve(null), { once: true }));
-  const timeout = setTimeout(() => { timedOut = true; load.abort(); }, loadTimeoutMs);
+  const onExpire = (reason) => { expired = reason; load.abort(); };
+  const watchdog = watchLoad?.({ onExpire, stallMs: stallTimeoutMs, maxMs: maxLoadMs })
+    ?? fixedDeadlineWatchdog({ onExpire, maxMs: maxLoadMs });
+  // A server that sends the file size gets a percentage. One that streams
+  // without it (the local development server) gets the bytes received so far
+  // and a bar that only says "moving"; neither invents a number.
+  let spokenStep = null;
+  const sizeText = (bytes) => (bytes >= 1048576 ? `${(bytes / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`);
+  function showProgress(progress) {
+    watchdog.activity();
+    if (!(progress?.loaded > 0) || load.signal.aborted) return;
+    loadingBar.hidden = false;
+    loadingBar.dataset.loadedBytes = String(progress.loaded);
+    // The byte count is for the eyes only; the status line speaks in steps.
+    loadingBytes.hidden = false;
+    let step, text;
+    if (progress.total > 0) {
+      const percent = Math.max(0, Math.min(99, Math.floor(progress.loaded / progress.total * 100)));
+      loadingBar.removeAttribute('data-indeterminate');
+      loadingFill.style.width = `${percent}%`;
+      loadingBar.setAttribute('aria-valuenow', String(percent));
+      loadingBytes.textContent = `${sizeText(progress.loaded)} / ${sizeText(progress.total)}`;
+      step = `p${Math.floor(percent / 10)}`;
+      text = uiText('正在下載狩獵場 {percent}%', { percent: Math.floor(percent / 10) * 10 });
+    } else {
+      loadingBar.dataset.indeterminate = 'true';
+      loadingFill.style.removeProperty('width');
+      loadingBar.removeAttribute('aria-valuenow');
+      loadingBytes.textContent = uiText('已下載 {size}', { size: sizeText(progress.loaded) });
+      step = 'bytes';
+      text = uiText('正在下載狩獵場…');
+    }
+    if (step !== spokenStep) { spokenStep = step; loadingText.textContent = text; }
+  }
+  // Any finished download also counts as the load being alive.
+  let resources = null;
+  try {
+    resources = new PerformanceObserver(() => watchdog.activity());
+    resources.observe({ type: 'resource' });
+  } catch { resources = null; }
+  const slowNotice = setTimeout(() => {
+    if (fieldHost.getAttribute('aria-busy') !== 'true' || load.signal.aborted) return;
+    loadingNote.textContent = uiText('網路較慢，仍在下載中；也可以先返回牧場。');
+    loadingNote.hidden = false;
+  }, slowNoticeMs);
   let field;
   try {
     const pending = Promise.resolve().then(() => mountField({ host: fieldHost, source, signal: load.signal,
+    onProgress: showProgress,
     onActorFrame:mode===VS2_PRESENTATION_MODES.DEVELOPER
       ? (positions,toolState)=>{fieldHost.dataset.wildScreenPositions=JSON.stringify(positions);
         fieldHost.dataset.huntToolState=JSON.stringify(toolState);} : null }));
@@ -596,10 +672,21 @@ export async function createHuntFieldView({ root, source, mountField, loadTimeou
       if (load.signal.aborted) { result?.dispose?.(); return null; }
       return result;
     }), cancelled]);
-  } finally { clearTimeout(timeout); }
+  } finally {
+    watchdog.stop();
+    resources?.disconnect();
+    clearTimeout(slowNotice);
+  }
   if (!field && load.signal.aborted) {
     fieldHost.setAttribute('aria-busy', 'false');
-    if (timedOut) loading.textContent = '狩獵場載入時間過長，請返回牧場後再試一次。';
+    if (expired) {
+      loadingText.textContent = uiText(expired === 'STALLED'
+        ? '狩獵場下載沒有回應，請返回牧場後再試一次。'
+        : '狩獵場載入時間過長，請返回牧場後再試一次。');
+      loadingBar.hidden = true;
+      loadingBytes.hidden = true;
+      loadingNote.hidden = true;
+    }
     return Object.freeze({ isPlayable: false, render() {}, dispose() { load.abort(); shell.remove(); } });
   }
   if (!field || typeof field.render !== "function" || typeof field.dispose !== "function") {
@@ -614,7 +701,7 @@ export async function createHuntFieldView({ root, source, mountField, loadTimeou
     gateName.textContent = uiText(next.hud.gateName ?? "");
     const remaining=next.hud.time?.remainingMinutes;
     companion.textContent = uiText(remaining == null ? next.hud.companionName ?? "" :
-      `剩餘 ${String(Math.floor(remaining/60)).padStart(2,'0')}:${String(remaining%60).padStart(2,'0')}`);
+      uiText('剩餘 {time}', { time: `${String(Math.floor(remaining/60)).padStart(2,'0')}:${String(remaining%60).padStart(2,'0')}` }));
     const selected = next.hud.target;
     targetName.textContent = uiText(selected ? selected.name??'野生數碼獸' : '輕觸數碼獸查看');
     target.dataset.selected = String(Boolean(selected));
@@ -625,8 +712,12 @@ export async function createHuntFieldView({ root, source, mountField, loadTimeou
     for(const marker of plugins?.radar??[]){const dot=element('i');dot.style.left=`${marker.x*100}%`;dot.style.top=`${marker.y*100}%`;radar.append(dot);}
     if(next.toolState){
       for(const tool of next.toolState.tools){const button=toolButtons.get(tool.id);if(button){button.disabled=field.isPlayable===false||!tool.enabled;button.setAttribute("aria-pressed",String(next.toolState.activeTool===tool.id));
-        const counter=plugins?.counters.find(c=>c.id===tool.id);button.textContent=uiText(tool.label+(counter?` ×${counter.quantity}`:''));}}
+        const counter=plugins?.counters.find(c=>c.id===tool.id);button.textContent=uiText(tool.label)+(counter?` ×${counter.quantity}`:'');}}
       const selectedTool=next.toolState.tools.find(t=>t.id===next.toolState.activeTool);
+      // A notice (the rope broke, the card is full) is feedback and always
+      // shows; an instruction is a hint the compact HUD may leave out.
+      const noticeKnown=Boolean(next.toolState.notice&&["OVER_CAPACITY","ROPE_BROKEN","ON_CARD","EMPTY","BLOCKED_TERRAIN","FOOD_POOL_FULL","TOOL_POOL_FULL"].includes(next.toolState.notice));
+      movementHint.dataset.kind=noticeKnown?"notice":"instruction";
       movementHint.textContent=uiText(({OVER_CAPACITY:"記憶卡容量不足",ROPE_BROKEN:"繩索斷了",ON_CARD:"已收入記憶卡",EMPTY:"道具已用完",
         BLOCKED_TERRAIN:"無法放在這個位置",FOOD_POOL_FULL:"場上的肉餌已滿",TOOL_POOL_FULL:"場上的道具已滿"})[next.toolState.notice]
         ?? ({ROPE:"快速畫圈綑綁 · 按住目標拉動繩索 · 放鬆可恢復耐久",SHOT:"按住目標射擊",WIRE:"拖曳拉出鋼索 · 放手完成",

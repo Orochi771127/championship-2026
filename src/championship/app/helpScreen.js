@@ -88,7 +88,7 @@ export function createHelpView({ root, entryIndex = null, onExit } = {}) {
   scrim.addEventListener("click", () => closeDetail());
   const detail = element("article", "cm-help-detail cm-sheet__panel");
   detail.setAttribute("role", "dialog");
-  detail.setAttribute("aria-label", "說明內容");
+  detail.setAttribute("aria-label", uiText("說明內容"));
   sheet.append(scrim, detail);
   let opener = null;
   function closeDetail() {
@@ -152,7 +152,7 @@ export function createHelpView({ root, entryIndex = null, onExit } = {}) {
 
   // The grouping caveat is an evidence note, not player copy.
   const note = element("p", "cm-help-note",
-    `依原作順序列出 ${HELP_TOPIC_COUNT} 個說明主題與 ${HELP_HEADING_COUNT} 個分類標題。分類與主題的從屬關係尚待確認。`);
+    uiText("依原作順序列出 {topics} 個說明主題與 {headings} 個分類標題。分類與主題的從屬關係尚待確認。", { topics: HELP_TOPIC_COUNT, headings: HELP_HEADING_COUNT }));
   note.hidden = !developer;
 
   const footer = element("footer", "cm-screen-footer");

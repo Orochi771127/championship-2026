@@ -70,14 +70,55 @@ fs.mkdirSync(output, {recursive:true});
     await page.getByRole('button',{name:'返回牧場',exact:true}).click();
     await page.locator('[data-screen="RAISING_HOME"]').waitFor({timeout:90000});
     await page.unroute(failedManifest);
+    // A slow but working link (2026-09-29): about 48 KB/s, the speed at which
+    // the public playtest's Hunt used to give up at a fixed 30 s. The download
+    // must keep going, show real progress, and end in a playable field with no
+    // failure message.
+    await loadout();
+    const cdp=await page.context().newCDPSession(page);
+    await cdp.send('Network.enable');
+    await cdp.send('Network.emulateNetworkConditions',{offline:false,latency:150,downloadThroughput:48*1024,uploadThroughput:48*1024});
+    const slowStart=Date.now();
+    await page.locator('.cm-vs2-footer .cm-vs2-action--primary').click();
+    await page.locator('.cm-vs2-field__progress:not([hidden])').waitFor({timeout:60000});
+    const percents=new Set();
+    const seenFailure=()=>page.getByRole('status').filter({hasText:/沒有回應|時間過長/}).count();
+    let slowReady=false,noteShot=false;
+    while(Date.now()-slowStart<240000){
+      if(await page.locator('.cm-vs2-field__canvas[aria-busy="false"]').count()){slowReady=true;break;}
+      // Bytes received so far: present whether or not the server sends sizes.
+      const now=await page.locator('.cm-vs2-field__progress').getAttribute('data-loaded-bytes').catch(()=>null);
+      if(now!==null)percents.add(Number(now));
+      assert.equal(await seenFailure(),0,'a download that is still moving must not be given up');
+      if(Date.now()-slowStart>12000&&!noteShot){
+        assert.equal(await page.locator('.cm-vs2-field__loading-note').isVisible(),true,'a slow load says it is still downloading');
+        await page.screenshot({path:path.join(output,'slow-link-progress.png')});noteShot=true;
+      }
+      await page.waitForTimeout(1000);
+    }
+    const slowSeconds=Math.round((Date.now()-slowStart)/1000);
+    await cdp.send('Network.emulateNetworkConditions',{offline:false,latency:0,downloadThroughput:-1,uploadThroughput:-1});
+    assert.equal(slowReady,true,'the slow link finishes loading the Hunt');
+    assert.ok(slowSeconds>30,`the throttled load outlasted the old 30 s limit (${slowSeconds}s)`);
+    const seen=[...percents].sort((a,b)=>a-b);
+    assert.ok(seen.length>=3&&seen.at(-1)>seen[0],`bytes kept arriving and were shown while downloading (${seen.join(',')})`);
+    await page.waitForTimeout(500);
+    assert.equal(await page.locator('.cm-vs2-field__loading').count(),0);
+    assert.ok(await page.locator('.cm-hunt-tools button:enabled').count()>0);
+    await page.screenshot({path:path.join(output,'slow-link-ready.png')});
+    await page.getByRole('button',{name:'返回牧場',exact:true}).click();
+    await page.locator('[data-screen="RAISING_HOME"]').waitFor({timeout:90000});
+    await cdp.detach();
+
     await loadout();
     let timeoutHit;const timeoutIntercepted=new Promise(r=>timeoutHit=r),timeoutGate=new Promise(r=>release=r);
     await page.route(failedManifest,async route=>{timeoutHit();await timeoutGate;await route.abort().catch(()=>{});});
     await page.clock.install();
     await page.locator('.cm-vs2-footer .cm-vs2-action--primary').click();await timeoutIntercepted;
     const beforeTimeout=await page.locator('.cm-status-bar__time').textContent();
+    // Nothing more arrives: 30 s after the last progress the load is stalled.
     await page.clock.fastForward(31000);
-    await page.getByRole('status').filter({hasText:'狩獵場載入時間過長'}).waitFor();
+    await page.getByRole('status').filter({hasText:'狩獵場下載沒有回應'}).waitFor();
     assert.equal(await page.locator('.cm-status-bar__time').textContent(),beforeTimeout);
     assert.equal(await page.locator('.cm-hunt-tools button:enabled').count(),0);
     await page.screenshot({path:path.join(output,'timeout.png')});
@@ -85,7 +126,8 @@ fs.mkdirSync(output, {recursive:true});
     await page.locator('[data-screen="RAISING_HOME"]').waitFor({timeout:15000});
     release();await page.unroute(failedManifest,{behavior:'wait'});
     assert.deepEqual(errors,[]);
-    fs.writeFileSync(path.join(output,'result.json'),JSON.stringify({passed:true,delayedClock:true,cancelBeforeDownloadFinishes:true,reentryBeforeOldDownloadFinishes:true,timeoutWithoutClockLoss:true,optionalFeedbackFailure:true,errors},null,2));
+    fs.writeFileSync(path.join(output,'result.json'),JSON.stringify({passed:true,delayedClock:true,cancelBeforeDownloadFinishes:true,reentryBeforeOldDownloadFinishes:true,
+      slowLink:{throughputBytesPerSecond:48*1024,seconds:slowSeconds,progressSeen:seen},stallWithoutClockLoss:true,optionalFeedbackFailure:true,errors},null,2));
     console.log('CHAMPIONSHIP_HUNT_LOADING_BROWSER_PASS');
   } catch(e) {console.error(e);throw e;} finally {release?.();await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

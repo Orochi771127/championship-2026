@@ -42,6 +42,11 @@ export const VS5_VERDICT_LABELS = Object.freeze({
   LEVEL: "雙方平手"
 });
 
+/** An amount of bits, grouped the way the display language groups numbers. */
+function formatBits(value) {
+  return uiText("{n}", { n: value });
+}
+
 function element(tag, className, text, localize = true) {
   const node = document.createElement(tag);
   if (className) node.className = className;
@@ -178,7 +183,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   let selectedMatch=null,selectedIds=[];
   function arenaSelector(){
     const label=element('label','cm-vs5-arena-choice','對戰場地'),select=element('select');
-    select.setAttribute('aria-label','對戰場地');select.append(element('option','','隨機場地'));select.children[0].value='';
+    select.setAttribute('aria-label',uiText('對戰場地'));select.append(element('option','','隨機場地'));select.children[0].value='';
     for(const arena of arenaChoices){const option=element('option','',arena.identifier.replace('BATTLE_',''));option.value=String(arena.index);select.append(option);}
     label.append(select);return {node:label,value:()=>select.value?Number(select.value):null};
   }
@@ -187,7 +192,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     entryNotice.hidden=false;entryNotice.dataset.reason=result.reason??'ENTRY_REFUSED';
     const fee=result.entryFee??match.entryFee,wallet=result.walletBits??result.wallet??result.bits;
     entryNotice.textContent=uiText(['INSUFFICIENT_FUNDS','INSUFFICIENT_BITS'].includes(result.reason)
-      ?`持有金額不足。報名費 ${fee} 位元幣；持有 ${wallet??'—'} 位元幣。`
+      ?uiText('持有金額不足。報名費 {fee} 位元幣；持有 {wallet} 位元幣。',{fee,wallet:wallet??'—'})
       :result.message??menuCopy.entryRefused??'目前無法參加這場對戰。');
   }
   async function chooseParty(match){
@@ -202,7 +207,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     }
     if(cubeDisposed||request!==partyRequest)return;
     const {candidates,limit}=selection;
-    partyPanel.append(element('h2','cm-vs5-title','選擇參賽數碼獸'),element('p','cm-vs5-entry-notice',`最多 ${limit} 隻`));
+    partyPanel.append(element('h2','cm-vs5-title','選擇參賽數碼獸'),element('p','cm-vs5-entry-notice',uiText('最多 {limit} 隻',{limit})));
     const arena=mode==='FREE_BATTLE'?arenaSelector():null;if(arena)partyPanel.append(arena.node);
     const controls=[];
     const confirm=actionButton('決定',{primary:true});confirm.disabled=true;
@@ -211,7 +216,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       button.dataset.instanceId=entry.instanceId;button.setAttribute('aria-pressed','false');
       button.disabled=!entry.admission.ok;
       if(!entry.admission.ok)button.append(element('span','cm-vs5-match__fee',entry.admission.message));
-      else if(entry.profile)button.append(element('span','cm-vs5-match__fee',`HP ${entry.profile.currentHp}／${entry.profile.maxHp}　TP ${entry.profile.currentTp}／${entry.profile.maxTp}`));
+      else if(entry.profile)button.append(element('span','cm-vs5-match__fee',uiText('HP {hp}／{maxHp}　TP {tp}／{maxTp}',{hp:entry.profile.currentHp,maxHp:entry.profile.maxHp,tp:entry.profile.currentTp,maxTp:entry.profile.maxTp})));
       button.addEventListener('click',()=>{
         selectedIds=selectedIds.includes(entry.instanceId)?selectedIds.filter(id=>id!==entry.instanceId):[...selectedIds,entry.instanceId];
         for(const [c,b] of controls){const picked=selectedIds.includes(c.instanceId);b.setAttribute('aria-pressed',String(picked));b.disabled=!c.admission.ok||(!picked&&selectedIds.length>=limit);}
@@ -241,7 +246,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     const teams=[[],[]],controls=[],summary=element('p','cm-vs5-entry-notice'),arena=arenaSelector();
     const confirm=actionButton('開始練習',{primary:true});confirm.disabled=true;
     const refresh=()=>{
-      summary.textContent=`A 隊 ${teams[0].length}／3　B 隊 ${teams[1].length}／3`;
+      summary.textContent=uiText('A 隊 {a}／3　B 隊 {b}／3',{a:teams[0].length,b:teams[1].length});
       for(const {button,entry,team} of controls){const picked=teams[team].includes(entry.instanceId);
         button.setAttribute('aria-pressed',String(picked));button.disabled=entering||!entry.admission.ok
           ||teams[1-team].includes(entry.instanceId)||(!picked&&teams[team].length>=3);}
@@ -252,7 +257,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       const row=element('div','cm-vs5-practice-member'),name=memberName(entry);
       row.append(element('span','cm-vs5-practice-member__name',name));
       if(!entry.admission.ok)row.append(element('span','cm-vs5-match__fee',entry.admission.message));
-      for(const team of [0,1]){const button=actionButton(`${team===0?'A':'B'} 隊`);button.setAttribute('aria-label',`${name} ${team===0?'A':'B'} 隊`);
+      for(const team of [0,1]){const button=actionButton(uiText('{team} 隊',{team:team===0?'A':'B'}));button.setAttribute('aria-label',uiText('{name} {team} 隊',{name,team:team===0?'A':'B'}));
         button.addEventListener('click',()=>{if(button.disabled)return;const ids=teams[team],at=ids.indexOf(entry.instanceId);if(at<0)ids.push(entry.instanceId);else ids.splice(at,1);refresh();});
         controls.push({button,entry,team});row.append(button);}
       partyPanel.append(row);
@@ -281,13 +286,13 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       element('p','cm-vs5-entry-notice','輸入兩組隊伍密碼。每組密碼可還原最多 3 隻數碼獸。'));
     const inputs=[];
     for(const team of ['A','B']){
-      const label=element('label','cm-vs5-password-label',`${team} 隊密碼`);
+      const label=element('label','cm-vs5-password-label',uiText('{team} 隊密碼',{team}));
       // Spaces in a copied code do not count and the decoder checks the real
       // length, so a leading space must not push the last symbol out of the field.
       const inputCap=maxLength*3;
       const input=element('input','cm-vs5-password-input');input.value='';input.maxLength=inputCap;
       input.setAttribute('maxlength',String(inputCap));input.setAttribute('autocomplete','off');input.setAttribute('autocapitalize','none');
-      input.setAttribute('spellcheck','false');input.setAttribute('aria-label',`${team} 隊密碼`);
+      input.setAttribute('spellcheck','false');input.setAttribute('aria-label',uiText('{team} 隊密碼',{team}));
       label.append(input);inputs.push(input);partyPanel.append(label);
     }
     const confirm=actionButton('開始密碼對戰',{primary:true});confirm.disabled=true;
@@ -308,7 +313,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
         element('p','cm-vs5-entry-notice','選擇最多 3 隻自己的數碼獸，產生可以分享給朋友的密碼。密碼保存的是現在的狀態。'));
       const chosen=[],picks=[];
       const output=element('input','cm-vs5-password-input');output.value='';output.readOnly=true;
-      output.setAttribute('readonly','');output.setAttribute('aria-label','我的隊伍密碼');
+      output.setAttribute('readonly','');output.setAttribute('aria-label',uiText('我的隊伍密碼'));
       const make=actionButton('產生密碼',{primary:true}),copy=actionButton('複製密碼');copy.hidden=true;
       const status=element('p','cm-vs5-entry-notice');status.hidden=true;status.setAttribute('role','status');
       const sync=()=>{
@@ -426,9 +431,9 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       const button = actionButton(selectedMode==='FREE_BATTLE'?match.title:titleEventText(match.recordIndex, "name", match.title ?? `${menuCopy.match} ${match.recordIndex}`));
       button.classList.add("cm-vs5-match__enter");
       button.append(element("span", "cm-vs5-match__fee",
-        `${menuCopy.entryFee ?? "報名費"} ${Number.isSafeInteger(match.entryFee) ? match.entryFee.toLocaleString("en-US") : "—"} 位元幣`));
+        uiText("報名費 {bits} 位元幣", { bits: Number.isSafeInteger(match.entryFee) ? match.entryFee : "—" })));
       button.append(element("span", "cm-vs5-match__payout",
-        `${menuCopy.prize ?? "獎金"} ${match.payout > 0 ? `${match.payout.toLocaleString("en-US")} 位元幣` : menuCopy.noPayout}`));
+        match.payout > 0 ? uiText("獎金 {bits} 位元幣", { bits: match.payout }) : uiText("獎金 {none}", { none: menuCopy.noPayout })));
       button.addEventListener("click", async () => {
         if(getPartySelection){await chooseParty(match);return;}
         const result = await onEnter(match.recordIndex,undefined,selectedMode);
@@ -438,7 +443,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
         const fee = result.entryFee ?? match.entryFee;
         const wallet = result.walletBits ?? result.wallet ?? result.bits;
         entryNotice.textContent = uiText(["INSUFFICIENT_FUNDS", "INSUFFICIENT_BITS"].includes(result.reason)
-          ? `${menuCopy.insufficientFunds ?? "持有金額不足。"} ${menuCopy.entryFee ?? "報名費"} ${fee} 位元幣；${menuCopy.wallet ?? "持有"} ${wallet ?? "—"} 位元幣。`
+          ? uiText("持有金額不足。 報名費 {fee} 位元幣；持有 {wallet} 位元幣。", { fee, wallet: wallet ?? "—" })
           : (result.message ?? menuCopy.entryRefused ?? "目前無法參加這場對戰。"));
       });
       item.append(button);
@@ -580,7 +585,7 @@ function combatantCard(combatant, compact,hudArt=null) {
       portrait.hidden=!image;
       if(image){if(portrait.getAttribute('src')!==image.src)portrait.src=image.src;}
       hp.fill.style.width = `${Math.round(next.hp.ratio * 100)}%`;
-      hpValue.textContent = uiText(`生命值 ${next.hp.current} / ${next.hp.maximum}`);
+      hpValue.textContent = uiText("生命值 {hp} / {max}", { hp: next.hp.current, max: next.hp.maximum });
       hp.wrap.setAttribute('aria-label', uiText(hpValue.textContent));
       card.dataset.down = String(next.down);
       card.dataset.engaged = String(next.engaged);
@@ -723,12 +728,21 @@ export function createBattleFieldView({ root, frame, mountField, onExit,hudArt=n
  * Panels advance one at a time, which is how the original presents them; the
  * last one returns home.
  */
-export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], hudArt=null, onExit, exitLabel="返回牧場" }) {
+export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null }) {
   if (!outcome || typeof outcome !== "object") throw new TypeError("The Battle result requires an outcome");
 
   const section = shell(root, "BATTLE_RESULT", "Battle result");
   section.dataset.verdict = outcome.verdict;
   section.dataset.endReason = outcome.reason;
+
+  // Feedback tier. The app decides it from its own settled receipt and hands
+  // the important-highlight template in; this view only says where the plate
+  // is and what figure it shows. Any other result uses the ordinary entrance.
+  const tier = feedback?.tier === "highlight" && typeof highlight === "function" ? "highlight" : "result";
+  section.dataset.feedback = tier;
+  const settlement = tier === "highlight" && Number.isSafeInteger(feedback.settlement?.credited) && feedback.settlement.credited >= 0
+    ? feedback.settlement : null;
+  let amountNode = null;
 
   const panels = [];
 
@@ -747,6 +761,15 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
       // time is still distinguishable from being knocked down.
       if (outcome.winningTeam === null) {
         frag.append(element("p", "cm-vs5-result__detail", "雙方都未取得領先。"));
+      }
+      // The settled prize, counted up by the highlight and always ending on
+      // the receipt's own figure; the prize panel that follows has the rest.
+      if (settlement) {
+        const line = element("p", "cm-vs5-result__settlement");
+        amountNode = element("strong", "cm-vs5-result__amount", formatBits(settlement.credited), false);
+        line.append(element("span", "cm-vs5-result__settlement-label", "獎金 +"), amountNode, element("span", "", "位元幣"));
+        if (settlement.clamped) line.append(element("span", "cm-vs5-result__cap", "持有金額已達上限"));
+        frag.append(line);
       }
       return frag;
     }
@@ -768,16 +791,16 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
       // title plate no longer sits over its own label.
       const head = element("header", "cm-vs5-header");
       head.append(element("span", "cm-vs5-kicker", "獎金"),
-        element("h1", "cm-vs5-title", credited ? receipt.credited.toLocaleString("en-US") : "—"));
+        element("h1", "cm-vs5-title", credited ? formatBits(receipt.credited) : "—"));
       frag.append(head);
       if (!credited) {
         frag.append(element("p", "cm-vs5-result__detail", "獎金尚未入帳。"));
         return frag;
       }
-      frag.append(element("p", "cm-vs5-result__detail", `持有 ${receipt.walletAfter.toLocaleString("en-US")} 位元幣`));
+      frag.append(element("p", "cm-vs5-result__detail", uiText("持有 {bits} 位元幣", { bits: receipt.walletAfter })));
       if (receipt.clamped) {
         frag.append(element("p", "cm-vs5-result__detail",
-          `獎金 ${receipt.rewardBits.toLocaleString("en-US")} 位元幣；持有金額已達上限。`));
+          uiText("獎金 {bits} 位元幣；持有金額已達上限。", { bits: receipt.rewardBits })));
       } else if (receipt.credited === 0) {
         frag.append(element("p", "cm-vs5-result__detail", "本場沒有獲得獎金。"));
       }
@@ -789,7 +812,7 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
   if(credited&&receipt.won&&Number.isInteger(progression?.rankBefore)&&Number.isInteger(progression?.rankAfter)&&progression.rankAfter>progression.rankBefore){
     panels.push({id:'RANK',scene:'result_sub_rankup_scene',build(){
       const frag=document.createDocumentFragment();frag.append(element('span','cm-vs5-kicker','馴獸師升階'),
-        element('h1','cm-vs5-title',`階級 ${progression.rankBefore} → ${progression.rankAfter}`));return frag;
+        element('h1','cm-vs5-title',uiText('階級 {before} → {after}',{before:progression.rankBefore,after:progression.rankAfter})));return frag;
     }});
   }
   if(credited&&receipt.won&&progression?.earnedTitles?.length){
@@ -821,7 +844,7 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
 
   const body = element("div", "cm-vs5-result__body");
   const characterHost=element('div','cm-vs5-result__characters');
-  characterHost.setAttribute('aria-label','參賽數碼獸');
+  characterHost.setAttribute('aria-label',uiText('參賽數碼獸'));
   const resultStage=element('div','cm-vs5-result__stage');resultStage.append(characterHost,body);
   let index = 0;
 
@@ -834,12 +857,33 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     exit.hidden = !last;
   }
 
+  let entrance = null;
   advance.addEventListener("click", () => {
+    // While the highlight plays, the first press lands it; the next advances.
+    if (entrance && section.dataset.entrance !== "DONE") {
+      entrance.skip?.();
+      section.dataset.entrance = "DONE";
+      return;
+    }
     if (index < panels.length - 1) { index += 1; paint(); }
   });
 
   section.append(resultStage, advance, exit);
   paint();
+
+  if (tier === "highlight") {
+    section.dataset.entrance = "PREPARE";
+    try {
+      entrance = highlight({
+        host: resultStage,
+        focus: body,
+        target: settlement?.credited ?? 0,
+        onPhase(phase) { section.dataset.entrance = phase; },
+        onValue(value) { if (amountNode) amountNode.textContent = formatBits(value); }
+      }) ?? null;
+    } catch { entrance = null; }
+    if (!entrance) section.dataset.entrance = "DONE";
+  }
 
   return Object.freeze({
     getCharacterHost:()=>characterHost,
@@ -854,9 +898,11 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
         notBuilt: Object.freeze([]),
         conditionalScenes: Object.freeze(['result_sub_rankup_scene','result_sub_titleget']),
         visualGaps:Object.freeze(['ORIGINAL_RANK_ART','ORIGINAL_SCENE_TRANSITIONS']),
+        feedback: tier,
+        entrance: section.dataset.entrance ?? null,
         outOfScope: Object.freeze(["result_sub_net_scene"])
       });
     },
-    dispose() {}
+    dispose() { entrance?.dispose?.(); entrance = null; }
   });
 }

@@ -1,4 +1,5 @@
 import {createOpeningStoryState,advanceOpeningStory,openingStoryTrajectory} from './nativeOpeningStory.js';
+import {uiText} from '../text/uiText.js';
 
 // Translated from the four observed opening cards. Pictures below are authored
 // CSS illustrations, not decoded original screenshots or licensed battle art.
@@ -11,9 +12,9 @@ const TEXT=[
 const FRAME_MS=1000/60;
 
 export function createOpeningStoryPresentation({host,onComplete}){
-  const el=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text)n.textContent=text;return n;};
+  const el=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text)n.textContent=uiText(text);return n;};
   const root=el('section','cm-opening-story');root.tabIndex=0;root.setAttribute('role','button');
-  root.setAttribute('aria-label','開場故事，閱讀後點按繼續');
+  root.setAttribute('aria-label',uiText('開場故事，閱讀後點按繼續'));
   const cards=[],parts=[];
   for(let i=0;i<4;i++){
     const card=el('article',`cm-opening-story__card cm-opening-story__card--${i}`),row=[el('p','cm-opening-story__text',TEXT[i])];

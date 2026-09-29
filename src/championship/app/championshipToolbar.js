@@ -82,6 +82,37 @@ export const TOOLBAR_MENUS = Object.freeze([
   })
 ]);
 
+/**
+ * Entries this product adds to a submenu (PRODUCT_AUTHORED, settings round
+ * 2026-09-29). They are kept apart from TOOLBAR_MENUS, which stays exactly the
+ * observed original menus; the menu panel shows both, grouped below.
+ */
+export const TOOLBAR_PRODUCT_ENTRIES = Object.freeze({
+  SYSTEM: Object.freeze([
+    Object.freeze({ id: "settings", label: "Settings", action: "OPEN_SETTINGS", hint: "主題、畫質、聲音與語言", evidence: "PRODUCT_AUTHORED" })
+  ])
+});
+
+/**
+ * How the two submenus are laid out (2026-09-29, OWNER_APPROVED_ADAPTATION of
+ * presentation). The entries, their labels and destinations are the observed
+ * ones above; they are shown in groups so the three destinations of the loop
+ * are not filed among system chores, and the two entries that end something
+ * (the day, the session) sit apart. An entry no group names still appears.
+ */
+export const TOOLBAR_MENU_GROUPS = Object.freeze({
+  MANAGEMENT: Object.freeze([
+    Object.freeze({ id: "residents", title: "夥伴與牧場", entries: Object.freeze(["digimon", "cageEdit"]) }),
+    Object.freeze({ id: "records", title: "紀錄", entries: Object.freeze(["tamer", "schedule"]) }),
+    Object.freeze({ id: "day", title: null, entries: Object.freeze(["endDay"]), separate: true })
+  ]),
+  SYSTEM: Object.freeze([
+    Object.freeze({ id: "go", title: "出發", entries: Object.freeze(["hunt", "battle", "shop"]), prominent: true }),
+    Object.freeze({ id: "reference", title: "資料", entries: Object.freeze(["database", "help"]) }),
+    Object.freeze({ id: "session", title: null, entries: Object.freeze(["settings", "saveQuit"]), separate: true })
+  ])
+});
+
 function element(tag, className, text) {
   const node = document.createElement(tag);
   if (className) node.className = className;
@@ -112,6 +143,17 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
   menuPanel.hidden = true;
   menuPanel.setAttribute("role", "menu");
 
+  // While a care tool is chosen, say what it does and how to put it down.
+  // It sits above the rail and never changes the rail's measured height.
+  const toolHint = element("div", "cm-toolbar__tool-hint");
+  toolHint.hidden = true;
+  toolHint.setAttribute("role", "status");
+  const toolName = element("span", "cm-toolbar__tool-name");
+  const toolText = element("span", "cm-toolbar__tool-text");
+  const toolDone = element("button", "cm-toolbar__tool-done", "完成");
+  toolDone.type = "button";
+  toolHint.append(toolName, toolText, toolDone);
+
   const rail = element("div", "cm-toolbar__rail");
   rail.setAttribute("role", "toolbar");
   rail.setAttribute("aria-label", uiText("Contextual toolbar"));
@@ -127,34 +169,59 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
     for (const cell of rail.querySelectorAll("[data-menu-id]")) cell.setAttribute("aria-expanded", "false");
   }
 
+  function entryButton(entry) {
+    // Two lines: the original entry name, then what it is for, so Hunt,
+    // Battle and Shop can be found without knowing the menus by heart.
+    const button = element("button", "cm-toolbar__entry");
+    button.append(element("span", "cm-toolbar__entry-label", entry.label));
+    if (entry.hint) button.append(element("span", "cm-toolbar__entry-hint", entry.hint));
+    button.setAttribute("aria-label", uiText(entry.label));
+    button.type = "button";
+    button.setAttribute("role", "menuitem");
+    button.dataset.entryId = entry.id;
+    const reachable = Boolean(entry.screen || entry.action);
+    button.disabled = !reachable;
+    if (!reachable) {
+      // The original has this destination; this build has not made it yet.
+      button.dataset.state = "NOT_IMPLEMENTED";
+      button.title = uiText("In the original, not yet in this build");
+    }
+    button.addEventListener("click", () => {
+      closeMenu();
+      onMenuEntry(entry);
+    });
+    return button;
+  }
+
   function openMenu(menu) {
     if (openMenuId === menu.id) { closeMenu(); return; }
     openMenuId = menu.id;
     menuPanel.replaceChildren();
     menuPanel.dataset.menuId = menu.id;
-    for (const entry of menu.entries) {
-      // Two lines: the original entry name, then what it is for, so Hunt,
-      // Battle and Shop can be found without knowing the menus by heart.
-      const button = element("button", "cm-toolbar__entry");
-      button.append(element("span", "cm-toolbar__entry-label", entry.label));
-      if (entry.hint) button.append(element("span", "cm-toolbar__entry-hint", entry.hint));
-      button.setAttribute("aria-label", uiText(entry.label));
-      button.type = "button";
-      button.setAttribute("role", "menuitem");
-      button.dataset.entryId = entry.id;
-      const reachable = Boolean(entry.screen || entry.action);
-      button.disabled = !reachable;
-      if (!reachable) {
-        // The original has this destination; this build has not made it yet.
-        button.dataset.state = "NOT_IMPLEMENTED";
-        button.title = uiText("In the original, not yet in this build");
+    const byId = new Map([...menu.entries, ...(TOOLBAR_PRODUCT_ENTRIES[menu.id] ?? [])].map((entry) => [entry.id, entry]));
+    const placed = new Set();
+    for (const group of TOOLBAR_MENU_GROUPS[menu.id] ?? []) {
+      const entries = group.entries.map((id) => byId.get(id)).filter(Boolean);
+      if (!entries.length) continue;
+      const block = element("div", "cm-toolbar__group");
+      block.setAttribute("role", "group");
+      block.dataset.group = group.id;
+      if (group.prominent) block.dataset.prominent = "true";
+      if (group.separate) block.dataset.separate = "true";
+      if (group.title) {
+        // "menu" context: 「資料」 here is the reference shelf, not the Data attribute.
+        const title = element("p", "cm-toolbar__group-title");
+        title.textContent = uiText(group.title, { context: "menu" });
+        title.setAttribute("aria-hidden", "true");
+        block.setAttribute("aria-label", uiText(group.title, { context: "menu" }));
+        block.append(title);
       }
-      button.addEventListener("click", () => {
-        closeMenu();
-        onMenuEntry(entry);
-      });
-      menuPanel.append(button);
+      const list = element("div", "cm-toolbar__group-entries");
+      for (const entry of entries) { list.append(entryButton(entry)); placed.add(entry.id); }
+      block.append(list);
+      menuPanel.append(block);
     }
+    for (const entry of byId.values()) if (!placed.has(entry.id)) menuPanel.append(entryButton(entry));
     menuPanel.hidden = false;
     for (const cell of rail.querySelectorAll("[data-menu-id]")) {
       cell.setAttribute("aria-expanded", String(cell.dataset.menuId === menu.id));
@@ -167,6 +234,7 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
       cell.setAttribute("aria-pressed", String(cell.dataset.toolId === selectedTool));
     }
     bar.dataset.selectedTool = selectedTool ?? "";
+    paintToolHint();
     onToolChange?.(selectedTool);
   }
 
@@ -202,8 +270,34 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
     rail.append(button);
   });
 
-  bar.append(menuPanel, rail);
+  bar.append(menuPanel, rail, toolHint);
   root.append(bar);
+  function paintToolHint() {
+    const tool = TOOLBAR_TOOLS.find((entry) => entry.id === selectedTool) ?? null;
+    toolHint.hidden = !tool;
+    toolName.textContent = uiText(tool?.label ?? "");
+    toolText.textContent = uiText(tool?.hint ?? "");
+    const body = root.ownerDocument?.body ?? null;
+    if (body?.dataset) {
+      if (tool) body.dataset.tool = tool.id; else delete body.dataset.tool;
+    }
+  }
+  toolDone.addEventListener("click", () => { if (selectedTool) selectTool(selectedTool); });
+  // An open menu closes on Escape (focus returns to its button) or on a press
+  // anywhere outside the toolbar; the press itself still reaches its target.
+  const ownerDocument = root.ownerDocument ?? globalThis.document;
+  function onMenuKey(event) {
+    if (event.key !== "Escape" || openMenuId === null) return;
+    const opener = rail.querySelector?.(`[data-menu-id="${openMenuId}"]`);
+    closeMenu();
+    opener?.focus?.();
+  }
+  function onOutsidePress(event) {
+    if (openMenuId === null || bar.contains?.(event.target)) return;
+    closeMenu();
+  }
+  ownerDocument?.addEventListener?.("keydown", onMenuKey);
+  ownerDocument?.addEventListener?.("pointerdown", onOutsidePress, true);
   function refreshFoodStock() {
     const stock=getFoodStock();
     for(const id of ['feed','protein','medicine','woundMedicine']) {
@@ -247,6 +341,7 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
       if (currentMode !== mode) {
         selectedTool = null;
         bar.dataset.selectedTool = "";
+        paintToolHint();
         onToolChange?.(null);
       }
       currentMode = mode;
@@ -271,6 +366,23 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
       return selectedTool;
     },
 
+    /** Re-apply every label in the current language (after a language switch). */
+    relabel() {
+      if (disposed) return;
+      rail.setAttribute("aria-label", uiText("Contextual toolbar"));
+      toolDone.textContent = uiText("完成");
+      const hunt = currentMode === TOOLBAR_MODES.HUNT;
+      for (const button of rail.querySelectorAll("[data-cell-index]")) {
+        const cell = cells[Number(button.dataset.cellIndex)];
+        button.querySelector(".cm-toolbar__cell-label").textContent = uiText(hunt ? "—" : (cell.tool?.label ?? cell.menu.label));
+        button.title = uiText(hunt ? "In the original, not yet in this build" : (cell.tool?.hint ?? ""));
+      }
+      paintToolHint();
+      const open = TOOLBAR_MENUS.find((menu) => menu.id === openMenuId);
+      if (open) { openMenuId = null; openMenu(open); }
+      syncHeight();
+    },
+
     getOpenMenuId() { return openMenuId; },
 
     closeMenu,
@@ -282,6 +394,8 @@ export function createChampionshipToolbar({ root, onMenuEntry, onToolChange, get
       resizeObserver?.disconnect();
       if (!resizeObserver) windowHost?.removeEventListener("resize", syncHeight);
       closeMenu();
+      ownerDocument?.removeEventListener?.("keydown", onMenuKey);
+      ownerDocument?.removeEventListener?.("pointerdown", onOutsidePress, true);
       delete host.dataset.toolbar;
       host.style.removeProperty("--cm-toolbar-height");
       bar.remove();

@@ -29,7 +29,7 @@ function element(tag, className, text) {
 /** schedule_item spends money_01..money_06 and a bit mark on a prize. */
 function prizeRow(prize) {
   const row = element("p", "cm-championship-prize");
-  row.append(element("span", "cm-championship-prize__digits", prize.toLocaleString("en-US")));
+  row.append(element("span", "cm-championship-prize__digits", uiText("{n}", { n: prize })));
   row.append(element("span", "cm-championship-prize__bit", uiText("位元幣")));
   return row;
 }
@@ -40,7 +40,7 @@ function prizeRow(prize) {
  * number. The wording here is that, not a round counter of our own.
  */
 function roundName(run) {
-  return uiText(`${categoryName(run.id)} 預賽第 ${run.round + 1} 戰 / 共 ${run.totalRounds} 戰`);
+  return uiText("{event} 預賽第 {round} 戰 / 共 {total} 戰", { event: categoryName(run.id), round: run.round + 1, total: run.totalRounds });
 }
 
 function categoryName(id) {
@@ -103,7 +103,7 @@ export function createChampionshipView({ root, source }) {
       const copy = element("span", "cm-championship-entry__copy");
       copy.append(element("span", "cm-championship-entry__name", categoryName(category.id)));
       copy.append(element("span", "cm-championship-entry__rounds",
-        uiText(`${category.rounds} 輪`)));
+        uiText("{count} 輪", { count: category.rounds })));
       copy.append(prizeRow(category.prize));
       row.append(copy);
       const reason = lockReason(category);
@@ -146,7 +146,7 @@ export function createChampionshipView({ root, source }) {
       // what writes the flag, so this board never judges a round itself.
       const actions = element("div", "cm-championship-actions");
       const fight = element("button", "cm-championship-action cm-championship-action--primary",
-        uiText(`開始第 ${run.round + 1} 戰`));
+        uiText("開始第 {round} 戰", { round: run.round + 1 }));
       fight.type = "button";
       fight.dataset.round = String(run.round);
       let selectedIds=[],busy=false;
@@ -157,7 +157,7 @@ export function createChampionshipView({ root, source }) {
         const version=renderVersion;
         Promise.resolve(source.getPartySelection()).then(({candidates,limit})=>{
           if(disposed||version!==renderVersion)return;
-          party.append(element('p','cm-championship-opponent',uiText(`最多 ${limit} 隻`)));
+          party.append(element('p','cm-championship-opponent',uiText("最多 {limit} 隻", { limit })));
           const controls=[];
           for(const entry of candidates){
             const button=element('button','cm-championship-action',uiText(entry.displayName??entry.instanceId));
@@ -188,12 +188,12 @@ export function createChampionshipView({ root, source }) {
       panel.append(actions);
     } else {
       const settle = element("button", "cm-championship-action cm-championship-action--primary",
-        run.payable ? uiText(`領取 ${run.prize.toLocaleString("en-US")} 位元幣`) : uiText("結束賽事"));
+        run.payable ? uiText("領取 {bits} 位元幣", { bits: run.prize }) : uiText("結束賽事"));
       settle.type = "button";
       settle.addEventListener("click", () => {
         const settled = intents.settle?.();
         say(settled?.ok
-          ? settled.payable ? uiText(`獲得 ${settled.prize.toLocaleString("en-US")} 位元幣。`) : uiText("本次沒有獎金。")
+          ? settled.payable ? uiText("獲得 {bits} 位元幣。", { bits: settled.prize }) : uiText("本次沒有獎金。")
           : uiText("無法結算這場賽事。"));
         render();
       });

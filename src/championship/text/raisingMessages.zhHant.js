@@ -1,5 +1,7 @@
 // Product-authored Traditional Chinese rendering keyed by the original mail ID.
 // Dialogue presentation is separate from the numeric message/effect authority.
+import { isEnglish } from './locale.js';
+import { DEFAULT_NAME_EN, EXTRA_EN, RANDOM_EN, SEASONS_EN, SENDERS_EN, SEQUENTIAL_EN } from './raisingMessages.en.js';
 const sequential=[
   '先把夥伴培育好，參加春季第 3 日的「春季王牌」頭銜賽吧！',
   '育成區堆滿排泄物會讓數碼獸生病，記得經常清理。',
@@ -81,8 +83,16 @@ const extra={94:'已到戰鬥入場登錄時間。',
   103:'恭喜制霸所有頭銜賽！獲得免費通行券，可以免費前往狩獵。',105:'育成容量不足會阻擋進化。可以放生數碼獸，騰出容量。',106:'長期缺乏照顧或沒有參與戰鬥，數碼獸可能逃走，不再回來。',
   128:'表現得很好！也為你的數碼獸準備了禮物。',129:'真是一場精彩的戰鬥！讓夥伴們一起分享勝利的喜悅，這是給牠們的獎勵。',130:'這次的表現比以往更出色！來舉辦勝利的宴席吧，恭喜你！',131:'恭喜！終於做到了！請收下我衷心準備的賀禮。',
   196:'{name} 好像找到了什麼！',197:'生日快樂！拿這些位元幣去買些喜歡的東西吧。',198:'生日快樂！也為你的數碼獸準備了蛋糕。',199:'這顆數碼蛋是送你的生日禮物，請好好培育牠。'};
-export function raisingMessageText(id,name='夥伴'){
-  const value=id>=13&&id<=75?sequential[id-13]:id>=76&&id<=91?seasons[id-76]:id>=186&&id<=195?random[id-186]:extra[id];
-  return value?.replace('{name}',name)||null;
+// English lives beside it (raisingMessages.en.js, same IDs); the display
+// language picks one. A player-given {name} is inserted as typed.
+export function raisingMessageText(id,name){
+  const english=isEnglish();
+  const pick=(zh,en,index)=>(english?en[index]:zh[index]);
+  const value=id>=13&&id<=75?pick(sequential,SEQUENTIAL_EN,id-13):id>=76&&id<=91?pick(seasons,SEASONS_EN,id-76)
+    :id>=186&&id<=195?pick(random,RANDOM_EN,id-186):(english?EXTRA_EN[id]:extra[id]);
+  return value?.replace('{name}',name??(english?DEFAULT_NAME_EN:'夥伴'))||null;
 }
 export const RAISING_MESSAGE_SENDERS=Object.freeze(['數位競技場','大會會長','大會會長','資深馴獸師','商店店長','浩司','惠子','熱衷研究的馴獸師','對戰王','富有的大姊姊','數碼獸收藏家','媽媽','通知']);
+export function raisingMessageSender(index){
+  return (isEnglish()?SENDERS_EN[index]:null)??RAISING_MESSAGE_SENDERS[index]??'';
+}

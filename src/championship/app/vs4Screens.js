@@ -1,4 +1,4 @@
-import { speciesName } from "../text/zhHant.js";
+import { speciesName, shopItemDescription as shopDescriptionText, shopItemName } from "../text/zhHant.js";
 // VS4 -- Shop presentation.
 //
 // Consumes only the injected Gate/Hunt presentation source. The Shop runtime
@@ -9,10 +9,10 @@ import { PRODUCT_GIVEN_NAME_MAX_LENGTH } from "./championshipRaisingProduction.j
 import { VS2_UI_AUTHORITY, VS2_PRESENTATION_MODES } from "./vs2Screens.js";
 import { cageUiImage, shopCageUiImage, cageEditorArtCells, cageUiName, shopCageUiName, cageUiSummary } from '../presentation/cageUiArt.js';
 import { uiText } from '../text/uiText.js';
-import { SHOP_DESCRIPTIONS_ZH, SHOP_NAMES_ZH } from '../text/catalogs.zhHant.js';
 import { shopGoodsPresentation } from '../presentation/shopGoodsUiArt.js';
 import { getHuntCatalogItem } from '../hunt/loadout/huntEquipmentCatalog.js';
 import { showChoiceDialog } from './uiDialog.js';
+import { prefersReducedMotion } from '../presentation/presentationPreferences.js';
 
 const CATEGORY_LABELS = Object.freeze({
   TRAINING_GOODS: "養成用品",
@@ -38,9 +38,8 @@ const SHOP_PLACEHOLDERS = Object.freeze({
 
 export function shopItemDescription(row) {
   const recordIndex = row?.shopRecordIndex;
-  return Number.isSafeInteger(recordIndex) && SHOP_DESCRIPTIONS_ZH[recordIndex]
-    ? SHOP_DESCRIPTIONS_ZH[recordIndex]
-    : "商品說明無法顯示。";
+  const text = Number.isSafeInteger(recordIndex) ? shopDescriptionText(recordIndex) : null;
+  return text ?? uiText("商品說明無法顯示。");
 }
 
 function element(tag, className, text) {
@@ -62,7 +61,7 @@ function presentationMode() {
 
 /** A short confirmation pulse on the element that changed; none under reduced motion. */
 function pulse(node) {
-  if (globalThis.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches) return;
+  if (prefersReducedMotion()) return;
   node.animate?.([{ transform: "scale(1)", filter: "brightness(1)" },
     { transform: "scale(1.06)", filter: "brightness(1.18)" }, { transform: "scale(1)", filter: "brightness(1)" }],
   { duration: 320, easing: "ease-out" });
@@ -171,7 +170,7 @@ export function createShopView({ root, source }) {
   });
 
   function productName(row) {
-    return uiText(SHOP_NAMES_ZH[row.shopRecordIndex]
+    return uiText(shopItemName(row.shopRecordIndex)
       ?? shopGoodsPresentation(row.shopRecordIndex)?.name
       ?? getHuntCatalogItem(row.productItemId)?.displayName
       ?? shopCageUiName(row.shopRecordIndex, uiText(row.displayName)));
@@ -226,7 +225,7 @@ export function createShopView({ root, source }) {
   function paint(nextFrame) {
     const shop = nextFrame?.shop;
     if (!shop) return;
-    wallet.textContent = uiText(`持有 ${shop.bits.toLocaleString('en-US')} 位元幣`);
+    wallet.textContent = uiText("持有 {bits} 位元幣", { bits: shop.bits });
     // A spend is visible where the money is shown, not only in the numbers.
     if (paintedBits !== null && shop.bits !== paintedBits) {
       wallet.dataset.change = shop.bits < paintedBits ? "spent" : "gained";
@@ -237,9 +236,10 @@ export function createShopView({ root, source }) {
     // Name the item and its new count, so a second purchase of the same item
     // reads differently from the first instead of repeating the same line.
     const boughtRow = receipt?.ok ? shop.listings.find((row) => row.shopRecordIndex === receipt.shopRecordIndex) : null;
-    status.textContent = uiText(receipt
-      ? (boughtRow ? `已購買「${productName(boughtRow)}」，持有 ${boughtRow.owned}/${boughtRow.maxOwned}。` : (RECEIPT_COPY[receipt.reason] ?? ""))
-      : "");
+    status.textContent = receipt
+      ? (boughtRow ? uiText("已購買「{item}」，持有 {owned}/{max}。", { item: productName(boughtRow), owned: boughtRow.owned, max: boughtRow.maxOwned })
+        : uiText(RECEIPT_COPY[receipt.reason] ?? ""))
+      : "";
     status.dataset.tone = receipt ? (receipt.ok ? "ok" : "refused") : "";
     if (receipt && receipt !== paintedReceipt) pulse(status);
     paintedReceipt = receipt ?? null;
@@ -271,16 +271,16 @@ export function createShopView({ root, source }) {
     appendProductArt(detailArt, selectedRow, { detailView: true });
     detailName.textContent = uiText(selectedName);
     detailDescription.textContent = shopItemDescription(selectedRow);
-    detailMeta.textContent = `${selectedRow.unitPriceBits.toLocaleString('en-US')} 位元幣 · 持有 ${selectedRow.owned}/${selectedRow.maxOwned}`;
+    detailMeta.textContent = uiText("{bits} 位元幣 · 持有 {owned}/{max}", { bits: selectedRow.unitPriceBits, owned: selectedRow.owned, max: selectedRow.maxOwned });
     const full = selectedRow.owned >= selectedRow.maxOwned;
     const shortBits = full ? 0 : Math.max(0, selectedRow.unitPriceBits - shop.bits);
-    buy.textContent = full ? (selectedRow.maxOwned === 1 ? "已持有" : "已達上限") : "購買";
+    buy.textContent = uiText(full ? (selectedRow.maxOwned === 1 ? "已持有" : "已達上限") : "購買");
     buy.disabled = full || shortBits > 0;
-    buy.setAttribute("aria-label", uiText(full ? `${selectedName}已達持有上限` : `購買${selectedName}`));
+    buy.setAttribute("aria-label", full ? uiText("{item}已達持有上限", { item: selectedName }) : uiText("購買{item}", { item: selectedName }));
     detailState.hidden = !buy.disabled;
     detailState.textContent = full
-      ? (selectedRow.maxOwned === 1 ? "已經持有，無法再購買。" : `已達持有上限 ${selectedRow.maxOwned}。`)
-      : shortBits > 0 ? `持有金額不足，還差 ${shortBits.toLocaleString('en-US')} 位元幣。` : "";
+      ? (selectedRow.maxOwned === 1 ? uiText("已經持有，無法再購買。") : uiText("已達持有上限 {max}。", { max: selectedRow.maxOwned }))
+      : shortBits > 0 ? uiText("持有金額不足，還差 {bits} 位元幣。", { bits: shortBits }) : "";
     previous.disabled = selectedIndex <= 0;
     next.disabled = selectedIndex >= rows.length - 1;
     let selectedCard = null;
@@ -301,7 +301,7 @@ export function createShopView({ root, source }) {
       const meta = element(
         "span",
         "cm-vs2-shop__meta",
-        `${row.unitPriceBits.toLocaleString('en-US')} 位元幣 · 持有 ${row.owned}/${row.maxOwned}`
+        uiText("{bits} 位元幣 · 持有 {owned}/{max}", { bits: row.unitPriceBits, owned: row.owned, max: row.maxOwned })
       );
       name.append(meta);
       item.addEventListener("click", () => {
@@ -392,7 +392,7 @@ export function createDatabaseView({ root, source }) {
   function paint(nextFrame) {
     const book = nextFrame?.database;
     if (!book) return;
-    census.textContent = uiText(`已登錄 ${book.registeredCount} / ${book.slotCount}`);
+    census.textContent = uiText("已登錄 {count} / {total}", { count: book.registeredCount, total: book.slotCount });
     body.dataset.mode = book.selected ? "detail" : "list";
 
     if (book.selected) {
@@ -421,7 +421,7 @@ export function createDatabaseView({ root, source }) {
       if (row.speciesIndex === lastOpened) reopened = item;
       item.type = "button";
       item.dataset.state = row.state;
-      item.setAttribute("aria-label", uiText(row.state === "REGISTERED" ? speciesName(row.speciesIndex, row.displayName) : `未登錄 ${row.bookOrdinal + 1}`));
+      item.setAttribute("aria-label", row.state === "REGISTERED" ? uiText(speciesName(row.speciesIndex, row.displayName)) : uiText("未登錄 {n}", { n: row.bookOrdinal + 1 }));
       const name = element("div", "cm-vs2-shop__name");
       name.append(element("strong", "", row.state === "REGISTERED" ? speciesName(row.speciesIndex, row.displayName) : "-----"));
       // The number stays; "registered / not" is carried by the tile itself
@@ -582,12 +582,12 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     let choice = null;
     try {
       choice = await askToLeave({
-        title: "配置還沒有套用",
-        message: "這次調整的設施位置尚未確認。要套用後返回牧場，還是放棄這些變更？",
+        title: uiText("配置還沒有套用"),
+        message: uiText("這次調整的設施位置尚未確認。要套用後返回牧場，還是放棄這些變更？"),
         actions: [
-          { id: "stay", label: "繼續編輯", tone: "secondary" },
-          { id: "discard", label: "放棄變更", tone: "danger" },
-          { id: "apply", label: "套用並返回", tone: "primary" }
+          { id: "stay", label: uiText("繼續編輯"), tone: "secondary" },
+          { id: "discard", label: uiText("放棄變更"), tone: "danger" },
+          { id: "apply", label: uiText("套用並返回"), tone: "primary" }
         ],
         cancelId: "stay"
       });
@@ -610,7 +610,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
     const rankLabel = element(
       "span",
       "cm-vs2-cage-rank__label",
-      `階級 ${cage.tamerRank} · ${cage.occupiedCount ?? cage.placements.length} / ${cage.unlockedCount} 格`
+      uiText("階級 {rank} · {used} / {total} 格", { rank: cage.tamerRank, used: cage.occupiedCount ?? cage.placements.length, total: cage.unlockedCount })
     );
     const up = element("button", "cm-vs2-cage-rank__step", "+");
     up.type = "button";
@@ -637,11 +637,11 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
       cell.setAttribute("role", "gridcell");
       cell.setAttribute(
         "aria-label",
-        uiText(slot.unlocked
+        slot.unlocked
           ? (slot.displayName
-            ? `第 ${slot.slotIndex + 1} 格：${cageUiName(slot.moduleId, slot.displayName)}。${cageUiSummary(slot.moduleId, slot.trainingSummary) ?? ""}`
-            : `Empty hex ${slot.slotIndex + 1}`)
-          : `Locked hex ${slot.slotIndex + 1}`));
+            ? uiText("第 {n} 格：{cage}。{effect}", { n: slot.slotIndex + 1, cage: cageUiName(slot.moduleId, slot.displayName), effect: cageUiSummary(slot.moduleId, slot.trainingSummary) ?? "" })
+            : uiText(`Empty hex ${slot.slotIndex + 1}`))
+          : uiText(`Locked hex ${slot.slotIndex + 1}`));
       const visual = cellArt.get(slot.slotIndex);
       cell.style.left = `${visual.x}px`; cell.style.top = `${visual.y}px`;
       if (visual.image) {
@@ -664,7 +664,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
       tile.type = 'button';
       tile.disabled = cage.slots.some((slot) => slot.moduleId === placement.moduleId && slot.fixed);
       const displayName = cageUiName(placement.moduleId, placement.displayName);
-      tile.setAttribute('aria-label', uiText(`取回 ${displayName}`));
+      tile.setAttribute('aria-label', uiText('取回 {cage}', { cage: displayName }));
       const src = cageUiImage(placement.moduleId);
       if (src) { const image = element('img', 'cm-facility-thumb'); image.src = src; image.alt = ''; tile.append(image); }
       tile.append(element('strong', '', displayName), element('span', '', cageUiSummary(placement.moduleId, placement.trainingSummary)));
@@ -683,7 +683,7 @@ export function createCageEditView({ root, source, askToLeave = showChoiceDialog
       row.dataset.selected = item.selected ? "true" : "false";
       row.setAttribute("role", "listitem");
       row.setAttribute("aria-pressed", item.selected ? "true" : "false");
-      row.setAttribute("aria-label", uiText(`選擇${cageUiName(item.moduleId, item.displayName)}。${cageUiSummary(item.moduleId, item.trainingSummary)}`));
+      row.setAttribute("aria-label", uiText("選擇{cage}。{effect}", { cage: cageUiName(item.moduleId, item.displayName), effect: cageUiSummary(item.moduleId, item.trainingSummary) ?? "" }));
       const src = cageUiImage(item.moduleId);
       if (src) { const image = element('img', 'cm-facility-thumb'); image.src = src; image.alt = ''; row.append(image); }
       row.append(

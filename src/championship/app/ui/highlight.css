@@ -1,0 +1,181 @@
+/* 重要高光 — the one important-highlight template (2026-09-29 redesign).
+ *
+ * createHighlightSequence.js builds two layers and moves one attribute,
+ * data-phase, through PREPARE -> BUILD -> CHARGE -> BURST -> REVEAL -> DONE;
+ * each rule below says what a layer does in each phase. Durations arrive as
+ * --hl-* custom properties from the tunable timeline.
+ *
+ * Composition (settings round): the BACK layer (.cm-highlight, z 1) sits under
+ * the result plate (z 2) and holds everything that moves -- scrim, light
+ * column, stair marks, ring, pixel shards -- so nothing can cover the words.
+ * The FRONT layer (.cm-highlight-front, z 3) holds the burst flash, which has
+ * faded before the plate lands, and the skip hint; it also takes the tap.
+ * The light, the ring and the burst centre on the anchor (--hl-ax, --hl-ay):
+ * where the characters stand, not where the plate is.
+ *
+ * Feedback tiers, for reference:
+ *   daily     presses, tool pick-up, menu open: tokens' --dur-fast, no sound
+ *   result    a purchase, a rename, a saved layout, a loss: a short rise or
+ *             a status chip, --dur-slow
+ *   highlight a won and settled match that paid out, ranked up or earned a
+ *             title: this template, five phases, synthesized sound
+ */
+
+.cm-highlight,
+.cm-highlight-front {
+  --hl-fx: 50%;
+  --hl-fy: 40%;
+  --hl-ax: 50%;
+  --hl-ay: 60%;
+  --hl-light: #ffffff;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.cm-highlight { z-index: 1; pointer-events: none; }
+.cm-highlight-front {
+  z-index: 3;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.cm-highlight-front[data-phase="DONE"] { pointer-events: none; cursor: default; }
+.cm-highlight > *,
+.cm-highlight-front > * { position: absolute; margin: 0; pointer-events: none; }
+
+/* ---- Scrim: the room dims around the characters, then lifts --------------- */
+.cm-highlight__scrim {
+  inset: 0;
+  background: radial-gradient(circle at var(--hl-ax) var(--hl-ay), var(--c-highlight-scrim-core) 0, var(--c-highlight-scrim-core) 16%, var(--c-highlight-scrim-edge) 68%);
+  opacity: 0;
+  transition: opacity var(--hl-prepare, 420ms) var(--ease-out);
+}
+.cm-highlight:is([data-phase="PREPARE"], [data-phase="BUILD"], [data-phase="CHARGE"], [data-phase="BURST"]) .cm-highlight__scrim { opacity: 1; }
+.cm-highlight[data-phase="REVEAL"] .cm-highlight__scrim { opacity: 0.45; transition-duration: 600ms; }
+.cm-highlight[data-phase="DONE"] .cm-highlight__scrim { opacity: 0; transition-duration: 700ms; }
+
+/* ---- Light column: falls onto the characters as the marks light ----------- */
+.cm-highlight__beam {
+  left: var(--hl-ax);
+  top: 0;
+  width: 72px;
+  height: calc(var(--hl-ay) + 40px);
+  margin-left: -36px;
+  background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--c-accent) 30%, transparent) 45%, color-mix(in srgb, var(--hl-light) 55%, transparent) 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 38%, #000 62%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 38%, #000 62%, transparent);
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: top center;
+  transition: transform var(--hl-build, 720ms) var(--ease-out), opacity 200ms linear;
+}
+.cm-highlight[data-phase="BUILD"] .cm-highlight__beam { opacity: 0.7; transform: scaleY(1); }
+.cm-highlight[data-phase="CHARGE"] .cm-highlight__beam {
+  opacity: 1;
+  transform: scaleY(1);
+  background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--c-gold) 40%, transparent) 40%, color-mix(in srgb, var(--hl-light) 75%, transparent) 100%);
+}
+.cm-highlight:is([data-phase="BURST"], [data-phase="REVEAL"]) .cm-highlight__beam { opacity: 0.25; transform: scaleY(1); transition-duration: 480ms; }
+.cm-highlight[data-phase="DONE"] .cm-highlight__beam { opacity: 0; transform: scaleY(1); transition-duration: 700ms; }
+
+/* ---- Stair marks: the signature, lit one step at a time above the heads --- */
+.cm-highlight__stairs {
+  left: var(--hl-ax);
+  top: calc(var(--hl-ay) - 96px);
+  width: 66px;
+  height: 66px;
+  margin: -33px 0 0 -33px;
+  transition: transform 260ms var(--ease-out), opacity 260ms linear;
+}
+.cm-highlight__stair {
+  position: absolute;
+  left: calc(var(--i) * 24px);
+  top: calc(var(--i) * 24px);
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--c-line-3);
+  background: var(--c-surface-3);
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 160ms linear, transform 220ms var(--ease-spring), background-color 200ms linear, box-shadow 200ms linear;
+}
+.cm-highlight[data-lit="1"] .cm-highlight__stair:nth-child(-n + 1),
+.cm-highlight[data-lit="2"] .cm-highlight__stair:nth-child(-n + 2),
+.cm-highlight[data-lit="3"] .cm-highlight__stair:nth-child(-n + 3) {
+  border-color: transparent;
+  background: var(--c-accent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--c-accent) 75%, transparent);
+  opacity: 1;
+  transform: scale(1);
+}
+.cm-highlight[data-phase="CHARGE"] .cm-highlight__stair {
+  background: var(--c-gold-strong);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--c-gold) 85%, transparent);
+  animation: cm-hl-stair-pulse 240ms var(--ease-in-out) infinite alternate;
+}
+.cm-highlight:is([data-phase="BURST"], [data-phase="REVEAL"], [data-phase="DONE"]) .cm-highlight__stairs { opacity: 0; transform: scale(1.8); }
+@keyframes cm-hl-stair-pulse { to { transform: scale(1.18); } }
+
+/* ---- Ring: gathers onto the characters, becomes the shock wave ------------ */
+.cm-highlight__ring {
+  left: var(--hl-ax);
+  top: var(--hl-ay);
+  width: 180px;
+  height: 180px;
+  margin: -90px 0 0 -90px;
+  border: 2px solid var(--c-gold-strong);
+  border-radius: 50%;
+  box-shadow: 0 0 26px color-mix(in srgb, var(--c-gold) 55%, transparent), inset 0 0 26px color-mix(in srgb, var(--c-gold) 35%, transparent);
+  opacity: 0;
+  transform: scale(2.2);
+}
+.cm-highlight[data-phase="CHARGE"] .cm-highlight__ring { animation: cm-hl-gather var(--hl-charge, 800ms) cubic-bezier(0.55, 0, 0.9, 0.45) forwards; }
+.cm-highlight[data-phase="BURST"] .cm-highlight__ring,
+.cm-highlight[data-phase="REVEAL"] .cm-highlight__ring { animation: cm-hl-shock 620ms var(--ease-out) forwards; }
+@keyframes cm-hl-gather {
+  from { opacity: 0.15; transform: scale(2.2) rotate(0deg); border-style: dashed; }
+  to { opacity: 1; transform: scale(0.3) rotate(120deg); border-style: dashed; }
+}
+@keyframes cm-hl-shock {
+  from { opacity: 1; transform: scale(0.3); border-width: 8px; }
+  to { opacity: 0; transform: scale(3.4); border-width: 1px; }
+}
+
+/* ---- Shards (bounded Three.js): behind the plate --------------------------- */
+.cm-highlight__shards { inset: 0; width: 100%; height: 100%; }
+
+/* ---- Flash (front): gone before the plate lands; --flash-peak is the
+ *      "flash intensity" preference (1 standard, 0.35 soft) ---------------- */
+.cm-highlight__flash {
+  inset: 0;
+  background: radial-gradient(circle at var(--hl-ax) var(--hl-ay), var(--hl-light), color-mix(in srgb, var(--c-gold-strong) 70%, transparent) 22%, transparent 62%);
+  opacity: 0;
+}
+.cm-highlight-front[data-phase="BURST"] .cm-highlight__flash { animation: cm-hl-flash calc(var(--hl-burst, 280ms) + 220ms) var(--ease-out) forwards; }
+@keyframes cm-hl-flash { 0% { opacity: 0; } 16% { opacity: calc(0.92 * var(--flash-peak, 1)); } 100% { opacity: 0; } }
+
+/* ---- Skip hint (front) ------------------------------------------------------ */
+.cm-highlight__hint {
+  left: 0;
+  right: 0;
+  bottom: var(--sp-4);
+  color: var(--c-text-3);
+  font-size: var(--fs-label);
+  letter-spacing: 0.06em;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 300ms linear 500ms;
+}
+.cm-highlight-front:is([data-phase="BUILD"], [data-phase="CHARGE"], [data-phase="BURST"]) .cm-highlight__hint { opacity: 1; }
+
+/* ---- Quality: the saver tier keeps the marks, the scrim and the burst, and
+ *      drops the light column and the shock ring --------------------------- */
+.cm-highlight[data-decor="minimal"] :is(.cm-highlight__beam, .cm-highlight__ring) { display: none; }
+
+/* ---- Reduced motion: no travel, flash or burst; only the reveal fades ----- */
+.cm-highlight[data-motion="reduced"] :is(.cm-highlight__beam, .cm-highlight__stairs, .cm-highlight__ring) { display: none; }
+.cm-highlight-front[data-motion="reduced"] :is(.cm-highlight__flash, .cm-highlight__hint) { display: none; }
+.cm-highlight[data-motion="reduced"][data-phase="REVEAL"] .cm-highlight__scrim { opacity: 0.35; transition-duration: 1ms; }
+/* The template reads the resolved motion preference when it starts and sets
+   data-motion on both layers; the rules above are therefore the whole
+   reduced path. */

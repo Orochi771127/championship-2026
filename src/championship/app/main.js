@@ -46,13 +46,13 @@ import {nativeBattleWinPercent} from '../battle/nativeTitleProgression.js';
 import { mountBattleAudioPresentation } from '../presentation/battleAudioPresentation.js';
 // The battle menu box. Its four faces are ROM_VERIFIED from launcher13.nsbmd;
 // the geometry is original-created, exactly as the Gate world sphere is.
-import { BATTLE_MENU_LABELS, speciesName, raisingDisplayName, starterName, titleEventText } from "../text/zhHant.js";
+import { battleMenuLabels, speciesName, raisingDisplayName, starterName, titleEventText } from "../text/zhHant.js";
 import { createBattleSelectView, createBattleFieldView, createBattleResultView } from "./vs5Screens.js";
 import { loadPixiCharacterRuntimeBundle, createPixiAssetScope } from "../presentation/pixiCharacterRuntimeBundle.js";
 import { applyQaUnlock, qaUnlockRequested } from "./qaUnlock.js";
 import { listChampionshipGates } from "../gate/gateCatalog.js";
 import { createChampionshipStatusBar } from "./championshipStatusBar.js";
-import { createDigimonListView } from "./digimonListScreen.js";
+import { createDigimonListView, appendCreatureDetail } from "./digimonListScreen.js";
 import { createScheduleView } from "./scheduleScreen.js";
 import { createChampionshipView } from "./championshipScreen.js";
 import { BATTLE_OUTCOME_TEAM_ZERO_AHEAD, BATTLE_OUTCOME_TEAM_ONE_AHEAD } from "../battle/battleOutcome.js";
@@ -72,7 +72,25 @@ import {
 } from "../presentation/runtimeMapArtBundle.js";
 import { createRaisingCageArtPlan } from "../presentation/raisingCageArtPlan.js";
 import { mountPortraitFrame } from './portraitFrame.js';
-import { showChoiceDialog } from './uiDialog.js';
+import { showChoiceDialog, isChoiceDialogOpen } from './uiDialog.js';
+import { assetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
+import { createLoadWatchdog } from './loadWatchdog.js';
+import { classifyBattleResultFeedback, HIGHLIGHT_DEFAULTS, highlightOverrides } from '../presentation/highlight/highlightTimeline.js';
+import { createHighlightSequence } from '../presentation/highlight/createHighlightSequence.js';
+import { createHighlightAudio } from '../presentation/highlight/highlightAudio.js';
+import { createAutosaveScheduler } from './autosaveScheduler.js';
+// Settings round (2026-09-29): player preferences, applied to the page, the
+// one Pixi stage, the audio graph and the highlight template.
+import { CHAMPIONSHIP_PREFERENCES_KEY, createChampionshipPreferencePort } from './ChampionshipPersistentSavePort.js';
+import { createPreferenceStore } from './settings/preferenceStore.js';
+import { createPreferenceEnvironment } from './settings/preferenceEnvironment.js';
+import { createQualityController } from './settings/qualityController.js';
+import { createSettingsPanel } from './settings/settingsPanel.js';
+import { createAudioBus } from '../presentation/audioBus.js';
+import { cappedPixelRatio, currentQuality, highlightMode, prefersReducedMotion } from '../presentation/presentationPreferences.js';
+import { resultHeroAnchor, resultStageLight } from '../presentation/battleResultCharacters.js';
+import { formatDateTime, formatList, onLocaleChange } from '../text/locale.js';
+import { retranslate, setLabel, setText } from '../text/uiText.js';
 
 const PIXI_V8_MODULE_URL = "../../../node_modules/pixi.js/dist/pixi.mjs";
 // Three.js is about 2MB and only the bounded 3D views read it, so each mount is
@@ -84,6 +102,8 @@ const mountBattleSelectThreePresentation = async (options) =>
   (await import("../presentation/vs5/createBattleSelectThreePresentation.js")).mountBattleSelectThreePresentation(options);
 const mountGateSelectThreePresentation = async (options) =>
   (await import("../presentation/vs2/createGateSelectThreePresentation.js")).mountGateSelectThreePresentation(options);
+const mountHighlightBurstThree = async (options) =>
+  (await import("../presentation/highlight/createHighlightBurstThree.js")).mountHighlightBurstThree(options);
 
 // battleRuntime reaches the character geometry, profiles, moves, presets and
 // scripts -- about 3.7MB no screen before the battle menu reads. Every caller
@@ -194,6 +214,10 @@ let expeditionSource = null;
 let unsubscribeScreen = null;
 let unsubscribeExpedition = null;
 let unsubscribeCalendar = null;
+// Keeps the bar's bits and save readout current between screen changes.
+let unsubscribeHud = null;
+// Local autosave after important operations (2026-09-29); one per session.
+let autosave = null;
 let mountedScreen = null;
 let mounting = null;
 
@@ -212,14 +236,91 @@ let statusBar = null;
 // attached by the ARM9 main binary, not by any mode overlay.
 let toolbar = null;
 
+// ---- Settings (2026-09-29) --------------------------------------------------
+// One preference store, written only through the preference port beside the
+// save port (a different key: settings can never overwrite progress). The
+// environment turns it into page attributes; the quality controller owns
+// data-quality; the audio bus applies the volume and mute to every sound.
+function bootSettings() {
+  let storage = null;
+  try { storage = window.localStorage; } catch { storage = null; }
+  let port;
+  try { port = createChampionshipPreferencePort({ storage }); }
+  catch {
+    // Storage is blocked (a privacy mode or a policy): the settings still
+    // work for this visit, and say that they are not kept.
+    port = Object.freeze({
+      storageKey: CHAMPIONSHIP_PREFERENCES_KEY,
+      read: () => Object.freeze({ text: null, error: "STORAGE_UNAVAILABLE" }),
+      write: () => Object.freeze({ ok: false, error: "STORAGE_UNAVAILABLE" })
+    });
+  }
+  const store = createPreferenceStore({ port });
+  const quality = createQualityController({ preference: store.get().quality });
+  const environment = createPreferenceEnvironment({ store, quality });
+  const levels = () => ({ muted: store.get().muted, masterVolume: store.get().masterVolume, sfxVolume: store.get().sfxVolume });
+  const audio = createAudioBus({ levels: levels() });
+  store.subscribe((values, changed) => {
+    if (changed.some((id) => id === "muted" || id === "masterVolume" || id === "sfxVolume")) audio.setLevels(levels());
+  });
+  quality.subscribe((described) => { pixiStage?.setResolutionCap(described.parameters.pixiResolutionCap); });
+  // Another tab changed the settings: follow it, without writing back.
+  window.addEventListener("storage", (event) => { if (event.key === CHAMPIONSHIP_PREFERENCES_KEY) store.reload(); });
+  const flush = () => { try { store.flush(); } catch { /* reported by the store */ } };
+  window.addEventListener("pagehide", flush);
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") flush(); });
+  return Object.freeze({ store, environment, quality, audio });
+}
+const settings = bootSettings();
+
+// When a quality sample may count: the screen is mounted and settled, the
+// page is visible, and nothing is loading. A screen change restarts the clock.
+let screenChangedAt = 0;
+function sceneIsSettled() {
+  if (document.visibilityState !== "visible" || !app || root.hidden) return false;
+  if (!mountedScreen || mountedScreen !== app.getScreen() || view?.isPlayable === false) return false;
+  if (performance.now() - screenChangedAt < 4000) return false;
+  return !root.querySelector(".cm-vs2-field__loading:not([hidden])");
+}
+
+let settingsPanel = null;
+function openSettings(from = null) {
+  settingsPanel ??= createSettingsPanel({
+    store: settings.store,
+    environment: settings.environment,
+    audio: settings.audio,
+    quality: settings.quality,
+    getSaveStatus: saveStatusLine,
+    confirm: showChoiceDialog
+  });
+  settingsPanel.open({ from });
+}
+
+/** The save facts the Data & Account page shows, as a key and its values. */
+function saveStatusLine() {
+  const status = app?.savePort?.getStatus?.();
+  if (!status || !app?.getSession?.()) return { key: "目前沒有進行中的遊戲。" };
+  const when = status.savedAt ? formatDateTime(status.savedAt) : null;
+  if (status.phase === "SAVE_FAILED") return { key: "上次保存失敗；可在畫面上方的保存狀態重試。" };
+  if (status.phase === "SAVED" || status.phase === "RESTORED") return when ? { key: "已存到本機（{time}）。", params: { time: when } } : { key: "已存到本機。" };
+  return { key: "上次寫入後遊戲又有進展，重要操作或離開頁面時會保存。" };
+}
+
 function note(message) {
-  if (titleNote) titleNote.textContent = uiText(message);
+  if (titleNote) setText(titleNote, message);
 }
 
 async function ensurePixiStage(canvasHost, signal) {
   const PIXI = await import(PIXI_V8_MODULE_URL);
   signal?.throwIfAborted();
-  if (!pixiStage) pixiStage = await createChampionshipPixiStage({ PIXI, canvasHost });
+  if (!pixiStage) {
+    // The quality tier chooses the resolution cap (changeable later) and the
+    // antialiasing (fixed for the Application's life: next launch).
+    const tier = currentQuality();
+    pixiStage = await createChampionshipPixiStage({ PIXI, canvasHost, resolutionCap: tier.pixiResolutionCap, antialias: tier.pixiAntialias });
+    // "Auto" may step down once if frames stay long on a settled scene.
+    settings.quality.attachTicker(pixiStage.app.ticker, { isStable: sceneIsSettled });
+  }
   else pixiStage.attach(canvasHost);
   if (!clockDriver) {
     clockDriver = createChampionshipClockDriver({
@@ -291,19 +392,34 @@ async function loadOptionalCharacterReview(stage, speciesIds = [], sides=['main'
  * hm00 is the tutorial field, not a Gate biome; ?huntArt=field_hm00_01 still
  * overlays it for visual QA without inventing a Gate mapping or changing collision.
  */
-async function loadOptionalHuntFieldArt(stage) {
+async function loadOptionalHuntFieldArt(stage, { signal = null, onProgress = null } = {}) {
   const wanted = HUNT_ART_PREVIEW_FIELD || app.getHuntRuntime()?.world.artFieldId
     || app.getConfirmedGate()?.originalFields?.dayFieldId || null;
   if (!wanted) return null;
+  let frameUrls = [];
   try {
-    const response = await fetch(new URL(LICENSED_HUNT_ART_MANIFEST_URL, globalThis.location.href));
+    const response = await fetch(new URL(LICENSED_HUNT_ART_MANIFEST_URL, globalThis.location.href), { signal });
     if (!response.ok) throw new Error(`HUNT_ART_MANIFEST_HTTP_${response.status}`);
     const manifest = validateRuntimeMapArtBundle(await response.json());
-    if (!manifest.fields.some((field) => field.fieldId === wanted)) return null;
-    return createRuntimeMapArtFieldLoader({ PIXI: createPixiAssetScope(stage.PIXI) }).load({ manifest, fieldId: wanted });
+    const field = manifest.fields.find((entry) => entry.fieldId === wanted);
+    if (!field) return null;
+    // The map frames are the heavy part of a Hunt (about a megabyte each).
+    // Streaming them first gives the loading screen real progress on a slow
+    // link, and the texture loader then reads the same bytes instead of
+    // downloading them again.
+    frameUrls = field.frames.map((frame) => new URL(frame.src.replaceAll("\\", "/"), globalThis.location.href).href);
+    const report = () => onProgress?.(assetPrefetcher.progress(frameUrls));
+    const stopReporting = assetPrefetcher.subscribe(report);
+    try { await assetPrefetcher.fetchAll(frameUrls, { signal }); } finally { stopReporting(); }
+    if (signal?.aborted) return null;
+    const PIXI = withPrefetchedTextures(createPixiAssetScope(stage.PIXI), (url) => assetPrefetcher.blobOf(url));
+    return await createRuntimeMapArtFieldLoader({ PIXI }).load({ manifest, fieldId: wanted });
   } catch (error) {
-    console.warn(`CHAMPIONSHIP_HUNT_ART_FALLBACK: ${error.message}`);
+    if (!signal?.aborted) console.warn(`CHAMPIONSHIP_HUNT_ART_FALLBACK: ${error.message}`);
     return null;
+  } finally {
+    // Textures now hold the pixels; the downloaded copies can go.
+    assetPrefetcher.forget(frameUrls);
   }
 }
 
@@ -413,13 +529,14 @@ async function mountRaisingHome() {
     root,
     hudArt,
     source: raisingSource,
-    // What Home says about the rest of the loop: money held, and how many
-    // title matches the Battle menu will list today (the same capped list).
-    summary: {
-      get: () => ({ bits: app.getShopFrame()?.bits ?? null,
-        todayMatches: Math.min(app.getAvailableBattleRecordIndices().length, BATTLE_MATCH_LIST_CAP) }),
-      openBattle: () => { if (!app.hasRaisingPresentation() && app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) app.openBattle(); }
-    },
+    // The full record in the detail sheet is the roster's own projection and
+    // row renderer, so Home and the roster can never disagree.
+    getRosterEntry: (creatureId) => projectRoster().find((entry) => entry.instanceId === creatureId) ?? null,
+    renderCreatureDetail: appendCreatureDetail,
+    openRoster: () => runToolbarMenuEntry({ id: "digimon", screen: CHAMPIONSHIP_SCREENS.DIGIMON_LIST }),
+    // The select hint is for the first day of a new game, read from the game's
+    // own calendar rather than a private storage flag (one save, one writer).
+    firstRunHint: (() => { const c = app.getCalendar(); return (c.year ?? 0) === 0 && c.season === 0 && c.dayOfSeason === 0; })(),
     async mountField({ host, source: fieldSource,onTrainingFrame }) {
       let characterBundle = null;
       let fieldArt = null;
@@ -484,7 +601,8 @@ async function mountHuntField() {
   return createHuntFieldView({
     root,
     source: expeditionSource,
-    async mountField({ host, source: fieldSource, onActorFrame, signal }) {
+    watchLoad: createLoadWatchdog,
+    async mountField({ host, source: fieldSource, onActorFrame, onProgress, signal }) {
       let characterBundle = null;
       let fieldArt = null;
       let feedbackArt = null;
@@ -507,7 +625,7 @@ async function mountHuntField() {
         }).wildCreatures.map((wild) => wild.speciesId);
         const loaded = await Promise.allSettled([
           own(loadOptionalCharacterReview(stage, speciesIds)),
-          own(loadOptionalHuntFieldArt(stage)),
+          own(loadOptionalHuntFieldArt(stage, { signal, onProgress })),
           own(loadRegisteredHuntFeedbackArt({PIXI:createPixiAssetScope(stage.PIXI),baseUrl:location.href,
             kinds:fieldSource.getFrame().huntField.toolState?.tools.map(tool=>tool.subtype??tool.id)??null}))
         ]);
@@ -630,8 +748,8 @@ async function mountBattleSelect() {
       ?{candidates:await app.getBattlePartyCandidates(null),limit:app.getFreeBattleMatches().find(m=>m.id===recordIndex)?.slots??3}
       :{candidates:await app.getBattlePartyCandidates(recordIndex),limit:await app.getBattlePartyLimit(recordIndex)},
     getModeMatches:async mode=>mode==='TITLE_MATCH'?battleRuntime.listMatches():app.openFreeBattle().map(match=>({
-      ...match,recordIndex:match.id,title:`${match.kind==='SINGLE'?'單隻對戰':'三隻對戰'} — ${match.speciesIndices.map(index=>speciesName(index)).join('、')}`})),
-    menuCopy: BATTLE_MENU_LABELS,
+      ...match,recordIndex:match.id,title:uiText('{kind} — {species}',{kind:uiText(match.kind==='SINGLE'?'單隻對戰':'三隻對戰'),species:formatList(match.speciesIndices.map(index=>speciesName(index)))})})),
+    menuCopy: battleMenuLabels(),
     onOpenChampionship() { app.openChampionship(); },
     async onEnter(recordIndex,playerInstanceIds,mode,selectedArena=null) {
       // Battle simulation uses this existing Application's ticker. Do not
@@ -746,7 +864,9 @@ async function mountBattleField() {
           }
           // Audio is optional presentation; an unavailable decoder/sample must
           // never prevent the existing battle scene from starting.
-          battleAudio = await mountBattleAudioPresentation({source}).catch(error=>{
+          // Through the product audio bus: master volume, sound effects
+          // volume and mute apply to the battle's own samples too.
+          battleAudio = await mountBattleAudioPresentation({source,output:settings.audio.output('sfx')}).catch(error=>{
             console.warn('Battle audio unavailable',error);return null;
           });
           scene = await mountBattleFieldPixiPresentation({ stage, source, fieldArt, characterRoster, effectArt,onView:frame=>view.render(frame) });
@@ -794,6 +914,9 @@ async function mountBattleField() {
     view.render(observed);
     if (observed.outcome.ended && app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) {
       app.finishMatch({ ...activeRuntime.getSettlementResult(), attemptId: activeAttemptId });
+      // The settlement (prize, rank, titles) is committed in the session; the
+      // result screen is a safe place to write it.
+      autosave?.request('settlement');
     }
   });
   return view;
@@ -808,25 +931,94 @@ async function mountHuntResult() {
   return createHuntResultView({ root, source: expeditionSource, hudArt });
 }
 
+/**
+ * The important-highlight template on the result stage. The view says where
+ * the plate is and which settled figure it shows; this supplies the one Pixi
+ * ticker, the synthesized cues and the bounded Three.js shards. Any failure
+ * lands the plate at once: a presentation must never hold back a result.
+ */
+function playResultHighlight(request, getStage, getAnchor = null) {
+  let sequence = null, skipRequested = false, disposed = false;
+  const land = () => { if (!disposed) { request.onValue(request.target); request.onPhase('DONE'); } };
+  (async () => {
+    // The view calls this while it is still being built; the stage is asked
+    // for only after the caller has had the chance to attach it.
+    await Promise.resolve();
+    const stage = await Promise.resolve(getStage()).catch(() => null);
+    if (disposed) return;
+    if (!stage || skipRequested) { land(); return; }
+    // The player's preferences, resolved when the run starts: motion, the
+    // highlight length, and the quality tier's shards, marks and decoration.
+    const reducedMotion = prefersReducedMotion();
+    const mode = highlightMode();
+    const tier = currentQuality();
+    sequence = createHighlightSequence({
+      host: request.host, focus: request.focus, anchor: getAnchor, ticker: stage.app.ticker, target: request.target, reducedMotion,
+      timing: highlightOverrides({ mode, quality: tier }),
+      decor: tier.highlightDecor, shardLife: tier.highlightShardLife,
+      burstPixelRatio: cappedPixelRatio(tier.threePixelRatioCap), burstAntialias: tier.threeAntialias,
+      audio: createHighlightAudio({ gain: HIGHLIGHT_DEFAULTS.audioGain, output: settings.audio.output('sfx') }),
+      mountBurst: mountHighlightBurstThree,
+      onPhase: request.onPhase, onValue: request.onValue
+    });
+    // QA reads the run's own measurements (frame times, phases, cues) here.
+    void sequence.done.then((summary) => {
+      if (disposed) return;
+      request.host.dataset.highlightSummary = JSON.stringify({ phase: summary.phase, elapsedMs: summary.elapsedMs,
+        skipped: summary.skipped, target: summary.target, shownValue: summary.shownValue, frames: summary.frames,
+        audio: summary.audio, burst: summary.burst, reducedMotion: summary.timing.reducedMotion, totalMs: summary.timing.totalMs,
+        mode, quality: document.documentElement.dataset.quality ?? null, particles: summary.timing.particleCount,
+        stairs: summary.timing.stairSteps, decor: summary.decor, anchor: summary.anchor, focus: summary.focus });
+    });
+    sequence.start();
+  })().catch((error) => { console.warn('Result highlight unavailable', error); land(); });
+  return {
+    skip() { skipRequested = true; if (sequence) return sequence.skip(); land(); return true; },
+    dispose() { disposed = true; sequence?.dispose(); sequence = null; }
+  };
+}
+
 async function mountBattleResult() {
   // The result consumes the app's actual receipt, including loss and clamping.
   const chosen = battleRuntime.getChosenMatch?.() ?? null;
   const record=app.getTitleProgress().record;
   const hudArt=await loadRegisteredCharacterHudArt({baseUrl:location.href}).catch(()=>null);
+  const receipt = app.getBattleReceipt();
+  const progression = battleProgressBefore?{rankBefore:battleProgressBefore.rank,rankAfter:app.getTamerRank(),
+    earnedTitles:app.getBattleBadges().filter(id=>!battleProgressBefore.badges.includes(id)).map(id=>({id,name:titleEventText(id,'name',uiText('頭銜 {id}',{id}))}))}:null;
+  // Only this attempt's own settled receipt can earn the highlight.
+  const tier = classifyBattleResultFeedback({ receipt, attemptId: battleAttemptId, progression });
+  const feedback = tier === 'highlight'
+    ? { tier, settlement: receipt.rewardBits > 0 ? { credited: receipt.credited, rewardBits: receipt.rewardBits, clamped: receipt.clamped === true } : null }
+    : { tier };
+  let stageReady = null;
+  // Which of the three result slots will show a character, so the highlight's
+  // light can fall where they stand (resultHeroAnchor, same frame layout).
+  const heroSlots = (() => {
+    try { return hudArt ? battleRuntime.getResultParticipants().slice(0, 3).map((entry, index) => (entry ? index : -1)).filter((index) => index >= 0) : []; }
+    catch { return []; }
+  })();
+  let characterHostNode = null;
+  const heroAnchor = () => {
+    const box = characterHostNode?.getBoundingClientRect?.();
+    return box && heroSlots.length ? resultHeroAnchor({ width: box.width, height: box.height, slots: heroSlots }) : null;
+  };
   const resultView=createBattleResultView({
     root,
     outcome: battleRuntime.outcome(),
-    receipt: app.getBattleReceipt(),
-    matchTitle: chosen?.link?'通訊對戰':chosen?.password?'密碼對戰':chosen?.practice?'練習對戰':chosen?.freeBattle?'自由對戰':chosen?.championship?`${chosen.recordIndex===0?'冠軍大會':'世界大會'} 第 ${chosen.cursor+1} 戰`
+    receipt,
+    feedback,
+    highlight: (request) => playResultHighlight(request, () => stageReady, heroAnchor),
+    matchTitle: chosen?.link?uiText('通訊對戰'):chosen?.password?uiText('密碼對戰'):chosen?.practice?uiText('練習對戰'):chosen?.freeBattle?uiText('自由對戰')
+      :chosen?.championship?uiText('{event} 第 {round} 戰',{event:uiText(chosen.recordIndex===0?'冠軍大會':'世界大會'),round:chosen.cursor+1})
       :chosen?titleEventText(chosen.recordIndex,"name",chosen.title):null,
     hudArt,
     // exitBattle returns to the tournament board while the run is still owed
     // a round; the verdict is already recorded when this result mounts.
-    exitLabel:chosen?.championship&&app.getChampionshipRun()?.continues?'返回賽事':undefined,
+    exitLabel:chosen?.championship&&app.getChampionshipRun()?.continues?uiText('返回賽事'):undefined,
     statistics:{battles:record?.battles??null,winPercent:nativeBattleWinPercent(record),titleCount:app.getBattleBadges().length},
     unlocks:battleProgressBefore?app.getShopFrame().listings.filter(item=>!battleProgressBefore.shopIds.includes(item.shopRecordIndex)).map(item=>({name:uiText(item.displayName)})):[],
-    progression:battleProgressBefore?{rankBefore:battleProgressBefore.rank,rankAfter:app.getTamerRank(),
-      earnedTitles:app.getBattleBadges().filter(id=>!battleProgressBefore.badges.includes(id)).map(id=>({id,name:titleEventText(id,'name',`頭銜 ${id}`)}))}:null,
+    progression,
     onExit() {
       battleRuntime?.dispose();
       battleRuntime = null;
@@ -834,9 +1026,21 @@ async function mountBattleResult() {
       app.leaveScreen();
     }
   });
+  characterHostNode = resultView.getCharacterHost();
+  // The stage light pools under the characters that are present.
+  {
+    const box = characterHostNode.getBoundingClientRect?.();
+    const light = box && heroSlots.length ? resultStageLight({ width: box.width, height: box.height, slots: heroSlots }) : null;
+    const stageNode = characterHostNode.parentElement;
+    if (light && stageNode?.style) {
+      stageNode.style.setProperty("--result-light-x", `${(light.x * 100).toFixed(2)}%`);
+      stageNode.style.setProperty("--result-light-w", `${(light.width * 100).toFixed(2)}%`);
+    }
+  }
+  stageReady = ensurePixiStage(characterHostNode);
   let resultCharacters=null;
   try{
-    const participants=battleRuntime.getResultParticipants(),stage=await ensurePixiStage(resultView.getCharacterHost());
+    const participants=battleRuntime.getResultParticipants(),stage=await stageReady;
     resultCharacters=await mountBattleResultCharacters({stage,hudArt,participants,won:battleRuntime.outcome().winningTeam===0});
   }catch(error){console.warn('Battle result character reference unavailable',error);}
   return {...resultView,dispose(){resultCharacters?.dispose();resultView.dispose();}};
@@ -884,6 +1088,7 @@ async function mountCurrentScreen() {
       entries: projectRoster(),
       onRename(instanceId, name) {
         const result = app.renameRosterInstance(instanceId, name);
+        if (result.ok) autosave?.request('rename');
         return result.ok ? { ...result, entries: projectRoster() } : result;
       },
       onExit() { app.leaveScreen(); }
@@ -911,8 +1116,8 @@ async function mountCurrentScreen() {
         calendar: app.getCalendar(),
         eligibleRecordIndices: app.getAvailableBattleRecordIndices(),
         progress:app.getTitleProgress(),
-        onToggleRegistration(recordIndex){app.toggleTitleRegistration(recordIndex);return app.getTitleProgress();},
-        onToggleChampionship(){app.toggleChampionshipRegistration();return app.getTitleProgress();},
+        onToggleRegistration(recordIndex){app.toggleTitleRegistration(recordIndex);autosave?.request('registration');return app.getTitleProgress();},
+        onToggleChampionship(){app.toggleChampionshipRegistration();autosave?.request('registration');return app.getTitleProgress();},
         onExit() { app.leaveScreen(); }
       });
     }
@@ -942,6 +1147,7 @@ async function mountCurrentScreen() {
     else if (target === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) view = await mountBattleField();
     else if (target === CHAMPIONSHIP_SCREENS.BATTLE_RESULT) view = await mountBattleResult();
     mountedScreen = target;
+    screenChangedAt = performance.now();
     // One attribute every screen carries, whichever view family drew it. The
     // views' own data-screen stays theirs (the status bar also carries one).
     root.dataset.activeScreen = target;
@@ -971,7 +1177,11 @@ async function openGameplay() {
   unsubscribeExpedition?.();
   unsubscribeScreen?.();
   unsubscribeCalendar?.();
-  expeditionSource = createGateHuntPresentationSource(app);
+  autosave?.dispose();
+  // While a confirmation is open the player is still deciding: wait for it.
+  autosave = createAutosaveScheduler({ route: () => (isChoiceDialogOpen() ? null : safeSaveRoute()), onChange: () => refreshStatusBar() });
+  // A purchase, a confirmed cage layout or a Database rename asks for a save.
+  expeditionSource = createGateHuntPresentationSource(app, { onCommitted: (reason) => autosave?.request(reason) });
 
   // One subscription repaints the mounted view; a screen change swaps it.
   unsubscribeExpedition = expeditionSource.subscribe((frame) => {
@@ -1000,11 +1210,25 @@ async function openGameplay() {
     refreshStatusBar(); refreshToolbarMode(); void refreshCalendarViews(); void mountCurrentScreen();
   });
   unsubscribeCalendar = app.getSession().subscribeRaisingHome(refreshCalendarViews);
+  unsubscribeHud?.();
+  {
+    const stopShop = app.subscribeShop(refreshStatusBar);
+    // Any successful write (autosave, page hide, Save & Quit, the day change,
+    // the hunt's home commit) covers every change made before it.
+    const stopSave = app.savePort?.subscribe?.((status) => {
+      if (status?.phase === "SAVED") autosave?.settled();
+      refreshStatusBar();
+    });
+    unsubscribeHud = () => { stopShop?.(); stopSave?.(); };
+  }
 
   if (!statusBar) {
     // No End Day here any more: the original puts it in the toolbar's
     // MANAGEMENT submenu, and that is where it now lives.
-    statusBar = createChampionshipStatusBar({ root: document.body });
+    statusBar = createChampionshipStatusBar({ root: document.body,
+      // Today's title matches open the same Battle menu the System menu reaches.
+      onOpenMatches: () => { if (!app.hasRaisingPresentation() && app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) app.openBattle(); },
+      onOpenSave: () => { void openSaveDetails(); } });
   }
   if (!toolbar) {
     toolbar = createChampionshipToolbar({
@@ -1043,6 +1267,10 @@ function refreshToolbarMode() {
 /** Act on a submenu entry. Entries with no destination yet never reach here. */
 function runToolbarMenuEntry(entry) {
   if(app.hasRaisingPresentation())return;
+  // Product-authored System entry (2026-09-29): the settings screen. It opens
+  // over the current screen and changes nothing in the session.
+  // Focus returns to the Menu button: the menu item itself is gone by then.
+  if (entry.action === "OPEN_SETTINGS") { openSettings(document.querySelector('.cm-toolbar__cell[data-menu-id="SYSTEM"]')); return; }
   if (entry.action === "END_DAY") {
     app.requestRaisingDayEnd();
     clockDriver?.reset();
@@ -1088,36 +1316,92 @@ function runToolbarMenuEntry(entry) {
 // capture waiting on the memory card and a running or unsettled battle stay
 // excluded -- the save port refuses those anyway, and the hunt's entry fee
 // must not persist without the hunt it paid for.
+// 2026-09-29: the battle result joins them. It mounts only after the match
+// has settled (prize, rank and titles are already in the session), so a page
+// closed on the result no longer loses the win; app.save() still refuses any
+// battle that is running or unsettled.
 const HIDE_SAVE_SCREENS = new Set([
   CHAMPIONSHIP_SCREENS.SHOP, CHAMPIONSHIP_SCREENS.DATABASE, CHAMPIONSHIP_SCREENS.CAGE_EDIT,
   CHAMPIONSHIP_SCREENS.DIGIMON_LIST, CHAMPIONSHIP_SCREENS.SCHEDULE, CHAMPIONSHIP_SCREENS.HELP,
   CHAMPIONSHIP_SCREENS.TAMER_INFO, CHAMPIONSHIP_SCREENS.GATE_SELECT, CHAMPIONSHIP_SCREENS.HUNT_LOADOUT,
-  CHAMPIONSHIP_SCREENS.BATTLE_SELECT, CHAMPIONSHIP_SCREENS.CHAMPIONSHIP
+  CHAMPIONSHIP_SCREENS.BATTLE_SELECT, CHAMPIONSHIP_SCREENS.CHAMPIONSHIP, CHAMPIONSHIP_SCREENS.BATTLE_RESULT
 ]);
 
-function autosaveOnHide() {
-  if (!app || !mountedScreen || mountedScreen !== app.getScreen()) return;
+/**
+ * The save call for the current screen, or null when writing now would not be
+ * safe. Shared by the page-hide save and the autosave after important
+ * operations, so both obey the same guards: Raising Home only between its
+ * lifecycle moments (a day change, an evolution, a confirmation or a letter
+ * owns the screen), other screens only from the list above.
+ */
+function safeSaveRoute() {
+  if (!app || !mountedScreen || mountedScreen !== app.getScreen()) return null;
   if (mountedScreen === CHAMPIONSHIP_SCREENS.RAISING_HOME) {
-    if (!raisingSource) return;
+    if (!raisingSource) return null;
     const lifecycle = raisingSource.getFrame()?.lifecycle;
-    if (lifecycle?.day || lifecycle?.evolution || lifecycle?.confirmation) return;
+    if (lifecycle?.day || lifecycle?.evolution || lifecycle?.confirmation) return null;
     const mailbox = lifecycle?.mailbox;
-    if (mailbox?.queue?.some((entry) => entry.id === mailbox.activeId)) return;
-    try { raisingSource.intents.requestSave(); }
-    catch (error) { console.warn(`CHAMPIONSHIP_AUTOSAVE_ON_HIDE: ${error.message}`); }
+    if (mailbox?.queue?.some((entry) => entry.id === mailbox.activeId)) return null;
+    return () => raisingSource.intents.requestSave();
+  }
+  if (!HIDE_SAVE_SCREENS.has(mountedScreen) || app.hasRaisingPresentation()) return null;
+  return () => app.save();
+}
+
+function autosaveOnHide() {
+  const route = safeSaveRoute();
+  if (!route) return;
+  try { route(); }
+  catch (error) { console.warn(`CHAMPIONSHIP_AUTOSAVE_ON_HIDE: ${error.message}`); }
+}
+
+/**
+ * What "saved" means in this build, from the save indicator. Local only: this
+ * build has no account and no cloud copy, and says so. A failed write offers
+ * the port's own retry, which rebuilds the current session rather than
+ * replaying stale bytes.
+ */
+async function openSaveDetails() {
+  const status = app?.savePort?.getStatus?.();
+  if (!status) return;
+  // The save time in the reader's own date and clock format.
+  const when = status.savedAt ? formatDateTime(status.savedAt) : null;
+  const where = uiText("存檔只保存在這台裝置的這個瀏覽器。目前沒有帳號或雲端同步，換裝置或清除網站資料後無法取回。");
+  const how = uiText("購買、改名、確認設施配置、報名與對戰結算後會自動保存；離開頁面、換日與「保存並結束」也會保存。");
+  if (status.phase === "SAVE_FAILED") {
+    const reason = uiText(status.lastCode === "CHAMPIONSHIP_MODERN_SAVE_CONFLICT"
+      ? "另一個分頁已寫入較新的存檔，這個分頁不會覆蓋它。請關閉其他分頁後重新開啟遊戲。"
+      : "這次沒有寫入本機存檔。可以再試一次；若仍失敗，請確認瀏覽器沒有封鎖網站資料或處於私密瀏覽。");
+    const choice = await showChoiceDialog({
+      title: uiText("保存失敗"),
+      message: `${reason}\n${where}`,
+      actions: status.canRetry
+        ? [{ id: "close", label: uiText("關閉"), tone: "secondary" }, { id: "retry", label: uiText("再試一次"), tone: "primary" }]
+        : [{ id: "close", label: uiText("關閉"), tone: "secondary" }],
+      cancelId: "close"
+    });
+    if (choice === "retry") {
+      try { app.persistenceFacade().retry(); } catch (error) { console.warn(`CHAMPIONSHIP_SAVE_RETRY: ${error.message}`); }
+      refreshStatusBar();
+    }
     return;
   }
-  if (!HIDE_SAVE_SCREENS.has(mountedScreen) || app.hasRaisingPresentation()) return;
-  try { app.save(); }
-  catch (error) { console.warn(`CHAMPIONSHIP_AUTOSAVE_ON_HIDE: ${error.message}`); }
+  const pending = (autosave?.inspect().pending.length ?? 0) > 0;
+  const state = pending ? uiText("有變更正在等待寫入。")
+    : status.phase === "DIRTY" ? (when ? uiText("上次寫入後遊戲又有進展（上次：{time}）。", { time: when }) : uiText("上次寫入後遊戲又有進展。"))
+    : (when ? uiText("已存到本機（{time}）。", { time: when }) : uiText("已存到本機。"));
+  await showChoiceDialog({ title: uiText("存檔狀態"), message: `${state}\n${how}\n${where}`, actions: [{ id: "close", label: uiText("知道了"), tone: "primary" }], cancelId: "close" });
 }
 
 /** Save & Quit returns to the title, which is where the original ends a session. */
 async function returnToTitle() {
   clockDriver?.setActive(false);
+  autosave?.dispose();autosave=null;
   statusBar?.dispose();statusBar=null;
   unsubscribeCalendar?.();
   unsubscribeCalendar = null;
+  unsubscribeHud?.();
+  unsubscribeHud = null;
   toolbar?.setMode(null);
   battleRuntime?.dispose();
   battleRuntime = null;
@@ -1129,6 +1413,7 @@ async function returnToTitle() {
   root.hidden = true;
   titleScreen.hidden = false;
   openingPresentation.reset();loginButton.hidden=false;titleActions.hidden=true;
+  if (titleSettingsButton) titleSettingsButton.hidden = false;
   newGameButton.disabled = false;
   refreshContinue();
 }
@@ -1176,6 +1461,12 @@ function refreshStatusBar() {
     reading.seasonName = display.seasonName;
     reading.dayNumber = display.dayNumber;
     reading.time = display.time;
+    // Product readouts on the same bar (2026-09-29): bits held, today's title
+    // matches (the same capped list the Battle menu shows), the save state.
+    reading.bits = app.getShopFrame()?.bits ?? null;
+    reading.todayMatches = Math.min(app.getAvailableBattleRecordIndices().length, BATTLE_MATCH_LIST_CAP);
+    const status = app.savePort?.getStatus?.() ?? null;
+    reading.save = status ? { ...status, autosavePending: (autosave?.inspect().pending.length ?? 0) > 0 } : null;
   }
   statusBar.render(reading);
   // A day may only be closed from the Training side, matching where the
@@ -1233,8 +1524,9 @@ async function startNewGame(names={}) {
   } catch (error) {
     console.warn(error);
     newGameButton.disabled = false;
+    if (titleSettingsButton) titleSettingsButton.hidden = false;
     refreshContinue();
-    note(`無法開始新遊戲：${error.message}`);
+    note(uiText("無法開始新遊戲：{reason}", { reason: uiText(error.message) }));
     return false;
   }
 }
@@ -1254,7 +1546,7 @@ async function continueGame() {
     console.warn(error);
     newGameButton.disabled = false;
     refreshContinue();
-    note(`無法讀取存檔：${error.message}`);
+    note(uiText("無法讀取存檔：{reason}", { reason: uiText(error.message) }));
   }
 }
 
@@ -1284,7 +1576,42 @@ function refreshContinue() {
   }
 }
 
+const titleSettingsButton = document.getElementById("cm-title-settings");
+
+/**
+ * After a language switch: relabel everything that outlives a screen (the
+ * title, the status bar, the toolbar) and the screen that is showing, in
+ * place. Nothing is remounted, so the page, its selection and its scroll stay.
+ */
+function relabelChrome() {
+  document.title = uiText("數碼獸冠軍賽 — 2026");
+  const heading = titleScreen.querySelector(".cm-title__name");
+  // The logo is drawn brand art and keeps its Chinese; English readers get
+  // the name through the heading's label.
+  if (heading) {
+    heading.lang = "zh-Hant";
+    if (document.documentElement.lang === "en") heading.setAttribute("aria-label", "Digimon Championship");
+    else heading.removeAttribute("aria-label");
+  }
+  retranslate(titleScreen);
+  statusBar?.relabel?.();
+  refreshStatusBar();
+  toolbar?.relabel?.();
+  if (view?.relabel) view.relabel();
+  else retranslate(root);
+}
+
 function boot() {
+  // Title labels that the language setting can change.
+  setText(newGameButton, "開始新遊戲");
+  setText(continueButton, "繼續遊戲");
+  if (titleSettingsButton) {
+    setLabel(titleSettingsButton, "aria-label", "設定");
+    setLabel(titleSettingsButton, "title", "設定");
+    titleSettingsButton.addEventListener("click", () => openSettings(titleSettingsButton));
+  }
+  relabelChrome();
+  onLocaleChange(() => relabelChrome());
   try {
     app = createChampionshipStandaloneApp({
       storage: window.localStorage,
@@ -1307,17 +1634,19 @@ function boot() {
     if (inspected.present) {
       const name = starterName(inspected.save?.creature?.displayName ?? "");
       const choice = await showChoiceDialog({
-        title: "要開始新遊戲嗎？",
-        message: `${name ? `目前存檔「${name}」` : "目前的存檔"}會在完成開場命名後被新遊戲取代，而且無法復原。想接著玩請選「繼續遊戲」。`,
+        title: uiText("要開始新遊戲嗎？"),
+        message: name
+          ? uiText("目前存檔「{name}」會在完成開場命名後被新遊戲取代，而且無法復原。想接著玩請選「繼續遊戲」。", { name })
+          : uiText("目前的存檔會在完成開場命名後被新遊戲取代，而且無法復原。想接著玩請選「繼續遊戲」。"),
         actions: [
-          { id: "cancel", label: "取消", tone: "secondary" },
-          { id: "new", label: "開始新遊戲", tone: "danger" }
+          { id: "cancel", label: uiText("取消"), tone: "secondary" },
+          { id: "new", label: uiText("開始新遊戲"), tone: "danger" }
         ],
         cancelId: "cancel"
       });
       if (choice !== "new") return;
     }
-    titleActions.hidden=true;note('');openingPresentation.begin();
+    titleActions.hidden=true;note('');if(titleSettingsButton)titleSettingsButton.hidden=true;openingPresentation.begin();
   });
   continueButton.addEventListener("click", () => { void continueGame(); });
   installHomeEntries();

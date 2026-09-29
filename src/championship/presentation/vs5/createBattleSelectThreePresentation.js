@@ -28,7 +28,9 @@
 // leaves through the injected onSelect.
 
 import * as THREE from "../../../../node_modules/three/build/three.module.js";
-import { BATTLE_FACE_LABELS } from "../../text/zhHant.js";
+import { BATTLE_FACE_LABELS, battleFaceLabel } from "../../text/zhHant.js";
+import { uiText } from "../../text/uiText.js";
+import { cappedPixelRatio, currentQuality } from "../presentationPreferences.js";
 import { BATTLE_CUBE_ART_ID, resolveBattleCubeArt } from "./battleCubeArt.js";
 
 /** Mode identities confirmed against OVL10's original help-bank dispatch. */
@@ -90,15 +92,17 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
   }
 
   let renderer;
-  try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); }
+  // The quality tier, read when the cube mounts: next Battle menu for a change.
+  const quality = currentQuality();
+  try { renderer = new THREE.WebGLRenderer({ antialias: quality.threeAntialias, alpha: true }); }
   catch { return mountFlatFallback({ host, onSelect, available }); }
-  renderer.setPixelRatio(Math.min(globalThis.devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(cappedPixelRatio(quality.threePixelRatioCap));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.setClearColor(0x000000, 0);
   renderer.domElement.className = "cm-vs5-cube__canvas";
   renderer.domElement.dataset.renderer = "THREE_BOUNDED_BATTLE_SELECT";
   renderer.domElement.setAttribute("role", "img");
-  renderer.domElement.setAttribute("aria-label", "戰鬥選單立方體，拖曳或使用左右方向鍵旋轉");
+  renderer.domElement.setAttribute("aria-label", uiText("戰鬥選單立方體，拖曳或使用左右方向鍵旋轉"));
   renderer.domElement.tabIndex = 0;
   renderer.domElement.style.touchAction = "none";
 
@@ -107,7 +111,7 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
   const overlay = document.createElement("div");
   overlay.className = "cm-vs5-cube__faces";
   overlay.setAttribute("role", "group");
-  overlay.setAttribute("aria-label", "對戰模式");
+  overlay.setAttribute("aria-label", uiText("對戰模式"));
 
   host.append(renderer.domElement, overlay);
 
@@ -143,12 +147,12 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
     button.className = "cm-vs5-cube__face";
     button.dataset.faceId = face.id;
     button.dataset.romNode = face.node;
-    button.textContent = face.label;
+    button.textContent = battleFaceLabel(face.id);
     const reachable = available === null || available.has(face.id);
     button.disabled = !reachable;
     if (!reachable) {
       button.dataset.state = "NOT_IMPLEMENTED";
-      button.title = "此模式尚未開放";
+      button.title = uiText("此模式尚未開放");
     }
     button.addEventListener("click", () => {
       if (button.disabled) return;
@@ -305,7 +309,7 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
 function mountFlatFallback({ host, onSelect, available }) {
   const grid = document.createElement("div");
   grid.className = "cm-vs5-cube__fallback";
-  grid.setAttribute("aria-label", "對戰模式");
+  grid.setAttribute("aria-label", uiText("對戰模式"));
   const art = resolveBattleCubeArt();
   let selected = null;
   for (const face of BATTLE_CUBE_FACES) {
@@ -322,7 +326,7 @@ function mountFlatFallback({ host, onSelect, available }) {
       img.addEventListener("error", () => img.remove(), { once: true });
       button.append(img);
     }
-    button.append(document.createTextNode(face.label));
+    button.append(document.createTextNode(battleFaceLabel(face.id)));
     button.addEventListener("click", () => { if (!button.disabled) { selected = face.id; onSelect(face.id); } });
     grid.append(button);
   }

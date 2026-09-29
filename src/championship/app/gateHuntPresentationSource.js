@@ -110,8 +110,17 @@ function assertApplication(app) {
   }
 }
 
-export function createGateHuntPresentationSource(app) {
+/**
+ * @param {object} app
+ * @param {object} [options]
+ * @param {(reason: string) => void} [options.onCommitted] told after an
+ *   operation the player would expect to be kept -- a purchase, a confirmed
+ *   cage layout, a Database rename -- so the app can autosave. Presentation
+ *   wiring only: the source still writes nothing itself.
+ */
+export function createGateHuntPresentationSource(app, { onCommitted = null } = {}) {
   assertApplication(app);
+  const committed = (reason) => { try { onCommitted?.(reason); } catch { /* an observer must not break the intent */ } };
   const listeners = new Set();
   let frameRevision = 0;
   let currentFrame = null;
@@ -373,6 +382,7 @@ export function createGateHuntPresentationSource(app) {
     },
     confirmCageEdit() {
       app.confirmCageEdit();
+      committed("cage-layout");
       return commit();
     },
     setTamerRank(nextRank) {
@@ -385,10 +395,12 @@ export function createGateHuntPresentationSource(app) {
     },
     renameDatabaseInstance(instanceId, displayName) {
       app.renameDatabaseInstance(instanceId, displayName);
+      committed("rename");
       return commit();
     },
     buyShopItem(shopRecordIndex, quantity = 1) {
-      app.buyShopItem(shopRecordIndex, quantity);
+      const receipt = app.buyShopItem(shopRecordIndex, quantity);
+      if (receipt?.ok) committed("purchase");
       return commit();
     },
     selectGate(gateId) {

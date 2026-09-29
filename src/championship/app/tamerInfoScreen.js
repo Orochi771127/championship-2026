@@ -192,7 +192,7 @@ export function createTamerInfoView({ root, walletBits = null, tamerRank = null,
   }
 
   const note = element("p", "cm-tamer-note",
-    `共 ${TAMER_INFO_FIELDS.length} 個欄位，其中 ${TAMER_INFO_FIELDS.length-sourced} 個欄位的資料來源尚待確認，以橫線表示，並非零。`);
+    uiText("共 {total} 個欄位，其中 {unsourced} 個欄位的資料來源尚待確認，以橫線表示，並非零。", { total: TAMER_INFO_FIELDS.length, unsourced: TAMER_INFO_FIELDS.length - sourced }));
   note.hidden = new URLSearchParams(globalThis.location?.search??'').get('presentation') !== 'developer';
 
   // Every screen leaves from the same sticky footer, named for where it goes.

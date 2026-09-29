@@ -6,6 +6,7 @@ import { ranchBoardCell } from '../cage/ranchSlotGeometry.js';
 import { getOriginalCageVisualBinding } from './originalCageVisualBindings.js';
 import { validateRuntimeMapArtBundle } from './runtimeMapArtBundle.js';
 import { cageName } from '../text/zhHant.js';
+import { uiText } from '../text/uiText.js';
 import { assembledCageArt, assembledShopArt } from './assembledUiArt.js';
 
 const art = validateRuntimeMapArtBundle(manifest);
@@ -22,9 +23,11 @@ export function cageUiSummary(moduleId, fallback = '') {
   const definition = getCageDefinitionByModuleId(moduleId);
   if (!definition) return fallback;
   const {channels, capacity} = definition.training;
-  const parts = channels.map(channel=>channelNames[channel.id]).filter(Boolean);
-  if (capacity !== null) parts.push(`建議 ${capacity} 隻`);
-  return parts.join(' · ') || '固定待機區';
+  // Each part is resolved on its own, so a translation never has to match
+  // the joined line.
+  const parts = channels.map(channel=>channelNames[channel.id]).filter(Boolean).map((part)=>uiText(part));
+  if (capacity !== null) parts.push(uiText('建議 {count} 隻', { count: capacity }));
+  return parts.join(' · ') || uiText('固定待機區');
 }
 export function cageUiImage(moduleId, baseUrl) {
   const definition = getCageDefinitionByModuleId(moduleId);

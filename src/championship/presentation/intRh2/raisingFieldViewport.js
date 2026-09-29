@@ -1,13 +1,34 @@
-/** Screen pixels kept clear along the top of the frame for the floating
- * readout. A fixed band, not a share of the leftover: the readout does not
- * grow with the ranch. */
-export const RAISING_READOUT_BAND_PX = 96;
+/** The whole number of screen pixels one original native pixel may take on
+ * the ranch. Whole numbers keep every native pixel the same size on screen,
+ * which is what keeps pixel art crisp while it pans. */
+export const RAISING_MIN_NATIVE_SCREEN_PIXELS = 2;
+export const RAISING_MAX_NATIVE_SCREEN_PIXELS = 6;
 
-/** The largest one original native pixel may appear on screen. At two screen
- * pixels the resident remains readable while a phone still shows the current
- * cage in its neighbouring-board context. Larger values make one cage cover
- * most of the ranch and look detached from the cells it actually occupies. */
-export const RAISING_MAX_NATIVE_SCREEN_PIXELS = 2;
+/** How much of the board stays in view at once, in native pixels: two and a
+ * third of the 48-pixel board columns, so the cage a resident lives in is
+ * still seen beside its neighbours however large the screen makes it. */
+export const RAISING_MIN_VISIBLE_NATIVE_WIDTH = 112;
+
+/**
+ * Screen pixels per native pixel for the native ranch window (2026-09-29).
+ *
+ * The board is a wide, short strip (two cage rows) panned sideways. The old
+ * rule kept two screen pixels on every screen and laid the strip on the floor
+ * under a fixed readout band, so a phone showed half its height as empty
+ * ground and a tablet two-thirds. This takes the largest whole scale that
+ * fits the frame's height and still leaves enough of the board in view.
+ */
+export function raisingNativeScreenPixels(field, viewport, padding = 12) {
+  const unit = field.nativePixelWorldScale;
+  const nativeHeight = field.worldHeightPx / unit;
+  const byHeight = Math.floor((viewport.height - padding * 2) / nativeHeight);
+  const byWidth = Math.floor((viewport.width - padding * 2) / RAISING_MIN_VISIBLE_NATIVE_WIDTH);
+  const whole = Math.min(RAISING_MAX_NATIVE_SCREEN_PIXELS, byHeight, byWidth);
+  if (whole >= RAISING_MIN_NATIVE_SCREEN_PIXELS) return whole;
+  // A frame too short for two whole pixels fits the height instead, as the
+  // ranch always did, rather than hiding part of the board.
+  return Math.min(RAISING_MIN_NATIVE_SCREEN_PIXELS, Math.max(1e-3, (viewport.height - padding * 2) / nativeHeight));
+}
 
 /** Presentation transform only. Legacy habitat regions retain their identity
  * and normalized geometry; this does not assign residents to native modules.
@@ -17,21 +38,21 @@ export function raisingFieldViewport(field, viewport, padding = 12, cameraX = 0)
   if (!(field?.worldWidthPx > 0 && field?.worldHeightPx > 0)) {
     return { x: 0, y: 0, width: viewport.width, height: viewport.height, scale: 1 };
   }
-  // The native ranch remains a sideways window over one continuous board. It
-  // is laid on the bottom edge, below the fixed readout band, and it never
-  // enlarges past the scale that keeps adjacent cells visible on a phone.
+  // The native ranch remains a sideways window over one continuous board,
+  // centred in the frame's height. Nothing is reserved for a readout: cards
+  // float over the margin and never move the board.
   const nativeWindow = field.presentationMode === 'NATIVE_RANCH' && field.nativePixelWorldScale > 0;
-  const headroom = nativeWindow && field.wrapWidthPx ? RAISING_READOUT_BAND_PX : 0;
-  const heightScale = Math.max(1, viewport.height - padding * 2 - headroom) / field.worldHeightPx;
+  const heightScale = Math.max(1, viewport.height - padding * 2) / field.worldHeightPx;
   const scale = nativeWindow
-    ? Math.min(heightScale, RAISING_MAX_NATIVE_SCREEN_PIXELS / field.nativePixelWorldScale)
+    ? raisingNativeScreenPixels(field, viewport, padding) / field.nativePixelWorldScale
     : Math.min(Math.max(1, viewport.width - padding * 2) / field.worldWidthPx, heightScale);
   const width = field.worldWidthPx * scale;
   const height = field.worldHeightPx * scale;
   const maxCameraX = Math.max(0,field.worldWidthPx - (viewport.width-padding*2)/scale);
   const scroll=field.wrapWidthPx ? wrapRaisingCamera(cameraX,field.wrapWidthPx) : Math.min(maxCameraX,Math.max(0,cameraX));
   const x = nativeWindow ? padding - scroll*scale : (viewport.width-width)/2;
-  const y = nativeWindow ? viewport.height - padding - height : (viewport.height - height) / 2;
+  // Whole screen pixels for the board's top edge, so rows do not shimmer.
+  const y = nativeWindow ? Math.round((viewport.height - height) / 2) : (viewport.height - height) / 2;
   return { x, y, width, height, scale };
 }
 

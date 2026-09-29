@@ -68,10 +68,27 @@ async function footerReachable(page, selector, label) {
       const first = await saved(page);
       assert.ok(first, 'a new game is written once it starts');
       assert.equal(first.creature.displayName, '小蛋');
-      await page.locator('.int-rh2-summary__money').waitFor();
+      // 2026-09-29 redesign: money and today's title matches moved from the
+      // Home card into the status bar, so every screen carries them.
+      await page.locator('.cm-status-bar__bits').waitFor();
       // Painted when Home mounts, before the field finishes loading.
-      assert.equal(await page.locator('.int-rh2-summary__money').textContent(), '0 位元幣');
-      assert.match(await page.locator('.int-rh2-summary__matches').textContent(), /頭銜賽/);
+      assert.equal(await page.locator('.cm-status-bar__bits').textContent(), '0');
+      assert.equal(await page.locator('.cm-status-bar__bits').getAttribute('aria-label'), '持有 0 位元幣');
+      // The title-match badge counts the same capped list the Battle menu
+      // shows; it is hidden, not shown as zero, when there is none today.
+      const matchBadge = page.locator('.cm-status-bar__matches');
+      const badgeCount = (await matchBadge.isVisible())
+        ? Number((await matchBadge.textContent()).match(/^頭銜賽 ([1-9]\d*)$/)?.[1] ?? NaN) : 0;
+      assert.ok(Number.isInteger(badgeCount), 'the badge names a whole count');
+      if (badgeCount > 0) {
+        await matchBadge.click();
+      } else {
+        await menu(page, 'SYSTEM', 'battle');
+      }
+      await onScreen(page, 'BATTLE_SELECT');
+      assert.equal(await page.locator('.cm-vs5-matches .cm-vs5-match__enter').count(), badgeCount, 'badge count equals the Battle menu list');
+      await page.getByRole('button', { name: '返回牧場', exact: true }).click();
+      await home(page);
       assert.match(await page.locator('.cm-status-bar__day').textContent(), /第\s*1\s*日/);
       await page.screenshot({ path: path.join(output, 'new-game-home-390.png') });
 
@@ -163,7 +180,8 @@ async function footerReachable(page, selector, label) {
       assert.notEqual(after.updatedAt, before.updatedAt, 'leaving from the Shop writes the save');
       await login(page); await page.click('#cm-continue'); await home(page);
       assert.equal(await feedStock(), feed0 + 2, 'the toolbar food count shows both purchases after Continue');
-      assert.equal(await page.locator('.int-rh2-summary__money').textContent(), `${bits2.toLocaleString('en-US')} 位元幣`, 'Home shows the same money');
+      assert.equal(await page.locator('.cm-status-bar__bits').getAttribute('aria-label'), `持有 ${bits2.toLocaleString('en-US')} 位元幣`, 'Home shows the same money');
+      assert.equal(await page.locator('.cm-status-bar__bits').textContent(), bits2.toLocaleString('en-US'));
       await menu(page, 'SYSTEM', 'shop');
       await onScreen(page, 'SHOP');
       assert.equal(await bitsText(), bits2, 'the purchases persisted after Continue');

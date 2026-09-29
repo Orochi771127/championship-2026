@@ -3,6 +3,11 @@
 // the legacy 35-step catalogue is only a middle segment. In particular, text
 // wording does not establish whether the original waits for input or performs
 // a demonstration. See TUTORIAL_MESSAGE_COVERAGE_2026-09-13.json.
+// English (2026-09-29) lives beside it, keyed identically; the display
+// language picks one when a line is shown.
+import { isEnglish } from './locale.js';
+import { TUTORIAL_LINES_EN, TUTORIAL_PROMPTS_EN } from './tutorialMessages.en.js';
+
 const lines = {
   1495: '在育成畫面裡，可以照顧你的數碼獸。',
   1496: '這是一顆數碼蛋，數碼獸會從蛋裡誕生。',
@@ -98,13 +103,13 @@ const prompts = {
 export function tutorialLine(textId) {
   const line = lines[textId];
   if (line === undefined) throw new Error(`TUTORIAL_TEXT_MISSING: ${textId}`);
-  return line;
+  return (isEnglish() ? TUTORIAL_LINES_EN[textId] : null) ?? line;
 }
 
 export function tutorialPrompt(advance) {
   const prompt = prompts[advance];
   if (prompt === undefined) throw new Error(`TUTORIAL_PROMPT_MISSING: ${advance}`);
-  return prompt;
+  return (isEnglish() ? TUTORIAL_PROMPTS_EN[advance] : null) ?? prompt;
 }
 
 export const TUTORIAL_TEXT_IDS = Object.freeze(Object.keys(lines).map(Number));

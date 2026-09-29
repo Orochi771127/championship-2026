@@ -1,4 +1,5 @@
 import { uiText } from "../text/uiText.js";
+import { formatList } from "../text/locale.js";
 import {generationName,personalityName,rosterFamilyName,specialSkillName} from '../text/zhHant.js';
 // The Digimon roster -- the original's ui/digimon_list_* scenes.
 //
@@ -91,6 +92,37 @@ function element(tag, className, text, localize = true) {
 }
 
 /**
+ * The traced detail rows and the resistance graph for one roster entry.
+ * Shared by this screen and the Raising Home detail sheet (2026-09-29), so
+ * both read one source and show the same rows in the same order.
+ */
+export function appendCreatureDetail(detail, entry) {
+  for (const row of TRACED_DETAIL_ROWS) {
+    const value = row.read(entry);
+    if (value === null || value === undefined) continue;
+    const term = element("dt", "cm-digimon-detail__label", row.label);
+    term.setAttribute("data-row", row.id);
+    detail.append(term, element("dd", "cm-digimon-detail__value", String(value), row.id !== "nickname"));
+  }
+  const graphValues = entry.stats?.resistanceGraph;
+  if (Array.isArray(graphValues) && graphValues.length === 5) {
+    const graph = element('div', 'cm-digimon-resistance');
+    graph.setAttribute('role', 'img');
+    graph.setAttribute('aria-label', formatList(graphValues.map(part => `${uiText(RESISTANCE_LABELS[part.id] ?? part.id)} ${part.pixels}`)));
+    graph.append(element('span', 'cm-digimon-resistance__title', '抗性'));
+    const bar = element('span', 'cm-digimon-resistance__bar');
+    for (const part of graphValues) {
+      const segment = element('span', `cm-digimon-resistance__segment cm-digimon-resistance__segment--${part.id.toLowerCase()}`);
+      segment.style.flexGrow = String(part.pixels);
+      segment.title = `${uiText(RESISTANCE_LABELS[part.id] ?? part.id)} ${part.pixels}/78`;
+      bar.append(segment);
+    }
+    graph.append(bar);
+    detail.append(graph);
+  }
+}
+
+/**
  * Mount the roster.
  *
  * @param {object} options
@@ -122,30 +154,7 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
       detail.append(element("p", "cm-digimon-empty", "No Digimon in the roster."));
       return;
     }
-    for (const row of TRACED_DETAIL_ROWS) {
-      const value = row.read(entry);
-      if (value === null || value === undefined) continue;
-      detail.append(
-        element("dt", "cm-digimon-detail__label", row.label),
-        element("dd", "cm-digimon-detail__value", String(value), row.id !== "nickname")
-      );
-    }
-    const graphValues=entry.stats?.resistanceGraph;
-    if(Array.isArray(graphValues)&&graphValues.length===5){
-      const graph=element('div','cm-digimon-resistance');
-      graph.setAttribute('role','img');
-      graph.setAttribute('aria-label',graphValues.map(part=>`${RESISTANCE_LABELS[part.id]??part.id} ${part.pixels}`).join('、'));
-      graph.append(element('span','cm-digimon-resistance__title','抗性'));
-      const bar=element('span','cm-digimon-resistance__bar');
-      for(const part of graphValues){
-        const segment=element('span',`cm-digimon-resistance__segment cm-digimon-resistance__segment--${part.id.toLowerCase()}`);
-        segment.style.flexGrow=String(part.pixels);
-        segment.title=`${RESISTANCE_LABELS[part.id]??part.id} ${part.pixels}/78`;
-        bar.append(segment);
-      }
-      graph.append(bar);
-      detail.append(graph);
-    }
+    appendCreatureDetail(detail, entry);
     // Say what is missing rather than leaving the panel silently short.
     const note = element("p", "cm-digimon-untraced",
       `${UNTRACED_DETAIL_ROWS.length} further rows the original shows are not traced yet.`);
@@ -202,7 +211,7 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
   editorInput.maxLength = ROSTER_NAME_MAX_LENGTH;
   editorInput.autocomplete = "off";
   editorInput.spellcheck = false;
-  editorInput.setAttribute("aria-label", "新的暱稱");
+  editorInput.setAttribute("aria-label", uiText("新的暱稱"));
   editorLabel.append(editorInput);
   const editorMessage = element("p", "cm-digimon-rename__message");
   editorMessage.setAttribute("role", "status");
@@ -220,7 +229,7 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
     nameEdit.disabled = !renameable;
     nameEdit.dataset.state = onRename ? "READY" : "NOT_IMPLEMENTED";
     nameEdit.title = !onRename ? uiText("In the original, not yet in this build")
-      : entry?.renameable === false ? "初始夥伴的名字在開場時決定，無法更改。" : "";
+      : entry?.renameable === false ? uiText("初始夥伴的名字在開場時決定，無法更改。") : "";
   }
   nameEdit.addEventListener("click", () => {
     const entry = entries[selectedIndex];
@@ -238,12 +247,12 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
     const entry = entries[selectedIndex];
     const name = String(editorInput.value ?? "").trim();
     if (!entry || !name || name.length > ROSTER_NAME_MAX_LENGTH) {
-      editorMessage.textContent = `名稱需為 1 至 ${ROSTER_NAME_MAX_LENGTH} 個字。`;
+      editorMessage.textContent = uiText("名稱需為 1 至 {max} 個字。", { max: ROSTER_NAME_MAX_LENGTH });
       return;
     }
     const result = onRename?.(entry.instanceId, name);
     if (!result?.ok) {
-      editorMessage.textContent = result?.reason === "NOT_RENAMEABLE" ? "這隻數碼獸的名字無法更改。" : `名稱需為 1 至 ${ROSTER_NAME_MAX_LENGTH} 個字。`;
+      editorMessage.textContent = result?.reason === "NOT_RENAMEABLE" ? uiText("這隻數碼獸的名字無法更改。") : uiText("名稱需為 1 至 {max} 個字。", { max: ROSTER_NAME_MAX_LENGTH });
       return;
     }
     if (Array.isArray(result.entries)) entries = result.entries;

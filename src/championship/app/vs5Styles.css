@@ -1,8 +1,13 @@
-/* VS5 — Battle menu, match and result.
+/* VS5 — Battle menu, match and result. 2026-09-29 redesign on ui/tokens.css.
  *
  * A separate stylesheet on purpose: styles.css is claimed by both the runtime
  * and the art lane's manifests, so this lane adds a file rather than editing a
  * contested one. The vs2 screens set the same precedent.
+ *
+ * Battle is the one place the calm terrarium turns up the energy: the team
+ * colours, the broadcast-style clock and the verdict plate borrow the arena
+ * candidate's language, on the same tokens, surfaces and radii as every other
+ * screen. Original-created CSS only: no ROM or decoded pixels are drawn here.
  *
  * The 9:16 frame is this project's mobile adaptation. Two original 256x192
  * screens stacked form 256x384 (2:3), not 9:16. The 37.5% field band fits
@@ -18,13 +23,22 @@
   /* Not `stretch`: a stretched child overrides the shell's aspect-ratio, and
      the five band percentages are only correct on a 9:16 shell. */
   align-items: center;
-
+  overflow: hidden;
+  color: var(--c-text-1);
+  font-family: var(--font-ui);
+  background:
+    radial-gradient(90% 45% at 50% 38%, var(--c-stage-glow), transparent 70%),
+    var(--c-ground);
 }
+.cm-vs5-root *,
+.cm-vs5-root *::before,
+.cm-vs5-root *::after { box-sizing: border-box; }
 
 /* The shell IS the 9:16 frame, so a band's percentage height is a percentage
    of that frame and not of whatever the viewport happens to be. Without this
    the five proportions drift on any screen that is not exactly 9:16. */
 .cm-vs5-shell {
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -35,6 +49,24 @@
   margin: auto;
   padding: 0;
   gap: 0;
+  animation: cm-vs5-screen-in var(--dur-slow) var(--ease-out) both;
+}
+@keyframes cm-vs5-screen-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* The menu and the result are ordinary scrolling pages: the full screen
+   height, the same width rules as every other page. Only the match itself is
+   the 9:16 frame. */
+.cm-vs5-root:is([data-screen="BATTLE_SELECT"], [data-screen="BATTLE_RESULT"]) { align-items: stretch; }
+.cm-vs5-root:is([data-screen="BATTLE_SELECT"], [data-screen="BATTLE_RESULT"]) .cm-vs5-shell {
+  width: min(100%, 560px);
+  max-width: none;
+  height: 100%;
+  aspect-ratio: auto;
+  margin: 0 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* The sticky footer must never cover a control scrolled or focused into view. */
+  scroll-padding-bottom: 96px;
 }
 
 /* ---------------- The five bands -----------------------------------------
@@ -47,225 +79,335 @@
  * 37.5% of a 9:16 frame at full width is exactly 3:2, which is the aspect the
  * arena art is authored at, so the field takes it with no crop.
  */
-.cm-vs5-shell[data-band-lock] > * { flex: 0 0 auto; }
-.cm-vs5-clock            { flex: 0 0 5%; }
+.cm-vs5-clock { flex: 0 0 5%; }
 .cm-vs5-roster--opponent { flex: 0 0 10%; }
-.cm-vs5-field            { flex: 0 0 37.5%; }
-.cm-vs5-roster--player   { flex: 0 0 28%; }
-.cm-vs5-log              { flex: 0 0 19.5%; }
+.cm-vs5-field { flex: 0 0 37.5%; }
+.cm-vs5-roster--player { flex: 0 0 28%; }
+.cm-vs5-log { flex: 0 0 19.5%; }
+
+/* ---------------- Shared type ---------------- */
+.cm-vs5-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--sp-5) var(--sp-4) var(--sp-3);
+}
+.cm-vs5-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--c-accent);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-strong);
+  letter-spacing: 0.08em;
+  line-height: var(--lh-label);
+}
+.cm-vs5-header > .cm-vs5-kicker::before { content: ""; width: 9px; height: 9px; background: var(--motif-stair) no-repeat; }
+.cm-vs5-title { margin: 0; font-size: var(--fs-title-1); line-height: var(--lh-title-1); font-weight: var(--fw-heavy); }
+.cm-vs5-evidence { color: var(--c-text-3); font-size: var(--fs-caption); letter-spacing: 0.06em; }
+
+/* ---------------- Controls ---------------- */
+.cm-vs5-action {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: var(--control);
+  padding: 0 var(--sp-5);
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-control);
+  background: var(--c-surface-2);
+  color: var(--c-text-1);
+  font: var(--fw-strong) var(--fs-body)/1.25 var(--font-ui);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+.cm-vs5-action--primary { border-color: transparent; background: var(--c-accent); color: var(--c-text-on-accent); }
+@media (hover: hover) {
+  .cm-vs5-action:hover:not(:disabled) { border-color: var(--c-line-3); background: var(--c-surface-3); }
+  .cm-vs5-action--primary:hover:not(:disabled) { background: var(--c-accent-strong); }
+}
+.cm-vs5-action:not(:disabled):active { transform: translateY(1px); }
+.cm-vs5-action:disabled { border-color: var(--c-line-1); background: var(--c-surface-1); color: var(--c-text-disabled); cursor: default; }
+.cm-vs5-action:focus-visible,
+.cm-vs5-cube__face:focus-visible,
+.cm-vs5-cube__canvas:focus-visible,
+.cm-vs5-password-input:focus-visible,
+.cm-vs5-link-code:focus-visible,
+.cm-vs5-arena-choice select:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+
+/* One footer per menu level: the way back on the left, the level's one
+   primary action on the right. */
+.cm-vs5-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--sp-3);
+  margin-top: auto;
+  padding: var(--sp-3) var(--sp-4) max(var(--sp-3), var(--safe-bottom));
+  border-top: 1px solid var(--c-line-1);
+  background: var(--c-surface-bar);
+  -webkit-backdrop-filter: var(--backdrop-glass);
+  backdrop-filter: var(--backdrop-glass);
+}
+.cm-vs5-footer > :only-child,
+.cm-vs5-footer > :first-child:nth-last-child(2):has(+ [hidden]) { grid-column: 1 / -1; justify-self: start; }
+.cm-vs5-footer > .cm-vs5-action:not(.cm-vs5-action--primary):first-child::before { content: ""; flex: 0 0 auto; width: 8px; height: 14px; margin-right: 2px; background: currentColor; -webkit-mask: var(--icon-chevron-left) center / contain no-repeat; mask: var(--icon-chevron-left) center / contain no-repeat; }
+.cm-vs5-footer > [hidden] { display: none; }
+
+/* ---------------- Battle menu ---------------- */
+.cm-vs5-cube { width: 100%; max-width: 320px; margin: 0 auto; padding: 0 var(--sp-4); }
+.cm-vs5-cube__canvas { display: block; width: 100%; height: auto; cursor: grab; touch-action: pan-y; }
+.cm-vs5-cube__canvas:active { cursor: grabbing; }
+.cm-vs5-cube__faces { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: var(--sp-2); }
+.cm-vs5-cube__face {
+  min-width: 0;
+  min-height: var(--target);
+  padding: 0 4px;
+  border: 1px solid var(--c-line-1);
+  border-radius: var(--r-control);
+  background: var(--c-surface-1);
+  color: var(--c-text-2);
+  font: var(--fw-strong) var(--fs-body-sm)/1.2 var(--font-ui);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.cm-vs5-cube__face[aria-pressed="true"] { border-color: var(--c-accent); background: var(--c-accent-soft); color: var(--c-accent-strong); box-shadow: var(--glow-accent); }
+.cm-vs5-cube__face:disabled { color: var(--c-text-disabled); background: transparent; cursor: default; }
+.cm-vs5-cube__fallback { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.cm-vs5-cube__fallback img { display: block; width: 100%; height: auto; margin-bottom: 6px; border-radius: var(--r-control); }
+.cm-vs5-cube__fallback .cm-vs5-cube__face { padding: 6px 6px 10px; }
+.cm-vs5-cube__note { margin: var(--sp-2) auto 0; padding: 0 var(--sp-4); max-width: 420px; color: var(--c-text-3); font-size: var(--fs-label); line-height: var(--lh-label); text-align: center; }
+.cm-vs5-party[hidden], .cm-vs5-matches[hidden], .cm-vs5-cube[hidden], .cm-vs5-cube__note[hidden], .cm-vs5-entry-notice[hidden] { display: none; }
+
+.cm-vs5-matches {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: var(--sp-3) var(--sp-4);
+}
+.cm-vs5-matches__empty { padding: var(--sp-5) var(--sp-2); color: var(--c-text-2); font-size: var(--fs-body-sm); text-align: center; }
+.cm-vs5-match { margin: 0; }
+.cm-vs5-match__enter {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "name name" "fee payout";
+  justify-content: stretch;
+  gap: 6px var(--sp-3);
+  width: 100%;
+  min-height: 72px;
+  padding: var(--sp-3) var(--sp-4);
+  border-color: var(--c-line-2);
+  background: var(--c-surface-1);
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.cm-vs5-match__fee,
+.cm-vs5-match__payout { font-size: var(--fs-label); font-weight: var(--fw-strong); font-variant-numeric: tabular-nums; }
+.cm-vs5-match__enter .cm-vs5-match__fee { grid-area: fee; color: var(--c-text-2); }
+.cm-vs5-match__enter .cm-vs5-match__payout { grid-area: payout; justify-self: end; color: var(--c-gold-strong); }
+.cm-vs5-entry-notice { margin: 0 var(--sp-4); color: var(--c-text-2); font-size: var(--fs-body-sm); line-height: var(--lh-body-sm); }
+.cm-vs5-entry-notice[role="status"] { padding: 10px 12px; border-radius: var(--r-control); background: var(--c-warning-soft); color: var(--c-warning); }
+
+/* A mode's panel: the kind's title, what it needs, then the choices. */
+/* A panel never shrinks inside the scrolling menu: the whole page scrolls, so
+   its last control can always come up above the sticky footer. */
+.cm-vs5-party { display: flex; flex: 0 0 auto; flex-direction: column; gap: var(--sp-2); padding: 0 var(--sp-4) var(--sp-3); }
+.cm-vs5-party > .cm-vs5-title { font-size: var(--fs-title-2); line-height: var(--lh-title-2); }
+.cm-vs5-party .cm-vs5-entry-notice { margin: 0; }
+.cm-vs5-party .cm-vs5-action,
+.cm-vs5-link .cm-vs5-action { justify-content: flex-start; flex-wrap: wrap; text-align: left; }
+.cm-vs5-party .cm-vs5-action[aria-pressed],
+.cm-vs5-link .cm-vs5-action[aria-pressed] { position: relative; padding-left: 44px; background: var(--c-surface-1); }
+.cm-vs5-party .cm-vs5-action[aria-pressed]::before,
+.cm-vs5-link .cm-vs5-action[aria-pressed]::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  width: 18px;
+  height: 18px;
+  transform: translateY(-50%);
+  border: 1.5px solid var(--c-line-3);
+  border-radius: 5px;
+}
+.cm-vs5-party .cm-vs5-action[aria-pressed="true"],
+.cm-vs5-link .cm-vs5-action[aria-pressed="true"] { border-color: var(--c-accent); background: var(--c-accent-soft); }
+.cm-vs5-party .cm-vs5-action[aria-pressed="true"]::before,
+.cm-vs5-link .cm-vs5-action[aria-pressed="true"]::before {
+  border-color: var(--c-accent);
+  background: var(--c-accent) url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 18 18'%3E%3Cpath d='M4 9.5l3.2 3L14 5.5' fill='none' stroke='%23042019' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 100% no-repeat;
+}
+.cm-vs5-party .cm-vs5-match__fee { flex-basis: 100%; color: var(--c-text-3); font-weight: var(--fw-regular); }
+.cm-vs5-party .cm-vs5-action:disabled .cm-vs5-match__fee { color: var(--c-warning); }
+.cm-vs5-arena-choice { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: var(--sp-3); color: var(--c-text-2); font-size: var(--fs-body-sm); font-weight: var(--fw-strong); }
+.cm-vs5-arena-choice select,
+.cm-vs5-password-input,
+.cm-vs5-link-code {
+  width: 100%;
+  min-height: var(--control);
+  padding: 8px 12px;
+  border: 1px solid var(--c-line-3);
+  border-radius: var(--r-control);
+  background: var(--c-ground);
+  color: var(--c-text-1);
+  /* 16px: iPhone Safari zooms the whole page into any focused field below 16px. */
+  font: var(--fw-strong) 16px/1.35 var(--font-ui);
+}
+.cm-vs5-practice-member {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 6px;
+  padding: var(--sp-2) var(--sp-3) var(--sp-3);
+  border: 1px solid var(--c-line-1);
+  border-radius: var(--r-card);
+  background: var(--c-surface-1);
+}
+.cm-vs5-practice-member__name,
+.cm-vs5-practice-member > .cm-vs5-match__fee { grid-column: 1 / -1; overflow-wrap: anywhere; }
+.cm-vs5-practice-member__name { font-weight: var(--fw-strong); }
+.cm-vs5-practice-member .cm-vs5-action { justify-content: center; min-height: var(--target); padding: 0 var(--sp-3); }
+.cm-vs5-practice-member .cm-vs5-action[aria-pressed] { padding-left: var(--sp-3); }
+.cm-vs5-practice-member .cm-vs5-action[aria-pressed]::before { display: none; }
+.cm-vs5-practice-member .cm-vs5-action[aria-pressed="true"] { border-color: var(--c-accent); background: var(--c-accent-soft); color: var(--c-accent-strong); }
+.cm-vs5-password-label { display: grid; gap: 6px; color: var(--c-text-2); font-size: var(--fs-body-sm); font-weight: var(--fw-strong); }
+.cm-vs5-password-maker,
+.cm-vs5-link { display: flex; flex-direction: column; gap: var(--sp-2); }
+.cm-vs5-password-maker { margin-top: var(--sp-3); padding-top: var(--sp-3); border-top: 1px solid var(--c-line-1); }
+.cm-vs5-link__heading { margin: var(--sp-2) 0 0; color: var(--c-text-1); font-size: var(--fs-body); font-weight: var(--fw-heavy); }
+.cm-vs5-link-code { min-height: 92px; resize: vertical; font: 16px/1.35 ui-monospace, "Cascadia Mono", Consolas, monospace; overflow-wrap: anywhere; }
+
+/* ---------------- The match ---------------- */
+/* Team colours: the player's side is the accent, the opponent's is ember.
+   Health keeps its own colours on both sides. */
+.cm-vs5-root[data-screen="BATTLE_FIELD"] {
+  --team-player: var(--c-team-player);
+  --team-opponent: var(--c-team-opponent);
+  background:
+    radial-gradient(80% 30% at 50% 44%, color-mix(in srgb, var(--c-stage-light) 70%, transparent), transparent 72%),
+    linear-gradient(180deg, var(--c-backdrop-top), var(--c-void));
+}
+.cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-shell { background: var(--c-ground); box-shadow: 0 0 0 1px var(--c-line-1), var(--shadow-float); }
 
 .cm-vs5-clock {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 3px;
-  padding: 0 12px;
   min-height: 0;
+  padding: 0 var(--sp-3);
 }
+.cm-vs5-clock__caption { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; min-width: 0; }
+.cm-vs5-clock__caption .cm-vs5-kicker { color: var(--c-text-2); letter-spacing: 0.04em; }
+.cm-vs5-clock__caption .cm-vs5-evidence { display: none; }
+.cm-vs5-clock__track { position: relative; height: 5px; overflow: hidden; border-radius: 3px; background: var(--c-surface-3); }
+.cm-vs5-clock__fill { display: block; width: 100%; height: 100%; border-radius: inherit; background: var(--c-accent); transition: width 120ms linear; }
+/* The last two tiers of the 7200-frame clock read as "running out". */
+.cm-vs5-clock[data-tier="6"] .cm-vs5-clock__fill,
+.cm-vs5-clock[data-tier="7"] .cm-vs5-clock__fill { background: var(--c-warning); }
+.cm-vs5-clock__pips { display: none; }
 
-.cm-vs5-clock__track {
-  height: 5px;
-
-  overflow: hidden;
-}
-
-.cm-vs5-clock__fill {
-  display: block;
-  height: 100%;
-  width: 100%;
-
-  transition: width 120ms linear;
-}
-
-.cm-vs5-clock__caption {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.cm-vs5-clock__pips { display: flex; gap: 2px; }
-
-.cm-vs5-clock__pip {
-  flex: 1 1 0;
-  height: 3px;
-  background: #9fd8de;
-  opacity: 0.55;
-}
-
-.cm-vs5-clock__pip[data-spent="true"] { background: #24424c; opacity: 0.9; }
-
-.cm-vs5-log {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 2px;
-  padding: 6px 12px 0;
-  min-height: 0;
-  overflow: hidden;
-}
-
-.cm-vs5-log__line {
-  margin: 0;
-  font-size: 13px;
-  letter-spacing: 0.1em;
-
-}
-
-.cm-vs5-log__detail {
-  margin: 0;
-  font-size: 11px;
-  letter-spacing: 0.14em;
-
-}
-
-.cm-vs5-log[data-verdict="TEAM_ZERO_AHEAD"] .cm-vs5-log__line { color: #6fd0d8; }
-.cm-vs5-log[data-verdict="TEAM_ONE_AHEAD"] .cm-vs5-log__line { color: #d88a6f; }
-.cm-vs5-log[data-verdict="LEVEL"] .cm-vs5-log__line { color: #8d8f9a; }
-
-.cm-vs5-header {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 12px 16px 8px;
-}
-
-.cm-vs5-header--match {
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: space-between;
-  padding: 8px 12px 4px;
-}
-
-.cm-vs5-kicker {
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  color: #65b8c3;
-}
-
-.cm-vs5-evidence {
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  color: #8d8f9a;
-}
-
-.cm-vs5-title {
-  margin: 0;
-  font-size: 20px;
-  letter-spacing: 0.08em;
-}
-
-/* ---------------- Battle menu ---------------- */
-
-.cm-vs5-matches {
-  list-style: none;
-  margin: 0;
-  padding: 8px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  overflow-y: auto;
-}
-
-.cm-vs5-matches__empty {
-  padding: 24px 4px;
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  color: #8d8f9a;
-}
-
-.cm-vs5-match__enter {
-  width: 100%;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.cm-vs5-match__payout {
-  font-size: 11px;
-
-}
-
-/* ---------------- The match ---------------- */
-
-.cm-vs5-roster {
-  list-style: none;
-  margin: 0;
-  padding: 4px 10px;
-  display: flex;
-  gap: 6px;
-}
-
-.cm-vs5-roster--opponent { flex-direction: row; min-height: 0; overflow: hidden; }
-.cm-vs5-roster--opponent .cm-vs5-fighter { flex: 1 1 0; min-height: 0; }
-
-.cm-vs5-roster--player {
-  flex-direction: column;
-  justify-content: flex-start;
-  min-height: 0;
-  overflow: hidden;
-}
+.cm-vs5-roster { list-style: none; display: flex; gap: 6px; margin: 0; padding: 4px var(--sp-3); min-height: 0; }
+.cm-vs5-roster--opponent { flex-direction: row; overflow: hidden; }
+.cm-vs5-roster--player { flex-direction: column; justify-content: center; overflow: hidden; }
 
 .cm-vs5-fighter {
-  flex: 0 1 auto;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: center;
+  gap: 3px;
   min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 6px 8px;
-  border: 1px solid #1d3742;
-  background: rgba(13, 37, 48, 0.55);
-}
-
-.cm-vs5-fighter[data-present="false"] { opacity: 0.35; }
-.cm-vs5-fighter[data-down="true"] { background: rgba(80, 36, 42, 0.75); }
-.cm-vs5-fighter[data-engaged="true"] { border-color: #f0e0a8; }
-
-.cm-vs5-fighter__name {
-  font-size: 11px;
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.cm-vs5-meter {
-  display: block;
-  height: 6px;
-
+  min-height: 0;
+  padding: 5px 8px 5px 10px;
+  border: 1px solid var(--c-line-1);
+  border-radius: var(--r-control);
+  background: var(--c-surface-1);
   overflow: hidden;
 }
-
-.cm-vs5-meter__fill {
-  display: block;
-  height: 100%;
-  width: 100%;
-  background: #5fd08a;
-  transition: width 120ms linear;
+/* The team edge. */
+.cm-vs5-fighter::before { content: ""; position: absolute; inset: 6px auto 6px 0; width: 3px; border-radius: 0 2px 2px 0; background: var(--team-player); }
+.cm-vs5-roster--opponent .cm-vs5-fighter { flex: 1 1 0; }
+.cm-vs5-roster--opponent .cm-vs5-fighter::before { background: var(--team-opponent); }
+.cm-vs5-roster--player .cm-vs5-fighter { flex: 1 1 0; }
+.cm-vs5-fighter[data-present="false"] { place-items: center; border-style: dashed; background: transparent; }
+.cm-vs5-fighter[data-present="false"]::before { display: none; }
+.cm-vs5-fighter__empty { color: var(--c-text-disabled); }
+.cm-vs5-fighter[data-engaged="true"] { border-color: var(--c-accent-line); box-shadow: 0 0 12px color-mix(in srgb, var(--c-team-player) 22%, transparent); }
+.cm-vs5-roster--opponent .cm-vs5-fighter[data-engaged="true"] { border-color: color-mix(in srgb, var(--c-team-opponent) 60%, transparent); box-shadow: 0 0 12px color-mix(in srgb, var(--c-team-opponent) 22%, transparent); }
+.cm-vs5-fighter[data-down="true"] { background: var(--c-ground); filter: saturate(0.2); opacity: 0.62; }
+.cm-vs5-fighter[data-down="true"]::after {
+  content: var(--label-down);
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  padding: 0 5px;
+  border-radius: 4px;
+  background: var(--c-danger-soft);
+  color: var(--c-danger);
+  font-size: calc(10px * var(--text-scale));
+  font-weight: var(--fw-heavy);
+  line-height: calc(16px * var(--text-scale));
 }
+.cm-vs5-fighter__portrait { width: 32px; height: 32px; object-fit: contain; image-rendering: pixelated; }
+.cm-vs5-fighter__portrait[hidden] { display: none; }
+.cm-vs5-fighter:has(.cm-vs5-fighter__portrait:not([hidden])) { grid-template-columns: 32px minmax(0, 1fr); column-gap: 6px; }
+.cm-vs5-fighter:has(.cm-vs5-fighter__portrait:not([hidden])) .cm-vs5-fighter__portrait { grid-column: 1; grid-row: 1 / span 3; align-self: center; }
+.cm-vs5-fighter:has(.cm-vs5-fighter__portrait:not([hidden])) > :not(.cm-vs5-fighter__portrait) { grid-column: 2; }
+.cm-vs5-fighter__name { min-width: 0; overflow: hidden; font-size: var(--fs-label); font-weight: var(--fw-strong); line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
+.cm-vs5-fighter__hp { color: var(--c-text-3); font-size: var(--fs-caption); line-height: 1.2; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.cm-vs5-meter { display: block; height: 5px; overflow: hidden; border-radius: 3px; background: var(--c-surface-3); }
+.cm-vs5-meter__fill { display: block; width: 100%; height: 100%; border-radius: inherit; background: var(--c-stat-hp); transition: width 120ms linear; }
+.cm-vs5-meter--resource .cm-vs5-meter__fill { background: var(--c-stat-tp); }
+/* The compact opponent card keeps only name and health. */
+.cm-vs5-fighter--compact .cm-vs5-fighter__hp { display: none; }
+/* A narrow frame (the desktop portrait frame) wraps a long name onto two
+   lines rather than cutting it: 閃光暴龍獸 stays whole. */
+.cm-vs5-fighter--compact .cm-vs5-fighter__name { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
 
-.cm-vs5-meter--resource .cm-vs5-meter__fill { background: #65b8c3; }
+/* The player's three: portrait, name and the two meters across the row. */
+.cm-vs5-roster--player .cm-vs5-fighter:has(.cm-vs5-fighter__portrait:not([hidden])) {
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  grid-template-areas: "portrait name hp" "portrait hpbar hpbar" "portrait tp tp";
+  column-gap: 8px;
+  row-gap: 3px;
+}
+.cm-vs5-roster--player .cm-vs5-fighter:has(.cm-vs5-fighter__portrait:not([hidden])) .cm-vs5-fighter__portrait { grid-area: portrait; width: 40px; height: 40px; }
+.cm-vs5-roster--player .cm-vs5-fighter:has(.cm-vs5-fighter__portrait:not([hidden])) .cm-vs5-fighter__name { grid-area: name; font-size: var(--fs-body-sm); }
+.cm-vs5-roster--player .cm-vs5-fighter:has(.cm-vs5-fighter__portrait:not([hidden])) .cm-vs5-fighter__hp { grid-area: hp; align-self: center; }
+.cm-vs5-roster--player .cm-vs5-fighter:has(.cm-vs5-fighter__portrait:not([hidden])) .cm-vs5-meter--hp { grid-area: hpbar; }
+.cm-vs5-roster--player .cm-vs5-fighter:has(.cm-vs5-fighter__portrait:not([hidden])) .cm-vs5-meter--resource { grid-area: tp; height: 4px; }
 
 /* The 37.5% band above is what fixes this at 3:2; the aspect-ratio here is a
    fallback for a container that somehow is not the 9:16 shell. */
 .cm-vs5-field {
+  position: relative;
   width: 100%;
   aspect-ratio: 3 / 2;
-  position: relative;
   overflow: hidden;
-
+  border-block: 1px solid var(--c-line-2);
+  background: var(--c-scene-backdrop);
 }
-
-.cm-vs5-field .cm-field-canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  z-index: 1;
+.cm-vs5-field .cm-field-canvas { position: relative; z-index: 1; display: block; width: 100%; height: 100%; }
+.cm-vs5-field__loading {
+  position: absolute;
+  inset: 50% var(--sp-4) auto;
+  z-index: 5;
+  margin: 0;
+  padding: var(--sp-3);
+  transform: translateY(-50%);
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-card);
+  background: var(--c-surface-glass);
+  color: var(--c-text-1);
+  font-size: var(--fs-body-sm);
+  text-align: center;
 }
-
-.cm-vs5-field__loading { position:absolute; z-index:5; inset:50% 1rem auto; margin:0; padding:.65rem; transform:translateY(-50%); border-radius:.75rem; background:#163c35; color:#fff; text-align:center; font-size:.85rem; }
 
 /* Bounded Three overlay. Pointer-none so Auto Battle still takes no field input. */
 .cm-vs5-vfx-overlay {
@@ -277,73 +419,194 @@
   z-index: 2;
 }
 
+/* The record band: what just happened on the left, the way out on the right.
+   VS5 is Auto Battle, so this is never a command menu. */
+.cm-vs5-log {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  align-content: center;
+  column-gap: var(--sp-3);
+  row-gap: 2px;
+  min-height: 0;
+  padding: var(--sp-2) var(--sp-3) max(var(--sp-2), var(--safe-bottom));
+  overflow: hidden;
+}
+.cm-vs5-log__line { grid-column: 1; margin: 0; font-size: var(--fs-body); font-weight: var(--fw-heavy); letter-spacing: 0.04em; }
+.cm-vs5-log__detail { grid-column: 1; margin: 0; color: var(--c-text-2); font-size: var(--fs-label); }
+.cm-vs5-log__detail:empty { display: none; }
+.cm-vs5-log .cm-vs5-exit { grid-column: 2; grid-row: 1 / span 2; align-self: center; min-width: 96px; padding: 0 var(--sp-4); }
+.cm-vs5-log[data-ended="false"] .cm-vs5-log__line::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 8px; border-radius: 50%; background: var(--c-accent); vertical-align: 2px; animation: cm-vs5-live 1.6s var(--ease-in-out) infinite; }
+@keyframes cm-vs5-live { 50% { opacity: 0.25; } }
+.cm-vs5-log[data-verdict="TEAM_ZERO_AHEAD"] .cm-vs5-log__line { color: var(--c-accent-strong); }
+.cm-vs5-log[data-verdict="TEAM_ONE_AHEAD"] .cm-vs5-log__line { color: var(--c-team-opponent); }
+.cm-vs5-log[data-verdict="LEVEL"] .cm-vs5-log__line { color: var(--c-text-2); }
+.cm-vs5-log[data-ended="true"] .cm-vs5-exit { border-color: transparent; background: var(--c-accent); color: var(--c-text-on-accent); }
+
 /* ---------------- Result ---------------- */
+.cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell { display: grid; grid-template-rows: minmax(0, 1fr) auto auto; overflow: hidden; }
+.cm-vs5-result__stage { position: relative; min-height: 0; overflow: hidden; container-type: size; }
+.cm-vs5-result__characters { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; }
+.cm-vs5-result__characters canvas { display: block; }
+.cm-vs5-result__stage::before {
+  /* The stage light under the fighters. battleResultCharacters.js fits the
+     original 256x192 result frame by width (75cqw tall) and sets it 70% of the
+     way down the spare height (RESULT_FRAME_DROP), so their feet (y 151-172 of
+     192, about 62cqw into the frame) stand at 70cqh + 9.5cqw. The app moves the
+     pool under the characters actually present (--result-light-x/-w). */
+  content: "";
+  position: absolute;
+  left: calc(var(--result-light-x, 50%) - var(--result-light-w, 88%) / 2);
+  width: var(--result-light-w, 88%);
+  top: calc(70cqh - 0.5cqw);
+  height: 20cqw;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--c-accent) 20%, transparent), transparent);
+  pointer-events: none;
+}
+/* The plate is centred in the space above the characters' heads (about
+   34cqw above the frame's feet line), so the verdict, the figure and the
+   winners read as one group instead of two ends of an empty stage. */
+.cm-vs5-result__body {
+  position: absolute;
+  top: max(var(--sp-4), 3cqh);
+  right: var(--sp-4);
+  bottom: calc(30cqh + 27.5cqw);
+  left: var(--sp-4);
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-2);
+  height: fit-content;
+  max-height: calc(100cqh - 30cqh - 27.5cqw - max(var(--sp-4), 3cqh));
+  margin-block: auto;
+  padding: var(--sp-5) var(--sp-5) var(--sp-4);
+  overflow-y: auto;
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-sheet);
+  background: var(--c-surface-hud);
+  box-shadow: var(--shadow-float);
+  text-align: center;
+}
+.cm-vs5-result__body .cm-vs5-header { align-items: center; padding: 0; }
+.cm-vs5-result__body .cm-vs5-title { font-size: var(--fs-display); line-height: var(--lh-display); }
+.cm-vs5-result__detail { margin: 0; color: var(--c-text-2); font-size: var(--fs-body-sm); line-height: var(--lh-body-sm); }
+.cm-vs5-result__medal { width: auto; max-height: 96px; object-fit: contain; image-rendering: pixelated; }
+.cm-vs5-result__statistics { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px var(--sp-6); width: min(100%, 240px); margin: var(--sp-2) 0 0; text-align: left; }
+.cm-vs5-result__statistics dt { color: var(--c-text-2); }
+.cm-vs5-result__statistics dd { margin: 0; font-weight: var(--fw-heavy); text-align: right; font-variant-numeric: tabular-nums; }
+/* Win, loss and draw each read by their words first; the frame only agrees. */
+.cm-vs5-shell[data-verdict="TEAM_ZERO_AHEAD"] .cm-vs5-result__body { border-color: var(--c-accent-line); box-shadow: var(--glow-accent), var(--shadow-float); }
+.cm-vs5-shell[data-verdict="TEAM_ZERO_AHEAD"][data-panel="RESULT"] .cm-vs5-title { color: var(--c-accent-strong); }
+.cm-vs5-shell[data-verdict="TEAM_ONE_AHEAD"][data-panel="RESULT"] .cm-vs5-title { color: var(--c-text-1); }
+.cm-vs5-shell[data-panel="PRIZE"] .cm-vs5-title { color: var(--c-gold-strong); font-variant-numeric: tabular-nums; }
+.cm-vs5-shell[data-panel="PRIZE"] .cm-vs5-kicker { color: var(--c-gold); }
+.cm-vs5-shell[data-settlement="NOT_CREDITED"][data-panel="PRIZE"] .cm-vs5-title { color: var(--c-text-2); }
+/* Feedback tiers on the verdict. "result": the plate rises in. "highlight":
+   the plate waits under the template (ui/highlight.css) and lands at REVEAL. */
+.cm-vs5-shell[data-feedback="result"] .cm-vs5-result__body { animation: cm-vs5-rise var(--dur-slow) var(--ease-out) both; }
+@keyframes cm-vs5-rise { from { opacity: 0; transform: translateY(10px); } }
+.cm-vs5-shell[data-feedback="highlight"]:is([data-entrance="PREPARE"], [data-entrance="BUILD"], [data-entrance="CHARGE"], [data-entrance="BURST"]) .cm-vs5-result__body { visibility: hidden; }
+.cm-vs5-shell[data-feedback="highlight"][data-entrance="REVEAL"] .cm-vs5-result__body { animation: cm-vs5-land 460ms var(--ease-spring) both; }
+@keyframes cm-vs5-land {
+  0% { opacity: 0; transform: scale(1.22); filter: brightness(2.4); }
+  55% { opacity: 1; filter: brightness(1.35); }
+  100% { opacity: 1; transform: none; filter: none; }
+}
+.cm-vs5-result__characters { transition: transform 500ms var(--ease-out); }
+.cm-vs5-shell[data-entrance="CHARGE"] .cm-vs5-result__characters { transform: scale(1.04); transition: transform 900ms var(--ease-in-out); }
+/* The highlight's plate: gold frame and the stair mark in its corners. */
+.cm-vs5-shell[data-feedback="highlight"] .cm-vs5-result__body {
+  border-color: color-mix(in srgb, var(--c-gold) 70%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--c-gold) 35%, transparent), 0 0 36px color-mix(in srgb, var(--c-gold) 22%, transparent), var(--shadow-float);
+}
+:root[data-quality="saver"] .cm-vs5-shell[data-feedback="highlight"] .cm-vs5-result__body {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--c-gold) 35%, transparent), var(--shadow-float);
+}
+.cm-vs5-shell[data-feedback="highlight"] .cm-vs5-result__body::before,
+.cm-vs5-shell[data-feedback="highlight"] .cm-vs5-result__body::after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  width: 9px;
+  height: 9px;
+  background: var(--motif-stair-gold) no-repeat;
+}
+.cm-vs5-shell[data-feedback="highlight"] .cm-vs5-result__body::before { left: 12px; }
+.cm-vs5-shell[data-feedback="highlight"] .cm-vs5-result__body::after { right: 12px; transform: scaleX(-1); }
+.cm-vs5-shell[data-feedback="highlight"][data-panel="RESULT"] .cm-vs5-title { color: var(--c-gold-strong); font-size: calc(34px * var(--text-scale)); line-height: calc(42px * var(--text-scale)); letter-spacing: 0.06em; text-shadow: 0 0 24px color-mix(in srgb, var(--c-gold) 45%, transparent); }
+.cm-vs5-result__settlement {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 2px 6px;
+  margin: var(--sp-1) 0 0;
+  padding: 6px 14px;
+  border-radius: var(--r-control);
+  background: var(--c-gold-soft);
+  color: var(--c-gold-strong);
+  font-weight: var(--fw-heavy);
+  font-variant-numeric: tabular-nums;
+}
+.cm-vs5-result__amount { min-width: 3ch; font-size: var(--fs-title-1); line-height: var(--lh-title-1); text-align: center; }
+.cm-vs5-result__cap { flex-basis: 100%; color: var(--c-text-2); font-size: var(--fs-label); font-weight: var(--fw-strong); }
+.cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell > .cm-vs5-action { margin: 0 var(--sp-4) var(--sp-3); }
+.cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell > .cm-vs5-action:last-child { margin-bottom: max(var(--sp-4), var(--safe-bottom)); }
+.cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell > .cm-vs5-action[hidden] { display: none; }
 
-.cm-vs5-result__detail {
-  margin: 0;
-  padding: 0 16px;
-  font-size: 12px;
-  letter-spacing: 0.08em;
-
+/* ---------------- Small phones ---------------- */
+@media (max-width: 374px) {
+  .cm-vs5-header, .cm-vs5-matches, .cm-vs5-party { padding-inline: var(--sp-3); }
+  .cm-vs5-cube__face { font-size: var(--fs-label); }
+  .cm-vs5-log .cm-vs5-exit { min-width: 84px; padding: 0 var(--sp-3); }
 }
 
-/* ---------------- Controls ---------------- */
-
-.cm-vs5-action {
-  appearance: none;
-
-  font: inherit;
-  font-size: 13px;
-
-  padding: 10px 14px;
-  cursor: pointer;
+/* ---------------- Tablets: the menu becomes two columns ---------------- */
+@media (min-width: 700px) {
+  body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-shell {
+    display: grid;
+    width: min(100%, 980px);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    grid-template-areas: "header header" "cube list" "note list" "footer footer";
+    column-gap: var(--sp-6);
+    padding-inline: var(--sp-8);
+    overflow: hidden;
+  }
+  body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header { grid-area: header; padding-inline: 0; }
+  body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube { grid-area: cube; max-width: 400px; padding: 0; }
+  body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube__note { grid-area: note; align-self: start; padding: 0; }
+  body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] :is(.cm-vs5-matches, .cm-vs5-party, .cm-vs5-entry-notice) { grid-column: 2; grid-row: 2 / span 2; min-height: 0; overflow-y: auto; padding-inline: 0; }
+  body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-shell[data-battle-mode]:has(.cm-vs5-cube[hidden]) :is(.cm-vs5-party, .cm-vs5-entry-notice) { grid-column: 1 / -1; }
+  body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer { grid-area: footer; margin-inline: calc(-1 * var(--sp-8)); padding-inline: var(--sp-8); }
+  body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-shell { width: min(100%, 720px); }
+  body:not([data-portrait-frame]) .cm-vs5-result__body { inset-inline: 12%; }
+  body:not([data-portrait-frame]) .cm-vs5-roster--player .cm-vs5-fighter:has(.cm-vs5-fighter__portrait:not([hidden])) { grid-template-columns: 56px minmax(0, 1fr) auto; }
+  body:not([data-portrait-frame]) .cm-vs5-roster--player .cm-vs5-fighter:has(.cm-vs5-fighter__portrait:not([hidden])) .cm-vs5-fighter__portrait { width: 56px; height: 56px; }
+  body:not([data-portrait-frame]) .cm-vs5-fighter__name { font-size: var(--fs-body-sm); }
+  body:not([data-portrait-frame]) .cm-vs5-fighter__hp { font-size: var(--fs-label); }
+  body:not([data-portrait-frame]) .cm-vs5-meter { height: 7px; }
+  body:not([data-portrait-frame]) .cm-vs5-log__line { font-size: var(--fs-title-2); }
 }
 
-.cm-vs5-action:focus-visible { outline: 2px solid #65b8c3; outline-offset: 2px; }
-.cm-vs5-party { display: flex; flex-direction: column; gap: 10px; overflow-y: auto; min-height: 0; }
-.cm-vs5-party[hidden], .cm-vs5-matches[hidden], .cm-vs5-cube[hidden], .cm-vs5-cube__note[hidden] { display: none; }
-.cm-vs5-party { padding: 0 12px; }
-.cm-vs5-party .cm-vs5-action { min-height: 48px; text-align: left; }
-.cm-vs5-party .cm-vs5-action[aria-pressed="true"] { border: 2px solid #a5edff; background: #18516b; }
-.cm-vs5-party .cm-vs5-action:disabled { opacity: .55; cursor: default; }
-.cm-vs5-party .cm-vs5-match__fee { display: block; margin-top: 5px; font-size: 12px; letter-spacing: 0; }
-.cm-vs5-arena-choice { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-.cm-vs5-arena-choice select { min-height: 44px; min-width: 0; flex: 1; padding: 6px 10px; font: inherit; color: #f3fff0; background: #123f30; border: 1px solid #a8d68d; border-radius: 8px; }
-.cm-vs5-practice-member { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 8px; border: 1px solid #a8d68d; border-radius: 8px; }
-.cm-vs5-practice-member__name, .cm-vs5-practice-member > .cm-vs5-match__fee { grid-column: 1 / -1; overflow-wrap: anywhere; }
-.cm-vs5-password-label { display: grid; gap: 6px; color: #efffe9; font-weight: 700; }
-.cm-vs5-password-input { width: 100%; min-height: 48px; box-sizing: border-box; padding: 8px 10px; color: #f7fff2; background: #0b2f28; border: 1px solid #a8d68d; border-radius: 8px; font: inherit; font-size: 16px; }
-.cm-vs5-password-input:focus-visible { outline: 2px solid #65b8c3; outline-offset: 2px; }
-.cm-vs5-password-maker { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(168, 214, 141, 0.45); }
-.cm-vs5-link { display: flex; flex-direction: column; gap: 8px; }
-.cm-vs5-link__heading { margin: 4px 0; font-size: 14px; color: #efffe9; }
-/* 16px: iPhone Safari zooms the whole page into any focused field below 16px. */
-.cm-vs5-link-code { width: 100%; min-height: 92px; resize: vertical; box-sizing: border-box; padding: 8px 10px; color: #f7fff2; background: #0b2f28; border: 1px solid #a8d68d; border-radius: 8px; font: 16px/1.35 ui-monospace, Consolas, monospace; overflow-wrap: anywhere; }
-.cm-vs5-link-code:focus-visible { outline: 2px solid #65b8c3; outline-offset: 2px; }
-
-.cm-vs5-exit {
-  margin: auto 0 8px;
-  align-self: stretch;
-  flex: 0 0 auto;
+/* Reduced motion: the player's choice (data-motion on <html>, resolved from
+   the setting and, when it is "system", from the OS); the media query only
+   covers a page that has no data-motion yet. */
+:root[data-motion="reduced"] .cm-vs5-shell { animation: none; }
+:root[data-motion="reduced"] .cm-vs5-action:not(:disabled):active { transform: none; }
+:root[data-motion="reduced"] .cm-vs5-meter__fill, :root[data-motion="reduced"] .cm-vs5-clock__fill { transition: none; }
+:root[data-motion="reduced"] .cm-vs5-log[data-ended="false"] .cm-vs5-log__line::before { animation: none; }
+:root[data-motion="reduced"] .cm-vs5-shell[data-feedback="result"] .cm-vs5-result__body { animation-name: cm-vs5-fade; }
+:root[data-motion="reduced"] .cm-vs5-shell[data-feedback="highlight"][data-entrance="REVEAL"] .cm-vs5-result__body { animation: cm-vs5-fade var(--dur-slow) linear both; }
+:root[data-motion="reduced"] .cm-vs5-shell[data-entrance="CHARGE"] .cm-vs5-result__characters { transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion]) .cm-vs5-shell { animation: none; }
+  :root:not([data-motion]) .cm-vs5-action:not(:disabled):active { transform: none; }
+  :root:not([data-motion]) .cm-vs5-meter__fill, :root:not([data-motion]) .cm-vs5-clock__fill { transition: none; }
+  :root:not([data-motion]) .cm-vs5-log[data-ended="false"] .cm-vs5-log__line::before { animation: none; }
+  :root:not([data-motion]) .cm-vs5-shell[data-feedback="result"] .cm-vs5-result__body { animation-name: cm-vs5-fade; }
+  :root:not([data-motion]) .cm-vs5-shell[data-feedback="highlight"][data-entrance="REVEAL"] .cm-vs5-result__body { animation: cm-vs5-fade var(--dur-slow) linear both; }
+  :root:not([data-motion]) .cm-vs5-shell[data-entrance="CHARGE"] .cm-vs5-result__characters { transform: none; }
 }
-
-/* ---- Battle menu box (structure from battle_menu/launcher13.nsbmd) --------- */
-.cm-vs5-cube { width: 100%; max-width: 380px; margin: 0 auto; }
-.cm-vs5-cube__canvas { display: block; width: 100%; height: auto; }
-.cm-vs5-cube__faces { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; margin-top: 0.5rem; }
-.cm-vs5-cube__face {
-  min-height: 44px;
-
-  font: inherit; font-size: 0.68rem; letter-spacing: 0.08em; cursor: pointer;
-}
-.cm-vs5-cube__face[aria-pressed="true"] { background: #2a5f7d; border-color: #9ad9f0; }
-.cm-vs5-cube__face:disabled {  cursor: default; }
-.cm-vs5-cube__face:focus-visible { outline: 2px solid #7ec5e0; outline-offset: 2px; }
-.cm-vs5-cube__canvas:focus-visible { outline: 2px solid #7ec5e0; outline-offset: 2px; }
-.cm-vs5-cube__fallback { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-.cm-vs5-cube__fallback img { display: block; width: 100%; height: auto; margin-bottom: 6px; }
-.cm-vs5-cube__fallback .cm-vs5-cube__face { padding: 5px 5px 10px; }
-.cm-vs5-cube__note {
-  margin: 0.5rem 0 0; font-size: 0.62rem; line-height: 1.45;
-  max-width: 380px; margin-inline: auto;
-}
+@keyframes cm-vs5-fade { from { opacity: 0; } }

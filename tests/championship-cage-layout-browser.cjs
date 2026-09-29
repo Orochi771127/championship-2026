@@ -81,7 +81,9 @@ function bounds(m) {
       assert.ok(c.height >= 44, c.name);
       assert.ok(c.x >= 0 && c.y >= 0 && c.x + c.width <= m.viewport.width + 1 && c.y + c.height <= m.viewport.height + 1, c.name);
     }
-    if (m.viewport.width === 390) assert.equal(m.host.width, 370, 'compact field retained');
+    // 2026-09-29 redesign: on a phone the habitat is full-bleed (it was a
+    // 370px inset card); the HUD overlays its margins instead of shrinking it.
+    if (m.viewport.width === 390) assert.equal(m.host.width, m.viewport.width, 'phone field is full-bleed');
     if (!baseline && m.viewport.width >= 600) {
       assert.ok(m.host.width >= m.viewport.width - 40, 'wide field uses available space');
       assert.ok(Math.abs(m.hp.y - m.tp.y) < 1, 'existing vitals reflow into pairs');
@@ -160,10 +162,14 @@ function bounds(m) {
       await page.setViewportSize(viewport); await page.waitForTimeout(200);
       const hand = page.locator('[data-tool-id="hand"]');
       if (await hand.getAttribute('aria-pressed') !== 'true') await hand.click();
-      // Stroke admission needs >3 native pixels; at the board-context scale a
-      // 12px gesture clears that threshold without becoming a long drag.
-      let a = await press(page, [8], origin => page.mouse.move(origin.x + 12, origin.y));
-      await page.mouse.move(a.x + 18, a.y); await page.mouse.up();
+      // Stroke admission needs >3 native pixels; a 6-native-pixel gesture
+      // clears that threshold without becoming a long drag. It was 12px when
+      // the board was capped at 2x; since the 2026-09-29 adaptive zoom (2x-6x)
+      // the gesture is sized from the field's published screen pixels per
+      // native pixel, so the same native stroke is tested at every width.
+      const nativePx = (row, count) => Math.round(count * (row.nativeScreenPixels ?? 2));
+      let a = await press(page, [8], origin => page.mouse.move(origin.x + nativePx(origin, 6), origin.y));
+      await page.mouse.move(a.x + nativePx(a, 9), a.y); await page.mouse.up();
       await waitState(page, [1, 2, 3, 9]);
       a = await press(page, [6]);
       await page.mouse.move(a.x + 24, a.y + 24, { steps: 12 }); await page.mouse.up();
@@ -248,8 +254,10 @@ function bounds(m) {
         await page.locator(`[data-entry-id="${entry}"]`).click();
         await page.locator(`.cm-vs2-root[data-screen="${screen}"]`).waitFor();
         const m = await measure(page);
-        // 2026-09-28: Shop and Database take the tablet column (760px) at >=700px; phones keep 430.
-        assert.equal(m.shell.width, Math.min(viewport.width, viewport.width >= 700 ? 760 : 430), 'other screens use their phone or tablet column');
+        // 2026-09-29 redesign: Shop and Database take the tablet column (980px,
+        // detail beside a grid) at >=700px; phones take the phone column (560px).
+        // Was 760 / 430 in the 2026-09-28 layout.
+        assert.equal(m.shell.width, Math.min(viewport.width, viewport.width >= 700 ? 980 : 560), 'other screens use their phone or tablet column');
         assert.equal(m.document.width, viewport.width); assert.equal(m.document.height, viewport.height);
         await page.screenshot({ path: path.join(output, `${entry}-${viewport.width}x${viewport.height}.png`) });
         report.otherScreens.push({ screen, viewport, shellWidth: m.shell.width, noOverflow: true });

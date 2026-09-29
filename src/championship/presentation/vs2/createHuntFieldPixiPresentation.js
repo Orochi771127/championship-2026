@@ -14,6 +14,7 @@
 // loaded, and none of it is a claim about original terrain, props or creatures.
 
 import { createHuntFieldPointer } from "./huntFieldPointer.js";
+import { flashScale } from '../presentationPreferences.js';
 import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
 import {huntTrapLayers} from '../huntFeedbackArt.js';
 import { captureStorageTarget, captureStorageVfxFrame } from '../vfx/captureStorageVfx.js';
@@ -463,7 +464,8 @@ export async function mountHuntFieldPixiPresentation({
           const r=o.kind==='SHOT_IMPACT'?12:o.sequence===3?24:10;
           g.star(x,y,6,r,r*.4).fill({color:0xffdd80,alpha:Math.min(1,o.remaining/8)});
           g.star(x,y,6,r*.55,r*.2).fill({color:0xfff8d3,alpha:Math.min(1,o.remaining/8)});
-        }else if(o.kind==='FLASH')flashGraphic.rect(0,0,app.screen.width,app.screen.height).fill({color:0xffffe6,alpha:o.alpha});
+        // The flash-intensity preference scales only how bright it looks.
+        }else if(o.kind==='FLASH')flashGraphic.rect(0,0,app.screen.width,app.screen.height).fill({color:0xffffe6,alpha:o.alpha*flashScale()});
       }
       for(const p of view.tools.points)strokeGraphic.star(p.x,p.y,4,4,1.5).fill(0xf8db69);
       const closure=view.tools.closure;

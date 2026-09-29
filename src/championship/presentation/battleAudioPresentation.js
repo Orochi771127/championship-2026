@@ -22,15 +22,20 @@ export function validateBattleAudio(manifest,index) {
 
 // A single, scene-owned Web Audio graph. Original sample IDs and frame events
 // supply every sound; this adapter has no RNG, synthesis or gameplay authority.
+// `output` (2026-09-29): the product audio bus's sfx input and its shared
+// context. The master volume, the sfx volume and mute are applied there, after
+// this graph's own headroom gain; without it the adapter keeps its own context.
 export async function mountBattleAudioPresentation({source,baseUrl=globalThis.location?.href,
-  fetchImpl=globalThis.fetch,AudioContextClass=globalThis.AudioContext,eventTarget=globalThis.document}={}) {
-  if(!isLocalBattleEffectPreview(baseUrl) || !AudioContextClass)return null;
+  fetchImpl=globalThis.fetch,AudioContextClass=globalThis.AudioContext,eventTarget=globalThis.document,output=null}={}) {
+  if(!isLocalBattleEffectPreview(baseUrl) || (!output?.context && !AudioContextClass))return null;
   // Keep the application directory, including the approved Pages subpath.
   baseUrl=new URL('./',baseUrl).href;
   const loadJson=async path=>{const r=await fetchImpl(new URL(path,baseUrl));if(!r.ok)throw Error(`BATTLE_AUDIO_HTTP_${r.status}`);return r.json();};
   const index=await loadJson('assets/production/ART_PRODUCTION_INDEX.json');
   const manifest=validateBattleAudio(await loadJson(BATTLE_AUDIO_MANIFEST),index);
-  const context=new AudioContextClass(),master=context.createGain();master.connect(context.destination);
+  const ownsContext=!output?.context;
+  const context=ownsContext?new AudioContextClass():output.context,master=context.createGain();
+  master.connect(ownsContext?context.destination:output.destination);
   // Leave headroom for the source's two sequence voices plus one stream.
   master.gain.value=.5;
   const buffers=new Map(),voices=new Set(),missing=new Set();let disposed=false,lastEvent=0,played=0,released=0,stream=null,sequence=null;
@@ -48,7 +53,7 @@ export async function mountBattleAudioPresentation({source,baseUrl=globalThis.lo
     const failed=results.find(r=>r.status==='rejected');if(failed)throw failed.reason;
   } catch(error) {
     eventTarget?.removeEventListener('pointerdown',resume);eventTarget?.removeEventListener('keydown',resume);
-    master.disconnect();await context.close();throw error;
+    master.disconnect();if(ownsContext)await context.close();throw error;
   }
   resume();
   function update() {
@@ -81,6 +86,8 @@ export async function mountBattleAudioPresentation({source,baseUrl=globalThis.lo
     update,
     getDiagnostics:()=>({assetId:BATTLE_AUDIO_ID,loaded:buffers.size,played,released,active:voices.size,missing:[...missing],contextState:context.state}),
     async dispose(){if(disposed)return;disposed=true;unsubscribe();for(const v of [...voices])stop(v);buffers.clear();
-      eventTarget?.removeEventListener('pointerdown',resume);eventTarget?.removeEventListener('keydown',resume);master.disconnect();await context.close();}
+      eventTarget?.removeEventListener('pointerdown',resume);eventTarget?.removeEventListener('keydown',resume);master.disconnect();
+      // A shared context belongs to the bus: this scene only lets go of it.
+      if(ownsContext)await context.close();}
   };
 }

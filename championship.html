@@ -4,23 +4,65 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="color-scheme" content="dark">
-    <meta name="theme-color" content="#066ddd">
+    <meta name="theme-color" content="#0b181c">
     <link rel="icon" href="data:,">
     <title>數碼獸冠軍賽 — 2026</title>
-    <link rel="stylesheet" href="./src/championship/app/styles.css?v=result-1">
-    <link rel="stylesheet" href="./src/championship/app/intRh2Styles.css?v=result-1">
-    <link rel="stylesheet" href="./src/championship/app/vs2Styles.css?v=vs4-cap-1">
-    <link rel="stylesheet" href="./src/championship/app/vs5Styles.css?v=result-1">
-    <link rel="stylesheet" href="./src/championship/app/raisingHomeHud.css?v=raising-r3">
-    <link rel="stylesheet" href="./src/championship/app/huntMobile.css?v=continuous-r1">
-    <link rel="stylesheet" href="./src/championship/app/facilityBattleMobile.css?v=facilities-r1">
-    <link rel="stylesheet" href="./src/championship/app/opening.css?v=opening-1">
-    <link rel="stylesheet" href="./src/championship/app/trainingLabels.css?v=training-1">
-    <!-- Loads last: the original-faithful interface skin re-dresses the chrome above. -->
-    <link rel="stylesheet" href="./src/championship/app/nativeUiSkin.css?v=ds-skin-1">
-    <!-- Owner-supplied original Shop video: bounded layout correction after the shared skin. -->
-    <link rel="stylesheet" href="./src/championship/app/shopOriginalVideo.css?v=shop-video-r1">
-    <link rel="stylesheet" href="./src/championship/app/daylightSkin.css?v=daylight-1">
+    <script>
+      // Player preferences before the first paint (settings round, 2026-09-29).
+      // Read-only, and a mirror of settings/preferenceEnvironment.js and the
+      // "auto" start of settings/qualityController.js, so a saved theme, reading
+      // size or language never flashes the default one first; the modules take
+      // over as soon as they load. tests/championship-settings-cases.mjs runs
+      // this script against the modules' own mapping.
+      (function () {
+        var root = document.documentElement, p = {}, k;
+        try {
+          var d = JSON.parse(window.localStorage.getItem("championshipModernSave:preferences:v1") || "null");
+          if (d && typeof d === "object" && !Array.isArray(d)) {
+            if (d.schemaVersion === 1) {
+              for (k in (d.account || {})) p[k] = d.account[k];
+              for (k in (d.device || {})) p[k] = d.device[k];
+            } else if (d.schemaVersion === undefined) p = d;
+          }
+        } catch (error) { p = {}; }
+        function query(text) { try { return window.matchMedia(text).matches === true; } catch (error) { return false; } }
+        function pick(value, allowed, fallback) { return allowed.indexOf(value) >= 0 ? value : fallback; }
+        var choice = pick(p.theme, ["night", "clear", "warm", "system"], "night");
+        var dark = typeof window.matchMedia === "function" ? query("(prefers-color-scheme: dark)") : true;
+        var theme = choice === "system" ? (dark ? "night" : "clear") : choice;
+        var motion = pick(p.reducedMotion, ["system", "on", "off"], "system");
+        var quality = pick(p.quality, ["auto", "saver", "balanced", "high"], "auto");
+        var nav = window.navigator || {};
+        if (quality === "auto") {
+          quality = (nav.connection && nav.connection.saveData === true)
+            || (nav.deviceMemory > 0 && nav.deviceMemory <= 2)
+            || (nav.hardwareConcurrency > 0 && nav.hardwareConcurrency <= 2) ? "saver" : "balanced";
+        }
+        root.dataset.theme = theme;
+        root.dataset.themeChoice = choice;
+        root.dataset.textScale = String(pick(p.textScale, [100, 115, 130], 100));
+        root.dataset.hud = pick(p.hudDensity, ["standard", "compact"], "standard");
+        root.dataset.motion = motion === "on" || (motion === "system" && query("(prefers-reduced-motion: reduce)")) ? "reduced" : "full";
+        root.dataset.flash = pick(p.flashIntensity, ["standard", "soft"], "standard");
+        root.dataset.highlight = pick(p.highlightMode, ["full", "compact"], "full");
+        root.dataset.quality = quality;
+        root.lang = pick(p.locale, ["zh-Hant", "en"], "zh-Hant");
+        var color = document.querySelector('meta[name="theme-color"]');
+        if (color) color.setAttribute("content", { night: "#0b181c", clear: "#eef3f8", warm: "#f7efd6" }[theme]);
+        var scheme = document.querySelector('meta[name="color-scheme"]');
+        if (scheme) scheme.setAttribute("content", theme === "night" ? "dark" : "light");
+      })();
+    </script>
+    <!-- 2026-09-29 redesign: design tokens first, then one sheet per game area.
+         The earlier reskin layers were folded into these and removed. -->
+    <link rel="stylesheet" href="./src/championship/app/ui/tokens.css?v=settings-1">
+    <link rel="stylesheet" href="./src/championship/app/styles.css?v=settings-1">
+    <link rel="stylesheet" href="./src/championship/app/intRh2Styles.css?v=settings-1">
+    <link rel="stylesheet" href="./src/championship/app/vs2Styles.css?v=settings-1">
+    <link rel="stylesheet" href="./src/championship/app/vs5Styles.css?v=settings-1">
+    <link rel="stylesheet" href="./src/championship/app/opening.css?v=settings-1">
+    <link rel="stylesheet" href="./src/championship/app/ui/highlight.css?v=settings-1">
+    <link rel="stylesheet" href="./src/championship/app/ui/settings.css?v=settings-1">
     <script type="importmap">
       { "imports": { "three": "./node_modules/three/build/three.module.js" } }
     </script>
@@ -70,6 +112,12 @@
     <link rel="modulepreload" href="./src/championship/presentation/raisingCageArtPlan.js">
     <link rel="modulepreload" href="./src/championship/app/portraitFrame.js">
     <link rel="modulepreload" href="./src/championship/app/uiDialog.js">
+    <link rel="modulepreload" href="./src/championship/app/assetPrefetch.js">
+    <link rel="modulepreload" href="./src/championship/app/loadWatchdog.js">
+    <link rel="modulepreload" href="./src/championship/presentation/highlight/highlightTimeline.js">
+    <link rel="modulepreload" href="./src/championship/presentation/highlight/createHighlightSequence.js">
+    <link rel="modulepreload" href="./src/championship/presentation/highlight/highlightAudio.js">
+    <link rel="modulepreload" href="./src/championship/app/autosaveScheduler.js">
     <link rel="modulepreload" href="./src/championship/r2/createChampionshipR2Session.js">
     <link rel="modulepreload" href="./src/championship/kernel/ChampionshipSavePortR2.js">
     <link rel="modulepreload" href="./src/championship/raising/raisingHomePersistenceR2.js">
@@ -213,8 +261,11 @@
     <!-- /modulepreload -->
   </head>
   <body>
-    <div id="cm-title" class="cm-title">
+    <!-- The title and the opening are drawn key art: they keep the night
+         palette whichever theme is chosen (data-palette, ui/tokens.css). -->
+    <div id="cm-title" class="cm-title" data-palette="night">
       <div class="cm-title__panel" data-opening="login">
+        <button id="cm-title-settings" class="cm-title__settings" type="button" aria-label="設定" title="設定"></button>
         <div class="cm-title__logo">
           <span class="cm-title__crown" aria-hidden="true"></span>
           <p class="cm-title__eyebrow">DIGIMON</p>
@@ -243,7 +294,7 @@
       } else {
         const gameModule = document.createElement("script");
         gameModule.type = "module";
-        gameModule.src = "./src/championship/app/main.js?v=result-1";
+        gameModule.src = "./src/championship/app/main.js?v=settings-1";
         document.body.appendChild(gameModule);
       }
     </script>

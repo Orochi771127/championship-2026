@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { raisingFieldViewport, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingEdgeScroll, RAISING_READOUT_BAND_PX, RAISING_MAX_NATIVE_SCREEN_PIXELS } from '../src/championship/presentation/intRh2/raisingFieldViewport.js';
+import { raisingFieldViewport, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingEdgeScroll,
+  raisingNativeScreenPixels, RAISING_MIN_NATIVE_SCREEN_PIXELS, RAISING_MAX_NATIVE_SCREEN_PIXELS, RAISING_MIN_VISIBLE_NATIVE_WIDTH } from '../src/championship/presentation/intRh2/raisingFieldViewport.js';
 import { getRaisingNativePixelScale } from '../src/championship/presentation/intRh2/raisingNativeSizing.js';
 
 test('portrait and landscape letterboxing keep actor/drop coordinates on the same art plane', () => {
@@ -50,8 +51,10 @@ test('periodic ranch aligns actor and drop target on both sides of the waiting-a
   assert.equal(wrapRaisingCamera(-4,2688),2684);
   assert.deepEqual(raisingFieldViewport(field,viewport,12,0),raisingFieldViewport(field,viewport,12,2688));
   const fit=raisingFieldViewport(field,viewport);
-  assert.ok(fit.y>=12+RAISING_READOUT_BAND_PX-1e-7,'the floating readout band stays clear of the ranch');
-  assert.ok(Math.abs(fit.y+fit.height-(viewport.height-12))<1e-7,'the ranch is laid on the floor of the frame');
+  // 2026-09-29: no band is held back for a readout; the board sits in the
+  // middle of the frame and cards float over the margin instead.
+  assert.ok(Math.abs(fit.y+fit.height/2-viewport.height/2)<=0.5,'the ranch is centred in the frame');
+  assert.ok(fit.y>=12-1e-7&&fit.y+fit.height<=viewport.height-12+1e-7,'and fits inside it');
 });
 
 test('edge scroll continues at stationary pointer, respects direction and stops outside the field',()=>{
@@ -63,17 +66,21 @@ test('edge scroll continues at stationary pointer, respects direction and stops 
   assert.equal(raisingEdgeScroll({x:390,y:100},viewport,1000),9,'background resume does not jump the camera');
 });
 
-test('the ranch keeps adjacent cells visible at two screen pixels per native pixel and retains pointer round trips',()=>{
+test('the ranch takes the largest whole pixel scale that fits, keeps neighbouring cells in view and retains pointer round trips',()=>{
   const field={worldWidthPx:2688,worldHeightPx:768,nativePixelWorldScale:4,presentationMode:'NATIVE_RANCH',wrapWidthPx:2688};
-  const screens=[{width:370,height:740},{width:800,height:1076},{width:1004,height:1262}];
+  // A 192-native-pixel board on a phone, a tablet and a large tablet frame.
+  const screens=[{width:370,height:740,expected:3},{width:800,height:1076,expected:5},{width:1004,height:1262,expected:6}];
   for(const screen of screens){
     const fit=raisingFieldViewport(field,screen);
     const nativeScale=fit.scale*field.nativePixelWorldScale;
-    const heightLimited=(screen.height-24-RAISING_READOUT_BAND_PX)/field.worldHeightPx*field.nativePixelWorldScale;
-    assert.equal(nativeScale,Math.min(heightLimited,RAISING_MAX_NATIVE_SCREEN_PIXELS));
-    assert.equal(nativeScale,2,'large phones and tablets keep the same legible board-context scale');
-    assert.ok(Math.abs(fit.y+fit.height-(screen.height-12))<1e-7,'no gap below the ranch');
-    assert.ok(fit.y>=12+RAISING_READOUT_BAND_PX-1e-7,'the fixed readout band stays clear');
+    assert.equal(nativeScale,screen.expected);
+    assert.equal(nativeScale,raisingNativeScreenPixels(field,screen));
+    assert.ok(Number.isInteger(nativeScale)&&nativeScale>=RAISING_MIN_NATIVE_SCREEN_PIXELS&&nativeScale<=RAISING_MAX_NATIVE_SCREEN_PIXELS,
+      'every native pixel is the same whole number of screen pixels');
+    assert.ok(fit.y>=12-1e-7&&fit.y+fit.height<=screen.height-12+1e-7,'the whole board height fits the frame');
+    assert.ok(screen.height-24-fit.height<field.worldHeightPx/field.nativePixelWorldScale,'one more whole step would not fit');
+    assert.ok((screen.width-24)/nativeScale>=RAISING_MIN_VISIBLE_NATIVE_WIDTH,'at least 2⅓ board columns stay in view');
+    assert.ok(Math.abs(fit.y+fit.height/2-screen.height/2)<=0.5,'the board is centred, not held under a reserved band');
     for(const camera of [-20,0,2600,5390])for(const point of [
       {x:12,y:fit.y+20},{x:screen.width/2,y:fit.y+fit.height/2},{x:screen.width-12,y:fit.y+fit.height-20}
     ]){
@@ -83,4 +90,17 @@ test('the ranch keeps adjacent cells visible at two screen pixels per native pix
       assert.ok(Math.abs(projected.y-point.y)<1e-7);
     }
   }
+});
+
+test('a frame too short for two whole pixels still shows the whole board height',()=>{
+  const field={worldWidthPx:2688,worldHeightPx:768,nativePixelWorldScale:4,presentationMode:'NATIVE_RANCH',wrapWidthPx:2688};
+  const screen={width:390,height:300};
+  const fit=raisingFieldViewport(field,screen);
+  const nativeScale=fit.scale*field.nativePixelWorldScale;
+  assert.ok(nativeScale<RAISING_MIN_NATIVE_SCREEN_PIXELS);
+  assert.ok(Math.abs(fit.height-(screen.height-24))<1e-7,'the board fills the short frame instead of spilling out of it');
+  const point={x:screen.width/2,y:fit.y+fit.height/2};
+  const native=raisingScreenToNative(point,field,screen,40);
+  const back=raisingNativeToScreen([native.x*4096,native.y*4096],field,screen,40);
+  assert.ok(Math.abs(back.x-point.x)<1e-7&&Math.abs(back.y-point.y)<1e-7);
 });

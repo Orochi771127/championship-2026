@@ -1,20 +1,12 @@
-/* INT-RH2 — P1R DOM presentation around the single Claude-owned Pixi field. */
-
-:root {
-  --rh2-ink: var(--cm-dark-ink);
-  --rh2-muted: var(--cm-dark-muted);
-  --rh2-gold: var(--cm-gold);
-  --rh2-gold-bright: var(--cm-gold-bright);
-  --rh2-cyan: var(--cm-cyan);
-  --rh2-shell: var(--cm-dark-shell);
-  --rh2-shell-dark: var(--cm-dark-shell-deep);
-  --rh2-display: var(--cm-display);
-  --rh2-panel: rgba(9, 25, 35, 0.96);
-  --rh2-line: var(--cm-gold-line);
-  --rh2-safe-top: max(10px, env(safe-area-inset-top));
-  --rh2-safe-bottom: max(8px, env(safe-area-inset-bottom));
-  --rh2-font: var(--cm-ui-font);
-}
+/* Raising Home (INT-RH2 P1R DOM around the single Pixi field), 2026-09-29.
+ *
+ * The habitat is the screen. The shell fills the space between the shared
+ * status bar and tool dock, the field fills the shell, and the Pixi ranch
+ * centres itself inside at a whole-pixel scale (raisingFieldViewport.js).
+ * Nothing is reserved for a readout: the resident card floats over the
+ * margin when someone is picked and the detail sheet opens over everything.
+ * Tokens: ui/tokens.css.
+ */
 
 .int-rh2-root,
 .int-rh2-root * { box-sizing: border-box; }
@@ -23,85 +15,39 @@
   position: fixed;
   inset: 0;
   overflow: hidden;
-  color: var(--rh2-ink);
-  /* A double tap on the frame or the readout used to zoom the whole page on a
-     phone and leave the layout shifted sideways. The canvas keeps `none`. */
+  color: var(--c-text-1);
+  font-family: var(--font-ui);
+  /* A double tap on the frame must not zoom the page on a phone; the canvas
+     keeps `none` for its own gestures. */
   touch-action: manipulation;
-  font-family: var(--rh2-font);
 }
 
+/* The habitat uses the full width of the screen, not a phone-width column. */
 .int-rh2-shell {
   position: relative;
-  display: grid;
-  /* One row: the habitat. Owner 2026-09-16 removed the title band, the readout
-     row and the save line that used to share the height with it. */
-  grid-template-rows: minmax(0, 1fr);
-  width: min(100%, 430px);
+  width: 100%;
   height: 100%;
   min-height: 0;
-  margin: 0 auto;
-  overflow: hidden;
-
-  border-inline: 1px solid rgba(210, 173, 93, 0.18);
-}
-
-.int-rh2-kicker {
-  display: block;
   margin: 0;
-  color: var(--rh2-cyan);
-  font-size: clamp(0.55rem, 1.8vw, 0.66rem);
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  line-height: 1.2;
+  overflow: hidden;
 }
-
-.int-rh2-system-button,
-.int-rh2-care-button {
-  appearance: none;
-  min-width: 58px;
-  min-height: 44px;
-  padding: 8px 10px;
-  border: 1px solid rgba(210, 173, 93, 0.58);
-  border-radius: 5px 12px 5px 12px;
-
-  font: 700 0.7rem/1 var(--rh2-font);
-  letter-spacing: 0.12em;
-  cursor: pointer;
-}
-
-.int-rh2-system-button:focus-visible,
-.int-rh2-care-button:focus-visible { outline: 3px solid var(--rh2-cyan); outline-offset: 2px; }
-.int-rh2-system-button:active,
-.int-rh2-care-button:active { transform: translateY(1px); }
-.int-rh2-care-button:disabled { opacity: 0.4; cursor: default; }
 
 .int-rh2-field-frame {
-  position: relative;
-  min-height: 0;
-  margin: 8px;
-  overflow: hidden;
-
-}
-
-/* The readout owns the top of the habitat now, so the hint moved to the bottom
-   corner, left of where the mail icon sits. */
-.int-rh2-field-frame__label {
   position: absolute;
-  inset: auto 0 0;
-  z-index: 3;
-  display: flex;
-  justify-content: flex-start;
-  gap: 8px;
-  padding: 8px 68px 8px 10px;
-  pointer-events: none;
-
+  inset: 0;
+  overflow: hidden;
 }
-
-.int-rh2-field-state {
-
-  font-size: 0.56rem;
-  font-weight: 700;
-
+/* The lamp over the terrarium: a soft band of light behind the board, which
+   sits in the middle of the frame. Drawn by CSS, under a transparent canvas. */
+.int-rh2-field-frame::before {
+  content: "";
+  position: absolute;
+  inset: 8% -10%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 55% at 50% 50%, color-mix(in srgb, var(--c-accent) 10%, transparent), transparent 70%),
+    linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--c-stage-light) 45%, transparent) 50%, transparent 100%);
 }
 
 .int-rh2-field-host,
@@ -110,7 +56,7 @@
   width: 100%;
   height: 100%;
 }
-.int-rh2-field-host { min-height: 100%; touch-action: none; }
+.int-rh2-field-host { position: relative; z-index: 1; touch-action: none; }
 
 .int-rh2-field-fallback {
   display: grid;
@@ -118,232 +64,622 @@
   width: 100%;
   height: 100%;
   margin: 0;
-  padding: 24px;
-  color: var(--rh2-muted);
-  font-size: 0.75rem;
-  line-height: 1.5;
+  padding: var(--sp-6);
+  color: var(--c-text-2);
+  font-size: var(--fs-body-sm);
+  line-height: 1.6;
   text-align: center;
 }
 
-/* Readout and notice stack in the habitat's headroom band. They take no pointer
-   events: the residents underneath still do. */
-.int-rh2-overlay {
+/* ---- First-run hint ------------------------------------------------------ */
+.int-rh2-hint {
   position: absolute;
-  z-index: 6;
-  inset: 8px 8px auto;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  left: 50%;
+  bottom: max(14px, env(safe-area-inset-bottom));
+  z-index: 2;
+  margin: 0;
+  padding: 8px 14px;
+  transform: translateX(-50%);
+  border: 1px solid var(--c-line-1);
+  border-radius: var(--r-control);
+  background: var(--c-surface-glass);
+  color: var(--c-text-2);
+  font-size: var(--fs-body-sm);
+  /* One line when it fits; a longer language or a larger reading size wraps
+     inside the screen instead of running off both edges. */
+  width: max-content;
+  max-width: calc(100% - 32px);
+  text-align: center;
+  text-wrap: balance;
+  pointer-events: none;
+  animation: rh2-hint 3.6s var(--ease-in-out) infinite;
+}
+.int-rh2-hint::before { content: "☝ "; }
+.int-rh2-root[data-selection="selected"] .int-rh2-hint { display: none; }
+@keyframes rh2-hint { 0%, 100% { opacity: 0.75; } 50% { opacity: 1; } }
+
+/* ---- Resident card (someone is picked) ----------------------------------- *
+ * Two rows: who (opens the record) with step/close, then the two traced
+ * meters and capacity. It rises from the margin under the board, or drops
+ * from the top when the resident stands where it would go. */
+.int-rh2-companion {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  z-index: var(--z-card);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: "portrait copy actions" "vitals vitals vitals";
+  align-items: center;
+  column-gap: var(--sp-2);
+  row-gap: 6px;
+  width: min(calc(100% - 24px), 560px);
+  padding: 8px 8px 12px 14px;
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-card);
+  background: var(--c-surface-hud);
+  box-shadow: var(--shadow-float);
+  transform: translateX(-50%);
+  transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), visibility 0s linear 0s;
+}
+.int-rh2-companion::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 9px;
+  height: 9px;
+  background: var(--motif-stair) no-repeat;
+}
+.int-rh2-companion[data-placement="top"] { top: 12px; bottom: auto; }
+/* A held care item (food, protein, cleaning, medicine) owns the field: the
+   card steps aside until the item is put down. The hand is how a resident is
+   touched, so its card stays; the hand's own hint over the dock yields while
+   the card holds the lower edge (the pressed hand cell still says it is on). */
+body[data-tool]:not([data-tool="hand"]) .int-rh2-companion[data-open="true"] {
+  opacity: 0;
+  visibility: hidden;
   pointer-events: none;
 }
-
-/* The readout keeps its space when it is closed, so the notice below it and the
-   habitat behind it never move. */
-.int-rh2-companion {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  gap: 10px;
-  min-height: 0;
-  padding: 9px 11px;
-  transition: opacity 160ms ease, transform 160ms ease;
-}
-
+body[data-tool="hand"]:has(.int-rh2-companion[data-open="true"][data-placement="bottom"]) .cm-toolbar__tool-hint { display: none; }
+body[data-tool] .int-rh2-hint { display: none; }
 .int-rh2-companion[data-open="false"] {
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-8px);
+  transform: translateX(-50%) translateY(14px);
+  pointer-events: none;
+  transition: opacity var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out), visibility 0s linear var(--dur-fast);
 }
+.int-rh2-companion[data-open="false"][data-placement="top"] { transform: translateX(-50%) translateY(-14px); }
 
-.int-rh2-companion__name {
-  margin: 2px 0 0;
+.int-rh2-companion__portrait {
+  grid-area: portrait;
+  width: 44px;
+  height: 44px;
   overflow: hidden;
-  font-size: clamp(0.92rem, 4vw, 1.12rem);
-
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  border-radius: var(--r-control);
+  background: var(--c-surface-3);
 }
+.int-rh2-companion__portrait img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
 
-.int-rh2-companion__location {
-  margin: 3px 0 0;
-  overflow: hidden;
-
-  font-size: 0.7rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Only speaks when something happened: a save that failed or was overtaken by
-   another tab, or one of the day's events. It sits under the readout. */
-.int-rh2-notice {
-  display: flex;
-  flex-direction: column;
+.int-rh2-companion__copy {
+  grid-area: copy;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "head more" "place more";
   align-items: center;
-  gap: 8px;
+  column-gap: var(--sp-2);
+  min-width: 0;
+  min-height: 44px;
   margin: 0;
-  padding: 8px 12px;
-  font-size: 0.68rem;
-  line-height: 1.35;
-  text-align: center;
+  padding: 2px 6px 2px 0;
+  border: 0;
+  border-radius: var(--r-control);
+  background: transparent;
+  color: inherit;
+  text-align: left;
 }
-.int-rh2-notice[hidden] { display: none; }
-.int-rh2-notice__text { margin: 0; }
+@media (hover: hover) { .int-rh2-companion__copy:hover .int-rh2-companion__more { color: var(--c-accent-strong); } }
+.int-rh2-companion__head { grid-area: head; display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.int-rh2-companion__name {
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--fs-title-2);
+  line-height: 1.25;
+  font-weight: var(--fw-heavy);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.int-rh2-companion__species {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--c-text-3);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-strong);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.int-rh2-companion__place {
+  grid-area: place;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  color: var(--c-text-2);
+  font-size: var(--fs-label);
+}
+.int-rh2-companion__ranch-icon { width: 16px; height: 16px; flex: 0 0 auto; image-rendering: pixelated; }
+.int-rh2-companion__location { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.int-rh2-companion__more {
+  grid-area: more;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--c-accent);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-strong);
+}
+.int-rh2-companion__more::after { content: ""; flex: 0 0 auto; width: 6px; height: 11px; margin-left: 2px; background: currentColor; -webkit-mask: var(--icon-chevron-right) center / contain no-repeat; mask: var(--icon-chevron-right) center / contain no-repeat; }
 
-@media (max-width: 374px) {
-  .int-rh2-companion { gap: 8px; padding: 7px 8px; }
-  .int-rh2-system-button,
-  .int-rh2-care-button { min-width: 54px; }
+.int-rh2-companion__actions { grid-area: actions; display: flex; align-items: center; gap: 2px; }
+.int-rh2-companion__nav,
+.int-rh2-companion__close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-control);
+  background: transparent;
+  color: var(--c-text-2);
+  font-size: 22px;
+  line-height: 1;
+}
+.int-rh2-companion__close { font-size: 24px; }
+@media (hover: hover) {
+  .int-rh2-companion__nav:hover,
+  .int-rh2-companion__close:hover { background: var(--c-surface-3); color: var(--c-text-1); }
 }
 
-@media (max-height: 820px), (orientation: landscape) {
-  .int-rh2-field-frame { margin-top: 5px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .int-rh2-root *,
-  .int-rh2-root *::before,
-  .int-rh2-root *::after {
-    scroll-behavior: auto !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* Vitals in the companion panel: HP and TP from the traced stat curve. */
+/* ---- Meters: HP and TP from the traced stat curve, capacity as a value ---- */
 .int-rh2-vitals {
   display: grid;
-  grid-template-columns: auto 1fr auto 1fr;
-  align-items: baseline;
-  gap: 0.15rem 0.45rem;
-  margin: 0.35rem 0 0;
+  grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  column-gap: 6px;
+  margin: 0;
   font-variant-numeric: tabular-nums;
 }
 .int-rh2-vitals__label {
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
-
+  color: var(--c-text-3);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-heavy);
+  letter-spacing: 0.04em;
 }
-.int-rh2-vitals__value {
+.int-rh2-vitals__value { margin: 0; min-width: 0; }
+.int-rh2-vitals__bar {
+  --meter: var(--c-stat-hp);
+  position: relative;
+  display: block;
+  height: calc(18px * var(--text-scale));
+  overflow: hidden;
+  border-radius: 5px;
+  background: var(--c-surface-3);
+}
+.int-rh2-vitals__bar::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--fill, 0%);
+  border-radius: inherit;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--meter) 88%, white), var(--meter));
+  opacity: 0.85;
+  transition: width var(--dur-slow) var(--ease-out);
+}
+.int-rh2-vitals__bar[data-stat="tp"] { --meter: var(--c-stat-tp); }
+.int-rh2-vitals__bar[data-stat="ap"] { --meter: var(--c-stat-ap); }
+.int-rh2-vitals__bar[data-stat="hp"][data-low="true"] { --meter: var(--c-stat-hp-low); }
+.int-rh2-vitals__num {
+  position: relative;
+  display: block;
+  padding: 0 6px;
+  color: var(--c-text-1);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-heavy);
+  line-height: calc(18px * var(--text-scale));
+  text-align: right;
+  text-shadow: 0 1px 1px color-mix(in srgb, var(--c-ground) 50%, transparent);
+}
+.int-rh2-companion > .int-rh2-vitals { grid-area: vitals; }
+/* Light themes: the meter fills are tints with a solid base line, so the
+   dark numbers read over the filled part and the empty track alike. */
+:root:is([data-theme="clear"], [data-theme="warm"]) .int-rh2-vitals__bar::before {
+  background: color-mix(in srgb, var(--meter) 42%, var(--c-surface-1));
+  box-shadow: inset 0 -3px 0 var(--meter);
+  opacity: 1;
+}
+:root:is([data-theme="clear"], [data-theme="warm"]) .int-rh2-vitals__num { text-shadow: none; }
+/* Larger reading sizes: a name or a place may take a second line, and the
+   meters stack one per row so their numbers are never cut. */
+:root:is([data-text-scale="115"], [data-text-scale="130"]) :is(.int-rh2-companion__name, .int-rh2-companion__location) {
+  overflow: visible;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+:root:is([data-text-scale="115"], [data-text-scale="130"]) .int-rh2-companion > .int-rh2-vitals {
+  grid-template-columns: auto minmax(0, 1fr);
+  row-gap: 4px;
+}
+/* The card shows HP and TP; AP (the original's constant bar) and the record
+   live in the detail sheet. Capacity is a value, not a meter. */
+.int-rh2-companion .int-rh2-vitals > [data-stat="ap"] { display: none; }
+.int-rh2-vitals > dd[data-stat="capacity"] .int-rh2-vitals__bar { height: auto; overflow: visible; background: transparent; }
+.int-rh2-vitals > dd[data-stat="capacity"] .int-rh2-vitals__bar::before { display: none; }
+.int-rh2-vitals > dd[data-stat="capacity"] .int-rh2-vitals__num { padding: 0; color: var(--c-text-2); text-shadow: none; white-space: nowrap; }
+
+/* ---- Notices: a failed save or the day's events, over the top of the field */
+.int-rh2-notice {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  z-index: calc(var(--z-card) + 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  width: min(calc(100% - 24px), 440px);
   margin: 0;
-  font-size: 0.9rem;
-  font-weight: 700;
-
+  padding: 10px 14px;
+  transform: translateX(-50%);
+  border: 1px solid var(--c-accent-line);
+  border-radius: var(--r-card);
+  background: var(--c-surface-hud);
+  box-shadow: var(--shadow-float);
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-body-sm);
+  text-align: center;
+  animation: rh2-drop var(--dur-base) var(--ease-out);
 }
+.int-rh2-notice[hidden] { display: none; }
+.int-rh2-notice__text { margin: 0; }
+.int-rh2-notice:has(.int-rh2-system-button:not([hidden])) { border-color: var(--c-danger-line); }
+@keyframes rh2-drop { from { opacity: 0; transform: translateX(-50%) translateY(-8px); } to { opacity: 1; transform: translateX(-50%); } }
+/* A picked resident's card at the top would sit under the notice. */
+.int-rh2-root:has(.int-rh2-companion[data-open="true"][data-placement="top"]) .int-rh2-notice { top: auto; bottom: 12px; }
 
-/* Owner HUD reference revision, 2026-09-06. Existing Home controls and eight slots.
-   Gold/blue original HUD structure, bright tactile materials; no source pixels. */
-.int-rh2-root {
-  --rh2-ink: #173c52;
-  --rh2-muted: #486574;
-  --rh2-ink-soft: #486574;
-  --rh2-gold: #d28b24;
-  --rh2-gold-bright: #805011;
-  --rh2-cyan: #24677e;
-  --rh2-shell: #f7fbfa;
-  --rh2-shell-dark: #e4eff1;
-  --rh2-display: #e6eee8;
-  --rh2-panel: #f6fbfc;
-  --rh2-line: #a5c6d0;
-
+.int-rh2-system-button {
+  min-width: 88px;
+  min-height: 44px;
+  padding: 0 var(--sp-4);
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-control);
+  background: var(--c-surface-2);
+  color: var(--c-text-1);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-strong);
 }
-.int-rh2-shell { border-inline-color: #c6bb92; }
-.int-rh2-system-button,
-.int-rh2-care-button {
-  color: #594920;
-  border-color: #b29450;
-  background: linear-gradient(180deg, #fffdf3, #f4e5b8);
-  box-shadow: inset 0 0 0 2px #fff9e6, 0 3px 0 #c0a162, 0 4px 6px rgba(75, 58, 19, .12);
+.int-rh2-system-button[hidden] { display: none; }
+
+/* ---- Training labels: numbers that rise from a training cage ------------- *
+ * Drawn straight over the scene art, so their ink and stroke are the same in
+ * every theme: the art behind them does not change with the palette. */
+.int-rh2-training-labels { position: absolute; inset: 0; z-index: 4; overflow: hidden; pointer-events: none; }
+.int-rh2-training-label {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  color: #ffdcdc;
+  font-weight: 900;
+  line-height: 1.2;
+  white-space: nowrap;
+  -webkit-text-stroke: 0.4px #3b0f11;
+  text-shadow: 0 1px 0 #3b0f11, 0 0 6px rgba(0, 0, 0, 0.6);
 }
-.int-rh2-system-button { display: grid; justify-items: center; gap: 1px; padding: 4px 9px 5px; font-size: .55rem;  min-width: 50px;  }
-.int-rh2-system-button::before { content: ""; display: block; width: 27px; height: 27px; background: url("../../../assets/production/ui/tooling-pilot-r1/tool-icons.webp") 100% 100% / 300% 300%; pointer-events: none; }
+.int-rh2-training-label[data-positive="true"] { color: #86f2d8; -webkit-text-stroke-color: #06231c; text-shadow: 0 1px 0 #06231c, 0 0 6px rgba(0, 0, 0, 0.6); }
 
-.int-rh2-field-state {  letter-spacing: .04em; }
+/* ---- Detail sheet (the full record) --------------------------------------- *
+ * One component: a bottom sheet on a phone, a side sheet on a tablet. */
+.int-rh2-detail {
+  position: fixed;
+  inset: auto 0 0;
+  width: 100%;
+  max-width: none;
+  max-height: min(82vh, 720px);
+  margin: 0;
+  padding: 0;
+  display: none;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  border: 1px solid var(--c-line-2);
+  border-bottom: 0;
+  border-radius: var(--r-sheet) var(--r-sheet) 0 0;
+  background: var(--c-surface-1);
+  color: var(--c-text-1);
+  box-shadow: var(--shadow-lift);
+  overflow: hidden;
+}
+.int-rh2-detail[open] { display: grid; animation: rh2-sheet-up var(--dur-slow) var(--ease-out); }
+.int-rh2-detail::backdrop { background: var(--c-scrim); }
+@keyframes rh2-sheet-up { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
 
-/* Shared bars have their own DOM roots; use their existing screen/mode state. */
-.cm-status-bar[data-screen="RAISING_HOME"] {    gap: 8px; padding-block: 5px; font-size: .63rem;  }
-.cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__season { padding: 3px 7px;    }
-.cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__day { color: #486574; }
-.cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__day-number,
-.cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__time { color: #214a60; }
-.cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__mode { padding: 3px 8px; border: 1px solid transparent; font-size: .61rem; }
-.cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__season { color: #805011; }
-.cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__season[data-season="spring"] { color: #286338; }
-.cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__season[data-season="summer"] { color: #805011; }
-.cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__season[data-season="autumn"] { color: #984220; }
-.cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__season[data-season="winter"] { color: #23627e; }
-.cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__end-day { color: #214a60; border-color: #8eb9c9; background: #f6fbfd; }
-.cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__end-day:hover:not(:disabled) { background: #cfe8f1; }
-.cm-toolbar[data-mode="1"] .cm-toolbar__rail { gap: 3px; padding: 6px 5px calc(5px + env(safe-area-inset-bottom, 0px));    }
-.cm-toolbar[data-mode="1"] .cm-toolbar__cell,
-.cm-toolbar[data-mode="1"] .cm-toolbar__entry {  border-color: #b5a071;   }
-.cm-toolbar[data-mode="1"] .cm-toolbar__cell { flex-direction: column; gap: 1px; min-height: 62px; padding: 3px 0 4px;  letter-spacing: 0; font-size: clamp(.42rem, 1.8vw, .52rem); font-weight: 700; }
-.cm-toolbar[data-mode="1"] .cm-toolbar__cell::before { content: ""; display: block; width: 34px; height: 34px; background-image: url("../../../assets/production/ui/tooling-pilot-r1/tool-icons.webp"); background-size: 300% 300%; pointer-events: none; }
-/* Original toolbar icons (ui/training_set). The game plays them grey and
- * lights only the selected slot gold, so the two banks drive rest and
- * aria-pressed rather than one drawing being tinted. Manage and System keep
- * their authored icons: the contract has that slot mapping untraced. */
-.cm-toolbar[data-mode="1"] [data-tool-id="hand"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/hand-rest.png"); background-size: contain; background-position: center; image-rendering: pixelated; }
-.cm-toolbar[data-mode="1"] [data-tool-id="hand"][aria-pressed="true"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/hand-selected.png"); }
-.cm-toolbar[data-mode="1"] [data-tool-id="feed"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/feed-rest.png"); background-size: contain; background-position: center; image-rendering: pixelated; }
-.cm-toolbar[data-mode="1"] [data-tool-id="feed"][aria-pressed="true"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/feed-selected.png"); }
-.cm-toolbar[data-mode="1"] [data-tool-id="protein"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/protein-rest.png"); background-size: contain; background-position: center; image-rendering: pixelated; }
-.cm-toolbar[data-mode="1"] [data-tool-id="protein"][aria-pressed="true"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/protein-selected.png"); }
-.cm-toolbar[data-mode="1"] [data-tool-id="clean"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/clean-rest.png"); background-size: contain; background-position: center; image-rendering: pixelated; }
-.cm-toolbar[data-mode="1"] [data-tool-id="clean"][aria-pressed="true"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/clean-selected.png"); }
-.cm-toolbar[data-mode="1"] [data-tool-id="woundMedicine"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/woundMedicine-rest.png"); background-size: contain; background-position: center; image-rendering: pixelated; }
-.cm-toolbar[data-mode="1"] [data-tool-id="woundMedicine"][aria-pressed="true"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/woundMedicine-selected.png"); }
-.cm-toolbar[data-mode="1"] [data-tool-id="medicine"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/medicine-rest.png"); background-size: contain; background-position: center; image-rendering: pixelated; }
-.cm-toolbar[data-mode="1"] [data-tool-id="medicine"][aria-pressed="true"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/medicine-selected.png"); }
-.cm-toolbar[data-mode="1"] [data-menu-id="MANAGEMENT"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/manage-rest.png"); background-size: contain; background-position: center; image-rendering: pixelated; }
-.cm-toolbar[data-mode="1"] [data-menu-id="MANAGEMENT"][aria-expanded="true"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/manage-selected.png"); }
-.cm-toolbar[data-mode="1"] [data-menu-id="SYSTEM"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/system-rest.png"); background-size: contain; background-position: center; image-rendering: pixelated; }
-.cm-toolbar[data-mode="1"] [data-menu-id="SYSTEM"][aria-expanded="true"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/system-selected.png"); }
-.cm-toolbar[data-mode="1"] .cm-toolbar__cell:hover,
-.cm-toolbar[data-mode="1"] .cm-toolbar__entry:hover:not(:disabled) { background: #fff3c7; }
+.int-rh2-detail__head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-5) var(--sp-3) var(--sp-3) var(--sp-5);
+  border-bottom: 1px solid var(--c-line-1);
+}
+.int-rh2-detail__head::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 40px;
+  height: 4px;
+  margin-left: -20px;
+  border-radius: 2px;
+  background: var(--c-line-3);
+}
+.int-rh2-detail__titles { flex: 1 1 auto; min-width: 0; }
+.int-rh2-detail__name { margin: 0; font-size: var(--fs-title-1); line-height: var(--lh-title-1); font-weight: var(--fw-heavy); overflow-wrap: anywhere; }
+.int-rh2-detail__species { margin: 2px 0 0; color: var(--c-text-2); font-size: var(--fs-body-sm); }
+.int-rh2-detail__close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  min-height: 44px;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-control);
+  background: var(--c-surface-2);
+  color: var(--c-text-1);
+  font-size: 24px;
+  line-height: 1;
+}
+.int-rh2-detail__body {
+  display: grid;
+  align-content: start;
+  gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-5);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.int-rh2-detail__vitals {
+  grid-template-columns: auto minmax(0, 1fr);
+  row-gap: 8px;
+  column-gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-card);
+  background: var(--c-ground-raised);
+}
+.int-rh2-detail__rows { margin: 0; }
+.int-rh2-detail__empty { margin: 0; color: var(--c-text-2); }
+.int-rh2-detail__footer {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-5) calc(var(--sp-3) + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--c-line-1);
+}
+.int-rh2-detail__footer > .cm-screen-primary { flex: 0 1 200px; }
 
-.cm-toolbar[data-mode="1"] .cm-toolbar__cell[aria-expanded="true"] {   color: #68440f; }
-.cm-toolbar[data-mode="1"] .cm-toolbar__menu { gap: 7px; padding: 10px;     }
-.cm-toolbar[data-mode="1"] .cm-toolbar__entry { min-height: 44px;  font-weight: 600; }
-.cm-toolbar[data-mode="1"] .cm-toolbar__cell:focus-visible,
-.cm-toolbar[data-mode="1"] .cm-toolbar__entry:focus-visible,
-.cm-status-bar[data-screen="RAISING_HOME"] .cm-status-bar__end-day:focus-visible { outline-color: #24677e; }
-
-@media (min-width: 431px) {
-  .cm-status-bar[data-screen="RAISING_HOME"],
-  .cm-toolbar[data-mode="1"] {
-    left: 50%;
-    right: auto;
-    width: 430px;
-    transform: translateX(-50%);
+@media (min-width: 768px) {
+  body:not([data-portrait-frame]) .int-rh2-detail {
+    inset: 0 0 0 auto;
+    width: min(420px, 46vw);
+    height: 100%;
+    max-height: none;
+    border-bottom: 1px solid var(--c-line-2);
+    border-right: 0;
+    border-radius: var(--r-sheet) 0 0 var(--r-sheet);
+    padding-top: env(safe-area-inset-top);
   }
+  body:not([data-portrait-frame]) .int-rh2-detail[open] { animation-name: rh2-sheet-side; }
+  body:not([data-portrait-frame]) .int-rh2-detail__head::before { display: none; }
+  @keyframes rh2-sheet-side { from { transform: translateX(28px); opacity: 0; } to { transform: none; opacity: 1; } }
 }
-/* Application-owned lifecycle; all text remains DOM, field effects are Pixi. */
-.int-rh2-root:has(.int-rh2-lifecycle:not([hidden])) { z-index: 100; }
-.int-rh2-lifecycle { position: fixed; inset: 0; z-index: 100; display: flex; align-items: flex-end; justify-content: flex-end; padding: 24px max(24px, env(safe-area-inset-right)); color: #fff; pointer-events: auto; }
+
+/* ---- Day change, calendar, letters (application-owned lifecycle) ---------- */
+.int-rh2-root:has(.int-rh2-lifecycle:not([hidden])) { z-index: var(--z-lifecycle); }
+.int-rh2-lifecycle {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-lifecycle);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 24px max(24px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom));
+}
 .int-rh2-lifecycle[hidden] { display: none; }
-.int-rh2-lifecycle [hidden] { display:none !important; }
-.int-rh2-day-confirm { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:min(86vw,330px); background:var(--ds-window-fill); border:3px solid var(--ds-gold); border-radius:12px; padding:20px; text-align:center; color:var(--ds-text); box-shadow:var(--ds-window-frame),0 0 0 100vmax #0006; }
-.int-rh2-day-confirm button { display:inline-block; margin:4px 12px; min-width:88px; }
-.int-rh2-lifecycle__text { font-size: 14px; margin: 0 12px 0 0; }
-.int-rh2-calendar { position:absolute; inset:0; width:100%; border:0; padding:0; background:#000; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:space-around; cursor:pointer; font:inherit; }
-.int-rh2-calendar[hidden] { display:none; }
-.int-rh2-calendar__date { padding:22px 34px; background:var(--ds-calendar-date); border:2px solid var(--ds-gold); border-radius:9px; font-size:22px; box-shadow:0 0 0 2px var(--ds-ink); }
-.int-rh2-calendar__grid { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; width:min(88vw,380px); padding:14px; border:5px solid #b5d466; border-radius:18px; background:#6cb13f; box-shadow:var(--ds-window-frame); }
-.int-rh2-calendar[data-season="1"] .int-rh2-calendar__grid { background:#288ca7; border-color:#91ded7; }
-.int-rh2-calendar[data-season="2"] .int-rh2-calendar__grid { background:#b58142; border-color:#edbe74; }
-.int-rh2-calendar[data-season="3"] .int-rh2-calendar__grid { background:#7196b8; border-color:#c4e2ef; }
-.int-rh2-calendar__day { min-height:106px; color:#294536; background:#eff9d7; border:1px solid #678a47; text-align:left; }
-.int-rh2-calendar__day strong { display:block; padding:5px; border-bottom:1px solid #a8c584; text-align:center; font-size:23px; }
-.int-rh2-calendar__day.is-today strong { color:#fff; background:#d5587b; outline:2px solid #ffe5f2; outline-offset:-3px; }
-.int-rh2-calendar__counts { display:flex; flex-direction:column; padding:7px 3px; font-size:15px; }
-.int-rh2-mail-icon {position:absolute;right:14px;bottom:calc(60px + env(safe-area-inset-bottom));z-index:30;width:48px;height:44px;border:0;background:transparent;cursor:pointer;}
-.int-rh2-mail-icon::before {content:'';position:absolute;inset:9px 7px;background:linear-gradient(35deg,transparent 48%,var(--ds-ink) 49% 52%,transparent 53%),linear-gradient(-35deg,transparent 48%,var(--ds-ink) 49% 52%,transparent 53%),var(--ds-paper-lit);border:2px solid var(--ds-gold);box-shadow:0 0 7px var(--ds-cyan-lit);}
-.int-rh2-mail-icon[hidden],.int-rh2-letter[hidden] {display:none;}
-.int-rh2-letter {position:absolute;left:50%;top:54%;transform:translate(-50%,-50%);width:min(90vw,420px);min-height:220px;color:var(--ds-paper-ink);border:5px double var(--ds-gold);background:var(--ds-paper);box-shadow:var(--ds-window-frame);pointer-events:auto;}
-.int-rh2-letter__sender {margin:0;padding:5px 12px;background:var(--ds-paper-lit);border-bottom:2px solid var(--ds-paper-line);font-size:14px;font-weight:700;}
-.int-rh2-letter__text {padding:9px 12px;margin:0;min-height:146px;white-space:pre-wrap;line-height:28px;font-size:16px;background:repeating-linear-gradient(transparent 0 27px,var(--ds-paper-line) 27px 28px);}
-.int-rh2-letter__ack {display:block;min-height:44px;min-width:86px;margin:10px 12px 10px auto;cursor:pointer;}
-.int-rh2-letter[data-system="true"] {top:31%;min-height:0;background:var(--ds-window-fill);color:var(--ds-text);}
-.int-rh2-letter[data-system="true"] .int-rh2-letter__sender {display:none;}
-.int-rh2-letter[data-system="true"] .int-rh2-letter__text {min-height:0;background:none;}
+.int-rh2-lifecycle [hidden] { display: none; }
+.int-rh2-lifecycle__text { margin: 0 12px 0 0; color: var(--c-text-1); font-size: var(--fs-body-sm); }
+
+.int-rh2-day-confirm {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-2);
+  width: min(calc(100vw - 32px), 340px);
+  padding: var(--sp-5);
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-sheet);
+  background: var(--c-surface-1);
+  box-shadow: var(--shadow-lift);
+}
+.int-rh2-day-confirm__question { grid-column: 1 / -1; margin: 0 0 var(--sp-2); font-size: var(--fs-title-2); font-weight: var(--fw-heavy); text-align: center; }
+.int-rh2-day-confirm .int-rh2-system-button { width: 100%; min-height: var(--control); }
+.int-rh2-day-confirm .int-rh2-system-button:first-of-type { border-color: transparent; background: var(--c-accent); color: var(--c-text-on-accent); }
+
+.int-rh2-calendar {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-5);
+  width: 100%;
+  padding: var(--sp-6) var(--sp-4);
+  border: 0;
+  background: radial-gradient(70% 55% at 50% 45%, color-mix(in srgb, var(--c-stage-light) 60%, transparent), var(--c-void) 75%);
+  color: var(--c-text-1);
+  --season: var(--c-accent);
+}
+.int-rh2-calendar[hidden] { display: none; }
+.int-rh2-calendar[data-season="0"] { --season: var(--c-season-spring); }
+.int-rh2-calendar[data-season="1"] { --season: var(--c-season-summer); }
+.int-rh2-calendar[data-season="2"] { --season: var(--c-season-autumn); }
+.int-rh2-calendar[data-season="3"] { --season: var(--c-season-winter); }
+.int-rh2-calendar__date {
+  position: relative;
+  padding: var(--sp-3) var(--sp-6);
+  border-radius: var(--r-card);
+  background: var(--c-surface-1);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--season) 60%, transparent), 0 0 40px color-mix(in srgb, var(--season) 22%, transparent);
+  color: var(--c-text-1);
+  font-size: var(--fs-display);
+  line-height: var(--lh-display);
+  font-weight: var(--fw-heavy);
+  letter-spacing: 0.06em;
+}
+.int-rh2-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  width: min(calc(100vw - 32px), 400px);
+  padding: var(--sp-3);
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-card);
+  background: var(--c-surface-1);
+}
+.int-rh2-calendar__day {
+  min-height: 78px;
+  padding: 6px;
+  border-radius: var(--r-control);
+  background: var(--c-ground-raised);
+  color: var(--c-text-2);
+  text-align: left;
+}
+.int-rh2-calendar__day strong { display: block; color: var(--c-text-1); font-size: calc(20px * var(--text-scale)); font-variant-numeric: tabular-nums; }
+.int-rh2-calendar__day.is-today { background: color-mix(in srgb, var(--season) 16%, var(--c-surface-2)); box-shadow: inset 0 0 0 1px var(--season); }
+.int-rh2-calendar__day.is-today strong { color: var(--season); }
+.int-rh2-calendar__counts { display: grid; gap: 2px; margin-top: 4px; font-size: var(--fs-label); font-variant-numeric: tabular-nums; }
+
+.int-rh2-mail-icon {
+  position: absolute;
+  right: max(14px, env(safe-area-inset-right));
+  top: 14px;
+  z-index: var(--z-card);
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid var(--c-accent-line);
+  border-radius: 50%;
+  background: var(--c-surface-glass);
+  box-shadow: var(--glow-accent);
+}
+.int-rh2-mail-icon::before {
+  content: "";
+  width: 22px;
+  height: 16px;
+  border: 2px solid var(--c-accent-strong);
+  border-radius: 3px;
+  background: linear-gradient(35deg, transparent 47%, var(--c-accent-strong) 48% 54%, transparent 55%) left / 50% 100% no-repeat,
+    linear-gradient(-35deg, transparent 47%, var(--c-accent-strong) 48% 54%, transparent 55%) right / 50% 100% no-repeat;
+}
+.int-rh2-mail-icon::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--c-danger);
+  box-shadow: 0 0 0 2px var(--c-surface-1);
+  /* The new-mail dot breathes; only its opacity moves, so nothing repaints. */
+  animation: rh2-mail 2.4s var(--ease-in-out) infinite;
+}
+.int-rh2-mail-icon[hidden], .int-rh2-letter[hidden] { display: none; }
+@keyframes rh2-mail { 50% { opacity: 0.35; } }
+
+/* Letters are paper (see the opening's letter); system notices stay panels. */
+.int-rh2-letter {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  width: min(calc(100vw - 32px), 440px);
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  border-radius: var(--r-card);
+  background: var(--c-paper);
+  color: var(--c-paper-ink);
+  box-shadow: var(--shadow-lift);
+}
+.int-rh2-letter__sender {
+  margin: 0;
+  padding: var(--sp-4) var(--sp-5) var(--sp-2);
+  color: var(--c-paper-muted);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-strong);
+  letter-spacing: 0.06em;
+}
+.int-rh2-letter__text {
+  margin: 0;
+  padding: 0 var(--sp-5) var(--sp-4);
+  min-height: 120px;
+  background: repeating-linear-gradient(180deg, transparent 0 calc(27px * var(--text-scale)), var(--c-paper-line) calc(27px * var(--text-scale)) calc(28px * var(--text-scale)));
+  font-size: calc(16px * var(--text-scale));
+  line-height: calc(28px * var(--text-scale));
+  white-space: pre-wrap;
+}
+.int-rh2-letter__ack {
+  justify-self: end;
+  min-width: 112px;
+  min-height: var(--control);
+  margin: 0 var(--sp-5) var(--sp-5);
+  border: 0;
+  border-radius: var(--r-control);
+  background: var(--c-paper-ink);
+  color: var(--c-paper);
+  font-weight: var(--fw-strong);
+}
+.int-rh2-letter__ack:disabled { opacity: 0.4; }
+.int-rh2-letter[data-system="true"] { top: 36%; border: 1px solid var(--c-line-2); background: var(--c-surface-1); color: var(--c-text-1); }
+.int-rh2-letter[data-system="true"] .int-rh2-letter__sender { display: none; }
+.int-rh2-letter[data-system="true"] .int-rh2-letter__text { min-height: 0; padding-top: var(--sp-5); background: none; }
+.int-rh2-letter[data-system="true"] .int-rh2-letter__ack { background: var(--c-accent); color: var(--c-text-on-accent); }
+
+/* ---- Narrow phones -------------------------------------------------------- */
+@media (max-width: 379px) {
+  /* Every control stays 44px; the species line (it is in the record) and the
+     word 詳細 (the chevron stays) give way so the name keeps its room. */
+  .int-rh2-companion { padding: 8px 6px 10px 10px; column-gap: 6px; }
+  .int-rh2-companion__portrait { width: 40px; height: 40px; }
+  .int-rh2-companion__species { display: none; }
+  .int-rh2-companion__name { font-size: var(--fs-body); }
+  .int-rh2-companion__more { font-size: 0; gap: 0; }
+  .int-rh2-companion__actions { gap: 0; }
+  .int-rh2-vitals { column-gap: 4px; }
+}
+
+/* Reduced motion: the player's choice (data-motion on <html>, resolved from
+   the setting and, when it is "system", from the OS); the media query only
+   covers a page that has no data-motion yet. */
+:root[data-motion="reduced"] .int-rh2-hint, :root[data-motion="reduced"] .int-rh2-mail-icon::after { animation: none; }
+:root[data-motion="reduced"] .int-rh2-companion, :root[data-motion="reduced"] .int-rh2-companion[data-open="false"], :root[data-motion="reduced"] .int-rh2-companion[data-open="false"][data-placement="top"] { transform: translateX(-50%); }
+:root[data-motion="reduced"] .int-rh2-detail[open], :root[data-motion="reduced"] .int-rh2-notice { animation-name: cm-fade; }
+:root[data-motion="reduced"] .int-rh2-vitals__bar::before { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion]) .int-rh2-hint, :root:not([data-motion]) .int-rh2-mail-icon::after { animation: none; }
+  :root:not([data-motion]) .int-rh2-companion, :root:not([data-motion]) .int-rh2-companion[data-open="false"], :root:not([data-motion]) .int-rh2-companion[data-open="false"][data-placement="top"] { transform: translateX(-50%); }
+  :root:not([data-motion]) .int-rh2-detail[open], :root:not([data-motion]) .int-rh2-notice { animation-name: cm-fade; }
+  :root:not([data-motion]) .int-rh2-vitals__bar::before { transition: none; }
+}

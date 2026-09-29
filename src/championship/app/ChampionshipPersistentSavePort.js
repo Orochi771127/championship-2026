@@ -13,7 +13,9 @@
 // through the controller's duck-typed `persistence` facade
 // ({ getStatus, subscribe, save, retry, exportRecovery }). The R2 session keeps
 // its zero-write ports and keeps reporting persistentWrites === 0; this port owns
-// the only durable write in the product, and it writes only its own key.
+// the only durable write of game progress, and it writes only its own key. The
+// one other durable document, player preferences, is written by the small
+// preference port below: same file, same guard, a different key, no progress.
 
 import { serializeRaisingHomeSaveR2 } from "../raising/raisingHomePersistenceR2.js";
 import {
@@ -45,6 +47,40 @@ export function guardChampionshipStorage(storage) {
     },
     removeItem(key) {
       return storage.removeItem(assertAllowedChampionshipStorageKey(key));
+    }
+  });
+}
+
+// The preferences document (2026-09-29): theme, language, volume and the
+// like. It is not part of the game save and never carries progress, so a
+// settings change can never overwrite a save and a save can never reset a
+// setting. It shares this boundary so the product still has exactly one
+// place that writes durable storage, and the same key policy guards both.
+export const CHAMPIONSHIP_PREFERENCES_KEY = "championshipModernSave:preferences:v1";
+
+/**
+ * Raw access to the stored preferences text. Parsing, defaults and migration
+ * live in settings/preferenceSchema.js; this only moves text across the
+ * storage boundary and reports what the browser said.
+ */
+export function createChampionshipPreferencePort({ storage } = {}) {
+  if (!storage || typeof storage.getItem !== "function" || typeof storage.setItem !== "function"
+    || typeof storage.removeItem !== "function") {
+    throw new TypeError("Championship preference port requires a Storage-like object");
+  }
+  const key = assertAllowedChampionshipStorageKey(CHAMPIONSHIP_PREFERENCES_KEY);
+  const guarded = guardChampionshipStorage(storage);
+  return Object.freeze({
+    storageKey: key,
+    /** { text, error } -- a blocked or unavailable Storage is reported, not thrown. */
+    read() {
+      try { return Object.freeze({ text: guarded.getItem(key), error: null }); }
+      catch (error) { return Object.freeze({ text: null, error: `STORAGE_UNAVAILABLE: ${error.message}` }); }
+    },
+    /** { ok, error } -- quota, private mode and blocked storage all land here. */
+    write(text) {
+      try { guarded.setItem(key, text); return Object.freeze({ ok: true, error: null }); }
+      catch (error) { return Object.freeze({ ok: false, error: error?.message ?? String(error) }); }
     }
   });
 }

@@ -23,7 +23,17 @@
 // than to a blank or to an invented word.
 
 import { deepFreeze } from "../contracts/championshipContracts.js";
-import { SPECIES_NAMES_ZH, HELP_ZH, TITLE_EVENTS_ZH } from "./catalogs.zhHant.js";
+import { SPECIES_NAMES_ZH, HELP_ZH, TITLE_EVENTS_ZH, SHOP_NAMES_ZH, SHOP_DESCRIPTIONS_ZH } from "./catalogs.zhHant.js";
+// English (settings round, 2026-09-29): the accessors below return English
+// when the display language is English and an English entry exists. The
+// tables in this file stay the zh-Hant source; nothing here is replaced.
+import { isEnglish } from "./locale.js";
+import {
+  BATTLE_FACE_LABELS_EN, BATTLE_MENU_LABELS_EN, CAGE_EFFECT_LABELS_EN, CAGE_NAMES_EN, DIGI_EGG_EN,
+  FAMILY_LABELS_EN, GATE_NAMES_EN, GENERATIONS_EN, PERSONALITIES_EN, RESIST_LABELS_EN, ROSTER_FAMILIES_EN,
+  SPECIAL_SKILLS_EN, TAMER_RANK_NAMES_EN, UNKNOWN_DIGIMON_EN
+} from "./gameText.en.js";
+import { HELP_EN, SHOP_DESCRIPTIONS_EN, SHOP_NAMES_EN, TITLE_EVENTS_EN } from "./catalogs.en.js";
 
 export const TEXT_LOCALE = "zh-Hant";
 export const TEXT_EVIDENCE = "PRODUCT_AUTHORED";
@@ -38,11 +48,12 @@ const TAMER_RANK_NAMES = Object.freeze(['綠階','藍階','紅階','白階','青
 const SPECIAL_SKILLS = Object.freeze(['無','挑釁','治癒 α','治癒 β','治癒 γ','全體治癒 α','全體治癒 β','全體治癒 γ',
   '淨化','全體淨化','強化攻擊','全體強化攻擊','防護','全體防護','加速','全體加速','感知','全體感知',
   '耐火','全體耐火','耐水','全體耐水','耐雷','全體耐雷','耐光','全體耐光','耐暗','全體耐暗','復活 α','復活 β','勇氣']);
-export const generationName = index => GENERATIONS[index] ?? null;
-export const personalityName = index => PERSONALITIES[index] ?? null;
-export const rosterFamilyName = ordinal => ROSTER_FAMILIES[ordinal] ?? null;
-export const tamerRankName = index => TAMER_RANK_NAMES[index] ?? null;
-export const specialSkillName = index => SPECIAL_SKILLS[index] ?? null;
+const localized = (zh, en, key) => (isEnglish() ? en[key] ?? zh[key] : zh[key]) ?? null;
+export const generationName = index => localized(GENERATIONS, GENERATIONS_EN, index);
+export const personalityName = index => localized(PERSONALITIES, PERSONALITIES_EN, index);
+export const rosterFamilyName = ordinal => localized(ROSTER_FAMILIES, ROSTER_FAMILIES_EN, ordinal);
+export const tamerRankName = index => localized(TAMER_RANK_NAMES, TAMER_RANK_NAMES_EN, index);
+export const specialSkillName = index => localized(SPECIAL_SKILLS, SPECIAL_SKILLS_EN, index);
 
 /** The status bar's mode field. The cartridge's own words are in the comments. */
 export const MODE_LABELS = deepFreeze({
@@ -144,25 +155,50 @@ function lookup(table, key, fallback) {
   return value === undefined || value === null ? fallback : value;
 }
 
-/** Chinese for a cage, falling back to the cartridge's Japanese. */
+/** The battle menu's copy in the display language (a fresh object per call). */
+export function battleMenuLabels() {
+  return isEnglish() ? { ...BATTLE_MENU_LABELS, ...BATTLE_MENU_LABELS_EN } : { ...BATTLE_MENU_LABELS };
+}
+
+/** A battle mode's name in the display language. */
+export function battleFaceLabel(id) {
+  return (isEnglish() ? BATTLE_FACE_LABELS_EN[id] : null) ?? BATTLE_FACE_LABELS[id] ?? id;
+}
+
+/** Chinese (or English) for a cage, falling back to the cartridge's Japanese. */
 export function cageName(cageIndex, japanese) {
+  if (isEnglish() && CAGE_NAMES_EN[cageIndex]) return CAGE_NAMES_EN[cageIndex];
   return lookup(CAGE_NAMES, cageIndex, japanese);
 }
 
-/** Chinese for a gate, falling back to the cartridge's Japanese. */
+/** Chinese (or English) for a gate, falling back to the cartridge's Japanese. */
 export function gateName(recordIndex, japanese) {
+  if (isEnglish() && GATE_NAMES_EN[recordIndex]) return GATE_NAMES_EN[recordIndex];
   return lookup(GATE_NAMES, recordIndex, japanese);
 }
 
-/** Only catalog identity is localized here; never pass a player's nickname. */
-export function speciesName(recordIndex, fallback = "未知數碼獸") {
-  if (Number.isInteger(recordIndex) && recordIndex >= 0 && recordIndex < 8) return "數碼蛋";
-  return lookup(SPECIES_NAMES_ZH, recordIndex, fallback);
+/**
+ * Only catalog identity is localized here; never pass a player's nickname.
+ * Species names have no approved English form, so English shows the approved
+ * zh-Hant name; the eggs and the unknown fallback are ordinary words.
+ */
+export function speciesName(recordIndex, fallback = undefined) {
+  if (Number.isInteger(recordIndex) && recordIndex >= 0 && recordIndex < 8) return isEnglish() ? DIGI_EGG_EN : "數碼蛋";
+  return lookup(SPECIES_NAMES_ZH, recordIndex, fallback === undefined ? (isEnglish() ? UNKNOWN_DIGIMON_EN : "未知數碼獸") : fallback);
 }
 
-export function speciesNameForId(speciesId, fallback = "未知數碼獸") {
+export function speciesNameForId(speciesId, fallback = undefined) {
+  const unknown = fallback === undefined ? (isEnglish() ? UNKNOWN_DIGIMON_EN : "未知數碼獸") : fallback;
   const match = /^(?:championship:creature:)?species-(\d+)$/.exec(speciesId ?? "");
-  return match ? speciesName(Number(match[1]), fallback) : fallback;
+  return match ? speciesName(Number(match[1]), unknown) : unknown;
+}
+
+/** A Shop item's name and description in the display language. */
+export function shopItemName(recordIndex, fallback = null) {
+  return (isEnglish() ? SHOP_NAMES_EN[recordIndex] : null) ?? SHOP_NAMES_ZH[recordIndex] ?? fallback;
+}
+export function shopItemDescription(recordIndex, fallback = null) {
+  return (isEnglish() ? SHOP_DESCRIPTIONS_EN[recordIndex] : null) ?? SHOP_DESCRIPTIONS_ZH[recordIndex] ?? fallback;
 }
 
 // Original starter constructor's 25 variants (two produce the same name).
@@ -187,24 +223,26 @@ export function raisingDisplayName(instance) {
 }
 
 export function helpText(entryIndex, field, fallback) {
-  return HELP_ZH[entryIndex]?.[field] ?? fallback;
+  return (isEnglish() ? HELP_EN[entryIndex]?.[field] : null) ?? HELP_ZH[entryIndex]?.[field] ?? fallback;
 }
 
 export function titleEventText(recordIndex, field, fallback) {
-  return TITLE_EVENTS_ZH[recordIndex]?.[field] ?? fallback;
+  return (isEnglish() ? TITLE_EVENTS_EN[recordIndex]?.[field] : null) ?? TITLE_EVENTS_ZH[recordIndex]?.[field] ?? fallback;
 }
 
-/** Chinese for a cage effect, falling back to the raw kind:target key. */
+/** Chinese (or English) for a cage effect, falling back to the raw kind:target key. */
 export function cageEffectLabel(kind, target) {
   const key = `${kind}:${target}`;
-  const direct = CAGE_EFFECT_LABELS[key];
+  const english = isEnglish();
+  const direct = english ? CAGE_EFFECT_LABELS_EN[key] ?? CAGE_EFFECT_LABELS[key] : CAGE_EFFECT_LABELS[key];
   if (direct) return direct;
   if (kind === "FAMILY_UP") {
+    if (english && FAMILY_LABELS_EN[target]) return `${FAMILY_LABELS_EN[target]} up`;
     const family = FAMILY_LABELS[target];
     return family ? `${family}屬性上升` : null;
   }
   if (kind === "RESIST_UP") {
-    const resist = RESIST_LABELS[target];
+    const resist = english ? RESIST_LABELS_EN[target] ?? RESIST_LABELS[target] : RESIST_LABELS[target];
     return resist ?? null;
   }
   return null;

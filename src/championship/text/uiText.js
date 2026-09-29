@@ -1,4 +1,7 @@
 // Display-only PRODUCT_AUTHORED copy. Never translate identifiers or saved input.
+import { formatNumber, getLocale, pluralCategory } from "./locale.js";
+import { PATTERNS_EN, TEXT_EN, UI_COPY_EN, UNTRANSLATED_PROPER_NOUNS } from "./uiText.en.js";
+
 export const UI_COPY = Object.freeze({
   "SWIPE TO VIEW": "滑動查看場地", "Waiting Room": "待機區",
   "Moonwell Pool": "月井池", "Quiet Hollow": "靜謐谷地",
@@ -35,7 +38,8 @@ export const UI_COPY = Object.freeze({
   "TAMER": "馴獸師", "Tamer": "馴獸師", "TAMER INFO": "馴獸師資料",
   "SCHEDULE": "賽程", "Schedule": "賽程", "TITLE MATCHES": "頭銜賽", "RECORD": "編號",
   "HELP": "說明", "Help": "說明", "Cage Edit": "設施配置", "End Day": "結束今天",
-  "Save & Quit": "儲存並離開", "MANAGE": "管理", "SYSTEM": "系統",
+  "Save & Quit": "儲存並離開", "MANAGE": "管理", "SYSTEM": "選單", "Settings": "設定",
+  "Retry": "重試", "Saving...": "保存中…",
   "HAND": "手掌", "FEED": "餵食", "CLEAN": "清潔", "MED": "藥品", "WOUND": "傷藥", "PROTEIN": "蛋白質",
   "Move a resident, or stroke it": "移動或撫摸數碼獸", "Place food beside a resident": "在數碼獸身旁放置食物",
   "Clear droppings and leftovers": "清除排泄物與剩餘食物", "Cure sickness": "治療疾病",
@@ -102,14 +106,136 @@ export const UI_COPY = Object.freeze({
   "The live field view is unavailable. Screen controls and save remain available.": "目前無法顯示場地，仍可使用畫面控制與儲存功能。"
 });
 
-export function uiText(value) {
+/**
+ * Display text for `value` in the current language.
+ *
+ * `value` is either one of the English design keys above or a zh-Hant source
+ * string (the language every product string is written in). A string may
+ * carry `{name}` placeholders, filled from `params`; a numeric param is
+ * formatted for the language. English comes from uiText.en.js. A string with
+ * no English yet falls back to its zh-Hant source -- never to undefined and
+ * never to a key -- and is recorded for the coverage report.
+ */
+export function uiText(value, params) {
   if (typeof value !== "string") return value;
-  if (Object.hasOwn(UI_COPY, value)) return UI_COPY[value];
+  if (getLocale() === "en") return englishText(value, params);
+  if (Object.hasOwn(UI_COPY, value)) return fillTemplate(UI_COPY[value], params);
   for (const [pattern, format] of PATTERNS) {
     const match = value.match(pattern);
     if (match) return format(...match.slice(1));
   }
-  return value;
+  return fillTemplate(value, params);
+}
+
+const HAN = /[㐀-鿿豈-﫿]/;
+const missing = new Set();
+
+function englishText(value, params) {
+  if (Object.hasOwn(UI_COPY, value)) {
+    // An English design key: its English display, else the key itself.
+    return fillTemplate(select(UI_COPY_EN[value] ?? value, params), params);
+  }
+  // A word with two meanings (「關閉」 Close / Off) is told apart by an
+  // optional params.context, looked up as "context|source" first.
+  const contextual = params?.context ? `${params.context}|${value}` : null;
+  if (contextual && Object.hasOwn(TEXT_EN, contextual)) return fillTemplate(select(TEXT_EN[contextual], params), params);
+  if (Object.hasOwn(TEXT_EN, value)) return fillTemplate(select(TEXT_EN[value], params), params);
+  for (const [pattern, format] of PATTERNS_EN) {
+    const match = value.match(pattern);
+    if (match) return format(...match.slice(1));
+  }
+  if (HAN.test(value) && !UNTRANSLATED_PROPER_NOUNS.has(value)) missing.add(value);
+  return fillTemplate(value, params);
+}
+
+/** An English entry may be `{ one, other }`; `params.count` (or `n`) picks. */
+function select(entry, params) {
+  if (typeof entry === "string") return entry;
+  const count = params?.count ?? params?.n;
+  return entry[pluralCategory(count)] ?? entry.other ?? Object.values(entry)[0];
+}
+
+/** Replace `{name}` with params.name; numbers are formatted for the language. */
+export function fillTemplate(template, params) {
+  if (!params || typeof template !== "string" || !template.includes("{")) return template;
+  return template.replace(/\{([A-Za-z0-9_]+)\}/g, (whole, name) => {
+    if (!Object.hasOwn(params, name)) return whole;
+    const value = params[name];
+    if (value === null || value === undefined) return "";
+    return typeof value === "number" ? String(formatNumber(value)) : String(value);
+  });
+}
+
+/**
+ * The text before and after one placeholder of a template, in the current
+ * language: templateParts("第 {n} 日") is ["第", "日"] in zh-Hant and
+ * ["Day", ""] in English. For layouts that style the value on its own.
+ */
+export function templateParts(template, name = "n") {
+  const marker = "\u0000";
+  const text = uiText(template, { [name]: marker });
+  const at = text.indexOf(marker);
+  if (at < 0) return [text.trim(), ""];
+  return [text.slice(0, at).trim(), text.slice(at + marker.length).trim()];
+}
+
+/** zh-Hant strings shown in English this session without an English entry. */
+export function listMissingTranslations() {
+  return [...missing].sort();
+}
+
+// ---- Relabelling long-lived chrome after a language switch -------------------
+//
+// Screens are rebuilt when they mount, so they pick up the language by
+// themselves. The chrome that outlives screens (status bar, toolbar, the Home
+// view, the title) records which key produced each label, and retranslate()
+// re-applies them in place: the page, its selection and its scroll stay put.
+
+const I18N = Symbol.for("championship.i18n");
+
+function remember(node, slot, key, params) {
+  if (!node) return;
+  (node[I18N] ??= {})[slot] = { key, params: params ?? null };
+}
+
+/** Set a node's text from a key and remember it for retranslate(). */
+export function setText(node, key, params) {
+  if (!node) return node;
+  node.textContent = uiText(key, params);
+  remember(node, "textContent", key, params);
+  return node;
+}
+
+/** Set an attribute (aria-label, title, placeholder) from a key and remember it. */
+export function setLabel(node, attribute, key, params) {
+  if (!node) return node;
+  node.setAttribute(attribute, uiText(key, params));
+  remember(node, attribute, key, params);
+  return node;
+}
+
+/** Re-apply every remembered label under `root` in the current language. */
+export function retranslate(root) {
+  if (!root?.querySelectorAll) return 0;
+  let count = 0;
+  for (const node of [root, ...root.querySelectorAll("*")]) {
+    const labels = node[I18N];
+    if (!labels) continue;
+    for (const [slot, { key, params }] of Object.entries(labels)) {
+      const text = uiText(key, params);
+      if (slot === "textContent") {
+        // A labelled node that later gained child elements keeps them: only
+        // its own first text run is replaced.
+        if (node.childElementCount === 0) node.textContent = text;
+        else {
+          const run = [...node.childNodes].find((child) => child.nodeType === 3);
+          if (run) run.data = text;
+        }
+      } else node.setAttribute(slot, text);
+      count += 1;
+    }
+  }
+  return count;
 }
 
 const PATTERNS = [

@@ -11,6 +11,7 @@ import {
   loadLicensedVfxRuntimeManifest
 } from "../vfx/licensedVfxRuntimeBundle.js";
 import { BATTLE_IMPACT_FAMILIES } from '../../battle/battleImpactEffects.js';
+import { currentQuality, flashScale } from '../presentationPreferences.js';
 
 const CAMERA_POLICY = "PRODUCT_AUTHORED_PREVIEW_FRAMING";
 
@@ -52,7 +53,8 @@ export async function mountBattleVfxThreeOverlay({
   const resolvedId = runtime.resolveSystemId(live ? 'hypereffect' : systemId);
   if (!resolvedId) fail(`UNKNOWN_SYSTEM:${systemId}`);
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+  // Antialiasing follows the quality tier when the overlay mounts (next battle).
+  const renderer = new THREE.WebGLRenderer({ antialias: currentQuality().threeAntialias, alpha: true, powerPreference: "high-performance" });
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.setClearColor(0x000000, 0);
   renderer.domElement.className = "cm-vs5-vfx-overlay";
@@ -163,8 +165,9 @@ export async function mountBattleVfxThreeOverlay({
     } else instance.update(ticker?.deltaMS ?? 0);
     // Original one-frame hit flash, adapted to the unified phone battlefield.
     // Reduced motion suppresses presentation flashing without changing hits.
+    // The flash-intensity preference makes it a translucent white instead.
     if(live&&source.getView().nativeLifecycle?.flash?.active&&!getFieldPlacement()?.reducedMotion){
-      renderer.setClearColor(0xffffff,1);renderer.clear();
+      renderer.setClearColor(0xffffff,flashScale());renderer.clear();
     }else{renderer.setClearColor(0x000000,0);renderer.render(scene, camera);}
   }
 

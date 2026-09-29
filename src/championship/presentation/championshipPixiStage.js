@@ -20,6 +20,12 @@ function clamp(value, minimum, maximum) {
   return Math.max(minimum, Math.min(maximum, value));
 }
 
+/** Renderer resolution: the device pixel ratio, held between 1 and the cap. */
+export function resolutionFor(cap = MAX_DEVICE_RESOLUTION, devicePixelRatio = globalThis.devicePixelRatio) {
+  const limit = Number.isFinite(cap) && cap >= 1 ? cap : MAX_DEVICE_RESOLUTION;
+  return clamp(Number(devicePixelRatio) || 1, 1, limit);
+}
+
 function assertHost(canvasHost) {
   if (!canvasHost || typeof canvasHost.appendChild !== "function" || typeof canvasHost.getBoundingClientRect !== "function") {
     throw new TypeError("The Championship Pixi stage requires a canvas host element");
@@ -33,7 +39,7 @@ function assertHost(canvasHost) {
  * Call this once per page. `main.js` holds the single instance and hands it to
  * whichever field scene is currently mounted.
  */
-export async function createChampionshipPixiStage({ PIXI, canvasHost }) {
+export async function createChampionshipPixiStage({ PIXI, canvasHost, resolutionCap = MAX_DEVICE_RESOLUTION, antialias = true }) {
   const required = ["Application", "Assets", "Container", "Graphics", "AnimatedSprite", "Sprite", "Spritesheet", "Rectangle"];
   if (!PIXI || required.some((key) => typeof PIXI[key] !== "function" && typeof PIXI[key] !== "object")) {
     throw new TypeError("The Championship Pixi stage requires the PixiJS v8 presentation API");
@@ -50,9 +56,12 @@ export async function createChampionshipPixiStage({ PIXI, canvasHost }) {
     width: Math.max(1, Math.round(rect.width)),
     height: Math.max(1, Math.round(rect.height)),
     backgroundAlpha: 0,
-    antialias: true,
+    // The quality preference (2026-09-29) supplies both. Antialiasing is fixed
+    // for the life of the Application, so a change to it applies next launch;
+    // the resolution cap can change at any time (setResolutionCap below).
+    antialias: antialias !== false,
     autoDensity: true,
-    resolution: clamp(Number(globalThis.devicePixelRatio) || 1, 1, MAX_DEVICE_RESOLUTION),
+    resolution: resolutionFor(resolutionCap),
     autoStart: true,
     sharedTicker: false,
     powerPreference: "high-performance",
@@ -68,6 +77,7 @@ export async function createChampionshipPixiStage({ PIXI, canvasHost }) {
 
   let destroyed = false;
   let contextLost = false;
+  let resolutionCapNow = resolutionCap;
   let resumeAfterRestore = false;
   const resizeListeners = new Set();
   const contextLostListeners = new Set();
@@ -148,6 +158,28 @@ export async function createChampionshipPixiStage({ PIXI, canvasHost }) {
       return this;
     },
 
+    /**
+     * Change the renderer resolution cap (the quality tier). The canvas keeps
+     * its CSS size; only how many device pixels back it changes. Pixel art
+     * stays sharp because .cm-field-canvas is drawn with image-rendering:
+     * pixelated and every texture samples nearest. Scenes get the usual
+     * resize signal, so anything that measures the screen re-measures.
+     */
+    setResolutionCap(cap) {
+      resolutionCapNow = cap;
+      if (destroyed || contextLost) return app.renderer.resolution;
+      const next = resolutionFor(cap);
+      if (next === app.renderer.resolution) return next;
+      const bounds = size();
+      app.renderer.resize(Math.max(1, Math.round(bounds.width)), Math.max(1, Math.round(bounds.height)), next);
+      applySize();
+      return app.renderer.resolution;
+    },
+
+    get resolution() {
+      return app.renderer.resolution;
+    },
+
     /** A scene subscribes for the one resize signal instead of observing itself. */
     onResize(listener) {
       resizeListeners.add(listener);
@@ -191,6 +223,9 @@ export async function createChampionshipPixiStage({ PIXI, canvasHost }) {
         threeUsed: false,
         sceneCount: app.stage.children.length,
         contextLost,
+        resolution: app.renderer.resolution,
+        resolutionCap: resolutionCapNow,
+        antialias: antialias !== false,
         viewport: Object.freeze({ width: app.screen.width, height: app.screen.height })
       });
     },

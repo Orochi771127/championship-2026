@@ -51,6 +51,7 @@
 // Graphics, and every label on this screen belongs to the DOM view.
 
 import contract from "../../../../docs/contracts/championship/battle-field-presentation.v1.json" with { type: "json" };
+import { prefersReducedMotion } from '../presentationPreferences.js';
 import {battleFocusViewport,drawBattleDigitalCurtain} from '../battleFocusViewport.js';
 import {createBattleEffectSprites} from '../battleEffectSprites.js';
 
@@ -171,7 +172,7 @@ function drawField(graphic, rect, frame, view, renderedSlots) {
  */
 export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt = null, characterRoster = null, effectArt = null, autoAdvance = true,
   onView = null,
-  reducedMotion = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false }) {
+  reducedMotion = prefersReducedMotion() }) {
   assertDependencies(stage, source);
   if (fieldArt !== null && (!fieldArt.displayObject || typeof fieldArt.update !== "function"
     || typeof fieldArt.dispose !== "function" || typeof fieldArt.getDiagnostics !== "function"

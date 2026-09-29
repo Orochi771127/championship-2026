@@ -103,7 +103,7 @@ export function createScheduleView({ root, bits = null, calendar = null, season 
   scrim.addEventListener("click", () => closeDetail());
   const detail = element("div", "cm-schedule-detail cm-sheet__panel");
   detail.setAttribute("role", "dialog");
-  detail.setAttribute("aria-label", "賽事詳細");
+  detail.setAttribute("aria-label", uiText("賽事詳細"));
   sheet.append(scrim, detail);
   let opener = null;
   function closeDetail() {
@@ -139,11 +139,11 @@ export function createScheduleView({ root, bits = null, calendar = null, season 
     // fee is never shown without what the player actually holds beside it.
     const fee = matchEntryFee(selected.recordIndex);
     const short = Number.isInteger(bits) && bits < fee;
-    const feeValue = element("dd", null, `${fee.toLocaleString("en-US")} 位元幣`);
+    const feeValue = element("dd", null, uiText("{bits} 位元幣", { bits: fee }));
     if (short) feeValue.dataset.short = "true";
     const rankNeeded = selected.unlockThreshold * 2;
     const rankShort = Number.isInteger(progress?.rank) && selected.unlockThreshold > (progress.rank >>> 1);
-    const rankValue = element("dd", null, rankNeeded > 0 ? `${rankNeeded} 以上` : "不限");
+    const rankValue = element("dd", null, rankNeeded > 0 ? uiText("{rank} 以上", { rank: rankNeeded }) : "不限");
     if (rankShort) rankValue.dataset.short = "true";
     facts.append(
       element("dt", null, "參賽階級"),
@@ -152,12 +152,12 @@ export function createScheduleView({ root, bits = null, calendar = null, season 
       feeValue,
       // Not the shared "HELD" copy: in the Shop that word means "at the limit".
       element("dt", null, "持有金額"),
-      element("dd", null, Number.isInteger(bits) ? `${bits.toLocaleString("en-US")} 位元幣` : "—"),
+      element("dd", null, Number.isInteger(bits) ? uiText("{bits} 位元幣", { bits }) : "—"),
       element("dt", null, "PRIZE"),
-      element("dd", null, `${matchPayout(selected.recordIndex).toLocaleString("en-US")} 位元幣`)
+      element("dd", null, uiText("{bits} 位元幣", { bits: matchPayout(selected.recordIndex) }))
     );
     if (short) facts.append(element("p", "cm-schedule-short", "持有金額不足以支付報名費。"));
-    if (rankShort) facts.append(element("p", "cm-schedule-short", `馴獸師階級達到 ${rankNeeded} 後才能登錄這場比賽。`));
+    if (rankShort) facts.append(element("p", "cm-schedule-short", uiText("馴獸師階級達到 {rank} 後才能登錄這場比賽。", { rank: rankNeeded })));
     detail.append(facts);
 
     const actions = element("div", "cm-sheet__actions");
@@ -223,7 +223,7 @@ export function createScheduleView({ root, bits = null, calendar = null, season 
     board.append(row);
   });
 
-  const footer = element("p", "cm-schedule-footer", `${TITLE_EVENT_SCAN_LIMIT} scheduled fixtures across four seasons.`);
+  const footer = element("p", "cm-schedule-footer", uiText("四季共 {count} 場預定賽事。", { count: TITLE_EVENT_SCAN_LIMIT }));
 
   // Leave on the left, the screen's one other action on the right.
   const actionBar = element("footer", "cm-screen-footer");
@@ -253,7 +253,8 @@ export function createScheduleView({ root, bits = null, calendar = null, season 
     championship.hidden=!progress||progress.championship.stage<1;
     const key=calendar?.year%4===3?'worldEntry':'entry';
     const entered=Boolean(progress?.championship[key]);
-    championship.textContent=`${entered?'取消登錄':'登錄'}${key==='worldEntry'?'世界冠軍賽':'冠軍賽'}`;
+    const world=key==='worldEntry';
+    championship.textContent=uiText(entered?(world?'取消登錄世界冠軍賽':'取消登錄冠軍賽'):(world?'登錄世界冠軍賽':'登錄冠軍賽'));
     // Registering is the action this footer offers; withdrawing is not a
     // primary action, so it drops the gold.
     championship.className=entered?'cm-screen-back cm-schedule-championship':'cm-screen-primary cm-schedule-championship';

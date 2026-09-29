@@ -1,4 +1,5 @@
 import { uiText } from "../../text/uiText.js";
+import { cappedPixelRatio, currentQuality } from "../presentationPreferences.js";
 // VS2-R1 -- bounded Three.js presentation for Gate Select.
 //
 // This scene is original-created Championship 2026 geometry. It carries no ROM
@@ -71,7 +72,9 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
     throw new Error("CHAMPIONSHIP_GATE_3D_INVALID_BINDING");
   }
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+  // The quality tier, read when the globe mounts: next Gate visit for a change.
+  const quality = currentQuality();
+  const renderer = new THREE.WebGLRenderer({ antialias: quality.threeAntialias, alpha: true, powerPreference: "high-performance" });
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.08;
@@ -205,7 +208,7 @@ export function mountGateSelectThreePresentation({ host, gates, onSelect }) {
     if (disposed) return;
     const width = Math.max(1, host.clientWidth);
     const height = Math.max(1, host.clientHeight);
-    renderer.setPixelRatio(Math.min(globalThis.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(cappedPixelRatio(quality.threePixelRatioCap));
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();

@@ -1,862 +1,1083 @@
-/* Championship 2026 -- standalone production styles.
-   Mobile-first 9:16. The habitat is the hero: creatures first, then the regions
-   they live in, then the current selection, then the tools. Everything else
-   stays out of the way. Direct manipulation only -- no navigation surface. */
+/* Championship 2026 — shared interface, 2026-09-29 redesign 「數位生態箱」.
+ *
+ * Tokens live in ui/tokens.css (loaded first). This sheet holds the base,
+ * the portrait frame, the shared HUD (status bar and tool dock), the shared
+ * components (buttons, dialogs, sheets, page scaffold) and the five record
+ * pages: roster, schedule, help, tamer and championship run. Each game area
+ * keeps its own sheet: intRh2Styles.css (Raising Home), vs2Styles.css (Gate,
+ * Hunt, Shop, Database, Cage), vs5Styles.css (Battle), opening.css (title),
+ * and ui/highlight.css holds the one important-highlight template.
+ * The earlier reskin layers (nativeUiSkin, daylightSkin, raisingHomeHud,
+ * huntMobile, facilityBattleMobile, trainingLabels, shopOriginalVideo) were
+ * folded in and are no longer linked; nothing here should need !important.
+ */
 
-:root {
-  --cm-ink: #eaf6ff;
-  --cm-muted: #9db9c9;
-  --cm-dim: #7f9aa9;
-  --cm-deep: #061620;
-  --cm-panel: rgba(6, 22, 32, 0.9);
-  --cm-line: rgba(79, 166, 204, 0.24);
-  --cm-accent: #7fd2f5;
-  --cm-water: 127, 210, 245;
-  --cm-rest: 150, 205, 158;
-  /* Shared chrome tokens. The original reuses one frame across screens
-     (desktop_top/desktop_under are byte-identical in five screen groups, and
-     it ships common_bg_top/common_bg_bottom), so these five are defined once
-     here and referenced by the vs2- and rh2- sets rather than restated.
-     Values are unchanged: both sets already held these exact bytes. */
-  --cm-gold: #d2ad5d;
-  --cm-gold-bright: #f0d58c;
-  --cm-cyan: #65b8c3;
-  --cm-display: #06141e;
-  --cm-ui-font: Bahnschrift, "Arial Narrow", "Roboto Condensed", Arial, sans-serif;
-  /* The bright mobile screens had drifted into three palettes and two type
-     families. Text, structure and signal are one set here; each screen keeps
-     its own scene background, as the original gives each mode its own scene. */
-  --cm-light-ink: #174e67;
-  --cm-light-muted: #47717b;
-  --cm-light-dim: #6a8890;
-  --cm-light-gold: #d5a232;
-  --cm-light-cyan: #117893;
-  --cm-light-font: Bahnschrift, "Segoe UI", "Microsoft JhengHei", sans-serif;
-  /* The dark sets had drifted one to three per channel from each other, which
-     no one can see and which only widens. --cm-line is the gold at .34; panel
-     is not shared because the two differ in transparency, not in colour. */
-  --cm-dark-ink: #edf4f5;
-  --cm-dark-muted: #94a8ae;
-  --cm-dark-shell: #2c3940;
-  --cm-dark-shell-deep: #111c22;
-  --cm-gold-line: rgba(210, 173, 93, 0.34);
-  /* The roster, schedule, help and tamer sheets are four copies of one design,
-     and each had its own literals, so the bright treatment reached none of
-     them. One set, and they move together. */
-  --cm-sheet-ground: #e9f4f1;
-  --cm-sheet-ink: var(--cm-light-ink);
-  --cm-sheet-accent: var(--cm-light-cyan);
-  --cm-sheet-muted: var(--cm-light-muted);
-  --cm-sheet-dim: var(--cm-light-dim);
-  --cm-sheet-card: #ffffffc7;
-  --cm-sheet-edge: #afcfc6;
-  --cm-sheet-selected: #fff2c9;
-  --cm-sheet-selected-edge: #c2a146;
-  --cm-sheet-today: #fff8de;
-  --cm-sheet-short: #9c2f22;
-  --cm-sheet-inset: #f4fbf8;
-  --cm-sheet-highlight: #9a6a16;
-  --cm-screen-top: 0px;
-  --cm-screen-bottom: 0px;
-  --cm-screen-height: calc(var(--cm-viewport-height, 100dvh) - var(--cm-screen-top) - var(--cm-screen-bottom));
-}
-
-* { box-sizing: border-box; }
+/* ======================================================================= *
+ * 1. Base
+ * ======================================================================= */
+*, *::before, *::after { box-sizing: border-box; }
 
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background: var(--cm-deep);
-  color: var(--cm-ink);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--c-text-1);
+  font-family: var(--font-ui);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-weight: var(--fw-regular);
   overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
 }
 
-body { overflow: hidden; }
-button { font: inherit; }
-
-/* ---------------- Title ---------------- */
-
-.cm-title {
-  position: fixed;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: max(24px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
-
-  z-index: 20;
+html { background: var(--c-void); }
+body {
+  overflow: hidden;
+  /* The night lab: a lamp over the middle of the screen, falling off to ink. */
+  background:
+    radial-gradient(90% 60% at 50% 48%, var(--c-stage-glow) 0%, transparent 70%),
+    linear-gradient(180deg, var(--c-backdrop-top) 0%, var(--c-ground) 45%, var(--c-backdrop-bottom) 100%);
 }
 
-.cm-title[hidden] { display: none; }
-.cm-title__panel { width: min(420px, 100%); display: flex; flex-direction: column; gap: 18px; text-align: center; }
-.cm-title__eyebrow { margin: 0; font-size: 0.72rem;  text-transform: uppercase;  }
-.cm-title__name { margin: 0; font-size: clamp(1.9rem, 8vw, 2.6rem); line-height: 1.1; }
-.cm-title__tagline { margin: 0; font-size: 0.92rem;  }
-.cm-title__actions { display: flex; flex-direction: column; gap: 12px; margin-top: 6px; }
-.cm-title__note { margin: 0; font-size: 0.78rem;  min-height: 1.2em; }
+button, input, select, textarea { font: inherit; color: inherit; letter-spacing: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: default; }
+img { max-width: 100%; }
 
-.cm-button {
-  appearance: none;
-
-  font-size: 1.02rem;
-
-  padding: 15px 18px;
-  min-height: 52px;
-  cursor: pointer;
+:where(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
 }
-
-.cm-button:disabled { opacity: 0.4; cursor: default; }
-.cm-button:not(:disabled):active { transform: translateY(1px); }
-.cm-button:focus-visible { outline: 3px solid var(--cm-accent); outline-offset: 2px; }
-.cm-button--primary { border-color: #4fa6cc;  }
-
-/* ---------------- Raising screen ---------------- */
+::selection { background: var(--c-selection); color: var(--c-text-1); }
+* { scrollbar-width: thin; scrollbar-color: var(--c-line-3) transparent; }
 
 #cm-root[hidden] { display: none; }
-/* Visibility is owned by the views. Responsive grid/flex skins must not
-   resurrect hidden panels and overlap the active chooser. */
-#cm-root [hidden] { display: none; }
+/* Visibility is owned by the views; a grid or flex rule must never bring a
+   hidden panel back. */
+#cm-root [hidden],
+.cm-status-bar [hidden],
+.cm-toolbar[hidden],
+.cm-toolbar [hidden] { display: none; }
 
-.cm-home {
-  position: fixed;
-  inset: 0;
-  display: grid;
-  /* The habitat takes everything the two thin bands below it do not need. */
-  grid-template-rows: minmax(0, 1fr) auto auto;
-  width: 100%;
-  max-width: min(100vw, calc(100dvh * 9 / 16));
-  margin: 0 auto;
-  background: var(--cm-deep);
-}
-
-.cm-habitat {
-  position: relative;
-  min-height: 0;
+.cm-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
   overflow: hidden;
-  background-color: #0a2233;
-  background-repeat: no-repeat;
-  background-position: center top;
-  background-size: cover;
-}
-
-.cm-topbar {
-  position: relative;
-  z-index: 8;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: max(10px, env(safe-area-inset-top)) 12px 10px;
-  background: linear-gradient(180deg, rgba(4, 16, 24, 0.8) 0%, rgba(4, 16, 24, 0) 100%);
-}
-
-.cm-place {
-  flex: 1;
-  margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(1rem, 4.2vw, 1.4rem);
-  font-weight: 500;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
-}
-
-.cm-clock {
-  margin: 0;
-  padding: 4px 10px;
-  border: 1px solid rgba(240, 208, 131, 0.32);
-  border-radius: 999px;
-  background: rgba(4, 16, 24, 0.5);
-  color: #f0d083;
-  font-variant-numeric: tabular-nums;
-  font-weight: 700;
-  font-size: 0.8rem;
-}
-
-/* Save is system UI, not a creature tool, so it lives up here on its own. */
-.cm-system {
-  padding: 6px 12px;
-  min-height: 34px;
-  border: 1px solid rgba(157, 185, 201, 0.35);
-  border-radius: 999px;
-  background: rgba(4, 16, 24, 0.55);
-  color: var(--cm-muted);
-  font-size: 0.74rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-}
-
-.cm-system:active { transform: translateY(1px); }
-.cm-system:focus-visible { outline: 3px solid var(--cm-accent); outline-offset: 2px; }
-
-/* ---------------- Habitat regions ---------------- */
-
-/* Regions are part of the environment, not boxes drawn on top of it. At rest
-   they are a soft tint that separates water from resting ground; only a real
-   drag makes them outline themselves. */
-.cm-region {
-  position: absolute;
-  z-index: 1;
-  display: flex;
-  align-items: flex-start;
-  padding: 7px 10px;
-  border: 1px solid transparent;
-  border-radius: 26px;
-  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
-}
-
-.cm-region[data-identity="water"] {
-  background:
-    radial-gradient(120% 80% at 50% 100%, rgba(var(--cm-water), 0.20) 0%, rgba(var(--cm-water), 0) 70%),
-    linear-gradient(180deg, rgba(var(--cm-water), 0.05) 0%, rgba(var(--cm-water), 0.13) 100%);
-}
-
-.cm-region[data-identity="rest"] {
-  background:
-    radial-gradient(120% 80% at 50% 100%, rgba(var(--cm-rest), 0.18) 0%, rgba(var(--cm-rest), 0) 70%),
-    linear-gradient(180deg, rgba(var(--cm-rest), 0.04) 0%, rgba(var(--cm-rest), 0.12) 100%);
-}
-
-.cm-region__label {
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(234, 246, 255, 0.42);
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
-  transition: color 160ms ease;
-}
-
-/* Drag state: the regions speak up, and the destination speaks loudest. */
-.cm-home.is-relocating .cm-region { border-color: rgba(234, 246, 255, 0.22); }
-.cm-home.is-relocating .cm-region__label { color: rgba(234, 246, 255, 0.78); }
-.cm-home.is-relocating .cm-region.is-origin { border-style: dashed; opacity: 0.75; }
-
-.cm-region.is-drop-target {
-  border-color: var(--cm-accent);
-  box-shadow: inset 0 0 0 2px rgba(127, 210, 245, 0.45), 0 0 30px rgba(127, 210, 245, 0.3);
-  background:
-    radial-gradient(120% 80% at 50% 100%, rgba(var(--cm-water), 0.3) 0%, rgba(var(--cm-water), 0) 72%),
-    linear-gradient(180deg, rgba(var(--cm-water), 0.12) 0%, rgba(var(--cm-water), 0.26) 100%);
-}
-
-.cm-region.is-drop-target .cm-region__label { color: var(--cm-accent); }
-
-.cm-stage { position: absolute; inset: 0; z-index: 3; }
-
-/* ---------------- Creatures ---------------- */
-
-.cm-creature {
-  position: absolute;
-  transform: translate(-50%, -100%);
-  display: grid;
-  justify-items: center;
-  gap: 2px;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: inherit;
-  cursor: grab;
-  /* Required, or a drag scrolls the page instead of moving the creature. */
-  touch-action: none;
-  -webkit-tap-highlight-color: transparent;
-  transition: left 1100ms ease-in-out, top 1100ms ease-in-out;
-}
-
-.cm-creature.is-dragging {
-  cursor: grabbing;
-  z-index: 40;
-  transition: none;
-  filter: drop-shadow(0 14px 20px rgba(0, 0, 0, 0.6));
-}
-
-.cm-creature__sprite {
-  display: block;
-  width: 116px;
-  height: 116px;
-  background-repeat: no-repeat;
-  background-position: 0% 0%;
-  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.45));
-  pointer-events: none;
-}
-
-.cm-creature__sprite.is-still { background-size: contain; background-position: center; }
-
-/* Nameplates would otherwise stack up as habitat clutter, so only the creature
-   the player is actually working with is labelled. */
-.cm-creature__name {
-  padding: 2px 9px;
-  border-radius: 999px;
-  background: rgba(127, 210, 245, 0.92);
-  color: #04141d;
-  font-size: 0.66rem;
-  font-weight: 700;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
   white-space: nowrap;
-  opacity: 0;
-  transform: translateY(-3px);
-  transition: opacity 140ms ease, transform 140ms ease;
-  pointer-events: none;
 }
 
-.cm-creature.is-selected .cm-creature__name,
-.cm-creature.is-dragging .cm-creature__name { opacity: 1; transform: translateY(0); }
+/* The shared Pixi canvas keeps crisp pixels wherever it is mounted. */
+.cm-field-canvas { display: block; image-rendering: pixelated; }
 
-.cm-creature.is-selected::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 20px;
-  width: 84px;
-  height: 26px;
-  transform: translateX(-50%);
-  border: 2px solid var(--cm-accent);
-  border-radius: 50%;
-  box-shadow: 0 0 18px rgba(127, 210, 245, 0.55), inset 0 0 12px rgba(127, 210, 245, 0.28);
-  animation: cm-ring 2s ease-in-out infinite;
+/* ======================================================================= *
+ * 2. Portrait frame (Owner 2026-09-13): a sideways screen shows the portrait
+ *    game centred and scaled, one containing block for every fixed layer.
+ * ======================================================================= */
+body[data-portrait-frame] {
+  position: fixed;
+  left: var(--cm-frame-center-x);
+  top: var(--cm-frame-center-y);
+  width: 390px;
+  height: var(--cm-viewport-height);
+  transform: translate(-50%, -50%) scale(var(--cm-frame-scale));
+  transform-origin: center;
+  overflow: hidden;
+  border-radius: 18px;
+  box-shadow: 0 0 0 1px var(--c-line-1), var(--shadow-frame);
 }
-
-.cm-creature.is-reacting .cm-creature__sprite { filter: drop-shadow(0 0 16px rgba(150, 205, 158, 0.75)); }
-.cm-creature:focus-visible { outline: 3px solid var(--cm-accent); outline-offset: 4px; border-radius: 10px; }
-
-@keyframes cm-ring {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+html:has(body[data-portrait-frame]) {
+  background:
+    radial-gradient(60% 80% at 50% 50%, var(--c-ground-raised) 0%, var(--c-void) 70%),
+    var(--c-void);
 }
+body[data-portrait-frame] .cm-status-bar,
+body[data-portrait-frame] .cm-toolbar { left: 0; right: 0; width: auto; transform: none; }
 
-/* ---------------- Transient feedback ---------------- */
-
-/* A message appears, says its piece, and leaves. It never becomes a permanent
-   band eating habitat. */
-.cm-toast {
-  position: absolute;
-  left: 50%;
-  bottom: 12px;
-  z-index: 9;
-  max-width: calc(100% - 28px);
-  margin: 0;
-  padding: 8px 14px;
-  transform: translate(-50%, 6px);
-  border: 1px solid var(--cm-line);
-  border-radius: 999px;
-  background: rgba(4, 16, 24, 0.9);
-  color: var(--cm-ink);
-  font-size: 0.76rem;
-  line-height: 1.3;
-  text-align: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 200ms ease, transform 200ms ease;
+/* Screens sit between the shared bars; each bar reports its own height. */
+:root {
+  --cm-screen-top: 0px;
+  --cm-screen-bottom: 0px;
+  --cm-screen-height: calc(var(--cm-viewport-height, 100dvh) - var(--cm-screen-top) - var(--cm-screen-bottom));
 }
-
-.cm-toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
-
-/* ---------------- Selected creature ---------------- */
-
-.cm-panel {
-  padding: 9px 14px 8px;
-  border-top: 1px solid var(--cm-line);
-  background: var(--cm-panel);
+body[data-status-bar="on"] {
+  --cm-screen-top: var(--cm-status-bar-height, var(--hud-height));
+  --cm-screen-height: calc(var(--cm-viewport-height, 100dvh) - var(--cm-screen-top) - var(--cm-screen-bottom));
 }
-
-.cm-panel__name { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 1.12rem; font-weight: 500; }
-.cm-panel__where { margin: 1px 0 0; font-size: 0.74rem; color: var(--cm-muted); }
-
-/* ---------------- Bottom tool bar ---------------- */
-
-.cm-tools {
-  display: flex;
-  gap: 8px;
-  padding: 8px 14px calc(8px + env(safe-area-inset-bottom));
-  border-top: 1px solid var(--cm-line);
-  background: rgba(4, 16, 24, 0.96);
+body[data-status-bar="on"] #cm-root { top: var(--cm-screen-top); }
+body[data-toolbar="on"] {
+  --cm-screen-bottom: var(--cm-toolbar-height, var(--dock-height));
+  --cm-screen-height: calc(var(--cm-viewport-height, 100dvh) - var(--cm-screen-top) - var(--cm-screen-bottom));
 }
+body[data-toolbar="on"] #cm-root { bottom: var(--cm-screen-bottom); }
 
-.cm-tool {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1px;
-  min-height: 54px;
-  padding: 7px 10px;
-  border: 1px solid rgba(79, 166, 204, 0.3);
-  border-radius: 14px;
-  background: rgba(20, 67, 95, 0.4);
-  color: var(--cm-muted);
-  cursor: pointer;
-  transition: border-color 140ms ease, background 140ms ease, color 140ms ease;
-}
-
-.cm-tool__glyph { font-size: 1.24rem; line-height: 1.1; }
-.cm-tool__label { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-
-.cm-tool.is-active {
-  border-color: var(--cm-accent);
-  background: linear-gradient(180deg, #1d6d95 0%, #12506f 100%);
-  color: var(--cm-ink);
-  box-shadow: inset 0 0 0 1px rgba(127, 210, 245, 0.45);
-}
-
-.cm-tool:not(.is-active):active { transform: translateY(1px); }
-.cm-tool:focus-visible { outline: 3px solid var(--cm-accent); outline-offset: 2px; }
-
-/* ---------------- Size adaptation ---------------- */
-
-@media (max-width: 360px) {
-  .cm-creature__sprite { width: 100px; height: 100px; }
-  .cm-place { font-size: 0.95rem; }
-}
-
-@media (max-height: 480px) {
-  .cm-home { max-width: 100vw; }
-  .cm-panel { padding: 6px 14px 5px; }
-  .cm-tools { padding-top: 6px; padding-bottom: calc(6px + env(safe-area-inset-bottom)); }
-  .cm-tool { min-height: 44px; padding: 4px 8px; }
-  .cm-tool__glyph { font-size: 1.05rem; }
-  .cm-creature__sprite { width: 88px; height: 88px; }
-  .cm-toast { bottom: 8px; }
-}
-
-@media (min-width: 700px) {
-  body { background: #04121b; }
-  .cm-home { border-left: 1px solid var(--cm-line); border-right: 1px solid var(--cm-line); }
-  .cm-creature__sprite { width: 138px; height: 138px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cm-creature { transition: none; }
-  .cm-creature.is-selected::before { animation: none; opacity: 1; }
-  .cm-region, .cm-toast, .cm-tool, .cm-creature__name { transition: none; }
-}
-
-/* --- Persistent status bar: the original's ui/info_bar.nxr ---------------- */
-/* Four fields on one row -- SEASON | DAY N | MODE | HH:MM -- matching the nine
-   nodes info_bar.nxr carries. It sits above every screen because the original's
-   bar is a Shared scene no mode overlay owns. */
-/* The screen shells are `position: fixed; inset: 0` full-viewport layers, so a
-   bar in normal flow cannot push them down. The bar is fixed too, and the rule
-   below offsets whichever shell is mounted. Higher specificity than the shells'
-   own `inset: 0`, and scoped to the attribute so it does nothing when the bar
-   is absent -- for instance on the title screen. */
+/* ======================================================================= *
+ * 3. Top HUD — the original's info_bar fields plus bits and the save state
+ * ======================================================================= */
 .cm-status-bar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 40;
+  z-index: var(--z-hud);
   display: flex;
+  /* A larger reading size or a longer language may need a second row: the
+     readouts wrap instead of running off the edge, and every screen below
+     follows the bar's measured height (--cm-status-bar-height). */
+  flex-wrap: wrap;
   align-items: center;
-  gap: clamp(0.5rem, 2.5vw, 1.25rem);
-  padding: 0.4rem clamp(0.6rem, 3vw, 1.1rem);
-  background: linear-gradient(180deg, #123449 0%, #0c2436 100%);
-  border-bottom: 1px solid rgba(126, 197, 224, 0.28);
-  font-family: "Segoe UI", system-ui, sans-serif;
-  font-size: clamp(0.68rem, 2.4vw, 0.8rem);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #cfe8f4;
+  gap: 6px var(--sp-2);
+  min-height: calc(var(--hud-height) + var(--safe-top));
+  padding: calc(var(--safe-top) + 6px) max(var(--sp-3), var(--safe-right)) 6px max(var(--sp-3), var(--safe-left));
+  background: var(--c-surface-bar);
+  border-bottom: 1px solid var(--c-line-1);
+  -webkit-backdrop-filter: var(--backdrop-glass);
+  backdrop-filter: var(--backdrop-glass);
+  color: var(--c-text-1);
+  font-size: var(--fs-body-sm);
+  line-height: 1;
+  font-weight: var(--fw-strong);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+/* Over the habitat the bar is part of the scene: no plate, a soft fade. */
+.cm-status-bar[data-screen="RAISING_HOME"] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--c-ground) 86%, transparent) 0%, color-mix(in srgb, var(--c-ground) 50%, transparent) 70%, transparent 100%);
+  border-bottom-color: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 .cm-status-bar__season {
-  font-weight: 700;
-  color: #ffd98a;
-  min-width: 4.5em;
-}
-.cm-status-bar__season[data-season="spring"] { color: #a8e6a1; }
-.cm-status-bar__season[data-season="summer"] { color: #ffd98a; }
-.cm-status-bar__season[data-season="autumn"] { color: #f0a875; }
-.cm-status-bar__season[data-season="winter"] { color: #a7d8f0; }
-
-.cm-status-bar__day {
   display: inline-flex;
-  align-items: baseline;
-  gap: 0.35em;
-  color: #9ec6da;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 10px 0 8px;
+  border-radius: var(--r-tag);
+  background: var(--c-surface-2);
+  color: var(--c-text-1);
+  font-size: var(--fs-label);
 }
-.cm-status-bar__day-number {
-  font-weight: 700;
-  font-size: 1.15em;
-  /* Follow the bar. This was the one status-bar part recoloured per screen
-     instead of with its bar, so it stayed near-white on the bright Hunt and
-     Shop bars and vanished. Weight and size carry the emphasis. */
-  color: inherit;
+.cm-status-bar__season::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--season, var(--c-text-3));
 }
+.cm-status-bar__season[data-season="spring"] { --season: var(--c-season-spring); }
+.cm-status-bar__season[data-season="summer"] { --season: var(--c-season-summer); }
+.cm-status-bar__season[data-season="autumn"] { --season: var(--c-season-autumn); }
+.cm-status-bar__season[data-season="winter"] { --season: var(--c-season-winter); }
 
+.cm-status-bar__day { display: inline-flex; align-items: baseline; gap: 0.2em; color: var(--c-text-2); }
+.cm-status-bar__day-number { color: var(--c-text-1); font-size: var(--fs-body); }
+.cm-status-bar__time { color: var(--c-text-1); font-size: var(--fs-body); letter-spacing: 0.02em; }
+
+/* Every screen now titles itself, so the bar's mode name is for assistive
+   technology only. */
 .cm-status-bar__mode {
-  flex: 1 1 auto;
-  text-align: center;
-  font-weight: 700;
-  color: #ffe9b0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
 }
 
-.cm-status-bar__time {
-  font-weight: 700;
-  font-size: 1.15em;
-  color: #eaf6fc;
-  letter-spacing: 0.05em;
+.cm-status-bar__extras { display: inline-flex; align-items: center; gap: var(--sp-2); margin-left: auto; min-width: 0; }
+/* Bits and today's matches belong to Home; the Shop and Battle carry their own. */
+.cm-status-bar:not([data-screen="RAISING_HOME"]) :is(.cm-status-bar__bits, .cm-status-bar__matches) { display: none; }
+
+.cm-status-bar__bits {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--c-gold-strong);
+  font-size: var(--fs-body);
 }
+.cm-status-bar__bits::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--c-coin-light) 0 22%, var(--c-gold) 45%, var(--c-coin-shade) 100%);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c-text-on-gold) 35%, transparent);
+}
+
+.cm-status-bar__matches {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--c-accent-line);
+  border-radius: var(--r-tag);
+  background: var(--c-accent-soft);
+  color: var(--c-accent-strong);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-strong);
+}
+.cm-status-bar__matches::before { content: ""; width: 7px; height: 7px; background: currentColor; transform: rotate(45deg); }
+/* A 44px touch area around a compact chip. */
+.cm-status-bar__matches::after { content: ""; position: absolute; inset: -8px -4px; }
+
+/* Save state: a compact mark with a 44px hit area. The mark says the state;
+   words appear only with news -- queued, just written, or failed. Tapping it
+   explains what "saved" means in this build (this device only). */
+.cm-status-bar__save {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 7px;
+  border: 1px solid transparent;
+  border-radius: var(--r-tag);
+  background: transparent;
+  color: var(--c-text-3);
+  font: var(--fw-strong) var(--fs-label)/1 var(--font-ui);
+  white-space: nowrap;
+  transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
+}
+.cm-status-bar__save::after { content: ""; position: absolute; inset: -8px -4px; }
+.cm-status-bar__save::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  background: currentColor;
+  -webkit-mask: var(--icon-check) center / contain no-repeat;
+  mask: var(--icon-check) center / contain no-repeat;
+}
+.cm-status-bar__save-text { display: none; }
+.cm-status-bar__save:is([data-state="SAVING"], [data-state="SAVE_FAILED"], [data-flash="true"]) .cm-status-bar__save-text { display: inline; }
+/* Queued: an autosave will write as soon as the screen allows. */
+.cm-status-bar__save[data-state="SAVING"] { color: var(--c-accent-strong); }
+.cm-status-bar__save[data-state="SAVING"]::before {
+  width: 10px;
+  height: 10px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  background: transparent;
+  -webkit-mask: none;
+  mask: none;
+  animation: cm-save-spin 0.9s linear infinite;
+}
+@keyframes cm-save-spin { to { transform: rotate(360deg); } }
+/* Just written: the words stay for a moment in the accent. */
+.cm-status-bar__save[data-flash="true"] { border-color: var(--c-accent-line); background: var(--c-accent-soft); color: var(--c-accent-strong); }
+.cm-status-bar__save[data-state="SAVE_FAILED"] { border-color: var(--c-danger-line); background: var(--c-danger-soft); color: var(--c-danger); }
+.cm-status-bar__save[data-state="SAVE_FAILED"]::before { -webkit-mask-image: var(--icon-alert); mask-image: var(--icon-alert); }
+@media (hover: hover) { .cm-status-bar__save:hover { background: var(--c-surface-2); color: var(--c-text-1); } }
+.cm-status-bar__save:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+/* Save news for assistive technology only. */
+.cm-status-bar__announce { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 .cm-status-bar__end-day {
-  flex: 0 0 auto;
-  border: 1px solid rgba(126, 197, 224, 0.45);
-  border-radius: 3px;
-  background: rgba(18, 52, 73, 0.9);
-  color: #cfe8f4;
-  font: inherit;
-  letter-spacing: 0.08em;
-  padding: 0.22em 0.6em;
-  cursor: pointer;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-tag);
+  background: var(--c-surface-2);
+  color: var(--c-text-1);
+  font-size: var(--fs-label);
 }
-.cm-status-bar__end-day:hover:not(:disabled) { background: rgba(30, 78, 104, 0.95); }
-.cm-status-bar__end-day:disabled { opacity: 0.35; cursor: default; }
-.cm-status-bar__end-day:focus-visible { outline: 2px solid #7ec5e0; outline-offset: 2px; }
+.cm-status-bar__end-day:disabled { opacity: 0.4; }
 
-body[data-status-bar="on"] {
-  --cm-screen-top: var(--cm-status-bar-height, 38px);
-  --cm-screen-height: calc(var(--cm-viewport-height, 100dvh) - var(--cm-screen-top) - var(--cm-screen-bottom));
-}
-
-body[data-status-bar="on"] #cm-root {
-  top: var(--cm-screen-top);
-  /* The shared bar already includes the top safe area. */
-  --rh2-safe-top: 10px;
-  --vs2-safe-top: 10px;
-}
-
-/* --- Contextual toolbar: the original's ui/toolbar.nxr -------------------- */
-/* Eight cells at the bottom of the touch surface, with the submenu opening
-   upward from the bar -- the original anchors it at submenu_origin (167,162),
-   above the bar plate at y=168. Shared like the status bar: no screen owns it. */
-/* An author `display` beats the hidden attribute's UA `display:none`, so the
-   bar has to opt out explicitly or it renders on screens that set hidden. */
-.cm-toolbar[hidden] { display: none; }
-.cm-toolbar__menu[hidden] { display: none; }
-
+/* ======================================================================= *
+ * 4. Tool dock — the original's ui/toolbar.nxr: six tools and two menus
+ * ======================================================================= */
 .cm-toolbar {
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 45;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  font-family: "Segoe UI", system-ui, sans-serif;
+  z-index: var(--z-hud);
 }
 
 .cm-toolbar__rail {
   display: grid;
   grid-template-columns: repeat(8, minmax(0, 1fr));
   gap: 2px;
-  padding: 4px clamp(4px, 1.5vw, 10px) calc(4px + env(safe-area-inset-bottom, 0px));
-  background: linear-gradient(180deg, #0d2534 0%, #071722 100%);
-  border-top: 1px solid rgba(126, 197, 224, 0.3);
+  padding: 6px max(6px, var(--safe-left)) calc(6px + var(--safe-bottom)) max(6px, var(--safe-right));
+  background: var(--c-surface-bar);
+  border-top: 1px solid var(--c-line-1);
+  -webkit-backdrop-filter: var(--backdrop-glass);
+  backdrop-filter: var(--backdrop-glass);
 }
 
 .cm-toolbar__cell {
-  min-width: 0;
-  min-height: 44px; /* touch target */
-  border: 1px solid rgba(126, 197, 224, 0.22);
-  border-radius: 3px;
-  background: rgba(18, 52, 73, 0.85);
-  color: #a9cfe0;
-  font: inherit;
-  font-size: clamp(0.52rem, 2vw, 0.64rem);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  cursor: pointer;
+  position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2px;
+  gap: 3px;
+  min-width: 0;
+  min-height: 60px;
+  padding: 4px 2px;
+  border: 1px solid transparent;
+  border-radius: var(--r-control);
+  background: transparent;
+  color: var(--c-text-2);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-strong);
+  line-height: 1.15;
+  transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
 }
-.cm-toolbar__cell:hover { background: rgba(30, 78, 104, 0.95); }
-.cm-toolbar__cell:focus-visible { outline: 2px solid #7ec5e0; outline-offset: 1px; }
-.cm-toolbar__cell[aria-pressed="true"] {
-  background: #2f7d63;
-  border-color: #8fe0bd;
-  color: #eafff5;
+.cm-toolbar__cell::before {
+  content: "";
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  background: center / contain no-repeat;
+  image-rendering: pixelated;
+  transition: transform var(--dur-fast) var(--ease-out);
 }
-.cm-toolbar__cell[aria-expanded="true"] {
-  background: #2a5f7d;
-  border-color: #9ad9f0;
-  color: #eaf6fc;
-}
-.cm-toolbar__cell-label { pointer-events: none; }
+.cm-toolbar__cell[data-icon="hand"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/hand-rest.png"); }
+.cm-toolbar__cell[data-icon="feed"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/feed-rest.png"); }
+.cm-toolbar__cell[data-icon="protein"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/protein-rest.png"); }
+.cm-toolbar__cell[data-icon="clean"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/clean-rest.png"); }
+.cm-toolbar__cell[data-icon="woundMedicine"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/woundMedicine-rest.png"); }
+.cm-toolbar__cell[data-icon="medicine"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/medicine-rest.png"); }
+.cm-toolbar__cell[data-icon="manage"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/manage-rest.png"); }
+.cm-toolbar__cell[data-icon="system"]::before { background-image: url("../../../assets/production/toolbar/licensed-runtime-v1/system-rest.png"); }
 
-/* The submenu opens upward, over the field, exactly as the original does. */
-.cm-toolbar__menu {
-  align-self: center;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  width: min(calc(100% - 16px), 320px);
-  max-height: max(0px, calc(var(--cm-screen-height) - 8px));
-  overflow-y: auto;
-  gap: 4px;
-  margin: 0 0 4px;
-  padding: 8px;
-  border: 1px solid rgba(154, 217, 240, 0.45);
-  border-radius: 4px;
-  background: rgba(9, 32, 46, 0.97);
-  box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.45);
+.cm-toolbar__cell-label { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Icon captions: the icon carries the meaning and the full name is the
+   button's label, so the caption keeps its size at larger reading sizes
+   and English letters sit a little tighter. */
+.cm-toolbar__cell-label { font-size: min(var(--fs-caption), 11px); }
+:root:lang(en) .cm-toolbar__cell { padding-inline: 0; }
+:root:lang(en) .cm-toolbar__cell-label { font-size: 10px; letter-spacing: -0.02em; }
+
+/* The two menus sit apart from the six tools. */
+.cm-toolbar__cell[data-menu-id="MANAGEMENT"] { margin-left: 4px; }
+.cm-toolbar__cell[data-menu-id="MANAGEMENT"]::after {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: 14px;
+  bottom: 14px;
+  width: 1px;
+  background: var(--c-line-2);
 }
+
+@media (hover: hover) {
+  .cm-toolbar__cell:hover:not(:disabled) { background: var(--c-surface-2); color: var(--c-text-1); }
+}
+.cm-toolbar__cell:active:not(:disabled)::before { transform: scale(0.92); }
+
+/* The chosen tool and the open menu: the one living colour. */
+.cm-toolbar__cell[aria-pressed="true"],
+.cm-toolbar__cell[aria-expanded="true"] {
+  border-color: var(--c-accent-line);
+  background: var(--c-accent-soft);
+  color: var(--c-accent-strong);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--c-accent) 18%, transparent);
+}
+.cm-toolbar__cell[aria-pressed="true"]::before { transform: translateY(-1px) scale(1.06); }
+
+.cm-toolbar__cell:disabled { opacity: 0.38; }
+
+/* Stock rides the icon's top-right corner. */
+.cm-toolbar__stock {
+  position: absolute;
+  top: 3px;
+  left: calc(50% + 8px);
+  min-width: 20px;
+  height: 17px;
+  padding: 0 5px;
+  border-radius: var(--r-tag);
+  background: var(--c-surface-3);
+  color: var(--c-text-1);
+  font-size: 10px;
+  line-height: 17px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+.cm-toolbar__cell[data-owned="0"] .cm-toolbar__stock { background: var(--c-danger-soft); color: var(--c-danger); }
+
+/* ---- Active tool: what it does, and how to put it down ------------------ */
+.cm-toolbar__tool-hint {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + var(--sp-2));
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  width: max-content;
+  max-width: calc(100% - 24px);
+  padding: 4px 4px 4px 14px;
+  transform: translateX(-50%);
+  border: 1px solid var(--c-accent-line);
+  border-radius: var(--r-card);
+  background: var(--c-surface-hud);
+  box-shadow: var(--shadow-float);
+  font-size: var(--fs-body-sm);
+  animation: cm-rise var(--dur-base) var(--ease-out);
+}
+.cm-toolbar__tool-name { color: var(--c-accent-strong); font-weight: var(--fw-heavy); white-space: nowrap; }
+.cm-toolbar__tool-text { min-width: 0; overflow: hidden; color: var(--c-text-2); text-overflow: ellipsis; white-space: nowrap; }
+.cm-toolbar__tool-done {
+  flex: 0 0 auto;
+  min-height: var(--target);
+  padding: 0 var(--sp-4);
+  border: 0;
+  border-radius: var(--r-control);
+  background: var(--c-surface-3);
+  color: var(--c-text-1);
+  font-weight: var(--fw-strong);
+}
+.cm-toolbar__menu:not([hidden]) ~ .cm-toolbar__tool-hint { display: none; }
+
+/* ---- Menus: a sheet above the dock, entries in groups ------------------- */
+.cm-toolbar__menu {
+  position: absolute;
+  left: max(var(--sp-3), var(--safe-left));
+  right: max(var(--sp-3), var(--safe-right));
+  bottom: calc(100% + var(--sp-2));
+  max-width: 440px;
+  margin: 0 auto;
+  display: grid;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-sheet);
+  background: var(--c-surface-1);
+  box-shadow: var(--shadow-lift);
+  animation: cm-rise var(--dur-base) var(--ease-out);
+}
+@keyframes cm-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes cm-fade { from { opacity: 0; } to { opacity: 1; } }
+
+.cm-toolbar__group { display: grid; gap: var(--sp-2); }
+.cm-toolbar__group-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0 2px;
+  color: var(--c-text-3);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-strong);
+  letter-spacing: 0.04em;
+}
+.cm-toolbar__group-title::before { content: ""; width: 9px; height: 9px; background: var(--motif-stair) no-repeat; }
+.cm-toolbar__group-entries { display: grid; gap: 6px; }
+.cm-toolbar__group[data-prominent="true"] .cm-toolbar__group-entries { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.cm-toolbar__group[data-separate="true"] { padding-top: var(--sp-3); border-top: 1px solid var(--c-line-1); }
 
 .cm-toolbar__entry {
-  min-height: 40px;
-  border: 1px solid rgba(126, 197, 224, 0.4);
-  border-radius: 3px;
-  background: linear-gradient(180deg, #1d5f86 0%, #14415e 100%);
-  color: #eaf6fc;
-  font: inherit;
-  font-size: clamp(0.66rem, 2.2vw, 0.8rem);
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  padding: 0 0.7em;
+  display: grid;
+  align-content: center;
+  gap: 2px;
+  min-height: 52px;
+  padding: 8px 12px;
+  border: 1px solid var(--c-line-1);
+  border-radius: var(--r-control);
+  background: var(--c-surface-2);
+  color: var(--c-text-1);
+  text-align: left;
+  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
 }
-.cm-toolbar__entry:hover:not(:disabled) { background: linear-gradient(180deg, #2a7ba8 0%, #1b5478 100%); }
-.cm-toolbar__entry:focus-visible { outline: 2px solid #7ec5e0; outline-offset: 2px; }
-.cm-toolbar__entry:disabled { opacity: 0.4; cursor: not-allowed; }
-/* Present in the original, not yet built here -- shown, never silently dropped. */
-.cm-toolbar__entry[data-state="NOT_IMPLEMENTED"]::after { content: " ·"; opacity: 0.7; }
+.cm-toolbar__entry-label { font-size: var(--fs-body); font-weight: var(--fw-strong); line-height: 1.25; }
+.cm-toolbar__entry-hint { color: var(--c-text-3); font-size: var(--fs-label); line-height: var(--lh-label); }
+@media (hover: hover) {
+  .cm-toolbar__entry:hover:not(:disabled) { border-color: var(--c-accent-line); background: var(--c-surface-3); }
+}
+.cm-toolbar__entry:active:not(:disabled) { background: var(--c-surface-3); }
+.cm-toolbar__entry:disabled { opacity: 0.45; }
+.cm-toolbar__entry[data-state="NOT_IMPLEMENTED"] .cm-toolbar__entry-hint::after { content: var(--label-not-open); }
+/* The three destinations of the loop read as tiles. */
+.cm-toolbar__group[data-prominent="true"] .cm-toolbar__entry {
+  min-height: 78px;
+  justify-items: center;
+  text-align: center;
+  border-color: var(--c-accent-line);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--c-accent) 12%, transparent), color-mix(in srgb, var(--c-accent) 4%, transparent));
+}
+.cm-toolbar__group[data-prominent="true"] .cm-toolbar__entry-label { font-size: var(--fs-title-2); }
+.cm-toolbar__group[data-separate="true"] .cm-toolbar__entry { background: transparent; }
 
-body[data-toolbar="on"] {
-  --cm-screen-bottom: var(--cm-toolbar-height, 56px);
-  --cm-screen-height: calc(var(--cm-viewport-height, 100dvh) - var(--cm-screen-top) - var(--cm-screen-bottom));
+/* A 360px phone: the bar keeps every readout by dropping words, never the
+   numbers; the dock's eight cells keep 44px each by losing their gaps. */
+@media (max-width: 379px) {
+  .cm-status-bar { gap: 6px; padding-inline: max(10px, var(--safe-left)) max(10px, var(--safe-right)); }
+  .cm-status-bar__extras { gap: 6px; }
+  .cm-status-bar__matches { padding: 0 8px; }
+  .cm-status-bar__matches-word { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .cm-status-bar__bits { gap: 4px; font-size: var(--fs-body-sm); }
+  .cm-status-bar__bits::before { width: 12px; height: 12px; }
+  .cm-toolbar__rail { gap: 0; padding-inline: max(4px, var(--safe-left)) max(4px, var(--safe-right)); }
+  .cm-toolbar__cell[data-menu-id="MANAGEMENT"] { margin-left: 0; }
+  .cm-toolbar__cell[data-menu-id="MANAGEMENT"]::after { left: 0; }
 }
 
-body[data-toolbar="on"] #cm-root {
-  bottom: var(--cm-screen-bottom);
-  /* The shared rail already includes the bottom safe area. */
-  --rh2-safe-bottom: 8px;
-  --vs2-safe-bottom: 8px;
+/* A wide screen has room for the icon beside its name. */
+@media (min-width: 600px) {
+  body:not([data-portrait-frame]) .cm-toolbar__rail { max-width: 760px; margin: 0 auto; border-inline: 1px solid var(--c-line-1); border-radius: var(--r-card) var(--r-card) 0 0; }
+  body:not([data-portrait-frame]) .cm-toolbar__cell { flex-direction: row; gap: 6px; font-size: var(--fs-label); }
+  body:not([data-portrait-frame]) .cm-toolbar__cell::before { width: 30px; height: 30px; }
+  body:not([data-portrait-frame]) .cm-toolbar__stock { left: auto; right: 4px; top: 2px; }
+  body:not([data-portrait-frame]) .cm-toolbar__menu { max-width: 520px; }
 }
 
-/* --- Digimon roster: ui/digimon_list_* ----------------------------------- */
-.cm-digimon-root { position: fixed; inset: 0; overflow: auto; background: var(--cm-sheet-ground);  }
-.cm-digimon-shell {
-  width: min(100%, 430px);
+/* ======================================================================= *
+ * 5. Components
+ * ======================================================================= */
+
+/* ---- Buttons --------------------------------------------------------------
+ * Primary: the one action a screen is for. Secondary: everything else that
+ * is pressed. Back: leave, always on the left. Danger: only in confirmations. */
+.cm-button,
+.cm-screen-back,
+.cm-screen-primary {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: var(--control);
+  padding: 0 var(--sp-5);
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-control);
+  background: var(--c-surface-2);
+  color: var(--c-text-1);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-strong);
+  line-height: 1.2;
+  text-align: center;
+  transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+.cm-button--primary,
+.cm-screen-primary {
+  border-color: transparent;
+  background: var(--c-accent);
+  color: var(--c-text-on-accent);
+}
+@media (hover: hover) {
+  .cm-button:hover:not(:disabled), .cm-screen-back:hover:not(:disabled) { border-color: var(--c-line-3); background: var(--c-surface-3); }
+  .cm-button--primary:hover:not(:disabled), .cm-screen-primary:hover:not(:disabled) { background: var(--c-accent-strong); }
+}
+:is(.cm-button, .cm-screen-back, .cm-screen-primary):active:not(:disabled) { transform: translateY(1px); }
+:is(.cm-button, .cm-screen-back, .cm-screen-primary):disabled {
+  border-color: var(--c-line-1);
+  background: var(--c-surface-1);
+  color: var(--c-text-disabled);
+}
+/* The drawn chevron marks the one way back: the first button of a page footer.
+   The same class also styles quiet buttons (關閉, 取消, a registration toggle)
+   that are not a way back, so they get no chevron. */
+.cm-screen-footer > .cm-screen-back:first-child::before { content: ""; flex: 0 0 auto; width: 8px; height: 14px; margin-right: 2px; background: currentColor; -webkit-mask: var(--icon-chevron-left) center / contain no-repeat; mask: var(--icon-chevron-left) center / contain no-repeat; }
+
+/* ---- Confirmation dialog (uiDialog.js) ---------------------------------- */
+dialog.cm-dialog {
+  width: min(380px, calc(100vw - 32px));
+  max-width: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--c-text-1);
+  overflow: visible;
+}
+dialog.cm-dialog::backdrop { background: var(--c-scrim); }
+dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
+@keyframes cm-pop { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: none; } }
+.cm-dialog__panel {
+  display: grid;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-sheet);
+  background: var(--c-surface-1);
+  box-shadow: var(--shadow-lift);
+}
+.cm-dialog__title { margin: 0; font-size: var(--fs-title-2); line-height: var(--lh-title-2); font-weight: var(--fw-heavy); }
+.cm-dialog__message { margin: 0; color: var(--c-text-2); font-size: var(--fs-body); line-height: var(--lh-body); white-space: pre-line; }
+.cm-dialog__actions { display: grid; gap: var(--sp-2); margin-top: var(--sp-2); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.cm-dialog__actions[data-count="1"] { grid-template-columns: minmax(0, 1fr); }
+.cm-dialog__actions[data-count="3"] { grid-template-columns: minmax(0, 1fr); }
+.cm-dialog__action {
+  min-height: var(--control);
+  padding: 0 var(--sp-3);
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-control);
+  background: var(--c-surface-2);
+  color: var(--c-text-1);
+  font-weight: var(--fw-strong);
+}
+.cm-dialog__action--primary { border-color: transparent; background: var(--c-accent); color: var(--c-text-on-accent); }
+.cm-dialog__action--danger { border-color: var(--c-danger-line); background: var(--c-danger-soft); color: var(--c-danger-text); }
+@media (hover: hover) {
+  .cm-dialog__action:hover { background: var(--c-surface-3); }
+  .cm-dialog__action--primary:hover { background: var(--c-accent-strong); }
+  .cm-dialog__action--danger:hover { background: color-mix(in srgb, var(--c-danger) 24%, transparent); }
+}
+
+/* ---- Sheet (item details on a list page) --------------------------------- */
+.cm-sheet { position: fixed; inset: 0; z-index: var(--z-sheet); display: grid; align-items: end; }
+.cm-sheet__scrim { position: absolute; inset: 0; border: 0; padding: 0; background: var(--c-scrim); animation: cm-fade var(--dur-base) var(--ease-out); }
+.cm-sheet__panel {
+  position: relative;
+  display: grid;
+  gap: var(--sp-3);
+  width: min(100%, 560px);
+  max-height: min(78vh, calc(var(--cm-screen-height, 100vh) + var(--cm-screen-bottom) - 24px));
   margin: 0 auto;
-  padding: 1rem 1rem 2rem;
+  padding: var(--sp-5) var(--sp-5) calc(var(--sp-5) + var(--safe-bottom));
+  overflow-y: auto;
+  border: 1px solid var(--c-line-2);
+  border-bottom: 0;
+  border-radius: var(--r-sheet) var(--r-sheet) 0 0;
+  background: var(--c-surface-1);
+  box-shadow: var(--shadow-lift);
+  /* A sheet answers a tap: the standard 200 ms, not the page-entry 320 ms. */
+  animation: cm-rise var(--dur-base) var(--ease-out);
+}
+.cm-sheet__panel::before {
+  content: "";
+  justify-self: center;
+  width: 40px;
+  height: 4px;
+  margin: -8px 0 4px;
+  border-radius: 2px;
+  background: var(--c-line-3);
+}
+.cm-sheet__actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: var(--sp-2); margin-top: var(--sp-2); }
+.cm-sheet__close { min-height: var(--control); }
+@media (min-width: 700px) {
+  body:not([data-portrait-frame]) .cm-sheet { align-items: center; }
+  body:not([data-portrait-frame]) .cm-sheet__panel { border-bottom: 1px solid var(--c-line-2); border-radius: var(--r-sheet); padding-bottom: var(--sp-5); }
+  body:not([data-portrait-frame]) .cm-sheet__panel::before { display: none; }
+}
+
+/* ======================================================================= *
+ * 6. Record pages: one scaffold for roster, schedule, help, tamer and the
+ *    championship run. Header (kicker + title + lede), body, footer with
+ *    Back on the left and the page's one action on the right.
+ * ======================================================================= */
+:is(.cm-digimon-root, .cm-schedule-root, .cm-help-root, .cm-tamer-root, .cm-championship-root) {
+  position: fixed;
+  inset: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-padding-bottom: 96px;
+}
+:is(.cm-digimon-shell, .cm-schedule-shell, .cm-help-shell, .cm-tamer-shell, .cm-championship-shell) {
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
-
+  gap: var(--sp-4);
+  width: min(100%, 560px);
+  min-height: 100%;
+  margin: 0 auto;
+  padding: var(--sp-5) max(var(--sp-4), var(--safe-left)) 0;
 }
-.cm-digimon-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em;  }
-.cm-digimon-title { margin: 0; font-size: 1.5rem;  }
-.cm-digimon-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+
+:is(.cm-digimon-kicker, .cm-schedule-kicker, .cm-help-kicker, .cm-tamer-kicker, .cm-championship-kicker) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--c-accent);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-strong);
+  letter-spacing: 0.08em;
+}
+:is(.cm-digimon-kicker, .cm-schedule-kicker, .cm-help-kicker, .cm-tamer-kicker, .cm-championship-kicker)::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  background: var(--motif-stair) no-repeat;
+}
+:is(.cm-digimon-title, .cm-schedule-title, .cm-help-title, .cm-tamer-title, .cm-championship-title) {
+  margin: -8px 0 0;
+  font-size: var(--fs-title-1);
+  line-height: var(--lh-title-1);
+  font-weight: var(--fw-heavy);
+}
+.cm-screen-lede { margin: -6px 0 0; color: var(--c-text-2); font-size: var(--fs-body-sm); line-height: var(--lh-body-sm); }
+
+/* The footer stays reachable at the bottom of the page. */
+.cm-screen-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin: auto calc(-1 * max(var(--sp-4), var(--safe-left))) 0;
+  padding: var(--sp-3) max(var(--sp-4), var(--safe-left)) calc(var(--sp-3) + var(--safe-bottom));
+  border-top: 1px solid var(--c-line-1);
+  background: var(--c-surface-bar);
+  -webkit-backdrop-filter: var(--backdrop-glass);
+  backdrop-filter: var(--backdrop-glass);
+}
+.cm-screen-footer > .cm-screen-back { flex: 0 1 auto; }
+.cm-screen-footer > .cm-screen-primary { flex: 1 1 auto; max-width: 260px; margin-left: auto; }
+
+/* Shared surfaces for a block of readouts. */
+:is(.cm-tamer-fields, .cm-digimon-detail, .cm-schedule-season, .cm-championship-board, .cm-championship-run) {
+  border: 1px solid var(--c-line-1);
+  border-radius: var(--r-card);
+  background: var(--c-surface-1);
+}
+
+/* ---- Roster ------------------------------------------------------------- */
+.cm-digimon-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cm-digimon-item { min-width: 0; }
 .cm-digimon-item__button {
-  width: 100%; min-height: 44px; text-align: left;
-
-    font: inherit;
-  padding: 0.5rem 0.7rem; cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 52px;
+  padding: 8px 12px 8px 14px;
+  border: 1px solid var(--c-line-1);
+  border-radius: var(--r-control);
+  background: var(--c-surface-1);
+  color: var(--c-text-1);
+  text-align: left;
 }
-.cm-digimon-item__button[aria-pressed="true"] {  border-color: var(--cm-sheet-selected-edge); }
-.cm-digimon-item__button:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
+.cm-digimon-item__name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: var(--fw-strong); }
+.cm-digimon-item__button[aria-pressed="true"] {
+  border-color: var(--c-accent-line);
+  background: var(--c-accent-soft);
+  box-shadow: var(--glow-accent);
+}
+.cm-digimon-item__button[aria-pressed="true"]::before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 9px;
+  height: 9px;
+  background: var(--motif-stair) no-repeat;
+}
+
 .cm-digimon-detail {
-  display: grid; grid-template-columns: auto 1fr; gap: 0.2rem 0.7rem;
-  margin: 0; padding: 0.7rem;
-   font-variant-numeric: tabular-nums;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 0;
+  margin: 0;
+  padding: var(--sp-2) var(--sp-4);
 }
-.cm-digimon-detail__label { font-size: 0.62rem;   }
-.cm-digimon-detail__value { margin: 0; font-weight: 700; }
-.cm-digimon-untraced { grid-column: 1 / -1; margin: 0.4rem 0 0; font-size: 0.66rem;  }
-.cm-digimon-controls { display: flex; gap: 4px; }
+.cm-digimon-detail__label,
+.cm-digimon-detail__value {
+  margin: 0;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--c-line-1);
+}
+.cm-digimon-detail__label { color: var(--c-text-3); font-size: var(--fs-body-sm); }
+.cm-digimon-detail__value { padding-left: var(--sp-4); color: var(--c-text-1); font-weight: var(--fw-strong); text-align: right; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.cm-digimon-detail > :nth-last-child(2):is(dt, dd),
+.cm-digimon-detail > :last-child:is(dt, dd) { border-bottom: 0; }
+.cm-digimon-empty { grid-column: 1 / -1; margin: 0; padding: var(--sp-4) 0; color: var(--c-text-2); }
+.cm-digimon-untraced { grid-column: 1 / -1; margin: var(--sp-2) 0; color: var(--c-text-3); font-size: var(--fs-label); }
+
+.cm-digimon-resistance { grid-column: 1 / -1; display: grid; gap: 6px; padding: 12px 0 8px; }
+.cm-digimon-resistance__title { color: var(--c-text-3); font-size: var(--fs-body-sm); }
+.cm-digimon-resistance__bar { display: flex; height: 10px; overflow: hidden; border-radius: 5px; background: var(--c-surface-3); gap: 2px; }
+.cm-digimon-resistance__segment { min-width: 2px; }
+.cm-digimon-resistance__segment--heat { background: var(--c-element-heat); }
+.cm-digimon-resistance__segment--cold { background: var(--c-element-cold); }
+.cm-digimon-resistance__segment--thunder { background: var(--c-element-thunder); }
+.cm-digimon-resistance__segment--light { background: var(--c-element-light); }
+.cm-digimon-resistance__segment--dark { background: var(--c-element-dark); }
+
+.cm-digimon-controls { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
 .cm-digimon-control {
-  flex: 1; min-height: 40px;
-    font: inherit; font-size: 0.62rem;
-  letter-spacing: 0.08em;  cursor: not-allowed;
+  min-height: var(--target);
+  padding: 0 var(--sp-4);
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-control);
+  background: var(--c-surface-2);
+  color: var(--c-text-1);
+  font-weight: var(--fw-strong);
 }
-.cm-digimon-empty {  font-size: 0.8rem; }
+.cm-digimon-control:disabled { border-color: var(--c-line-1); background: transparent; color: var(--c-text-disabled); }
+.cm-digimon-controls-note { margin: -4px 0 0; color: var(--c-text-3); font-size: var(--fs-label); }
 
-/* ---- Schedule board (ARM9 0x020CD004, scanned at 0x02089230) ------------- */
-.cm-schedule-root { position: fixed; inset: 0; overflow: auto; background: var(--cm-sheet-ground);  }
-.cm-schedule-shell {
-  width: min(100%, 430px);
-  margin: 0 auto;
-  padding: 1rem 1rem 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
-
+.cm-digimon-rename {
+  display: grid;
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  border: 1px solid var(--c-accent-line);
+  border-radius: var(--r-card);
+  background: var(--c-surface-1);
+  scroll-margin-bottom: 96px;
 }
-.cm-schedule-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em;  }
-.cm-schedule-title { margin: 0; font-size: 1.5rem;  }
-.cm-schedule-board { display: flex; flex-direction: column; gap: 0.7rem; }
-.cm-schedule-season { display: flex; flex-direction: column; gap: 0.3rem; }
+.cm-digimon-rename__label { color: var(--c-text-2); font-size: var(--fs-body-sm); }
+.cm-digimon-rename__input {
+  min-height: var(--control);
+  padding: 0 var(--sp-3);
+  border: 1px solid var(--c-line-3);
+  border-radius: var(--r-control);
+  background: var(--c-ground);
+  color: var(--c-text-1);
+  font-size: calc(16px * var(--text-scale));
+}
+.cm-digimon-rename__input:focus { border-color: var(--c-accent); outline: none; box-shadow: 0 0 0 3px var(--c-accent-soft); }
+.cm-digimon-rename__actions { display: flex; justify-content: flex-end; gap: var(--sp-2); }
+.cm-digimon-rename__actions button {
+  min-height: var(--target);
+  padding: 0 var(--sp-4);
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-control);
+  background: var(--c-surface-2);
+  color: var(--c-text-1);
+  font-weight: var(--fw-strong);
+}
+.cm-digimon-rename__actions button[type="submit"] { border-color: transparent; background: var(--c-accent); color: var(--c-text-on-accent); }
+.cm-digimon-rename__message { margin: 0; color: var(--c-warning); font-size: var(--fs-body-sm); }
+.cm-digimon-rename__message:empty { display: none; }
+
+/* ---- Schedule ------------------------------------------------------------ */
+.cm-schedule-board { display: grid; gap: var(--sp-3); }
+.cm-schedule-season { padding: var(--sp-3); }
 .cm-schedule-season__name {
-  margin: 0; font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--cm-sheet-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 var(--sp-2);
+  font-size: var(--fs-title-2);
+  font-weight: var(--fw-heavy);
 }
-/* Eight days, so four columns keeps every cell tappable at phone width. */
-.cm-schedule-days { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.cm-schedule-days { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
 .cm-schedule-day {
-  display: flex; flex-direction: column; gap: 3px; min-height: 62px;
-  padding: 0.35rem 0.3rem;
-
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 4px;
+  min-width: 0;
+  padding: 6px;
+  border-radius: var(--r-control);
+  background: var(--c-ground-raised);
 }
-.cm-schedule-day[data-today="true"] { border-color: var(--cm-sheet-selected-edge); background: var(--cm-sheet-today); }
-.cm-schedule-day__number {
-  margin: 0; font-size: 0.6rem;  font-variant-numeric: tabular-nums;
-}
-.cm-schedule-day__none { margin: 0; font-size: 0.7rem;  }
+.cm-schedule-day[data-today="true"] { box-shadow: inset 0 0 0 1px var(--c-accent-line); background: color-mix(in srgb, var(--c-accent) 7%, transparent); }
+.cm-schedule-day__number { margin: 0; color: var(--c-text-3); font-size: var(--fs-label); font-weight: var(--fw-strong); font-variant-numeric: tabular-nums; }
+.cm-schedule-day[data-today="true"] .cm-schedule-day__number { color: var(--c-accent); }
+.cm-schedule-day[data-today="true"] .cm-schedule-day__number::after { content: var(--label-today); }
+.cm-schedule-day__none { margin: 0; color: var(--c-text-disabled); font-size: var(--fs-label); }
 .cm-schedule-fixture {
-  width: 100%; min-height: 30px; text-align: left;
-
-  font: inherit; font-size: 0.62rem; line-height: 1.15;
-  padding: 0.25rem 0.3rem; cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-height: var(--target);
+  padding: 6px 8px;
+  border: 1px solid var(--c-line-1);
+  border-radius: var(--r-tag);
+  background: var(--c-surface-2);
+  color: var(--c-text-1);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-strong);
+  text-align: left;
 }
-.cm-schedule-fixture[aria-pressed="true"] {  border-color: var(--cm-sheet-selected-edge); }
-.cm-schedule-fixture:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 1px; }
-/* A gated fixture is still shown -- the marker says the table gates it, not that
-   this build has decided the player cannot enter. */
-.cm-schedule-fixture[data-gated]::after {
-  content: " ·" attr(data-gated); color: var(--cm-sheet-highlight); font-size: 0.58rem;
-}
-.cm-schedule-detail {
-  display: flex; flex-direction: column; gap: 0.4rem;
-  padding: 0.7rem;
-
-}
-.cm-schedule-detail__name { margin: 0; font-size: 1rem; }
-.cm-schedule-detail__when { margin: 0; font-size: 0.66rem; letter-spacing: 0.1em;  }
-.cm-schedule-detail__blurb {
-  margin: 0; font-size: 0.72rem; line-height: 1.5;  white-space: pre-line;
-}
+.cm-schedule-fixture__name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Status is carried by a mark as well as a colour. */
+.cm-schedule-fixture[data-won="true"]::before { content: "✓"; color: var(--c-success); font-size: 12px; }
+.cm-schedule-fixture[data-locked="true"] { color: var(--c-text-disabled); background: transparent; }
+.cm-schedule-fixture[data-locked="true"]::before { content: "🔒"; font-size: 10px; filter: grayscale(1); opacity: 0.7; }
+.cm-schedule-fixture[data-eligible-today="true"] { border-color: var(--c-accent-line); }
+.cm-schedule-fixture[data-eligible-today="true"]::after { content: var(--label-eligible); margin-left: auto; padding: 1px 5px; border-radius: 4px; background: var(--c-accent-soft); color: var(--c-accent-strong); font-size: 10px; }
+.cm-schedule-fixture[aria-pressed="true"] { border-color: var(--c-accent); background: var(--c-accent-soft); box-shadow: var(--glow-accent); }
+.cm-schedule-empty { margin: 0; color: var(--c-text-2); }
+.cm-schedule-footer { margin: 0; color: var(--c-text-3); font-size: var(--fs-label); line-height: var(--lh-label); text-align: center; }
+.cm-schedule-detail { gap: var(--sp-3); }
+.cm-schedule-detail__when { margin: 0; color: var(--c-accent); font-size: var(--fs-label); font-weight: var(--fw-strong); letter-spacing: 0.04em; }
+.cm-schedule-detail__name { margin: 0; font-size: var(--fs-title-1); line-height: var(--lh-title-1); font-weight: var(--fw-heavy); }
+.cm-schedule-detail__blurb { margin: 0; color: var(--c-text-2); }
 .cm-schedule-facts {
-  display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 0.7rem; margin: 0.2rem 0 0;
-  font-size: 0.66rem; font-variant-numeric: tabular-nums;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px var(--sp-4);
+  margin: 0;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-control);
+  background: var(--c-ground-raised);
 }
+.cm-schedule-facts dt { color: var(--c-text-3); font-size: var(--fs-body-sm); }
+.cm-schedule-facts dd { margin: 0; text-align: right; font-weight: var(--fw-strong); font-variant-numeric: tabular-nums; }
+.cm-schedule-short,
+.cm-schedule-facts dd[data-short="true"] { color: var(--c-warning); }
+.cm-schedule-register { width: 100%; }
 
-.cm-schedule-facts dd { margin: 0; font-weight: 700; }
-.cm-schedule-untraced { margin: 0.3rem 0 0; font-size: 0.62rem; line-height: 1.45;  }
-/* titlematch_top_sub_scene turns pay_red on when the fee cannot be met. */
-.cm-schedule-facts dd[data-short="true"] { color: var(--cm-sheet-short); font-weight: 700; }
-.cm-schedule-short { grid-column: 1 / -1; margin: 0.2rem 0 0; font-size: 0.64rem; color: var(--cm-sheet-short); }
-.cm-schedule-empty { margin: 0; font-size: 0.72rem;  }
-.cm-schedule-footer { margin: 0; font-size: 0.62rem; line-height: 1.45;  }
-
-/* ---- Help (help/help_main_scene.nxr, text from ui/txt/help_text_txt.dat) ---- */
-.cm-help-root { position: fixed; inset: 0; overflow: auto; background: var(--cm-sheet-ground);  }
-.cm-help-shell {
-  width: min(100%, 430px);
-  margin: 0 auto;
-  padding: 1rem 1rem 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-
-}
-.cm-help-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em;  }
-.cm-help-title { margin: 0; font-size: 1.5rem;  }
-.cm-help-list { display: flex; flex-wrap: wrap; gap: 4px; align-content: flex-start; }
-/* A heading has no body in the cartridge, so it is a label and takes a full row. */
+/* ---- Help ---------------------------------------------------------------- */
+.cm-help-list { display: grid; gap: 6px; }
 .cm-help-heading {
-  flex: 1 0 100%; margin: 0.5rem 0 0.1rem;
-  font-size: 0.64rem; letter-spacing: 0.16em;
-  border-bottom: 1px solid var(--cm-sheet-edge); padding-bottom: 0.25rem;
-}
-.cm-help-heading:first-child { margin-top: 0; }
-.cm-help-topic {
-  min-height: 32px; text-align: left;
-
-  font: inherit; font-size: 0.68rem;
-  padding: 0.3rem 0.55rem; cursor: pointer;
-}
-.cm-help-topic[aria-pressed="true"] {  border-color: var(--cm-sheet-selected-edge); }
-.cm-help-topic:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
-.cm-help-detail {
-  display: flex; flex-direction: column; gap: 0.45rem;
-  padding: 0.8rem;
-
-}
-.cm-help-detail__title { margin: 0; font-size: 1rem; }
-/* The cartridge writes its own line breaks; keep them. */
-.cm-help-detail__body { margin: 0; font-size: 0.78rem; line-height: 1.65; white-space: pre-line; }
-.cm-help-detail__provenance { margin: 0; font-size: 0.6rem;  font-variant-numeric: tabular-nums; }
-.cm-help-empty { margin: 0; font-size: 0.72rem;  }
-.cm-help-note { margin: 0; font-size: 0.62rem; line-height: 1.45;  }
-
-/* ---- Tamer Info (tamer_info_main_scene.nxr + tamer_info_sub_scene.nxr) ----- */
-.cm-tamer-root { position: fixed; inset: 0; overflow: auto; background: var(--cm-sheet-ground);  }
-.cm-tamer-shell {
-  width: min(100%, 430px);
-  margin: 0 auto;
-  padding: 1rem 1rem 2rem;
   display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
-
+  align-items: center;
+  gap: 8px;
+  margin: var(--sp-3) 0 0;
+  color: var(--c-text-3);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-strong);
+  letter-spacing: 0.06em;
 }
-.cm-tamer-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em;  }
-.cm-tamer-title { margin: 0; font-size: 1.5rem;  }
+.cm-help-heading + .cm-help-heading { margin-top: 0; }
+.cm-help-heading::before { content: ""; width: 9px; height: 9px; background: var(--motif-stair) no-repeat; opacity: 0.8; }
+.cm-help-topic {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 0 var(--sp-4);
+  border: 1px solid var(--c-line-1);
+  border-radius: var(--r-control);
+  background: var(--c-surface-1);
+  color: var(--c-text-1);
+  font-weight: var(--fw-strong);
+  text-align: left;
+}
+.cm-help-topic::after { content: ""; flex: 0 0 auto; width: 8px; height: 14px; margin-left: auto; background: var(--c-text-3); -webkit-mask: var(--icon-chevron-right) center / contain no-repeat; mask: var(--icon-chevron-right) center / contain no-repeat; }
+.cm-help-topic[aria-pressed="true"] { border-color: var(--c-accent-line); background: var(--c-accent-soft); }
+.cm-help-empty, .cm-help-note { margin: 0; color: var(--c-text-3); font-size: var(--fs-body-sm); }
+.cm-help-detail__title { margin: 0; font-size: var(--fs-title-2); line-height: var(--lh-title-2); font-weight: var(--fw-heavy); }
+.cm-help-detail__body { margin: 0; color: var(--c-text-1); line-height: 1.7; white-space: pre-line; }
+.cm-help-detail__provenance { margin: 0; color: var(--c-text-3); font-size: var(--fs-label); }
+
+/* ---- Tamer --------------------------------------------------------------- */
 .cm-tamer-fields {
-  display: grid; grid-template-columns: auto 1fr; gap: 0.3rem 0.9rem; margin: 0;
-  padding: 0.8rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 0;
+  margin: 0;
+  padding: var(--sp-2) var(--sp-4);
+}
+.cm-tamer-field__label,
+.cm-tamer-field__value { margin: 0; padding: 11px 0; border-bottom: 1px solid var(--c-line-1); }
+.cm-tamer-field__label { color: var(--c-text-3); font-size: var(--fs-body-sm); }
+.cm-tamer-field__value { padding-left: var(--sp-4); text-align: right; font-weight: var(--fw-strong); font-variant-numeric: tabular-nums; }
+.cm-tamer-field__value[data-state="UNSOURCED"] { color: var(--c-text-disabled); }
+.cm-tamer-field__value[data-field-id="money"] { color: var(--c-gold-strong); }
+.cm-tamer-field__value[data-field-id="rank"] { color: var(--c-accent-strong); }
+.cm-tamer-fields > :nth-last-child(-n + 2) { border-bottom: 0; }
+.cm-tamer-note { margin: 0; color: var(--c-text-3); font-size: var(--fs-label); }
 
-}
-.cm-tamer-field__label { font-size: 0.64rem;   align-self: center; }
-/* The cartridge draws each digit as its own cell, so the value row is monospaced
-   and right-aligned to keep the column the width the scene fixes. */
-.cm-tamer-field__value {
-  margin: 0; text-align: right;
-  font-family: "Cascadia Mono", Consolas, ui-monospace, monospace;
-  font-size: 0.95rem; font-weight: 700; letter-spacing: 0.08em;
-  font-variant-numeric: tabular-nums;
-}
-.cm-tamer-field__value[data-state="UNSOURCED"] {  font-weight: 400; }
-.cm-tamer-note { margin: 0; font-size: 0.62rem; line-height: 1.5;  }
-
-/* --- Tournaments: ui/conference_list_item + training/schedule_item ------- */
-.cm-championship-root { position: fixed; inset: 0; overflow: auto; background: var(--cm-sheet-ground);  }
-.cm-championship-shell {
-  width: min(100%, 430px); margin: 0 auto;
-  display: flex; flex-direction: column; gap: 0.7rem;
-  padding: calc(var(--cm-screen-top, 0px) + 0.8rem) 0.9rem calc(0.9rem + env(safe-area-inset-bottom, 0px));
-}
-.cm-championship-kicker { margin: 0; font-size: 0.62rem; letter-spacing: 0.18em;  }
-.cm-championship-title { margin: 0; font-size: 1.15rem;  }
-.cm-championship-board { display: flex; flex-direction: column; gap: 0.6rem; }
-/* conference_list_item: a cup, a name, a plate. */
+/* ---- Championship run ---------------------------------------------------- */
+.cm-championship-board { display: grid; gap: var(--sp-2); padding: var(--sp-2); }
 .cm-championship-entry {
-  display: flex; align-items: center; gap: 0.7rem; width: 100%; min-height: 72px;
-  padding: 0.6rem 0.8rem; text-align: left; cursor: pointer; font: inherit;
-
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  min-height: 72px;
+  padding: var(--sp-3);
+  border: 1px solid var(--c-line-1);
+  border-radius: var(--r-control);
+  background: var(--c-surface-2);
+  color: var(--c-text-1);
+  text-align: left;
 }
-.cm-championship-entry:disabled { cursor: default;  }
-.cm-championship-entry[data-unlocked="true"]:not(:disabled):hover { border-color: var(--cm-sheet-selected-edge); background: var(--cm-sheet-selected); }
-.cm-championship-entry:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
-.cm-championship-cup { font-size: 1.5rem; line-height: 1; }
-.cm-championship-entry__copy { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
-.cm-championship-entry__name { font-weight: 700; font-size: 0.95rem; }
-.cm-championship-entry__rounds { font-size: 0.68rem;  letter-spacing: 0.08em; }
-.cm-championship-entry__reason { font-size: 0.64rem; color: var(--cm-sheet-dim); line-height: 1.4; }
-/* schedule_item spends money_01..06 and a bit mark on a prize. */
-.cm-championship-prize { display: flex; align-items: baseline; gap: 0.3rem; margin: 0; font-variant-numeric: tabular-nums; }
-.cm-championship-prize__digits { font-weight: 700; font-size: 0.9rem; }
-.cm-championship-prize__bit { font-size: 0.62rem; color: var(--cm-sheet-muted); }
-
-.cm-championship-run {
-  display: flex; flex-direction: column; gap: 0.6rem; padding: 0.8rem;
-
+.cm-championship-entry[data-unlocked="false"] { background: transparent; color: var(--c-text-disabled); }
+.cm-championship-cup {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  border-radius: var(--r-control);
+  background: var(--c-gold-soft);
+  font-size: 22px;
 }
-.cm-championship-run__title { margin: 0; font-size: 1rem; letter-spacing: 0.05em; }
-.cm-championship-rounds { display: flex; gap: 0.4rem; margin: 0; padding: 0; list-style: none; }
+.cm-championship-entry[data-unlocked="false"] .cm-championship-cup { filter: grayscale(1); opacity: 0.5; }
+.cm-championship-entry__copy { display: grid; gap: 2px; min-width: 0; }
+.cm-championship-entry__name { font-size: var(--fs-title-2); font-weight: var(--fw-heavy); }
+.cm-championship-entry__rounds { color: var(--c-text-2); font-size: var(--fs-body-sm); }
+.cm-championship-entry__reason { color: var(--c-warning); font-size: var(--fs-body-sm); }
+.cm-championship-prize { display: inline-flex; align-items: baseline; gap: 4px; margin: 2px 0 0; color: var(--c-gold-strong); font-weight: var(--fw-heavy); font-variant-numeric: tabular-nums; }
+.cm-championship-prize__bit { color: var(--c-text-2); font-size: var(--fs-label); font-weight: var(--fw-strong); }
+.cm-championship-notice { margin: 0; padding: var(--sp-3); border-radius: var(--r-control); background: var(--c-warning-soft); color: var(--c-warning); }
+.cm-championship-run { display: grid; gap: var(--sp-3); padding: var(--sp-4); }
+.cm-championship-run__title { margin: 0; font-size: var(--fs-title-2); font-weight: var(--fw-heavy); }
+.cm-championship-rounds { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
 .cm-championship-round {
-  display: grid; place-items: center; min-width: 40px; min-height: 40px;
-
-   font-size: 0.78rem; font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: 44px;
+  padding: 0 var(--sp-3);
+  border-radius: var(--r-control);
+  background: var(--c-ground-raised);
 }
-.cm-championship-round[data-state="WON"] { border-color: var(--cm-sheet-selected-edge);  }
-.cm-championship-round[data-state="LOST"] { color: var(--cm-sheet-dim); }
-.cm-championship-round[data-state="NOW"] { border-color: var(--cm-sheet-accent);  }
-.cm-championship-round[data-state="PENDING"] { color: var(--cm-sheet-dim); opacity: 0.75; }
-.cm-championship-opponent { margin: 0; font-size: 0.74rem; color: var(--cm-sheet-muted); }
-.cm-championship-actions { display: flex; gap: 0.5rem; }
+.cm-championship-opponent { color: var(--c-text-2); }
+.cm-championship-actions { display: flex; gap: var(--sp-2); }
 .cm-championship-action {
-  flex: 1 1 auto; min-height: 44px; padding: 0 0.9rem; cursor: pointer; font: inherit;
-
+  min-height: var(--control);
+  padding: 0 var(--sp-5);
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-control);
+  background: var(--c-surface-2);
+  color: var(--c-text-1);
+  font-weight: var(--fw-strong);
 }
-.cm-championship-action--primary { border-color: var(--cm-sheet-selected-edge);  font-weight: 700; }
-.cm-championship-action:focus-visible { outline: 2px solid var(--cm-sheet-accent); outline-offset: 2px; }
-.cm-championship-notice { margin: 0; font-size: 0.7rem; line-height: 1.45;  }
-.cm-championship-footer { display: flex; margin-top: auto; padding-top: 0.4rem; }
+.cm-championship-action--primary { border-color: transparent; background: var(--c-accent); color: var(--c-text-on-accent); }
+
+/* ---- Wider screens: the extra width becomes columns, not bigger cards ---- */
+@media (min-width: 700px) {
+  body:not([data-portrait-frame]) :is(.cm-digimon-shell, .cm-help-shell, .cm-tamer-shell, .cm-championship-shell) { width: min(100%, 820px); padding-inline: var(--sp-8); }
+  body:not([data-portrait-frame]) .cm-schedule-shell { width: min(100%, 1000px); padding-inline: var(--sp-8); }
+  body:not([data-portrait-frame]) .cm-screen-footer { margin-inline: calc(-1 * var(--sp-8)); padding-inline: var(--sp-8); }
+  /* Roster: the list and the record side by side. */
+  body:not([data-portrait-frame]) .cm-digimon-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+    grid-template-areas: "kicker kicker" "title title" "list detail" "controls detail" "rename detail" "note detail" "footer footer";
+    /* The note row takes the spare height, so the footer still sits at the
+       bottom of the screen as it does on a phone. */
+    grid-template-rows: auto auto auto auto auto minmax(0, 1fr) auto;
+    column-gap: var(--sp-5);
+  }
+  body:not([data-portrait-frame]) .cm-digimon-shell > .cm-digimon-controls-note { align-self: start; }
+  body:not([data-portrait-frame]) .cm-digimon-shell > .cm-screen-footer { align-self: end; }
+  body:not([data-portrait-frame]) .cm-digimon-shell > .cm-digimon-kicker { grid-area: kicker; }
+  body:not([data-portrait-frame]) .cm-digimon-shell > .cm-digimon-title { grid-area: title; }
+  body:not([data-portrait-frame]) .cm-digimon-shell > .cm-digimon-list { grid-area: list; grid-template-columns: minmax(0, 1fr); align-content: start; }
+  body:not([data-portrait-frame]) .cm-digimon-shell > .cm-digimon-detail { grid-area: detail; align-self: start; }
+  body:not([data-portrait-frame]) .cm-digimon-shell > .cm-digimon-controls { grid-area: controls; }
+  body:not([data-portrait-frame]) .cm-digimon-shell > .cm-digimon-rename { grid-area: rename; }
+  body:not([data-portrait-frame]) .cm-digimon-shell > .cm-digimon-controls-note { grid-area: note; }
+  body:not([data-portrait-frame]) .cm-digimon-shell > .cm-screen-footer { grid-area: footer; }
+  body:not([data-portrait-frame]) .cm-schedule-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* Two seasons side by side keep two days per row, so a fixture name fits. */
+  body:not([data-portrait-frame]) .cm-schedule-days { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  body:not([data-portrait-frame]) .cm-tamer-fields { grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr); }
+  body:not([data-portrait-frame]) .cm-tamer-fields > :nth-last-child(-n + 4) { border-bottom: 0; }
+  body:not([data-portrait-frame]) .cm-help-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  body:not([data-portrait-frame]) .cm-help-heading { grid-column: 1 / -1; }
+  body:not([data-portrait-frame]) .cm-championship-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ======================================================================= *
+ * 7. Motion preferences
+ * ======================================================================= */
+/* Reduced motion: the player's choice (data-motion on <html>, resolved from
+   the setting and, when it is "system", from the OS); the media query only
+   covers a page that has no data-motion yet. */
+:root[data-motion="reduced"] .cm-status-bar__save[data-state="SAVING"]::before { animation: none; border-top-color: currentColor; opacity: 0.7; }
+:root[data-motion="reduced"] *, :root[data-motion="reduced"] *::before, :root[data-motion="reduced"] *::after { scroll-behavior: auto; }
+:root[data-motion="reduced"] .cm-toolbar__menu, :root[data-motion="reduced"] .cm-sheet__panel, :root[data-motion="reduced"] dialog.cm-dialog[open] { animation-name: cm-fade; }
+:root[data-motion="reduced"] :is(.cm-button, .cm-screen-back, .cm-screen-primary):active:not(:disabled) { transform: none; }
+:root[data-motion="reduced"] .cm-toolbar__cell::before { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion]) .cm-status-bar__save[data-state="SAVING"]::before { animation: none; border-top-color: currentColor; opacity: 0.7; }
+  :root:not([data-motion]) *, :root:not([data-motion]) *::before, :root:not([data-motion]) *::after { scroll-behavior: auto; }
+  :root:not([data-motion]) .cm-toolbar__menu, :root:not([data-motion]) .cm-sheet__panel, :root:not([data-motion]) dialog.cm-dialog[open] { animation-name: cm-fade; }
+  :root:not([data-motion]) :is(.cm-button, .cm-screen-back, .cm-screen-primary):active:not(:disabled) { transform: none; }
+  :root:not([data-motion]) .cm-toolbar__cell::before { transition: none; }
+}

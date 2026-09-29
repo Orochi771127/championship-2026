@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>帳號與同步流程（設計預覽）</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../../src/championship/app/ui/tokens.css">
+<style>
+  /* Developer design preview only (2026-09-29). Not linked from the game,
+     not in the web build inputs, and nothing on this page signs in, uploads
+     or reads a save: every control is inert. The screens reuse the product's
+     tokens so the future implementation starts from the same design. */
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--c-void); color: var(--c-text-1); font-family: var(--font-ui); font-size: var(--fs-body); line-height: var(--lh-body); }
+  .page { max-width: 1320px; margin: 0 auto; padding: var(--sp-6) var(--sp-4) var(--sp-10); }
+  .banner { display: grid; gap: 6px; margin-bottom: var(--sp-6); padding: var(--sp-4) var(--sp-5); border: 1px solid rgba(255, 181, 76, 0.5); border-radius: var(--r-card); background: var(--c-warning-soft); color: var(--c-text-1); }
+  .banner strong { color: var(--c-warning); }
+  h1 { margin: 0 0 var(--sp-2); font-size: var(--fs-display); line-height: var(--lh-display); }
+  .lede { margin: 0 0 var(--sp-6); max-width: 70ch; color: var(--c-text-2); }
+  .board { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: var(--sp-6); }
+  figure { margin: 0; display: grid; gap: var(--sp-3); align-content: start; }
+  figcaption { display: grid; gap: 4px; }
+  figcaption b { font-size: var(--fs-title-2); line-height: var(--lh-title-2); }
+  figcaption span { color: var(--c-text-2); font-size: var(--fs-body-sm); line-height: var(--lh-body-sm); }
+  .step { display: inline-flex; align-items: center; gap: 8px; color: var(--c-accent); font-size: var(--fs-label); font-weight: var(--fw-strong); letter-spacing: 0.06em; }
+  .step::before { content: ""; width: 9px; height: 9px; background: var(--motif-stair) no-repeat; }
+
+  /* A phone frame at the product's 390 x 693 portrait size. */
+  .phone { position: relative; width: 100%; max-width: 360px; aspect-ratio: 390 / 693; overflow: hidden; border: 1px solid var(--c-line-2); border-radius: 28px; background: radial-gradient(80% 50% at 50% 42%, rgba(29, 74, 77, 0.6), transparent 70%), var(--c-ground); box-shadow: var(--shadow-float); }
+  .bar { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 12px; border-bottom: 1px solid var(--c-line-1); background: rgba(7, 17, 20, 0.9); font-size: var(--fs-body-sm); font-weight: var(--fw-strong); }
+  .bar .season { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 8px; border-radius: var(--r-tag); background: var(--c-surface-2); font-size: var(--fs-label); }
+  .bar .season::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: #7ee08a; }
+  .bar .grow { flex: 1; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 8px; border: 1px solid transparent; border-radius: var(--r-tag); font-size: var(--fs-label); font-weight: var(--fw-strong); white-space: nowrap; }
+  .chip i { width: 10px; height: 10px; border-radius: 50%; background: currentColor; }
+  .chip.local { color: var(--c-accent-strong); border-color: var(--c-accent-line); background: var(--c-accent-soft); }
+  .chip.synced { color: var(--c-info); border-color: rgba(107, 183, 255, 0.5); background: var(--c-info-soft); }
+  .chip.syncing { color: var(--c-info); }
+  .chip.syncing i { background: transparent; border: 2px solid currentColor; border-top-color: transparent; }
+  .chip.offline { color: var(--c-text-2); border-color: var(--c-line-2); }
+  .chip.offline i { background: transparent; border: 1.5px dashed currentColor; }
+  .chip.failed { color: var(--c-danger); border-color: rgba(255, 111, 107, 0.5); background: var(--c-danger-soft); }
+  .chip.conflict { color: var(--c-warning); border-color: rgba(255, 181, 76, 0.55); background: var(--c-warning-soft); }
+  .screen { position: absolute; inset: 44px 0 0; display: grid; align-content: start; gap: var(--sp-3); padding: var(--sp-4); }
+  .scrim { position: absolute; inset: 0; background: var(--c-scrim); }
+  .sheet { position: absolute; left: 0; right: 0; bottom: 0; display: grid; gap: var(--sp-3); padding: var(--sp-5) var(--sp-4) var(--sp-5); border-top: 1px solid var(--c-line-2); border-radius: var(--r-sheet) var(--r-sheet) 0 0; background: var(--c-surface-1); box-shadow: var(--shadow-lift); }
+  .sheet::before { content: ""; justify-self: center; width: 36px; height: 4px; margin: -8px 0 4px; border-radius: 2px; background: var(--c-line-3); }
+  .dialog { position: absolute; left: 16px; right: 16px; top: 50%; transform: translateY(-50%); display: grid; gap: var(--sp-3); padding: var(--sp-5); border: 1px solid var(--c-line-2); border-radius: var(--r-sheet); background: var(--c-surface-1); box-shadow: var(--shadow-lift); }
+  .title { margin: 0; font-size: var(--fs-title-2); line-height: var(--lh-title-2); font-weight: var(--fw-heavy); }
+  .body { margin: 0; color: var(--c-text-2); font-size: var(--fs-body-sm); line-height: var(--lh-body-sm); }
+  .btn { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: var(--control); padding: 0 var(--sp-4); border: 1px solid var(--c-line-2); border-radius: var(--r-control); background: var(--c-surface-2); color: var(--c-text-1); font: var(--fw-strong) var(--fs-body)/1.2 var(--font-ui); pointer-events: none; }
+  .btn.primary { border-color: transparent; background: var(--c-accent); color: var(--c-text-on-accent); }
+  .btn.danger { border-color: rgba(255, 111, 107, 0.5); background: var(--c-danger-soft); color: #ffb3b0; }
+  .btn.ghost { background: transparent; border-color: transparent; color: var(--c-text-2); }
+  .btn[aria-disabled="true"] { color: var(--c-text-disabled); background: var(--c-surface-1); border-color: var(--c-line-1); }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); }
+  .soon { padding: 1px 6px; border-radius: 4px; background: var(--c-surface-3); color: var(--c-text-2); font-size: 10px; font-weight: var(--fw-heavy); }
+  .card { display: grid; gap: 6px; padding: var(--sp-3); border: 1px solid var(--c-line-2); border-radius: var(--r-card); background: var(--c-surface-1); }
+  .card.pick { border-color: var(--c-accent); background: var(--c-accent-soft); }
+  .card h4 { margin: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: var(--fs-body); }
+  .facts { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; margin: 0; font-size: var(--fs-label); }
+  .facts dt { color: var(--c-text-3); }
+  .facts dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+  .facts dd.more { color: var(--c-accent-strong); font-weight: var(--fw-heavy); }
+  .brand { justify-self: center; margin: 56px 0 28px; text-align: center; }
+  .brand small { display: block; color: var(--c-accent); font-size: var(--fs-label); font-weight: var(--fw-strong); letter-spacing: 0.2em; }
+  .brand strong { display: block; font-size: 26px; line-height: 34px; }
+  .account { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; border: 1px dashed var(--c-line-2); border-radius: var(--r-control); color: var(--c-text-2); font-size: var(--fs-label); }
+  .legend { display: grid; gap: var(--sp-2); padding: var(--sp-4); border: 1px solid var(--c-line-1); border-radius: var(--r-card); background: var(--c-surface-1); }
+  .legend .line { display: grid; grid-template-columns: 150px 1fr; align-items: center; gap: var(--sp-3); font-size: var(--fs-body-sm); color: var(--c-text-2); }
+  table { width: 100%; border-collapse: collapse; margin-top: var(--sp-8); font-size: var(--fs-body-sm); }
+  th, td { padding: 8px 10px; border-bottom: 1px solid var(--c-line-1); text-align: left; vertical-align: top; }
+  th { color: var(--c-text-3); font-weight: var(--fw-strong); }
+  td.no { color: var(--c-warning); font-weight: var(--fw-strong); }
+  td.yes { color: var(--c-success); font-weight: var(--fw-strong); }
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="banner" role="note">
+    <strong>設計預覽｜帳號與雲端同步尚未接通</strong>
+    <span>本頁只給開發與設計檢查使用，不在遊戲流程內，也不會被發布。畫面中的按鈕全部不可操作：不會登入、不會上傳、不會讀取或改寫任何存檔。遊戲目前只有「已存到本機」這一種保存狀態。</span>
+  </div>
+  <h1>帳號、同步與衝突流程</h1>
+  <p class="lede">依 2026-09-29 帳號存檔方向繪製的九個畫面，使用正式版的色彩、字級與元件規則。每張圖說明它在未來流程中的位置、真正要顯示的資料來源，以及目前的實作狀態。詳細規劃見 docs/planning/ACCOUNT_CLOUD_SAVE_PLAN_2026-09-29_ZH_TW.md。</p>
+
+  <section class="board">
+    <figure>
+      <div class="phone" aria-label="標題畫面的帳號入口">
+        <div class="bar"><span class="grow">DIGIMON CHAMPIONSHIP 2026</span></div>
+        <div class="screen">
+          <div class="brand"><small>DIGIMON</small><strong>CHAMPIONSHIP</strong></div>
+          <div class="btn primary">繼續遊戲</div>
+          <div class="btn">新遊戲</div>
+          <div class="account"><span>未登入・存檔只在這台裝置</span><span class="soon">即將推出</span></div>
+          <div class="btn" aria-disabled="true">登入並開啟雲端同步</div>
+        </div>
+      </div>
+      <figcaption><span class="step">1 入口</span><b>標題畫面：帳號入口</b><span>未登入時明說「存檔只在這台裝置」。按鈕在服務接通前維持停用並標示「即將推出」，不做可點但無作用的假入口。</span></figcaption>
+    </figure>
+
+    <figure>
+      <div class="phone" aria-label="登入方式">
+        <div class="bar"><span class="grow">DIGIMON CHAMPIONSHIP 2026</span></div>
+        <div class="scrim"></div>
+        <div class="sheet">
+          <p class="title">登入以同步存檔</p>
+          <p class="body">登入後，存檔會在你同意後上傳到雲端，換手機也能繼續。遊戲不會取得你的聯絡人或其他資料。</p>
+          <div class="btn">使用 Apple 登入</div>
+          <div class="btn">使用 Google 登入</div>
+          <div class="btn">以電子郵件登入</div>
+          <div class="btn ghost">稍後再說</div>
+        </div>
+      </div>
+      <figcaption><span class="step">2 登入</span><b>登入方式（底部面板）</b><span>登入只建立身分，不自動上傳。完成後一律先到第 3 或第 4 步讓玩家決定存檔去向。供應商清單待 Owner 決定。</span></figcaption>
+    </figure>
+
+    <figure>
+      <div class="phone" aria-label="首次登入匯入本機存檔">
+        <div class="bar"><span class="season">春季</span><span>第 3 日</span><span class="grow"></span><span class="chip local"><i></i>已存到本機</span></div>
+        <div class="screen">
+          <p class="title">要把這台裝置的存檔上傳嗎？</p>
+          <p class="body">你的帳號還沒有雲端存檔。上傳後，這份存檔會成為帳號的存檔。</p>
+          <div class="card pick">
+            <h4>這台裝置的存檔</h4>
+            <dl class="facts"><dt>馴獸師</dt><dd>小光</dd><dt>遊戲日</dt><dd>春季 第 3 日</dd><dt>位元幣</dt><dd>12,450</dd><dt>夥伴</dt><dd>4 隻</dd><dt>上次保存</dt><dd>今天 20:31</dd></dl>
+          </div>
+          <div class="btn primary">上傳這份存檔</div>
+          <div class="btn ghost">先不要，維持只存在本機</div>
+        </div>
+      </div>
+      <figcaption><span class="step">3 首次登入</span><b>匯入本機存檔</b><span>資料全部讀自本機存檔本身。上傳是玩家按下後才開始；上傳成功前狀態仍是「已存到本機」，不提前顯示「已同步」。</span></figcaption>
+    </figure>
+
+    <figure>
+      <div class="phone" aria-label="本機與雲端存檔衝突">
+        <div class="bar"><span class="season">春季</span><span>第 3 日</span><span class="grow"></span><span class="chip conflict"><i></i>需要選擇</span></div>
+        <div class="screen">
+          <p class="title">兩份存檔不同，要保留哪一份？</p>
+          <p class="body">系統不會自動合併。沒被選的那份會先保留為備份。</p>
+          <div class="card pick">
+            <h4>這台裝置 <span class="soon">較新</span></h4>
+            <dl class="facts"><dt>上次保存</dt><dd>今天 20:31・此手機</dd><dt>遊戲日</dt><dd class="more">春季 第 3 日</dd><dt>位元幣</dt><dd>12,450</dd><dt>夥伴／頭銜</dt><dd>4 隻／2 個</dd></dl>
+          </div>
+          <div class="card">
+            <h4>雲端</h4>
+            <dl class="facts"><dt>上次保存</dt><dd>昨天 22:10・平板</dd><dt>遊戲日</dt><dd>春季 第 2 日</dd><dt>位元幣</dt><dd class="more">15,200</dd><dt>夥伴／頭銜</dt><dd>4 隻／2 個</dd></dl>
+          </div>
+          <div class="row2"><div class="btn">使用雲端</div><div class="btn primary">使用這台裝置</div></div>
+        </div>
+      </div>
+      <figcaption><span class="step">4 衝突</span><b>本機與雲端衝突</b><span>以存檔自己的修訂號與時間判斷；並列真實數字、標出各自較多的一項，不替玩家判斷「哪份比較好」。選擇前同步暫停。</span></figcaption>
+    </figure>
+
+    <figure>
+      <div class="phone" aria-label="同步狀態">
+        <div class="bar"><span class="season">春季</span><span>第 3 日</span><span class="grow"></span><span class="chip synced"><i></i>已同步</span></div>
+        <div class="screen">
+          <p class="title">同步狀態（未來的狀態列）</p>
+          <div class="legend">
+            <div class="line"><span class="chip local"><i></i>已存到本機</span><span>現在唯一的真實狀態：寫進這台裝置的瀏覽器。</span></div>
+            <div class="line"><span class="chip syncing"><i></i>同步中</span><span>上傳請求已送出、尚未收到伺服器確認。</span></div>
+            <div class="line"><span class="chip synced"><i></i>已同步</span><span>伺服器回覆同一修訂號後才顯示。</span></div>
+            <div class="line"><span class="chip offline"><i></i>離線</span><span>已存到本機，連線後再上傳。</span></div>
+            <div class="line"><span class="chip failed"><i></i>同步失敗</span><span>本機仍安全；點一下看原因並重試。</span></div>
+            <div class="line"><span class="chip conflict"><i></i>需要選擇</span><span>本機與雲端不同，開啟第 4 步。</span></div>
+          </div>
+        </div>
+      </div>
+      <figcaption><span class="step">5 狀態</span><b>同步狀態的六種顯示</b><span>「已存到本機」與「已同步」用不同顏色與字，永遠不混用；雲端狀態只在收到伺服器回覆後改變。</span></figcaption>
+    </figure>
+
+    <figure>
+      <div class="phone" aria-label="帳號選單">
+        <div class="bar"><span class="season">春季</span><span>第 3 日</span><span class="grow"></span><span class="chip synced"><i></i>已同步</span></div>
+        <div class="scrim"></div>
+        <div class="sheet">
+          <p class="title">帳號</p>
+          <div class="card"><h4>p***@example.com</h4><dl class="facts"><dt>同步</dt><dd>已同步・今天 20:31</dd><dt>這台裝置</dt><dd>iPhone・Safari</dd></dl></div>
+          <div class="btn">立即同步</div>
+          <div class="btn">切換帳號</div>
+          <div class="btn danger">登出</div>
+        </div>
+      </div>
+      <figcaption><span class="step">6 帳號</span><b>系統選單 → 帳號</b><span>放在「選單」群組的「系統」區，和「保存並結束」相鄰。電子郵件遮罩顯示；「立即同步」就是手動保存的雲端版本。</span></figcaption>
+    </figure>
+
+    <figure>
+      <div class="phone" aria-label="切換帳號">
+        <div class="bar"><span class="season">春季</span><span>第 3 日</span><span class="grow"></span><span class="chip synced"><i></i>已同步</span></div>
+        <div class="scrim"></div>
+        <div class="dialog">
+          <p class="title">要切換帳號嗎？</p>
+          <p class="body">目前的存檔屬於 p***@example.com，已同步到雲端，切換後仍可從那個帳號取回。這台裝置接著會載入新帳號的存檔。</p>
+          <div class="row2"><div class="btn">取消</div><div class="btn primary">切換</div></div>
+        </div>
+      </div>
+      <figcaption><span class="step">7 切換</span><b>切換帳號</b><span>若還有未同步的變更，先要求同步或明示「這些變更會留在本機備份」，不讓一個帳號的進度被另一個帳號覆蓋。</span></figcaption>
+    </figure>
+
+    <figure>
+      <div class="phone" aria-label="登出">
+        <div class="bar"><span class="season">春季</span><span>第 3 日</span><span class="grow"></span><span class="chip synced"><i></i>已同步</span></div>
+        <div class="scrim"></div>
+        <div class="dialog">
+          <p class="title">要登出嗎？</p>
+          <p class="body">登出後，這台裝置保留一份本機存檔，可以繼續離線遊玩，但不會再同步。再次登入時，若兩份不同會請你選擇。</p>
+          <div class="row2"><div class="btn">取消</div><div class="btn danger">登出</div></div>
+        </div>
+      </div>
+      <figcaption><span class="step">8 登出</span><b>登出</b><span>登出不刪除任何存檔。刪除帳號資料是另一個有二次確認的流程，不在本輪範圍。</span></figcaption>
+    </figure>
+
+    <figure>
+      <div class="phone" aria-label="同步失敗">
+        <div class="bar"><span class="season">春季</span><span>第 3 日</span><span class="grow"></span><span class="chip failed"><i></i>同步失敗</span></div>
+        <div class="scrim"></div>
+        <div class="dialog">
+          <p class="title">同步沒有完成</p>
+          <p class="body">這次的變更已存到本機，不會遺失。伺服器暫時無法連線（錯誤碼 503）。連線恢復後會自動重試，也可以現在再試一次。</p>
+          <div class="row2"><div class="btn">關閉</div><div class="btn primary">再試一次</div></div>
+        </div>
+      </div>
+      <figcaption><span class="step">9 失敗</span><b>同步失敗</b><span>先說本機是否安全，再說原因與下一步。錯誤碼來自伺服器實際回應。</span></figcaption>
+    </figure>
+  </section>
+
+  <table>
+    <caption style="text-align:left;color:var(--c-text-2);margin-bottom:8px">目前實作狀態（2026-09-29）</caption>
+    <thead><tr><th>能力</th><th>狀態</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>本機保存（重要操作後自動、離頁、換日、保存並結束）</td><td class="yes">已實作</td><td>單一存檔鍵與既有保存入口；狀態列只顯示保存中／已存到本機／保存失敗。</td></tr>
+      <tr><td>帳號登入、登出、切換</td><td class="no">未實作</td><td>本頁僅為設計；遊戲內沒有任何登入畫面或假成功狀態。</td></tr>
+      <tr><td>雲端上傳、下載、同步狀態</td><td class="no">未實作</td><td>需要後端服務、帳號供應商與隱私政策，待 Owner 決定。</td></tr>
+      <tr><td>首次登入匯入、衝突選擇</td><td class="no">未實作</td><td>規則見規劃文件；存檔格式不變，雲端包裝另加。</td></tr>
+    </tbody>
+  </table>
+</main>
+</body>
+</html>

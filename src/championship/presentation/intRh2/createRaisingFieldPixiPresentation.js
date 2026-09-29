@@ -11,6 +11,8 @@
 import { getRaisingNativePixelScale, getRaisingNativeActorGeometry } from "./raisingNativeSizing.js";
 import { applyNativeCharacterCellGeometry } from '../nativeHuntCharacterAction.js';
 import {loadAssembledEvolutionArt, evolutionArtClock} from '../assembledUiArt.js';
+import { prefersReducedMotion } from '../presentationPreferences.js';
+import { uiText } from '../../text/uiText.js';
 import { raisingFieldViewport, raisingRegionBounds, raisingNativeToScreen, raisingScreenToNative, wrapRaisingCamera, raisingEdgeScroll } from "./raisingFieldViewport.js";
 
 const DRAG_THRESHOLD_PX = 6;
@@ -97,7 +99,7 @@ export async function mountRaisingFieldPixiPresentation({
   getSelectedTool = () => null,
   onTrainingFrame = () => {},
   onActorFrame = null,
-  reducedMotion = globalThis.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false
+  reducedMotion = prefersReducedMotion()
 }) {
   assertDependencies(stage, source);
   const { PIXI, app } = stage;
@@ -128,7 +130,7 @@ export async function mountRaisingFieldPixiPresentation({
   const evolutionGlow=new PIXI.Graphics();evolutionGlow.eventMode='none';fxLayer.addChild(evolutionGlow);
   const evolutionBackdrop=new PIXI.Graphics();evolutionBackdrop.eventMode='none';scene.addChildAt(evolutionBackdrop,4);
   const evolutionWriting=new PIXI.Container();evolutionWriting.eventMode='none';scene.addChildAt(evolutionWriting,5);
-  const evolutionWords=Array.from({length:6},(_,i)=>{const word=new PIXI.Text({text:i%2?'進化!!':'EVOLUTION',style:{fontFamily:'sans-serif',fontSize:16+(i%3)*4,fontWeight:'bold',fill:0x008bff}});evolutionWriting.addChild(word);return word;});
+  const evolutionWords=Array.from({length:6},(_,i)=>{const word=new PIXI.Text({text:i%2?uiText('進化!!'):'EVOLUTION',style:{fontFamily:'sans-serif',fontSize:16+(i%3)*4,fontWeight:'bold',fill:0x008bff}});evolutionWriting.addChild(word);return word;});
   const evolutionArt=await loadAssembledEvolutionArt(PIXI).catch(error=>{onFallback(error);return null;});
   if(evolutionArt)for(let i=0;i<evolutionWords.length;i+=2){
     const art=evolutionArt.get(i===4?'evolution-code':i%3?'evolution-word-small':'evolution-word');
@@ -398,7 +400,9 @@ export async function mountRaisingFieldPixiPresentation({
   function createActor(resident) {
     const root = new PIXI.Container({ label: resident.displayName });
     const shadow = new PIXI.Graphics().ellipse(0, 3, 42, 12).fill({ color: 0x02070a, alpha: 0.38 });
-    const selection = new PIXI.Graphics().ellipse(0, 0, 54, 17).stroke({ color: 0xf0d083, width: 3, alpha: 0.82 });
+    // The pick is the interface's one living colour (mint, 2026-09-29), drawn as
+    // a lit spot on the floor rather than the old gold ring.
+    const selection = new PIXI.Graphics().ellipse(0, 0, 54, 17).fill({ color: 0x56e3c2, alpha: 0.12 }).stroke({ color: 0x56e3c2, width: 3, alpha: 0.9 });
     const fallback = fallbackCreature(PIXI);
     selection.visible = resident.selected;
     root.addChild(shadow, selection, fallback);
@@ -563,7 +567,7 @@ export async function mountRaisingFieldPixiPresentation({
         entry.shadow.clear().ellipse(center, bottom + 1, visible.width * 0.42, Math.max(1, visible.width * 0.13))
           .fill({ color: 0x02070a, alpha: 0.26 });
         entry.selection.clear().ellipse(center, bottom + 1, visible.width / 2 + 2, Math.max(2, visible.width * 0.16))
-          .stroke({ color: 0xf0d083, width: 1, alpha: 0.9 });
+          .fill({ color: 0x56e3c2, alpha: 0.12 }).stroke({ color: 0x56e3c2, width: 1, alpha: 0.95 });
         entry.root.hitArea = new PIXI.Rectangle(hitArea.x, hitArea.y, hitArea.width, hitArea.height);
       }
       entry.nativeScale = geometry ? nativeScale : null;
@@ -607,7 +611,24 @@ export async function mountRaisingFieldPixiPresentation({
     sync(source.getFrame(), { force: true });
   }
 
+  // A requested pan to a resident (from the resident card). It eases the camera
+  // and gives way at once to any drag, so input coordinates only ever move
+  // under the player's own finger.
+  let cameraFocus = null;
+  function stepCameraFocus(deltaMs) {
+    if (!cameraFocus || !fieldArt?.field) return;
+    if (drag || cameraDrag) { cameraFocus = null; return; }
+    cameraFocus.elapsed += Math.min(50, Math.max(0, deltaMs));
+    const t = Math.min(1, cameraFocus.elapsed / cameraFocus.duration);
+    const eased = 1 - Math.pow(1 - t, 3);
+    const next = cameraFocus.from + cameraFocus.distance * eased;
+    cameraX = fieldArt.field.wrapWidthPx ? wrapRaisingCamera(next, fieldArt.field.wrapWidthPx) : Math.max(0, next);
+    layoutFieldArt();
+    if (t >= 1) cameraFocus = null;
+  }
+
   function updateAnimations(ticker) {
+    stepCameraFocus(ticker.deltaMS);
     if(drag?.nativeHand)drag.carried=source.getActorFrame?.(drag.creatureId)?.state===6;
     if(drag?.carried&&fieldArt?.field?.presentationMode==='NATIVE_RANCH'){
       const fit=raisingFieldViewport(fieldArt.field,app.screen,12,cameraX);
@@ -684,11 +705,17 @@ export async function mountRaisingFieldPixiPresentation({
       drawEvolution(entry,native);
     }
     onTrainingFrame(trainingLabels);
-    if(onActorFrame)onActorFrame([...actors].map(([creatureId,entry])=>{
-      const area=entry.root.hitArea,point=entry.root.toGlobal(new PIXI.Point(area.x+area.width/2,area.y+area.height/2));
-      const native=source.getActorFrame?.(creatureId);
-      return {creatureId,x:point.x,y:point.y,state:native?.state,speciesIndex:native?.speciesIndex,nativeFrame:native?.nativeFrame,sequenceId:native?.sequenceId};
-    }));
+    if(onActorFrame){
+      // Developer-only readout. Screen pixels per native pixel, so a browser
+      // check can size a gesture in the original's native units at any zoom.
+      const fit=fieldArt?.field?raisingFieldViewport(fieldArt.field,app.screen,12,cameraX):null;
+      const nativeScreenPixels=fit&&fieldArt.field.nativePixelWorldScale>0?fit.scale*fieldArt.field.nativePixelWorldScale:null;
+      onActorFrame([...actors].map(([creatureId,entry])=>{
+        const area=entry.root.hitArea,point=entry.root.toGlobal(new PIXI.Point(area.x+area.width/2,area.y+area.height/2));
+        const native=source.getActorFrame?.(creatureId);
+        return {creatureId,x:point.x,y:point.y,state:native?.state,speciesIndex:native?.speciesIndex,nativeFrame:native?.nativeFrame,sequenceId:native?.sequenceId,nativeScreenPixels};
+      }));
+    }
   }
 
   function drawNativeFeedback(entry,native,covered,kind){
@@ -858,6 +885,41 @@ export async function mountRaisingFieldPixiPresentation({
     // presentation sync only and skips an already-consumed revision.
     render(frame) {
       sync(frame);
+    },
+
+    /** A resident's on-screen box, relative to the field host, so interface
+     * cards can keep out of its way. Null while it is not drawn. */
+    actorScreenRect(creatureId) {
+      const entry = actors.get(creatureId);
+      const area = entry?.root?.hitArea;
+      if (!area || entry.root.destroyed || !entry.root.visible) return null;
+      const a = entry.root.toGlobal(new PIXI.Point(area.x, area.y));
+      const b = entry.root.toGlobal(new PIXI.Point(area.x + area.width, area.y + area.height));
+      return { x: Math.min(a.x, b.x), y: Math.min(a.y, b.y), width: Math.abs(b.x - a.x), height: Math.abs(b.y - a.y) };
+    },
+
+    /** Ease the camera so a resident is in the middle of the view. Ignored
+     * while the player is dragging; the wrapped board takes the short way. */
+    focusResident(creatureId, { reducedMotion = false } = {}) {
+      const field = fieldArt?.field;
+      const native = source.getActorFrame?.(creatureId);
+      if (!field || field.presentationMode !== 'NATIVE_RANCH' || !native?.positionQ12 || drag || cameraDrag) return false;
+      const fit = raisingFieldViewport(field, app.screen, 12, cameraX);
+      let target = native.positionQ12[0] / 4096 * field.nativePixelWorldScale - (app.screen.width - 24) / fit.scale / 2;
+      let distance;
+      if (field.wrapWidthPx) {
+        target = wrapRaisingCamera(target, field.wrapWidthPx);
+        distance = target - cameraX;
+        if (distance > field.wrapWidthPx / 2) distance -= field.wrapWidthPx;
+        if (distance < -field.wrapWidthPx / 2) distance += field.wrapWidthPx;
+      } else {
+        const maxX = Math.max(0, field.worldWidthPx - (app.screen.width - 24) / fit.scale);
+        distance = clamp(target, 0, maxX) - cameraX;
+      }
+      if (Math.abs(distance) < 0.5) return true;
+      if (reducedMotion) { cameraX = field.wrapWidthPx ? wrapRaisingCamera(cameraX + distance, field.wrapWidthPx) : cameraX + distance; layoutFieldArt(); return true; }
+      cameraFocus = { from: cameraX, distance, elapsed: 0, duration: 380 };
+      return true;
     },
 
     getDiagnostics() {

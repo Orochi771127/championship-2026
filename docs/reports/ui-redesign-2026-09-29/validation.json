@@ -1,0 +1,903 @@
+{
+  "schemaVersion": 1,
+  "record": "UI_REDESIGN_LOCAL_20260929",
+  "recordedOn": "2026-09-29",
+  "git": {
+    "branch": "main",
+    "head": "cdc341ed33ce05ad7d9962151dbed2d313e11f40",
+    "committed": false,
+    "pushed": false,
+    "merged": false,
+    "deployed": false,
+    "note": "Local working tree only; other agents' uncommitted entries preserved."
+  },
+  "environment": {
+    "os": "Windows 11 Home 10.0.26200",
+    "node": "v24.18.0",
+    "browser": "Chrome (Playwright channel \"chrome\"), headless",
+    "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Ti (0x00002782) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "origin": "http://127.0.0.1:8761 (isolated QA origin; the Owner's 8732 save was not used)",
+    "beforeBuild": "frozen export of cdc341e served on http://127.0.0.1:8764",
+    "classification": "BROWSER_EMULATION_ONLY — no physical device was used"
+  },
+  "unitTests": {
+    "testCi": {
+      "command": "npm run test:ci (Web Locks removed, as on CI Node 22)",
+      "tests": 1372,
+      "pass": 1372,
+      "fail": 0,
+      "failingFiles": []
+    },
+    "npmTest": {
+      "command": "npm test",
+      "tests": 1612,
+      "pass": 1607,
+      "fail": 5,
+      "failingFiles": [
+        "tests\\character-batch-progression-gate-review-browser.mjs",
+        "tests\\character-batch-runtime-review-browser.mjs",
+        "tests\\character-sheet-review-browser.mjs",
+        "tests\\m001-expression-review-browser.mjs",
+        "tests\\m001-runtime-review-browser.mjs"
+      ],
+      "knownEnvironmentFailures": "The 5 failing files are art-review command-line tools that exit with a usage error without arguments or the 8732 server; unchanged from the previous round."
+    },
+    "preload": "module preload check ok: 191 startup modules"
+  },
+  "browserGates": {
+    "origin": "http://127.0.0.1:8761",
+    "results": [
+      {
+        "gate": "int-rh2",
+        "file": "tests/championship-int-rh2-browser.cjs",
+        "firstRun": "FAIL",
+        "seconds": 97,
+        "reruns": [
+          "PASS"
+        ]
+      },
+      {
+        "gate": "ui-integration",
+        "file": "tests/championship-ui-integration-browser.cjs",
+        "firstRun": "PASS",
+        "seconds": 86,
+        "reruns": []
+      },
+      {
+        "gate": "recent-integration",
+        "file": "tests/championship-recent-integration-browser.cjs",
+        "firstRun": "PASS",
+        "seconds": 48,
+        "reruns": []
+      },
+      {
+        "gate": "cage-layout",
+        "file": "tests/championship-cage-layout-browser.cjs",
+        "firstRun": "PASS",
+        "seconds": 31,
+        "reruns": []
+      },
+      {
+        "gate": "convergence",
+        "file": "tests/championship-convergence-browser.cjs",
+        "firstRun": "PASS",
+        "seconds": 15,
+        "reruns": []
+      },
+      {
+        "gate": "vs2",
+        "file": "tests/championship-vs2-browser.cjs",
+        "firstRun": "PASS",
+        "seconds": 82,
+        "reruns": []
+      },
+      {
+        "gate": "vs2-r1",
+        "file": "tests/championship-vs2-r1-gate-browser.cjs",
+        "firstRun": "PASS",
+        "seconds": 32,
+        "reruns": []
+      },
+      {
+        "gate": "vs3",
+        "file": "tests/championship-vs3-browser.cjs",
+        "firstRun": "PASS",
+        "seconds": 22,
+        "reruns": [
+          "PASS"
+        ]
+      },
+      {
+        "gate": "hunt-loading",
+        "file": "tests/championship-hunt-loading-browser.cjs",
+        "firstRun": "PASS",
+        "seconds": 94,
+        "reruns": []
+      },
+      {
+        "gate": "owned-battle",
+        "file": "tests/championship-owned-battle-browser.cjs",
+        "firstRun": "PASS",
+        "seconds": 25,
+        "reruns": [
+          "PASS",
+          "PASS"
+        ]
+      },
+      {
+        "gate": "battle-cube",
+        "file": "tests/championship-battle-cube-browser.cjs",
+        "firstRun": "PASS",
+        "seconds": 12,
+        "reruns": [
+          "PASS"
+        ]
+      },
+      {
+        "gate": "full-qa-save",
+        "file": "tests/championship-full-qa-save-browser.cjs",
+        "firstRun": "PASS",
+        "seconds": 3,
+        "reruns": []
+      },
+      {
+        "gate": "file-launch",
+        "file": "tests/championship-file-launch-guard-browser.cjs",
+        "firstRun": "PASS",
+        "seconds": 1,
+        "reruns": []
+      },
+      {
+        "gate": "faithful-vfx",
+        "file": "tests/championship-faithful-vfx-browser.cjs",
+        "firstRun": "PASS",
+        "seconds": 2,
+        "reruns": []
+      },
+      {
+        "gate": "cage-art-candidate",
+        "file": "tests/championship-cage-art-candidate-browser.cjs",
+        "firstRun": "FAIL",
+        "seconds": 20,
+        "reruns": [
+          "FAIL",
+          "PASS"
+        ]
+      },
+      {
+        "gate": "battle-art-pilot",
+        "file": "tests/championship-battle-art-pilot-browser.cjs",
+        "firstRun": "PASS",
+        "seconds": 7,
+        "reruns": []
+      },
+      {
+        "gate": "battle-bm02",
+        "file": "tests/championship-battle-bm02-art-browser.cjs",
+        "firstRun": "PASS",
+        "seconds": 7,
+        "reruns": []
+      },
+      {
+        "gate": "battle-static-family",
+        "file": "tests/championship-battle-static-arena-family-browser.cjs",
+        "firstRun": "PASS",
+        "seconds": 33,
+        "reruns": []
+      },
+      {
+        "gate": "battle-bm07",
+        "file": "tests/championship-battle-bm07-cyberspace-browser.cjs",
+        "firstRun": "PASS",
+        "seconds": 6,
+        "reruns": []
+      },
+      {
+        "gate": "battle-animated",
+        "file": "tests/championship-battle-bm03-bm04-animated-browser.cjs",
+        "firstRun": "PASS",
+        "seconds": 12,
+        "reruns": []
+      },
+      {
+        "gate": "battle-hardening-r2",
+        "file": "tests/championship-battle-object-hardening-r2-browser.cjs",
+        "firstRun": "PASS",
+        "seconds": 19,
+        "reruns": []
+      }
+    ],
+    "notes": [
+      "int-rh2: the final batch failed once where the gate reads the card name right after clicking a walking resident on the reloaded page (no wait); the gate passed unchanged when re-run.",
+      "cage-art-candidate: the first re-run failed before its landing tolerance was converted from 180 screen px (90 native px at the old 2x zoom) to 90 native px; it passed afterwards. The resident lands in the same place in the passing and failing runs.",
+      "vs3 and owned-battle were re-run after the last stylesheet edits (memory-card frame, highlight shader pre-compile) and passed.",
+      "Gate expectations updated for the new layout (same strictness): cage-layout and convergence (phone habitat is full-bleed), ui-integration (money and title matches read from the status bar), cage-layout (Shop/Database column 560/980 px; stroke gesture sized in native pixels), cage-art-candidate (landing tolerance in native pixels)."
+    ]
+  },
+  "normalFlowWalk": {
+    "script": "scratchpad walk.cjs with the repository QA save (fixture: prepares legal progress only)",
+    "sizes": [
+      {
+        "viewport": "390x844",
+        "pages": 40,
+        "pageErrors": 0,
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        ],
+        "documentOverflowPages": [],
+        "failedSteps": []
+      },
+      {
+        "viewport": "360x800",
+        "pages": 40,
+        "pageErrors": 0,
+        "consoleErrors": [],
+        "documentOverflowPages": [],
+        "failedSteps": []
+      },
+      {
+        "viewport": "820x1180",
+        "pages": 40,
+        "pageErrors": 0,
+        "consoleErrors": [],
+        "documentOverflowPages": [],
+        "failedSteps": []
+      },
+      {
+        "viewport": "1024x1366",
+        "pages": 40,
+        "pageErrors": 0,
+        "consoleErrors": [],
+        "documentOverflowPages": [],
+        "failedSteps": []
+      },
+      {
+        "viewport": "1440x900",
+        "pages": 40,
+        "pageErrors": 0,
+        "consoleErrors": [],
+        "documentOverflowPages": [],
+        "failedSteps": []
+      }
+    ]
+  },
+  "homeGeometry": {
+    "method": "fresh game through the normal opening; ranch pixels located on a flat-colour mask",
+    "sizes": [
+      {
+        "size": "390x844",
+        "before": {
+          "emptyAbove": 363,
+          "ranchHeight": 352,
+          "hostHeight": 727
+        },
+        "after": {
+          "emptyAbove": 98,
+          "emptyBelow": 97,
+          "ranchHeight": 528,
+          "hostHeight": 723
+        }
+      },
+      {
+        "size": "360x800",
+        "before": {
+          "emptyAbove": 322,
+          "ranchHeight": 352,
+          "hostHeight": 686
+        },
+        "after": {
+          "emptyAbove": 76,
+          "emptyBelow": 75,
+          "ranchHeight": 528,
+          "hostHeight": 679
+        }
+      },
+      {
+        "size": "820x1180",
+        "before": {
+          "emptyAbove": 699,
+          "ranchHeight": 352,
+          "hostHeight": 1063
+        },
+        "after": {
+          "emptyAbove": 90,
+          "emptyBelow": 89,
+          "ranchHeight": 880,
+          "hostHeight": 1059
+        }
+      },
+      {
+        "size": "1024x1366",
+        "before": {
+          "emptyAbove": 885,
+          "ranchHeight": 352,
+          "hostHeight": 1249
+        },
+        "after": {
+          "emptyAbove": 95,
+          "emptyBelow": 94,
+          "ranchHeight": 1056,
+          "hostHeight": 1245
+        }
+      },
+      {
+        "size": "1440x900",
+        "before": {
+          "emptyAbove": 279,
+          "ranchHeight": 458,
+          "hostHeight": 752
+        },
+        "after": {
+          "emptyAbove": 0,
+          "emptyBelow": 29,
+          "ranchHeight": 714,
+          "hostHeight": 743
+        }
+      }
+    ]
+  },
+  "highlight": {
+    "normal390": {
+      "viewport": "390x844",
+      "reducedMotion": false,
+      "match": "單隻對戰 — 年糕獸 報名費 0 位元幣 獎金 50 位元幣",
+      "member": "公爵獸",
+      "phasesSeen": [
+        [
+          "PREPARE",
+          2
+        ],
+        [
+          "BUILD",
+          361
+        ],
+        [
+          "CHARGE",
+          1094
+        ],
+        [
+          "BURST",
+          1892
+        ],
+        [
+          "REVEAL",
+          2178
+        ],
+        [
+          "DONE",
+          3675
+        ]
+      ],
+      "bits": {
+        "start": 9999999,
+        "afterPurchase": 9999699,
+        "afterBattle": 9999749
+      },
+      "resultText": "一方全員倒下 我方獲勝 獎金 + 50 位元幣",
+      "prizeText": "獎金 50 持有 9,999,749 位元幣 自由對戰",
+      "summary": {
+        "phase": "DONE",
+        "elapsedMs": 3733,
+        "skipped": false,
+        "target": 50,
+        "shownValue": 50,
+        "frames": {
+          "count": 223,
+          "p50": 16.69999999999709,
+          "p95": 16.799999999999272,
+          "max": 33.29999999999927,
+          "over20ms": 1,
+          "over33ms": 0
+        },
+        "audio": {
+          "state": "running",
+          "played": 20,
+          "skipped": 0,
+          "voices": 2
+        },
+        "burst": {
+          "shards": 96,
+          "mode": "DONE",
+          "frames": 144,
+          "averageRenderMs": 0.2597222232984172,
+          "maxRenderMs": 13.200000017881393,
+          "cleared": true
+        },
+        "reducedMotion": false,
+        "totalMs": 3720
+      },
+      "errors": [
+        "console error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "error": null
+    },
+    "reduced390": {
+      "viewport": "390x844",
+      "reducedMotion": true,
+      "match": "單隻對戰 — 年糕獸 報名費 0 位元幣 獎金 50 位元幣",
+      "member": "公爵獸",
+      "phasesSeen": [
+        [
+          "REVEAL",
+          2
+        ],
+        [
+          "DONE",
+          186
+        ]
+      ],
+      "bits": {
+        "start": 9999999,
+        "afterPurchase": 9999699,
+        "afterBattle": 9999749
+      },
+      "resultText": "一方全員倒下 我方獲勝 獎金 + 50 位元幣",
+      "prizeText": "獎金 50 持有 9,999,749 位元幣 自由對戰",
+      "summary": {
+        "phase": "DONE",
+        "elapsedMs": 250,
+        "skipped": false,
+        "target": 50,
+        "shownValue": 50,
+        "frames": {
+          "count": 14,
+          "p50": 16.700000000000728,
+          "p95": 16.80000000000291,
+          "max": 33.29999999999927,
+          "over20ms": 1,
+          "over33ms": 0
+        },
+        "audio": {
+          "state": "running",
+          "played": 1,
+          "skipped": 0,
+          "voices": 2
+        },
+        "burst": null,
+        "reducedMotion": true,
+        "totalMs": 240
+      },
+      "errors": [
+        "console error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "error": null
+    },
+    "normal1024": {
+      "viewport": "1024x1366",
+      "reducedMotion": false,
+      "match": "單隻對戰 — 年糕獸 報名費 0 位元幣 獎金 50 位元幣",
+      "member": "公爵獸",
+      "phasesSeen": [
+        [
+          "PREPARE",
+          3
+        ],
+        [
+          "BUILD",
+          375
+        ],
+        [
+          "CHARGE",
+          1080
+        ],
+        [
+          "BURST",
+          1879
+        ],
+        [
+          "REVEAL",
+          2162
+        ],
+        [
+          "DONE",
+          3661
+        ]
+      ],
+      "bits": {
+        "start": 9999999,
+        "afterPurchase": 9999699,
+        "afterBattle": 9999749
+      },
+      "resultText": "一方全員倒下 我方獲勝 獎金 + 50 位元幣",
+      "prizeText": "獎金 50 持有 9,999,749 位元幣 自由對戰",
+      "summary": {
+        "phase": "DONE",
+        "elapsedMs": 3733,
+        "skipped": false,
+        "target": 50,
+        "shownValue": 50,
+        "frames": {
+          "count": 223,
+          "p50": 16.69999999999709,
+          "p95": 16.799999999999272,
+          "max": 33.39999999999782,
+          "over20ms": 1,
+          "over33ms": 0
+        },
+        "audio": {
+          "state": "running",
+          "played": 20,
+          "skipped": 0,
+          "voices": 2
+        },
+        "burst": {
+          "shards": 96,
+          "mode": "DONE",
+          "frames": 144,
+          "averageRenderMs": 0.18958333362307814,
+          "maxRenderMs": 1.5,
+          "cleared": true
+        },
+        "reducedMotion": false,
+        "totalMs": 3720
+      },
+      "errors": [
+        "console error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "error": null
+    },
+    "normal1440": {
+      "viewport": "1440x900",
+      "reducedMotion": false,
+      "match": "單隻對戰 — 年糕獸 報名費 0 位元幣 獎金 50 位元幣",
+      "member": "公爵獸",
+      "phasesSeen": [
+        [
+          "PREPARE",
+          2
+        ],
+        [
+          "BUILD",
+          373
+        ],
+        [
+          "CHARGE",
+          1078
+        ],
+        [
+          "BURST",
+          1908
+        ],
+        [
+          "REVEAL",
+          2173
+        ],
+        [
+          "DONE",
+          3677
+        ]
+      ],
+      "bits": {
+        "start": 9999999,
+        "afterPurchase": 9999699,
+        "afterBattle": 9999749
+      },
+      "resultText": "一方全員倒下 我方獲勝 獎金 + 50 位元幣",
+      "prizeText": "獎金 50 持有 9,999,749 位元幣 自由對戰",
+      "summary": {
+        "phase": "DONE",
+        "elapsedMs": 3733,
+        "skipped": false,
+        "target": 50,
+        "shownValue": 50,
+        "frames": {
+          "count": 224,
+          "p50": 16.69999999999709,
+          "p95": 16.799999999999272,
+          "max": 16.80000000000291,
+          "over20ms": 0,
+          "over33ms": 0
+        },
+        "audio": {
+          "state": "running",
+          "played": 20,
+          "skipped": 0,
+          "voices": 2
+        },
+        "burst": {
+          "shards": 96,
+          "mode": "DONE",
+          "frames": 144,
+          "averageRenderMs": 0.17361111069718996,
+          "maxRenderMs": 1.5,
+          "cleared": true
+        },
+        "reducedMotion": false,
+        "totalMs": 3720
+      },
+      "errors": [
+        "console error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "error": null
+    }
+  },
+  "autosave": {
+    "steps": [
+      {
+        "name": "continue",
+        "chip": null,
+        "revision": 2
+      },
+      {
+        "name": "purchase",
+        "queued": {
+          "state": "SAVING",
+          "flash": false,
+          "text": "保存中",
+          "label": "保存中"
+        },
+        "written": {
+          "state": "SAVED",
+          "flash": true,
+          "text": "已存到本機",
+          "label": "已存到本機"
+        },
+        "label": "purchase",
+        "ms": 620,
+        "bits": 9999699,
+        "protein": 91
+      },
+      {
+        "name": "rename",
+        "label": "rename",
+        "ms": 724
+      },
+      {
+        "name": "cage-layout",
+        "label": "cage-layout",
+        "ms": 711,
+        "slotIndex": 4,
+        "screen": "CAGE_EDIT"
+      },
+      {
+        "name": "settlement",
+        "label": "settlement",
+        "ms": 611,
+        "settledBefore": 0,
+        "settledAfter": 1,
+        "receipt": {
+          "won": true,
+          "credited": 50
+        },
+        "savedBits": 9999749,
+        "statusBits": 9999749,
+        "screen": "BATTLE_RESULT"
+      },
+      {
+        "name": "background",
+        "chipBefore": null,
+        "label": "background",
+        "ms": 2
+      },
+      {
+        "name": "reload",
+        "bits": 9999749,
+        "renameKept": true,
+        "chip": null
+      },
+      {
+        "name": "failure",
+        "failed": {
+          "state": "SAVE_FAILED",
+          "flash": false,
+          "text": "保存失敗",
+          "label": "保存失敗，點一下查看"
+        },
+        "dialogText": "保存失敗 這次沒有寫入本機存檔。可以再試一次；若仍失敗，請確認瀏覽器沒有封鎖網站資料或處於私密瀏覽。 存檔只保存在這台裝置的這個瀏覽器。目前沒有帳號或雲端同步，換裝置或清除網站資料後無法取回。 關閉 再試一次",
+        "label": "retry",
+        "ms": 2,
+        "after": {
+          "state": "SAVED",
+          "flash": true,
+          "text": "已存到本機",
+          "label": "已存到本機"
+        }
+      }
+    ],
+    "detailsText": "存檔狀態 已存到本機（2026/09/29 12:30）。 購買、改名、確認設施配置、報名與對戰結算後會自動保存；離開頁面、換日與「保存並結束」也會保存。 存檔只保存在這台裝置的這個瀏覽器。目前沒有帳號或雲端同步，換裝置或清除網站資料後無法取回。 知道了",
+    "errors": [
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pass": true
+  },
+  "performance": {
+    "note": "Frame intervals sampled by an rAF probe injected into the test page only; headless Chrome on this desktop, not a device.",
+    "screens": [
+      {
+        "viewport": "390x844",
+        "samples": {
+          "homeIdle": {
+            "frames": 300,
+            "fps": 60,
+            "p50": 16.7,
+            "p95": 16.7,
+            "p99": 16.8,
+            "max": 16.8,
+            "over25ms": 0,
+            "over50ms": 0
+          },
+          "homeDrag": {
+            "frames": 257,
+            "fps": 60,
+            "p50": 16.7,
+            "p95": 16.8,
+            "p99": 16.8,
+            "max": 16.8,
+            "over25ms": 0,
+            "over50ms": 0
+          },
+          "homeDragBack": {
+            "frames": 503,
+            "fps": 60,
+            "p50": 16.7,
+            "p95": 16.8,
+            "p99": 16.8,
+            "max": 16.8,
+            "over25ms": 0,
+            "over50ms": 0
+          },
+          "homeDragAgain": {
+            "frames": 245,
+            "fps": 60,
+            "p50": 16.7,
+            "p95": 16.8,
+            "p99": 16.8,
+            "max": 16.8,
+            "over25ms": 0,
+            "over50ms": 0
+          },
+          "homeSelected": {
+            "frames": 179,
+            "fps": 60,
+            "p50": 16.7,
+            "p95": 16.8,
+            "p99": 16.8,
+            "max": 16.8,
+            "over25ms": 0,
+            "over50ms": 0
+          },
+          "huntIdle": {
+            "frames": 301,
+            "fps": 60,
+            "p50": 16.7,
+            "p95": 16.7,
+            "p99": 16.8,
+            "max": 16.8,
+            "over25ms": 0,
+            "over50ms": 0
+          },
+          "huntPan": {
+            "frames": 527,
+            "fps": 60,
+            "p50": 16.7,
+            "p95": 16.8,
+            "p99": 16.8,
+            "max": 16.8,
+            "over25ms": 0,
+            "over50ms": 0
+          }
+        }
+      },
+      {
+        "viewport": "1024x1366",
+        "samples": {
+          "homeIdle": {
+            "frames": 300,
+            "fps": 60,
+            "p50": 16.7,
+            "p95": 16.8,
+            "p99": 16.8,
+            "max": 17.5,
+            "over25ms": 0,
+            "over50ms": 0
+          },
+          "homeDrag": {
+            "frames": 264,
+            "fps": 60,
+            "p50": 16.7,
+            "p95": 16.8,
+            "p99": 16.8,
+            "max": 16.9,
+            "over25ms": 0,
+            "over50ms": 0
+          },
+          "homeDragBack": {
+            "frames": 525,
+            "fps": 60,
+            "p50": 16.7,
+            "p95": 16.7,
+            "p99": 16.8,
+            "max": 16.8,
+            "over25ms": 0,
+            "over50ms": 0
+          },
+          "homeDragAgain": {
+            "frames": 259,
+            "fps": 60,
+            "p50": 16.7,
+            "p95": 16.8,
+            "p99": 16.8,
+            "max": 16.8,
+            "over25ms": 0,
+            "over50ms": 0
+          },
+          "homeSelected": {
+            "frames": 359,
+            "fps": 60.1,
+            "p50": 16.7,
+            "p95": 16.7,
+            "p99": 16.8,
+            "max": 16.8,
+            "over25ms": 0,
+            "over50ms": 0
+          },
+          "huntIdle": {
+            "frames": 301,
+            "fps": 60,
+            "p50": 16.7,
+            "p95": 16.8,
+            "p99": 16.8,
+            "max": 16.8,
+            "over25ms": 0,
+            "over50ms": 0
+          },
+          "huntPan": {
+            "frames": 513,
+            "fps": 60,
+            "p50": 16.7,
+            "p95": 16.8,
+            "p99": 16.8,
+            "max": 16.9,
+            "over25ms": 0,
+            "over50ms": 0
+          }
+        }
+      }
+    ],
+    "homeDragBench": {
+      "before": {
+        "origin": "http://127.0.0.1:8764",
+        "viewport": "390x844",
+        "runs": 3,
+        "frames": 2594,
+        "p50": "16.7",
+        "p95": "16.8",
+        "p99": "16.8",
+        "max": "16.9",
+        "over25ms": 0,
+        "over50ms": 0
+      },
+      "afterFirstVersion": {
+        "origin": "http://127.0.0.1:8761",
+        "viewport": "390x844",
+        "runs": 3,
+        "frames": 2557,
+        "p50": "16.7",
+        "p95": "16.8",
+        "p99": "16.8",
+        "max": "50.0",
+        "over25ms": 6,
+        "over50ms": 0
+      },
+      "afterBlurFix": {
+        "origin": "http://127.0.0.1:8761",
+        "viewport": "390x844",
+        "runs": 3,
+        "frames": 2479,
+        "p50": "16.7",
+        "p95": "16.8",
+        "p99": "16.8",
+        "max": "16.9",
+        "over25ms": 0,
+        "over50ms": 0
+      }
+    }
+  },
+  "notVerified": [
+    "Physical devices (iPhone Safari, Android Chrome, iPad): layout, safe areas, touch, audio levels and frame times",
+    "Screen readers (VoiceOver, TalkBack) end-to-end",
+    "Real slow mobile networks beyond the CDP 48 KB/s throttle in the hunt-loading gate",
+    "GitHub Pages build and the public playtest (not published; WEB_BUILD_INPUTS would need 9 new files approved)",
+    "Account, login and cloud sync (design preview and plan only; no service exists)"
+  ]
+}

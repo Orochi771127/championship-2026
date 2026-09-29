@@ -100,8 +100,12 @@ async function press(page, allowed) {
     await waitState(page, [1, 2, 3, 4, 9, 11, 13, 16, 17, 18], 30000);
     await page.waitForTimeout(400);
     const grounded = await actor(page);
-    assert.ok(Math.hypot(grounded.pageX - candidateDrop.x, grounded.pageY - candidateDrop.y) < 180,
-      'normal flight lands near the visible cm01 drop point');
+    // The tolerance is 90 native pixels: it was written as 180 screen pixels
+    // when the ranch was capped at 2x. Since the 2026-09-29 adaptive zoom
+    // (6x at this viewport) the same native distance is measured through the
+    // field's published screen pixels per native pixel.
+    const landedNativeDistance = Math.hypot(grounded.pageX - candidateDrop.x, grounded.pageY - candidateDrop.y) / (grounded.nativeScreenPixels ?? 2);
+    assert.ok(landedNativeDistance < 90, `normal flight lands near the visible cm01 drop point (${landedNativeDistance.toFixed(1)} native px)`);
     const groundingScreenshot = 'raising-candidate-grounding-1024x1366.png';
     await page.screenshot({ path: path.join(output, groundingScreenshot), fullPage: true });
     const grounding = {

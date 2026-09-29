@@ -103,7 +103,11 @@ test("P1R layout carries mobile safe-area and touch constraints", () => {
   assert.match(appCss, /grid-template-columns: repeat\(8, minmax\(0, 1fr\)\)/);
   assert.doesNotMatch(css, /int-rh2-toolbar|int-rh2-raw-slot/,
     "the retired P1R toolbar shell must not come back as unused CSS");
-  assert.match(css, /width: min\(100%, 430px\)/);
+  // 2026-09-29: the habitat is the screen. The shell used to stop at a
+  // 430px phone column, which left tablets a stretched phone; it now spans
+  // the root, and the resident card is what stays bounded.
+  assert.match(css, /\.int-rh2-shell \{[^}]*width: 100%;/);
+  assert.match(css, /width: min\(calc\(100% - 24px\), 560px\)/, "the resident card keeps a readable width");
   assert.match(css, /height: 100%/, "the shell fits the root after shared chrome is reserved");
   assert.match(css, /min-height: 44px/);
 });
