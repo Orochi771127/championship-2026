@@ -44,8 +44,9 @@ def source_images(entity,inv):
         raw=P.SOURCE.native_bank(archive/'07_RAW_NITRO_ART_BY_ROM_DIRECTORY/digimon',name,doc)
         for cell in doc['cells']:
             key=f"{side}/cell_{cell['cellIndex']:03d}";im,_=P.SOURCE.render_native(cell,raw)
-            b=inv['slots'][key]['nativeBounds'];o=inv['sourceOrigin']
-            tile=Image.new('RGBA',(64,64));tile.alpha_composite(im,(o[0]+b[0],o[1]+b[1]));images[key]=tile
+            b=inv['slots'][key]['nativeBounds'];o=inv['slots'][key].get('canvasOrigin',inv['sourceOrigin'])
+            tile=Image.new('RGBA',tuple(inv.get('canvas',[64,64])));tile.alpha_composite(im,(o[0]+b[0],o[1]+b[1]));images[key]=tile
+            P.require(sum(tile.getchannel('A').get_flattened_data())==sum(im.getchannel('A').get_flattened_data()),'SOURCE_CANVAS_CLIPS_VISIBLE_PIXELS '+key)
     return images
 
 
@@ -169,8 +170,7 @@ def prepare(entity):
                    'targetAlphaSha256':P.sha(target_alpha.tobytes()),
                    'translation':list(translation),'alphaOccupancyMismatchPixels':alpha_mismatch,
                    'maximumAllowedMismatchPixels':max_alpha_mismatch,
-                   'targetColorCount':len({p for p in images[key].get_flattened_data() if p[3]}),
-                   'limitation':'Donor alpha is proof only. Translate and recolor the original-character base; never transfer donor pixels or RGB.'}
+                   'targetColorCount':len({p for p in images[key].get_flattened_data() if p[3]})}
         if proof:
             derived[key]={'base':parent,'operation':operation,'translation':list(translation),'sourceProof':proof}
         else:not_derived.append(key)

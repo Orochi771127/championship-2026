@@ -25,7 +25,7 @@ function memoryStorage() {
 }
 
 const appFor = (storage) => createChampionshipStandaloneApp({
-  storage, catalog, cages: presentation.cages, now: () => "2026-09-05T10:00:00.000Z"
+  storage, locks: null, catalog, cages: presentation.cages, now: () => "2026-09-05T10:00:00.000Z"
 });
 
 /**

@@ -16,7 +16,7 @@ function makeApp(providedStorage=null) {
   const data = new Map();
   const storage = { getItem: k => data.get(k) ?? null, setItem: (k, v) => data.set(k, String(v)),
     removeItem: k => data.delete(k), keys: () => [...data.keys()] };
-  return createChampionshipStandaloneApp({ storage:providedStorage??storage, catalog: speciesCatalog, cages: presentation.cages,
+  return createChampionshipStandaloneApp({ storage:providedStorage??storage, locks: null, catalog: speciesCatalog, cages: presentation.cages,
     now: () => "2026-09-05T10:00:00.000Z" });
 }
 

@@ -14,7 +14,7 @@ P=importlib.util.module_from_spec(spec);spec.loader.exec_module(P)
 BASE=P.PACK/'donor-review-v1'
 REQUIRED=('morphology','locomotion','faceAndExpression','appendages','restraint','specialStates','contactAndOrigin')
 
-def prepare(entity):
+def prepare(entity, frame_packing=False, canvas_extent=64):
     folder=P.PACK/'generated/entities'/entity
     P.require(folder.is_dir() and folder.parent==P.PACK/'generated/entities','UNKNOWN_ENTITY')
     archive=ROOT.parent/'YDIJ_PRIVATE_ROM_ART_PACK'
@@ -40,7 +40,25 @@ def prepare(entity):
             visible=[bounds[0]+box[0],bounds[1]+box[1],bounds[0]+box[2],bounds[1]+box[3]] if box else bounds
             slots[key]={'canonical':canonical,'nativeBounds':bounds,'visibleBounds':visible,'blank':box is None,'sourceRgbaSha256':digest}
             images[key]=im
-    union,origin=P.canvas_origin([r['nativeBounds'] for r in slots.values()])
+    if canvas_extent is None:
+        extent=max(max(r["visibleBounds"][2]-r["visibleBounds"][0],r["visibleBounds"][3]-r["visibleBounds"][1]) for r in slots.values())
+        canvas_extent=max(64,((extent+31)//32)*32)
+    P.require(type(canvas_extent) is int and 64<=canvas_extent<=256 and canvas_extent%32==0,"INVALID_REVIEW_CANVAS")
+    P.require(frame_packing or canvas_extent==64,"EXTENDED_CANVAS_REQUIRES_PACKING")
+    if frame_packing:
+        # Transparent hardware-tile padding is not character extent. An actor's
+        # motion union may exceed 64 even though every individual pose fits.
+        # Preserve native world coordinates with explicit packing origins; no
+        # rescaling, recentering of the actor, or motion edits are involved.
+        bounds=[r['visibleBounds'] for r in slots.values() if not r['blank']]
+        union=[min(b[0] for b in bounds),min(b[1] for b in bounds),max(b[2] for b in bounds),max(b[3] for b in bounds)]
+        origin=[(canvas_extent-union[2]+union[0])//2-union[0],(canvas_extent-union[3]+union[1])//2-union[1]]
+        for row in slots.values():
+            b=row['visibleBounds']
+            P.require(b[2]-b[0]<=canvas_extent and b[3]-b[1]<=canvas_extent,'INDIVIDUAL_POSE_EXCEEDS_REVIEW_CANVAS')
+            row['canvasOrigin']=[max(-b[0],min(origin[0],canvas_extent-b[2])),max(-b[1],min(origin[1],canvas_extent-b[3]))]
+    else:
+        union,origin=P.canvas_origin([r['nativeBounds'] for r in slots.values()])
     for row in slots.values():
         parent=slots[row['canonical']]['visibleBounds'];v=row['visibleBounds']
         row['translation']=[v[0]-parent[0],v[1]-parent[1]]
@@ -51,17 +69,21 @@ def prepare(entity):
           'motionContractSha256':P.sha((folder/'motion-contract.json').read_bytes()),
           'speciesCatalogSha256':P.sha(species_doc.read_bytes()),'species':species,
           'designSha256':P.sha(setting.read_bytes()) if setting.exists() else None,
-          'sourceOrigin':origin,'nativeBoundsUnion':union,'canvas':[64,64],'nativeScale':1,
+          'sourceOrigin':origin,'nativeBoundsUnion':union,'canvas':[canvas_extent,canvas_extent],'nativeScale':1,
           'slots':slots,'sequences':contract['sides'],
           'counts':{'slots':len(slots),'masters':len(groups),'sequences':sum(len(s['sequences']) for s in contract['sides'].values())},
           'prohibitions':['NO_NEW_ACTION_SEMANTICS','NO_BBOX_RECENTER','NO_PER_CELL_AUTOFIT','NO_SOURCE_PIXELS_IN_OUTPUT',
                           'NO_UNIVERSAL_BOUND_CELL_RANGE','NO_INTERPOLATED_TIMING','NO_NEW_LIMBS']}
+    if frame_packing:
+        data['packingPolicy']='EXPLICIT_PER_SLOT_ORIGIN_NATIVE_WORLD_COORDINATES_UNCHANGED'
     P.SOURCE.publish({'inventory.json':P.encoded(data)},BASE/entity,False)
     # All source images stay in a research directory outside the Git product.
     research=ROOT.parent/'_archive/character-donor-review-v1'/entity
     files={};canvases={}
     for key,row in slots.items():
-        canvas=Image.new('RGBA',(64,64));canvas.alpha_composite(images[key],(origin[0]+row['nativeBounds'][0],origin[1]+row['nativeBounds'][1]));canvases[key]=canvas
+        packed_origin=row.get('canvasOrigin',origin)
+        canvas=Image.new('RGBA',(canvas_extent,canvas_extent));canvas.alpha_composite(images[key],(packed_origin[0]+row['nativeBounds'][0],packed_origin[1]+row['nativeBounds'][1]));canvases[key]=canvas
+        P.require(sum(canvas.getchannel('A').get_flattened_data())==sum(images[key].getchannel('A').get_flattened_data()),'SOURCE_CANVAS_CLIPS_VISIBLE_PIXELS '+key)
     for side in ('main','sub'):
         keys=[k for k in slots if k.startswith(side+'/')];sheet=Image.new('RGBA',(8*160,((len(keys)+7)//8)*160),(233,235,238,255));draw=ImageDraw.Draw(sheet)
         for n,key in enumerate(keys):

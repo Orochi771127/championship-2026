@@ -18,7 +18,7 @@ const catalog = read("src/data/championship/catalogs/creature-species.r1.json");
 const { cages } = read("docs/contracts/championship/raising-home-presentation.v1.json");
 const store = () => { const map=new Map(); return { fail:false, getItem:k=>map.get(k)??null,
   setItem(k,v) { if (this.fail) throw Error("FULL"); map.set(k,v); }, removeItem:k=>map.delete(k) }; };
-const appFor = (storage, options={}) => createChampionshipStandaloneApp({ storage,catalog,cages,
+const appFor = (storage, options={}) => createChampionshipStandaloneApp({ storage,locks:null,catalog,cages,
   rngClock:()=>({hour:13,minute:20,second:50}), ...options });
 async function enter(app, biomeId="Grass") {
   app.openGate(); app.selectGate(app.getGates().find(g=>g.biomeId===biomeId).gateId); app.confirmGate();

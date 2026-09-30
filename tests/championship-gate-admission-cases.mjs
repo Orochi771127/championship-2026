@@ -15,7 +15,7 @@ function storage() {
   const data = new Map();
   return { getItem: k => data.get(k) ?? null, setItem: (k,v) => data.set(k,v), removeItem: k => data.delete(k), keys: () => [...data.keys()] };
 }
-const make = (overrides = {}) => createChampionshipStandaloneApp({ catalog, cages, storage: storage(),
+const make = (overrides = {}) => createChampionshipStandaloneApp({ catalog, cages, storage: storage(), locks: null,
   rngClock: () => ({ hour:13, minute:20, second:50 }), ...overrides });
 function configure(app, biome = "Canyon") {
   app.openGate(); app.selectGate(app.getGates().find(g => g.biomeId === biome).gateId); app.confirmGate();

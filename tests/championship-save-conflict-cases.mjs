@@ -7,7 +7,7 @@ import {createChampionshipPersistentSavePort} from '../src/championship/app/Cham
 const read=p=>JSON.parse(readFileSync(new URL('../'+p,import.meta.url),'utf8'));
 function setup(){const data=new Map();let blocked=false;const storage={getItem(k){if(blocked)throw Error('STORAGE_BLOCKED');return data.get(k)??null;},
   setItem(k,v){if(blocked)throw Error('STORAGE_BLOCKED');data.set(k,v);},removeItem:k=>data.delete(k)};
- const create=()=>createChampionshipStandaloneApp({storage,catalog:read('src/data/championship/catalogs/creature-species.r1.json'),
+ const create=()=>createChampionshipStandaloneApp({storage,locks:null,catalog:read('src/data/championship/catalogs/creature-species.r1.json'),
  cages:read('docs/contracts/championship/raising-home-presentation.v1.json').cages});return {data,create,block:()=>blocked=true};}
 test('stale tab cannot overwrite newer save on retry or inspection; explicit Continue adopts it',async()=>{
  const h=setup(),a=h.create();let b;

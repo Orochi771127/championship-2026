@@ -153,7 +153,7 @@ async function selectHuntTool(page, label) {
 /** Capture through normal tools, returning the collected identity or null.
  * Virtual-time mode controls input cadence only; it never bypasses the game.
  */
-async function captureOneWild(page, box, { attempts = 12, controlledClock = false } = {}) {
+async function captureOneWild(page, box, { attempts = 12, controlledClock = false, targetSpeciesId = null, onBound = null } = {}) {
   const trace=async stage=>{if(process.env.CHAMPIONSHIP_QA_TRACE)console.log(stage,await page.locator('[data-hunt-tool-state]').getAttribute('data-hunt-tool-state'));};
   const advance = async ms => {
     if(!controlledClock)return page.waitForTimeout(ms);
@@ -181,7 +181,7 @@ async function captureOneWild(page, box, { attempts = 12, controlledClock = fals
   const onScreen = (list) => list.filter((wild) => wild.x > 40 && wild.y > 40 && wild.x < box.width - 50 && wild.y < box.height - 60);
   // Prefer lower-HP targets for the initial rope, then standing and nearby
   // targets. Their original HP, motion and capture conditions remain active.
-  const nearest = (list) => list
+  const nearest = (list) => list.filter(wild => !targetSpeciesId || wild.speciesId === targetSpeciesId)
     .map((wild) => ({ wild, distance: Math.hypot(wild.x - centre.x, wild.y - centre.y) }))
     .sort((a, b) => (a.wild.maxHp-b.wild.maxHp) || (a.wild.moving === b.wild.moving ? a.distance - b.distance : (a.wild.moving ? 1 : -1)))[0] ?? null;
 
@@ -267,6 +267,7 @@ async function captureOneWild(page, box, { attempts = 12, controlledClock = fals
       if (now?.state === "TETHERED") bound = now;
     }
     if (!bound) continue;
+    if(onBound)await onBound(bound);
     if(process.env.CHAMPIONSHIP_QA_TRACE)console.log('BOUND',JSON.stringify(bound));
     if(bound.y<200||bound.y>box.height-100||bound.x<30||bound.x>box.width-110) {
       await tool('手');await panToward(bound);await tool('繩索');
@@ -282,7 +283,7 @@ async function captureOneWild(page, box, { attempts = 12, controlledClock = fals
       // Overlapping native hit boxes may select a different bound actor.
       // Follow the controller's selected rope target, not our intended target.
       bound=attached.rope?await find(attached.rope.wildId):null;
-      if(!bound){await page.mouse.up();await sampleFrame();continue;}
+      if(!bound||(targetSpeciesId&&bound.speciesId!==targetSpeciesId)){await page.mouse.up();await sampleFrame();continue;}
     }
     for (let step = 1; step <= 12; step += 1) await page.mouse.move(box.x + bound.x + step * 7.5, box.y + bound.y - 15);
     let down = null;

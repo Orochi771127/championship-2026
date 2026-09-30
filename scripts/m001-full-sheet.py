@@ -81,6 +81,7 @@ def import_sheet(source, output='compiled', sample_side=64):
         reviews.append({'key':key,'panel':i,'alphaBounds':list(bbox),'touchesPanelEdge':any([bbox[0]==0,bbox[1]==0,bbox[2]==64,bbox[3]==64]),'sourceVisibleBoundsOn64':[v+plan['geometry']['sourceOrigin'][j%2] for j,v in enumerate(plan['slots'][key]['visibleBounds'])],
                         'stateTransform':state,'poseExpressionRestraintQa':'PENDING','geometryQa':'PENDING','artAccepted':False})
     metadata={'designVersion':'m001-full-sheet-candidate-r01',
+              'authoredMasters':9,'derivedMasters':1,'generatedCandidateMasters':43,
               'unexpectedOccupiedPanels':extra_panels,'generationSourceSize':list(im.size),
               'normalization':{'operation':'UNIFORM_WHOLE_SHEET_NEAREST_SHARED_PALETTE_BINARY_ALPHA','panelSampleSize':sample_side,'sharedOffset':list(offset),'perFrameFit':False}}
     assemble(masters,plan,native,files,reviews,metadata,WORK/output,mapping)
@@ -91,19 +92,27 @@ def assemble(masters,plan,native,files,reviews,metadata,destination,mapping):
     delivered={}
     for key,slot in plan['slots'].items():
         tile=masters[slot['canonical']];dx,dy=slot['sourceTranslationFromCanonical']
+        source_translation=[dx,dy]
+        if 'canvasOrigin' in slot:
+            own=slot['canvasOrigin'];parent=plan['slots'][slot['canonical']]['canvasOrigin']
+            dx+=own[0]-parent[0];dy+=own[1]-parent[1]
         if dx or dy:
             box=tile.getchannel('A').getbbox()
             P.require(0<=box[0]+dx<box[2]+dx<=64 and 0<=box[1]+dy<box[3]+dy<=64,'TRANSLATED_PIXELS_CLIPPED')
             shifted=Image.new('RGBA',(64,64));shifted.alpha_composite(tile,(dx,dy));tile=shifted
         filename='cells/'+key.replace('/','-')+'.png';files[filename]=P.PIXEL.png_bytes(tile)
         delivered[key]={'image':filename,'canonical':slot['canonical'],'translation': [dx,dy],'sha256':P.sha(files[filename]),'alphaBounds':list(tile.getchannel('A').getbbox())}
+        if 'canvasOrigin' in slot:
+            delivered[key].update({'canvasOrigin':slot['canvasOrigin'],'sourceTranslationFromCanonical':source_translation})
     contract=P.read(P.PACK/'generated/entities'/native.get('entityId',P.ENTITY)/'motion-contract.json')
     sequences=[{'side':side,'sequence':s,'available':True,'missing':[]} for side,v in contract['sides'].items() for s in v['sequences']]
+    # Master counts come from the caller or, for a repair, the prior bank; other
+    # entities must never inherit m001's numbers. Slot and sequence counts are
+    # measured from this bank, so no caller can overstate them.
     bank={**native,'designVersion':'m001-full-sheet-candidate-r01','cells':delivered,'sequences':sequences,
-          'authoredMasters':9,'derivedMasters':1,'generatedCandidateMasters':43,'deliveredSlots':83,'availableSequences':53,
           'fullMotionQa':'PENDING_ALL_GENERATED_CELLS','normalGameQa':'NOT_RUN','artReview':'PENDING','runtimeEligible':False,
           'generationTool':'BUILTIN_IMAGEGEN','modelVersion':'NOT_EXPOSED','higgsfieldCalls':0,
-          **metadata}
+          **metadata,'deliveredSlots':len(delivered),'availableSequences':len(sequences)}
     files['bank.json']=P.encoded(bank);files['cell-review.json']=P.encoded(reviews)
     for side,count in [(side,sum(k.startswith(side+'/') for k in delivered)) for side in ('main','sub')]:
         columns=8;rows=(count+columns-1)//columns
