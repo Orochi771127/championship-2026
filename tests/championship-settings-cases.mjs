@@ -602,3 +602,122 @@ test("the title keeps its key-art palette, and retired skins stay unlinked", () 
   }
   assert.match(html, /ui\/settings\.css/);
 });
+
+// Minimal DOM boundary for the real settings panel; geometry and native pointer
+// dragging require separate browser verification; this checks node lifetime.
+class SettingsNode {
+  constructor(tag, doc) {
+    this.tagName = tag; this.ownerDocument = doc; this.children = []; this.parentNode = null;
+    this.dataset = {}; this.attributes = {}; this.listeners = {}; this.className = '';
+    this.style = { setProperty() {} }; this.scrollTop = 0; this.value = ''; this.textContent = '';
+  }
+  append(...nodes) { for (const node of nodes) { node.parentNode = this; this.children.push(node); } }
+  replaceChildren(...nodes) { for (const node of this.children) node.parentNode = null; this.children = []; this.append(...nodes); }
+  get lastChild() { return this.children.at(-1); }
+  get childNodes() { return this.children; }
+  get childElementCount() { return this.children.length; }
+  get isConnected() { return this === this.ownerDocument.body || Boolean(this.parentNode?.isConnected); }
+  setAttribute(name, value) { this.attributes[name] = String(value); }
+  getAttribute(name) { return this.attributes[name] ?? null; }
+  addEventListener(name, listener) { (this.listeners[name] ??= []).push(listener); }
+  fire(name) { for (const fn of this.listeners[name] ?? []) fn({ target: this }); }
+  focus() { this.ownerDocument.activeElement = this; }
+  showModal() { this.open = true; }
+  close() { this.open = false; }
+  remove() { this.parentNode.children = this.parentNode.children.filter(node => node !== this); this.parentNode = null; }
+  matches(selector) {
+    if (selector === '*') return true;
+    if (selector.startsWith('#')) return this.id === selector.slice(1);
+    if (selector.startsWith('.')) return this.className.split(' ').includes(selector.slice(1));
+    const [tag, attr, value] = selector.match(/^(\w+)?(?:\[([^=\]]+)(?:=["']([^"']*)["'])?\])?$/)?.slice(1) ?? [];
+    if (!tag && !attr) throw Error(`Unsupported test selector: ${selector}`);
+    if (tag && this.tagName !== tag) return false;
+    if (!attr) return true;
+    const actual = attr.startsWith('data-') ? this.dataset[attr.slice(5).replace(/-([a-z])/g, (_, c) => c.toUpperCase())]
+      : this[attr] ?? this.attributes[attr];
+    return value === undefined ? actual !== undefined : String(actual) === value;
+  }
+  closest(selector) { return this.matches(selector) ? this : this.parentNode?.closest(selector) ?? null; }
+  querySelectorAll(selector) {
+    const parts = selector.split(/\s+/);
+    const visit = node => node.children.flatMap(child => [child, ...visit(child)]);
+    return visit(this).filter(node => {
+      if (!node.matches(parts.at(-1))) return false;
+      let parent = node.parentNode;
+      for (let i = parts.length - 2; i >= 0; i--) {
+        while (parent && !parent.matches(parts[i])) parent = parent.parentNode;
+        if (!parent) return false;
+        parent = parent.parentNode;
+      }
+      return true;
+    });
+  }
+  querySelector(selector) { return this.querySelectorAll(selector)[0] ?? null; }
+}
+
+test('volume input keeps the active native slider mounted through store and environment notifications', async (t) => {
+  const { createSettingsPanel } = await import('../src/championship/app/settings/settingsPanel.js');
+  const { getLocale, setLocale } = await import('../src/championship/text/locale.js');
+  const originalLocale = getLocale();
+  t.after(() => setLocale(originalLocale));
+  const originalCSS = globalThis.CSS;
+  globalThis.CSS = { escape: value => String(value) };
+  t.after(() => { if (originalCSS === undefined) delete globalThis.CSS; else globalThis.CSS = originalCSS; });
+  const doc = fakeDocument();
+  doc.createElement = tag => new SettingsNode(tag, doc);
+  doc.body = doc.createElement('body');
+  const storage = memoryStorage();
+  storage.data.set(CHAMPIONSHIP_MODERN_SAVE_KEY, 'untouched-game-save');
+  const { store, timers } = storeOn(storage);
+  const environment = createPreferenceEnvironment({ store, doc, matchMedia: fakeMatchMedia().matchMedia });
+  const panel = createSettingsPanel({ doc, store, environment, history: null, win: null });
+  t.after(() => { panel.dispose(); environment.dispose(); store.dispose(); });
+  panel.open({ category: 'sound' });
+  for (const id of ['masterVolume', 'sfxVolume']) {
+    const slider = doc.body.querySelector(`#cm-setting-${id}`);
+    slider.focus();
+    for (const value of [95, 75, 50, 20]) {
+      slider.value = String(value);
+      slider.fire('input');
+      assert.equal(store.get()[id], value, 'the audio preference applies at every drag step');
+      assert.equal(doc.body.querySelector(`#cm-setting-${id}`) === slider, true,
+        `${id} must not be replaced while a native drag or keyboard input is in progress`);
+      assert.equal(slider.isConnected, true);
+      assert.equal(doc.activeElement, slider);
+      assert.equal(slider.getAttribute('aria-valuetext'), `${value}%`);
+      assert.equal(slider.parentNode.querySelector('output').textContent, `${value}%`);
+    }
+  }
+  assert.match(doc.body.querySelector('[data-category="sound"]').lastChild.textContent, /20%/);
+  assert.ok(doc.body.querySelectorAll('p').some(node => /目前 4%/.test(node.textContent)), 'effective volume is refreshed');
+  timers.runAll();
+  assert.equal(JSON.parse(storage.getItem(CHAMPIONSHIP_PREFERENCES_KEY)).device.masterVolume, 20);
+  assert.equal(JSON.parse(storage.getItem(CHAMPIONSHIP_PREFERENCES_KEY)).device.sfxVolume, 20);
+  assert.equal(storage.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY), 'untouched-game-save');
+  panel.close();
+  panel.open({ category: 'sound' });
+  assert.equal(doc.body.querySelector('#cm-setting-masterVolume').value, '20', 'close/reopen keeps the stored choice');
+  const previousSlider = doc.body.querySelector('#cm-setting-masterVolume');
+  store.set('masterVolume', 60);
+  assert.equal(doc.body.querySelector('#cm-setting-masterVolume').value, '60', 'an external update refreshes the control');
+  assert.equal(previousSlider.isConnected, false, 'only an active input event suppresses full refresh');
+  store.set('muted', true);
+  const mutedSlider = doc.body.querySelector('#cm-setting-masterVolume');
+  mutedSlider.focus();
+  mutedSlider.value = '50'; mutedSlider.fire('input');
+  assert.equal(mutedSlider.isConnected, true);
+  assert.ok(doc.body.querySelectorAll('p').some(node => /目前 0%/.test(node.textContent)), 'muted drag keeps effective volume at zero');
+  assert.match(doc.body.querySelector('[data-category="sound"]').lastChild.textContent, /靜音/);
+  store.set('muted', false);
+  assert.ok(doc.body.querySelectorAll('p').some(node => /目前 10%/.test(node.textContent)), 'unmute restores the current volume product');
+  store.set('locale', 'en');
+  const englishSlider = doc.body.querySelector('#cm-setting-masterVolume');
+  englishSlider.focus();
+  englishSlider.value = '70'; englishSlider.fire('input');
+  assert.equal(englishSlider.isConnected, true);
+  assert.ok(doc.body.querySelectorAll('p').some(node => /now 14%/.test(node.textContent)), 'partial refresh follows the live language');
+  assert.equal(doc.body.querySelector('[data-category="sound"]').lastChild.textContent, 'Master volume 70%');
+  doc.body.querySelector('.cm-settings__reset').fire('click');
+  assert.equal(doc.body.querySelector('#cm-setting-masterVolume').value, '100', 'reset still rebuilds the page');
+  assert.equal(doc.body.querySelector('#cm-setting-sfxVolume').value, '100');
+});

@@ -104,6 +104,8 @@ export function createSettingsPanel({
   let historyEntry = false;
   let ignoreNextPop = false;
   let closing = false;
+  let handlingSliderInput = false;
+  let soundLevelNote = null;
   const cleanups = [];
   const node = (tag, className, key, params) => {
     const element = doc.createElement(tag);
@@ -223,7 +225,17 @@ export function createSettingsPanel({
       input.style.setProperty("--fill", `${value}%`);
     };
     paint(input.value);
-    input.addEventListener("input", () => { paint(input.value); store.set(id, Number(input.value)); });
+    input.addEventListener("input", () => {
+      paint(input.value);
+      // Store/environment observers run synchronously. Replacing this native
+      // range during its input event cancels the pointer's ongoing drag.
+      handlingSliderInput = true;
+      try { store.set(id, Number(input.value)); }
+      finally { handlingSliderInput = false; }
+      const summaryNode = nav.querySelector('[data-category="sound"]')?.lastChild;
+      if (summaryNode) summaryNode.textContent = summary("sound");
+      updateSoundLevel();
+    });
     row.append(input, output);
     set.append(row);
     return set;
@@ -261,6 +273,13 @@ export function createSettingsPanel({
       renderContent();
     });
     return button;
+  }
+
+  function updateSoundLevel() {
+    const values = store.get();
+    setText(soundLevelNote, "實際音量 = 總音量 × 遊戲音效（目前 {level}%）；靜音時為 0。", {
+      level: values.muted ? 0 : Math.round(values.masterVolume * values.sfxVolume / 100)
+    });
   }
 
   // ---- Category pages ------------------------------------------------------
@@ -308,10 +327,9 @@ export function createSettingsPanel({
       section.append(toggle("muted", "全部靜音"));
       section.append(slider("masterVolume", "總音量"));
       section.append(slider("sfxVolume", "遊戲音效", "對戰音效與高光演出音效。"));
-      const values = store.get();
-      section.append(note("實際音量 = 總音量 × 遊戲音效（目前 {level}%）；靜音時為 0。", {
-        level: values.muted ? 0 : Math.round(values.masterVolume * values.sfxVolume / 100)
-      }));
+      soundLevelNote = note("實際音量 = 總音量 × 遊戲音效（目前 {level}%）；靜音時為 0。");
+      updateSoundLevel();
+      section.append(soundLevelNote);
       const test = node("button", "cm-settings__action", "試聽");
       test.type = "button";
       test.addEventListener("click", () => {
@@ -441,7 +459,7 @@ export function createSettingsPanel({
   }
 
   function renderAll() {
-    if (!dialog) return;
+    if (!dialog || handlingSliderInput) return;
     setText(titleNode, view === "detail" && narrow() ? CATEGORY_TITLES[category] : "設定");
     renderNav();
     renderContent();
