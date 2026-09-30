@@ -11,7 +11,7 @@
 - remote：`origin https://github.com/Orochi771127/championship-2026.git`
 - 基準 commit：`bfb1f28d53e8a1bbca19bb0aa6b0c9c6f21146e0`（`main` 與 `origin/main` 起點相同）
 - 交接分支：`handoff/dot-continuation-20261001`
-- Pages 只在 `main` push 觸發；本分支 push 不觸發 GitHub Pages deploy。CI 對 push/PR 仍可能執行 deterministic tests。
+- Pages 只在 `main` push 或手動執行時觸發；本分支 push 不觸發 GitHub Pages deploy。CI 的 push trigger 只列 `main`，建立 PR 時才會對本分支執行 `npm run test:ci`。
 
 開始盤點時工作區有 20 個已修改檔案。Git 狀態以目錄折疊顯示 594 個未追蹤路徑，逐檔展開後是 101,195 個未追蹤檔案；未把這些路徑當成可公開成果整批加入。未提交的角色生成、審核、provider ledger、cage library 與其他 agent 內容仍留在工作區。
 
