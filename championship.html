@@ -278,7 +278,7 @@
          palette whichever theme is chosen (data-palette, ui/tokens.css). -->
     <div id="cm-title" class="cm-title" data-palette="night">
       <div class="cm-title__panel" data-opening="login">
-        <button id="cm-title-settings" class="cm-title__settings" type="button" aria-label="設定" title="設定"></button>
+        <button id="cm-title-settings" class="cm-title__settings" type="button" aria-label="設定" title="設定" hidden></button>
         <div class="cm-title__logo">
           <span class="cm-title__crown" aria-hidden="true"></span>
           <p class="cm-title__eyebrow">DIGIMON</p>
@@ -307,7 +307,7 @@
       } else {
         const gameModule = document.createElement("script");
         gameModule.type = "module";
-        gameModule.src = "./src/championship/app/main.js?v=settings-1";
+        gameModule.src = "./src/championship/app/main.js?v=settings-2";
         document.body.appendChild(gameModule);
       }
     </script>

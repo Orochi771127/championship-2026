@@ -8,7 +8,7 @@
 
 ## 1. 入口與操作
 
-- 標題畫面右上的齒輪（`#cm-title-settings`），或遊戲中「系統」選單 →「設定」。開場動畫播放時齒輪隱藏。
+- 標題畫面右上的齒輪（`#cm-title-settings`），或遊戲中「系統」選單 →「設定」。開場動畫播放時齒輪隱藏；遊戲程式載入完成前齒輪也隱藏，和還不能按的 LOGIN 一樣，慢速網路下不會出現按了沒反應的齒輪（2026-10-04 正式站冒煙測試發現後修正）。
 - 設定是原生 `<dialog>` 的 modal：開啟時底下的牧場、戰鬥等畫面不能被點到。
 - 手機先顯示分類清單，點分類進入細項；寬度 ≥ 768px 時左側固定分類、右側細項。
 - 返回：Esc 與瀏覽器／Android 返回鍵都是「細項 → 清單 → 關閉」逐層退回，不會離開遊戲頁面，也不會改變目前畫面。關閉後焦點回到開啟它的按鈕。
@@ -220,7 +220,7 @@
 - `src/championship/app/ui/settings.css`：選中卡片與目前分類的說明字改用第二層文字色（對比 ≥ 4.5:1）；窄螢幕參數表與文字大小卡的排列。
 - `src/championship/app/settings/settingsPanel.js`：滑桿拖曳時就地更新、重設後焦點留在按鈕上。
 - `src/championship/app/vs4Screens.js`：商店讀屏標籤經由翻譯層。
-- `championship.html`：重新產生的啟動預載清單（191 → 204 個模組），兩張樣式表的版本號。
+- `championship.html`、`src/championship/app/main.js`：重新產生的啟動預載清單（191 → 204 個模組）、樣式表與主程式的版本號；標題齒輪在主程式接上點擊後才顯示。
 - `docs/contracts/championship/WEB_BUILD_INPUTS.v1.json`：登記新檔並更新雜湊（第 13 節）。
 - 測試：設定閘門新增商店英文標籤與滑桿拖曳檢查，並拒絕未指定或指向 8732 的測試來源；單元測試新增選中狀態的對比檢查。
 
@@ -249,4 +249,4 @@
 
 （路徑皆在 `src/championship/` 之下。）
 
-2026-10-04 依 Owner 指示「全部完成後自檢沒問題就COMMIT跟PUSH且整合到MAIN發布」登記上述檔案並更新已列入檔案的雜湊，`build:playtest` 與 `validate:playtest` 通過、建置產物上的瀏覽器閘門通過後才推送。發佈結果（線上 build ID 與檔案雜湊核對）記錄在[產品現況](../../CURRENT_PRODUCT_STATUS.md)。
+2026-10-04 依 Owner 指示「全部完成後自檢沒問題就COMMIT跟PUSH且整合到MAIN發布」登記上述檔案並更新已列入檔案的雜湊，`build:playtest` 與 `validate:playtest` 通過、建置產物上的瀏覽器閘門通過後才推送。第一次發佈（`493bf349`）的線上 build ID 與本機成品相同，60 個改動檔的線上雜湊全部一致；正式站冒煙測試發現慢速網路下標題齒輪會在主程式載入前出現但沒有反應，修正後再次建置、驗證並發佈。最終結果記錄在[產品現況](../../CURRENT_PRODUCT_STATUS.md)。

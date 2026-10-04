@@ -1609,6 +1609,9 @@ function boot() {
     setLabel(titleSettingsButton, "aria-label", "設定");
     setLabel(titleSettingsButton, "title", "設定");
     titleSettingsButton.addEventListener("click", () => openSettings(titleSettingsButton));
+    // The page ships the gear hidden, like the disabled LOGIN button: on a slow
+    // link it would otherwise show (and ignore taps) until this module loads.
+    titleSettingsButton.hidden = false;
   }
   relabelChrome();
   onLocaleChange(() => relabelChrome());
