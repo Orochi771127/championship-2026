@@ -11,7 +11,8 @@ Do not infer current implementation state from one historical coordination file.
 
 | Need | Canonical entry |
 |---|---|
-| 全遊戲 UI／HUD 重設計、重要高光、本機自動保存與帳號方向（2026-09-29，本機驗收，未發布） | [重設計報告](reports/ui-redesign-2026-09-29/REPORT_ZH_TW.md) · [設計規則](reports/ui-redesign-2026-09-29/DESIGN_ZH_TW.md) · [驗證回條](reports/ui-redesign-2026-09-29/validation.json) · [帳號與雲端存檔規劃](planning/ACCOUNT_CLOUD_SAVE_PLAN_2026-09-29_ZH_TW.md) |
+| 正式設定畫面：外觀主題、畫質、聲音、繁中／英文、操作輔助與資料（2026-09-29，合併於 `bfb1f28`） | [設定報告](reports/settings-2026-09-29/REPORT_ZH_TW.md) · [中英術語表](reports/settings-2026-09-29/GLOSSARY_ZH_TW.md) · [各畫質效能](reports/settings-2026-09-29/perf/perf-tiers.json) |
+| 全遊戲 UI／HUD 重設計、重要高光、本機自動保存與帳號方向（2026-09-29，合併於 `bfb1f28`） | [重設計報告](reports/ui-redesign-2026-09-29/REPORT_ZH_TW.md) · [設計規則](reports/ui-redesign-2026-09-29/DESIGN_ZH_TW.md) · [驗證回條](reports/ui-redesign-2026-09-29/validation.json) · [帳號與雲端存檔規劃](planning/ACCOUNT_CLOUD_SAVE_PLAN_2026-09-29_ZH_TW.md) |
 | 全遊戲頁面、操作流程與系統整合（2026-09-28，已發布） | [頁面與流程整合報告](reports/ui-integration-2026-09-28/REPORT_ZH_TW.md) · [驗證回條](reports/ui-integration-2026-09-28/validation.json) · [發布回條](reports/ui-integration-2026-09-28/PUBLICATION_ZH_TW.md) |
 | 原地產品化收束與 Cage / Responsive 驗收 | [Convergence index](planning/NEXUS_LINK_PRODUCTIZATION_CONVERGENCE_INDEX_2026-09-16_ZH_TW.md) · [2026-09-17 Cage 技術驗收與 Raising/Cage 排版](reports/cage-layout-2026-09-17/REPORT_ZH_TW.md) · [前輪 Handoff](coordination/CODEX_CONVERGENCE_HANDOFF_2026-09-16_ZH_TW.md) · [2026-09-16 歷史報告](reports/convergence-2026-09-16/REPORT_ZH_TW.md) |
 | Current original-content priority: characters and existing cages first | [2026-09-15 原創角色與棲地籠子優先](planning/ORIGINAL_CHARACTER_CAGE_FIRST_2026-09-15.md) · [concept and cost work packet](art/production/original-character-cage-r1/README.md) |

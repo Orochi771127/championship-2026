@@ -12,7 +12,14 @@ const path = require('node:path');
 const { chromium } = require('playwright');
 const { login } = require('./championship-browser-opening.cjs');
 
-const origin = process.env.CHAMPIONSHIP_QA_ORIGIN || 'http://127.0.0.1:8732';
+// The gate installs the QA save, which replaces the save on that origin, so it
+// never falls back to a default: name an isolated origin, and the player's own
+// 8732 origin is refused outright.
+const origin = process.env.CHAMPIONSHIP_QA_ORIGIN;
+if (!origin || /:8732(\/|$)/.test(origin)) {
+  console.error('Set CHAMPIONSHIP_QA_ORIGIN to an isolated origin, e.g. http://127.0.0.1:8761. The player\'s 8732 origin is refused.');
+  process.exit(2);
+}
 const output = require('./browser-qa-output.cjs')('settings');
 const SAVE_KEY = 'championshipModernSave:v1';
 const PREFS_KEY = 'championshipModernSave:preferences:v1';
@@ -124,6 +131,16 @@ const pick = (page, id, value) => page.locator(`input[name="cm-setting-${id}"][v
       assert.equal(relabel.screen, 'RAISING_HOME');
       assert.deepEqual(relabel.toolbar, ['Hand', 'Feed', 'Protein', 'Clean', 'Salve', 'Meds', 'Manage', 'Menu']);
       assert.match(relabel.day, /^Day/);
+      // The shop's screen-reader labels follow the language too (2026-10-04
+      // acceptance: they stayed in Chinese).
+      await page.locator('button[data-menu-id="SYSTEM"]').click();
+      await page.locator('[data-entry-id="shop"]').click();
+      await page.waitForFunction(() => document.getElementById('cm-root')?.dataset.activeScreen === 'SHOP');
+      const shopLabels = await page.evaluate(() => ['.cm-vs2-shop__tabs', '.cm-vs2-shop__arrow--previous', '.cm-vs2-shop__list', '.cm-vs2-shop__arrow--next']
+        .map((selector) => document.querySelector(selector)?.getAttribute('aria-label')));
+      assert.deepEqual(shopLabels, ['Item categories', 'Previous item', 'Items', 'Next item']);
+      await page.getByRole('button', { name: 'Back to ranch', exact: true }).click();
+      await home(page);
       const saveBefore = await stored(page, SAVE_KEY);
       await page.locator('button[data-menu-id="SYSTEM"]').click();
       await page.locator('[data-entry-id="settings"]').click();
@@ -174,6 +191,34 @@ const pick = (page, id, value) => page.locator(`input[name="cm-setting-${id}"][v
       assert.equal(JSON.parse(await stored(page, PREFS_KEY)).account.theme, 'clear', 'the retry wrote the settings');
       assert.deepEqual(problems, []);
       report.checks.storageFailure = 'reported and retried';
+      await context.close();
+    }
+
+    // ---- 4. A volume slider follows a full drag (2026-10-04 acceptance: the
+    //         page was rebuilt under the finger and only the first step held) ----
+    {
+      const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+      const page = await context.newPage();
+      const problems = watch(page);
+      await page.goto(`${origin}/championship.html`, { waitUntil: 'domcontentloaded' });
+      await page.click('#cm-title-settings');
+      await page.locator('.cm-settings__category[data-category="sound"]').click();
+      const slider = page.locator('input[type="range"][name="cm-setting-masterVolume"], .cm-setting[data-setting="masterVolume"] input[type="range"]').first();
+      await slider.waitFor();
+      await page.evaluate(() => { window.__qaSlider = document.querySelector('.cm-setting[data-setting="masterVolume"] input[type="range"]'); });
+      const box = await slider.boundingBox();
+      const y = box.y + box.height / 2;
+      await page.mouse.move(box.x + box.width - 2, y);
+      await page.mouse.down();
+      for (let step = 1; step <= 12; step += 1) await page.mouse.move(box.x + box.width - 2 - (box.width * 0.8 * step) / 12, y);
+      await page.mouse.up();
+      await page.waitForTimeout(500);
+      const after = await page.evaluate(() => ({ same: document.querySelector('.cm-setting[data-setting="masterVolume"] input[type="range"]') === window.__qaSlider, value: Number(window.__qaSlider.value) }));
+      assert.equal(after.same, true, 'the slider under the pointer is never replaced while it moves');
+      assert.ok(after.value <= 35, `the drag reached its end (value ${after.value})`);
+      assert.equal(JSON.parse(await stored(page, PREFS_KEY)).device.masterVolume, after.value, 'and the dragged value is the one kept');
+      assert.deepEqual(problems, []);
+      report.checks.sliderDrag = after;
       await context.close();
     }
     report.verdict = 'PASS';

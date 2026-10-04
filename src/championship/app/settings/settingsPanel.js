@@ -224,6 +224,8 @@ export function createSettingsPanel({
     };
     paint(input.value);
     input.addEventListener("input", () => { paint(input.value); store.set(id, Number(input.value)); });
+    // Follows a change made elsewhere (another tab) without replacing this element.
+    sliderPainters.set(id, (value) => { if (input.value !== String(value)) { input.value = String(value); paint(input.value); } });
     row.append(input, output);
     set.append(row);
     return set;
@@ -251,6 +253,18 @@ export function createSettingsPanel({
     return paragraph;
   }
 
+  // The one line on the Sound page that follows the sliders. It is updated in
+  // place while a slider moves (see refresh): rebuilding the page would
+  // replace the slider under the player's finger and end the drag.
+  const VOLUME_NOTE = "實際音量 = 總音量 × 遊戲音效（目前 {level}%）；靜音時為 0。";
+  const SELF_PAINTING = new Set(["masterVolume", "sfxVolume"]);
+  const sliderPainters = new Map();
+  let volumeNote = null;
+  function volumeLevel() {
+    const values = store.get();
+    return { level: values.muted ? 0 : Math.round(values.masterVolume * values.sfxVolume / 100) };
+  }
+
   function resetCategoryButton(id) {
     if (!preferenceIdsIn(id).length) return null;
     const button = node("button", "cm-settings__reset", "恢復本分類預設");
@@ -259,6 +273,8 @@ export function createSettingsPanel({
       store.resetCategory(id);
       announce(uiText("已恢復「{name}」的預設值。遊戲進度不受影響。", { name: uiText(CATEGORY_TITLES[id]) }));
       renderContent();
+      // The page was rebuilt under the keyboard: keep focus on the same button.
+      content.querySelector(".cm-settings__reset")?.focus({ preventScroll: true });
     });
     return button;
   }
@@ -308,10 +324,8 @@ export function createSettingsPanel({
       section.append(toggle("muted", "全部靜音"));
       section.append(slider("masterVolume", "總音量"));
       section.append(slider("sfxVolume", "遊戲音效", "對戰音效與高光演出音效。"));
-      const values = store.get();
-      section.append(note("實際音量 = 總音量 × 遊戲音效（目前 {level}%）；靜音時為 0。", {
-        level: values.muted ? 0 : Math.round(values.masterVolume * values.sfxVolume / 100)
-      }));
+      volumeNote = note(VOLUME_NOTE, volumeLevel());
+      section.append(volumeNote);
       const test = node("button", "cm-settings__action", "試聽");
       test.type = "button";
       test.addEventListener("click", () => {
@@ -372,6 +386,7 @@ export function createSettingsPanel({
         store.resetAll();
         announce(uiText("全部設定已恢復預設。遊戲進度不受影響。"));
         renderAll();
+        content.querySelector(".cm-settings__action--danger")?.focus({ preventScroll: true });
       });
       prefs.append(resetAll);
     }
@@ -421,6 +436,8 @@ export function createSettingsPanel({
     const focusedValue = doc.activeElement?.value ?? null;
     const scroll = content.scrollTop;
     content.replaceChildren();
+    sliderPainters.clear();
+    volumeNote = null;
     const heading = node("h3", "cm-settings__section-title", CATEGORY_TITLES[category]);
     heading.id = "cm-settings-section-title";
     heading.tabIndex = -1;
@@ -541,8 +558,17 @@ export function createSettingsPanel({
     doc.body.append(dialog);
   }
 
-  function refresh() {
+  function refresh(changed = []) {
     if (!dialog) return;
+    // A volume slider paints its own value. Keep that element (and the drag
+    // it owns): only the list summary and the volume line follow.
+    if (changed.length && changed.every((id) => SELF_PAINTING.has(id))) {
+      renderNav();
+      const values = store.get();
+      for (const id of changed) sliderPainters.get(id)?.(values[id]);
+      if (volumeNote?.isConnected) setText(volumeNote, VOLUME_NOTE, volumeLevel());
+      return;
+    }
     // Radios already show the new value; the summaries, notes and anything
     // derived (resolved theme, effective tier, the volume product, and the
     // language itself, which the environment has already switched) follow.
@@ -559,7 +585,16 @@ export function createSettingsPanel({
       build();
       cleanups.push(store.subscribe((values, changed) => refresh(changed)));
       cleanups.push(store.subscribeStatus(() => { if (category === "data") renderContent(); }));
-      if (environment?.subscribe) cleanups.push(environment.subscribe(() => renderAll()));
+      // The environment re-applies after every preference change; the store
+      // observer above already handles those. Re-render here only when what
+      // the environment resolved actually changed (the OS theme or motion).
+      let seen = JSON.stringify(environment?.resolved?.() ?? null);
+      if (environment?.subscribe) cleanups.push(environment.subscribe((resolved) => {
+        const next = JSON.stringify(resolved ?? null);
+        if (next === seen) return;
+        seen = next;
+        renderAll();
+      }));
       if (quality?.subscribe) cleanups.push(quality.subscribe(() => renderAll()));
       renderAll();
       if (typeof dialog.showModal === "function") dialog.showModal();

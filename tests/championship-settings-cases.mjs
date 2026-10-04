@@ -594,6 +594,32 @@ test("every palette keeps text, status and readouts legible on its surfaces", ()
   }
 });
 
+test("a selected option and the current category stay legible on the accent tint", () => {
+  // Found by the 2026-10-04 WCAG probe of the settings panel: the third text
+  // tone fell to 4.0-4.3:1 on the tinted selected card and current category.
+  const css = fs.readFileSync("src/championship/app/ui/tokens.css", "utf8");
+  const settings = fs.readFileSync("src/championship/app/ui/settings.css", "utf8");
+  const selectors = { night: ':root, [data-palette="night"]', clear: ':root[data-theme="clear"], [data-palette="clear"]', warm: ':root[data-theme="warm"], [data-palette="warm"]' };
+  const hex = (n) => Math.round(n).toString(16).padStart(2, "0");
+  for (const [name, selector] of Object.entries(selectors)) {
+    const p = palette(css, selector);
+    const start = css.indexOf(selector);
+    const body = css.slice(css.indexOf("{", start) + 1, css.indexOf("\n}", start));
+    const tint = /--c-accent-soft:\s*rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/.exec(body);
+    assert.ok(tint, `${name}: accent-soft is a translucent tint`);
+    const [r, g, b, a] = tint.slice(1).map(Number);
+    for (const surface of ["c-ground", "c-surface-1", "c-surface-2"]) {
+      const base = [1, 3, 5].map((i) => parseInt(p[surface].slice(i, i + 2), 16));
+      const tinted = "#" + [r, g, b].map((c, i) => hex(c * a + base[i] * (1 - a))).join("");
+      for (const text of ["c-text-1", "c-text-2", "c-accent-strong"]) {
+        assert.ok(contrast(p[text], tinted) >= 4.5, `${name}: ${text} on the tint over ${surface} is ${contrast(p[text], tinted).toFixed(2)}`);
+      }
+    }
+  }
+  assert.match(settings, /\.cm-choice:has\(\.cm-choice__input:checked\) \.cm-choice__desc \{ color: var\(--c-text-2\); \}/, "a selected option's description uses the second text tone");
+  assert.match(settings, /\.cm-settings__category\[aria-current="true"\] \.cm-settings__category-summary \{ color: var\(--c-text-2\); \}/, "the current category's summary uses the second text tone");
+});
+
 test("the title keeps its key-art palette, and retired skins stay unlinked", () => {
   const html = fs.readFileSync("championship.html", "utf8");
   assert.match(html, /<div id="cm-title" class="cm-title" data-palette="night">/);

@@ -1,0 +1,278 @@
+[
+  {
+    "tier": "saver",
+    "viewport": "390x844@3x",
+    "segments": {
+      "home": {
+        "frames": 361,
+        "p50": 16.7,
+        "p95": 16.8,
+        "max": 18.2,
+        "over20ms": 0,
+        "over33ms": 0
+      },
+      "battleSelect": {
+        "frames": 179,
+        "p50": 16.7,
+        "p95": 16.8,
+        "max": 83.4,
+        "over20ms": 2,
+        "over33ms": 2
+      },
+      "battle": {
+        "frames": 1191,
+        "p50": 16.7,
+        "p95": 16.8,
+        "max": 150,
+        "over20ms": 6,
+        "over33ms": 4
+      },
+      "resultHighlight": {
+        "frames": 292,
+        "p50": 16.7,
+        "p95": 16.8,
+        "max": 16.8,
+        "over20ms": 0,
+        "over33ms": 0
+      }
+    },
+    "environment": {
+      "quality": "saver",
+      "devicePixelRatio": 3,
+      "pixiBackingScale": 1,
+      "webgl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Ti (0x00002782) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    "member": "公爵獸",
+    "highlight": {
+      "phase": "DONE",
+      "elapsedMs": 3733,
+      "skipped": false,
+      "target": 50,
+      "shownValue": 50,
+      "frames": {
+        "count": 223,
+        "p50": 16.69999999999709,
+        "p95": 16.80000000000291,
+        "max": 33.299999999995634,
+        "over20ms": 1,
+        "over33ms": 0
+      },
+      "audio": {
+        "state": "running",
+        "played": 19,
+        "skipped": 0,
+        "voices": 2,
+        "silenced": 0,
+        "shared": true
+      },
+      "burst": {
+        "shards": 40,
+        "mode": "DONE",
+        "frames": 116,
+        "averageRenderMs": 0.18706896554293304,
+        "maxRenderMs": 1.3999999985098839,
+        "cleared": true
+      },
+      "reducedMotion": false,
+      "totalMs": 3720,
+      "mode": "full",
+      "quality": "saver",
+      "particles": 40,
+      "stairs": 2,
+      "decor": "minimal",
+      "anchor": {
+        "x": 0.1796875,
+        "y": 0.6598441830558792
+      },
+      "focus": {
+        "x": 0.5,
+        "y": 0.2704016644021739
+      }
+    },
+    "errors": []
+  },
+  {
+    "tier": "balanced",
+    "viewport": "390x844@3x",
+    "segments": {
+      "home": {
+        "frames": 360,
+        "p50": 16.7,
+        "p95": 16.8,
+        "max": 16.8,
+        "over20ms": 0,
+        "over33ms": 0
+      },
+      "battleSelect": {
+        "frames": 180,
+        "p50": 16.7,
+        "p95": 16.8,
+        "max": 16.8,
+        "over20ms": 0,
+        "over33ms": 0
+      },
+      "battle": {
+        "frames": 1199,
+        "p50": 16.7,
+        "p95": 16.8,
+        "max": 33.3,
+        "over20ms": 1,
+        "over33ms": 0
+      },
+      "resultHighlight": {
+        "frames": 293,
+        "p50": 16.7,
+        "p95": 16.7,
+        "max": 16.8,
+        "over20ms": 0,
+        "over33ms": 0
+      }
+    },
+    "environment": {
+      "quality": "balanced",
+      "devicePixelRatio": 3,
+      "pixiBackingScale": 2,
+      "webgl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Ti (0x00002782) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    "member": "公爵獸",
+    "highlight": {
+      "phase": "DONE",
+      "elapsedMs": 3733,
+      "skipped": false,
+      "target": 50,
+      "shownValue": 50,
+      "frames": {
+        "count": 224,
+        "p50": 16.69999999999709,
+        "p95": 16.700000000004366,
+        "max": 16.80000000000291,
+        "over20ms": 0,
+        "over33ms": 0
+      },
+      "audio": {
+        "state": "running",
+        "played": 20,
+        "skipped": 0,
+        "voices": 2,
+        "silenced": 0,
+        "shared": true
+      },
+      "burst": {
+        "shards": 96,
+        "mode": "DONE",
+        "frames": 144,
+        "averageRenderMs": 0.17916666680119103,
+        "maxRenderMs": 1.3000000044703484,
+        "cleared": true
+      },
+      "reducedMotion": false,
+      "totalMs": 3720,
+      "mode": "full",
+      "quality": "balanced",
+      "particles": 96,
+      "stairs": 3,
+      "decor": "full",
+      "anchor": {
+        "x": 0.1796875,
+        "y": 0.6598441830558792
+      },
+      "focus": {
+        "x": 0.5,
+        "y": 0.2704016644021739
+      }
+    },
+    "errors": []
+  },
+  {
+    "tier": "high",
+    "viewport": "390x844@3x",
+    "segments": {
+      "home": {
+        "frames": 360,
+        "p50": 16.7,
+        "p95": 16.8,
+        "max": 16.8,
+        "over20ms": 0,
+        "over33ms": 0
+      },
+      "battleSelect": {
+        "frames": 180,
+        "p50": 16.7,
+        "p95": 16.7,
+        "max": 16.8,
+        "over20ms": 0,
+        "over33ms": 0
+      },
+      "battle": {
+        "frames": 1200,
+        "p50": 16.7,
+        "p95": 16.8,
+        "max": 33.3,
+        "over20ms": 1,
+        "over33ms": 0
+      },
+      "resultHighlight": {
+        "frames": 294,
+        "p50": 16.7,
+        "p95": 16.8,
+        "max": 17.3,
+        "over20ms": 0,
+        "over33ms": 0
+      }
+    },
+    "environment": {
+      "quality": "high",
+      "devicePixelRatio": 3,
+      "pixiBackingScale": 3,
+      "webgl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Ti (0x00002782) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    "member": "公爵獸",
+    "highlight": {
+      "phase": "DONE",
+      "elapsedMs": 3733,
+      "skipped": false,
+      "target": 50,
+      "shownValue": 50,
+      "frames": {
+        "count": 224,
+        "p50": 16.69999999999709,
+        "p95": 16.80000000000291,
+        "max": 17.299999999995634,
+        "over20ms": 0,
+        "over33ms": 0
+      },
+      "audio": {
+        "state": "running",
+        "played": 20,
+        "skipped": 0,
+        "voices": 2,
+        "silenced": 0,
+        "shared": true
+      },
+      "burst": {
+        "shards": 160,
+        "mode": "BURST",
+        "frames": 155,
+        "averageRenderMs": 0.1780645160425094,
+        "maxRenderMs": 1.8000000044703484,
+        "cleared": false
+      },
+      "reducedMotion": false,
+      "totalMs": 3720,
+      "mode": "full",
+      "quality": "high",
+      "particles": 160,
+      "stairs": 3,
+      "decor": "full",
+      "anchor": {
+        "x": 0.1796875,
+        "y": 0.6598441734662247
+      },
+      "focus": {
+        "x": 0.5,
+        "y": 0.2704016644021739
+      }
+    },
+    "errors": []
+  }
+]

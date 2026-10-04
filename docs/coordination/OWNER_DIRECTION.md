@@ -2,6 +2,12 @@
 
 > Reading guide — instruction maintenance, 2026-09-14: the dated Owner records below are preserved. Match authorization to the current task, batch, assets and destination. Later scope-specific continuation supersedes an older batch's stop only within that scope; it does not approve new gameplay, rights or publication. Use [authority by question](../README.md#authority-by-question) for evidence claims and [the current shared-file protocol](SHARED_FILE_UPDATE_PROTOCOL.md) for coordination. No new product or publication authorization is created by this annotation.
 
+## 2026-10-04 — Finish the settings round and publish it
+
+The Owner directs: 「請繼續把之前沒做完的完成」, then 「全部完成後自檢沒問題就COMMIT跟PUSH且整合到MAIN發布」. With the settings-round instruction 「做完請你commit並push整合至main,且推到正式版」, this covers the work left open after `bfb1f28`: the settings report and glossary, per-tier performance measurement, the regenerated startup module preload list, the fixes found by the final checks and by the separate acceptance session, and publication. Once those fixes and the self-checks pass, add the batch's new first-party modules and stylesheets to `WEB_BUILD_INPUTS.v1.json` and its public-playtest approval list, refresh the approved hashes of the listed files the batch changed, and publish `main` to the existing public-playtest destination after `build:playtest`, `validate:playtest` and the local gates pass. It adds no asset, destination or rights claim; physical-device, rights and commercial-release acceptance stay separate. No force push, rebase, reset or cleanup is authorized.
+
+The Owner also asks which skills and plugins can help game development and game UI/HUD art and construction, and to use them more. Third-party skills are installed only after the Owner confirms each install.
+
 ## 2026-09-29 — Commit and merge the UI redesign and settings to main
 
 The Owner directs: 「先把做好的都commit 跟push整合至main」, and hands the settings acceptance checks (open, back button, Esc, persistence, save-failure retry, reset keeps the save, live language switch) to a separate session. This authorizes committing this session's UI redesign and settings work to `main` and pushing it, leaving other agents' uncommitted files untouched. It does not authorize publication: `WEB_BUILD_INPUTS.v1.json` is not refreshed, so the Pages build stops at its input check until the Owner approves publishing after acceptance. No force push, rebase, reset or cleanup is authorized.

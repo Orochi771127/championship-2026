@@ -207,7 +207,11 @@ dialog.cm-settings[data-view="list"] .cm-settings__back { visibility: hidden; }
 /* Choices: native radios dressed as cards. */
 .cm-setting__options { display: grid; gap: var(--sp-2); grid-template-columns: repeat(auto-fit, minmax(min(100%, 132px), 1fr)); }
 .cm-setting[data-setting="theme"] .cm-setting__options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.cm-setting[data-setting="textScale"] .cm-setting__options { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+/* Three across while the names fit; a card moves to the next row rather
+   than breaking a word ("Standar / d" at 360 px with 130 % English). */
+.cm-setting[data-setting="textScale"] .cm-setting__options { display: flex; flex-wrap: wrap; }
+.cm-setting[data-setting="textScale"] .cm-choice { flex: 1 1 0; min-width: min-content; }
+.cm-setting[data-setting="textScale"] .cm-choice__name { overflow-wrap: break-word; }
 .cm-setting[data-setting="quality"] .cm-setting__options,
 .cm-setting[data-setting="reducedMotion"] .cm-setting__options { grid-template-columns: minmax(0, 1fr); }
 .cm-choice {
@@ -230,6 +234,8 @@ dialog.cm-settings[data-view="list"] .cm-settings__back { visibility: hidden; }
   box-shadow: inset 0 0 0 1px var(--c-accent);
 }
 .cm-choice:has(.cm-choice__input:checked) .cm-choice__name { color: var(--c-accent-strong); }
+/* On the tinted selected card the third text tone falls under 4.5:1. */
+.cm-choice:has(.cm-choice__input:checked) .cm-choice__desc { color: var(--c-text-2); }
 .cm-choice:has(.cm-choice__input:checked)::after {
   content: "";
   position: absolute;
@@ -354,7 +360,10 @@ dialog.cm-settings[data-view="list"] .cm-settings__back { visibility: hidden; }
 .cm-settings__caption { margin: 0; color: var(--c-text-3); font-size: var(--fs-label); line-height: var(--lh-label); font-weight: var(--fw-strong); }
 .cm-settings__params {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  /* The label column keeps a readable share; the value column wraps its
+     "applies ..." line instead of claiming its longest line (at 360 px with
+     130 % English text that squeezed the labels to one letter per line). */
+  grid-template-columns: minmax(40%, 1fr) minmax(0, max-content);
   gap: 0;
   margin: 0;
   border: 1px solid var(--c-line-1);
@@ -431,6 +440,7 @@ dialog.cm-settings[data-view="list"] .cm-settings__back { visibility: hidden; }
   .cm-settings__content { padding: var(--sp-5) var(--sp-6) var(--sp-8); }
   .cm-settings__category[aria-current="true"] { border-color: var(--c-accent-line); background: var(--c-accent-soft); }
   .cm-settings__category[aria-current="true"] .cm-settings__category-name { color: var(--c-accent-strong); }
+  .cm-settings__category[aria-current="true"] .cm-settings__category-summary { color: var(--c-text-2); }
   .cm-setting[data-setting="theme"] .cm-setting__options { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .cm-setting[data-setting="quality"] .cm-setting__options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cm-setting[data-setting="reducedMotion"] .cm-setting__options { grid-template-columns: repeat(3, minmax(0, 1fr)); }

@@ -661,8 +661,9 @@
 .cm-vs2-shop__detail-state { margin: 0; padding: 6px 10px; border-radius: var(--r-tag); background: var(--c-warning-soft); color: var(--c-warning); font-size: var(--fs-label); font-weight: var(--fw-strong); }
 .cm-vs2-shop__detail-state[hidden] { display: none; }
 
-.cm-vs2-shop__tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
-.cm-vs2-shop__tabs::-webkit-scrollbar { display: none; }
+/* Tabs wrap to a second row rather than hiding one off screen (English at
+   large text sizes on a 360px phone). */
+.cm-vs2-shop__tabs { display: flex; flex-wrap: wrap; gap: 6px; }
 .cm-vs2-shop__tab {
   flex: 1 0 max-content;
   min-height: var(--target);
@@ -677,6 +678,18 @@
 .cm-vs2-shop__tabs[hidden], .cm-vs2-shop__list[hidden], .cm-vs2-database__detail[hidden] { display: none; }
 
 .cm-vs2-shop__shelf { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; gap: 6px; height: 156px; min-height: 0; align-items: stretch; }
+/* Larger text in the one-column shop: every part keeps its own height (the
+   cards grow with a wrapped price and stock line) and the shop scrolls rather
+   than squeezing one part over another. The two-column shop at 700px and up
+   already sizes to content. */
+@media (max-width: 699px) {
+  :root:is([data-text-scale="115"], [data-text-scale="130"]) .cm-vs2-shop__body { display: flex; flex-direction: column; overflow-y: auto; }
+  :root:is([data-text-scale="115"], [data-text-scale="130"]) .cm-vs2-shop__body > * { flex: none; }
+  :root:is([data-text-scale="115"], [data-text-scale="130"]) .cm-vs2-shop__shelf { height: auto; }
+}
+:root:is([data-text-scale="115"], [data-text-scale="130"]) body[data-portrait-frame] .cm-vs2-shop__body { display: flex; flex-direction: column; overflow-y: auto; }
+:root:is([data-text-scale="115"], [data-text-scale="130"]) body[data-portrait-frame] .cm-vs2-shop__body > * { flex: none; }
+:root:is([data-text-scale="115"], [data-text-scale="130"]) body[data-portrait-frame] .cm-vs2-shop__shelf { height: auto; }
 .cm-vs2-shop__arrow {
   min-width: 44px;
   min-height: 44px;
