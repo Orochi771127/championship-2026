@@ -1,6 +1,6 @@
 # 中英術語表（設定回合，2026-09-29）
 
-本表由 `scripts` 以外的一次性產生器直接讀取遊戲內的對照表輸出（`src/championship/text/zhHant.js`、`gameText.en.js`、`uiText.js`、`uiText.en.js`），內容與出貨程式一致。英文是 `PRODUCT_AUTHORED` 譯文，尚未經英文母語編輯審稿。
+本表直接讀取遊戲內的對照表產生（`src/championship/text/zhHant.js`、`gameText.en.js`、`uiText.js`、`uiText.en.js`；最後更新 2026-10-04），內容與出貨程式一致。英文是 `PRODUCT_AUTHORED` 譯文，尚未經英文母語編輯審稿。
 
 ## 原則
 
@@ -869,6 +869,7 @@
 | 深色夜景 | Night |
 | 藍白清爽 | Clear Blue |
 | 經典暖黃 | Classic Warm |
+| 復古藍金 | Retro Blue & Gold |
 | 跟隨系統 | Match system |
 | 標準 | Standard |
 | 較大 | Larger |

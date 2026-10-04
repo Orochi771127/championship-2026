@@ -41,7 +41,7 @@ export const PREFERENCE_TIMING = Object.freeze({ IMMEDIATE: "IMMEDIATE", NEXT_SC
 
 const DEFINITIONS = {
   // Appearance and display
-  theme: { category: "appearance", scope: "account", type: "enum", values: ["night", "clear", "warm", "system"], default: "night" },
+  theme: { category: "appearance", scope: "account", type: "enum", values: ["night", "clear", "warm", "classic", "system"], default: "night" },
   textScale: { category: "appearance", scope: "device", type: "enum", values: [100, 115, 130], default: 100 },
   hudDensity: { category: "appearance", scope: "device", type: "enum", values: ["standard", "compact"], default: "standard" },
   // Quality
@@ -165,7 +165,7 @@ export function parsePreferences(text) {
 /** night | clear | warm. "system" follows the OS: dark reads as night, light as clear. */
 export function resolveTheme(theme, { prefersDark = true } = {}) {
   if (theme === "system") return prefersDark ? "night" : "clear";
-  return ["night", "clear", "warm"].includes(theme) ? theme : "night";
+  return ["night", "clear", "warm", "classic"].includes(theme) ? theme : "night";
 }
 
 /** Whether motion is reduced: the explicit choice wins, else the OS setting. */

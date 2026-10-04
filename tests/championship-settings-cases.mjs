@@ -162,6 +162,7 @@ test("theme and motion resolution: the explicit choice wins, system follows the 
   assert.equal(resolveTheme("system", { prefersDark: true }), "night");
   assert.equal(resolveTheme("system", { prefersDark: false }), "clear");
   assert.equal(resolveTheme("warm", { prefersDark: true }), "warm", "warm is only ever chosen by hand");
+  assert.equal(resolveTheme("classic", { prefersDark: false }), "classic", "and so is the retro blue & gold");
   assert.equal(resolveReducedMotion("system", { systemReduced: true }), true);
   assert.equal(resolveReducedMotion("off", { systemReduced: true }), false);
   assert.equal(resolveReducedMotion("on", { systemReduced: false }), true);
@@ -314,7 +315,8 @@ test("the boot script and the modules map every case the same way", () => {
     { text: JSON.stringify({ schemaVersion: 1, account: { theme: "warm", flashIntensity: "soft" }, device: { quality: "high", hudDensity: "compact", reducedMotion: "off" } }), dark: true, reduce: true, nav: {} },
     { text: JSON.stringify({ theme: "clear", quality: "auto" }), dark: true, reduce: false, nav: { deviceMemory: 2 } },
     { text: "{broken", dark: false, reduce: false, nav: { connection: { saveData: true } } },
-    { text: JSON.stringify({ schemaVersion: 4, account: { theme: "warm" } }), dark: true, reduce: false, nav: { hardwareConcurrency: 2 } }
+    { text: JSON.stringify({ schemaVersion: 4, account: { theme: "warm" } }), dark: true, reduce: false, nav: { hardwareConcurrency: 2 } },
+    { text: JSON.stringify({ schemaVersion: 1, account: { theme: "classic" }, device: { textScale: 130 } }), dark: false, reduce: false, nav: {} }
   ];
   for (const scenario of cases) {
     // What the boot script writes.
@@ -573,7 +575,8 @@ test("every palette keeps text, status and readouts legible on its surfaces", ()
   const palettes = {
     night: palette(css, ':root, [data-palette="night"]'),
     clear: palette(css, ':root[data-theme="clear"], [data-palette="clear"]'),
-    warm: palette(css, ':root[data-theme="warm"], [data-palette="warm"]')
+    warm: palette(css, ':root[data-theme="warm"], [data-palette="warm"]'),
+    classic: palette(css, ':root[data-theme="classic"], [data-palette="classic"]')
   };
   for (const [name, p] of Object.entries(palettes)) {
     for (const surface of ["c-ground", "c-surface-1", "c-surface-2"]) {
@@ -584,7 +587,7 @@ test("every palette keeps text, status and readouts legible on its surfaces", ()
     }
     assert.ok(contrast(p["c-text-on-accent"], p["c-accent"]) >= 4.5, `${name}: a primary button's words`);
     assert.ok(contrast(p["c-accent"], p["c-surface-1"]) >= 3, `${name}: the accent outline of a selection`);
-    if (name !== "night") {
+    if (name !== "night" && name !== "classic") {
       // In light palettes these are used as text on light surfaces.
       for (const status of ["c-success", "c-warning", "c-danger", "c-info", "c-rare", "c-gold-strong", "c-accent-strong", "c-stat-hp", "c-stat-tp"]) {
         assert.ok(contrast(p[status], p["c-surface-1"]) >= 4.5, `${name}: ${status} on surface-1 is ${contrast(p[status], p["c-surface-1"]).toFixed(2)}`);
@@ -599,7 +602,7 @@ test("a selected option and the current category stay legible on the accent tint
   // tone fell to 4.0-4.3:1 on the tinted selected card and current category.
   const css = fs.readFileSync("src/championship/app/ui/tokens.css", "utf8");
   const settings = fs.readFileSync("src/championship/app/ui/settings.css", "utf8");
-  const selectors = { night: ':root, [data-palette="night"]', clear: ':root[data-theme="clear"], [data-palette="clear"]', warm: ':root[data-theme="warm"], [data-palette="warm"]' };
+  const selectors = { night: ':root, [data-palette="night"]', clear: ':root[data-theme="clear"], [data-palette="clear"]', warm: ':root[data-theme="warm"], [data-palette="warm"]', classic: ':root[data-theme="classic"], [data-palette="classic"]' };
   const hex = (n) => Math.round(n).toString(16).padStart(2, "0");
   for (const [name, selector] of Object.entries(selectors)) {
     const p = palette(css, selector);
@@ -623,8 +626,30 @@ test("a selected option and the current category stay legible on the accent tint
 test("the title keeps its key-art palette, and retired skins stay unlinked", () => {
   const html = fs.readFileSync("championship.html", "utf8");
   assert.match(html, /<div id="cm-title" class="cm-title" data-palette="night">/);
-  for (const retired of ["nativeUiSkin.css", "daylightSkin.css", "raisingHomeHud.css", "huntMobile.css", "facilityBattleMobile.css", "trainingLabels.css", "shopOriginalVideo.css"]) {
+  for (const retired of ["daylightSkin.css", "raisingHomeHud.css", "huntMobile.css", "facilityBattleMobile.css", "trainingLabels.css", "shopOriginalVideo.css"]) {
     assert.equal(html.includes(retired), false, retired);
   }
   assert.match(html, /ui\/settings\.css/);
+});
+
+test("the earlier interface skin returns only as the retro blue & gold theme", () => {
+  // Owner 2026-10-04: the old skin, on the redesigned layout, as a theme.
+  const html = fs.readFileSync("championship.html", "utf8");
+  const link = html.indexOf("nativeUiSkin.css");
+  assert.ok(link > html.indexOf("ui/settings.css"), "it loads after every base sheet");
+  const css = fs.readFileSync("src/championship/app/nativeUiSkin.css", "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+  // Every selector of every style rule carries the theme condition, so the
+  // other themes never see a single declaration of it. The earlier skin's own
+  // rules wrap it in :where() (no added specificity, so the redesigned layout
+  // still wins where it did); the fitting rules for the redesign state it
+  // plainly so they win.
+  const preludes = [...css.matchAll(/(^|[{};])\s*([^{};@]+?)\s*\{/g)].map((match) => match[2]).filter((prelude) => !/^(from|to|\d+%)/.test(prelude));
+  assert.ok(preludes.length > 300, `${preludes.length} rules found`);
+  for (const prelude of preludes) {
+    for (const selector of prelude.split(/,(?![^(]*\))/)) {
+      assert.match(selector.trim(), /^(:where\((:root|html)\[data-theme="classic"\]\)|:root\[data-theme="classic"\])/, selector.trim().slice(0, 80));
+    }
+  }
+  // Its fixed type follows the text-size setting like every other sheet.
+  assert.equal(/font-size:\s*[0-9.]+(px|rem)\s*;/.test(css), false, "no fixed font size is left");
 });

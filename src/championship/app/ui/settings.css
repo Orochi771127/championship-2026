@@ -441,7 +441,7 @@ dialog.cm-settings[data-view="list"] .cm-settings__back { visibility: hidden; }
   .cm-settings__category[aria-current="true"] { border-color: var(--c-accent-line); background: var(--c-accent-soft); }
   .cm-settings__category[aria-current="true"] .cm-settings__category-name { color: var(--c-accent-strong); }
   .cm-settings__category[aria-current="true"] .cm-settings__category-summary { color: var(--c-text-2); }
-  .cm-setting[data-setting="theme"] .cm-setting__options { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .cm-setting[data-setting="theme"] .cm-setting__options { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .cm-setting[data-setting="quality"] .cm-setting__options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cm-setting[data-setting="reducedMotion"] .cm-setting__options { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }

@@ -27,7 +27,7 @@
         } catch (error) { p = {}; }
         function query(text) { try { return window.matchMedia(text).matches === true; } catch (error) { return false; } }
         function pick(value, allowed, fallback) { return allowed.indexOf(value) >= 0 ? value : fallback; }
-        var choice = pick(p.theme, ["night", "clear", "warm", "system"], "night");
+        var choice = pick(p.theme, ["night", "clear", "warm", "classic", "system"], "night");
         var dark = typeof window.matchMedia === "function" ? query("(prefers-color-scheme: dark)") : true;
         var theme = choice === "system" ? (dark ? "night" : "clear") : choice;
         var motion = pick(p.reducedMotion, ["system", "on", "off"], "system");
@@ -48,9 +48,9 @@
         root.dataset.quality = quality;
         root.lang = pick(p.locale, ["zh-Hant", "en"], "zh-Hant");
         var color = document.querySelector('meta[name="theme-color"]');
-        if (color) color.setAttribute("content", { night: "#0b181c", clear: "#eef3f8", warm: "#f7efd6" }[theme]);
+        if (color) color.setAttribute("content", { night: "#0b181c", clear: "#eef3f8", warm: "#f7efd6", classic: "#072f5e" }[theme]);
         var scheme = document.querySelector('meta[name="color-scheme"]');
-        if (scheme) scheme.setAttribute("content", theme === "night" ? "dark" : "light");
+        if (scheme) scheme.setAttribute("content", theme === "night" || theme === "classic" ? "dark" : "light");
       })();
     </script>
     <!-- 2026-09-29 redesign: design tokens first, then one sheet per game area.
@@ -63,6 +63,8 @@
     <link rel="stylesheet" href="./src/championship/app/opening.css?v=settings-1">
     <link rel="stylesheet" href="./src/championship/app/ui/highlight.css?v=settings-1">
     <link rel="stylesheet" href="./src/championship/app/ui/settings.css?v=settings-2">
+    <!-- Classic theme: the earlier interface skin, active only under data-theme="classic". -->
+    <link rel="stylesheet" href="./src/championship/app/nativeUiSkin.css?v=classic-1">
     <script type="importmap">
       { "imports": { "three": "./node_modules/three/build/three.module.js" } }
     </script>

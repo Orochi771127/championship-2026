@@ -17,8 +17,8 @@
 import { resolveReducedMotion, resolveTheme } from "./preferenceSchema.js";
 import { setLocale } from "../../text/locale.js";
 
-export const THEME_COLORS = Object.freeze({ night: "#0b181c", clear: "#eef3f8", warm: "#f7efd6" });
-export const THEME_SCHEMES = Object.freeze({ night: "dark", clear: "light", warm: "light" });
+export const THEME_COLORS = Object.freeze({ night: "#0b181c", clear: "#eef3f8", warm: "#f7efd6", classic: "#072f5e" });
+export const THEME_SCHEMES = Object.freeze({ night: "dark", clear: "light", warm: "light", classic: "dark" });
 
 export function createPreferenceEnvironment({
   store,

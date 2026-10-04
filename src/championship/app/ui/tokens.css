@@ -313,6 +313,100 @@
   --motif-stair-gold: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' viewBox='0 0 9 9'%3E%3Cpath fill='%23c98a12' d='M0 0h3v3H0zM3 3h3v3H3zM6 6h3v3H6z'/%3E%3C/svg%3E");
 }
 
+/* ---- Retro blue & gold (id "classic", 2026-10-04) -------------------------
+   The tokens for the parts the earlier interface skin never knew (settings,
+   dialogs, the highlight, autosave): navy ground, dark-green windows, gold
+   accent, taken from that skin's own palette. The skin itself
+   (nativeUiSkin.css) dresses the screens under the same attribute. */
+:root[data-theme="classic"], [data-palette="classic"] {
+  color-scheme: dark;
+
+  --c-void: #041d3b;
+  --c-ground: #072f5e;
+  --c-ground-raised: #0a4a86;
+  --c-stage-light: #1f8bff;
+  --c-stage-glow: rgba(127, 233, 255, 0.35);
+  --c-backdrop-top: #0b56e8;
+  --c-backdrop-bottom: #072f5e;
+  --c-scene-backdrop: #0a4a86;
+
+  --c-surface-1: #12301f;
+  --c-surface-2: #1d4132;
+  --c-surface-3: #2a5744;
+  --c-surface-glass: rgba(16, 40, 29, 0.9);
+  --c-surface-hud: rgba(16, 40, 29, 0.95);
+  --c-surface-bar: rgba(7, 47, 94, 0.96);
+  --c-scrim: rgba(2, 10, 30, 0.62);
+  --c-selection: rgba(255, 223, 70, 0.25);
+
+  --c-line-1: rgba(255, 223, 70, 0.18);
+  --c-line-2: rgba(255, 223, 70, 0.32);
+  --c-line-3: rgba(255, 223, 70, 0.5);
+
+  --c-text-1: #eafff2;
+  --c-text-2: #bfe6cf;
+  --c-text-3: #94c4a8;
+  --c-text-disabled: #6f9580;
+  --c-text-on-accent: #061119;
+  --c-text-on-gold: #2a1a00;
+
+  --c-accent: #ffdf46;
+  --c-accent-strong: #fff6a8;
+  --c-accent-deep: #c46a04;
+  --c-accent-soft: rgba(255, 223, 70, 0.16);
+  --c-accent-line: rgba(255, 223, 70, 0.55);
+
+  --c-gold: #ffbe28;
+  --c-gold-strong: #ffdf46;
+  --c-gold-soft: rgba(255, 190, 40, 0.16);
+  --c-coin-light: #fff6a8;
+  --c-coin-shade: #c46a04;
+
+  --c-success: #6ee07a;
+  --c-success-soft: rgba(110, 224, 122, 0.14);
+  --c-warning: #ffbe28;
+  --c-warning-soft: rgba(255, 190, 40, 0.14);
+  --c-danger: #ff6b5e;
+  --c-danger-soft: rgba(255, 107, 94, 0.14);
+  --c-danger-line: rgba(255, 107, 94, 0.5);
+  --c-danger-text: #ff8a7e;
+  --c-info: #7fe9ff;
+  --c-info-soft: rgba(127, 233, 255, 0.14);
+  --c-rare: #d8a8ff;
+  --c-rare-soft: rgba(216, 168, 255, 0.14);
+
+  /* The accent is gold here, so the player's side takes the skin's cyan. */
+  --c-team-player: #3ec6ff;
+  --c-team-opponent: #ff7a3c;
+  --c-team-opponent-soft: rgba(255, 122, 60, 0.14);
+
+  --c-season-spring: #7fe08a;
+  --c-season-summer: #ff7ab8;
+  --c-season-autumn: #ffa04a;
+  --c-season-winter: #7fc8ff;
+
+  --c-element-heat: #ff7a3c;
+  --c-element-cold: #7fc8ff;
+  --c-element-thunder: #ffdf46;
+  --c-element-light: #fff6a8;
+  --c-element-dark: #c08cff;
+
+  --c-stat-hp: #6ee07a;
+  --c-stat-hp-low: #ff6b5e;
+  --c-stat-tp: #7fe9ff;
+  --c-stat-ap: #ffdf46;
+  --c-stat-capacity: #c8d6a0;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 10, 30, 0.35);
+  --shadow-float: 0 12px 32px rgba(0, 10, 30, 0.5);
+  --shadow-lift: 0 18px 48px rgba(0, 10, 30, 0.6);
+  --shadow-frame: 0 30px 80px rgba(0, 10, 30, 0.55);
+  --glow-accent: 0 0 0 1px var(--c-accent-line), 0 0 14px rgba(255, 223, 70, 0.25);
+
+  --motif-stair: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' viewBox='0 0 9 9'%3E%3Cpath fill='%23ffdf46' d='M0 0h3v3H0zM3 3h3v3H3zM6 6h3v3H6z'/%3E%3C/svg%3E");
+  --motif-stair-gold: url("data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' viewBox='0 0 9 9'%3E%3Cpath fill='%23ffbe28' d='M0 0h3v3H0zM3 3h3v3H3zM6 6h3v3H6z'/%3E%3C/svg%3E");
+}
+
 /* ---- Everything that does not change with the palette ------------------ */
 :root {
   /* Paper: letters are the one warm surface in every theme. The opening

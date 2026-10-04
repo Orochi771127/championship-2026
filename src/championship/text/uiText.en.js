@@ -715,6 +715,8 @@ export const TEXT_EN = Object.freeze({
   "明亮的藍白配色，適合白天與戶外。": "Bright blue and white, good for daytime and outdoors.",
   "經典暖黃": "Classic Warm",
   "米黃紙色與琥珀色，柔和的暖色調。": "Cream paper and amber, a soft warm palette.",
+  "復古藍金": "Retro Blue & Gold",
+  "深藍底、金色緞帶與框線，搭配六角網格的復古風格。": "Deep blue with gold ribbons and frames over a hexagon mesh, a retro look.",
   "跟隨系統": "Match system",
   "系統深色時用深色夜景，淺色時用藍白清爽。": "Night when your system is dark, Clear Blue when it is light.",
   "標準": "Standard",

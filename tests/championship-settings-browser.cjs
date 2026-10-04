@@ -227,6 +227,36 @@ const pick = (page, id, value) => page.locator(`input[name="cm-setting-${id}"][v
       report.checks.sliderDrag = after;
       await context.close();
     }
+
+    // ---- 5. Retro blue & gold: the earlier skin dresses the game only while
+    //         it is the chosen theme (Owner 2026-10-04) ----
+    {
+      const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true });
+      const page = await context.newPage();
+      const problems = watch(page);
+      await installQaSave(page);
+      await login(page);
+      await page.click('#cm-continue');
+      await home(page);
+      const ribbon = () => page.evaluate(() => getComputedStyle(document.querySelector('.cm-status-bar')).backgroundImage);
+      const plain = await ribbon();
+      await page.locator('button[data-menu-id="SYSTEM"]').click();
+      await page.locator('[data-entry-id="settings"]').click();
+      await page.locator('.cm-settings__category[data-category="appearance"]').click();
+      await pick(page, 'theme', 'classic');
+      assert.equal((await html(page)).theme, 'classic');
+      const dressed = await ribbon();
+      assert.match(dressed, /^linear-gradient\(rgb\(255, 246, 168\) 0%/, 'the status bar becomes the gold ribbon');
+      assert.notEqual(dressed, plain);
+      assert.equal(await page.locator('.cm-setting[data-setting="theme"] input[value="classic"]').evaluate((input) => input.closest('label').textContent.includes('復古藍金')), true, 'it is offered under its own name');
+      await pick(page, 'theme', 'night');
+      assert.equal(await ribbon(), plain, 'and leaves nothing behind when another theme is chosen');
+      await page.keyboard.press('Escape');
+      await page.keyboard.press('Escape');
+      assert.deepEqual(problems, []);
+      report.checks.retroTheme = { plain, dressed: dressed.slice(0, 60) };
+      await context.close();
+    }
     report.verdict = 'PASS';
   } catch (error) {
     report.verdict = 'FAIL';

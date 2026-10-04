@@ -32,6 +32,7 @@ const THEME_CHOICES = Object.freeze([
   { value: "night", name: "深色夜景", desc: "深色背景，適合夜間與長時間遊玩。" },
   { value: "clear", name: "藍白清爽", desc: "明亮的藍白配色，適合白天與戶外。" },
   { value: "warm", name: "經典暖黃", desc: "米黃紙色與琥珀色，柔和的暖色調。" },
+  { value: "classic", name: "復古藍金", desc: "深藍底、金色緞帶與框線，搭配六角網格的復古風格。" },
   { value: "system", name: "跟隨系統", desc: "系統深色時用深色夜景，淺色時用藍白清爽。" }
 ]);
 const TEXT_SCALE_CHOICES = Object.freeze([
