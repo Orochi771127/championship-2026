@@ -40,7 +40,13 @@ async function installQaSave(page) {
   await page.getByText('QA 存檔已驗證，可以安裝。', { exact: true }).waitFor();
   await Promise.all([page.waitForURL(/\/championship\.html$/), page.locator('#install').click()]);
 }
-const home = (page) => page.locator('.cm-raising-pixi-canvas').waitFor({ timeout: 45000 });
+// Home is ready when its mount has finished, not when its canvas first shows:
+// on a slow link (the live site, 2026-10-04) the screen attribute followed the
+// canvas by a second or more.
+async function home(page) {
+  await page.locator('.cm-raising-pixi-canvas').waitFor({ timeout: 45000 });
+  await page.waitForFunction(() => document.getElementById('cm-root')?.dataset.activeScreen === 'RAISING_HOME', null, { timeout: 45000 });
+}
 const html = (page) => page.evaluate(() => ({ ...document.documentElement.dataset, lang: document.documentElement.lang }));
 const stored = (page, key) => page.evaluate((k) => localStorage.getItem(k), key);
 const pick = (page, id, value) => page.locator(`input[name="cm-setting-${id}"][value="${value}"]`).check({ force: true });
