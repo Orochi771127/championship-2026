@@ -625,7 +625,11 @@
   text-align: left;
 }
 .cm-vs2-result__row > span { min-width: 0; overflow-wrap: anywhere; }
+.cm-vs2-result__row > span:not([class]) { flex: 1 1 auto; }
 .cm-vs2-result__row button { flex: 0 0 auto; min-height: var(--target); }
+/* The catch the name plate is editing (several catches in one hunt). */
+.cm-vs2-result__row[data-selected="true"] { border-color: var(--c-accent-line); background: var(--c-accent-soft); }
+.cm-vs2-result__pick[aria-pressed="true"] { border-color: var(--c-accent); color: var(--c-accent-strong); }
 .cm-vs2-result__thumbnail { width: 40px; height: 40px; flex: 0 0 auto; background: center / contain no-repeat; image-rendering: pixelated; }
 .cm-vs2-result__release { position: sticky; bottom: 0; padding: var(--sp-3); border-top: 1px solid var(--c-line-1); background: var(--c-surface-bar); }
 .cm-vs2-result__release button { min-height: var(--target); margin: 4px; }

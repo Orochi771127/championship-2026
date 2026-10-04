@@ -205,6 +205,31 @@ test("Hunt Result translates failure/release UI without committing a displayed d
   assert.deepEqual(names, ["MiXeD小火"]);
 });
 
+test("Hunt Result lets every catch on the memory card take the name plate", t => {
+  // Owner report 2026-10-05: with two or more catches only the first could be named.
+  const root = useDocument(t);
+  const rows = [
+    { kind: "CARD", id: "wild-1", key: "card:wild-1", speciesId: "species-034", displayName: "亞古獸", canRelease: true, selected: true },
+    { kind: "CARD", id: "wild-2", key: "card:wild-2", speciesId: "species-035", displayName: "加布獸", canRelease: true, selected: false },
+    { kind: "HOME", id: "home-1", key: "home:home-1", speciesId: "species-001", displayName: "滾球獸", canRelease: true }
+  ];
+  const block = { title: "HUNT RESULT", outcomeLabel: "ON MEMORY CARD", wildId: "wild-1", speciesId: "species-034",
+    speciesLabel: "SPECIES 034", displayName: "亞古獸", pendingHomeCommit: true, rows };
+  const calls = [];
+  const source = { getFrame: () => ({ screen: "HUNT_RESULT", huntResult: block }), intents: {
+    setHuntResultName: name => calls.push(["name", name]), selectHuntResultEntry: id => calls.push(["select", id]),
+    confirmHuntResult() {}, requestHuntResultRelease() {} } };
+  createHuntResultView({ root, source });
+  const picks = root.querySelectorAll("button").filter(button => button.dataset.nameKey);
+  assert.deepEqual(picks.map(button => button.dataset.nameKey), ["card:wild-1", "card:wild-2"], "each catch on the card can be named; a Home resident cannot");
+  assert.deepEqual(picks.map(button => button.textContent), ["命名中", "命名"]);
+  assert.equal(picks[0].getAttribute("aria-pressed"), "true");
+  const input = root.querySelector("input");
+  input.value = "小亞";
+  picks[1].click();
+  assert.deepEqual(calls, [["name", "小亞"], ["select", "wild-2"]], "what was typed is kept for the first catch before the plate moves");
+});
+
 test("Hunt result projection distinguishes an unnamed card entry from a user name matching a label", () => {
   const raw = { title: "HUNT RESULT", wildId: "wild-1", speciesId: "species-034", displayName: "SPECIES 034",
     rows: [{ kind: "CARD", id: "wild-1", key: "card:wild-1", displayName: "SPECIES 034" },

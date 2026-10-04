@@ -250,7 +250,12 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       sprite.visible = Boolean(scale > 0 && Number.isFinite(scale) && texture?.orig);
       if (!sprite.visible) continue;
       const trim = texture.trim ?? {x:0,y:0,width:texture.orig.width,height:texture.orig.height};
-      const facing = combatant.stand.facing;
+      // stand.facing is the ported native state: +1 faces right (0x6dc is 1
+      // when the facing angle is within 90 degrees of +X). Main is authored
+      // facing left, so a right-facing actor is drawn mirrored, as the Raising
+      // field does with the original body flip bit. Drawing +1 unmirrored had
+      // every battler facing away from its opponent (Owner report 2026-10-05).
+      const mirror = -combatant.stand.facing;
       let center = trim.x + trim.width / 2 - texture.orig.width * sprite.anchor.x;
       let bottom = trim.y + trim.height - texture.orig.height * sprite.anchor.y;
       if (motion) {
@@ -264,13 +269,13 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       }
       const x = rect.x + combatant.stand.x * rect.width;
       const y = rect.y + combatant.stand.y * rect.height;
-      sprite.scale.set(scale * facing, scale);
+      sprite.scale.set(scale * mirror, scale);
       // Numeric rotation is written by the original reaction handler. This
       // projection changes no timing or physics and resets after its exit.
       sprite.rotation=Math.atan2(combatant.nativeMotion?.rotationSinQ12??0,
         combatant.nativeMotion?.rotationCosQ12??4096);
       const lift=(combatant.nativeMotion?.heightNativePx ?? 0)*nativeScale;
-      sprite.position.set(x - center * scale * facing, y - bottom * scale - lift);
+      sprite.position.set(x - center * scale * mirror, y - bottom * scale - lift);
       sprite.zIndex = y;
       // Down remains a session fact; original effect/return-to-idle timing is separate.
       sprite.alpha = combatant.nativeMotion?.alpha ?? (combatant.down ? 0.35 : 1);

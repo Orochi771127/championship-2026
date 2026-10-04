@@ -465,6 +465,7 @@ export function createGateHuntPresentationSource(app, { onCommitted = null } = {
       app.setHuntResultName(displayName);
       return commit();
     },
+    selectHuntResultEntry(wildId) { app.selectHuntResultEntry(wildId); return commit(); },
     requestHuntResultRelease(key) { app.requestHuntResultRelease(key); return commit(); },
     cancelHuntResultRelease() { app.cancelHuntResultRelease(); return commit(); },
     confirmHuntResultRelease() { app.confirmHuntResultRelease(); return commit(); },

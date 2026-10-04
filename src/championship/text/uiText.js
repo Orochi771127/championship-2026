@@ -9,7 +9,7 @@ export const UI_COPY = Object.freeze({
   "durability": "耐久度", "length": "長度",
   "HP 分析": "生命值分析",
   "ON MEMORY CARD": "已收入記憶卡", "MEMORY CARD": "記憶卡",
-  "RELEASE": "放生", "CANCEL": "取消", "CONFIRM RELEASE": "確認放生",
+  "RELEASE": "放生", "CANCEL": "取消", "CONFIRM RELEASE": "確認放生", "NAME THIS ONE": "命名", "NAMING": "命名中",
   "Memory card and Home roster": "記憶卡與育成夥伴名單", "Confirm release": "確認放生",
   "Release is not yet available for this resident.": "目前尚無法放生這隻數碼獸。",
   "Save failed. Your Digimon is still on the memory card. Return Home again to retry.": "儲存失敗，數碼獸仍在記憶卡中。請再次返回育成基地以重試。",

@@ -194,9 +194,13 @@ test('animated geometry retains a fixed native origin across changing packing an
         assert.equal(s.anchor.x,geometries[pose].origin[0]/384);
         assert.equal(s.anchor.y,geometries[pose].origin[1]/352);
         assert.ok(Math.abs(s.scale.y*geometries[pose].scale-scale)<1e-9);
+        // Main is authored facing left: a right-facing actor (+1, native 0x6dc=1)
+        // is drawn mirrored, a left-facing one is not (Owner report 2026-10-05:
+        // the opposite had every battler facing away from its opponent).
+        assert.equal(Math.sign(s.scale.x), -stands[i].facing);
         // Position is the source origin, not the bottom of the current trimmed pose.
         const actual=[s.position.x,s.position.y];
-        assert.ok(Math.abs(actual[0]-(stands[i].x*width-2.5*scale*stands[i].facing))<1e-9);
+        assert.ok(Math.abs(actual[0]-(stands[i].x*width+2.5*scale*stands[i].facing))<1e-9);
         if(pose===0)original.push(actual);else actual.forEach((value,axis)=>assert.ok(Math.abs(value-original[i][axis])<1e-9));
       });
     }

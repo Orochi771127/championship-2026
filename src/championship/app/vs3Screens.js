@@ -164,8 +164,12 @@ export function createHuntResultView({ root, source, hudArt = null }) {
       : next.commitError === "HOME_ROSTER_FULL" ? "Your home roster is full. Your Digimon remains on the memory card." : "");
     error.hidden = !error.textContent;
     roster.replaceChildren();
+    // With more than one catch, each one on the card can take the name plate
+    // (Owner report 2026-10-05: only the first catch could be named).
+    const catches = (next.rows ?? []).filter((row) => row.kind === "CARD").length;
     for (const row of next.rows ?? []) {
       const line = element("div", "cm-vs2-result__row");
+      if (row.selected) line.dataset.selected = "true";
       const label = `${uiText(row.kind === "CARD" ? "MEMORY CARD" : "HOME")} — ${row.displayName}`;
       const image = hudArt?.getPortrait(row.speciesId);
       const thumbnail = element('span', 'cm-vs2-result__thumbnail');
@@ -176,6 +180,21 @@ export function createHuntResultView({ root, source, hudArt = null }) {
       }
       line.append(thumbnail);
       line.append(element("span", "", label));
+      if (row.kind === "CARD" && catches > 1) {
+        const pick = element("button", "cm-vs2-action cm-vs2-result__pick", row.selected ? "NAMING" : "NAME THIS ONE");
+        pick.type = "button";
+        pick.dataset.nameKey = row.key;
+        pick.setAttribute("aria-pressed", row.selected ? "true" : "false");
+        pick.setAttribute("aria-label", `${uiText("NAME THIS ONE")} ${row.displayName}`);
+        pick.disabled = Boolean(next.pendingRelease);
+        pick.addEventListener("click", () => {
+          // Keep what was typed for the current catch before switching.
+          commitName();
+          source.intents.selectHuntResultEntry(row.id);
+          nameInput.focus?.({ preventScroll: false });
+        });
+        line.append(pick);
+      }
       const release = element("button", "cm-vs2-action", "RELEASE");
       release.type = "button";
       release.dataset.releaseKey = row.key;

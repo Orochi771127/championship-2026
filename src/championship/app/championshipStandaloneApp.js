@@ -1472,7 +1472,8 @@ export function createChampionshipStandaloneApp({
       const rows = [
         ...(huntRuntime?.getOnCardEntries() ?? []).map((entry) => Object.freeze({
           key: `card:${entry.wildId}`, kind: "CARD", id: entry.wildId, speciesId: entry.speciesId,
-          displayName: entry.displayName ?? speciesDisplayName(entry.speciesId), canRelease: true })),
+          displayName: entry.displayName ?? speciesDisplayName(entry.speciesId), canRelease: true,
+          selected: entry.wildId === huntResult.wildId })),
         ...listRaisingInstances(instanceSources()).filter((entry) => !released.has(entry.instanceId)).map((entry) => Object.freeze({
           key: `home:${entry.instanceId}`, kind: "HOME", id: entry.instanceId, speciesId: entry.speciesId,
           displayName: entry.displayName ?? speciesDisplayName(entry.speciesId),
@@ -2566,6 +2567,24 @@ export function createChampionshipStandaloneApp({
         displayName: selected ? selected.displayName ?? speciesDisplayName(selected.speciesId) : null,
         releasedHomeIds: Object.freeze(releasedHomeIds), pendingReleaseKey: null, commitError: null });
       publishScreens(); return true;
+    },
+
+    /**
+     * Which catch on the memory card the name plate edits. Every catch is
+     * brought Home with its own name; the plate used to stay on the first one,
+     * so a second or third catch could not be named (Owner report, 2026-10-05).
+     */
+    selectHuntResultEntry(wildId) {
+      if (screens.current() !== CHAMPIONSHIP_SCREENS.HUNT_RESULT || !huntResult?.pendingHomeCommit || huntCommitActive) return false;
+      const entry = (huntRuntime?.getOnCardEntries() ?? []).find((candidate) => candidate.wildId === wildId);
+      if (!entry) return false;
+      if (entry.wildId !== huntResult.wildId) {
+        huntResult = Object.freeze({ ...huntResult, wildId: entry.wildId, speciesId: entry.speciesId,
+          speciesLabel: speciesDisplayName(entry.speciesId),
+          displayName: entry.displayName ?? speciesDisplayName(entry.speciesId) });
+        publishScreens();
+      }
+      return true;
     },
 
     /**

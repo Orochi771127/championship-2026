@@ -23,7 +23,7 @@ export const UI_COPY_EN = Object.freeze({
   "durability": "Durability", "length": "Length",
   "HP 分析": "HP analysis",
   "ON MEMORY CARD": "On the memory card", "MEMORY CARD": "Memory card",
-  "RELEASE": "Release", "CANCEL": "Cancel", "CONFIRM RELEASE": "Confirm release",
+  "RELEASE": "Release", "CANCEL": "Cancel", "CONFIRM RELEASE": "Confirm release", "NAME THIS ONE": "Name", "NAMING": "Naming",
   "Memory card and Home roster": "Memory card and ranch partners", "Confirm release": "Confirm release",
   "Release is not yet available for this resident.": "This Digimon cannot be released yet.",
   "Save failed. Your Digimon is still on the memory card. Return Home again to retry.": "Save failed. Your Digimon is still on the memory card. Head back to the ranch again to retry.",

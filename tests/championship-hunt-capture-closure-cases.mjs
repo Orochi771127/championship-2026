@@ -94,6 +94,18 @@ test("HP zero, down animation, hand event and insertion are separate ownership b
   assert.equal(store.getItem(CHAMPIONSHIP_MODERN_SAVE_KEY), beforeSave);
   await app.dispose();
 });
+test("the name plate moves only to a catch that is on the memory card", async () => {
+  // Owner report 2026-10-05: every catch of a hunt can be named, not only the first.
+  const app = appFor(storage()); await app.newGame();
+  assert.equal(app.selectHuntResultEntry("wild-x"), false, "no hunt result yet");
+  await enter(app); const { id } = card(app);
+  assert.equal(app.exitHunt(), "HUNT_RESULT");
+  assert.equal(app.selectHuntResultEntry("not-on-card"), false);
+  assert.equal(app.selectHuntResultEntry(id), true);
+  assert.equal(app.getHuntResult().rows.find((row) => row.kind === "CARD").selected, true);
+  assert.equal(app.getHuntResult().rows.filter((row) => row.kind === "HOME").every((row) => !row.selected), true);
+  await app.dispose();
+});
 test("an absent memory card leaves a ready wild in the field without allocating or saving", async () => {
   const app = appFor(storage(), { huntStartingInventory: [] }); await app.newGame(); await enter(app);
   const { runtime, id } = down(app); runtime.completeNativeDownAnimation(id);
