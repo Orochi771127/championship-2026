@@ -4033,6 +4033,7 @@
     "src/championship/battle/titleEventSchedule.js",
     "src/championship/cage/cageCatalog.js",
     "src/championship/cage/cageEditRuntime.js",
+    "src/championship/cage/ranchExpansion.js",
     "src/championship/cage/cageEffects.js",
     "src/championship/cage/nativeRanchLayout.js",
     "src/championship/cage/ranchSlotGeometry.js",
@@ -4126,6 +4127,7 @@
     "src/championship/presentation/pixiCharacterRuntimeBundle.js",
     "src/championship/presentation/presentationPack.js",
     "src/championship/presentation/raisingCageArtPlan.js",
+    "src/championship/presentation/raisingRanchArtPlan.js",
     "src/championship/presentation/raisingFeedbackArt.js",
     "src/championship/presentation/runtimeBattleArenaArtReview.js",
     "src/championship/presentation/runtimeMapArtBundle.js",
@@ -4155,6 +4157,7 @@
     "src/championship/raising/nativeRaisingFeedback.js",
     "src/championship/raising/nativeRaisingFood.js",
     "src/championship/raising/nativeRaisingGround.js",
+    "src/championship/raising/nativeRaisingRanchRing.js",
     "src/championship/raising/nativeRaisingGrowth.js",
     "src/championship/raising/nativeRaisingHand.js",
     "src/championship/raising/nativeRaisingHomeState.js",
@@ -17863,7 +17866,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "086d5ff58f53b6d5f7569603b51d55ecf77832b364805e2b8479ee4ed445866a"
+        "sha256": "eaca2532d52f175c2ac1dc70d482f52e33e86f613038466fb717ddb05dec74f2"
       },
       {
         "path": "full-qa-save.html",
@@ -17907,7 +17910,7 @@
       },
       {
         "path": "docs/contracts/championship/CHAMPIONSHIP_RANCH_NATIVE_GEOMETRY.v1.json",
-        "sha256": "03d68dafd7d3129ea1541207d64be9e845bb159823ed5071e6a025f952bf6779"
+        "sha256": "911f1ffe2d45468925732b5d59d39c654c9f99b59683c6db12d892af4530ba93"
       },
       {
         "path": "docs/contracts/championship/CHAMPIONSHIP_RANCH_TILE_COMPOSITION.v1.json",
@@ -18003,7 +18006,7 @@
       },
       {
         "path": "docs/contracts/championship/battle-normal-flow.v1.json",
-        "sha256": "b8adade05197dd7ab6fbc7ca26c043923d3bcee90e634c7dd5424a564742ff36"
+        "sha256": "90d48482b930fc6abc3eb807ad59a866c2f37595f6d384e3c85fc0c7a429f644"
       },
       {
         "path": "docs/contracts/championship/battle-original-effect-preview.v1.json",
@@ -18075,11 +18078,11 @@
       },
       {
         "path": "src/championship/app/battleRosterSource.js",
-        "sha256": "abc791d4b0a8de8745004f331072a117e25bb34124f55982e9657942992cd8ed"
+        "sha256": "2914b0c41df4f61f856c0a6d4c8dcc69ee72b5159eb5cfe6c25f3f589d5ae09f"
       },
       {
         "path": "src/championship/app/battleRuntime.js",
-        "sha256": "c07ad84e6568812a4787c29cb3f6f6c2da0481208aa693696ccf34757134b28c"
+        "sha256": "213942dc6a33e5ebf4958e8ad0287ebf06809300aa671f9a2e50f3907746dee9"
       },
       {
         "path": "src/championship/app/cageRoster.js",
@@ -18099,7 +18102,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "2b693b281ce676edd56b5a0ad5ca55c3bb621752de6561752c6585a38c7ed030"
+        "sha256": "58c0fd96141a8cf52851b7c2b8e778a98349686627d4db33cf92634a8d475855"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -18111,7 +18114,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneSave.js",
-        "sha256": "d78a17cb2aedda5da0c85760838f0c304e672f500e576ced0cf9fc36349b5449"
+        "sha256": "54e58d37a3956e6f992a74ae6f83b4d547e318baeea3ec810e85e00c8dc867b0"
       },
       {
         "path": "src/championship/app/championshipStatusBar.js",
@@ -18135,7 +18138,7 @@
       },
       {
         "path": "src/championship/app/gateHuntPresentationSource.js",
-        "sha256": "aaa7d99f9680d43075d47c7489e6d5f07b388bb213498f9bee4bdebab5b6f6f1"
+        "sha256": "d11cfdef175bbebe0c8e2f260dbb80dca13649994214eb343d670360501803de"
       },
       {
         "path": "src/championship/app/helpScreen.js",
@@ -18163,7 +18166,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "f5921973578087695ccb536be6d35c58186613631bf4084523d7ba9242535c3a"
+        "sha256": "f8cd38e2bc2238a062c9fc6c215071eb8789199c535e068435453cae87a5d6ed"
       },
       {
         "path": "src/championship/app/nativeOpeningState.js",
@@ -18199,7 +18202,7 @@
       },
       {
         "path": "src/championship/app/raisingHomeP1RView.js",
-        "sha256": "598deeb2586b2d8f4ed31d8e43a50f2b28560985d1d1b9f1aa0dbd8858b2390b"
+        "sha256": "082dbf748a9f5f3192963ef020550fc5ad5653fb130251c12f76b9113e418cdd"
       },
       {
         "path": "src/championship/app/raisingPresentationSource.js",
@@ -18235,7 +18238,7 @@
       },
       {
         "path": "src/championship/app/vs2Styles.css",
-        "sha256": "8a750f176c747450994792feab2496df386115a96ac7c190225765de27da54f2"
+        "sha256": "7fffb6ecc08779464060b941ecf6237e31197d7b3316429cd8e87c1d247d6cb8"
       },
       {
         "path": "src/championship/app/vs3Screens.js",
@@ -18243,7 +18246,7 @@
       },
       {
         "path": "src/championship/app/vs4Screens.js",
-        "sha256": "cfacc78f888f9d2af5299ae5c1f2cb5ad0799f9b20cb1686613b5a121b642470"
+        "sha256": "c84e00f97e6c2c57eed7d62bd8ca8046ac1f0f50af7792d31d47233432c03c82"
       },
       {
         "path": "src/championship/app/vs5Screens.js",
@@ -18263,7 +18266,7 @@
       },
       {
         "path": "src/championship/battle/battleActionSelection.js",
-        "sha256": "405884c38e25d606136d91dc6e48f2ce103a8ff0e0b7a6ecf64be72f45853efe"
+        "sha256": "fa6ab319ffd6e0ce884c8be7b40ddb29239c281e9a366a421346a00e1fde069d"
       },
       {
         "path": "src/championship/battle/battleCandidateBuckets.js",
@@ -18279,7 +18282,7 @@
       },
       {
         "path": "src/championship/battle/battleCreatureBuild.js",
-        "sha256": "3f8f33e383b3148218d15bf3b62e7cf0610b2cca95dd0a9f120d6b25c69d2695"
+        "sha256": "b39f811261d0dffeb0ef9d47275799bb31883c63e3aac05ff005c41f86b8a524"
       },
       {
         "path": "src/championship/battle/battleDamageCore.js",
@@ -18359,11 +18362,11 @@
       },
       {
         "path": "src/championship/battle/battleNormalFlow.js",
-        "sha256": "f6ca18842e8257de346ea9117cc6bdfb08807924cdc8330aa8cc90c828f9ed19"
+        "sha256": "6ed6e6bcbb971116eba6a7c22b90df189615b5cd39b3d90ec40fe6d629d4b0bc"
       },
       {
         "path": "src/championship/battle/battleNormalRuntime.js",
-        "sha256": "7635149965e4a7c0458dc42b7d1f9561b33b1fdfdd20c1ab1e97b04f8262cdd6"
+        "sha256": "402cf03be634817ddf9007a121d9e53b0a4effd18dd150e32cca7383bc299e0b"
       },
       {
         "path": "src/championship/battle/battleOutcome.js",
@@ -18371,7 +18374,7 @@
       },
       {
         "path": "src/championship/battle/battleParty.js",
-        "sha256": "75fee5284b9fe9d501e910cc2d1cd432762decbd15133ff179317c89df0ea60c"
+        "sha256": "4c636bf0c2d9e7c6cd14787b36fa3ca7ac27b7221c9e335e60cc7454a6ad5ad8"
       },
       {
         "path": "src/championship/battle/battlePresentationHost.js",
@@ -18403,7 +18406,7 @@
       },
       {
         "path": "src/championship/battle/battleSession.js",
-        "sha256": "1468f8978a0d52acc61f43812b732c6f02395fc4fb0626c9d476368e46cbecb0"
+        "sha256": "b028cbffe7158b74d8caaf46135e7670c684df133c5fb05c889c9194ae42b977"
       },
       {
         "path": "src/championship/battle/battleSoundEvents.js",
@@ -18455,7 +18458,11 @@
       },
       {
         "path": "src/championship/cage/cageEditRuntime.js",
-        "sha256": "49e3b5e8b2b0aac111a53d05a5cf03fc7f87270a60457d8f6d06ed2bfd9600cb"
+        "sha256": "35ad3f56373cd16a9775ad042f7e46245b59cc305b45653bbed22c6f26a14705"
+      },
+      {
+        "path": "src/championship/cage/ranchExpansion.js",
+        "sha256": "6528c8aabd5f910029604714d2431c0c689b43f1e16f45e8eedb9548193a726d"
       },
       {
         "path": "src/championship/cage/cageEffects.js",
@@ -18743,7 +18750,7 @@
       },
       {
         "path": "src/championship/presentation/cageUiArt.js",
-        "sha256": "02edeedbfdd988bce94ca97532c2d32f41128742c3c1d8a206ee3853cebfbe4f"
+        "sha256": "b53b1c2c0df466bd2775c8018066cfff2fbcc8ef87793a6fefa28b6bba14f039"
       },
       {
         "path": "src/championship/presentation/championshipPixiStage.js",
@@ -18779,11 +18786,11 @@
       },
       {
         "path": "src/championship/presentation/intRh2/createRaisingFieldPixiPresentation.js",
-        "sha256": "abb563ded962fbaa91cb1976de8f68de02fa914c90f59feaa2d1e7606c78138d"
+        "sha256": "d51e277fed012abb5e251634b0697e8ecedad001ab49220800a0355e95d76dc1"
       },
       {
         "path": "src/championship/presentation/intRh2/raisingFieldViewport.js",
-        "sha256": "cd0791093494a4b46e28d5fab10d51cf37c9205dfde6c10c36b36d48aeae1444"
+        "sha256": "2c01f88de48666ba77b3e777bf03dc0c52814c4ccc8482fbf206cd440d26fda6"
       },
       {
         "path": "src/championship/presentation/intRh2/raisingNativeSizing.js",
@@ -18826,6 +18833,10 @@
         "sha256": "35a8a50822615efa8ac9c6756830ff0d10bc8950f375c04f5a79814bf42d1ca0"
       },
       {
+        "path": "src/championship/presentation/raisingRanchArtPlan.js",
+        "sha256": "4ec82bee342254581ea256760ae4fede7a0ca0923860db2223f24a2db158dec9"
+      },
+      {
         "path": "src/championship/presentation/raisingFeedbackArt.js",
         "sha256": "edb8ffe3b733d23655e49c89786871ec2a584d8b6409107cd38ea8b0afa21d14"
       },
@@ -18835,7 +18846,7 @@
       },
       {
         "path": "src/championship/presentation/runtimeMapArtBundle.js",
-        "sha256": "c52bf19cda5af4a2cb9c1c600ba62acac07e320b2b6af9ba1c0d130044a0b69d"
+        "sha256": "641be4ab7475cccd1d3eda0b15188925e9e63cbc5de398fc76430a5334c6e42a"
       },
       {
         "path": "src/championship/presentation/shopGoodsUiArt.js",
@@ -18940,6 +18951,10 @@
       {
         "path": "src/championship/raising/nativeRaisingGround.js",
         "sha256": "c0163aadbd8cdd90266b615366297ca9654f3b5c841e95bf4e8cf4c2d91ab538"
+      },
+      {
+        "path": "src/championship/raising/nativeRaisingRanchRing.js",
+        "sha256": "9e4588c63b837fdd786c9c55cea7602d18aa06c46a7cf8e4261f1543637fa71f"
       },
       {
         "path": "src/championship/raising/nativeRaisingGrowth.js",
@@ -20163,7 +20178,7 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "790da98951de4c4d6b061307bcd92db2366fcb7da531a31b74efd29b0b77b482"
+        "sha256": "1f888ad94a9de9c1d00c838d466c90234e8e4d7b874b1ff06fed7d0af18f3aea"
       },
       {
         "path": "src/championship/text/gameText.en.js",

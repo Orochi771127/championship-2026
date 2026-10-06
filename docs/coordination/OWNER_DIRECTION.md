@@ -2,6 +2,20 @@
 
 > Reading guide — instruction maintenance, 2026-09-14: the dated Owner records below are preserved. Match authorization to the current task, batch, assets and destination. Later scope-specific continuation supersedes an older batch's stop only within that scope; it does not approve new gameplay, rights or publication. Use [authority by question](../README.md#authority-by-question) for evidence claims and [the current shared-file protocol](SHARED_FILE_UPDATE_PROTOCOL.md) for coordination. No new product or publication authorization is created by this annotation.
 
+## 2026-10-06 — Publish the ranch, personality and annex batch
+
+The Owner asks 「新做好的籠子地圖對於牧場跟擴充都適用嗎?」 and directs 「自審沒問題就COMMIT跟PUSH整合至正式版看看」. After the self-review, commit the three work packages below to `main` and publish them to the existing public-playtest destination once the gates pass on the built artifact. This adds the batch's three new first-party modules (`src/championship/cage/ranchExpansion.js`, `src/championship/raising/nativeRaisingRanchRing.js`, `src/championship/presentation/raisingRanchArtPlan.js`) to `WEB_BUILD_INPUTS.v1.json` and its public-playtest approval list, refreshes the hashes of the listed files the batch changed and regenerates the startup module preload list. It adds no asset, destination or rights claim. The other session's review-only cage art (`assets/production/cage/original-opus-v1`, uncommitted) is not part of this batch; it keeps the shipped manifest's field IDs, sizes and frame counts, so once it is promoted the main ranch and the annex both draw it through the same art plan. The annex grant appears only with `?presentation=developer` or `?ranchExpansion=prototype` and charges nothing. No force push, rebase, reset or cleanup is authorized.
+
+## 2026-10-05 — Ranch top edge, personality in battle, and a non-paid ranch annex prototype
+
+After the read-only review of the non-animation handoff and the report on the ranch edge and paid expansion, the Owner directs three work packages, each reported when finished without asking again before the next; only destructive changes, undecided payment rules or real blockers stop for a question:
+
+1. 「修正牧場角色越過上緣及高個角色被遮住。依實際程式證據做最小修正，移動邊界、腳底／影子與畫面轉換必須一致；不要靠單獨下移角色掩蓋。必要的原作追證只用來解決具體疑點，不讓它無限阻擋可確認的修復。」
+2. 「接入性格＋當下狀態的自動戰鬥偏好。把 W1 必要的資料接線與紀錄，和第一個能實際看出性格差異的 W2a 一起推進。先在自由／練習模式做兩種對照策略，保留原有合法動作、傷害公式與 baseline 回退。用正常進場流程驗收，不停在只加紀錄、沒有行為改變。」
+3. 「完成牧場＋10格擴充的必要設計，並實作可操作的非付費原型：增加空間、保持格子清晰、支援直向捲動，驗證配置、碰撞與保存重開。」 A reversible technical choice between a single row and zones is the implementer's; only real player-rule divergences go to the Owner. Old saves are kept, new data is versioned with a migration, and the Owner's save is never reset.
+
+Also: 「價格、免費解鎖途徑、擴充上限、競技公平規則與真實金流尚未定案；先做原型與必要介面，不自行接支付或決定收費。訓練數值未進戰鬥的疑點請記錄精確證據，不順手改整套平衡。」 Character animation in production and the paused Tamer Info change are not touched. To 「增加格子數量後(例如上下兩排)_現在籠子場地的大小就可以再縮小一點 你覺得呢?」 the answer was whole-number scaling (2× on phones) with vertical scrolling only where the frame needs it, which the first package implements. The cage-map vanishing seen once on a QA save is recorded, not investigated. Personality wiring under this entry restores traced original behaviour; the annex is `OWNER_APPROVAL_PENDING_ADAPTATION`.
+
 ## 2026-10-05 — Battle facing, naming every catch, and the state of game values
 
 After 「繼續發佈」 (the Retro Blue & Gold theme was published as `bb6c7ef8`), the Owner reports: 「戰鬥時腳色的面朝方向不對,還有捕捉狩獵有複數時,沒辦法改抓到的其他隻的名稱只能改第一隻的,然後很多遊戲數值都沒接上,說是因為原作DOM的反向解讀還沒做完還是甚麼的,像個性跟進化條件之類的」.
